@@ -1,0 +1,35 @@
+// Whenever you need predefined color variables or mixins
+// Add the following line to the top of your .scss file
+@import '~tc-ui/src/styles/tc-includes';
+
+// Declare local variables, if necessary
+$peaches: #ffdab9;
+
+/* Please do not overly nest (except media queries):
+** ul {
+**   &.item-list {
+**     li {
+**       &.peaches-color {
+**         background-color: $tc-white;
+**       }
+**     }
+**   }
+** }
+*/
+
+// Prefer flat over nested structure
+.item-list {
+  background-color: $tc-white;
+}
+
+.peaches-color {
+  color: $peaches
+}
+
+// Always nest media queries
+.on-sale {
+  border: 3px solid $tc-dark-blue;
+  @media screen and (max-width: 700px) {
+    border-width: 2px;
+  }
+}

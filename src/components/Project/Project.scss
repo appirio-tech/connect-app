@@ -1,0 +1,20 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.project {
+  display: flex;
+  max-width: 960px;
+  border-bottom: 1px solid rgba(163, 163, 174, 0.3);
+  @media (max-width: 700px) {
+    display: block;
+  }
+}
+
+// ReactCSSTransitionGroup transitions
+.project-appear {
+  opacity: 0.01;
+
+  &.project-appear-active {
+    opacity: 1;
+    transition: opacity .25s ease-in;
+  }
+}

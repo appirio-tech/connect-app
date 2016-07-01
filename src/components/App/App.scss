@@ -1,0 +1,7 @@
+@import 'tc-styles';
+
+body {
+  min-width: 320px;
+  background-color: $tc-gray-neutral-dark;
+  @include proxima-nova;
+}
