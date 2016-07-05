@@ -17,7 +17,7 @@ describe('searchTerm reducer', () => {
 
   describe(SET_SEARCH_TERM, () => {
     const currentState = freeze({
-      previousSearchTerm: 'darth vader'
+      searchTerm: 'darth vader'
     })
 
     const action = { type: SET_SEARCH_TERM, searchTerm: 'C-3PO' }
@@ -25,7 +25,8 @@ describe('searchTerm reducer', () => {
     const newState = searchTerm(currentState, action)
 
     it('should update the saved search term', () => {
-      newState.previousSearchTerm.should.equal('C-3PO')
+      newState.searchTerm.should.equal('C-3PO')
+      newState.previousSearchTerm.should.equal('darth vader')
     })
   })
 

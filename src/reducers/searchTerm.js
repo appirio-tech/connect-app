@@ -10,7 +10,7 @@ export default function(state = initialState, action) {
   switch (action.type) {
   case SET_SEARCH_TERM:
     return Object.assign({}, state, {
-      previousSearchTerm: action.previousSearchTerm,
+      previousSearchTerm: state.searchTerm,
       searchTerm: action.searchTerm
     })
 
