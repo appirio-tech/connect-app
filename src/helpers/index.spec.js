@@ -1,6 +1,6 @@
-import chai from 'chai'
+// import chai from 'chai'
 import jsdom from 'mocha-jsdom'
-import _ from 'lodash'
+// import _ from 'lodash'
 import * as helpers from './index'
 
 describe('Helper Functions', () => {
@@ -80,40 +80,3 @@ describe('Helper Functions', () => {
     })
   })
 })
-
-function mockStatsData() {
-  return {
-    COPILOT: {
-      contests: 24,
-      fulfillment: 83.33
-    },
-    DATA_SCIENCE: {
-      MARATHON_MATCH: {
-        mostRecentEventDate: 1,
-        rank: {
-          rating: 500
-        }
-      },
-      SRM: {
-        mostRecentEventDate: 4,
-        rank: {
-          rating: 700
-        }
-      }
-    },
-    DESIGN: {
-      subTracks: [{
-        name: 'WEB_DESIGNS',
-        mostRecentEventDate: 3,
-        wins: 4
-      }]
-    },
-    DEVELOP: {
-      subTracks: [{
-        name: 'CODE',
-        mostRecentEventDate: 2,
-        wins: 9
-      }]
-    }
-  }
-}

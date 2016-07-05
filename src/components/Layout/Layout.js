@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import LayoutView from './Layout.jsx'
 import { loadUser } from '../../actions/loadUser'
 import { loadSearchSuggestions, search } from '../../actions/navSearch'
-import { isEndOfScreen } from '../../helpers'
+// import { isEndOfScreen } from '../../helpers'
 
 class Layout extends Component {
   constructor(props) {

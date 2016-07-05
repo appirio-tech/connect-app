@@ -1,7 +1,7 @@
 require('./TopBar.scss')
 
 import React, {PropTypes, Component} from 'react'
-import { MenuBar, SearchBar, QuickLinks, UserDropdown,
+import { MenuBar, QuickLinks, UserDropdown,
         ConnectLogo, TopcoderMobileLogo, HamburgerIcon
       } from 'appirio-tech-react-components'
 
@@ -27,9 +27,8 @@ class TopBar extends Component {
     const userImage = this.props.userImage
     const domain = this.props.domain
     const mobileMenuUrl = this.props.mobileMenuUrl
-    const mobileSearchUrl = this.props.mobileSearchUrl
     const homePageUrl = '//www.' + domain
-    const isLoggedIn = username ? true : false
+    const isLoggedIn = username
 
     //TODO prepare navigation items according to roles of the user
     const primaryNavigationItems = [

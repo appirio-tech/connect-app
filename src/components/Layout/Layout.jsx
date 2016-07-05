@@ -13,9 +13,10 @@ const Layout = (props) => {
   return (
     <div>
       <TopBar
-      username={ handle }
-      userImage={ id }
-      domain={ DOMAIN } />
+        username={ handle }
+        userImage={ id }
+        domain={ DOMAIN }
+      />
       <div className="content-area">
         Sample Page
       </div>

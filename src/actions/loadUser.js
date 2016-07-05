@@ -1,14 +1,14 @@
-import _ from 'lodash'
-import { fetchJSON } from '../helpers'
+// import _ from 'lodash'
+// import { fetchJSON } from '../helpers'
 import { ACCOUNTS_APP_CONNECTOR_URL, LOAD_USER_SUCCESS, LOAD_USER_FAILURE } from '../config/constants'
-import { getFreshToken, configureConnector, decodeToken, logout as doLogout  } from 'tc-accounts'
+import { getFreshToken, configureConnector, decodeToken } from 'tc-accounts'
 
 configureConnector({
   connectorUrl: ACCOUNTS_APP_CONNECTOR_URL,
   frameId: 'tc-accounts-iframe'
 })
 
-export function loadUser(searchTerm) {
+export function loadUser() {
   return ((dispatch, getState) => {
     const state = getState()
     const user = state.user
@@ -17,7 +17,7 @@ export function loadUser(searchTerm) {
       dispatch({ type: LOAD_USER_SUCCESS, user })
     }
 
-    return getFreshToken().then(function(token) {
+    return getFreshToken().then((token) => {
       return loadUserSuccess(dispatch, token)
     })
 
@@ -25,7 +25,7 @@ export function loadUser(searchTerm) {
 }
 export function loadUserSuccess(dispatch, token) {
   const decodedToken = decodeToken( token )
-  var currentUser = null
+  let currentUser = null
   if (decodedToken.userId) {
     currentUser = decodedToken
     currentUser.id = currentUser.userId

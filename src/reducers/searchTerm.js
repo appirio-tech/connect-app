@@ -2,6 +2,7 @@ import { SET_SEARCH_TERM, SET_SEARCH_TAG, RESET_SEARCH_TERM } from '../config/co
 
 export const initialState = {
   previousSearchTerm: null,
+  searchTerm : null,
   searchTermTag: null
 }
 
@@ -9,7 +10,8 @@ export default function(state = initialState, action) {
   switch (action.type) {
   case SET_SEARCH_TERM:
     return Object.assign({}, state, {
-      previousSearchTerm: action.searchTerm
+      previousSearchTerm: action.previousSearchTerm,
+      searchTerm: action.searchTerm
     })
 
   case SET_SEARCH_TAG:

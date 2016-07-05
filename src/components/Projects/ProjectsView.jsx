@@ -1,9 +1,9 @@
 import React from 'react'
-import _ from 'lodash'
+// import _ from 'lodash'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import ListContainer from '../ListContainer/ListContainer'
-import ProjectList from '../ProjectList/ProjectList'
-import Project from '../Project/Project'
+// import ProjectList from '../ProjectList/ProjectList'
+// import Project from '../Project/Project'
 import LoadingListItem from '../LoadingListItem/LoadingListItem'
 import PageError from '../PageError/PageError'
 import NoResults from '../NoResults/NoResults'
@@ -15,7 +15,7 @@ require('./ProjectsView.scss')
 const ProjectsView = (props) => {
   const { pageLoaded, loadingMore, error } = props
   const { projects, totalCount, moreMatchesAvailable } = props
-  const { previousSearchTerm: searchTerm, searchTermTag: tag } = props
+  const { previousSearchTerm: searchTerm } = props
 
   const projectMatches = renderProjects()
   const pageStatus = renderPageState()
@@ -121,7 +121,7 @@ const ProjectsView = (props) => {
       return null
 
     // Or if there are no results at all
-    } else if (numResults === 0 && topMembers.length === 0) {
+    } else if (numResults === 0 && projects.length === 0) {
       return null
 
     } else {
