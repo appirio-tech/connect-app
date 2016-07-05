@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
 import TopBar from '../TopBar/TopBar'
+import Footer from '../Footer/Footer'
 import { DOMAIN } from '../../config/constants'
 
 require('./Layout.scss')
@@ -18,6 +19,7 @@ const Layout = (props) => {
       <div className="content-area">
         Sample Page
       </div>
+      <Footer domain={ DOMAIN } />
     </div>
   )
 }

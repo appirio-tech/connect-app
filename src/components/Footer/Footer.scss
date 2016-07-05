@@ -1,0 +1,31 @@
+// this is to include tc styles in the output library
+@import 'tc-styles';
+
+.Footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: calc(2 * #{$base-unit}) calc(4 * #{$base-unit});
+
+  .copyright-notice {
+    font-size: 13px;
+    line-height: 20px;
+    color: $tc-gray-40;
+  }
+
+  ul.MenuBar {
+
+    li {
+      a {
+        font-size: 13px;
+        line-height: 20px;
+        color: $tc-gray-40;
+        text-transform: none;
+      }
+    }
+
+    li:last-child {
+      margin-right: 0px;
+    }
+  }
+}

@@ -141,6 +141,7 @@
     .UserDropdownMenu {
       flex-shrink: 0;
       background-color: transparent;
+      padding-right: 0px;
 
       .username {
         color: $tc-gray-50;
