@@ -16,9 +16,9 @@ const config = require('appirio-tech-webpack-config')({
 
 // Set asset prefix to CDN
 // FIXME: Move to constants in webpack-config
-if (branch === 'dev')     config.output.publicPath = '//d2w5g0u9h79yyx.cloudfront.net/'
-if (branch === 'qa')      config.output.publicPath = '//changeme.cloudfront.net/'
-if (branch === 'master')  config.output.publicPath = '//changeme.cloudfront.net/'
+// if (branch === 'dev')     config.output.publicPath = '//d2w5g0u9h79yyx.cloudfront.net/'
+// if (branch === 'qa')      config.output.publicPath = '//changeme.cloudfront.net/'
+// if (branch === 'master')  config.output.publicPath = '//changeme.cloudfront.net/'
 
 // Adding react hot loader
 const babelOptions = {
