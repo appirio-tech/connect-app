@@ -37,6 +37,12 @@ const LoadingListItem = ({ type }) => {
         </div>
       </div>
     )
+  case 'PROJECT':
+    return (
+      <div className="loading-list-item">
+        Loading project
+      </div>
+    )
   }
 }
 

@@ -3,6 +3,7 @@ import React from 'react'
 import TopBar from '../TopBar/TopBar'
 import Footer from '../Footer/Footer'
 import { DOMAIN } from '../../config/constants'
+import { StickyContainer, Sticky } from 'react-sticky'
 
 require('./Layout.scss')
 
@@ -11,17 +12,17 @@ const Layout = (props) => {
   const handle  = _.get(user, 'handle')
   const id  = _.get(user, 'id')
   return (
-    <div>
+    <StickyContainer>
       <TopBar
         username={ handle }
         userImage={ id }
         domain={ DOMAIN }
       />
-      <div className="content-area">
-        Sample Page
+      <div>
+        { props.children }
       </div>
       <Footer domain={ DOMAIN } />
-    </div>
+    </StickyContainer>
   )
 }
 

@@ -2,13 +2,13 @@ import React from 'react'
 // import _ from 'lodash'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import ListContainer from '../ListContainer/ListContainer'
-// import ProjectList from '../ProjectList/ProjectList'
-// import Project from '../Project/Project'
+import ProjectList from '../ProjectList/ProjectList'
 import LoadingListItem from '../LoadingListItem/LoadingListItem'
 import PageError from '../PageError/PageError'
 import NoResults from '../NoResults/NoResults'
 import LoadMoreButton from '../LoadMoreButton/LoadMoreButton'
 import EndOfResults from '../EndOfResults/EndOfResults'
+import ProjectsToolBar from '../ProjectsToolBar/ProjectsToolBar'
 
 require('./ProjectsView.scss')
 
@@ -16,6 +16,7 @@ const ProjectsView = (props) => {
   const { pageLoaded, loadingMore, error } = props
   const { projects, totalCount, moreMatchesAvailable } = props
   const { previousSearchTerm: searchTerm } = props
+  const { loadProjects } = props
 
   const projectMatches = renderProjects()
   const pageStatus = renderPageState()
@@ -24,13 +25,17 @@ const ProjectsView = (props) => {
 
   return (
     <div className="projects-view">
-      {pageStatus}
+      <ProjectsToolBar onSearch={ loadProjects } />
 
-      {projectMatches}
+      <div className="content-area">
+        {pageStatus}
 
-      {loadMoreButton}
+        {projectMatches}
 
-      {endOfResults}
+        {loadMoreButton}
+
+        {endOfResults}
+      </div>
     </div>
   )
 
@@ -65,7 +70,7 @@ const ProjectsView = (props) => {
 
       for (let i = 0; i < 10; i++) {
         loadingListItems.push(
-          <LoadingListItem type={'MEMBER'} key={i} />
+          <LoadingListItem type={'PROJECT'} key={i} />
         )
       }
 
@@ -90,7 +95,11 @@ const ProjectsView = (props) => {
   }
 
   function renderProjects() {
-    return <div>Projects</div>
+    return (
+      <div>
+        <ProjectList projects={ projects } />
+      </div>
+    )
   }
 
   function renderLoadMoreButton() {

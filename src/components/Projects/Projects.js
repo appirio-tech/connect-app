@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ProjectsView from './ProjectsView'
 import { loadProjects } from '../../actions/loadProjects'
+import { loadProject } from '../../actions/loadProject'
 import { isEndOfScreen } from '../../helpers'
 
 class Projects extends Component {
@@ -15,6 +16,7 @@ class Projects extends Component {
     window.addEventListener('scroll', this.handleScroll)
 
     this.searchTermFromQuery = this.props.location.query.q || ''
+    console.log('loading projects..')
     this.props.loadProjects(this.searchTermFromQuery)
   }
 
@@ -50,6 +52,6 @@ const mapStateToProps = ({ projectSearch, searchTerm }) => {
   }
 }
 
-const actionsToBind = { loadProjects }
+const actionsToBind = { loadProjects, loadProject }
 
 export default connect(mapStateToProps, actionsToBind)(Projects)

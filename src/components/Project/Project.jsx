@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import { Link } from 'react-router'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import classNames from 'classnames'
 import { CONNECT_DOMAIN } from '../../config/constants'
@@ -11,12 +12,12 @@ const Project = ({ project, shouldAnimate = false }) => {
   )
 
   const projectDOM = (
-    <a
-      className={projectStyles}
-      href={`https://www.${CONNECT_DOMAIN}/projects/${project.id}`}
-    >
-      { project.name }
-    </a>
+    <div className="Project">
+      <Link className="projectName" to={`/projects/${project.id}`}>{ project.name }</Link>
+      <div className="projectCurrentPhase">{ project.currentPhase }</div>
+      <div className="projectStartsOn">{ project.startsOn }</div>
+      <div className="projectEndsOn">{ project.endsOn }</div>
+    </div>
   )
 
   if (shouldAnimate) {
