@@ -1,4 +1,4 @@
-import _ from 'lodash'
+// import _ from 'lodash'
 // import { fetchJSON } from '../helpers'
 import {
   LOAD_PROJECT, CLEAR_LOADED_PROJECT, PROJECT_LOAD_SUCCESS, PROJECT_LOAD_FAILURE
@@ -7,7 +7,8 @@ import {
 export function loadProject(projectId) {
   return ((dispatch, getState) => {
     const state = getState()
-
+    const loadedProject = state.loadProject.project
+    dispatch({ type: CLEAR_LOADED_PROJECT, projectId, loadedProject })
     dispatch({ type: LOAD_PROJECT, projectId })
 
     // TODO get more project details
@@ -27,10 +28,10 @@ export function loadProject(projectId) {
 
 export function projectLoadSuccess(dispatch) {
   dispatch({ type: PROJECT_LOAD_SUCCESS })
-  dispatch({ type: RESET_SEARCH_TERM})
+  // dispatch({ type: RESET_SEARCH_TERM})
 }
 
 export function projectLoadFailure(dispatch) {
   dispatch({ type: PROJECT_LOAD_FAILURE })
-  dispatch({ type: RESET_SEARCH_TERM})
+  // dispatch({ type: RESET_SEARCH_TERM})
 }

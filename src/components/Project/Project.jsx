@@ -2,17 +2,17 @@ import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import classNames from 'classnames'
-import { CONNECT_DOMAIN } from '../../config/constants'
+// import { CONNECT_DOMAIN } from '../../config/constants'
 
 require('./Project.scss')
 
 const Project = ({ project, shouldAnimate = false }) => {
   const projectStyles = classNames(
-    'project'
+    'Project'
   )
 
   const projectDOM = (
-    <div className="Project">
+    <div className={ projectStyles }>
       <Link className="projectName" to={`/projects/${project.id}`}>{ project.name }</Link>
       <div className="projectCurrentPhase">{ project.currentPhase }</div>
       <div className="projectStartsOn">{ project.startsOn }</div>

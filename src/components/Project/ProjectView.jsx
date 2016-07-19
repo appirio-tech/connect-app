@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
-import classNames from 'classnames'
+// import classNames from 'classnames'
 import { CONNECT_DOMAIN } from '../../config/constants'
 import { loadProject } from '../../actions/loadProject'
 import ProjectToolBar from '../ProjectToolBar/ProjectToolBar'
@@ -22,9 +22,6 @@ class ProjectView extends Component {
   render() {
     const {shouldAnimate, project} = this.props
     const recentProjects = []
-    const projectStyles = classNames(
-      'project'
-    )
 
     const projectDOM = (
       <div>

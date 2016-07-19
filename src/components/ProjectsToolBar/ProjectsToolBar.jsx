@@ -1,14 +1,11 @@
 require('./ProjectsToolBar.scss')
 
-import React, {PropTypes, Component} from 'react'
+import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import { SearchBar, QuickLinks, UserDropdown,
-        ConnectLogo, TopcoderMobileLogo, HamburgerIcon,
-        Dropdown
-      } from 'appirio-tech-react-components'
+import { SearchBar } from 'appirio-tech-react-components'
 import { projectSuggestions } from '../../actions/loadProjects'
 import { loadProject } from '../../actions/loadProject'
-import { StickyContainer, Sticky } from 'react-sticky'
+import { Sticky } from 'react-sticky'
 
 // properties: domain
 
@@ -23,14 +20,14 @@ class ProjectsToolBar extends Component {
 
   handleTermChange(oldTerm, searchTerm, reqNo, callback) {
     this.props.projectSuggestions(searchTerm)
-    this.setState({ callback : callback, reqNo: reqNo })
+    this.setState({ callback, reqNo })
   }
 
   handleSearch(searchTerm) {
     this.props.onSearch.apply(this, [searchTerm])
   }
 
-  componentDidUpdate(nextProps) {
+  componentDidUpdate() {
     if (this.state.callback) {
       if (!this.props.error) {
         this.state.callback.apply(null, [this.state.reqNo, this.props.projects])
@@ -43,7 +40,7 @@ class ProjectsToolBar extends Component {
   }
 
   render() {
-    const {domain} = this.props
+    // const {domain} = this.props
     return (
       <Sticky stickyClassName="StickyProjectsToolBar">
         <div className="ProjectsToolBar flex middle space-between">

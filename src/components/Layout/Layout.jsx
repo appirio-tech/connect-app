@@ -3,7 +3,7 @@ import React from 'react'
 import TopBar from '../TopBar/TopBar'
 import Footer from '../Footer/Footer'
 import { DOMAIN } from '../../config/constants'
-import { StickyContainer, Sticky } from 'react-sticky'
+import { StickyContainer } from 'react-sticky'
 
 require('./Layout.scss')
 

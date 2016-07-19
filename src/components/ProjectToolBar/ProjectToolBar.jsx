@@ -1,10 +1,7 @@
 require('./ProjectToolBar.scss')
 
 import React, {PropTypes, Component} from 'react'
-import { MenuBar, QuickLinks, UserDropdown,
-        ConnectLogo, TopcoderMobileLogo, HamburgerIcon,
-        Dropdown
-      } from 'appirio-tech-react-components'
+import { MenuBar } from 'appirio-tech-react-components'
 
 // properties: username, userImage, domain, mobileMenuUrl, mobileSearchUrl, searchSuggestionsFunc
 // searchSuggestionsFunc should return a Promise object
@@ -16,7 +13,7 @@ class ProjectToolBar extends Component {
   }
 
   render() {
-    const {domain, project, recentProjects} = this.props
+    const {project, recentProjects} = this.props
 
     //TODO prepare navigation items according to roles of the user
     const primaryNavigationItems = [
