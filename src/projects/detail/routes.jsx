@@ -1,5 +1,5 @@
 import React from 'react'
-import { Router, Route, IndexRoute, Link, hashHistory } from 'react-router'
+import { Route, IndexRoute } from 'react-router'
 
 import ProjectDetail    from './components/ProjectDetail'
 import ProjectDashboard    from './components/Dashboard.jsx'

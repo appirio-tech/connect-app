@@ -1,6 +1,6 @@
 'use strict'
 
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
 
 
 class ProjectSpecification extends Component {
@@ -11,7 +11,7 @@ class ProjectSpecification extends Component {
   render() {
     // TODO - add more
     return (
-      <div className=''>
+      <div className="ProjectSpecification">
         Project specification goes here
       </div>
     )

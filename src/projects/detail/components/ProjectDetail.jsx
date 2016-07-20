@@ -1,5 +1,5 @@
 
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
 import ProjectToolBar from './ProjectToolBar/ProjectToolBar.jsx'
 
 class ProjectDetail extends Component {
@@ -9,7 +9,7 @@ class ProjectDetail extends Component {
 
   render() {
     return (
-      <div className=''>
+      <div className="ProjectDetail">
         <ProjectToolBar project={this.props.project} />
         <span>this is a test</span>
         { this.props.children }
@@ -24,7 +24,7 @@ ProjectDetail.defaultProps = {
   project: {
     name: 'Test Project',
     id: 1,
-    description: "This is a rather short description of the project",
+    description: 'This is a rather short description of the project',
     details: {
       features: ['login', 'dashboard', 'analytics']
     }

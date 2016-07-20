@@ -1,6 +1,6 @@
 'use strict'
 
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
 
 class ProjectDashboard extends Component {
   constructor(props) {
@@ -10,7 +10,7 @@ class ProjectDashboard extends Component {
   render() {
     // TODO - add more
     return (
-      <div className=''>
+      <div className="Dashboard">
         Project dashboard
       </div>
     )

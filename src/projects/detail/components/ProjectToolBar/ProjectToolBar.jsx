@@ -1,7 +1,7 @@
 require('./ProjectToolBar.scss')
 
 import React, {PropTypes, Component} from 'react'
-import { MenuBar, Dropdown } from 'appirio-tech-react-components'
+import { MenuBar } from 'appirio-tech-react-components'
 
 // properties: username, userImage, domain, mobileMenuUrl, mobileSearchUrl, searchSuggestionsFunc
 // searchSuggestionsFunc should return a Promise object
