@@ -16,7 +16,6 @@ class Projects extends Component {
     window.addEventListener('scroll', this.handleScroll)
 
     this.searchTermFromQuery = this.props.location.query.q || ''
-    console.log('loading projects..')
     this.props.loadProjects(this.searchTermFromQuery)
   }
 

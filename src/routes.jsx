@@ -5,10 +5,12 @@ import App             from './components/App/App'
 
 import projectDetailRoutes from './projects/detail/routes.jsx'
 import projectsListRoutes from './projects/list/routes.jsx'
+import reportsListRoutes from './reports/routes.jsx'
 
 export default (
   <Route path="/" component={ App }>
     {projectDetailRoutes}
     {projectsListRoutes}
+    {reportsListRoutes}
   </Route>
 )
