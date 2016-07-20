@@ -63,108 +63,28 @@
 
   .SearchBar {
     flex: 1;
+    margin: 0px calc(2 * #{$base_unit});
   }
 
-  .MenuBar {
-    margin-right: 30px;
-
-    @media screen and (max-width: $screen-md) {
-      order: 1;
-      margin-right: 7px;
-    }
-
-    li {
-      a {
-        color: $tc-gray-50;
-      }
-
-      a:hover {
-        color: white;
-      }
-
-      &.selected {
-        a {
-          color: white;
-        }
-      }
-    }
-
-    &.horizontal li {
-      position: relative;
-
-      a {
-        @media screen and (max-width: $screen-md) {
-          padding-bottom: 0;
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-        }
-      }
-    }
+  .dropdown-wrap.default {
+    height: 40px;
   }
 
-  .menu-wrap {
-    flex: 0 0 auto;
-    position: relative;
-    display: flex;
-    align-items: center;
+  .projectTypes {
+    flex: 0 0 200px;
+    margin: 0px calc(2 * #{$base_unit});
+  }
 
-    @media screen and (max-width :$screen-md) {
-      width: 40px;
-      height: 40px;
-      order: 3;
-      cursor: pointer;
+  .projectStatuses {
+    flex: 0 0 200px;
+    margin: 0px calc(2 * #{$base_unit});
+  }
 
-      &:hover {
-        background-color: $tc-gray-40;
-
-        .mobile-wrap {
-          svg > g > g {
-            stroke: white;
-          }
-        }
-      }
-    }
-
-    .mobile-wrap {
-      display: none;
-
-      @media screen and (max-width: $screen-md) {
-        display: block;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-    }
-
-    .quick-links-wrap {
-      margin-right: 30px;
-      display: inline-block;
-      vertical-align: middle;
-
-      @media screen and (max-width: $screen-md) {
-        display: none;
-      }
-
-      .Dropdown {
-        right: -46px;
-        top: 10px;
-      }
-    }
-
-    .UserDropdownMenu {
-      flex-shrink: 0;
-      background-color: transparent;
-      padding-right: 0px;
-
-      .username {
-        color: $tc-gray-50;
-      }
-
-      @media screen and (max-width: $screen-md) {
-        display: none;
-      }
+  .actions {
+    margin: 0px calc(2 * #{$base_unit});
+    .new-project-action {
+      font-size: 13px;
+      line-height: 20px;
     }
   }
 }
