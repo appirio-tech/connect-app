@@ -86,7 +86,7 @@ class ProjectsToolBar extends Component {
             </Dropdown>
           </div>
           <div className="actions">
-            <Link className="new-project-action tc-btn tc-btn-primary tc-btn-sm" to='projects/create' >+ New Project</Link>
+            <Link className="new-project-action tc-btn tc-btn-primary tc-btn-sm" to="projects/create" >+ New Project</Link>
           </div>
         </div>
       </Sticky>
