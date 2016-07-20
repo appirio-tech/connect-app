@@ -36,19 +36,17 @@ class TopBar extends Component {
         //img: require('./nav-projects.svg'),
         text: 'Projects',
         link: '/projects',
-        regex: '/projects?\?',
-        // selected: true
+        regex: '/projects?\?'
       },
       { 
         //img: require('./nav-projects.svg'),
         text: 'Reports',
         link: '/reports',
-        regex: '/reports?\?',
-        // selected: false
+        regex: '/reports?\?'
       }
     ]
     const menubar = isLoggedIn
-      ? <MenuBar forReactRouter={ true } items={primaryNavigationItems} orientation="horizontal" />
+      ? <MenuBar forReactRouter items={primaryNavigationItems} orientation="horizontal" />
       : null
     const quickLinks = isLoggedIn ?
       <div className="quick-links-wrap"><QuickLinks domain={domain} /></div>

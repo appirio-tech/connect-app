@@ -11,7 +11,7 @@ class ReportDashboard extends Component {
   }
 }
 
-const mapStateToProps = ({ projectSearch, searchTerm }) => {
+const mapStateToProps = () => {
   return {
   }
 }
