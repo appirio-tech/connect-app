@@ -12,7 +12,7 @@ class ProjectSpecification extends Component {
     // TODO - add more
     return (
       <div className=''>
-        {this.props.project.details}
+        Project specification goes here
       </div>
     )
   }
