@@ -13,51 +13,44 @@ class ProjectToolBar extends Component {
   }
 
   render() {
-    const {project, recentProjects} = this.props
+    const {project} = this.props
 
     //TODO prepare navigation items according to roles of the user
     const primaryNavigationItems = [
       {
         //img: require('./nav-projects.svg'),
         text: 'Dashboard',
-        link: '/projects/dashboard',
+        link: `/projects/${project.id}/`,
         regex: '/dashboard?\?',
         selected: true
       },
       {
         //img: require('./nav-projects.svg'),
         text: 'Challenges',
-        link: '/projects/challenges',
+        link: `/projects/${project.id}/challenges/`,
         regex: '/challenges?\?',
         selected: true
       },
       {
         //img: require('./nav-projects.svg'),
         text: 'Project Details',
-        link: '/projects/details',
+        link: `/projects/${project.id}/specification/`,
         regex: '/details?\?',
         selected: true
       },
       {
         //img: require('./nav-projects.svg'),
         text: 'Sumbissions',
-        link: '/projects/submissions',
+        link: `/projects/${project.id}/submissions/`,
         regex: '/submissions?\?',
         selected: true
       }
     ]
+
     return (
       <div className="ProjectToolBar flex middle space-between">
-        <Dropdown pointerShadow>
-          <a className="dropdown-menu-header">{ project.name }</a>
-          <ul className="dropdown-menu-list">
-            {
-              recentProjects.map((recentProject, i) => {
-                return <li key={i}><a href="javascript:;">{recentProject.name}</a></li>
-              })
-            }
-          </ul>
-        </Dropdown>
+        <h3>{ project.name }</h3>
+
         <MenuBar items={primaryNavigationItems} orientation="horizontal" />
       </div>
     )
@@ -65,7 +58,7 @@ class ProjectToolBar extends Component {
 }
 
 ProjectToolBar.propTypes = {
-  domain                : PropTypes.string.isRequired
+  project : PropTypes.object.isRequired
 }
 
 ProjectToolBar.defaultProps = {
