@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import ProjectsView from './ProjectsView'
 import { loadProjects } from '../../actions/loadProjects'
 import { loadProject } from '../../actions/loadProject'
-import { isEndOfScreen } from '../../helpers'
+import { isEndOfScreen } from '../../../../helpers'
 
 class Projects extends Component {
   constructor(props) {
