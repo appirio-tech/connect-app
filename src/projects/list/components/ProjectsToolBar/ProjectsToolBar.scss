@@ -68,16 +68,29 @@
 
   .dropdown-wrap.default {
     height: 40px;
+
+    .dropdown-menu-header {
+      @include ellipsis;
+      max-width: 118px;/* 150 - 22(2 * 10 + 2) - 10(dropdown arrow) */
+    }
+
+    .Dropdown {
+      top: 40px;
+    }
   }
 
-  .projectTypes {
-    flex: 0 0 200px;
+  .project-types {
+    flex: 0 0 150px;
     margin: 0px calc(2 * #{$base_unit});
   }
 
-  .projectStatuses {
-    flex: 0 0 200px;
+  .project-statuses {
+    flex: 0 0 150px;
     margin: 0px calc(2 * #{$base_unit});
+  }
+
+  .my-projects-only {
+    flex: 1;
   }
 
   .actions {

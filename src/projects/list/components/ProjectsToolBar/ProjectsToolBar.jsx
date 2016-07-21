@@ -3,9 +3,8 @@ require('./ProjectsToolBar.scss')
 import React, {Component} from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
-import { SearchBar, Dropdown } from 'appirio-tech-react-components'
+import { SearchBar, Dropdown, SwitchButton } from 'appirio-tech-react-components'
 import { projectSuggestions } from '../../actions/loadProjects'
-import { loadProject } from '../../actions/loadProject'
 import { Sticky } from 'react-sticky'
 
 const projectTypes = [
@@ -30,16 +29,10 @@ class ProjectsToolBar extends Component {
     super(props)
     this.handleTermChange = this.handleTermChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
-    this.state = { recentTerms: [] }
-  }
-
-  handleTermChange(oldTerm, searchTerm, reqNo, callback) {
-    this.props.projectSuggestions(searchTerm)
-    this.setState({ callback, reqNo })
-  }
-
-  handleSearch(searchTerm) {
-    this.props.onSearch.apply(this, [searchTerm])
+    this.handleTypeFilter = this.handleTypeFilter.bind(this)
+    this.handleStatusFilter = this.handleStatusFilter.bind(this)
+    this.handleMyProjectsFilter = this.handleMyProjectsFilter.bind(this)
+    this.state = { recentTerms: [], filter: { type: {}, status: {}} }
   }
 
   componentDidUpdate() {
@@ -54,36 +47,68 @@ class ProjectsToolBar extends Component {
     }
   }
 
+  handleTermChange(oldTerm, searchTerm, reqNo, callback) {
+    this.props.projectSuggestions(searchTerm)
+    this.setState({ callback, reqNo })
+  }
+
+  handleSearch(searchTerm) {
+    this.props.onSearch.apply(this, [searchTerm])
+  }
+
+  handleTypeFilter(type) {
+    console.log(type)
+    const filter = this.state.filter
+    filter.type = type
+    this.setState({ filter : filter })
+  }
+
+  handleStatusFilter(status) {
+    console.log(status)
+    const filter = this.state.filter
+    filter.status = status
+    this.setState({ filter : filter })
+  }
+
+  handleMyProjectsFilter(event) {
+    console.log(event.target.checked)
+    this.setState({ filter :  { myProjects : event.target.checked } })
+  }
+
   render() {
-    // const {domain} = this.props
+    const { filter } = this.state
+    const { type , status } = filter
     return (
       <Sticky stickyClassName="StickyProjectsToolBar">
         <div className="ProjectsToolBar flex middle space-between">
           <div className="heading">All Projects</div>
           <SearchBar recentTerms={ this.state.recentTerms } onTermChange={ this.handleTermChange } onSearch={ this.handleSearch } />
-          <div className="projectTypes">
-            <Dropdown theme="default">
-              <a className="dropdown-menu-header">All Types</a>
+          <div className="project-types">
+            <Dropdown theme="default" noPointer>
+              <a className="dropdown-menu-header">{ type.value || 'All Types' }</a>
               <ul className="dropdown-menu-list">
                 {
                   projectTypes.map((pt, i) => {
-                    return <li key={i}><a href="javascript:;">{pt.value}</a></li>
+                    return <li key={i} onClick={ () => { this.handleTypeFilter(pt) } }><a href="javascript:;">{pt.value}</a></li>
                   })
                 }
               </ul>
             </Dropdown>
           </div>
-          <div className="projectStatuses">
-            <Dropdown theme="default">
-              <a className="dropdown-menu-header">All Status</a>
+          <div className="project-statuses">
+            <Dropdown theme="default" noPointer>
+              <a className="dropdown-menu-header">{ status.value || 'All Status' }</a>
               <ul className="dropdown-menu-list">
                 {
-                  projectStatuses.map((pt, i) => {
-                    return <li key={i}><a href="javascript:;">{pt.value}</a></li>
+                  projectStatuses.map((ps, i) => {
+                    return <li key={i} onClick={ () => { this.handleStatusFilter(ps) } }><a href="javascript:;">{ps.value}</a></li>
                   })
                 }
               </ul>
             </Dropdown>
+          </div>
+          <div className="my-projects-only">
+            <SwitchButton onChange={ this.handleMyProjectsFilter } label="My projects only" name="my-projects-only" />
           </div>
           <div className="actions">
             <Link className="new-project-action tc-btn tc-btn-primary tc-btn-sm" to="projects/create" >+ New Project</Link>
@@ -108,7 +133,7 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm }) => {
   }
 }
 
-const actionsToBind = { projectSuggestions, loadProject }
+const actionsToBind = { projectSuggestions }
 
 export default connect(mapStateToProps, actionsToBind)(ProjectsToolBar)
 
