@@ -3,7 +3,7 @@ import projectSearch from './projectSearch'
 import projectSearchSuggestions from './projectSearchSuggestions'
 import searchTerm from './searchTerm'
 import loadUser from './loadUser'
-import loadProject from './loadProject'
+import currentProject from '../projects/reducers/project'
 import navSearch from './navSearch'
 
 export default combineReducers({
@@ -11,6 +11,7 @@ export default combineReducers({
   navSearch,
   projectSearch,
   projectSearchSuggestions,
-  loadProject,
+  // loadProject,
+  currentProject,
   searchTerm
 })

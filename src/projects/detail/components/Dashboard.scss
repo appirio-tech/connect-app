@@ -1,0 +1,14 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.dashboard-main {
+  background-color: $tc-white;
+  width: 70%;
+  margin: 10px;
+  padding: 7px;
+}
+.dashboard-sidebar {
+  background-color: $tc-white;
+  width: 30%;
+  margin: 10px;
+  padding: 7px;
+}

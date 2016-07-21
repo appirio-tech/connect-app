@@ -1,0 +1,17 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.specification {
+  // background-color: $tc-gray-20;
+}
+.specification-main {
+  background-color: $tc-white;
+  width: 70%;
+  margin: 10px;
+  padding: 7px;
+}
+.specification-sidebar {
+  background-color: $tc-white;
+  width: 30%;
+  margin: 10px;
+  padding: 7px;
+}

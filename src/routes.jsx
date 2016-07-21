@@ -1,14 +1,13 @@
 import React from 'react'
-import Route from 'react-router/lib/Route'
-
+import {Route, Redirect} from 'react-router'
 import App             from './components/App/App'
-import Projects    from './components/Projects/Projects'
-
-import projectDetailRoutes from './projects/detail/routes.jsx'
+import projectRoutes from './projects/routes.jsx'
 
 export default (
   <Route path="/" component={ App }>
-    <Route path="projects" component={ Projects } />
-    {projectDetailRoutes}
+    // Handle /projects/* routes
+    <Redirect from='/#/projects/1/' to='/projects/1/' />
+    {projectRoutes}
+
   </Route>
 )

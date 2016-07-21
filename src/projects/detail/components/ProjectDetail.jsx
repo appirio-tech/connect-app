@@ -1,34 +1,42 @@
 
-import React, { PropTypes, Component } from 'react'
-import ProjectToolBar from './ProjectToolBar/ProjectToolBar.jsx'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import {loadProject} from '../../actions/project'
+
 
 class ProjectDetail extends Component {
   constructor(props) {
     super(props)
   }
 
+  componentWillMount() {
+    let projectId = this.props.params.projectId
+    this.props.loadProject(projectId)
+  }
+
   render() {
+    var children = React.Children.map(this.props.children, (child) => {
+      return React.cloneElement(child, {
+        project: this.props.project
+      })
+    })
+
     return (
-      <div className=''>
-        <ProjectToolBar project={this.props.project} />
-        <span>this is a test</span>
-        { this.props.children }
-      </div>
+      <div>{children}</div>
     )
   }
 }
 
-ProjectDetail.propTypes = {}
-
-ProjectDetail.defaultProps = {
-  project: {
-    name: 'Test Project',
-    id: 1,
-    description: "This is a rather short description of the project",
-    details: {
-      features: ['login', 'dashboard', 'analytics']
-    }
+const mapStateToProps = ({currentProject}) => {
+  return {
+    isLoading: currentProject.isLoading,
+    project: currentProject.project
   }
 }
+const mapDispatchToProps = { loadProject }
 
-export default ProjectDetail
+ProjectDetail.propTypes = {
+  project: PropTypes.object.isRequired
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetail)

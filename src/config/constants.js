@@ -34,7 +34,7 @@ export const PROJECT_LOAD_SUCCESS     = 'PROJECT_LOAD_SUCCESS'
 
 export const DOMAIN = process.env.domain || 'topcoder.com'
 export const CONNECT_DOMAIN = `connect.${DOMAIN}`
-export const ACCOUNTS_APP_CONNECTOR_URL = 'https://accounts.topcoder-dev.com/connector.html'
+export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
 
 // FIXME: Change to process.env.INTERNAL_API after added to webpack
 export const INTERNAL_API = `https://internal-api.${DOMAIN}/v3`
