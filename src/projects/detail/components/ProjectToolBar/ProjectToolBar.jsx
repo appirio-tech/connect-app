@@ -1,14 +1,14 @@
-require('./ProjectTopBar.scss')
+require('./ProjectToolBar.scss')
 
 import React, {PropTypes, Component} from 'react'
-import { LinkMenuBar } from 'appirio-tech-react-components'
+import { MenuBar } from 'appirio-tech-react-components'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
 // properties: username, userImage, domain, mobileMenuUrl, mobileSearchUrl, searchSuggestionsFunc
 // searchSuggestionsFunc should return a Promise object
 
-class ProjectTopBar extends Component {
+class ProjectToolBar extends Component {
 
   constructor(props) {
     super(props)
@@ -48,7 +48,7 @@ class ProjectTopBar extends Component {
 
 
     return (
-      <div className="ProjectTopBar flex middle space-between">
+      <div className="ProjectToolBar flex middle space-between">
         <h3>{ project.title }</h3>
         <MenuBar items={primaryNavigationItems} orientation="horizontal" forReactRouter={true}/>
       </div>
@@ -62,15 +62,15 @@ const mapStateToProps = ({currentProject}) => {
   }
 }
 
-ProjectTopBar.propTypes = {
+ProjectToolBar.propTypes = {
   userRoles : PropTypes.arrayOf(PropTypes.string).isRequired,
   project   : PropTypes.object.isRequired,
   isLoading : PropTypes.bool.isRequired
 }
 
 // TODO remove this once we have data coming from JWT
-ProjectTopBar.defaultProps = {
+ProjectToolBar.defaultProps = {
   userRoles: ['Topcoder User']
 }
 
-export default connect(mapStateToProps)(ProjectTopBar)
+export default connect(mapStateToProps)(ProjectToolBar)

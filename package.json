@@ -32,7 +32,6 @@
   "dependencies": {
     "appirio-tech-react-components": "appirio-tech/react-components.git#feature/connectv2",
     "classnames": "^2.2.3",
-    "fixed-data-table": "^0.6.2",
     "history": "^1.17.0",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.14.1",

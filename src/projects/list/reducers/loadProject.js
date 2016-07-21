@@ -1,7 +1,7 @@
 import {
   CLEAR_LOADED_PROJECT, PROJECT_LOAD_SUCCESS,
   PROJECT_LOAD_FAILURE
-} from '../config/constants'
+} from '../../../config/constants'
 
 export const initialState = {
   pageLoaded: false,

@@ -1,0 +1,103 @@
+// this is to include tc styles in the output library
+@import 'tc-styles';
+
+
+.StickyProjectsToolBar {
+  z-index: 11;/* > 10 which is the highest z index set by table component*/
+}
+
+.ProjectsToolBar {
+  height: 60px;
+  background-color: $tc-gray-neutral-light;
+  padding: 10px 20px;
+  width: 100%;
+  display: flex;
+  z-index: 11;
+
+  @media screen and (max-width: $screen-md) {
+    height: 40px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .heading {
+    flex: 1;
+  }
+
+  .topcoder-logo {
+    width: 56px;
+    height: 24px;
+    margin-right: 40px;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+
+    @media screen and (min-width: $screen-sm) {
+      width: 155px;
+
+      &.non-mobile {
+        display: flex;
+      }
+      &.mobile {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: $screen-sm) {
+      width: 40px;
+      margin-right: 15px;
+
+      &.non-mobile {
+        display: none;
+      }
+      &.mobile {
+        display: flex;
+      }
+    }
+  }
+
+  .links-section {
+    display: flex;
+    align-items: center;
+  }
+
+  .SearchBar {
+    flex: 1;
+    margin: 0px calc(2 * #{$base_unit});
+  }
+
+  .dropdown-wrap.default {
+    height: 40px;
+
+    .dropdown-menu-header {
+      @include ellipsis;
+      max-width: 118px;/* 150 - 22(2 * 10 + 2) - 10(dropdown arrow) */
+    }
+
+    .Dropdown {
+      top: 40px;
+    }
+  }
+
+  .project-types {
+    flex: 0 0 150px;
+    margin: 0px calc(2 * #{$base_unit});
+  }
+
+  .project-statuses {
+    flex: 0 0 150px;
+    margin: 0px calc(2 * #{$base_unit});
+  }
+
+  .my-projects-only {
+    flex: 1;
+  }
+
+  .actions {
+    margin: 0px calc(2 * #{$base_unit});
+    .new-project-action {
+      font-size: 13px;
+      line-height: 20px;
+    }
+  }
+}

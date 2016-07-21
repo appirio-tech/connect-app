@@ -12,7 +12,6 @@ export function loadProject(projectId) {
     const state = getState()
     const currentProject = state.currentProject
     // check if project is being loaded or was loaded recently
-    debugger
     let now = new Date().getTime()
     if (currentProject.projectId == projectId &&
       (now - currentProject.lastUpdated.getTime() < 3000

@@ -4,7 +4,7 @@ import {
   CLEAR_PROJECT_SEARCH, PROJECT_SEARCH_SUCCESS, PROJECT_SEARCH_FAILURE,
   RESET_SEARCH_TERM, SET_SEARCH_TERM,
   CLEAR_PROJECT_SUGGESTIONS_SEARCH, PROJECT_SUGGESTIONS_SEARCH_SUCCESS
-  } from '../config/constants'
+  } from '../../../config/constants'
 
 export function loadProjects(searchTerm) {
   return ((dispatch, getState) => {
