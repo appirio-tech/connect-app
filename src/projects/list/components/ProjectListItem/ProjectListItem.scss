@@ -1,11 +1,11 @@
-@import '~tc-ui/src/styles/tc-includes';
+@import 'tc-styles';
 
-.Project {
+.ProjectListItem {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: calc(4 * #{$base_unit});
-  max-width: 960px;
+  // max-width: 960px;
   margin: 0px auto;
   border-bottom: 1px solid rgba(163, 163, 174, 0.3);
   @media (max-width: 700px) {
@@ -31,6 +31,10 @@
     text-align: center;
     width: 20%;
   }
+}
+
+.header {
+  background-color: $tc-gray-neutral-light;
 }
 
 // ReactCSSTransitionGroup transitions

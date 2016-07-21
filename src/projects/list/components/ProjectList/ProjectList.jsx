@@ -1,17 +1,17 @@
 import React, { PropTypes } from 'react'
-import Project from '../Project/Project'
+import ProjectListItem from '../ProjectListItem/ProjectListItem'
 
 require('./ProjectList.scss')
 
 const ProjectList = (({ projects }) => {
 
   const renderProject = (project, idx) => {
-    return (<Project project={ project } key={ idx } />)
+    return (<ProjectListItem project={ project } key={ idx } />)
   }
-
 
   return (
     <div className="project-list">
+      <ProjectListItem  headerOnly />
       { projects.map(renderProject) }
     </div>
   )
