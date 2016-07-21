@@ -8,7 +8,7 @@ require('./ProjectListItem.scss')
 const ProjectListItem = ({ project, headerOnly = false, shouldAnimate = false }) => {
   const projectStyles = classNames(
     'ProjectListItem',
-    { 'header' : headerOnly }
+    { header : headerOnly }
   )
 
   let projectDOM = (

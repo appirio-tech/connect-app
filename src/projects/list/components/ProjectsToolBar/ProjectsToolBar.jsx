@@ -60,14 +60,14 @@ class ProjectsToolBar extends Component {
     console.log(type)
     const filter = this.state.filter
     filter.type = type
-    this.setState({ filter : filter })
+    this.setState({ filter })
   }
 
   handleStatusFilter(status) {
     console.log(status)
     const filter = this.state.filter
     filter.status = status
-    this.setState({ filter : filter })
+    this.setState({ filter })
   }
 
   handleMyProjectsFilter(event) {
@@ -77,7 +77,7 @@ class ProjectsToolBar extends Component {
 
   render() {
     const { filter } = this.state
-    const { type , status } = filter
+    const { type, status } = filter
     return (
       <Sticky stickyClassName="StickyProjectsToolBar">
         <div className="ProjectsToolBar flex middle space-between">
@@ -89,7 +89,7 @@ class ProjectsToolBar extends Component {
               <ul className="dropdown-menu-list">
                 {
                   projectTypes.map((pt, i) => {
-                    return <li key={i} onClick={ () => { this.handleTypeFilter(pt) } }><a href="javascript:;">{pt.value}</a></li>
+                    return <li key={i} onClick={ function() { this.handleTypeFilter(pt) } }><a href="javascript:;">{pt.value}</a></li>
                   })
                 }
               </ul>
@@ -101,7 +101,7 @@ class ProjectsToolBar extends Component {
               <ul className="dropdown-menu-list">
                 {
                   projectStatuses.map((ps, i) => {
-                    return <li key={i} onClick={ () => { this.handleStatusFilter(ps) } }><a href="javascript:;">{ps.value}</a></li>
+                    return <li key={i} onClick={ function() { this.handleStatusFilter(ps) } }><a href="javascript:;">{ps.value}</a></li>
                   })
                 }
               </ul>
@@ -136,4 +136,3 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm }) => {
 const actionsToBind = { projectSuggestions }
 
 export default connect(mapStateToProps, actionsToBind)(ProjectsToolBar)
-

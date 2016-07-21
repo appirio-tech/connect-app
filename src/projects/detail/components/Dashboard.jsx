@@ -1,5 +1,3 @@
-'use strict'
-
 import React, { Component } from 'react'
 
 require('./Dashboard.scss')
@@ -12,11 +10,11 @@ class ProjectDashboard extends Component {
   render() {
     // TODO - add more
     return (
-      <div className='dashboard flex'>
-        <div className='dashboard-main'>
+      <div className="dashboard flex">
+        <div className="dashboard-main">
           <h3>Name: {this.props.project.title}</h3>
         </div>
-        <div className='dashboard-sidebar'>
+        <div className="dashboard-sidebar">
           {/*
             <ProjectProgress project={this.props.project} />
             <ProjectTeam project={this.props.members}>

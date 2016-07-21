@@ -13,11 +13,11 @@ class ProjectSpecification extends Component {
     const {project} = this.props
     let details = JSON.stringify(project.details||{}, null, 2)
     return (
-      <div className='specification flex'>
-        <div className='specification-main'>
+      <div className="specification flex">
+        <div className="specification-main">
           { details }
         </div>
-        <div className='specification-sidebar'>
+        <div className="specification-sidebar">
           project specification sidebar
         </div>
       </div>

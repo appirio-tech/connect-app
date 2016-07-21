@@ -12,12 +12,12 @@ import ProjectToolBar from './detail/components/ProjectToolBar/ProjectToolBar'
 
 
 const projectRoutes = (
-  <Route path='/projects' component={ ProjectLayout }>
+  <Route path="/projects" component={ ProjectLayout }>
     // TODO add project topbar
     <IndexRoute components={{topbar: null, main: Projects }} />
-    <Route path=':projectId' components={{topbar: ProjectToolBar, main: ProjectDetail}} >
+    <Route path=":projectId" components={{topbar: ProjectToolBar, main: ProjectDetail}} >
       <IndexRoute component={ Dashboard } />
-      <Route path='specification' component={ Specification } />
+      <Route path="specification" component={ Specification } />
     </Route>
   </Route>
 )

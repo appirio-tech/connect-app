@@ -15,6 +15,5 @@ export default combineReducers({
   projectSearch,
   projectSearchSuggestions,
   currentProject,
-  loadProject, // TODO rename this
-  searchTerm
+  loadProject // TODO rename this
 })

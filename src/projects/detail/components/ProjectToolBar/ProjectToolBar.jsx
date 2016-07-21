@@ -21,36 +21,35 @@ class ProjectToolBar extends Component {
       {
         //img: require('./nav-projects.svg'),
         text: 'Dashboard',
-        link: `/projects/${project.id}/`,
+        link: `/projects/${project.id}/`
       },
       {
         //img: require('./nav-projects.svg'),
         text: 'Project Details',
-        link: `/projects/${project.id}/specification/`,
+        link: `/projects/${project.id}/specification/`
       },
       {
         //img: require('./nav-projects.svg'),
         text: 'Sumbissions',
-        link: `/projects/${project.id}/submissions/`,
+        link: `/projects/${project.id}/submissions/`
       }
     ]
-    let isCopilotOrManager = !!_.find(userRoles, (r)=> {
-      r = r.toLowerCase();
+    const isCopilotOrManager = !!_.find(userRoles, (r) => {
+      r = r.toLowerCase()
       return r.indexOf('copilot') > -1 || r.indexOf('manager') > -1
     })
     if (isCopilotOrManager) {
       primaryNavigationItems.splice(2, 0, {
         //img: require('./nav-projects.svg'),
         text: 'Challenges',
-        link: `/projects/${project.id}/challenges/`,
+        link: `/projects/${project.id}/challenges/`
       })
     }
-
 
     return (
       <div className="ProjectToolBar flex middle space-between">
         <h3>{ project.title }</h3>
-        <MenuBar items={primaryNavigationItems} orientation="horizontal" forReactRouter={true}/>
+        <MenuBar items={primaryNavigationItems} orientation="horizontal" forReactRouter />
       </div>
     )
   }

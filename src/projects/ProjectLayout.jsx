@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 
 require('./ProjectLayout.scss')
 
@@ -10,12 +10,12 @@ class ProjectViewLayout extends Component {
   render() {
     const {topbar, main} = this.props
     return (
-      <div className='content-pane'>
-        <div className='top-bar'>
+      <div className="content-pane">
+        <div className="top-bar">
           {topbar}
         </div>
-        <div className='content flex'>
-          <div className='main-pane'>
+        <div className="content flex">
+          <div className="main-pane">
             {main}
           </div>
         </div>

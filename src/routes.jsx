@@ -1,5 +1,5 @@
 import React from 'react'
-import {Route, Redirect} from 'react-router'
+import {Route} from 'react-router'
 import App             from './components/App/App'
 import projectRoutes from './projects/routes.jsx'
 import reportsListRoutes from './reports/routes.jsx'

@@ -2,6 +2,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import {loadProject} from '../../actions/project'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
+
 
 
 class ProjectDetail extends Component {
@@ -10,20 +12,26 @@ class ProjectDetail extends Component {
   }
 
   componentWillMount() {
-    let projectId = this.props.params.projectId
+    const projectId = this.props.params.projectId
     this.props.loadProject(projectId)
   }
 
   render() {
-    var children = React.Children.map(this.props.children, (child) => {
-      return React.cloneElement(child, {
-        project: this.props.project
+    // handle loading state
+    if (this.props.isLoading) {
+      return (
+        <LoadingIndicator />
+      )
+    } else {
+      const children = React.Children.map(this.props.children, (child) => {
+        return React.cloneElement(child, {
+          project: this.props.project
+        })
       })
-    })
-
-    return (
-      <div>{children}</div>
-    )
+      return (
+        <div>{children}</div>
+      )
+    }
   }
 }
 
@@ -36,7 +44,8 @@ const mapStateToProps = ({currentProject}) => {
 const mapDispatchToProps = { loadProject }
 
 ProjectDetail.propTypes = {
-  project: PropTypes.object.isRequired
+  project   : PropTypes.object.isRequired,
+  isLoading : PropTypes.bool.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetail)
