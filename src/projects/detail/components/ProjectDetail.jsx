@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import {loadProject} from '../../actions/project'
+import {fetchProject} from '../../../actions/project'
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 
 
@@ -13,7 +13,7 @@ class ProjectDetail extends Component {
 
   componentWillMount() {
     const projectId = this.props.params.projectId
-    this.props.loadProject(projectId)
+    this.props.fetchProject(projectId)
   }
 
   render() {
@@ -41,7 +41,7 @@ const mapStateToProps = ({currentProject}) => {
     project: currentProject.project
   }
 }
-const mapDispatchToProps = { loadProject }
+const mapDispatchToProps = { fetchProject }
 
 ProjectDetail.propTypes = {
   project   : PropTypes.object.isRequired,

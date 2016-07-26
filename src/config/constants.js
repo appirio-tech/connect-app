@@ -28,13 +28,25 @@ export const CLEAR_LOADED_PROJECT     = 'CLEAR_LOADED_PROJECT'
 export const PROJECT_LOAD_FAILURE     = 'PROJECT_LOAD_FAILURE'
 export const PROJECT_LOAD_SUCCESS     = 'PROJECT_LOAD_SUCCESS'
 
+export const CREATE_PROJECT           = 'CREATE_PROJECT'
+export const CREATE_PROJECT_SUCCESS   = 'CREATE_PROJECT_SUCCESS'
+export const CREATE_PROJECT_FAILURE   = 'CREATE_PROJECT_FAILURE'
+
+export const UPDATE_PROJECT           = 'UPDATE_PROJECT'
+export const UPDATE_PROJECT_SUCCESS   = 'UPDATE_PROJECT_SUCCESS'
+export const UPDATE_PROJECT_FAILURE   = 'UPDATE_PROJECT_FAILURE'
+
 /*
  * URLs
  */
 
+export const ROLE_TOPCODER_MANAGER = 'manager'
+export const ROLE_ADMINISTRATOR = 'administrator'
+
 export const DOMAIN = process.env.domain || 'topcoder.com'
 export const CONNECT_DOMAIN = `connect.${DOMAIN}`
 export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
+export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || 'https://accounts.topcoder-dev.com/connect'
 
 // FIXME: Change to process.env.INTERNAL_API after added to webpack
 export const INTERNAL_API = `https://internal-api.${DOMAIN}/v3`
