@@ -4,7 +4,7 @@ import React, {Component} from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { SearchBar, Dropdown, SwitchButton } from 'appirio-tech-react-components'
-import { projectSuggestions } from '../../actions/loadProjects'
+import { projectSuggestions, loadProjects } from '../../actions/loadProjects'
 import { Sticky } from 'react-sticky'
 
 const projectTypes = [
@@ -53,7 +53,7 @@ class ProjectsToolBar extends Component {
   }
 
   handleSearch(searchTerm) {
-    this.props.onSearch.apply(this, [searchTerm])
+    this.props.loadProjects.apply(this, [searchTerm])
   }
 
   handleTypeFilter(type) {
@@ -133,6 +133,6 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm }) => {
   }
 }
 
-const actionsToBind = { projectSuggestions }
+const actionsToBind = { projectSuggestions, loadProjects }
 
 export default connect(mapStateToProps, actionsToBind)(ProjectsToolBar)
