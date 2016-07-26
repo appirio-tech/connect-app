@@ -2,7 +2,8 @@
 import {
   LOAD_PROJECT, PROJECT_LOAD_SUCCESS, PROJECT_LOAD_FAILURE,
   CREATE_PROJECT, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE,
-  UPDATE_PROJECT, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE
+  UPDATE_PROJECT, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
+  CLEAR_LOADED_PROJECT
 } from '../config/constants'
 import { createProject as createProjectApi, updateProject as updateProjectApi, getProjectById } from '../api/projects'
 
@@ -26,6 +27,14 @@ export function createProject(newProject) {
           error: err
         })
       })
+  })
+}
+
+export function clearLoadedProject() {
+  return ((dispatch) => {
+    dispatch({
+      type: CLEAR_LOADED_PROJECT
+    })
   })
 }
 
@@ -56,12 +65,12 @@ export function updateProject(projectId, updatedProps) {
 export function fetchProject(projectId) {
   return ((dispatch, getState) => {
     const state = getState()
-    const currentProject = state.currentProject
+    const projectState = state.projectState
     // check if project is being loaded or was loaded recently
     const now = new Date().getTime()
-    if (currentProject.projectId === projectId &&
-      (now - currentProject.lastUpdated.getTime() < 3000
-      || currentProject.isLoading)
+    if (projectState.projectId === projectId &&
+      (now - projectState.lastUpdated.getTime() < 3000
+      || projectState.isLoading)
     ) {
       // project is already loaded or is loading so dont dispatch
       // TODO - not dispatching since state should already be up to date

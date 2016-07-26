@@ -54,10 +54,10 @@ class ProjectToolBar extends Component {
     )
   }
 }
-const mapStateToProps = ({currentProject}) => {
+const mapStateToProps = ({projectState}) => {
   return {
-    isLoading: currentProject.isLoading,
-    project: currentProject.project
+    isLoading: projectState.isLoading,
+    project: projectState.project
   }
 }
 

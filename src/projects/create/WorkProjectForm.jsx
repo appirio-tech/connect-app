@@ -3,8 +3,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Form, Errors, Field } from 'react-redux-form'
-import { createProject } from '../../actions/project'
-import { hashHistory } from 'react-router'
+import { createProject, clearLoadedProject } from '../../actions/project'
+import { withRouter } from 'react-router'
 
 class WorkProjectForm extends Component {
 
@@ -14,17 +14,20 @@ class WorkProjectForm extends Component {
     // TODO handle success
   }
 
+  componentWillMount() {
+    this.props.clearLoadedProject()
+  }
+
   componentWillUpdate(nextProps) {
     if (!nextProps.isLoading &&
         nextProps.project.id) {
       debugger
       console.log('project created', nextProps.project)
-      hashHistory.transitionTo('/projects/' + nextProps.project.id )
+      this.props.router.push('/projects/' + nextProps.project.id )
     }
   }
 
   render() {
-
     let { newProject } = this.props
 
     return (
@@ -67,6 +70,6 @@ const mapStateToProps = ({ newProject, projectState }) => ({
   project: projectState.project
 })
 
-const mapActionsToProps = { createProject }
+const mapActionsToProps = { createProject, clearLoadedProject }
 
-export default connect(mapStateToProps, mapActionsToProps)(WorkProjectForm)
+export default withRouter(connect(mapStateToProps, mapActionsToProps)(WorkProjectForm))
