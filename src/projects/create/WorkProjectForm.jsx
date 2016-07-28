@@ -2,26 +2,21 @@
 
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { Form, Errors, Field } from 'react-redux-form'
+import { Form, actions as modelActions} from 'react-redux-form'
 import { createProject, clearLoadedProject } from '../../actions/project'
 import { withRouter } from 'react-router'
+import { InputFormField, TextareaFormField } from 'appirio-tech-react-components'
 
 class WorkProjectForm extends Component {
 
-  handleSubmit(val) {
-    console.log('creating project', val)
-    this.props.createProject(val)
-    // TODO handle success
-  }
-
   componentWillMount() {
     this.props.clearLoadedProject()
+    // set project type to generic
+    this.props.assignProjectType('generic')
   }
 
   componentWillUpdate(nextProps) {
-    if (!nextProps.isLoading &&
-        nextProps.project.id) {
-      debugger
+    if (!nextProps.isLoading && nextProps.project.id) {
       console.log('project created', nextProps.project)
       this.props.router.push('/projects/' + nextProps.project.id )
     }
@@ -31,30 +26,49 @@ class WorkProjectForm extends Component {
     let { newProject } = this.props
 
     return (
-      <Form model="newProject" onSubmit={(val) => this.handleSubmit(val)}>
-        <Field model="newProject.name"
-          errors={{
-            required: (val) => !val || !val.length
-          }}>
-          <label>Project Name</label>
-          <input type="text" placeholder="Enter project name ... "/>
-        </Field>
+      <Form model="newProject" onSubmit={(val) => this.props.submitHandler(val)}>
+        <div className="project-info">
+            <h2>Project info</h2>
 
-        <div>
-        <Errors
-          model="newProject.name"
-          messages={{
-            required: 'Please enter an email address.'
-          }} />
+            <div className="row">
+              <InputFormField
+                id="name"
+                validators={{
+                  required: (val) => val
+                }}
+                errorMessages={{
+                  required: 'Please provide a project name'
+                }}
+                formModelName="newProjectForm"
+                fieldModelName="newProject.name"
+                label="Project Name"
+                placeholder="Enter project name"
+                inputType="text"
+                />
+            </div>
+
+            <div className="row">
+              <TextareaFormField
+                id="description"
+                formModelName="newProjectForm"
+                fieldModelName="newProject.description"
+                label="Description"
+              />
+            </div>
+
+            <div className="row center">
+              <InputFormField
+                id="utm.code"
+                formModelName="newProjectForm"
+                fieldModelName="newProject.utm.code"
+                label="Invite Code (optional):"
+                placeholder=""
+                inputType="text"
+              />
+
+            </div>
+
         </div>
-
-        <Field model="newProject.description"
-          validators={{
-            required: (val) => val && val.length
-          }}>
-          <label>Description</label>
-          <textarea />
-        </Field>
 
         <button>
           Create
@@ -64,12 +78,21 @@ class WorkProjectForm extends Component {
   }
 }
 
+WorkProjectForm.propTypes = {
+  submitHandler: PropTypes.func.isRequired
+}
+
 const mapStateToProps = ({ newProject, projectState }) => ({
   newProject,
   isLoading: projectState.isLoading,
   project: projectState.project
 })
 
-const mapActionsToProps = { createProject, clearLoadedProject }
+function assignProjectType(type) {
+  return (dispatch) => {
+    dispatch(modelActions.change('newProject.type', type))
+  }
+}
+const mapActionsToProps = { clearLoadedProject, assignProjectType }
 
 export default withRouter(connect(mapStateToProps, mapActionsToProps)(WorkProjectForm))

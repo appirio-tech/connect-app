@@ -4,6 +4,10 @@ import React, { Component, PropTypes } from 'react'
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs'
 import { ROLE_TOPCODER_MANAGER, ROLE_ADMINISTRATOR } from '../../config/constants'
 import WorkProjectForm from './WorkProjectForm'
+import AppProjectForm from './AppProjectForm'
+import { createProject, clearLoadedProject } from '../../actions/project'
+
+require('./CreateProject.scss')
 
 class CreateView extends Component {
 
@@ -15,59 +19,58 @@ class CreateView extends Component {
     console.log('SelectedTab: ' + index, ', LastTab: ' + last)
   }
 
-  renderAppProjectWizard() {
-    return (
-      <div>Create project tab</div>
-    )
+  createProject(val) {
+    debugger
+    console.log('creating project', val)
+    this.props.createProject(val)
   }
 
-  renderWorkProject() {
-    return (
-      <WorkProjectForm />
-    )
+  switchTab(val) {
+    this.props.currentTab = val
   }
 
   renderTabs() {
-    const appProjectWizard = this.renderAppProjectWizard()
-    const workProjectWizard = this.renderWorkProject()
-
     return (
-      <div>
-        <Tabs onSelect={this.handleSelect} >
-          <TabList>
-            <Tab>App Project</Tab>
-            <Tab>Work</Tab>
-          </TabList>
-          <TabPanel>
-            {appProjectWizard}
-          </TabPanel>
-          <TabPanel>
-            {workProjectWizard}
-          </TabPanel>
-        </Tabs>
+      <div className="tabs">
+        <ul>
+          <li className="active"><a href="#">App Project</a></li>
+          <li><a href="#">Work Project</a></li>
+        </ul>
       </div>
     )
   }
 
-
-
   render() {
+    const childDoms = []
+    let tabs = null, form = null
     if (_.indexOf(this.props.userRoles, ROLE_TOPCODER_MANAGER) > -1 ||
         _.indexOf(this.props.userRoles, ROLE_ADMINISTRATOR) > -1 ) {
-      return this.renderTabs()
+      tabs = this.renderTabs()
+      // Todo select based on Tab
+      form = <AppProjectForm submitHandler={this.createProject}/>
     } else {
-      return this.renderAppProjectWizard()
+      form = <WorkProjectForm submitHandler={this.createProject}/>
     }
+    return (
+      <section className="content">
+        <div className="container">
+          <a href="#" className="btn-close">x</a>
+          {tabs}
+          {form}
+        </div>
+      </section>
+    )
   }
-
 }
 
 CreateView.propTypes = {
-  userRoles: PropTypes.arrayOf(PropTypes.string).isRequired
+  userRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  currentTab: PropTypes.number.isRequired
 }
 
 CreateView.defaultProps = {
-  userRoles: ['manager']
+  userRoles: ['manager'],
+  currentTab: 0
 }
 
 export default CreateView

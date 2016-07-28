@@ -63,7 +63,16 @@ export const projectState = function (state=initialState, action) {
 
 export const newProject = modelReducer('newProject', {
   name: '',
-  description: ''
+  description: '',
+  utm: {
+    code: ''
+  },
+  type: '',
+  details: {
+    version: 'v2',
+    devices: ['phone'],
+    appType: ''
+  }
 })
 
 export const newProjectForm = formReducer('newProject')
