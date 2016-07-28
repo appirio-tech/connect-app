@@ -1,6 +1,6 @@
 import { getFreshToken } from 'tc-accounts'
 
-export function jwt({  }) {
+export function jwt({ dispatch, getState }) {
   return (next) => (action) => {
     // only worry about expiring token for async actions
     if (typeof action === 'function') {
