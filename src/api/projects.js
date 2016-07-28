@@ -5,6 +5,7 @@ const _projects = require('./test/projects.json')
 
 export function getProjects(criteria, sort, limit, offset) {
   // TODO
+  console.log(criteria, sort, limit, offset)
 }
 
 /**
@@ -21,7 +22,7 @@ export function getProjectById(projectId) {
 }
 
 export function updateProject(projectId, updatedProps) {
-  let p = _.find(projects, (p) => { return p.id === projectId })
+  const p = _.find(_projects, (p) => { return p.id === projectId })
   if (!p)
     return Promise.reject('Project not found')
 
@@ -32,8 +33,8 @@ export function updateProject(projectId, updatedProps) {
 
 
 export function createProject(projectProps) {
-  let newId = _.max(_.map(_projects, 'id')) + 1
-  let newProject = _.assign({}, projectProps, {id: newId})
+  const newId = _.max(_.map(_projects, 'id')) + 1
+  const newProject = _.assign({}, projectProps, {id: newId})
   _projects.push(newProject)
   return Promise.resolve(newProject)
 }

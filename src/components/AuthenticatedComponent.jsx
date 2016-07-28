@@ -1,15 +1,16 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { getFreshToken } from 'tc-accounts'
-import { ACCOUNTS_APP_LOGIN_URL } from '../config/constants'
 
+import {getFreshToken} from 'tc-accounts'
+import {ACCOUNTS_APP_LOGIN_URL} from '../config/constants'
 
 export function requiresAuthentication(Component) {
 
   class AuthenticatedComponent extends React.Component {
     constructor(props) {
       super(props)
-      this.state = {isLoggedIn: false}
+      this.state = {
+        isLoggedIn: false
+      }
     }
 
     componentWillMount() {
@@ -17,17 +18,15 @@ export function requiresAuthentication(Component) {
     }
 
     checkAuth() {
-      getFreshToken()
-        .then((token) => {
-          this.setState({isLoggedIn: true})
-        })
-        .catch(() => {
-            // FIXME should we include hash, search etc
-            let redirectBackToUrl = window.location.origin + '/' + this.props.location.pathname
-            let newLocation = ACCOUNTS_APP_LOGIN_URL + '?retUrl=' + redirectBackToUrl
-            console.log('redirecting... ', newLocation)
-            window.location = newLocation
-        })
+      getFreshToken().then(() => {
+        this.setState({isLoggedIn: true})
+      }).catch(() => {
+        // FIXME should we include hash, search etc
+        const redirectBackToUrl = window.location.origin + '/' + this.props.location.pathname
+        const newLocation = ACCOUNTS_APP_LOGIN_URL + '?retUrl=' + redirectBackToUrl
+        console.log('redirecting... ', newLocation)
+        window.location = newLocation
+      })
     }
 
     render() {
@@ -35,7 +34,7 @@ export function requiresAuthentication(Component) {
         <div>
           {
             this.state.isLoggedIn === true
-            ? <Component { ...this.props} />
+            ? <Component { ...this.props}/>
             : null
           }
         </div>

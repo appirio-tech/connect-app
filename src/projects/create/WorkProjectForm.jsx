@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Form, actions as modelActions} from 'react-redux-form'
-import { createProject, clearLoadedProject } from '../../actions/project'
+import { clearLoadedProject } from '../../actions/project'
 import { withRouter } from 'react-router'
 import { InputFormField, TextareaFormField } from 'appirio-tech-react-components'
 
@@ -23,8 +23,6 @@ class WorkProjectForm extends Component {
   }
 
   render() {
-    let { newProject } = this.props
-
     return (
       <Form model="newProject" onSubmit={(val) => this.props.submitHandler(val)}>
         <div className="project-info">
@@ -44,7 +42,7 @@ class WorkProjectForm extends Component {
                 label="Project Name"
                 placeholder="Enter project name"
                 inputType="text"
-                />
+              />
             </div>
 
             <div className="row">

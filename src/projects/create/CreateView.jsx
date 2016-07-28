@@ -1,11 +1,11 @@
 import _ from 'lodash'
 
 import React, { Component, PropTypes } from 'react'
-import {Tab, Tabs, TabList, TabPanel} from 'react-tabs'
 import { ROLE_TOPCODER_MANAGER, ROLE_ADMINISTRATOR } from '../../config/constants'
 import WorkProjectForm from './WorkProjectForm'
 import AppProjectForm from './AppProjectForm'
-import { createProject, clearLoadedProject } from '../../actions/project'
+import { connect } from 'react-redux'
+import { createProject } from '../../actions/project'
 
 require('./CreateProject.scss')
 
@@ -20,7 +20,6 @@ class CreateView extends Component {
   }
 
   createProject(val) {
-    debugger
     console.log('creating project', val)
     this.props.createProject(val)
   }
@@ -41,8 +40,8 @@ class CreateView extends Component {
   }
 
   render() {
-    const childDoms = []
-    let tabs = null, form = null
+    let tabs = null
+    let form = null
     if (_.indexOf(this.props.userRoles, ROLE_TOPCODER_MANAGER) > -1 ||
         _.indexOf(this.props.userRoles, ROLE_ADMINISTRATOR) > -1 ) {
       tabs = this.renderTabs()
@@ -73,4 +72,5 @@ CreateView.defaultProps = {
   currentTab: 0
 }
 
-export default CreateView
+const mapDispatchToProps = { createProject }
+export default connect(null, mapDispatchToProps)(CreateView)

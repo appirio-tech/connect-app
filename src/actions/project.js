@@ -56,7 +56,7 @@ export function updateProject(projectId, updatedProps) {
       .catch((err) => {
         dispatch({
           type: UPDATE_PROJECT_FAILURE,
-          updatedProps
+          err
         })
       })
   })
@@ -85,12 +85,13 @@ export function fetchProject(projectId) {
       .then((project) => {
         dispatch({
           type: PROJECT_LOAD_SUCCESS,
-          project: project
+          project
         })
       })
       .catch((err) => {
         dispatch({
-          type: PROJECT_LOAD_FAILURE
+          type: PROJECT_LOAD_FAILURE,
+          err
         })
       })
   })
