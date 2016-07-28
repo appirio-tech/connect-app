@@ -1,11 +1,11 @@
 import _ from 'lodash'
 
 import React, { Component, PropTypes } from 'react'
-import { ROLE_TOPCODER_MANAGER, ROLE_ADMINISTRATOR } from '../../config/constants'
+import { ROLE_TOPCODER_MANAGER, ROLE_ADMINISTRATOR } from '../../../config/constants'
 import WorkProjectForm from './WorkProjectForm'
 import AppProjectForm from './AppProjectForm'
 import { connect } from 'react-redux'
-import { createProject } from '../../actions/project'
+import { createProject } from '../../../actions/project'
 
 require('./CreateProject.scss')
 
@@ -53,7 +53,7 @@ class CreateView extends Component {
     return (
       <section className="content">
         <div className="container">
-          <a href="#" className="btn-close">x</a>
+          <a href="#" className="btn-close"></a>
           {tabs}
           {form}
         </div>

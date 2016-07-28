@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Form, actions as modelActions} from 'react-redux-form'
-import { clearLoadedProject } from '../../actions/project'
+import { clearLoadedProject } from '../../../actions/project'
 import { withRouter } from 'react-router'
 import { InputFormField, TextareaFormField } from 'appirio-tech-react-components'
 

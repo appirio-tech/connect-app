@@ -10,13 +10,14 @@ import Dashboard     from './detail/components/Dashboard'
 import Specification from './detail/components/Specification'
 import ProjectsToolBar from './list/components/ProjectsToolBar/ProjectsToolBar'
 import ProjectToolBar from './detail/components/ProjectToolBar/ProjectToolBar'
-import CreateProjectWizard from './create/CreateView'
+import CreateProjectWizard from './create/components/CreateView'
 import { requiresAuthentication } from '../components/AuthenticatedComponent'
 
 
 
 const projectRoutes = (
-  <Route path="/projects" component={ requiresAuthentication(ProjectLayout) }>
+  // TOOD add auth check requiresAuthentication(ProjectLayout)
+  <Route path="/projects" component={ ProjectLayout }>
     // TODO add project topbar
     <IndexRoute components={{topbar: ProjectsToolBar, main: Projects }} />
     <Route path="create" components={{topbar: null, main: CreateProjectWizard}} />
