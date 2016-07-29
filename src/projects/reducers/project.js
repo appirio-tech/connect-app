@@ -1,13 +1,20 @@
 
-import { LOAD_PROJECT, PROJECT_LOAD_SUCCESS,
-  PROJECT_LOAD_FAILURE} from '../../config/constants'
+import {
+  LOAD_PROJECT, PROJECT_LOAD_SUCCESS, PROJECT_LOAD_FAILURE,
+  CREATE_PROJECT, CREATE_PROJECT_SUCCESS,
+  CREATE_PROJECT_FAILURE, CLEAR_LOADED_PROJECT
+} from '../../config/constants'
+
+import { modelReducer, formReducer } from 'react-redux-form'
+
+
 
 const initialState = {
   isLoading: false,
   project: {}
 }
 
-export default function project(state=initialState, action) {
+export const projectState = function (state=initialState, action) {
 
   switch (action.type) {
   case LOAD_PROJECT:
@@ -28,7 +35,44 @@ export default function project(state=initialState, action) {
       error: true
     })
 
+  case CLEAR_LOADED_PROJECT:
+    return Object.assign({}, state, {
+      project: {}
+    })
+
+  case CREATE_PROJECT:
+    return Object.assign({}, state, {
+      isLoading: true
+    })
+  case CREATE_PROJECT_SUCCESS:
+    return Object.assign({}, state, {
+      isLoading: false,
+      project: action.newProject,
+      lastUpdated: new Date()
+    })
+  case CREATE_PROJECT_FAILURE:
+    return Object.assign({}, state, {
+      isLoading: false,
+      error: action.error
+    })
   default:
     return state
   }
 }
+
+
+export const newProject = modelReducer('newProject', {
+  name: '',
+  description: '',
+  utm: {
+    code: ''
+  },
+  type: '',
+  details: {
+    version: 'v2',
+    devices: ['phone'],
+    appType: ''
+  }
+})
+
+export const newProjectForm = formReducer('newProject')

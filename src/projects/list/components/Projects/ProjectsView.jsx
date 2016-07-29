@@ -8,7 +8,6 @@ import PageError from '../../../../components/PageError/PageError'
 import NoResults from '../../../../components/NoResults/NoResults'
 import LoadMoreButton from '../../../../components/LoadMoreButton/LoadMoreButton'
 import EndOfResults from '../../../../components/EndOfResults/EndOfResults'
-import ProjectsToolBar from '../ProjectsToolBar/ProjectsToolBar'
 
 require('./ProjectsView.scss')
 
@@ -25,7 +24,6 @@ const ProjectsView = (props) => {
 
   return (
     <div className="projects-view">
-      <ProjectsToolBar onSearch={ loadProjects } />
 
       <div className="content-area">
         {pageStatus}
@@ -104,7 +102,7 @@ const ProjectsView = (props) => {
 
   function renderLoadMoreButton() {
     const loadMoreProjects = () => {
-      props.loadProjects(searchTerm)
+      loadProjects(searchTerm)
     }
 
     if (moreMatchesAvailable && pageLoaded && !loadingMore && !error && projects.length === 10) {
