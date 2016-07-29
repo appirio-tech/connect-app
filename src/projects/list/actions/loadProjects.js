@@ -1,7 +1,7 @@
 import _ from 'lodash'
 // import { fetchJSON } from '../helpers'
 import {
-  CLEAR_PROJECT_SEARCH, PROJECT_SEARCH_SUCCESS, PROJECT_SEARCH_FAILURE,
+  PROJECT_SEARCH_SUCCESS, PROJECT_SEARCH_FAILURE,
   RESET_SEARCH_TERM, SET_SEARCH_TERM,
   CLEAR_PROJECT_SUGGESTIONS_SEARCH, PROJECT_SUGGESTIONS_SEARCH_SUCCESS
   } from '../../../config/constants'
@@ -15,14 +15,14 @@ export function loadProjects(searchTerm) {
       api : projectService,
       method: 'getProjects',
       args: {searchTerm},
-      success : (respose) => { console.log('dispatch success action') },
-      failure : (error) => { console.log('dispatch failure action') }
+      success : () => { console.log('dispatch success action') },
+      failure : () => { console.log('dispatch failure action') }
     }
   }
 }
 
 export function projectSearchSuccess(dispatch) {
-  dispatch({ type: PROJECT_SEARCH_FAILURE })
+  dispatch({ type: PROJECT_SEARCH_SUCCESS })
   dispatch({ type: RESET_SEARCH_TERM})
 }
 

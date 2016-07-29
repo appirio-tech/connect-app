@@ -1,4 +1,4 @@
-import _ from 'lodash'
+// import _ from 'lodash'
 import { fetchJSON } from '../helpers'
 
 class ProjectService {
@@ -25,7 +25,7 @@ class ProjectService {
   getProjects(searchTerm) {
     const options = this.getOptions()
     options.method = 'GET' //TODO use constants
-    return fetchJSON('http://api.topcoder-dev.com/v4/projects', options)
+    return fetchJSON('http://api.topcoder-dev.com/v4/projects?q=' + searchTerm, options)
   }
 
   getOptions(requiresAuth) {
