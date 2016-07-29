@@ -1,8 +1,9 @@
 import thunk from 'redux-thunk'
 import { createStore, applyMiddleware, compose } from 'redux'
 import reducers from '../reducers'
+import apiMiddleware from './apiMiddleware'
 
-const middleware = [thunk]
+const middleware = [apiMiddleware, thunk]
 
 if (process.env.ENV === 'DEV') {
   const createLogger = require('redux-logger')
