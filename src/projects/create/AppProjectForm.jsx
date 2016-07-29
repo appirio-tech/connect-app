@@ -63,8 +63,9 @@ class AppProjectForm extends Component {
           active: _.indexOf(devices, item.val) > -1
         }
       )
+      const handleClick = () => this.props.toggleDevice(item.val)
       return (
-        <a onClick={() => this.props.toggleDevice(item.val)}
+        <a onClick={handleClick}
           className={itemClassnames}
           key={index}
         >
@@ -89,11 +90,15 @@ class AppProjectForm extends Component {
     )
   }
 
+  handleSubmit(val) {
+    this.props.submitHandler(val)
+  }
+
   render () {
     const devices = this.renderDevices()
 
     return (
-      <Form model="newProject" onSubmit={(val) => this.props.submitHandler(val)}>
+      <Form model="newProject" onSubmit={this.handleSubmit}>
         <div className="what-you-like-to-do">
           <h2>What would you like to do?</h2>
           <div className="type-selector">
