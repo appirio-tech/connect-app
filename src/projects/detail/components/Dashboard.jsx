@@ -12,7 +12,7 @@ class ProjectDashboard extends Component {
     return (
       <div className="dashboard flex">
         <div className="dashboard-main">
-          <h3>Name: {this.props.project.title}</h3>
+          <h3>Name: {this.props.project.name}</h3>
         </div>
         <div className="dashboard-sidebar">
           {/*

@@ -17,9 +17,13 @@ export function loadUser() {
       dispatch({ type: LOAD_USER_SUCCESS, user })
     }
 
-    return getFreshToken().then((token) => {
-      return loadUserSuccess(dispatch, token)
-    })
+    return getFreshToken()
+      .then((token) => {
+        return loadUserSuccess(dispatch, token)
+      })
+      .catch(() => {
+        return loadUserFailure(dispatch)
+      })
 
   })
 }

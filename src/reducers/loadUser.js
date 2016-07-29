@@ -3,7 +3,8 @@ import {
 } from '../config/constants'
 
 export const initialState = {
-  userLoaded : false,
+  isLoading : true,
+  isLoggedIn: false,
   user : null
 }
 
@@ -12,13 +13,15 @@ export default function(state = initialState, action) {
 
   case LOAD_USER_SUCCESS:
     return Object.assign({}, state, {
-      userLoaded : true,
+      isLoading : false,
+      isLoggedIn: true,
       user : action.user
     })
 
   case LOAD_USER_FAILURE:
     return Object.assign({}, state, {
-      userLoaded : false
+      isLoading : false,
+      isLoggedIn: false
     })
 
   default:

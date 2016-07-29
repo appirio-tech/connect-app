@@ -21,7 +21,8 @@ class Layout extends Component {
 
 const mapStateToProps = ({ loadUser }) => {
   return {
-    user : loadUser.user
+    user : loadUser.user,
+    isLoadingUser: loadUser.isLoading
   }
 }
 

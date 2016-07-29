@@ -2,6 +2,8 @@ import thunk from 'redux-thunk'
 import { createStore, applyMiddleware, compose } from 'redux'
 import reducers from '../reducers'
 import apiMiddleware from './apiMiddleware'
+// import jwt from '../middleware/jwt'
+
 
 const middleware = [apiMiddleware, thunk]
 
