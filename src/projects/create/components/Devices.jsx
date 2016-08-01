@@ -100,13 +100,13 @@ class DevicesComponent extends BaseInputField {
     return (
       <div className="pick-target-devices">
         <h2>Pick target device(s)</h2>
-        <div className="target-selector">
+        <div className="target-selectors">
           <TiledCheckboxInput
             key={0}
             name="devices1"
             label=""
             value={this.state.set1}
-            wrapperClass="target-selector"
+            wrapperClass="target-selector non-wearable-devices"
             options={devicesSet1}
             onFieldChange={this.onChange}
           />
@@ -118,7 +118,7 @@ class DevicesComponent extends BaseInputField {
             name="devices2"
             label=""
             value={this.state.set2}
-            wrapperClass="target-selector"
+            wrapperClass="target-selector wearable-devices"
             options={devicesSet2}
             onFieldChange={this.onChange}
           />
