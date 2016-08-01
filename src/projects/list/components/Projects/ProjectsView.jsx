@@ -102,7 +102,7 @@ const ProjectsView = (props) => {
 
   function renderLoadMoreButton() {
     const loadMoreProjects = () => {
-      props.loadProjects(searchTerm)
+      loadProjects(searchTerm)
     }
 
     if (moreMatchesAvailable && pageLoaded && !loadingMore && !error && projects.length === 10) {

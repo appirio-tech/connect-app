@@ -10,7 +10,7 @@
 .list-header {
   padding: 11px 15px;
   background-color: $tc-gray-20;
-  @include tc-label;
+  @include tc-label-md;
 
   .header-text {
     color: $tc-gray-70;

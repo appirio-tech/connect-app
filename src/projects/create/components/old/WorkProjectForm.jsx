@@ -22,9 +22,13 @@ class WorkProjectForm extends Component {
     }
   }
 
+  handleSubmit(val) {
+    this.props.submitHandler(val)
+  }
+
   render() {
     return (
-      <Form model="newProject" onSubmit={this.props.submitHandler}>
+      <Form model="newProject" onSubmit={ this.handleSubmit }>
         <div className="project-info">
             <h2>Project info</h2>
               <TextInputField

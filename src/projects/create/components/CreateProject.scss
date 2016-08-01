@@ -296,7 +296,7 @@
                     line-height: 19px;
                     padding-left: 26px;
                     position: relative;
-                    @include tc-label;
+                    @include tc-label-md;
                     font-size:14px;
                     color: $tc-black;
                     margin-right: 30px;
