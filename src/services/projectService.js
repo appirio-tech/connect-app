@@ -4,7 +4,8 @@ import { fetchJSON } from '../helpers'
 class ProjectService {
   constructor() {
     this.token = null
-    // this.getProjects = getProjects.bind(this)
+    this.getProjects = this.getProjects.bind(this)
+    this.getOptions = this.getOptions.bind(this)
   }
 
   requiresAuth(methodName) {
@@ -23,9 +24,9 @@ class ProjectService {
   }
 
   getProjects(searchTerm) {
-    const options = this.getOptions()
+    const options = this.getOptions(true)
     options.method = 'GET' //TODO use constants
-    return fetchJSON('http://api.topcoder-dev.com/v4/projects?q=' + searchTerm, options)
+    return fetchJSON('https://api.topcoder-dev.com/v3/challenges/', options)
   }
 
   getOptions(requiresAuth) {
