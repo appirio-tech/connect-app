@@ -20,7 +20,8 @@ export function requiresAuthentication(Component) {
     checkAuth() {
       getFreshToken().then(() => {
         this.setState({isLoggedIn: true})
-      }).catch(() => {
+      }).catch((error) => {
+        console.log(error)
         // FIXME should we include hash, search etc
         const redirectBackToUrl = window.location.origin + '/' + this.props.location.pathname
         const newLocation = ACCOUNTS_APP_LOGIN_URL + '?retUrl=' + redirectBackToUrl

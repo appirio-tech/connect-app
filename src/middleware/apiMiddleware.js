@@ -1,13 +1,13 @@
 function apiMiddleware({ dispatch, getState }) {
   return next => action => {
     console.log(dispatch)
-    console.log(next)
+    // console.log(next)
     const {
       API_CALL
       // payload = {}
     } = action
     if (!API_CALL) {
-      return //next(action)
+      return next(action)
     }
 
     // const config = action[API_CALL]
