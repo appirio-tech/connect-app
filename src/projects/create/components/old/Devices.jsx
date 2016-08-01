@@ -47,8 +47,9 @@ class DevicesComponent extends Component {
           active: _.indexOf(devices, item.val) > -1
         }
       )
+      const handleClick = this.props.toggleDevice.bind(item.val)
       return (
-        <a onClick={this.props.toggleDevice.bind(item.val)}
+        <a onClick={ handleClick }
           className={itemClassnames}
           key={index}
         >

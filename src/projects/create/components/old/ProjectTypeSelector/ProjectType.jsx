@@ -30,6 +30,7 @@ const getTypeIndex = (val) => _.findIndex(projectTypes, (t) => t.val === val)
 class ProjectTypeSelector extends Component {
   constructor(props) {
     super(props)
+    this.onSliderChange = this.props.onSliderChange.bind(this)
   }
 
   render() {
@@ -41,10 +42,11 @@ class ProjectTypeSelector extends Component {
         active: type === item.val
       })
       const idx = getTypeIndex(item.val)
+      const handleClick = this.props.onSliderChange.bind(this, idx)
       return (
         <div
           className={itemClassnames} key={index}
-          onClick={this.props.onSliderChange.bind(this, idx)}
+          onClick={ handleClick }
         >
           <h3>{item.title}</h3>
           {item.desc}
@@ -57,9 +59,10 @@ class ProjectTypeSelector extends Component {
       // handle active class
       const itemClassnames = classNames({active: type === item.val})
       const idx = getTypeIndex(item.val)
+      const handleClick = this.props.onSliderChange.bind(this, idx)
       return (
         <span
-          onClick={this.props.onSliderChange.bind(this, idx)}
+          onClick={ handleClick }
           className={itemClassnames}
           key={index}
           dangerouslySetInnerHTML={{__html: item.info}}
@@ -87,7 +90,7 @@ class ProjectTypeSelector extends Component {
             min={0}
             max={2}
             value={getTypeIndex(this.props.type)}
-            onInput={this.props.onSliderChange.bind(this)}
+            onInput={this.onSliderChange}
           />
           <p></p>
         </div>
