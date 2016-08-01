@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
@@ -19,13 +20,14 @@ const ProjectListItem = ({ project, headerOnly = false, shouldAnimate = false })
       <div className="projectEndsOn">Ends On</div>
     </div>
   )
+  const currentPhase = _.get(project, 'currentPhases[0].phaseType')
   if (!headerOnly) {
     projectDOM = (
       <div className={ projectStyles }>
         <Link className="projectName" to={`/projects/${project.id}`}>{ project.name }</Link>
-        <div className="projectCurrentPhase">{ project.currentPhase }</div>
-        <div className="projectStartsOn">{ project.startsOn }</div>
-        <div className="projectEndsOn">{ project.endsOn }</div>
+        <div className="projectCurrentPhase">{ currentPhase }</div>
+        <div className="projectStartsOn">{ project.registrationStartDate }</div>
+        <div className="projectEndsOn">{ project.registrationEndDate }</div>
       </div>
     )
   }
