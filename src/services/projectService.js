@@ -1,9 +1,9 @@
-// import _ from 'lodash'
+import BaseService from './baseService'
 import { fetchJSON } from '../helpers'
 
-class ProjectService {
+class ProjectService extends BaseService {
   constructor() {
-    this.token = null
+    super()
     this.getProjects = this.getProjects.bind(this)
     this.getOptions = this.getOptions.bind(this)
   }
@@ -15,28 +15,11 @@ class ProjectService {
     return false
   }
 
-  setToken(token) {
-    this.token = token
-  }
-
-  getToken() {
-    return this.token
-  }
-
   getProjects(searchTerm) {
+    console.log(searchTerm)
     const options = this.getOptions(true)
     options.method = 'GET' //TODO use constants
     return fetchJSON('https://api.topcoder-dev.com/v3/challenges/', options)
-  }
-
-  getOptions(requiresAuth) {
-    const options = {}
-    const myHeaders = new Headers()
-    if (requiresAuth) {
-      myHeaders.append('Authorization', 'Basic ' + this.token) //TODO use constants
-    }
-    options.headers = myHeaders
-    return options
   }
 }
 
