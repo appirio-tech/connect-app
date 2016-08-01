@@ -1,371 +1,317 @@
 @import 'tc-styles';
 
-* {
-    &,
-    &:before,
-        &:after {
-        box-sizing: border-box;
-    }
-}
-
 .hide{
-    display: none;
+  display: none;
 }
 
 .tabs {
+  width:240px;
+  list-style-type: none;
+  padding: 0;
+  margin: 0 auto 50px auto;
+  ul{
+    display: -webkit-flex;
+    display: flex;
     width:240px;
-    list-style-type: none;
-    padding: 0;
-    margin: 0 auto 50px auto;
-    ul{
-        display: -webkit-flex;
-        display: flex;
-        width:240px;
+  }
+  li {
+    -webkit-flex: initial;
+    flex: initial;
+    width: 50%;
+    padding: 10px 0;
+    text-align: center;
+    background-color: $tc-gray-neutral-light;
+    @include roboto-medium;
+    font-size: 15px;
+    line-height:20px;
+    background: $tc-white;
+    border: 1px solid $tc-gray-30;
+    a{
+      color: $tc-gray-80;
     }
-    li {
-        -webkit-flex: initial;
-        flex: initial;
-        width: 50%;
-        padding: 10px 0;
-        text-align: center;
-        background-color: $tc-gray-neutral-light;
-        @include roboto-medium;
-        font-size: 15px;
-        line-height:20px;
-        background: $tc-white;
-        border: 1px solid $tc-gray-30;
-        a{
-            color: $tc-gray-80;
-        }
-        &:hover {
-        }
-        &.active {
-            background-color: $tc-dark-blue-90;
-            border: 1px solid $tc-dark-blue-90;
-            a{
-                color: $tc-white;
-            }
-        }
-        &:first-child{
-            border-radius: 2px 0 0 2px;
-            border-right:none;
-        }
-        &:last-child{
-            border-radius: 0 2px 2px 0 ;
-            border-left:none;
-        }
-
-
+    &:hover {
     }
+    &.active {
+      background-color: $tc-dark-blue-90;
+      border: 1px solid $tc-dark-blue-90;
+      a{
+        color: $tc-white;
+      }
+    }
+    &:first-child{
+      border-radius: 2px 0 0 2px;
+      border-right:none;
+    }
+    &:last-child{
+      border-radius: 0 2px 2px 0 ;
+      border-left:none;
+    }
+  }
 }
 
-.content{
-    display: block;
-    margin-top:30px;
-    overflow:hidden;
-    .container{
+.content {
+  display: block;
+  margin-top:30px;
+  overflow:hidden;
+  .container {
+    display:block;
+    position:relative;
+    margin:0px auto 20px auto;
+    width: 920px;
+    padding: 20px;
+    border-radius: 4px;
+    background: $tc-white;
+    .btn-close {
+      display: block;
+      position:absolute;
+      right: 20px;
+      top: 20px;
+      background: url('../../images/x-mark-big.svg') no-repeat 0 0;
+      width: 14px;
+      height: 14px;
+      background-size: 14px 14px;
+    }
+    h2 {
+        @include roboto-light;
+        color: $tc-gray-60;
+        font-size: 30px;
         display:block;
-        position:relative;
-        margin:0px auto 20px auto;
-        width: 920px;
-        padding: 20px;
-        border-radius: 4px;
-        background: $tc-white;
-        .btn-close{
-            display: block;
-            position:absolute;
-            right: 20px;
-            top: 20px;
-            background: url('../../images/x-mark-big.svg') no-repeat 0 0;
-            width: 14px;
-            height: 14px;
-            background-size: 14px 14px;
-        }
-        h2{
-            @include roboto-light;
-            color: $tc-gray-60;
-            font-size: 30px;
-            display:block;
-            width:100%;
-            text-align: center;
-            margin:  0 0 50px 0;
-        }
-        .what-you-like-to-do{
-            clear:both;
-            display:block;
-            width:100%;
-            overflow:hidden;
-            .info-selector{
-                display: -webkit-flex;
-                display: flex;
-                clear:both;
-                overflow:hidden;
-                width:100%;
-                margin: 0 auto 30px auto;
-                span{
-                    -webkit-flex: initial;
-                    flex: initial;
-                    width: 33%;
-                    cursor: pointer;
-                    @include roboto-light;
-                    font-size: 12px;
-                    line-height: 20px;
-                    color: $tc-gray-50;
-                    text-align: center;
-                    &.active{
-                        color: $tc-black;
-                    }
-
-                }
-            }
-            .type-selector{
-                display: -webkit-flex;
-                display: flex;
-                .selector{
-                    -webkit-flex: initial;
-                    flex: initial;
-                    width: 33%;
-                    cursor: pointer;
-                    &.active{
-                        h3{
-                            color: $tc-black;
-                        }
-                        p{
-                            color: $tc-black;
-                        }
-                        span{
-                            color: $tc-black;
-                        }
-                    }
-                    h3{
-                        @include roboto-light;
-                        color: $tc-gray-50;
-                        font-size: 20px;
-                        line-height: 25px;
-                        text-align: center;
-                    }
-                    p{
-                        @include roboto-light;
-                        font-size: 15px;
-                        color: $tc-gray-50;
-                        line-height: 25px;
-                        text-align: center;
-                        strong{
-                            @include roboto-bold;
-                            font-weight:normal;
-                        }
-                    }
-                }
-            }
-        }
-        .pick-target-devices{
-            clear:both;
-            display:block;
-            width:820px;
-            margin: 0 auto;
-            overflow:hidden;
-            .target-selector{
-                padding: 0;
-                margin: 0;
-                list-style: none;
-
-                display: -webkit-box;
-                display: -moz-box;
-                display: -ms-flexbox;
-                display: -webkit-flex;
-                display: flex;
-
-                -webkit-flex-flow: row wrap;
-                justify-content: space-around;
-
-                clear:both;
-                overflow:hidden;
-                width:100%;
-                margin: 0 auto 20px auto;
-                a{
-                    -webkit-flex: initial;
-                    flex: initial;
-                    height:155px;
-                    width:135px;
-                    border: 1px solid $tc-gray-20;
-                    border-radius: 4px;
-                    &:hover{
-                        border: 1px solid $tc-dark-blue-70;
-                    }
-                    &.active{
-                        background: $tc-dark-blue-10;
-                        border: 1px solid $tc-dark-blue-30;
-                    }
-                    span.icon{
-                        display:block;
-                        height: 50px;
-                        margin:30px auto 20px auto;
-                    }
-                    span.title{
-                        display:block;
-                        margin-top: 20px;
-                        @include roboto-bold;
-                        color: $tc-gray-90;
-                        font-size: 13px;
-                        text-align:center;
-                    }
-                    small{
-                        display:block;
-                        font-size: 11px;
-                        text-align:center;
-                        color: $tc-gray-50;
-                        @include roboto;
-                        margin-top:10px;
-                    }
-                    &.phone{
-                        span.icon{
-                            background: url('../../images/phone.svg') no-repeat 0 0;
-                            width: 33px;
-                            background-size: 33px 50px;
-                        }
-                    }
-                    &.tablet{
-                        span.icon{
-                            background: url('../../images/tablet.svg') no-repeat 0 0;
-                            width: 43px;
-                            background-size: 43px 50px;
-                        }
-                    }
-                    &.desktop{
-                        span.icon{
-                            background: url('../../images/desktop.svg') no-repeat 0 0;
-                            width: 55px;
-                            background-size: 55px 50px;
-                        }
-                    }
-                    &.apple-watch{
-                        span.icon{
-                            background: url('../../images/watch-apple.svg') no-repeat 0 0;
-                            width: 38px;
-                            background-size: 38px 50px;
-                        }
-                    }
-                    &.android-watch{
-                        span.icon{
-                            background: url('../../images/watch-android.svg') no-repeat 0 0;
-                            width: 38px;
-                            background-size: 38px 50px;
-                        }
-                    }
-                }
-                .divider{
-                    -webkit-flex: none;
-                    flex: none;
-                    @include roboto-light;
-                    font-style:italic;
-                    color: $tc-gray-40;
-                    font-size:12px;
-                    line-height: 155px;
-                    background: url('../../images/divider.png') no-repeat 50% 0;
-                }
-            }
-        }
-        .app-type{
-            width:500px;
-            border-bottom: 1px solid $tc-gray-20;
-            margin:0 auto;
-            clear:both;
-            overflow:hidden;
-            padding: 20px 0;
-            margin-bottom:  50px;
-            display: -webkit-box;
-            display: -moz-box;
-            display: -ms-flexbox;
+        width:100%;
+        text-align: center;
+        margin:  0 0 50px 0;
+    }
+    .what-you-like-to-do{
+        clear:both;
+        display:block;
+        width:100%;
+        overflow:hidden;
+        .info-selector{
             display: -webkit-flex;
             display: flex;
-            -webkit-flex-flow: row wrap;
-            justify-content: space-around;
-            h4{
-                @include roboto-bold;
-                font-size:14px;
-                color: $tc-black;
-            }
-            .radio {
-                margin: 0;
-                input[type="radio"] {
-                    opacity: 0;
-                    display: none;
-                }
-                label {
-                    display: inline-block;
-                    line-height: 19px;
-                    padding-left: 26px;
-                    position: relative;
-                    @include tc-label-md;
-                    font-size:14px;
+            clear:both;
+            overflow:hidden;
+            width:100%;
+            margin: 0 auto 30px auto;
+            span{
+                -webkit-flex: initial;
+                flex: initial;
+                width: 33%;
+                cursor: pointer;
+                @include roboto-light;
+                font-size: 12px;
+                line-height: 20px;
+                color: $tc-gray-50;
+                text-align: center;
+                &.active{
                     color: $tc-black;
-                    margin-right: 30px;
-                    &:before {
-                        border: 1px solid $tc-gray-20;
-                        border-radius: 50%;
-                        background-color: #fff;
-                        content: "";
-                        display: inline-block;
-                        height: 19px;
-                        left: 0;
-                        position: absolute;
-                        top: 0;
-                        width: 19px;
+                }
+
+            }
+        }
+        .type-selector{
+            display: -webkit-flex;
+            display: flex;
+            .selector{
+                -webkit-flex: initial;
+                flex: initial;
+                width: 33%;
+                cursor: pointer;
+                &.active{
+                    h3{
+                        color: $tc-black;
+                    }
+                    p{
+                        color: $tc-black;
+                    }
+                    span{
+                        color: $tc-black;
                     }
                 }
-                input[type="radio"]:checked + label:after {
-                    background: $tc-dark-blue-90;
-                    border-radius: 50%;
-                    content: "";
-                    display: inline-block;
-                    left: 4px;
-                    position: absolute;
-                    top: 4px;
-                    height: 11px;
-                    width: 11px;
+                h3{
+                    @include roboto-light;
+                    color: $tc-gray-50;
+                    font-size: 20px;
+                    line-height: 25px;
+                    text-align: center;
+                }
+                p{
+                    @include roboto-light;
+                    font-size: 15px;
+                    color: $tc-gray-50;
+                    line-height: 25px;
+                    text-align: center;
+                    strong{
+                        @include roboto-bold;
+                        font-weight:normal;
+                    }
                 }
             }
         }
-        .project-info{
-    clear:both;
-    display:block;
-    width:100%;
-    overflow:hidden;
-    .row{
+    }
+    .pick-target-devices {
+      width: 100%;
+      padding: 0px 50px;
+
+      .target-selectors {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between;
+        .divider {
+          @include roboto-light;
+          font-style:italic;
+          color: $tc-gray-40;
+          font-size:12px;
+          line-height: 155px;
+          background: url('../../images/divider.png') no-repeat 50% 0;
+        }
+        .target-selector {
+          display: flex;
+          flex-flow: row wrap;
+          justify-content: space-between;
+          overflow:hidden;
+          margin-bottom: 20px;
+
+          a {
+            -webkit-flex: initial;
+            flex: initial;
+            height:155px;
+            width:135px;
+            border: 1px solid $tc-gray-20;
+            border-radius: 4px;
+            &:hover{
+              border: 1px solid $tc-dark-blue-70;
+            }
+            &.active{
+              background: $tc-dark-blue-10;
+              border: 1px solid $tc-dark-blue-30;
+            }
+            span.icon{
+              display:block;
+              height: 50px;
+              margin:30px auto 20px auto;
+            }
+            span.title{
+              display:block;
+              margin-top: 20px;
+              @include roboto-bold;
+              color: $tc-gray-90;
+              font-size: 13px;
+              text-align:center;
+            }
+            small{
+              display:block;
+              font-size: 11px;
+              text-align:center;
+              color: $tc-gray-50;
+              @include roboto;
+              margin-top:10px;
+            }
+            &.phone {
+              span.icon{
+                background: url('../../images/phone.svg') no-repeat 0 0;
+                width: 33px;
+                background-size: 33px 50px;
+              }
+            }
+            &.tablet {
+              span.icon{
+                background: url('../../images/tablet.svg') no-repeat 0 0;
+                width: 43px;
+                background-size: 43px 50px;
+              }
+            }
+            &.desktop {
+              span.icon{
+                background: url('../../images/desktop.svg') no-repeat 0 0;
+                width: 55px;
+                background-size: 55px 50px;
+              }
+            }
+            &.apple-watch {
+              span.icon{
+                background: url('../../images/watch-apple.svg') no-repeat 0 0;
+                width: 38px;
+                background-size: 38px 50px;
+              }
+            }
+            &.android-watch {
+              span.icon{
+                background: url('../../images/watch-android.svg') no-repeat 0 0;
+                width: 38px;
+                background-size: 38px 50px;
+              }
+            }
+          }
+        }
+
+        .non-wearable-devices {
+          flex-basis: 55%;
+        }
+
+        .wearable-devices {
+          flex-basis: 38%;
+        }
+      }
+    }
+    .app-type {
+      margin: 0px auto;
+      display: flex;
+      justify-content: center;
+
+      align-items: center;
+      .radio-group-label {
+        width: auto;
+        font-weight: bold;
+      }
+      .radio-group-options {
+        justify-content: center;
+      }
+    }
+    .section-divider {
+      background-color: $tc-gray-20;
+      width: 100%;
+      max-width: 600px;
+      height: 1px;
+      margin: 50px auto;
+    }
+    .project-info{
+      display:block;
+      width:100%;
+      overflow:hidden;
+      .row {
         margin-bottom: 20px;
         &.center{
-            display: table;
-            margin: 0 auto;
-            label{
-                display: inline;
-            }
-            input{
-                display: inline;
-                width: 100px;
-            }
+          display: table;
+          margin: 0 auto;
+          label{
+            display: inline;
+          }
+          input{
+            display: inline;
+            width: 100px;
+          }
         }
+      }
     }
-}
-        .button-area{
-            a{
-                height: 40px;
-                width: 137px;
-                display:block;
-                margin:30px auto;
-                text-align:center;
-                text-transform: none;
-                font-family: 'Roboto Bold';
-                font-size: 15px;
-                padding:0!important;
-                border: none;
-                &.disabled{
-                    color: $tc-white;
-                    background: $tc-gray-10;
-
-                }
-            }
+    .button-area {
+      a {
+        height: 40px;
+        width: 137px;
+        display:block;
+        margin:30px auto;
+        text-align:center;
+        text-transform: none;
+        font-family: 'Roboto Bold';
+        font-size: 15px;
+        padding:0!important;
+        border: none;
+        &.disabled{
+          color: $tc-white;
+          background: $tc-gray-10;
         }
+      }
     }
+  }
 }
 
 .range-slider{

@@ -96,10 +96,10 @@ class AppProjectForm extends Component {
           name="newProject.details.appType"
           label="App Type"
           disabled={false}
-          wrapperClass="app-type1"
+          wrapperClass="app-type"
           options={appTypeOptions}
         />
-
+        <div className="section-divider"></div>
         <div className="project-info">
           <h2>Project info</h2>
 
