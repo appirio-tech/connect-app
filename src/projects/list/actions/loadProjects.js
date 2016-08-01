@@ -15,17 +15,18 @@ export function loadProjects(searchTerm) {
       api : projectService,
       method: 'getProjects',
       args: {searchTerm},
-      success : (resp) => {
+      success : (resp, dispatch) => {
         console.log('dispatch success action')
         console.log(resp)
+        projectSearchSuccess(dispatch, resp)
       },
       failure : () => { console.log('dispatch failure action') }
     }
   }
 }
 
-export function projectSearchSuccess(dispatch) {
-  dispatch({ type: PROJECT_SEARCH_SUCCESS })
+export function projectSearchSuccess(dispatch, response) {
+  dispatch({ type: PROJECT_SEARCH_SUCCESS, projects : response.result.content })
   dispatch({ type: RESET_SEARCH_TERM})
 }
 
