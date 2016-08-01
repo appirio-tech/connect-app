@@ -111,7 +111,9 @@ class ProjectsToolBar extends Component {
             <SwitchButton onChange={ this.handleMyProjectsFilter } label="My projects only" name="my-projects-only" />
           </div>
           <div className="actions">
-            <Link className="new-project-action tc-btn tc-btn-primary tc-btn-sm" to="projects/create" >+ New Project</Link>
+            <Link className="new-project-action" to="projects/create" >
+              <button className="tc-btn tc-btn-primary tc-btn-sm">+ New Project</button>
+            </Link>
           </div>
         </div>
       </Sticky>
