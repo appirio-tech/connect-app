@@ -67,11 +67,11 @@ export const newProject = modelReducer('newProject', {
   utm: {
     code: ''
   },
-  type: '',
+  type: 'visual_design',
   details: {
     version: 'v2',
     devices: ['phone'],
-    appType: ''
+    appType: 'ios'
   }
 })
 

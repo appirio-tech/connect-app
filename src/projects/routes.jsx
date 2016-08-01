@@ -10,7 +10,7 @@ import Dashboard     from './detail/components/Dashboard'
 import Specification from './detail/components/Specification'
 import ProjectsToolBar from './list/components/ProjectsToolBar/ProjectsToolBar'
 import ProjectToolBar from './detail/components/ProjectToolBar/ProjectToolBar'
-import CreateProjectWizard from './create/CreateView'
+import CreateProjectWizard from './create/components/CreateView'
 import { requiresAuthentication } from '../components/AuthenticatedComponent'
 
 

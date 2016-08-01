@@ -76,7 +76,7 @@
             position:absolute;
             right: 20px;
             top: 20px;
-            // background: url('../images/x-mark-big.svg') no-repeat 0 0;
+            background: url('../../images/x-mark-big.svg') no-repeat 0 0;
             width: 14px;
             height: 14px;
             background-size: 14px 14px;
@@ -219,35 +219,35 @@
                     }
                     &.phone{
                         span.icon{
-                            // background: url('../images/phone.svg') no-repeat 0 0;
+                            background: url('../../images/phone.svg') no-repeat 0 0;
                             width: 33px;
                             background-size: 33px 50px;
                         }
                     }
                     &.tablet{
                         span.icon{
-                            // background: url('../images/tablet.svg') no-repeat 0 0;
+                            background: url('../../images/tablet.svg') no-repeat 0 0;
                             width: 43px;
                             background-size: 43px 50px;
                         }
                     }
                     &.desktop{
                         span.icon{
-                            // background: url('../images/desktop.svg') no-repeat 0 0;
+                            background: url('../../images/desktop.svg') no-repeat 0 0;
                             width: 55px;
                             background-size: 55px 50px;
                         }
                     }
                     &.apple-watch{
                         span.icon{
-                            // background: url('../images/watch-apple.svg') no-repeat 0 0;
+                            background: url('../../images/watch-apple.svg') no-repeat 0 0;
                             width: 38px;
                             background-size: 38px 50px;
                         }
                     }
                     &.android-watch{
                         span.icon{
-                            // background: url('../images/watch-android.svg') no-repeat 0 0;
+                            background: url('../../images/watch-android.svg') no-repeat 0 0;
                             width: 38px;
                             background-size: 38px 50px;
                         }
@@ -261,7 +261,7 @@
                     color: $tc-gray-40;
                     font-size:12px;
                     line-height: 155px;
-                    // background: url('../images/divider.png') no-repeat 50% 0;
+                    background: url('../../images/divider.png') no-repeat 50% 0;
                 }
             }
         }
@@ -395,7 +395,7 @@
             height: 16px;
             border: none!important;
             box-shadow: none!important;
-            // background: url('../images/slider-bg.png') no-repeat 0 0;
+            background: url('../../images/slider-bg.png') no-repeat 0 0;
         }
         &::-webkit-slider-thumb {
             -webkit-appearance: none;
@@ -413,7 +413,7 @@
         &::-moz-range-track {
             width: 600px;
             height: 16px;
-            // background: url('../images/slider-bg.png') no-repeat 0 0;
+            background: url('../../images/slider-bg.png') no-repeat 0 0;
             border: none;
 
         }

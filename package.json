@@ -40,6 +40,7 @@
     "react-addons-css-transition-group": "^0.14.8",
     "react-dom": "^0.14.8",
     "react-dotdotdot": "^1.0.4",
+    "react-forms": "^2.0.0-beta33",
     "react-layout-pane": "^0.1.16",
     "react-redux": "^4.0.6",
     "react-redux-form": "^0.14.3",
