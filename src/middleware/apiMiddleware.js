@@ -33,7 +33,13 @@ function apiMiddleware({ dispatch, getState }) {
     }
 
     const callApi = api[method]
-    return callApi(...args).then(success).catch(failure)
+    return callApi(...args)
+      .then((resp) => {
+        success(resp, dispatch)
+      })
+      .catch((error) => {
+        failure(error, dispatch)
+      })
 
   }
 }
