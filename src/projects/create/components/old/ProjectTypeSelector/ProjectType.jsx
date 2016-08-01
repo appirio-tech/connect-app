@@ -62,7 +62,8 @@ class ProjectTypeSelector extends Component {
           onClick={this.props.onSliderChange.bind(this, idx)}
           className={itemClassnames}
           key={index}
-          dangerouslySetInnerHTML={{__html: item.info}}>
+          dangerouslySetInnerHTML={{__html: item.info}}
+        >
         </span>
       )
     }
@@ -115,7 +116,7 @@ const actionCreators = {
 
 const mapStateToProps = ({newProject}) => ({
   type: newProject.type,
-  mappedProjectType: _.findIndex(projectTypes, (t) => newProject.type === t.val),
+  mappedProjectType: _.findIndex(projectTypes, (t) => newProject.type === t.val)
 })
 
 // Merging props so that we can use determine the current

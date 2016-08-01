@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Form, actions as modelActions} from 'react-redux-form'
 import { clearLoadedProject } from '../../../actions/project'
 import { withRouter } from 'react-router'
-import { InputFormField, TextareaFormField } from 'appirio-tech-react-components'
+import { TextInputField, InputFormField, TextareaFormField } from 'appirio-tech-react-components'
 
 class WorkProjectForm extends Component {
 
@@ -24,9 +24,17 @@ class WorkProjectForm extends Component {
 
   render() {
     return (
-      <Form model="newProject" onSubmit={(val) => this.props.submitHandler(val)}>
+      <Form model="newProject" onSubmit={this.props.submitHandler}>
         <div className="project-info">
             <h2>Project info</h2>
+              <TextInputField
+                id="name"
+                wrapperClass="row"
+                label="Project Name"
+                placeholder="Enter project name"
+                errorMessage="This is a required field"
+              />
+
 
             <div className="row">
               <InputFormField

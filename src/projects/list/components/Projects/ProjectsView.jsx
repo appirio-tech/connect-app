@@ -15,7 +15,7 @@ const ProjectsView = (props) => {
   const { pageLoaded, loadingMore, error } = props
   const { projects, totalCount, moreMatchesAvailable } = props
   const { previousSearchTerm: searchTerm } = props
-  const { loadProjects } = props
+  // const { loadProjects } = props
 
   const projectMatches = renderProjects()
   const pageStatus = renderPageState()
