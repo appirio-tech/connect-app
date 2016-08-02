@@ -123,7 +123,7 @@ class AppProjectForm extends Component {
           />
 
           <TextInput
-            name="details.utm.code"
+            name="newProject.details.utm.code"
             label="Invite code (optional)"
             type="text"
             disabled={false}

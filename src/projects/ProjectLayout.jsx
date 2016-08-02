@@ -14,11 +14,7 @@ class ProjectViewLayout extends Component {
         <div className="top-bar">
           {topbar}
         </div>
-        <div className="content flex">
-          <div className="main-pane">
-            {main}
-          </div>
-        </div>
+        {main}
       </div>
     )
   }

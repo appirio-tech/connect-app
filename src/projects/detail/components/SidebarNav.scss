@@ -1,0 +1,82 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.list-group {
+    .title {
+        @include roboto-bold;
+        font-size: 13px;
+        color: #262628;
+        line-height: 30px;
+        padding-left: 22px;
+        position: relative;
+        margin: 0 20px;
+        .number {
+            position: absolute;
+            left: 0;
+        }
+    }
+    li {
+        .txt {
+           @include roboto;
+            font-size: 13px;
+            color: #262628;
+            line-height: 16px;
+            padding: 7px 0;
+            display: inline-block;
+        }
+        .schedule {
+            @include roboto-medium;
+            font-size: 13px;
+            line-height: 16px;
+            color: #0B71E6;
+            padding: 7px 0;
+            float: right;
+        }
+        .subtract {
+            float: right;
+            background: #DCDCE0;
+            margin: 13px 5px 0 0;
+            width: 9px;
+            height: 2px;
+            display: inline-block;
+        }
+        .boxes {
+            display: block;
+            padding: 0 20px 0 42px;
+            position: relative;
+            &:hover {
+                background: #FAFAFB;
+            }
+            &.complete {
+                .schedule {
+                    display: none;
+                }
+                .icon-complete {
+                    display: block;
+                }
+            }
+            .icon-complete {
+                background-position: 0 0;
+                width: 24px;
+                height: 24px;
+                position: absolute;
+                right: 21px;
+                top: 3px;
+                display: none;
+            }
+        }
+
+    }
+
+}
+// &.no-number {
+//     .list-group {
+//         .title {
+//             padding-left: 0;
+//         }
+//         li {
+//             .boxes {
+//                 padding: 0 20px;
+//             }
+//         }
+//     }
+// }

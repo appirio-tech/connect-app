@@ -14,12 +14,12 @@ class CreateView extends Component {
 
   constructor(props) {
     super(props)
+    this.createProject = this.createProject.bind(this)
   }
 
   componentWillUpdate(nextProps) {
     if (!nextProps.isLoading &&
         nextProps.project.id) {
-      console.log('project created', nextProps.project)
       this.props.router.push('/projects/' + nextProps.project.id )
     }
   }
@@ -30,7 +30,7 @@ class CreateView extends Component {
 
   createProject(val) {
     console.log('creating project', val)
-    createProject(val.newProject)
+    this.props.createProject(val.newProject)
   }
 
   switchTab(val) {

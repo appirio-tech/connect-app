@@ -7,7 +7,7 @@
     "billingAccountId": "1",
     "title": "Test 2",
     "description": "test project",
-    "type": "design",
+    "type": "visual_design",
     "details": {
         "features": [{
             "id": null,
@@ -56,7 +56,7 @@
     "billingAccountId": "1",
     "title": "test1",
     "description": "test project",
-    "type": "design",
+    "type": "app_dev",
     "details": {
         "features": [{
             "id": null,

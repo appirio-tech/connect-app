@@ -45,6 +45,7 @@
     "react-redux": "^4.0.6",
     "react-redux-form": "^0.14.3",
     "react-router": "^2.6.0",
+    "react-scroll": "^1.1.1",
     "react-sticky": "5.0.4",
     "react-tabs": "^0.7.0",
     "redux": "^3.3.1",
