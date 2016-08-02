@@ -12,51 +12,46 @@ const scrollProps = {
   activeClass: 'active'
 }
 
-export class SidebarNavItem extends Component {
-  render() {
-    const renderChild = (child, idx) => {
-      const { name, percentage, link } = child
-      const _anchorClasses = classNames('boxes', {
-        complete: percentage === 100
-      })
-      const _iconClasses = classNames('icons', {
-        'icons-complete': percentage === 100
-      })
-
-      return (
-        <li key={idx}>
-          <DirectLink to={link} className={_anchorClasses} {...scrollProps} href="javascript;;">
-            <span className="txt">{name}</span>
-            <span className="schedule">{percentage}%</span>
-            <i className={_iconClasses}></i>
-          </DirectLink>
-        </li>
-      )
-    }
-    const { name, link, subItems, index} = this.props
-    return (
-      <div className="item">
-        <DirectLink to={link} {...scrollProps} href="javascript;;">
-          <h4 className="title">
-            <span className="number">{index}.</span>{name}
-          </h4>
-        </DirectLink>
-        <ul>
-          {subItems.map(renderChild)}
-        </ul>
-      </div>
-    )
-  }
+/**
+ * Renders subitems for navbar
+ * @param  {object} child nav sub item
+ * @param  {number} idx   index
+ */
+const renderSubNavItems = (child, idx) => {
+  const { name, percentage, link } = child
+  const _anchorClasses = classNames('boxes', {
+    complete: percentage === 100
+  })
+  const _iconClasses = classNames('icons', {
+    'icons-complete': percentage === 100
+  })
+  return (
+    <li key={idx}>
+      <DirectLink to={link} className={_anchorClasses} {...scrollProps} href="false;">
+        <span className="txt">{name}</span>
+        <span className="schedule">{percentage}%</span>
+        <i className={_iconClasses}></i>
+      </DirectLink>
+    </li>
+  )
 }
 
-SidebarNavItem.propTypes = {
-  name: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-  subItems: PropTypes.arrayOf(PropTypes.object.isRequired)
-}
+/**
+ * Dumb component that renders NavItems
+ */
+const SidebarNavItem = ({ name, link, subItems, index}) =>
+  <div className="item">
+    <DirectLink to={link} {...scrollProps} href="false;">
+      <h4 className="title">
+        <span className="number">{index}.</span>{name}
+      </h4>
+    </DirectLink>
+    <ul>
+      {subItems.map(renderSubNavItems)}
+    </ul>
+  </div>
 
-export class SidebarNav extends Component {
+class SidebarNav extends Component {
   render() {
     const {items} = this.props
 
@@ -78,3 +73,5 @@ export class SidebarNav extends Component {
 SidebarNav.PropTypes = {
   items: PropTypes.arrayOf(PropTypes.instanceOf(SidebarNavItem))
 }
+
+export default SidebarNav
