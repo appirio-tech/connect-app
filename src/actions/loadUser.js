@@ -21,7 +21,8 @@ export function loadUser() {
       .then((token) => {
         return loadUserSuccess(dispatch, token)
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err)
         return loadUserFailure(dispatch)
       })
 

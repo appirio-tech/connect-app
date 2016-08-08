@@ -1,8 +1,8 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 //TODO  Additional variables - need to find a home for these
-$gray-color: #888894;
-$title-color: #47474F;
+$gray-color: $tc-gray-50;
+$title-color: $tc-gray-80;
 @mixin flexBox {
     display: box;
     display: -webkit-box;

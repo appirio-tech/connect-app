@@ -1,12 +1,11 @@
 
 import {
-  LOAD_PROJECT, PROJECT_LOAD_SUCCESS, PROJECT_LOAD_FAILURE,
+  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_FAILURE,
   CREATE_PROJECT, CREATE_PROJECT_SUCCESS,
   CREATE_PROJECT_FAILURE, CLEAR_LOADED_PROJECT
 } from '../../config/constants'
 
 import { modelReducer, formReducer } from 'react-redux-form'
-
 
 
 const initialState = {
@@ -17,19 +16,19 @@ const initialState = {
 export const projectState = function (state=initialState, action) {
 
   switch (action.type) {
-  case LOAD_PROJECT:
+  case LOAD_PROJECT_PENDING:
     return Object.assign({}, state, {
       isLoading: true,
       project: {}
     })
-  case PROJECT_LOAD_SUCCESS:
+  case LOAD_PROJECT_SUCCESS:
     return Object.assign({}, state, {
       isLoading: false,
-      project: action.project,
+      project: action.payload,
       lastUpdated: new Date()
     })
 
-  case PROJECT_LOAD_FAILURE:
+  case LOAD_PROJECT_FAILURE:
     return Object.assign({}, state, {
       pageLoaded: true,
       error: true

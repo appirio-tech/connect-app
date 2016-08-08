@@ -1,13 +1,12 @@
 import {
-  CLEAR_PROJECT_SEARCH, PROJECT_SEARCH_SUCCESS,
-  PROJECT_SEARCH_FAILURE, LOAD_MORE_PROJECTS
+  PROJECT_SEARCH_PENDING, PROJECT_SEARCH_SUCCESS, PROJECT_SEARCH_FAILURE,
+  GET_PROJECTS_PENDING, GET_PROJECTS_SUCCESS, GET_PROJECTS_FAILURE,
+  LOAD_MORE_PROJECTS, CLEAR_PROJECT_SEARCH
 } from '../../../config/constants'
 
 export const initialState = {
-  pageLoaded: false,
+  isLoading: false,
   projects: [],
-  loadingMore: false,
-  moreMatchesAvailable: false,
   error: false,
   totalCount: 0
 }
@@ -15,25 +14,38 @@ export const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
 
+  // project search state
+  case GET_PROJECTS_PENDING:
+  case PROJECT_SEARCH_PENDING:
+    return Object.assign({}, state, {
+      isLoading: true,
+      error: false,
+      totalCount: 0
+    })
   case CLEAR_PROJECT_SEARCH:
     return Object.assign({}, state, {
-      loadingMore: false,
       error: false,
       totalCount: 0
     })
 
+  // called after members are loaded
   case PROJECT_SEARCH_SUCCESS:
+    return Object.assign({}, state, {
+      error: false,
+      isLoading: false
+    })
+  case GET_PROJECTS_SUCCESS:
     console.log('project search success')
     return Object.assign({}, state, {
-      pageLoaded: true,
-      projects: action.projects
+      projects: action.payload.projects,
+      totalCount: action.payload.totalCount
     })
 
   case PROJECT_SEARCH_FAILURE:
+  case GET_PROJECTS_FAILURE:
     return Object.assign({}, state, {
-      loadingMore: false,
-      error: true,
-      totalCount: 0
+      isLoading: false,
+      error: true
     })
 
   case LOAD_MORE_PROJECTS:

@@ -6,6 +6,13 @@ import classNames from 'classnames'
 
 require('./ProjectListItem.scss')
 
+
+const tempGetName = (user, isCopilotField) => {
+  if (!user)
+    return isCopilotField ? 'Unclaimed': 'Unknown'
+  return _.get(user, 'handle', 'big_lebowski')
+}
+
 const ProjectListItem = ({ project, headerOnly = false, shouldAnimate = false }) => {
   const projectStyles = classNames(
     'ProjectListItem',
@@ -15,19 +22,22 @@ const ProjectListItem = ({ project, headerOnly = false, shouldAnimate = false })
   let projectDOM = (
     <div className={ projectStyles }>
       <div className="projectName">Name</div>
-      <div className="projectCurrentPhase">Phase</div>
-      <div className="projectStartsOn">Starts On</div>
-      <div className="projectEndsOn">Ends On</div>
+      <div className="projectStatus">Status</div>
+      <div className="projectStartsOn">Customer</div>
+      <div className="projectEndsOn">Copilot</div>
     </div>
   )
-  const currentPhase = _.get(project, 'currentPhases[0].phaseType')
   if (!headerOnly) {
+    // get customerId
+    const customer = _.find(project.members, m => m.role === 'customer' && m.isPrimary )
+    const copilot = _.find(project.members, m => m.role === 'copilot' && m.isPrimary )
+
     projectDOM = (
       <div className={ projectStyles }>
         <Link className="projectName" to={`/projects/${project.id}`}>{ project.name }</Link>
-        <div className="projectCurrentPhase">{ currentPhase }</div>
-        <div className="projectStartsOn">{ project.registrationStartDate }</div>
-        <div className="projectEndsOn">{ project.registrationEndDate }</div>
+        <div className="projectStatus">{ project.status }</div>
+        <div className="projectStartsOn">{ tempGetName(customer, false) }</div>
+        <div className="projectEndsOn">{ tempGetName(copilot, true) }</div>
       </div>
     )
   }
@@ -50,6 +60,7 @@ const ProjectListItem = ({ project, headerOnly = false, shouldAnimate = false })
 }
 
 ProjectListItem.propTypes = {
+  project: PropTypes.object.isRequired,
   shouldAnimate : PropTypes.bool
 }
 

@@ -48,7 +48,7 @@ class ProjectToolBar extends Component {
 
     return (
       <div className="ProjectToolBar flex middle space-between">
-        <h3>{ project.title }</h3>
+        <h3>{ project.name }</h3>
         <MenuBar items={primaryNavigationItems} orientation="horizontal" forReactRouter />
       </div>
     )
