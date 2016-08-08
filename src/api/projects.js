@@ -1,12 +1,26 @@
-import _ from 'lodash'
+import { axiosInstance as axios } from './requestInterceptor'
+import { TC_API_URL } from '../config/constants'
 
-
-const _projects = require('./test/projects.json')
-
-export function getProjects(criteria, sort, limit, offset) {
-  // TODO
-  console.log(criteria, sort, limit, offset)
+export function getProjects(criteria, limit, offset, sort) {
+  // TODO map criteria to API
+  const params = {
+    sort,
+    limit,
+    offset
+  }
+  return axios.get(`${TC_API_URL}/v4/projects/`, { params })
+    .then( resp => {
+      return {
+        totalCount: resp.data.result.metadata.totalCount,
+        projects: resp.data.result.content
+      }
+    })
 }
+
+export function getProjectSuggestions() {
+  // TODO
+}
+
 
 /**
  * Get a project basd on it's id
@@ -15,26 +29,19 @@ export function getProjects(criteria, sort, limit, offset) {
  */
 export function getProjectById(projectId) {
   projectId = parseInt(projectId)
-  return Promise.resolve(_projects)
-    .then((projects) => {
-      return _.find(projects, (p) => { return p.id === projectId })
+  return axios.get(`${TC_API_URL}/v4/projects/${projectId}/`)
+    .then(resp => {
+      return resp.data.result.content
     })
 }
 
 export function updateProject(projectId, updatedProps) {
-  const p = _.find(_projects, (p) => { return p.id === projectId })
-  if (!p)
-    return Promise.reject('Project not found')
-
-  _.assign(p, updatedProps)
-  return Promise.resolve(p)
-
+  // TODO
+  console.log(projectId, updatedProps)
 }
 
 
 export function createProject(projectProps) {
-  const newId = _.max(_.map(_projects, 'id')) + 1
-  const newProject = _.assign({}, projectProps, {id: newId})
-  _projects.push(newProject)
-  return Promise.resolve(newProject)
+  // TODO
+  console.log(projectProps)
 }

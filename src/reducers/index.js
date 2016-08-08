@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux'
 import searchTerm from './searchTerm'
 import loadUser from './loadUser'
-import { projectState, newProject, newProjectForm } from '../projects/reducers/project'
+import { projectState } from '../projects/reducers/project'
+import { projectDashboard } from '../projects/reducers/projectDashboard'
 import navSearch from './navSearch'
 import projectSearch from '../projects/list/reducers/projectSearch'
 import projectSearchSuggestions from '../projects/list/reducers/projectSearchSuggestions'
-import loadProject from '../projects/list/reducers/loadProject'
+import members from './members'
 
 export default combineReducers({
   loadUser,
@@ -14,6 +15,6 @@ export default combineReducers({
   projectSearch,
   projectSearchSuggestions,
   projectState,
-  newProject, newProjectForm,
-  loadProject // TODO rename this
+  members,
+  projectDashboard
 })

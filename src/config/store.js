@@ -1,11 +1,14 @@
 import thunk from 'redux-thunk'
 import { createStore, applyMiddleware, compose } from 'redux'
 import reducers from '../reducers'
-import apiMiddleware from '../middleware/apiMiddleware'
-// import jwt from '../middleware/jwt'
+import promiseMiddleware from 'redux-promise-middleware'
 
-
-const middleware = [apiMiddleware, thunk]
+const middleware = [
+  promiseMiddleware({
+    promiseTypeSuffixes: ['PENDING', 'SUCCESS', 'FAILURE']
+  }),
+  thunk
+]
 
 if (process.env.ENV === 'DEV') {
   const createLogger = require('redux-logger')

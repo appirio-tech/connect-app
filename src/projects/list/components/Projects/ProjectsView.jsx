@@ -9,11 +9,15 @@ import NoResults from '../../../../components/NoResults/NoResults'
 import LoadMoreButton from '../../../../components/LoadMoreButton/LoadMoreButton'
 import EndOfResults from '../../../../components/EndOfResults/EndOfResults'
 
+// This handles showing a spinner while the state is being loaded async
+import spinnerWhileLoading from '../../../../components/LoadingSpinner'
+const enhance = spinnerWhileLoading(props => !props.isLoading)
+
 require('./ProjectsView.scss')
 
-const ProjectsView = (props) => {
+const ProjectsView = enhance((props) => {
   const { pageLoaded, loadingMore, error } = props
-  const { projects, totalCount, moreMatchesAvailable } = props
+  const { projects, members, totalCount, moreMatchesAvailable } = props
   const { previousSearchTerm: searchTerm } = props
   const { loadProjects } = props
 
@@ -95,7 +99,7 @@ const ProjectsView = (props) => {
   function renderProjects() {
     return (
       <div>
-        <ProjectList projects={ projects } />
+        <ProjectList projects={ projects } members={ members }/>
       </div>
     )
   }
@@ -135,6 +139,6 @@ const ProjectsView = (props) => {
       return <EndOfResults />
     }
   }
-}
+})
 
 export default ProjectsView

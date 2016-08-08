@@ -1,47 +1,43 @@
 
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import {fetchProject} from '../../../actions/project'
-import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
+import { loadProjectDashboard } from '../../actions/projectDashboard'
+import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
 
+// This handles showing a spinner while the state is being loaded async
+const enhance = spinnerWhileLoading(props => !props.isLoading)
+const ProjectDetailView = enhance((props) => {
+  const children = React.Children.map(props.children, (child) => {
+    return React.cloneElement(child, {
+      project: props.project
+    })
+  })
+  return <div>{children}</div>
+})
 
 class ProjectDetail extends Component {
   constructor(props) {
     super(props)
   }
-
   componentWillMount() {
     const projectId = this.props.params.projectId
-    this.props.fetchProject(projectId)
+    this.props.loadProjectDashboard(projectId)
   }
 
   render() {
-    // handle loading state
-    if (this.props.isLoading) {
-      return (
-        <LoadingIndicator />
-      )
-    } else {
-      const children = React.Children.map(this.props.children, (child) => {
-        return React.cloneElement(child, {
-          project: this.props.project
-        })
-      })
-      return (
-        <div>{children}</div>
-      )
-    }
+    return <ProjectDetailView {...this.props} />
   }
 }
 
-const mapStateToProps = ({projectState}) => {
+const mapStateToProps = ({projectState, projectDashboard}) => {
   return {
-    isLoading: projectState.isLoading,
+    isLoading: projectDashboard.isLoading,
+    error: projectDashboard.error,
     project: projectState.project
   }
 }
-const mapDispatchToProps = { fetchProject }
+const mapDispatchToProps = { loadProjectDashboard }
 
 ProjectDetail.propTypes = {
   project   : PropTypes.object.isRequired,

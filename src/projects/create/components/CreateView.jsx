@@ -6,7 +6,7 @@ import AppProjectForm from './AppProjectForm'
 import GenericProjectForm from './GenericProjectForm'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import { createProject } from '../../../actions/project'
+import { createProject } from '../../actions/project'
 
 require('./CreateProject.scss')
 

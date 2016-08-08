@@ -1,5 +1,5 @@
 {
-  "name": "customer-app-r",
+  "name": "customer-app",
   "version": "1.0.21",
   "description": "Customer pages in React and Redux",
   "scripts": {
@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "appirio-tech-react-components": "appirio-tech/react-components.git#feature/connectv2",
+    "axios": "^0.13.1",
     "classnames": "^2.2.3",
     "draft-js": "^0.7.0",
     "history": "^1.17.0",
@@ -43,12 +44,14 @@
     "react-forms": "^2.0.0-beta33",
     "react-layout-pane": "^0.1.16",
     "react-redux": "^4.0.6",
-    "react-redux-form": "^0.14.3",
     "react-router": "^2.6.0",
     "react-scroll": "^1.1.1",
     "react-sticky": "5.0.4",
     "react-tabs": "^0.7.0",
+    "recompose": "^0.20.2",
     "redux": "^3.3.1",
+    "redux-combine-actions": "^0.1.2",
+    "redux-promise-middleware": "^3.3.2",
     "redux-thunk": "^1.0.3",
     "tc-accounts": "https://github.com/appirio-tech/accounts-app.git#dev",
     "tc-ui": "https://github.com/appirio-tech/tc-ui.git#feature/connectv2"
