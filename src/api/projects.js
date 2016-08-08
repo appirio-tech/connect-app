@@ -3,10 +3,12 @@ import { TC_API_URL } from '../config/constants'
 
 export function getProjects(criteria, limit, offset, sort) {
   // TODO map criteria to API
+  const includeFields = ['id', 'name', 'members', 'status', 'type', 'createdAt', 'updatedAt']
   const params = {
     sort,
     limit,
-    offset
+    offset,
+    fields: includeFields.join(',')
   }
   return axios.get(`${TC_API_URL}/v4/projects/`, { params })
     .then( resp => {
@@ -25,7 +27,7 @@ export function getProjectSuggestions() {
 /**
  * Get a project basd on it's id
  * @param  {integer} projectId unique identifier of the project
- * @return {[type]}           [description]
+ * @return {object}           project returned by api
  */
 export function getProjectById(projectId) {
   projectId = parseInt(projectId)
@@ -42,6 +44,8 @@ export function updateProject(projectId, updatedProps) {
 
 
 export function createProject(projectProps) {
-  // TODO
-  console.log(projectProps)
+  return axios.post(`${TC_API_URL}/v4/projects/`, { param: projectProps })
+    .then( resp => {
+      return resp.data.result.content
+    })
 }
