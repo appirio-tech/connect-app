@@ -1,8 +1,6 @@
 import _ from 'lodash'
 import React, { Component} from 'react'
-import { Link } from 'react-router'
 import classNames from 'classnames'
-import FeatureSelectorNav from './FeatureSelectorNav'
 import FeatureList from './FeatureList'
 import { Form, TextInput, TextareaInput, SubmitButton, Validations } from 'appirio-tech-react-components'
 
@@ -260,9 +258,9 @@ const customFeatureTemplate = {
 }
 
 const filterByCategory = (list, category) => {
-  return list != null ? list.filter(function(feature) {
-    return feature.category === category;
-  }) : [];
+  return list !== null ? list.filter((feature) => {
+    return feature.category === category
+  }) : []
 }
 
 class DefineFeature extends Component {
@@ -323,7 +321,7 @@ class DefineFeature extends Component {
     activeFeature.selected = true//TODO check if need to call setState
 
     features.forEach((feature) => {
-      if(feature.id == activeFeature.id) {
+      if(feature.id === activeFeature.id) {
         updatedFeatures.push(feature)
       }
     })
@@ -332,9 +330,9 @@ class DefineFeature extends Component {
   }
 
   removeFeature() {
-    const { updatedFeatures } = this.state
+    const { updatedFeatures, activeFeature } = this.state
     updatedFeatures.forEach((feature, index) => {
-      if(feature.title == vm.activeFeature.title) {
+      if(feature.title === activeFeature.title) {
         updatedFeatures.splice(index, 1)
       }
     })
@@ -345,7 +343,7 @@ class DefineFeature extends Component {
 
   addCustomFeature() {
     const { updatedFeatures, customFeature } = this.state
-    let valid = customFeature.title && customFeature.description && this.customNameUnique()
+    const valid = customFeature.title && customFeature.description && this.customNameUnique()
 
     if (valid) {
       updatedFeatures.push(customFeature)
@@ -355,12 +353,13 @@ class DefineFeature extends Component {
   }
 
   customNameUnique() {
-    let featureTitleError = false
+    const { customFeature } = this.state
+    // let featureTitleError = false
     let unique = true
 
     features.forEach((feature) => {
-      if (customFeature.title && customFeature.title.toLowerCase() == feature.title.toLowerCase()) {
-        featureTitleError = true
+      if (customFeature.title && customFeature.title.toLowerCase() === feature.title.toLowerCase()) {
+        // featureTitleError = true
         unique = false
       }
     })
@@ -468,7 +467,7 @@ class DefineFeature extends Component {
   }
 
   render() {
-    const { activeFeature, showDefineFeaturesForm, updatedFeatures } = this.state
+    const { activeFeature, updatedFeatures } = this.state
     const { readOnly } = this.props
     const selectedFeaturesCount = updatedFeatures ? updatedFeatures.length : 0
 
@@ -483,7 +482,8 @@ class DefineFeature extends Component {
             activeFeature={ activeFeature}
             headerText={ category.category }
             features={ features }
-            onFeatureSelection={ this.activateFeature } />
+            onFeatureSelection={ this.activateFeature }
+          />
         </li>
       )
     }
