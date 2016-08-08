@@ -1,0 +1,165 @@
+@import 'tc-styles';
+
+$card-max-width: 180px;
+
+button {
+  &.clean {
+    background-color: transparent;
+    border-radius   : 0;
+    border          : none;
+    padding         : 0;
+    margin          : 0;
+    font-size       : inherit;
+    font            : inherit;
+    line-height     : inherit;
+    font-weight     : inherit;
+    text-transform  : inherit;
+  }
+  &:active,
+  &:focus {
+    outline: none;
+  }
+}
+
+.define-features {
+  $footer-height: 66px;
+  background-color: white;
+  text-align: left;
+
+  .close {
+    background-color: initial;
+  }
+
+  > h2 {
+    padding: 15px;
+    text-align: center;
+  }
+
+  h5 {
+    color: $tc-black;
+  }
+
+  > main {
+    width: 100%;
+    border-top: 1px solid $tc-gray-20;
+
+    ul.features {
+      min-width       : 220px;
+      background-color: $tc-gray-10;
+      border-right    : 1px solid $tc-gray-neutral-light;
+      position: relative;
+
+      > li {
+        // max-height: 400px;// TODO fix height using js for full height
+        overflow: scroll;
+        // margin-bottom: $footer-height;
+        max-height: 100%;
+
+        ul.feature-categories-list {
+
+          h6 {
+            font-weight: 700;
+          }
+        }
+
+        &:last-child {
+          // position: absolute;
+          min-height: $footer-height;
+          margin-bottom: 0px;
+          // left: 0;
+          // top: 100%;
+          overflow: hidden;
+
+          button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height          : $footer-height;
+            text-transform  : uppercase;
+            width           : 100%;
+
+            .icon {
+              color           : $tc-dark-blue;
+              background-color: white;
+              border-radius   : 50%;
+              text-align      : center;
+              font-size       : 20px;
+              margin-left     : 10px;
+              margin-right    : 0;
+              font-family     : arial;
+              width           : 30px;
+              line-height     : 30px;
+            }
+          }
+        }
+      }
+    }
+
+    ul.contents {
+      li:first-child {
+        .example {
+          background-color: $tc-gray-10;
+          text-align: center;
+
+          img {
+            margin-top: 30px;
+            max-height: 500px;
+          }
+        }
+      }
+
+      .default, .description, .new-feature {
+        width  : 400px;
+        padding: 30px;
+        display: none;
+
+        &.active {
+          display: block;
+        }
+
+        p, h6 {
+          margin-top: 10px;
+        }
+
+
+        input {
+          display: block;
+        }
+
+        label {
+          display: block;
+          margin-top: 30px;
+          margin-bottom: 15px;
+        }
+
+        button {
+          margin-top: 30px;
+
+          &.cancel {
+            margin-left: 15px;
+          }
+        }
+
+        textarea {
+          height: 150px;
+        }
+      }
+
+      .description {
+        textarea {
+          margin-top: 64px;
+          height: 150px;
+        }
+      }
+
+      li:last-child {
+        background-color: white;
+        padding         : 15px;
+        color           : $tc-gray-90;
+        text-align      : center;
+        height          : $footer-height;
+        border-top      : 1px solid $tc-gray-20;
+      }
+    }
+  }
+}
