@@ -26,6 +26,17 @@ $title-color: #47474F;
     flex: $number;
 }
 
+.feature-selection-dialog {
+    top: 0px;
+    left: 0px;
+    height: 100%;
+}
+.feature-selection-dialog-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
 .two-col-content.content {
     .tc-file-field__inputs {
         height: 30px;

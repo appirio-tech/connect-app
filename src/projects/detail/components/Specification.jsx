@@ -1,29 +1,56 @@
 'use strict'
 
 import React, { Component } from 'react'
+import Modal from 'react-modal'
 import ProjectSpecSidebar from './ProjectSpecSidebar'
+import DefineFeature from '../../FeatureSelector/DefineFeature'
 
 require('./Specification.scss')
 
 class ProjectSpecification extends Component {
   constructor(props) {
     super(props)
+
+    this.state = { showFeaturesDialog : false}
+    this.showFeaturesDialog = this.showFeaturesDialog.bind(this)
+    this.hideFeaturesDialog = this.hideFeaturesDialog.bind(this)
   }
 
+  showFeaturesDialog() {
+    this.setState({ showFeaturesDialog : true })
+  }
+
+  hideFeaturesDialog() {
+    this.setState({ showFeaturesDialog : false })
+  }
 
   render() {
     const {project} = this.props
+    const {showFeaturesDialog} = this.state
     const _debug = JSON.stringify(project, null, 2)
     const details = <pre>{_debug}</pre>
     return (
       <section className="two-col-content content">
         <div className="container">
+          <Modal
+            isOpen={ showFeaturesDialog }
+            className="feature-selection-dialog"
+            // onAfterOpen={afterOpenFn}
+            // onRequestClose={requestCloseFn}
+            // closeTimeoutMS={n}
+            // style={customStyle}
+          >
+            <DefineFeature />
+            <button onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">Close</button>
+          </Modal>
           <div className="left-area">
             <ProjectSpecSidebar project={project} />
           </div>
 
           {/* right area --- THIS IS TEST CODE */}
           <div className="right-area">
+
+        <button onClick={ this.showFeaturesDialog }>Select Features</button>
             <div className="right-area-item" id="design-spec" >
               <div className="boxes">
                 <h2 className="big-titles">Design Specification</h2>

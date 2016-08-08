@@ -1,0 +1,77 @@
+@import "tc-styles";
+
+.feature-list {
+  display         : block;
+  background-color: $tc-gray-neutral-light;
+  width           : 286px;
+
+  .feature-list-feature {
+    .invisible {
+      visibility: hidden;
+    }
+    .active-feature {
+      button {
+        background-color: $tc-gray-neutral-dark;
+      }
+    }
+  }
+
+  header {
+    padding: 15px;
+    padding-left: 0px;
+
+    h6 {
+      @include ellipsis;
+
+      margin: 0 15px;
+      font-size  : 16px;
+      font-weight: bold;
+      color      : $tc-black;
+    }
+  }
+
+  img {
+    width      : 20px;
+    height     : 20px;
+    min-width  : 20px;
+    margin-left: 15px;
+  }
+
+
+  button.clean {
+    padding: 15px 15px 15px 0;
+  }
+
+  li {
+    cursor: pointer;
+    &.active {
+      button {
+        background-color: $tc-gray-neutral-dark;
+
+        p {
+          font-weight: 400;
+        }
+      }
+    }
+
+    p {
+      @include ellipsis;
+
+      color: $tc-black;
+      margin-left: 15px;
+    }
+
+    button {
+      width: 100%;
+      text-align: left;
+
+      &:hover {
+        background-color: $tc-gray-neutral-dark;
+
+        p {
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}
