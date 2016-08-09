@@ -1,7 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
 import GridView from '../../../../components/Grid/GridView'
-import ProjectListItem from '../ProjectListItemNew/ProjectListItem'
 import moment from 'moment'
 import classNames from 'classnames'
 import UserWithName from '../../../../components/User/UserWithName'
@@ -13,21 +12,23 @@ const enhance = spinnerWhileLoading(props => !props.isLoading)
 
 require('./ProjectsView.scss')
 
+/*eslint-disable quote-props */
 const projectTypeMap = {
-  'generic': 'Wr',
+  generic: 'Wr',
   'visual_design': 'Dn',
   'visual_prototype': 'Pr',
   'app_dev': 'Ap'
 }
 const projectStatuseMap = {
-  'draft': { classes: 'status-draft', label: 'Draft'},
+  draft: { classes: 'status-draft', label: 'Draft'},
   'in_review': { classes: 'status-active', label: 'In Review'},
-  'reviewed': { classes: 'status-draft', label: 'Will launch'},
-  'active': { classes: 'status-active', label: 'Working'},
-  'completed': { classes: 'status-done', label: 'Done'},
-  'paused': { classes: 'status-error', label: 'Stalled'},
-  'cancelled': { classes: 'status-error', label: 'Cancelled'}
+  reviewed: { classes: 'status-draft', label: 'Will launch'},
+  active: { classes: 'status-active', label: 'Working'},
+  completed: { classes: 'status-done', label: 'Done'},
+  paused: { classes: 'status-error', label: 'Stalled'},
+  cancelled: { classes: 'status-error', label: 'Cancelled'}
 }
+/*eslint-enable */
 
 // This 'little' array is the heart of the list component.
 // it defines what columns should be displayed and more importantly
@@ -81,7 +82,7 @@ const columns = [
       })
       return (
         <div className="spacing">
-          <span className="txt-normal">{moment(item.updatedAt).format('MMM D')}</span>
+          <span className={classes}>{moment(item.updatedAt).format('MMM D')}</span>
         </div>
       )
     }
@@ -119,7 +120,8 @@ const columns = [
     headerLabel: 'Price',
     classes: 'item-price width7',
     renderText: item => {
-      let desc = '', price = null
+      let desc = ''
+      let price = null
       switch (item.status) {
       case 'active':
         desc = 'Pending'
@@ -158,7 +160,7 @@ const columns = [
     }
   }
 ]
-const ProjectsView = enhance(({projects, members, totalCount, isLoading}) => {
+const ProjectsView = enhance(({ projects, members, totalCount }) => {
   // annotate projects with member data
   _.forEach(projects, prj => {
     prj.members = _.map(prj.members, m => {
@@ -175,7 +177,7 @@ const ProjectsView = enhance(({projects, members, totalCount, isLoading}) => {
     sortHandler: (evt, field) => { console.log('Sort with ', evt, field)},
     currentSortFields: [],
     resultSet: projects,
-    totalCount: totalCount,
+    totalCount,
     currentPageNum: 1,
     pageSize: 20
   }

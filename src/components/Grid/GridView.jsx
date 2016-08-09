@@ -6,7 +6,7 @@ import './GridView.scss'
 
 
 const GridView = props => {
-  const { columns, sortHandler, currentSortFields, ListComponent, resultSet, listItemPropName } = props
+  const { columns, sortHandler, currentSortFields, ListComponent, resultSet } = props
   const { totalCount, pageSize, currentPageNum } = props
   const paginationProps = { totalCount, pageSize, currentPageNum }
   const headerProps = {
@@ -52,7 +52,7 @@ GridView.propTypes = {
   resultSet: PropTypes.arrayOf(PropTypes.object).isRequired,
   totalCount: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
-  currentPageNum: PropTypes.number.isRequired,
+  currentPageNum: PropTypes.number.isRequired
 }
 
 GridView.defaultProps = {

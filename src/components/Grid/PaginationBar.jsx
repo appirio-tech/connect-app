@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 
 const PaginationBar = (props) => {
-
+  console.log(props)
   return (
     <div className="pages">
       <nav className="right-page">
@@ -25,6 +25,12 @@ const PaginationBar = (props) => {
       </nav>
     </div>
   )
+}
+
+PaginationBar.PropTypes = {
+  totalCount: PropTypes.number.isRequired,
+  pageSize: PropTypes.number.isRequired,
+  currentPageNum: PropTypes.number.isRequired
 }
 
 export default PaginationBar
