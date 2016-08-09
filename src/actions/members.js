@@ -5,7 +5,7 @@ import { LOAD_MEMBERS, INTERNAL_API } from '../config/constants'
 const getMembers = userIds => {
   const _userIdArr = _.map(userIds, _id => `userId:${_id}`)
   // only requesting certain member attributes
-  const fields = 'userId,handle,photoURL,firstName,lastName'
+  const fields = 'userId,handle,photoURL,firstName,lastName,maxRating,details'
   const query = _userIdArr.join(' OR ')
   const url = `${INTERNAL_API}/members/_search/?fields=`
     + encodeURIComponent(fields)
