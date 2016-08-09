@@ -5,7 +5,7 @@ import {
 } from '../../../config/constants'
 
 export const initialState = {
-  isLoading: false,
+  isLoading: true,
   projects: [],
   error: false,
   totalCount: 0

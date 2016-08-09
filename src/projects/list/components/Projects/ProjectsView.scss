@@ -1,15 +1,59 @@
 @import 'tc-styles';
 
-.projects-view {
+.item-type {
+    .spacing {
+        padding-left: 20px;
+        min-width: 50px;
+    }
+}
+.item-status  .spacing {
+    min-width: 85px;
+}
+.item-status-date  .spacing {
+    min-width: 42px;
+}
+.item-customer  .spacing {
+    min-width: 130px;
+}
+.item-copilot  .spacing {
+    min-width: 105px;
+}
+.item-price  .spacing {
+    min-width: 75px;
+}
+.item-ref-code .spacing {
+    padding: 0 40px 0 0;
+    min-width: 95px;
 }
 
-.content-area {
-  margin: calc(4 * #{$base-unit});
-  margin-bottom: 0px;
-  background-color: white;
-  min-height: 100px;
-  @media (max-width: 700px) {
-    margin: calc(2 * #{$base-unit});
-    margin-bottom: 0px;
-  }
+
+/* .txt-price */
+.txt-price {
+    @include roboto-medium;
+    font-size: $tc-label-md;
+    color: #202A36;
+    text-align: center;
+    height: 20px;
+    line-height: $base-unit + 16;
+    min-width: 54px;
+    padding-right: 5px;
+    padding-left: 5px;
+    background: $tc-gray-neutral-dark;
+    border-radius: 13px;
+    display: inline-block;
+    margin-top: 3px;
+    &.yellow-light {
+        background: $tc-gold-30;
+    }
+}
+.txt-gray-sm {
+    font-size: $tc-label-sm;
+    color: $tc-gray-50;
+    line-height: $base-unit * 4;
+    display: block;
+    margin: 2px 0 0 6px;
+}
+.txt-gray-md {
+    font-size: $tc-label-md;
+    color: $tc-gray-50;
 }
