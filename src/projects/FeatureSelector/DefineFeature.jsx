@@ -333,7 +333,8 @@ class DefineFeature extends Component {
   removeFeature() {
     const { updatedFeatures, activeFeature } = this.state
     updatedFeatures.forEach((feature, index) => {
-      if(feature.title === activeFeature.title) {
+      if(feature.id === activeFeature.id) {
+        feature.selected = false
         updatedFeatures.splice(index, 1)
       }
     })
