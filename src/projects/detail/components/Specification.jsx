@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import Modal from 'react-modal'
 import ProjectSpecSidebar from './ProjectSpecSidebar'
 import DefineFeature from '../../FeatureSelector/DefineFeature'
+import { XMarkIcon } from 'appirio-tech-react-components'
 
 require('./Specification.scss')
 
@@ -35,13 +36,12 @@ class ProjectSpecification extends Component {
           <Modal
             isOpen={ showFeaturesDialog }
             className="feature-selection-dialog"
-            // onAfterOpen={afterOpenFn}
-            // onRequestClose={requestCloseFn}
-            // closeTimeoutMS={n}
-            // style={customStyle}
+            onRequestClose={this.hideFeaturesDialog }
           >
             <DefineFeature />
-            <button onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">Close</button>
+            <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
+              <XMarkIcon />
+            </div>
           </Modal>
           <div className="left-area">
             <ProjectSpecSidebar project={project} />
