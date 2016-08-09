@@ -316,9 +316,10 @@ class DefineFeature extends Component {
     // TODO get latest from server and normalize the reponse
   }
 
-  applyFeature() {
+  applyFeature(submittedFeature) {
     const { activeFeature, updatedFeatures } = this.state
-    activeFeature.selected = true//TODO check if need to call setState
+    _.merge(activeFeature, submittedFeature)
+    activeFeature.selected = true
 
     features.forEach((feature) => {
       if(feature.id === activeFeature.id) {
@@ -379,8 +380,7 @@ class DefineFeature extends Component {
         </div>
       )
     }
-
-    const selected = _.get('selected', activeFeature)
+    const selected = _.get(activeFeature, 'selected')
     const submitAction = !selected ? this.applyFeature : this.removeFeature
     const buttonText = !selected ? 'Add this feature' : 'Remove feature'
     if (!showDefineFeaturesForm && activeFeature) {
@@ -399,10 +399,10 @@ class DefineFeature extends Component {
             <SubmitButton className="tc-btn tc-btn-primary tc-btn-md" disabled={ readOnly }>{ buttonText }</SubmitButton>
           </div>
         </div>
-      ) 
+      )
     }
     return (
-      <Form initialValue={ this.state.activeFeature } onSubmit={ submitAction }>
+      <Form initialValue={ activeFeature } resetOnRender={ true } disableOnPristine={ false} onSubmit={ submitAction }>
         { activeFeatureDom }
       </Form>
     )

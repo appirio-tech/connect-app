@@ -6,12 +6,18 @@
   width           : 286px;
 
   .feature-list-feature {
-    .invisible {
+    .selected-feature-icon {
       visibility: hidden;
     }
-    .active-feature {
+    &.active-feature {
       button {
         background-color: $tc-gray-neutral-dark;
+      }
+    }
+
+    &.selected-feature {
+      .selected-feature-icon {
+        visibility: visible;
       }
     }
   }
