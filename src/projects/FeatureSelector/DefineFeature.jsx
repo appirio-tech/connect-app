@@ -472,7 +472,8 @@ class DefineFeature extends Component {
     const selectedFeaturesCount = updatedFeatures ? updatedFeatures.length : 0
 
     const renderFeatureCategory = (category, idx) => {
-      if (filterByCategory(features, category.category).length === 0) {
+      const featuresToRender = filterByCategory(features, category.category)
+      if (featuresToRender.length === 0) {
         return null
       }
       return (
@@ -481,7 +482,7 @@ class DefineFeature extends Component {
             icon={ category.icon }
             activeFeature={ activeFeature}
             headerText={ category.category }
-            features={ features }
+            features={ featuresToRender }
             onFeatureSelection={ this.activateFeature }
           />
         </li>
