@@ -489,9 +489,9 @@ class DefineFeature extends Component {
     }
 
     return (
-      <div className="slide full define-features">
+      <div className="define-features">
         <h2><strong>Features</strong></h2>
-        <main className="flex flex-grow stretch">
+        <main className="flex flex-grow">
           <ul className="features flex column">
             <li ignore-content="true" className="flex-grow">
               <ul className="feature-categories-list">
