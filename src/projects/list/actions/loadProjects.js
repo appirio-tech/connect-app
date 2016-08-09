@@ -22,6 +22,9 @@ const getProjectsWithMembers = (dispatch, searchTerm, limit, offset, sort) => {
       })
       // this is to remove any nulls from the list (dev had some bad data)
       _.remove(userIds, i => !i)
+      // return if there are no userIds to retrieve, empty result set
+      if (!userIds.length)
+        resolve(true)
       return dispatch(loadMembers(userIds))
         .then(() => resolve(true))
         .catch(err => reject(err))

@@ -19,7 +19,7 @@ const UserAvatar = ({ showLevel, rating, photoURL }) => {
   // Delete -r when taking member search back out of the angular app
   // Renamed to -r to avoid naming collisions
   return (
-    <div className="user-avatar-r" style={{ backgroundImage: backgroundImageUrl }}>
+    <div className="user-avatar" style={{ backgroundImage: backgroundImageUrl }}>
       {levelIcon}
     </div>
   )
