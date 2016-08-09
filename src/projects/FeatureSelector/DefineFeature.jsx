@@ -402,7 +402,7 @@ class DefineFeature extends Component {
       )
     }
     return (
-      <Form initialValue={ activeFeature } resetOnRender={ true } disableOnPristine={ false} onSubmit={ submitAction }>
+      <Form initialValue={ activeFeature } resetOnRender disableOnPristine={ false} onSubmit={ submitAction }>
         { activeFeatureDom }
       </Form>
     )
