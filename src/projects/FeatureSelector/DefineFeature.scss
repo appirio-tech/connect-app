@@ -25,6 +25,7 @@ button {
   $footer-height: 66px;
   background-color: white;
   text-align: left;
+  height: 100%;
 
   .close {
     background-color: initial;
@@ -42,6 +43,7 @@ button {
   > main {
     width: 100%;
     border-top: 1px solid $tc-gray-20;
+    height: calc(100% - #{$footer-height});
 
     ul.features {
       min-width       : 220px;

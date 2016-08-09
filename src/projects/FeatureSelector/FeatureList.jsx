@@ -12,21 +12,19 @@ class FeatureList extends Component {
     const { headerText, icon, features, activeFeature, onFeatureSelection } = this.props
     const renderFeature = (feature, idx) => {
       const featureClasses = classNames('feature-list-feature', {
-        'active-feature' : activeFeature && activeFeature.title === feature.title //TODO id comparison
+        'active-feature' : activeFeature && activeFeature.id === feature.id,
+        'selected-feature' : feature.selected
       })
       const activateFeature = () => {
         if (onFeatureSelection && typeof onFeatureSelection === 'function') {
           onFeatureSelection(feature)
         }
       }
-      const selectedClasses = classNames({
-        invisible: !feature.selected
-      })
       return (
         <li key={ idx } className={featureClasses}>
           <button onClick={ activateFeature } className="clean">
             <div className="flex">
-              <img className={ selectedClasses } src={ require('./images/icon-check-solid.svg') } />
+              <img className="selected-feature-icon" src={ require('./images/icon-check-solid.svg') } />
               <p>{ feature.title }</p>
             </div>
           </button>

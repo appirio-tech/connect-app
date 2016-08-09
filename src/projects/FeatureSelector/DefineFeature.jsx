@@ -316,9 +316,10 @@ class DefineFeature extends Component {
     // TODO get latest from server and normalize the reponse
   }
 
-  applyFeature() {
+  applyFeature(submittedFeature) {
     const { activeFeature, updatedFeatures } = this.state
-    activeFeature.selected = true//TODO check if need to call setState
+    _.merge(activeFeature, submittedFeature)
+    activeFeature.selected = true
 
     features.forEach((feature) => {
       if(feature.id === activeFeature.id) {
@@ -332,7 +333,8 @@ class DefineFeature extends Component {
   removeFeature() {
     const { updatedFeatures, activeFeature } = this.state
     updatedFeatures.forEach((feature, index) => {
-      if(feature.title === activeFeature.title) {
+      if(feature.id === activeFeature.id) {
+        feature.selected = false
         updatedFeatures.splice(index, 1)
       }
     })
@@ -379,8 +381,7 @@ class DefineFeature extends Component {
         </div>
       )
     }
-
-    const selected = _.get('selected', activeFeature)
+    const selected = _.get(activeFeature, 'selected')
     const submitAction = !selected ? this.applyFeature : this.removeFeature
     const buttonText = !selected ? 'Add this feature' : 'Remove feature'
     if (!showDefineFeaturesForm && activeFeature) {
@@ -399,10 +400,10 @@ class DefineFeature extends Component {
             <SubmitButton className="tc-btn tc-btn-primary tc-btn-md" disabled={ readOnly }>{ buttonText }</SubmitButton>
           </div>
         </div>
-      ) 
+      )
     }
     return (
-      <Form initialValue={ this.state.activeFeature } onSubmit={ submitAction }>
+      <Form initialValue={ activeFeature } resetOnRender disableOnPristine={ false} onSubmit={ submitAction }>
         { activeFeatureDom }
       </Form>
     )
@@ -472,7 +473,8 @@ class DefineFeature extends Component {
     const selectedFeaturesCount = updatedFeatures ? updatedFeatures.length : 0
 
     const renderFeatureCategory = (category, idx) => {
-      if (filterByCategory(features, category.category).length === 0) {
+      const featuresToRender = filterByCategory(features, category.category)
+      if (featuresToRender.length === 0) {
         return null
       }
       return (
@@ -481,7 +483,7 @@ class DefineFeature extends Component {
             icon={ category.icon }
             activeFeature={ activeFeature}
             headerText={ category.category }
-            features={ features }
+            features={ featuresToRender }
             onFeatureSelection={ this.activateFeature }
           />
         </li>
@@ -489,9 +491,9 @@ class DefineFeature extends Component {
     }
 
     return (
-      <div className="slide full define-features">
+      <div className="define-features">
         <h2><strong>Features</strong></h2>
-        <main className="flex flex-grow stretch">
+        <main className="flex flex-grow">
           <ul className="features flex column">
             <li ignore-content="true" className="flex-grow">
               <ul className="feature-categories-list">
