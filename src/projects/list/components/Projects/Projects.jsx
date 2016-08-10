@@ -6,19 +6,11 @@ import { loadProjects } from '../../actions/loadProjects'
 class Projects extends Component {
   constructor(props) {
     super(props)
-
-    // this.handleScroll = this.handleScroll.bind(this)
   }
 
   componentWillMount() {
-    window.addEventListener('scroll', this.handleScroll)
-
     this.searchTermFromQuery = this.props.location.query.q || ''
     this.props.loadProjects(this.searchTermFromQuery)
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll)
   }
 
   render() {

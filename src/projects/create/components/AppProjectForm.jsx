@@ -110,7 +110,7 @@ class AppProjectForm extends Component {
               required: [Validations.isRequired, 'project name is required']
             }}
             label="Project Name"
-            placeholder="enter project name"
+            placeholder="My awesome project"
             disabled={false}
             wrapperClass="row"
           />
@@ -120,6 +120,7 @@ class AppProjectForm extends Component {
             label="Description"
             disabled={false}
             wrapperClass="row"
+            placeholder="Mobile app that solves my biggest problem"
           />
 
           <TextInput
@@ -128,6 +129,7 @@ class AppProjectForm extends Component {
             type="text"
             disabled={false}
             wrapperClass="row center"
+            placeholder="ABCD123"
           />
         </div>
         {/* .project-info */}
