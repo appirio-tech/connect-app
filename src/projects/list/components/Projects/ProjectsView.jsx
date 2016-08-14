@@ -209,13 +209,13 @@ const ProjectsView = props => {
     pageSize: 20
   }
   const toolBarProps = { criteria, applyFilters }
-  
+
   return (
-    <section class="content">
+    <section className="content">
       <div className="">
         <ProjectsToolBar {...toolBarProps} />
       </div>
-      <div class="container">
+      <div className="container">
         <EnhancedGrid {...gridProps} />
       </div>
     </section>
