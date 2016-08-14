@@ -6,14 +6,9 @@ import './GridView.scss'
 
 
 const GridView = props => {
-  const { columns, sortHandler, currentSortFields, ListComponent, resultSet } = props
-  const { totalCount, pageSize, currentPageNum } = props
-  const paginationProps = { totalCount, pageSize, currentPageNum }
-  const headerProps = {
-    headers: columns,
-    sortHandler,
-    currentSortFields
-  }
+  const { columns, sortHandler, currentSortField, ListComponent, resultSet, onPageChange, totalCount, pageSize, currentPageNum } = props
+  const paginationProps = { totalCount, pageSize, currentPageNum, onPageChange }
+  const headerProps = { columns, sortHandler, currentSortField }
 
   const renderItem = (item, index) => {
     return <ListComponent columns={columns} item={item} key={index}/>
@@ -28,7 +23,6 @@ const GridView = props => {
         <div className="flex-area">
           <div className="flex-data">
             <ListHeader {...headerProps} />
-
             { resultSet.length ? resultSet.map(renderItem) : emptyList }
           </div>
           {/* .flex-data */}
@@ -40,14 +34,14 @@ const GridView = props => {
       </div>
       {/* .container */}
     </section>
-
   )
 }
 
 GridView.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onPageChange: PropTypes.func.isRequired,
   sortHandler: PropTypes.func.isRequired,
-  currentSortFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  currentSortField: PropTypes.string.isRequired,
   ListComponent: PropTypes.func,
   resultSet: PropTypes.arrayOf(PropTypes.object).isRequired,
   totalCount: PropTypes.number.isRequired,

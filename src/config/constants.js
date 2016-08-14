@@ -22,6 +22,7 @@ export const GET_PROJECTS               = 'GET_PROJECTS'
 export const GET_PROJECTS_PENDING       = 'GET_PROJECTS_PENDING'
 export const GET_PROJECTS_SUCCESS       = 'GET_PROJECTS_SUCCESS'
 export const GET_PROJECTS_FAILURE       = 'GET_PROJECTS_FAILURE'
+export const GET_PROJECTS_SEARCH_CRITERIA = 'GET_PROJECTS_SEARCH_CRITERIA'
 
 // Project Search Suggestions (Typeahead)
 export const CLEAR_PROJECT_SUGGESTIONS_SEARCH   = 'CLEAR_PROJECT_SUGGESTIONS_SEARCH'
@@ -56,12 +57,18 @@ export const LOAD_MEMBERS_SUCCESS     = 'LOAD_MEMBERS_SUCCESS'
 export const LOAD_MEMBERS_FAILURE     = 'LOAD_MEMBERS_FAILURE'
 
 /*
- * URLs
+ * User Roles
  */
-
-export const ROLE_TOPCODER_MANAGER = 'manager'
+export const ROLE_TOPCODER_USER = 'Topcoder User'
+export const ROLE_TOPCODER_COPILOT = 'Topcoder Copilot'
+export const ROLE_MANAGER = 'Manager'
+export const ROLE_TOPCODER_MANAGER = 'Topcoder Manager'
 export const ROLE_ADMINISTRATOR = 'administrator'
 
+
+/*
+ * URLs
+ */
 export const DOMAIN = process.env.domain || 'topcoder.com'
 export const CONNECT_DOMAIN = `connect.${DOMAIN}`
 export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL

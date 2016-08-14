@@ -2,15 +2,25 @@ import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL } from '../config/constants'
 
-export function getProjects(criteria, limit, offset, sort) {
-  // TODO map criteria to API
-  const includeFields = ['id', 'name', 'members', 'status', 'type', 'createdAt', 'updatedAt']
+export function getProjects(criteria, pageNum) {
+  // add default params
+  const includeFields = ['id', 'name', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt']
   const params = {
-    sort,
-    limit,
-    offset,
+    limit: 20,
+    offset: (pageNum - 1) * 20,
     fields: includeFields.join(',')
   }
+  // filters
+  const filter = _.omit(criteria, ['sort'])
+  if (!_.isEmpty(filter)) {
+    // convert filter object to string
+    const filterStr = _.map(filter, (v, k) => `${k}=${v}`)
+    params.filter = filterStr.join('&')
+  }
+  // sort fields
+  const sort = _.get(criteria, 'sort', null)
+  if (sort) params.sort = sort
+
   return axios.get(`${TC_API_URL}/v4/projects/`, { params })
     .then( resp => {
       return {

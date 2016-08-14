@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import {
   PROJECT_SEARCH, GET_PROJECTS,
-  SET_SEARCH_TERM,
+  SET_SEARCH_TERM, GET_PROJECTS_SEARCH_CRITERIA,
   CLEAR_PROJECT_SUGGESTIONS_SEARCH, PROJECT_SUGGESTIONS_SEARCH_SUCCESS
 } from '../../../config/constants'
 import { getProjects } from '../../../api/projects'
@@ -9,11 +9,16 @@ import { loadMembers } from '../../../actions/members'
 
 // ignore action
 /*eslint-disable no-unused-vars */
-const getProjectsWithMembers = (dispatch, searchTerm, limit, offset, sort) => {
+const getProjectsWithMembers = (dispatch, criteria, pageNum) => {
   return new Promise((resolve, reject) => {
+    dispatch({
+      type: GET_PROJECTS_SEARCH_CRITERIA,
+      criteria,
+      pageNum
+    })
     return dispatch({
       type: GET_PROJECTS,
-      payload: getProjects(searchTerm, limit, offset, sort)
+      payload: getProjects(criteria, pageNum)
     })
     .then(({ value, action }) => {
       let userIds = []
@@ -34,11 +39,11 @@ const getProjectsWithMembers = (dispatch, searchTerm, limit, offset, sort) => {
 }
 /*eslint-enable*/
 
-export function loadProjects(searchTerm, limit=20, offset=0, sort='createdAt asc') {
+export function loadProjects(criteria, pageNum=1) {
   return (dispatch) => {
     return dispatch({
       type: PROJECT_SEARCH,
-      payload: getProjectsWithMembers(dispatch, searchTerm, limit, offset, sort)
+      payload: getProjectsWithMembers(dispatch, criteria, pageNum)
     })
   }
 }
