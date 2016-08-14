@@ -211,10 +211,8 @@ const ProjectsView = props => {
   const toolBarProps = { criteria, applyFilters }
 
   return (
-    <section className="content">
-      <div className="">
-        <ProjectsToolBar {...toolBarProps} />
-      </div>
+    <section className="">
+      <ProjectsToolBar {...toolBarProps} />
       <div className="container">
         <EnhancedGrid {...gridProps} />
       </div>

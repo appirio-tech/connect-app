@@ -53,13 +53,13 @@ class CreateView extends Component {
     let form = null
     if (_.indexOf(this.props.userRoles, ROLE_TOPCODER_MANAGER) > -1 ||
         _.indexOf(this.props.userRoles, ROLE_ADMINISTRATOR) > -1 ) {
+      // TODO replace with Tabs component
       tabs = this.renderTabs()
       // Todo select based on Tab
       form = <AppProjectForm submitHandler={this.createProject}/>
     } else {
-      // form = <WorkProjectForm submitHandler={this.createProject}/>
-      tabs = this.renderTabs()
-      form = <GenericProjectForm onSubmit={this.createProject} />
+      // form = <GenericProjectForm onSubmit={this.createProject} />
+      form = <AppProjectForm submitHandler={this.createProject}/>
     }
     return (
       <section className="content">
@@ -79,11 +79,12 @@ CreateView.propTypes = {
 }
 
 CreateView.defaultProps = {
-  userRoles: ['manager'],
+  // userRoles: ['manager'],
   currentTab: 0
 }
 
-const mapStateToProps = ({projectState }) => ({
+const mapStateToProps = ({projectState, loadUser }) => ({
+  userRoles: loadUser.user.roles,
   isLoading: projectState.isLoading,
   project: projectState.project
 })
