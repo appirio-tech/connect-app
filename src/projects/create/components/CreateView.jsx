@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 import React, { Component, PropTypes } from 'react'
 import { Tabs, Tab } from 'appirio-tech-react-components'
-import { ROLE_MANAGER, ROLE_TOPCODER_MANAGER, ROLE_ADMINISTRATOR } from '../../../config/constants'
+import { ROLE_MANAGER, ROLE_ADMINISTRATOR } from '../../../config/constants'
 import AppProjectForm from './AppProjectForm'
 import GenericProjectForm from './GenericProjectForm'
 import { connect } from 'react-redux'
@@ -53,8 +53,7 @@ class CreateView extends Component {
 
   render() {
     let content = null
-    if (_.indexOf(this.props.userRoles, ROLE_TOPCODER_MANAGER) > -1 ||
-        _.indexOf(this.props.userRoles, ROLE_MANAGER) > -1 ||
+    if (_.indexOf(this.props.userRoles, ROLE_MANAGER) > -1 ||
         _.indexOf(this.props.userRoles, ROLE_ADMINISTRATOR) > -1 ) {
       content = this.renderWithTabs()
     } else {

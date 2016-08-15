@@ -62,7 +62,6 @@ export const LOAD_MEMBERS_FAILURE     = 'LOAD_MEMBERS_FAILURE'
 export const ROLE_TOPCODER_USER = 'Topcoder User'
 export const ROLE_TOPCODER_COPILOT = 'Topcoder Copilot'
 export const ROLE_MANAGER = 'Manager'
-export const ROLE_TOPCODER_MANAGER = 'Topcoder Manager'
 export const ROLE_ADMINISTRATOR = 'administrator'
 
 
