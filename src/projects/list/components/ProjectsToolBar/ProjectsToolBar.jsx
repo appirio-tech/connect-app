@@ -77,7 +77,7 @@ class ProjectsToolBar extends Component {
       <Sticky stickyClassName="StickyProjectsToolBar">
         <div className="ProjectsToolBar flex middle space-between">
           <div className="heading">All Projects</div>
-          <SearchBar recentTerms={ [] } onTermChange={ this.handleTermChange } onSearch={ this.handleSearch } />
+          <SearchBar recentTerms={ [] } onTermChange={ this.handleTermChange } onSearch={ this.handleSearch } onClearSearch={ this.handleSearch } />
           <div className="project-types">
             <Dropdown theme="default" noPointer>
               <a className="dropdown-menu-header">{ type.label || 'All Types' }</a>

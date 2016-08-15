@@ -1,0 +1,94 @@
+@import 'tc-includes';
+
+.file-list {
+  > h4 {
+
+    @include roboto-medium;
+    font-size: 15px;
+    color: $tc-gray-50;
+    line-height: 20px;
+    margin-bottom: 2px;
+  }
+}
+
+.file-list-item {
+  display: flex;
+  border-top: 1px dashed $tc-gray-30;
+  padding: 15px 0;
+  width: 100%;
+  align-items: stretch;
+  .icon-col {
+    padding-top: 3px;
+    width: 60px;
+  }
+  .content-col {
+    flex: 2;
+
+    h4 {
+      @include roboto-bold;
+      font-size: 15px;
+      color: $tc-gray-80;
+    }
+    p {
+      @include roboto;
+      font-size: 13px;
+      color: $tc-gray-60;
+      line-height: 25px;
+    }
+    .title {
+      width: 100%;
+      display: flex;
+      line-height: 25px;
+    }
+    .size {
+      @include roboto;
+      font-size: 15px;
+      color: $tc-gray-60;
+      margin-left: auto;
+    }
+    .edit-icons {
+      margin-left: 5px;
+    }
+    .title-edit {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      input {
+        @include roboto-bold;
+        font-size: 15px;
+        color: $tc-gray-80;
+        width: 80%;
+        height: 30px;
+        margin-left: 0;
+        margin-bottom: 0;
+        background: $tc-gray-neutral-light;
+      }
+    }
+
+    .tc-textarea {
+      margin-left: 0;
+      padding: 5px 10px;
+      font-size: 13px;
+      background: $tc-gray-neutral-light;
+      color: $tc-gray-50;
+      min-height: 55px;
+      max-width: 100%;
+      line-height: 20px;
+      resize: none;
+    }
+  }
+  .icon-trash,
+  .icon-edit {
+    margin-left: 13px;
+    vertical-align: middle;
+  }
+  .icon-trash {
+    margin-left: 22px;
+  }
+  .icon-save {
+    margin-right: 25px;
+  }
+  .icon-close {
+    margin-right: 10px;
+  }
+}

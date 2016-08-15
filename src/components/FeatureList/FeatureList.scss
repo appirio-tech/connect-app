@@ -1,0 +1,38 @@
+@import "~tc-ui/src/styles/variables";
+@import "~tc-ui/src/styles/typography";
+
+.feature-list {
+}
+
+.feature-list-item {
+  display: flex;
+  border-bottom: 1px dashed $tc-gray-30;
+  padding: 15px 0;
+
+  .icon-col {
+    padding-top: 3px;
+    width: 40px;
+  }
+  .content-col {
+    > h4 {
+      @include roboto-bold;
+      font-size: 15px;
+      letter-spacing: 0;
+      line-height: 25px;
+      color: $tc-gray-80;
+    }
+    > p {
+      @include roboto;
+      font-size: 13px;
+      color: $tc-gray-60;
+      letter-spacing: 0;
+      line-height: 25px;
+      &.bigger {
+        font-size: 15px;
+      }
+    }
+    .child-component {
+      margin-top: 10px;
+    }
+  }
+}

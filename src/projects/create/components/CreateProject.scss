@@ -4,51 +4,6 @@
   display: none;
 }
 
-.tabs {
-  width:240px;
-  list-style-type: none;
-  padding: 0;
-  margin: 0 auto 50px auto;
-  ul {
-    display: -webkit-flex;
-    display: flex;
-    width:240px;
-  }
-  li {
-    -webkit-flex: initial;
-    flex: initial;
-    width: 50%;
-    padding: 10px 0;
-    text-align: center;
-    background-color: $tc-gray-neutral-light;
-    @include roboto-medium;
-    font-size: 15px;
-    line-height:20px;
-    background: $tc-white;
-    border: 1px solid $tc-gray-30;
-    a{
-      color: $tc-gray-80;
-    }
-    &:hover {
-    }
-    &.active {
-      background-color: $tc-dark-blue-90;
-      border: 1px solid $tc-dark-blue-90;
-      a{
-        color: $tc-white;
-      }
-    }
-    &:first-child {
-      border-radius: 2px 0 0 2px;
-      border-right:none;
-    }
-    &:last-child {
-      border-radius: 0 2px 2px 0 ;
-      border-left:none;
-    }
-  }
-}
-
 .content {
   display: block;
   margin-top:30px;

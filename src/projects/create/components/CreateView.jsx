@@ -1,9 +1,10 @@
 import _ from 'lodash'
 
 import React, { Component, PropTypes } from 'react'
-import { ROLE_TOPCODER_MANAGER, ROLE_ADMINISTRATOR } from '../../../config/constants'
+import { Tabs, Tab } from 'appirio-tech-react-components'
+import { ROLE_MANAGER, ROLE_TOPCODER_MANAGER, ROLE_ADMINISTRATOR } from '../../../config/constants'
 import AppProjectForm from './AppProjectForm'
-// import GenericProjectForm from './GenericProjectForm'
+import GenericProjectForm from './GenericProjectForm'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { createProject } from '../../actions/project'
@@ -37,36 +38,33 @@ class CreateView extends Component {
     this.props.currentTab = val
   }
 
-  renderTabs() {
+  renderWithTabs() {
     return (
-      <div className="tabs">
-        <ul>
-          <li className="active"><a href="#">App Project</a></li>
-          <li><a href="#">Work Project</a></li>
-        </ul>
-      </div>
+      <Tabs defaultActiveKey={1}>
+        <Tab eventKey={1} title="App Project">
+          <AppProjectForm submitHandler={this.createProject} />
+        </Tab>
+        <Tab eventKey={2} title="Work Project">
+          <GenericProjectForm submitHandler={this.createProject} />
+        </Tab>
+      </Tabs>
     )
   }
 
   render() {
-    let tabs = null
-    let form = null
+    let content = null
     if (_.indexOf(this.props.userRoles, ROLE_TOPCODER_MANAGER) > -1 ||
+        _.indexOf(this.props.userRoles, ROLE_MANAGER) > -1 ||
         _.indexOf(this.props.userRoles, ROLE_ADMINISTRATOR) > -1 ) {
-      // TODO replace with Tabs component
-      tabs = this.renderTabs()
-      // Todo select based on Tab
-      form = <AppProjectForm submitHandler={this.createProject}/>
+      content = this.renderWithTabs()
     } else {
-      // form = <GenericProjectForm onSubmit={this.createProject} />
-      form = <AppProjectForm submitHandler={this.createProject}/>
+      content = <AppProjectForm submitHandler={this.createProject}/>
     }
     return (
       <section className="content">
         <div className="container">
           <a href="#" className="btn-close"></a>
-          {tabs}
-          {form}
+          {content}
         </div>
       </section>
     )
