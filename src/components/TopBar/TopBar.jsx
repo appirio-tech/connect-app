@@ -27,7 +27,8 @@ class TopBar extends Component {
     const userImage = this.props.userImage
     const domain = this.props.domain
     const mobileMenuUrl = this.props.mobileMenuUrl
-    const homePageUrl = '//www.' + domain
+    const homePageUrl = window.location.protocol + '//' +window.location.hostname
+    const logoutLink = 'https://accounts.' + domain + '/logout?retUrl=' + homePageUrl
     const isLoggedIn = username
 
     //TODO prepare navigation items according to roles of the user
@@ -44,6 +45,18 @@ class TopBar extends Component {
         link: '/reports',
         regex: '/reports?\?'
       }
+    ]
+    const userMenuItems = [
+      [
+        { label: 'My Profile', link: '/profile/' + username, id: 0 },
+        { label: 'Settings', link: '/settings/profile', id: 1 }
+      ],
+      [
+        { label: 'Help', link: '//help.' + domain, absolute: true, id: 0 }
+      ],
+      [
+        { label: 'Log out', link: logoutLink, absolute: true, id: 0 }
+      ]
     ]
     const menubar = isLoggedIn
       ? <MenuBar forReactRouter items={primaryNavigationItems} orientation="horizontal" />
@@ -64,7 +77,7 @@ class TopBar extends Component {
           <div className="menu-wrap" onClick={this.handleMobileClick}>
             <div className="mobile-wrap"><a href={mobileMenuUrl}><HamburgerIcon /></a></div>
             { quickLinks }
-            <UserDropdown username={username} userImage={userImage} domain={domain} />
+            <UserDropdown username={username} userImage={userImage} domain={domain} menuItems={ userMenuItems } forReactRouter/>
           </div>
         </div>
       </div>
