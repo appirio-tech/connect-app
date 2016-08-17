@@ -27,7 +27,7 @@ class TopBar extends Component {
     const userImage = this.props.userImage
     const domain = this.props.domain
     const mobileMenuUrl = this.props.mobileMenuUrl
-    const homePageUrl = 'https://connect.' + domain
+    const homePageUrl = window.location.protocol + '//' +window.location.hostname
     const logoutLink = 'https://accounts.' + domain + '/logout?retUrl=' + homePageUrl
     const isLoggedIn = username
 
