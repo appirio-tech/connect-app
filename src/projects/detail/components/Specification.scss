@@ -241,41 +241,7 @@ $title-color: $tc-gray-80;
     .content-boxes {
       display: none;
     }
-    .tabs {
-      width: 296px;
-      margin: 0 auto 10px auto;
-      min-height: 50px;
-      position: relative;
-      ul {
-        width: 100%;
-      }
-      li {
-        background-color: #fff;
-        padding: 7px 0;
-        a {
-          @include roboto;
-          font-size: 13px;
-          color: #47474F;
-          line-height: 16px;
-        }
-        &:first-child {
-          width: 39%;
-          position: absolute;
-          left: 0;
-        }
-        &:last-child {
-          width: 61%;
-          position: absolute;
-          right: 0;
-        }
-        &.active {
-          background: #DCDCE0;
-          box-shadow: inset 0px 1px 3px 0px rgba(71,71,79,0.38);
-          border: none;
-          height: 36px;
-        }
-      }
-    }
+
   }
   /* .section-file-interface */
   .section-file-interface {

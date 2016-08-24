@@ -76,8 +76,7 @@ CreateView.propTypes = {
 }
 
 CreateView.defaultProps = {
-  // userRoles: ['manager'],
-  currentTab: 0
+  currentTab: 1
 }
 
 const mapStateToProps = ({projectState, loadUser }) => ({

@@ -1,44 +1,49 @@
-import React, { Component } from 'react'
-import { Form, TextInput, TextareaInput, SubmitButton, Validations } from 'appirio-tech-react-components'
+import React, { Component, PropTypes } from 'react'
+import { Formsy, TCFormFields } from 'appirio-tech-react-components'
+import _ from 'lodash'
 
-const initialValue = {
-  newProject: {
-    name: 'initial',
-    description: '',
-    type: 'generic'
-  }
-}
 class GenericProjectForm extends Component {
 
+  constructor(props) {
+    super(props)
+    this.enableButton = this.enableButton.bind(this)
+    this.disableButton = this.disableButton.bind(this)
+  }
+
   componentWillMount() {
-    this.setState(initialValue)
+    this.setState({
+      newProject: {
+        name: null,
+        description: null,
+        type: 'generic'
+      },
+      canSubmit: false
+    })
   }
 
-  onSubmit(formValue) {
-    console.log(formValue)
+  enableButton() {
+    this.setState(_.assign({}, this.state, {canSubmit: true}))
   }
 
-  onChange(formValue) {
-    this.setState(formValue)
-    console.log(formValue)
+  disableButton() {
+    this.setState(_.assign({}, this.state, {canSubmit: false}))
   }
 
   render() {
     return (
-      <Form initialValue={initialValue} onSubmit={this.onSubmit}>
-        <TextInput
+      <Formsy.Form onValidSubmit={this.props.submitHandler} onValid={this.enableButton} onInvalid={this.disableButton}>
+        <TCFormFields.TextInput
           name="newProject.name"
           type="text"
-          validations={{
-            required: [Validations.isRequired, 'project name is required']
-          }}
+          validations="minLength:1" required
+          validationError="Project name is required"
           label="Project Name"
           placeholder="enter project name"
           disabled={false}
           wrapperClass="row"
         />
 
-        <TextareaInput
+        <TCFormFields.Textarea
           name="newProject.description"
           label="Description"
           disabled={false}
@@ -46,13 +51,15 @@ class GenericProjectForm extends Component {
         />
 
         <div className="button-area">
-          <SubmitButton className="tc-btn tc-btn-primary tc-btn-md">
-            Create Project
-          </SubmitButton>
+          <button className="tc-btn tc-btn-primary tc-btn-md" type="submit" disabled={!this.state.canSubmit}>Create Project</button>
         </div>
-      </Form>
+      </Formsy.Form>
     )
   }
+}
+
+GenericProjectForm.propTypes = {
+  submitHandler: PropTypes.func.isRequired
 }
 
 export default GenericProjectForm

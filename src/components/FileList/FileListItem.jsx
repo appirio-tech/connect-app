@@ -1,4 +1,7 @@
 import React, {PropTypes} from 'react'
+import filesize from 'filesize'
+import { TrashIcon, CloseIcon, EditIcon, SaveIcon } from 'appirio-tech-react-components'
+import FileIcons from './FileIcons'
 
 export default class FileListItem extends React.Component {
 
@@ -11,6 +14,11 @@ export default class FileListItem extends React.Component {
     }
     this.handleSave = this.handleSave.bind(this)
     this.startEdit = this.startEdit.bind(this)
+    this.onDelete = this.onDelete.bind(this)
+  }
+
+  onDelete() {
+    this.props.onDelete(this.props.id)
   }
 
   startEdit() {
@@ -23,7 +31,7 @@ export default class FileListItem extends React.Component {
   }
 
   handleSave(e) {
-    this.props.onSave({title: this.refs.title.value, description: this.refs.desc.value}, e)
+    this.props.onSave(this.props.id, {title: this.refs.title.value, description: this.refs.desc.value}, e)
     this.setState({isEditing: false})
   }
 
@@ -35,8 +43,8 @@ export default class FileListItem extends React.Component {
         <div className="title-edit">
           <input type="text" defaultValue={title} ref="title" />
           <div className="save-icons">
-            <a href="javascript:" className="icon-save" onClick={this.handleSave} />
-            <a href="javascript:" className="icon-close" onClick={onExitEdit} />
+            <a href="javascript:" className="icon-save" onClick={this.handleSave}><SaveIcon /></a>
+            <a href="javascript:" className="icon-close" onClick={onExitEdit}><CloseIcon /></a>
           </div>
         </div>
         <textarea defaultValue={description} ref="desc" className="tc-textarea" />
@@ -45,17 +53,17 @@ export default class FileListItem extends React.Component {
   }
 
   renderReadOnly() {
-    const {title, description, size, isEditable, onDelete} = this.props
+    const {title, description, size, isEditable} = this.props
     return (
       <div>
         <div className="title">
           <h4>{title}</h4>
           <div className="size">
-            {size}
+            {filesize(size)}
           </div>
           {isEditable && <div className="edit-icons">
-            <a href="javascript:" className="icon-edit" onClick={this.startEdit}/>
-            <a href="javascript:" className="icon-trash" onClick={onDelete} />
+            <a href="javascript:" className="icon-edit" onClick={this.startEdit}><EditIcon /></a>
+            <a href="javascript:" className="icon-trash" onClick={this.onDelete}><TrashIcon /></a>
           </div>}
         </div>
         <p>{description}</p>
@@ -63,13 +71,23 @@ export default class FileListItem extends React.Component {
     )
   }
 
+  getFileIcon(type) {
+    switch (type) {
+    case 'application/zip':
+    case 'applicatin/archive':
+      return <FileIcons.Gzip />
+    default:
+      return <FileIcons.Gzip /> // TODO add more
+    }
+  }
   render() {
     const {isEditing} = this.state
+    const icon = this.getFileIcon(this.props.contentType)
 
     return (
       <div className="file-list-item">
         <div className="icon-col">
-          <i className="icon-gzip-file" />
+          {icon}
         </div>
         <div className="content-col">
           {isEditing ? this.renderEditing() : this.renderReadOnly()}
@@ -84,9 +102,11 @@ export default class FileListItem extends React.Component {
 
 
 FileListItem.propTypes = {
+  id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  size: PropTypes.string.isRequired,
+  size: PropTypes.number.isRequired,
+  contentType: PropTypes.string,
   isEditable: PropTypes.bool,
 
   /**
@@ -112,4 +132,8 @@ FileListItem.propTypes = {
    *
    */
   onDelete: PropTypes.func.isRequired
+}
+
+FileListItem.defaultProps = {
+  isEditable: true
 }

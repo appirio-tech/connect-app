@@ -32,7 +32,7 @@ class FeatureList extends Component {
       )
     }
     return (
-      <div className="feature-list">
+      <div className="feature-picker-feature-list">
         <header className="flex middle">
           <img src={ icon } />
           <h6>{ headerText }</h6>

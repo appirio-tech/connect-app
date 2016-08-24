@@ -6,7 +6,7 @@ import {
 } from '../../config/constants'
 
 const initialState = {
-  isLoading: false,
+  isLoading: true,
   error: false
 }
 

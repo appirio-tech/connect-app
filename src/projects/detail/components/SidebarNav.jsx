@@ -18,7 +18,7 @@ const scrollProps = {
  * @param  {number} idx   index
  */
 const renderSubNavItems = (child, idx) => {
-  const { name, percentage, link } = child
+  const { name, percentage, link, required } = child
   const _anchorClasses = classNames('boxes', {
     complete: percentage === 100
   })
@@ -27,8 +27,8 @@ const renderSubNavItems = (child, idx) => {
   })
   return (
     <li key={idx}>
-      <DirectLink to={link} className={_anchorClasses} {...scrollProps} href="false;">
-        <span className="txt">{name}</span>
+      <DirectLink to={link} className={_anchorClasses} {...scrollProps} href="javascript:">
+        <span className="txt">{name}</span>{required && <span style={{color: 'orange'}}>*</span> }
         <span className="schedule">{percentage}%</span>
         <i className={_iconClasses}></i>
       </DirectLink>
@@ -39,11 +39,12 @@ const renderSubNavItems = (child, idx) => {
 /**
  * Dumb component that renders NavItems
  */
-const SidebarNavItem = ({ name, link, subItems, index}) =>
+const SidebarNavItem = ({ name, link, required, subItems, index}) =>
   <div className="item">
-    <DirectLink to={link} {...scrollProps} href="false;">
+    <DirectLink to={link} {...scrollProps} href="javascript:">
       <h4 className="title">
         <span className="number">{index}.</span>{name}
+          {required && <span className="schedule">*</span>}
       </h4>
     </DirectLink>
     <ul>
@@ -56,10 +57,9 @@ class SidebarNav extends Component {
     const {items} = this.props
 
     const renderChild = (child, idx) => {
-      const { name, link, subItems} = child
       const num = idx + 1
       return (
-        <SidebarNavItem name={name} link={link} subItems={subItems} key={idx} index={num} />
+        <SidebarNavItem {...child} key={num} index={num} />
       )
     }
     return (
