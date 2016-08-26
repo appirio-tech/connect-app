@@ -2,7 +2,7 @@ require('./TopBar.scss')
 
 import React, {PropTypes, Component} from 'react'
 import { MenuBar, QuickLinks, UserDropdown,
-        ConnectLogo, TopcoderMobileLogo, HamburgerIcon
+        ConnectLogo, TopcoderMobileLogo, IconTcMenuBold
       } from 'appirio-tech-react-components'
 
 // properties: username, userImage, domain, mobileMenuUrl, mobileSearchUrl, searchSuggestionsFunc
@@ -75,7 +75,7 @@ class TopBar extends Component {
         <div className="links-section">
           { menubar }
           <div className="menu-wrap" onClick={this.handleMobileClick}>
-            <div className="mobile-wrap"><a href={mobileMenuUrl}><HamburgerIcon /></a></div>
+            <div className="mobile-wrap"><a href={mobileMenuUrl}><IconTcMenuBold /></a></div>
             { quickLinks }
             <UserDropdown username={username} userImage={userImage} domain={domain} menuItems={ userMenuItems } forReactRouter/>
           </div>
