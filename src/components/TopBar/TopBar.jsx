@@ -1,9 +1,9 @@
 require('./TopBar.scss')
 
 import React, {PropTypes, Component} from 'react'
-import { MenuBar, QuickLinks, UserDropdown,
-        ConnectLogo, TopcoderMobileLogo, IconTcMenuBold
+import { MenuBar, QuickLinks, UserDropdown, Icons
       } from 'appirio-tech-react-components'
+const { TopcoderMobileLogo, IconTcMenuBold, ConnectLogo } = Icons
 
 // properties: username, userImage, domain, mobileMenuUrl, mobileSearchUrl, searchSuggestionsFunc
 // searchSuggestionsFunc should return a Promise object
