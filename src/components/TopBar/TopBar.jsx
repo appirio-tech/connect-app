@@ -24,7 +24,7 @@ class TopBar extends Component {
 
   render() {
     const username = this.props.username
-    const userImage = this.props.photoUrl
+    const userImage = this.props.userImage
     const domain = this.props.domain
     const mobileMenuUrl = this.props.mobileMenuUrl
     const homePageUrl = window.location.protocol + '//' +window.location.hostname
