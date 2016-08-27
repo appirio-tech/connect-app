@@ -2,6 +2,7 @@
 // import { fetchJSON } from '../helpers'
 import { ACCOUNTS_APP_CONNECTOR_URL, LOAD_USER_SUCCESS, LOAD_USER_FAILURE } from '../config/constants'
 import { getFreshToken, configureConnector, decodeToken } from 'tc-accounts'
+import { getUserProfile } from '../api/users'
 
 configureConnector({
   connectorUrl: ACCOUNTS_APP_CONNECTOR_URL,
@@ -36,8 +37,19 @@ export function loadUserSuccess(dispatch, token) {
     currentUser.id = currentUser.userId
     currentUser.token = token
   }
-
-  dispatch({ type: LOAD_USER_SUCCESS, user : currentUser })
+  if (currentUser) {
+    getUserProfile(currentUser.handle).then((profile) => {
+      currentUser.profile = profile
+      dispatch({ type: LOAD_USER_SUCCESS, user : currentUser })
+    })
+    .catch((err) => {
+      // if we fail to load user's profile, still dispatch user load success
+      // ideally it shouldn't happen, but if it is, we can render the page
+      // without profile information
+      console.log(err)
+      dispatch({ type: LOAD_USER_SUCCESS, user : currentUser })
+    })
+  }
 }
 
 export function loadUserFailure(dispatch) {
