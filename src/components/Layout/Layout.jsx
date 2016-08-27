@@ -10,7 +10,6 @@ require('./Layout.scss')
 const Layout = (props) => {
   const { isLoadingUser, user } = props
   const handle  = _.get(user, 'handle')
-  const id  = _.get(user, 'id')
   const userImage = _.get(user, 'profile.photoURL')
   if (isLoadingUser) {
     return (<div></div>)
