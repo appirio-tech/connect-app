@@ -1,8 +1,6 @@
 import React, {PropTypes} from 'react'
 import cn from 'classnames'
 import { Icons, Avatar } from 'appirio-tech-react-components'
-import IconPromote from './icons/IconPromote'
-
 
 const ActionBtn = (props) => {
   let icon
@@ -14,7 +12,7 @@ const ActionBtn = (props) => {
     icon = <Icons.IconLeave />
     break
   case 'promote':
-    icon = <IconPromote />
+    icon = <Icons.IconArrowPriorityHigh />
     break
   }
   return (
