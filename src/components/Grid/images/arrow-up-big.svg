@@ -4,7 +4,7 @@
     <title>arrow-up-big</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="Grid---Components" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Grid---Components" stroke="none" stroke-width="1" fill="none" fillRule="evenodd">
         <g id="Grid---header" transform="translate(-1015.000000, -565.000000)" fill="#1A85FF">
             <polygon id="arrow-up-big" points="1025 570.025 1023.95522 571.075 1020.74627 567.85 1020.74627 577 1019.25373 577 1019.25373 567.85 1016.04478 571.075 1015 570.025 1020 565"></polygon>
         </g>

@@ -3,12 +3,12 @@ import { DOMAIN } from '../../config/constants'
 import UserAvatar from './UserAvatar'
 require('./UserWithName.scss')
 
-const UserWithName = ({ handle, firstName, lastName, photoURL, maxRating=0, showLevel=false }) => {
+const UserWithName = ({ handle, firstName, lastName, photoURL, maxRating={rating: 0}, showLevel=false }) => {
   const url = `//www.${DOMAIN}/members/${handle}/`
   return (
     <div className="user-block">
       <a href={url} target="_blank" className="photo">
-        <UserAvatar rating={maxRating} showLevel={showLevel} photoURL={photoURL} />
+        <UserAvatar rating={maxRating.rating} showLevel={showLevel} photoURL={photoURL} />
       </a>
       <span className="txt-box">
         <a href={url} target="_blank" className="link-black">{firstName} {lastName}</a>
@@ -23,7 +23,7 @@ UserWithName.propTypes = {
   firstName : PropTypes.string.isRequired,
   lastName  : PropTypes.string.isRequired,
   photoURL  : PropTypes.string.isRequired,
-  maxRating : PropTypes.number,
+  maxRating : PropTypes.object,
   showLevel : PropTypes.bool
 }
 

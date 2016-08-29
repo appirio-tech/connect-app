@@ -8,22 +8,6 @@ import _ from 'lodash'
 
 require('./CreateProject.scss')
 
-const appTypeOptions = [
-  {
-    value: 'ios',
-    label: 'iOS'
-  }, {
-    value: 'android',
-    label: 'Android'
-  }, {
-    value: 'web',
-    label: 'Web'
-  }, {
-    value: 'hybrid',
-    label: 'Hybrid'
-  }
-]
-
 const projectTypes = [
   {
     value: 'visual_design',
@@ -94,15 +78,10 @@ class AppProjectForm extends Component {
 
         <DevicesComponent
           name="newProject.details.devices"
+          validations="minLength:1" required
+          validationError="Please select at least 1 device"
         />
 
-        <TCFormFields.RadioGroup
-          name="newProject.details.appType"
-          label="App Type"
-          disabled={false}
-          wrapperClass="app-type"
-          options={appTypeOptions}
-        />
         <div className="section-divider"></div>
         <div className="project-info">
           <h2>Project info</h2>
@@ -122,6 +101,8 @@ class AppProjectForm extends Component {
             name="newProject.description"
             label="Description"
             disabled={false}
+            validations="minLength:1" required
+            validationError="Please provide a project description"
             wrapperClass="row"
             placeholder="Mobile app that solves my biggest problem"
           />

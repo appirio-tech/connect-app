@@ -7,13 +7,13 @@ const Gzip = ({ width = '42px', height = '42px' }) => {
         <title>Group</title>
         <desc>Created with Sketch.</desc>
         <defs></defs>
-        <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fill-rule="evenodd">
+        <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
             <g id="Settings-form-elements" transform="translate(-572.000000, -1322.000000)">
                 <g id="Group" transform="translate(573.000000, 1323.000000)">
-                    <polyline id="Stroke-835" stroke="#444444" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" fill="#D8D8D8" points="36 16 36 10.6666667 25.3333333 0 4 0 4 16"></polyline>
-                    <polyline id="Stroke-836" stroke="#444444" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" fill="#D8D8D8" points="4 34.6666667 4 40 36 40 36 34.6666667"></polyline>
-                    <polyline id="Stroke-834" stroke="#444444" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" fill="#FFFFFF" points="25.3333333 0 25.3333333 10.6666667 36 10.6666667"></polyline>
-                    <polygon id="Stroke-841" stroke="#444444" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" fill="#60C700" points="0 34.6666667 40 34.6666667 40 16 0 16"></polygon>
+                    <polyline id="Stroke-835" stroke="#444444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="#D8D8D8" points="36 16 36 10.6666667 25.3333333 0 4 0 4 16"></polyline>
+                    <polyline id="Stroke-836" stroke="#444444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="#D8D8D8" points="4 34.6666667 4 40 36 40 36 34.6666667"></polyline>
+                    <polyline id="Stroke-834" stroke="#444444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="#FFFFFF" points="25.3333333 0 25.3333333 10.6666667 36 10.6666667"></polyline>
+                    <polygon id="Stroke-841" stroke="#444444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="#60C700" points="0 34.6666667 40 34.6666667 40 16 0 16"></polygon>
                     <path d="M11.4666667,24.9333333 L14.8,24.9333333 L14.8,29.0666667 C13.8666667,29.3333333 12.9333333,29.4666667 11.8666667,29.4666667 C10.6666667,29.4666667 9.73333333,29.0666667 9.2,28.4 C8.66666667,27.7333333 8.26666667,26.8 8.26666667,25.4666667 C8.26666667,24.2666667 8.66666667,23.3333333 9.33333333,22.5333333 C10,21.7333333 11.0666667,21.4666667 12.2666667,21.4666667 C12.8,21.4666667 13.2,21.4666667 13.6,21.6 C14,21.7333333 14.4,21.8666667 14.6666667,22 L14,23.6 C13.4666667,23.3333333 12.8,23.2 12.1333333,23.2 C11.4666667,23.2 11.0666667,23.3333333 10.8,23.7333333 C10.5333333,24.1333333 10.2666667,24.6666667 10.2666667,25.4666667 C10.2666667,26.1333333 10.4,26.6666667 10.6666667,27.0666667 C10.9333333,27.4666667 11.3333333,27.6 12,27.6 C12.2666667,27.6 12.5333333,27.6 12.8,27.4666667 L12.8,26.2666667 L11.4666667,26.2666667 L11.4666667,24.9333333 Z" id="Fill-837" fill="#FFFFFF"></path>
                     <polygon id="Fill-838" fill="#FFFFFF" points="21.7333333 29.3333333 15.8666667 29.3333333 15.8666667 28 19.2 23.3333333 16 23.3333333 16 21.7333333 21.7333333 21.7333333 21.7333333 22.9333333 18.4 27.6 21.7333333 27.6"></polygon>
                     <polygon id="Fill-839" fill="#FFFFFF" points="22.8 29.3333333 24.9333333 29.3333333 24.9333333 21.7333333 22.8 21.7333333"></polygon>

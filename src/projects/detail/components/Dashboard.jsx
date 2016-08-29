@@ -1,8 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
+import TeamManagementContainer from './TeamManagementContainer'
+import {
+  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER
+} from '../../../config/constants'
 
-require('./Dashboard.scss')
+require('./ProjectDetail.scss')
 
 class ProjectDashboard extends Component {
   constructor(props) {
@@ -10,30 +14,45 @@ class ProjectDashboard extends Component {
   }
 
   render() {
+    const { members, project } = this.props
     // fill project members from state.members object
-    const projectMembers = _.map(this.props.project.members, m => {
+    const projectMembers = _.map(project.members, m => {
       if (!m.userId) return m
+      // map role
+      switch (m.role) {
+      case PROJECT_ROLE_COPILOT:
+        m.isCopilot = true
+        break
+      case PROJECT_ROLE_CUSTOMER:
+        m.isCustomer = true
+        m.isPrimary = m.isPrimary || false
+        break
+      case PROJECT_ROLE_MANAGER:
+        m.isManager = true
+        break
+      }
       return _.assign({}, m, {
         photoURL: ''
       },
-      this.props.members[m.userId.toString()])
+      members[m.userId.toString()])
     })
-    const members = JSON.stringify(projectMembers, null, 2)
-    const prjObj = JSON.stringify(this.props.project, null, 2)
+    const prjObj = JSON.stringify(project, null, 2)
     return (
-      <div className="dashboard flex">
-        <div className="dashboard-main">
-          <h3>Name: {this.props.project.name}</h3>
-          <pre>{prjObj}</pre>
+      <section className="project-detail two-col-content content">
+        <div className="container">
+          <div className="left-area">
+            <div className="left-area-panel">
+              <TeamManagementContainer projectId={project.id} members={projectMembers} />
+            </div>
+          </div>
+          <div className="right-area">
+            <div className="right-area-item">
+              <h3>Name: {project.name}</h3>
+              <pre>{prjObj}</pre>
+            </div>
+          </div>
         </div>
-        <div className="dashboard-sidebar">
-          <pre>{members}</pre>
-          {/*
-            <ProjectProgress project={this.props.project} />
-            <ProjectTeam project={this.props.members}>
-          */}
-        </div>
-      </div>
+      </section>
     )
   }
 }
@@ -48,4 +67,7 @@ const mapStateToProps = ({members}) => {
     members: members.members
   }
 }
-export default connect(mapStateToProps)(ProjectDashboard)
+
+const mapDispatchToProps = {}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectDashboard)

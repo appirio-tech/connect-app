@@ -6,7 +6,7 @@ const LevelDesignatorIcon = ({ width, height, level }) => {
 
   return (
     <svg className="user-rank" width={ width || '20px' } height={ height || '20px' } viewBox="0 0 20 20" version="1.1">
-      <g id="Member-List" stroke="none" strokeWidth="1" fill="none" fill-rule="evenodd">
+      <g id="Member-List" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <g id="List-cards-members-desktop" transform="translate(-1787.000000, -747.000000)">
           <g id="level-designator-big" transform="translate(1788.000000, 748.000000)">
             <polygon id="background" stroke="#FFFFFF" fill={ fill || '#9D9FA0'} transform="translate(9.250000, 8.934110) scale(-1, -1) translate(-9.250000, -8.934110) " points="7.5 0.676045494 18 3.36821993 14.5 12.5470132 7.5 17.1921745 0.5 12.5470132 0.5 4.80507775 "></polygon>

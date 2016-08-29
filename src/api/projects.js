@@ -48,9 +48,20 @@ export function getProjectById(projectId) {
     })
 }
 
+/**
+ * Update project using patch
+ * @param  {integer} projectId    project Id
+ * @param  {object} updatedProps updated project properties
+ * @return {promise}              updated project
+ */
 export function updateProject(projectId, updatedProps) {
-  // TODO
-  console.log(projectId, updatedProps)
+  return axios.patch(`${TC_API_URL}/v4/projects/${projectId}`, { param: updatedProps })
+    .then(resp => {
+      return _.get(resp.data, 'result.content')
+    })
+    .catch( resp => {
+      return { status: resp.status, error: resp.data }
+    })
 }
 
 

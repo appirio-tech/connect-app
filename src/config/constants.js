@@ -47,7 +47,8 @@ export const CREATE_PROJECT           = 'CREATE_PROJECT_REQUEST'
 export const CREATE_PROJECT_SUCCESS   = 'CREATE_PROJECT_SUCCESS'
 export const CREATE_PROJECT_FAILURE   = 'CREATE_PROJECT_FAILURE'
 
-export const UPDATE_PROJECT_REQUEST   = 'UPDATE_PROJECT_REQUEST'
+export const UPDATE_PROJECT           = 'UPDATE_PROJECT'
+export const UPDATE_PROJECT_PENDING   = 'UPDATE_PROJECT_PENDING'
 export const UPDATE_PROJECT_SUCCESS   = 'UPDATE_PROJECT_SUCCESS'
 export const UPDATE_PROJECT_FAILURE   = 'UPDATE_PROJECT_FAILURE'
 
@@ -55,6 +56,26 @@ export const LOAD_MEMBERS             = 'LOAD_MEMBERS'
 export const LOAD_MEMBERS_PENDING     = 'LOAD_MEMBERS_PENDING'
 export const LOAD_MEMBERS_SUCCESS     = 'LOAD_MEMBERS_SUCCESS'
 export const LOAD_MEMBERS_FAILURE     = 'LOAD_MEMBERS_FAILURE'
+
+export const LOAD_MEMBER_SUGGESTIONS             = 'LOAD_MEMBER_SUGGESTIONS'
+export const LOAD_MEMBER_SUGGESTIONS_PENDING     = 'LOAD_MEMBER_SUGGESTIONS_PENDING'
+export const LOAD_MEMBER_SUGGESTIONS_SUCCESS     = 'LOAD_MEMBER_SUGGESTIONS_SUCCESS'
+export const LOAD_MEMBER_SUGGESTIONS_FAILURE     = 'LOAD_MEMBER_SUGGESTIONS_FAILURE'
+
+export const ADD_PROJECT_MEMBER             = 'ADD_PROJECT_MEMBER'
+export const ADD_PROJECT_MEMBER_PENDING     = 'ADD_PROJECT_MEMBER_PENDING'
+export const ADD_PROJECT_MEMBER_SUCCESS     = 'ADD_PROJECT_MEMBER_SUCCESS'
+export const ADD_PROJECT_MEMBER_FAILURE     = 'ADD_PROJECT_MEMBER_FAILURE'
+
+export const REMOVE_PROJECT_MEMBER             = 'REMOVE_PROJECT_MEMBER'
+export const REMOVE_PROJECT_MEMBER_PENDING     = 'REMOVE_PROJECT_MEMBER_PENDING'
+export const REMOVE_PROJECT_MEMBER_SUCCESS     = 'REMOVE_PROJECT_MEMBER_SUCCESS'
+export const REMOVE_PROJECT_MEMBER_FAILURE     = 'REMOVE_PROJECT_MEMBER_FAILURE'
+
+export const UPDATE_PROJECT_MEMBER             = 'UPDATE_PROJECT_MEMBER'
+export const UPDATE_PROJECT_MEMBER_PENDING     = 'UPDATE_PROJECT_MEMBER_PENDING'
+export const UPDATE_PROJECT_MEMBER_SUCCESS     = 'UPDATE_PROJECT_MEMBER_SUCCESS'
+export const UPDATE_PROJECT_MEMBER_FAILURE     = 'UPDATE_PROJECT_MEMBER_FAILURE'
 
 
 // Project attachments
@@ -73,13 +94,20 @@ export const UPDATE_PROJECT_ATTACHMENT_PENDING = 'UPDATE_PROJECT_ATTACHMENT_PEND
 export const UPDATE_PROJECT_ATTACHMENT_SUCCESS = 'UPDATE_PROJECT_ATTACHMENT_SUCCESS'
 export const UPDATE_PROJECT_ATTACHMENT_FAILURE = 'UPDATE_PROJECT_ATTACHMENT_FAILURE'
 
+/*
+ * Project member role
+ */
+export const PROJECT_ROLE_COPILOT = 'copilot'
+export const PROJECT_ROLE_MANAGER = 'manager'
+export const PROJECT_ROLE_CUSTOMER = 'customer'
+
 
 /*
  * User Roles
  */
 export const ROLE_TOPCODER_USER = 'Topcoder User'
-export const ROLE_TOPCODER_COPILOT = 'Topcoder Copilot'
-export const ROLE_MANAGER = 'Manager'
+export const ROLE_CONNECT_COPILOT = 'Connect Copilot'
+export const ROLE_CONNECT_MANAGER = 'Connect Manager'
 export const ROLE_ADMINISTRATOR = 'administrator'
 
 // FIXME .. remove defaults
@@ -95,13 +123,4 @@ export const CONNECT_DOMAIN = `connect.${DOMAIN}`
 export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
 export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || 'https://accounts.topcoder-dev.com/connect'
 
-// FIXME: Change to process.env.INTERNAL_API after added to webpack
-export const INTERNAL_API = `https://internal-api.${DOMAIN}/v3`
 export const TC_API_URL = `https://api.${DOMAIN}`
-export const V3_API_URL = `https://api.${DOMAIN}/v3`
-
-export const v3IdentityUrl = `${V3_API_URL}/users`
-
-export const memberSearchTagUrl = `${INTERNAL_API}/tags/`
-
-export const memberSearchUrl = `${INTERNAL_API}/members/_search/`

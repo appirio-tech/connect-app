@@ -4,7 +4,7 @@
     <title>tablet</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="Create-Project" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+    <g id="Create-Project" stroke="none" stroke-width="1" fill="none" fillRule="evenodd" stroke-linecap="round" stroke-linejoin="round">
         <g id="Slices" transform="translate(-490.000000, -526.000000)" stroke="#444444" stroke-width="1.5">
             <g id="tablet" transform="translate(491.000000, 527.000000)">
                 <path d="M39.6923077,50 L3.30769231,50 C1.48019231,50 0,48.5083333 0,46.6666667 L0,3.33333333 C0,1.49166667 1.48019231,0 3.30769231,0 L39.6923077,0 C41.5198077,0 43,1.49166667 43,3.33333333 L43,46.6666667 C43,48.5083333 41.5198077,50 39.6923077,50 L39.6923077,50 Z" id="Stroke-4835" fill="#FFFFFF"></path>

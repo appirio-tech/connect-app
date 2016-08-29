@@ -51,7 +51,7 @@ const SpecSection = props => {
       )
     case 'questions':
       return (
-        <SpecQuestions questions={props.questions} />
+        <SpecQuestions questions={props.questions} project={project}/>
       )
     case 'notes':
       return (
@@ -78,9 +78,6 @@ const SpecSection = props => {
             {description}
           </p>
           {subSections.map(renderSubSection)}
-          <div className="button-area">
-            <button className="tc-btn tc-btn-primary tc-btn-md" type="submit">Save Changes</button>
-          </div>
         </div>
     </div>
   )
@@ -91,52 +88,3 @@ SpecSection.propTypes = {
 }
 
 export default SpecSection
-
-/*
-
-<div className="section-features-module" id="design-spec-features">
-  <div className="bottom-border-titles">
-    <h4 className="title">What are the major features of your app?</h4>
-    <div className="section-actions">
-      <button href="javascript:;"  onClick={ this.showFeaturesDialog } className="tc-btn-default tc-btn-sm">Add / Edit features</button>
-    </div>
-  </div>
-  <div className="content-boxs">
-    <div className="tabs">
-      <ul>
-        <li><a href="#">Define my app</a></li>
-        <li className="active"><a href="#">Upload a speck document</a></li>
-      </ul>
-    </div>
-    <div className="contents-list part-one">
-      <div className="item dashed-bottom-border clearfix">
-        <i className="icons icon-box"></i>
-        <div className="right-area">
-          <h4 className="title">Search</h4>
-          <p className="txt">Allow users to register and log in using third-party services such as Facebook, Twitter.</p>
-        </div>
-      </div>
-      <div className="item dashed-bottom-border  clearfix">
-        <i className="icons icon-box"></i>
-        <div className="right-area">
-          <h4 className="title">Geolocation feature</h4>
-          <p className="txt">
-            Add this feature if your app has any geographic location-based functionality, such as showing
-            store locations on a map or illustrating the progress of a delivery. Please specify your desired functionality below.
-          </p>
-        </div>
-      </div>
-      <div className="item dashed-bottom-border  clearfix">
-        <i className="icons icon-magic"></i>
-        <div className="right-area">
-          <h4 className="title">Slack bot integration</h4>
-          <p className="txt">
-            My app needs to be able to connect ot Slack and transmit all data of people using it in real time,
-            so we can follow up with them almost instantly.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
- */

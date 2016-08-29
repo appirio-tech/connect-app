@@ -4,7 +4,7 @@
     <title>phone</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="Create-Project" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+    <g id="Create-Project" stroke="none" stroke-width="1" fill="none" fillRule="evenodd" stroke-linecap="round" stroke-linejoin="round">
         <g id="Slices" transform="translate(-337.000000, -526.000000)" stroke="#444444" stroke-width="1.5">
             <g id="phone" transform="translate(338.000000, 527.000000)">
                 <path d="M29.7,50 L3.3,50 C1.47675,50 0,48.5083333 0,46.6666667 L0,3.33333333 C0,1.49166667 1.47675,0 3.3,0 L29.7,0 C31.52325,0 33,1.49166667 33,3.33333333 L33,46.6666667 C33,48.5083333 31.52325,50 29.7,50 L29.7,50 Z" id="Stroke-4827" fill="#FFFFFF"></path>

@@ -4,7 +4,7 @@
     <title>logo-cn-web</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fillRule="evenodd">
         <g id="Connect---Logged-Out" transform="translate(-20.000000, -20.000000)">
             <g id="connect-top-bar">
                 <g id="logo-cn-web" transform="translate(20.000000, 17.000000)">
@@ -15,7 +15,7 @@
                         <path d="M40.8133377,6.45238763 C47.2163136,5.24036337 53.2414668,5.35168941 54.453446,8.75902697 C55.3096709,11.1657713 53.5577963,14.7970247 50.5503947,18.3806305 C49.7398331,19.3463684 48.8129642,19.7109002 47.9234688,19.7610061 C45.1342751,13.5996253 44.5526276,12.4904754 40.8133377,6.45238763 Z" id="segment-4" fill="#FB7D22"></path>
                         <path d="M40.8076557,6.45627322 C44.1942751,9.96772737 47.9346277,19.7632221 47.9346277,19.7632221 C46.3184818,19.8352842 44.7478465,18.8802582 44.284969,18.5985384 C37.3351507,14.3686905 33.0107396,11.47513 27.3306029,10.6849326 C30.714338,8.97888295 38.1009114,6.81411472 40.8076557,6.45627322 Z" id="segment-5" fill="#FFF100"></path>
                     </g>
-                    <text id="connect" font-family="ProximaNova-Light, Proxima Nova" font-size="20" font-weight="300" letter-spacing="1" fill="#FFFFFF">
+                    <text id="connect" font-family="ProximaNova-Light, Proxima Nova" font-size="20" font-weight="300" letterSpacing="1" fill="#FFFFFF">
                         <tspan x="65" y="20">connect</tspan>
                     </text>
                 </g>

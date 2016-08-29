@@ -26,7 +26,16 @@ const getNavItems = (project, sections) => {
           name: _.isString(sub.title) ? sub.title : _.capitalize(sub.id),
           required: sub.required,
           link: `${s.id}-${sub.id}`,
-          percentage: 50 // TODO
+          progress: (subSection) => {
+            if (subSection.id === 'questions') {
+              const fields = _.map(subSection.questions, 'fieldName')
+              const vals = _.map(fields, (f) => !_.isEmpty(_.get(project, f)))
+              let count = 0
+              _.forEach(vals, (v) => {if (v) count++ })
+              return [count, subSection.questions.length]
+            }
+            return []
+          }
         }
       })
     }

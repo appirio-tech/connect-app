@@ -8,27 +8,40 @@ const SeeAttachedWrapperField = ComposedComponent => class extends Component {
     this.onChange = this.onChange.bind(this)
   }
 
+  componentWillMount() {
+    this.setState(Object.assign({}, { displayComponent: !_.get(this.props.value, 'seeAttached', false)}))
+  }
+
   onChange(field, value) {
     const origField = field.substring(0, field.lastIndexOf('.'))
-    if (field.indexOf('.seeAttached') > -1 && value) {
+    const valueRef = this.refs[origField+'.value']
+    // const cbRef = this.refs[origField+'.seeAttached']
+    if (field.indexOf('.seeAttached') > -1) {
       // reset wrapped fields value
-      this.refs[origField+'.value'].setValue('')
-    } else if (field.indexOf('.value') > -1 && this.refs[origField+'.seeAttached'].getValue()) {
-      this.refs[origField+'.seeAttached'].setValue(false)
+      if (value && valueRef) {
+        valueRef.resetValue()
+      }
+      this.setState(Object.assign({}, { displayComponent: !value}))
     }
   }
 
   render() {
-    const isChecked = _.get(this.props, 'value.seeAttached', false)
-    const ccProps = _.without(this.props, ['name'])
-    ccProps.name = this.props.name + '.value'
-    ccProps.onChange = this.onChange
+    const cb = {
+      name: `${this.props.name}.seeAttached`,
+      value: _.get(this.props.value, 'seeAttached', false)
+    }
+    const ccProps = _.merge({}, _.without(this.props, ['name', 'value']), {
+      name: this.props.name + '.value',
+      value: _.get(this.props.value, 'value', undefined),
+      onChange: this.onChange
+    })
+
     const label = 'Skip question - I have a document (will upload at end of section)'
-    const cbName = `${this.props.name}.seeAttached`
+
     return (
       <div>
-        { !isChecked && <ComposedComponent ref={ccProps.name} {...ccProps} /> }
-        <TCFormFields.Checkbox ref={cbName} name={cbName} label={label} onChange={this.onChange} />
+        {this.state.displayComponent && <ComposedComponent ref={ccProps.name} {...ccProps} />}
+        <TCFormFields.Checkbox ref={cb.name} name={cb.name} label={label} onChange={this.onChange} value={cb.value}/>
       </div>
     )
   }

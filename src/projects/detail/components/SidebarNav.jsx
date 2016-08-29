@@ -18,19 +18,22 @@ const scrollProps = {
  * @param  {number} idx   index
  */
 const renderSubNavItems = (child, idx) => {
-  const { name, percentage, link, required } = child
+  const { name, progress, link, required } = child
+  const isComplete = progress.length && progress[0] === progress[1]
   const _anchorClasses = classNames('boxes', {
-    complete: percentage === 100
+    complete: isComplete
   })
   const _iconClasses = classNames('icons', {
-    'icons-complete': percentage === 100
+    'icons-complete': isComplete
   })
   return (
     <li key={idx}>
       <DirectLink to={link} className={_anchorClasses} {...scrollProps} href="javascript:">
         <span className="txt">{name}</span>{required && <span style={{color: 'orange'}}>*</span> }
-        <span className="schedule">{percentage}%</span>
-        <i className={_iconClasses}></i>
+        { isComplete
+          ?  <i className={_iconClasses}></i>
+          : <span className="schedule">{progress[0]} of {progress[1]}</span>
+        }
       </DirectLink>
     </li>
   )

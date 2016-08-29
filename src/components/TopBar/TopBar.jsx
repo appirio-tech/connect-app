@@ -2,8 +2,8 @@ require('./TopBar.scss')
 
 import React, {PropTypes, Component} from 'react'
 import { MenuBar, QuickLinks, UserDropdown,
-        ConnectLogo, TopcoderMobileLogo, HamburgerIcon
-      } from 'appirio-tech-react-components'
+  ConnectLogo, TopcoderMobileLogo
+} from 'appirio-tech-react-components'
 
 // properties: username, userImage, domain, mobileMenuUrl, mobileSearchUrl, searchSuggestionsFunc
 // searchSuggestionsFunc should return a Promise object
@@ -33,13 +33,13 @@ class TopBar extends Component {
 
     //TODO prepare navigation items according to roles of the user
     const primaryNavigationItems = [
-      { 
+      {
         //img: require('./nav-projects.svg'),
         text: 'Projects',
         link: '/projects',
         regex: '/projects?\?'
       },
-      { 
+      {
         //img: require('./nav-projects.svg'),
         text: 'Reports',
         link: '/reports',
@@ -75,7 +75,7 @@ class TopBar extends Component {
         <div className="links-section">
           { menubar }
           <div className="menu-wrap" onClick={this.handleMobileClick}>
-            <div className="mobile-wrap"><a href={mobileMenuUrl}><HamburgerIcon /></a></div>
+            <div className="mobile-wrap"><a href={mobileMenuUrl}><noscript /></a></div>
             { quickLinks }
             <UserDropdown username={username} userImage={userImage} domain={domain} menuItems={ userMenuItems } forReactRouter/>
           </div>

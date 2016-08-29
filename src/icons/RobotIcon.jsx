@@ -3,7 +3,7 @@ import React from 'react'
 const RobotIcon = ({ width, height }) => {
   return (
     <svg width={ width || '86px' } height={ height || '86px' } viewBox="0 0 86 86" version="1.1">
-      <g id="Profile-Web" stroke="none" strokeWidth="1" fill="none" fill-rule="evenodd">
+      <g id="Profile-Web" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <g id="Profile-User-Main-Completely-Empty" transform="translate(-645.000000, -636.000000)" stroke="#444444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <g id="robot" transform="translate(646.000000, 637.000000)">
             <path d="M84,25.375 C84,20.7492083 80.2382,17 75.6,17 L8.4,17 C3.7604,17 0,20.7492083 0,25.375 L0,75.625 C0,80.2507917 3.7604,84 8.4,84 L75.6,84 C80.2382,84 84,80.2507917 84,75.625 L84,25.375 L84,25.375 Z" id="Stroke-387" fill="#F0F0F0"></path>

@@ -46,8 +46,20 @@ class GenericProjectForm extends Component {
         <TCFormFields.Textarea
           name="newProject.description"
           label="Description"
+          validations="minLength:1" required
+          validationError="Please provide a project description"
+          placeholder="Mobile app that solves my biggest problem"
           disabled={false}
           wrapperClass="row"
+        />
+
+        <TCFormFields.TextInput
+          name="newProject.details.utm.code"
+          label="Invite code (optional)"
+          type="text"
+          disabled={false}
+          wrapperClass="row center"
+          placeholder="ABCD123"
         />
 
         <div className="button-area">

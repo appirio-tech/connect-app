@@ -10,6 +10,8 @@ import { XMarkIcon } from 'appirio-tech-react-components'
 import ProjectSpecSidebar from './ProjectSpecSidebar'
 import DefineFeature from '../../FeatureSelector/DefineFeature'
 import EditProjectForm from './EditProjectForm'
+import { updateProject } from '../../actions/project'
+import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
 require('./Specification.scss')
 
@@ -47,7 +49,7 @@ const sections = [
             description: 'Please list all the features you would like in your application. You can use our wizard to pick from common features or define your own.',
             // type: 'see-attached-features',
             type: 'features',
-            field: 'details.features'
+            fieldName: 'details.features'
           }
         ]
       },
@@ -161,8 +163,8 @@ const sections = [
             description: 'Do your users need to use the application when they are unable to connect to the internet?',
             type: 'radio-group',
             options: [
-              {value: true, label: 'Yes'},
-              {value: false, label: 'No'}
+              {value: 'true', label: 'Yes'},
+              {value: 'false', label: 'No'}
             ],
             fieldName: 'details.devSpecification.offlineAccess'
           },
@@ -192,15 +194,21 @@ const sections = [
   }
 ]
 
+
+// This handles showing a spinner while the state is being loaded async
+const enhance = spinnerWhileLoading(props => !props.processing)
+const EnhancedEditProjectForm = enhance(EditProjectForm)
+
 class ProjectSpecification extends Component {
   constructor(props) {
     super(props)
     this.showFeaturesDialog = this.showFeaturesDialog.bind(this)
     this.hideFeaturesDialog = this.hideFeaturesDialog.bind(this)
+    this.saveProject = this.saveProject.bind(this)
   }
 
   componentWillMount() {
-    this.setState({ showFeaturesDialog : false})
+    this.setState({ showFeaturesDialog : false })
   }
 
   showFeaturesDialog() {
@@ -209,6 +217,10 @@ class ProjectSpecification extends Component {
 
   hideFeaturesDialog() {
     this.setState(update(this.state, {$merge: { showFeaturesDialog: false } }))
+  }
+
+  saveProject(model, resetForm, invalidateForm) { // eslint-disable-line no-unused-vars
+    this.props.updateProject(this.props.project.id, model)
   }
 
   render() {
@@ -231,7 +243,7 @@ class ProjectSpecification extends Component {
           </div>
 
           <div className="right-area">
-            <EditProjectForm project={this.props.project} sections={sections} />
+            <EnhancedEditProjectForm project={this.props.project} sections={sections} submitHandler={this.saveProject} />
           </div>
 
         </div>
@@ -242,12 +254,20 @@ class ProjectSpecification extends Component {
 
 ProjectSpecification.propTypes = {
   project: PropTypes.object.isRequired,
-  members: PropTypes.object.isRequired
+  processing: PropTypes.bool,
+  error: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.object
+  ])
 }
-const mapStateToProps = ({members}) => {
+
+const mapStateToProps = ({projectState}) => {
   return {
-    members: members.members
+    processing: projectState.processing,
+    error: projectState.error
   }
 }
 
-export default connect(mapStateToProps)(ProjectSpecification)
+const mapDispatchToProps = { updateProject }
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectSpecification)

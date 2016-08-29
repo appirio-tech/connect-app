@@ -92,9 +92,6 @@ export default class FileListItem extends React.Component {
         <div className="content-col">
           {isEditing ? this.renderEditing() : this.renderReadOnly()}
         </div>
-        <div>
-
-        </div>
       </div>
     )
   }

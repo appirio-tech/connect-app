@@ -1,0 +1,25 @@
+import React from 'react'
+
+const IconUserName = ({ width = '30px', height = '30px' }) => {
+  return (
+    <svg width={width} height={height} viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <title>Group</title>
+        <desc>Created with Sketch.</desc>
+        <defs></defs>
+        <g id="Symbols" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+            <g id="action-add-user-data" transform="translate(-6.000000, -5.000000)">
+                <g id="Group-5">
+                    <g id="Group-4">
+                        <g id="Group" transform="translate(6.000000, 5.000000)">
+                            <path d="M-1.77635684e-15,14.516129 C-1.77635684e-15,6.49909234 6.49107731,5.32907052e-15 14.5166759,5.32907052e-15 L15.4833241,5.32907052e-15 C23.5006628,5.32907052e-15 30,6.49732962 30,14.516129 L30,14.516129 C30,22.5331657 23.5089227,29.0322581 15.4833241,29.0322581 L14.5166759,29.0322581 C6.4993372,29.0322581 -1.77635684e-15,22.5349284 -1.77635684e-15,14.516129 L-1.77635684e-15,14.516129 Z" id="Rectangle-1555" fill="#DCDCE0"></path>
+                            <path d="M15,16 C12.8,16 11,14.2 11,12 L11,11 C11,8.8 12.8,7 15,7 C17.2,7 19,8.8 19,11 L19,12 C19,14.2 17.2,16 15,16 Z M15,23 L8,23 C8,20.2 10.2,18 13,18 L15,18 L17,18 C19.8,18 22,20.2 22,23 L15,23 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </svg>
+  )
+}
+
+export default IconUserName

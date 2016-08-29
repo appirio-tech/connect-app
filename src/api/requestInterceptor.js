@@ -9,6 +9,9 @@ const getToken = () => {
       return resolve(token)
     } else {
       return getFreshToken()
+        .then((token) => {
+          resolve(token)
+        })
     }
   })
 }

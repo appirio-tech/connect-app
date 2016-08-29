@@ -11,9 +11,11 @@ export function addProjectAttachment(projectId, fileData) {
     })
 }
 
-export function updateProjectAttachment(projectId, attachment) {
-  return axios.patch(`${TC_API_URL}/v4/projects/${projectId}/attachments`, { param: attachment })
-    .then ( resp => _.get(resp.data, 'result.content', {}))
+export function updateProjectAttachment(projectId, attachmentId, attachment) {
+  return axios.patch(
+    `${TC_API_URL}/v4/projects/${projectId}/attachments/${attachmentId}`,
+    { param: attachment })
+    .then ( resp => resp.data.result.content )
 }
 
 export function removeProjectAttachment(projectId, attachmentId) {

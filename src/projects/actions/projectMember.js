@@ -1,0 +1,46 @@
+import { addProjectMember as addMember,
+  removeProjectMember as removeMember,
+  updateProjectMember as updateMember,
+  loadMemberSuggestions as loadMemberSuggestionsAPI
+} from '../../api/projectMembers'
+
+import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
+ LOAD_MEMBER_SUGGESTIONS
+} from '../../config/constants'
+
+
+export function loadMemberSuggestions(value) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_MEMBER_SUGGESTIONS,
+      payload: loadMemberSuggestionsAPI(value)
+    })
+  }
+}
+
+export function addProjectMember(projectId, member) {
+  return (dispatch) => {
+    return dispatch({
+      type: ADD_PROJECT_MEMBER,
+      payload: addMember(projectId, member)
+    })
+  }
+}
+
+export function updateProjectMember(projectId, memberId, member) {
+  return (dispatch) => {
+    return dispatch({
+      type: UPDATE_PROJECT_MEMBER,
+      payload: updateMember(projectId, memberId, member)
+    })
+  }
+}
+
+export function removeProjectMember(projectId, memberId) {
+  return (dispatch) => {
+    return dispatch({
+      type: REMOVE_PROJECT_MEMBER,
+      payload: removeMember(projectId, memberId)
+    })
+  }
+}

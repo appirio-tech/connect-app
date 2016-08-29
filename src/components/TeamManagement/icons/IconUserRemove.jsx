@@ -1,0 +1,22 @@
+import React from 'react'
+
+const IconUserRemove = ({ width = '16px', height = '16px' }) => {
+  return (
+    <svg width={width} height={height} viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <title>user-remove</title>
+        <desc>Created with Sketch.</desc>
+        <defs></defs>
+        <g id="Flows-&amp;-Components" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+            <g id="Team-Management" transform="translate(-3794.000000, -735.000000)" fill="#262628">
+                <g id="Group-3" transform="translate(3465.000000, 488.000000)">
+                    <g id="member---CP" transform="translate(0.000000, 225.000000)">
+                        <path d="M336,31 C333.8,31 332,29.2 332,27 L332,26 C332,23.8 333.8,22 336,22 C338.2,22 340,23.8 340,26 L340,27 C340,29.2 338.2,31 336,31 Z M334,33 C331.2,33 329,35.2 329,38 L337,38 L337,33 L334,33 Z M339,34 L345,34 L345,36 L339,36 L339,34 Z" id="user-remove"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </svg>
+  )
+}
+
+export default IconUserRemove

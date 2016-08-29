@@ -2,11 +2,11 @@ import _ from 'lodash'
 
 import React, { Component, PropTypes } from 'react'
 import { Tabs, Tab } from 'appirio-tech-react-components'
-import { ROLE_MANAGER, ROLE_ADMINISTRATOR } from '../../../config/constants'
+import { ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR } from '../../../config/constants'
 import AppProjectForm from './AppProjectForm'
 import GenericProjectForm from './GenericProjectForm'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
+import { withRouter, browserHistory } from 'react-router'
 import { createProject } from '../../actions/project'
 
 require('./CreateProject.scss')
@@ -53,7 +53,7 @@ class CreateView extends Component {
 
   render() {
     let content = null
-    if (_.indexOf(this.props.userRoles, ROLE_MANAGER) > -1 ||
+    if (_.indexOf(this.props.userRoles, ROLE_CONNECT_MANAGER) > -1 ||
         _.indexOf(this.props.userRoles, ROLE_ADMINISTRATOR) > -1 ) {
       content = this.renderWithTabs()
     } else {
@@ -62,7 +62,7 @@ class CreateView extends Component {
     return (
       <section className="content">
         <div className="container">
-          <a href="#" className="btn-close"></a>
+          <a href="javascript:" className="btn-close" onClick={browserHistory.goBack}></a>
           {content}
         </div>
       </section>

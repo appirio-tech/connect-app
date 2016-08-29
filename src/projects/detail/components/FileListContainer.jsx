@@ -15,7 +15,7 @@ class FileListContainer extends Component {
   }
 
   updateFile(attachmentId, updatedAttachment) {
-    this.propss.updateProjectAttachment(this.props.projectId, attachmentId, updatedAttachment)
+    this.props.updateProjectAttachment(this.props.projectId, attachmentId, updatedAttachment)
   }
 
   deleteFile(attachmentId) {
