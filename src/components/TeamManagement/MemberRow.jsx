@@ -1,23 +1,20 @@
 import React, {PropTypes} from 'react'
 import cn from 'classnames'
-import { Avatar } from 'appirio-tech-react-components'
-
-import IconUserRemove from './icons/IconUserRemove'
-import IconPromote from './icons/IconPromote'
-import IconExit from './icons/IconExit'
+import { Icons, Avatar } from 'appirio-tech-react-components'
+// import IconPromote from './icons/IconPromote'
 
 
 const ActionBtn = (props) => {
   let icon
   switch (props.type) {
   case 'user-remove':
-    icon = <IconUserRemove />
+    icon = <Icons.IconUsersDelete />
     break
   case 'leave':
-    icon = <IconExit />
+    icon = <Icons.IconLeave />
     break
   case 'promote':
-    icon = <IconPromote />
+    icon = <Icons.IconArrowMinimalUp />
     break
   }
   return (

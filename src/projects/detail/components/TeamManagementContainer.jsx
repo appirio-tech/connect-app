@@ -69,10 +69,10 @@ class TeamManagementContainer extends Component {
       }
       return user.handle.toLowerCase().indexOf(keyword.toLowerCase()) !== -1
     })
-    this.setState(Object.assign({}, this.state, {
+    this.setState({
       searchMembers,
       error: this.getError({keyword, searchMembers, selectedNewMember})
-    }))
+    })
   }
 
   getError({keyword, searchMembers, selectedNewMember}) {
@@ -85,32 +85,32 @@ class TeamManagementContainer extends Component {
   onKeywordChange(keyword) {
     if (keyword.length > 2)
       this.props.loadMemberSuggestions(keyword)
-    this.setState(Object.assign({}, this.state, { keyword, selectedNewMember: null }))
+    this.setState({ keyword, selectedNewMember: null })
   }
 
   onSelectNewMember(selectedNewMember) {
     const keyword = selectedNewMember ? selectedNewMember.handle : ''
-    this.setState(Object.assign({}, this.state, {selectedNewMember, keyword}))
+    this.setState({ selectedNewMember, keyword})
   }
 
   onAddNewMember() {
     const { filterType, selectedNewMember } = this.state
     const userId = selectedNewMember.userId
-    this.setState(Object.assign({}, this.state, {
-      keyword: '',
-      selectedNewMember: null,
-      isAddingTeamMember: false
-    }))
     this.props.addProjectMember(
       this.props.projectId, {
         userId,
         role: _.isEmpty(filterType) ? PROJECT_ROLE_CUSTOMER: filterType
       }
     )
+    this.setState({
+      keyword: '',
+      selectedNewMember: null
+    })
+
   }
 
   onToggleAddTeamMember(isAddingTeamMember) {
-    this.setState(Object.assign({}, this.state, {isAddingTeamMember}))
+    this.setState({isAddingTeamMember})
   }
 
   onMemberDeleteConfirm(member) {
@@ -127,7 +127,7 @@ class TeamManagementContainer extends Component {
   }
 
   onFilterTypeChange(filterType) {
-    this.setState(Object.assign({}, this.state, { filterType }))
+    this.setState({ filterType })
   }
 
   onChangeOwnerConfirm(member) {

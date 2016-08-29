@@ -19,8 +19,8 @@ const AddTeamMember = (props) => {
     onToggleAddTeamMember(false)
   }
   const onConfirmAddMember = () => {
-    onToggleAddTeamMember(false)
     onAddNewMember()
+    onToggleAddTeamMember(false)
   }
   const showAddMember = () => { onToggleAddTeamMember(true)}
   if (isAddingTeamMember) {

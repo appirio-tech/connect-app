@@ -74,6 +74,7 @@ $tc-body-extra-small	: 12px;
         button, a {
           border: none;
           cursor: pointer;
+          background: transparent;
           opacity: 0.4;
           height: 16px;
           width: 16px;
@@ -101,7 +102,7 @@ $tc-body-extra-small	: 12px;
         align-items: center;
         .add-icon {
           padding-top: 10px;
-          padding-left: 10px; 
+          padding-left: 10px;
           width: 40px;
           height: 40px;
           // @include icon('user-add.svg');
