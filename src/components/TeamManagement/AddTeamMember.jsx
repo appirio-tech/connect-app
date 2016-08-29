@@ -2,7 +2,10 @@ import React, {PropTypes} from 'react'
 import AutoCompleteInput from './AutoCompleteInput'
 // import MemberAutoSuggest from './MemberAutoSuggest'
 import cn from 'classnames'
-import { IconUsersAdd, XMarkIcon } from 'appirio-tech-react-components'
+import { Icons } from 'appirio-tech-react-components'
+
+
+const { IconUsersAdd, XMarkIcon } = Icons
 
 const AddTeamMember = (props) => {
   const {

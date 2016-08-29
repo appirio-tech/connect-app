@@ -1,7 +1,8 @@
 
 import React, { Component, PropTypes } from 'react'
-import classNames from 'classnames'
 import { Link as DirectLink } from 'react-scroll'
+
+
 require('./SidebarNav.scss')
 
 const scrollProps = {
@@ -20,20 +21,13 @@ const scrollProps = {
 const renderSubNavItems = (child, idx) => {
   const { name, progress, link, required } = child
   const isComplete = progress.length && progress[0] === progress[1]
-  const _anchorClasses = classNames('boxes', {
-    complete: isComplete
-  })
-  const _iconClasses = classNames('icons', {
-    'icons-complete': isComplete
-  })
+
+
   return (
     <li key={idx}>
-      <DirectLink to={link} className={_anchorClasses} {...scrollProps} href="javascript:">
+      <DirectLink to={link} className="boxes" {...scrollProps} href="javascript:">
         <span className="txt">{name}</span>{required && <span style={{color: 'orange'}}>*</span> }
-        { isComplete
-          ?  <i className={_iconClasses}></i>
-          : <span className="schedule">{progress[0]} of {progress[1]}</span>
-        }
+        <span className="schedule">{ isComplete ? 'Complete' : required && `${progress[0]} of ${progress[1]}`}</span>
       </DirectLink>
     </li>
   )

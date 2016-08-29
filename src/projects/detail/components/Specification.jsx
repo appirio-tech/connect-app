@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import Modal from 'react-modal'
 import _ from 'lodash'
 import update from 'react-addons-update'
-import { XMarkIcon } from 'appirio-tech-react-components'
+import { Icons } from 'appirio-tech-react-components'
 
 import ProjectSpecSidebar from './ProjectSpecSidebar'
 import DefineFeature from '../../FeatureSelector/DefineFeature'
@@ -234,7 +234,7 @@ class ProjectSpecification extends Component {
           >
             <DefineFeature />
             <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
-              <XMarkIcon />
+              <Icons.XMarkIcon />
             </div>
           </Modal>
 
