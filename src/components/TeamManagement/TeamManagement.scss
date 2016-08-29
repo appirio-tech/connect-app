@@ -13,7 +13,7 @@ $tc-body-extra-small	: 12px;
 /* wrap to avoid conflicts */
 .team-management {
 
-  .panel{
+  .panel {
     background: $tc-white;
     border-radius: $corner-radius;
     padding: $base-unit*2 0;
@@ -99,6 +99,7 @@ $tc-body-extra-small	: 12px;
       &.add-team-member{
         cursor: pointer;
         display: flex;
+        width: 400px;
         align-items: center;
         .add-icon {
           padding-top: 10px;
@@ -221,6 +222,7 @@ $tc-body-extra-small	: 12px;
         .input-icon-group{
           position: relative;
           flex-grow: 1;
+          height: 40px;
           display: flex;
           border: 1px solid $tc-gray-20;
           box-shadow: inset 0px 0px 2px 0px rgba(183, 183, 183, 0.2);
@@ -285,6 +287,7 @@ $tc-body-extra-small	: 12px;
       }
     }
     &.add-team-member{
+      width: 400px;
       margin-bottom: -$base-unit*2;
     }
     .tab-group {

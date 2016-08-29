@@ -31,7 +31,7 @@ $title-color: $tc-gray-80;
   .left-area {
     @include flexWidth(1);
     .left-area-panel {
-      min-wdith: 400px;
+      min-width: 400px;
       margin-right: 20px;
       margin-left: 20px;
       margin-bottom: 20px;

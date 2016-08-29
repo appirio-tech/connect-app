@@ -1,7 +1,9 @@
 import React, {PropTypes} from 'react'
 import filesize from 'filesize'
-import { TrashIcon, CloseIcon, EditIcon, SaveIcon } from 'appirio-tech-react-components'
+import { Icons } from 'appirio-tech-react-components'
 import FileIcons from './FileIcons'
+
+const { TrashIcon, CloseIcon, EditIcon, SaveIcon } = Icons
 
 export default class FileListItem extends React.Component {
 
