@@ -1,9 +1,9 @@
 require('./TopBar.scss')
 
 import React, {PropTypes, Component} from 'react'
-import { MenuBar, QuickLinks, UserDropdown,
-  ConnectLogo, TopcoderMobileLogo
-} from 'appirio-tech-react-components'
+import { MenuBar, QuickLinks, UserDropdown, Icons
+      } from 'appirio-tech-react-components'
+const { TopcoderMobileLogo, IconTcMenuBold, ConnectLogo } = Icons
 
 // properties: username, userImage, domain, mobileMenuUrl, mobileSearchUrl, searchSuggestionsFunc
 // searchSuggestionsFunc should return a Promise object
@@ -75,7 +75,7 @@ class TopBar extends Component {
         <div className="links-section">
           { menubar }
           <div className="menu-wrap" onClick={this.handleMobileClick}>
-            <div className="mobile-wrap"><a href={mobileMenuUrl}><noscript /></a></div>
+            <div className="mobile-wrap"><a href={mobileMenuUrl}><IconTcMenuBold /></a></div>
             { quickLinks }
             <UserDropdown username={username} userImage={userImage} domain={domain} menuItems={ userMenuItems } forReactRouter/>
           </div>
