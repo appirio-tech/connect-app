@@ -8,22 +8,6 @@ import _ from 'lodash'
 
 require('./CreateProject.scss')
 
-const appTypeOptions = [
-  {
-    value: 'ios',
-    label: 'iOS'
-  }, {
-    value: 'android',
-    label: 'Android'
-  }, {
-    value: 'web',
-    label: 'Web'
-  }, {
-    value: 'hybrid',
-    label: 'Hybrid'
-  }
-]
-
 const projectTypes = [
   {
     value: 'visual_design',
@@ -96,13 +80,6 @@ class AppProjectForm extends Component {
           name="newProject.details.devices"
         />
 
-        <TCFormFields.RadioGroup
-          name="newProject.details.appType"
-          label="App Type"
-          disabled={false}
-          wrapperClass="app-type"
-          options={appTypeOptions}
-        />
         <div className="section-divider"></div>
         <div className="project-info">
           <h2>Project info</h2>

@@ -31,7 +31,7 @@ class GenericProjectForm extends Component {
 
   render() {
     return (
-      <Formsy.Form onValidSubmit={this.props.submitHandler} onValid={this.enableButton} onInvalid={this.disableButton}>
+      <Formsy.Form className="generic-project-form" onValidSubmit={this.props.submitHandler} onValid={this.enableButton} onInvalid={this.disableButton}>
         <TCFormFields.TextInput
           name="newProject.name"
           type="text"
@@ -48,6 +48,7 @@ class GenericProjectForm extends Component {
           label="Description"
           disabled={false}
           wrapperClass="row"
+          placeholder="Mobile app that solves my biggest problem"
         />
 
         <div className="button-area">
