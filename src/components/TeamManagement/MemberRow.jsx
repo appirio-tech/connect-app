@@ -14,7 +14,7 @@ const ActionBtn = (props) => {
     icon = <Icons.IconLeave />
     break
   case 'promote':
-    icon = <IconsPromote />
+    icon = <IconPromote />
     break
   }
   return (
