@@ -2,7 +2,6 @@ import _ from 'lodash'
 import React, { Component} from 'react'
 import classNames from 'classnames'
 import FeatureList from './FeatureList'
-import { Form, TextInput, TextareaInput, SubmitButton, Validations } from 'appirio-tech-react-components'
 import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 
 require('./DefineFeature.scss')
@@ -260,7 +259,7 @@ const customFeatureTemplate = {
 
 const filterByCategory = (list, category) => {
   return list !== null ? list.filter((feature) => {
-    return feature.category == category
+    return feature.category === category
   }) : []
 }
 
@@ -326,7 +325,7 @@ class DefineFeature extends Component {
         selectedFeaturesCount++
       } else {
         features.forEach((vmFeature) => {
-          if(feature.id == vmFeature.id) {
+          if(feature.id === vmFeature.id) {
             vmFeature.selected = true
             vmFeature.notes = feature.notes
             selectedFeaturesCount++
@@ -334,8 +333,7 @@ class DefineFeature extends Component {
         })
       }
     })
-    // this.forceUpdate()
-    const featuresDefined = selectedFeaturesCount > 0
+    // const featuresDefined = selectedFeaturesCount > 0
   }
 
   applyFeature(submittedFeature) {
@@ -372,7 +370,7 @@ class DefineFeature extends Component {
     if (valid) {
       const customFeature = _.assign({}, customFeatureTemplate, model)
       updatedFeatures.push(customFeature)
-      this.setState({ customFeature : customFeature})
+      this.setState({ customFeature })
       this.hideCustomFeatures()
       this.onChange()
     }
@@ -421,7 +419,7 @@ class DefineFeature extends Component {
             placeholder="Notes..."
           />
           <div className="button-area">
-            <SubmitButton className="tc-btn tc-btn-primary tc-btn-md" disabled={ readOnly }>{ buttonText }</SubmitButton>
+            <button type="submit" className="tc-btn tc-btn-primary tc-btn-md" disabled={ readOnly }>{ buttonText }</button>
           </div>
         </div>
       )
@@ -434,7 +432,7 @@ class DefineFeature extends Component {
   }
 
   renderCustomFeatureForm() {
-    const { customFeature, showDefineFeaturesForm } = this.state
+    const { showDefineFeaturesForm } = this.state
     const { readOnly } = this.props
     const custFeatureClasses = classNames('new-feature', {
       active: showDefineFeaturesForm
@@ -463,7 +461,7 @@ class DefineFeature extends Component {
           />
 
           <div className="button-area">
-            <SubmitButton className="tc-btn tc-btn-primary tc-btn-md" disabled={ readOnly }>Add</SubmitButton>
+            <button className="tc-btn tc-btn-primary tc-btn-md" type="submit" disabled={ readOnly }>Add</button>
             <button type="button" className="tc-btn tc-btn-secondary tc-btn-md cancel" onClick={ this.hideCustomFeatures }>Cancel</button>
           </div>
         </Formsy.Form>
