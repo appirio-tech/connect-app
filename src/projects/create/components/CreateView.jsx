@@ -33,7 +33,7 @@ class CreateView extends Component {
     this.props.createProject(val.newProject)
   }
 
-  handleSelect(index, last) {
+  handleSelect(index) {
     this.setState({currentTab: index})
   }
 

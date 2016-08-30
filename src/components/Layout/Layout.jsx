@@ -26,7 +26,7 @@ const Layout = (props) => {
           userImage={ userImage }
           domain={ DOMAIN }
         />
-        <Alert stack={{limit: 3}} html={true} timeout={4000} offset={150} />
+        <Alert stack={{limit: 3}} html timeout={4000} offset={150} />
         <div>
           { props.children }
         </div>

@@ -60,7 +60,6 @@ export const projectState = function (state=initialState, action) {
 
   case CREATE_PROJECT_SUCCESS:
   case UPDATE_PROJECT_SUCCESS:
-    debugger
     return Object.assign({}, state, {
       processing: false,
       error: false,

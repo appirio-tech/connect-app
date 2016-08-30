@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import Alert from 'react-s-alert'
+/* eslint-disable no-unused-vars */
 import {
   // Project
   CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE,
@@ -13,7 +14,7 @@ import {
   UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE
 } from '../config/constants'
-
+/* eslint-enable no-unused-vars */
 
 export default function(state = {}, action) {
   switch(action.type) {
@@ -28,6 +29,7 @@ export default function(state = {}, action) {
     return state
 
   case CREATE_PROJECT_FAILURE:
+  case UPDATE_PROJECT_FAILURE:
   case ADD_PROJECT_ATTACHMENT_FAILURE:
   case UPDATE_PROJECT_ATTACHMENT_FAILURE:
   case REMOVE_PROJECT_ATTACHMENT_FAILURE:
