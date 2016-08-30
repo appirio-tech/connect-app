@@ -3,6 +3,7 @@ import React, { Component} from 'react'
 import classNames from 'classnames'
 import FeatureList from './FeatureList'
 import { Form, TextInput, TextareaInput, SubmitButton, Validations } from 'appirio-tech-react-components'
+import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 
 require('./DefineFeature.scss')
 
@@ -25,7 +26,7 @@ const categoriesList = [
   }
 ]
 
-const features = [
+const AVALAIBLE_FEATURES = [
   {
     category: 'Login & Registration',
     id: 'EMAIL LOGIN',
@@ -259,7 +260,7 @@ const customFeatureTemplate = {
 
 const filterByCategory = (list, category) => {
   return list !== null ? list.filter((feature) => {
-    return feature.category === category
+    return feature.category == category
   }) : []
 }
 
@@ -268,6 +269,7 @@ class DefineFeature extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      features : _.assign([], AVALAIBLE_FEATURES),
       selectedFeaturesCount : 0,
       activeFeature: null,
       customFeature : null,
@@ -313,11 +315,31 @@ class DefineFeature extends Component {
   }
 
   onChange() {
+    const { features, updatedFeatures } = this.state
+    let selectedFeaturesCount = 0
     // TODO get latest from server and normalize the reponse
+    updatedFeatures.forEach((feature) => {
+      if(feature.custom) {
+        feature.selected = true
+        feature.category = 'Custom Features'
+        features.push(feature)
+        selectedFeaturesCount++
+      } else {
+        features.forEach((vmFeature) => {
+          if(feature.id == vmFeature.id) {
+            vmFeature.selected = true
+            vmFeature.notes = feature.notes
+            selectedFeaturesCount++
+          }
+        })
+      }
+    })
+    // this.forceUpdate()
+    const featuresDefined = selectedFeaturesCount > 0
   }
 
   applyFeature(submittedFeature) {
-    const { activeFeature, updatedFeatures } = this.state
+    const { features, activeFeature, updatedFeatures } = this.state
     _.merge(activeFeature, submittedFeature)
     activeFeature.selected = true
 
@@ -343,19 +365,21 @@ class DefineFeature extends Component {
     this.onChange()
   }
 
-  addCustomFeature() {
-    const { updatedFeatures, customFeature } = this.state
-    const valid = customFeature.title && customFeature.description && this.customNameUnique()
+  addCustomFeature(model) {
+    const { updatedFeatures } = this.state
+    const valid = model.title && model.description && this.customNameUnique(model)
 
     if (valid) {
+      const customFeature = _.assign({}, customFeatureTemplate, model)
       updatedFeatures.push(customFeature)
+      this.setState({ customFeature : customFeature})
       this.hideCustomFeatures()
       this.onChange()
     }
   }
 
-  customNameUnique() {
-    const { customFeature } = this.state
+  customNameUnique(customFeature) {
+    const { features } = this.state
     // let featureTitleError = false
     let unique = true
 
@@ -389,12 +413,12 @@ class DefineFeature extends Component {
         <div className="description active">
           <h3>{ activeFeature.title }</h3>
           <p>{ activeFeature.description }</p>
-          <TextareaInput
+          <TCFormFields.Textarea
             name="notes"
             label="Notes"
-            placeholder="Notes..."
             disabled={ readOnly }
             wrapperClass="row"
+            placeholder="Notes..."
           />
           <div className="button-area">
             <SubmitButton className="tc-btn tc-btn-primary tc-btn-md" disabled={ readOnly }>{ buttonText }</SubmitButton>
@@ -403,9 +427,9 @@ class DefineFeature extends Component {
       )
     }
     return (
-      <Form initialValue={ activeFeature } resetOnRender disableOnPristine={ false} onSubmit={ submitAction }>
+      <Formsy.Form className="custom-feature-form" onValidSubmit={ submitAction }>
         { activeFeatureDom }
-      </Form>
+      </Formsy.Form>
     )
   }
 
@@ -417,34 +441,32 @@ class DefineFeature extends Component {
     })
     return (
       <div className={ custFeatureClasses }>
-        <Form initialValue={ customFeature } onSubmit={ this.addCustomFeature }>
+        <Formsy.Form className="custom-feature-form" onValidSubmit={this.addCustomFeature}>
           <h3>Define a new feature</h3>
-          <TextInput
+          <TCFormFields.TextInput
             name="title"
             type="text"
-            validations={{
-              required: [Validations.isRequired, 'feature name is required']
-              //TODO add unique validation
-            }}
             label="Feature name"
+            validations="minLength:1" required
+            //TODO add unique validation
+            validationError="feature name is required"
             placeholder="enter feature name"
-            disabled={readOnly}
+            disabled={ readOnly }
             wrapperClass="row"
           />
-
-          <TextareaInput
+          <TCFormFields.Textarea
             name="description"
             label="Feature Description"
-            placeholder="Briefly describe the feature, including how it will be used, and provide examples that will help designers and developers understand it."
-            disabled={readOnly}
+            disabled={ readOnly }
             wrapperClass="row"
+            placeholder="Briefly describe the feature, including how it will be used, and provide examples that will help designers and developers understand it."
           />
 
           <div className="button-area">
             <SubmitButton className="tc-btn tc-btn-primary tc-btn-md" disabled={ readOnly }>Add</SubmitButton>
             <button type="button" className="tc-btn tc-btn-secondary tc-btn-md cancel" onClick={ this.hideCustomFeatures }>Cancel</button>
           </div>
-        </Form>
+        </Formsy.Form>
       </div>
     )
   }
@@ -468,7 +490,7 @@ class DefineFeature extends Component {
   }
 
   render() {
-    const { activeFeature, updatedFeatures } = this.state
+    const { features, activeFeature, updatedFeatures } = this.state
     const { readOnly } = this.props
     const selectedFeaturesCount = updatedFeatures ? updatedFeatures.length : 0
 

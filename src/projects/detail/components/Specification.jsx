@@ -195,6 +195,8 @@ const sections = [
 ]
 
 
+const { XMarkIcon } = Icons
+
 // This handles showing a spinner while the state is being loaded async
 const enhance = spinnerWhileLoading(props => !props.processing)
 const EnhancedEditProjectForm = enhance(EditProjectForm)
@@ -243,6 +245,7 @@ class ProjectSpecification extends Component {
           </div>
 
           <div className="right-area">
+            <button onClick={this.showFeaturesDialog}>Edit Features</button>
             <EnhancedEditProjectForm project={this.props.project} sections={sections} submitHandler={this.saveProject} />
           </div>
 
