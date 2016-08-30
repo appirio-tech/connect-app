@@ -45,21 +45,23 @@ class AppProjectForm extends Component {
           devices: ['phone'],
           utm: { code: ''}
         },
-        type: 'visual_prototype'
+        type: 'visual_design'
       }
     })
   }
 
   enableButton() {
-    this.setState(_.assign({}, this.state, {canSubmit: true}))
+    this.setState(_.assign({}, this.state, { canSubmit: true }))
   }
 
   disableButton() {
-    this.setState(_.assign({}, this.state, {canSubmit: false}))
+    this.setState(_.assign({}, this.state, { canSubmit: false }))
   }
 
 
   render () {
+    const { processing } = this.props
+    const canSubmit = this.state.canSubmit && !processing
     return (
       <Formsy.Form onValidSubmit={this.props.submitHandler} onValid={this.enableButton} onInvalid={this.disableButton}>
         <div className="what-you-like-to-do">
@@ -67,6 +69,7 @@ class AppProjectForm extends Component {
           <TCFormFields.SliderRadioGroup
             name="newProject.type"
             label="na"
+            value={this.state.newProject.type}
             min={0}
             max={2}
             step={1}
@@ -93,14 +96,12 @@ class AppProjectForm extends Component {
             validationError="Project name is required"
             label="Project Name"
             placeholder="enter project name"
-            disabled={false}
             wrapperClass="row"
           />
 
           <TCFormFields.Textarea
             name="newProject.description"
             label="Description"
-            disabled={false}
             validations="minLength:1" required
             validationError="Please provide a project description"
             wrapperClass="row"
@@ -111,7 +112,6 @@ class AppProjectForm extends Component {
             name="newProject.details.utm.code"
             label="Invite code (optional)"
             type="text"
-            disabled={false}
             wrapperClass="row center"
             placeholder="ABCD123"
           />
@@ -119,8 +119,8 @@ class AppProjectForm extends Component {
         {/* .project-info */}
 
         <div className="button-area">
-          <button className="tc-btn tc-btn-primary tc-btn-md" type="submit" disabled={!this.state.canSubmit}>
-            Create Project
+          <button className="tc-btn tc-btn-primary tc-btn-md" type="submit" disabled={!canSubmit}>
+            { processing ? 'Creating...' : 'Create Project' }
           </button>
         </div>
         {/* .project-info */}
@@ -130,6 +130,11 @@ class AppProjectForm extends Component {
 }
 
 AppProjectForm.propTypes = {
+  processing: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.object
+  ]).isRequired,
   submitHandler: PropTypes.func.isRequired
 }
 

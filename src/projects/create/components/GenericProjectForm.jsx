@@ -8,19 +8,23 @@ class GenericProjectForm extends Component {
     super(props)
     this.enableButton = this.enableButton.bind(this)
     this.disableButton = this.disableButton.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
   componentWillMount() {
     this.setState({
       newProject: {
         name: null,
-        description: null,
-        type: 'generic'
+        description: null
       },
       canSubmit: false
     })
   }
 
+  onSubmit(val) {
+    val.newProject.type = 'generic'
+    this.props.submitHandler(val)
+  }
   enableButton() {
     this.setState(_.assign({}, this.state, {canSubmit: true}))
   }
@@ -30,8 +34,10 @@ class GenericProjectForm extends Component {
   }
 
   render() {
+    const { processing } = this.props
+    const canSubmit = this.state.canSubmit && !processing
     return (
-      <Formsy.Form className="generic-project-form" onValidSubmit={this.props.submitHandler} onValid={this.enableButton} onInvalid={this.disableButton}>
+      <Formsy.Form className="generic-project-form" onValidSubmit={this.onSubmit} onValid={this.enableButton} onInvalid={this.disableButton}>
         <TCFormFields.TextInput
           name="newProject.name"
           type="text"
@@ -64,7 +70,9 @@ class GenericProjectForm extends Component {
         />
 
         <div className="button-area">
-          <button className="tc-btn tc-btn-primary tc-btn-md" type="submit" disabled={!this.state.canSubmit}>Create Project</button>
+          <button className="tc-btn tc-btn-primary tc-btn-md" type="submit" disabled={!canSubmit}>
+            { processing ? 'Creating...' : 'Create Project' }
+          </button>
         </div>
       </Formsy.Form>
     )
@@ -72,6 +80,11 @@ class GenericProjectForm extends Component {
 }
 
 GenericProjectForm.propTypes = {
+  processing: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.object
+  ]).isRequired,
   submitHandler: PropTypes.func.isRequired
 }
 

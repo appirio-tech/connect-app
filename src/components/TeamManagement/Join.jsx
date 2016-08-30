@@ -15,7 +15,8 @@ const Join = ({isCopilot, owner, isShowJoin, onJoin, onJoinConfirm}) => {
         </div>
         <div className="modal-body">
           <p className="message center">
-            Once you join the project you’ll be responsible for carying over all orders from {owner.name}.
+            Once you join the project you’ll be responsible for carying over
+            all orders from {owner.firstName} {owner.lastName}.
             {' '}
             Are you sure you want to join?
           </p>

@@ -7,6 +7,7 @@ import navSearch from './navSearch'
 import projectSearch from '../projects/list/reducers/projectSearch'
 import projectSearchSuggestions from '../projects/list/reducers/projectSearchSuggestions'
 import members from './members'
+import alerts from './alerts'
 
 export default combineReducers({
   loadUser,
@@ -16,5 +17,6 @@ export default combineReducers({
   projectSearchSuggestions,
   projectState,
   members,
-  projectDashboard
+  projectDashboard,
+  alerts
 })

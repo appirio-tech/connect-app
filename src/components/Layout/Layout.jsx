@@ -4,8 +4,13 @@ import TopBar from '../TopBar/TopBar'
 import Footer from '../Footer/Footer'
 import { DOMAIN } from '../../config/constants'
 import { StickyContainer } from 'react-sticky'
+import Alert from 'react-s-alert'
 
 require('./Layout.scss')
+
+// Alert styles
+import 'react-s-alert/dist/s-alert-default.css'
+import 'react-s-alert/dist/s-alert-css-effects/slide.css'
 
 const Layout = (props) => {
   const { isLoadingUser, user } = props
@@ -21,6 +26,7 @@ const Layout = (props) => {
           userImage={ userImage }
           domain={ DOMAIN }
         />
+        <Alert stack={{limit: 3}} html={true} timeout={4000} offset={150} />
         <div>
           { props.children }
         </div>
