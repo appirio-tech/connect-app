@@ -2,13 +2,11 @@
 
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import Modal from 'react-modal'
 import _ from 'lodash'
 import update from 'react-addons-update'
 import { Icons } from 'appirio-tech-react-components'
 
 import ProjectSpecSidebar from './ProjectSpecSidebar'
-import DefineFeature from '../../FeatureSelector/DefineFeature'
 import EditProjectForm from './EditProjectForm'
 import { updateProject } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
@@ -204,21 +202,11 @@ const EnhancedEditProjectForm = enhance(EditProjectForm)
 class ProjectSpecification extends Component {
   constructor(props) {
     super(props)
-    this.showFeaturesDialog = this.showFeaturesDialog.bind(this)
-    this.hideFeaturesDialog = this.hideFeaturesDialog.bind(this)
     this.saveProject = this.saveProject.bind(this)
   }
 
   componentWillMount() {
-    this.setState({ showFeaturesDialog : false })
-  }
-
-  showFeaturesDialog() {
-    this.setState(update(this.state, {$merge: { showFeaturesDialog: true } }))
-  }
-
-  hideFeaturesDialog() {
-    this.setState(update(this.state, {$merge: { showFeaturesDialog: false } }))
+    // this.setState({ showFeaturesDialog : false })
   }
 
   saveProject(model, resetForm, invalidateForm) { // eslint-disable-line no-unused-vars
@@ -229,23 +217,11 @@ class ProjectSpecification extends Component {
     return (
       <section className="two-col-content content">
         <div className="container">
-          <Modal
-            isOpen={ this.state.showFeaturesDialog }
-            className="feature-selection-dialog"
-            onRequestClose={ this.hideFeaturesDialog }
-          >
-            <DefineFeature />
-            <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
-              <Icons.XMarkIcon />
-            </div>
-          </Modal>
-
           <div className="left-area">
             <ProjectSpecSidebar project={this.props.project} sections={sections}/>
           </div>
 
           <div className="right-area">
-            <button onClick={this.showFeaturesDialog}>Edit Features</button>
             <EnhancedEditProjectForm project={this.props.project} sections={sections} submitHandler={this.saveProject} />
           </div>
 

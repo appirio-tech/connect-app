@@ -12,11 +12,6 @@ const SpecSection = props => {
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
       <div className="bottom-border-titles">
         <h4 className="title">{typeof subSection.title === 'function' ? subSection.title(project): subSection.title }</h4>
-        { subSection.type === 'features' &&
-          <div className="section-actions">
-            <button href="javascript:"  onClick={ showFeaturesDialog } className="tc-btn-default tc-btn-sm">Add / Edit features</button>
-          </div>
-        }
       </div>
       <div className="content-boxs">
         {renderChild(subSection)}
@@ -41,17 +36,9 @@ const SpecSection = props => {
         </Tabs>
       )
     }
-    case 'features':
-      return (
-        <FeatureList>
-          {_.get(project, props.fieldName, []).map(
-            (f, idx) => <FeatureList.Item {...f} key={idx} />
-          )}
-        </FeatureList>
-      )
     case 'questions':
       return (
-        <SpecQuestions questions={props.questions} project={project}/>
+        <SpecQuestions showFeaturesDialog={showFeaturesDialog} questions={props.questions} project={project}/>
       )
     case 'notes':
       return (

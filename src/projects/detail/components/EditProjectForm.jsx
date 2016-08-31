@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import { Formsy } from 'appirio-tech-react-components'
+import Modal from 'react-modal'
+import FeaturePicker from '../../FeatureSelector/FeaturePicker'
+import { Formsy, Icons } from 'appirio-tech-react-components'
 
 import SpecSection from './SpecSection'
 
@@ -9,13 +11,17 @@ class EditProjectForm extends Component {
     super(props)
     this.enableButton = this.enableButton.bind(this)
     this.disableButton = this.disableButton.bind(this)
+    this.showFeaturesDialog = this.showFeaturesDialog.bind(this)
+    this.hideFeaturesDialog = this.hideFeaturesDialog.bind(this)
+    this.saveFeatures = this.saveFeatures.bind(this)
     this.submit = this.submit.bind(this)
   }
 
   componentWillMount() {
     this.setState({
       project: Object.assign({}, this.props.project),
-      canSubmit: false
+      canSubmit: false,
+      showFeaturesDialog: false
     })
   }
 
@@ -28,11 +34,26 @@ class EditProjectForm extends Component {
 
 
   enableButton() {
-    this.setState(Object.assign({}, this.state, {canSubmit: true}))
+    this.setState( { canSubmit: true })
   }
 
   disableButton() {
-    this.setState(Object.assign({}, this.state, {canSubmit: false}))
+    this.setState({ canSubmit: false })
+  }
+
+  showFeaturesDialog() {
+    this.setState({ showFeaturesDialog : true})
+  }
+
+  hideFeaturesDialog() {
+    this.setState({ showFeaturesDialog: false })
+  }
+
+  saveFeatures(features) {
+    const { project } = this.props
+    console.log('saving features...')
+    console.log(features)
+    project.details.features = features
   }
 
   submit(model, resetForm, invalidateForm) {
@@ -52,6 +73,17 @@ class EditProjectForm extends Component {
         <div className="button-area">
           <button className="tc-btn tc-btn-primary tc-btn-md" type="submit" disabled={!this.state.canSubmit}>Save Changes</button>
         </div>
+
+        <Modal
+            isOpen={ this.state.showFeaturesDialog }
+            className="feature-selection-dialog"
+            onRequestClose={ this.hideFeaturesDialog }
+          >
+          <FeaturePicker onSave={ this.saveFeatures }/>
+          <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
+            <Icons.XMarkIcon />
+          </div>
+        </Modal>
 
       </Formsy.Form>
     )

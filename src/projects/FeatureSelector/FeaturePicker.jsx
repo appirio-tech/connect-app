@@ -2,9 +2,11 @@ import _ from 'lodash'
 import React, { Component} from 'react'
 import classNames from 'classnames'
 import FeatureList from './FeatureList'
+import FeatureForm from './FeatureForm'
+import FeaturePreview from './FeaturePreview'
 import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 
-require('./DefineFeature.scss')
+require('./FeaturePicker.scss')
 
 const categoriesList = [
   { 
@@ -33,7 +35,7 @@ const AVALAIBLE_FEATURES = [
     description: 'Allow users to register and log in using their email address and a password. Users can also change their password or recover a forgotten one.',
     notes: null,
     custom: null,
-    icon: require('./images/help-me.svg'),
+    icon: require('./images/login-reg.svg'),
     selected: false
   },
   {
@@ -263,7 +265,7 @@ const filterByCategory = (list, category) => {
   }) : []
 }
 
-class DefineFeature extends Component {
+class FeaturePicker extends Component {
 
   constructor(props) {
     super(props)
@@ -272,68 +274,36 @@ class DefineFeature extends Component {
       selectedFeaturesCount : 0,
       activeFeature: null,
       customFeature : null,
-      showDefineFeaturesForm: true,
+      showCutsomFeatureForm: false,
       updatedFeatures : [] //initialize from work service or get from props
     }
     this.activateFeature = this.activateFeature.bind(this)
-    this.toggleDefineFeatures = this.toggleDefineFeatures.bind(this)
-    this.addCustomFeature = this.addCustomFeature.bind(this)
-    this.hideCustomFeatures = this.hideCustomFeatures.bind(this)
-    this.onChange = this.onChange.bind(this)
     this.applyFeature = this.applyFeature.bind(this)
-    this.removeFeature = this.removeFeature.bind(this)
+    this.onChange = this.onChange.bind(this)
     this.saveFeatures = this.saveFeatures.bind(this)
+    this.toggleDefineFeatures = this.toggleDefineFeatures.bind(this)
   }
 
-  activateFeature(feature) {
-    this.setState({
-      activeFeature : feature,
-      customFeature : _.assign({}, customFeatureTemplate),
-      showDefineFeaturesForm : false,
-      addingCustomFeature : false,
-      activePreview : require('./images/' + feature.title + '.png')
-    })
+  componentWillReceiveProps(props, newProps) {
+    this.setState({ notes: '' })
   }
 
   toggleDefineFeatures() {
     this.setState({
       activeFeature : null,
       addingCustomFeature : true,
-      showDefineFeaturesForm : !this.state.showDefineFeaturesForm
+      showCutsomFeatureForm : !this.state.showCutsomFeatureForm
     })
   }
 
-  hideCustomFeatures() {
+  activateFeature(feature) {
     this.setState({
-      showDefineFeaturesForm : false
+      activeFeature : feature,
+      customFeature : _.assign({}, customFeatureTemplate),
+      showCutsomFeatureForm : false,
+      addingCustomFeature : false,
+      notes: ''
     })
-  }
-
-  saveFeatures() {
-    console.log(this.state.updatedFeatures)
-  }
-
-  onChange() {
-    const { features, updatedFeatures } = this.state
-    let selectedFeaturesCount = 0
-    // TODO get latest from server and normalize the reponse
-    updatedFeatures.forEach((feature) => {
-      if(feature.custom) {
-        feature.selected = true
-        feature.category = 'Custom Features'
-        features.push(feature)
-        selectedFeaturesCount++
-      } else {
-        features.forEach((vmFeature) => {
-          if(feature.id === vmFeature.id) {
-            vmFeature.selected = true
-            vmFeature.notes = feature.notes
-            selectedFeaturesCount++
-          }
-        })
-      }
-    })
-    // const featuresDefined = selectedFeaturesCount > 0
   }
 
   applyFeature(submittedFeature) {
@@ -350,7 +320,7 @@ class DefineFeature extends Component {
     this.onChange()
   }
 
-  removeFeature() {
+  removeFeature(featureToRemove) {
     const { updatedFeatures, activeFeature } = this.state
     updatedFeatures.forEach((feature, index) => {
       if(feature.id === activeFeature.id) {
@@ -376,6 +346,35 @@ class DefineFeature extends Component {
     }
   }
 
+  saveFeatures() {
+    this.props.onSave(this.state.features.filter((feature) => {
+      return feature.selected === true
+    }))
+  }
+
+  onChange() {
+    const { features, updatedFeatures } = this.state
+    let selectedFeaturesCount = 0
+    // TODO get latest from server and normalize the reponse
+    updatedFeatures.forEach((feature) => {
+      if(feature.custom) {
+        feature.selected = true
+        feature.category = 'Custom Features'
+        features.push(feature)
+        selectedFeaturesCount++
+      } else {
+        features.forEach((vmFeature) => {
+          if(feature.id === vmFeature.id) {
+            vmFeature.selected = true
+            vmFeature.notes = feature.notes
+            selectedFeaturesCount++
+          }
+        })
+      }
+    })
+    // const featuresDefined = selectedFeaturesCount > 0
+  }
+
   customNameUnique(customFeature) {
     const { features } = this.state
     // let featureTitleError = false
@@ -391,104 +390,8 @@ class DefineFeature extends Component {
     return unique
   }
 
-  renderFeatureForm() {
-    const { activeFeature, showDefineFeaturesForm } = this.state
-    const { readOnly } = this.props
-    let activeFeatureDom = null
-    if (!showDefineFeaturesForm && !activeFeature) {
-      activeFeatureDom = (
-        <div className="default active">
-          <h3>Select and define features for your app</h3>
-          <p>Select from the most popular features, listed on the left, or define your own custom features.</p>
-        </div>
-      )
-    }
-    const selected = _.get(activeFeature, 'selected')
-    const submitAction = !selected ? this.applyFeature : this.removeFeature
-    const buttonText = !selected ? 'Add this feature' : 'Remove feature'
-    if (!showDefineFeaturesForm && activeFeature) {
-      activeFeatureDom = (
-        <div className="description active">
-          <h3>{ activeFeature.title }</h3>
-          <p>{ activeFeature.description }</p>
-          <TCFormFields.Textarea
-            name="notes"
-            label="Notes"
-            disabled={ readOnly }
-            wrapperClass="row"
-            placeholder="Notes..."
-          />
-          <div className="button-area">
-            <button type="submit" className="tc-btn tc-btn-primary tc-btn-md" disabled={ readOnly }>{ buttonText }</button>
-          </div>
-        </div>
-      )
-    }
-    return (
-      <Formsy.Form className="custom-feature-form" onValidSubmit={ submitAction }>
-        { activeFeatureDom }
-      </Formsy.Form>
-    )
-  }
-
-  renderCustomFeatureForm() {
-    const { showDefineFeaturesForm } = this.state
-    const { readOnly } = this.props
-    const custFeatureClasses = classNames('new-feature', {
-      active: showDefineFeaturesForm
-    })
-    return (
-      <div className={ custFeatureClasses }>
-        <Formsy.Form className="custom-feature-form" onValidSubmit={this.addCustomFeature}>
-          <h3>Define a new feature</h3>
-          <TCFormFields.TextInput
-            name="title"
-            type="text"
-            label="Feature name"
-            validations="minLength:1" required
-            //TODO add unique validation
-            validationError="feature name is required"
-            placeholder="enter feature name"
-            disabled={ readOnly }
-            wrapperClass="row"
-          />
-          <TCFormFields.Textarea
-            name="description"
-            label="Feature Description"
-            disabled={ readOnly }
-            wrapperClass="row"
-            placeholder="Briefly describe the feature, including how it will be used, and provide examples that will help designers and developers understand it."
-          />
-
-          <div className="button-area">
-            <button className="tc-btn tc-btn-primary tc-btn-md" type="submit" disabled={ readOnly }>Add</button>
-            <button type="button" className="tc-btn tc-btn-secondary tc-btn-md cancel" onClick={ this.hideCustomFeatures }>Cancel</button>
-          </div>
-        </Formsy.Form>
-      </div>
-    )
-  }
-
-  renderPreview() {
-    const { activeFeature, activePreview, addingCustomFeature } = this.state
-    let previewImg = null
-    // if feature is activated and is not a customer feature
-    if (activeFeature && !activeFeature.custom) {
-      previewImg = activePreview
-    } else if ((activeFeature && activeFeature.custom) || addingCustomFeature) { // if active/non-active custom feature
-      previewImg = require('./images/Custom-feature.png')
-    } else {
-      previewImg = require('./images/Default-preview.png')
-    }
-    return (
-      <div className="example flex-grow">
-        <img src={ previewImg } />
-      </div>
-    )
-  }
-
   render() {
-    const { features, activeFeature, updatedFeatures } = this.state
+    const { features, activeFeature, updatedFeatures, showCutsomFeatureForm, addingCustomFeature } = this.state
     const { readOnly } = this.props
     const selectedFeaturesCount = updatedFeatures ? updatedFeatures.length : 0
 
@@ -515,7 +418,7 @@ class DefineFeature extends Component {
         <h2><strong>Features</strong></h2>
         <main className="flex flex-grow">
           <ul className="features flex column">
-            <li ignore-content="true" className="flex-grow">
+            <li className="flex-grow">
               <ul className="feature-categories-list">
                 { categoriesList.map(renderFeatureCategory) }
               </ul>
@@ -529,9 +432,8 @@ class DefineFeature extends Component {
           </ul>
           <ul className="contents flex column flex-grow">
             <li className="flex flex-grow">
-              { this.renderFeatureForm() }
-              { this.renderCustomFeatureForm() }
-              { this.renderPreview() }
+              <FeatureForm feature={ activeFeature } showCutsomFeatureForm={ showCutsomFeatureForm } onAddFeature={ this.applyFeature } onRemoveFeature={ this.removeFeature } onAddCustomFeature={ this.addCustomFeature } />
+              <FeaturePreview feature={ activeFeature } addingCustomFeature={ addingCustomFeature } />
             </li>
             <li className="flex middle space-between">
               <div className="count">{ selectedFeaturesCount } features added</div>
@@ -544,4 +446,4 @@ class DefineFeature extends Component {
   }
 }
 
-export default DefineFeature
+export default FeaturePicker
