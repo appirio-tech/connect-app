@@ -278,7 +278,6 @@ class FeaturePicker extends Component {
     this.applyFeature = this.applyFeature.bind(this)
     this.addCustomFeature = this.addCustomFeature.bind(this)
     this.removeFeature = this.removeFeature.bind(this)
-    this.onChange = this.onChange.bind(this)
     this.saveFeatures = this.saveFeatures.bind(this)
     this.toggleDefineFeatures = this.toggleDefineFeatures.bind(this)
   }
