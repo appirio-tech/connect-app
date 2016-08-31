@@ -1,19 +1,19 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
 
-require('./FeatureList.scss')
+require('./PickerFeatureList.scss')
 
-class FeatureList extends Component {
+class PickerFeatureList extends Component {
   constructor(props) {
     super(props)
   }
 
   render() {
-    const { headerText, icon, features, activeFeature, onFeatureSelection } = this.props
+    const { headerText, icon, features, activeFeature, addedFeatures, onFeatureSelection } = this.props
     const renderFeature = (feature, idx) => {
       const featureClasses = classNames('feature-list-feature', {
-        'active-feature' : activeFeature && activeFeature.id === feature.id,
-        'selected-feature' : feature.selected
+        'active-feature' : activeFeature && activeFeature.title === feature.title,
+        'selected-feature' : addedFeatures.filter((f) => { return f.title === feature.title }).length
       })
       const activateFeature = () => {
         if (onFeatureSelection && typeof onFeatureSelection === 'function') {
@@ -45,4 +45,4 @@ class FeatureList extends Component {
   }
 }
 
-export default FeatureList
+export default PickerFeatureList

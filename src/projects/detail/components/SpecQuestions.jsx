@@ -3,8 +3,8 @@ import seeAttachedWrapperField from './SeeAttachedWrapperField'
 import { TCFormFields } from 'appirio-tech-react-components'
 import _ from 'lodash'
 
-import FeatureList from '../../../components/FeatureList/FeatureList'
-import FeatureIcons from '../../../components/FeatureList/FeatureIcons'
+import FeatureList from '../../FeatureList/FeatureList'
+import FeatureIcons from '../../FeatureList/FeatureIcons'
 
 // HOC for TextareaInput
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
@@ -50,11 +50,7 @@ const SpecQuestions = ({questions, project, showFeaturesDialog}) => {
             <button type="button" onClick={ showFeaturesDialog } className="tc-btn-default tc-btn-sm">Add / Edit features</button>
           </div>
           <div className="add-edit-features__added-features">
-            <FeatureList>
-              {_.get(project, q.fieldName, []).map(
-                (f, idx) => <FeatureList.Item key={idx} icon={ <img src={f.icon} /> } title={ f.title } description={ f.description }  />
-              )}
-            </FeatureList>
+            <FeatureList addedFeatures={ _.get(project, q.fieldName, []) } />
           </div>
         </div>
       )

@@ -10,6 +10,8 @@ class FeatureForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      title: '',
+      description: '',
       notes: '',
       showCutsomFeatureForm : props.showCutsomFeatureForm
     }
@@ -20,7 +22,12 @@ class FeatureForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ showCutsomFeatureForm : nextProps.showCutsomFeatureForm })
+    this.setState({
+      title: '',
+      description: '',
+      notes: '',
+      showCutsomFeatureForm : nextProps.showCutsomFeatureForm
+    })
   }
 
   hideCustomFeatures() {
@@ -43,7 +50,7 @@ class FeatureForm extends Component {
 
   renderFeatureForm() {
     const { showCutsomFeatureForm } = this.state
-    const { readOnly, feature } = this.props
+    const { readOnly, feature, addedFeatures } = this.props
     let featureDom = null
     if (!showCutsomFeatureForm && !feature) {
       featureDom = (
@@ -53,7 +60,7 @@ class FeatureForm extends Component {
         </div>
       )
     }
-    const selected = _.get(feature, 'selected')
+    const selected = addedFeatures.filter((f) => { return feature && f.title === feature.title}).length > 0
     const submitAction = !selected ? this.applyFeature : this.removeFeature
     const buttonText = !selected ? 'Add this feature' : 'Remove feature'
     if (!showCutsomFeatureForm && feature) {
@@ -67,7 +74,7 @@ class FeatureForm extends Component {
             disabled={ readOnly }
             wrapperClass="row"
             placeholder="Notes..."
-            // value={feature.notes || ''}
+            // value={ feature.notes || this.state.notes }
           />
           <div className="button-area">
             <button type="submit" className="tc-btn tc-btn-primary tc-btn-md" disabled={ readOnly }>{ buttonText }</button>
