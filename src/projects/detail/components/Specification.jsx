@@ -208,7 +208,18 @@ class ProjectSpecification extends Component {
   }
 
   componentWillMount() {
-    this.setState({ showFeaturesDialog : false })
+    this.setState({
+      showFeaturesDialog : false,
+      isMember: this.isCurrentUserMember(this.props)
+    })
+  }
+
+  isCurrentUserMember({currentUserId, project}) {
+    return project && !!_.find(project.members, m => m.userId === currentUserId)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({isMember: this.isCurrentUserMember(nextProps)})
   }
 
   showFeaturesDialog() {
@@ -224,11 +235,13 @@ class ProjectSpecification extends Component {
   }
 
   render() {
+    const { isMember, showFeaturesDialog } = this.state
+    const { project } = this.props
     return (
       <section className="two-col-content content">
         <div className="container">
           <Modal
-            isOpen={ this.state.showFeaturesDialog }
+            isOpen={ showFeaturesDialog }
             className="feature-selection-dialog"
             onRequestClose={ this.hideFeaturesDialog }
           >
@@ -239,11 +252,16 @@ class ProjectSpecification extends Component {
           </Modal>
 
           <div className="left-area">
-            <ProjectSpecSidebar project={this.props.project} sections={sections}/>
+            <ProjectSpecSidebar project={project} sections={sections}/>
           </div>
 
           <div className="right-area">
-            <EnhancedEditProjectForm project={this.props.project} sections={sections} submitHandler={this.saveProject} />
+            <EnhancedEditProjectForm
+              project={project}
+              sections={sections}
+              isEdittable={isMember}
+              submitHandler={this.saveProject}
+            />
           </div>
 
         </div>
@@ -261,10 +279,11 @@ ProjectSpecification.propTypes = {
   ])
 }
 
-const mapStateToProps = ({projectState}) => {
+const mapStateToProps = ({projectState, loadUser}) => {
   return {
     processing: projectState.processing,
-    error: projectState.error
+    error: projectState.error,
+    currentUserId: parseInt(loadUser.user.id)
   }
 }
 

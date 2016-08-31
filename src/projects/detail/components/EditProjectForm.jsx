@@ -40,13 +40,13 @@ class EditProjectForm extends Component {
   }
 
   render() {
-    const { project, sections } = this.props
+    const { project, sections, isEdittable } = this.props
     const renderSection = (section, idx) => (
       <SpecSection key={idx} {...section} project={project} showFeaturesDialog={this.showFeaturesDialog}/>
     )
 
     return (
-      <Formsy.Form onSubmit={this.submit} onValid={this.enableButton} onInvalid={this.disableButton}>
+      <Formsy.Form onSubmit={this.submit} onValid={this.enableButton} disabled={!isEdittable} onInvalid={this.disableButton}>
         {sections.map(renderSection)}
 
         <div className="button-area">
@@ -61,6 +61,7 @@ class EditProjectForm extends Component {
 EditProjectForm.propTypes = {
   project: PropTypes.object.isRequired,
   sections: PropTypes.arrayOf(PropTypes.object).isRequired,
+  isEdittable: PropTypes.bool.isReqiured,
   submitHandler: PropTypes.func.isRequired
 }
 
