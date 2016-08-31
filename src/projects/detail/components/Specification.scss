@@ -110,9 +110,25 @@ $title-color: $tc-gray-80;
             color: #262628;
           }
         }
-        .btn-boxes {
-          margin-top: 20px;
-          text-align: center;
+        .sidebar-section-separator {
+          margin: ($base-unit * 4) ($base-unit * 4) 0px;
+          height: 1px;
+          background-color: $tc-gray-20;
+        }
+        .project-spec-actions {
+          .project-spec-action {
+            padding: $base-unit * 4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .text {
+              @include tc-label-md;
+              color: $tc-gray-50;
+            }
+            button {
+              margin-top: $base-unit * 4;
+            }
+          }
         }
       }
     }
