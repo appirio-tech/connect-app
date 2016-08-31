@@ -1,0 +1,12 @@
+@import 'tc-includes';
+
+.add-edit-features {
+  .add-edit-features__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    background-color: $tc-gray-neutral-light;
+    border: 1px solid $tc-gray-10;
+  }
+}

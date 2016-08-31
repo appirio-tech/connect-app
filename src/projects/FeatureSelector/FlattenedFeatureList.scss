@@ -1,0 +1,41 @@
+@import 'tc-includes';
+
+.flattened-feature-list {
+  .flattened-feature-list-item {
+    display: flex;
+    border: 1px solid $tc-gray-10;
+    border-bottom: 0px;
+    padding: 15px 20px;
+    width: 100%;
+    .icon-col {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 20px;
+
+      > img {
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .content-col {
+      > h4 {
+        @include roboto-bold;
+        font-size: 15px;
+        letterSpacing: 0;
+        line-height: 25px;
+        color: $tc-gray-80;
+      }
+      > p {
+        @include roboto;
+        font-size: 13px;
+        color: $tc-gray-60;
+        letterSpacing: 0;
+        line-height: 25px;
+        &.bigger {
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}

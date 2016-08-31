@@ -3,19 +3,23 @@ import seeAttachedWrapperField from './SeeAttachedWrapperField'
 import { TCFormFields } from 'appirio-tech-react-components'
 import _ from 'lodash'
 
-import FeatureList from '../../FeatureList/FeatureList'
-import FeatureIcons from '../../FeatureList/FeatureIcons'
+import SpecQuestionList from './SpecQuestionList/SpecQuestionList'
+import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
+import SpecFeatureQuestion from './SpecFeatureQuestion'
 
 // HOC for TextareaInput
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
 
+// HOC for SpecFeatureQuestion
+// const SeeAttachedSpecFeatureQuestion = seeAttachedWrapperField(SpecFeatureQuestion)
+
 const getIcon = icon => {
   switch (icon) {
   case 'feature-generic':
-    return <FeatureIcons.Generic />
+    return <SpecQuestionIcons.Generic />
   case 'feature-placeholder':
   default:
-    return <FeatureIcons.Placeholder />
+    return <SpecQuestionIcons.Placeholder />
   }
 }
 
@@ -44,36 +48,27 @@ const SpecQuestions = ({questions, project, showFeaturesDialog}) => {
       child = <TCFormFields.Checkbox name={q.fieldName} label={q.label} value={value} />
       break
     case 'features':
-      child = (
-        <div className="add-edit-features">
-          <div className="add-edit-features__header">
-            <button type="button" onClick={ showFeaturesDialog } className="tc-btn-default tc-btn-sm">Add / Edit features</button>
-          </div>
-          <div className="add-edit-features__added-features">
-            <FeatureList addedFeatures={ _.get(project, q.fieldName, []) } />
-          </div>
-        </div>
-      )
+      child = <SpecFeatureQuestion project={ project } question={ q } showFeaturesDialog={ showFeaturesDialog } />
       break
     default:
       child = <noscript />
     }
     return (
-      <FeatureList.Item
+      <SpecQuestionList.Item
         key={index}
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
       >
         {child}
-      </FeatureList.Item>
+      </SpecQuestionList.Item>
     )
   }
 
   return (
-    <FeatureList>
+    <SpecQuestionList>
       {questions.map(renderQ)}
-    </FeatureList>
+    </SpecQuestionList>
   )
 }
 
