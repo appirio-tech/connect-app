@@ -45,11 +45,11 @@ const SpecQuestions = ({questions, project, showFeaturesDialog}) => {
       break
     case 'features':
       child = (
-        <div className='add-edit-features'>
-          <div className='add-edit-features__header'>
-            <button type='button' onClick={ showFeaturesDialog } className="tc-btn-default tc-btn-sm">Add / Edit features</button>
+        <div className="add-edit-features">
+          <div className="add-edit-features__header">
+            <button type="button" onClick={ showFeaturesDialog } className="tc-btn-default tc-btn-sm">Add / Edit features</button>
           </div>
-          <div className='add-edit-features__added-features'>
+          <div className="add-edit-features__added-features">
             <FeatureList>
               {_.get(project, q.fieldName, []).map(
                 (f, idx) => <FeatureList.Item key={idx} icon={ <img src={f.icon} /> } title={ f.title } description={ f.description }  />

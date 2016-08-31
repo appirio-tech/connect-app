@@ -75,10 +75,10 @@ class EditProjectForm extends Component {
         </div>
 
         <Modal
-            isOpen={ this.state.showFeaturesDialog }
-            className="feature-selection-dialog"
-            onRequestClose={ this.hideFeaturesDialog }
-          >
+          isOpen={ this.state.showFeaturesDialog }
+          className="feature-selection-dialog"
+          onRequestClose={ this.hideFeaturesDialog }
+        >
           <FeaturePicker onSave={ this.saveFeatures }/>
           <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
             <Icons.XMarkIcon />

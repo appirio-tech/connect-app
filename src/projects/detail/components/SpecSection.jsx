@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react'
 import { Tabs, Tab, TCFormFields } from 'appirio-tech-react-components'
 import _ from 'lodash'
 import SpecQuestions from './SpecQuestions'
-import FeatureList from '../../../components/FeatureList/FeatureList'
 import FileListContainer from './FileListContainer'
 
 

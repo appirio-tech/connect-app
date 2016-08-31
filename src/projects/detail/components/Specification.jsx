@@ -3,8 +3,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import update from 'react-addons-update'
-import { Icons } from 'appirio-tech-react-components'
 
 import ProjectSpecSidebar from './ProjectSpecSidebar'
 import EditProjectForm from './EditProjectForm'
@@ -191,9 +189,6 @@ const sections = [
     ]
   }
 ]
-
-
-const { XMarkIcon } = Icons
 
 // This handles showing a spinner while the state is being loaded async
 const enhance = spinnerWhileLoading(props => !props.processing)

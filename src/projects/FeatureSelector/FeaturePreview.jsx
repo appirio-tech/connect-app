@@ -1,7 +1,3 @@
-import _ from 'lodash'
-import classNames from 'classnames'
-import React, { Component} from 'react'
-import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 
 require('./FeaturePreview.scss')
 

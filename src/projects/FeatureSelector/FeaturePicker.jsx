@@ -1,10 +1,8 @@
 import _ from 'lodash'
 import React, { Component} from 'react'
-import classNames from 'classnames'
 import FeatureList from './FeatureList'
 import FeatureForm from './FeatureForm'
 import FeaturePreview from './FeaturePreview'
-import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 
 require('./FeaturePicker.scss')
 
@@ -284,10 +282,6 @@ class FeaturePicker extends Component {
     this.toggleDefineFeatures = this.toggleDefineFeatures.bind(this)
   }
 
-  componentWillReceiveProps(props, newProps) {
-    this.setState({ notes: '' })
-  }
-
   toggleDefineFeatures() {
     this.setState({
       activeFeature : null,
@@ -301,8 +295,7 @@ class FeaturePicker extends Component {
       activeFeature : feature,
       customFeature : _.assign({}, customFeatureTemplate),
       showCutsomFeatureForm : false,
-      addingCustomFeature : false,
-      notes: ''
+      addingCustomFeature : false
     })
   }
 
@@ -320,7 +313,7 @@ class FeaturePicker extends Component {
     this.onChange()
   }
 
-  removeFeature(featureToRemove) {
+  removeFeature() {
     const { updatedFeatures, activeFeature } = this.state
     updatedFeatures.forEach((feature, index) => {
       if(feature.id === activeFeature.id) {
