@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import React, { PropTypes } from 'react'
-import seeAttachedWrapperField from './SeeAttachedWrapperField'
 import FlattenedFeatureList from '../../FeatureSelector/FlattenedFeatureList'
 
 require('./SpecFeatureQuestion.scss')
@@ -16,6 +15,12 @@ const SpecFeatureQuestion = ({ project, question, showFeaturesDialog}) => {
       </div>
     </div>
   )
+}
+
+SpecFeatureQuestion.propTypes = {
+  project: PropTypes.object.isRequired,
+  question: PropTypes.object.isRequired,
+  showFeaturesDialog: PropTypes.func.isRequired
 }
 
 export default SpecFeatureQuestion
