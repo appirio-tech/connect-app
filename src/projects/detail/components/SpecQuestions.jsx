@@ -37,6 +37,9 @@ const SpecQuestions = ({questions, project}) => {
     case 'radio-group':
       child = <TCFormFields.RadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
+    case 'tiled-radio-group':
+      child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
+      break
     case 'checkbox-group':
       child = <TCFormFields.CheckboxGroup name={q.fieldName} label={q.label} value={value} options={q.options} />
       break

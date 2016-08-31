@@ -86,10 +86,10 @@ const sections = [
             icon: 'feaure-placeholder',
             title: 'What font style do you prefer? (Pick one)',
             description: 'The typography used in your designs will fit within these broad font styles',
-            type: 'radio-group',
+            type: 'tiled-radio-group',
             options: [
-              {value: 'serif', label: 'Serif'},
-              {value: 'sanSerif', label: 'Sans Serif'}
+              {value: 'serif', title: 'Serif', icon: '', desc: 'formal, old style'},
+              {value: 'sanSerif', title: 'Sans Serif', icon: '', desc: 'clean, modern, informal'}
             ],
             fieldName: 'details.designSpecification.fontStyle'
           },
@@ -109,13 +109,13 @@ const sections = [
           },
           {
             icon: 'feaure-placeholder',
-            title: 'What icon style do you prefer',
+            title: 'What icon style do you prefer? (Pick one)',
             description: 'Icons within your designs will follow these styles',
-            type: 'radio-group',
+            type: 'tiled-radio-group',
             options: [
-              {value: 'flatColor', label: 'Flat Color'},
-              {value: 'thinLine', label: 'Thin Line'},
-              {value: 'solidLine', label: 'Solid Line'}
+              {value: 'flatColor', title: 'Flat Color', icon: '', desc: 'playful'},
+              {value: 'thinLine', title: 'Thin Line', icon: '', desc: 'modern'},
+              {value: 'solidLine', title: 'Solid Line', icon: '', desc: 'classic'}
             ],
             fieldName: 'details.designSpecification.iconStyle'
           }
