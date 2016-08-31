@@ -45,7 +45,7 @@ const sections = [
             description: 'Please list all the features you would like in your application. You can use our wizard to pick from common features or define your own.',
             // type: 'see-attached-features',
             type: 'features',
-            fieldName: 'details.features'
+            fieldName: 'details.appDefinition.features'
           }
         ]
       },

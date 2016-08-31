@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
+import { Icons } from 'appirio-tech-react-components'
 import classNames from 'classnames'
-
+import _ from 'lodash'
 require('./PickerFeatureList.scss')
 
 class PickerFeatureList extends Component {
@@ -9,25 +10,25 @@ class PickerFeatureList extends Component {
   }
 
   render() {
-    const { headerText, icon, features, activeFeature, addedFeatures, onFeatureSelection } = this.props
+    const { headerText, icon, features, selectedFeatureId, activeFeatureIdList, onSelectFeature } = this.props
     const renderFeature = (feature, idx) => {
+      const isActive = _.indexOf(activeFeatureIdList, feature.id) > -1
       const featureClasses = classNames('feature-list-feature', {
-        'active-feature' : activeFeature && activeFeature.title === feature.title,
-        'selected-feature' : addedFeatures.filter((f) => { return f.title === feature.title }).length
+        'active-feature' : isActive,
+        'selected-feature' : feature.id === selectedFeatureId
       })
-      const activateFeature = () => {
-        if (onFeatureSelection && typeof onFeatureSelection === 'function') {
-          onFeatureSelection(feature)
-        }
+      const onClick = () => {
+        if (feature.id !== selectedFeatureId)
+          onSelectFeature(feature.id)
       }
       return (
         <li key={ idx } className={featureClasses}>
-          <button onClick={ activateFeature } className="clean">
+          <a onClick={ onClick } className="clean">
             <div className="flex">
-              <img className="selected-feature-icon" src={ require('./images/icon-check-solid.svg') } />
-              <p>{ feature.title }</p>
+              <span>{ feature.title }</span>
+              <span>{ isActive && <Icons.IconUICheckBold fill={'#FB7D22'} />}</span>
             </div>
-          </button>
+          </a>
         </li>
       )
     }
@@ -45,4 +46,6 @@ class PickerFeatureList extends Component {
   }
 }
 
+
+PickerFeatureList.PropTypes = {}
 export default PickerFeatureList

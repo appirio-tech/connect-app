@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import Modal from 'react-modal'
+import update from 'react-addons-update'
 import FeaturePicker from '../../FeatureSelector/FeaturePicker'
 import { Formsy, Icons } from 'appirio-tech-react-components'
 
@@ -25,9 +26,13 @@ class EditProjectForm extends Component {
     })
   }
 
-  componentWillReceiveProps() {
+  shouldComponentUpdate(nextProps, nextState) {
+    return true
+  }
+
+  componentWillReceiveProps(nextProps) {
     this.setState({
-      project: Object.assign({}, this.props.project),
+      project: Object.assign({}, nextProps.project),
       canSubmit: false
     })
   }
@@ -50,10 +55,10 @@ class EditProjectForm extends Component {
   }
 
   saveFeatures(features) {
-    const { project } = this.props
-    console.log('saving features...')
-    console.log(features)
-    project.details.features = features
+    this.setState(update(this.state, {
+      project: { details: { appDefinition: { features: { $set: features } } } },
+      canSubmit: { $set: true }
+    }))
   }
 
   submit(model, resetForm, invalidateForm) {
@@ -61,7 +66,8 @@ class EditProjectForm extends Component {
   }
 
   render() {
-    const { project, sections } = this.props
+    const { sections } = this.props
+    const { project } = this.state
     const renderSection = (section, idx) => (
       <SpecSection key={idx} {...section} project={project} showFeaturesDialog={this.showFeaturesDialog}/>
     )
@@ -79,7 +85,7 @@ class EditProjectForm extends Component {
           className="feature-selection-dialog"
           onRequestClose={ this.hideFeaturesDialog }
         >
-          <FeaturePicker addedFeatures={ project.details.features } onSave={ this.saveFeatures }/>
+          <FeaturePicker features={ project.details.appDefinition.features } onSave={ this.saveFeatures }/>
           <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
             <Icons.XMarkIcon />
           </div>

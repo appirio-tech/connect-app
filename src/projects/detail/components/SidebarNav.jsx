@@ -1,7 +1,8 @@
 
 import React, { Component, PropTypes } from 'react'
 import { Link as DirectLink } from 'react-scroll'
-
+import { Icons } from 'appirio-tech-react-components'
+import cn from 'classnames'
 
 require('./SidebarNav.scss')
 
@@ -22,12 +23,11 @@ const renderSubNavItems = (child, idx) => {
   const { name, progress, link, required } = child
   const isComplete = progress.length && progress[0] === progress[1]
 
-
   return (
     <li key={idx}>
       <DirectLink to={link} className="boxes" {...scrollProps} href="javascript:">
-        <span className="txt">{name}</span>{required && <span style={{color: 'orange'}}>*</span> }
-        <span className="schedule">{ isComplete ? 'Complete' : required && `${progress[0]} of ${progress[1]}`}</span>
+        <span className="txt">{name}&nbsp;{required && <span style={{color: '#FB7D22'}}>*</span>}</span>
+        <span className="schedule">{ isComplete ? <Icons.IconUICheckBold fill={'#FB7D22'} /> : required && `${progress[0]} of ${progress[1]}`}</span>
       </DirectLink>
     </li>
   )
