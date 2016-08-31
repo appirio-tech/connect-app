@@ -271,7 +271,6 @@ class FeaturePicker extends Component {
       features : props.addedFeatures || [],
       selectedFeaturesCount : 0,
       activeFeature: null,
-      // customFeature : null,
       showCutsomFeatureForm: false,
       updatedFeatures : []
     }
@@ -295,25 +294,17 @@ class FeaturePicker extends Component {
   activateFeature(feature) {
     this.setState({
       activeFeature : feature,
-      // customFeature : _.assign({}, customFeatureTemplate),
       showCutsomFeatureForm : false,
       addingCustomFeature : false
     })
   }
 
   applyFeature(submittedFeature) {
-    const { features, activeFeature, updatedFeatures } = this.state
-    // _.merge(activeFeature, submittedFeature)
-    // activeFeature.selected = true
+    const { activeFeature, updatedFeatures } = this.state
     submittedFeature.title = activeFeature.title
     submittedFeature.description = activeFeature.description
 
-    // features.forEach((feature) => {
-    //   if(feature.id === activeFeature.id) {
-        updatedFeatures.push(submittedFeature)
-    //   }
-    // })
-    // this.onChange()
+    updatedFeatures.push(submittedFeature)
     this.forceUpdate()
   }
 
@@ -338,46 +329,17 @@ class FeaturePicker extends Component {
       const customFeature = _.assign({}, customFeatureTemplate, model)
       model.custom = true
       updatedFeatures.push(model)
-      // this.setState({ customFeature })
-      // this.hideCustomFeatures()
       this.setState({
         activeFeature : customFeature,
         addingCustomFeature : false,
         showCutsomFeatureForm : false
       })
-      // this.onChange()
     }
   }
 
   saveFeatures() {
     const { features, updatedFeatures } = this.state
     this.props.onSave(features.concat(updatedFeatures))
-  }
-
-  onChange() {
-    // let { features, updatedFeatures } = this.state
-    // updatedFeatures.forEach((feature) => {
-    //   features.push(feature)
-    // })
-    // let selectedFeaturesCount = 0
-    // TODO get latest from server and normalize the reponse
-    // updatedFeatures.forEach((feature) => {
-    //   if(feature.custom) {
-    //     feature.selected = true
-    //     feature.category = 'Custom Features'
-    //     features.push(feature)
-    //     selectedFeaturesCount++
-    //   } else {
-    //     features.forEach((vmFeature) => {
-    //       if(feature.name === vmFeature.name) {
-    //         vmFeature.selected = true
-    //         vmFeature.notes = feature.notes
-    //         selectedFeaturesCount++
-    //       }
-    //     })
-    //   }
-    // })
-    // const featuresDefined = selectedFeaturesCount > 0
   }
 
   customNameUnique(customFeature) {
@@ -450,7 +412,8 @@ class FeaturePicker extends Component {
                 showCutsomFeatureForm={ showCutsomFeatureForm }
                 onAddFeature={ this.applyFeature }
                 onRemoveFeature={ this.removeFeature }
-                onAddCustomFeature={ this.addCustomFeature } />
+                onAddCustomFeature={ this.addCustomFeature }
+              />
               <FeaturePreview feature={ activeFeature } addingCustomFeature={ addingCustomFeature } />
             </li>
             <li className="flex middle space-between">
