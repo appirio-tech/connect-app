@@ -16,48 +16,49 @@ class CreateView extends Component {
   constructor(props) {
     super(props)
     this.createProject = this.createProject.bind(this)
+    this.handleSelect = this.handleSelect.bind(this)
+  }
+
+  componentWillMount() {
+    this.setState({currentTab: 1})
   }
 
   componentWillUpdate(nextProps) {
-    if (!nextProps.isLoading &&
-        nextProps.project.id) {
+    if (!nextProps.processing && !nextProps.error && nextProps.project.id) {
       this.props.router.push('/projects/' + nextProps.project.id )
     }
   }
 
-  handleSelect(index, last) {
-    console.log('SelectedTab: ' + index, ', LastTab: ' + last)
-  }
-
   createProject(val) {
-    console.log('creating project', val)
     this.props.createProject(val.newProject)
   }
 
-  switchTab(val) {
-    this.props.currentTab = val
+  handleSelect(index) {
+    this.setState({currentTab: index})
   }
 
   renderWithTabs() {
+    const { error, processing } = this.props
     return (
-      <Tabs defaultActiveKey={1}>
+      <Tabs defaultActiveKey={this.state.currentTab} onSelect={this.handleSelect}>
         <Tab eventKey={1} title="App Project">
-          <AppProjectForm submitHandler={this.createProject} />
+          <AppProjectForm processing={processing} error={error} submitHandler={this.createProject} />
         </Tab>
         <Tab eventKey={2} title="Work Project">
-          <GenericProjectForm submitHandler={this.createProject} />
+          <GenericProjectForm processing={processing} error={error} submitHandler={this.createProject} />
         </Tab>
       </Tabs>
     )
   }
 
   render() {
+    const { error, processing } = this.props
     let content = null
     if (_.indexOf(this.props.userRoles, ROLE_CONNECT_MANAGER) > -1 ||
         _.indexOf(this.props.userRoles, ROLE_ADMINISTRATOR) > -1 ) {
       content = this.renderWithTabs()
     } else {
-      content = <AppProjectForm submitHandler={this.createProject}/>
+      content = <AppProjectForm processing={processing} error={error} submitHandler={this.createProject}/>
     }
     return (
       <section className="content">
@@ -71,17 +72,13 @@ class CreateView extends Component {
 }
 
 CreateView.propTypes = {
-  userRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
-  currentTab: PropTypes.number.isRequired
-}
-
-CreateView.defaultProps = {
-  currentTab: 1
+  userRoles: PropTypes.arrayOf(PropTypes.string).isRequired
 }
 
 const mapStateToProps = ({projectState, loadUser }) => ({
   userRoles: loadUser.user.roles,
-  isLoading: projectState.isLoading,
+  processing: projectState.processing,
+  error: projectState.error,
   project: projectState.project
 })
 const actionCreators = { createProject }

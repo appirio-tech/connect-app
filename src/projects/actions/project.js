@@ -1,5 +1,5 @@
 import { getProjectById, createProject as createProjectAPI, updateProject as updateProjectAPI } from '../../api/projects'
-import { LOAD_PROJECT, CLEAR_LOADED_PROJECT, UPDATE_PROJECT } from '../../config/constants'
+import { LOAD_PROJECT, CREATE_PROJECT, CLEAR_LOADED_PROJECT, UPDATE_PROJECT } from '../../config/constants'
 
 
 export function loadProject(projectId) {
@@ -22,7 +22,7 @@ export function clearLoadedProject() {
 export function createProject(newProject) {
   return (dispatch) => {
     return dispatch({
-      type: LOAD_PROJECT,
+      type: CREATE_PROJECT,
       payload: createProjectAPI(newProject)
     })
   }
