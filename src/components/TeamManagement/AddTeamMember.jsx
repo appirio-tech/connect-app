@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react'
 import AutoCompleteInput from './AutoCompleteInput'
-// import MemberAutoSuggest from './MemberAutoSuggest'
 import cn from 'classnames'
 import { Icons } from 'appirio-tech-react-components'
 
@@ -35,11 +34,11 @@ const AddTeamMember = (props) => {
         <div className="modal-body">
           <div className="modal-inline-form">
             <AutoCompleteInput {...props} />
-              <button
-                className="tc-btn tc-btn-primary tc-btn-md"
-                disabled={!selectedNewMember}
-                onClick={onConfirmAddMember}
-              >Add</button>
+            <button
+              className="tc-btn tc-btn-primary tc-btn-md"
+              disabled={!selectedNewMember}
+              onClick={onConfirmAddMember}
+            >Add</button>
           </div>
           {error && <p className="error-message">
             {error}
