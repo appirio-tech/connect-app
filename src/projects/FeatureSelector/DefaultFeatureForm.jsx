@@ -51,8 +51,8 @@ class DefaultFeatureForm extends Component {
     const _debouncedOnChange = _.debounce(this.onSave, 5000, { trailing: true, maxWait: 10000 })
     return (
       <div className="feature-form">
-        <div className="feature-title-row">
-          <span className="title">{featureDesc.title}</span>
+        <div className="feature-title-row flex space-between">
+          <h3 className="title">{featureDesc.title}</h3>
           <SwitchButton
             disabled={!isEdittable}
             onChange={ this.toggleFeature }
@@ -60,15 +60,15 @@ class DefaultFeatureForm extends Component {
             checked={isActive ? 'checked' : null }
           />
         </div>
-        <div className="content">
-          <p>{ featureDesc.description }</p>
+        <div className="feature-form-content">
+          <p className="feature-description">{ featureDesc.description }</p>
           {
             isActive ?
               <Formsy.Form className="predefined-feature-form" disabled={!isEdittable} onChange={ _debouncedOnChange }>
                 <TCFormFields.Textarea
                   name="notes"
                   label="Describe your objectives for creating this application"
-                  wrapperClass="row"
+                  wrapperClass="feature-notes"
                   placeholder="Notes..."
                   value={featureData.notes}
                 />
