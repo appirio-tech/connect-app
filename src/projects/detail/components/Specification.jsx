@@ -202,7 +202,6 @@ class ProjectSpecification extends Component {
 
   componentWillMount() {
     this.setState({
-      showFeaturesDialog : false,
       isMember: this.isCurrentUserMember(this.props)
     })
   }
@@ -215,20 +214,12 @@ class ProjectSpecification extends Component {
     this.setState({isMember: this.isCurrentUserMember(nextProps)})
   }
 
-  showFeaturesDialog() {
-    this.setState({ showFeaturesDialog: true })
-  }
-
-  hideFeaturesDialog() {
-    this.setState({ showFeaturesDialog : false })
-  }
-
   saveProject(model, resetForm, invalidateForm) { // eslint-disable-line no-unused-vars
     this.props.updateProject(this.props.project.id, model)
   }
 
   render() {
-    const { isMember, showFeaturesDialog } = this.state
+    const { isMember } = this.state
     const { project } = this.props
     return (
       <section className="two-col-content content">

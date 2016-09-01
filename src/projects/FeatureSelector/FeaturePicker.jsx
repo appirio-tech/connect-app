@@ -411,7 +411,8 @@ FeaturePicker.AVAILABLE_FEATURES = AVAILABLE_FEATURES
 FeaturePicker.ALL_FEATURES_MAP = _.keyBy(AVAILABLE_FEATURES, 'id')
 
 FeaturePicker.PropTypes = {
-  features: PropTypes.arrayOf(PropTypes.object).isRequired
+  features: PropTypes.arrayOf(PropTypes.object).isRequired,
+  idEdittable: PropTypes.bool.isRequired
 }
 
 FeaturePicker.defaultProps = {

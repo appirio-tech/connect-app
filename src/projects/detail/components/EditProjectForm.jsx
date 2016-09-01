@@ -100,7 +100,7 @@ class EditProjectForm extends Component {
           className="feature-selection-dialog"
           onRequestClose={ this.hideFeaturesDialog }
         >
-          <FeaturePicker features={ _.get(project, 'details.appDefinition.features.value', []) } onSave={ this.saveFeatures }/>
+          <FeaturePicker features={ _.get(project, 'details.appDefinition.features.value', []) } isEdittable={isEdittable} onSave={ this.saveFeatures }/>
           <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
             <Icons.XMarkIcon />
           </div>
@@ -113,7 +113,7 @@ class EditProjectForm extends Component {
 EditProjectForm.propTypes = {
   project: PropTypes.object.isRequired,
   sections: PropTypes.arrayOf(PropTypes.object).isRequired,
-  isEdittable: PropTypes.bool.isReqiured,
+  isEdittable: PropTypes.bool.isRequired,
   submitHandler: PropTypes.func.isRequired
 }
 
