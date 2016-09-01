@@ -22,6 +22,7 @@ class EditProjectForm extends Component {
 
   componentWillMount() {
     this.setState({
+      isFeaturesDirty: false,
       project: Object.assign({}, this.props.project),
       canSubmit: false,
       showFeaturesDialog: false
@@ -31,7 +32,8 @@ class EditProjectForm extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       project: Object.assign({}, nextProps.project),
-      canSubmit: false
+      canSubmit: false,
+      isFeaturesDirty: false
     })
   }
 
@@ -62,14 +64,18 @@ class EditProjectForm extends Component {
       seeAttached: this.state.project.details.appDefinition.features.seeAttached
     }
     this.setState(update(this.state, {
+      isFeaturesDirty: { $set: true },
       project: { details: { appDefinition: { features: { $set: obj } } } },
       canSubmit: { $set: true }
     }))
-    const details = update(this.state.project.details, { appDefinition: { features: { $set: obj }}})
-    this.props.submitHandler({ details })
+    // const details = update(this.state.project.details, { appDefinition: { features: { $set: obj }}})
+    // this.props.submitHandler({ details })
   }
 
   submit(model) {
+    if (this.state.isFeaturesDirty) {
+      model.details.appDefinition.features = this.state.project.details.appDefinition.features
+    }
     this.props.submitHandler(model)
   }
 

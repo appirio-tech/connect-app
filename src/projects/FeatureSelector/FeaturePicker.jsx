@@ -246,9 +246,9 @@ class FeaturePicker extends Component {
     this.props.onSave(newState.activeFeatureList)
   }
 
-  removeFeature(feature) {
+  removeFeature(featureId) {
     // lookup index
-    const idx = _.findIndex(this.state.activeFeatureList, f => f.id === feature.id )
+    const idx = _.findIndex(this.state.activeFeatureList, f => f.id === featureId )
     const newState = update(this.state, {
       activeFeatureCount: {$set: this.state.activeFeatureCount - 1},
       activeFeatureList: { $splice: [[idx, 1]] }

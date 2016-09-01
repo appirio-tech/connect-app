@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
-import { Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
+import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 
 require('./FeatureForm.scss')
 
@@ -9,11 +9,19 @@ class DefaultFeatureForm extends Component {
   constructor(props) {
     super(props)
     this.toggleFeature = this.toggleFeature.bind(this)
-    this.onSave = this.onSave.bind(this)
+    this.onChange = this.onChange.bind(this)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !(_.isEqual(nextProps.featureData, this.props.featureData) &&
+      _.isEqual(nextProps.featureDesc, this.props.featureDesc))
   }
 
   componentWillMount() {
-    this.componentWillReceiveProps(this.props)
+    this.setState({
+      data: this.props.featureData || {},
+      isActive: !!this.props.featureData
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -40,7 +48,7 @@ class DefaultFeatureForm extends Component {
     }
   }
 
-  onSave(data) {
+  onChange(data) {
     const { featureData } = this.props
     this.props.updateFeature(_.merge({}, featureData, data))
   }
@@ -48,17 +56,27 @@ class DefaultFeatureForm extends Component {
   render() {
     const { featureDesc, featureData, isEdittable } = this.props
     const { isActive } = this.state
-    const _debouncedOnChange = _.debounce(this.onSave, 5000, { trailing: true, maxWait: 10000 })
+    const _debouncedOnChange = _.debounce(this.onChange, 2000, { trailing: true, maxWait: 10000 })
     return (
       <div className="feature-form">
         <div className="feature-title-row">
           <span className="title">{featureDesc.title}</span>
-          <SwitchButton
-            disabled={!isEdittable}
-            onChange={ this.toggleFeature }
-            name="featue-active"
-            checked={isActive ? 'checked' : null }
-          />
+            {/*
+            <SwitchButton
+              disabled={!isEdittable}
+              onChange={ this.toggleFeature }
+              name="featue-active"
+              {...checkedProps}
+            />
+            */}
+            <Formsy.Form >
+            <TCFormFields.Checkbox
+              name="isActive"
+              value={isActive}
+              onChange={this.toggleFeature}
+            />
+            </Formsy.Form>
+
         </div>
         <div className="content">
           <p>{ featureDesc.description }</p>
