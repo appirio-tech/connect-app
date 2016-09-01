@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
-import { Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
+import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 
 require('./FeatureForm.scss')
 
@@ -46,12 +46,12 @@ class CustomFeatureForm extends Component {
   }
 
   render() {
-    const { featureDesc, featureData, isEdittable } = this.props
-    const { isActive } = this.state
+    const { featureData, isEdittable } = this.props
+    // const { isActive } = this.state
     return (
       <div className="feature-form">
         <div className="feature-title-row">
-          <span className="title">{featureData.title || Define a new feature}</span>
+          <span className="title">{featureData.title || 'Define a new feature'}</span>
         </div>
         <div className="content">
           <Formsy.Form className="predefined-feature-form" disabled={!isEdittable} onValidSubmit={ this.onSave }>
