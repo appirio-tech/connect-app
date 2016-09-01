@@ -214,13 +214,15 @@ class ProjectSpecification extends Component {
     this.setState({isMember: this.isCurrentUserMember(nextProps)})
   }
 
-  saveProject(model, resetForm, invalidateForm) { // eslint-disable-line no-unused-vars
+  saveProject(model) {
+    // compare old & new
     this.props.updateProject(this.props.project.id, model)
   }
 
   render() {
     const { isMember } = this.state
     const { project } = this.props
+    
     return (
       <section className="two-col-content content">
         <div className="container">

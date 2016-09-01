@@ -216,99 +216,12 @@ class FeaturePicker extends Component {
     this.updateSelectedFeature = this.updateSelectedFeature.bind(this)
   }
 
-  /*
-  toggleDefineFeatures() {
-    this.setState({
-      activeFeature : null,
-      addingCustomFeature : true,
-      showCutsomFeatureForm : !this.state.showCutsomFeatureForm
-    })
-  }
-
-  activateFeature(feature) {
-    this.setState({
-      activeFeature : feature,
-      showCutsomFeatureForm : false,
-      addingCustomFeature : false
-    })
-  }
-
-  applyFeature(submittedFeature) {
-    const { activeFeature, updatedFeatures } = this.state
-    submittedFeature.title = activeFeature.title
-    submittedFeature.description = activeFeature.description
-
-    updatedFeatures.push(submittedFeature)
-    this.forceUpdate()
-  }
-
-  // removeFeature() {
-  //   const { updatedFeatures, activeFeature } = this.state
-  //   updatedFeatures.forEach((feature, index) => {
-  //     if(feature.title === activeFeature.title) {
-  //       // feature.selected = false
-  //       updatedFeatures.splice(index, 1)
-  //     }
-  //   })
-  //
-  //   this.setState({ activeFeature : null })
-  //   // this.onChange()
-  // }
-
-  addCustomFeature(model) {
-    const { updatedFeatures } = this.state
-    const valid = model.title && model.description && this.customNameUnique(model)
-
-    if (valid) {
-      const customFeature = _.assign({}, customFeatureTemplate, model)
-      model.custom = true
-      updatedFeatures.push(model)
-      this.setState({
-        activeFeature : customFeature,
-        addingCustomFeature : false,
-        showCutsomFeatureForm : false
-      })
-    }
-  }
-
-  saveFeatures() {
-    debugger
-    const { features, updatedFeatures } = this.state
-    this.props.onSave(features.concat(updatedFeatures))
-  }
-
-  customNameUnique(customFeature) {
-    const { features } = this.state
-    // let featureTitleError = false
-    let unique = true
-
-    features.forEach((feature) => {
-      if (customFeature.title && customFeature.title.toLowerCase() === feature.title.toLowerCase()) {
-        // featureTitleError = true
-        unique = false
-      }
-    })
-
-    return unique
-  }
-  */
-  //----------------------------------------
-
   componentWillMount() {
     this.setState({
       activeFeatureList: this.props.features,
       activeFeatureCount: this.props.features.length
     })
   }
-  // componentWillReceiveProps(nextProps) {
-  //   this.setState({
-  //     selectedFeatureId: null,
-  //     activeFeatureCount: nextProps.features.length,
-  //     showCustomFeatureForm: false,
-  //     addingCustomFeature: false,
-  //     activeFeatureList: nextProps.features
-  //   })
-  // }
 
   toggleFeature(featureId) {
     const idx = _.findIndex(this.state.activeFeatureList, f => f.id === featureId)
@@ -351,6 +264,7 @@ class FeaturePicker extends Component {
 
   render() {
     const { selectedFeatureId, activeFeatureList, activeFeatureCount, addingCustomFeature  } = this.state
+    const { isEdittable } = this.props
     const selectedFeature = _.find(AVAILABLE_FEATURES, f => f.id === selectedFeatureId )
     const selectedFeatureData = _.find(activeFeatureList, f => f.id === selectedFeatureId )
     const renderFeatureCategory = (category, idx) => {
@@ -388,7 +302,7 @@ class FeaturePicker extends Component {
           <div className="contents flex column flex-grow">
             { selectedFeatureId ?
                  <DefaultFeatureForm
-                   isEdittable
+                   isEdittable={isEdittable}
                    featureDesc={selectedFeature}
                    featureData={selectedFeatureData}
                    updateFeature={this.updateSelectedFeature}

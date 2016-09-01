@@ -18,12 +18,12 @@ class EditProjectForm extends Component {
     this.saveFeatures = this.saveFeatures.bind(this)
     this.resetFeatures = this.resetFeatures.bind(this)
     this.submit = this.submit.bind(this)
+    this.onFormChange = this.onFormChange.bind(this)
   }
 
   componentWillMount() {
     this.setState({
       project: Object.assign({}, this.props.project),
-      isFeaturesDirty: false,
       canSubmit: false,
       showFeaturesDialog: false
     })
@@ -32,7 +32,6 @@ class EditProjectForm extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       project: Object.assign({}, nextProps.project),
-      isFeaturesDirty: false,
       canSubmit: false
     })
   }
@@ -54,29 +53,33 @@ class EditProjectForm extends Component {
     this.setState({ showFeaturesDialog: false })
   }
 
-  saveFeatures(features) {
-    const obj = { value: features, seeAttached: false }
-    this.setState(update(this.state, {
-      project: { details: { appDefinition: { features: { $set: obj } } } },
-      isFeaturesDirty: { $set: true },
-      canSubmit: { $set: true }
-    }))
-  }
-
   resetFeatures() {
     this.saveFeatures([])
   }
 
-  submit(model, resetForm, invalidateForm) {
-    if (this.state.isFeaturesDirty) {
-      model.details.appDefinition.features.value = this.state.project.details.appDefinition.features.value
+  saveFeatures(features) {
+    const obj = {
+      value: features,
+      seeAttached: this.state.project.details.appDefinition.features.seeAttached
     }
-    this.props.submitHandler(model, resetForm, invalidateForm)
+    this.setState(update(this.state, {
+      project: { details: { appDefinition: { features: { $set: obj } } } },
+      canSubmit: { $set: true }
+    }))
+    const details = update(this.state.project.details, { appDefinition: { features: { $set: obj }}})
+    this.props.submitHandler({ details })
   }
+
+  submit(model) {
+    this.props.submitHandler(model)
+  }
+
 
   render() {
     const { isEdittable, sections } = this.props
     const { project } = this.state
+    const _debouncedFormSubmit = _.debounce(this.submit, 1500, { maxWait: 10000, trailing: true })
+    const _debouncedSaveFeatures = _.debounce(this.saveFeatures, 1500, { maxWait: 10000, trailing: true })
     const renderSection = (section, idx) => (
       <SpecSection
         key={idx}
@@ -89,10 +92,18 @@ class EditProjectForm extends Component {
 
     return (
       <div>
-        <Formsy.Form onSubmit={this.submit} onValid={this.enableButton} disabled={!isEdittable} onInvalid={this.disableButton}>
+        <Formsy.Form
+          ref="form"
+          onValidSubmit={_debouncedFormSubmit}
+          onValid={this.enableButton}
+          disabled={!isEdittable}
+          onInvalid={this.disableButton}
+        >
           {sections.map(renderSection)}
           <div className="button-area">
-            <button className="tc-btn tc-btn-primary tc-btn-md" type="submit" disabled={!this.state.canSubmit}>Save Changes</button>
+            <button className="tc-btn tc-btn-primary tc-btn-md"
+              type="submit" disabled={!this.state.canSubmit}
+            >Save Changes</button>
           </div>
         </Formsy.Form>
         <Modal
@@ -100,7 +111,10 @@ class EditProjectForm extends Component {
           className="feature-selection-dialog"
           onRequestClose={ this.hideFeaturesDialog }
         >
-          <FeaturePicker features={ _.get(project, 'details.appDefinition.features.value', []) } isEdittable={isEdittable} onSave={ this.saveFeatures }/>
+          <FeaturePicker
+            features={ _.get(project, 'details.appDefinition.features.value', []) }
+            isEdittable={isEdittable} onSave={ this.saveFeatures }
+          />
           <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
             <Icons.XMarkIcon />
           </div>

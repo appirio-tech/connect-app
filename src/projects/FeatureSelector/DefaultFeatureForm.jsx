@@ -48,6 +48,7 @@ class DefaultFeatureForm extends Component {
   render() {
     const { featureDesc, featureData, isEdittable } = this.props
     const { isActive } = this.state
+    const _debouncedOnChange = _.debounce(this.onSave, 5000, { trailing: true, maxWait: 10000 })
     return (
       <div className="feature-form">
         <div className="feature-title-row">
@@ -63,7 +64,7 @@ class DefaultFeatureForm extends Component {
           <p>{ featureDesc.description }</p>
           {
             isActive ?
-              <Formsy.Form className="predefined-feature-form" disabled={!isEdittable} onValidSubmit={ this.onSave }>
+              <Formsy.Form className="predefined-feature-form" disabled={!isEdittable} onChange={ _debouncedOnChange }>
                 <TCFormFields.Textarea
                   name="notes"
                   label="Describe your objectives for creating this application"
@@ -71,7 +72,6 @@ class DefaultFeatureForm extends Component {
                   placeholder="Notes..."
                   value={featureData.notes}
                 />
-                <button type="submit" className="tc-btn tc-btn-primary tc-btn-md" disabled={!isEdittable}>Save</button>
               </Formsy.Form>
             : <noscript />
           }
