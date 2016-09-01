@@ -2,13 +2,9 @@
 
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import Modal from 'react-modal'
 import _ from 'lodash'
-import update from 'react-addons-update'
-import { Icons } from 'appirio-tech-react-components'
 
 import ProjectSpecSidebar from './ProjectSpecSidebar'
-import DefineFeature from '../../FeatureSelector/DefineFeature'
 import EditProjectForm from './EditProjectForm'
 import { updateProject } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
@@ -49,7 +45,7 @@ const sections = [
             description: 'Please list all the features you would like in your application. You can use our wizard to pick from common features or define your own.',
             // type: 'see-attached-features',
             type: 'features',
-            fieldName: 'details.features'
+            fieldName: 'details.appDefinition.features'
           }
         ]
       },
@@ -86,10 +82,10 @@ const sections = [
             icon: 'feaure-placeholder',
             title: 'What font style do you prefer? (Pick one)',
             description: 'The typography used in your designs will fit within these broad font styles',
-            type: 'radio-group',
+            type: 'tiled-radio-group',
             options: [
-              {value: 'serif', label: 'Serif'},
-              {value: 'sanSerif', label: 'Sans Serif'}
+              {value: 'serif', title: 'Serif', icon: '', desc: 'formal, old style'},
+              {value: 'sanSerif', title: 'Sans Serif', icon: '', desc: 'clean, modern, informal'}
             ],
             fieldName: 'details.designSpecification.fontStyle'
           },
@@ -109,13 +105,13 @@ const sections = [
           },
           {
             icon: 'feaure-placeholder',
-            title: 'What icon style do you prefer',
+            title: 'What icon style do you prefer? (Pick one)',
             description: 'Icons within your designs will follow these styles',
-            type: 'radio-group',
+            type: 'tiled-radio-group',
             options: [
-              {value: 'flatColor', label: 'Flat Color'},
-              {value: 'thinLine', label: 'Thin Line'},
-              {value: 'solidLine', label: 'Solid Line'}
+              {value: 'flatColor', title: 'Flat Color', icon: '', desc: 'playful'},
+              {value: 'thinLine', title: 'Thin Line', icon: '', desc: 'modern'},
+              {value: 'solidLine', title: 'Solid Line', icon: '', desc: 'classic'}
             ],
             fieldName: 'details.designSpecification.iconStyle'
           }
@@ -194,7 +190,6 @@ const sections = [
   }
 ]
 
-
 // This handles showing a spinner while the state is being loaded async
 const enhance = spinnerWhileLoading(props => !props.processing)
 const EnhancedEditProjectForm = enhance(EditProjectForm)
@@ -202,21 +197,21 @@ const EnhancedEditProjectForm = enhance(EditProjectForm)
 class ProjectSpecification extends Component {
   constructor(props) {
     super(props)
-    this.showFeaturesDialog = this.showFeaturesDialog.bind(this)
-    this.hideFeaturesDialog = this.hideFeaturesDialog.bind(this)
     this.saveProject = this.saveProject.bind(this)
   }
 
   componentWillMount() {
-    this.setState({ showFeaturesDialog : false })
+    this.setState({
+      isMember: this.isCurrentUserMember(this.props)
+    })
   }
 
-  showFeaturesDialog() {
-    this.setState(update(this.state, {$merge: { showFeaturesDialog: true } }))
+  isCurrentUserMember({currentUserId, project}) {
+    return project && !!_.find(project.members, m => m.userId === currentUserId)
   }
 
-  hideFeaturesDialog() {
-    this.setState(update(this.state, {$merge: { showFeaturesDialog: false } }))
+  componentWillReceiveProps(nextProps) {
+    this.setState({isMember: this.isCurrentUserMember(nextProps)})
   }
 
   saveProject(model, resetForm, invalidateForm) { // eslint-disable-line no-unused-vars
@@ -224,26 +219,22 @@ class ProjectSpecification extends Component {
   }
 
   render() {
+    const { isMember } = this.state
+    const { project } = this.props
     return (
       <section className="two-col-content content">
         <div className="container">
-          <Modal
-            isOpen={ this.state.showFeaturesDialog }
-            className="feature-selection-dialog"
-            onRequestClose={ this.hideFeaturesDialog }
-          >
-            <DefineFeature />
-            <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
-              <Icons.XMarkIcon />
-            </div>
-          </Modal>
-
           <div className="left-area">
-            <ProjectSpecSidebar project={this.props.project} sections={sections}/>
+            <ProjectSpecSidebar project={project} sections={sections}/>
           </div>
 
           <div className="right-area">
-            <EnhancedEditProjectForm project={this.props.project} sections={sections} submitHandler={this.saveProject} />
+            <EnhancedEditProjectForm
+              project={project}
+              sections={sections}
+              isEdittable={isMember}
+              submitHandler={this.saveProject}
+            />
           </div>
 
         </div>
@@ -261,10 +252,11 @@ ProjectSpecification.propTypes = {
   ])
 }
 
-const mapStateToProps = ({projectState}) => {
+const mapStateToProps = ({projectState, loadUser}) => {
   return {
     processing: projectState.processing,
-    error: projectState.error
+    error: projectState.error,
+    currentUserId: parseInt(loadUser.user.id)
   }
 }
 

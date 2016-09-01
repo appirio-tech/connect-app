@@ -3,23 +3,27 @@ import seeAttachedWrapperField from './SeeAttachedWrapperField'
 import { TCFormFields } from 'appirio-tech-react-components'
 import _ from 'lodash'
 
-import FeatureList from '../../../components/FeatureList/FeatureList'
-import FeatureIcons from '../../../components/FeatureList/FeatureIcons'
+import SpecQuestionList from './SpecQuestionList/SpecQuestionList'
+import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
+import SpecFeatureQuestion from './SpecFeatureQuestion'
 
 // HOC for TextareaInput
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
 
+// HOC for SpecFeatureQuestion
+const SeeAttachedSpecFeatureQuestion = seeAttachedWrapperField(SpecFeatureQuestion)
+
 const getIcon = icon => {
   switch (icon) {
   case 'feature-generic':
-    return <FeatureIcons.Generic />
+    return <SpecQuestionIcons.Generic />
   case 'feature-placeholder':
   default:
-    return <FeatureIcons.Placeholder />
+    return <SpecQuestionIcons.Placeholder />
   }
 }
 
-const SpecQuestions = ({questions, project}) => {
+const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) => {
 
   const renderQ = (q, index) => {
     let child = null
@@ -37,36 +41,44 @@ const SpecQuestions = ({questions, project}) => {
     case 'radio-group':
       child = <TCFormFields.RadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
+    case 'tiled-radio-group':
+      child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
+      break
     case 'checkbox-group':
       child = <TCFormFields.CheckboxGroup name={q.fieldName} label={q.label} value={value} options={q.options} />
       break
     case 'checkbox':
       child = <TCFormFields.Checkbox name={q.fieldName} label={q.label} value={value} />
       break
+    case 'features':
+      child = <SeeAttachedSpecFeatureQuestion name={q.fieldName} value={value} question={ q } resetValue={ resetFeatures } showFeaturesDialog={ showFeaturesDialog } />
+      break
     default:
       child = <noscript />
     }
     return (
-      <FeatureList.Item
+      <SpecQuestionList.Item
         key={index}
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
       >
         {child}
-      </FeatureList.Item>
+      </SpecQuestionList.Item>
     )
   }
 
   return (
-    <FeatureList>
+    <SpecQuestionList>
       {questions.map(renderQ)}
-    </FeatureList>
+    </SpecQuestionList>
   )
 }
 
 SpecQuestions.propTypes = {
   project: PropTypes.object.isRequired,
+  showFeaturesDialog: PropTypes.func.isRequired,
+  resetFeatures: PropTypes.func.isRequired,
   questions: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 
