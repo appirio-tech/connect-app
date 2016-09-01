@@ -12,7 +12,7 @@ class DefaultFeatureForm extends Component {
     this.onChange = this.onChange.bind(this)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     return !(_.isEqual(nextProps.featureData, this.props.featureData) &&
       _.isEqual(nextProps.featureDesc, this.props.featureDesc))
   }
