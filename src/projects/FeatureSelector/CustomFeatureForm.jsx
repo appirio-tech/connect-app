@@ -4,7 +4,7 @@ import { Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-component
 
 require('./FeatureForm.scss')
 
-class DefaultFeatureForm extends Component {
+class CustomFeatureForm extends Component {
 
   constructor(props) {
     super(props)
@@ -51,37 +51,35 @@ class DefaultFeatureForm extends Component {
     return (
       <div className="feature-form">
         <div className="feature-title-row">
-          <span className="title">{featureDesc.title}</span>
-          <SwitchButton
-            disabled={!isEdittable}
-            onChange={ this.toggleFeature }
-            name="featue-active"
-            checked={isActive ? 'checked' : null }
-          />
+          <span className="title">{featureData.title || Define a new feature}</span>
         </div>
         <div className="content">
-          <p>{ featureDesc.description }</p>
-          {
-            isActive ?
-              <Formsy.Form className="predefined-feature-form" disabled={!isEdittable} onValidSubmit={ this.onSave }>
-                <TCFormFields.Textarea
-                  name="notes"
-                  label="Describe your objectives for creating this application"
-                  wrapperClass="row"
-                  placeholder="Notes..."
-                  value={featureData.notes}
-                />
-                <button type="submit" className="tc-btn tc-btn-primary tc-btn-md" disabled={!isEdittable}>Save</button>
-              </Formsy.Form>
-            : <noscript />
-          }
+          <Formsy.Form className="predefined-feature-form" disabled={!isEdittable} onValidSubmit={ this.onSave }>
+            <TCFormFields.TextInput
+              name="title"
+              label="Featue name"
+              validations="minLength:1" required
+              validationError="Feature name is required"
+              wrapperClass="row"
+              placeholder="My awesome feature"
+              value={featureData.title}
+            />
+            <TCFormFields.Textarea
+              name="description"
+              label="Featue description"
+              wrapperClass="row"
+              placeholder="Briefly describe the feature, including how it will be used, and provide examples that will help designers and developers understand it."
+              value={featureData.description}
+            />
+            <button type="submit" className="tc-btn tc-btn-primary tc-btn-md" disabled={!isEdittable}>Save</button>
+          </Formsy.Form>
         </div>
       </div>
     )
   }
 }
 
-DefaultFeatureForm.PropTypes = {
+CustomFeatureForm.PropTypes = {
   isActive: PropTypes.bool.isRequired,
   isEdittable: PropTypes.bool.isRequired,
   featureDesc: PropTypes.object.isRequired,
@@ -91,4 +89,4 @@ DefaultFeatureForm.PropTypes = {
   addFeature: PropTypes.func.isRequired
 }
 
-export default DefaultFeatureForm
+export default CustomFeatureForm

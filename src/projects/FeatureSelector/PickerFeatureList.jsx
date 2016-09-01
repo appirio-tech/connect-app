@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { Icons } from 'appirio-tech-react-components'
 import classNames from 'classnames'
 import _ from 'lodash'
@@ -10,9 +10,11 @@ class PickerFeatureList extends Component {
   }
 
   render() {
-    const { headerText, icon, features, selectedFeatureId, activeFeatureIdList, onSelectFeature } = this.props
+    const { headerText, icon, features, selectedFeatureId, activeFeatureList, onSelectFeature } = this.props
+
+    const allFeatures = features.concat(_.filter(activeFeatureList, f => f.categoryId === 'custom'))
     const renderFeature = (feature, idx) => {
-      const isActive = _.indexOf(activeFeatureIdList, feature.id) > -1
+      const isActive = _.findIndex(activeFeatureList, f => f.id === feature.id) > -1
       const featureClasses = classNames('feature-list-feature', {
         'active-feature' : isActive,
         'selected-feature' : feature.id === selectedFeatureId
@@ -39,7 +41,7 @@ class PickerFeatureList extends Component {
           <h6>{ headerText }</h6>
         </header>
         <ul>
-          { features.map(renderFeature) }
+          { allFeatures.map(renderFeature) }
         </ul>
       </div>
     )
@@ -47,5 +49,7 @@ class PickerFeatureList extends Component {
 }
 
 
-PickerFeatureList.PropTypes = {}
+PickerFeatureList.PropTypes = {
+  activeFeatureList: PropTypes.arrayOf(PropTypes.object).isRequired
+}
 export default PickerFeatureList

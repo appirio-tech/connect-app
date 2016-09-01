@@ -6,7 +6,7 @@ import FileListContainer from './FileListContainer'
 
 
 const SpecSection = props => {
-  const {project, showFeaturesDialog, id, title, description, subSections} = props
+  const {project, resetFeatures, showFeaturesDialog, id, title, description, subSections} = props
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
       <div className="bottom-border-titles">
@@ -37,7 +37,12 @@ const SpecSection = props => {
     }
     case 'questions':
       return (
-        <SpecQuestions showFeaturesDialog={showFeaturesDialog} questions={props.questions} project={project}/>
+        <SpecQuestions
+          showFeaturesDialog={showFeaturesDialog}
+          resetFeatures={resetFeatures}
+          questions={props.questions}
+          project={project}
+        />
       )
     case 'notes':
       return (

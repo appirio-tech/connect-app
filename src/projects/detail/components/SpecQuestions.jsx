@@ -11,7 +11,7 @@ import SpecFeatureQuestion from './SpecFeatureQuestion'
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
 
 // HOC for SpecFeatureQuestion
-// const SeeAttachedSpecFeatureQuestion = seeAttachedWrapperField(SpecFeatureQuestion)
+const SeeAttachedSpecFeatureQuestion = seeAttachedWrapperField(SpecFeatureQuestion)
 
 const getIcon = icon => {
   switch (icon) {
@@ -23,7 +23,7 @@ const getIcon = icon => {
   }
 }
 
-const SpecQuestions = ({questions, project, showFeaturesDialog}) => {
+const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) => {
 
   const renderQ = (q, index) => {
     let child = null
@@ -48,7 +48,7 @@ const SpecQuestions = ({questions, project, showFeaturesDialog}) => {
       child = <TCFormFields.Checkbox name={q.fieldName} label={q.label} value={value} />
       break
     case 'features':
-      child = <SpecFeatureQuestion project={ project } question={ q } showFeaturesDialog={ showFeaturesDialog } />
+      child = <SeeAttachedSpecFeatureQuestion name={q.fieldName} value={value} question={ q } resetValue={ resetFeatures } showFeaturesDialog={ showFeaturesDialog } />
       break
     default:
       child = <noscript />
@@ -74,6 +74,8 @@ const SpecQuestions = ({questions, project, showFeaturesDialog}) => {
 
 SpecQuestions.propTypes = {
   project: PropTypes.object.isRequired,
+  showFeaturesDialog: PropTypes.func.isRequired,
+  resetFeatures: PropTypes.func.isRequired,
   questions: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 

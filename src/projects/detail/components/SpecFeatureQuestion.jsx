@@ -1,25 +1,38 @@
-import _ from 'lodash'
-import React, { PropTypes } from 'react'
+import React, { PropTypes, Component } from 'react'
 import FlattenedFeatureList from '../../FeatureSelector/FlattenedFeatureList'
 
 require('./SpecFeatureQuestion.scss')
 
-const SpecFeatureQuestion = ({ project, question, showFeaturesDialog}) => {
-  return (
-    <div className="add-edit-features">
-      <div className="add-edit-features__added-features">
-        <FlattenedFeatureList addedFeatures={ _.get(project, question.fieldName, []) } />
+class SpecFeatureQuestion extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
+  render() {
+    const { value, showFeaturesDialog } = this.props
+    return (
+      <div className="add-edit-features">
+        <div className="add-edit-features__added-features">
+          <FlattenedFeatureList addedFeatures={ value } />
+        </div>
+        <div className="add-edit-features__header">
+          <button type="button" onClick={ showFeaturesDialog } className="tc-btn-secondary tc-btn-sm">Add / Edit Features</button>
+        </div>
       </div>
-      <div className="add-edit-features__header">
-        <button type="button" onClick={ showFeaturesDialog } className="tc-btn-secondary tc-btn-sm">Add / Edit Features</button>
-      </div>
-    </div>
-  )
+    )
+  }
+}
+
+SpecFeatureQuestion.defaultProps = {
+  value: []
 }
 
 SpecFeatureQuestion.propTypes = {
-  project: PropTypes.object.isRequired,
+  value: PropTypes.arrayOf(PropTypes.object).isRequired,
   question: PropTypes.object.isRequired,
+  resetValue: PropTypes.func.isRequired,
   showFeaturesDialog: PropTypes.func.isRequired
 }
 

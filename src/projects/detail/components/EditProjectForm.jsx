@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import Modal from 'react-modal'
+import _ from 'lodash'
 import update from 'react-addons-update'
 import FeaturePicker from '../../FeatureSelector/FeaturePicker'
 import { Formsy, Icons } from 'appirio-tech-react-components'
@@ -15,24 +16,23 @@ class EditProjectForm extends Component {
     this.showFeaturesDialog = this.showFeaturesDialog.bind(this)
     this.hideFeaturesDialog = this.hideFeaturesDialog.bind(this)
     this.saveFeatures = this.saveFeatures.bind(this)
+    this.resetFeatures = this.resetFeatures.bind(this)
     this.submit = this.submit.bind(this)
   }
 
   componentWillMount() {
     this.setState({
       project: Object.assign({}, this.props.project),
+      isFeaturesDirty: false,
       canSubmit: false,
       showFeaturesDialog: false
     })
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return true
-  }
-
   componentWillReceiveProps(nextProps) {
     this.setState({
       project: Object.assign({}, nextProps.project),
+      isFeaturesDirty: false,
       canSubmit: false
     })
   }
@@ -55,13 +55,22 @@ class EditProjectForm extends Component {
   }
 
   saveFeatures(features) {
+    const obj = { value: features, seeAttached: false }
     this.setState(update(this.state, {
-      project: { details: { appDefinition: { features: { $set: features } } } },
+      project: { details: { appDefinition: { features: { $set: obj } } } },
+      isFeaturesDirty: { $set: true },
       canSubmit: { $set: true }
     }))
   }
 
+  resetFeatures() {
+    this.saveFeatures([])
+  }
+
   submit(model, resetForm, invalidateForm) {
+    if (this.state.isFeaturesDirty) {
+      model.details.appDefinition.features.value = this.state.project.details.appDefinition.features.value
+    }
     this.props.submitHandler(model, resetForm, invalidateForm)
   }
 
@@ -69,29 +78,35 @@ class EditProjectForm extends Component {
     const { sections } = this.props
     const { project } = this.state
     const renderSection = (section, idx) => (
-      <SpecSection key={idx} {...section} project={project} showFeaturesDialog={this.showFeaturesDialog}/>
+      <SpecSection
+        key={idx}
+        {...section}
+        project={project}
+        resetFeatures={this.resetFeatures}
+        showFeaturesDialog={this.showFeaturesDialog}
+      />
     )
 
     return (
-      <Formsy.Form onSubmit={this.submit} onValid={this.enableButton} onInvalid={this.disableButton}>
-        {sections.map(renderSection)}
+      <div>
+        <Formsy.Form onSubmit={this.submit} onValid={this.enableButton} onInvalid={this.disableButton}>
+          {sections.map(renderSection)}
 
-        <div className="button-area">
-          <button className="tc-btn tc-btn-primary tc-btn-md" type="submit" disabled={!this.state.canSubmit}>Save Changes</button>
-        </div>
-
+          <div className="button-area">
+            <button className="tc-btn tc-btn-primary tc-btn-md" type="submit" disabled={!this.state.canSubmit}>Save Changes</button>
+          </div>
+        </Formsy.Form>
         <Modal
           isOpen={ this.state.showFeaturesDialog }
           className="feature-selection-dialog"
           onRequestClose={ this.hideFeaturesDialog }
         >
-          <FeaturePicker features={ project.details.appDefinition.features } onSave={ this.saveFeatures }/>
+          <FeaturePicker features={ _.get(project, 'details.appDefinition.features.value', []) } onSave={ this.saveFeatures }/>
           <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
             <Icons.XMarkIcon />
           </div>
         </Modal>
-
-      </Formsy.Form>
+      </div>
     )
   }
 }
