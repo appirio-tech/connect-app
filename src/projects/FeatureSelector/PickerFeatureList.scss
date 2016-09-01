@@ -2,17 +2,16 @@
 
 .feature-picker-feature-list {
   display         : block;
-  background-color: $tc-gray-neutral-light;
+  background-color: $tc-gray-10;
   width           : 286px;
 
   .feature-list-feature {
+    padding : (2 * $base-unit) (4 * $base-unit);
     .selected-feature-icon {
       visibility: hidden;
     }
     &.active-feature {
-      button {
-        background-color: $tc-gray-neutral-dark;
-      }
+      background-color: $tc-gray-neutral-light;
     }
 
     &.selected-feature {

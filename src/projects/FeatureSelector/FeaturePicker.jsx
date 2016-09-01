@@ -370,8 +370,8 @@ class FeaturePicker extends Component {
 
     return (
       <div className="define-features">
-        <h2><strong>Project Features - {activeFeatureCount || 0} selected</strong></h2>
-        <main className="flex flex-grow">
+        <h2><strong>Project Features - <span className="selected-feature-count">{activeFeatureCount || 0} selected</span></strong></h2>
+        <main className="flex space-between">
           <div className="features flex column">
             <ul className="feature-categories-list">
               { categoriesList.map(renderFeatureCategory) }
@@ -395,7 +395,10 @@ class FeaturePicker extends Component {
                    addFeature={this.addFeature}
                    removeFeature={this.removeFeature}
                  />
-                : <p>Some default text should go here</p>
+                : (<div className="feature-form-instructions">
+                    <h3>Select and define features for your app</h3>
+                    <p>Select from the most popular features, listed on the left, or define your own custom features.</p>
+                  </div>)
               }
           </div>
           <div className="contents flex column flex-grow">
