@@ -59,34 +59,33 @@ class DefaultFeatureForm extends Component {
     const _debouncedOnChange = _.debounce(this.onChange, 2000, { trailing: true, maxWait: 10000 })
     return (
       <div className="feature-form">
-        <div className="feature-title-row">
-          <span className="title">{featureDesc.title}</span>
+        <div className="feature-title-row flex space-between">
+          <h3 className="title">{featureDesc.title}</h3>
             {/*
-            <SwitchButton
-              disabled={!isEdittable}
-              onChange={ this.toggleFeature }
-              name="featue-active"
-              {...checkedProps}
-            />
+              <SwitchButton
+                disabled={!isEdittable}
+                onChange={ this.toggleFeature }
+                name="featue-active"
+                checked={isActive ? 'checked' : null }
+              />
             */}
-            <Formsy.Form >
-            <TCFormFields.Checkbox
-              name="isActive"
-              value={isActive}
-              onChange={this.toggleFeature}
-            />
-            </Formsy.Form>
-
+          <Formsy.Form >
+          <TCFormFields.Checkbox
+            name="isActive"
+            value={isActive}
+            onChange={this.toggleFeature}
+          />
+          </Formsy.Form>
         </div>
-        <div className="content">
-          <p>{ featureDesc.description }</p>
+        <div className="feature-form-content">
+          <p className="feature-description">{ featureDesc.description }</p>
           {
             isActive ?
               <Formsy.Form className="predefined-feature-form" disabled={!isEdittable} onChange={ _debouncedOnChange }>
                 <TCFormFields.Textarea
                   name="notes"
                   label="Describe your objectives for creating this application"
-                  wrapperClass="row"
+                  wrapperClass="feature-notes"
                   placeholder="Notes..."
                   value={featureData.notes}
                 />

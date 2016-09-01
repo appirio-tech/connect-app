@@ -38,22 +38,21 @@ const ProjectSpecSidebar = ({project, sections}) => {
   return (
     <div className="left-area-panel">
       <h4 className="titles gray-font">Specifications</h4>
-
       <div className="list-group">
         <SidebarNav items={navItems} />
       </div>
-
+      <div className="sidebar-section-separator"></div>
       <div className="project-spec-actions">
-        <div className="text">In order to submit your project please fill in
-        all the required information. Once you do that
-        we&quot;ll be able to give you a good estimate.
+        <div className="project-spec-action">
+          <div className="text">In order to submit your project please fill in
+          all the required information. Once you do that
+          we&quot;ll be able to give you a good estimate.
+          </div>
+          <button type="button" disabled href="javascript:" className="tc-btn tc-btn-primary tc-btn-sm">
+            Submit for Review
+          </button>
         </div>
-        <button type="buton" href="javascript:">
-          Submit for Review
-        </button>
-
       </div>
-
     </div>
   )
 }

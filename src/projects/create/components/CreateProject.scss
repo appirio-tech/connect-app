@@ -6,7 +6,6 @@
 
 .content {
   display: block;
-  margin-top:30px;
   overflow:hidden;
   .container {
     display:block;
@@ -21,10 +20,8 @@
       position:absolute;
       right: 20px;
       top: 20px;
-      background: url('../../images/x-mark-big.svg') no-repeat 0 0;
       width: 14px;
       height: 14px;
-      background-size: 14px 14px;
     }
     h2 {
       @include roboto-light;

@@ -16,8 +16,8 @@ class PickerFeatureList extends Component {
     const renderFeature = (feature, idx) => {
       const isActive = _.findIndex(activeFeatureList, f => f.id === feature.id) > -1
       const featureClasses = classNames('feature-list-feature', {
-        'active-feature' : isActive,
-        'selected-feature' : feature.id === selectedFeatureId
+        'active-feature' : feature.id === selectedFeatureId,
+        'selected-feature' : isActive
       })
       const onClick = () => {
         if (feature.id !== selectedFeatureId)
@@ -26,9 +26,9 @@ class PickerFeatureList extends Component {
       return (
         <li key={ idx } className={featureClasses}>
           <a onClick={ onClick } className="clean">
-            <div className="flex">
+            <div className="flex space-between">
               <span>{ feature.title }</span>
-              <span>{ isActive && <Icons.IconUICheckBold fill={'#FB7D22'} />}</span>
+              <span>{ isActive &&  <Icons.IconUICheckBold fill={'#FB7D22'} />}</span>
             </div>
           </a>
         </li>
