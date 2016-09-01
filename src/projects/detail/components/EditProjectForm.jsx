@@ -18,7 +18,6 @@ class EditProjectForm extends Component {
     this.saveFeatures = this.saveFeatures.bind(this)
     this.resetFeatures = this.resetFeatures.bind(this)
     this.submit = this.submit.bind(this)
-    this.onFormChange = this.onFormChange.bind(this)
   }
 
   componentWillMount() {
@@ -78,8 +77,6 @@ class EditProjectForm extends Component {
   render() {
     const { isEdittable, sections } = this.props
     const { project } = this.state
-    const _debouncedFormSubmit = _.debounce(this.submit, 1500, { maxWait: 10000, trailing: true })
-    const _debouncedSaveFeatures = _.debounce(this.saveFeatures, 1500, { maxWait: 10000, trailing: true })
     const renderSection = (section, idx) => (
       <SpecSection
         key={idx}
@@ -94,10 +91,10 @@ class EditProjectForm extends Component {
       <div>
         <Formsy.Form
           ref="form"
-          onValidSubmit={_debouncedFormSubmit}
-          onValid={this.enableButton}
           disabled={!isEdittable}
           onInvalid={this.disableButton}
+          onValid={this.enableButton}
+          onValidSubmit={this.submit}
         >
           {sections.map(renderSection)}
           <div className="button-area">
