@@ -19,7 +19,10 @@ const SeeAttachedWrapperField = ComposedComponent => class extends Component {
     if (field.indexOf('.seeAttached') > -1) {
       // reset wrapped fields value
       if (value && valueRef) {
-        valueRef.resetValue()
+        if (valueRef.resetValue)
+          valueRef.resetValue()
+        else if (valueRef.props.resetValue)
+          valueRef.props.resetValue()
       }
       this.setState(Object.assign({}, { displayComponent: !value}))
     }
@@ -30,7 +33,7 @@ const SeeAttachedWrapperField = ComposedComponent => class extends Component {
       name: `${this.props.name}.seeAttached`,
       value: _.get(this.props.value, 'seeAttached', false)
     }
-    const ccProps = _.merge({}, _.without(this.props, ['name', 'value']), {
+    const ccProps = _.merge({}, _.omit(this.props, ['name', 'value']), {
       name: this.props.name + '.value',
       value: _.get(this.props.value, 'value', undefined),
       onChange: this.onChange
@@ -39,7 +42,7 @@ const SeeAttachedWrapperField = ComposedComponent => class extends Component {
     const label = 'Skip question - I have a document (will upload at end of section)'
 
     return (
-      <div>
+      <div key={this.props.name}>
         {this.state.displayComponent && <ComposedComponent ref={ccProps.name} {...ccProps} />}
         <TCFormFields.Checkbox ref={cb.name} name={cb.name} label={label} onChange={this.onChange} value={cb.value}/>
       </div>

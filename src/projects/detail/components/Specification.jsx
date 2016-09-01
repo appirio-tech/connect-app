@@ -2,13 +2,9 @@
 
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import Modal from 'react-modal'
 import _ from 'lodash'
-import update from 'react-addons-update'
-import { Icons } from 'appirio-tech-react-components'
 
 import ProjectSpecSidebar from './ProjectSpecSidebar'
-import DefineFeature from '../../FeatureSelector/DefineFeature'
 import EditProjectForm from './EditProjectForm'
 import { updateProject } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
@@ -49,7 +45,7 @@ const sections = [
             description: 'Please list all the features you would like in your application. You can use our wizard to pick from common features or define your own.',
             // type: 'see-attached-features',
             type: 'features',
-            fieldName: 'details.features'
+            fieldName: 'details.appDefinition.features'
           }
         ]
       },
@@ -194,7 +190,6 @@ const sections = [
   }
 ]
 
-
 // This handles showing a spinner while the state is being loaded async
 const enhance = spinnerWhileLoading(props => !props.processing)
 const EnhancedEditProjectForm = enhance(EditProjectForm)
@@ -202,8 +197,6 @@ const EnhancedEditProjectForm = enhance(EditProjectForm)
 class ProjectSpecification extends Component {
   constructor(props) {
     super(props)
-    this.showFeaturesDialog = this.showFeaturesDialog.bind(this)
-    this.hideFeaturesDialog = this.hideFeaturesDialog.bind(this)
     this.saveProject = this.saveProject.bind(this)
   }
 
@@ -223,11 +216,11 @@ class ProjectSpecification extends Component {
   }
 
   showFeaturesDialog() {
-    this.setState(update(this.state, {$merge: { showFeaturesDialog: true } }))
+    this.setState({ showFeaturesDialog: true })
   }
 
   hideFeaturesDialog() {
-    this.setState(update(this.state, {$merge: { showFeaturesDialog: false } }))
+    this.setState({ showFeaturesDialog : false })
   }
 
   saveProject(model, resetForm, invalidateForm) { // eslint-disable-line no-unused-vars
@@ -240,17 +233,6 @@ class ProjectSpecification extends Component {
     return (
       <section className="two-col-content content">
         <div className="container">
-          <Modal
-            isOpen={ showFeaturesDialog }
-            className="feature-selection-dialog"
-            onRequestClose={ this.hideFeaturesDialog }
-          >
-            <DefineFeature />
-            <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
-              <Icons.XMarkIcon />
-            </div>
-          </Modal>
-
           <div className="left-area">
             <ProjectSpecSidebar project={project} sections={sections}/>
           </div>

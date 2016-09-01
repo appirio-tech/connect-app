@@ -2,17 +2,6 @@ import _ from 'lodash'
 import React from 'react'
 import SidebarNav from './SidebarNav'
 
-// const calcCompleteness = (project, fields) => {
-//   let completed = 0
-//   const isComplete = field => !_.isEmpty(_.get(project, field, ''))
-//   _.forEach(fields, f => {
-//     if (isComplete(f))
-//       completed += 1
-//   })
-//   return completed / fields.length * 100
-// }
-
-
 const calcProgress = (project, subSection) => {
   if (subSection.id === 'questions') {
     const fields = _.map(subSection.questions, 'fieldName')
@@ -49,6 +38,11 @@ const ProjectSpecSidebar = ({project, sections}) => {
   return (
     <div className="left-area-panel">
       <h4 className="titles gray-font">Specifications</h4>
+
+      <div className="list-group">
+        <SidebarNav items={navItems} />
+      </div>
+
       <div className="project-spec-actions">
         <div className="text">In order to submit your project please fill in
         all the required information. Once you do that
@@ -58,10 +52,6 @@ const ProjectSpecSidebar = ({project, sections}) => {
           Submit for Review
         </button>
 
-      </div>
-
-      <div className="list-group">
-        <SidebarNav items={navItems} />
       </div>
 
     </div>

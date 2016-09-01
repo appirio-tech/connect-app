@@ -32,9 +32,9 @@ const Generic = ({ width = '16px', height = '16px' }) => {
   )
 }
 
-const FeatureIcons = {
+const SpecQuestionIcons = {
   Placeholder,
   Generic
 }
 
-export default FeatureIcons
+export default SpecQuestionIcons
