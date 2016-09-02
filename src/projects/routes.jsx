@@ -5,9 +5,10 @@ import ProjectLayout from './ProjectLayout'
 
 import Projects from './list/components/Projects/Projects'
 
-import ProjectDetail from './detail/components/ProjectDetail'
-import Dashboard     from './detail/components/Dashboard'
-import Specification from './detail/components/Specification'
+import ProjectDetail from './detail/ProjectDetail'
+import Dashboard     from './detail/Dashboard'
+import ProjectMessages from './detail/Messages'
+import ProjectSpecification from './detail/containers/Specification'
 import ProjectToolBar from './detail/components/ProjectToolBar/ProjectToolBar'
 import CreateProjectWizard from './create/components/CreateView'
 import { requiresAuthentication } from '../components/AuthenticatedComponent'
@@ -20,7 +21,8 @@ const projectRoutes = (
     <Route path="create" components={{topbar: null, main: CreateProjectWizard}} />
     <Route path=":projectId" components={{topbar: ProjectToolBar, main: ProjectDetail}} >
       <IndexRoute component={ Dashboard } />
-      <Route path="specification" component={ Specification } />
+      <Route path="specification" component={ ProjectSpecification } />
+      <Route path="messages" component={ ProjectMessages } />
     </Route>
   </Route>
 )

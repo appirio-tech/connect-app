@@ -1,8 +1,8 @@
 
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { loadProjectDashboard } from '../../actions/projectDashboard'
-import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import { loadProjectDashboard } from '../actions/projectDashboard'
+import spinnerWhileLoading from '../../components/LoadingSpinner'
 
 
 // This handles showing a spinner while the state is being loaded async

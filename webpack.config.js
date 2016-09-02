@@ -9,7 +9,7 @@ if (branch === 'qa')     process.env.ENV = 'QA'
 const config = require('appirio-tech-webpack-config')({
   dirname: __dirname,
   entry: {
-    app: ['./src/index']
+    app: ['./src/styles/main.scss', './src/index']
   },
   template: './src/index.html'
 })

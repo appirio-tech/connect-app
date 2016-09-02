@@ -3,9 +3,10 @@ import cn from 'classnames'
 import uncontrollable from 'uncontrollable'
 import './TeamManagement.scss'
 import MemberRow from './MemberRow'
-import AddTeamMember from './AddTeamMember'
+import Panel from '../Panel/Panel'
 import DeleteModal from './DeleteModal'
 import OwnerModal from './OwnerModal'
+import AddTeamMember from './AddTeamMember'
 import Join from './Join'
 import { PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 const userShape = PropTypes.shape({
@@ -35,7 +36,7 @@ const calcMemberPriority = m => {
 const TeamManagement = (props) => {
   const {
     currentUser, members, deletingMember, isAddingTeamMember, onMemberDeleteConfirm, onMemberDelete, isShowJoin,
-    newOwner, onChangeOwner, onChangeOwnerConfirm
+    newOwner, onChangeOwner, onChangeOwnerConfirm, onToggleAddTeamMember
   } = props
   const currentMember = members.filter((member) => member.userId === currentUser.userId)[0]
   const owner = members.filter((member) => member.isPrimary && member.isCustomer)[0]
@@ -51,11 +52,13 @@ const TeamManagement = (props) => {
 
   return (
     <div className="team-management">
-      <div className={cn('panel', {'modal-active': modalActive})}>
+      <Panel className={cn({'modal-active': modalActive})}>
+        {currentMember && <Panel.AddBtn onClick={() => onToggleAddTeamMember(true)}>Create New Link</Panel.AddBtn>}
+
         {modalActive && <div className="modal-overlay"></div>}
-        <div className="panel-title">
+        <Panel.Title>
           Project Team ({members.length})
-        </div>
+        </Panel.Title>
 
         {sortedMembers.map((member) => {
           const _onConfirmDelete = () => {
@@ -104,7 +107,7 @@ const TeamManagement = (props) => {
 
         {canJoin && <Join {...props} isCopilot={currentUser.isCopilot} owner={owner} />}
         {currentMember && <AddTeamMember {...props} />}
-      </div>
+      </Panel>
     </div>
   )
 }

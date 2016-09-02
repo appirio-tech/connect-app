@@ -4,8 +4,8 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
-import ProjectSpecSidebar from './ProjectSpecSidebar'
-import EditProjectForm from './EditProjectForm'
+import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
+import EditProjectForm from '../components/EditProjectForm'
 import { updateProject } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
@@ -222,7 +222,7 @@ class ProjectSpecification extends Component {
   render() {
     const { isMember } = this.state
     const { project } = this.props
-    
+
     return (
       <section className="two-col-content content">
         <div className="container">

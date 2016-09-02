@@ -30,8 +30,8 @@ class ProjectToolBar extends Component {
       },
       {
         //img: require('./nav-projects.svg'),
-        text: 'Sumbissions',
-        link: `/projects/${project.id}/submissions/`
+        text: 'Messages',
+        link: `/projects/${project.id}/messages/`
       }
     ]
     const isCopilotOrManager = !!_.find(userRoles, (r) => {

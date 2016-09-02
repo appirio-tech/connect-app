@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-
 import {
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER,
   PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER
@@ -137,13 +136,39 @@ class TeamManagementContainer extends Component {
     this.props.updateProjectMember(this.props.projectId, member.id, { role: member.role, isPrimary: true })
   }
 
+  anontateMemberProps() {
+    const { members, allMembers } = this.props
+    // fill project members from state.members object
+    return _.map(members, m => {
+      if (!m.userId) return m
+      // map role
+      switch (m.role) {
+      case PROJECT_ROLE_COPILOT:
+        m.isCopilot = true
+        break
+      case PROJECT_ROLE_CUSTOMER:
+        m.isCustomer = true
+        m.isPrimary = m.isPrimary || false
+        break
+      case PROJECT_ROLE_MANAGER:
+        m.isManager = true
+        break
+      }
+      return _.assign({}, m, {
+        photoURL: ''
+      },
+      _.find(allMembers, mem => mem.userId === m.userId))
+    })
+  }
+
   render() {
+    const projectMembers = this.anontateMemberProps()
     return (
       <div>
         <TeamManagement
           {...this.state}
           currentUser={this.props.currentUser}
-          members={this.props.members}
+          members={projectMembers}
           onKeywordChange={this.onKeywordChange}
           onSelectNewMember={this.onSelectNewMember}
           onAddNewMember={this.onAddNewMember}

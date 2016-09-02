@@ -5,7 +5,7 @@
   "scripts": {
     "start": "webpack-dev-server --history-api-fallback --dev --hot --inline --progress --tc --port 3000",
     "build": "webpack --bail --progress --build --tc",
-    "lint": "eslint --format table --ext .js,.jsx .",
+    "lint": "eslint --fix --format table --ext .js,.jsx .",
     "test": "cross-env NODE_ENV=test mocha  --colors --reporter nyan --compilers js:babel-core/register --require ignore-styles --recursive \"./src/**/*.spec.js\"",
     "test:watch": "watch-run -i -p 'src/**/*' npm run test"
   },
@@ -34,6 +34,7 @@
     "axios": "^0.13.1",
     "classnames": "^2.2.3",
     "draft-js": "^0.7.0",
+    "draft-js-export-html": "^0.4.0",
     "filepicker-js": "^2.4.17",
     "filesize": "^3.3.0",
     "formsy-react": "^0.18.1",
