@@ -5,7 +5,7 @@ import { MenuBar, QuickLinks, UserDropdown, Icons
       } from 'appirio-tech-react-components'
 const { TopcoderMobileLogo, IconTcMenuBold, ConnectLogo } = Icons
 
-// properties: username, userImage, domain, mobileMenuUrl, mobileSearchUrl, searchSuggestionsFunc
+// properties: userHandle, userName, userImage, domain, mobileMenuUrl, mobileSearchUrl, searchSuggestionsFunc
 // searchSuggestionsFunc should return a Promise object
 
 class TopBar extends Component {
@@ -23,13 +23,10 @@ class TopBar extends Component {
   }
 
   render() {
-    const username = this.props.username
-    const userImage = this.props.userImage
-    const domain = this.props.domain
-    const mobileMenuUrl = this.props.mobileMenuUrl
-    const homePageUrl = window.location.protocol + '//' +window.location.hostname
+    const { userHandle, userImage, userName, domain, mobileMenuUrl } = this.props
+    const homePageUrl = window.location.protocol + '//' + window.location.hostname
     const logoutLink = 'https://accounts.' + domain + '/logout?retUrl=' + homePageUrl
-    const isLoggedIn = username
+    const isLoggedIn = userHandle
 
     //TODO prepare navigation items according to roles of the user
     const primaryNavigationItems = [
@@ -48,7 +45,7 @@ class TopBar extends Component {
     ]
     const userMenuItems = [
       [
-        { label: 'My Profile', link: '/profile/' + username, id: 0 },
+        { label: 'My Profile', link: '/profile/' + userHandle, id: 0 },
         { label: 'Settings', link: '/settings/profile', id: 1 }
       ],
       [
@@ -77,7 +74,7 @@ class TopBar extends Component {
           <div className="menu-wrap" onClick={this.handleMobileClick}>
             <div className="mobile-wrap"><a href={mobileMenuUrl}><IconTcMenuBold /></a></div>
             { quickLinks }
-            <UserDropdown username={username} userImage={userImage} domain={domain} menuItems={ userMenuItems } forReactRouter/>
+            <UserDropdown userName={ userName } userHandle={userHandle} userImage={userImage} domain={domain} menuItems={ userMenuItems } forReactRouter/>
           </div>
         </div>
       </div>
@@ -86,7 +83,7 @@ class TopBar extends Component {
 }
 
 TopBar.propTypes = {
-  username              : PropTypes.string,
+  userHandle            : PropTypes.string,
   userImage             : PropTypes.string,
   domain                : PropTypes.string.isRequired,
   mobileMenuUrl         : PropTypes.string,
