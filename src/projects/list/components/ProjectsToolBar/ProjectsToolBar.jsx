@@ -5,7 +5,7 @@ import React, {Component} from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { SearchBar, Dropdown, DropdownItem, SwitchButton } from 'appirio-tech-react-components'
-import { projectSuggestions } from '../../actions/loadProjects'
+import { projectSuggestions } from '../../../actions/loadProjects'
 import { Sticky } from 'react-sticky'
 
 const projectTypes = [
