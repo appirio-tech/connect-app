@@ -28,7 +28,7 @@ class PickerFeatureList extends Component {
           <a onClick={ onClick } className="clean">
             <div className="flex space-between">
               <span>{ feature.title }</span>
-              <span>{ isActive &&  <Icons.IconUICheckBold fill={'#FB7D22'} />}</span>
+              <span>{ isActive &&  <Icons.IconUICheckBold width={10} height={10} fill={'#FB7D22'} />}</span>
             </div>
           </a>
         </li>

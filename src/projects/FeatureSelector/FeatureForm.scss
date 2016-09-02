@@ -6,23 +6,27 @@
   .feature-title-row {
     .title {
       @include tc-heading;
+      @include roboto-medium;
     }
   }
 
   .feature-form-content {
     .feature-description {
-      @include tc-label-md;
+      @include tc-label-lg;
       color: $tc-gray-50;
       margin: 4 * $base-unit 0px;
     }
     .predefined-feature-form {
       .feature-notes {
         label {
-          @include tc-label-xs;
+          @include tc-label-md;
+          color: $tc-gray-70;
         }
 
         textarea {
           height: 100px;
+          @include tc-label-lg;
+          color: $tc-black;
         }
       }
     }
