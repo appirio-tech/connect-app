@@ -15,6 +15,8 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
     {isAddingNewLink &&
       <AddLink
         onAdd={(link) => {
+          if (link.address.indexOf('http') !== 0)
+            link.address = `http://${link.address}`
           onAddNewLink(link)
           onAddingNewLink(false)
         }}
@@ -26,11 +28,11 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
 
     {!isAddingNewLink && <div className="panel-links">
       <ul>
-        {links.slice(0, limit).map((link) =>
-          <li key={link.id}>
-            <a href={link.href}>{link.title}</a>
+        {links.slice(0, limit).map((link, idx) =>
+          <li key={idx}>
+            <a href={link.address}>{link.title}</a>
             {canDelete && <div className="buttons">
-              <button onClick={() => onDelete(link)} type="button" className="btn-remove"/>
+              <button onClick={() => onDelete(idx)} type="button" className="btn-remove"/>
             </div>}
           </li>)}
       </ul>

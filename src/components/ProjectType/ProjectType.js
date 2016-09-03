@@ -2,32 +2,41 @@ import React, {PropTypes} from 'react'
 import './ProjectType.scss'
 import PanelProject from '../PanelProject/PanelProject'
 
-const map = {
-  IPHONE: <div key="IPHONE" className="icon icon-iphone">iPhone</div>,
-  IPAD: <div key="IPAD" className="icon icon-ipad">iPad</div>,
-  WEB: <div key="WEB" className="icon icon-web">Web</div>,
-  APPLE_WATCH: <div key="APPLE_WATCH" className="icon icon-apple-watch"> Apple Watch</div>,
-  ANDROID_WEAR: <div  key="ANDROID_WEAR" className="icon icon-android-wear">Android Wear</div>
+const deviceMap = {
+  phone: <div key="IPHONE" className="icon icon-iphone">iPhone</div>,
+  tablet: <div key="IPAD" className="icon icon-ipad">iPad</div>,
+  desktop: <div key="WEB" className="icon icon-web">Web</div>,
+  'apple-watch': <div key="APPLE_WATCH" className="icon icon-apple-watch"> Apple Watch</div>,
+  'android-watch': <div  key="ANDROID_WEAR" className="icon icon-android-wear">Android Wear</div>
 }
 
-const ProjectType = ({types}) => (
+/*eslint-disable camelcase */
+const typeMap = {
+  app_dev: 'Design &amp; Development Project',
+  generic: 'Work Project',
+  visual_design: 'Visual Design Project',
+  visual_prototype: 'Visual Prototype Project'
+}
+/*eslint-enable camelcase */
+const ProjectType = ({type, devices}) => (
   <PanelProject>
     <PanelProject.Heading>
-      Design &amp; Development Project
+      {typeMap[type]}
     </PanelProject.Heading>
     <div className="project-icons">
       <div className="icon-set">
-        {types.slice(0, 3).map((type) => map[type])}
+        {devices.slice(0, 3).map((device) => deviceMap[device])}
       </div>
-      {types.length > 3 && <div className="icon-set">
-        {types.slice(3).map((type) => map[type])}
+      {devices.length > 3 && <div className="icon-set">
+        {devices.slice(3).map((device) => deviceMap[device])}
       </div>}
     </div>
   </PanelProject>
 )
 
 ProjectType.propTypes = {
-  types: PropTypes.arrayOf(PropTypes.oneOf(['IPHONE', 'IPAD', 'WEB', 'APPLE_WATCH', 'ANDROID_WEAR'])).isRequired
+  type: PropTypes.string.isRequired,
+  devices: PropTypes.arrayOf(PropTypes.oneOf(['phone', 'tablet', 'desktop', 'apple-watch', 'android-watch'])).isRequired
 }
 
 export default ProjectType

@@ -33,10 +33,13 @@ class ProjectStatus extends React.Component {
   render() {
     const {status, isOpen, onToggleOpen, onChangeStatus} = this.props
     const options = [
-      {className: 'draft', name: 'Draft', value: 'DRAFT'},
-      {className: 'working', name: 'Working', value: 'WORKING'},
-      {className: 'error', name: 'Stalled', value: 'STALLED'},
-      {className: 'completed', name: 'Completed', value: 'COMPLETED'}
+      {className: 'draft', name: 'Draft', value: 'draft'},
+      {className: 'working', name: 'Working', value: 'active'},
+      {className: 'draft', name: 'In Review', value: 'in_review'},
+      {className: 'working', name: 'Reviewed', value: 'reviewed'},
+      {className: 'completed', name: 'Completed', value: 'completed'},
+      {className: 'error', name: 'Paused', value: 'paused'},
+      {className: 'error', name: 'Cancelled', value: 'cancelled'}
     ]
     const selected = options.filter((opt) => opt.value === status)[0]
     return (
@@ -77,11 +80,10 @@ class ProjectStatus extends React.Component {
   }
 }
 
-
 ProjectStatus.propTypes = {
   isOpen: PropTypes.bool,
   onToggleOpen: PropTypes.func,
-  status: PropTypes.oneOf(['DRAFT', 'WORKING', 'STALLED', 'COMPLETED']).isRequired,
+  status: PropTypes.oneOf(['draft', 'active', 'in_review', 'reviewed', 'completed', 'paused', 'cancelled']).isRequired,
   onChangeStatus: PropTypes.func.isRequired
 }
 

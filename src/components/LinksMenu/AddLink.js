@@ -8,12 +8,12 @@ class AddLink extends React.Component {
 
     const addLink = () => {
       const title = this.refs.title.value
-      const href = this.refs.href.value
-      if (title && href) {
-        onAdd({title, href})
+      const address = this.refs.address.value
+      if (title && address) {
+        onAdd({title, address})
       }
     }
-    
+
     return (
       <Modal onClose={onClose}>
         <Modal.Title>
@@ -27,7 +27,7 @@ class AddLink extends React.Component {
 
           <div className="form-group">
             <label className="tc-label">Address</label>
-            <input className="tc-file-field__inputs" ref="href" type="text" placeholder="https://www.topcoder.com/example"/>
+            <input className="tc-file-field__inputs" ref="address" type="text" placeholder="https://www.topcoder.com/example"/>
           </div>
 
           <div className="button-area center-buttons">

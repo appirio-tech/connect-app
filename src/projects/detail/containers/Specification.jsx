@@ -8,6 +8,7 @@ import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
 import EditProjectForm from '../components/EditProjectForm'
 import { updateProject } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import { Icons } from 'appirio-tech-react-components'
 
 require('./Specification.scss')
 
@@ -84,8 +85,8 @@ const sections = [
             description: 'The typography used in your designs will fit within these broad font styles',
             type: 'tiled-radio-group',
             options: [
-              {value: 'serif', title: 'Serif', icon: '', desc: 'formal, old style'},
-              {value: 'sanSerif', title: 'Sans Serif', icon: '', desc: 'clean, modern, informal'}
+              {value: 'serif', title: 'Serif', icon: Icons.IconTcSpecTypeSerif, iconOptions: { fill: '#00000'}, desc: 'formal, old style'},
+              {value: 'sanSerif', title: 'Sans Serif', icon: Icons.IconTcSpecTypeSerif, iconOptions: { fill: '#00000'}, desc: 'clean, modern, informal'}
             ],
             fieldName: 'details.designSpecification.fontStyle'
           },
@@ -109,9 +110,9 @@ const sections = [
             description: 'Icons within your designs will follow these styles',
             type: 'tiled-radio-group',
             options: [
-              {value: 'flatColor', title: 'Flat Color', icon: '', desc: 'playful'},
-              {value: 'thinLine', title: 'Thin Line', icon: '', desc: 'modern'},
-              {value: 'solidLine', title: 'Solid Line', icon: '', desc: 'classic'}
+              {value: 'flatColor', title: 'Flat Color', icon: Icons.IconTcSpecIconTypeColorHome, iconOptions: { fill: '#00000'}, desc: 'playful'},
+              {value: 'thinLine', title: 'Thin Line', icon: Icons.IconTcSpecIconTypeGlyphHome, iconOptions: { fill: '#00000'}, desc: 'modern'},
+              {value: 'solidLine', title: 'Solid Line', icon: Icons.IconTcSpecIconTypeOutlineHome, iconOptions: { fill: '#00000'}, desc: 'classic'}
             ],
             fieldName: 'details.designSpecification.iconStyle'
           }
@@ -206,10 +207,6 @@ class ProjectSpecification extends Component {
     })
   }
 
-  isCurrentUserMember({currentUserId, project}) {
-    return project && !!_.find(project.members, m => m.userId === currentUserId)
-  }
-
   componentWillReceiveProps(nextProps) {
     this.setState({isMember: this.isCurrentUserMember(nextProps)})
   }
@@ -247,6 +244,7 @@ class ProjectSpecification extends Component {
 
 ProjectSpecification.propTypes = {
   project: PropTypes.object.isRequired,
+  isCurrentUserMember: PropTypes.bool.isRequired,
   processing: PropTypes.bool,
   error: PropTypes.oneOfType([
     PropTypes.bool,

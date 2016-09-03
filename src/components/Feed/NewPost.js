@@ -3,7 +3,39 @@ import {Editor, EditorState, RichUtils} from 'draft-js'
 import {stateToHTML} from 'draft-js-export-html'
 import cn from 'classnames'
 import './draftjs.scss'
+// import { Icons } from 'appirio-tech-react-components'
 
+const styles = [
+  {className: 'bold', style: 'BOLD'},
+  {className: 'italic', style: 'ITALIC'},
+  {className: 'underline', style: 'UNDERLINE'}
+]
+
+const blocks = [
+  {className: 'ordered-list', style: 'ordered-list-item'},
+  {className: 'unordered-list', style: 'unordered-list-item'},
+  {className: 'code', style: 'code-block'},
+  {className: 'quote', style: 'blockquote'}
+]
+
+// const getIcon = (style) => {
+//   switch (style.toLowerCase()) {
+//   case 'bold':
+//     return Icons.IconTcTextBold
+//   case 'italic':
+//     return Icons.IconTcTextItalic
+//   case 'underline':
+//     return Icons.IconTcTextUnderline
+//   case 'ordered-list-item':
+//     return Icons.IconTextListNumbers
+//   case 'unordered-list-item':
+//     return Icons.IconTextListBullet
+//   case 'code-block': // FIXME
+//     return Icons.IconTextListNumbers
+//   case 'blockquote':
+//     return Icons.IconTextQuote
+//   }
+// }
 class NewPost extends React.Component {
 
   constructor(props) {
@@ -44,19 +76,6 @@ class NewPost extends React.Component {
       .getBlockForKey(selection.getStartKey())
       .getType()
 
-    const styles = [
-      {className: 'bold', style: 'BOLD'},
-      {className: 'italic', style: 'ITALIC'},
-      {className: 'underline', style: 'UNDERLINE'}
-    ]
-
-    const blocks = [
-      {className: 'ordered-list', style: 'ordered-list-item'},
-      {className: 'unordered-list', style: 'unordered-list-item'},
-      {className: 'code', style: 'code-block'},
-      {className: 'quote', style: 'blockquote'}
-    ]
-    
     const onPost = () => {
       const title = this.refs.title.value
       const content = stateToHTML(editorState.getCurrentContent())
@@ -66,7 +85,7 @@ class NewPost extends React.Component {
         this.refs.title.value = ''
       }
     }
-    
+
     return (
       <div className="modal action-card">
         <a href="javascript:" className="btn-close"/>
@@ -93,6 +112,7 @@ class NewPost extends React.Component {
               />
               <div className="textarea-footer">
                 <div className="textarea-buttons">
+                  {/* TODO use Icon components */}
                   {styles.map((item) =>
                     <button
                       key={item.style}
@@ -103,6 +123,7 @@ class NewPost extends React.Component {
                       }}
                     />)}
                   <div className="separator"/>
+                  {/* TODO use Icon components */}
                   {blocks.map((item) =>
                     <button
                       key={item.style}
@@ -112,6 +133,7 @@ class NewPost extends React.Component {
                         e.preventDefault()
                       }}
                     />)}
+
                   <div className="separator"/>
                   <button className="attach"/>
                 </div>

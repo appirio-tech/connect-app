@@ -10,8 +10,8 @@ export default class ProjectInfoContainer extends React.Component {
     super(props)
     this.state = {
       canDeleteLinks: true,
-      status: 'DRAFT',
-      types: ['IPHONE', 'IPAD', 'WEB', 'APPLE_WATCH', 'ANDROID_WEAR'],
+      status: 'draft',
+      devices: ['iphone', 'tablet', 'android-watch'],
       duration: {
         percent: 0,
         text: 'Complete specification to get estimate'
@@ -52,13 +52,14 @@ export default class ProjectInfoContainer extends React.Component {
   onDeleteLink(link) {
     this.setState({links: this.state.links.filter((item) => item.id !== link.id)})
   }
-  
+
   render() {
-    const {types, status, duration, budget, links, canDeleteLinks} = this.state
+    const {devices, status, duration, budget, links, canDeleteLinks} = this.state
     return (
       <div>
         <ProjectInfo
-          types={types}
+          type={'app_dev'}
+          devices={devices}
           status={status} onChangeStatus={this.onChangeStatus}
           duration={duration}
           budget={budget}
