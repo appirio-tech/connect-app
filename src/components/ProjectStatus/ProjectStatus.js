@@ -31,7 +31,7 @@ class ProjectStatus extends React.Component {
   }
 
   render() {
-    const {status, isOpen, onToggleOpen, onChangeStatus} = this.props
+    const {status, isOpen, isEdittable, onToggleOpen, onChangeStatus} = this.props
     const options = [
       {className: 'draft', name: 'Draft', value: 'draft'},
       {className: 'working', name: 'Working', value: 'active'},
@@ -49,14 +49,14 @@ class ProjectStatus extends React.Component {
             Status
           </PanelProject.Heading>
           <div
-            onClick={(e) => onToggleOpen(!isOpen, e)}
+            onClick={(e) => isEdittable && onToggleOpen(!isOpen, e)}
             ref="toggleBtn"
             className={cn('status-label', selected.className, {active: isOpen})}
           >
             <i className="status-icon"/>
             {selected.name}
           </div>
-          {isOpen && <dir className="status-dropdown">
+          {isEdittable, isOpen && <dir className="status-dropdown">
             <ul>
               {options.map((item) =>
                 <li key={item.value}>
@@ -82,6 +82,7 @@ class ProjectStatus extends React.Component {
 
 ProjectStatus.propTypes = {
   isOpen: PropTypes.bool,
+  isEdittable: PropTypes.bool.isRequired,
   onToggleOpen: PropTypes.func,
   status: PropTypes.oneOf(['draft', 'active', 'in_review', 'reviewed', 'completed', 'paused', 'cancelled']).isRequired,
   onChangeStatus: PropTypes.func.isRequired

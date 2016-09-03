@@ -27,7 +27,7 @@ class ProjectInfoContainer extends React.Component {
   }
 
   onChangeStatus(status) {
-    this.setState({status})
+    this.props.updateProject({status})
   }
 
   onAddNewLink(link) {
@@ -50,6 +50,7 @@ class ProjectInfoContainer extends React.Component {
     return (
       <div>
         <ProjectInfo
+          isEdittable={isCurrentUserMember}
           type={project.type}
           devices={project.details.devices}
           status={project.status} onChangeStatus={this.onChangeStatus}
