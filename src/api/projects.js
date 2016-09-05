@@ -71,3 +71,10 @@ export function createProject(projectProps) {
       return _.get(resp.data, 'result.content', {})
     })
 }
+
+export function getDirectProjectData(directProjectId) {
+  return axios.get(`${TC_API_URL}/v3/direct/projects/${directProjectId}`)
+    .then(resp => {
+      return resp.data.result.content
+    })
+}

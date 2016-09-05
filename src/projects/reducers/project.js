@@ -1,6 +1,6 @@
 
 import {
-  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_FAILURE,
+  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
   CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT_PENDING, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   ADD_PROJECT_ATTACHMENT_PENDING, ADD_PROJECT_ATTACHMENT_SUCCESS, ADD_PROJECT_ATTACHMENT_FAILURE,
@@ -47,6 +47,22 @@ export const projectState = function (state=initialState, action) {
   case CLEAR_LOADED_PROJECT:
     return Object.assign({}, state, {
       project: {}
+    })
+
+  case LOAD_DIRECT_PROJECT_SUCCESS:
+    return update(state, {
+      project: {
+        budget: { $set: {
+          actualCost: action.payload.actualCost,
+          projectedCost: action.payload.projectedCost,
+          totalBudget: action.payload.totalBudget
+        }},
+        duration: { $set: {
+          actualDuration: action.payload.actualDuration,
+          plannedDuration: action.payload.plannedDuration,
+          projectedDuration: action.payload.projectedDuration,
+        }}
+      }
     })
 
   // Create & Edit project

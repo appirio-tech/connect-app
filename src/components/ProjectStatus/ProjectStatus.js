@@ -5,9 +5,17 @@ import './ProjectStatus.scss'
 import cn from 'classnames'
 import uncontrollable from 'uncontrollable'
 
+const statusOptions = [
+  {className: 'draft', name: 'Draft', value: 'draft'},
+  {className: 'working', name: 'Working', value: 'active'},
+  {className: 'draft', name: 'In Review', value: 'in_review'},
+  {className: 'working', name: 'Reviewed', value: 'reviewed'},
+  {className: 'completed', name: 'Completed', value: 'completed'},
+  {className: 'paused', name: 'Paused', value: 'paused'},
+  {className: 'error', name: 'Cancelled', value: 'cancelled'}
+]
 
 class ProjectStatus extends React.Component {
-
 
   constructor(props) {
     super(props)
@@ -31,17 +39,12 @@ class ProjectStatus extends React.Component {
   }
 
   render() {
-    const {status, isOpen, isEdittable, onToggleOpen, onChangeStatus} = this.props
-    const options = [
-      {className: 'draft', name: 'Draft', value: 'draft'},
-      {className: 'working', name: 'Working', value: 'active'},
-      {className: 'draft', name: 'In Review', value: 'in_review'},
-      {className: 'working', name: 'Reviewed', value: 'reviewed'},
-      {className: 'completed', name: 'Completed', value: 'completed'},
-      {className: 'error', name: 'Paused', value: 'paused'},
-      {className: 'error', name: 'Cancelled', value: 'cancelled'}
-    ]
-    const selected = options.filter((opt) => opt.value === status)[0]
+    const {status, isOpen, currentMemberRole, onToggleOpen, onChangeStatus} = this.props
+
+    const selected = statusOptions.filter((opt) => opt.value === status)[0]
+    const displayOptions = currentMemberRole && isOpen
+      && _.indexOf(['copilot', 'manager'], currentMemberRole) > -1
+
     return (
       <PanelProject>
         <div className="project-status">
@@ -49,16 +52,16 @@ class ProjectStatus extends React.Component {
             Status
           </PanelProject.Heading>
           <div
-            onClick={(e) => isEdittable && onToggleOpen(!isOpen, e)}
+            onClick={(e) => displayOptions && onToggleOpen(!isOpen, e)}
             ref="toggleBtn"
             className={cn('status-label', selected.className, {active: isOpen})}
           >
             <i className="status-icon"/>
             {selected.name}
           </div>
-          {isEdittable, isOpen && <dir className="status-dropdown">
+          {displayOptions && <dir className="status-dropdown">
             <ul>
-              {options.map((item) =>
+              {statusOptions.map((item) =>
                 <li key={item.value}>
                   <a
                     href="javascript:"
@@ -82,7 +85,7 @@ class ProjectStatus extends React.Component {
 
 ProjectStatus.propTypes = {
   isOpen: PropTypes.bool,
-  isEdittable: PropTypes.bool.isRequired,
+  currentMemberRole: PropTypes.string,
   onToggleOpen: PropTypes.func,
   status: PropTypes.oneOf(['draft', 'active', 'in_review', 'reviewed', 'completed', 'paused', 'cancelled']).isRequired,
   onChangeStatus: PropTypes.func.isRequired

@@ -201,37 +201,26 @@ class ProjectSpecification extends Component {
     this.saveProject = this.saveProject.bind(this)
   }
 
-  componentWillMount() {
-    this.setState({
-      isMember: this.isCurrentUserMember(this.props)
-    })
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({isMember: this.isCurrentUserMember(nextProps)})
-  }
-
   saveProject(model) {
     // compare old & new
     this.props.updateProject(this.props.project.id, model)
   }
 
   render() {
-    const { isMember } = this.state
-    const { project } = this.props
+    const { project, isCurrentUserMember, currentMemberRole } = this.props
 
     return (
       <section className="two-col-content content">
         <div className="container">
           <div className="left-area">
-            <ProjectSpecSidebar project={project} sections={sections}/>
+            <ProjectSpecSidebar project={project} sections={sections} currentMemberRole={currentMemberRole} />
           </div>
 
           <div className="right-area">
             <EnhancedEditProjectForm
               project={project}
               sections={sections}
-              isEdittable={isMember}
+              isEdittable={isCurrentUserMember}
               submitHandler={this.saveProject}
             />
           </div>

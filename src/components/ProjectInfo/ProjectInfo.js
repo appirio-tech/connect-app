@@ -4,11 +4,11 @@ import ProjectType from '../ProjectType/ProjectType'
 import ProjectStatus from '../ProjectStatus/ProjectStatus'
 import ProjectProgress from '../ProjectProgress/ProjectProgress'
 
-const ProjectInfo = ({type, devices, isEdittable, status, onChangeStatus, duration, budget}) => (
+const ProjectInfo = ({type, devices, currentMemberRole, status, onChangeStatus, duration, budget}) => (
   <Panel>
     <Panel.Title>Project Info</Panel.Title>
     <ProjectType type={type} devices={devices} />
-  <ProjectStatus isEdittable={isEdittable} status={status} onChangeStatus={onChangeStatus} />
+  <ProjectStatus currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
     <ProjectProgress title="Duration" percent={duration.percent} type="completed">
       {duration.text}
     </ProjectProgress>
@@ -19,7 +19,7 @@ const ProjectInfo = ({type, devices, isEdittable, status, onChangeStatus, durati
 )
 
 ProjectInfo.propTypes = {
-  isEdittable: PropTypes.bool.isRequired,
+  currentMemberRole: PropTypes.string,
   type: PropTypes.string.isRequired,
   devices: PropTypes.array.isRequired,
   status: PropTypes.string.isRequired,

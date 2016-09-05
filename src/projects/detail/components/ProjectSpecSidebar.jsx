@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React from 'react'
+import React, { PropTypes } from 'react'
 import SidebarNav from './SidebarNav'
 
 const calcProgress = (project, subSection) => {
@@ -33,16 +33,18 @@ const getNavItems = (project, sections) => {
   })
 }
 
-const ProjectSpecSidebar = ({project, sections}) => {
+const ProjectSpecSidebar = ({project, sections, currentMemberRole}) => {
   const navItems = getNavItems(project, sections)
+  const canSubmitForReview = project.status === 'draft' && currentMemberRole === 'customer'
   return (
     <div className="left-area-panel">
       <h4 className="titles gray-font">Specifications</h4>
       <div className="list-group">
         <SidebarNav items={navItems} />
       </div>
-      <div className="sidebar-section-separator"></div>
+      { canSubmitForReview &&
       <div className="project-spec-actions">
+        <div className="sidebar-section-separator"></div>
         <div className="project-spec-action">
           <div className="text">In order to submit your project please fill in
           all the required information. Once you do that
@@ -53,8 +55,15 @@ const ProjectSpecSidebar = ({project, sections}) => {
           </button>
         </div>
       </div>
+      }
     </div>
   )
+}
+
+ProjectSpecSidebar.PropTypes = {
+  project: PropTypes.object.isRequired,
+  sections: PropTypes.arrayOf(PropTypes.object).isRequired,
+  currentMemberRole: PropTypes.string
 }
 
 export default ProjectSpecSidebar

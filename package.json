@@ -55,7 +55,6 @@
     "react-sticky": "5.0.4",
     "recompose": "^0.20.2",
     "redux": "^3.5.2",
-    "redux-combine-actions": "^0.1.2",
     "redux-promise-middleware": "^4.0.0",
     "redux-thunk": "^2.1.0",
     "tc-accounts": "https://github.com/appirio-tech/accounts-app.git#dev",

@@ -46,11 +46,11 @@ class ProjectInfoContainer extends React.Component {
 
   render() {
     const {duration, budget } = this.state
-    const { project, isCurrentUserMember } = this.props
+    const { project, currentMemberRole } = this.props
     return (
       <div>
         <ProjectInfo
-          isEdittable={isCurrentUserMember}
+          currentMemberRole={currentMemberRole}
           type={project.type}
           devices={project.details.devices}
           status={project.status} onChangeStatus={this.onChangeStatus}
@@ -59,7 +59,7 @@ class ProjectInfoContainer extends React.Component {
         />
         <LinksMenu
           links={project.bookmarks || []}
-          canDelete={isCurrentUserMember}
+          canDelete={!!currentMemberRole}
           onAddNewLink={this.onAddNewLink}
           onDelete={this.onDeleteLink}
         />
@@ -71,7 +71,7 @@ class ProjectInfoContainer extends React.Component {
 }
 
 ProjectInfoContainer.PropTypes = {
-  isCurrentUserMember: PropTypes.bool.isRequired,
+  currentMemberRole: PropTypes.string,
   project: PropTypes.object.isRequired
 }
 
