@@ -4,7 +4,7 @@ import { PROJECT_STATUS_DRAFT, PROJECT_ROLE_CUSTOMER } from '../../../config/con
 import { connect } from 'react-redux'
 import NewPost from '../../../components/Feed/NewPost'
 import Feed from '../../../components/Feed/Feed'
-import spinnerWhileLoading from '../../../components/LoadingSpinner'
+// import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectSpecification from '../../../components/ProjectSpecification/ProjectSpecification'
 import { loadDashboardFeeds, createProjectTopic } from '../../actions/projectTopics'
 import moment from 'moment'
@@ -175,7 +175,7 @@ const mapStateToProps = ({ projectTopics, members, loadUser }) => {
 }
 const mapDispatchToProps = { loadDashboardFeeds, createProjectTopic }
 
-const enhance = spinnerWhileLoading(props => !props.isLoading)
-const EnhancedFeedContainer = enhance(FeedContainer)
+// const enhance = spinnerWhileLoading(props => !props.isLoading)
+// const EnhancedFeedContainer = enhance(FeedContainer)
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedContainer)

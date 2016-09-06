@@ -3,7 +3,7 @@ import moment from 'moment'
 import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL } from '../config/constants'
 
-export function getTopics(criteria, pageNum) {
+export function getTopics(criteria) {
   const params = {}
   // filters
   const filter = _.omit(criteria, ['sort'])
@@ -22,7 +22,7 @@ export function getTopics(criteria, pageNum) {
   //   })
 
   // Mocked
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     resolve({
       totalCount: 10,
       topics: [ {
