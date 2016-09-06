@@ -93,6 +93,10 @@ $title-color: $tc-gray-80;
   .container {
     @include flexBox;
     background-color: transparent;
+    display: flex;
+    padding: 0px;
+    width: 1110px;
+    margin: 50px auto;
     /* .left-area */
     .left-area {
       @include flexWidth(1);
