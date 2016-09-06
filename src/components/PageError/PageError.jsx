@@ -3,11 +3,11 @@ import './PageError.scss'
 
 const getMessage = code => {
   switch(code) {
-    case 404:
-      return 'D’oh! We couldn’t find the page you were looking for.'
-    case 500:
-    default:
-      return 'D’oh! Something went wrong'
+  case 404:
+    return 'D’oh! We couldn’t find the page you were looking for.'
+  case 500:
+  default:
+    return 'D’oh! Something went wrong'
   }
 }
 

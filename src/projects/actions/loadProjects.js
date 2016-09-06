@@ -3,9 +3,9 @@ import {
   PROJECT_SEARCH, GET_PROJECTS,
   SET_SEARCH_TERM, GET_PROJECTS_SEARCH_CRITERIA,
   CLEAR_PROJECT_SUGGESTIONS_SEARCH, PROJECT_SUGGESTIONS_SEARCH_SUCCESS
-} from '../../../config/constants'
-import { getProjects } from '../../../api/projects'
-import { loadMembers } from '../../../actions/members'
+} from '../../config/constants'
+import { getProjects } from '../../api/projects'
+import { loadMembers } from '../../actions/members'
 
 // ignore action
 /*eslint-disable no-unused-vars */

@@ -26,7 +26,7 @@ class FeedContainer extends React.Component {
 
   onNewPost({title, content}) {
     const { project, feeds } = this.props
-    const newTopic = { title: title, body: content, tag: !feeds || feeds.length === 0 ? 'PRIMARY' : ''}
+    const newTopic = { title, body: content, tag: !feeds || feeds.length === 0 ? 'PRIMARY' : ''}
     this.props.createProjectTopic(project.id, newTopic)
     // this.setState({
     //   feeds: [

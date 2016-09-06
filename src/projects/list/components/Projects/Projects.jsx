@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import ProjectsView from './ProjectsView'
-import { loadProjects } from '../../actions/loadProjects'
+import { loadProjects } from '../../../actions/loadProjects'
 import _ from 'lodash'
 
 class Projects extends Component {
