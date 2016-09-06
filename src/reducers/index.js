@@ -3,6 +3,7 @@ import searchTerm from './searchTerm'
 import loadUser from './loadUser'
 import { projectState } from '../projects/reducers/project'
 import { projectDashboard } from '../projects/reducers/projectDashboard'
+import { projectTopics } from '../projects/reducers/projectTopics'
 import navSearch from './navSearch'
 import projectSearch from '../projects/list/reducers/projectSearch'
 import projectSearchSuggestions from '../projects/list/reducers/projectSearchSuggestions'
@@ -18,5 +19,6 @@ export default combineReducers({
   projectState,
   members,
   projectDashboard,
+  projectTopics,
   alerts
 })

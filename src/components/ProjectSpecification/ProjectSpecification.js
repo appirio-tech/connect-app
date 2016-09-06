@@ -1,65 +1,21 @@
 import React from 'react'
 import './ProjectSpecification.scss'
 import Panel from '../Panel/Panel'
+import ProjectType from '../ProjectType/ProjectType'
+import ProjectSpecSidebar from '../../projects/detail/components/ProjectSpecSidebar'
+import Specification from '../../projects/detail/containers/Specification'
 
-const ProjectSpecification = () => (
+const ProjectSpecification = ({ project, currentMemberRole }) => (
   <Panel className="panel-gray action-card">
     <div className="panel-specifications">
       <div className="specifications-title">
-        Connect mobile - web app
+        { project.name }
       </div>
       <div className="specifications-platforms">
-        <div className="project-icons">
-          <div className="icon-set">
-            <div className="icon icon-iphone">
-              iPhone
-            </div>
-            <div className="icon icon-ipad">
-              iPad
-            </div>
-            <div className="icon icon-web">
-              Web
-            </div>
-          </div>
-        </div>
+        <ProjectType type="" devices={ project.details.devices } />
       </div>
       <div className="specifications-list">
-        <div className="specifications-header">
-          <div className="specifications-label">
-            App Definition
-          </div>
-          <span className="value highlight">* required</span>
-        </div>
-        <div className="specifications-row">
-          <div className="specifications-label">
-            Questions and Specification
-            <span className="highlight">*</span>
-          </div>
-          <span className="value">1 of 3</span>
-        </div>
-        <div className="specifications-row">
-          <div className="specifications-label">
-            Features
-            <span className="highlight">*</span>
-          </div>
-          <span className="value"><i className="tick"/></span>
-        </div>
-        <div className="specifications-row">
-          <div className="specifications-label">
-            Notes
-          </div>
-          <span className="value"><i className="tick"/></span>
-        </div>
-        <div className="specifications-row">
-          <div className="specifications-label">
-            Project Files
-            <span className="highlight">*</span>
-          </div>
-          <span className="value value-alt">-</span>
-        </div>
-      </div>
-      <div className="panel-buttons">
-        <button className="tc-btn tc-btn-primary tc-btn-md">Complete Project Specification</button>
+        <ProjectSpecSidebar project={ project } sections={ Specification.sections } currentMemberRole={ currentMemberRole } />
       </div>
     </div>
   </Panel>

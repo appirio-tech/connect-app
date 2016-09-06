@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
 import Panel from '../Panel/Panel'
 import cn from 'classnames'
+import { Avatar } from 'appirio-tech-react-components'
 
 export default class AddComment extends React.Component {
 
@@ -23,14 +24,14 @@ export default class AddComment extends React.Component {
   }
   
   render() {
-    const { className, avatarUrl, onChange, content, placeholder } = this.props
+    const { className, avatarUrl, authorName, onChange, content, placeholder } = this.props
     const { isFocused } = this.state
     const isCollapsed = !isFocused && !content
 
     return (
       <Panel.Body className={cn(className, {'comment-form-collapsed': isCollapsed})}>
         <div className="portrait">
-          {avatarUrl ? <img src={avatarUrl}/> :  ' '}
+          <Avatar avatarUrl={ avatarUrl } userName={ authorName } />
         </div>
         <div className="object">
           <div className="comment-form">

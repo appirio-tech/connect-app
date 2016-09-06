@@ -4,17 +4,22 @@ import cn from 'classnames'
 import ActionCard from '../ActionCard/ActionCard'
 import Panel from '../Panel/Panel'
 import FeedComments from './FeedComments'
+import { Avatar } from 'appirio-tech-react-components'
 
 const Feed = (props) => {
   const {
     user, currentUser, title, date, html, totalComments, hasMoreComments, onLoadMoreComments, isLoadingMoreComments,
     allowComments, comments, unread, children, onNewCommentChange, onAddNewComment, newComment
   } = props
+  let authorName = user.firstName
+  if (authorName && user.lastName) {
+    authorName += ' ' + user.lastName
+  }
   return (
     <ActionCard>
       <Panel.Body className={cn({active: unread})}>
         <div className="portrait">
-          <img src={user.photoURL} alt=""/>
+          <Avatar avatarUrl={ user.photoURL } userName={ authorName } />
         </div>
         <div className="object">
           <div className="card-title">
@@ -22,7 +27,7 @@ const Feed = (props) => {
           </div>
           <div className="card-profile">
             <div className="card-author">
-              {user.firstName} {user.lastName}
+              { authorName }
             </div>
             <div className="card-time">
               {moment(date).fromNow()}

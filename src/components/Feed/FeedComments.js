@@ -20,6 +20,10 @@ const FeedComments = (props) => {
     comments, currentUser, totalComments, onLoadMoreComments, isLoadingMoreComments, hasMoreComments, onAdd,
     onChange, content, avatarUrl
   } = props
+  let authorName = currentUser.firstName
+  if (authorName && currentUser.lastName) {
+    authorName += ' ' + currentUser.lastName
+  }
   return (
     <div>
       <Panel.Body className="comment-count-container">
@@ -50,7 +54,7 @@ const FeedComments = (props) => {
           {item.content}
         </Comment>
       )}
-      <AddComment placeholder="Create a new comment..." onAdd={onAdd} onChange={onChange} content={content} avatarUrl={avatarUrl} />
+      <AddComment placeholder="Create a new comment..." onAdd={onAdd} onChange={onChange} content={content} avatarUrl={avatarUrl} authorName={ authorName } />
     </div>
   )
 }

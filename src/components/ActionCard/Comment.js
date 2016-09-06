@@ -1,11 +1,12 @@
 import React, {PropTypes} from 'react'
 import cn from 'classnames'
 import Panel from '../Panel/Panel'
+import { Avatar } from 'appirio-tech-react-components'
 
 const Comment = ({avatarUrl, authorName, date, children, active, self}) => (
   <Panel.Body active={active}>
     <div className="portrait">
-      <img src={avatarUrl} alt="" />
+      <Avatar avatarUrl={avatarUrl} userName={ authorName } />
     </div>
     <div className={cn('object comment', {self})}>
       <div className="card-profile">
@@ -29,7 +30,7 @@ Comment.propTypes = {
   /**
    * The user avatar url
    */
-  avatarUrl: PropTypes.string.isRequired,
+  avatarUrl: PropTypes.string,
   /**
    * The author name
    */

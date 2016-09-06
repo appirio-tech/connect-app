@@ -1,154 +1,39 @@
 import React from 'react'
+import _ from 'lodash'
+import { PROJECT_STATUS_DRAFT, PROJECT_ROLE_CUSTOMER } from '../../../config/constants'
+import { connect } from 'react-redux'
 import NewPost from '../../../components/Feed/NewPost'
 import Feed from '../../../components/Feed/Feed'
+// import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectSpecification from '../../../components/ProjectSpecification/ProjectSpecification'
+import { loadDashboardFeeds, createProjectTopic } from '../../actions/projectTopics'
 import moment from 'moment'
 
-export default class FeedContainer extends React.Component {
+class FeedContainer extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      currentUser: {
-        userId: 1,
-        handle: 'christina_underwood',
-        firstName: 'Christina',
-        lastName: 'Underwood',
-        photoURL: require('../../../styles/i/profile1.jpg')
-      },
-      feeds: [
-        {
-          id: 1,
-          user: {
-            firstName: 'Patrick',
-            lastName: 'Monahan',
-            photoURL: require('../../../styles/i/profile2.jpg')
-          },
-          date: moment().add('-1', 'minutes').format(),
-          title: 'Congratulations, your project is approved and active in the system!',
-          html: `
-        <p>@team, we’re all ready and kicking the code challenges. We have 3 ongoing in the community right now, (links: challenge 1, challenge 2, challenge 3) and will have the results in about 7 days from now.</p>
-        <br/>
-        <p>I’ll post again when we’re at the code review stage. Have a great day!</p>`,
-          allowComments: true,
-          hasMoreComments: false,
-          unread: true,
-          totalComments: 0,
-          comments: []
-        },
-        {
-          id: 111,
-          user: {
-            firstName: 'Patrick',
-            lastName: 'Monahan',
-            photoURL: require('../../../styles/i/profile2.jpg')
-          },
-          date: moment().add('-2', 'days').format(),
-          title: 'Update 23: Design challenge finalists are now available to be ranked and we need your feedback',
-          html: `
-        <p>All challenges are completed and you can now pick the ones you like most. Please have in mind we’ll have to turn those on Aug 15 (5 days from now) to stay on track. Thanks!</p>`,
-          allowComments: true,
-          hasMoreComments: true,
-          unread: false,
-          totalComments: 6,
-          comments: [
-            {
-              id: 1,
-              date: moment().add('-2', 'h').format(),
-              author: {
-                userId: 2,
-                firstName: 'Patrick',
-                lastName: 'Monahan',
-                photoURL: require('../../../styles/i/avatar-patrick.png')
-              },
-              content: 'Hey Christina, that’s a great question. In general you can pick 3 winners, that’s included in the package. If you want to go beyond that you’ll have to pay extra for the winners, thus this will increase the total cost. Anything after 3-rd place costs additional $400 per submission. Hope this helps!'
-
-            },
-            {
-              id: 2,
-              date: moment().add('-1', 'h').format(),
-              author: {
-                userId: 1,
-                firstName: 'Christina',
-                lastName: 'Underwood',
-                photoURL: require('../../../styles/i/profile1.jpg')
-              },
-              content: 'Thanks Pat! We’ll look into it with the guys and get back to you as we have our winners. Is there a requirement of how many designs we can pick?'
-
-            }
-          ]
-        },
-        {
-          id: 2,
-          user: {
-            firstName: 'Coder',
-            lastName: 'The Bot',
-            photoURL: require('../../../styles/i/avatar-coder.png')
-          },
-          date: moment().add('-1', 'days').format(),
-          title: 'Good news, everyone! I delivered your project to the puny humans and they’re reviewing it!',
-          html: `
-<p>It tooke a whole 289ms to pack all the awesome work you did. It usually takes the puny humans around 24h to process so much important information, but fear not, they’ll contact you pretty soon. Coder out.
-</p><br/>
-<p>P.S. Your app looks really amazing, I want to have a function or two of it when it is ready!</p>`,
-          allowComments: false
-        },
-        {
-          id: 3,
-          user: {
-            firstName: 'Coder',
-            lastName: 'The Bot',
-            photoURL: require('../../../styles/i/avatar-coder.png')
-          },
-          date: moment().add('-7', 'hours').format(),
-          title: 'Coder here! Your project specification is complete, you can submit for review with our experts.',
-          html: `
-<p>My calculations say we have everything needed, let’s send it over for review. Ususally somebody from our amazing team will get back to you within 24 hours with additional feedback and questions. After all, they’re not Coder the Bot, puny humans!</p>
-`,
-          allowComments: false,
-          sendForReview: true
-        },
-        {
-          id: 4,
-          user: {
-            firstName: 'Coder',
-            lastName: 'The Bot',
-            photoURL: require('../../../styles/i/avatar-coder.png')
-          },
-          date: moment().add('-1', 'days').format(),
-          title: 'Hey there, I’m ready with the next steps for your project!',
-          html: `
-<p>I went over the project information and I see we still need to collect more details before I can use my super computational powers and create your quote.</p>
-<br/>
-<p>Head over to the <a href="javascript:">Specification</a> section and answer all of the required questions. If you already have a document with specification, verify it against our checklist and upload it.</p>
-`,
-          allowComments: false,
-          spec: true
-        }
-      ]
-    }
     this.onNewPost = this.onNewPost.bind(this)
     this.onNewCommentChange = this.onNewCommentChange.bind(this)
     this.onLoadMoreComments = this.onLoadMoreComments.bind(this)
     this.onAddNewComment = this.onAddNewComment.bind(this)
   }
 
+  componentWillMount() {
+    console.log('calling loadDashboardFeeds...' + this.props.project.id)
+    this.props.loadDashboardFeeds(this.props.project.id)
+  }
+
   onNewPost({title, content}) {
-    this.setState({
-      feeds: [
-        {
-          id: new Date().getTime(),
-          user: this.state.currentUser,
-          date: new Date().toISOString(),
-          title,
-          html: content,
-          allowComments: true,
-          totalComments: 0,
-          comments: []
-        },
-        ...this.state.feeds
-      ]
-    })
+    const { project, feeds } = this.props
+    const newTopic = { title: title, body: content, tag: !feeds || feeds.length === 0 ? 'PRIMARY' : ''}
+    this.props.createProjectTopic(project.id, newTopic)
+    // this.setState({
+    //   feeds: [
+    //     newTopic,
+    //     ...this.state.feeds
+    //   ]
+    // })
   }
 
 
@@ -236,15 +121,27 @@ export default class FeedContainer extends React.Component {
   }
 
   render() {
-    const {currentUser, feeds} = this.state
+    const {currentUser, project, feeds, allMembers, currentMemberRole } = this.props
+    const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
 
-    return (
-      <div>
-        <NewPost currentUser={currentUser} onPost={this.onNewPost} />
-        {feeds.map((item) => <div style={{marginTop: '20px'}} key={item.id}>
+    const renderFeed = (item) => {
+      item.user = _.find(allMembers, mem => mem.userId === item.userId)
+      item.html = item.body
+      item.comments = item.posts ? item.posts : []
+      item.comments.forEach((comment) => {
+        console.log(comment.author)
+        comment.author = _.find(allMembers, mem => mem.userId === comment.author)
+        console.log(comment.author)
+      })
+      if ((item.spec || item.sendForReview) && !showDraftSpec) {
+        return null
+      }
+      // debugger
+      return (
+        <div className="feed-action-card" key={item.id}>
           <Feed
             {...item}
-            currentUser={currentUser}
+            currentUser={currentUser.profile}
             onNewCommentChange={this.onNewCommentChange.bind(this, item.id)}
             onAddNewComment={this.onAddNewComment.bind(this, item.id)}
             onLoadMoreComments={this.onLoadMoreComments.bind(this, item.id)}
@@ -253,9 +150,32 @@ export default class FeedContainer extends React.Component {
               <button className="tc-btn tc-btn-primary tc-btn-md">Send for review</button>
             </div>}
           </Feed>
-          {item.spec && <ProjectSpecification />  }
-        </div>)}
+          {item.spec && <ProjectSpecification project={ project } currentMemberRole={ currentMemberRole } />  }
+        </div>
+      )
+    }
+    return (
+      <div>
+        <NewPost currentUser={currentUser.profile} onPost={this.onNewPost} />
+        { feeds.map(renderFeed) }
       </div>
     )
   }
 }
+
+
+const mapStateToProps = ({ projectTopics, members, loadUser }) => {
+  return {
+    currentUser: loadUser.user,
+    feeds      : projectTopics.topics,
+    isLoading  : projectTopics.isLoading,
+    error      : projectTopics.error,
+    allMembers : _.values(members.members)
+  }
+}
+const mapDispatchToProps = { loadDashboardFeeds, createProjectTopic }
+
+// const enhance = spinnerWhileLoading(props => !props.isLoading)
+// const EnhancedFeedContainer = enhance(FeedContainer)
+
+export default connect(mapStateToProps, mapDispatchToProps)(FeedContainer)
