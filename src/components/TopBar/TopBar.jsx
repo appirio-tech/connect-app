@@ -58,6 +58,7 @@ class TopBar extends Component {
         { label: 'Log out', link: logoutLink, absolute: true, id: 0 }
       ]
     ]
+
     const menubar = isLoggedIn
       ? <MenuBar forReactRouter items={primaryNavigationItems} orientation="horizontal" />
       : null
@@ -77,7 +78,7 @@ class TopBar extends Component {
           <div className="menu-wrap" onClick={this.handleMobileClick}>
             <div className="mobile-wrap"><a href={mobileMenuUrl}><IconTcMenuBold /></a></div>
             { quickLinks }
-            <UserDropdown username={username} userImage={userImage} domain={domain} menuItems={ userMenuItems } forReactRouter/>
+            <UserDropdown userHandle={username} userImage={userImage} domain={domain} menuItems={ userMenuItems } forReactRouter/>
           </div>
         </div>
       </div>

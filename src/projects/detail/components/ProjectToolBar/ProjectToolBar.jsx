@@ -4,9 +4,7 @@ import React, {PropTypes, Component} from 'react'
 import { MenuBar } from 'appirio-tech-react-components'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-
-// properties: username, userImage, domain, mobileMenuUrl, mobileSearchUrl, searchSuggestionsFunc
-// searchSuggestionsFunc should return a Promise object
+import { LOAD_PROJECT_FAILURE } from '../../../../config/constants'
 
 class ProjectToolBar extends Component {
 
@@ -15,7 +13,10 @@ class ProjectToolBar extends Component {
   }
 
   render() {
-    const {project, userRoles} = this.props
+    const {project, userRoles, isLoading, error} = this.props
+    if (isLoading || error && error.type === LOAD_PROJECT_FAILURE)
+      return <noscript />
+  
     //TODO prepare navigation items according to roles of the user
     let primaryNavigationItems = [
       {
@@ -30,8 +31,8 @@ class ProjectToolBar extends Component {
       },
       {
         //img: require('./nav-projects.svg'),
-        text: 'Sumbissions',
-        link: `/projects/${project.id}/submissions/`
+        text: 'Messages',
+        link: `/projects/${project.id}/messages/`
       }
     ]
     const isCopilotOrManager = !!_.find(userRoles, (r) => {
@@ -57,13 +58,15 @@ class ProjectToolBar extends Component {
 const mapStateToProps = ({projectState}) => {
   return {
     isLoading: projectState.isLoading,
-    project: projectState.project
+    project: projectState.project,
+    error: projectState.error
   }
 }
 
 ProjectToolBar.propTypes = {
   userRoles : PropTypes.arrayOf(PropTypes.string).isRequired,
-  project   : PropTypes.object.isRequired,
+  project   : PropTypes.object,
+  error     : PropTypes.oneOfType([PropTypes.object, PropTypes.bool]).isRequired,
   isLoading : PropTypes.bool.isRequired
 }
 

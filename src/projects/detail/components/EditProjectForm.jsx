@@ -103,7 +103,7 @@ class EditProjectForm extends Component {
           onValidSubmit={this.submit}
         >
           {sections.map(renderSection)}
-          <div className="button-area">
+          <div className="section-footer">
             <button className="tc-btn tc-btn-primary tc-btn-md"
               type="submit" disabled={!this.state.canSubmit}
             >Save Changes</button>

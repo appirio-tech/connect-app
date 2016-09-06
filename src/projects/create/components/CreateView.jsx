@@ -62,7 +62,7 @@ class CreateView extends Component {
     }
     return (
       <section className="content">
-        <div className="container">
+        <div className="container container-margin">
           <div onClick={ browserHistory.goBack } className="btn-close">
             <Icons.XMarkIcon />
           </div>

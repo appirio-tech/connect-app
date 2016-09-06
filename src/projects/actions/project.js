@@ -1,5 +1,5 @@
-import { getProjectById, createProject as createProjectAPI, updateProject as updateProjectAPI } from '../../api/projects'
-import { LOAD_PROJECT, CREATE_PROJECT, CLEAR_LOADED_PROJECT, UPDATE_PROJECT } from '../../config/constants'
+import { getProjectById, createProject as createProjectAPI, updateProject as updateProjectAPI, getDirectProjectData } from '../../api/projects'
+import { LOAD_PROJECT, CREATE_PROJECT, CLEAR_LOADED_PROJECT, UPDATE_PROJECT, LOAD_DIRECT_PROJECT } from '../../config/constants'
 
 
 export function loadProject(projectId) {
@@ -28,12 +28,20 @@ export function createProject(newProject) {
   }
 }
 
-
 export function updateProject(projectId, updatedProps) {
   return (dispatch) => {
     return dispatch({
       type: UPDATE_PROJECT,
       payload: updateProjectAPI(projectId, updatedProps)
+    })
+  }
+}
+
+export function loadDirectProjectData(directProjectId) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_DIRECT_PROJECT,
+      payload: getDirectProjectData(directProjectId)
     })
   }
 }

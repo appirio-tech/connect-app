@@ -5,7 +5,7 @@
   "scripts": {
     "start": "webpack-dev-server --history-api-fallback --dev --hot --inline --progress --tc --port 3000",
     "build": "webpack --bail --progress --build --tc",
-    "lint": "eslint --format table --ext .js,.jsx .",
+    "lint": "eslint --fix --format table --ext .js,.jsx .",
     "test": "cross-env NODE_ENV=test mocha  --colors --reporter nyan --compilers js:babel-core/register --require ignore-styles --recursive \"./src/**/*.spec.js\"",
     "test:watch": "watch-run -i -p 'src/**/*' npm run test"
   },
@@ -34,6 +34,7 @@
     "axios": "^0.13.1",
     "classnames": "^2.2.3",
     "draft-js": "^0.7.0",
+    "draft-js-export-html": "^0.4.0",
     "filepicker-js": "^2.4.17",
     "filesize": "^3.3.0",
     "formsy-react": "^0.18.1",
@@ -43,6 +44,7 @@
     "react": "^15.3.1",
     "react-addons-css-transition-group": "^15.3.1",
     "react-addons-pure-render-mixin": "^15.3.1",
+    "react-color": "^2.2.7",
     "react-dom": "^15.3.1",
     "react-dotdotdot": "^1.0.4",
     "react-layout-pane": "^0.1.16",
@@ -54,7 +56,6 @@
     "react-sticky": "5.0.4",
     "recompose": "^0.20.2",
     "redux": "^3.5.2",
-    "redux-combine-actions": "^0.1.2",
     "redux-promise-middleware": "^4.0.0",
     "redux-thunk": "^2.1.0",
     "tc-accounts": "https://github.com/appirio-tech/accounts-app.git#dev",

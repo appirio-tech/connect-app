@@ -31,6 +31,7 @@ $tc-body-extra-small	: 12px;
     }
     .panel-body{
       &.join-project{
+        justify-content: center;
         background-color: $tc-gray-neutral-light;
       }
     }
@@ -99,7 +100,6 @@ $tc-body-extra-small	: 12px;
       &.add-team-member{
         cursor: pointer;
         display: flex;
-        width: 400px;
         align-items: center;
         .add-icon {
           padding-top: 10px;
@@ -287,7 +287,6 @@ $tc-body-extra-small	: 12px;
       }
     }
     &.add-team-member{
-      width: 400px;
       margin-bottom: -$base-unit*2;
     }
     .tab-group {

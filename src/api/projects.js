@@ -59,9 +59,6 @@ export function updateProject(projectId, updatedProps) {
     .then(resp => {
       return _.get(resp.data, 'result.content')
     })
-    .catch( resp => {
-      return { status: resp.status, error: resp.data }
-    })
 }
 
 
@@ -69,5 +66,12 @@ export function createProject(projectProps) {
   return axios.post(`${TC_API_URL}/v4/projects/`, { param: projectProps })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})
+    })
+}
+
+export function getDirectProjectData(directProjectId) {
+  return axios.get(`${TC_API_URL}/v3/direct/projects/${directProjectId}`)
+    .then(resp => {
+      return resp.data.result.content
     })
 }

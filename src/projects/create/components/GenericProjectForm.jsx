@@ -57,7 +57,6 @@ class GenericProjectForm extends Component {
           placeholder="Mobile app that solves my biggest problem"
           disabled={false}
           wrapperClass="row"
-          placeholder="Mobile app that solves my biggest problem"
         />
 
         <TCFormFields.TextInput

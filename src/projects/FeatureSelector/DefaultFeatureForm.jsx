@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
-import { Formsy, TCFormFields } from 'appirio-tech-react-components'
+import { Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
 
 require('./FeatureForm.scss')
 
@@ -61,21 +61,12 @@ class DefaultFeatureForm extends Component {
       <div className="feature-form">
         <div className="feature-title-row flex space-between">
           <h3 className="title">{featureDesc.title}</h3>
-            {/*
-              <SwitchButton
-                disabled={!isEdittable}
-                onChange={ this.toggleFeature }
-                name="featue-active"
-                checked={isActive ? 'checked' : null }
-              />
-            */}
-          <Formsy.Form >
-          <TCFormFields.Checkbox
-            name="isActive"
-            value={isActive}
-            onChange={this.toggleFeature}
+          <SwitchButton
+            disabled={!isEdittable}
+            onChange={ this.toggleFeature }
+            name="featue-active"
+            checked={isActive ? 'checked' : null }
           />
-          </Formsy.Form>
         </div>
         <div className="feature-form-content">
           <p className="feature-description">{ featureDesc.description }</p>

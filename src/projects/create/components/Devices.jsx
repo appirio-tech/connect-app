@@ -127,7 +127,7 @@ class DevicesComponent extends Component {
 
     return (
       <div className="pick-target-devices">
-        <h2>Pick target device(s)</h2>
+        <h2 className="project-info__title--device">Pick target device(s)</h2>
         <div className="target-selectors">
           {renderOptionsSet()}
         </div>

@@ -21,7 +21,7 @@ export const projectDashboard = function (state=initialState, action) {
   case LOAD_PROJECT_DASHBOARD_SUCCESS:
     return Object.assign({}, state, {
       isLoading: false,
-      error: true
+      error: false
     })
 
   case LOAD_PROJECT_DASHBOARD_FAILURE:
