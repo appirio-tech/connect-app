@@ -20,20 +20,20 @@ class FeedContainer extends React.Component {
   }
 
   componentWillMount() {
-    console.log('calling loadDashboardFeeds...' + this.props.project.id)
     this.props.loadDashboardFeeds(this.props.project.id)
   }
 
   onNewPost({title, content}) {
-    const { project, feeds } = this.props
-    const newTopic = { title: title, body: content, tag: !feeds || feeds.length === 0 ? 'PRIMARY' : ''}
+    const { project, currentUser, feeds } = this.props
+    const newTopic = {
+      title: title,
+      body: content,
+      tag: !feeds || feeds.length === 0 ? 'PRIMARY' : '',
+      userId: parseInt(currentUser.id),
+      date: moment().format(),
+      allowComments: true
+    }
     this.props.createProjectTopic(project.id, newTopic)
-    // this.setState({
-    //   feeds: [
-    //     newTopic,
-    //     ...this.state.feeds
-    //   ]
-    // })
   }
 
 
@@ -130,14 +130,13 @@ class FeedContainer extends React.Component {
       // render method maybe in componentWillReceiveProps to update the state
       // For now i am going to clone item
       const item = _.cloneDeep(_item)
+
       item.user = _.find(allMembers, mem => mem.userId === item.userId)
       item.html = item.body
 
       item.comments = item.posts ? item.posts : []
       item.comments.forEach((comment) => {
-        console.log(comment.author)
-        comment.author = _.find(allMembers, mem => mem.userId === comment.author)
-        console.log(comment.author)
+        comment.author = _.find(allMembers, mem => mem.userId === comment.userId)
       })
       if ((item.spec || item.sendForReview) && !showDraftSpec) {
         return null

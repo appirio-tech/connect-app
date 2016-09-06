@@ -55,14 +55,14 @@ export function getTopics(criteria) {
           {
             id: 1,
             date: moment().add('-2', 'h').format(),
-            author: 40152856,
+            userId: 40152856,
             content: 'Hey Christina, that’s a great question. In general you can pick 3 winners, that’s included in the package. If you want to go beyond that you’ll have to pay extra for the winners, thus this will increase the total cost. Anything after 3-rd place costs additional $400 per submission. Hope this helps!'
 
           },
           {
             id: 2,
             date: moment().add('-1', 'h').format(),
-            author: 8547899,
+            userId: 8547899,
             content: 'Thanks Pat! We’ll look into it with the guys and get back to you as we have our winners. Is there a requirement of how many designs we can pick?'
 
           }
@@ -118,10 +118,14 @@ export function getTopicPosts(topicId) {
 }
 
 export function createTopic(topicProps) {
-  return axios.post(`${TC_API_URL}/v4/topics/`, topicProps)
-    .then( resp => {
-      return _.get(resp.data, 'result.content', {})
-    })
+  // return axios.post(`${TC_API_URL}/v4/topics/`, topicProps)
+  //   .then( resp => {
+  //     return _.get(resp.data, 'result.content', {})
+  //   })
+  // mocked
+  return new Promise((resolve) => {
+    resolve({ ...topicProps, id: new Date().getTime() })
+  })
 }
 
 export function addTopicPost(topicId, post) {

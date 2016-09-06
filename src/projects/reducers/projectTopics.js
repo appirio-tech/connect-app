@@ -2,11 +2,16 @@
 import {
   LOAD_PROJECT_TOPICS_PENDING,
   LOAD_PROJECT_TOPICS_SUCCESS,
-  LOAD_PROJECT_TOPICS_FAILURE
+  LOAD_PROJECT_TOPICS_FAILURE,
+  CREATE_PROJECT_TOPIC_PENDING,
+  CREATE_PROJECT_TOPIC_SUCCESS,
+  CREATE_PROJECT_TOPIC_FAILURE
 } from '../../config/constants'
+import update from 'react-addons-update'
 
 const initialState = {
   isLoading: true,
+  isCreating: false,
   error: false,
   topics: [],
   totalTopics: 0
@@ -32,6 +37,22 @@ export const projectTopics = function (state=initialState, action) {
     return Object.assign({}, state, {
       isLoading: false,
       error: true
+    })
+  case CREATE_PROJECT_TOPIC_PENDING:
+    return Object.assign({}, state, {
+      isCreating: true,
+      error: false
+    })
+  case CREATE_PROJECT_TOPIC_SUCCESS:
+    return update (state, {
+      isCreating: { $set : false },
+      error: { $set : false },
+      topics: { $splice: [[0, 0, action.payload]] }
+    })
+  case CREATE_PROJECT_TOPIC_FAILURE:
+    return Object.assign({}, state, {
+      isCreating: false,
+      error: false
     })
 
   default:

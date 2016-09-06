@@ -9,7 +9,6 @@ import { LOAD_PROJECT_TOPICS, CREATE_PROJECT_TOPIC } from '../../config/constant
 
 
 export function loadDashboardFeeds(projectId) {
-  console.log('inside loadDashboardFeeds')
   return (dispatch) => {
     return dispatch({
       type: LOAD_PROJECT_TOPICS,
@@ -20,7 +19,6 @@ export function loadDashboardFeeds(projectId) {
 
 export function createProjectTopic(projectId, topic) {
   const updatedTopic = _.assign({ reference: 'project', referenceId: projectId.toString()}, topic)
-  console.log(updatedTopic)
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT_TOPIC,
