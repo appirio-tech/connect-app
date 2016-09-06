@@ -12,8 +12,8 @@ import PageError from '../../../../components/PageError/PageError'
 // This handles showing a spinner while the state is being loaded async
 import spinnerWhileLoading from '../../../../components/LoadingSpinner'
 
-const showErrorMessageIfError = hasError =>
-  branch(hasError, t => t, renderComponent(<PageError code={500} />))
+const showErrorMessageIfError = hasLoaded =>
+  branch(hasLoaded, t => t, renderComponent(<PageError code={500} />))
 const errorHandler = showErrorMessageIfError(props => !props.error)
 const spinner = spinnerWhileLoading(props => !props.isLoading)
 const EnhancedGrid = spinner(errorHandler(GridView))
