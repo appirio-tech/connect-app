@@ -1,6 +1,8 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 //TODO  Additional variables - need to find a home for these
+
+
 $gray-color: $tc-gray-50;
 $title-color: $tc-gray-80;
 @mixin flexBox {
@@ -94,52 +96,25 @@ $title-color: $tc-gray-80;
     /* .left-area */
     .left-area {
       @include flexWidth(1);
-      .left-area-panel {
-        margin-right: 20px;
-        margin-bottom: 20px;
-        background-color: #fff;
-        padding: 20px 0;
-        border-radius: 4px;
-        // min-width: 100px;
-        .titles {
-          @include roboto-medium;
-          font-size: 15px;
-          color: $gray-color;
-          line-height: 18px;
-          padding: 6px 0;
-          margin: 0 20px;
-          &.normal-txt {
-            color: #262628;
-          }
-        }
-        .sidebar-section-separator {
-          margin: ($base-unit * 4) ($base-unit * 4) 0px;
-          height: 1px;
-          background-color: $tc-gray-20;
-        }
-        .project-spec-actions {
-          .project-spec-action {
-            padding: $base-unit * 4;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            .text {
-              @include tc-label-md;
-              color: $tc-gray-50;
-            }
-            button {
-              margin-top: $base-unit * 4;
-            }
-          }
+      .left-area-footer{
+        padding: 0 40px 0 20px;
+        @include roboto;
+        font-size: 13px;
+        line-height: 30px;
+        color: $tc-gray-50;
+        span{
+          float: right;
         }
       }
     }
     .right-area {
       @include flexWidth(2);
       border-radius: 4px;
+      position: relative;
       .title {
         color: $title-color;
         @include roboto;
+        font-weight: 600;
       }
       .right-area-item {
         padding: 50px 0 20px 0;
@@ -155,6 +130,24 @@ $title-color: $tc-gray-80;
           color: $gray-color;
           line-height: 30px;
           margin-bottom: 20px;
+          .optional,
+          .required {
+            position: absolute;
+            right: 0;
+            @include roboto;
+            font-size: 13px;
+            float: right;
+            padding: 0 20px;
+            border-radius: 20px 0 0 20px;
+          }
+          .required {
+            background: $tc-orange-70;
+            color: #fff;
+          }
+          .optional {
+            background: $tc-gray-10;
+            color: $gray-color;
+          }
         }
         .gray-text {
           @include roboto;
@@ -259,7 +252,31 @@ $title-color: $tc-gray-80;
     .content-boxes {
       display: none;
     }
+    .textarea-title {
+      @include roboto;
+      font-size: 13px;
+      color: #5D5D66;
+      line-height: 20px;
+      padding-bottom: 10px;
+    }
+    textarea {
+      min-height: 80px;
+      max-width: 100%;
+      color: $gray-color;
+      text-align: left;
+      text-indent: 0;
+      margin-bottom: 20px;
+    }
 
+  }
+  .section-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $tc-gray-neutral-light;
+    height: 70px;
+    border-radius: 4px;
+    margin-top: -10px;
   }
   /* .section-file-interface */
   .section-file-interface {

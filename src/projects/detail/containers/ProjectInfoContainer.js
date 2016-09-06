@@ -27,7 +27,7 @@ class ProjectInfoContainer extends React.Component {
   }
 
   onChangeStatus(status) {
-    this.props.updateProject({status})
+    this.props.updateProject(this.props.project.id, {status})
   }
 
   onAddNewLink(link) {

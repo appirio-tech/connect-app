@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom'
 import PanelProject from '../PanelProject/PanelProject'
 import './ProjectStatus.scss'
 import cn from 'classnames'
+import _ from 'lodash'
 import uncontrollable from 'uncontrollable'
+import { PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } from '../../config/constants'
 
 const statusOptions = [
   {className: 'draft', name: 'Draft', value: 'draft'},
@@ -42,8 +44,8 @@ class ProjectStatus extends React.Component {
     const {status, isOpen, currentMemberRole, onToggleOpen, onChangeStatus} = this.props
 
     const selected = statusOptions.filter((opt) => opt.value === status)[0]
-    const displayOptions = currentMemberRole && isOpen
-      && _.indexOf(['copilot', 'manager'], currentMemberRole) > -1
+    const canEdit = currentMemberRole
+      && _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
 
     return (
       <PanelProject>
@@ -52,14 +54,14 @@ class ProjectStatus extends React.Component {
             Status
           </PanelProject.Heading>
           <div
-            onClick={(e) => displayOptions && onToggleOpen(!isOpen, e)}
+            onClick={(e) => canEdit && onToggleOpen(!isOpen, e)}
             ref="toggleBtn"
             className={cn('status-label', selected.className, {active: isOpen})}
           >
             <i className="status-icon"/>
             {selected.name}
           </div>
-          {displayOptions && <dir className="status-dropdown">
+          {isOpen && <dir className="status-dropdown">
             <ul>
               {statusOptions.map((item) =>
                 <li key={item.value}>

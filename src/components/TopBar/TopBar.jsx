@@ -58,6 +58,7 @@ class TopBar extends Component {
         { label: 'Log out', link: logoutLink, absolute: true, id: 0 }
       ]
     ]
+
     const menubar = isLoggedIn
       ? <MenuBar forReactRouter items={primaryNavigationItems} orientation="horizontal" />
       : null

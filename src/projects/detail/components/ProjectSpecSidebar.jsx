@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React, { PropTypes } from 'react'
 import SidebarNav from './SidebarNav'
+import './ProjectSpecSidebar.scss'
 
 const calcProgress = (project, subSection) => {
   if (subSection.id === 'questions') {
@@ -37,22 +38,19 @@ const ProjectSpecSidebar = ({project, sections, currentMemberRole}) => {
   const navItems = getNavItems(project, sections)
   const canSubmitForReview = project.status === 'draft' && currentMemberRole === 'customer'
   return (
-    <div className="left-area-panel">
+    <div className="projectSpecSidebar">
       <h4 className="titles gray-font">Specifications</h4>
       <div className="list-group">
         <SidebarNav items={navItems} />
       </div>
       { canSubmitForReview &&
-      <div className="project-spec-actions">
-        <div className="sidebar-section-separator"></div>
-        <div className="project-spec-action">
-          <div className="text">In order to submit your project please fill in
-          all the required information. Once you do that
-          we&quot;ll be able to give you a good estimate.
-          </div>
-          <button type="button" disabled href="javascript:" className="tc-btn tc-btn-primary tc-btn-sm">
-            Submit for Review
-          </button>
+      <div>
+        <div className="text-box">
+          <hr />
+          <p>In order to submit your project please fill in all the required information. Once that you do that we&quot;ll be able to give you a good estimate.</p>
+        </div>
+        <div className="btn-boxs">
+          <button href="javascript:;" className="btn-gray tc-btn-sm" disabled="disabled">Submit for Review</button>
         </div>
       </div>
       }

@@ -8,17 +8,15 @@ import ProjectListProjectColHeader from './ProjectListProjectColHeader'
 import GridView from '../../../../components/Grid/GridView'
 import UserWithName from '../../../../components/User/UserWithName'
 import ProjectsToolBar from '../ProjectsToolBar/ProjectsToolBar'
-
+import PageError from '../../../../components/PageError/PageError'
 // This handles showing a spinner while the state is being loaded async
 import spinnerWhileLoading from '../../../../components/LoadingSpinner'
 
-const errorMessage = () => <div><h4>Opps we ran into a problem. <br/>Our minions are have been notified and will resolve the problem shortly.</h4></div>
 const showErrorMessageIfError = hasError =>
-  branch(hasError, t => t, renderComponent(errorMessage))
+  branch(hasError, t => t, renderComponent(<PageError code={500} />))
 const errorHandler = showErrorMessageIfError(props => !props.error)
 const spinner = spinnerWhileLoading(props => !props.isLoading)
 const EnhancedGrid = spinner(errorHandler(GridView))
-
 
 
 require('./ProjectsView.scss')

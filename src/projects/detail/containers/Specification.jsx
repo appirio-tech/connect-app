@@ -3,12 +3,15 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
+import { Sticky } from 'react-sticky'
 
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
+import FooterV2 from '../../../components/FooterV2/FooterV2'
 import EditProjectForm from '../components/EditProjectForm'
 import { updateProject } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import { Icons } from 'appirio-tech-react-components'
+
 
 require('./Specification.scss')
 
@@ -27,21 +30,21 @@ const sections = [
         type: 'questions',
         questions: [
           {
-            icon: 'feaure-placeholder',
+            icon: 'question',
             title: 'What is the goal of your application? How will people use it?',
             description: 'Describe your objectives for creating this application',
             type: 'see-attached-textbox',
             fieldName: 'details.appDefinition.goal'
           },
           {
-            icon: 'feature-placeholder',
+            icon: 'question',
             title: 'Who are the users of your application? ',
             description: 'Describe the roles and needs of your target users',
             type: 'see-attached-textbox',
             fieldName: 'details.appDefinition.users'
           },
           {
-            icon: 'feature-placeholder',
+            icon: 'question',
             title: 'Feature requirements',
             description: 'Please list all the features you would like in your application. You can use our wizard to pick from common features or define your own.',
             // type: 'see-attached-features',
@@ -80,7 +83,7 @@ const sections = [
         type: 'questions',
         questions: [
           {
-            icon: 'feaure-placeholder',
+            icon: 'question',
             title: 'What font style do you prefer? (Pick one)',
             description: 'The typography used in your designs will fit within these broad font styles',
             type: 'tiled-radio-group',
@@ -91,21 +94,15 @@ const sections = [
             fieldName: 'details.designSpecification.fontStyle'
           },
           {
-            icon: 'feaure-placeholder',
+            icon: 'question',
             title: 'What colors do you like? (Select all that apply)',
             description: 'Your preferred colors will be used to guide the shading in your designs',
-            type: 'checkbox-group',
-            options: [
-              {value: 'blue', label: 'Blue'},
-              {value: 'red', label: 'Red'},
-              {value: 'green', label: 'Green'},
-              {value: 'orange', label: 'Orange'},
-              {value: 'black', label: 'Black'}
-            ],
+            type: 'colors',
+            defaultColors: ['#2E9AC8', '#187299', '#FFD800', '#F17012'],
             fieldName: 'details.designSpecification.colors'
           },
           {
-            icon: 'feaure-placeholder',
+            icon: 'question',
             title: 'What icon style do you prefer? (Pick one)',
             description: 'Icons within your designs will follow these styles',
             type: 'tiled-radio-group',
@@ -142,7 +139,7 @@ const sections = [
         type: 'questions',
         questions: [
           {
-            icon: 'feaure-generic',
+            icon: 'question',
             title: 'How should your application be built?',
             description: 'Choose the operating system/platform for your application',
             type: 'checkbox-group',
@@ -155,7 +152,7 @@ const sections = [
             fieldName: 'details.devSpecification.platform'
           },
           {
-            icon: 'feaure-generic',
+            icon: 'question',
             title: 'Is offline access required for your application?',
             description: 'Do your users need to use the application when they are unable to connect to the internet?',
             type: 'radio-group',
@@ -166,7 +163,7 @@ const sections = [
             fieldName: 'details.devSpecification.offlineAccess'
           },
           {
-            icon: 'feaure-generic',
+            icon: 'question',
             title: 'What level of security is needed for your application?',
             description: 'Do you expect to be storing or transmitting personal or sensitive information?',
             type: 'radio-group',
@@ -207,20 +204,23 @@ class ProjectSpecification extends Component {
   }
 
   render() {
-    const { project, isCurrentUserMember, currentMemberRole } = this.props
+    const { project, currentMemberRole } = this.props
 
     return (
       <section className="two-col-content content">
         <div className="container">
           <div className="left-area">
-            <ProjectSpecSidebar project={project} sections={sections} currentMemberRole={currentMemberRole} />
+            <Sticky>
+              <ProjectSpecSidebar project={project} sections={sections} currentMemberRole={currentMemberRole} />
+              <FooterV2 />
+            </Sticky>
           </div>
 
           <div className="right-area">
             <EnhancedEditProjectForm
               project={project}
               sections={sections}
-              isEdittable={isCurrentUserMember}
+              isEdittable={!!currentMemberRole}
               submitHandler={this.saveProject}
             />
           </div>
@@ -233,7 +233,7 @@ class ProjectSpecification extends Component {
 
 ProjectSpecification.propTypes = {
   project: PropTypes.object.isRequired,
-  isCurrentUserMember: PropTypes.bool.isRequired,
+  currentMemberRole: PropTypes.string,
   processing: PropTypes.bool,
   error: PropTypes.oneOfType([
     PropTypes.bool,

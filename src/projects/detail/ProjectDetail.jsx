@@ -12,7 +12,7 @@ const ProjectDetailView = enhance((props) => {
   const children = React.Children.map(props.children, (child) => {
     return React.cloneElement(child, {
       project: props.project,
-      isCurrentUserMember: props.isCurrentUserMember
+      currentMemberRole: props.currentMemberRole
     })
   })
   return <div>{children}</div>
@@ -27,13 +27,19 @@ class ProjectDetail extends Component {
     this.props.loadProjectDashboard(projectId)
   }
 
-  isCurrentUserMember({currentUserId, project}) {
-    return project && !!_.find(project.members, m => m.userId === currentUserId)
+  getProjectRoleForCurrentUser({currentUserId, project}) {
+    let role = null
+    if (project) {
+      const member = _.find(project.members, m => m.userId === currentUserId)
+      if (member)
+        role = member.role
+    }
+    return role
   }
 
   render() {
-    const isMember = this.isCurrentUserMember(this.props)
-    return <ProjectDetailView {...this.props} isCurrentUserMember={isMember} />
+    const currentMemberRole = this.getProjectRoleForCurrentUser(this.props)
+    return <ProjectDetailView {...this.props} currentMemberRole={currentMemberRole} />
   }
 }
 

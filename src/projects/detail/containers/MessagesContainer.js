@@ -1,6 +1,8 @@
 import React from 'react'
 import MessageList from '../../../components/MessageList/MessageList'
 import MessageDetails from '../../../components/MessageDetails/MessageDetails'
+import NewPost from '../../../components/Feed/NewPost'
+import { Sticky } from 'react-sticky'
 
 let nextMessageId = 1
 
@@ -81,10 +83,12 @@ export default class MessagesContainer extends React.Component {
     this.onLoadMoreMessages = this.onLoadMoreMessages.bind(this)
     this.onAddNewMessage = this.onAddNewMessage.bind(this)
     this.onNewMessageChange = this.onNewMessageChange.bind(this)
+    this.onNewThread = this.onNewThread.bind(this)
   }
 
   onThreadSelect(thread) {
     this.setState({
+      isCreateNewMessage: false,
       threads: this.state.threads.map((item) => {
         if (item.isActive) {
           if (item.threadId === thread.threadId) {
@@ -154,7 +158,7 @@ export default class MessagesContainer extends React.Component {
               id: nextMessageId++,
               date: new Date(),
               author: this.state.currentUser,
-              content: item.newMessage
+              content: item.newMessage.replace(/\n/g, '<br />')
             }]
           }
         }
@@ -163,23 +167,59 @@ export default class MessagesContainer extends React.Component {
     })
   }
 
+  onNewThread({title, content}) {
+    const threads = this.state.threads.map((item) => ({...item, isActive: false}))
+    this.setState({
+      isCreateNewMessage: false,
+      threads: [
+        {
+          isActive: true,
+          threadId: new Date().getTime(),
+          title,
+          hasMoreMessages: false,
+          messages: [{
+            id: new Date().getTime(),
+            date: new Date(),
+            author: this.state.currentUser,
+            content
+          }]
+        },
+        ...threads
+      ]
+    })
+  }
+
   render() {
-    const {threads, currentUser} = this.state
+    const {threads, currentUser, isCreateNewMessage} = this.state
     const activeThread = threads.filter((item) => item.isActive)[0]
 
     return (
       <div className="container" style={{display: 'flex', width: '1110px', margin: '50px auto'}}>
         <div style={{width: '360px', marginRight: '30px'}}>
-          <MessageList threads={threads} onSelect={this.onThreadSelect}/>
+          <Sticky>
+            <MessageList
+              onAdd={() => this.setState({isCreateNewMessage: true})}
+              threads={threads}
+              onSelect={this.onThreadSelect}
+            />
+          </Sticky>
         </div>
         <div style={{width: '720px'}}>
-          <MessageDetails
-            {...activeThread}
-            onLoadMoreMessages={this.onLoadMoreMessages}
-            onNewMessageChange={this.onNewMessageChange}
-            onAddNewMessage={this.onAddNewMessage}
-            currentUser={currentUser}
-          />
+          {
+            isCreateNewMessage ?
+              <NewPost
+                currentUser={currentUser}
+                onPost={this.onNewThread}
+              />
+              :
+              <MessageDetails
+                {...activeThread}
+                onLoadMoreMessages={this.onLoadMoreMessages}
+                onNewMessageChange={this.onNewMessageChange}
+                onAddNewMessage={this.onAddNewMessage}
+                currentUser={currentUser}
+              />
+          }
         </div>
       </div>
     )

@@ -18,7 +18,7 @@ const SpecQuestionListItem = ({icon, title, description, children}) => (
   <div className="spec-question-list-item">
     {icon && <div className="icon-col">{icon}</div>}
     <div className="content-col">
-      <h4>{title}</h4>
+      <h5>{title}</h5>
       <p className={cn({bigger: !icon})}>{description}</p>
       {children && <div className="child-component">{children}</div>}
     </div>

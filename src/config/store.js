@@ -2,7 +2,6 @@ import thunk from 'redux-thunk'
 import { createStore, applyMiddleware, compose } from 'redux'
 import reducers from '../reducers'
 import promiseMiddleware from 'redux-promise-middleware'
-import combineActionsMiddleware from 'redux-combine-actions'
 
 const middleware = [
   promiseMiddleware({

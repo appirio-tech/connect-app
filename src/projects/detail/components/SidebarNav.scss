@@ -13,21 +13,37 @@
       position: absolute;
       left: 0;
     }
+    /* required 8/29 */
+    .required {
+      float: right;
+      @include roboto;
+      color: $tc-orange;
+      font-size: 11px;
+    }
+    /* required End */
   }
   li {
     .txt {
-     @include roboto;
+      @include roboto;
       font-size: 13px;
       color: #262628;
       line-height: 16px;
       padding: 7px 0;
       display: inline-block;
     }
+    /* required 8/29 */
+    .required {
+      @include roboto;
+      font-size: 13px;
+      color: $tc-orange;
+    }
+    /* required End */
     .schedule {
-      @include roboto-medium;
+      @include roboto;
       font-size: 13px;
       line-height: 16px;
-      color: #0B71E6;
+      color: $tc-gray-50;
+      // change the schedule color to gray - 8/30
       padding: 7px 0;
       float: right;
     }
@@ -39,7 +55,7 @@
       height: 2px;
       display: inline-block;
     }
-    .boxes {
+    .boxs {
       display: block;
       padding: 0 20px 0 42px;
       position: relative;
@@ -54,14 +70,12 @@
           display: block;
         }
       }
-      .icon-complete {
-        background-position: 0 0;
-        width: 24px;
-        height: 24px;
+      svg {
+        width: 10px;
+        height: 10px;
         position: absolute;
         right: 21px;
         top: 3px;
-        display: none;
       }
     }
   }

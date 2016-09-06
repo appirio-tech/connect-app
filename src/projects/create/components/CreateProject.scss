@@ -15,6 +15,9 @@
     padding: 20px;
     border-radius: 4px;
     background: $tc-white;
+    &.container-margin {
+      margin-top: 20px;
+    }
     .btn-close {
       display: block;
       position:absolute;
@@ -30,11 +33,16 @@
       display:block;
       width:100%;
       text-align: center;
-      margin:  0 0 20px 0;
+      margin: 0 0 50px 0;
+      &.project-info__title--device {
+        margin-bottom: 30px;
+      }
     }
     .what-you-like-to-do {
       width:100%;
       overflow:hidden;
+      padding-top: 45px;
+      padding-bottom: 20px;
       .info-selector {
         display: -webkit-flex;
         display: flex;
@@ -90,7 +98,6 @@
             text-align: center;
             strong{
               @include roboto-bold;
-              font-weight:normal;
             }
           }
         }
@@ -209,34 +216,140 @@
       height: 1px;
       margin: 50px auto;
     }
-    .project-info {
-      width: 100%;
-      max-width: 600px;
-      margin: 50px auto 0px auto;
-      .row {
+    .project-info{
+      clear:both;
+      display:block;
+      width:100%;
+      overflow:hidden;
+      &.padding-top-30{
+        padding-top: 30px;
+      }
+      .row{
         margin-bottom: 20px;
-        label {
-          @include tc-label-md;
-        }
-        textarea {
-          height: 80px;
-          resize: none;
-        }
-        &.center {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          label {
-            width: 170px;
+        &.center{
+          display: table;
+          margin: 0 auto;
+          label{
+            display: inline;
           }
-          input {
+          input{
+            display: inline;
             width: 100px;
-            margin: 0px;
+          }
+        }
+      }
+      label{
+        display:block;
+        width:600px;
+        margin: 10px auto;
+        text-transform: none;
+        @include tc-label-md;
+        color: $tc-gray-70;
+        font-size: 13px;
+      }
+
+      .error-message{
+        display:block;
+        width:600px;
+        margin: 5px auto;
+        @include roboto;
+
+        color: $tc-gray-70;
+        font-size: 13px;
+        line-height:20px;
+        font-style:italic;
+        border: 1px solid $tc-red-30;
+        background: $tc-red-10;
+        color: $tc-red-70;
+        padding:10px;
+        border-radius: 2px;
+        strong{
+          @include roboto-bold;
+        }
+      }
+
+      input{
+        display:block;
+        width:600px;
+        margin: 0 auto;
+        color: $tc-black;
+        background: $tc-gray-neutral-light;
+        border-color: $tc-gray-20;
+        @include tc-label-md;
+        font-size:15px;
+        line-height:20px;
+
+        &.tc-file-field__inputs--code{
+          background-color: $tc-white;
+        }
+        &.tc-file-field__inputs--fill{
+          background-color: $tc-gray-neutral-light;
+        }
+
+        &[disabled]{
+          color: $tc-gray-20;
+          background: $tc-white;
+        }
+
+        &:hover{
+          border-color: $tc-gray-40;
+          background: $tc-gray-neutral-light;
+        }
+
+        &:focus{
+          background: $tc-white!important;
+          border-left: 3px solid $tc-dark-blue-90!important;
+        }
+
+        &.error{
+          border-left: 3px solid $tc-red-70!important;
+          background: $tc-gray-neutral-light!important;
+          &:focus{
+            background: $tc-white!important;
+            border-color: $tc-dark-blue-90!important;
+          }
+        }
+      }
+
+      textarea{
+        display:block;
+        width:600px;
+        margin: 0 auto;
+        height: 100px;
+        color: $tc-black;
+        background: $tc-gray-neutral-light;
+        border-color: $tc-gray-20;
+        @include tc-label-md;
+        font-size:15px;
+        line-height:20px;
+        box-shadow: none;
+
+        &[disabled]{
+          color: $tc-gray-20;
+          background: $tc-white;
+        }
+
+        &:hover{
+          border-color: $tc-gray-40;
+        }
+
+        &:focus{
+          background: $tc-white!important;
+          border-left: 3px solid $tc-dark-blue-90!important;
+        }
+
+        &.error{
+          border-left: 3px solid $tc-red-70!important;
+          background: $tc-gray-neutral-light!important;
+          &:focus{
+            background: $tc-white!important;
+            border-color: $tc-dark-blue-90!important;
           }
         }
       }
     }
     .button-area {
+      padding: 20px 0 0;
       display: flex;
       justify-content: center;
       a {
@@ -283,6 +396,11 @@
           }
         }
       }
+    }
+  }
+  input {
+    @include placeholder {
+      text-transform: none;
     }
   }
 }

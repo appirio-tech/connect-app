@@ -59,9 +59,6 @@ export function updateProject(projectId, updatedProps) {
     .then(resp => {
       return _.get(resp.data, 'result.content')
     })
-    .catch( resp => {
-      return { status: resp.status, error: resp.data }
-    })
 }
 
 

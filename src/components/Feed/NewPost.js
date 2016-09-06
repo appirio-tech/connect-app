@@ -14,7 +14,7 @@ const styles = [
 const blocks = [
   {className: 'ordered-list', style: 'ordered-list-item'},
   {className: 'unordered-list', style: 'unordered-list-item'},
-  {className: 'code', style: 'code-block'},
+//      {className: 'code', style: 'code-block'},
   {className: 'quote', style: 'blockquote'}
 ]
 
@@ -76,6 +76,7 @@ class NewPost extends React.Component {
       .getBlockForKey(selection.getStartKey())
       .getType()
 
+
     const onPost = () => {
       const title = this.refs.title.value
       const content = stateToHTML(editorState.getCurrentContent())
@@ -133,9 +134,8 @@ class NewPost extends React.Component {
                         e.preventDefault()
                       }}
                     />)}
-
-                  <div className="separator"/>
-                  <button className="attach"/>
+                  {/*<div className="separator"/>
+                  <button className="attach"/>*/}
                 </div>
                 <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={onPost}>Post</button>
               </div>

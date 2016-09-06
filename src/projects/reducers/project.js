@@ -60,7 +60,7 @@ export const projectState = function (state=initialState, action) {
         duration: { $set: {
           actualDuration: action.payload.actualDuration,
           plannedDuration: action.payload.plannedDuration,
-          projectedDuration: action.payload.projectedDuration,
+          projectedDuration: action.payload.projectedDuration
         }}
       }
     })
@@ -83,11 +83,18 @@ export const projectState = function (state=initialState, action) {
     })
 
   case CREATE_PROJECT_FAILURE:
-  case UPDATE_PROJECT_FAILURE:
+  case UPDATE_PROJECT_FAILURE: {
+    const data = action.payload.response.data.result
     return Object.assign({}, state, {
       processing: false,
-      error: { type: action.type, errObj: action.error }
+      error: {
+        type: action.type,
+        status: data.status,
+        msg: data.content.message,
+        details: JSON.parse(data.details)
+      }
     })
+  }
 
   // Project attachments
   case ADD_PROJECT_ATTACHMENT_PENDING:
@@ -99,11 +106,18 @@ export const projectState = function (state=initialState, action) {
 
   case UPDATE_PROJECT_ATTACHMENT_FAILURE:
   case ADD_PROJECT_ATTACHMENT_FAILURE:
-  case REMOVE_PROJECT_ATTACHMENT_FAILURE:
+  case REMOVE_PROJECT_ATTACHMENT_FAILURE: {
+    const data = action.payload.response.data.result
     return Object.assign({}, state, {
       processingAttachments: false,
-      error: { type: action.type, errObj: action.error }
+      error: {
+        type: action.type,
+        status: data.status,
+        msg: data.content.message,
+        details: JSON.parse(data.details)
+      }
     })
+  }
 
   case ADD_PROJECT_ATTACHMENT_SUCCESS:
     return update(state, {
@@ -139,11 +153,18 @@ export const projectState = function (state=initialState, action) {
 
   case ADD_PROJECT_MEMBER_FAILURE:
   case REMOVE_PROJECT_MEMBER_FAILURE:
-  case UPDATE_PROJECT_MEMBER_FAILURE:
+  case UPDATE_PROJECT_MEMBER_FAILURE: {
+    const data = action.payload.response.data.result
     return Object.assign({}, state, {
       processingMembers: false,
-      error: { type: action.type, errObj: action.error }
+      error: {
+        type: action.type,
+        status: data.status,
+        msg: data.content.message,
+        details: JSON.parse(data.details)
+      }
     })
+  }
 
   case ADD_PROJECT_MEMBER_SUCCESS:
     return update (state, {

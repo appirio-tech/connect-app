@@ -22,10 +22,15 @@ const formatTime = (date) => {
   return diffDays + 'd'
 }
 
-const MessageRow = ({title, messages, isActive, unreadCount, onClick}) => {
+const strip = (html) => {
+  const tmp = document.createElement('DIV')
+  tmp.innerHTML = html
+  return tmp.textContent || tmp.innerText || ''
+}
 
+const MessageRow = ({title, messages, isActive, unreadCount, onClick}) => {
   const lastMessage = messages[messages.length - 1]
-  const excerpt = lastMessage.content.split(' ').slice(0, 15).join(' ')
+  const excerpt = strip(lastMessage.content).split(' ').slice(0, 15).join(' ')
 
   return (<div className={cn('message', {active: isActive})} onClick={onClick}>
     <div className="message-body">
@@ -44,11 +49,11 @@ const MessageRow = ({title, messages, isActive, unreadCount, onClick}) => {
 }
 
 
-const MessageList = ({threads, onSelect}) => (
+const MessageList = ({threads, onSelect, onAdd}) => (
   <Panel className="message-list">
     <Panel.Title>
       Messages
-      <Panel.AddBtn />
+      <Panel.AddBtn onClick={onAdd} />
     </Panel.Title>
     <div className="panel-messages">
       {threads.map((item) => <MessageRow key={item.threadId} onClick={(e) => onSelect(item, e) } {...item} />)}

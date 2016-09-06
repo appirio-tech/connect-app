@@ -62,7 +62,7 @@ export default class FeedContainer extends React.Component {
                 photoURL: require('../i/avatar-patrick.png')
               },
               content: 'Hey Christina, that’s a great question. In general you can pick 3 winners, that’s included in the package. If you want to go beyond that you’ll have to pay extra for the winners, thus this will increase the total cost. Anything after 3-rd place costs additional $400 per submission. Hope this helps!'
-              
+
             },
             {
               id: 2,
@@ -74,7 +74,7 @@ export default class FeedContainer extends React.Component {
                 photoURL: require('../i/profile1.jpg')
               },
               content: 'Thanks Pat! We’ll look into it with the guys and get back to you as we have our winners. Is there a requirement of how many designs we can pick?'
-              
+
             }
           ]
         },

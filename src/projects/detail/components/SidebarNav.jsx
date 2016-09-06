@@ -24,8 +24,8 @@ const renderSubNavItems = (child, idx) => {
 
   return (
     <li key={idx}>
-      <DirectLink to={link} className="boxes" {...scrollProps} href="javascript:">
-        <span className="txt">{name}&nbsp;{required && <span style={{color: '#FB7D22'}}>*</span>}</span>
+      <DirectLink to={link} className="boxs" {...scrollProps} href="javascript:">
+        <span className="txt">{name}&nbsp;{required && <span className="required">*</span>}</span>
         <span className="schedule">{ isComplete ? <Icons.IconUICheckBold fill={'#FB7D22'} /> : required && `${progress[0]} of ${progress[1]}`}</span>
       </DirectLink>
     </li>
@@ -40,7 +40,7 @@ const SidebarNavItem = ({ name, link, required, subItems, index}) =>
     <DirectLink to={link} {...scrollProps} href="javascript:">
       <h4 className="title">
         <span className="number">{index}.</span>{name}
-          {required && <span className="schedule">*</span>}
+          {required && <span className="required">* required</span>}
       </h4>
     </DirectLink>
     <ul>
