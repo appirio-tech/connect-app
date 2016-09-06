@@ -251,4 +251,6 @@ const mapStateToProps = ({projectState, loadUser}) => {
 
 const mapDispatchToProps = { updateProject }
 
+ProjectSpecification.sections = sections
+
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectSpecification)

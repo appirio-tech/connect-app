@@ -100,7 +100,7 @@ class NewPost extends React.Component {
           <div className="object">
             <input
               ref="title"
-              className="tc-file-field__inputs"
+              className="title"
               type="text"
               placeholder="Share the latest project updates with the team"
             />

@@ -3,17 +3,19 @@ import ProjectInfoContainer from './containers/ProjectInfoContainer'
 import FeedContainer from './containers/FeedContainer'
 import { Sticky } from 'react-sticky'
 
+require('./Dashboard.scss')
+
 const Dashboard = ({project, currentMemberRole}) => (
   <div>
-    <div className="container" style={{display: 'flex', width: '1110px', margin: '50px auto'}}>
-      <div style={{width: '360px', marginRight: '30px'}}>
+    <div className="container">
+      <div className="left-area">
         <Sticky>
-          <div style={{paddingBottom: '50px'}}>
+          <div className="dashboard-left-panel">
             <ProjectInfoContainer currentMemberRole={currentMemberRole} project={project} />
           </div>
         </Sticky>
       </div>
-      <div style={{width: '720px'}}>
+      <div className="right-area">
         <FeedContainer currentMemberRole={currentMemberRole} project={project} />
       </div>
     </div>

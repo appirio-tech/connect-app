@@ -1,54 +1,23 @@
 @import "tc-includes";
 
 .panel-specifications{
-  text-align: center;
-  .specifications-title{
+  .specifications-title {
+    text-align: center;
     @include roboto-light;
     font-size: $tc-heading-lg;
     color: $tc-gray-50;
     line-height: $base-unit*6;
   }
   .specifications-list{
-    width: 270px;
-    margin: 20px auto 40px auto;
-    text-align: left;
+    width: 300px;
+    margin: 0px auto 40px auto;
     @include roboto;
     font-size: $tc-label-md;
     line-height: $base-unit*6;
     color: $tc-black;
-    .specifications-header{
+    .titles {
+      text-align: center;
       @include roboto-bold;
-    }
-    .specifications-header,
-    .specifications-row{
-      display: flex;
-      .value{
-        margin-left: auto;
-        color: $tc-gray-50;
-        @include roboto-medium;
-        .tick{
-          height: 7px;
-          width: 9px;
-          -webkit-mask:  url('../../styles/i/ui-9px-1_check-orange.svg') no-repeat 0 0;
-          background-size:9px 7px;
-          background-color: $tc-orange;
-          display: block;
-          position: relative;
-          top:10px;
-        }
-      }
-      .value-alt{
-        color: $tc-gray-30;
-        font-size:$tc-heading-lg;
-        position: relative;
-        top:-3px;
-      }
-      .highlight{
-        color: $tc-orange;
-        &::before{
-          content: " ";
-        }
-      }
     }
   }
 }
