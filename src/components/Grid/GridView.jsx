@@ -18,7 +18,7 @@ const GridView = props => {
   const emptyList = <div style={{textAlign: 'center'}}><br/><br/><h3> No results </h3><br/><br/></div>
 
   return (
-    <section className="content all-projects-content">
+    <section className="content gridview-content">
       <div className="container">
         <div className="flex-area">
           <div className="flex-data">
