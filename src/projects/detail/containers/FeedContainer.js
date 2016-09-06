@@ -124,9 +124,15 @@ class FeedContainer extends React.Component {
     const {currentUser, project, feeds, allMembers, currentMemberRole } = this.props
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
 
-    const renderFeed = (item) => {
+    const renderFeed = (_item) => {
+      // FIXME - @vikas this breaks when component is re-mounted since you are
+      // directly changing the props object. This should be done outside of the
+      // render method maybe in componentWillReceiveProps to update the state
+      // For now i am going to clone item
+      const item = _.cloneDeep(_item)
       item.user = _.find(allMembers, mem => mem.userId === item.userId)
       item.html = item.body
+
       item.comments = item.posts ? item.posts : []
       item.comments.forEach((comment) => {
         console.log(comment.author)
