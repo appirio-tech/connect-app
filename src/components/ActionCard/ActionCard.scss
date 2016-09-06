@@ -312,6 +312,10 @@
         color: $tc-orange;
       }
     }
+    .new-post-title {
+      max-width: 640px;
+      margin-left: 0px;
+    }
     &.add-team-member{
       cursor: pointer;
       display: flex;
