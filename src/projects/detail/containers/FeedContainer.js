@@ -38,7 +38,7 @@ class FeedContainer extends React.Component {
     const { allMembers } = props
     this.setState({
       feeds: props.feeds.map((feed) => {
-        let item = { ...feed }
+        const item = { ...feed }
         item.user = _.find(allMembers, mem => mem.userId === item.userId)
         item.html = item.body
 
@@ -58,7 +58,7 @@ class FeedContainer extends React.Component {
     const { project, currentUser } = this.props
     const { feeds } = this.state
     const newFeed = {
-      title: title,
+      title,
       body: content,
       tag: !feeds || feeds.length === 0 ? 'PRIMARY' : '',
       userId: parseInt(currentUser.id),
@@ -94,22 +94,24 @@ class FeedContainer extends React.Component {
 
   onAddNewComment(feedId, content) {
     const { currentUser } = this.props
-    const { feeds } = this.state
-    const feed = _.find(feeds, feed => feed.id === feedId)
     const newComment = {
       date: new Date(),
       userId: parseInt(currentUser.id),
-      content: content
+      content
     }
     this.props.addFeedComment(feedId, newComment)
   }
 
   render() {
-    const {currentUser, project, allMembers, currentMemberRole } = this.props
+    const {currentUser, project, currentMemberRole } = this.props
     const { loadingFeedComments, feeds } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
 
     const renderFeed = (item) => {
+      if ((item.spec || item.sendForReview) && !showDraftSpec) {
+        return null
+      }
+
       return (
         <div className="feed-action-card" key={item.id}>
           <Feed

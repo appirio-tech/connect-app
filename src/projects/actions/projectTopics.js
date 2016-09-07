@@ -39,7 +39,7 @@ export function loadFeedComments(feedId, fromIndex) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_TOPIC_POSTS,
-      payload: getTopicPosts(feedId)
+      payload: getTopicPosts(feedId, fromIndex)
     })
   }
 }

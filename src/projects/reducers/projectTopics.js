@@ -11,7 +11,7 @@ import {
   LOAD_TOPIC_POSTS_FAILURE,
   CREATE_PROJECT_TOPIC_POST_PENDING,
   CREATE_PROJECT_TOPIC_POST_SUCCESS,
-  CREATE_PROJECT_TOPIC_POST_FAILURE,
+  CREATE_PROJECT_TOPIC_POST_FAILURE
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -85,8 +85,12 @@ export const projectTopics = function (state=initialState, action) {
         topics: { $splice: [[topicIndex, 1, updatedTopic]] }
       })
     }
+    break
   }
-  // case LOAD_TOPIC_POSTS_FAILURE:
+  case LOAD_TOPIC_POSTS_FAILURE:
+    return state
+  case CREATE_PROJECT_TOPIC_POST_PENDING:
+    return state
   case CREATE_PROJECT_TOPIC_POST_SUCCESS: {
     const topicId = payload.topicId
     const comment = payload.comment
@@ -94,7 +98,6 @@ export const projectTopics = function (state=initialState, action) {
     const topicIndex = _.findIndex(state.topics, topic => topic.id === topicId)
     if (topicIndex >= 0) {
       const topic = state.topics[topicIndex]
-      const posts = topic ? topic.posts : []
       const totalComments = topic.totalComments + 1
       const updatedTopic = update (topic, {
         // no need to update hasMoreComments, it should maintain its prev value
@@ -106,7 +109,10 @@ export const projectTopics = function (state=initialState, action) {
         topics: { $splice: [[topicIndex, 1, updatedTopic]] }
       })
     }
+    break
   }
+  case CREATE_PROJECT_TOPIC_POST_FAILURE:
+    return state
 
   default:
     return state

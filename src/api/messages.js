@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import moment from 'moment'
-import { axiosInstance as axios } from './requestInterceptor'
-import { TC_API_URL } from '../config/constants'
+// import { axiosInstance as axios } from './requestInterceptor'
+// import { TC_API_URL } from '../config/constants'
 
 export function getTopics(criteria) {
   const params = {}
@@ -108,6 +108,7 @@ export function getTopics(criteria) {
 }
 
 export function getTopicPosts(topicId, fromIndex) {
+  console.log(fromIndex)
   // return axios.get(`${TC_API_URL}/v4/topics/${topicId}/posts`)
   //   .then( resp => {
   //     return {
@@ -119,7 +120,7 @@ export function getTopicPosts(topicId, fromIndex) {
   return new Promise((resolve) => {
     resolve({
       totalCount: 7,
-      topicId: topicId,
+      topicId,
       posts: [
         {
           id: new Date().getTime(),
@@ -133,7 +134,7 @@ export function getTopicPosts(topicId, fromIndex) {
           date: moment().add('-1', 'd').format(),
           userId: 40152856,
           content: 'Lorem ipsum dolor it somor'
-        },
+        }
       ]
     })
   })
@@ -157,6 +158,6 @@ export function addTopicPost(topicId, post) {
   //   })
   // mocked
   return new Promise((resolve) => {
-    resolve({ topicId : topicId, comment : { ...post, id: new Date().getTime() }})
+    resolve({ topicId, comment : { ...post, id: new Date().getTime() }})
   })
 }
