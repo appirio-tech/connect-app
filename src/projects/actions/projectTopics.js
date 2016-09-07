@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import { getTopics, createTopic } from '../../api/messages'
-import { LOAD_PROJECT_TOPICS, CREATE_PROJECT_TOPIC } from '../../config/constants'
+import { getTopics, getTopicPosts, createTopic } from '../../api/messages'
+import { LOAD_PROJECT_TOPICS, CREATE_PROJECT_TOPIC, LOAD_TOPIC_POSTS } from '../../config/constants'
 
 /**
  * Load all project data to paint the dashboard
@@ -23,6 +23,15 @@ export function createProjectTopic(projectId, topic) {
     return dispatch({
       type: CREATE_PROJECT_TOPIC,
       payload: createTopic(updatedTopic)
+    })
+  }
+}
+
+export function loadFeedComments(feedId, fromIndex) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_TOPIC_POSTS,
+      payload: getTopicPosts(feedId)
     })
   }
 }
