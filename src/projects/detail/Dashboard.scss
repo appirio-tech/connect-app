@@ -23,9 +23,11 @@
   flex: $number;
 }
 
-.container {
+.dashboard-container {
   @include flexBox;
-  margin: 4 * $base-unit;
+  display: flex;
+  width: 1110px;
+  margin: 50px auto;
   .left-area {
     @include flexWidth(1);
 

@@ -1,7 +1,7 @@
 import {
   CLEAR_PROJECT_SUGGESTIONS_SEARCH, PROJECT_SUGGESTIONS_SEARCH_SUCCESS,
   PROJECT_SUGGESTIONS_SEARCH_FAILURE
-} from '../../../config/constants'
+} from '../../config/constants'
 
 export const initialState = {
   loaded: false,

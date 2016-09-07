@@ -7,7 +7,7 @@ require('./Dashboard.scss')
 
 const Dashboard = ({project, currentMemberRole}) => (
   <div>
-    <div className="container">
+    <div className="dashboard-container">
       <div className="left-area">
         <Sticky>
           <div className="dashboard-left-panel">

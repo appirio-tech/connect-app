@@ -12,7 +12,7 @@ const deviceMap = {
 
 /*eslint-disable camelcase */
 const typeMap = {
-  app_dev: 'Design &amp; Development Project',
+  app_dev: 'Design & Development Project',
   generic: 'Work Project',
   visual_design: 'Visual Design Project',
   visual_prototype: 'Visual Prototype Project'
