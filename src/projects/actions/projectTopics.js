@@ -1,6 +1,11 @@
 import _ from 'lodash'
-import { getTopics, getTopicPosts, createTopic } from '../../api/messages'
-import { LOAD_PROJECT_TOPICS, CREATE_PROJECT_TOPIC, LOAD_TOPIC_POSTS } from '../../config/constants'
+import { getTopics, getTopicPosts, createTopic, addTopicPost } from '../../api/messages'
+import { 
+  LOAD_PROJECT_TOPICS,
+  CREATE_PROJECT_TOPIC,
+  LOAD_TOPIC_POSTS,
+  CREATE_PROJECT_TOPIC_POST
+} from '../../config/constants'
 
 /**
  * Load all project data to paint the dashboard
@@ -18,7 +23,10 @@ export function loadDashboardFeeds(projectId) {
 }
 
 export function createProjectTopic(projectId, topic) {
-  const updatedTopic = _.assign({ reference: 'project', referenceId: projectId.toString()}, topic)
+  const updatedTopic = _.assign({
+    reference: 'project',
+    referenceId: projectId.toString()
+  }, topic)
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT_TOPIC,
@@ -32,6 +40,16 @@ export function loadFeedComments(feedId, fromIndex) {
     return dispatch({
       type: LOAD_TOPIC_POSTS,
       payload: getTopicPosts(feedId)
+    })
+  }
+}
+
+export function addFeedComment(feedId, comment) {
+  // const updatedTopic = _.assign({ reference: 'project', referenceId: projectId.toString()}, topic)
+  return (dispatch) => {
+    return dispatch({
+      type: CREATE_PROJECT_TOPIC_POST,
+      payload: addTopicPost(feedId, comment)
     })
   }
 }

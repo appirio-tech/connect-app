@@ -151,8 +151,12 @@ export function createTopic(topicProps) {
 }
 
 export function addTopicPost(topicId, post) {
-  return axios.post(`${TC_API_URL}/v4/topics/${topicId}/posts`, post)
-    .then( resp => {
-      return _.get(resp.data, 'result.content', {})
-    })
+  // return axios.post(`${TC_API_URL}/v4/topics/${topicId}/posts`, post)
+  //   .then( resp => {
+  //     return _.get(resp.data, 'result.content', {})
+  //   })
+  // mocked
+  return new Promise((resolve) => {
+    resolve({ topicId : topicId, comment : { ...post, id: new Date().getTime() }})
+  })
 }

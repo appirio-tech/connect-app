@@ -8,7 +8,10 @@ import {
   CREATE_PROJECT_TOPIC_FAILURE,
   LOAD_TOPIC_POSTS_PENDING,
   LOAD_TOPIC_POSTS_SUCCESS,
-  LOAD_TOPIC_POSTS_FAILURE
+  LOAD_TOPIC_POSTS_FAILURE,
+  CREATE_PROJECT_TOPIC_POST_PENDING,
+  CREATE_PROJECT_TOPIC_POST_SUCCESS,
+  CREATE_PROJECT_TOPIC_POST_FAILURE,
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -22,6 +25,7 @@ const initialState = {
 }
 
 export const projectTopics = function (state=initialState, action) {
+  const payload = action.payload
 
   switch (action.type) {
   case LOAD_PROJECT_TOPICS_PENDING:
@@ -33,8 +37,8 @@ export const projectTopics = function (state=initialState, action) {
     return Object.assign({}, state, {
       isLoading: false,
       error: true,
-      topics: action.payload.topics,
-      totalTopics: action.payload.totalCount
+      topics: payload.topics,
+      totalTopics: payload.totalCount
     })
 
   case LOAD_PROJECT_TOPICS_FAILURE:
@@ -48,10 +52,11 @@ export const projectTopics = function (state=initialState, action) {
       error: false
     })
   case CREATE_PROJECT_TOPIC_SUCCESS:
+    payload.posts = []
     return update (state, {
       isCreating: { $set : false },
       error: { $set : false },
-      topics: { $splice: [[0, 0, action.payload]] }
+      topics: { $splice: [[0, 0, payload]] }
     })
   case CREATE_PROJECT_TOPIC_FAILURE:
     return Object.assign({}, state, {
@@ -60,13 +65,12 @@ export const projectTopics = function (state=initialState, action) {
     })
   case LOAD_TOPIC_POSTS_PENDING:
     return state
-  case LOAD_TOPIC_POSTS_SUCCESS:
-    const payload = action.payload
+  case LOAD_TOPIC_POSTS_SUCCESS: {
     const topicId = payload.topicId
     // find topic index from the state
     const topicIndex = _.findIndex(state.topics, topic => topic.id === topicId)
     // if we find the topic
-    if (topicIndex) {
+    if (topicIndex >= 0) {
       const topic = state.topics[topicIndex]
       // number of posts those would be rendered after this state update
       const noOfRenderedPosts = topic.posts.length + payload.posts.length
@@ -81,7 +85,28 @@ export const projectTopics = function (state=initialState, action) {
         topics: { $splice: [[topicIndex, 1, updatedTopic]] }
       })
     }
+  }
   // case LOAD_TOPIC_POSTS_FAILURE:
+  case CREATE_PROJECT_TOPIC_POST_SUCCESS: {
+    const topicId = payload.topicId
+    const comment = payload.comment
+    // find topic index from the state
+    const topicIndex = _.findIndex(state.topics, topic => topic.id === topicId)
+    if (topicIndex >= 0) {
+      const topic = state.topics[topicIndex]
+      const posts = topic ? topic.posts : []
+      const totalComments = topic.totalComments + 1
+      const updatedTopic = update (topic, {
+        // no need to update hasMoreComments, it should maintain its prev value
+        totalComments: { $set : totalComments },
+        posts: { $push : [ comment ] }
+      })
+      // update the state
+      return update (state, {
+        topics: { $splice: [[topicIndex, 1, updatedTopic]] }
+      })
+    }
+  }
 
   default:
     return state

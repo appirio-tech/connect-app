@@ -19,7 +19,7 @@ export default class AddComment extends React.Component {
       this.refs.input.focus()
       return
     }
-    this.props.onAdd()
+    this.props.onAdd(this.props.content)
     this.refs.input.focus()
   }
   

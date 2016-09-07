@@ -6,7 +6,7 @@ import NewPost from '../../../components/Feed/NewPost'
 import Feed from '../../../components/Feed/Feed'
 // import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectSpecification from '../../../components/ProjectSpecification/ProjectSpecification'
-import { loadDashboardFeeds, createProjectTopic, loadFeedComments } from '../../actions/projectTopics'
+import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
 import moment from 'moment'
 import update from 'react-addons-update'
 
@@ -46,6 +46,9 @@ class FeedContainer extends React.Component {
         item.comments.forEach((comment) => {
           comment.author = _.find(allMembers, mem => mem.userId === comment.userId)
         })
+
+        // reset newComment property
+        item.newComment = ''
         return item
       })
     })
@@ -54,7 +57,7 @@ class FeedContainer extends React.Component {
   onNewPost({title, content}) {
     const { project, currentUser } = this.props
     const { feeds } = this.state
-    const newTopic = {
+    const newFeed = {
       title: title,
       body: content,
       tag: !feeds || feeds.length === 0 ? 'PRIMARY' : '',
@@ -62,7 +65,7 @@ class FeedContainer extends React.Component {
       date: moment().format(),
       allowComments: true
     }
-    this.props.createProjectTopic(project.id, newTopic)
+    this.props.createProjectTopic(project.id, newFeed)
   }
 
 
@@ -89,25 +92,16 @@ class FeedContainer extends React.Component {
     }
   }
 
-  onAddNewComment(feedId) {
-    this.setState({
-      feeds: this.state.feeds.map((item) => {
-        if (item.id === feedId) {
-          return {
-            ...item,
-            newComment: '',
-            totalComments: item.totalComments + 1,
-            comments: [...item.comments, {
-              id: new Date().getTime(),
-              date: new Date(),
-              author: this.state.currentUser,
-              content: item.newComment
-            }]
-          }
-        }
-        return item
-      })
-    })
+  onAddNewComment(feedId, content) {
+    const { currentUser } = this.props
+    const { feeds } = this.state
+    const feed = _.find(feeds, feed => feed.id === feedId)
+    const newComment = {
+      date: new Date(),
+      userId: parseInt(currentUser.id),
+      content: content
+    }
+    this.props.addFeedComment(feedId, newComment)
   }
 
   render() {
@@ -153,7 +147,12 @@ const mapStateToProps = ({ projectTopics, members, loadUser }) => {
     allMembers : _.values(members.members)
   }
 }
-const mapDispatchToProps = { loadDashboardFeeds, createProjectTopic, loadFeedComments }
+const mapDispatchToProps = {
+  loadDashboardFeeds,
+  createProjectTopic,
+  loadFeedComments,
+  addFeedComment
+}
 
 // const enhance = spinnerWhileLoading(props => !props.isLoading)
 // const EnhancedFeedContainer = enhance(FeedContainer)
