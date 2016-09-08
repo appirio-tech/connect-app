@@ -30,7 +30,7 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
       <ul>
         {links.slice(0, limit).map((link, idx) =>
           <li key={idx}>
-            <a href={link.address}>{link.title}</a>
+            <a href={link.address} target="_blank">{link.title}</a>
             {canDelete && <div className="buttons">
               <button onClick={() => onDelete(idx)} type="button" className="btn-remove"/>
             </div>}
