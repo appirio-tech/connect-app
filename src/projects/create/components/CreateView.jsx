@@ -41,10 +41,10 @@ class CreateView extends Component {
     const { error, processing } = this.props
     return (
       <Tabs defaultActiveKey={this.state.currentTab} onSelect={this.handleSelect}>
-        <Tab eventKey={1} title="App Project">
+        <Tab eventKey={1} title="App Design & Dev">
           <AppProjectForm processing={processing} error={error} submitHandler={this.createProject} />
         </Tab>
-        <Tab eventKey={2} title="Work Project">
+        <Tab eventKey={2} title="Other Work">
           <GenericProjectForm processing={processing} error={error} submitHandler={this.createProject} />
         </Tab>
       </Tabs>
