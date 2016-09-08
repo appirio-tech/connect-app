@@ -143,7 +143,7 @@ class FeedContainer extends React.Component {
 const mapStateToProps = ({ projectTopics, members, loadUser }) => {
   return {
     currentUser: loadUser.user,
-    feeds      : projectTopics.topics,
+    feeds      : projectTopics.feeds,
     isLoading  : projectTopics.isLoading,
     error      : projectTopics.error,
     allMembers : _.values(members.members)
