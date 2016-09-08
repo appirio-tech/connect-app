@@ -94,7 +94,7 @@ class AppProjectForm extends Component {
             validations="minLength:1" required
             validationError="Project name is required"
             label="Project Name"
-            placeholder="Enter project name"
+            // placeholder="Enter project name"
             wrapperClass="row"
           />
 
@@ -104,7 +104,7 @@ class AppProjectForm extends Component {
             validations="minLength:1" required
             validationError="Please provide a project description"
             wrapperClass="row"
-            placeholder="Mobile app that solves my biggest problem"
+            // placeholder="Mobile app that solves my biggest problem"
           />
 
           <TCFormFields.TextInput
@@ -112,7 +112,7 @@ class AppProjectForm extends Component {
             label="Invite code (optional)"
             type="text"
             wrapperClass="row center"
-            placeholder="ABCD123"
+            // placeholder="ABCD123"
           />
         </div>
         {/* .project-info */}
