@@ -85,7 +85,6 @@ class AppProjectForm extends Component {
           validationError="Please select at least 1 device"
         />
 
-        <div className="section-divider"></div>
         <div className="project-info">
           <h2>Project info</h2>
 
@@ -95,7 +94,7 @@ class AppProjectForm extends Component {
             validations="minLength:1" required
             validationError="Project name is required"
             label="Project Name"
-            placeholder="enter project name"
+            placeholder="Enter project name"
             wrapperClass="row"
           />
 

@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 import React, { Component, PropTypes } from 'react'
-import { Tabs, Tab } from 'appirio-tech-react-components'
+import { Tabs, Tab, Icons } from 'appirio-tech-react-components'
 import { ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR } from '../../../config/constants'
 import AppProjectForm from './AppProjectForm'
 import GenericProjectForm from './GenericProjectForm'
@@ -62,8 +62,10 @@ class CreateView extends Component {
     }
     return (
       <section className="content">
-        <div className="container">
-          <a href="javascript:" className="btn-close" onClick={browserHistory.goBack}></a>
+        <div className="container container-margin">
+          <div onClick={ browserHistory.goBack } className="btn-close">
+            <Icons.XMarkIcon />
+          </div>
           {content}
         </div>
       </section>

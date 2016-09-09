@@ -1,25 +1,53 @@
-@import '~tc-ui/src/styles/tc-includes';
+@import 'tc-includes';
+
+.content.content-error {
+  .container {
+    width: 1220px;
+    background: $tc-gray-neutral-dark;
+  }
+}
 
 .page-error {
-  max-width: 960px;
-  margin: 70px auto 20px;
+  border-radius:4px;
+  position: relative;
+  padding-top: 55px;
   text-align: center;
-  color: $tc-gray-80;
-
-  p {
-    margin-bottom: 50px;
-    @include tc-heading-large;
-    font-weight: 300;
+  min-height: 606px;
+  min-width: 768px;
+  width: 970px;
+  margin: 20px auto 0;
+  background: $tc-white url('../../styles/i/coder-broken.svg') no-repeat 18% 85%;
+  background-size: 307px 300px;
+  a{
+    color: $tc-dark-blue;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  h3{
+    color: $tc-gray-70;
+    @include roboto-medium;
+    font-size: 48px;
+    letter-spacing: 0px;
+    padding: 0 0 25px 0;
+    line-height: inherit;
+  }
+  p{
+    text-align: left;
+    padding: 0 168px;
+    @include roboto;
+    font-size: $tc-label-lg;
+    color: $tc-gray-70;
+    letter-spacing: 0px;
+    line-height: 23px;
+  }
+  span{
+    position: absolute;
+    left: 49%;
+    top: 45%;
+    @include roboto-medium;
+    font-size: 190px;
+    color: $tc-orange-30;
+    letter-spacing: 0px;
   }
 }
-
-// ReactCSSTransitionGroup transitions
-.page-error-appear {
-  opacity: 0.01;
-
-  &.page-error-appear-active {
-    opacity: 1;
-    transition: opacity .25s ease-in;
-  }
-}
-

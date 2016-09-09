@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="35px" height="52px" viewBox="0 0 35 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.3 (29802) - http://www.bohemiancoding.com/sketch -->
+    <title>phone</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Create-Project" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Slices" transform="translate(-337.000000, -526.000000)" stroke="#444444" stroke-width="1.5">
+            <g id="phone" transform="translate(338.000000, 527.000000)">
+                <path d="M29.7,50 L3.3,50 C1.47675,50 0,48.5083333 0,46.6666667 L0,3.33333333 C0,1.49166667 1.47675,0 3.3,0 L29.7,0 C31.52325,0 33,1.49166667 33,3.33333333 L33,46.6666667 C33,48.5083333 31.52325,50 29.7,50 L29.7,50 Z" id="Stroke-4827" fill="#FFFFFF"></path>
+                <path d="M14.85,43.3333333 C14.85,42.4133333 15.5892,41.6666667 16.5,41.6666667 C17.4108,41.6666667 18.15,42.4133333 18.15,43.3333333 C18.15,44.2533333 17.4108,45 16.5,45 C15.5892,45 14.85,44.2533333 14.85,43.3333333 L14.85,43.3333333 Z" id="Stroke-4828"></path>
+                <path d="M0,36 L33,36" id="Stroke-4846"></path>
+                <path d="M0,8 L33,8" id="Stroke-4847"></path>
+            </g>
+        </g>
+    </g>
+</svg>

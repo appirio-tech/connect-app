@@ -10,15 +10,16 @@
   width: 100%;
   .icon-col {
     padding-top: 3px;
-    width: 40px;
+    padding-right: 10px;
   }
   .content-col {
-    > h4 {
-      @include roboto-bold;
+    width: 100%;
+    > h5 {
+      @include roboto-medium;
       font-size: 15px;
-      letterSpacing: 0;
       line-height: 25px;
       color: $tc-gray-80;
+      margin-bottom: 15px;
     }
     > p {
       @include roboto;
@@ -32,6 +33,20 @@
     }
     .child-component {
       margin-top: 10px;
+
+      textarea {
+        min-height: 80px;
+        max-width: 100%;
+        color: $tc-gray-50;
+        text-align: left;
+        text-indent: 0;
+        margin-bottom: 20px;
+      }
+      .checkbox-group-item label {
+        font-weight: 400;
+        color: $tc-black;
+        font-size: 13px;
+      }
     }
   }
 }

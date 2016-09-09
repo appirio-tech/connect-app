@@ -1,0 +1,46 @@
+@import "tc-includes";
+
+@mixin flexBox {
+  display: box;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  -o-flex-direction: row;
+  flex-direction: row;
+  width: auto;
+}
+@mixin flexWidth($number) {
+  -webkit-box-flex: $number;
+  -moz-box-flex: $number;
+  -webkit-flex: $number;
+  -ms-flex: $number;
+  flex: $number;
+}
+
+.dashboard-container {
+  @include flexBox;
+  display: flex;
+  width: 1110px;
+  margin: 50px auto;
+  .left-area {
+    @include flexWidth(1);
+
+    .dashboard-left-panel {
+      padding-bottom: 10 * $base-unit;
+    }
+  }
+  .right-area {
+    @include flexWidth(2);
+    margin-left: 4 * $base-unit;
+
+    .feed-action-card {
+      margin-top: 4 * $base-unit;
+    }
+  }
+}

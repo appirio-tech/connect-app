@@ -1,11 +1,10 @@
 import React, {PropTypes} from 'react'
 import AutoCompleteInput from './AutoCompleteInput'
-// import MemberAutoSuggest from './MemberAutoSuggest'
 import cn from 'classnames'
 import { Icons } from 'appirio-tech-react-components'
 
 
-const { IconUsersAdd, XMarkIcon } = Icons
+const { XMarkIcon } = Icons
 
 const AddTeamMember = (props) => {
   const {
@@ -22,46 +21,42 @@ const AddTeamMember = (props) => {
     onAddNewMember()
     onToggleAddTeamMember(false)
   }
-  const showAddMember = () => { onToggleAddTeamMember(true)}
-  if (isAddingTeamMember) {
-    return (
-      <div className="modal add-team-member">
-        <a href="javascript:" className="btn-close" onClick={onBtnClose}>
-          <XMarkIcon />
-        </a>
-        <div className="modal-title title-muted">
-          Add a Team Member
-        </div>
-        <div className="modal-body">
-          <div className="modal-inline-form">
-            <AutoCompleteInput {...props} />
-              <button
-                className="tc-btn tc-btn-primary tc-btn-md"
-                disabled={!selectedNewMember}
-                onClick={onConfirmAddMember}
-              >Add</button>
-          </div>
-          {error && <p className="error-message">
-            {error}
-          </p>}
-          {(currentUser.isManager || currentUser.isCopilot) && <div className="tab-group">
-            <ul>
-              <li className={cn({active: filterType === 'customer'})}>
-                <a href="javascript:" onClick={onTypeChangeCustomer}>Member</a>
-              </li>
-              <li className={cn({active: filterType === 'copilot'})}>
-                <a href="javascript:" onClick={onTypeChangeCopilot}>Copilot</a>
-              </li>
-            </ul>
-          </div>}
-        </div>
-      </div>
-    )
+
+  if (!isAddingTeamMember) {
+    return null
   }
   return (
-    <div className="panel-row add-team-member" onClick={showAddMember}>
-      <div className="add-icon"><IconUsersAdd className="add-icon"/></div>
-      <div className="profile">Add a team member</div>
+    <div className="modal add-team-member">
+      <a href="javascript:" className="btn-close" onClick={onBtnClose}>
+        <XMarkIcon />
+      </a>
+      <div className="modal-title title-muted">
+        Add a Team Member
+      </div>
+      <div className="modal-body">
+        <div className="modal-inline-form">
+          <AutoCompleteInput {...props} />
+          <button
+            className="tc-btn tc-btn-primary tc-btn-md"
+            disabled={!selectedNewMember}
+            onClick={onConfirmAddMember}
+          >Add
+          </button>
+        </div>
+        {error && <p className="error-message">
+          {error}
+        </p>}
+        {(currentUser.isManager || currentUser.isCopilot) && <div className="tab-group">
+          <ul>
+            <li className={cn({active: filterType === 'customer'})}>
+              <a href="javascript:" onClick={onTypeChangeCustomer}>Member</a>
+            </li>
+            <li className={cn({active: filterType === 'copilot'})}>
+              <a href="javascript:" onClick={onTypeChangeCopilot}>Copilot</a>
+            </li>
+          </ul>
+        </div>}
+      </div>
     </div>
   )
 }

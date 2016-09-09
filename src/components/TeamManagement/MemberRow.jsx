@@ -73,7 +73,7 @@ const MemberRow = ({ member, currentMember, onMemberDelete, onChangeOwner }) => 
 
   return (
     <div className="panel-row">
-      <Avatar size={40} avatarUrl={member.photoURL}/>
+      <Avatar avatarUrl={member.photoURL} userName={`${member.firstName} ${member.lastName}`}   />
       <div className="profile">
         <span className="name">{member.firstName} {member.lastName}</span>
         {member === currentMember && <span className="self"> (you) </span>}

@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { loadMembers } from '../../actions/members'
-import { loadProject } from './project'
-import { LOAD_PROJECT_DASHBOARD } from '../../config/constants'
+import { loadProject, loadDirectProjectData } from './project'
+import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
 
 /**
  * Load all project data to paint the dashboard
@@ -17,11 +17,15 @@ const getDashboardData = (dispatch, projectId) => {
         const userIds = _.map(value.members, 'userId')
         // this is to remove any nulls from the list (dev had some bad data)
         _.remove(userIds, i => !i)
-        // consider usign redux-combine-actions to load
-        // additional data in parallel
-        return dispatch(loadMembers(userIds))
-          .then(() => resolve(true))
-          .catch(err => reject(err))
+        // load additional data in parallel
+        return resolve(dispatch({
+          type: LOAD_ADDITIONAL_PROJECT_DATA,
+          payload: Promise.all([
+            dispatch(loadMembers(userIds)),
+            dispatch(loadDirectProjectData(value.directProjectId))
+          ])
+        }))
+
       })
       .catch(err => reject(err))
   })

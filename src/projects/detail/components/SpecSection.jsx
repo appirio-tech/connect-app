@@ -6,7 +6,7 @@ import FileListContainer from './FileListContainer'
 
 
 const SpecSection = props => {
-  const {project, resetFeatures, showFeaturesDialog, id, title, description, subSections} = props
+  const {project, resetFeatures, showFeaturesDialog, id, title, description, required, subSections} = props
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
       <div className="bottom-border-titles">
@@ -20,7 +20,6 @@ const SpecSection = props => {
 
   const renderChild = props => {
     const {type} = props
-
     switch(type) {
     case 'tabs': {
       const tabs = _.get(props, 'tabs')
@@ -46,11 +45,14 @@ const SpecSection = props => {
       )
     case 'notes':
       return (
-        <TCFormFields.Textarea
-          name={props.fieldName}
-          label={props.description}
-          wrapperClass="row"
-        />
+        <div>
+          <div className="textarea-title">
+            {props.description}
+          </div>
+          <TCFormFields.Textarea
+            name={props.fieldName}
+          />
+        </div>
       )
     case 'files': {
       const files = _.get(project, props.fieldName, [])
@@ -64,11 +66,17 @@ const SpecSection = props => {
   return (
     <div className="right-area-item" id={id}>
       <div className="boxes">
-        <h2 className="big-titles" id={id}>{title}</h2>
-          <p className="gray-text">
-            {description}
-          </p>
-          {subSections.map(renderSubSection)}
+        <h2 className="big-titles" id={id}>
+          {title}
+          { required
+            ? <span className="required">Required</span>
+            : <span className="optional">Optional</span>
+          }
+        </h2>
+        <p className="gray-text">
+          {description}
+        </p>
+        {subSections.map(renderSubSection)}
         </div>
     </div>
   )

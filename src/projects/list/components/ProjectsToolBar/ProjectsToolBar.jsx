@@ -5,7 +5,7 @@ import React, {Component} from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { SearchBar, Dropdown, DropdownItem, SwitchButton } from 'appirio-tech-react-components'
-import { projectSuggestions } from '../../actions/loadProjects'
+import { projectSuggestions } from '../../../actions/loadProjects'
 import { Sticky } from 'react-sticky'
 
 const projectTypes = [
@@ -76,39 +76,41 @@ class ProjectsToolBar extends Component {
     return (
       <Sticky stickyClassName="StickyProjectsToolBar">
         <div className="ProjectsToolBar flex middle space-between">
-          <div className="heading">All Projects</div>
-          <SearchBar recentTerms={ [] } onTermChange={ this.handleTermChange } onSearch={ this.handleSearch } onClearSearch={ this.handleSearch } />
-          <div className="project-types">
-            <Dropdown theme="default" noPointer>
-              <a className="dropdown-menu-header">{ type.label || 'All Types' }</a>
-              <ul className="dropdown-menu-list">
-                {
-                  _types.map((item, i) =>
-                    <DropdownItem key={i} item={item} onItemClick={applyFilters}  />
-                  )
-                }
-              </ul>
-            </Dropdown>
-          </div>
-          <div className="project-statuses">
-            <Dropdown theme="default" noPointer>
-              <a className="dropdown-menu-header">{ status.label || 'All Status' }</a>
-              <ul className="dropdown-menu-list">
-                {
-                  _statuses.map((item, i) =>
-                    <DropdownItem key={i} item={item} onItemClick={applyFilters}  />
-                  )
-                }
-              </ul>
-            </Dropdown>
-          </div>
-          <div className="my-projects-only">
-            <SwitchButton
-              onChange={ this.handleMyProjectsFilter }
-              label="My projects only"
-              name="my-projects-only"
-              checked={criteria.memberOnly}
-            />
+          <h2>All Projects</h2>
+          <div className="search-panel">
+            <SearchBar recentTerms={ [] } onTermChange={ this.handleTermChange } onSearch={ this.handleSearch } onClearSearch={ this.handleSearch } />
+            <div className="project-types">
+              <Dropdown theme="new-theme" noPointer>
+                <a className="dropdown-menu-header">{ type.label || 'All Types' }</a>
+                <ul className="dropdown-menu-list">
+                  {
+                    _types.map((item, i) =>
+                      <DropdownItem key={i} item={item} onItemClick={applyFilters}  />
+                    )
+                  }
+                </ul>
+              </Dropdown>
+            </div>
+            <div className="project-statuses">
+              <Dropdown theme="new-theme" noPointer>
+                <a className="dropdown-menu-header">{ status.label || 'All Status' }</a>
+                <ul className="dropdown-menu-list">
+                  {
+                    _statuses.map((item, i) =>
+                      <DropdownItem key={i} item={item} onItemClick={applyFilters}  />
+                    )
+                  }
+                </ul>
+              </Dropdown>
+            </div>
+            <div className="my-projects-only">
+              <SwitchButton
+                onChange={ this.handleMyProjectsFilter }
+                label="My projects only"
+                name="my-projects-only"
+                checked={criteria.memberOnly}
+              />
+            </div>
           </div>
           <div className="actions">
             <Link className="new-project-action" to="projects/create" >

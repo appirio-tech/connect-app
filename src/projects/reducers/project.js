@@ -1,6 +1,6 @@
 
 import {
-  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_FAILURE,
+  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
   CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT_PENDING, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   ADD_PROJECT_ATTACHMENT_PENDING, ADD_PROJECT_ATTACHMENT_SUCCESS, ADD_PROJECT_ATTACHMENT_FAILURE,
@@ -22,13 +22,23 @@ const initialState = {
   project: {}
 }
 
+const parseErrorObj = (action) => {
+  const data = action.payload.response.data.result
+  return {
+    type: action.type,
+    code: data.status,
+    msg: _.get(data, 'content.message', ''),
+    details: JSON.parse(_.get(data, 'details', null))
+  }
+}
+
 export const projectState = function (state=initialState, action) {
 
   switch (action.type) {
   case LOAD_PROJECT_PENDING:
     return Object.assign({}, state, {
       isLoading: true,
-      project: {}
+      project: null
     })
 
   case LOAD_PROJECT_SUCCESS:
@@ -38,15 +48,25 @@ export const projectState = function (state=initialState, action) {
       lastUpdated: new Date()
     })
 
-  case LOAD_PROJECT_FAILURE:
-    return Object.assign({}, state, {
-      isLoading: false,
-      error: { type: action.type, errObj: action.error }
-    })
-
   case CLEAR_LOADED_PROJECT:
     return Object.assign({}, state, {
       project: {}
+    })
+
+  case LOAD_DIRECT_PROJECT_SUCCESS:
+    return update(state, {
+      project: {
+        budget: { $set: {
+          actualCost: action.payload.actualCost,
+          projectedCost: action.payload.projectedCost,
+          totalBudget: action.payload.totalBudget
+        }},
+        duration: { $set: {
+          actualDuration: action.payload.actualDuration,
+          plannedDuration: action.payload.plannedDuration,
+          projectedDuration: action.payload.projectedDuration
+        }}
+      }
     })
 
   // Create & Edit project
@@ -66,27 +86,12 @@ export const projectState = function (state=initialState, action) {
       project: action.payload
     })
 
-  case CREATE_PROJECT_FAILURE:
-  case UPDATE_PROJECT_FAILURE:
-    return Object.assign({}, state, {
-      processing: false,
-      error: { type: action.type, errObj: action.error }
-    })
-
   // Project attachments
   case ADD_PROJECT_ATTACHMENT_PENDING:
   case UPDATE_PROJECT_ATTACHMENT_PENDING:
   case REMOVE_PROJECT_ATTACHMENT_PENDING:
     return Object.assign({}, state, {
       processingAttachments: true
-    })
-
-  case UPDATE_PROJECT_ATTACHMENT_FAILURE:
-  case ADD_PROJECT_ATTACHMENT_FAILURE:
-  case REMOVE_PROJECT_ATTACHMENT_FAILURE:
-    return Object.assign({}, state, {
-      processingAttachments: false,
-      error: { type: action.type, errObj: action.error }
     })
 
   case ADD_PROJECT_ATTACHMENT_SUCCESS:
@@ -121,14 +126,6 @@ export const projectState = function (state=initialState, action) {
       processingMembers: true
     })
 
-  case ADD_PROJECT_MEMBER_FAILURE:
-  case REMOVE_PROJECT_MEMBER_FAILURE:
-  case UPDATE_PROJECT_MEMBER_FAILURE:
-    return Object.assign({}, state, {
-      processingMembers: false,
-      error: { type: action.type, errObj: action.error }
-    })
-
   case ADD_PROJECT_MEMBER_SUCCESS:
     return update (state, {
       processingMembers: { $set : false },
@@ -158,6 +155,23 @@ export const projectState = function (state=initialState, action) {
       project: { members: { $splice: [[idx, 1]] } }
     })
   }
+
+  case LOAD_PROJECT_FAILURE:
+  case CREATE_PROJECT_FAILURE:
+  case UPDATE_PROJECT_FAILURE:
+  case ADD_PROJECT_MEMBER_FAILURE:
+  case REMOVE_PROJECT_MEMBER_FAILURE:
+  case UPDATE_PROJECT_MEMBER_FAILURE:
+  case UPDATE_PROJECT_ATTACHMENT_FAILURE:
+  case ADD_PROJECT_ATTACHMENT_FAILURE:
+  case REMOVE_PROJECT_ATTACHMENT_FAILURE:
+    return Object.assign({}, state, {
+      isLoading: false,
+      processing: false,
+      processingMembers: false,
+      processingAttachments: false,
+      error: parseErrorObj(action)
+    })
 
   default:
     return state

@@ -16,18 +16,25 @@ const Layout = (props) => {
   const { isLoadingUser, user } = props
   const handle  = _.get(user, 'handle')
   const userImage = _.get(user, 'profile.photoURL')
+  const userFirstName = _.get(user, 'profile.firstName')
+  const userLastName = _.get(user, 'profile.lastName')
+  let userName = userFirstName
+  if (userName && userLastName) {
+    userName += ' ' + userLastName
+  }
   if (isLoadingUser) {
     return (<div></div>)
   } else {
     return (
       <StickyContainer>
         <TopBar
-          username={ handle }
+          userHandle={ handle }
           userImage={ userImage }
+          userName={ userName }
           domain={ DOMAIN }
         />
-        <Alert stack={{limit: 3}} html timeout={4000} offset={150} />
-        <div>
+      <Alert stack={{limit: 3}} html timeout={4000} offset={50} />
+        <div className="main-wrapper">
           { props.children }
         </div>
         <Footer domain={ DOMAIN } />
