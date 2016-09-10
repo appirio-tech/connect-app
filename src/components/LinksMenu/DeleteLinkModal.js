@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 
-const DeleteLinkModal = ({ link, onCancel, onConfirm}) => {
+const DeleteLinkModal = ({ onCancel, onConfirm}) => {
   return (
     <div className="modal">
       <div className="modal-title danger flex center">
@@ -24,7 +24,7 @@ const DeleteLinkModal = ({ link, onCancel, onConfirm}) => {
 DeleteLinkModal.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
-  link: PropTypes.object.isRequired
+  // link: PropTypes.object.isRequired
 }
 
 export default DeleteLinkModal
