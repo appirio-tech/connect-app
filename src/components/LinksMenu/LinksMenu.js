@@ -2,10 +2,11 @@ import React, {PropTypes} from 'react'
 import './LinksMenu.scss'
 import Panel from '../Panel/Panel'
 import AddLink from './AddLink'
+import DeleteLinkModal from './DeleteLinkModal'
 import uncontrollable from 'uncontrollable'
 import cn from 'classnames'
 
-const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, onDelete }) => (
+const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, onDeleteIntent, onDelete }) => (
   <Panel className={cn({'modal-active': isAddingNewLink})}>
     <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Create New Link</Panel.AddBtn>
     <Panel.Title>
@@ -28,13 +29,36 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
 
     {!isAddingNewLink && <div className="panel-links">
       <ul>
-        {links.slice(0, limit).map((link, idx) =>
-          <li key={idx}>
-            <a href={link.address}>{link.title}</a>
-            {canDelete && <div className="buttons">
-              <button onClick={() => onDelete(idx)} type="button" className="btn-remove"/>
-            </div>}
-          </li>)}
+        {
+          links.slice(0, limit).map((link, idx) => {
+            const onDeleteConfirm = () => {
+              onDelete(idx)
+              onDeleteIntent(-1)
+            }
+            const onDeleteCancel = () => onDeleteIntent(-1)
+            const handleDeleteClick = () => onDeleteIntent(idx)
+            if (linkToDelete === idx) {
+              return (
+                <li className="delete-confirmation-modal" key={ 'delete-confirmation-' + idx }>
+                  <DeleteLinkModal
+                    link={ link }
+                    onCancel={ onDeleteCancel }
+                    onConfirm={ onDeleteConfirm }
+                  />
+                </li>
+              )
+            } else {
+              return (
+                <li key={idx}>
+                  <a href={link.address} target="_blank">{link.title}</a>
+                  {canDelete && <div className="buttons">
+                    <button onClick={ handleDeleteClick } type="button" className="btn-remove"/>
+                  </div>}
+                </li>
+              )
+            }
+          })
+        }
       </ul>
       {links.length > limit && <div className="links-footer">
         <a href="javascript:" onClick={() => onChangeLimit(10000)}>view more</a>
@@ -58,6 +82,7 @@ LinksMenu.defaultProps = {
 }
 
 export default uncontrollable(LinksMenu, {
+  linkToDelete: 'onDeleteIntent',
   isAddingNewLink: 'onAddingNewLink',
   limit: 'onChangeLimit'
 })
