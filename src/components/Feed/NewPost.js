@@ -3,6 +3,7 @@ import {Editor, EditorState, RichUtils} from 'draft-js'
 import {stateToHTML} from 'draft-js-export-html'
 import cn from 'classnames'
 import './draftjs.scss'
+import { Avatar } from 'appirio-tech-react-components'
 // import { Icons } from 'appirio-tech-react-components'
 
 const styles = [
@@ -71,6 +72,10 @@ class NewPost extends React.Component {
     const {editorState} = this.state
     const currentStyle = editorState.getCurrentInlineStyle()
     const selection = editorState.getSelection()
+    let authorName = currentUser.firstName
+    if (authorName && currentUser.lastName) {
+      authorName += ' ' + currentUser.lastName
+    }
     const blockType = editorState
       .getCurrentContent()
       .getBlockForKey(selection.getStartKey())
@@ -95,7 +100,7 @@ class NewPost extends React.Component {
         </div>
         <div className="modal-row">
           <div className="portrait">
-            <img src={currentUser.photoURL} alt=""/>
+            <Avatar avatarUrl={ currentUser.photoURL } userName={ authorName } />
           </div>
           <div className="object">
             <input
