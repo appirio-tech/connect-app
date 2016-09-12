@@ -14,11 +14,18 @@
       margin-left: auto;
     }
   }
-  li:hover{
+  li:not(.delete-confirmation-modal):hover{
     background: #FAFAFB;
     color: $tc-dark-blue;
     .buttons{
       display: block;
+    }
+  }
+  .delete-confirmation-modal {
+    .button-area {
+      button:not(:last-child) {
+        margin-right: 2 * $base-unit;
+      }
     }
   }
   .links-footer{
