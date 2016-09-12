@@ -26,10 +26,11 @@
 .dashboard-container {
   @include flexBox;
   display: flex;
-  width: 1110px;
+  max-width: 1110px;
   margin: 50px auto;
   .left-area {
     @include flexWidth(1);
+    max-width: 360px;
 
     .dashboard-left-panel {
       padding-bottom: 10 * $base-unit;

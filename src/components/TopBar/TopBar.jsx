@@ -42,10 +42,6 @@ class TopBar extends Component {
     ]
     const userMenuItems = [
       [
-        { label: 'My Profile', link: '/profile/' + userHandle, id: 0 },
-        { label: 'Settings', link: '/settings/profile', id: 1 }
-      ],
-      [
         { label: 'Help', link: '//help.' + domain, absolute: true, id: 0 }
       ],
       [

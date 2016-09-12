@@ -44,7 +44,7 @@ class GenericProjectForm extends Component {
           validations="minLength:1" required
           validationError="Project name is required"
           label="Project Name"
-          placeholder="enter project name"
+          // placeholder="enter project name"
           disabled={false}
           wrapperClass="row"
         />
@@ -54,7 +54,7 @@ class GenericProjectForm extends Component {
           label="Description"
           validations="minLength:1" required
           validationError="Please provide a project description"
-          placeholder="Mobile app that solves my biggest problem"
+          // placeholder="Mobile app that solves my biggest problem"
           disabled={false}
           wrapperClass="row"
         />
@@ -65,7 +65,7 @@ class GenericProjectForm extends Component {
           type="text"
           disabled={false}
           wrapperClass="row center"
-          placeholder="ABCD123"
+          // placeholder="ABCD123"
         />
 
         <div className="button-area">
