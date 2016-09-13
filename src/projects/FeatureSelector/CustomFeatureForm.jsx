@@ -1,5 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
+import cn from 'classnames'
+import Panel from '../../components/Panel/Panel'
+import DeleteFeatureModal from './DeleteFeatureModal'
 import { Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
 
 require('./FeatureForm.scss')
@@ -9,9 +12,11 @@ class CustomFeatureForm extends Component {
   constructor(props) {
     super(props)
     this.toggleFeature = this.toggleFeature.bind(this)
-    this.state = { }
+    this.state = { showDeleteModal : false }
     this.onSave = this.onSave.bind(this)
     this.onDelete = this.onDelete.bind(this)
+    this.onDeleteIntent = this.onDeleteIntent.bind(this)
+    this.onCancelDelete = this.onCancelDelete.bind(this)
   }
 
   componentWillMount() {
@@ -43,6 +48,14 @@ class CustomFeatureForm extends Component {
     this.props.removeFeature(data.id)
   }
 
+  onDeleteIntent() {
+    this.setState({ showDeleteModal : true})
+  }
+
+  onCancelDelete() {
+    this.setState({ showDeleteModal : false})
+  }
+
   onSave(data) {
     const { featureData } = this.props
     this.props.addFeature(_.merge({
@@ -54,13 +67,16 @@ class CustomFeatureForm extends Component {
 
   render() {
     const { isEdittable, onCancel } = this.props
-    const { data, isActive } = this.state
+    const { data, isActive, showDeleteModal } = this.state
     const submitButton = !isActive
       ? <button type="submit" className="tc-btn tc-btn-primary tc-btn-md" disabled={!isEdittable}>Save Feature</button>
       : <button type="submit" className="tc-btn tc-btn-default tc-btn-md" disabled={!isEdittable}>Delete Custom Feature</button>
-    const formAction = isActive ? this.onDelete : this.onSave
+    const formAction = isActive ? this.onDeleteIntent : this.onSave
+    const formClasses = cn('feature-form', {
+      'modal-active': showDeleteModal
+    })
     return (
-      <div className="feature-form">
+      <Panel className={ formClasses }>
         <div className="feature-title-row">
           <span className="title">{ _.get(data, 'title', 'Define a new feature')}</span>
           <SwitchButton
@@ -94,7 +110,17 @@ class CustomFeatureForm extends Component {
             </div>
           </Formsy.Form>
         </div>
-      </div>
+        <div className="modal-overlay"></div>
+        { showDeleteModal &&
+          <div className="delete-feature-modal">
+            <DeleteFeatureModal
+              feature={ data }
+              onCancel={ this.onCancelDelete }
+              onConfirm={ this.onDelete }
+            />
+          </div>
+        }
+      </Panel>
     )
   }
 }

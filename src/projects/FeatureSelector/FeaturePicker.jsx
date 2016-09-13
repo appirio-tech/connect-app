@@ -308,7 +308,7 @@ class FeaturePicker extends Component {
           <div className="features flex column">
             <ul className="feature-categories-list">
               { categoriesList.map(renderFeatureCategory) }
-              <li>
+              <li className="add-custom-feature">
                 <div className="custom-feature-btn-desc">Create your custom feature if you don’t see the one you need in the list.</div>
                 <button className="tc-btn-secondary tc-btn-sm" onClick={ this.renderCustomFeatureForm }>
                   <span>Add a custom feature</span>

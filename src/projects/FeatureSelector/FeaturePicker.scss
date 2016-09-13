@@ -61,22 +61,21 @@ button {
         max-height: calc(100% - #{$header-height});
         width: 300px;
 
-        > li {
-          &:last-child {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        li.add-custom-feature {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
 
-            .custom-feature-btn-desc {
-              @include roboto;
-              @include tc-label-md;
-              color: $tc-gray-50;
-            }
+          .custom-feature-btn-desc {
+            @include roboto;
+            @include tc-label-md;
+            color: $tc-gray-50;
+            padding: 2 * $base-unit 4 * $base-unit;
+          }
 
-            button {
-              margin-top: 4 * $base-unit;
-            }
+          button {
+            margin: 4 * $base-unit 0px;
           }
         }
       }
