@@ -112,6 +112,7 @@ class EditProjectForm extends Component {
         <Modal
           isOpen={ this.state.showFeaturesDialog }
           className="feature-selection-dialog"
+          overlayClassName="feature-selection-dialog-overlay"
           onRequestClose={ this.hideFeaturesDialog }
         >
           <FeaturePicker

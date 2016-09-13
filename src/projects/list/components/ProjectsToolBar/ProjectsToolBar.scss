@@ -49,9 +49,16 @@
       display: inline-block;
     }
     .SwitchButton{
+      cursor: pointer;
       margin-left: 20px;
-      width: 127px;
+      width: 129px;
       display: inline-block;
+      .label {
+        margin-right: 2px;
+      }
+      label {
+        cursor: pointer;
+      }
     }
   }
 }

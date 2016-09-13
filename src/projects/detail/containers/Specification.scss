@@ -1,4 +1,4 @@
-@import '~tc-ui/src/styles/tc-includes';
+@import 'tc-includes';
 
 //TODO  Additional variables - need to find a home for these
 
@@ -26,6 +26,15 @@ $title-color: $tc-gray-80;
   -webkit-flex: $number;
   -ms-flex: $number;
   flex: $number;
+}
+
+.feature-selection-dialog-overlay {
+  position          : fixed;
+  top               : 0;
+  left              : 0;
+  right             : 0;
+  bottom            : 0;
+  z-index: 21;/* +1 of the z-index of the topbar */
 }
 
 .feature-selection-dialog {
