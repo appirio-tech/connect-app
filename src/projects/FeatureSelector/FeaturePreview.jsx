@@ -5,9 +5,9 @@ require('./FeaturePreview.scss')
 const FeaturePreview = props => {
   const { feature, addingCustomFeature } = props
   let previewImg = null
-  if (!feature) {
+  if (!feature && !addingCustomFeature) {
     previewImg = require('./images/Default-preview.png')
-  } else if (feature.type === 'custom' || addingCustomFeature) {
+  } else if (addingCustomFeature || feature.categoryId === 'custom') {
     previewImg = require('./images/Custom-feature.png')
   } else {
     // TODO change image names to match feature id

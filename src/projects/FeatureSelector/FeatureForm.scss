@@ -1,29 +1,87 @@
 @import 'tc-includes';
 
 .feature-form {
-  padding: 8 * $base-unit;
+  padding: 10 * $base-unit;
+  border: none;
+  box-shadow: none;
+
+  &.modal-active {
+    position: inherit;
+
+    .modal-overlay {
+      background-color: $tc-gray-neutral-dark;
+    }
+  }
   
   .feature-title-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4 * $base-unit;
     .title {
+      flex: 1;
       @include tc-heading;
+      @include roboto-medium;
+      color: $tc-black;
+      white-space: nowrap;
     }
   }
 
   .feature-form-content {
     .feature-description {
-      @include tc-label-md;
+      @include tc-label-lg;
       color: $tc-gray-50;
       margin: 4 * $base-unit 0px;
     }
     .predefined-feature-form {
       .feature-notes {
         label {
-          @include tc-label-xs;
+          @include tc-label-md;
+          color: $tc-gray-70;
         }
 
         textarea {
           height: 100px;
+          @include tc-label-lg;
+          color: $tc-black;
         }
+      }
+    }
+
+    .custom-feature-form {
+      .feature-description {
+        label {
+          @include tc-label-md;
+          color: $tc-gray-70;
+        }
+
+        textarea {
+          height: 100px;
+          @include tc-label-lg;
+          color: $tc-black;
+        }
+      }
+    }
+
+    .feature-form-actions {
+      display: flex;
+      justify-content: center;
+      
+      button + button {
+        margin-left: 4 * $base-unit;
+      }
+    }
+  }
+
+  .delete-feature-modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 21;/* +1 of the z-index of the topbar */
+
+    .button-area {
+      button + button {
+        margin-left: 2 * $base-unit;
       }
     }
   }

@@ -22,6 +22,7 @@ button {
 }
 
 .define-features {
+  $header-height: 65px;
   $footer-height: 66px;
   background-color: white;
   text-align: left;
@@ -57,34 +58,24 @@ button {
 
       ul.feature-categories-list {
         overflow-y: scroll;
-        max-height: 100%;
+        max-height: calc(100% - #{$header-height});
         width: 300px;
-      }
 
-      &:last-child {
-        min-height: $footer-height;
-        margin-bottom: 0px;
-        overflow: hidden;
-
-        button {
+        li.add-custom-feature {
           display: flex;
+          flex-direction: column;
           justify-content: center;
           align-items: center;
-          height          : $footer-height;
-          text-transform  : uppercase;
-          width           : 100%;
 
-          .icon {
-            color           : $tc-dark-blue;
-            background-color: white;
-            border-radius   : 50%;
-            text-align      : center;
-            font-size       : 20px;
-            margin-left     : 10px;
-            margin-right    : 0;
-            font-family     : arial;
-            width           : 30px;
-            line-height     : 30px;
+          .custom-feature-btn-desc {
+            @include roboto;
+            @include tc-label-md;
+            color: $tc-gray-50;
+            padding: 2 * $base-unit 4 * $base-unit;
+          }
+
+          button {
+            margin: 4 * $base-unit 0px;
           }
         }
       }
