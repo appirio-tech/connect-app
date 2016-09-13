@@ -6,8 +6,7 @@
 }
 
 .content {
-  display: block;
-  overflow:hidden;
+  overflow: hidden;
   .container {
     display:block;
     position:relative;
@@ -112,14 +111,45 @@
         display: flex;
         flex-flow: row wrap;
         justify-content: space-between;
+        
+        // TODO: Create as mixin;
+        // FIXME: Refactor to use proper calculation of the ":after" box position
         .divider {
           @include roboto-light;
-          font-style:italic;
-          color: $tc-gray-40;
-          font-size:12px;
-          line-height: 155px;
-          background: url('../../images/divider.png') no-repeat 50% 0;
+          position: relative;
+          width: 20px;
+          height: 155px;
+          // background: url('../../images/divider.png') no-repeat 50% 0;
+
+          &:before {
+            content: '';
+            display: block;
+            width: 1px;
+            height: 80%;
+            background-color: $tc-gray-10;
+            position: absolute;
+            left: 50%;
+            top: 10%;
+          }
+
+          &:after {
+            content: 'Or';
+            font-style: italic;
+            color: $tc-gray-40;
+            font-size: 12px;
+            line-height: 20px;
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -15px 0 0 -10px;
+            text-align: center;
+            width: 20px;
+            line-height: 30px;
+            background-color: $tc-white;
+          }
         }
+
         .target-selector {
           display: flex;
           flex-flow: row wrap;
