@@ -50,7 +50,7 @@ class ProjectsToolBar extends Component {
   /*eslint-disable no-unused-vars */
   handleTermChange(oldTerm, searchTerm, reqNo, callback) {
     this.props.projectSuggestions(searchTerm)
-    // this.setState({ callback, reqNo })
+    callback(reqNo, this.props.projects);
   }
   /*eslint-enable */
 
@@ -78,7 +78,7 @@ class ProjectsToolBar extends Component {
         <div className="ProjectsToolBar flex middle space-between">
           <h2>All Projects</h2>
           <div className="search-panel">
-            <SearchBar recentTerms={ [] } onTermChange={ this.handleTermChange } onSearch={ this.handleSearch } onClearSearch={ this.handleSearch } />
+            <SearchBar hideSuggestionsWhenEmpty={ true } recentTerms={false} showPopularSearchHeader={false} onTermChange={ this.handleTermChange } onSearch={ this.handleSearch } onClearSearch={ this.handleSearch } />
             <div className="project-types">
               <Dropdown theme="new-theme" noPointer>
                 <a className="dropdown-menu-header">{ type.label || 'All Types' }</a>
