@@ -1,2 +1,10 @@
 @import 'tc-styles';
+
+// This is the partial where we load all the Roboto fonts for Webpack
 @import 'fonts';
+
+// Make the fonts render properly; under Chrome & Firefox Roboto render really
+// bad, so we have to force geometricPrecision.
+body {
+	text-rendering: geometricPrecision;
+}
