@@ -4,9 +4,14 @@
   padding: 8 * $base-unit;
   
   .feature-title-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4 * $base-unit;
     .title {
+      flex: 1;
       @include tc-heading;
       @include roboto-medium;
+      white-space: nowrap;
     }
   }
 
@@ -28,6 +33,30 @@
           @include tc-label-lg;
           color: $tc-black;
         }
+      }
+    }
+
+    .custom-feature-form {
+      .feature-description {
+        label {
+          @include tc-label-md;
+          color: $tc-gray-70;
+        }
+
+        textarea {
+          height: 100px;
+          @include tc-label-lg;
+          color: $tc-black;
+        }
+      }
+    }
+
+    .feature-form-actions {
+      display: flex;
+      justify-content: center;
+      
+      button + button {
+        margin-left: 4 * $base-unit;
       }
     }
   }

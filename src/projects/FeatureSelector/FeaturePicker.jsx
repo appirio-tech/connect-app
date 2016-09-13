@@ -4,6 +4,7 @@ import update from 'react-addons-update'
 import PickerFeatureList from './PickerFeatureList'
 // import FeatureForm from './FeatureForm'
 import DefaultFeatureForm from './DefaultFeatureForm'
+import CustomFeatureForm from './CustomFeatureForm'
 import FeaturePreview from './FeaturePreview'
 
 require('./FeaturePicker.scss')
@@ -214,6 +215,8 @@ class FeaturePicker extends Component {
     this.selectFeature = this.selectFeature.bind(this)
     this.toggleFeature = this.toggleFeature.bind(this)
     this.updateSelectedFeature = this.updateSelectedFeature.bind(this)
+    this.renderCustomFeatureForm = this.renderCustomFeatureForm.bind(this)
+    this.renderDefaultFeatureForm = this.renderDefaultFeatureForm.bind(this)
   }
 
   componentWillMount() {
@@ -228,6 +231,20 @@ class FeaturePicker extends Component {
     idx > -1 ? this.removeFeature(featureId) : this.addFeature(featureId)
   }
 
+  renderCustomFeatureForm() {
+    this.setState({
+      selectedFeatureId: null,
+      showCutsomFeatureForm: true
+    })
+  }
+
+  renderDefaultFeatureForm() {
+    this.setState({
+      selectedFeatureId: null,
+      showCutsomFeatureForm: false
+    })
+  }
+
   updateSelectedFeature(feature) {
     const idx = _.findIndex(this.state.activeFeatureList, f => f.id === feature.id )
     const newState = update(this.state, {
@@ -240,7 +257,8 @@ class FeaturePicker extends Component {
   addFeature(feature) {
     const newState = update(this.state, {
       activeFeatureCount: {$set: this.state.activeFeatureCount + 1},
-      activeFeatureList: { $push : [feature] }
+      activeFeatureList: { $push : [feature] },
+      selectedFeatureId: { $set : feature.id }
     })
     this.setState(newState)
     this.props.onSave(newState.activeFeatureList)
@@ -257,13 +275,15 @@ class FeaturePicker extends Component {
     this.props.onSave(newState.activeFeatureList)
   }
 
-  selectFeature(selectedFeatureId) {
-    this.setState({ selectedFeatureId })
+  selectFeature(selectedFeature) {
+    this.setState({
+      selectedFeatureId : selectedFeature.id,
+      showCutsomFeatureForm : selectedFeature.categoryId === 'custom' })
   }
   //----------------------------------------
 
   render() {
-    const { selectedFeatureId, activeFeatureList, activeFeatureCount, addingCustomFeature  } = this.state
+    const { selectedFeatureId, activeFeatureList, activeFeatureCount, addingCustomFeature, showCutsomFeatureForm  } = this.state
     const { isEdittable } = this.props
     const selectedFeature = _.find(AVAILABLE_FEATURES, f => f.id === selectedFeatureId )
     const selectedFeatureData = _.find(activeFeatureList, f => f.id === selectedFeatureId )
@@ -271,8 +291,7 @@ class FeaturePicker extends Component {
       return (
         <li key={ idx }>
           <PickerFeatureList
-            icon={ category.icon }
-            headerText={ category.label }
+            category={ category }
             features={ categorizedFeatureSet[category.id] || []}
             selectedFeatureId={ selectedFeatureId }
             activeFeatureList={ activeFeatureList }
@@ -289,34 +308,43 @@ class FeaturePicker extends Component {
           <div className="features flex column">
             <ul className="feature-categories-list">
               { categoriesList.map(renderFeatureCategory) }
+              <li>
+                <div className="custom-feature-btn-desc">Create your custom feature if you don’t see the one you need in the list.</div>
+                <button className="tc-btn-secondary tc-btn-sm" onClick={ this.renderCustomFeatureForm }>
+                  <span>Add a custom feature</span>
+                </button>
+              </li>
             </ul>
-            {/*
-            <li>
-              <button className="tc-btn-primary" onClick={ this.toggleDefineFeatures } disabled={ readOnly }>
-                <span>Define a new feature</span>
-                <div className="icon">+</div>
-              </button>
-            </li>
-            */}
           </div>
           <div className="contents flex column flex-grow">
-            { selectedFeatureId ?
-                 <DefaultFeatureForm
-                   isEdittable={isEdittable}
-                   featureDesc={selectedFeature}
-                   featureData={selectedFeatureData}
-                   updateFeature={this.updateSelectedFeature}
-                   addFeature={this.addFeature}
-                   removeFeature={this.removeFeature}
-                 />
-                : (<div className="feature-form-instructions">
+            { showCutsomFeatureForm ?
+                  <CustomFeatureForm
+                    isEdittable={isEdittable}
+                    featureDesc={selectedFeature}
+                    featureData={selectedFeatureData}
+                    updateFeature={this.updateSelectedFeature}
+                    addFeature={this.addFeature}
+                    removeFeature={this.removeFeature}
+                    onCancel={this.renderDefaultFeatureForm}
+                   />
+                : ( selectedFeatureId ?
+                  <DefaultFeatureForm
+                    isEdittable={isEdittable}
+                    featureDesc={selectedFeature}
+                    featureData={selectedFeatureData}
+                    updateFeature={this.updateSelectedFeature}
+                    addFeature={this.addFeature}
+                    removeFeature={this.removeFeature}
+                  />
+                  : (<div className="feature-form-instructions">
                     <h3>Select and define features for your app</h3>
                     <p>Select from the most popular features, listed on the left, or define your own custom features.</p>
                   </div>)
+                )
               }
           </div>
-          <div className="contents flex column flex-grow">
-            <FeaturePreview feature={ selectedFeature } addingCustomFeature={ addingCustomFeature } />
+          <div className="contents flex column">
+            <FeaturePreview feature={ selectedFeature } addingCustomFeature={ showCutsomFeatureForm } />
           </div>
         </main>
       </div>

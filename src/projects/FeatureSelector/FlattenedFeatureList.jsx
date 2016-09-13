@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react'
-import cn from 'classnames'
 import FeaturePicker from './FeaturePicker'
 require('./FlattenedFeatureList.scss')
 
@@ -12,12 +11,15 @@ const FlattenedFeatureList = ({ addedFeatures }) => {
     childrenDom = []
     addedFeatures.map((f, idx) => {
       const feature = f.categoryId === 'custom' ? f : allFeaturesMap[f.id]
+      if (feature.categoryId === 'custom') {
+        feature.icon = require('./images/custom-features.svg')
+      }
       childrenDom.push(
         <div className="flattened-feature-list-item" key={idx}>
           {feature.icon && <div className="icon-col">{ <img src={feature.icon} /> }</div>}
           <div className="content-col">
             <h4>{ feature.title }</h4>
-            <p className={cn({bigger: !feature.icon})}>{ feature.description }</p>
+            <p>{ feature.description }</p>
           </div>
         </div>
       )
