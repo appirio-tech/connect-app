@@ -195,51 +195,51 @@
           }
         }
         .bold{
-          background: url('../../styles/i/tc-text-16-bold.svg') no-repeat;
+          background: url('../../assets/images/tc-text-16-bold.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/tc-text-16-bold-active.svg') no-repeat;
+            background: url('../../assets/images/tc-text-16-bold-active.svg') no-repeat;
           }
         }
         .italic{
-          background: url('../../styles/i/tc-text-16-italic.svg') no-repeat;
+          background: url('../../assets/images/tc-text-16-italic.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/tc-text-16-italic-active.svg') no-repeat;
+            background: url('../../assets/images/tc-text-16-italic-active.svg') no-repeat;
           }
         }
         .underline{
-          background: url('../../styles/i/tc-text-16-underline.svg') no-repeat;
+          background: url('../../assets/images/tc-text-16-underline.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/tc-text-16-underline-active.svg') no-repeat;
+            background: url('../../assets/images/tc-text-16-underline-active.svg') no-repeat;
           }
         }
         .ordered-list{
-          background: url('../../styles/i/text-16px_list-numbers.svg') no-repeat;
+          background: url('../../assets/images/text-16px_list-numbers.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/text-16px_list-numbers-active.svg') no-repeat;
+            background: url('../../assets/images/text-16px_list-numbers-active.svg') no-repeat;
           }
         }
         .unordered-list{
-          background: url('../../styles/i/text-16px_list-bullet.svg') no-repeat;
+          background: url('../../assets/images/text-16px_list-bullet.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/text-16px_list-bullet-active.svg') no-repeat;
+            background: url('../../assets/images/text-16px_list-bullet-active.svg') no-repeat;
           }
         }
         .code{
-          background: url('../../styles/i/design-16px_code.svg') no-repeat;
+          background: url('../../assets/images/design-16px_code.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/design-16px_code-active.svg') no-repeat;
+            background: url('../../assets/images/design-16px_code-active.svg') no-repeat;
           }
         }
         .quote{
-          background: url('../../styles/i/text-16px_quote.svg') no-repeat;
+          background: url('../../assets/images/text-16px_quote.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/text-16px_quote-active.svg') no-repeat;
+            background: url('../../assets/images/text-16px_quote-active.svg') no-repeat;
           }
         }
         .attach{
-          background: url('../../styles/i/media-16px-1_image-02.svg') no-repeat;
+          background: url('../../assets/images/media-16px-1_image-02.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/media-16px-1_image-02-active.svg') no-repeat;
+            background: url('../../assets/images/media-16px-1_image-02-active.svg') no-repeat;
           }
         }
 
@@ -337,7 +337,7 @@
     }
     &:empty {
       border: 2px solid $tc-gray-50;
-      background: url('../../styles/i/user-add.svg') no-repeat;
+      background: url('../../assets/images/user-add.svg') no-repeat;
       background-position: center;
       background-size: 16px;
       border-radius: 33px;
@@ -361,19 +361,19 @@
       }
     }
     .btn-user-remove{
-      background: url('../../styles/i/user-remove.svg') no-repeat;
+      background: url('../../assets/images/user-remove.svg') no-repeat;
     }
     .btn-promote{
-      background: url('../../styles/i/promote.svg') no-repeat;
+      background: url('../../assets/images/promote.svg') no-repeat;
     }
     .btn-leave{
-      background: url('../../styles/i/exit.svg') no-repeat;
+      background: url('../../assets/images/exit.svg') no-repeat;
     }
     .btn-edit{
-      background: url('../../styles/i/ui-16px-1_pencil.svg') no-repeat;
+      background: url('../../assets/images/ui-16px-1_pencil.svg') no-repeat;
     }
     .btn-remove{
-      background: url('../../styles/i/ui-16px-1_trash-simple.svg') no-repeat;
+      background: url('../../assets/images/ui-16px-1_trash-simple.svg') no-repeat;
     }
   }
 }

@@ -1,4 +1,3 @@
-
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { clearLoadedProject } from '../../actions/project'
@@ -6,7 +5,7 @@ import DevicesComponent from './Devices'
 import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 import _ from 'lodash'
 
-require('./CreateProject.scss')
+require('./NewProjectForm.scss')
 
 const projectTypes = [
   {

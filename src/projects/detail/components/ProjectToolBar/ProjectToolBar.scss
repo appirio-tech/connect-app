@@ -1,5 +1,7 @@
 @import 'tc-includes';
 
+// FIXME: Deep nesting; refactor; use height unit variables
+
 .ProjectToolBar {
   height: 60px;
   background-color: $tc-white;

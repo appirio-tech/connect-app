@@ -6,7 +6,7 @@ $tc-body-small      	: 14px;
 $tc-body-extra-small	: 12px;
 
 @mixin icon($url) {
-  background: url("../../styles/i/#{$url}") no-repeat;
+  background: url("../../assets/images/#{$url}") no-repeat;
 
 }
 

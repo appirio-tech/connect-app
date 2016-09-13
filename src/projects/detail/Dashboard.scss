@@ -1,20 +1,11 @@
 @import "tc-includes";
-
+// FIXME
 @mixin flexBox {
   display: box;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  -o-flex-direction: row;
   flex-direction: row;
-  width: auto;
 }
+// FIXME
 @mixin flexWidth($number) {
   -webkit-box-flex: $number;
   -moz-box-flex: $number;
@@ -23,6 +14,7 @@
   flex: $number;
 }
 
+// FIXME
 .dashboard-container {
   @include flexBox;
   display: flex;
