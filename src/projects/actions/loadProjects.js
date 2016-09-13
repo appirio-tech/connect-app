@@ -64,7 +64,17 @@ export function projectSuggestions(searchTerm) {
 
     dispatch({ type: PROJECT_SUGGESTIONS_SEARCH_SUCCESS,
       projects: [
-        'LUX challenge for HP',
+        'LUX challenge for HP - A',
+        'LUX challenge for HP - B',
+        'LUX challenge for HP - C',
+        'LUX challenge for HP - D',
+        'LUX challenge for HP - E',
+        'LUX challenge for HP - F',
+        'LUX challenge for HP - G',
+        'LUX challenge for HP - H',
+        'LUX challenge for HP - I',
+        'LUX challenge for HP - J',
+        'LUX challenge for HP - K',
         'LUX challenge for Delloite'
       ]
     })
