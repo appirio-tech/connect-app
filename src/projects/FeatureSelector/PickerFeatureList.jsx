@@ -11,9 +11,9 @@ class PickerFeatureList extends Component {
 
   render() {
     const { category, features, selectedFeatureId, activeFeatureList, onSelectFeature } = this.props
-    const { id , icon, label } = category
+    const { id, icon, label } = category
 
-    let allFeatures = null;
+    let allFeatures = null
     if (id !== 'custom') {
       allFeatures = features
     } else {

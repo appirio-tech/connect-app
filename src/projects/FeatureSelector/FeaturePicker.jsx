@@ -207,7 +207,6 @@ class FeaturePicker extends Component {
       selectedFeatureId: null,
       activeFeatureCount: 0,
       activeFeatureList : [],
-      addingCustomFeature: false,
       showCutsomFeatureForm: false
     }
     this.addFeature = this.addFeature.bind(this)
@@ -283,7 +282,7 @@ class FeaturePicker extends Component {
   //----------------------------------------
 
   render() {
-    const { selectedFeatureId, activeFeatureList, activeFeatureCount, addingCustomFeature, showCutsomFeatureForm  } = this.state
+    const { selectedFeatureId, activeFeatureList, activeFeatureCount, showCutsomFeatureForm  } = this.state
     const { isEdittable } = this.props
     const selectedFeature = _.find(AVAILABLE_FEATURES, f => f.id === selectedFeatureId )
     const selectedFeatureData = _.find(activeFeatureList, f => f.id === selectedFeatureId )
@@ -300,6 +299,19 @@ class FeaturePicker extends Component {
         </li>
       )
     }
+    const defaultFeatureForm = selectedFeatureId
+    ? (<DefaultFeatureForm
+        isEdittable={isEdittable}
+        featureDesc={selectedFeature}
+        featureData={selectedFeatureData}
+        updateFeature={this.updateSelectedFeature}
+        addFeature={this.addFeature}
+        removeFeature={this.removeFeature}
+       />)
+    : (<div className="feature-form-instructions">
+      <h3>Select and define features for your app</h3>
+      <p>Select from the most popular features, listed on the left, or define your own custom features.</p>
+      </div>)
 
     return (
       <div className="define-features">
@@ -317,31 +329,18 @@ class FeaturePicker extends Component {
             </ul>
           </div>
           <div className="contents flex column flex-grow">
-            { showCutsomFeatureForm ?
-                  <CustomFeatureForm
-                    isEdittable={isEdittable}
-                    featureDesc={selectedFeature}
-                    featureData={selectedFeatureData}
-                    updateFeature={this.updateSelectedFeature}
-                    addFeature={this.addFeature}
-                    removeFeature={this.removeFeature}
-                    onCancel={this.renderDefaultFeatureForm}
-                   />
-                : ( selectedFeatureId ?
-                  <DefaultFeatureForm
-                    isEdittable={isEdittable}
-                    featureDesc={selectedFeature}
-                    featureData={selectedFeatureData}
-                    updateFeature={this.updateSelectedFeature}
-                    addFeature={this.addFeature}
-                    removeFeature={this.removeFeature}
-                  />
-                  : (<div className="feature-form-instructions">
-                    <h3>Select and define features for your app</h3>
-                    <p>Select from the most popular features, listed on the left, or define your own custom features.</p>
-                  </div>)
-                )
-              }
+            { showCutsomFeatureForm
+              ? (<CustomFeatureForm
+                  isEdittable={isEdittable}
+                  featureDesc={selectedFeature}
+                  featureData={selectedFeatureData}
+                  updateFeature={this.updateSelectedFeature}
+                  addFeature={this.addFeature}
+                  removeFeature={this.removeFeature}
+                  onCancel={this.renderDefaultFeatureForm}
+                 />)
+              : defaultFeatureForm
+            }
           </div>
           <div className="contents flex column">
             <FeaturePreview feature={ selectedFeature } addingCustomFeature={ showCutsomFeatureForm } />
