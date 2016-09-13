@@ -1,7 +1,7 @@
 @import 'tc-includes';
 
 .feature-form {
-  padding: 8 * $base-unit;
+  padding: 10 * $base-unit;
   border: none;
   box-shadow: none;
 
@@ -21,6 +21,7 @@
       flex: 1;
       @include tc-heading;
       @include roboto-medium;
+      color: $tc-black;
       white-space: nowrap;
     }
   }

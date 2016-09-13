@@ -6,9 +6,14 @@
   width           : 286px;
 
   .feature-list-feature {
-    padding : (2 * $base-unit) (4 * $base-unit);
+    padding : 0px (4 * $base-unit);
     .selected-feature-icon {
       visibility: hidden;
+    }
+    .feature-title {
+      @include tc-label-md;
+      color: $tc-gray-80;
+      line-height: 8 * $base-unit;
     }
     &.active-feature {
       background-color: $tc-gray-neutral-light;
