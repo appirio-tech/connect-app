@@ -12,7 +12,6 @@ import Dashboard     from './detail/Dashboard'
 import ProjectMessages from './detail/Messages'
 import ProjectSpecification from './detail/containers/Specification'
 import ProjectToolBar from './detail/components/ProjectToolBar/ProjectToolBar'
-import CreateProjectWizard from './create/components/CreateView'
 import { requiresAuthentication } from '../components/AuthenticatedComponent'
 
 
