@@ -32,7 +32,7 @@ class PickerFeatureList extends Component {
       return (
         <li key={ idx } className={featureClasses}>
           <a onClick={ onClick } className="clean">
-            <div className="flex space-between">
+            <div className="flex space-between middle">
               <span className="feature-title">{ feature.title }</span>
               <span>{ isActive &&  <Icons.IconUICheckBold width={10} height={10} fill={'#FB7D22'} />}</span>
             </div>
