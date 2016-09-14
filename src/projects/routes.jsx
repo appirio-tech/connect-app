@@ -20,7 +20,6 @@ const projectRoutes = (
   <Route path="/projects" component={ requiresAuthentication(ProjectLayout) }>
     // TODO add project topbar
     <IndexRoute components={{topbar: null, main: Projects }} />
-    <Route path="create" components={{topbar: null, main: CreateProjectWizard}} />
     <Route path="walkthrough" components={{topbar: ProjectsTopBar, main: Walkthrough }} />
     <Route path=":projectId" components={{topbar: ProjectToolBar, main: ProjectDetail}} >
       <IndexRoute component={ Dashboard } />
