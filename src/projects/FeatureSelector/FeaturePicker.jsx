@@ -318,14 +318,17 @@ class FeaturePicker extends Component {
         <h2><strong>Project Features - <span className="selected-feature-count">{activeFeatureCount || 0} selected</span></strong></h2>
         <main className="flex space-between">
           <div className="features flex column">
+            { showCutsomFeatureForm && <div className="features-overlay"></div> }
             <ul className="feature-categories-list">
               { categoriesList.map(renderFeatureCategory) }
-              <li className="add-custom-feature">
-                <div className="custom-feature-btn-desc">Create your custom feature if you don’t see the one you need in the list.</div>
-                <button className="tc-btn-secondary tc-btn-sm" onClick={ this.renderCustomFeatureForm }>
-                  <span>Add a custom feature</span>
-                </button>
-              </li>
+              { !showCutsomFeatureForm &&
+                <li className="add-custom-feature">
+                  <div className="custom-feature-btn-desc">Create your custom feature if you don’t see the one you need in the list.</div>
+                  <button className="tc-btn-secondary tc-btn-sm" onClick={ this.renderCustomFeatureForm }>
+                    <span>Add a custom feature</span>
+                  </button>
+                </li>
+              }
             </ul>
           </div>
           <div className="contents flex column flex-grow">

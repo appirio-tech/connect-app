@@ -57,3 +57,27 @@
     font-size: $tc-label-md;
     color: $tc-gray-50;
 }
+
+.project-creation-dialog-overlay {
+  position : fixed;
+  top : 0;
+  left : 0;
+  right : 0;
+  bottom : 0;
+  z-index: 21;/* +1 of the z-index of the topbar */
+  background-color: $tc-gray-neutral-dark;
+  overflow-y: scroll;
+}
+
+.project-creation-dialog {
+  top: 0px;
+  left: 0px;
+}
+.project-creation-dialog-close {
+  cursor: pointer;
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  width: 14px;
+  height: 14px;
+}
