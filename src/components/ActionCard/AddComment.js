@@ -24,7 +24,7 @@ export default class AddComment extends React.Component {
   }
   
   render() {
-    const { className, avatarUrl, authorName, onChange, content, placeholder } = this.props
+    const { className, avatarUrl, authorName, onChange, content, placeholder, isAdding } = this.props
     const { isFocused } = this.state
     const isCollapsed = !isFocused && !content
 
@@ -45,7 +45,9 @@ export default class AddComment extends React.Component {
                 onChange={(e) => onChange(e.target.value, e)}
               />
               {!isCollapsed && <div className="textarea-footer">
-                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onAdd}>Post</button>
+                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onAdd} disabled={ this.props.isAdding }>
+                 { isAdding ? 'Posting...' : 'Post' }
+                </button>
               </div>}
             </div>
           </div>

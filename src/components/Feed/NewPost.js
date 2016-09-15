@@ -83,6 +83,10 @@ class NewPost extends React.Component {
 
 
     const onPost = () => {
+      // if post creation is already in progress
+      if (this.props.isCreating) {
+        return
+      }
       const title = this.refs.title.value
       const content = stateToHTML(editorState.getCurrentContent())
       if (title && content) {
@@ -142,7 +146,9 @@ class NewPost extends React.Component {
                   {/*<div className="separator"/>
                   <button className="attach"/>*/}
                 </div>
-                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={onPost}>Post</button>
+                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={onPost} disabled={ this.props.isCreating }>
+                  { this.props.isCreating ? 'Posting...' : 'Post'  }
+                </button>
               </div>
             </div>
           </div>
@@ -155,7 +161,8 @@ class NewPost extends React.Component {
 
 NewPost.propTypes = {
   currentUser: PropTypes.object.isRequired,
-  onPost: PropTypes.func.isRequired
+  onPost: PropTypes.func.isRequired,
+  isCreating: PropTypes.bool
 }
 
 export default NewPost
