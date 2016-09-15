@@ -5,6 +5,11 @@
 
 // Make the fonts render properly; under Chrome & Firefox Roboto render really
 // bad, so we have to force geometricPrecision.
-body {
+html, body {
+	@include roboto;
+	font-size: $tc-body-md;
+	line-height: 5 * $base-unit;
 	text-rendering: geometricPrecision;
+
+	box-sizing: border-box;
 }

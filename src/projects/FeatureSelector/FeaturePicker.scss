@@ -1,6 +1,10 @@
 @import 'tc-includes';
 
 $card-max-width: 180px;
+// Used to calculate the available height for the left-side column
+$header-height: 60px;
+$footer-height: 0;
+
 
 button {
   &.clean {
@@ -22,8 +26,6 @@ button {
 }
 
 .define-features {
-  $header-height: 65px;
-  $footer-height: 66px;
   background-color: $tc-white;
   text-align: left;
   height: 100%;
@@ -33,10 +35,12 @@ button {
   }
 
   > h2 {
+    font-size: $tc-heading-md;
     background-color: $tc-gray-neutral-light;
     color: $tc-black;
     padding: 3 * $base_unit;
-    font-size: 20px; //TODO: Use variable
+    height: $header-height;
+    // border-bottom: 1px solid $tc-gray-10;
 
     .selected-feature-count {
       color: $tc-gray-30;
@@ -52,22 +56,29 @@ button {
     border-top: 1px solid $tc-gray-20;
     height: 100%;
 
-    div.features {
-      min-width       : 300px;
+    .features {
+      min-width: 300px;
+      width: 300px;
+      max-width: 300px;
       background-color: $tc-gray-10;
-      border-right    : 1px solid $tc-gray-neutral-light;
+      border-right    : 1px solid $tc-gray-20;
       position: relative;
 
-      ul.feature-categories-list {
+      .feature-categories-list {
         overflow-y: scroll;
-        max-height: calc(100% - #{$header-height});
-        width: 300px;
+        max-height: calc(100% - #{$header-height}); //FIXME: ??
+        width: 100%;
+        padding: 4 * $base-unit 0;
 
-        li.add-custom-feature {
+        .add-custom-feature {
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
+
+          margin-top: 2 * $base-unit;
+          border-top: 1px solid $tc-gray-30;
+          padding-top: 2 * $base-unit;
 
           .custom-feature-btn-desc {
             @include roboto;
