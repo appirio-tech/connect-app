@@ -47,7 +47,7 @@ class TeamManagementContainer extends Component {
     }
     const searchMembers = allMembers.filter((user) => {
       if (members.some((member) => member.userId === user.userId)) {
-        return false
+        // return false
       }
       // if (currentUser.isCustomer && !user.isCustomer) {
       //   return false
@@ -89,7 +89,14 @@ class TeamManagementContainer extends Component {
 
   onSelectNewMember(selectedNewMember) {
     const keyword = selectedNewMember ? selectedNewMember.handle : ''
-    this.setState({ selectedNewMember, keyword})
+    const { members } = this.props
+    let error = null
+    if (selectedNewMember && members.some((member) => member.userId === selectedNewMember.userId)) {
+      error = keyword + ' is already part of your team'
+    }
+    this.setState({ selectedNewMember, keyword,
+      error: error
+    })
   }
 
   onAddNewMember() {

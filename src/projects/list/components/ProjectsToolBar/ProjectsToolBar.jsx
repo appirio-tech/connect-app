@@ -2,7 +2,6 @@ require('./ProjectsToolBar.scss')
 
 import _ from 'lodash'
 import React, {Component} from 'react'
-import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { SearchBar, Dropdown, DropdownItem, SwitchButton } from 'appirio-tech-react-components'
 import { projectSuggestions } from '../../../actions/loadProjects'
@@ -50,7 +49,7 @@ class ProjectsToolBar extends Component {
   /*eslint-disable no-unused-vars */
   handleTermChange(oldTerm, searchTerm, reqNo, callback) {
     this.props.projectSuggestions(searchTerm)
-    callback(reqNo, this.props.projects);
+    callback(reqNo, this.props.projects)
   }
   /*eslint-enable */
 
@@ -63,7 +62,7 @@ class ProjectsToolBar extends Component {
   }
 
   render() {
-    const { criteria, applyFilters } = this.props
+    const { criteria, applyFilters, onNewProjectIntent } = this.props
     const type = _.find(projectTypes, t => t.val === (criteria.type || null))
     const status = _.find(projectStatuses, t => t.val === (criteria.status || null))
 
@@ -78,7 +77,7 @@ class ProjectsToolBar extends Component {
         <div className="ProjectsToolBar flex middle space-between">
           <h2>All Projects</h2>
           <div className="search-panel">
-            <SearchBar hideSuggestionsWhenEmpty={ true } recentTerms={false} showPopularSearchHeader={false} onTermChange={ this.handleTermChange } onSearch={ this.handleSearch } onClearSearch={ this.handleSearch } />
+            <SearchBar hideSuggestionsWhenEmpty={ true } showPopularSearchHeader={ false } onTermChange={ this.handleTermChange } onSearch={ this.handleSearch } onClearSearch={ this.handleSearch } />
             <div className="project-types">
               <Dropdown theme="new-theme" noPointer>
                 <a className="dropdown-menu-header">{ type.label || 'All Types' }</a>
@@ -113,9 +112,9 @@ class ProjectsToolBar extends Component {
             </div>
           </div>
           <div className="actions">
-            <Link className="new-project-action" to="projects/create" >
-              <button className="tc-btn tc-btn-primary tc-btn-sm">+ New Project</button>
-            </Link>
+            <div className="new-project-action" >
+              <button type="button" onClick={ onNewProjectIntent } className="tc-btn tc-btn-primary tc-btn-sm">+ New Project</button>
+            </div>
           </div>
         </div>
       </Sticky>
