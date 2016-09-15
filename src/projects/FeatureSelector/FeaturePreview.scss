@@ -4,9 +4,9 @@
   text-align: center;
   padding: 8 * $base-unit;
   background: url('./images/Device-iPhone.svg') no-repeat;
+  background-color: $tc-dark-blue-10;
   background-position: 21px 22px;
   padding-top: 88px;
-  margin-top: 6 * $base-unit;
 
   img {
     max-height: 500px;
