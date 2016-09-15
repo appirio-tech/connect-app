@@ -40,7 +40,7 @@ const projectStatuseMap = {
 /*eslint-enable */
 
 const ProjectsView = props => {
-  const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading } = props
+  const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
   // it defines what columns should be displayed and more importantly
@@ -210,7 +210,7 @@ const ProjectsView = props => {
 
   return (
     <section className="">
-      <ProjectsToolBar {...toolBarProps} />
+      <ProjectsToolBar {...toolBarProps} onNewProjectIntent={ onNewProjectIntent } />
       <div className="container">
         <EnhancedGrid {...gridProps} />
       </div>

@@ -12,7 +12,6 @@ import Dashboard     from './detail/Dashboard'
 import ProjectMessages from './detail/Messages'
 import ProjectSpecification from './detail/containers/Specification'
 import ProjectToolBar from './detail/components/ProjectToolBar/ProjectToolBar'
-import CreateProjectWizard from './create/components/CreateView'
 import { requiresAuthentication } from '../components/AuthenticatedComponent'
 
 
@@ -20,7 +19,6 @@ const projectRoutes = (
   <Route path="/projects" component={ requiresAuthentication(ProjectLayout) }>
     // TODO add project topbar
     <IndexRoute components={{topbar: null, main: Projects }} />
-    <Route path="create" components={{topbar: null, main: CreateProjectWizard}} />
     <Route path="walkthrough" components={{topbar: ProjectsTopBar, main: Walkthrough }} />
     <Route path=":projectId" components={{topbar: ProjectToolBar, main: ProjectDetail}} >
       <IndexRoute component={ Dashboard } />
