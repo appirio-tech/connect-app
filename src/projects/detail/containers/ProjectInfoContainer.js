@@ -19,7 +19,11 @@ class ProjectInfoContainer extends React.Component {
       budget: {
         percent: 80,
         text: '$1000 remaining'
-      }
+      },
+      directLinks: [
+        {name: 'Project in Topcoder Direct', href: 'javascript:'},
+        {name: 'SalesForce Opportunity', href: 'javascript:'}
+      ]
     }
     this.onChangeStatus = this.onChangeStatus.bind(this)
     this.onAddNewLink = this.onAddNewLink.bind(this)
@@ -45,11 +49,12 @@ class ProjectInfoContainer extends React.Component {
   }
 
   render() {
-    const {duration, budget } = this.state
+    const {duration, budget, directLinks } = this.state
     const { project, currentMemberRole } = this.props
     return (
       <div>
         <ProjectInfo
+          directLinks={directLinks}
           currentMemberRole={currentMemberRole}
           type={project.type}
           devices={project.details.devices}

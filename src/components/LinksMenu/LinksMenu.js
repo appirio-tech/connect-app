@@ -8,11 +8,10 @@ import cn from 'classnames'
 
 const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, onDeleteIntent, onDelete }) => (
   <Panel className={cn({'modal-active': isAddingNewLink})}>
-    <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Create New Link</Panel.AddBtn>
-    <Panel.Title>
+    {!isAddingNewLink && <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Create New Link</Panel.AddBtn>}
+    {!isAddingNewLink && <Panel.Title>
       Links ({links.length})
-    </Panel.Title>
-    {isAddingNewLink && <div className="modal-overlay"></div>}
+    </Panel.Title>}
     {isAddingNewLink &&
       <AddLink
         onAdd={(link) => {
@@ -27,7 +26,7 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
       />
     }
 
-    {!isAddingNewLink && <div className="panel-links">
+    <div className="panel-links">
       <ul>
         {
           links.slice(0, limit).map((link, idx) => {
@@ -63,7 +62,7 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
       {links.length > limit && <div className="links-footer">
         <a href="javascript:" onClick={() => onChangeLimit(10000)}>view more</a>
       </div>}
-    </div>}
+    </div>
   </Panel>
 )
 

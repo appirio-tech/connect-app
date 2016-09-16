@@ -40,6 +40,10 @@ class FeedContainer extends React.Component {
       feeds: props.feeds.map((feed) => {
         const item = { ...feed }
         item.user = _.find(allMembers, mem => mem.userId === item.userId)
+        if (!item.user) {
+          //TODO: throwing an error
+          return null;
+        }
         item.html = item.body
 
         item.comments = item.posts ? item.posts : []
@@ -50,7 +54,7 @@ class FeedContainer extends React.Component {
         // reset newComment property
         item.newComment = ''
         return item
-      })
+      }).filter((item) => item)
     })
   }
 

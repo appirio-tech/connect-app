@@ -98,7 +98,7 @@ const sections = [
             title: 'What colors do you like? (Select all that apply)',
             description: 'Your preferred colors will be used to guide the shading in your designs',
             type: 'colors',
-            defaultColors: ['#2E9AC8', '#187299', '#FFD800', '#F17012'],
+            defaultColors: [],
             fieldName: 'details.designSpecification.colors'
           },
           {

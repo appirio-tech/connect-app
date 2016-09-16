@@ -5,17 +5,7 @@ import './ProjectStatus.scss'
 import cn from 'classnames'
 import _ from 'lodash'
 import uncontrollable from 'uncontrollable'
-import { PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } from '../../config/constants'
-
-const statusOptions = [
-  {className: 'draft', name: 'Draft', value: 'draft'},
-  {className: 'working', name: 'Working', value: 'active'},
-  {className: 'draft', name: 'In Review', value: 'in_review'},
-  {className: 'working', name: 'Reviewed', value: 'reviewed'},
-  {className: 'completed', name: 'Completed', value: 'completed'},
-  {className: 'paused', name: 'Paused', value: 'paused'},
-  {className: 'error', name: 'Cancelled', value: 'cancelled'}
-]
+import { PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_STATUS } from '../../config/constants'
 
 class ProjectStatus extends React.Component {
 
@@ -41,9 +31,8 @@ class ProjectStatus extends React.Component {
   }
 
   render() {
-    const {status, isOpen, currentMemberRole, onToggleOpen, onChangeStatus} = this.props
-
-    const selected = statusOptions.filter((opt) => opt.value === status)[0]
+    const {directLinks, status, isOpen, currentMemberRole, onToggleOpen, onChangeStatus} = this.props
+    const selected = PROJECT_STATUS.filter((opt) => opt.value === status)[0]
     const canEdit = currentMemberRole
       && _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
 
@@ -56,14 +45,14 @@ class ProjectStatus extends React.Component {
           <div
             onClick={(e) => canEdit && onToggleOpen(!isOpen, e)}
             ref="toggleBtn"
-            className={cn('status-label', selected.className, {active: isOpen})}
+            className={cn('status-label', selected.color, {active: isOpen})}
           >
             <i className="status-icon"/>
             {selected.name}
           </div>
           {isOpen && <dir className="status-dropdown">
             <ul>
-              {statusOptions.map((item) =>
+              {PROJECT_STATUS.map((item) =>
                 <li key={item.value}>
                   <a
                     href="javascript:"
@@ -73,13 +62,18 @@ class ProjectStatus extends React.Component {
                       onToggleOpen(false, e)
                     }}
                   >
-                    <span className={item.className}><i className="status-icon"/></span>
+                    <span className={item.color}><i className="status-icon"/></span>
                     {item.name}
                   </a>
                 </li>)}
             </ul>
           </dir>}
         </div>
+        {directLinks && <div className="project-direct-links">
+          <ul>
+            {directLinks.map((link, i) => <li key={i}><a href={link.href}>{link.name}</a></li>)}
+          </ul>          
+        </div>}
       </PanelProject>
     )
   }
@@ -88,6 +82,7 @@ class ProjectStatus extends React.Component {
 ProjectStatus.propTypes = {
   isOpen: PropTypes.bool,
   currentMemberRole: PropTypes.string,
+  directLinks: PropTypes.array,
   onToggleOpen: PropTypes.func,
   status: PropTypes.oneOf(['draft', 'active', 'in_review', 'reviewed', 'completed', 'paused', 'cancelled']).isRequired,
   onChangeStatus: PropTypes.func.isRequired

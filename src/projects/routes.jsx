@@ -11,7 +11,6 @@ import ProjectDetail from './detail/ProjectDetail'
 import Dashboard     from './detail/Dashboard'
 import ProjectMessages from './detail/Messages'
 import ProjectSpecification from './detail/containers/Specification'
-import ProjectToolBar from './detail/components/ProjectToolBar/ProjectToolBar'
 import { requiresAuthentication } from '../components/AuthenticatedComponent'
 
 
@@ -20,7 +19,7 @@ const projectRoutes = (
     // TODO add project topbar
     <IndexRoute components={{topbar: null, main: Projects }} />
     <Route path="walkthrough" components={{topbar: ProjectsTopBar, main: Walkthrough }} />
-    <Route path=":projectId" components={{topbar: ProjectToolBar, main: ProjectDetail}} >
+    <Route path=":projectId" components={{topbar: null, main: ProjectDetail}} >
       <IndexRoute component={ Dashboard } />
       <Route path="specification" component={ ProjectSpecification } />
       <Route path="messages" component={ ProjectMessages } />

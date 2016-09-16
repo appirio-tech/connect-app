@@ -1,15 +1,44 @@
 require('./TopBar.scss')
 
 import React, {PropTypes, Component} from 'react'
-import { MenuBar, QuickLinks, UserDropdown, Icons
-      } from 'appirio-tech-react-components'
-const { TopcoderMobileLogo, IconTcMenuBold, ConnectLogo } = Icons
+import cn from 'classnames'
+import { UserDropdown, Icons } from 'appirio-tech-react-components'
+const { ConnectLogo } = Icons
+import { SearchBar } from 'appirio-tech-react-components'
+import Filters from './Filters'
+import ProjectToolBar from './ProjectToolBar'
+import {Sticky} from 'react-sticky'
+
 
 class TopBar extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      isFilterVisible: false,
+      isCreatingProject: false
+    }
     this.handleMobileClick = this.handleMobileClick.bind(this)
+    this.handleTermChange = this.handleTermChange.bind(this)
+    this.handleSearch = this.handleSearch.bind(this)
+    this.handleMyProjectsFilter = this.handleMyProjectsFilter.bind(this)
+    this.toggleFilter = this.toggleFilter.bind(this)
+  }
+
+
+  /*eslint-disable no-unused-vars */
+  handleTermChange(oldTerm, searchTerm, reqNo, callback) {
+    this.props.projectSuggestions(searchTerm)
+    callback(reqNo, this.props.projects)
+  }
+  /*eslint-enable */
+
+  handleSearch(name) {
+    this.props.applyFilters({ name })
+  }
+
+  handleMyProjectsFilter(event) {
+    this.props.applyFilters({memberOnly: event.target.checked})
   }
 
   handleMobileClick(se) {
@@ -19,27 +48,24 @@ class TopBar extends Component {
     }
   }
 
+  toggleFilter() {
+    const {isFilterVisible} = this.state
+    this.setState({isFilterVisible: !isFilterVisible}, () => {
+      // sticky must be re-calculated, because we change the height of the component (toggle filters component)
+      this.forceUpdate()
+    })
+  }
+  
   render() {
-    const { userHandle, userImage, userName, domain, mobileMenuUrl } = this.props
+    const {
+      userHandle, userImage, userName, domain, criteria, onNewProjectIntent, applyFilters, isProjectDetails, project,
+      isPowerUser
+    } = this.props
+    const {isFilterVisible} = this.state
     const homePageUrl = window.location.protocol + '//' + window.location.hostname
     const logoutLink = 'https://accounts.' + domain + '/logout?retUrl=' + homePageUrl
     const isLoggedIn = userHandle
 
-    //TODO prepare navigation items according to roles of the user
-    const primaryNavigationItems = [
-      {
-        //img: require('./nav-projects.svg'),
-        text: 'Projects',
-        link: '/projects',
-        regex: '/projects?\?'
-      },
-      {
-        //img: require('./nav-projects.svg'),
-        text: 'Reports',
-        link: '/reports',
-        regex: '/reports?\?'
-      }
-    ]
     const userMenuItems = [
       [
         { label: 'Help', link: '//help.' + domain, absolute: true, id: 0 }
@@ -48,30 +74,62 @@ class TopBar extends Component {
         { label: 'Log out', link: logoutLink, absolute: true, id: 0 }
       ]
     ]
-
-    const menubar = isLoggedIn
-      ? <MenuBar forReactRouter items={primaryNavigationItems} orientation="horizontal" />
-      : null
-    const quickLinks = isLoggedIn ?
-      <div className="quick-links-wrap"><QuickLinks domain={domain} /></div>
-      : null
-    return (
-      <div className="TopBar flex middle space-between">
-        <div className="topcoder-logo non-mobile">
-          <a href={homePageUrl}><ConnectLogo width={155}/></a>
-        </div>
-        <div className="topcoder-logo mobile">
-          <a href={homePageUrl}><TopcoderMobileLogo width={40} /></a>
-        </div>
-        <div className="links-section">
-          { menubar }
-          <div className="menu-wrap" onClick={this.handleMobileClick}>
-            <div className="mobile-wrap"><a href={mobileMenuUrl}><IconTcMenuBold /></a></div>
-            { quickLinks }
-            <UserDropdown userName={ userName } userHandle={userHandle} userImage={userImage} domain={domain} menuItems={ userMenuItems } forReactRouter/>
+    const logo = (
+      <div className="logo-wrapper">
+        <a className="logo" href={homePageUrl}><ConnectLogo width={60}/></a>
+      </div>
+    )
+    const avatar = (
+      <div className="welcome-info">
+        {isLoggedIn && !isProjectDetails &&  <a onClick={onNewProjectIntent} href="javascript:" className="tc-btn tc-btn-sm tc-btn-secondary">+ New Project</a> }
+        <div className="avatar-info">
+          <div className="links-section">
+            <div className="menu-wrap" onClick={this.handleMobileClick}>
+              <UserDropdown userName={ userName } userHandle={userHandle} userImage={userImage} domain={domain} menuItems={ userMenuItems } forReactRouter/>
+            </div>
           </div>
         </div>
       </div>
+    )
+
+    if (isProjectDetails) {
+      return <ProjectToolBar isPowerUser={isPowerUser} logo={logo} avatar={avatar} project={project} />
+    }
+    
+    return (
+      <Sticky ref="sticky">
+        <div className="tc-header tc-header__connect">
+          <div className="top-bar">
+            {logo}
+            <div className="search-bar">
+              {isLoggedIn && <div className="search-widget">
+                <SearchBar
+                  hideSuggestionsWhenEmpty
+                  showPopularSearchHeader={ false }
+                  onTermChange={ this.handleTermChange }
+                  onSearch={ this.handleSearch }
+                  onClearSearch={ this.handleSearch }
+                />
+              </div>}
+              {isPowerUser && <div className="search-filter">
+                <a
+                  href="javascript:"
+                  className={cn('tc-btn tc-btn-sm', {active: isFilterVisible})}
+                  onClick={this.toggleFilter}
+                >Filters</a>
+              </div>}
+            </div>
+            {avatar}
+          </div>
+          {isFilterVisible &&
+            <Filters
+              handleMyProjectsFilter={this.handleMyProjectsFilter}
+              applyFilters={applyFilters}
+              criteria={criteria}
+            />
+          }
+        </div>
+      </Sticky>
     )
   }
 }
@@ -81,7 +139,8 @@ TopBar.propTypes = {
   userImage             : PropTypes.string,
   domain                : PropTypes.string.isRequired,
   mobileMenuUrl         : PropTypes.string,
-  mobileSearchUrl       : PropTypes.string
+  mobileSearchUrl       : PropTypes.string,
+  criteria              : PropTypes.object.isRequired
 }
 
 TopBar.defaultProps = {
@@ -90,3 +149,4 @@ TopBar.defaultProps = {
 }
 
 export default TopBar
+

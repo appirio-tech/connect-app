@@ -7,7 +7,6 @@ import classNames from 'classnames'
 import ProjectListProjectColHeader from './ProjectListProjectColHeader'
 import GridView from '../../../../components/Grid/GridView'
 import UserWithName from '../../../../components/User/UserWithName'
-import ProjectsToolBar from '../ProjectsToolBar/ProjectsToolBar'
 import PageError from '../../../../components/PageError/PageError'
 // This handles showing a spinner while the state is being loaded async
 import spinnerWhileLoading from '../../../../components/LoadingSpinner'
@@ -206,11 +205,9 @@ const ProjectsView = props => {
     currentPageNum: pageNum,
     pageSize: 20
   }
-  const toolBarProps = { criteria, applyFilters }
 
   return (
     <section className="">
-      <ProjectsToolBar {...toolBarProps} onNewProjectIntent={ onNewProjectIntent } />
       <div className="container">
         <EnhancedGrid {...gridProps} />
       </div>
