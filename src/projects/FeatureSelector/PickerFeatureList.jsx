@@ -29,23 +29,22 @@ class PickerFeatureList extends Component {
         if (feature.id !== selectedFeatureId)
           onSelectFeature(feature)
       }
+
       return (
         <li key={ idx } className={featureClasses}>
           <a onClick={ onClick } className="clean">
             <div className="flex space-between middle">
               <span className="feature-title">{ feature.title }</span>
-              <span>{ isActive &&  <Icons.IconUICheckBold width={10} height={10} fill={'#FB7D22'} />}</span>
+              <span>{ isActive && <Icons.IconUICheckBold width={10} height={10} fill={'#FB7D22'} />}</span>
             </div>
           </a>
         </li>
       )
     }
+
     return (
       <div className="feature-picker-feature-list">
-        <header className="flex middle">
-          <img src={ icon } />
-          <h6>{ label }</h6>
-        </header>
+        <h3>{ label }</h3>
         <ul>
           { allFeatures.map(renderFeature) }
         </ul>
@@ -58,4 +57,5 @@ class PickerFeatureList extends Component {
 PickerFeatureList.PropTypes = {
   activeFeatureList: PropTypes.arrayOf(PropTypes.object).isRequired
 }
+
 export default PickerFeatureList

@@ -84,7 +84,7 @@
     }
   }
   .status-label {
-    cursor: pointer;
+    cursor: default;
     position: relative;
     margin-left: auto;
     border-radius: $base-unit*4;
@@ -147,9 +147,12 @@
       background-size: 9px 4px;
       background: url('../../assets/images/arrow-9px-carret-down-normal.svg') no-repeat 50% 50%;
     }
-    &:hover {
-      &::after {
-        background: url('../../assets/images/arrows-9px-carret-down-expanded.svg') no-repeat 50% 50%;
+    &.editable {
+      cursor: pointer;
+      &:hover {
+        &::after {
+          background: url('../../assets/images/arrows-9px-carret-down-expanded.svg') no-repeat 50% 50%;
+        }
       }
     }
     &.active {

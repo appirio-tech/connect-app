@@ -38,7 +38,7 @@ const AddTeamMember = (props) => {
           <AutoCompleteInput {...props} />
           <button
             className="tc-btn tc-btn-primary tc-btn-md"
-            disabled={!selectedNewMember}
+            disabled={!selectedNewMember || error}
             onClick={onConfirmAddMember}
           >Add
           </button>

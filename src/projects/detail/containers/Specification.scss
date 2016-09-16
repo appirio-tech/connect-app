@@ -288,8 +288,12 @@ $title-color: $tc-gray-80;
     justify-content: center;
     background: $tc-gray-neutral-light;
     height: 70px;
-    border-radius: 4px;
+    border-radius: $corner-radius * 2;
+  }
+  .section-footer-spec {
+    border-radius: 0 0 $corner-radius * 2 $corner-radius * 2;
     margin-top: -10px;
+    margin-bottom: $base-unit * 5;
   }
   /* .section-file-interface */
   .section-file-interface {
