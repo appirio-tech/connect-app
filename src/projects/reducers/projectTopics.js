@@ -21,7 +21,6 @@ import update from 'react-addons-update'
 const initialState = {
   isLoading: true,
   isCreatingFeed: false,
-  isAddingComment: false,
   error: false,
   feeds: [],
   totalFeeds: 0
@@ -59,7 +58,7 @@ export const projectTopics = function (state=initialState, action) {
       error: false
     })
   case CREATE_PROJECT_FEED_SUCCESS: {
-    const feed = payload.length ? payload[0] : null
+    const feed = payload
     if (!feed) {
       return update (state, {
         isCreatingFeed: { $set : false },
@@ -104,11 +103,22 @@ export const projectTopics = function (state=initialState, action) {
   }
   case LOAD_PROJECT_FEED_COMMENTS_FAILURE:
     return state
-  case CREATE_PROJECT_FEED_COMMENT_PENDING:
-    return update (state, {
-      error: { $set : false },
-      isAddingComment: { $set : true }
-    })
+  case CREATE_PROJECT_FEED_COMMENT_PENDING: {
+    const feedId = _.get(action, "meta.feedId", null)
+    if (!feedId) return state
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds, feed => feed.id === feedId)
+    if (feedIndex >= 0) {
+      const feed = state.feeds[feedIndex]
+      const updatedFeed = update (feed, {
+        isAddingComment : { $set : true }
+      })
+      return update (state, {
+        error: { $set : false },
+        feeds: { $splice: [[feedIndex, 1, updatedFeed]] }
+      })
+    }
+  }
   case CREATE_PROJECT_FEED_COMMENT_SUCCESS: {
     const feedId = payload.topicId
     const comment = payload.comment
@@ -120,7 +130,8 @@ export const projectTopics = function (state=initialState, action) {
       const updatedFeed = update (feed, {
         // no need to update hasMoreComments, it should maintain its prev value
         totalComments: { $set : totalComments },
-        posts: { $push : [ comment ] }
+        posts: { $push : [ comment ] },
+        isAddingComment : { $set : false }
       })
       // update the state
       return update (state, {
@@ -130,11 +141,22 @@ export const projectTopics = function (state=initialState, action) {
     }
     break
   }
-  case CREATE_PROJECT_FEED_COMMENT_FAILURE:
-    return update (state, {
-      error: { $set : true },
-      isAddingComment: { $set : false }
-    })
+  case CREATE_PROJECT_FEED_COMMENT_FAILURE: {
+    const feedId = _.get(action, "meta.feedId", null)
+    if (!feedId) return state
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds, feed => feed.id === feedId)
+    if (feedIndex >= 0) {
+      const feed = state.feeds[feedIndex]
+      const updatedFeed = update (feed, {
+        isAddingComment : { $set : false }
+      })
+      return update (state, {
+        error: { $set : false },
+        feeds: { $splice: [[feedIndex, 1, updatedFeed]] }
+      })
+    }
+  }
 
   default:
     return state

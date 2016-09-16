@@ -78,7 +78,8 @@ export function addFeedComment(feedId, comment) {
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT_FEED_COMMENT,
-      payload: addTopicPost(feedId, comment)
+      payload: addTopicPost(feedId, comment),
+      meta: { feedId }
     })
   }
 }

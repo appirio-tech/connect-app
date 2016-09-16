@@ -71,13 +71,7 @@ export function addTopicPost(topicId, post) {
     .then( resp => {
       return {
         topicId,
-        comment: {
-          id: post.date.getTime(),
-          date: post.date, //TODO remove after api returns the newly created object
-          userId: post.userId, //TODO remove after api returns the newly created object
-          // body: _.get(resp.data, 'result.content', {})
-          body : post.content//TODO remove after api returns the newly created object          
-        }
+        comment : _.get(resp.data, 'result.content', {})
       }
     })
 }

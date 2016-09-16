@@ -38,9 +38,6 @@ class FeedContainer extends React.Component {
     this.setState({
       feeds: props.feeds.map((feed) => {
         let item = { ...feed }
-        if (!!item.isNewFeed && this.state.newFeed) {
-          item = { id: item.id, ...this.state.newFeed }
-        }
         if (item.userId === 'system') {
           item.user = {
             firstName: 'Coder',
@@ -83,9 +80,6 @@ class FeedContainer extends React.Component {
       // date: moment().format(),
       // allowComments: true
     }
-    this.setState({
-      newFeed
-    })
     this.props.createProjectTopic(project.id, newFeed)
   }
 
@@ -142,7 +136,6 @@ class FeedContainer extends React.Component {
             onNewCommentChange={this.onNewCommentChange.bind(this, item.id)}
             onAddNewComment={this.onAddNewComment.bind(this, item.id)}
             onLoadMoreComments={this.onLoadMoreComments.bind(this, item.id)}
-            isAddingComment={ isAddingComment }
           >
             {item.sendForReview && <div className="panel-buttons">
               <button className="tc-btn tc-btn-primary tc-btn-md">Send for review</button>
@@ -174,7 +167,6 @@ const mapStateToProps = ({ projectTopics, members, loadUser }) => {
     feeds          : projectTopics.feeds,
     isLoading      : projectTopics.isLoading,
     isCreatingFeed : projectTopics.isCreatingFeed,
-    isAddingComment: projectTopics.isAddingComment,
     error          : projectTopics.error,
     allMembers     : _.values(members.members)
   }
