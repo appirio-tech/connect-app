@@ -51,7 +51,7 @@ $title-color: $tc-gray-80;
     .right-area-item {
       overflow: hidden;
       padding: 50px 0 20px 0;
-      margin-bottom: 5px;
+      margin-bottom: $base-unit;
       border-radius: 4px;
       background-color: #fff;
       .boxes {
