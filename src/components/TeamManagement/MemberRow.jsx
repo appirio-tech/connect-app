@@ -79,7 +79,7 @@ const MemberRow = ({ member, currentMember, onMemberDelete, onChangeOwner }) => 
         {member === currentMember && <span className="self"> (you) </span>}
         <span className="handle">{member.handle}</span>
       </div>
-      {buttons.length ? <div className="buttons">{buttons}</div> : <div className={cn(titleClasses)}>{title}</div>}
+      {buttons.length ? <div><div className={cn(titleClasses)}>{title}</div><div className="buttons">{buttons}</div></div> : <div className={cn(titleClasses)}>{title}</div>}
     </div>
   )
 }

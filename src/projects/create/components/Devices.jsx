@@ -52,7 +52,8 @@ class DevicesComponent extends Component {
     event.preventDefault()
     const curValue = this.props.getValue()
     const newValue = _.xor(curValue, [value])
-
+    // if last item being unselected do nothing
+    if (!newValue.length) return false
     // determine the value that was just added
     let justUpdated = _.difference(newValue, curValue)
     if (!justUpdated.length) {

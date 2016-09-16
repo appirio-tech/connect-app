@@ -6,410 +6,393 @@
 }
 
 
-  
-.container {
-  position: relative;
-  margin: 0px auto 20px;
-  width: 920px;
-  padding: 20px;
-  border-radius: 4px;
-  background: $tc-white;
+.content {
+  .container {
+    position: relative;
+    margin: 0px auto 20px;
+    width: 920px;
+    padding: 20px 20px 50px;
+    border-radius: 4px;
+    background: $tc-white;
 
-  &.container-margin {
-    margin-top: 20px;
-  }
-
-  .btn-close {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    width: 14px;
-    height: 14px;
-  }
-  h2 {
-    @include roboto-light;
-    color: $tc-gray-60;
-    font-size: $tc-heading-lg;
-    text-align: center;
-    margin: 0 0 50px 0;
-
-    &.project-info__title--device {
-      margin-bottom: 30px;
+    &.container-margin {
+      margin-top: 20px;
     }
-  }
-  .what-you-like-to-do {
-    padding: 45px 0 20px;
 
-    .info-selector {
-      display: flex;
-      margin: 0 auto 30px;
+    .btn-close {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+    }
+    h2 {
+      @include roboto-light;
+      color: $tc-gray-60;
+      font-size: $tc-heading-lg;
+      text-align: center;
+      margin: 0 0 50px 0;
 
-      span{
-        width: 33%;
-        cursor: pointer;
-        @include roboto-light;
-        font-size: 12px;
-        line-height: 20px;
-        color: $tc-gray-50;
-        text-align: center;
-        &.active{
-          color: $tc-black;
-        }
+      &.project-info__title--device {
+        margin-bottom: 30px;
       }
     }
-    .type-selector {
-      display: flex;
-      .selector {
-        width: 33%;
-        cursor: pointer;
-        &.active{
-          h3, p, span{
+    .what-you-like-to-do {
+      padding: 45px 0 20px;
+
+      .info-selector {
+        display: flex;
+        margin: 0 auto 30px;
+
+        span{
+          width: 33%;
+          cursor: pointer;
+          @include roboto-light;
+          font-size: 12px;
+          line-height: 20px;
+          color: $tc-gray-50;
+          text-align: center;
+          &.active{
             color: $tc-black;
           }
         }
+      }
+      .type-selector {
+        display: flex;
+        .selector {
+          width: 33%;
+          cursor: pointer;
+          &.active{
+            h3, p, span{
+              color: $tc-black;
+            }
+          }
 
-        h3, p {
-          @include roboto-light;
-          color: $tc-gray-50;
-          line-height: 25px;
-          text-align: center;
-        }
-        h3 {
-          font-size: 20px;
-          
-        }
-        p {
-          
-          font-size: 15px;
+          h3, p {
+            @include roboto-light;
+            color: $tc-gray-50;
+            line-height: 25px;
+            text-align: center;
+          }
+          h3 {
+            font-size: 20px;
+            
+          }
+          p {
+            
+            font-size: 15px;
 
-          strong{
-            @include roboto-bold;
+            strong{
+              @include roboto-bold;
+            }
           }
         }
       }
     }
-  }
-  .pick-target-devices {
-    padding: 0px 50px;
+    .pick-target-devices {
+      padding: 0px 50px;
 
-    .target-selectors {
-      display: flex;
-      flex-flow: row wrap;
-      justify-content: space-between;
-      
-      // TODO: Create as mixin;
-      // FIXME: Refactor to use proper calculation of the ":after" box position
-      .divider {
-        @include roboto-light;
-        position: relative;
-        width: 20px;
-        height: 155px;
-
-        &:before,
-        &:after {
-          display: block;
-          position: absolute;
-          left: 50%;
-        }
-
-        &:before {
-          content: '';
-          width: 1px;
-          height: 80%;
-          background-color: $tc-gray-10;
-          top: 10%;
-        }
-
-        &:after {
-          content: 'Or';
-          font-style: italic;
-          color: $tc-gray-40;
-          font-size: 12px;
-          line-height: 20px;
-          top: 50%;
-          margin: -15px 0 0 -10px;
-          text-align: center;
-          width: 20px;
-          line-height: 30px;
-          background-color: $tc-white;
-        }
-      }
-
-      .target-selector {
+      .target-selectors {
         display: flex;
         flex-flow: row wrap;
         justify-content: space-between;
-        overflow:hidden;
+        
+        // TODO: Create as mixin;
+        // FIXME: Refactor to use proper calculation of the ":after" box position
+        .divider {
+          @include roboto-light;
+          position: relative;
+          width: 20px;
+          height: 155px;
+
+          &:before,
+          &:after {
+            display: block;
+            position: absolute;
+            left: 50%;
+          }
+
+          &:before {
+            content: '';
+            width: 1px;
+            height: 80%;
+            background-color: $tc-gray-10;
+            top: 10%;
+          }
+
+          &:after {
+            content: 'Or';
+            font-style: italic;
+            color: $tc-gray-40;
+            font-size: 12px;
+            line-height: 20px;
+            top: 50%;
+            margin: -15px 0 0 -10px;
+            text-align: center;
+            width: 20px;
+            line-height: 30px;
+            background-color: $tc-white;
+          }
+        }
+
+        .target-selector {
+          display: flex;
+          flex-flow: row wrap;
+          justify-content: space-between;
+          overflow:hidden;
+          margin-bottom: 20px;
+
+          a {
+            -webkit-flex: initial;
+            flex: initial;
+            height:155px;
+            width:135px;
+            border: 1px solid $tc-gray-20;
+            border-radius: 4px;
+            cursor: pointer;
+            &.active{
+              background: $tc-dark-blue-10;
+              border: 1px solid $tc-dark-blue-30;
+            }
+            &:hover{
+              border: 1px solid $tc-dark-blue-70;
+            }
+            span.icon{
+              display:block;
+              height: 50px;
+              margin:30px auto 20px auto;
+            }
+            span.title{
+              display:block;
+              margin-top: 20px;
+              @include roboto-bold;
+              color: $tc-gray-90;
+              font-size: 13px;
+              text-align:center;
+            }
+            small{
+              display:block;
+              font-size: 11px;
+              text-align:center;
+              color: $tc-gray-50;
+              @include roboto;
+              margin-top:10px;
+            }
+            &.phone {
+              span.icon{
+                background: url('../../images/phone.svg') no-repeat 0 0;
+                width: 33px;
+                background-size: 33px 50px;
+              }
+            }
+            &.tablet {
+              span.icon{
+                background: url('../../images/tablet.svg') no-repeat 0 0;
+                width: 43px;
+                background-size: 43px 50px;
+              }
+            }
+            &.desktop {
+              span.icon{
+                background: url('../../images/desktop.svg') no-repeat 0 0;
+                width: 55px;
+                background-size: 55px 50px;
+              }
+            }
+            &.apple-watch {
+              span.icon{
+                background: url('../../images/watch-apple.svg') no-repeat 0 0;
+                width: 38px;
+                background-size: 38px 50px;
+              }
+            }
+            &.android-watch {
+              span.icon{
+                background: url('../../images/watch-android.svg') no-repeat 0 0;
+                width: 38px;
+                background-size: 38px 50px;
+              }
+            }
+          }
+        }
+
+        .non-wearable-devices {
+          flex-basis: 55%;
+        }
+
+        .wearable-devices {
+          flex-basis: 38%;
+        }
+      }
+    }
+    .section-divider {
+      background-color: $tc-gray-20;
+      width: 100%;
+      max-width: 600px;
+      height: 1px;
+      margin: 50px auto;
+    }
+    .project-info{
+      margin: 50px auto 20px;
+      width: 600px;
+
+      h2 {
         margin-bottom: 20px;
+      }
 
-        a {
-          -webkit-flex: initial;
-          flex: initial;
-          height:155px;
-          width:135px;
-          border: 1px solid $tc-gray-20;
-          border-radius: 4px;
-          cursor: pointer;
-          &.active{
-            background: $tc-dark-blue-10;
-            border: 1px solid $tc-dark-blue-30;
+      &.padding-top-30{
+        padding-top: 60px;
+      }
+      .row{
+        margin-bottom: 20px;
+        &.center{
+          display: table;
+          margin: 0 auto;
+          label{
+            display: inline;
           }
-          &:hover{
-            border: 1px solid $tc-dark-blue-70;
-          }
-          span.icon{
-            display:block;
-            height: 50px;
-            margin:30px auto 20px auto;
-          }
-          span.title{
-            display:block;
-            margin-top: 20px;
-            @include roboto-bold;
-            color: $tc-gray-90;
-            font-size: 13px;
-            text-align:center;
-          }
-          small{
-            display:block;
-            font-size: 11px;
-            text-align:center;
-            color: $tc-gray-50;
-            @include roboto;
-            margin-top:10px;
-          }
-          &.phone {
-            span.icon{
-              background: url('../../images/phone.svg') no-repeat 0 0;
-              width: 33px;
-              background-size: 33px 50px;
-            }
-          }
-          &.tablet {
-            span.icon{
-              background: url('../../images/tablet.svg') no-repeat 0 0;
-              width: 43px;
-              background-size: 43px 50px;
-            }
-          }
-          &.desktop {
-            span.icon{
-              background: url('../../images/desktop.svg') no-repeat 0 0;
-              width: 55px;
-              background-size: 55px 50px;
-            }
-          }
-          &.apple-watch {
-            span.icon{
-              background: url('../../images/watch-apple.svg') no-repeat 0 0;
-              width: 38px;
-              background-size: 38px 50px;
-            }
-          }
-          &.android-watch {
-            span.icon{
-              background: url('../../images/watch-android.svg') no-repeat 0 0;
-              width: 38px;
-              background-size: 38px 50px;
-            }
+          input{
+            display: inline;
+            width: 100px;
+            background: $tc-white;
+            color: $tc-gray-30;
           }
         }
       }
-
-      .non-wearable-devices {
-        flex-basis: 55%;
-      }
-
-      .wearable-devices {
-        flex-basis: 38%;
-      }
-    }
-  }
-  .section-divider {
-    background-color: $tc-gray-20;
-    width: 100%;
-    max-width: 600px;
-    height: 1px;
-    margin: 50px auto;
-  }
-  .project-info{
-    margin: 50px auto;
-
-
-    width: 600px;
-    &.padding-top-30{
-      padding-top: 60px;
-    }
-    .row{
-      margin-bottom: 20px;
-      &.center{
-        display: table;
-        margin: 0 auto;
-        label{
-          display: inline;
-        }
-        input{
-          display: inline;
-          width: 100px;
-        }
-      }
-    }
-    label{
-      display:block;
-      margin: 10px 0;
-      text-transform: none;
-      @include tc-label-md;
-      color: $tc-gray-70;
-      font-size: 13px;
-    }
-
-    .error-message{
-      display:block;
-      margin: 5px 0;
-      @include roboto;
-
-      color: $tc-gray-70;
-      font-size: 13px;
-      line-height:20px;
-      font-style:italic;
-      border: 1px solid $tc-red-30;
-      background: $tc-red-10;
-      color: $tc-red-70;
-      padding:10px;
-      border-radius: 2px;
-      strong{
-        @include roboto-bold;
-      }
-    }
-
-    input{
-      display:block;
-      color: $tc-black;
-      background: $tc-gray-neutral-light;
-      border-color: $tc-gray-20;
-      @include tc-label-md;
-      font-size:15px;
-      line-height:20px;
-
-      &.tc-file-field__inputs--code{
-        background-color: $tc-white;
-      }
-      &.tc-file-field__inputs--fill{
-        background-color: $tc-gray-neutral-light;
-      }
-
-      &[disabled]{
-        color: $tc-gray-20;
-        background: $tc-white;
-      }
-
-      &:hover{
-        border-color: $tc-gray-40;
-        background: $tc-gray-neutral-light;
-      }
-
-      &:focus{
-        background: $tc-white!important;
-        border-left: 3px solid $tc-dark-blue-90!important;
-      }
-
-      &.error{
-        border-left: 3px solid $tc-red-70!important;
-        background: $tc-gray-neutral-light!important;
-        &:focus{
-          background: $tc-white!important;
-          border-color: $tc-dark-blue-90!important;
-        }
-      }
-    }
-
-    textarea{
-      display:block;
-      width:600px;
-      margin: 0 auto;
-      height: 100px;
-      color: $tc-black;
-      background: $tc-gray-neutral-light;
-      border-color: $tc-gray-20;
-      @include tc-label-md;
-      font-size:15px;
-      line-height:20px;
-      box-shadow: none;
-
-      &[disabled]{
-        color: $tc-gray-20;
-        background: $tc-white;
-      }
-
-      &:hover{
-        border-color: $tc-gray-40;
-      }
-
-      &:focus{
-        background: $tc-white!important;
-        border-left: 3px solid $tc-dark-blue-90!important;
-      }
-
-      &.error{
-        border-left: 3px solid $tc-red-70!important;
-        background: $tc-gray-neutral-light!important;
-        &:focus{
-          background: $tc-white!important;
-          border-color: $tc-dark-blue-90!important;
-        }
-      }
-    }
-  }
-  .button-area {
-    padding: 20px 0 0;
-    display: flex;
-    justify-content: center;
-    a {
-      height: 40px;
-      width: 137px;
-      display:block;
-      margin:30px auto;
-      text-align:center;
-      text-transform: none;
-      font-family: 'Roboto Bold';
-      font-size: 15px;
-      padding:0!important;
-      border: none;
-      &.disabled{
-        color: $tc-white;
-        background: $tc-gray-10;
-      }
-    }
-  }
-
-  .generic-project-form {
-    width: 100%;
-    max-width: 600px;
-    margin: 50px auto 0px auto;
-    .row {
-      margin-bottom: 20px;
-      label {
+      label{
+        display:block;
+        margin-bottom: 5px;
+        text-transform: none;
         @include tc-label-md;
+        color: $tc-gray-70;
+        font-size: 13px;
       }
-      textarea {
-        height: 80px;
-        resize: none;
-      }
-      &.center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        label {
-          width: 170px;
+
+      .error-message{
+        display:block;
+        margin: 5px 0;
+        @include roboto;
+        color: $tc-gray-70;
+        font-size: 13px;
+        line-height:20px;
+        font-style:italic;
+        border: 1px solid $tc-red-30;
+        background: $tc-red-10;
+        color: $tc-red-70;
+        padding:10px;
+        border-radius: 2px;
+        strong{
+          @include roboto-bold;
         }
-        input {
-          width: 100px;
-          margin: 0px;
+      }
+
+      input, textarea {
+        display:block;
+        color: $tc-black;
+        background: $tc-gray-neutral-light;
+        border-color: $tc-gray-20;
+        @include tc-label-md;
+        font-size:15px;
+        line-height:20px;
+
+        &[disabled]{
+          background: $tc-white;
+          border-color: $tc-gray-20;
+          color: $tc-gray-30;
+        }
+        &:hover{
+          border-color: $tc-gray-40;
+          background: $tc-gray-neutral-light;
+          color: $tc-gray-50;
+        }
+         &:focus{
+          background: $tc-white;
+          border-color: $tc-dark-blue-70;
+          box-shadow: 0px 0px 2px 1px $tc-dark-blue-30;
+        }
+
+        &.error{
+          color: $tc-gray-50;
+          border-color: $tc-gray-30 ;
+          border-left: 3px solid $tc-red-70;
+          background: $tc-gray-neutral-light;
+          &:focus{
+            background: $tc-white;
+            border-color: $tc-dark-blue-70;
+            border-left: 1px solid $tc-dark-blue-70 !important;
+            box-shadow: 0px 0px 2px 1px $tc-dark-blue-30;
+          }
+        }
+      } 
+      input{
+
+        &.tc-file-field__inputs--code{
+          background-color: $tc-white;
+        }
+        &.tc-file-field__inputs--fill{
+          background-color: $tc-gray-neutral-light;
+        }
+        
+      }
+
+      textarea{
+        height: 100px;
+        box-shadow: none;
+      }
+    }
+    .button-area {
+      display: flex;
+      justify-content: center;
+      background: url('/assets/images/check-orange.svg') no-repeat;
+      a {
+        height: 40px;
+        width: 137px;
+        display:block;
+        margin:30px auto;
+        text-align:center;
+        text-transform: none;
+        font-family: 'Roboto Bold';
+        font-size: 15px;
+        padding:0!important;
+        border: none;
+        &.disabled{
+          color: $tc-white;
+          background: $tc-gray-10;
+        }
+      }
+    }
+
+    .generic-project-form {
+      width: 100%;
+      max-width: 600px;
+      margin: 50px auto 0px auto;
+      .row {
+        margin-bottom: 20px;
+        label {
+          @include tc-label-md;
+        }
+        textarea {
+          height: 80px;
+          resize: none;
+        }
+        &.center {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          label {
+            width: 170px;
+          }
+          input {
+            width: 100px;
+            margin: 0px;
+          }
         }
       }
     }
   }
 }
+
 input {
   @include placeholder {
     text-transform: none;
@@ -418,7 +401,7 @@ input {
 
 
 .range-slider {
-  width: 600px;
+  width: 780px;
   display:block;
   margin: 20px auto;
   clear:both;
@@ -430,7 +413,7 @@ input {
     cursor: pointer;
     border: none!important;
     box-shadow: none!important;
-    width: 600px;
+    width: 780px;
     display:block;
     margin: 0 auto;
     padding:0!important;
@@ -440,36 +423,39 @@ input {
       box-shadow: none!important;
     }
     &::-webkit-slider-runnable-track {
-      width: 580px;
-      height: 16px;
-      border: none!important;
+      width: 780px;
+      height: 4px !important;
+      border: none!important; 
       box-shadow: none!important;
-      background: url('../../images/slider-bg.png') no-repeat 0 0;
+      background: $tc-gray-20;
+      /*background: url('../../images/slider-bg.png') no-repeat 0 0;*/
     }
     &::-webkit-slider-thumb {
       -webkit-appearance: none;
       border: none;
-      height: 23px;
-      width: 23px;
-      border-radius: 50%;
-      background: $tc-dark-blue-90;
-      margin-top: -5px;
+      height: 27px;
+      width: 27px;
       border: 3px solid $tc-white;
+      border-radius: 50%;
+      background: $tc-dark-blue-90 url('/assets/images/check-orange.svg') no-repeat;
+      margin-top: -12px;
     }
     &::-webkit-slider-runnable-track {
-      height: 16px;
+      height: 4px;
     }
     &::-moz-range-track {
-      width: 600px;
-      height: 16px;
-      background: url('../../images/slider-bg.png') no-repeat 0 0;
+      width: 780px;
+      height: 4px;
+
+      background: $tc-gray-20;
+      /*background: url('../../images/slider-bg.png') no-repeat 0 0;*/
       border: none;
 
     }
     &::-moz-range-thumb {
       border: none;
-      height: 20px;
-      width: 20px;
+      height: 24px;
+      width: 24px;
       border-radius: 50%;
       background: $tc-dark-blue-90;
       cursor: pointer;
@@ -480,7 +466,7 @@ input {
       outline-offset: -1px;
     }
     &::-ms-track {
-      width: 580px;
+      width: 860px;
       height: 5px;
       background: none;
       border-color: none;
@@ -489,8 +475,8 @@ input {
     }
     &::-ms-thumb {
       border: none;
-      height: 16px;
-      width: 16px;
+      height: 20px;
+      width: 20px;
       border-radius: 50%;
     }
     &:focus::-ms-fill-lower {

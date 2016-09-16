@@ -2,11 +2,12 @@
 
 .feature-preview {
   text-align: center;
-  padding: 8 * $base-unit;
+  padding: (8 * $base-unit) (12 * $base-unit) ;
   background: url('./images/Device-iPhone.svg') no-repeat;
-  background-position: 21px 22px;
+  background-color: #FBFDFF;
+  background-position: 50% 22px;
   padding-top: 88px;
-  margin-top: 4 * $base-unit;
+  border-left: 1px solid $tc-dark-blue-30;
 
   img {
     max-height: 500px;
