@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import { FilePicker } from 'appirio-tech-react-components'
+import './AddFiles.scss'
 
 import { FILE_PICKER_API_KEY, FILE_PICKER_SUBMISSION_CONTAINER_NAME } from '../../config/constants'
 
@@ -11,10 +12,10 @@ const AddFiles = props => {
   const options = {
     apiKey: FILE_PICKER_API_KEY,
     buttonText: 'Add File',
-    buttonClass: 'tc-btn tc-btn-primary tc-btn-md',
+    buttonClass: 'tc-btn tc-btn-secondary tc-btn-sm',
     dragText: 'Drag and drop your files here',
     // dragClass: '',
-    // class: '', // div styling
+    class: 'add-file', // div styling
     language: 'en',
     storeLocation: 's3',
     storeContainer: FILE_PICKER_SUBMISSION_CONTAINER_NAME,
