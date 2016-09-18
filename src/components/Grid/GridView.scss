@@ -22,7 +22,7 @@
         width: 6%;
     }
     .width70 {
-        width: 6%;
+        width: 70px;
         max-width: 70px;
         min-width: 70px;
     }
@@ -111,7 +111,13 @@
                     &a:hover { cursor: pointer; }
                 }
             }
+
         }
+        .flex-item-title.item-type,
+        .flex-item.item-type .blue-block {
+            padding-left: 15px;
+        }
+        
         .spacing {
             padding: 0 5px;
         }
@@ -151,6 +157,11 @@
         font-size: $tc-label-lg;
         color: $tc-gray-90;
         line-height: $base-unit * 4;
+        display: block;
+        white-space: nowrap;
+        padding-right: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
         &:hover {
             text-decoration: underline;
         }
@@ -161,6 +172,11 @@
         line-height: $base-unit * 3;
         padding: 3px 0;
         display: block;
+        font-weight: normal;
+    }
+    .txt-normal {
+        font-weight: normal;
+        font-style: italic;
     }
 }
 .blue-block,
@@ -199,6 +215,16 @@
     }
     &.txt-red {
         color: $tc-red;
+    }
+}
+.item-projects {
+    .spacing {
+        width: 100%;
+    }
+}
+.user-block {
+    .txt-box span {
+        font-weight: normal;
     }
 }
 /* .user-block */

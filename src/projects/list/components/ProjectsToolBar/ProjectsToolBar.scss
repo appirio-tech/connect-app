@@ -53,6 +53,9 @@
       margin-left: 20px;
       width: 129px;
       .label {
+        position: relative;
+        top: -5px;
+        display: inline-block;
         margin-right: 2px;
       }
       label {

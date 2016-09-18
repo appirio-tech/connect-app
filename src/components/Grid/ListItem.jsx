@@ -6,9 +6,7 @@ const ListItem = ({ item, columns }) => {
     const divClasses = `flex-item-title ${col.classes}`
     return (
       <div className={divClasses} key={index}>
-          <div className="spacing">
-              {col.renderText(item)}
-          </div>
+          {col.renderText(item)}
       </div>
     )
   }
