@@ -18,7 +18,7 @@ const getCommentCount = (totalComments) => {
 const FeedComments = (props) => {
   const {
     comments, currentUser, totalComments, onLoadMoreComments, isLoadingMoreComments, hasMoreComments, onAdd,
-    onChange, content, avatarUrl
+    onChange, content, avatarUrl, isAddingComment
   } = props
   let authorName = currentUser.firstName
   if (authorName && currentUser.lastName) {
@@ -51,10 +51,18 @@ const FeedComments = (props) => {
           active={item.unread}
           self={item.author.userId === currentUser.userId}
         >
-          {item.content}
+          <div dangerouslySetInnerHTML={{__html: item.content}}></div>
         </Comment>
       )}
-      <AddComment placeholder="Create a new comment..." onAdd={onAdd} onChange={onChange} content={content} avatarUrl={avatarUrl} authorName={ authorName } />
+      <AddComment
+        placeholder="Create a new comment..."
+        onAdd={onAdd}
+        onChange={onChange}
+        content={content}
+        avatarUrl={avatarUrl}
+        authorName={ authorName }
+        isAdding={ isAddingComment }
+      />
     </div>
   )
 }

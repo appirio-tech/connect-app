@@ -59,6 +59,9 @@ class EditProjectForm extends Component {
   }
 
   saveFeatures(features) {
+    if (!this.state.project.details.appDefinition) {
+      this.state.project.details.appDefinition = { features: {} }
+    }
     const obj = {
       value: features,
       seeAttached: this.state.project.details.appDefinition.features.seeAttached
@@ -84,13 +87,19 @@ class EditProjectForm extends Component {
     const { isEdittable, sections } = this.props
     const { project } = this.state
     const renderSection = (section, idx) => (
-      <SpecSection
-        key={idx}
-        {...section}
-        project={project}
-        resetFeatures={this.resetFeatures}
-        showFeaturesDialog={this.showFeaturesDialog}
-      />
+      <div key={idx}>
+        <SpecSection
+          {...section}
+          project={project}
+          resetFeatures={this.resetFeatures}
+          showFeaturesDialog={this.showFeaturesDialog}
+        />
+        <div className="section-footer section-footer-spec">
+          <button className="tc-btn tc-btn-primary tc-btn-md"
+            type="submit" disabled={!this.state.canSubmit}
+          >Save Changes</button>
+        </div>
+      </div>
     )
 
     return (
@@ -103,11 +112,6 @@ class EditProjectForm extends Component {
           onValidSubmit={this.submit}
         >
           {sections.map(renderSection)}
-          <div className="section-footer">
-            <button className="tc-btn tc-btn-primary tc-btn-md"
-              type="submit" disabled={!this.state.canSubmit}
-            >Save Changes</button>
-          </div>
         </Formsy.Form>
         <Modal
           isOpen={ this.state.showFeaturesDialog }

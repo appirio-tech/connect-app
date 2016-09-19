@@ -23,7 +23,7 @@ const DeleteLinkModal = ({ onCancel, onConfirm}) => {
 
 DeleteLinkModal.propTypes = {
   onCancel: PropTypes.func.isRequired,
-  onConfirm: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired
   // link: PropTypes.object.isRequired
 }
 

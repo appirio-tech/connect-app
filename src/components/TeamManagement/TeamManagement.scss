@@ -82,7 +82,7 @@ $tc-body-extra-small	: 12px;
           background-size: 16px;
           display: inline-block;
           margin-left: $base-unit*3;
-
+          margin-top: $base-unit;
           &:hover{
             opacity: 1.0;
           }

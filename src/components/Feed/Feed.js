@@ -9,7 +9,7 @@ import { Avatar } from 'appirio-tech-react-components'
 const Feed = (props) => {
   const {
     user, currentUser, title, date, html, totalComments, hasMoreComments, onLoadMoreComments, isLoadingMoreComments,
-    allowComments, comments, unread, children, onNewCommentChange, onAddNewComment, newComment
+    allowComments, comments, unread, children, onNewCommentChange, onAddNewComment, newComment, isAddingComment
   } = props
   let authorName = user.firstName
   if (authorName && user.lastName) {
@@ -49,6 +49,7 @@ const Feed = (props) => {
         currentUser={currentUser}
         avatarUrl={currentUser.photoURL}
         comments={comments}
+        isAddingComment={ isAddingComment }
       />}
       {children}
     </ActionCard>
@@ -66,7 +67,8 @@ Feed.propTypes = {
   children: PropTypes.any,
   onLoadMoreComments: PropTypes.func.isRequired,
   onNewCommentChange: PropTypes.func.isRequired,
-  onAddNewComment: PropTypes.func.isRequired
+  onAddNewComment: PropTypes.func.isRequired,
+  isAddingComment: PropTypes.bool
 }
 
 export default Feed
