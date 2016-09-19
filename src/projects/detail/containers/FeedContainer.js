@@ -37,7 +37,7 @@ class FeedContainer extends React.Component {
     const { allMembers } = props
     this.setState({
       feeds: props.feeds.map((feed) => {
-        let item = { ...feed }
+        const item = { ...feed }
         if (item.userId === 'system') {
           item.user = {
             firstName: 'Coder',
@@ -118,7 +118,7 @@ class FeedContainer extends React.Component {
   }
 
   render() {
-    const {currentUser, project, currentMemberRole, isLoading, isCreatingFeed, isAddingComment } = this.props
+    const {currentUser, project, currentMemberRole, isLoading, isCreatingFeed } = this.props
     const { loadingFeedComments, feeds } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
 

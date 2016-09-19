@@ -42,13 +42,13 @@ export const projectTopics = function (state=initialState, action) {
     return Object.assign({}, state, {
       isLoading: false,
       error: true,
-      feeds: { 'PRIMARY' : payload.topics },
+      feeds: { PRIMARY : payload.topics },
       totalFeeds: payload.totalCount
     })
   case LOAD_PROJECT_FEEDS_MEMBERS_FAILURE:
   case LOAD_PROJECT_FEEDS_FAILURE:
     return Object.assign({}, state, {
-      feeds: { 'PRIMARY': [] },
+      feeds: { PRIMARY : [] },
       isLoading: false,
       error: true
     })
@@ -69,7 +69,7 @@ export const projectTopics = function (state=initialState, action) {
     return update (state, {
       isCreatingFeed: { $set : false },
       error: { $set : false },
-      feeds: { 'PRIMARY' : { $splice: [[0, 0, feed]] } }
+      feeds: { PRIMARY : { $splice: [[0, 0, feed]] } }
     })
   }
   case CREATE_PROJECT_FEED_FAILURE:
@@ -96,7 +96,7 @@ export const projectTopics = function (state=initialState, action) {
       })
       // update the state
       return update (state, {
-        feeds: { 'PRIMARY' : { $splice: [[feedIndex, 1, updatedFeed]] } }
+        feeds: { PRIMARY : { $splice: [[feedIndex, 1, updatedFeed]] } }
       })
     }
     return state
@@ -104,7 +104,7 @@ export const projectTopics = function (state=initialState, action) {
   case LOAD_PROJECT_FEED_COMMENTS_FAILURE:
     return state
   case CREATE_PROJECT_FEED_COMMENT_PENDING: {
-    const feedId = _.get(action, "meta.feedId", null)
+    const feedId = _.get(action, 'meta.feedId', null)
     if (!feedId) return state
     // find feed index from the state
     const feedIndex = _.findIndex(state.feeds, feed => feed.id === feedId)
@@ -115,7 +115,7 @@ export const projectTopics = function (state=initialState, action) {
       })
       return update (state, {
         error: { $set : false },
-        feeds: { 'PRIMARY' : { $splice: [[feedIndex, 1, updatedFeed]] } }
+        feeds: { PRIMARY : { $splice: [[feedIndex, 1, updatedFeed]] } }
       })
     }
     return state
@@ -136,14 +136,14 @@ export const projectTopics = function (state=initialState, action) {
       })
       // update the state
       return update (state, {
-        feeds: { 'PRIMARY' : { $splice: [[feedIndex, 1, updatedFeed]] } },
+        feeds: { PRIMARY : { $splice: [[feedIndex, 1, updatedFeed]] } },
         isAddingComment: { $set : false }
       })
     }
     return state
   }
   case CREATE_PROJECT_FEED_COMMENT_FAILURE: {
-    const feedId = _.get(action, "meta.feedId", null)
+    const feedId = _.get(action, 'meta.feedId', null)
     if (!feedId) return state
     // find feed index from the state
     const feedIndex = _.findIndex(state.feeds, feed => feed.id === feedId)
@@ -154,7 +154,7 @@ export const projectTopics = function (state=initialState, action) {
       })
       return update (state, {
         error: { $set : false },
-        feeds: { 'PRIMARY' : { $splice: [[feedIndex, 1, updatedFeed]] } }
+        feeds: { PRIMARY : { $splice: [[feedIndex, 1, updatedFeed]] } }
       })
     }
     return state
