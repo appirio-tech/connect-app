@@ -83,7 +83,7 @@ export const projectTopics = function (state=initialState, action) {
   case LOAD_PROJECT_FEED_COMMENTS_SUCCESS: {//NOT being used until we have pagination for comments
     const feedId = payload.topicId
     // find feed index from the state
-    const feedIndex = _.findIndex(state.feeds, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds['PRIMARY'], feed => feed.id === feedId)
     // if we find the feed
     if (feedIndex >= 0) {
       const feed = state.feeds['PRIMARY'][feedIndex]
@@ -108,7 +108,7 @@ export const projectTopics = function (state=initialState, action) {
     const feedId = _.get(action, 'meta.feedId', null)
     if (!feedId) return state
     // find feed index from the state
-    const feedIndex = _.findIndex(state.feeds, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds['PRIMARY'], feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds['PRIMARY'][feedIndex]
       const updatedFeed = update (feed, {
@@ -125,7 +125,7 @@ export const projectTopics = function (state=initialState, action) {
     const feedId = payload.topicId
     const comment = payload.comment
     // find feed index from the state
-    const feedIndex = _.findIndex(state.feeds, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds['PRIMARY'], feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds['PRIMARY'][feedIndex]
       const totalComments = feed.totalComments + 1
@@ -137,8 +137,7 @@ export const projectTopics = function (state=initialState, action) {
       })
       // update the state
       return update (state, {
-        feeds: { PRIMARY : { $splice: [[feedIndex, 1, updatedFeed]] } },
-        isAddingComment: { $set : false }
+        feeds: { PRIMARY : { $splice: [[feedIndex, 1, updatedFeed]] } }
       })
     }
     return state
@@ -147,7 +146,7 @@ export const projectTopics = function (state=initialState, action) {
     const feedId = _.get(action, 'meta.feedId', null)
     if (!feedId) return state
     // find feed index from the state
-    const feedIndex = _.findIndex(state.feeds, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds['PRIMARY'], feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds['PRIMARY'][feedIndex]
       const updatedFeed = update (feed, {
