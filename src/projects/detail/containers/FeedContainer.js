@@ -164,7 +164,7 @@ FeedContainer.propTypes = {
 const mapStateToProps = ({ projectTopics, members, loadUser }) => {
   return {
     currentUser    : loadUser.user,
-    feeds          : projectTopics.feeds,
+    feeds          : _.values(projectTopics.feeds['PRIMARY']),
     isLoading      : projectTopics.isLoading,
     isCreatingFeed : projectTopics.isCreatingFeed,
     error          : projectTopics.error,

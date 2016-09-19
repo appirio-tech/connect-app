@@ -22,7 +22,7 @@ const initialState = {
   isLoading: true,
   isCreatingFeed: false,
   error: false,
-  feeds: [],
+  feeds: {},
   totalFeeds: 0
 }
 
@@ -42,13 +42,13 @@ export const projectTopics = function (state=initialState, action) {
     return Object.assign({}, state, {
       isLoading: false,
       error: true,
-      feeds: payload.topics,
+      feeds: { 'PRIMARY' : payload.topics },
       totalFeeds: payload.totalCount
     })
   case LOAD_PROJECT_FEEDS_MEMBERS_FAILURE:
   case LOAD_PROJECT_FEEDS_FAILURE:
     return Object.assign({}, state, {
-      feeds: [],
+      feeds: { 'PRIMARY': [] },
       isLoading: false,
       error: true
     })
@@ -69,7 +69,7 @@ export const projectTopics = function (state=initialState, action) {
     return update (state, {
       isCreatingFeed: { $set : false },
       error: { $set : false },
-      feeds: { $splice: [[0, 0, feed]] }
+      feeds: { 'PRIMARY' : { $splice: [[0, 0, feed]] } }
     })
   }
   case CREATE_PROJECT_FEED_FAILURE:
@@ -85,7 +85,7 @@ export const projectTopics = function (state=initialState, action) {
     const feedIndex = _.findIndex(state.feeds, feed => feed.id === feedId)
     // if we find the feed
     if (feedIndex >= 0) {
-      const feed = state.feeds[feedIndex]
+      const feed = state.feeds['PRIMARY'][feedIndex]
       // number of posts those would be rendered after this state update
       const noOfRenderedPosts = feed.posts.length + payload.posts.length
       // updates feed, pushes the new posts into posts array of the feed
@@ -96,10 +96,10 @@ export const projectTopics = function (state=initialState, action) {
       })
       // update the state
       return update (state, {
-        feeds: { $splice: [[feedIndex, 1, updatedFeed]] }
+        feeds: { 'PRIMARY' : { $splice: [[feedIndex, 1, updatedFeed]] } }
       })
     }
-    break
+    return state
   }
   case LOAD_PROJECT_FEED_COMMENTS_FAILURE:
     return state
@@ -109,15 +109,16 @@ export const projectTopics = function (state=initialState, action) {
     // find feed index from the state
     const feedIndex = _.findIndex(state.feeds, feed => feed.id === feedId)
     if (feedIndex >= 0) {
-      const feed = state.feeds[feedIndex]
+      const feed = state.feeds['PRIMARY'][feedIndex]
       const updatedFeed = update (feed, {
         isAddingComment : { $set : true }
       })
       return update (state, {
         error: { $set : false },
-        feeds: { $splice: [[feedIndex, 1, updatedFeed]] }
+        feeds: { 'PRIMARY' : { $splice: [[feedIndex, 1, updatedFeed]] } }
       })
     }
+    return state
   }
   case CREATE_PROJECT_FEED_COMMENT_SUCCESS: {
     const feedId = payload.topicId
@@ -125,7 +126,7 @@ export const projectTopics = function (state=initialState, action) {
     // find feed index from the state
     const feedIndex = _.findIndex(state.feeds, feed => feed.id === feedId)
     if (feedIndex >= 0) {
-      const feed = state.feeds[feedIndex]
+      const feed = state.feeds['PRIMARY'][feedIndex]
       const totalComments = feed.totalComments + 1
       const updatedFeed = update (feed, {
         // no need to update hasMoreComments, it should maintain its prev value
@@ -135,11 +136,11 @@ export const projectTopics = function (state=initialState, action) {
       })
       // update the state
       return update (state, {
-        feeds: { $splice: [[feedIndex, 1, updatedFeed]] },
+        feeds: { 'PRIMARY' : { $splice: [[feedIndex, 1, updatedFeed]] } },
         isAddingComment: { $set : false }
       })
     }
-    break
+    return state
   }
   case CREATE_PROJECT_FEED_COMMENT_FAILURE: {
     const feedId = _.get(action, "meta.feedId", null)
@@ -147,15 +148,16 @@ export const projectTopics = function (state=initialState, action) {
     // find feed index from the state
     const feedIndex = _.findIndex(state.feeds, feed => feed.id === feedId)
     if (feedIndex >= 0) {
-      const feed = state.feeds[feedIndex]
+      const feed = state.feeds['PRIMARY'][feedIndex]
       const updatedFeed = update (feed, {
         isAddingComment : { $set : false }
       })
       return update (state, {
         error: { $set : false },
-        feeds: { $splice: [[feedIndex, 1, updatedFeed]] }
+        feeds: { 'PRIMARY' : { $splice: [[feedIndex, 1, updatedFeed]] } }
       })
     }
+    return state
   }
 
   default:
