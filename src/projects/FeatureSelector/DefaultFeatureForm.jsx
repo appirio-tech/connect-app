@@ -65,7 +65,7 @@ class DefaultFeatureForm extends Component {
             disabled={!isEdittable}
             onChange={ this.toggleFeature }
             name="featue-active"
-            checked={isActive ? true : false }
+            checked={isActive}
           />
         </div>
         <div className="feature-form-content">
