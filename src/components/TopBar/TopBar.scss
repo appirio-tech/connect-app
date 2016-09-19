@@ -7,7 +7,12 @@ $tc-rgba-20: rgba(0,0,0,0.17);
 $tc-body-large     		: 20px;
 
 .sticky {
-  z-index: 2;
+  z-index: 15;
+}
+
+.container .sticky,
+.dashboard-container .sticky {
+  z-index: 14;
 }
 
 .tc-header{
@@ -202,6 +207,7 @@ $tc-body-large     		: 20px;
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
+          padding-right: $base-unit * 12;
         }
         a {
           display:block;

@@ -30,7 +30,7 @@
     "webpack-dev-server": "^1.12.1"
   },
   "dependencies": {
-    "appirio-tech-react-components": "appirio-tech/react-components.git#community-fixes",
+    "appirio-tech-react-components": "appirio-tech/react-components.git#feature/connectv2",
     "axios": "^0.13.1",
     "classnames": "^2.2.3",
     "draft-js": "^0.7.0",

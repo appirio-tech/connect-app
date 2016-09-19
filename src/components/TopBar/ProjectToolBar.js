@@ -1,6 +1,8 @@
 import React, {PropTypes} from 'react'
 import {Link} from 'react-router'
 import ReactDOM from 'react-dom'
+import {Sticky} from 'react-sticky'
+
 
 function isEllipsisActive(el) {
   return (el.offsetWidth < el.scrollWidth)
@@ -55,29 +57,31 @@ class ProjectToolBar extends React.Component {
       className: router.isActive(to, true) ? 'active': ''
     })
     return (
-      <div className="tc-header tc-header__connect-project">
-        <div className="top-bar">
-          <div className="bar-column">
-            {logo}
-            {project && <div className="breadcrumb">
-              <Link to="/projects">Projects /&nbsp;</Link>
-              <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
-            </div>}
-            {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
-          </div>
-          <div className="bar-column">
-            {project && <nav className="nav">
-              <ul>
-                <li><Link {...getLinkProps(`/projects/${project.id}`)}><i className="icon-dashboard"/>Dashboard</Link></li>
-                <li><Link {...getLinkProps(`/projects/${project.id}/specification`)}><i className="icon-specification"/>Specification</Link></li>
-                {isPowerUser && <li><Link {...getLinkProps(`/projects/${project.id}/challenges`)}><i className="icon-challenges"/>Challenges</Link></li>}
-                <li><Link {...getLinkProps(`/projects/${project.id}/messages`)}><i className="icon-messages"/>Messages</Link></li>
-              </ul>
-            </nav>}
-            {avatar}
+      <Sticky ref="sticky">
+        <div className="tc-header tc-header__connect-project">
+          <div className="top-bar">
+            <div className="bar-column">
+              {logo}
+              {project && <div className="breadcrumb">
+                <Link to="/projects">Projects /&nbsp;</Link>
+                <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
+              </div>}
+              {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
+            </div>
+            <div className="bar-column">
+              {project && <nav className="nav">
+                <ul>
+                  <li><Link {...getLinkProps(`/projects/${project.id}`)}><i className="icon-dashboard"/>Dashboard</Link></li>
+                  <li><Link {...getLinkProps(`/projects/${project.id}/specification`)}><i className="icon-specification"/>Specification</Link></li>
+                  {isPowerUser && <li><Link {...getLinkProps(`/projects/${project.id}/challenges`)}><i className="icon-challenges"/>Challenges</Link></li>}
+                  <li><Link {...getLinkProps(`/projects/${project.id}/messages`)}><i className="icon-messages"/>Messages</Link></li>
+                </ul>
+              </nav>}
+              {avatar}
+            </div>
           </div>
         </div>
-      </div>
+      </Sticky>
     )
   }
 }
