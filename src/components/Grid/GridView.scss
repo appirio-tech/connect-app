@@ -151,6 +151,7 @@
         font-size: $tc-label-lg;
         color: $tc-gray-90;
         line-height: $base-unit * 4;
+        word-break: break-word;
         &:hover {
             text-decoration: underline;
         }
