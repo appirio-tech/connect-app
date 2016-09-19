@@ -84,9 +84,8 @@ class EditProjectForm extends Component {
     const { isEdittable, sections } = this.props
     const { project } = this.state
     const renderSection = (section, idx) => (
-      <div>
+      <div key={idx}>
         <SpecSection
-          key={idx}
           {...section}
           project={project}
           resetFeatures={this.resetFeatures}
