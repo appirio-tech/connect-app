@@ -50,11 +50,12 @@ class ColorSelector extends React.Component {
           />
         )}
         
-        {colors.length < PROJECT_MAX_COLORS && <a
-          href="javascript:"
-          onClick={() => this.setState({isPickerVisible: true})}
-          className="color-card color-card-add"
-        >
+        {colors.length < PROJECT_MAX_COLORS && 
+          <a
+            href="javascript:"
+            onClick={() => this.setState({isPickerVisible: true})}
+            className="color-card color-card-add"
+          >
           {isPickerVisible &&
             <div className="picker-wrapper" onClick={(e) => e.stopPropagation()}>
               <SketchPicker

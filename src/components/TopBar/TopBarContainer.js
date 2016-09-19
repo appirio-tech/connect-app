@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import Modal from 'react-modal'
