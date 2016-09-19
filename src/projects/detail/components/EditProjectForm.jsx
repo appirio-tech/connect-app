@@ -59,6 +59,9 @@ class EditProjectForm extends Component {
   }
 
   saveFeatures(features) {
+    if (!this.state.project.details.appDefinition) {
+      this.state.project.details.appDefinition = { features: {} }
+    }
     const obj = {
       value: features,
       seeAttached: this.state.project.details.appDefinition.features.seeAttached
