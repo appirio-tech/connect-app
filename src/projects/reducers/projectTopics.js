@@ -33,7 +33,7 @@ export const projectTopics = function (state=initialState, action) {
   case LOAD_PROJECT_FEEDS_MEMBERS_PENDING:
   case LOAD_PROJECT_FEEDS_PENDING:
     return Object.assign({}, state, {
-      feeds: {},//empty the feeds so that switching between projects doesn't show wrong feeds
+      feeds: {}, //empty the feeds so that switching between projects doesn't show wrong feeds
       isLoading: true,
       error: false
     })

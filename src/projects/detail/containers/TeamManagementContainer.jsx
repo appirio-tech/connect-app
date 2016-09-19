@@ -95,7 +95,7 @@ class TeamManagementContainer extends Component {
       error = keyword + ' is already part of your team'
     }
     this.setState({ selectedNewMember, keyword,
-      error: error
+      error
     })
   }
 

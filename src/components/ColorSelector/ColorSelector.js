@@ -4,6 +4,7 @@ import cn from 'classnames'
 import { SketchPicker } from 'react-color'
 import _ from 'lodash'
 import { HOC as hoc } from 'formsy-react'
+import {PROJECT_MAX_COLORS} from '../../config/constants'
 
 class ColorSelector extends React.Component {
   
@@ -49,11 +50,12 @@ class ColorSelector extends React.Component {
           />
         )}
         
-        <a
-          href="javascript:"
-          onClick={() => this.setState({isPickerVisible: true})}
-          className="color-card color-card-add"
-        >
+        {colors.length < PROJECT_MAX_COLORS && 
+          <a
+            href="javascript:"
+            onClick={() => this.setState({isPickerVisible: true})}
+            className="color-card color-card-add"
+          >
           {isPickerVisible &&
             <div className="picker-wrapper" onClick={(e) => e.stopPropagation()}>
               <SketchPicker
@@ -86,7 +88,7 @@ class ColorSelector extends React.Component {
               </div>
             </div>
           }
-        </a>
+        </a>}
       </div>
     )
   }

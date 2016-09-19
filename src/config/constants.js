@@ -170,3 +170,17 @@ export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
 export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || 'https://accounts.topcoder-dev.com/connect'
 
 export const TC_API_URL = `https://api.${DOMAIN}`
+
+export const PROJECT_NAME_MAX_LENGTH = 255
+
+export const PROJECT_STATUS = [
+  {color: 'gray', name: 'Draft', value: 'draft'},
+  {color: 'gray', name: 'In Review', value: 'in_review'},
+  {color: 'gray', name: 'Reviewed', value: 'reviewed'},
+  {color: 'green', name: 'Active', value: 'active'},
+  {color: 'black', name: 'Completed', value: 'completed'},
+  {color: 'black', name: 'Cancelled', value: 'cancelled'},
+  {color: 'red', name: 'Paused', value: 'paused'}
+]
+
+export const PROJECT_MAX_COLORS = 5

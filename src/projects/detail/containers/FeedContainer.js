@@ -38,6 +38,12 @@ class FeedContainer extends React.Component {
     this.setState({
       feeds: props.feeds.map((feed) => {
         const item = { ...feed }
+        item.user = _.find(allMembers, mem => mem.userId === item.userId)
+        if (!item.user) {
+          //TODO: throwing an error
+          return null
+        }
+
         if (item.userId === 'system') {
           item.user = {
             firstName: 'Coder',
@@ -46,7 +52,6 @@ class FeedContainer extends React.Component {
           item.allowComments = false
         } else {
           item.allowComments = true
-          item.user = _.find(allMembers, mem => mem.userId === item.userId)
         }
 
         item.html = item.posts.length > 0 ? item.posts[0].body : null
@@ -66,7 +71,7 @@ class FeedContainer extends React.Component {
         // reset newComment property
         item.newComment = ''
         return item
-      })
+      }).filter((item) => item)
     })
   }
 

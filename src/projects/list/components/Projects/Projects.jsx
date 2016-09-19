@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
-import Modal from 'react-modal'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import ProjectsView from './ProjectsView'
-import CreateView from '../../../create/components/CreateView'
 import { loadProjects } from '../../../actions/loadProjects'
-import { Icons } from 'appirio-tech-react-components'
 import _ from 'lodash'
 
 class Projects extends Component {
@@ -15,8 +12,6 @@ class Projects extends Component {
     this.sortHandler = this.sortHandler.bind(this)
     this.onPageChange = this.onPageChange.bind(this)
     this.applyFilters = this.applyFilters.bind(this)
-    this.showCreateProjectDialog = this.showCreateProjectDialog.bind(this)
-    this.hideCreateProjectDialog = this.hideCreateProjectDialog.bind(this)
   }
 
   componentWillMount() {
@@ -38,17 +33,6 @@ class Projects extends Component {
     }
   }
 
-  showCreateProjectDialog() {
-    this.setState({
-      isCreatingProject : true
-    })
-  }
-
-  hideCreateProjectDialog() {
-    this.setState({
-      isCreatingProject : false
-    })
-  }
 
   onPageChange(pageNum) {
     this.routeWithParams(this.props.criteria, pageNum)
@@ -77,20 +61,8 @@ class Projects extends Component {
   }
 
   render() {
-    const { isCreatingProject } = this.state
     return (
       <div>
-        <Modal
-          isOpen={ isCreatingProject }
-          className="project-creation-dialog"
-          overlayClassName="project-creation-dialog-overlay"
-          onRequestClose={ this.hideCreateProjectDialog }
-        >
-          <CreateView />
-          <div onClick={ this.hideCreateProjectDialog } className="project-creation-dialog-close">
-            <Icons.XMarkIcon />
-          </div>
-        </Modal>
         <ProjectsView {...this.props}
           onPageChange={this.onPageChange}
           sortHandler={this.sortHandler}
