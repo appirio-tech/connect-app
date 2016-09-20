@@ -36,11 +36,12 @@ export function updateProjectMember(projectId, memberId, member) {
   }
 }
 
-export function removeProjectMember(projectId, memberId) {
+export function removeProjectMember(projectId, memberId, isUserLeaving) {
   return (dispatch) => {
     return dispatch({
       type: REMOVE_PROJECT_MEMBER,
-      payload: removeMember(projectId, memberId)
+      payload: removeMember(projectId, memberId),
+      meta: { isUserLeaving }
     })
   }
 }

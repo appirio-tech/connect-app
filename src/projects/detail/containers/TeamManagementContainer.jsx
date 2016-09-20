@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 import _ from 'lodash'
 import {
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER,
@@ -120,7 +121,13 @@ class TeamManagementContainer extends Component {
   }
 
   onMemberDeleteConfirm(member) {
-    this.props.removeProjectMember(this.props.projectId, member.id)
+    // is user leaving current project
+    const isLeaving = member.userId === this.props.currentUser.userId
+    this.props.removeProjectMember(this.props.projectId, member.id, isLeaving)
+    if (isLeaving) {
+      // transition user to project lists page
+      this.props.router.push('/projects')
+    }
   }
 
   onJoinConfirm() {
@@ -222,4 +229,4 @@ TeamManagementContainer.propTypes = {
   projectId: PropTypes.number.isRequired
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TeamManagementContainer)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TeamManagementContainer))
