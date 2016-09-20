@@ -98,7 +98,7 @@ const sections = [
             title: 'What colors do you like? (Select all that apply)',
             description: 'Your preferred colors will be used to guide the shading in your designs',
             type: 'colors',
-            defaultColors: ['#2E9AC8', '#187299', '#FFD800', '#F17012'],
+            defaultColors: [],
             fieldName: 'details.designSpecification.colors'
           },
           {
@@ -108,8 +108,8 @@ const sections = [
             type: 'tiled-radio-group',
             options: [
               {value: 'flatColor', title: 'Flat Color', icon: Icons.IconTcSpecIconTypeColorHome, iconOptions: { fill: '#00000'}, desc: 'playful'},
-              {value: 'thinLine', title: 'Thin Line', icon: Icons.IconTcSpecIconTypeGlyphHome, iconOptions: { fill: '#00000'}, desc: 'modern'},
-              {value: 'solidLine', title: 'Solid Line', icon: Icons.IconTcSpecIconTypeOutlineHome, iconOptions: { fill: '#00000'}, desc: 'classic'}
+              {value: 'thinLine', title: 'Thin Line', icon: Icons.IconTcSpecIconTypeOutlineHome, iconOptions: { fill: '#00000'}, desc: 'modern'},
+              {value: 'solidLine', title: 'Solid Line', icon: Icons.IconTcSpecIconTypeGlyphHome, iconOptions: { fill: '#00000'}, desc: 'classic'}
             ],
             fieldName: 'details.designSpecification.iconStyle'
           }

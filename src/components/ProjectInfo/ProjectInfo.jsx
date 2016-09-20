@@ -4,11 +4,11 @@ import ProjectType from '../ProjectType/ProjectType'
 import ProjectStatus from '../ProjectStatus/ProjectStatus'
 import ProjectProgress from '../ProjectProgress/ProjectProgress'
 
-const ProjectInfo = ({type, devices, currentMemberRole, status, onChangeStatus, duration, budget}) => (
+const ProjectInfo = ({type, directLinks, devices, currentMemberRole, status, onChangeStatus, duration, budget}) => (
   <Panel>
     <Panel.Title>Project Info</Panel.Title>
     <ProjectType type={type} devices={devices} />
-  <ProjectStatus currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
+  <ProjectStatus directLinks={directLinks} currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
     <ProjectProgress title="Duration" percent={duration.percent} type="completed">
       {duration.text}
     </ProjectProgress>
@@ -22,6 +22,7 @@ ProjectInfo.propTypes = {
   currentMemberRole: PropTypes.string,
   type: PropTypes.string.isRequired,
   devices: PropTypes.array.isRequired,
+  directLinks: PropTypes.array,
   status: PropTypes.string.isRequired,
   onChangeStatus: PropTypes.func.isRequired,
   duration: PropTypes.object.isRequired,

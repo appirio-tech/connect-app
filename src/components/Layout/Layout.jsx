@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
-import TopBar from '../TopBar/TopBar'
+import TopBarContainer from '../TopBar/TopBarContainer'
 import Footer from '../Footer/Footer'
 import { DOMAIN } from '../../config/constants'
 import { StickyContainer } from 'react-sticky'
@@ -27,7 +27,7 @@ const Layout = (props) => {
   } else {
     return (
       <StickyContainer>
-        <TopBar
+        <TopBarContainer
           userHandle={ handle }
           userImage={ userImage }
           userName={ userName }

@@ -8,10 +8,16 @@ const Footer = ({domain}) => {
   const currentYear = moment().format('YYYY')
   const otherNavigationItems = [
     {img: '', text: 'About', link: 'https://www.' + domain + '/about'},
-    {img: '', text: 'Contacts', link: 'https://www.' + domain + '/contact-us'},
-    {img: '', text: 'Terms of service', link: 'https://www.' + domain + '/community/how-it-works/terms/'},
-    {img: '', text: 'Help', link: 'https://help.' + domain, target:'_blank'}
+    {img: '', text: 'Contact', link: 'https://www.' + domain + '/contact-us'},
+    {img: '', text: 'Help', link: 'https://help.' + domain, target:'_blank'},
+    {img: '', text: 'Privacy', link: 'https://help.' + domain, target:'_blank'},
+    {img: '', text: 'Terms', link: 'https://www.' + domain + '/community/how-it-works/terms/'}
   ]
+  const isProjectDetails = /projects\/\d+/.test(window.location.pathname)
+
+  if (isProjectDetails) {
+    return null
+  }
 
   return (
     <div className="Footer">

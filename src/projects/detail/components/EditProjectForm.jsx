@@ -59,6 +59,9 @@ class EditProjectForm extends Component {
   }
 
   saveFeatures(features) {
+    if (!this.state.project.details.appDefinition) {
+      this.state.project.details.appDefinition = { features: {} }
+    }
     const obj = {
       value: features,
       seeAttached: this.state.project.details.appDefinition.features.seeAttached
@@ -84,9 +87,8 @@ class EditProjectForm extends Component {
     const { isEdittable, sections } = this.props
     const { project } = this.state
     const renderSection = (section, idx) => (
-      <div>
+      <div key={idx}>
         <SpecSection
-          key={idx}
           {...section}
           project={project}
           resetFeatures={this.resetFeatures}

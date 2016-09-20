@@ -4,6 +4,7 @@ import { clearLoadedProject } from '../../actions/project'
 import DevicesComponent from './Devices'
 import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 import _ from 'lodash'
+import {PROJECT_NAME_MAX_LENGTH} from '../../../config/constants'
 
 require('./NewProjectForm.scss')
 
@@ -90,6 +91,7 @@ class AppProjectForm extends Component {
           <TCFormFields.TextInput
             name="newProject.name"
             type="text"
+            maxLength={PROJECT_NAME_MAX_LENGTH}
             validations="minLength:1" required
             validationError="Project name is required"
             label="Project Name"

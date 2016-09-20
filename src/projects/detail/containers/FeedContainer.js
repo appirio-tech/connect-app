@@ -1,14 +1,13 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import _ from 'lodash'
 import { PROJECT_STATUS_DRAFT, PROJECT_ROLE_CUSTOMER } from '../../../config/constants'
 import { connect } from 'react-redux'
 import NewPost from '../../../components/Feed/NewPost'
 import Feed from '../../../components/Feed/Feed'
-// import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectSpecification from '../../../components/ProjectSpecification/ProjectSpecification'
 import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
-import moment from 'moment'
 import update from 'react-addons-update'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 
 class FeedContainer extends React.Component {
 
@@ -40,30 +39,51 @@ class FeedContainer extends React.Component {
       feeds: props.feeds.map((feed) => {
         const item = { ...feed }
         item.user = _.find(allMembers, mem => mem.userId === item.userId)
-        item.html = item.body
+        if (!item.user) {
+          //TODO: throwing an error
+          return null
+        }
 
-        item.comments = item.posts ? item.posts : []
+        if (item.userId === 'system') {
+          item.user = {
+            firstName: 'Coder',
+            lastName: 'Bot'
+          }
+          item.allowComments = false
+        } else {
+          item.allowComments = true
+        }
+
+        item.html = item.posts.length > 0 ? item.posts[0].body : null
+        item.comments = item.posts ? item.posts.slice(1) : []
         item.comments.forEach((comment) => {
-          comment.author = _.find(allMembers, mem => mem.userId === comment.userId)
+          comment.content = comment.body
+          if (comment.userId === 'system') {
+            comment.author = {
+              firstName: 'Coder',
+              lastName: 'Bot'
+            }
+          } else {
+            comment.author = _.find(allMembers, mem => mem.userId === comment.userId)
+          }
         })
 
         // reset newComment property
         item.newComment = ''
         return item
-      })
+      }).filter((item) => item)
     })
   }
 
   onNewPost({title, content}) {
-    const { project, currentUser } = this.props
-    const { feeds } = this.state
+    const { project } = this.props
     const newFeed = {
       title,
       body: content,
-      tag: !feeds || feeds.length === 0 ? 'PRIMARY' : '',
-      userId: parseInt(currentUser.id),
-      date: moment().format(),
-      allowComments: true
+      tag: 'PRIMARY'
+      // userId: parseInt(currentUser.id),
+      // date: moment().format(),
+      // allowComments: true
     }
     this.props.createProjectTopic(project.id, newFeed)
   }
@@ -103,7 +123,7 @@ class FeedContainer extends React.Component {
   }
 
   render() {
-    const {currentUser, project, currentMemberRole } = this.props
+    const {currentUser, project, currentMemberRole, isLoading, isCreatingFeed } = this.props
     const { loadingFeedComments, feeds } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
 
@@ -132,21 +152,28 @@ class FeedContainer extends React.Component {
     }
     return (
       <div>
-        <NewPost currentUser={currentUser.profile} onPost={this.onNewPost} />
-        { feeds.map(renderFeed) }
+        <NewPost currentUser={currentUser.profile} onPost={this.onNewPost} isCreating={ isCreatingFeed } />
+        { !isLoading && feeds.map(renderFeed) }
+        { isLoading && <LoadingIndicator />}
       </div>
     )
   }
 }
 
 
+FeedContainer.propTypes = {
+  isLoading : PropTypes.bool.isRequired
+}
+
+
 const mapStateToProps = ({ projectTopics, members, loadUser }) => {
   return {
-    currentUser: loadUser.user,
-    feeds      : projectTopics.feeds,
-    isLoading  : projectTopics.isLoading,
-    error      : projectTopics.error,
-    allMembers : _.values(members.members)
+    currentUser    : loadUser.user,
+    feeds          : _.values(projectTopics.feeds['PRIMARY']),
+    isLoading      : projectTopics.isLoading,
+    isCreatingFeed : projectTopics.isCreatingFeed,
+    error          : projectTopics.error,
+    allMembers     : _.values(members.members)
   }
 }
 const mapDispatchToProps = {

@@ -8,6 +8,9 @@
   padding: $base-unit*2 0;
   .btn-close {
     position: absolute;
+    display: block;
+    width: 15px;
+    height: 15px;
     top: $base-unit*3;
     right: $base-unit*3;
     background: url('../../assets/images/x-mark-big.svg') no-repeat 0 0;
