@@ -1,7 +1,7 @@
 @import 'tc-includes';
 
 .add-edit-features {
-  margin-bottom: 20px;
+  margin-bottom: 20px; // FIXME: use $variables for units
   .add-edit-features__header {
     display: flex;
     justify-content: center;

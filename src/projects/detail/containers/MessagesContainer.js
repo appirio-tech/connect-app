@@ -21,12 +21,12 @@ const randomMsg = (christina, dayDiff) => {
       userId: 1,
       firstName: 'Christina',
       lastName: 'Underwood',
-      photoURL: require('../../../styles/i/profile1.jpg')
+      photoURL: require('../../../assets/images/profile1.jpg')
     } : {
       userId: 2,
       firstName: 'Patrick',
       lastName: 'Monahan',
-      photoURL: require('../../../styles/i/avatar-patrick.png')
+      photoURL: require('../../../assets/images/avatar-patrick.png')
     },
     content: content + '\nMessage Id: ' + id
   }
@@ -41,7 +41,7 @@ export default class MessagesContainer extends React.Component {
         userId: 1,
         firstName: 'Christina',
         lastName: 'Underwood',
-        photoURL: require('../../../styles/i/profile1.jpg')
+        photoURL: require('../../../assets/images/profile1.jpg')
       },
       threads: [
         {

@@ -1,6 +1,9 @@
 @import '~tc-ui/src/styles/tc-includes';
+
+// FIXME: bad names for variables;
 $gray-color: $tc-gray-50;
 $title-color: $tc-gray-80;
+// FIXME: repeated mixin use! Use global
 @mixin flexBox {
   display: box;
   display: -webkit-box;
@@ -16,6 +19,7 @@ $title-color: $tc-gray-80;
   flex-direction: row;
   width: auto;
 }
+// FIXME: repeated mixin use!
 @mixin flexWidth($number) {
   -webkit-box-flex: $number;
   -moz-box-flex: $number;
@@ -41,6 +45,7 @@ $title-color: $tc-gray-80;
       // min-width: 100px;
     }
   }
+  // FIXME: overly nexted code
   .right-area {
     @include flexWidth(2);
     border-radius: 4px;

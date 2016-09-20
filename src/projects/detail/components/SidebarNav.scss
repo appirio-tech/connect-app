@@ -1,5 +1,7 @@
 @import 'tc-includes';
 
+// FIXME: multiple problems: floats, colors, units, deep nesting, global tag "svg" restyling
+
 .list-group {
   .title {
     @include roboto-bold;
@@ -18,7 +20,7 @@
       float: right;
       @include roboto;
       color: $tc-orange;
-      font-size: 11px;
+      font-size: 11px; // FIXME: non-standard font size
     }
     /* required End */
   }
