@@ -56,7 +56,7 @@ const MessageList = ({threads, onSelect, onAdd}) => (
       <Panel.AddBtn onClick={onAdd} />
     </Panel.Title>
     <div className="panel-messages">
-      {threads.map((item) => <MessageRow key={item.threadId} onClick={(e) => onSelect(item, e) } {...item} />)}
+      {threads.map((item) => <MessageRow key={item.id} onClick={(e) => onSelect(item, e) } {...item} />)}
     </div>
   </Panel>
 )

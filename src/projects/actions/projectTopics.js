@@ -60,7 +60,10 @@ export function createProjectTopic(projectId, topic) {
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT_FEED,
-      payload: createTopic(updatedTopic)
+      payload: createTopic(updatedTopic),
+      meta: {
+        tag: topic.tag
+      }
     })
   }
 }
@@ -74,12 +77,12 @@ export function loadFeedComments(feedId, fromIndex) {
   }
 }
 
-export function addFeedComment(feedId, comment) {
+export function addFeedComment(feedId, tag, comment) {
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT_FEED_COMMENT,
       payload: addTopicPost(feedId, comment),
-      meta: { feedId }
+      meta: { feedId, tag }
     })
   }
 }

@@ -119,7 +119,7 @@ class FeedContainer extends React.Component {
       userId: parseInt(currentUser.id),
       content
     }
-    this.props.addFeedComment(feedId, newComment)
+    this.props.addFeedComment(feedId, 'PRIMARY', newComment)
   }
 
   render() {

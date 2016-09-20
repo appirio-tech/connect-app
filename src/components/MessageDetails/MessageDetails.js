@@ -6,14 +6,14 @@ import BtnSeparator from '../ActionCard/BtnSeparator'
 import Comment from '../ActionCard/Comment'
 import AddComment from '../ActionCard/AddComment'
 
-const MessageDetails = ({title, messages, onLoadMoreMessages, hasMoreMessages, newMessage, onNewMessageChange, onAddNewMessage, isLoading, currentUser}) => (
+const MessageDetails = ({title, messages, onLoadMoreMessages, hasMoreMessages, newMessage, onNewMessageChange, onAddNewMessage, isLoading, currentUser, isAddingComment}) => (
   <ActionCard className="main-messaging">
     <ActionCard.Header title={title}>
       {hasMoreMessages && <BtnSeparator onClick={onLoadMoreMessages}>
         {isLoading ? 'Loading...' : 'Load earlier messages'}
       </BtnSeparator>}
     </ActionCard.Header>
-    {messages.map((item) => 
+    {messages && messages.map((item) => 
       <Comment
         key={item.id}
         avatarUrl={item.author.photoURL}
@@ -28,6 +28,7 @@ const MessageDetails = ({title, messages, onLoadMoreMessages, hasMoreMessages, n
     
     <AddComment
       className="messaging-comment-section"
+      isAdding={isAddingComment}
       avatarUrl={currentUser.photoURL}
       onAdd={onAddNewMessage}
       onChange={onNewMessageChange}
