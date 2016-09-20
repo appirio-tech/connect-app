@@ -2,6 +2,7 @@
 
 .action-card{
   padding: $base-unit*4 0;
+  box-shadow: 0px 1px 3px 0px #C3C3C8;
 
   .panel-row,
   .modal-row{
@@ -53,7 +54,7 @@
     line-height: $base-unit*5;
     padding: 10px 0;
     &.comment-section{
-      margin-bottom: -30px;
+      margin-bottom: -50px;
       .comment-count{
         @include roboto;
         font-size: $tc-label-md;
@@ -97,13 +98,29 @@
     }
   }
   .comment{
-    background: #FAFAFB;
+    background: $tc-gray-neutral-light;
     box-shadow: 0px 0px 3px 0px rgba(89,167,255,0.00);
     border-radius: 4px;
     padding: $base-unit*2;
     margin-bottom: -10px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      width: 0px;
+      height: 0px;
+      margin-left: -16px;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right: 14px solid $tc-gray-neutral-light;
+      transform: rotate(-90deg);
+    }
+
     &.self{
       background: $tc-dark-blue-10;
+      &:before {
+        border-right: 14px solid $tc-dark-blue-10;
+      }
     }
     .comment-body{
       @include roboto;
