@@ -22,7 +22,7 @@ class ProjectInfoContainer extends React.Component {
       },
       directLinks: [
         {name: 'Project in Topcoder Direct', href: 'javascript:'},
-        {name: 'SalesForce Opportunity', href: 'javascript:'}
+        {name: 'Salesforce Opportunity', href: 'javascript:'}
       ]
     }
     this.onChangeStatus = this.onChangeStatus.bind(this)

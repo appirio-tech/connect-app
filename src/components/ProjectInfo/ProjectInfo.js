@@ -4,7 +4,9 @@ import ProjectType from '../ProjectType/ProjectType'
 import ProjectStatus from '../ProjectStatus/ProjectStatus'
 import ProjectProgress from '../ProjectProgress/ProjectProgress'
 
-const ProjectInfo = ({type, directLinks, devices, currentMemberRole, status, onChangeStatus, duration, budget}) => (
+//const ProjectInfo = ({type, directLinks, devices, currentMemberRole, status, onChangeStatus, duration, budget}) => (
+// TODO: Enable 'budget' when is needed again.
+const ProjectInfo = ({type, directLinks, devices, currentMemberRole, status, onChangeStatus, duration}) => (
   <Panel>
     <Panel.Title>Project Info</Panel.Title>
     <ProjectType type={type} devices={devices} />
@@ -12,9 +14,11 @@ const ProjectInfo = ({type, directLinks, devices, currentMemberRole, status, onC
     <ProjectProgress title="Duration" percent={duration.percent} type="completed">
       {duration.text}
     </ProjectProgress>
+    {/*
     <ProjectProgress title="Budget" percent={budget.percent} type="working">
       {budget.text}
     </ProjectProgress>
+    */}
   </Panel>
 )
 
