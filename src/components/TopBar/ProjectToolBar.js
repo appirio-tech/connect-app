@@ -48,7 +48,9 @@ class ProjectToolBar extends React.Component {
   }
 
   render() {
-    const {logo, avatar, project, isPowerUser} = this.props
+    //const {logo, avatar, project, isPowerUser} = this.props
+    // TODO: removing isPowerUser until link challenges is needed once again.
+    const {logo, avatar, project } = this.props
     const {router} = this.context
     const {isTooltipVisible} = this.state
 
@@ -56,6 +58,7 @@ class ProjectToolBar extends React.Component {
       to,
       className: router.isActive(to, true) ? 'active': ''
     })
+
     return (
       <Sticky ref="sticky">
         <div className="tc-header tc-header__connect-project">
@@ -73,7 +76,10 @@ class ProjectToolBar extends React.Component {
                 <ul>
                   <li><Link {...getLinkProps(`/projects/${project.id}`)}><i className="icon-dashboard"/>Dashboard</Link></li>
                   <li><Link {...getLinkProps(`/projects/${project.id}/specification`)}><i className="icon-specification"/>Specification</Link></li>
-                  {isPowerUser && <li><Link {...getLinkProps(`/projects/${project.id}/challenges`)}><i className="icon-challenges"/>Challenges</Link></li>}
+                  {/*
+                    TODO: Enable again when challenges link is needed.
+                    isPowerUser && <li><Link {...getLinkProps(`/projects/${project.id}/challenges`)}><i className="icon-challenges"/>Challenges</Link></li>
+                  */}
                   <li><Link {...getLinkProps(`/projects/${project.id}/messages`)}><i className="icon-messages"/>Messages</Link></li>
                 </ul>
               </nav>}

@@ -15,7 +15,7 @@ const AddFiles = props => {
     buttonClass: 'tc-btn tc-btn-secondary tc-btn-sm',
     dragText: 'Drag and drop your files here',
     // dragClass: '',
-    class: 'add-file', // div styling
+    className: 'add-file', // div styling
     language: 'en',
     storeLocation: 's3',
     storeContainer: FILE_PICKER_SUBMISSION_CONTAINER_NAME,

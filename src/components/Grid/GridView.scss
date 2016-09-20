@@ -152,8 +152,13 @@
         left: 0;
         z-index: 99;
     }
+    .spacing-grid {
+        overflow: hidden;
+    }
     .link-title {
         @include roboto-medium;
+        @include ellipsis;
+        display: block;
         font-size: $tc-label-lg;
         color: $tc-gray-90;
         line-height: $base-unit * 4;
