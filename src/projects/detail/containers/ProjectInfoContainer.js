@@ -2,12 +2,14 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import update from 'react-addons-update'
+import _ from 'lodash'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 import LinksMenu from '../../../components/LinksMenu/LinksMenu'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject } from '../../actions/project'
-import { PROJECT_ROLE_OWNER } from '../../../config/constants'
+import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
+   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK } from '../../../config/constants'
 
 class ProjectInfoContainer extends React.Component {
 
@@ -21,11 +23,7 @@ class ProjectInfoContainer extends React.Component {
       budget: {
         percent: 80,
         text: '$1000 remaining'
-      },
-      directLinks: [
-        {name: 'Project in Topcoder Direct', href: 'javascript:'},
-        {name: 'SalesForce Opportunity', href: 'javascript:'}
-      ]
+      }
     }
     this.onChangeStatus = this.onChangeStatus.bind(this)
     this.onDeleteProject = this.onDeleteProject.bind(this)
@@ -61,8 +59,21 @@ class ProjectInfoContainer extends React.Component {
   }
 
   render() {
-    const {duration, budget, directLinks } = this.state
+    const {duration, budget } = this.state
     const { project, currentMemberRole } = this.props
+
+    let directLinks = null
+    // check if direct links need to be added
+    const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
+    if (isMemberOrCopilot) {
+      directLinks = []
+      if (project.directProjectId) {
+        directLinks.push({name: 'Project in Topcoder Direct', href: `${DIRECT_PROJECT_URL}${project.directProjectId}`})
+      }
+      // TODO waiting on @mdesiderio for salesforce link info
+      // directLinks.push({name: 'SalesForce Opportunity', href: `${SALESFORCE_PROJECT_LEAD_LINK}`})
+    }
+
     const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER
       && project.status === 'draft'
     return (
@@ -73,7 +84,7 @@ class ProjectInfoContainer extends React.Component {
           directLinks={directLinks}
           currentMemberRole={currentMemberRole}
           type={project.type}
-          devices={project.details.devices}
+          devices={project.details.devices || []}
           status={project.status} onChangeStatus={this.onChangeStatus}
           duration={duration}
           budget={budget}

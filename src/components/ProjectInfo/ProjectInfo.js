@@ -39,7 +39,7 @@ class ProjectInfo extends Component {
             onConfirm={this.onConfirmDelete}
         /> }
         <ProjectType type={type} devices={devices} />
-      <ProjectStatus directLinks={directLinks} currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
+        <ProjectStatus directLinks={directLinks} currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
         <ProjectProgress title="Duration" percent={duration.percent} type="completed">
           {duration.text}
         </ProjectProgress>
