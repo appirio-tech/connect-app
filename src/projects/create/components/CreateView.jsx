@@ -23,8 +23,12 @@ class CreateView extends Component {
   }
 
   componentWillUpdate(nextProps) {
-    if (!nextProps.processing && !nextProps.error && nextProps.project.id) {
-      this.props.router.push('/projects/' + nextProps.project.id )
+    const projectId = _.get(nextProps, 'project.id', null)
+    if (!nextProps.processing && !nextProps.error && projectId) {
+      if (nextProps.afterProjectCreation) {
+        nextProps.afterProjectCreation(projectId)
+      }
+      this.props.router.push('/projects/' + projectId )
     }
   }
 
@@ -73,7 +77,8 @@ class CreateView extends Component {
 }
 
 CreateView.propTypes = {
-  userRoles: PropTypes.arrayOf(PropTypes.string).isRequired
+  userRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  afterProjectCreation: PropTypes.func
 }
 
 const mapStateToProps = ({projectState, loadUser }) => ({
