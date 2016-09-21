@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { loadProjectDashboard } from '../actions/projectDashboard'
-import { LOAD_PROJECT_FAILURE } from '../../config/constants'
+import { LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import PageError from '../../components/PageError/PageError'
 
@@ -45,8 +45,11 @@ class ProjectDetail extends Component {
     let role = null
     if (project) {
       const member = _.find(project.members, m => m.userId === currentUserId)
-      if (member)
+      if (member) {
         role = member.role
+        if (role === PROJECT_ROLE_CUSTOMER && member.isPrimary)
+          role = PROJECT_ROLE_OWNER
+      }
     }
     return role
   }

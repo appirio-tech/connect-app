@@ -25,9 +25,8 @@ class CreateView extends Component {
   componentWillUpdate(nextProps) {
     const projectId = _.get(nextProps, 'project.id', null)
     if (!nextProps.processing && !nextProps.error && projectId) {
-      if (nextProps.afterProjectCreation) {
-        nextProps.afterProjectCreation(projectId)
-      }
+      // close modal and navigate to project dashboard
+      this.props.closeModal()
       this.props.router.push('/projects/' + projectId )
     }
   }
@@ -78,7 +77,7 @@ class CreateView extends Component {
 
 CreateView.propTypes = {
   userRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
-  afterProjectCreation: PropTypes.func
+  closeModal: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({projectState, loadUser }) => ({

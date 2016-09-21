@@ -1,26 +1,57 @@
-import React, {PropTypes} from 'react'
+import React, {PropTypes, Component} from 'react'
 import Panel from '../Panel/Panel'
 import ProjectType from '../ProjectType/ProjectType'
 import ProjectStatus from '../ProjectStatus/ProjectStatus'
 import ProjectProgress from '../ProjectProgress/ProjectProgress'
+import DeleteProjectModal from './DeleteProjectModal'
 
-//const ProjectInfo = ({type, directLinks, devices, currentMemberRole, status, onChangeStatus, duration, budget}) => (
-// TODO: Enable 'budget' when is needed again.
-const ProjectInfo = ({type, directLinks, devices, currentMemberRole, status, onChangeStatus, duration}) => (
-  <Panel>
-    <Panel.Title>Project Info</Panel.Title>
-    <ProjectType type={type} devices={devices} />
-  <ProjectStatus directLinks={directLinks} currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
-    <ProjectProgress title="Duration" percent={duration.percent} type="completed">
-      {duration.text}
-    </ProjectProgress>
-    {/*
-    <ProjectProgress title="Budget" percent={budget.percent} type="working">
-      {budget.text}
-    </ProjectProgress>
-    */}
-  </Panel>
-)
+class ProjectInfo extends Component {
+
+  constructor(props) {
+    super(props)
+    this.toggleProjectDelete = this.toggleProjectDelete.bind(this)
+    this.onConfirmDelete = this.onConfirmDelete.bind(this)
+  }
+
+  componentWillMount() {
+    this.setState({ showDeleteConfirm: false })
+  }
+
+  toggleProjectDelete() {
+    this.setState({ showDeleteConfirm: !this.state.showDeleteConfirm })
+  }
+
+  onConfirmDelete() {
+    this.props.onDeleteProject()
+  }
+
+  render() {
+    const { type, directLinks, devices, currentMemberRole, status, onChangeStatus, duration, canDeleteProject } = this.props
+    const { showDeleteConfirm } = this.state
+    return (
+      <Panel>
+        <Panel.Title>Project</Panel.Title>
+        { canDeleteProject && !showDeleteConfirm &&
+          <Panel.DeleteBtn onClick={this.toggleProjectDelete}></Panel.DeleteBtn>
+        }
+        { showDeleteConfirm &&
+          <DeleteProjectModal
+            onCancel={this.toggleProjectDelete}
+            onConfirm={this.onConfirmDelete}
+          />
+        }
+        <ProjectType type={type} devices={devices} />
+        <ProjectStatus directLinks={directLinks} currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
+        <ProjectProgress title="Duration" percent={duration.percent} type="completed">
+          {duration.text}
+        </ProjectProgress>
+        {/* <ProjectProgress title="Budget" percent={budget.percent} type="working">
+          {budget.text}
+        </ProjectProgress> */}
+      </Panel>
+    )
+  }
+}
 
 ProjectInfo.propTypes = {
   currentMemberRole: PropTypes.string,

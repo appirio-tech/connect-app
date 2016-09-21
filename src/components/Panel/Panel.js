@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react'
+import { defaultProps } from 'recompose'
 import './Panel.scss'
 import cn from 'classnames'
 
@@ -24,17 +25,18 @@ Title.propTypes = {
   children: PropTypes.any.isRequired
 }
 
-const AddBtn = ({children, onClick}) => (
-  <a href="javascript:" onClick={onClick} className="btn-add" title={children}>
-    <i className="plus"/>
+const ActionBtn = ({children, onClick, type}) => (
+  <a href="javascript:" onClick={onClick} className="btn-action" title={children}>
+    { type === 'add' && <i className="plus"/> }
+    { type === 'remove' && <i className="remove"/> }
   </a>
 )
 
-AddBtn.propTypes = {
+ActionBtn.propTypes = {
   children: PropTypes.any,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  type: PropTypes.oneOf(['add', 'remove']).isRequired
 }
-
 
 
 const Body = ({children, active, className}) => (
@@ -50,6 +52,7 @@ Body.propTypes = {
 
 Panel.Title = Title
 Panel.Body = Body
-Panel.AddBtn = AddBtn
+Panel.AddBtn = defaultProps({ type: 'add'})(ActionBtn)
+Panel.DeleteBtn = defaultProps({ type: 'remove'})(ActionBtn)
 
 export default Panel
