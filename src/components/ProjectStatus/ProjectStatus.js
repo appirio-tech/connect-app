@@ -45,7 +45,7 @@ class ProjectStatus extends React.Component {
           <div
             onClick={(e) => canEdit && onToggleOpen(!isOpen, e)}
             ref="toggleBtn"
-            className={cn('status-label', selected.color, {active: isOpen})}
+            className={cn('status-label', selected.color, {active: isOpen, 'editable' : canEdit})}
           >
             <i className="status-icon"/>
             {selected.name}

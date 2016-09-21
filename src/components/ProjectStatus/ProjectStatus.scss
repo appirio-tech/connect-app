@@ -88,7 +88,6 @@
     -moz-user-select: none; 
     -ms-user-select: none; 
     user-select: none;
-    cursor: pointer;
     position: relative;
     margin-left: auto;
     border-radius: $base-unit*4;
@@ -140,23 +139,23 @@
         -webkit-mask-size: 12px;
       }
     }
-    &::after {
-      content: '';
-      display: inline-block;
-      width: 9px;
-      height: 5px;
-      position: absolute;
-      right: 10px;
-      top: 8px;
-      background-size: 9px 4px;
-      background: url('../../assets/images/arrow-9px-carret-down-normal.svg') no-repeat 50% 50%;
-    }
     &.editable {
       cursor: pointer;
       &:hover {
         &::after {
           background: url('../../assets/images/arrows-9px-carret-down-expanded.svg') no-repeat 50% 50%;
         }
+      }
+      &::after {
+        content: '';
+        display: inline-block;
+        width: 9px;
+        height: 5px;
+        position: absolute;
+        right: 10px;
+        top: 8px;
+        background-size: 9px 4px;
+        background: url('../../assets/images/arrow-9px-carret-down-normal.svg') no-repeat 50% 50%;
       }
     }
     &.active {
