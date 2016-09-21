@@ -1,11 +1,13 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 import update from 'react-addons-update'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 import LinksMenu from '../../../components/LinksMenu/LinksMenu'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject } from '../../actions/project'
+import { PROJECT_ROLE_OWNER } from '../../../config/constants'
 
 class ProjectInfoContainer extends React.Component {
 
@@ -26,6 +28,7 @@ class ProjectInfoContainer extends React.Component {
       ]
     }
     this.onChangeStatus = this.onChangeStatus.bind(this)
+    this.onDeleteProject = this.onDeleteProject.bind(this)
     this.onAddNewLink = this.onAddNewLink.bind(this)
     this.onDeleteLink = this.onDeleteLink.bind(this)
   }
@@ -48,12 +51,25 @@ class ProjectInfoContainer extends React.Component {
     })
   }
 
+  onDeleteProject() {
+    const { router, updateProject, project } = this.props
+    updateProject(project.id, {
+      status: 'cancelled'
+    })
+    // navigate to project list view
+    router.push('/projects')
+  }
+
   render() {
     const {duration, budget, directLinks } = this.state
     const { project, currentMemberRole } = this.props
+    const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER
+      && project.status === 'draft'
     return (
       <div>
         <ProjectInfo
+          canDeleteProject={canDeleteProject}
+          onDeleteProject={this.onDeleteProject}
           directLinks={directLinks}
           currentMemberRole={currentMemberRole}
           type={project.type}
@@ -82,4 +98,4 @@ ProjectInfoContainer.PropTypes = {
 
 const mapDispatchToProps = { updateProject }
 
-export default connect(null, mapDispatchToProps)(ProjectInfoContainer)
+export default withRouter(connect(null, mapDispatchToProps)(ProjectInfoContainer))

@@ -39,4 +39,8 @@ ProjectType.propTypes = {
   devices: PropTypes.arrayOf(PropTypes.oneOf(['phone', 'tablet', 'desktop', 'apple-watch', 'android-watch'])).isRequired
 }
 
+ProjectType.defaultProps = {
+  devices: []
+}
+
 export default ProjectType

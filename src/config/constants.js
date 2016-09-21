@@ -146,6 +146,7 @@ export const PROJECT_STATUS_DRAFT = 'draft'
 export const PROJECT_ROLE_COPILOT = 'copilot'
 export const PROJECT_ROLE_MANAGER = 'manager'
 export const PROJECT_ROLE_CUSTOMER = 'customer'
+export const PROJECT_ROLE_OWNER = 'owner'
 
 
 /*

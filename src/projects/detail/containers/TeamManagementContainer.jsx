@@ -4,7 +4,7 @@ import { withRouter } from 'react-router'
 import _ from 'lodash'
 import {
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER,
-  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER
+  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import { addProjectMember, updateProjectMember, removeProjectMember,

@@ -19,19 +19,12 @@ import spinnerWhileLoading from '../../../../components/LoadingSpinner'
   Definiing default project criteria. This is used to later to determine if
   walkthrough component should be rendered instead of no results
  */
-const defaultCriteria = {sort: "createdAt desc"}
+const defaultCriteria = {sort: 'createdAt desc'}
 
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, t => t, renderComponent(<PageError code={500} />))
 const errorHandler = showErrorMessageIfError(props => !props.error)
 const spinner = spinnerWhileLoading(props => !props.isLoading)
-// const showWalkThru = showWalkThrough =>
-//   branch(showWalkThrough, t => t, renderComponent(<Walkthrough />))
-// const showWalkthroughHandler = showWalkThru(props => props.totalCount === 0 &&
-//   _.isEqual(props.criteria, defaultCriteria) &&
-//   _.isEmpty(_.intersection([props.currentUser.roles,
-//     [ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT]
-//   ])))
 const enhance = compose(errorHandler, spinner)
 const EnhancedGrid = enhance(GridView)
 
