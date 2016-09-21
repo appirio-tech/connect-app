@@ -227,7 +227,6 @@ class FeaturePicker extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    debugger
     this.setState({
       addingCustomFeature : this.state.addingCustomFeature && this.props.features.length === nextProps.features.length
     })
