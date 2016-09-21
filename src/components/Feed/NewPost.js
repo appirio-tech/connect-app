@@ -60,7 +60,6 @@ class NewPost extends React.Component {
   }
 
   onClickOutside(evt) {
-    const {editorState} = this.state
     let currNode = evt.target
     let isEditor = false
 
