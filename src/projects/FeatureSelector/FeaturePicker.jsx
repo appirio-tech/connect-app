@@ -315,7 +315,7 @@ class FeaturePicker extends Component {
 
     return (
       <div className="define-features">
-        <h2><strong>Project Features - <span className="selected-feature-count">{activeFeatureCount || 0} selected</span></strong></h2>
+        <h2>Project Features <span className="selected-feature-count">- {activeFeatureCount || 0} selected</span></h2>
         <main className="flex space-between">
           <div className="features flex column">
             { showCutsomFeatureForm && <div className="features-overlay"></div> }

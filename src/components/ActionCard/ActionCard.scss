@@ -2,6 +2,7 @@
 
 .action-card{
   padding: $base-unit*4 0;
+  box-shadow: 0px 1px 3px 0px #C3C3C8;
 
   .panel-row,
   .modal-row{
@@ -53,7 +54,7 @@
     line-height: $base-unit*5;
     padding: 10px 0;
     &.comment-section{
-      margin-bottom: -30px;
+      margin-bottom: -50px;
       .comment-count{
         @include roboto;
         font-size: $tc-label-md;
@@ -70,7 +71,7 @@
         text-align:center;
         height: 20px;
         position: relative;
-        margin-bottom: 10px;
+        margin-bottom: 35px;
         .comment-collapse-button{
           background: $tc-gray-10;
           border-radius: 176px;
@@ -97,13 +98,29 @@
     }
   }
   .comment{
-    background: #FAFAFB;
+    background: $tc-gray-neutral-light;
     box-shadow: 0px 0px 3px 0px rgba(89,167,255,0.00);
     border-radius: 4px;
     padding: $base-unit*2;
     margin-bottom: -10px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      width: 0px;
+      height: 0px;
+      margin-left: -16px;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right: 14px solid $tc-gray-neutral-light;
+      transform: rotate(-90deg);
+    }
+
     &.self{
       background: $tc-dark-blue-10;
+      &:before {
+        border-right: 14px solid $tc-dark-blue-10;
+      }
     }
     .comment-body{
       @include roboto;
@@ -195,51 +212,51 @@
           }
         }
         .bold{
-          background: url('../../styles/i/tc-text-16-bold.svg') no-repeat;
+          background: url('../../assets/images/tc-text-16-bold.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/tc-text-16-bold-active.svg') no-repeat;
+            background: url('../../assets/images/tc-text-16-bold-active.svg') no-repeat;
           }
         }
         .italic{
-          background: url('../../styles/i/tc-text-16-italic.svg') no-repeat;
+          background: url('../../assets/images/tc-text-16-italic.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/tc-text-16-italic-active.svg') no-repeat;
+            background: url('../../assets/images/tc-text-16-italic-active.svg') no-repeat;
           }
         }
         .underline{
-          background: url('../../styles/i/tc-text-16-underline.svg') no-repeat;
+          background: url('../../assets/images/tc-text-16-underline.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/tc-text-16-underline-active.svg') no-repeat;
+            background: url('../../assets/images/tc-text-16-underline-active.svg') no-repeat;
           }
         }
         .ordered-list{
-          background: url('../../styles/i/text-16px_list-numbers.svg') no-repeat;
+          background: url('../../assets/images/text-16px_list-numbers.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/text-16px_list-numbers-active.svg') no-repeat;
+            background: url('../../assets/images/text-16px_list-numbers-active.svg') no-repeat;
           }
         }
         .unordered-list{
-          background: url('../../styles/i/text-16px_list-bullet.svg') no-repeat;
+          background: url('../../assets/images/text-16px_list-bullet.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/text-16px_list-bullet-active.svg') no-repeat;
+            background: url('../../assets/images/text-16px_list-bullet-active.svg') no-repeat;
           }
         }
         .code{
-          background: url('../../styles/i/design-16px_code.svg') no-repeat;
+          background: url('../../assets/images/design-16px_code.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/design-16px_code-active.svg') no-repeat;
+            background: url('../../assets/images/design-16px_code-active.svg') no-repeat;
           }
         }
         .quote{
-          background: url('../../styles/i/text-16px_quote.svg') no-repeat;
+          background: url('../../assets/images/text-16px_quote.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/text-16px_quote-active.svg') no-repeat;
+            background: url('../../assets/images/text-16px_quote-active.svg') no-repeat;
           }
         }
         .attach{
-          background: url('../../styles/i/media-16px-1_image-02.svg') no-repeat;
+          background: url('../../assets/images/media-16px-1_image-02.svg') no-repeat;
           &.active {
-            background: url('../../styles/i/media-16px-1_image-02-active.svg') no-repeat;
+            background: url('../../assets/images/media-16px-1_image-02-active.svg') no-repeat;
           }
         }
 
@@ -337,7 +354,7 @@
     }
     &:empty {
       border: 2px solid $tc-gray-50;
-      background: url('../../styles/i/user-add.svg') no-repeat;
+      background: url('../../assets/images/user-add.svg') no-repeat;
       background-position: center;
       background-size: 16px;
       border-radius: 33px;
@@ -361,19 +378,19 @@
       }
     }
     .btn-user-remove{
-      background: url('../../styles/i/user-remove.svg') no-repeat;
+      background: url('../../assets/images/user-remove.svg') no-repeat;
     }
     .btn-promote{
-      background: url('../../styles/i/promote.svg') no-repeat;
+      background: url('../../assets/images/promote.svg') no-repeat;
     }
     .btn-leave{
-      background: url('../../styles/i/exit.svg') no-repeat;
+      background: url('../../assets/images/exit.svg') no-repeat;
     }
     .btn-edit{
-      background: url('../../styles/i/ui-16px-1_pencil.svg') no-repeat;
+      background: url('../../assets/images/ui-16px-1_pencil.svg') no-repeat;
     }
     .btn-remove{
-      background: url('../../styles/i/ui-16px-1_trash-simple.svg') no-repeat;
+      background: url('../../assets/images/ui-16px-1_trash-simple.svg') no-repeat;
     }
   }
 }

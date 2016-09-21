@@ -1,0 +1,66 @@
+// this is to include tc styles in the output library
+@import 'tc-includes';
+@import "../../../../styles/variables";
+
+
+.StickyProjectsToolBar {
+  z-index: 11;/* > 10 which is the highest z index set by table component*/
+}
+.ProjectsToolBar {
+  position: relative;
+  min-height: 60px;
+  padding: 0 20px;
+  background-color: $tc-gray-neutral-light;
+  display: flex;
+  z-index: 11;
+  h2{
+    font-size: $tc-body-large;
+    line-height: 60px;
+    color: $tc-black;
+    width: 120px;
+    white-space: nowrap;
+  }
+  .actions {
+    width: 120px;
+    text-align: right;
+    min-height: 30px;
+    .tc-btn{
+      display: inline-block;
+      height: 30px;
+      white-space: nowrap;
+    }
+  }
+  .search-panel{
+    flex: 1;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+    flex-wrap: wrap;
+    .SearchBar{
+      display: inline-block;
+      width: 330px;
+      height: 30px;
+    }
+    .dropdown-wrap {
+      width: 143px;
+      margin-left: 10px;
+      display: inline-block;
+    }
+    .SwitchButton{
+      cursor: pointer;
+      margin-left: 20px;
+      width: 129px;
+      .label {
+        position: relative;
+        top: -5px;
+        display: inline-block;
+        margin-right: 2px;
+      }
+      label {
+        cursor: pointer;
+      }
+    }
+  }
+}

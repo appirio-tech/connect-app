@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { createProject } from '../../actions/project'
 
-require('./CreateProject.scss')
+require('./NewProjectForm.scss')
 
 class CreateView extends Component {
 

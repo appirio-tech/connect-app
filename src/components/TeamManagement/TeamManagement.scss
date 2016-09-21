@@ -6,7 +6,7 @@ $tc-body-small      	: 14px;
 $tc-body-extra-small	: 12px;
 
 @mixin icon($url) {
-  background: url("../../styles/i/#{$url}") no-repeat;
+  background: url("../../assets/images/#{$url}") no-repeat;
 
 }
 
@@ -69,19 +69,19 @@ $tc-body-extra-small	: 12px;
         }
       }
       .buttons{
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        
         button, a {
+          display: block;
+          float: right;
           border: none;
           cursor: pointer;
           background: transparent;
           opacity: 0.4;
-          height: 16px;
-          width: 16px;
+          height: auto;
+          width: auto;
           background-size: 16px;
           display: inline-block;
-          margin-left: $base-unit*3;
+          margin-right: -$base-unit;
           margin-top: $base-unit;
           &:hover{
             opacity: 1.0;
@@ -217,13 +217,14 @@ $tc-body-extra-small	: 12px;
         display: flex;
         margin-bottom: $base-unit*2;
         button{
-          margin-left: $base-unit;
+          margin-left: $base-unit*2;
         }
         .input-icon-group{
           position: relative;
           flex-grow: 1;
           height: 40px;
           display: flex;
+          background: $tc-white;
           border: 1px solid $tc-gray-20;
           box-shadow: inset 0px 0px 2px 0px rgba(183, 183, 183, 0.2);
           input{
@@ -231,6 +232,8 @@ $tc-body-extra-small	: 12px;
             display: inline-block;
             border: none;
             box-shadow: none;
+            background: $tc-white;
+
 
             /* lowercase username placeholder */
             &::-webkit-input-placeholder { text-transform:none; }
@@ -346,7 +349,7 @@ $tc-body-extra-small	: 12px;
     width: 100%;
     margin: 0 auto;
     background: $tc-white;
-    border: $tc-gray-30;
+    border:1px solid $tc-gray-30;
     box-shadow: 0px 1px 2px 1px rgba(38,38,40,0.09);
     border-radius: 2px;
     padding: 10px 0 10px 0;
@@ -356,7 +359,7 @@ $tc-body-extra-small	: 12px;
     .Avatar {
       height: 30px;
       width: 30px;
-      margin: 5px 10px 5px 5px;
+      margin: 5px 10px 5px 9px;
       flex-shrink: 0;
     }
 

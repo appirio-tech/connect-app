@@ -21,12 +21,12 @@ const randomMsg = (christina, dayDiff) => {
       userId: 1,
       firstName: 'Christina',
       lastName: 'Underwood',
-      photoURL: require('../../../styles/i/profile1.jpg')
+      photoURL: require('../../../assets/images/profile1.jpg')
     } : {
       userId: 2,
       firstName: 'Patrick',
       lastName: 'Monahan',
-      photoURL: require('../../../styles/i/avatar-patrick.png')
+      photoURL: require('../../../assets/images/avatar-patrick.png')
     },
     content: content + '\nMessage Id: ' + id
   }
@@ -41,7 +41,7 @@ export default class MessagesContainer extends React.Component {
         userId: 1,
         firstName: 'Christina',
         lastName: 'Underwood',
-        photoURL: require('../../../styles/i/profile1.jpg')
+        photoURL: require('../../../assets/images/profile1.jpg')
       },
       threads: [
         {
@@ -194,7 +194,7 @@ export default class MessagesContainer extends React.Component {
     const activeThread = threads.filter((item) => item.isActive)[0]
 
     return (
-      <div className="container" style={{display: 'flex', width: '1110px', margin: '50px auto'}}>
+      <div className="container" style={{display: 'flex', width: '1110px', margin: '20px auto'}}>
         <div style={{width: '360px', marginRight: '30px'}}>
           <Sticky>
             <MessageList

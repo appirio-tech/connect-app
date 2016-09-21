@@ -36,9 +36,9 @@
       height: 100%;
       width: 100%;
       background-color: $tc-white;
-      mask: url('../../styles/i/ui-16px-1_bold-add.svg') no-repeat 50% 50%;
+      mask: url('../../assets/images/ui-16px-1_bold-add.svg') no-repeat 50% 50%;
       mask-size: $tc-label-sm;
-      -webkit-mask: url('../../styles/i/ui-16px-1_bold-add.svg') no-repeat 50% 50%;
+      -webkit-mask: url('../../assets/images/ui-16px-1_bold-add.svg') no-repeat 50% 50%;
       -webkit-mask-size: $tc-label-sm;
     }
     .remove{
