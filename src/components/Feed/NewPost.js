@@ -41,12 +41,48 @@ class NewPost extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {editorState: EditorState.createEmpty()}
+    this.state = {editorState: EditorState.createEmpty(), expandedEditor: false}
     this.onChange = (editorState) => this.setState({editorState})
 
     this.handleKeyCommand = this.handleKeyCommand.bind(this)
     this.toggleBlockType = this.toggleBlockType.bind(this)
     this.toggleInlineStyle = this.toggleInlineStyle.bind(this)
+    this.onClickOutside = this.onClickOutside.bind(this)
+  }
+
+  componentDidMount() {
+    document.removeEventListener('click', this.onClickOutside)
+    document.addEventListener('click', this.onClickOutside)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.onClickOutside)
+  }
+
+  onClickOutside(evt) {
+    const {editorState} = this.state
+    let currNode = evt.target
+    let isEditor = false
+
+    do {
+      if(currNode.className
+        && currNode.className.indexOf
+        && currNode.className.indexOf('new-post-composer') > -1) {
+        isEditor = true
+        break
+      }
+
+      currNode = currNode.parentNode
+
+      if(!currNode)
+        break
+    } while(currNode.tagName)
+
+    if(!isEditor) {
+      this.setState({ expandedEditor: false })
+    } else {
+      this.setState({ expandedEditor: true })
+    }
   }
 
   handleKeyCommand(command) {
@@ -96,8 +132,18 @@ class NewPost extends React.Component {
       }
     }
 
+    const editorClasses = cn(
+      'draftjs-editor',
+      'tc-textarea',
+      'collapsedEditor',
+      {
+        'has-footer': this.state.expandedEditor,
+        expandedEditor : this.state.expandedEditor
+      }
+    )
+
     return (
-      <div className="modal action-card">
+      <div className="modal action-card new-post-composer">
         <a href="javascript:" className="btn-close"/>
         <div className="modal-title title-muted">
           NEW STATUS POST
@@ -113,7 +159,7 @@ class NewPost extends React.Component {
               type="text"
               placeholder="Share the latest project updates with the team"
             />
-            <div className="tc-textarea has-footer">
+            <div className={ editorClasses }>
               <Editor
                 ref="editor"
                 editorState={editorState}

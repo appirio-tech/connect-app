@@ -1,5 +1,14 @@
 @import "tc-includes";
 
+
+.collapsedEditor {
+  display: none !important;
+}
+
+.expandedEditor {
+  display: block !important;
+}
+
 .public-DraftEditor-content {
   width: 100%;
   font-size: 15px;
