@@ -34,10 +34,12 @@ class ProjectInfo extends Component {
         { canDeleteProject && !showDeleteConfirm &&
           <Panel.DeleteBtn onClick={this.toggleProjectDelete}></Panel.DeleteBtn>
         }
-        { showDeleteConfirm && <DeleteProjectModal
+        { showDeleteConfirm &&
+          <DeleteProjectModal
             onCancel={this.toggleProjectDelete}
             onConfirm={this.onConfirmDelete}
-        /> }
+          />
+        }
         <ProjectType type={type} devices={devices} />
         <ProjectStatus directLinks={directLinks} currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
         <ProjectProgress title="Duration" percent={duration.percent} type="completed">

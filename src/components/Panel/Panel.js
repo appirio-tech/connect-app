@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react'
-import { compose, defaultProps } from 'recompose'
+import { defaultProps } from 'recompose'
 import './Panel.scss'
 import cn from 'classnames'
 
