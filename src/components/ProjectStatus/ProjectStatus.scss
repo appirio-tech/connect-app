@@ -14,7 +14,7 @@
     position: absolute;
     background: $tc-white;
     top: 27px;
-    right: -28px;
+    right: -9px;
     z-index: 2;
     a {
       display: block;
@@ -84,7 +84,11 @@
     }
   }
   .status-label {
-    cursor: default;
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none;
+    cursor: pointer;
     position: relative;
     margin-left: auto;
     border-radius: $base-unit*4;

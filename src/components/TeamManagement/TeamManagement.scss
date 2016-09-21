@@ -69,19 +69,19 @@ $tc-body-extra-small	: 12px;
         }
       }
       .buttons{
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        
         button, a {
+          display: block;
+          float: right;
           border: none;
           cursor: pointer;
           background: transparent;
           opacity: 0.4;
-          height: 16px;
-          width: 16px;
+          height: auto;
+          width: auto;
           background-size: 16px;
           display: inline-block;
-          margin-left: $base-unit*3;
+          margin-right: -$base-unit;
           margin-top: $base-unit;
           &:hover{
             opacity: 1.0;

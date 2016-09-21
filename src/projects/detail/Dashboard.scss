@@ -1,7 +1,6 @@
 @import "tc-includes";
 // FIXME
 @mixin flexBox {
-  display: box;
   display: flex;
   flex-direction: row;
 }
@@ -17,9 +16,9 @@
 // FIXME
 .dashboard-container {
   @include flexBox;
-  display: flex;
   max-width: 1110px;
-  margin: 50px auto;
+  margin: 20px auto;
+  
   .left-area {
     @include flexWidth(1);
     max-width: 360px;
