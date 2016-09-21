@@ -4,7 +4,6 @@ import './FileList.scss'
 
 const FileList = ({children}) => (
   <div className="file-list">
-    <h4>Attached Files</h4>
     {children}
   </div>
 )

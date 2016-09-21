@@ -22,7 +22,7 @@
         width: 6%;
     }
     .width70 {
-        width: 6%;
+        width: 70px;
         max-width: 70px;
         min-width: 70px;
     }
@@ -111,7 +111,13 @@
                     &a:hover { cursor: pointer; }
                 }
             }
+
         }
+        .flex-item-title.item-type,
+        .flex-item.item-type .blue-block {
+            padding-left: 15px;
+        }
+        
         .spacing {
             padding: 0 5px;
         }
@@ -156,7 +162,11 @@
         font-size: $tc-label-lg;
         color: $tc-gray-90;
         line-height: $base-unit * 4;
-        padding-right: $base-unit * 6;
+        display: block;
+        white-space: nowrap;
+        padding-right: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
         &:hover {
             text-decoration: underline;
         }
@@ -167,6 +177,10 @@
         line-height: $base-unit * 3;
         padding: 3px 0;
         display: block;
+        font-weight: normal;
+    }
+    .txt-normal {
+        font-weight: normal;
     }
 }
 .blue-block,
@@ -196,6 +210,8 @@
 
 /* .txt-italic */
 .txt-italic {
+    @include roboto;
+
     font-style: italic;
     font-size: $tc-label-md;
     color: $tc-gray-80;
@@ -207,7 +223,20 @@
         color: $tc-red;
     }
 }
-/* .user-block */
+
+.item-projects {
+    .spacing {
+        width: 100%;
+    }
+}
+
+.user-block {
+    .txt-box span {
+        font-weight: normal;
+    }
+}
+/* .user-block  - remove as it is extended at UserWithName.scss */
+
 // .user-block {
 //     position: relative;
 //     .photo,
@@ -224,6 +253,7 @@
 //             border-radius: 100%;
 //         }
 //     }
+
 //     .txt-box {
 //         .link-black {
 //             @include roboto-bold;
@@ -235,17 +265,18 @@
 //             }
 //         }
 //         .txt-gray {
-//             font-style: italic;
 //             font-size: $tc-label-sm;
 //             color: $tc-gray-50;
 //             line-height: $base-unit * 3;
 //             display: block;
 //         }
 //     }
+
 //     &.single-block .txt-box a {
 //         line-height: $base-unit * 6;
 //         display: inline-block;
 //     }
+    
 //     .item-mask-layer {
 //         background: rgba(255,255,255,0.7);
 //         width: 100%;
@@ -256,7 +287,7 @@
 //         z-index: 99;
 //     }
 // }
-//
+
 
 /* .txt-status */
 .txt-status {

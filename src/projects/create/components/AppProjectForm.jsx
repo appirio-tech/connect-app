@@ -1,4 +1,3 @@
-
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { clearLoadedProject } from '../../actions/project'
@@ -7,24 +6,24 @@ import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 import _ from 'lodash'
 import {PROJECT_NAME_MAX_LENGTH} from '../../../config/constants'
 
-require('./CreateProject.scss')
+require('./NewProjectForm.scss')
 
 const projectTypes = [
   {
     value: 'visual_design',
     title: 'Visualize an app idea',
-    desc: <p><strong>5-7 days,</strong> from <strong>$3,500</strong></p>,
-    info: 'Wireframes, Visual Design'
+    desc: <p>Wireframes, Visual Design</p>,
+    info: ''
   }, {
     value: 'visual_prototype',
     title: 'Prototype an app',
-    desc: <p><strong>14+ days,</strong> from <strong>$15,000</strong></p>,
-    info: 'Visual or HTML prototype'
+    desc: <p>Visual or HTML prototype</p>,
+    info: ''
   }, {
     value: 'app_dev',
     title: 'Fully develop an app',
-    desc: <p>from <strong>$30,000 </strong></p>,
-    info: 'Design, Front End, Back End, <br/>Integration and API'
+    desc: <p>Design, Front End, Back End, <br/>Integration and API</p>,
+    info: ''
   }
 ]
 

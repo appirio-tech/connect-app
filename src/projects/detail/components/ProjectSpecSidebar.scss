@@ -1,7 +1,8 @@
 @import 'tc-includes';
 
 //TODO  Additional variables - need to find a home for these
-
+// FIXME: remove non-standard variables! Deep nesting, non-standard line-height;
+// FIXME: non-standard units (use $base-unit and $corner-radius)
 
 $gray-color: $tc-gray-50;
 $title-color: $tc-gray-80;
