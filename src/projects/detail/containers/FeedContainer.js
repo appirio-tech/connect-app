@@ -147,6 +147,7 @@ class FeedContainer extends React.Component {
         <div className="feed-action-card" key={item.id}>
           <Feed
             {...item}
+            allowComments={ item.allowComments && !!currentMemberRole}
             currentUser={currentUser.profile}
             isLoadingMoreComments={ loadingFeedComments[item.id] }
             onNewCommentChange={this.onNewCommentChange.bind(this, item.id)}
