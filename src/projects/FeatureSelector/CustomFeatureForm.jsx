@@ -66,7 +66,7 @@ class CustomFeatureForm extends Component {
   }
 
   render() {
-    const { isEdittable, onCancel } = this.props
+    const { isEdittable, onCancel, featureData } = this.props
     const { data, isActive, showDeleteModal } = this.state
     const submitButton = !isActive
       ? <button type="submit" className="tc-btn tc-btn-primary tc-btn-md" disabled={!isEdittable}>Save Feature</button>
@@ -88,22 +88,27 @@ class CustomFeatureForm extends Component {
         </div>
         <div className="feature-form-content">
           <Formsy.Form className="custom-feature-form" disabled={!isEdittable} onValidSubmit={ formAction }>
-            <TCFormFields.TextInput
-              name="title"
-              label="Feature name"
-              validations="minLength:1" required
-              validationError="Feature name is required"
-              wrapperClass="row"
-              // placeholder="My awesome feature"
-              value={ _.get(data, 'title', '') }
-            />
-            <TCFormFields.Textarea
-              name="description"
-              label="Feature description"
-              wrapperClass="feature-description"
-              // placeholder="Briefly describe the feature, including how it will be used, and provide examples that will help designers and developers understand it."
-              value={ _.get(data, 'description', '') }
-            />
+            { !isActive &&
+              <TCFormFields.TextInput
+                name="title"
+                label="Feature name"
+                validations="minLength:1" required
+                validationError="Feature name is required"
+                wrapperClass="row"
+                // placeholder="My awesome feature"
+                value={ _.get(data, 'title', '') }
+              />
+            }
+            { !isActive ?
+              <TCFormFields.Textarea
+                name="description"
+                label="Feature description"
+                wrapperClass="feature-description"
+                // placeholder="Briefly describe the feature, including how it will be used, and provide examples that will help designers and developers understand it."
+                value={ _.get(data, 'description', '') }
+              />
+              : <p className="feature-description">{ featureData.description }</p>
+            }
             <div className="feature-form-actions">
               { !isActive && <button type="button" className="tc-btn tc-btn-default tc-btn-md" onClick={ onCancel }>Cancel</button> }
               { submitButton }
@@ -126,9 +131,7 @@ class CustomFeatureForm extends Component {
 }
 
 CustomFeatureForm.PropTypes = {
-  isActive: PropTypes.bool.isRequired,
   isEdittable: PropTypes.bool.isRequired,
-  featureDesc: PropTypes.object.isRequired,
   featureData: PropTypes.object.isRequired,
   updateFeature: PropTypes.func.isRequired,
   removeFeature: PropTypes.func.isRequired,
