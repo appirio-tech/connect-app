@@ -6,6 +6,13 @@ import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
 import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
 import { Sticky } from 'react-sticky'
+import {
+  PROJECT_FEED_TYPE_MESSAGES,
+  DISCOURSE_BOT_USERID,
+  CODER_BOT_USERID,
+  CODER_BOT_USER_FNAME,
+  CODER_BOT_USER_LNAME
+} from '../../../config/constants'
 
 class MessagesContainer extends React.Component {
 
@@ -38,10 +45,10 @@ class MessagesContainer extends React.Component {
     this.setState({
       threads: props.threads.map((thread, idx) => {
         const item = { ...thread, isActive : idx === activeThreadIndex }
-        if (item.userId === 'system') {
+        if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(item.userId) > -1) {
           item.user = {
-            firstName: 'Coder',
-            lastName: 'Bot'
+            firstName: CODER_BOT_USER_FNAME,
+            lastName: CODER_BOT_USER_LNAME
           }
           item.allowComments = false
         } else {
@@ -55,10 +62,10 @@ class MessagesContainer extends React.Component {
         item.messages = item.posts ? item.posts : []
         item.messages.forEach((message) => {
           message.content = message.body
-          if (message.userId === 'system') {
+          if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(message.userId) > -1) {
             message.author = {
-              firstName: 'Coder',
-              lastName: 'Bot'
+              firstName: CODER_BOT_USER_FNAME,
+              lastName: CODER_BOT_USER_LNAME
             }
           } else {
             message.author = _.find(allMembers, mem => mem.userId === message.userId)
@@ -123,7 +130,7 @@ class MessagesContainer extends React.Component {
       userId: parseInt(currentUser.id),
       content
     }
-    this.props.addFeedComment(threadId, 'MESSAGES', newMessage)
+    this.props.addFeedComment(threadId, PROJECT_FEED_TYPE_MESSAGES, newMessage)
   }
 
   onNewThread({title, content}) {
@@ -132,7 +139,7 @@ class MessagesContainer extends React.Component {
     const newThread = {
       title,
       body: content,
-      tag: 'MESSAGES'
+      tag: PROJECT_FEED_TYPE_MESSAGES
     }
     this.props.createProjectTopic(project.id, newThread).then(() => {
       this.setState({
@@ -187,7 +194,7 @@ class MessagesContainer extends React.Component {
 const mapStateToProps = ({ projectTopics, members, loadUser }) => {
   return {
     currentUser: loadUser.user,
-    threads    : _.values(projectTopics.feeds['MESSAGES']),
+    threads    : _.values(projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES]),
     isCreatingFeed : projectTopics.isCreatingFeed,
     isLoading  : projectTopics.isLoading,
     error      : projectTopics.error,
