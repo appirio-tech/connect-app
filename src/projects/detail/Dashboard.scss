@@ -42,7 +42,11 @@
     @include flexWidth(2);
     margin-left: 4 * $base-unit;
 
-    .feed-action-card {
+    .new-post-composer {
+      margin-bottom: 4 * $base-unit;
+    }
+
+    .feed-action-card + .feed-action-card {
       margin-top: 4 * $base-unit;
     }
   }
