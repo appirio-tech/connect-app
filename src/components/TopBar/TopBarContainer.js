@@ -58,7 +58,7 @@ class TopBarContainer extends React.Component {
           overlayClassName="project-creation-dialog-overlay"
           onRequestClose={ this.hideCreateProjectDialog }
         >
-          <CreateView afterProjectCreation={ this.hideCreateProjectDialog } />
+          <CreateView closeModal={this.hideCreateProjectDialog} />
           <div onClick={ this.hideCreateProjectDialog } className="project-creation-dialog-close">
             <Icons.XMarkIcon />
           </div>

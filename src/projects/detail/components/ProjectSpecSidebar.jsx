@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React, { PropTypes } from 'react'
 import SidebarNav from './SidebarNav'
+import { PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../../config/constants'
 import './ProjectSpecSidebar.scss'
 
 const calcProgress = (project, subSection) => {
@@ -36,7 +37,8 @@ const getNavItems = (project, sections) => {
 
 const ProjectSpecSidebar = ({project, sections, currentMemberRole}) => {
   const navItems = getNavItems(project, sections)
-  const canSubmitForReview = project.status === 'draft' && currentMemberRole === 'customer'
+  const canSubmitForReview = project.status === 'draft'
+    && _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
   return (
     <div className="projectSpecSidebar">
       <h4 className="titles gray-font">Specifications</h4>

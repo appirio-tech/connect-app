@@ -27,6 +27,12 @@ export default function(state = {}, action) {
   case UPDATE_PROJECT_SUCCESS:
     Alert.success('Project updated.')
     return state
+  case REMOVE_PROJECT_MEMBER_SUCCESS:
+    // show notification message if user leaving a project
+    if (action.meta.isUserLeaving) {
+      Alert.success('You\'ve successfully left the project.')
+    }
+    return state
 
   case CREATE_PROJECT_FAILURE:
   case UPDATE_PROJECT_FAILURE:

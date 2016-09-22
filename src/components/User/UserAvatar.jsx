@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import LevelDesignatorIcon from '../../icons/LevelDesignatorIcon'
+import LevelDesignatorIcon from '../../assets/LevelDesignatorIcon'
 import { memberLevelByRating } from '../../helpers'
 
 require('./UserAvatar.scss')
