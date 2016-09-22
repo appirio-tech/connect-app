@@ -93,7 +93,7 @@ class TeamManagementContainer extends Component {
     const { members } = this.props
     let error = null
     if (selectedNewMember && members.some((member) => member.userId === selectedNewMember.userId)) {
-      error = keyword + ' is already part of your team'
+      error = keyword + ' is already part of your team.'
     }
     this.setState({ selectedNewMember, keyword,
       error
