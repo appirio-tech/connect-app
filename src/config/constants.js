@@ -146,6 +146,7 @@ export const PROJECT_STATUS_DRAFT = 'draft'
 export const PROJECT_ROLE_COPILOT = 'copilot'
 export const PROJECT_ROLE_MANAGER = 'manager'
 export const PROJECT_ROLE_CUSTOMER = 'customer'
+export const PROJECT_ROLE_OWNER = 'owner'
 
 
 /*
@@ -170,6 +171,8 @@ export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
 export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || 'https://accounts.topcoder-dev.com/connect'
 
 export const TC_API_URL = `https://api.${DOMAIN}`
+export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?formData.projectId=`
+export const SALESFORCE_PROJECT_LEAD_LINK = 'javascript:' // TODO waiting on @mdesiderio for salesforce link info 
 
 export const PROJECT_NAME_MAX_LENGTH = 255
 

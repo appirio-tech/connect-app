@@ -1,51 +1,62 @@
 @import "tc-styles";
 
 .feature-picker-feature-list {
-  display         : block;
-  background-color: $tc-gray-10;
-  width           : 286px;
+  // background-color: $tc-gray-10;
+  width: 100%;
+
+  h3 {
+    @include ellipsis;
+    @include tc-label-md;
+    font-weight: 700;
+    display: block;
+
+    margin: 0 (4 * $base-unit);
+    color: $tc-gray-80;
+    line-height: 8 * $base-unit;
+  }
+
+  img {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    margin-left: 15px;
+  }
 
   .feature-list-feature {
-    padding : 0px (4 * $base-unit);
+    padding : 0 (4 * $base-unit) 0 (8 * $base-unit);
+    transition: 50ms ease-in all;
+
+    &:hover {
+      background-color: $tc-gray-neutral-light;
+      cursor: pointer;
+    }
+
     .selected-feature-icon {
       visibility: hidden;
     }
+    
+    // The feature list styles
     .feature-title {
       @include tc-label-md;
-      color: $tc-gray-80;
+
+      color: $tc-gray-60;
       line-height: 8 * $base-unit;
     }
+    
     &.active-feature {
-      background-color: $tc-gray-neutral-light;
-    }
+      background-color: $tc-white;
 
-    &.selected-feature {
+      .feature-title {
+        color: $tc-orange;
+      }
+
       .selected-feature-icon {
         visibility: visible;
       }
     }
   }
 
-  header {
-    padding: 15px;
-    padding-left: 0px;
-
-    h6 {
-      @include ellipsis;
-
-      margin: 0 15px;
-      font-size  : 16px;
-      font-weight: bold;
-      color      : $tc-black;
-    }
-  }
-
-  img {
-    width      : 20px;
-    height     : 20px;
-    min-width  : 20px;
-    margin-left: 15px;
-  }
+  
 
 
   button.clean {
@@ -54,7 +65,10 @@
 
   li {
     cursor: pointer;
+    line-height: 8 * $base-unit;
+    
     &.active {
+      
       button {
         background-color: $tc-gray-neutral-dark;
 
