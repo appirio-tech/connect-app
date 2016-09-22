@@ -75,7 +75,6 @@ class DefaultFeatureForm extends Component {
               <Formsy.Form className="predefined-feature-form" disabled={!isEdittable} onChange={ _debouncedOnChange }>
                 <TCFormFields.Textarea
                   name="notes"
-                  label="Describe your objectives for creating this application"
                   wrapperClass="feature-notes"
                   placeholder="Notes..."
                   value={featureData.notes}

@@ -8,6 +8,12 @@ const Join = ({isCopilot, owner, isShowJoin, onJoin, onJoinConfirm}) => {
     onJoinConfirm()
   }
   if (isShowJoin) {
+    let msg
+    if (owner)
+      msg = `Once you join the project you’ll be responsible for carrying over all orders from ${owner.firstName} ${owner.lastName}.`
+    else
+      msg = 'Once you join the project you\'ll be responsible for the success of this project.'
+
     return (
       <div className="modal">
         <div className="modal-title center">
@@ -15,8 +21,7 @@ const Join = ({isCopilot, owner, isShowJoin, onJoin, onJoinConfirm}) => {
         </div>
         <div className="modal-body">
           <p className="message center">
-            Once you join the project you’ll be responsible for carying over
-            all orders from {owner.firstName} {owner.lastName}.
+            { msg }
             {' '}
             Are you sure you want to join?
           </p>

@@ -167,7 +167,7 @@ class MessagesContainer extends React.Component {
     }
 
     return (
-      <div className="container" style={{display: 'flex', width: '1110px', margin: '50px auto'}}>
+      <div className="container" style={{display: 'flex', width: '1110px', margin: '20px auto'}}>
         <div style={{width: '360px', marginRight: '30px'}}>
           <Sticky>
             <MessageList

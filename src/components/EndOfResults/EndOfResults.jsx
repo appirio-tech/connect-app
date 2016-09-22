@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
-
-require('./EndOfResults.scss')
+import './EndOfResults.scss'
 
 const EndOfResults = ({ endOfResultsText = 'End of results' }) => (
   <div className="end-of-results">{endOfResultsText}</div>

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import _ from 'lodash'
-import { PROJECT_STATUS_DRAFT, PROJECT_ROLE_CUSTOMER } from '../../../config/constants'
+import { PROJECT_STATUS_DRAFT, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } from '../../../config/constants'
 import { connect } from 'react-redux'
 import NewPost from '../../../components/Feed/NewPost'
 import Feed from '../../../components/Feed/Feed'
@@ -55,7 +55,7 @@ class FeedContainer extends React.Component {
         }
 
         item.html = item.posts.length > 0 ? item.posts[0].body : null
-        item.comments = item.posts ? item.posts.slice(1) : []
+        item.comments = item.posts ? item.posts.slice(1).filter((post) => post.type === 'post') : []
         item.comments.forEach((comment) => {
           comment.content = comment.body
           if (comment.userId === 'system') {
@@ -126,6 +126,7 @@ class FeedContainer extends React.Component {
     const {currentUser, project, currentMemberRole, isLoading, isCreatingFeed } = this.props
     const { loadingFeedComments, feeds } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
+    const renderComposer = currentMemberRole === PROJECT_ROLE_COPILOT || currentMemberRole === PROJECT_ROLE_MANAGER
 
     const renderFeed = (item) => {
       if ((item.spec || item.sendForReview) && !showDraftSpec) {
@@ -152,7 +153,7 @@ class FeedContainer extends React.Component {
     }
     return (
       <div>
-        <NewPost currentUser={currentUser.profile} onPost={this.onNewPost} isCreating={ isCreatingFeed } />
+        { renderComposer && <NewPost currentUser={currentUser.profile} onPost={this.onNewPost} isCreating={ isCreatingFeed } /> }
         { !isLoading && feeds.map(renderFeed) }
         { isLoading && <LoadingIndicator />}
       </div>

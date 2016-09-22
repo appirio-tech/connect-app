@@ -42,7 +42,9 @@
       .badge{
         padding: 0 $base-unit;
         background: $tc-orange-70;
-        border-radius: 105px;
+        min-width: 20px;
+        text-align: center;
+        border-radius: 50%;
         color: $tc-white;
       }
     }

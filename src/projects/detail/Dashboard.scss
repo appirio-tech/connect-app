@@ -1,20 +1,10 @@
 @import "tc-includes";
-
+// FIXME
 @mixin flexBox {
-  display: box;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  -o-flex-direction: row;
   flex-direction: row;
-  width: auto;
 }
+// FIXME
 @mixin flexWidth($number) {
   -webkit-box-flex: $number;
   -moz-box-flex: $number;
@@ -23,24 +13,40 @@
   flex: $number;
 }
 
+// FIXME
 .dashboard-container {
   @include flexBox;
-  display: flex;
   max-width: 1110px;
-  margin: 50px auto;
+  margin: 20px auto;
+  
   .left-area {
     @include flexWidth(1);
     max-width: 360px;
 
     .dashboard-left-panel {
       padding-bottom: 10 * $base-unit;
+      .form-group {
+        .tc-label {
+          font-size: 12px;
+          color: $tc-gray-50;
+          text-transform: capitalize;
+        }
+        input {
+          background-color: $tc-white;
+          border-color: $tc-gray-20;
+        }
+      }
     }
   }
   .right-area {
     @include flexWidth(2);
     margin-left: 4 * $base-unit;
 
-    .feed-action-card {
+    .new-post-composer {
+      margin-bottom: 4 * $base-unit;
+    }
+
+    .feed-action-card + .feed-action-card {
       margin-top: 4 * $base-unit;
     }
   }

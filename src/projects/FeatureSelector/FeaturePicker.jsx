@@ -207,7 +207,8 @@ class FeaturePicker extends Component {
       selectedFeatureId: null,
       activeFeatureCount: 0,
       activeFeatureList : [],
-      showCutsomFeatureForm: false
+      showCutsomFeatureForm: false,
+      addingCustomFeature: false
     }
     this.addFeature = this.addFeature.bind(this)
     this.removeFeature = this.removeFeature.bind(this)
@@ -225,6 +226,12 @@ class FeaturePicker extends Component {
     })
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      addingCustomFeature : this.state.addingCustomFeature && this.props.features.length === nextProps.features.length
+    })
+  }
+
   toggleFeature(featureId) {
     const idx = _.findIndex(this.state.activeFeatureList, f => f.id === featureId)
     idx > -1 ? this.removeFeature(featureId) : this.addFeature(featureId)
@@ -233,14 +240,16 @@ class FeaturePicker extends Component {
   renderCustomFeatureForm() {
     this.setState({
       selectedFeatureId: null,
-      showCutsomFeatureForm: true
+      showCutsomFeatureForm: true,
+      addingCustomFeature: true
     })
   }
 
   renderDefaultFeatureForm() {
     this.setState({
       selectedFeatureId: null,
-      showCutsomFeatureForm: false
+      showCutsomFeatureForm: false,
+      addingCustomFeature: false
     })
   }
 
@@ -277,12 +286,13 @@ class FeaturePicker extends Component {
   selectFeature(selectedFeature) {
     this.setState({
       selectedFeatureId : selectedFeature.id,
-      showCutsomFeatureForm : selectedFeature.categoryId === 'custom' })
+      showCutsomFeatureForm : selectedFeature.categoryId === 'custom'
+    })
   }
   //----------------------------------------
 
   render() {
-    const { selectedFeatureId, activeFeatureList, activeFeatureCount, showCutsomFeatureForm  } = this.state
+    const { selectedFeatureId, activeFeatureList, activeFeatureCount, showCutsomFeatureForm, addingCustomFeature  } = this.state
     const { isEdittable } = this.props
     const selectedFeature = _.find(AVAILABLE_FEATURES, f => f.id === selectedFeatureId )
     const selectedFeatureData = _.find(activeFeatureList, f => f.id === selectedFeatureId )
@@ -315,13 +325,13 @@ class FeaturePicker extends Component {
 
     return (
       <div className="define-features">
-        <h2><strong>Project Features - <span className="selected-feature-count">{activeFeatureCount || 0} selected</span></strong></h2>
+        <h2>Project Features <span className="selected-feature-count">- {activeFeatureCount || 0} selected</span></h2>
         <main className="flex space-between">
           <div className="features flex column">
-            { showCutsomFeatureForm && <div className="features-overlay"></div> }
+            { addingCustomFeature && <div className="features-overlay"></div> }
             <ul className="feature-categories-list">
               { categoriesList.map(renderFeatureCategory) }
-              { !showCutsomFeatureForm &&
+              { !addingCustomFeature &&
                 <li className="add-custom-feature">
                   <div className="custom-feature-btn-desc">Create your custom feature if you don’t see the one you need in the list.</div>
                   <button className="tc-btn-secondary tc-btn-sm" onClick={ this.renderCustomFeatureForm }>
@@ -335,7 +345,6 @@ class FeaturePicker extends Component {
             { showCutsomFeatureForm
               ? (<CustomFeatureForm
                   isEdittable={isEdittable}
-                  featureDesc={selectedFeature}
                   featureData={selectedFeatureData}
                   updateFeature={this.updateSelectedFeature}
                   addFeature={this.addFeature}
