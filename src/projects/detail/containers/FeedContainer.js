@@ -55,7 +55,7 @@ class FeedContainer extends React.Component {
         }
 
         item.html = item.posts.length > 0 ? item.posts[0].body : null
-        item.comments = item.posts ? item.posts.slice(1) : []
+        item.comments = item.posts ? item.posts.slice(1).filter((post) => post.type === 'post') : []
         item.comments.forEach((comment) => {
           comment.content = comment.body
           if (comment.userId === 'system') {
