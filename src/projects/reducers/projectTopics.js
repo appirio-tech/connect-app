@@ -48,8 +48,7 @@ export const projectTopics = function (state=initialState, action) {
     return Object.assign({}, state, {
       isLoading: false,
       error: true,
-      // TODO replace payload.topics with corresponding variable, when we start getting tags in /topics
-      feeds: { PRIMARY : payload.topics, MESSAGES: payload.topics },
+      feeds: { PRIMARY : primaryTopics, MESSAGES: messageThreads },
       totalFeeds: payload.totalCount
     })
   case LOAD_PROJECT_FEEDS_MEMBERS_FAILURE:
