@@ -14,10 +14,7 @@ import {
   LOAD_PROJECT_FEED_COMMENTS_FAILURE,
   CREATE_PROJECT_FEED_COMMENT_PENDING,
   CREATE_PROJECT_FEED_COMMENT_SUCCESS,
-  CREATE_PROJECT_FEED_COMMENT_FAILURE,
-  CREATE_PROJECT_THREAD_PENDING,
-  CREATE_PROJECT_THREAD_SUCCESS,
-  CREATE_PROJECT_THREAD_FAILURE
+  CREATE_PROJECT_FEED_COMMENT_FAILURE
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -42,7 +39,7 @@ export const projectTopics = function (state=initialState, action) {
     })
   case LOAD_PROJECT_FEEDS_SUCCESS:// DO NOT alter state until we get all members loaded
     return state
-  case LOAD_PROJECT_FEEDS_MEMBERS_SUCCESS:
+  case LOAD_PROJECT_FEEDS_MEMBERS_SUCCESS: {
     const primaryTopics = payload.topics.filter((topic) => topic.tag === 'PRIMARY')
     const messageThreads = payload.topics.filter((topic) => topic.tag === 'MESSAGES')
     return Object.assign({}, state, {
@@ -51,6 +48,7 @@ export const projectTopics = function (state=initialState, action) {
       feeds: { PRIMARY : primaryTopics, MESSAGES: messageThreads },
       totalFeeds: payload.totalCount
     })
+  }
   case LOAD_PROJECT_FEEDS_MEMBERS_FAILURE:
   case LOAD_PROJECT_FEEDS_FAILURE:
     return Object.assign({}, state, {
@@ -58,7 +56,6 @@ export const projectTopics = function (state=initialState, action) {
       isLoading: false,
       error: true
     })
-  case CREATE_PROJECT_THREAD_PENDING:
   case CREATE_PROJECT_FEED_PENDING:
     return Object.assign({}, state, {
       isCreatingFeed: true,

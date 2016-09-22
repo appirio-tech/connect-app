@@ -49,11 +49,11 @@ const MessageRow = ({title, messages, isActive, unreadCount, onClick}) => {
 }
 
 
-const MessageList = ({threads, onSelect, onAdd}) => (
+const MessageList = ({threads, onSelect, onAdd, showAddButton}) => (
   <Panel className="message-list">
     <Panel.Title>
       Messages
-      <Panel.AddBtn onClick={onAdd} />
+      { showAddButton && <Panel.AddBtn onClick={onAdd} /> }
     </Panel.Title>
     <div className="panel-messages">
       {threads.map((item) => <MessageRow key={item.id} onClick={(e) => onSelect(item, e) } {...item} />)}
@@ -75,7 +75,12 @@ MessageList.propTypes = {
    *  SyntheticEvent event?
    * )
    */
-  onSelect: PropTypes.func.isRequired
+  onSelect: PropTypes.func.isRequired,
+
+  /**
+   * Flag to toggle the rendering of the button to add new message
+   */
+  showAddButton: PropTypes.bool.isRequired
 }
 
 export default MessageList

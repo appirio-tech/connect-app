@@ -6,6 +6,7 @@ import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
 import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
 import { Sticky } from 'react-sticky'
+import update from 'react-addons-update'
 import {
   PROJECT_FEED_TYPE_MESSAGES,
   DISCOURSE_BOT_USERID,
@@ -28,7 +29,7 @@ class MessagesContainer extends React.Component {
 
   componentWillMount() {
     // if (!this.props.threads) {
-      this.props.loadDashboardFeeds(this.props.project.id)
+    this.props.loadDashboardFeeds(this.props.project.id)
     // }
   }
 
@@ -134,7 +135,6 @@ class MessagesContainer extends React.Component {
   }
 
   onNewThread({title, content}) {
-    const threads = this.state.threads.map((item) => ({...item, isActive: false}))
     const { project } = this.props
     const newThread = {
       title,
@@ -150,24 +150,28 @@ class MessagesContainer extends React.Component {
 
   render() {
     const {threads, isCreateNewMessage} = this.state
-    const { currentUser, isCreatingFeed } = this.props
+    const { currentUser, isCreatingFeed, currentMemberRole } = this.props
     const activeThread = threads.filter((item) => item.isActive)[0]
 
     const renderRightPanel = () => {
-      if (isCreateNewMessage) {
-        return (<NewPost
-          currentUser={currentUser}
-          onPost={this.onNewThread}
-          isCreating={isCreatingFeed}
-        />)
+      if (!!currentMemberRole && isCreateNewMessage) {
+        return (
+          <NewPost
+            currentUser={currentUser}
+            onPost={this.onNewThread}
+            isCreating={isCreatingFeed}
+          />
+        )
       } else if (activeThread) {
-        return (<MessageDetails
-          {...activeThread}
-          onLoadMoreMessages={this.onLoadMoreMessages}
-          onNewMessageChange={this.onNewMessageChange}
-          onAddNewMessage={ this.onAddNewMessage.bind(this, activeThread.id) }
-          currentUser={currentUser}
-        />)
+        return (
+          <MessageDetails
+            {...activeThread}
+            onLoadMoreMessages={this.onLoadMoreMessages}
+            onNewMessageChange={this.onNewMessageChange}
+            onAddNewMessage={ this.onAddNewMessage.bind(this, activeThread.id) }
+            currentUser={currentUser}
+          />
+        )
       } else {
         // TODO show some placeholder card
       }
@@ -181,6 +185,7 @@ class MessagesContainer extends React.Component {
               onAdd={() => this.setState({isCreateNewMessage: true})}
               threads={threads}
               onSelect={this.onThreadSelect}
+              showAddButton={ !!currentMemberRole }
             />
           </Sticky>
         </div>
