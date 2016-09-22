@@ -6,36 +6,56 @@ import BtnSeparator from '../ActionCard/BtnSeparator'
 import Comment from '../ActionCard/Comment'
 import AddComment from '../ActionCard/AddComment'
 
-const MessageDetails = ({title, messages, onLoadMoreMessages, hasMoreMessages, newMessage, onNewMessageChange, onAddNewMessage, isLoading, currentUser, isAddingComment}) => (
-  <ActionCard className="main-messaging">
-    <ActionCard.Header title={title}>
-      {hasMoreMessages && <BtnSeparator onClick={onLoadMoreMessages}>
-        {isLoading ? 'Loading...' : 'Load earlier messages'}
-      </BtnSeparator>}
-    </ActionCard.Header>
-    {messages && messages.map((item) => 
-      <Comment
-        key={item.id}
-        avatarUrl={item.author.photoURL}
-        authorName={item.author.firstName + ' ' + item.author.lastName}
-        date={moment(item.date).fromNow()}
-        active={item.unread}
-        self={item.author.userId === currentUser.userId}
-      >
-        <div dangerouslySetInnerHTML={{__html: item.content}}></div>
-      </Comment>
-    )}
-    
-    <AddComment
-      className="messaging-comment-section"
-      isAdding={isAddingComment}
-      avatarUrl={currentUser.photoURL}
-      onAdd={onAddNewMessage}
-      onChange={onNewMessageChange}
-      content={newMessage}
-    />
-  </ActionCard>
-)
+const MessageDetails = ({
+  title,
+  messages,
+  onLoadMoreMessages,
+  hasMoreMessages,
+  newMessage,
+  onNewMessageChange,
+  onAddNewMessage,
+  isLoading,
+  currentUser,
+  isAddingComment,
+  allowAddingComment}) =>  {
+  let authorName = currentUser.firstName
+  if (authorName && currentUser.lastName) {
+    authorName += ' ' + currentUser.lastName
+  }
+  return (
+    <ActionCard className="main-messaging">
+      <ActionCard.Header title={title}>
+        {hasMoreMessages && <BtnSeparator onClick={onLoadMoreMessages}>
+          {isLoading ? 'Loading...' : 'Load earlier messages'}
+        </BtnSeparator>}
+      </ActionCard.Header>
+      {messages && messages.map((item) => 
+        <Comment
+          key={item.id}
+          avatarUrl={item.author.photoURL}
+          authorName={item.author.firstName + ' ' + item.author.lastName}
+          date={moment(item.date).fromNow()}
+          active={item.unread}
+          self={item.author.userId === currentUser.userId}
+        >
+          <div dangerouslySetInnerHTML={{__html: item.content}}></div>
+        </Comment>
+      )}
+      
+      { allowAddingComment &&
+        <AddComment
+          className="messaging-comment-section"
+          isAdding={isAddingComment}
+          avatarUrl={currentUser.photoURL}
+          authorName={ authorName }
+          onAdd={onAddNewMessage}
+          onChange={onNewMessageChange}
+          content={newMessage}
+        />
+      }
+    </ActionCard>
+  )
+}
 
 MessageDetails.propTypes = {
   /**
@@ -89,7 +109,17 @@ MessageDetails.propTypes = {
   /**
    * The current logged in user
    */
-  currentUser: PropTypes.object.isRequired
+  currentUser: PropTypes.object.isRequired,
+
+  /**
+   * The flag if comment addition is in progress
+   */
+  isAddingComment: PropTypes.bool,
+
+  /**
+   * Flag to allow adding comments for the message
+   */
+  allowAddingComment: PropTypes.bool.isRequired
 }
 
 export default MessageDetails

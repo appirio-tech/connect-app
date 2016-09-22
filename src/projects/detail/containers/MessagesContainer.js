@@ -166,6 +166,7 @@ class MessagesContainer extends React.Component {
         return (
           <MessageDetails
             {...activeThread}
+            allowAddingComment={ activeThread.allowComments && !!currentMemberRole }
             onLoadMoreMessages={this.onLoadMoreMessages}
             onNewMessageChange={this.onNewMessageChange}
             onAddNewMessage={ this.onAddNewMessage.bind(this, activeThread.id) }

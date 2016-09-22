@@ -1,4 +1,4 @@
-// import _ from 'lodash'
+import _ from 'lodash'
 // import { fetchJSON } from '../helpers'
 import { ACCOUNTS_APP_CONNECTOR_URL, LOAD_USER_SUCCESS, LOAD_USER_FAILURE } from '../config/constants'
 import { getFreshToken, configureConnector, decodeToken } from 'tc-accounts'
@@ -39,6 +39,8 @@ export function loadUserSuccess(dispatch, token) {
   }
   if (currentUser) {
     getUserProfile(currentUser.handle).then((profile) => {
+      currentUser = _.assign(currentUser, profile)
+      // keeping profile for backward compaitability
       currentUser.profile = profile
       dispatch({ type: LOAD_USER_SUCCESS, user : currentUser })
     })
