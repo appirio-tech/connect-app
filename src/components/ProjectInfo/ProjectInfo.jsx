@@ -32,7 +32,7 @@ class ProjectInfo extends Component {
       <Panel>
         <Panel.Title>Project</Panel.Title>
         { canDeleteProject && !showDeleteConfirm &&
-          <Panel.DeleteBtn onClick={this.toggleProjectDelete}></Panel.DeleteBtn>
+          <Panel.DeleteBtn onClick={this.toggleProjectDelete} />
         }
         { showDeleteConfirm &&
           <DeleteProjectModal

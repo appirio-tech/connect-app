@@ -38,7 +38,7 @@ const MessageDetails = ({
           active={item.unread}
           self={item.author.userId === currentUser.userId}
         >
-          <div dangerouslySetInnerHTML={{__html: item.content}}></div>
+          <div dangerouslySetInnerHTML={{__html: item.content}} />
         </Comment>
       )}
       

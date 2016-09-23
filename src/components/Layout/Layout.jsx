@@ -23,7 +23,7 @@ const Layout = (props) => {
     userName += ' ' + userLastName
   }
   if (isLoadingUser) {
-    return (<div></div>)
+    return (<div />)
   } else {
     return (
       <StickyContainer>

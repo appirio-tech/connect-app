@@ -10,7 +10,7 @@ const ProjectProgress = ({title, type, percent, children }) => (
     </PanelProject.Heading>
     <div className="project-progress">
       <div className="progress-bar">
-        <div className={cn('progress', type)} style={{width: percent + '%'}}></div>
+        <div className={cn('progress', type)} style={{width: percent + '%'}} />
       </div>
       <div className="progress-remaining">
         {children}

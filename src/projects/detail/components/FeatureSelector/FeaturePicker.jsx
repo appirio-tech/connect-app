@@ -328,7 +328,7 @@ class FeaturePicker extends Component {
         <h2>Project Features <span className="selected-feature-count">- {activeFeatureCount || 0} selected</span></h2>
         <main className="flex space-between">
           <div className="features flex column">
-            { addingCustomFeature && <div className="features-overlay"></div> }
+            { addingCustomFeature && <div className="features-overlay" /> }
             <ul className="feature-categories-list">
               { categoriesList.map(renderFeatureCategory) }
               { !addingCustomFeature &&
