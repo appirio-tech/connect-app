@@ -71,7 +71,7 @@ export function createProject(projectProps) {
 
 export function deleteProject(projectId) {
   return axios.delete(`${TC_API_URL}/v4/projects/${projectId}/`)
-    .then(resp => {
+    .then(() => {
       return projectId
     })
 }

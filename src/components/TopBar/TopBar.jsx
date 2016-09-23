@@ -106,7 +106,7 @@ class TopBar extends Component {
                 <SearchBar
                   hideSuggestionsWhenEmpty
                   showPopularSearchHeader={ false }
-                  searchTermKey='name'
+                  searchTermKey="name"
                   onTermChange={ this.handleTermChange }
                   onSearch={ this.handleSearch }
                   onClearSearch={ this.handleSearch }
