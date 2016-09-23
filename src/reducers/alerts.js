@@ -5,6 +5,7 @@ import {
   // Project
   CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE,
   UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
+  DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
   // Attachments
   ADD_PROJECT_ATTACHMENT_SUCCESS, ADD_PROJECT_ATTACHMENT_FAILURE,
   UPDATE_PROJECT_ATTACHMENT_SUCCESS, UPDATE_PROJECT_ATTACHMENT_FAILURE,
@@ -24,6 +25,10 @@ export default function(state = {}, action) {
     return state
   }
 
+  case DELETE_PROJECT_SUCCESS:
+    Alert.success('Project deleted.')
+    return state
+
   case UPDATE_PROJECT_SUCCESS:
     Alert.success('Project updated.')
     return state
@@ -36,6 +41,7 @@ export default function(state = {}, action) {
 
   case CREATE_PROJECT_FAILURE:
   case UPDATE_PROJECT_FAILURE:
+  case DELETE_PROJECT_FAILURE:
   case ADD_PROJECT_ATTACHMENT_FAILURE:
   case UPDATE_PROJECT_ATTACHMENT_FAILURE:
   case REMOVE_PROJECT_ATTACHMENT_FAILURE:

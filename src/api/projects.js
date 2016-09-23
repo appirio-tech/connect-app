@@ -4,7 +4,7 @@ import { TC_API_URL } from '../config/constants'
 
 export function getProjects(criteria, pageNum) {
   // add default params
-  const includeFields = ['id', 'name', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt']
+  const includeFields = ['id', 'name', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'details']
   const params = {
     limit: 20,
     offset: (pageNum - 1) * 20,
@@ -55,7 +55,7 @@ export function getProjectById(projectId) {
  * @return {promise}              updated project
  */
 export function updateProject(projectId, updatedProps) {
-  return axios.patch(`${TC_API_URL}/v4/projects/${projectId}`, { param: updatedProps })
+  return axios.patch(`${TC_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
     .then(resp => {
       return _.get(resp.data, 'result.content')
     })
@@ -66,6 +66,13 @@ export function createProject(projectProps) {
   return axios.post(`${TC_API_URL}/v4/projects/`, { param: projectProps })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})
+    })
+}
+
+export function deleteProject(projectId) {
+  return axios.delete(`${TC_API_URL}/v4/projects/${projectId}/`)
+    .then(resp => {
+      return projectId
     })
 }
 

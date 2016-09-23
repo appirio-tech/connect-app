@@ -24,6 +24,13 @@ export const GET_PROJECTS_SUCCESS       = 'GET_PROJECTS_SUCCESS'
 export const GET_PROJECTS_FAILURE       = 'GET_PROJECTS_FAILURE'
 export const GET_PROJECTS_SEARCH_CRITERIA = 'GET_PROJECTS_SEARCH_CRITERIA'
 
+
+// Delete project
+export const DELETE_PROJECT             = 'DELETE_PROJECT'
+export const DELETE_PROJECT_PENDING     = 'DELETE_PROJECT_PENDING'
+export const DELETE_PROJECT_SUCCESS     = 'DELETE_PROJECT_SUCCESS'
+export const DELETE_PROJECT_FAILURE     = 'DELETE_PROJECT_FAILURE'
+
 // Project Search Suggestions (Typeahead)
 export const CLEAR_PROJECT_SUGGESTIONS_SEARCH   = 'CLEAR_PROJECT_SUGGESTIONS_SEARCH'
 export const PROJECT_SUGGESTIONS_SEARCH_FAILURE     = 'PROJECT_SUGGESTIONS_SEARCH_FAILURE'
@@ -172,7 +179,7 @@ export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || 'htt
 
 export const TC_API_URL = `https://api.${DOMAIN}`
 export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?formData.projectId=`
-export const SALESFORCE_PROJECT_LEAD_LINK = 'javascript:' // TODO waiting on @mdesiderio for salesforce link info 
+export const SALESFORCE_PROJECT_LEAD_LINK = 'javascript:' // TODO waiting on @mdesiderio for salesforce link info
 
 export const PROJECT_NAME_MAX_LENGTH = 255
 
