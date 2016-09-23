@@ -62,6 +62,12 @@ class NewPost extends React.Component {
   onClickOutside(evt) {
     let currNode = evt.target
     let isEditor = false
+    const title = this.refs.title.value
+    const content = stateToHTML(this.state.editorState.getCurrentContent())
+    // if any of title and content, is non empty, do not proceed
+    if ((title && title.length > 0) || (content && content !== '<p><br></p>')) {
+      return
+    }
 
     do {
       if(currNode.className
