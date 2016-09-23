@@ -1,6 +1,16 @@
 import React, { PropTypes } from 'react'
 import _ from 'lodash'
-import { PROJECT_STATUS_DRAFT, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } from '../../../config/constants'
+import {
+  PROJECT_STATUS_DRAFT,
+  PROJECT_ROLE_CUSTOMER,
+  PROJECT_ROLE_COPILOT,
+  PROJECT_ROLE_MANAGER,
+  PROJECT_FEED_TYPE_PRIMARY,
+  DISCOURSE_BOT_USERID,
+  CODER_BOT_USERID,
+  CODER_BOT_USER_FNAME,
+  CODER_BOT_USER_LNAME
+} from '../../../config/constants'
 import { connect } from 'react-redux'
 import NewPost from '../../../components/Feed/NewPost'
 import Feed from '../../../components/Feed/Feed'
@@ -44,10 +54,10 @@ class FeedContainer extends React.Component {
           return null
         }
 
-        if (item.userId === 'system') {
+        if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(item.userId) > -1) {
           item.user = {
-            firstName: 'Coder',
-            lastName: 'Bot'
+            firstName: CODER_BOT_USER_FNAME,
+            lastName: CODER_BOT_USER_LNAME
           }
           item.allowComments = false
         } else {
@@ -58,10 +68,10 @@ class FeedContainer extends React.Component {
         item.comments = item.posts ? item.posts.slice(1).filter((post) => post.type === 'post') : []
         item.comments.forEach((comment) => {
           comment.content = comment.body
-          if (comment.userId === 'system') {
+          if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(comment.userId) > -1) {
             comment.author = {
-              firstName: 'Coder',
-              lastName: 'Bot'
+              firstName: CODER_BOT_USER_FNAME,
+              lastName: CODER_BOT_USER_LNAME
             }
           } else {
             comment.author = _.find(allMembers, mem => mem.userId === comment.userId)
@@ -80,7 +90,7 @@ class FeedContainer extends React.Component {
     const newFeed = {
       title,
       body: content,
-      tag: 'PRIMARY'
+      tag: PROJECT_FEED_TYPE_PRIMARY
       // userId: parseInt(currentUser.id),
       // date: moment().format(),
       // allowComments: true
@@ -119,7 +129,7 @@ class FeedContainer extends React.Component {
       userId: parseInt(currentUser.id),
       content
     }
-    this.props.addFeedComment(feedId, newComment)
+    this.props.addFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, newComment)
   }
 
   render() {
@@ -137,6 +147,7 @@ class FeedContainer extends React.Component {
         <div className="feed-action-card" key={item.id}>
           <Feed
             {...item}
+            allowComments={ item.allowComments && !!currentMemberRole}
             currentUser={currentUser.profile}
             isLoadingMoreComments={ loadingFeedComments[item.id] }
             onNewCommentChange={this.onNewCommentChange.bind(this, item.id)}
@@ -170,7 +181,7 @@ FeedContainer.propTypes = {
 const mapStateToProps = ({ projectTopics, members, loadUser }) => {
   return {
     currentUser    : loadUser.user,
-    feeds          : _.values(projectTopics.feeds['PRIMARY']),
+    feeds          : _.values(projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY]),
     isLoading      : projectTopics.isLoading,
     isCreatingFeed : projectTopics.isCreatingFeed,
     error          : projectTopics.error,

@@ -1,84 +1,25 @@
+import _ from 'lodash'
 import React from 'react'
+import { connect } from 'react-redux'
 import MessageList from '../../../components/MessageList/MessageList'
 import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
+import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
 import { Sticky } from 'react-sticky'
+import update from 'react-addons-update'
+import {
+  PROJECT_FEED_TYPE_MESSAGES,
+  DISCOURSE_BOT_USERID,
+  CODER_BOT_USERID,
+  CODER_BOT_USER_FNAME,
+  CODER_BOT_USER_LNAME
+} from '../../../config/constants'
 
-let nextMessageId = 1
-
-const randomMsg = (christina, dayDiff) => {
-  const date = new Date()
-  date.setDate(date.getDate() - dayDiff)
-  const content = christina ?
-    'Thanks Pat! We’ll look into it with the guys and get back to you as we have our winners. Is there a requirement of how many designs we can pick?'
-    :
-    'Hey Christina, that’s a great question. In general you can pick 3 winners, that’s included in the package. If you want to go beyond that you’ll have to pay extra for the winners, thus this will increase the total cost. Anything after 3-rd place costs additional $400 per submission. Hope this helps!'
-  const id = nextMessageId++
-  return {
-    id,
-    date,
-    author: christina ? {
-      userId: 1,
-      firstName: 'Christina',
-      lastName: 'Underwood',
-      photoURL: require('../../../assets/images/profile1.jpg')
-    } : {
-      userId: 2,
-      firstName: 'Patrick',
-      lastName: 'Monahan',
-      photoURL: require('../../../assets/images/avatar-patrick.png')
-    },
-    content: content + '\nMessage Id: ' + id
-  }
-}
-
-export default class MessagesContainer extends React.Component {
+class MessagesContainer extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      currentUser: {
-        userId: 1,
-        firstName: 'Christina',
-        lastName: 'Underwood',
-        photoURL: require('../../../assets/images/profile1.jpg')
-      },
-      threads: [
-        {
-          isActive: true,
-          threadId: 1,
-          title: 'Project Design challenges and solutions',
-          hasMoreMessages: true,
-          messages: [
-            randomMsg(false, 3),
-            randomMsg(true, 2),
-            randomMsg(false, 1)
-          ]
-        },
-        {
-          threadId: 2,
-          title: 'Code & Development talk',
-          unreadCount: 1,
-          hasMoreMessages: true,
-          messages: [
-            randomMsg(false, 3),
-            randomMsg(true, 2),
-            randomMsg(false, 1)
-          ]
-        },
-        {
-          threadId: 3,
-          title: 'Topcoder Specific procedures and advanced requirements process discussion for all',
-          hasMoreMessages: false,
-          messages: [
-            randomMsg(false, 3),
-            randomMsg(true, 2),
-            randomMsg(false, 1)
-          ]
-        }
-      ]
-    }
-    this.state.threads[1].messages[2].unread = true
+    this.state = { threads : [], activeThreadId : null }
     this.onThreadSelect = this.onThreadSelect.bind(this)
     this.onLoadMoreMessages = this.onLoadMoreMessages.bind(this)
     this.onAddNewMessage = this.onAddNewMessage.bind(this)
@@ -86,17 +27,71 @@ export default class MessagesContainer extends React.Component {
     this.onNewThread = this.onNewThread.bind(this)
   }
 
+  componentWillMount() {
+    // if (!this.props.threads) {
+    this.props.loadDashboardFeeds(this.props.project.id)
+    // }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.init(nextProps)
+  }
+
+  init(props) {
+    const { allMembers } = props
+    const { activeThreadId } = this.state
+    const activeThreadIndex = activeThreadId
+      ? _.findIndex(this.state.threads, (thread) => thread.id === activeThreadId )
+      : 0
+    this.setState({
+      threads: props.threads.map((thread, idx) => {
+        const item = { ...thread, isActive : idx === activeThreadIndex }
+        if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(item.userId) > -1) {
+          item.user = {
+            firstName: CODER_BOT_USER_FNAME,
+            lastName: CODER_BOT_USER_LNAME
+          }
+          item.allowComments = false
+        } else {
+          item.allowComments = true
+          item.user = _.find(allMembers, mem => mem.userId === item.userId)
+        }
+
+        // TODO remove hardcoded check for hasMoreMessages
+        item.hasMoreMessages = false
+        item.html = item.posts.length > 0 ? item.posts[0].body : null
+        item.messages = item.posts ? item.posts : []
+        item.messages.forEach((message) => {
+          message.content = message.body
+          if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(message.userId) > -1) {
+            message.author = {
+              firstName: CODER_BOT_USER_FNAME,
+              lastName: CODER_BOT_USER_LNAME
+            }
+          } else {
+            message.author = _.find(allMembers, mem => mem.userId === message.userId)
+          }
+        })
+
+        // reset newMessage property
+        item.newMessage = ''
+        return item
+      })
+    })
+  }
+
   onThreadSelect(thread) {
     this.setState({
       isCreateNewMessage: false,
+      activeThreadId: thread.id,
       threads: this.state.threads.map((item) => {
         if (item.isActive) {
-          if (item.threadId === thread.threadId) {
+          if (item.id === thread.id) {
             return item
           }
           return {...item, isActive: false, messages: item.messages.map((msg) => ({...msg, unread: false}))}
         }
-        if (item.threadId === thread.threadId) {
+        if (item.id === thread.id) {
           return {...item, isActive: true, unreadCount: 0}
         }
         return item
@@ -115,83 +110,73 @@ export default class MessagesContainer extends React.Component {
     })
   }
 
+  // this method is not ready yet, however, it is not used right now because messaging
+  // api is not supporting paging yet
   onLoadMoreMessages() {
-    let activeThreadId
-    this.setState({
-      threads: this.state.threads.map((item) => {
-        if (item.isActive) {
-          activeThreadId = item.threadId
-          return {...item, isLoading: true}
-        }
-        return item
-      })
-    })
-    setTimeout(() => {
-      this.setState({
-        threads: this.state.threads.map((item) => {
-          if (item.threadId === activeThreadId) {
-            return {
-              ...item,
-              isLoading: false,
-              messages: [
-                randomMsg(true, item.messages.length + 3),
-                randomMsg(false, item.messages.length + 2),
-                randomMsg(true, item.messages.length + 1),
-                ...item.messages
-              ]
-            }
-          }
-          return item
-        })
-      })
-    }, 700)
+    const { threads, activeThreadId } = this.state
+    const thread = _.find(threads, thread => thread.id === activeThreadId)
+    if (thread.posts && thread.posts.length < thread.totalComments) {
+      const loadFromIndex = thread.posts.length
+      this.setState(update(this.state, {
+        loadingFeedComments: { feedId : { $set : true}}
+      }))
+      this.props.loadFeedComments(activeThreadId, loadFromIndex)
+    }
   }
 
-  onAddNewMessage() {
-    this.setState({
-      threads: this.state.threads.map((item) => {
-        if (item.isActive) {
-          return {
-            ...item,
-            newMessage: '',
-            messages: [...item.messages, {
-              id: nextMessageId++,
-              date: new Date(),
-              author: this.state.currentUser,
-              content: item.newMessage.replace(/\n/g, '<br />')
-            }]
-          }
-        }
-        return item
-      })
-    })
+  onAddNewMessage(threadId, content) {
+    const { currentUser } = this.props
+    const newMessage = {
+      date: new Date(),
+      userId: parseInt(currentUser.id),
+      content
+    }
+    this.props.addFeedComment(threadId, PROJECT_FEED_TYPE_MESSAGES, newMessage)
   }
 
   onNewThread({title, content}) {
-    const threads = this.state.threads.map((item) => ({...item, isActive: false}))
-    this.setState({
-      isCreateNewMessage: false,
-      threads: [
-        {
-          isActive: true,
-          threadId: new Date().getTime(),
-          title,
-          hasMoreMessages: false,
-          messages: [{
-            id: new Date().getTime(),
-            date: new Date(),
-            author: this.state.currentUser,
-            content
-          }]
-        },
-        ...threads
-      ]
+    const { project } = this.props
+    const newThread = {
+      title,
+      body: content,
+      tag: PROJECT_FEED_TYPE_MESSAGES
+    }
+    this.props.createProjectTopic(project.id, newThread).then(() => {
+      this.setState({
+        isCreateNewMessage : false
+      })
     })
   }
 
   render() {
-    const {threads, currentUser, isCreateNewMessage} = this.state
+    const {threads, isCreateNewMessage} = this.state
+    const { currentUser, isCreatingFeed, currentMemberRole } = this.props
     const activeThread = threads.filter((item) => item.isActive)[0]
+
+    const renderRightPanel = () => {
+      if (!!currentMemberRole && isCreateNewMessage) {
+        return (
+          <NewPost
+            currentUser={currentUser}
+            onPost={this.onNewThread}
+            isCreating={isCreatingFeed}
+          />
+        )
+      } else if (activeThread) {
+        return (
+          <MessageDetails
+            {...activeThread}
+            allowAddingComment={ activeThread.allowComments && !!currentMemberRole }
+            onLoadMoreMessages={this.onLoadMoreMessages}
+            onNewMessageChange={this.onNewMessageChange}
+            onAddNewMessage={ this.onAddNewMessage.bind(this, activeThread.id) }
+            currentUser={currentUser}
+          />
+        )
+      } else {
+        // TODO show some placeholder card
+      }
+    }
 
     return (
       <div className="container" style={{display: 'flex', width: '1110px', margin: '20px auto'}}>
@@ -201,27 +186,32 @@ export default class MessagesContainer extends React.Component {
               onAdd={() => this.setState({isCreateNewMessage: true})}
               threads={threads}
               onSelect={this.onThreadSelect}
+              showAddButton={ !!currentMemberRole }
             />
           </Sticky>
         </div>
         <div style={{width: '720px'}}>
-          {
-            isCreateNewMessage ?
-              <NewPost
-                currentUser={currentUser}
-                onPost={this.onNewThread}
-              />
-              :
-              <MessageDetails
-                {...activeThread}
-                onLoadMoreMessages={this.onLoadMoreMessages}
-                onNewMessageChange={this.onNewMessageChange}
-                onAddNewMessage={this.onAddNewMessage}
-                currentUser={currentUser}
-              />
-          }
+          { renderRightPanel() }
         </div>
       </div>
     )
   }
 }
+const mapStateToProps = ({ projectTopics, members, loadUser }) => {
+  return {
+    currentUser: loadUser.user,
+    threads    : _.values(projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES]),
+    isCreatingFeed : projectTopics.isCreatingFeed,
+    isLoading  : projectTopics.isLoading,
+    error      : projectTopics.error,
+    allMembers : _.values(members.members)
+  }
+}
+const mapDispatchToProps = {
+  loadDashboardFeeds,
+  createProjectTopic,
+  loadFeedComments,
+  addFeedComment
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessagesContainer)
