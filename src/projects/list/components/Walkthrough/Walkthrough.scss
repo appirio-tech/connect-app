@@ -8,17 +8,18 @@
   min-width: 768px;
   min-height: 496px;
   padding: 20px 86px;
+  
   .text-img{
     background: url('../../../../assets/images/pointer-new-project.svg') no-repeat 0 0;
-    background-size: 581px 119px;
+    background-size: 100% 100%;
     position: absolute;
     display:block;
-    width: 581px;
-    height: 119px;
-    right: 272px;
-    top: 10px;
+    width: 640px;
+    height: 160px;
+    right: 80px;
     z-index:2;
   }
+
   h3{
     color: $tc-gray-70;
     @include roboto-medium;
@@ -57,11 +58,13 @@
       }
     }
   }
+
   .bubble{
     position: absolute;
     top: 180px;
-    right: 500px;
+    left: calc(50% - 300px);
     padding-left:243px;
+
     div{
       position:relative;
       background: $tc-white;
