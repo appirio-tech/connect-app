@@ -10,7 +10,7 @@ import Walkthrough from '../Walkthrough/Walkthrough'
 
 import UserWithName from '../../../../components/User/UserWithName'
 import PageError from '../../../../components/PageError/PageError'
-import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT } from '../../../../config/constants'
+import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, PROJECT_STATUS } from '../../../../config/constants'
 
 // This handles showing a spinner while the state is being loaded async
 import spinnerWhileLoading from '../../../../components/LoadingSpinner'
@@ -92,11 +92,11 @@ const ProjectsView = props => {
       sortable: true,
       classes: 'item-status width9',
       renderText: item => {
-        const s = projectStatuseMap[item.status]
-        const classes = `txt-status ${s.classes}`
+        const s = PROJECT_STATUS.filter((opt) => opt.value === item.status)[0]
+        const classes = `txt-status ${s.color}`
         return (
           <div className="spacing">
-            <span className={classes}>{s.label}</span>
+            <span className={classes}>{s.name}</span>
           </div>
         )
       }

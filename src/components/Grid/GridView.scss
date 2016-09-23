@@ -310,16 +310,20 @@
         left: 0;
         margin-top: -12px;
     }
-    &.status-draft {
+    &.status-draft,
+    &.gray {
         background: url("./images/status-draft.svg") no-repeat 0 center;
     }
-    &.status-active {
+    &.status-active,
+    &.green {
         background: url("./images/status-active.svg") no-repeat 0 center;
     }
-    &.status-error {
+    &.status-error,
+    &.red {
         background: url("./images/status-error.svg") no-repeat 0 center;
     }
-    &.status-done {
+    &.status-done,
+    &.black {
         background: url("./images/status-done.svg") no-repeat 0 center;
     }
 }
