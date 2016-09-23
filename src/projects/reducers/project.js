@@ -3,6 +3,7 @@ import {
   LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
   CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT_PENDING, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
+  DELETE_PROJECT_PENDING, DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
   ADD_PROJECT_ATTACHMENT_PENDING, ADD_PROJECT_ATTACHMENT_SUCCESS, ADD_PROJECT_ATTACHMENT_FAILURE,
   UPDATE_PROJECT_ATTACHMENT_PENDING, UPDATE_PROJECT_ATTACHMENT_SUCCESS, UPDATE_PROJECT_ATTACHMENT_FAILURE,
   REMOVE_PROJECT_ATTACHMENT_PENDING, REMOVE_PROJECT_ATTACHMENT_SUCCESS, REMOVE_PROJECT_ATTACHMENT_FAILURE,
@@ -71,6 +72,7 @@ export const projectState = function (state=initialState, action) {
 
   // Create & Edit project
   case CREATE_PROJECT_PENDING:
+  case DELETE_PROJECT_PENDING:
   case UPDATE_PROJECT_PENDING:
     return Object.assign({}, state, {
       isLoading: false,
@@ -84,6 +86,13 @@ export const projectState = function (state=initialState, action) {
       processing: false,
       error: false,
       project: action.payload
+    })
+
+  case DELETE_PROJECT_SUCCESS:
+    return Object.assign({}, state, {
+      processing: false,
+      error: false,
+      project: {}
     })
 
   // Project attachments
@@ -158,6 +167,7 @@ export const projectState = function (state=initialState, action) {
 
   case LOAD_PROJECT_FAILURE:
   case CREATE_PROJECT_FAILURE:
+  case DELETE_PROJECT_FAILURE:
   case UPDATE_PROJECT_FAILURE:
   case ADD_PROJECT_MEMBER_FAILURE:
   case REMOVE_PROJECT_MEMBER_FAILURE:

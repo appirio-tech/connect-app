@@ -55,7 +55,7 @@ class TopBar extends Component {
       this.forceUpdate()
     })
   }
-  
+
   render() {
     const {
       userHandle, userImage, userName, domain, criteria, onNewProjectIntent, applyFilters, isProjectDetails, project,
@@ -95,7 +95,7 @@ class TopBar extends Component {
     if (isProjectDetails) {
       return <ProjectToolBar isPowerUser={isPowerUser} logo={logo} avatar={avatar} project={project} />
     }
-    
+
     return (
       <Sticky ref="sticky">
         <div className="tc-header tc-header__connect">
@@ -106,6 +106,7 @@ class TopBar extends Component {
                 <SearchBar
                   hideSuggestionsWhenEmpty
                   showPopularSearchHeader={ false }
+                  searchTermKey="name"
                   onTermChange={ this.handleTermChange }
                   onSearch={ this.handleSearch }
                   onClearSearch={ this.handleSearch }
@@ -149,4 +150,3 @@ TopBar.defaultProps = {
 }
 
 export default TopBar
-

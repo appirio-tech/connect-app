@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react'
-import FlattenedFeatureList from '../../FeatureSelector/FlattenedFeatureList'
+import FlattenedFeatureList from './FeatureSelector/FlattenedFeatureList'
 
 require('./SpecFeatureQuestion.scss')
 

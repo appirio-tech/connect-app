@@ -53,8 +53,8 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
     case 'checkbox':
       child = <TCFormFields.Checkbox name={q.fieldName} label={q.label} value={value} />
       break
-    case 'features':
-      child = <SeeAttachedSpecFeatureQuestion name={q.fieldName} value={value} question={ q } resetValue={ resetFeatures } showFeaturesDialog={ showFeaturesDialog } />
+    case 'see-attached-features':
+      child = <SeeAttachedSpecFeatureQuestion name={q.fieldName} value={value} question={q} resetValue={resetFeatures} showFeaturesDialog={showFeaturesDialog} />
       break
     case 'colors':
       child = <ColorSelector name={q.fieldName} defaultColors={q.defaultColors} value={value} />

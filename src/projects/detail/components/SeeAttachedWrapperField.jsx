@@ -13,10 +13,9 @@ const SeeAttachedWrapperField = ComposedComponent => class extends Component {
   }
 
   onChange(field, value) {
-    const origField = field.substring(0, field.lastIndexOf('.'))
-    const valueRef = this.refs[origField+'.value']
-    // const cbRef = this.refs[origField+'.seeAttached']
     if (field.indexOf('.seeAttached') > -1) {
+      const origField = field.substring(0, field.lastIndexOf('.'))
+      const valueRef = this.refs[origField+'.value']
       // reset wrapped fields value
       if (value && valueRef) {
         if (valueRef.resetValue)
@@ -24,7 +23,7 @@ const SeeAttachedWrapperField = ComposedComponent => class extends Component {
         else if (valueRef.props.resetValue)
           valueRef.props.resetValue()
       }
-      this.setState(Object.assign({}, { displayComponent: !value}))
+      this.setState(Object.assign({}, {displayComponent: !value}))
     }
   }
 

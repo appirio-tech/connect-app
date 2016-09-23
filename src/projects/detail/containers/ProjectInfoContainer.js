@@ -7,7 +7,7 @@ import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 import LinksMenu from '../../../components/LinksMenu/LinksMenu'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import TeamManagementContainer from './TeamManagementContainer'
-import { updateProject } from '../../actions/project'
+import { updateProject, deleteProject } from '../../actions/project'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
    DIRECT_PROJECT_URL/*, SALESFORCE_PROJECT_LEAD_LINK*/ } from '../../../config/constants'
 
@@ -50,10 +50,8 @@ class ProjectInfoContainer extends React.Component {
   }
 
   onDeleteProject() {
-    const { router, updateProject, project } = this.props
-    updateProject(project.id, {
-      status: 'cancelled'
-    })
+    const { router, deleteProject, project } = this.props
+    deleteProject(project.id)
     // navigate to project list view
     router.push('/projects')
   }
@@ -107,6 +105,6 @@ ProjectInfoContainer.PropTypes = {
   project: PropTypes.object.isRequired
 }
 
-const mapDispatchToProps = { updateProject }
+const mapDispatchToProps = { updateProject, deleteProject }
 
 export default withRouter(connect(null, mapDispatchToProps)(ProjectInfoContainer))

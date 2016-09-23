@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import Modal from 'react-modal'
 import _ from 'lodash'
 import update from 'react-addons-update'
-import FeaturePicker from '../../FeatureSelector/FeaturePicker'
+import FeaturePicker from './FeatureSelector/FeaturePicker'
 import { Formsy, Icons } from 'appirio-tech-react-components'
 
 import SpecSection from './SpecSection'
@@ -16,7 +16,7 @@ class EditProjectForm extends Component {
     this.showFeaturesDialog = this.showFeaturesDialog.bind(this)
     this.hideFeaturesDialog = this.hideFeaturesDialog.bind(this)
     this.saveFeatures = this.saveFeatures.bind(this)
-    this.resetFeatures = this.resetFeatures.bind(this)
+    this.onFeaturesSaveAttachedClick = this.onFeaturesSaveAttachedClick.bind(this)
     this.submit = this.submit.bind(this)
   }
 
@@ -54,21 +54,21 @@ class EditProjectForm extends Component {
     this.setState({ showFeaturesDialog: false })
   }
 
-  resetFeatures() {
-    this.saveFeatures([])
+  onFeaturesSaveAttachedClick() {
+    this.saveFeatures([], true)
   }
 
-  saveFeatures(features) {
+  saveFeatures(features, featureSeeAttached=false) {
     if (!this.state.project.details.appDefinition) {
       this.state.project.details.appDefinition = { features: {} }
     }
-    const obj = {
+    const featureObj = {
       value: features,
-      seeAttached: this.state.project.details.appDefinition.features.seeAttached
+      seeAttached: featureSeeAttached
     }
     this.setState(update(this.state, {
       isFeaturesDirty: { $set: true },
-      project: { details: { appDefinition: { features: { $set: obj } } } },
+      project: { details: { appDefinition: { features: { $set: featureObj } } } },
       canSubmit: { $set: true }
     }))
     // const details = update(this.state.project.details, { appDefinition: { features: { $set: obj }}})
@@ -91,7 +91,7 @@ class EditProjectForm extends Component {
         <SpecSection
           {...section}
           project={project}
-          resetFeatures={this.resetFeatures}
+          resetFeatures={this.onFeaturesSaveAttachedClick}
           showFeaturesDialog={this.showFeaturesDialog}
         />
         <div className="section-footer section-footer-spec">
