@@ -38,15 +38,6 @@ const projectTypeMap = {
   'visual_prototype': 'Pr',
   'app_dev': 'Ap'
 }
-const projectStatuseMap = {
-  draft: { classes: 'status-draft', label: 'Draft'},
-  'in_review': { classes: 'status-active', label: 'In Review'},
-  reviewed: { classes: 'status-draft', label: 'Will launch'},
-  active: { classes: 'status-active', label: 'Working'},
-  completed: { classes: 'status-done', label: 'Done'},
-  paused: { classes: 'status-error', label: 'Stalled'},
-  cancelled: { classes: 'status-error', label: 'Cancelled'}
-}
 /*eslint-enable */
 
 
