@@ -117,7 +117,7 @@ class TeamManagementContainer extends Component {
   }
 
   onToggleAddTeamMember(isAddingTeamMember) {
-    this.setState({isAddingTeamMember})
+    this.setState({isAddingTeamMember, error : null})
   }
 
   onMemberDeleteConfirm(member) {
