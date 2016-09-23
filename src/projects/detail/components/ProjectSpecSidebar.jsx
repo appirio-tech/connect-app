@@ -6,8 +6,15 @@ import './ProjectSpecSidebar.scss'
 
 const calcProgress = (project, subSection) => {
   if (subSection.id === 'questions') {
-    const fields = _.map(subSection.questions, 'fieldName')
-    const vals = _.map(fields, (f) => !_.isEmpty(_.get(project, f)))
+    const vals = _.map(subSection.questions, (q) => {
+      let fieldName = q.fieldName
+      // special handling for seeAttached type of fields
+      if (q.type.indexOf('see-attached') > -1) {
+        const val = _.get(project, fieldName, null)
+        return val && (val.seeAttached || !_.isEmpty(_.get(project, `${fieldName}.value`)))
+      }
+      return !_.isEmpty(_.get(project, fieldName))
+    })
     let count = 0
     _.forEach(vals, (v) => {if (v) count++ })
     return [count, subSection.questions.length]

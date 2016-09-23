@@ -47,8 +47,8 @@ const sections = [
             icon: 'question',
             title: 'Feature requirements',
             description: 'Please list all the features you would like in your application. You can use our wizard to pick from common features or define your own.',
-            // type: 'see-attached-features',
-            type: 'features',
+            type: 'see-attached-features',
+            // type: 'features',
             fieldName: 'details.appDefinition.features'
           }
         ]
@@ -129,7 +129,7 @@ const sections = [
     id: 'devSpecification',
     title: 'Development Specification',
     description: 'Define some basic technical requirements for your application or provide any architecture or technical guidelines. Skip this section if you dont know what is required.',
-    required: true,
+    required: false,
     subSections: [
       {
         id: 'questions',

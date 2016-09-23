@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
 import cn from 'classnames'
-import Panel from '../../components/Panel/Panel'
+import Panel from '../../../../components/Panel/Panel'
 import DeleteFeatureModal from './DeleteFeatureModal'
 import { Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
 
