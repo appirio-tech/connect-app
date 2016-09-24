@@ -3,7 +3,6 @@ import React from 'react'
 import TopBarContainer from '../TopBar/TopBarContainer'
 import Footer from '../Footer/Footer'
 import { DOMAIN } from '../../config/constants'
-import { StickyContainer } from 'react-sticky'
 import Alert from 'react-s-alert'
 
 require('./Layout.scss')
@@ -26,7 +25,7 @@ const Layout = (props) => {
     return (<div />)
   } else {
     return (
-      <StickyContainer>
+      <div>
         <TopBarContainer
           userHandle={ handle }
           userImage={ userImage }
@@ -38,7 +37,7 @@ const Layout = (props) => {
           { props.children }
         </div>
         <Footer domain={ DOMAIN } />
-      </StickyContainer>
+      </div>
     )
   }
 }

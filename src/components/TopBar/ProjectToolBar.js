@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import {Link} from 'react-router'
 import ReactDOM from 'react-dom'
-import {Sticky} from 'react-sticky'
+import Sticky from 'react-stickynode'
 
 
 function isEllipsisActive(el) {
@@ -9,7 +9,7 @@ function isEllipsisActive(el) {
 }
 
 class ProjectToolBar extends React.Component {
-  
+
   constructor(props) {
     super(props)
     this.state = {
@@ -35,7 +35,7 @@ class ProjectToolBar extends React.Component {
   onNameLeave() {
     this.setState({isTooltipVisible: false})
   }
-  
+
   componentDidMount() {
     const {router} = this.context
     router.registerTransitionHook(this.onTransition)
@@ -44,7 +44,7 @@ class ProjectToolBar extends React.Component {
   componentWillUnmount() {
     const {router} = this.context
     router.unregisterTransitionHook(this.onTransition)
-    
+
   }
 
   render() {
@@ -60,7 +60,7 @@ class ProjectToolBar extends React.Component {
     })
 
     return (
-      <Sticky ref="sticky">
+      <Sticky>
         <div className="tc-header tc-header__connect-project">
           <div className="top-bar">
             <div className="bar-column">

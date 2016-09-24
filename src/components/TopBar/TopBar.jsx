@@ -8,7 +8,7 @@ const { ConnectLogo } = Icons
 import { SearchBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import ProjectToolBar from './ProjectToolBar'
-import {Sticky} from 'react-sticky'
+import Sticky from 'react-stickynode'
 
 
 class TopBar extends Component {
@@ -98,7 +98,7 @@ class TopBar extends Component {
     }
 
     return (
-      <Sticky ref="sticky">
+      <Sticky>
         <div className="tc-header tc-header__connect">
           <div className="top-bar">
             {logo}

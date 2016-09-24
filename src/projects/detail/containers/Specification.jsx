@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { Sticky } from 'react-sticky'
+import Sticky from 'react-stickynode'
 
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
@@ -221,7 +221,7 @@ class ProjectSpecification extends Component {
       <section className="two-col-content content">
         <div className="container">
           <div className="left-area">
-            <Sticky>
+            <Sticky top={80}>
               <ProjectSpecSidebar project={project} sections={sections} currentMemberRole={currentMemberRole} />
               <FooterV2 />
             </Sticky>
