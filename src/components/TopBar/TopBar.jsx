@@ -1,6 +1,7 @@
 require('./TopBar.scss')
 
 import React, {PropTypes, Component} from 'react'
+import { Link } from 'react-router'
 import cn from 'classnames'
 import { UserDropdown, Icons } from 'appirio-tech-react-components'
 const { ConnectLogo } = Icons
@@ -64,7 +65,8 @@ class TopBar extends Component {
     const {isFilterVisible} = this.state
     const homePageUrl = window.location.protocol + '//' + window.location.hostname
     const logoutLink = 'https://accounts.' + domain + '/logout?retUrl=' + homePageUrl
-    const isLoggedIn = userHandle
+    const isLoggedIn = !!userHandle
+    const logoTargetUrl = isLoggedIn ? '/projects' : '/'
 
     const userMenuItems = [
       [
@@ -76,7 +78,7 @@ class TopBar extends Component {
     ]
     const logo = (
       <div className="logo-wrapper">
-        <a className="logo" href={homePageUrl}><ConnectLogo width={60}/></a>
+        <Link className="logo" to={logoTargetUrl}><ConnectLogo width={60}/></Link>
       </div>
     )
     const avatar = (
