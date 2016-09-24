@@ -46,7 +46,7 @@ class ProjectSpecSidebar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {project, sections, currentMemberRole} = nextProps
+    const {project, sections} = nextProps
     const navItems = _.map(sections, s => {
       return {
         name: s.title,

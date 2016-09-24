@@ -26,7 +26,6 @@ class TopBar extends Component {
     this.toggleFilter = this.toggleFilter.bind(this)
   }
 
-
   /*eslint-disable no-unused-vars */
   handleTermChange(oldTerm, searchTerm, reqNo, callback) {
     this.props.projectSuggestions(searchTerm)

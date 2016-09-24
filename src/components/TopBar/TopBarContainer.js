@@ -6,7 +6,8 @@ import { Icons } from 'appirio-tech-react-components'
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
 import TopBar from './TopBar'
 import CreateView from '../../projects/create/components/CreateView'
-import {ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR} from '../../config/constants'
+import { TCEmitter } from '../../helpers'
+import {ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, EVENT_ROUTE_CHANGE} from '../../config/constants'
 
 class TopBarContainer extends React.Component {
 
@@ -15,9 +16,21 @@ class TopBarContainer extends React.Component {
     this.state = {
       isCreatingProject : false
     }
+    this.RouteChangeListener = null
     this.applyFilters = this.applyFilters.bind(this)
     this.showCreateProjectDialog = this.showCreateProjectDialog.bind(this)
     this.hideCreateProjectDialog = this.hideCreateProjectDialog.bind(this)
+  }
+
+  componentWillMount() {
+    this.setState({currentPath: window.location.pathname})
+    this.RouteChangeListener = TCEmitter.addListener(EVENT_ROUTE_CHANGE, (path) => {
+      this.setState({currentPath: path})
+    })
+  }
+
+  componentWillUnmount() {
+    this.RouteChangeListener && this.RouteChangeListener.remove()
   }
 
   showCreateProjectDialog() {
@@ -48,8 +61,8 @@ class TopBarContainer extends React.Component {
   }
 
   render() {
-    const {isCreatingProject} = this.state
-    const isProjectDetails = /projects\/\d+/.test(window.location.pathname)
+    const {isCreatingProject, currentPath} = this.state
+    const isProjectDetails = /projects\/\d+/.test(currentPath)
     return (
       <div>
         <Modal
