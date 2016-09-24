@@ -1,5 +1,8 @@
 import _ from 'lodash'
 import fetch from 'isomorphic-fetch'
+import tcEmitter from './emitter'
+
+export const TCEmitter = tcEmitter
 
 // Fetch helpers
 export function status(response) {

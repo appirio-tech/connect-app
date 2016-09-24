@@ -7,11 +7,17 @@ import Router         from 'react-router/lib/Router'
 
 import store  from './config/store'
 import routes from './routes'
+import { TCEmitter } from './helpers'
+import { EVENT_ROUTE_CHANGE } from './config/constants'
 
 const mountNode = document.getElementById('root')
+const onRouteChange = () => {
+  console.debug('route change', window.location.pathname)
+  TCEmitter.emit(EVENT_ROUTE_CHANGE, window.location.pathname)
+}
 
 render((
   <Provider store={store}>
-    <Router history={browserHistory} routes={routes} />
+    <Router history={browserHistory} routes={routes} onUpdate={onRouteChange} />
   </Provider>
 ), mountNode)

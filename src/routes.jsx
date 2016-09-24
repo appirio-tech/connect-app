@@ -1,6 +1,7 @@
 import React from 'react'
-import {Route} from 'react-router'
+import { Route, IndexRoute } from 'react-router'
 import App from './components/App/App'
+import Home from './components/Home/Home'
 import PageError from './components/PageError/PageError'
 import projectRoutes from './projects/routes.jsx'
 
@@ -8,6 +9,8 @@ import projectRoutes from './projects/routes.jsx'
 
 export default (
   <Route path="/" component={ App }>
+    <IndexRoute component={Home} />
+
     {/* Handle /projects/* routes */}
     {projectRoutes}
     {/* {reportsListRoutes} */}

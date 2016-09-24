@@ -15,6 +15,17 @@ import { Icons } from 'appirio-tech-react-components'
 
 require('./Specification.scss')
 
+const isFileRequired = (project, subSections) => {
+  const subSection = _.find(subSections, (s) => s.type === 'questions')
+  const fields = _.filter(subSection.questions, q => q.type.indexOf('see-attached') > -1)
+  // iterate over all seeAttached type fields to check
+  //  if any see attached is checked.
+  return _.some(_.map(
+    _.map(fields, 'fieldName'),
+    fn => _.get(project, `${fn}.seeAttached`)
+  ))
+}
+
 const sections = [
   {
     id: 'appDefinition',
@@ -48,7 +59,6 @@ const sections = [
             title: 'Feature requirements',
             description: 'Please list all the features you would like in your application. You can use our wizard to pick from common features or define your own.',
             type: 'see-attached-features',
-            // type: 'features',
             fieldName: 'details.appDefinition.features'
           }
         ]
@@ -62,7 +72,7 @@ const sections = [
       },
       {
         id: 'files',
-        required: false,
+        required: isFileRequired,
         title: (project) => `Project Files (${_.get(project, 'attachments', []).length})` || 'Files',
         description: '',
         type: 'files',
@@ -72,6 +82,7 @@ const sections = [
   },
   {
     id: 'designSpecification',
+    required: false,
     title: 'Design Specification',
     description: 'Define the visual style for your application or provide a style guide or brand guidelines. Skip this section (or particular questions) if you don\'t have any preferences or restrictions.',
     subSections: [
@@ -179,7 +190,7 @@ const sections = [
       {
         id: 'notes',
         required: false,
-        fieldName: 'details.designSpecification.notes',
+        fieldName: 'details.devSpecification.notes',
         title: 'Notes',
         description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
         type: 'notes'

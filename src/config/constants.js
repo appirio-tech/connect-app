@@ -155,6 +155,10 @@ export const PROJECT_ROLE_MANAGER = 'manager'
 export const PROJECT_ROLE_CUSTOMER = 'customer'
 export const PROJECT_ROLE_OWNER = 'owner'
 
+/*
+ * Events
+ */
+export const EVENT_ROUTE_CHANGE = 'event.route_change'
 
 /*
  * User Roles
