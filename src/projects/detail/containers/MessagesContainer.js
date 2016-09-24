@@ -5,7 +5,7 @@ import MessageList from '../../../components/MessageList/MessageList'
 import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
 import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
-import { Sticky } from 'react-sticky'
+import Sticky from 'react-stickynode'
 import update from 'react-addons-update'
 import {
   PROJECT_FEED_TYPE_MESSAGES,
@@ -181,7 +181,7 @@ class MessagesContainer extends React.Component {
     return (
       <div className="container" style={{display: 'flex', width: '1110px', margin: '20px auto'}}>
         <div style={{width: '360px', marginRight: '30px'}}>
-          <Sticky>
+          <Sticky top={80}>
             <MessageList
               onAdd={() => this.setState({isCreateNewMessage: true})}
               threads={threads}

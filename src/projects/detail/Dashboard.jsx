@@ -1,7 +1,7 @@
 import React from 'react'
 import ProjectInfoContainer from './containers/ProjectInfoContainer'
 import FeedContainer from './containers/FeedContainer'
-import { Sticky } from 'react-sticky'
+import Sticky from 'react-stickynode'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 
 require('./Dashboard.scss')
@@ -15,7 +15,7 @@ const Dashboard = ({project, currentMemberRole}) => (
   <div>
     <div className="dashboard-container">
       <div className="left-area">
-        <Sticky>
+        <Sticky top={80}>
           <div className="dashboard-left-panel">
             <ProjectInfoContainer currentMemberRole={currentMemberRole} project={project} />
           </div>
