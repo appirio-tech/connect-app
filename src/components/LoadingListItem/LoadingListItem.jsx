@@ -27,11 +27,11 @@ const LoadingListItem = ({ type }) => {
           <div className="aligner">
             <div className="tag-list" />
             <div className="track-list">
-              <div className="track-item"></div>
-              <div className="track-item"></div>
-              <div className="track-item"></div>
-              <div className="track-item"></div>
-              <div className="track-item"></div>
+              <div className="track-item" />
+              <div className="track-item" />
+              <div className="track-item" />
+              <div className="track-item" />
+              <div className="track-item" />
             </div>
           </div>
         </div>

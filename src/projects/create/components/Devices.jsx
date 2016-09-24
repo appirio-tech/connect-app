@@ -104,7 +104,7 @@ class DevicesComponent extends Component {
       const handleClick = this.onChange.bind(this, opt.value)
       return (
         <a onClick={ !disabled && handleClick } className={itemClassnames} key={key} >
-          <span className="icon"> </span>
+          <span className="icon" />
           <span className="title">{opt.title}</span>
           <small>{opt.desc}</small>
         </a>
@@ -120,7 +120,7 @@ class DevicesComponent extends Component {
           </div>
         )
         if (i < optionsSet.length-1) {
-          dom.push(<div key={'divider'+i} className="divider"> </div>)
+          dom.push(<div key={'divider'+i} className="divider" />)
         }
       }
       return dom

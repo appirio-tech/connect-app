@@ -115,7 +115,7 @@ class CustomFeatureForm extends Component {
             </div>
           </Formsy.Form>
         </div>
-        <div className="modal-overlay"></div>
+        <div className="modal-overlay" />
         { showDeleteModal &&
           <div className="delete-feature-modal">
             <DeleteFeatureModal

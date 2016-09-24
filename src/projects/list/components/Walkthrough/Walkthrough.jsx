@@ -3,18 +3,9 @@ import './Walkthrough.scss'
 
 const Walkthrough = ({currentUser}) => (
   <div className="walkthrough-column">
+    
     <span className="text-img"/>
-    <ul className="clearfix">
-      <li>
-        <a href="javascript:;">+</a>
-      </li>
-      <li>
-        <a href="javascript:;">+</a>
-      </li>
-      <li>
-        <a href="javascript:;">+</a>
-      </li>
-    </ul>
+    
     <div className="bubble">
       <span className="robot"/>
       <span className="shadow"/>

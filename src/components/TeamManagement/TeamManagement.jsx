@@ -55,7 +55,7 @@ const TeamManagement = (props) => {
       <Panel className={cn({'modal-active': modalActive})}>
         {currentMember && <Panel.AddBtn onClick={() => onToggleAddTeamMember(true)}>Create New Link</Panel.AddBtn>}
 
-        {modalActive && <div className="modal-overlay"></div>}
+        {modalActive && <div className="modal-overlay" />}
         <Panel.Title>
           Project Team ({members.length})
         </Panel.Title>

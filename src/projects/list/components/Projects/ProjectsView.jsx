@@ -58,7 +58,7 @@ const ProjectsView = props => {
       renderText: item => {
         return (
           <div className="spacing">
-            <span className="blue-border hide"></span>
+            <span className="blue-border hide" />
             <span className="blue-block">{projectTypeMap[item.type]}</span>
           </div>
         )

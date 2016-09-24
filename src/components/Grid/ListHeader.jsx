@@ -42,7 +42,7 @@ const ListHeader = ({ columns, sortHandler, currentSortField }) => {
   return (
     <div className="row">
       <div className="flex-row row-th">
-        <div className="mask-layer hide"></div>
+        <div className="mask-layer hide" />
         { columns.map( col =>
           <HeaderItem key={col.id} item={col} currentSortField={currentSortField} onItemClick={toggleSort} />
         )}

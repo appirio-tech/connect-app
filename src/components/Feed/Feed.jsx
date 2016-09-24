@@ -33,8 +33,7 @@ const Feed = (props) => {
               {moment(date).fromNow()}
             </div>
           </div>
-          <div className="card-body draftjs-post" dangerouslySetInnerHTML={{__html: html}}>
-          </div>
+          <div className="card-body draftjs-post" dangerouslySetInnerHTML={{__html: html}} />
         </div>
       </Panel.Body>
       {allowComments &&

@@ -13,7 +13,7 @@ const ListItem = ({ item, columns }) => {
   return (
     <div className="row">
       <div className="flex-row">
-          <div className="mask-layer hide"></div>
+          <div className="mask-layer hide" />
           {columns.map(renderColumn)}
       </div>
     </div>

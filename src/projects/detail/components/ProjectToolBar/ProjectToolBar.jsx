@@ -18,7 +18,7 @@ class ProjectToolBar extends Component {
       return <noscript />
   
     //TODO prepare navigation items according to roles of the user
-    let primaryNavigationItems = [
+    const primaryNavigationItems = [
       {
         //img: require('./nav-projects.svg'),
         text: 'Dashboard',

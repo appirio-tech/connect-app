@@ -27,7 +27,7 @@ const FeedComments = (props) => {
   return (
     <div>
       <Panel.Body className="comment-count-container">
-        <div className="portrait">  </div>
+        <div className="portrait" />
         <div className="object">
           <div className="card-body comment-section">
             <div className="comment-count">
@@ -51,7 +51,7 @@ const FeedComments = (props) => {
           active={item.unread}
           self={item.author.userId === currentUser.userId}
         >
-          <div dangerouslySetInnerHTML={{__html: item.content}}></div>
+          <div dangerouslySetInnerHTML={{__html: item.content}} />
         </Comment>
       )}
       <AddComment
