@@ -21,12 +21,12 @@ const scrollProps = {
 const renderSubNavItems = (child, idx) => {
   const { name, progress, link, required } = child
   const isComplete = progress.length && progress[0] === progress[1]
-
+  const showProgress = progress[0] > 0
   return (
     <li key={idx}>
       <DirectLink to={link} className="boxs" {...scrollProps} href="javascript:">
         <span className="txt">{name}&nbsp;{required && <span className="required">*</span>}</span>
-        <span className="schedule">{ isComplete ? <Icons.IconUICheckBold fill={'#FB7D22'} /> : required && `${progress[0]} of ${progress[1]}`}</span>
+        <span className="schedule">{ isComplete ? <Icons.IconUICheckBold fill={'#FB7D22'} /> : showProgress && `${progress[0]} of ${progress[1]}`}</span>
       </DirectLink>
     </li>
   )
