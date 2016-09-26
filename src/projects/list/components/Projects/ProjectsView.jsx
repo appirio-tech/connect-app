@@ -33,10 +33,10 @@ require('./ProjectsView.scss')
 
 /*eslint-disable quote-props */
 const projectTypeMap = {
-  'generic': 'Wr',
-  'visual_design': 'Dn',
-  'visual_prototype': 'Pr',
-  'app_dev': 'Ap'
+  'generic': 'Work project',
+  'visual_design': 'Design',
+  'visual_prototype': 'Design & Prototype',
+  'app_dev': 'Full App'
 }
 /*eslint-enable */
 
@@ -51,29 +51,34 @@ const ProjectsView = props => {
   // how they should be displayed.
   const columns = [
     {
-      id: 'type',
-      headerLabel: 'Type',
-      classes: 'width70 item-type',
+      id: 'id',
+      headerLabel: 'Project ID',
+      classes: 'width70 item-id',
       sortable: true,
       renderText: item => {
         return (
           <div className="spacing">
             <span className="blue-border hide" />
-            <span className="blue-block">{projectTypeMap[item.type]}</span>
+            { item.id }
           </div>
         )
       }
     }, {
       id: 'projects',
       headerLabel: <ProjectListProjectColHeader currentSortField={currentSortField} sortHandler={sortHandler}/>,
-      classes: 'width38 item-projects',
+      classes: 'width45 item-projects',
       sortable: false,
       renderText: item => {
         const url = `/projects/${item.id}`
+        const code = _.get(item, 'details.utm.code', '')
         return (
           <div className="spacing">
             <Link to={url} className="link-title">{item.name}</Link>
-            <span className="txt-time">{moment(item.createdAt).format('DD MMM YYYY')}</span>
+            <div className="project-metadata">
+              <span className="blue-block">{projectTypeMap[item.type]}</span>
+              { code && <span className="item-ref-code txt-gray-md">{code}</span> }
+              <span className="txt-time">{moment(item.createdAt).format('DD MMM YYYY')}</span>
+            </div>
           </div>
         )
       }
@@ -168,19 +173,6 @@ const ProjectsView = props => {
           <div className="spacing">
             { price ? <span className="txt-price yellow-light">$ {price}</span> : <noscript /> }
             <span className="txt-gray-sm">{desc}</span>
-          </div>
-        )
-      }
-    }, {
-      id: 'ref-code',
-      sortable: false,
-      headerLabel: 'Ref code',
-      classes: 'item-ref-code width8',
-      renderText: item => {
-        const code = _.get(item, 'details.utm.code', '')
-        return (
-          <div className="spacing">
-            <span className="txt-gray-md">{code}</span>
           </div>
         )
       }
