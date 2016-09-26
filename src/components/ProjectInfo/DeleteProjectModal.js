@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 
 const DeleteProjectModal = ({ onCancel, onConfirm}) => {
   return (
-    <div className="modal">
+    <div className="modal delete-project-modal">
       <div className="modal-title danger flex center">
         You're about to delete this project
       </div>

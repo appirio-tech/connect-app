@@ -5,6 +5,8 @@ import ProjectStatus from '../ProjectStatus/ProjectStatus'
 import ProjectProgress from '../ProjectProgress/ProjectProgress'
 import DeleteProjectModal from './DeleteProjectModal'
 
+require('./ProjectInfo.scss')
+
 class ProjectInfo extends Component {
 
   constructor(props) {

@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import { defaultProps } from 'recompose'
+import { Icons } from 'appirio-tech-react-components'
 import './Panel.scss'
 import cn from 'classnames'
 
@@ -27,8 +28,8 @@ Title.propTypes = {
 
 const ActionBtn = ({children, onClick, type}) => (
   <a href="javascript:" onClick={onClick} className="btn-action" title={children}>
-    { type === 'add' && <i className="plus"/> }
-    { type === 'remove' && <i className="remove"/> }
+    { type === 'add' && <i className="plus"><Icons.IconUIBoldAdd /></i> }
+    { type === 'remove' && <i className="remove"><Icons.IconUITrashSimple /></i> }
   </a>
 )
 
