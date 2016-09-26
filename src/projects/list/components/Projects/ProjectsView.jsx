@@ -52,7 +52,7 @@ const ProjectsView = props => {
   const columns = [
     {
       id: 'id',
-      headerLabel: 'Project ID',
+      headerLabel: 'ID',
       classes: 'width70 item-id',
       sortable: true,
       renderText: item => {
