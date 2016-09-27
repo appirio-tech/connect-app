@@ -28,7 +28,7 @@ class Home extends React.Component {
                 <p>Join Connect today to see what we can do for your next project through the power of crowdsourcing, delivered by Topcoder.</p>
                 <div className="button-bar">
                     <a href="javascript:" className="tc-btn tc-btn-primary">Register for free</a>
-                    <a href="javascript:" className="tc-btn tc-btn-default">Learn more about croudsorcing</a>
+                    <a href="javascript:" className="tc-btn tc-btn-default">Learn more about crowdsourcing</a>
                 </div>
             </div>
         </div>
