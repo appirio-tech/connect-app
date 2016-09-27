@@ -2,6 +2,7 @@ import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import MessageList from '../../../components/MessageList/MessageList'
+import MessagingEmptyState from '../../../components/MessageList/MessagingEmptyState'
 import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
 import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
@@ -19,7 +20,7 @@ class MessagesContainer extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { threads : [], activeThreadId : null }
+    this.state = { threads : [], activeThreadId : null, showEmptyState : true }
     this.onThreadSelect = this.onThreadSelect.bind(this)
     this.onLoadMoreMessages = this.onLoadMoreMessages.bind(this)
     this.onAddNewMessage = this.onAddNewMessage.bind(this)
@@ -60,7 +61,7 @@ class MessagesContainer extends React.Component {
         // TODO remove hardcoded check for hasMoreMessages
         item.hasMoreMessages = false
         item.html = item.posts.length > 0 ? item.posts[0].body : null
-        item.messages = item.posts ? item.posts : []
+        item.messages = item.posts ? item.posts.filter((post) => post.type === 'post') : []
         item.messages.forEach((message) => {
           message.content = message.body
           if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(message.userId) > -1) {
@@ -149,12 +150,12 @@ class MessagesContainer extends React.Component {
   }
 
   render() {
-    const {threads, isCreateNewMessage} = this.state
+    const {threads, isCreateNewMessage, showEmptyState} = this.state
     const { currentUser, isCreatingFeed, currentMemberRole } = this.props
     const activeThread = threads.filter((item) => item.isActive)[0]
 
     const renderRightPanel = () => {
-      if (!!currentMemberRole && isCreateNewMessage) {
+      if (!!currentMemberRole && (isCreateNewMessage || !threads.length)) {
         return (
           <NewPost
             currentUser={currentUser}
@@ -179,18 +180,25 @@ class MessagesContainer extends React.Component {
     }
 
     return (
-      <div className="container" style={{display: 'flex', width: '1110px', margin: '20px auto'}}>
-        <div style={{width: '360px', marginRight: '30px'}}>
+      <div className="messages-container">
+        <div className="left-area">
           <Sticky top={80}>
             <MessageList
               onAdd={() => this.setState({isCreateNewMessage: true})}
               threads={threads}
               onSelect={this.onThreadSelect}
               showAddButton={ !!currentMemberRole }
+              showEmptyState={ showEmptyState && !threads.length }
             />
           </Sticky>
         </div>
-        <div style={{width: '720px'}}>
+        <div className="right-area">
+          { (showEmptyState && !threads.length) &&
+            <MessagingEmptyState
+              currentUser={currentUser}
+              onClose={() => this.setState({showEmptyState: false})}
+            />
+          }
           { renderRightPanel() }
         </div>
       </div>

@@ -51,6 +51,10 @@
       background-color: $tc-white;
       fill: $tc-gray-40;
     }
+
+    .close {
+      
+    }
   }
 }
 .panel.modal-active {
@@ -78,6 +82,9 @@
   &.panel-gray{
     background: $tc-gray-neutral-light;
     margin-bottom: -10px;
+  }
+  &.panel-orange {
+    background-color: $tc-orange-10;
   }
   .panel-body{
     &.active{
