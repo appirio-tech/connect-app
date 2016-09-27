@@ -62,6 +62,7 @@ class NewPost extends React.Component {
   onClickOutside(evt) {
     let currNode = evt.target
     let isEditor = false
+    let isCloseButton = false
     const title = this.refs.title.value
     const content = stateToHTML(this.state.editorState.getCurrentContent())
     // if any of title and content, is non empty, do not proceed
@@ -71,10 +72,14 @@ class NewPost extends React.Component {
 
     do {
       if(currNode.className
-        && currNode.className.indexOf
-        && currNode.className.indexOf('new-post-composer') > -1) {
-        isEditor = true
-        break
+        && currNode.className.indexOf) {
+        if (currNode.className.indexOf('btn-close') > -1) {
+          isCloseButton = true
+        }
+        if (currNode.className.indexOf('new-post-composer') > -1) {
+          isEditor = true
+          break
+        }
       }
 
       currNode = currNode.parentNode
@@ -83,7 +88,7 @@ class NewPost extends React.Component {
         break
     } while(currNode.tagName)
 
-    if(!isEditor) {
+    if(!isEditor || isCloseButton) {
       this.setState({ expandedEditor: false })
     } else {
       this.setState({ expandedEditor: true })
@@ -148,7 +153,9 @@ class NewPost extends React.Component {
 
     return (
       <div className={ composerClasses }>
-        <a href="javascript:" className="btn-close"/>
+        {/* No need to handle click event of the close button as its already
+         handled in onClickOutside handler */}
+        <a href="javascript:" className="btn-close" />
         <div className="modal-title title-muted">
           NEW STATUS POST
         </div>

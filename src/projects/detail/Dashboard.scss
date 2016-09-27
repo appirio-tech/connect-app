@@ -45,6 +45,10 @@
     .new-post-composer {
       margin-bottom: 4 * $base-unit;
       background-color: $tc-white;
+
+      .btn-close {
+        display: none;
+      }
       
       .modal-row {
         padding-bottom: 0px;
@@ -63,6 +67,10 @@
       }
 
       &.expanded {
+
+        .btn-close {
+          display: block;
+        }
 
         input {
           margin-bottom: 2 * $base-unit;
