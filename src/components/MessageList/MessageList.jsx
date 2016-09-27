@@ -43,19 +43,20 @@ const MessageRow = ({title, messages, isActive, unreadCount, onClick}) => {
     </div>
     <div className="message-time">
       {unreadCount > 0 && <div className="badge">{unreadCount}</div>}
-      {!unreadCount && formatTime(lastMessage.date)}
+      {(!unreadCount && lastMessage.date) && formatTime(lastMessage.date)}
     </div>
   </div>)
 }
 
 
-const MessageList = ({threads, onSelect, onAdd, showAddButton}) => (
+const MessageList = ({threads, onSelect, onAdd, showAddButton, showEmptyState}) => (
   <Panel className="message-list">
     <Panel.Title>
       Messages
       { showAddButton && <Panel.AddBtn onClick={onAdd} /> }
     </Panel.Title>
     <div className="panel-messages">
+      { showEmptyState && <MessageRow title="First discussion post" isActive messages={[{ content: ''}]} /> }
       {threads.map((item) => <MessageRow key={item.id} onClick={(e) => onSelect(item, e) } {...item} />)}
     </div>
   </Panel>

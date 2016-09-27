@@ -2,6 +2,8 @@ import React from 'react'
 import MessagesContainer from './containers/MessagesContainer'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 
+require('./Messages.scss')
+
 // This handles showing a spinner while the state is being loaded async
 const spinner = spinnerWhileLoading(props => !props.isLoading)
 
