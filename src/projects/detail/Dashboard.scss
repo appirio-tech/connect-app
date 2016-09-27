@@ -44,6 +44,46 @@
 
     .new-post-composer {
       margin-bottom: 4 * $base-unit;
+      background-color: $tc-white;
+
+      .btn-close {
+        display: none;
+      }
+      
+      .modal-row {
+        padding-bottom: 0px;
+
+        &:hover {
+          background-color: inherit;
+        }
+      }
+
+      input {
+        margin-bottom: 0px;
+      }
+
+      .draftjs-editor {
+        display: none;
+      }
+
+      &.expanded {
+
+        .btn-close {
+          display: block;
+        }
+
+        input {
+          margin-bottom: 2 * $base-unit;
+        }
+
+        .draftjs-editor {
+          display: block;
+        }
+      }
+
+      &.expanded.modal {
+        background-color: $tc-gray-neutral-light;
+      }
     }
 
     .feed-action-card + .feed-action-card {
