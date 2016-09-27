@@ -1,7 +1,6 @@
 import React from 'react'
 import './MessagingEmptyState.scss'
 import Panel from '../Panel/Panel'
-import ActionCard from '../ActionCard/ActionCard'
 import Comment from '../ActionCard/Comment'
 import { Icons } from 'appirio-tech-react-components'
 
