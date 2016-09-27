@@ -13,3 +13,6 @@ $gray         : lighten($gray-base, 33.5%);
 $gray-light   : lighten($gray-base, 46.7%);
 $gray-lighter : lighten($gray-base, 93.5%);
 $gray-lightest: lighten($gray-base, 97.5%);
+
+// TODO: Add breakpoint to global styles
+$screen-rg: 992px;
