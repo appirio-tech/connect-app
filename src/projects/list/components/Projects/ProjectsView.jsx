@@ -38,6 +38,12 @@ const projectTypeMap = {
   'visual_prototype': 'Design & Prototype',
   'app_dev': 'Full App'
 }
+const projectTypeClassMap = {
+  'generic': 'purple-block',
+  'visual_design': 'blue-block',
+  'visual_prototype': 'blue-block',
+  'app_dev': 'green-block'
+}
 /*eslint-enable */
 
 
@@ -52,13 +58,14 @@ const ProjectsView = props => {
   const columns = [
     {
       id: 'id',
-      headerLabel: 'Project ID',
+      headerLabel: 'ID',
       classes: 'width70 item-id',
       sortable: true,
       renderText: item => {
+        const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
           <div className="spacing">
-            <span className="blue-border hide" />
+            { recentlyCreated  && <span className="blue-border" /> }
             { item.id }
           </div>
         )
@@ -71,12 +78,13 @@ const ProjectsView = props => {
       renderText: item => {
         const url = `/projects/${item.id}`
         const code = _.get(item, 'details.utm.code', '')
+        const projectTypeClass = projectTypeClassMap[item.type]
         return (
           <div className="spacing">
             <Link to={url} className="link-title">{item.name}</Link>
             <div className="project-metadata">
-              <span className="blue-block">{projectTypeMap[item.type]}</span>
-              { code && <span className="item-ref-code txt-gray-md">{code}</span> }
+              <span className={ projectTypeClass }>{projectTypeMap[item.type]}</span>
+              { code && <span className="item-ref-code txt-gray-md">Ref: {code}</span> }
               <span className="txt-time">{moment(item.createdAt).format('DD MMM YYYY')}</span>
             </div>
           </div>
