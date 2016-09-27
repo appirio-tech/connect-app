@@ -12,7 +12,7 @@ const MessagingEmptyState = ({ currentUser, onClose }) => (
       </a>
       <Comment
         avatarUrl={ require('../../assets/images/avatar-coder.png') }
-        authorName="Code the Bot"
+        authorName="Coder the Bot"
         self={false}
         date=""
       >
