@@ -137,18 +137,17 @@ class NewPost extends React.Component {
       }
     }
 
-    const editorClasses = cn(
-      'draftjs-editor',
-      'tc-textarea',
-      'collapsedEditor',
+    const composerClasses = cn(
+      'modal',
+      'action-card',
+      'new-post-composer',
       {
-        'has-footer': this.state.expandedEditor,
-        expandedEditor : this.state.expandedEditor
+        expanded : this.state.expandedEditor
       }
     )
 
     return (
-      <div className="modal action-card new-post-composer">
+      <div className={ composerClasses }>
         <a href="javascript:" className="btn-close"/>
         <div className="modal-title title-muted">
           NEW STATUS POST
@@ -164,7 +163,7 @@ class NewPost extends React.Component {
               type="text"
               placeholder="Share the latest project updates with the team"
             />
-            <div className={ editorClasses }>
+            <div className="draftjs-editor tc-textarea">
               <Editor
                 ref="editor"
                 editorState={editorState}
