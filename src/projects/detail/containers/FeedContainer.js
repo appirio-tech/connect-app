@@ -77,6 +77,8 @@ class FeedContainer extends React.Component {
             comment.author = _.find(allMembers, mem => mem.userId === comment.userId)
           }
         })
+        // -1 for the first post which is actual treated as body of the feed
+        item.totalComments = item.totalPosts - 1
 
         // reset newComment property
         item.newComment = ''
