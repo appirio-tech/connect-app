@@ -65,10 +65,6 @@ class NewPost extends React.Component {
     let isCloseButton = false
     const title = this.refs.title.value
     const content = stateToHTML(this.state.editorState.getCurrentContent())
-    // if any of title and content, is non empty, do not proceed
-    if ((title && title.length > 0) || (content && content !== '<p><br></p>')) {
-      return
-    }
 
     do {
       if(currNode.className
@@ -87,6 +83,13 @@ class NewPost extends React.Component {
       if(!currNode)
         break
     } while(currNode.tagName)
+
+    // if any of title and content, is non empty, do not proceed
+    if (!isEditor
+      && !isCloseButton
+      && ((title && title.length > 0) || (content && content !== '<p><br></p>'))) {
+      return
+    }
 
     if(!isEditor || isCloseButton) {
       this.setState({ expandedEditor: false })
