@@ -68,11 +68,15 @@ export function createProjectTopic(projectId, topic) {
   }
 }
 
-export function loadFeedComments(feedId, fromIndex) {
+export function loadFeedComments(feedId, tag, fromIndex) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_PROJECT_FEED_COMMENTS,
-      payload: getTopicPosts(feedId, fromIndex)
+      payload: getTopicPosts(feedId, fromIndex),
+      meta: {
+        topicId: feedId,
+        tag
+      }
     })
   }
 }
