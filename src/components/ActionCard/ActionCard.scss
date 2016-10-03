@@ -94,6 +94,11 @@
           border-top:solid 1px $tc-gray-10;
           z-index: 1;
         }
+        &.loading-comments {
+          .comment-collapse-button {
+            cursor: default;
+          }
+        }
       }
     }
   }

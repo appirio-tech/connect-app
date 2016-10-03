@@ -40,7 +40,7 @@ export const projectTopics = function (state=initialState, action) {
   case LOAD_PROJECT_FEEDS_SUCCESS:// DO NOT alter state until we get all members loaded
     return state
   case LOAD_PROJECT_FEEDS_MEMBERS_SUCCESS: {
-    const primaryTopics = payload.topics.filter((topic) => topic.tag === 'PRIMARY')
+    const primaryTopics = payload.topics.filter((topic) => topic.tag === 'PRIMARY').map((topic) => { return {...topic, body: topic.posts[0].body, posts: []}})
     const messageThreads = payload.topics.filter((topic) => topic.tag === 'MESSAGES')
     return Object.assign({}, state, {
       isLoading: false,
@@ -85,9 +85,27 @@ export const projectTopics = function (state=initialState, action) {
       isCreatingFeed: false,
       error: false
     })
-  case LOAD_PROJECT_FEED_COMMENTS_PENDING:
+  case LOAD_PROJECT_FEED_COMMENTS_PENDING: {
+    const feedId = _.get(action, 'meta.topicId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds[tag], feed => feed.id === feedId)
+    // if we find the feed
+    if (feedIndex >= 0) {
+      const feed = state.feeds[tag][feedIndex]
+      const updatedFeed = update(feed, {
+        isLoadingComments: { $set : true }
+      })
+      const feedUpdateQuery = {}
+      feedUpdateQuery[tag] = { $splice: [[feedIndex, 1, updatedFeed]] }
+      // update the state
+      return update (state, {
+        feeds: feedUpdateQuery
+      })
+    }
     return state
-  case LOAD_PROJECT_FEED_COMMENTS_SUCCESS: {//NOT being used until we have pagination for comments
+  }
+  case LOAD_PROJECT_FEED_COMMENTS_SUCCESS: {
     const feedId = _.get(action, 'meta.topicId', null)
     const tag = _.get(action, 'meta.tag', null)
     // find feed index from the state
@@ -101,7 +119,8 @@ export const projectTopics = function (state=initialState, action) {
       const updatedFeed = update(feed, {
         hasMoreComments: { $set : payload.totalCount > noOfRenderedPosts },
         totalComments: { $set : payload.totalCount },
-        posts: { $push : payload.posts }
+        posts: { $splice : [[0, 0, ...payload.posts]] },
+        isLoadingComments: { $set : false }
       })
       const feedUpdateQuery = {}
       feedUpdateQuery[tag] = { $splice: [[feedIndex, 1, updatedFeed]] }
@@ -113,6 +132,23 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case LOAD_PROJECT_FEED_COMMENTS_FAILURE:
+    const feedId = _.get(action, 'meta.topicId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds[tag], feed => feed.id === feedId)
+    // if we find the feed
+    if (feedIndex >= 0) {
+      const feed = state.feeds[tag][feedIndex]
+      const updatedFeed = update(feed, {
+        isLoadingComments: { $set : false }
+      })
+      const feedUpdateQuery = {}
+      feedUpdateQuery[tag] = { $splice: [[feedIndex, 1, updatedFeed]] }
+      // update the state
+      return update (state, {
+        feeds: feedUpdateQuery
+      })
+    }
     return state
   case CREATE_PROJECT_FEED_COMMENT_PENDING: {
     const feedId = _.get(action, 'meta.feedId', null)
