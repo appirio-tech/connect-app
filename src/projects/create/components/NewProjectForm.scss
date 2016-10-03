@@ -490,6 +490,7 @@ $track-color: $tc-gray-neutral-dark;
       height: 4px;
     }
 
+
     // Firefox styles
     &::-moz-range-track {
       width: $track-width;
@@ -547,7 +548,6 @@ $track-color: $tc-gray-neutral-dark;
       border-radius: 4px;
       background-color: $tc-gray-neutral-dark;
     }
-
     &::ms-tooltip {
       display: block;
       padding: 30px;
