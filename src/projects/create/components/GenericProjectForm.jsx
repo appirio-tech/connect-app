@@ -41,7 +41,7 @@ class GenericProjectForm extends Component {
         <TCFormFields.TextInput
           name="newProject.name"
           type="text"
-          validations="minLength:1" required
+          validations="isRequired"
           validationError="Project name is required"
           label="Project Name"
           // placeholder="enter project name"
@@ -52,7 +52,7 @@ class GenericProjectForm extends Component {
         <TCFormFields.Textarea
           name="newProject.description"
           label="Description"
-          validations="minLength:1" required
+          validations="isRequired"
           validationError="Please provide a project description"
           // placeholder="Mobile app that solves my biggest problem"
           disabled={false}
@@ -62,6 +62,7 @@ class GenericProjectForm extends Component {
         <TCFormFields.TextInput
           name="newProject.details.utm.code"
           label="Invite code (optional)"
+          maxLength="25"
           type="text"
           disabled={false}
           wrapperClass="row center"
