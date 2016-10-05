@@ -49,7 +49,7 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
             } else {
               return (
                 <li key={idx}>
-                  <a href={link.address} target="_blank">{link.title}</a>
+                  <a href={link.address} target="_blank" rel="noopener noreferrer">{link.title}</a>
                   {canDelete && <div className="buttons">
                     <button onClick={ handleDeleteClick } type="button" className="btn-remove"/>
                   </div>}

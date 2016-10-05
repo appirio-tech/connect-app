@@ -13,6 +13,11 @@
       margin-right: 20px;
       margin-left: auto;
     }
+    a{
+      max-width: 275px;
+      text-overflow: ellipsis;
+      overflow-x: hidden;
+    }
   }
   li:not(.delete-confirmation-modal):hover{
     background: #FAFAFB;
