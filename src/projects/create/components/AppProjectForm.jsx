@@ -112,6 +112,7 @@ class AppProjectForm extends Component {
             name="newProject.details.utm.code"
             label="Invite code (optional)"
             type="text"
+            maxLength={25}
             wrapperClass="row center"
             // placeholder="ABCD123"
           />

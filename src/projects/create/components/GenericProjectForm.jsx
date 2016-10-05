@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 import _ from 'lodash'
+import {PROJECT_NAME_MAX_LENGTH} from '../../../config/constants'
 
 class GenericProjectForm extends Component {
 
@@ -43,6 +44,7 @@ class GenericProjectForm extends Component {
           type="text"
           validations="isRequired"
           validationError="Project name is required"
+          maxLength={PROJECT_NAME_MAX_LENGTH}
           label="Project Name"
           // placeholder="enter project name"
           disabled={false}
@@ -62,7 +64,7 @@ class GenericProjectForm extends Component {
         <TCFormFields.TextInput
           name="newProject.details.utm.code"
           label="Invite code (optional)"
-          maxLength="25"
+          maxLength={25}
           type="text"
           disabled={false}
           wrapperClass="row center"

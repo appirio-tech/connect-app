@@ -19,6 +19,13 @@ import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedCommen
 import update from 'react-addons-update'
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 
+
+const SYSTEM_USER = {
+  firstName: CODER_BOT_USER_FNAME,
+  lastName: CODER_BOT_USER_LNAME,
+  photoURL: require('../../../assets/images/avatar-coder.png')
+}
+
 class FeedContainer extends React.Component {
 
   constructor(props) {
@@ -44,24 +51,21 @@ class FeedContainer extends React.Component {
   }
 
   init(props) {
-    const { allMembers } = props
+    const { allMembers, feeds } = props
     this.setState({
-      feeds: props.feeds.map((feed) => {
+      feeds: feeds.map((feed) => {
         const item = { ...feed }
         item.user = _.find(allMembers, mem => mem.userId === item.userId)
-        if (!item.user) {
-          //TODO: throwing an error
-          return null
-        }
 
         if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(item.userId) > -1) {
-          item.user = {
-            firstName: CODER_BOT_USER_FNAME,
-            lastName: CODER_BOT_USER_LNAME
-          }
+          item.user = SYSTEM_USER
           item.allowComments = false
         } else {
           item.allowComments = true
+        }
+        if (!item.user) {
+          //TODO: throwing an error
+          return null
         }
 
         item.html = item.posts.length > 0 ? item.posts[0].body : null
@@ -69,10 +73,7 @@ class FeedContainer extends React.Component {
         item.comments.forEach((comment) => {
           comment.content = comment.body
           if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(comment.userId) > -1) {
-            comment.author = {
-              firstName: CODER_BOT_USER_FNAME,
-              lastName: CODER_BOT_USER_LNAME
-            }
+            comment.author = SYSTEM_USER
           } else {
             comment.author = _.find(allMembers, mem => mem.userId === comment.userId)
           }

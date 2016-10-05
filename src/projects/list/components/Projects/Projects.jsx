@@ -22,7 +22,7 @@ class Projects extends Component {
     const queryParams = _.get(this.props, 'location.query', null)
     if (!_.isEmpty(queryParams)) {
       if (queryParams.sort) criteria.sort = queryParams.sort
-      if (queryParams.name) criteria.name = queryParams.name
+      if (queryParams.name) criteria.name = decodeURIComponent(queryParams.name)
       if (queryParams.status) criteria.status = queryParams.status
       if (queryParams.type) criteria.type = queryParams.type
       if (queryParams.memberOnly) criteria.memberOnly = queryParams.memberOnly
@@ -32,7 +32,6 @@ class Projects extends Component {
       this.routeWithParams(criteria, pageNum)
     }
   }
-
 
   onPageChange(pageNum) {
     this.routeWithParams(this.props.criteria, pageNum)
