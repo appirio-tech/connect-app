@@ -9,6 +9,12 @@
   display: block !important;
 }
 
+.new-post-composer {
+  .modal-title {
+    text-transform: uppercase;
+  }
+}
+
 .public-DraftEditor-content {
   width: 100%;
   font-size: 15px;
