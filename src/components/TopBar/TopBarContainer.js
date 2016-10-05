@@ -47,6 +47,8 @@ class TopBarContainer extends React.Component {
 
   applyFilters(filter) {
     const criteria = _.assign({}, this.props.criteria, filter)
+    if (criteria && criteria.name)
+      criteria.name = encodeURIComponent(criteria.name)
     this.routeWithParams(criteria, 1)
   }
 
