@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes } from 'react'
+import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { renderComponent, branch, compose, withProps } from 'recompose'
@@ -36,9 +37,16 @@ class ProjectDetail extends Component {
   constructor(props) {
     super(props)
   }
+
   componentWillMount() {
     const projectId = this.props.params.projectId
     this.props.loadProjectDashboard(projectId)
+  }
+
+  componentWillReceiveProps({isProcessing, isLoading, error, project}) {
+    // handle just deleted projects
+    if (! (error || isLoading || isProcessing) && _.isEmpty(project))
+      this.props.router.push('/projects/')
   }
 
   getProjectRoleForCurrentUser({currentUserId, project}) {
@@ -64,6 +72,7 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser}) => {
   return {
     currentUserId: parseInt(loadUser.user.id),
     isLoading: projectDashboard.isLoading,
+    isProcessing: projectState.processing,
     error: projectState.error,
     project: projectState.project
   }
@@ -80,4 +89,4 @@ ProjectDetail.propTypes = {
   isLoading : PropTypes.bool.isRequired
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetail)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectDetail))

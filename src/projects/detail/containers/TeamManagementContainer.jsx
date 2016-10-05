@@ -28,6 +28,7 @@ class TeamManagementContainer extends Component {
 
   componentWillMount() {
     this.setState({
+      isUserLeaving: false,
       searchMembers: [],
       keyword: '',
       isAddingTeamMember: false,
@@ -39,6 +40,13 @@ class TeamManagementContainer extends Component {
     const { keyword, isAddingTeamMember } = this.state
     if (isAddingTeamMember && keyword.length)
       this.updateSearchMembers(nextProps)
+    if (this.state.isUserLeaving &&
+      _.findIndex(nextProps.members,
+        m => m.userId === this.props.currentUser.userId) === -1
+    ) {
+      // navigate to project listing
+      this.props.router.push('/projects/')
+    }
   }
 
   updateSearchMembers({allMembers, members}) {
@@ -124,10 +132,7 @@ class TeamManagementContainer extends Component {
     // is user leaving current project
     const isLeaving = member.userId === this.props.currentUser.userId
     this.props.removeProjectMember(this.props.projectId, member.id, isLeaving)
-    if (isLeaving) {
-      // transition user to project lists page
-      this.props.router.push('/projects')
-    }
+    this.setState({ isUserLeaving: isLeaving })
   }
 
   onJoinConfirm() {
@@ -144,9 +149,6 @@ class TeamManagementContainer extends Component {
   }
 
   onChangeOwnerConfirm(member) {
-    // const members = this.state.members
-    //   .map((item) => ({...item, isPrimary: item.userId === member.userId}))
-    // this.setState({ members })
     this.props.updateProjectMember(this.props.projectId, member.id, { role: member.role, isPrimary: true })
   }
 

@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
 import update from 'react-addons-update'
 import _ from 'lodash'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
@@ -20,7 +19,7 @@ class ProjectInfoContainer extends React.Component {
         percent: 0,
         text: 'Complete specification to get estimate'
       },
-      budget: {
+      budget: { // FIXME
         percent: 80,
         text: '$1000 remaining'
       }
@@ -29,6 +28,22 @@ class ProjectInfoContainer extends React.Component {
     this.onDeleteProject = this.onDeleteProject.bind(this)
     this.onAddNewLink = this.onAddNewLink.bind(this)
     this.onDeleteLink = this.onDeleteLink.bind(this)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
+    return !_.isEqual(nextProps.project, this.props.project)
+  }
+
+  componentWillReceiveProps({project}) {
+    if (project.duration) {
+      const percent = project.duration.actualDuration / project.duration.plannedDuration * 100
+      this.setState({
+        duration: {
+          percent,
+          text: percent === 0 ? 'Complete specification to get estimate' : ''
+        }
+      })
+    }
   }
 
   onChangeStatus(status) {
@@ -50,10 +65,8 @@ class ProjectInfoContainer extends React.Component {
   }
 
   onDeleteProject() {
-    const { router, deleteProject, project } = this.props
+    const { deleteProject, project } = this.props
     deleteProject(project.id)
-    // navigate to project list view
-    router.push('/projects')
   }
 
   render() {
@@ -107,4 +120,4 @@ ProjectInfoContainer.PropTypes = {
 
 const mapDispatchToProps = { updateProject, deleteProject }
 
-export default withRouter(connect(null, mapDispatchToProps)(ProjectInfoContainer))
+export default connect(null, mapDispatchToProps)(ProjectInfoContainer)

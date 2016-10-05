@@ -92,7 +92,7 @@ class AppProjectForm extends Component {
             name="newProject.name"
             type="text"
             maxLength={PROJECT_NAME_MAX_LENGTH}
-            validations="minLength:1" required
+            validations="isRequired"
             validationError="Project name is required"
             label="Project Name"
             // placeholder="Enter project name"
@@ -102,7 +102,7 @@ class AppProjectForm extends Component {
           <TCFormFields.Textarea
             name="newProject.description"
             label="Description"
-            validations="minLength:1" required
+            validations="isRequired"
             validationError="Please provide a project description"
             wrapperClass="row"
             // placeholder="Mobile app that solves my biggest problem"
@@ -112,6 +112,7 @@ class AppProjectForm extends Component {
             name="newProject.details.utm.code"
             label="Invite code (optional)"
             type="text"
+            maxLength={25}
             wrapperClass="row center"
             // placeholder="ABCD123"
           />

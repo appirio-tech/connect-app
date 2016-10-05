@@ -20,17 +20,19 @@ const GridView = props => {
   return (
     <section className="content gridview-content">
       <div className="container">
-        <div className="flex-area">
-          <div className="flex-data">
-            <ListHeader {...headerProps} />
-            { resultSet.length ? resultSet.map(renderItem) : emptyList }
+        {
+          resultSet.length
+          ?
+          <div className="flex-area">
+            <div className="flex-data">
+              <ListHeader {...headerProps} />
+              {resultSet.map(renderItem)}
+            </div>
+            <PaginationBar {...paginationProps} />
           </div>
-          {/* .flex-data */}
-
-          { resultSet.length ? <PaginationBar {...paginationProps} /> : <noscript /> }
-
-        </div>
-        {/* .flex-area */}
+          :
+          <div className="flex-area">{emptyList}</div>
+        }
       </div>
       {/* .container */}
     </section>
