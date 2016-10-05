@@ -4,7 +4,7 @@ import cn from 'classnames'
 const BtnSeparator = ({children, onClick, isLoadingComments}) => (
   <div>
     <div className="card-body comment-section">
-      <div className={cn("comment-collapse", {'loading-comments': isLoadingComments})}>
+      <div className={cn('comment-collapse', {'loading-comments': isLoadingComments})}>
         <a href="javascript:" onClick={onClick} className="comment-collapse-button">
           {children}
         </a>

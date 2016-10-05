@@ -7,7 +7,7 @@ import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
 import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
 import Sticky from 'react-stickynode'
-import update from 'react-addons-update'
+// import update from 'react-addons-update'
 import {
   PROJECT_FEED_TYPE_MESSAGES,
   DISCOURSE_BOT_USERID,
@@ -124,7 +124,6 @@ class MessagesContainer extends React.Component {
   // this method is not ready yet, however, it is not used right now because messaging
   // api is not supporting paging yet
   onLoadMoreMessages(thread) {
-    const { threads, activeThreadId } = this.state
     const renderedMessages = thread.messages.length
     const availableMessages = thread.posts.length - 1
     if (renderedMessages < availableMessages) {
@@ -179,8 +178,8 @@ class MessagesContainer extends React.Component {
             currentUser={currentUser}
             onPost={this.onNewThread}
             isCreating={isCreatingFeed}
-            heading='New Discussion Post'
-            titlePlaceholder='Start a new discussion topic with the team'
+            heading="New Discussion Post"
+            titlePlaceholder="Start a new discussion topic with the team"
           />
         )
       } else if (activeThread) {

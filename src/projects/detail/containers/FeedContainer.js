@@ -185,8 +185,8 @@ class FeedContainer extends React.Component {
             currentUser={currentUser}
             onPost={this.onNewPost}
             isCreating={ isCreatingFeed }
-            heading='NEW STATUS POST'
-            titlePlaceholder='Share the latest project updates with the team'
+            heading="NEW STATUS POST"
+            titlePlaceholder="Share the latest project updates with the team"
           />
         }
         { !isLoading && feeds.map(renderFeed) }

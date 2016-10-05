@@ -39,7 +39,7 @@ const FeedComments = (props) => {
               {getCommentCount(totalComments)}
             </div>
             <hr className={cn({'no-margin': !comments.length})} />
-            {hasMoreComments && <div className={cn("comment-collapse", {'loading-comments': isLoadingComments})}>
+            {hasMoreComments && <div className={cn('comment-collapse', {'loading-comments': isLoadingComments})}>
               <a href="javascript:" onClick={ handleLoadMoreClick } className="comment-collapse-button">
                 {isLoadingComments ? 'Loading...' : 'View older comments'}
               </a>

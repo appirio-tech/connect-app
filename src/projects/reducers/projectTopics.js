@@ -131,7 +131,7 @@ export const projectTopics = function (state=initialState, action) {
     }
     return state
   }
-  case LOAD_PROJECT_FEED_COMMENTS_FAILURE:
+  case LOAD_PROJECT_FEED_COMMENTS_FAILURE: {
     const feedId = _.get(action, 'meta.topicId', null)
     const tag = _.get(action, 'meta.tag', null)
     // find feed index from the state
@@ -150,6 +150,7 @@ export const projectTopics = function (state=initialState, action) {
       })
     }
     return state
+  }
   case CREATE_PROJECT_FEED_COMMENT_PENDING: {
     const feedId = _.get(action, 'meta.feedId', null)
     const tag = _.get(action, 'meta.tag', null)
