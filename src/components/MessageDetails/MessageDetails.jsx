@@ -14,7 +14,7 @@ const MessageDetails = ({
   newMessage,
   onNewMessageChange,
   onAddNewMessage,
-  isLoading,
+  isLoadingComments,
   currentUser,
   isAddingComment,
   allowAddingComment}) =>  {
@@ -25,8 +25,8 @@ const MessageDetails = ({
   return (
     <ActionCard className="main-messaging">
       <ActionCard.Header title={title}>
-        {hasMoreMessages && <BtnSeparator onClick={onLoadMoreMessages}>
-          {isLoading ? 'Loading...' : 'Load earlier messages'}
+        {hasMoreMessages && <BtnSeparator onClick={onLoadMoreMessages} isLoadingComments={ isLoadingComments }>
+          {isLoadingComments ? 'Loading...' : 'Load earlier messages'}
         </BtnSeparator>}
       </ActionCard.Header>
       {messages && messages.map((item) => 
