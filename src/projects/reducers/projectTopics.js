@@ -41,7 +41,7 @@ export const projectTopics = function (state=initialState, action) {
     return state
   case LOAD_PROJECT_FEEDS_MEMBERS_SUCCESS: {
     const primaryTopics = payload.topics.filter((topic) => topic.tag === 'PRIMARY').map((topic) => { return {...topic, body: topic.posts[0].body, posts: []}})
-    const messageThreads = payload.topics.filter((topic) => topic.tag === 'MESSAGES')
+    const messageThreads = payload.topics.filter((topic) => topic.tag === 'MESSAGES').map((topic) => { return {...topic, body: topic.posts[0].body, posts: []}})
     return Object.assign({}, state, {
       isLoading: false,
       error: true,
@@ -199,9 +199,9 @@ export const projectTopics = function (state=initialState, action) {
     const tag = _.get(action, 'meta.tag', null)
     if (!feedId) return state
     // find feed index from the state
-    const feedIndex = _.findIndex(state.feeds['PRIMARY'], feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag], feed => feed.id === feedId)
     if (feedIndex >= 0) {
-      const feed = state.feeds['PRIMARY'][feedIndex]
+      const feed = state.feeds[tag][feedIndex]
       const updatedFeed = update (feed, {
         isAddingComment : { $set : false }
       })

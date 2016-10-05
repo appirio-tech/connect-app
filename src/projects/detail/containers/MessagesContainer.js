@@ -16,6 +16,8 @@ import {
   CODER_BOT_USER_LNAME
 } from '../../../config/constants'
 
+const THREAD_MESSAGES_PAGE_SIZE = 3
+
 class MessagesContainer extends React.Component {
 
   constructor(props) {
@@ -58,21 +60,28 @@ class MessagesContainer extends React.Component {
           item.user = _.find(allMembers, mem => mem.userId === item.userId)
         }
 
-        // TODO remove hardcoded check for hasMoreMessages
-        item.hasMoreMessages = false
-        item.html = item.posts.length > 0 ? item.posts[0].body : null
-        item.messages = item.posts ? item.posts.filter((post) => post.type === 'post') : []
-        item.messages.forEach((message) => {
-          message.content = message.body
-          if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(message.userId) > -1) {
-            message.author = {
-              firstName: CODER_BOT_USER_FNAME,
-              lastName: CODER_BOT_USER_LNAME
+        item.html = item.body
+        if (item.posts.length === 0 && item.postIds && !item.isLoadingComments) {
+          const commentIds = item.postIds.slice(-THREAD_MESSAGES_PAGE_SIZE)
+          item.messages = []
+          this.props.loadFeedComments(item.id, PROJECT_FEED_TYPE_MESSAGES, commentIds)
+        } else {
+          item.messages = item.posts
+          item.posts.forEach((comment) => {
+            comment.content = comment.body
+            if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(comment.userId) > -1) {
+              comment.author = {
+                firstName: CODER_BOT_USER_FNAME,
+                lastName: CODER_BOT_USER_LNAME
+              }
+            } else {
+              comment.author = _.find(allMembers, mem => mem.userId === comment.userId)
             }
-          } else {
-            message.author = _.find(allMembers, mem => mem.userId === message.userId)
-          }
-        })
+          })
+          // -1 for the first post which is actual treated as body of the feed
+          item.totalComments = item.totalPosts - 1
+          item.hasMoreMessages = item.messages.length < item.totalComments
+        }
 
         // reset newMessage property
         item.newMessage = ''
@@ -113,15 +122,21 @@ class MessagesContainer extends React.Component {
 
   // this method is not ready yet, however, it is not used right now because messaging
   // api is not supporting paging yet
-  onLoadMoreMessages() {
+  onLoadMoreMessages(thread) {
     const { threads, activeThreadId } = this.state
-    const thread = _.find(threads, thread => thread.id === activeThreadId)
-    if (thread.posts && thread.posts.length < thread.totalComments) {
-      const loadFromIndex = thread.posts.length
-      this.setState(update(this.state, {
-        loadingFeedComments: { feedId : { $set : true}}
-      }))
-      this.props.loadFeedComments(activeThreadId, loadFromIndex)
+    const renderedMessages = thread.messages.length
+    const availableMessages = thread.posts.length - 1
+    if (renderedMessages < availableMessages) {
+      const nextPage = thread.posts.slice(-renderedMessages-THREAD_MESSAGES_PAGE_SIZE, -renderedMessages)
+      thread.messages = nextPage.concat(thread.messages)
+      thread.hasMoreMessages = thread.messages.length < thread.totalComments
+      this.forceUpdate()
+    } else {
+      if (thread.messages && thread.messages.length < thread.totalComments) {
+        const commentIds = thread.postIds.slice(-renderedMessages-THREAD_MESSAGES_PAGE_SIZE, -renderedMessages)
+
+        this.props.loadFeedComments(thread.id, PROJECT_FEED_TYPE_MESSAGES, commentIds)
+      }
     }
   }
 
@@ -168,7 +183,7 @@ class MessagesContainer extends React.Component {
           <MessageDetails
             {...activeThread}
             allowAddingComment={ activeThread.allowComments && !!currentMemberRole }
-            onLoadMoreMessages={this.onLoadMoreMessages}
+            onLoadMoreMessages={this.onLoadMoreMessages.bind(this, activeThread)}
             onNewMessageChange={this.onNewMessageChange}
             onAddNewMessage={ this.onAddNewMessage.bind(this, activeThread.id) }
             currentUser={currentUser}

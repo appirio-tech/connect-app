@@ -1,9 +1,10 @@
 import React, {PropTypes} from 'react'
+import cn from 'classnames'
 
-const BtnSeparator = ({children, onClick}) => (
+const BtnSeparator = ({children, onClick, isLoadingComments}) => (
   <div>
     <div className="card-body comment-section">
-      <div className="comment-collapse">
+      <div className={cn("comment-collapse", {'loading-comments': isLoadingComments})}>
         <a href="javascript:" onClick={onClick} className="comment-collapse-button">
           {children}
         </a>

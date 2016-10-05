@@ -29,8 +29,8 @@ const strip = (html) => {
 }
 
 const MessageRow = ({title, messages, isActive, unreadCount, onClick}) => {
-  const lastMessage = messages[messages.length - 1]
-  const excerpt = strip(lastMessage.content).split(' ').slice(0, 15).join(' ')
+  const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null
+  const excerpt = lastMessage ? strip(lastMessage.content).split(' ').slice(0, 15).join(' ') : 'Loading...'
 
   return (<div className={cn('message', {active: isActive})} onClick={onClick}>
     <div className="message-body">
@@ -43,7 +43,7 @@ const MessageRow = ({title, messages, isActive, unreadCount, onClick}) => {
     </div>
     <div className="message-time">
       {unreadCount > 0 && <div className="badge">{unreadCount}</div>}
-      {(!unreadCount && lastMessage.date) && formatTime(lastMessage.date)}
+      {(!unreadCount && lastMessage && lastMessage.date) && formatTime(lastMessage.date)}
     </div>
   </div>)
 }

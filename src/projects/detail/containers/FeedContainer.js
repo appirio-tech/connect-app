@@ -70,8 +70,6 @@ class FeedContainer extends React.Component {
           item.comments = []
           this.props.loadFeedComments(item.id, PROJECT_FEED_TYPE_PRIMARY, commentIds)
         } else {
-
-          // item.html = item.posts.length > 0 ? item.posts[0].body : null
           item.comments = item.posts// ? item.posts.slice(-FEED_COMMENTS_PAGE_SIZE).filter((post) => post.type === 'post') : []
           item.posts.forEach((comment) => {
             comment.content = comment.body
