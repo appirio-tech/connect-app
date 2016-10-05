@@ -22,12 +22,12 @@ class AddLink extends React.Component {
         <Modal.Body>
           <div className="form-group">
             <label className="tc-label">Title</label>
-            <input className="tc-file-field__inputs" ref="title" type="text" placeholder="Awesome Title"/>
+            <input className="tc-file-field__inputs" ref="title" required type="text" placeholder="Awesome Title"/>
           </div>
 
           <div className="form-group">
             <label className="tc-label">Address</label>
-            <input className="tc-file-field__inputs" ref="address" type="text" placeholder="https://www.topcoder.com/example"/>
+            <input className="tc-file-field__inputs" ref="address" required type="text" placeholder="https://www.topcoder.com/example"/>
           </div>
 
           <div className="button-area center-buttons">

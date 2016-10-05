@@ -7,7 +7,14 @@ import { projectSuggestions, loadProjects } from '../../projects/actions/loadPro
 import TopBar from './TopBar'
 import CreateView from '../../projects/create/components/CreateView'
 import { TCEmitter } from '../../helpers'
-import {ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, EVENT_ROUTE_CHANGE} from '../../config/constants'
+import {
+  ROLE_CONNECT_COPILOT,
+  ROLE_CONNECT_MANAGER,
+  ROLE_ADMINISTRATOR,
+  EVENT_ROUTE_CHANGE,
+  ACCOUNTS_APP_LOGIN_URL,
+  ACCOUNTS_APP_REGISTER_URL
+} from '../../config/constants'
 
 class TopBarContainer extends React.Component {
 
@@ -47,6 +54,8 @@ class TopBarContainer extends React.Component {
 
   applyFilters(filter) {
     const criteria = _.assign({}, this.props.criteria, filter)
+    if (criteria && criteria.name)
+      criteria.name = encodeURIComponent(criteria.name)
     this.routeWithParams(criteria, 1)
   }
 
@@ -63,6 +72,9 @@ class TopBarContainer extends React.Component {
   render() {
     const {isCreatingProject, currentPath} = this.state
     const isProjectDetails = /projects\/\d+/.test(currentPath)
+    const isHomePage = this.context.router.isActive('/', true)
+    const loginUrl = ACCOUNTS_APP_LOGIN_URL
+    const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
     return (
       <div>
         <Modal
@@ -81,6 +93,8 @@ class TopBarContainer extends React.Component {
           isProjectDetails={isProjectDetails}
           applyFilters={this.applyFilters}
           onNewProjectIntent={ this.showCreateProjectDialog }
+          loginUrl={loginUrl}
+          registerUrl={registerUrl}
         />
       </div>
     )

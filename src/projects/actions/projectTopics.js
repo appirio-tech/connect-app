@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { getTopics, getTopicPosts, createTopic, addTopicPost } from '../../api/messages'
-import { 
+import {
   LOAD_PROJECT_FEEDS,
   CREATE_PROJECT_FEED,
   LOAD_PROJECT_FEED_COMMENTS,
@@ -42,7 +42,7 @@ const getDashboardFeedsWithMembers = (dispatch, projectId) => {
       _.remove(userIds, i => !i || i === 'system')
       // return if there are no userIds to retrieve, empty result set
       if (!userIds.length)
-        resolve(true)
+        resolve(value)
       return dispatch(loadMembers(userIds))
         .then(() => resolve(value))
         .catch(err => reject(err))
@@ -68,11 +68,15 @@ export function createProjectTopic(projectId, topic) {
   }
 }
 
-export function loadFeedComments(feedId, fromIndex) {
+export function loadFeedComments(feedId, tag, fromIndex) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_PROJECT_FEED_COMMENTS,
-      payload: getTopicPosts(feedId, fromIndex)
+      payload: getTopicPosts(feedId, fromIndex),
+      meta: {
+        topicId: feedId,
+        tag
+      }
     })
   }
 }

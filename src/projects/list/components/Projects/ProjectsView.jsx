@@ -33,7 +33,7 @@ require('./ProjectsView.scss')
 
 /*eslint-disable quote-props */
 const projectTypeMap = {
-  'generic': 'Work project',
+  'generic': 'Work Project',
   'visual_design': 'Design',
   'visual_prototype': 'Design & Prototype',
   'app_dev': 'Full App'
@@ -105,9 +105,9 @@ const ProjectsView = props => {
         )
       }
     }, {
-      id: 'status-date',
-      headerLabel: 'Status Date',
-      sortable: false,
+      id: 'updatedAt',
+      headerLabel: 'Last Updated',
+      sortable: true,
       classes: 'item-status-date width9',
       renderText: item => {
         const classes = classNames('txt-normal', {

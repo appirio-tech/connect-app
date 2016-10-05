@@ -53,7 +53,7 @@ const TeamManagement = (props) => {
   return (
     <div className="team-management">
       <Panel className={cn({'modal-active': modalActive})}>
-        {currentMember && <Panel.AddBtn onClick={() => onToggleAddTeamMember(true)}>Create New Link</Panel.AddBtn>}
+        {currentMember && <Panel.AddBtn onClick={() => onToggleAddTeamMember(true)}>Add Team Member</Panel.AddBtn>}
 
         {modalActive && <div className="modal-overlay" />}
         <Panel.Title>

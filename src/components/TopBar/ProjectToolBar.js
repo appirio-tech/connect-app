@@ -80,7 +80,7 @@ class ProjectToolBar extends React.Component {
                     TODO: Enable again when challenges link is needed.
                     isPowerUser && <li><Link {...getLinkProps(`/projects/${project.id}/challenges`)}><i className="icon-challenges"/>Challenges</Link></li>
                   */}
-                  <li><Link {...getLinkProps(`/projects/${project.id}/messages`)}><i className="icon-messages"/>Messages</Link></li>
+                  <li><Link {...getLinkProps(`/projects/${project.id}/discussions`)}><i className="icon-messages"/>Discussions</Link></li>
                 </ul>
               </nav>}
               {avatar}

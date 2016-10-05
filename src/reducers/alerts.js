@@ -13,7 +13,10 @@ import {
   // project Members
   ADD_PROJECT_MEMBER_SUCCESS, ADD_PROJECT_MEMBER_FAILURE,
   UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
-  REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE
+  REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
+  // project feeds
+  CREATE_PROJECT_FEED_FAILURE,
+  CREATE_PROJECT_FEED_COMMENT_FAILURE
 } from '../config/constants'
 /* eslint-enable no-unused-vars */
 
@@ -48,6 +51,8 @@ export default function(state = {}, action) {
   case ADD_PROJECT_MEMBER_FAILURE:
   case UPDATE_PROJECT_MEMBER_FAILURE:
   case REMOVE_PROJECT_MEMBER_FAILURE:
+  case CREATE_PROJECT_FEED_COMMENT_FAILURE:
+  case CREATE_PROJECT_FEED_FAILURE:
     Alert.error('Whoops! we ran into a problem.<br/> Please try again later.')
     return state
   default:

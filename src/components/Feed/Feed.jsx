@@ -8,7 +8,7 @@ import { Avatar } from 'appirio-tech-react-components'
 
 const Feed = (props) => {
   const {
-    user, currentUser, title, date, html, totalComments, hasMoreComments, onLoadMoreComments, isLoadingMoreComments,
+    user, currentUser, title, date, html, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
     allowComments, comments, unread, children, onNewCommentChange, onAddNewComment, newComment, isAddingComment
   } = props
   let authorName = user.firstName
@@ -44,7 +44,7 @@ const Feed = (props) => {
         onChange={onNewCommentChange}
         onAdd={onAddNewComment}
         content={newComment}
-        isLoadingMoreComments={isLoadingMoreComments}
+        isLoadingComments={isLoadingComments}
         currentUser={currentUser}
         avatarUrl={currentUser.photoURL}
         comments={comments}

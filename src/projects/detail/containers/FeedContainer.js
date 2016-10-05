@@ -16,8 +16,15 @@ import NewPost from '../../../components/Feed/NewPost'
 import Feed from '../../../components/Feed/Feed'
 import ProjectSpecification from '../../../components/ProjectSpecification/ProjectSpecification'
 import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
-import update from 'react-addons-update'
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
+
+const FEED_COMMENTS_PAGE_SIZE = 3
+
+const SYSTEM_USER = {
+  firstName: CODER_BOT_USER_FNAME,
+  lastName: CODER_BOT_USER_LNAME,
+  photoURL: require('../../../assets/images/avatar-coder.png')
+}
 
 class FeedContainer extends React.Component {
 
@@ -30,7 +37,6 @@ class FeedContainer extends React.Component {
     this.init = this.init.bind(this)
 
     this.state = {
-      loadingFeedComments: { },
       feeds : []
     }
   }
@@ -44,41 +50,42 @@ class FeedContainer extends React.Component {
   }
 
   init(props) {
-    const { allMembers } = props
+    const { allMembers, feeds } = props
     this.setState({
-      feeds: props.feeds.map((feed) => {
+      feeds: feeds.map((feed) => {
         const item = { ...feed }
         item.user = _.find(allMembers, mem => mem.userId === item.userId)
+
+        if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(item.userId) > -1) {
+          item.user = SYSTEM_USER
+          item.allowComments = false
+        } else {
+          item.allowComments = true
+        }
         if (!item.user) {
           //TODO: throwing an error
           return null
         }
 
-        if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(item.userId) > -1) {
-          item.user = {
-            firstName: CODER_BOT_USER_FNAME,
-            lastName: CODER_BOT_USER_LNAME
-          }
-          item.allowComments = false
+        item.html = item.body
+        if (item.posts.length === 0 && item.postIds && !item.isLoadingComments) {
+          const commentIds = item.postIds.slice(-FEED_COMMENTS_PAGE_SIZE)
+          item.comments = []
+          this.props.loadFeedComments(item.id, PROJECT_FEED_TYPE_PRIMARY, commentIds)
         } else {
-          item.allowComments = true
-        }
-
-        item.html = item.posts.length > 0 ? item.posts[0].body : null
-        item.comments = item.posts ? item.posts.slice(1).filter((post) => post.type === 'post') : []
-        item.comments.forEach((comment) => {
-          comment.content = comment.body
-          if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(comment.userId) > -1) {
-            comment.author = {
-              firstName: CODER_BOT_USER_FNAME,
-              lastName: CODER_BOT_USER_LNAME
+          item.comments = item.posts
+          item.posts.forEach((comment) => {
+            comment.content = comment.body
+            if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(comment.userId) > -1) {
+              comment.author = SYSTEM_USER
+            } else {
+              comment.author = _.find(allMembers, mem => mem.userId === comment.userId)
             }
-          } else {
-            comment.author = _.find(allMembers, mem => mem.userId === comment.userId)
-          }
-        })
-        // -1 for the first post which is actual treated as body of the feed
-        item.totalComments = item.totalPosts - 1
+          })
+          // -1 for the first post which is actual treated as body of the feed
+          item.totalComments = item.totalPosts - 1
+          item.hasMoreComments = item.comments.length < item.totalComments
+        }
 
         // reset newComment property
         item.newComment = ''
@@ -114,13 +121,21 @@ class FeedContainer extends React.Component {
 
   onLoadMoreComments(feedId) {
     const { feeds } = this.state
-    const feed = _.find(feeds, feed => feed.id === feedId)
-    if (feed.posts && feed.posts.length < feed.totalComments) {
-      const loadFromIndex = feed.posts.length
-      this.setState(update(this.state, {
-        loadingFeedComments: { feedId : { $set : true}}
-      }))
-      this.props.loadFeedComments(feedId, loadFromIndex)
+    const feedIndex = _.findIndex(feeds, feed => feed.id === feedId)
+    const feed = feeds[feedIndex]
+    const renderedComments = feed.comments.length
+    const availableComments = feed.posts.length - 1
+    if (renderedComments < availableComments) {
+      const nextPage = feed.posts.slice(-renderedComments-FEED_COMMENTS_PAGE_SIZE, -renderedComments)
+      feed.comments = nextPage.concat(feed.comments)
+      feed.hasMoreComments = feed.comments.length < feed.totalComments
+      this.forceUpdate()
+    } else {
+      if (feed.comments && feed.comments.length < feed.totalComments) {
+        const commentIds = feed.postIds.slice(-renderedComments-FEED_COMMENTS_PAGE_SIZE, -renderedComments)
+
+        this.props.loadFeedComments(feedId, PROJECT_FEED_TYPE_PRIMARY, commentIds)
+      }
     }
   }
 
@@ -136,7 +151,7 @@ class FeedContainer extends React.Component {
 
   render() {
     const {currentUser, project, currentMemberRole, isLoading, isCreatingFeed } = this.props
-    const { loadingFeedComments, feeds } = this.state
+    const { feeds } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
     const renderComposer = currentMemberRole === PROJECT_ROLE_COPILOT || currentMemberRole === PROJECT_ROLE_MANAGER
 
@@ -150,8 +165,7 @@ class FeedContainer extends React.Component {
           <Feed
             {...item}
             allowComments={ item.allowComments && !!currentMemberRole}
-            currentUser={currentUser.profile}
-            isLoadingMoreComments={ loadingFeedComments[item.id] }
+            currentUser={currentUser}
             onNewCommentChange={this.onNewCommentChange.bind(this, item.id)}
             onAddNewComment={this.onAddNewComment.bind(this, item.id)}
             onLoadMoreComments={this.onLoadMoreComments.bind(this, item.id)}
@@ -166,7 +180,15 @@ class FeedContainer extends React.Component {
     }
     return (
       <div>
-        { renderComposer && <NewPost currentUser={currentUser.profile} onPost={this.onNewPost} isCreating={ isCreatingFeed } /> }
+        { renderComposer &&
+          <NewPost
+            currentUser={currentUser}
+            onPost={this.onNewPost}
+            isCreating={ isCreatingFeed }
+            heading="NEW STATUS POST"
+            titlePlaceholder="Share the latest project updates with the team"
+          />
+        }
         { !isLoading && feeds.map(renderFeed) }
         { isLoading && <LoadingIndicator />}
       </div>

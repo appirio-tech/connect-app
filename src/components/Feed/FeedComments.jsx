@@ -17,12 +17,17 @@ const getCommentCount = (totalComments) => {
 
 const FeedComments = (props) => {
   const {
-    comments, currentUser, totalComments, onLoadMoreComments, isLoadingMoreComments, hasMoreComments, onAdd,
+    comments, currentUser, totalComments, onLoadMoreComments, isLoadingComments, hasMoreComments, onAdd,
     onChange, content, avatarUrl, isAddingComment
   } = props
   let authorName = currentUser.firstName
   if (authorName && currentUser.lastName) {
     authorName += ' ' + currentUser.lastName
+  }
+  const handleLoadMoreClick = () => {
+    if (!isLoadingComments) {
+      onLoadMoreComments()
+    }
   }
   return (
     <div>
@@ -34,9 +39,9 @@ const FeedComments = (props) => {
               {getCommentCount(totalComments)}
             </div>
             <hr className={cn({'no-margin': !comments.length})} />
-            {hasMoreComments && <div className="comment-collapse">
-              <a href="javascript:" onClick={onLoadMoreComments} className="comment-collapse-button">
-                {isLoadingMoreComments ? 'Loading...' : 'View older comments'}
+            {hasMoreComments && <div className={cn('comment-collapse', {'loading-comments': isLoadingComments})}>
+              <a href="javascript:" onClick={ handleLoadMoreClick } className="comment-collapse-button">
+                {isLoadingComments ? 'Loading...' : 'View older comments'}
               </a>
             </div>}
           </div>

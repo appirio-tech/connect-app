@@ -2,14 +2,8 @@ import React from 'react'
 import ProjectInfoContainer from './containers/ProjectInfoContainer'
 import FeedContainer from './containers/FeedContainer'
 import Sticky from 'react-stickynode'
-import spinnerWhileLoading from '../../components/LoadingSpinner'
 
 require('./Dashboard.scss')
-
-// TODO right now spinner HOC is not working for loading icon in feeds section
-// hence directly using the LoadingIndicator component in FeedContainer
-const spinner = spinnerWhileLoading(props => !props.isLoading)
-const EnhancedFeedContainer = spinner(FeedContainer)
 
 const Dashboard = ({project, currentMemberRole}) => (
   <div>
@@ -22,7 +16,7 @@ const Dashboard = ({project, currentMemberRole}) => (
         </Sticky>
       </div>
       <div className="right-area">
-        <EnhancedFeedContainer currentMemberRole={currentMemberRole} project={project} />
+        <FeedContainer currentMemberRole={currentMemberRole} project={project} />
       </div>
     </div>
   </div>
