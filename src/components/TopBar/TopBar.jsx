@@ -59,7 +59,7 @@ class TopBar extends Component {
   render() {
     const {
       userHandle, userImage, userName, domain, criteria, onNewProjectIntent, applyFilters, isProjectDetails, project,
-      isPowerUser
+      isPowerUser, loginUrl, registerUrl
     } = this.props
     const {isFilterVisible} = this.state
     const homePageUrl = window.location.protocol + '//' + window.location.hostname
@@ -86,7 +86,16 @@ class TopBar extends Component {
         <div className="avatar-info">
           <div className="links-section">
             <div className="menu-wrap" onClick={this.handleMobileClick}>
-              <UserDropdown userName={ userName } userHandle={userHandle} userImage={userImage} domain={domain} menuItems={ userMenuItems } forReactRouter/>
+              <UserDropdown
+                userName={ userName }
+                userHandle={userHandle}
+                userImage={userImage}
+                domain={domain}
+                menuItems={ userMenuItems }
+                loginUrl={ loginUrl }
+                registerUrl={ registerUrl }
+                forReactRouter
+              />
             </div>
           </div>
         </div>

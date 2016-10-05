@@ -117,7 +117,7 @@ class NewPost extends React.Component {
   }
 
   render() {
-    const {currentUser} = this.props
+    const {currentUser, heading, titlePlaceholder} = this.props
     const {editorState} = this.state
     const currentStyle = editorState.getCurrentInlineStyle()
     const selection = editorState.getSelection()
@@ -160,7 +160,7 @@ class NewPost extends React.Component {
          handled in onClickOutside handler */}
         <a href="javascript:" className="btn-close" />
         <div className="modal-title title-muted">
-          NEW STATUS POST
+          { heading || 'NEW STATUS POST' } 
         </div>
         <div className="modal-row">
           <div className="portrait">
@@ -171,7 +171,7 @@ class NewPost extends React.Component {
               ref="title"
               className="new-post-title"
               type="text"
-              placeholder="Share the latest project updates with the team"
+              placeholder={ titlePlaceholder || 'Title of the post'}
             />
             <div className="draftjs-editor tc-textarea">
               <Editor

@@ -52,7 +52,7 @@ const MessageRow = ({title, messages, isActive, unreadCount, onClick}) => {
 const MessageList = ({threads, onSelect, onAdd, showAddButton, showEmptyState}) => (
   <Panel className="message-list">
     <Panel.Title>
-      Messages
+      Discussions
       { showAddButton && <Panel.AddBtn onClick={onAdd} /> }
     </Panel.Title>
     <div className="panel-messages">

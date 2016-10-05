@@ -15,6 +15,7 @@ import {
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME
 } from '../../../config/constants'
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 
 const THREAD_MESSAGES_PAGE_SIZE = 3
 
@@ -166,9 +167,11 @@ class MessagesContainer extends React.Component {
 
   render() {
     const {threads, isCreateNewMessage, showEmptyState} = this.state
-    const { currentUser, isCreatingFeed, currentMemberRole } = this.props
-    const activeThread = threads.filter((item) => item.isActive)[0]
+    const { currentUser, isCreatingFeed, currentMemberRole, isLoading } = this.props
+    if (isLoading)
+      return <LoadingIndicator />
 
+    const activeThread = threads.filter((item) => item.isActive)[0]
     const renderRightPanel = () => {
       if (!!currentMemberRole && (isCreateNewMessage || !threads.length)) {
         return (
@@ -176,6 +179,8 @@ class MessagesContainer extends React.Component {
             currentUser={currentUser}
             onPost={this.onNewThread}
             isCreating={isCreatingFeed}
+            heading='New Discussion Post'
+            titlePlaceholder='Start a new discussion topic with the team'
           />
         )
       } else if (activeThread) {
