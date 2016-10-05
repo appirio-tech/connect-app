@@ -164,6 +164,8 @@ class MessagesContainer extends React.Component {
             currentUser={currentUser}
             onPost={this.onNewThread}
             isCreating={isCreatingFeed}
+            heading='New Discussion Post'
+            titlePlaceholder='Start a new discussion topic with the team'
           />
         )
       } else if (activeThread) {
