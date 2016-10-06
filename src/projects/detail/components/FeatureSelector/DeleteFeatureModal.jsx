@@ -1,6 +1,9 @@
 import React, {PropTypes} from 'react'
 
 const DeleteFeatureModal = ({ feature, onCancel, onConfirm }) => {
+  const deleteFeature = () => {
+    onConfirm(feature)
+  }
   return (
     <div className="modal">
       <div className="modal-title danger flex center">
@@ -13,7 +16,7 @@ const DeleteFeatureModal = ({ feature, onCancel, onConfirm }) => {
 
         <div className="button-area flex center">
           <button className="tc-btn tc-btn-default tc-btn-sm btn-cancel" onClick={onCancel}>Cancel</button>
-          <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={onConfirm}>Delete Custom Feature</button>
+          <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={ deleteFeature }>Delete Custom Feature</button>
         </div>
       </div>
     </div>

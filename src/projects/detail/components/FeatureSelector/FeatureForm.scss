@@ -17,6 +17,8 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 4 * $base-unit;
+    padding-bottom: 2 * $base-unit;
+    border-bottom: 1px solid $tc-gray-10;
     
     .title {
       @include tc-heading;
@@ -26,9 +28,33 @@
       color: $tc-black;
       white-space: nowrap;
     }
+
+    .separator {
+      width: 1px;
+      height: 25px;
+      background-color: $tc-gray-10;
+      margin: 0px 2 * $base-unit;
+    }
+
+    .feature-actions {
+      display: flex;
+      align-items: center;
+
+      .feature-edit-action {
+        margin-right: 2 * $base-unit;
+        fill: $tc-gray-40;
+        height: 16px;
+      }
+
+      .feature-delete-action {
+        fill: $tc-gray-40;
+        height: 16px;
+      }
+    }
   }
 
   .feature-form-content {
+
     .feature-description {
       @include roboto;
       font-size: $tc-body-md;
