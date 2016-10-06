@@ -84,7 +84,7 @@ class CustomFeatureForm extends Component {
   }
 
   render() {
-    const { isEdittable, onCancel, featureData } = this.props
+    const { isEdittable, onCancel } = this.props
     const { data, isAdded, editMode, isActive, showDeleteModal } = this.state
     const _debouncedOnChange = _.debounce(this.onChange, 2000, { trailing: true, maxWait: 10000 })
     const formClasses = cn('feature-form', {
