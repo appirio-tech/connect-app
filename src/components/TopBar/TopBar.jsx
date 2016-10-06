@@ -8,7 +8,7 @@ const { ConnectLogo } = Icons
 import { SearchBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import ProjectToolBar from './ProjectToolBar'
-import Sticky from 'react-stickynode'
+// import Sticky from 'react-stickynode'
 
 
 class TopBar extends Component {
@@ -50,10 +50,19 @@ class TopBar extends Component {
 
   toggleFilter() {
     const {isFilterVisible} = this.state
+    const topSpace = document.getElementById('wrapper-main').style
+
+    // wrapperMarginTop === '60px' ? (wrapperMarginTop = '120px') : (wrapperMarginTop = '60px')
+
     this.setState({isFilterVisible: !isFilterVisible}, () => {
+      
+      // FIXME: dynamically push the main wrapper padding top to accomodate space; this is hacky
+      topSpace.paddingTop === '120px' ? (topSpace.paddingTop = '60px') : (topSpace.paddingTop = '120px')
+      
       // sticky must be re-calculated, because we change the height of the component (toggle filters component)
       this.forceUpdate()
     })
+
   }
 
   render() {
@@ -107,7 +116,7 @@ class TopBar extends Component {
     }
 
     return (
-      <Sticky>
+      // <Sticky>
         <div className="tc-header tc-header__connect">
           <div className="top-bar">
             {logo}
@@ -140,7 +149,7 @@ class TopBar extends Component {
             />
           }
         </div>
-      </Sticky>
+      // </Sticky>
     )
   }
 }

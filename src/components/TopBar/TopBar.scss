@@ -6,26 +6,34 @@ $tc-rgba-10: rgba(71,71,79,0.38);
 $tc-rgba-20: rgba(0,0,0,0.17);
 $tc-body-large     		: 20px;
 
-.sticky-inner-wrapper {
-  z-index: 15;
-}
+// .sticky-inner-wrapper {
+//   z-index: 15;
+// }
 
-.container .sticky-inner-wrapper,
-.dashboard-container .sticky-inner-wrapper {
-  z-index: 14;
-}
+// .container .sticky-inner-wrapper,
+// .dashboard-container .sticky-inner-wrapper {
+//   z-index: 14;
+// }
 
-.tc-header{
+.tc-header {
   height: 60px;
-  background: $tc-gray-neutral-light;
+  // background: $tc-gray-neutral-light;
   line-height: 60px;
+  height: 60px;
+  background-color: $tc-black;
   z-index: 100;
   padding: 0 20px;
-  .logo-wrapper{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  .logo-wrapper {
     width: 60px;
     height: 60px;
     flex-shrink: 0;
-    .logo{
+
+    .logo {
       display: inline-block;
       position: relative;
       margin-top: 12px;
@@ -33,6 +41,7 @@ $tc-body-large     		: 20px;
       height: 36px;
     }
   }
+
   .UserDropdownMenu {
     padding: 0;
     display: flex;
@@ -48,18 +57,23 @@ $tc-body-large     		: 20px;
     padding: 0;
     min-height: 60px;
     height: auto;
-    .top-bar{
+
+    .top-bar {
       height: 60px;
       background-color: $tc-black;
       padding: 0 20px;
       position: relative;
       text-align: center;
+      display: flex;
+      
       .logo-wrapper {
-        position: absolute;
-        left: 20px;
-        top: 0;
-        z-index:2;
+        // position: absolute;
+        // left: 20px;
+        // top: 0;
+        // z-index:2;
+
       }
+
       .search-bar{
         margin: 0 auto;
         width: 585px;
@@ -107,10 +121,10 @@ $tc-body-large     		: 20px;
         }
       }
       .welcome-info{
-        position: absolute;
-        right: 20px;
-        top: 0;
-        z-index:2;
+        // position: absolute;
+        // right: 20px;
+        // top: 0;
+        // z-index:2;
         height: 60px;
         font-size: 13px;
         color: $tc-gray-50;
@@ -449,7 +463,7 @@ $tc-body-large     		: 20px;
 
 
 
-@media all and (max-width: 1240px) {
+@media all and (max-width: 1023px) {
   .tc-header{
     &.tc-header__connect{
       .top-bar .search-bar{

@@ -32,8 +32,8 @@ const Layout = (props) => {
           userName={ userName }
           domain={ DOMAIN }
         />
-        <Alert stack={{limit: 3, spacing: 30}} position="top" html timeout={4000} offset={50} />
-        <div className="main-wrapper">
+        <Alert stack={{limit: 3, spacing: 30}} position="top" html timeout={4000} offset={0} />
+        <div className="main-wrapper" id="wrapper-main">
           { props.children }
         </div>
         <Footer domain={ DOMAIN } />

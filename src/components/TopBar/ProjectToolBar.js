@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import {Link} from 'react-router'
 import ReactDOM from 'react-dom'
-import Sticky from 'react-stickynode'
+// import Sticky from 'react-stickynode'
 
 
 function isEllipsisActive(el) {
@@ -60,7 +60,7 @@ class ProjectToolBar extends React.Component {
     })
 
     return (
-      <Sticky>
+      // <Sticky>
         <div className="tc-header tc-header__connect-project">
           <div className="top-bar">
             <div className="bar-column">
@@ -87,7 +87,7 @@ class ProjectToolBar extends React.Component {
             </div>
           </div>
         </div>
-      </Sticky>
+      // </Sticky>
     )
   }
 }
