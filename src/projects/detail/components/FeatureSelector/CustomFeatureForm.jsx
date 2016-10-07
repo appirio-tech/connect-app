@@ -73,14 +73,14 @@ class CustomFeatureForm extends Component {
     this.setState({ editMode : false })
   }
 
-  onChange(fieldName, value) {
+  onChange(data){//fieldName, value) {
     const { featureData } = this.props
     // following check is needed to prevent adding the feature again after removing
     // because forms' onChange event gets fire with only form data when we lose focus from the form
     // alternative to this check is to put the change handler on textarea instead of form
     if (featureData) {// feature is already added
-      const data = {}
-      data[fieldName] = value
+      // const data = {}
+      // data[fieldName] = value
       this.props.updateFeature(_.merge({}, featureData, data))
     }
   }
@@ -114,7 +114,7 @@ class CustomFeatureForm extends Component {
           </div>
         }
         <div className="feature-form-content">
-          <Formsy.Form className="custom-feature-form" disabled={!isEdittable} onValidSubmit={ this.onSave }>
+          <Formsy.Form className="custom-feature-form" disabled={!isEdittable} onChange={ this.onChange } onValidSubmit={ this.onSave }>
             { (!isAdded || editMode)  &&
               <TCFormFields.TextInput
                 name="title"
@@ -131,7 +131,6 @@ class CustomFeatureForm extends Component {
                 label="Feature Notes"
                 wrapperClass="feature-notes"
                 value={ _.get(data, 'notes', '') }
-                onChange={ this.onChange }
               />
               : null
             }
