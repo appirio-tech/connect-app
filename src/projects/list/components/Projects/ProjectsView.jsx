@@ -153,7 +153,7 @@ const ProjectsView = props => {
     }, {
       id: 'price',
       headerLabel: 'Price',
-      sortable: true,
+      sortable: false,
       classes: 'item-price width7',
       renderText: item => {
         let desc = ''

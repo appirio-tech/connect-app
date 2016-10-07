@@ -7,11 +7,11 @@ const UserWithName = ({ handle, firstName, lastName, photoURL, maxRating={rating
   const url = `//www.${DOMAIN}/members/${handle}/`
   return (
     <div className="user-block">
-      <a href={url} target="_blank" className="photo">
+      <a href={url} target="_blank" rel="noopener noreferrer" className="photo">
         <UserAvatar rating={maxRating.rating} showLevel={showLevel} photoURL={photoURL} />
       </a>
       <span className="txt-box">
-        <a href={url} target="_blank" className="link-black">{firstName} {lastName}</a>
+        <a href={url} target="_blank" rel="noopener noreferrer" className="link-black">{firstName} {lastName}</a>
         <span className="txt-gray">{handle}</span>
       </span>
     </div>

@@ -36,7 +36,7 @@ const sections = [
       {
         id: 'questions',
         required: true,
-        title: 'Questions and Specifications',
+        title: 'Questions',
         description: '',
         type: 'questions',
         questions: [

@@ -16,7 +16,7 @@ import NewPost from '../../../components/Feed/NewPost'
 import Feed from '../../../components/Feed/Feed'
 import ProjectSpecification from '../../../components/ProjectSpecification/ProjectSpecification'
 import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
-import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
+import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
 const FEED_COMMENTS_PAGE_SIZE = 3
 
@@ -25,8 +25,10 @@ const SYSTEM_USER = {
   lastName: CODER_BOT_USER_LNAME,
   photoURL: require('../../../assets/images/avatar-coder.png')
 }
+const isSystemUser = (userId) => [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(userId) > -1
 
-class FeedContainer extends React.Component {
+
+class FeedView extends React.Component {
 
   constructor(props) {
     super(props)
@@ -34,15 +36,11 @@ class FeedContainer extends React.Component {
     this.onNewCommentChange = this.onNewCommentChange.bind(this)
     this.onLoadMoreComments = this.onLoadMoreComments.bind(this)
     this.onAddNewComment = this.onAddNewComment.bind(this)
-    this.init = this.init.bind(this)
-
-    this.state = {
-      feeds : []
-    }
+    this.state = { feeds : [] }
   }
 
   componentWillMount() {
-    this.props.loadDashboardFeeds(this.props.project.id)
+    this.init(this.props)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,44 +51,34 @@ class FeedContainer extends React.Component {
     const { allMembers, feeds } = props
     this.setState({
       feeds: feeds.map((feed) => {
-        const item = { ...feed }
-        item.user = _.find(allMembers, mem => mem.userId === item.userId)
-
-        if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(item.userId) > -1) {
+        const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds'])
+        if (isSystemUser(item.userId)) {
           item.user = SYSTEM_USER
           item.allowComments = false
         } else {
+          item.user = allMembers[item.userId]
           item.allowComments = true
         }
-        if (!item.user) {
-          //TODO: throwing an error
-          return null
-        }
-
-        item.html = item.body
-        if (item.posts.length === 0 && item.postIds && !item.isLoadingComments) {
-          const commentIds = item.postIds.slice(-FEED_COMMENTS_PAGE_SIZE)
-          item.comments = []
-          this.props.loadFeedComments(item.id, PROJECT_FEED_TYPE_PRIMARY, commentIds)
-        } else {
-          item.comments = item.posts
-          item.posts.forEach((comment) => {
-            comment.content = comment.body
-            if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(comment.userId) > -1) {
-              comment.author = SYSTEM_USER
-            } else {
-              comment.author = _.find(allMembers, mem => mem.userId === comment.userId)
+        item.unread = !feed.read
+        item.html = feed.posts[0].body
+        // skip over the first post since that is the topic post
+        item.totalComments = feed.totalPosts-1
+        item.comments = _.map(_.slice(feed.posts, 1), (p) => {
+          if (p.type === 'post') {
+            return {
+              content: p.body,
+              unread: !p.read,
+              date: p.date,
+              author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
             }
-          })
-          // -1 for the first post which is actual treated as body of the feed
-          item.totalComments = item.totalPosts - 1
-          item.hasMoreComments = item.comments.length < item.totalComments
-        }
-
-        // reset newComment property
+          } else {
+            item.totalComments--
+          }
+        }).filter(i => i)
         item.newComment = ''
+        item.hasMoreComments = false // FIXME
         return item
-      }).filter((item) => item)
+      }).filter(item => item)
     })
   }
 
@@ -100,9 +88,6 @@ class FeedContainer extends React.Component {
       title,
       body: content,
       tag: PROJECT_FEED_TYPE_PRIMARY
-      // userId: parseInt(currentUser.id),
-      // date: moment().format(),
-      // allowComments: true
     }
     this.props.createProjectTopic(project.id, newFeed)
   }
@@ -149,8 +134,8 @@ class FeedContainer extends React.Component {
     this.props.addFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, newComment)
   }
 
-  render() {
-    const {currentUser, project, currentMemberRole, isLoading, isCreatingFeed } = this.props
+  render () {
+    const {currentUser, project, currentMemberRole, isCreatingFeed } = this.props
     const { feeds } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
     const renderComposer = currentMemberRole === PROJECT_ROLE_COPILOT || currentMemberRole === PROJECT_ROLE_MANAGER
@@ -159,7 +144,6 @@ class FeedContainer extends React.Component {
       if ((item.spec || item.sendForReview) && !showDraftSpec) {
         return null
       }
-
       return (
         <div className="feed-action-card" key={item.id}>
           <Feed
@@ -189,27 +173,43 @@ class FeedContainer extends React.Component {
             titlePlaceholder="Share the latest project updates with the team"
           />
         }
-        { !isLoading && feeds.map(renderFeed) }
-        { isLoading && <LoadingIndicator />}
+        { feeds.map(renderFeed) }
       </div>
     )
   }
 }
+const enhance = spinnerWhileLoading(props => !props.isLoading)
+const EnhancedFeedView = enhance(FeedView)
 
 
-FeedContainer.propTypes = {
-  isLoading : PropTypes.bool.isRequired
+class FeedContainer extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
+  componentWillMount() {
+    this.props.loadDashboardFeeds(this.props.project.id)
+  }
+
+  render() {
+    return <EnhancedFeedView {...this.props} />
+  }
 }
 
+FeedContainer.PropTypes = {
+  currentMemberRole: PropTypes.string,
+  project: PropTypes.object.isRequired
+}
 
 const mapStateToProps = ({ projectTopics, members, loadUser }) => {
   return {
     currentUser    : loadUser.user,
-    feeds          : _.values(projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY]),
+    feeds          : projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
+    feedTotalCount : projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].totalCount,
     isLoading      : projectTopics.isLoading,
     isCreatingFeed : projectTopics.isCreatingFeed,
     error          : projectTopics.error,
-    allMembers     : _.values(members.members)
+    allMembers     : members.members
   }
 }
 const mapDispatchToProps = {
@@ -218,8 +218,5 @@ const mapDispatchToProps = {
   loadFeedComments,
   addFeedComment
 }
-
-// const enhance = spinnerWhileLoading(props => !props.isLoading)
-// const EnhancedFeedContainer = enhance(FeedContainer)
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedContainer)

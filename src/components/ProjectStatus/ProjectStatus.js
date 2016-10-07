@@ -71,7 +71,7 @@ class ProjectStatus extends React.Component {
         </div>
         {directLinks && <div className="project-direct-links">
           <ul>
-            {directLinks.map((link, i) => <li key={i}><a href={link.href} target="_blank">{link.name}</a></li>)}
+            {directLinks.map((link, i) => <li key={i}><a href={link.href} target="_blank" rel="noopener noreferrer">{link.name}</a></li>)}
           </ul>
         </div>}
       </PanelProject>

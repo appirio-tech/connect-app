@@ -5,11 +5,30 @@ import ActionCard from '../ActionCard/ActionCard'
 import BtnSeparator from '../ActionCard/BtnSeparator'
 import Comment from '../ActionCard/Comment'
 import AddComment from '../ActionCard/AddComment'
+import { THREAD_MESSAGES_PAGE_SIZE } from '../../config/constants'
 
-const MessageDetails = ({
+class MessageDetails extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.handleLoadMoreClick = this.handleLoadMoreClick.bind(this)
+    this.state = { showAll: false }
+  }
+
+  handleLoadMoreClick() {
+    this.setState({showAll: true})
+    // TODO - handle the case when a topic has more than 20 comments
+    // since those will have to retrieved from the server
+    // if (!isLoadingComments) {
+    //   onLoadMoreComments()
+    // }
+  }
+
+  render() {
+    const {
   title,
   messages,
-  onLoadMoreMessages,
+  // onLoadMoreMessages,
   hasMoreMessages,
   newMessage,
   onNewMessageChange,
@@ -17,21 +36,27 @@ const MessageDetails = ({
   isLoadingComments,
   currentUser,
   isAddingComment,
-  allowAddingComment}) =>  {
-  let authorName = currentUser.firstName
-  if (authorName && currentUser.lastName) {
-    authorName += ' ' + currentUser.lastName
-  }
-  return (
+  allowAddingComment} = this.props
+    let authorName = currentUser.firstName
+    if (authorName && currentUser.lastName) {
+      authorName += ' ' + currentUser.lastName
+    }
+    let _messages = messages
+    let _hasMoreMessages = hasMoreMessages
+    if (!this.state.showAll && _messages.length > THREAD_MESSAGES_PAGE_SIZE) {
+      _messages = _messages.slice(-THREAD_MESSAGES_PAGE_SIZE)
+      _hasMoreMessages = true
+    }
+    return (
     <ActionCard className="main-messaging">
       <ActionCard.Header title={title}>
-        {hasMoreMessages && <BtnSeparator onClick={onLoadMoreMessages} isLoadingComments={ isLoadingComments }>
+        {_hasMoreMessages && <BtnSeparator onClick={this.handleLoadMoreClick} isLoadingComments={ isLoadingComments }>
           {isLoadingComments ? 'Loading...' : 'Load earlier messages'}
         </BtnSeparator>}
       </ActionCard.Header>
-      {messages && messages.map((item) => 
+      {_messages && _messages.map((item, idx) =>
         <Comment
-          key={item.id}
+          key={idx}
           avatarUrl={item.author.photoURL}
           authorName={item.author.firstName + ' ' + item.author.lastName}
           date={moment(item.date).fromNow()}
@@ -41,7 +66,7 @@ const MessageDetails = ({
           <div dangerouslySetInnerHTML={{__html: item.content}} />
         </Comment>
       )}
-      
+
       { allowAddingComment &&
         <AddComment
           className="messaging-comment-section"
@@ -55,6 +80,7 @@ const MessageDetails = ({
       }
     </ActionCard>
   )
+  }
 }
 
 MessageDetails.propTypes = {

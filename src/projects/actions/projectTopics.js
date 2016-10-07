@@ -1,6 +1,8 @@
 import _ from 'lodash'
 import { getTopics, getTopicPosts, createTopic, addTopicPost } from '../../api/messages'
 import {
+  PROJECT_FEED_TYPE_PRIMARY,
+  PROJECT_FEED_TYPE_MESSAGES,
   LOAD_PROJECT_FEEDS,
   CREATE_PROJECT_FEED,
   LOAD_PROJECT_FEED_COMMENTS,
@@ -16,21 +18,35 @@ import { loadMembers } from '../../actions/members'
 
 
 export function loadDashboardFeeds(projectId) {
+  const tag = PROJECT_FEED_TYPE_PRIMARY
   return (dispatch) => {
     return dispatch({
       type: LOAD_PROJECT_FEEDS_MEMBERS,
-      payload: getDashboardFeedsWithMembers(dispatch, projectId)
+      payload: getProjectTopicsWithMember(dispatch, projectId, tag),
+      meta: { tag, projectId }
+    })
+  }
+}
+
+export function laodProjectMessages(projectId) {
+  const tag = PROJECT_FEED_TYPE_MESSAGES
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_PROJECT_FEEDS_MEMBERS,
+      payload: getProjectTopicsWithMember(dispatch, projectId, tag),
+      meta: { tag, projectId }
     })
   }
 }
 
 // ignore action param
 /*eslint-disable no-unused-vars */
-const getDashboardFeedsWithMembers = (dispatch, projectId) => {
+const getProjectTopicsWithMember = (dispatch, projectId, tag) => {
   return new Promise((resolve, reject) => {
     return dispatch({
       type: LOAD_PROJECT_FEEDS,
-      payload: getTopics({ reference : 'project', referenceId: projectId })
+      payload: getTopics({ reference : 'project', referenceId: projectId, tag }),
+      meta: { tag, projectId }
     })
     .then(({ value, action }) => {
       let userIds = []
