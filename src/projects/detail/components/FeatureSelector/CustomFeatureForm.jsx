@@ -65,7 +65,7 @@ class CustomFeatureForm extends Component {
       id: data.title.toLowerCase().replace(/\s/g, '_'),
       categoryId: 'custom',
       notes: ''
-    }, featureData, data))
+    }, featureData, { title : data.title.trim() }))
     // assumes addFeature to be a synchronous call, otherwise it could lead to inconsistent UI state 
     // e.g. if async addFeature fails, it would close the edit mode
     // this call is needed here because debounce call (for notes change) is closing the edit mode if
@@ -79,6 +79,8 @@ class CustomFeatureForm extends Component {
     // because forms' onChange event gets fire with only form data when we lose focus from the form
     // alternative to this check is to put the change handler on textarea instead of form
     if (featureData) {// feature is already added
+      // trim the notes (as of now only notes field is auto updated)
+      data.notes = data.notes.trim()
       this.props.updateFeature(_.merge({}, featureData, data))
     }
   }
@@ -117,7 +119,7 @@ class CustomFeatureForm extends Component {
               <TCFormFields.TextInput
                 name="title"
                 label="Feature name"
-                validations="minLength:1" required
+                validations="isRequired" required
                 validationError="Feature name is required"
                 wrapperClass="row"
                 value={ _.get(data, 'title', '') }

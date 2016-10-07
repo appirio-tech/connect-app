@@ -214,7 +214,6 @@ class FeaturePicker extends Component {
     this.removeFeature = this.removeFeature.bind(this)
     this.toggleFeature = this.toggleFeature.bind(this)
     this.selectFeature = this.selectFeature.bind(this)
-    this.toggleFeature = this.toggleFeature.bind(this)
     this.updateSelectedFeature = this.updateSelectedFeature.bind(this)
     this.renderCustomFeatureForm = this.renderCustomFeatureForm.bind(this)
     this.renderDefaultFeatureForm = this.renderDefaultFeatureForm.bind(this)
@@ -231,11 +230,6 @@ class FeaturePicker extends Component {
     this.setState({
       addingCustomFeature : this.state.addingCustomFeature && this.props.features.length === nextProps.features.length
     })
-  }
-
-  toggleFeature(featureId) {
-    const idx = _.findIndex(this.state.activeFeatureList, f => f.id === featureId)
-    idx > -1 ? this.removeFeature(featureId) : this.addFeature(featureId)
   }
 
   renderCustomFeatureForm() {

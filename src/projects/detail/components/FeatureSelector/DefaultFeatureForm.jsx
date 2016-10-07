@@ -50,6 +50,8 @@ class DefaultFeatureForm extends Component {
 
   onChange(data) {
     const { featureData } = this.props
+    // trim the notes (as of now only notes field is auto updated)
+    data.notes = data.notes.trim()
     this.props.updateFeature(_.merge({}, featureData, data))
   }
 
