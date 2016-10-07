@@ -8,7 +8,7 @@ import FooterV2 from '../../../components/FooterV2/FooterV2'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
-   DIRECT_PROJECT_URL/*, SALESFORCE_PROJECT_LEAD_LINK*/ } from '../../../config/constants'
+   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK } from '../../../config/constants'
 
 class ProjectInfoContainer extends React.Component {
 
@@ -81,8 +81,7 @@ class ProjectInfoContainer extends React.Component {
       if (project.directProjectId) {
         directLinks.push({name: 'Project in Topcoder Direct', href: `${DIRECT_PROJECT_URL}${project.directProjectId}`})
       }
-      // TODO waiting on @mdesiderio for salesforce link info
-      // directLinks.push({name: 'Salesforce Lead', href: `${SALESFORCE_PROJECT_LEAD_LINK}`})
+      directLinks.push({name: 'Salesforce Lead', href: `${SALESFORCE_PROJECT_LEAD_LINK}${project.id}`})
     }
 
     const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER

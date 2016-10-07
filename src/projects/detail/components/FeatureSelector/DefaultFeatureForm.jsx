@@ -32,11 +32,11 @@ class DefaultFeatureForm extends Component {
   }
 
   toggleFeature() {
-    const { removeFeature, addFeature, featureDesc, isEdittable } = this.props
+    const { toggleFeature, addFeature, featureDesc, isEdittable } = this.props
     if (isEdittable) {
       if (this.state.isActive) {
         // remove feature
-        removeFeature(featureDesc.id)
+        toggleFeature(featureDesc.id, true)
       } else {
         // add feature
         addFeature({
@@ -50,13 +50,15 @@ class DefaultFeatureForm extends Component {
 
   onChange(data) {
     const { featureData } = this.props
+    // trim the notes (as of now only notes field is auto updated)
+    data.notes = data.notes.trim()
     this.props.updateFeature(_.merge({}, featureData, data))
   }
 
   render() {
     const { featureDesc, featureData, isEdittable } = this.props
     const { isActive } = this.state
-    const _debouncedOnChange = _.debounce(this.onChange, 2000, { trailing: true, maxWait: 10000 })
+    // const _debouncedOnChange = _.debounce(this.onChange, 2000, { trailing: true, maxWait: 10000 })
     return (
       <div className="feature-form">
         <div className="feature-title-row flex space-between">
@@ -72,7 +74,7 @@ class DefaultFeatureForm extends Component {
           <p className="feature-description">{ featureDesc.description }</p>
           {
             isActive ?
-              <Formsy.Form className="predefined-feature-form" disabled={!isEdittable} onChange={ _debouncedOnChange }>
+              <Formsy.Form className="predefined-feature-form" disabled={!isEdittable} onChange={ this.onChange }>
                 <TCFormFields.Textarea
                   name="notes"
                   wrapperClass="feature-notes"

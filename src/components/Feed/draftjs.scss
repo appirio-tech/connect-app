@@ -51,7 +51,7 @@
 }
 
 .public-DraftStyleDefault-ul,
-.public-DraftStyleDefault-ol {  
+.public-DraftStyleDefault-ol {
   margin: $base-unit*2 0 $base-unit*2 $base-unit*6
 }
 
@@ -75,7 +75,7 @@
     list-style-type: disc;
   }
   ol {
-    list-style-type: disc;
+    list-style-type: decimal;
   }
   blockquote {
     @include roboto-medium;

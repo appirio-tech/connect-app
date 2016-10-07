@@ -1,15 +1,14 @@
 import React, {PropTypes} from 'react'
 import {Editor, EditorState, RichUtils} from 'draft-js'
-import {stateToHTML} from 'draft-js-export-html'
+import {stateToMarkdown} from 'draft-js-export-markdown'
 import cn from 'classnames'
 import './draftjs.scss'
 import { Avatar } from 'appirio-tech-react-components'
-// import { Icons } from 'appirio-tech-react-components'
 
 const styles = [
   {className: 'bold', style: 'BOLD'},
-  {className: 'italic', style: 'ITALIC'},
-  {className: 'underline', style: 'UNDERLINE'}
+  {className: 'italic', style: 'ITALIC'}
+  // {className: 'underline', style: 'UNDERLINE'}
 ]
 
 const blocks = [
@@ -41,13 +40,13 @@ class NewPost extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {editorState: EditorState.createEmpty(), expandedEditor: false}
-    this.onChange = (editorState) => this.setState({editorState})
-
+    this.state = {editorState: EditorState.createEmpty(), expandedEditor: false, canSubmit: false}
+    this.onEditorChange = this.onEditorChange.bind(this)
     this.handleKeyCommand = this.handleKeyCommand.bind(this)
     this.toggleBlockType = this.toggleBlockType.bind(this)
     this.toggleInlineStyle = this.toggleInlineStyle.bind(this)
     this.onClickOutside = this.onClickOutside.bind(this)
+    this.onNewPostChange = this.onNewPostChange.bind(this)
   }
 
   componentDidMount() {
@@ -64,7 +63,7 @@ class NewPost extends React.Component {
     let isEditor = false
     let isCloseButton = false
     const title = this.refs.title.value
-    const content = stateToHTML(this.state.editorState.getCurrentContent())
+    const hasContent = this.state.editorState.getCurrentContent().hasText()
 
     do {
       if(currNode.className
@@ -87,7 +86,7 @@ class NewPost extends React.Component {
     // if any of title and content, is non empty, do not proceed
     if (!isEditor
       && !isCloseButton
-      && ((title && title.length > 0) || (content && content !== '<p><br></p>'))) {
+      && ((title && title.trim().length > 0) || hasContent)) {
       return
     }
 
@@ -102,23 +101,34 @@ class NewPost extends React.Component {
     const {editorState} = this.state
     const newState = RichUtils.handleKeyCommand(editorState, command)
     if (newState) {
-      this.onChange(newState)
+      this.onEditorChange(newState)
       return true
     }
     return false
   }
 
   toggleBlockType(blockType) {
-    this.onChange(RichUtils.toggleBlockType(this.state.editorState, blockType))
+    this.onEditorChange(RichUtils.toggleBlockType(this.state.editorState, blockType))
   }
 
   toggleInlineStyle(inlineStyle) {
-    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle))
+    this.onEditorChange(RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle))
+  }
+
+  onEditorChange(editorState) {
+    this.setState({editorState})
+    this.onNewPostChange()
+  }
+
+  onNewPostChange() {
+    this.setState({
+      canSubmit: !!this.refs.title.value.trim().length && this.state.editorState.getCurrentContent().hasText()
+    })
   }
 
   render() {
-    const {currentUser, heading, titlePlaceholder} = this.props
-    const {editorState} = this.state
+    const {currentUser, titlePlaceholder, isCreating} = this.props
+    const {editorState, canSubmit} = this.state
     const currentStyle = editorState.getCurrentInlineStyle()
     const selection = editorState.getSelection()
     let authorName = currentUser.firstName
@@ -137,7 +147,7 @@ class NewPost extends React.Component {
         return
       }
       const title = this.refs.title.value
-      const content = stateToHTML(editorState.getCurrentContent())
+      const content = stateToMarkdown(editorState.getCurrentContent())
       if (title && content) {
         this.props.onPost({title, content})
         this.setState({editorState: EditorState.createEmpty()})
@@ -159,9 +169,11 @@ class NewPost extends React.Component {
         {/* No need to handle click event of the close button as its already
          handled in onClickOutside handler */}
         <a href="javascript:" className="btn-close" />
+        {/*
         <div className="modal-title title-muted">
-          { heading || 'NEW STATUS POST' } 
+          { heading || 'NEW STATUS POST' }
         </div>
+        */}
         <div className="modal-row">
           <div className="portrait">
             <Avatar avatarUrl={ currentUser.photoURL } userName={ authorName } />
@@ -171,13 +183,14 @@ class NewPost extends React.Component {
               ref="title"
               className="new-post-title"
               type="text"
+              onChange={this.onNewPostChange}
               placeholder={ titlePlaceholder || 'Title of the post'}
             />
             <div className="draftjs-editor tc-textarea">
               <Editor
                 ref="editor"
                 editorState={editorState}
-                onChange={this.onChange}
+                onChange={this.onEditorChange}
                 handleKeyCommand={this.handleKeyCommand}
               />
               <div className="textarea-footer">
@@ -206,7 +219,7 @@ class NewPost extends React.Component {
                   {/*<div className="separator"/>
                   <button className="attach"/>*/}
                 </div>
-                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={onPost} disabled={ this.props.isCreating }>
+                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={onPost} disabled={isCreating || !canSubmit }>
                   { this.props.isCreating ? 'Posting...' : 'Post'  }
                 </button>
               </div>

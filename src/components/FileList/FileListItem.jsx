@@ -49,7 +49,7 @@ export default class FileListItem extends React.Component {
             <a href="javascript:" className="icon-close" onClick={onExitEdit}><CloseIcon /></a>
           </div>
         </div>
-        <textarea defaultValue={description} ref="desc" className="tc-textarea" />
+        <textarea defaultValue={description} ref="desc" maxLength={250} className="tc-textarea" />
       </div>
     )
   }
@@ -72,24 +72,15 @@ export default class FileListItem extends React.Component {
       </div>
     )
   }
-
-  getFileIcon(type) {
-    switch (type) {
-    case 'application/zip':
-    case 'applicatin/archive':
-      return <FileIcons.Gzip />
-    default:
-      return <FileIcons.Gzip /> // TODO add more
-    }
-  }
+  
   render() {
     const {isEditing} = this.state
-    const icon = this.getFileIcon(this.props.contentType)
+    // const Icon = this.getFileIcon(this.props.contentType)
 
     return (
       <div className="file-list-item">
         <div className="icon-col">
-          {icon}
+          <FileIcons.Default width={42} height={42}/>
         </div>
         <div className="content-col">
           {isEditing ? this.renderEditing() : this.renderReadOnly()}

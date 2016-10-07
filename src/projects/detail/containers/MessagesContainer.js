@@ -5,21 +5,27 @@ import MessageList from '../../../components/MessageList/MessageList'
 import MessagingEmptyState from '../../../components/MessageList/MessagingEmptyState'
 import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
-import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
+import { laodProjectMessages, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
 import Sticky from 'react-stickynode'
-// import update from 'react-addons-update'
+import spinnerWhileLoading from '../../../components/LoadingSpinner'
+
 import {
+  THREAD_MESSAGES_PAGE_SIZE,
   PROJECT_FEED_TYPE_MESSAGES,
   DISCOURSE_BOT_USERID,
   CODER_BOT_USERID,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME
 } from '../../../config/constants'
-import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 
-const THREAD_MESSAGES_PAGE_SIZE = 3
+const SYSTEM_USER = {
+  firstName: CODER_BOT_USER_FNAME,
+  lastName: CODER_BOT_USER_LNAME,
+  photoURL: require('../../../assets/images/avatar-coder.png')
+}
+const isSystemUser = (userId) => [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(userId) > -1
 
-class MessagesContainer extends React.Component {
+class MessagesView extends React.Component {
 
   constructor(props) {
     super(props)
@@ -32,9 +38,7 @@ class MessagesContainer extends React.Component {
   }
 
   componentWillMount() {
-    // if (!this.props.threads) {
-    this.props.loadDashboardFeeds(this.props.project.id)
-    // }
+    this.init(this.props)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -49,45 +53,36 @@ class MessagesContainer extends React.Component {
       : 0
     this.setState({
       threads: props.threads.map((thread, idx) => {
-        const item = { ...thread, isActive : idx === activeThreadIndex }
-        if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(item.userId) > -1) {
-          item.user = {
-            firstName: CODER_BOT_USER_FNAME,
-            lastName: CODER_BOT_USER_LNAME
-          }
+        const item = _.pick(thread, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds'])
+        item.isActive = idx === activeThreadIndex
+        if (isSystemUser(item.userId)) {
+          item.user = SYSTEM_USER
           item.allowComments = false
         } else {
+          item.user = allMembers[item.userId]
           item.allowComments = true
-          item.user = _.find(allMembers, mem => mem.userId === item.userId)
         }
 
-        item.html = item.body
-        if (item.posts.length === 0 && item.postIds && !item.isLoadingComments) {
-          const commentIds = item.postIds.slice(-THREAD_MESSAGES_PAGE_SIZE)
-          item.messages = []
-          this.props.loadFeedComments(item.id, PROJECT_FEED_TYPE_MESSAGES, commentIds)
-        } else {
-          item.messages = item.posts
-          item.posts.forEach((comment) => {
-            comment.content = comment.body
-            if ([DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(comment.userId) > -1) {
-              comment.author = {
-                firstName: CODER_BOT_USER_FNAME,
-                lastName: CODER_BOT_USER_LNAME
-              }
-            } else {
-              comment.author = _.find(allMembers, mem => mem.userId === comment.userId)
+        item.unread = !thread.read
+        item.html = thread.posts[0].body
+        // skip over the first post since that is the topic post
+        item.totalComments = thread.totalPosts-1
+        item.messages = _.map(thread.posts, (p) => {
+          if (p.type === 'post') {
+            return {
+              content: p.body,
+              unread: !p.read,
+              date: p.date,
+              author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
             }
-          })
-          // -1 for the first post which is actual treated as body of the feed
-          item.totalComments = item.totalPosts - 1
-          item.hasMoreMessages = item.messages.length < item.totalComments
-        }
-
-        // reset newMessage property
+          } else {
+            item.totalComments--
+          }
+        }).filter(i => i)
         item.newMessage = ''
+        item.hasMoreMessages = false // FIXME
         return item
-      })
+      }).filter(item => item)
     })
   }
 
@@ -224,18 +219,35 @@ class MessagesContainer extends React.Component {
     )
   }
 }
+
+const enhance = spinnerWhileLoading(props => !props.isLoading)
+const EnhancedMessagesView = enhance(MessagesView)
+
+class MessagesContainer extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+  componentWillMount() {
+    this.props.laodProjectMessages(this.props.project.id)
+  }
+  render() {
+    return <EnhancedMessagesView {...this.props} />
+  }
+}
+
 const mapStateToProps = ({ projectTopics, members, loadUser }) => {
   return {
     currentUser: loadUser.user,
-    threads    : _.values(projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES]),
+    threads    : projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics,
+    threadTotalCount : projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].totalCount,
     isCreatingFeed : projectTopics.isCreatingFeed,
     isLoading  : projectTopics.isLoading,
     error      : projectTopics.error,
-    allMembers : _.values(members.members)
+    allMembers : members.members
   }
 }
 const mapDispatchToProps = {
-  loadDashboardFeeds,
+  laodProjectMessages,
   createProjectTopic,
   loadFeedComments,
   addFeedComment

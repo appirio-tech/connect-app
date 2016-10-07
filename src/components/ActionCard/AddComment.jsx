@@ -22,7 +22,7 @@ export default class AddComment extends React.Component {
     this.props.onAdd(this.props.content)
     this.refs.input.focus()
   }
-  
+
   render() {
     const { className, avatarUrl, authorName, onChange, content, placeholder, isAdding } = this.props
     const { isFocused } = this.state

@@ -77,10 +77,10 @@
           }
           h3 {
             font-size: 20px;
-            
+
           }
           p {
-            
+
             font-size: 15px;
 
             strong{
@@ -97,7 +97,7 @@
         display: flex;
         flex-flow: row wrap;
         justify-content: space-between;
-        
+
         // TODO: Create as mixin;
         // FIXME: Refactor to use proper calculation of the ":after" box position
         .divider {
@@ -324,7 +324,7 @@
             box-shadow: 0px 0px 2px 1px $tc-dark-blue-30;
           }
         }
-      } 
+      }
       input{
 
         &.tc-file-field__inputs--code{
@@ -333,7 +333,7 @@
         &.tc-file-field__inputs--fill{
           background-color: $tc-gray-neutral-light;
         }
-        
+
       }
 
       textarea{
@@ -344,7 +344,7 @@
     .button-area {
       display: flex;
       justify-content: center;
-      background: url('/assets/images/check-orange.svg') no-repeat;
+      /* background: url('../../../assets/images/check-orange.svg') no-repeat; */
       a {
         height: 40px;
         width: 137px;
@@ -424,8 +424,8 @@ input {
     }
     &::-webkit-slider-runnable-track {
       width: 780px;
-      height: 16px !important;
-      border: none!important; 
+      height: 4px !important;
+      border: none!important;
       box-shadow: none!important;
       /*background: $tc-gray-20;*/
       background: url('../../images/slider-bg.png') no-repeat;
@@ -438,8 +438,8 @@ input {
       width: 27px;
       border: 3px solid $tc-white;
       border-radius: 50%;
-      background: $tc-dark-blue-90 url('../../../assets/images/check-white.svg') no-repeat 6px 7px;
-      margin-top: -5px;
+      background: $tc-dark-blue-90 no-repeat;
+      margin-top: -12px;
     }
     &::-webkit-slider-runnable-track {
       height: 4px;
