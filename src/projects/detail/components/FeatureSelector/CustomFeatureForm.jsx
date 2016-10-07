@@ -35,9 +35,9 @@ class CustomFeatureForm extends Component {
   }
 
   toggleFeature() {
-    const { addFeature, isEdittable } = this.props
+    const { toggleFeature, isEdittable } = this.props
     if (isEdittable) {
-      addFeature({ ...this.state.data, disabled: !!this.state.isActive })
+      toggleFeature(this.state.data.id, !!this.state.isActive)
     }
   }
 
@@ -65,7 +65,7 @@ class CustomFeatureForm extends Component {
       id: data.title.toLowerCase().replace(/\s/g, '_'),
       categoryId: 'custom',
       notes: ''
-    }, featureData, data))
+    }, featureData, { title : data.title.trim() }))
     // assumes addFeature to be a synchronous call, otherwise it could lead to inconsistent UI state 
     // e.g. if async addFeature fails, it would close the edit mode
     // this call is needed here because debounce call (for notes change) is closing the edit mode if
@@ -73,14 +73,14 @@ class CustomFeatureForm extends Component {
     this.setState({ editMode : false })
   }
 
-  onChange(fieldName, value) {
+  onChange(data){
     const { featureData } = this.props
     // following check is needed to prevent adding the feature again after removing
     // because forms' onChange event gets fire with only form data when we lose focus from the form
     // alternative to this check is to put the change handler on textarea instead of form
     if (featureData) {// feature is already added
-      const data = {}
-      data[fieldName] = value
+      // trim the notes (as of now only notes field is auto updated)
+      data.notes = data.notes.trim()
       this.props.updateFeature(_.merge({}, featureData, data))
     }
   }
@@ -114,12 +114,12 @@ class CustomFeatureForm extends Component {
           </div>
         }
         <div className="feature-form-content">
-          <Formsy.Form className="custom-feature-form" disabled={!isEdittable} onValidSubmit={ this.onSave }>
+          <Formsy.Form className="custom-feature-form" disabled={!isEdittable} onChange={ this.onChange } onValidSubmit={ this.onSave }>
             { (!isAdded || editMode)  &&
               <TCFormFields.TextInput
                 name="title"
                 label="Feature name"
-                validations="minLength:1" required
+                validations="isRequired" required
                 validationError="Feature name is required"
                 wrapperClass="row"
                 value={ _.get(data, 'title', '') }
@@ -131,7 +131,6 @@ class CustomFeatureForm extends Component {
                 label="Feature Notes"
                 wrapperClass="feature-notes"
                 value={ _.get(data, 'notes', '') }
-                onChange={ this.onChange }
               />
               : null
             }
