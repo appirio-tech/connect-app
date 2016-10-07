@@ -32,11 +32,11 @@ class DefaultFeatureForm extends Component {
   }
 
   toggleFeature() {
-    const { removeFeature, addFeature, featureDesc, isEdittable } = this.props
+    const { toggleFeature, addFeature, featureDesc, isEdittable } = this.props
     if (isEdittable) {
       if (this.state.isActive) {
         // remove feature
-        removeFeature(featureDesc.id)
+        toggleFeature(featureDesc.id, true)
       } else {
         // add feature
         addFeature({

@@ -35,9 +35,9 @@ class CustomFeatureForm extends Component {
   }
 
   toggleFeature() {
-    const { addFeature, isEdittable } = this.props
+    const { toggleFeature, isEdittable } = this.props
     if (isEdittable) {
-      addFeature({ ...this.state.data, disabled: !!this.state.isActive })
+      toggleFeature(this.state.data.id, !!this.state.isActive)
     }
   }
 
