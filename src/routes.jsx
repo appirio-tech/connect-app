@@ -11,7 +11,7 @@ import {ACCOUNTS_APP_LOGIN_URL} from './config/constants'
 // import reportsListRoutes from './reports/routes.jsx'
 
 const LoginRedirect = withProps({
-  redirectTo: `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.hostname}${window.location.port ? ":" + window.location.port : ''}`
+  redirectTo: `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`
 })(RedirectComponent)
 
 export default (

@@ -1,7 +1,6 @@
-import React, { PropTypes } from 'react'
+import { PropTypes } from 'react'
 
 const RedirectComponent = (props) => {
-  debugger
   window.location = props.redirectTo
 }
 

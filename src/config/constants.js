@@ -142,6 +142,7 @@ export const UPDATE_PROJECT_ATTACHMENT_PENDING = 'UPDATE_PROJECT_ATTACHMENT_PEND
 export const UPDATE_PROJECT_ATTACHMENT_SUCCESS = 'UPDATE_PROJECT_ATTACHMENT_SUCCESS'
 export const UPDATE_PROJECT_ATTACHMENT_FAILURE = 'UPDATE_PROJECT_ATTACHMENT_FAILURE'
 
+export const THREAD_MESSAGES_PAGE_SIZE = 3
 /*
  * Project status
  */
@@ -184,7 +185,7 @@ export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL |
 
 export const TC_API_URL = `https://api.${DOMAIN}`
 export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?formData.projectId=`
-export const SALESFORCE_PROJECT_LEAD_LINK = 'javascript:' // TODO waiting on @mdesiderio for salesforce link info
+export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
 
 export const PROJECT_NAME_MAX_LENGTH = 255
 
