@@ -20,7 +20,7 @@ class PickerFeatureList extends Component {
       allFeatures = _.filter(activeFeatureList, f => f.categoryId === id)
     }
     const renderFeature = (feature, idx) => {
-      const isActive = _.findIndex(activeFeatureList, f => f.id === feature.id) > -1
+      const isActive = _.findIndex(activeFeatureList, f => f.id === feature.id) > -1 && !feature.disabled
       const featureClasses = classNames('feature-list-feature', {
         'active-feature' : feature.id === selectedFeatureId,
         'selected-feature' : isActive

@@ -10,6 +10,7 @@ const FlattenedFeatureList = ({ addedFeatures }) => {
   if (addedFeatures) {
     childrenDom = []
     addedFeatures.map((f, idx) => {
+      if (f.disabled) return
       const feature = f.categoryId === 'custom' ? f : allFeaturesMap[f.id]
       if (feature.categoryId === 'custom') {
         feature.icon = require('./images/custom-features.svg')
@@ -19,7 +20,7 @@ const FlattenedFeatureList = ({ addedFeatures }) => {
           {feature.icon && <div className="icon-col">{ <img src={feature.icon} /> }</div>}
           <div className="content-col">
             <h4>{ feature.title }</h4>
-            <p>{ feature.description }</p>
+            <p>{ feature.categoryId === 'custom' ? feature.notes : feature.description }</p>
           </div>
         </div>
       )
