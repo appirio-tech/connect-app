@@ -30,6 +30,7 @@ class ProjectInfo extends Component {
   render() {
     const { type, directLinks, devices, currentMemberRole, status, onChangeStatus, duration, canDeleteProject } = this.props
     const { showDeleteConfirm } = this.state
+    const displayProgress = status !== 'cancelled'
     return (
       <Panel>
         <Panel.Title>Project</Panel.Title>
@@ -44,9 +45,9 @@ class ProjectInfo extends Component {
         }
         <ProjectType type={type} devices={devices} />
         <ProjectStatus directLinks={directLinks} currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
-        <ProjectProgress title="Duration" percent={duration.percent} type="completed">
+        {displayProgress && <ProjectProgress {...duration}>
           {duration.text}
-        </ProjectProgress>
+        </ProjectProgress>}
         {/* <ProjectProgress title="Budget" percent={budget.percent} type="working">
           {budget.text}
         </ProjectProgress> */}

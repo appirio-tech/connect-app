@@ -15,10 +15,7 @@ class ProjectInfoContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      duration: {
-        percent: 0,
-        text: 'Complete specification to get estimate'
-      },
+      duration: {},
       budget: { // FIXME
         percent: 80,
         text: '$1000 remaining'
@@ -34,16 +31,58 @@ class ProjectInfoContainer extends React.Component {
     return !_.isEqual(nextProps.project, this.props.project)
   }
 
-  componentWillReceiveProps({project}) {
-    if (project.duration) {
-      const percent = project.duration.actualDuration / project.duration.plannedDuration * 100
-      this.setState({
-        duration: {
-          percent,
-          text: percent === 0 ? 'Complete specification to get estimate' : ''
+  setDuration({duration, status}) {
+    let percent =''
+    let title = ''
+    let text = ''
+    let type = ''
+    if (duration) {
+      const {actualDuration, plannedDuration} = duration
+      if (status === 'draft') {
+        title = 'Duration'
+        percent = 0
+        text = 'Complete specification to get estimate'
+      } else if (status === 'in_review') {
+        title = 'Duration'
+        percent = 0
+        text = 'Pending review'
+      } else if (status === 'reviewed') {
+        title = `${plannedDuration} days (projected)`
+        percent = 0
+        text = `${plannedDuration} days remaining`
+      } else if (status === 'completed') {
+        title = 'Completed'
+        percent = 100
+        text = ''
+        type = 'completed'
+      } else {
+        text = `Day ${actualDuration} of ${plannedDuration}`
+        percent = actualDuration / plannedDuration * 100
+        if (0 <= percent && percent < 100) {
+          const diff = plannedDuration - actualDuration
+          title = `${diff} ${diff > 1 ? 'days' : 'day'} remaining`
+          type = 'working'
+        } else {
+          percent = 100
+          type = 'error'
+          const diff = actualDuration - plannedDuration
+          title = `${diff} ${diff > 1 ? 'days' : 'day'} over`
         }
-      })
+      }
+    } else {
+      title = 'Duration'
+      percent = 0
+      text = 'Complete specification to get estimate'
     }
+    this.setState({duration: { title, text, percent, type }})
+  }
+
+  componentWillMount() {
+    this.setDuration(this.props.project)
+  }
+
+  componentWillReceiveProps({project}) {
+    this.setDuration(project)
   }
 
   onChangeStatus(status) {
