@@ -1,4 +1,4 @@
-# Customer-App-R
+# Customer-App
 
 This repository houses new Customer pages, using React, Redux, and Webpack.
 
