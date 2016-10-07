@@ -73,14 +73,12 @@ class CustomFeatureForm extends Component {
     this.setState({ editMode : false })
   }
 
-  onChange(data){//fieldName, value) {
+  onChange(data){
     const { featureData } = this.props
     // following check is needed to prevent adding the feature again after removing
     // because forms' onChange event gets fire with only form data when we lose focus from the form
     // alternative to this check is to put the change handler on textarea instead of form
     if (featureData) {// feature is already added
-      // const data = {}
-      // data[fieldName] = value
       this.props.updateFeature(_.merge({}, featureData, data))
     }
   }
