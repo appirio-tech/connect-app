@@ -12,7 +12,7 @@ const projectTypes = [
 ]
 
 const projectStatuses = [
-  { val: 'open', label: 'Open' },
+  { val: 'in(draft,in_review,reviewed,active)', label: 'Open' },
   { val: null, label: 'All Statuses' },
   ...PROJECT_STATUS.map((item) => ({val: item.value, label: item.name}))
 ]
