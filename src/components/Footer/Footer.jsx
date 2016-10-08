@@ -4,14 +4,14 @@ import moment from 'moment'
 
 require('./Footer.scss')
 
-const Footer = ({domain}) => {
+const Footer = () => {
   const currentYear = moment().format('YYYY')
   const otherNavigationItems = [
-    {img: '', text: 'About', link: 'https://www.' + domain + '/about'},
-    {img: '', text: 'Contact', link: 'https://www.' + domain + '/contact-us'},
-    {img: '', text: 'Help', link: 'https://help.' + domain, target:'_blank'},
-    {img: '', text: 'Privacy', link: 'https://help.' + domain, target:'_blank'},
-    {img: '', text: 'Terms', link: 'https://www.' + domain + '/community/how-it-works/terms/'}
+    {img: '', text: 'About', link: 'https://www.topcoder.com/about-topcoder/'},
+    {img: '', text: 'Contact', link: 'https://www.topcoder.com/about-topcoder/contact/'},
+    {img: '', text: 'Help', link: 'https://help.topcoder.com/hc/en-us'},
+    {img: '', text: 'Privacy', link: 'https://www.topcoder.com/community/how-it-works/privacy-policy/'},
+    {img: '', text: 'Terms', link: 'https://connect.topcoder.com/terms'}
   ]
   const isProjectDetails = /projects\/\d+/.test(window.location.pathname)
 

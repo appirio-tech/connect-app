@@ -36,7 +36,7 @@ const Layout = (props) => {
         <div className="main-wrapper">
           { props.children }
         </div>
-        <Footer domain={ DOMAIN } />
+        <Footer />
       </div>
     )
   }
