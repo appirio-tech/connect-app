@@ -3,6 +3,10 @@
 .main-wrapper {
   min-height: calc(100vh - 60px); // header and footer width
   padding-top: 60px;
+
+  &.with-filters {
+    padding-top: 120px;
+  }
 }
 
 .content-area {

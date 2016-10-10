@@ -16,7 +16,6 @@ class TopBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isFilterVisible: false,
       isCreatingProject: false
     }
     this.handleMobileClick = this.handleMobileClick.bind(this)
@@ -48,29 +47,12 @@ class TopBar extends Component {
     }
   }
 
-  toggleFilter() {
-    const {isFilterVisible} = this.state
-    const topSpace = document.getElementById('wrapper-main').style
-
-    // wrapperMarginTop === '60px' ? (wrapperMarginTop = '120px') : (wrapperMarginTop = '60px')
-
-    this.setState({isFilterVisible: !isFilterVisible}, () => {
-      
-      // FIXME: dynamically push the main wrapper padding top to accomodate space; this is hacky
-      topSpace.paddingTop === '120px' ? (topSpace.paddingTop = '60px') : (topSpace.paddingTop = '120px')
-      
-      // sticky must be re-calculated, because we change the height of the component (toggle filters component)
-      this.forceUpdate()
-    })
-
-  }
-
   render() {
     const {
       userHandle, userImage, userName, domain, criteria, onNewProjectIntent, applyFilters, isProjectDetails, project,
-      isPowerUser, loginUrl, registerUrl
+      isPowerUser, loginUrl, registerUrl, isFilterVisible
     } = this.props
-    const {isFilterVisible} = this.state
+    // const {isFilterVisible} = this.state
     const homePageUrl = window.location.protocol + '//' + window.location.hostname
     const logoutLink = 'https://accounts.' + domain + '/logout?retUrl=' + homePageUrl
     const isLoggedIn = !!userHandle
@@ -135,7 +117,7 @@ class TopBar extends Component {
                 <a
                   href="javascript:"
                   className={cn('tc-btn tc-btn-sm', {active: isFilterVisible})}
-                  onClick={this.toggleFilter}
+                  onClick={this.props.onToggleFilter}
                 >Filters</a>
               </div>}
             </div>
