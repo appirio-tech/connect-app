@@ -94,7 +94,6 @@ class TopBarContainer extends React.Component {
   }
 
   render() {
-    const { onToggleFilter } = this.props
     const {isCreatingProject, currentPath, isFilterVisible } = this.state
     const isProjectDetails = /projects\/\d+/.test(currentPath)
     const isHomePage = this.context.router.isActive('/', true)
