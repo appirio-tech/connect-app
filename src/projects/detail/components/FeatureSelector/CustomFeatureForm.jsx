@@ -122,6 +122,7 @@ class CustomFeatureForm extends Component {
                 validations="isRequired" required
                 validationError="Feature name is required"
                 wrapperClass="row"
+                maxLength={40}
                 value={ _.get(data, 'title', '') }
               />
             }
