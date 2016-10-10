@@ -51,7 +51,7 @@ class FeedView extends React.Component {
     const { allMembers, feeds } = props
     this.setState({
       feeds: feeds.map((feed) => {
-        const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds'])
+        const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isAddingComment'])
         if (isSystemUser(item.userId)) {
           item.user = SYSTEM_USER
           item.allowComments = false

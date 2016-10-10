@@ -122,7 +122,7 @@ class NewPost extends React.Component {
 
   onNewPostChange() {
     this.setState({
-      canSubmit: !!this.refs.title.value.trim().length && this.state.editorState.getCurrentContent().hasText()
+      canSubmit: this.refs.title && !!this.refs.title.value.trim().length && this.state.editorState.getCurrentContent().hasText()
     })
   }
 

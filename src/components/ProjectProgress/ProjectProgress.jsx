@@ -19,6 +19,9 @@ const ProjectProgress = ({title, type, percent, children }) => (
   </PanelProject>
 )
 
+ProjectProgress.defaultProps = {
+  type: 'completed'
+}
 ProjectProgress.propTypes = {
   title: PropTypes.string.isRequired,
   type: PropTypes.oneOf(['working', 'error', 'completed']),
