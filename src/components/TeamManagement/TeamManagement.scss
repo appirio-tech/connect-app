@@ -298,12 +298,10 @@ $tc-body-extra-small	: 12px;
       padding: 0;
       margin: 10px 0 0 0;
       ul{
-        display: -webkit-flex;
         display: flex;
         width:160px;
       }
       li {
-        -webkit-flex: initial;
         flex: initial;
         height: 30px;
         width: 50%;
@@ -312,9 +310,9 @@ $tc-body-extra-small	: 12px;
         @include roboto-medium;
         font-size: $tc-body-extra-small;
         line-height:18px;
-        background: $tc-gray-20;
+        box-shadow: none;
+        background-color: $tc-white;
         border: 1px solid $tc-gray-30;
-        box-shadow: inset 0px 1px 3px 0px rgba(71,71,79,0.38);
         a{
           color: $tc-gray-80;
           font-weight: normal;
@@ -322,8 +320,8 @@ $tc-body-extra-small	: 12px;
         &:hover {
         }
         &.active {
-          background-color: $tc-white;
-          box-shadow: none;
+          background: $tc-gray-20;
+          box-shadow: inset 0px 1px 3px 0px rgba(71,71,79,0.38);
           a{
           }
         }
