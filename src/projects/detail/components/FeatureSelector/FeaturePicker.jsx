@@ -212,8 +212,8 @@ class FeaturePicker extends Component {
     }
     this.addFeature = this.addFeature.bind(this)
     this.removeFeature = this.removeFeature.bind(this)
-    this.selectFeature = this.selectFeature.bind(this)
     this.toggleFeature = this.toggleFeature.bind(this)
+    this.selectFeature = this.selectFeature.bind(this)
     this.updateSelectedFeature = this.updateSelectedFeature.bind(this)
     this.renderCustomFeatureForm = this.renderCustomFeatureForm.bind(this)
     this.renderDefaultFeatureForm = this.renderDefaultFeatureForm.bind(this)
@@ -230,11 +230,6 @@ class FeaturePicker extends Component {
     this.setState({
       addingCustomFeature : this.state.addingCustomFeature && this.props.features.length === nextProps.features.length
     })
-  }
-
-  toggleFeature(featureId) {
-    const idx = _.findIndex(this.state.activeFeatureList, f => f.id === featureId)
-    idx > -1 ? this.removeFeature(featureId) : this.addFeature(featureId)
   }
 
   renderCustomFeatureForm() {
@@ -262,6 +257,29 @@ class FeaturePicker extends Component {
     this.props.onSave(newState.activeFeatureList)
   }
 
+  toggleFeature(featureId, disable) {
+    const featureIndex = _.findIndex(this.state.activeFeatureList, (f) => f.id === featureId )
+    if (featureIndex >= 0) {
+      const feature = this.state.activeFeatureList[featureIndex]
+      let featureListQuery
+      // separate update query for custom and standard features
+      // when disabling, we remove standard feature from the list while update custom feature with disabled flag
+      if (feature.categoryId === 'custom') {
+        feature.disabled = disable
+        featureListQuery = { $splice : [[featureIndex, 1, feature]] }
+      } else {
+        featureListQuery = { $splice: [[featureIndex, 1]] }
+      }
+      const newState = update(this.state, {
+        activeFeatureCount: { $set: this.state.activeFeatureCount - 1 },
+        activeFeatureList: featureListQuery,
+        selectedFeatureId: { $set : feature.id }
+      })
+      this.setState(newState)
+      this.props.onSave(newState.activeFeatureList)
+    }
+  }
+
   addFeature(feature) {
     const newState = update(this.state, {
       activeFeatureCount: {$set: this.state.activeFeatureCount + 1},
@@ -272,12 +290,15 @@ class FeaturePicker extends Component {
     this.props.onSave(newState.activeFeatureList)
   }
 
+  // removeFeature is only called for custom feature
   removeFeature(featureId) {
     // lookup index
     const idx = _.findIndex(this.state.activeFeatureList, f => f.id === featureId )
     const newState = update(this.state, {
       activeFeatureCount: {$set: this.state.activeFeatureCount - 1},
-      activeFeatureList: { $splice: [[idx, 1]] }
+      activeFeatureList: { $splice: [[idx, 1]] },
+      showCutsomFeatureForm: { $set : false },
+      selectedFeatureId: { $set : null }
     })
     this.setState(newState)
     this.props.onSave(newState.activeFeatureList)
@@ -315,6 +336,7 @@ class FeaturePicker extends Component {
         featureDesc={selectedFeature}
         featureData={selectedFeatureData}
         updateFeature={this.updateSelectedFeature}
+        toggleFeature={ this.toggleFeature }
         addFeature={this.addFeature}
         removeFeature={this.removeFeature}
        />)
@@ -347,6 +369,7 @@ class FeaturePicker extends Component {
                   isEdittable={isEdittable}
                   featureData={selectedFeatureData}
                   updateFeature={this.updateSelectedFeature}
+                  toggleFeature={ this. toggleFeature }
                   addFeature={this.addFeature}
                   removeFeature={this.removeFeature}
                   onCancel={this.renderDefaultFeatureForm}

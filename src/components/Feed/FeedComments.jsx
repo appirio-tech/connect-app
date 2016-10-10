@@ -4,6 +4,7 @@ import Panel from '../Panel/Panel'
 import AddComment from '../ActionCard/AddComment'
 import Comment from '../ActionCard/Comment'
 import cn from 'classnames'
+import { THREAD_MESSAGES_PAGE_SIZE } from '../../config/constants'
 
 const getCommentCount = (totalComments) => {
   if (!totalComments) {
@@ -15,21 +16,38 @@ const getCommentCount = (totalComments) => {
   return `${totalComments} comments`
 }
 
-const FeedComments = (props) => {
-  const {
-    comments, currentUser, totalComments, onLoadMoreComments, isLoadingComments, hasMoreComments, onAdd,
+class FeedComments extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { showAll: false }
+  }
+
+  render() {
+    const {
+    comments, currentUser, totalComments, /*onLoadMoreComments,*/ isLoadingComments, hasMoreComments, onAdd,
     onChange, content, avatarUrl, isAddingComment
-  } = props
-  let authorName = currentUser.firstName
-  if (authorName && currentUser.lastName) {
-    authorName += ' ' + currentUser.lastName
-  }
-  const handleLoadMoreClick = () => {
-    if (!isLoadingComments) {
-      onLoadMoreComments()
+  } = this.props
+    let authorName = currentUser.firstName
+    if (authorName && currentUser.lastName) {
+      authorName += ' ' + currentUser.lastName
     }
-  }
-  return (
+    const handleLoadMoreClick = () => {
+      this.setState({showAll: true})
+    // TODO - handle the case when a topic has more than 20 comments
+    // since those will have to retrieved from the server
+    // if (!isLoadingComments) {
+    //   onLoadMoreComments()
+    // }
+    }
+
+    let _comments = comments
+    let _hasMoreComments = hasMoreComments
+    if (!this.state.showAll && _comments.length > THREAD_MESSAGES_PAGE_SIZE) {
+      _comments = _comments.slice(-THREAD_MESSAGES_PAGE_SIZE)
+      _hasMoreComments = true
+    }
+
+    return (
     <div>
       <Panel.Body className="comment-count-container">
         <div className="portrait" />
@@ -39,7 +57,7 @@ const FeedComments = (props) => {
               {getCommentCount(totalComments)}
             </div>
             <hr className={cn({'no-margin': !comments.length})} />
-            {hasMoreComments && <div className={cn('comment-collapse', {'loading-comments': isLoadingComments})}>
+            {_hasMoreComments && <div className={cn('comment-collapse', {'loading-comments': isLoadingComments})}>
               <a href="javascript:" onClick={ handleLoadMoreClick } className="comment-collapse-button">
                 {isLoadingComments ? 'Loading...' : 'View older comments'}
               </a>
@@ -47,9 +65,9 @@ const FeedComments = (props) => {
           </div>
         </div>
       </Panel.Body>
-      {comments.map((item) =>
+      {_comments.map((item, idx) =>
         <Comment
-          key={item.id}
+          key={idx}
           avatarUrl={item.author.photoURL}
           authorName={item.author.firstName + ' ' + item.author.lastName}
           date={moment(item.date).fromNow()}
@@ -70,8 +88,8 @@ const FeedComments = (props) => {
       />
     </div>
   )
+  }
 }
-
 FeedComments.propTypes = {
   comments: PropTypes.array.isRequired
 }

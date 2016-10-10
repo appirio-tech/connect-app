@@ -3,7 +3,7 @@ import _ from 'lodash'
 import cn from 'classnames'
 import Panel from '../../../../components/Panel/Panel'
 import DeleteFeatureModal from './DeleteFeatureModal'
-import { Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
+import { Icons, Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
 
 require('./FeatureForm.scss')
 
@@ -12,11 +12,13 @@ class CustomFeatureForm extends Component {
   constructor(props) {
     super(props)
     this.toggleFeature = this.toggleFeature.bind(this)
-    this.state = { showDeleteModal : false }
+    this.state = { showDeleteModal : false, editMode : false }
     this.onSave = this.onSave.bind(this)
+    this.editFeature = this.editFeature.bind(this)
     this.onDelete = this.onDelete.bind(this)
     this.onDeleteIntent = this.onDeleteIntent.bind(this)
     this.onCancelDelete = this.onCancelDelete.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
 
   componentWillMount() {
@@ -24,24 +26,25 @@ class CustomFeatureForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const previousData = this.state.data || {}
     this.setState({
-      data: nextProps.featureData || previousData,
-      isActive: !!nextProps.featureData
+      data: nextProps.featureData,
+      isAdded: !!nextProps.featureData,
+      isActive: !!nextProps.featureData && !nextProps.featureData.disabled,
+      showDeleteModal: false
     })
   }
 
   toggleFeature() {
-    const { removeFeature, addFeature, featureData, isEdittable } = this.props
+    const { toggleFeature, isEdittable } = this.props
     if (isEdittable) {
-      if (this.state.isActive) {
-        // remove feature
-        removeFeature(featureData.id)
-      } else {
-        // add feature
-        addFeature(this.state.data)
-      }
+      toggleFeature(this.state.data.id, !!this.state.isActive)
     }
+  }
+
+  editFeature() {
+    this.setState({
+      editMode : true
+    })
   }
 
   onDelete(data) {
@@ -59,59 +62,81 @@ class CustomFeatureForm extends Component {
   onSave(data) {
     const { featureData } = this.props
     this.props.addFeature(_.merge({
-      id: data.title.toLowerCase().replace(' ', '_'),
+      id: data.title.toLowerCase().replace(/\s/g, '_'),
       categoryId: 'custom',
       notes: ''
-    }, featureData, data))
+    }, featureData, { title : data.title.trim() }))
+    // assumes addFeature to be a synchronous call, otherwise it could lead to inconsistent UI state 
+    // e.g. if async addFeature fails, it would close the edit mode
+    // this call is needed here because debounce call (for notes change) is closing the edit mode if
+    // we do set the editMode in componentWillReceiveProps method
+    this.setState({ editMode : false })
+  }
+
+  onChange(data){
+    const { featureData } = this.props
+    // following check is needed to prevent adding the feature again after removing
+    // because forms' onChange event gets fire with only form data when we lose focus from the form
+    // alternative to this check is to put the change handler on textarea instead of form
+    if (featureData) {// feature is already added
+      // trim the notes (as of now only notes field is auto updated)
+      data.notes = data.notes.trim()
+      this.props.updateFeature(_.merge({}, featureData, data))
+    }
   }
 
   render() {
-    const { isEdittable, onCancel, featureData } = this.props
-    const { data, isActive, showDeleteModal } = this.state
-    const submitButton = !isActive
-      ? <button type="submit" className="tc-btn tc-btn-primary tc-btn-md" disabled={!isEdittable}>Save Feature</button>
-      : <button type="submit" className="tc-btn tc-btn-default tc-btn-md" disabled={!isEdittable}>Delete Custom Feature</button>
-    const formAction = isActive ? this.onDeleteIntent : this.onSave
+    const { isEdittable, onCancel } = this.props
+    const { data, isAdded, editMode, isActive, showDeleteModal } = this.state
+    // const _debouncedOnChange = _.debounce(this.onChange, 2000, { trailing: true, maxWait: 10000 })
     const formClasses = cn('feature-form', {
       'modal-active': showDeleteModal
     })
     return (
       <Panel className={ formClasses }>
-        <div className="feature-title-row">
-          <span className="title">{ _.get(data, 'title', 'Define a new feature')}</span>
-          <SwitchButton
-            disabled={!isEdittable}
-            onChange={ this.toggleFeature }
-            name="featue-active"
-            checked={isActive ? 'checked' : null }
-          />
-        </div>
+        { (isAdded && !editMode) &&
+          <div className="feature-title-row">
+            <span className="title">{ _.get(data, 'title', 'Define a new feature')}</span>
+              <div className="feature-actions">
+                { isAdded &&
+                  <SwitchButton
+                    disabled={!isEdittable}
+                    onChange={ this.toggleFeature }
+                    name="featue-active"
+                    checked={isActive ? 'checked' : null }
+                    label="Enable Feature"
+                  />
+                }
+                <div className="separator"/>
+                <button className="clean feature-edit-action" onClick={ this.editFeature }><Icons.IconUIPencil /></button>
+                <button className="clean feature-delete-action" onClick={ this.onDeleteIntent }><Icons.IconUITrashSimple /></button>
+              </div>
+          </div>
+        }
         <div className="feature-form-content">
-          <Formsy.Form className="custom-feature-form" disabled={!isEdittable} onValidSubmit={ formAction }>
-            { !isActive &&
+          <Formsy.Form className="custom-feature-form" disabled={!isEdittable} onChange={ this.onChange } onValidSubmit={ this.onSave }>
+            { (!isAdded || editMode)  &&
               <TCFormFields.TextInput
                 name="title"
                 label="Feature name"
-                validations="minLength:1" required
+                validations="isRequired" required
                 validationError="Feature name is required"
                 wrapperClass="row"
-                // placeholder="My awesome feature"
                 value={ _.get(data, 'title', '') }
               />
             }
-            { !isActive ?
+            { (isActive && !editMode) ?
               <TCFormFields.Textarea
-                name="description"
-                label="Feature description"
-                wrapperClass="feature-description"
-                // placeholder="Briefly describe the feature, including how it will be used, and provide examples that will help designers and developers understand it."
-                value={ _.get(data, 'description', '') }
+                name="notes"
+                label="Feature Notes"
+                wrapperClass="feature-notes"
+                value={ _.get(data, 'notes', '') }
               />
-              : <p className="feature-description">{ featureData.description }</p>
+              : null
             }
             <div className="feature-form-actions">
-              { !isActive && <button type="button" className="tc-btn tc-btn-default tc-btn-md" onClick={ onCancel }>Cancel</button> }
-              { submitButton }
+              { (!isAdded || editMode) && <button type="button" className="tc-btn tc-btn-default tc-btn-md" onClick={ onCancel }>Cancel</button> }
+              { (!isAdded || editMode) && <button type="submit" className="tc-btn tc-btn-primary tc-btn-md" disabled={!isEdittable}>Save Feature</button> }
             </div>
           </Formsy.Form>
         </div>
