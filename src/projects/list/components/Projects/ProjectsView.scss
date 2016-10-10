@@ -93,6 +93,10 @@
   z-index: 21;/* +1 of the z-index of the topbar */
   background-color: $tc-gray-neutral-dark;
   overflow-y: scroll;
+
+  section.content {
+    padding: 1px 0;
+  }
 }
 
 .project-creation-dialog {

@@ -69,7 +69,7 @@ class TopBar extends Component {
 
     const userMenuItems = [
       [
-        { label: 'Help', link: '//help.' + domain, absolute: true, id: 0 }
+        { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true, id: 0 }
       ],
       [
         { label: 'Log out', link: logoutLink, absolute: true, id: 0 }
