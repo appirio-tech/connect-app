@@ -5,8 +5,16 @@
   display: none;
 }
 
+.ReactModalPortal {
+  transition: 200ms ease-in-out
+}
+
+.project-creation-dialog-overlay {
+  background-color: rgba(235, 235, 235, .94) !important;
+}
 
 .content {
+
   .container {
     position: relative;
     margin: 0px auto 20px;
@@ -16,7 +24,8 @@
     background: $tc-white;
 
     &.container-margin {
-      margin-top: 20px;
+      margin: 50px auto;
+      box-shadow: 0px 0px 14px 1px rgba(38,38,40,0.15);
     }
 
     .btn-close {
