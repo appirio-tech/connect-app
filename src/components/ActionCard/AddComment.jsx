@@ -8,9 +8,11 @@ export default class AddComment extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isFocused: false
+      isFocused: false,
+      canSubmit: false
     }
     this.onAdd = this.onAdd.bind(this)
+    this.onTextAreaChange = this.onTextAreaChange.bind(this)
   }
 
   onAdd(e) {
@@ -23,9 +25,15 @@ export default class AddComment extends React.Component {
     this.refs.input.focus()
   }
 
+  onTextAreaChange(evt) {
+    const val = evt.target.value
+    this.setState({canSubmit: val && val.trim().length})
+    this.props.onChange(val, evt)
+  }
+
   render() {
-    const { className, avatarUrl, authorName, onChange, content, placeholder, isAdding } = this.props
-    const { isFocused } = this.state
+    const { className, avatarUrl, authorName, content, placeholder, isAdding } = this.props
+    const { isFocused, canSubmit } = this.state
     const isCollapsed = !isFocused && !content
 
     return (
@@ -42,10 +50,10 @@ export default class AddComment extends React.Component {
                 value={content}
                 onFocus={() => this.setState({isFocused: true})}
                 onBlur={() => this.setState({isFocused: false})}
-                onChange={(e) => onChange(e.target.value, e)}
+                onChange={this.onTextAreaChange}
               />
               {!isCollapsed && <div className="textarea-footer">
-                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onAdd} disabled={ this.props.isAdding }>
+                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onAdd} disabled={ isAdding || !canSubmit }>
                  { isAdding ? 'Posting...' : 'Post' }
                 </button>
               </div>}
