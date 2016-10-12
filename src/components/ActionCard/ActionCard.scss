@@ -357,13 +357,6 @@
       height: 40px;
       border-radius: 33px;
     }
-    &:empty {
-      border: 2px solid $tc-gray-50;
-      background: url('../../assets/images/user-add.svg') no-repeat;
-      background-position: center;
-      background-size: 16px;
-      border-radius: 33px;
-    }
   }
   .buttons{
     display: flex;
