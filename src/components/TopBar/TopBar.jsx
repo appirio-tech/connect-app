@@ -8,7 +8,6 @@ const { ConnectLogo } = Icons
 import { SearchBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import ProjectToolBar from './ProjectToolBar'
-import Sticky from 'react-stickynode'
 
 
 class TopBar extends Component {
@@ -16,14 +15,12 @@ class TopBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isFilterVisible: false,
       isCreatingProject: false
     }
     this.handleMobileClick = this.handleMobileClick.bind(this)
     this.handleTermChange = this.handleTermChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.handleMyProjectsFilter = this.handleMyProjectsFilter.bind(this)
-    this.toggleFilter = this.toggleFilter.bind(this)
   }
 
   /*eslint-disable no-unused-vars */
@@ -48,20 +45,11 @@ class TopBar extends Component {
     }
   }
 
-  toggleFilter() {
-    const {isFilterVisible} = this.state
-    this.setState({isFilterVisible: !isFilterVisible}, () => {
-      // sticky must be re-calculated, because we change the height of the component (toggle filters component)
-      this.forceUpdate()
-    })
-  }
-
   render() {
     const {
       userHandle, userImage, userName, domain, criteria, onNewProjectIntent, applyFilters, isProjectDetails, project,
-      isPowerUser, loginUrl, registerUrl
+      isPowerUser, loginUrl, registerUrl, isFilterVisible
     } = this.props
-    const {isFilterVisible} = this.state
     const homePageUrl = window.location.protocol + '//' + window.location.hostname
     const logoutLink = 'https://accounts.' + domain + '/logout?retUrl=' + homePageUrl
     const isLoggedIn = !!userHandle
@@ -107,7 +95,7 @@ class TopBar extends Component {
     }
 
     return (
-      <Sticky>
+      // <Sticky>
         <div className="tc-header tc-header__connect">
           <div className="top-bar">
             {logo}
@@ -126,7 +114,7 @@ class TopBar extends Component {
                 <a
                   href="javascript:"
                   className={cn('tc-btn tc-btn-sm', {active: isFilterVisible})}
-                  onClick={this.toggleFilter}
+                  onClick={this.props.onToggleFilter}
                 >Filters</a>
               </div>}
             </div>
@@ -140,7 +128,7 @@ class TopBar extends Component {
             />
           }
         </div>
-      </Sticky>
+      // </Sticky>
     )
   }
 }
