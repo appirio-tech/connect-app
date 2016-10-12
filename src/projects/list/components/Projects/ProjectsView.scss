@@ -28,8 +28,9 @@
 
     .item-ref-code {
       background: $tc-gray-10;
-      font-size: $tc-label-md;
-      color: $tc-gray-50;
+      font-size: $tc-label-sm;
+      color: $tc-gray-40;
+      font-weight: 400;
       border-radius: 2px;
       line-height: 4 * $base-unit;
       padding: 0px 2 * $base-unit;
