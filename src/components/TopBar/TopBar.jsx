@@ -22,7 +22,6 @@ class TopBar extends Component {
     this.handleTermChange = this.handleTermChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.handleMyProjectsFilter = this.handleMyProjectsFilter.bind(this)
-    this.toggleFilter = this.toggleFilter.bind(this)
   }
 
   /*eslint-disable no-unused-vars */
