@@ -20,7 +20,6 @@ const entry = {
     './src/index',
   ]
 };
-const template = path.join(dirname, './src/index.html');
 
 let TEST = false;
 let BUILD = false;
@@ -88,23 +87,11 @@ config.module = {
       loaders: [
         'react-hot',
         'babel?' + JSON.stringify({
-          presets: [ 'es2015', 'react', 'stage-2' ],
+          presets: [ 'es2015', 'react', 'stage-0' ],
           plugins: [ 'lodash' ]
         })
       ],
       exclude: /node_modules\/(?!appirio-tech.*|topcoder|tc-)/,
-    }, {
-      test: /^(?!.*\.react\.jade$)(.*\.jade$)/,
-      loader: 'jade'
-    }, {
-      test: /\.react\.jade$/,
-      loader: 'jade-react'
-    }, {
-      test: /\.jader$/,
-      loader: 'jade-react'
-    }, {
-      test: /\.(coffee|litcoffee|cjsx)$/,
-      loader: 'babel?presets[]=react,presets[]=es2015,presets[]=stage-2,plugins[]=lodash!coffee!cjsx'
     }, {
       test: /\.json$/,
       loader: 'json'
@@ -113,7 +100,7 @@ config.module = {
       loader: scssLoader
     }, {
       test: /\.css$/,
-      loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
+      loader: BUILD ? ExtractTextPlugin.extract('style-loader', 'css-loader') : 'style-loader!css-loader',
     }, {
       test: /\.(png|jpg|jpeg|gif)$/,
       loader: 'file'
@@ -127,7 +114,7 @@ config.module = {
   ],
   postLoaders: [
     {
-      test: /\.(js|coffee|cjsx|jsx)$/,
+      test: /\.(js|jsx)$/,
       loader: 'transform/cacheable?envify'
     }
   ]
@@ -144,7 +131,9 @@ config.sassLoader = {
   includePaths: [path.join(dirname, '/node_modules/bourbon/app/assets/stylesheets'), path.join(dirname, '/node_modules/tc-ui/src/styles')]
 };
 config.plugins = [];
-config.plugins.push(new ExtractTextPlugin('[name].[hash].css'));
+if (BUILD) {
+  config.plugins.push(new ExtractTextPlugin('[name].[hash].css'));
+}
 config.plugins.push(new webpack.DefinePlugin({
   __MOCK__: JSON.stringify(JSON.parse(MOCK || 'false'))
 }));
