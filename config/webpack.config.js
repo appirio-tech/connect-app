@@ -124,8 +124,13 @@ config.resolveLoader = {
 };
 config.resolve = {
   root: path.join(dirname, '/node_modules/'),
+  alias: {
+    config: path.join(dirname, './src/config'),
+    actions: path.join(dirname, './src/actions'),
+    components: path.join(dirname, './src/components'),
+  },
   modulesDirectories: ['node_modules'],
-  extensions: ['', '.js', '.jsx', '.json', '.coffee', '.jade', '.jader', '.scss', '.svg', '.png', '.gif', '.jpg', '.cjsx']
+  extensions: ['', '.js', '.jsx', '.json', '.scss', '.svg', '.png', '.gif', '.jpg']
 };
 config.sassLoader = {
   includePaths: [path.join(dirname, '/node_modules/bourbon/app/assets/stylesheets'), path.join(dirname, '/node_modules/tc-ui/src/styles')]
