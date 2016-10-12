@@ -129,14 +129,17 @@ $title-color: $tc-gray-80;
         @include roboto;
         font-weight: 600;
       }
+
       .right-area-item {
-        padding: 50px 0 20px 0;
-        margin-bottom: 5px;
+        padding: 50px 0 70px 0;
+        margin-bottom: 20px;
         border-radius: 4px;
         background-color: #fff;
+
         .boxes {
           margin: 0 10%;
         }
+
         .big-titles {
           @include roboto-light;
           font-size: 28px;
@@ -288,13 +291,22 @@ $title-color: $tc-gray-80;
     justify-content: center;
     background: $tc-gray-neutral-light;
     height: 70px;
+    margin-top: -70px;
+    margin-bottom: 20px;
     border-radius: $corner-radius * 2;
+
   }
+
   .section-footer-spec {
     border-radius: 0 0 $corner-radius * 2 $corner-radius * 2;
-    margin-top: -10px;
-    margin-bottom: $base-unit * 5;
+    // margin-top: -10px;
+    // margin-bottom: $base-unit * 4;
+
+    // &:last-child {
+    //   margin-bottom: 0;
+    // }
   }
+
   /* .section-file-interface */
   .section-file-interface {
       .tc-textarea {

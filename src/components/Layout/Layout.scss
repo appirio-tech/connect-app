@@ -1,9 +1,12 @@
 @import 'tc-includes';
 
 .main-wrapper {
-  position: relative;
-  z-index: 1;
-  min-height: calc(100vh - 60px - 60px); // header and footer width
+  min-height: calc(100vh - 60px); // header and footer width
+  padding-top: 60px;
+
+  &.with-filters {
+    padding-top: 120px;
+  }
 }
 
 .content-area {
