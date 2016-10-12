@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="48px" height="48px" viewBox="0 0 48 48"><g >
+<polygon fill="#161616" points="44,27 4,27 1,23 5,19 43,19 47,23 "/>
+<path fill="#E6E6E6" d="M41,47H7c-1.105,0-2-0.895-2-2V3c0-1.105,0.895-2,2-2l24,0l12,12v32C43,46.105,42.105,47,41,47z"/>
+<path fill="#B3B3B3" d="M31,1v10c0,1.105,0.895,2,2,2h10L31,1z"/>
+<path fill="#444444" d="M45,41H3c-1.105,0-2-0.895-2-2V23h46v16C47,40.105,46.105,41,45,41z"/>
+<path fill="#FFFFFF" d="M18.85,36h-2.122v-6.117h-1.917v-1.735h5.951v1.735H18.85V36z"/>
+<path fill="#FFFFFF" d="M25.348,36h-2.121v-6.117h-1.918v-1.735h5.951v1.735h-1.912V36z"/>
+<path fill="#FFFFFF" d="M30.473,36h-2.09v-7.853h4.641v1.702h-2.551v1.499h2.352v1.702h-2.352V36z"/>
+</g></svg>

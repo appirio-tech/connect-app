@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react'
 import filesize from 'filesize'
 import { Icons } from 'appirio-tech-react-components'
-import FileIcons from './FileIcons'
 
 const { TrashIcon, CloseIcon, EditIcon, SaveIcon } = Icons
 
@@ -75,12 +74,17 @@ export default class FileListItem extends React.Component {
   
   render() {
     const {isEditing} = this.state
-    // const Icon = this.getFileIcon(this.props.contentType)
+    let iconPath
+    try {
+      iconPath = require('./images/' + this.props.contentType.split('/')[1] +'.svg')
+    } catch(err) {
+      iconPath = require('./images/default.svg')
+    }
 
     return (
       <div className="file-list-item">
         <div className="icon-col">
-          <FileIcons.Default width={42} height={42}/>
+          <img width={42} height={42} src={ iconPath } />
         </div>
         <div className="content-col">
           {isEditing ? this.renderEditing() : this.renderReadOnly()}
