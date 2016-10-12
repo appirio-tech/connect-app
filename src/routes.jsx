@@ -6,6 +6,7 @@ import Home from './components/Home/Home'
 import PageError from './components/PageError/PageError'
 import projectRoutes from './projects/routes.jsx'
 import RedirectComponent from './components/RedirectComponent'
+import SampleCSSModule from './components/SampleCSSModule'
 import {ACCOUNTS_APP_LOGIN_URL} from './config/constants'
 
 // import reportsListRoutes from './reports/routes.jsx'
@@ -18,6 +19,7 @@ export default (
   <Route path="/" onUpdate={() => window.scrollTo(0, 0)} component={ App }>
     <IndexRoute component={Home} />
     <Route path="/login" component={LoginRedirect}/>
+    <Route path="/css" component={SampleCSSModule}/>
 
     {/* Handle /projects/* routes */}
     {projectRoutes}
