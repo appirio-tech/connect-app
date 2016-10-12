@@ -245,9 +245,12 @@
 }
 
 .user-block {
+    white-space: nowrap;
+
     .txt-box span {
         font-weight: normal;
     }
+    
     .linnk-black {
         white-space: nowrap;
         text-overflow: ellipsis;
