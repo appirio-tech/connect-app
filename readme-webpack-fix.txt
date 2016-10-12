@@ -32,3 +32,35 @@ import {
 
 
 --------
+
+Unused dependencies
+
+https://github.com/appirio-tech/accounts-app/blob/dev/package.json
+There are many unused dependencies that our app doesn't need (angular).
+Someone should separate it for example: split angular app and connector to two modules.
+ 
+
+
+--------
+CSS modules
+
+Temporary, the file must include '.m.scss' to be transformed as a CSS module.
+If you rewrite all styles to CSS modules tou can remove this prefix.
+
+Open http://localhost:3000/css to see demo
+
+Components:
+SampleCSSModule
+SampleSubCSSModule
+
+--------
+blueprints
+
+install redux cli:
+npm -g  redux-cli
+
+generate component
+
+redux g component MySampleComponent
+It will create a component template with CSS modules.
+If you don't need unit tests, you can remove blueprints/component/files/src/components/__name__/__name__.spec.js

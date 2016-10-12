@@ -49,6 +49,18 @@ process.argv.forEach(function (arg) {
     return MOCK = true;
   }
 });
+
+
+const fixStyleLoader = (loader) => {
+  if (BUILD) {
+    const first = loader.loaders[0];
+    const rest = loader.loaders.slice(1);
+    loader.loader = ExtractTextPlugin.extract(first, rest.join('!'));
+    delete loader.loaders;
+  }
+  return loader;
+};
+
 const envConstants = constants(ENV);
 if (!SILENT) {
   console.log('Assigning the following constants to process.env:');
@@ -95,13 +107,35 @@ config.module = {
     }, {
       test: /\.json$/,
       loader: 'json'
-    }, {
+    },
+
+    fixStyleLoader({
+      test: /\.m\.scss$/,
+      loaders: [
+        'style',
+        'css?sourceMap&-minimize&modules&importLoaders=2&localIdentName=[name]__[local]___[hash:base64:5]',
+        'postcss',
+        'sass?sourceMap',
+      ],
+    }),
+    fixStyleLoader({
       test: /\.scss$/,
-      loader: scssLoader
-    }, {
-      test: /\.css$/,
-      loader: BUILD ? ExtractTextPlugin.extract('style-loader', 'css-loader') : 'style-loader!css-loader',
-    }, {
+      exclude: /\.m\.scss$/,
+      loaders: [
+        'style',
+        'css?sourceMap&-minimize',
+        'postcss',
+        'sass?sourceMap',
+      ],
+    }),
+    fixStyleLoader({
+      test: /\.css/,
+      loaders: [
+        'style',
+        'css?sourceMap&-minimize',
+      ],
+    }),
+    {
       test: /\.(png|jpg|jpeg|gif)$/,
       loader: 'file'
     }, {
@@ -166,5 +200,12 @@ if (BUILD) {
     minRatio: 0.8
   }));
 }
+
+config.postcss = [
+  require('postcss-flexboxfixer'),
+  require('autoprefixer')({
+    browsers: ['last 2 versions'],
+  }),
+];
 
 module.exports = config;
