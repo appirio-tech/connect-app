@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react'
 import {Link} from 'react-router'
 import ReactDOM from 'react-dom'
-// import Sticky from 'react-stickynode'
 
 
 function isEllipsisActive(el) {
@@ -60,34 +59,32 @@ class ProjectToolBar extends React.Component {
     })
 
     return (
-      // <Sticky>
-        <div className="tc-header tc-header__connect-project">
-          <div className="top-bar">
-            <div className="bar-column">
-              {logo}
-              {project && <div className="breadcrumb">
-                <Link to="/projects">Projects /&nbsp;</Link>
-                <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
-              </div>}
-              {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
-            </div>
-            <div className="bar-column">
-              {project && <nav className="nav">
-                <ul>
-                  <li><Link {...getLinkProps(`/projects/${project.id}`)}><i className="icon-dashboard"/>Dashboard</Link></li>
-                  <li><Link {...getLinkProps(`/projects/${project.id}/specification`)}><i className="icon-specification"/>Specification</Link></li>
-                  {/*
-                    TODO: Enable again when challenges link is needed.
-                    isPowerUser && <li><Link {...getLinkProps(`/projects/${project.id}/challenges`)}><i className="icon-challenges"/>Challenges</Link></li>
-                  */}
-                  <li><Link {...getLinkProps(`/projects/${project.id}/discussions`)}><i className="icon-messages"/>Discussions</Link></li>
-                </ul>
-              </nav>}
-              {avatar}
-            </div>
+      <div className="tc-header tc-header__connect-project">
+        <div className="top-bar">
+          <div className="bar-column">
+            {logo}
+            {project && <div className="breadcrumb">
+              <Link to="/projects">Projects /&nbsp;</Link>
+              <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
+            </div>}
+            {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
+          </div>
+          <div className="bar-column">
+            {project && <nav className="nav">
+              <ul>
+                <li><Link {...getLinkProps(`/projects/${project.id}`)}><i className="icon-dashboard"/>Dashboard</Link></li>
+                <li><Link {...getLinkProps(`/projects/${project.id}/specification`)}><i className="icon-specification"/>Specification</Link></li>
+                {/*
+                  TODO: Enable again when challenges link is needed.
+                  isPowerUser && <li><Link {...getLinkProps(`/projects/${project.id}/challenges`)}><i className="icon-challenges"/>Challenges</Link></li>
+                */}
+                <li><Link {...getLinkProps(`/projects/${project.id}/discussions`)}><i className="icon-messages"/>Discussions</Link></li>
+              </ul>
+            </nav>}
+            {avatar}
           </div>
         </div>
-      // </Sticky>
+      </div>
     )
   }
 }

@@ -8,7 +8,6 @@ const { ConnectLogo } = Icons
 import { SearchBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import ProjectToolBar from './ProjectToolBar'
-// import Sticky from 'react-stickynode'
 
 
 class TopBar extends Component {
@@ -51,7 +50,6 @@ class TopBar extends Component {
       userHandle, userImage, userName, domain, criteria, onNewProjectIntent, applyFilters, isProjectDetails, project,
       isPowerUser, loginUrl, registerUrl, isFilterVisible
     } = this.props
-    // const {isFilterVisible} = this.state
     const homePageUrl = window.location.protocol + '//' + window.location.hostname
     const logoutLink = 'https://accounts.' + domain + '/logout?retUrl=' + homePageUrl
     const isLoggedIn = !!userHandle
