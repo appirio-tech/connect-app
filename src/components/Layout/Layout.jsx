@@ -8,7 +8,7 @@ import Alert from 'react-s-alert'
 require('./Layout.scss')
 
 // Alert styles
-import 'react-s-alert/dist/s-alert-default.css'
+import '../../styles/vendors/s-alert-default.css'
 import 'react-s-alert/dist/s-alert-css-effects/slide.css'
 
 const Layout = (props) => {

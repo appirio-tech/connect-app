@@ -4,6 +4,9 @@
   padding: $base-unit*4 0;
   box-shadow: 0px 1px 3px 0px #C3C3C8;
 
+  // FIXME: Hide the top border on the new post composer to be better looking
+  .new-post-title + .tc-textarea .textarea-footer {border-top: none;}
+
   .panel-row,
   .modal-row{
     padding: $base-unit*2 $base-unit*6;
@@ -187,7 +190,7 @@
       padding: 12px 15px;
       background: $tc-gray-neutral-light;
       border: 1px solid $tc-gray-20;
-      border-top: none;
+      border-top: 1px solid $tc-dark-blue-90;
       display: flex;
       .textarea-buttons{
         display: flex;

@@ -4,7 +4,8 @@ import React, {PropTypes, Component} from 'react'
 import { Link } from 'react-router'
 import cn from 'classnames'
 import { UserDropdown, Icons } from 'appirio-tech-react-components'
-const { ConnectLogo } = Icons
+
+const { ConnectLogoBeta } = Icons
 import { SearchBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import ProjectToolBar from './ProjectToolBar'
@@ -65,7 +66,7 @@ class TopBar extends Component {
     ]
     const logo = (
       <div className="logo-wrapper">
-        <Link className="logo" to={logoTargetUrl}><ConnectLogo width={60}/></Link>
+        <Link className="logo" to={logoTargetUrl}><ConnectLogoBeta /></Link>
       </div>
     )
     const avatar = (

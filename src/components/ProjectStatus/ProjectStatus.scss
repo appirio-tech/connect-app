@@ -50,6 +50,7 @@
         }
         &.red {
           background-color: $tc-red;
+          
           .status-icon {
             position: absolute;
             left: 4px;
@@ -57,13 +58,15 @@
             display: block;
             height: 12px;
             width: 12px;
-            mask: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
-            -webkit-mask: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
-            background-color: $tc-white;
-            mask-size: 12px;
-            -webkit-mask-size: 12px;
+            background: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
+            background-size: 12px 12px;
+            // -webkit-mask: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
+            // background-color: $tc-white;
+            // mask-size: 12px;
+            // -webkit-mask-size: 12px;
           }
         }
+
         &.black {
           background-color: $tc-gray-70;
           .status-icon {
@@ -73,16 +76,18 @@
             display: block;
             height: 12px;
             width: 12px;
-            mask: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
-            -webkit-mask: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
-            background-color: $tc-white;
-            mask-size: 12px;
-            -webkit-mask-size: 12px;
+            background: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
+            background-size: 12px 12px;
+            // -webkit-mask: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
+            // background-color: $tc-white;
+            // mask-size: 12px;
+            // -webkit-mask-size: 12px;
           }
         }
       }
     }
   }
+
   .status-label {
     -webkit-user-select: none; 
     -moz-user-select: none; 
@@ -109,6 +114,7 @@
     }
     &.red {
       background-color: $tc-red;
+      
       .status-icon {
         position: absolute;
         left: 5px;
@@ -116,12 +122,14 @@
         display: block;
         height: 12px;
         width: 12px;
-        mask: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
-        -webkit-mask: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
-        background-color: $tc-white;
-        mask-size: 12px;
-        -webkit-mask-size: 12px;
+        background: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
+        background-size: 12px 12px;
+        // -webkit-mask: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
+        // background-color: $tc-white;
+        // mask-size: 12px;
+        // -webkit-mask-size: 12px;
       }
+
     }
     &.black {
       background-color: $tc-gray-70;
@@ -132,11 +140,12 @@
         display: block;
         height: 12px;
         width: 12px;
-        mask: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
-        -webkit-mask: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
-        background-color: $tc-white;
-        mask-size: 12px;
-        -webkit-mask-size: 12px;
+        background: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
+        background-size: 12px 12px;
+        // -webkit-mask: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
+        // background-color: $tc-white;
+        // mask-size: 12px;
+        // -webkit-mask-size: 12px;
       }
     }
     &.editable {

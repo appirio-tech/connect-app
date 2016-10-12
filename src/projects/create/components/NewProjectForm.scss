@@ -5,8 +5,16 @@
   display: none;
 }
 
+.ReactModalPortal {
+  transition: 200ms ease-in-out
+}
+
+.project-creation-dialog-overlay {
+  background-color: rgba(235, 235, 235, .94) !important;
+}
 
 .content {
+
   .container {
     position: relative;
     margin: 0px auto 20px;
@@ -16,7 +24,8 @@
     background: $tc-white;
 
     &.container-margin {
-      margin-top: 20px;
+      margin: 50px auto;
+      box-shadow: 0px 0px 14px 1px rgba(38,38,40,0.15);
     }
 
     .btn-close {
@@ -46,7 +55,7 @@
         margin: 0 auto 30px;
 
         span{
-          width: 33%;
+          width: 33.3%;
           cursor: pointer;
           @include roboto-light;
           font-size: 12px;
@@ -60,10 +69,30 @@
       }
       .type-selector {
         display: flex;
+        
         .selector {
-          width: 33%;
+          width: 33.3%;
           cursor: pointer;
-          &.active{
+          position: relative;
+
+          &:before {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border: 3px solid $tc-white;
+            top: -29px;
+            left: calc(50% - 7.5px);
+            border-radius: 50%;
+            background: $tc-gray-neutral-dark;
+          }
+          
+          &.active {
+            &:before {
+              display: none;
+            }
+
             h3, p, span{
               color: $tc-black;
             }
@@ -399,94 +428,132 @@ input {
   }
 }
 
+// TODO: Export as a separate component!
+// FIXME: Refactor the code
+
+// Slider variables:
+$slider-height: 40px;
+$track-height: 5px;
+$track-width: 600px;
+$track-thumb-size: 20px;
+$track-color: $tc-gray-neutral-dark;
 
 .range-slider {
-  width: 780px;
-  display:block;
-  margin: 20px auto;
-  clear:both;
-  overflow:hidden;
-  height: 40px;
+  width: $track-width;
+  display: block;
+  margin: 0 auto;
+  overflow: hidden;
+  height: $slider-height;
   cursor: pointer;
+  text-align: center;
+
   input[type=range] {
     -webkit-appearance: none;
     cursor: pointer;
     border: none!important;
     box-shadow: none!important;
-    width: 780px;
-    display:block;
+    width: $track-width;
+    display: block;
     margin: 0 auto;
-    padding:0!important;
+    padding:0 !important;
+
     &:focus {
       outline: none;
       border: none!important;
       box-shadow: none!important;
     }
+
+    // Chrome + Safari styles
     &::-webkit-slider-runnable-track {
-      width: 780px;
-      height: 4px !important;
-      border: none!important;
-      box-shadow: none!important;
-      background: $tc-gray-20;
-      /*background: url('../../images/slider-bg.png') no-repeat 0 0;*/
+      width: $track-width;
+      height: $track-height;
+      border: none;
+      box-shadow: none;
+      background: $track-color;
+      // background: url('../../images/slider-bg.png') no-repeat;
+      background-size: cover;
+      border-radius: 5px;
     }
+
     &::-webkit-slider-thumb {
       -webkit-appearance: none;
       border: none;
-      height: 27px;
-      width: 27px;
-      border: 3px solid $tc-white;
+      height: $track-thumb-size;
+      width: $track-thumb-size;
+      // border: 3px solid $tc-white;
       border-radius: 50%;
-      background: $tc-dark-blue-90 no-repeat;
-      margin-top: -12px;
+      background: $tc-dark-blue-90 url('../../../assets/images/check-white.svg') no-repeat 50% 50%;
+      margin-top: -10px;
     }
+
     &::-webkit-slider-runnable-track {
       height: 4px;
     }
+
+
+    // Firefox styles
     &::-moz-range-track {
-      width: 780px;
-      height: 4px;
-
-      background: $tc-gray-20;
-      /*background: url('../../images/slider-bg.png') no-repeat 0 0;*/
+      width: $track-width;
+      height: $track-height;
+      background: $track-color;
+      // background: url('../../images/slider-bg.png') no-repeat;
+      // background-size: cover; 
       border: none;
-
     }
+
     &::-moz-range-thumb {
       border: none;
-      height: 24px;
-      width: 24px;
+      height: $track-thumb-size;
+      width: $track-thumb-size;
       border-radius: 50%;
-      background: $tc-dark-blue-90;
+      background: $tc-dark-blue-90 url('../../../assets/images/check-white.svg') no-repeat 50% 50%;
       cursor: pointer;
-      border: 3px solid $tc-white;
     }
-    &::-moz-focusring{
+
+    &::-moz-focusring {
       outline: none;
       outline-offset: -1px;
     }
+    
+    // MS IE11+ styles
     &::-ms-track {
-      width: 860px;
+      width: $track-width;
       height: 5px;
-      background: none;
-      border-color: none;
-      border-width: 6px 0;
       color: transparent;
+      border: none;
+      cursor: pointer;
+      border-radius: 10px;
     }
+
+    // The rounded selector
     &::-ms-thumb {
       border: none;
-      height: 20px;
-      width: 20px;
+      height: $track-thumb-size;
+      width: $track-thumb-size;
       border-radius: 50%;
+      background: $tc-dark-blue-90 url('../../../assets/images/check-white.svg') no-repeat 50% 50%;
     }
-    &:focus::-ms-fill-lower {
-      background: transparent;
+
+    // Color the sections between steps
+    &::-ms-fill-lower,
+    &::-ms-fill-upper {
+      border: none;
+      background: $track-color;
+      border-radius: 4px;
     }
+
+    &:focus::-ms-fill-lower,
     &:focus::-ms-fill-upper {
-      background: transparent;
+      border: none;
+      border-radius: 4px;
+      background-color: $tc-gray-neutral-dark;
     }
-    &::-moz-range-track {
-      border: 0;
+    &::ms-tooltip {
+      display: block;
+      padding: 30px;
+      background: $tc-dark-blue-10;
+      border: 1px solid $tc-dark-blue-30;
+      color: $tc-gray-80;
     }
   }
 }
