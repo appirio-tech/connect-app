@@ -53,7 +53,7 @@ class MessagesView extends React.Component {
       : 0
     this.setState({
       threads: props.threads.map((thread, idx) => {
-        const item = _.pick(thread, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds'])
+        const item = _.pick(thread, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isAddingComment'])
         item.isActive = idx === activeThreadIndex
         if (isSystemUser(item.userId)) {
           item.user = SYSTEM_USER
