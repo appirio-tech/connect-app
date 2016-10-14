@@ -21,6 +21,10 @@ class ProjectStatus extends React.Component {
     this.changeStatus = this.changeStatus.bind(this)
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ showStatusChangeDialog : false })
+  }
+
   componentDidMount() {
     document.addEventListener('click', this.onClickOutside)
   }
@@ -34,15 +38,15 @@ class ProjectStatus extends React.Component {
     if (e.target === ReactDOM.findDOMNode(this.refs.toggleBtn)) {
       return
     }
-    onToggleOpen(false, e)
+    this.setState({ isOpen : false })
   }
 
   showStatusChangeDialog(newStatus, e) {
     if (newStatus === 'completed' || newStatus === 'cancelled') {
-      this.setState({  newStatus, showStatusChangeDialog : true })
+      this.setState({ newStatus, showStatusChangeDialog : true, isOpen : false })
     } else {
-      this.setState({  newStatus, showStatusChangeDialog : true })
-      // this.props.onChangeStatus(newStatus)
+      // this.setState({ newStatus, showStatusChangeDialog : true, isOpen : false })
+      this.props.onChangeStatus(newStatus)
     }
   }
 
@@ -55,8 +59,8 @@ class ProjectStatus extends React.Component {
   }
 
   render() {
-    const {directLinks, status, isOpen, currentMemberRole, onToggleOpen, onChangeStatus } = this.props
-    const { showStatusChangeDialog } = this.state
+    const {directLinks, status, currentMemberRole, onToggleOpen, onChangeStatus } = this.props
+    const { showStatusChangeDialog, isOpen } = this.state
     const selected = PROJECT_STATUS.filter((opt) => opt.value === status)[0]
     const canEdit = currentMemberRole
       && _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -70,7 +74,7 @@ class ProjectStatus extends React.Component {
               Status
             </PanelProject.Heading>
             <div
-              onClick={(e) => canEdit && onToggleOpen(!isOpen, e)}
+              onClick={(e) => canEdit && this.setState({isOpen : !isOpen})}
               ref="toggleBtn"
               className={cn('status-label', selected.color, {active: isOpen, editable : canEdit})}
             >
@@ -86,7 +90,6 @@ class ProjectStatus extends React.Component {
                       className={cn({active: item.value === status})}
                       onClick={(e) => {
                         this.showStatusChangeDialog(item.value, e)
-                        onToggleOpen(false, e)
                       }}
                     >
                       <span className={item.color}><i className="status-icon"/></span>
@@ -117,6 +120,4 @@ ProjectStatus.propTypes = {
   onChangeStatus: PropTypes.func.isRequired
 }
 
-export default uncontrollable(ProjectStatus, {
-  isOpen: 'onToggleOpen'
-})
+export default ProjectStatus
