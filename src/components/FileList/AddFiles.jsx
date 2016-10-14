@@ -19,7 +19,7 @@ const AddFiles = props => {
     storeContainer: FILE_PICKER_SUBMISSION_CONTAINER_NAME,
     path: storePath,
     multiple: 'true',
-    services: ['COMPUTER']//'COMPUTER,GOOGLE_DRIVE,BOX,DROPBOX,SKYDRIVE'
+    services: ['COMPUTER', 'GOOGLE_DRIVE', 'BOX', 'DROPBOX', 'SKYDRIVE']
   }
 
   return (
