@@ -60,9 +60,9 @@ const getTopicsWithComments = (projectId, tag) => {
         return { topics, totalCount }
       }
       return Promise.all(additionalPosts)
-        .then(posts => {
-          _.forEach(posts, (p) => {
-            const topic = _.find(topics, p.topicId)
+        .then(postArr => {
+          _.forEach(postArr, (p) => {
+            const topic = _.find(topics, t => p.topicId)
             topic.posts = _.sortBy(topic.posts.concat(p.posts), ['id'])
           })
           return { topics, totalCount }
@@ -113,11 +113,11 @@ export function createProjectTopic(projectId, topic) {
   }
 }
 
-export function loadFeedComments(feedId, tag, fromIndex) {
+export function loadFeedComments(feedId, tag, postIds) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_PROJECT_FEED_COMMENTS,
-      payload: getTopicPosts(feedId, fromIndex),
+      payload: getTopicPosts(feedId, postIds),
       meta: {
         topicId: feedId,
         tag

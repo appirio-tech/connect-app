@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import _ from 'lodash'
 import {
+  THREAD_MESSAGES_PAGE_SIZE,
   PROJECT_STATUS_DRAFT,
   PROJECT_ROLE_CUSTOMER,
   PROJECT_ROLE_COPILOT,
@@ -12,14 +13,12 @@ import {
   CODER_BOT_USER_LNAME
 } from '../../../config/constants'
 import { connect } from 'react-redux'
-import { update } from 'react-addons-update'
+import update from 'react-addons-update'
 import NewPost from '../../../components/Feed/NewPost'
 import Feed from '../../../components/Feed/Feed'
 import ProjectSpecification from '../../../components/ProjectSpecification/ProjectSpecification'
 import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-
-const FEED_COMMENTS_PAGE_SIZE = 3
 
 const SYSTEM_USER = {
   firstName: CODER_BOT_USER_FNAME,
@@ -35,7 +34,7 @@ class FeedView extends React.Component {
     super(props)
     this.onNewPost = this.onNewPost.bind(this)
     this.onNewCommentChange = this.onNewCommentChange.bind(this)
-    this.onLoadMoreComments = this.onLoadMoreComments.bind(this)
+    this.onShowAllComments = this.onShowAllComments.bind(this)
     this.onAddNewComment = this.onAddNewComment.bind(this)
     this.state = { feeds : [], showAll: [] }
   }
@@ -48,62 +47,54 @@ class FeedView extends React.Component {
     this.init(nextProps)
   }
 
+  mapFeed(feed, showAll = false) {
+    const { allMembers } = this.props
+    const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isAddingComment', 'isLoadingComments', 'error'])
+    if (isSystemUser(item.userId)) {
+      item.user = SYSTEM_USER
+      item.allowComments = false
+    } else {
+      item.user = allMembers[item.userId]
+      item.allowComments = true
+    }
+    item.unread = !feed.read
+    // item.html = posts[feed.postIds[0]].body
+    item.html = feed.posts[0].body
+    // skip over the first post since that is the topic post
+    item.totalComments = feed.totalPosts-1
+    item.comments = []
+    const _toComment = (p) => {
+      return {
+        id: p.id,
+        content: p.body,
+        unread: !p.read,
+        date: p.date,
+        author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
+      }
+    }
+    if (showAll) {
+      // if we are showing all comments, just iterate through the entire array
+      _.forEach(_.slice(feed.posts, 1), p => {
+        p.type === 'post' ? item.comments.push(_toComment(p)) : item.totalComments--
+      })
+    } else {
+      // otherwise iterate from right and add to the beginning of the array
+      _.forEachRight(_.slice(feed.posts, 1), (p) => {
+        p.type === 'post' ? item.comments.unshift(_toComment(p)) : item.totalComments--
+        if (!feed.showAll && item.comments.length === THREAD_MESSAGES_PAGE_SIZE)
+          return false
+      })
+    }
+    item.newComment = ''
+    item.hasMoreComments = item.comments.length !== item.totalComments
+    return item
+  }
+
   init(props) {
-    const { allMembers, feeds } = props
+    const { feeds } = props
     this.setState({
       feeds: feeds.map((feed) => {
-        const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isAddingComment', 'error'])
-        // const showAll = this.state.showAll.indexOf(feed.id) > -1
-        if (isSystemUser(item.userId)) {
-          item.user = SYSTEM_USER
-          item.allowComments = false
-        } else {
-          item.user = allMembers[item.userId]
-          item.allowComments = true
-        }
-        item.unread = !feed.read
-        // item.html = posts[feed.postIds[0]].body
-        item.html = feed.posts[0].body
-        // skip over the first post since that is the topic post
-        item.totalComments = feed.totalPosts-1
-        item.comments = []
-        const _toComment = (p) => {
-          return {
-            id: p.id,
-            content: p.body,
-            unread: !p.read,
-            date: p.date,
-            author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
-          }
-        }
-        if (feed.showAll) {
-          // if we are showing all comments, just iterate through the entire array
-          _.forEach(_.slice(feed.posts, 1), p => {
-            p.type === 'post' ? item.comments.push(_toComment(p)) : item.totalComments--
-          })
-        } else {
-          // otherwise iterate from right and add to the beginning of the array
-          _.forEachRight(_.slice(feed.posts, 1), (p) => {
-            p.type === 'post' ? item.comments.unshift(_toComment(p)) : item.totalComments--
-            if (!feed.showAll && item.comments.length === 3)
-              return false
-          })
-        }
-        // item.comments = _.map(_.slice(feed.posts, 1), (p) => {
-        //   if (p.type === 'post') {
-        //     return {
-        //       content: p.body,
-        //       unread: !p.read,
-        //       date: p.date,
-        //       author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
-        //     }
-        //   } else {
-        //     item.totalComments--
-        //   }
-        // }).filter(i => i)
-        item.newComment = ''
-        item.hasMoreComments = item.comments.length !== item.totalComments // FIXME
-        return item
+        return this.mapFeed(feed, this.state.showAll.indexOf(feed.id) > -1)
       }).filter(item => item)
     })
   }
@@ -118,7 +109,6 @@ class FeedView extends React.Component {
     this.props.createProjectTopic(project.id, newFeed)
   }
 
-
   onNewCommentChange(feedId, content) {
     this.setState({
       feeds: this.state.feeds.map((item) => {
@@ -130,36 +120,30 @@ class FeedView extends React.Component {
     })
   }
 
-  onLoadMoreComments(feedId) {
+  onShowAllComments(feedId) {
     const { feeds } = this.props
-    const feedIndex = _.findIndex(feeds, feed => feed.id === feedId)
-    const item = this.state.feeds[feedIndex]
-    const feed = feeds[feedIndex]
-    const renderedCommentIds = _.map(item.comments, 'id')
-    const commentsToRetrieve = _.without(feed.postIds.slice(1), ...renderedCommentIds)
-    if (commentsToRetrieve.length) {
-      this.props.loadFeedComments(feedId, PROJECT_FEED_TYPE_PRIMARY, commentsToRetrieve)
-    }
-    this.setState({showAll: update(this.state, { $push: feedId })})
-  }
-
-  XonLoadMoreComments(feedId) {
-    const { feeds } = this.state
-    const feedIndex = _.findIndex(feeds, feed => feed.id === feedId)
-    const feed = feeds[feedIndex]
-    const renderedComments = feed.comments.length
-    const availableComments = feed.posts.length - 1
-    if (renderedComments < availableComments) {
-      const nextPage = feed.posts.slice(-renderedComments-FEED_COMMENTS_PAGE_SIZE, -renderedComments)
-      feed.comments = nextPage.concat(feed.comments)
-      feed.hasMoreComments = feed.comments.length < feed.totalComments
-      this.forceUpdate()
+    const feed = _.find(feeds, feed => feed.id === feedId)
+    const stateFeedIdx = _.findIndex(this.state.feeds, (f) => f.id === feedId)
+    // in case we have already have all comments for that feed from the server,
+    // just change the state to show all comments for that FeedId.
+    // Otherwise load more comments from the server
+    if (feed.posts.length < feed.postIds.length) {
+      // load more from server
+      const updatedFeed = update(this.state.feeds[stateFeedIdx], {
+        isLoadingComments: { $set : true }
+      })
+      const retrievedPostIds = _.map(feed.posts, 'id')
+      const commentIdsToRetrieve = _.filter(feed.postIds, _id => retrievedPostIds.indexOf(_id) === -1 )
+      this.setState(update(this.state, {
+        showAll: { $push: [feedId] },
+        feeds: { $splice: [[stateFeedIdx, 1, updatedFeed ]] }
+      }))
+      this.props.loadFeedComments(feedId, PROJECT_FEED_TYPE_PRIMARY, commentIdsToRetrieve)
     } else {
-      if (feed.comments && feed.comments.length < feed.totalComments) {
-        const commentIds = feed.postIds.slice(-renderedComments-FEED_COMMENTS_PAGE_SIZE, -renderedComments)
-
-        this.props.loadFeedComments(feedId, PROJECT_FEED_TYPE_PRIMARY, commentIds)
-      }
+      this.setState(update(this.state, {
+        showAll: { $push: [feedId] },
+        feeds: { $splice: [[stateFeedIdx, 1, this.mapFeed(feed, true) ]] }
+      }))
     }
   }
 
@@ -191,7 +175,7 @@ class FeedView extends React.Component {
             currentUser={currentUser}
             onNewCommentChange={this.onNewCommentChange.bind(this, item.id)}
             onAddNewComment={this.onAddNewComment.bind(this, item.id)}
-            onLoadMoreComments={this.onLoadMoreComments.bind(this, item.id)}
+            onLoadMoreComments={this.onShowAllComments.bind(this, item.id)}
           >
             {item.sendForReview && <div className="panel-buttons">
               <button className="tc-btn tc-btn-primary tc-btn-md">Send for review</button>

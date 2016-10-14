@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
-import update from 'react-addons-update'
 import SidebarNav from './SidebarNav'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../../config/constants'
 import { updateProject } from '../../actions/project'
@@ -87,7 +86,6 @@ class ProjectSpecSidebar extends Component {
       _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
     return (
       <div className="projectSpecSidebar">
-        <button onClick={() => this.props.updateProject(project.id, update(project, { details: { appDefinition: { goal: { value: { $apply: (x) => { return parseInt(x) + 1}}}}}}))} className="btn btn-primary">Test Save</button>
         <h4 className="titles gray-font">Specifications</h4>
         <div className="list-group">
           <SidebarNav items={navItems} />
