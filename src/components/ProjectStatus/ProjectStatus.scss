@@ -7,6 +7,7 @@
   margin: 15px 0;
   padding-top: 10px;
   position: relative;
+
   .status-dropdown {
     border-radius: $base-unit;
     box-shadow: 0 0 15px rgba(0, 0, 0, .25);
@@ -174,6 +175,11 @@
     }
 
   }
+}
+
+.project-status-wrapper.panel {// reset styles of panel class, we need panel class to activate the modal-overlay
+  border: none;
+  box-shadow: none;
 }
 
 .project-direct-links {
