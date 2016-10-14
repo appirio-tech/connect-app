@@ -28,8 +28,10 @@ const initialState = {
   feeds: {
     MESSAGES: { topics: [], totalCount: 0 },
     PRIMARY: { topics: [], totalCount: 0 }
-  }
+  },
+  posts: {}
 }
+
 
 export const projectTopics = function (state=initialState, action) {
   const payload = action.payload
@@ -66,15 +68,23 @@ export const projectTopics = function (state=initialState, action) {
      * Also, update the total count.
      * NOTE: pagination for topics is not supported right now
      */
+
+    // const posts = {}
+    // let topics = _.map(payload.topics, (t) => {
+    //   _.merge(posts, _.keyBy(t.posts, 'id'))
+    //   return _.omit(t, ['posts'])
+    // })
     const topics = _.sortBy(payload.topics, (t) => {
       return new Date(t.lastActivityAt)
     }).reverse()
+
     const feedUpdateQuery = {}
     feedUpdateQuery[action.meta.tag] = { $merge: { topics, totalCount: payload.totalCount } }
     return update(state, {
       isLoading: {$set: false},
       error: {$set: false},
       feeds: feedUpdateQuery
+      // posts: { $merge: posts }
     })
   }
   case LOAD_PROJECT_FEEDS_MEMBERS_FAILURE:
@@ -117,7 +127,7 @@ export const projectTopics = function (state=initialState, action) {
   case CREATE_PROJECT_FEED_FAILURE:
     return Object.assign({}, state, {
       isCreatingFeed: false,
-      error: false
+      error: true
     })
   case LOAD_PROJECT_FEED_COMMENTS_PENDING: {
     const feedId = _.get(action, 'meta.topicId', null)
@@ -148,12 +158,14 @@ export const projectTopics = function (state=initialState, action) {
     if (feedIndex >= 0) {
       const feed = state.feeds[tag][feedIndex]
       // number of posts those would be rendered after this state update
-      const noOfRenderedPosts = feed.posts.length + payload.posts.length
+      // const noOfRenderedPosts = feed.posts.length + payload.posts.length
       // updates feed, pushes the new posts into posts array of the feed
       const updatedFeed = update(feed, {
-        hasMoreComments: { $set : payload.totalCount > noOfRenderedPosts },
-        totalComments: { $set : payload.totalCount },
-        posts: { $splice : [[0, 0, ...payload.posts]] },
+        // hasMoreComments: { $set : payload.totalCount > noOfRenderedPosts },
+        // totalComments: { $set : payload.totalCount },
+        // posts: { $splice : [[0, 0, ...payload.posts]] },
+        showAll: { $set: true },
+        posts: { $push: payload.posts },
         isLoadingComments: { $set : false }
       })
       const feedUpdateQuery = {}
@@ -219,7 +231,8 @@ export const projectTopics = function (state=initialState, action) {
         retrievedPosts: { $apply: n => n+1 },
         postIds: { $push: [comment.id] },
         posts: { $push : [ comment ] },
-        isAddingComment : { $set : false }
+        isAddingComment : { $set : false },
+        error: { $set: false }
       })
       const feedUpdateQuery = {}
       feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
@@ -239,7 +252,8 @@ export const projectTopics = function (state=initialState, action) {
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
       const updatedFeed = update (feed, {
-        isAddingComment : { $set : false }
+        isAddingComment : { $set : false },
+        error: { $set: false }
       })
       const feedUpdateQuery = {}
       feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }

@@ -8,11 +8,11 @@ import TopBar from './TopBar'
 import CreateView from '../../projects/create/components/CreateView'
 import { TCEmitter } from '../../helpers'
 import {
+  DOMAIN,
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
   ROLE_ADMINISTRATOR,
   EVENT_ROUTE_CHANGE,
-  ACCOUNTS_APP_LOGIN_URL,
   ACCOUNTS_APP_REGISTER_URL
 } from '../../config/constants'
 
@@ -97,7 +97,8 @@ class TopBarContainer extends React.Component {
     const {isCreatingProject, currentPath, isFilterVisible } = this.state
     const isProjectDetails = /projects\/\d+/.test(currentPath)
     const isHomePage = this.context.router.isActive('/', true)
-    const loginUrl = ACCOUNTS_APP_LOGIN_URL
+    // NOTE: hardcoding to connectv2, once connect v1
+    const loginUrl = `ACCOUNTS_APP_LOGIN_URL?retUrl=https://connectv2.${DOMAIN}/`
     const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
     return (
       <div>

@@ -6,7 +6,7 @@ import Projects from './list/components/Projects/Projects'
 import ProjectDetail from './detail/ProjectDetail'
 import Dashboard     from './detail/Dashboard'
 import ProjectMessages from './detail/Messages'
-import ProjectSpecification from './detail/containers/Specification'
+import SpecificationContainer from './detail/containers/SpecificationContainer'
 import { requiresAuthentication } from '../components/AuthenticatedComponent'
 
 
@@ -16,7 +16,7 @@ const projectRoutes = (
     <IndexRoute components={{topbar: null, main: Projects }} />
     <Route path=":projectId" components={{topbar: null, main: ProjectDetail}} >
       <IndexRoute component={ Dashboard } />
-      <Route path="specification" component={ ProjectSpecification } />
+      <Route path="specification" component={ SpecificationContainer } />
       <Route path="discussions" component={ ProjectMessages } />
     </Route>
   </Route>

@@ -36,6 +36,7 @@ class MessageDetails extends React.Component {
   isLoadingComments,
   currentUser,
   isAddingComment,
+  error,
   allowAddingComment} = this.props
     let authorName = currentUser.firstName
     if (authorName && currentUser.lastName) {
@@ -71,6 +72,7 @@ class MessageDetails extends React.Component {
         <AddComment
           className="messaging-comment-section"
           isAdding={isAddingComment}
+          hasError={error}
           avatarUrl={currentUser.photoURL}
           authorName={ authorName }
           onAdd={onAddNewMessage}

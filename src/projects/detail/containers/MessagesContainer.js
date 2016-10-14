@@ -161,7 +161,7 @@ class MessagesView extends React.Component {
 
   render() {
     const {threads, isCreateNewMessage, showEmptyState} = this.state
-    const { currentUser, isCreatingFeed, currentMemberRole, isLoading } = this.props
+    const { currentUser, isCreatingFeed, currentMemberRole, isLoading, error } = this.props
     if (isLoading)
       return <LoadingIndicator />
 
@@ -173,6 +173,7 @@ class MessagesView extends React.Component {
             currentUser={currentUser}
             onPost={this.onNewThread}
             isCreating={isCreatingFeed}
+            hasError={error}
             heading="New Discussion Post"
             titlePlaceholder="Start a new discussion topic with the team"
           />
