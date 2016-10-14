@@ -41,7 +41,6 @@ class ProjectStatus extends React.Component {
     if (newStatus === 'completed' || newStatus === 'cancelled') {
       this.setState({ newStatus, showStatusChangeDialog : true, isOpen : false })
     } else {
-      // this.setState({ newStatus, showStatusChangeDialog : true, isOpen : false })
       this.props.onChangeStatus(newStatus)
     }
   }
