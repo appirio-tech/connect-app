@@ -39,9 +39,9 @@ export default class FileListItem extends React.Component {
     const title = this.refs.title.value
     const errors = this.validateForm()
     if (!_.isEmpty(errors)) {
-      this.setState({ errors : errors })
+      this.setState({ errors })
     } else {
-      this.props.onSave(this.props.id, {title: title, description: this.refs.desc.value}, e)
+      this.props.onSave(this.props.id, {title, description: this.refs.desc.value}, e)
       this.setState({isEditing: false})
     }
   }
@@ -63,7 +63,7 @@ export default class FileListItem extends React.Component {
     const errors = this.state.errors || {}
     this.validateTitle(errors)
     if (!_.isEmpty(errors)) {
-      this.setState({ errors : errors })
+      this.setState({ errors })
     }
   }
 

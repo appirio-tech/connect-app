@@ -8,7 +8,6 @@ import TopBar from './TopBar'
 import CreateView from '../../projects/create/components/CreateView'
 import { TCEmitter } from '../../helpers'
 import {
-  DOMAIN,
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
   ROLE_ADMINISTRATOR,
