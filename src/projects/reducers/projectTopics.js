@@ -31,6 +31,7 @@ const initialState = {
   }
 }
 
+
 export const projectTopics = function (state=initialState, action) {
   const payload = action.payload
 
@@ -64,11 +65,12 @@ export const projectTopics = function (state=initialState, action) {
      * Sort them based on 'lastActivityAt' (latest first) and replace,
      * the topics in the current list for that tag.
      * Also, update the total count.
-     * NOTE: pagination for topics is not supported right now
      */
+
     const topics = _.sortBy(payload.topics, (t) => {
       return new Date(t.lastActivityAt)
     }).reverse()
+
     const feedUpdateQuery = {}
     feedUpdateQuery[action.meta.tag] = { $merge: { topics, totalCount: payload.totalCount } }
     return update(state, {
@@ -117,21 +119,21 @@ export const projectTopics = function (state=initialState, action) {
   case CREATE_PROJECT_FEED_FAILURE:
     return Object.assign({}, state, {
       isCreatingFeed: false,
-      error: false
+      error: true
     })
   case LOAD_PROJECT_FEED_COMMENTS_PENDING: {
     const feedId = _.get(action, 'meta.topicId', null)
     const tag = _.get(action, 'meta.tag', null)
     // find feed index from the state
-    const feedIndex = _.findIndex(state.feeds[tag], feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     // if we find the feed
     if (feedIndex >= 0) {
-      const feed = state.feeds[tag][feedIndex]
+      const feed = state.feeds[tag].topics[feedIndex]
       const updatedFeed = update(feed, {
         isLoadingComments: { $set : true }
       })
       const feedUpdateQuery = {}
-      feedUpdateQuery[tag] = { $splice: [[feedIndex, 1, updatedFeed]] }
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
       // update the state
       return update (state, {
         feeds: feedUpdateQuery
@@ -143,21 +145,20 @@ export const projectTopics = function (state=initialState, action) {
     const feedId = _.get(action, 'meta.topicId', null)
     const tag = _.get(action, 'meta.tag', null)
     // find feed index from the state
-    const feedIndex = _.findIndex(state.feeds[tag], feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     // if we find the feed
     if (feedIndex >= 0) {
-      const feed = state.feeds[tag][feedIndex]
+      const feed = state.feeds[tag].topics[feedIndex]
       // number of posts those would be rendered after this state update
-      const noOfRenderedPosts = feed.posts.length + payload.posts.length
+      // const noOfRenderedPosts = feed.posts.length + payload.posts.length
       // updates feed, pushes the new posts into posts array of the feed
       const updatedFeed = update(feed, {
-        hasMoreComments: { $set : payload.totalCount > noOfRenderedPosts },
-        totalComments: { $set : payload.totalCount },
-        posts: { $splice : [[0, 0, ...payload.posts]] },
+        showAll: { $set: true },
+        posts: { $push: payload.posts },
         isLoadingComments: { $set : false }
       })
       const feedUpdateQuery = {}
-      feedUpdateQuery[tag] = { $splice: [[feedIndex, 1, updatedFeed]] }
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
       // update the state
       return update (state, {
         feeds: feedUpdateQuery
@@ -169,15 +170,15 @@ export const projectTopics = function (state=initialState, action) {
     const feedId = _.get(action, 'meta.topicId', null)
     const tag = _.get(action, 'meta.tag', null)
     // find feed index from the state
-    const feedIndex = _.findIndex(state.feeds[tag], feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     // if we find the feed
     if (feedIndex >= 0) {
-      const feed = state.feeds[tag][feedIndex]
+      const feed = state.feeds[tag].topics[feedIndex]
       const updatedFeed = update(feed, {
         isLoadingComments: { $set : false }
       })
       const feedUpdateQuery = {}
-      feedUpdateQuery[tag] = { $splice: [[feedIndex, 1, updatedFeed]] }
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
       // update the state
       return update (state, {
         feeds: feedUpdateQuery
@@ -219,7 +220,8 @@ export const projectTopics = function (state=initialState, action) {
         retrievedPosts: { $apply: n => n+1 },
         postIds: { $push: [comment.id] },
         posts: { $push : [ comment ] },
-        isAddingComment : { $set : false }
+        isAddingComment : { $set : false },
+        error: { $set: false }
       })
       const feedUpdateQuery = {}
       feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
@@ -239,7 +241,8 @@ export const projectTopics = function (state=initialState, action) {
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
       const updatedFeed = update (feed, {
-        isAddingComment : { $set : false }
+        isAddingComment : { $set : false },
+        error: { $set: false }
       })
       const feedUpdateQuery = {}
       feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }

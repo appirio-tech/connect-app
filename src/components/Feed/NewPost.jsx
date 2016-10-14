@@ -58,6 +58,14 @@ class NewPost extends React.Component {
     document.removeEventListener('click', this.onClickOutside)
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!(nextProps.isCreating || nextProps.hasError && !nextProps.isCreating)) {
+      this.setState({editorState: EditorState.createEmpty()})
+      this.refs.title.value = ''
+    }
+    this.onNewPostChange()
+  }
+
   onClickOutside(evt) {
     let currNode = evt.target
     let isEditor = false
@@ -150,8 +158,8 @@ class NewPost extends React.Component {
       const content = stateToMarkdown(editorState.getCurrentContent())
       if (title && content) {
         this.props.onPost({title, content})
-        this.setState({editorState: EditorState.createEmpty()})
-        this.refs.title.value = ''
+        // this.setState({editorState: EditorState.createEmpty()})
+        // this.refs.title.value = ''
       }
     }
 

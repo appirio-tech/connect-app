@@ -35,7 +35,7 @@ class ProjectInfoContainer extends React.Component {
     let percent =''
     let title = ''
     let text = ''
-    let type = ''
+    let type = 'completed' // default
     if (duration) {
       const {actualDuration, plannedDuration} = duration
       if (status === 'draft') {
