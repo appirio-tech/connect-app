@@ -20,9 +20,7 @@ export default class FileListItem extends React.Component {
     this.onDelete = this.onDelete.bind(this)
     this.validateForm = this.validateForm.bind(this)
     this.validateTitle = this.validateTitle.bind(this)
-    this.validateDesc = this.validateDesc.bind(this)
     this.onTitleChange = this.onTitleChange.bind(this)
-    this.onDescChange = this.onDescChange.bind(this)
   }
 
   onDelete() {
@@ -52,7 +50,6 @@ export default class FileListItem extends React.Component {
   validateForm() {
     const errors = this.state.errors || {}
     this.validateTitle(errors)
-    this.validateDesc(errors)
     return errors
   }
 
@@ -63,24 +60,9 @@ export default class FileListItem extends React.Component {
     }
   }
 
-  validateDesc(errors) {
-    const desc = this.refs.desc.value
-    if (!desc || desc.trim().length === 0) {
-      errors['desc'] = 'Description cannot be blank.'
-    }
-  }
-
   onTitleChange() {
     const errors = this.state.errors || {}
     this.validateTitle(errors)
-    if (!_.isEmpty(errors)) {
-      this.setState({ errors : errors })
-    }
-  }
-
-  onDescChange() {
-    const errors = this.state.errors || {}
-    this.validateDesc(errors)
     if (!_.isEmpty(errors)) {
       this.setState({ errors : errors })
     }
@@ -100,7 +82,7 @@ export default class FileListItem extends React.Component {
           </div>
         </div>
         { (errors && errors.title) && <div className="error-message">{ errors.title }</div> }
-        <textarea defaultValue={description} ref="desc" maxLength={250} className="tc-textarea" onChange={ this.onDescChange } />
+        <textarea defaultValue={description} ref="desc" maxLength={250} className="tc-textarea" />
         { (errors && errors.desc) && <div className="error-message">{ errors.desc }</div> }
       </div>
     )
