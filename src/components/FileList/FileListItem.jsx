@@ -59,14 +59,14 @@ export default class FileListItem extends React.Component {
   validateTitle(errors) {
     const title = this.refs.title.value
     if (!title || title.trim().length === 0) {
-      errors['title'] = 'Please enter a valid file name'
+      errors['title'] = 'The file name cannot be blank.'
     }
   }
 
   validateDesc(errors) {
     const desc = this.refs.desc.value
     if (!desc || desc.trim().length === 0) {
-      errors['desc'] = 'Please enter a valid description'
+      errors['desc'] = 'Description cannot be blank.'
     }
   }
 
@@ -93,7 +93,7 @@ export default class FileListItem extends React.Component {
     return (
       <div>
         <div className="title-edit">
-          <input type="text" defaultValue={title} ref="title" onChange={ this.onTitleChange }/>
+          <input type="text" defaultValue={title} ref="title" maxLength={50} onChange={ this.onTitleChange }/>
           <div className="save-icons">
             <a href="javascript:" className="icon-save" onClick={this.handleSave}><SaveIcon /></a>
             <a href="javascript:" className="icon-close" onClick={onExitEdit}><CloseIcon /></a>
