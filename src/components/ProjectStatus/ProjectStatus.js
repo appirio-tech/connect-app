@@ -1,13 +1,10 @@
 import React, {PropTypes} from 'react'
 import ReactDOM from 'react-dom'
-import Modal from 'react-modal'
 import PanelProject from '../PanelProject/PanelProject'
 import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import './ProjectStatus.scss'
 import cn from 'classnames'
 import _ from 'lodash'
-import uncontrollable from 'uncontrollable'
-import { Icons } from 'appirio-tech-react-components'
 import { PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_STATUS } from '../../config/constants'
 
 class ProjectStatus extends React.Component {
@@ -21,7 +18,7 @@ class ProjectStatus extends React.Component {
     this.changeStatus = this.changeStatus.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps() {
     this.setState({ showStatusChangeDialog : false })
   }
 
@@ -34,14 +31,13 @@ class ProjectStatus extends React.Component {
   }
 
   onClickOutside(e) {
-    const {onToggleOpen} = this.props
     if (e.target === ReactDOM.findDOMNode(this.refs.toggleBtn)) {
       return
     }
     this.setState({ isOpen : false })
   }
 
-  showStatusChangeDialog(newStatus, e) {
+  showStatusChangeDialog(newStatus) {
     if (newStatus === 'completed' || newStatus === 'cancelled') {
       this.setState({ newStatus, showStatusChangeDialog : true, isOpen : false })
     } else {
@@ -59,7 +55,7 @@ class ProjectStatus extends React.Component {
   }
 
   render() {
-    const {directLinks, status, currentMemberRole, onToggleOpen, onChangeStatus } = this.props
+    const {directLinks, status, currentMemberRole } = this.props
     const { showStatusChangeDialog, isOpen } = this.state
     const selected = PROJECT_STATUS.filter((opt) => opt.value === status)[0]
     const canEdit = currentMemberRole
@@ -74,7 +70,7 @@ class ProjectStatus extends React.Component {
               Status
             </PanelProject.Heading>
             <div
-              onClick={(e) => canEdit && this.setState({isOpen : !isOpen})}
+              onClick={() => canEdit && this.setState({isOpen : !isOpen})}
               ref="toggleBtn"
               className={cn('status-label', selected.color, {active: isOpen, editable : canEdit})}
             >
@@ -115,7 +111,6 @@ ProjectStatus.propTypes = {
   isOpen: PropTypes.bool,
   currentMemberRole: PropTypes.string,
   directLinks: PropTypes.array,
-  onToggleOpen: PropTypes.func,
   status: PropTypes.oneOf(['draft', 'active', 'in_review', 'reviewed', 'completed', 'paused', 'cancelled']).isRequired,
   onChangeStatus: PropTypes.func.isRequired
 }
