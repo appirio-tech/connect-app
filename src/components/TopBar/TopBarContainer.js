@@ -21,10 +21,12 @@ class TopBarContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      isFilterVisible: false,
       isCreatingProject : false
     }
     this.RouteChangeListener = null
     this.applyFilters = this.applyFilters.bind(this)
+    this.toggleFilter = this.toggleFilter.bind(this)
     this.showCreateProjectDialog = this.showCreateProjectDialog.bind(this)
     this.hideCreateProjectDialog = this.hideCreateProjectDialog.bind(this)
   }
@@ -33,6 +35,28 @@ class TopBarContainer extends React.Component {
     this.setState({currentPath: window.location.pathname})
     this.RouteChangeListener = TCEmitter.addListener(EVENT_ROUTE_CHANGE, (path) => {
       this.setState({currentPath: path})
+    })
+  }
+
+  componentDidUpdate() {
+    const isProjectDetails = /projects\/\d+/.test(this.state.currentPath)
+    const contentDiv = document.getElementById('wrapper-main')
+    if (!isProjectDetails && this.state.isFilterVisible) {
+      contentDiv.classList.add('with-filters')
+    } else {
+      contentDiv.classList.remove('with-filters')
+    }
+  }
+
+  toggleFilter() {
+    const {isFilterVisible} = this.state
+    const contentDiv = document.getElementById('wrapper-main')
+    this.setState({isFilterVisible: !isFilterVisible}, () => {
+      if (this.state.isFilterVisible) {
+        contentDiv.classList.add('with-filters')
+      } else {
+        contentDiv.classList.remove('with-filters')
+      }
     })
   }
 
@@ -70,10 +94,12 @@ class TopBarContainer extends React.Component {
   }
 
   render() {
-    const {isCreatingProject, currentPath} = this.state
+    const {isCreatingProject, currentPath, isFilterVisible } = this.state
     const isProjectDetails = /projects\/\d+/.test(currentPath)
     const isHomePage = this.context.router.isActive('/', true)
-    const loginUrl = ACCOUNTS_APP_LOGIN_URL
+    // NOTE: hardcoding to connectv2, once connect v1
+    window.host
+    const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.host}/`
     const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
     return (
       <div>
@@ -95,6 +121,8 @@ class TopBarContainer extends React.Component {
           onNewProjectIntent={ this.showCreateProjectDialog }
           loginUrl={loginUrl}
           registerUrl={registerUrl}
+          isFilterVisible={ isFilterVisible }
+          onToggleFilter={ this.toggleFilter }
         />
       </div>
     )

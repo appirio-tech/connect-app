@@ -57,9 +57,9 @@ button {
     height: 100%;
 
     .features {
-      min-width: 300px;
-      width: 300px;
-      max-width: 300px;
+      min-width: 320px;
+      width: 320px;
+      max-width: 320px;
       background-color: $tc-gray-10;
       border-right    : 1px solid $tc-gray-20;
       position: relative;
@@ -71,11 +71,7 @@ button {
         padding: 4 * $base-unit 0;
 
         .add-custom-feature {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-
+          text-align: center;
           margin-top: 2 * $base-unit;
           border-top: 1px solid $tc-gray-30;
           padding-top: 2 * $base-unit;
@@ -104,6 +100,11 @@ button {
       }
     }    
 
+    .features-content {
+      max-width: 660px;
+      width: 100%;
+      position: relative;
+    }
     .feature-form-instructions {
       padding: 8 * $base-unit;
 

@@ -24,7 +24,7 @@
     max-width: 360px;
 
     .dashboard-left-panel {
-      padding-bottom: 10 * $base-unit;
+      padding-bottom: 2 * $base-unit;
       .form-group {
         .tc-label {
           font-size: 12px;
@@ -55,6 +55,10 @@
 
         &:hover {
           background-color: inherit;
+        }
+
+        .new-post-title {
+          font-size: 20px;
         }
       }
 

@@ -4,7 +4,7 @@ import Panel from '../Panel/Panel'
 import AddComment from '../ActionCard/AddComment'
 import Comment from '../ActionCard/Comment'
 import cn from 'classnames'
-import { THREAD_MESSAGES_PAGE_SIZE } from '../../config/constants'
+// import { THREAD_MESSAGES_PAGE_SIZE } from '../../config/constants'
 
 const getCommentCount = (totalComments) => {
   if (!totalComments) {
@@ -24,7 +24,7 @@ class FeedComments extends React.Component {
 
   render() {
     const {
-    comments, currentUser, totalComments, /*onLoadMoreComments,*/ isLoadingComments, hasMoreComments, onAdd,
+    comments, currentUser, totalComments, onLoadMoreComments, isLoadingComments, hasMoreComments, onAdd,
     onChange, content, avatarUrl, isAddingComment
   } = this.props
     let authorName = currentUser.firstName
@@ -35,17 +35,17 @@ class FeedComments extends React.Component {
       this.setState({showAll: true})
     // TODO - handle the case when a topic has more than 20 comments
     // since those will have to retrieved from the server
-    // if (!isLoadingComments) {
-    //   onLoadMoreComments()
-    // }
+      if (!isLoadingComments) {
+        onLoadMoreComments()
+      }
     }
 
-    let _comments = comments
-    let _hasMoreComments = hasMoreComments
-    if (!this.state.showAll && _comments.length > THREAD_MESSAGES_PAGE_SIZE) {
-      _comments = _comments.slice(-THREAD_MESSAGES_PAGE_SIZE)
-      _hasMoreComments = true
-    }
+    // let _comments = comments
+    // let _hasMoreComments = hasMoreComments
+    // if (!this.state.showAll && _comments.length > THREAD_MESSAGES_PAGE_SIZE) {
+    //   _comments = _comments.slice(-THREAD_MESSAGES_PAGE_SIZE)
+    //   _hasMoreComments = true
+    // }
 
     return (
     <div>
@@ -57,7 +57,7 @@ class FeedComments extends React.Component {
               {getCommentCount(totalComments)}
             </div>
             <hr className={cn({'no-margin': !comments.length})} />
-            {_hasMoreComments && <div className={cn('comment-collapse', {'loading-comments': isLoadingComments})}>
+            {hasMoreComments && <div className={cn('comment-collapse', {'loading-comments': isLoadingComments})}>
               <a href="javascript:" onClick={ handleLoadMoreClick } className="comment-collapse-button">
                 {isLoadingComments ? 'Loading...' : 'View older comments'}
               </a>
@@ -65,7 +65,7 @@ class FeedComments extends React.Component {
           </div>
         </div>
       </Panel.Body>
-      {_comments.map((item, idx) =>
+      {comments.map((item, idx) =>
         <Comment
           key={idx}
           avatarUrl={item.author.photoURL}

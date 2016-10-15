@@ -41,11 +41,40 @@ export function laodProjectMessages(projectId) {
 
 // ignore action param
 /*eslint-disable no-unused-vars */
+
+const getTopicsWithComments = (projectId, tag) => {
+  return getTopics({ reference : 'project', referenceId: projectId, tag })
+    .then(({topics, totalCount}) => {
+      const additionalPosts = []
+      // if a topic has more than 20 posts then to display the latest posts,
+      // we'll have to first retrieve them from the server
+      _.forEach(topics, (t) => {
+        if (t.postIds.length > 20) {
+          const postIds = t.postIds.slice(20).slice(-6)
+          additionalPosts.push(getTopicPosts(t.id, postIds))
+        }
+        t.posts = _.sortBy(t.posts, ['id'])
+      })
+      if (additionalPosts.length === 0) {
+        // we dont need to retrieve any additional posts
+        return { topics, totalCount }
+      }
+      return Promise.all(additionalPosts)
+        .then(postArr => {
+          _.forEach(postArr, (p) => {
+            const topic = _.find(topics, t => p.topicId)
+            topic.posts = _.sortBy(topic.posts.concat(p.posts), ['id'])
+          })
+          return { topics, totalCount }
+        })
+
+    })
+}
 const getProjectTopicsWithMember = (dispatch, projectId, tag) => {
   return new Promise((resolve, reject) => {
     return dispatch({
       type: LOAD_PROJECT_FEEDS,
-      payload: getTopics({ reference : 'project', referenceId: projectId, tag }),
+      payload: getTopicsWithComments(projectId, tag),
       meta: { tag, projectId }
     })
     .then(({ value, action }) => {
@@ -84,11 +113,11 @@ export function createProjectTopic(projectId, topic) {
   }
 }
 
-export function loadFeedComments(feedId, tag, fromIndex) {
+export function loadFeedComments(feedId, tag, postIds) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_PROJECT_FEED_COMMENTS,
-      payload: getTopicPosts(feedId, fromIndex),
+      payload: getTopicPosts(feedId, postIds),
       meta: {
         topicId: feedId,
         tag

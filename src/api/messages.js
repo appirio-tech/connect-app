@@ -28,7 +28,8 @@ export function getTopicPosts(topicId, postIds) {
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
-        posts: _.get(resp.data, 'result.content', [])
+        posts: _.get(resp.data, 'result.content', []),
+        topicId
       }
     })
 }

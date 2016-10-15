@@ -3,7 +3,7 @@
   "version": "1.0.21",
   "description": "Customer pages in React and Redux",
   "scripts": {
-    "start": "webpack-dev-server --history-api-fallback --dev --hot --inline --progress --tc --port 3000",
+    "start": "webpack-dev-server --history-api-fallback --dev --hot --inline --progress --tc --port 3000 --host 0.0.0.0",
     "build": "webpack --bail --progress --build --tc",
     "lint": "eslint --fix --format table --ext .js,.jsx .",
     "test": "cross-env NODE_ENV=test mocha  --colors --reporter nyan --compilers js:babel-core/register --require ignore-styles --recursive \"./src/**/*.spec.js\"",
@@ -42,6 +42,7 @@
     "formsy-react": "^0.18.1",
     "history": "^1.17.0",
     "isomorphic-fetch": "^2.2.1",
+    "lodash": "^4.16.4",
     "moment": "^2.14.1",
     "react": "^15.3.1",
     "react-addons-css-transition-group": "^15.3.1",

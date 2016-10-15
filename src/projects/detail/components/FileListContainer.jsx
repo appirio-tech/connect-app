@@ -31,7 +31,7 @@ class FileListContainer extends Component {
         category,
         size: f.size,
         filePath: f.key,
-        contentType: f.mimeType || 'application/unknown'
+        contentType: f.mimetype || 'application/unknown'
       }
       this.props.addProjectAttachment(this.props.projectId, attachment)
     })

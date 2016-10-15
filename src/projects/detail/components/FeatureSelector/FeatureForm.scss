@@ -27,6 +27,8 @@
       flex: 1;
       color: $tc-black;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .separator {
@@ -64,7 +66,8 @@
       margin: 4 * $base-unit 0px;
     }
     
-    .predefined-feature-form {
+    .predefined-feature-form,
+    .custom-feature-form {
       
       .feature-notes {
         label {
@@ -74,6 +77,7 @@
 
         textarea {
           height: 100px;
+          overflow: auto;
           @include tc-label-lg;
           color: $tc-black;
         }

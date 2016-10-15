@@ -8,7 +8,7 @@ import Alert from 'react-s-alert'
 require('./Layout.scss')
 
 // Alert styles
-import 'react-s-alert/dist/s-alert-default.css'
+import '../../styles/vendors/s-alert-default.css'
 import 'react-s-alert/dist/s-alert-css-effects/slide.css'
 
 const Layout = (props) => {
@@ -32,11 +32,11 @@ const Layout = (props) => {
           userName={ userName }
           domain={ DOMAIN }
         />
-        <Alert stack={{limit: 3, spacing: 30}} position="top" html timeout={4000} offset={50} />
-        <div className="main-wrapper">
+        <Alert stack={{limit: 3, spacing: 30}} position="top" html timeout={4000} offset={0} />
+        <div className="main-wrapper" id="wrapper-main">
           { props.children }
         </div>
-        <Footer domain={ DOMAIN } />
+        <Footer />
       </div>
     )
   }

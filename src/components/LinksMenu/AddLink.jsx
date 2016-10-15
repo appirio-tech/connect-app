@@ -47,11 +47,11 @@ class AddLink extends React.Component {
               type="text"
               validationError="This is a required field."
               validations={{
-                isUrl: true,
+                isRelaxedUrl: true,
                 isRequired: true
               }}
               validationErrors={{
-                isUrl: 'Please enter a valid URL'
+                isRelaxedUrl: 'Please enter a valid URL'
               }}
               wrapperClass="form-group"
             />

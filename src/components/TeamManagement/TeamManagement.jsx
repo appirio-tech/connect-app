@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React, {PropTypes} from 'react'
 import cn from 'classnames'
 import uncontrollable from 'uncontrollable'
@@ -30,7 +31,7 @@ const calcMemberPriority = m => {
   if (m.role === PROJECT_ROLE_MANAGER) priority += 2
 
   if (m.isPrimary) priority++
-  return priority
+  return -priority
 }
 
 const TeamManagement = (props) => {
@@ -43,11 +44,9 @@ const TeamManagement = (props) => {
   const modalActive = isAddingTeamMember || deletingMember || isShowJoin
   const canJoin = !currentMember && (currentUser.isCopilot || currentUser.isManager)
 
-  const sortedMembers = members.sort((a, b) => {
-    const aPriority = calcMemberPriority(a)
-    const bPriority = calcMemberPriority(b)
-    return bPriority - aPriority
-  })
+  const sortedMembers = _.sortBy(members, [(member) => {
+    return calcMemberPriority(member)
+  }])
 
 
   return (

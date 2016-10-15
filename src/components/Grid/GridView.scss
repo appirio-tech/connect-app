@@ -8,7 +8,8 @@
     width: auto;
     padding: 0;
     margin: 0 20px 20px 20px;
-  }
+    box-shadow: 0px 1px 3px 0px #C3C3C8;
+      }
 }
 
 .flex-data {
@@ -39,12 +40,12 @@
         min-width: 85px;
     }
     .width11 {
-        width: 11%;
-        min-width: 106px;
+        width: 15%;
+        min-width: 150px;
     }
     .width12 {
-        width: 12%;
-        min-width: 118px;
+        width: 15%;
+        min-width: 160px;
     }
     .width13 {
         width: 13%;
@@ -53,7 +54,7 @@
         width: 38%;
     }
     .width45 {
-        width: 45%;
+        width: 40%;
     }
     .txt-black {
         color: $tc-black;
@@ -63,6 +64,7 @@
         margin: 0;
         border-bottom: 1px solid $tc-gray-10;
     }
+
     .flex-row {
         display: box;
         display: -webkit-box;
@@ -76,6 +78,12 @@
             display: -webkit-inline-flex;
             display: inline-flex;
             min-height: 71px;
+
+            &.item-id .spacing {
+                color: $tc-gray-30;
+                font-weight: 400;
+            }
+
             .spacing {
                 @include roboto-medium;
                 font-size: $tc-label-md;
@@ -119,7 +127,7 @@
         }
         
         .spacing {
-            padding: 0 5px;
+            // padding: 0 5px;
         }
 
         .blue-border {
@@ -188,7 +196,8 @@
 .orange-block,
 .purple-block {
   @include roboto-medium;
-  font-size: $tc-label-md;
+  font-size: $tc-label-sm;
+  font-weight: 300;
   width: 30px;
   height: 30px;
   text-align: center;
@@ -197,20 +206,20 @@
   border-radius: 2px;
 }
 .blue-block {
-  color: $tc-dark-blue-90;
-  background: $tc-light-blue-30;
+
+  background: $tc-light-blue-70;
 }
 .green-block {
-  color: $tc-green;
-  background: $tc-green-30;
+
+  background: $tc-green-70;
 }
 .orange-block {
-  color: $tc-orange;
-  background: $tc-orange-10;
+
+  background: $tc-orange-30;
 }
 .purple-block {
-  color: $tc-purple;
-  background: $tc-purple-30;
+
+  background: $tc-purple-70;
 }
 
 /* .txt-italic */
@@ -219,7 +228,7 @@
 
     font-style: italic;
     font-size: $tc-label-md;
-    color: $tc-gray-80;
+    color: $tc-gray-30;
     line-height: $base-unit * 3;
     &.txt-normal {
         font-style: normal;
@@ -236,8 +245,15 @@
 }
 
 .user-block {
+    white-space: nowrap;
+
     .txt-box span {
         font-weight: normal;
+    }
+    
+    .linnk-black {
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 }
 /* .user-block  - remove as it is extended at UserWithName.scss */
@@ -548,7 +564,7 @@
             }
         }
         .txt-box .link-black {
-            letterSpacing: -0.5px;
+            // letterSpacing: -0.5px;
         }
         .txt-box .link-black,
         .txt-gray-md,
