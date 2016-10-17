@@ -48,11 +48,11 @@ const AddTeamMember = (props) => {
         </p>}
         {(currentUser.isManager || currentUser.isCopilot) && <div className="tab-group">
           <ul>
-            <li className={cn({active: filterType === 'customer'})}>
-              <a href="javascript:" onClick={onTypeChangeCustomer}>Member</a>
+            <li className={cn({active: filterType === 'customer'})} onClick={onTypeChangeCustomer}>
+              Member
             </li>
-            <li className={cn({active: filterType === 'copilot'})}>
-              <a href="javascript:" onClick={onTypeChangeCopilot}>Copilot</a>
+            <li className={cn({active: filterType === 'copilot'})} onClick={onTypeChangeCopilot}>
+              Copilot
             </li>
           </ul>
         </div>}
