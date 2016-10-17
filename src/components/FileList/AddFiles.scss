@@ -2,18 +2,6 @@
 
 .add-file {
   position: relative;
-  & div div {
-    @include roboto-medium;
-    display: block !important;
-    width: 100%;
-    height: 130px;
-    padding: $base-unit*4 !important;
-    margin: 0 !important;
-    background: $tc-gray-neutral-light;
-    font-size: 15px !important;
-    color: $tc-gray-80 !important;
-    text-align: center;
-  }
   
   .tc-btn {
     position: absolute;
