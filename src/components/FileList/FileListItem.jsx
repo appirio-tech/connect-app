@@ -56,15 +56,15 @@ export default class FileListItem extends React.Component {
     const title = this.refs.title.value
     if (!title || title.trim().length === 0) {
       errors['title'] = 'The file name cannot be blank.'
+    } else {
+      delete errors['title']
     }
   }
 
   onTitleChange() {
     const errors = this.state.errors || {}
     this.validateTitle(errors)
-    if (!_.isEmpty(errors)) {
-      this.setState({ errors })
-    }
+    this.setState({ errors })
   }
 
   renderEditing() {
