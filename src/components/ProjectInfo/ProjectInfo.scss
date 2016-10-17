@@ -1,9 +1,2 @@
 @import 'tc-includes';
 
-.delete-project-modal {
-  .button-area {
-    button:not(:last-child) {
-      margin-right: 2 * $base-unit;
-    }
-  }
-}
