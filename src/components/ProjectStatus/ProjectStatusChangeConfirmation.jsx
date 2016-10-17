@@ -4,17 +4,16 @@ const ProjectStatusChangeConfirmation = ({ onCancel, onConfirm }) => {
 
   return (
     <div className="modal project-status-change-modal">
-      <div className="modal-title danger center">
+      <div className="modal-title danger">
         You are about to close the project
       </div>
       <div className="modal-body">
-        <p className="message center">
+        <p className="message">
           This will permanently change the status your project. This action cannot be undone.
         </p>
 
         <div className="button-area flex center">
           <button className="tc-btn tc-btn-default tc-btn-sm btn-cancel" onClick={onCancel}>Cancel</button>
-          {' '}
           <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={onConfirm}>Confirm</button>
         </div>
       </div>

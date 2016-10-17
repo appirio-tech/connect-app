@@ -182,14 +182,6 @@
   box-shadow: none;
 }
 
-.project-status-change-modal {
-  .button-area {
-    button:not(:last-child) {
-      margin-right: 2 * $base-unit;
-    }
-  }
-}
-
 .project-direct-links {
   @include roboto-medium;
   font-size: $tc-label-md;
