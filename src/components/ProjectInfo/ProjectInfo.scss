@@ -1,2 +1,11 @@
 @import 'tc-includes';
 
+.project-description {
+  color: $tc-gray-80;
+  @include tc-label-md;
+
+  .read-more-link {
+    white-space: nowrap;
+    color: $tc-dark-blue-90;
+  }
+}
