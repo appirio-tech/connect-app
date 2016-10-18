@@ -1,7 +1,9 @@
 import _ from 'lodash'
 import React, {PropTypes} from 'react'
+import Modal from 'react-modal'
 import filesize from 'filesize'
 import { Icons } from 'appirio-tech-react-components'
+import FileDeletionConfirmModal from './FileDeletionConfirmModal'
 
 const { TrashIcon, CloseIcon, EditIcon, SaveIcon } = Icons
 
@@ -12,17 +14,21 @@ export default class FileListItem extends React.Component {
     this.state = {
       title: props.title,
       description: props.description,
-      isEditing: false
+      isEditing: false,
+      showDeletionDialog: false
     }
     this.handleSave = this.handleSave.bind(this)
     this.startEdit = this.startEdit.bind(this)
     this.onDelete = this.onDelete.bind(this)
+    this.showDeletionDialog = this.showDeletionDialog.bind(this)
+    this.hideDeletionDialog = this.hideDeletionDialog.bind(this)
     this.validateForm = this.validateForm.bind(this)
     this.validateTitle = this.validateTitle.bind(this)
     this.onTitleChange = this.onTitleChange.bind(this)
   }
 
   onDelete() {
+    this.setState({ showDeletionDialog : false })
     this.props.onDelete(this.props.id)
   }
 
@@ -67,6 +73,14 @@ export default class FileListItem extends React.Component {
     this.setState({ errors })
   }
 
+  showDeletionDialog() {
+    this.setState({ showDeletionDialog : true })
+  }
+
+  hideDeletionDialog() {
+    this.setState({ showDeletionDialog : false })
+  }
+
   renderEditing() {
     const {title, description} = this.props
     const { errors } = this.state
@@ -89,16 +103,28 @@ export default class FileListItem extends React.Component {
 
   renderReadOnly() {
     const {title, description, size, isEditable} = this.props
+    const { showDeletionDialog } = this.state
     return (
       <div>
+        <Modal
+          isOpen={ showDeletionDialog }
+          className="file-deletion-dialog"
+          overlayClassName="file-deletion-dialog-overlay"
+          onRequestClose={ this.hideDeletionDialog }
+        >
+          <FileDeletionConfirmModal fileName={ title } onConfirm={ this.onDelete } onCancel={ this.hideDeletionDialog } />
+          <div onClick={ this.hideDeletionDialog } className="file-deletion-dialog-close">
+            <Icons.XMarkIcon />
+          </div>
+        </Modal>
         <div className="title">
           <h4>{title}</h4>
           <div className="size">
             {filesize(size)}
           </div>
           {isEditable && <div className="edit-icons">
-            <a href="javascript:" className="icon-edit" onClick={this.startEdit}><EditIcon /></a>
-            <a href="javascript:" className="icon-trash" onClick={this.onDelete}><TrashIcon /></a>
+            <i className="icon-edit" onClick={this.startEdit}><EditIcon /></i>
+            <i className="icon-trash" onClick={this.showDeletionDialog}><TrashIcon /></i>
           </div>}
         </div>
         <p>{description}</p>
