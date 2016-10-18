@@ -102,7 +102,7 @@ export default class FileListItem extends React.Component {
   }
 
   renderReadOnly() {
-    const {title, description, size, isEditable} = this.props
+    const {title, downloadUrl, description, size, isEditable} = this.props
     const { showDeletionDialog } = this.state
     return (
       <div>
@@ -118,7 +118,7 @@ export default class FileListItem extends React.Component {
           </div>
         </Modal>
         <div className="title">
-          <h4>{title}</h4>
+          <h4><a href={downloadUrl} target="_blank" rel="noopener noreferrer">{title}</a></h4>
           <div className="size">
             {filesize(size)}
           </div>
@@ -131,7 +131,7 @@ export default class FileListItem extends React.Component {
       </div>
     )
   }
-  
+
   render() {
     const {isEditing} = this.state
     let iconPath

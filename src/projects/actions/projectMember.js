@@ -3,6 +3,7 @@ import { addProjectMember as addMember,
   updateProjectMember as updateMember,
   loadMemberSuggestions as loadMemberSuggestionsAPI
 } from '../../api/projectMembers'
+import { loadMembers } from '../../actions/members'
 
 import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
  LOAD_MEMBER_SUGGESTIONS
@@ -18,11 +19,24 @@ export function loadMemberSuggestions(value) {
   }
 }
 
-export function addProjectMember(projectId, member) {
-  return (dispatch) => {
+function addProjectMemberWithData(dispatch, projectId, member) {
+  return new Promise((resolve, reject) => {
     return dispatch({
       type: ADD_PROJECT_MEMBER,
       payload: addMember(projectId, member)
+    })
+      .then((/*{value, action}*/) => {
+        return resolve(dispatch(loadMembers([member.userId])))
+      })
+      .catch(err => reject(err))
+  })
+}
+
+export function addProjectMember(projectId, member) {
+  return (dispatch) => {
+    return dispatch({
+      type: 'ADD_PROJECT_MEMBER_INIT',
+      payload: addProjectMemberWithData(dispatch, projectId, member)
     })
   }
 }
