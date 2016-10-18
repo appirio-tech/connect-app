@@ -20,6 +20,14 @@ const sections = [
     description: 'Answer just a few questions about your application. You can also provide the needed information in a supporting-document - upload it below or add a link in the notes section.',
     subSections: [
       {
+        id: 'projectInfo',
+        required: true,
+        fieldName: 'description',
+        description: 'Description',
+        title: 'Project Info',
+        type: 'notes'
+      },
+      {
         id: 'questions',
         required: true,
         title: 'Questions',

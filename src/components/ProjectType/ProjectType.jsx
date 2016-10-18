@@ -1,6 +1,8 @@
 import React, {PropTypes} from 'react'
 import './ProjectType.scss'
 import PanelProject from '../PanelProject/PanelProject'
+import TextTruncate from 'react-text-truncate'
+import {Link} from 'react-router'
 
 const deviceMap = {
   phone: <div key="IPHONE" className="icon icon-iphone">Phone</div>,
@@ -18,11 +20,18 @@ const typeMap = {
   visual_prototype: 'Visual Prototype Project'
 }
 /*eslint-enable camelcase */
-const ProjectType = ({type, devices}) => (
+const ProjectType = ({projectId, type, description, devices}) => (
   <PanelProject>
     <PanelProject.Heading>
       {typeMap[type]}
     </PanelProject.Heading>
+    <TextTruncate
+      containerClassName="project-description"
+      line={4}
+      truncateText="..."
+      text={ description }
+      textTruncateChild={<Link className="read-more-link" to={`/projects/${projectId}/specification`}>read more &gt;</Link>}
+    />
     <div className="project-icons">
       <div className="icon-set">
         {devices.slice(0, 3).map((device) => deviceMap[device])}

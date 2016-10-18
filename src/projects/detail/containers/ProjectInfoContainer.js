@@ -128,10 +128,12 @@ class ProjectInfoContainer extends React.Component {
     return (
       <div>
         <ProjectInfo
+          projectId={project.id}
           canDeleteProject={canDeleteProject}
           onDeleteProject={this.onDeleteProject}
           directLinks={directLinks}
           currentMemberRole={currentMemberRole}
+          description={project.description}
           type={project.type}
           devices={project.details.devices || []}
           status={project.status} onChangeStatus={this.onChangeStatus}
