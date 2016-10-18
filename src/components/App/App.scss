@@ -6,5 +6,9 @@ body {
 }
 
 .ReactModal__Body--open {
-    overflow: hidden;
+  overflow: hidden;
+}
+
+.ReactModal__Content--after-open {
+  outline: none;
 }

@@ -48,6 +48,9 @@
     }
     .edit-icons {
       margin-left: 5px;
+      i {
+        cursor: pointer;
+      }
     }
     .title-edit {
       display: flex;
@@ -91,4 +94,36 @@
   .icon-close {
     margin-right: 10px;
   }
+}
+
+.delete-file-modal {
+  &:focus {
+    // outline: none;
+  }
+}
+
+.file-deletion-dialog-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $tc-gray-neutral-dark;
+  position          : fixed;
+  top               : 0;
+  left              : 0;
+  right             : 0;
+  bottom            : 0;
+  z-index: 21;/* +1 of the z-index of the topbar */
+}
+
+.file-deletion-dialog {
+  top: 0px;
+  left: 0px;
+}
+.file-deletion-dialog-close {
+  cursor: pointer;
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  width: 14px;
+  height: 14px;
 }
