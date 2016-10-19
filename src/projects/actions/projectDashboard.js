@@ -18,12 +18,14 @@ const getDashboardData = (dispatch, projectId) => {
         // this is to remove any nulls from the list (dev had some bad data)
         _.remove(userIds, i => !i)
         // load additional data in parallel
+        const promises = [
+          dispatch(loadMembers(userIds))
+        ]
+        if (value.directProjectId)
+          promises.push(dispatch(loadDirectProjectData(value.directProjectId)))
         return resolve(dispatch({
           type: LOAD_ADDITIONAL_PROJECT_DATA,
-          payload: Promise.all([
-            dispatch(loadMembers(userIds)),
-            dispatch(loadDirectProjectData(value.directProjectId))
-          ])
+          payload: Promise.all(promises)
         }))
 
       })
