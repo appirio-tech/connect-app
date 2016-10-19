@@ -12,6 +12,7 @@ class Home extends React.Component {
 
   componentWillMount() {
     // redirect to project list if user is logged in.
+    document.title = 'Connect - Topcoder'
     if (this.props.isLoggedIn)
       this.props.router.push('/projects')
   }

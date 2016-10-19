@@ -15,6 +15,7 @@ class Projects extends Component {
   }
 
   componentWillMount() {
+    document.title = 'Projects - Topcoder'
     // this.searchTermFromQuery = this.props.location.query.q || ''
     const {criteria, loadProjects} = this.props
     let pageNum = this.props.pageNum
