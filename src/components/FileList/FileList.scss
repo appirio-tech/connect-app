@@ -1,6 +1,9 @@
 @import 'tc-includes';
 
 .file-list {
+  // reset styles of panel class, we need panel class to activate the modal-overlay
+  border: none;
+  box-shadow: none;
   > h4 {
 
     @include roboto-medium;
@@ -97,33 +100,5 @@
 }
 
 .delete-file-modal {
-  &:focus {
-    // outline: none;
-  }
-}
 
-.file-deletion-dialog-overlay {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: $tc-gray-neutral-dark;
-  position          : fixed;
-  top               : 0;
-  left              : 0;
-  right             : 0;
-  bottom            : 0;
-  z-index: 21;/* +1 of the z-index of the topbar */
-}
-
-.file-deletion-dialog {
-  top: 0px;
-  left: 0px;
-}
-.file-deletion-dialog-close {
-  cursor: pointer;
-  position: absolute;
-  top: 25px;
-  right: 25px;
-  width: 14px;
-  height: 14px;
 }
