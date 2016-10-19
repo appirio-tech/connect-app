@@ -88,7 +88,7 @@ export default class FileListItem extends React.Component {
   }
 
   renderReadOnly() {
-    const {title, description, size, isEditable} = this.props
+    const {title, downloadUrl, description, size, isEditable} = this.props
     return (
       <div>
         <div className="title">
