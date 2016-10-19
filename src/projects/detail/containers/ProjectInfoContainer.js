@@ -72,7 +72,7 @@ class ProjectInfoContainer extends React.Component {
     } else {
       title = 'Duration'
       percent = 0
-      text = 'Complete specification to get estimate'
+      text = status === 'draft' ? 'Complete specification to get estimate' : 'Estimate not entered'
     }
     this.setState({duration: { title, text, percent, type }})
   }
