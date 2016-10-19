@@ -36,9 +36,6 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
       label: q.label,
       value: _.get(project, q.fieldName, undefined)
     }
-    if (elemProps.value) {
-      console.log({name: q.fieldName, value: JSON.stringify(elemProps.value)})
-    }
     let ChildElem = ''
     switch (q.type) {
     case 'see-attached-textbox':

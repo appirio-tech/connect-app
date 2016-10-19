@@ -56,15 +56,15 @@ export default class FileListItem extends React.Component {
     const title = this.refs.title.value
     if (!title || title.trim().length === 0) {
       errors['title'] = 'The file name cannot be blank.'
+    } else {
+      delete errors['title']
     }
   }
 
   onTitleChange() {
     const errors = this.state.errors || {}
     this.validateTitle(errors)
-    if (!_.isEmpty(errors)) {
-      this.setState({ errors })
-    }
+    this.setState({ errors })
   }
 
   renderEditing() {
@@ -88,26 +88,26 @@ export default class FileListItem extends React.Component {
   }
 
   renderReadOnly() {
-    const {title, description, size, isEditable} = this.props
+    const {title, downloadUrl, description, size, isEditable} = this.props
     return (
       <div>
         <div className="title">
-          <h4>{title}</h4>
+          <h4><a href={downloadUrl} target="_blank" rel="noopener noreferrer">{title}</a></h4>
           <div className="size">
             {filesize(size)}
           </div>
           {isEditable && <div className="edit-icons">
-            <a href="javascript:" className="icon-edit" onClick={this.startEdit}><EditIcon /></a>
-            <a href="javascript:" className="icon-trash" onClick={this.onDelete}><TrashIcon /></a>
+            <i className="icon-edit" onClick={this.startEdit}><EditIcon /></i>
+            <i className="icon-trash" onClick={this.onDelete}><TrashIcon /></i>
           </div>}
         </div>
         <p>{description}</p>
       </div>
     )
   }
-  
+
   render() {
-    const {isEditing} = this.state
+    const { isEditing } = this.state
     let iconPath
     try {
       iconPath = require('./images/' + this.props.contentType.split('/')[1] +'.svg')

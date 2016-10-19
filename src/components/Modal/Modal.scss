@@ -21,6 +21,7 @@
     font-size: $tc-label-lg;
     padding: $base-unit*2 $base-unit*4 0 $base-unit*4;
     line-height: $base-unit*4;
+    text-align: center;
     &.title-muted {
       @include roboto-medium;
       color: $tc-gray-50;
@@ -108,8 +109,15 @@
       }
     }
     .message {
+      text-align: center;
       margin-bottom: $base-unit*4;
-      color: $tc-gray-60;
+      color: $tc-black;
+    }
+
+    .button-area {
+      button:not(:last-child) {
+        margin-right: 2 * $base-unit;
+      }
     }
   }
   .form-group {

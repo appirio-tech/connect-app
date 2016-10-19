@@ -26,11 +26,10 @@ const Join = ({isCopilot, owner, isShowJoin, onJoin, onJoinConfirm}) => {
             Are you sure you want to join?
           </p>
 
-          <div className="button-area">
+          <div className="button-area flex center">
             <button className="tc-btn tc-btn-default tc-btn-sm btn-cancel"
               onClick={onClickCancel}
             >Cancel</button>
-            {' '}
             <button
               className="tc-btn tc-btn-primary tc-btn-sm"
               onClick={onClickJoinConfirm}

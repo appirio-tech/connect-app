@@ -26,13 +26,6 @@
       display: block;
     }
   }
-  .delete-confirmation-modal {
-    .button-area {
-      button:not(:last-child) {
-        margin-right: 2 * $base-unit;
-      }
-    }
-  }
   .links-footer{
     @include roboto;
     font-size: $tc-label-xs;

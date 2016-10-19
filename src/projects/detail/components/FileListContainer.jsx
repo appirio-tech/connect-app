@@ -42,15 +42,7 @@ class FileListContainer extends Component {
     const storePath = `${PROJECT_ATTACHMENTS_FOLDER}/${projectId}/`
     return (
       <div>
-        <FileList>
-          {files.map((file, i) =>
-            <FileList.Item
-              {...file}
-              key={i}
-              onDelete={this.deleteFile}
-              onSave={this.updateFile}
-            />)}
-        </FileList>
+        <FileList files={files} onDelete={ this.deleteFile } onSave={ this.updateFile } />
         <AddFiles successHandler={this.processUploadedFiles} storePath={storePath} category={'appDefinition'} />
       </div>
     )

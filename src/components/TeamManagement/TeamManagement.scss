@@ -314,6 +314,7 @@ $tc-body-extra-small	: 12px;
         box-shadow: none;
         background-color: $tc-white;
         border: 1px solid $tc-gray-30;
+        cursor: pointer;
         a{
           color: $tc-gray-80;
           font-weight: normal;
@@ -321,8 +322,9 @@ $tc-body-extra-small	: 12px;
         &:hover {
         }
         &.active {
-          background: $tc-gray-20;
-          box-shadow: inset 0px 1px 3px 0px rgba(71,71,79,0.38);
+          background: $tc-dark-blue-90;
+          color: $tc-white;
+          // box-shadow: inset 0px 1px 3px 0px rgba(71,71,79,0.38);
           a{
           }
         }
@@ -380,8 +382,5 @@ $tc-body-extra-small	: 12px;
   .btn-cancel{
     border: 1px solid $tc-dark-blue-90;
     box-shadow: 0px 0px 3px 0px $tc-dark-blue-30;
-  }
-  .button-area {
-    text-align: center;
   }
 }

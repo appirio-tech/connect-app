@@ -1,29 +1,28 @@
 import React, {PropTypes} from 'react'
 
-const ProjectStatusChangeConfirmation = ({ onCancel, onConfirm }) => {
-
+const FileDeletionConfirmModal = ({ fileName, onCancel, onConfirm}) => {
   return (
-    <div className="modal project-status-change-modal">
+    <div className="modal delete-file-modal">
       <div className="modal-title danger">
-        You are about to close the project
+        You're about to delete the file '{fileName}'
       </div>
       <div className="modal-body">
         <p className="message">
-          This will permanently change the status your project. This action cannot be undone.
+          Are you sure you want to delete this file? You will not be able to undo this action.
         </p>
 
         <div className="button-area flex center">
           <button className="tc-btn tc-btn-default tc-btn-sm btn-cancel" onClick={onCancel}>Cancel</button>
-          <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={onConfirm}>Confirm</button>
+          <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={onConfirm}>Delete File</button>
         </div>
       </div>
     </div>
   )
 }
 
-ProjectStatusChangeConfirmation.propTypes = {
+FileDeletionConfirmModal.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired
 }
 
-export default ProjectStatusChangeConfirmation
+export default FileDeletionConfirmModal

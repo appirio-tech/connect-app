@@ -35,17 +35,16 @@ const DeleteModal = ({onCancel, onConfirm, isCustomer, isCopilot, isManager, isL
 
   return (
     <div className="modal">
-      <div className="modal-title danger center">
+      <div className="modal-title danger">
         {title}
       </div>
       <div className="modal-body">
-        <p className="message center">
+        <p className="message">
           {content}
         </p>
 
-        <div className="button-area">
+        <div className="button-area flex center">
           <button className="tc-btn tc-btn-default tc-btn-sm btn-cancel" onClick={onCancel}>Cancel</button>
-          {' '}
           <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={onConfirm}>{btnText}</button>
         </div>
       </div>
