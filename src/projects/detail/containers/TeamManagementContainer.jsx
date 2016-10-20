@@ -110,8 +110,7 @@ class TeamManagementContainer extends Component {
   }
 
   onAddNewMember() {
-    const { allMembers } = this.props
-    const { filterType, selectedNewMember, showNewMemberConfirmation } = this.state
+    const { filterType, selectedNewMember } = this.state
     const userId = selectedNewMember.userId
     this.props.addProjectMember(
       this.props.projectId, {
