@@ -322,6 +322,7 @@ $tc-body-extra-small	: 12px;
         &:hover {
         }
         &.active {
+          cursor: default;
           background: $tc-dark-blue-90;
           color: $tc-white;
           // box-shadow: inset 0px 1px 3px 0px rgba(71,71,79,0.38);
