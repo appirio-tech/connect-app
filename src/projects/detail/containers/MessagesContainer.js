@@ -219,7 +219,7 @@ class MessagesView extends React.Component {
     }
 
     return (
-      <FullHeightContainer offset={80}>
+      <FullHeightContainer offset={ 80 }>
         <div className="messages-container">
             <div className="left-area">
               <MessageList
