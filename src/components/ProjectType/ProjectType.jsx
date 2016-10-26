@@ -19,6 +19,7 @@ const typeMap = {
   visual_design: 'Visual Design Project',
   visual_prototype: 'Visual Prototype Project'
 }
+
 /*eslint-enable camelcase */
 const ProjectType = ({projectId, type, description, devices}) => (
   <PanelProject>
@@ -32,20 +33,25 @@ const ProjectType = ({projectId, type, description, devices}) => (
       text={ description }
       textTruncateChild={<Link className="read-more-link" to={`/projects/${projectId}/specification`}>read more &gt;</Link>}
     />
+
     <div className="project-icons">
-      <div className="icon-set">
-        {devices.slice(0, 3).map((device) => deviceMap[device])}
-      </div>
-      {devices.length > 3 && <div className="icon-set">
-        {devices.slice(3).map((device) => deviceMap[device])}
-      </div>}
+      {type === 'generic' &&
+        <div key="GENERIC" className="icon icon-work-project">Work Project</div> }
+      {type !== 'generic' &&
+        <div className="icon-set">
+          {devices.slice(0, 3).map((device) => deviceMap[device])}
+        </div>}
+        {type !== 'generic' && devices.length > 3 && <div className="icon-set">
+          {devices.slice(3).map((device) => deviceMap[device])}
+        </div>}
     </div>
+
   </PanelProject>
 )
 
 ProjectType.propTypes = {
   type: PropTypes.string.isRequired,
-  devices: PropTypes.arrayOf(PropTypes.oneOf(['phone', 'tablet', 'desktop', 'apple-watch', 'android-watch'])).isRequired
+  devices: PropTypes.arrayOf(PropTypes.oneOf(['generic', 'phone', 'tablet', 'desktop', 'apple-watch', 'android-watch'])).isRequired
 }
 
 ProjectType.defaultProps = {
