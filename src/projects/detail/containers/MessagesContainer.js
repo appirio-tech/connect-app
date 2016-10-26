@@ -7,7 +7,6 @@ import MessagingEmptyState from '../../../components/MessageList/MessagingEmptyS
 import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
 import { laodProjectMessages, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
-import Sticky from 'react-stickynode'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import {FullHeightContainer} from 'appirio-tech-react-components'
 
