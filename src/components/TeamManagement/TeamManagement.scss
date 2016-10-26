@@ -262,6 +262,9 @@ $tc-body-extra-small	: 12px;
       }
       .message {
         margin-bottom: $base-unit*4;
+        strong{
+          @include roboto-bold;
+        }
       }
       .error-message{
         display: block;

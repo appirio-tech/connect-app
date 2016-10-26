@@ -4,11 +4,11 @@ const OwnerModal = ({member, onCancel, onConfirm}) => {
   return (
     <div className="modal">
       <div className="modal-title">
-        Assign member as owner
+        You are about to assign a new project owner
       </div>
       <div className="modal-body">
         <p className="message">
-          This will make <strong>{member.name}</strong> the project owner. Do you still want to proceed?
+          <strong>{member.firstName} {member.lastName}</strong> will become responsible for the project and be able to add and remove team members. Are you sure you want to proceed?
         </p>
 
         <div className="button-area flex center">
