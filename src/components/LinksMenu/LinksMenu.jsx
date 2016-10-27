@@ -7,11 +7,12 @@ import uncontrollable from 'uncontrollable'
 import cn from 'classnames'
 
 const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, onDeleteIntent, onDelete }) => (
-  <Panel className={cn({'modal-active': isAddingNewLink})}>
+  <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0) })}>
     {!isAddingNewLink && <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Create New Link</Panel.AddBtn>}
     {!isAddingNewLink && <Panel.Title>
       Links ({links.length})
     </Panel.Title>}
+    { (isAddingNewLink || linkToDelete >= 0) && <div className="modal-overlay" />}
     {isAddingNewLink &&
       <AddLink
         onAdd={(link) => {

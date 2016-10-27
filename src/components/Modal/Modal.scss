@@ -118,6 +118,11 @@
       button:not(:last-child) {
         margin-right: 2 * $base-unit;
       }
+
+      .btn-cancel {
+        border: 1px solid $tc-dark-blue-90;
+        box-shadow: 0px 0px 3px 0px $tc-dark-blue-30;
+      }
     }
   }
   .form-group {

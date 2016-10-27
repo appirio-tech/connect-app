@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 
 const DeleteLinkModal = ({ onCancel, onConfirm}) => {
   return (
-    <div className="modal">
+    <div className="modal delete-link-modal">
       <div className="modal-title danger">
         You're about to delete a link
       </div>
