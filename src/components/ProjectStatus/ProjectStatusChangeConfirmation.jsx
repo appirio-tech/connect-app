@@ -2,7 +2,8 @@ import React, {PropTypes} from 'react'
 import { PROJECT_STATUS_COMPLETED, PROJECT_STATUS_CANCELLED } from '../../config/constants'
 
 const ProjectStatusChangeConfirmation = ({ newStatus, onCancel, onConfirm }) => {
-  let confirmText, titleStatus
+  let confirmText
+  let titleStatus
   switch(newStatus) {
   case PROJECT_STATUS_COMPLETED:
     confirmText = 'Close Project'
