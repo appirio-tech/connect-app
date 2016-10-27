@@ -1,15 +1,20 @@
 @import "tc-includes";
 
 .message-list{
+  height: 100%;
+  overflow: hidden;
+
   .panel-title{
     padding: $base-unit*2 $base-unit*4 $base-unit*4 $base-unit*4;
   }
   .panel-messages{
-    min-height: 630px;
+    min-height: 530px;
     background-color: $tc-gray-neutral-light;
     margin-bottom: -10px;
     @include roboto;
     line-height: $base-unit*4;
+    height: calc(100% - 45px);// 45px is the height of panel-title
+    overflow-y: auto;
     .message:last-child{
       border-bottom: 1px solid $tc-gray-10;
     }

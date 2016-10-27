@@ -24,7 +24,6 @@
     @include flexWidth(1);
     max-width: 360px;
     z-index: 14;/* Don't know the exact reason, but it needs explicit z-index to get behind the topbar*/
-    overflow-y: auto;
   }
   .right-area {
     @include flexWidth(2);
