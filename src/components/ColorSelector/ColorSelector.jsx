@@ -1,10 +1,10 @@
 import React, {PropTypes} from 'react'
 import './ColorSelector.scss'
-import cn from 'classnames'
 import { SketchPicker } from 'react-color'
 import _ from 'lodash'
 import { HOC as hoc } from 'formsy-react'
 import {PROJECT_MAX_COLORS} from '../../config/constants'
+import { Icons } from 'appirio-tech-react-components'
 
 class ColorSelector extends React.Component {
   
@@ -40,14 +40,18 @@ class ColorSelector extends React.Component {
     
     return (
       <div className="colorSelector">
-        {colors.map((color) =>
+        {value.map((color) =>
           <a
             key={color}
             href="javascript:"
             onClick={() => onColorToggle(color)}
-            className={cn('color-card', {selected: value.indexOf(color) !== -1})}
+            className="color-card"
             style={{backgroundColor: color}}
-          />
+          >
+            <span className="remove-color">
+              <Icons.CloseIcon />
+            </span>
+          </a>
         )}
         
         {colors.length < PROJECT_MAX_COLORS && 
