@@ -55,7 +55,7 @@ class ProjectStatus extends React.Component {
 
   render() {
     const {directLinks, status, currentMemberRole } = this.props
-    const { showStatusChangeDialog, isOpen } = this.state
+    const { showStatusChangeDialog, isOpen, newStatus } = this.state
     const selected = PROJECT_STATUS.filter((opt) => opt.value === status)[0]
     const canEdit = currentMemberRole
       && _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -94,7 +94,7 @@ class ProjectStatus extends React.Component {
               </ul>
             </dir>}
           </div>
-          { showStatusChangeDialog && <ProjectStatusChangeConfirmation onConfirm={ this.changeStatus } onCancel={ this.hideStatusChangeDialog } /> }
+          { showStatusChangeDialog && <ProjectStatusChangeConfirmation newStatus={ newStatus } onConfirm={ this.changeStatus } onCancel={ this.hideStatusChangeDialog } /> }
           {directLinks && <div className="project-direct-links">
             <ul>
               {directLinks.map((link, i) => <li key={i}><a href={link.href} target="_blank" rel="noopener noreferrer">{link.name}</a></li>)}

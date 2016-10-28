@@ -189,13 +189,16 @@ export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_
 
 export const PROJECT_NAME_MAX_LENGTH = 255
 
+export const PROJECT_STATUS_COMPLETED = 'completed'
+export const PROJECT_STATUS_CANCELLED = 'cancelled'
+
 export const PROJECT_STATUS = [
   {color: 'gray', name: 'Draft', value: 'draft'},
   {color: 'gray', name: 'In Review', value: 'in_review'},
   {color: 'gray', name: 'Reviewed', value: 'reviewed'},
   {color: 'green', name: 'Active', value: 'active'},
-  {color: 'black', name: 'Completed', value: 'completed'},
-  {color: 'black', name: 'Cancelled', value: 'cancelled'},
+  {color: 'black', name: 'Completed', value: PROJECT_STATUS_COMPLETED },
+  {color: 'black', name: 'Cancelled', value: PROJECT_STATUS_CANCELLED },
   {color: 'red', name: 'Paused', value: 'paused'}
 ]
 

@@ -180,6 +180,10 @@
 .project-status-wrapper.panel {// reset styles of panel class, we need panel class to activate the modal-overlay
   border: none;
   box-shadow: none;
+
+  .project-status-change-modal {
+    margin: 0px -4*$base-unit;
+  }
 }
 
 .project-direct-links {
