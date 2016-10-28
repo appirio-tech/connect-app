@@ -8,13 +8,13 @@ require('./Dashboard.scss')
 const Dashboard = ({project, currentMemberRole}) => (
   <div>
     <div className="dashboard-container">
-      <div className="left-area">
-        <Sticky top={80}>
-          <div className="dashboard-left-panel">
-            <ProjectInfoContainer currentMemberRole={currentMemberRole} project={project} />
-          </div>
-        </Sticky>
-      </div>
+      <Sticky top={80}>
+        <div className="left-area">
+            <div className="dashboard-left-panel">
+              <ProjectInfoContainer currentMemberRole={currentMemberRole} project={project} />
+            </div>
+        </div>
+      </Sticky>
       <div className="right-area">
         <FeedContainer currentMemberRole={currentMemberRole} project={project} />
       </div>
