@@ -7,8 +7,8 @@ import MessagingEmptyState from '../../../components/MessageList/MessagingEmptyS
 import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
 import { laodProjectMessages, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
-import Sticky from 'react-stickynode'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import {FullHeightContainer} from 'appirio-tech-react-components'
 
 import {
   THREAD_MESSAGES_PAGE_SIZE,
@@ -219,28 +219,28 @@ class MessagesView extends React.Component {
     }
 
     return (
-      <div className="messages-container">
-        <div className="left-area">
-          <Sticky top={80}>
-            <MessageList
-              onAdd={() => this.setState({isCreateNewMessage: true})}
-              threads={threads}
-              onSelect={this.onThreadSelect}
-              showAddButton={ !!currentMemberRole }
-              showEmptyState={ showEmptyState && !threads.length }
-            />
-          </Sticky>
+      <FullHeightContainer offset={ 80 }>
+        <div className="messages-container">
+            <div className="left-area">
+              <MessageList
+                onAdd={() => this.setState({isCreateNewMessage: true})}
+                threads={threads}
+                onSelect={this.onThreadSelect}
+                showAddButton={ !!currentMemberRole }
+                showEmptyState={ showEmptyState && !threads.length }
+              />
+            </div>
+            <div className="right-area">
+              { (showEmptyState && !threads.length) &&
+                <MessagingEmptyState
+                  currentUser={currentUser}
+                  onClose={() => this.setState({showEmptyState: false})}
+                />
+              }
+              { renderRightPanel() }
+            </div>
         </div>
-        <div className="right-area">
-          { (showEmptyState && !threads.length) &&
-            <MessagingEmptyState
-              currentUser={currentUser}
-              onClose={() => this.setState({showEmptyState: false})}
-            />
-          }
-          { renderRightPanel() }
-        </div>
-      </div>
+      </FullHeightContainer>
     )
   }
 }

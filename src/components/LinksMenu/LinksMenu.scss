@@ -33,4 +33,8 @@
     line-height: $base-unit*6;
     padding-left: $base-unit*4;
   }
+
+  .delete-link-modal {
+    margin-left: -4*$base-unit;
+  }
 }

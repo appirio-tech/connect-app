@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react'
 import AutoCompleteInput from './AutoCompleteInput'
 import cn from 'classnames'
 import { Icons } from 'appirio-tech-react-components'
+import { PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 
 
 const { XMarkIcon } = Icons
@@ -9,7 +10,7 @@ const { XMarkIcon } = Icons
 const AddTeamMember = (props) => {
   const {
     isAddingTeamMember, onAddNewMember, onToggleAddTeamMember, onKeywordChange, selectedNewMember, error,
-    filterType, currentUser, onFilterTypeChange
+    filterType, currentUser, onFilterTypeChange, onToggleNewMemberConfirm, owner
   } = props
   const onTypeChangeCustomer = () => onFilterTypeChange('customer')
   const onTypeChangeCopilot = () => onFilterTypeChange('copilot')
@@ -18,6 +19,11 @@ const AddTeamMember = (props) => {
     onToggleAddTeamMember(false)
   }
   const onConfirmAddMember = () => {
+    // if adding a customer and there is no owner yet for the project
+    if(filterType === PROJECT_ROLE_CUSTOMER && !owner) {
+      onToggleNewMemberConfirm(true)
+      return
+    }
     onAddNewMember()
     onToggleAddTeamMember(false)
   }

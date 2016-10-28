@@ -24,6 +24,7 @@ class TeamManagementContainer extends Component {
     this.onJoinConfirm = this.onJoinConfirm.bind(this)
     this.onChangeOwnerConfirm = this.onChangeOwnerConfirm.bind(this)
     this.onFilterTypeChange = this.onFilterTypeChange.bind(this)
+    this.onToggleNewMemberConfirm = this.onToggleNewMemberConfirm.bind(this)
   }
 
   componentWillMount() {
@@ -121,11 +122,14 @@ class TeamManagementContainer extends Component {
       keyword: '',
       selectedNewMember: null
     })
-
   }
 
   onToggleAddTeamMember(isAddingTeamMember) {
-    this.setState({isAddingTeamMember, error : null})
+    this.setState({ isAddingTeamMember, error : null })
+  }
+
+  onToggleNewMemberConfirm(showNewMemberConfirmation) {
+    this.setState({ showNewMemberConfirmation, isAddingTeamMember : false })
   }
 
   onMemberDeleteConfirm(member) {
@@ -188,6 +192,7 @@ class TeamManagementContainer extends Component {
           onKeywordChange={this.onKeywordChange}
           onSelectNewMember={this.onSelectNewMember}
           onAddNewMember={this.onAddNewMember}
+          onToggleNewMemberConfirm={ this.onToggleNewMemberConfirm }
           onToggleAddTeamMember={this.onToggleAddTeamMember}
           onMemberDeleteConfirm={this.onMemberDeleteConfirm}
           onJoinConfirm={this.onJoinConfirm}

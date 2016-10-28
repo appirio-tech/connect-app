@@ -262,6 +262,9 @@ $tc-body-extra-small	: 12px;
       }
       .message {
         margin-bottom: $base-unit*4;
+        strong{
+          @include roboto-bold;
+        }
       }
       .error-message{
         display: block;
@@ -322,6 +325,7 @@ $tc-body-extra-small	: 12px;
         &:hover {
         }
         &.active {
+          cursor: default;
           background: $tc-dark-blue-90;
           color: $tc-white;
           // box-shadow: inset 0px 1px 3px 0px rgba(71,71,79,0.38);
@@ -377,10 +381,5 @@ $tc-body-extra-small	: 12px;
         color: $tc-gray-80;
       }
     }
-  }
-
-  .btn-cancel{
-    border: 1px solid $tc-dark-blue-90;
-    box-shadow: 0px 0px 3px 0px $tc-dark-blue-30;
   }
 }

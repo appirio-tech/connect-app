@@ -3,17 +3,16 @@ import React, {PropTypes} from 'react'
 const OwnerModal = ({member, onCancel, onConfirm}) => {
   return (
     <div className="modal">
-      <div className="modal-title center">
-        Assign member as owner
+      <div className="modal-title">
+        You are about to assign a new project owner
       </div>
       <div className="modal-body">
-        <p className="message center">
-          This will make <strong>{member.name}</strong> the project owner. Do you still want to proceed?
+        <p className="message">
+          <strong>{member.firstName} {member.lastName}</strong> will become responsible for the project and be able to add and remove team members. Are you sure you want to proceed?
         </p>
 
-        <div className="button-area">
+        <div className="button-area flex center">
           <button className="tc-btn tc-btn-default tc-btn-sm btn-cancel" onClick={onCancel}>Cancel</button>
-          {' '}
           <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={onConfirm}>Assign as owner</button>
         </div>
       </div>
