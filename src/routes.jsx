@@ -44,7 +44,7 @@ export default (
   <Route path="/" onUpdate={() => window.scrollTo(0, 0)} component={ App }>
     <IndexRoute component={Home} />
     <Route path="/login" component={LoginRedirect}/>
-    <Route path="/messages/:feedId" onEnter={ redirectToProject } />
+    <Route path="/discussions/:feedId" onEnter={ redirectToProject } />
 
     {/* Handle /projects/* routes */}
     {projectRoutes}
