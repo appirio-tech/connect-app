@@ -92,8 +92,10 @@ class MessagesView extends React.Component {
 
   init(props) {
     const { activeThreadId } = this.state
-    const activeThreadIndex = activeThreadId
-      ? _.findIndex(this.state.threads, (thread) => thread.id === activeThreadId )
+    const propsThreadId = props.location.state ? props.location.state.threadId : null
+    const threadId = activeThreadId ? activeThreadId : propsThreadId
+    const activeThreadIndex = threadId
+      ? _.findIndex(props.threads, (thread) => thread.id === threadId )
       : 0
     this.setState({
       threads: props.threads.map((thread, idx) => {
