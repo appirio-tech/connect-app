@@ -34,7 +34,7 @@ const redirectToProject = (nextState, replace, callback) => {
     }
     callback()
   })
-  .catch(error => {
+  .catch(() => {
     replace('/projects')
     callback()
   })
