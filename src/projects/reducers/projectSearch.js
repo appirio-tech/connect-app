@@ -28,7 +28,7 @@ export default function(state = initialState, action) {
     })
   case GET_PROJECTS_SEARCH_CRITERIA:
     return Object.assign({}, state, {
-      criteria: Object.assign({}, action.criteria ),
+      criteria: action.criteria,
       pageNum: action.pageNum
     })
   case CLEAR_PROJECT_SEARCH:

@@ -95,7 +95,7 @@ class TopBar extends Component {
     if (isProjectDetails) {
       return <ProjectToolBar isPowerUser={isPowerUser} logo={logo} avatar={avatar} project={project} />
     }
-    const noOfFilters = _.keys(criteria).length - 1
+    const noOfFilters = _.keys(criteria).length - 1 // -1 for default sort criteria
 
     return (
       // <Sticky>
