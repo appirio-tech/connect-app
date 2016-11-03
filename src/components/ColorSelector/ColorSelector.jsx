@@ -13,15 +13,14 @@ class ColorSelector extends React.Component {
 
     this.state = {
       isPickerVisible: false,
-      newColor: '#fff',
-      colors: _.uniq([...props.defaultColors, ...props.value])
+      newColor: '#fff'
     }
   }
   
   render() {
-    const {getValue, name, onChange, setValue} = this.props
-    const value = getValue() || []
-    const {isPickerVisible, colors, newColor} = this.state
+    const {getValue, name, onChange, setValue, defaultColors } = this.props
+    const value = getValue() || defaultColors
+    const {isPickerVisible, newColor} = this.state
 
     const onColorToggle = (color) => {
       const index = value.indexOf(color)
@@ -54,7 +53,7 @@ class ColorSelector extends React.Component {
           </a>
         )}
         
-        {colors.length < PROJECT_MAX_COLORS && 
+        {value.length < PROJECT_MAX_COLORS && 
           <a
             href="javascript:"
             onClick={() => this.setState({isPickerVisible: true})}
@@ -72,11 +71,6 @@ class ColorSelector extends React.Component {
                 <button type="button" className="tc-btn tc-btn-primary tc-btn-md"
                   onClick={() => {
                     this.setState({isPickerVisible: false})
-                    if (colors.indexOf(newColor) === -1) {
-                      this.setState({colors: [...colors, newColor], newColor: '#fff'})
-                    } else {
-                      this.setState({newColor: '#fff'})
-                    }
                     const newValue = [...value, newColor]
                     setValue(newValue)
                     onChange(name, newValue)
