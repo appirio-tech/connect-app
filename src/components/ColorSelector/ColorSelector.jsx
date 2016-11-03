@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react'
 import './ColorSelector.scss'
 import { SketchPicker } from 'react-color'
-import _ from 'lodash'
 import { HOC as hoc } from 'formsy-react'
 import {PROJECT_MAX_COLORS} from '../../config/constants'
 import { Icons } from 'appirio-tech-react-components'
