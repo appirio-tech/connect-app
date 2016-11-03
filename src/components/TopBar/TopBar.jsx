@@ -67,7 +67,7 @@ class TopBar extends Component {
     ]
     const logo = (
       <div className="logo-wrapper">
-        <Link className="logo" to={logoTargetUrl}><ConnectLogoBeta /></Link>
+        <Link className="logo" to={logoTargetUrl} target="_self"><ConnectLogoBeta /></Link>
       </div>
     )
     const avatar = (
