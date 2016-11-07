@@ -21,6 +21,11 @@ class ColorSelector extends React.Component {
     const value = getValue() || defaultColors
     const {isPickerVisible, newColor} = this.state
 
+    const updateNewColorPalette = (palette) => {
+      setValue(palette)
+      onChange(name, palette)
+    }
+
     const onColorToggle = (color) => {
       const index = value.indexOf(color)
       let newValue
@@ -32,8 +37,7 @@ class ColorSelector extends React.Component {
         newValue = tmp
       }
 
-      setValue(newValue)
-      onChange(name, newValue)
+      updateNewColorPalette(newValue)
     }
     
     return (
@@ -51,7 +55,7 @@ class ColorSelector extends React.Component {
             </span>
           </a>
         )}
-        
+
         {value.length < PROJECT_MAX_COLORS && 
           <a
             href="javascript:"
@@ -70,9 +74,11 @@ class ColorSelector extends React.Component {
                 <button type="button" className="tc-btn tc-btn-primary tc-btn-md"
                   onClick={() => {
                     this.setState({isPickerVisible: false})
-                    const newValue = [...value, newColor]
-                    setValue(newValue)
-                    onChange(name, newValue)
+                    const index = value.indexOf(this.state.newColor)
+                    if (index === -1) {
+                      const newValue = [ ...value, newColor ]
+                      updateNewColorPalette(newValue)
+                    }
                   }}
                 >Add</button>
                 <button
