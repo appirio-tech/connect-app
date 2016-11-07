@@ -40,7 +40,7 @@ const redirectToProject = (nextState, replace, callback) => {
       replace('/projects')
       callback()
     })
-  }).catch((error) => {
+  }).catch(() => {
     // FIXME should we include hash, search etc
     const redirectBackToUrl = window.location.origin + '/' + nextState.location.pathname
     const newLocation = ACCOUNTS_APP_LOGIN_URL + '?retUrl=' + redirectBackToUrl
