@@ -68,7 +68,7 @@ class MessageList extends Component {
   }
 
   render() {
-    const {threads, onSelect, onAdd, showAddButton, showEmptyState, scrollPosition } = this.props
+    const {threads, onSelect, onAdd, showAddButton, showEmptyState } = this.props
     return (
       <Panel className="message-list">
         <Panel.Title>
