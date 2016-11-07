@@ -50,6 +50,21 @@ class TeamManagementContainer extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    // Trigger a resize event to make sure all <Sticky> nodes update their sizes
+    // whenever isAddingTeamMember is toggled.
+    if (prevState.isAddingTeamMember !== this.state.isAddingTeamMember) {
+      // We use requestAnimationFrame because this function may be executed before
+      // the DOM elements are actually drawn.
+      // Source: http://stackoverflow.com/a/28748160
+      requestAnimationFrame(() => {
+        const event = document.createEvent('HTMLEvents')
+        event.initEvent('resize', true, false)
+        window.dispatchEvent(event)
+      })
+    }
+  }
+
   updateSearchMembers({allMembers, members}) {
     const {keyword, selectedNewMember } = this.state
     if (!keyword || !keyword.trim().length) {
