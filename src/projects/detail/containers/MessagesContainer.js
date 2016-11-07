@@ -92,12 +92,14 @@ class MessagesView extends React.Component {
 
   init(props) {
     const { activeThreadId } = this.state
-    const propsThreadId = props.location.state ? props.location.state.threadId : null
+    const propsThreadId = _.get(props, 'location.state.threadId', null)
     const threadId = activeThreadId ? activeThreadId : propsThreadId
     const activeThreadIndex = threadId
       ? _.findIndex(props.threads, (thread) => thread.id === threadId )
       : 0
+
     this.setState({
+      scrollPosition: activeThreadIndex * 71,
       threads: props.threads.map((thread, idx) => {
         return this.mapFeed(thread,
           idx === activeThreadIndex,
@@ -189,7 +191,7 @@ class MessagesView extends React.Component {
   }
 
   render() {
-    const {threads, isCreateNewMessage, showEmptyState} = this.state
+    const {threads, isCreateNewMessage, showEmptyState, scrollPosition} = this.state
     const { currentUser, isCreatingFeed, currentMemberRole, error } = this.props
     const activeThread = threads.filter((item) => item.isActive)[0]
     const renderRightPanel = () => {
@@ -230,6 +232,7 @@ class MessagesView extends React.Component {
                 onSelect={this.onThreadSelect}
                 showAddButton={ !!currentMemberRole }
                 showEmptyState={ showEmptyState && !threads.length }
+                scrollPosition={ scrollPosition }
               />
             </div>
             <div className="right-area">
