@@ -4,7 +4,7 @@ import MessagesContainer from './containers/MessagesContainer'
 
 require('./Messages.scss')
 
-const Messages = ({ project, currentMemberRole }) => (
-  <MessagesContainer project={ project } currentMemberRole={ currentMemberRole } />
+const Messages = ({ location, project, currentMemberRole }) => (
+  <MessagesContainer location={ location } project={ project } currentMemberRole={ currentMemberRole } />
 )
 export default Messages

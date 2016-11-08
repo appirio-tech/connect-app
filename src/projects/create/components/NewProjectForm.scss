@@ -273,8 +273,11 @@
       &.padding-top-30{
         padding-top: 60px;
       }
-      .row{
+      .row {
         margin-bottom: 20px;
+        input::-ms-clear {
+          display: none;
+        }
         &.center{
           display: table;
           margin: 0 auto;
@@ -404,6 +407,9 @@
         textarea {
           height: 80px;
           resize: none;
+        }
+        input::-ms-clear {
+          display: none;
         }
         &.center {
           display: flex;
