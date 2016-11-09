@@ -153,6 +153,7 @@ $tc-body-extra-small	: 12px;
       right: $base-unit*3;
       // @include icon('x-mark-big.svg');
       background-size: $tc-heading-extra-small;
+      overflow: hidden;
     }
     .modal-title{
       @include roboto-bold;
