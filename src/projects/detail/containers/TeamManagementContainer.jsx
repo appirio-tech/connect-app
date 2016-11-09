@@ -4,7 +4,7 @@ import { withRouter } from 'react-router'
 import _ from 'lodash'
 import {
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER,
-  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER
+  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER, AUTOCOMPLETE_TRIGGER_LENGTH
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import { addProjectMember, updateProjectMember, removeProjectMember,
@@ -107,7 +107,7 @@ class TeamManagementContainer extends Component {
   }
 
   onKeywordChange(keyword) {
-    if (keyword.length > 2)
+    if (keyword.length >= AUTOCOMPLETE_TRIGGER_LENGTH)
       this.props.loadMemberSuggestions(keyword)
     this.setState({ keyword, selectedNewMember: null })
   }
@@ -135,12 +135,13 @@ class TeamManagementContainer extends Component {
     )
     this.setState({
       keyword: '',
+      searchMembers: [],
       selectedNewMember: null
     })
   }
 
   onToggleAddTeamMember(isAddingTeamMember) {
-    this.setState({ isAddingTeamMember, error : null })
+    this.setState({ isAddingTeamMember, error : null, searchMembers: [] })
   }
 
   onToggleNewMemberConfirm(showNewMemberConfirmation) {
