@@ -211,3 +211,5 @@ export const CODER_BOT_USER_FNAME = 'Coder'
 export const CODER_BOT_USER_LNAME = 'Bot'
 
 export const PROJECT_MAX_COLORS = 5
+
+export const AUTOCOMPLETE_TRIGGER_LENGTH = 3

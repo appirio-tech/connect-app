@@ -110,7 +110,7 @@ class AppProjectForm extends Component {
 
           <TCFormFields.TextInput
             name="newProject.details.utm.code"
-            label="Invite code (optional)"
+            label="Reference code (optional)"
             type="text"
             maxLength={25}
             wrapperClass="row center"

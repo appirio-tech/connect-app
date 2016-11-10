@@ -61,7 +61,7 @@ const sections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
         type: 'notes'
       },
       {
@@ -94,7 +94,7 @@ const sections = [
             type: 'tiled-radio-group',
             options: [
               {value: 'serif', title: 'Serif', icon: Icons.IconTcSpecTypeSerif, iconOptions: { fill: '#00000'}, desc: 'formal, old style'},
-              {value: 'sanSerif', title: 'Sans Serif', icon: Icons.IconTcSpecTypeSerif, iconOptions: { fill: '#00000'}, desc: 'clean, modern, informal'}
+              {value: 'sanSerif', title: 'Sans Serif', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: 'clean, modern, informal'}
             ],
             fieldName: 'details.designSpecification.fontStyle'
           },

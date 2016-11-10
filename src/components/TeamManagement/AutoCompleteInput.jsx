@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import uncontrollable from 'uncontrollable'
 import { Avatar } from 'appirio-tech-react-components'
+import { AUTOCOMPLETE_TRIGGER_LENGTH } from '../../config/constants'
 
 class AutoCompleteInput extends React.Component {
 
@@ -52,7 +53,7 @@ class AutoCompleteInput extends React.Component {
     return (
       <div className="input-icon-group tc-file-field__inputs">
 
-        {isPopupVisible && searchMembers.length > 0 &&
+        {isPopupVisible && keyword.length >= AUTOCOMPLETE_TRIGGER_LENGTH && searchMembers.length > 0 &&
           <div className="member-dropdown">
             {searchMembers.map(renderMember)}
           </div>

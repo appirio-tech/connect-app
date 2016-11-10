@@ -102,7 +102,7 @@ class EditProjectForm extends Component {
         />
         <div className="section-footer section-footer-spec">
           <button className="tc-btn tc-btn-primary tc-btn-md"
-            type="submit" disabled={!this.state.canSubmit}
+            type="submit" disabled={!this.state.canSubmit || this.state.isSaving }
           >Save Changes</button>
         </div>
       </div>
