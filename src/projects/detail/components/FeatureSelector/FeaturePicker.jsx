@@ -363,7 +363,7 @@ class FeaturePicker extends Component {
               }
             </ul>
           </div>
-          <div className="contents flex column flex-grow">
+          <div className="contents features-content flex column flex-grow">
             { showCutsomFeatureForm
               ? (<CustomFeatureForm
                   isEdittable={isEdittable}

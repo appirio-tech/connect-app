@@ -14,13 +14,12 @@ const AddFiles = props => {
     buttonText: 'Add File',
     buttonClass: 'tc-btn tc-btn-secondary tc-btn-sm',
     dragText: 'Drag and drop your files here',
-    // dragClass: '',
     language: 'en',
-    storeLocation: 's3',
+    location: 's3',
     storeContainer: FILE_PICKER_SUBMISSION_CONTAINER_NAME,
-    storePath,
+    path: storePath,
     multiple: 'true',
-    services: 'COMPUTER,GOOGLE_DRIVE,BOX,DROPBOX,SKYDRIVE'
+    services: ['COMPUTER', 'GOOGLE_DRIVE', 'BOX', 'DROPBOX', 'SKYDRIVE']
   }
 
   return (

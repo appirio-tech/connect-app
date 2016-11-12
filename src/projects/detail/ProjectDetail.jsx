@@ -47,6 +47,9 @@ class ProjectDetail extends Component {
     // handle just deleted projects
     if (! (error || isLoading || isProcessing) && _.isEmpty(project))
       this.props.router.push('/projects/')
+    if (project && project.name) {
+      document.title = `${project.name} - Topcoder`
+    }
   }
 
   getProjectRoleForCurrentUser({currentUserId, project}) {

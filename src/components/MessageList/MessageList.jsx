@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react'
+import React, {Component, PropTypes} from 'react'
 import Panel from '../Panel/Panel'
 import './MessageList.scss'
 import cn from 'classnames'
@@ -49,18 +49,42 @@ const MessageRow = ({title, messages, isActive, unreadCount, onClick}) => {
 }
 
 
-const MessageList = ({threads, onSelect, onAdd, showAddButton, showEmptyState}) => (
-  <Panel className="message-list">
-    <Panel.Title>
-      Discussions
-      { showAddButton && <Panel.AddBtn onClick={onAdd} /> }
-    </Panel.Title>
-    <div className="panel-messages">
-      { showEmptyState && <MessageRow title="First discussion post" isActive messages={[{ content: ''}]} /> }
-      {threads.map((item) => <MessageRow key={item.id} onClick={(e) => onSelect(item, e) } {...item} />)}
-    </div>
-  </Panel>
-)
+class MessageList extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  componentDidMount() {
+    const { scrollPosition } = this.props
+    const panelMessages = this.refs.panelMessages
+    // 145 = 60 for topbar + 45 for panel title + 20px for margin between topbar and left panel + 10px padding
+    panelMessages.style.height = (window.innerHeight - 145) + 'px'
+    if (scrollPosition) {
+      // We use requestAnimationFrame because this function may be executed before
+      // the DOM elements are actually drawn.
+      // Source: http://stackoverflow.com/a/28748160
+      requestAnimationFrame(() => {
+        panelMessages.scrollTop += scrollPosition
+      })
+    }
+  }
+
+  render() {
+    const {threads, onSelect, onAdd, showAddButton, showEmptyState } = this.props
+    return (
+      <Panel className="message-list">
+        <Panel.Title>
+          Discussions
+          { showAddButton && <Panel.AddBtn onClick={onAdd} /> }
+        </Panel.Title>
+        <div className="panel-messages" ref="panelMessages">
+          { showEmptyState && <MessageRow title="First discussion post" isActive messages={[{ content: ''}]} /> }
+          {threads.map((item) => <MessageRow key={item.id} onClick={(e) => onSelect(item, e) } {...item} />)}
+        </div>
+      </Panel>
+    )
+  }
+}
 
 MessageList.propTypes = {
   /**

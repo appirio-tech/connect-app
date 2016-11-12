@@ -37,8 +37,8 @@ $tc-body-large     		: 20px;
       display: inline-block;
       position: relative;
       margin-top: 12px;
-      width: 60px;
-      height: 36px;
+      // width: 60px;
+      // height: 36px;
     }
   }
 
@@ -76,7 +76,7 @@ $tc-body-large     		: 20px;
 
       .search-bar{
         margin: 0 auto;
-        width: 585px;
+        width: 605px;
         padding-top: 15px;
         display: flex;
         justify-content:space-between;
@@ -88,9 +88,11 @@ $tc-body-large     		: 20px;
           height: 30px;
         }
         .search-filter{
-          width: 77px;
+          width: 97px;
           .tc-btn{
-            display: block;
+            display: flex;
+            align-items: center;
+            justfiy-content: center;
             padding: 5px 0 5px 34px;
             text-align: left;
             color: $tc-gray-40;
@@ -117,6 +119,18 @@ $tc-body-large     		: 20px;
                 background-size: 14px 32px;
               }
             }
+          }
+
+          .filter-indicator {
+            width: 15px;
+            height: 15px;
+            margin-left: $base-unit;
+            background-color: $tc-dark-blue-90;
+            border-radius: 26px;
+            color: $tc-white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
         }
       }

@@ -35,8 +35,8 @@ class ProjectInfoContainer extends React.Component {
     let percent =''
     let title = ''
     let text = ''
-    let type = ''
-    if (duration) {
+    let type = 'completed' // default
+    if (duration  && duration.plannedDuration) {
       const {actualDuration, plannedDuration} = duration
       if (status === 'draft') {
         title = 'Duration'
@@ -72,7 +72,7 @@ class ProjectInfoContainer extends React.Component {
     } else {
       title = 'Duration'
       percent = 0
-      text = 'Complete specification to get estimate'
+      text = status === 'draft' ? 'Complete specification to get estimate' : 'Estimate not entered'
     }
     this.setState({duration: { title, text, percent, type }})
   }
@@ -128,10 +128,12 @@ class ProjectInfoContainer extends React.Component {
     return (
       <div>
         <ProjectInfo
+          projectId={project.id}
           canDeleteProject={canDeleteProject}
           onDeleteProject={this.onDeleteProject}
           directLinks={directLinks}
           currentMemberRole={currentMemberRole}
+          description={project.description}
           type={project.type}
           devices={project.details.devices || []}
           status={project.status} onChangeStatus={this.onChangeStatus}

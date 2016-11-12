@@ -1,9 +1,11 @@
 @import 'tc-includes';
 
-.delete-project-modal {
-  .button-area {
-    button:not(:last-child) {
-      margin-right: 2 * $base-unit;
-    }
+.project-description {
+  color: $tc-gray-80;
+  @include tc-label-md;
+
+  .read-more-link {
+    white-space: nowrap;
+    color: $tc-dark-blue-90;
   }
 }

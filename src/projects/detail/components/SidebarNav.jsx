@@ -8,7 +8,7 @@ require('./SidebarNav.scss')
 const scrollProps = {
   spy: true,
   smooth: true,
-  offset: -10,
+  offset: -70, // 60px for top bar and 10px for margin from nav bar
   duration: 500,
   activeClass: 'active'
 }

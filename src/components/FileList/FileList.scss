@@ -1,6 +1,9 @@
 @import 'tc-includes';
 
 .file-list {
+  // reset styles of panel class, we need panel class to activate the modal-overlay
+  border: none;
+  box-shadow: none;
   > h4 {
 
     @include roboto-medium;
@@ -48,6 +51,9 @@
     }
     .edit-icons {
       margin-left: 5px;
+      i {
+        cursor: pointer;
+      }
     }
     .title-edit {
       display: flex;
@@ -91,4 +97,8 @@
   .icon-close {
     margin-right: 10px;
   }
+}
+
+.delete-file-modal {
+
 }

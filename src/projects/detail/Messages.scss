@@ -18,6 +18,7 @@
   @include flexBox;
   max-width: 1110px;
   margin: 20px auto;
+  height: calc(100% - 20px);// 20px is for bottom margin
   
   .left-area {
     @include flexWidth(1);
@@ -27,6 +28,7 @@
   .right-area {
     @include flexWidth(2);
     margin-left: 4 * $base-unit;
+    overflow-y: auto;
 
     .messaging-empty-state {
       margin-bottom: 4 * $base-unit;

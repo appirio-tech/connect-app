@@ -28,7 +28,8 @@ class ProjectInfo extends Component {
   }
 
   render() {
-    const { type, directLinks, devices, currentMemberRole, status, onChangeStatus, duration, canDeleteProject } = this.props
+    const { projectId, description, type, directLinks, devices, currentMemberRole, status, onChangeStatus, duration,
+      canDeleteProject } = this.props
     const { showDeleteConfirm } = this.state
     const displayProgress = status !== 'cancelled'
     return (
@@ -43,7 +44,7 @@ class ProjectInfo extends Component {
             onConfirm={this.onConfirmDelete}
           />
         }
-        <ProjectType type={type} devices={devices} />
+        <ProjectType projectId={projectId} type={type} devices={devices} description={ description } />
         <ProjectStatus directLinks={directLinks} currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
         {displayProgress && <ProjectProgress {...duration}>
           {duration.text}

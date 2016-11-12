@@ -26,18 +26,15 @@
       display: block;
     }
   }
-  .delete-confirmation-modal {
-    .button-area {
-      button:not(:last-child) {
-        margin-right: 2 * $base-unit;
-      }
-    }
-  }
   .links-footer{
     @include roboto;
     font-size: $tc-label-xs;
     color: $tc-dark-blue-70;
     line-height: $base-unit*6;
     padding-left: $base-unit*4;
+  }
+
+  .delete-link-modal {
+    margin-left: -4*$base-unit;
   }
 }

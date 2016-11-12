@@ -77,6 +77,7 @@
     "react-s-alert": "^1.1.4",
     "react-scroll": "^1.2.0",
     "react-stickynode": "^1.2.1",
+    "react-text-truncate": "^0.8.3",
     "recompose": "^0.20.2",
     "redux": "^3.5.2",
     "redux-promise-middleware": "^4.0.0",

@@ -1,10 +1,9 @@
 import React, {PropTypes} from 'react'
 import './ColorSelector.scss'
-import cn from 'classnames'
 import { SketchPicker } from 'react-color'
-import _ from 'lodash'
 import { HOC as hoc } from 'formsy-react'
 import {PROJECT_MAX_COLORS} from '../../config/constants'
+import { Icons } from 'appirio-tech-react-components'
 
 class ColorSelector extends React.Component {
   
@@ -13,15 +12,19 @@ class ColorSelector extends React.Component {
 
     this.state = {
       isPickerVisible: false,
-      newColor: '#fff',
-      colors: _.uniq([...props.defaultColors, ...props.value])
+      newColor: '#fff'
     }
   }
   
   render() {
-    const {getValue, name, onChange, setValue} = this.props
-    const value = getValue() || []
-    const {isPickerVisible, colors, newColor} = this.state
+    const {getValue, name, onChange, setValue, defaultColors } = this.props
+    const value = getValue() || defaultColors
+    const {isPickerVisible, newColor} = this.state
+
+    const updateNewColorPalette = (palette) => {
+      setValue(palette)
+      onChange(name, palette)
+    }
 
     const onColorToggle = (color) => {
       const index = value.indexOf(color)
@@ -34,23 +37,26 @@ class ColorSelector extends React.Component {
         newValue = tmp
       }
 
-      setValue(newValue)
-      onChange(name, newValue)
+      updateNewColorPalette(newValue)
     }
     
     return (
       <div className="colorSelector">
-        {colors.map((color) =>
+        {value.map((color) =>
           <a
             key={color}
             href="javascript:"
             onClick={() => onColorToggle(color)}
-            className={cn('color-card', {selected: value.indexOf(color) !== -1})}
+            className="color-card"
             style={{backgroundColor: color}}
-          />
+          >
+            <span className="remove-color">
+              <Icons.CloseIcon />
+            </span>
+          </a>
         )}
-        
-        {colors.length < PROJECT_MAX_COLORS && 
+
+        {value.length < PROJECT_MAX_COLORS && 
           <a
             href="javascript:"
             onClick={() => this.setState({isPickerVisible: true})}
@@ -68,14 +74,11 @@ class ColorSelector extends React.Component {
                 <button type="button" className="tc-btn tc-btn-primary tc-btn-md"
                   onClick={() => {
                     this.setState({isPickerVisible: false})
-                    if (colors.indexOf(newColor) === -1) {
-                      this.setState({colors: [...colors, newColor], newColor: '#fff'})
-                    } else {
-                      this.setState({newColor: '#fff'})
+                    const index = value.indexOf(this.state.newColor)
+                    if (index === -1) {
+                      const newValue = [ ...value, newColor ]
+                      updateNewColorPalette(newValue)
                     }
-                    const newValue = [...value, newColor]
-                    setValue(newValue)
-                    onChange(name, newValue)
                   }}
                 >Add</button>
                 <button

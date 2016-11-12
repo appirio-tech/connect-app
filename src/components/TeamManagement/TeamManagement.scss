@@ -153,6 +153,7 @@ $tc-body-extra-small	: 12px;
       right: $base-unit*3;
       // @include icon('x-mark-big.svg');
       background-size: $tc-heading-extra-small;
+      overflow: hidden;
     }
     .modal-title{
       @include roboto-bold;
@@ -223,6 +224,7 @@ $tc-body-extra-small	: 12px;
           position: relative;
           flex-grow: 1;
           height: 40px;
+          width: 233px;
           display: flex;
           background: $tc-white;
           border: 1px solid $tc-gray-20;
@@ -261,6 +263,9 @@ $tc-body-extra-small	: 12px;
       }
       .message {
         margin-bottom: $base-unit*4;
+        strong{
+          @include roboto-bold;
+        }
       }
       .error-message{
         display: block;
@@ -313,6 +318,7 @@ $tc-body-extra-small	: 12px;
         box-shadow: none;
         background-color: $tc-white;
         border: 1px solid $tc-gray-30;
+        cursor: pointer;
         a{
           color: $tc-gray-80;
           font-weight: normal;
@@ -320,8 +326,10 @@ $tc-body-extra-small	: 12px;
         &:hover {
         }
         &.active {
-          background: $tc-gray-20;
-          box-shadow: inset 0px 1px 3px 0px rgba(71,71,79,0.38);
+          cursor: default;
+          background: $tc-dark-blue-90;
+          color: $tc-white;
+          // box-shadow: inset 0px 1px 3px 0px rgba(71,71,79,0.38);
           a{
           }
         }
@@ -374,13 +382,5 @@ $tc-body-extra-small	: 12px;
         color: $tc-gray-80;
       }
     }
-  }
-
-  .btn-cancel{
-    border: 1px solid $tc-dark-blue-90;
-    box-shadow: 0px 0px 3px 0px $tc-dark-blue-30;
-  }
-  .button-area {
-    text-align: center;
   }
 }

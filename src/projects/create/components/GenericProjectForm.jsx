@@ -63,7 +63,7 @@ class GenericProjectForm extends Component {
 
         <TCFormFields.TextInput
           name="newProject.details.utm.code"
-          label="Invite code (optional)"
+          label="Reference code (optional)"
           maxLength={25}
           type="text"
           disabled={false}

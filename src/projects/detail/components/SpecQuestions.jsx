@@ -29,38 +29,61 @@ const getIcon = icon => {
 const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) => {
 
   const renderQ = (q, index) => {
-    let child = null
-    const value = _.get(project, q.fieldName, undefined)
+    // let child = null
+    // const value =
+    const elemProps = {
+      name: q.fieldName,
+      label: q.label,
+      value: _.get(project, q.fieldName, undefined)
+    }
+    let ChildElem = ''
     switch (q.type) {
     case 'see-attached-textbox':
-      child = <SeeAttachedTextareaInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
+      ChildElem = SeeAttachedTextareaInput
+      elemProps.wrapperClass = 'row'
+      // child = <SeeAttachedTextareaInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'textinput':
-      child = <TCFormFields.TextInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
+      ChildElem = TCFormFields.TextInput
+      elemProps.wrapperClass = 'row'
+      // child = <TCFormFields.TextInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'textbox':
-      child = <TCFormFields.Textarea name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
+      ChildElem = TCFormFields.Textarea
+      elemProps.wrapperClass = 'row'
+      // child = <TCFormFields.Textarea name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'radio-group':
-      child = <TCFormFields.RadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
+      ChildElem = TCFormFields.RadioGroup
+      _.assign(elemProps, {wrapperClass: 'row', options: q.options})
+      // child = <TCFormFields.RadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
     case 'tiled-radio-group':
-      child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
+      ChildElem = TCFormFields.TiledRadioGroup
+      _.assign(elemProps, {wrapperClass: 'row', options: q.options})
+      // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
     case 'checkbox-group':
-      child = <TCFormFields.CheckboxGroup name={q.fieldName} label={q.label} value={value} options={q.options} />
+      ChildElem = TCFormFields.CheckboxGroup
+      _.assign(elemProps, {options: q.options})
+      // child = <TCFormFields.CheckboxGroup name={q.fieldName} label={q.label} value={value} options={q.options} />
       break
     case 'checkbox':
-      child = <TCFormFields.Checkbox name={q.fieldName} label={q.label} value={value} />
+      ChildElem = TCFormFields.Checkbox
+      // child = <TCFormFields.Checkbox name={q.fieldName} label={q.label} value={value} />
       break
     case 'see-attached-features':
-      child = <SeeAttachedSpecFeatureQuestion name={q.fieldName} value={value} question={q} resetValue={resetFeatures} showFeaturesDialog={showFeaturesDialog} />
+      ChildElem = SeeAttachedSpecFeatureQuestion
+      _.assign(elemProps, { resetValue: resetFeatures, question: q, showFeaturesDialog })
+      // child = <SeeAttachedSpecFeatureQuestion name={q.fieldName} value={value} question={q} resetValue={resetFeatures} showFeaturesDialog={showFeaturesDialog} />
       break
     case 'colors':
-      child = <ColorSelector name={q.fieldName} defaultColors={q.defaultColors} value={value} />
+      ChildElem = ColorSelector
+      _.assign(elemProps, { defaultColors: q.defaultColors })
+      // child = <ColorSelector name={q.fieldName} defaultColors={q.defaultColors} value={value} />
       break
     default:
-      child = <noscript />
+      ChildElem = <noscript />
     }
     return (
       <SpecQuestionList.Item
@@ -69,7 +92,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
         icon={getIcon(q.icon)}
         description={q.description}
       >
-        {child}
+        <ChildElem {...elemProps} />
       </SpecQuestionList.Item>
     )
   }

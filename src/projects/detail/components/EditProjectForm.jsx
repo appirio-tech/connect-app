@@ -22,6 +22,7 @@ class EditProjectForm extends Component {
 
   componentWillMount() {
     this.setState({
+      isProjectDirty: false,
       isFeaturesDirty: false,
       project: Object.assign({}, this.props.project),
       canSubmit: false,
@@ -30,10 +31,14 @@ class EditProjectForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    let updatedProject = Object.assign({}, nextProps.project)
+    if (this.state.isFeaturesDirty && !this.state.isSaving) {
+      updatedProject = update(updatedProject, {details: { appDefinition: { features: { $set: this.state.project.details.appDefinition.features } } } })
+    }
     this.setState({
-      project: Object.assign({}, nextProps.project),
-      canSubmit: false,
-      isFeaturesDirty: false
+      project: updatedProject,
+      canSubmit: this.state.isFeaturesDirty,
+      isSaving: false
     })
   }
 
@@ -79,6 +84,7 @@ class EditProjectForm extends Component {
     if (this.state.isFeaturesDirty) {
       model.details.appDefinition.features = this.state.project.details.appDefinition.features
     }
+    this.setState({isSaving: true })
     this.props.submitHandler(model)
   }
 
@@ -96,7 +102,7 @@ class EditProjectForm extends Component {
         />
         <div className="section-footer section-footer-spec">
           <button className="tc-btn tc-btn-primary tc-btn-md"
-            type="submit" disabled={!this.state.canSubmit}
+            type="submit" disabled={!this.state.canSubmit || this.state.isSaving }
           >Save Changes</button>
         </div>
       </div>
@@ -134,6 +140,7 @@ class EditProjectForm extends Component {
 
 EditProjectForm.propTypes = {
   project: PropTypes.object.isRequired,
+  saving: PropTypes.bool.isRequired,
   sections: PropTypes.arrayOf(PropTypes.object).isRequired,
   isEdittable: PropTypes.bool.isRequired,
   submitHandler: PropTypes.func.isRequired

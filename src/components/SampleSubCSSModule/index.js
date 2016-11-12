@@ -1,3 +1,3 @@
-import SampleSubCSSModule from './SampleSubCSSModule';
+import SampleSubCSSModule from './SampleSubCSSModule'
 
-export default SampleSubCSSModule;
+export default SampleSubCSSModule

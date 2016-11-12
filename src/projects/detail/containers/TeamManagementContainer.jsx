@@ -4,7 +4,7 @@ import { withRouter } from 'react-router'
 import _ from 'lodash'
 import {
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER,
-  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER
+  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER, AUTOCOMPLETE_TRIGGER_LENGTH
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import { addProjectMember, updateProjectMember, removeProjectMember,
@@ -24,6 +24,7 @@ class TeamManagementContainer extends Component {
     this.onJoinConfirm = this.onJoinConfirm.bind(this)
     this.onChangeOwnerConfirm = this.onChangeOwnerConfirm.bind(this)
     this.onFilterTypeChange = this.onFilterTypeChange.bind(this)
+    this.onToggleNewMemberConfirm = this.onToggleNewMemberConfirm.bind(this)
   }
 
   componentWillMount() {
@@ -46,6 +47,21 @@ class TeamManagementContainer extends Component {
     ) {
       // navigate to project listing
       this.props.router.push('/projects/')
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // Trigger a resize event to make sure all <Sticky> nodes update their sizes
+    // whenever isAddingTeamMember is toggled.
+    if (prevState.isAddingTeamMember !== this.state.isAddingTeamMember) {
+      // We use requestAnimationFrame because this function may be executed before
+      // the DOM elements are actually drawn.
+      // Source: http://stackoverflow.com/a/28748160
+      requestAnimationFrame(() => {
+        const event = document.createEvent('HTMLEvents')
+        event.initEvent('resize', true, false)
+        window.dispatchEvent(event)
+      })
     }
   }
 
@@ -91,7 +107,7 @@ class TeamManagementContainer extends Component {
   }
 
   onKeywordChange(keyword) {
-    if (keyword.length > 2)
+    if (keyword.length >= AUTOCOMPLETE_TRIGGER_LENGTH)
       this.props.loadMemberSuggestions(keyword)
     this.setState({ keyword, selectedNewMember: null })
   }
@@ -119,13 +135,17 @@ class TeamManagementContainer extends Component {
     )
     this.setState({
       keyword: '',
+      searchMembers: [],
       selectedNewMember: null
     })
-
   }
 
   onToggleAddTeamMember(isAddingTeamMember) {
-    this.setState({isAddingTeamMember, error : null})
+    this.setState({ isAddingTeamMember, error : null, searchMembers: [] })
+  }
+
+  onToggleNewMemberConfirm(showNewMemberConfirmation) {
+    this.setState({ showNewMemberConfirmation, isAddingTeamMember : false })
   }
 
   onMemberDeleteConfirm(member) {
@@ -188,6 +208,7 @@ class TeamManagementContainer extends Component {
           onKeywordChange={this.onKeywordChange}
           onSelectNewMember={this.onSelectNewMember}
           onAddNewMember={this.onAddNewMember}
+          onToggleNewMemberConfirm={ this.onToggleNewMemberConfirm }
           onToggleAddTeamMember={this.onToggleAddTeamMember}
           onMemberDeleteConfirm={this.onMemberDeleteConfirm}
           onJoinConfirm={this.onJoinConfirm}

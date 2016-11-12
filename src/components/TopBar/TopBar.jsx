@@ -3,9 +3,11 @@ require('./TopBar.scss')
 import React, {PropTypes, Component} from 'react'
 import { Link } from 'react-router'
 import cn from 'classnames'
-import { UserDropdown, Icons } from 'appirio-tech-react-components'
+import _ from 'lodash'
+import { UserDropdown, Icons, SearchBar } from 'appirio-tech-react-components'
+
 const { ConnectLogo } = Icons
-import { SearchBar } from 'appirio-tech-react-components'
+import {  } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import ProjectToolBar from './ProjectToolBar'
 
@@ -65,7 +67,7 @@ class TopBar extends Component {
     ]
     const logo = (
       <div className="logo-wrapper">
-        <Link className="logo" to={logoTargetUrl}><ConnectLogo width={60}/></Link>
+        <Link className="logo" to={logoTargetUrl} target="_self"><ConnectLogo /></Link>
       </div>
     )
     const avatar = (
@@ -93,6 +95,7 @@ class TopBar extends Component {
     if (isProjectDetails) {
       return <ProjectToolBar isPowerUser={isPowerUser} logo={logo} avatar={avatar} project={project} />
     }
+    const noOfFilters = _.keys(criteria).length - 1 // -1 for default sort criteria
 
     return (
       // <Sticky>
@@ -115,7 +118,7 @@ class TopBar extends Component {
                   href="javascript:"
                   className={cn('tc-btn tc-btn-sm', {active: isFilterVisible})}
                   onClick={this.props.onToggleFilter}
-                >Filters</a>
+                >Filters { noOfFilters > 0 && <span className="filter-indicator">{ noOfFilters }</span> }</a>
               </div>}
             </div>
             {avatar}

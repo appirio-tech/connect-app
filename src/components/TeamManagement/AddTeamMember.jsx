@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react'
 import AutoCompleteInput from './AutoCompleteInput'
 import cn from 'classnames'
 import { Icons } from 'appirio-tech-react-components'
+import { PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 
 
 const { XMarkIcon } = Icons
@@ -9,7 +10,7 @@ const { XMarkIcon } = Icons
 const AddTeamMember = (props) => {
   const {
     isAddingTeamMember, onAddNewMember, onToggleAddTeamMember, onKeywordChange, selectedNewMember, error,
-    filterType, currentUser, onFilterTypeChange
+    filterType, currentUser, onFilterTypeChange, onToggleNewMemberConfirm, owner
   } = props
   const onTypeChangeCustomer = () => onFilterTypeChange('customer')
   const onTypeChangeCopilot = () => onFilterTypeChange('copilot')
@@ -18,6 +19,11 @@ const AddTeamMember = (props) => {
     onToggleAddTeamMember(false)
   }
   const onConfirmAddMember = () => {
+    // if adding a customer and there is no owner yet for the project
+    if(filterType === PROJECT_ROLE_CUSTOMER && !owner) {
+      onToggleNewMemberConfirm(true)
+      return
+    }
     onAddNewMember()
     onToggleAddTeamMember(false)
   }
@@ -48,11 +54,11 @@ const AddTeamMember = (props) => {
         </p>}
         {(currentUser.isManager || currentUser.isCopilot) && <div className="tab-group">
           <ul>
-            <li className={cn({active: filterType === 'customer'})}>
-              <a href="javascript:" onClick={onTypeChangeCustomer}>Member</a>
+            <li className={cn({active: filterType === 'customer'})} onClick={onTypeChangeCustomer}>
+              Member
             </li>
-            <li className={cn({active: filterType === 'copilot'})}>
-              <a href="javascript:" onClick={onTypeChangeCopilot}>Copilot</a>
+            <li className={cn({active: filterType === 'copilot'})} onClick={onTypeChangeCopilot}>
+              Copilot
             </li>
           </ul>
         </div>}

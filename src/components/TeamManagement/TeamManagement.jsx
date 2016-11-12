@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React, {PropTypes} from 'react'
 import cn from 'classnames'
 import uncontrollable from 'uncontrollable'
@@ -7,6 +8,7 @@ import Panel from '../Panel/Panel'
 import DeleteModal from './DeleteModal'
 import OwnerModal from './OwnerModal'
 import AddTeamMember from './AddTeamMember'
+import NewMemberConfirmModal from './NewMemberConfirmModal'
 import Join from './Join'
 import { PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 const userShape = PropTypes.shape({
@@ -30,26 +32,32 @@ const calcMemberPriority = m => {
   if (m.role === PROJECT_ROLE_MANAGER) priority += 2
 
   if (m.isPrimary) priority++
-  return priority
+  return -priority
 }
 
 const TeamManagement = (props) => {
   const {
     currentUser, members, deletingMember, isAddingTeamMember, onMemberDeleteConfirm, onMemberDelete, isShowJoin,
-    newOwner, onChangeOwner, onChangeOwnerConfirm, onToggleAddTeamMember
+    newOwner, onChangeOwner, onChangeOwnerConfirm, onToggleAddTeamMember, showNewMemberConfirmation, onAddNewMember,
+    onToggleNewMemberConfirm, onKeywordChange
   } = props
   const currentMember = members.filter((member) => member.userId === currentUser.userId)[0]
   const owner = members.filter((member) => member.isPrimary && member.isCustomer)[0]
-  const modalActive = isAddingTeamMember || deletingMember || isShowJoin
+  const modalActive = isAddingTeamMember || deletingMember || isShowJoin || showNewMemberConfirmation
   const canJoin = !currentMember && (currentUser.isCopilot || currentUser.isManager)
 
-  const sortedMembers = members.sort((a, b) => {
-    const aPriority = calcMemberPriority(a)
-    const bPriority = calcMemberPriority(b)
-    return bPriority - aPriority
-  })
+  const sortedMembers = _.sortBy(members, [(member) => {
+    return calcMemberPriority(member)
+  }])
 
-
+  const _onAddNewMember = () => {
+    onToggleNewMemberConfirm(false)
+    onAddNewMember()
+  }
+  const _onAddMemberCancel = () => {
+    onKeywordChange('')
+    onToggleNewMemberConfirm(false)
+  }
   return (
     <div className="team-management">
       <Panel className={cn({'modal-active': modalActive})}>
@@ -106,7 +114,9 @@ const TeamManagement = (props) => {
         })}
 
         {canJoin && <Join {...props} isCopilot={currentUser.isCopilot} owner={owner} />}
-        {currentMember && <AddTeamMember {...props} />}
+        {currentMember && <AddTeamMember {...props} owner={owner} />}
+
+        { showNewMemberConfirmation && <NewMemberConfirmModal onConfirm={ _onAddNewMember } onCancel={ _onAddMemberCancel } />}
       </Panel>
     </div>
   )

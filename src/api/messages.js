@@ -21,14 +21,25 @@ export function getTopics(criteria) {
     })
 }
 
+export function getTopic(topicId) {
+  return axios.get(`${TC_API_URL}/v4/topics/${topicId}`)
+    .then( resp => {
+      return {
+        totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
+        topics: _.get(resp.data, 'result.content', []),
+        topicId
+      }
+    })
+}
+
 export function getTopicPosts(topicId, postIds) {
-  console.log(postIds)
   const params = { postIds : postIds.join(',') }
   return axios.get(`${TC_API_URL}/v4/topics/${topicId}/posts`, { params })
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
-        posts: _.get(resp.data, 'result.content', [])
+        posts: _.get(resp.data, 'result.content', []),
+        topicId
       }
     })
 }

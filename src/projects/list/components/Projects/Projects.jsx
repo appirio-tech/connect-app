@@ -15,19 +15,21 @@ class Projects extends Component {
   }
 
   componentWillMount() {
+    document.title = 'Projects - Topcoder'
     // this.searchTermFromQuery = this.props.location.query.q || ''
     const {criteria, loadProjects} = this.props
     let pageNum = this.props.pageNum
     // check for criteria specified in URL.
     const queryParams = _.get(this.props, 'location.query', null)
     if (!_.isEmpty(queryParams)) {
-      if (queryParams.sort) criteria.sort = queryParams.sort
-      if (queryParams.name) criteria.name = decodeURIComponent(queryParams.name)
-      if (queryParams.status) criteria.status = queryParams.status
-      if (queryParams.type) criteria.type = queryParams.type
-      if (queryParams.memberOnly) criteria.memberOnly = queryParams.memberOnly
+      const initialCriteria = {}
+      if (queryParams.sort) initialCriteria.sort = queryParams.sort
+      if (queryParams.name) initialCriteria.name = decodeURIComponent(queryParams.name)
+      if (queryParams.status) initialCriteria.status = queryParams.status
+      if (queryParams.type) initialCriteria.type = queryParams.type
+      if (queryParams.memberOnly) initialCriteria.memberOnly = queryParams.memberOnly
       if (queryParams.page) pageNum = parseInt(queryParams.page)
-      loadProjects(criteria, pageNum)
+      loadProjects(initialCriteria, pageNum)
     } else {
       this.routeWithParams(criteria, pageNum)
     }

@@ -97,7 +97,9 @@ class TopBarContainer extends React.Component {
     const {isCreatingProject, currentPath, isFilterVisible } = this.state
     const isProjectDetails = /projects\/\d+/.test(currentPath)
     const isHomePage = this.context.router.isActive('/', true)
-    const loginUrl = ACCOUNTS_APP_LOGIN_URL
+    // NOTE: hardcoding to connectv2, once connect v1
+    window.host
+    const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.host}/`
     const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
     return (
       <div>

@@ -40,7 +40,7 @@
       @include tc-label-md;
 
       color: $tc-gray-60;
-      line-height: 8 * $base-unit;
+      padding: 10px 0;
     }
     
     &.active-feature {
