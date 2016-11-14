@@ -81,6 +81,9 @@ if (TEST) {
     filename: '[name].[hash].js',
     chunkFilename: '[name].[hash].js'
   }
+  if (!BUILD) {
+    config.output.publicPath = 'http://localhost:3000/'
+  }
 }
 if (TEST) {
   config.devtool = 'inline-source-map'
