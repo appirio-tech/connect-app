@@ -33,7 +33,7 @@ class AddLink extends React.Component {
         <Modal.Body>
           <Formsy.Form onValidSubmit={onAdd} onValid={this.enableSubmitBtn} onInvalid={this.disableSubmitBtn}>
             <TCFormFields.TextInput
-              name="name"
+              name="title"
               label="Name"
               type="text"
               validations="isRequired"
@@ -42,7 +42,7 @@ class AddLink extends React.Component {
               wrapperClass="form-group"
             />
             <TCFormFields.TextInput
-              name="url"
+              name="address"
               label="URL"
               type="text"
               validationError="URL is required."
