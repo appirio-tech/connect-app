@@ -3,7 +3,7 @@ import AutoCompleteInput from './AutoCompleteInput'
 import cn from 'classnames'
 import { Icons } from 'appirio-tech-react-components'
 import { PROJECT_ROLE_CUSTOMER } from '../../config/constants'
-
+import Scroll from 'react-scroll'
 
 const { XMarkIcon } = Icons
 
@@ -17,6 +17,7 @@ const AddTeamMember = (props) => {
   const onBtnClose = () => {
     onKeywordChange('')
     onToggleAddTeamMember(false)
+    Scroll.animateScroll.scrollMore(1)
   }
   const onConfirmAddMember = () => {
     // if adding a customer and there is no owner yet for the project
