@@ -24,7 +24,9 @@ const FeaturePreview = props => {
   // }
   return (
     <div className="feature-preview flex-grow">
-      <img src={ previewImg } />
+      <div className="feature-preview-img">
+        <img src={ previewImg } />
+      </div>
     </div>
   )
 }
