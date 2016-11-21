@@ -32,8 +32,8 @@ class TopBar extends Component {
   }
   /*eslint-enable */
 
-  handleSearch(name) {
-    this.props.applyFilters({ name })
+  handleSearch(keyword) {
+    this.props.applyFilters({ keyword })
   }
 
   handleMyProjectsFilter(event) {
@@ -107,7 +107,7 @@ class TopBar extends Component {
                 <SearchBar
                   hideSuggestionsWhenEmpty
                   showPopularSearchHeader={ false }
-                  searchTermKey="name"
+                  searchTermKey="keyword"
                   onTermChange={ this.handleTermChange }
                   onSearch={ this.handleSearch }
                   onClearSearch={ this.handleSearch }
