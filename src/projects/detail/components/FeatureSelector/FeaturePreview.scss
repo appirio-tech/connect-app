@@ -11,11 +11,16 @@
   .feature-preview-img {
     background: url('./images/Device-iPhone.svg') no-repeat;
     /*padding: (8 * $base-unit) (12 * $base-unit) ;*/
-    padding: 9.18vh 1.57vw;
-    height: 78.5vh;
+    padding: 22% 7%;
+    width: 100%;
+    max-width: 273px;
     background-size: contain;
   }
   img {
-    max-height: 100%;
+    display: inline-block;
+    width: 100%;
+    max-width: 235px;
+
+    /*max-height: 500px;*/
   }
 }
