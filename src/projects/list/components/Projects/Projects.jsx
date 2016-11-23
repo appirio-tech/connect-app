@@ -24,7 +24,7 @@ class Projects extends Component {
     if (!_.isEmpty(queryParams)) {
       const initialCriteria = {}
       if (queryParams.sort) initialCriteria.sort = queryParams.sort
-      if (queryParams.name) initialCriteria.name = decodeURIComponent(queryParams.name)
+      if (queryParams.keyword) initialCriteria.keyword = decodeURIComponent(queryParams.keyword)
       if (queryParams.status) initialCriteria.status = queryParams.status
       if (queryParams.type) initialCriteria.type = queryParams.type
       if (queryParams.memberOnly) initialCriteria.memberOnly = queryParams.memberOnly

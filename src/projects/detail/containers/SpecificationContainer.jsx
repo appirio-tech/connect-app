@@ -67,6 +67,7 @@ class SpecificationContainer extends Component {
               isEdittable={!!currentMemberRole}
               submitHandler={this.saveProject}
               saving={processing}
+              route={this.props.route}
             />
           </div>
 

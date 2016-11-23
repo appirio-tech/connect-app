@@ -78,8 +78,8 @@ class TopBarContainer extends React.Component {
 
   applyFilters(filter) {
     const criteria = _.assign({}, this.props.criteria, filter)
-    if (criteria && criteria.name)
-      criteria.name = encodeURIComponent(criteria.name)
+    if (criteria && criteria.keyword)
+      criteria.keyword = encodeURIComponent(criteria.keyword)
     this.routeWithParams(criteria, 1)
   }
 

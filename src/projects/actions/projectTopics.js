@@ -62,7 +62,7 @@ const getTopicsWithComments = (projectId, tag) => {
       return Promise.all(additionalPosts)
         .then(postArr => {
           _.forEach(postArr, (p) => {
-            const topic = _.find(topics, t => p.topicId)
+            const topic = _.find(topics, t => t.id === p.topicId)
             topic.posts = _.sortBy(topic.posts.concat(p.posts), ['id'])
           })
           return { topics, totalCount }
