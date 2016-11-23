@@ -154,7 +154,7 @@ class EditProjectForm extends Component {
             isEdittable={isEdittable} onSave={ this.saveFeatures }
           />
           <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
-            <Icons.XMarkIcon />
+            Save and close <Icons.XMarkIcon />  
           </div>
         </Modal>
       </div>

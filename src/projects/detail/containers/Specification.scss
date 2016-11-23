@@ -35,12 +35,33 @@ $title-color: $tc-gray-80;
 }
 
 .feature-selection-dialog-close {
+  @include roboto;
   cursor: pointer;
   position: absolute;
-  top: 25px;
+  top: 20px;
   right: 25px;
-  width: 14px;
-  height: 14px;
+  width: 185px;
+  height: 20px;
+  line-height: 20px;
+  text-align: right;
+  color: $tc-gray-60;
+  transition: all 200ms ease-in-out;
+
+  .x-mark-icon {
+    display: inline-block;
+    margin: 0 0 0 5px;
+    vertical-align: text-bottom;
+    transition: all 200ms ease-in-out;
+  }
+
+  &:hover {
+    color: $tc-black;
+    cursor: pointer;
+
+    .x-mark-icon {
+      fill: $tc-black;
+    }
+  }
 }
 
 .two-col-content.content {
