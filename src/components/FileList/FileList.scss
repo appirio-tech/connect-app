@@ -4,8 +4,8 @@
   // reset styles of panel class, we need panel class to activate the modal-overlay
   border: none;
   box-shadow: none;
-  > h4 {
 
+  > h4 {
     @include roboto-medium;
     font-size: 15px;
     color: $tc-gray-50;
@@ -20,10 +20,12 @@
   padding: 15px 0;
   width: 100%;
   align-items: stretch;
+
   .icon-col {
     padding-top: 3px;
     width: 60px;
   }
+
   .content-col {
     flex: 2;
 
@@ -31,35 +33,43 @@
       @include roboto-bold;
       font-size: 15px;
       color: $tc-gray-80;
-      width: 400px;
+      max-width: 380px;
     }
+
     p {
       @include roboto;
       font-size: 13px;
-      color: $tc-gray-60;
-      line-height: 25px;
+      font-weight: 400;
+      color: $tc-gray-70;
+      line-height: 20px;
     }
+
     .title {
       width: 100%;
       display: flex;
       line-height: 25px;
     }
+
     .size {
       @include roboto;
       font-size: 15px;
       color: $tc-gray-60;
       margin-left: auto;
     }
+
     .edit-icons {
       margin-left: 5px;
+
       i {
         cursor: pointer;
       }
     }
+
     .title-edit {
       display: flex;
       align-items: center;
       margin-bottom: 10px;
+
       input {
         @include roboto-bold;
         font-size: 15px;
@@ -84,22 +94,25 @@
       resize: none;
     }
   }
+
   .icon-trash,
   .icon-edit {
     margin-left: 13px;
     vertical-align: middle;
   }
+
   .icon-trash {
     margin-left: 22px;
   }
+
   .icon-save {
     margin-right: 25px;
   }
+
   .icon-close {
     margin-right: 10px;
   }
 }
 
 .delete-file-modal {
-
 }
