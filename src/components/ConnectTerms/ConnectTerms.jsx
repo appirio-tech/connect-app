@@ -1,8 +1,8 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 
 require('./ConnectTerms.scss')
 
-const ConnectTerms = props => (
+const ConnectTerms = () => (
   <div role="main" className="terms-page-wrapper">
     <div className="terms-page">
       <h1>Terms</h1>
