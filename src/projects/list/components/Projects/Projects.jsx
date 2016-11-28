@@ -14,6 +14,15 @@ class Projects extends Component {
     this.applyFilters = this.applyFilters.bind(this)
   }
 
+  componentDidUpdate() {
+      window.scrollTo(0, parseInt(window.sessionStorage.getItem("projectsPageScrollTop")));
+  }
+
+  componentWillUnmount(){
+    const scrollingElement = document.scrollingElement || document.documentElement;
+    window.sessionStorage.setItem('projectsPageScrollTop', scrollingElement.scrollTop);
+  }
+
   componentWillMount() {
     document.title = 'Projects - Topcoder'
     // this.searchTermFromQuery = this.props.location.query.q || ''
