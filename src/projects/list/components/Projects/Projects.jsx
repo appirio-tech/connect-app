@@ -19,7 +19,7 @@ class Projects extends Component {
   }
 
   componentWillUnmount(){
-    var scrollingElement = document.scrollingElement || document.documentElement;
+    const scrollingElement = document.scrollingElement || document.documentElement;
     window.sessionStorage.setItem('projectsPageScrollTop', scrollingElement.scrollTop);
   }
 
