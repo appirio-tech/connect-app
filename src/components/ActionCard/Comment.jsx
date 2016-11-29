@@ -17,7 +17,7 @@ const Comment = ({avatarUrl, authorName, date, children, active, self}) => (
           {date}
         </div>
       </div>
-      <div className="comment-body">
+      <div className="comment-body draftjs-post">
         <p>
           {children}
         </p>

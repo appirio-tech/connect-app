@@ -8,12 +8,15 @@
   border-bottom: 1px dashed $tc-gray-30;
   padding: 15px 0;
   width: 100%;
+
   .icon-col {
     padding-top: 3px;
     padding-right: 10px;
   }
+
   .content-col {
     width: 100%;
+
     > h5 {
       @include roboto-medium;
       font-size: 15px;
@@ -21,27 +24,30 @@
       color: $tc-gray-80;
       margin-bottom: 15px;
     }
+
     > p {
       @include roboto;
       font-size: 13px;
-      color: $tc-gray-60;
-      letterSpacing: 0;
-      line-height: 25px;
+      color: $tc-gray-70;
+      font-weight: 400;
+      line-height: 20px;
+
       &.bigger {
         font-size: 15px;
       }
     }
+
     .child-component {
       margin-top: 10px;
 
       textarea {
         min-height: 80px;
         max-width: 100%;
-        color: $tc-gray-50;
         text-align: left;
         text-indent: 0;
         margin-bottom: 20px;
       }
+
       .checkbox-group-item label {
         font-weight: 400;
         color: $tc-black;

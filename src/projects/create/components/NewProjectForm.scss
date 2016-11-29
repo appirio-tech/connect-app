@@ -6,7 +6,7 @@
 }
 
 .ReactModalPortal {
-  transition: 200ms ease-in-out
+  transition: 200ms ease-in-out;
 }
 
 .project-creation-dialog-overlay {
@@ -14,7 +14,6 @@
 }
 
 .content {
-
   .container {
     position: relative;
     margin: 0px auto 20px;
@@ -25,7 +24,7 @@
 
     &.container-margin {
       margin: 50px auto;
-      box-shadow: 0px 0px 14px 1px rgba(38,38,40,0.15);
+      box-shadow: 0px 0px 14px 1px rgba(38, 38, 40, 0.15);
     }
 
     .btn-close {
@@ -36,6 +35,7 @@
       height: 14px;
       cursor: pointer;
     }
+
     h2 {
       @include roboto-light;
       color: $tc-gray-60;
@@ -47,6 +47,7 @@
         margin-bottom: 30px;
       }
     }
+
     .what-you-like-to-do {
       padding: 45px 0 20px;
 
@@ -54,7 +55,7 @@
         display: flex;
         margin: 0 auto 30px;
 
-        span{
+        span {
           width: 33.3%;
           cursor: pointer;
           @include roboto-light;
@@ -62,14 +63,16 @@
           line-height: 20px;
           color: $tc-gray-50;
           text-align: center;
-          &.active{
+
+          &.active {
             color: $tc-black;
           }
         }
       }
+
       .type-selector {
         display: flex;
-        
+
         .selector {
           width: 33.3%;
           cursor: pointer;
@@ -87,38 +90,42 @@
             border-radius: 50%;
             background: $tc-gray-neutral-dark;
           }
-          
+
           &.active {
             &:before {
               display: none;
             }
 
-            h3, p, span{
+            h3,
+            p,
+            span {
               color: $tc-black;
             }
           }
 
-          h3, p {
+          h3,
+          p {
             @include roboto-light;
             color: $tc-gray-50;
             line-height: 25px;
             text-align: center;
           }
+
           h3 {
             font-size: 20px;
-
           }
-          p {
 
+          p {
             font-size: 15px;
 
-            strong{
+            strong {
               @include roboto-bold;
             }
           }
         }
       }
     }
+
     .pick-target-devices {
       padding: 0px 50px;
 
@@ -169,75 +176,85 @@
           display: flex;
           flex-flow: row wrap;
           justify-content: space-between;
-          overflow:hidden;
+          overflow: hidden;
           margin-bottom: 20px;
 
           a {
             -webkit-flex: initial;
             flex: initial;
-            height:155px;
-            width:135px;
+            height: 155px;
+            width: 135px;
             border: 1px solid $tc-gray-20;
             border-radius: 4px;
             cursor: pointer;
-            &.active{
+
+            &.active {
               background: $tc-dark-blue-10;
               border: 1px solid $tc-dark-blue-30;
             }
-            &:hover{
+
+            &:hover {
               border: 1px solid $tc-dark-blue-70;
             }
-            span.icon{
-              display:block;
+
+            span.icon {
+              display: block;
               height: 50px;
-              margin:30px auto 20px auto;
+              margin: 30px auto 20px auto;
             }
-            span.title{
-              display:block;
+
+            span.title {
+              display: block;
               margin-top: 20px;
               @include roboto-bold;
               color: $tc-gray-90;
               font-size: 13px;
-              text-align:center;
+              text-align: center;
             }
-            small{
-              display:block;
+
+            small {
+              display: block;
               font-size: 11px;
-              text-align:center;
+              text-align: center;
               color: $tc-gray-50;
               @include roboto;
-              margin-top:10px;
+              margin-top: 10px;
             }
+
             &.phone {
-              span.icon{
+              span.icon {
                 background: url('../../images/phone.svg') no-repeat 0 0;
                 width: 33px;
                 background-size: 33px 50px;
               }
             }
+
             &.tablet {
-              span.icon{
+              span.icon {
                 background: url('../../images/tablet.svg') no-repeat 0 0;
                 width: 43px;
                 background-size: 43px 50px;
               }
             }
+
             &.desktop {
-              span.icon{
+              span.icon {
                 background: url('../../images/desktop.svg') no-repeat 0 0;
                 width: 55px;
                 background-size: 55px 50px;
               }
             }
+
             &.apple-watch {
-              span.icon{
+              span.icon {
                 background: url('../../images/watch-apple.svg') no-repeat 0 0;
                 width: 38px;
                 background-size: 38px 50px;
               }
             }
+
             &.android-watch {
-              span.icon{
+              span.icon {
                 background: url('../../images/watch-android.svg') no-repeat 0 0;
                 width: 38px;
                 background-size: 38px 50px;
@@ -255,6 +272,7 @@
         }
       }
     }
+
     .section-divider {
       background-color: $tc-gray-20;
       width: 100%;
@@ -262,7 +280,8 @@
       height: 1px;
       margin: 50px auto;
     }
-    .project-info{
+
+    .project-info {
       margin: 50px auto 20px;
       width: 600px;
 
@@ -270,30 +289,35 @@
         margin-bottom: 20px;
       }
 
-      &.padding-top-30{
+      &.padding-top-30 {
         padding-top: 60px;
       }
+
       .row {
         margin-bottom: 20px;
+
         input::-ms-clear {
           display: none;
         }
-        &.center{
+
+        &.center {
           display: table;
           margin: 0 auto;
-          label{
+
+          label {
             display: inline;
           }
-          input{
+
+          input {
             display: inline;
             width: 100px;
             background: $tc-white;
-            color: $tc-gray-30;
           }
         }
       }
-      label{
-        display:block;
+
+      label {
+        display: block;
         margin-bottom: 5px;
         text-transform: none;
         @include tc-label-md;
@@ -301,55 +325,60 @@
         font-size: 13px;
       }
 
-      .error-message{
-        display:block;
+      .error-message {
+        display: block;
         margin: 5px 0;
         @include roboto;
         color: $tc-gray-70;
         font-size: 13px;
-        line-height:20px;
-        font-style:italic;
+        line-height: 20px;
+        font-style: italic;
         border: 1px solid $tc-red-30;
         background: $tc-red-10;
         color: $tc-red-70;
-        padding:10px;
+        padding: 10px;
         border-radius: 2px;
-        strong{
+
+        strong {
           @include roboto-bold;
         }
       }
 
-      input, textarea {
-        display:block;
+      input,
+      textarea {
+        @include tc-label-md;
+        display: block;
         color: $tc-black;
         background: $tc-gray-neutral-light;
         border-color: $tc-gray-20;
-        @include tc-label-md;
-        font-size:15px;
-        line-height:20px;
+        font-size: 15px;
+        line-height: 20px;
 
-        &[disabled]{
+        &[disabled] {
           background: $tc-white;
           border-color: $tc-gray-20;
           color: $tc-gray-30;
         }
-        &:hover{
+
+        &:hover {
           border-color: $tc-gray-40;
           background: $tc-gray-neutral-light;
-          color: $tc-gray-50;
+          color: $tc-black;
         }
-         &:focus{
+
+        &:focus {
           background: $tc-white;
           border-color: $tc-dark-blue-70;
           box-shadow: 0px 0px 2px 1px $tc-dark-blue-30;
         }
 
-        &.error{
+        &.error {
           color: $tc-gray-50;
-          border-color: $tc-gray-30 ;
+          border-color: $tc-gray-30;
           border-left: 3px solid $tc-red-70;
           background: $tc-gray-neutral-light;
-          &:focus{
+
+          &:focus {
             background: $tc-white;
             border-color: $tc-dark-blue-70;
             border-left: 1px solid $tc-dark-blue-70 !important;
@@ -357,22 +386,23 @@
           }
         }
       }
-      input{
 
-        &.tc-file-field__inputs--code{
+      input {
+        &.tc-file-field__inputs--code {
           background-color: $tc-white;
         }
-        &.tc-file-field__inputs--fill{
+
+        &.tc-file-field__inputs--fill {
           background-color: $tc-gray-neutral-light;
         }
-
       }
 
-      textarea{
+      textarea {
         height: 100px;
         box-shadow: none;
       }
     }
+
     .button-area {
       display: flex;
       justify-content: center;
@@ -380,15 +410,16 @@
       a {
         height: 40px;
         width: 137px;
-        display:block;
-        margin:30px auto;
-        text-align:center;
+        display: block;
+        margin: 30px auto;
+        text-align: center;
         text-transform: none;
         font-family: 'Roboto Bold';
         font-size: 15px;
-        padding:0!important;
+        padding: 0 !important;
         border: none;
-        &.disabled{
+
+        &.disabled {
           color: $tc-white;
           background: $tc-gray-10;
         }
@@ -399,25 +430,32 @@
       width: 100%;
       max-width: 600px;
       margin: 50px auto 0px auto;
+
       .row {
         margin-bottom: 20px;
+
         label {
           @include tc-label-md;
         }
+
         textarea {
           height: 80px;
           resize: none;
         }
+
         input::-ms-clear {
           display: none;
         }
+
         &.center {
           display: flex;
           justify-content: center;
           align-items: center;
+
           label {
             width: 170px;
           }
+
           input {
             width: 100px;
             margin: 0px;
@@ -456,17 +494,17 @@ $track-color: $tc-gray-neutral-dark;
   input[type=range] {
     -webkit-appearance: none;
     cursor: pointer;
-    border: none!important;
-    box-shadow: none!important;
+    border: none !important;
+    box-shadow: none !important;
     width: $track-width;
     display: block;
     margin: 0 auto;
-    padding:0 !important;
+    padding: 0 !important;
 
     &:focus {
       outline: none;
-      border: none!important;
-      box-shadow: none!important;
+      border: none !important;
+      box-shadow: none !important;
     }
 
     // Chrome + Safari styles
@@ -520,7 +558,7 @@ $track-color: $tc-gray-neutral-dark;
       outline: none;
       outline-offset: -1px;
     }
-    
+
     // MS IE11+ styles
     &::-ms-track {
       width: $track-width;
@@ -554,6 +592,7 @@ $track-color: $tc-gray-neutral-dark;
       border-radius: 4px;
       background-color: $tc-gray-neutral-dark;
     }
+
     &::ms-tooltip {
       display: block;
       padding: 30px;
