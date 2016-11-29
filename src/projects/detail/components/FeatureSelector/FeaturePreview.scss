@@ -2,12 +2,15 @@
 
 .feature-preview {
   text-align: center;
-  /*padding: (8 * $base-unit) (12 * $base-unit) ;*/
-  /*background: url('./images/Device-iPhone.svg') no-repeat;*/
-  background-color: #FBFDFF;
+  // padding: (8 * $base-unit) (12 * $base-unit) ;
+  // background: url('./images/Device-iPhone.svg') no-repeat;
+  background-color: #fbfdff;
   background-position: 50% 22px;
   padding: 8 * $base-unit;
   border-left: 1px solid $tc-dark-blue-30;
+  min-width: 260px;
+  display: block;
+
   .feature-preview-img {
     background: url('./images/Device-iPhone.svg') no-repeat;
     /*padding: (8 * $base-unit) (12 * $base-unit) ;*/
@@ -16,6 +19,7 @@
     max-width: 273px;
     background-size: contain;
   }
+
   img {
     display: inline-block;
     width: 100%;
