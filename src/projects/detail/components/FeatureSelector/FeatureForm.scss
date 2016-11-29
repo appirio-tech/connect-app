@@ -129,6 +129,8 @@
 
   // Switch button extensions
   .SwitchButton {
+    cursor: pointer;
+
     .label {
       cursor: pointer;
       transition: color 200ms ease-in-out;
