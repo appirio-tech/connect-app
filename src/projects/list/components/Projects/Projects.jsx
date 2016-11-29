@@ -15,7 +15,7 @@ class Projects extends Component {
   }
 
   componentDidUpdate() {
-      window.scrollTo(0, parseInt(window.sessionStorage.getItem("projectsPageScrollTop")));
+    window.scrollTo(0, parseInt(window.sessionStorage.getItem("projectsPageScrollTop")));
   }
 
   componentWillUnmount(){
@@ -45,6 +45,7 @@ class Projects extends Component {
   }
 
   onPageChange(pageNum) {
+    window.sessionStorage.removeItem('projectsPageScrollTop');
     this.routeWithParams(this.props.criteria, pageNum)
   }
 
