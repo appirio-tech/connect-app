@@ -50,15 +50,19 @@ $title-color: $tc-gray-80;
   .x-mark-icon {
     display: inline-block;
     margin: 0 0 0 5px;
-    vertical-align: text-bottom;
     transition: all 200ms ease-in-out;
+
+    & > svg {
+      padding-top: 3px;
+      transition: all 200ms ease-in-out;
+    }
   }
 
   &:hover {
     color: $tc-black;
     cursor: pointer;
 
-    .x-mark-icon {
+    .x-mark-icon > svg {
       fill: $tc-black;
     }
   }
