@@ -1,24 +1,23 @@
 @import 'tc-includes';
-
 $card-max-width: 180px;
 // Used to calculate the available height for the left-side column
 $header-height: 60px;
 $footer-height: 0;
 
-
 button {
   &.clean {
     background-color: transparent;
-    border-radius   : 0;
-    border          : none;
-    padding         : 0;
-    margin          : 0;
-    font-size       : inherit;
-    font            : inherit;
-    line-height     : inherit;
-    font-weight     : inherit;
-    text-transform  : inherit;
+    border-radius: 0;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    font: inherit;
+    line-height: inherit;
+    font-weight: inherit;
+    text-transform: inherit;
   }
+
   &:active,
   &:focus {
     outline: none;
@@ -61,12 +60,13 @@ button {
       width: 320px;
       max-width: 320px;
       background-color: $tc-gray-10;
-      border-right    : 1px solid $tc-gray-20;
+      border-right: 1px solid $tc-gray-20;
       position: relative;
+      // Main container, scroll according to the content displayed inside.
+      overflow-y: scroll;
+      height: calc(100% - #{$header-height});
 
       .feature-categories-list {
-        overflow-y: scroll;
-        max-height: calc(100% - #{$header-height}); //FIXME: ??
         width: 100%;
         padding: 4 * $base-unit 0;
 
@@ -98,13 +98,14 @@ button {
         width: 100%;
         height: 100%;
       }
-    }    
+    }
 
     .features-content {
       max-width: 660px;
       width: 100%;
       position: relative;
     }
+
     .feature-form-instructions {
       padding: 8 * $base-unit;
 

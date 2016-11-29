@@ -129,10 +129,11 @@
 
   // Switch button extensions
   .SwitchButton {
-    cursor: pointer;
+    & > * {
+      cursor: pointer;
+    }
 
     .label {
-      cursor: pointer;
       transition: color 200ms ease-in-out;
       -moz-user-select: none;
       -webkit-user-select: none;
