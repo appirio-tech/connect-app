@@ -15,12 +15,12 @@ class Projects extends Component {
   }
 
   componentDidUpdate() {
-    window.scrollTo(0, parseInt(window.sessionStorage.getItem("projectsPageScrollTop")));
+    window.scrollTo(0, parseInt(window.sessionStorage.getItem('projectsPageScrollTop')))
   }
 
   componentWillUnmount(){
-    const scrollingElement = document.scrollingElement || document.documentElement;
-    window.sessionStorage.setItem('projectsPageScrollTop', scrollingElement.scrollTop);
+    const scrollingElement = document.scrollingElement || document.documentElement
+    window.sessionStorage.setItem('projectsPageScrollTop', scrollingElement.scrollTop)
   }
 
   componentWillMount() {
@@ -45,7 +45,7 @@ class Projects extends Component {
   }
 
   onPageChange(pageNum) {
-    window.sessionStorage.removeItem('projectsPageScrollTop');
+    window.sessionStorage.removeItem('projectsPageScrollTop')
     this.routeWithParams(this.props.criteria, pageNum)
   }
 
