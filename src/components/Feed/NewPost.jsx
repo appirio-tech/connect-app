@@ -128,7 +128,8 @@ class NewPost extends React.Component {
     this.setState({editorState})
     this.validateSubmitState()
     if (this.props.onNewPostChange) {
-      this.props.onNewPostChange(this.refs.title.value, stateToMarkdown(editorState.getCurrentContent()))
+      // NOTE: uses getPlainText method to avoid newline character for empty content
+      this.props.onNewPostChange(this.refs.title.value, editorState.getCurrentContent().getPlainText())
     }
   }
 
@@ -143,7 +144,8 @@ class NewPost extends React.Component {
     const { editorState } = this.state
     this.validateSubmitState()
     if (this.props.onNewPostChange) {
-      this.props.onNewPostChange(this.refs.title.value, stateToMarkdown(editorState.getCurrentContent()))
+      // NOTE: uses getPlainText method to avoid newline character for empty content
+      this.props.onNewPostChange(this.refs.title.value, editorState.getCurrentContent().getPlainText())
     }
   }
 

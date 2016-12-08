@@ -47,11 +47,14 @@ class MessagesView extends React.Component {
     this.isChanged = this.isChanged.bind(this)
     this.onNewPostChange = this.onNewPostChange.bind(this)
     this.changeThread = this.changeThread.bind(this)
+    this.onNewThreadClick = this.onNewThreadClick.bind(this)
+    this.showNewThreadForm = this.showNewThreadForm.bind(this)
   }
 
   componentDidMount() {
-    this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
+    const routeLeaveHook = this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
     window.addEventListener('beforeunload', this.onLeave)
+    this.setState({ routeLeaveHook })
   }
 
   componentWillMount() {
@@ -64,6 +67,9 @@ class MessagesView extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('beforeunload', this.onLeave)
+    if (this.state.routeLeaveHook) {
+      this.state.routeLeaveHook()
+    }
   }
 
   // Notify user if they navigate away while the form is modified.
@@ -208,6 +214,30 @@ class MessagesView extends React.Component {
     })
   }
 
+  onNewThreadClick() {
+    const unsavedContentMsg = this.onLeave({})
+    if (unsavedContentMsg) {
+      const changeConfirmed = confirm(unsavedContentMsg)
+      if (changeConfirmed) {
+        this.showNewThreadForm()
+      }
+    } else {
+      this.showNewThreadForm()
+    }
+  }
+
+  showNewThreadForm() {
+    this.setState({
+      isCreateNewMessage: true,
+      threads: this.state.threads.map((item) => {
+        if (item.isActive) {
+          return {...item, newMessage: ''}
+        }
+        return item
+      })
+    })
+  }
+
   onNewMessageChange(content) {
     this.setState({
       threads: this.state.threads.map((item) => {
@@ -281,7 +311,7 @@ class MessagesView extends React.Component {
         <div className="messages-container">
             <div className="left-area">
               <MessageList
-                onAdd={() => this.setState({isCreateNewMessage: true})}
+                onAdd={ this.onNewThreadClick }
                 threads={threads}
                 onSelect={this.onThreadSelect}
                 showAddButton={ !!currentMemberRole }
