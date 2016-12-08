@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import { withRouter } from 'react-router'
 import _ from 'lodash'
 import {
   THREAD_MESSAGES_PAGE_SIZE,
@@ -36,7 +37,16 @@ class FeedView extends React.Component {
     this.onNewCommentChange = this.onNewCommentChange.bind(this)
     this.onShowAllComments = this.onShowAllComments.bind(this)
     this.onAddNewComment = this.onAddNewComment.bind(this)
-    this.state = { feeds : [], showAll: [] }
+    this.onLeave = this.onLeave.bind(this)
+    this.isChanged = this.isChanged.bind(this)
+    this.onNewPostChange = this.onNewPostChange.bind(this)
+    this.state = { feeds : [], showAll: [], newPost: {} }
+  }
+
+  componentDidMount() {
+    const routeLeaveHook = this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
+    window.addEventListener('beforeunload', this.onLeave)
+    this.setState({ routeLeaveHook })
   }
 
   componentWillMount() {
@@ -45,6 +55,27 @@ class FeedView extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.init(nextProps)
+  }
+
+  componentWillUnmount() {
+    if (this.state.routeLeaveHook) {
+      this.state.routeLeaveHook()
+    }
+    window.removeEventListener('beforeunload', this.onLeave)
+  }
+
+  // Notify user if they navigate away while the form is modified.
+  onLeave(e) {
+    if (this.isChanged()) {
+      return e.returnValue = 'You have uposted content. Are you sure you want to leave?'
+    }
+  }
+
+  isChanged() {
+    const { newPost } = this.state
+    const hasComment = !_.isUndefined(_.find(this.state.feeds, (feed) => feed.newComment && feed.newComment.length))
+    const hasThread = (newPost.title && !!newPost.title.trim().length) || ( newPost.content && !!newPost.content.trim().length)
+    return hasThread || hasComment
   }
 
   mapFeed(feed, showAll = false) {
@@ -96,6 +127,12 @@ class FeedView extends React.Component {
       feeds: feeds.map((feed) => {
         return this.mapFeed(feed, this.state.showAll.indexOf(feed.id) > -1)
       }).filter(item => item)
+    })
+  }
+
+  onNewPostChange(title, content) {
+    this.setState({
+      newPost: {title, content}
     })
   }
 
@@ -194,6 +231,7 @@ class FeedView extends React.Component {
             isCreating={ isCreatingFeed }
             hasError={ error }
             heading="NEW STATUS POST"
+            onNewPostChange={this.onNewPostChange}
             titlePlaceholder="Share the latest project updates with the team"
           />
         }
@@ -203,7 +241,7 @@ class FeedView extends React.Component {
   }
 }
 const enhance = spinnerWhileLoading(props => !props.isLoading)
-const EnhancedFeedView = enhance(FeedView)
+const EnhancedFeedView = withRouter(enhance(FeedView))
 
 
 class FeedContainer extends React.Component {

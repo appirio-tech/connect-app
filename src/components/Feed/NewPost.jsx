@@ -41,12 +41,13 @@ class NewPost extends React.Component {
   constructor(props) {
     super(props)
     this.state = {editorState: EditorState.createEmpty(), expandedEditor: false, canSubmit: false}
+    this.onTitleChange = this.onTitleChange.bind(this)
     this.onEditorChange = this.onEditorChange.bind(this)
     this.handleKeyCommand = this.handleKeyCommand.bind(this)
     this.toggleBlockType = this.toggleBlockType.bind(this)
     this.toggleInlineStyle = this.toggleInlineStyle.bind(this)
     this.onClickOutside = this.onClickOutside.bind(this)
-    this.onNewPostChange = this.onNewPostChange.bind(this)
+    this.validateSubmitState = this.validateSubmitState.bind(this)
   }
 
   componentDidMount() {
@@ -59,11 +60,11 @@ class NewPost extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!(nextProps.isCreating || nextProps.hasError && !nextProps.isCreating)) {
+    if (nextProps.isCreating !== this.props.isCreating && !nextProps.isCreating && !nextProps.hasError) {
       this.setState({editorState: EditorState.createEmpty()})
       this.refs.title.value = ''
     }
-    this.onNewPostChange()
+    this.validateSubmitState()
   }
 
   onClickOutside(evt) {
@@ -125,13 +126,27 @@ class NewPost extends React.Component {
 
   onEditorChange(editorState) {
     this.setState({editorState})
-    this.onNewPostChange()
+    this.validateSubmitState()
+    if (this.props.onNewPostChange) {
+      // NOTE: uses getPlainText method to avoid newline character for empty content
+      this.props.onNewPostChange(this.refs.title.value, editorState.getCurrentContent().getPlainText())
+    }
   }
 
-  onNewPostChange() {
+  validateSubmitState() {
+    const { editorState } = this.state
     this.setState({
-      canSubmit: this.refs.title && !!this.refs.title.value.trim().length && this.state.editorState.getCurrentContent().hasText()
+      canSubmit: this.refs.title && !!this.refs.title.value.trim().length && editorState.getCurrentContent().hasText()
     })
+  }
+
+  onTitleChange() {
+    const { editorState } = this.state
+    this.validateSubmitState()
+    if (this.props.onNewPostChange) {
+      // NOTE: uses getPlainText method to avoid newline character for empty content
+      this.props.onNewPostChange(this.refs.title.value, editorState.getCurrentContent().getPlainText())
+    }
   }
 
   render() {
@@ -191,7 +206,7 @@ class NewPost extends React.Component {
               ref="title"
               className="new-post-title"
               type="text"
-              onChange={this.onNewPostChange}
+              onChange={this.onTitleChange}
               placeholder={ titlePlaceholder || 'Title of the post'}
             />
             <div className="draftjs-editor tc-textarea">
