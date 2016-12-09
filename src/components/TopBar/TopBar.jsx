@@ -6,7 +6,7 @@ import cn from 'classnames'
 import _ from 'lodash'
 import { UserDropdown, Icons } from 'appirio-tech-react-components'
 
-const { ConnectLogoBeta } = Icons
+const { ConnectLogo } = Icons
 import { SearchBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import ProjectToolBar from './ProjectToolBar'
@@ -67,7 +67,7 @@ class TopBar extends Component {
     ]
     const logo = (
       <div className="logo-wrapper">
-        <Link className="logo" to={logoTargetUrl} target="_self"><ConnectLogoBeta /></Link>
+        <Link className="logo" to={logoTargetUrl} target="_self"><ConnectLogo /></Link>
       </div>
     )
     const avatar = (
