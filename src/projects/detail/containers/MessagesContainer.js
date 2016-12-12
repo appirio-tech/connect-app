@@ -86,7 +86,7 @@ class MessagesView extends React.Component {
     return hasThread || hasMessage
   }
 
-  mapFeed(feed, isActive, showAll = false) {
+  mapFeed(feed, isActive, showAll = false, resetNewMessage = false) {
     const { allMembers } = this.props
     const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isAddingComment', 'isLoadingComments', 'error'])
     item.isActive = isActive
@@ -126,6 +126,10 @@ class MessagesView extends React.Component {
       })
     }
     item.newMessage = ''
+    if (!resetNewMessage) {
+      const threadFromState = _.find(this.state.threads, t => feed.id === t.id)
+      item.newMessage = threadFromState ? threadFromState.newMessage : ''
+    }
     item.hasMoreMessages = item.messages.length < item.totalComments
     return item
   }
