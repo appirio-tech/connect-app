@@ -4,10 +4,10 @@ import React, {PropTypes, Component} from 'react'
 import { Link } from 'react-router'
 import cn from 'classnames'
 import _ from 'lodash'
-import { UserDropdown, Icons, SearchBar } from 'appirio-tech-react-components'
+import { UserDropdown, Icons } from 'appirio-tech-react-components'
 
 const { ConnectLogo } = Icons
-import {  } from 'appirio-tech-react-components'
+import { SearchBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import ProjectToolBar from './ProjectToolBar'
 
@@ -32,8 +32,8 @@ class TopBar extends Component {
   }
   /*eslint-enable */
 
-  handleSearch(name) {
-    this.props.applyFilters({ name })
+  handleSearch(keyword) {
+    this.props.applyFilters({ keyword })
   }
 
   handleMyProjectsFilter(event) {
@@ -53,7 +53,7 @@ class TopBar extends Component {
       isPowerUser, loginUrl, registerUrl, isFilterVisible
     } = this.props
     const homePageUrl = window.location.protocol + '//' + window.location.hostname
-    const logoutLink = 'https://accounts.' + domain + '/logout?retUrl=' + homePageUrl
+    const logoutLink = 'https://accounts.' + domain + '/#/logout?retUrl=' + homePageUrl
     const isLoggedIn = !!userHandle
     const logoTargetUrl = isLoggedIn ? '/projects' : '/'
 
@@ -107,7 +107,7 @@ class TopBar extends Component {
                 <SearchBar
                   hideSuggestionsWhenEmpty
                   showPopularSearchHeader={ false }
-                  searchTermKey="name"
+                  searchTermKey="keyword"
                   onTermChange={ this.handleTermChange }
                   onSearch={ this.handleSearch }
                   onClearSearch={ this.handleSearch }

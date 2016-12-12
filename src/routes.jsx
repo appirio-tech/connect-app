@@ -3,6 +3,7 @@ import { Route, IndexRoute } from 'react-router'
 import { withProps } from 'recompose'
 import App from './components/App/App'
 import Home from './components/Home/Home'
+import ConnectTerms from './components/ConnectTerms/ConnectTerms'
 import PageError from './components/PageError/PageError'
 import projectRoutes from './projects/routes.jsx'
 import RedirectComponent from './components/RedirectComponent'
@@ -51,6 +52,7 @@ const redirectToProject = (nextState, replace, callback) => {
 export default (
   <Route path="/" onUpdate={() => window.scrollTo(0, 0)} component={ App }>
     <IndexRoute component={Home} />
+    <Route path="/terms" component={ConnectTerms} />
     <Route path="/login" component={LoginRedirect}/>
     <Route path="/discussions/:feedId" onEnter={ redirectToProject } />
 

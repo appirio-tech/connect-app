@@ -63,6 +63,7 @@ class AutoCompleteInput extends React.Component {
           {selectedNewMember && <img src={selectedNewMember.photoURL} />}
         </span>
         <input
+          autoFocus
           ref="input"
           value={keyword}
           className="tc-file-field__inputs"

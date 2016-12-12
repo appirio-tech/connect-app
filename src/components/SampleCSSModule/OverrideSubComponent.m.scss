@@ -1,8 +1,0 @@
-.sample-sub-css-module {
-  composes: sample-sub-css-module from '../SampleSubCSSModule/SampleSubCSSModule.m.scss';
-}
-
-.square {
-  composes: square from '../SampleSubCSSModule/SampleSubCSSModule.m.scss';
-  height: 50px;
-}

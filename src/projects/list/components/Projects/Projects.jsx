@@ -14,6 +14,15 @@ class Projects extends Component {
     this.applyFilters = this.applyFilters.bind(this)
   }
 
+  componentDidUpdate() {
+    window.scrollTo(0, parseInt(window.sessionStorage.getItem('projectsPageScrollTop')))
+  }
+
+  componentWillUnmount(){
+    const scrollingElement = document.scrollingElement || document.documentElement
+    window.sessionStorage.setItem('projectsPageScrollTop', scrollingElement.scrollTop)
+  }
+
   componentWillMount() {
     document.title = 'Projects - Topcoder'
     // this.searchTermFromQuery = this.props.location.query.q || ''
@@ -24,7 +33,7 @@ class Projects extends Component {
     if (!_.isEmpty(queryParams)) {
       const initialCriteria = {}
       if (queryParams.sort) initialCriteria.sort = queryParams.sort
-      if (queryParams.name) initialCriteria.name = decodeURIComponent(queryParams.name)
+      if (queryParams.keyword) initialCriteria.keyword = decodeURIComponent(queryParams.keyword)
       if (queryParams.status) initialCriteria.status = queryParams.status
       if (queryParams.type) initialCriteria.type = queryParams.type
       if (queryParams.memberOnly) initialCriteria.memberOnly = queryParams.memberOnly
@@ -36,6 +45,7 @@ class Projects extends Component {
   }
 
   onPageChange(pageNum) {
+    window.sessionStorage.removeItem('projectsPageScrollTop')
     this.routeWithParams(this.props.criteria, pageNum)
   }
 

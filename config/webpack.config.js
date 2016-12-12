@@ -145,11 +145,14 @@ config.module = {
     }, {
       test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
       loader: 'file'
+    }, {
+      test: /\.(coffee|litcoffee|cjsx)$/,
+      loader: 'babel?presets[]=react,presets[]=es2015,presets[]=stage-2,plugins[]=lodash!coffee!cjsx'
     }
   ],
   postLoaders: [
     {
-      test: /\.(js|jsx)$/,
+      test: /\.(js|coffee|cjsx|jsx)$/,
       loader: 'transform/cacheable?envify'
     }
   ]
@@ -165,7 +168,7 @@ config.resolve = {
     components: path.join(dirname, './src/components')
   },
   modulesDirectories: ['node_modules'],
-  extensions: ['', '.js', '.jsx', '.json', '.scss', '.svg', '.png', '.gif', '.jpg']
+  extensions: ['', '.js', '.jsx', '.json', '.scss', '.svg', '.png', '.gif', '.jpg', '.coffee', '.cjsx']
 }
 config.sassLoader = {
   includePaths: [path.join(dirname, '/node_modules/bourbon/app/assets/stylesheets'), path.join(dirname, '/node_modules/tc-ui/src/styles')]

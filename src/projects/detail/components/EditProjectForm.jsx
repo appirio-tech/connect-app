@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import { withRouter } from 'react-router'
 import Modal from 'react-modal'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -18,6 +19,7 @@ class EditProjectForm extends Component {
     this.saveFeatures = this.saveFeatures.bind(this)
     this.onFeaturesSaveAttachedClick = this.onFeaturesSaveAttachedClick.bind(this)
     this.submit = this.submit.bind(this)
+    this.onLeave = this.onLeave.bind(this)
   }
 
   componentWillMount() {
@@ -37,11 +39,33 @@ class EditProjectForm extends Component {
     }
     this.setState({
       project: updatedProject,
-      canSubmit: this.state.isFeaturesDirty,
+      isFeaturesDirty: false, // Since we just saved, features are not dirty anymore.
+      canSubmit: false,
       isSaving: false
     })
   }
 
+  componentDidMount() {
+    this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
+    window.addEventListener('beforeunload', this.onLeave)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.onLeave)
+  }
+
+  // Notify user if they navigate away while the form is modified.
+  onLeave(e) {
+    if (this.isChanged()) {
+      return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
+    }
+  }
+
+  isChanged() {
+    // We check if this.refs.form exists because this may be called before the
+    // first render, in which case it will be undefined.
+    return (this.refs.form && this.refs.form.isChanged()) || this.state.isFeaturesDirty
+  }
 
   enableButton() {
     this.setState( { canSubmit: true })
@@ -102,7 +126,7 @@ class EditProjectForm extends Component {
         />
         <div className="section-footer section-footer-spec">
           <button className="tc-btn tc-btn-primary tc-btn-md"
-            type="submit" disabled={!this.state.canSubmit || this.state.isSaving }
+            type="submit" disabled={!this.isChanged() || this.state.isSaving}
           >Save Changes</button>
         </div>
       </div>
@@ -130,7 +154,7 @@ class EditProjectForm extends Component {
             isEdittable={isEdittable} onSave={ this.saveFeatures }
           />
           <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
-            <Icons.XMarkIcon />
+            Save and close <Icons.XMarkIcon />
           </div>
         </Modal>
       </div>
@@ -146,4 +170,4 @@ EditProjectForm.propTypes = {
   submitHandler: PropTypes.func.isRequired
 }
 
-export default EditProjectForm
+export default withRouter(EditProjectForm)

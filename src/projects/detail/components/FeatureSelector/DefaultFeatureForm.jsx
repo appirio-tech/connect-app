@@ -68,6 +68,7 @@ class DefaultFeatureForm extends Component {
             onChange={ this.toggleFeature }
             name="featue-active"
             checked={isActive}
+            label="Enable feature"
           />
         </div>
         <div className="feature-form-content">
