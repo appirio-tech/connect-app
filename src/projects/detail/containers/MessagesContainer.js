@@ -10,6 +10,7 @@ import NewPost from '../../../components/Feed/NewPost'
 import { laodProjectMessages, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import {FullHeightContainer} from 'appirio-tech-react-components'
+import FooterV2 from '../../../components/FooterV2/FooterV2'
 
 import {
   THREAD_MESSAGES_PAGE_SIZE,
@@ -322,6 +323,7 @@ class MessagesView extends React.Component {
                 showEmptyState={ showEmptyState && !threads.length }
                 scrollPosition={ scrollPosition }
               />
+              <FooterV2 />
             </div>
             <div className="right-area">
               { (showEmptyState && !threads.length) &&
