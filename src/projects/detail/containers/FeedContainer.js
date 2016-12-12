@@ -78,7 +78,7 @@ class FeedView extends React.Component {
     return hasThread || hasComment
   }
 
-  mapFeed(feed, showAll = false) {
+  mapFeed(feed, showAll = false, resetNewComment = false) {
     const { allMembers } = this.props
     const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isAddingComment', 'isLoadingComments', 'error'])
     if (isSystemUser(item.userId)) {
@@ -117,6 +117,10 @@ class FeedView extends React.Component {
       })
     }
     item.newComment = ''
+    if (!resetNewComment) {
+      const feedFromState = _.find(this.state.feeds, f => feed.id === f.id)
+      item.newComment = feedFromState ? feedFromState.newComment : ''
+    }
     item.hasMoreComments = item.comments.length !== item.totalComments
     return item
   }
