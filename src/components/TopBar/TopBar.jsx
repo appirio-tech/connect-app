@@ -53,7 +53,7 @@ class TopBar extends Component {
       isPowerUser, loginUrl, registerUrl, isFilterVisible
     } = this.props
     const homePageUrl = window.location.protocol + '//' + window.location.hostname
-    const logoutLink = 'https://accounts.' + domain + '/logout?retUrl=' + homePageUrl
+    const logoutLink = 'https://accounts.' + domain + '/#!/logout?retUrl=' + homePageUrl
     const isLoggedIn = !!userHandle
     const logoTargetUrl = isLoggedIn ? '/projects' : '/'
 
