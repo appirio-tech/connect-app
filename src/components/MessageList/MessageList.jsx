@@ -57,8 +57,9 @@ class MessageList extends Component {
   componentDidMount() {
     const { scrollPosition } = this.props
     const panelMessages = this.refs.panelMessages
-    // 145 = 60 for topbar + 45 for panel title + 20px for margin between topbar and left panel + 10px padding
-    panelMessages.style.height = (window.innerHeight - 145) + 'px'
+    // 215 = 60 for topbar + 45 for panel title + 20px for margin between topbar and left panel + 10px padding
+    // + 60px footer + 10px margin bw footer and left panel
+    panelMessages.style.height = (window.innerHeight - 215) + 'px'
     if (scrollPosition) {
       // We use requestAnimationFrame because this function may be executed before
       // the DOM elements are actually drawn.
