@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
-import { Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
+import FormsyComponent from '../../../../components/Formsy'
+const { Formsy } = FormsyComponent
+import TCFormFields from '../../../../components/TCFormFields'
+import SwitchButton from '../../../../components/SwitchButton/SwitchButton'
 
 require('./FeatureForm.scss')
 

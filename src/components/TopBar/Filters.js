@@ -1,6 +1,8 @@
 import React, {PropTypes} from 'react'
 import _ from 'lodash'
-import { Dropdown, DropdownItem, SwitchButton } from 'appirio-tech-react-components'
+import Dropdown from '../Dropdown/Dropdown'
+import DropdownItem from '../Dropdown/DropdownItem'
+import SwitchButton from '../SwitchButton/SwitchButton'
 import { PROJECT_STATUS } from '../../config/constants'
 
 const projectTypes = [

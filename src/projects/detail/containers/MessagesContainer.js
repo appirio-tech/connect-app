@@ -9,7 +9,7 @@ import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
 import { laodProjectMessages, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import {FullHeightContainer} from 'appirio-tech-react-components'
+import FullHeightContainer from '../../../components/FullHeightContainer/FullHeightContainer'
 
 import {
   THREAD_MESSAGES_PAGE_SIZE,

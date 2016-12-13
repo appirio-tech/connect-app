@@ -1,3 +1,3 @@
-import Formsy from '../Formsy'
+import FormsyComponent from '../Formsy'
 
-export default Formsy.Fields
+export default FormsyComponent.Fields

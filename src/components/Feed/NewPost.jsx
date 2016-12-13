@@ -3,7 +3,7 @@ import {Editor, EditorState, RichUtils} from 'draft-js'
 import {stateToMarkdown} from 'draft-js-export-markdown'
 import cn from 'classnames'
 import './draftjs.scss'
-import { Avatar } from 'appirio-tech-react-components'
+import Avatar from '../Avatar/Avatar'
 
 const styles = [
   {className: 'bold', style: 'BOLD'},

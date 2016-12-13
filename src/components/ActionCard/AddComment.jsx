@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import Panel from '../Panel/Panel'
 import cn from 'classnames'
-import { Avatar } from 'appirio-tech-react-components'
+import Avatar from '../Avatar/Avatar'
 
 export default class AddComment extends React.Component {
 

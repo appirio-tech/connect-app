@@ -4,7 +4,7 @@ import cn from 'classnames'
 import ActionCard from '../ActionCard/ActionCard'
 import Panel from '../Panel/Panel'
 import FeedComments from './FeedComments'
-import { Avatar } from 'appirio-tech-react-components'
+import Avatar from '../Avatar/Avatar'
 
 const Feed = (props) => {
   const {

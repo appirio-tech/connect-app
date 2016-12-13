@@ -50,7 +50,6 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
-    "appirio-tech-react-components": "lsentkiewicz/react-components.git#feature/connectv2",
     "axios": "^0.13.1",
     "cjsx-loader": "^3.0.0",
     "classnames": "^2.2.3",
@@ -70,6 +69,8 @@
     "react": "^15.3.1",
     "react-addons-css-transition-group": "^15.3.1",
     "react-addons-pure-render-mixin": "^15.3.1",
+    "react-addons-update": "^15.3.1",
+    "react-avatar": "^2.2.0",
     "react-color": "^2.2.7",
     "react-css-modules": "^3.7.10",
     "react-datetime": "2.7.1",
@@ -90,6 +91,7 @@
     "stylelint": "^7.3.1",
     "stylelint-config-standard": "^13.0.2",
     "tc-accounts": "https://github.com/appirio-tech/accounts-app.git#dev",
-    "tc-ui": "https://github.com/appirio-tech/tc-ui.git#feature/connectv2"
+    "tc-ui": "https://github.com/appirio-tech/tc-ui.git#feature/connectv2",
+    "uncontrollable": "^4.0.1"
   }
 }

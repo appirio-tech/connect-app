@@ -4,7 +4,9 @@ import Modal from 'react-modal'
 import _ from 'lodash'
 import update from 'react-addons-update'
 import FeaturePicker from './FeatureSelector/FeaturePicker'
-import { Formsy, Icons } from 'appirio-tech-react-components'
+import FormsyComponent from '../../../components/Formsy'
+const { Formsy } = FormsyComponent
+import Icons from '../../../components/Icons'
 
 import SpecSection from './SpecSection'
 

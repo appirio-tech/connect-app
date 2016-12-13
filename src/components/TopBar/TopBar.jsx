@@ -4,10 +4,11 @@ import React, {PropTypes, Component} from 'react'
 import { Link } from 'react-router'
 import cn from 'classnames'
 import _ from 'lodash'
-import { UserDropdown, Icons } from 'appirio-tech-react-components'
+import UserDropdown from '../UserDropdownMenu/UserDropdownMenu'
+import Icons from '../Icons'
 
 const { ConnectLogo } = Icons
-import { SearchBar } from 'appirio-tech-react-components'
+import SearchBar from '../SearchBar/SearchBar'
 import Filters from './Filters'
 import ProjectToolBar from './ProjectToolBar'
 

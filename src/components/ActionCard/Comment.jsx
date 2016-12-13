@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import cn from 'classnames'
 import Panel from '../Panel/Panel'
-import { Avatar } from 'appirio-tech-react-components'
+import Avatar from '../Avatar/Avatar'
 
 const Comment = ({avatarUrl, authorName, date, children, active, self}) => (
   <Panel.Body active={active}>

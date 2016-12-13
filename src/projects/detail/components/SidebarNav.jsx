@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react'
 import { Link as DirectLink } from 'react-scroll'
-import { Icons } from 'appirio-tech-react-components'
+import Icons from '../../../components/Icons'
 
 require('./SidebarNav.scss')
 

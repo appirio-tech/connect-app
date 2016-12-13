@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import { defaultProps } from 'recompose'
-import { Icons } from 'appirio-tech-react-components'
+import Icons from '../Icons'
 import './Panel.scss'
 import cn from 'classnames'
 

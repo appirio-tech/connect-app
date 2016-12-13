@@ -1,7 +1,7 @@
 require('./ProjectToolBar.scss')
 
 import React, {PropTypes, Component} from 'react'
-import { MenuBar } from 'appirio-tech-react-components'
+import MenuBar from '../../../../components/MenuBar/MenuBar'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { LOAD_PROJECT_FAILURE } from '../../../../config/constants'
@@ -16,7 +16,7 @@ class ProjectToolBar extends Component {
     const {project, userRoles, isLoading, error} = this.props
     if (isLoading || error && error.type === LOAD_PROJECT_FAILURE)
       return <noscript />
-  
+
     //TODO prepare navigation items according to roles of the user
     const primaryNavigationItems = [
       {

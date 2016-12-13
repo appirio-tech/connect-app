@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
 import cn from 'classnames'
-import { Icons, Avatar } from 'appirio-tech-react-components'
+import Icons from '../Icons'
+import Avatar from '../Avatar/Avatar'
 
 const ActionBtn = (props) => {
   let icon

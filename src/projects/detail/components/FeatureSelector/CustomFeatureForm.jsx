@@ -3,7 +3,11 @@ import _ from 'lodash'
 import cn from 'classnames'
 import Panel from '../../../../components/Panel/Panel'
 import DeleteFeatureModal from './DeleteFeatureModal'
-import { Icons, Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
+import Icons from '../../../../components/Icons'
+import FormsyComponent from '../../../../components/Formsy'
+const { Formsy } = FormsyComponent
+import TCFormFields from '../../../../components/TCFormFields'
+import SwitchButton from '../../../../components/SwitchButton/SwitchButton'
 
 require('./FeatureForm.scss')
 
@@ -66,7 +70,7 @@ class CustomFeatureForm extends Component {
       categoryId: 'custom',
       notes: ''
     }, featureData, { title : data.title.trim() }))
-    // assumes addFeature to be a synchronous call, otherwise it could lead to inconsistent UI state 
+    // assumes addFeature to be a synchronous call, otherwise it could lead to inconsistent UI state
     // e.g. if async addFeature fails, it would close the edit mode
     // this call is needed here because debounce call (for notes change) is closing the edit mode if
     // we do set the editMode in componentWillReceiveProps method

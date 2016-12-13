@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import AutoCompleteInput from './AutoCompleteInput'
 import cn from 'classnames'
-import { Icons } from 'appirio-tech-react-components'
+import Icons from '../Icons'
 import { PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 import Scroll from 'react-scroll'
 

@@ -3,10 +3,10 @@ import './ColorSelector.scss'
 import { SketchPicker } from 'react-color'
 import { HOC as hoc } from 'formsy-react'
 import {PROJECT_MAX_COLORS} from '../../config/constants'
-import { Icons } from 'appirio-tech-react-components'
+import Icons from '../Icons'
 
 class ColorSelector extends React.Component {
-  
+
   constructor(props) {
     super(props)
 
@@ -15,7 +15,7 @@ class ColorSelector extends React.Component {
       newColor: '#fff'
     }
   }
-  
+
   render() {
     const {getValue, name, onChange, setValue, defaultColors } = this.props
     const value = getValue() || defaultColors
@@ -39,7 +39,7 @@ class ColorSelector extends React.Component {
 
       updateNewColorPalette(newValue)
     }
-    
+
     return (
       <div className="colorSelector">
         {value.map((color) =>
@@ -56,7 +56,7 @@ class ColorSelector extends React.Component {
           </a>
         )}
 
-        {value.length < PROJECT_MAX_COLORS && 
+        {value.length < PROJECT_MAX_COLORS &&
           <a
             href="javascript:"
             onClick={() => this.setState({isPickerVisible: true})}
@@ -95,7 +95,7 @@ class ColorSelector extends React.Component {
       </div>
     )
   }
-  
+
 }
 
 ColorSelector.propTypes = {

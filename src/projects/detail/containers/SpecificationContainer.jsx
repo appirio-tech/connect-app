@@ -10,7 +10,6 @@ import FooterV2 from '../../../components/FooterV2/FooterV2'
 import EditProjectForm from '../components/EditProjectForm'
 import { updateProject } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-// import { Icons } from 'appirio-tech-react-components'
 import sections from '../../../config/projectQuestions/topcoder.v1'
 
 require('./Specification.scss')

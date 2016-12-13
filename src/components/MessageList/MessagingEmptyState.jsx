@@ -2,7 +2,7 @@ import React from 'react'
 import './MessagingEmptyState.scss'
 import Panel from '../Panel/Panel'
 import Comment from '../ActionCard/Comment'
-import { Icons } from 'appirio-tech-react-components'
+import Icons from '../Icons'
 
 const MessagingEmptyState = ({ currentUser, onClose }) => (
   <Panel className="panel-orange action-card messaging-empty-state">

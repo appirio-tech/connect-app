@@ -1,6 +1,8 @@
 import React, {PropTypes} from 'react'
 import Modal from '../Modal/Modal'
-import { Formsy, TCFormFields } from 'appirio-tech-react-components'
+import FormsyComponent from '../Formsy'
+const { Formsy } = FormsyComponent
+import TCFormFields from '../TCFormFields'
 
 class AddLink extends React.Component {
 

@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import uncontrollable from 'uncontrollable'
-import { Avatar } from 'appirio-tech-react-components'
+import Avatar from '../Avatar/Avatar'
 import { AUTOCOMPLETE_TRIGGER_LENGTH } from '../../config/constants'
 
 class AutoCompleteInput extends React.Component {
