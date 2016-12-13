@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.6 (26304) - http://www.bohemiancoding.com/sketch -->
+    <title>nav-learn</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Scaling" stroke="none" stroke-width="1" fill="none" fillRule="evenodd">
+        <g id="Components---Desktop" transform="translate(-1138.000000, -445.000000)">
+            <g id="nav-learn" transform="translate(1139.000000, 446.000000)">
+                <path d="M8.43876364,2.46356364 C6.3144,1.54865455 3.75585455,1.95883636 2.02058182,3.69410909 C1.66494545,4.04974545 1.37185455,4.4432 1.12749091,4.85701818 L3.61985455,7.35010909" id="Stroke-4043" stroke="#888894" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M13.5184727,7.52029091 C14.4566545,9.65265455 14.0522909,12.2330182 12.3061091,13.9792 C11.9504727,14.3348364 11.5570182,14.6279273 11.1424727,14.8722909 L8.62756364,12.3581091" id="Stroke-4045" stroke="#888894" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M6.64916364,13.4647273 L2.53498182,9.35054545 C2.53498182,9.35054545 6.04916364,0.608 15.9058909,0.0938181818 C15.3488,9.90763636 6.64916364,13.4647273 6.64916364,13.4647273 L6.64916364,13.4647273 Z" id="Stroke-4047" stroke="#888894" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M8.19192727,5.75083636 C8.75992727,5.18283636 9.68065455,5.18283636 10.2486545,5.75083636 C10.8166545,6.31883636 10.8166545,7.23956364 10.2486545,7.80756364 C9.68065455,8.37556364 8.75992727,8.37556364 8.19192727,7.80756364 C7.62392727,7.23956364 7.62392727,6.31883636 8.19192727,5.75083636 L8.19192727,5.75083636 Z" id="Stroke-4049" fill="#888894"></path>
+                <path d="M1.15330909,12.7896727 C1.72130909,12.2216727 2.64203636,12.2216727 3.21003636,12.7896727 C3.77803636,13.3576727 3.77803636,14.2784 3.21003636,14.8464 C2.64203636,15.4144 0.727127273,15.2725818 0.727127273,15.2725818 C0.727127273,15.2725818 0.585309091,13.3576727 1.15330909,12.7896727 L1.15330909,12.7896727 Z" id="Stroke-4051" stroke="#888894" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+        </g>
+    </g>
+</svg>

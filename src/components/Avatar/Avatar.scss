@@ -1,0 +1,14 @@
+$avatar-diameter: 35px;
+
+.Avatar {
+  width           : $avatar-diameter;
+  height          : $avatar-diameter;
+  border-radius   : 50%;
+  background-color: #eee;
+  overflow        : hidden;
+
+  img {
+    width : 100%;
+    height: 100%;
+  }
+}

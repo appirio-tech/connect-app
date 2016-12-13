@@ -1,0 +1,31 @@
+/**
+ * Containers of dropdown should be positioned relative so that the dropdown stay within the bounds of it
+ * Pointer is positioned 15px from the right by default, but this can be overriden in styling
+ */
+
+.dropdown-example {
+	margin-bottom: 50px;
+	position: relative;
+	padding: 15px;
+	background-color: #DDD;
+}
+
+.full-width {
+	width: 100%;
+
+	.Dropdown:before {
+		right: initial;
+		left: 30px;
+	}
+}
+
+.limited-width {
+	width: 25%;
+	display: inline-block;
+	margin-right: 25px;
+	text-align: right;
+}
+
+.limited-width.pointer-left-example {
+	text-align: left;
+}

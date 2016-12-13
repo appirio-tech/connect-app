@@ -1,0 +1,59 @@
+@import 'tc-includes';
+
+.MenuBar {
+  display: flex;
+  @include roboto-medium;
+
+  &.horizontal {
+    flex-direction: row;
+    justify-content: center;
+
+    li {
+      display: flex;
+      justify-content: center;
+      margin: 0px 15px;
+    }
+  }
+
+  &.vertical {
+    flex-direction: column;
+
+    li {
+      padding: 10px 15px;
+    }
+  }
+
+  li {
+    display: flex;
+
+    &.selected {
+      border-bottom: 2px solid $tc-orange-70;
+
+      a {
+        color: $tc-black;
+      }
+    }
+
+    &.mobile {
+      width: 30px;
+    }
+
+    a {
+      display: inline-block;
+      @include roboto-medium;
+      font-size: $tc-label-lg;
+      color: $tc-gray-50;
+      line-height: 32px;
+      &:hover{
+        color: $tc-black;
+      }
+    }
+  }
+
+  li:hover {
+    a {
+      color: white;
+    }
+  }
+
+}

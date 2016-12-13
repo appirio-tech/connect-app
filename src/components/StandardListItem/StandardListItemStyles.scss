@@ -1,0 +1,55 @@
+$breakpoint-mobile: 768px;
+
+.StandardListItem {
+
+  display: flex;
+  align-items: center;
+
+  text-align: center;
+
+  width: 100%;
+
+  padding: 15px 20px;
+
+  @media (max-width: $breakpoint-mobile) {
+    padding: 12px 15px;
+  }
+
+  &.top {
+    flex-direction: column-reverse;
+
+    .icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    // Add margin only if label present
+    .label + .icon {
+      margin-bottom: 7px;
+    }
+  }
+
+  &.left {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+
+    .label + .icon {
+      margin-right: 10px;
+    }
+  }
+
+  &.right{
+    justify-content: space-between;
+
+    .label + .icon {
+      margin-left: 10px;
+    }
+  }
+
+  &.left, &.right {
+    .icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}

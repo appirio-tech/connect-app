@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="10px" height="6px" viewBox="0 0 10 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.6 (26304) - http://www.bohemiancoding.com/sketch -->
+    <title>arrow-small-down</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Scaling" stroke="none" stroke-width="1" fill="none" fillRule="evenodd">
+        <g id="Components---Desktop" transform="translate(-901.000000, -452.000000)" fill="#737380">
+            <path d="M905.190737,457.109763 L901.190737,453.109763 C900.936421,452.855446 900.936421,452.445054 901.190737,452.190737 C901.445054,451.936421 901.855446,451.936421 902.109763,452.190737 L905.65025,455.731225 L909.190737,452.190737 C909.445054,451.936421 909.855446,451.936421 910.109763,452.190737 C910.364079,452.445054 910.364079,452.855446 910.109763,453.109763 L906.109763,457.109763 C905.986037,457.233489 905.821609,457.30025 905.65025,457.30025 C905.478891,457.30025 905.314463,457.233489 905.190737,457.109763 Z" id="arrow-small-down"></path>
+        </g>
+    </g>
+</svg>

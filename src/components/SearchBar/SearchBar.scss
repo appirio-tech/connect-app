@@ -1,0 +1,157 @@
+@import 'tc-includes';
+
+.SearchBar {
+  @include roboto;
+  background: $tc-gray-80;
+  height: 30px;
+  width: 100%;
+  border: 0;
+  border-radius: 2px;
+  position: relative;
+  padding-left: 15px;
+  padding-right: 46px;
+
+  &.state-empty {
+    .search-bar__clear {
+      display: none;
+    }
+  }
+
+  .search-txt {
+    display: none;
+    color: white;
+  }
+
+  &.state-empty:before {
+    content: "Search for projects";
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    text-align: left;
+    transform: translateY(-50%);
+    color: $tc-gray-40;
+    font-size: 13px;
+    line-height: 20px;
+    width: 75%;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &.state-focused:before,
+  &.state-filled:before {
+    content: "";
+  }
+
+  &.state-filled,
+  &.state-focused {
+    border-color: $tc-gray-40;
+    padding-right: 88px;
+    background-color: white;
+
+    .search-txt {
+      display: block;
+    }
+
+    .search-icon-wrap {
+      width: 88px;
+      background-color: $tc-dark-blue-90;
+      z-index: 20;
+      cursor: pointer;
+    }
+  }
+
+  &.state-focused {
+    .search-typeahead-text {
+      display: block;
+    }
+
+    .suggestions-panel {
+      display: block;
+    }
+  }
+
+  .search-bar__text,
+  .search-typeahead-text {
+    @include roboto;
+    outline: 0px;
+    border: 0px none;
+    font-size: 17px;
+    color: $tc-gray-90;
+    line-height: 20px;
+    // NOTE: If uncommented, it causes problems with the proper alignment of
+    //    the typeahead text.
+    // width: calc(100% - 15px - 46px);
+    position: absolute;
+    left: 0;
+    text-indent: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent !important;
+    z-index: 20;
+    padding-left: 0px;
+    height: 30px;
+  }
+
+  .search-bar__text {
+    padding-right: 130px;
+
+    &:hover,
+    &:focus {
+      border: none;
+      box-shadow: none;
+    }
+  }
+
+  .search-typeahead-text {
+    position: absolute;
+    color: $tc-gray-40;
+    display: none;
+    z-index: 20;
+    top: 19px;
+  }
+
+  .search-bar__clear {
+    position: absolute;
+    top: 50%;
+    right: 110px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 20;
+  }
+
+  .search-icon-wrap {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 30px;
+    width: 37px;
+    background: $tc-gray-60 url("./ui-16px-2_zoom.svg") 10px 7px no-repeat;
+    border-radius: 0 2px 2px 0;
+    border-left: 1px solid $tc-black;
+    @include roboto;
+    font-size: 12px;
+    color: $tc-white;
+    padding-left: 36px;
+    text-align: left;
+    line-height: 30px;
+  }
+
+  .suggestions-panel {
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+
+    .loading-suggestions {
+    }
+
+    .SearchSuggestions {
+      strong {
+        font-weight: 600;
+      }
+    }
+  }
+}

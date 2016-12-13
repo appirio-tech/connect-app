@@ -1,0 +1,11 @@
+@import "tc-includes";
+
+.x-mark-icon {
+  color: $tc-gray-30;
+  fill: $tc-gray-30;
+
+  &:hover {
+    color: $tc-black;
+    fill: $tc-black;
+  }
+}

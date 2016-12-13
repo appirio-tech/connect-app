@@ -1,0 +1,18 @@
+import React from 'react'
+
+const EditIcon = ({ width = '16px', height = '16px' }) => {
+  return (
+    <svg width={width} height={height} viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <title>Fill 146</title>
+        <desc>Created with Sketch.</desc>
+        <defs></defs>
+        <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+            <g id="Settings-form-elements" transform="translate(-1122.000000, -1407.000000)" fill="#888894">
+                <path d="M1134,1413.6 L1131.4,1411 L1133,1409.4 L1135.6,1412 L1134,1413.6 Z M1126.6,1421 L1124,1421 L1124,1418.4 L1130,1412.4 L1132.6,1415 L1126.6,1421 Z M1133.7,1407.3 C1133.3,1406.9 1132.7,1406.9 1132.3,1407.3 L1122.3,1417.3 C1122.1,1417.5 1122,1417.7 1122,1418 L1122,1422 C1122,1422.6 1122.4,1423 1123,1423 L1127,1423 C1127.3,1423 1127.5,1422.9 1127.7,1422.7 L1137.7,1412.7 C1138.1,1412.3 1138.1,1411.7 1137.7,1411.3 L1133.7,1407.3 Z" id="Fill-146"></path>
+            </g>
+        </g>
+    </svg>
+  )
+}
+
+export default EditIcon
