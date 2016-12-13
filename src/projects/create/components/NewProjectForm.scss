@@ -81,7 +81,7 @@
           cursor: pointer;
           position: relative;
 
-          &:before {
+          &::before {
             content: '';
             display: block;
             position: absolute;
@@ -95,7 +95,7 @@
           }
 
           &.active {
-            &:before {
+            &::before {
               display: none;
             }
 
@@ -147,14 +147,14 @@
           width: 20px;
           height: 155px;
 
-          &:before,
-          &:after {
+          &::before,
+          &::after {
             display: block;
             position: absolute;
             left: 50%;
           }
 
-          &:before {
+          &::before {
             content: '';
             width: 1px;
             height: 80%;
@@ -162,7 +162,7 @@
             top: 10%;
           }
 
-          &:after {
+          &::after {
             content: 'Or';
             font-style: italic;
             color: $tc-gray-40;

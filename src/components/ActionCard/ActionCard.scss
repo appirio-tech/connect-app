@@ -145,7 +145,7 @@
     padding: $base-unit*2;
     margin-bottom: -10px;
 
-    &:before {
+    &::before {
       content: '';
       position: absolute;
       width: 0;
@@ -160,7 +160,7 @@
     &.self {
       background: $tc-dark-blue-10;
 
-      &:before {
+      &::before {
         border-right: 14px solid $tc-dark-blue-10;
       }
     }

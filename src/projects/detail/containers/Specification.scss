@@ -514,7 +514,7 @@ $title-color: $tc-gray-80;
           }
         }
 
-        &:after {
+        &::after {
           clear: right;
         }
       }

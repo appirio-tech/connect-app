@@ -23,7 +23,7 @@
     color: white;
   }
 
-  &.state-empty:before {
+  &.state-empty::before {
     content: "Search for projects";
     position: absolute;
     left: 15px;
@@ -39,8 +39,8 @@
     text-overflow: ellipsis;
   }
 
-  &.state-focused:before,
-  &.state-filled:before {
+  &.state-focused::before,
+  &.state-filled::before {
     content: "";
   }
 

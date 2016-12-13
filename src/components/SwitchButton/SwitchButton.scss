@@ -31,12 +31,12 @@
     position: absolute;
     z-index: -1;
 
-    &:checked + i:before {
+    &:checked + i::before {
       width: 35px;
       background: $tc-dark-blue-90;
     }
 
-    &:checked + i:after {
+    &:checked + i::after {
       left: 18px;
     }
   }
@@ -52,7 +52,7 @@
     padding: 0;
     background: $tc-gray-40;
 
-    &:before {
+    &::before {
       content: "";
       position: absolute;
       display: block;
@@ -65,7 +65,7 @@
       -webkit-transition: 0.25s ease-in-out;
     }
 
-    &:after {
+    &::after {
       content: "";
       position: absolute;
       display: block;

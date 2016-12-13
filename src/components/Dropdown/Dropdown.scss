@@ -80,7 +80,7 @@
   display: none;
 }
 
-.Dropdown.pointer-left:before {
+.Dropdown.pointer-left::before {
   right: initial;
   left: 15px;
 }
@@ -88,7 +88,7 @@
 .UserDropdownMenu .Dropdown.pointer-shadow {
   margin-top: 35px;
 
-  &:before {
+  &::before {
     content: '';
     display: block;
     position: absolute;
@@ -104,7 +104,7 @@
   }
 }
 
-.Dropdown.pointer-hide:before {
+.Dropdown.pointer-hide::before {
   display: none;
 }
 
@@ -134,7 +134,7 @@
     font-size: 13px;
   }
 
-  &:after {
+  &::after {
     display: block;
     content: '';
     position: absolute;

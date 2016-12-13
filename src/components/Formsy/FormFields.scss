@@ -167,7 +167,7 @@ textarea {
         color: $tc-black;
         margin-right: 30px;
 
-        &:before {
+        &::before {
           border: 1px solid $tc-gray-20;
           border-radius: 50%;
           background-color: #fff;
@@ -181,7 +181,7 @@ textarea {
         }
       }
 
-      input[type="radio"]:checked + label:after {
+      input[type="radio"]:checked + label::after {
         background: $tc-dark-blue-90;
         border-radius: 50%;
         content: "";

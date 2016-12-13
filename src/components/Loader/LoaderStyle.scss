@@ -32,7 +32,7 @@
   }
 
   .Loader__loader,
-  .Loader__loader:after {
+  .Loader__loader::after {
     border-radius: 50%;
   }
 }

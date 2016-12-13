@@ -13,7 +13,7 @@
 .full-width {
   width: 100%;
 
-  .Dropdown:before {
+  .Dropdown::before {
     right: initial;
     left: 30px;
   }
