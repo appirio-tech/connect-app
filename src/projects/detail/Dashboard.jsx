@@ -37,7 +37,7 @@ class Dashboard extends React.Component {
   }
 }
 
-const mapStateToProps = ({ projectState, projectTopics }) => {
+const mapStateToProps = ({ projectState }) => {
   return {
     isLoading      : projectState.isLoading
   }
