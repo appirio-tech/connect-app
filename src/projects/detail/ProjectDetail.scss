@@ -31,7 +31,9 @@ $title-color: $tc-gray-80;
 .project-detail {
   .container {
     @include flexBox;
+
     background-color: transparent;
+
     /* .left-area */
     .left-area {
       @include flexWidth(1);
@@ -50,6 +52,7 @@ $title-color: $tc-gray-80;
     // FIXME: overly nexted code
     .right-area {
       @include flexWidth(2);
+
       border-radius: 4px;
 
       .title {
@@ -71,6 +74,7 @@ $title-color: $tc-gray-80;
 
         .big-titles {
           @include roboto-light;
+
           font-size: 28px;
           color: $gray-color;
           line-height: 30px;

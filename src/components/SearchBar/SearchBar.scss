@@ -2,6 +2,7 @@
 
 .SearchBar {
   @include roboto;
+
   background: $tc-gray-80;
   height: 30px;
   width: 100%;
@@ -74,6 +75,7 @@
   .search-bar__text,
   .search-typeahead-text {
     @include roboto;
+
     outline: 0;
     border: 0 none;
     font-size: 17px;
@@ -131,6 +133,7 @@
     border-left: 1px solid $tc-black;
 
     @include roboto;
+
     font-size: 12px;
     color: $tc-white;
     padding-left: 36px;

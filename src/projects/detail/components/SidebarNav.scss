@@ -5,6 +5,7 @@
 .list-group {
   .title {
     @include roboto-bold;
+
     font-size: 13px;
     color: #262628;
     line-height: 30px;
@@ -16,35 +17,43 @@
       position: absolute;
       left: 0;
     }
+
     /* required 8/29 */
     .required {
       float: right;
 
       @include roboto;
+
       color: $tc-orange;
       font-size: 11px; // FIXME: non-standard font size
     }
+
     /* required End */
   }
 
   li {
     .txt {
       @include roboto;
+
       font-size: 13px;
       color: #262628;
       line-height: 16px;
       padding: 7px 0;
       display: inline-block;
     }
+
     /* required 8/29 */
     .required {
       @include roboto;
+
       font-size: 13px;
       color: $tc-orange;
     }
+
     /* required End */
     .schedule {
       @include roboto;
+
       font-size: 13px;
       line-height: 16px;
       color: $tc-gray-50;

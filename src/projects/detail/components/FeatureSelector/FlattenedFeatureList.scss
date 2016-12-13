@@ -23,6 +23,7 @@
     .content-col {
       > h4 {
         @include roboto-bold;
+
         font-size: 15px;
         letterspacing: 0;
         line-height: 25px;
@@ -31,6 +32,7 @@
 
       > p {
         @include roboto;
+
         font-size: 13px;
         color: $tc-gray-60;
         letterspacing: 0;

@@ -2,6 +2,7 @@
 
 .footer-v2 {
   @include roboto;
+
   font-size: $tc-label-md;
   color: $tc-gray-50;
   line-height: $base-unit*6;

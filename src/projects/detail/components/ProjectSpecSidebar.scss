@@ -22,6 +22,7 @@ $hr-color-lighter: lighten($hr-color-base, 93.5%);
 
   .titles {
     @include roboto-medium;
+
     font-size: 15px;
     color: $gray-color;
     line-height: 18px;
@@ -32,6 +33,7 @@ $hr-color-lighter: lighten($hr-color-base, 93.5%);
       color: #262628;
     }
   }
+
   /* .text-box 8/29 */
   .text-box {
     margin: 0 20px;
@@ -47,11 +49,13 @@ $hr-color-lighter: lighten($hr-color-base, 93.5%);
 
     p {
       @include roboto;
+
       font-size: 13px;
       line-height: 25px;
       color: $gray-color;
     }
   }
+
   /* text-box End */
   .btn-boxs {
     margin-top: 20px;

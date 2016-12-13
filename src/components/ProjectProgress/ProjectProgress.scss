@@ -28,6 +28,7 @@
 
   .progress-remaining {
     @include roboto-medium;
+
     font-size: $tc-label-sm;
     color: $tc-gray-50;
   }

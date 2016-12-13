@@ -2,7 +2,7 @@
 
 .action-card {
   padding: $base-unit*4 0;
-  box-shadow: 0 1px 3px 0px #c3c3c8;
+  box-shadow: 0 1px 3px 0 #c3c3c8;
 
   // FIXME: Hide the top border on the new post composer to be better looking
   .new-post-title + .tc-textarea .textarea-footer {
@@ -26,6 +26,7 @@
 
   .card-title {
     @include roboto-medium;
+
     flex-grow: 1;
     align-items: center;
     line-height: $base-unit*6;
@@ -35,6 +36,7 @@
 
   .card-profile {
     @include roboto-medium;
+
     font-size: $tc-label-md;
     line-height: $base-unit*4;
     margin-bottom: 10px;
@@ -62,6 +64,7 @@
 
   .card-body {
     @include roboto;
+
     font-size: $tc-label-lg;
     color: $tc-gray-70;
     line-height: $base-unit*5;
@@ -72,6 +75,7 @@
 
       .comment-count {
         @include roboto;
+
         font-size: $tc-label-md;
         color: $tc-gray-40;
         line-height: $base-unit*4;
@@ -136,7 +140,7 @@
 
   .comment {
     background: $tc-gray-neutral-light;
-    box-shadow: 0 0px 3px 0px rgba(89, 167, 255, 0);
+    box-shadow: 0 0 3px 0 rgba(89, 167, 255, 0);
     border-radius: 4px;
     padding: $base-unit*2;
     margin-bottom: -10px;
@@ -163,6 +167,7 @@
 
     .comment-body {
       @include roboto;
+
       font-size: 13px;
       color: #47474f;
       line-height: $base-unit*4;
@@ -170,6 +175,7 @@
 
     .comment-read-more {
       @include roboto;
+
       font-size: 11px;
       color: #59a7ff;
       line-height: $base-unit*6;
@@ -180,6 +186,7 @@
     textarea,
     input {
       @include roboto;
+
       font-size: $tc-label-md;
 
       @include placeholder {
@@ -194,6 +201,7 @@
 
       textarea {
         @include roboto;
+
         font-size: 13px;
         color: #47474f;
         line-height: 20px;
@@ -212,6 +220,7 @@
     .public-DraftEditor-content,
     textarea {
       @include roboto;
+
       min-height: 145px;
       color: $tc-gray-70;
       line-height: $base-unit*5;
@@ -338,6 +347,7 @@
 
   input {
     @include roboto-medium;
+
     font-size: $base-unit*4;
 
     @include placeholder {
@@ -379,6 +389,7 @@
     padding: $base-unit*2 $base-unit*4;
 
     @include roboto;
+
     font-size: $tc-label-lg;
     display: flex;
 

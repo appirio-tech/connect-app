@@ -31,6 +31,7 @@
     color: $tc-gray-70;
 
     @include roboto-medium;
+
     font-size: 48px;
     letter-spacing: 0;
     padding: 0 168px 25px;
@@ -42,6 +43,7 @@
     padding: 0 168px;
 
     @include roboto;
+
     font-size: $tc-label-lg;
     color: $tc-gray-70;
     letter-spacing: 0;
@@ -54,6 +56,7 @@
     top: 45%;
 
     @include roboto-medium;
+
     font-size: 190px;
     color: $tc-orange-30;
     letter-spacing: 0;

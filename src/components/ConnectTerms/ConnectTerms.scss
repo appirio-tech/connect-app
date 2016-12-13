@@ -16,7 +16,7 @@
     margin: 20px auto;
     text-align: left;
     background: $tc-white;
-    box-shadow: 0 1px 3px 0px $tc-gray-30;
+    box-shadow: 0 1px 3px 0 $tc-gray-30;
 
     strong {
       @include roboto-bold;
@@ -54,6 +54,7 @@
 
     & p {
       @include roboto;
+
       font-size: 16px;
       line-height: 25px;
       color: $tc-gray-80;
@@ -79,6 +80,7 @@
 
       li {
         @include roboto-light;
+
         font-size: 16px;
         line-height: 25px;
         color: $tc-gray-80;

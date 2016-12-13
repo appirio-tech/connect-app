@@ -24,6 +24,7 @@ label {
   text-transform: none;
 
   @include tc-label-md;
+
   color: $tc-gray-70;
   font-size: 13px;
 }
@@ -33,6 +34,7 @@ label {
   margin: 5px auto;
 
   @include roboto;
+
   color: $tc-gray-70;
   font-size: 13px;
   line-height: 20px;
@@ -92,6 +94,7 @@ textarea {
   border-color: $tc-gray-20;
 
   @include tc-label-md;
+
   font-size: 15px;
   line-height: 20px;
   box-shadow: none;
@@ -127,6 +130,7 @@ textarea {
 
   label {
     @include roboto-bold;
+
     color: $tc-gray-80;
     margin-right: 0;
   }
@@ -135,6 +139,7 @@ textarea {
 .radio-group-input {
   .radio-group-label {
     @include tc-label-md;
+
     margin-right: 20px;
   }
 
@@ -157,6 +162,7 @@ textarea {
         position: relative;
 
         @include roboto-bold;
+
         font-size: 14px;
         color: $tc-black;
         margin-right: 30px;
@@ -221,6 +227,7 @@ a.tiled-group-item {
     margin-top: 20px;
 
     @include roboto-bold;
+
     color: $tc-black;
     font-size: 13px;
     text-align: center;
@@ -240,6 +247,7 @@ a.tiled-group-item {
     color: $tc-gray-50;
 
     @include roboto;
+
     margin-top: 10px;
   }
 }

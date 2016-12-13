@@ -24,7 +24,7 @@
 
     &.container-margin {
       margin: 50px auto;
-      box-shadow: 0 0px 14px 1px rgba(38, 38, 40, 0.15);
+      box-shadow: 0 0 14px 1px rgba(38, 38, 40, 0.15);
     }
 
     .btn-close {
@@ -38,6 +38,7 @@
 
     h2 {
       @include roboto-light;
+
       color: $tc-gray-60;
       font-size: $tc-heading-lg;
       text-align: center;
@@ -60,6 +61,7 @@
           cursor: pointer;
 
           @include roboto-light;
+
           font-size: 12px;
           line-height: 20px;
           color: $tc-gray-50;
@@ -107,6 +109,7 @@
           h3,
           p {
             @include roboto-light;
+
             color: $tc-gray-50;
             line-height: 25px;
             text-align: center;
@@ -139,6 +142,7 @@
         // FIXME: Refactor to use proper calculation of the ":after" box position
         .divider {
           @include roboto-light;
+
           position: relative;
           width: 20px;
           height: 155px;
@@ -209,6 +213,7 @@
               margin-top: 20px;
 
               @include roboto-bold;
+
               color: $tc-gray-90;
               font-size: 13px;
               text-align: center;
@@ -221,6 +226,7 @@
               color: $tc-gray-50;
 
               @include roboto;
+
               margin-top: 10px;
             }
 
@@ -325,6 +331,7 @@
         text-transform: none;
 
         @include tc-label-md;
+
         color: $tc-gray-70;
         font-size: 13px;
       }
@@ -334,6 +341,7 @@
         margin: 5px 0;
 
         @include roboto;
+
         color: $tc-gray-70;
         font-size: 13px;
         line-height: 20px;
@@ -352,6 +360,7 @@
       input,
       textarea {
         @include tc-label-md;
+
         display: block;
         color: $tc-black;
         background: $tc-gray-neutral-light;
@@ -374,7 +383,7 @@
         &:focus {
           background: $tc-white;
           border-color: $tc-dark-blue-70;
-          box-shadow: 0 0px 2px 1px $tc-dark-blue-30;
+          box-shadow: 0 0 2px 1px $tc-dark-blue-30;
         }
 
         &.error {
@@ -387,7 +396,7 @@
             background: $tc-white;
             border-color: $tc-dark-blue-70;
             border-left: 1px solid $tc-dark-blue-70 !important;
-            box-shadow: 0 0px 2px 1px $tc-dark-blue-30;
+            box-shadow: 0 0 2px 1px $tc-dark-blue-30;
           }
         }
       }
@@ -411,6 +420,7 @@
     .button-area {
       display: flex;
       justify-content: center;
+
       /* background: url('../../../assets/images/check-orange.svg') no-repeat; */
       a {
         height: 40px;
@@ -434,7 +444,7 @@
     .generic-project-form {
       width: 100%;
       max-width: 600px;
-      margin: 50px auto 0px;
+      margin: 50px auto 0;
 
       .row {
         margin-bottom: 20px;

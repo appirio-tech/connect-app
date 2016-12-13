@@ -22,6 +22,7 @@
       display: block;
 
       @include roboto-medium;
+
       font-size: $tc-label-md;
       color: #394146;
       text-align: left;
@@ -108,6 +109,7 @@
     border-radius: $base-unit*4;
 
     @include roboto-medium;
+
     font-size: $tc-label-sm;
     color: $tc-white;
     line-height: $base-unit*4;
@@ -205,6 +207,7 @@
 
 .project-direct-links {
   @include roboto-medium;
+
   font-size: $tc-label-md;
   color: $tc-gray-40;
   line-height: $base-unit*6;

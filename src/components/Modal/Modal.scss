@@ -20,6 +20,7 @@
 
   .modal-title {
     @include roboto-bold;
+
     font-size: $tc-label-lg;
     padding: $base-unit*2 $base-unit*4 0 $base-unit*4;
     line-height: $base-unit*4;
@@ -27,6 +28,7 @@
 
     &.title-muted {
       @include roboto-medium;
+
       color: $tc-gray-50;
       font-size: $tc-label-sm;
       text-transform: uppercase;
@@ -41,6 +43,7 @@
 
   .modal-body {
     @include roboto;
+
     font-size: $tc-label-md;
     line-height: $base-unit * 4;
     margin: $base-unit*2 $base-unit*4;
@@ -98,7 +101,7 @@
         flex-grow: 1;
         display: flex;
         border: 1px solid $tc-gray-20;
-        box-shadow: inset 0px 0px 2px 0px rgba(183, 183, 183, 0.2);
+        box-shadow: inset 0 0 2px 0 rgba(183, 183, 183, 0.2);
 
         input {
           flex-grow: 1;
@@ -142,7 +145,7 @@
 
       .btn-cancel {
         border: 1px solid $tc-dark-blue-90;
-        box-shadow: 0 0px 3px 0px $tc-dark-blue-30;
+        box-shadow: 0 0 3px 0 $tc-dark-blue-30;
       }
     }
   }

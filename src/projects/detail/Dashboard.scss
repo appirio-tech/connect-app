@@ -16,11 +16,13 @@
 // FIXME
 .dashboard-container {
   @include flexBox;
+
   max-width: 1110px;
   margin: 20px auto;
 
   .left-area {
     @include flexWidth(1);
+
     max-width: 360px;
 
     .dashboard-left-panel {
@@ -43,6 +45,7 @@
 
   .right-area {
     @include flexWidth(2);
+
     margin-left: 4 * $base-unit;
 
     .new-post-composer {

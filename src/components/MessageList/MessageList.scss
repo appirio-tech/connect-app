@@ -14,6 +14,7 @@
     margin-bottom: -10px;
 
     @include roboto;
+
     line-height: $base-unit*4;
     height: calc(100% - 45px);// 45px is the height of panel-title
     overflow-y: auto;

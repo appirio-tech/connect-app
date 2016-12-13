@@ -7,6 +7,7 @@
   h3 {
     @include ellipsis;
     @include tc-label-md;
+
     font-weight: 700;
     display: block;
     margin: 0 (4 * $base-unit);
@@ -37,6 +38,7 @@
     // The feature list styles
     .feature-title {
       @include tc-label-md;
+
       color: $tc-gray-60;
       padding: 10px 0;
     }
@@ -74,6 +76,7 @@
 
     p {
       @include ellipsis;
+
       color: $tc-black;
       margin-left: 15px;
     }

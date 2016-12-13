@@ -3,6 +3,7 @@
 .panel-links {
   li {
     @include roboto-medium;
+
     font-size: $tc-label-md;
     color: $tc-gray-70;
     line-height: $base-unit*6;
@@ -33,6 +34,7 @@
 
   .links-footer {
     @include roboto;
+
     font-size: $tc-label-xs;
     color: $tc-dark-blue-70;
     line-height: $base-unit*6;

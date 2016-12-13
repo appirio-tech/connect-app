@@ -5,6 +5,7 @@
 
   .username {
     @include tc-heading;
+
     color: $tc-gray-80;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -17,6 +18,7 @@
   .user-details {
     .country-and-wins {
       @include tc-label-small;
+
       color: $tc-gray-60;
 
       .user-country {
@@ -26,6 +28,7 @@
 
     .member-since {
       @include tc-label-small;
+
       color: $tc-gray-30;
     }
   }

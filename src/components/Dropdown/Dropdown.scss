@@ -48,7 +48,7 @@
 
   .Dropdown {
     ul.dropdown-menu-list {
-      padding: 10px 0px;
+      padding: 10px 0;
 
       li {
         padding: 0 20px;
@@ -116,6 +116,7 @@
   border: 1px solid $tc-gray-20;
 
   @include roboto;
+
   font-size: 13px;
   line-height: 20px;
   width: 100%;
@@ -149,7 +150,7 @@
 
   .Dropdown {
     ul.dropdown-menu-list {
-      padding: 10px 0px;
+      padding: 10px 0;
 
       li {
         padding: 0 20px;

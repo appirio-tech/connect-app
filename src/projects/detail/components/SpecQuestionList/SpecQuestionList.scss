@@ -19,6 +19,7 @@
 
     > h5 {
       @include roboto-medium;
+
       font-size: 15px;
       line-height: 25px;
       color: $tc-gray-80;
@@ -27,6 +28,7 @@
 
     > p {
       @include roboto;
+
       font-size: 13px;
       color: $tc-gray-70;
       font-weight: 400;

@@ -36,6 +36,7 @@ $title-color: $tc-gray-80;
 
 .feature-selection-dialog-close {
   @include roboto;
+
   cursor: pointer;
   position: absolute;
   top: 20px;
@@ -72,6 +73,7 @@ $title-color: $tc-gray-80;
   .tc-file-field__inputs {
     height: 30px;
   }
+
   /* .tc-file-field__inputs */
   .tc-file-field__inputs,
   .tc-textarea {
@@ -95,12 +97,14 @@ $title-color: $tc-gray-80;
       text-transform: none;
     }
   }
+
   /* .dashed-bottom-border */
   .dashed-bottom-border {
     border-bottom: 1px dashed #c3c3c8;
     padding: 15px 0;
     position: relative;
   }
+
   /* .bottom-border-titles */
   .bottom-border-titles {
     border-bottom: 1px solid $tc-gray-30;
@@ -110,6 +114,7 @@ $title-color: $tc-gray-80;
 
     .title {
       @include roboto;
+
       font-size: 20px;
       line-height: 30px;
     }
@@ -128,17 +133,20 @@ $title-color: $tc-gray-80;
 
   .container {
     @include flexBox;
+
     background-color: transparent;
     display: flex;
     padding: 0;
     width: 1110px;
     margin: 20px auto;
+
     /* .left-area */
     .left-area {
       @include flexWidth(1);
 
       .left-area-footer {
         @include roboto;
+
         padding: 0 40px 0 20px;
         font-size: 13px;
         line-height: 30px;
@@ -152,6 +160,7 @@ $title-color: $tc-gray-80;
 
     .right-area {
       @include flexWidth(2);
+
       border-radius: 4px;
       position: relative;
 
@@ -159,6 +168,7 @@ $title-color: $tc-gray-80;
         color: $tc-gray-80;
 
         @include roboto;
+
         font-weight: 400;
       }
 
@@ -174,6 +184,7 @@ $title-color: $tc-gray-80;
 
         .big-titles {
           @include roboto-light;
+
           font-size: 28px;
           color: $gray-color;
           line-height: 30px;
@@ -182,6 +193,7 @@ $title-color: $tc-gray-80;
           .optional,
           .required {
             @include roboto;
+
             position: absolute;
             right: 0;
             font-size: 13px;
@@ -203,6 +215,7 @@ $title-color: $tc-gray-80;
 
         .gray-text {
           @include roboto;
+
           font-size: 15px;
           color: $gray-color;
           line-height: 25px;
@@ -226,6 +239,7 @@ $title-color: $tc-gray-80;
             float: left;
 
             @include roboto;
+
             font-size: 13px;
             color: #47474f;
             line-height: 16px;
@@ -236,6 +250,7 @@ $title-color: $tc-gray-80;
       .section-additional-notes {
         .textarea-title {
           @include roboto;
+
           font-size: 13px;
           color: #5d5d66;
           line-height: 20px;
@@ -258,6 +273,7 @@ $title-color: $tc-gray-80;
 
         .title {
           @include roboto-bold;
+
           font-size: 15px;
           letter-spacing: 0;
           line-height: 25px;
@@ -265,6 +281,7 @@ $title-color: $tc-gray-80;
 
         .txt {
           @include roboto;
+
           font-size: 13px;
           color: $tc-gray-80;
           line-height: 25px;
@@ -289,6 +306,7 @@ $title-color: $tc-gray-80;
       }
     }
   }
+
   /* .section-features-module */
   .section-features-module {
     &.open {
@@ -304,6 +322,7 @@ $title-color: $tc-gray-80;
 
     .bg-contents {
       @include roboto-medium;
+
       font-size: 15px;
       color: #b47dd6;
       background: #f8f2fb;
@@ -320,6 +339,7 @@ $title-color: $tc-gray-80;
 
     .textarea-title {
       @include roboto;
+
       font-size: 13px;
       color: $tc-gray-70;
       line-height: 20px;
@@ -436,6 +456,7 @@ $title-color: $tc-gray-80;
     .contents-list {
       .titles {
         @include roboto-medium;
+
         font-size: 15px;
         color: $gray-color;
         line-height: 20px;
@@ -485,6 +506,7 @@ $title-color: $tc-gray-80;
 
           .txt {
             @include roboto;
+
             font-size: 15px;
             color: $gray-color;
             letter-spacing: 0;
@@ -498,6 +520,7 @@ $title-color: $tc-gray-80;
       }
     }
   }
+
   /* .dashed-boxes */
   .dashed-boxes {
     border: 1px dashed #c3c3c8;
@@ -508,6 +531,7 @@ $title-color: $tc-gray-80;
 
     .title {
       @include roboto-medium;
+
       font-size: 15px;
       letter-spacing: 0;
       line-height: 20px;
@@ -515,6 +539,7 @@ $title-color: $tc-gray-80;
 
     .gray-txt {
       @include roboto;
+
       font-size: 15px;
       color: #747480;
       line-height: 20px;
@@ -568,6 +593,7 @@ $title-color: $tc-gray-80;
 
         .file-name {
           @include roboto-bold;
+
           font-size: 15px;
           color: $title-color;
           letter-spacing: 0;
@@ -577,9 +603,10 @@ $title-color: $tc-gray-80;
 
         .upload-status {
           @include roboto;
+
           font-size: 15px;
           color: $gray-color;
-          // letter-spacing: 0px;
+          // letter-spacing: 0;
           line-height: 20px;
           float: right;
         }
@@ -595,7 +622,7 @@ $title-color: $tc-gray-80;
           .blue-bar {
             background: #59a7ff;
             border-right: 2px solid #fafafb;
-            border-radius: 10px 0px 0px 10px;
+            border-radius: 10px 0 0 10px;
             height: 4px;
             position: absolute;
             left: 0;
@@ -618,10 +645,12 @@ $title-color: $tc-gray-80;
 
           @include roboto-bold;
         }
+
         padding: 20px 0;
       }
     }
   }
+
   /* .section-form-option */
   .section-form-option {
     .bottom-border-titles {
@@ -632,6 +661,7 @@ $title-color: $tc-gray-80;
       text-align: left;
 
       @include roboto-bold;
+
       font-size: 15px;
       color: $title-color;
       line-height: 25px;
@@ -639,6 +669,7 @@ $title-color: $tc-gray-80;
 
     .gray-txt {
       @include roboto;
+
       font-size: 15px;
       color: #747480;
       line-height: 20px;
@@ -677,12 +708,14 @@ $title-color: $tc-gray-80;
         .text,
         .point {
           @include roboto-medium;
+
           font-size: 15px;
           color: #262628;
           line-height: 18px;
           padding: 10px 0;
 
           @include roboto-bold;
+
           color: $title-color;
         }
       }

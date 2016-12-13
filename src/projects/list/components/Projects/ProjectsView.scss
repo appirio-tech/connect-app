@@ -63,6 +63,7 @@
 /* .txt-price */
 .txt-price {
   @include roboto-medium;
+
   font-size: $tc-label-md;
   color: #202a36;
   text-align: center;

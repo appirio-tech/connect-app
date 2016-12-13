@@ -118,7 +118,7 @@ $tc-body-large: 20px;
 
             &.active {
               background: $tc-gray-80;
-              box-shadow: inset 0px 1px 3px 0px $tc-rgba-10;
+              box-shadow: inset 0 1px 3px 0 $tc-rgba-10;
 
               &:before {
                 background: url("../../styles/i/icon-filter.png") left -16px no-repeat;
@@ -178,6 +178,7 @@ $tc-body-large: 20px;
             color: $tc-white;
 
             @include roboto-medium;
+
             font-size: 15px;
             position: absolute;
             left: 0;
@@ -244,6 +245,7 @@ $tc-body-large: 20px;
 
       .breadcrumb {
         @include roboto-light;
+
         font-size: 20px;
         color: $tc-gray-10;
         position: relative;
@@ -304,6 +306,7 @@ $tc-body-large: 20px;
           color: $tc-white;
 
           @include roboto-medium;
+
           font-size: 15px;
           position: absolute;
           left: 0;
@@ -358,11 +361,13 @@ $tc-body-large: 20px;
         display: inline-block;
 
         @include roboto-medium;
+
         font-size: $tc-label-md;
         color: $tc-gray-50;
         line-height: 20px;
         position: relative;
         padding-left: 26px;
+
         /* menu icons */
         > i {
           display: block;
@@ -443,6 +448,7 @@ $tc-body-large: 20px;
 
   .breadcrumb-tooltip {
     @include roboto();
+
     word-break: break-word;
     position: absolute;
     left: calc(50% - 240px - 230px);
@@ -516,6 +522,7 @@ $tc-body-large: 20px;
 
     label {
       @include roboto-medium;
+
       width: 83px;
       display: inline-block;
       line-height: 30px;

@@ -43,6 +43,7 @@
       display: inline-block;
 
       @include roboto-medium;
+
       font-size: $tc-label-lg;
       color: $tc-gray-50;
       line-height: 32px;

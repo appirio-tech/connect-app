@@ -7,6 +7,7 @@
 
   > h4 {
     @include roboto-medium;
+
     font-size: 15px;
     color: $tc-gray-50;
     line-height: 20px;
@@ -31,6 +32,7 @@
 
     h4 {
       @include roboto-bold;
+
       font-size: 15px;
       color: $tc-gray-80;
       max-width: 380px;
@@ -38,6 +40,7 @@
 
     p {
       @include roboto;
+
       font-size: 13px;
       font-weight: 400;
       color: $tc-gray-70;
@@ -52,6 +55,7 @@
 
     .size {
       @include roboto;
+
       font-size: 15px;
       color: $tc-gray-60;
       margin-left: auto;
@@ -72,6 +76,7 @@
 
       input {
         @include roboto-bold;
+
         font-size: 15px;
         color: $tc-gray-80;
         width: 80%;

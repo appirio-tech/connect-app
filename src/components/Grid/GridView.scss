@@ -9,7 +9,7 @@
     width: auto;
     padding: 0;
     margin: 0 20px 20px;
-    box-shadow: 0 1px 3px 0px #c3c3c8;
+    box-shadow: 0 1px 3px 0 #c3c3c8;
   }
 }
 
@@ -72,6 +72,7 @@
   .txt-black {
     color: $tc-black;
   }
+
   /* .flex-area .flex-row */
   .row {
     margin: 0;
@@ -100,6 +101,7 @@
 
       .spacing {
         @include roboto-medium;
+
         font-size: $tc-label-md;
         color: $tc-gray-50;
         line-height: $base-unit + 11;
@@ -162,6 +164,7 @@
       z-index: 9;
     }
   }
+
   /* .flex-area .row-th */
   .row-th {
     background: $tc-gray-neutral-light;
@@ -169,6 +172,7 @@
     border-top-right-radius: 4px;
     height: 70px;
   }
+
   /* .flex-area .flex-row-bar */
   .row-blue-light {
     background: rgba(243, 249, 255, 0.4);
@@ -191,6 +195,7 @@
   .link-title {
     @include roboto-medium;
     @include ellipsis;
+
     display: block;
     font-size: $tc-label-lg;
     color: $tc-gray-90;
@@ -225,6 +230,7 @@
 .orange-block,
 .purple-block {
   @include roboto-medium;
+
   font-size: $tc-label-sm;
   font-weight: 300;
   width: 30px;
@@ -254,6 +260,7 @@
 /* .txt-italic */
 .txt-italic {
   @include roboto;
+
   font-style: italic;
   font-size: $tc-label-md;
   color: $tc-gray-30;
@@ -286,6 +293,7 @@
     text-overflow: ellipsis;
   }
 }
+
 /* .user-block  - remove as it is extended at UserWithName.scss */
 
 // .user-block {
@@ -343,6 +351,7 @@
 /* .txt-status */
 .txt-status {
   @include roboto-medium;
+
   font-size: $tc-label-sm;
   color: $tc-gray-80;
   line-height: $base-unit * 4;
@@ -443,6 +452,7 @@
         &.active,
         &.active:hover {
           @include roboto-bold;
+
           background: $tc-gray-neutral-light;
         }
       }
@@ -479,7 +489,7 @@
 
       &.active a {
         background: $tc-gray-20;
-        box-shadow: inset -1px 1px 2px 0px rgba(71, 71, 79, 0.2);
+        box-shadow: inset -1px 1px 2px 0 rgba(71, 71, 79, 0.2);
       }
 
       .down-layer {
@@ -514,6 +524,7 @@
 
         .txt {
           @include roboto;
+
           font-size: $tc-label-md;
           color: #394146;
           line-height: $base-unit * 6;
@@ -530,6 +541,7 @@
 
           input {
             @include roboto;
+
             font-size: $tc-label-md;
             color: #394146;
             background: $tc-gray-neutral-light;
@@ -545,6 +557,7 @@
 
     a {
       @include roboto;
+
       font-size: $tc-label-md;
       color: $tc-gray-80;
       height: 28px;
@@ -633,6 +646,7 @@
       font-size: $tc-label-sm;
     }
   }
+
   /* .txt-status */
   .txt-status {
     line-height: $base-unit + 9;
@@ -640,6 +654,7 @@
     padding-bottom: 3px;
     min-height: 20px;
   }
+
   /* .drop-down */
   .drop-down {
     margin-left: 0;
