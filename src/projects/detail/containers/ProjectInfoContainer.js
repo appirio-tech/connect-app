@@ -135,7 +135,7 @@ class ProjectInfoContainer extends React.Component {
           currentMemberRole={currentMemberRole}
           description={project.description}
           type={project.type}
-          devices={project.details.devices || []}
+          devices={ _.get(project, 'details.devices', []) }
           status={project.status} onChangeStatus={this.onChangeStatus}
           duration={duration}
           budget={budget}

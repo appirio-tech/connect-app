@@ -1,11 +1,13 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import ProjectInfoContainer from './containers/ProjectInfoContainer'
 import FeedContainer from './containers/FeedContainer'
 import Sticky from 'react-stickynode'
+import spinnerWhileLoading from '../../components/LoadingSpinner'
 
 require('./Dashboard.scss')
 
-const Dashboard = ({project, currentMemberRole, route}) => (
+const DashboardView = ({project, currentMemberRole, route}) => (
   <div>
     <div className="dashboard-container">
       <div className="left-area">
@@ -22,4 +24,23 @@ const Dashboard = ({project, currentMemberRole, route}) => (
   </div>
 )
 
-export default Dashboard
+const enhance = spinnerWhileLoading(props => !props.isLoading)
+const EnhancedDashboardView = enhance(DashboardView)
+
+class Dashboard extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    return <EnhancedDashboardView {...this.props} />
+  }
+}
+
+const mapStateToProps = ({ projectState, projectTopics }) => {
+  return {
+    isLoading      : projectState.isLoading
+  }
+}
+
+export default connect(mapStateToProps)(Dashboard)
