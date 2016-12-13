@@ -7,6 +7,7 @@
     "build": "webpack --config config/webpack.config.js --bail --progress --build --tc",
     "lint": "eslint --fix --format table --ext .js,.jsx .",
     "stylelint": "stylelint 'src/**/*.scss'",
+    "stylefmt": "stylefmt --recursive 'src/**/*.scss'",
     "test": "cross-env NODE_ENV=test mocha  --colors --reporter nyan --compilers js:babel-core/register --require ignore-styles --recursive \"./src/**/*.spec.js\"",
     "test:watch": "watch-run -i -p 'src/**/*' npm run test"
   },
@@ -44,6 +45,7 @@
     "redux-mock-store": "^1.0.2",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
+    "stylefmt": "^5.0.2",
     "transform-loader": "^0.2.3",
     "watch-run": "^1.2.4",
     "webpack": "^1.13.2",
