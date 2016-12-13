@@ -74,8 +74,8 @@
   .search-bar__text,
   .search-typeahead-text {
     @include roboto;
-    outline: 0px;
-    border: 0px none;
+    outline: 0;
+    border: 0 none;
     font-size: 17px;
     color: $tc-gray-90;
     line-height: 20px;
@@ -89,7 +89,7 @@
     transform: translateY(-50%);
     background-color: transparent !important;
     z-index: 20;
-    padding-left: 0px;
+    padding-left: 0;
     height: 30px;
   }
 
@@ -129,6 +129,7 @@
     background: $tc-gray-60 url("./ui-16px-2_zoom.svg") 10px 7px no-repeat;
     border-radius: 0 2px 2px 0;
     border-left: 1px solid $tc-black;
+
     @include roboto;
     font-size: 12px;
     color: $tc-white;

@@ -8,7 +8,7 @@
 }
 
 .page-error {
-  border-radius:4px;
+  border-radius: 4px;
   position: relative;
   padding-top: 55px;
   text-align: center;
@@ -18,36 +18,44 @@
   margin: 20px auto 0;
   background: $tc-white url('../../assets/images/coder-broken.svg') no-repeat 18% 85%;
   background-size: 307px 300px;
-  a{
+
+  a {
     color: $tc-dark-blue;
+
     &:hover {
       text-decoration: underline;
     }
   }
-  h3{
+
+  h3 {
     color: $tc-gray-70;
+
     @include roboto-medium;
     font-size: 48px;
-    letter-spacing: 0px;
-    padding: 0 168px 25px 168px;
+    letter-spacing: 0;
+    padding: 0 168px 25px;
     line-height: inherit;
   }
-  p{
+
+  p {
     text-align: left;
     padding: 0 168px;
+
     @include roboto;
     font-size: $tc-label-lg;
     color: $tc-gray-70;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     line-height: 23px;
   }
-  span{
+
+  span {
     position: absolute;
     left: 49%;
     top: 45%;
+
     @include roboto-medium;
     font-size: 190px;
     color: $tc-orange-30;
-    letter-spacing: 0px;
+    letter-spacing: 0;
   }
 }

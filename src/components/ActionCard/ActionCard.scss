@@ -2,7 +2,7 @@
 
 .action-card {
   padding: $base-unit*4 0;
-  box-shadow: 0px 1px 3px 0px #c3c3c8;
+  box-shadow: 0 1px 3px 0px #c3c3c8;
 
   // FIXME: Hide the top border on the new post composer to be better looking
   .new-post-title + .tc-textarea .textarea-footer {
@@ -136,7 +136,7 @@
 
   .comment {
     background: $tc-gray-neutral-light;
-    box-shadow: 0px 0px 3px 0px rgba(89, 167, 255, 0.00);
+    box-shadow: 0 0px 3px 0px rgba(89, 167, 255, 0);
     border-radius: 4px;
     padding: $base-unit*2;
     margin-bottom: -10px;
@@ -144,8 +144,8 @@
     &:before {
       content: '';
       position: absolute;
-      width: 0px;
-      height: 0px;
+      width: 0;
+      height: 0;
       margin-left: -16px;
       border-top: 10px solid transparent;
       border-bottom: 10px solid transparent;
@@ -204,7 +204,7 @@
 
   .panel-buttons,
   .modal-buttons {
-    padding: 0 0 10px 0;
+    padding: 0 0 10px;
     text-align: center;
   }
 
@@ -377,6 +377,7 @@
   .panel-row,
   .modal-row {
     padding: $base-unit*2 $base-unit*4;
+
     @include roboto;
     font-size: $tc-label-lg;
     display: flex;
@@ -414,7 +415,7 @@
 
     .new-post-title {
       max-width: 640px;
-      margin-left: 0px;
+      margin-left: 0;
     }
 
     &.add-team-member {
@@ -458,7 +459,7 @@
       margin-left: $base-unit*3;
 
       &:hover {
-        opacity: 1.0;
+        opacity: 1;
       }
     }
 

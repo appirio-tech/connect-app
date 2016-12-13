@@ -3,14 +3,13 @@
 //TODO  Additional variables - need to find a home for these
 // FIXME: remove non-standard variables! Deep nesting, non-standard line-height;
 // FIXME: non-standard units (use $base-unit and $corner-radius)
-
 $gray-color: $tc-gray-50;
 $title-color: $tc-gray-80;
-$hr-color-base   : #000;
-$hr-color-darker : lighten($hr-color-base, 13.5%);
-$hr-color-dark   : lighten($hr-color-base, 20%);
-$hr-color        : lighten($hr-color-base, 33.5%);
-$hr-color-light  : lighten($hr-color-base, 46.7%);
+$hr-color-base: #000;
+$hr-color-darker: lighten($hr-color-base, 13.5%);
+$hr-color-dark: lighten($hr-color-base, 20%);
+$hr-color: lighten($hr-color-base, 33.5%);
+$hr-color-light: lighten($hr-color-base, 46.7%);
 $hr-color-lighter: lighten($hr-color-base, 93.5%);
 
 .projectSpecSidebar {
@@ -20,6 +19,7 @@ $hr-color-lighter: lighten($hr-color-base, 93.5%);
   padding: 20px 0;
   border-radius: 4px;
   min-width: 100px;
+
   .titles {
     @include roboto-medium;
     font-size: 15px;
@@ -27,6 +27,7 @@ $hr-color-lighter: lighten($hr-color-base, 93.5%);
     line-height: 18px;
     padding: 6px 0;
     margin: 0 20px;
+
     &.normal-txt {
       color: #262628;
     }
@@ -34,6 +35,7 @@ $hr-color-lighter: lighten($hr-color-base, 93.5%);
   /* .text-box 8/29 */
   .text-box {
     margin: 0 20px;
+
     hr {
       display: block;
       height: 1px;
@@ -42,6 +44,7 @@ $hr-color-lighter: lighten($hr-color-base, 93.5%);
       margin: 1em 0;
       padding: 0;
     }
+
     p {
       @include roboto;
       font-size: 13px;
@@ -54,11 +57,13 @@ $hr-color-lighter: lighten($hr-color-base, 93.5%);
     margin-top: 20px;
     text-align: center;
   }
+
   &.no-number {
     .list-group {
       .title {
         padding-left: 0;
       }
+
       li {
         .boxs {
           padding: 0 20px;

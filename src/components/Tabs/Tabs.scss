@@ -6,13 +6,15 @@
 .tabs {
   width: 300px;
   list-style-type: none;
-  margin: 0 auto 50px auto;
-  ul{
+  margin: 0 auto 50px;
+
+  ul {
     text-align: center;
     display: -webkit-flex;
     display: flex;
-    width:300px;
+    width: 300px;
   }
+
   li {
     // -webkit-flex: initial;
     flex: initial;
@@ -20,31 +22,38 @@
     padding: 10px 0;
     text-align: center;
     background-color: $tc-gray-neutral-light;
+
     @include roboto-medium;
     font-size: 15px;
-    line-height:20px;
+    line-height: 20px;
     background: $tc-white;
     border: 1px solid $tc-gray-30;
     cursor: pointer;
-    a{
+
+    a {
       color: $tc-gray-80;
     }
+
     &:hover {
     }
+
     &.active {
       background-color: $tc-dark-blue-90;
       border: 1px solid $tc-dark-blue-90;
-      a{
+
+      a {
         color: $tc-white;
       }
     }
-    &:first-child{
+
+    &:first-child {
       border-radius: 2px 0 0 2px;
-      border-right:none;
+      border-right: none;
     }
-    &:last-child{
-      border-radius: 0 2px 2px 0 ;
-      border-left:none;
+
+    &:last-child {
+      border-radius: 0 2px 2px 0;
+      border-left: none;
     }
   }
 }

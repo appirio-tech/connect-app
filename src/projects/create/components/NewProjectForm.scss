@@ -10,14 +10,13 @@
 }
 
 .project-creation-dialog-overlay {
-  background-color: rgba(235, 235, 235, .94) !important;
+  background-color: rgba(235, 235, 235, 0.94) !important;
 }
 
 .content {
-
   .container {
     position: relative;
-    margin: 0px auto 20px;
+    margin: 0 auto 20px;
     width: 920px;
     padding: 20px 20px 50px;
     border-radius: 4px;
@@ -25,7 +24,7 @@
 
     &.container-margin {
       margin: 50px auto;
-      box-shadow: 0px 0px 14px 1px rgba(38, 38, 40, 0.15);
+      box-shadow: 0 0px 14px 1px rgba(38, 38, 40, 0.15);
     }
 
     .btn-close {
@@ -42,7 +41,7 @@
       color: $tc-gray-60;
       font-size: $tc-heading-lg;
       text-align: center;
-      margin: 0 0 50px 0;
+      margin: 0 0 50px;
 
       &.project-info__title--device {
         margin-bottom: 30px;
@@ -59,6 +58,7 @@
         span {
           width: 33.3%;
           cursor: pointer;
+
           @include roboto-light;
           font-size: 12px;
           line-height: 20px;
@@ -128,7 +128,7 @@
     }
 
     .pick-target-devices {
-      padding: 0px 50px;
+      padding: 0 50px;
 
       .target-selectors {
         display: flex;
@@ -201,12 +201,13 @@
             span.icon {
               display: block;
               height: 50px;
-              margin: 30px auto 20px auto;
+              margin: 30px auto 20px;
             }
 
             span.title {
               display: block;
               margin-top: 20px;
+
               @include roboto-bold;
               color: $tc-gray-90;
               font-size: 13px;
@@ -218,6 +219,7 @@
               font-size: 11px;
               text-align: center;
               color: $tc-gray-50;
+
               @include roboto;
               margin-top: 10px;
             }
@@ -321,6 +323,7 @@
         display: block;
         margin-bottom: 5px;
         text-transform: none;
+
         @include tc-label-md;
         color: $tc-gray-70;
         font-size: 13px;
@@ -329,6 +332,7 @@
       .error-message {
         display: block;
         margin: 5px 0;
+
         @include roboto;
         color: $tc-gray-70;
         font-size: 13px;
@@ -370,7 +374,7 @@
         &:focus {
           background: $tc-white;
           border-color: $tc-dark-blue-70;
-          box-shadow: 0px 0px 2px 1px $tc-dark-blue-30;
+          box-shadow: 0 0px 2px 1px $tc-dark-blue-30;
         }
 
         &.error {
@@ -383,7 +387,7 @@
             background: $tc-white;
             border-color: $tc-dark-blue-70;
             border-left: 1px solid $tc-dark-blue-70 !important;
-            box-shadow: 0px 0px 2px 1px $tc-dark-blue-30;
+            box-shadow: 0 0px 2px 1px $tc-dark-blue-30;
           }
         }
       }
@@ -430,7 +434,7 @@
     .generic-project-form {
       width: 100%;
       max-width: 600px;
-      margin: 50px auto 0px auto;
+      margin: 50px auto 0px;
 
       .row {
         margin-bottom: 20px;
@@ -459,7 +463,7 @@
 
           input {
             width: 100px;
-            margin: 0px;
+            margin: 0;
           }
         }
       }

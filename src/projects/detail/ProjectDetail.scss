@@ -27,49 +27,56 @@ $title-color: $tc-gray-80;
   -ms-flex: $number;
   flex: $number;
 }
+
 .project-detail {
-.container {
-  @include flexBox;
-  background-color: transparent;
-  /* .left-area */
-  .left-area {
-    @include flexWidth(1);
-    .left-area-panel {
-      min-width: 400px;
-      margin-right: 20px;
-      margin-left: 20px;
-      margin-bottom: 20px;
-      background-color: #fff;
-      padding: 20px 0;
-      border-radius: 4px;
-      // min-width: 100px;
-    }
-  }
-  // FIXME: overly nexted code
-  .right-area {
-    @include flexWidth(2);
-    border-radius: 4px;
-    .title {
-      color: $title-color;
-      @include roboto;
-    }
-    .right-area-item {
-      overflow: hidden;
-      padding: 50px 0 20px 0;
-      margin-bottom: $base-unit;
-      border-radius: 4px;
-      background-color: #fff;
-      .boxes {
-        margin: 0 15%;
-      }
-      .big-titles {
-        @include roboto-light;
-        font-size: 28px;
-        color: $gray-color;
-        line-height: 30px;
+  .container {
+    @include flexBox;
+    background-color: transparent;
+    /* .left-area */
+    .left-area {
+      @include flexWidth(1);
+
+      .left-area-panel {
+        min-width: 400px;
+        margin-right: 20px;
+        margin-left: 20px;
         margin-bottom: 20px;
+        background-color: #fff;
+        padding: 20px 0;
+        border-radius: 4px;
+        // min-width: 100px;
+      }
+    }
+    // FIXME: overly nexted code
+    .right-area {
+      @include flexWidth(2);
+      border-radius: 4px;
+
+      .title {
+        color: $title-color;
+
+        @include roboto;
+      }
+
+      .right-area-item {
+        overflow: hidden;
+        padding: 50px 0 20px;
+        margin-bottom: $base-unit;
+        border-radius: 4px;
+        background-color: #fff;
+
+        .boxes {
+          margin: 0 15%;
+        }
+
+        .big-titles {
+          @include roboto-light;
+          font-size: 28px;
+          color: $gray-color;
+          line-height: 30px;
+          margin-bottom: 20px;
+        }
       }
     }
   }
-}
 }

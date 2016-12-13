@@ -4,35 +4,42 @@
   position: relative;
   display: flex;
   align-items: center;
-  .label{
+
+  .label {
     width: 92px;
     line-height: 20px;
     font-size: 12px;
+
     @include roboto;
     color: $tc-gray-60;
   }
-  label{
+
+  label {
     display: flex;
     margin: 0;
     padding: 0;
     height: 20px;
     margin-top: 5px;
   }
+
   input[type="checkbox"] {
     max-height: 0;
     max-width: 0;
     opacity: 0;
     margin: 0;
     position: absolute;
-    z-index:-1;
+    z-index: -1;
+
     &:checked + i:before {
       width: 35px;
       background: $tc-dark-blue-90;
     }
+
     &:checked + i:after {
       left: 18px;
     }
   }
+
   i {
     display: inline-block;
     position: relative;
@@ -43,6 +50,7 @@
     margin: 0;
     padding: 0;
     background: $tc-gray-40;
+
     &:before {
       content: "";
       position: absolute;
@@ -53,8 +61,9 @@
       left: 0;
       border-radius: 10px;
       background: $tc-gray-40;
-      -webkit-transition: .25s ease-in-out;
+      -webkit-transition: 0.25s ease-in-out;
     }
+
     &:after {
       content: "";
       position: absolute;
@@ -66,7 +75,7 @@
       border-radius: 7px;
       background: $tc-white;
       cursor: pointer;
-      -webkit-transition: .25s ease-in-out;
+      -webkit-transition: 0.25s ease-in-out;
     }
   }
 }

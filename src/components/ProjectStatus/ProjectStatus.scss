@@ -10,27 +10,32 @@
 
   .status-dropdown {
     border-radius: $base-unit;
-    box-shadow: 0 0 15px rgba(0, 0, 0, .25);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
     padding: 10px 0;
     position: absolute;
     background: $tc-white;
     top: 27px;
     right: -9px;
     z-index: 2;
+
     a {
       display: block;
+
       @include roboto-medium;
       font-size: $tc-label-md;
       color: #394146;
       text-align: left;
       line-height: 30px;
       padding: 0 16px 0 10px;
+
       &:hover {
         background: $tc-dark-blue-10;
       }
+
       &.active {
         background: $tc-dark-blue-10;
       }
+
       span {
         display: inline-block;
         position: relative;
@@ -39,19 +44,22 @@
         border-radius: 100%;
         width: 20px;
         height: 20px;
+
         &.gray {
           background: url('../../assets/images/dot.png') no-repeat 6px 50%;
           background-size: 8px;
           background-color: $tc-gray-40;
         }
+
         &.green {
           background: url('../../assets/images/dot.png') no-repeat 6px 50%;
           background-size: 8px;
           background-color: $tc-green;
         }
+
         &.red {
           background-color: $tc-red;
-          
+
           .status-icon {
             position: absolute;
             left: 4px;
@@ -70,6 +78,7 @@
 
         &.black {
           background-color: $tc-gray-70;
+
           .status-icon {
             position: absolute;
             left: 4px;
@@ -90,32 +99,36 @@
   }
 
   .status-label {
-    -webkit-user-select: none; 
-    -moz-user-select: none; 
-    -ms-user-select: none; 
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     position: relative;
     margin-left: auto;
     border-radius: $base-unit*4;
+
     @include roboto-medium;
     font-size: $tc-label-sm;
     color: $tc-white;
     line-height: $base-unit*4;
     height: $base-unit*4;
     padding: 0 $base-unit*5 0 $base-unit*5;
+
     &.gray {
       background: url('../../assets/images/dot.png') no-repeat 6px 50%;
       background-size: 8px;
       background-color: $tc-gray-40;
     }
+
     &.green {
       background: url('../../assets/images/dot.png') no-repeat 6px 50%;
       background-size: 8px;
       background-color: $tc-green;
     }
+
     &.red {
       background-color: $tc-red;
-      
+
       .status-icon {
         position: absolute;
         left: 5px;
@@ -130,10 +143,11 @@
         // mask-size: 12px;
         // -webkit-mask-size: 12px;
       }
-
     }
+
     &.black {
       background-color: $tc-gray-70;
+
       .status-icon {
         position: absolute;
         left: 5px;
@@ -149,13 +163,16 @@
         // -webkit-mask-size: 12px;
       }
     }
+
     &.editable {
       cursor: pointer;
+
       &:hover {
         &::after {
           background: url('../../assets/images/arrows-9px-carret-down-expanded.svg') no-repeat 50% 50%;
         }
       }
+
       &::after {
         content: '';
         display: inline-block;
@@ -168,12 +185,12 @@
         background: url('../../assets/images/arrow-9px-carret-down-normal.svg') no-repeat 50% 50%;
       }
     }
+
     &.active {
       &::after {
         background: url('../../assets/images/arrows-9px-carret-down-expanded.svg') no-repeat 50% 50%;
       }
     }
-
   }
 }
 
@@ -182,7 +199,7 @@
   box-shadow: none;
 
   .project-status-change-modal {
-    margin: 0px -4*$base-unit;
+    margin: 0 -4 * $base-unit;
   }
 }
 
@@ -191,8 +208,10 @@
   font-size: $tc-label-md;
   color: $tc-gray-40;
   line-height: $base-unit*6;
+
   ul {
     padding: 0;
+
     li {
       background: url("../../assets/images/icon-direct-arrow.svg") no-repeat 0 center;
       padding-left: $base-unit*6;

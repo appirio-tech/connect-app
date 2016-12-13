@@ -34,7 +34,7 @@
       width: 1px;
       height: 25px;
       background-color: $tc-gray-10;
-      margin: 0px 2 * $base-unit;
+      margin: 0 2 * $base-unit;
     }
 
     .feature-actions {
@@ -75,6 +75,7 @@
         textarea {
           height: 100px;
           overflow: auto;
+
           @include tc-label-lg;
           color: $tc-black;
         }
@@ -90,6 +91,7 @@
 
         textarea {
           height: 100px;
+
           @include tc-label-lg;
           color: $tc-black;
         }

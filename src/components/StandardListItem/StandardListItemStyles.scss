@@ -1,14 +1,10 @@
 $breakpoint-mobile: 768px;
 
 .StandardListItem {
-
   display: flex;
   align-items: center;
-
   text-align: center;
-
   width: 100%;
-
   padding: 15px 20px;
 
   @media (max-width: $breakpoint-mobile) {
@@ -38,7 +34,7 @@ $breakpoint-mobile: 768px;
     }
   }
 
-  &.right{
+  &.right {
     justify-content: space-between;
 
     .label + .icon {
@@ -46,7 +42,8 @@ $breakpoint-mobile: 768px;
     }
   }
 
-  &.left, &.right {
+  &.left,
+  &.right {
     .icon {
       width: 16px;
       height: 16px;

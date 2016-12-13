@@ -19,12 +19,13 @@
   max-width: 1110px;
   margin: 20px auto;
   height: calc(100% - 20px);// 20px is for bottom margin
-  
+
   .left-area {
     @include flexWidth(1);
     max-width: 360px;
     z-index: 14;/* Don't know the exact reason, but it needs explicit z-index to get behind the topbar*/
   }
+
   .right-area {
     @include flexWidth(2);
     margin-left: 4 * $base-unit;

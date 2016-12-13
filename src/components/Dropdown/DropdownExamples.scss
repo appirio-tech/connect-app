@@ -4,28 +4,28 @@
  */
 
 .dropdown-example {
-	margin-bottom: 50px;
-	position: relative;
-	padding: 15px;
-	background-color: #DDD;
+  margin-bottom: 50px;
+  position: relative;
+  padding: 15px;
+  background-color: #ddd;
 }
 
 .full-width {
-	width: 100%;
+  width: 100%;
 
-	.Dropdown:before {
-		right: initial;
-		left: 30px;
-	}
+  .Dropdown:before {
+    right: initial;
+    left: 30px;
+  }
 }
 
 .limited-width {
-	width: 25%;
-	display: inline-block;
-	margin-right: 25px;
-	text-align: right;
+  width: 25%;
+  display: inline-block;
+  margin-right: 25px;
+  text-align: right;
 }
 
 .limited-width.pointer-left-example {
-	text-align: left;
+  text-align: left;
 }

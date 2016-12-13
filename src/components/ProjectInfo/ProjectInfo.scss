@@ -2,6 +2,7 @@
 
 .project-description {
   color: $tc-gray-80;
+
   @include tc-label-md;
 
   .read-more-link {

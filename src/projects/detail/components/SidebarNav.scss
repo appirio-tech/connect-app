@@ -11,6 +11,7 @@
     padding-left: 22px;
     position: relative;
     margin: 0 20px;
+
     .number {
       position: absolute;
       left: 0;
@@ -18,12 +19,14 @@
     /* required 8/29 */
     .required {
       float: right;
+
       @include roboto;
       color: $tc-orange;
       font-size: 11px; // FIXME: non-standard font size
     }
     /* required End */
   }
+
   li {
     .txt {
       @include roboto;
@@ -49,29 +52,35 @@
       padding: 7px 0;
       float: right;
     }
+
     .subtract {
       float: right;
-      background: #DCDCE0;
+      background: #dcdce0;
       margin: 13px 5px 0 0;
       width: 9px;
       height: 2px;
       display: inline-block;
     }
+
     .boxs {
       display: block;
       padding: 0 20px 0 42px;
       position: relative;
+
       &:hover {
-        background: #FAFAFB;
+        background: #fafafb;
       }
+
       &.complete {
         .schedule {
           display: none;
         }
+
         .icon-complete {
           display: block;
         }
       }
+
       svg {
         width: 10px;
         height: 10px;

@@ -4,6 +4,7 @@
   display: flex;
   max-width: 960px;
   border-bottom: 1px solid rgba(163, 163, 174, 0.3);
+
   @media (max-width: 700px) {
     display: block;
   }
@@ -17,6 +18,7 @@
     flex-basis: 60%;
     padding: 20px;
     position: relative;
+
     @media (max-width: 700px) {
       flex-basis: 50%;
     }
@@ -33,6 +35,7 @@
       position: relative;
       border-radius: 50%;
       background-color: $tc-gray-10;
+
       @media (max-width: 700px) {
         margin-right: 10px;
       }
@@ -47,11 +50,11 @@
       width: 126px;
       margin-bottom: 10px;
       background-color: $tc-gray-10;
+
       @media (max-width: 700px) {
         max-width: 180px;
       }
     }
-
 
     .user-details {
       .country-and-wins {
@@ -78,6 +81,7 @@
     padding: 20px;
     background-color: $tc-gray-neutral-light;
     border-left: 1px solid $tc-gray-neutral-dark;
+
     @media (max-width: 700px) {
       flex-basis: 100%;
       display: block;
@@ -100,6 +104,7 @@
     display: flex;
     flex-wrap: wrap;
     white-space: nowrap;
+
     @media (max-width: 700px) {
       flex-wrap: nowrap;
       display: block;
@@ -116,8 +121,10 @@
     margin-right: 5px;
     border-radius: 13px;
     background-color: $tc-gray-10;
+
     &:last-child {
       margin-right: 0;
+
       @media (max-width: 700px) {
         margin-right: 15px;
       }

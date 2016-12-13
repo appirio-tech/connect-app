@@ -9,7 +9,6 @@
     @include tc-label-md;
     font-weight: 700;
     display: block;
-
     margin: 0 (4 * $base-unit);
     color: $tc-gray-80;
     line-height: 8 * $base-unit;
@@ -23,7 +22,7 @@
   }
 
   .feature-list-feature {
-    padding : 0 (4 * $base-unit) 0 (8 * $base-unit);
+    padding: 0 (4 * $base-unit) 0 (8 * $base-unit);
     transition: 50ms ease-in all;
 
     &:hover {
@@ -34,15 +33,14 @@
     .selected-feature-icon {
       visibility: hidden;
     }
-    
+
     // The feature list styles
     .feature-title {
       @include tc-label-md;
-
       color: $tc-gray-60;
       padding: 10px 0;
     }
-    
+
     &.active-feature {
       background-color: $tc-white;
 
@@ -56,9 +54,6 @@
     }
   }
 
-  
-
-
   button.clean {
     padding: 15px 15px 15px 0;
   }
@@ -66,9 +61,8 @@
   li {
     cursor: pointer;
     line-height: 8 * $base-unit;
-    
+
     &.active {
-      
       button {
         background-color: $tc-gray-neutral-dark;
 
@@ -80,7 +74,6 @@
 
     p {
       @include ellipsis;
-
       color: $tc-black;
       margin-left: 15px;
     }

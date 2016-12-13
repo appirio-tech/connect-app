@@ -4,14 +4,11 @@
 
 @mixin font-family($font-name, $font-weight, $font-style, $font-url, $font-file) {
   @font-face {
-      font-family: '#{$font-name}';
-      src: url('#{$font-url}#{$font-file}.eot');
-      src: url('#{$font-url}#{$font-file}.eot?#iefix') format('embedded-opentype'),
-           url('#{$font-url}#{$font-file}.woff') format('woff'),
-           url('#{$font-url}#{$font-file}.ttf') format('truetype'),
-           url('#{$font-url}.svg##{$font-file}') format('svg');
-      font-weight: $font-weight;
-      font-style: $font-style;
+    font-family: '#{$font-name}';
+    src: url('#{$font-url}#{$font-file}.eot');
+    src: url('#{$font-url}#{$font-file}.eot?#iefix') format('embedded-opentype'), url('#{$font-url}#{$font-file}.woff') format('woff'), url('#{$font-url}#{$font-file}.ttf') format('truetype'), url('#{$font-url}.svg##{$font-file}') format('svg');
+    font-weight: $font-weight;
+    font-style: $font-style;
   }
 }
 
@@ -32,18 +29,13 @@
 // Roboto
 @include font-family('Roboto', 900, normal, '~/src/assets/fonts/roboto/', 'roboto-black');
 @include font-family('Roboto', 900, italic, '~/src/assets/fonts/roboto/', 'roboto-blackitalic');
-
 @include font-family('Roboto', 700, normal, '~/src/assets/fonts/roboto/', 'roboto-bold');
 @include font-family('Roboto', 700, italic, '~/src/assets/fonts/roboto/', 'roboto-bolditalic');
-
 @include font-family('Roboto', 500, normal, '~/src/assets/fonts/roboto/', 'roboto-medium');
 @include font-family('Roboto', 500, italic, '~/src/assets/fonts/roboto/', 'roboto-mediumitalic');
-
 @include font-family('Roboto', 400, normal, '~/src/assets/fonts/roboto/', 'roboto-regular');
 @include font-family('Roboto', 400, italic, '~/src/assets/fonts/roboto/', 'roboto-italic');
-
 @include font-family('Roboto', 300, normal, '~/src/assets/fonts/roboto/', 'roboto-light');
 @include font-family('Roboto', 300, italic, '~/src/assets/fonts/roboto/', 'roboto-lightitalic');
-
 @include font-family('Roboto', 100, normal, '~/src/assets/fonts/roboto/', 'roboto-thin');
 @include font-family('Roboto', 100, italic, '~/src/assets/fonts/roboto/', 'roboto-thinitalic');

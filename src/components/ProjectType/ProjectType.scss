@@ -1,20 +1,22 @@
 @import 'tc-includes';
 
-.project-icons{
+.project-icons {
   @include roboto;
   font-size: $tc-label-md;
   color: $tc-gray-50;
   line-height: $base-unit*4;
   text-align: center;
-  .icon-set{
+
+  .icon-set {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 220px;
     margin: 30px auto;
   }
-  .icon{
-    display:inline-block;
+
+  .icon {
+    display: inline-block;
     text-align: center;
     height: 60px;
     padding-top: 40px;
@@ -23,23 +25,28 @@
     background-size: 32px;
   }
 
-  .icon-work-project{
+  .icon-work-project {
     background: url('../../assets/images/tech-32px-outline-work-project.svg') no-repeat center top;
     width: 120px;
   }
-  .icon-iphone{
+
+  .icon-iphone {
     background: url('../../assets/images/tech-32-outline_mobile.svg') no-repeat center top;
   }
-  .icon-ipad{
+
+  .icon-ipad {
     background: url('../../assets/images/tech-32-outline_tablet-button.svg') no-repeat center top;
   }
-  .icon-web{
+
+  .icon-web {
     background: url('../../assets/images/tech-32-outline_desktop.svg') no-repeat center top;
   }
-  .icon-apple-watch{
+
+  .icon-apple-watch {
     background: url('../../assets/images/tech-32-outline_watch-time.svg') no-repeat center top;
   }
-  .icon-android-wear{
+
+  .icon-android-wear {
     background: url('../../assets/images/tech-32-outline_watch-circle.svg') no-repeat center top;
   }
 }

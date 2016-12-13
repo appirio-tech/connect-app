@@ -2,111 +2,121 @@
 
 .row {
   margin-bottom: 20px;
-  &.center{
+
+  &.center {
     display: table;
     margin: 0 auto;
-    label{
+
+    label {
       display: inline;
     }
-    input{
+
+    input {
       display: inline;
       width: 100px;
     }
   }
 }
-label{
-  display:block;
+
+label {
+  display: block;
   margin: 10px auto;
   text-transform: none;
+
   @include tc-label-md;
   color: $tc-gray-70;
   font-size: 13px;
 }
 
-.error-message{
-  display:block;
+.error-message {
+  display: block;
   margin: 5px auto;
-  @include roboto;
 
+  @include roboto;
   color: $tc-gray-70;
   font-size: 13px;
-  line-height:20px;
-  font-style:italic;
+  line-height: 20px;
+  font-style: italic;
   border: 1px solid $tc-red-30;
   background: $tc-red-10;
   color: $tc-red-70;
-  padding:10px;
+  padding: 10px;
   border-radius: 2px;
-  strong{
+
+  strong {
     @include roboto-bold;
   }
 }
 
 input {
-  display:block;
+  display: block;
   margin: 0 auto;
   color: $tc-black;
   background: $tc-gray-neutral-light;
   border-color: $tc-gray-20;
+
   @include tc-label-md;
 
-  &[disabled]{
+  &[disabled] {
     color: $tc-gray-20;
     background: $tc-white;
   }
 
-  &:hover{
+  &:hover {
     border-color: $tc-gray-40;
     background: $tc-gray-neutral-light;
   }
 
-  &:focus{
-    background: $tc-white!important;
-    border-color: $tc-dark-blue-90!important;
+  &:focus {
+    background: $tc-white !important;
+    border-color: $tc-dark-blue-90 !important;
   }
 
-  &.error{
-    border-left: 3px solid $tc-red-70!important;
-    background: $tc-gray-neutral-light!important;
-    &:focus{
-      background: $tc-white!important;
-      border-color: $tc-dark-blue-90!important;
+  &.error {
+    border-left: 3px solid $tc-red-70 !important;
+    background: $tc-gray-neutral-light !important;
+
+    &:focus {
+      background: $tc-white !important;
+      border-color: $tc-dark-blue-90 !important;
     }
   }
 }
 
-textarea{
-  display:block;
+textarea {
+  display: block;
   margin: 0 auto;
   height: 100px;
   color: $tc-black;
   background: $tc-gray-neutral-light;
   border-color: $tc-gray-20;
+
   @include tc-label-md;
-  font-size:15px;
-  line-height:20px;
+  font-size: 15px;
+  line-height: 20px;
   box-shadow: none;
 
-  &[disabled]{
+  &[disabled] {
     color: $tc-gray-20;
     background: $tc-white;
   }
 
-  &:hover{
+  &:hover {
     border-color: $tc-gray-40;
   }
 
-  &:focus{
-    background: $tc-white!important;
-    border-color: $tc-dark-blue-90!important;
+  &:focus {
+    background: $tc-white !important;
+    border-color: $tc-dark-blue-90 !important;
   }
 
-  &.error{
-    border-left: 3px solid $tc-red-70!important;
-    background: $tc-gray-neutral-light!important;
-    &:focus{
-      background: $tc-white!important;
-      border-color: $tc-dark-blue-90!important;
+  &.error {
+    border-left: 3px solid $tc-red-70 !important;
+    background: $tc-gray-neutral-light !important;
+
+    &:focus {
+      background: $tc-white !important;
+      border-color: $tc-dark-blue-90 !important;
     }
   }
 }
@@ -114,6 +124,7 @@ textarea{
 .checkbox-group-item {
   display: inline-block;
   margin-right: 42px;
+
   label {
     @include roboto-bold;
     color: $tc-gray-80;
@@ -126,24 +137,30 @@ textarea{
     @include tc-label-md;
     margin-right: 20px;
   }
+
   .radio-group-options {
     display: flex;
     flex-direction: row;
+
     .radio {
       margin: 0;
+
       input[type="radio"] {
         opacity: 0;
         display: none;
       }
+
       label {
         display: inline-block;
         line-height: 19px;
         padding-left: 26px;
         position: relative;
+
         @include roboto-bold;
-        font-size:14px;
+        font-size: 14px;
         color: $tc-black;
         margin-right: 30px;
+
         &:before {
           border: 1px solid $tc-gray-20;
           border-radius: 50%;
@@ -157,6 +174,7 @@ textarea{
           width: 19px;
         }
       }
+
       input[type="radio"]:checked + label:after {
         background: $tc-dark-blue-90;
         border-radius: 50%;
@@ -178,44 +196,50 @@ textarea{
   overflow: hidden;
   justify-content: center;
 }
+
 a.tiled-group-item {
   -webkit-flex: initial;
   flex: initial;
   margin-right: 20px;
-  height:155px;
-  width:135px;
+  height: 155px;
+  width: 135px;
   border: 1px solid $tc-gray-20;
   border-radius: 4px;
   cursor: pointer;
-  &.active{
+
+  &.active {
     background: $tc-dark-blue-10;
     border: 1px solid $tc-dark-blue-30;
   }
-  &:hover{
+
+  &:hover {
     border: 1px solid $tc-dark-blue-70;
   }
 
-  span.title{
-    display:block;
+  span.title {
+    display: block;
     margin-top: 20px;
+
     @include roboto-bold;
     color: $tc-black;
     font-size: 13px;
-    text-align:center;
+    text-align: center;
   }
 
   span.icon {
     text-align: center;
-    display:block;
+    display: block;
     height: 50px;
-    margin:30px auto 20px auto;
+    margin: 30px auto 20px;
   }
+
   small {
-    display:block;
+    display: block;
     font-size: 11px;
-    text-align:center;
+    text-align: center;
     color: $tc-gray-50;
+
     @include roboto;
-    margin-top:10px;
+    margin-top: 10px;
   }
 }

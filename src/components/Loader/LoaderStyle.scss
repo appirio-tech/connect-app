@@ -1,41 +1,40 @@
 @import 'tc-includes';
 
 .Loader {
-  position       : absolute;
-  display        : flex;
-  top            : 0;
-  left           : 0;
-  width          : 100%;
-  height         : 100%;
+  position: absolute;
+  display: flex;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   justify-content: center;
-  align-items    : center;
+  align-items: center;
 
   .Loader__container {
-    padding         : 25px;
+    padding: 25px;
     // background-color: $primary-color;
-    opacity         : .98;
-    border-radius   : 10px;
+    opacity: 0.98;
+    border-radius: 10px;
   }
 
   .Loader__loader {
     width: 50px;
     height: 50px;
-    border-top       : 10px solid $tc-gray-neutral-dark;
-    border-right     : 10px solid $tc-gray-neutral-dark;
-    border-bottom    : 10px solid $tc-gray-neutral-dark;
-    border-left      : 10px solid $tc-gray-neutral-light;
+    border-top: 10px solid $tc-gray-neutral-dark;
+    border-right: 10px solid $tc-gray-neutral-dark;
+    border-bottom: 10px solid $tc-gray-neutral-dark;
+    border-left: 10px solid $tc-gray-neutral-light;
     -webkit-transform: translateZ(0);
-    -ms-transform    : translateZ(0);
-    transform        : translateZ(0);
-    -webkit-animation: load8 .8s infinite linear;
-    animation        : load8 .8s infinite linear;
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: load8 0.8s infinite linear;
+    animation: load8 0.8s infinite linear;
   }
+
   .Loader__loader,
   .Loader__loader:after {
     border-radius: 50%;
   }
-
-
 }
 
 @-webkit-keyframes load8 {
@@ -43,6 +42,7 @@
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
@@ -54,6 +54,7 @@
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);

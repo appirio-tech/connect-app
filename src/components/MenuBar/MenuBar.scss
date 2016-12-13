@@ -2,6 +2,7 @@
 
 .MenuBar {
   display: flex;
+
   @include roboto-medium;
 
   &.horizontal {
@@ -11,7 +12,7 @@
     li {
       display: flex;
       justify-content: center;
-      margin: 0px 15px;
+      margin: 0 15px;
     }
   }
 
@@ -40,11 +41,13 @@
 
     a {
       display: inline-block;
+
       @include roboto-medium;
       font-size: $tc-label-lg;
       color: $tc-gray-50;
       line-height: 32px;
-      &:hover{
+
+      &:hover {
         color: $tc-black;
       }
     }
@@ -55,5 +58,4 @@
       color: white;
     }
   }
-
 }

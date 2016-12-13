@@ -29,8 +29,8 @@ $title-color: $tc-gray-80;
 }
 
 .feature-selection-dialog {
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   height: 100%;
 }
 
@@ -105,7 +105,7 @@ $title-color: $tc-gray-80;
   .bottom-border-titles {
     border-bottom: 1px solid $tc-gray-30;
     padding-bottom: $base-unit;
-    margin: 30px 0 20px 0;
+    margin: 30px 0 20px;
     position: relative;
 
     .title {
@@ -130,7 +130,7 @@ $title-color: $tc-gray-80;
     @include flexBox;
     background-color: transparent;
     display: flex;
-    padding: 0px;
+    padding: 0;
     width: 1110px;
     margin: 20px auto;
     /* .left-area */
@@ -157,12 +157,13 @@ $title-color: $tc-gray-80;
 
       .title {
         color: $tc-gray-80;
+
         @include roboto;
         font-weight: 400;
       }
 
       .right-area-item {
-        padding: 50px 0 70px 0;
+        padding: 50px 0 70px;
         margin-bottom: 20px;
         border-radius: 4px;
         background-color: #fff;
@@ -223,6 +224,7 @@ $title-color: $tc-gray-80;
           .btn-nav {
             padding: 0 15px;
             float: left;
+
             @include roboto;
             font-size: 13px;
             color: #47474f;
@@ -257,7 +259,7 @@ $title-color: $tc-gray-80;
         .title {
           @include roboto-bold;
           font-size: 15px;
-          letter-spacing: 0px;
+          letter-spacing: 0;
           line-height: 25px;
         }
 
@@ -462,6 +464,7 @@ $title-color: $tc-gray-80;
         width: 80%;
         margin-right: 100px;
         display: none;
+
         @include roboto-bold;
 
         &.height100 {
@@ -484,7 +487,7 @@ $title-color: $tc-gray-80;
             @include roboto;
             font-size: 15px;
             color: $gray-color;
-            letter-spacing: 0px;
+            letter-spacing: 0;
             line-height: 20px;
           }
         }
@@ -506,7 +509,7 @@ $title-color: $tc-gray-80;
     .title {
       @include roboto-medium;
       font-size: 15px;
-      letter-spacing: 0px;
+      letter-spacing: 0;
       line-height: 20px;
     }
 
@@ -567,7 +570,7 @@ $title-color: $tc-gray-80;
           @include roboto-bold;
           font-size: 15px;
           color: $title-color;
-          letter-spacing: 0px;
+          letter-spacing: 0;
           line-height: 20px;
           padding-left: 7px;
         }
@@ -612,6 +615,7 @@ $title-color: $tc-gray-80;
       .file-list-bottom {
         .txt {
           color: $title-color;
+
           @include roboto-bold;
         }
         padding: 20px 0;
@@ -626,6 +630,7 @@ $title-color: $tc-gray-80;
 
     .titles {
       text-align: left;
+
       @include roboto-bold;
       font-size: 15px;
       color: $title-color;
@@ -676,6 +681,7 @@ $title-color: $tc-gray-80;
           color: #262628;
           line-height: 18px;
           padding: 10px 0;
+
           @include roboto-bold;
           color: $title-color;
         }

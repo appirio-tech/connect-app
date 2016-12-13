@@ -1,27 +1,32 @@
 @import "tc-includes";
 
-.project-progress{
+.project-progress {
   margin: 10px 0;
-  .progress-bar{
+
+  .progress-bar {
     margin: 10px 0;
     position: relative;
     background-color: $tc-gray-neutral-dark;
     height: 4px;
 
-    .progress{
+    .progress {
       height: 4px;
-      &.working{
+
+      &.working {
         background-color: $tc-green;
       }
-      &.error{
+
+      &.error {
         background-color: $tc-red-70;
       }
-      &.completed{
+
+      &.completed {
         background-color: $tc-gray-70;
       }
     }
   }
-  .progress-remaining{
+
+  .progress-remaining {
     @include roboto-medium;
     font-size: $tc-label-sm;
     color: $tc-gray-50;

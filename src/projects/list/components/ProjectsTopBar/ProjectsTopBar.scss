@@ -5,19 +5,21 @@
   padding-top: 20px;
 }
 
-.topbar{
-  padding:0 20px;
+.topbar {
+  padding: 0 20px;
   height: 50px;
   line-height: 30px;
   color: white;
 }
-.topbar span{
+
+.topbar span {
   @include roboto-light;
   font-size: 20px;
   color: $tc-black;
   line-height: 35px;
 }
-.topbar a{
+
+.topbar a {
   float: right;
-  border-radius:2px;
+  border-radius: 2px;
 }

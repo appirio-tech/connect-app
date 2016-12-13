@@ -1,6 +1,5 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-
 .user-avatar {
   width: 30px;
   height: 30px;
@@ -8,6 +7,7 @@
   position: relative;
   background-size: cover;
   background-position: center;
+
   @media (max-width: 700px) {
     margin-right: 10px;
   }

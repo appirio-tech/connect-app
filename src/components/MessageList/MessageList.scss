@@ -1,50 +1,60 @@
 @import "tc-includes";
 
-.message-list{
+.message-list {
   height: 100%;
   overflow: hidden;
 
-  .panel-title{
+  .panel-title {
     padding: $base-unit*2 $base-unit*4 $base-unit*4 $base-unit*4;
   }
-  .panel-messages{
+
+  .panel-messages {
     min-height: 430px;
     background-color: $tc-gray-neutral-light;
     margin-bottom: -10px;
+
     @include roboto;
     line-height: $base-unit*4;
     height: calc(100% - 45px);// 45px is the height of panel-title
     overflow-y: auto;
-    .message:last-child{
+
+    .message:last-child {
       border-bottom: 1px solid $tc-gray-10;
     }
-    .message{
+
+    .message {
       padding: $base-unit*3 $base-unit*4;
       display: flex;
       background-color: $tc-white;
       border-top: 1px solid $tc-gray-10;
       cursor: pointer;
-      &:hover{
+
+      &:hover {
         background-color: $tc-gray-neutral-light;
       }
     }
-    .message-body{
+
+    .message-body {
       margin-right: $base-unit*2;
     }
-    .message-title{
+
+    .message-title {
       font-size: $tc-label-lg;
       color: #354052;
       line-height: $base-unit*4;
     }
-    .message-subtitle{
+
+    .message-subtitle {
       color: $tc-gray-50;
       font-size: $tc-label-md;
     }
-    .message-time{
+
+    .message-time {
       margin-left: auto;
       font-size: $tc-label-sm;
       color: $tc-gray-40;
-      .badge{
+
+      .badge {
         padding: 0 $base-unit;
         background: $tc-orange-70;
         min-width: 20px;
@@ -53,15 +63,18 @@
         color: $tc-white;
       }
     }
-    .message.active{
+
+    .message.active {
       background-color: $tc-dark-blue-10;
       border-top: 1px solid $tc-dark-blue-30;
       border-bottom: 1px solid $tc-dark-blue-30;
-      .message-title{
+
+      .message-title {
         @include roboto-medium;
       }
     }
-    .message.active + .message{
+
+    .message.active + .message {
       border-top: none;
     }
   }

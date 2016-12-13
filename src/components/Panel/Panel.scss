@@ -1,38 +1,43 @@
 @import "tc-includes";
 
-.panel{
+.panel {
   background: $tc-white;
   border-radius: $corner-radius;
   padding: $base-unit*2 0;
   position: relative;
-  box-shadow: 0px 1px 3px 0px $tc-gray-30;
+  box-shadow: 0 1px 3px 0px $tc-gray-30;
+
   .panel-title,
-  .panel-body{
+  .panel-body {
     padding: $base-unit*2 $base-unit*4;
   }
-  .panel-title{
+
+  .panel-title {
     @include roboto-medium;
     color: $tc-gray-50;
     text-transform: uppercase;
     font-size: $tc-label-sm;
     line-height: $base-unit*3;
   }
-  .panel-body{
-    &.join-project{
+
+  .panel-body {
+    &.join-project {
       background-color: $tc-gray-neutral-light;
     }
   }
 
-  .btn-action{
+  .btn-action {
     position: absolute;
     top: $base-unit*3;
     right: $base-unit*3;
     border-radius: 21px;
     height: 4 * $base-unit;
     width: 4 * $base-unit;
+
     &:hover {
       opacity: 0.7;
     }
+
     .plus {
       background-color: $tc-gray-40;
       border-radius: 10px;
@@ -41,24 +46,27 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
       svg {
         fill: $tc-white;
         width: 12px;
         height: 12px;
       }
     }
+
     .remove svg {
       background-color: $tc-white;
       fill: $tc-gray-40;
     }
 
     .close {
-      
     }
   }
 }
+
 .panel.modal-active {
   position: relative;
+
   .modal-overlay {
     position: absolute;
     top: 0;
@@ -70,6 +78,7 @@
     border-radius: $corner-radius;
     z-index: 1;
   }
+
   .modal,
   .panel-title {
     position: relative;
@@ -77,23 +86,26 @@
   }
 }
 
-
-.panel{
-  &.panel-gray{
+.panel {
+  &.panel-gray {
     background: $tc-gray-neutral-light;
     margin-bottom: -10px;
   }
+
   &.panel-orange {
     background-color: $tc-orange-10;
   }
-  .panel-body{
-    &.active{
-      position:relative;
-      &::after{
+
+  .panel-body {
+    &.active {
+      position: relative;
+
+      &::after {
         content: '';
         display: block;
         position: absolute;
-        top: 10; left: 0;
+        top: 10;
+        left: 0;
         width: 3px;
         height: 90%;
         background: $tc-orange-70;

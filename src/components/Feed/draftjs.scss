@@ -1,6 +1,5 @@
 @import "tc-includes";
 
-
 .collapsedEditor {
   display: none !important;
 }
@@ -18,6 +17,7 @@
 .public-DraftEditor-content {
   width: 100%;
   font-size: 15px;
+
   @include roboto;
   line-height: 20px;
   color: $tc-gray-80;
@@ -38,29 +38,32 @@
   &.focus {
     border: 1px solid $tc-dark-blue-90;
     outline: none;
-    box-shadow: inset 0px 0px 2px 1px rgba(133,203,255,0.4);
+    box-shadow: inset 0px 0px 2px 1px rgba(133, 203, 255, 0.4);
   }
-  transition: .15s all;
+  transition: 0.15s all;
+
   blockquote {
     @include roboto-medium;
     font-weight: 600;
     margin: $base-unit*2 0 $base-unit*2 $base-unit*6;
     padding: $base-unit*3 0 $base-unit*3 $base-unit*3;
-    border-left: $corner-radius * 2 solid $tc-gray-10
+    border-left: $corner-radius * 2 solid $tc-gray-10;
   }
 }
 
 .public-DraftStyleDefault-ul,
 .public-DraftStyleDefault-ol {
-  margin: $base-unit*2 0 $base-unit*2 $base-unit*6
+  margin: $base-unit*2 0 $base-unit*2 $base-unit*6;
 }
 
 .public-DraftStyleDefault-ol {
   list-style-type: decimal;
 }
+
 .public-DraftStyleDefault-ul {
   list-style-type: disc;
 }
+
 .public-DraftStyleDefault-pre {
   background: #ddd;
   padding: 3px;
@@ -68,30 +71,37 @@
 }
 
 .draftjs-post {
-  ul, ol {
-    margin: $base-unit*2 0 $base-unit*2 $base-unit*6
+  ul,
+  ol {
+    margin: $base-unit*2 0 $base-unit*2 $base-unit*6;
   }
+
   ul {
     list-style-type: disc;
   }
+
   ol {
     list-style-type: decimal;
   }
+
   blockquote {
     @include roboto-medium;
     font-weight: 600;
     margin: $base-unit*2 0 $base-unit*2 $base-unit*6;
     padding: $base-unit*3 0 $base-unit*3 $base-unit*3;
-    border-left: $corner-radius * 2 solid $tc-gray-10
+    border-left: $corner-radius * 2 solid $tc-gray-10;
   }
+
   pre {
     background: #ddd;
     padding: 3px;
     font-family: monospace;
   }
+
   strong {
     font-weight: bold;
   }
+
   em {
     font-style: italic;
   }
