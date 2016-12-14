@@ -299,7 +299,7 @@ class MessagesView extends React.Component {
         return (
           <MessageDetails
             {...activeThread}
-            allowAddingComment={ activeThread.allowComments && !!currentMemberRole }
+            allowAddingComment={ activeThread.allowComments }
             onLoadMoreMessages={this.onShowAllComments.bind(this, activeThread.id)}
             onNewMessageChange={this.onNewMessageChange}
             onAddNewMessage={ this.onAddNewMessage.bind(this, activeThread.id) }

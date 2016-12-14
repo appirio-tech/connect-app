@@ -212,7 +212,7 @@ class FeedView extends React.Component {
         <div className="feed-action-card" key={item.id}>
           <Feed
             {...item}
-            allowComments={ item.allowComments && !!currentMemberRole}
+            allowComments={ item.allowComments }
             currentUser={currentUser}
             onNewCommentChange={this.onNewCommentChange.bind(this, item.id)}
             onAddNewComment={this.onAddNewComment.bind(this, item.id)}
