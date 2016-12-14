@@ -25,7 +25,7 @@ class FeedComments extends React.Component {
   render() {
     const {
     comments, currentUser, totalComments, onLoadMoreComments, isLoadingComments, hasMoreComments, onAdd,
-    onChange, content, avatarUrl, isAddingComment
+    onChange, content, avatarUrl, isAddingComment, allowComments
   } = this.props
     let authorName = currentUser.firstName
     if (authorName && currentUser.lastName) {
@@ -77,6 +77,7 @@ class FeedComments extends React.Component {
           <div dangerouslySetInnerHTML={{__html: item.content}} />
         </Comment>
       )}
+      {allowComments &&
       <AddComment
         placeholder="Create a new comment..."
         onAdd={onAdd}
@@ -85,7 +86,7 @@ class FeedComments extends React.Component {
         avatarUrl={avatarUrl}
         authorName={ authorName }
         isAdding={ isAddingComment }
-      />
+      />}
     </div>
   )
   }
