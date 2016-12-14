@@ -25,7 +25,7 @@
         @include roboto-bold;
 
         font-size: 15px;
-        letterspacing: 0;
+        letter-spacing: 0;
         line-height: 25px;
         color: $tc-gray-80;
       }
@@ -35,7 +35,7 @@
 
         font-size: 13px;
         color: $tc-gray-60;
-        letterspacing: 0;
+        letter-spacing: 0;
         line-height: 25px;
 
         &.bigger {

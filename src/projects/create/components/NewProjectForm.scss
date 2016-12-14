@@ -167,7 +167,6 @@
             font-style: italic;
             color: $tc-gray-40;
             font-size: 12px;
-            line-height: 20px;
             top: 50%;
             margin: -15px 0 0 -10px;
             text-align: center;
@@ -342,7 +341,6 @@
 
         @include roboto;
 
-        color: $tc-gray-70;
         font-size: 13px;
         line-height: 20px;
         font-style: italic;
@@ -549,7 +547,6 @@ $track-color: $tc-gray-neutral-dark;
       height: 4px;
     }
 
-
     // Firefox styles
     &::-moz-range-track {
       width: $track-width;
@@ -608,6 +605,7 @@ $track-color: $tc-gray-neutral-dark;
       background-color: $tc-gray-neutral-dark;
     }
 
+    /* stylelint-disable-next-line selector-pseudo-element-no-unknown */
     &::ms-tooltip {
       display: block;
       padding: 30px;

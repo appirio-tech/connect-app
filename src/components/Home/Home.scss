@@ -14,7 +14,7 @@
     box-shadow: 0 1px 3px 0 rgba($tc-black, 0.2);
     border-radius: $corner-radius;
 
-    @media screen and (max-width: $screen-rg - 1) {
+    @media screen and (max-width: ($screen-rg - 1)) {
       flex-direction: column;
       width: 100%;
       padding: $base-unit*6 $base-unit*12 $base-unit*6;
@@ -24,7 +24,7 @@
       }
     }
 
-    @media screen and (max-width: $screen-md - 174) {
+    @media screen and (max-width: ($screen-md - 174)) {
       img {
         width: 100%;
         height: auto;

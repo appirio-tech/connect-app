@@ -16,7 +16,6 @@ $tc-body-large: 20px;
 // }
 
 .tc-header {
-  height: 60px;
   // background: $tc-gray-neutral-light;
   line-height: 60px;
   height: 60px;
@@ -95,7 +94,7 @@ $tc-body-large: 20px;
           .tc-btn {
             display: flex;
             align-items: center;
-            justfiy-content: center;
+            justify-content: center;
             padding: 5px 0 5px 34px;
             text-align: left;
             color: $tc-gray-40;
@@ -479,7 +478,6 @@ $tc-body-large: 20px;
     }
   }
 }
-
 
 /* .bar__search */
 .bar__search {

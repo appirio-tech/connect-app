@@ -200,7 +200,6 @@
     font-size: $tc-label-lg;
     color: $tc-gray-90;
     line-height: $base-unit * 4;
-    display: block;
     white-space: nowrap;
     padding-right: 20px;
     overflow: hidden;
@@ -346,7 +345,6 @@
 //         z-index: 99;
 //     }
 // }
-
 
 /* .txt-status */
 .txt-status {
@@ -608,8 +606,7 @@
   }
 }
 
-
-/*fix layout issue when smaller than 1024px width*/
+/* fix layout issue when smaller than 1024px width */
 @media (max-width: 1003px) {
   /* .flex-data */
   .flex-data {

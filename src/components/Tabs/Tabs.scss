@@ -21,7 +21,6 @@
     width: 50%;
     padding: 10px 0;
     text-align: center;
-    background-color: $tc-gray-neutral-light;
 
     @include roboto-medium;
 
@@ -33,9 +32,6 @@
 
     a {
       color: $tc-gray-80;
-    }
-
-    &:hover {
     }
 
     &.active {
