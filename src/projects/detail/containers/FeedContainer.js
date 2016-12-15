@@ -103,15 +103,18 @@ class FeedView extends React.Component {
         author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
       }
     }
+    const validPost = (post) => {
+      return post.type === 'post' && (post.body && post.body.trim().length || !isSystemUser(post.userId))
+    }
     if (showAll) {
       // if we are showing all comments, just iterate through the entire array
       _.forEach(_.slice(feed.posts, 1), p => {
-        p.type === 'post' ? item.comments.push(_toComment(p)) : item.totalComments--
+        validPost(p) ? item.comments.push(_toComment(p)) : item.totalComments--
       })
     } else {
       // otherwise iterate from right and add to the beginning of the array
       _.forEachRight(_.slice(feed.posts, 1), (p) => {
-        p.type === 'post' ? item.comments.unshift(_toComment(p)) : item.totalComments--
+        validPost(p) ? item.comments.unshift(_toComment(p)) : item.totalComments--
         if (!feed.showAll && item.comments.length === THREAD_MESSAGES_PAGE_SIZE)
           return false
       })

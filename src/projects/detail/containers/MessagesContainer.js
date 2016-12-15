@@ -113,15 +113,18 @@ class MessagesView extends React.Component {
         author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
       }
     }
+    const validPost = (post) => {
+      return post.type === 'post' && (post.body && post.body.trim().length || !isSystemUser(post.userId))
+    }
     if (showAll) {
       // if we are showing all comments, just iterate through the entire array
       _.forEach(feed.posts, p => {
-        p.type === 'post' ? item.messages.push(_toComment(p)) : item.totalComments--
+        validPost(p) ? item.messages.push(_toComment(p)) : item.totalComments--
       })
     } else {
       // otherwise iterate from right and add to the beginning of the array
       _.forEachRight(feed.posts, (p) => {
-        p.type === 'post' ? item.messages.unshift(_toComment(p)) : item.totalComments--
+        validPost(p) ? item.messages.unshift(_toComment(p)) : item.totalComments--
         if (!feed.showAll && item.messages.length === THREAD_MESSAGES_PAGE_SIZE)
           return false
       })
