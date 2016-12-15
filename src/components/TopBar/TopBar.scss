@@ -368,29 +368,13 @@ $tc-body-large: 20px;
         padding-left: 26px;
 
         /* menu icons */
-        > i {
+        > svg {
           display: block;
           width: 16px;
           height: 16px;
           position: absolute;
           left: 0;
           top: 2px;
-
-          &.icon-dashboard {
-            background: url("../../styles/i/icon-dashboard.svg") left top no-repeat;
-          }
-
-          &.icon-specification {
-            background: url("../../styles/i/icon-ruler-pencil.svg") left top no-repeat;
-          }
-
-          &.icon-challenges {
-            background: url("../../styles/i/icon-hammer.svg") left top no-repeat;
-          }
-
-          &.icon-messages {
-            background: url("../../styles/i/icon-chat.svg") left top no-repeat;
-          }
         }
       }
 
@@ -400,22 +384,8 @@ $tc-body-large: 20px;
         a:hover {
           color: $tc-orange-30;
 
-          > i {
-            &.icon-dashboard {
-              background: url("../../styles/i/icon-dashboard-hover.svg") left top no-repeat;
-            }
-
-            &.icon-specification {
-              background: url("../../styles/i/icon-ruler-pencil-hover.svg") left top no-repeat;
-            }
-
-            &.icon-challenges {
-              background: url("../../styles/i/icon-hammer-hover.svg") left top no-repeat;
-            }
-
-            &.icon-messages {
-              background: url("../../styles/i/icon-chat-hover.svg") left top no-repeat;
-            }
+          > svg * {
+            fill: $tc-orange-30;
           }
         }
       }
@@ -424,22 +394,8 @@ $tc-body-large: 20px;
       a.active:hover {
         color: $tc-orange-70;
 
-        > i {
-          &.icon-dashboard {
-            background: url("../../styles/i/icon-dashboard-active.svg") left top no-repeat;
-          }
-
-          &.icon-specification {
-            background: url("../../styles/i/icon-ruler-pencil-active.svg") left top no-repeat;
-          }
-
-          &.icon-challenges {
-            background: url("../../styles/i/icon-hammer-active.svg") left top no-repeat;
-          }
-
-          &.icon-messages {
-            background: url("../../styles/i/icon-chat-active.svg") left top no-repeat;
-          }
+        > svg * {
+          fill: $tc-orange-70;
         }
       }
     }

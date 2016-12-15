@@ -143,11 +143,18 @@ config.module = {
       test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
       loader: 'file'
     }, {
-      test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      loader: 'file'
+    }, {
+      // all .svg except .inline.svg
+      test: /^(?!.*\.inline\.svg$).*\.svg$/,
       loader: 'file'
     }, {
       test: /\.(coffee|litcoffee|cjsx)$/,
       loader: 'babel?presets[]=react,presets[]=es2015,presets[]=stage-2,plugins[]=lodash!coffee!cjsx'
+    }, {
+      test: /\.inline\.svg$/,
+      loader: 'babel!svg-react'
     }
   ],
   postLoaders: [
