@@ -252,6 +252,8 @@
           margin-right: 15px;
           display: inline-block;
           border: none;
+          padding: 0;
+          background: none;
         }
 
         .button {
@@ -274,27 +276,9 @@
           }
         }
 
-        .bold {
-          background: url('../../assets/images/tc-text-16-bold.svg') no-repeat;
-
-          &.active {
-            background: url('../../assets/images/tc-text-16-bold-active.svg') no-repeat;
-          }
-        }
-
-        .italic {
-          background: url('../../assets/images/tc-text-16-italic.svg') no-repeat;
-
-          &.active {
-            background: url('../../assets/images/tc-text-16-italic-active.svg') no-repeat;
-          }
-        }
-
-        .underline {
-          background: url('../../assets/images/tc-text-16-underline.svg') no-repeat;
-
-          &.active {
-            background: url('../../assets/images/tc-text-16-underline-active.svg') no-repeat;
+        .bold, .italic, .underline {
+          &.active path {
+            fill: #59a7ff;
           }
         }
 
