@@ -157,6 +157,7 @@ export const projectTopics = function (state=initialState, action) {
         posts: { $push: payload.posts },
         isLoadingComments: { $set : false }
       })
+      updatedFeed.posts = _.sortBy(updatedFeed.posts, ['id'])
       const feedUpdateQuery = {}
       feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
       // update the state
