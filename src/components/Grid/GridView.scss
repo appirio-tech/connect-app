@@ -490,6 +490,13 @@
                     }
                 }
             }
+
+            &.go-to-page-pill {
+                .tooltip-target {
+                    min-width: 27px;
+                    height: 28px;
+                }
+            }
         }
         a {
             @include roboto;
