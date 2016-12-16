@@ -17,6 +17,14 @@ const LoginRedirect = withProps({
   redirectTo: `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`
 })(RedirectComponent)
 
+const redirectToConnect = (nextState, replace, callback) => {
+  if(window.location.hostname.indexOf('connectv2') === 0) {
+    window.location.assign(window.location.href.replace('connectv2', 'connect'))
+    return
+  }
+  callback()
+}
+
 const redirectToProject = (nextState, replace, callback) => {
   const feedId = nextState.params.feedId
   getFreshToken().then(() => {
@@ -50,7 +58,7 @@ const redirectToProject = (nextState, replace, callback) => {
 }
 
 export default (
-  <Route path="/" onUpdate={() => window.scrollTo(0, 0)} component={ App }>
+  <Route path="/" onUpdate={() => window.scrollTo(0, 0)} component={ App } onEnter={ redirectToConnect }>
     <IndexRoute component={Home} />
     <Route path="/terms" component={ConnectTerms} />
     <Route path="/login" component={LoginRedirect}/>

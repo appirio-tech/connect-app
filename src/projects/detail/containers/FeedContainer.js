@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import { withRouter } from 'react-router'
 import _ from 'lodash'
 import {
   THREAD_MESSAGES_PAGE_SIZE,
@@ -36,7 +37,16 @@ class FeedView extends React.Component {
     this.onNewCommentChange = this.onNewCommentChange.bind(this)
     this.onShowAllComments = this.onShowAllComments.bind(this)
     this.onAddNewComment = this.onAddNewComment.bind(this)
-    this.state = { feeds : [], showAll: [] }
+    this.onLeave = this.onLeave.bind(this)
+    this.isChanged = this.isChanged.bind(this)
+    this.onNewPostChange = this.onNewPostChange.bind(this)
+    this.state = { feeds : [], showAll: [], newPost: {} }
+  }
+
+  componentDidMount() {
+    const routeLeaveHook = this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
+    window.addEventListener('beforeunload', this.onLeave)
+    this.setState({ routeLeaveHook })
   }
 
   componentWillMount() {
@@ -47,7 +57,28 @@ class FeedView extends React.Component {
     this.init(nextProps)
   }
 
-  mapFeed(feed, showAll = false) {
+  componentWillUnmount() {
+    if (this.state.routeLeaveHook) {
+      this.state.routeLeaveHook()
+    }
+    window.removeEventListener('beforeunload', this.onLeave)
+  }
+
+  // Notify user if they navigate away while the form is modified.
+  onLeave(e) {
+    if (this.isChanged()) {
+      return e.returnValue = 'You have uposted content. Are you sure you want to leave?'
+    }
+  }
+
+  isChanged() {
+    const { newPost } = this.state
+    const hasComment = !_.isUndefined(_.find(this.state.feeds, (feed) => feed.newComment && feed.newComment.length))
+    const hasThread = (newPost.title && !!newPost.title.trim().length) || ( newPost.content && !!newPost.content.trim().length)
+    return hasThread || hasComment
+  }
+
+  mapFeed(feed, showAll = false, resetNewComment = false) {
     const { allMembers } = this.props
     const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isAddingComment', 'isLoadingComments', 'error'])
     if (isSystemUser(item.userId)) {
@@ -72,20 +103,27 @@ class FeedView extends React.Component {
         author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
       }
     }
+    const validPost = (post) => {
+      return post.type === 'post' && (post.body && post.body.trim().length || !isSystemUser(post.userId))
+    }
     if (showAll) {
       // if we are showing all comments, just iterate through the entire array
       _.forEach(_.slice(feed.posts, 1), p => {
-        p.type === 'post' ? item.comments.push(_toComment(p)) : item.totalComments--
+        validPost(p) ? item.comments.push(_toComment(p)) : item.totalComments--
       })
     } else {
       // otherwise iterate from right and add to the beginning of the array
       _.forEachRight(_.slice(feed.posts, 1), (p) => {
-        p.type === 'post' ? item.comments.unshift(_toComment(p)) : item.totalComments--
+        validPost(p) ? item.comments.unshift(_toComment(p)) : item.totalComments--
         if (!feed.showAll && item.comments.length === THREAD_MESSAGES_PAGE_SIZE)
           return false
       })
     }
     item.newComment = ''
+    if (!resetNewComment) {
+      const feedFromState = _.find(this.state.feeds, f => feed.id === f.id)
+      item.newComment = feedFromState ? feedFromState.newComment : ''
+    }
     item.hasMoreComments = item.comments.length !== item.totalComments
     return item
   }
@@ -96,6 +134,12 @@ class FeedView extends React.Component {
       feeds: feeds.map((feed) => {
         return this.mapFeed(feed, this.state.showAll.indexOf(feed.id) > -1)
       }).filter(item => item)
+    })
+  }
+
+  onNewPostChange(title, content) {
+    this.setState({
+      newPost: {title, content}
     })
   }
 
@@ -194,6 +238,7 @@ class FeedView extends React.Component {
             isCreating={ isCreatingFeed }
             hasError={ error }
             heading="NEW STATUS POST"
+            onNewPostChange={this.onNewPostChange}
             titlePlaceholder="Share the latest project updates with the team"
           />
         }
@@ -203,7 +248,7 @@ class FeedView extends React.Component {
   }
 }
 const enhance = spinnerWhileLoading(props => !props.isLoading)
-const EnhancedFeedView = enhance(FeedView)
+const EnhancedFeedView = withRouter(enhance(FeedView))
 
 
 class FeedContainer extends React.Component {

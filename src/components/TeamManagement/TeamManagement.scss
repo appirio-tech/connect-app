@@ -214,6 +214,10 @@ $tc-body-extra-small	: 12px;
         }
       }
 
+      input::-ms-clear {
+        display: none;
+      }
+
       .modal-inline-form{
         display: flex;
         margin-bottom: $base-unit*2;

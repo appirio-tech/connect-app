@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'lodash'
 import {
-  ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER,
+  ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR,
   PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER, AUTOCOMPLETE_TRIGGER_LENGTH
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
@@ -221,13 +221,14 @@ class TeamManagementContainer extends Component {
 }
 
 const mapStateToProps = ({ loadUser, members }) => {
+  const powerUserRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
+  const managerRoles = [ ROLE_ADMINISTRATOR, ROLE_CONNECT_MANAGER ]
   return {
     currentUser: {
       userId: parseInt(loadUser.user.id),
       isCopilot: _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT) > -1,
-      isManager: _.indexOf(loadUser.user.roles, ROLE_CONNECT_MANAGER) > -1,
-      isCustomer: _.indexOf(loadUser.user.roles, ROLE_CONNECT_MANAGER) === -1
-        && _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT) === -1
+      isManager: loadUser.user.roles.some((role) => managerRoles.indexOf(role) !== -1),
+      isCustomer: !loadUser.user.roles.some((role) => powerUserRoles.indexOf(role) !== -1)
     },
     allMembers: _.values(members.members)
   }

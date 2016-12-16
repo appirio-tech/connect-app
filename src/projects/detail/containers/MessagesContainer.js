@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import update from 'react-addons-update'
 import MessageList from '../../../components/MessageList/MessageList'
@@ -9,6 +10,7 @@ import NewPost from '../../../components/Feed/NewPost'
 import { laodProjectMessages, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import {FullHeightContainer} from 'appirio-tech-react-components'
+import FooterV2 from '../../../components/FooterV2/FooterV2'
 
 import {
   THREAD_MESSAGES_PAGE_SIZE,
@@ -30,12 +32,30 @@ class MessagesView extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { threads : [], activeThreadId : null, showEmptyState : true, showAll: []}
+    this.state = {
+      threads : [],
+      activeThreadId : null,
+      showEmptyState : true,
+      showAll: [],
+      newPost: {}
+    }
     this.onThreadSelect = this.onThreadSelect.bind(this)
     this.onShowAllComments = this.onShowAllComments.bind(this)
     this.onAddNewMessage = this.onAddNewMessage.bind(this)
     this.onNewMessageChange = this.onNewMessageChange.bind(this)
     this.onNewThread = this.onNewThread.bind(this)
+    this.onLeave = this.onLeave.bind(this)
+    this.isChanged = this.isChanged.bind(this)
+    this.onNewPostChange = this.onNewPostChange.bind(this)
+    this.changeThread = this.changeThread.bind(this)
+    this.onNewThreadClick = this.onNewThreadClick.bind(this)
+    this.showNewThreadForm = this.showNewThreadForm.bind(this)
+  }
+
+  componentDidMount() {
+    const routeLeaveHook = this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
+    window.addEventListener('beforeunload', this.onLeave)
+    this.setState({ routeLeaveHook })
   }
 
   componentWillMount() {
@@ -46,7 +66,28 @@ class MessagesView extends React.Component {
     this.init(nextProps)
   }
 
-  mapFeed(feed, isActive, showAll = false) {
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.onLeave)
+    if (this.state.routeLeaveHook) {
+      this.state.routeLeaveHook()
+    }
+  }
+
+  // Notify user if they navigate away while the form is modified.
+  onLeave(e) {
+    if (this.isChanged()) {
+      return e.returnValue = 'You have uposted content. Are you sure you want to leave?'
+    }
+  }
+
+  isChanged() {
+    const { newPost } = this.state
+    const hasMessage = !_.isUndefined(_.find(this.state.threads, (thread) => thread.newMessage && thread.newMessage.length))
+    const hasThread = (newPost.title && !!newPost.title.trim().length) || ( newPost.content && !!newPost.content.trim().length)
+    return hasThread || hasMessage
+  }
+
+  mapFeed(feed, isActive, showAll = false, resetNewMessage = false) {
     const { allMembers } = this.props
     const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isAddingComment', 'isLoadingComments', 'error'])
     item.isActive = isActive
@@ -72,20 +113,27 @@ class MessagesView extends React.Component {
         author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
       }
     }
+    const validPost = (post) => {
+      return post.type === 'post' && (post.body && post.body.trim().length || !isSystemUser(post.userId))
+    }
     if (showAll) {
       // if we are showing all comments, just iterate through the entire array
       _.forEach(feed.posts, p => {
-        p.type === 'post' ? item.messages.push(_toComment(p)) : item.totalComments--
+        validPost(p) ? item.messages.push(_toComment(p)) : item.totalComments--
       })
     } else {
       // otherwise iterate from right and add to the beginning of the array
       _.forEachRight(feed.posts, (p) => {
-        p.type === 'post' ? item.messages.unshift(_toComment(p)) : item.totalComments--
+        validPost(p) ? item.messages.unshift(_toComment(p)) : item.totalComments--
         if (!feed.showAll && item.messages.length === THREAD_MESSAGES_PAGE_SIZE)
           return false
       })
     }
     item.newMessage = ''
+    if (!resetNewMessage) {
+      const threadFromState = _.find(this.state.threads, t => feed.id === t.id)
+      item.newMessage = threadFromState ? threadFromState.newMessage : ''
+    }
     item.hasMoreMessages = item.messages.length < item.totalComments
     return item
   }
@@ -137,18 +185,61 @@ class MessagesView extends React.Component {
   }
 
   onThreadSelect(thread) {
+    const unsavedContentMsg = this.onLeave({})
+    if (unsavedContentMsg) {
+      const changeConfirmed = confirm(unsavedContentMsg)
+      if (changeConfirmed) {
+        this.changeThread(thread)
+      }
+    } else {
+      this.changeThread(thread)
+    }
+  }
+
+  changeThread(thread) {
     this.setState({
       isCreateNewMessage: false,
+      newPost: {},
       activeThreadId: thread.id,
       threads: this.state.threads.map((item) => {
         if (item.isActive) {
           if (item.id === thread.id) {
             return item
           }
-          return {...item, isActive: false, messages: item.messages.map((msg) => ({...msg, unread: false}))}
+          return {...item, isActive: false, newMessage: '', messages: item.messages.map((msg) => ({...msg, unread: false}))}
         }
         if (item.id === thread.id) {
           return {...item, isActive: true, unreadCount: 0}
+        }
+        return item
+      })
+    })
+  }
+
+  onNewPostChange(title, content) {
+    this.setState({
+      newPost: {title, content}
+    })
+  }
+
+  onNewThreadClick() {
+    const unsavedContentMsg = this.onLeave({})
+    if (unsavedContentMsg) {
+      const changeConfirmed = confirm(unsavedContentMsg)
+      if (changeConfirmed) {
+        this.showNewThreadForm()
+      }
+    } else {
+      this.showNewThreadForm()
+    }
+  }
+
+  showNewThreadForm() {
+    this.setState({
+      isCreateNewMessage: true,
+      threads: this.state.threads.map((item) => {
+        if (item.isActive) {
+          return {...item, newMessage: ''}
         }
         return item
       })
@@ -200,6 +291,7 @@ class MessagesView extends React.Component {
           <NewPost
             currentUser={currentUser}
             onPost={this.onNewThread}
+            onNewPostChange={ this.onNewPostChange }
             isCreating={isCreatingFeed}
             hasError={error}
             heading="New Discussion Post"
@@ -227,13 +319,14 @@ class MessagesView extends React.Component {
         <div className="messages-container">
             <div className="left-area">
               <MessageList
-                onAdd={() => this.setState({isCreateNewMessage: true})}
+                onAdd={ this.onNewThreadClick }
                 threads={threads}
                 onSelect={this.onThreadSelect}
                 showAddButton={ !!currentMemberRole }
                 showEmptyState={ showEmptyState && !threads.length }
                 scrollPosition={ scrollPosition }
               />
+              <FooterV2 />
             </div>
             <div className="right-area">
               { (showEmptyState && !threads.length) &&
@@ -251,7 +344,7 @@ class MessagesView extends React.Component {
 }
 
 const enhance = spinnerWhileLoading(props => !props.isLoading)
-const EnhancedMessagesView = enhance(MessagesView)
+const EnhancedMessagesView = withRouter(enhance(MessagesView))
 
 class MessagesContainer extends React.Component {
   constructor(props) {
