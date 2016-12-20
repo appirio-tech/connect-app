@@ -2,10 +2,10 @@ import React, {PropTypes} from 'react'
 import {Link} from 'react-router'
 import ReactDOM from 'react-dom'
 
-import IconDashboard from '../../assets/images/icon-dashboard.inline.svg'
-import IconRulerPencil from '../../assets/images/icon-ruler-pencil.inline.svg'
-// import IconHammer from '../../assets/images/icon-hammer.inline.svg'
-import IconChat from '../../assets/images/icon-hammer.inline.svg'
+import IconDashboard from 'icons/dashboard.svg'
+import IconRulerPencil from 'icons/ruler-pencil.svg'
+// import IconHammer from 'icons/hammer.svg'
+import IconChat from 'icons/chat.svg'
 
 function isEllipsisActive(el) {
   return (el.offsetWidth < el.scrollWidth)
