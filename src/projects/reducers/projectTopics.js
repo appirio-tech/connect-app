@@ -243,7 +243,7 @@ export const projectTopics = function (state=initialState, action) {
       const feed = state.feeds[tag].topics[feedIndex]
       const updatedFeed = update (feed, {
         isAddingComment : { $set : false },
-        error: { $set: false }
+        error: { $set: true }
       })
       const feedUpdateQuery = {}
       feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
