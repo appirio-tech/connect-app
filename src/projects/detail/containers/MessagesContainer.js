@@ -63,7 +63,7 @@ class MessagesView extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.init(nextProps)
+    this.init(nextProps, this.props)
   }
 
   componentWillUnmount() {
@@ -138,7 +138,7 @@ class MessagesView extends React.Component {
     return item
   }
 
-  init(props) {
+  init(props, prevProps) {
     const { activeThreadId } = this.state
     const propsThreadId = _.get(props, 'location.state.threadId', null)
     const threadId = activeThreadId ? activeThreadId : propsThreadId
@@ -149,9 +149,17 @@ class MessagesView extends React.Component {
     this.setState({
       scrollPosition: activeThreadIndex * 71,
       threads: props.threads.map((thread, idx) => {
+        // finds the same thread from previous props, if exists
+        let prevThread
+        if (prevProps && prevProps.threads) {
+          prevThread = _.find(prevProps.threads, t => thread.id === t.id)
+        }
+        // reset new message if we were adding message and there is no error in doing so
+        const resetNewMessage = prevThread && prevThread.isAddingComment && !thread.isAddingComment && !thread.error
         return this.mapFeed(thread,
           idx === activeThreadIndex,
-          this.state.showAll.indexOf(thread.id) > -1)
+          this.state.showAll.indexOf(thread.id) > -1,
+          resetNewMessage)
       }).filter(item => item)
     })
   }
