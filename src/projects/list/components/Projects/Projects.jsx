@@ -12,6 +12,7 @@ class Projects extends Component {
     this.sortHandler = this.sortHandler.bind(this)
     this.onPageChange = this.onPageChange.bind(this)
     this.applyFilters = this.applyFilters.bind(this)
+    this.init = this.init.bind(this)
   }
 
   componentDidUpdate() {
@@ -23,13 +24,26 @@ class Projects extends Component {
     window.sessionStorage.setItem('projectsPageScrollTop', scrollingElement.scrollTop)
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
+    const prevQueryParams = _.get(this.props, 'location.query', null)
+    const queryParams = _.get(nextProps, 'location.query', null)
+    if (!_.isEqual(prevQueryParams, queryParams)) {
+      this.init(nextProps)
+    }
+  }
+
   componentWillMount() {
+    this.init(this.props)
+  }
+
+  init(props) {
     document.title = 'Projects - Topcoder'
     // this.searchTermFromQuery = this.props.location.query.q || ''
-    const {criteria, loadProjects} = this.props
-    let pageNum = this.props.pageNum
+    const {criteria, loadProjects} = props
+    let pageNum = props.pageNum
     // check for criteria specified in URL.
-    const queryParams = _.get(this.props, 'location.query', null)
+    const queryParams = _.get(props, 'location.query', null)
     if (!_.isEmpty(queryParams)) {
       const initialCriteria = {}
       if (queryParams.sort) initialCriteria.sort = queryParams.sort

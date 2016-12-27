@@ -37,8 +37,8 @@ const GoToPagePill = ({minPage, maxPage, onPageClick}) => {
   }
   return (
     <li className="go-to-page-pill">
-      <Tooltip popMethod="click">
-        <div className="tooltip-target"><span>...</span></div>
+      <Tooltip popMethod="click" theme="light">
+        <div className="tooltip-target"><a href="javascript:">...</a></div>
         <div className="tooltip-body">
           <div className="go-to-page-tooltip">Go to page: <input type="number" min={minPage} max={maxPage} onKeyUp={handleChange} /></div>
         </div>
@@ -130,6 +130,7 @@ const PaginationBar = enhance(({onPageChange, currentPageNum, totalCount, pageSi
       pagePills.splice(1,
         0,
         <GoToPagePill
+          key="goToPagePill-1"
           onPageClick={ handlePageSelection }
           minPage={currentPageNum - pagesBeforeCurrent + remainingPillsLeft }
           maxPage={currentPageNum}
@@ -141,6 +142,7 @@ const PaginationBar = enhance(({onPageChange, currentPageNum, totalCount, pageSi
       pagePills.splice(pagePills.length - 1,
         0, 
         <GoToPagePill
+          key="goToPagePill-2"
           onPageClick={ handlePageSelection }
           minPage={currentPageNum}
           maxPage={ currentPageNum + pagesAfterCurrent - remainingPillsRight}
