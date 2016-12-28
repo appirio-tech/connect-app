@@ -504,10 +504,12 @@
         .go-to-page-tooltip {
           display: flex;
           align-items: center;
+          @include tc-label-md;
+          line-height: $base-unit * 6;
 
           input[type="number"] {
             width: 50px;
-            height: 30px;
+            height: $base-unit * 6;
             margin-bottom: 0px;
             margin-left: $base-unit * 2;
           }
