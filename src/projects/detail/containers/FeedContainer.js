@@ -130,7 +130,12 @@ class FeedView extends React.Component {
 
   init(props, prevProps) {
     const { feeds } = props
+    let resetNewPost = false
+    if (prevProps) {
+      resetNewPost = prevProps.isCreatingFeed && !props.isCreatingFeed && !props.error
+    }
     this.setState({
+      newPost: resetNewPost ? {} : this.state.newPost,
       feeds: feeds.map((feed) => {
         // finds the same feed from previous props, if exists
         let prevFeed
