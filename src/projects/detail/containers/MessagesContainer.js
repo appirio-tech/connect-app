@@ -145,8 +145,12 @@ class MessagesView extends React.Component {
     const activeThreadIndex = threadId
       ? _.findIndex(props.threads, (thread) => thread.id === threadId )
       : 0
-
+    let resetNewPost = false
+    if (prevProps) {
+      resetNewPost = prevProps.isCreatingFeed && !props.isCreatingFeed && !props.error
+    }
     this.setState({
+      newPost: resetNewPost ? {} : this.state.newPost,
       scrollPosition: activeThreadIndex * 71,
       threads: props.threads.map((thread, idx) => {
         // finds the same thread from previous props, if exists
