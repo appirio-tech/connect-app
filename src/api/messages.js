@@ -45,7 +45,7 @@ export function getTopicPosts(topicId, postIds) {
 }
 
 export function createTopic(topicProps) {
-  return axios.post(`${TC_API_URL}/v4/topics/`, topicProps)
+  return axios.post(`${TC_API_URL}/v4/topics/`, topicProps, { timeout: 1.5 * 60 * 1000 })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})
     })
@@ -54,7 +54,7 @@ export function createTopic(topicProps) {
 // ignore resp
 /*eslint-disable no-unused-vars */
 export function addTopicPost(topicId, post) {
-  return axios.post(`${TC_API_URL}/v4/topics/${topicId}/posts`, { post: post.content } )
+  return axios.post(`${TC_API_URL}/v4/topics/${topicId}/posts`, { post: post.content }, { timeout: 1.5 * 60 * 1000 } )
     .then( resp => {
       return {
         topicId,

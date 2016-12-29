@@ -54,7 +54,7 @@ class FeedView extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.init(nextProps)
+    this.init(nextProps, this.props)
   }
 
   componentWillUnmount() {
@@ -128,11 +128,23 @@ class FeedView extends React.Component {
     return item
   }
 
-  init(props) {
+  init(props, prevProps) {
     const { feeds } = props
+    let resetNewPost = false
+    if (prevProps) {
+      resetNewPost = prevProps.isCreatingFeed && !props.isCreatingFeed && !props.error
+    }
     this.setState({
+      newPost: resetNewPost ? {} : this.state.newPost,
       feeds: feeds.map((feed) => {
-        return this.mapFeed(feed, this.state.showAll.indexOf(feed.id) > -1)
+        // finds the same feed from previous props, if exists
+        let prevFeed
+        if (prevProps && prevProps.feeds) {
+          prevFeed = _.find(prevProps.feeds, f => feed.id === f.id)
+        }
+        // reset new comment if we were adding comment and there is no error in doing so
+        const resetNewComment = prevFeed && prevFeed.isAddingComment && !feed.isAddingComment && !feed.error
+        return this.mapFeed(feed, this.state.showAll.indexOf(feed.id) > -1, resetNewComment)
       }).filter(item => item)
     })
   }
