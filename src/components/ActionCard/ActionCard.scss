@@ -352,8 +352,18 @@
     border-radius: $corner-radius;
   }
 
-  a {
+
+  // Link colors
+  a:link,
+  a:visited {
+    color: $tc-dark-blue;
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:active {
     color: $tc-dark-blue-70;
+    text-decoration: underline;
   }
 
   input {
