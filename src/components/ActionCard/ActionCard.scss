@@ -276,7 +276,9 @@
           }
         }
 
-        .bold, .italic, .underline {
+        .bold,
+        .italic,
+        .underline {
           &.active path {
             fill: #59a7ff;
           }
