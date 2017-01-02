@@ -41,6 +41,7 @@
   .right-area {
     @include flexWidth(2);
     margin-left: 4 * $base-unit;
+    max-width: 730px;//1110px - 360px - 20px(margin-left)
 
     .new-post-composer {
       margin-bottom: 4 * $base-unit;
