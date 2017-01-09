@@ -215,3 +215,5 @@ export const PROJECT_MAX_COLORS = 5
 export const AUTOCOMPLETE_TRIGGER_LENGTH = 3
 
 export const HEAP_ANALYTICS_APP_ID = process.env.HEAP_ANALYTICS_APP_ID || '4153837120'
+
+export const MAINTENANCE_MODE = false
