@@ -25,17 +25,7 @@ const Layout = (props) => {
   if (isLoadingUser) {
     return (<div />)
   } else if (MAINTENANCE_MODE) {
-    return (
-      <section className="content content-error">
-        <div className="container">
-          <div className="page-error">
-            <h3>Welcome to Topcoder Connect</h3>
-            <p>We are temporarily down for maintenance. We will be back shortly, after Coder is done with all the amazing optimizations.</p>
-          </div>
-        </div>
-      </section>
-    )// return <Maintenance />
-    // return <h3>Test</h3>
+    return <Maintenance />
   } else {
     return (
       <div>

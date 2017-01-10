@@ -217,4 +217,4 @@ export const AUTOCOMPLETE_TRIGGER_LENGTH = 3
 export const HEAP_ANALYTICS_APP_ID = process.env.HEAP_ANALYTICS_APP_ID || '4153837120'
 
 // Toggle this flag to enable/disable maintenance mode
-export const MAINTENANCE_MODE = true
+export const MAINTENANCE_MODE = false
