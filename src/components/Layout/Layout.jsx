@@ -2,8 +2,9 @@ import _ from 'lodash'
 import React from 'react'
 import TopBarContainer from '../TopBar/TopBarContainer'
 import Footer from '../Footer/Footer'
-import { DOMAIN } from '../../config/constants'
+import { DOMAIN, MAINTENANCE_MODE } from '../../config/constants'
 import Alert from 'react-s-alert'
+import Maintenance from '../Maintenance/Maintenance'
 
 require('./Layout.scss')
 
@@ -23,6 +24,8 @@ const Layout = (props) => {
   }
   if (isLoadingUser) {
     return (<div />)
+  } else if (MAINTENANCE_MODE) {
+    return (<Maintenance />)
   } else {
     return (
       <div>
