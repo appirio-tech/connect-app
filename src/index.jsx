@@ -8,7 +8,7 @@ import Router         from 'react-router/lib/Router'
 import store  from './config/store'
 import routes from './routes'
 import { TCEmitter } from './helpers'
-import { EVENT_ROUTE_CHANGE, HEAP_ANALYTICS_APP_ID, SEGMENT_KEY } from './config/constants'
+import { EVENT_ROUTE_CHANGE, SEGMENT_KEY } from './config/constants'
 
 const mountNode = document.getElementById('root')
 const onRouteChange = () => {

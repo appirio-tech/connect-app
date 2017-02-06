@@ -14,7 +14,7 @@ import { getFreshToken } from 'tc-accounts'
 // import reportsListRoutes from './reports/routes.jsx'
 
 // Tracking
-browserHistory.listen( location => {
+browserHistory.listen( () => {
   if (window.analytics) {
     window.analytics.page()
   }

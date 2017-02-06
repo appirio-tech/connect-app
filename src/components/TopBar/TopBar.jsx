@@ -58,9 +58,7 @@ class TopBar extends Component {
     const logoTargetUrl = isLoggedIn ? '/projects' : '/'
 
     const logoutClick = () => {
-      console.log('Before ID', analytics.user().anonymousId())
-      analytics.reset()
-      console.log('After ID', analytics.user().anonymousId())
+      window.analytics.reset()
       window.location = logoutLink
 
     }

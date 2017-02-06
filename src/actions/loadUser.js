@@ -1,5 +1,4 @@
 import _ from 'lodash'
-// import { fetchJSON } from '../helpers'
 import { ACCOUNTS_APP_CONNECTOR_URL, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, ROLE_ADMINISTRATOR, ROLE_CONNECT_COPILOT, ROLE_TOPCODER_USER, ROLE_CONNECT_MANAGER } from '../config/constants'
 import { getFreshToken, configureConnector, decodeToken } from 'tc-accounts'
 import { getUserProfile } from '../api/users'
@@ -44,7 +43,7 @@ export function loadUserSuccess(dispatch, token) {
       // keeping profile for backward compaitability
       currentUser.profile = profile
       // determine user role
-      let userRole;
+      let userRole
       if (_.indexOf(currentUser.roles, ROLE_ADMINISTRATOR) > -1) {
         userRole = ROLE_ADMINISTRATOR
       } else if (_.indexOf(currentUser.roles, ROLE_CONNECT_MANAGER) > -1) {
@@ -56,7 +55,7 @@ export function loadUserSuccess(dispatch, token) {
       }
 
 
-      const analyticsEvents = [
+      const analyticsEvents = [{
         eventType: EventTypes.identify,
         eventPayload: {
           userId: currentUser.id,
@@ -70,12 +69,12 @@ export function loadUserSuccess(dispatch, token) {
             createdAt: currentUser.createdAt
           }
         }
-      ]
-      if (analytics) {
-        const anonymousId = analtyics.user().anonymousId()
+      }]
+      if (window.analytics) {
+        const anonymousId = window.analtyics.user().anonymousId()
         if (anonymousId) {
           analyticsEvents.push({
-            eventType: EventType.alias,
+            eventType: EventTypes.alias,
             eventPayload: {
               userId: currentUser.id,
               previousId: anonymousId
