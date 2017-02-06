@@ -191,7 +191,7 @@ export const FILE_PICKER_API_KEY = process.env.FILE_PICKER_API_KEY || 'AzFINuQoq
 export const FILE_PICKER_SUBMISSION_CONTAINER_NAME = process.env.FILE_PICKER_SUBMISSION_CONTAINER_NAME || 'submission-staging-dev'
 export const PROJECT_ATTACHMENTS_FOLDER = process.env.PROJECT_ATTACHMENTS_FOLDER || 'PROJECT_ATTACHMENTS'
 
-export const SEGMENT_KEY = process.env.SEGMENT_KEY
+export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
 /*
  * URLs
  */
