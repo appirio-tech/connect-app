@@ -2,12 +2,16 @@ import thunk from 'redux-thunk'
 import { createStore, applyMiddleware, compose } from 'redux'
 import reducers from '../reducers'
 import promiseMiddleware from 'redux-promise-middleware'
+import { createTracker } from 'redux-segment'
+
+const tracker = createTracker()
 
 const middleware = [
   promiseMiddleware({
     promiseTypeSuffixes: ['PENDING', 'SUCCESS', 'FAILURE']
   }),
-  thunk
+  thunk,
+  tracker
 ]
 
 if (process.env.ENV === 'DEV') {

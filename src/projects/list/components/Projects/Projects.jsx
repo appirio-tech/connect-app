@@ -25,7 +25,6 @@ class Projects extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps)
     const prevQueryParams = _.get(this.props, 'location.query', null)
     const queryParams = _.get(nextProps, 'location.query', null)
     if (!_.isEqual(prevQueryParams, queryParams)) {

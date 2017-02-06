@@ -1,8 +1,9 @@
 import _ from 'lodash'
 // import { fetchJSON } from '../helpers'
-import { ACCOUNTS_APP_CONNECTOR_URL, LOAD_USER_SUCCESS, LOAD_USER_FAILURE } from '../config/constants'
+import { ACCOUNTS_APP_CONNECTOR_URL, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, ROLE_ADMINISTRATOR, ROLE_CONNECT_COPILOT, ROLE_TOPCODER_USER, ROLE_CONNECT_MANAGER } from '../config/constants'
 import { getFreshToken, configureConnector, decodeToken } from 'tc-accounts'
 import { getUserProfile } from '../api/users'
+import { EventTypes } from 'redux-segment'
 
 configureConnector({
   connectorUrl: ACCOUNTS_APP_CONNECTOR_URL,
@@ -42,7 +43,53 @@ export function loadUserSuccess(dispatch, token) {
       currentUser = _.assign(currentUser, profile)
       // keeping profile for backward compaitability
       currentUser.profile = profile
-      dispatch({ type: LOAD_USER_SUCCESS, user : currentUser })
+      // determine user role
+      let userRole;
+      if (_.indexOf(currentUser.roles, ROLE_ADMINISTRATOR) > -1) {
+        userRole = ROLE_ADMINISTRATOR
+      } else if (_.indexOf(currentUser.roles, ROLE_CONNECT_MANAGER) > -1) {
+        userRole = ROLE_CONNECT_MANAGER
+      } else if (_.indexOf(currentUser.roles, ROLE_CONNECT_COPILOT) > -1) {
+        userRole = ROLE_CONNECT_COPILOT
+      } else {
+        userRole = ROLE_TOPCODER_USER
+      }
+
+
+      const analyticsEvents = [
+        eventType: EventTypes.identify,
+        eventPayload: {
+          userId: currentUser.id,
+          traits: {
+            id: currentUser.id,
+            role: userRole,
+            username: currentUser.handle,
+            firstName: currentUser.firstName,
+            lastName: currentUser.lastName,
+            email: currentUser.email,
+            createdAt: currentUser.createdAt
+          }
+        }
+      ]
+      if (analytics) {
+        const anonymousId = analtyics.user().anonymousId()
+        if (anonymousId) {
+          analyticsEvents.push({
+            eventType: EventType.alias,
+            eventPayload: {
+              userId: currentUser.id,
+              previousId: anonymousId
+            }
+          })
+        }
+      }
+      dispatch({
+        type: LOAD_USER_SUCCESS,
+        user : currentUser,
+        meta: {
+          analytics: analyticsEvents
+        }
+      })
     })
     .catch((err) => {
       // if we fail to load user's profile, still dispatch user load success

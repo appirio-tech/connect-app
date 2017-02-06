@@ -52,17 +52,25 @@ class TopBar extends Component {
       userHandle, userImage, userName, domain, criteria, onNewProjectIntent, applyFilters, isProjectDetails, project,
       isPowerUser, loginUrl, registerUrl, isFilterVisible
     } = this.props
-    const homePageUrl = window.location.protocol + '//' + window.location.hostname
-    const logoutLink = 'https://accounts.' + domain + '/#!/logout?retUrl=' + homePageUrl
+    const homePageUrl = `${window.location.protocol}//${window.location.host}/`
+    const logoutLink = `https://accounts.${domain}/#!/logout?retUrl=${homePageUrl}`
     const isLoggedIn = !!userHandle
     const logoTargetUrl = isLoggedIn ? '/projects' : '/'
+
+    const logoutClick = () => {
+      console.log('Before ID', analytics.user().anonymousId())
+      analytics.reset()
+      console.log('After ID', analytics.user().anonymousId())
+      window.location = logoutLink
+
+    }
 
     const userMenuItems = [
       [
         { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true, id: 0 }
       ],
       [
-        { label: 'Log out', link: logoutLink, absolute: true, id: 0 }
+        { label: 'Log out', onClick: logoutClick, absolute: true, id: 0 }
       ]
     ]
     const logo = (
