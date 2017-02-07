@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, IndexRoute } from 'react-router'
+import { Route, IndexRoute, browserHistory } from 'react-router'
 import { withProps } from 'recompose'
 import App from './components/App/App'
 import Home from './components/Home/Home'
@@ -12,6 +12,13 @@ import { getTopic } from './api/messages'
 import { getFreshToken } from 'tc-accounts'
 
 // import reportsListRoutes from './reports/routes.jsx'
+
+// Tracking
+browserHistory.listen( () => {
+  if (window.analytics) {
+    window.analytics.page()
+  }
+})
 
 const LoginRedirect = withProps({
   redirectTo: `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`

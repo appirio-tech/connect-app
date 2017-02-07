@@ -3,6 +3,8 @@ import fetch from 'isomorphic-fetch'
 import tcEmitter from './emitter'
 
 export const TCEmitter = tcEmitter
+export const titleCase = (str) => _.startCase(_.camelCase(str))
+
 
 // Fetch helpers
 export function status(response) {
