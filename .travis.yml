@@ -1,8 +1,13 @@
 language: node_js
 node_js:
 - 5.5.0
-cache: yarn
+# cache:
+#   yarn: true
+#   directories:
+#     - node_modules
+
 script:
+- npm cache clean
 - npm run lint && npm test && npm run build
 sudo: false
 addons:
