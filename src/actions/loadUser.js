@@ -66,12 +66,13 @@ export function loadUserSuccess(dispatch, token) {
             firstName: currentUser.firstName,
             lastName: currentUser.lastName,
             email: currentUser.email,
-            createdAt: currentUser.createdAt
+            createdAt: currentUser.createdAt,
+            avatar: currentUser.photoURL
           }
         }
       }]
-      if (window.analytics) {
-        const anonymousId = window.analtyics.user().anonymousId()
+      if (window.analytics && window.analytics.user()) {
+        const anonymousId = window.analytics.user().anonymousId()
         if (anonymousId) {
           analyticsEvents.push({
             eventType: EventTypes.alias,
