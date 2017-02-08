@@ -10,6 +10,7 @@ import {
   LOAD_PROJECT_FEEDS_MEMBERS
 } from '../../config/constants'
 import { loadMembers } from '../../actions/members'
+// import { EventTypes } from 'redux-segment'
 
 /**
  * Load all project data to paint the dashboard
@@ -102,12 +103,25 @@ export function createProjectTopic(projectId, topic) {
     reference: 'project',
     referenceId: projectId.toString()
   }, topic)
-  return (dispatch) => {
+  return (dispatch/*, getState*/) => {
+    // const projectStatus = getState().projectState.project.status
     return dispatch({
       type: CREATE_PROJECT_FEED,
       payload: createTopic(updatedTopic),
       meta: {
         tag: topic.tag
+        // analytics: {
+        //   eventType: EventTypes.track,
+        //   eventPayload: {
+        //     event: 'Project Topic Created',
+        //     properties: {
+        //       text: topic.body,
+        //       topicCategory: topic.tag,
+        //       projectId,
+        //       projectStatus
+        //     }
+        //   }
+        // }
       }
     })
   }
@@ -127,11 +141,26 @@ export function loadFeedComments(feedId, tag, postIds) {
 }
 
 export function addFeedComment(feedId, tag, comment) {
-  return (dispatch) => {
+  return (dispatch/*, getState*/) => {
+    // const projectStatus = getState().projectState.project.status
     return dispatch({
       type: CREATE_PROJECT_FEED_COMMENT,
       payload: addTopicPost(feedId, comment),
-      meta: { feedId, tag }
+      meta: {
+        feedId,
+        tag
+        // analytics: {
+        //   eventType: EventTypes.track,
+        //   eventPayload: {
+        //     event: 'Project Topic Comment Created',
+        //     properties: {
+        //       topicCategory: tag,
+        //       topicId: feedId,
+        //       projectStatus
+        //     }
+        //   }
+        // }
+      }
     })
   }
 }

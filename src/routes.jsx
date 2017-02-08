@@ -14,9 +14,19 @@ import { getFreshToken } from 'tc-accounts'
 // import reportsListRoutes from './reports/routes.jsx'
 
 // Tracking
-browserHistory.listen( () => {
+browserHistory.listen(location => {
   if (window.analytics) {
-    window.analytics.page()
+    if (/^projects\/$/.test(location.pathname)) {
+      window.analytics.page('Project Listings')
+    } else if (/^projects\/\d+\/?$/.test(location.pathname)) {
+      window.analytics.page('Project Dashboard')
+    } else if (/^projects\/\d+\/discussions\/?$/.test(location.pathname)) {
+      window.analytics.page('Project Discussions')
+    } else if (/^projects\/\d+\/specification\/?$/.test(location.pathname)) {
+      window.analytics.page('Project Specification')
+    } else if (/^\/$/.test(location.pathname)) {
+      window.analytics.page('Connect Home')
+    }
   }
 })
 
