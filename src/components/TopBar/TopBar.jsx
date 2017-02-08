@@ -57,10 +57,10 @@ class TopBar extends Component {
     const isLoggedIn = !!userHandle
     const logoTargetUrl = isLoggedIn ? '/projects' : '/'
 
-    const logoutClick = () => {
-      window.analytics.reset()
+    const logoutClick = (evt) => {
+      evt.preventDefault()
+      window.analytics && window.analytics.reset()
       window.location = logoutLink
-
     }
 
     const userMenuItems = [
