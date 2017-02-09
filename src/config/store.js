@@ -3,14 +3,15 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import reducers from '../reducers'
 import promiseMiddleware from 'redux-promise-middleware'
 import { createTracker } from 'redux-segment'
+import segmentPromiseHelper from '../middleware/segmentPromiseHelper'
 
 const tracker = createTracker()
-
 const middleware = [
   promiseMiddleware({
     promiseTypeSuffixes: ['PENDING', 'SUCCESS', 'FAILURE']
   }),
   thunk,
+  segmentPromiseHelper,
   tracker
 ]
 
