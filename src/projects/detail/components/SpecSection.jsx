@@ -3,6 +3,7 @@ import { Tabs, Tab, TCFormFields } from 'appirio-tech-react-components'
 import _ from 'lodash'
 import SpecQuestions from './SpecQuestions'
 import FileListContainer from './FileListContainer'
+import SpecScreens from './SpecScreens'
 
 
 const SpecSection = props => {
@@ -59,6 +60,17 @@ const SpecSection = props => {
       const files = _.get(project, props.fieldName, [])
       return <FileListContainer projectId={project.id} files={files} />
     }
+    case 'screens': {
+      const screens = _.get(project, props.fieldName, [])
+      return (
+        <SpecScreens 
+          name={props.fieldName}
+          screens={screens} 
+          questions={props.questions}
+          project={project}
+        />
+      )
+    }
     default:
       return <noscript />
     }
@@ -78,7 +90,7 @@ const SpecSection = props => {
           {description}
         </p>
         {subSections.map(renderSubSection)}
-        </div>
+      </div>
     </div>
   )
 }

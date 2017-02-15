@@ -100,6 +100,13 @@ $title-color: $tc-gray-80;
     border-bottom: 1px dashed #c3c3c8;
     padding: 15px 0;
     position: relative;
+
+    .screen-title {
+      @include roboto;
+      color: black;
+      font-size: 18px;
+      font-weight: bold;
+    }
   }
   /* .bottom-border-titles */
   .bottom-border-titles {
@@ -205,6 +212,10 @@ $title-color: $tc-gray-80;
           font-size: 15px;
           color: $gray-color;
           line-height: 25px;
+
+          strong {
+            font-weight: bold;
+          }
         }
 
         &.design-specification-two {
@@ -726,4 +737,20 @@ $title-color: $tc-gray-80;
       }
     }
   }
+}
+
+.tc-link {
+  @include roboto;
+}
+
+.SelectDropdown {
+  margin-bottom: 20px;
+}
+
+.edit-screen-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 40px;
 }

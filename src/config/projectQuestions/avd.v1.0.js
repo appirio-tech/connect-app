@@ -1,3 +1,4 @@
+import React from 'react'
 import _ from 'lodash'
 import { Icons } from 'appirio-tech-react-components'
 
@@ -75,6 +76,67 @@ const sections = [
     ]
   },
   {
+    id: 'appScreens',
+    required: false,
+    title: 'App Screens',
+    description: (
+      <span>
+        Please describe all the primary screens first. It is important to think about the biggest
+        problem of your application, rather than list all possible screens. Well documented and
+        researched design patterns like <strong>Settings</strong>, <strong>Search</strong>, <strong>Listing</strong>, <strong>Log In</strong>, <strong>Registration</strong> do not need
+        to be the focus of the design, unless you're doing something transformative with said
+        screens. In that case please list in details what is the novel approach for your screens.
+      </span>
+    ),
+    subSections: [
+      {
+        id: 'screens',
+        required: false,
+        fieldName: 'details.appScreens.screens',
+        title: 'Screens',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
+        type: 'screens',
+        questions: [
+          {
+            icon: 'question',
+            title: 'Screen name',
+            description: 'Describe your objectives for creating this application',
+            type: 'textinput',
+            fieldName: 'name',
+            validationError: 'Screen name cannot be blank'
+          },
+          {
+            icon: 'question',
+            title: 'What are the things the user can do on this screen?',
+            description: 'What are the important features/capabilities that the screen provides to your end users?',
+            type: 'textbox',
+            fieldName: 'description',
+            validationError: 'Answer cannot be blank'
+          },
+          {
+            icon: 'question',
+            title: 'Screen importance',
+            description: 'Pick how important is this screen for your project from 1 to 10',
+            type: 'select-dropdown',
+            fieldName: 'importanceLevel',
+            options: [
+              {value: 1, title: '1'},
+              {value: 2, title: '2'},
+              {value: 3, title: '3'},
+              {value: 4, title: '4'},
+              {value: 5, title: '5'},
+              {value: 6, title: '6'},
+              {value: 7, title: '7'},
+              {value: 8, title: '8'},
+              {value: 9, title: '9'},
+              {value: 10, title: '10'}
+            ]
+          }
+        ]
+      }
+    ]              
+  },
+  {
     id: 'designSpecification',
     required: false,
     title: 'Design Specification',
@@ -124,67 +186,6 @@ const sections = [
         id: 'notes',
         required: false,
         fieldName: 'details.designSpecification.notes',
-        title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
-        type: 'notes'
-      }
-    ]
-  },
-  {
-    id: 'devSpecification',
-    title: 'Development Specification',
-    description: 'Define some basic technical requirements for your application or provide any architecture or technical guidelines. Skip this section if you dont know what is required.',
-    required: false,
-    subSections: [
-      {
-        id: 'questions',
-        required: false,
-        title: 'Questions',
-        description: '',
-        type: 'questions',
-        questions: [
-          {
-            icon: 'question',
-            title: 'How should your application be built?',
-            description: 'Choose the operating system/platform for your application',
-            type: 'checkbox-group',
-            options: [
-              {value: 'ios', label: 'iOS'},
-              {value: 'android', label: 'Android'},
-              {value: 'web', label: 'Web'},
-              {value: 'hybrid', label: 'Hybrid'}
-            ],
-            fieldName: 'details.devSpecification.platform'
-          },
-          {
-            icon: 'question',
-            title: 'Is offline access required for your application?',
-            description: 'Do your users need to use the application when they are unable to connect to the internet?',
-            type: 'radio-group',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ],
-            fieldName: 'details.devSpecification.offlineAccess'
-          },
-          {
-            icon: 'question',
-            title: 'What level of security is needed for your application?',
-            description: 'Do you expect to be storing or transmitting personal or sensitive information?',
-            type: 'radio-group',
-            options: [
-              {value: 'standard', label: 'Standard - Nothing to do here'},
-              {value: 'enhanced', label: 'Enhanced'},
-              {value: 'maximumm', label: 'Maximum'}
-            ],
-            fieldName: 'details.devSpecification.securityLevel'
-          }
-        ]
-      },
-      {
-        id: 'notes',
-        required: false,
-        fieldName: 'details.devSpecification.notes',
         title: 'Notes',
         description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
         type: 'notes'
