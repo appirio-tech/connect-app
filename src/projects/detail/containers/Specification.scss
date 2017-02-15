@@ -101,11 +101,17 @@ $title-color: $tc-gray-80;
     padding: 15px 0;
     position: relative;
 
-    .screen-title {
+    .screen-title, .project-name {
       @include roboto;
       color: black;
-      font-size: 18px;
       font-weight: bold;
+    }
+    .screen-title {
+      font-size: 18px;
+    }
+
+    .project-name {
+      font-size: 24px;
     }
   }
   /* .bottom-border-titles */
@@ -753,4 +759,42 @@ $title-color: $tc-gray-80;
   justify-content: center;
   margin-top: 20px;
   margin-bottom: 40px;
+}
+
+.project-name-section {
+  display: flex;
+  align-items: flex-end;
+
+  .dashed-bottom-border {
+    flex: 1;
+  }
+
+  .textinput-refcode {
+    position: relative;
+    width: 100px;
+    height: 100%;
+    margin-left: 10px;
+
+    .refcode-desc {
+      @include roboto;
+      font-size: 13px;
+      color: #5d5d66;
+      position: absolute;
+      bottom: -20px;
+      font-style: italic;
+
+    }
+
+    .project-refcode {
+      width: 100%;
+      height: 100%;
+
+      input {
+        @include roboto;
+        height: 50px;
+        margin: 0;
+        font-size: 20px;
+      }
+    }
+  }
 }
