@@ -37,10 +37,33 @@ const sections = [
         questions: [
           {
             icon: 'question',
-            title: 'What is the goal of your application? How will people use it?',
-            description: 'Describe your objectives for creating this application',
-            type: 'see-attached-textbox',
-            fieldName: 'details.appDefinition.goal'
+            title: 'How many screens do you need designed?',
+            description: 'This is the most popular project size that can get a medium-sized app designed in a breeze',
+            fieldName: 'details.appDefinition.numberScreens',
+            type: 'see-attached-tiled-radio-group',
+            options: [
+              {value: '1', title: 'screens', icon: Icons.IconTcSpecTypeSerif, iconOptions: { fill: '#00000'}, desc: '3-5 days'},
+              {value: '3', title: 'screens', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: '5-10 days'},
+              {value: '5', title: 'screens', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: '7-10 days'},
+              {value: '7', title: 'screens', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: '10-14 days'}
+            ]
+          },
+          {
+            icon: 'question',
+            title: 'Which is your primary device target?',
+            description: 'Select only the device that you need to develop for. \
+                          In most cases limiting the scope of your project would result \
+                          in better final result. Topcoder recommends to always start \
+                          with the mobile phone view and expand to other devices as your \
+                          app matures.',
+            fieldName: 'details.appDefinition.primaryTarget',
+            type: 'see-attached-tiled-radio-group',
+            options: [
+              {value: 'Phone', title: 'Phone', icon: Icons.IconTcSpecTypeSerif, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Tablet', title: 'Tablet', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Desktop', title: 'Desktop', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'Wearable', title: 'Wearable', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+            ]
           },
           {
             icon: 'question',
