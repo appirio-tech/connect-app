@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import _ from 'lodash'
-import update from 'react-addons-update'
-import { Formsy, Icons } from 'appirio-tech-react-components'
+import { Formsy } from 'appirio-tech-react-components'
 
 import SpecScreenQuestions from './SpecScreenQuestions'
 
@@ -23,7 +21,7 @@ class EditAppScreenForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let updatedScreen = Object.assign({}, nextProps.screen)
+    const updatedScreen = Object.assign({}, nextProps.screen)
     this.setState({
       screen: updatedScreen,
       canSubmit: false
@@ -39,14 +37,11 @@ class EditAppScreenForm extends Component {
   }
 
   submit(model) {
-    if (this.props.new)
-      this.props.onSubmit(model)
-    else
-      this.props.onDelete()
+    this.props.onSubmit(model)
   }
 
   update(model, isChanged) {
-    if (!this.props.new && isChanged) this.props.onUpdate(model)
+    if (!this.props.isNew && isChanged) this.props.onUpdate(model)
   }
 
   render() {
@@ -65,9 +60,10 @@ class EditAppScreenForm extends Component {
           screen={screen}
         />
         <div className="edit-screen-footer">
-          {this.props.new ? (
+          {this.props.isNew ? (
             <button className="tc-btn tc-btn-default tc-btn-md"
-              type="submit" disabled={!this.state.canSubmit}>
+              type="submit" disabled={!this.state.canSubmit}
+            >
               Define another screen
             </button>
           ) : (
@@ -75,7 +71,8 @@ class EditAppScreenForm extends Component {
               onClick={(evt) => {
                 evt.preventDefault()
                 this.props.onDelete()
-              }}>
+              }}
+            >
               Delete screen
             </button>
           )}
@@ -86,7 +83,7 @@ class EditAppScreenForm extends Component {
 }
 
 EditAppScreenForm.propTypes = {
-  new: PropTypes.bool.isRequired,
+  isNew: PropTypes.bool.isRequired,
   screen: PropTypes.object,
   questions: PropTypes.arrayOf(PropTypes.object).isRequired
 }

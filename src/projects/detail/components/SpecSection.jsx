@@ -85,7 +85,8 @@ const SpecSection = props => {
               placeholder="REF code"
               value={_.get(project, refCodeFieldName, undefined)}
               wrapperClass="project-refcode"
-              maxLength={5} />
+              maxLength={5}
+            />
             <div className="refcode-desc">
               Optional
             </div>

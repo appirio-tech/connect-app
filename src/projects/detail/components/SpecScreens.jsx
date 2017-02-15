@@ -17,21 +17,21 @@ class SpecScreens extends Component {
   }
 
   updateScreen(index, screen) {
-    let screens = [...this.state.screens.slice(0, index),
+    const screens = [...this.state.screens.slice(0, index),
       screen, ...this.state.screens.slice(index + 1)]
     this.setState({ screens })
     this.props.setValue(screens)
   }
 
   deleteScreen(index) {
-    let screens = [...this.state.screens.slice(0, index),
+    const screens = [...this.state.screens.slice(0, index),
       ...this.state.screens.slice(index + 1)]
     this.setState({ screens })
     this.props.setValue(screens)
   }
 
   addScreen(screen) {
-    let screens = [...this.state.screens, screen]
+    const screens = [...this.state.screens, screen]
     this.setState({ screens })
     this.props.setValue(screens)
   }
@@ -46,7 +46,7 @@ class SpecScreens extends Component {
             <h5 className="screen-title">Screen {index + 1}</h5>
           </div>
           <EditAppScreenForm 
-            new={false} 
+            isNew={false} 
             screen={screen} 
             questions={this.props.questions}
             onUpdate={this.updateScreen.bind(this, index)}
@@ -63,9 +63,10 @@ class SpecScreens extends Component {
             <h5 className="screen-title">Screen {newIndex}</h5>
           </div>
           <EditAppScreenForm 
-            new={true} 
+            isNew
             questions={this.props.questions}
-            onSubmit={this.addScreen} />
+            onSubmit={this.addScreen}
+          />
         </div>
       )
     }
