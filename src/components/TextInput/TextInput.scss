@@ -1,0 +1,41 @@
+@import 'tc-includes';
+
+.TextInput[type="text"] {
+  @include roboto-medium;
+  border: none;
+  border-bottom: 1px dotted $tc-gray-20;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 20px;
+  &.empty {
+    @include roboto;
+    background: $tc-gray-neutral-light;
+    border-bottom: 1px solid $tc-gray-40;
+    color: $tc-gray-30;
+    font-size: 15px;
+  }
+  &::-webkit-input-placeholder {
+    color: $tc-gray-30;
+    font-size: 15px;
+    text-transform: none;
+    font-style: italic;
+  }
+  &:focus {
+    @include roboto;
+    background: $tc-dark-blue-10 !important;
+    border: none;
+    border-bottom: 1px solid $tc-dark-blue-70;
+    box-shadow: none;
+    color: $tc-gray-80;
+    font-size: 15px;
+  }
+  &:hover {
+    border: none;
+    border-bottom: 1px solid $tc-dark-blue-70;
+    box-shadow: none;
+    color: $tc-dark-blue-70;
+    &::-webkit-input-placeholder {
+      color: $tc-dark-blue-70;
+    }
+  }
+}

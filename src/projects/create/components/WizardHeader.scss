@@ -1,0 +1,27 @@
+@import 'tc-includes';
+
+.WizardHeader {
+  min-width: 700px;
+  text-align: center;
+  h1 {
+    @include tc-heading;
+    color: $tc-gray-50;
+    margin-bottom: 20px;
+  }
+  .project-name {
+    display: inline-block;
+    margin: 0 5px;
+    vertical-align: top;
+    width: 500px;
+  }
+  .project-ref-code-wrapper {
+    @include roboto;
+    color: $tc-gray-50;
+    display: inline-block;
+    font-size: 12px;
+    font-style: italic;
+    margin: 0 5px;
+    text-align: left;
+    width: 90px;
+  }
+}

@@ -1,0 +1,25 @@
+@import 'tc-includes';
+
+.Wizard {
+  text-align: center;
+  .content {
+    background: $tc-white;
+    box-shadow: 0px 0px 14px 1px rgba(38, 38, 40, 0.15);
+    display: inline-block;
+    margin: 24px auto;
+    min-width: 120px;
+    padding: 20px;
+    position: relative;
+    text-align: left;
+  }
+  .back-button {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+  }
+  .escape-button {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+  }
+}
