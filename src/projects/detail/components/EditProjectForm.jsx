@@ -35,7 +35,15 @@ class EditProjectForm extends Component {
   componentWillReceiveProps(nextProps) {
     let updatedProject = Object.assign({}, nextProps.project)
     if (this.state.isFeaturesDirty && !this.state.isSaving) {
-      updatedProject = update(updatedProject, {details: { appDefinition: { features: { $set: this.state.project.details.appDefinition.features } } } })
+      updatedProject = update(updatedProject, {
+        details: { 
+          appDefinition: { 
+            features: { 
+              $set: this.state.project.details.appDefinition.features 
+            } 
+          } 
+        } 
+      })
     }
     this.setState({
       project: updatedProject,
@@ -105,6 +113,7 @@ class EditProjectForm extends Component {
   }
 
   submit(model) {
+    console.log('submit', this.isChanged())
     if (this.state.isFeaturesDirty) {
       model.details.appDefinition.features = this.state.project.details.appDefinition.features
     }
