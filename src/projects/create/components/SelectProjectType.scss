@@ -4,7 +4,8 @@
   @include tc-body;
   color: $tc-gray-50;
   text-align: center;
-  width: 960px;
+  max-width: 960px;
+  margin: 0 auto;
   a, a:hover {
     color: $tc-dark-blue;
     cursor: pointer;
@@ -23,5 +24,6 @@
   }
   .WizardHeader {
     margin: 20px 0;
+    min-width: 0;
   }
 }

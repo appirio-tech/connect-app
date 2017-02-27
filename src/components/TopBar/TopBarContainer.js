@@ -110,9 +110,7 @@ class TopBarContainer extends React.Component {
           onRequestClose={ this.hideCreateProjectDialog }
         >
           <ProjectWizard closeModal={this.hideCreateProjectDialog} />
-          <div onClick={ this.hideCreateProjectDialog } className="project-creation-dialog-close">
-            <Icons.XMarkIcon />
-          </div>
+
         </Modal>
         <TopBar
           {...this.props}

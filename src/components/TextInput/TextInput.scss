@@ -1,9 +1,10 @@
 @import 'tc-includes';
 
+.project-refcode input,
 .TextInput[type="text"] {
-  @include roboto-medium;
+  @include roboto;
   border: none;
-  border-bottom: 1px dotted $tc-gray-20;
+  border-bottom: 1px dashed $tc-gray-20;
   border-radius: 0;
   box-shadow: none;
   font-size: 20px;
@@ -15,10 +16,12 @@
     font-size: 15px;
   }
   &::-webkit-input-placeholder {
+    @include roboto-light;
     color: $tc-gray-30;
     font-size: 15px;
     text-transform: none;
     font-style: italic;
+
   }
   &:focus {
     @include roboto;
