@@ -8,7 +8,7 @@ import FooterV2 from '../../../components/FooterV2/FooterV2'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
-   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK } from '../../../config/constants'
+   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
 
 class ProjectInfoContainer extends React.Component {
 
@@ -85,8 +85,21 @@ class ProjectInfoContainer extends React.Component {
     this.setDuration(project)
   }
 
-  onChangeStatus(status) {
-    this.props.updateProject(this.props.project.id, {status})
+  onChangeStatus(status, reason) {
+    const delta = {status}
+    if (reason && status === PROJECT_STATUS_CANCELLED) {
+      delta.details = {
+        statusChangeReasons : _.get(this.props.project, 'details.statusChangeReasons', [])
+      }
+      const reasonObj = {
+        fromStatus : this.props.project.status,
+        toStatus : status,
+        reason,
+        timestamp: new Date().getTime()
+      }
+      delta.details.statusChangeReasons.splice(0, 0, reasonObj)
+    }
+    this.props.updateProject(this.props.project.id, delta)
   }
 
   onAddNewLink(link) {
