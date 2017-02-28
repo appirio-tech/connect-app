@@ -123,7 +123,8 @@ class ProjectInfoContainer extends React.Component {
       directLinks.push({name: 'Salesforce Lead', href: `${SALESFORCE_PROJECT_LEAD_LINK}${project.id}`})
     }
 
-    const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER
+    const canDeleteProject =
+      (currentMemberRole === PROJECT_ROLE_OWNER || currentMemberRole === PROJECT_ROLE_MANAGER)
       && project.status === 'draft'
     return (
       <div>
