@@ -91,12 +91,12 @@ class MessagesView extends React.Component {
     const { allMembers } = this.props
     const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isAddingComment', 'isLoadingComments', 'error'])
     item.isActive = isActive
+    // Github issue##623, allow comments on all posts (including system posts)
+    item.allowComments = true
     if (isSystemUser(item.userId)) {
       item.user = SYSTEM_USER
-      item.allowComments = false
     } else {
       item.user = allMembers[item.userId]
-      item.allowComments = true
     }
     item.unread = !feed.read
     // item.html = posts[feed.postIds[0]].body
