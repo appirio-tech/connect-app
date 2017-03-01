@@ -1,5 +1,8 @@
 @import 'tc-includes';
 
+.two-col-content.content .tc-file-field__inputs, 
+.two-col-content.content .tc-textarea,
+.child-component textarea,
 .project-refcode input,
 .TextInput[type="text"] {
   @include roboto;
