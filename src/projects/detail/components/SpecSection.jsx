@@ -7,7 +7,7 @@ import SpecScreens from './SpecScreens'
 
 
 const SpecSection = props => {
-  const {project, resetFeatures, showFeaturesDialog, id, title, description, required, subSections} = props
+  const {project, resetFeatures, showFeaturesDialog, id, title, description, subSections} = props
   console.log('SpecSection', props)
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
@@ -64,9 +64,9 @@ const SpecSection = props => {
     case 'screens': {
       const screens = _.get(project, props.fieldName, [])
       return (
-        <SpecScreens 
+        <SpecScreens
           name={props.fieldName}
-          screens={screens} 
+          screens={screens}
           questions={props.questions}
           project={project}
         />
@@ -80,7 +80,7 @@ const SpecSection = props => {
             <h5 className="project-name">{project.name}</h5>
           </div>
           <div className="textinput-refcode">
-            <TCFormFields.TextInput 
+            <TCFormFields.TextInput
               name={refCodeFieldName}
               placeholder="REF code"
               value={_.get(project, refCodeFieldName, undefined)}
