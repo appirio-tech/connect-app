@@ -206,6 +206,7 @@ export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?
 export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
 
 export const PROJECT_NAME_MAX_LENGTH = 255
+export const PROJECT_REF_CODE_MAX_LENGTH = 5
 
 export const PROJECT_FEED_TYPE_PRIMARY  = 'PRIMARY'
 export const PROJECT_FEED_TYPE_MESSAGES = 'MESSAGES'

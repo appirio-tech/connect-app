@@ -100,6 +100,19 @@ $title-color: $tc-gray-80;
     border-bottom: 1px dashed #c3c3c8;
     padding: 15px 0;
     position: relative;
+
+    .screen-title, .project-name {
+      @include roboto;
+      color: black;
+      font-weight: bold;
+    }
+    .screen-title {
+      font-size: 18px;
+    }
+
+    .project-name {
+      font-size: 24px;
+    }
   }
   /* .bottom-border-titles */
   .bottom-border-titles {
@@ -168,7 +181,7 @@ $title-color: $tc-gray-80;
         background-color: #fff;
 
         .boxes {
-          margin: 0 10%;
+          margin: 0 6%;
         }
 
         .big-titles {
@@ -205,6 +218,10 @@ $title-color: $tc-gray-80;
           font-size: 15px;
           color: $gray-color;
           line-height: 25px;
+
+          strong {
+            font-weight: bold;
+          }
         }
 
         &.design-specification-two {
@@ -723,6 +740,77 @@ $title-color: $tc-gray-80;
         width: 54px;
         position: absolute;
         right: 0;
+      }
+    }
+  }
+}
+
+.tc-link {
+  @include roboto;
+}
+
+.SelectDropdown {
+  margin-bottom: 20px;
+}
+
+.edit-screen-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.screen-number-reached-message {
+  position: absolute;
+  top: 50px;
+  background: #666666;
+  color: white;
+  padding: 5px;
+  text-align: center;
+  border-radius: 2px;
+  opacity: 0;
+}
+
+.edit-screen-footer:hover .screen-number-reached-message {
+  transition: opacity 0.2s;
+  opacity: 0.8;
+}
+
+.project-name-section {
+  display: flex;
+  align-items: flex-end;
+
+  .dashed-bottom-border {
+    flex: 1;
+  }
+
+  .textinput-refcode {
+    position: relative;
+    width: 100px;
+    height: 100%;
+    margin-left: 10px;
+
+    .refcode-desc {
+      @include roboto;
+      font-size: 13px;
+      color: #5d5d66;
+      position: absolute;
+      bottom: -20px;
+      font-style: italic;
+
+    }
+
+    .project-refcode {
+      width: 100%;
+      height: 100%;
+
+      input {
+        @include roboto;
+        height: 50px;
+        margin: 0;
+        font-size: 20px;
       }
     }
   }

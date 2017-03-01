@@ -3,10 +3,12 @@ import { Tabs, Tab, TCFormFields } from 'appirio-tech-react-components'
 import _ from 'lodash'
 import SpecQuestions from './SpecQuestions'
 import FileListContainer from './FileListContainer'
+import SpecScreens from './SpecScreens'
 
 
 const SpecSection = props => {
   const {project, resetFeatures, showFeaturesDialog, id, title, description, required, subSections} = props
+  console.log('SpecSection', props)
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
       <div className="bottom-border-titles">
@@ -59,6 +61,39 @@ const SpecSection = props => {
       const files = _.get(project, props.fieldName, [])
       return <FileListContainer projectId={project.id} files={files} />
     }
+    case 'screens': {
+      const screens = _.get(project, props.fieldName, [])
+      return (
+        <SpecScreens 
+          name={props.fieldName}
+          screens={screens} 
+          questions={props.questions}
+          project={project}
+        />
+      )
+    }
+    case 'project-name': {
+      const refCodeFieldName = 'details.utm.code'
+      return (
+        <div className="project-name-section">
+          <div className="dashed-bottom-border">
+            <h5 className="project-name">{project.name}</h5>
+          </div>
+          <div className="textinput-refcode">
+            <TCFormFields.TextInput 
+              name={refCodeFieldName}
+              placeholder="REF code"
+              value={_.get(project, refCodeFieldName, undefined)}
+              wrapperClass="project-refcode"
+              maxLength={5}
+            />
+            <div className="refcode-desc">
+              Optional
+            </div>
+          </div>
+        </div>
+      )
+    }
     default:
       return <noscript />
     }
@@ -78,7 +113,7 @@ const SpecSection = props => {
           {description}
         </p>
         {subSections.map(renderSubSection)}
-        </div>
+      </div>
     </div>
   )
 }
