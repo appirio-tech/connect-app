@@ -774,6 +774,23 @@ $title-color: $tc-gray-80;
   justify-content: center;
   margin-top: 20px;
   margin-bottom: 40px;
+  position: relative;
+}
+
+.screen-number-reached-message {
+  position: absolute;
+  top: 50px;
+  background: #666666;
+  color: white;
+  padding: 5px;
+  text-align: center;
+  border-radius: 2px;
+  opacity: 0;
+}
+
+.edit-screen-footer:hover .screen-number-reached-message {
+  transition: opacity 0.2s;
+  opacity: 0.8;
 }
 
 .project-name-section {

@@ -140,6 +140,7 @@
     border-radius: 4px;
     padding: $base-unit*2;
     margin-bottom: -10px;
+    width: calc(100% - 40px);
 
     &:before {
       content: '';
@@ -166,6 +167,8 @@
       font-size: 13px;
       color: #47474f;
       line-height: $base-unit*4;
+      width: 100%;
+      overflow-x: auto;
     }
 
     .comment-read-more {

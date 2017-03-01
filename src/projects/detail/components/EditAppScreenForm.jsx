@@ -47,7 +47,7 @@ class EditAppScreenForm extends Component {
   render() {
     let { questions } = this.props
     let { screen } = this.state
-    
+
     return (
       <Formsy.Form
         onInvalid={this.disableButton}
@@ -62,7 +62,7 @@ class EditAppScreenForm extends Component {
         <div className="edit-screen-footer">
           {this.props.isNew ? (
             <button className="tc-btn tc-btn-default tc-btn-md"
-              type="submit" disabled={!this.state.canSubmit}
+              type="submit" disabled={this.props.screenNumberReached || !this.state.canSubmit}
             >
               Define another screen
             </button>
@@ -76,6 +76,16 @@ class EditAppScreenForm extends Component {
               Delete screen
             </button>
           )}
+
+          {
+            this.props.screenNumberReached ? (
+              <p className="screen-number-reached-message">
+                You have reached the number of screens selected.
+                <br/>
+                Please select and save a higher number to keep adding new screens.
+              </p>
+            ) : null
+          }
         </div>
       </Formsy.Form>
     )
@@ -85,7 +95,8 @@ class EditAppScreenForm extends Component {
 EditAppScreenForm.propTypes = {
   isNew: PropTypes.bool.isRequired,
   screen: PropTypes.object,
-  questions: PropTypes.arrayOf(PropTypes.object).isRequired
+  questions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  screenNumberReached: PropTypes.bool
 }
 
 export default EditAppScreenForm

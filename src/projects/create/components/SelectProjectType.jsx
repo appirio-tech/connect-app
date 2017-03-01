@@ -2,16 +2,14 @@ import React, { PropTypes as PT } from 'react'
 import config from '../../../config/projectWizard'
 import ProjectTypeCard from './ProjectTypeCard'
 import WizardHeader from './WizardHeader'
+import SVGIconImage from '../../../components/SVGIconImage'
 import './SelectProjectType.scss'
 
 function SelectProjectType(props) {
   const cards = []
   for (const key in config) {
     const item = config[key]
-    const icon = React.createElement(item.icon, {
-      color: 'black',
-      size: 60
-    })
+    const icon = <SVGIconImage filePath={item.icon} />
     cards.push(
       <ProjectTypeCard
         disabled={!props.projectName}

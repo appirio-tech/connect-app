@@ -3,6 +3,7 @@ import React, { PropTypes as PT } from 'react'
 import config from '../../../config/projectWizard'
 import ProjectSubTypeCard from './ProjectSubTypeCard'
 import WizardHeader from './WizardHeader'
+import SVGIconImage from '../../../components/SVGIconImage'
 import './SelectProjectSubType.scss'
 
 function SelectProjectSubType(props) {
@@ -10,10 +11,7 @@ function SelectProjectSubType(props) {
   const subConfig = config[props.projectType]
   for (const key in subConfig.subtypes) {
     const item = subConfig.subtypes[key]
-    const icon = React.createElement(item.icon, {
-      color: 'black',
-      size: 60
-    })
+    const icon = <SVGIconImage filePath={item.icon} />
     cards.push(
       <ProjectSubTypeCard
         disabled={!props.projectName}
