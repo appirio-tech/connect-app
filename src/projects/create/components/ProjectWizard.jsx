@@ -31,10 +31,10 @@ class ProjectWizard extends Component {
     if (!nextProps.processing && !nextProps.error && projectId) {
       // close modal and navigate to project dashboard
       this.props.closeModal()
-      this.props.router.push('/projects/' + projectId )
+      this.props.router.push('/projects/' + projectId + '/specification' )
     }
   }
-  
+
   createProject() {
     this.setState({ creatingProject: true })
     const s = this.state

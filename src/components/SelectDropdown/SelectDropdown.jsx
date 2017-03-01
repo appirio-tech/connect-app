@@ -14,6 +14,8 @@ class SelectDropdown extends Component {
   componentWillMount() {
     this.setState({
       selectedOption: this.props.selectedOption || this.props.options[0]
+    }, function() {
+      this.props.setValue(this.state.selectedOption)
     })
   }
 

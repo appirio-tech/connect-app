@@ -1,0 +1,11 @@
+@import 'tc-includes';
+
+.screen-number {
+  font-family: "Roboto";
+  font-size: 42px;
+  text-align: center;
+  color: $tc-gray-70;
+  line-height: $base-unit * 10;
+  margin-top: $base-unit * 6;
+  margin-bottom: $base-unit * 2;
+}

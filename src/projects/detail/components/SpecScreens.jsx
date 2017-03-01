@@ -38,6 +38,12 @@ class SpecScreens extends Component {
 
   render() {
     const { screens } =  this.state
+    const { appDefinition } = this.props.project.details
+    let numberScreensSelected = appDefinition && appDefinition.numberScreens.value
+      ? parseInt(appDefinition.numberScreens.value)
+      : Infinity
+
+    if (appDefinition && appDefinition.numberScreens.seeAttached) numberScreensSelected = Infinity
 
     const renderCurrentScreen = (screen, index) => {
       return (
@@ -45,9 +51,9 @@ class SpecScreens extends Component {
           <div className="dashed-bottom-border">
             <h5 className="screen-title">Screen {index + 1}</h5>
           </div>
-          <EditAppScreenForm 
-            isNew={false} 
-            screen={screen} 
+          <EditAppScreenForm
+            isNew={false}
+            screen={screen}
             questions={this.props.questions}
             onUpdate={this.updateScreen.bind(this, index)}
             onDelete={this.deleteScreen.bind(this, index)}
@@ -62,15 +68,17 @@ class SpecScreens extends Component {
           <div className="dashed-bottom-border">
             <h5 className="screen-title">Screen {newIndex}</h5>
           </div>
-          <EditAppScreenForm 
+          <EditAppScreenForm
             isNew
+            key={Math.random()} // Math.random() is used here so its fields clear after submission
             questions={this.props.questions}
             onSubmit={this.addScreen}
+            screenNumberReached={numberScreensSelected <= screens.length}
           />
         </div>
       )
     }
-    
+
     return (
       <div>
         {screens.map(renderCurrentScreen)}

@@ -1,6 +1,7 @@
 import React, { PropTypes as PT } from 'react'
 import ModalControl from '../ModalControl'
 import Icons from '../Icons'
+import SVGIconImage from '../SVGIconImage'
 import './Wizard.scss'
 
 function Wizard(props) {
@@ -21,7 +22,7 @@ function Wizard(props) {
         {backControl}
         <ModalControl
           className="escape-button"
-          icon={<Icons.XMark />}
+          icon={<SVGIconImage filePath="x-mark" />}
           label="esc"
           onClick={props.onCancel}
         />

@@ -1,6 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { Icons } from 'appirio-tech-react-components'
+import SVGNumberText from '../../components/SVGNumberText/SVGNumberText'
 
 const isFileRequired = (project, subSections) => {
   const subSection = _.find(subSections, (s) => s.type === 'questions')
@@ -18,6 +19,7 @@ const sections = [
     id: 'appDefinition',
     title: 'App Definition',
     required: true,
+    pricePerPage: 1000,
     description: 'Answer just a few questions about your application. You can also provide the needed information in a supporting-document - upload it below or add a link in the notes section.',
     subSections: [
       {
@@ -50,10 +52,10 @@ const sections = [
             fieldName: 'details.appDefinition.numberScreens',
             type: 'see-attached-tiled-radio-group',
             options: [
-              {value: '1', title: 'screens', icon: Icons.IconTcSpecTypeSerif, iconOptions: { fill: '#00000'}, desc: '3-5 days'},
-              {value: '3', title: 'screens', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: '5-10 days'},
-              {value: '5', title: 'screens', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: '7-10 days'},
-              {value: '7', title: 'screens', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: '10-14 days'}
+              {value: '1', title: 'screens', icon: SVGNumberText, iconOptions: { number: '1' }, desc: '3-5 days'},
+              {value: '3', title: 'screens', icon: SVGNumberText, iconOptions: { number: '3' }, desc: '5-10 days'},
+              {value: '5', title: 'screens', icon: SVGNumberText, iconOptions: { number: '5' }, desc: '7-10 days'},
+              {value: '7', title: 'screens', icon: SVGNumberText, iconOptions: { number: '7' }, desc: '10-14 days'}
             ]
           },
           {
@@ -108,7 +110,7 @@ const sections = [
   },
   {
     id: 'appScreens',
-    required: false,
+    required: true,
     title: 'App Screens',
     description: (
       <span>
@@ -122,7 +124,7 @@ const sections = [
     subSections: [
       {
         id: 'screens',
-        required: false,
+        required: true,
         fieldName: 'details.appScreens.screens',
         title: 'Screens',
         description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
@@ -172,7 +174,7 @@ const sections = [
         description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
         type: 'notes'
       }
-    ]              
+    ]
   },
   {
     id: 'designSpecification',
