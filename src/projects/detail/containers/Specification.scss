@@ -70,14 +70,14 @@ $title-color: $tc-gray-80;
 
 .two-col-content.content {
   .tc-file-field__inputs {
-    height: 30px;
+    height: 45px;
   }
   /* .tc-file-field__inputs */
   .tc-file-field__inputs,
   .tc-textarea {
-    background: $tc-gray-neutral-light;
+    /*background: $tc-gray-neutral-light;
     border-color: $tc-gray-20;
-    color: $tc-black;
+    color: $tc-black;*/
 
     &::-webkit-input-placeholder {
       color: #888894;
@@ -111,7 +111,7 @@ $title-color: $tc-gray-80;
     }
 
     .project-name {
-      font-size: 24px;
+      font-size: 20px;
     }
   }
   /* .bottom-border-titles */
@@ -139,6 +139,18 @@ $title-color: $tc-gray-80;
     }
   }
 
+  .sub-title {
+    margin: 50px 0 20px;
+    .title {
+      font-size: 15px;
+      line-height: 25px;
+      color: $tc-gray-80;
+      span {
+        color: $tc-orange;
+        font-size: 15px;
+      }
+    }
+  }
   .container {
     @include flexBox;
     background-color: transparent;
@@ -170,12 +182,11 @@ $title-color: $tc-gray-80;
 
       .title {
         color: $tc-gray-80;
-        @include roboto;
-        font-weight: 400;
+        @include roboto-bold;
       }
 
       .right-area-item {
-        padding: 50px 0 70px 0;
+        padding: 0 0 70px 0;
         margin-bottom: 20px;
         border-radius: 4px;
         background-color: #fff;
@@ -189,7 +200,11 @@ $title-color: $tc-gray-80;
           font-size: 28px;
           color: $gray-color;
           line-height: 30px;
-          margin-bottom: 20px;
+          padding: 30px 0 30px 6%; 
+          margin: 0 -6.75% 20px;
+          border-radius: 4px 4px 0 0;
+          background: $tc-gray-neutral-light;
+          border-bottom: 1px dashed $tc-gray-20;
 
           .optional,
           .required {
@@ -809,9 +824,74 @@ $title-color: $tc-gray-80;
       input {
         @include roboto;
         height: 50px;
+        line-height: 50px;
         margin: 0;
         font-size: 20px;
+        box-shadow: none;
+        border: 0;
+        border-bottom: 1px solid $tc-gray-40;
+
+        @include placeholder {
+          @include roboto-light;
+          font-style: italic;
+          font-size: 15px;
+          color: $tc-gray-30;
+        }
+        
+        &:not([type="checkbox"]):hover {
+          border: none;
+          border-bottom: 1px solid $tc-dark-blue-70;
+          box-shadow: none;
+          color: $tc-dark-blue-70;
+          &::-webkit-input-placeholder {
+            color: $tc-dark-blue-70;
+          }
+        }
       }
+    }
+  }
+}
+
+.two-col-content.content .container .tiled-group-item {
+  border: 1px solid $tc-gray-20;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 10px 10px 0;
+  position: relative;
+  vertical-align: top;
+  .check-mark {
+    background: $tc-dark-blue-90;
+    border-radius: 2px;
+    display: none;
+    height: 15px;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 15px;
+    .Icon {
+      position: relative;
+      margin: 0;
+      top: -5px;
+    }
+  }
+  &.disabled {
+    opacity: 0.3
+  }
+  &:hover {
+    border-color: $tc-dark-blue-70;
+    cursor: pointer;
+    .icon svg{
+      fill: $tc-dark-blue-70;
+    }
+  }
+  &.active {
+    background: $tc-gray-10;
+    border-color: transparent;
+    &:hover {
+      border-color: $tc-dark-blue-70;
+    }
+    .check-mark {
+      display: block;
     }
   }
 }

@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import Modal from 'react-modal'
-import { Icons } from 'appirio-tech-react-components'
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
 import TopBar from './TopBar'
 import ProjectWizard from '../../projects/create/components/ProjectWizard'
@@ -110,9 +109,7 @@ class TopBarContainer extends React.Component {
           onRequestClose={ this.hideCreateProjectDialog }
         >
           <ProjectWizard closeModal={this.hideCreateProjectDialog} />
-          <div onClick={ this.hideCreateProjectDialog } className="project-creation-dialog-close">
-            <Icons.XMarkIcon />
-          </div>
+
         </Modal>
         <TopBar
           {...this.props}

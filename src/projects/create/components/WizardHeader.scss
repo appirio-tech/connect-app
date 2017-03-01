@@ -12,7 +12,7 @@
     display: inline-block;
     margin: 0 5px;
     vertical-align: top;
-    width: 500px;
+    max-width: 500px;
   }
   .project-ref-code-wrapper {
     @include roboto;

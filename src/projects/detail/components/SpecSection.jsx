@@ -7,12 +7,12 @@ import SpecScreens from './SpecScreens'
 
 
 const SpecSection = props => {
-  const {project, resetFeatures, showFeaturesDialog, id, title, description, required, subSections} = props
+  const {project, resetFeatures, showFeaturesDialog, id, title, description, subSections} = props
   console.log('SpecSection', props)
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
-      <div className="bottom-border-titles">
-        <h4 className="title">{typeof subSection.title === 'function' ? subSection.title(project): subSection.title }</h4>
+      <div className="sub-title">
+        <h4 className="title">{typeof subSection.title === 'function' ? subSection.title(project): subSection.title } <span>*</span></h4>
       </div>
       <div className="content-boxs">
         {renderChild(subSection)}
@@ -64,9 +64,9 @@ const SpecSection = props => {
     case 'screens': {
       const screens = _.get(project, props.fieldName, [])
       return (
-        <SpecScreens 
+        <SpecScreens
           name={props.fieldName}
-          screens={screens} 
+          screens={screens}
           questions={props.questions}
           project={project}
         />
@@ -80,7 +80,7 @@ const SpecSection = props => {
             <h5 className="project-name">{project.name}</h5>
           </div>
           <div className="textinput-refcode">
-            <TCFormFields.TextInput 
+            <TCFormFields.TextInput
               name={refCodeFieldName}
               placeholder="REF code"
               value={_.get(project, refCodeFieldName, undefined)}
@@ -104,10 +104,6 @@ const SpecSection = props => {
       <div className="boxes">
         <h2 className="big-titles" id={id}>
           {title}
-          { required
-            ? <span className="required">Required</span>
-            : <span className="optional">Optional</span>
-          }
         </h2>
         <p className="gray-text">
           {description}
