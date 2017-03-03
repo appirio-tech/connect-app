@@ -4,7 +4,7 @@ import _ from 'lodash'
 import SpecQuestions from './SpecQuestions'
 import FileListContainer from './FileListContainer'
 import SpecScreens from './SpecScreens'
-import { PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
+import { PROJECT_STATUS_DRAFT, PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
 
 
 const SpecSection = props => {
@@ -77,7 +77,7 @@ const SpecSection = props => {
       const refCodeFieldName = 'details.utm.code'
       return (
         <div className="project-name-section">
-          { project.status === 'draft' &&
+          { project.status === PROJECT_STATUS_DRAFT &&
             <div className="editable-project-name">
               <TCFormFields.TextInput
                 name='name'
@@ -88,7 +88,7 @@ const SpecSection = props => {
               />
             </div>
           }
-          { project.status !== 'draft' &&
+          { project.status !== PROJECT_STATUS_DRAFT &&
             <div className="dashed-bottom-border">
               <h5 className="project-name">{project.name}</h5>
             </div>
