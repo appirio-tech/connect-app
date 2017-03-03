@@ -69,10 +69,10 @@ const sections = [
             fieldName: 'details.appDefinition.primaryTarget',
             type: 'see-attached-tiled-radio-group',
             options: [
-              {value: 'Phone', title: 'Phone', icon: Icons.IconTcSpecTypeSerif, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'Tablet', title: 'Tablet', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'Desktop', title: 'Desktop', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: 'all OS'},
-              {value: 'Wearable', title: 'Wearable', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+              {value: 'Phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'Wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
           },
           {
