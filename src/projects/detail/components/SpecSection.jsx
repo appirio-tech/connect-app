@@ -4,6 +4,7 @@ import _ from 'lodash'
 import SpecQuestions from './SpecQuestions'
 import FileListContainer from './FileListContainer'
 import SpecScreens from './SpecScreens'
+import { PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
 
 
 const SpecSection = props => {
@@ -85,7 +86,7 @@ const SpecSection = props => {
               placeholder="REF code"
               value={_.get(project, refCodeFieldName, undefined)}
               wrapperClass="project-refcode"
-              maxLength={5}
+              maxLength={ PROJECT_REF_CODE_MAX_LENGTH }
             />
             <div className="refcode-desc">
               Optional
