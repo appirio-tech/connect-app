@@ -23,6 +23,11 @@
       line-height: 25px;
       color: $tc-gray-80;
       margin-bottom: 15px;
+
+      span {
+        color: $tc-orange;
+        padding-left: $base-unit;
+      }
     }
 
     > p {
@@ -41,7 +46,7 @@
 
     .child-component {
       margin-top: 10px;
-      
+
       .colorSelector {
         margin-bottom: 20px;
       }
@@ -98,7 +103,7 @@
           font-size: 12px;
         }
       }
-      
+
     }
   }
 }
