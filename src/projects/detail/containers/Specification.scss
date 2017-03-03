@@ -797,7 +797,8 @@ $title-color: $tc-gray-80;
   display: flex;
   align-items: flex-end;
 
-  .dashed-bottom-border {
+  .dashed-bottom-border,
+  .editable-project-name {
     flex: 1;
   }
 
