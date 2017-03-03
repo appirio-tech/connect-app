@@ -119,6 +119,8 @@ class ProjectInfoContainer extends React.Component {
       directLinks = []
       if (project.directProjectId) {
         directLinks.push({name: 'Project in Topcoder Direct', href: `${DIRECT_PROJECT_URL}${project.directProjectId}`})
+      } else {
+        directLinks.push({name: 'No Direct project. Please contact support.', href: 'mailto:support@topcoder.com'})
       }
       directLinks.push({name: 'Salesforce Lead', href: `${SALESFORCE_PROJECT_LEAD_LINK}${project.id}`})
     }
