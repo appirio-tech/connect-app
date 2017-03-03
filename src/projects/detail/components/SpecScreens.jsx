@@ -82,7 +82,14 @@ class SpecScreens extends Component {
     return (
       <div>
         {screens.map(renderCurrentScreen)}
-        {renderNewScreen(screens.length + 1)}
+        {
+          numberScreensSelected > screens.length ? renderNewScreen(screens.length + 1) :
+          <p className="screen-number-reached-message">
+            You have reached the number of screens selected.
+            <br/>
+            Please select and save a higher number to keep adding new screens.
+          </p>
+        }
       </div>
     )
   }

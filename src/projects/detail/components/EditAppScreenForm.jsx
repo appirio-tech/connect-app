@@ -60,11 +60,11 @@ class EditAppScreenForm extends Component {
           screen={screen}
         />
         <div className="edit-screen-footer">
-          {this.props.isNew ? (
+          {this.props.isNew && !this.props.screenNumberReached ? (
             <button className="tc-btn tc-btn-default tc-btn-md"
               type="submit" disabled={this.props.screenNumberReached || !this.state.canSubmit}
             >
-              Define another screen
+              Save &amp; Add new screen
             </button>
           ) : (
             <button className="tc-btn tc-btn-default tc-btn-md"
@@ -76,16 +76,6 @@ class EditAppScreenForm extends Component {
               Delete screen
             </button>
           )}
-
-          {
-            this.props.screenNumberReached ? (
-              <p className="screen-number-reached-message">
-                You have reached the number of screens selected.
-                <br/>
-                Please select and save a higher number to keep adding new screens.
-              </p>
-            ) : null
-          }
         </div>
       </Formsy.Form>
     )
