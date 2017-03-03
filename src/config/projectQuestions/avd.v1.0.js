@@ -50,7 +50,7 @@ const sections = [
             title: 'How many screens do you need designed?',
             description: 'This is the most popular project size that can get a medium-sized app designed in a breeze',
             fieldName: 'details.appDefinition.numberScreens',
-            type: 'see-attached-tiled-radio-group',
+            type: 'tiled-radio-group',
             options: [
               {value: '1', title: 'screens', icon: SVGNumberText, iconOptions: { number: '1' }, desc: '3-5 days'},
               {value: '3', title: 'screens', icon: SVGNumberText, iconOptions: { number: '3' }, desc: '5-10 days'},
