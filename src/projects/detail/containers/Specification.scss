@@ -833,20 +833,7 @@ $title-color: $tc-gray-80;
         border-bottom: 1px solid $tc-gray-40;
 
         @include placeholder {
-          @include roboto-light;
-          font-style: italic;
-          font-size: 15px;
           color: $tc-gray-30;
-        }
-        
-        &:not([type="checkbox"]):hover {
-          border: none;
-          border-bottom: 1px solid $tc-dark-blue-70;
-          box-shadow: none;
-          color: $tc-dark-blue-70;
-          &::-webkit-input-placeholder {
-            color: $tc-dark-blue-70;
-          }
         }
       }
     }

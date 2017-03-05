@@ -80,7 +80,7 @@ const SpecSection = props => {
           { project.status === PROJECT_STATUS_DRAFT &&
             <div className="editable-project-name">
               <TCFormFields.TextInput
-                name='name'
+                name="name"
                 placeholder="Project Name"
                 value={_.get(project, 'name', undefined)}
                 wrapperClass="project-name"
