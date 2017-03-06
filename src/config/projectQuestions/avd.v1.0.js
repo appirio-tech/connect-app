@@ -133,6 +133,7 @@ const sections = [
           {
             icon: 'question',
             title: 'Screen name',
+            required: true,
             description: 'Describe your objectives for creating this application',
             type: 'textinput',
             fieldName: 'name',
@@ -141,6 +142,7 @@ const sections = [
           {
             icon: 'question',
             title: 'What are the things the user can do on this screen?',
+            required: true,
             description: 'What are the important features/capabilities that the screen provides to your end users?',
             type: 'textbox',
             fieldName: 'description',
@@ -149,6 +151,7 @@ const sections = [
           {
             icon: 'question',
             title: 'Screen importance',
+            required: true,
             description: 'Pick how important is this screen for your project from 1 to 10',
             type: 'select-dropdown',
             fieldName: 'importanceLevel',
