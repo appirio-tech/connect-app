@@ -797,7 +797,8 @@ $title-color: $tc-gray-80;
   display: flex;
   align-items: flex-end;
 
-  .dashed-bottom-border {
+  .dashed-bottom-border,
+  .editable-project-name {
     flex: 1;
   }
 
@@ -832,12 +833,9 @@ $title-color: $tc-gray-80;
         border-bottom: 1px solid $tc-gray-40;
 
         @include placeholder {
-          @include roboto-light;
-          font-style: italic;
-          font-size: 15px;
           color: $tc-gray-30;
         }
-
+        
         &:not([type="checkbox"]):hover {
           border: none;
           border-bottom: 1px solid $tc-dark-blue-70;
