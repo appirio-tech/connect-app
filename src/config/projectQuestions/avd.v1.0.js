@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { Icons } from 'appirio-tech-react-components'
-import SVGNumberText from '../../components/SVGNumberText/SVGNumberText'
+import NumberText from '../../components/NumberText/NumberText'
 
 const isFileRequired = (project, subSections) => {
   const subSection = _.find(subSections, (s) => s.type === 'questions')
@@ -50,12 +50,12 @@ const sections = [
             title: 'How many screens do you need designed?',
             description: 'This is the most popular project size that can get a medium-sized app designed in a breeze',
             fieldName: 'details.appDefinition.numberScreens',
-            type: 'see-attached-tiled-radio-group',
+            type: 'tiled-radio-group',
             options: [
-              {value: '1', title: 'screens', icon: SVGNumberText, iconOptions: { number: '1' }, desc: '3-5 days'},
-              {value: '3', title: 'screens', icon: SVGNumberText, iconOptions: { number: '3' }, desc: '5-10 days'},
-              {value: '5', title: 'screens', icon: SVGNumberText, iconOptions: { number: '5' }, desc: '7-10 days'},
-              {value: '7', title: 'screens', icon: SVGNumberText, iconOptions: { number: '7' }, desc: '10-14 days'}
+              {value: '1', title: 'screens', icon: NumberText, iconOptions: { number: '1' }, desc: '3-5 days'},
+              {value: '3', title: 'screens', icon: NumberText, iconOptions: { number: '3' }, desc: '5-10 days'},
+              {value: '5', title: 'screens', icon: NumberText, iconOptions: { number: '5' }, desc: '7-10 days'},
+              {value: '10', title: 'screens', icon: NumberText, iconOptions: { number: '10' }, desc: '10-14 days'}
             ]
           },
           {
