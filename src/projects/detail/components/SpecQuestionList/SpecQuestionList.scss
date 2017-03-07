@@ -56,6 +56,9 @@
           border-radius: 4px;
         }
       }
+      .checkbox-group-item.checkbox-item-cheked{
+        background: $tc-dark-blue-10;
+      }
       .row + .checkbox-group-item {
         position: relative;
         top: -20px;

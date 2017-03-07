@@ -5,33 +5,34 @@
 .child-component textarea,
 .project-refcode input,
 .TextInput[type="text"] {
-  @include roboto-light;
+  @include roboto;
   border: none;
   border-bottom: 1px dashed $tc-gray-20;
   border-radius: 0;
   box-shadow: none;
-  font-size: 20px;
+  font-size: $base-unit*3;
+  line-height: $base-unit*4;
   &.empty {
     background: $tc-gray-neutral-light;
     border-bottom: 1px solid $tc-gray-40;
     color: $tc-gray-30;
-    font-size: 15px;
   }
-  &::-webkit-input-placeholder {
-    @include roboto-light;
+
+  @include placeholder {
+    @include roboto;
     color: $tc-gray-30;
-    font-size: 15px;
     text-transform: none;
     font-style: italic;
-
+    font-size: $base-unit*3;
+    line-height: $base-unit*4;
   }
+  
   &:focus {
     background: $tc-dark-blue-10 !important;
     border: none;
     border-bottom: 1px solid $tc-dark-blue-70;
     box-shadow: none;
     color: $tc-gray-80;
-    font-size: 15px;
   }
   &:hover {
     border: none;
@@ -42,6 +43,25 @@
     background: $tc-gray-neutral-light;
     border-bottom: 1px solid $tc-gray-40;
     color: $tc-gray-30;
-    font-size: 15px;
+  }
+
+  &.input-lg {
+    font-size: $base-unit*4;
+    line-height: $base-unit*6;
+
+    @include placeholder {
+      font-size: $base-unit*4;
+      line-height: $base-unit*6;
+    }
+  }
+}
+
+.two-col-content.content .tc-textarea {
+  font-size: $base-unit*3;
+  line-height: $base-unit*5;
+
+  @include placeholder {
+    font-size: $base-unit*3;
+    line-height: $base-unit*5;
   }
 }

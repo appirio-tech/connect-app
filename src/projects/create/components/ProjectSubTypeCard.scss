@@ -52,6 +52,9 @@
   &.selected {
     background: $tc-gray-10;
     border-color: transparent;
+    &:hover {
+      border-color: transparent;
+    }
     .check-mark {
       display: block;
     }
