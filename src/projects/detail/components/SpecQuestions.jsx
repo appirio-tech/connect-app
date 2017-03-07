@@ -39,6 +39,20 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
       label: q.label,
       value: _.get(project, q.fieldName, undefined)
     }
+
+    if (q.fieldName === 'details.appDefinition.numberScreens') {
+      _.each(q.options, (option) => {
+        option.disabled = parseInt(option.value) < project.details.appScreens.screens.length
+        option.errorMessage = (
+          <p>
+            You've defined more than {option.value} screens.
+            <br/>
+            Please delete screens to select this option.
+          </p>
+        )
+      })
+    }
+
     let ChildElem = ''
     switch (q.type) {
     case 'see-attached-textbox':
