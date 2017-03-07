@@ -34,14 +34,14 @@ class EditAppScreenForm extends Component {
     if (isValid === this.state.isValid) {
       return
     }
-    let screen = this.state.screen
+    const screen = this.state.screen
     if (!isValid) {
       screen.isInvalid = true
     } else {
       delete screen.isInvalid
     }
     this.props.validateScreen(screen)
-    this.setState({ isValid });
+    this.setState({ isValid })
   }
 
   update(model, isChanged) {
@@ -60,7 +60,9 @@ class EditAppScreenForm extends Component {
       >
         <SpecScreenQuestions
         questions={questions}
-        screen={screen} />
+        screen={screen}
+        />
+
         <div className="edit-screen-footer">
           <button className="tc-btn tc-btn-default tc-btn-md"
             onClick={(evt) => {

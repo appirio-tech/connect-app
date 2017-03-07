@@ -30,7 +30,7 @@ class SpecScreens extends Component {
       screen, ...this.state.screens.slice(index + 1)]
     this.setState({ screens })
     this.props.setValue(screens)
-    this.props.onValidate(!_.find(screens, 'isInvalid') ? false : true)
+    this.props.onValidate(!(!_.find(screens, 'isInvalid')))
   }
 
   deleteScreen(index) {
