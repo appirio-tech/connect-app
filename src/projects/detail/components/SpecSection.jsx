@@ -75,6 +75,7 @@ const SpecSection = props => {
     }
     case 'project-name': {
       const refCodeFieldName = 'details.utm.code'
+      const refCode = _.get(project, refCodeFieldName, undefined)
       return (
         <div className="project-name-section">
           { project.status === PROJECT_STATUS_DRAFT &&
@@ -93,18 +94,28 @@ const SpecSection = props => {
               <h5 className="project-name">{project.name}</h5>
             </div>
           }
-          <div className="textinput-refcode">
-            <TCFormFields.TextInput
-              name={refCodeFieldName}
-              placeholder="REF code"
-              value={_.get(project, refCodeFieldName, undefined)}
-              wrapperClass="project-refcode"
-              maxLength={ PROJECT_REF_CODE_MAX_LENGTH }
-            />
-            <div className="refcode-desc">
-              Optional
+          { project.status === PROJECT_STATUS_DRAFT &&
+            <div className="textinput-refcode">
+              <TCFormFields.TextInput
+                name={refCodeFieldName}
+                placeholder="REF code"
+                value={ refCode }
+                wrapperClass="project-refcode"
+                maxLength={ PROJECT_REF_CODE_MAX_LENGTH }
+              />
+              <div className="refcode-desc">
+                Optional
+              </div>
             </div>
-          </div>
+          }
+          { refCode && project.status !== PROJECT_STATUS_DRAFT &&
+            <div className="read-only-refcode">
+              <h5 className="project-refcode">{ refCode }</h5>
+              <div className="refcode-desc">
+                REF Code
+              </div>
+            </div>
+          }
         </div>
       )
     }
