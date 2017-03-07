@@ -33,7 +33,7 @@ class SelectDropdown extends Component {
     const { selectedOption } = this.state
     let selectedValue = selectedOption.title
 
-    const renderOption = (option, optIdx) => {
+    const renderOption1 = (option, optIdx) => {
       const handleOptionClick = this.handleClick.bind(this, option)
       return (
         <li key={ optIdx } className="dropdown-menu-list-item" onClick={ handleOptionClick }>
@@ -41,13 +41,20 @@ class SelectDropdown extends Component {
         </li>
       )
     }
+    const renderOption = (option, optIdx) => {
+      return (
+        <option key={ optIdx } className="dropdown-menu-list-item">
+          { option.title }
+        </option>
+      )
+    }
+    const handleOptionClick = this.handleClick.bind(this)
     return (
-      <Dropdown theme={ theme } className="SelectDropdown" noPointer>
-        <div className="dropdown-menu-header"><span className="tc-link">{ selectedValue }</span></div>
-        <ul className="dropdown-menu-list">
-          { options.map(renderOption) }
-        </ul>
-      </Dropdown>
+      <div className="SelectDropdown">
+        <select onChange={handleOptionClick} ref={ (select) => {this.select = select} }>
+            { options.map(renderOption) }
+        </select>
+      </div>
     )
   }
 }
