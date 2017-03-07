@@ -8,7 +8,7 @@ import { PROJECT_STATUS_DRAFT, PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LEN
 
 
 const SpecSection = props => {
-  const {project, resetFeatures, showFeaturesDialog, id, title, description, subSections} = props
+  const {project, resetFeatures, showFeaturesDialog, id, title, description, subSections, validate} = props
   console.log('SpecSection', props)
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
@@ -20,6 +20,8 @@ const SpecSection = props => {
       </div>
     </div>
   )
+
+  const onValidate = (isInvalid) => validate(isInvalid)
 
   const renderChild = props => {
     const {type} = props
@@ -70,6 +72,7 @@ const SpecSection = props => {
           screens={screens}
           questions={props.questions}
           project={project}
+          onValidate={onValidate}
         />
       )
     }

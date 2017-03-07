@@ -169,13 +169,6 @@ const sections = [
             ]
           }
         ]
-      },
-      {
-        id: 'notes',
-        fieldName: 'details.appScreens.notes',
-        title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
-        type: 'notes'
       }
     ]
   },
