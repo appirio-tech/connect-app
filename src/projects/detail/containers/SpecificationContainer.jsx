@@ -51,8 +51,8 @@ class SpecificationContainer extends Component {
     const { project, currentMemberRole, processing } = this.props
 
     let specification = 'topcoder.v1'
-    if (project.type)
-      specification = typeToSpecification[project.type]
+    if (project.details && project.details.products && project.details.products[0])
+      specification = typeToSpecification[project.details.products[0]]
     let sections = require(`../../../config/projectQuestions/${specification}`).default
 
     return (

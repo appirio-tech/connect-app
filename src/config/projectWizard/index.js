@@ -3,6 +3,7 @@ export default {
     icon: 'product-app-visual-design',
     info: 'Create wireframes, mockups, graphic & visual design',
     question: 'What kind of design do you need?',
+    id: 'visual_design',
     subtypes: {
       Wireframes: {
         brief: '5-15 screens',
@@ -33,6 +34,7 @@ export default {
     icon: 'product-prototype',
     info: 'Visual click-through or technical app prototype',
     question: 'What prototype do you need?',
+    id: 'visual_prototype',
     subtypes: {
       Demo: {
         brief: '3-20 screens',
@@ -54,6 +56,7 @@ export default {
     icon: 'product-code',
     info: 'Integration, API, Architecture POC, Bug Fixes, Components, Services',
     question: 'What do you need to develop?',
+    id: 'app_dev',
     subtypes: {
       Code: {
         brief: 'Hardcore development',
