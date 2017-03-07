@@ -795,11 +795,29 @@ $title-color: $tc-gray-80;
 
 .project-name-section {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
 
   .dashed-bottom-border,
   .editable-project-name {
     flex: 1;
+  }
+
+  .read-only-refcode {
+    height: 100%;
+    align-self: flex-end;
+    border-bottom: 1px solid $tc-gray-40;
+    padding: 0px 2*$base-unit;
+    position: relative;
+
+    .refcode-desc {
+      @include roboto;
+      font-size: 13px;
+      color: #5d5d66;
+      position: absolute;
+      bottom: -20px;
+      font-style: italic;
+      white-space: nowrap;
+    }
   }
 
   .textinput-refcode {
@@ -815,12 +833,15 @@ $title-color: $tc-gray-80;
       position: absolute;
       bottom: -20px;
       font-style: italic;
-
     }
 
     .project-refcode {
       width: 100%;
       height: 100%;
+
+      label {
+        display: none;//hides the empty label
+      }
 
       input {
         @include roboto;
