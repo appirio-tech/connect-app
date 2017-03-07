@@ -12,9 +12,12 @@ const SpecSection = props => {
   console.log('SpecSection', props)
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
-      <div className="sub-title">
-        <h4 className="title">{typeof subSection.title === 'function' ? subSection.title(project): subSection.title } <span>*</span></h4>
-      </div>
+      {
+        subSection.hideTitle ? null :
+        <div className="sub-title">
+          <h4 className="title">{typeof subSection.title === 'function' ? subSection.title(project): subSection.title } <span>*</span></h4>
+        </div>
+      }
       <div className="content-boxs">
         {renderChild(subSection)}
       </div>
