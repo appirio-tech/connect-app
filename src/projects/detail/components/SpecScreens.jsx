@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { HOC as hoc } from 'formsy-react'
+import { Tooltip } from 'appirio-tech-react-components'
+import _ from 'lodash'
 
 import EditAppScreenForm from './EditAppScreenForm'
 
@@ -21,6 +23,15 @@ class SpecScreens extends Component {
       screen, ...this.state.screens.slice(index + 1)]
     this.setState({ screens })
     this.props.setValue(screens)
+    this.props.onValidate(!_.find(screens, 'isInvalid'))
+  }
+
+  validateScreen(index, screen) {
+    const screens = [...this.state.screens.slice(0, index),
+      screen, ...this.state.screens.slice(index + 1)]
+    this.setState({ screens })
+    this.props.setValue(screens)
+    this.props.onValidate(!_.find(screens, 'isInvalid'))
   }
 
   deleteScreen(index) {
@@ -30,19 +41,26 @@ class SpecScreens extends Component {
     this.props.setValue(screens)
   }
 
-  addScreen(screen) {
-    const screens = [...this.state.screens, screen]
+  addScreen(screen, addEmptyScreen) {
+    const emptyScreen = {
+      description: '',
+      name: '',
+      importanceLevel: {
+        title: '1',
+        value: 1
+      }
+    }
+    const screens = [...this.state.screens, addEmptyScreen ? emptyScreen : screen]
     this.setState({ screens })
     this.props.setValue(screens)
   }
 
   render() {
-    const { screens } =  this.state
+    const { screens } = this.state
     const { appDefinition } = this.props.project.details
     let numberScreensSelected = appDefinition && appDefinition.numberScreens.value
       ? parseInt(appDefinition.numberScreens.value)
       : Infinity
-
     if (appDefinition && appDefinition.numberScreens.seeAttached) numberScreensSelected = Infinity
 
     const renderCurrentScreen = (screen, index) => {
@@ -52,28 +70,11 @@ class SpecScreens extends Component {
             <h5 className="screen-title">Screen {index + 1}</h5>
           </div>
           <EditAppScreenForm
-            isNew={false}
             screen={screen}
             questions={this.props.questions}
             onUpdate={this.updateScreen.bind(this, index)}
             onDelete={this.deleteScreen.bind(this, index)}
-          />
-        </div>
-      )
-    }
-
-    const renderNewScreen = (newIndex) => {
-      return (
-        <div>
-          <div className="dashed-bottom-border">
-            <h5 className="screen-title">Screen {newIndex}</h5>
-          </div>
-          <EditAppScreenForm
-            isNew
-            key={Math.random()} // Math.random() is used here so its fields clear after submission
-            questions={this.props.questions}
-            onSubmit={this.addScreen}
-            screenNumberReached={numberScreensSelected <= screens.length}
+            validateScreen={this.validateScreen.bind(this, index)}
           />
         </div>
       )
@@ -82,14 +83,29 @@ class SpecScreens extends Component {
     return (
       <div>
         {screens.map(renderCurrentScreen)}
-        {
-          numberScreensSelected > screens.length ? renderNewScreen(screens.length + 1) :
-          <p className="screen-number-reached-message">
-            You have reached the number of screens selected.
-            <br/>
-            Please select and save a higher number to keep adding new screens.
-          </p>
-        }
+        {/*renderNewScreen(screens.length + 1)*/}
+        <div className="edit-screen-footer">
+          {
+            screens.length >= numberScreensSelected ?
+            <Tooltip>
+              <div className="tooltip-target" id="tooltip-define-screen-error">
+                <button disabled className="tc-btn tc-btn-default tc-btn-md">
+                  Define another screen
+                </button>
+              </div>
+              <div className="tooltip-body">
+                <p className="screen-number-reached-message">
+                  You have reached the number of screens selected.
+                  <br/>
+                  Please select and save a higher number to keep adding new screens.
+                </p>
+              </div>
+            </Tooltip> :
+            <button className="tc-btn tc-btn-default tc-btn-md" onClick={() => this.addScreen(null, true)}>
+              Define another screen
+            </button>
+          }
+        </div>
       </div>
     )
   }

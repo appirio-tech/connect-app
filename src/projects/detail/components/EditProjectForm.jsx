@@ -36,13 +36,13 @@ class EditProjectForm extends Component {
     let updatedProject = Object.assign({}, nextProps.project)
     if (this.state.isFeaturesDirty && !this.state.isSaving) {
       updatedProject = update(updatedProject, {
-        details: { 
-          appDefinition: { 
-            features: { 
-              $set: this.state.project.details.appDefinition.features 
-            } 
-          } 
-        } 
+        details: {
+          appDefinition: {
+            features: {
+              $set: this.state.project.details.appDefinition.features
+            }
+          }
+        }
       })
     }
     this.setState({
@@ -132,10 +132,11 @@ class EditProjectForm extends Component {
           project={project}
           resetFeatures={this.onFeaturesSaveAttachedClick}
           showFeaturesDialog={this.showFeaturesDialog}
+          validate={(isValid) => section.isInvalid = !isValid}
         />
         <div className="section-footer section-footer-spec">
           <button className="tc-btn tc-btn-primary tc-btn-md"
-            type="submit" disabled={!this.isChanged() || this.state.isSaving}
+            type="submit" disabled={(!this.isChanged() || this.state.isSaving) || section.isInvalid}
           >Save Changes</button>
         </div>
       </div>
@@ -163,7 +164,7 @@ class EditProjectForm extends Component {
             isEdittable={isEdittable} onSave={ this.saveFeatures }
           />
           <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
-            Save and close <Icons.XMarkIcon />  
+            Save and close <Icons.XMarkIcon />
           </div>
         </Modal>
       </div>

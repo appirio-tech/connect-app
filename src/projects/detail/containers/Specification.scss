@@ -778,12 +778,8 @@ $title-color: $tc-gray-80;
 }
 
 .screen-number-reached-message {
-  background: #666666;
+  @include roboto;
   color: white;
-  padding: 5px;
-  text-align: center;
-  border-radius: 2px;
-  opacity: 0.8;
 }
 
 .project-name-section {
