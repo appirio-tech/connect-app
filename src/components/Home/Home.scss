@@ -4,11 +4,12 @@
 .content-home {
 	margin: $base-unit*4;
 
-	.container{
+	.container {
 		display: flex;
 		justify-content: space-around;
 		max-width: 1200px;
 		width: auto;
+		margin: auto;
 		padding: $base-unit*12 $base-unit*9 $base-unit*18;
 		background: $tc-white;
 		box-shadow: 0 1px 3px 0px rgba($tc-black,.2);

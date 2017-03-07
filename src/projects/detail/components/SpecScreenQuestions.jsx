@@ -60,7 +60,7 @@ const SpecScreenQuestions = ({questions, screen}) => {
     case 'select-dropdown':
       ChildElem = SelectDropdown
       _.assign(elemProps, {
-        options: q.options, 
+        options: q.options,
         theme: 'default',
         selectedOption: screen.importanceLevel
       })
@@ -74,6 +74,7 @@ const SpecScreenQuestions = ({questions, screen}) => {
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
+        required={q.required}
       >
         <ChildElem {...elemProps} required/>
       </SpecQuestionList.Item>
