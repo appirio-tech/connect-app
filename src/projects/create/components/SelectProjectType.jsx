@@ -32,7 +32,7 @@ function SelectProjectType(props) {
       <h1>Select your project category</h1>
       {cards}
       <div className="footer">
-        Not what you're looking for? <a>Create an empty project</a> or <a>get in touch with us</a>
+        Looking for something else? <a href="http://crowdsourcing.topcoder.com/piqued_by_crowdsourcing">Get in touch</a> with us.
       </div>
     </div>
   )
