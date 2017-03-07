@@ -16,6 +16,7 @@ class ProjectStatus extends React.Component {
     this.hideStatusChangeDialog = this.hideStatusChangeDialog.bind(this)
     this.showStatusChangeDialog = this.showStatusChangeDialog.bind(this)
     this.changeStatus = this.changeStatus.bind(this)
+    this.handleReasonUpdate = this.handleReasonUpdate.bind(this)
   }
 
   componentWillReceiveProps() {
@@ -50,7 +51,11 @@ class ProjectStatus extends React.Component {
   }
 
   changeStatus() {
-    this.props.onChangeStatus(this.state.newStatus)
+    this.props.onChangeStatus(this.state.newStatus, this.state.statusChangeReason)
+  }
+
+  handleReasonUpdate(reason) {
+    this.setState({ statusChangeReason : reason.value })
   }
 
   render() {
@@ -94,7 +99,14 @@ class ProjectStatus extends React.Component {
               </ul>
             </dir>}
           </div>
-          { showStatusChangeDialog && <ProjectStatusChangeConfirmation newStatus={ newStatus } onConfirm={ this.changeStatus } onCancel={ this.hideStatusChangeDialog } /> }
+          { showStatusChangeDialog &&
+            <ProjectStatusChangeConfirmation
+              newStatus={ newStatus }
+              onConfirm={ this.changeStatus }
+              onCancel={ this.hideStatusChangeDialog }
+              onReasonUpdate={ this.handleReasonUpdate }
+            />
+          }
           {directLinks && <div className="project-direct-links">
             <ul>
               {directLinks.map((link, i) => <li key={i}><a href={link.href} target="_blank" rel="noopener noreferrer">{link.name}</a></li>)}
