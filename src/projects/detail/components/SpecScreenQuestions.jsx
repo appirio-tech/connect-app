@@ -37,6 +37,7 @@ const SpecScreenQuestions = ({questions, screen}) => {
     case 'textbox':
       ChildElem = TCFormFields.Textarea
       elemProps.wrapperClass = 'row'
+      elemProps.autoResize = true
       break
     case 'radio-group':
       ChildElem = TCFormFields.RadioGroup

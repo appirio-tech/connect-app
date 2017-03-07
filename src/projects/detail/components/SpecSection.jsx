@@ -53,6 +53,7 @@ const SpecSection = props => {
             {props.description}
           </div>
           <TCFormFields.Textarea
+            autoResize={true}
             name={props.fieldName}
             value={_.get(project, props.fieldName) || ''}
           />
