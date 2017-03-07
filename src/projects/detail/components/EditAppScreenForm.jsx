@@ -12,7 +12,8 @@ class EditAppScreenForm extends Component {
 
   componentWillMount() {
     this.setState({
-      screen: Object.assign({}, this.props.screen)
+      screen: Object.assign({}, this.props.screen),
+      isValid: false
     })
   }
 
@@ -30,11 +31,17 @@ class EditAppScreenForm extends Component {
   }
 
   onValidate(isValid) {
+    if (isValid === this.state.isValid) {
+      return
+    }
     let screen = this.state.screen
     if (!isValid) {
       screen.isInvalid = true
+    } else {
+      delete screen.isInvalid
     }
     this.props.validateScreen(screen)
+    this.setState({ isValid });
   }
 
   update(model, isChanged) {

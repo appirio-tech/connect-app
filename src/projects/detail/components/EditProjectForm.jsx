@@ -132,7 +132,7 @@ class EditProjectForm extends Component {
           project={project}
           resetFeatures={this.onFeaturesSaveAttachedClick}
           showFeaturesDialog={this.showFeaturesDialog}
-          validate={(isValid) => section.isInvalid = !isValid}
+          validate={(isInvalid) => section.isInvalid = isInvalid}
         />
         <div className="section-footer section-footer-spec">
           <button className="tc-btn tc-btn-primary tc-btn-md"

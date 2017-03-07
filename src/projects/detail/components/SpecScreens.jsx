@@ -23,7 +23,6 @@ class SpecScreens extends Component {
       screen, ...this.state.screens.slice(index + 1)]
     this.setState({ screens })
     this.props.setValue(screens)
-    this.props.onValidate(!_.find(screens, 'isInvalid'))
   }
 
   validateScreen(index, screen) {
@@ -31,7 +30,7 @@ class SpecScreens extends Component {
       screen, ...this.state.screens.slice(index + 1)]
     this.setState({ screens })
     this.props.setValue(screens)
-    this.props.onValidate(!_.find(screens, 'isInvalid'))
+    this.props.onValidate(!_.find(screens, 'isInvalid') ? false : true)
   }
 
   deleteScreen(index) {
@@ -48,11 +47,13 @@ class SpecScreens extends Component {
       importanceLevel: {
         title: '1',
         value: 1
-      }
+      },
+      isInvalid: true
     }
     const screens = [...this.state.screens, addEmptyScreen ? emptyScreen : screen]
     this.setState({ screens })
     this.props.setValue(screens)
+    this.props.onValidate(true) // add validation error since the new screen will be empty
   }
 
   render() {

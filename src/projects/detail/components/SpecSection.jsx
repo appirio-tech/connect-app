@@ -21,7 +21,7 @@ const SpecSection = props => {
     </div>
   )
 
-  const onValidate = (isValid) => validate(isValid)
+  const onValidate = (isInvalid) => validate(isInvalid)
 
   const renderChild = props => {
     const {type} = props
