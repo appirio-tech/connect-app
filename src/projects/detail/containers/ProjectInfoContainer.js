@@ -8,7 +8,7 @@ import FooterV2 from '../../../components/FooterV2/FooterV2'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
-   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK } from '../../../config/constants'
+   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
 
 class ProjectInfoContainer extends React.Component {
 
@@ -85,8 +85,12 @@ class ProjectInfoContainer extends React.Component {
     this.setDuration(project)
   }
 
-  onChangeStatus(status) {
-    this.props.updateProject(this.props.project.id, {status})
+  onChangeStatus(status, reason) {
+    const delta = {status}
+    if (reason && status === PROJECT_STATUS_CANCELLED) {
+      delta.cancelReason = reason
+    }
+    this.props.updateProject(this.props.project.id, delta)
   }
 
   onAddNewLink(link) {
@@ -119,6 +123,8 @@ class ProjectInfoContainer extends React.Component {
       directLinks = []
       if (project.directProjectId) {
         directLinks.push({name: 'Project in Topcoder Direct', href: `${DIRECT_PROJECT_URL}${project.directProjectId}`})
+      } else {
+        directLinks.push({name: 'No Direct project. Please contact support.', href: 'mailto:support@topcoder.com'})
       }
       directLinks.push({name: 'Salesforce Lead', href: `${SALESFORCE_PROJECT_LEAD_LINK}${project.id}`})
     }
