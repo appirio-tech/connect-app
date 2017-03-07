@@ -43,7 +43,8 @@ class ProjectWizard extends Component {
         devices: [],
         utm: {
           code: s.projectRef
-        }
+        },
+        products: [config[s.projectType].subtypes[s.projectSubType].id]
       },
       description: 'No description provided',
       name: s.projectName,
