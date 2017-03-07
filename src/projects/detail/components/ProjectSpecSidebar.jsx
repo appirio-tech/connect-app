@@ -106,7 +106,7 @@ class ProjectSpecSidebar extends Component {
 
       return (
         <div className="list-group">
-          <VisualDesignProjectEstimateSection numberScreens={appDefinition.numberScreens.value} />
+          <VisualDesignProjectEstimateSection numberScreens={appDefinition.numberScreens} />
         </div>
       )
     }

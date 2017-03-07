@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { HOC as hoc } from 'formsy-react'
+import _ from 'lodash'
 
 import EditAppScreenForm from './EditAppScreenForm'
 
@@ -39,11 +40,7 @@ class SpecScreens extends Component {
   render() {
     const { screens } =  this.state
     const { appDefinition } = this.props.project.details
-    let numberScreensSelected = appDefinition && appDefinition.numberScreens.value
-      ? parseInt(appDefinition.numberScreens.value)
-      : Infinity
-
-    if (appDefinition && appDefinition.numberScreens.seeAttached) numberScreensSelected = Infinity
+    const numberScreensSelected = parseInt(_.get(appDefinition, 'numberScreens', '0'))
 
     const renderCurrentScreen = (screen, index) => {
       return (
