@@ -41,7 +41,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
     }
 
     if (q.fieldName === 'details.appDefinition.numberScreens') {
-      const minValue = project.details.appScreens ? project.details.appScreens.screens : 0
+      const minValue = project.details.appScreens ? project.details.appScreens.screens.length : 0
       _.each(q.options, (option) => {
         option.disabled = parseInt(option.value) < minValue
         option.errorMessage = (
