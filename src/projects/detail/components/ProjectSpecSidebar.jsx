@@ -2,6 +2,7 @@ import _ from 'lodash'
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import SidebarNav from './SidebarNav'
+import VisualDesignProjectEstimateSection from './VisualDesignProjectEstimateSection'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../../config/constants'
 import { updateProject } from '../../actions/project'
 import './ProjectSpecSidebar.scss'
@@ -84,12 +85,43 @@ class ProjectSpecSidebar extends Component {
     const { currentMemberRole, project } = this.props
     const showReviewBtn = project.status === 'draft' &&
       _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
+
+    // NOTE: May be beneficial to refactor all of these logics into a higher-order
+    // component that returns different project estimate components for different
+    // types of projects in the future. But let's keep it this way for now because
+    // project estimate is only available for one kind of projects
+    const getProjectEstimateSection = () => {
+      const { appDefinition } = project.details
+
+      // project estimate only available for visual design porjects right now
+      if (project.type !== 'visual_design') return
+
+      if (!project.details.appDefinition) return (
+        <div className="list-group"><VisualDesignProjectEstimateSection /></div>
+      )
+
+      if (!appDefinition.numberScreens || appDefinition.numberScreens.seeAttached) return (
+        <div className="list-group"><VisualDesignProjectEstimateSection /></div>
+      )
+
+      return (
+        <div className="list-group">
+          <VisualDesignProjectEstimateSection numberScreens={appDefinition.numberScreens.value} />
+        </div>
+      )
+    }
+
     return (
       <div className="projectSpecSidebar">
         <h4 className="titles gray-font">Specifications</h4>
         <div className="list-group">
           <SidebarNav items={navItems} />
         </div>
+
+        <br/>
+
+        {getProjectEstimateSection()}
+
         { showReviewBtn &&
         <div>
           <div className="text-box">
