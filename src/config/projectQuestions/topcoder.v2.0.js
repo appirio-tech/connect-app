@@ -28,16 +28,9 @@ const sections = [
         type: 'project-name'
       },
       {
-        id: 'projectInfo',
-        required: true,
-        fieldName: 'description',
-        description: 'Description',
-        title: 'Project Info',
-        type: 'notes'
-      },
-      {
         id: 'questions',
         required: true,
+        hideTitle: true,
         title: 'Questions',
         description: '',
         type: 'questions',
@@ -53,11 +46,19 @@ const sections = [
             fieldName: 'details.appDefinition.primaryTarget',
             type: 'see-attached-tiled-radio-group',
             options: [
-              {value: 'Phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'Tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'Desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
-              {value: 'Wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+              {value: 'phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
+          },
+          {
+            id: 'projectInfo',
+            required: true,
+            fieldName: 'description',
+            description: 'Description',
+            title: 'Description',
+            type: 'textbox'
           },
           {
             icon: 'question',

@@ -8,7 +8,17 @@ import { PROJECT_STATUS_DRAFT, PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LEN
 
 
 const SpecSection = props => {
-  const {project, resetFeatures, showFeaturesDialog, id, title, description, subSections, validate} = props
+  const {
+    project,
+    resetFeatures,
+    showFeaturesDialog,
+    id,
+    title,
+    description,
+    subSections,
+    validate,
+    sectionNumber
+  } = props
   console.log('SpecSection', props)
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
@@ -134,9 +144,12 @@ const SpecSection = props => {
   return (
     <div className="right-area-item" id={id}>
       <div className="boxes">
-        <h2 className="big-titles" id={id}>
-          {title}
-        </h2>
+        <div className="section-header big-titles">
+          <h2 id={id}>
+            {title}
+          </h2>
+          <span className="section-number">{ sectionNumber }</span>
+        </div>
         <p className="gray-text">
           {description}
         </p>
@@ -147,7 +160,8 @@ const SpecSection = props => {
 }
 
 SpecSection.propTypes = {
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
+  sectionNumber: PropTypes.number.isRequired
 }
 
 export default SpecSection

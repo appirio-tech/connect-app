@@ -130,6 +130,7 @@ class EditProjectForm extends Component {
         <SpecSection
           {...section}
           project={project}
+          sectionNumber={idx + 1}
           resetFeatures={this.onFeaturesSaveAttachedClick}
           showFeaturesDialog={this.showFeaturesDialog}
           validate={(isInvalid) => section.isInvalid = isInvalid}

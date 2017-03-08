@@ -1,22 +1,31 @@
 import React, { PropTypes } from 'react'
-import sections from '../../../config/projectQuestions/avd.v1.0'
 import './VisualDesignProjectEstimateSection.scss'
+import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
 import _ from 'lodash'
 
-const section = _.find(sections, (section) => section.id === 'appDefinition')
-const { pricePerPage, subSections } = section
-const sectionQuestions = _.find(subSections, (subSection) => subSection.id === 'questions').questions
 const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+const DEFAULT_AVD_TEMPLATE = 'avd.v1.1'
 
-const { options: projectDurationOptions } = _.find(
-  sectionQuestions,
-  (question) => question.fieldName === 'details.appDefinition.numberScreens'
-)
+const VisualDesignProjectEstimateSection = ({products, numberScreens}) => {
+  // determine the spec template to use for the first product used in the project
+  // TODO when we support multiple products per project, we can loop through products and sum up the estimates
+  const specTemplate = products.length > 0 ? typeToSpecification[products[0]] : DEFAULT_AVD_TEMPLATE
+  const sections = require('../../../config/projectQuestions/' + specTemplate).default
+  // appDefinition section
+  const section = _.find(sections, (section) => section.id === 'appDefinition')
+  const { subSections } = section
+  // questions sub section
+  const sectionQuestions = _.find(subSections, (subSection) => subSection.id === 'questions').questions
 
-const VisualDesignProjectEstimateSection = ({numberScreens}) => {
-  const priceEstimate = numberWithCommas((parseInt(numberScreens) || 0) * pricePerPage)
+  // options provided in the number of screens question
+  const { options: projectDurationOptions } = _.find(
+    sectionQuestions,
+    (question) => question.fieldName === 'details.appDefinition.numberScreens'
+  )
+  // selected option
   const pickedDurationOption = _.find(projectDurationOptions, (option) => option.value === numberScreens)
   const durationEstimate = pickedDurationOption ? pickedDurationOption.desc : '0 days'
+  const priceEstimate = pickedDurationOption ? pickedDurationOption.price : 0
 
   return (
     <div className="visual-design-project-estimate-section">

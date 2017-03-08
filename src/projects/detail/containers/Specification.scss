@@ -366,6 +366,17 @@ $title-color: $tc-gray-80;
     }
   }
 
+  .section-header  {
+    display: flex;
+    justify-content: space-between;
+
+    .section-number {
+      @include tc-label-lg;
+      color: $tc-gray-30;
+      padding-right: 6*$base-unit;
+    }
+  }
+
   .section-footer {
     display: flex;
     align-items: center;
