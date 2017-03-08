@@ -1,10 +1,6 @@
 {
-	"wireframes": "wireframes.v1.0",
-  "visual_design_concepts": "avd.v1.1",
-  "visual_design_prod": "avd.v1.1",
-	"generic_design": "avd.v1.0",
+	"visual_design": "avd.v1.0",
 	"visual_prototype": "topcoder.v2.0",
-  "website_development": "topcoder.v2.0",
-  "application_development": "topcoder.v2.0",
-  "generic_dev": "topcoder.v2.0"
+	"app_dev": "topcoder.v2.0",
+  "generic": "topcoder.v2.0"
 }
