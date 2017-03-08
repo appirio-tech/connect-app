@@ -127,6 +127,7 @@ const sections = [
         required: true,
         fieldName: 'details.appScreens.screens',
         title: 'Screens',
+        hideTitle: true,
         description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
         type: 'screens',
         questions: [
