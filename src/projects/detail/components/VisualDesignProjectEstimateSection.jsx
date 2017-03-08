@@ -33,7 +33,7 @@ const VisualDesignProjectEstimateSection = ({products, numberScreens}) => {
       <h3 className="label">Duration</h3>
       <h3 className="estimate">{durationEstimate}</h3>
       <h3 className="label">Quick Quote</h3>
-      <h3 className="estimate"><span>$</span> {priceEstimate}</h3>
+      <h3 className="estimate"><span>$</span> { numberWithCommas(priceEstimate) }</h3>
     </div>
   )
 }
