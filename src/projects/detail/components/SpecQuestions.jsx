@@ -59,6 +59,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
     case 'see-attached-textbox':
       ChildElem = SeeAttachedTextareaInput
       elemProps.wrapperClass = 'row'
+      elemProps.autoResize = true
       // child = <SeeAttachedTextareaInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'textinput':
@@ -70,6 +71,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
     case 'textbox':
       ChildElem = TCFormFields.Textarea
       elemProps.wrapperClass = 'row'
+      elemProps.autoResize = true
       // child = <TCFormFields.Textarea name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'radio-group':
