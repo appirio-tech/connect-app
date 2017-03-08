@@ -817,8 +817,9 @@ $title-color: $tc-gray-80;
 
     .refcode-desc {
       @include roboto;
-      font-size: 13px;
-      color: #5d5d66;
+      font-size: 12px;
+      line-height: 20px;
+      color: $tc-gray-50;
       position: absolute;
       bottom: -20px;
       font-style: italic;
@@ -833,27 +834,11 @@ $title-color: $tc-gray-80;
       }
 
       input {
-        @include roboto;
         height: 50px;
-        line-height: 50px;
-        margin: 0;
+        line-height: 30px;
         font-size: 20px;
-        box-shadow: none;
-        border: 0;
-        border-bottom: 1px solid $tc-gray-40;
-
         @include placeholder {
           color: $tc-gray-30;
-        }
-
-        &:not([type="checkbox"]):hover {
-          border: none;
-          border-bottom: 1px solid $tc-dark-blue-70;
-          box-shadow: none;
-          color: $tc-dark-blue-70;
-          &::-webkit-input-placeholder {
-            color: $tc-dark-blue-70;
-          }
         }
       }
     }
@@ -892,11 +877,15 @@ $title-color: $tc-gray-80;
       color: $tc-dark-blue-70;
     }
   }
+
   &.active {
     background: $tc-gray-10;
     border-color: transparent;
     &:hover {
       border-color: transparent;
+      .icon span {
+        color: $tc-gray-70;
+      }
     }
     .check-mark {
       display: block;

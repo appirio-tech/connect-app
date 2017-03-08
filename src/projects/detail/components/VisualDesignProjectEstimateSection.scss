@@ -20,7 +20,9 @@
 
   .estimate {
     text-align: right;
-    color: $tc-gray-50;
     line-height: 20px;
+    span {
+      color: $tc-gray-50;
+    }
   }
 }

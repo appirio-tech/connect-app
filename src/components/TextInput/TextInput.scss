@@ -44,15 +44,16 @@
     border-bottom: 1px solid $tc-gray-40;
     color: $tc-gray-30;
   }
+}
 
-  &.input-lg {
+.input-lg,
+.two-col-content.content .tc-file-field__inputs{
+  font-size: $base-unit*4;
+  line-height: $base-unit*6;
+
+  @include placeholder {
     font-size: $base-unit*4;
     line-height: $base-unit*6;
-
-    @include placeholder {
-      font-size: $base-unit*4;
-      line-height: $base-unit*6;
-    }
   }
 }
 
