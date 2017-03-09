@@ -41,7 +41,6 @@ const sections = [
       {
         id: 'questions',
         required: true,
-        hideTitle: true,
         title: 'Questions',
         description: '',
         type: 'questions',

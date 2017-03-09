@@ -41,17 +41,9 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
     }
 
     if (q.fieldName === 'details.appDefinition.numberScreens') {
-      const screens = _.get(project, 'details.appScreens.screens', [])
-      const definedScreens = screens.length
+      const minValue = project.details.appScreens ? project.details.appScreens.screens.length : 0
       _.each(q.options, (option) => {
-        let maxValue = 0
-        const hyphenIdx = option.value.indexOf('-')
-        if (hyphenIdx === -1) {
-          maxValue = parseInt(option.value)
-        } else {
-          maxValue = parseInt(option.value.substring(hyphenIdx+1))
-        }
-        option.disabled = maxValue < definedScreens
+        option.disabled = parseInt(option.value) < minValue
         option.errorMessage = (
           <p>
             You've defined more than {option.value} screens.
@@ -125,7 +117,6 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
-        required={q.required}
       >
         <ChildElem {...elemProps} />
       </SpecQuestionList.Item>
