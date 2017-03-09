@@ -14,6 +14,9 @@ const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
 // HOC for SpecFeatureQuestion
 const SeeAttachedSpecFeatureQuestion = seeAttachedWrapperField(SpecFeatureQuestion)
 
+// HOC for TiledRadioGroup
+const SeeAttachedTiledRadioGroup = seeAttachedWrapperField(TCFormFields.TiledRadioGroup)
+
 const getIcon = icon => {
   switch (icon) {
   case 'feature-generic':
@@ -36,14 +39,39 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
       label: q.label,
       value: _.get(project, q.fieldName, undefined)
     }
+
+    if (q.fieldName === 'details.appDefinition.numberScreens') {
+      const screens = _.get(project, 'details.appScreens.screens', [])
+      const definedScreens = screens.length
+      _.each(q.options, (option) => {
+        let maxValue = 0
+        const hyphenIdx = option.value.indexOf('-')
+        if (hyphenIdx === -1) {
+          maxValue = parseInt(option.value)
+        } else {
+          maxValue = parseInt(option.value.substring(hyphenIdx+1))
+        }
+        option.disabled = maxValue < definedScreens
+        option.errorMessage = (
+          <p>
+            You've defined more than {option.value} screens.
+            <br/>
+            Please delete screens to select this option.
+          </p>
+        )
+      })
+    }
+
     let ChildElem = ''
     switch (q.type) {
     case 'see-attached-textbox':
       ChildElem = SeeAttachedTextareaInput
       elemProps.wrapperClass = 'row'
+      elemProps.autoResize = true
       // child = <SeeAttachedTextareaInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'textinput':
+      console.log('TextInput', q)
       ChildElem = TCFormFields.TextInput
       elemProps.wrapperClass = 'row'
       // child = <TCFormFields.TextInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
@@ -51,6 +79,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
     case 'textbox':
       ChildElem = TCFormFields.Textarea
       elemProps.wrapperClass = 'row'
+      elemProps.autoResize = true
       // child = <TCFormFields.Textarea name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'radio-group':
@@ -60,6 +89,11 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
       break
     case 'tiled-radio-group':
       ChildElem = TCFormFields.TiledRadioGroup
+      _.assign(elemProps, {wrapperClass: 'row', options: q.options})
+      // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
+      break
+    case 'see-attached-tiled-radio-group':
+      ChildElem = SeeAttachedTiledRadioGroup
       _.assign(elemProps, {wrapperClass: 'row', options: q.options})
       // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
@@ -91,6 +125,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
+        required={q.required}
       >
         <ChildElem {...elemProps} />
       </SpecQuestionList.Item>

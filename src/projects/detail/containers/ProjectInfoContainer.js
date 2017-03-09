@@ -131,6 +131,13 @@ class ProjectInfoContainer extends React.Component {
 
     const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER
       && project.status === 'draft'
+    let devices = []
+    const primaryTarget = _.get(project, 'details.appDefinition.primaryTarget')
+    if (primaryTarget && !primaryTarget.seeAttached) {
+      devices.push(primaryTarget.value)
+    } else {
+      devices = _.get(project, 'details.devices', [])
+    }
     return (
       <div>
         <ProjectInfo
@@ -141,7 +148,7 @@ class ProjectInfoContainer extends React.Component {
           currentMemberRole={currentMemberRole}
           description={project.description}
           type={project.type}
-          devices={ _.get(project, 'details.devices', []) }
+          devices={ devices }
           status={project.status} onChangeStatus={this.onChangeStatus}
           duration={duration}
           budget={budget}

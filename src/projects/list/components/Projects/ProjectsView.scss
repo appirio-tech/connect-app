@@ -103,10 +103,19 @@
 .project-creation-dialog {
   top: 0px;
   left: 0px;
-  height: 100%;
+
+  .Wizard .content {
+    margin: 0 auto;
+    width: 100%;
+    min-height: 100vh;
+  }
+  .TextInput.project-name,
+  .TextInput.project-ref-code {
+    height: 45px;
+  }
 }
 
-.project-creation-dialog-close {
+/*.project-creation-dialog-close {
   cursor: pointer;
   position: fixed;
   top: 20px;
@@ -119,4 +128,6 @@
     width: 100%;
     height: 100%;
   }
-}
+}*/
+
+

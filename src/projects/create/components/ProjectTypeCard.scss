@@ -1,0 +1,51 @@
+@import 'tc-includes';
+
+.ProjectTypeCard {
+  border: 1px solid $tc-gray-20;
+  border-radius: 4px;
+  display: inline-block;
+  height: 335px;
+  margin: 10px 10px 0;
+  position: relative;
+  width: 280px;
+  vertical-align: top;
+  .button {
+    @include tc-label-sm;
+    background: $tc-gray-40;
+    border: 1px solid $tc-gray-50;
+    border-radius: 2px;
+    display: inline-block;
+    bottom: 20px;
+    color: $tc-white;
+    left: 58px;
+    padding: 6px 12px;
+    position: absolute;
+  }
+  .details {
+    margin: 0 20px;
+    width: 240px;
+  }
+  .header {
+    @include roboto-bold;
+    color: $tc-gray-80;
+    margin-bottom: 10px;
+    margin-top: 0px;
+  }
+  .selectedIcon,
+  .normalIcon,
+  .Icon {
+    margin: 50px 0 25px;
+  }
+  &.disabled {
+    opacity: 0.3
+  }
+  &.enabled:hover {
+    border-color: $tc-dark-blue-70;
+    cursor: pointer;
+    .button {
+      background: $tc-dark-blue;
+      border-color: transparent;
+      color: $tc-white;
+    }
+  }
+}

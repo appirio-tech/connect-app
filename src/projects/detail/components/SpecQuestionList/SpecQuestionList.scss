@@ -5,13 +5,13 @@
 
 .spec-question-list-item {
   display: flex;
-  border-bottom: 1px dashed $tc-gray-30;
-  padding: 15px 0;
+  padding: 35px 0 15px;
   width: 100%;
 
   .icon-col {
     padding-top: 3px;
     padding-right: 10px;
+    display: none;
   }
 
   .content-col {
@@ -23,13 +23,20 @@
       line-height: 25px;
       color: $tc-gray-80;
       margin-bottom: 15px;
+
+      span {
+        color: $tc-orange;
+        padding-left: $base-unit;
+      }
     }
 
     > p {
-      @include roboto;
-      font-size: 13px;
-      color: $tc-gray-70;
+      @include roboto-light;
+      margin-top: -10px;
+      font-size: 12px;
+      color: $tc-gray-50;
       font-weight: 400;
+      font-style: italic;
       line-height: 20px;
 
       &.bigger {
@@ -40,18 +47,71 @@
     .child-component {
       margin-top: 10px;
 
+      .colorSelector {
+        margin-bottom: 20px;
+      }
+      .row.tiled-group-row {
+        margin-bottom: 40px;
+        + .checkbox-group-item {
+          border-radius: 4px;
+        }
+      }
+      .checkbox-group-item.checkbox-item-checked{
+        background: $tc-dark-blue-10;
+      }
+      .row + .checkbox-group-item {
+        position: relative;
+        top: -20px;
+        margin-bottom: 0px;
+      }
+      .add-edit-features + .checkbox-group-item {
+        margin-top: 0;
+      }
+      .add-edit-features,
+      .row {
+        + .checkbox-group-item {
+          border-radius: 0 0 4px 4px;
+        }
+
+      }
+      .dropdown-wrap.default {
+        background: $tc-gray-neutral-light;
+        border-color: $tc-gray-20;
+        position: relative;
+        width: 150px;
+        left: 170px;
+        margin-top: -45px;
+        &:after {
+          border-bottom-color: $tc-gray-70;
+          border-right-color: $tc-gray-70;
+        }
+      }
       textarea {
         min-height: 80px;
         max-width: 100%;
         text-align: left;
         text-indent: 0;
+        margin-bottom: 0;
+      }
+      .checkbox-group-item {
+        width: 100%;
+        padding: 12px 10px;
         margin-bottom: 20px;
+        margin-right: 0;
+        border-radius: 4px;
+        background: $tc-gray-10;
+        label {
+          font-weight: 400;
+          color: $tc-black;
+          font-size: 12px;
+        }
       }
 
-      .checkbox-group-item label {
-        font-weight: 400;
-        color: $tc-black;
-        font-size: 13px;
+      .checkbox-group-options .checkbox-group-item {
+        width: auto;
+        background: none;
+        padding: 0;
+        margin-right: 30px;
       }
     }
   }

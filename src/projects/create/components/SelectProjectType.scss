@@ -1,0 +1,29 @@
+@import 'tc-includes';
+
+.SelectProjectType {
+  @include tc-body;
+  color: $tc-gray-50;
+  text-align: center;
+  max-width: 960px;
+  margin: 0 auto;
+  a, a:hover {
+    color: $tc-dark-blue;
+    cursor: pointer;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  h1 {
+    @include tc-heading;
+    color: $tc-gray-50;
+    margin-bottom: 20px;
+  }
+  .footer {
+    margin-bottom: 15px;
+    margin-top: 100px;
+  }
+  .WizardHeader {
+    margin: 20px 0;
+    min-width: 0;
+  }
+}

@@ -35,7 +35,15 @@ class EditProjectForm extends Component {
   componentWillReceiveProps(nextProps) {
     let updatedProject = Object.assign({}, nextProps.project)
     if (this.state.isFeaturesDirty && !this.state.isSaving) {
-      updatedProject = update(updatedProject, {details: { appDefinition: { features: { $set: this.state.project.details.appDefinition.features } } } })
+      updatedProject = update(updatedProject, {
+        details: {
+          appDefinition: {
+            features: {
+              $set: this.state.project.details.appDefinition.features
+            }
+          }
+        }
+      })
     }
     this.setState({
       project: updatedProject,
@@ -105,6 +113,7 @@ class EditProjectForm extends Component {
   }
 
   submit(model) {
+    console.log('submit', this.isChanged())
     if (this.state.isFeaturesDirty) {
       model.details.appDefinition.features = this.state.project.details.appDefinition.features
     }
@@ -121,12 +130,14 @@ class EditProjectForm extends Component {
         <SpecSection
           {...section}
           project={project}
+          sectionNumber={idx + 1}
           resetFeatures={this.onFeaturesSaveAttachedClick}
           showFeaturesDialog={this.showFeaturesDialog}
+          validate={(isInvalid) => section.isInvalid = isInvalid}
         />
         <div className="section-footer section-footer-spec">
           <button className="tc-btn tc-btn-primary tc-btn-md"
-            type="submit" disabled={!this.isChanged() || this.state.isSaving}
+            type="submit" disabled={(!this.isChanged() || this.state.isSaving) || section.isInvalid}
           >Save Changes</button>
         </div>
       </div>
@@ -154,7 +165,7 @@ class EditProjectForm extends Component {
             isEdittable={isEdittable} onSave={ this.saveFeatures }
           />
           <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
-            Save and close <Icons.XMarkIcon />  
+            Save and close <Icons.XMarkIcon />
           </div>
         </Modal>
       </div>
