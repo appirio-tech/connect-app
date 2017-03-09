@@ -27,19 +27,6 @@ deploy:
   local_dir: dist
   on:
     branch: dev
-# FIXME: @vikasrohit please remove this once feature/productsv1 has been deployed
-# to dev
-- provider: s3
-  cache_control: private, no-store, no-cache, must-revalidate, max-age=0
-  detect_encoding: true
-  access_key_id: $AWS_KEY
-  secret_access_key: $AWS_SECRET
-  bucket: connectv2.topcoder-dev.com
-  skip_cleanup: true
-  local_dir: dist
-  on:
-    branch: feature/productsv1
-
 - provider: s3
   cache_control: private, no-store, no-cache, must-revalidate, max-age=0
   detect_encoding: true
