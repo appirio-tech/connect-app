@@ -29,7 +29,7 @@ const getIcon = icon => {
   }
 }
 
-const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) => {
+const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog, isRequired}) => {
 
   const renderQ = (q, index) => {
     // let child = null
@@ -125,7 +125,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
-        required={q.required}
+        required={isRequired}
       >
         <ChildElem {...elemProps} />
       </SpecQuestionList.Item>

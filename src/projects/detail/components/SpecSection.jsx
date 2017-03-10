@@ -25,7 +25,10 @@ const SpecSection = props => {
       {
         !subSection.hideTitle &&
         <div className="sub-title">
-          <h4 className="title">{typeof subSection.title === 'function' ? subSection.title(project): subSection.title } <span>*</span></h4>
+          <h4 className="title">
+            {typeof subSection.title === 'function' ? subSection.title(project): subSection.title }
+            {subSection.isRequired && <span>*</span>}
+          </h4>
         </div>
       }
       <div className="content-boxs">
@@ -37,7 +40,7 @@ const SpecSection = props => {
   const onValidate = (isInvalid) => validate(isInvalid)
 
   const renderChild = props => {
-    const {type} = props
+    const {type, required} = props
     switch(type) {
     case 'tabs': {
       const tabs = _.get(props, 'tabs')
@@ -59,6 +62,7 @@ const SpecSection = props => {
           resetFeatures={resetFeatures}
           questions={props.questions}
           project={project}
+          isRequired={props.required}
         />
       )
     case 'notes':
