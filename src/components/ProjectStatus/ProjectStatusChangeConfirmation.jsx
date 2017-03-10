@@ -45,7 +45,7 @@ const ProjectStatusChangeConfirmation = ({ newStatus, onCancel, onConfirm, onRea
               <SelectDropdown
                 options={ cancelReasons }
                 onSelect={ onReasonUpdate }
-                theme='default'
+                theme="default"
               />
             </div>
           </div>

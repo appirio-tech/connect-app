@@ -40,7 +40,7 @@ const SpecSection = props => {
   const onValidate = (isInvalid) => validate(isInvalid)
 
   const renderChild = props => {
-    const {type, required} = props
+    const {type} = props
     switch(type) {
     case 'tabs': {
       const tabs = _.get(props, 'tabs')
@@ -72,7 +72,7 @@ const SpecSection = props => {
             {props.description}
           </div>
           <TCFormFields.Textarea
-            autoResize={true}
+            autoResize
             name={props.fieldName}
             value={_.get(project, props.fieldName) || ''}
           />
