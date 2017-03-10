@@ -37,7 +37,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
     const elemProps = {
       name: q.fieldName,
       label: q.label,
-      value: _.get(project, q.fieldName, undefined)
+      value: _.get(project, q.fieldName, '')
     }
 
     if (q.fieldName === 'details.appDefinition.numberScreens') {
