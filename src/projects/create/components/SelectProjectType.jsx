@@ -12,7 +12,7 @@ function SelectProjectType(props) {
     const icon = <SVGIconImage filePath={item.icon} />
     cards.push(
       <ProjectTypeCard
-        disabled={!props.projectName}
+        disabled={!props.projectName.trim()}
         icon={icon}
         info={item.info}
         key={key}
