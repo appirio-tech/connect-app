@@ -21,7 +21,7 @@ const scrollProps = {
 const renderSubNavItems = (child, idx) => {
   const { name, progress, link, required } = child
   const isComplete = progress.length && progress[0] === progress[1]
-  const showProgress = progress[0] > 0
+  const showProgress = progress[1] > 0
   return (
     <li key={idx}>
       <DirectLink to={link} className="boxs" {...scrollProps} href="javascript:">
