@@ -42,8 +42,11 @@ export default function(state = {}, action) {
     }
     return state
 
-  case CREATE_PROJECT_FAILURE:
   case UPDATE_PROJECT_FAILURE:
+    Alert.error('Please add a name for your project and then try saving again.')
+    return state
+
+  case CREATE_PROJECT_FAILURE:
   case DELETE_PROJECT_FAILURE:
   case ADD_PROJECT_ATTACHMENT_FAILURE:
   case UPDATE_PROJECT_ATTACHMENT_FAILURE:
