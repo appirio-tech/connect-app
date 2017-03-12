@@ -71,6 +71,8 @@ const SpecSection = props => {
             autoResize={true}
             name={props.fieldName}
             value={_.get(project, props.fieldName) || ''}
+            validations="isRequired"
+            validationError="Cannot contain Empty String"
           />
         </div>
       )
