@@ -136,7 +136,8 @@ const sections = [
             description: 'Describe your objectives for creating this application',
             type: 'textinput',
             fieldName: 'name',
-            validationError: 'Screen name cannot be blank'
+            validationError: 'Screen name cannot be blank',
+            validations: 'isRequired'
           },
           {
             icon: 'question',
@@ -145,7 +146,8 @@ const sections = [
             description: 'What are the important features/capabilities that the screen provides to your end users?',
             type: 'textbox',
             fieldName: 'description',
-            validationError: 'Answer cannot be blank'
+            validationError: 'Answer cannot be blank',
+            validations: 'isRequired'
           },
           {
             icon: 'question',
