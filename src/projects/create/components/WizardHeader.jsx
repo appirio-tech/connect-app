@@ -18,6 +18,7 @@ function WizardHeader(props) {
         onChange={props.onProjectNameChange}
         placeholder="Enter project name here"
         value={props.projectName}
+        autoFocus
       />
       <div className="project-ref-code-wrapper">
         <TextInput

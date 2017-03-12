@@ -10,6 +10,7 @@ function TextInput(props) {
       placeholder={props.placeholder}
       type="text"
       value={props.value}
+      autoFocus={props.autoFocus}
     />
   )
 }
