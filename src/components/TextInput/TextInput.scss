@@ -9,6 +9,7 @@
   border: none;
   border-bottom: 1px dashed $tc-gray-20;
   border-radius: 0;
+  -ms-overflow-style: none;
   box-shadow: none;
   font-size: $base-unit*3;
   line-height: $base-unit*4;
