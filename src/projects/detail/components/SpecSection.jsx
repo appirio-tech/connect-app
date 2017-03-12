@@ -19,15 +19,14 @@ const SpecSection = props => {
     validate,
     sectionNumber
   } = props
-  console.log('SpecSection', props)
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
       {
         !subSection.hideTitle &&
         <div className="sub-title">
           <h4 className="title">
-            {typeof subSection.title === 'function' ? subSection.title(project): subSection.title }
-            {subSection.isRequired && <span>*</span>}
+            {typeof subSection.title === 'function' ? subSection.title(project): subSection.title } 
+            <span>{((typeof subSection.required === 'function') ? subSection.required(project, subSections) : subSection.required) ? '*' : ''}</span>
           </h4>
         </div>
       }
