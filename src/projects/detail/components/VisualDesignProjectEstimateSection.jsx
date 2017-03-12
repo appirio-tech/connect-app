@@ -25,7 +25,7 @@ const VisualDesignProjectEstimateSection = ({products, numberScreens}) => {
   // selected option
   const pickedDurationOption = _.find(projectDurationOptions, (option) => option.value === numberScreens)
   const durationEstimate = pickedDurationOption ? pickedDurationOption.desc : '0 days'
-  const priceEstimate = pickedDurationOption ? (pickedDurationOption.price ? pickedDurationOption.price: 0): 0
+  const priceEstimate = pickedDurationOption.price ? pickedDurationOption.price : 0
 
   return (
     <div className="visual-design-project-estimate-section">
