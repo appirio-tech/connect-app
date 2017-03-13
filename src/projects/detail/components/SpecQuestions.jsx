@@ -68,6 +68,8 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog, i
       ChildElem = SeeAttachedTextareaInput
       elemProps.wrapperClass = 'row'
       elemProps.autoResize = true
+      elemProps.description = q.description
+      elemProps.renderDescriptionInChildren = true
       // child = <SeeAttachedTextareaInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'textinput':
@@ -94,7 +96,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog, i
       break
     case 'see-attached-tiled-radio-group':
       ChildElem = SeeAttachedTiledRadioGroup
-      _.assign(elemProps, {wrapperClass: 'row', options: q.options})
+      _.assign(elemProps, {wrapperClass: 'row', options: q.options, renderDescriptionInChildren: true, description: q.description})
       // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
     case 'checkbox-group':
@@ -108,7 +110,12 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog, i
       break
     case 'see-attached-features':
       ChildElem = SeeAttachedSpecFeatureQuestion
-      _.assign(elemProps, { resetValue: resetFeatures, question: q, showFeaturesDialog })
+      _.assign(elemProps, {
+        resetValue: resetFeatures,
+        question: q, showFeaturesDialog,
+        renderDescriptionInChildren: true,
+        description: q.description
+      })
       // child = <SeeAttachedSpecFeatureQuestion name={q.fieldName} value={value} question={q} resetValue={resetFeatures} showFeaturesDialog={showFeaturesDialog} />
       break
     case 'colors':

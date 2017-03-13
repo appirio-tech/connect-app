@@ -1,8 +1,17 @@
 import React, {PropTypes} from 'react'
 import {SelectDropdown} from 'appirio-tech-react-components'
+import uncontrollable from 'uncontrollable'
 import { PROJECT_STATUS_COMPLETED, PROJECT_STATUS_CANCELLED } from '../../config/constants'
 
-const ProjectStatusChangeConfirmation = ({ newStatus, onCancel, onConfirm, onReasonUpdate }) => {
+const ProjectStatusChangeConfirmation = ({
+    newStatus,
+    onCancel,
+    onConfirm,
+    onReasonUpdate,
+    statusChangeReason,
+    emptyCancelReason,
+    showEmptyReasonError
+  }) => {
   let confirmText
   let titleStatus
   switch(newStatus) {
@@ -19,15 +28,30 @@ const ProjectStatusChangeConfirmation = ({ newStatus, onCancel, onConfirm, onRea
     titleStatus = 'close'
   }
   const cancelReasons = [
+    { value: null, title: '-- Select Reason --'},
     { value: 'spam', title: 'Spam'},
     { value: 'demo', title: 'Demo/Test'},
-    { value: 'competitor', title: 'Went with competitor'},
-    { value: 'price', title: 'Price/Cost'},
-    { value: 'non-community', title: 'Not a good fit for community'},
-    { value: 'by-choice', title: 'Declined by our choice'},
-    { value: 'customer-inactivity', title: 'Customer didn\'t make decision'},
-    { value: 'customer-inhouse', title: 'Customer decided to do it themselves'}
+    { value: 'competitor', title: 'Customer selected competitor'},
+    { value: 'price', title: 'Price too high'},
+    { value: 'customer-inhouse', title: 'Being done in-house'},
+    { value: 'customer-inactivity', title: 'Customer not responsive'},
+    { value: 'non-community', title: 'Poor community fit'},
+    { value: 'by-choice', title: 'Declined by us'}
   ]
+  const handleReasonChange = (option) => {
+    // after reason change, remove the error
+    showEmptyReasonError(false)
+    // update reason in parent component
+    onReasonUpdate(option)
+  }
+  const handleConfirm = () => {
+    // if new status is cancelled but cancel reason is not set, show error
+    if (newStatus === PROJECT_STATUS_CANCELLED && !statusChangeReason) {
+      showEmptyReasonError(true)
+    } else { // otherwise update the status
+      onConfirm()
+    }
+  }
   return (
     <div className="modal project-status-change-modal">
       <div className="modal-title danger">
@@ -35,25 +59,27 @@ const ProjectStatusChangeConfirmation = ({ newStatus, onCancel, onConfirm, onRea
       </div>
       <div className="modal-body">
         <p className="message">
-          This will permanently change the status your project. This action cannot be undone.
+          This action will permanently change the status of your project and cannot be undone.
         </p>
 
         { newStatus === PROJECT_STATUS_CANCELLED &&
           <div className="cancellation-reason">
-            <label>Why do you cancel this project?</label>
+            <label>Why is this project being canceled?</label>
             <div className="select-cancellation-reason">
               <SelectDropdown
                 options={ cancelReasons }
-                onSelect={ onReasonUpdate }
-                theme="default"
+                onSelect={ handleReasonChange }
+                theme='default'
+                // support passing selected value for the dropdown
               />
             </div>
+            { emptyCancelReason && <div className="tc-error-messages">Please select reason to cancel the project</div> }
           </div>
         }
 
         <div className="button-area flex center">
           <button className="tc-btn tc-btn-default tc-btn-sm btn-cancel" onClick={onCancel}>Cancel</button>
-          <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={onConfirm}>{ confirmText }</button>
+          <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={ handleConfirm }>{ confirmText }</button>
         </div>
       </div>
     </div>
@@ -65,4 +91,6 @@ ProjectStatusChangeConfirmation.propTypes = {
   onConfirm: PropTypes.func.isRequired
 }
 
-export default ProjectStatusChangeConfirmation
+export default uncontrollable(ProjectStatusChangeConfirmation, {
+  emptyCancelReason: 'showEmptyReasonError'
+})
