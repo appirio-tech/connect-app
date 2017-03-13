@@ -1,4 +1,4 @@
-export default {
+const products = {
   Design: {
     icon: 'product-app-visual-design',
     info: 'Wireframe, mockups, visual design, and more',
@@ -60,6 +60,18 @@ export default {
         details: 'Get help with any part of your development cycle',
         icon: 'project-development-ideation',
         id: 'generic_dev'
+      }
+    }
+  }
+}
+
+export default products
+
+export function findProduct(product) {
+  for(var pType in products) {
+    for(var prd in products[pType].subtypes) {
+      if (products[pType].subtypes[prd].id === product) {
+        return prd
       }
     }
   }

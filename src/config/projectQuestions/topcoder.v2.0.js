@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { Icons } from 'appirio-tech-react-components'
+import { findProduct} from '../projectWizard'
 
 const isFileRequired = (project, subSections) => {
   const subSection = _.find(subSections, (s) => s.type === 'questions')
@@ -15,7 +16,14 @@ const isFileRequired = (project, subSections) => {
 const sections = [
   {
     id: 'appDefinition',
-    title: 'App Definition',
+    title: function(project, showProduct) {
+      const product = _.get(project, 'details.products[0]')
+      if (showProduct && product && product !== 'generic_dev') {
+        const prd = findProduct(product)
+        if (prd) return prd
+      }
+      return 'App Definition'
+    },
     required: true,
     description: 'Answer just a few questions about your application. You can also provide the needed information in a supporting-document - upload it below or add a link in the notes section.',
     subSections: [
@@ -56,8 +64,8 @@ const sections = [
             id: 'projectInfo',
             required: true,
             fieldName: 'description',
-            description: 'Description',
-            title: 'Description',
+            description: 'Brief Description',
+            title: 'Brief Description',
             type: 'textbox'
           },
           {

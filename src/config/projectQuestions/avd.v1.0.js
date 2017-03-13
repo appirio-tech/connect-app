@@ -31,14 +31,6 @@ const sections = [
         type: 'project-name'
       },
       {
-        id: 'projectInfo',
-        required: true,
-        fieldName: 'description',
-        description: 'Description',
-        title: 'Project Info',
-        type: 'notes'
-      },
-      {
         id: 'questions',
         required: true,
         hideTitle: true,
@@ -75,6 +67,14 @@ const sections = [
               {value: 'Desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
               {value: 'Wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
+          },
+          {
+            icon: 'question',
+            id: 'projectInfo',
+            fieldName: 'description',
+            description: 'Brief Description',
+            title: 'Brief Description',
+            type: 'textbox'
           },
           {
             icon: 'question',
