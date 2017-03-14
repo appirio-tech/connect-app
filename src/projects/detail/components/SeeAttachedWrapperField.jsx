@@ -34,7 +34,7 @@ const SeeAttachedWrapperField = ComposedComponent => class extends Component {
     }
     const ccProps = _.merge({}, _.omit(this.props, ['name', 'value']), {
       name: this.props.name + '.value',
-      value: _.get(this.props.value, 'value', undefined),
+      value: _.get(this.props.value, 'value', ''),
       onChange: this.onChange
     })
 
