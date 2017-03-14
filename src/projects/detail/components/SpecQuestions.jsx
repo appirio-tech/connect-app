@@ -29,7 +29,7 @@ const getIcon = icon => {
   }
 }
 
-const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) => {
+const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog, isRequired}) => {
 
   const renderQ = (q, index) => {
     // let child = null
@@ -37,7 +37,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
     const elemProps = {
       name: q.fieldName,
       label: q.label,
-      value: _.get(project, q.fieldName, undefined)
+      value: _.get(project, q.fieldName, '')
     }
 
     if (q.fieldName === 'details.appDefinition.numberScreens') {
@@ -68,6 +68,8 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
       ChildElem = SeeAttachedTextareaInput
       elemProps.wrapperClass = 'row'
       elemProps.autoResize = true
+      elemProps.description = q.description
+      elemProps.renderDescriptionInChildren = true
       // child = <SeeAttachedTextareaInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'textinput':
@@ -94,7 +96,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
       break
     case 'see-attached-tiled-radio-group':
       ChildElem = SeeAttachedTiledRadioGroup
-      _.assign(elemProps, {wrapperClass: 'row', options: q.options})
+      _.assign(elemProps, {wrapperClass: 'row', options: q.options, renderDescriptionInChildren: true, description: q.description})
       // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
     case 'checkbox-group':
@@ -108,7 +110,12 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
       break
     case 'see-attached-features':
       ChildElem = SeeAttachedSpecFeatureQuestion
-      _.assign(elemProps, { resetValue: resetFeatures, question: q, showFeaturesDialog })
+      _.assign(elemProps, {
+        resetValue: resetFeatures,
+        question: q, showFeaturesDialog,
+        renderDescriptionInChildren: true,
+        description: q.description
+      })
       // child = <SeeAttachedSpecFeatureQuestion name={q.fieldName} value={value} question={q} resetValue={resetFeatures} showFeaturesDialog={showFeaturesDialog} />
       break
     case 'colors':
@@ -125,7 +132,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
-        required={q.required}
+        required={isRequired}
       >
         <ChildElem {...elemProps} />
       </SpecQuestionList.Item>

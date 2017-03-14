@@ -34,7 +34,7 @@ const SeeAttachedWrapperField = ComposedComponent => class extends Component {
     }
     const ccProps = _.merge({}, _.omit(this.props, ['name', 'value']), {
       name: this.props.name + '.value',
-      value: _.get(this.props.value, 'value', undefined),
+      value: _.get(this.props.value, 'value', ''),
       onChange: this.onChange
     })
 
@@ -43,6 +43,7 @@ const SeeAttachedWrapperField = ComposedComponent => class extends Component {
     return (
       <div key={this.props.name}>
         {this.state.displayComponent && <ComposedComponent ref={ccProps.name} {...ccProps} />}
+        <p className="description">{ccProps.description}</p>
         <TCFormFields.Checkbox ref={cb.name} name={cb.name} label={label} onChange={this.onChange} value={cb.value}/>
       </div>
     )

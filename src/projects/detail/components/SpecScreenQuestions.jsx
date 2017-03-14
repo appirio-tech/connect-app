@@ -26,7 +26,8 @@ const SpecScreenQuestions = ({questions, screen}) => {
       name: q.fieldName,
       label: q.label,
       value: _.get(screen, q.fieldName, undefined),
-      validationError: q.validationError
+      validationError: q.validationError,
+      validations: q.validations
     }
     let ChildElem = ''
     switch (q.type) {
