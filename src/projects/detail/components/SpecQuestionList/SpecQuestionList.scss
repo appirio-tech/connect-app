@@ -30,7 +30,8 @@
       }
     }
 
-    > p {
+    > p,
+    .description {
       @include roboto-light;
       margin-top: -10px;
       font-size: 12px;
@@ -43,12 +44,15 @@
         font-size: 15px;
       }
     }
-
+    .description {
+      margin-bottom: $base-unit * 4;
+    }
     .child-component {
       margin-top: 10px;
-
+      
+      .add-edit-features,
       .colorSelector {
-        margin-bottom: 20px;
+        margin-bottom: $base-unit * 4;
       }
       .row.tiled-group-row {
         margin-bottom: 40px;
@@ -59,21 +63,7 @@
       .checkbox-group-item.checkbox-item-checked{
         background: $tc-dark-blue-10;
       }
-      .row + .checkbox-group-item {
-        position: relative;
-        top: -20px;
-        margin-bottom: 0px;
-      }
-      .add-edit-features + .checkbox-group-item {
-        margin-top: 0;
-      }
-      .add-edit-features,
-      .row {
-        + .checkbox-group-item {
-          border-radius: 0 0 4px 4px;
-        }
-
-      }
+      
       .dropdown-wrap.default {
         background: $tc-gray-neutral-light;
         border-color: $tc-gray-20;
@@ -99,7 +89,7 @@
         margin-bottom: 20px;
         margin-right: 0;
         border-radius: 4px;
-        background: $tc-gray-10;
+        background: $tc-gray-neutral-light;
         label {
           font-weight: 400;
           color: $tc-black;
