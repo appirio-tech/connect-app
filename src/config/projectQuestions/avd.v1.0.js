@@ -2,6 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import { Icons } from 'appirio-tech-react-components'
 import NumberText from '../../components/NumberText/NumberText'
+import { findProduct} from '../projectWizard'
 
 const isFileRequired = (project, subSections) => {
   const subSection = _.find(subSections, (s) => s.type === 'questions')
@@ -17,7 +18,14 @@ const isFileRequired = (project, subSections) => {
 const sections = [
   {
     id: 'appDefinition',
-    title: 'App Definition',
+    title: function(project, showProduct) {
+      const product = _.get(project, 'details.products[0]')
+      if (showProduct && product) {
+        const prd = findProduct(product)
+        if (prd) return prd
+      }
+      return 'Definition'
+    },
     required: true,
     pricePerPage: 1000,
     description: 'Answer just a few questions about your application. You can also provide the needed information in a supporting-document - upload it below or add a link in the notes section.',

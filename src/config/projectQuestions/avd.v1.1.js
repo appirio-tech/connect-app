@@ -24,7 +24,7 @@ const sections = [
         const prd = findProduct(product)
         if (prd) return prd
       }
-      return 'App Definition'
+      return 'Definition'
     },
     required: true,
     description: 'Answer just a few questions about your application. You can also provide the needed information in a supporting-document - upload it below or add a link in the notes section.',

@@ -68,15 +68,15 @@ const products = {
 export default products
 
 export function findProduct(product) {
-  for(var pType in products) {
-    for(var prd in products[pType].subtypes) {
+  if (product === 'generic_dev') {
+    return 'Development'
+  }
+  if (product === 'generic_design') {
+    return 'Design'
+  }
+  for(let pType in products) {
+    for(let prd in products[pType].subtypes) {
       if (products[pType].subtypes[prd].id === product) {
-        if (id === 'generic_dev') {
-          return 'Development'
-        }
-        if (id === 'generic_design') {
-          return 'Design'
-        }
         return prd
       }
     }

@@ -24,7 +24,7 @@ const sections = [
         const prd = findProduct(product)
         if (prd) return prd
       }
-      return 'App Definition'
+      return 'Definition'
     },
     productName: 'Wireframes',
     required: true,
