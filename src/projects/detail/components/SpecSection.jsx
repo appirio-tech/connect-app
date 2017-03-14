@@ -25,7 +25,10 @@ const SpecSection = props => {
       {
         !subSection.hideTitle &&
         <div className="sub-title">
-          <h4 className="title">{typeof subSection.title === 'function' ? subSection.title(project): subSection.title } <span>*</span></h4>
+          <h4 className="title">
+            {typeof subSection.title === 'function' ? subSection.title(project): subSection.title }
+            {subSection.isRequired && <span>*</span>}
+          </h4>
         </div>
       }
       <div className="content-boxs">
@@ -59,6 +62,7 @@ const SpecSection = props => {
           resetFeatures={resetFeatures}
           questions={props.questions}
           project={project}
+          isRequired={props.required}
         />
       )
     case 'notes':
@@ -68,7 +72,7 @@ const SpecSection = props => {
             {props.description}
           </div>
           <TCFormFields.Textarea
-            autoResize={true}
+            autoResize
             name={props.fieldName}
             value={_.get(project, props.fieldName) || ''}
           />

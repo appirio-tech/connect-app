@@ -16,7 +16,7 @@ const deviceMap = {
 /*eslint-disable camelcase */
 const typeMap = {
   app_dev: 'Design & Development Project',
-  generic: 'Work Project',// needed for backward compatibility with templates < v1.1
+  generic: 'Work Project', // needed for backward compatibility with templates < v1.1
   visual_design: 'Visual Design Project',
   visual_prototype: 'Visual Prototype Project'// needed for backward compatibility with templates < v1.1
 }

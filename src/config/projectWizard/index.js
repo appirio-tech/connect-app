@@ -25,7 +25,7 @@ export default {
       },
       'Other Design': {
         brief: 'other designs',
-        details: `Get help with other types of design`,
+        details: 'Get help with other types of design',
         icon: 'project-wireframes',
         id: 'generic_design'
       }
@@ -39,7 +39,7 @@ export default {
     subtypes: {
       Prototype: {
         brief: '3-20 screens',
-        details: `Translate designs to an HTML/CSS/JavaScript prototype`,
+        details: 'Translate designs to an HTML/CSS/JavaScript prototype',
         icon: 'project-prototype-demo',
         id: 'visual_prototype'
       },
@@ -51,7 +51,7 @@ export default {
       },
       'Application Development': {
         brief: 'Apps',
-        details: `Build apps for mobile, web, or wearables`,
+        details: 'Build apps for mobile, web, or wearables',
         icon: 'project-development-code',
         id: 'application_development'
       },

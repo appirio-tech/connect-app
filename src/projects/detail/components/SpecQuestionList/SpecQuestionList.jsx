@@ -14,13 +14,13 @@ SpecQuestionList.propTypes = {
   children: PropTypes.any.isRequired
 }
 
-const SpecQuestionListItem = ({icon, title, description, children, required}) => (
+const SpecQuestionListItem = ({icon, title, description, children, required, renderDescriptionInChildren}) => (
   <div className="spec-question-list-item">
     {icon && <div className="icon-col">{icon}</div>}
     <div className="content-col">
       <h5>{title}{required ? <span>*</span> : null}</h5>
       {children && <div className="child-component">{children}</div>}
-      <p className={cn({bigger: !icon})}>{description}</p>
+      {!renderDescriptionInChildren && <p className={cn({bigger: !icon})}>{description}</p>}
     </div>
   </div>
 )

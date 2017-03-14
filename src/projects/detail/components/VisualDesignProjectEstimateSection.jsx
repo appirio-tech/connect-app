@@ -3,7 +3,7 @@ import './VisualDesignProjectEstimateSection.scss'
 import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
 import _ from 'lodash'
 
-const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 const DEFAULT_AVD_TEMPLATE = 'avd.v1.1'
 
 const VisualDesignProjectEstimateSection = ({products, numberScreens}) => {
@@ -25,7 +25,7 @@ const VisualDesignProjectEstimateSection = ({products, numberScreens}) => {
   // selected option
   const pickedDurationOption = _.find(projectDurationOptions, (option) => option.value === numberScreens)
   const durationEstimate = pickedDurationOption ? pickedDurationOption.desc : '0 days'
-  const priceEstimate = pickedDurationOption ? pickedDurationOption.price : 0
+  const priceEstimate = pickedDurationOption && pickedDurationOption.price ? pickedDurationOption.price : 0
 
   return (
     <div className="visual-design-project-estimate-section">

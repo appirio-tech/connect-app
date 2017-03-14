@@ -12,7 +12,7 @@ function SelectProjectType(props) {
     const icon = <SVGIconImage filePath={item.icon} />
     cards.push(
       <ProjectTypeCard
-        disabled={!props.projectName}
+        disabled={!props.projectName.trim()}
         icon={icon}
         info={item.info}
         key={key}
@@ -32,7 +32,7 @@ function SelectProjectType(props) {
       <h1>Select your project category</h1>
       {cards}
       <div className="footer">
-        Looking for something else? <a href="http://crowdsourcing.topcoder.com/piqued_by_crowdsourcing">Get in touch</a> with us.
+        Looking for something else? <a href="http://crowdsourcing.topcoder.com/piqued_by_crowdsourcing">Get in touch with us.</a>
       </div>
     </div>
   )
