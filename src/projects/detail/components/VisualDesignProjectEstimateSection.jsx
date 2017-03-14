@@ -4,12 +4,12 @@ import typeToSpecification from '../../../config/projectSpecification/typeToSpec
 import _ from 'lodash'
 
 const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-const DEFAULT_AVD_TEMPLATE = 'avd.v1.1'
+const DEFAULT_DESIGN_TEMPLATE = 'visual_design.v1.0'
 
 const VisualDesignProjectEstimateSection = ({products, numberScreens}) => {
   // determine the spec template to use for the first product used in the project
   // TODO when we support multiple products per project, we can loop through products and sum up the estimates
-  const specTemplate = products.length > 0 ? typeToSpecification[products[0]] : DEFAULT_AVD_TEMPLATE
+  const specTemplate = products.length > 0 ? typeToSpecification[products[0]] : DEFAULT_DESIGN_TEMPLATE
   const sections = require('../../../config/projectQuestions/' + specTemplate).default
   // appDefinition section
   const section = _.find(sections, (section) => section.id === 'appDefinition')
