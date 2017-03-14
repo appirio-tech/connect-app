@@ -65,7 +65,7 @@ const sections = [
             required: true,
             fieldName: 'description',
             description: 'Brief Description',
-            title: 'Brief Description',
+            title: 'Description',
             type: 'textbox'
           },
           {

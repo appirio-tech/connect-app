@@ -73,7 +73,7 @@ const sections = [
             id: 'projectInfo',
             fieldName: 'description',
             description: 'Brief Description',
-            title: 'Brief Description',
+            title: 'Description',
             type: 'textbox'
           },
           {

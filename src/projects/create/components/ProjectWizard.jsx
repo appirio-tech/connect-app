@@ -46,7 +46,6 @@ class ProjectWizard extends Component {
         },
         products: [config[s.projectType].subtypes[s.projectSubType].id]
       },
-      description: 'No description provided',
       name: s.projectName,
       type:  config[s.projectType].id
     })

@@ -48,14 +48,6 @@ const sections = [
         questions: [
           {
             icon: 'question',
-            id: 'projectInfo',
-            fieldName: 'description',
-            description: 'Brief Description',
-            title: 'Brief Description',
-            type: 'textbox'
-          },
-          {
-            icon: 'question',
             title: 'How many screens do you need designed?',
             description: 'This is the most popular project size that can get a medium-sized app designed in a breeze',
             fieldName: 'details.appDefinition.numberScreens',
@@ -81,6 +73,14 @@ const sections = [
               {value: 'Desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
               {value: 'Wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
+          },
+          {
+            icon: 'question',
+            id: 'projectInfo',
+            fieldName: 'description',
+            description: 'Brief Description',
+            title: 'Description',
+            type: 'textbox'
           },
           {
             icon: 'question',
