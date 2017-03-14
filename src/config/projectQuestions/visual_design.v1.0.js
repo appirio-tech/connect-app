@@ -2,6 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import { Icons } from 'appirio-tech-react-components'
 import NumberText from '../../components/NumberText/NumberText'
+import { findProduct} from '../projectWizard'
 
 const isFileRequired = (project, subSections) => {
   const subSection = _.find(subSections, (s) => s.type === 'questions')
@@ -17,8 +18,16 @@ const isFileRequired = (project, subSections) => {
 const sections = [
   {
     id: 'appDefinition',
-    title: 'App Definition',
+    title: function(project, showProduct) {
+      const product = _.get(project, 'details.products[0]')
+      if (showProduct && product) {
+        const prd = findProduct(product)
+        if (prd) return prd
+      }
+      return 'Definition'
+    },
     required: true,
+    pricePerPage: 1000,
     description: 'Answer just a few questions about your application. You can also provide the needed information in a supporting-document - upload it below or add a link in the notes section.',
     subSections: [
       {
@@ -39,22 +48,15 @@ const sections = [
         questions: [
           {
             icon: 'question',
-            id: 'projectInfo',
-            fieldName: 'description',
-            description: 'Brief Description',
-            title: 'Project Info',
-            type: 'textbox'
-          },
-          {
-            icon: 'question',
             title: 'How many screens do you need designed?',
             description: 'This is the most popular project size that can get a medium-sized app designed in a breeze',
             fieldName: 'details.appDefinition.numberScreens',
             type: 'tiled-radio-group',
             options: [
-              {value: '1-3', title: 'screens', icon: NumberText, iconOptions: { number: '1-3' }, desc: '5-7 days', price: 5000},
-              {value: '4-8', title: 'screens', icon: NumberText, iconOptions: { number: '4-8' }, desc: '7-10 days', price: 7000},
-              {value: '9-15', title: 'screens', icon: NumberText, iconOptions: { number: '9-15' }, desc: '8-10 days', price: 8500}
+              {value: '1', title: 'screens', icon: NumberText, iconOptions: { number: '1' }, desc: '3-5 days'},
+              {value: '3', title: 'screens', icon: NumberText, iconOptions: { number: '3' }, desc: '5-10 days'},
+              {value: '5', title: 'screens', icon: NumberText, iconOptions: { number: '5' }, desc: '7-10 days'},
+              {value: '10', title: 'screens', icon: NumberText, iconOptions: { number: '10' }, desc: '10-14 days'}
             ]
           },
           {
@@ -76,10 +78,11 @@ const sections = [
           },
           {
             icon: 'question',
-            title: 'What is the goal of your application? How will people use it?',
-            description: 'Describe your objectives for creating this application',
-            type: 'see-attached-textbox',
-            fieldName: 'details.appDefinition.goal'
+            id: 'projectInfo',
+            fieldName: 'description',
+            description: 'Brief Description',
+            title: 'Description',
+            type: 'textbox'
           },
           {
             icon: 'question',
@@ -87,6 +90,13 @@ const sections = [
             description: 'Describe the roles and needs of your target users',
             type: 'see-attached-textbox',
             fieldName: 'details.appDefinition.users'
+          },
+          {
+            icon: 'question',
+            title: 'Feature requirements',
+            description: 'Please list all the features you would like in your application. You can use our wizard to pick from common features or define your own.',
+            type: 'see-attached-features',
+            fieldName: 'details.appDefinition.features'
           }
         ]
       },
@@ -177,42 +187,56 @@ const sections = [
   {
     id: 'designSpecification',
     required: false,
-    title: 'Design Guidelines',
+    title: 'Design Specification',
     description: 'Define the visual style for your application or provide a style guide or brand guidelines. Skip this section (or particular questions) if you don\'t have any preferences or restrictions.',
     subSections: [
       {
         id: 'questions',
         required: false,
-        hideTitle: true,
         title: 'Questions',
         description: '',
         type: 'questions',
         questions: [
           {
-            id: 'guidelines',
-            title: 'Guidelines',
-            description: 'Do you have brand guidelines that need to be followed? If yes, please include a link or attach them in the definition section, above.',
-            type: 'see-attached-textbox',
-            // required: false,
-            fieldName: 'details.designSpecification.guidelines'
+            icon: 'question',
+            title: 'What font style do you prefer? (Pick one)',
+            description: 'The typography used in your designs will fit within these broad font styles',
+            type: 'tiled-radio-group',
+            options: [
+              {value: 'serif', title: 'Serif', icon: Icons.IconTcSpecTypeSerif, iconOptions: { fill: '#00000'}, desc: 'formal, old style'},
+              {value: 'sanSerif', title: 'Sans Serif', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: 'clean, modern, informal'}
+            ],
+            fieldName: 'details.designSpecification.fontStyle'
           },
           {
-            id: 'examples',
-            title: 'Examples',
-            description: 'Are there any apps or sites that have a look and feel that you would want used as inspiration? Please provide links or examples.',
-            type: 'see-attached-textbox',
-            // required: false,
-            fieldName: 'details.designSpecification.examples'
+            icon: 'question',
+            title: 'What colors do you like? (Select all that apply)',
+            description: 'Your preferred colors will be used to guide the shading in your designs',
+            type: 'colors',
+            defaultColors: [],
+            fieldName: 'details.designSpecification.colors'
           },
           {
-            id: 'excludeExamples',
-            // required: false,
-            fieldName: 'details.designSpecification.excludeExamples',
-            title: 'Exclude Examples',
-            description: 'On the other hand, are there any apps or sites that you dislike? Please provide links or examples.',
-            type: 'see-attached-textbox'
+            icon: 'question',
+            title: 'What icon style do you prefer? (Pick one)',
+            description: 'Icons within your designs will follow these styles',
+            type: 'tiled-radio-group',
+            options: [
+              {value: 'flatColor', title: 'Flat Color', icon: Icons.IconTcSpecIconTypeColorHome, iconOptions: { fill: '#00000'}, desc: 'playful'},
+              {value: 'thinLine', title: 'Thin Line', icon: Icons.IconTcSpecIconTypeOutlineHome, iconOptions: { fill: '#00000'}, desc: 'modern'},
+              {value: 'solidLine', title: 'Solid Line', icon: Icons.IconTcSpecIconTypeGlyphHome, iconOptions: { fill: '#00000'}, desc: 'classic'}
+            ],
+            fieldName: 'details.designSpecification.iconStyle'
           }
         ]
+      },
+      {
+        id: 'notes',
+        required: false,
+        fieldName: 'details.designSpecification.notes',
+        title: 'Notes',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
+        type: 'notes'
       }
     ]
   }

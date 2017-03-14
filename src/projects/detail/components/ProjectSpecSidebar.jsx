@@ -50,7 +50,7 @@ class ProjectSpecSidebar extends Component {
     const {project, sections} = nextProps
     const navItems = _.map(sections, s => {
       return {
-        name: s.title,
+        name: typeof s.title === 'function' ? s.title(project, false): s.title,
         required: s.required,
         link: s.id,
         subItems: _.map(s.subSections, sub => {

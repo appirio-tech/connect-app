@@ -150,7 +150,7 @@ const SpecSection = props => {
       <div className="boxes">
         <div className="section-header big-titles">
           <h2 id={id}>
-            {title}
+            {typeof title === 'function' ? title(project, true): title }
           </h2>
           <span className="section-number">{ sectionNumber }</span>
         </div>
