@@ -33,7 +33,11 @@ export default function(state = {}, action) {
     return state
 
   case UPDATE_PROJECT_SUCCESS:
-    Alert.success('Project updated.')
+    if (action.payload.status === 'in_review') {
+      Alert.success('Project submitted.')
+    } else {
+      Alert.success('Project updated.')
+    }
     return state
   case REMOVE_PROJECT_MEMBER_SUCCESS:
     // show notification message if user leaving a project

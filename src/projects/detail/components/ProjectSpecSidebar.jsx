@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React, { PropTypes, Component } from 'react'
+import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import SidebarNav from './SidebarNav'
 import VisualDesignProjectEstimateSection from './VisualDesignProjectEstimateSection'
@@ -77,7 +78,9 @@ class ProjectSpecSidebar extends Component {
 
   onSubmitForReview() {
     const { updateProject, project } = this.props
-    updateProject(project.id, { status: 'in_review'})
+    updateProject(project.id, { status: 'in_review'}).then(() => {
+      browserHistory.push(`/projects/${project.id}`)
+    })
   }
 
   render() {
