@@ -33,7 +33,6 @@
     > p,
     .description {
       @include roboto-light;
-      margin-top: -10px;
       font-size: 12px;
       color: $tc-gray-50;
       font-weight: 400;
@@ -50,18 +49,12 @@
     .child-component {
       margin-top: 10px;
       
-      .add-edit-features,
       .colorSelector {
         margin-bottom: $base-unit * 4;
       }
-      .row.tiled-group-row {
-        margin-bottom: 40px;
-        + .checkbox-group-item {
-          border-radius: 4px;
-        }
-      }
       .checkbox-group-item.checkbox-item-checked{
         background: $tc-dark-blue-10;
+        border-radius: 4px;
       }
       
       .dropdown-wrap.default {
