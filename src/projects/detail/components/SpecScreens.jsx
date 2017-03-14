@@ -28,9 +28,7 @@ class SpecScreens extends Component {
   validateScreen(index, screen) {
     const screens = [...this.state.screens.slice(0, index),
       screen, ...this.state.screens.slice(index + 1)]
-    this.setState({ screens })
-    this.props.setValue(screens)
-    this.props.onValidate(!(!_.find(screens, 'isInvalid')))
+    this.props.onValidate(!(!_.find(screens, (screen) => screen.name.trim() === '' || screen.description.trim() === '')))
   }
 
   deleteScreen(index) {
@@ -47,8 +45,7 @@ class SpecScreens extends Component {
       importanceLevel: {
         title: '1',
         value: 1
-      },
-      isInvalid: true
+      }
     }
     const screens = [...this.state.screens, addEmptyScreen ? emptyScreen : screen]
     this.setState({ screens })
@@ -59,7 +56,7 @@ class SpecScreens extends Component {
   render() {
     const { screens } = this.state
     const { appDefinition } = this.props.project.details
-    const numberScreensSelected = parseInt(_.last(_.get(appDefinition, 'numberScreens', '0').split('-'))) 
+    const numberScreensSelected = parseInt(_.last(_.get(appDefinition, 'numberScreens', '0').split('-')))
 
     const renderCurrentScreen = (screen, index) => {
       return (
