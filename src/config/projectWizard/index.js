@@ -74,8 +74,8 @@ export function findProduct(product) {
   if (product === 'generic_design') {
     return 'Design'
   }
-  for(let pType in products) {
-    for(let prd in products[pType].subtypes) {
+  for(const pType in products) {
+    for(const prd in products[pType].subtypes) {
       if (products[pType].subtypes[prd].id === product) {
         return prd
       }
