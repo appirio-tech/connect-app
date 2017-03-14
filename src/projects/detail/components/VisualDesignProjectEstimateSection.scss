@@ -3,6 +3,7 @@
 .visual-design-project-estimate-section {
   display: flex;
   flex-wrap: wrap;
+  flex-direction: row;
 
   h4.titles {
     width: 100%;
@@ -20,7 +21,7 @@
 
   .estimate {
     text-align: right;
-    line-height: 20px;
+    flex: auto;
     span {
       color: $tc-gray-50;
     }
