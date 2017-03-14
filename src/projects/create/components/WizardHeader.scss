@@ -24,4 +24,8 @@
     text-align: left;
     width: 90px;
   }
+  
+  input::-ms-clear{
+    display:none;
+  }
 }
