@@ -62,17 +62,6 @@ class EditAppScreenForm extends Component {
         questions={questions}
         screen={screen}
         />
-
-        <div className="edit-screen-footer">
-          <button className="tc-btn tc-btn-default tc-btn-md"
-            onClick={(evt) => {
-              evt.preventDefault()
-              this.props.onDelete()
-            }}
-          >
-            Delete screen
-          </button>
-        </div>
       </Formsy.Form>
     )
   }

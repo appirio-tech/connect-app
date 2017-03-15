@@ -61,8 +61,18 @@ class SpecScreens extends Component {
     const renderCurrentScreen = (screen, index) => {
       return (
         <div key={index}>
-          <div className="dashed-bottom-border">
+          <div className="app-screen-header">
             <h5 className="screen-title">Screen {index + 1}</h5>
+            <button className="tc-btn tc-btn-secondary tc-btn-xs"
+              disabled={screen.isInvalid}
+              type="button"
+              onClick={(evt) => {
+                evt.preventDefault()
+                this.deleteScreen(index)
+              }}
+            >
+              Delete
+            </button>
           </div>
           <EditAppScreenForm
             screen={screen}
