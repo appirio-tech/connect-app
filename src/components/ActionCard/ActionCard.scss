@@ -27,6 +27,7 @@
   .card-title {
     @include roboto-medium;
     flex-grow: 1;
+    word-break: break-word;
     align-items: center;
     line-height: $base-unit*6;
     font-size: $base-unit*4;
