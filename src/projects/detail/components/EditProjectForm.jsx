@@ -35,7 +35,15 @@ class EditProjectForm extends Component {
   componentWillReceiveProps(nextProps) {
     let updatedProject = Object.assign({}, nextProps.project)
     if (this.state.isFeaturesDirty && !this.state.isSaving) {
-      updatedProject = update(updatedProject, {details: { appDefinition: { features: { $set: this.state.project.details.appDefinition.features } } } })
+      updatedProject = update(updatedProject, {
+        details: {
+          appDefinition: {
+            features: {
+              $set: this.state.project.details.appDefinition.features
+            }
+          }
+        }
+      })
     }
     this.setState({
       project: updatedProject,
@@ -57,6 +65,16 @@ class EditProjectForm extends Component {
   // Notify user if they navigate away while the form is modified.
   onLeave(e) {
     if (this.isChanged()) {
+      // TODO: remove this block - it disables unsaved changes popup 
+      // for app screens changes
+      if (this.refs.form){
+        const pristine = this.refs.form.getPristineValues()
+        const current = this.refs.form.getCurrentValues()
+        pristine['details.appScreens.screens']=current['details.appScreens.screens']
+        if (_.isEqual(pristine, current)){
+          return
+        }
+      }
       return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
     }
   }
@@ -105,6 +123,7 @@ class EditProjectForm extends Component {
   }
 
   submit(model) {
+    console.log('submit', this.isChanged())
     if (this.state.isFeaturesDirty) {
       model.details.appDefinition.features = this.state.project.details.appDefinition.features
     }
@@ -116,21 +135,27 @@ class EditProjectForm extends Component {
   render() {
     const { isEdittable, sections } = this.props
     const { project } = this.state
-    const renderSection = (section, idx) => (
-      <div key={idx}>
-        <SpecSection
-          {...section}
-          project={project}
-          resetFeatures={this.onFeaturesSaveAttachedClick}
-          showFeaturesDialog={this.showFeaturesDialog}
-        />
-        <div className="section-footer section-footer-spec">
-          <button className="tc-btn tc-btn-primary tc-btn-md"
-            type="submit" disabled={!this.isChanged() || this.state.isSaving}
-          >Save Changes</button>
+    const renderSection = (section, idx) => {
+      const anySectionInvalid = _.some(this.props.sections, (s) => s.isInvalid)
+      return (
+        <div key={idx}>
+          <SpecSection
+            {...section}
+            project={project}
+            sectionNumber={idx + 1}
+            resetFeatures={this.onFeaturesSaveAttachedClick}
+            showFeaturesDialog={this.showFeaturesDialog}
+            // TODO we shoudl not update the props (section is coming from props)
+            validate={(isInvalid) => section.isInvalid = isInvalid}
+          />
+          <div className="section-footer section-footer-spec">
+            <button className="tc-btn tc-btn-primary tc-btn-md"
+              type="submit" disabled={(!this.isChanged() || this.state.isSaving) || anySectionInvalid}
+            >Save Changes</button>
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
 
     return (
       <div>
@@ -154,7 +179,7 @@ class EditProjectForm extends Component {
             isEdittable={isEdittable} onSave={ this.saveFeatures }
           />
           <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
-            Save and close <Icons.XMarkIcon />  
+            Save and close <Icons.XMarkIcon />
           </div>
         </Modal>
       </div>

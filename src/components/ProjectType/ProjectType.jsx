@@ -8,6 +8,7 @@ const deviceMap = {
   phone: <div key="IPHONE" className="icon icon-iphone">Phone</div>,
   tablet: <div key="IPAD" className="icon icon-ipad">Tablet</div>,
   desktop: <div key="WEB" className="icon icon-web">Desktop</div>,
+  wearable: <div key="APPLE_WATCH" className="icon icon-apple-watch"> Apple Watch</div>,
   'apple-watch': <div key="APPLE_WATCH" className="icon icon-apple-watch"> Apple Watch</div>,
   'android-watch': <div  key="ANDROID_WEAR" className="icon icon-android-wear">Android Watch</div>
 }
@@ -15,9 +16,9 @@ const deviceMap = {
 /*eslint-disable camelcase */
 const typeMap = {
   app_dev: 'Design & Development Project',
-  generic: 'Work Project',
+  generic: 'Work Project', // needed for backward compatibility with templates < v1.1
   visual_design: 'Visual Design Project',
-  visual_prototype: 'Visual Prototype Project'
+  visual_prototype: 'Visual Prototype Project'// needed for backward compatibility with templates < v1.1
 }
 
 /*eslint-enable camelcase */

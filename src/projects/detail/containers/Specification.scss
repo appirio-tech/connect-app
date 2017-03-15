@@ -70,14 +70,14 @@ $title-color: $tc-gray-80;
 
 .two-col-content.content {
   .tc-file-field__inputs {
-    height: 30px;
+    height: 45px;
   }
   /* .tc-file-field__inputs */
   .tc-file-field__inputs,
   .tc-textarea {
-    background: $tc-gray-neutral-light;
+    /*background: $tc-gray-neutral-light;
     border-color: $tc-gray-20;
-    color: $tc-black;
+    color: $tc-black;*/
 
     &::-webkit-input-placeholder {
       color: #888894;
@@ -96,10 +96,30 @@ $title-color: $tc-gray-80;
     }
   }
   /* .dashed-bottom-border */
-  .dashed-bottom-border {
-    border-bottom: 1px dashed #c3c3c8;
+  .app-screen-header {
+    border-bottom: 1px solid #c3c3c8;
+    display: flex;
+    justify-content: space-between;
     padding: 15px 0;
     position: relative;
+
+    .screen-title, .project-name {
+      @include roboto;
+      color: black;
+      font-weight: bold;
+    }
+    .screen-title {
+      font-size: 18px;
+    }
+
+    .project-name {
+      font-size: 20px;
+    }
+
+    button.tc-btn-xs {//TODO ideally we should fix it in react-components repo
+      padding-top: 2px;
+      padding-bottom: 2px;
+    }
   }
   /* .bottom-border-titles */
   .bottom-border-titles {
@@ -126,6 +146,19 @@ $title-color: $tc-gray-80;
     }
   }
 
+  .sub-title {
+    margin: 50px 0 20px;
+    .title {
+      font-size: 15px;
+      line-height: 25px;
+      color: $tc-gray-80;
+      span {
+        color: $tc-orange;
+        font-size: 15px;
+        padding-left: 5px;
+      }
+    }
+  }
   .container {
     @include flexBox;
     background-color: transparent;
@@ -157,26 +190,29 @@ $title-color: $tc-gray-80;
 
       .title {
         color: $tc-gray-80;
-        @include roboto;
-        font-weight: 400;
+        @include roboto-bold;
       }
 
       .right-area-item {
-        padding: 50px 0 70px 0;
+        padding: 0 0 70px 0;
         margin-bottom: 20px;
         border-radius: 4px;
         background-color: #fff;
 
         .boxes {
-          margin: 0 10%;
+          margin: 0 6%;
         }
 
         .big-titles {
           @include roboto-light;
           font-size: 28px;
-          color: $gray-color;
+          color: $tc-gray-70;
           line-height: 30px;
-          margin-bottom: 20px;
+          padding: 30px 0 30px 6%;
+          margin: 0 -6.75% 20px;
+          border-radius: 4px 4px 0 0;
+          background: $tc-gray-neutral-light;
+          border-bottom: 1px dashed $tc-gray-20;
 
           .optional,
           .required {
@@ -205,6 +241,10 @@ $title-color: $tc-gray-80;
           font-size: 15px;
           color: $gray-color;
           line-height: 25px;
+
+          strong {
+            font-weight: bold;
+          }
         }
 
         &.design-specification-two {
@@ -241,7 +281,7 @@ $title-color: $tc-gray-80;
         }
 
         textarea {
-          height: 80px;
+          height: 45px;
           max-width: 100%;
           text-align: left;
           text-indent: 0;
@@ -325,12 +365,23 @@ $title-color: $tc-gray-80;
     }
 
     textarea {
-      min-height: 80px;
+      min-height: 45px;
       max-width: 100%;
       text-align: left;
       text-indent: 0;
       margin-bottom: 20px;
       resize: vertical;
+    }
+  }
+
+  .section-header  {
+    display: flex;
+    justify-content: space-between;
+
+    .section-number {
+      @include tc-label-lg;
+      color: $tc-gray-30;
+      padding-right: 6*$base-unit;
     }
   }
 
@@ -724,6 +775,139 @@ $title-color: $tc-gray-80;
         position: absolute;
         right: 0;
       }
+    }
+  }
+}
+
+.tc-link {
+  @include roboto;
+}
+
+.SelectDropdown {
+  margin-bottom: 20px;
+}
+
+.edit-screen-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.screen-number-reached-message {
+  @include roboto;
+  color: white;
+}
+
+.project-name-section {
+  display: flex;
+  align-items: flex-start;
+
+  .dashed-bottom-border,
+  .editable-project-name {
+    flex: 1;
+  }
+
+  .read-only-refcode {
+    height: 100%;
+    align-self: flex-end;
+    border-bottom: 1px solid $tc-gray-40;
+    padding: 0px 2*$base-unit;
+    position: relative;
+
+    .refcode-desc {
+      @include roboto;
+      font-size: 13px;
+      color: #5d5d66;
+      position: absolute;
+      bottom: -20px;
+      font-style: italic;
+      white-space: nowrap;
+    }
+  }
+
+  .textinput-refcode {
+    position: relative;
+    width: 100px;
+    height: 100%;
+    margin-left: 10px;
+
+    .refcode-desc {
+      @include roboto;
+      font-size: 12px;
+      line-height: 20px;
+      color: $tc-gray-50;
+      position: absolute;
+      bottom: -20px;
+      font-style: italic;
+    }
+
+    .project-refcode {
+      width: 100%;
+      height: 100%;
+
+      label {
+        display: none;//hides the empty label
+      }
+
+      input {
+        height: 50px;
+        line-height: 30px;
+        font-size: 20px;
+        @include placeholder {
+          color: $tc-gray-30;
+        }
+      }
+    }
+  }
+}
+
+.two-col-content.content .container .tiled-group-item {
+  border: 1px solid $tc-gray-20;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 10px 10px 0;
+  position: relative;
+  vertical-align: top;
+  .check-mark {
+    background: $tc-dark-blue-90;
+    border-radius: 2px;
+    display: none;
+    height: 15px;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 15px;
+    .Icon {
+      position: relative;
+      margin: 0;
+      top: -5px;
+    }
+  }
+  &.disabled {
+    opacity: 0.3
+  }
+  &:hover {
+    border-color: $tc-dark-blue-70;
+    cursor: pointer;
+    .icon {
+      color: $tc-dark-blue-70;
+    }
+  }
+
+  &.active {
+    background: $tc-gray-10;
+    border-color: transparent;
+    &:hover {
+      border-color: transparent;
+      .icon span {
+        color: $tc-gray-70;
+      }
+    }
+    .check-mark {
+      display: block;
     }
   }
 }

@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React, {PropTypes} from 'react'
 import moment from 'moment'
 import Panel from '../Panel/Panel'
@@ -68,11 +69,11 @@ class FeedComments extends React.Component {
       {comments.map((item, idx) =>
         <Comment
           key={idx}
-          avatarUrl={item.author.photoURL}
-          authorName={item.author.firstName + ' ' + item.author.lastName}
+          avatarUrl={ _.get(item, 'author.photoURL', null) }
+          authorName={ item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user' }
           date={moment(item.date).fromNow()}
           active={item.unread}
-          self={item.author.userId === currentUser.userId}
+          self={ item.author && item.author.userId === currentUser.userId}
         >
           <div dangerouslySetInnerHTML={{__html: item.content}} />
         </Comment>

@@ -1,7 +1,9 @@
 import _ from 'lodash'
 import React, { PropTypes, Component } from 'react'
+import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import SidebarNav from './SidebarNav'
+import VisualDesignProjectEstimateSection from './VisualDesignProjectEstimateSection'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../../config/constants'
 import { updateProject } from '../../actions/project'
 import './ProjectSpecSidebar.scss'
@@ -20,6 +22,16 @@ const calcProgress = (project, subSection) => {
     let count = 0
     _.forEach(vals, (v) => {if (v) count++ })
     return [count, subSection.questions.length]
+  } else if (subSection.id === 'screens') {
+    const screens = _.get(project, 'details.appScreens.screens', [])
+    const validScreens = screens.filter((s) => {
+      const vals = _.filter(subSection.questions, (q) => {
+        const fName = q.fieldName
+        return !_.isEmpty(_.get(s, fName))
+      })
+      return vals.length === subSection.questions.filter((q) => q.required).length
+    })
+    return [validScreens.length, screens.length]//TODO we should do range comparison here
   } else {
     // assuming there is only one question
     return [_.isEmpty(_.get(project, subSection.fieldName, null)) ? 0 : 1, 1]
@@ -49,7 +61,7 @@ class ProjectSpecSidebar extends Component {
     const {project, sections} = nextProps
     const navItems = _.map(sections, s => {
       return {
-        name: s.title,
+        name: typeof s.title === 'function' ? s.title(project, false): s.title,
         required: s.required,
         link: s.id,
         subItems: _.map(s.subSections, sub => {
@@ -76,7 +88,9 @@ class ProjectSpecSidebar extends Component {
 
   onSubmitForReview() {
     const { updateProject, project } = this.props
-    updateProject(project.id, { status: 'in_review'})
+    updateProject(project.id, { status: 'in_review'}).then(() => {
+      browserHistory.push(`/projects/${project.id}`)
+    })
   }
 
   render() {
@@ -84,12 +98,40 @@ class ProjectSpecSidebar extends Component {
     const { currentMemberRole, project } = this.props
     const showReviewBtn = project.status === 'draft' &&
       _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
+
+    // NOTE: May be beneficial to refactor all of these logics into a higher-order
+    // component that returns different project estimate components for different
+    // types of projects in the future. But let's keep it this way for now because
+    // project estimate is only available for one kind of projects
+    const getProjectEstimateSection = () => {
+      const { appDefinition, products } = project.details
+
+      // project estimate only available for visual design porjects right now
+      // estimation is support with introduction of products, hence it would rendered only for new projects
+      if (project.type !== 'visual_design' || !products || project.details.products[0] === 'generic_design') return
+
+      if (!appDefinition || !appDefinition.numberScreens) return (
+        <div className="list-group"><VisualDesignProjectEstimateSection  products={products} /></div>
+      )
+
+      return (
+        <div className="list-group">
+          <VisualDesignProjectEstimateSection products={products} numberScreens={appDefinition.numberScreens} />
+        </div>
+      )
+    }
+
     return (
       <div className="projectSpecSidebar">
         <h4 className="titles gray-font">Specifications</h4>
         <div className="list-group">
           <SidebarNav items={navItems} />
         </div>
+
+        <br/>
+
+        {getProjectEstimateSection()}
+
         { showReviewBtn &&
         <div>
           <div className="text-box">

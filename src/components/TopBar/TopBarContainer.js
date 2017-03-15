@@ -2,10 +2,9 @@ import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import Modal from 'react-modal'
-import { Icons } from 'appirio-tech-react-components'
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
 import TopBar from './TopBar'
-import CreateView from '../../projects/create/components/CreateView'
+import ProjectWizard from '../../projects/create/components/ProjectWizard'
 import { TCEmitter } from '../../helpers'
 import {
   ROLE_CONNECT_COPILOT,
@@ -109,10 +108,8 @@ class TopBarContainer extends React.Component {
           overlayClassName="project-creation-dialog-overlay"
           onRequestClose={ this.hideCreateProjectDialog }
         >
-          <CreateView closeModal={this.hideCreateProjectDialog} />
-          <div onClick={ this.hideCreateProjectDialog } className="project-creation-dialog-close">
-            <Icons.XMarkIcon />
-          </div>
+          <ProjectWizard closeModal={this.hideCreateProjectDialog} />
+
         </Modal>
         <TopBar
           {...this.props}

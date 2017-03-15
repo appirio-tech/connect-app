@@ -11,7 +11,7 @@ import EditProjectForm from '../components/EditProjectForm'
 import { updateProject } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 // import { Icons } from 'appirio-tech-react-components'
-import sections from '../../../config/projectQuestions/topcoder.v1'
+import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
 
 require('./Specification.scss')
 
@@ -49,6 +49,11 @@ class SpecificationContainer extends Component {
 
   render() {
     const { project, currentMemberRole, processing } = this.props
+
+    let specification = 'topcoder.v1'
+    if (project.details && project.details.products && project.details.products[0])
+      specification = typeToSpecification[project.details.products[0]]
+    let sections = require(`../../../config/projectQuestions/${specification}`).default
 
     return (
       <section className="two-col-content content">
@@ -96,7 +101,5 @@ const mapStateToProps = ({projectState, loadUser}) => {
 }
 
 const mapDispatchToProps = { updateProject }
-
-SpecificationContainer.sections = sections
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpecificationContainer)

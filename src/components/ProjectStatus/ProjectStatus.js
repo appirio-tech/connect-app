@@ -5,7 +5,13 @@ import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import './ProjectStatus.scss'
 import cn from 'classnames'
 import _ from 'lodash'
-import { PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_STATUS } from '../../config/constants'
+import {
+  PROJECT_ROLE_COPILOT,
+  PROJECT_ROLE_MANAGER,
+  PROJECT_STATUS,
+  PROJECT_STATUS_COMPLETED,
+  PROJECT_STATUS_CANCELLED
+} from '../../config/constants'
 
 class ProjectStatus extends React.Component {
 
@@ -16,6 +22,7 @@ class ProjectStatus extends React.Component {
     this.hideStatusChangeDialog = this.hideStatusChangeDialog.bind(this)
     this.showStatusChangeDialog = this.showStatusChangeDialog.bind(this)
     this.changeStatus = this.changeStatus.bind(this)
+    this.handleReasonUpdate = this.handleReasonUpdate.bind(this)
   }
 
   componentWillReceiveProps() {
@@ -38,7 +45,7 @@ class ProjectStatus extends React.Component {
   }
 
   showStatusChangeDialog(newStatus) {
-    if (newStatus === 'completed' || newStatus === 'cancelled') {
+    if (newStatus === PROJECT_STATUS_COMPLETED || newStatus === PROJECT_STATUS_CANCELLED) {
       this.setState({ newStatus, showStatusChangeDialog : true, isOpen : false })
     } else {
       this.props.onChangeStatus(newStatus)
@@ -46,16 +53,22 @@ class ProjectStatus extends React.Component {
   }
 
   hideStatusChangeDialog() {
-    this.setState({ showStatusChangeDialog : false })
+    // set flag off for showing the status change dialog
+    // resets the status change reason so that it starts from fresh on next status change
+    this.setState({ showStatusChangeDialog : false, statusChangeReason: null })
   }
 
   changeStatus() {
-    this.props.onChangeStatus(this.state.newStatus)
+    this.props.onChangeStatus(this.state.newStatus, this.state.statusChangeReason)
+  }
+
+  handleReasonUpdate(reason) {
+    this.setState({ statusChangeReason : _.get(reason, 'value') })
   }
 
   render() {
     const {directLinks, status, currentMemberRole } = this.props
-    const { showStatusChangeDialog, isOpen, newStatus } = this.state
+    const { showStatusChangeDialog, isOpen, newStatus, statusChangeReason } = this.state
     const selected = PROJECT_STATUS.filter((opt) => opt.value === status)[0]
     const canEdit = currentMemberRole
       && _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -94,7 +107,15 @@ class ProjectStatus extends React.Component {
               </ul>
             </dir>}
           </div>
-          { showStatusChangeDialog && <ProjectStatusChangeConfirmation newStatus={ newStatus } onConfirm={ this.changeStatus } onCancel={ this.hideStatusChangeDialog } /> }
+          { showStatusChangeDialog &&
+            <ProjectStatusChangeConfirmation
+              newStatus={ newStatus }
+              onConfirm={ this.changeStatus }
+              onCancel={ this.hideStatusChangeDialog }
+              onReasonUpdate={ this.handleReasonUpdate }
+              statusChangeReason={ statusChangeReason }
+            />
+          }
           {directLinks && <div className="project-direct-links">
             <ul>
               {directLinks.map((link, i) => <li key={i}><a href={link.href} target="_blank" rel="noopener noreferrer">{link.name}</a></li>)}

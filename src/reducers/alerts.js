@@ -33,7 +33,11 @@ export default function(state = {}, action) {
     return state
 
   case UPDATE_PROJECT_SUCCESS:
-    Alert.success('Project updated.')
+    if (action.payload.status === 'in_review') {
+      Alert.success('Project submitted.')
+    } else {
+      Alert.success('Project updated.')
+    }
     return state
   case REMOVE_PROJECT_MEMBER_SUCCESS:
     // show notification message if user leaving a project
@@ -42,8 +46,11 @@ export default function(state = {}, action) {
     }
     return state
 
-  case CREATE_PROJECT_FAILURE:
   case UPDATE_PROJECT_FAILURE:
+    Alert.error('Please add a name for your project and then try saving again.')
+    return state
+
+  case CREATE_PROJECT_FAILURE:
   case DELETE_PROJECT_FAILURE:
   case ADD_PROJECT_ATTACHMENT_FAILURE:
   case UPDATE_PROJECT_ATTACHMENT_FAILURE:

@@ -26,7 +26,7 @@ const getIcon = icon => {
   }
 }
 
-const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) => {
+const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog, isRequired}) => {
 
   const renderQ = (q, index) => {
     // let child = null
@@ -34,16 +34,43 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
     const elemProps = {
       name: q.fieldName,
       label: q.label,
-      value: _.get(project, q.fieldName, undefined)
+      value: _.get(project, q.fieldName, '')
     }
+
+    if (q.fieldName === 'details.appDefinition.numberScreens') {
+      const screens = _.get(project, 'details.appScreens.screens', [])
+      const definedScreens = screens.length
+      _.each(q.options, (option) => {
+        let maxValue = 0
+        const hyphenIdx = option.value.indexOf('-')
+        if (hyphenIdx === -1) {
+          maxValue = parseInt(option.value)
+        } else {
+          maxValue = parseInt(option.value.substring(hyphenIdx+1))
+        }
+        option.disabled = maxValue < definedScreens
+        option.errorMessage = (
+          <p>
+            You've defined more than {option.value} screens.
+            <br/>
+            Please delete screens to select this option.
+          </p>
+        )
+      })
+    }
+
     let ChildElem = ''
     switch (q.type) {
     case 'see-attached-textbox':
       ChildElem = SeeAttachedTextareaInput
       elemProps.wrapperClass = 'row'
+      elemProps.autoResize = true
+      elemProps.description = q.description
+      elemProps.hideDescription = true
       // child = <SeeAttachedTextareaInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'textinput':
+      console.log('TextInput', q)
       ChildElem = TCFormFields.TextInput
       elemProps.wrapperClass = 'row'
       // child = <TCFormFields.TextInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
@@ -51,6 +78,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
     case 'textbox':
       ChildElem = TCFormFields.Textarea
       elemProps.wrapperClass = 'row'
+      elemProps.autoResize = true
       // child = <TCFormFields.Textarea name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'radio-group':
@@ -61,6 +89,11 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
     case 'tiled-radio-group':
       ChildElem = TCFormFields.TiledRadioGroup
       _.assign(elemProps, {wrapperClass: 'row', options: q.options})
+      // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
+      break
+    case 'see-attached-tiled-radio-group':
+      ChildElem = TCFormFields.TiledRadioGroup
+      _.assign(elemProps, {wrapperClass: 'row', options: q.options, hideDescription: true, description: q.description})
       // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
     case 'checkbox-group':
@@ -74,7 +107,12 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
       break
     case 'see-attached-features':
       ChildElem = SeeAttachedSpecFeatureQuestion
-      _.assign(elemProps, { resetValue: resetFeatures, question: q, showFeaturesDialog })
+      _.assign(elemProps, {
+        resetValue: resetFeatures,
+        question: q, showFeaturesDialog,
+        hideDescription: true,
+        description: q.description
+      })
       // child = <SeeAttachedSpecFeatureQuestion name={q.fieldName} value={value} question={q} resetValue={resetFeatures} showFeaturesDialog={showFeaturesDialog} />
       break
     case 'colors':
@@ -91,6 +129,8 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog}) 
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
+        required={isRequired}
+        hideDescription={elemProps.hideDescription}
       >
         <ChildElem {...elemProps} />
       </SpecQuestionList.Item>
