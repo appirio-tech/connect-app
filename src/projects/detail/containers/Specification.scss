@@ -96,8 +96,10 @@ $title-color: $tc-gray-80;
     }
   }
   /* .dashed-bottom-border */
-  .dashed-bottom-border {
-    border-bottom: 1px dashed #c3c3c8;
+  .app-screen-header {
+    border-bottom: 1px solid #c3c3c8;
+    display: flex;
+    justify-content: space-between;
     padding: 15px 0;
     position: relative;
 
@@ -112,6 +114,11 @@ $title-color: $tc-gray-80;
 
     .project-name {
       font-size: 20px;
+    }
+
+    button.tc-btn-xs {//TODO ideally we should fix it in react-components repo
+      padding-top: 2px;
+      padding-bottom: 2px;
     }
   }
   /* .bottom-border-titles */
