@@ -50,9 +50,6 @@ class EditProjectForm extends Component {
       isFeaturesDirty: false, // Since we just saved, features are not dirty anymore.
       canSubmit: false,
       isSaving: false
-    }, () => {
-      // Reset form
-      if (this.refs.form && this.refs.form.isChanged()) this.refs.form.reset(nextProps)
     })
   }
 
@@ -68,6 +65,16 @@ class EditProjectForm extends Component {
   // Notify user if they navigate away while the form is modified.
   onLeave(e) {
     if (this.isChanged()) {
+      // TODO: remove this block - it disables unsaved changes popup 
+      // for app screens changes
+      if (this.refs.form){
+        const pristine = this.refs.form.getPristineValues()
+        const current = this.refs.form.getCurrentValues()
+        pristine['details.appScreens.screens']=current['details.appScreens.screens']
+        if (_.isEqual(pristine, current)){
+          return
+        }
+      }
       return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
     }
   }
