@@ -25,7 +25,7 @@ const SpecScreenQuestions = ({questions, screen}) => {
     const elemProps = {
       name: q.fieldName,
       label: q.label,
-      value: _.get(screen, q.fieldName, undefined),
+      value: _.get(screen, q.fieldName, ''),
       validationError: q.validationError,
       validations: q.validations
     }
