@@ -1,6 +1,6 @@
 {
   "name": "connect-app",
-  "version": "1.0.21",
+  "version": "1.1.0",
   "description": "Customer pages in React and Redux",
   "scripts": {
     "start": "webpack-dev-server --history-api-fallback --dev --hot --inline --progress --tc --port 3000 --host 0.0.0.0",
