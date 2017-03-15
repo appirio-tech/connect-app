@@ -50,6 +50,9 @@ class EditProjectForm extends Component {
       isFeaturesDirty: false, // Since we just saved, features are not dirty anymore.
       canSubmit: false,
       isSaving: false
+    }, () => {
+      // Reset form
+      if (this.refs.form && this.refs.form.isChanged()) this.refs.form.reset(nextProps)
     })
   }
 
