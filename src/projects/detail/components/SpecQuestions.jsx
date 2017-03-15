@@ -66,7 +66,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog, i
       elemProps.wrapperClass = 'row'
       elemProps.autoResize = true
       elemProps.description = q.description
-      elemProps.renderDescriptionInChildren = true
+      elemProps.hideDescription = true
       // child = <SeeAttachedTextareaInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'textinput':
@@ -93,7 +93,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog, i
       break
     case 'see-attached-tiled-radio-group':
       ChildElem = TCFormFields.TiledRadioGroup
-      _.assign(elemProps, {wrapperClass: 'row', options: q.options, renderDescriptionInChildren: false, description: q.description})
+      _.assign(elemProps, {wrapperClass: 'row', options: q.options, hideDescription: true, description: q.description})
       // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
     case 'checkbox-group':
@@ -110,7 +110,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog, i
       _.assign(elemProps, {
         resetValue: resetFeatures,
         question: q, showFeaturesDialog,
-        renderDescriptionInChildren: true,
+        hideDescription: true,
         description: q.description
       })
       // child = <SeeAttachedSpecFeatureQuestion name={q.fieldName} value={value} question={q} resetValue={resetFeatures} showFeaturesDialog={showFeaturesDialog} />
@@ -130,6 +130,7 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog, i
         icon={getIcon(q.icon)}
         description={q.description}
         required={isRequired}
+        hideDescription={elemProps.hideDescription}
       >
         <ChildElem {...elemProps} />
       </SpecQuestionList.Item>

@@ -68,7 +68,7 @@ const sections = [
                           with the mobile phone view and expand to other devices as your \
                           app matures.',
             fieldName: 'details.appDefinition.primaryTarget',
-            type: 'see-attached-tiled-radio-group',
+            type: 'tiled-radio-group',
             options: [
               {value: 'Phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
               {value: 'Tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},

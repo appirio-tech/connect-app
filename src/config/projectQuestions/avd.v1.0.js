@@ -66,7 +66,7 @@ const sections = [
                           with the mobile phone view and expand to other devices as your \
                           app matures.',
             fieldName: 'details.appDefinition.primaryTarget',
-            type: 'see-attached-tiled-radio-group',
+            type: 'tiled-radio-group',
             options: [
               {value: 'Phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
               {value: 'Tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
@@ -200,7 +200,7 @@ const sections = [
             id: 'guidelines',
             title: 'Guidelines',
             description: 'Do you have brand guidelines that need to be followed? If yes, please include a link or attach them in the definition section, above.',
-            type: 'see-attached-textbox',
+            type: 'textbox',
             // required: false,
             fieldName: 'details.designSpecification.guidelines'
           },
@@ -208,7 +208,7 @@ const sections = [
             id: 'examples',
             title: 'Examples',
             description: 'Are there any apps or sites that have a look and feel that you would want used as inspiration? Please provide links or examples.',
-            type: 'see-attached-textbox',
+            type: 'textbox',
             // required: false,
             fieldName: 'details.designSpecification.examples'
           },
@@ -218,7 +218,7 @@ const sections = [
             fieldName: 'details.designSpecification.excludeExamples',
             title: 'Exclude Examples',
             description: 'On the other hand, are there any apps or sites that you dislike? Please provide links or examples.',
-            type: 'see-attached-textbox'
+            type: 'textbox'
           }
         ]
       }
