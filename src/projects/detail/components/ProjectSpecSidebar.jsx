@@ -22,6 +22,16 @@ const calcProgress = (project, subSection) => {
     let count = 0
     _.forEach(vals, (v) => {if (v) count++ })
     return [count, subSection.questions.length]
+  } else if (subSection.id === 'screens') {
+    const screens = _.get(project, 'details.appScreens.screens', [])
+    const validScreens = screens.filter((s) => {
+      const vals = _.filter(subSection.questions, (q) => {
+        const fName = q.fieldName
+        return !_.isEmpty(_.get(s, fName))
+      })
+      return vals.length === subSection.questions.filter((q) => q.required).length
+    })
+    return [validScreens.length, screens.length]//TODO we should do range comparison here
   } else {
     // assuming there is only one question
     return [_.isEmpty(_.get(project, subSection.fieldName, null)) ? 0 : 1, 1]
