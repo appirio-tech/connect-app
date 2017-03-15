@@ -128,23 +128,27 @@ class EditProjectForm extends Component {
   render() {
     const { isEdittable, sections } = this.props
     const { project } = this.state
-    const renderSection = (section, idx) => (
-      <div key={idx}>
-        <SpecSection
-          {...section}
-          project={project}
-          sectionNumber={idx + 1}
-          resetFeatures={this.onFeaturesSaveAttachedClick}
-          showFeaturesDialog={this.showFeaturesDialog}
-          validate={(isInvalid) => section.isInvalid = isInvalid}
-        />
-        <div className="section-footer section-footer-spec">
-          <button className="tc-btn tc-btn-primary tc-btn-md"
-            type="submit" disabled={(!this.isChanged() || this.state.isSaving) || section.isInvalid}
-          >Save Changes</button>
+    const renderSection = (section, idx) => {
+      const anySectionInvalid = _.some(this.props.sections, (s) => s.isInvalid)
+      return (
+        <div key={idx}>
+          <SpecSection
+            {...section}
+            project={project}
+            sectionNumber={idx + 1}
+            resetFeatures={this.onFeaturesSaveAttachedClick}
+            showFeaturesDialog={this.showFeaturesDialog}
+            // TODO we shoudl not update the props (section is coming from props)
+            validate={(isInvalid) => section.isInvalid = isInvalid}
+          />
+          <div className="section-footer section-footer-spec">
+            <button className="tc-btn tc-btn-primary tc-btn-md"
+              type="submit" disabled={(!this.isChanged() || this.state.isSaving) || anySectionInvalid}
+            >Save Changes</button>
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
 
     return (
       <div>

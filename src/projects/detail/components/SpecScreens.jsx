@@ -106,8 +106,8 @@ class SpecScreens extends Component {
                 </p>
               </div>
             </Tooltip> :
-            <button className="tc-btn tc-btn-default tc-btn-md" onClick={() => this.addScreen(null, true)}>
-              Define another screen
+            <button type="button" className="tc-btn tc-btn-default tc-btn-md" onClick={() => this.addScreen(null, true)}>
+              { screens.length === 0 ? 'Define screen' : 'Define another screen' }
             </button>
           }
         </div>
