@@ -52,7 +52,7 @@ class EditProjectForm extends Component {
       isSaving: false
     }, () => {
       // Reset form
-     // if (this.refs.form && this.refs.form.isChanged()) this.refs.form.reset(nextProps) <-- this is breaking form
+      if (this.refs.form && this.refs.form.isChanged()) this.refs.form.reset(nextProps)
     })
   }
 
