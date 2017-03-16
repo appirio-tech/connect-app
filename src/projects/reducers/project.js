@@ -176,11 +176,9 @@ export const projectState = function (state=initialState, action) {
   }
 
   case PROJECT_DIRTY_UNDO: {
-    console.log('UNDOING')
     return Object.assign({}, state, {
       project: _.cloneDeep(state.projectNonDirty)
     })
-    return state
   }
 
   case LOAD_PROJECT_FAILURE:
