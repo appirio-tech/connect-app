@@ -8,7 +8,7 @@ import Sticky from 'react-stickynode'
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import EditProjectForm from '../components/EditProjectForm'
-import { updateProject } from '../../actions/project'
+import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 // import { Icons } from 'appirio-tech-react-components'
 import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
@@ -73,6 +73,8 @@ class SpecificationContainer extends Component {
               submitHandler={this.saveProject}
               saving={processing}
               route={this.props.route}
+              fireProjectDirty={ this.props.fireProjectDirty }
+              fireProjectDirtyUndo= { this.props.fireProjectDirtyUndo }
             />
           </div>
 
@@ -100,6 +102,6 @@ const mapStateToProps = ({projectState, loadUser}) => {
   }
 }
 
-const mapDispatchToProps = { updateProject }
+const mapDispatchToProps = { updateProject, fireProjectDirty, fireProjectDirtyUndo }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpecificationContainer)

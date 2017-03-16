@@ -65,6 +65,7 @@
     "redux-segment": "^1.6.1",
     "redux-thunk": "^2.1.0",
     "tc-accounts": "https://github.com/appirio-tech/accounts-app.git#dev",
-    "tc-ui": "https://github.com/appirio-tech/tc-ui.git#feature/connectv2"
+    "tc-ui": "https://github.com/appirio-tech/tc-ui.git#feature/connectv2",
+    "unflatten": "^1.0.4"
   }
 }
