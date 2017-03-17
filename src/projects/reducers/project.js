@@ -1,4 +1,4 @@
-
+import unflatten from 'unflatten'
 import {
   LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
   CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CLEAR_LOADED_PROJECT,
@@ -10,7 +10,7 @@ import {
   ADD_PROJECT_MEMBER_PENDING, ADD_PROJECT_MEMBER_SUCCESS, ADD_PROJECT_MEMBER_FAILURE,
   UPDATE_PROJECT_MEMBER_PENDING, UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
-  GET_PROJECTS_SUCCESS
+  GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -47,6 +47,7 @@ export const projectState = function (state=initialState, action) {
     return Object.assign({}, state, {
       isLoading: false,
       project: action.payload,
+      projectNonDirty: _.cloneDeep(action.payload),
       lastUpdated: new Date()
     })
 
@@ -87,7 +88,8 @@ export const projectState = function (state=initialState, action) {
     return Object.assign({}, state, {
       processing: false,
       error: false,
-      project: action.payload
+      project: action.payload,
+      projectNonDirty: _.cloneDeep(action.payload)
     })
 
   case DELETE_PROJECT_SUCCESS:
@@ -164,6 +166,18 @@ export const projectState = function (state=initialState, action) {
     return update(state, {
       processingMembers: { $set : false },
       project: { members: { $splice: [[idx, 1]] } }
+    })
+  }
+
+  case PROJECT_DIRTY: {
+    return Object.assign({}, state, {
+      project: _.merge({}, state.project, unflatten(action.payload), { isDirty : true})
+    })
+  }
+
+  case PROJECT_DIRTY_UNDO: {
+    return Object.assign({}, state, {
+      project: _.cloneDeep(state.projectNonDirty)
     })
   }
 
