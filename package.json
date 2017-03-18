@@ -39,6 +39,7 @@
     "fbemitter": "^2.1.1",
     "filepicker-js": "^2.4.17",
     "filesize": "^3.3.0",
+    "flat": "^2.0.1",
     "formsy-react": "^0.18.1",
     "history": "^1.17.0",
     "isomorphic-fetch": "^2.2.1",
@@ -65,7 +66,6 @@
     "redux-segment": "^1.6.1",
     "redux-thunk": "^2.1.0",
     "tc-accounts": "https://github.com/appirio-tech/accounts-app.git#dev",
-    "tc-ui": "https://github.com/appirio-tech/tc-ui.git#feature/connectv2",
-    "unflatten": "^1.0.4"
+    "tc-ui": "https://github.com/appirio-tech/tc-ui.git#feature/connectv2"
   }
 }
