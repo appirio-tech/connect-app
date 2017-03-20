@@ -1,4 +1,3 @@
-import { unflatten } from 'flat'
 import {
   LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
   CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CLEAR_LOADED_PROJECT,
@@ -169,9 +168,16 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
-  case PROJECT_DIRTY: {
+  case PROJECT_DIRTY: {// payload contains only changed values from the project form
     return Object.assign({}, state, {
-      project: _.merge({}, state.project, unflatten(action.payload), { isDirty : true})
+      project: _.mergeWith({}, state.project, action.payload, { isDirty : true},
+        // customizer to override screens array with changed values
+        (objValue, srcValue, key) => {
+          if (key === 'screens') {
+            return srcValue// srcValue contains the changed values from action payload
+          }
+        }
+      )
     })
   }
 
