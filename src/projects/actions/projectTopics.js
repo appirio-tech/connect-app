@@ -7,7 +7,9 @@ import {
   CREATE_PROJECT_FEED,
   LOAD_PROJECT_FEED_COMMENTS,
   CREATE_PROJECT_FEED_COMMENT,
-  LOAD_PROJECT_FEEDS_MEMBERS
+  LOAD_PROJECT_FEEDS_MEMBERS,
+  DISCOURSE_BOT_USERID,
+  CODER_BOT_USERID
 } from '../../config/constants'
 import { loadMembers } from '../../actions/members'
 import { EventTypes } from 'redux-segment'
@@ -85,7 +87,7 @@ const getProjectTopicsWithMember = (dispatch, projectId, tag) => {
         userIds = _.union(userIds, _.map(topic.posts, 'userId'))
       })
       // this is to remove any nulls from the list (dev had some bad data)
-      _.remove(userIds, i => !i || i === 'system')
+      _.remove(userIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(i) > -1)
       // return if there are no userIds to retrieve, empty result set
       if (!userIds.length)
         resolve(value)
