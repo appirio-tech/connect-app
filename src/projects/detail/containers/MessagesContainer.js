@@ -101,8 +101,9 @@ class MessagesView extends React.Component {
     item.unread = !feed.read
     // item.html = posts[feed.postIds[0]].body
     item.html = feed.posts[0].body
-    // skip over the first post since that is the topic post
-    item.totalComments = feed.totalPosts-1
+    // Github issue#673, Don't skip over the first post like we do in dashboard feeds
+    // because here we show the first post as comment as well
+    item.totalComments = feed.totalPosts
     item.messages = []
     const _toComment = (p) => {
       return {
