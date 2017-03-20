@@ -87,7 +87,7 @@ const getProjectTopicsWithMember = (dispatch, projectId, tag) => {
         userIds = _.union(userIds, _.map(topic.posts, 'userId'))
       })
       // this is to remove any nulls from the list (dev had some bad data)
-      _.remove(userIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(i) > -1)
+      _.remove(userIds, i => !i && [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(i) > -1)
       // return if there are no userIds to retrieve, empty result set
       if (!userIds.length)
         resolve(value)
