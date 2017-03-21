@@ -104,7 +104,7 @@ class FeedView extends React.Component {
     item.totalComments = feed.totalPosts-1
     item.comments = []
     const _toComment = (p) => {
-      const author = CONNECT_USER
+      let author = CONNECT_USER
       if (p.userId) {
         author = isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
       }
