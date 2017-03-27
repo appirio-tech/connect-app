@@ -24,7 +24,7 @@ describe('Helper Functions', () => {
   })
 
   describe('isEndOfScreen', () => {
-    jsdom()
+    // jsdom()
 
     const isEndOfScreen = helpers.isEndOfScreen
 
