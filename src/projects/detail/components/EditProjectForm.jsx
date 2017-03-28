@@ -20,6 +20,7 @@ class EditProjectForm extends Component {
     this.onFeaturesSaveAttachedClick = this.onFeaturesSaveAttachedClick.bind(this)
     this.submit = this.submit.bind(this)
     this.onLeave = this.onLeave.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
 
   componentWillMount() {
@@ -33,6 +34,8 @@ class EditProjectForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // we receipt property updates from PROJECT_DIRTY REDUX state
+    if (nextProps.project.isDirty) return
     let updatedProject = Object.assign({}, nextProps.project)
     if (this.state.isFeaturesDirty && !this.state.isSaving) {
       updatedProject = update(updatedProject, {
@@ -59,6 +62,7 @@ class EditProjectForm extends Component {
   }
 
   componentWillUnmount() {
+    this.props.fireProjectDirtyUndo()
     window.removeEventListener('beforeunload', this.onLeave)
   }
 
@@ -131,6 +135,17 @@ class EditProjectForm extends Component {
     this.props.submitHandler(model)
   }
 
+  /**
+   * Handles the change event of the form.
+   *
+   * @param change changed form model in flattened form
+   * @param isChanged flag that indicates if form actually changed from initial model values
+   */
+  handleChange(change) {
+    // removed check for isChanged argument to fire the PROJECT_DIRTY event for every change in the form
+    this.props.fireProjectDirty(change)
+  }
+
 
   render() {
     const { isEdittable, sections } = this.props
@@ -165,6 +180,7 @@ class EditProjectForm extends Component {
           onInvalid={this.disableButton}
           onValid={this.enableButton}
           onValidSubmit={this.submit}
+          onChange={ this.handleChange }
         >
           {sections.map(renderSection)}
         </Formsy.Form>
@@ -192,7 +208,9 @@ EditProjectForm.propTypes = {
   saving: PropTypes.bool.isRequired,
   sections: PropTypes.arrayOf(PropTypes.object).isRequired,
   isEdittable: PropTypes.bool.isRequired,
-  submitHandler: PropTypes.func.isRequired
+  submitHandler: PropTypes.func.isRequired,
+  fireProjectDirty: PropTypes.func.isRequired,
+  fireProjectDirtyUndo: PropTypes.func.isRequired
 }
 
 export default withRouter(EditProjectForm)
