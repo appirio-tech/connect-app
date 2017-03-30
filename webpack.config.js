@@ -1,4 +1,5 @@
 require('./node_modules/coffee-script/register')
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 const branch = process.env.TRAVIS_BRANCH
 
@@ -42,5 +43,7 @@ config.module.loaders.forEach((loader, i, loaders) => {
     loaders[i] = jsxLoader
   }
 })
+
+config.plugins.push(new FaviconsWebpackPlugin('./src/favicon.png'))
 
 module.exports = config
