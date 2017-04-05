@@ -34,7 +34,11 @@ const calcProgress = (project, subSection) => {
     return [validScreens.length, screens.length]//TODO we should do range comparison here
   } else {
     // assuming there is only one question
-    return [_.isEmpty(_.get(project, subSection.fieldName, null)) ? 0 : 1, 1]
+    let val = _.get(project, subSection.fieldName, null)
+    if (val && typeof val.trim === 'function') {
+      val = val.trim()
+    }
+    return [_.isEmpty(val) ? 0 : 1, 1]
   }
 }
 
