@@ -141,8 +141,8 @@ class MessagesView extends React.Component {
 
   init(props, prevProps) {
     const { activeThreadId } = this.state
-    const propsThreadId = _.get(props, 'location.state.threadId', null)
-    const threadId = activeThreadId ? activeThreadId : propsThreadId
+    const propsThreadId = _.get(props, 'params.discussionId', null)
+    const threadId = activeThreadId ? activeThreadId : parseInt(propsThreadId)
     const activeThreadIndex = threadId
       ? _.findIndex(props.threads, (thread) => thread.id === threadId )
       : 0
@@ -226,6 +226,8 @@ class MessagesView extends React.Component {
         }
         return item
       })
+    }, () => {
+      this.props.router.push(`/projects/${this.props.project.id}/discussions/${thread.id}`)
     })
   }
 

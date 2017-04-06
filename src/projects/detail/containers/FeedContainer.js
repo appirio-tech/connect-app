@@ -21,6 +21,10 @@ import ProjectSpecification from '../../../components/ProjectSpecification/Proje
 import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
+import { Element, Helpers, scroller } from 'react-scroll'
+
+const ScrollableFeed = Helpers.Element(Feed)
+
 const SYSTEM_USER = {
   firstName: CODER_BOT_USER_FNAME,
   lastName: CODER_BOT_USER_LNAME,
@@ -79,7 +83,7 @@ class FeedView extends React.Component {
   }
 
   mapFeed(feed, showAll = false, resetNewComment = false) {
-    const { allMembers } = this.props
+    const { allMembers, project } = this.props
     const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isAddingComment', 'isLoadingComments', 'error'])
     // Github issue##623, allow comments on all posts (including system posts)
     item.allowComments = true
@@ -125,6 +129,8 @@ class FeedView extends React.Component {
       item.newComment = feedFromState ? feedFromState.newComment : ''
     }
     item.hasMoreComments = item.comments.length !== item.totalComments
+    // adds permalink for the feed
+    item.permalink = `/projects/${project.id}/status/${item.id}`
     return item
   }
 
@@ -146,6 +152,18 @@ class FeedView extends React.Component {
         const resetNewComment = prevFeed && prevFeed.isAddingComment && !feed.isAddingComment && !feed.error
         return this.mapFeed(feed, this.state.showAll.indexOf(feed.id) > -1, resetNewComment)
       }).filter(item => item)
+    }, () => {
+      const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
+      // const scrollTo = _.get(props, 'params.statusId', null)
+      if (scrollTo) {
+        scroller.scrollTo(scrollTo, {
+          spy: true,
+          smooth: true,
+          offset: -80, // 60px for top bar and 20px for margin from nav bar
+          duration: 500,
+          activeClass: 'active'
+        })
+      }
     })
   }
 
@@ -223,10 +241,12 @@ class FeedView extends React.Component {
       if ((item.spec || item.sendForReview) && !showDraftSpec) {
         return null
       }
+      const anchorId = 'feed-' + item.id
       return (
         <div className="feed-action-card" key={item.id}>
-          <Feed
+          <ScrollableFeed
             {...item}
+            name={anchorId}
             allowComments={ item.allowComments && !!currentMemberRole}
             currentUser={currentUser}
             onNewCommentChange={this.onNewCommentChange.bind(this, item.id)}
@@ -236,7 +256,7 @@ class FeedView extends React.Component {
             {item.sendForReview && <div className="panel-buttons">
               <button className="tc-btn tc-btn-primary tc-btn-md">Send for review</button>
             </div>}
-          </Feed>
+          </ScrollableFeed>
           {item.spec && <ProjectSpecification project={ project } currentMemberRole={ currentMemberRole } />  }
         </div>
       )

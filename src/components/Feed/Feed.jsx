@@ -5,11 +5,13 @@ import ActionCard from '../ActionCard/ActionCard'
 import Panel from '../Panel/Panel'
 import FeedComments from './FeedComments'
 import { Avatar } from 'appirio-tech-react-components'
+import {Link} from 'react-router'
 
 const Feed = (props) => {
   const {
     user, currentUser, title, date, html, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
-    allowComments, comments, unread, children, onNewCommentChange, onAddNewComment, newComment, isAddingComment
+    allowComments, comments, unread, children, onNewCommentChange, onAddNewComment, newComment, isAddingComment,
+    permalink
   } = props
   let authorName = user.firstName
   if (authorName && user.lastName) {
@@ -30,7 +32,7 @@ const Feed = (props) => {
               { authorName }
             </div>
             <div className="card-time">
-              {moment(date).fromNow()}
+              <Link to={ permalink }>{moment(date).fromNow()}</Link>
             </div>
           </div>
           <div className="card-body draftjs-post" dangerouslySetInnerHTML={{__html: html}} />
