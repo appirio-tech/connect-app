@@ -143,10 +143,15 @@ class EditProjectForm extends Component {
     this.props.submitHandler(model)
   }
 
-  handleChange(change, isChanged) {
-    if (isChanged) {
-      this.props.fireProjectDirty(unflatten(change))
-    }
+  /**
+   * Handles the change event of the form.
+   *
+   * @param change changed form model in flattened form
+   * @param isChanged flag that indicates if form actually changed from initial model values
+   */
+  handleChange(change) {
+    // removed check for isChanged argument to fire the PROJECT_DIRTY event for every change in the form
+    this.props.fireProjectDirty(change)
   }
 
 

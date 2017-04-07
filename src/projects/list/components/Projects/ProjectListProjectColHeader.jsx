@@ -3,10 +3,10 @@ import _ from 'lodash'
 import { Dropdown, DropdownItem } from 'appirio-tech-react-components'
 
 const options = [
+  { val: 'best match', label: 'Best Match' },
   { val: 'createdAt desc', label: 'Latest first' },
   { val: 'createdAt', label: 'Oldest first' },
   { val: 'name', label: 'Name A-Z' }
-  // { val: 'name desc', label: 'Name Z-A' }
 ]
 
 const ProjectListProjectColHeader = ({currentSortField, sortHandler}) => {
