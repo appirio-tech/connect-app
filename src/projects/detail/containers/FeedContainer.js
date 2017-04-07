@@ -21,8 +21,9 @@ import ProjectSpecification from '../../../components/ProjectSpecification/Proje
 import { loadDashboardFeeds, createProjectTopic, loadFeedComments, addFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
-import { Element, Helpers, scroller } from 'react-scroll'
+import { Helpers, scroller } from 'react-scroll'
 
+/*eslint-disable new-cap */
 const ScrollableFeed = Helpers.Element(Feed)
 
 const SYSTEM_USER = {
