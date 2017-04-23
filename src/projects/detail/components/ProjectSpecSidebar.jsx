@@ -12,10 +12,13 @@ const calcProgress = (project, subSection) => {
   if (subSection.id === 'questions') {
     const vals = _.map(subSection.questions, (q) => {
       const fName = q.fieldName
-      // special handling for seeAttached type of fields
+      // special handling for seeAttached type of fields and description field
       if (q.type.indexOf('see-attached') > -1) {
         const val = _.get(project, fName, null)
         return val && (val.seeAttached || !_.isEmpty(_.get(project, `${fName}.value`)))
+      } else if (fName === 'description') {
+        const val = _.get(project, fName, null)
+        return val && (val !== 'No description provided')
       }
       return !_.isEmpty(_.get(project, fName))
     })
