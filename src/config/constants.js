@@ -218,6 +218,8 @@ export const DISCOURSE_BOT_USERID = 'system'
 export const CODER_BOT_USERID = 'CoderBot'
 export const CODER_BOT_USER_FNAME = 'Coder'
 export const CODER_BOT_USER_LNAME = 'Bot'
+export const CONNECT_USER_FNAME = 'Connect'
+export const CONNECT_USER_LNAME = 'User'
 
 export const PROJECT_MAX_COLORS = 5
 

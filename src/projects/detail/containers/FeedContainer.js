@@ -11,7 +11,9 @@ import {
   DISCOURSE_BOT_USERID,
   CODER_BOT_USERID,
   CODER_BOT_USER_FNAME,
-  CODER_BOT_USER_LNAME
+  CODER_BOT_USER_LNAME,
+  CONNECT_USER_FNAME,
+  CONNECT_USER_LNAME
 } from '../../../config/constants'
 import { connect } from 'react-redux'
 import update from 'react-addons-update'
@@ -25,6 +27,11 @@ const SYSTEM_USER = {
   firstName: CODER_BOT_USER_FNAME,
   lastName: CODER_BOT_USER_LNAME,
   photoURL: require('../../../assets/images/avatar-coder.png')
+}
+const CONNECT_USER = {
+  firstName: CONNECT_USER_FNAME,
+  lastName: CONNECT_USER_LNAME,
+  photoURL: require('../../../assets/images/avatar-coder.png')//TODO replace icon
 }
 const isSystemUser = (userId) => [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(userId) > -1
 
@@ -83,7 +90,9 @@ class FeedView extends React.Component {
     const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isAddingComment', 'isLoadingComments', 'error'])
     // Github issue##623, allow comments on all posts (including system posts)
     item.allowComments = true
-    if (isSystemUser(item.userId)) {
+    if (!item.userId) {
+      item.user = CONNECT_USER
+    } else if (isSystemUser(item.userId)) {
       item.user = SYSTEM_USER
     } else {
       item.user = allMembers[item.userId]
@@ -95,12 +104,16 @@ class FeedView extends React.Component {
     item.totalComments = feed.totalPosts-1
     item.comments = []
     const _toComment = (p) => {
+      let author = CONNECT_USER
+      if (p.userId) {
+        author = isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
+      }
       return {
         id: p.id,
         content: p.body,
         unread: !p.read,
         date: p.date,
-        author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
+        author
       }
     }
     const validPost = (post) => {
