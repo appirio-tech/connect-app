@@ -131,7 +131,8 @@ class FeedView extends React.Component {
     }
     item.hasMoreComments = item.comments.length !== item.totalComments
     // adds permalink for the feed
-    item.permalink = `/projects/${project.id}/status/${item.id}`
+    // item.permalink = `/projects/${project.id}/status/${item.id}`
+    item.permalink = `/projects/${project.id}#feed-${item.id}`
     return item
   }
 
