@@ -7,7 +7,7 @@ import spinnerWhileLoading from '../../components/LoadingSpinner'
 
 require('./Dashboard.scss')
 
-const DashboardView = ({project, currentMemberRole, route, params}) => (
+const DashboardView = ({project, currentMemberRole, route}) => (
   <div>
     <div className="dashboard-container">
       <div className="left-area">
@@ -18,7 +18,7 @@ const DashboardView = ({project, currentMemberRole, route, params}) => (
         </Sticky>
       </div>
       <div className="right-area">
-        <FeedContainer currentMemberRole={currentMemberRole} project={project} route={route} params={params} />
+        <FeedContainer currentMemberRole={currentMemberRole} project={project} route={route} />
       </div>
     </div>
   </div>
