@@ -45,6 +45,11 @@
     border-bottom: 1px solid $tc-gray-40;
     color: $tc-gray-30;
   }
+  &.error{
+    border-left: 3px solid $tc-red-70!important;
+    border-bottom: 1px solid $tc-red-70!important;
+    background: $tc-gray-neutral-light!important;
+  }
 }
 
 .input-lg,

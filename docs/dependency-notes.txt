@@ -1,0 +1,4 @@
+
+This document outlines the dependency concerns faced during the development of the application.
+
+1. We have overridden the version to 1.1.2 of to-ico library which is used indirectly by "favicon-webpack-plugin" which in turn is used for generating the favicons for different devices and browser combinations. This was required because with versions above 1.1.2 to-ico library is using some features from node v5.10+.
