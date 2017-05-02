@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { withRouter } from 'react-router'
 import Modal from 'react-modal'
 import _ from 'lodash'
+import { unflatten } from 'flat'
 import update from 'react-addons-update'
 import FeaturePicker from './FeatureSelector/FeaturePicker'
 import { Formsy, Icons } from 'appirio-tech-react-components'
@@ -34,8 +35,15 @@ class EditProjectForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // we receipt property updates from PROJECT_DIRTY REDUX state
-    if (nextProps.project.isDirty) return
+    // we received property updates from PROJECT_DIRTY REDUX state
+    if (nextProps.project.isDirty) {
+      this.setState({
+        // sets a new state variable with dirty project
+        // any component who wants to listen for unsaved changes in project form can listen to this state variable
+        dirtyProject : Object.assign({}, nextProps.project)
+      })
+      return
+    }
     let updatedProject = Object.assign({}, nextProps.project)
     if (this.state.isFeaturesDirty && !this.state.isSaving) {
       updatedProject = update(updatedProject, {
@@ -143,13 +151,13 @@ class EditProjectForm extends Component {
    */
   handleChange(change) {
     // removed check for isChanged argument to fire the PROJECT_DIRTY event for every change in the form
-    this.props.fireProjectDirty(change)
+    this.props.fireProjectDirty(unflatten(change))
   }
 
 
   render() {
     const { isEdittable, sections } = this.props
-    const { project } = this.state
+    const { project, dirtyProject } = this.state
     const renderSection = (section, idx) => {
       const anySectionInvalid = _.some(this.props.sections, (s) => s.isInvalid)
       return (
@@ -157,6 +165,7 @@ class EditProjectForm extends Component {
           <SpecSection
             {...section}
             project={project}
+            dirtyProject={dirtyProject}
             sectionNumber={idx + 1}
             resetFeatures={this.onFeaturesSaveAttachedClick}
             showFeaturesDialog={this.showFeaturesDialog}
