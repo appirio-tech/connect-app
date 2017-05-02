@@ -20,8 +20,11 @@ const initialState = {
   processingMembers: false,
   processingAttachments: false,
   error: false,
-  project: {}
+  project: {},
+  projectNonDirty: {}
 }
+
+// NOTE: We should always update projectNonDirty state whenever we update the project state
 
 const parseErrorObj = (action) => {
   const data = action.payload.response.data.result
@@ -39,7 +42,8 @@ export const projectState = function (state=initialState, action) {
   case LOAD_PROJECT_PENDING:
     return Object.assign({}, state, {
       isLoading: true,
-      project: null
+      project: null,
+      projectNonDirty: null
     })
 
   case LOAD_PROJECT_SUCCESS:
@@ -53,12 +57,25 @@ export const projectState = function (state=initialState, action) {
   case CLEAR_LOADED_PROJECT:
   case GET_PROJECTS_SUCCESS:
     return Object.assign({}, state, {
-      project: {}
+      project: {},
+      projectNonDirty: {}
     })
 
   case LOAD_DIRECT_PROJECT_SUCCESS:
     return update(state, {
       project: {
+        budget: { $set: {
+          actualCost: action.payload.actualCost,
+          projectedCost: action.payload.projectedCost,
+          totalBudget: action.payload.totalBudget
+        }},
+        duration: { $set: {
+          actualDuration: action.payload.actualDuration,
+          plannedDuration: action.payload.plannedDuration,
+          projectedDuration: action.payload.projectedDuration
+        }}
+      },
+      projectNonDirty: {
         budget: { $set: {
           actualCost: action.payload.actualCost,
           projectedCost: action.payload.projectedCost,
@@ -95,7 +112,8 @@ export const projectState = function (state=initialState, action) {
     return Object.assign({}, state, {
       processing: false,
       error: false,
-      project: {}
+      project: {},
+      projectNonDirty: {}
     })
 
   // Project attachments
@@ -109,7 +127,8 @@ export const projectState = function (state=initialState, action) {
   case ADD_PROJECT_ATTACHMENT_SUCCESS:
     return update(state, {
       processingAttachments: { $set : false },
-      project: { attachments: { $push: [action.payload] } }
+      project: { attachments: { $push: [action.payload] } },
+      projectNonDirty: { attachments: { $push: [action.payload] } }
     })
 
   case UPDATE_PROJECT_ATTACHMENT_SUCCESS: {
@@ -117,7 +136,8 @@ export const projectState = function (state=initialState, action) {
     const idx = _.findIndex(state.project.attachments, a => a.id === action.payload.id)
     return update(state, {
       processingAttachments: { $set : false },
-      project: { attachments: { $splice : [[idx, 1, action.payload]] } }
+      project: { attachments: { $splice : [[idx, 1, action.payload]] } },
+      projectNonDirty: { attachments: { $splice : [[idx, 1, action.payload]] } }
     })
   }
 
@@ -127,7 +147,8 @@ export const projectState = function (state=initialState, action) {
     const idx = _.findIndex(state.project.attachments, a => a.id === action.payload)
     return update(state, {
       processing: { $set : false },
-      project: { attachments: { $splice: [[idx, 1]] } }
+      project: { attachments: { $splice: [[idx, 1]] } },
+      projectNonDirty: { attachments: { $splice: [[idx, 1]] } }
     })
   }
 
@@ -141,7 +162,8 @@ export const projectState = function (state=initialState, action) {
   case ADD_PROJECT_MEMBER_SUCCESS:
     return update (state, {
       processingMembers: { $set : false },
-      project: { members: { $push: [action.payload] } }
+      project: { members: { $push: [action.payload] } },
+      projectNonDirty: { members: { $push: [action.payload] } }
     })
 
   case UPDATE_PROJECT_MEMBER_SUCCESS: {
@@ -155,7 +177,8 @@ export const projectState = function (state=initialState, action) {
     updatedMembers.splice(idx, 1, action.payload)
     return update(state, {
       processingMembers: { $set : false },
-      project: { members: { $set: updatedMembers } }
+      project: { members: { $set: updatedMembers } },
+      projectNonDirty: { members: { $set: updatedMembers } }
     })
   }
 
@@ -164,7 +187,8 @@ export const projectState = function (state=initialState, action) {
     const idx = _.findIndex(state.project.members, a => a.id === action.payload)
     return update(state, {
       processingMembers: { $set : false },
-      project: { members: { $splice: [[idx, 1]] } }
+      project: { members: { $splice: [[idx, 1]] } },
+      projectNonDirty: { members: { $splice: [[idx, 1]] } }
     })
   }
 

@@ -151,7 +151,7 @@ class EditProjectForm extends Component {
    */
   handleChange(change) {
     // removed check for isChanged argument to fire the PROJECT_DIRTY event for every change in the form
-    this.props.fireProjectDirty(change)
+    this.props.fireProjectDirty(unflatten(change))
   }
 
 
