@@ -228,6 +228,7 @@ class EditProjectForm extends Component {
             showFeaturesDialog={ this.state.showFeaturesDialog }
             hideFeaturesDialog={ this.hideFeaturesDialog }
             saveFeatures={ this.saveFeatures }
+            value={ _.get(project, 'details.appDefinition.features', {})}
           />
         </Formsy.Form>
         
