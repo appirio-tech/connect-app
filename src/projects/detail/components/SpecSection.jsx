@@ -10,6 +10,7 @@ import { PROJECT_STATUS_DRAFT, PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LEN
 const SpecSection = props => {
   const {
     project,
+    dirtyProject,
     resetFeatures,
     showFeaturesDialog,
     id,
@@ -61,6 +62,7 @@ const SpecSection = props => {
           resetFeatures={resetFeatures}
           questions={props.questions}
           project={project}
+          dirtyProject={dirtyProject}
           isRequired={props.required}
         />
       )
