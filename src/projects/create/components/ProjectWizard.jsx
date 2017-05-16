@@ -97,8 +97,13 @@ ProjectWizard.propTypes = {
   closeModal: PropTypes.func.isRequired
 }
 
+ProjectWizard.defaultProps = {
+  userRoles: [],
+  closeModal: () => {}
+}
+
 const mapStateToProps = ({projectState, loadUser }) => ({
-  userRoles: loadUser.user.roles,
+  userRoles: _.get(loadUser, 'user.roles', []),
   processing: projectState.processing,
   error: projectState.error,
   project: projectState.project

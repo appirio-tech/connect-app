@@ -7,6 +7,7 @@ import ConnectTerms from './components/ConnectTerms/ConnectTerms'
 import PageError from './components/PageError/PageError'
 import projectRoutes from './projects/routes.jsx'
 import RedirectComponent from './components/RedirectComponent'
+import CreateContainer from './projects/create/containers/CreateContainer'
 import {ACCOUNTS_APP_LOGIN_URL, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from './config/constants'
 import { getTopic } from './api/messages'
 import { getFreshToken } from 'tc-accounts'
@@ -77,6 +78,7 @@ const redirectToProject = (nextState, replace, callback) => {
 export default (
   <Route path="/" onUpdate={() => window.scrollTo(0, 0)} component={ App } onEnter={ redirectToConnect }>
     <IndexRoute component={Home} />
+    <Route path="/new-project" component={CreateContainer} />
     <Route path="/terms" component={ConnectTerms} />
     <Route path="/login" component={LoginRedirect}/>
     <Route path="/discussions/:feedId" onEnter={ redirectToProject } />
