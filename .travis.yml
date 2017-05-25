@@ -26,7 +26,7 @@ deploy:
   skip_cleanup: true
   local_dir: dist
   on:
-    branch: ["dev" , "feature/permalink_for_feeds_messages"]
+    branch: dev
 - provider: s3
   cache_control: private, no-store, no-cache, must-revalidate, max-age=0
   detect_encoding: true
