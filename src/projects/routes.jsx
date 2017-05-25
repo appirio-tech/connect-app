@@ -7,20 +7,17 @@ import ProjectDetail from './detail/ProjectDetail'
 import Dashboard     from './detail/Dashboard'
 import ProjectMessages from './detail/Messages'
 import SpecificationContainer from './detail/containers/SpecificationContainer'
-// import CreateContainer from './create/containers/CreateContainer'
 import { requiresAuthentication } from '../components/AuthenticatedComponent'
 
 
 const projectRoutes = (
-  <Route path="/projects" >
+  <Route path="/projects" component={ requiresAuthentication(ProjectLayout)}>
     // TODO add project topbar
-    <Route path="/" component={ requiresAuthentication(ProjectLayout)}>
-      <IndexRoute components={{topbar: null, main: Projects }} />
-      <Route path=":projectId" components={{topbar: null, main: ProjectDetail}} >
-        <IndexRoute component={ Dashboard } />
-        <Route path="specification" component={ SpecificationContainer } />
-        <Route path="discussions" component={ ProjectMessages } />
-      </Route>
+    <IndexRoute components={{topbar: null, main: Projects }} />
+    <Route path=":projectId" components={{topbar: null, main: ProjectDetail}} >
+      <IndexRoute component={ Dashboard } />
+      <Route path="specification" component={ SpecificationContainer } />
+      <Route path="discussions" component={ ProjectMessages } />
     </Route>
   </Route>
 )

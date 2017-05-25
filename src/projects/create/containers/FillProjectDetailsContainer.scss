@@ -1,0 +1,90 @@
+@import 'tc-includes';
+
+//TODO  Additional variables - need to find a home for these
+$gray-color: $tc-gray-50;
+$title-color: $tc-gray-80;
+
+@mixin flexBox {
+  display: box;
+  display: flex;
+  flex-direction: row;
+  width: auto;
+}
+
+@mixin flexWidth($number) {
+  -webkit-box-flex: $number;
+  -moz-box-flex: $number;
+  -webkit-flex: $number;
+  -ms-flex: $number;
+  flex: $number;
+}
+
+.FillProjectDetailsContainer {
+
+  .header {
+    display: flex;
+
+    h1 {
+      @include tc-heading;
+      width: 100%;
+      text-align: center;
+    }
+
+    button {
+      align-self: flex-end;
+      white-space: nowrap;
+    }
+  }
+
+
+  .two-col-content.content {
+
+    .container {
+      @include flexBox;
+      background-color: transparent;
+      display: flex;
+      padding: 0px;
+      width: 1110px;
+      margin: 20px auto;
+      /* .left-area */
+      .left-area {
+        @include flexWidth(2);
+        position: relative;
+        border-radius: 4px;
+        background: $tc-white;
+        box-shadow: 0px 1px 3px 0px $tc-gray-30;
+        padding: 5*$base-unit;
+        margin-bottom: 20px;
+
+        .title {
+          color: $tc-gray-80;
+          @include roboto-bold;
+        }
+
+        .section-footer {
+          margin-top: 4*$base_unit;
+          margin-bottom: 0px;
+          background: none;
+        }
+
+      }
+
+      .right-area {
+        @include flexWidth(1);
+        margin-left: 4*$base_unit;
+
+        .right-area-footer {
+          @include roboto;
+          padding: 0 40px 0 20px;
+          font-size: 13px;
+          line-height: 30px;
+          color: $tc-gray-50;
+
+          span {
+            float: right;
+          }
+        }
+      }
+    }
+  }
+}

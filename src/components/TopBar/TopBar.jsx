@@ -78,7 +78,7 @@ class TopBar extends Component {
     )
     const avatar = (
       <div className="welcome-info">
-        {isLoggedIn && !isProjectDetails &&  <a onClick={onNewProjectIntent} href="javascript:" className="tc-btn tc-btn-sm tc-btn-primary">+ New Project</a> }
+        {isLoggedIn && !isProjectDetails &&  <Link to="new-project"  className="tc-btn tc-btn-sm tc-btn-primary">+ New Project</Link> }
         <div className="avatar-info">
           <div className="links-section">
             <div className="menu-wrap" onClick={this.handleMobileClick}>

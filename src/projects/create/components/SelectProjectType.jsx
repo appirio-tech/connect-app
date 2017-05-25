@@ -12,7 +12,6 @@ function SelectProjectType(props) {
     const icon = <SVGIconImage filePath={item.icon} />
     cards.push(
       <ProjectTypeCard
-        disabled={!props.projectName.trim()}
         icon={icon}
         info={item.info}
         key={key}
@@ -23,12 +22,6 @@ function SelectProjectType(props) {
   }
   return (
     <div className="SelectProjectType">
-      <WizardHeader
-        onProjectNameChange={props.onProjectNameChange}
-        onProjectRefChange={props.onProjectRefChange}
-        projectName={props.projectName}
-        projectRef={props.projectRef}
-      />
       <h1>Select your project category</h1>
       {cards}
       <div className="footer">

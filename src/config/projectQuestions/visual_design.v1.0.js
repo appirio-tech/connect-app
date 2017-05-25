@@ -243,3 +243,93 @@ const sections = [
 ]
 
 export default sections
+
+
+export const basicSections = [
+  {
+    id: 'appDefinition',
+    title: function(project, showProduct) {
+      const product = _.get(project, 'details.products[0]')
+      if (showProduct && product) {
+        const prd = findProduct(product)
+        if (prd) return prd
+      }
+      return 'Definition'
+    },
+    required: true,
+    pricePerPage: 1000,
+    description: 'Answer just a few questions about your application. You can also provide the needed information in a supporting-document - upload it below or add a link in the notes section.',
+    subSections: [
+      {
+        id: 'projectName',
+        required: true,
+        fieldName: 'name',
+        description: '',
+        title: 'Project Name',
+        type: 'project-name'
+      },
+      {
+        id: 'questions',
+        required: true,
+        hideTitle: true,
+        title: 'Questions',
+        description: '',
+        type: 'questions',
+        questions: [
+          {
+            icon: 'question',
+            title: 'How many screens do you need designed?',
+            description: 'This is the most popular project size that can get a medium-sized app designed in a breeze',
+            fieldName: 'details.appDefinition.numberScreens',
+            type: 'tiled-radio-group',
+            options: [
+              {value: '1', title: 'screens', icon: NumberText, iconOptions: { number: '1' }, desc: '3-5 days'},
+              {value: '3', title: 'screens', icon: NumberText, iconOptions: { number: '3' }, desc: '5-10 days'},
+              {value: '5', title: 'screens', icon: NumberText, iconOptions: { number: '5' }, desc: '7-10 days'},
+              {value: '10', title: 'screens', icon: NumberText, iconOptions: { number: '10' }, desc: '10-14 days'}
+            ]
+          },
+          {
+            icon: 'question',
+            title: 'Which is your primary device target?',
+            description: 'Select only the device that you need to develop for. \
+                          In most cases limiting the scope of your project would result \
+                          in better final result. Topcoder recommends to always start \
+                          with the mobile phone view and expand to other devices as your \
+                          app matures.',
+            fieldName: 'details.appDefinition.primaryTarget',
+            type: 'tiled-radio-group',
+            options: [
+              {value: 'Phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'Wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+            ]
+          },
+          {
+            icon: 'question',
+            id: 'projectInfo',
+            fieldName: 'description',
+            description: 'Brief Description',
+            title: 'Description',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            title: 'Who are the users of your application? ',
+            description: 'Describe the roles and needs of your target users',
+            type: 'see-attached-textbox',
+            fieldName: 'details.appDefinition.users'
+          }
+        ]
+      },
+      {
+        id: 'notes',
+        fieldName: 'details.appDefinition.notes',
+        title: 'Notes',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        type: 'notes'
+      }
+    ]
+  }
+]

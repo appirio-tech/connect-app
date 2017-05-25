@@ -1,0 +1,14 @@
+@import 'tc-includes';
+
+.IncompleteProjectConfirmation {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .actions {
+    button + button {
+      margin-left: 4 * $base_unit;
+    }
+  }
+}

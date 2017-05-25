@@ -98,7 +98,7 @@ const SpecSection = props => {
       const refCode = _.get(project, refCodeFieldName, undefined)
       return (
         <div className="project-name-section">
-          { project.status === PROJECT_STATUS_DRAFT &&
+          { (!project.status || project.status === PROJECT_STATUS_DRAFT) &&
             <div className="editable-project-name">
               <TCFormFields.TextInput
                 name="name"
@@ -109,12 +109,12 @@ const SpecSection = props => {
               />
             </div>
           }
-          { project.status !== PROJECT_STATUS_DRAFT &&
+          { (project.status && project.status !== PROJECT_STATUS_DRAFT) &&
             <div className="dashed-bottom-border">
               <h5 className="project-name">{project.name}</h5>
             </div>
           }
-          { project.status === PROJECT_STATUS_DRAFT &&
+          { (!project.status || project.status === PROJECT_STATUS_DRAFT) &&
             <div className="textinput-refcode">
               <TCFormFields.TextInput
                 name={refCodeFieldName}
@@ -128,7 +128,7 @@ const SpecSection = props => {
               </div>
             </div>
           }
-          { refCode && project.status !== PROJECT_STATUS_DRAFT &&
+          { (refCode && project.status && project.status !== PROJECT_STATUS_DRAFT) &&
             <div className="read-only-refcode">
               <h5 className="project-refcode">{ refCode }</h5>
               <div className="refcode-desc">

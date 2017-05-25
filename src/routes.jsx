@@ -78,7 +78,8 @@ const redirectToProject = (nextState, replace, callback) => {
 export default (
   <Route path="/" onUpdate={() => window.scrollTo(0, 0)} component={ App } onEnter={ redirectToConnect }>
     <IndexRoute component={Home} />
-    <Route path="/new-project" component={CreateContainer} />
+    <Route path="/new-project(/type/:type)(/product/:product)" component={CreateContainer} />
+    <Route path="/new-project-callback" component={CreateContainer} />
     <Route path="/terms" component={ConnectTerms} />
     <Route path="/login" component={LoginRedirect}/>
     <Route path="/discussions/:feedId" onEnter={ redirectToProject } />

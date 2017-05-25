@@ -5,7 +5,7 @@ import SVGIconImage from '../SVGIconImage'
 import './Wizard.scss'
 
 function Wizard(props) {
-  let backControl
+  let backControl, modalCloseControl
   if (props.step) {
     backControl = (
       <ModalControl
@@ -16,16 +16,21 @@ function Wizard(props) {
       />
     )
   }
+  if (!props.hideModal) {
+    modalCloseControl = (
+      <ModalControl
+        className="escape-button"
+        icon={<SVGIconImage filePath="x-mark" />}
+        label="esc"
+        onClick={props.onCancel}
+      />
+    )
+  }
   return (
-    <div className="Wizard">
+    <div className={`Wizard ${props.className}`}>
       <div className="content">
         {backControl}
-        <ModalControl
-          className="escape-button"
-          icon={<SVGIconImage filePath="x-mark" />}
-          label="esc"
-          onClick={props.onCancel}
-        />
+        { modalCloseControl }
         {props.children[props.step]}
       </div>
     </div>

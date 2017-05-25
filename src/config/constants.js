@@ -225,3 +225,6 @@ export const AUTOCOMPLETE_TRIGGER_LENGTH = 3
 
 // Toggle this flag to enable/disable maintenance mode
 export const MAINTENANCE_MODE = false
+
+/* Local Storage Variables */
+export const LS_INCOMPLETE_PROJECT = 'incompleteProject'
