@@ -30,9 +30,9 @@ const VisualDesignProjectEstimateSection = ({products, numberScreens}) => {
   return (
     <div className="visual-design-project-estimate-section">
       <h4 className="titles gray-font">Project Estimate</h4>
-      <h3 className="label">Duration</h3>
+      <h3 className="label">Duration:</h3>
       <h3 className="estimate">{durationEstimate}</h3>
-      <h3 className="label">Quick Quote</h3>
+      <h3 className="label">Quick Quote:</h3>
       <h3 className="estimate"><span>$</span> { numberWithCommas(priceEstimate) }</h3>
     </div>
   )
