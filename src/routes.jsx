@@ -4,7 +4,7 @@ import { withProps } from 'recompose'
 import App from './components/App/App'
 import Home from './components/Home/Home'
 import ConnectTerms from './components/ConnectTerms/ConnectTerms'
-import PageError from './components/PageError/PageError'
+import CoderBot from './components/CoderBot/CoderBot'
 import projectRoutes from './projects/routes.jsx'
 import RedirectComponent from './components/RedirectComponent'
 import CreateContainer from './projects/create/containers/CreateContainer'
@@ -88,7 +88,7 @@ export default (
     {projectRoutes}
     {/* {reportsListRoutes} */}
 
-    <Route path="/error" component={ () => <PageError code={500} /> }/>
-    <Route path="*" component={ () => <PageError code={404} /> }/>
+    <Route path="/error" component={ () => <CoderBot code={500} /> }/>
+    <Route path="*" component={ () => <CoderBot code={404} /> }/>
   </Route>
 )

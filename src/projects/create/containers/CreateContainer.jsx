@@ -4,7 +4,7 @@ import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
-import PageError from '../../../components/PageError/PageError'
+import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
 import { CREATE_PROJECT_FAILURE, LS_INCOMPLETE_PROJECT } from '../../../config/constants'
@@ -13,13 +13,13 @@ const page404 = compose(
   withProps({code:500})
 )
 // this handles showing error page when there is an error in loading the page
-const showPageErrorIfError = (hasError) =>
+const showCoderBotIfError = (hasError) =>
   branch(
     hasError,
-    renderComponent(page404(PageError)),
+    renderComponent(page404(CoderBot)),
     t => t
   )
-const errorHandler = showPageErrorIfError(props => props.error && props.error.type === CREATE_PROJECT_FAILURE)
+const errorHandler = showCoderBotIfError(props => props.error && props.error.type === CREATE_PROJECT_FAILURE)
 
 // This handles showing a spinner while the state is being loaded async
 const spinner = spinnerWhileLoading(props => !props.processing)
@@ -31,8 +31,7 @@ const CreateView = (props) => {
   const { route, error } = props
   if (route.path === '/new-project-callback') {
     // can do some fancy loading (e.g. coderbot animation) here
-    // return <div><PageError code={ 200 } message='Creating your project...' /></div>
-    return <div>Creating your project</div>
+    return <div><CoderBot code={ 200 } message='Creating your project...' /></div>
   }
   return (
     <div>
