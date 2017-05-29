@@ -33,19 +33,13 @@ class ProjectWizard extends Component {
     this.updateProjectRef = this.updateProjectRef.bind(this)
     this.updateProducts = this.updateProducts.bind(this)
     this.handleProjectChange = this.handleProjectChange.bind(this)
-    this.onLeave = this.onLeave.bind(this)
     this.loadIncompleteProject = this.loadIncompleteProject.bind(this)
     this.removeIncompleteProject = this.removeIncompleteProject.bind(this)
     this.handleOnCreateProject = this.handleOnCreateProject.bind(this)
+    this.handleStepChange = this.handleStepChange.bind(this)
   }
 
   componentDidMount() {
-    // sets route leave hook to show unsaved changes alert and persist incomplete project
-    this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
-    // sets window unload hook to show unsaved changes alert and persist incomplete project
-    window.addEventListener('beforeunload', this.onLeave)
-
-
     const { userRoles, location } = this.props
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
@@ -54,7 +48,10 @@ class ProjectWizard extends Component {
       this.setState({
         project: update(this.state.project, {$merge : incompleteProject}),
         dirtyProject: update(this.state.dirtyProject, {$merge : incompleteProject}),
-        wizardStep: WZ_STEP_INCOMP_PROJ_CONF
+        wizardStep: WZ_STEP_INCOMP_PROJ_CONF,
+        isProjectDirty: false
+      }, () => {
+        this.props.onStepChange(this.state.wizardStep)
       })
     } else {
       // if there is no incomplete project in the local storage, load the wizard with appropriate step
@@ -72,13 +69,12 @@ class ProjectWizard extends Component {
       this.setState({
         project: update(this.state.project, updateQuery),
         dirtyProject: update(this.state.dirtyProject, updateQuery),
-        wizardStep
+        wizardStep,
+        isProjectDirty: false
+      }, () => {
+        this.props.onStepChange(this.state.wizardStep)
       })
     }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.onLeave)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -88,18 +84,9 @@ class ProjectWizard extends Component {
     if (wizardStep) {
       this.setState({
         wizardStep: wizardStep
+      }, () => {
+        this.props.onStepChange(this.state.wizardStep)
       })
-    }
-  }
-
-  // stores the incomplete project in local storage
-  onLeave(e) {
-    const { wizardStep, isProjectDirty, processing } = this.state
-    if (wizardStep === WZ_STEP_FILL_PROJ_DETAILS && isProjectDirty) {// Project Details step
-      window.localStorage.setItem(LS_INCOMPLETE_PROJECT, JSON.stringify(this.state.dirtyProject))
-    }
-    if (isProjectDirty && !processing) {
-      return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
     }
   }
 
@@ -115,6 +102,8 @@ class ProjectWizard extends Component {
         project: update(this.state.project, { $merge : incompleteProject }),
         dirtyProject: update(this.state.dirtyProject, { $merge : incompleteProject }),
         wizardStep: WZ_STEP_FILL_PROJ_DETAILS
+      }, () => {
+        this.props.onStepChange(this.state.wizardStep)
       })
     }
   }
@@ -160,11 +149,25 @@ class ProjectWizard extends Component {
       // update only dirtyProject when Form changes the model
       dirtyProject: _.merge({}, this.state.dirtyProject, unflatten(change)),
       isProjectDirty: true
+    }, () => {
+      this.props.onProjectUpdate(this.state.dirtyProject)
     })
   }
 
   handleOnCreateProject() {
     this.props.createProject(this.state.dirtyProject)
+  }
+
+  handleStepChange(wizardStep) {
+    this.setState({
+      // In this wizard we have just two steps, and this callback is triggered
+      // only to move from the second step back to the first, thus we always
+      // should reset the projectSubType when this callback is fired.
+      project: update(project, { details: { products: {$set : [] }}}),
+      wizardStep
+    }, () => {
+      this.props.onStepChange(wizardStep)
+    })
   }
 
   render() {
@@ -175,13 +178,7 @@ class ProjectWizard extends Component {
         hideModal={true}
         className="ProjectWizard"
         onCancel={() => this.props.closeModal()}
-        onStepChange={wizardStep => this.setState({
-          // In this wizard we have just two steps, and this callback is triggered
-          // only to move from the second step back to the first, thus we always
-          // should reset the projectSubType when this callback is fired.
-          project: update(project, { details: { products: {$set : [] }}}),
-          wizardStep
-        })}
+        onStepChange={ this.handleStepChange }
         step={this.state.wizardStep}
       >
         <IncompleteProjectConfirmation
@@ -243,6 +240,14 @@ ProjectWizard.propTypes = {
 ProjectWizard.defaultProps = {
   userRoles: [],
   closeModal: () => {}
+}
+
+ProjectWizard.Steps = {
+  WZ_STEP_INCOMP_PROJ_CONF,
+  WZ_STEP_SELECT_PROJ_TYPE,
+  WZ_STEP_SELECT_PROD_TYPE,
+  WZ_STEP_FILL_PROJ_DETAILS,
+  WZ_STEP_ERROR_CREATING_PROJ
 }
 
 export default ProjectWizard

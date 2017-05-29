@@ -25,7 +25,6 @@ const errorHandler = showCoderBotIfError(props => props.error && props.error.typ
 const spinner = spinnerWhileLoading(props => !props.processing)
 
 const enhance = compose(errorHandler, spinner)
-// const EnhancedProjectWizard = enhance(ProjectWizard)
 
 const CreateView = (props) => {
   const { route, error } = props
@@ -40,24 +39,41 @@ const CreateView = (props) => {
   )
 }
 const EnhancedCreateView = enhance(CreateView)
-// const EnhancedCreateView = spinner(CreateView)
 
 class CreateConainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      creatingProject : false
+      creatingProject : false,
+      isProjectDirty: false,
+      wizardStep: 0,
+      updatedProject: {}
     }
     this.createProject = this.createProject.bind(this)
+    this.onLeave = this.onLeave.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.creatingProject != nextProps.processing) {
+    const projectId = _.get(nextProps, 'project.id', null)
+    if (!nextProps.processing && !nextProps.error && projectId) {
+      // close modal (if shown as modal), remove incomplete project, and navigate to project dashboard
+      // this.props.closeModal()
+      this.setState({
+        creatingProject: false,
+        isProjectDirty: false
+      }, () => {
+        console.log('removing incomplete project')
+        window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
+        this.props.router.push('/projects/' + projectId)  
+      })
+      
+    } else if (this.state.creatingProject != nextProps.processing) {
       this.setState({ creatingProject : nextProps.processing })
     }
   }
 
   componentWillMount() {
+    console.log('CreateContainer#componentWillMount')
     const { processing, userRoles, route } = this.props
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
@@ -72,14 +88,26 @@ class CreateConainer extends React.Component {
     }
   }
 
-  componentWillUpdate(nextProps) {
-    const projectId = _.get(nextProps, 'project.id', null)
-    if (!nextProps.processing && !nextProps.error && projectId) {
-      // close modal (if shown as modal), remove incomplete project, and navigate to project dashboard
-      // this.props.closeModal()
-      console.log('removing incomplete project from local storage')
-      window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
-      this.props.router.push('/projects/' + projectId)
+  componentDidMount() {
+    // sets route leave hook to show unsaved changes alert and persist incomplete project
+    this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
+    // sets window unload hook to show unsaved changes alert and persist incomplete project
+    window.addEventListener('beforeunload', this.onLeave)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.onLeave)
+  }
+
+  // stores the incomplete project in local storage
+  onLeave(e) {
+    const { wizardStep, isProjectDirty, creatingProject } = this.state
+    if (wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS && isProjectDirty) {// Project Details step
+      console.log('saving incomplete project')
+      window.localStorage.setItem(LS_INCOMPLETE_PROJECT, JSON.stringify(this.state.updatedProject))
+    }
+    if (isProjectDirty && !creatingProject) {
+      return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
     }
   }
 
@@ -101,7 +129,20 @@ class CreateConainer extends React.Component {
   }
 
   render() {
-    return <EnhancedCreateView {...this.props} createProject={ this.createProject } processing={ this.state.creatingProject } />
+    return (
+      <EnhancedCreateView
+        {...this.props}
+        createProject={ this.createProject }
+        processing={ this.state.creatingProject }
+        onStepChange={ (wizardStep) => this.setState({
+          wizardStep
+        })}
+        onProjectUpdate={ (updatedProject) => this.setState({
+          isProjectDirty: true,
+          updatedProject
+        })}
+      />
+    )
   }
 }
 
