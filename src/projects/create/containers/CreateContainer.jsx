@@ -56,12 +56,12 @@ class CreateConainer extends React.Component {
   componentWillReceiveProps(nextProps) {
     const projectId = _.get(nextProps, 'project.id', null)
     if (!nextProps.processing && !nextProps.error && projectId) {
-      // close modal (if shown as modal), remove incomplete project, and navigate to project dashboard
-      // this.props.closeModal()
+      // update state
       this.setState({
         creatingProject: false,
         isProjectDirty: false
       }, () => {
+        // remove incomplete project, and navigate to project dashboard
         console.log('removing incomplete project')
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
         this.props.router.push('/projects/' + projectId)  

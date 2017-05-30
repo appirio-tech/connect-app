@@ -7,7 +7,7 @@ import Wizard from '../../../components/Wizard'
 import SelectProjectType from './SelectProjectType'
 import SelectProjectSubType from './SelectProjectSubType'
 import IncompleteProjectConfirmation from './IncompleteProjectConfirmation'
-import FillProjectDetails from '../containers/FillProjectDetailsContainer'
+import FillProjectDetails from './FillProjectDetails'
 import update from 'react-addons-update'
 import { LS_INCOMPLETE_PROJECT } from '../../../config/constants'
 import './ProjectWizard.scss'
@@ -171,11 +171,11 @@ class ProjectWizard extends Component {
   }
 
   render() {
-    const { processing, route, userRoles, createProject } = this.props
+    const { processing, route, userRoles, createProject, showModal } = this.props
     const { project, dirtyProject } = this.state
     return (
       <Wizard
-        hideModal={true}
+        showModal={showModal}
         className="ProjectWizard"
         onCancel={() => this.props.closeModal()}
         onStepChange={ this.handleStepChange }
@@ -234,12 +234,14 @@ class ProjectWizard extends Component {
 
 ProjectWizard.propTypes = {
   userRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
-  closeModal: PropTypes.func.isRequired
+  closeModal: PropTypes.func.isRequired,
+  showModal: PropTypes.boolean
 }
 
 ProjectWizard.defaultProps = {
   userRoles: [],
-  closeModal: () => {}
+  closeModal: () => {},
+  showModal: false
 }
 
 ProjectWizard.Steps = {

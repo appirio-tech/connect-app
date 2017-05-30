@@ -16,7 +16,7 @@ function Wizard(props) {
       />
     )
   }
-  if (!props.hideModal) {
+  if (props.showModal) {
     modalCloseControl = (
       <ModalControl
         className="escape-button"
@@ -41,7 +41,8 @@ Wizard.proptTypes = {
   children: PT.node.isRequired,
   onCancel: PT.node.isRequired,
   onStepChange: PT.func.isRequired,
-  step: PT.number.isRequired
+  step: PT.number.isRequired,
+  showModal: PT.boolean
 }
 
 export default Wizard

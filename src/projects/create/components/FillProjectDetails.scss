@@ -1,9 +1,5 @@
 @import 'tc-includes';
 
-//TODO  Additional variables - need to find a home for these
-$gray-color: $tc-gray-50;
-$title-color: $tc-gray-80;
-
 @mixin flexBox {
   display: box;
   display: flex;
@@ -19,7 +15,7 @@ $title-color: $tc-gray-80;
   flex: $number;
 }
 
-.FillProjectDetailsContainer {
+.FillProjectDetails {
 
   .header {
     display: flex;

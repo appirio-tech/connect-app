@@ -3,12 +3,12 @@ import React, { PropTypes as PT, Component } from 'react'
 import Sticky from 'react-stickynode'
 import config from '../../../config/projectWizard'
 import WizardHeader from '../components/WizardHeader'
-import './FillProjectDetailsContainer.scss'
+import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
 import ProjectOutline from '../components/ProjectOutline'
 import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
 
-class FillProjectDetailsContainer extends Component  {
+class FillProjectDetails extends Component  {
   constructor(props) {
     super(props)
     this.state = { project: {} }
@@ -45,7 +45,7 @@ class FillProjectDetailsContainer extends Component  {
       specification = typeToSpecification[product]
     let sections = require(`../../../config/projectQuestions/${specification}`).basicSections
     return (
-      <div className="FillProjectDetailsContainer">
+      <div className="FillProjectDetails">
         <div className="header">
           <h1>Let's setup your { productName } project</h1>
           <button className="tc-btn tc-btn-default tc-btn-sm">Start over</button>
@@ -77,7 +77,7 @@ class FillProjectDetailsContainer extends Component  {
   }
 }
 
-FillProjectDetailsContainer.propTypes = {
+FillProjectDetails.propTypes = {
   // onProjectChange: PT.func.isRequired,
   onCreateProject: PT.func.isRequired,
   project: PT.object.isRequired,
@@ -89,4 +89,4 @@ FillProjectDetailsContainer.propTypes = {
   ])
 }
 
-export default FillProjectDetailsContainer
+export default FillProjectDetails
