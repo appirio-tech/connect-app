@@ -54,8 +54,7 @@ const redirectToProject = (nextState, replace, callback) => {
           replace(`/projects/${projectId}/`)
         } else if (topic.tag === PROJECT_FEED_TYPE_MESSAGES) {
           replace({
-            pathname: `/projects/${projectId}/discussions`,
-            state: { threadId : topic.id }
+            pathname: `/projects/${projectId}/discussions/${topic.id}`
           })
         } else {
           replace('/projects')
