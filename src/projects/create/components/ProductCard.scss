@@ -1,0 +1,49 @@
+@import 'tc-includes';
+
+.ProductCard {
+  border: 1px solid $tc-gray-20;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 255px;
+  margin: 10px 10px 0;
+  position: relative;
+  vertical-align: top;
+  width: 215px;
+  .sub-type-details {
+    margin: 0 20px;
+  }
+  .header {
+    @include tc-body;
+    @include roboto-bold;
+    color: $tc-gray-70;
+    margin-bottom: 0;
+    margin-top: 0px;
+  }
+  .Icon {
+    margin: 4*$base_unit 0 2*$base_unit;
+  }
+  &.disabled {
+    opacity: 0.3
+  }
+  &.enabled:hover {
+    border-color: $tc-dark-blue-70;
+    cursor: pointer;
+    .button {
+      background: $tc-dark-blue;
+      border-color: transparent;
+      color: $tc-white;
+    }
+  }
+  &.selected {
+    background: $tc-gray-10;
+    border-color: transparent;
+    &:hover {
+      border-color: transparent;
+    }
+  }
+  .tc-btn {
+    margin-top: 2 * $base_unit;
+  }
+}

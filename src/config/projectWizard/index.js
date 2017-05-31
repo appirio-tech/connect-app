@@ -11,7 +11,7 @@ const products = {
         icon: 'project-wireframes',
         id: 'wireframes'
       },
-      'App Visual Design - Concepts': {
+      'Visual Design': {
         brief: '1-15 screens',
         details: 'Visualize and test your app requirements and ideas',
         icon: 'project-app-visual-design',
@@ -21,7 +21,14 @@ const products = {
         brief: '1-15 screens',
         details: 'Create development-ready designs',
         icon: 'project-app-visual-design',
-        id: 'visual_design_prod'
+        id: 'visual_design_prod',
+        disabled: true
+      },
+      'Infographic': {
+        brief: 'Infographic',
+        details: 'Present your data in a clean and a fun way',
+        icon: 'project-app-visual-design',
+        id: 'infographic'
       },
       'Other Design': {
         brief: 'other designs',
@@ -37,25 +44,25 @@ const products = {
     question: 'What do you need to develop?',
     id: 'app_dev',
     subtypes: {
-      Prototype: {
+      'Front-end Prototype': {
         brief: '3-20 screens',
         details: 'Translate designs to an HTML/CSS/JavaScript prototype',
         icon: 'project-prototype-demo',
         id: 'visual_prototype'
       },
-      'Website Development': {
+      'Website': {
         brief: 'Websites',
         details: 'Build responsive or regular websites',
         icon: 'project-prototype-technical',
         id: 'website_development'
       },
-      'Application Development': {
+      'App': {
         brief: 'Apps',
         details: 'Build apps for mobile, web, or wearables',
         icon: 'project-development-code',
         id: 'application_development'
       },
-      'Other Development': {
+      'Software Development': {
         brief: 'Tasks or adhoc',
         details: 'Get help with any part of your development cycle',
         icon: 'project-development-ideation',
@@ -78,6 +85,22 @@ export function findProduct(product) {
     for(const prd in products[pType].subtypes) {
       if (products[pType].subtypes[prd].id === product) {
         return prd
+      }
+    }
+  }
+}
+
+export function findProductCategory(product) {
+  if (product === 'generic_dev') {
+    return 'Development'
+  }
+  if (product === 'generic_design') {
+    return 'Design'
+  }
+  for(const pType in products) {
+    for(const prd in products[pType].subtypes) {
+      if (products[pType].subtypes[prd].id === product) {
+        return pType
       }
     }
   }

@@ -2,10 +2,11 @@ import _ from 'lodash'
 import { unflatten } from 'flat'
 import React, { Component, PropTypes } from 'react'
 
-import config from '../../../config/projectWizard'
+import config, { findProductCategory } from '../../../config/projectWizard'
 import Wizard from '../../../components/Wizard'
 import SelectProjectType from './SelectProjectType'
 import SelectProjectSubType from './SelectProjectSubType'
+import SelectProduct from './SelectProduct'
 import IncompleteProjectConfirmation from './IncompleteProjectConfirmation'
 import FillProjectDetails from './FillProjectDetails'
 import update from 'react-addons-update'
@@ -13,10 +14,10 @@ import { LS_INCOMPLETE_PROJECT } from '../../../config/constants'
 import './ProjectWizard.scss'
 
 const WZ_STEP_INCOMP_PROJ_CONF = 0
-const WZ_STEP_SELECT_PROJ_TYPE = 1
-const WZ_STEP_SELECT_PROD_TYPE = 2
-const WZ_STEP_FILL_PROJ_DETAILS = 3
-const WZ_STEP_ERROR_CREATING_PROJ = 4
+// const WZ_STEP_SELECT_PROJ_TYPE = 1
+const WZ_STEP_SELECT_PROD_TYPE = 1
+const WZ_STEP_FILL_PROJ_DETAILS = 2
+const WZ_STEP_ERROR_CREATING_PROJ = 3
 
 class ProjectWizard extends Component {
 
@@ -24,7 +25,7 @@ class ProjectWizard extends Component {
     super(props)
 
     this.state = {
-      wizardStep: WZ_STEP_SELECT_PROJ_TYPE,
+      wizardStep: WZ_STEP_SELECT_PROD_TYPE,
       project: { details: {} },
       dirtyProject: { details: {} },
       isProjectDirty: false
@@ -55,14 +56,14 @@ class ProjectWizard extends Component {
       })
     } else {
       // if there is no incomplete project in the local storage, load the wizard with appropriate step
-      const { type, product } = this.props.params
+      const { product } = this.props.params
       const updateQuery = {}
-      let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
-      if (type) {
-        updateQuery['type'] = { $set: type }
-        wizardStep = WZ_STEP_SELECT_PROD_TYPE
-      }
+      let wizardStep = WZ_STEP_SELECT_PROD_TYPE
       if (product) {
+        const prodCategory = findProductCategory(product)
+        if (prodCategory) {
+          updateQuery['type'] = { $set : config[prodCategory].id }
+        }
         updateQuery['details'] = { 'products' : { $set: [product] } }
         wizardStep = WZ_STEP_FILL_PROJ_DETAILS
       }
@@ -116,7 +117,7 @@ class ProjectWizard extends Component {
     this.setState({
       project: { details: {} },
       dirtyProject: { details: {} },
-      wizardStep: WZ_STEP_SELECT_PROJ_TYPE
+      wizardStep: WZ_STEP_SELECT_PROD_TYPE
     })
   }
 
@@ -132,15 +133,19 @@ class ProjectWizard extends Component {
     })
   }
 
-  updateProducts(product) {
+  updateProducts(projectType, product) {
     const products = _.get(this.state.project, 'details.products')
     let updateQuery = { details: { products : { $set : [product] }}}
     if (!products) {
       updateQuery = { details: { $set : { products : [product] }}}
     }
+    if (projectType) {
+      updateQuery.type = {$set : projectType }
+    }
     this.setState({ 
       project: update(this.state.project, updateQuery),
-      dirtyProject: update(this.state.project, updateQuery)
+      dirtyProject: update(this.state.project, updateQuery),
+      wizardStep: WZ_STEP_FILL_PROJ_DETAILS
     })
   }
 
@@ -163,7 +168,7 @@ class ProjectWizard extends Component {
       // In this wizard we have just two steps, and this callback is triggered
       // only to move from the second step back to the first, thus we always
       // should reset the projectSubType when this callback is fired.
-      project: update(project, { details: { products: {$set : [] }}}),
+      project: update(this.state.project, { details: { products: {$set : [] }}}),
       wizardStep
     }, () => {
       this.props.onStepChange(wizardStep)
@@ -184,33 +189,8 @@ class ProjectWizard extends Component {
         <IncompleteProjectConfirmation
           loadIncompleteProject={ this.loadIncompleteProject }
           removeIncompleteProject={ this.removeIncompleteProject }/>
-        <SelectProjectType
-          onProjectNameChange={projectName => this.setState({ 
-            project: update(project, { name: {$set : projectName }})
-          })}
-          onProjectRefChange={ this.updateProjectRef }
-          onProjectTypeChange={projectType => {this.setState({
-            project: update(project, { type: {$set : config[projectType].id }}),
-            wizardStep: WZ_STEP_SELECT_PROD_TYPE
-          })}}
-          projectName={ _.get(project, 'name', '') }
-          projectRef={ _.get(project, 'details.utm.code', '') }
-          projectType={ _.get(project, 'type', '') }
-          projectSubType={ _.get(project, 'details.products[0]', '') }
-        />
-        <SelectProjectSubType
-          createProject={projectType => this.setState({
-            wizardStep: WZ_STEP_FILL_PROJ_DETAILS
-          })}
-          onProjectNameChange={projectName => this.setState({ 
-            project: update(project, { name: {$set : projectName }})
-          })}
-          onProjectRefChange={ this.updateProjectRef }
-          onSubCategoryChange={ this.updateProducts }
-          projectName={ _.get(project, 'name', '') }
-          projectRef={ _.get(project, 'details.utm.code', '') }
-          projectType={ _.get(project, 'type', '') }
-          projectSubType={ _.get(project, 'details.products[0]', '') }
+        <SelectProduct
+          onProductChange={ this.updateProducts }
         />
         <FillProjectDetails
           project={ project }
@@ -235,7 +215,7 @@ class ProjectWizard extends Component {
 ProjectWizard.propTypes = {
   userRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
   closeModal: PropTypes.func.isRequired,
-  showModal: PropTypes.boolean
+  showModal: PropTypes.bool
 }
 
 ProjectWizard.defaultProps = {
@@ -246,7 +226,7 @@ ProjectWizard.defaultProps = {
 
 ProjectWizard.Steps = {
   WZ_STEP_INCOMP_PROJ_CONF,
-  WZ_STEP_SELECT_PROJ_TYPE,
+  // WZ_STEP_SELECT_PROJ_TYPE,
   WZ_STEP_SELECT_PROD_TYPE,
   WZ_STEP_FILL_PROJ_DETAILS,
   WZ_STEP_ERROR_CREATING_PROJ

@@ -42,7 +42,7 @@ Wizard.proptTypes = {
   onCancel: PT.node.isRequired,
   onStepChange: PT.func.isRequired,
   step: PT.number.isRequired,
-  showModal: PT.boolean
+  showModal: PT.bool
 }
 
 export default Wizard

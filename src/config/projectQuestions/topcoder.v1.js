@@ -202,3 +202,60 @@ const sections = [
 ]
 
 export default sections
+
+export const basicSections = [
+  {
+    id: 'appDefinition',
+    title: '',
+    required: true,
+    description: 'Answer just a few questions about your application. You can also provide the needed information in a supporting-document - upload it below or add a link in the notes section.',
+    subSections: [
+      {
+        id: 'projectName',
+        required: true,
+        fieldName: 'name',
+        description: '',
+        title: 'Project Name',
+        type: 'project-name'
+      },
+      {
+        id: 'projectInfo',
+        required: true,
+        fieldName: 'description',
+        description: 'Description',
+        title: 'Project Info',
+        type: 'notes'
+      },
+      {
+        id: 'questions',
+        required: true,
+        title: 'Questions',
+        description: '',
+        type: 'questions',
+        questions: [
+          {
+            icon: 'question',
+            title: 'What is the goal of your application? How will people use it?',
+            description: 'Describe your objectives for creating this application',
+            type: 'see-attached-textbox',
+            fieldName: 'details.appDefinition.goal'
+          },
+          {
+            icon: 'question',
+            title: 'Who are the users of your application? ',
+            description: 'Describe the roles and needs of your target users',
+            type: 'see-attached-textbox',
+            fieldName: 'details.appDefinition.users'
+          }
+        ]
+      },
+      {
+        id: 'notes',
+        fieldName: 'details.appDefinition.notes',
+        title: 'Notes',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        type: 'notes'
+      }
+    ]
+  }
+]

@@ -228,3 +228,78 @@ const sections = [
 ]
 
 export default sections
+
+export const basicSections = [
+  {
+    id: 'appDefinition',
+    title: '',
+    required: true,
+    description: 'Answer just a few questions about your application. You can also provide the needed information in a supporting-document - upload it below or add a link in the notes section.',
+    subSections: [
+      {
+        id: 'projectName',
+        required: true,
+        fieldName: 'name',
+        description: '',
+        title: 'Project Name',
+        type: 'project-name'
+      },
+      {
+        id: 'questions',
+        required: true,
+        hideTitle: true,
+        title: 'Questions',
+        description: '',
+        type: 'questions',
+        questions: [
+          {
+            icon: 'question',
+            title: 'Which is your primary device target?',
+            description: 'Select only the device that you need to develop for. \
+                          In most cases limiting the scope of your project would result \
+                          in better final result. Topcoder recommends to always start \
+                          with the mobile phone view and expand to other devices as your \
+                          app matures.',
+            fieldName: 'details.appDefinition.primaryTarget',
+            type: 'tiled-radio-group',
+            options: [
+              {value: 'phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+            ]
+          },
+          {
+            id: 'projectInfo',
+            required: true,
+            fieldName: 'description',
+            description: 'Brief Description',
+            title: 'Description',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            title: 'What is the goal of your application? How will people use it?',
+            description: 'Describe your objectives for creating this application',
+            type: 'see-attached-textbox',
+            fieldName: 'details.appDefinition.goal'
+          },
+          {
+            icon: 'question',
+            title: 'Who are the users of your application? ',
+            description: 'Describe the roles and needs of your target users',
+            type: 'see-attached-textbox',
+            fieldName: 'details.appDefinition.users'
+          }
+        ]
+      },
+      {
+        id: 'notes',
+        fieldName: 'details.appDefinition.notes',
+        title: 'Notes',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        type: 'notes'
+      }
+    ]
+  }
+]

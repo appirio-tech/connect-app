@@ -18,10 +18,14 @@ const VisualDesignProjectEstimateSection = ({products, numberScreens}) => {
   const sectionQuestions = _.find(subSections, (subSection) => subSection.id === 'questions').questions
 
   // options provided in the number of screens question
-  const { options: projectDurationOptions } = _.find(
+  let projectDurationOptions = []
+  const numberScreensQuestion = _.find(
     sectionQuestions,
     (question) => question.fieldName === 'details.appDefinition.numberScreens'
   )
+  if (numberScreensQuestion) {
+    projectDurationOptions = numberScreensQuestion.options
+  }
   // selected option
   const pickedDurationOption = _.find(projectDurationOptions, (option) => option.value === numberScreens)
   const durationEstimate = pickedDurationOption ? pickedDurationOption.desc : '0 days'
