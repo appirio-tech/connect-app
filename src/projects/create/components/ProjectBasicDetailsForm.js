@@ -71,9 +71,8 @@ class ProjectBasicDetailsForm extends Component {
 
   render() {
     const { isEdittable, sections, submitBtnText } = this.props
-    const { project } = this.state
+    const { project, canSubmit } = this.state
     const renderSection = (section, idx) => {
-      const anySectionInvalid = _.some(this.props.sections, (s) => s.isInvalid)
       return (
         <div key={idx} className="ProjectBasicDetailsForm">
           <div className="sections">
@@ -84,15 +83,13 @@ class ProjectBasicDetailsForm extends Component {
               showFeaturesDialog={ () => {} }//dummy
               resetFeatures={ () => {} }//dummy
               // TODO we shoudl not update the props (section is coming from props)
-              validate={(isInvalid) => {
-                console.log('isInvalid: ' + isInvalid)
-                section.isInvalid = isInvalid
-              }}
+              // further, it is not used for this component as we are not rendering spec screen section here
+              validate={(isInvalid) => {}}//dummy
             />
           </div>
           <div className="section-footer section-footer-spec">
             <button className="tc-btn tc-btn-primary tc-btn-md"
-              type="submit" disabled={(!this.isChanged() || this.state.isSaving) || anySectionInvalid}
+              type="submit" disabled={(!this.isChanged() || this.state.isSaving) || !canSubmit}
             >{ submitBtnText }</button>
           </div>
         </div>

@@ -108,6 +108,8 @@ const SpecSection = props => {
                 value={_.get(project, 'name', undefined)}
                 wrapperClass="project-name"
                 maxLength={ PROJECT_NAME_MAX_LENGTH }
+                required={props.required}
+                validationError={props.validationError}
               />
             </div>
           }

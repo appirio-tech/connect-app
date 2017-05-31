@@ -256,6 +256,7 @@ export const basicSections = [
       {
         id: 'projectName',
         required: true,
+        validationError: 'Please provide a name to your project',
         fieldName: 'name',
         description: '',
         title: 'Project Name',
@@ -271,6 +272,8 @@ export const basicSections = [
         questions: [
           {
             icon: 'question',
+            required: true,
+            validationError: 'Please let us know the number of screens required',
             title: 'How many screens do you need designed?',
             description: 'This is the most popular project size that can get a medium-sized app designed in a breeze',
             fieldName: 'details.appDefinition.numberScreens',
@@ -284,6 +287,8 @@ export const basicSections = [
           },
           {
             icon: 'question',
+            required: true,
+            validationError: 'Please let us know the target device',
             title: 'Which is your primary device target?',
             description: 'Select only the device that you need to develop for. \
                           In most cases limiting the scope of your project would result \
@@ -301,6 +306,8 @@ export const basicSections = [
           },
           {
             icon: 'question',
+            required: true,
+            validationError: 'Please provide description',
             id: 'projectInfo',
             fieldName: 'description',
             description: 'Brief Description',
@@ -309,6 +316,8 @@ export const basicSections = [
           },
           {
             icon: 'question',
+            required: true,
+            validationError: 'Please let us know users of your application',
             title: 'Who are the users of your application? ',
             description: 'Describe the roles and needs of your target users',
             type: 'see-attached-textbox',

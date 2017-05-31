@@ -34,7 +34,9 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
     const elemProps = {
       name: q.fieldName,
       label: q.label,
-      value: _.get(project, q.fieldName, '')
+      value: _.get(project, q.fieldName, ''),
+      required: q.required,
+      validationError: q.validationError
     }
     if (q.fieldName === 'details.appDefinition.numberScreens') {
       const p = dirtyProject ? dirtyProject : project
