@@ -118,6 +118,8 @@ class ProjectWizard extends Component {
       project: { details: {} },
       dirtyProject: { details: {} },
       wizardStep: WZ_STEP_SELECT_PROD_TYPE
+    }, () => {
+      this.props.onStepChange(this.state.wizardStep)
     })
   }
 
@@ -146,6 +148,8 @@ class ProjectWizard extends Component {
       project: update(this.state.project, updateQuery),
       dirtyProject: update(this.state.project, updateQuery),
       wizardStep: WZ_STEP_FILL_PROJ_DETAILS
+    }, () => {
+      this.props.onStepChange(this.state.wizardStep)
     })
   }
 
