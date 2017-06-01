@@ -1,0 +1,53 @@
+@import 'tc-includes';
+
+.project-creation-dialog-overlay {
+  position : fixed;
+  top : 0;
+  left : 0;
+  right : 0;
+  bottom : 0;
+  z-index: 21;/* +1 of the z-index of the topbar */
+  background-color: $tc-gray-neutral-dark;
+  overflow-y: scroll;
+
+  section.content {
+    padding: 1px 0;
+  }
+
+  .escape-button {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    z-index: 22;/* +1 from z-index of the modal overlay */
+  }
+}
+
+.project-creation-dialog {
+  top: 0px;
+  left: 0px;
+
+  .Wizard .content {
+    margin: 0 auto;
+    width: 100%;
+    min-height: 100vh;
+  }
+  .TextInput.project-name,
+  .TextInput.project-ref-code {
+    height: 45px;
+  }
+}
+
+/*.project-creation-dialog-close {
+  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+
+  & .x-mark-icon {
+    width: 100%;
+    height: 100%;
+  }
+}*/

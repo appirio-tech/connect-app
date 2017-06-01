@@ -73,7 +73,6 @@ class CreateConainer extends React.Component {
   }
 
   componentWillMount() {
-    console.log('CreateContainer#componentWillMount')
     const { processing, userRoles, route } = this.props
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)

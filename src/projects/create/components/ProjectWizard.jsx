@@ -41,7 +41,7 @@ class ProjectWizard extends Component {
   }
 
   componentDidMount() {
-    const { userRoles, location } = this.props
+    const { location, params } = this.props
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
@@ -56,15 +56,14 @@ class ProjectWizard extends Component {
       })
     } else {
       // if there is no incomplete project in the local storage, load the wizard with appropriate step
-      const { product } = this.props.params
       const updateQuery = {}
       let wizardStep = WZ_STEP_SELECT_PROD_TYPE
-      if (product) {
-        const prodCategory = findProductCategory(product)
+      if (params && params.product) {
+        const prodCategory = findProductCategory(params.product)
         if (prodCategory) {
           updateQuery['type'] = { $set : config[prodCategory].id }
         }
-        updateQuery['details'] = { 'products' : { $set: [product] } }
+        updateQuery['details'] = { 'products' : { $set: [params.product] } }
         wizardStep = WZ_STEP_FILL_PROJ_DETAILS
       }
       this.setState({
@@ -164,7 +163,7 @@ class ProjectWizard extends Component {
   }
 
   handleOnCreateProject() {
-    this.props.createProject(this.state.dirtyProject)
+    this.props.createProject({})
   }
 
   handleStepChange(wizardStep) {
@@ -180,7 +179,7 @@ class ProjectWizard extends Component {
   }
 
   render() {
-    const { processing, route, userRoles, createProject, showModal } = this.props
+    const { processing, createProject, showModal, userRoles } = this.props
     const { project, dirtyProject } = this.state
     return (
       <Wizard
@@ -189,6 +188,7 @@ class ProjectWizard extends Component {
         onCancel={() => this.props.closeModal()}
         onStepChange={ this.handleStepChange }
         step={this.state.wizardStep}
+        shouldRenderBackButton={ (step) => userRoles && userRoles.length && step > 1 }
       >
         <IncompleteProjectConfirmation
           loadIncompleteProject={ this.loadIncompleteProject }
@@ -208,8 +208,8 @@ class ProjectWizard extends Component {
             project: update(project, { details: { utm : { code : {$set : projectRef }}}})
           })}
           onProjectChange={ this.handleProjectChange }
-          route={route}
           submitBtnText="Continue"
+          userRoles={ userRoles }
         />
       </Wizard>
     )
@@ -217,13 +217,16 @@ class ProjectWizard extends Component {
 }
 
 ProjectWizard.propTypes = {
-  userRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
-  closeModal: PropTypes.func.isRequired,
-  showModal: PropTypes.bool
+  closeModal: PropTypes.func,
+  showModal: PropTypes.bool,
+  createProject: PropTypes.func.isRequired,
+  onStepChange: PropTypes.func.isRequired,
+  onProjectUpdate: PropTypes.func.isRequired,
+  processing: PropTypes.bool.isRequired,
+  userRoles: PropTypes.arrayOf(PropTypes.string)
 }
 
 ProjectWizard.defaultProps = {
-  userRoles: [],
   closeModal: () => {},
   showModal: false
 }

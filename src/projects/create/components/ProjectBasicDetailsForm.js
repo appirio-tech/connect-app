@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import { withRouter } from 'react-router'
 import Modal from 'react-modal'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -121,4 +120,4 @@ ProjectBasicDetailsForm.propTypes = {
   submitHandler: PropTypes.func.isRequired
 }
 
-export default withRouter(ProjectBasicDetailsForm)
+export default ProjectBasicDetailsForm

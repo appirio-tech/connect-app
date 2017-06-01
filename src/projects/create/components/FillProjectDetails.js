@@ -1,12 +1,16 @@
 import _ from 'lodash'
 import React, { PropTypes as PT, Component } from 'react'
 import Sticky from 'react-stickynode'
+
+import { Icons } from 'appirio-tech-react-components'
 import config from '../../../config/projectWizard'
 import WizardHeader from '../components/WizardHeader'
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
 import ProjectOutline from '../components/ProjectOutline'
 import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
+
+const { ConnectLogo } = Icons
 
 class FillProjectDetails extends Component  {
   constructor(props) {
@@ -32,7 +36,8 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, dirtyProject, processing, submitBtnText, onProjectNameChange,  onProjectRefChange } = this.props
+    const { project, dirtyProject, processing, submitBtnText, onProjectNameChange, userRoles,
+      onProjectRefChange } = this.props
     const product = _.get(project, 'details.products[0]')
     const projectName = _.get(project, 'name')
     const projectRef = _.get(project, 'details.utm.code', '')
@@ -47,8 +52,9 @@ class FillProjectDetails extends Component  {
     return (
       <div className="FillProjectDetails">
         <div className="header">
+          { (!userRoles || !userRoles.length) && <ConnectLogo />}
           <h1>Let's setup your { productName } project</h1>
-          <button className="tc-btn tc-btn-default tc-btn-sm">Start over</button>
+          { (!userRoles || !userRoles.length) && <button className="tc-btn tc-btn-default tc-btn-sm">Change project type</button> }
         </div>
         <section className="two-col-content content">
           <div className="container">
@@ -59,7 +65,6 @@ class FillProjectDetails extends Component  {
                 isEdittable={true}
                 submitHandler={this.props.onCreateProject}
                 saving={processing}
-                route={this.props.route}
                 onProjectChange={this.props.onProjectChange}
                 submitBtnText={ submitBtnText }
               />
@@ -81,7 +86,7 @@ FillProjectDetails.propTypes = {
   // onProjectChange: PT.func.isRequired,
   onCreateProject: PT.func.isRequired,
   project: PT.object.isRequired,
-  currentMemberRole: PT.string,
+  userRoles: PT.arrayOf(PT.string),
   processing: PT.bool,
   error: PT.oneOfType([
     PT.bool,

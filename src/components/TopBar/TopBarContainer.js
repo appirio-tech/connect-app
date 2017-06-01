@@ -2,8 +2,12 @@ import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import Modal from 'react-modal'
+import { createProject as createProjectAction } from '../../projects/actions/project'
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
 import TopBar from './TopBar'
+import CoderBot from '../CoderBot/CoderBot'
+import ModalControl from '../ModalControl'
+import SVGIconImage from '../SVGIconImage'
 import ProjectWizard from '../../projects/create/components/ProjectWizard'
 import { TCEmitter } from '../../helpers'
 import {
@@ -14,6 +18,7 @@ import {
   ACCOUNTS_APP_LOGIN_URL,
   ACCOUNTS_APP_REGISTER_URL
 } from '../../config/constants'
+require('./TopBarContainer.scss')
 
 class TopBarContainer extends React.Component {
 
@@ -21,7 +26,8 @@ class TopBarContainer extends React.Component {
     super(props)
     this.state = {
       isFilterVisible: false,
-      isCreatingProject : false
+      isCreateProjectModalVisible : false,
+      errorCreatingProject: false
     }
     this.RouteChangeListener = null
     this.applyFilters = this.applyFilters.bind(this)
@@ -35,6 +41,21 @@ class TopBarContainer extends React.Component {
     this.RouteChangeListener = TCEmitter.addListener(EVENT_ROUTE_CHANGE, (path) => {
       this.setState({currentPath: path})
     })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // if new project is created successfully
+    if (this.props.creatingProject && !nextProps.creatingProject) {
+      if (!nextProps.projectCreationError
+        && nextProps.project && nextProps.project.id) {
+        this.hideCreateProjectDialog()
+        this.context.router.push('/projects/' + nextProps.project.id)
+      } else {
+        this.setState({
+          errorCreatingProject: true
+        })
+      }
+    }
   }
 
   componentDidUpdate() {
@@ -65,13 +86,14 @@ class TopBarContainer extends React.Component {
 
   showCreateProjectDialog() {
     this.setState({
-      isCreatingProject : true
+      isCreateProjectModalVisible : true
     })
   }
 
   hideCreateProjectDialog() {
     this.setState({
-      isCreatingProject : false
+      isCreateProjectModalVisible : false,
+      errorCreatingProject: false
     })
   }
 
@@ -96,7 +118,8 @@ class TopBarContainer extends React.Component {
   }
 
   render() {
-    const {isCreatingProject, currentPath, isFilterVisible } = this.state
+    const {isCreateProjectModalVisible, currentPath, isFilterVisible, errorCreatingProject } = this.state
+    const { userRoles } = this.props
     const isProjectDetails = /projects\/\d+/.test(currentPath)
     const isHomePage = this.context.router.isActive('/', true)
     // NOTE: hardcoding to connectv2, once connect v1
@@ -104,15 +127,31 @@ class TopBarContainer extends React.Component {
     const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.host}/`
     const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
     return (
-      <div>
+      <div className="TopBarContainer">
         <Modal
-          isOpen={ isCreatingProject }
+          isOpen={ isCreateProjectModalVisible }
           className="project-creation-dialog"
           overlayClassName="project-creation-dialog-overlay"
           onRequestClose={ this.hideCreateProjectDialog }
         >
-          <ProjectWizard closeModal={this.hideCreateProjectDialog} />
-
+          <ModalControl
+            className="escape-button"
+            icon={<SVGIconImage filePath="x-mark" />}
+            label="esc"
+            onClick={ this.hideCreateProjectDialog }
+          />
+          { !errorCreatingProject &&
+            <ProjectWizard
+              showModal={ false }
+              processing={ this.props.creatingProject }
+              createProject={ this.props.createProjectAction }
+              closeModal={ this.hideCreateProjectDialog }
+              onStepChange={ () => {} }
+              onProjectUpdate={ () => {} }
+              userRoles={ userRoles }
+            />
+          }
+          { errorCreatingProject && <CoderBot code={ 500 } message="Unable to create project" />}
         </Modal>
         <TopBar
           {...this.props}
@@ -144,11 +183,14 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
     previousSearchTerm     : searchTerm.previousSearchTerm,
     searchTermTag          : searchTerm.searchTermTag,
     project                : projectState.project,
+    creatingProject        : projectState.processing,
+    projectCreationError   : projectState.error,
     criteria               : projectSearch.criteria,
+    userRoles              : _.get(loadUser, 'user.roles', []),
     isPowerUser
   }
 }
 
-const actionsToBind = { projectSuggestions, loadProjects }
+const actionsToBind = { projectSuggestions, loadProjects, createProjectAction }
 
 export default connect(mapStateToProps, actionsToBind)(TopBarContainer)
