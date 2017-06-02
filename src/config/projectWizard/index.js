@@ -24,7 +24,7 @@ const products = {
         id: 'visual_design_prod',
         disabled: true
       },
-      'Infographic': {
+      Infographic: {
         brief: 'Infographic',
         details: 'Present your data in a clean and a fun way',
         icon: 'project-app-visual-design',
@@ -50,13 +50,13 @@ const products = {
         icon: 'project-prototype-demo',
         id: 'visual_prototype'
       },
-      'Website': {
+      Website: {
         brief: 'Websites',
         details: 'Build responsive or regular websites',
         icon: 'project-prototype-technical',
         id: 'website_development'
       },
-      'App': {
+      App: {
         brief: 'Apps',
         details: 'Build apps for mobile, web, or wearables',
         icon: 'project-development-code',

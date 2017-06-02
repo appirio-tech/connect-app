@@ -6,7 +6,8 @@ import './Wizard.scss'
 
 function Wizard(props) {
   const { step, shouldRenderBackButton, onStepChange, showModal, onCancel } = props
-  let backControl, modalCloseControl
+  let backControl
+  let modalCloseControl
   if (step && (!shouldRenderBackButton || shouldRenderBackButton(step))) {
     backControl = (
       <ModalControl

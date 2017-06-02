@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import React, { PropTypes as PT } from 'react'
-import Icons from '../../../components/Icons'
 import './ProductCard.scss'
 
 class ProductCard extends React.Component {

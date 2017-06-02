@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import React, { PropTypes as PT } from 'react'
 import './IncompleteProjectConfirmation.scss'
 

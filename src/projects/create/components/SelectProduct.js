@@ -1,8 +1,6 @@
 import React, { PropTypes as PT } from 'react'
 import config from '../../../config/projectWizard'
-import ProjectTypeCard from './ProjectTypeCard'
 import ProductCard from './ProductCard'
-import WizardHeader from './WizardHeader'
 import SVGIconImage from '../../../components/SVGIconImage'
 import './SelectProduct.scss'
 

@@ -4,8 +4,6 @@ import React, { Component, PropTypes } from 'react'
 
 import config, { findProductCategory } from '../../../config/projectWizard'
 import Wizard from '../../../components/Wizard'
-import SelectProjectType from './SelectProjectType'
-import SelectProjectSubType from './SelectProjectSubType'
 import SelectProduct from './SelectProduct'
 import IncompleteProjectConfirmation from './IncompleteProjectConfirmation'
 import FillProjectDetails from './FillProjectDetails'
@@ -41,7 +39,7 @@ class ProjectWizard extends Component {
   }
 
   componentDidMount() {
-    const { location, params } = this.props
+    const { params } = this.props
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
@@ -63,7 +61,7 @@ class ProjectWizard extends Component {
         if (prodCategory) {
           updateQuery['type'] = { $set : config[prodCategory].id }
         }
-        updateQuery['details'] = { 'products' : { $set: [params.product] } }
+        updateQuery['details'] = { products : { $set: [params.product] } }
         wizardStep = WZ_STEP_FILL_PROJ_DETAILS
       }
       this.setState({
@@ -80,10 +78,10 @@ class ProjectWizard extends Component {
   componentWillReceiveProps(nextProps) {
     const type = _.get(nextProps.project, 'type', null)
     const product = _.get(nextProps.project, 'details.products[0]', null)
-    let wizardStep = type && product ? WZ_STEP_FILL_PROJ_DETAILS : null
+    const wizardStep = type && product ? WZ_STEP_FILL_PROJ_DETAILS : null
     if (wizardStep) {
       this.setState({
-        wizardStep: wizardStep
+        wizardStep
       }, () => {
         this.props.onStepChange(this.state.wizardStep)
       })
@@ -179,7 +177,7 @@ class ProjectWizard extends Component {
   }
 
   render() {
-    const { processing, createProject, showModal, userRoles } = this.props
+    const { processing, showModal, userRoles } = this.props
     const { project, dirtyProject } = this.state
     return (
       <Wizard
@@ -192,7 +190,8 @@ class ProjectWizard extends Component {
       >
         <IncompleteProjectConfirmation
           loadIncompleteProject={ this.loadIncompleteProject }
-          removeIncompleteProject={ this.removeIncompleteProject }/>
+          removeIncompleteProject={ this.removeIncompleteProject }
+        />
         <SelectProduct
           onProductChange={ this.updateProducts }
         />

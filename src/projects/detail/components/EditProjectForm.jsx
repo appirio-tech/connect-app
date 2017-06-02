@@ -222,7 +222,7 @@ class EditProjectForm extends Component {
         >
           {sections.map(renderSection)}
           <FeaturePickerFormField
-            name='details.appDefinition.features'
+            name="details.appDefinition.features"
             project={ project }
             isEdittable={ isEdittable }
             showFeaturesDialog={ this.state.showFeaturesDialog }

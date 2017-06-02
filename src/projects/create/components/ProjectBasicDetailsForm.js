@@ -1,8 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import Modal from 'react-modal'
-import _ from 'lodash'
-import update from 'react-addons-update'
-import { Formsy, Icons } from 'appirio-tech-react-components'
+import { Formsy } from 'appirio-tech-react-components'
 import './ProjectBasicDetailsForm.scss'
 
 import SpecSection from '../../detail/components/SpecSection'
@@ -27,7 +24,7 @@ class ProjectBasicDetailsForm extends Component {
   componentWillReceiveProps(nextProps) {
     // we receipt property updates from PROJECT_DIRTY REDUX state
     if (nextProps.project.isDirty) return
-    let updatedProject = Object.assign({}, nextProps.project)
+    const updatedProject = Object.assign({}, nextProps.project)
     this.setState({
       project: updatedProject,
       isSaving: false,
@@ -83,7 +80,7 @@ class ProjectBasicDetailsForm extends Component {
               resetFeatures={ () => {} }//dummy
               // TODO we shoudl not update the props (section is coming from props)
               // further, it is not used for this component as we are not rendering spec screen section here
-              validate={(isInvalid) => {}}//dummy
+              validate={() => {}}//dummy
             />
           </div>
           <div className="section-footer section-footer-spec">

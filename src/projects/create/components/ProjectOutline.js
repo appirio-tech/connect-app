@@ -1,9 +1,6 @@
 import _ from 'lodash'
 import React, { PropTypes as PT } from 'react'
 import config from '../../../config/projectWizard'
-import ProjectSubTypeCard from './ProjectSubTypeCard'
-import WizardHeader from './WizardHeader'
-import SVGIconImage from '../../../components/SVGIconImage'
 import VisualDesignProjectEstimateSection from '../../detail/components/VisualDesignProjectEstimateSection'
 import './ProjectOutline.scss'
 
@@ -50,6 +47,7 @@ ProjectOutline.defaultProps = {
 }
 
 ProjectOutline.propTypes = {
+  project: PT.object.isRequired
 }
 
 export default ProjectOutline

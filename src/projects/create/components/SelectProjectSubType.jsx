@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React, { PropTypes as PT } from 'react'
 import config from '../../../config/projectWizard'
 import ProjectSubTypeCard from './ProjectSubTypeCard'
-import WizardHeader from './WizardHeader'
+// import WizardHeader from './WizardHeader'
 import SVGIconImage from '../../../components/SVGIconImage'
 import './SelectProjectSubType.scss'
 

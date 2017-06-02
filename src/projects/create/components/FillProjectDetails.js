@@ -4,7 +4,6 @@ import Sticky from 'react-stickynode'
 
 import { Icons } from 'appirio-tech-react-components'
 import config from '../../../config/projectWizard'
-import WizardHeader from '../components/WizardHeader'
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
 import ProjectOutline from '../components/ProjectOutline'
@@ -36,11 +35,10 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, dirtyProject, processing, submitBtnText, onProjectNameChange, userRoles,
-      onProjectRefChange } = this.props
+    const { project, dirtyProject, processing, submitBtnText, userRoles } = this.props
     const product = _.get(project, 'details.products[0]')
-    const projectName = _.get(project, 'name')
-    const projectRef = _.get(project, 'details.utm.code', '')
+    // const projectName = _.get(project, 'name')
+    // const projectRef = _.get(project, 'details.utm.code', '')
     const projectTypeId = _.get(project, 'type')
     const subConfig = config[_.findKey(config, {id : projectTypeId})]
     const productName = _.findKey(subConfig.subtypes, {id : product})
@@ -62,7 +60,7 @@ class FillProjectDetails extends Component  {
               <ProjectBasicDetailsForm
                 project={project}
                 sections={sections}
-                isEdittable={true}
+                isEdittable
                 submitHandler={this.props.onCreateProject}
                 saving={processing}
                 onProjectChange={this.props.onProjectChange}

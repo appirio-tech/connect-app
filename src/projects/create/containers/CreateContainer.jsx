@@ -27,10 +27,10 @@ const spinner = spinnerWhileLoading(props => !props.processing)
 const enhance = compose(errorHandler, spinner)
 
 const CreateView = (props) => {
-  const { route, error } = props
+  const { route } = props
   if (route.path === '/new-project-callback') {
     // can do some fancy loading (e.g. coderbot animation) here
-    return <div><CoderBot code={ 200 } message='Creating your project...' /></div>
+    return <div><CoderBot code={ 200 } message="Creating your project..." /></div>
   }
   return (
     <div>
@@ -67,7 +67,7 @@ class CreateConainer extends React.Component {
         this.props.router.push('/projects/' + projectId)  
       })
       
-    } else if (this.state.creatingProject != nextProps.processing) {
+    } else if (this.state.creatingProject !== nextProps.processing) {
       this.setState({ creatingProject : nextProps.processing })
     }
   }
