@@ -259,7 +259,7 @@ export const basicSections = [
             validationError: 'Please let us know the number of screens required',
             title: 'How many screens do you need designed?',
             description: 'This is the most popular project size that can get a medium-sized app designed in a breeze',
-            fieldName: 'details.appDefinition.numberScreens',
+            fieldName: 'details.appDefinition.numberScreens.value',
             type: 'tiled-radio-group',
             options: [
               {value: '10', title: 'screens', icon: NumberText, iconOptions: { number: '10' }, desc: '7-10 days', price: 5000},
@@ -276,7 +276,7 @@ export const basicSections = [
                           in better final result. Topcoder recommends to always start \
                           with the mobile phone view and expand to other devices as your \
                           app matures.',
-            fieldName: 'details.appDefinition.primaryTarget',
+            fieldName: 'details.appDefinition.primaryTarget.value',
             type: 'tiled-radio-group',
             options: [
               {value: 'Phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
@@ -301,8 +301,8 @@ export const basicSections = [
             validationError: 'Please let us know the goal of your application',
             title: 'What is the goal of your application? How will people use it?',
             description: 'Describe your objectives for creating this application',
-            type: 'see-attached-textbox',
-            fieldName: 'details.appDefinition.goal'
+            type: 'textbox',
+            fieldName: 'details.appDefinition.goal.value'
           },
           {
             icon: 'question',
@@ -310,8 +310,8 @@ export const basicSections = [
             validationError: 'Please let us know users of your application',
             title: 'Who are the users of your application? ',
             description: 'Describe the roles and needs of your target users',
-            type: 'see-attached-textbox',
-            fieldName: 'details.appDefinition.users'
+            type: 'textbox',
+            fieldName: 'details.appDefinition.users.value'
           }
         ]
       },

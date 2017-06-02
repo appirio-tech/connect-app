@@ -40,10 +40,10 @@ const ProjectType = ({projectId, type, description, devices}) => (
         <div key="GENERIC" className="icon icon-work-project">Work Project</div> }
       {type !== 'generic' &&
         <div className="icon-set">
-          {devices.slice(0, 3).map((device) => deviceMap[device])}
+          {devices.slice(0, 3).map((device) => deviceMap[device ? device.toLowerCase() : ''])}
         </div>}
         {type !== 'generic' && devices.length > 3 && <div className="icon-set">
-          {devices.slice(3).map((device) => deviceMap[device])}
+          {devices.slice(3).map((device) => deviceMap[device ? device.toLowerCase() : ''])}
         </div>}
     </div>
 
@@ -52,7 +52,7 @@ const ProjectType = ({projectId, type, description, devices}) => (
 
 ProjectType.propTypes = {
   type: PropTypes.string.isRequired,
-  devices: PropTypes.arrayOf(PropTypes.oneOf(['generic', 'phone', 'tablet', 'desktop', 'apple-watch', 'android-watch'])).isRequired
+  devices: PropTypes.arrayOf(PropTypes.oneOf(['generic', 'phone', 'tablet', 'desktop', 'apple-watch', 'android-watch', 'wearable'])).isRequired
 }
 
 ProjectType.defaultProps = {
