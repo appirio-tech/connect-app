@@ -26,7 +26,7 @@ deploy:
   skip_cleanup: true
   local_dir: dist
   on:
-    branch: dev
+    branch: [ "dev", "feature/deep-links"]
 - provider: s3
   cache_control: private, no-store, no-cache, must-revalidate, max-age=0
   detect_encoding: true

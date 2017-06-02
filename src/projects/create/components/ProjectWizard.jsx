@@ -161,7 +161,7 @@ class ProjectWizard extends Component {
   }
 
   handleOnCreateProject() {
-    this.props.createProject({})
+    this.props.createProject(this.state.dirtyProject)
   }
 
   handleStepChange(wizardStep) {
