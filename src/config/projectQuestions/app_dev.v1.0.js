@@ -51,7 +51,7 @@ const sections = [
                           in better final result. Topcoder recommends to always start \
                           with the mobile phone view and expand to other devices as your \
                           app matures.',
-            fieldName: 'details.appDefinition.primaryTarget',
+            fieldName: 'details.appDefinition.primaryTarget.value',
             type: 'tiled-radio-group',
             options: [
               {value: 'phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
