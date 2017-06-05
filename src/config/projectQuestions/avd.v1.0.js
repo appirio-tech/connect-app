@@ -302,7 +302,7 @@ export const basicSections = [
             title: 'What is the goal of your application? How will people use it?',
             description: 'Describe your objectives for creating this application',
             type: 'textbox',
-            fieldName: 'details.appDefinition.goal'
+            fieldName: 'details.appDefinition.goal.value'
           },
           {
             icon: 'question',
@@ -311,7 +311,7 @@ export const basicSections = [
             title: 'Who are the users of your application? ',
             description: 'Describe the roles and needs of your target users',
             type: 'textbox',
-            fieldName: 'details.appDefinition.users'
+            fieldName: 'details.appDefinition.users.value'
           }
         ]
       },

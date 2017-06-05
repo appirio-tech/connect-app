@@ -301,8 +301,8 @@ export const basicSections = [
             validationError: 'Please let us know the goal of your application',
             title: 'What is the goal of your application? How will people use it?',
             description: 'Describe your objectives for creating this application',
-            type: 'see-attached-textbox',
-            fieldName: 'details.appDefinition.goal'
+            type: 'textbox',
+            fieldName: 'details.appDefinition.goal.value'
           },
           {
             icon: 'question',
@@ -310,8 +310,8 @@ export const basicSections = [
             validationError: 'Please let us know users of your application',
             title: 'Who are the users of your application? ',
             description: 'Describe the roles and needs of your target users',
-            type: 'see-attached-textbox',
-            fieldName: 'details.appDefinition.users'
+            type: 'textbox',
+            fieldName: 'details.appDefinition.users.value'
           }
         ]
       },
