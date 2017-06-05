@@ -50,7 +50,7 @@ const sections = [
             icon: 'question',
             title: 'How many screens do you need designed?',
             description: 'This is the most popular project size that can get a medium-sized app designed in a breeze',
-            fieldName: 'details.appDefinition.numberScreens.value',
+            fieldName: 'details.appDefinition.numberScreens',
             type: 'tiled-radio-group',
             options: [
               {value: '1', title: 'screens', icon: NumberText, iconOptions: { number: '1' }, desc: '3-5 days'},
@@ -67,7 +67,7 @@ const sections = [
                           in better final result. Topcoder recommends to always start \
                           with the mobile phone view and expand to other devices as your \
                           app matures.',
-            fieldName: 'details.appDefinition.primaryTarget.value',
+            fieldName: 'details.appDefinition.primaryTarget',
             type: 'tiled-radio-group',
             options: [
               {value: 'Phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
