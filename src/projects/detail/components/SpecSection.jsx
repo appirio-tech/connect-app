@@ -110,6 +110,7 @@ const SpecSection = props => {
                 maxLength={ PROJECT_NAME_MAX_LENGTH }
                 required={props.required}
                 validationError={props.validationError}
+                theme="paper-form-dotted"
               />
             </div>
           }
@@ -126,6 +127,7 @@ const SpecSection = props => {
                 value={ refCode }
                 wrapperClass="project-refcode"
                 maxLength={ PROJECT_REF_CODE_MAX_LENGTH }
+                theme="paper-form-dotted"
               />
               <div className="refcode-desc">
                 Optional
