@@ -44,9 +44,8 @@ class TopBarContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isCreateProjectModalVisible } = this.state
     // if new project is created successfully
-    if (this.props.creatingProject && !nextProps.creatingProject && isCreateProjectModalVisible) {
+    if (this.props.creatingProject && !nextProps.creatingProject) {
       if (!nextProps.projectCreationError
         && nextProps.project && nextProps.project.id) {
         this.hideCreateProjectDialog()

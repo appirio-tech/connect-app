@@ -55,10 +55,8 @@ class SpecScreens extends Component {
 
   render() {
     const { screens } = this.state
-    const { project } = this.props
-    const numberOfScreens = _.get(project, 'details.appDefinition.numberScreens', '0')
-    let numberOfScreensValue = numberOfScreens.value ? numberOfScreens.value : numberOfScreens
-    const numberScreensSelected = parseInt(_.last(numberOfScreensValue.split('-')))
+    const { appDefinition } = this.props.project.details
+    const numberScreensSelected = parseInt(_.last(_.get(appDefinition, 'numberScreens', '0').split('-')))
 
     const renderCurrentScreen = (screen, index) => {
       return (
