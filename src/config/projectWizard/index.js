@@ -8,13 +8,13 @@ const products = {
       Wireframes: {
         brief: '10-15 screens',
         details: 'Plan and explore the navigation and structure of your app',
-        icon: 'project-wireframes',
+        icon: 'product-wireframes',
         id: 'wireframes'
       },
       'Visual Design': {
         brief: '1-15 screens',
         details: 'Visualize and test your app requirements and ideas',
-        icon: 'project-app-visual-design',
+        icon: 'product-app-visual-design',
         id: 'visual_design_concepts'
       },
       'App Visual Design - Production': {
@@ -27,19 +27,19 @@ const products = {
       Infographic: {
         brief: 'Infographic',
         details: 'Present your data in a clean and a fun way',
-        icon: 'project-app-visual-design',
+        icon: 'product-infographic',
         id: 'infographic'
       },
       'Other Design': {
         brief: 'other designs',
         details: 'Get help with other types of design',
-        icon: 'project-wireframes',
+        icon: 'product-other-design',
         id: 'generic_design'
       }
     }
   },
   Development: {
-    icon: 'product-code',
+    icon: 'product-software-development',
     info: 'Front end prototypes, website and application development, services, and more',
     question: 'What do you need to develop?',
     id: 'app_dev',
@@ -47,25 +47,25 @@ const products = {
       'Front-end Prototype': {
         brief: '3-20 screens',
         details: 'Translate designs to an HTML/CSS/JavaScript prototype',
-        icon: 'project-prototype-demo',
+        icon: 'product-front-end-prototype',
         id: 'visual_prototype'
       },
       Website: {
         brief: 'Websites',
         details: 'Build responsive or regular websites',
-        icon: 'project-prototype-technical',
+        icon: 'product-website',
         id: 'website_development'
       },
       App: {
         brief: 'Apps',
         details: 'Build apps for mobile, web, or wearables',
-        icon: 'project-development-code',
+        icon: 'product-app',
         id: 'application_development'
       },
       'Software Development': {
         brief: 'Tasks or adhoc',
         details: 'Get help with any part of your development cycle',
-        icon: 'project-development-ideation',
+        icon: 'product-software-development',
         id: 'generic_dev'
       }
     }
