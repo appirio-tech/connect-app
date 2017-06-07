@@ -29,6 +29,11 @@
     button {
       align-self: flex-end;
       white-space: nowrap;
+
+      .Icon {
+        vertical-align: middle;
+        margin-right: 2 * $base_unit;
+      }
     }
   }
 

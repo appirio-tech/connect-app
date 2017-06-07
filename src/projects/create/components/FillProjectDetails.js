@@ -4,6 +4,7 @@ import Sticky from 'react-stickynode'
 
 import { Icons } from 'appirio-tech-react-components'
 import config from '../../../config/projectWizard'
+import SVGIconImage from '../../../components/SVGIconImage'
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
 import ProjectOutline from '../components/ProjectOutline'
@@ -52,7 +53,7 @@ class FillProjectDetails extends Component  {
         <div className="header">
           { (!userRoles || !userRoles.length) && <ConnectLogo />}
           <h1>Let's setup your { productName } project</h1>
-          { (!userRoles || !userRoles.length) && <button className="tc-btn tc-btn-default tc-btn-sm">Change project type</button> }
+          { (!userRoles || !userRoles.length) && <button className="tc-btn tc-btn-default tc-btn-sm"><SVGIconImage filePath="arrows-undo" />Change project type</button> }
         </div>
         <section className="two-col-content content">
           <div className="container">
