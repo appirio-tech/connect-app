@@ -53,6 +53,7 @@ deploy:
   access_key_id: $TEST_AWS_KEY
   secret_access_key: $TEST_AWS_SECRET
   bucket: connect-testa.topcoder-dev.com
+  region: us-west-2
   skip_cleanup: true
   local_dir: dist
   on:
