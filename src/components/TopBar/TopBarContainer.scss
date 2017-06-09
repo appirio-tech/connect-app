@@ -1,53 +1,134 @@
 @import 'tc-includes';
 
-.project-creation-dialog-overlay {
-  position : fixed;
-  top : 0;
-  left : 0;
-  right : 0;
-  bottom : 0;
-  z-index: 21;/* +1 of the z-index of the topbar */
-  background-color: $tc-gray-neutral-dark;
-  overflow-y: scroll;
-
-  section.content {
-    padding: 1px 0;
-  }
-
-  .escape-button {
-    position: absolute;
-    right: 12px;
-    top: 12px;
-    z-index: 22;/* +1 from z-index of the modal overlay */
-  }
-}
-
-.project-creation-dialog {
-  top: 0px;
-  left: 0px;
-
-  .Wizard .content {
-    margin: 0 auto;
-    width: 100%;
-    min-height: 100vh;
-  }
-  .TextInput.project-name,
-  .TextInput.project-ref-code {
-    height: 45px;
-  }
-}
-
-/*.project-creation-dialog-close {
-  cursor: pointer;
+.tc-header {
+  height: 60px;
+  // background: $tc-gray-neutral-light;
+  line-height: 60px;
+  height: 60px;
+  background-color: $tc-black;
+  z-index: 20;
+  padding: 0 20px;
   position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  text-align: center;
+  top: 0;
+  left: 0;
+  right: 0;
 
-  & .x-mark-icon {
-    width: 100%;
-    height: 100%;
+  .logo-wrapper {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+
+    .logo {
+      display: inline-block;
+      position: relative;
+      margin-top: 12px;
+      // width: 60px;
+      // height: 36px;
+    }
   }
-}*/
+
+  .UserDropdownMenu {
+    padding: 0;
+    display: flex;
+    align-content: center;
+    text-align: left;
+  }
+
+  .sb-avatar {
+    display: block !important;
+  }
+
+  &.tc-header__connect{
+    padding: 0;
+    min-height: 60px;
+    height: auto;
+
+    .top-bar {
+      height: 60px;
+      background-color: $tc-black;
+      position: relative;
+
+      .welcome-info {
+        height: 60px;
+        font-size: 13px;
+        color: $tc-gray-50;
+        display: flex;
+        justify-content: space-between;
+        @include roboto-medium;
+        >.tc-btn{
+          margin-top: 15px;
+          border: 0;
+          width: 116px;
+          text-align: center;
+        }
+        .avatar-info {
+          position: relative;
+          margin-left: 20px;
+          display: flex;
+          align-items: center;
+          .avatar {
+            width: 30px;
+            height: 30px;
+            background-color: $tc-dark-blue-70 ;
+            border-radius: 15px;
+            overflow: hidden;
+            text-align: center;
+            line-height: 30px;
+            color: $tc-white;
+            @include roboto-medium;
+            font-size: 15px;
+            position: absolute;
+            left: 0;
+            top: 15px;
+            img {
+              width: 30px;
+              height: 30px;
+              border-radius: 15px;
+            }
+          }
+          .avatar-link {
+            display: inline-block;
+            padding-right: 16px;
+            position: relative;
+            &:after{
+              display: block;
+              content: '';
+              width: 10px;
+              position: absolute;
+              right: 0;
+              top: 50%;
+              margin-top: -4px;
+              height: 7.5px;
+              //background: url("../../styles/i/arrow-down-black.png") right center no-repeat;
+              background-size: 10px 7.5px;
+            }
+          }
+        }
+        .tc-btn-primary {
+          margin-left: 7px;
+          color: $tc-white;
+        }
+      }
+    }
+  }
+}
+
+@media all and (max-width: 1023px) {
+  .tc-header{
+    &.tc-header__connect{
+      .top-bar .search-bar{
+        width: 383px;
+        margin-left: 110px;
+        .search-widget{
+          width: 296px;
+        }
+      }
+      .top-bar .welcome-info .avatar-info .avatar-link{
+        text-indent: -9999px;
+        width: 10px;
+        padding-right: 0;
+      }
+    }
+    
+  }
+}

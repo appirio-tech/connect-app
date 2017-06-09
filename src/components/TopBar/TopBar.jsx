@@ -10,6 +10,7 @@ const { ConnectLogo } = Icons
 import { SearchBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import ProjectToolBar from './ProjectToolBar'
+import { DOMAIN } from '../../config/constants'
 
 
 class TopBar extends Component {
@@ -76,6 +77,7 @@ class TopBar extends Component {
         <Link className="logo" to={logoTargetUrl} target="_self"><ConnectLogo /></Link>
       </div>
     )
+    console.log(isLoggedIn)
     const avatar = (
       <div className="welcome-info">
         {isLoggedIn && !isProjectDetails &&  <a onClick={onNewProjectIntent} href="javascript:" className="tc-btn tc-btn-sm tc-btn-primary">+ New Project</a> }
@@ -86,7 +88,7 @@ class TopBar extends Component {
                 userName={ userName }
                 userHandle={userHandle}
                 userImage={userImage}
-                domain={domain}
+                domain={ DOMAIN }
                 menuItems={ userMenuItems }
                 loginUrl={ loginUrl }
                 registerUrl={ registerUrl }
@@ -145,7 +147,7 @@ class TopBar extends Component {
 TopBar.propTypes = {
   userHandle            : PropTypes.string,
   userImage             : PropTypes.string,
-  domain                : PropTypes.string.isRequired,
+  // domain                : PropTypes.string.isRequired,
   mobileMenuUrl         : PropTypes.string,
   mobileSearchUrl       : PropTypes.string,
   criteria              : PropTypes.object.isRequired

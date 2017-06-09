@@ -1,22 +1,13 @@
 import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
 import _ from 'lodash'
-import Modal from 'react-modal'
-import { createProject as createProjectAction } from '../../projects/actions/project'
-import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
-import TopBar from './TopBar'
-import CoderBot from '../CoderBot/CoderBot'
-import ModalControl from '../ModalControl'
-import SVGIconImage from '../SVGIconImage'
-import ProjectWizard from '../../projects/create/components/ProjectWizard'
-import { TCEmitter } from '../../helpers'
+import { UserDropdown, Icons } from 'appirio-tech-react-components'
+const { ConnectLogo } = Icons
 import {
-  ROLE_CONNECT_COPILOT,
-  ROLE_CONNECT_MANAGER,
-  ROLE_ADMINISTRATOR,
-  EVENT_ROUTE_CHANGE,
   ACCOUNTS_APP_LOGIN_URL,
-  ACCOUNTS_APP_REGISTER_URL
+  ACCOUNTS_APP_REGISTER_URL,
+  DOMAIN
 } from '../../config/constants'
 require('./TopBarContainer.scss')
 
@@ -24,145 +15,94 @@ class TopBarContainer extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      isFilterVisible: false,
-      isCreateProjectModalVisible : false,
-      errorCreatingProject: false
+  }
+
+  handleMobileClick(se) {
+    const mobileMenuLink = se.target.querySelector('.mobile-wrap > a')
+    if (mobileMenuLink) {
+      mobileMenuLink.click()
     }
-    this.RouteChangeListener = null
-    this.applyFilters = this.applyFilters.bind(this)
-    this.toggleFilter = this.toggleFilter.bind(this)
-    this.showCreateProjectDialog = this.showCreateProjectDialog.bind(this)
-    this.hideCreateProjectDialog = this.hideCreateProjectDialog.bind(this)
-  }
-
-  componentWillMount() {
-    this.setState({currentPath: window.location.pathname})
-    this.RouteChangeListener = TCEmitter.addListener(EVENT_ROUTE_CHANGE, (path) => {
-      this.setState({currentPath: path})
-    })
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // if new project is created successfully
-    if (this.props.creatingProject && !nextProps.creatingProject) {
-      if (!nextProps.projectCreationError
-        && nextProps.project && nextProps.project.id) {
-        this.hideCreateProjectDialog()
-        this.context.router.push('/projects/' + nextProps.project.id)
-      } else {
-        this.setState({
-          errorCreatingProject: true
-        })
-      }
-    }
-  }
-
-  componentDidUpdate() {
-    const isProjectDetails = /projects\/\d+/.test(this.state.currentPath)
-    const contentDiv = document.getElementById('wrapper-main')
-    if (!isProjectDetails && this.state.isFilterVisible) {
-      contentDiv.classList.add('with-filters')
-    } else {
-      contentDiv.classList.remove('with-filters')
-    }
-  }
-
-  toggleFilter() {
-    const {isFilterVisible} = this.state
-    const contentDiv = document.getElementById('wrapper-main')
-    this.setState({isFilterVisible: !isFilterVisible}, () => {
-      if (this.state.isFilterVisible) {
-        contentDiv.classList.add('with-filters')
-      } else {
-        contentDiv.classList.remove('with-filters')
-      }
-    })
-  }
-
-  componentWillUnmount() {
-    this.RouteChangeListener && this.RouteChangeListener.remove()
-  }
-
-  showCreateProjectDialog() {
-    this.setState({
-      isCreateProjectModalVisible : true
-    })
-  }
-
-  hideCreateProjectDialog() {
-    this.setState({
-      isCreateProjectModalVisible : false,
-      errorCreatingProject: false
-    })
-  }
-
-  applyFilters(filter) {
-    const criteria = _.assign({}, this.props.criteria, filter)
-    if (criteria && criteria.keyword) {
-      criteria.keyword = encodeURIComponent(criteria.keyword)
-      // force sort criteria to best match
-      criteria.sort = 'best match'
-    }
-    this.routeWithParams(criteria, 1)
-  }
-
-  routeWithParams(criteria, page) {
-    // remove any null values
-    criteria = _.pickBy(criteria, _.identity)
-    this.context.router.push({
-      pathname: '/projects/',
-      query: _.assign({}, criteria, { page })
-    })
-    this.props.loadProjects(criteria, page)
   }
 
   render() {
-    const {isCreateProjectModalVisible, currentPath, isFilterVisible, errorCreatingProject } = this.state
-    const { userRoles } = this.props
-    const isProjectDetails = /projects\/\d+/.test(currentPath)
+    const { user, userRoles, toolbar } = this.props
+    console.log(typeof toolbar)
+
+    const userHandle  = _.get(user, 'handle')
+    const userImage = _.get(user, 'profile.photoURL')
+    const userFirstName = _.get(user, 'profile.firstName')
+    const userLastName = _.get(user, 'profile.lastName')
+    let userName = userFirstName
+    if (userName && userLastName) {
+      userName += ' ' + userLastName
+    }
+    const homePageUrl = `${window.location.protocol}//${window.location.host}/`
+    const logoutLink = `https://accounts.${DOMAIN}/#!/logout?retUrl=${homePageUrl}`
+    const isLoggedIn = userRoles && userRoles.length
+    const logoTargetUrl = isLoggedIn ? '/projects' : '/'
     const isHomePage = this.context.router.isActive('/', true)
     // NOTE: hardcoding to connectv2, once connect v1
     window.host
     const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.host}/`
     const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
+
+    const logoutClick = (evt) => {
+      evt.preventDefault()
+      window.analytics && window.analytics.reset()
+      window.location = logoutLink
+    }
+
+    const userMenuItems = [
+      [
+        { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true, id: 0 }
+      ],
+      [
+        { label: 'Log out', onClick: logoutClick, absolute: true, id: 0 }
+      ]
+    ]
+    const logo = (
+      <div className="logo-wrapper">
+        <Link className="logo" to={logoTargetUrl} target="_self"><ConnectLogo /></Link>
+      </div>
+    )
+
+    const avatar = (
+      <div className="welcome-info">
+        <div className="avatar-info">
+          <div className="links-section">
+            <div className="menu-wrap" onClick={this.handleMobileClick}>
+              <UserDropdown
+                userName={ userName }
+                userHandle={userHandle}
+                userImage={userImage}
+                domain={ DOMAIN }
+                menuItems={ userMenuItems }
+                loginUrl={ loginUrl }
+                registerUrl={ registerUrl }
+                forReactRouter
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+    let ToolBar = null
+    ToolBar = typeof toolbar === 'function' ? toolbar : null
+    ToolBar = toolbar && typeof toolbar.type  === 'function' ? toolbar.type : ToolBar
     return (
       <div className="TopBarContainer">
-        <Modal
-          isOpen={ isCreateProjectModalVisible }
-          className="project-creation-dialog"
-          overlayClassName="project-creation-dialog-overlay"
-          onRequestClose={ this.hideCreateProjectDialog }
-        >
-          <ModalControl
-            className="escape-button"
-            icon={<SVGIconImage filePath="x-mark" />}
-            label="esc"
-            onClick={ this.hideCreateProjectDialog }
-          />
-          { !errorCreatingProject &&
-            <ProjectWizard
-              showModal={ false }
-              processing={ this.props.creatingProject }
-              createProject={ this.props.createProjectAction }
-              closeModal={ this.hideCreateProjectDialog }
-              onStepChange={ () => {} }
-              onProjectUpdate={ () => {} }
-              userRoles={ userRoles }
-            />
-          }
-          { errorCreatingProject && <CoderBot code={ 500 } message="Unable to create project" />}
-        </Modal>
-        <TopBar
-          {...this.props}
-          isProjectDetails={isProjectDetails}
-          applyFilters={this.applyFilters}
-          onNewProjectIntent={ this.showCreateProjectDialog }
-          loginUrl={loginUrl}
-          registerUrl={registerUrl}
-          isFilterVisible={ isFilterVisible }
-          onToggleFilter={ this.toggleFilter }
-        />
+        <div className="tc-header tc-header__connect">
+          <div className="top-bar">
+            {
+              ToolBar &&
+              <ToolBar
+                {...this.props}
+                logo={ logo }
+                userMenu={ avatar }
+              />
+            }
+          </div>
+        </div>
       </div>
     )
   }
@@ -172,25 +112,13 @@ TopBarContainer.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, projectState, loadUser }) => {
-  let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
-  if (loadUser.user) {
-    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
-  }
+const mapStateToProps = ({ loadUser }) => {
   return {
-    projects               : projectSearchSuggestions.projects,
-    previousSearchTerm     : searchTerm.previousSearchTerm,
-    searchTermTag          : searchTerm.searchTermTag,
-    project                : projectState.project,
-    creatingProject        : projectState.processing,
-    projectCreationError   : projectState.error,
-    criteria               : projectSearch.criteria,
     userRoles              : _.get(loadUser, 'user.roles', []),
-    isPowerUser
+    user                   : loadUser.user
   }
 }
 
-const actionsToBind = { projectSuggestions, loadProjects, createProjectAction }
+const actionsToBind = { }
 
 export default connect(mapStateToProps, actionsToBind)(TopBarContainer)

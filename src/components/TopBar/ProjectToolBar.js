@@ -1,7 +1,15 @@
+require('./ProjectToolBar.scss')
+
+import _ from 'lodash'
 import React, {PropTypes} from 'react'
 import {Link} from 'react-router'
+import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
-
+import {
+  ROLE_CONNECT_COPILOT,
+  ROLE_CONNECT_MANAGER,
+  ROLE_ADMINISTRATOR
+} from '../../config/constants'
 
 function isEllipsisActive(el) {
   return (el.offsetWidth < el.scrollWidth)
@@ -47,9 +55,8 @@ class ProjectToolBar extends React.Component {
   }
 
   render() {
-    //const {logo, avatar, project, isPowerUser} = this.props
     // TODO: removing isPowerUser until link challenges is needed once again.
-    const {logo, avatar, project } = this.props
+    const {logo, userMenu, project } = this.props
     const {router} = this.context
     const {isTooltipVisible} = this.state
 
@@ -59,8 +66,8 @@ class ProjectToolBar extends React.Component {
     })
 
     return (
-      <div className="tc-header tc-header__connect-project">
-        <div className="top-bar">
+      <div className="ProjectToolBar">
+        <div className="tool-bar">
           <div className="bar-column">
             {logo}
             {project && <div className="breadcrumb">
@@ -81,7 +88,7 @@ class ProjectToolBar extends React.Component {
                 <li><Link {...getLinkProps(`/projects/${project.id}/discussions`)}><i className="icon-messages"/>Discussions</Link></li>
               </ul>
             </nav>}
-            {avatar}
+            { userMenu }
           </div>
         </div>
       </div>
@@ -90,8 +97,6 @@ class ProjectToolBar extends React.Component {
 }
 
 ProjectToolBar.propTypes = {
-  logo: PropTypes.any.isRequired,
-  avatar: PropTypes.any.isRequired,
   project: PropTypes.object,
   isPowerUser: PropTypes.bool
 }
@@ -100,4 +105,21 @@ ProjectToolBar.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-export default ProjectToolBar
+const mapStateToProps = ({ projectState, loadUser }) => {
+  let isPowerUser = false
+  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
+  if (loadUser.user) {
+    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
+  }
+  return {
+    project                : projectState.project,
+    userRoles              : _.get(loadUser, 'user.roles', []),
+    user                   : loadUser.user,
+    isPowerUser
+  }
+}
+
+const actionsToBind = {  }
+
+// export default ProjectToolBar
+export default connect(mapStateToProps, actionsToBind)(ProjectToolBar)
