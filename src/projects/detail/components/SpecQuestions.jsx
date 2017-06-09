@@ -90,7 +90,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       break
     case 'tiled-radio-group':
       ChildElem = TCFormFields.TiledRadioGroup
-      _.assign(elemProps, {wrapperClass: 'row', options: q.options})
+      _.assign(elemProps, {wrapperClass: 'row', options: q.options, theme: 'dark', tabable: true})
       // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
     case 'see-attached-tiled-radio-group':
