@@ -7,9 +7,11 @@ node_js:
 #     - node_modules
 
 script:
+- echo keys are here > tfile
+- echo AWS_KEY = $AWS_KEY >>tfile
+- cat tfile
 - npm cache clean
 - npm run lint && npm test && npm run build
-- echo AWS_KEY = $AWS_KEY
 sudo: false
 addons:
   apt:
