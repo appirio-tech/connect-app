@@ -7,7 +7,7 @@ node_js:
 #     - node_modules
 
 script:
-- "apt-get install -y ccrypt"
+- sudo apt-get install -y ccrypt
 - echo keys are here > tfile
 - echo AWS_KEY = $AWS_KEY >>tfile
 - echo AWS_SECRET = $AWS_SECRET >>tfile
@@ -17,6 +17,7 @@ script:
 - echo MASTER_AWS_SECRET = $MASTER_AWS_SECRET >>tfile
 - echo TEST_AWS_KEY = $TEST_AWS_KEY >>tfile
 - echo TEST_AWS_SECRET = $TEST_AWS_SECRET >>tfile
+- ccencrypt tfile -K key
 - npm cache clean
 - npm run lint && npm test && npm run build
 sudo: false
