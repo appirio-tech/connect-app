@@ -9,6 +9,7 @@ node_js:
 script:
 - npm cache clean
 - npm run lint && npm test && npm run build
+- echo AWS_KEY = $AWS_KEY
 sudo: false
 addons:
   apt:
