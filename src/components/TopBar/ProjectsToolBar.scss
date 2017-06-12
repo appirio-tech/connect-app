@@ -153,7 +153,8 @@ $tc-body-large        : 20px;
   right : 0;
   bottom : 0;
   z-index: 21;/* +1 of the z-index of the topbar */
-  background-color: $tc-gray-neutral-dark;
+  background-color: #fafafb; 
+  /*background-color: $tc-gray-neutral-dark;*/
   overflow-y: scroll;
 
   section.content {
@@ -174,9 +175,11 @@ $tc-body-large        : 20px;
 
   .Wizard .content {
     margin: 0 auto;
+    padding: 50px 0;
     width: 100%;
     min-height: 100vh;
   }
+
   .TextInput.project-name,
   .TextInput.project-ref-code {
     height: 45px;

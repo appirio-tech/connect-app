@@ -1,24 +1,28 @@
 @import 'tc-includes';
 
 .ProductCard {
-  border: 1px solid $tc-gray-20;
+  /*border: 1px solid $tc-gray-20;*/
   border-radius: 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 255px;
+  height: 260px;
   margin: 10px 10px 0;
   position: relative;
   vertical-align: top;
-  width: 215px;
+  width: 230px;
   .sub-type-details {
     margin: 0 20px;
+    font-size: 13px;
+    color: $tc-gray-50;
+    line-height: 20px;
   }
   .header {
     @include tc-body;
     @include roboto-bold;
-    color: $tc-gray-70;
-    margin-bottom: 0;
+    color: $tc-gray-80;
+    line-height: 20px;
+    margin-bottom: 10px;
     margin-top: 0px;
   }
   .Icon {
