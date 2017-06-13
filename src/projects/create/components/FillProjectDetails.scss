@@ -89,3 +89,33 @@
     }
   }
 }
+
+.ProjectWizard {
+  .FillProjectDetails {
+    .header h1{
+      @include roboto-light;
+      font-size: 36px;
+      color: $tc-black;
+      line-height: 40px;
+    }
+    .two-col-content.content .container {
+      margin-top: 0;
+      .left-area .title span,
+      .section-header .section-number {
+        display: none;
+      }
+      .gray-text {
+        @include roboto;
+        font-size: 15px;
+        color: $tc-gray-50;
+        line-height: 25px;
+      }
+      .left-area {
+        padding: 50px;
+      }
+    }
+  }
+  .spec-question-list-item .content-col > h5 span {
+    display: none;
+  }
+}
