@@ -11,12 +11,24 @@ import {
   CREATE_PROJECT_FEED_PENDING,
   CREATE_PROJECT_FEED_SUCCESS,
   CREATE_PROJECT_FEED_FAILURE,
+  SAVE_PROJECT_FEED_PENDING,
+  SAVE_PROJECT_FEED_SUCCESS,
+  SAVE_PROJECT_FEED_FAILURE,
+  DELETE_PROJECT_FEED_PENDING,
+  DELETE_PROJECT_FEED_SUCCESS,
+  DELETE_PROJECT_FEED_FAILURE,
   LOAD_PROJECT_FEED_COMMENTS_PENDING,
   LOAD_PROJECT_FEED_COMMENTS_SUCCESS,
   LOAD_PROJECT_FEED_COMMENTS_FAILURE,
   CREATE_PROJECT_FEED_COMMENT_PENDING,
   CREATE_PROJECT_FEED_COMMENT_SUCCESS,
-  CREATE_PROJECT_FEED_COMMENT_FAILURE
+  CREATE_PROJECT_FEED_COMMENT_FAILURE,
+  SAVE_PROJECT_FEED_COMMENT_PENDING,
+  SAVE_PROJECT_FEED_COMMENT_SUCCESS,
+  SAVE_PROJECT_FEED_COMMENT_FAILURE,
+  DELETE_PROJECT_FEED_COMMENT_PENDING,
+  DELETE_PROJECT_FEED_COMMENT_SUCCESS,
+  DELETE_PROJECT_FEED_COMMENT_FAILURE
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -187,6 +199,130 @@ export const projectTopics = function (state=initialState, action) {
     }
     return state
   }
+  case SAVE_PROJECT_FEED_PENDING: {
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    if (!feedId) return state
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    if (feedIndex >= 0) {
+      const feed = state.feeds[tag].topics[feedIndex]
+      const updatedFeed = update (feed, {
+        isSavingTopic : { $set : true },
+        error: { $set : false }
+      })
+      const feedUpdateQuery = {}
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
+      return update (state, {
+        error: { $set : false },
+        feeds: feedUpdateQuery
+      })
+    }
+    return state
+  }
+  case SAVE_PROJECT_FEED_SUCCESS: {
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const topic = payload.topic
+    const topicPost = payload.post
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    if (feedIndex >= 0) {
+      const feed = state.feeds[tag].topics[feedIndex]
+      const topicMessage = topicPost ? update (feed.posts[0], {
+        body: { $set: topicPost.body },
+        date: { $set: topicPost.date }
+      }) : feed.posts[0]
+      const updatedFeed = update (feed, {
+        title : { $set : topic.title },
+        posts: { $splice: [[0, 1, topicMessage]] },
+        isSavingTopic : { $set : false },
+        error: { $set: false }
+      })
+      const feedUpdateQuery = {}
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
+      // update the state
+      return update (state, {
+        error: { $set : false },
+        feeds: feedUpdateQuery
+      })
+    }
+    return state
+  }
+  case SAVE_PROJECT_FEED_FAILURE: {
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    if (!feedId) return state
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    if (feedIndex >= 0) {
+      const feed = state.feeds[tag].topics[feedIndex]
+      const updatedFeed = update (feed, {
+        isSavingTopic : { $set : false },
+        error: { $set: true }
+      })
+      const feedUpdateQuery = {}
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
+      return update (state, {
+        error: { $set : false },
+        feeds: feedUpdateQuery
+      })
+    }
+    return state
+  }
+  case DELETE_PROJECT_FEED_PENDING: {
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    if (!feedId) return state
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    if (feedIndex >= 0) {
+      const feed = state.feeds[tag].topics[feedIndex]
+      const updatedFeed = update (feed, {
+        isDeletingTopic : { $set : true }
+      })
+      const feedUpdateQuery = {}
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
+      return update (state, {
+        error: { $set : false },
+        feeds: feedUpdateQuery
+      })
+    }
+    return state
+  }
+  case DELETE_PROJECT_FEED_SUCCESS: {
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    if (!feedId) return state
+    const topics = _.filter(state.feeds[tag].topics, t => t.id !== feedId)
+    const feedUpdateQuery = {}
+    feedUpdateQuery[tag] = { topics: { $set: topics }, totalCount: {$apply: (n) => n - 1} }
+    return update (state, {
+      error: { $set : false },
+      feeds: feedUpdateQuery
+    })
+  }
+  case DELETE_PROJECT_FEED_FAILURE: {
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    if (!feedId) return state
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    if (feedIndex >= 0) {
+      const feed = state.feeds[tag].topics[feedIndex]
+      const updatedFeed = update (feed, {
+        isDeletingTopic : { $set : false },
+        error: { $set: true }
+      })
+      const feedUpdateQuery = {}
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
+      return update (state, {
+        error: { $set : false },
+        feeds: feedUpdateQuery
+      })
+    }
+    return state
+  }
   case CREATE_PROJECT_FEED_COMMENT_PENDING: {
     const feedId = _.get(action, 'meta.feedId', null)
     const tag = _.get(action, 'meta.tag', null)
@@ -215,15 +351,25 @@ export const projectTopics = function (state=initialState, action) {
     const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
-      const updatedFeed = update (feed, {
-        // no need to update hasMoreComments, it should maintain its prev value
-        totalPosts: { $apply: n => n + 1},
-        retrievedPosts: { $apply: n => n+1 },
-        postIds: { $push: [comment.id] },
-        posts: { $push : [ comment ] },
-        isAddingComment : { $set : false },
-        error: { $set: false }
-      })
+      const commentIndex = _.findIndex(feed.postIds, id => id === comment.id)
+      let updatedFeed
+      if (commentIndex >= 0) {
+        // The created comment already exists, it's duplicate
+        updatedFeed = update (feed, {
+          isAddingComment : { $set : false },
+          error: { $set: false }
+        })
+      } else {
+        updatedFeed = update (feed, {
+          // no need to update hasMoreComments, it should maintain its prev value
+          totalPosts: { $apply: n => n + 1},
+          retrievedPosts: { $apply: n => n+1 },
+          postIds: { $push: [comment.id] },
+          posts: { $push : [ comment ] },
+          isAddingComment : { $set : false },
+          error: { $set: false }
+        })
+      }
       const feedUpdateQuery = {}
       feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
       // update the state
@@ -247,6 +393,180 @@ export const projectTopics = function (state=initialState, action) {
       })
       const feedUpdateQuery = {}
       feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
+      return update (state, {
+        error: { $set : false },
+        feeds: feedUpdateQuery
+      })
+    }
+    return state
+  }
+  case SAVE_PROJECT_FEED_COMMENT_PENDING: {
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
+    if (!feedId || !commentId) return state
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    if (feedIndex >= 0) {
+      const feed = state.feeds[tag].topics[feedIndex]
+      const commentIndex = _.findIndex(feed.posts, post => post.id === commentId)
+      if (commentIndex < 0) {
+        return state
+      }
+      const updatedComment = update (feed.posts[commentIndex], {
+        isSavingComment : { $set : true },
+        error: { $set : false }
+      })
+
+      const updatedFeed = update(feed, { posts: { $splice: [[commentIndex, 1, updatedComment]] } })
+
+      const feedUpdateQuery = {}
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
+      return update (state, {
+        error: { $set : false },
+        feeds: feedUpdateQuery
+      })
+    }
+    return state
+  }
+  case SAVE_PROJECT_FEED_COMMENT_SUCCESS: {
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
+    const savedComment = payload.comment
+    if (!feedId || !commentId) return state
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    if (feedIndex >= 0) {
+      const feed = state.feeds[tag].topics[feedIndex]
+      const commentIndex = _.findIndex(feed.posts, post => post.id === commentId)
+      if (commentIndex < 0) {
+        return state
+      }
+      const updatedComment = update(feed.posts[commentIndex], {
+        isSavingComment : { $set : false },
+        error: { $set : false },
+        body: { $set : savedComment.body },
+        date: { $set : savedComment.date }
+      })
+
+      const updatedFeed = update(feed, { posts: { $splice: [[commentIndex, 1, updatedComment]] } })
+      const feedUpdateQuery = {}
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
+      return update (state, {
+        error: { $set : false },
+        feeds: feedUpdateQuery
+      })
+    }
+    return state
+  }
+  case SAVE_PROJECT_FEED_COMMENT_FAILURE: {
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
+    if (!feedId || !commentId) return state
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    if (feedIndex >= 0) {
+      const feed = state.feeds[tag].topics[feedIndex]
+      const commentIndex = _.findIndex(feed.posts, post => post.id === commentId)
+      if (commentIndex < 0) {
+        return state
+      }
+      const updatedComment = update (feed.posts[commentIndex], {
+        isSavingComment : { $set : false },
+        error: { $set : true }
+      })
+
+      const updatedFeed = update(feed, { posts: { $splice: [[commentIndex, 1, updatedComment]] } })
+      const feedUpdateQuery = {}
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
+
+      return update (state, {
+        error: { $set : false },
+        feeds: feedUpdateQuery
+      })
+    }
+    return state
+  }
+  case DELETE_PROJECT_FEED_COMMENT_PENDING: {
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
+    if (!feedId || !commentId) return state
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    if (feedIndex >= 0) {
+      const feed = state.feeds[tag].topics[feedIndex]
+      const commentIndex = _.findIndex(feed.posts, post => post.id === commentId)
+      if (commentIndex < 0) {
+        return state
+      }
+      const updatedComment = update (feed.posts[commentIndex], {
+        isDeletingComment : { $set : true },
+        error: { $set : false }
+      })
+
+      const updatedFeed = update(feed, { posts: { $splice: [[commentIndex, 1, updatedComment]] } })
+
+      const feedUpdateQuery = {}
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
+      return update (state, {
+        error: { $set : false },
+        feeds: feedUpdateQuery
+      })
+    }
+    return state
+  }
+  case DELETE_PROJECT_FEED_COMMENT_SUCCESS: {
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    if (feedIndex >= 0) {
+      const feed = state.feeds[tag].topics[feedIndex]
+      const postIds = _.filter(feed.postIds, p => p !== commentId)
+      const posts = _.filter(feed.posts, p => p.id !== commentId)
+      const updatedFeed = update (feed, {
+        // no need to update hasMoreComments, it should maintain its prev value
+        totalPosts: { $apply: n => n - 1},
+        retrievedPosts: { $apply: n => n - 1 },
+        postIds: { $set: postIds },
+        posts: { $set : posts },
+        error: { $set: false }
+      })
+      const feedUpdateQuery = {}
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
+      // update the state
+      return update (state, {
+        feeds: feedUpdateQuery
+      })
+    }
+    return state
+  }
+  case DELETE_PROJECT_FEED_COMMENT_FAILURE: {
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
+    if (!feedId || !commentId) return state
+    // find feed index from the state
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    if (feedIndex >= 0) {
+      const feed = state.feeds[tag].topics[feedIndex]
+      const commentIndex = _.findIndex(feed.posts, post => post.id === commentId)
+      if (commentIndex < 0) {
+        return state
+      }
+      const updatedComment = update (feed.posts[commentIndex], {
+        isDeletingComment : { $set : false },
+        error: { $set : true }
+      })
+
+      const updatedFeed = update(feed, { posts: { $splice: [[commentIndex, 1, updatedComment]] } })
+      const feedUpdateQuery = {}
+      feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
+
       return update (state, {
         error: { $set : false },
         feeds: feedUpdateQuery

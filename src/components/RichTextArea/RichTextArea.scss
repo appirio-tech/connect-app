@@ -1,0 +1,32 @@
+@import "tc-includes";
+.rich-editor{
+  position: relative;
+}
+.public-DraftEditorPlaceholder-root {
+  position: absolute;
+  padding-left: 10px;
+  padding-top: 5px;
+  color: #A3A3AD;
+}
+.public-DraftEditorPlaceholder-hasFocus {
+  display: none !important;
+}
+
+.action-card .comment .tc-textarea .public-DraftEditor-content {
+  min-height: 60px !important;
+}
+.action-card .expanded .comment .tc-textarea .public-DraftEditor-content {
+  min-height: 145px !important;
+}
+
+.action-card .comment .textarea-footer {
+  display: none !important;
+}
+
+.action-card .expanded .comment .textarea-footer {
+  display: flex !important;
+}
+
+.hide-title {
+  display: none !important;
+}

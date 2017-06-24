@@ -11,12 +11,12 @@ const MessagingEmptyState = ({ currentUser, onClose }) => (
         <Icons.CloseIcon />
       </a>
       <Comment
-        avatarUrl={ require('../../assets/images/avatar-coder.png') }
+        avatarUrl={require('../../assets/images/avatar-coder.png')}
         authorName="Coder the Bot"
         self={false}
         date=""
       >
-        Hey {currentUser.firstName}, welcome to the discussions section. This is where you can keep communication open and ongoing during the project. You can create new discussions from the top left, using the + button. Have in mind that all discussions are visible to all team members.
+        <p>Hey {currentUser.firstName}, welcome to the discussions section. This is where you can keep communication open and ongoing during the project. You can create new discussions from the top left, using the + button. Have in mind that all discussions are visible to all team members.</p>
       </Comment>
     </div>
   </Panel>
