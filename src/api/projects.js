@@ -81,7 +81,7 @@ export function createProjectWithStatus(projectProps, status) {
         .then(resp => {
           return _.get(resp.data, 'result.content')
         })
-        .catch(error => {
+        .catch(error => { // eslint-disable-line no-unused-vars
           // return created project even if status update fails to prevent error page
           return project
         })
