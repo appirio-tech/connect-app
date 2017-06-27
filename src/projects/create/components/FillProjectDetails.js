@@ -53,7 +53,7 @@ class FillProjectDetails extends Component  {
         <div className="header">
           { (!userRoles || !userRoles.length) && <ConnectLogo />}
           <h1>Let's setup your { productName } project</h1>
-          { (!userRoles || !userRoles.length) && <button className="tc-btn tc-btn-default tc-btn-sm"><SVGIconImage filePath="arrows-undo" />Change project type</button> }
+          { (!userRoles || !userRoles.length) && <button className="tc-btn tc-btn-default tc-btn-sm" onClick={ this.props.onChangeProjectType }><SVGIconImage filePath="arrows-undo" />Change project type</button> }
         </div>
         <section className="two-col-content content">
           <div className="container">
@@ -84,6 +84,7 @@ class FillProjectDetails extends Component  {
 FillProjectDetails.propTypes = {
   // onProjectChange: PT.func.isRequired,
   onCreateProject: PT.func.isRequired,
+  onChangeProjectType: PT.func.isRequired,
   project: PT.object.isRequired,
   userRoles: PT.arrayOf(PT.string),
   processing: PT.bool,

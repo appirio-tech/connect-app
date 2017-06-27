@@ -200,12 +200,7 @@ class ProjectWizard extends Component {
           dirtyProject={ dirtyProject }
           processing={ processing}
           onCreateProject={ this.handleOnCreateProject }
-          onProjectNameChange={projectName => this.setState({ 
-            project: update(project, { name: {$set : projectName }})
-          })}
-          onProjectRefChange={projectRef => this.setState({ 
-            project: update(project, { details: { utm : { code : {$set : projectRef }}}})
-          })}
+          onChangeProjectType={() => this.handleStepChange(WZ_STEP_SELECT_PROD_TYPE) }
           onProjectChange={ this.handleProjectChange }
           submitBtnText="Continue"
           userRoles={ userRoles }
