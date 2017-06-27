@@ -1,4 +1,5 @@
 import { getProjectById, createProject as createProjectAPI,
+  createProjectWithStatus as createProjectWithStatusAPI,
   updateProject as updateProjectAPI,
   deleteProject as deleteProjectAPI,
   getDirectProjectData } from '../../api/projects'
@@ -37,6 +38,15 @@ export function updateProject(projectId, updatedProps) {
     return dispatch({
       type: UPDATE_PROJECT,
       payload: updateProjectAPI(projectId, updatedProps)
+    })
+  }
+}
+
+export function createProjectWithStatus(newProject, status) {
+  return (dispatch) => {
+    return dispatch({
+      type: CREATE_PROJECT,
+      payload: createProjectWithStatusAPI(newProject, status)
     })
   }
 }

@@ -10,14 +10,16 @@ import Filters from './Filters'
 
 import ModalControl from '../ModalControl'
 import SVGIconImage from '../SVGIconImage'
+import CoderBot from '../CoderBot/CoderBot'
 import ProjectWizard from '../../projects/create/components/ProjectWizard'
 
-import { createProject as createProjectAction } from '../../projects/actions/project'
+import { createProjectWithStatus as createProjectAction } from '../../projects/actions/project'
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
 import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
-  ROLE_ADMINISTRATOR
+  ROLE_ADMINISTRATOR,
+  PROJECT_STATUS_IN_REVIEW
 } from '../../config/constants'
 
 
@@ -38,6 +40,7 @@ class ProjectsToolBar extends Component {
     this.handleTermChange = this.handleTermChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.handleMyProjectsFilter = this.handleMyProjectsFilter.bind(this)
+    this.createProject = this.createProject.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -120,6 +123,10 @@ class ProjectsToolBar extends Component {
     this.props.loadProjects(criteria, page)
   }
 
+  createProject(project) {
+    this.props.createProjectAction(project, PROJECT_STATUS_IN_REVIEW)
+  }
+
   render() {
     const { logo, userMenu, userRoles, criteria, isPowerUser } = this.props
     const { isCreateProjectModalVisible, errorCreatingProject, isFilterVisible } = this.state
@@ -146,7 +153,7 @@ class ProjectsToolBar extends Component {
             <ProjectWizard
               showModal={ false }
               processing={ this.props.creatingProject }
-              createProject={ this.props.createProjectAction }
+              createProject={ this.createProject }
               closeModal={ this.hideCreateProjectDialog }
               onStepChange={ () => {} }
               onProjectUpdate={ () => {} }
@@ -229,6 +236,7 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
     searchTermTag          : searchTerm.searchTermTag,
     creatingProject        : projectState.processing,
     projectCreationError   : projectState.error,
+    project                : projectState.project,
     criteria               : projectSearch.criteria,
     userRoles              : _.get(loadUser, 'user.roles', []),
     user                   : loadUser.user,

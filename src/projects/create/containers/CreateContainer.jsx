@@ -3,11 +3,11 @@ import React, { PropTypes } from 'react'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
-import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
+import { createProjectWithStatus as createProjectAction, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
-import { CREATE_PROJECT_FAILURE, LS_INCOMPLETE_PROJECT } from '../../../config/constants'
+import { CREATE_PROJECT_FAILURE, LS_INCOMPLETE_PROJECT, PROJECT_STATUS_IN_REVIEW } from '../../../config/constants'
 
 const page404 = compose(
   withProps({code:500})
@@ -82,7 +82,7 @@ class CreateConainer extends React.Component {
         // if project wizard is loaded after redirection from register page
         // TODO should we validate the project again?
         console.log('calling createProjectAction...')
-        this.props.createProjectAction(incompleteProject)
+        this.props.createProjectAction(incompleteProject, PROJECT_STATUS_IN_REVIEW)
       } 
     }
   }
@@ -118,7 +118,8 @@ class CreateConainer extends React.Component {
       if (this.props.userRoles && this.props.userRoles.length > 0) {
         // if user is logged in and has a valid role, create project
         // uses dirtyProject from the state as it has the latest changes from the user
-        this.props.createProjectAction(project)
+        // this.props.createProjectAction(project)
+        this.props.createProjectAction(project, PROJECT_STATUS_IN_REVIEW)
       } else {
         // redirect to registration/login page
         const retUrl = window.location.origin + '/new-project-callback'

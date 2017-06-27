@@ -69,6 +69,25 @@ export function createProject(projectProps) {
     })
 }
 
+export function createProjectWithStatus(projectProps, status) {
+  return axios.post(`${TC_API_URL}/v4/projects/`, { param: projectProps })
+    .then( resp => {
+      return _.get(resp.data, 'result.content', {})
+    })
+    .then(project => {
+      const updatedProps = { status }
+      const projectId = project.id
+      return axios.patch(`${TC_API_URL}/v4/projectss/${projectId}/`, { param: updatedProps })
+        .then(resp => {
+          return _.get(resp.data, 'result.content')
+        })
+        .catch(error => {
+          // return created project even if status update fails to prevent error page
+          return project
+        })
+    })
+}
+
 export function deleteProject(projectId) {
   return axios.delete(`${TC_API_URL}/v4/projects/${projectId}/`)
     .then(() => {
