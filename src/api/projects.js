@@ -77,7 +77,7 @@ export function createProjectWithStatus(projectProps, status) {
     .then(project => {
       const updatedProps = { status }
       const projectId = project.id
-      return axios.patch(`${TC_API_URL}/v4/projectss/${projectId}/`, { param: updatedProps })
+      return axios.patch(`${TC_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
         .then(resp => {
           return _.get(resp.data, 'result.content')
         })
