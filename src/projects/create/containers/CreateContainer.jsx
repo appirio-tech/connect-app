@@ -7,7 +7,12 @@ import { createProjectWithStatus as createProjectAction, fireProjectDirty, fireP
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
-import { CREATE_PROJECT_FAILURE, LS_INCOMPLETE_PROJECT, PROJECT_STATUS_IN_REVIEW } from '../../../config/constants'
+import {
+  CREATE_PROJECT_FAILURE,
+  LS_INCOMPLETE_PROJECT,
+  PROJECT_STATUS_IN_REVIEW,
+  ACCOUNTS_APP_REGISTER_URL
+} from '../../../config/constants'
 
 const page404 = compose(
   withProps({code:500})
@@ -123,7 +128,7 @@ class CreateConainer extends React.Component {
       } else {
         // redirect to registration/login page
         const retUrl = window.location.origin + '/new-project-callback'
-        window.location = 'https://accounts.topcoder-dev.com/#!/connect?retUrl=' + retUrl
+        window.location = ACCOUNTS_APP_REGISTER_URL + '?retUrl=' + retUrl
       }
     })
   }
