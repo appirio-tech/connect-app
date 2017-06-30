@@ -23,10 +23,14 @@ class FeedComments extends React.Component {
     this.state = { showAll: false }
   }
 
+  onSaveMessageChange(messageId, content, editMode) {
+    this.props.onSaveMessageChange(messageId, content, editMode)
+  }
+
   render() {
     const {
-    comments, currentUser, totalComments, onLoadMoreComments, isLoadingComments, hasMoreComments, onAdd,
-    onChange, content, avatarUrl, isAddingComment, allowComments
+    comments, currentUser, totalComments, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
+    onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage
   } = this.props
     let authorName = currentUser.firstName
     if (authorName && currentUser.lastName) {
@@ -69,11 +73,17 @@ class FeedComments extends React.Component {
       {comments.map((item, idx) =>
         <Comment
           key={idx}
-          avatarUrl={ _.get(item, 'author.photoURL', null) }
-          authorName={ item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user' }
+          message={item}
+          avatarUrl={ _.get(item, 'author.photoURL', null)}
+          authorName={item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user'}
           date={moment(item.date).fromNow()}
           active={item.unread}
-          self={ item.author && item.author.userId === currentUser.userId}
+          self={item.author && item.author.userId === currentUser.userId}
+          onChange={this.onSaveMessageChange.bind(this, item.id)}
+          onSave={onSaveMessage}
+          onDelete={onDeleteMessage}
+          isSaving={item.isSavingComment}
+          hasError={item.error}
         >
           <div dangerouslySetInnerHTML={{__html: item.content}} />
         </Comment>
@@ -81,12 +91,12 @@ class FeedComments extends React.Component {
       {allowComments &&
       <AddComment
         placeholder="Create a new comment..."
-        onAdd={onAdd}
-        onChange={onChange}
-        content={content}
+        onAdd={onAddNewComment}
+        onChange={onNewCommentChange}
         avatarUrl={avatarUrl}
-        authorName={ authorName }
-        isAdding={ isAddingComment }
+        authorName={authorName}
+        isAdding={isAddingComment}
+        hasError={error}
       />}
     </div>
   )

@@ -16,7 +16,7 @@ const isFileRequired = (project, subSections) => {
 const sections = [
   {
     id: 'appDefinition',
-    title: function(project, showProduct) {
+    title: (project, showProduct) => {
       const product = _.get(project, 'details.products[0]')
       if (showProduct && product) {
         const prd = findProduct(product)

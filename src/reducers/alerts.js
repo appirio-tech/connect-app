@@ -16,7 +16,11 @@ import {
   REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
   // project feeds
   CREATE_PROJECT_FEED_FAILURE,
-  CREATE_PROJECT_FEED_COMMENT_FAILURE
+  CREATE_PROJECT_FEED_COMMENT_FAILURE,
+  SAVE_PROJECT_FEED_FAILURE,
+  SAVE_PROJECT_FEED_COMMENT_FAILURE,
+  DELETE_PROJECT_FEED_FAILURE,
+  DELETE_PROJECT_FEED_COMMENT_FAILURE
 } from '../config/constants'
 /* eslint-enable no-unused-vars */
 
@@ -59,7 +63,22 @@ export default function(state = {}, action) {
   case UPDATE_PROJECT_MEMBER_FAILURE:
   case REMOVE_PROJECT_MEMBER_FAILURE:
   case CREATE_PROJECT_FEED_COMMENT_FAILURE:
+  case SAVE_PROJECT_FEED_COMMENT_FAILURE:
+  case DELETE_PROJECT_FEED_COMMENT_FAILURE:
   case CREATE_PROJECT_FEED_FAILURE:
+  case SAVE_PROJECT_FEED_FAILURE:
+  case DELETE_PROJECT_FEED_FAILURE:
+    if (action.payload && action.payload.response) {
+      const rdata = action.payload.response.data
+      if (rdata && rdata.result && rdata.result.content && rdata.result.content.message) {
+        Alert.error(rdata.result.content.message)
+        return state
+      }
+      if (action.payload.response.statusText) {
+        Alert.error(action.payload.response.statusText)
+        return state
+      }
+    }
     Alert.error('Whoops! we ran into a problem.<br/> Please try again later.')
     return state
   default:

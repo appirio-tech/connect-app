@@ -1,12 +1,16 @@
 import _ from 'lodash'
-import { getTopics, getTopicPosts, createTopic, addTopicPost } from '../../api/messages'
+import { getTopics, getTopicPosts, createTopic, saveTopic, deleteTopic, addTopicPost, saveTopicPost, deleteTopicPost } from '../../api/messages'
 import {
   PROJECT_FEED_TYPE_PRIMARY,
   PROJECT_FEED_TYPE_MESSAGES,
   LOAD_PROJECT_FEEDS,
   CREATE_PROJECT_FEED,
+  SAVE_PROJECT_FEED,
+  DELETE_PROJECT_FEED,
   LOAD_PROJECT_FEED_COMMENTS,
   CREATE_PROJECT_FEED_COMMENT,
+  SAVE_PROJECT_FEED_COMMENT,
+  DELETE_PROJECT_FEED_COMMENT,
   LOAD_PROJECT_FEEDS_MEMBERS,
   DISCOURSE_BOT_USERID,
   CODER_BOT_USERID
@@ -129,6 +133,56 @@ export function createProjectTopic(projectId, topic) {
   }
 }
 
+export function saveProjectTopic(feedId, tag, topicProps) {
+  return (dispatch, getState) => {
+    const projectStatus = getState().projectState.project.status
+    return dispatch({
+      type: SAVE_PROJECT_FEED,
+      payload: saveTopic(feedId, topicProps),
+      meta: {
+        feedId,
+        tag,
+        onSuccessAnalytics: {
+          eventType: EventTypes.track,
+          eventPayload: {
+            event: 'Project Topic Saved',
+            properties: {
+              topicCategory: tag,
+              topicId: feedId,
+              projectStatus
+            }
+          }
+        }
+      }
+    })
+  }
+}
+
+export function deleteProjectTopic(feedId, tag) {
+  return (dispatch, getState) => {
+    const projectStatus = getState().projectState.project.status
+    return dispatch({
+      type: DELETE_PROJECT_FEED,
+      payload: deleteTopic(feedId),
+      meta: {
+        feedId,
+        tag,
+        onSuccessAnalytics: {
+          eventType: EventTypes.track,
+          eventPayload: {
+            event: 'Project Topic Deleted',
+            properties: {
+              topicCategory: tag,
+              topicId: feedId,
+              projectStatus
+            }
+          }
+        }
+      }
+    })
+  }
+}
+
 export function loadFeedComments(feedId, tag, postIds) {
   return (dispatch) => {
     return dispatch({
@@ -155,6 +209,58 @@ export function addFeedComment(feedId, tag, comment) {
           eventType: EventTypes.track,
           eventPayload: {
             event: 'Project Topic Comment Created',
+            properties: {
+              topicCategory: tag,
+              topicId: feedId,
+              projectStatus
+            }
+          }
+        }
+      }
+    })
+  }
+}
+
+export function saveFeedComment(feedId, tag, comment) {
+  return (dispatch, getState) => {
+    const projectStatus = getState().projectState.project.status
+    return dispatch({
+      type: SAVE_PROJECT_FEED_COMMENT,
+      payload: saveTopicPost(feedId, comment),
+      meta: {
+        feedId,
+        tag,
+        commentId: comment.id,
+        onSuccessAnalytics: {
+          eventType: EventTypes.track,
+          eventPayload: {
+            event: 'Project Topic Comment Saved',
+            properties: {
+              topicCategory: tag,
+              topicId: feedId,
+              projectStatus
+            }
+          }
+        }
+      }
+    })
+  }
+}
+
+export function deleteFeedComment(feedId, tag, commentId) {
+  return (dispatch, getState) => {
+    const projectStatus = getState().projectState.project.status
+    return dispatch({
+      type: DELETE_PROJECT_FEED_COMMENT,
+      payload: deleteTopicPost(feedId, commentId),
+      meta: {
+        feedId,
+        tag,
+        commentId,
+        onSuccessAnalytics: {
+          eventType: EventTypes.track,
+          eventPayload: {
+            event: 'Project Topic Comment Deleted',
             properties: {
               topicCategory: tag,
               topicId: feedId,
