@@ -25,6 +25,7 @@ const FeaturePickerModal = ({ project, isEdittable, showFeaturesDialog, hideFeat
       className="feature-selection-dialog"
       overlayClassName="feature-selection-dialog-overlay"
       onRequestClose={ hideFeaturesDialog }
+      contentLabel=""
     >
       <FeaturePicker
         features={ _.get(project, 'details.appDefinition.features.value', []) }
@@ -222,7 +223,7 @@ class EditProjectForm extends Component {
         >
           {sections.map(renderSection)}
           <FeaturePickerFormField
-            name='details.appDefinition.features'
+            name="details.appDefinition.features"
             project={ project }
             isEdittable={ isEdittable }
             showFeaturesDialog={ this.state.showFeaturesDialog }

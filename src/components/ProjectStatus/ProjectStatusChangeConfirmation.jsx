@@ -69,7 +69,7 @@ const ProjectStatusChangeConfirmation = ({
               <SelectDropdown
                 options={ cancelReasons }
                 onSelect={ handleReasonChange }
-                theme='default'
+                theme="default"
                 // support passing selected value for the dropdown
               />
             </div>

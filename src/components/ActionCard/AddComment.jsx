@@ -1,66 +1,45 @@
 import React, {PropTypes} from 'react'
-import Panel from '../Panel/Panel'
-import cn from 'classnames'
-import { Avatar } from 'appirio-tech-react-components'
+import RichTextArea from '../RichTextArea/RichTextArea'
 
 export default class AddComment extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      isFocused: false,
-      canSubmit: false
-    }
-    this.onAdd = this.onAdd.bind(this)
-    this.onTextAreaChange = this.onTextAreaChange.bind(this)
+    this.onPost = this.onPost.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
 
-  onAdd(e) {
-    if (!this.props.content) {
-      e.preventDefault()
-      this.refs.input.focus()
-      return
+  componentWillReceiveProps(nextProps) {
+    if (this.refs.richTextArea
+      && (nextProps.content === null || nextProps.content === undefined)
+      && nextProps.content !== this.props.content) {
+      this.refs.richTextArea.clearState()
     }
-    this.props.onAdd(this.props.content)
-    this.refs.input.focus()
   }
 
-  onTextAreaChange(evt) {
-    const val = evt.target.value
-    this.setState({canSubmit: val && val.trim().length})
-    this.props.onChange(val, evt)
+  onPost({content}) {
+    this.props.onAdd(content)
+  }
+
+  onChange(title, content) {
+    this.props.onChange(content)
   }
 
   render() {
-    const { className, avatarUrl, authorName, content, placeholder, isAdding } = this.props
-    const { isFocused, canSubmit } = this.state
-    const isCollapsed = !isFocused && !content
+    const { className, avatarUrl, authorName, placeholder, isAdding, hasError } = this.props
 
     return (
-      <Panel.Body className={cn(className, {'comment-form-collapsed': isCollapsed})}>
-        <div className="portrait">
-          <Avatar avatarUrl={ avatarUrl } userName={ authorName } />
-        </div>
-        <div className="object">
-          <div className="comment-form">
-            <div className={cn('tc-textarea', {'has-footer': !isCollapsed})}>
-              <textarea
-                placeholder={placeholder || 'New reply...'}
-                ref="input"
-                value={content}
-                onFocus={() => this.setState({isFocused: true})}
-                onBlur={() => this.setState({isFocused: false})}
-                onChange={this.onTextAreaChange}
-              />
-              {!isCollapsed && <div className="textarea-footer">
-                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onAdd} disabled={ isAdding || !canSubmit }>
-                 { isAdding ? 'Posting...' : 'Post' }
-                </button>
-              </div>}
-            </div>
-          </div>
-        </div>
-      </Panel.Body>
+      <RichTextArea ref="richTextArea"
+          className={className}
+          disableTitle
+          contentPlaceholder={placeholder || 'New reply...'}
+          onPost={this.onPost}
+          onPostChange={this.onChange}
+          isCreating={isAdding}
+          hasError={hasError}
+          avatarUrl={avatarUrl}
+          authorName={authorName}
+      />
     )
   }
 }
@@ -70,5 +49,9 @@ AddComment.propTypes = {
   onChange: PropTypes.func.isRequired,
   className: PropTypes.string,
   content: PropTypes.string,
-  avatarUrl: PropTypes.string
+  avatarUrl: PropTypes.string,
+  authorName: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  hasError: PropTypes.bool,
+  isAdding: PropTypes.bool
 }
