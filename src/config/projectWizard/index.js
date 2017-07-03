@@ -11,18 +11,18 @@ const products = {
         icon: 'product-wireframes',
         id: 'wireframes'
       },
-      'Visual Design': {
+      'App Visual Design - Concepts': {
         brief: '1-15 screens',
         details: 'Visualize and test your app requirements and ideas',
         icon: 'product-app-visual-design',
-        id: 'visual_design_concepts'
+        id: 'visual_design_concepts',
+        disabled: true
       },
-      'App Visual Design - Production': {
+      'Visual Design': {
         brief: '1-15 screens',
         details: 'Create development-ready designs',
-        icon: 'project-app-visual-design',
-        id: 'visual_design_prod',
-        disabled: true
+        icon: 'product-app-visual-design',
+        id: 'visual_design_prod'
       },
       Infographic: {
         brief: 'Infographic',
