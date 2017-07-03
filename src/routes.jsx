@@ -10,6 +10,7 @@ import TopBarContainer from './components/TopBar/TopBarContainer'
 import ProjectsToolBar from './components/TopBar/ProjectsToolBar'
 import RedirectComponent from './components/RedirectComponent'
 import CreateContainer from './projects/create/containers/CreateContainer'
+import { findProductCategory } from './config/projectWizard'
 import {ACCOUNTS_APP_LOGIN_URL, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from './config/constants'
 import { getTopic } from './api/messages'
 import { getFreshToken } from 'tc-accounts'
@@ -76,12 +77,21 @@ const redirectToProject = (nextState, replace, callback) => {
   })
 }
 
+const validateCreateProjectParams = (nextState, replace, callback) => {
+  const product = nextState.params.product
+  const productCategory = findProductCategory(product)
+  if (!productCategory) {
+    replace('/404')
+  }
+    callback()
+}
+
 const renderTopBarWithProjectsToolBar = () => <TopBarContainer toolbar={ ProjectsToolBar } />
 
 export default (
   <Route path="/" onUpdate={() => window.scrollTo(0, 0)} component={ App } onEnter={ redirectToConnect }>
     <IndexRoute components={{ topbar: renderTopBarWithProjectsToolBar, content: Home }} />
-    <Route path="/new-project(/type/:type)(/product/:product)" components={{ topbar: null, content: CreateContainer }} />
+    <Route path="/new-project(/product/:product)" components={{ topbar: null, content: CreateContainer }} onEnter={ validateCreateProjectParams } />
     <Route path="/new-project-callback" components={{ topbar: null, content: CreateContainer }} />
     <Route path="/terms" components={{ topbar: renderTopBarWithProjectsToolBar, content: ConnectTerms }}  />
     <Route path="/login" components={{ topbar: renderTopBarWithProjectsToolBar, content: LoginRedirect }} />
@@ -92,6 +102,7 @@ export default (
     {/* {reportsListRoutes} */}
 
     <Route path="/error" components={{ topbar: renderTopBarWithProjectsToolBar, content: () => <CoderBot code={500} /> }} />
+    <Route path="/404" components={{ topbar: renderTopBarWithProjectsToolBar, content: () => <CoderBot code={404} /> }} />
     <Route path="*" components={{ topbar: renderTopBarWithProjectsToolBar, content: () => <CoderBot code={404} /> }} />
   </Route>
 )

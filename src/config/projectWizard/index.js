@@ -99,7 +99,8 @@ export function findProductCategory(product) {
   }
   for(const pType in products) {
     for(const prd in products[pType].subtypes) {
-      if (products[pType].subtypes[prd].id === product) {
+      const subType = products[pType].subtypes[prd]
+      if (subType.id === product && !subType.disabled) {
         return pType
       }
     }
