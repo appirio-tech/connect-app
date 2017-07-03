@@ -39,7 +39,7 @@ class ProjectWizard extends Component {
   }
 
   componentDidMount() {
-    const { params } = this.props
+    const { params, onStepChange } = this.props
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
@@ -50,7 +50,7 @@ class ProjectWizard extends Component {
         wizardStep: WZ_STEP_INCOMP_PROJ_CONF,
         isProjectDirty: false
       }, () => {
-        this.props.onStepChange(this.state.wizardStep)
+        typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
       })
     } else {
       // if there is no incomplete project in the local storage, load the wizard with appropriate step
@@ -60,9 +60,9 @@ class ProjectWizard extends Component {
         const prodCategory = findProductCategory(params.product)
         if (prodCategory) {
           updateQuery['type'] = { $set : config[prodCategory].id }
+          updateQuery['details'] = { products : { $set: [params.product] } }
+          wizardStep = WZ_STEP_FILL_PROJ_DETAILS
         }
-        updateQuery['details'] = { products : { $set: [params.product] } }
-        wizardStep = WZ_STEP_FILL_PROJ_DETAILS
       }
       this.setState({
         project: update(this.state.project, updateQuery),
@@ -70,12 +70,13 @@ class ProjectWizard extends Component {
         wizardStep,
         isProjectDirty: false
       }, () => {
-        this.props.onStepChange(this.state.wizardStep)
+        typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
       })
     }
   }
 
   componentWillReceiveProps(nextProps) {
+    const { onStepChange } = nextProps
     const type = _.get(nextProps.project, 'type', null)
     const product = _.get(nextProps.project, 'details.products[0]', null)
     const wizardStep = type && product ? WZ_STEP_FILL_PROJ_DETAILS : null
@@ -83,7 +84,7 @@ class ProjectWizard extends Component {
       this.setState({
         wizardStep
       }, () => {
-        this.props.onStepChange(this.state.wizardStep)
+        typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
       })
     }
   }
@@ -93,6 +94,7 @@ class ProjectWizard extends Component {
    * It also moves the wizard to the project details step if there exists an incomplete project.
    */
   loadIncompleteProject() {
+    const { onStepChange } = this.props
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
       const incompleteProject = JSON.parse(incompleteProjectStr)
@@ -101,7 +103,7 @@ class ProjectWizard extends Component {
         dirtyProject: update(this.state.dirtyProject, { $merge : incompleteProject }),
         wizardStep: WZ_STEP_FILL_PROJ_DETAILS
       }, () => {
-        this.props.onStepChange(this.state.wizardStep)
+        typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
       })
     }
   }
@@ -110,13 +112,14 @@ class ProjectWizard extends Component {
    * Removed incomplete project from the local storage and resets the state. Also, moves wizard to the first step.
    */
   removeIncompleteProject() {
+    const { onStepChange } = this.props
     window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
     this.setState({
       project: { details: {} },
       dirtyProject: { details: {} },
       wizardStep: WZ_STEP_SELECT_PROD_TYPE
     }, () => {
-      this.props.onStepChange(this.state.wizardStep)
+      typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
     })
   }
 
@@ -133,6 +136,7 @@ class ProjectWizard extends Component {
   }
 
   updateProducts(projectType, product) {
+    const { onStepChange } = this.props
     const products = _.get(this.state.project, 'details.products')
     let updateQuery = { details: { products : { $set : [product] }}}
     if (!products) {
@@ -146,17 +150,18 @@ class ProjectWizard extends Component {
       dirtyProject: update(this.state.project, updateQuery),
       wizardStep: WZ_STEP_FILL_PROJ_DETAILS
     }, () => {
-      this.props.onStepChange(this.state.wizardStep)
+      typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
     })
   }
 
   handleProjectChange(change) {
+    const { onProjectUpdate } = this.props
     this.setState({
       // update only dirtyProject when Form changes the model
       dirtyProject: _.merge({}, this.state.dirtyProject, unflatten(change)),
       isProjectDirty: true
     }, () => {
-      this.props.onProjectUpdate(this.state.dirtyProject)
+      typeof onProjectUpdate === 'function' && onProjectUpdate(this.state.dirtyProject)
     })
   }
 
@@ -165,6 +170,7 @@ class ProjectWizard extends Component {
   }
 
   handleStepChange(wizardStep) {
+    const { onStepChange } = this.props
     this.setState({
       // In this wizard we have just two steps, and this callback is triggered
       // only to move from the second step back to the first, thus we always
@@ -172,7 +178,7 @@ class ProjectWizard extends Component {
       project: update(this.state.project, { details: { products: {$set : [] }}}),
       wizardStep
     }, () => {
-      this.props.onStepChange(wizardStep)
+      typeof onStepChange === 'function' && onStepChange(wizardStep)
     })
   }
 
@@ -211,12 +217,33 @@ class ProjectWizard extends Component {
 }
 
 ProjectWizard.propTypes = {
+  /**
+   * Callback to be called when the wizard is shown in modal form and close button is clicked.
+   */
   closeModal: PropTypes.func,
+  /**
+   * Flag to render the wizard as modal (allows closing of the wizard at any step)
+   */
   showModal: PropTypes.bool,
+  /**
+   * Callback to create project. Called when the wizard finishes its last step.
+   */
   createProject: PropTypes.func.isRequired,
-  onStepChange: PropTypes.func.isRequired,
-  onProjectUpdate: PropTypes.func.isRequired,
+  /**
+   * Callback called on every step change in the wizard.
+   */
+  onStepChange: PropTypes.func,
+  /**
+   * Callback called for every change in project details.
+   */
+  onProjectUpdate: PropTypes.func,
+  /**
+   * Flag which indicates that a project creation is in progress.
+   */
   processing: PropTypes.bool.isRequired,
+  /**
+   * Roles of the logged in user. Used to determine anonymous access.
+   */
   userRoles: PropTypes.arrayOf(PropTypes.string)
 }
 

@@ -155,8 +155,6 @@ class ProjectsToolBar extends Component {
               processing={ this.props.creatingProject }
               createProject={ this.createProject }
               closeModal={ this.hideCreateProjectDialog }
-              onStepChange={ () => {} }
-              onProjectUpdate={ () => {} }
               userRoles={ userRoles }
             />
           }
