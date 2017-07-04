@@ -80,7 +80,7 @@ const redirectToProject = (nextState, replace, callback) => {
 const validateCreateProjectParams = (nextState, replace, callback) => {
   const product = nextState.params.product
   const productCategory = findProductCategory(product)
-  if (!productCategory) {
+  if (product && product.trim().length > 0 && !productCategory) {
     replace('/404')
   }
     callback()
