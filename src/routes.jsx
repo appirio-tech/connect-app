@@ -91,7 +91,7 @@ const renderTopBarWithProjectsToolBar = () => <TopBarContainer toolbar={ Project
 export default (
   <Route path="/" onUpdate={() => window.scrollTo(0, 0)} component={ App } onEnter={ redirectToConnect }>
     <IndexRoute components={{ topbar: renderTopBarWithProjectsToolBar, content: Home }} />
-    <Route path="/new-project(/product/:product)" components={{ topbar: null, content: CreateContainer }} onEnter={ validateCreateProjectParams } />
+    <Route path="/new-project(/:product)" components={{ topbar: null, content: CreateContainer }} onEnter={ validateCreateProjectParams } />
     <Route path="/new-project-callback" components={{ topbar: null, content: CreateContainer }} />
     <Route path="/terms" components={{ topbar: renderTopBarWithProjectsToolBar, content: ConnectTerms }}  />
     <Route path="/login" components={{ topbar: renderTopBarWithProjectsToolBar, content: LoginRedirect }} />
