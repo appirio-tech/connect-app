@@ -79,7 +79,7 @@ class MessagesView extends React.Component {
   // Notify user if they navigate away while the form is modified.
   onLeave(e) {
     if (this.isChanged()) {
-      return e.returnValue = 'You have uposted content. Are you sure you want to leave?'
+      return e.returnValue = 'You haven\'t saved your edits. Leaving this page would discard all edits. Are you sure you want to leave?'
     }
   }
 
