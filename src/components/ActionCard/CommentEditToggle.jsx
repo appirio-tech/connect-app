@@ -7,6 +7,7 @@ export default class CommentEditToggle extends React.Component {
 
   constructor(props) {
     super(props)
+    this.state = {}
     this.onEdit = this.onEdit.bind(this)
     this.onDelete = this.onDelete.bind(this)
     this.showDelete = this.showDelete.bind(this)
