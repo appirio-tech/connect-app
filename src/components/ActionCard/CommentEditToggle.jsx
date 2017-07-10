@@ -7,7 +7,6 @@ export default class CommentEditToggle extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {isOpen: false}
     this.onEdit = this.onEdit.bind(this)
     this.onDelete = this.onDelete.bind(this)
     this.showDelete = this.showDelete.bind(this)
@@ -15,7 +14,6 @@ export default class CommentEditToggle extends React.Component {
   }
 
   onEdit() {
-    this.setState({isOpen: false})
     this.props.onEdit()
   }
 
@@ -24,16 +22,16 @@ export default class CommentEditToggle extends React.Component {
   }
 
   cancelDelete() {
-    this.setState({isOpen: false, showDeleteConfirm: false})
+    this.setState({showDeleteConfirm: false})
   }
 
   onDelete() {
-    this.setState({isOpen: false, showDeleteConfirm: false})
+    this.setState({showDeleteConfirm: false})
     this.props.onDelete()
   }
 
   render() {
-    const { isOpen, showDeleteConfirm } = this.state
+    const {showDeleteConfirm } = this.state
     const editOptions = {label:this.props.forTopic ? 'Edit post' : 'Edit comment', val:'1'}
     const deleteOptions = {label:this.props.forTopic ? 'Delete post' : 'Delete comment', val:'2'}
     return (
@@ -44,39 +42,37 @@ export default class CommentEditToggle extends React.Component {
         <div className="dropdown-menu-list down-layer">
           <ul>
             <DropdownItem key={1} item={editOptions}
-                onItemClick={this.onEdit}
-                currentSelection=''
-              />
+              onItemClick={this.onEdit}
+              currentSelection="" 
+            />
             <DropdownItem key={2} item={deleteOptions}
-                onItemClick={this.showDelete}
-                currentSelection=''
-              />
+              onItemClick={this.showDelete}
+              currentSelection="" 
+            />
           </ul>
         </div>
-
-
-        
       </Dropdown>
       <Modal
-          isOpen={ showDeleteConfirm }
-          className="delete-post-dialog"
-          overlayClassName="delete-post-dialog-overlay"
-          onRequestClose={ this.cancelDelete }
-          contentLabel=""
-        >
-          <div className="modal-title">
-            Are you sure you want to delete this post?
-          </div>
+        isOpen={ showDeleteConfirm }
+        className="delete-post-dialog"
+        overlayClassName="delete-post-dialog-overlay"
+        onRequestClose={ this.cancelDelete }
+        contentLabel=""
+      >
 
-          <div className="modal-body">
-            This action cannot be undone.
-          </div>
+        <div className="modal-title">
+          Are you sure you want to delete this post?
+        </div>
 
-          <div className="button-area flex center action-area">
-            <button className="tc-btn tc-btn-default tc-btn-sm action-btn btn-cancel" onClick={this.cancelDelete}>Cancel</button>
-            <button className="tc-btn tc-btn-warning tc-btn-sm action-btn " onClick={this.onDelete}>Delete Post</button>
-          </div>
-        </Modal>
+        <div className="modal-body">
+          This action cannot be undone.
+        </div>
+
+        <div className="button-area flex center action-area">
+          <button className="tc-btn tc-btn-default tc-btn-sm action-btn btn-cancel" onClick={this.cancelDelete}>Cancel</button>
+          <button className="tc-btn tc-btn-warning tc-btn-sm action-btn " onClick={this.onDelete}>Delete Post</button>
+        </div>
+      </Modal>
 
     </div>
 
