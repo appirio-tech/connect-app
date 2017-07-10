@@ -237,7 +237,7 @@ class RichTextArea extends React.Component {
                 </div>
                 <div className="tc-btns">
                 { editMode && !isCreating &&
-                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.cancelEdit}>
+                <button className="tc-btn-link" onClick={this.cancelEdit}>
                   Cancel
                 </button>
                 }
