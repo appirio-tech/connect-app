@@ -29,7 +29,7 @@ class ProductCard extends React.Component {
         {icon}
         <h1 className="header">{p.type}</h1>
         <div className="sub-type-details">{p.info}</div>
-        <div className="tc-btn tc-btn-sm tc-btn-primary">Create project</div>
+        <button className="tc-btn tc-btn-sm tc-btn-primary">Create project</button>
       </div>
     )
   }
