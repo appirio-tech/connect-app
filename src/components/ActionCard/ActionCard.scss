@@ -145,6 +145,7 @@
     color: $tc-gray-70;
     line-height: $base-unit*5;
     padding: 10px 0;
+    word-break: break-word;
 
     &.comment-section {
       margin-bottom: -50px;
