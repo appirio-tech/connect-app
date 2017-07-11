@@ -636,7 +636,7 @@
 
 .delete-post-dialog{
 
-  padding:40px;
+  padding: 50px 40px 50px 40px;
   top                   : 50%;
   left                  : 50%;
   right                 : auto;
@@ -644,20 +644,19 @@
   transform             : translate(-50%, -50%);
   position:absolute;
   background: white;
-  width:40%;
-  height:250px;
+
+  box-shadow: 0 2px 9px 0 rgba(38,38,40,0.15);
+  border-radius: 6px;
 }
 
 .delete-post-dialog-overlay{
-  background   : rgba(80, 80, 80, 0.55);
-  width:100%;
-  height:100%;
-  position:absolute;
-  top:0;
-  left:0;
+  background   : rgba(38, 38, 40, 0.6);
   z-index:20;
-
-
+  position          : fixed;
+  top               : 0;
+  left              : 0;
+  right             : 0;
+  bottom            : 0;
 }
 
 .modal-title{
@@ -665,7 +664,6 @@
   font-size: 20px;
   color: #47474F;
   line-height: 30px;
-  margin-top:10px;
 }
 
 .modal-body{
@@ -677,7 +675,7 @@
 }
 
 .action-btn {
-  margin:10px;
+  margin-left:10px;
 }
 
 .action-area{
