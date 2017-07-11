@@ -36,7 +36,7 @@ export default class CommentEditToggle extends React.Component {
     const editOptions = {label:this.props.forTopic ? 'Edit post' : 'Edit comment', val:'1'}
     const deleteOptions = {label:this.props.forTopic ? 'Delete post' : 'Delete comment', val:'2'}
     return (
-    <div>
+    <div className="dropdownContainer">
       <Dropdown pointerShadow className="drop-down edit-toggle-container">
         <div className={cn('dropdown-menu-header', 'edit-toggle', {'for-topic': this.props.forTopic})} >
         </div>

@@ -14,6 +14,12 @@
     padding: $base-unit*2 $base-unit*6;
   }
 
+  .Dropdown li:not(:last-child) {
+    a {
+      border-bottom: 1px solid $tc-gray-10;
+      display: block;
+    }
+  }
     .edit-toggle-container {
       display: inline;
       float: right;
@@ -39,7 +45,20 @@
       }
       .dropdown-menu-list a{
         text-decoration:none;
+        font-weight:400;
+        padding:0px;
+        &:hover{
+        background:transparent;
+        }
       }
+      .dropdown-menu-list li{
+        padding:0px 20px 0 20px;
+        &:hover{
+          background:$tc-gray-10;
+        }
+      }
+
+      
 
       .pointer-shadow .dropdown-menu-list{
         transform:translate(-50%,0%);
@@ -48,7 +67,7 @@
           content: '';
           display: block;
           position: absolute;
-          top: -3px;
+          top: -6px;
           right:14px;
           margin-left:-24px;
           width: 12px;
@@ -131,6 +150,7 @@
     color: $tc-gray-70;
     line-height: $base-unit*5;
     padding: 10px 0;
+    word-break: break-word;
 
     &.comment-section {
       margin-bottom: -50px;
@@ -206,6 +226,7 @@
     margin-bottom: -10px;
     width: calc(100% - 40px);
 
+
     &.self {
       background: $tc-dark-blue-10;
 
@@ -229,6 +250,11 @@
       color: #59a7ff;
       line-height: $base-unit*6;
     }
+  }
+
+  .commentEdit{
+    padding-left:0px;
+    padding-right:0px;
   }
 
   .comment-form {
@@ -656,4 +682,8 @@
 
 .action-area{
   margin-top:45px;
+}
+
+.dropdownContainer{
+  display:inline;
 }
