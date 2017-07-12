@@ -39,6 +39,7 @@ $tc-body-extra-small	: 12px;
       @include roboto;
       font-size: $tc-label-lg;
       display: flex;
+      min-height: 60px;
       .profile {
         flex-grow: 1;
         margin-left: $base-unit*2;
@@ -69,7 +70,7 @@ $tc-body-extra-small	: 12px;
         }
       }
       .buttons{
-        
+        display: none;
         button, a {
           display: block;
           float: right;
@@ -116,6 +117,10 @@ $tc-body-extra-small	: 12px;
       &:hover,
       &.active{
         background-color: $tc-gray-neutral-light;
+
+        .buttons{
+          display: block;
+        }
       }
     }
   }
