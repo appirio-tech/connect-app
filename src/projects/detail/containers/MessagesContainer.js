@@ -7,13 +7,10 @@ import MessageList from '../../../components/MessageList/MessageList'
 import MessagingEmptyState from '../../../components/MessageList/MessagingEmptyState'
 import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
-import { laodProjectMessages, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment } from '../../actions/projectTopics'
+import { laodProjectMessages, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import {FullHeightContainer} from 'appirio-tech-react-components'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
-
-import {stateToHTML} from 'draft-js-export-html'
-import {stateFromHTML} from 'draft-js-import-html'
 
 import {
   THREAD_MESSAGES_PAGE_SIZE,
@@ -53,6 +50,10 @@ class MessagesView extends React.Component {
     this.changeThread = this.changeThread.bind(this)
     this.onNewThreadClick = this.onNewThreadClick.bind(this)
     this.showNewThreadForm = this.showNewThreadForm.bind(this)
+    this.onEditMessage = this.onEditMessage.bind(this)
+    this.onSaveMessageChange = this.onSaveMessageChange.bind(this)
+    this.onEditTopic = this.onEditTopic.bind(this)
+    this.onTopicChange = this.onTopicChange.bind(this)
   }
 
   componentDidMount() {
@@ -88,8 +89,8 @@ class MessagesView extends React.Component {
     const hasMessage = !_.isUndefined(_.find(this.state.threads, (thread) => (thread.isSavingTopic || thread.isDeletingTopic || thread.isAddingComment)
       || (thread.newMessage && thread.newMessage.length)
       || (thread.newTitle && thread.newTitle.length && thread.newTitle !== thread.title)
-      || (thread.topicMessage && thread.topicMessage.newContent && thread.topicMessage.newContent.length && thread.topicMessage.newContent !== stateToHTML(stateFromHTML(thread.topicMessage.content)))
-      || !_.isUndefined(_.find(thread.messages, (message) => message.isSavingComment || message.isDeletingComment || (message.newContent && message.newContent.length && message.newContent !== stateToHTML(stateFromHTML(message.content)))))
+      || (thread.topicMessage && thread.topicMessage.newContent && thread.topicMessage.newContent.length && thread.topicMessage.rawContent && thread.topicMessage.newContent !== thread.topicMessage.rawContent)
+      || !_.isUndefined(_.find(thread.messages, (message) => message.isSavingComment || message.isDeletingComment || (message.newContent && message.newContent.length && message.rawContent && message.newContent !== message.rawContent)))
     ))
     const hasThread = (newPost.title && !!newPost.title.trim().length) || ( newPost.content && !!newPost.content.trim().length)
     return hasThread || hasMessage
@@ -119,6 +120,8 @@ class MessagesView extends React.Component {
       const comment= {
         id: p.id,
         content: p.body,
+        rawContent: p.rawContent,
+        isGettingComment: p.isGettingComment,
         isSavingComment: p.isSavingComment,
         isDeletingComment: p.isDeletingComment,
         error: p.error,
@@ -126,16 +129,14 @@ class MessagesView extends React.Component {
         date: p.date,
         author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
       }
-      if (prevThread) {
-        const prevComment = _.find(prevThread.posts, t => p.id === t.id)
-        if (prevComment && prevComment.isSavingComment && !comment.isSavingComment && !comment.error) {
-          comment.editMode = false
-        } else {
-          const threadFromState = _.find(this.state.threads, t => feed.id === t.id)
-          const commentFromState = threadFromState ? _.find(threadFromState.messages, t => comment.id === t.id) : null
-          comment.newContent = commentFromState ? commentFromState.newContent : null
-          comment.editMode = commentFromState && commentFromState.editMode
-        }
+      const prevComment = prevThread ? _.find(prevThread.posts, t => p.id === t.id) : null
+      if (prevComment && prevComment.isSavingComment && !comment.isSavingComment && !comment.error) {
+        comment.editMode = false
+      } else {
+        const threadFromState = _.find(this.state.threads, t => feed.id === t.id)
+        const commentFromState = threadFromState ? _.find(threadFromState.messages, t => comment.id === t.id) : null
+        comment.newContent = commentFromState ? commentFromState.newContent : null
+        comment.editMode = commentFromState && commentFromState.editMode
       }
       return comment
     }
@@ -356,11 +357,32 @@ class MessagesView extends React.Component {
     this.props.deleteFeedComment(threadId, PROJECT_FEED_TYPE_MESSAGES, postId)
   }
 
+  onEditMessage(threadId, postId) {
+    const thread = _.find(this.state.threads, t => threadId === t.id)
+    const comment = _.find(thread.messages, message => message.id === postId)
+    if (!comment.rawContent) {
+      this.props.getFeedComment(threadId, PROJECT_FEED_TYPE_MESSAGES, postId)
+    }
+    this.onSaveMessageChange(threadId, postId, null, true)
+  }
+
+  onEditTopic(threadId) {
+    const thread = _.find(this.state.threads, t => threadId === t.id)
+    const comment = thread.topicMessage
+    if (!comment.rawContent) {
+      this.props.getFeedComment(threadId, PROJECT_FEED_TYPE_MESSAGES, comment.id)
+    }
+    this.onTopicChange(threadId, comment.id, null, null, true)
+  }
+
   onTopicChange(threadId, messageId, title, content, editTopicMode) {
     this.setState({
       threads: this.state.threads.map((item) => {
         if (item.id === threadId) {
-          return {...item, newTitle: title, editTopicMode, topicMessage: {...item.topicMessage, newContent: content}}
+          item.newTitle = title
+          item.editTopicMode = editTopicMode
+          item.topicMessage = {...item.topicMessage, newContent: content}
+          return {...item}
         }
         return item
       })
@@ -415,9 +437,11 @@ class MessagesView extends React.Component {
             onNewMessageChange={this.onNewMessageChange}
             onAddNewMessage={this.onAddNewMessage.bind(this, activeThread.id)}
             currentUser={currentUser}
+            onEditMessage={this.onEditMessage.bind(this, activeThread.id)}
             onSaveMessageChange={this.onSaveMessageChange.bind(this, activeThread.id)}
             onSaveMessage={this.onSaveMessage.bind(this, activeThread.id)}
             onDeleteMessage={this.onDeleteMessage.bind(this, activeThread.id)}
+            onEditTopic={this.onEditTopic.bind(this, activeThread.id)}
             onTopicChange={this.onTopicChange.bind(this, activeThread.id)}
             onSaveTopic={this.onSaveTopic.bind(this, activeThread.id)}
             onDeleteTopic={this.onDeleteTopic.bind(this, activeThread.id)}
@@ -491,7 +515,8 @@ const mapDispatchToProps = {
   loadFeedComments,
   addFeedComment,
   saveFeedComment,
-  deleteFeedComment
+  deleteFeedComment,
+  getFeedComment
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessagesContainer)

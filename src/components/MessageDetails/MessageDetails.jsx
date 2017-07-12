@@ -18,6 +18,9 @@ class MessageDetails extends React.Component {
     this.props.onLoadMoreMessages()
   }
 
+  onEditMessage(messageId) {
+    this.props.onEditMessage(messageId)
+  }
   onSaveMessageChange(messageId, content, editMode) {
     this.props.onSaveMessageChange(messageId, content, editMode)
   }
@@ -27,7 +30,6 @@ class MessageDetails extends React.Component {
       topicMessage,
       messages,
       hasMoreMessages,
-      newMessage,
       onNewMessageChange,
       onAddNewMessage,
       onSaveMessage,
@@ -63,6 +65,7 @@ class MessageDetails extends React.Component {
           date={moment(item.date).fromNow()}
           active={item.unread}
           self={item.author && item.author.userId === currentUser.userId}
+          onEdit={this.onEditMessage.bind(this, item.id)}
           onChange={this.onSaveMessageChange.bind(this, item.id)}
           onSave={onSaveMessage}
           onDelete={onDeleteMessage}
@@ -83,7 +86,7 @@ class MessageDetails extends React.Component {
           authorName={authorName}
           onAdd={onAddNewMessage}
           onChange={onNewMessageChange}
-          content={newMessage}
+          threadId={this.props.id}
         />
       }
       {isDeletingTopic &&
@@ -151,6 +154,16 @@ MessageDetails.propTypes = {
    * )
    */
   onSaveMessageChange: PropTypes.func.isRequired,
+
+  /**
+   * Callback fired when a message is edited
+   *
+   * function (
+   *  String messageId,
+   *  SyntheticEvent event?
+   * )
+   */
+  onEditMessage: PropTypes.func.isRequired,
 
   /**
    * Callback fired when a new message is added (confirmed)

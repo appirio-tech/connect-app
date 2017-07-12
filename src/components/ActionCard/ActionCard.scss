@@ -320,11 +320,10 @@
 
         button,
         .separator {
-          height: 16px;
-          width: 16px;
-          margin-right: 15px;
+          margin-right: 5px;
           display: inline-block;
           border: none;
+          background-color: transparent;
         }
 
         .button {
@@ -338,76 +337,13 @@
         }
 
         button {
-          &:hover {
+          &:hover,
+          &:disabled {
             opacity: 0.5;
           }
 
           &.active {
             opacity: 1;
-          }
-        }
-
-        .bold {
-          background: url('../../assets/images/tc-text-16-bold.svg') no-repeat;
-
-          &.active {
-            background: url('../../assets/images/tc-text-16-bold-active.svg') no-repeat;
-          }
-        }
-
-        .italic {
-          background: url('../../assets/images/tc-text-16-italic.svg') no-repeat;
-
-          &.active {
-            background: url('../../assets/images/tc-text-16-italic-active.svg') no-repeat;
-          }
-        }
-
-        .underline {
-          background: url('../../assets/images/tc-text-16-underline.svg') no-repeat;
-
-          &.active {
-            background: url('../../assets/images/tc-text-16-underline-active.svg') no-repeat;
-          }
-        }
-
-        .ordered-list {
-          background: url('../../assets/images/text-16px_list-numbers.svg') no-repeat;
-
-          &.active {
-            background: url('../../assets/images/text-16px_list-numbers-active.svg') no-repeat;
-          }
-        }
-
-        .unordered-list {
-          background: url('../../assets/images/text-16px_list-bullet.svg') no-repeat;
-
-          &.active {
-            background: url('../../assets/images/text-16px_list-bullet-active.svg') no-repeat;
-          }
-        }
-
-        .code {
-          background: url('../../assets/images/design-16px_code.svg') no-repeat;
-
-          &.active {
-            background: url('../../assets/images/design-16px_code-active.svg') no-repeat;
-          }
-        }
-
-        .quote {
-          background: url('../../assets/images/text-16px_quote.svg') no-repeat;
-
-          &.active {
-            background: url('../../assets/images/text-16px_quote-active.svg') no-repeat;
-          }
-        }
-
-        .attach {
-          background: url('../../assets/images/media-16px-1_image-02.svg') no-repeat;
-
-          &.active {
-            background: url('../../assets/images/media-16px-1_image-02-active.svg') no-repeat;
           }
         }
       }
@@ -627,10 +563,10 @@
   width: 100%;
   position: absolute;
   background-color: whitesmoke;
-  opacity: 0.5;
+  opacity: 0.7;
   div {
     text-align: center;
-    color: red;
+    color: green;
     font-weight: bold;
   }
 }

@@ -25,7 +25,7 @@ class Feed extends React.Component {
 
   onEditTopic() {
     this.setState({editTopicMode: true})
-    this.props.onTopicChange(this.props.topicMessage.id, null, null, true)
+    this.props.onEditTopic()
   }
   cancelEditTopic() {
     this.setState({editTopicMode: false})
@@ -42,7 +42,7 @@ class Feed extends React.Component {
     const {
       user, currentUser, date, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
       allowComments, comments, unread, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
-      onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, permalink
+      onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, permalink
     } = this.props
     const {editTopicMode} = this.state
     let authorName = user.firstName
@@ -51,16 +51,18 @@ class Feed extends React.Component {
     }
     const self = user && user.userId === currentUser.userId
     const title = this.props.newTitle === null || this.props.newTitle === undefined ? this.props.title : this.props.newTitle
-    const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.content : topicMessage.newContent
+    const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
     return (
       <ActionCard>
         {editTopicMode && (
         <RichTextArea
             editMode
+            messageId={topicMessage.id}
+            isGettingComment={topicMessage.isGettingComment}
             title={title}
             content={content}
             oldTitle={this.props.title}
-            oldContent={topicMessage.content}
+            oldContent={topicMessage.rawContent}
             onPost={this.onSaveTopic}
             onPostChange={this.onTopicChange}
             isCreating={isSavingTopic}
@@ -111,6 +113,7 @@ class Feed extends React.Component {
           avatarUrl={currentUser.photoURL}
           comments={comments}
           isAddingComment={isAddingComment}
+          onEditMessage={onEditMessage}
           onSaveMessageChange={onSaveMessageChange}
           onSaveMessage={onSaveMessage}
           onDeleteMessage={onDeleteMessage}

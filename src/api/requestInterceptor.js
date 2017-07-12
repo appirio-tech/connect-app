@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '../config/store'
 import { getFreshToken, isTokenExpired } from 'tc-accounts'
 
-const getToken = () => {
+export const getToken = () => {
   return new Promise((resolve) => {
     const userState = store.getState().loadUser
     const token = userState && userState.user ? userState.user.token : null

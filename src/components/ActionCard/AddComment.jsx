@@ -10,9 +10,7 @@ export default class AddComment extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.refs.richTextArea
-      && (nextProps.content === null || nextProps.content === undefined)
-      && nextProps.content !== this.props.content) {
+    if (this.refs.richTextArea && nextProps.threadId !== this.props.threadId) {
       this.refs.richTextArea.clearState()
     }
   }
