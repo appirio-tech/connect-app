@@ -5,3 +5,4 @@ bower_components
 build
 dist
 npm-debug.log
+.history

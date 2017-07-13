@@ -16,8 +16,9 @@ const projectRoutes = (
     <IndexRoute components={{topbar: null, main: Projects }} />
     <Route path=":projectId" components={{topbar: null, main: ProjectDetail}} >
       <IndexRoute component={ Dashboard } />
+      // <Route path="status/:statusId" component={ Dashboard } />
       <Route path="specification" component={ SpecificationContainer } />
-      <Route path="discussions" component={ ProjectMessages } />
+      <Route path="discussions(/:discussionId)" component={ ProjectMessages } />
     </Route>
   </Route>
 )

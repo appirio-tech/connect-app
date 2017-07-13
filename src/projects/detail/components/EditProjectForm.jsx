@@ -2,11 +2,43 @@ import React, { Component, PropTypes } from 'react'
 import { withRouter } from 'react-router'
 import Modal from 'react-modal'
 import _ from 'lodash'
+import { unflatten } from 'flat'
 import update from 'react-addons-update'
 import FeaturePicker from './FeatureSelector/FeaturePicker'
 import { Formsy, Icons } from 'appirio-tech-react-components'
 
 import SpecSection from './SpecSection'
+import { HOC as hoc } from 'formsy-react'
+
+const FeaturePickerModal = ({ project, isEdittable, showFeaturesDialog, hideFeaturesDialog, saveFeatures, setValue }) => {
+  const setFormValue = (features, featureSeeAttached=false) => {
+    const featureObj = {
+      value: features,
+      seeAttached: featureSeeAttached
+    }
+    setValue(featureObj)
+    saveFeatures(features, featureSeeAttached)
+  }
+  return (
+    <Modal
+      isOpen={ showFeaturesDialog }
+      className="feature-selection-dialog"
+      overlayClassName="feature-selection-dialog-overlay"
+      onRequestClose={ hideFeaturesDialog }
+      contentLabel=""
+    >
+      <FeaturePicker
+        features={ _.get(project, 'details.appDefinition.features.value', []) }
+        isEdittable={isEdittable} onSave={ setFormValue }
+      />
+      <div onClick={ hideFeaturesDialog } className="feature-selection-dialog-close">
+        Save and close <Icons.XMarkIcon />
+      </div>
+    </Modal>
+  )
+}
+
+const FeaturePickerFormField = hoc(FeaturePickerModal)
 
 class EditProjectForm extends Component {
 
@@ -34,8 +66,15 @@ class EditProjectForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // we receipt property updates from PROJECT_DIRTY REDUX state
-    if (nextProps.project.isDirty) return
+    // we received property updates from PROJECT_DIRTY REDUX state
+    if (nextProps.project.isDirty) {
+      this.setState({
+        // sets a new state variable with dirty project
+        // any component who wants to listen for unsaved changes in project form can listen to this state variable
+        dirtyProject : Object.assign({}, nextProps.project)
+      })
+      return
+    }
     let updatedProject = Object.assign({}, nextProps.project)
     if (this.state.isFeaturesDirty && !this.state.isSaving) {
       updatedProject = update(updatedProject, {
@@ -127,10 +166,9 @@ class EditProjectForm extends Component {
   }
 
   submit(model) {
-    console.log('submit', this.isChanged())
-    if (this.state.isFeaturesDirty) {
-      model.details.appDefinition.features = this.state.project.details.appDefinition.features
-    }
+    // if (this.state.isFeaturesDirty) {
+    //   model.details.appDefinition.features = this.state.project.details.appDefinition.features
+    // }
     this.setState({isSaving: true })
     this.props.submitHandler(model)
   }
@@ -143,13 +181,13 @@ class EditProjectForm extends Component {
    */
   handleChange(change) {
     // removed check for isChanged argument to fire the PROJECT_DIRTY event for every change in the form
-    this.props.fireProjectDirty(change)
+    this.props.fireProjectDirty(unflatten(change))
   }
 
 
   render() {
     const { isEdittable, sections } = this.props
-    const { project } = this.state
+    const { project, dirtyProject } = this.state
     const renderSection = (section, idx) => {
       const anySectionInvalid = _.some(this.props.sections, (s) => s.isInvalid)
       return (
@@ -157,6 +195,7 @@ class EditProjectForm extends Component {
           <SpecSection
             {...section}
             project={project}
+            dirtyProject={dirtyProject}
             sectionNumber={idx + 1}
             resetFeatures={this.onFeaturesSaveAttachedClick}
             showFeaturesDialog={this.showFeaturesDialog}
@@ -183,21 +222,17 @@ class EditProjectForm extends Component {
           onChange={ this.handleChange }
         >
           {sections.map(renderSection)}
-        </Formsy.Form>
-        <Modal
-          isOpen={ this.state.showFeaturesDialog }
-          className="feature-selection-dialog"
-          overlayClassName="feature-selection-dialog-overlay"
-          onRequestClose={ this.hideFeaturesDialog }
-        >
-          <FeaturePicker
-            features={ _.get(project, 'details.appDefinition.features.value', []) }
-            isEdittable={isEdittable} onSave={ this.saveFeatures }
+          <FeaturePickerFormField
+            name="details.appDefinition.features"
+            project={ project }
+            isEdittable={ isEdittable }
+            showFeaturesDialog={ this.state.showFeaturesDialog }
+            hideFeaturesDialog={ this.hideFeaturesDialog }
+            saveFeatures={ this.saveFeatures }
+            value={ _.get(project, 'details.appDefinition.features', {})}
           />
-          <div onClick={ this.hideFeaturesDialog } className="feature-selection-dialog-close">
-            Save and close <Icons.XMarkIcon />
-          </div>
-        </Modal>
+        </Formsy.Form>
+        
       </div>
     )
   }

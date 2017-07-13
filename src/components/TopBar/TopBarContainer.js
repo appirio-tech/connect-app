@@ -110,6 +110,7 @@ class TopBarContainer extends React.Component {
           className="project-creation-dialog"
           overlayClassName="project-creation-dialog-overlay"
           onRequestClose={ this.hideCreateProjectDialog }
+          contentLabel=""
         >
           <ProjectWizard closeModal={this.hideCreateProjectDialog} />
 

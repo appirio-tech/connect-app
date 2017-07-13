@@ -26,7 +26,7 @@ const getIcon = icon => {
   }
 }
 
-const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog, isRequired}) => {
+const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog, isRequired}) => {
 
   const renderQ = (q, index) => {
     // let child = null
@@ -36,9 +36,9 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog, i
       label: q.label,
       value: _.get(project, q.fieldName, '')
     }
-
     if (q.fieldName === 'details.appDefinition.numberScreens') {
-      const screens = _.get(project, 'details.appScreens.screens', [])
+      const p = dirtyProject ? dirtyProject : project
+      const screens = _.get(p, 'details.appScreens.screens', [])
       const definedScreens = screens.length
       _.each(q.options, (option) => {
         let maxValue = 0
@@ -145,9 +145,26 @@ const SpecQuestions = ({questions, project, resetFeatures, showFeaturesDialog, i
 }
 
 SpecQuestions.propTypes = {
+  /**
+   * Original project object for which questions are to be rendered
+   */
   project: PropTypes.object.isRequired,
+  /**
+   * Dirty project with all unsaved changes
+   */
+  dirtyProject: PropTypes.object,
+  /**
+   * Callback to be called when user clicks on Add/Edit Features button in feature picker component
+   */
   showFeaturesDialog: PropTypes.func.isRequired,
+  /**
+   * Call back to be called when user resets features from feature picker.
+   * NOTE: It seems it is not used as of now by feature picker component
+   */
   resetFeatures: PropTypes.func.isRequired,
+  /**
+   * Array of questions to be rendered. This comes from the spec template for the product
+   */
   questions: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 
