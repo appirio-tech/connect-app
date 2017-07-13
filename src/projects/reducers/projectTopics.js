@@ -635,7 +635,7 @@ export const projectTopics = function (state=initialState, action) {
         isGettingComment : { $set : false },
         error: { $set : false },
         body: { $set : comment.body },
-        rawContent: { $set : comment.raw }
+        rawContent: { $set : comment.rawContent }
       })
 
       const updatedFeed = update(feed, { posts: { $splice: [[commentIndex, 1, updatedComment]] } })

@@ -8,6 +8,7 @@ import { CONNECT_MESSAGE_API_URL } from '../../config/constants'
 
 Uploader.prototype._attach = () => {}
 Uploader.prototype._getElement = () => ({tagName: 'dummy'})
+Uploader.prototype._preview = () => {}
 
 function _doUpload(files, getEditorState, setEditorState, setUploadState) {
 
@@ -22,9 +23,6 @@ function _doUpload(files, getEditorState, setEditorState, setUploadState) {
           url: `${CONNECT_MESSAGE_API_URL}/v4/topics/image`,
           headers: { Authorization: `Bearer ${token}` }
         })
-        uploader._read([files[key]])
-        uploader.upload()
-        setUploadState(1)
         uploader.on('upload:done', (response) => {
           setUploadState(false)
           const result = JSON.parse(response).result
@@ -43,6 +41,9 @@ function _doUpload(files, getEditorState, setEditorState, setUploadState) {
           console.error(err)
           Alert.error(`Failed to upload image: ${err.message}`)
         })
+        uploader._read([files[key]])
+        setUploadState(1)
+        uploader.upload()
       })
     }
   }
