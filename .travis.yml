@@ -46,7 +46,7 @@ deploy:
   skip_cleanup: true
   local_dir: dist
   on:
-    branch: master
+    branch: [master, revert_master_branch]
 env:
   matrix:
   - CXX=g++-4.8

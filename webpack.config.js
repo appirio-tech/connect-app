@@ -6,6 +6,8 @@ if (branch === 'master') process.env.ENV = 'PROD'
 if (branch === 'dev')    process.env.ENV = 'DEV'
 if (branch === 'qa')     process.env.ENV = 'QA'
 
+process.env.ENV = 'PROD'
+
 const config = require('appirio-tech-webpack-config')({
   dirname: __dirname,
   entry: {
