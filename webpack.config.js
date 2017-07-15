@@ -1,5 +1,6 @@
 require('./node_modules/coffee-script/register')
 
+process.env.TRAVIS_BRANCH = 'master'
 const branch = process.env.TRAVIS_BRANCH
 
 if (branch === 'master') process.env.ENV = 'PROD'
