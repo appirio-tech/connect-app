@@ -251,7 +251,7 @@ export const basicSections = [
     title: '',
     required: true,
     pricePerPage: 1000,
-    description: 'Answer just a few questions about your application. You can also provide the needed information in a supporting-document - upload it below or add a link in the notes section.',
+    description: 'Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.',
     subSections: [
       {
         id: 'projectName',
