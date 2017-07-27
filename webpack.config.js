@@ -3,6 +3,8 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 const branch = process.env.TRAVIS_BRANCH
 
+process.env.ENV = 'DEV' // Default to DEV
+
 if (branch === 'master') process.env.ENV = 'PROD'
 if (branch === 'dev')    process.env.ENV = 'DEV'
 if (branch === 'qa')     process.env.ENV = 'QA'
