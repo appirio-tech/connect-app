@@ -17,7 +17,7 @@ const sections = [
     id: 'appDefinition',
     title: 'App Definition',
     required: true,
-    description: 'Answer just a few questions about your application. You can also provide the needed information in a supporting-document - upload it below or add a link in the notes section.',
+    description: 'Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.',
     subSections: [
       {
         id: 'projectName',
