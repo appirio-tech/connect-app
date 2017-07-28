@@ -5,28 +5,35 @@ import SVGIconImage from '../SVGIconImage'
 import './Wizard.scss'
 
 function Wizard(props) {
+  const { step, shouldRenderBackButton, onStepChange, showModal, onCancel } = props
   let backControl
-  if (props.step) {
+  let modalCloseControl
+  if (step && (!shouldRenderBackButton || shouldRenderBackButton(step))) {
     backControl = (
       <ModalControl
         className="back-button"
         icon={<Icons.ArrowBack />}
         label="back"
-        onClick={() => props.onStepChange(props.step - 1)}
+        onClick={() => onStepChange(step - 1)}
+      />
+    )
+  }
+  if (showModal) {
+    modalCloseControl = (
+      <ModalControl
+        className="escape-button"
+        icon={<SVGIconImage filePath="x-mark" />}
+        label="esc"
+        onClick={ onCancel }
       />
     )
   }
   return (
-    <div className="Wizard">
+    <div className={`Wizard ${props.className}`}>
       <div className="content">
         {backControl}
-        <ModalControl
-          className="escape-button"
-          icon={<SVGIconImage filePath="x-mark" />}
-          label="esc"
-          onClick={props.onCancel}
-        />
-        {props.children[props.step]}
+        { modalCloseControl }
+        {props.children[step]}
       </div>
     </div>
   )
@@ -36,7 +43,9 @@ Wizard.proptTypes = {
   children: PT.node.isRequired,
   onCancel: PT.node.isRequired,
   onStepChange: PT.func.isRequired,
-  step: PT.number.isRequired
+  step: PT.number.isRequired,
+  showModal: PT.bool,
+  shouldRenderBackButton: PT.func
 }
 
 export default Wizard

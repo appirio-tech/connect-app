@@ -227,3 +227,101 @@ const sections = [
 ]
 
 export default sections
+
+export const basicSections = [
+  {
+    id: 'appDefinition',
+    title: '',
+    required: true,
+    description: 'Answer just a few questions about your application. You can also provide the needed information in a supporting-document - upload it below or add a link in the notes section.',
+    subSections: [
+      {
+        id: 'projectName',
+        required: true,
+        validationError: 'Please provide a name to your project',
+        fieldName: 'name',
+        description: '',
+        title: 'Project Name',
+        type: 'project-name'
+      },
+      {
+        id: 'questions',
+        required: true,
+        hideTitle: true,
+        title: 'Questions',
+        description: '',
+        type: 'questions',
+        questions: [
+          {
+            icon: 'question',
+            required: true,
+            validationError: 'Please let us know the number of screens required',
+            title: 'How many screens do you need designed?',
+            description: 'This is the most popular project size that can get a medium-sized app designed in a breeze',
+            fieldName: 'details.appDefinition.numberScreens',
+            type: 'tiled-radio-group',
+            options: [
+              {value: '1-3', title: 'screens', icon: NumberText, iconOptions: { number: '1-3' }, desc: '5-7 days', price: 5000},
+              {value: '4-8', title: 'screens', icon: NumberText, iconOptions: { number: '4-8' }, desc: '7-10 days', price: 7000},
+              {value: '9-15', title: 'screens', icon: NumberText, iconOptions: { number: '9-15' }, desc: '8-10 days', price: 8500}
+            ]
+          },
+          {
+            icon: 'question',
+            required: true,
+            validationError: 'Please let us know the target device',
+            title: 'Which is your primary device target?',
+            description: 'Select only the device that you need to develop for. \
+                          In most cases limiting the scope of your project would result \
+                          in better final result. Topcoder recommends to always start \
+                          with the mobile phone view and expand to other devices as your \
+                          app matures.',
+            fieldName: 'details.appDefinition.primaryTarget',
+            type: 'tiled-radio-group',
+            options: [
+              {value: 'Phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'Wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+            ]
+          },
+          {
+            icon: 'question',
+            required: true,
+            validationError: 'Please provide description',
+            id: 'projectInfo',
+            fieldName: 'description',
+            description: 'Brief Description',
+            title: 'Description',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            required: true,
+            validationError: 'Please let us know the goal of your application',
+            title: 'What is the goal of your application? How will people use it?',
+            description: 'Describe your objectives for creating this application',
+            type: 'textbox',
+            fieldName: 'details.appDefinition.goal.value'
+          },
+          {
+            icon: 'question',
+            required: true,
+            validationError: 'Please let us know users of your application',
+            title: 'Who are the users of your application? ',
+            description: 'Describe the roles and needs of your target users',
+            type: 'textbox',
+            fieldName: 'details.appDefinition.users.value'
+          }
+        ]
+      },
+      {
+        id: 'notes',
+        fieldName: 'details.appDefinition.notes',
+        title: 'Notes',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        type: 'notes'
+      }
+    ]
+  }
+]

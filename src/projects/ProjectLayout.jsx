@@ -8,15 +8,15 @@ class ProjectViewLayout extends Component {
   }
 
   render() {
-    const {topbar, main} = this.props
+    const { main } = this.props
     return (
       <div className="content-pane">
         <div className="top-bar">
-          {topbar}
         </div>
         {main}
       </div>
     )
+    // return this.props.children
   }
 }
 

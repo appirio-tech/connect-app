@@ -9,7 +9,7 @@ import GridView from '../../../../components/Grid/GridView'
 import Walkthrough from '../Walkthrough/Walkthrough'
 
 import UserWithName from '../../../../components/User/UserWithName'
-import PageError from '../../../../components/PageError/PageError'
+import CoderBot from '../../../../components/CoderBot/CoderBot'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, PROJECT_STATUS } from '../../../../config/constants'
 
 // This handles showing a spinner while the state is being loaded async
@@ -22,7 +22,7 @@ import spinnerWhileLoading from '../../../../components/LoadingSpinner'
 const defaultCriteria = {sort: 'createdAt desc'}
 
 const showErrorMessageIfError = hasLoaded =>
-  branch(hasLoaded, t => t, renderComponent(<PageError code={500} />))
+  branch(hasLoaded, t => t, renderComponent(<CoderBot code={500} />))
 const errorHandler = showErrorMessageIfError(props => !props.error)
 const spinner = spinnerWhileLoading(props => !props.isLoading)
 const enhance = compose(errorHandler, spinner)

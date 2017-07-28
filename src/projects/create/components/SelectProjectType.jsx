@@ -1,7 +1,7 @@
 import React, { PropTypes as PT } from 'react'
 import config from '../../../config/projectWizard'
 import ProjectTypeCard from './ProjectTypeCard'
-import WizardHeader from './WizardHeader'
+// import WizardHeader from './WizardHeader'
 import SVGIconImage from '../../../components/SVGIconImage'
 import './SelectProjectType.scss'
 
@@ -12,7 +12,6 @@ function SelectProjectType(props) {
     const icon = <SVGIconImage filePath={item.icon} />
     cards.push(
       <ProjectTypeCard
-        disabled={!props.projectName.trim()}
         icon={icon}
         info={item.info}
         key={key}
@@ -23,12 +22,6 @@ function SelectProjectType(props) {
   }
   return (
     <div className="SelectProjectType">
-      <WizardHeader
-        onProjectNameChange={props.onProjectNameChange}
-        onProjectRefChange={props.onProjectRefChange}
-        projectName={props.projectName}
-        projectRef={props.projectRef}
-      />
       <h1>Select your project category</h1>
       {cards}
       <div className="footer">
