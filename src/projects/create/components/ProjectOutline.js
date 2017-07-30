@@ -11,7 +11,6 @@ function ProjectOutline({ project }) {
   const projectType = _.findKey(config, {id : projectTypeId})
   const subConfig = config[projectType]
   const productName = _.findKey(subConfig.subtypes, {id : product})
-  const projectSize = 'To be estimated'
   return (
     <div className="ProjectOutline">
       <h5>Project Outline</h5>
