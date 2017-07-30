@@ -11,25 +11,12 @@ function ProjectOutline({ project }) {
   const projectType = _.findKey(config, {id : projectTypeId})
   const subConfig = config[projectType]
   const productName = _.findKey(subConfig.subtypes, {id : product})
-  const projectSize = 'To be estimated'
   return (
     <div className="ProjectOutline">
       <h5>Project Outline</h5>
       <div className="project-name">{ project.name }</div>
       <div className="project-product">{ productName }</div>
       <ul className="project-meta-data">
-        <li className="project-meta-data-row">
-          <span className="project-meta-data-label">Type:</span>
-          <span className="project-meta-data-value">{ projectType }</span>
-        </li>
-        <li className="project-meta-data-row">
-          <span className="project-meta-data-label">Size:</span>
-          <span className="project-meta-data-value">{ projectSize }</span>
-        </li>
-        <li className="project-meta-data-row">
-          <span className="project-meta-data-label">Work:</span>
-          <span className="project-meta-data-value">{ productName }</span>
-        </li>
         <div className="project-description">{ project.description }</div>
         <li><hr /></li>
         <li className="project-meta-data-row">
