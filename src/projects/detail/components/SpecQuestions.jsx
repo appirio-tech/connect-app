@@ -36,6 +36,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       label: q.label,
       value: _.get(project, q.fieldName, ''),
       required: q.required,
+      validations: q.required ? "isRequired" : "",
       validationError: q.validationError
     }
     if (q.fieldName === 'details.appDefinition.numberScreens') {
