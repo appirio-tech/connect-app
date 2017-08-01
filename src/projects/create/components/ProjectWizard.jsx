@@ -136,6 +136,7 @@ class ProjectWizard extends Component {
   }
 
   updateProducts(projectType, product) {
+    window.scrollTo(0, 0)
     const { onStepChange } = this.props
     const products = _.get(this.state.project, 'details.products')
     let updateQuery = { details: { products : { $set : [product] }}}
