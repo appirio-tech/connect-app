@@ -12,6 +12,12 @@ function ProjectOutline({ project }) {
   const subConfig = config[projectType]
   const productName = _.findKey(subConfig.subtypes, {id : product})
   const projectSize = 'To be estimated'
+  const projectEstimate = (productName === 'Other Design') ? (null) : (<li className="project-meta-data-row">
+                            <VisualDesignProjectEstimateSection
+                              products={ _.get(project, 'details.products', []) }
+                              numberScreens={ _.get(project, 'details.appDefinition.numberScreens', '') }
+                            />
+                          </li>)
   return (
     <div className="ProjectOutline">
       <h5>Project Outline</h5>
@@ -32,12 +38,7 @@ function ProjectOutline({ project }) {
         </li>
         <div className="project-description">{ project.description }</div>
         <li><hr /></li>
-        <li className="project-meta-data-row">
-          <VisualDesignProjectEstimateSection
-            products={ _.get(project, 'details.products', []) }
-            numberScreens={ _.get(project, 'details.appDefinition.numberScreens', '') }
-          />
-        </li>
+        {projectEstimate}
       </ul>
     </div>
   )
