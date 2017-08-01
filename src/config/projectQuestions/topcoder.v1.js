@@ -219,22 +219,27 @@ export const basicSections = [
         type: 'project-name'
       },
       {
-        id: 'projectInfo',
-        required: true,
-        fieldName: 'description',
-        description: 'Description',
-        title: 'Project Info',
-        type: 'notes'
-      },
-      {
         id: 'questions',
         required: true,
+        hideTitle: true,
         title: 'Questions',
         description: '',
         type: 'questions',
         questions: [
           {
             icon: 'question',
+            required: true,
+            validationError: 'Please provide description',
+            id: 'projectInfo',
+            fieldName: 'description',
+            description: 'Brief Description',
+            title: 'Description',
+            type: 'textbox'
+          },        
+          {
+            icon: 'question',
+            required: true,
+            validationError: 'Please let us know the goal of your application',
             title: 'What is the goal of your application? How will people use it?',
             description: 'Describe your objectives for creating this application',
             type: 'textbox',
@@ -242,6 +247,8 @@ export const basicSections = [
           },
           {
             icon: 'question',
+            required: true,
+            validationError: 'Please let us know users of your application',
             title: 'Who are the users of your application? ',
             description: 'Describe the roles and needs of your target users',
             type: 'textbox',
