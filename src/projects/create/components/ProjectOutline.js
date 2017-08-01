@@ -12,7 +12,8 @@ function ProjectOutline({ project }) {
   const subConfig = config[projectType]
   const productName = _.findKey(subConfig.subtypes, {id : product})
   const projectSize = 'To be estimated'
-  const projectEstimate = (productName === 'Other Design') ? (null) : (<li className="project-meta-data-row">
+  const projectsWithEstimate = ["Wireframes","Visual Design","Front-end Prototype"]
+  const projectEstimate = (projectsWithEstimate.indexOf(productName)<0) ? (null) : (<li className="project-meta-data-row">
                             <VisualDesignProjectEstimateSection
                               products={ _.get(project, 'details.products', []) }
                               numberScreens={ _.get(project, 'details.appDefinition.numberScreens', '') }
