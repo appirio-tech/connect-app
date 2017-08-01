@@ -43,7 +43,7 @@
     "filepicker-js": "^2.4.17",
     "filesize": "^3.3.0",
     "flat": "^2.0.1",
-    "formsy-react": "^0.18.1",
+    "formsy-react": "^0.19.5",
     "history": "^1.17.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.16.4",
