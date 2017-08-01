@@ -85,7 +85,7 @@ class ProjectBasicDetailsForm extends Component {
           </div>
           <div className="section-footer section-footer-spec">
             <button className="tc-btn tc-btn-primary tc-btn-md"
-              type="submit" disabled={(!this.isChanged() || this.state.isSaving) || !canSubmit}
+              type="submit" disabled={(this.state.isSaving) || !canSubmit}
             >{ submitBtnText }</button>
           </div>
         </div>
