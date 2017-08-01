@@ -109,6 +109,7 @@ const SpecSection = props => {
                 wrapperClass="project-name"
                 maxLength={ PROJECT_NAME_MAX_LENGTH }
                 required={props.required}
+                validations={props.required ? "isRequired" : null}
                 validationError={props.validationError}
                 theme="paper-form-dotted"
               />
