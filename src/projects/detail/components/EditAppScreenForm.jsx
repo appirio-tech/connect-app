@@ -54,6 +54,7 @@ class EditAppScreenForm extends Component {
 
     return (
       <Formsy.Form
+        ref={el => this.sForm = el}
         onInvalid={() => this.onValidate(false)}
         onValid={() => this.onValidate(true)}
         onChange={this.update}

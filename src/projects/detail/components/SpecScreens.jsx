@@ -9,6 +9,7 @@ class SpecScreens extends Component {
   constructor(props) {
     super(props)
     this.addScreen = this.addScreen.bind(this)
+    this.appScreen = []
   }
 
   componentWillMount() {
@@ -34,8 +35,12 @@ class SpecScreens extends Component {
   deleteScreen(index) {
     const screens = [...this.state.screens.slice(0, index),
       ...this.state.screens.slice(index + 1)]
-    this.setState({ screens })
     this.props.setValue(screens)
+    this.setState({ screens }, () =>{
+      screens.forEach((val, i) => {
+        this.appScreen[i].sForm.setFormPristine(true)
+      })
+    })
   }
 
   addScreen(screen, addEmptyScreen) {
@@ -75,6 +80,7 @@ class SpecScreens extends Component {
             </button>
           </div>
           <EditAppScreenForm
+            ref={el => this.appScreen[index] = el}
             screen={screen}
             questions={this.props.questions}
             onUpdate={this.updateScreen.bind(this, index)}
