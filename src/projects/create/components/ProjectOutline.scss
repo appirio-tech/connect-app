@@ -21,6 +21,8 @@
     @include roboto-bold;
     margin-bottom: $base-unit * 2;
     align-self: center;
+    width: 100%;
+    word-break: break-all;
   }
   
   .project-product {
@@ -34,6 +36,7 @@
     line-height: 5*$base-unit;
     margin-top: $base-unit * 4;
     margin-bottom: $base-unit * 4;
+    word-break: break-all;
   }
 
   .project-meta-data {

@@ -12,10 +12,11 @@
   vertical-align: top;
   width: 230px;
   .sub-type-details {
-    margin: 0 20px;
+    padding: 0 20px;
     font-size: 13px;
     color: $tc-gray-50;
     line-height: 20px;
+    width: 100%;
   }
   .header {
     @include tc-body;
