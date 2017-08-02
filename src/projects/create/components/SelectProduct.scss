@@ -6,7 +6,7 @@
   text-align: center;
   max-width: 1000px;
   margin: 0 auto;
-  a, a:hover {
+  a, a:visited, a:hover, a:active{
     color: $tc-dark-blue;
     cursor: pointer;
   }
