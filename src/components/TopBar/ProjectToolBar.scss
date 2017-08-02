@@ -31,6 +31,7 @@
       position: relative;
       overflow: hidden;
       text-overflow: ellipsis;
+      width: 500px;
       display: flex;
       span {
         display:block;
@@ -102,7 +103,8 @@
     border-right: 1px solid $tc-gray-80;
     flex: 1;
     ul{
-      width: 484px;
+      /*width: 484px;*/
+      width: auto;
       height: 20px;
       display: flex;
       justify-content: flex-end;

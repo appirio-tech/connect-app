@@ -808,6 +808,10 @@ $title-color: $tc-gray-80;
   .dashed-bottom-border,
   .editable-project-name {
     flex: 1;
+
+    .project-name {
+      word-break: break-all;
+    }
   }
 
   .read-only-refcode {
