@@ -76,10 +76,11 @@
 
         .right-area-footer {
           @include roboto;
-          padding: 0 40px 0 20px;
+          padding: 10px 40px 0 0;
           font-size: 13px;
-          line-height: 30px;
+          line-height: 20px;
           color: $tc-gray-50;
+          font-style: italic;
 
           span {
             float: right;
