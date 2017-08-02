@@ -45,12 +45,12 @@
 
 			a.tc-link {
 				text-align: center;
-		    color: #1a85ff;
-		    font-family: Roboto;
-		    font-size: 13px;
-		    margin: 0 auto;
-		    display: inline-block;
-		    margin-top: 10px;
+			    color: #1a85ff;
+			    @include roboto;
+			    font-size: 13px;
+			    margin: 0 auto;
+			    display: inline-block;
+			    margin-top: 10px;
 			}
 		}
 		h1{
