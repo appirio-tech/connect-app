@@ -157,6 +157,12 @@ $tc-body-large        : 20px;
   /*background-color: $tc-gray-neutral-dark;*/
   overflow-y: scroll;
 
+  .IncompleteProjectConfirmation {
+    position: static;
+    padding-top: 0;
+    height: auto;
+  }
+
   section.content {
     padding: 1px 0;
   }
