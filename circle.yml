@@ -1,0 +1,33 @@
+machine:
+  node:
+    version: 5.5.0
+  environment:
+    CXX: g++-4.8
+
+dependencies:
+  pre:
+    - sudo add-apt-repository ppa:ubuntu-toolchain-r/test  -y
+    - sudo apt-get update -y
+    - sudo apt-get install g++-4.8  -y
+    
+compile:
+  override:
+    - npm cache clean
+    - npm run lint && npm test && npm run build
+
+deployment:
+  development:
+    branch: [ "dev", "feature/deep-links"]
+    owner: appirio-tech
+    commands:
+      - ./deploy.sh DEV
+  qa:
+    branch: qa
+    owner: appirio-tech
+    commands:
+      - ./deploy.sh QA
+  production:
+    branch: master
+    owner: appirio-tech
+    commands:
+      - ./deploy.sh PROD
