@@ -43,6 +43,10 @@
     margin-top: $base-unit * 4;
     .project-meta-data-row {
       display: flex;
+      .visual-design-project-estimate-section {
+        margin-left: 0;
+        margin-right: 0;
+      }
       .project-meta-data-label {
         flex: 1;
         color: $tc-gray-50;

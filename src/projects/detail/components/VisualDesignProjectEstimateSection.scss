@@ -2,12 +2,15 @@
 
 .visual-design-project-estimate-section {
   display: flex;
-  width: 100%;
+  width: calc(100% - 40px);
+  margin-left: 20px;
+  margin-right: 20px;
   flex-wrap: wrap;
   flex-direction: row;
 
   h4.titles {
     width: 100%;
+    margin: 0;
     margin-bottom: $base-unit * 2;
     font-size: 12px;
     color: $tc-gray-50;

@@ -49,33 +49,37 @@ class FillProjectDetails extends Component  {
       specification = typeToSpecification[product]
     let sections = require(`../../../config/projectQuestions/${specification}`).basicSections
     return (
-      <div className="FillProjectDetails">
-        <div className="header">
+      <div className="FillProjectDetailsWrapper">
+        <div className="header headerFillProjectDetails">
           { (!userRoles || !userRoles.length) && <ConnectLogo />}
-          <h1>Let's setup your { productName } project</h1>
           { (!userRoles || !userRoles.length) && <button className="tc-btn tc-btn-default tc-btn-sm" onClick={ this.props.onChangeProjectType }><SVGIconImage filePath="arrows-undo" />Change project type</button> }
         </div>
-        <section className="two-col-content content">
-          <div className="container">
-            <div className="left-area">
-              <ProjectBasicDetailsForm
-                project={project}
-                sections={sections}
-                isEdittable
-                submitHandler={this.props.onCreateProject}
-                saving={processing}
-                onProjectChange={this.props.onProjectChange}
-                submitBtnText={ submitBtnText }
-              />
-            </div>
-            <div className="right-area">
-              <Sticky top={80}>
-                <ProjectOutline project={ dirtyProject } />
-                <div className="right-area-footer">In 24 hours our project managers will contact you for more information and a detailed quote that accurately reflects your project needs.</div>
-              </Sticky>
-            </div>
+        <div className="FillProjectDetails">
+          <div className="header">
+            <h1>Let's setup your { productName } project</h1>
           </div>
-        </section>
+          <section className="two-col-content content">
+            <div className="container">
+              <div className="left-area">
+                <ProjectBasicDetailsForm
+                  project={project}
+                  sections={sections}
+                  isEdittable
+                  submitHandler={this.props.onCreateProject}
+                  saving={processing}
+                  onProjectChange={this.props.onProjectChange}
+                  submitBtnText={ submitBtnText }
+                />
+              </div>
+              <div className="right-area">
+                <Sticky top={80}>
+                  <ProjectOutline project={ dirtyProject } />
+                  <div className="right-area-footer">In 24 hours our project managers will contact you for more information and a detailed quote that accurately reflects your project needs.</div>
+                </Sticky>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
     )
   }

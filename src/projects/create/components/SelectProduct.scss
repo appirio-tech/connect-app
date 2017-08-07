@@ -1,5 +1,11 @@
 @import 'tc-includes';
 
+.headerSelectProduct {
+    position: absolute;
+    top: 25px;
+    left: 20px;
+}
+
 .SelectProduct {
   @include tc-body;
   color: $tc-gray-50;

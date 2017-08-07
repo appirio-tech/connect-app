@@ -29,14 +29,16 @@ function SelectProduct(props) {
     }
   }
   return (
-    <div className="SelectProduct">
-      <div className="header">
+    <div>
+      <div className="header headerSelectProduct">
         <ConnectLogo />
       </div>
-      <h1>Select your project type</h1>
-      <div className="cards">{cards}</div>
-      <div className="footer">
-        Looking for something else? <a href="http://crowdsourcing.topcoder.com/piqued_by_crowdsourcing">Get in touch with us.</a>
+      <div className="SelectProduct">
+        <h1>Select your project type</h1>
+        <div className="cards">{cards}</div>
+        <div className="footer">
+          Looking for something else? <a href="http://crowdsourcing.topcoder.com/piqued_by_crowdsourcing">Get in touch with us.</a>
+        </div>
       </div>
     </div>
   )

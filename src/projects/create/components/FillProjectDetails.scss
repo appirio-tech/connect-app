@@ -14,6 +14,14 @@
   -ms-flex: $number;
   flex: $number;
 }
+.headerFillProjectDetails {
+  margin-top: -28px;
+  display: flex;
+  justify-content: space-between;
+  .tc-btn-default img {
+    margin-right: 10px;
+  }
+}
 
 .FillProjectDetails {
 
