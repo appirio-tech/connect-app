@@ -28,7 +28,8 @@ const products = {
         brief: 'Infographic',
         details: 'Present your data in an easy-to-understand and interesting way',
         icon: 'product-infographic',
-        id: 'infographic'
+        id: 'infographic',
+        disabled: true
       },
       'Other Design': {
         brief: 'other designs',
