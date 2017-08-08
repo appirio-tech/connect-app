@@ -27,10 +27,10 @@ const initialState = {
 // NOTE: We should always update projectNonDirty state whenever we update the project state
 
 const parseErrorObj = (action) => {
-  const data = action.payload.response.data.result
+  const data = _.get(action.payload, 'response.data.result')
   return {
     type: action.type,
-    code: data.status,
+    code: _.get(data, 'status', 500),
     msg: _.get(data, 'content.message', ''),
     details: JSON.parse(_.get(data, 'details', null))
   }

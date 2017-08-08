@@ -3,10 +3,10 @@ import Layout from '../Layout/Layout'
 
 require('./App.scss')
 
-const App = ({ children }) => {
+const App = (props) => {
   return (
-    <Layout>
-      { children }
+    <Layout {...props}>
+      { props.children }
     </Layout>
   )
 }

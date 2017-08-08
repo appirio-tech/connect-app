@@ -25,7 +25,7 @@ class ProjectTypeCard extends React.Component {
         {icon}
         <h1 className="header">{p.type}</h1>
         <div className="details">{p.info}</div>
-        <div className="button">Create a {p.type.toLowerCase()} project</div>
+        <div className="button">Create project</div>
       </div>
     )
   }

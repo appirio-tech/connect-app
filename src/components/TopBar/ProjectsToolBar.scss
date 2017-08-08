@@ -1,0 +1,234 @@
+// this is to include tc styles in the output library
+@import 'tc-includes';
+
+// TODO: move to includes
+$tc-rgba-10: rgba(71,71,79,0.38);
+$tc-rgba-20: rgba(0,0,0,0.17);
+$tc-body-large        : 20px;
+
+.ProjectsToolBar {
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .primary-toolbar {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+
+    .logo-wrapper {
+      margin-left: 4*$base-unit;
+    }
+
+    .welcome-info {
+      margin-right: 4*$base-unit;
+    }
+
+    .actions {
+      display: flex;
+    }
+  }
+
+  .secondary-toolbar {
+    display: flex;
+  }
+
+  .search-widget {
+    width: 595px;
+    height: 30px;
+    margin-top: 15px;
+    display: flex;
+  }
+  .search-filter {
+    width: 97px;
+    margin-left: 2*$base-unit;
+    .tc-btn{
+      display: flex;
+      align-items: center;
+      // justify-content: center;
+      padding: 5px 2*$base-unit 5px 34px;
+      text-align: left;
+      color: $tc-gray-40;
+      background-color: transparent;
+      border-radius: 2px;
+      font-size: 12px;
+      position: relative;
+      &:before{
+        display: block;
+        content: '';
+        width: 14px;
+        height: 16px;
+        position: absolute;
+        top: 7px;
+        left: 10px;
+        background: url("../../styles/i/icon-filter.png") left top no-repeat;
+        background-size: 14px 32px;
+      }
+      &.active{
+        background: $tc-gray-80;
+        box-shadow: inset 0px 1px 3px 0px $tc-rgba-10;
+        &:before{
+          background: url("../../styles/i/icon-filter.png") left -16px no-repeat;
+          background-size: 14px 32px;
+        }
+      }
+    }
+
+    .filter-indicator {
+      width: 15px;
+      height: 15px;
+      margin-left: $base-unit;
+      background-color: $tc-dark-blue-90;
+      border-radius: 26px;
+      color: $tc-white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  /* .bar__search */
+  .bar__search{
+    position: relative;
+    min-height: 60px;
+    padding: 0 20px;
+    background-color: $tc-gray-neutral-light;
+    display: flex;
+    width: 100%;
+    h2{
+      font-size: $tc-body-large;
+      line-height: 60px;
+      color: $tc-black;
+      width: 120px;
+      white-space: nowrap;
+    }
+    .bar-control{
+      width: 120px;
+      text-align: right;
+      min-height: 30px;
+      padding-top: 15px;
+      .tc-btn{
+        display: inline-block;
+        height: 30px;
+        white-space: nowrap;
+      }
+    }
+    .search-panel{
+      flex: 1;
+      margin: 0 auto;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      padding-top: 15px;
+      flex-wrap: wrap;
+      label{
+        @include roboto-medium;
+        width: 83px;
+        display: inline-block;
+        line-height: 30px;
+        height: 30px;
+        font-size: 13px;
+        color: $tc-gray-70;
+        text-align: right;
+      }
+      .search-select-widget{
+        width: 280px;
+        margin-left: 10px;
+        display: inline-block;
+      }
+    }
+    .SwitchButton {
+      .label {
+        padding-right: 10px;
+      }
+    }
+  }
+}
+
+.project-creation-dialog-overlay {
+  position : fixed;
+  top : 0;
+  left : 0;
+  right : 0;
+  bottom : 0;
+  z-index: 21;/* +1 of the z-index of the topbar */
+  background-color: #fafafb; 
+  /*background-color: $tc-gray-neutral-dark;*/
+  overflow-y: scroll;
+
+  .IncompleteProjectConfirmation {
+    position: static;
+    padding-top: 0;
+    height: auto;
+  }
+
+  section.content {
+    padding: 1px 0;
+  }
+
+  .escape-button {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    z-index: 22;/* +1 from z-index of the modal overlay */
+  }
+}
+
+.project-creation-dialog {
+  top: 0px;
+  left: 0px;
+
+  .Wizard .content {
+    margin: 0 auto;
+    padding: 50px 0;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  .TextInput.project-name,
+  .TextInput.project-ref-code {
+    height: 45px;
+  }
+}
+
+/*.project-creation-dialog-close {
+  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+
+  & .x-mark-icon {
+    width: 100%;
+    height: 100%;
+  }
+}*/
+
+
+@media all and (max-width: 1023px) {
+  .bar__search{
+    h2{
+      width: 110px;
+    }
+    .search-panel{
+      flex: 1;
+      margin: 0 auto;
+      text-align: left;
+      display: flex;
+      justify-content: flex-start;
+      label{
+        width: auto;
+        margin-left: 30px;
+        &.first{
+          margin-left: 0;
+        }
+      }
+      .search-select-widget {
+        width: 170px;
+      }
+    }
+  }
+}

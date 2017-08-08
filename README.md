@@ -1,3 +1,21 @@
+# TC Deployment Notes
+_[TC Deployment Notes should always be kept up to date **on the default branch**. Update these notes when changes to this information occur]_
+
+**General Deployment:** This software is deployed to AWS S3 by Travis.ci. It's ultimately delivered through AWS Cloudfront, which is fed from the S3 bucket. There are no EC2 systems involved in the delivery (althought Connect is fed from various micro-services).
+
+**Branches:**
+
+* Any commits to ```dev``` will will trigger a build and deploy to the _dev_ AWS environment
+* Any commits to ```feature/deep-links``` will will trigger a build and deploy to the _dev_ AWS environment
+* Any commits to ```master``` will trigger a build and deploy to the _prod_ AWS environment
+
+**Development Flow:** This repo uses typical Gitflow (```feature/[feature name]```, ```hotfix/[fix name]```, ...etc). Generally changes to prod should be merged from dev to master. Hotfixes should be merged to master and dev at the same time.
+
+**Additional Notes:**
+
+* The _.travis.yml_ file controls the build - see this file if you need to confirm if your commit will deploy anything
+* Travis-ci builds can be easily cancelled - please do so if you accidentally trigger an undesired build
+
 # Customer-App
 
 This repository houses new Customer pages, using React, Redux, and Webpack.

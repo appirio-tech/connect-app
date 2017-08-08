@@ -7,18 +7,18 @@ import { renderComponent, branch, compose, withProps } from 'recompose'
 import { loadProjectDashboard } from '../actions/projectDashboard'
 import { LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
-import PageError from '../../components/PageError/PageError'
+import CoderBot from '../../components/CoderBot/CoderBot'
 
 const page404 = compose(
   withProps({code:404})
 )
-const showPageErrorIfError = (hasError) =>
+const showCoderBotIfError = (hasError) =>
   branch(
     hasError,
-    renderComponent(page404(PageError)), // FIXME pass in props code=400
+    renderComponent(page404(CoderBot)), // FIXME pass in props code=400
     t => t
   )
-const errorHandler = showPageErrorIfError(props => props.error && props.error.type === LOAD_PROJECT_FAILURE)
+const errorHandler = showCoderBotIfError(props => props.error && props.error.type === LOAD_PROJECT_FAILURE)
 
 // This handles showing a spinner while the state is being loaded async
 const spinner = spinnerWhileLoading(props => !props.isLoading)
