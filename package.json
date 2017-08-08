@@ -65,7 +65,7 @@
     "react-text-truncate": "^0.8.3",
     "recompose": "^0.20.2",
     "redux": "^3.7.1",
-    "redux-promise-middleware": "^4.0.0",
+    "redux-promise-middleware": "4.2.1",
     "redux-segment": "^1.6.2",
     "redux-thunk": "^2.1.0",
     "tc-accounts": "git+https://github.com/appirio-tech/accounts-app.git#dev",
