@@ -7149,7 +7149,7 @@
       "dev": true
     },
     "tc-accounts": {
-      "version": "git+https://github.com/appirio-tech/accounts-app.git#9fb47278438cebed63ef648b4c74ff0188e39326",
+      "version": "git+https://github.com/appirio-tech/accounts-app.git#0.0.11",
       "dependencies": {
         "abbrev": {
           "version": "1.1.0",
@@ -7312,25 +7312,13 @@
           "integrity": "sha1-3RtCG/rw8PSokKRTgHSlVYDQy8s=",
           "dev": true
         },
-        "appirio-tech-ng-auth": {
-          "version": "4.2.6",
-          "resolved": "https://registry.npmjs.org/appirio-tech-ng-auth/-/appirio-tech-ng-auth-4.2.6.tgz",
-          "integrity": "sha1-xCW9T6ans536yQ7jZCqv8L0YNco=",
-          "dependencies": {
-            "angular": {
-              "version": "1.4.14",
-              "resolved": "https://registry.npmjs.org/angular/-/angular-1.4.14.tgz",
-              "integrity": "sha1-nQ/q9gzm5SzlD0nuMoZW0eGHXDc="
-            }
-          }
-        },
         "appirio-tech-ng-iso-constants": {
           "version": "1.0.6",
           "resolved": "https://registry.npmjs.org/appirio-tech-ng-iso-constants/-/appirio-tech-ng-iso-constants-1.0.6.tgz",
           "integrity": "sha1-1r3R9xB/KEPjeX0UTgVH8vSkY3M="
         },
         "appirio-tech-ng-ui-components": {
-          "version": "2.2.4",
+          "version": "2.2.5",
           "resolved": "https://registry.npmjs.org/appirio-tech-ng-ui-components/-/appirio-tech-ng-ui-components-2.2.4.tgz",
           "integrity": "sha1-h86LqWrC+BuGjo3z1d5e0Qvt2no=",
           "dependencies": {
