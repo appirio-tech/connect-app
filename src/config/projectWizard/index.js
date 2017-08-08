@@ -26,7 +26,7 @@ const products = {
       },
       Infographic: {
         brief: 'Infographic',
-        details: 'Present your data in an easy-to-understand and interesting way.',
+        details: 'Present your data in an easy-to-understand and interesting way',
         icon: 'product-infographic',
         id: 'infographic'
       },
@@ -46,7 +46,7 @@ const products = {
     subtypes: {
       'Front-end Prototype': {
         brief: '3-20 screens',
-        details: 'Translate designs to a web (HTML/CSS/JavaScript) or mobile prototype.',
+        details: 'Translate designs to a web (HTML/CSS/JavaScript) or mobile prototype',
         icon: 'product-front-end-prototype',
         id: 'visual_prototype'
       },

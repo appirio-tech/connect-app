@@ -37,7 +37,7 @@
 		min-width: $base-unit*86;
 	}
 	.content-container{
-		padding: $base-unit*9 0 0 $base-unit*17;
+		padding: $base-unit*8 0 0 $base-unit*17;
 		.button-bar{
 			display: flex;
 			flex-direction: column;
@@ -59,6 +59,7 @@
 			color: $tc-black;
 			letter-spacing: 0;
 			padding: 0 0 $base-unit*6;
+			text-align: center;
 		}
 		p{
 			@include roboto;
