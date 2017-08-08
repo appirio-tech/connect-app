@@ -193,7 +193,7 @@ class RichTextArea extends React.Component {
           <div className="portrait">
             <Avatar avatarUrl={avatarUrl} userName={authorName} />
           </div>
-          <div className={cn('object', {comment: disableTitle})}>
+          <div className={cn('object', {comment: disableTitle}, 'commentEdit')}>
             <input
               ref="title" value={titleValue}
               className={cn('new-post-title', {'hide-title': disableTitle})}
@@ -237,17 +237,17 @@ class RichTextArea extends React.Component {
                 </div>
                 <div className="tc-btns">
                 { editMode && !isCreating &&
-                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.cancelEdit}>
+                <button className="tc-btn-link postActionButton" onClick={this.cancelEdit}>
                   Cancel
                 </button>
                 }
                 { editMode &&
-                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
+                <button className="tc-btn tc-btn-primary tc-btn-sm postActionButton" onClick={this.onPost} disabled={!canSubmit }>
                   { isCreating ? 'Saving...' : 'Save changes' }
                 </button>
                 }
                 { !editMode &&
-                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
+                <button className="tc-btn tc-btn-primary tc-btn-sm postActionButton" onClick={this.onPost} disabled={!canSubmit }>
                   { isCreating ? 'Posting...' : 'Post' }
                 </button>
                 }

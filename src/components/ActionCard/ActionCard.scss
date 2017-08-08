@@ -14,8 +14,15 @@
     padding: $base-unit*2 $base-unit*6;
   }
 
+  .Dropdown li:not(:last-child) {
+    a {
+      border-bottom: 1px solid $tc-gray-10;
+      display: block;
+    }
+  }
     .edit-toggle-container {
       display: inline;
+      float: right;
 
       .edit-toggle {
         background: url('../../assets/images/ui-16px-1_edit-73.svg') no-repeat 30px 50%;
@@ -31,53 +38,51 @@
         line-height: 20px;
         height: 20px;
         padding: 0 25px 0 25px;
-        float: right;
         cursor: pointer;
       }
       .edit-toggle.for-topic {
         background: url('../../assets/images/arrows-16px-3_small-down.svg') no-repeat 30px 50%;
       }
-      .edit-dropdown {
-        border-radius: $base-unit;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-        padding: 10px 0;
-        position: absolute;
-        background: $tc-white;
-        top: 15px;
-        right: 10px;
-        z-index: 2;
-        display: flex;
-        a {
-          display: block;
-          @include roboto-medium;
-          font-size: $tc-label-md;
-          color: #394146;
-          text-align: left;
-          line-height: 30px;
-          padding: 0 16px 0 10px;
-          &:hover {
-            background: $tc-dark-blue-10;
-          }
-          &.active {
-            background: $tc-dark-blue-10;
-          }
-        }
-        .delete-confirm {
-          justify-content: space-between;
-          padding: 10px 10px 0 10px;
-        }
-        .delete-confirm-btns {
-          float: right;
-          padding-top: 5px;
-
-          button {
-            margin-left: 10px
-          }
-        }
-        .hide {
-          display: none !important
+      .dropdown-menu-list a{
+        text-decoration:none;
+        font-weight:400;
+        padding:0px;
+        &:hover{
+        background:transparent;
         }
       }
+      .dropdown-menu-list li{
+        padding:0px 20px 0 20px;
+        &:hover{
+          background:$tc-gray-10;
+        }
+      }
+
+      
+
+      .pointer-shadow .dropdown-menu-list{
+        transform:translate(-50%,0%);
+      }
+      .pointer-shadow .dropdown-menu-list::before {
+          content: '';
+          display: block;
+          position: absolute;
+          top: -6px;
+          right:14px;
+          margin-left:-24px;
+          width: 12px;
+          height: 12px;
+          background: #FFFFFF;
+          border-right: 1px solid #DCDCE0;
+          border-bottom: 1px solid #DCDCE0;
+          transform: rotate(-135deg);
+          z-index: 999;
+      }
+
+      .pointer-shadow.hide{
+        display:none;
+      }
+
     }
 
   .card-header {
@@ -215,24 +220,12 @@
   // Embedded content overrides -- end
 
   .comment {
-    background: $tc-gray-neutral-light;
     box-shadow: 0px 0px 3px 0px rgba(89, 167, 255, 0.00);
     border-radius: 4px;
     padding: $base-unit*2;
     margin-bottom: -10px;
     width: calc(100% - 40px);
 
-    &:before {
-      content: '';
-      position: absolute;
-      width: 0px;
-      height: 0px;
-      margin-left: -16px;
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-right: 14px solid $tc-gray-neutral-light;
-      transform: rotate(-90deg);
-    }
 
     &.self {
       background: $tc-dark-blue-10;
@@ -257,6 +250,11 @@
       color: #59a7ff;
       line-height: $base-unit*6;
     }
+  }
+
+  .commentEdit{
+    padding-left:0px;
+    padding-right:0px;
   }
 
   .comment-form {
@@ -524,7 +522,7 @@
 
     &:hover,
     &.active {
-      background-color: $tc-gray-neutral-light;
+      background-color: white;
     }
   }
 
@@ -634,4 +632,56 @@
     color: red;
     font-weight: bold;
   }
+}
+
+.delete-post-dialog{
+
+  padding: 50px 40px 50px 40px;
+  top                   : 50%;
+  left                  : 50%;
+  right                 : auto;
+  bottom                : auto;
+  transform             : translate(-50%, -50%);
+  position:absolute;
+  background: white;
+
+  box-shadow: 0 2px 9px 0 rgba(38,38,40,0.15);
+  border-radius: 6px;
+}
+
+.delete-post-dialog-overlay{
+  background   : rgba(38, 38, 40, 0.6);
+  z-index:20;
+  position          : fixed;
+  top               : 0;
+  left              : 0;
+  right             : 0;
+  bottom            : 0;
+}
+
+.modal-title{
+  font-family: Roboto-Medium;
+  font-size: 20px;
+  color: #47474F;
+  line-height: 30px;
+}
+
+.modal-body{
+  margin-top:20px;
+  font-family: Roboto-Regular;
+  font-size: 15px;
+  color: #747480;
+  line-height: 25px;
+}
+
+.action-btn {
+  margin-left:10px;
+}
+
+.action-area{
+  margin-top:45px;
+}
+
+.dropdownContainer{
+  display:inline;
 }
