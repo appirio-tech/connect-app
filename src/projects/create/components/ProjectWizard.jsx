@@ -36,10 +36,11 @@ class ProjectWizard extends Component {
     this.removeIncompleteProject = this.removeIncompleteProject.bind(this)
     this.handleOnCreateProject = this.handleOnCreateProject.bind(this)
     this.handleStepChange = this.handleStepChange.bind(this)
+    this.restoreCommonDetails = this.restoreCommonDetails.bind(this)
   }
 
   componentDidMount() {
-    const { params, onStepChange } = this.props
+    const { params, onStepChange, location } = this.props
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
@@ -62,6 +63,16 @@ class ProjectWizard extends Component {
           updateQuery['type'] = { $set : config[prodCategory].id }
           updateQuery['details'] = { products : { $set: [params.product] } }
           wizardStep = WZ_STEP_FILL_PROJ_DETAILS
+        }
+      }
+      // retrieve refcode from query param
+      const refcode = _.get(location, 'query.refcode')
+      if (refcode) {
+        // if refcode exists, update the updateQuery to set that refcode
+        if (_.get(updateQuery, 'details')) {
+          updateQuery['details']['utm'] = { $set : { code : refcode }}
+        } else {
+          updateQuery['details'] = { utm : { $set : { code : refcode }}}
         }
       }
       this.setState({
@@ -138,11 +149,12 @@ class ProjectWizard extends Component {
   updateProducts(projectType, product) {
     window.scrollTo(0, 0)
     const { onStepChange } = this.props
-    const products = _.get(this.state.project, 'details.products')
-    let updateQuery = { details: { products : { $set : [product] }}}
-    if (!products) {
-      updateQuery = { details: { $set : { products : [product] }}}
-    }
+    // const products = _.get(this.state.project, 'details.products')
+    const updateQuery = { }
+    const detailsQuery = { products : [product] }
+    // restore common fields from dirty project
+    this.restoreCommonDetails(updateQuery, detailsQuery)
+    updateQuery.details = { $set : detailsQuery}
     if (projectType) {
       updateQuery.type = {$set : projectType }
     }
@@ -153,6 +165,29 @@ class ProjectWizard extends Component {
     }, () => {
       typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
     })
+  }
+
+  /**
+   * Restores common details of the project while changing product type.
+   * 
+   * Added for Github issue#1037
+   */
+  restoreCommonDetails(updateQuery, detailsQuery) {
+    const name = _.get(this.state.dirtyProject, 'name')
+    // if name was already entered, restore it
+    if (name) {
+      updateQuery.name = { $set: name }
+    }
+    const description = _.get(this.state.dirtyProject, 'description')
+    // if description was already entered, restore it
+    if (description) {
+      updateQuery.description = { $set: description }
+    }
+    const utm = _.get(this.state.dirtyProject, 'details.utm')
+    // if UTM code was already entered, restore it
+    if (utm) {
+      detailsQuery.utm = { code : utm.code }
+    }
   }
 
   handleProjectChange(change) {
