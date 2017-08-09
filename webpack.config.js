@@ -1,7 +1,7 @@
 require('./node_modules/coffee-script/register')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
-const branch = process.env.TRAVIS_BRANCH
+const branch = process.env.CIRCLE_BRANCH
 
 process.env.ENV = 'DEV' // Default to DEV
 
