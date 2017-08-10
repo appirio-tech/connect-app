@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, { PropTypes } from 'react'
-import { withRouter } from 'react-router'
+import { withRouter, browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { createProjectWithStatus as createProjectAction, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
@@ -139,13 +139,33 @@ class CreateConainer extends React.Component {
         {...this.props}
         createProject={ this.createProject }
         processing={ this.state.creatingProject }
-        onStepChange={ (wizardStep) => this.setState({
-          wizardStep
-        })}
-        onProjectUpdate={ (updatedProject) => this.setState({
-          isProjectDirty: true,
-          updatedProject
-        })}
+        onStepChange={ (wizardStep) => {
+            if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
+              browserHistory.push('/new-project/incomplete')
+            }
+            if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
+              browserHistory.push('/new-project/')
+            }
+            this.setState({
+              wizardStep
+            })
+          }
+        }
+        onProjectUpdate={ (updatedProject, dirty=true) => {
+            const prevProduct = _.get(this.state.updatedProject, 'details.products[0]', null)
+            const product = _.get(updatedProject, 'details.products[0]', null)
+            // compares updated product with previous product to know if user has updated the product
+            if (prevProduct !== product) {
+              if (product) {
+                browserHistory.push('/new-project/' + product)
+              }
+            }
+            this.setState({
+              isProjectDirty: dirty,
+              updatedProject
+            })
+          }
+        }
       />
     )
   }
