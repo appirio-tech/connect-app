@@ -30,6 +30,12 @@ browserHistory.listen(location => {
       window.analytics.page('Project Specification')
     } else if (/^\/$/.test(location.pathname)) {
       window.analytics.page('Connect Home')
+    } else if (/^new-project\/$/.test(location.pathname)) {
+      window.analytics.page('New Project : Select Product')
+    } else if (/^new-project\/incomplete$/.test(location.pathname)) {
+      window.analytics.page('New Project : Incomplete Project')
+    } else if (/^new-project\/[a-zA-Z0-9\_]+$/.test(location.pathname)) {
+      window.analytics.page('New Project : Project Details')
     }
   }
 })
@@ -81,9 +87,13 @@ const validateCreateProjectParams = (nextState, replace, callback) => {
   const product = nextState.params.product
   const productCategory = findProductCategory(product)
   if (product && product.trim().length > 0 && !productCategory) {
-    replace('/404')
+    // workaround to add URL for incomplete project confirmation step
+    // ideally we should have better URL naming which resolves each route with distinct patterns
+    if (product !== 'incomplete') {
+      replace('/404')
+    }
   }
-    callback()
+  callback()
 }
 
 const renderTopBarWithProjectsToolBar = () => <TopBarContainer toolbar={ ProjectsToolBar } />

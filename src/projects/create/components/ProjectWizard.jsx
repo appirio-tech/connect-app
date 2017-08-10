@@ -106,7 +106,7 @@ class ProjectWizard extends Component {
    * It also moves the wizard to the project details step if there exists an incomplete project.
    */
   loadIncompleteProject() {
-    const { onStepChange } = this.props
+    const { onStepChange, onProjectUpdate } = this.props
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
       const incompleteProject = JSON.parse(incompleteProjectStr)
@@ -115,6 +115,7 @@ class ProjectWizard extends Component {
         dirtyProject: update(this.state.dirtyProject, { $merge : incompleteProject }),
         wizardStep: WZ_STEP_FILL_PROJ_DETAILS
       }, () => {
+        typeof onProjectUpdate === 'function' && onProjectUpdate(this.state.dirtyProject, false)
         typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
       })
     }
@@ -149,7 +150,7 @@ class ProjectWizard extends Component {
 
   updateProducts(projectType, product) {
     window.scrollTo(0, 0)
-    const { onStepChange } = this.props
+    const { onStepChange, onProjectUpdate } = this.props
     // const products = _.get(this.state.project, 'details.products')
     const updateQuery = { }
     const detailsQuery = { products : [product] }
@@ -164,6 +165,7 @@ class ProjectWizard extends Component {
       dirtyProject: update(this.state.project, updateQuery),
       wizardStep: WZ_STEP_FILL_PROJ_DETAILS
     }, () => {
+      typeof onProjectUpdate === 'function' && onProjectUpdate(this.state.dirtyProject, false)
       typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
     })
   }

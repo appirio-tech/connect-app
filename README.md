@@ -1,7 +1,7 @@
 # TC Deployment Notes
 _[TC Deployment Notes should always be kept up to date **on the default branch**. Update these notes when changes to this information occur]_
 
-**General Deployment:** This software is deployed to AWS S3 by Travis.ci. It's ultimately delivered through AWS Cloudfront, which is fed from the S3 bucket. There are no EC2 systems involved in the delivery (althought Connect is fed from various micro-services).
+**General Deployment:** This software is deployed to AWS S3 by CircleCI. It's ultimately delivered through AWS Cloudfront, which is fed from the S3 bucket. There are no EC2 systems involved in the delivery (althought Connect is fed from various micro-services).
 
 **Branches:**
 
@@ -13,8 +13,8 @@ _[TC Deployment Notes should always be kept up to date **on the default branch**
 
 **Additional Notes:**
 
-* The _.travis.yml_ file controls the build - see this file if you need to confirm if your commit will deploy anything
-* Travis-ci builds can be easily cancelled - please do so if you accidentally trigger an undesired build
+* The _circle.yml_ file controls the build - see this file if you need to confirm if your commit will deploy anything
+* Circle-ci builds can be easily cancelled - please do so if you accidentally trigger an undesired build
 
 # Customer-App
 
