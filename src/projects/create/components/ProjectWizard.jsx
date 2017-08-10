@@ -8,7 +8,7 @@ import SelectProduct from './SelectProduct'
 import IncompleteProjectConfirmation from './IncompleteProjectConfirmation'
 import FillProjectDetails from './FillProjectDetails'
 import update from 'react-addons-update'
-import { LS_INCOMPLETE_PROJECT } from '../../../config/constants'
+import { LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
 import './ProjectWizard.scss'
 
 const WZ_STEP_INCOMP_PROJ_CONF = 0
@@ -65,14 +65,15 @@ class ProjectWizard extends Component {
           wizardStep = WZ_STEP_FILL_PROJ_DETAILS
         }
       }
-      // retrieve refcode from query param
-      const refcode = _.get(location, 'query.refcode')
-      if (refcode) {
-        // if refcode exists, update the updateQuery to set that refcode
+      // retrieve refCode from query param
+      // TODO give warning after truncating
+      const refCode = _.get(location, 'query.refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
+      if (refCode.trim().length > 0) {
+        // if refCode exists, update the updateQuery to set that refCode
         if (_.get(updateQuery, 'details')) {
-          updateQuery['details']['utm'] = { $set : { code : refcode }}
+          updateQuery['details']['utm'] = { $set : { code : refCode }}
         } else {
-          updateQuery['details'] = { utm : { $set : { code : refcode }}}
+          updateQuery['details'] = { utm : { $set : { code : refCode }}}
         }
       }
       this.setState({
