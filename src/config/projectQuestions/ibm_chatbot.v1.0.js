@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { Icons } from 'appirio-tech-react-components'
+// import { Icons } from 'appirio-tech-react-components'
 import { findProduct} from '../projectWizard'
 
 const isFileRequired = (project, subSections) => {
