@@ -70,6 +70,32 @@ const products = {
         id: 'generic_dev'
       }
     }
+  },
+  'Quality Assurance': {
+    icon: 'product-software-development',
+    info: 'Testing and all the cool stuff it entails.',
+    question: 'What kind of testing are you interested in?',
+    id: 'app_dev',
+    subtypes: {
+      'Crowd Testing': {
+        brief: 'TBD',
+        details: 'Exploratory Testing, Cross browser-device Testing',
+        icon: 'product-front-end-prototype',
+        id: 'crowd_testing'
+      },
+      'Mobility Testing': {
+        brief: 'TBD',
+        details: 'App Certification, Lab on Hire, User Sentiment Analysis',
+        icon: 'product-website',
+        id: 'mobility_testing'
+      },
+      'Website Performance': {
+        brief: 'TBD',
+        details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
+        icon: 'product-app',
+        id: 'website_performance'
+      }
+    }
   }
 }
 
