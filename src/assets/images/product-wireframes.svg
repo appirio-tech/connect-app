@@ -1,1 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="60" viewBox="0 0 64 60"><g fill="none" stroke="#222829" stroke-width="2" stroke-miterlimit="10"><path d="M56 47a7 7 0 1 0-7-7V8H1v39h55z"/><path d="M63 40V8a7 7 0 1 0-14 0M56 12v2M56 16v2M56 20v2M1 51h62v8H1zM11 59v-3M15 59v-3M19 59v-3M23 59v-3M27 59v-3M31 59v-3M35 59v-3M39 59v-3M43 59v-3M47 59v-3M51 59v-3M55 59v-3M59 59v-3M4 55h2M5 13h4M23 13h4M17 13h4M29 13h4M35 13h4M41 13h4M6 17h38v7H6zM6 28h10v6H6zM20 28h10v6H20zM34 28h10v6H34zM5 38h12M5 42h12M19 38h12M19 42h12M33 38h12M33 42h12"/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 44.1 (41455) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-product-wireframes</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="spec" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="specification" transform="translate(-171.000000, -873.000000)">
+            <g id="icon-product-wireframes" transform="translate(171.000000, 873.000000)">
+                <circle id="round-background" fill="#EBEBEB" cx="25" cy="25" r="25"></circle>
+                <g id="icon" transform="translate(12.000000, 11.000000)" stroke="#444444" stroke-width="2" fill="#FFFFFF" stroke-linecap="square">
+                    <rect id="Rectangle-path" x="0" y="0" width="11" height="17"></rect>
+                    <rect id="Rectangle-path" x="0" y="21" width="11" height="9"></rect>
+                    <rect id="Rectangle-path" x="15" y="0" width="11" height="9"></rect>
+                    <rect id="Rectangle-path" x="15" y="13" width="11" height="17"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

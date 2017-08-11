@@ -37,9 +37,21 @@
 		min-width: $base-unit*86;
 	}
 	.content-container{
-		padding: $base-unit*9 0 0 $base-unit*17;
+		padding: $base-unit*7 0 0 $base-unit*17;
 		.button-bar{
+			display: flex;
+			flex-direction: column;
 			padding-top:$base-unit*6;
+
+			a.tc-link {
+				text-align: center;
+			    color: #1a85ff;
+			    @include roboto;
+			    font-size: 13px;
+			    margin: 0 auto;
+			    display: inline-block;
+			    margin-top: 10px;
+			}
 		}
 		h1{
 			@include tc-heading-extra-large;
@@ -47,6 +59,7 @@
 			color: $tc-black;
 			letter-spacing: 0;
 			padding: 0 0 $base-unit*6;
+			text-align: center;
 		}
 		p{
 			@include roboto;
@@ -61,7 +74,7 @@
 			width: $base-unit*50;
 			text-align: center;
 			margin: 0 auto;
-			line-height:$base-unit*7;
+			line-height: 38px;
 			@include roboto-medium;
 			font-size: $tc-label-lg;
 			display: block;

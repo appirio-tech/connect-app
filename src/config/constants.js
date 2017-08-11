@@ -250,4 +250,8 @@ export const AUTOCOMPLETE_TRIGGER_LENGTH = 3
 // Toggle this flag to enable/disable maintenance mode
 export const MAINTENANCE_MODE = false
 
+export const LS_INCOMPLETE_PROJECT = 'incompleteProject'
+
 export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL
+
+export const NEW_PROJECT_PATH = '/new-project'

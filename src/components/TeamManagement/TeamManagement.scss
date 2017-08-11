@@ -1,44 +1,48 @@
 @import "~tc-ui/src/styles/tc-includes";
 // @import "../../styles/variables";
 // TODO where do we add these
-$tc-heading-extra-small	: 14px;
-$tc-body-small      	: 14px;
-$tc-body-extra-small	: 12px;
+$tc-heading-extra-small: 14px;
+$tc-body-small: 14px;
+$tc-body-extra-small: 12px;
 
 @mixin icon($url) {
   background: url("../../assets/images/#{$url}") no-repeat;
-
 }
 
 /* wrap to avoid conflicts */
 .team-management {
-
   .panel {
     background: $tc-white;
     border-radius: $corner-radius;
     padding: $base-unit*2 0;
+
     .panel-title,
     .panel-body,
-    .panel-row{
+    .panel-row {
       padding: $base-unit*2 $base-unit*4;
     }
-    .panel-title{
+
+    .panel-title {
       @include roboto-medium;
       color: $tc-gray-50;
       text-transform: uppercase;
       font-size: $tc-label-sm;
       line-height: $base-unit*3;
     }
-    .panel-body{
-      &.join-project{
+
+    .panel-body {
+      &.join-project {
         justify-content: center;
         background-color: $tc-gray-neutral-light;
       }
     }
-    .panel-row{
+
+    .panel-row {
       @include roboto;
       font-size: $tc-label-lg;
       display: flex;
+      min-height: 60px;
+
       .profile {
         flex-grow: 1;
         margin-left: $base-unit*2;
@@ -59,7 +63,8 @@ $tc-body-extra-small	: 12px;
           margin-top: 6px;
         }
       }
-      .title{
+
+      .title {
         margin-left: $base-unit*2;
         color: $tc-gray-50;
         font-size: $tc-label-sm;
@@ -68,9 +73,12 @@ $tc-body-extra-small	: 12px;
           color: $tc-orange;
         }
       }
-      .buttons{
-        
-        button, a {
+
+      .buttons {
+        display: none;
+
+        button,
+        a {
           display: block;
           float: right;
           border: none;
@@ -82,25 +90,32 @@ $tc-body-extra-small	: 12px;
           background-size: 16px;
           display: inline-block;
           margin-right: -$base-unit;
-          margin-top: $base-unit;
-          &:hover{
+          margin-top: 12px;
+          transition: 250ms all ease-in-out;
+
+          &:hover {
             opacity: 1.0;
           }
         }
-        .btn-user-remove{
+
+        .btn-user-remove {
           // @include icon('user-remove.svg');
         }
-        .btn-promote{
+
+        .btn-promote {
           // @include icon('promote.svg');
         }
-        .btn-leave{
+
+        .btn-leave {
           // @include icon('exit.svg');
         }
       }
-      &.add-team-member{
+
+      &.add-team-member {
         cursor: pointer;
         display: flex;
         align-items: center;
+
         .add-icon {
           padding-top: 10px;
           padding-left: 10px;
@@ -113,14 +128,27 @@ $tc-body-extra-small	: 12px;
           border-radius: 33px;
         }
       }
+
       &:hover,
-      &.active{
+      &.active {
         background-color: $tc-gray-neutral-light;
+
+        .buttons {
+          display: block;
+        }
+      }
+    }
+
+    .panel-row:hover {
+      .title {
+        display: none;
       }
     }
   }
+
   .panel.modal-active {
     position: relative;
+
     .modal-overlay {
       position: absolute;
       top: 0;
@@ -132,30 +160,33 @@ $tc-body-extra-small	: 12px;
       border-radius: $corner-radius;
       z-index: 1;
     }
+
     .modal,
     .panel-title {
       position: relative;
       z-index: 2;
     }
   }
-  .modal{
+
+  .modal {
     background: $tc-gray-neutral-light;
     border-radius: $corner-radius;
     position: relative;
     padding: $base-unit*2 0;
 
-    .btn-close{
+    .btn-close {
       width: 14px;
       height: 14px;
       display: block;
-      position:absolute;
+      position: absolute;
       top: $base-unit*3;
       right: $base-unit*3;
       // @include icon('x-mark-big.svg');
       background-size: $tc-heading-extra-small;
       overflow: hidden;
     }
-    .modal-title{
+
+    .modal-title {
       @include roboto-bold;
       font-size: $tc-label-lg;
       padding: $base-unit*2 $base-unit*4 0 $base-unit*4;
@@ -174,14 +205,15 @@ $tc-body-extra-small	: 12px;
         color: $tc-red;
       }
     }
-    .modal-body{
+
+    .modal-body {
       @include roboto;
       font-size: $tc-label-md;
       line-height: $base-unit * 4;
       margin: $base-unit*2 $base-unit*4;
 
-      input{
-        display:block;
+      input {
+        display: block;
         height: 38px;
         margin: 0 auto;
         color: $tc-black;
@@ -189,27 +221,28 @@ $tc-body-extra-small	: 12px;
         border-color: $tc-gray-20;
         @include tc-label-md;
 
-        &[disabled]{
+        &[disabled] {
           color: $tc-gray-20;
           background: $tc-white;
         }
 
-        &:hover{
+        &:hover {
           border-color: $tc-gray-40;
           background: $tc-gray-neutral-light;
         }
 
-        &:focus{
-          background: $tc-white!important;
-          border-color: $tc-dark-blue-90!important;
+        &:focus {
+          background: $tc-white !important;
+          border-color: $tc-dark-blue-90 !important;
         }
 
-        &.error{
-          border-left: 3px solid $tc-red-70!important;
-          background: $tc-gray-neutral-light!important;
-          &:focus{
-            background: $tc-white!important;
-            border-color: $tc-dark-blue-90!important;
+        &.error {
+          border-left: 3px solid $tc-red-70 !important;
+          background: $tc-gray-neutral-light !important;
+
+          &:focus {
+            background: $tc-white !important;
+            border-color: $tc-dark-blue-90 !important;
           }
         }
       }
@@ -218,13 +251,15 @@ $tc-body-extra-small	: 12px;
         display: none;
       }
 
-      .modal-inline-form{
+      .modal-inline-form {
         display: flex;
         margin-bottom: $base-unit*2;
-        button{
+
+        button {
           margin-left: $base-unit*2;
         }
-        .input-icon-group{
+
+        .input-icon-group {
           position: relative;
           flex-grow: 1;
           height: 40px;
@@ -233,7 +268,8 @@ $tc-body-extra-small	: 12px;
           background: $tc-white;
           border: 1px solid $tc-gray-20;
           box-shadow: inset 0px 0px 2px 0px rgba(183, 183, 183, 0.2);
-          input{
+
+          input {
             flex-grow: 1;
             display: inline-block;
             border: none;
@@ -242,22 +278,30 @@ $tc-body-extra-small	: 12px;
 
 
             /* lowercase username placeholder */
-            &::-webkit-input-placeholder { text-transform:none; }
-            &::-moz-placeholder { text-transform:none; }
+            &::-webkit-input-placeholder {
+              text-transform: none;
+            }
+
+            &::-moz-placeholder {
+              text-transform: none;
+            }
           }
-          .input-icon{
+
+          .input-icon {
             height: 30px;
             margin: 4px;
+
             &:empty {
               flex-shrink: 0;
               width: 30px;
               // @include icon('username-icon.svg');
               background-size: 30px 30px;
-              background-color:$tc-gray-20;
+              background-color: $tc-gray-20;
               background-position: center;
               border-radius: 34px;
             }
-            img{
+
+            img {
               width: 30px;
               height: 30px;
               border-radius: 34px;
@@ -265,20 +309,22 @@ $tc-body-extra-small	: 12px;
           }
         }
       }
+
       .message {
         margin-bottom: $base-unit*4;
-        strong{
+
+        strong {
           @include roboto-bold;
         }
       }
-      .error-message{
+
+      .error-message {
         display: block;
         margin: $base-unit*2 auto;
         @include roboto;
-
         color: $tc-gray-70;
         font-size: $tc-body-small;
-        font-style:italic;
+        font-style: italic;
         border: 1px solid $tc-red-30;
         background: $tc-red-10;
         color: $tc-red-70;
@@ -286,30 +332,35 @@ $tc-body-extra-small	: 12px;
         border-radius: $corner-radius;
         box-sizing: border-box;
         height: 40px;
-        strong{
+
+        strong {
           @include roboto-bold;
         }
       }
       /* Style for dropdown display */
-      .dropdown-demo{
+      .dropdown-demo {
         position: absolute;
         top: 42px;
         left: 0px;
         width: 100%;
       }
     }
-    &.add-team-member{
+
+    &.add-team-member {
       margin-bottom: -$base-unit*2;
     }
+
     .tab-group {
-      width:160px;
+      width: 160px;
       list-style-type: none;
       padding: 0;
       margin: 10px 0 0 0;
-      ul{
+
+      ul {
         display: flex;
-        width:160px;
+        width: 160px;
       }
+
       li {
         flex: initial;
         height: 30px;
@@ -318,39 +369,43 @@ $tc-body-extra-small	: 12px;
         text-align: center;
         @include roboto-medium;
         font-size: $tc-body-extra-small;
-        line-height:18px;
+        line-height: 18px;
         box-shadow: none;
         background-color: $tc-white;
         border: 1px solid $tc-gray-30;
         cursor: pointer;
-        a{
+
+        a {
           color: $tc-gray-80;
           font-weight: normal;
         }
+
         &:hover {
         }
+
         &.active {
           cursor: default;
           background: $tc-dark-blue-90;
           color: $tc-white;
           // box-shadow: inset 0px 1px 3px 0px rgba(71,71,79,0.38);
-          a{
+          a {
           }
         }
-        &:first-child{
+
+        &:first-child {
           border-radius: 2px 0 0 2px;
-          border-right:none;
+          border-right: none;
         }
-        &:last-child{
-          border-radius: 0 2px 2px 0 ;
-          border-left:none;
+
+        &:last-child {
+          border-radius: 0 2px 2px 0;
+          border-left: none;
         }
       }
     }
   }
 
-
-  .member-dropdown{
+  .member-dropdown {
     @include roboto;
     transform: translateY(-100%);
     position: absolute;
@@ -359,8 +414,8 @@ $tc-body-extra-small	: 12px;
     width: 100%;
     margin: 0 auto;
     background: $tc-white;
-    border:1px solid $tc-gray-30;
-    box-shadow: 0px 1px 2px 1px rgba(38,38,40,0.09);
+    border: 1px solid $tc-gray-30;
+    box-shadow: 0px 1px 2px 1px rgba(38, 38, 40, 0.09);
     border-radius: 2px;
     padding: 10px 0 10px 0;
     max-height: 210px;
@@ -373,7 +428,7 @@ $tc-body-extra-small	: 12px;
       flex-shrink: 0;
     }
 
-    .dropdown-cell{
+    .dropdown-cell {
       display: flex;
       align-items: center;
       cursor: pointer;
@@ -381,6 +436,7 @@ $tc-body-extra-small	: 12px;
       &:hover {
         background: $tc-dark-blue-10;
       }
+
       .handle {
         font-size: $tc-label-lg;
         color: $tc-gray-80;

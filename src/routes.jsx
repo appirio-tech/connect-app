@@ -4,9 +4,13 @@ import { withProps } from 'recompose'
 import App from './components/App/App'
 import Home from './components/Home/Home'
 import ConnectTerms from './components/ConnectTerms/ConnectTerms'
-import PageError from './components/PageError/PageError'
+import CoderBot from './components/CoderBot/CoderBot'
 import projectRoutes from './projects/routes.jsx'
+import TopBarContainer from './components/TopBar/TopBarContainer'
+import ProjectsToolBar from './components/TopBar/ProjectsToolBar'
 import RedirectComponent from './components/RedirectComponent'
+import CreateContainer from './projects/create/containers/CreateContainer'
+import { findProductCategory } from './config/projectWizard'
 import {ACCOUNTS_APP_LOGIN_URL, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from './config/constants'
 import { getTopic } from './api/messages'
 import { getFreshToken } from 'tc-accounts'
@@ -26,6 +30,12 @@ browserHistory.listen(location => {
       window.analytics.page('Project Specification')
     } else if (/^\/$/.test(location.pathname)) {
       window.analytics.page('Connect Home')
+    } else if (/^new-project\/$/.test(location.pathname)) {
+      window.analytics.page('New Project : Select Product')
+    } else if (/^new-project\/incomplete$/.test(location.pathname)) {
+      window.analytics.page('New Project : Incomplete Project')
+    } else if (/^new-project\/[a-zA-Z0-9\_]+$/.test(location.pathname)) {
+      window.analytics.page('New Project : Project Details')
     }
   }
 })
@@ -73,18 +83,36 @@ const redirectToProject = (nextState, replace, callback) => {
   })
 }
 
+const validateCreateProjectParams = (nextState, replace, callback) => {
+  const product = nextState.params.product
+  const productCategory = findProductCategory(product)
+  if (product && product.trim().length > 0 && !productCategory) {
+    // workaround to add URL for incomplete project confirmation step
+    // ideally we should have better URL naming which resolves each route with distinct patterns
+    if (product !== 'incomplete') {
+      replace('/404')
+    }
+  }
+  callback()
+}
+
+const renderTopBarWithProjectsToolBar = () => <TopBarContainer toolbar={ ProjectsToolBar } />
+
 export default (
   <Route path="/" onUpdate={() => window.scrollTo(0, 0)} component={ App } onEnter={ redirectToConnect }>
-    <IndexRoute component={Home} />
-    <Route path="/terms" component={ConnectTerms} />
-    <Route path="/login" component={LoginRedirect}/>
+    <IndexRoute components={{ topbar: renderTopBarWithProjectsToolBar, content: Home }} />
+    <Route path="/new-project(/:product)" components={{ topbar: null, content: CreateContainer }} onEnter={ validateCreateProjectParams } />
+    <Route path="/new-project-callback" components={{ topbar: null, content: CreateContainer }} />
+    <Route path="/terms" components={{ topbar: renderTopBarWithProjectsToolBar, content: ConnectTerms }}  />
+    <Route path="/login" components={{ topbar: renderTopBarWithProjectsToolBar, content: LoginRedirect }} />
     <Route path="/discussions/:feedId" onEnter={ redirectToProject } />
 
     {/* Handle /projects/* routes */}
     {projectRoutes}
     {/* {reportsListRoutes} */}
 
-    <Route path="/error" component={ () => <PageError code={500} /> }/>
-    <Route path="*" component={ () => <PageError code={404} /> }/>
+    <Route path="/error" components={{ topbar: renderTopBarWithProjectsToolBar, content: () => <CoderBot code={500} /> }} />
+    <Route path="/404" components={{ topbar: renderTopBarWithProjectsToolBar, content: () => <CoderBot code={404} /> }} />
+    <Route path="*" components={{ topbar: renderTopBarWithProjectsToolBar, content: () => <CoderBot code={404} /> }} />
   </Route>
 )

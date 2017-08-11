@@ -8,57 +8,65 @@ const products = {
       Wireframes: {
         brief: '10-15 screens',
         details: 'Plan and explore the navigation and structure of your app',
-        icon: 'project-wireframes',
+        icon: 'product-wireframes',
         id: 'wireframes'
       },
       'App Visual Design - Concepts': {
         brief: '1-15 screens',
         details: 'Visualize and test your app requirements and ideas',
-        icon: 'project-app-visual-design',
-        id: 'visual_design_concepts'
+        icon: 'product-app-visual-design',
+        id: 'visual_design_concepts',
+        disabled: true
       },
-      'App Visual Design - Production': {
+      'Visual Design': {
         brief: '1-15 screens',
         details: 'Create development-ready designs',
-        icon: 'project-app-visual-design',
+        icon: 'product-app-visual-design',
         id: 'visual_design_prod'
+      },
+      Infographic: {
+        brief: 'Infographic',
+        details: 'Present your data in an easy-to-understand and interesting way',
+        icon: 'product-infographic',
+        id: 'infographic',
+        disabled: true
       },
       'Other Design': {
         brief: 'other designs',
         details: 'Get help with other types of design',
-        icon: 'project-wireframes',
+        icon: 'product-other-design',
         id: 'generic_design'
       }
     }
   },
   Development: {
-    icon: 'product-code',
+    icon: 'product-software-development',
     info: 'Front end prototypes, website and application development, services, and more',
     question: 'What do you need to develop?',
     id: 'app_dev',
     subtypes: {
-      Prototype: {
+      'Front-end Prototype': {
         brief: '3-20 screens',
-        details: 'Translate designs to an HTML/CSS/JavaScript prototype',
-        icon: 'project-prototype-demo',
+        details: 'Translate designs to a web (HTML/CSS/JavaScript) or mobile prototype',
+        icon: 'product-front-end-prototype',
         id: 'visual_prototype'
       },
-      'Website Development': {
+      Website: {
         brief: 'Websites',
         details: 'Build responsive or regular websites',
-        icon: 'project-prototype-technical',
+        icon: 'product-website',
         id: 'website_development'
       },
-      'Application Development': {
+      App: {
         brief: 'Apps',
         details: 'Build apps for mobile, web, or wearables',
-        icon: 'project-development-code',
+        icon: 'product-app',
         id: 'application_development'
       },
-      'Other Development': {
+      'Software Development': {
         brief: 'Tasks or adhoc',
         details: 'Get help with any part of your development cycle',
-        icon: 'project-development-ideation',
+        icon: 'product-software-development',
         id: 'generic_dev'
       }
     }
@@ -78,6 +86,23 @@ export function findProduct(product) {
     for(const prd in products[pType].subtypes) {
       if (products[pType].subtypes[prd].id === product) {
         return prd
+      }
+    }
+  }
+}
+
+export function findProductCategory(product) {
+  if (product === 'generic_dev') {
+    return 'Development'
+  }
+  if (product === 'generic_design') {
+    return 'Design'
+  }
+  for(const pType in products) {
+    for(const prd in products[pType].subtypes) {
+      const subType = products[pType].subtypes[prd]
+      if (subType.id === product && !subType.disabled) {
+        return pType
       }
     }
   }

@@ -1,0 +1,131 @@
+@import 'tc-includes';
+
+@mixin flexBox {
+  display: box;
+  display: flex;
+  flex-direction: row;
+  width: auto;
+}
+
+@mixin flexWidth($number) {
+  -webkit-box-flex: $number;
+  -moz-box-flex: $number;
+  -webkit-flex: $number;
+  -ms-flex: $number;
+  flex: $number;
+}
+.headerFillProjectDetails {
+  margin-top: -28px;
+  display: flex;
+  justify-content: space-between;
+  .tc-btn-default img {
+    margin-right: 10px;
+  }
+}
+
+.FillProjectDetails {
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+
+    h1 {
+      @include tc-heading;
+      width: 100%;
+      text-align: center;
+    }
+
+    button {
+      align-self: flex-end;
+      white-space: nowrap;
+
+      .Icon {
+        vertical-align: middle;
+        margin-right: 2 * $base_unit;
+      }
+    }
+  }
+
+
+  .two-col-content.content {
+
+    .container {
+      @include flexBox;
+      background-color: transparent;
+      display: flex;
+      padding: 0px;
+      width: 1110px;
+      margin: 20px auto;
+      /* .left-area */
+      .left-area {
+        @include flexWidth(2);
+        position: relative;
+        border-radius: 4px;
+        background: $tc-white;
+        box-shadow: 0px 1px 3px 0px $tc-gray-30;
+        padding: 5*$base-unit;
+        margin-bottom: 20px;
+
+        .title {
+          color: $tc-gray-80;
+          @include roboto-bold;
+        }
+
+        .section-footer {
+          margin-top: 4*$base_unit;
+          margin-bottom: 0px;
+          background: none;
+        }
+
+      }
+
+      .right-area {
+        @include flexWidth(1);
+        margin-left: 4*$base_unit;
+
+        .right-area-footer {
+          @include roboto;
+          padding: 10px 40px 0 0;
+          font-size: 13px;
+          line-height: 20px;
+          color: $tc-gray-50;
+          font-style: italic;
+
+          span {
+            float: right;
+          }
+        }
+      }
+    }
+  }
+}
+
+.ProjectWizard {
+  .FillProjectDetails {
+    .header h1{
+      @include roboto-light;
+      font-size: 36px;
+      color: $tc-black;
+      line-height: 40px;
+    }
+    .two-col-content.content .container {
+      margin-top: 0;
+      .left-area .title span,
+      .section-header .section-number {
+        display: none;
+      }
+      .gray-text {
+        @include roboto;
+        font-size: 15px;
+        color: $tc-gray-50;
+        line-height: 25px;
+      }
+      .left-area {
+        padding: 50px;
+      }
+    }
+  }
+  .spec-question-list-item .content-col > h5 span {
+    display: none;
+  }
+}

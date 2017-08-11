@@ -1,0 +1,25 @@
+@import 'tc-includes';
+
+.ProjectWizard {
+  .content {
+    background: transparent;
+    box-shadow: none;
+    width: 100%;
+
+    .ProjectTypeCard {
+      background: $tc-white;
+
+      &.selected {
+        background: $tc-gray-10;
+      }
+    }
+
+    .ProjectSubTypeCard {
+      background: $tc-white;
+
+      &.selected {
+        background: $tc-gray-10;
+      }
+    }
+  }
+}
