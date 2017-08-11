@@ -69,8 +69,6 @@ export function deleteTopic(topicId) {
     })
 }
 
-// ignore resp
-/*eslint-disable no-unused-vars */
 export function addTopicPost(topicId, post) {
   return axios.post(`${CONNECT_MESSAGE_API_URL}/v4/topics/${topicId}/posts`, { post: post.content }, { timeout } )
     .then( resp => {
@@ -80,10 +78,19 @@ export function addTopicPost(topicId, post) {
       }
     })
 }
-/*eslint-enable*/
 
 export function saveTopicPost(topicId, post) {
   return axios.post(`${CONNECT_MESSAGE_API_URL}/v4/topics/${topicId}/posts/${post.id}/edit`, { post: post.content }, { timeout } )
+    .then( resp => {
+      return {
+        topicId,
+        comment : _.get(resp.data, 'result.content', {})
+      }
+    })
+}
+
+export function getTopicPost(topicId, postId) {
+  return axios.get(`${CONNECT_MESSAGE_API_URL}/v4/topics/${topicId}/posts/${postId}`, null, { timeout } )
     .then( resp => {
       return {
         topicId,

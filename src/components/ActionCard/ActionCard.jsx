@@ -32,7 +32,7 @@ class Header extends React.Component{
 
   onEditTopic() {
     this.setState({editTopicMode: true})
-    this.props.onTopicChange(this.props.topicMessage.id, null, null, true)
+    this.props.onEditTopic()
   }
   cancelEditTopic() {
     this.setState({editTopicMode: false})
@@ -49,14 +49,16 @@ class Header extends React.Component{
     if (this.state.editTopicMode) {
       const { topicMessage } = this.props
       const title = this.props.newTitle === null || this.props.newTitle === undefined ? this.props.title : this.props.newTitle
-      const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.content : topicMessage.newContent
+      const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
       return (
         <RichTextArea
             editMode
+            messageId={topicMessage.id}
+            isGettingComment={topicMessage.isGettingComment}
             title={title}
             content={content}
             oldTitle={this.props.title}
-            oldContent={topicMessage.content}
+            oldContent={topicMessage.rawContent}
             onPost={this.onSaveTopic}
             onPostChange={this.onTopicChange}
             isCreating={this.props.isSavingTopic}
@@ -99,6 +101,7 @@ Header.propTypes = {
   title: PropTypes.string.isRequired,
   authorName: PropTypes.string.isRequired,
   avatarUrl: PropTypes.string,
+  onEditTopic: PropTypes.func.isRequired,
   onTopicChange: PropTypes.func.isRequired,
   onSaveTopic: PropTypes.func.isRequired,
   onDeleteTopic: PropTypes.func.isRequired,
