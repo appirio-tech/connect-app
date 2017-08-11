@@ -17,6 +17,10 @@ class Comment extends React.Component {
     this.cancelEdit = this.cancelEdit.bind(this)
   }
 
+  componentWillMount() {
+    this.setState({editMode: this.props.message && this.props.message.editMode})
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({editMode: nextProps.message && nextProps.message.editMode})
   }
@@ -31,7 +35,7 @@ class Comment extends React.Component {
 
   edit() {
     this.setState({editMode: true})
-    this.props.onChange(null, true)
+    this.props.onEdit()
   }
 
   delete() {
@@ -47,13 +51,15 @@ class Comment extends React.Component {
     const {message, avatarUrl, authorName, date, children, active, self, isSaving, hasError, readonly} = this.props
 
     if (this.state.editMode) {
-      const content = message.newContent === null || message.newContent === undefined ? message.content : message.newContent
+      const content = message.newContent === null || message.newContent === undefined ? message.rawContent : message.newContent
       return (
         <RichTextArea
             disableTitle
             editMode
+            messageId={message.id}
+            isGettingComment={message.isGettingComment}
             content={content}
-            oldContent={message.content}
+            oldContent={message.rawContent}
             onPost={this.onSave}
             onPostChange={this.onChange}
             isCreating={isSaving}
@@ -128,6 +134,10 @@ Comment.propTypes = {
    * The message object
    */
   message: PropTypes.any,
+  /**
+   * The onEdit function
+   */
+  onEdit: PropTypes.func,
   /**
    * The onSave function
    */

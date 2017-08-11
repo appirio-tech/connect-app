@@ -48,6 +48,9 @@
     padding: $base-unit*3 0 $base-unit*3 $base-unit*3;
     border-left: $corner-radius * 2 solid $tc-gray-10
   }
+  figure img {
+    max-width: 600px;
+  }
 }
 
 .public-DraftStyleDefault-ul,
@@ -63,8 +66,11 @@
 }
 .public-DraftStyleDefault-pre {
   background: #ddd;
-  padding: 3px;
+  padding: 10px;
   font-family: monospace;
+}
+.public-DraftStyleDefault-block {
+  white-space: pre-wrap;
 }
 
 .draftjs-post {
@@ -86,7 +92,7 @@
   }
   pre {
     background: #ddd;
-    padding: 3px;
+    padding: 10px;
     font-family: monospace;
   }
   strong {
@@ -94,5 +100,8 @@
   }
   em {
     font-style: italic;
+  }
+  img {
+    max-width: 600px;
   }
 }
