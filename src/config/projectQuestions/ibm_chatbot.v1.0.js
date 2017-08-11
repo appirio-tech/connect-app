@@ -210,50 +210,38 @@ export const basicSections = [
             type: 'checkbox-group',
             fieldName: 'details.appDefinition.capabilities',
             options: [
-              {value: 'order_management', label: 'Order Management'},
+              {value: 'order_management', label: 'Order management'},
               {value: 'information', label: 'Information'},
               {value: 'help', label: 'Help'},
               {value: 'complaints', label: 'Complaints'},
               {value: 'billing', label: 'Billing'},
-              {value: 'account_management', label: 'Account Management'},
-              {value: 'custom', label: 'Custom'}
+              {value: 'account_management', label: 'Account management'},
+              {value: 'custom', label: 'Custom (please explain in the Notes)'}
             ],
           },
           {
             icon: 'question',
             required: true,
-            title: 'Will the chatbot need to provide data from any systems to support the capabilities you listed above?',
+            title: 'Will the chatbot need to access data from any systems to support the capabilities you listed above? If so, please list the systems below. (Change to text box)',
             description: '',
-            type: 'radio-group',
-            fieldName: 'details.appDefinition.integrationSystems',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ]
+            type: 'textbox',
+            fieldName: 'details.appDefinition.integrationSystems'
           },
           {
             icon: 'question',
             required: true,
-            title: 'Do you have existing agent scripts?',
+            title: 'Do you have any example agent conversations you can provide? If so, please paste them or any links to documents below (you’ll be able to upload documents later).',
             description: '',
-            type: 'radio-group',
-            fieldName: 'details.appDefinition.existingAgentScripts',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ]
+            type: 'textbox',
+            fieldName: 'details.appDefinition.existingAgentScripts'
           },
           {
             icon: 'question',
             required: true,
-            title: 'Are you planning to transfer conversations to human agents?',
+            title: 'Are you planning to transfer conversations to human agents? If so, please list the agents’ communication tools (e.g., Slack, LiveAgent, Intercom, etc.)',
             description: '',
-            type: 'radio-group',
-            fieldName: 'details.appDefinition.transferToHumanAgents',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ]
+            type: 'textbox',
+            fieldName: 'details.appDefinition.transferToHumanAgents'
           }
         ]
       },
