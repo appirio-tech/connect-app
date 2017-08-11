@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import qs from 'query-string'
 import { Tabs, Tab, TCFormFields } from 'appirio-tech-react-components'
 import _ from 'lodash'
 import SpecQuestions from './SpecQuestions'
@@ -98,6 +99,7 @@ const SpecSection = props => {
     case 'project-name': {
       const refCodeFieldName = 'details.utm.code'
       const refCode = _.get(project, refCodeFieldName, undefined)
+      const queryParamRefCode = qs.parse(window.location.search).refCode
       return (
         <div className="project-name-section">
           { (!project.status || project.status === PROJECT_STATUS_DRAFT) &&
@@ -129,6 +131,7 @@ const SpecSection = props => {
                 wrapperClass="project-refcode"
                 maxLength={ PROJECT_REF_CODE_MAX_LENGTH }
                 theme="paper-form-dotted"
+                disabled={ queryParamRefCode && queryParamRefCode.length > 0 }
               />
               <div className="refcode-desc">
                 Optional

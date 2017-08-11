@@ -11,7 +11,8 @@ import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
   PROJECT_STATUS_IN_REVIEW,
-  ACCOUNTS_APP_REGISTER_URL
+  ACCOUNTS_APP_REGISTER_URL,
+  NEW_PROJECT_PATH
 } from '../../../config/constants'
 
 const page404 = compose(
@@ -141,10 +142,10 @@ class CreateConainer extends React.Component {
         processing={ this.state.creatingProject }
         onStepChange={ (wizardStep) => {
             if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
-              browserHistory.push('/new-project/incomplete')
+              browserHistory.push(NEW_PROJECT_PATH + '/incomplete')
             }
             if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
-              browserHistory.push('/new-project/')
+              browserHistory.push(NEW_PROJECT_PATH +'' + window.location.search)
             }
             this.setState({
               wizardStep
@@ -157,7 +158,7 @@ class CreateConainer extends React.Component {
             // compares updated product with previous product to know if user has updated the product
             if (prevProduct !== product) {
               if (product) {
-                browserHistory.push('/new-project/' + product)
+                browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
               }
             }
             this.setState({
