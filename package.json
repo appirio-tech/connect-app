@@ -9,6 +9,9 @@
     "test": "cross-env NODE_ENV=test mocha  --colors --reporter nyan --compilers js:babel-core/register --require ignore-styles --recursive \"./src/**/*.spec.js\"",
     "test:watch": "watch-run -i -p 'src/**/*' npm run test"
   },
+  "optional": {
+    "fsevents": "*"
+  },
   "devDependencies": {
     "appirio-tech-webpack-config": "appirio-tech/webpack-config.git#feature/connectv2",
     "babel-polyfill": "^6.6.1",
