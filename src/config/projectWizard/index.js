@@ -1,3 +1,6 @@
+import _ from 'lodash'
+import typeToSpecification from '../projectSpecification/typeToSpecification'
+
 const products = {
   Design: {
     icon: 'product-app-visual-design',
@@ -107,3 +110,32 @@ export function findProductCategory(product) {
     }
   }
 }
+
+/**
+ * Finds field from the project creation template
+ *
+ * @param {string} product      id of the product. It should resolve to a template where search is to be made.
+ * @param {string} sectionId    id of the section in the product template
+ * @param {string} subSectionId id of the sub section under the section identified by sectionId
+ * @param {string} fieldName    name of the field to be fetched
+ *
+ * @return {object} field from the template, if found, null otherwise
+ */
+export function getProjectCreationTemplateField(product, sectionId, subSectionId, fieldName) {
+    let specification = 'topcoder.v1'
+    if (product)
+      specification = typeToSpecification[product]
+    let sections = require(`../projectQuestions/${specification}`).basicSections
+    const section = _.find(sections, {id: sectionId})
+    let subSection = null
+    if (subSectionId && section) {
+      subSection = _.find(section.subSections, {id : subSectionId })
+    }
+    if (subSection) {
+      if (subSectionId === 'questions') {
+        return _.find(subSection.questions, { fieldName })
+      }
+      return subSection.fieldName === fieldName ? subSection : null
+    }
+    return null
+  }

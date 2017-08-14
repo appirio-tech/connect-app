@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { unflatten } from 'flat'
 import React, { Component, PropTypes } from 'react'
 
-import config, { findProductCategory } from '../../../config/projectWizard'
+import config, { findProductCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
 import Wizard from '../../../components/Wizard'
 import SelectProduct from './SelectProduct'
 import IncompleteProjectConfirmation from './IncompleteProjectConfirmation'
@@ -155,7 +155,7 @@ class ProjectWizard extends Component {
     const updateQuery = { }
     const detailsQuery = { products : [product] }
     // restore common fields from dirty project
-    this.restoreCommonDetails(updateQuery, detailsQuery)
+    this.restoreCommonDetails(product, updateQuery, detailsQuery)
     updateQuery.details = { $set : detailsQuery}
     if (projectType) {
       updateQuery.type = {$set : projectType }
@@ -175,7 +175,7 @@ class ProjectWizard extends Component {
    * 
    * Added for Github issue#1037
    */
-  restoreCommonDetails(updateQuery, detailsQuery) {
+  restoreCommonDetails(updatedProduct, updateQuery, detailsQuery) {
     const name = _.get(this.state.dirtyProject, 'name')
     // if name was already entered, restore it
     if (name) {
@@ -191,6 +191,32 @@ class ProjectWizard extends Component {
     if (utm) {
       detailsQuery.utm = { code : utm.code }
     }
+    const appDefinitionQuery = {}
+    const goal = _.get(this.state.dirtyProject, 'details.appDefinition.goal')
+    // finds the goal field from the updated product template
+    const goalField = getProjectCreationTemplateField(
+      updatedProduct,
+      'appDefinition',
+      'questions',
+      'details.appDefinition.goal.value'
+    )
+    // if goal was already entered and updated product template has the field, restore it
+    if (goalField && goal) {
+      appDefinitionQuery.goal = goal
+    }
+    const users = _.get(this.state.dirtyProject, 'details.appDefinition.users')
+    // finds the users field from the target product template
+    const usersField = getProjectCreationTemplateField(
+      updatedProduct,
+      'appDefinition',
+      'questions',
+      'details.appDefinition.users.value'
+    )
+    // if users was already entered and updated product template has the field, restore it
+    if (usersField && users) {
+      appDefinitionQuery.users = users
+    }
+    detailsQuery.appDefinition = appDefinitionQuery
   }
 
   handleProjectChange(change) {
