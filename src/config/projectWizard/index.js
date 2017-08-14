@@ -125,7 +125,7 @@ export function getProjectCreationTemplateField(product, sectionId, subSectionId
     let specification = 'topcoder.v1'
     if (product)
       specification = typeToSpecification[product]
-    let sections = require(`../projectQuestions/${specification}`).basicSections
+    const sections = require(`../projectQuestions/${specification}`).basicSections
     const section = _.find(sections, {id: sectionId})
     let subSection = null
     if (subSectionId && section) {
