@@ -68,36 +68,56 @@ const products = {
         details: 'Get help with any part of your development cycle',
         icon: 'product-software-development',
         id: 'generic_dev'
+      },
+        'Crowd Testing': {
+          brief: 'TBD',
+          details: 'Exploratory Testing, Cross browser-device Testing',
+          icon: 'icon-crowd-testing',
+          id: 'crowd_testing'
+        },
+        'Mobility Testing': {
+          brief: 'TBD',
+          details: 'App Certification, Lab on Hire, User Sentiment Analysis',
+          icon: 'icon-mobility-testing',
+          id: 'mobility_testing'
+        },
+        'Website Performance': {
+          brief: 'TBD',
+          details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
+          icon: 'icon-website-performance',
+          id: 'website_performance'
+        }
       }
     }
-  },
-  'Quality Assurance': {
-    icon: 'product-software-development',
+  }
+
+  /*'Quality Assurance': {
+    icon: 'icon-crowd-testing',
     info: 'Testing and all the cool stuff it entails.',
     question: 'What kind of testing are you interested in?',
-    id: 'app_dev',
+    id: 'qaas',
     subtypes: {
       'Crowd Testing': {
         brief: 'TBD',
         details: 'Exploratory Testing, Cross browser-device Testing',
-        icon: 'product-front-end-prototype',
+        icon: 'icon-crowd-testing',
         id: 'crowd_testing'
       },
       'Mobility Testing': {
         brief: 'TBD',
         details: 'App Certification, Lab on Hire, User Sentiment Analysis',
-        icon: 'product-website',
+        icon: 'icon-mobility-testing',
         id: 'mobility_testing'
       },
       'Website Performance': {
         brief: 'TBD',
         details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
-        icon: 'product-app',
+        icon: 'icon-website-performance',
         id: 'website_performance'
       }
     }
   }
-}
+}*/
 
 export default products
 

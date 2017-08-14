@@ -18,7 +18,8 @@ const typeMap = {
   app_dev: 'Design & Development Project',
   generic: 'Work Project', // needed for backward compatibility with templates < v1.1
   visual_design: 'Visual Design Project',
-  visual_prototype: 'Visual Prototype Project'// needed for backward compatibility with templates < v1.1
+  visual_prototype: 'Visual Prototype Project',// needed for backward compatibility with templates < v1.1
+  qaas: 'Quality Assurance as a Service'
 }
 
 /*eslint-enable camelcase */
