@@ -216,6 +216,18 @@ class ProjectWizard extends Component {
     if (usersField && users) {
       appDefinitionQuery.users = users
     }
+    const notes = _.get(this.state.dirtyProject, 'details.appDefinition.notes')
+    // finds the notes field from the target product template
+    const notesField = getProjectCreationTemplateField(
+      updatedProduct,
+      'appDefinition',
+      'notes',
+      'details.appDefinition.notes'
+    )
+    // if notes was already entered and updated product template has the field, restore it
+    if (notesField && notes) {
+      appDefinitionQuery.notes = notes
+    }
     detailsQuery.appDefinition = appDefinitionQuery
   }
 
