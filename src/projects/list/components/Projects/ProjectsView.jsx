@@ -36,13 +36,15 @@ const projectTypeMap = {
   'generic': 'Work Project',
   'visual_design': 'Design',
   'visual_prototype': 'Design & Prototype',
-  'app_dev': 'Full App'
+  'app_dev': 'Full App',
+  'qaas': 'QAAS'
 }
 const projectTypeClassMap = {
   'generic': 'purple-block',
   'visual_design': 'blue-block',
   'visual_prototype': 'blue-block',
-  'app_dev': 'green-block'
+  'app_dev': 'green-block',
+  'qaas': 'blue-block'
 }
 /*eslint-enable */
 

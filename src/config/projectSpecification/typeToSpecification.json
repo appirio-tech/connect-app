@@ -7,5 +7,8 @@
 	"visual_prototype": "app_dev.v1.0",
   "website_development": "app_dev.v1.0",
   "application_development": "app_dev.v1.0",
-  "generic_dev": "app_dev.v1.0"
+  "generic_dev": "app_dev.v1.0",
+	"crowd_testing": "crowd_testing.v1.0",
+	"mobility_testing": "app_dev.v1.0",
+	"website_performance": "app_dev.v1.0"
 }
