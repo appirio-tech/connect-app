@@ -47,11 +47,12 @@ $tc-body-large        : 20px;
       display: flex;
       align-items: center;
       // justify-content: center;
-      padding: 5px 2*$base-unit 5px 34px;
+      padding: 0 2*$base-unit 0 34px;
       text-align: left;
       color: $tc-gray-40;
       background-color: transparent;
       border-radius: 2px;
+      border: 0;
       font-size: 12px;
       position: relative;
       &:before{
@@ -172,6 +173,9 @@ $tc-body-large        : 20px;
     right: 12px;
     top: 12px;
     z-index: 22;/* +1 from z-index of the modal overlay */
+  }
+  .FillProjectDetails .header {
+    margin: 35px 0 0;
   }
 }
 
