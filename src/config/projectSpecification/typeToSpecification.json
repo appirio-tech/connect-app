@@ -10,5 +10,5 @@
   "generic_dev": "app_dev.v1.0",
 	"crowd_testing": "crowd_testing.v1.0",
 	"mobility_testing": "app_dev.v1.0",
-	"website_performance": "app_dev.v1.0"
+	"website_performance": "performance_testing.v1.0"
 }
