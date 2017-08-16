@@ -64,8 +64,10 @@ const sections = [
               {value: 'false', title: 'No'},
             ]
           },
+
           {
             icon: 'question',
+            required: true,
             title: 'Do you have an existing IBM Bluemix account?',
             description: '',
             type: 'radio-group',
@@ -77,7 +79,6 @@ const sections = [
           },
           {
             icon: 'question',
-            required: true,
             title: 'What capabilities does the chatbot need to support?',
             description: '',
             type: 'checkbox-group',
@@ -95,7 +96,7 @@ const sections = [
           {
             icon: 'question',
             required: true,
-            title: 'Do you have any example agent conversations you can provide? If so, please paste them or any links to documents below (you’ll be able to upload documents later).',
+            title: 'Will the chatbot need to access data from any systems to support the capabilities you listed above? If so, please list the systems below. (Change to text box)',
             description: '',
             type: 'textbox',
             fieldName: 'details.appDefinition.integrationSystems'
