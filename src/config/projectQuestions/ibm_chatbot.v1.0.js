@@ -58,7 +58,7 @@ const sections = [
             title: 'Are you an existing Watson Virtual Assistant customer?',
             description: '',
             fieldName: 'details.appDefinition.existingWatsonCustomer',
-            type: 'checkbox',
+            type: 'radio-group',
             options: [
               {value: 'true', title: 'Yes'},
               {value: 'false', title: 'No'},
