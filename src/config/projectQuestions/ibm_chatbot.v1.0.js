@@ -46,7 +46,7 @@ const sections = [
         questions: [
           {
             icon: 'question',
-            title: 'Are you an existing Watson Assistant customer?',
+            title: 'Are you an existing Watson Virtual Assistant customer?',
             description: '',
             fieldName: 'details.appDefinition.existingWatsonCustomer',
             type: 'checkbox',
@@ -181,7 +181,7 @@ export const basicSections = [
           {
             icon: 'question',
             required: true,
-            title: 'Are you an existing Watson Assistant customer?',
+            title: 'Are you an existing Watson Virtual Assistant customer?',
             description: '',
             fieldName: 'details.appDefinition.existingWatsonCustomer',
             type: 'radio-group',
