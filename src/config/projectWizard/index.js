@@ -66,6 +66,13 @@ const products = {
         icon: 'product-app',
         id: 'application_development'
       },
+      'Watson Chatbot': {
+        brief: 'Watson Chatbot',
+        details: 'Build Chatbot using IBM Watson',
+        icon: 'product-chatbot',
+        id: 'watson_chatbot',
+        hidden: true
+      },
       'Software Development': {
         brief: 'Tasks or adhoc',
         details: 'Get help with any part of your development cycle',

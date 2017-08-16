@@ -15,7 +15,8 @@ function SelectProduct(props) {
     for(const subType in subTypes) {
       const item = subTypes[subType]
       // don't render disabled items for selection
-      if (item.disabled) continue
+      // don't render hidden items as well, hidden items can be reached via direct link though
+      if (item.disabled || item.hidden) continue
       const icon = <SVGIconImage filePath={item.icon} />
       cards.push(
         <ProductCard
