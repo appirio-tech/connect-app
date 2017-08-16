@@ -22,7 +22,7 @@ const sections = [
       {
         id: 'projectName',
         required: true,
-        validationError: 'Please provide a name to your project',        
+        validationError: 'Please provide a name for your project',        
         fieldName: 'name',
         description: '',
         title: 'Project Name',
@@ -214,7 +214,7 @@ export const basicSections = [
       {
         id: 'projectName',
         required: true,
-        validationError: 'Please provide a name to your project',        
+        validationError: 'Please provide a name for your project',        
         fieldName: 'name',
         description: '',
         title: 'Project Name',
