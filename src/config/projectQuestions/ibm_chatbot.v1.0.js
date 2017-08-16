@@ -45,7 +45,16 @@ const sections = [
         type: 'questions',
         questions: [
           {
+            id: 'projectInfo',
+            required: true,
+            fieldName: 'description',
+            description: 'Brief Description',
+            title: 'Description',
+            type: 'textbox'
+          },
+          {
             icon: 'question',
+            required: true,
             title: 'Are you an existing Watson Virtual Assistant customer?',
             description: '',
             fieldName: 'details.appDefinition.existingWatsonCustomer',
@@ -54,14 +63,6 @@ const sections = [
               {value: 'true', title: 'Yes'},
               {value: 'false', title: 'No'},
             ]
-          },
-          {
-            id: 'projectInfo',
-            required: true,
-            fieldName: 'description',
-            description: 'Brief Description',
-            title: 'Description',
-            type: 'textbox'
           },
           {
             icon: 'question',
@@ -76,7 +77,8 @@ const sections = [
           },
           {
             icon: 'question',
-            title: 'What capabilities does the chatbot need to support? (check all that apply)',
+            required: true,
+            title: 'What capabilities does the chatbot need to support?',
             description: '',
             type: 'checkbox-group',
             fieldName: 'details.appDefinition.capabilities',
@@ -87,41 +89,32 @@ const sections = [
               {value: 'complaints', label: 'Complaints'},
               {value: 'billing', label: 'Billing'},
               {value: 'account_management', label: 'Account Management'},
-              {value: 'custom', label: 'Custom'}
+              {value: 'custom', label: 'Custom (please explain in the Notes)'}
             ],
           },
           {
             icon: 'question',
-            title: 'Will the chatbot need to provide data from any systems to support the capabilities you listed above?',
+            required: true,
+            title: 'Do you have any example agent conversations you can provide? If so, please paste them or any links to documents below (you’ll be able to upload documents later).',
             description: '',
-            type: 'radio-group',
-            fieldName: 'details.appDefinition.integrationSystems',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ]
+            type: 'textbox',
+            fieldName: 'details.appDefinition.integrationSystems'
           },
           {
             icon: 'question',
-            title: 'Do you have existing agent scripts?',
+            required: true,
+            title: 'Do you have any example agent conversations you can provide? If so, please paste them or any links to documents below (you’ll be able to upload documents later).',
             description: '',
-            type: 'radio-group',
-            fieldName: 'details.appDefinition.existingAgentScripts',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ]
+            type: 'textbox',
+            fieldName: 'details.appDefinition.existingAgentScripts'
           },
           {
             icon: 'question',
-            title: 'Are you planning to transfer conversations to human agents?',
+            required: true,
+            title: 'Are you planning to transfer conversations to human agents? If so, please list the agents’ communication tools (e.g., Slack, LiveAgent, Intercom, etc.)',
             description: '',
-            type: 'radio-group',
-            fieldName: 'details.appDefinition.transferToHumanAgents',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ]
+            type: 'textbox',
+            fieldName: 'details.appDefinition.transferToHumanAgents'
           }
         ]
       },
