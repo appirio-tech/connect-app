@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, { PropTypes } from 'react'
-import { withRouter } from 'react-router'
+import { withRouter, browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { createProjectWithStatus as createProjectAction, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
@@ -11,7 +11,8 @@ import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
   PROJECT_STATUS_IN_REVIEW,
-  ACCOUNTS_APP_REGISTER_URL
+  ACCOUNTS_APP_REGISTER_URL,
+  NEW_PROJECT_PATH
 } from '../../../config/constants'
 
 const page404 = compose(
@@ -139,13 +140,33 @@ class CreateConainer extends React.Component {
         {...this.props}
         createProject={ this.createProject }
         processing={ this.state.creatingProject }
-        onStepChange={ (wizardStep) => this.setState({
-          wizardStep
-        })}
-        onProjectUpdate={ (updatedProject) => this.setState({
-          isProjectDirty: true,
-          updatedProject
-        })}
+        onStepChange={ (wizardStep) => {
+            if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
+              browserHistory.push(NEW_PROJECT_PATH + '/incomplete')
+            }
+            if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
+              browserHistory.push(NEW_PROJECT_PATH +'' + window.location.search)
+            }
+            this.setState({
+              wizardStep
+            })
+          }
+        }
+        onProjectUpdate={ (updatedProject, dirty=true) => {
+            const prevProduct = _.get(this.state.updatedProject, 'details.products[0]', null)
+            const product = _.get(updatedProject, 'details.products[0]', null)
+            // compares updated product with previous product to know if user has updated the product
+            if (prevProduct !== product) {
+              if (product) {
+                browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
+              }
+            }
+            this.setState({
+              isProjectDirty: dirty,
+              updatedProject
+            })
+          }
+        }
       />
     )
   }
