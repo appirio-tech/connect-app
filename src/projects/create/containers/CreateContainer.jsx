@@ -141,31 +141,31 @@ class CreateConainer extends React.Component {
         createProject={ this.createProject }
         processing={ this.state.creatingProject }
         onStepChange={ (wizardStep) => {
-            if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
-              browserHistory.push(NEW_PROJECT_PATH + '/incomplete')
-            }
-            if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
-              browserHistory.push(NEW_PROJECT_PATH +'' + window.location.search)
-            }
-            this.setState({
-              wizardStep
-            })
+          if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
+            browserHistory.push(NEW_PROJECT_PATH + '/incomplete')
           }
+          if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
+            browserHistory.push(NEW_PROJECT_PATH +'' + window.location.search)
+          }
+          this.setState({
+            wizardStep
+          })
+        }
         }
         onProjectUpdate={ (updatedProject, dirty=true) => {
-            const prevProduct = _.get(this.state.updatedProject, 'details.products[0]', null)
-            const product = _.get(updatedProject, 'details.products[0]', null)
+          const prevProduct = _.get(this.state.updatedProject, 'details.products[0]', null)
+          const product = _.get(updatedProject, 'details.products[0]', null)
             // compares updated product with previous product to know if user has updated the product
-            if (prevProduct !== product) {
-              if (product) {
-                browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
-              }
+          if (prevProduct !== product) {
+            if (product) {
+              browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
             }
-            this.setState({
-              isProjectDirty: dirty,
-              updatedProject
-            })
           }
+          this.setState({
+            isProjectDirty: dirty,
+            updatedProject
+          })
+        }
         }
       />
     )

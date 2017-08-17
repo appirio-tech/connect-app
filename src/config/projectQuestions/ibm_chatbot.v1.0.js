@@ -61,7 +61,7 @@ const sections = [
             type: 'radio-group',
             options: [
               {value: 'true', title: 'Yes'},
-              {value: 'false', title: 'No'},
+              {value: 'false', title: 'No'}
             ]
           },
 
@@ -91,7 +91,7 @@ const sections = [
               {value: 'billing', label: 'Billing'},
               {value: 'account_management', label: 'Account Management'},
               {value: 'custom', label: 'Custom (please explain in the Notes)'}
-            ],
+            ]
           },
           {
             icon: 'question',
@@ -181,7 +181,7 @@ export const basicSections = [
             type: 'radio-group',
             options: [
               {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'},
+              {value: 'false', label: 'No'}
             ]
           },
           {
@@ -211,7 +211,7 @@ export const basicSections = [
               {value: 'billing', label: 'Billing'},
               {value: 'account_management', label: 'Account management'},
               {value: 'custom', label: 'Custom (please explain in the Notes)'}
-            ],
+            ]
           },
           {
             icon: 'question',

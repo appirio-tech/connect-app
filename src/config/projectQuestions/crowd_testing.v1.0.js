@@ -173,6 +173,14 @@ const sections = [
         title: 'Notes',
         description: 'Please log any other notes or comments related to scope here.',
         type: 'notes'
+      },
+      {
+        id: 'files',
+        required: isFileRequired,
+        title: (project) => `Project Files (${_.get(project, 'attachments', []).length})` || 'Files',
+        description: '',
+        type: 'files',
+        fieldName: 'attachments'
       }
     ]
   }/*,
