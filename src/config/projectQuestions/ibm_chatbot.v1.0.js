@@ -60,8 +60,8 @@ const sections = [
             fieldName: 'details.appDefinition.existingWatsonCustomer',
             type: 'radio-group',
             options: [
-              {value: 'true', title: 'Yes'},
-              {value: 'false', title: 'No'}
+              {value: 'true', label: 'Yes'},
+              {value: 'false', label: 'No'}
             ]
           },
 
