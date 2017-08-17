@@ -237,7 +237,7 @@ class ProjectWizard extends Component {
       // update only dirtyProject when Form changes the model
       dirtyProject: _.mergeWith({}, this.state.dirtyProject, unflatten(change),
         // customizer to override array value with changed values
-        (objValue, srcValue, key) => {
+        (objValue, srcValue, key) => {// eslint-disable-line no-unused-vars
           if (_.isArray(srcValue)) {
             return srcValue// srcValue contains the changed values from action payload
           }
