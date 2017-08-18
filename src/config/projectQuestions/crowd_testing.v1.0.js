@@ -1,5 +1,7 @@
 import _ from 'lodash'
+import React from 'react'
 import { Icons } from 'appirio-tech-react-components'
+import SVGIconImage from '../../components/SVGIconImage'
 import NumberText from '../../components/NumberText/NumberText'
 import { findProduct} from '../projectWizard'
 
@@ -55,9 +57,9 @@ const sections = [
             fieldName: 'details.appDefinition.testType',
             type: 'tiled-radio-group',
             options: [
-              {value: 'unstructured', title: 'Unstructured', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: ''},
-              {value: 'structured', title: 'Structured', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: ''},
-              {value: 'dontKnow', title: 'Do not know', icon: 'icon-dont-know', iconOptions: { fill: '#00000'}, desc: ''}
+              {value: 'unstructured', title: 'Unstructured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: ''},
+              {value: 'structured', title: 'Structured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-structured', fill: '#00000'}, desc: ''},
+              {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
             ]
           },
           {
@@ -273,9 +275,9 @@ export const basicSections = [
             fieldName: 'details.appDefinition.testType',
             type: 'tiled-radio-group',
             options: [
-              {value: 'unstructured', title: 'Unstructured', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: ''},
-              {value: 'structured', title: 'Structured', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: ''},
-              {value: 'dontKnow', title: 'Do not know', icon: 'icon-dont-know', iconOptions: { fill: '#00000'}, desc: ''}
+              {value: 'unstructured', title: 'Unstructured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: ''},
+              {value: 'structured', title: 'Structured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-structured',  fill: '#00000'}, desc: ''},
+              {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
             ]
           },
           {
@@ -325,7 +327,7 @@ export const basicSections = [
               {value: 'upto5', title: 'configurations', icon: NumberText, iconOptions: { number: '5' }, desc: 'or fewer'},
               {value: 'upTo10', title: 'configurations', icon: NumberText, iconOptions: { number: '10' }, desc: 'or fewer'},
               {value: 'upTo20', title: 'configurations', icon: NumberText, iconOptions: { number: '20' }, desc: 'or fewer'},
-              {value: 'dontKnow', title: 'Do not know', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'We will find the best fit for you.'}
+              {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know',  fill: '#00000'}, desc: 'We will find the best fit for you.'}
             ]
           }
           {
