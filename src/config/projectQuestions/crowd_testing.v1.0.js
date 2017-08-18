@@ -3,6 +3,7 @@ import { Icons } from 'appirio-tech-react-components'
 import NumberText from '../../components/NumberText/NumberText'
 import { findProduct} from '../projectWizard'
 
+
 const isFileRequired = (project, subSections) => {
   const subSection = _.find(subSections, (s) => s.type === 'questions')
   const fields = _.filter(subSection.questions, q => q.type.indexOf('see-attached') > -1)
@@ -62,48 +63,38 @@ const sections = [
           {
             icon: 'question',
             required: true,
-            validationError: 'Please let us know the expected hours',
-            title: 'Approximately how many hours of crowd testing are you \
-                      looking for your app?',
-            description: 'If you know roughly the amount of time you want spent \
-                       testing the application please list it here. If you do \
-                       not know how many hours you require your copilot can \
-                       assist you.',
+            validationError: 'Please let us know if you have test cases.',
+            title: 'Do you have test cases written?',
+            description: 'Do you have test cases you would like executed? These are essential when running structured testing and optional for unstructured testing. If you are planning a structured test cycle and do not have test cases do not worry, we can help!',
             fieldName: 'details.appDefinition.expectedHours',
-            type: 'tiled-radio-group',
+            type: 'radio-group',
             options: [
-              {value: 'upto100', title: 'hours', icon: NumberText, iconOptions: { number: '100' }, desc: 'or fewer'},
-              {value: 'upTo250', title: 'hours', icon: NumberText, iconOptions: { number: '250' }, desc: 'or fewer'},
-              {value: 'upTo500', title: 'hours', icon: NumberText, iconOptions: { number: '500' }, desc: 'or fewer'},
-              {value: 'dontKnow', title: 'Do not know', icon: 'icon-dont-know', iconOptions: { fill: '#00000'}, desc: 'or not applicable'}
+              {value: 'true', label: 'Yes I have test cases.'},
+              {value: 'false', label: 'No I do not have test cases.'}
             ]
           },
           {
             icon: 'question',
-            title: 'In which geographies would you like to test?',
-            description: '',
-            type: 'checkbox-group',
-            options: [
-              {value: 'africa', label: 'Africa'},
-              {value: 'asia', label: 'Asia'},
-              {value: 'australia', label: 'Australia'},
-              {value: 'europe', label: 'Europe'},
-              {value: 'northAmerica', label: 'North America'},
-              {value: 'southAmerica', label: 'South America'}
-            ],
-            fieldName: 'details.appDefinition.geographies'
+            title: 'Please tell us about your users.',
+            description: 'Please share information about your end users. Where are they from? What is their goal? This information can help you find the best testers for your application.',
+            type: 'textbox',
+            fieldName: 'details.appDefinition.userInfo'
           },
           {
             icon: 'question',
-            title: 'Approximately how many platform/device - browser configurations to be tested?',
-            description: '',
-            fieldName: 'details.appDefinition.browserConfigurations',
+            title: 'Which is your primary device target?',
+            description: 'Select only the device that you need to develop for. \
+                          In most cases limiting the scope of your project would result \
+                          in better final result. Topcoder recommends to always start \
+                          with the mobile phone view and expand to other devices as your \
+                          app matures.',
+            fieldName: 'details.appDefinition.primaryTarget',
             type: 'tiled-radio-group',
             options: [
-              {value: 'upto5', title: 'configurations', icon: NumberText, iconOptions: { number: '5' }, desc: 'or fewer'},
-              {value: 'upTo10', title: 'configurations', icon: NumberText, iconOptions: { number: '10' }, desc: 'or fewer'},
-              {value: 'upTo20', title: 'configurations', icon: NumberText, iconOptions: { number: '20' }, desc: 'or fewer'},
-              {value: 'dontKnow', title: 'Do not know', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'We will find the best fit for you.'}
+              {value: 'phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
           }
         ]
@@ -290,38 +281,41 @@ export const basicSections = [
           {
             icon: 'question',
             required: true,
-            validationError: 'Please let us know the expected hours',
-            title: 'Approximately how many hours of crowd testing are you \
-                      looking for your app?',
-            description: 'If you know roughly the amount of time you want spent \
-                       testing the application please list it here. If you do \
-                       not know how many hours you require your copilot can \
-                       assist you.',
+            validationError: 'Please let us know if you have test cases.',
+            title: 'Do you have test cases written?',
+            description: 'Do you have test cases you would like executed? These are essential when running structured testing and optional for unstructured testing. If you are planning a structured test cycle and do not have test cases do not worry, we can help!',
             fieldName: 'details.appDefinition.expectedHours',
-            type: 'tiled-radio-group',
+            type: 'radio-group',
             options: [
-              {value: 'upto100', title: 'hours', icon: NumberText, iconOptions: { number: '100' }, desc: 'or fewer'},
-              {value: 'upTo250', title: 'hours', icon: NumberText, iconOptions: { number: '250' }, desc: 'or fewer'},
-              {value: 'upTo500', title: 'hours', icon: NumberText, iconOptions: { number: '500' }, desc: 'or fewer'},
-              {value: 'dontKnow', title: 'Do not know', icon: 'icon-dont-know', iconOptions: { fill: '#00000'}, desc: 'or not applicable'}
+              {value: 'true', label: 'Yes I have test cases.'},
+              {value: 'false', label: 'No I do not have test cases.'}
             ]
           },
           {
             icon: 'question',
-            title: 'In which geographies would you like to test?',
-            description: '',
-            type: 'checkbox-group',
-            options: [
-              {value: 'africa', label: 'Africa'},
-              {value: 'asia', label: 'Asia'},
-              {value: 'australia', label: 'Australia'},
-              {value: 'europe', label: 'Europe'},
-              {value: 'northAmerica', label: 'North America'},
-              {value: 'southAmerica', label: 'South America'}
-            ],
-            fieldName: 'details.appDefinition.geographies'
+            title: 'Please tell us about your users.',
+            description: 'Please share information about your end users. Where are they from? What is their goal? This information can help you find the best testers for your application.',
+            type: 'textbox',
+            fieldName: 'details.appDefinition.userInfo'
           },
           {
+            icon: 'question',
+            title: 'Which is your primary device target?',
+            description: 'Select only the device that you need to develop for. \
+                          In most cases limiting the scope of your project would result \
+                          in better final result. Topcoder recommends to always start \
+                          with the mobile phone view and expand to other devices as your \
+                          app matures.',
+            fieldName: 'details.appDefinition.primaryTarget',
+            type: 'tiled-radio-group',
+            options: [
+              {value: 'phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+            ]
+          }
+          /*{
             icon: 'question',
             title: 'Approximately how many platform/device - browser configurations to be tested?',
             description: '',
@@ -334,7 +328,7 @@ export const basicSections = [
               {value: 'dontKnow', title: 'Do not know', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'We will find the best fit for you.'}
             ]
           }
-          /*{
+          {
             id: 'projectInfo',
             required: true,
             validationError: 'Please provide any user accounts \
