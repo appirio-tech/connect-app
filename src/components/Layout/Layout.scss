@@ -3,9 +3,11 @@
 .main-wrapper {
   min-height: calc(100vh - 60px); // header and footer width
   padding-top: 60px;
+  transition: all 150ms ease-in-out;
 
   &.with-filters {
     padding-top: 120px;
+    min-height: calc(100vh - 120px);
   }
 }
 
