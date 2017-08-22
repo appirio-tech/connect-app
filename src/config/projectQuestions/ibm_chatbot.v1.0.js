@@ -95,15 +95,13 @@ const sections = [
           },
           {
             icon: 'question',
-            required: true,
-            title: 'Will the chatbot need to access data from any systems to support the capabilities you listed above? If so, please list the systems below. (Change to text box)',
+            title: 'Will the chatbot need to access data from any systems to support the capabilities you listed above? If so, please list the systems below.',
             description: '',
             type: 'textbox',
             fieldName: 'details.appDefinition.integrationSystems'
           },
           {
             icon: 'question',
-            required: true,
             title: 'Do you have any example agent conversations you can provide? If so, please paste them or any links to documents below (you’ll be able to upload documents later).',
             description: '',
             type: 'textbox',
@@ -111,8 +109,7 @@ const sections = [
           },
           {
             icon: 'question',
-            required: true,
-            title: 'Are you planning to transfer conversations to human agents? If so, please list the agents’ communication tools (e.g., Slack, LiveAgent, Intercom, etc.)',
+            title: 'Are you planning to transfer conversations to human agents? If so, please list the agents’ communication tools (e.g., Slack, LiveAgent, Intercom, etc.).',
             description: '',
             type: 'textbox',
             fieldName: 'details.appDefinition.transferToHumanAgents'
@@ -216,7 +213,7 @@ export const basicSections = [
           {
             icon: 'question',
             required: true,
-            title: 'Will the chatbot need to access data from any systems to support the capabilities you listed above? If so, please list the systems below. (Change to text box)',
+            title: 'Will the chatbot need to access data from any systems to support the capabilities you listed above? If so, please list the systems below.',
             description: '',
             type: 'textbox',
             fieldName: 'details.appDefinition.integrationSystems'
@@ -232,7 +229,7 @@ export const basicSections = [
           {
             icon: 'question',
             required: true,
-            title: 'Are you planning to transfer conversations to human agents? If so, please list the agents’ communication tools (e.g., Slack, LiveAgent, Intercom, etc.)',
+            title: 'Are you planning to transfer conversations to human agents? If so, please list the agents’ communication tools (e.g., Slack, LiveAgent, Intercom, etc.).',
             description: '',
             type: 'textbox',
             fieldName: 'details.appDefinition.transferToHumanAgents'
