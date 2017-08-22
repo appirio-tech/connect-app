@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import './FooterV2.scss'
 
 const FooterV2 = () => (
@@ -11,7 +12,7 @@ const FooterV2 = () => (
       <li><a href="https://connect.topcoder.com/terms">Terms</a></li>
     </ul>
     <div className="footer-copyright">
-      Topcoder © 2016.
+      Topcoder © { moment().format('YYYY') }.
     </div>
   </div>
 )
