@@ -12,7 +12,7 @@ const FooterV2 = () => (
       <li><a href="https://connect.topcoder.com/terms">Terms</a></li>
     </ul>
     <div className="footer-copyright">
-      Topcoder © { moment().format('YYYY') }.
+      © Topcoder { moment().format('YYYY') }
     </div>
   </div>
 )
