@@ -43,7 +43,8 @@ export default function(state = {}, action) {
     return Object.assign({}, state, {
       project: action.payload
     })
-  case UPDATE_PROJECT_SUCCESS:
+
+  case UPDATE_PROJECT_SUCCESS: {
     const prevStatus = _.get(state, 'project.status', '')
     if (action.payload.status === PROJECT_STATUS_IN_REVIEW
       && prevStatus && prevStatus !== PROJECT_STATUS_IN_REVIEW) {
@@ -54,6 +55,8 @@ export default function(state = {}, action) {
     return Object.assign({}, state, {
       project: action.payload
     })
+  }
+  
   case REMOVE_PROJECT_MEMBER_SUCCESS:
     // show notification message if user leaving a project
     if (action.meta.isUserLeaving) {
