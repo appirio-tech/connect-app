@@ -175,9 +175,7 @@ $tc-body-large: 20px;
   transition: all .250ms ease-in-out;
 
   .IncompleteProjectConfirmation {
-    position: static;
-    padding-top: 0;
-    height: auto;
+    margin-top: 0px;
   }
 
   section.content {
@@ -201,10 +199,6 @@ $tc-body-large: 20px;
   left: 0px;
 
   .Wizard .content {
-    margin: 0 auto;
-    padding: 50px 0;
-    width: 100%;
-    min-height: 100vh;
   }
 
   .TextInput.project-name,
