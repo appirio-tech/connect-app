@@ -6,6 +6,7 @@ import {
   CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE,
   UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
+  LOAD_PROJECT_SUCCESS,
   // Attachments
   ADD_PROJECT_ATTACHMENT_SUCCESS, ADD_PROJECT_ATTACHMENT_FAILURE,
   UPDATE_PROJECT_ATTACHMENT_SUCCESS, UPDATE_PROJECT_ATTACHMENT_FAILURE,
@@ -20,7 +21,9 @@ import {
   SAVE_PROJECT_FEED_FAILURE,
   SAVE_PROJECT_FEED_COMMENT_FAILURE,
   DELETE_PROJECT_FEED_FAILURE,
-  DELETE_PROJECT_FEED_COMMENT_FAILURE
+  DELETE_PROJECT_FEED_COMMENT_FAILURE,
+  // Project status
+  PROJECT_STATUS_IN_REVIEW
 } from '../config/constants'
 /* eslint-enable no-unused-vars */
 
@@ -36,13 +39,21 @@ export default function(state = {}, action) {
     Alert.success('Project deleted.')
     return state
 
+  case LOAD_PROJECT_SUCCESS:
+    return Object.assign({}, state, {
+      project: action.payload
+    })
   case UPDATE_PROJECT_SUCCESS:
-    if (action.payload.status === 'in_review') {
+    const prevStatus = _.get(state, 'project.status', '')
+    if (action.payload.status === PROJECT_STATUS_IN_REVIEW
+      && prevStatus && prevStatus !== PROJECT_STATUS_IN_REVIEW) {
       Alert.success('Project submitted.')
     } else {
       Alert.success('Project updated.')
     }
-    return state
+    return Object.assign({}, state, {
+      project: action.payload
+    })
   case REMOVE_PROJECT_MEMBER_SUCCESS:
     // show notification message if user leaving a project
     if (action.meta.isUserLeaving) {
