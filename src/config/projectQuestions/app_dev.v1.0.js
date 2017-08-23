@@ -276,7 +276,7 @@ export const basicSections = [
           {
             id: 'projectInfo',
             required: true,
-            validationError: 'Please provide description',
+            validationError: 'Please provide a description',
             fieldName: 'description',
             description: 'Brief Description',
             title: 'Description',
