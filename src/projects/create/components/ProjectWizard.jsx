@@ -216,6 +216,18 @@ class ProjectWizard extends Component {
     if (usersField && users) {
       appDefinitionQuery.users = users
     }
+    const notes = _.get(this.state.dirtyProject, 'details.appDefinition.notes')
+    // finds the notes field from the target product template
+    const notesField = getProjectCreationTemplateField(
+      updatedProduct,
+      'appDefinition',
+      'notes',
+      'details.appDefinition.notes'
+    )
+    // if notes was already entered and updated product template has the field, restore it
+    if (notesField && notes) {
+      appDefinitionQuery.notes = notes
+    }
     detailsQuery.appDefinition = appDefinitionQuery
   }
 
@@ -223,7 +235,14 @@ class ProjectWizard extends Component {
     const { onProjectUpdate } = this.props
     this.setState({
       // update only dirtyProject when Form changes the model
-      dirtyProject: _.merge({}, this.state.dirtyProject, unflatten(change)),
+      dirtyProject: _.mergeWith({}, this.state.dirtyProject, unflatten(change),
+        // customizer to override array value with changed values
+        (objValue, srcValue, key) => {// eslint-disable-line no-unused-vars
+          if (_.isArray(srcValue)) {
+            return srcValue// srcValue contains the changed values from action payload
+          }
+        }
+      ),
       isProjectDirty: true
     }, () => {
       typeof onProjectUpdate === 'function' && onProjectUpdate(this.state.dirtyProject)

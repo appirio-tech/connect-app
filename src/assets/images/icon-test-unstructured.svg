@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.1 (44463) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-test-unstructured</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Transitional-project-creation" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon-test-unstructured">
+            <rect id="Rectangle-path" stroke="#262628" stroke-width="2" stroke-linecap="square" x="19" y="2" width="10" height="10"></rect>
+            <rect id="Rectangle-path-Copy" stroke="#262628" stroke-width="2" stroke-linecap="square" x="19" y="19" width="10" height="10"></rect>
+            <path d="M25,40 L25,35 L23,35 L23,40 L18,40 L18,42 L23,42 L23,47 L25,47 L25,42 L30,42 L30,40 L25,40 Z" id="Combined-Shape" fill="#262628"></path>
+            <path d="M41,40 L41,35 L39,35 L39,40 L34,40 L34,42 L39,42 L39,47 L41,47 L41,42 L46,42 L46,40 L41,40 Z" id="Combined-Shape-Copy-3" fill="#262628"></path>
+            <path d="M9,23 L9,18 L7,18 L7,23 L2,23 L2,25 L7,25 L7,30 L9,30 L9,25 L14,25 L14,23 L9,23 Z" id="Combined-Shape-Copy" fill="#262628"></path>
+            <path d="M41,7 L41,2 L39,2 L39,7 L34,7 L34,9 L39,9 L39,14 L41,14 L41,9 L46,9 L46,7 L41,7 Z" id="Combined-Shape-Copy-2" fill="#262628"></path>
+            <circle id="Oval-6" stroke="#262628" stroke-width="2" stroke-linecap="square" cx="40" cy="24" r="5"></circle>
+            <circle id="Oval-6-Copy" stroke="#262628" stroke-width="2" stroke-linecap="square" cx="8" cy="40" r="5"></circle>
+            <circle id="Oval-6-Copy-2" stroke="#262628" stroke-width="2" stroke-linecap="square" cx="7" cy="7" r="5"></circle>
+        </g>
+    </g>
+</svg>

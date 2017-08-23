@@ -28,6 +28,7 @@
   .header {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 30px;
 
     h1 {
       @include tc-heading;

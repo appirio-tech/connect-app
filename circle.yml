@@ -19,7 +19,7 @@ compile:
 
 deployment:
   development:
-    branch: dev
+    branch: [dev]
     owner: appirio-tech
     commands:
       - ./deploy.sh DEV
