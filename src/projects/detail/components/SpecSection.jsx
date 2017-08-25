@@ -122,7 +122,7 @@ const SpecSection = props => {
               <h5 className="project-name">{project.name}</h5>
             </div>
           }
-          { (!project.status || project.status === PROJECT_STATUS_DRAFT) &&
+          { (!queryParamRefCode && (!project.status || project.status === PROJECT_STATUS_DRAFT)) &&
             <div className="textinput-refcode">
               <TCFormFields.TextInput
                 name={refCodeFieldName}
@@ -138,7 +138,7 @@ const SpecSection = props => {
               </div>
             </div>
           }
-          { (refCode && project.status && project.status !== PROJECT_STATUS_DRAFT) &&
+          { (!queryParamRefCode && project.status && project.status !== PROJECT_STATUS_DRAFT) &&
             <div className="read-only-refcode">
               <h5 className="project-refcode">{ refCode }</h5>
               <div className="refcode-desc">
