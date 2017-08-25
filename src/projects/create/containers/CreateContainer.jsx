@@ -93,9 +93,10 @@ class CreateConainer extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount() {    
     // sets route leave hook to show unsaved changes alert and persist incomplete project
     this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
+    
     // sets window unload hook to show unsaved changes alert and persist incomplete project
     window.addEventListener('beforeunload', this.onLeave)
   }
@@ -105,15 +106,18 @@ class CreateConainer extends React.Component {
   }
 
   // stores the incomplete project in local storage
-  onLeave(e) {
-    const { wizardStep, isProjectDirty, creatingProject } = this.state
+  onLeave(e) {// eslint-disable-line no-unused-vars
+    const { wizardStep, isProjectDirty } = this.state
     if (wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS && isProjectDirty) {// Project Details step
       console.log('saving incomplete project')
       window.localStorage.setItem(LS_INCOMPLETE_PROJECT, JSON.stringify(this.state.updatedProject))
     }
-    if (isProjectDirty && !creatingProject) {
-      return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
-    }
+    // commenting alerts for the page unload and route change hooks as discussed
+    // https://github.com/appirio-tech/connect-app/issues/1037#issuecomment-324732052
+
+    // if (isProjectDirty && !creatingProject) {
+    //   return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
+    // }
   }
 
   /**
