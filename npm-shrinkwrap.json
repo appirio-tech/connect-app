@@ -209,7 +209,7 @@
       }
     },
     "appirio-tech-react-components": {
-      "version": "github:appirio-tech/react-components#2752f92d27dda3a88a89abb316f4a4e87d8165ac",
+      "version": "github:appirio-tech/react-components#feature/connectv2",
       "requires": {
         "appirio-tech-api-schemas": "5.0.70",
         "appirio-tech-client-app-layer": "0.1.3",
