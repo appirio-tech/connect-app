@@ -151,7 +151,7 @@
       }
     },
     "appirio-tech-react-components": {
-      "version": "github:appirio-tech/react-components#2752f92d27dda3a88a89abb316f4a4e87d8165ac"
+      "version": "github:appirio-tech/react-components#feature/connectv2"
     },
     "appirio-tech-webpack-config": {
       "version": "github:appirio-tech/webpack-config#74b7e9ebf63ea5a39f78dd02c5f7055549954857",
