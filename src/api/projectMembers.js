@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
-import { TC_API_URL } from '../config/constants'
+import { TC_API_URL, CONNECT_MESSAGE_API_URL } from '../config/constants'
 
 export function getMembersById (userIds) {
   const _userIdArr = _.map(userIds, _id => `userId:${_id}`)
@@ -29,7 +29,9 @@ export function addProjectMember(projectId, newMember) {
   const url = `${TC_API_URL}/v4/projects/${projectId}/members/`
   return axios.post(url, { param: newMember})
   .then(resp => {
-    return resp.data.result.content
+    return axios.put(`${CONNECT_MESSAGE_API_URL}/v4/topics/syncUsers`,
+    { reference: 'project', referenceId: projectId })
+    .then(() => resp.data.result.content)
   })
 }
 
@@ -42,11 +44,23 @@ export function updateProjectMember(projectId, memberId, updatedProps) {
   })
 }
 
-export function removeProjectMember(projectId, memberId) {
+export function removeProjectMember(projectId, memberId, isUserLeaving) {
   const url = `${TC_API_URL}/v4/projects/${projectId}/members/${memberId}/`
-  return axios.delete(url)
-  .then(resp => { // eslint-disable-line no-unused-vars
-    // return the member id just removed
-    return memberId
+  let promise = { then: fn => fn() }
+  if (isUserLeaving) {
+    promise = axios.put(`${CONNECT_MESSAGE_API_URL}/v4/topics/syncUsers`,
+      { reference: 'project', referenceId: projectId, isUserLeaving })
+  }
+  return promise.then(() => {
+    return axios.delete(url)
+    .then(() => {
+      if (!isUserLeaving) {
+        return axios.put(`${CONNECT_MESSAGE_API_URL}/v4/topics/syncUsers`,
+          { reference: 'project', referenceId: projectId })
+        .then(() => memberId)
+      }
+      // return the member id just removed
+      return memberId
+    })
   })
 }

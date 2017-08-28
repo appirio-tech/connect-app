@@ -235,7 +235,14 @@ class ProjectWizard extends Component {
     const { onProjectUpdate } = this.props
     this.setState({
       // update only dirtyProject when Form changes the model
-      dirtyProject: _.merge({}, this.state.dirtyProject, unflatten(change)),
+      dirtyProject: _.mergeWith({}, this.state.dirtyProject, unflatten(change),
+        // customizer to override array value with changed values
+        (objValue, srcValue, key) => {// eslint-disable-line no-unused-vars
+          if (_.isArray(srcValue)) {
+            return srcValue// srcValue contains the changed values from action payload
+          }
+        }
+      ),
       isProjectDirty: true
     }, () => {
       typeof onProjectUpdate === 'function' && onProjectUpdate(this.state.dirtyProject)

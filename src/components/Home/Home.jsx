@@ -30,7 +30,7 @@ class Home extends React.Component {
                 <p>Companies and agencies, from the world’s largest to the Valley’s newest, use crowdsourcing to deliver high-quality assets, faster.</p>
                 <p>Connect guides you through the entire crowdsourcing process, from entering requirements to receiving final deliverables, and it facilitates collaboration between your project team and Topcoder community members working on your project.</p>
                 <div className="button-bar">
-                    <Link to='new-project' className="tc-btn tc-btn-primary">Start a project</Link>
+                    <Link to="new-project" className="tc-btn tc-btn-primary">Start a project</Link>
                     <a href={ learnMoreUrl } className="tc-link">Learn more about Connect</a>
                 </div>
             </div>

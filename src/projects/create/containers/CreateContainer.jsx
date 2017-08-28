@@ -93,9 +93,10 @@ class CreateConainer extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount() {    
     // sets route leave hook to show unsaved changes alert and persist incomplete project
     this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
+    
     // sets window unload hook to show unsaved changes alert and persist incomplete project
     window.addEventListener('beforeunload', this.onLeave)
   }
@@ -105,15 +106,18 @@ class CreateConainer extends React.Component {
   }
 
   // stores the incomplete project in local storage
-  onLeave(e) {
-    const { wizardStep, isProjectDirty, creatingProject } = this.state
+  onLeave(e) {// eslint-disable-line no-unused-vars
+    const { wizardStep, isProjectDirty } = this.state
     if (wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS && isProjectDirty) {// Project Details step
       console.log('saving incomplete project')
       window.localStorage.setItem(LS_INCOMPLETE_PROJECT, JSON.stringify(this.state.updatedProject))
     }
-    if (isProjectDirty && !creatingProject) {
-      return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
-    }
+    // commenting alerts for the page unload and route change hooks as discussed
+    // https://github.com/appirio-tech/connect-app/issues/1037#issuecomment-324732052
+
+    // if (isProjectDirty && !creatingProject) {
+    //   return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
+    // }
   }
 
   /**
@@ -141,31 +145,31 @@ class CreateConainer extends React.Component {
         createProject={ this.createProject }
         processing={ this.state.creatingProject }
         onStepChange={ (wizardStep) => {
-            if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
-              browserHistory.push(NEW_PROJECT_PATH + '/incomplete')
-            }
-            if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
-              browserHistory.push(NEW_PROJECT_PATH +'' + window.location.search)
-            }
-            this.setState({
-              wizardStep
-            })
+          if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
+            browserHistory.push(NEW_PROJECT_PATH + '/incomplete')
           }
+          if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
+            browserHistory.push(NEW_PROJECT_PATH +'' + window.location.search)
+          }
+          this.setState({
+            wizardStep
+          })
+        }
         }
         onProjectUpdate={ (updatedProject, dirty=true) => {
-            const prevProduct = _.get(this.state.updatedProject, 'details.products[0]', null)
-            const product = _.get(updatedProject, 'details.products[0]', null)
+          const prevProduct = _.get(this.state.updatedProject, 'details.products[0]', null)
+          const product = _.get(updatedProject, 'details.products[0]', null)
             // compares updated product with previous product to know if user has updated the product
-            if (prevProduct !== product) {
-              if (product) {
-                browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
-              }
+          if (prevProduct !== product) {
+            if (product) {
+              browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
             }
-            this.setState({
-              isProjectDirty: dirty,
-              updatedProject
-            })
           }
+          this.setState({
+            isProjectDirty: dirty,
+            updatedProject
+          })
+        }
         }
       />
     )

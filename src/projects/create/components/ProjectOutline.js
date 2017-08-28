@@ -11,7 +11,7 @@ function ProjectOutline({ project }) {
   const projectType = _.findKey(config, {id : projectTypeId})
   const subConfig = config[projectType]
   const productName = _.findKey(subConfig.subtypes, {id : product})
-  const projectsWithEstimate = ["Wireframes","Visual Design","Front-end Prototype"]
+  const projectsWithEstimate = ['Wireframes', 'Visual Design', 'Front-end Prototype']
   const projectEstimate = (projectsWithEstimate.indexOf(productName)<0) ? (null) : (<li className="project-meta-data-row">
                             <VisualDesignProjectEstimateSection
                               products={ _.get(project, 'details.products', []) }

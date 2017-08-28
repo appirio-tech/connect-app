@@ -78,6 +78,27 @@ const products = {
         details: 'Get help with any part of your development cycle',
         icon: 'product-software-development',
         id: 'generic_dev'
+      },
+      'Crowd Testing': {
+        brief: 'TBD',
+        details: 'Exploratory Testing, Cross browser-device Testing',
+        icon: 'icon-crowd-testing',
+        id: 'crowd_testing',
+        hidden: true
+      },
+      'Mobility Testing': {
+        brief: 'TBD',
+        details: 'App Certification, Lab on Hire, User Sentiment Analysis',
+        icon: 'icon-mobility-testing',
+        id: 'mobility_testing',
+        hidden: true
+      },
+      'Website Performance': {
+        brief: 'TBD',
+        details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
+        icon: 'icon-website-performance',
+        id: 'website_performance',
+        hidden: true
       }
     }
   }
@@ -129,20 +150,20 @@ export function findProductCategory(product) {
  * @return {object} field from the template, if found, null otherwise
  */
 export function getProjectCreationTemplateField(product, sectionId, subSectionId, fieldName) {
-    let specification = 'topcoder.v1'
-    if (product)
-      specification = typeToSpecification[product]
-    const sections = require(`../projectQuestions/${specification}`).basicSections
-    const section = _.find(sections, {id: sectionId})
-    let subSection = null
-    if (subSectionId && section) {
-      subSection = _.find(section.subSections, {id : subSectionId })
-    }
-    if (subSection) {
-      if (subSectionId === 'questions') {
-        return _.find(subSection.questions, { fieldName })
-      }
-      return subSection.fieldName === fieldName ? subSection : null
-    }
-    return null
+  let specification = 'topcoder.v1'
+  if (product)
+    specification = typeToSpecification[product]
+  const sections = require(`../projectQuestions/${specification}`).basicSections
+  const section = _.find(sections, {id: sectionId})
+  let subSection = null
+  if (subSectionId && section) {
+    subSection = _.find(section.subSections, {id : subSectionId })
   }
+  if (subSection) {
+    if (subSectionId === 'questions') {
+      return _.find(subSection.questions, { fieldName })
+    }
+    return subSection.fieldName === fieldName ? subSection : null
+  }
+  return null
+}
