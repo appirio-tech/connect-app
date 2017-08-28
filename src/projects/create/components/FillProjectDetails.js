@@ -2,15 +2,12 @@ import _ from 'lodash'
 import React, { PropTypes as PT, Component } from 'react'
 import Sticky from 'react-stickynode'
 
-import { Icons } from 'appirio-tech-react-components'
 import config from '../../../config/projectWizard'
 import SVGIconImage from '../../../components/SVGIconImage'
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
 import ProjectOutline from '../components/ProjectOutline'
 import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
-
-const { ConnectLogo } = Icons
 
 class FillProjectDetails extends Component  {
   constructor(props) {
@@ -51,7 +48,7 @@ class FillProjectDetails extends Component  {
     return (
       <div className="FillProjectDetailsWrapper">
         <div className="header headerFillProjectDetails">
-          { (!userRoles || !userRoles.length) && <ConnectLogo />}
+          { (!userRoles || !userRoles.length) && <SVGIconImage filePath="connect-logo-mono" />}
           { (!userRoles || !userRoles.length) && <button className="tc-btn tc-btn-default tc-btn-sm" onClick={ this.props.onChangeProjectType }><SVGIconImage filePath="arrows-undo" />Change project type</button> }
         </div>
         <div className="FillProjectDetails">

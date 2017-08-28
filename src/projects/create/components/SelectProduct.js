@@ -1,11 +1,8 @@
 import React, { PropTypes as PT } from 'react'
-import { Icons } from 'appirio-tech-react-components'
 import config from '../../../config/projectWizard'
 import ProductCard from './ProductCard'
 import SVGIconImage from '../../../components/SVGIconImage'
 import './SelectProduct.scss'
-
-const { ConnectLogo } = Icons
 
 function SelectProduct(props) {
   const cards = []
@@ -32,7 +29,7 @@ function SelectProduct(props) {
   return (
     <div>
       <div className="header headerSelectProduct">
-        <ConnectLogo />
+        <SVGIconImage filePath="connect-logo-mono" />
       </div>
       <div className="SelectProduct">
         <h1>Select your project type</h1>
