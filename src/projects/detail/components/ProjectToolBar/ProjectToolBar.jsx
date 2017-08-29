@@ -16,7 +16,7 @@ class ProjectToolBar extends Component {
     const {project, userRoles, isLoading, error} = this.props
     if (isLoading || error && error.type === LOAD_PROJECT_FAILURE)
       return <noscript />
-  
+
     //TODO prepare navigation items according to roles of the user
     const primaryNavigationItems = [
       {

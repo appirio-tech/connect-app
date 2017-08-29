@@ -63,6 +63,11 @@ export function updateProject(projectId, updatedProps) {
 
 
 export function createProject(projectProps) {
+  // Phase out discussions
+  // TODO: Remove this once none of the active projects
+  // have the discussions tab enabled
+  projectProps.details.hideDiscussions = true
+  
   return axios.post(`${TC_API_URL}/v4/projects/`, { param: projectProps })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})
@@ -70,6 +75,11 @@ export function createProject(projectProps) {
 }
 
 export function createProjectWithStatus(projectProps, status) {
+  // Phase out discussions
+  // TODO: Remove this once none of the active projects
+  // have the discussions tab enabled
+  projectProps.details.hideDiscussions = true
+
   return axios.post(`${TC_API_URL}/v4/projects/`, { param: projectProps })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})

@@ -85,7 +85,14 @@ class ProjectToolBar extends React.Component {
                   TODO: Enable again when challenges link is needed.
                   isPowerUser && <li><Link {...getLinkProps(`/projects/${project.id}/challenges`)}><i className="icon-challenges"/>Challenges</Link></li>
                 */}
-                <li><Link {...getLinkProps(`/projects/${project.id}/discussions`)}><i className="icon-messages"/>Discussions</Link></li>
+                {/*
+                  * TODO: Completely remome the discussions list item once there isn't
+                  * any active project that uses discussions.
+                  */}
+                {
+                  (project.details && !project.details.hideDiscussions) &&
+                  <li><Link {...getLinkProps(`/projects/${project.id}/discussions`)}><i className="icon-messages"/>Discussions</Link></li>
+                }
               </ul>
             </nav>}
             { userMenu }
