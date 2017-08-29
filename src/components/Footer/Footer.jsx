@@ -21,7 +21,7 @@ const Footer = () => {
 
   return (
     <div className="Footer">
-      <p className="copyright-notice">Created by © Topcoder, All Rights Reserved {currentYear}</p>
+      <p className="copyright-notice">© Topcoder { currentYear }</p>
       <div className="footer-menu">
         <MenuBar items={otherNavigationItems} orientation="horizontal" mobileBreakPoint={767} />
       </div>

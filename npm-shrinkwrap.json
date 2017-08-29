@@ -231,7 +231,7 @@
         "react-switch-button": "1.1.2",
         "react-textarea-autosize": "4.3.2",
         "redux-thunk": "2.2.0",
-        "tc-ui": "git+https://github.com/appirio-tech/tc-ui.git#f8eff16f739a26ebac5f1b7d0ffa252bdff7b2e7",
+        "tc-ui": "git+https://github.com/appirio-tech/tc-ui.git#feature/connectv2",
         "uncontrollable": "4.1.0"
       },
       "dependencies": {
@@ -16736,7 +16736,7 @@
       }
     },
     "tc-ui": {
-      "version": "git+https://github.com/appirio-tech/tc-ui.git#f8eff16f739a26ebac5f1b7d0ffa252bdff7b2e7",
+      "version": "git+https://github.com/appirio-tech/tc-ui.git#feature/connectv2",
       "requires": {
         "classnames": "2.2.5",
         "lodash": "4.17.4",
