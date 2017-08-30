@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import React from 'react'
 import { Icons } from 'appirio-tech-react-components'
 import SVGIconImage from '../../components/SVGIconImage'
 // import NumberText from '../../components/NumberText/NumberText'
