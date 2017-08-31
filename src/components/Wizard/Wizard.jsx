@@ -1,6 +1,5 @@
 import React, { PropTypes as PT } from 'react'
 import ModalControl from '../ModalControl'
-import Icons from '../Icons'
 import SVGIconImage from '../SVGIconImage'
 import './Wizard.scss'
 
@@ -12,7 +11,7 @@ function Wizard(props) {
     backControl = (
       <ModalControl
         className="back-button"
-        icon={<Icons.ArrowBack />}
+        icon={<SVGIconImage filePath="arrows-16px-1_tail-left" />}
         label="back"
         onClick={() => onStepChange(step - 1)}
       />

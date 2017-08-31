@@ -31,7 +31,7 @@ class ProjectSubTypeCard extends React.Component {
         <h1 className="header">{p.type}</h1>
         <div className="sub-type-details">{p.info}</div>
         <div className="check-mark">
-          <Icons.Check color="white" size="11" />
+          <SVGIconImage filePath={'check'} />
         </div>
       </div>
     )

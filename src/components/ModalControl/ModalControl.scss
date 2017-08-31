@@ -17,6 +17,19 @@
     height: 43px;
     text-align: center;
     width: 40px;
+    color: $tc-gray-70;
+
+    svg {
+      fill: $tc-gray-70;
+    }
+
+    &:hover {
+      color: $tc-white;
+
+      svg {
+        fill: $tc-white;
+      }
+    }
   }
   .label {
     @include roboto-medium;
