@@ -24,7 +24,7 @@ class TopBarContainer extends React.Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     return nextProps.user.handle !== this.props.user.handle
     || nextProps.toolbar.type !== this.props.toolbar.type
   }
