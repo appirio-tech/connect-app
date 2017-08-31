@@ -15,6 +15,19 @@ class ModalControl extends React.Component {
     this.state = {}
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return !(
+        _.isEqual(nextProps.icon, this.props.icon)
+     && _.isEqual(nextProps.label, this.props.label)
+     && _.isEqual(nextProps.className, this.props.className)
+     // intentionally commenting onClick comparison, assuming it won't change dynamically
+     // ideally we should make this component functional i.e. remove hovered state
+     // to achieve that we need to render SVG as inline svg element instead of rendering it as image
+     // && _.isEqual(nextProps.onClick, this.props.onClick)
+     && _.isEqual(nextState.hovered, this.state.hovered)
+   )
+  }
+
   render() {
     let icon = this.props.icon
     if (icon) icon = React.cloneElement(icon, {
