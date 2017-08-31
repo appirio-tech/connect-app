@@ -2,37 +2,23 @@ import _ from 'lodash'
 import React, { PropTypes as PT } from 'react'
 import './ProductCard.scss'
 
-class ProductCard extends React.Component {
+function ProductCard(props) {
+  const p = props
 
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
+  let className = `ProductCard ${p.disabled ? 'disabled' : 'enabled'}`
+  if (p.selected) className = `${className} selected`
 
-  render() {
-    const p = this.props
-    const s = this.state
-    const icon = React.cloneElement(p.icon, {
-      color: !p.disabled && s.hovered ? '#1A85FF' : '#5D5D66'
-    })
-
-    let className = `ProductCard ${p.disabled ? 'disabled' : 'enabled'}`
-    if (p.selected) className = `${className} selected`
-
-    return (
-      <div
-        className={className}
-        onClick={p.disabled ? _.noop : this.props.onClick}
-        onMouseEnter={() => this.setState({ hovered: true })}
-        onMouseLeave={() => this.setState({ hovered: false })}
-      >
-        {icon}
-        <h1 className="header">{p.type}</h1>
-        <div className="sub-type-details">{p.info}</div>
-        <button className="tc-btn tc-btn-sm tc-btn-primary">Create project</button>
-      </div>
-    )
-  }
+  return (
+    <div
+      className={className}
+      onClick={p.disabled ? _.noop : props.onClick}
+    >
+      <div className="icon-wrapper">{p.icon}</div>
+      <h1 className="header">{p.type}</h1>
+      <div className="sub-type-details">{p.info}</div>
+      <button className="tc-btn tc-btn-sm tc-btn-primary">Create project</button>
+    </div>
+  )
 }
 
 ProductCard.defaultProps = {
