@@ -70,9 +70,9 @@ class CreateConainer extends React.Component {
         // remove incomplete project, and navigate to project dashboard
         console.log('removing incomplete project')
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
-        this.props.router.push('/projects/' + projectId)  
+        this.props.router.push('/projects/' + projectId)
       })
-      
+
     } else if (this.state.creatingProject !== nextProps.processing) {
       this.setState({ creatingProject : nextProps.processing })
     }
@@ -89,14 +89,14 @@ class CreateConainer extends React.Component {
         // TODO should we validate the project again?
         console.log('calling createProjectAction...')
         this.props.createProjectAction(incompleteProject, PROJECT_STATUS_IN_REVIEW)
-      } 
+      }
     }
   }
 
-  componentDidMount() {    
+  componentDidMount() {
     // sets route leave hook to show unsaved changes alert and persist incomplete project
     this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
-    
+
     // sets window unload hook to show unsaved changes alert and persist incomplete project
     window.addEventListener('beforeunload', this.onLeave)
   }
