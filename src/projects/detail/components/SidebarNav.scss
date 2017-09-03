@@ -81,4 +81,18 @@
       }
     }
   }
+
+  &.single-section {
+    .title {
+      padding-left: 0px;
+
+      .number {
+        display: none;
+      }
+    }
+
+    .boxs {
+      padding-left: 20px;// 42 - 22
+    }
+  }
 }

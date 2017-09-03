@@ -1,9 +1,9 @@
 @import 'tc-includes';
 
 .headerSelectProduct {
-    position: absolute;
-    top: 25px;
-    left: 20px;
+  position: absolute;
+  top: 25px;
+  left: 20px;
 }
 
 .SelectProduct {
@@ -12,6 +12,7 @@
   text-align: center;
   max-width: 1000px;
   margin: 0 auto;
+  margin-top: -20px;// to align top with bottom of the header
   a, a:visited, a:hover, a:active{
     color: $tc-dark-blue;
     cursor: pointer;

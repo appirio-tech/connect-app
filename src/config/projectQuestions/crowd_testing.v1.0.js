@@ -1,6 +1,9 @@
 import _ from 'lodash'
 import { Icons } from 'appirio-tech-react-components'
+import SVGIconImage from '../../components/SVGIconImage'
+// import NumberText from '../../components/NumberText/NumberText'
 import { findProduct} from '../projectWizard'
+
 
 const isFileRequired = (project, subSections) => {
   const subSection = _.find(subSections, (s) => s.type === 'questions')
@@ -30,7 +33,7 @@ const sections = [
       {
         id: 'projectName',
         required: true,
-        validationError: 'Please provide a name for your project',
+        validationError: 'Please provide a name to your project',
         fieldName: 'name',
         description: '',
         title: 'Project Name',
@@ -44,6 +47,40 @@ const sections = [
         description: '',
         type: 'questions',
         questions: [
+          {
+            icon: 'question',
+            required: true,
+            validationError: 'Please let us know what kind of testing you would like to execute',
+            title: 'What kind of crowd testing are you interested in?',
+            description: 'Structured testing focuses on the execution of test cases, whereas unstructured testing lets the testers create their own path through an application as an end user might.',
+            fieldName: 'details.appDefinition.testType',
+            type: 'tiled-radio-group',
+            options: [
+              {value: 'unstructured', title: 'Unstructured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: ''},
+              {value: 'structured', title: 'Structured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-structured', fill: '#00000'}, desc: ''},
+              {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
+            ]
+          },
+          {
+            icon: 'question',
+            required: true,
+            validationError: 'Please let us know if you have test cases.',
+            title: 'Do you have test cases written?',
+            description: 'Do you have test cases you would like executed? These are essential when running structured testing and optional for unstructured testing. If you are planning a structured test cycle and do not have test cases do not worry, we can help!',
+            fieldName: 'details.appDefinition.expectedHours',
+            type: 'radio-group',
+            options: [
+              {value: 'true', label: 'Yes I have test cases.'},
+              {value: 'false', label: 'No I do not have test cases.'}
+            ]
+          },
+          {
+            icon: 'question',
+            title: 'Please tell us about your users.',
+            description: 'Please share information about your end users. Where are they from? What is their goal? This information can help you find the best testers for your application.',
+            type: 'textbox',
+            fieldName: 'details.appDefinition.userInfo'
+          },
           {
             icon: 'question',
             title: 'Which is your primary device target?',
@@ -60,35 +97,6 @@ const sections = [
               {value: 'desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
               {value: 'wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
-          },
-          {
-            id: 'projectInfo',
-            required: true,
-            fieldName: 'description',
-            description: 'Brief Description',
-            title: 'Description',
-            type: 'textbox'
-          },
-          {
-            icon: 'question',
-            title: 'What is the goal of your application? How will people use it?',
-            description: 'Describe your objectives for creating this application',
-            type: 'see-attached-textbox',
-            fieldName: 'details.appDefinition.goal'
-          },
-          {
-            icon: 'question',
-            title: 'Who are the users of your application? ',
-            description: 'Describe the roles and needs of your target users',
-            type: 'see-attached-textbox',
-            fieldName: 'details.appDefinition.users'
-          },
-          {
-            icon: 'question',
-            title: 'Feature requirements',
-            description: 'Please list all the features you would like in your application. You can use our wizard to pick from common features or define your own.',
-            type: 'see-attached-features',
-            fieldName: 'details.appDefinition.features'
           }
         ]
       },
@@ -96,7 +104,66 @@ const sections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        description: 'Please enter any additional information like \
+                      requirements and/or test cases.  After creating \
+                       your project you will be able to upload files.',
+        type: 'notes'
+      }
+    ]
+  },
+  {
+    id: 'testingNeeds',
+    required: false,
+    title: 'Testing Needs',
+    description: 'Please answer these additional questions to better help us understand your needs.',
+    subSections: [
+      {
+        id: 'scope',
+        required: false,
+        title: 'Scope',
+        description: '',
+        type: 'questions',
+        questions: [
+          {
+            icon: 'question',
+            id: 'testingNeeds.description',
+            fieldName: 'description',
+            description: '',
+            title: 'Please describe your website and/or application.',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            id: 'testingNeeds.inScope',
+            fieldName: 'In Scope',
+            description: '',
+            title: 'Please describe which features or components are in-scope in this testing effort.',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            id: 'testingNeeds.outOfScope',
+            fieldName: 'Out of Scope',
+            description: '',
+            title: 'Are any features or components out of scope? If yes, please describe.',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            id: 'testingNeeds.duration',
+            fieldName: 'Duration',
+            description: '',
+            title: 'Do you have a specific timeline for testing? If so, please provide approximate start and end dates.',
+            type: 'textbox'
+          }
+        ]
+      },
+      {
+        id: 'notes',
+        required: false,
+        fieldName: 'details.testingNeeds.notes',
+        title: 'Notes',
+        description: 'Please log any other notes or comments related to scope here.',
         type: 'notes'
       },
       {
@@ -108,63 +175,7 @@ const sections = [
         fieldName: 'attachments'
       }
     ]
-  },
-  {
-    id: 'designSpecification',
-    required: false,
-    title: 'Design Specification',
-    description: 'Define the visual style for your application or provide a style guide or brand guidelines. Skip this section (or particular questions) if you don\'t have any preferences or restrictions.',
-    subSections: [
-      {
-        id: 'questions',
-        required: false,
-        title: 'Questions',
-        description: '',
-        type: 'questions',
-        questions: [
-          {
-            icon: 'question',
-            title: 'What font style do you prefer? (Pick one)',
-            description: 'The typography used in your designs will fit within these broad font styles',
-            type: 'tiled-radio-group',
-            options: [
-              {value: 'serif', title: 'Serif', icon: Icons.IconTcSpecTypeSerif, iconOptions: { fill: '#00000'}, desc: 'formal, old style'},
-              {value: 'sanSerif', title: 'Sans Serif', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: 'clean, modern, informal'}
-            ],
-            fieldName: 'details.designSpecification.fontStyle'
-          },
-          {
-            icon: 'question',
-            title: 'What colors do you like? (Select all that apply)',
-            description: 'Your preferred colors will be used to guide the shading in your designs',
-            type: 'colors',
-            defaultColors: [],
-            fieldName: 'details.designSpecification.colors'
-          },
-          {
-            icon: 'question',
-            title: 'What icon style do you prefer? (Pick one)',
-            description: 'Icons within your designs will follow these styles',
-            type: 'tiled-radio-group',
-            options: [
-              {value: 'flatColor', title: 'Flat Color', icon: Icons.IconTcSpecIconTypeColorHome, iconOptions: { fill: '#00000'}, desc: 'playful'},
-              {value: 'thinLine', title: 'Thin Line', icon: Icons.IconTcSpecIconTypeOutlineHome, iconOptions: { fill: '#00000'}, desc: 'modern'},
-              {value: 'solidLine', title: 'Solid Line', icon: Icons.IconTcSpecIconTypeGlyphHome, iconOptions: { fill: '#00000'}, desc: 'classic'}
-            ],
-            fieldName: 'details.designSpecification.iconStyle'
-          }
-        ]
-      },
-      {
-        id: 'notes',
-        required: false,
-        fieldName: 'details.designSpecification.notes',
-        title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
-        type: 'notes'
-      }
-    ]
-  },
+  }/*,
   {
     id: 'devSpecification',
     title: 'Development Specification',
@@ -225,7 +236,7 @@ const sections = [
         type: 'notes'
       }
     ]
-  }
+  }*/
 ]
 
 export default sections
@@ -240,7 +251,7 @@ export const basicSections = [
       {
         id: 'projectName',
         required: true,
-        validationError: 'Please provide a name for your project',
+        validationError: 'Please provide a name to your project',
         fieldName: 'name',
         description: '',
         title: 'Project Name',
@@ -257,7 +268,39 @@ export const basicSections = [
           {
             icon: 'question',
             required: true,
-            validationError: 'Please let us know the target device',
+            validationError: 'Please let us know what kind of testing you would like to execute',
+            title: 'What kind of crowd testing are you interested in?',
+            description: 'Structured testing focuses on the execution of test cases, whereas unstructured testing lets the testers create their own path through an application as an end user might.',
+            fieldName: 'details.appDefinition.testType',
+            type: 'tiled-radio-group',
+            options: [
+              {value: 'unstructured', title: 'Unstructured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: ''},
+              {value: 'structured', title: 'Structured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-structured',  fill: '#00000'}, desc: ''},
+              {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
+            ]
+          },
+          {
+            icon: 'question',
+            required: true,
+            validationError: 'Please let us know if you have test cases.',
+            title: 'Do you have test cases written?',
+            description: 'Do you have test cases you would like executed? These are essential when running structured testing and optional for unstructured testing. If you are planning a structured test cycle and do not have test cases do not worry, we can help!',
+            fieldName: 'details.appDefinition.expectedHours',
+            type: 'radio-group',
+            options: [
+              {value: 'true', label: 'Yes I have test cases.'},
+              {value: 'false', label: 'No I do not have test cases.'}
+            ]
+          },
+          {
+            icon: 'question',
+            title: 'Please tell us about your users.',
+            description: 'Please share information about your end users. Where are they from? What is their goal? This information can help you find the best testers for your application.',
+            type: 'textbox',
+            fieldName: 'details.appDefinition.userInfo'
+          },
+          {
+            icon: 'question',
             title: 'Which is your primary device target?',
             description: 'Select only the device that you need to develop for. \
                           In most cases limiting the scope of your project would result \
@@ -272,24 +315,30 @@ export const basicSections = [
               {value: 'desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
               {value: 'wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
-          },
+          }
+          /*{
+            icon: 'question',
+            title: 'Approximately how many platform/device - browser configurations to be tested?',
+            description: '',
+            fieldName: 'details.appDefinition.browserConfigurations',
+            type: 'tiled-radio-group',
+            options: [
+              {value: 'upto5', title: 'configurations', icon: NumberText, iconOptions: { number: '5' }, desc: 'or fewer'},
+              {value: 'upTo10', title: 'configurations', icon: NumberText, iconOptions: { number: '10' }, desc: 'or fewer'},
+              {value: 'upTo20', title: 'configurations', icon: NumberText, iconOptions: { number: '20' }, desc: 'or fewer'},
+              {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know',  fill: '#00000'}, desc: 'We will find the best fit for you.'}
+            ]
+          }
           {
             id: 'projectInfo',
             required: true,
-            validationError: 'Please provide a description',
+            validationError: 'Please provide any user accounts \
+                             or passwords to access the acount',
             fieldName: 'description',
-            description: 'Brief Description',
-            title: 'Description',
+            description: 'Please provide any user accounts \
+                             or passwords to access the acount',
+            title: 'Access Information',
             type: 'textbox'
-          },
-          {
-            icon: 'question',
-            required: true,
-            validationError: 'Please let us know the goal of your application',
-            title: 'What is the goal of your application? How will people use it?',
-            description: 'Describe your objectives for creating this application',
-            type: 'textbox',
-            fieldName: 'details.appDefinition.goal.value'
           },
           {
             icon: 'question',
@@ -299,14 +348,16 @@ export const basicSections = [
             description: 'Describe the roles and needs of your target users',
             type: 'textbox',
             fieldName: 'details.appDefinition.users.value'
-          }
+          }*/
         ]
       },
       {
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        description: 'Please enter any additional information like \
+                      requirements and/or test cases.  After creating \
+                       your project you will be able to upload files.',
         type: 'notes'
       }
     ]

@@ -29,7 +29,7 @@ Install dependencies by running the following in the root of the project:
  - **Note:** You must use npm 3. Type `npm -v` to ensure you have a 3.x version.
 
 ## NPM Commands
-- To run locally, run `npm start` and head to `http://localhost:3000/search/challenges`
+- To run locally, run `npm start` and head to `http://localhost:3000/new_project`
 - Run tests with `npm test` or use `npm run test:watch` to rerun tests after files change
 - To make sure your code passes linting: `npm run lint`
 - To create the build: `npm run build`

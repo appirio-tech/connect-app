@@ -1,6 +1,7 @@
 
 import React, { Component, PropTypes } from 'react'
 import { Link as DirectLink } from 'react-scroll'
+import cn from 'classnames'
 import { Icons } from 'appirio-tech-react-components'
 
 require('./SidebarNav.scss')
@@ -39,7 +40,7 @@ const SidebarNavItem = ({ name, link, required, subItems, index}) =>
   <div className="item">
     <DirectLink to={link} {...scrollProps} href="javascript:">
       <h4 className="title">
-        <span className="number">{index}.</span>{name}
+        <span className="number" >{index}.</span>{name}
           {required && <span className="required">* required</span>}
       </h4>
     </DirectLink>
@@ -59,7 +60,7 @@ class SidebarNav extends Component {
       )
     }
     return (
-      <div className="list-group">
+      <div className={cn('list-group', {'single-section' : items.length === 1})}>
         {items.map(renderChild)}
       </div>
     )
