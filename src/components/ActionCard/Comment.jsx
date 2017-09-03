@@ -49,7 +49,7 @@ class Comment extends React.Component {
 
   render() {
     const {message, avatarUrl, authorName, date, edited, children, active, self, isSaving, hasError, readonly} = this.props
-    console.log('comment '+date+edited);
+    console.log('comment '+date+edited)
 
     if (this.state.editMode) {
       const content = message.newContent === null || message.newContent === undefined ? message.rawContent : message.newContent
@@ -83,7 +83,7 @@ class Comment extends React.Component {
               {authorName}
             </div>
             <div className="card-time">
-              {date} {edited && "• Edited"}
+              {date} {edited && '• Edited'}
             </div>
             {self && !readonly &&
               <CommentEditToggle

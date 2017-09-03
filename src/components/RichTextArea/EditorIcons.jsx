@@ -108,11 +108,11 @@ const icons = {
 
 function render(type, active) {
   const EditorIcon = icons[type]
-  const colorInactive = '#37373C';
-  const colorActive = '#FFFFFF';
-  const color = active ? colorActive : colorInactive;
+  const colorInactive = '#37373C'
+  const colorActive = '#FFFFFF'
+  const color = active ? colorActive : colorInactive
   return (
-    <div className={cn('editor-tool', active?"tool-active":"tool-inactive")}>
+    <div className={cn('editor-tool', active?'tool-active':'tool-inactive')}>
       <EditorIcon color={color}/>
     </div>  
   )

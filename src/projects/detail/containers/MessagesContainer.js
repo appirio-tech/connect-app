@@ -117,8 +117,8 @@ class MessagesView extends React.Component {
       prevThread = _.find(prevProps.threads, t => feed.id === t.id)
     }
     const _toComment = (p) => {
-      const date = p.updatedDate?p.updatedDate:p.date;
-      const edited = date != p.date;
+      const date = p.updatedDate?p.updatedDate:p.date
+      const edited = date !== p.date
       const comment= {
         id: p.id,
         content: p.body,
@@ -129,7 +129,7 @@ class MessagesView extends React.Component {
         error: p.error,
         unread: !p.read,
         date: p.date,
-        edited: edited,
+        edited,
         author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
       }
       const prevComment = prevThread ? _.find(prevThread.posts, t => p.id === t.id) : null

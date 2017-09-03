@@ -111,8 +111,8 @@ class FeedView extends React.Component {
       prevFeed = _.find(prevProps.feeds, t => feed.id === t.id)
     }
     const _toComment = (p) => {
-      const date = p.updatedDate?p.updatedDate:p.date;
-      const edited = date != p.date;
+      const date = p.updatedDate?p.updatedDate:p.date
+      const edited = date !== p.date
       const comment = {
         id: p.id,
         content: p.body,
@@ -122,8 +122,8 @@ class FeedView extends React.Component {
         isDeletingComment: p.isDeletingComment,
         error: p.error,
         unread: !p.read,
-        date: date,
-        edited: edited,
+        date,
+        edited,
         author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
       }
       const prevComment = prevFeed ? _.find(prevFeed.posts, t => p.id === t.id) : null
