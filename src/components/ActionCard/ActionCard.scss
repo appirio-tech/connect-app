@@ -14,12 +14,6 @@
     padding: $base-unit*2 $base-unit*6;
   }
 
-  .Dropdown li:not(:last-child) {
-    a {
-      border-bottom: 1px solid $tc-gray-10;
-      display: block;
-    }
-  }
     .edit-toggle-container {
       display: inline;
       float: right;
@@ -67,14 +61,12 @@
           content: '';
           display: block;
           position: absolute;
-          top: -6px;
+          top: -4px;
           right:14px;
           margin-left:-24px;
           width: 12px;
           height: 12px;
           background: #FFFFFF;
-          border-right: 1px solid #DCDCE0;
-          border-bottom: 1px solid #DCDCE0;
           transform: rotate(-135deg);
           z-index: 999;
       }
@@ -233,6 +225,24 @@
       &:before {
         border-right: 14px solid $tc-dark-blue-10;
       }
+
+      &:before {
+        width: 0; 
+        height: 0; 
+        border-top: 12px solid transparent;
+        border-bottom: 12px solid transparent; 
+        
+        border-right:12px solid #F4F9FF; 
+        content: '';
+        display: block;
+        position: absolute;
+        top: 10px;
+        left: -6px;
+        
+        transform: rotate(-90deg);
+        z-index: 18;
+      }
+      position:relative;
     }
 
     .comment-body {
@@ -567,6 +577,42 @@
     text-align: center;
     color: green;
     font-weight: bold;
+  }
+}
+
+.deleting-layer {
+  z-index: 21;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: #F4F9FF;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+  div {
+    @include roboto-bold;
+    font-size: 15px;
+    color: #59A7FF;
+    letter-spacing: 0;
+  }
+  &:before {
+    width: 0; 
+    height: 0; 
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent; 
+    
+    border-right:12px solid #F4F9FF; 
+    content: '';
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: -6px;
+    
+    transform: rotate(-90deg);
+    z-index: 18;
   }
 }
 

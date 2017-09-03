@@ -94,12 +94,12 @@ class Comment extends React.Component {
           <div className="comment-body draftjs-post">
             {children}
           </div>
+          {message && message.isDeletingComment &&
+            <div className="deleting-layer">
+              <div>Deleting post ...</div>
+            </div> 
+          }
         </div>
-        {message && message.isDeletingComment &&
-         <div className="editing-layer">
-          <div>Deleting...</div>
-         </div> 
-        }
       </Panel.Body>
     )
   }

@@ -120,8 +120,8 @@ class Feed extends React.Component {
         />
         {children}
         {isDeletingTopic &&
-        <div className="editing-layer">
-          <div>Deleting...</div>
+        <div className="deleting-layer">
+          <div>Deleting post ...</div>
         </div> 
         }
       </ActionCard>
