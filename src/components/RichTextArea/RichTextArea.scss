@@ -109,3 +109,20 @@
 span.bbcode-u {
     text-decoration: underline;
 }
+
+.editor-tool{
+  border-radius:3px;  
+  display:flex;
+  height:30px;
+  width:30px;
+  align-items: center;
+  justify-content:center;
+}
+
+.tool-active{
+  background-color:#37373C;
+  
+}
+.tool-inactive{
+  background-color:#FFFFFFFF;
+}

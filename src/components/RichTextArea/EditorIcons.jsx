@@ -1,4 +1,5 @@
 import React from 'react'
+import cn from 'classnames'
 
 const BoldIcon = ({color}) => {
   return (
@@ -107,9 +108,13 @@ const icons = {
 
 function render(type, active) {
   const EditorIcon = icons[type]
-  const color = active ? '#59A7FF' : '#444444'
+  const colorInactive = '#37373C';
+  const colorActive = '#FFFFFF';
+  const color = active ? colorActive : colorInactive;
   return (
-    <EditorIcon color={color}/>
+    <div className={cn('editor-tool', active?"tool-active":"tool-inactive")}>
+      <EditorIcon color={color}/>
+    </div>  
   )
 }
 

@@ -325,10 +325,11 @@
 
         button,
         .separator {
-          margin-right: 5px;
+          margin-right: 1px;
           display: inline-block;
           border: none;
           background-color: transparent;
+          padding:0px;
         }
 
         .button {
@@ -339,6 +340,8 @@
           width: 1px;
           height: 20px;
           background-color: $tc-gray-30;
+          margin-left:8px;
+          margin-right:8px;
         }
 
         button {
