@@ -2540,20 +2540,6 @@
         }
       }
     },
-    "draft-js-export-html": {
-      "version": "https://registry.npmjs.org/draft-js-export-html/-/draft-js-export-html-0.5.4.tgz",
-      "integrity": "sha1-4kkn2j7+bz3xfx12BqncYUHb9y0=",
-      "requires": {
-        "draft-js-utils": "https://registry.npmjs.org/draft-js-utils/-/draft-js-utils-0.1.7.tgz"
-      }
-    },
-    "draft-js-export-markdown": {
-      "version": "https://registry.npmjs.org/draft-js-export-markdown/-/draft-js-export-markdown-0.2.2.tgz",
-      "integrity": "sha1-WwoaEFkdi5YZnctwsEsat963KjM=",
-      "requires": {
-        "draft-js-utils": "https://registry.npmjs.org/draft-js-utils/-/draft-js-utils-0.1.7.tgz"
-      }
-    },
     "draft-js-image-plugin": {
       "version": "https://registry.npmjs.org/draft-js-image-plugin/-/draft-js-image-plugin-2.0.0-rc4.tgz",
       "integrity": "sha1-HER4s3/B6ZfaeQF726vqUBP68YU=",
@@ -2569,21 +2555,6 @@
           "version": "https://registry.npmjs.org/immutable/-/immutable-3.7.6.tgz",
           "integrity": "sha1-E7TTyxK++hVIKib+Gy665kAHHks="
         }
-      }
-    },
-    "draft-js-import-element": {
-      "version": "https://registry.npmjs.org/draft-js-import-element/-/draft-js-import-element-0.4.3.tgz",
-      "integrity": "sha1-eFOBouAyOpg2z6hWxELpATvUgqQ=",
-      "requires": {
-        "draft-js-utils": "https://registry.npmjs.org/draft-js-utils/-/draft-js-utils-0.1.7.tgz",
-        "synthetic-dom": "https://registry.npmjs.org/synthetic-dom/-/synthetic-dom-0.2.1.tgz"
-      }
-    },
-    "draft-js-import-html": {
-      "version": "https://registry.npmjs.org/draft-js-import-html/-/draft-js-import-html-0.3.2.tgz",
-      "integrity": "sha1-zCBaYZLKwsZSBXZohwLuMfUkGBA=",
-      "requires": {
-        "draft-js-import-element": "https://registry.npmjs.org/draft-js-import-element/-/draft-js-import-element-0.4.3.tgz"
       }
     },
     "draft-js-link-plugin": {
@@ -8562,10 +8533,6 @@
       "integrity": "sha1-rifbOPZgp64uHDt9G8KQgZuFGeY=",
       "dev": true,
       "optional": true
-    },
-    "synthetic-dom": {
-      "version": "https://registry.npmjs.org/synthetic-dom/-/synthetic-dom-0.2.1.tgz",
-      "integrity": "sha1-bHb8+R6ppSMTGPj0FeJ4g9U034Y="
     },
     "table": {
       "version": "https://registry.npmjs.org/table/-/table-3.8.3.tgz",
