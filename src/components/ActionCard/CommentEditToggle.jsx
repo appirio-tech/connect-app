@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react'
 import cn from 'classnames'
 import { Dropdown, DropdownItem } from 'appirio-tech-react-components'
 import Modal from 'react-modal'
+import SVGIconImage from '../SVGIconImage'
 
 export default class CommentEditToggle extends React.Component {
 
@@ -38,7 +39,10 @@ export default class CommentEditToggle extends React.Component {
     return (
     <div className="dropdownContainer">
       <Dropdown pointerShadow className="drop-down edit-toggle-container">
-        <div className={cn('dropdown-menu-header', 'edit-toggle', {'for-topic': this.props.forTopic})} >
+        <div className={cn('dropdown-menu-header', 'edit-toggle')} >
+          {this.props.forTopic && <SVGIconImage filePath="arrows-16px-3_small-down" />}
+          {!this.props.forTopic && <SVGIconImage filePath="ui-16px-1_edit-73" />}
+          
         </div>
         <div className="dropdown-menu-list down-layer">
           <ul>

@@ -19,7 +19,6 @@
       float: right;
 
       .edit-toggle {
-        background: url('../../assets/images/ui-16px-1_edit-73.svg') no-repeat 30px 50%;
         background-size: 15px;
         user-select: none;
         position: relative;
@@ -33,9 +32,6 @@
         height: 20px;
         padding: 0 25px 0 25px;
         cursor: pointer;
-      }
-      .edit-toggle.for-topic {
-        background: url('../../assets/images/arrows-16px-3_small-down.svg') no-repeat 30px 50%;
       }
       .dropdown-menu-list a{
         text-decoration:none;
@@ -62,7 +58,7 @@
           display: block;
           position: absolute;
           top: -4px;
-          right:14px;
+          right:18px;
           margin-left:-24px;
           width: 12px;
           height: 12px;
@@ -666,4 +662,7 @@
 
 .dropdownContainer{
   display:inline;
+  .down-layer{
+    top:22px;
+  }
 }
