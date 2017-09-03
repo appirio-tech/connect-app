@@ -63,6 +63,7 @@ class MessageDetails extends React.Component {
           avatarUrl={_.get(item, 'author.photoURL', null)}
           authorName={item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user'}
           date={moment(item.date).fromNow()}
+          edited={item.edited}
           active={item.unread}
           self={item.author && item.author.userId === currentUser.userId}
           onEdit={this.onEditMessage.bind(this, item.id)}
