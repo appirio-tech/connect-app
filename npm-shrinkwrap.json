@@ -209,7 +209,7 @@
       }
     },
     "appirio-tech-react-components": {
-      "version": "github:appirio-tech/react-components#feature/connectv2",
+      "version": "github:appirio-tech/react-components#feature/performance-tuning",
       "requires": {
         "appirio-tech-api-schemas": "5.0.70",
         "appirio-tech-client-app-layer": "0.1.3",

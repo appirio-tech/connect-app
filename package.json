@@ -32,7 +32,7 @@
     "webpack-dev-server": "^1.12.1"
   },
   "dependencies": {
-    "appirio-tech-react-components": "github:appirio-tech/react-components#feature/connectv2",
+    "appirio-tech-react-components": "github:appirio-tech/react-components#feature/performance-tuning",
     "axios": "^0.13.1",
     "classnames": "^2.2.3",
     "draft-js": "^0.7.0",
