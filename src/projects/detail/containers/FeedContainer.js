@@ -321,7 +321,6 @@ class FeedView extends React.Component {
     const {currentUser, project, currentMemberRole, isCreatingFeed, error } = this.props
     const { feeds } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
-    const renderComposer = currentMemberRole === PROJECT_ROLE_COPILOT || currentMemberRole === PROJECT_ROLE_MANAGER
 
     const renderFeed = (item) => {
       if ((item.spec || item.sendForReview) && !showDraftSpec) {
@@ -355,17 +354,15 @@ class FeedView extends React.Component {
     }
     return (
       <div>
-        { renderComposer &&
-          <NewPost
-            currentUser={currentUser}
-            onPost={this.onNewPost}
-            isCreating={isCreatingFeed}
-            hasError={error}
-            heading="NEW STATUS POST"
-            onNewPostChange={this.onNewPostChange}
-            titlePlaceholder="Share the latest project updates with the team"
-          />
-        }
+        <NewPost
+          currentUser={currentUser}
+          onPost={this.onNewPost}
+          isCreating={isCreatingFeed}
+          hasError={error}
+          heading="NEW STATUS POST"
+          onNewPostChange={this.onNewPostChange}
+          titlePlaceholder="Share the latest project updates with the team"
+        />
         { feeds.map(renderFeed) }
       </div>
     )
