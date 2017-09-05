@@ -23,6 +23,11 @@ deployment:
     owner: appirio-tech
     commands:
       - ./deploy.sh DEV
+  test:
+    branch: [qa]
+    owner: appirio-tech
+    commands:
+      - ./deploy.sh TEST01
   qa:
     branch: qa
     owner: appirio-tech
