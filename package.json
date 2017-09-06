@@ -4,7 +4,7 @@
   "description": "Customer pages in React and Redux",
   "scripts": {
     "start": "webpack-dev-server --history-api-fallback --dev --hot --inline --progress --tc --port 3000 --host 0.0.0.0",
-    "build": "webpack --bail --progress --build --tc",
+    "build": "npm rebuild node-sass; webpack --bail --progress --build --tc",
     "lint": "eslint --fix --format table --ext .js,.jsx .",
     "test": "cross-env NODE_ENV=test mocha  --colors --reporter nyan --compilers js:babel-core/register --require ignore-styles --recursive \"./src/**/*.spec.js\"",
     "test:watch": "watch-run -i -p 'src/**/*' npm run test"
@@ -35,6 +35,7 @@
     "appirio-tech-react-components": "github:appirio-tech/react-components#feature/connectv2",
     "axios": "^0.13.1",
     "classnames": "^2.2.3",
+    "coffeescript": "^1.12.7",
     "draft-js": "^0.7.0",
     "draft-js-export-html": "^0.5.4",
     "draft-js-export-markdown": "^0.2.1",
