@@ -131,5 +131,5 @@ SCSS Files
 - Follow the instructions under [Get Emmet working](http://www.nitinh.com/2015/02/setting-sublime-text-react-jsx-development/)
   - **Note:** Add the last snippet of code to `reg_replace.sublime-settings` by navigating to  `Sublime Text -> Preferences -> Package Settings -> Reg Replace -> Settings-User`
 
-### License
+# License
 © 2017 Topcoder. All Rights Reserved
