@@ -27,7 +27,7 @@ deployment:
     branch: test01
     owner: appirio-tech
     commands:
-      - ./deploy.sh TEST01
+      - ./deploy.sh DEV
   qa:
     branch: qa
     owner: appirio-tech
