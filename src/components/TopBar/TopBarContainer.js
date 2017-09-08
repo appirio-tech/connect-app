@@ -108,7 +108,7 @@ class TopBarContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ loa
+const mapStateToProps = ({ loadUser }) => {
   return {
     userRoles              : _.get(loadUser, 'user.roles', []),
     user                   : loadUser.user
