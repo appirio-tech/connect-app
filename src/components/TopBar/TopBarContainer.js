@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router'
 import _ from 'lodash'
@@ -108,7 +108,7 @@ class TopBarContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ loadUser }) => {
+const mapStateToProps = ({ loa
   return {
     userRoles              : _.get(loadUser, 'user.roles', []),
     user                   : loadUser.user
