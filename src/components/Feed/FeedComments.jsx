@@ -30,7 +30,7 @@ class FeedComments extends React.Component {
   render() {
     const {
     comments, currentUser, totalComments, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
-    onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage
+    onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage, onEditMessage
   } = this.props
     let authorName = currentUser.firstName
     if (authorName && currentUser.lastName) {
@@ -77,6 +77,7 @@ class FeedComments extends React.Component {
           avatarUrl={ _.get(item, 'author.photoURL', null)}
           authorName={item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user'}
           date={moment(item.date).fromNow()}
+          edited={item.edited}
           active={item.unread}
           self={item.author && item.author.userId === currentUser.userId}
           onChange={this.onSaveMessageChange.bind(this, item.id)}
