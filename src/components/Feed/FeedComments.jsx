@@ -23,9 +23,6 @@ class FeedComments extends React.Component {
     this.state = { showAll: false }
   }
 
-  onEditMessage(messageId) {
-    this.props.onEditMessage(messageId)
-  }
   onSaveMessageChange(messageId, content, editMode) {
     this.props.onSaveMessageChange(messageId, content, editMode)
   }
@@ -80,10 +77,8 @@ class FeedComments extends React.Component {
           avatarUrl={ _.get(item, 'author.photoURL', null)}
           authorName={item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user'}
           date={moment(item.date).fromNow()}
-          edited={item.edited}
           active={item.unread}
           self={item.author && item.author.userId === currentUser.userId}
-          onEdit={this.onEditMessage.bind(this, item.id)}
           onChange={this.onSaveMessageChange.bind(this, item.id)}
           onSave={onSaveMessage}
           onDelete={onDeleteMessage}

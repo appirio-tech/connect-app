@@ -40,8 +40,7 @@ export default class CommentEditToggle extends React.Component {
     <div className="dropdownContainer">
       <Dropdown pointerShadow className="drop-down edit-toggle-container">
         <div className={cn('dropdown-menu-header', 'edit-toggle')} >
-          {this.props.forTopic && <SVGIconImage filePath="arrows-16px-3_small-down" />}
-          {!this.props.forTopic && <SVGIconImage filePath="ui-16px-1_edit-73" />}
+          <SVGIconImage filePath="ui-16px-1_edit-73" />
           
         </div>
         <div className="dropdown-menu-list down-layer">
@@ -50,10 +49,11 @@ export default class CommentEditToggle extends React.Component {
               onItemClick={this.onEdit}
               currentSelection="" 
             />
+            {! this.props.hideDelete &&
             <DropdownItem key={2} item={deleteOptions}
               onItemClick={this.showDelete}
               currentSelection="" 
-            />
+            />}
           </ul>
         </div>
       </Dropdown>

@@ -461,7 +461,8 @@ export const projectTopics = function (state=initialState, action) {
         error: { $set : false },
         rawContent: { $set : rawContent },
         body: { $set : savedComment.body },
-        date: { $set : savedComment.date }
+        date: { $set : savedComment.updatedDate },
+        edited: {$set : true }
       })
 
       const updatedFeed = update(feed, { posts: { $splice: [[commentIndex, 1, updatedComment]] } })
