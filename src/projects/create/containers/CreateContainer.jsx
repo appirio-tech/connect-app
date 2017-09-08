@@ -108,7 +108,7 @@ class CreateConainer extends React.Component {
   // stores the incomplete project in local storage
   onLeave(e) {// eslint-disable-line no-unused-vars
     const { wizardStep, isProjectDirty } = this.state
-    if (wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS && isProjectDirty) {// Project Details step
+    if (wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {// Project Details step
       console.log('saving incomplete project')
       window.localStorage.setItem(LS_INCOMPLETE_PROJECT, JSON.stringify(this.state.updatedProject))
     }
