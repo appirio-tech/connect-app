@@ -1,6 +1,81 @@
 @import "tc-includes";
 .rich-editor{
   position: relative;
+  .addLinkButton {
+    position: relative;
+  }
+  .addLinkModal {
+    top: 30px;
+    left: 50%;
+    transform: translate(-50%) scale(1);
+    position: absolute;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 1px 18px 0 rgba(0, 0, 0, 0.3);
+    z-index: 2;
+    box-sizing: border-box;
+
+    .modalWrapper {
+      white-space: nowrap;
+      background: #fff;
+      box-shadow: 0 1px 18px 0 rgba(0, 0, 0, 0.3);
+      position: relative;
+      background-color: white;
+      width: 360px;
+    }
+
+    .modalInput {
+      display: inline-block;
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+      color: #181818 !important;
+      font-size: 15px;
+      height: auto;
+      line-height: 1.2;
+      margin: 0;
+      padding: 16px;
+      width: 270px;
+      @include placeholder {
+        font-size:15px;
+      }
+    }
+
+    .modalInput:focus {
+      outline: none;
+      box-shadow: none !important;
+      background: transparent !important;
+    }
+
+    .modalButton {
+      padding: 0;
+      cursor: pointer;
+      border: 0;
+      height: 26px;
+      width: 26px;
+      margin-right: 5px !important;
+      background: transparent;
+      padding-right: 16px;
+      color: #ccc;
+    }
+
+    .modalButton:hover {
+      color: #9d1d20;
+    }
+
+    .modalButtonWrapper {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .modalError {
+      transition: height 0.2s ease-in-out;
+      color: #fff;
+      font-size: 12px;
+      margin: -8px 2rem 0 2rem;
+    }
+  }
 }
 .public-DraftEditorPlaceholder-root {
   position: absolute;
@@ -31,6 +106,23 @@
   display: none !important;
 }
 
-.postActionButton{
-  font-size:13px;
+span.bbcode-u {
+    text-decoration: underline;
+}
+
+.editor-tool{
+  border-radius:3px;  
+  display:flex;
+  height:30px;
+  width:30px;
+  align-items: center;
+  justify-content:center;
+}
+
+.tool-active{
+  background-color:#37373C;
+  
+}
+.tool-inactive{
+  background-color:#FFFFFFFF;
 }

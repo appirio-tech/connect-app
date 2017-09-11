@@ -18,6 +18,9 @@ class MessageDetails extends React.Component {
     this.props.onLoadMoreMessages()
   }
 
+  onEditMessage(messageId) {
+    this.props.onEditMessage(messageId)
+  }
   onSaveMessageChange(messageId, content, editMode) {
     this.props.onSaveMessageChange(messageId, content, editMode)
   }
@@ -27,7 +30,6 @@ class MessageDetails extends React.Component {
       topicMessage,
       messages,
       hasMoreMessages,
-      newMessage,
       onNewMessageChange,
       onAddNewMessage,
       onSaveMessage,
@@ -61,8 +63,10 @@ class MessageDetails extends React.Component {
           avatarUrl={_.get(item, 'author.photoURL', null)}
           authorName={item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user'}
           date={moment(item.date).fromNow()}
+          edited={item.edited}
           active={item.unread}
           self={item.author && item.author.userId === currentUser.userId}
+          onEdit={this.onEditMessage.bind(this, item.id)}
           onChange={this.onSaveMessageChange.bind(this, item.id)}
           onSave={onSaveMessage}
           onDelete={onDeleteMessage}
@@ -83,12 +87,12 @@ class MessageDetails extends React.Component {
           authorName={authorName}
           onAdd={onAddNewMessage}
           onChange={onNewMessageChange}
-          content={newMessage}
+          threadId={this.props.id}
         />
       }
       {isDeletingTopic &&
-      <div className="editing-layer">
-        <div>Deleting...</div>
+      <div className="deleting-layer">
+        <div>Deleting post ...</div>
       </div> 
       }
     </ActionCard>
@@ -151,6 +155,16 @@ MessageDetails.propTypes = {
    * )
    */
   onSaveMessageChange: PropTypes.func.isRequired,
+
+  /**
+   * Callback fired when a message is edited
+   *
+   * function (
+   *  String messageId,
+   *  SyntheticEvent event?
+   * )
+   */
+  onEditMessage: PropTypes.func.isRequired,
 
   /**
    * Callback fired when a new message is added (confirmed)

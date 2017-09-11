@@ -1,4 +1,4 @@
-require('./node_modules/coffee-script/register')
+require('./node_modules/coffeescript/register')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 const branch = process.env.CIRCLE_BRANCH

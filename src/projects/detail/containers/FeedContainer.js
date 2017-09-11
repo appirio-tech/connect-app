@@ -16,12 +16,10 @@ import update from 'react-addons-update'
 import NewPost from '../../../components/Feed/NewPost'
 import Feed from '../../../components/Feed/Feed'
 import ProjectSpecification from '../../../components/ProjectSpecification/ProjectSpecification'
-import { loadDashboardFeeds, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment } from '../../actions/projectTopics'
+import { loadDashboardFeeds, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
 import { Helpers, scroller } from 'react-scroll'
-import {stateToHTML} from 'draft-js-export-html'
-import {stateFromHTML} from 'draft-js-import-html'
 
 /*eslint-disable new-cap */
 const ScrollableFeed = Helpers.Element(Feed)
@@ -45,6 +43,10 @@ class FeedView extends React.Component {
     this.onLeave = this.onLeave.bind(this)
     this.isChanged = this.isChanged.bind(this)
     this.onNewPostChange = this.onNewPostChange.bind(this)
+    this.onEditMessage = this.onEditMessage.bind(this)
+    this.onSaveMessageChange = this.onSaveMessageChange.bind(this)
+    this.onEditTopic = this.onEditTopic.bind(this)
+    this.onTopicChange = this.onTopicChange.bind(this)
     this.state = { feeds : [], showAll: [], newPost: {} }
   }
 
@@ -81,8 +83,8 @@ class FeedView extends React.Component {
     const hasComment = !_.isUndefined(_.find(this.state.feeds, (feed) => (feed.isSavingTopic || feed.isDeletingTopic || feed.isAddingComment)
       || (feed.newComment && feed.newComment.length)
       || (feed.newTitle && feed.newTitle.length && feed.newTitle !== feed.title)
-      || (feed.topicMessage && feed.topicMessage.newContent && feed.topicMessage.newContent.length && feed.topicMessage.newContent !== stateToHTML(stateFromHTML(feed.topicMessage.content)))
-      || !_.isUndefined(_.find(feed.comments, (message) => message.isSavingComment || message.isDeletingComment || (message.newContent && message.newContent.length && message.newContent !== stateToHTML(stateFromHTML(message.content)))))
+      || (feed.topicMessage && feed.topicMessage.newContent && feed.topicMessage.newContent.length && feed.topicMessage.rawContent && feed.topicMessage.newContent !== feed.topicMessage.rawContent)
+      || !_.isUndefined(_.find(feed.comments, (message) => message.isSavingComment || message.isDeletingComment || (message.newContent && message.newContent.length && message.rawContent && message.newContent !== message.rawContent)))
     ))
     const hasThread = (newPost.title && !!newPost.title.trim().length) || ( newPost.content && !!newPost.content.trim().length)
     return hasThread || hasComment
@@ -107,26 +109,29 @@ class FeedView extends React.Component {
       prevFeed = _.find(prevProps.feeds, t => feed.id === t.id)
     }
     const _toComment = (p) => {
+      const date = p.updatedDate?p.updatedDate:p.date
+      const edited = date !== p.date
       const comment = {
         id: p.id,
         content: p.body,
+        rawContent: p.rawContent,
+        isGettingComment: p.isGettingComment,
         isSavingComment: p.isSavingComment,
         isDeletingComment: p.isDeletingComment,
         error: p.error,
         unread: !p.read,
-        date: p.date,
+        date,
+        edited,
         author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
       }
-      if (prevFeed) {
-        const prevComment = _.find(prevFeed.posts, t => p.id === t.id)
-        if (prevComment && prevComment.isSavingComment && !comment.isSavingComment && !comment.error) {
-          comment.editMode = false
-        } else {
-          const feedFromState = _.find(this.state.feeds, t => feed.id === t.id)
-          const commentFromState = feedFromState ? _.find(feedFromState.comments, t => comment.id === t.id) : null
-          comment.newContent = commentFromState ? commentFromState.newContent : null
-          comment.editMode = commentFromState && commentFromState.editMode
-        }
+      const prevComment = prevFeed ? _.find(prevFeed.posts, t => p.id === t.id) : null
+      if (prevComment && prevComment.isSavingComment && !comment.isSavingComment && !comment.error) {
+        comment.editMode = false
+      } else {
+        const feedFromState = _.find(this.state.feeds, t => feed.id === t.id)
+        const commentFromState = feedFromState ? _.find(feedFromState.comments, t => comment.id === t.id) : null
+        comment.newContent = commentFromState ? commentFromState.newContent : null
+        comment.editMode = commentFromState && commentFromState.editMode
       }
       return comment
     }
@@ -296,11 +301,32 @@ class FeedView extends React.Component {
     this.props.deleteFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, postId)
   }
 
+  onEditMessage(feedId, postId) {
+    const thread = _.find(this.state.feeds, t => feedId === t.id)
+    const comment = _.find(thread.comments, message => message.id === postId)
+    if (!comment.rawContent) {
+      this.props.getFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, postId)
+    }
+    this.onSaveMessageChange(feedId, postId, null, true)
+  }
+
+  onEditTopic(feedId) {
+    const thread = _.find(this.state.feeds, t => feedId === t.id)
+    const comment = thread.topicMessage
+    if (!comment.rawContent) {
+      this.props.getFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, comment.id)
+    }
+    this.onTopicChange(feedId, comment.id, null, null, true)
+  }
+
   onTopicChange(feedId, messageId, title, content, editTopicMode) {
     this.setState({
       feeds: this.state.feeds.map((item) => {
         if (item.id === feedId) {
-          return {...item, newTitle: title, editTopicMode, topicMessage: {...item.topicMessage, newContent: content}}
+          item.newTitle = title
+          item.editTopicMode = editTopicMode
+          item.topicMessage = {...item.topicMessage, newContent: content}
+          return {...item}
         }
         return item
       })
@@ -335,9 +361,11 @@ class FeedView extends React.Component {
             onNewCommentChange={this.onNewCommentChange.bind(this, item.id)}
             onAddNewComment={this.onAddNewComment.bind(this, item.id)}
             onLoadMoreComments={this.onShowAllComments.bind(this, item.id)}
+            onEditMessage={this.onEditMessage.bind(this, item.id)}
             onSaveMessageChange={this.onSaveMessageChange.bind(this, item.id)}
             onSaveMessage={this.onSaveMessage.bind(this, item.id)}
             onDeleteMessage={this.onDeleteMessage.bind(this, item.id)}
+            onEditTopic={this.onEditTopic.bind(this, item.id)}
             onTopicChange={this.onTopicChange.bind(this, item.id)}
             onSaveTopic={this.onSaveTopic.bind(this, item.id)}
             onDeleteTopic={this.onDeleteTopic.bind(this, item.id)}
@@ -408,7 +436,8 @@ const mapDispatchToProps = {
   loadFeedComments,
   addFeedComment,
   saveFeedComment,
-  deleteFeedComment
+  deleteFeedComment,
+  getFeedComment
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedContainer)
