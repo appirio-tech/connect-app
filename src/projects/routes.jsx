@@ -14,7 +14,7 @@ import { requiresAuthentication } from '../components/AuthenticatedComponent'
 
 
 const projectRoutes = (
-  <Route path="/projects" components={ { topbar: (props) => <TopBarContainer toolbar={ props.toolbar } shortUserMenu={ props.shortUserMenu } />, content: requiresAuthentication(ProjectLayout)}}>
+  <Route path="/projects" components={ { topbar: (props) => <TopBarContainer route={ props.route } toolbar={ props.toolbar } shortUserMenu={ props.shortUserMenu } />, content: requiresAuthentication(ProjectLayout)}}>
     // TODO add project topbar
     <IndexRoute components={{toolbar: ProjectsToolBar, main: Projects }} />
     <Route path=":projectId" components={{toolbar: ProjectToolBar, main: ProjectDetail }} >

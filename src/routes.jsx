@@ -96,7 +96,7 @@ const validateCreateProjectParams = (nextState, replace, callback) => {
   callback()
 }
 
-const renderTopBarWithProjectsToolBar = () => <TopBarContainer toolbar={ ProjectsToolBar } />
+const renderTopBarWithProjectsToolBar = (props) => <TopBarContainer toolbar={ ProjectsToolBar } route={props.route} />
 
 export default (
   <Route path="/" onUpdate={() => window.scrollTo(0, 0)} component={ App } onEnter={ redirectToConnect }>
