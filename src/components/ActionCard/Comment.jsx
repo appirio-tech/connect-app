@@ -35,7 +35,7 @@ class Comment extends React.Component {
 
   edit() {
     this.setState({editMode: true})
-    this.props.onChange(null,true)
+    this.props.onChange(null, true)
   }
 
   delete() {

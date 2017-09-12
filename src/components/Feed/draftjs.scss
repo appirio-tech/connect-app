@@ -65,9 +65,14 @@
   list-style-type: disc;
 }
 .public-DraftStyleDefault-pre {
-  background: #ddd;
+  background: #fafafb;
   padding: 10px;
-  font-family: monospace;
+  font-family: Roboto Mono, SF Mono, monospace;
+  font-size: 13px;
+  font-weight: normal;
+  color: #333;
+  border: 1px solid #ededf2;
+  border-radius: 4px;
 }
 .public-DraftStyleDefault-block {
   white-space: pre-wrap;

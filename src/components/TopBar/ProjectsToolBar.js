@@ -185,10 +185,10 @@ class ProjectsToolBar extends Component {
               closeModal={ this.hideCreateProjectDialog }
               userRoles={ userRoles }
               onProjectUpdate={ (updatedProject, dirty=true) => {
-                  this.setState({
-                    isProjectDirty: dirty
-                  })
-                }
+                this.setState({
+                  isProjectDirty: dirty
+                })
+              }
               }
             />
           }

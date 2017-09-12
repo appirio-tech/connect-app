@@ -23,8 +23,16 @@ const blockDndPlugin = createBlockDndPlugin()
 const decorator = composeDecorators(
   blockDndPlugin.decorator
 )
-const imagePlugin = createImagePlugin({ decorator })
-const plugins = [linkPlugin, handleDropPlugin, blockDndPlugin, imagePlugin, imageUploadPlugin]
+const allowImages = false
+const plugins = [linkPlugin, blockDndPlugin]
+if (allowImages){
+  const imagePlugin = createImagePlugin({ decorator })
+  plugins.push(handleDropPlugin)
+  plugins.push(imagePlugin)
+  plugins.push(imageUploadPlugin)
+}
+
+
 
 const styles = [
   {className: 'bold', style: 'BOLD'},
@@ -298,12 +306,14 @@ class RichTextArea extends React.Component {
                     active={currentEntity && 'LINK' === currentEntity.getType()}
                   />
                   <div className="separator"/>
-                  <AddLinkButton
-                    type={'image'}
-                    getEditorState={this.getEditorState}
-                    setEditorState={this.setEditorState}
-                    disabled={disableForCodeBlock}
-                  />
+                  { allowImages && 
+                    <AddLinkButton
+                      type={'image'}
+                      getEditorState={this.getEditorState}
+                      setEditorState={this.setEditorState}
+                      disabled={disableForCodeBlock}
+                    />
+                  }
                 </div>
                 <div className="tc-btns">
                 { editMode && !isCreating &&
