@@ -1,23 +1,50 @@
 
 
 import React, {PropTypes} from 'react'
-import {Editor, EditorState, RichUtils} from 'draft-js'
-import {stateToMarkdown} from 'draft-js-export-markdown'
-import {stateToHTML} from 'draft-js-export-html'
-import {stateFromHTML} from 'draft-js-import-html'
-import { Avatar } from 'appirio-tech-react-components'
+import Editor, {composeDecorators} from 'draft-js-plugins-editor'
+import {EditorState, RichUtils} from 'draft-js'
+import {Avatar} from 'appirio-tech-react-components'
 import cn from 'classnames'
+import createLinkPlugin from 'draft-js-link-plugin'
+import createImagePlugin from 'draft-js-image-plugin'
+import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin'
+import imageUploadPlugin from './ImageUploadPlugin'
+import handleDropPlugin from './HandleDropPlugin'
+import AddLinkButton from './AddLinkButton'
+import {getCurrentEntity} from '../../helpers/draftJSHelper'
+import markdownToState from '../../helpers/markdownToState'
+import stateToMarkdown from '../../helpers/stateToMarkdown'
+import 'draft-js-link-plugin/lib/plugin.css'
+import EditorIcons from './EditorIcons'
 import './RichTextArea.scss'
+
+const linkPlugin = createLinkPlugin()
+const blockDndPlugin = createBlockDndPlugin()
+const decorator = composeDecorators(
+  blockDndPlugin.decorator
+)
+const allowImages = false
+const plugins = [linkPlugin, blockDndPlugin]
+if (allowImages){
+  const imagePlugin = createImagePlugin({ decorator })
+  plugins.push(handleDropPlugin)
+  plugins.push(imagePlugin)
+  plugins.push(imageUploadPlugin)
+}
+
+
 
 const styles = [
   {className: 'bold', style: 'BOLD'},
-  {className: 'italic', style: 'ITALIC'}
+  {className: 'italic', style: 'ITALIC'},
+  {className: 'underline', style: 'UNDERLINE'}
 ]
 
 const blocks = [
   {className: 'ordered-list', style: 'ordered-list-item'},
   {className: 'unordered-list', style: 'unordered-list-item'},
-  {className: 'quote', style: 'blockquote'}
+  {className: 'quote', style: 'blockquote'},
+  {className: 'code', style: 'code-block'}
 ]
 
 class RichTextArea extends React.Component {
@@ -33,32 +60,24 @@ class RichTextArea extends React.Component {
     this.onPost = this.onPost.bind(this)
     this.cancelEdit = this.cancelEdit.bind(this)
     this.clearState = this.clearState.bind(this)
+    this.getEditorState = this.getEditorState.bind(this)
+    this.setEditorState = this.setEditorState.bind(this)
+    this.setUploadState = this.setUploadState.bind(this)
   }
 
   componentDidMount() {
     document.removeEventListener('click', this.onClickOutside)
     document.addEventListener('click', this.onClickOutside)
+  }
 
+  componentWillMount() {
     this.setState({
       editorExpanded: this.props.editMode,
-      titleValue: this.props.title || ''
+      titleValue: this.props.title || '',
+      editorState: this.props.content ? EditorState.createWithContent(markdownToState(this.props.content)) : EditorState.createEmpty(),
+      currentMDContent: this.props.content,
+      oldMDContent: this.props.oldContent
     })
-
-    if (this.props.content) {
-      const htmlState = stateFromHTML(this.props.content)
-      this.setState({
-        editorState: EditorState.createWithContent(htmlState),
-        currentHtmlContent: stateToHTML(htmlState)
-      })
-    } else {
-      this.setState({
-        editorState: EditorState.createEmpty()
-      })
-    }
-
-    if (this.props.oldContent) {
-      this.setState({oldHtmlContent: stateToHTML(stateFromHTML(this.props.oldContent))})
-    }
   }
 
   componentWillUnmount() {
@@ -68,6 +87,16 @@ class RichTextArea extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.isCreating !== this.props.isCreating && !nextProps.isCreating && !nextProps.hasError) {
       this.clearState()
+    } else if ((nextProps.isGettingComment !== this.props.isGettingComment && !nextProps.isGettingComment)
+      || (nextProps.messageId !== this.props.messageId)) {
+      const editorState = EditorState.push(this.state.editorState, nextProps.content ? markdownToState(nextProps.content) : EditorState.createEmpty().getCurrentContent())
+      this.setState({
+        editorExpanded: nextProps.editMode,
+        titleValue: nextProps.title || '',
+        editorState,
+        currentMDContent: nextProps.content,
+        oldMDContent: nextProps.oldContent
+      })
     }
   }
 
@@ -75,7 +104,9 @@ class RichTextArea extends React.Component {
     this.setState({
       editorExpanded: this.props.editMode,
       titleValue: '',
-      editorState: EditorState.createEmpty()
+      editorState: EditorState.push(this.state.editorState, EditorState.createEmpty().getCurrentContent()),
+      currentMDContent: null,
+      oldMDContent: null
     })
   }
 
@@ -120,34 +151,46 @@ class RichTextArea extends React.Component {
     const newState = RichUtils.handleKeyCommand(editorState, command)
     if (newState) {
       this.onEditorChange(newState)
-      return true
+      return 'handled'
     }
-    return false
+    return 'not-handled'
   }
 
   toggleBlockType(blockType) {
+    if (!this.state.editorState.getSelection().getHasFocus()) {
+      return
+    }
     this.onEditorChange(RichUtils.toggleBlockType(this.state.editorState, blockType))
   }
 
   toggleInlineStyle(inlineStyle) {
+    if (!this.state.editorState.getSelection().getHasFocus()) {
+      return
+    }
     this.onEditorChange(RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle))
   }
 
   onEditorChange(editorState) {
-    const htmlContent = editorState.getCurrentContent().hasText() ? stateToHTML(editorState.getCurrentContent()) : ''
     this.setState({
-      editorState,
-      currentHtmlContent: htmlContent
+      editorState
     })
-    if (this.props.onPostChange) {
-      this.props.onPostChange(this.state.titleValue, htmlContent)
+    if (!this.refs.richEditor) {
+      return
+    }
+    const prevMDContent = this.state.currentMDContent
+    const mdContent = editorState.getCurrentContent().hasText() ? stateToMarkdown(editorState.getCurrentContent()) : ''
+    this.setState({
+      currentMDContent: mdContent
+    })
+    if (this.props.onPostChange && prevMDContent !== mdContent) {
+      this.props.onPostChange(this.state.titleValue, mdContent)
     }
   }
 
   onTitleChange() {
     this.setState({titleValue: this.refs.title.value})
     if (this.props.onPostChange) {
-      this.props.onPostChange(this.refs.title.value, this.state.currentHtmlContent)
+      this.props.onPostChange(this.refs.title.value, this.state.currentMDContent)
     }
   }
 
@@ -157,7 +200,7 @@ class RichTextArea extends React.Component {
       return
     }
     const title = this.state.titleValue
-    const content = stateToMarkdown(this.state.editorState.getCurrentContent())
+    const content = this.state.currentMDContent
     if ((this.props.disableTitle || title) && content) {
       this.props.onPost({title, content})
     }
@@ -166,27 +209,38 @@ class RichTextArea extends React.Component {
   cancelEdit() {
     this.props.cancelEdit()
   }
-
+  getEditorState() {
+    return this.state.editorState
+  }
+  setEditorState(editorState) {
+    this.onEditorChange(editorState)
+  }
+  setUploadState(uploading) {
+    this.setState({uploading})
+  }
   render() {
-    const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating, disableTitle} = this.props
-    const {editorExpanded, editorState, titleValue, oldHtmlContent, currentHtmlContent} = this.state
+    const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating, isGettingComment, disableTitle} = this.props
+    const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading} = this.state
     let canSubmit = (disableTitle || titleValue.trim())
         && editorState.getCurrentContent().hasText()
     if (editMode && canSubmit) {
-      canSubmit = (!disableTitle && titleValue !== this.props.oldTitle) || oldHtmlContent !== currentHtmlContent
+      canSubmit = (!disableTitle && titleValue !== this.props.oldTitle) || oldMDContent !== currentMDContent
     }
     const currentStyle = editorState.getCurrentInlineStyle()
-    const selection = editorState.getSelection()
-    const blockType = editorState
-      .getCurrentContent()
-      .getBlockForKey(selection.getStartKey())
-      .getType()
+    const blockType = RichUtils.getCurrentBlockType(editorState)
+    const currentEntity = getCurrentEntity(editorState)
+    const disableForCodeBlock = blockType === 'code-block'
 
     return (
       <div className={cn(className, 'rich-editor', {expanded: editorExpanded || editMode})} ref="richEditor">
-        {isCreating &&
+        {(isCreating || isGettingComment) &&
          <div className="editing-layer">
-         </div> 
+         </div>
+        }
+        {uploading &&
+         <div className="editing-layer">
+           <div>Uploading image {uploading}%</div>
+         </div>
         }
         <a href="javascript:" className="btn-close" />
         <div className="modal-row">
@@ -202,52 +256,78 @@ class RichTextArea extends React.Component {
               placeholder={titlePlaceholder || 'Title of the post'}
             />
             <div className="draftjs-editor tc-textarea">
+              {!isGettingComment &&
               <Editor
                 ref="editor"
                 placeholder={contentPlaceholder}
                 editorState={editorState}
                 onChange={this.onEditorChange}
                 handleKeyCommand={this.handleKeyCommand}
+                plugins={plugins}
+                setUploadState={this.setUploadState}
               />
+              }
               <div className="textarea-footer">
                 <div className="textarea-buttons">
-                  {/* TODO use Icon components */}
                   {styles.map((item) =>
                     <button
                       key={item.style}
-                      className={cn(item.className, {active: currentStyle.has(item.style)})}
+                      disabled={disableForCodeBlock}
                       onMouseDown={(e) => {
                         this.toggleInlineStyle(item.style)
                         e.preventDefault()
                       }}
-                    />)}
+                    >
+                      {
+                        EditorIcons.render(item.className, currentStyle.has(item.style))
+                      }
+                    </button>
+                    )}
                   <div className="separator"/>
-                  {/* TODO use Icon components */}
                   {blocks.map((item) =>
                     <button
+                      disabled={item.style !== 'code-block' && disableForCodeBlock}
                       key={item.style}
-                      className={cn(item.className, {active: item.style === blockType})}
                       onMouseDown={(e) => {
                         this.toggleBlockType(item.style)
                         e.preventDefault()
                       }}
-                    />)}
-                  {/*<div className="separator"/>
-                  <button className="attach"/>*/}
+                    >
+                      {
+                        EditorIcons.render(item.className, item.style === blockType)
+                      }
+                    </button>
+                    )}
+                  <AddLinkButton
+                    type={'link'}
+                    getEditorState={this.getEditorState}
+                    setEditorState={this.setEditorState}
+                    disabled={disableForCodeBlock}
+                    active={currentEntity && 'LINK' === currentEntity.getType()}
+                  />
+                  <div className="separator"/>
+                  { allowImages && 
+                    <AddLinkButton
+                      type={'image'}
+                      getEditorState={this.getEditorState}
+                      setEditorState={this.setEditorState}
+                      disabled={disableForCodeBlock}
+                    />
+                  }
                 </div>
                 <div className="tc-btns">
                 { editMode && !isCreating &&
-                <button className="tc-btn-link postActionButton" onClick={this.cancelEdit}>
+                <button className="tc-btn tc-btn-link tc-btn-sm" onClick={this.cancelEdit}>
                   Cancel
                 </button>
                 }
                 { editMode &&
-                <button className="tc-btn tc-btn-primary tc-btn-sm postActionButton" onClick={this.onPost} disabled={!canSubmit }>
+                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
                   { isCreating ? 'Saving...' : 'Save changes' }
                 </button>
                 }
                 { !editMode &&
-                <button className="tc-btn tc-btn-primary tc-btn-sm postActionButton" onClick={this.onPost} disabled={!canSubmit }>
+                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
                   { isCreating ? 'Posting...' : 'Post' }
                 </button>
                 }

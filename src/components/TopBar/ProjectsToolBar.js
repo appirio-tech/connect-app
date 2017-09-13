@@ -28,7 +28,6 @@ class ProjectsToolBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isCreatingProject: false,
       isCreateProjectModalVisible : false,
       errorCreatingProject: false,
       isFilterVisible: false
@@ -41,6 +40,7 @@ class ProjectsToolBar extends Component {
     this.handleSearch = this.handleSearch.bind(this)
     this.handleMyProjectsFilter = this.handleMyProjectsFilter.bind(this)
     this.createProject = this.createProject.bind(this)
+    this.onLeave = this.onLeave.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -49,7 +49,7 @@ class ProjectsToolBar extends Component {
       if (!nextProps.projectCreationError
         && nextProps.project && nextProps.project.id) {
         this.hideCreateProjectDialog()
-        this.context.router.push('/projects/' + nextProps.project.id)
+        this.props.router.push('/projects/' + nextProps.project.id)
       } else {
         this.setState({
           errorCreatingProject: true
@@ -58,9 +58,30 @@ class ProjectsToolBar extends Component {
     }
   }
 
+  componentDidMount() {
+    const { router, route } = this.props
+    // sets route leave hook to show unsaved changes alert and persist incomplete project
+    this.routeLeaveHook = router.setRouteLeaveHook(route, this.onLeave)
+
+    // sets window unload hook to show unsaved changes alert and persist incomplete project
+    window.addEventListener('beforeunload', this.onLeave)
+  }
+
   componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.onLeave)
+    if (this.routeLeaveHook) {
+      this.routeLeaveHook()
+    }
     const contentDiv = document.getElementById('wrapper-main')
     contentDiv.classList.remove('with-filters')
+  }
+
+  onLeave(e) {
+    const { isProjectDirty } = this.state
+    const { creatingProject } = this.props
+    if (isProjectDirty && !creatingProject) {
+      return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
+    }
   }
 
   /*eslint-disable no-unused-vars */
@@ -85,10 +106,17 @@ class ProjectsToolBar extends Component {
   }
 
   hideCreateProjectDialog() {
-    this.setState({
-      isCreateProjectModalVisible : false,
-      errorCreatingProject: false
-    })
+    let confirm = true
+    if (this.state.isProjectDirty) {
+      confirm = window.confirm('You have unsaved changes. Are you sure you want to leave?')
+    }
+    if (confirm === true) {
+      this.setState({
+        isProjectDirty: false,
+        isCreateProjectModalVisible : false,
+        errorCreatingProject: false
+      })
+    }
   }
 
   applyFilters(filter) {
@@ -116,7 +144,7 @@ class ProjectsToolBar extends Component {
   routeWithParams(criteria, page) {
     // remove any null values
     criteria = _.pickBy(criteria, _.identity)
-    this.context.router.push({
+    this.props.router.push({
       pathname: '/projects/',
       query: _.assign({}, criteria, { page })
     })
@@ -156,6 +184,12 @@ class ProjectsToolBar extends Component {
               createProject={ this.createProject }
               closeModal={ this.hideCreateProjectDialog }
               userRoles={ userRoles }
+              onProjectUpdate={ (updatedProject, dirty=true) => {
+                this.setState({
+                  isProjectDirty: dirty
+                })
+              }
+              }
             />
           }
           { errorCreatingProject && <CoderBot code={ 500 } message="Unable to create project" />}
@@ -214,10 +248,6 @@ ProjectsToolBar.propTypes = {
 }
 
 ProjectsToolBar.defaultProps = {
-}
-
-ProjectsToolBar.contextTypes = {
-  router: PropTypes.object.isRequired
 }
 
 // export default ProjectsToolBar

@@ -130,3 +130,5 @@ SCSS Files
 - Configure Emmet to work with React, e.g. classes expand to `className` instead of `class`
 - Follow the instructions under [Get Emmet working](http://www.nitinh.com/2015/02/setting-sublime-text-react-jsx-development/)
   - **Note:** Add the last snippet of code to `reg_replace.sublime-settings` by navigating to  `Sublime Text -> Preferences -> Package Settings -> Reg Replace -> Settings-User`
+
+© 2017 Topcoder. All Rights Reserved

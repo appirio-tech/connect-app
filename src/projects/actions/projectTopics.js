@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { getTopics, getTopicPosts, createTopic, saveTopic, deleteTopic, addTopicPost, saveTopicPost, deleteTopicPost } from '../../api/messages'
+import { getTopics, getTopicPosts, createTopic, saveTopic, deleteTopic, addTopicPost, saveTopicPost, getTopicPost, deleteTopicPost } from '../../api/messages'
 import {
   PROJECT_FEED_TYPE_PRIMARY,
   PROJECT_FEED_TYPE_MESSAGES,
@@ -10,6 +10,7 @@ import {
   LOAD_PROJECT_FEED_COMMENTS,
   CREATE_PROJECT_FEED_COMMENT,
   SAVE_PROJECT_FEED_COMMENT,
+  GET_PROJECT_FEED_COMMENT,
   DELETE_PROJECT_FEED_COMMENT,
   LOAD_PROJECT_FEEDS_MEMBERS,
   DISCOURSE_BOT_USERID,
@@ -116,6 +117,7 @@ export function createProjectTopic(projectId, topic) {
       payload: createTopic(updatedTopic),
       meta: {
         tag: topic.tag,
+        rawContent: topic.body,
         onSuccessAnalytics: {
           eventType: EventTypes.track,
           eventPayload: {
@@ -142,6 +144,7 @@ export function saveProjectTopic(feedId, tag, topicProps) {
       meta: {
         feedId,
         tag,
+        rawContent: topicProps.content,
         onSuccessAnalytics: {
           eventType: EventTypes.track,
           eventPayload: {
@@ -205,6 +208,7 @@ export function addFeedComment(feedId, tag, comment) {
       meta: {
         feedId,
         tag,
+        rawContent: comment.content,
         onSuccessAnalytics: {
           eventType: EventTypes.track,
           eventPayload: {
@@ -231,6 +235,7 @@ export function saveFeedComment(feedId, tag, comment) {
         feedId,
         tag,
         commentId: comment.id,
+        rawContent: comment.content,
         onSuccessAnalytics: {
           eventType: EventTypes.track,
           eventPayload: {
@@ -261,6 +266,32 @@ export function deleteFeedComment(feedId, tag, commentId) {
           eventType: EventTypes.track,
           eventPayload: {
             event: 'Project Topic Comment Deleted',
+            properties: {
+              topicCategory: tag,
+              topicId: feedId,
+              projectStatus
+            }
+          }
+        }
+      }
+    })
+  }
+}
+
+export function getFeedComment(feedId, tag, commentId) {
+  return (dispatch, getState) => {
+    const projectStatus = getState().projectState.project.status
+    return dispatch({
+      type: GET_PROJECT_FEED_COMMENT,
+      payload: getTopicPost(feedId, commentId),
+      meta: {
+        feedId,
+        tag,
+        commentId,
+        onSuccessAnalytics: {
+          eventType: EventTypes.track,
+          eventPayload: {
+            event: 'Project Topic Comment Retrieved',
             properties: {
               topicCategory: tag,
               topicId: feedId,

@@ -17,6 +17,10 @@ class Comment extends React.Component {
     this.cancelEdit = this.cancelEdit.bind(this)
   }
 
+  componentWillMount() {
+    this.setState({editMode: this.props.message && this.props.message.editMode})
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({editMode: nextProps.message && nextProps.message.editMode})
   }
@@ -44,16 +48,19 @@ class Comment extends React.Component {
   }
 
   render() {
-    const {message, avatarUrl, authorName, date, children, active, self, isSaving, hasError, readonly} = this.props
+    const {message, avatarUrl, authorName, date, edited, children, active, self, isSaving, hasError, readonly} = this.props
+    console.log('comment '+date+edited)
 
     if (this.state.editMode) {
-      const content = message.newContent === null || message.newContent === undefined ? message.content : message.newContent
+      const content = message.newContent === null || message.newContent === undefined ? message.rawContent : message.newContent
       return (
         <RichTextArea
             disableTitle
             editMode
+            messageId={message.id}
+            isGettingComment={message.isGettingComment}
             content={content}
-            oldContent={message.content}
+            oldContent={message.rawContent}
             onPost={this.onSave}
             onPostChange={this.onChange}
             isCreating={isSaving}
@@ -76,7 +83,7 @@ class Comment extends React.Component {
               {authorName}
             </div>
             <div className="card-time">
-              {date}
+              {date} {edited && '• Edited'}
             </div>
             {self && !readonly &&
               <CommentEditToggle
@@ -88,12 +95,12 @@ class Comment extends React.Component {
           <div className="comment-body draftjs-post">
             {children}
           </div>
+          {message && message.isDeletingComment &&
+            <div className="deleting-layer">
+              <div>Deleting post ...</div>
+            </div> 
+          }
         </div>
-        {message && message.isDeletingComment &&
-         <div className="editing-layer">
-          <div>Deleting...</div>
-         </div> 
-        }
       </Panel.Body>
     )
   }
@@ -128,6 +135,10 @@ Comment.propTypes = {
    * The message object
    */
   message: PropTypes.any,
+  /**
+   * The onEdit function
+   */
+  onEdit: PropTypes.func,
   /**
    * The onSave function
    */

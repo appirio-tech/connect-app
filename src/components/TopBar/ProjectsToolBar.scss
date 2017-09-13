@@ -178,6 +178,10 @@ $tc-body-large: 20px;
     margin-top: 0px;
   }
 
+  .SelectProduct {
+    margin-top: 0px;
+  }
+
   section.content {
     padding: 1px 0;
   }
@@ -189,8 +193,8 @@ $tc-body-large: 20px;
     z-index: 22;/* +1 from z-index of the modal overlay */
   }
 
-  .FillProjectDetails .header {
-    margin: 35px 0 0;
+  .FillProjectDetailsWrapper {
+    margin-top: 0px;
   }
 }
 

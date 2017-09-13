@@ -54,19 +54,6 @@ const sections = [
           {
             icon: 'question',
             required: true,
-            title: 'Are you an existing Watson Virtual Assistant customer?',
-            description: '',
-            fieldName: 'details.appDefinition.existingWatsonCustomer',
-            type: 'radio-group',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ]
-          },
-
-          {
-            icon: 'question',
-            required: true,
             title: 'Do you have an existing IBM Bluemix account?',
             description: '',
             type: 'radio-group',
@@ -168,19 +155,6 @@ export const basicSections = [
             description: 'Brief Description',
             title: 'Description',
             type: 'textbox'
-          },
-          {
-            icon: 'question',
-            required: true,
-            validationError: 'Please complete this section',
-            title: 'Are you an existing Watson Virtual Assistant customer?',
-            description: '',
-            fieldName: 'details.appDefinition.existingWatsonCustomer',
-            type: 'radio-group',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ]
           },
           {
             icon: 'question',
