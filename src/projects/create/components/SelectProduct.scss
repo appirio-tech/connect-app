@@ -26,14 +26,23 @@
   a:hover {
     text-decoration: underline;
   }
-  h1 {
+
+  > h1 {
     @include tc-heading;
     @include roboto-light;
     color: $tc-black;
-    margin-bottom: 40px;
+    margin-bottom: 73px;
     font-size: 36px;
     line-height: 40px;
-
+  }
+  > h1 + h2 {
+    @include tc-heading;
+    @include roboto-bold;
+    font-size: 15px;
+    line-height: 20px;
+    color: $tc-gray-80;
+    margin-bottom: 13px;
+    margin-top: 0px;
   }
 
   .header{

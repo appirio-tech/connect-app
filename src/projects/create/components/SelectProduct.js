@@ -2,6 +2,7 @@ import React, { PropTypes as PT } from 'react'
 import config from '../../../config/projectWizard'
 import ProductCard from './ProductCard'
 import SVGIconImage from '../../../components/SVGIconImage'
+import { findCategory } from '../../../config/projectWizard'
 import './SelectProduct.scss'
 
 function SelectProduct(props) {
@@ -28,6 +29,7 @@ function SelectProduct(props) {
       )
     }
   }
+  const projectCategory = findCategory(props.projectType)
   return (
     <div>
       <div className="header headerSelectProduct">
@@ -35,7 +37,8 @@ function SelectProduct(props) {
         { (!userRoles || !userRoles.length) && <button className="tc-btn tc-btn-default tc-btn-sm" onClick={ onChangeProjectType }><SVGIconImage filePath="arrows-undo" />Change project type</button> }
       </div>
       <div className="SelectProduct">
-        <h1>Select your project type</h1>
+        <h1>{ projectCategory.info }</h1>
+        <h2>{ projectCategory.question }</h2>
         <div className="cards">{cards}</div>
         <div className="footer">
           Looking for something else? <a href="http://crowdsourcing.topcoder.com/piqued_by_crowdsourcing">Get in touch with us.</a>

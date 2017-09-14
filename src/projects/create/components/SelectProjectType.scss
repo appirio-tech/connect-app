@@ -31,24 +31,4 @@
     justify-content: center;
     flex-flow: row wrap;
   }
-
-
-
-  > h1 {
-    font-family: 'Roboto', Helvetica, Arial, sans-serif;
-    font-weight: 300;
-    color: #262628;
-    margin-bottom: 73px;
-    font-size: 36px;
-    line-height: 40px;
-  }
-  h1 + h2 {
-    font-size: 15px;
-    line-height: 20px;
-    font-family: 'Roboto', Helvetica, Arial, sans-serif;
-    font-weight: 600;
-    color: #47474F;
-    margin-bottom: 13px;
-    margin-top: 0px;
-  }
 }

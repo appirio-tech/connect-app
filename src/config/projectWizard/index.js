@@ -119,7 +119,7 @@ const products = {
   QA: {
     icon: 'project-quality-assurance',
     info: 'Test and fix bugs in your software',
-    question: 'What do you need to test?',
+    question: 'What kind of quality assurance (QA) do you need?',
     id: 'quality_assurance',
     subtypes: {
       'Crowd Testing': {
@@ -178,6 +178,11 @@ export function findProduct(product) {
       }
     }
   }
+}
+
+export function findCategory(categoryId) {
+  console.log(categoryId, 'categoryId')
+  return _.find(products, (category) => { return category.id === categoryId })
 }
 
 export function findProductsOfCategory(category) {
