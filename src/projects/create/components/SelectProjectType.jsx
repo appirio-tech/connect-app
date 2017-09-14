@@ -1,7 +1,6 @@
 import React, { PropTypes as PT } from 'react'
 import config from '../../../config/projectWizard'
 import ProjectTypeCard from './ProjectTypeCard'
-// import WizardHeader from './WizardHeader'
 import SVGIconImage from '../../../components/SVGIconImage'
 import './SelectProjectType.scss'
 
@@ -15,7 +14,7 @@ function SelectProjectType(props) {
         icon={icon}
         info={item.info}
         key={key}
-        onClick={() => props.onProjectTypeChange(key)}
+        onClick={() => props.onProjectTypeChange(item.id)}
         type={key}
       />
     )
@@ -23,7 +22,7 @@ function SelectProjectType(props) {
   return (
     <div className="SelectProjectType">
       <h1>Select your project category</h1>
-      {cards}
+      <div className="cards">{cards}</div>
       <div className="footer">
         Looking for something else? <a href="http://crowdsourcing.topcoder.com/piqued_by_crowdsourcing">Get in touch with us.</a>
       </div>
@@ -32,11 +31,7 @@ function SelectProjectType(props) {
 }
 
 SelectProjectType.propTypes = {
-  onProjectNameChange: PT.func.isRequired,
-  onProjectRefChange: PT.func.isRequired,
-  onProjectTypeChange: PT.func.isRequired,
-  projectName: PT.string.isRequired,
-  projectRef: PT.string.isRequired
+  onProjectTypeChange: PT.func.isRequired
 }
 
 export default SelectProjectType

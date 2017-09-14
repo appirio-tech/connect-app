@@ -13,32 +13,39 @@ class ProjectTypeCard extends React.Component {
     const p = this.props
     const s = this.state
     const icon = React.cloneElement(p.icon, {
-      color: !p.disabled && s.hovered ? 'blue' : 'black'
+      color: !p.disabled && s.hovered ? '#1A85FF' : '#5D5D66'
     })
+
+    let className = `ProjectTypeCard ${p.disabled ? 'disabled' : 'enabled'}`
+    if (p.selected) className = `${className} selected`
+
     return (
       <div
-        className={`ProjectTypeCard ${p.disabled ? 'disabled' : 'enabled'}`}
-        onClick={p.disabled ? _.noop : p.onClick}
+        className={className}
+        onClick={p.disabled ? _.noop : this.props.onClick}
         onMouseEnter={() => this.setState({ hovered: true })}
         onMouseLeave={() => this.setState({ hovered: false })}
       >
         {icon}
         <h1 className="header">{p.type}</h1>
-        <div className="details">{p.info}</div>
-        <div className="button">Create project</div>
+        <div className="sub-type-details">{p.info}</div>
+        <button className="tc-btn tc-btn-sm tc-btn-primary">Select project</button>
       </div>
     )
   }
 }
 
-ProjectTypeCard.defaultTypes = {
-  onClick: _.noop
+ProjectTypeCard.defaultProps = {
+  disabled: false,
+  selected: false
 }
 
 ProjectTypeCard.propTypes = {
+  disabled: PT.bool,
   icon: PT.element.isRequired,
   info: PT.string.isRequired,
-  onClick: PT.func,
+  onClick: PT.func.isRequired,
+  selected: PT.bool,
   type: PT.string.isRequired
 }
 

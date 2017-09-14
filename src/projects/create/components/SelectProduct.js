@@ -5,9 +5,11 @@ import SVGIconImage from '../../../components/SVGIconImage'
 import './SelectProduct.scss'
 
 function SelectProduct(props) {
+  const { userRoles, projectType, onChangeProjectType } = props
   const cards = []
   for (const key in config) {
     const type = config[key]
+    if (projectType && type.id !== projectType) continue
     const subTypes = type.subtypes
     for(const subType in subTypes) {
       const item = subTypes[subType]
@@ -29,7 +31,8 @@ function SelectProduct(props) {
   return (
     <div>
       <div className="header headerSelectProduct">
-        <SVGIconImage filePath="connect-logo-mono" />
+        { (!userRoles || !userRoles.length) && <SVGIconImage filePath="connect-logo-mono" />}
+        { (!userRoles || !userRoles.length) && <button className="tc-btn tc-btn-default tc-btn-sm" onClick={ onChangeProjectType }><SVGIconImage filePath="arrows-undo" />Change project type</button> }
       </div>
       <div className="SelectProduct">
         <h1>Select your project type</h1>
@@ -43,7 +46,8 @@ function SelectProduct(props) {
 }
 
 SelectProduct.propTypes = {
-  onProductChange: PT.func.isRequired
+  onProductChange: PT.func.isRequired,
+  userRoles: PT.arrayOf(PT.string)
 }
 
 export default SelectProduct

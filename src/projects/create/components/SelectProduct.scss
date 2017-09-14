@@ -1,16 +1,22 @@
 @import 'tc-includes';
 
 .headerSelectProduct {
+  display: flex;
+  justify-content: space-between;
   position: absolute;
   top: 25px;
   left: 20px;
+  width: calc(100% - 40px);// 20px for left absolute position, 20px for padding around button in the  header
+  .tc-btn-default img {
+    margin-right: 10px;
+  }
 }
 
 .SelectProduct {
   @include tc-body;
   color: $tc-gray-50;
   text-align: center;
-  max-width: 1000px;
+  max-width: 860px;
   margin: 0 auto;
   margin-top: -20px;// to align top with bottom of the header
   a, a:visited, a:hover, a:active{
@@ -32,7 +38,6 @@
 
   .header{
     display:block;
-    float:left;
   }
 
   .footer {
@@ -40,41 +45,9 @@
     margin-top: 50px;
   }
 
-  .ProductCard {
-    transition: 300ms all ease;
-    -moz-transition: 300ms all ease;
-    -webkit-transition: 300ms all ease;
-    .tc-btn {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0
-    }
-    &:hover {
-      transition: 300ms all ease;
-      -moz-transition: 300ms all ease;
-      -webkit-transition: 300ms all ease;
-      position: relative;
-      background: $tc-white;
-      box-shadow: 0 2px 9px 0 rgba(38, 38, 38, 0.1);
-      h1 {
-        color: $tc-dark-blue;
-      }
-      .tc-btn {
-        opacity: 1;
-      }
-    }
-    &:active {
-      background: $tc-dark-blue-10;
-    }
-  }
-
-  
-
   .cards {
     display: flex;
-    // justify-content: space-between;
+    justify-content: center;
     flex-flow: row wrap;
   }
 }

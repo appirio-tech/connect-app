@@ -84,8 +84,9 @@ const redirectToProject = (nextState, replace, callback) => {
 }
 
 const validateCreateProjectParams = (nextState, replace, callback) => {
+  const projectType = nextState.params.projectType
   const product = nextState.params.product
-  const productCategory = findProductCategory(product)
+  const productCategory = !projectType ? findProductCategory(product) : projectType
   if (product && product.trim().length > 0 && !productCategory) {
     // workaround to add URL for incomplete project confirmation step
     // ideally we should have better URL naming which resolves each route with distinct patterns
@@ -101,7 +102,7 @@ const renderTopBarWithProjectsToolBar = (props) => <TopBarContainer toolbar={ Pr
 export default (
   <Route path="/" onUpdate={() => window.scrollTo(0, 0)} component={ App } onEnter={ redirectToConnect }>
     <IndexRoute components={{ topbar: renderTopBarWithProjectsToolBar, content: Home }} />
-    <Route path="/new-project(/:product)" components={{ topbar: null, content: CreateContainer }} onEnter={ validateCreateProjectParams } />
+    <Route path="/new-project(/:projectType)(/:product)" components={{ topbar: null, content: CreateContainer }} onEnter={ validateCreateProjectParams } />
     <Route path="/new-project-callback" components={{ topbar: null, content: CreateContainer }} />
     <Route path="/terms" components={{ topbar: renderTopBarWithProjectsToolBar, content: ConnectTerms }}  />
     <Route path="/login" components={{ topbar: renderTopBarWithProjectsToolBar, content: LoginRedirect }} />

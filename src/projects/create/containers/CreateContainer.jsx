@@ -144,12 +144,20 @@ class CreateConainer extends React.Component {
         {...this.props}
         createProject={ this.createProject }
         processing={ this.state.creatingProject }
-        onStepChange={ (wizardStep) => {
+        onStepChange={ (wizardStep, updatedProject) => {
+          const projectType = _.get(updatedProject, 'type', null)
+          const product = _.get(updatedProject, 'details.products[0]', null)
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
             browserHistory.push(NEW_PROJECT_PATH + '/incomplete')
           }
-          if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
-            browserHistory.push(NEW_PROJECT_PATH +'' + window.location.search)
+          if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
+            browserHistory.push(NEW_PROJECT_PATH + '/' + window.location.search)
+          }
+          if (projectType && wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
+            browserHistory.push(NEW_PROJECT_PATH + '/' + projectType + window.location.search)
+          }
+          if (projectType && product && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
+            browserHistory.push(NEW_PROJECT_PATH + '/' + projectType + '/' + product + window.location.search)
           }
           this.setState({
             wizardStep
@@ -157,6 +165,7 @@ class CreateConainer extends React.Component {
         }
         }
         onProjectUpdate={ (updatedProject, dirty=true) => {
+          const projectType = _.get(this.state.updatedProject, 'type', null)
           const prevProduct = _.get(this.state.updatedProject, 'details.products[0]', null)
           const product = _.get(updatedProject, 'details.products[0]', null)
             // compares updated product with previous product to know if user has updated the product

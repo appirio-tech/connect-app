@@ -8,15 +8,7 @@
     display: block;
     margin: 0px;
 
-    .ProjectTypeCard {
-      background: $tc-white;
-
-      &.selected {
-        background: $tc-gray-10;
-      }
-    }
-
-    .ProjectSubTypeCard {
+    .ProductCard {
       background: $tc-white;
 
       &.selected {

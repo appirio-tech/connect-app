@@ -54,51 +54,109 @@ const products = {
         icon: 'product-front-end-prototype',
         id: 'visual_prototype'
       },
-      Website: {
-        brief: 'Websites',
-        details: 'Build responsive or regular websites',
-        icon: 'product-website',
-        id: 'website_development'
-      },
-      App: {
-        brief: 'Apps',
-        details: 'Build apps for mobile, web, or wearables',
-        icon: 'product-app',
-        id: 'application_development'
-      },
-      'Watson Chatbot': {
-        brief: 'Watson Chatbot',
-        details: 'Build Chatbot using IBM Watson',
-        icon: 'product-chatbot',
-        id: 'watson_chatbot',
-        hidden: true
-      },
       'Software Development': {
         brief: 'Tasks or adhoc',
         details: 'Get help with any part of your development cycle',
         icon: 'product-software-development',
         id: 'generic_dev'
       },
+      'API': {
+        brief: '',
+        details: 'Build an API for your software',
+        icon: 'product-software-development',
+        id: 'api_dev'
+      },
+      'Integration': {
+        brief: 'Tasks or adhoc',
+        details: 'Expand and improve your software',
+        icon: 'product-software-development',
+        id: 'integration_dev'
+      }
+    }
+  },
+  App: {
+    icon: 'project-app',
+    info: 'Front end prototypes, website and application development, services, and more',
+    question: 'What do you need to develop?',
+    id: 'app',
+    subtypes: {
+      App: {
+        brief: 'Apps',
+        details: 'Build apps for mobile, web, or wearables',
+        icon: 'product-app',
+        id: 'application_development'
+      },
+    }
+  },
+  Website: {
+    icon: 'project-website',
+    info: 'Front end prototypes, website and application development, services, and more',
+    question: 'What do you need to develop?',
+    id: 'website',
+    subtypes: {
+      Website: {
+        brief: 'Websites',
+        details: 'Build responsive or regular websites',
+        icon: 'product-website',
+        id: 'website_development'
+      },
+    }
+  },
+  Chatbot: {
+    icon: 'project-chatbot',
+    info: 'Front end prototypes, website and application development, services, and more',
+    question: 'What do you need to develop?',
+    id: 'chatbot',
+    subtypes: {
+      'Watson Chatbot': {
+        brief: 'Watson Chatbot',
+        details: 'Build Chatbot using IBM Watson',
+        icon: 'product-watson-chatbot',
+        id: 'watson_chatbot'
+      }
+    }
+  },
+  QA: {
+    icon: 'project-quality-assurance',
+    info: 'Test and fix bugs in your software',
+    question: 'What do you need to test?',
+    id: 'quality_assurance',
+    subtypes: {
       'Crowd Testing': {
         brief: 'TBD',
         details: 'Exploratory Testing, Cross browser-device Testing',
         icon: 'icon-crowd-testing',
-        id: 'crowd_testing',
-        hidden: true
+        id: 'crowd_testing'
       },
       'Mobility Testing': {
         brief: 'TBD',
         details: 'App Certification, Lab on Hire, User Sentiment Analysis',
         icon: 'icon-mobility-testing',
-        id: 'mobility_testing',
-        hidden: true
+        id: 'mobility_testing'
       },
       'Website Performance': {
         brief: 'TBD',
         details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
         icon: 'icon-website-performance',
-        id: 'website_performance',
-        hidden: true
+        id: 'website_performance'
+      },
+      'Digital Accessability': {
+        brief: 'TBD',
+        details: 'Make sure you app or website conforms to all rules and regulations',
+        icon: 'icon-digital-accessability',
+        id: 'digital_accessability'
+      },
+      'Open Source Automation': {
+        brief: 'TBD',
+        details: 'Exploratory testing, cross browser testing',
+        icon: 'icon-os-automation',
+        id: 'open_source_automation'
+      },
+      'Consulting & Adivisory': {
+        brief: 'TBD',
+        details: 'Expert services to get your project covered end-to-end',
+        icon: 'icon-consulting-advisory',
+        id: 'consulting_adivisory'
       }
     }
   }
@@ -118,6 +176,18 @@ export function findProduct(product) {
       if (products[pType].subtypes[prd].id === product) {
         return prd
       }
+    }
+  }
+}
+
+export function findProductsOfCategory(category) {
+  for(const pType in products) {
+    if (products[pType].id === category) {
+      const ret = []
+      for(const prd in products[pType].subtypes) {
+        ret.push({ ...products[pType].subtypes[prd], name: prd })
+      }
+      return ret
     }
   }
 }
