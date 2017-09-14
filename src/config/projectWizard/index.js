@@ -60,13 +60,13 @@ const products = {
         icon: 'product-software-development',
         id: 'generic_dev'
       },
-      'API': {
+      API: {
         brief: '',
         details: 'Build an API for your software',
         icon: 'product-software-development',
         id: 'api_dev'
       },
-      'Integration': {
+      Integration: {
         brief: 'Tasks or adhoc',
         details: 'Expand and improve your software',
         icon: 'product-software-development',

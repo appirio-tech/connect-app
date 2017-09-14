@@ -165,7 +165,7 @@ class CreateConainer extends React.Component {
         }
         }
         onProjectUpdate={ (updatedProject, dirty=true) => {
-          const projectType = _.get(this.state.updatedProject, 'type', null)
+          // const projectType = _.get(this.state.updatedProject, 'type', null)
           const prevProduct = _.get(this.state.updatedProject, 'details.products[0]', null)
           const product = _.get(updatedProject, 'details.products[0]', null)
             // compares updated product with previous product to know if user has updated the product

@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { unflatten } from 'flat'
 import React, { Component, PropTypes } from 'react'
 
-import config, { findProductCategory, findProductsOfCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
+import { findProductsOfCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
 import Wizard from '../../../components/Wizard'
 import SelectProjectType from './SelectProjectType'
 import SelectProduct from './SelectProduct'
