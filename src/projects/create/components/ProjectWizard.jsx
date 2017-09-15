@@ -39,6 +39,7 @@ class ProjectWizard extends Component {
     this.handleOnCreateProject = this.handleOnCreateProject.bind(this)
     this.handleStepChange = this.handleStepChange.bind(this)
     this.restoreCommonDetails = this.restoreCommonDetails.bind(this)
+    this.handleWizardCancel = this.handleWizardCancel.bind(this)
   }
 
   componentDidMount() {
@@ -293,6 +294,10 @@ class ProjectWizard extends Component {
     })
   }
 
+  handleWizardCancel() {
+    this.props.closeModal()
+  }
+
   render() {
     const { processing, showModal, userRoles } = this.props
     const { project, dirtyProject } = this.state
@@ -300,7 +305,7 @@ class ProjectWizard extends Component {
       <Wizard
         showModal={showModal}
         className="ProjectWizard"
-        onCancel={() => this.props.closeModal()}
+        onCancel={this.handleWizardCancel}
         onStepChange={ this.handleStepChange }
         step={this.state.wizardStep}
         shouldRenderBackButton={ (step) => userRoles && userRoles.length && step > 1 }

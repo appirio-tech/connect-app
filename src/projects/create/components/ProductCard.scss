@@ -37,6 +37,20 @@
     letter-spacing: -0.4px;
     transition: 150ms ease-in-out all;
   }
+  .icon-wrapper {
+    svg {
+      fill: $tc-gray-70;
+    }
+
+    &:hover {
+      svg {
+        fill: $tc-dark-blue-90;
+      }
+    }
+  }
+  .Icon {
+    margin: 4*$base_unit 0 2*$base_unit;
+  }
 
   .list-cards {
     user-select: none;

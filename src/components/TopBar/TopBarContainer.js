@@ -24,9 +24,13 @@ class TopBarContainer extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps) {
+    return nextProps.user.handle !== this.props.user.handle
+    || nextProps.toolbar.type !== this.props.toolbar.type
+  }
+
   render() {
     const { user, userRoles, toolbar } = this.props
-    console.log(typeof toolbar)
 
     const userHandle  = _.get(user, 'handle')
     const userImage = _.get(user, 'profile.photoURL')
