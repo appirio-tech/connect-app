@@ -133,7 +133,7 @@ class ProjectWizard extends Component {
     this.setState({
       project: { details: {} },
       dirtyProject: { details: {} },
-      wizardStep: WZ_STEP_SELECT_PROD_TYPE
+      wizardStep: WZ_STEP_SELECT_PROJ_TYPE
     }, () => {
       typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
     })

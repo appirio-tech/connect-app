@@ -2,6 +2,48 @@ import _ from 'lodash'
 import typeToSpecification from '../projectSpecification/typeToSpecification'
 
 const products = {
+  App: {
+    icon: 'project-app',
+    info: 'Front end prototypes, website and application development, services, and more',
+    question: 'What do you need to develop?',
+    id: 'app',
+    subtypes: {
+      App: {
+        brief: 'Apps',
+        details: 'Build apps for mobile, web, or wearables',
+        icon: 'product-app',
+        id: 'application_development'
+      },
+    }
+  },
+  Website: {
+    icon: 'project-website',
+    info: 'Front end prototypes, website and application development, services, and more',
+    question: 'What do you need to develop?',
+    id: 'website',
+    subtypes: {
+      Website: {
+        brief: 'Websites',
+        details: 'Build responsive or regular websites',
+        icon: 'product-website',
+        id: 'website_development'
+      },
+    }
+  },
+  Chatbot: {
+    icon: 'project-chatbot',
+    info: 'Front end prototypes, website and application development, services, and more',
+    question: 'What do you need to develop?',
+    id: 'chatbot',
+    subtypes: {
+      'Watson Chatbot': {
+        brief: 'Watson Chatbot',
+        details: 'Build Chatbot using IBM Watson',
+        icon: 'product-watson-chatbot',
+        id: 'watson_chatbot'
+      }
+    }
+  },
   Design: {
     icon: 'product-app-visual-design',
     info: 'Wireframe, mockups, visual design, and more',
@@ -54,65 +96,23 @@ const products = {
         icon: 'product-front-end-prototype',
         id: 'visual_prototype'
       },
-      'Software Development': {
-        brief: 'Tasks or adhoc',
-        details: 'Get help with any part of your development cycle',
+      'Front-end development': {
+        brief: '',
+        details: 'Full fledged front end development',
         icon: 'product-software-development',
-        id: 'generic_dev'
+        id: 'frontend_dev'
       },
-      API: {
+      'Integration/API': {
         brief: '',
         details: 'Build an API for your software',
         icon: 'product-software-development',
         id: 'api_dev'
       },
-      Integration: {
+      'Software Development': {
         brief: 'Tasks or adhoc',
-        details: 'Expand and improve your software',
+        details: 'Get help with any part of your development cycle',
         icon: 'product-software-development',
-        id: 'integration_dev'
-      }
-    }
-  },
-  App: {
-    icon: 'project-app',
-    info: 'Front end prototypes, website and application development, services, and more',
-    question: 'What do you need to develop?',
-    id: 'app',
-    subtypes: {
-      App: {
-        brief: 'Apps',
-        details: 'Build apps for mobile, web, or wearables',
-        icon: 'product-app',
-        id: 'application_development'
-      },
-    }
-  },
-  Website: {
-    icon: 'project-website',
-    info: 'Front end prototypes, website and application development, services, and more',
-    question: 'What do you need to develop?',
-    id: 'website',
-    subtypes: {
-      Website: {
-        brief: 'Websites',
-        details: 'Build responsive or regular websites',
-        icon: 'product-website',
-        id: 'website_development'
-      },
-    }
-  },
-  Chatbot: {
-    icon: 'project-chatbot',
-    info: 'Front end prototypes, website and application development, services, and more',
-    question: 'What do you need to develop?',
-    id: 'chatbot',
-    subtypes: {
-      'Watson Chatbot': {
-        brief: 'Watson Chatbot',
-        details: 'Build Chatbot using IBM Watson',
-        icon: 'product-watson-chatbot',
-        id: 'watson_chatbot'
+        id: 'generic_dev'
       }
     }
   },

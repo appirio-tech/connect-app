@@ -16,5 +16,5 @@
   "open_source_automation": "crowd_testing.v1.0",
   "consulting_adivisory": "crowd_testing.v1.0",
   "api_dev": "app_dev.v1.0",
-  "integration_dev" : "app_dev.v1.0"
+  "frontend_dev" : "app_dev.v1.0"
 }

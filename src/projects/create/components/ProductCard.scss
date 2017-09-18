@@ -12,7 +12,9 @@
   transition: 150ms ease-in-out all;
 
   .Icon {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 0 auto 20px;
   }
 
@@ -47,9 +49,6 @@
         fill: $tc-dark-blue-90;
       }
     }
-  }
-  .Icon {
-    margin: 4*$base_unit 0 2*$base_unit;
   }
 
   .list-cards {
