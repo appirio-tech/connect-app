@@ -18,7 +18,7 @@
   text-align: center;
   max-width: 860px;
   margin: 0 auto;
-  margin-top: -20px;// to align top with bottom of the header
+  // margin-top: -20px;// to align top with bottom of the header
   a, a:visited, a:hover, a:active{
     color: $tc-dark-blue;
     cursor: pointer;
@@ -27,22 +27,23 @@
     text-decoration: underline;
   }
 
-  > h1 {
+  h1 {
     @include tc-heading;
     @include roboto-light;
     color: $tc-black;
     margin-bottom: 73px;
     font-size: 36px;
     line-height: 40px;
-  }
-  > h1 + h2 {
-    @include tc-heading;
-    @include roboto-bold;
-    font-size: 15px;
-    line-height: 20px;
-    color: $tc-gray-80;
-    margin-bottom: 13px;
-    margin-top: 0px;
+
+    + h2 {
+      font-size: 15px;
+      line-height: 20px;
+      @include tc-heading;
+      @include roboto-bold;
+      color: $tc-gray-80;
+      margin-bottom: 13px;
+      margin-top: 0px;
+    }
   }
 
   .header{

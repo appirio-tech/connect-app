@@ -1,6 +1,7 @@
 import React from 'react'
 import { MenuBar } from 'appirio-tech-react-components'
 import moment from 'moment'
+import { NEW_PROJECT_PATH } from '../../config/constants'
 
 require('./Footer.scss')
 
@@ -14,8 +15,9 @@ const Footer = () => {
     {img: '', text: 'Terms', link: 'https://connect.topcoder.com/terms'}
   ]
   const isProjectDetails = /projects\/\d+/.test(window.location.pathname)
+  const isCreateProject = window.location.pathname.startsWith(NEW_PROJECT_PATH)
 
-  if (isProjectDetails) {
+  if (isProjectDetails || isCreateProject) {
     return null
   }
 

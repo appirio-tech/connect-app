@@ -1,43 +1,49 @@
 @import 'tc-includes';
 
+@mixin transition {
+  transition: 150ms ease-in-out all;
+}
+
 .ProductCard {
   width: 185px;
   height: 185px;
   margin: 10px 8px;
-  background: #fff;
+  background: $tc-white;
   border-radius: 4px;
   padding: 30px 15px 20px;
   text-align: center;
-  box-shadow: 0 0 0 1px #DCDCE0;
-  transition: 150ms ease-in-out all;
+  box-shadow: 0 0 0 1px $tc-gray-20;
+  @include transition;
 
   .Icon {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0 auto 20px;
+    width: 32px;
+    height: 32px;
   }
 
   h3 {
+    @include tc-heading;
+    @include roboto-bold;
     font-size: 15px;
     line-height: 20px;
-    font-family: 'Roboto', Helvetica, Arial, sans-serif;
-    font-weight: 600;
-    color: #47474F;
+    color: $tc-gray-80;
     margin-bottom: 5px;
     margin-top: 0px;
-    transition: 150ms ease-in-out all;
+    @include transition;
   }
 
   .details {
     margin: 0;
-    color: #888894;
+    color: $tc-gray-50;
     line-height: 20px;
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
     font-weight: 400;
     font-size: 13px;
     letter-spacing: -0.4px;
-    transition: 150ms ease-in-out all;
+    @include transition;
   }
   .icon-wrapper {
     svg {
@@ -56,17 +62,22 @@
   }
 
   &:not(.active):hover {
-    box-shadow: 0 0 0 1px #59A7FF;
-    background-color: #F4F9FF;
+    box-shadow: 0 0 0 1px $tc-dark-blue-70;
+    background-color: $tc-dark-blue-10;
     cursor: pointer;
+
+    h3 {
+      color: $tc-black;
+    }
+
+    p {
+      color: $tc-gray-80;
+    }
   }
-  &:not(.active):hover h3 {
-    color: #262628;
-  }
-  &:not(.active):hover p {
-    color: #47474F;
-  }
+
+  &:active,
   &.active {
-    background: #DCDCE0;
+    background-color: $tc-dark-blue-30;
+    box-shadow: 0 0 0 1px $tc-dark-blue-70;
   }
 }
