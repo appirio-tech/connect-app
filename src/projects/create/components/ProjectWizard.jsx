@@ -282,12 +282,18 @@ class ProjectWizard extends Component {
 
   handleStepChange(wizardStep) {
     const { onStepChange } = this.props
+    const products = findProductsOfCategory(this.state.project.type)
+    // if project type has only one product, move one step back to select project type step
+    if (wizardStep == WZ_STEP_SELECT_PROD_TYPE && products && products.length === 1) {
+      wizardStep = WZ_STEP_SELECT_PROJ_TYPE
+    }
+    // project type
+    // if wizard has moved to select product step , it should persist project type, else it should be reset
+    const type = wizardStep === WZ_STEP_SELECT_PROD_TYPE ? this.state.project.type : null
     this.setState({
-      // In this wizard we have just two steps, and this callback is triggered
-      // only to move from the second step back to the first, thus we always
-      // should reset the projectSubType when this callback is fired.
-      project: update(this.state.project, { type: { $set : null }, details: { products: {$set : [] }}}),
-      dirtyProject: update(this.state.project, { type: { $set : null }, details: { products: {$set : [] }}}),
+      // resets project sub type or product
+      project: update(this.state.project, { type: { $set : type }, details: { products: {$set : [] }}}),
+      dirtyProject: update(this.state.project, { type: { $set : type }, details: { products: {$set : [] }}}),
       wizardStep
     }, () => {
       typeof onStepChange === 'function' && onStepChange(wizardStep, this.state.dirtyProject)
