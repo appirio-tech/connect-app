@@ -256,7 +256,7 @@
       }
     },
     "appirio-tech-webpack-config": {
-      "version": "github:appirio-tech/webpack-config#74b7e9ebf63ea5a39f78dd02c5f7055549954857",
+      "version": "github:appirio-tech/webpack-config#57dfd4aa7eee2e9c1ae3efe0aa95570f25a083e1",
       "dev": true,
       "requires": {
         "angular-mocks": "1.6.6",
