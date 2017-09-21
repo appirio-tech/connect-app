@@ -48,8 +48,12 @@ class ProjectsToolBar extends Component {
     if (this.props.creatingProject && !nextProps.creatingProject) {
       if (!nextProps.projectCreationError
         && nextProps.project && nextProps.project.id) {
-        this.hideCreateProjectDialog()
-        this.props.router.push('/projects/' + nextProps.project.id)
+        this.setState({
+          isProjectDirty : false
+        } ,() => {
+          this.hideCreateProjectDialog()
+          this.props.router.push('/projects/' + nextProps.project.id)
+        })
       } else {
         this.setState({
           errorCreatingProject: true
