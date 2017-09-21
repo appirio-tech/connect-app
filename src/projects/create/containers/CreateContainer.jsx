@@ -157,7 +157,7 @@ class CreateConainer extends React.Component {
             browserHistory.push(NEW_PROJECT_PATH + '/' + projectType + window.location.search)
           }
           if (projectType && product && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
-            browserHistory.push(NEW_PROJECT_PATH + '/' + projectType + '/' + product + window.location.search)
+            browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
           }
           this.setState({
             wizardStep

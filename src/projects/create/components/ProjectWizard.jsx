@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { unflatten } from 'flat'
 import React, { Component, PropTypes } from 'react'
 
-import { findProductsOfCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
+import { findCategory, findProductsOfCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
 import Wizard from '../../../components/Wizard'
 import SelectProjectType from './SelectProjectType'
 import SelectProduct from './SelectProduct'
@@ -60,10 +60,16 @@ class ProjectWizard extends Component {
       // if there is no incomplete project in the local storage, load the wizard with appropriate step
       const updateQuery = {}
       let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
-      if (params && params.projectType) {
-        updateQuery['type'] = { $set : params.projectType }
-        wizardStep = WZ_STEP_SELECT_PROD_TYPE
-        if (params.product) {
+      if (params && params.product) {
+        // first try the path param to be a project category
+        let projectType = findCategory(params.product)
+        if (projectType) {// if its a category
+          updateQuery['type'] = { $set : projectType }
+          wizardStep = WZ_STEP_SELECT_PROD_TYPE
+        } else {
+          // if it is not a category, it should be a product and we should be able to find a category for it
+          projectType = findProductsOfCategory(params.product)
+          updateQuery['type'] = { $set : projectType }
           updateQuery['details'] = { products : { $set: [params.product] } }
           wizardStep = WZ_STEP_FILL_PROJ_DETAILS
         }
