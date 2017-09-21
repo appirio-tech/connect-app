@@ -2,6 +2,7 @@ import React from 'react'
 import Footer from '../Footer/Footer'
 import { MAINTENANCE_MODE } from '../../config/constants'
 import Alert from 'react-s-alert'
+import cn from 'classnames'
 import Maintenance from '../Maintenance/Maintenance'
 
 require('./Layout.scss')
@@ -22,7 +23,7 @@ const Layout = (props) => {
       <div>
         { props.topbar }
         <Alert stack={{limit: 3, spacing: 30}} position="top" html timeout={4000} offset={0} />
-        <div className="main-wrapper" id="wrapper-main">
+        <div className={cn('main-wrapper')} data-route={window.location.pathname.replace(/\//g, "__")} id="wrapper-main">
           { props.content }
         </div>
         <Footer />

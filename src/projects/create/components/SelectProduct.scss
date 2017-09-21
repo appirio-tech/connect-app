@@ -17,6 +17,7 @@
   color: $tc-gray-50;
   text-align: center;
   max-width: 860px;
+  min-height: calc(100vh - 100px);// 100 = 60 (top padding of main wrapper) + 20 (top padding of content) + 20 (bottom padding of content)
   margin: 0 auto;
   // margin-top: -20px;// to align top with bottom of the header
   a, a:visited, a:hover, a:active{
