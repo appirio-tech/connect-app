@@ -181,7 +181,6 @@ export function findProduct(product) {
 }
 
 export function findCategory(categoryId) {
-  console.log(categoryId, 'categoryId')
   return _.find(products, (category) => { return category.id === categoryId })
 }
 

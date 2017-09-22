@@ -2,6 +2,7 @@ import React, { PropTypes as PT } from 'react'
 import config from '../../../config/projectWizard'
 import ProjectTypeCard from './ProjectTypeCard'
 import SVGIconImage from '../../../components/SVGIconImage'
+import { findProductsOfCategory } from '../../../config/projectWizard'
 import './SelectProjectType.scss'
 
 function SelectProjectType(props) {
@@ -10,6 +11,7 @@ function SelectProjectType(props) {
   for (const key in config) {
     const item = config[key]
     const icon = <SVGIconImage filePath={item.icon} />
+    const products = findProductsOfCategory(item.id) || []
     cards.push(
       <ProjectTypeCard
         icon={icon}
@@ -17,6 +19,7 @@ function SelectProjectType(props) {
         key={key}
         onClick={() => props.onProjectTypeChange(item.id)}
         type={key}
+        buttonText={ products.length > 1 ? 'View All' : 'Select Project'}
       />
     )
   }

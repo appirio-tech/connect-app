@@ -31,8 +31,15 @@
     margin-bottom: 10px;
     margin-top: 0px;
   }
-  .Icon {
-    margin: 4*$base_unit 0 2*$base_unit;
+
+
+  .icon-wrapper {
+    .Icon {
+      margin: 4*$base_unit 0 2*$base_unit;
+      svg {
+        fill: $tc-gray-70;
+      }
+    }
   }
   &.disabled {
     opacity: 0.3
@@ -44,6 +51,9 @@
       background: $tc-dark-blue;
       border-color: transparent;
       color: $tc-white;
+    }
+    svg {
+      fill: $tc-dark-blue-90;
     }
   }
   &.selected {
