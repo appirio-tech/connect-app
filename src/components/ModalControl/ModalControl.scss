@@ -22,14 +22,6 @@
     svg {
       fill: $tc-gray-70;
     }
-
-    &:hover {
-      color: $tc-white;
-
-      svg {
-        fill: $tc-white;
-      }
-    }
   }
   .label {
     @include roboto-medium;
@@ -38,11 +30,16 @@
     text-transform: uppercase;
   }
   &:hover {
+    color: $tc-white;
     .bubble {
       background: $tc-dark-blue-70;
     }
     .label {
       color: $tc-black;
+    }
+
+    svg {
+      fill: $tc-white;
     }
   }
 }

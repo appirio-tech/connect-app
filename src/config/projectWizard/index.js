@@ -3,7 +3,7 @@ import typeToSpecification from '../projectSpecification/typeToSpecification'
 
 const products = {
   App: {
-    icon: 'project-app',
+    icon: 'product-cat-app',
     info: 'Front end prototypes, website and application development, services, and more',
     question: 'What do you need to develop?',
     id: 'app',
@@ -11,13 +11,13 @@ const products = {
       App: {
         brief: 'Apps',
         details: 'Build apps for mobile, web, or wearables',
-        icon: 'product-app',
+        icon: 'product-app-app',
         id: 'application_development'
       },
     }
   },
   Website: {
-    icon: 'project-website',
+    icon: 'product-cat-website',
     info: 'Front end prototypes, website and application development, services, and more',
     question: 'What do you need to develop?',
     id: 'website',
@@ -25,13 +25,13 @@ const products = {
       Website: {
         brief: 'Websites',
         details: 'Build responsive or regular websites',
-        icon: 'product-website',
+        icon: 'product-website-website',
         id: 'website_development'
       },
     }
   },
   Chatbot: {
-    icon: 'project-chatbot',
+    icon: 'product-cat-chatbot',
     info: 'Front end prototypes, website and application development, services, and more',
     question: 'What do you need to develop?',
     id: 'chatbot',
@@ -39,13 +39,13 @@ const products = {
       'Watson Chatbot': {
         brief: 'Watson Chatbot',
         details: 'Build Chatbot using IBM Watson',
-        icon: 'product-watson-chatbot',
+        icon: 'product-chatbot-chatbot',
         id: 'watson_chatbot'
       }
     }
   },
   Design: {
-    icon: 'product-app-visual-design',
+    icon: 'product-cat-design',
     info: 'Wireframe, mockups, visual design, and more',
     question: 'What kind of design do you need?',
     id: 'visual_design',
@@ -53,39 +53,39 @@ const products = {
       Wireframes: {
         brief: '10-15 screens',
         details: 'Plan and explore the navigation and structure of your app',
-        icon: 'product-wireframes',
+        icon: 'product-design-wireframes',
         id: 'wireframes'
       },
       'App Visual Design - Concepts': {
         brief: '1-15 screens',
         details: 'Visualize and test your app requirements and ideas',
-        icon: 'product-app-visual-design',
+        icon: 'product-design-app-visual',
         id: 'visual_design_concepts',
         disabled: true
       },
       'Visual Design': {
         brief: '1-15 screens',
         details: 'Create development-ready designs',
-        icon: 'product-app-visual-design',
+        icon: 'product-design-app-visual',
         id: 'visual_design_prod'
       },
       Infographic: {
         brief: 'Infographic',
         details: 'Present your data in an easy-to-understand and interesting way',
-        icon: 'product-infographic',
+        icon: 'product-design-infographic',
         id: 'infographic',
         disabled: true
       },
       'Other Design': {
         brief: 'other designs',
         details: 'Get help with other types of design',
-        icon: 'product-other-design',
+        icon: 'product-design-other',
         id: 'generic_design'
       }
     }
   },
   Development: {
-    icon: 'product-software-development',
+    icon: 'product-cat-development',
     info: 'Front end prototypes, website and application development, services, and more',
     question: 'What do you need to develop?',
     id: 'app_dev',
@@ -93,31 +93,31 @@ const products = {
       'Front-end Prototype': {
         brief: '3-20 screens',
         details: 'Translate designs to a web (HTML/CSS/JavaScript) or mobile prototype',
-        icon: 'product-front-end-prototype',
+        icon: 'product-dev-prototype',
         id: 'visual_prototype'
       },
       'Front-end development': {
         brief: '',
         details: 'Full fledged front end development',
-        icon: 'product-software-development',
+        icon: 'product-dev-front-end-dev',
         id: 'frontend_dev'
       },
       'Integration/API': {
         brief: '',
         details: 'Build an API for your software',
-        icon: 'product-software-development',
+        icon: 'product-dev-integration',
         id: 'api_dev'
       },
       'Software Development': {
         brief: 'Tasks or adhoc',
         details: 'Get help with any part of your development cycle',
-        icon: 'product-software-development',
+        icon: 'product-dev-other',
         id: 'generic_dev'
       }
     }
   },
   QA: {
-    icon: 'project-quality-assurance',
+    icon: 'product-cat-qa',
     info: 'Test and fix bugs in your software',
     question: 'What kind of quality assurance (QA) do you need?',
     id: 'quality_assurance',
@@ -125,37 +125,37 @@ const products = {
       'Crowd Testing': {
         brief: 'TBD',
         details: 'Exploratory Testing, Cross browser-device Testing',
-        icon: 'icon-crowd-testing',
+        icon: 'product-qa-crowd-testing',
         id: 'crowd_testing'
       },
       'Mobility Testing': {
         brief: 'TBD',
         details: 'App Certification, Lab on Hire, User Sentiment Analysis',
-        icon: 'icon-mobility-testing',
+        icon: 'product-qa-mobility-testing',
         id: 'mobility_testing'
       },
       'Website Performance': {
         brief: 'TBD',
         details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
-        icon: 'icon-website-performance',
+        icon: 'product-qa-website-performance',
         id: 'website_performance'
       },
       'Digital Accessability': {
         brief: 'TBD',
         details: 'Make sure you app or website conforms to all rules and regulations',
-        icon: 'icon-digital-accessability',
+        icon: 'product-qa-digital-accessability',
         id: 'digital_accessability'
       },
       'Open Source Automation': {
         brief: 'TBD',
         details: 'Exploratory testing, cross browser testing',
-        icon: 'icon-os-automation',
+        icon: 'product-qa-os-automation',
         id: 'open_source_automation'
       },
       'Consulting & Adivisory': {
         brief: 'TBD',
         details: 'Expert services to get your project covered end-to-end',
-        icon: 'icon-consulting-advisory',
+        icon: 'product-qa-consulting',
         id: 'consulting_adivisory'
       }
     }
