@@ -13,7 +13,7 @@ const products = {
         details: 'Build apps for mobile, web, or wearables',
         icon: 'product-app-app',
         id: 'application_development'
-      },
+      }
     }
   },
   Website: {
@@ -27,7 +27,7 @@ const products = {
         details: 'Build responsive or regular websites',
         icon: 'product-website-website',
         id: 'website_development'
-      },
+      }
     }
   },
   Chatbot: {

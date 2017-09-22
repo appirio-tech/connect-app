@@ -17,7 +17,7 @@
   color: $tc-gray-50;
   text-align: center;
   max-width: 860px;
-  margin: 20px auto;
+  margin: 0px auto 20px;
   a, a:hover, a:visited {
     color: $tc-dark-blue;
     cursor: pointer;
@@ -25,14 +25,18 @@
   a:hover {
     text-decoration: underline;
   }
-  h1 {
+  > h1 {
     @include tc-heading;
-    color: $tc-gray-50;
+    @include roboto-light;
+    margin-bottom: 73px;
+    font-size: 36px;
+    line-height: 40px;
+    color: $tc-black;
     margin-bottom: 20px;
   }
   .footer {
     margin-bottom: 15px;
-    margin-top: 100px;
+    margin-top: 50px;
   }
   .WizardHeader {
     margin: 20px 0;

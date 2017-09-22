@@ -23,7 +23,7 @@ const Layout = (props) => {
       <div>
         { props.topbar }
         <Alert stack={{limit: 3, spacing: 30}} position="top" html timeout={4000} offset={0} />
-        <div className={cn('main-wrapper')} data-route={window.location.pathname.replace(/\//g, "__")} id="wrapper-main">
+        <div className={cn('main-wrapper')} data-route={window.location.pathname.replace(/\//g, '__')} id="wrapper-main">
           { props.content }
         </div>
         <Footer />
