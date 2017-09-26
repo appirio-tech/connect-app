@@ -37,7 +37,7 @@ function SelectProduct(props) {
         { (!userRoles || !userRoles.length) && <button className="tc-btn tc-btn-default tc-btn-sm" onClick={ onChangeProjectType }><SVGIconImage filePath="arrows-undo" />Change project type</button> }
       </div>
       <div className="SelectProduct">
-        <h1>{ projectCategory.info }</h1>
+        <h1> { projectCategory.name } projects </h1>
         <h2>{ projectCategory.question }</h2>
         <div className="cards">{cards}</div>
         <div className="footer">

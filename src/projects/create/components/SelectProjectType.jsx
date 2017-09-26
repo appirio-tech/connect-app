@@ -29,7 +29,7 @@ function SelectProjectType(props) {
         { (!userRoles || !userRoles.length) && <SVGIconImage filePath="connect-logo-mono" />}
       </div>
       <div className="SelectProjectType">
-        <h1>Select your project category</h1>
+        <h1>Create a new project</h1>
         <div className="cards">{cards}</div>
         <div className="footer">
           Looking for something else? <a href="http://crowdsourcing.topcoder.com/piqued_by_crowdsourcing">Get in touch with us.</a>

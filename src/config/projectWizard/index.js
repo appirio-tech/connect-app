@@ -4,7 +4,7 @@ import typeToSpecification from '../projectSpecification/typeToSpecification'
 const products = {
   App: {
     icon: 'product-cat-app',
-    info: 'Front end prototypes, website and application development, services, and more',
+    info: 'Build a phone, tablet, wearable, or desktop app',
     question: 'What do you need to develop?',
     id: 'app',
     subtypes: {
@@ -18,7 +18,7 @@ const products = {
   },
   Website: {
     icon: 'product-cat-website',
-    info: 'Front end prototypes, website and application development, services, and more',
+    info: 'Design and build the high-impact pages for your blog, online store, or company',
     question: 'What do you need to develop?',
     id: 'website',
     subtypes: {
@@ -32,7 +32,7 @@ const products = {
   },
   Chatbot: {
     icon: 'product-cat-chatbot',
-    info: 'Front end prototypes, website and application development, services, and more',
+    info: 'Build a cognitive chat bot for your product',
     question: 'What do you need to develop?',
     id: 'chatbot',
     subtypes: {
@@ -46,7 +46,7 @@ const products = {
   },
   Design: {
     icon: 'product-cat-design',
-    info: 'Wireframe, mockups, visual design, and more',
+    info: 'Pick the right design project for your needs - wireframes, visual, or other',
     question: 'What kind of design do you need?',
     id: 'visual_design',
     subtypes: {
@@ -84,10 +84,10 @@ const products = {
       }
     }
   },
-  Development: {
+  'Software Development' : {
     icon: 'product-cat-development',
-    info: 'Front end prototypes, website and application development, services, and more',
-    question: 'What do you need to develop?',
+    info: 'Get help with any part of your development lifecycle',
+    question: 'What kind of development you need?',
     id: 'app_dev',
     subtypes: {
       'Front-end Prototype': {
@@ -98,17 +98,17 @@ const products = {
       },
       'Front-end development': {
         brief: '',
-        details: 'Full fledged front end development',
+        details: 'Production code without server development',
         icon: 'product-dev-front-end-dev',
         id: 'frontend_dev'
       },
       'Integration/API': {
         brief: '',
-        details: 'Build an API for your software',
+        details: 'Expand and improve your software',
         icon: 'product-dev-integration',
         id: 'api_dev'
       },
-      'Software Development': {
+      'Development Integration': {
         brief: 'Tasks or adhoc',
         details: 'Get help with any part of your development cycle',
         icon: 'product-dev-other',
@@ -181,7 +181,12 @@ export function findProduct(product) {
 }
 
 export function findCategory(categoryId) {
-  return _.find(products, (category) => { return category.id === categoryId })
+  for(const key in products) {
+    if (products[key].id === categoryId) {
+      return { ...products[key], name: key} 
+    }
+  }
+  return null
 }
 
 export function findProductsOfCategory(category) {
