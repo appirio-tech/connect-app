@@ -31,9 +31,10 @@
     margin-bottom: 10px;
     margin-top: 0px;
   }
-
-
+  
   .icon-wrapper {
+    height: 87px;
+    display: flex;
     .Icon {
       margin: 4*$base_unit 0 2*$base_unit;
       svg {
