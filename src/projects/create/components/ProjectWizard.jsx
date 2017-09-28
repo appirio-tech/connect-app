@@ -2,8 +2,9 @@ import _ from 'lodash'
 import { unflatten } from 'flat'
 import React, { Component, PropTypes } from 'react'
 
-import config, { findProductCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
+import { findCategory, findProductsOfCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
 import Wizard from '../../../components/Wizard'
+import SelectProjectType from './SelectProjectType'
 import SelectProduct from './SelectProduct'
 import IncompleteProjectConfirmation from './IncompleteProjectConfirmation'
 import FillProjectDetails from './FillProjectDetails'
@@ -12,10 +13,10 @@ import { LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH } from '../../../con
 import './ProjectWizard.scss'
 
 const WZ_STEP_INCOMP_PROJ_CONF = 0
-// const WZ_STEP_SELECT_PROJ_TYPE = 1
-const WZ_STEP_SELECT_PROD_TYPE = 1
-const WZ_STEP_FILL_PROJ_DETAILS = 2
-const WZ_STEP_ERROR_CREATING_PROJ = 3
+const WZ_STEP_SELECT_PROJ_TYPE = 1
+const WZ_STEP_SELECT_PROD_TYPE = 2
+const WZ_STEP_FILL_PROJ_DETAILS = 3
+const WZ_STEP_ERROR_CREATING_PROJ = 4
 
 class ProjectWizard extends Component {
 
@@ -23,13 +24,14 @@ class ProjectWizard extends Component {
     super(props)
 
     this.state = {
-      wizardStep: WZ_STEP_SELECT_PROD_TYPE,
+      wizardStep: WZ_STEP_SELECT_PROJ_TYPE,
       project: { details: {} },
       dirtyProject: { details: {} },
       isProjectDirty: false
     }
 
     this.updateProjectRef = this.updateProjectRef.bind(this)
+    this.updateProjectType = this.updateProjectType.bind(this)
     this.updateProducts = this.updateProducts.bind(this)
     this.handleProjectChange = this.handleProjectChange.bind(this)
     this.loadIncompleteProject = this.loadIncompleteProject.bind(this)
@@ -37,6 +39,7 @@ class ProjectWizard extends Component {
     this.handleOnCreateProject = this.handleOnCreateProject.bind(this)
     this.handleStepChange = this.handleStepChange.bind(this)
     this.restoreCommonDetails = this.restoreCommonDetails.bind(this)
+    this.handleWizardCancel = this.handleWizardCancel.bind(this)
   }
 
   componentDidMount() {
@@ -56,11 +59,17 @@ class ProjectWizard extends Component {
     } else {
       // if there is no incomplete project in the local storage, load the wizard with appropriate step
       const updateQuery = {}
-      let wizardStep = WZ_STEP_SELECT_PROD_TYPE
+      let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
       if (params && params.product) {
-        const prodCategory = findProductCategory(params.product)
-        if (prodCategory) {
-          updateQuery['type'] = { $set : config[prodCategory].id }
+        // first try the path param to be a project category
+        let projectType = findCategory(params.product)
+        if (projectType) {// if its a category
+          updateQuery['type'] = { $set : projectType }
+          wizardStep = WZ_STEP_SELECT_PROD_TYPE
+        } else {
+          // if it is not a category, it should be a product and we should be able to find a category for it
+          projectType = findProductsOfCategory(params.product)
+          updateQuery['type'] = { $set : projectType }
           updateQuery['details'] = { products : { $set: [params.product] } }
           wizardStep = WZ_STEP_FILL_PROJ_DETAILS
         }
@@ -116,7 +125,7 @@ class ProjectWizard extends Component {
         wizardStep: WZ_STEP_FILL_PROJ_DETAILS
       }, () => {
         typeof onProjectUpdate === 'function' && onProjectUpdate(this.state.dirtyProject, false)
-        typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
+        typeof onStepChange === 'function' && onStepChange(this.state.wizardStep, this.state.dirtyProject)
       })
     }
   }
@@ -130,7 +139,7 @@ class ProjectWizard extends Component {
     this.setState({
       project: { details: {} },
       dirtyProject: { details: {} },
-      wizardStep: WZ_STEP_SELECT_PROD_TYPE
+      wizardStep: WZ_STEP_SELECT_PROJ_TYPE
     }, () => {
       typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
     })
@@ -145,6 +154,30 @@ class ProjectWizard extends Component {
     this.setState({ 
       project: update(this.state.project, updateQuery),
       dirtyProject: update(this.state.project, updateQuery)
+    })
+  }
+
+  updateProjectType(projectType) {
+    window.scrollTo(0, 0)
+    const { onStepChange, onProjectUpdate } = this.props
+    const products = findProductsOfCategory(projectType)
+    console.log(products, 'products')
+    const updateQuery = { }
+    // restore common fields from dirty project
+    // this.restoreCommonDetails(products, updateQuery, detailsQuery)
+    if (projectType) {
+      updateQuery.type = {$set : projectType }
+      if (products.length === 1) {
+        updateQuery.details = { $set : { products : [products[0].id]} }
+      }
+    }
+    this.setState({ 
+      project: update(this.state.project, updateQuery),
+      dirtyProject: update(this.state.project, updateQuery),
+      wizardStep: products.length === 1 ? WZ_STEP_FILL_PROJ_DETAILS : WZ_STEP_SELECT_PROD_TYPE
+    }, () => {
+      typeof onProjectUpdate === 'function' && onProjectUpdate(this.state.dirtyProject, false)
+      typeof onStepChange === 'function' && onStepChange(this.state.wizardStep, this.state.dirtyProject)
     })
   }
 
@@ -166,7 +199,7 @@ class ProjectWizard extends Component {
       wizardStep: WZ_STEP_FILL_PROJ_DETAILS
     }, () => {
       typeof onProjectUpdate === 'function' && onProjectUpdate(this.state.dirtyProject, false)
-      typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
+      typeof onStepChange === 'function' && onStepChange(this.state.wizardStep, this.state.dirtyProject)
     })
   }
 
@@ -255,15 +288,26 @@ class ProjectWizard extends Component {
 
   handleStepChange(wizardStep) {
     const { onStepChange } = this.props
+    const products = findProductsOfCategory(this.state.project.type)
+    // if project type has only one product, move one step back to select project type step
+    if (wizardStep === WZ_STEP_SELECT_PROD_TYPE && products && products.length === 1) {
+      wizardStep = WZ_STEP_SELECT_PROJ_TYPE
+    }
+    // project type
+    // if wizard has moved to select product step , it should persist project type, else it should be reset
+    const type = wizardStep === WZ_STEP_SELECT_PROD_TYPE ? this.state.project.type : null
     this.setState({
-      // In this wizard we have just two steps, and this callback is triggered
-      // only to move from the second step back to the first, thus we always
-      // should reset the projectSubType when this callback is fired.
-      project: update(this.state.project, { details: { products: {$set : [] }}}),
+      // resets project sub type or product
+      project: update(this.state.project, { type: { $set : type }, details: { products: {$set : [] }}}),
+      dirtyProject: update(this.state.project, { type: { $set : type }, details: { products: {$set : [] }}}),
       wizardStep
     }, () => {
-      typeof onStepChange === 'function' && onStepChange(wizardStep)
+      typeof onStepChange === 'function' && onStepChange(wizardStep, this.state.dirtyProject)
     })
+  }
+
+  handleWizardCancel() {
+    this.props.closeModal()
   }
 
   render() {
@@ -273,7 +317,7 @@ class ProjectWizard extends Component {
       <Wizard
         showModal={showModal}
         className="ProjectWizard"
-        onCancel={() => this.props.closeModal()}
+        onCancel={this.handleWizardCancel}
         onStepChange={ this.handleStepChange }
         step={this.state.wizardStep}
         shouldRenderBackButton={ (step) => userRoles && userRoles.length && step > 1 }
@@ -282,15 +326,21 @@ class ProjectWizard extends Component {
           loadIncompleteProject={ this.loadIncompleteProject }
           removeIncompleteProject={ this.removeIncompleteProject }
         />
+        <SelectProjectType
+          onProjectTypeChange={ this.updateProjectType }
+        />
         <SelectProduct
           onProductChange={ this.updateProducts }
+          projectType={ project.type }
+          userRoles={ userRoles }
+          onChangeProjectType={() => this.handleStepChange(WZ_STEP_SELECT_PROJ_TYPE) }
         />
         <FillProjectDetails
           project={ project }
           dirtyProject={ dirtyProject }
           processing={ processing}
           onCreateProject={ this.handleOnCreateProject }
-          onChangeProjectType={() => this.handleStepChange(WZ_STEP_SELECT_PROD_TYPE) }
+          onChangeProjectType={() => this.handleStepChange(WZ_STEP_SELECT_PROJ_TYPE) }
           onProjectChange={ this.handleProjectChange }
           submitBtnText="Continue"
           userRoles={ userRoles }
@@ -338,7 +388,7 @@ ProjectWizard.defaultProps = {
 
 ProjectWizard.Steps = {
   WZ_STEP_INCOMP_PROJ_CONF,
-  // WZ_STEP_SELECT_PROJ_TYPE,
+  WZ_STEP_SELECT_PROJ_TYPE,
   WZ_STEP_SELECT_PROD_TYPE,
   WZ_STEP_FILL_PROJ_DETAILS,
   WZ_STEP_ERROR_CREATING_PROJ

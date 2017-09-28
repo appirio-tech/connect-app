@@ -10,7 +10,7 @@ import TopBarContainer from './components/TopBar/TopBarContainer'
 import ProjectsToolBar from './components/TopBar/ProjectsToolBar'
 import RedirectComponent from './components/RedirectComponent'
 import CreateContainer from './projects/create/containers/CreateContainer'
-import { findProductCategory } from './config/projectWizard'
+import { findCategory, findProductCategory } from './config/projectWizard'
 import {ACCOUNTS_APP_LOGIN_URL, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from './config/constants'
 import { getTopic } from './api/messages'
 import { getFreshToken } from 'tc-accounts'
@@ -85,7 +85,10 @@ const redirectToProject = (nextState, replace, callback) => {
 
 const validateCreateProjectParams = (nextState, replace, callback) => {
   const product = nextState.params.product
-  const productCategory = findProductCategory(product)
+  // first try the path param to be a project category
+  let productCategory = findCategory(product)
+  // if it is not a category, it should be a product and we should be able to find a category for it
+  productCategory = !productCategory ? findProductCategory(product) : productCategory
   if (product && product.trim().length > 0 && !productCategory) {
     // workaround to add URL for incomplete project confirmation step
     // ideally we should have better URL naming which resolves each route with distinct patterns

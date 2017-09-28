@@ -1,11 +1,26 @@
 @import 'tc-includes';
 
+.headerSelectProjectType {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 25px;
+  left: 20px;
+  width: calc(100% - 40px);// 20px for left absolute position, 20px for padding around button in the  header
+  .tc-btn-default img {
+    margin-right: 10px;
+  }
+}
+
 .SelectProjectType {
   @include tc-body;
   color: $tc-gray-50;
   text-align: center;
-  max-width: 960px;
-  margin: 0 auto;
+  max-width: 860px;
+  position: relative;
+  min-height: calc(100vh - 130px);
+  margin: -30px auto 0;
+  padding-bottom: 90px;
   a, a:hover, a:visited {
     color: $tc-dark-blue;
     cursor: pointer;
@@ -13,17 +28,40 @@
   a:hover {
     text-decoration: underline;
   }
-  h1 {
+  > h1 {
     @include tc-heading;
-    color: $tc-gray-50;
+    @include roboto-light;
+    margin-bottom: 73px;
+    font-size: 36px;
+    line-height: 40px;
+    color: $tc-black;
     margin-bottom: 20px;
   }
   .footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     margin-bottom: 15px;
-    margin-top: 100px;
+    margin-top: 50px;
   }
   .WizardHeader {
     margin: 20px 0;
     min-width: 0;
+  }
+  .cards {
+    display: flex;
+    justify-content: center;
+    flex-flow: row wrap;
+  }
+}
+
+.project-creation-dialog {
+  .ProjectWizard .content {
+    padding: 0;
+  }
+  .SelectProjectType {
+    margin-top: 50px;
+    min-height: calc(100vh - 50px);
   }
 }

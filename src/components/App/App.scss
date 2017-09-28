@@ -3,6 +3,10 @@
 body {
   min-width: 320px;
   background-color: $tc-gray-neutral-dark;
+
+  iframe#tc-accounts-iframe {
+    display: none;
+  }
 }
 
 .ReactModal__Body--open {
