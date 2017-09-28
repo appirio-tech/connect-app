@@ -50,7 +50,7 @@ class ProjectsToolBar extends Component {
         && nextProps.project && nextProps.project.id) {
         this.setState({
           isProjectDirty : false
-        } ,() => {
+        }, () => {
           this.hideCreateProjectDialog()
           this.props.router.push('/projects/' + nextProps.project.id)
         })
