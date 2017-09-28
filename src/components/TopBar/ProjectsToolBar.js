@@ -50,7 +50,7 @@ class ProjectsToolBar extends Component {
         && nextProps.project && nextProps.project.id) {
         this.setState({
           isProjectDirty : false
-        } ,() => {
+        }, () => {
           this.hideCreateProjectDialog()
           this.props.router.push('/projects/' + nextProps.project.id)
         })
@@ -157,6 +157,19 @@ class ProjectsToolBar extends Component {
 
   createProject(project) {
     this.props.createProjectAction(project, PROJECT_STATUS_IN_REVIEW)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { user, criteria, creatingProject, projectCreationError, searchTermTag } = this.props
+    const { isCreateProjectModalVisible, errorCreatingProject, isFilterVisible } = this.state
+    return nextProps.user.handle !== user.handle
+    || JSON.stringify(nextProps.criteria) !== JSON.stringify(criteria)
+    || nextProps.creatingProject !== creatingProject
+    || nextProps.projectCreationError !== projectCreationError
+    || nextProps.searchTermTag !== searchTermTag
+    || nextState.isCreateProjectModalVisible !== isCreateProjectModalVisible
+    || nextState.errorCreatingProject !== errorCreatingProject
+    || nextState.isFilterVisible !== isFilterVisible
   }
 
   render() {
