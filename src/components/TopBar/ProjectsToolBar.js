@@ -13,7 +13,7 @@ import SVGIconImage from '../SVGIconImage'
 import CoderBot from '../CoderBot/CoderBot'
 import ProjectWizard from '../../projects/create/components/ProjectWizard'
 
-import { createProjectWithStatus as createProjectAction } from '../../projects/actions/project'
+import { createProject as createProjectAction } from '../../projects/actions/project'
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
 import {
   ROLE_CONNECT_COPILOT,
