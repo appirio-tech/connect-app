@@ -94,31 +94,32 @@ const products = {
         brief: '3-20 screens',
         details: 'Translate designs to a web (HTML/CSS/JavaScript) or mobile prototype',
         icon: 'product-dev-prototype',
-        id: 'visual_prototype'
+        id: 'visual_prototype',
+        disabled: true
       },
-      'Front-end development': {
+      'Front-end': {
         brief: '',
-        details: 'Production code without server development',
+        details: 'Translate your designs into Web or Mobile front-end',
         icon: 'product-dev-front-end-dev',
         id: 'frontend_dev'
       },
-      'Integration/API': {
+      'Back-end & API': {
         brief: '',
-        details: 'Expand and improve your software',
+        details: 'Build the server, DB, and API for your app',
         icon: 'product-dev-integration',
         id: 'api_dev'
       },
       'Development Integration': {
         brief: 'Tasks or adhoc',
-        details: 'Get help with any part of your development cycle',
+        details: 'Get help with any part of your app or software',
         icon: 'product-dev-other',
         id: 'generic_dev'
       }
     }
   },
-  QA: {
-    icon: 'product-cat-qa',
-    info: 'Test and fix bugs in your software',
+  'Crowd Testing': {
+    icon: 'product-qa-crowd-testing',
+    info: 'Exploratory Testing, Cross browser-device Testing',
     question: 'What kind of quality assurance (QA) do you need?',
     id: 'quality_assurance',
     subtypes: {
@@ -132,31 +133,36 @@ const products = {
         brief: 'TBD',
         details: 'App Certification, Lab on Hire, User Sentiment Analysis',
         icon: 'product-qa-mobility-testing',
-        id: 'mobility_testing'
+        id: 'mobility_testing',
+        disabled: true
       },
       'Website Performance': {
         brief: 'TBD',
         details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
         icon: 'product-qa-website-performance',
-        id: 'website_performance'
+        id: 'website_performance',
+        disabled: true
       },
       'Digital Accessability': {
         brief: 'TBD',
         details: 'Make sure you app or website conforms to all rules and regulations',
         icon: 'product-qa-digital-accessability',
-        id: 'digital_accessability'
+        id: 'digital_accessability',
+        disabled: true
       },
       'Open Source Automation': {
         brief: 'TBD',
         details: 'Exploratory testing, cross browser testing',
         icon: 'product-qa-os-automation',
-        id: 'open_source_automation'
+        id: 'open_source_automation',
+        disabled: true
       },
       'Consulting & Adivisory': {
         brief: 'TBD',
         details: 'Expert services to get your project covered end-to-end',
         icon: 'product-qa-consulting',
-        id: 'consulting_adivisory'
+        id: 'consulting_adivisory',
+        disabled: true
       }
     }
   }
@@ -194,7 +200,9 @@ export function findProductsOfCategory(category) {
     if (products[pType].id === category) {
       const ret = []
       for(const prd in products[pType].subtypes) {
-        ret.push({ ...products[pType].subtypes[prd], name: prd })
+        if (!products[pType].subtypes[prd].disabled) {
+          ret.push({ ...products[pType].subtypes[prd], name: prd })
+        }
       }
       return ret
     }
