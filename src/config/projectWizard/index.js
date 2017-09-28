@@ -79,12 +79,11 @@ const products = {
         icon: 'product-software-development',
         id: 'generic_dev'
       },
-      'Crowd Testing': {
+      'Real World Testing': {
         brief: 'TBD',
         details: 'Exploratory Testing, Cross browser-device Testing',
         icon: 'icon-crowd-testing',
-        id: 'crowd_testing',
-        hidden: true
+        id: 'real_world_testing',
       },
       'Mobility Testing': {
         brief: 'TBD',
