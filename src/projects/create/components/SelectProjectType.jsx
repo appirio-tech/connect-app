@@ -26,7 +26,7 @@ function SelectProjectType(props) {
   return (
     <div>
       <div className="header headerSelectProjectType">
-        { (!userRoles || !userRoles.length) && <SVGIconImage filePath="connect-logo-mono" />}
+        { (!userRoles || !userRoles.length) && <SVGIconImage filePath="connect-logo-mono" className="connectLogo"/>}
       </div>
       <div className="SelectProjectType">
         <h1>Create a new project</h1>

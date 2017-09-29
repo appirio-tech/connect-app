@@ -48,7 +48,7 @@ class FillProjectDetails extends Component  {
     return (
       <div className="FillProjectDetailsWrapper">
         <div className="header headerFillProjectDetails">
-          { (!userRoles || !userRoles.length) && <SVGIconImage filePath="connect-logo-mono" />}
+          { (!userRoles || !userRoles.length) && <SVGIconImage filePath="connect-logo-mono" className="connectLogo" />}
           { (!userRoles || !userRoles.length) && <button className="tc-btn tc-btn-default tc-btn-sm" onClick={ this.props.onChangeProjectType }><SVGIconImage filePath="arrows-undo" />Change project type</button> }
         </div>
         <div className="FillProjectDetails">
@@ -69,7 +69,7 @@ class FillProjectDetails extends Component  {
                 />
               </div>
               <div className="right-area">
-                <Sticky top={80}>
+                <Sticky top={20}>
                   <ProjectOutline project={ dirtyProject } />
                   <div className="right-area-footer">In 24 hours our project managers will contact you for more information and a detailed quote that accurately reflects your project needs.</div>
                 </Sticky>

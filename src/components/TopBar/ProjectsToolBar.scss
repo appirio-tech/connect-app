@@ -193,9 +193,9 @@ $tc-body-large: 20px;
     z-index: 22;/* +1 from z-index of the modal overlay */
   }
 
-  .FillProjectDetailsWrapper {
-    margin-top: 0px;
-  }
+  // .FillProjectDetailsWrapper {
+//   margin-top: -60px; // Counteract the push from the main wrapper, top of vewport
+// }
 }
 
 .project-creation-dialog {
