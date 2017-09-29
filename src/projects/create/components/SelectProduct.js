@@ -1,4 +1,5 @@
 import React, { PropTypes as PT } from 'react'
+import { Link } from 'react-router'
 import config from '../../../config/projectWizard'
 import ProductCard from './ProductCard'
 import SVGIconImage from '../../../components/SVGIconImage'
@@ -7,6 +8,8 @@ import './SelectProduct.scss'
 
 function SelectProduct(props) {
   const { userRoles, projectType, onChangeProjectType } = props
+  const isLoggedIn = userRoles && userRoles.length
+  const logoTargetUrl = isLoggedIn ? '/projects' : '/'
   const cards = []
   for (const key in config) {
     const type = config[key]
@@ -33,8 +36,8 @@ function SelectProduct(props) {
   return (
     <div>
       <div className="header headerSelectProduct">
-        { (!userRoles || !userRoles.length) && <SVGIconImage filePath="connect-logo-mono" />}
-        { (!userRoles || !userRoles.length) && <button className="tc-btn tc-btn-default tc-btn-sm" onClick={ onChangeProjectType }><SVGIconImage filePath="arrows-undo" />Change project type</button> }
+        { !isLoggedIn && <Link className="logo" to={logoTargetUrl} target="_self"><SVGIconImage filePath="connect-logo-mono" className="connectLogo"/></Link>}
+        { !isLoggedIn && <button className="tc-btn tc-btn-default tc-btn-sm" onClick={ onChangeProjectType }><SVGIconImage filePath="arrows-undo" />Change project type</button> }
       </div>
       <div className="SelectProduct">
         <h1> { projectCategory.name } projects </h1>
