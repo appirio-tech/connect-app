@@ -1,7 +1,9 @@
+import _ from 'lodash'
 import React, {PropTypes} from 'react'
 import './ProjectType.scss'
 import PanelProject from '../PanelProject/PanelProject'
 import TextTruncate from 'react-text-truncate'
+import { findCategory } from '../../config/projectWizard'
 import {Link} from 'react-router'
 
 const deviceMap = {
@@ -13,19 +15,11 @@ const deviceMap = {
   'android-watch': <div  key="ANDROID_WEAR" className="icon icon-android-wear">Android Watch</div>
 }
 
-/*eslint-disable camelcase */
-const typeMap = {
-  app_dev: 'Design & Development Project',
-  generic: 'Work Project', // needed for backward compatibility with templates < v1.1
-  visual_design: 'Visual Design Project',
-  visual_prototype: 'Visual Prototype Project'// needed for backward compatibility with templates < v1.1
-}
-
 /*eslint-enable camelcase */
 const ProjectType = ({projectId, type, description, devices}) => (
   <PanelProject>
     <PanelProject.Heading>
-      {typeMap[type]}
+      { _.get(findCategory(type), 'name', '') }
     </PanelProject.Heading>
     <TextTruncate
       containerClassName="project-description"
