@@ -127,7 +127,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testingNeeds.description',
-            fieldName: 'description',
+            fieldName: 'details.testingNeeds.description',
             description: '',
             title: 'Please describe your website and/or application.',
             type: 'textbox'
@@ -135,7 +135,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testingNeeds.inScope',
-            fieldName: 'In Scope',
+            fieldName: 'details.testingNeeds.inScope',
             description: '',
             title: 'Please describe which features or components are in-scope in this testing effort.',
             type: 'textbox'
@@ -143,7 +143,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testingNeeds.outOfScope',
-            fieldName: 'Out of Scope',
+            fieldName: 'details.testingNeeds.outOfScope',
             description: '',
             title: 'Are any features or components out of scope? If yes, please describe.',
             type: 'textbox'
@@ -151,7 +151,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testingNeeds.duration',
-            fieldName: 'Duration',
+            fieldName: 'details.testingNeeds.duration',
             description: '',
             title: 'Do you have a specific timeline for testing? If so, please provide approximate start and end dates.',
             type: 'textbox'
@@ -168,7 +168,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testerDetails.demographics',
-            fieldName: 'demographics',
+            fieldName: 'details.testerDetails.demographics',
             description: '',
             title: 'Do you have preferred demographics you would like to target?',
             type: 'textbox'
@@ -176,7 +176,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testerDetails.geographies',
-            fieldName: 'Geographies',
+            fieldName: 'details.testerDetails.geographies',
             description: '',
             title: 'Would you like to target any specific geographies?',
             type: 'textbox'
@@ -184,7 +184,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testerDetails.skills',
-            fieldName: 'Skills',
+            fieldName: 'details.testerDetails.skills',
             description: '',
             title: 'Are any specific skills required to test your application? If so, please list them.',
             type: 'textbox'
@@ -201,7 +201,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testEnvironment.environmentDetails',
-            fieldName: 'Environment Details',
+            fieldName: 'details.testEnvironment.environmentDetails',
             description: '',
             title: 'Do you have a version of the application available for testers to access? If so, please provide details. Details can include a test URL, access information, etc.',
             type: 'textbox'
@@ -209,7 +209,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testEnvironment.assets',
-            fieldName: 'Assets',
+            fieldName: 'details.testEnvironment.assets',
             description: '',
             title: 'Are any test assets available? For exmaple: test plan, test scenario, test scripts, test data.',
             type: 'textbox'
@@ -217,7 +217,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testEnvironment.other',
-            fieldName: 'Other Information',
+            fieldName: 'details.testEnvironment.otherInformation',
             description: '',
             title: 'Are there any other specific details related to the environment you can share?',
             type: 'textbox'
@@ -234,7 +234,7 @@ const sections = [
           {
             icon: 'question',
             id: 'targetApplication.description',
-            fieldName: 'Description',
+            fieldName: 'details.targetApplication.description',
             description: '',
             title: 'Please describe your application.',
             type: 'textbox'
@@ -242,7 +242,7 @@ const sections = [
           {
             icon: 'question',
             id: 'targetApplication.platform',
-            fieldName: 'Platform',
+            fieldName: 'details.targetApplication.platform',
             description: '',
             title: 'Please list all platforms the application should be tested on.',
             type: 'textbox'
@@ -250,7 +250,7 @@ const sections = [
           {
             icon: 'question',
             id: 'targetApplication.training',
-            fieldName: 'Training',
+            fieldName: 'details.targetApplication.training',
             description: '',
             title: 'Does the application require training to utilize it properly? If so, are you able to provide these inputs?',
             type: 'textbox'
@@ -266,7 +266,7 @@ const sections = [
           {
             icon: 'question',
             id: 'preferences.suggestions',
-            fieldName: 'Usability Suggestions',
+            fieldName: 'details.cyclePreferences.usabilitySuggestions',
             description: '',
             title: 'Would you like usability suggestions included in the issue report?',
             type: 'textbox'
@@ -274,7 +274,7 @@ const sections = [
           {
             icon: 'question',
             id: 'preferences.omissions',
-            fieldName: 'Omissions',
+            fieldName: 'details.cyclePreferences.omissions',
             description: '',
             title: 'Are there any types of defects you would like ommitted from issue reports?',
             type: 'textbox'
