@@ -155,7 +155,7 @@ const sections = [
             description: '',
             title: 'Do you have a specific timeline for testing? If so, please provide approximate start and end dates.',
             type: 'textbox'
-          },
+          }
         ]
       },
       {
@@ -188,7 +188,7 @@ const sections = [
             description: '',
             title: 'Are any specific skills required to test your application? If so, please list them.',
             type: 'textbox'
-          },
+          }
         ]
       },
       {
@@ -221,7 +221,7 @@ const sections = [
             description: '',
             title: 'Are there any other specific details related to the environment you can share?',
             type: 'textbox'
-          },
+          }
         ]
       },
       {
@@ -254,9 +254,9 @@ const sections = [
             description: '',
             title: 'Does the application require training to utilize it properly? If so, are you able to provide these inputs?',
             type: 'textbox'
-          },
+          }
         ]
-      },{
+      }, {
         id: 'cyclePreferences',
         required: false,
         title: 'Test Cycle Preferences',
@@ -278,7 +278,7 @@ const sections = [
             description: 'Are there any types of defects you would like ommitted from issue reports?',
             title: '',
             type: 'textbox'
-          },
+          }
         ]
       },
       {
