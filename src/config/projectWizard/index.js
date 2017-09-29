@@ -87,7 +87,7 @@ const products = {
   'Software Development' : {
     icon: 'product-cat-development',
     info: 'Get help with any part of your development lifecycle',
-    question: 'What kind of development you need?',
+    question: 'What kind of development do you need?',
     id: 'app_dev',
     subtypes: {
       'Front-end Prototype': {
