@@ -11,11 +11,16 @@
   margin: 10px 10px 0;
   position: relative;
   vertical-align: top;
-  
   transition: 300ms all ease;
   -moz-transition: 300ms all ease;
   -webkit-transition: 300ms all ease;
-  
+
+  // Hide the chatbot card
+  // FIXME: Remove when chatbot should be enabled again
+  &:nth-child(3) {
+    display: none;
+  }
+
   .sub-type-details {
     padding: 0 20px;
     font-size: 13px;
@@ -23,6 +28,7 @@
     line-height: 20px;
     width: 100%;
   }
+
   .header {
     @include tc-body;
     @include roboto-bold;
@@ -31,39 +37,48 @@
     margin-bottom: 10px;
     margin-top: 0px;
   }
-  
+
   .icon-wrapper {
     height: 87px;
     display: flex;
+
     .Icon {
-      margin: 4*$base_unit 0 2*$base_unit;
+      margin: 4 * $base_unit 0 2 * $base_unit;
+
       svg {
         fill: $tc-gray-70;
       }
     }
   }
+
   &.disabled {
-    opacity: 0.3
+    opacity: 0.3;
   }
+
   &.enabled:hover {
     border-color: $tc-dark-blue-70;
     cursor: pointer;
+
     .button {
       background: $tc-dark-blue;
       border-color: transparent;
       color: $tc-white;
     }
+
     svg {
       fill: $tc-dark-blue-90;
     }
   }
+
   &.selected {
     background: $tc-gray-10;
     border-color: transparent;
+
     &:hover {
       border-color: transparent;
     }
   }
+
   .tc-btn {
     margin-top: 2 * $base_unit;
   }
@@ -73,8 +88,9 @@
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    opacity: 0
+    opacity: 0;
   }
+
   &:hover {
     transition: 300ms all ease;
     -moz-transition: 300ms all ease;
@@ -82,13 +98,16 @@
     position: relative;
     background: $tc-white;
     box-shadow: 0 2px 9px 0 rgba(38, 38, 38, 0.1);
+
     h1 {
       color: $tc-dark-blue;
     }
+
     .tc-btn {
       opacity: 1;
     }
   }
+
   &:active {
     background: $tc-dark-blue-10;
   }
