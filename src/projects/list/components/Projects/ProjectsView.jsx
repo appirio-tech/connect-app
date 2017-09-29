@@ -33,12 +33,6 @@ const EnhancedGrid = enhance(GridView)
 require('./ProjectsView.scss')
 
 /*eslint-disable quote-props */
-const projectTypeMap = {
-  'generic': 'Work Project',
-  'visual_design': 'Design',
-  'visual_prototype': 'Design & Prototype',
-  'app_dev': 'Full App'
-}
 const projectTypeClassMap = {
   'generic'             : 'purple-block',
   'visual_design'       : 'blue-block',
