@@ -1,4 +1,5 @@
 import React, { PropTypes as PT } from 'react'
+import { Link } from 'react-router'
 import config from '../../../config/projectWizard'
 import ProjectTypeCard from './ProjectTypeCard'
 import SVGIconImage from '../../../components/SVGIconImage'
@@ -7,6 +8,8 @@ import './SelectProjectType.scss'
 
 function SelectProjectType(props) {
   const { userRoles } = props
+  const isLoggedIn = userRoles && userRoles.length
+  const logoTargetUrl = isLoggedIn ? '/projects' : '/'
   const cards = []
   for (const key in config) {
     const item = config[key]
@@ -26,7 +29,7 @@ function SelectProjectType(props) {
   return (
     <div>
       <div className="header headerSelectProjectType">
-        { (!userRoles || !userRoles.length) && <SVGIconImage filePath="connect-logo-mono" className="connectLogo"/>}
+        { !isLoggedIn && <Link className="logo" to={logoTargetUrl} target="_self"><SVGIconImage filePath="connect-logo-mono" className="connectLogo"/></Link>}
       </div>
       <div className="SelectProjectType">
         <h1>Create a new project</h1>

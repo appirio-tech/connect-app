@@ -324,9 +324,11 @@ class ProjectWizard extends Component {
         <IncompleteProjectConfirmation
           loadIncompleteProject={ this.loadIncompleteProject }
           removeIncompleteProject={ this.removeIncompleteProject }
+          userRoles={ userRoles }
         />
         <SelectProjectType
           onProjectTypeChange={ this.updateProjectType }
+          userRoles={ userRoles }
         />
         <SelectProduct
           onProductChange={ this.updateProducts }
