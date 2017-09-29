@@ -5,6 +5,10 @@
   border: none;
   box-shadow: none;
 
+  &.panel {
+    padding: 0;
+  }
+
   > h4 {
     @include roboto-medium;
     font-size: 15px;
