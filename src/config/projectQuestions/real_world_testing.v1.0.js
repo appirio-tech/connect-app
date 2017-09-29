@@ -235,16 +235,16 @@ const sections = [
             icon: 'question',
             id: 'targetApplication.description',
             fieldName: 'Description',
-            description: 'Please describe your application.',
-            title: '',
+            description: '',
+            title: 'Please describe your application.',
             type: 'textbox'
           },
           {
             icon: 'question',
             id: 'targetApplication.platform',
             fieldName: 'Platform',
-            description: 'Please list all platforms the application should be tested on.',
-            title: '',
+            description: '',
+            title: 'Please list all platforms the application should be tested on.',
             type: 'textbox'
           },
           {
@@ -267,16 +267,16 @@ const sections = [
             icon: 'question',
             id: 'preferences.suggestions',
             fieldName: 'Usability Suggestions',
-            description: 'Would you like usability suggestions included in the issue report?',
-            title: '',
+            description: '',
+            title: 'Would you like usability suggestions included in the issue report?',
             type: 'textbox'
           },
           {
             icon: 'question',
             id: 'preferences.omissions',
             fieldName: 'Omissions',
-            description: 'Are there any types of defects you would like ommitted from issue reports?',
-            title: '',
+            description: '',
+            title: 'Are there any types of defects you would like ommitted from issue reports?',
             type: 'textbox'
           }
         ]
