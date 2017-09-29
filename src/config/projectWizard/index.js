@@ -117,17 +117,17 @@ const products = {
       }
     }
   },
-  'Crowd Testing': {
+  'Real World Testing': {
     icon: 'product-qa-crowd-testing',
     info: 'Exploratory Testing, Cross browser-device Testing',
     question: 'What kind of quality assurance (QA) do you need?',
     id: 'quality_assurance',
     subtypes: {
-      'Crowd Testing': {
+      'Real World Testing': {
         brief: 'TBD',
         details: 'Exploratory Testing, Cross browser-device Testing',
         icon: 'product-qa-crowd-testing',
-        id: 'crowd_testing'
+        id: 'real_world_testing'
       },
       'Mobility Testing': {
         brief: 'TBD',
