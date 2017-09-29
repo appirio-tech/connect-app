@@ -2,23 +2,26 @@
 
 .footer-v2 {
   @include roboto;
-  font-size: $tc-label-md;
+  font-size: $tc-label-xs;
   color: $tc-gray-50;
   line-height: $base-unit*6;
-  padding: 0 $base-unit*4;
+  padding: 0 10px;
   margin-top: $base-unit*2;
+
   li {
     display: inline-block;
   }
-  li:not(:first-child)::before{
-    content: " · ";
+
+  li:not(:first-child)::before {
+    content: " • "; // U+00B7
     padding-left: $base-unit;
   }
-  a:hover{
+
+  a:hover {
     color: $tc-dark-blue;
   }
 
   .footer-copyright {
-    color: $tc-gray-30;
+    color: $tc-gray-50;
   }
 }

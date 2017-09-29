@@ -56,7 +56,7 @@ class SpecificationContainer extends Component {
     let sections = require(`../../../config/projectQuestions/${specification}`).default
 
     return (
-      <section className="two-col-content content">
+      <section className="two-col-content content specificationContainer">
         <div className="container">
           <div className="left-area">
             <Sticky top={80}>

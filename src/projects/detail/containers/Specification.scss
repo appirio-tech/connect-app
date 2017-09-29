@@ -3,6 +3,7 @@
 //TODO  Additional variables - need to find a home for these
 $gray-color: $tc-gray-50;
 $title-color: $tc-gray-80;
+$sideBarWidth: 280px;
 
 @mixin flexBox {
   display: box;
@@ -103,11 +104,13 @@ $title-color: $tc-gray-80;
     padding: 15px 0;
     position: relative;
 
-    .screen-title, .project-name {
+    .screen-title,
+    .project-name {
       @include roboto;
       color: black;
       font-weight: bold;
     }
+
     .screen-title {
       font-size: 18px;
     }
@@ -147,11 +150,13 @@ $title-color: $tc-gray-80;
   }
 
   .sub-title {
-    margin: 50px 0 20px;
+    margin: 30px 0 10px;
+
     .title {
       font-size: 15px;
       line-height: 25px;
       color: $tc-gray-80;
+
       span {
         color: $tc-orange;
         font-size: 15px;
@@ -159,21 +164,22 @@ $title-color: $tc-gray-80;
       }
     }
   }
+
   .container {
     @include flexBox;
     background-color: transparent;
     display: flex;
     padding: 0px;
-    width: 1110px;
+    max-width: 1110px;
     margin: 20px auto;
     /* .left-area */
     .left-area {
-      @include flexWidth(1);
+      flex: auto;
 
       .left-area-footer {
         @include roboto;
-        padding: 0 40px 0 20px;
-        font-size: 13px;
+        padding: 0 10px;
+        font-size: 11px;
         line-height: 30px;
         color: $tc-gray-50;
 
@@ -184,7 +190,7 @@ $title-color: $tc-gray-80;
     }
 
     .right-area {
-      @include flexWidth(2);
+      flex: auto;
       border-radius: 4px;
       position: relative;
 
@@ -201,10 +207,10 @@ $title-color: $tc-gray-80;
         padding: 0 0 70px 0;
         margin-bottom: 20px;
         border-radius: 4px;
-        background-color: #fff;
+        background-color: $tc-white;
 
         .boxes {
-          margin: 0 6%;
+          margin: 0 50px;
         }
 
         .big-titles {
@@ -213,7 +219,7 @@ $title-color: $tc-gray-80;
           color: $tc-gray-70;
           line-height: 30px;
           padding: 30px 0 30px 6%;
-          margin: 0 -6.75% 20px;
+          margin: 0 -50px 20px;
           border-radius: 4px 4px 0 0;
           background: $tc-gray-neutral-light;
           border-bottom: 1px dashed $tc-gray-20;
@@ -331,8 +337,11 @@ $title-color: $tc-gray-80;
       }
     }
   }
+
   /* .section-features-module */
   .section-features-module {
+    margin-top: 20px;
+
     &.open {
       .content-boxes {
         display: block;
@@ -342,6 +351,10 @@ $title-color: $tc-gray-80;
       .btn-gray-border {
         display: none;
       }
+    }
+
+    .row {
+      margin-bottom: 5px;
     }
 
     .bg-contents {
@@ -373,20 +386,19 @@ $title-color: $tc-gray-80;
       max-width: 100%;
       text-align: left;
       text-indent: 0;
-      margin-bottom: 20px;
-      resize: vertical;
+      resize: none;
       overflow: auto;
     }
   }
 
-  .section-header  {
+  .section-header {
     display: flex;
     justify-content: space-between;
 
     .section-number {
       @include tc-label-lg;
       color: $tc-gray-30;
-      padding-right: 6*$base-unit;
+      padding-right: 6 * $base-unit;
     }
   }
 
@@ -784,6 +796,23 @@ $title-color: $tc-gray-80;
   }
 }
 
+.two-col-content.specificationContainer {
+  padding: 0 20px;
+  min-width: 960px;
+  max-width: 1120px;
+  width: auto;
+  margin: 0 auto;
+
+  .left-area {
+    min-width: $sideBarWidth;
+    margin-right: 20px;
+  }
+
+  .right-area {
+    min-width: 500px;
+  }
+}
+
 .tc-link {
   @include roboto;
 }
@@ -809,29 +838,38 @@ $title-color: $tc-gray-80;
 .project-name-section {
   display: flex;
   align-items: flex-start;
+  margin-bottom: 20px;
 
   .dashed-bottom-border,
   .editable-project-name {
     flex: 1;
+    height: 40px;
+    border-bottom: 1px dashed $tc-gray-20;
 
     .project-name {
       word-break: break-all;
+      font-size: 20px;
+      margin-top: 10px;
     }
   }
 
   .read-only-refcode {
-    height: 100%;
+    height: 40px;
     align-self: flex-end;
-    border-bottom: 1px solid $tc-gray-40;
-    padding: 0px 2*$base-unit;
+    border-bottom: 1px solid $tc-gray-20;
+    padding: 10px;
     position: relative;
+    margin-left: 20px;
 
     .refcode-desc {
       @include roboto;
       font-size: 13px;
-      color: #5d5d66;
+      color: $tc-gray-30;
       position: absolute;
       bottom: -20px;
+      left: 0;
+      width: 100%;
+      text-align: center;
       font-style: italic;
       white-space: nowrap;
     }
@@ -854,8 +892,6 @@ $title-color: $tc-gray-80;
     }
 
     .project-refcode {
-      width: 100%;
-      height: 100%;
     }
   }
 }
@@ -865,8 +901,8 @@ $title-color: $tc-gray-80;
   -webkit-flex: initial;
   flex: initial;
   margin-right: 20px;
-  height:155px;
-  width:135px;
+  height: 155px;
+  width: 135px;
   border: 1px solid $tc-gray-20;
   border-radius: 4px;
   cursor: pointer;
@@ -876,20 +912,24 @@ $title-color: $tc-gray-80;
   margin: 10px 10px 0;
   position: relative;
   vertical-align: top;
+
   .check-mark {
     display: none;
   }
+
   &.disabled {
-    opacity: 0.3
+    opacity: 0.3;
   }
+
   &:hover {
     border-color: $tc-dark-blue-70;
     cursor: pointer;
   }
 
-  &.active{
+  &.active {
     background: $tc-gray-10;
     border-color: $tc-gray-10;
+
     &:after {
       content: '';
       display: block;
@@ -898,9 +938,10 @@ $title-color: $tc-gray-80;
       right: 10px;
       width: 15px;
       height: 15px;
-      background: #1A85FF;
+      background: #1a85ff;
       border-radius: 2px;
     }
+
     &:before {
       content: '';
       position: absolute;
@@ -917,32 +958,34 @@ $title-color: $tc-gray-80;
       -ms-transform: rotate(45deg);
       -webkit-transform: rotate(45deg);
     }
+
     &:hover {
       border-color: $tc-gray-10;
     }
   }
 
-  span.title{
-    display:block;
+  span.title {
+    display: block;
     margin-top: 20px;
     @include roboto-bold;
     color: $tc-black;
     font-size: 13px;
-    text-align:center;
+    text-align: center;
   }
 
   span.icon {
     text-align: center;
-    display:block;
+    display: block;
     height: 50px;
-    margin:30px auto 20px auto;
+    margin: 30px auto 20px auto;
   }
+
   small {
-    display:block;
+    display: block;
     font-size: 11px;
-    text-align:center;
+    text-align: center;
     color: $tc-gray-50;
     @include roboto;
-    margin-top:10px;
+    margin-top: 10px;
   }
 }

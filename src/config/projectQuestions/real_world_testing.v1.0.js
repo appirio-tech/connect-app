@@ -56,8 +56,8 @@ const sections = [
             fieldName: 'details.appDefinition.testType',
             type: 'tiled-radio-group',
             options: [
-              {value: 'unstructured', title: 'Unstructured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: ''},
-              {value: 'structured', title: 'Structured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-structured', fill: '#00000'}, desc: ''},
+              {value: 'unstructured', title: 'Unstructured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: '', price: 6000},
+              {value: 'structured', title: 'Structured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-structured', fill: '#00000'}, desc: '', price: 4000},
               {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
             ]
           },
@@ -127,7 +127,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testingNeeds.description',
-            fieldName: 'description',
+            fieldName: 'details.testingNeeds.description',
             description: '',
             title: 'Please describe your website and/or application.',
             type: 'textbox'
@@ -135,7 +135,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testingNeeds.inScope',
-            fieldName: 'In Scope',
+            fieldName: 'details.testingNeeds.inScope',
             description: '',
             title: 'Please describe which features or components are in-scope in this testing effort.',
             type: 'textbox'
@@ -143,7 +143,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testingNeeds.outOfScope',
-            fieldName: 'Out of Scope',
+            fieldName: 'details.testingNeeds.outOfScope',
             description: '',
             title: 'Are any features or components out of scope? If yes, please describe.',
             type: 'textbox'
@@ -151,7 +151,7 @@ const sections = [
           {
             icon: 'question',
             id: 'testingNeeds.duration',
-            fieldName: 'Duration',
+            fieldName: 'details.testingNeeds.duration',
             description: '',
             title: 'Do you have a specific timeline for testing? If so, please provide approximate start and end dates.',
             type: 'textbox'
@@ -159,12 +159,127 @@ const sections = [
         ]
       },
       {
-        id: 'notes',
+        id: 'testerDetails',
         required: false,
-        fieldName: 'details.testingNeeds.notes',
-        title: 'Notes',
-        description: 'Please log any other notes or comments related to scope here.',
-        type: 'notes'
+        title: 'Tester Details',
+        description: '',
+        type: 'questions',
+        questions: [
+          {
+            icon: 'question',
+            id: 'testerDetails.demographics',
+            fieldName: 'details.testerDetails.demographics',
+            description: '',
+            title: 'Do you have preferred demographics you would like to target?',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            id: 'testerDetails.geographies',
+            fieldName: 'details.testerDetails.geographies',
+            description: '',
+            title: 'Would you like to target any specific geographies?',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            id: 'testerDetails.skills',
+            fieldName: 'details.testerDetails.skills',
+            description: '',
+            title: 'Are any specific skills required to test your application? If so, please list them.',
+            type: 'textbox'
+          }
+        ]
+      },
+      {
+        id: 'testEnvironment',
+        required: false,
+        title: 'Testing Enviroment',
+        description: '',
+        type: 'questions',
+        questions: [
+          {
+            icon: 'question',
+            id: 'testEnvironment.environmentDetails',
+            fieldName: 'details.testEnvironment.environmentDetails',
+            description: '',
+            title: 'Do you have a version of the application available for testers to access? If so, please provide details. Details can include a test URL, access information, etc.',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            id: 'testEnvironment.assets',
+            fieldName: 'details.testEnvironment.assets',
+            description: '',
+            title: 'Are any test assets available? For exmaple: test plan, test scenario, test scripts, test data.',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            id: 'testEnvironment.other',
+            fieldName: 'details.testEnvironment.otherInformation',
+            description: '',
+            title: 'Are there any other specific details related to the environment you can share?',
+            type: 'textbox'
+          }
+        ]
+      },
+      {
+        id: 'targetApplication',
+        required: false,
+        title: 'Target Application',
+        description: '',
+        type: 'questions',
+        questions: [
+          {
+            icon: 'question',
+            id: 'targetApplication.description',
+            fieldName: 'details.targetApplication.description',
+            description: '',
+            title: 'Please describe your application.',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            id: 'targetApplication.platform',
+            fieldName: 'details.targetApplication.platform',
+            description: '',
+            title: 'Please list all platforms the application should be tested on.',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            id: 'targetApplication.training',
+            fieldName: 'details.targetApplication.training',
+            description: '',
+            title: 'Does the application require training to utilize it properly? If so, are you able to provide these inputs?',
+            type: 'textbox'
+          }
+        ]
+      }, {
+        id: 'cyclePreferences',
+        required: false,
+        title: 'Test Cycle Preferences',
+        description: '',
+        type: 'questions',
+        questions: [
+          {
+            icon: 'question',
+            id: 'preferences.suggestions',
+            fieldName: 'details.cyclePreferences.usabilitySuggestions',
+            description: '',
+            title: 'Would you like usability suggestions included in the issue report?',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            id: 'preferences.omissions',
+            fieldName: 'details.cyclePreferences.omissions',
+            description: '',
+            title: 'Are there any types of defects you would like ommitted from issue reports?',
+            type: 'textbox'
+          }
+        ]
       },
       {
         id: 'files',
@@ -175,7 +290,8 @@ const sections = [
         fieldName: 'attachments'
       }
     ]
-  }/*,
+  }
+/*,
   {
     id: 'devSpecification',
     title: 'Development Specification',
@@ -295,7 +411,7 @@ export const basicSections = [
           {
             icon: 'question',
             title: 'Please tell us about your users.',
-            description: 'Please share information about your end users. Where are they from? What is their goal? This information can help you find the best testers for your application.',
+            description: 'Please share information about your end users. Where are they from? What is their goal? This information can help us find the best testers for your application.',
             type: 'textbox',
             fieldName: 'details.appDefinition.userInfo'
           },
