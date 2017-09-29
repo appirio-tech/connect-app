@@ -4,9 +4,8 @@
 }
 
 .spec-question-list-item {
-  display: flex;
-  padding: 35px 0 15px;
-  width: 100%;
+  padding: 0;
+  margin-bottom: 30px;
 
   .icon-col {
     padding-top: 3px;
@@ -18,11 +17,11 @@
     width: 100%;
 
     > h5 {
-      @include roboto-medium;
+      @include roboto;
       font-size: 15px;
       line-height: 25px;
-      color: $tc-gray-80;
-      margin-bottom: 15px;
+      color: $tc-gray-70;
+      margin-bottom: 0;
 
       span {
         color: $tc-orange;
@@ -43,20 +42,21 @@
         font-size: 15px;
       }
     }
+
     .description {
       margin-bottom: $base-unit * 4;
     }
+
     .child-component {
-      margin-top: 10px;
-      
       .colorSelector {
         margin-bottom: $base-unit * 4;
       }
-      .checkbox-group-item.checkbox-item-checked{
+
+      .checkbox-group-item.checkbox-item-checked {
         background: $tc-dark-blue-10;
         border-radius: 4px;
       }
-      
+
       .dropdown-wrap.default {
         background: $tc-gray-neutral-light;
         border-color: $tc-gray-20;
@@ -64,11 +64,13 @@
         width: 150px;
         left: 170px;
         margin-top: -45px;
+
         &:after {
           border-bottom-color: $tc-gray-70;
           border-right-color: $tc-gray-70;
         }
       }
+
       textarea {
         min-height: 45px;
         max-width: 100%;
@@ -77,13 +79,20 @@
         margin-bottom: 0;
         line-height: 25px;
       }
+
+      .radio-group-input,
       .checkbox-group-item {
         width: 100%;
-        padding: 12px 10px;
+        padding: 15px 0;
         margin-bottom: 20px;
         margin-right: 0;
+      }
+
+      .checkbox-group-item {
         border-radius: 4px;
         background: $tc-gray-neutral-light;
+        padding-left: 10px;
+
         label {
           font-weight: 400;
           color: $tc-black;
@@ -95,7 +104,7 @@
         width: auto;
         background: none;
         padding: 0;
-        margin-right: 30px;
+        margin: 15px 30px 15px 0;
       }
     }
   }
