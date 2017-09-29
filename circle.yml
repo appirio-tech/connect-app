@@ -19,7 +19,7 @@ compile:
 
 deployment:
   development:
-    branch: [dev, 'feature/second-level-project-category-performance']
+    branch: dev
     owner: appirio-tech
     commands:
       - ./deploy.sh DEV
