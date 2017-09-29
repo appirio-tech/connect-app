@@ -41,7 +41,7 @@ const projectTypeClassMap = {
   'app'                 : 'green-block',
   'website'             : 'green-block',
   'chatbot'             : 'green-block',
-  'quality_assurance'   : 'green-block',
+  'quality_assurance'   : 'green-block'
 }
 /*eslint-enable */
 
