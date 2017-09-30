@@ -85,7 +85,8 @@ $sideBarWidth: 280px;
       text-transform: none;
     }
 
-    &:-moz-placeholder {
+    &::-moz-placeholder {
+      line-height: 45px;
       color: #888894;
       opacity: 1;
       text-transform: none;
