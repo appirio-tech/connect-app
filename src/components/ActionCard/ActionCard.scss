@@ -124,6 +124,10 @@
       &::before {
         content: " · ";
       }
+      
+      a {
+        color: $tc-gray-70;
+      }
     }
 
     .card-status {
