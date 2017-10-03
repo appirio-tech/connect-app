@@ -15,12 +15,6 @@
   -moz-transition: 300ms all ease;
   -webkit-transition: 300ms all ease;
 
-  // Hide the chatbot card
-  // FIXME: Remove when chatbot should be enabled again
-  &:nth-child(3) {
-    display: none;
-  }
-
   .sub-type-details {
     padding: 0 20px;
     font-size: 13px;
