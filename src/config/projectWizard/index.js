@@ -221,7 +221,7 @@ export function findProductCategory(product) {
     for(const prd in products[pType].subtypes) {
       const subType = products[pType].subtypes[prd]
       if (subType.id === product && !subType.disabled) {
-        return pType
+        return { ...products[pType], name: pType}
       }
     }
   }
