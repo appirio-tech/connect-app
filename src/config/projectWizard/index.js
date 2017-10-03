@@ -35,6 +35,7 @@ const products = {
     info: 'Build a cognitive chat bot for your product',
     question: 'What do you need to develop?',
     id: 'chatbot',
+    hidden: true,
     subtypes: {
       'Watson Chatbot': {
         brief: 'Watson Chatbot',
@@ -188,7 +189,7 @@ export function findProduct(product) {
 
 export function findCategory(categoryId) {
   for(const key in products) {
-    if (products[key].id === categoryId) {
+    if (products[key].id === categoryId && !products[key].disabled) {
       return { ...products[key], name: key} 
     }
   }
