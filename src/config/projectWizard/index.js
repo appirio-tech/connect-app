@@ -211,12 +211,6 @@ export function findProductsOfCategory(category) {
 }
 
 export function findProductCategory(product) {
-  if (product === 'generic_dev') {
-    return 'Development'
-  }
-  if (product === 'generic_design') {
-    return 'Design'
-  }
   for(const pType in products) {
     for(const prd in products[pType].subtypes) {
       const subType = products[pType].subtypes[prd]
