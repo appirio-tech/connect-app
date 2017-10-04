@@ -19,7 +19,7 @@ compile:
 
 deployment:
   development:
-    branch: dev
+    branch: [ dev, 'feature/generic_chatbot_project_type' ]
     owner: appirio-tech
     commands:
       - ./deploy.sh DEV
