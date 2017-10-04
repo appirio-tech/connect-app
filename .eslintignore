@@ -1,0 +1,2 @@
+# ignore dist directory to speed up linting after we build project
+dist/*
