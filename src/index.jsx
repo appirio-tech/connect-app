@@ -2,19 +2,13 @@ import 'babel-polyfill'
 import React          from 'react'
 import { render }     from 'react-dom'
 import { Provider }   from 'react-redux'
-import browserHistory from 'react-router/lib/browserHistory'
-import Router         from 'react-router/lib/Router'
 
 import _ from 'lodash'
 import store  from './config/store'
-import routes from './routes'
-import { TCEmitter } from './helpers'
-import { EVENT_ROUTE_CHANGE, SEGMENT_KEY } from './config/constants'
+import { SEGMENT_KEY } from './config/constants'
+import App from './App'
 
 const mountNode = document.getElementById('root')
-const onRouteChange = () => {
-  TCEmitter.emit(EVENT_ROUTE_CHANGE, window.location.pathname)
-}
 
 /* eslint-disable */
 if (!_.isEmpty(SEGMENT_KEY)) {
@@ -25,8 +19,39 @@ if (!_.isEmpty(SEGMENT_KEY)) {
 
 /* eslint-enable */
 
-render((
-  <Provider store={store}>
-    <Router history={browserHistory} routes={routes} onUpdate={onRouteChange} />
-  </Provider>
-), mountNode)
+const renderApp = (AppComponent) => {
+  render((
+    <Provider store={store}>
+      <AppComponent />
+    </Provider>
+  ), mountNode)
+}
+
+renderApp(App)
+
+/**
+ * Warning from React Router, caused by react-hot-loader.
+ * The warning can be safely ignored, so filter it from the console.
+ * Otherwise you'll see it every time something changes.
+ * See https://github.com/gaearon/react-hot-loader/issues/298
+ *
+ * I think if update to react-router it has to disappear
+ */
+if (module.hot) {
+  const isString = (str) => typeof str === 'string'
+  const orgError = console.error // eslint-disable-line no-console
+  console.error = (...args) => { // eslint-disable-line no-console
+    if (args && args.length === 1 && isString(args[0]) && args[0].indexOf('You cannot change <Router routes>;') > -1) {
+      // React route changed
+    } else {
+      // Log the error as normally
+      orgError.apply(console, args)
+    }
+  }
+
+  module.hot.accept('./App', () => {
+    const AppComponent = require('./App').default
+
+    renderApp(AppComponent)
+  })
+}
