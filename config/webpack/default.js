@@ -1,20 +1,13 @@
 'use strict'
 
 const _ = require('lodash')
-const path              = require('path')
-const webpack           = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const ExtractCssChunks = require('extract-css-chunks-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const constants         = require('../constants.js')
-
-const branch = process.env.CIRCLE_BRANCH
-let env = 'DEV' // Default to DEV
-if (branch === 'master') env = 'PROD'
-if (branch === 'dev')    env = 'DEV'
-if (branch === 'qa')     env = 'QA'
-const envConstants = constants(env)
+const constants = require('../constants')
 
 const dirname = path.resolve(__dirname, '../..')
 
@@ -102,7 +95,7 @@ module.exports = {
 
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': _.mapValues(envConstants, (value) => JSON.stringify(value))
+      'process.env': _.mapValues(constants, (value) => JSON.stringify(value))
     }),
     new FaviconsWebpackPlugin({
       logo: './src/favicon.png',
