@@ -160,7 +160,7 @@ class ProjectWizard extends Component {
   updateProjectType(projectType) {
     window.scrollTo(0, 0)
     const { onStepChange, onProjectUpdate } = this.props
-    const products = findProductsOfCategory(projectType)
+    const products = findProductsOfCategory(projectType, false)
     const updateQuery = { }
     // restore common fields from dirty project
     // this.restoreCommonDetails(products, updateQuery, detailsQuery)
