@@ -160,7 +160,7 @@ class ProjectWizard extends Component {
   updateProjectType(projectType) {
     window.scrollTo(0, 0)
     const { onStepChange, onProjectUpdate } = this.props
-    const products = findProductsOfCategory(projectType)
+    const products = findProductsOfCategory(projectType, false)
     const updateQuery = { }
     // restore common fields from dirty project
     // this.restoreCommonDetails(products, updateQuery, detailsQuery)
@@ -287,7 +287,7 @@ class ProjectWizard extends Component {
 
   handleStepChange(wizardStep) {
     const { onStepChange } = this.props
-    const products = findProductsOfCategory(this.state.project.type)
+    const products = findProductsOfCategory(this.state.project.type, false)
     // if project type has only one product, move one step back to select project type step
     if (wizardStep === WZ_STEP_SELECT_PROD_TYPE && products && products.length === 1) {
       wizardStep = WZ_STEP_SELECT_PROJ_TYPE

@@ -32,16 +32,22 @@ const products = {
   },
   Chatbot: {
     icon: 'product-cat-chatbot',
-    info: 'Build a cognitive chat bot for your product',
+    info: 'Build, train and test a custom conversation for your chatbot',
     question: 'What do you need to develop?',
     id: 'chatbot',
-    hidden: true,
     subtypes: {
       'Watson Chatbot': {
         brief: 'Watson Chatbot',
         details: 'Build Chatbot using IBM Watson',
+        icon: 'product-chatbot-watson',
+        id: 'watson_chatbot',
+        hidden: true
+      },
+      Chatbot: {
+        brief: 'Chatbot',
+        details: 'Build, train and test a custom conversation for your chat bot',
         icon: 'product-chatbot-chatbot',
-        id: 'watson_chatbot'
+        id: 'generic_chatbot'
       }
     }
   },
@@ -196,12 +202,13 @@ export function findCategory(categoryId) {
   return null
 }
 
-export function findProductsOfCategory(category) {
+export function findProductsOfCategory(category, fetchHidden = true) {
   for(const pType in products) {
     if (products[pType].id === category) {
       const ret = []
       for(const prd in products[pType].subtypes) {
-        if (!products[pType].subtypes[prd].disabled) {
+        const product = products[pType].subtypes[prd]
+        if (!product.disabled && (fetchHidden || !product.hidden)) {
           ret.push({ ...products[pType].subtypes[prd], name: prd })
         }
       }
