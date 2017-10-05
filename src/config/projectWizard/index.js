@@ -171,6 +171,9 @@ const products = {
 
 export default products
 
+// exports all project types as an array
+export const projectTypes = _.mapValues(products, (p, key) => ({...p, name: key }) )
+
 export function findProduct(product) {
   if (product === 'generic_dev') {
     return 'Development'
