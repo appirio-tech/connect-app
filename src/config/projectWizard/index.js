@@ -32,7 +32,7 @@ const products = {
   },
   Chatbot: {
     icon: 'product-cat-chatbot',
-    info: 'Build, train and test a custom conversation for your chat bot',
+    info: 'Build, train and test a custom conversation for your chatbot',
     question: 'What do you need to develop?',
     id: 'chatbot',
     subtypes: {
