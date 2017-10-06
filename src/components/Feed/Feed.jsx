@@ -77,7 +77,7 @@ class Feed extends React.Component {
           <div className="portrait">
             <Avatar avatarUrl={user.photoURL} userName={authorName} />
           </div>
-          <div className="object">
+          <div className="object topicBody">
             <div className="card-title">
               <div>{title}</div>
               {self && (

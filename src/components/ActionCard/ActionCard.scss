@@ -136,6 +136,10 @@
     }
   }
 
+  .topicBody{
+    width: calc(100% - 40px);
+  }
+
   .card-body {
     @include roboto;
     font-size: $tc-label-lg;
@@ -143,6 +147,7 @@
     line-height: $base-unit*5;
     padding: 10px 0;
     word-break: break-word;
+    overflow-x:auto;
 
     &.comment-section {
       margin-bottom: -50px;
