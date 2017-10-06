@@ -34,7 +34,7 @@ const products = {
     icon: 'product-cat-chatbot',
     info: 'Build, train and test a custom conversation for your chatbot',
     question: 'What do you need to develop?',
-    id: 'chatbot',
+    id: 'all-chatbots',
     subtypes: {
       'Watson Chatbot': {
         brief: 'Watson Chatbot',
@@ -47,7 +47,7 @@ const products = {
         brief: 'Chatbot',
         details: 'Build, train and test a custom conversation for your chat bot',
         icon: 'product-chatbot-chatbot',
-        id: 'generic_chatbot'
+        id: 'chatbot'
       }
     }
   },
