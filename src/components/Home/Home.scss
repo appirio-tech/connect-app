@@ -70,6 +70,7 @@
 			padding-bottom: $base-unit*6;
 		}
 		.tc-btn{
+			color: #cfe6ff;
 			height:$base-unit*8;
 			width: $base-unit*50;
 			text-align: center;
@@ -79,6 +80,14 @@
 			font-size: $tc-label-lg;
 			display: block;
 			margin-bottom: $base-unit * 4;
+			&:hover {
+				color:#ffffff;
+				background-image: linear-gradient(#3996FF 0%, #127BF3 100%) !important;				
+			}			
+			&:active {
+				color:#ffffff;
+				background-image: linear-gradient(#3996FF 0%, #127BF3 100%) !important;
+			}
 		}
 	}
 }
