@@ -182,6 +182,9 @@ class CreateConainer extends React.Component {
             // compares updated product with previous product to know if user has updated the product
           if (prevProduct !== product) {
             if (product) {
+              // intentionally commented because now it should not be require as we handling all URL changes in onStepChange
+              // earlier we were not getting updated project in onStepChange handler, hence it was required here
+              // still leaving it here for next few release, in case we find any issue because of commenting this line
               // browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
             }
           }
