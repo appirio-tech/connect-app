@@ -107,16 +107,18 @@ class ProjectWizard extends Component {
     const updateQuery = {}
     if (params && params.product) { // if there exists product path param
       // first try the path param to be a project category
-      let projectType = findCategory(params.product)
+      let projectType = findCategory(params.product, true)
       if (projectType) {// if its a category
         updateQuery['type'] = { $set : projectType.id }
         wizardStep = WZ_STEP_SELECT_PROD_TYPE
       } else {
         // if it is not a category, it should be a product and we should be able to find a category for it
-        projectType = findProductCategory(params.product)
+        projectType = findProductCategory(params.product, true)
+        // finds product object from product alias
+        const product = findProduct(params.product, true)
         if (projectType) {// we can have `incomplete` as params.product
           updateQuery['type'] = { $set : projectType.id }
-          updateQuery['details'] = { products : { $set: [params.product] } }
+          updateQuery['details'] = { products : { $set: [product.id] } }
           wizardStep = WZ_STEP_FILL_PROJ_DETAILS
         }
       }
