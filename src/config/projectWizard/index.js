@@ -274,12 +274,6 @@ export function findProductsOfCategory(categoryId, fetchHidden = true) {
  * @return {object} project category object, from the catalouge, for the given product
  */
 export function findProductCategory(productId, aliasesOnly = false) {
-  if (productId === 'generic_dev') {
-    return 'Development'
-  }
-  if (productId === 'generic_design') {
-    return 'Design'
-  }
   for(const pType in products) {
     for(const prd in products[pType].subtypes) {
       const subType = products[pType].subtypes[prd]
