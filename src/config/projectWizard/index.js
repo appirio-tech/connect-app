@@ -14,7 +14,7 @@ const products = {
         details: 'Build apps for mobile, web, or wearables',
         icon: 'product-app-app',
         id: 'application_development',
-        aliases: ['app']
+        aliases: ['app', 'application_development']
       }
     }
   },
@@ -30,7 +30,7 @@ const products = {
         details: 'Build responsive or regular websites',
         icon: 'product-website-website',
         id: 'website_development',
-        aliases: ['website']
+        aliases: ['website', 'website_development']
       }
     }
   },
@@ -46,6 +46,7 @@ const products = {
         details: 'Build Chatbot using IBM Watson',
         icon: 'product-chatbot-watson',
         id: 'watson_chatbot',
+        aliases: ['watson_chatbot'],
         hidden: true
       },
       Chatbot: {
@@ -53,7 +54,7 @@ const products = {
         details: 'Build, train and test a custom conversation for your chat bot',
         icon: 'product-chatbot-chatbot',
         id: 'generic_chatbot',
-        aliases: ['chatbot']
+        aliases: ['chatbot', 'generic_chatbot']
       }
     }
   },
@@ -84,7 +85,7 @@ const products = {
         details: 'Create development-ready designs',
         icon: 'product-design-app-visual',
         id: 'visual_design_prod',
-        aliases: ['visual-design']
+        aliases: ['visual-design', 'visual_design_prod']
       },
       Infographic: {
         brief: 'Infographic',
@@ -99,7 +100,7 @@ const products = {
         details: 'Get help with other types of design',
         icon: 'product-design-other',
         id: 'generic_design',
-        aliases: ['generic_design']
+        aliases: ['generic-design', 'generic_design']
       }
     }
   },
@@ -115,7 +116,7 @@ const products = {
         details: 'Translate designs to a web (HTML/CSS/JavaScript) or mobile prototype',
         icon: 'product-dev-prototype',
         id: 'visual_prototype',
-        aliases: ['visual-prototype'],
+        aliases: ['visual-prototype','visual_prototype'],
         disabled: true
       },
       'Front-end': {
@@ -123,21 +124,21 @@ const products = {
         details: 'Translate your designs into Web or Mobile front-end',
         icon: 'product-dev-front-end-dev',
         id: 'frontend_dev',
-        aliases: ['frontend-development']
+        aliases: ['frontend-development', 'frontend_dev']
       },
       'Back-end & API': {
         brief: '',
         details: 'Build the server, DB, and API for your app',
         icon: 'product-dev-integration',
         id: 'api_dev',
-        aliases: ['api-development']
+        aliases: ['api-development', 'api_dev']
       },
       'Development Integration': {
         brief: 'Tasks or adhoc',
         details: 'Get help with any part of your app or software',
         icon: 'product-dev-other',
         id: 'generic_dev',
-        aliases: ['generic-development']
+        aliases: ['generic-development', 'generic_dev']
       }
     }
   },
@@ -153,14 +154,14 @@ const products = {
         details: 'Exploratory Testing, Cross browser-device Testing',
         icon: 'product-qa-crowd-testing',
         id: 'real_world_testing',
-        aliases: ['real-world-testing']
+        aliases: ['real-world-testing', 'real_world_testing']
       },
       'Mobility Testing': {
         brief: 'TBD',
         details: 'App Certification, Lab on Hire, User Sentiment Analysis',
         icon: 'product-qa-mobility-testing',
         id: 'mobility_testing',
-        aliases: ['mobility-testing'],
+        aliases: ['mobility-testing', 'mobility_testing'],
         disabled: true
       },
       'Website Performance': {
@@ -168,7 +169,7 @@ const products = {
         details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
         icon: 'product-qa-website-performance',
         id: 'website_performance',
-        aliases: ['website-performance'],
+        aliases: ['website-performance', 'website_performance'],
         disabled: true
       },
       'Digital Accessability': {
@@ -176,7 +177,7 @@ const products = {
         details: 'Make sure you app or website conforms to all rules and regulations',
         icon: 'product-qa-digital-accessability',
         id: 'digital_accessability',
-        aliases: ['digital-accessability'],
+        aliases: ['digital-accessability', 'digital_accessability'],
         disabled: true
       },
       'Open Source Automation': {
@@ -184,7 +185,7 @@ const products = {
         details: 'Exploratory testing, cross browser testing',
         icon: 'product-qa-os-automation',
         id: 'open_source_automation',
-        aliases: ['open-source-automation'],
+        aliases: ['open-source-automation', 'open_source_automation'],
         disabled: true
       },
       'Consulting & Adivisory': {
@@ -192,7 +193,7 @@ const products = {
         details: 'Expert services to get your project covered end-to-end',
         icon: 'product-qa-consulting',
         id: 'consulting_adivisory',
-        aliases: ['consulting-adivisory'],
+        aliases: ['consulting-adivisory', 'consulting_adivisory'],
         disabled: true
       }
     }
