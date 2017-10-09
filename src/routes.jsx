@@ -86,9 +86,9 @@ const redirectToProject = (nextState, replace, callback) => {
 const validateCreateProjectParams = (nextState, replace, callback) => {
   const product = nextState.params.product
   // first try the path param to be a project category
-  let productCategory = findCategory(product)
+  let productCategory = findCategory(product, true)
   // if it is not a category, it should be a product and we should be able to find a category for it
-  productCategory = !productCategory ? findProductCategory(product) : productCategory
+  productCategory = !productCategory ? findProductCategory(product, true) : productCategory
   if (product && product.trim().length > 0 && !productCategory) {
     // workaround to add URL for incomplete project confirmation step
     // ideally we should have better URL naming which resolves each route with distinct patterns

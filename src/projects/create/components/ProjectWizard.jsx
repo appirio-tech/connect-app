@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { unflatten } from 'flat'
 import React, { Component, PropTypes } from 'react'
 
-import { findCategory, findProductCategory, findProductsOfCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
+import { findProduct, findCategory, findProductCategory, findProductsOfCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
 import Wizard from '../../../components/Wizard'
 import SelectProjectType from './SelectProjectType'
 import SelectProduct from './SelectProduct'
@@ -62,15 +62,17 @@ class ProjectWizard extends Component {
       let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
       if (params && params.product) {
         // first try the path param to be a project category
-        let projectType = findCategory(params.product)
+        let projectType = findCategory(params.product, true)
         if (projectType) {// if its a category
           updateQuery['type'] = { $set : projectType.id }
           wizardStep = WZ_STEP_SELECT_PROD_TYPE
         } else {
           // if it is not a category, it should be a product and we should be able to find a category for it
-          projectType = findProductCategory(params.product)
+          projectType = findProductCategory(params.product, true)
+          // finds product object from product alias
+          const product = findProduct(params.product, true)
           updateQuery['type'] = { $set : projectType.id }
-          updateQuery['details'] = { products : { $set: [params.product] } }
+          updateQuery['details'] = { products : { $set: [product.id] } }
           wizardStep = WZ_STEP_FILL_PROJ_DETAILS
         }
       }
