@@ -22,7 +22,7 @@ const sections = [
       const product = _.get(project, 'details.products[0]')
       if (showProduct && product) {
         const prd = findProduct(product)
-        if (prd) return prd
+        if (prd) return prd.name
       }
       return 'Definition'
     },

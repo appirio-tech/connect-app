@@ -7,6 +7,7 @@ import { createProjectWithStatus as createProjectAction, fireProjectDirty, fireP
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
+import { findProduct, findCategory } from '../../../config/projectWizard'
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
@@ -145,8 +146,18 @@ class CreateConainer extends React.Component {
         createProject={ this.createProject }
         processing={ this.state.creatingProject }
         onStepChange={ (wizardStep, updatedProject) => {
-          const projectType = _.get(updatedProject, 'type', null)
-          const product = _.get(updatedProject, 'details.products[0]', null)
+          // type of the project
+          let projectType = _.get(updatedProject, 'type', null)
+          // finds project category object from the catalogue
+          const projectCategory = findCategory(projectType)
+          // updates the projectType variable to use first alias to create SEO friendly URL
+          projectType = _.get(projectCategory, 'aliases[0]', projectType)
+          // product of the project
+          let productType = _.get(updatedProject, 'details.products[0]', null)
+          // finds product object from the catalogue
+          const product = findProduct(productType)
+          // updates the productType variable to use first alias to create SEO friendly URL
+          productType = _.get(product, 'aliases[0]', productType)
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
             browserHistory.push(NEW_PROJECT_PATH + '/incomplete')
           }
@@ -156,8 +167,8 @@ class CreateConainer extends React.Component {
           if (projectType && wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
             browserHistory.push(NEW_PROJECT_PATH + '/' + projectType + window.location.search)
           }
-          if (projectType && product && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
-            browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
+          if (projectType && productType && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
+            browserHistory.push(NEW_PROJECT_PATH + '/' + productType + window.location.search)
           }
           this.setState({
             wizardStep
@@ -171,7 +182,10 @@ class CreateConainer extends React.Component {
             // compares updated product with previous product to know if user has updated the product
           if (prevProduct !== product) {
             if (product) {
-              browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
+              // intentionally commented because now it should not be require as we handling all URL changes in onStepChange
+              // earlier we were not getting updated project in onStepChange handler, hence it was required here
+              // still leaving it here for next few release, in case we find any issue because of commenting this line
+              // browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
             }
           }
           this.setState({
