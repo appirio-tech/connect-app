@@ -14,7 +14,10 @@ function SelectProjectType(props) {
   for (const key in config) {
     const item = config[key]
     const icon = <SVGIconImage filePath={item.icon} />
-    const products = findProductsOfCategory(item.id) || []
+    const products = findProductsOfCategory(item.id, false) || []
+    // don't render disabled items for selection
+    // don't render hidden items as well, hidden items can be reached via direct link though
+    if (item.disabled || item.hidden) continue
     cards.push(
       <ProjectTypeCard
         icon={icon}

@@ -53,18 +53,6 @@ const sections = [
           },
           {
             icon: 'question',
-            required: true,
-            title: 'Do you have an existing IBM Bluemix account?',
-            description: '',
-            type: 'radio-group',
-            fieldName: 'details.appDefinition.hasBluemixAccount',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ]
-          },
-          {
-            icon: 'question',
             title: 'What capabilities does the chatbot need to support?',
             description: '',
             type: 'checkbox-group',
@@ -155,19 +143,6 @@ export const basicSections = [
             description: 'Brief Description',
             title: 'Description',
             type: 'textbox'
-          },
-          {
-            icon: 'question',
-            required: true,
-            validationError: 'Please complete this section',
-            title: 'Do you have an existing IBM Bluemix account?',
-            description: '',
-            type: 'radio-group',
-            fieldName: 'details.appDefinition.hasBluemixAccount',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ]
           },
           {
             icon: 'question',

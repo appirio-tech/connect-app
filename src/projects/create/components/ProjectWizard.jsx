@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { unflatten } from 'flat'
 import React, { Component, PropTypes } from 'react'
 
-import { findCategory, findProductCategory, findProductsOfCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
+import { findProduct, findCategory, findProductCategory, findProductsOfCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
 import Wizard from '../../../components/Wizard'
 import SelectProjectType from './SelectProjectType'
 import SelectProduct from './SelectProduct'
@@ -62,15 +62,17 @@ class ProjectWizard extends Component {
       let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
       if (params && params.product) {
         // first try the path param to be a project category
-        let projectType = findCategory(params.product)
+        let projectType = findCategory(params.product, true)
         if (projectType) {// if its a category
           updateQuery['type'] = { $set : projectType.id }
           wizardStep = WZ_STEP_SELECT_PROD_TYPE
         } else {
           // if it is not a category, it should be a product and we should be able to find a category for it
-          projectType = findProductCategory(params.product)
+          projectType = findProductCategory(params.product, true)
+          // finds product object from product alias
+          const product = findProduct(params.product, true)
           updateQuery['type'] = { $set : projectType.id }
-          updateQuery['details'] = { products : { $set: [params.product] } }
+          updateQuery['details'] = { products : { $set: [product.id] } }
           wizardStep = WZ_STEP_FILL_PROJ_DETAILS
         }
       }
@@ -97,12 +99,39 @@ class ProjectWizard extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { onStepChange } = nextProps
+    const { onStepChange, params } = nextProps
     const type = _.get(nextProps.project, 'type', null)
     const product = _.get(nextProps.project, 'details.products[0]', null)
-    const wizardStep = type && product ? WZ_STEP_FILL_PROJ_DETAILS : null
-    if (wizardStep) {
+    // redirect user to project details form, if we already have category and product available
+    let wizardStep = type && product ? WZ_STEP_FILL_PROJ_DETAILS : null
+    const updateQuery = {}
+    if (params && params.product) { // if there exists product path param
+      // first try the path param to be a project category
+      let projectType = findCategory(params.product, true)
+      if (projectType) {// if its a category
+        updateQuery['type'] = { $set : projectType.id }
+        wizardStep = WZ_STEP_SELECT_PROD_TYPE
+      } else {
+        // if it is not a category, it should be a product and we should be able to find a category for it
+        projectType = findProductCategory(params.product, true)
+        // finds product object from product alias
+        const product = findProduct(params.product, true)
+        if (projectType) {// we can have `incomplete` as params.product
+          updateQuery['type'] = { $set : projectType.id }
+          updateQuery['details'] = { products : { $set: [product.id] } }
+          wizardStep = WZ_STEP_FILL_PROJ_DETAILS
+        }
+      }
+    } else { // if there is not product path param, it should be first step of the wizard
+      updateQuery['type'] = { $set : null }
+      updateQuery['details'] = { products : { $set: [] } }
+      wizardStep = WZ_STEP_SELECT_PROJ_TYPE
+    }
+    // if wizard setp deduced above and stored in state are not the same, update the state
+    if (wizardStep && this.state.wizardStep !== wizardStep) {
       this.setState({
+        project: update(this.state.project, updateQuery),
+        dirtyProject: update(this.state.dirtyProject, updateQuery),
         wizardStep
       }, () => {
         typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
@@ -160,7 +189,7 @@ class ProjectWizard extends Component {
   updateProjectType(projectType) {
     window.scrollTo(0, 0)
     const { onStepChange, onProjectUpdate } = this.props
-    const products = findProductsOfCategory(projectType)
+    const products = findProductsOfCategory(projectType, false)
     const updateQuery = { }
     // restore common fields from dirty project
     // this.restoreCommonDetails(products, updateQuery, detailsQuery)
@@ -287,7 +316,7 @@ class ProjectWizard extends Component {
 
   handleStepChange(wizardStep) {
     const { onStepChange } = this.props
-    const products = findProductsOfCategory(this.state.project.type)
+    const products = findProductsOfCategory(this.state.project.type, false)
     // if project type has only one product, move one step back to select project type step
     if (wizardStep === WZ_STEP_SELECT_PROD_TYPE && products && products.length === 1) {
       wizardStep = WZ_STEP_SELECT_PROJ_TYPE
