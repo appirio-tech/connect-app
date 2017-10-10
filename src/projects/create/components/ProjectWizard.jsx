@@ -55,6 +55,7 @@ class ProjectWizard extends Component {
         // assumes the params.product to be id of a product because incomplete project is set only
         // after user selects a particular product
         const product = findProduct(params.product, true)
+        // load project detais page directly if product of save project and deep link are the same
         if (product && product.id === incompleteProduct) {
           wizardStep = WZ_STEP_FILL_PROJ_DETAILS
         }
