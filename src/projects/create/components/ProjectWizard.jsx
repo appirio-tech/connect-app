@@ -48,10 +48,21 @@ class ProjectWizard extends Component {
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
       const incompleteProject = JSON.parse(incompleteProjectStr)
+      // const incompleteProjectType = _.get(incompleteProject, 'type')
+      const incompleteProduct = _.get(incompleteProject, 'details.products[0]')
+      let wizardStep = WZ_STEP_INCOMP_PROJ_CONF
+      if (incompleteProduct && params && params.product) {
+        // assumes the params.product to be id of a product because incomplete project is set only
+        // after user selects a particular product
+        const product = findProduct(params.product, true)
+        if (product && product.id === incompleteProduct) {
+          wizardStep = WZ_STEP_FILL_PROJ_DETAILS
+        }
+      }
       this.setState({
         project: update(this.state.project, {$merge : incompleteProject}),
         dirtyProject: update(this.state.dirtyProject, {$merge : incompleteProject}),
-        wizardStep: WZ_STEP_INCOMP_PROJ_CONF,
+        wizardStep: wizardStep,
         isProjectDirty: false
       }, () => {
         typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
