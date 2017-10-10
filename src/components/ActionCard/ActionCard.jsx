@@ -75,7 +75,7 @@ class Header extends React.Component{
         <div className="portrait">
           &nbsp;
         </div>
-        <div className="object">
+        <div className="object topicBody">
           <div className="card-header">
             <div className="card-title">
               <div>{this.props.title}</div>
