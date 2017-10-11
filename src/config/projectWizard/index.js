@@ -116,7 +116,7 @@ const products = {
         details: 'Translate designs to a web (HTML/CSS/JavaScript) or mobile prototype',
         icon: 'product-dev-prototype',
         id: 'visual_prototype',
-        aliases: ['visual-prototype','visual_prototype'],
+        aliases: ['visual-prototype', 'visual_prototype'],
         disabled: true
       },
       'Front-end': {
