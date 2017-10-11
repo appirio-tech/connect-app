@@ -1,5 +1,4 @@
 import React, { PropTypes as PT } from 'react'
-import { Link } from 'react-router'
 import config from '../../../config/projectWizard'
 import ProjectTypeCard from './ProjectTypeCard'
 import SVGIconImage from '../../../components/SVGIconImage'
@@ -32,7 +31,7 @@ function SelectProjectType(props) {
   return (
     <div>
       <div className="header headerSelectProjectType">
-        <Link className="logo" to={logoTargetUrl} target="_self"><SVGIconImage filePath="connect-logo-mono" className="connectLogo"/></Link>
+        <SVGIconImage filePath="connect-logo-mono" className="connectLogo"/>
       </div>
       <div className="SelectProjectType">
         <h1>Create a new project</h1>
