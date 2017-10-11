@@ -1,10 +1,8 @@
 import _ from 'lodash'
 import React, { PropTypes as PT, Component } from 'react'
-import { Link } from 'react-router'
 import Sticky from 'react-stickynode'
 
 import config from '../../../config/projectWizard'
-import SVGIconImage from '../../../components/SVGIconImage'
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
 import ProjectOutline from '../components/ProjectOutline'
@@ -36,7 +34,6 @@ class FillProjectDetails extends Component  {
   render() {
     const { project, dirtyProject, processing, submitBtnText, userRoles } = this.props
     const isLoggedIn = userRoles && userRoles.length
-    const logoTargetUrl = isLoggedIn ? '/projects' : '/'
     const product = _.get(project, 'details.products[0]')
     const projectTypeId = _.get(project, 'type')
     const subConfig = config[_.findKey(config, {id : projectTypeId})]

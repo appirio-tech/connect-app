@@ -3,7 +3,7 @@ import SVGIconImage from '../../../components/SVGIconImage'
 import './IncompleteProjectConfirmation.scss'
 
 function IncompleteProjectConfirmation({ loadIncompleteProject, removeIncompleteProject, userRoles }) {
-  const isLoggedIn = userRoles && userRoles.length
+  // const isLoggedIn = userRoles && userRoles.length
   return (
     <div className="IncompleteProjectConfirmation">
       <div className="header">

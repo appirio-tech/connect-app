@@ -1,5 +1,4 @@
 import React, { PropTypes as PT } from 'react'
-import { Link } from 'react-router'
 import config from '../../../config/projectWizard'
 import ProductCard from './ProductCard'
 import SVGIconImage from '../../../components/SVGIconImage'
@@ -7,9 +6,8 @@ import { findCategory } from '../../../config/projectWizard'
 import './SelectProduct.scss'
 
 function SelectProduct(props) {
-  const { userRoles, projectType, onChangeProjectType } = props
+  const { userRoles, projectType } = props
   const isLoggedIn = userRoles && userRoles.length
-  const logoTargetUrl = isLoggedIn ? '/projects' : '/'
   const cards = []
   for (const key in config) {
     const type = config[key]
