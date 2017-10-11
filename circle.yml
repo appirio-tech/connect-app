@@ -33,6 +33,11 @@ deployment:
     owner: appirio-tech
     commands:
       - ./deploy.sh TEST02
+  dev_auth0:
+    branch: dev-auth0
+    owner: appirio-tech
+    commands:
+      - ./deploy.sh DEV_AUTH0
   qa:
     branch: qa
     owner: appirio-tech
