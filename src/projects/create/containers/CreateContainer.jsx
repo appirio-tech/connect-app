@@ -143,6 +143,8 @@ class CreateConainer extends React.Component {
   closeWizard() {
     const { userRoles } = this.props
     const isLoggedIn = userRoles && userRoles.length > 0
+    // calls leave handler
+    this.onLeave()
     if (isLoggedIn) {
       this.props.router.push('/projects')
     } else {
