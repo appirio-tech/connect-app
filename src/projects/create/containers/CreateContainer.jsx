@@ -144,9 +144,9 @@ class CreateConainer extends React.Component {
     const { userRoles } = this.props
     const isLoggedIn = userRoles && userRoles.length > 0
     if (isLoggedIn) {
-      this.props.router.push("/projects")
+      this.props.router.push('/projects')
     } else {
-      this.props.router.push("/")
+      this.props.router.push('/')
     }
   }
 
@@ -156,7 +156,7 @@ class CreateConainer extends React.Component {
         {...this.props}
         createProject={ this.createProject }
         processing={ this.state.creatingProject }
-        showModal={true}
+        showModal
         closeModal={ this.closeWizard }
         onStepChange={ (wizardStep, updatedProject) => {
           // type of the project
@@ -172,7 +172,9 @@ class CreateConainer extends React.Component {
           // updates the productType variable to use first alias to create SEO friendly URL
           productType = _.get(product, 'aliases[0]', productType)
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
-            browserHistory.push(NEW_PROJECT_PATH + '/incomplete')
+            let productUrl = productType ? ('/' + productType) : ''
+            productUrl = !productType && projectType ? ('/' + projectType) : productUrl
+            browserHistory.push(NEW_PROJECT_PATH + productUrl + '/incomplete')
           }
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
             browserHistory.push(NEW_PROJECT_PATH + '/' + window.location.search)

@@ -8,15 +8,11 @@ import _ from 'lodash'
 import { SearchBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
 
-import SVGIconImage from '../SVGIconImage'
-import CoderBot from '../CoderBot/CoderBot'
-
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
 import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
-  ROLE_ADMINISTRATOR,
-  PROJECT_STATUS_IN_REVIEW
+  ROLE_ADMINISTRATOR
 } from '../../config/constants'
 
 
@@ -141,7 +137,7 @@ class ProjectsToolBar extends Component {
 
   render() {
     const { logo, userMenu, userRoles, criteria, isPowerUser } = this.props
-    const { errorCreatingProject, isFilterVisible } = this.state
+    const { isFilterVisible } = this.state
     const isLoggedIn = userRoles && userRoles.length
 
     const noOfFilters = _.keys(criteria).length - 1 // -1 for default sort criteria
