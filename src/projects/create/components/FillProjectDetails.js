@@ -32,8 +32,7 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, dirtyProject, processing, submitBtnText, userRoles } = this.props
-    const isLoggedIn = userRoles && userRoles.length
+    const { project, dirtyProject, processing, submitBtnText } = this.props
     const product = _.get(project, 'details.products[0]')
     const projectTypeId = _.get(project, 'type')
     const subConfig = config[_.findKey(config, {id : projectTypeId})]

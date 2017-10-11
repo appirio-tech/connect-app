@@ -2,7 +2,7 @@ import React, { PropTypes as PT } from 'react'
 import SVGIconImage from '../../../components/SVGIconImage'
 import './IncompleteProjectConfirmation.scss'
 
-function IncompleteProjectConfirmation({ loadIncompleteProject, removeIncompleteProject, userRoles }) {
+function IncompleteProjectConfirmation({ loadIncompleteProject, removeIncompleteProject }) {
   // const isLoggedIn = userRoles && userRoles.length
   return (
     <div className="IncompleteProjectConfirmation">

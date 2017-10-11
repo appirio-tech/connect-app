@@ -6,8 +6,7 @@ import { findCategory } from '../../../config/projectWizard'
 import './SelectProduct.scss'
 
 function SelectProduct(props) {
-  const { userRoles, projectType } = props
-  const isLoggedIn = userRoles && userRoles.length
+  const { projectType } = props
   const cards = []
   for (const key in config) {
     const type = config[key]

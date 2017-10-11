@@ -6,9 +6,6 @@ import { findProductsOfCategory } from '../../../config/projectWizard'
 import './SelectProjectType.scss'
 
 function SelectProjectType(props) {
-  const { userRoles } = props
-  const isLoggedIn = userRoles && userRoles.length
-  // const logoTargetUrl = isLoggedIn ? '/projects' : '/'
   const cards = []
   for (const key in config) {
     const item = config[key]
