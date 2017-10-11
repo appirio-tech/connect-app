@@ -1,10 +1,8 @@
 import _ from 'lodash'
 import React, { PropTypes as PT, Component } from 'react'
-import { Link } from 'react-router'
 import Sticky from 'react-stickynode'
 
 import config from '../../../config/projectWizard'
-import SVGIconImage from '../../../components/SVGIconImage'
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
 import ProjectOutline from '../components/ProjectOutline'
@@ -34,9 +32,7 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, dirtyProject, processing, submitBtnText, userRoles } = this.props
-    const isLoggedIn = userRoles && userRoles.length
-    const logoTargetUrl = isLoggedIn ? '/projects' : '/'
+    const { project, dirtyProject, processing, submitBtnText } = this.props
     const product = _.get(project, 'details.products[0]')
     const projectTypeId = _.get(project, 'type')
     const subConfig = config[_.findKey(config, {id : projectTypeId})]
@@ -49,8 +45,6 @@ class FillProjectDetails extends Component  {
     return (
       <div className="FillProjectDetailsWrapper">
         <div className="header headerFillProjectDetails">
-          { !isLoggedIn && <Link className="logo" to={logoTargetUrl} target="_self"><SVGIconImage filePath="connect-logo-mono" className="connectLogo"/></Link>}
-          { !isLoggedIn && <button className="tc-btn tc-btn-default tc-btn-sm" onClick={ this.props.onChangeProjectType }><SVGIconImage filePath="arrows-undo" />Change project type</button> }
         </div>
         <div className="FillProjectDetails">
           <div className="header">

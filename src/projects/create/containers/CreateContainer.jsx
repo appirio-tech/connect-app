@@ -148,7 +148,9 @@ class CreateConainer extends React.Component {
     if (isLoggedIn) {
       this.props.router.push('/projects')
     } else {
-      this.props.router.push('/')
+      // this.props.router.push('/')
+      // FIXME ideally we should push on router
+      window.location = window.location.origin
     }
   }
 
