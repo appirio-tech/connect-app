@@ -180,7 +180,7 @@ class ProjectWizard extends Component {
    * Removed incomplete project from the local storage and resets the state. Also, moves wizard to the first step.
    */
   removeIncompleteProject() {
-    const { onStepChange, params, onProjectUpdate } = this.props
+    const { onStepChange, onProjectUpdate } = this.props
     // remove incomplete project from local storage
     window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
     const projectType = _.get(this.state.project, 'type')
