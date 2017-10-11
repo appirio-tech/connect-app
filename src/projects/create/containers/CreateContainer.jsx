@@ -58,6 +58,7 @@ class CreateConainer extends React.Component {
     }
     this.createProject = this.createProject.bind(this)
     this.onLeave = this.onLeave.bind(this)
+    this.closeWizard = this.closeWizard.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -139,12 +140,24 @@ class CreateConainer extends React.Component {
     })
   }
 
+  closeWizard() {
+    const { userRoles } = this.props
+    const isLoggedIn = userRoles && userRoles.length > 0
+    if (isLoggedIn) {
+      this.props.router.push("/projects")
+    } else {
+      this.props.router.push("/")
+    }
+  }
+
   render() {
     return (
       <EnhancedCreateView
         {...this.props}
         createProject={ this.createProject }
         processing={ this.state.creatingProject }
+        showModal={true}
+        closeModal={ this.closeWizard }
         onStepChange={ (wizardStep, updatedProject) => {
           // type of the project
           let projectType = _.get(updatedProject, 'type', null)
