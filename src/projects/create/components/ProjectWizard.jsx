@@ -385,7 +385,7 @@ class ProjectWizard extends Component {
         onCancel={this.handleWizardCancel}
         onStepChange={ this.handleStepChange }
         step={this.state.wizardStep}
-        shouldRenderBackButton={ (step) => userRoles && userRoles.length && step > 1 }
+        shouldRenderBackButton={ (step) => step > 1 }
       >
         <IncompleteProjectConfirmation
           loadIncompleteProject={ this.loadIncompleteProject }

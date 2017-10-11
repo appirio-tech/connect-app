@@ -32,7 +32,7 @@ function SelectProjectType(props) {
   return (
     <div>
       <div className="header headerSelectProjectType">
-        { !isLoggedIn && <Link className="logo" to={logoTargetUrl} target="_self"><SVGIconImage filePath="connect-logo-mono" className="connectLogo"/></Link>}
+        <Link className="logo" to={logoTargetUrl} target="_self"><SVGIconImage filePath="connect-logo-mono" className="connectLogo"/></Link>
       </div>
       <div className="SelectProjectType">
         <h1>Create a new project</h1>

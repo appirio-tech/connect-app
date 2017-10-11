@@ -36,8 +36,6 @@ function SelectProduct(props) {
   return (
     <div>
       <div className="header headerSelectProduct">
-        { !isLoggedIn && <Link className="logo" to={logoTargetUrl} target="_self"><SVGIconImage filePath="connect-logo-mono" className="connectLogo"/></Link>}
-        { !isLoggedIn && <button className="tc-btn tc-btn-default tc-btn-sm" onClick={ onChangeProjectType }><SVGIconImage filePath="arrows-undo" />Change project type</button> }
       </div>
       <div className="SelectProduct">
         <h1> { projectCategory.name } projects </h1>

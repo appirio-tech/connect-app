@@ -49,8 +49,6 @@ class FillProjectDetails extends Component  {
     return (
       <div className="FillProjectDetailsWrapper">
         <div className="header headerFillProjectDetails">
-          { !isLoggedIn && <Link className="logo" to={logoTargetUrl} target="_self"><SVGIconImage filePath="connect-logo-mono" className="connectLogo"/></Link>}
-          { !isLoggedIn && <button className="tc-btn tc-btn-default tc-btn-sm" onClick={ this.props.onChangeProjectType }><SVGIconImage filePath="arrows-undo" />Change project type</button> }
         </div>
         <div className="FillProjectDetails">
           <div className="header">
