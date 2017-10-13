@@ -11,7 +11,7 @@ dependencies:
     - sudo apt-get install g++-4.8  -y
   override:
     - npm install
-    
+
 compile:
   override:
     - npm cache clean
@@ -37,7 +37,7 @@ deployment:
     branch: dev-auth0
     owner: appirio-tech
     commands:
-      - ./deploy.sh DEV_AUTH0
+      - ./deploy.sh DEV_AUTH0 no-cache
   qa:
     branch: qa
     owner: appirio-tech

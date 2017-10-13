@@ -48,4 +48,21 @@ config.module.loaders.forEach((loader, i, loaders) => {
 
 config.plugins.push(new FaviconsWebpackPlugin('./src/favicon.png'))
 
+// Override webpack constants for testing
+const auth0DevConstants = {
+  auth0Domain: 'topcoder-newauth.auth0.com',
+  AUTH0_DOMAIN: 'topcoder-newauth.auth0.com',
+  ACCOUNTS_APP_URL: 'https://accounts-auth0.topcoder-dev.com/member',
+  ACCOUNTS_APP_CONNECTOR_URL: 'https://accounts-auth0.topcoder-dev.com/connector.html',
+  AUTH0_CLIENT_ID: 'G76ar2SI4tXz0jAyEbVGM7jFxheRnkqc',
+  ACCOUNTS_APP_LOGIN_URL: 'https://accounts-auth0.topcoder-dev.com/#!/connect?retUrl=http://connect-auth0.topcoder-dev.com/'
+}
+
+Object.assign(process.env, auth0DevConstants)
+
+config.plugins.forEach(p =>  {
+  if (p.definitions && p.definitions['process.env']) {
+    p.definitions['process.env'] = JSON.stringify(Object.assign(JSON.parse(p.definitions['process.env']), auth0DevConstants))
+  }})
+
 module.exports = config
