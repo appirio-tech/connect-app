@@ -40,6 +40,7 @@ class ProjectWizard extends Component {
     this.handleStepChange = this.handleStepChange.bind(this)
     this.restoreCommonDetails = this.restoreCommonDetails.bind(this)
     this.handleWizardCancel = this.handleWizardCancel.bind(this)
+    this.loadProjectAndProductFromURL = this.loadProjectAndProductFromURL.bind(this)
   }
 
   componentDidMount() {
@@ -48,33 +49,39 @@ class ProjectWizard extends Component {
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
       const incompleteProject = JSON.parse(incompleteProjectStr)
+      const incompleteProduct = _.get(incompleteProject, 'details.products[0]')
+      let wizardStep = WZ_STEP_INCOMP_PROJ_CONF
+      let updateQuery = {}
+      if (incompleteProduct && params && params.product) {
+        // assumes the params.product to be id of a product because incomplete project is set only
+        // after user selects a particular product
+        const product = findProduct(params.product, true)
+        if (product) {
+          // load project detais page directly if product of save project and deep link are the same
+          if (product.id === incompleteProduct) {
+            wizardStep = WZ_STEP_FILL_PROJ_DETAILS
+            updateQuery = {$merge : incompleteProject}
+          } else {
+            // explicitly ignores the wizardStep returned by the method
+            // we need to call this method just to get updateQuery updated with correct project type and product
+            this.loadProjectAndProductFromURL(params, updateQuery)
+          }
+        }
+      }
       this.setState({
-        project: update(this.state.project, {$merge : incompleteProject}),
-        dirtyProject: update(this.state.dirtyProject, {$merge : incompleteProject}),
-        wizardStep: WZ_STEP_INCOMP_PROJ_CONF,
+        project: update(this.state.project, updateQuery),
+        dirtyProject: update(this.state.dirtyProject, updateQuery),
+        wizardStep,
         isProjectDirty: false
       }, () => {
-        typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
+        typeof onStepChange === 'function' && onStepChange(this.state.wizardStep, this.state.project)
       })
     } else {
       // if there is no incomplete project in the local storage, load the wizard with appropriate step
       const updateQuery = {}
       let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
       if (params && params.product) {
-        // first try the path param to be a project category
-        let projectType = findCategory(params.product, true)
-        if (projectType) {// if its a category
-          updateQuery['type'] = { $set : projectType.id }
-          wizardStep = WZ_STEP_SELECT_PROD_TYPE
-        } else {
-          // if it is not a category, it should be a product and we should be able to find a category for it
-          projectType = findProductCategory(params.product, true)
-          // finds product object from product alias
-          const product = findProduct(params.product, true)
-          updateQuery['type'] = { $set : projectType.id }
-          updateQuery['details'] = { products : { $set: [product.id] } }
-          wizardStep = WZ_STEP_FILL_PROJ_DETAILS
-        }
+        wizardStep = this.loadProjectAndProductFromURL(params.product, updateQuery)
       }
       // retrieve refCode from query param
       // TODO give warning after truncating
@@ -106,22 +113,7 @@ class ProjectWizard extends Component {
     let wizardStep = type && product ? WZ_STEP_FILL_PROJ_DETAILS : null
     const updateQuery = {}
     if (params && params.product) { // if there exists product path param
-      // first try the path param to be a project category
-      let projectType = findCategory(params.product, true)
-      if (projectType) {// if its a category
-        updateQuery['type'] = { $set : projectType.id }
-        wizardStep = WZ_STEP_SELECT_PROD_TYPE
-      } else {
-        // if it is not a category, it should be a product and we should be able to find a category for it
-        projectType = findProductCategory(params.product, true)
-        // finds product object from product alias
-        const product = findProduct(params.product, true)
-        if (projectType) {// we can have `incomplete` as params.product
-          updateQuery['type'] = { $set : projectType.id }
-          updateQuery['details'] = { products : { $set: [product.id] } }
-          wizardStep = WZ_STEP_FILL_PROJ_DETAILS
-        }
-      }
+      wizardStep = this.loadProjectAndProductFromURL(params, updateQuery)
     } else { // if there is not product path param, it should be first step of the wizard
       updateQuery['type'] = { $set : null }
       updateQuery['details'] = { products : { $set: [] } }
@@ -136,6 +128,39 @@ class ProjectWizard extends Component {
       }, () => {
         typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
       })
+    }
+  }
+
+  /**
+   * Loads project type and product from the given URL parameter.
+   *
+   * @param {object} urlParams   URL parameters map
+   * @param {object} updateQuery query object which would be updated according to parsed project type and product
+   *
+   * @return {number} step where wizard should move after parsing the URL param
+   */
+  loadProjectAndProductFromURL(urlParams, updateQuery) {
+    const productParam = urlParams && urlParams.product
+    const statusParam  = urlParams && urlParams.status
+    if ('incomplete' === statusParam) {
+      return WZ_STEP_INCOMP_PROJ_CONF
+    }
+    if (!productParam) return
+    // first try the path param to be a project category
+    let projectType = findCategory(productParam, true)
+    if (projectType) {// if its a category
+      updateQuery['type'] = { $set : projectType.id }
+      return WZ_STEP_SELECT_PROD_TYPE
+    } else {
+      // if it is not a category, it should be a product and we should be able to find a category for it
+      projectType = findProductCategory(productParam, true)
+      // finds product object from product alias
+      const product = findProduct(productParam, true)
+      if (projectType) {// we can have `incomplete` as params.product
+        updateQuery['type'] = { $set : projectType.id }
+        updateQuery['details'] = { products : { $set: [product.id] } }
+        return WZ_STEP_FILL_PROJ_DETAILS
+      }
     }
   }
 
@@ -164,13 +189,25 @@ class ProjectWizard extends Component {
    */
   removeIncompleteProject() {
     const { onStepChange } = this.props
+    // remove incomplete project from local storage
     window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
+    const projectType = _.get(this.state.project, 'type')
+    const product = _.get(this.state.project, 'details.products[0]')
+    let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
+    let project = null
+    if (product) {
+      project = { type: projectType, details: { products: [product] } }
+      wizardStep = WZ_STEP_FILL_PROJ_DETAILS
+    } else if (projectType) {
+      project = { type: projectType, details: { products: [] } }
+      wizardStep = WZ_STEP_SELECT_PROD_TYPE
+    }
     this.setState({
-      project: { details: {} },
-      dirtyProject: { details: {} },
-      wizardStep: WZ_STEP_SELECT_PROJ_TYPE
+      project: _.merge({}, project),
+      dirtyProject: _.merge({}, project),
+      wizardStep
     }, () => {
-      typeof onStepChange === 'function' && onStepChange(this.state.wizardStep)
+      typeof onStepChange === 'function' && onStepChange(this.state.wizardStep, this.state.project)
     })
   }
 
@@ -348,7 +385,7 @@ class ProjectWizard extends Component {
         onCancel={this.handleWizardCancel}
         onStepChange={ this.handleStepChange }
         step={this.state.wizardStep}
-        shouldRenderBackButton={ (step) => userRoles && userRoles.length && step > 1 }
+        shouldRenderBackButton={ (step) => step > 1 }
       >
         <IncompleteProjectConfirmation
           loadIncompleteProject={ this.loadIncompleteProject }

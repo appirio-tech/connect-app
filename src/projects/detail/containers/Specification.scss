@@ -85,7 +85,8 @@ $sideBarWidth: 280px;
       text-transform: none;
     }
 
-    &:-moz-placeholder {
+    &::-moz-placeholder {
+      line-height: 45px;
       color: #888894;
       opacity: 1;
       text-transform: none;
@@ -849,7 +850,7 @@ $sideBarWidth: 280px;
     .project-name {
       word-break: break-all;
       font-size: 20px;
-      margin-top: 10px;
+      /*margin-top: 10px;*/
     }
   }
 

@@ -19,7 +19,7 @@ compile:
 
 deployment:
   development:
-    branch: [dev, 'feature/back-forward-button-project-wizard']
+    branch: dev
     owner: appirio-tech
     commands:
       - ./deploy.sh DEV
@@ -28,6 +28,11 @@ deployment:
     owner: appirio-tech
     commands:
       - ./deploy.sh TEST01
+  test02:
+    branch: test02
+    owner: appirio-tech
+    commands:
+      - ./deploy.sh TEST02
   qa:
     branch: qa
     owner: appirio-tech

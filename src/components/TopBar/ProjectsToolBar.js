@@ -1,25 +1,18 @@
 require('./ProjectsToolBar.scss')
 
 import React, {PropTypes, Component} from 'react'
+import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'lodash'
-import Modal from 'react-modal'
 import { SearchBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
 
-import ModalControl from '../ModalControl'
-import SVGIconImage from '../SVGIconImage'
-import CoderBot from '../CoderBot/CoderBot'
-import ProjectWizard from '../../projects/create/components/ProjectWizard'
-
-import { createProjectWithStatus as createProjectAction } from '../../projects/actions/project'
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
 import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
-  ROLE_ADMINISTRATOR,
-  PROJECT_STATUS_IN_REVIEW
+  ROLE_ADMINISTRATOR
 } from '../../config/constants'
 
 
@@ -28,18 +21,14 @@ class ProjectsToolBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isCreateProjectModalVisible : false,
       errorCreatingProject: false,
       isFilterVisible: false
     }
     this.applyFilters = this.applyFilters.bind(this)
     this.toggleFilter = this.toggleFilter.bind(this)
-    this.showCreateProjectDialog = this.showCreateProjectDialog.bind(this)
-    this.hideCreateProjectDialog = this.hideCreateProjectDialog.bind(this)
     this.handleTermChange = this.handleTermChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.handleMyProjectsFilter = this.handleMyProjectsFilter.bind(this)
-    this.createProject = this.createProject.bind(this)
     this.onLeave = this.onLeave.bind(this)
   }
 
@@ -51,7 +40,6 @@ class ProjectsToolBar extends Component {
         this.setState({
           isProjectDirty : false
         }, () => {
-          this.hideCreateProjectDialog()
           this.props.router.push('/projects/' + nextProps.project.id)
         })
       } else {
@@ -103,26 +91,6 @@ class ProjectsToolBar extends Component {
     this.applyFilters({memberOnly: event.target.checked})
   }
 
-  showCreateProjectDialog() {
-    this.setState({
-      isCreateProjectModalVisible : true
-    })
-  }
-
-  hideCreateProjectDialog() {
-    let confirm = true
-    if (this.state.isProjectDirty) {
-      confirm = window.confirm('You have unsaved changes. Are you sure you want to leave?')
-    }
-    if (confirm === true) {
-      this.setState({
-        isProjectDirty: false,
-        isCreateProjectModalVisible : false,
-        errorCreatingProject: false
-      })
-    }
-  }
-
   applyFilters(filter) {
     const criteria = _.assign({}, this.props.criteria, filter)
     if (criteria && criteria.keyword) {
@@ -155,62 +123,27 @@ class ProjectsToolBar extends Component {
     this.props.loadProjects(criteria, page)
   }
 
-  createProject(project) {
-    this.props.createProjectAction(project, PROJECT_STATUS_IN_REVIEW)
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     const { user, criteria, creatingProject, projectCreationError, searchTermTag } = this.props
-    const { isCreateProjectModalVisible, errorCreatingProject, isFilterVisible } = this.state
+    const { errorCreatingProject, isFilterVisible } = this.state
     return nextProps.user.handle !== user.handle
     || JSON.stringify(nextProps.criteria) !== JSON.stringify(criteria)
     || nextProps.creatingProject !== creatingProject
     || nextProps.projectCreationError !== projectCreationError
     || nextProps.searchTermTag !== searchTermTag
-    || nextState.isCreateProjectModalVisible !== isCreateProjectModalVisible
     || nextState.errorCreatingProject !== errorCreatingProject
     || nextState.isFilterVisible !== isFilterVisible
   }
 
   render() {
     const { logo, userMenu, userRoles, criteria, isPowerUser } = this.props
-    const { isCreateProjectModalVisible, errorCreatingProject, isFilterVisible } = this.state
+    const { isFilterVisible } = this.state
     const isLoggedIn = userRoles && userRoles.length
 
     const noOfFilters = _.keys(criteria).length - 1 // -1 for default sort criteria
 
     return (
       <div className="ProjectsToolBar">
-        <Modal
-          isOpen={ isCreateProjectModalVisible }
-          className="project-creation-dialog"
-          overlayClassName="project-creation-dialog-overlay"
-          onRequestClose={ this.hideCreateProjectDialog }
-          contentLabel=""
-        >
-          <ModalControl
-            className="escape-button"
-            icon={<SVGIconImage filePath="x-mark" />}
-            label="esc"
-            onClick={ this.hideCreateProjectDialog }
-          />
-          { !errorCreatingProject &&
-            <ProjectWizard
-              showModal={ false }
-              processing={ this.props.creatingProject }
-              createProject={ this.createProject }
-              closeModal={ this.hideCreateProjectDialog }
-              userRoles={ userRoles }
-              onProjectUpdate={ (updatedProject, dirty=true) => {
-                this.setState({
-                  isProjectDirty: dirty
-                })
-              }
-              }
-            />
-          }
-          { errorCreatingProject && <CoderBot code={ 500 } message="Unable to create project" />}
-        </Modal>
         <div className="primary-toolbar">
           { logo }
           {
@@ -240,7 +173,7 @@ class ProjectsToolBar extends Component {
           {
             !!isLoggedIn &&
             <div>
-              <a onClick={ this.showCreateProjectDialog } href="javascript:" className="tc-btn tc-btn-sm tc-btn-primary">+ New Project</a>
+              <Link to="/new-project" className="tc-btn tc-btn-sm tc-btn-primary">+ New Project</Link>
             </div>
           }
           { userMenu }
@@ -289,6 +222,6 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
   }
 }
 
-const actionsToBind = { projectSuggestions, loadProjects, createProjectAction }
+const actionsToBind = { projectSuggestions, loadProjects }
 
 export default connect(mapStateToProps, actionsToBind)(ProjectsToolBar)

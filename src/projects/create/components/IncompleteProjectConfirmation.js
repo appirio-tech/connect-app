@@ -1,15 +1,13 @@
 import React, { PropTypes as PT } from 'react'
-import { Link } from 'react-router'
 import SVGIconImage from '../../../components/SVGIconImage'
 import './IncompleteProjectConfirmation.scss'
 
-function IncompleteProjectConfirmation({ loadIncompleteProject, removeIncompleteProject, userRoles }) {
-  const isLoggedIn = userRoles && userRoles.length
-  const logoTargetUrl = isLoggedIn ? '/projects' : '/'
+function IncompleteProjectConfirmation({ loadIncompleteProject, removeIncompleteProject }) {
+  // const isLoggedIn = userRoles && userRoles.length
   return (
     <div className="IncompleteProjectConfirmation">
       <div className="header">
-        { !isLoggedIn && <Link className="logo" to={logoTargetUrl} target="_self"><SVGIconImage filePath="connect-logo-mono" className="connectLogo"/></Link>}
+        <SVGIconImage filePath="connect-logo-mono" className="connectLogo"/>
       </div>
       <h3>Welcome back!</h3>
       <h5>You started a project with us recently.</h5>
