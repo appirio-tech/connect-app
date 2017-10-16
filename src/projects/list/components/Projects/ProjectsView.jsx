@@ -10,6 +10,7 @@ import Walkthrough from '../Walkthrough/Walkthrough'
 
 import UserWithName from '../../../../components/User/UserWithName'
 import CoderBot from '../../../../components/CoderBot/CoderBot'
+import { findCategory } from '../../../../config/projectWizard'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, PROJECT_STATUS } from '../../../../config/constants'
 
 // This handles showing a spinner while the state is being loaded async
@@ -32,17 +33,15 @@ const EnhancedGrid = enhance(GridView)
 require('./ProjectsView.scss')
 
 /*eslint-disable quote-props */
-const projectTypeMap = {
-  'generic': 'Work Project',
-  'visual_design': 'Design',
-  'visual_prototype': 'Design & Prototype',
-  'app_dev': 'Full App'
-}
 const projectTypeClassMap = {
-  'generic': 'purple-block',
-  'visual_design': 'blue-block',
-  'visual_prototype': 'blue-block',
-  'app_dev': 'green-block'
+  'generic'             : 'purple-block',
+  'visual_design'       : 'blue-block',
+  'visual_prototype'    : 'blue-block',
+  'app_dev'             : 'green-block',
+  'app'                 : 'green-block',
+  'website'             : 'green-block',
+  'chatbot'             : 'green-block',
+  'quality_assurance'   : 'green-block'
 }
 /*eslint-enable */
 
@@ -79,11 +78,12 @@ const ProjectsView = props => {
         const url = `/projects/${item.id}`
         const code = _.get(item, 'details.utm.code', '')
         const projectTypeClass = projectTypeClassMap[item.type]
+        const projectType = _.get(findCategory(item.type), 'name', '')
         return (
           <div className="spacing">
             <Link to={url} className="link-title">{item.name}</Link>
             <div className="project-metadata">
-              <span className={ projectTypeClass }>{projectTypeMap[item.type]}</span>
+              <span className={ projectTypeClass }>{ projectType }</span>
               { code && <span className="item-ref-code txt-gray-md">Ref: {code}</span> }
               <span className="txt-time">{moment(item.createdAt).format('DD MMM YYYY')}</span>
             </div>

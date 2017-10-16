@@ -3,11 +3,11 @@ import SVGIconImage from '../../../components/SVGIconImage'
 import './IncompleteProjectConfirmation.scss'
 
 function IncompleteProjectConfirmation({ loadIncompleteProject, removeIncompleteProject }) {
-  
+  // const isLoggedIn = userRoles && userRoles.length
   return (
     <div className="IncompleteProjectConfirmation">
       <div className="header">
-        <SVGIconImage filePath="connect-logo-mono" />
+        <SVGIconImage filePath="connect-logo-mono" className="connectLogo"/>
       </div>
       <h3>Welcome back!</h3>
       <h5>You started a project with us recently.</h5>

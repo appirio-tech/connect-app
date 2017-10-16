@@ -7,6 +7,7 @@ import { createProject as createProjectAction, fireProjectDirty, fireProjectDirt
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
+import { findProduct, findCategory } from '../../../config/projectWizard'
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
@@ -57,6 +58,7 @@ class CreateConainer extends React.Component {
     }
     this.createProject = this.createProject.bind(this)
     this.onLeave = this.onLeave.bind(this)
+    this.closeWizard = this.closeWizard.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -107,9 +109,9 @@ class CreateConainer extends React.Component {
 
   // stores the incomplete project in local storage
   onLeave(e) {// eslint-disable-line no-unused-vars
-    const { wizardStep } = this.state
-    if (wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {// Project Details step
-      console.log('saving incomplete project')
+    const { wizardStep, isProjectDirty } = this.state
+    if (wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS && isProjectDirty) {// Project Details step
+      console.log('saving incomplete project', this.state.updatedProject)
       window.localStorage.setItem(LS_INCOMPLETE_PROJECT, JSON.stringify(this.state.updatedProject))
     }
     // commenting alerts for the page unload and route change hooks as discussed
@@ -138,18 +140,54 @@ class CreateConainer extends React.Component {
     })
   }
 
+  closeWizard() {
+    const { userRoles } = this.props
+    const isLoggedIn = userRoles && userRoles.length > 0
+    // calls leave handler
+    this.onLeave()
+    if (isLoggedIn) {
+      this.props.router.push('/projects')
+    } else {
+      // this.props.router.push('/')
+      // FIXME ideally we should push on router
+      window.location = window.location.origin
+    }
+  }
+
   render() {
     return (
       <EnhancedCreateView
         {...this.props}
         createProject={ this.createProject }
         processing={ this.state.creatingProject }
-        onStepChange={ (wizardStep) => {
+        showModal
+        closeModal={ this.closeWizard }
+        onStepChange={ (wizardStep, updatedProject) => {
+          // type of the project
+          let projectType = _.get(updatedProject, 'type', null)
+          // finds project category object from the catalogue
+          const projectCategory = findCategory(projectType)
+          // updates the projectType variable to use first alias to create SEO friendly URL
+          projectType = _.get(projectCategory, 'aliases[0]', projectType)
+          // product of the project
+          let productType = _.get(updatedProject, 'details.products[0]', null)
+          // finds product object from the catalogue
+          const product = findProduct(productType)
+          // updates the productType variable to use first alias to create SEO friendly URL
+          productType = _.get(product, 'aliases[0]', productType)
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
-            browserHistory.push(NEW_PROJECT_PATH + '/incomplete')
+            let productUrl = productType ? ('/' + productType) : ''
+            productUrl = !productType && projectType ? ('/' + projectType) : productUrl
+            browserHistory.push(NEW_PROJECT_PATH + productUrl + '/incomplete')
           }
-          if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
-            browserHistory.push(NEW_PROJECT_PATH +'' + window.location.search)
+          if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
+            browserHistory.push(NEW_PROJECT_PATH + '/' + window.location.search)
+          }
+          if (projectType && wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
+            browserHistory.push(NEW_PROJECT_PATH + '/' + projectType + window.location.search)
+          }
+          if (projectType && productType && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
+            browserHistory.push(NEW_PROJECT_PATH + '/' + productType + window.location.search)
           }
           this.setState({
             wizardStep
@@ -157,12 +195,16 @@ class CreateConainer extends React.Component {
         }
         }
         onProjectUpdate={ (updatedProject, dirty=true) => {
+          // const projectType = _.get(this.state.updatedProject, 'type', null)
           const prevProduct = _.get(this.state.updatedProject, 'details.products[0]', null)
           const product = _.get(updatedProject, 'details.products[0]', null)
             // compares updated product with previous product to know if user has updated the product
           if (prevProduct !== product) {
             if (product) {
-              browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
+              // intentionally commented because now it should not be require as we handling all URL changes in onStepChange
+              // earlier we were not getting updated project in onStepChange handler, hence it was required here
+              // still leaving it here for next few release, in case we find any issue because of commenting this line
+              // browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
             }
           }
           this.setState({

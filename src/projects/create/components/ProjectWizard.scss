@@ -7,16 +7,9 @@
     width: 100%;
     display: block;
     margin: 0px;
+    padding-top: 0px;//to align the wizard header to the bottom of logo
 
-    .ProjectTypeCard {
-      background: $tc-white;
-
-      &.selected {
-        background: $tc-gray-10;
-      }
-    }
-
-    .ProjectSubTypeCard {
+    .ProductCard {
       background: $tc-white;
 
       &.selected {

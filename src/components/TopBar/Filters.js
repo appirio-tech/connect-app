@@ -2,14 +2,7 @@ import React, {PropTypes} from 'react'
 import _ from 'lodash'
 import { Dropdown, DropdownItem, SwitchButton } from 'appirio-tech-react-components'
 import { PROJECT_STATUS } from '../../config/constants'
-
-const projectTypes = [
-  { val: null, label: 'All Types' },
-  { val: 'generic', label: 'Work Project' },
-  { val: 'visual_design', label: 'Visual Design' },
-  { val: 'visual_prototype', label: 'Visual Prototype' },
-  { val: 'app_dev', label: 'App Development' }
-]
+import { projectTypes } from '../../config/projectWizard'
 
 const projectStatuses = [
   { val: 'in(draft,in_review,reviewed,active)', label: 'Open' },
@@ -19,12 +12,15 @@ const projectStatuses = [
 
 const Filters = ({ criteria, handleMyProjectsFilter, applyFilters }) => {
 
-  const type = _.find(projectTypes, t => t.val === (criteria.type || null))
+  const type = _.find(projectTypes, t => t.id === (criteria.type || null))
   const status = _.find(projectStatuses, t => t.val === (criteria.status || null))
 
   const _types = _.map(projectTypes, p => {
-    return { val: { type: p.val }, label: p.label }
+    return { val: { type: p.id }, label: p.name }
   })
+  // adds null valued object for All Types selection
+  _types.splice(0, 0, { val: { type: null}, label: 'All Types' })
+
   const _statuses = _.map(projectStatuses, p => {
     return { val: { status: p.val }, label: p.label }
   })
@@ -36,7 +32,7 @@ const Filters = ({ criteria, handleMyProjectsFilter, applyFilters }) => {
         <label className="first">Project Type</label>
         <div className="search-select-widget">
           <Dropdown theme="new-theme" noPointer pointerShadow>
-            <a className="dropdown-menu-header">{ type.label || 'All Types' }</a>
+            <a className="dropdown-menu-header">{ _.get(type, 'name') || 'All Types' }</a>
             <ul className="dropdown-menu-list">
               {
                 _types.map((item, i) =>
