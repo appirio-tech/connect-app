@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import Cookies from 'js-cookie'
 import React, { PropTypes } from 'react'
 import { withRouter, browserHistory } from 'react-router'
 import { connect } from 'react-redux'
@@ -13,7 +14,9 @@ import {
   LS_INCOMPLETE_PROJECT,
   PROJECT_STATUS_IN_REVIEW,
   ACCOUNTS_APP_REGISTER_URL,
-  NEW_PROJECT_PATH
+  NEW_PROJECT_PATH,
+  GA_CLIENT_ID,
+  GA_CLICK_ID
 } from '../../../config/constants'
 
 const page404 = compose(
@@ -131,6 +134,16 @@ class CreateConainer extends React.Component {
         // if user is logged in and has a valid role, create project
         // uses dirtyProject from the state as it has the latest changes from the user
         // this.props.createProjectAction(project)
+        const gaClickId  = Cookies.get(GA_CLICK_ID)
+        const gaClientId = Cookies.get(GA_CLIENT_ID)
+        if(gaClientId || gaClickId) {
+          const googleAnalytics = {}
+          googleAnalytics[GA_CLICK_ID]  = gaClickId
+          googleAnalytics[GA_CLIENT_ID] = gaClientId
+          googleAnalytics['_gclid']  = gaClickId
+          googleAnalytics['_gacid'] = gaClientId
+          _.set(project, 'details.utm.google', googleAnalytics)
+        }
         this.props.createProjectAction(project, PROJECT_STATUS_IN_REVIEW)
       } else {
         // redirect to registration/login page
