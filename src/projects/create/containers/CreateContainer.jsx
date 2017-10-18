@@ -140,8 +140,6 @@ class CreateConainer extends React.Component {
           const googleAnalytics = {}
           googleAnalytics[GA_CLICK_ID]  = gaClickId
           googleAnalytics[GA_CLIENT_ID] = gaClientId
-          googleAnalytics['_gclid']  = gaClickId
-          googleAnalytics['_gacid'] = gaClientId
           _.set(project, 'details.utm.google', googleAnalytics)
         }
         this.props.createProjectAction(project, PROJECT_STATUS_IN_REVIEW)
