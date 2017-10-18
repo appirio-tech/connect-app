@@ -11,7 +11,7 @@
   "generic_chatbot": "generic_chatbot.v1.0",
   "generic_dev": "app_dev.v1.0",
 	"real_world_testing": "real_world_testing.v1.0",
-	"mobility_testing": "app_dev.v1.0",
+	"mobility_testing": "mobility_testing.v1.0",
 	"website_performance": "performance_testing.v1.0",
   "digital_accessability": "crowd_testing.v1.0",
   "open_source_automation": "crowd_testing.v1.0",

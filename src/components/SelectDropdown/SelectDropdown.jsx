@@ -12,10 +12,19 @@ class SelectDropdown extends Component {
   }
 
   componentWillMount() {
+    let selectedOption = _.find(this.props.options, (o) => o.value === this.props.value)
+    if (!selectedOption) {
+      selectedOption = this.props.options[0]
+    }
     this.setState({
-      selectedOption: this.props.selectedOption || this.props.options[0]
+      selectedOption: selectedOption
     }, function() {
-      this.props.setValue(this.state.selectedOption)
+      // FIXME intentionally commented because it was causing multiple renders when used in mobility testing template
+      // Need to further analyze
+      // It does not seem to add any value either in both of its usage (it is used in App Screens section 
+      // for design projects and in mobility testing projects)
+      
+      // this.props.setValue(this.state.selectedOption.value)
     })
   }
 
@@ -25,7 +34,7 @@ class SelectDropdown extends Component {
         this.props.onSelect(this.state.selectedOption)
       }
     })
-    this.props.setValue(option)
+    this.props.setValue(option.value)
   }
 
   render() {
