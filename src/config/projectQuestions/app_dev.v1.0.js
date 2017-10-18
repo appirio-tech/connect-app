@@ -89,6 +89,56 @@ const sections = [
             description: 'Please list all the features you would like in your application. You can use our wizard to pick from common features or define your own.',
             type: 'see-attached-features',
             fieldName: 'details.appDefinition.features'
+          },
+          {
+            icon: 'question',
+            required: true,
+            title: 'Do you have budget?',
+            description: 'Please let us know if you have any budget in mind.',
+            fieldName: 'details.appDefinition.budgetType',
+            type: 'radio-group',
+            options: [
+              {value: 'none', label: 'I have no idea, that\'s why I\'m here'},
+              {value: 'ballpark', label: 'I have a rough window in mind'},
+              {value: 'exact', label: 'I have an established budget to the penny'}
+            ],
+          },
+          {
+            icon: 'question',
+            required: true,
+            fieldName: 'details.appDefinition.budget',
+            description: 'Project Budget',
+            title: 'Project Budget',
+            type: 'textinput'
+          },
+          {
+            icon: 'question',
+            required: true,
+            title: 'When do you want to get started?',
+            description: 'Please let us know if you have any budget in mind.',
+            fieldName: 'details.appDefinition.whenToStart',
+            type: 'radio-group',
+            options: [
+              {value: 'asap', label: 'I Need to Start ASAP'},
+              {value: 'month-or-two', label: 'In the next month or two'},
+              {value: 'more-than-two', label: 'More than two months out'},
+              {value: 'estimating', label: 'Just looking for an estimate'}
+            ],
+          },
+          {
+            icon: 'question',
+            required: true,
+            fieldName: 'details.appDefinition.deadline',
+            description: 'When do you need the project to be completed?',
+            title: 'Deadline',
+            type: 'textinput'
+          },
+          {
+            icon: 'question',
+            title: 'Feature requirements',
+            description: 'Please list all the features you would like in your application. You can use our wizard to pick from common features or define your own.',
+            type: 'see-attached-features',
+            fieldName: 'details.appDefinition.features'
           }
         ]
       },
