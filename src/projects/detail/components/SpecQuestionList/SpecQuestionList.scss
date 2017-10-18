@@ -60,10 +60,8 @@
       .dropdown-wrap.default {
         background: $tc-gray-neutral-light;
         border-color: $tc-gray-20;
-        position: relative;
-        width: 150px;
-        left: 170px;
-        margin-top: -45px;
+        max-width: 300px;
+        margin-left: 0px;
 
         &:after {
           border-bottom-color: $tc-gray-70;

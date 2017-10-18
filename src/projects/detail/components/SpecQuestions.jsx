@@ -7,6 +7,7 @@ import SpecQuestionList from './SpecQuestionList/SpecQuestionList'
 import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
 import SpecFeatureQuestion from './SpecFeatureQuestion'
 import ColorSelector from './../../../components/ColorSelector/ColorSelector'
+import SelectDropdown from './../../../components/SelectDropdown/SelectDropdown'
 
 // HOC for TextareaInput
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
@@ -122,6 +123,13 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       ChildElem = ColorSelector
       _.assign(elemProps, { defaultColors: q.defaultColors })
       // child = <ColorSelector name={q.fieldName} defaultColors={q.defaultColors} value={value} />
+      break
+    case 'select-dropdown':
+      ChildElem = SelectDropdown
+      _.assign(elemProps, {
+        options: q.options,
+        theme: 'default'
+      })
       break
     default:
       ChildElem = <noscript />
