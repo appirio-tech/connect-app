@@ -17,15 +17,14 @@ class SelectDropdown extends Component {
       selectedOption = this.props.options[0]
     }
     this.setState({
-      selectedOption: selectedOption
-    }, function() {
+      selectedOption
+    }/*, function() {
       // FIXME intentionally commented because it was causing multiple renders when used in mobility testing template
       // Need to further analyze
       // It does not seem to add any value either in both of its usage (it is used in App Screens section 
       // for design projects and in mobility testing projects)
-      
-      // this.props.setValue(this.state.selectedOption.value)
-    })
+      this.props.setValue(this.state.selectedOption.value)
+    }*/)
   }
 
   handleClick(option) {

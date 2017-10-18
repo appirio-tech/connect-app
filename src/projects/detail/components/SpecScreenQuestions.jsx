@@ -59,9 +59,9 @@ const SpecScreenQuestions = ({questions, screen}) => {
       ChildElem = ColorSelector
       _.assign(elemProps, { defaultColors: q.defaultColors })
       break
-    case 'select-dropdown':
+    case 'select-dropdown': {
       ChildElem = SelectDropdown
-      const importanceLevel = _.get(screen, "importanceLevel")
+      const importanceLevel = _.get(screen, 'importanceLevel')
       _.assign(elemProps, {
         options: q.options,
         theme: 'default',
@@ -70,6 +70,7 @@ const SpecScreenQuestions = ({questions, screen}) => {
         value: importanceLevel.value ? importanceLevel.value : importanceLevel
       })
       break
+    }
     default:
       ChildElem = <noscript />
     }
