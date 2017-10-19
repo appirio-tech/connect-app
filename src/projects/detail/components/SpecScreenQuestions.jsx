@@ -59,14 +59,18 @@ const SpecScreenQuestions = ({questions, screen}) => {
       ChildElem = ColorSelector
       _.assign(elemProps, { defaultColors: q.defaultColors })
       break
-    case 'select-dropdown':
+    case 'select-dropdown': {
       ChildElem = SelectDropdown
+      const importanceLevel = _.get(screen, 'importanceLevel')
       _.assign(elemProps, {
         options: q.options,
         theme: 'default',
-        selectedOption: screen.importanceLevel
+        // overrides value to be backward compatible when it used to save full option object as selected value
+        // now it saves only the value of the selected option
+        value: importanceLevel.value ? importanceLevel.value : importanceLevel
       })
       break
+    }
     default:
       ChildElem = <noscript />
     }

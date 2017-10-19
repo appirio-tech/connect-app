@@ -261,3 +261,7 @@ export const LS_INCOMPLETE_PROJECT = 'incompleteProject'
 export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL
 
 export const NEW_PROJECT_PATH = '/new-project'
+
+// Analytics constants
+export const GA_CLICK_ID  = '_gclid'
+export const GA_CLIENT_ID = '_gacid'

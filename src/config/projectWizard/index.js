@@ -142,9 +142,9 @@ const products = {
       }
     }
   },
-  'Real World Testing': {
-    icon: 'product-qa-crowd-testing',
-    info: 'Exploratory Testing, Cross browser-device Testing',
+  QA: {
+    icon: 'product-cat-qa',
+    info: 'Test and fix bugs in your software',
     question: 'What kind of quality assurance (QA) do you need?',
     id: 'quality_assurance',
     aliases: ['all-quality-assurance'],
@@ -161,8 +161,7 @@ const products = {
         details: 'App Certification, Lab on Hire, User Sentiment Analysis',
         icon: 'product-qa-mobility-testing',
         id: 'mobility_testing',
-        aliases: ['mobility-testing', 'mobility_testing'],
-        disabled: true
+        aliases: ['mobility-testing', 'mobility_testing']
       },
       'Website Performance': {
         brief: 'TBD',
