@@ -1,12 +1,13 @@
 import 'babel-polyfill'
-import React          from 'react'
-import { render }     from 'react-dom'
-import { Provider }   from 'react-redux'
-
 import _ from 'lodash'
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import { AppContainer } from 'react-hot-loader'
+import { BrowserRouter } from 'react-router-dom'
 import store  from './config/store'
+import Routes from './routes'
 import { SEGMENT_KEY } from './config/constants'
-import App from './App'
 
 const mountNode = document.getElementById('root')
 
@@ -16,42 +17,30 @@ if (!_.isEmpty(SEGMENT_KEY)) {
   analytics.load(SEGMENT_KEY);
   }}();
 }
-
 /* eslint-enable */
 
-const renderApp = (AppComponent) => {
-  render((
-    <Provider store={store}>
-      <AppComponent />
-    </Provider>
-  ), mountNode)
+const renderApp = (Component) => {
+  render(
+    <AppContainer>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Component />
+        </BrowserRouter>
+      </Provider>
+    </AppContainer>,
+    mountNode
+  )
 }
 
-renderApp(App)
+renderApp(Routes)
 
-/**
- * Warning from React Router, caused by react-hot-loader.
- * The warning can be safely ignored, so filter it from the console.
- * Otherwise you'll see it every time something changes.
- * See https://github.com/gaearon/react-hot-loader/issues/298
- *
- * I think if update to react-router it has to disappear
- */
 if (module.hot) {
-  const isString = (str) => typeof str === 'string'
-  const orgError = console.error // eslint-disable-line no-console
-  console.error = (...args) => { // eslint-disable-line no-console
-    if (args && args.length === 1 && isString(args[0]) && args[0].indexOf('You cannot change <Router routes>;') > -1) {
-      // React route changed
-    } else {
-      // Log the error as normally
-      orgError.apply(console, args)
-    }
-  }
+  module.hot.accept('./routes', () => {
+    // TODO
+    // it has to work without explicit require component
+    // but it doesn't update components even though hot reloading is triggered, why?
+    const RoutesNew = require('./routes').default
 
-  module.hot.accept('./App', () => {
-    const AppComponent = require('./App').default
-
-    renderApp(AppComponent)
+    renderApp(RoutesNew)
   })
 }

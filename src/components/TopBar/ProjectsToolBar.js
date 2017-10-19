@@ -2,6 +2,7 @@ require('./ProjectsToolBar.scss')
 
 import React, {PropTypes, Component} from 'react'
 import { connect } from 'react-redux'
+import { Prompt, withRouter } from 'react-router-dom'
 import cn from 'classnames'
 import _ from 'lodash'
 import Modal from 'react-modal'
@@ -52,7 +53,7 @@ class ProjectsToolBar extends Component {
           isProjectDirty : false
         }, () => {
           this.hideCreateProjectDialog()
-          this.props.router.push('/projects/' + nextProps.project.id)
+          this.props.history.push('/projects/' + nextProps.project.id)
         })
       } else {
         this.setState({
@@ -63,24 +64,17 @@ class ProjectsToolBar extends Component {
   }
 
   componentDidMount() {
-    const { router, route } = this.props
-    // sets route leave hook to show unsaved changes alert and persist incomplete project
-    this.routeLeaveHook = router.setRouteLeaveHook(route, this.onLeave)
-
     // sets window unload hook to show unsaved changes alert and persist incomplete project
     window.addEventListener('beforeunload', this.onLeave)
   }
 
   componentWillUnmount() {
     window.removeEventListener('beforeunload', this.onLeave)
-    if (this.routeLeaveHook) {
-      this.routeLeaveHook()
-    }
     const contentDiv = document.getElementById('wrapper-main')
     contentDiv.classList.remove('with-filters')
   }
 
-  onLeave(e) {
+  onLeave(e = {}) {
     const { isProjectDirty } = this.state
     const { creatingProject } = this.props
     if (isProjectDirty && !creatingProject) {
@@ -148,7 +142,7 @@ class ProjectsToolBar extends Component {
   routeWithParams(criteria, page) {
     // remove any null values
     criteria = _.pickBy(criteria, _.identity)
-    this.props.router.push({
+    this.props.history.push({
       pathname: '/projects/',
       query: _.assign({}, criteria, { page })
     })
@@ -178,9 +172,14 @@ class ProjectsToolBar extends Component {
     const isLoggedIn = userRoles && userRoles.length
 
     const noOfFilters = _.keys(criteria).length - 1 // -1 for default sort criteria
+    const onLeaveMessage = this.onLeave() || ''
 
     return (
       <div className="ProjectsToolBar">
+        <Prompt
+          when={!!onLeaveMessage}
+          message={onLeaveMessage}
+        />
         <Modal
           isOpen={ isCreateProjectModalVisible }
           className="project-creation-dialog"
@@ -291,4 +290,4 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
 
 const actionsToBind = { projectSuggestions, loadProjects, createProjectAction }
 
-export default connect(mapStateToProps, actionsToBind)(ProjectsToolBar)
+export default withRouter(connect(mapStateToProps, actionsToBind)(ProjectsToolBar))

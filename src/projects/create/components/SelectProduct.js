@@ -1,5 +1,5 @@
 import React, { PropTypes as PT } from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import config from '../../../config/projectWizard'
 import ProductCard from './ProductCard'
 import SVGIconImage from '../../../components/SVGIconImage'

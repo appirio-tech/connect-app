@@ -4,7 +4,7 @@ import './ProjectType.scss'
 import PanelProject from '../PanelProject/PanelProject'
 import TextTruncate from 'react-text-truncate'
 import { findCategory } from '../../config/projectWizard'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 
 const deviceMap = {
   phone: <div key="IPHONE" className="icon icon-iphone">Phone</div>,

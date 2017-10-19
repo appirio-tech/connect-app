@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, { PropTypes as PT, Component } from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import Sticky from 'react-stickynode'
 
 import config from '../../../config/projectWizard'

@@ -5,7 +5,8 @@
   "scripts": {
     "start": "webpack-dev-server --history-api-fallback --env=development --hot --inline --progress --port 3000 --host 0.0.0.0",
     "build": "npm rebuild node-sass; ./node_modules/.bin/webpack --bail --progress  --colors --env=production",
-    "lint": "eslint --fix --format table --ext .js,.jsx .",
+    "lint": "eslint --format table --ext .js,.jsx .",
+    "lint:fix": "eslint --fix --format table --ext .js,.jsx .",
     "test": "cross-env NODE_ENV=test mocha  --colors --reporter nyan --compilers js:babel-core/register --require ignore-styles --recursive \"./src/**/*.spec.js\"",
     "test:watch": "watch-run -i -p 'src/**/*' npm run test"
   },
@@ -85,7 +86,7 @@
     "react-layout-pane": "^0.1.16",
     "react-modal": "^1.9.7",
     "react-redux": "^4.4.5",
-    "react-router": "^3.2.0",
+    "react-router-dom": "^4.2.2",
     "react-s-alert": "^1.1.4",
     "react-scroll": "^1.5.4",
     "react-stickynode": "^1.2.1",
