@@ -22,7 +22,7 @@ const sections = [
       const product = _.get(project, 'details.products[0]')
       if (showProduct && product) {
         const prd = findProduct(product)
-        if (prd) return prd
+        if (prd) return prd.name
       }
       return 'Definition'
     },
@@ -296,68 +296,6 @@ const sections = [
       }
     ]
   }
-/*,
-  {
-    id: 'devSpecification',
-    title: 'Development Specification',
-    description: 'Define some basic technical requirements for your application or provide any architecture or technical guidelines. Skip this section if you dont know what is required.',
-    required: false,
-    subSections: [
-      {
-        id: 'questions',
-        required: false,
-        title: 'Questions',
-        description: '',
-        type: 'questions',
-        questions: [
-          {
-            icon: 'question',
-            title: 'How should your application be built?',
-            description: 'Choose the operating system/platform for your application',
-            type: 'checkbox-group',
-            options: [
-              {value: 'ios', label: 'iOS'},
-              {value: 'android', label: 'Android'},
-              {value: 'web', label: 'Web'},
-              {value: 'hybrid', label: 'Hybrid'}
-            ],
-            fieldName: 'details.devSpecification.platform'
-          },
-          {
-            icon: 'question',
-            title: 'Is offline access required for your application?',
-            description: 'Do your users need to use the application when they are unable to connect to the internet?',
-            type: 'radio-group',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ],
-            fieldName: 'details.devSpecification.offlineAccess'
-          },
-          {
-            icon: 'question',
-            title: 'What level of security is needed for your application?',
-            description: 'Do you expect to be storing or transmitting personal or sensitive information?',
-            type: 'radio-group',
-            options: [
-              {value: 'standard', label: 'Standard - Nothing to do here'},
-              {value: 'enhanced', label: 'Enhanced'},
-              {value: 'maximumm', label: 'Maximum'}
-            ],
-            fieldName: 'details.devSpecification.securityLevel'
-          }
-        ]
-      },
-      {
-        id: 'notes',
-        required: false,
-        fieldName: 'details.devSpecification.notes',
-        title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
-        type: 'notes'
-      }
-    ]
-  }*/
 ]
 
 export default sections
