@@ -29,7 +29,7 @@ const ProjectDetailWithAuth = withProps({ main:
     <Route exact path="/projects/:projectId" render={() => <ProjectDetail><Dashboard /></ProjectDetail>} />
     <Route path="/projects/:projectId/status/:statusId" render={() => <ProjectDetail><Dashboard /></ProjectDetail>} />
     <Route path="/projects/:projectId/specification" render={() => <ProjectDetail><SpecificationContainer /></ProjectDetail>} />
-    <Route path="/projects/:projectId/discussions(/:discussionId)" render={() => <ProjectDetail><ProjectMessages /></ProjectDetail>} />
+    <Route path="/projects/:projectId/discussions/:discussionId?" render={() => <ProjectDetail><ProjectMessages /></ProjectDetail>} />
   </Switch>
 })(ProjectLayoutWithAuth)
 
