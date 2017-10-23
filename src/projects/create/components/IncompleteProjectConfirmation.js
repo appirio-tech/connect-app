@@ -1,5 +1,5 @@
 import React, { PropTypes as PT } from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import SVGIconImage from '../../../components/SVGIconImage'
 import './IncompleteProjectConfirmation.scss'
 

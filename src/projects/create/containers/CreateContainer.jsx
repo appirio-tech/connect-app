@@ -1,12 +1,13 @@
 import _ from 'lodash'
 import React, { PropTypes } from 'react'
-import { withRouter, browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { createProjectWithStatus as createProjectAction, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
+import { findCategory, findProductCategory } from '../../../config/projectWizard'
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
@@ -33,8 +34,8 @@ const spinner = spinnerWhileLoading(props => !props.processing)
 const enhance = compose(errorHandler, spinner)
 
 const CreateView = (props) => {
-  const { route } = props
-  if (route.path === '/new-project-callback') {
+  const { match } = props
+  if (match.path === '/new-project-callback') {
     // can do some fancy loading (e.g. coderbot animation) here
     return <div><CoderBot code={ 200 } message="Creating your project..." /></div>
   }
@@ -70,21 +71,42 @@ class CreateConainer extends React.Component {
         // remove incomplete project, and navigate to project dashboard
         console.log('removing incomplete project')
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
-        this.props.router.push('/projects/' + projectId)
+        this.props.history.push('/projects/' + projectId)
       })
 
     } else if (this.state.creatingProject !== nextProps.processing) {
       this.setState({ creatingProject : nextProps.processing })
     }
+
+    // when route is changed, save incomplete project
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      this.onLeave()
+    }
   }
 
   componentWillMount() {
-    const { processing, userRoles, route } = this.props
+    const { processing, userRoles, match, history } = this.props
+    // if we are on the project page validate product param
+    if (match.path === '/new-project/:product?') {
+      const product = match.params.product
+      // first try the path param to be a project category
+      let productCategory = findCategory(product)
+      // if it is not a category, it should be a product and we should be able to find a category for it
+      productCategory = !productCategory ? findProductCategory(product) : productCategory
+      if (product && product.trim().length > 0 && !productCategory) {
+        // workaround to add URL for incomplete project confirmation step
+        // ideally we should have better URL naming which resolves each route with distinct patterns
+        if (product !== 'incomplete') {
+          history.replace('/404')
+        }
+      }
+    }
+
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
       const incompleteProject = JSON.parse(incompleteProjectStr)
-      if (route.path === '/new-project-callback' && !processing && userRoles && userRoles.length > 0) {
+      if (match.path === '/new-project-callback' && !processing && userRoles && userRoles.length > 0) {
         // if project wizard is loaded after redirection from register page
         // TODO should we validate the project again?
         console.log('calling createProjectAction...')
@@ -94,15 +116,14 @@ class CreateConainer extends React.Component {
   }
 
   componentDidMount() {
-    // sets route leave hook to show unsaved changes alert and persist incomplete project
-    this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
-
-    // sets window unload hook to show unsaved changes alert and persist incomplete project
+    // sets window unload hook save incomplete project
     window.addEventListener('beforeunload', this.onLeave)
   }
 
   componentWillUnmount() {
     window.removeEventListener('beforeunload', this.onLeave)
+    // when we leave component, save incomplete project
+    this.onLeave()
   }
 
   // stores the incomplete project in local storage
@@ -148,16 +169,16 @@ class CreateConainer extends React.Component {
           const projectType = _.get(updatedProject, 'type', null)
           const product = _.get(updatedProject, 'details.products[0]', null)
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
-            browserHistory.push(NEW_PROJECT_PATH + '/incomplete')
+            this.props.history.push(NEW_PROJECT_PATH + '/incomplete')
           }
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
-            browserHistory.push(NEW_PROJECT_PATH + '/' + window.location.search)
+            this.props.history.push(NEW_PROJECT_PATH + '/' + window.location.search)
           }
           if (projectType && wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
-            browserHistory.push(NEW_PROJECT_PATH + '/' + projectType + window.location.search)
+            this.props.history.push(NEW_PROJECT_PATH + '/' + projectType + window.location.search)
           }
           if (projectType && product && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
-            browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
+            this.props.history.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
           }
           this.setState({
             wizardStep
@@ -171,7 +192,7 @@ class CreateConainer extends React.Component {
             // compares updated product with previous product to know if user has updated the product
           if (prevProduct !== product) {
             if (product) {
-              browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
+              this.props.history.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
             }
           }
           this.setState({

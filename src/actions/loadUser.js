@@ -71,7 +71,7 @@ export function loadUserSuccess(dispatch, token) {
           }
         }
       }]
-      if (window.analytics && window.analytics.user()) {
+      if (window.analytics && window.analytics.user && window.analytics.user()) {
         const anonymousId = window.analytics.user().anonymousId()
         if (anonymousId) {
           analyticsEvents.push({

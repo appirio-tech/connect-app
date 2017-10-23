@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import { UserDropdown, Icons } from 'appirio-tech-react-components'
 const { ConnectLogo } = Icons
@@ -26,7 +26,8 @@ class TopBarContainer extends React.Component {
 
   shouldComponentUpdate(nextProps) {
     return (nextProps.user || {}).handle !== (this.props.user || {}).handle
-    || nextProps.toolbar.type !== this.props.toolbar.type
+    || nextProps.toolbar !== this.props.toolbar
+    || this.props.location.pathname !== nextProps.location.pathname
   }
 
   render() {
@@ -44,7 +45,7 @@ class TopBarContainer extends React.Component {
     const logoutLink = `https://accounts.${DOMAIN}/#!/logout?retUrl=${homePageUrl}`
     const isLoggedIn = userRoles && userRoles.length
     const logoTargetUrl = isLoggedIn ? '/projects' : '/'
-    const isHomePage = this.props.router.isActive('/', true)
+    const isHomePage = this.props.match.path === '/'
     // NOTE: hardcoding to connectv2, once connect v1
     window.host
     const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.host}/`

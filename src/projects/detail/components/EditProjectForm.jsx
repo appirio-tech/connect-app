@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { withRouter } from 'react-router'
+import { Prompt } from 'react-router-dom'
 import Modal from 'react-modal'
 import _ from 'lodash'
 import { unflatten } from 'flat'
@@ -96,7 +96,6 @@ class EditProjectForm extends Component {
   }
 
   componentDidMount() {
-    this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
     window.addEventListener('beforeunload', this.onLeave)
   }
 
@@ -106,7 +105,7 @@ class EditProjectForm extends Component {
   }
 
   // Notify user if they navigate away while the form is modified.
-  onLeave(e) {
+  onLeave(e = {}) {
     if (this.isChanged()) {
       // TODO: remove this block - it disables unsaved changes popup 
       // for app screens changes
@@ -188,6 +187,7 @@ class EditProjectForm extends Component {
   render() {
     const { isEdittable, sections } = this.props
     const { project, dirtyProject } = this.state
+    const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
       const anySectionInvalid = _.some(this.props.sections, (s) => s.isInvalid)
       return (
@@ -213,6 +213,10 @@ class EditProjectForm extends Component {
 
     return (
       <div>
+        <Prompt
+          when={!!onLeaveMessage}
+          message={onLeaveMessage}
+        />
         <Formsy.Form
           ref="form"
           disabled={!isEdittable}
@@ -248,4 +252,4 @@ EditProjectForm.propTypes = {
   fireProjectDirtyUndo: PropTypes.func.isRequired
 }
 
-export default withRouter(EditProjectForm)
+export default EditProjectForm

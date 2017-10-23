@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import { withRouter } from 'react-router'
+import { Prompt } from 'react-router-dom'
 import _ from 'lodash'
 import {
   THREAD_MESSAGES_PAGE_SIZE,
@@ -51,9 +51,7 @@ class FeedView extends React.Component {
   }
 
   componentDidMount() {
-    const routeLeaveHook = this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
     window.addEventListener('beforeunload', this.onLeave)
-    this.setState({ routeLeaveHook })
   }
 
   componentWillMount() {
@@ -65,14 +63,11 @@ class FeedView extends React.Component {
   }
 
   componentWillUnmount() {
-    if (this.state.routeLeaveHook) {
-      this.state.routeLeaveHook()
-    }
     window.removeEventListener('beforeunload', this.onLeave)
   }
 
   // Notify user if they navigate away while the form is modified.
-  onLeave(e) {
+  onLeave(e = {}) {
     if (this.isChanged()) {
       return e.returnValue = 'You haven\'t posted your message. If you leave this page, your message will not be saved. Are you sure you want to leave?'
     }
@@ -345,6 +340,7 @@ class FeedView extends React.Component {
     const {currentUser, project, currentMemberRole, isCreatingFeed, error } = this.props
     const { feeds } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
+    const onLeaveMessage = this.onLeave() || ''
 
     const renderFeed = (item) => {
       if ((item.spec || item.sendForReview) && !showDraftSpec) {
@@ -380,6 +376,10 @@ class FeedView extends React.Component {
     }
     return (
       <div>
+        <Prompt
+          when={!!onLeaveMessage}
+          message={onLeaveMessage}
+        />
         <NewPost
           currentUser={currentUser}
           onPost={this.onNewPost}
@@ -395,7 +395,7 @@ class FeedView extends React.Component {
   }
 }
 const enhance = spinnerWhileLoading(props => !props.isLoading)
-const EnhancedFeedView = withRouter(enhance(FeedView))
+const EnhancedFeedView = enhance(FeedView)
 
 
 class FeedContainer extends React.Component {

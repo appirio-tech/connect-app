@@ -6,7 +6,9 @@ const defaultConfig = require('./default')
 
 const dirname = path.resolve(__dirname, '../..')
 
-module.exports = webpackMerge(defaultConfig, {
+module.exports = webpackMerge.strategy({
+  entry: 'prepend' // to put 'react-hot-loader/patch' first
+})(defaultConfig, {
   entry: [
     'react-hot-loader/patch'
   ],

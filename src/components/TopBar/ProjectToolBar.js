@@ -2,7 +2,7 @@ require('./ProjectToolBar.scss')
 
 import _ from 'lodash'
 import React, {PropTypes} from 'react'
-import {Link} from 'react-router'
+import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import {
@@ -22,14 +22,8 @@ class ProjectToolBar extends React.Component {
     this.state = {
       isTooltipVisible: false
     }
-    this.onTransition = this.onTransition.bind(this)
     this.onNameEnter = this.onNameEnter.bind(this)
     this.onNameLeave = this.onNameLeave.bind(this)
-  }
-
-  onTransition() {
-    // active links in menu are not automatically updated when navigating between project pages
-    this.forceUpdate()
   }
 
   onNameEnter() {
@@ -43,27 +37,10 @@ class ProjectToolBar extends React.Component {
     this.setState({isTooltipVisible: false})
   }
 
-  componentDidMount() {
-    const {router} = this.context
-    router.registerTransitionHook(this.onTransition)
-  }
-
-  componentWillUnmount() {
-    const {router} = this.context
-    router.unregisterTransitionHook(this.onTransition)
-
-  }
-
   render() {
     // TODO: removing isPowerUser until link challenges is needed once again.
     const {logo, userMenu, project } = this.props
-    const {router} = this.context
     const {isTooltipVisible} = this.state
-
-    const getLinkProps = (to) => ({
-      to,
-      className: router.isActive(to, true) ? 'active': ''
-    })
 
     return (
       <div className="ProjectToolBar">
@@ -71,7 +48,7 @@ class ProjectToolBar extends React.Component {
           <div className="bar-column">
             {logo}
             {project && <div className="breadcrumb">
-              <Link to="/projects">Projects /&nbsp;</Link>
+              <NavLink to="/projects">Projects /&nbsp;</NavLink>
               <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
             </div>}
             {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
@@ -79,11 +56,11 @@ class ProjectToolBar extends React.Component {
           <div className="bar-column">
             {project && <nav className="nav">
               <ul>
-                <li><Link {...getLinkProps(`/projects/${project.id}`)}><i className="icon-dashboard"/>Dashboard</Link></li>
-                <li><Link {...getLinkProps(`/projects/${project.id}/specification`)}><i className="icon-specification"/>Specification</Link></li>
+                <li><NavLink to={`/projects/${project.id}`} exact activeClassName="active"><i className="icon-dashboard"/>Dashboard</NavLink></li>
+                <li><NavLink to={`/projects/${project.id}/specification`} activeClassName="active"><i className="icon-specification"/>Specification</NavLink></li>
                 {/*
                   TODO: Enable again when challenges link is needed.
-                  isPowerUser && <li><Link {...getLinkProps(`/projects/${project.id}/challenges`)}><i className="icon-challenges"/>Challenges</Link></li>
+                  isPowerUser && <li><NavLink to={`/projects/${project.id}/challenges`} activeClassName="active"><i className="icon-challenges"/>Challenges</Link></li>
                 */}
                 {/*
                   * TODO: Completely remome the discussions list item once there isn't
@@ -91,7 +68,7 @@ class ProjectToolBar extends React.Component {
                   */}
                 {
                   (project.details && !project.details.hideDiscussions) &&
-                  <li><Link {...getLinkProps(`/projects/${project.id}/discussions`)}><i className="icon-messages"/>Discussions</Link></li>
+                  <li><NavLink to={`/projects/${project.id}/discussions`} activeClassName="active"><i className="icon-messages"/>Discussions</NavLink></li>
                 }
               </ul>
             </nav>}
@@ -106,10 +83,6 @@ class ProjectToolBar extends React.Component {
 ProjectToolBar.propTypes = {
   project: PropTypes.object,
   isPowerUser: PropTypes.bool
-}
-
-ProjectToolBar.contextTypes = {
-  router: PropTypes.object.isRequired
 }
 
 const mapStateToProps = ({ projectState, loadUser }) => {
