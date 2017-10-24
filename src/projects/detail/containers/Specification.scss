@@ -4,6 +4,7 @@
 $gray-color: $tc-gray-50;
 $title-color: $tc-gray-80;
 $sideBarWidth: 280px;
+$sideBarMaxWidth: 360px;
 
 @mixin flexBox {
   display: box;
@@ -806,6 +807,7 @@ $sideBarWidth: 280px;
 
   .left-area {
     min-width: $sideBarWidth;
+    max-width: $sideBarMaxWidth;
     margin-right: 20px;
   }
 
