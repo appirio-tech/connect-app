@@ -96,20 +96,21 @@ const sections = [
             title: 'Do you have budget?',
             description: 'Please let us know if you have any budget in mind.',
             fieldName: 'details.appDefinition.budgetType',
-            type: 'radio-group',
+            type: 'select-dropdown',
             options: [
-              {value: 'none', label: 'I have no idea, that\'s why I\'m here'},
-              {value: 'ballpark', label: 'I have a rough window in mind'},
-              {value: 'exact', label: 'I have an established budget to the penny'}
+              { value: '', title: 'Select'},
+              {value: 'none', title: 'I have no idea, that\'s why I\'m here'},
+              {value: 'ballpark', title: 'I have a rough window in mind'},
+              {value: 'exact', title: 'I have an established budget to the penny'}
             ],
           },
           {
             icon: 'question',
             required: true,
             fieldName: 'details.appDefinition.budget',
-            description: 'Project Budget',
+            description: 'Project budget in USD, please enter 0 if you don\'t have one',
             title: 'Project Budget',
-            type: 'textinput'
+            type: 'numberinput'
           },
           {
             icon: 'question',
@@ -117,12 +118,13 @@ const sections = [
             title: 'When do you want to get started?',
             description: 'Please let us know if you have any budget in mind.',
             fieldName: 'details.appDefinition.whenToStart',
-            type: 'radio-group',
+            type: 'select-dropdown',
             options: [
-              {value: 'asap', label: 'I Need to Start ASAP'},
-              {value: 'month-or-two', label: 'In the next month or two'},
-              {value: 'more-than-two', label: 'More than two months out'},
-              {value: 'estimating', label: 'Just looking for an estimate'}
+              { value: '', title: 'Select'},
+              {value: 'asap', title: 'I Need to Start ASAP'},
+              {value: 'month-or-two', title: 'In the next month or two'},
+              {value: 'more-than-two', title: 'More than two months out'},
+              {value: 'estimating', title: 'Just looking for an estimate'}
             ],
           },
           {
@@ -131,7 +133,15 @@ const sections = [
             fieldName: 'details.appDefinition.deadline',
             description: 'When do you need the project to be completed?',
             title: 'Deadline',
-            type: 'textinput'
+            type: 'select-dropdown',
+            options: [
+              { value: '', title: 'Select'},
+              {value: '2-weeks', title: '2 weeks'},
+              {value: '1-month', title: '1 month'},
+              {value: '2-months', title: '2 months'},
+              {value: '3-months', title: '3 months'},
+              {value: 'estimating', title: 'Just looking for an estimate'}
+            ],
           },
           {
             icon: 'question',

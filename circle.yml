@@ -19,7 +19,7 @@ compile:
 
 deployment:
   development:
-    branch: dev
+    branch: [ dev, 'feature/adding-budget-and-deadline-fields' ]
     owner: appirio-tech
     commands:
       - ./deploy.sh DEV

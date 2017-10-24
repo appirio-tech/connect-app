@@ -74,10 +74,14 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       // child = <SeeAttachedTextareaInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'textinput':
-      console.log('TextInput', q)
       ChildElem = TCFormFields.TextInput
       elemProps.wrapperClass = 'row'
       // child = <TCFormFields.TextInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
+      break
+    case 'numberinput':
+      ChildElem = TCFormFields.TextInput
+      elemProps.wrapperClass = 'row'
+      elemProps.type = 'number'
       break
     case 'textbox':
       ChildElem = TCFormFields.Textarea
