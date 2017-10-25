@@ -5,6 +5,7 @@ import React, {PropTypes} from 'react'
 import {Link} from 'react-router'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
+import SVGIconImage from '../SVGIconImage'
 import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
@@ -71,11 +72,13 @@ class ProjectToolBar extends React.Component {
           <div className="bar-column">
             {logo}
             {project && <div className="breadcrumb">
-              <Link to="/projects">Projects /&nbsp;</Link>
-              <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
+              <Link to="/projects"><SVGIconImage filePath="arrows-16px-1_tail-left" /> <span>View All Projects</span></Link>
             </div>}
-            {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
           </div>
+          {project && <div className="bar-column project-name">
+            <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
+            {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
+          </div>}
           <div className="bar-column">
             {project && <nav className="nav">
               <ul>
