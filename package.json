@@ -38,13 +38,13 @@
     "appirio-tech-react-components": "github:appirio-tech/react-components#feature/connectv2",
     "axios": "^0.13.1",
     "classnames": "^2.2.3",
+    "coffeescript": "^1.12.7",
     "draft-js": "^0.10.1",
     "draft-js-drag-n-drop-plugin": "^2.0.0-rc2",
     "draft-js-image-plugin": "^2.0.0-rc2",
     "draft-js-link-plugin": "^1.2.2",
     "draft-js-plugins-editor": "^2.0.0-rc2",
     "draft-js-utils": "^0.1.7",
-    "coffeescript": "^1.12.7",
     "fbemitter": "^2.1.1",
     "fbjs": "^0.8.12",
     "filepicker-js": "^2.4.17",
@@ -80,7 +80,7 @@
     "redux-thunk": "^2.1.0",
     "remarkable": "^1.7.1",
     "svg-react-loader": "^0.4.5",
-    "tc-accounts": "git+https://github.com/appirio-tech/accounts-app.git#0.0.11",
+    "tc-accounts": "git+https://github.com/appirio-tech/accounts-app.git#dev-auth0",
     "tc-ui": "git+https://github.com/appirio-tech/tc-ui.git#feature/connectv2",
     "tlds": "^1.191.0"
   }
