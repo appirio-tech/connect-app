@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react'
 import Panel from '../Panel/Panel'
 import ProjectType from '../ProjectType/ProjectType'
-import ProjectStatus from '../ProjectStatus/ProjectStatus'
+import ProjectStatusSection from '../ProjectStatusSection/ProjectStatusSection'
 import ProjectProgress from '../ProjectProgress/ProjectProgress'
 import DeleteProjectModal from './DeleteProjectModal'
 

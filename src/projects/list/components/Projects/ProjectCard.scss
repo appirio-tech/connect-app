@@ -1,0 +1,70 @@
+@import 'tc-includes';
+
+.ProjectCard {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  height: 400px;
+  background-color: $tc-white;
+  border-radius: 6px;
+  padding: 4 * $base_unit;
+
+  &:hover {
+    box-shadow: 0 2px 9px 0 rgba(38,38,40,0.15);
+    cursor: pointer;
+  }
+
+  .card-header {
+    flex: 1;
+    .project-header {
+      display: flex;
+      flex-direction: row;
+
+      .project-details {
+        display: flex;
+        flex-direction: column;
+        margin-left: 4 * $base_unit;
+
+        .project-name {
+          @include tc-label-md;
+          color: $tc-black;
+        }
+
+        .project-date {
+          @include tc-body-extra-small;
+          color: $tc-gray-50;
+          line-height: 3 * $base_unit;
+        }
+      }
+    }
+  }
+
+  .card-body {
+    flex: 2;
+
+    .project-description {
+      overflow: hidden;
+      max-height: 260px;
+      margin: 4 * $base_unit 0px;
+    }
+
+    .project-status {
+      border-top: 1px solid $tc-gray-10;
+      border-bottom: 1px solid $tc-gray-10;
+      padding: 10px 0px;
+      display: flex;
+      justify-content: center;
+
+      .status-header {
+        .status-label {
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+
+  .card-footer {
+    flex: 1;
+    padding-top: 4 * $base_unit;
+  }
+}

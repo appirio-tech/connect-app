@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import PanelProject from '../PanelProject/PanelProject'
 import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
-import './ProjectStatus.scss'
+import './ProjectStatusSection.scss'
 import cn from 'classnames'
 import _ from 'lodash'
 import {
@@ -13,7 +13,7 @@ import {
   PROJECT_STATUS_CANCELLED
 } from '../../config/constants'
 
-class ProjectStatus extends React.Component {
+class ProjectStatusSection extends React.Component {
 
   constructor(props) {
     super(props)
@@ -77,7 +77,7 @@ class ProjectStatus extends React.Component {
       <PanelProject>
         <div className={cn('panel', 'project-status-wrapper', {'modal-active': showStatusChangeDialog})}>
           <div className="modal-overlay"></div>
-          <div className="project-status">
+          <div className="project-status-section">
             <PanelProject.Heading>
               Status
             </PanelProject.Heading>
@@ -127,12 +127,11 @@ class ProjectStatus extends React.Component {
   }
 }
 
-ProjectStatus.propTypes = {
-  isOpen: PropTypes.bool,
+ProjectStatusSection.propTypes = {
   currentMemberRole: PropTypes.string,
   directLinks: PropTypes.array,
   status: PropTypes.oneOf(['draft', 'active', 'in_review', 'reviewed', 'completed', 'paused', 'cancelled']).isRequired,
   onChangeStatus: PropTypes.func.isRequired
 }
 
-export default ProjectStatus
+export default ProjectStatusSection
