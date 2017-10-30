@@ -1,18 +1,9 @@
-import _ from 'lodash'
 import React, { Component, PropTypes} from 'react'
-import { Dropdown } from 'appirio-tech-react-components'
 import cn from 'classnames'
-import { findCategory } from '../../config/projectWizard'
-import {
-  PROJECT_ROLE_COPILOT,
-  PROJECT_ROLE_MANAGER,
-  PROJECT_STATUS,
-  PROJECT_STATUS_COMPLETED,
-  PROJECT_STATUS_CANCELLED
-} from '../../config/constants'
+import { PROJECT_STATUS } from '../../config/constants'
 import './ProjectStatus.scss'
 
-export const EnhanceDropdown = (CompositeComponent) => class extends Component {
+export const enhanceDropdown = (CompositeComponent) => class extends Component {
   constructor(props) {
     super(props)
     this.state = { isOpen : false }
@@ -79,7 +70,7 @@ export const EnhanceDropdown = (CompositeComponent) => class extends Component {
   }
 
   render() {
-    const { isOpen, options } = this.state
+    const { isOpen } = this.state
     return (
       <div onClick={(e) => e.stopPropagation()} className="dropdown-wrap">
         <CompositeComponent
@@ -127,11 +118,11 @@ const ProjectStatus = ({canEdit, isOpen, status, handleClick, onSelect, showText
 }
 
 ProjectStatus.propTypes = {
-  status: PropTypes.oneOf(['draft', 'active', 'in_review', 'reviewed', 'completed', 'paused', 'cancelled']).isRequired,
+  status: PropTypes.oneOf(['draft', 'active', 'in_review', 'reviewed', 'completed', 'paused', 'cancelled']).isRequired
 }
 
 ProjectStatus.defaultProps = {
 }
 
-export default EnhanceDropdown(ProjectStatus)
+export default enhanceDropdown(ProjectStatus)
 

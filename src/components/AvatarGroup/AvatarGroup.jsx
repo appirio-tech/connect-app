@@ -5,10 +5,13 @@ import './AvatarGroup.scss'
 
 function AvatarGroup({ users }) {
   const renderAvatar = (user, index) => {
-    return (<Avatar
-      avatarUrl={ _.get(user, 'photoURL', require('../../assets/images/avatar-coder.png'))}
-      userName={ user.firstName ? (user.firstName + ' ' + user.lastName) : 'Connect user'}
-    />)
+    return (
+      <Avatar
+        key={ index }
+        avatarUrl={ _.get(user, 'photoURL', require('../../assets/images/avatar-coder.png'))}
+        userName={ user.firstName ? (user.firstName + ' ' + user.lastName) : 'Connect user'}
+      />
+    )
   }
   return (
     <div className="AvatarGroup">

@@ -144,7 +144,7 @@ class ProjectsToolBar extends Component {
     const primaryNavigationItems = [
       {
         text: 'My Projects',
-        link: `/projects`
+        link: '/projects'
       },
       {
         text: 'Getting Started',
@@ -153,7 +153,7 @@ class ProjectsToolBar extends Component {
       },
       {
         text: 'Help',
-        link: `https://help.topcoder.com/hc/en-us/articles/225540188-Topcoder-Connect-FAQs`,
+        link: 'https://help.topcoder.com/hc/en-us/articles/225540188-Topcoder-Connect-FAQs',
         target: '_blank'
       }
     ]

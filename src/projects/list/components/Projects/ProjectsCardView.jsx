@@ -1,21 +1,16 @@
 import React, { PropTypes } from 'react'
 import _ from 'lodash'
-import { Link } from 'react-router'
-import { branch, renderComponent, compose } from 'recompose'
-import moment from 'moment'
-import classNames from 'classnames'
+//import { branch, renderComponent, compose } from 'recompose'
 import ProjectCard from './ProjectCard'
 import NewProjectCard from './NewProjectCard'
 import Walkthrough from '../Walkthrough/Walkthrough'
 
-import CoderBot from '../../../../components/CoderBot/CoderBot'
-import { findCategory } from '../../../../config/projectWizard'
-import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, PROJECT_STATUS,
-  PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER
+// import CoderBot from '../../../../components/CoderBot/CoderBot'
+import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT
 } from '../../../../config/constants'
 
 // This handles showing a spinner while the state is being loaded async
-import spinnerWhileLoading from '../../../../components/LoadingSpinner'
+// import spinnerWhileLoading from '../../../../components/LoadingSpinner'
 
 /*
   Definiing default project criteria. This is used to later to determine if
@@ -23,33 +18,20 @@ import spinnerWhileLoading from '../../../../components/LoadingSpinner'
  */
 const defaultCriteria = {sort: 'createdAt desc'}
 
-const showErrorMessageIfError = hasLoaded =>
-  branch(hasLoaded, t => t, renderComponent(<CoderBot code={500} />))
-const errorHandler = showErrorMessageIfError(props => !props.error)
-const spinner = spinnerWhileLoading(props => !props.isLoading)
-const enhance = compose(errorHandler, spinner)
+// const showErrorMessageIfError = hasLoaded =>
+  // branch(hasLoaded, t => t, renderComponent(<CoderBot code={500} />))
+// const errorHandler = showErrorMessageIfError(props => !props.error)
+// const spinner = spinnerWhileLoading(props => !props.isLoading)
+// const enhance = compose(errorHandler, spinner)
 
 require('./ProjectsView.scss')
-
-/*eslint-disable quote-props */
-const projectTypeClassMap = {
-  'generic'             : 'purple-block',
-  'visual_design'       : 'blue-block',
-  'visual_prototype'    : 'blue-block',
-  'app_dev'             : 'green-block',
-  'app'                 : 'green-block',
-  'website'             : 'green-block',
-  'chatbot'             : 'green-block',
-  'quality_assurance'   : 'green-block'
-}
-/*eslint-enable */
 
 
 const ProjectsCardView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
-  const { projects, members, totalCount, criteria, pageNum, sortHandler, onPageChange, error, isLoading, currentUser} = props
-  const currentSortField = _.get(criteria, 'sort', '')
+  const { projects, members, totalCount, criteria, isLoading, currentUser} = props
+  // const currentSortField = _.get(criteria, 'sort', '')
 
   // annotate projects with member data
   _.forEach(projects, prj => {

@@ -4,26 +4,22 @@ import React, { PropTypes as PT } from 'react'
 import {Link} from 'react-router'
 import TextTruncate from 'react-text-truncate'
 import { getProjectRoleForCurrentUser } from '../../../../helpers/projectHelper'
-import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
+// import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
-import ProjectStatusSection from '../../../../components/ProjectStatusSection/ProjectStatusSection'
 import AvatarGroup from '../../../../components/AvatarGroup/AvatarGroup'
 import { findCategory } from '../../../../config/projectWizard'
 import SVGIconImage from '../../../../components/SVGIconImage'
 import './ProjectCard.scss'
 
-function isEllipsisActive(el) {
-  return (el.offsetHeight < el.scrollHeight)
-}
-
-function ProjectCard({ project, duration, disabled , currentUser, onChangeStatus}) {
+function ProjectCard({ project, duration, disabled, currentUser, onChangeStatus}) {
 
   let className = `ProjectCard ${ disabled ? 'disabled' : 'enabled'}`
   if (!project) return null
-  const currentMemberRole = getProjectRoleForCurrentUser({ project: project, currentUserId: currentUser.userId})
+  const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
   const category = findCategory(project.type)
   // icon for the category, use default generic work project icon for categories which no longer exist now
   const categoryIcon =  _.get(category, 'icon', 'tech-32px-outline-work-project')
+  console.log(duration)
   return (
     <div
       className={className}
@@ -56,8 +52,8 @@ function ProjectCard({ project, duration, disabled , currentUser, onChangeStatus
         <div className="project-status">
           <ProjectStatus
             status={ project.status }
-            showText={ true }
-            withoutLabel={ true }
+            showText
+            withoutLabel
             currentMemberRole={ currentMemberRole }
             onChangeStatus={ onChangeStatus }
             canEdit={ false }
@@ -72,7 +68,7 @@ function ProjectCard({ project, duration, disabled , currentUser, onChangeStatus
         </div>
       </div>
       <div className="card-footer">
-        <AvatarGroup users={ project.members }></AvatarGroup>
+        <AvatarGroup users={ project.members } />
       </div>
     </div>
   )
@@ -83,7 +79,7 @@ ProjectCard.defaultTypes = {
 
 ProjectCard.propTypes = {
   project: PT.object.isRequired,
-  currentMemberRole: PT.string,
+  currentMemberRole: PT.string
   // duration: PT.object.isRequired,
 }
 
