@@ -171,7 +171,7 @@ class ProjectsToolBar extends Component {
           }
           <div className="actions">
           {
-            !!isLoggedIn &&
+            !!isLoggedIn && isPowerUser &&
             <div>
               <Link to="/new-project" className="tc-btn tc-btn-sm tc-btn-primary">+ New Project</Link>
             </div>

@@ -12,76 +12,64 @@ $status-height :  20px;
     width: 4 * $base-unit;
     height: 4 * $base-unit;
     // top: 3px;
+
+    i {
+      display: block;
+      width: 4 * $base-unit;
+      height: 4 * $base-unit;
+    }
   }
 
-  .ps-draft, .ps-in_review, .ps-reviewed {
-    display: inline-block;
+  .ps-draft {
     .status-icon {
-      background-color: $tc-gray-40;
-      border-radius: 100%;
       i {
-        position: absolute;
-        left: 4px;
-        top: 4px;
-        display: block;
-        background: url('../../assets/images/dot.png') no-repeat 50% 50%;
-        background-size: 8px;
-        height: 12px;
-        width: 12px;
+        background: url('../../assets/images/ps-draft.svg') no-repeat -7px -4px;
+        // background-size: cover;
       }
     }
   }
 
-  .ps-active {
-    display: inline-block;
+  .ps-in_review {
     .status-icon {
-      background-color: $tc-green;
-      border-radius: 100%;
       i {
-        position: absolute;
-        left: 4px;
-        top: 4px;
-        display: block;
-        background: url('../../assets/images/dot.png') no-repeat 50% 50%;
-        background-size: 8px;
-        height: 12px;
-        width: 12px;
+        background: url('../../assets/images/ps-in_review.svg') no-repeat -7px -4px;
+        // background-size: cover;
+      }
+    }
+  }
+
+  .ps-reviewed {
+    .status-icon {
+      i {
+        background: url('../../assets/images/ps-reviewed.svg') no-repeat -7px -4px;
+        // background-size: cover;
+      }
+    }
+  }
+
+  .ps-cancelled {
+    .status-icon {
+      i {
+        background: url('../../assets/images/ps-cancelled.svg') no-repeat -7px -4px;
+        // background-size: cover;
+      }
+    }
+  }
+
+  .ps-completed {
+    .status-icon {
+      i {
+        background: url('../../assets/images/ps-completed.svg') no-repeat -7px -4px;
+        // background-size: cover;
       }
     }
   }
 
   .ps-paused {
-    display: inline-block;
     .status-icon {
-      background-color: $tc-red;
-      border-radius: 100%;
       i {
-        position: absolute;
-        left: 4px;
-        top: 4px;
-        display: block;
-        height: 12px;
-        width: 12px;
-        background: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
-        background-size: 12px 12px;
-      }
-    }
-  }
-
-  .ps-cancelled, .ps-completed {
-    display: inline-block;
-    .status-icon {
-      background-color: $tc-gray-70;
-      border-radius: 100%;
-      i {
-        position: absolute;
-        left: 4px;
-        top: 4px;
-        display: block;
-        height: 12px;
-        width: 12px;
-        background: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
-        background-size: 12px 12px;
+        background: url('../../assets/images/ps-paused.svg') no-repeat -7px -4px;
+        // background-size: cover;
       }
     }
   }

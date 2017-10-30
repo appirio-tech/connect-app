@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import ProjectsView from './ProjectsView'
+import ProjectsCardView from './ProjectsCardView'
 import { loadProjects } from '../../../actions/loadProjects'
 import _ from 'lodash'
+import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR } from '../../../../config/constants'
+
 
 class Projects extends Component {
   constructor(props) {
@@ -85,20 +88,37 @@ class Projects extends Component {
   }
 
   render() {
+    const { isPowerUser } = this.props
     return (
       <div>
-        <ProjectsView {...this.props}
+        { isPowerUser &&
+          <ProjectsView {...this.props}
+            onPageChange={this.onPageChange}
+            sortHandler={this.sortHandler}
+            applyFilters={this.applyFilters}
+            onNewProjectIntent={ this.showCreateProjectDialog }
+          />
+      }
+      { !isPowerUser &&
+        <ProjectsCardView
+          {...this.props }
           onPageChange={this.onPageChange}
           sortHandler={this.sortHandler}
           applyFilters={this.applyFilters}
           onNewProjectIntent={ this.showCreateProjectDialog }
         />
+      }
       </div>
     )
   }
 }
 
 const mapStateToProps = ({ projectSearch, members, loadUser }) => {
+  let isPowerUser = false
+  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
+  if (loadUser.user) {
+    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
+  }
   return {
     currentUser : {
       userId: loadUser.user.profile.userId,
@@ -112,7 +132,8 @@ const mapStateToProps = ({ projectSearch, members, loadUser }) => {
     members     : members.members,
     totalCount  : projectSearch.totalCount,
     pageNum     : projectSearch.pageNum,
-    criteria    : projectSearch.criteria
+    criteria    : projectSearch.criteria,
+    isPowerUser
   }
 }
 

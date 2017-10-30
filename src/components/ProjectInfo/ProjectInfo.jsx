@@ -45,7 +45,7 @@ class ProjectInfo extends Component {
           />
         }
         <ProjectType projectId={projectId} type={type} devices={devices} description={ description } />
-        <ProjectStatus directLinks={directLinks} currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
+        <ProjectStatusSection directLinks={directLinks} currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
         {displayProgress && <ProjectProgress {...duration}>
           {duration.text}
         </ProjectProgress>}
