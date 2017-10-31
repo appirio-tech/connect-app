@@ -4,7 +4,7 @@ import { branch, renderComponent, compose } from 'recompose'
 import { withRouter } from 'react-router'
 import Walkthrough from '../Walkthrough/Walkthrough'
 import CoderBot from '../../../../components/CoderBot/CoderBot'
-import ProjectsView from './ProjectsView'
+import ProjectsGridView from './ProjectsGridView'
 import ProjectsCardView from './ProjectsCardView'
 import { loadProjects } from '../../../actions/loadProjects'
 import _ from 'lodash'
@@ -25,7 +25,7 @@ const showErrorMessageIfError = hasLoaded =>
 const errorHandler = showErrorMessageIfError(props => !props.error)
 const spinner = spinnerWhileLoading(props => !props.isLoading)
 const enhance = compose(errorHandler, spinner)
-const EnhancedGrid  = enhance(ProjectsView)
+const EnhancedGrid  = enhance(ProjectsGridView)
 const EnhancedCards = enhance(ProjectsCardView)
 
 class Projects extends Component {

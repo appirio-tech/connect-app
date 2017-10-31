@@ -10,7 +10,7 @@ import UserWithName from '../../../../components/User/UserWithName'
 import { findCategory } from '../../../../config/projectWizard'
 import { PROJECT_STATUS } from '../../../../config/constants'
 
-require('./ProjectsView.scss')
+require('./ProjectsGridView.scss')
 
 /*eslint-disable quote-props */
 const projectTypeClassMap = {
@@ -26,7 +26,7 @@ const projectTypeClassMap = {
 /*eslint-enable */
 
 
-const ProjectsView = props => {
+const ProjectsGridView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
   const { projects, members, totalCount, criteria, pageNum, sortHandler, onPageChange, error, isLoading} = props
@@ -197,7 +197,7 @@ const ProjectsView = props => {
 }
 
 
-ProjectsView.propTypes = {
+ProjectsGridView.propTypes = {
   currentUser: PropTypes.object.isRequired,
   projects: PropTypes.arrayOf(PropTypes.object).isRequired,
   totalCount: PropTypes.number.isRequired,
@@ -211,4 +211,4 @@ ProjectsView.propTypes = {
   criteria: PropTypes.object.isRequired
 }
 
-export default ProjectsView
+export default ProjectsGridView

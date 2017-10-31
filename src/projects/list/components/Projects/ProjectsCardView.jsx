@@ -5,7 +5,7 @@ import NewProjectCard from './NewProjectCard'
 
 import { setDuration } from '../../../../helpers/projectHelper'
 
-require('./ProjectsView.scss')
+require('./ProjectsGridView.scss')
 
 
 const ProjectsCardView = props => {
