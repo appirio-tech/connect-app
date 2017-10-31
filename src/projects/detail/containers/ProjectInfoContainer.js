@@ -7,6 +7,7 @@ import LinksMenu from '../../../components/LinksMenu/LinksMenu'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
+import { setDuration } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
    DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
 
@@ -32,49 +33,7 @@ class ProjectInfoContainer extends React.Component {
   }
 
   setDuration({duration, status}) {
-    let percent =''
-    let title = ''
-    let text = ''
-    let type = 'completed' // default
-    if (duration  && duration.plannedDuration) {
-      const {actualDuration, plannedDuration} = duration
-      if (status === 'draft') {
-        title = 'Duration'
-        percent = 0
-        text = 'Complete specification to get estimate'
-      } else if (status === 'in_review') {
-        title = 'Duration'
-        percent = 0
-        text = 'Pending review'
-      } else if (status === 'reviewed') {
-        title = `${plannedDuration} days (projected)`
-        percent = 0
-        text = `${plannedDuration} days remaining`
-      } else if (status === 'completed') {
-        title = 'Completed'
-        percent = 100
-        text = ''
-        type = 'completed'
-      } else {
-        text = `Day ${actualDuration} of ${plannedDuration}`
-        percent = actualDuration / plannedDuration * 100
-        if (0 <= percent && percent < 100) {
-          const diff = plannedDuration - actualDuration
-          title = `${diff} ${diff > 1 ? 'days' : 'day'} remaining`
-          type = 'working'
-        } else {
-          percent = 100
-          type = 'error'
-          const diff = actualDuration - plannedDuration
-          title = `${diff} ${diff > 1 ? 'days' : 'day'} over`
-        }
-      }
-    } else {
-      title = 'Duration'
-      percent = 0
-      text = status === 'draft' ? 'Complete specification to get estimate' : 'Estimate not entered'
-    }
-    this.setState({duration: { title, text, percent, type }})
+    this.setState({duration: setDuration(duration, status)})
   }
 
   componentWillMount() {

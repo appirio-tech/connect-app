@@ -4,6 +4,8 @@ import ProjectType from '../ProjectType/ProjectType'
 import ProjectStatusSection from '../ProjectStatusSection/ProjectStatusSection'
 import ProjectProgress from '../ProjectProgress/ProjectProgress'
 import DeleteProjectModal from './DeleteProjectModal'
+import wrapInPanel from '../PanelProject/wrapInPanel'
+const ProgressPanel = wrapInPanel(ProjectProgress)
 
 require('./ProjectInfo.scss')
 
@@ -46,9 +48,9 @@ class ProjectInfo extends Component {
         }
         <ProjectType projectId={projectId} type={type} devices={devices} description={ description } />
         <ProjectStatusSection directLinks={directLinks} currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
-        {displayProgress && <ProjectProgress {...duration}>
+        {displayProgress && <ProgressPanel {...duration}>
           {duration.text}
-        </ProjectProgress>}
+        </ProgressPanel>}
         {/* <ProjectProgress title="Budget" percent={budget.percent} type="working">
           {budget.text}
         </ProjectProgress> */}

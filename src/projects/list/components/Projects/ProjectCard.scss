@@ -98,6 +98,15 @@
           text-transform: uppercase;
         }
       }
+
+      .project-progress {
+        display: flex;
+        .progress-text {
+          text-transform: uppercase;
+          margin-left: 10px;
+          line-height: 16px;
+        } 
+      }
     }
   }
 

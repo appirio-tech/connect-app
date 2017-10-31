@@ -6,6 +6,7 @@ import NewProjectCard from './NewProjectCard'
 import Walkthrough from '../Walkthrough/Walkthrough'
 
 // import CoderBot from '../../../../components/CoderBot/CoderBot'
+import { setDuration } from '../../../../helpers/projectHelper'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT
 } from '../../../../config/constants'
 
@@ -54,10 +55,12 @@ const ProjectsCardView = props => {
     ))
 
   const renderProject = (project, index) => {
+    const duration = setDuration({}, project.status)
     return (<div key={index} className="project-card">
       <ProjectCard
         project={project}
         currentUser={currentUser}
+        duration={duration}
       />
     </div>)
   }

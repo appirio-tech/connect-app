@@ -4,11 +4,12 @@ import React, { PropTypes as PT } from 'react'
 import {Link} from 'react-router'
 import TextTruncate from 'react-text-truncate'
 import { getProjectRoleForCurrentUser } from '../../../../helpers/projectHelper'
-// import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
+import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
 import AvatarGroup from '../../../../components/AvatarGroup/AvatarGroup'
 import { findCategory } from '../../../../config/projectWizard'
 import SVGIconImage from '../../../../components/SVGIconImage'
+import { PROJECT_STATUS_ACTIVE } from '../../../../config/constants'
 import './ProjectCard.scss'
 
 function ProjectCard({ project, duration, disabled, currentUser, onChangeStatus}) {
@@ -19,7 +20,6 @@ function ProjectCard({ project, duration, disabled, currentUser, onChangeStatus}
   const category = findCategory(project.type)
   // icon for the category, use default generic work project icon for categories which no longer exist now
   const categoryIcon =  _.get(category, 'icon', 'tech-32px-outline-work-project')
-  console.log(duration)
   return (
     <div
       className={className}
@@ -50,21 +50,22 @@ function ProjectCard({ project, duration, disabled, currentUser, onChangeStatus}
           textTruncateChild={<Link className="read-more-link" to={`/projects/${project.id}/specification`}>read more &gt;</Link>}
         />
         <div className="project-status">
-          <ProjectStatus
-            status={ project.status }
-            showText
-            withoutLabel
-            currentMemberRole={ currentMemberRole }
-            onChangeStatus={ onChangeStatus }
-            canEdit={ false }
-            unifiedHeader={ false }
-          />
-        {
-
-          // <ProjectProgress {...duration}>
-          //   {duration.text}
-          // </ProjectProgress>
-        }
+          { project.status !== PROJECT_STATUS_ACTIVE &&
+            <ProjectStatus
+              status={ project.status }
+              showText
+              withoutLabel
+              currentMemberRole={ currentMemberRole }
+              onChangeStatus={ onChangeStatus }
+              canEdit={ false }
+              unifiedHeader={ false }
+            />
+          }
+          { project.status === PROJECT_STATUS_ACTIVE &&
+            <ProjectProgress {...duration} viewType={ ProjectProgress.ViewTypes.CIRCLE } percent={46}>
+              <span className="progress-text">{ duration.percent }% completed</span>
+            </ProjectProgress>
+          }
         </div>
       </div>
       <div className="card-footer">
