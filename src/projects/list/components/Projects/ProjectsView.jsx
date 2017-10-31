@@ -1,34 +1,14 @@
 import React, { PropTypes } from 'react'
 import _ from 'lodash'
 import { Link } from 'react-router'
-import { branch, renderComponent, compose } from 'recompose'
 import moment from 'moment'
 import classNames from 'classnames'
 import ProjectListProjectColHeader from './ProjectListProjectColHeader'
 import GridView from '../../../../components/Grid/GridView'
-import Walkthrough from '../Walkthrough/Walkthrough'
 
 import UserWithName from '../../../../components/User/UserWithName'
-import CoderBot from '../../../../components/CoderBot/CoderBot'
 import { findCategory } from '../../../../config/projectWizard'
-import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, PROJECT_STATUS } from '../../../../config/constants'
-
-// This handles showing a spinner while the state is being loaded async
-import spinnerWhileLoading from '../../../../components/LoadingSpinner'
-
-/*
-  Definiing default project criteria. This is used to later to determine if
-  walkthrough component should be rendered instead of no results
- */
-const defaultCriteria = {sort: 'createdAt desc'}
-
-const showErrorMessageIfError = hasLoaded =>
-  branch(hasLoaded, t => t, renderComponent(<CoderBot code={500} />))
-const errorHandler = showErrorMessageIfError(props => !props.error)
-const spinner = spinnerWhileLoading(props => !props.isLoading)
-const enhance = compose(errorHandler, spinner)
-const EnhancedGrid = enhance(GridView)
-
+import { PROJECT_STATUS } from '../../../../config/constants'
 
 require('./ProjectsView.scss')
 
@@ -49,7 +29,7 @@ const projectTypeClassMap = {
 const ProjectsView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
-  const { projects, members, totalCount, criteria, pageNum, sortHandler, onPageChange, error, isLoading, currentUser} = props
+  const { projects, members, totalCount, criteria, pageNum, sortHandler, onPageChange, error, isLoading} = props
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
   // it defines what columns should be displayed and more importantly
@@ -211,20 +191,8 @@ const ProjectsView = props => {
     pageSize: 20
   }
 
-  // show walk through if user is customer and no projects were returned
-  // for default filters
-  const showWalkThrough = !isLoading && totalCount === 0 &&
-    _.isEqual(criteria, defaultCriteria) &&
-    _.isEmpty(_.intersection(currentUser.roles,
-      [ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT]
-    ))
-
   return (
-    <section className="">
-      <div className="container">
-        { showWalkThrough  ? <Walkthrough currentUser={currentUser} /> : <EnhancedGrid {...gridProps} />}
-      </div>
-    </section>
+    <GridView {...gridProps} />
   )
 }
 

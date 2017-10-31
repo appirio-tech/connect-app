@@ -1,12 +1,32 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { branch, renderComponent, compose } from 'recompose'
 import { withRouter } from 'react-router'
+import Walkthrough from '../Walkthrough/Walkthrough'
+import CoderBot from '../../../../components/CoderBot/CoderBot'
 import ProjectsView from './ProjectsView'
 import ProjectsCardView from './ProjectsCardView'
 import { loadProjects } from '../../../actions/loadProjects'
 import _ from 'lodash'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR } from '../../../../config/constants'
 
+// This handles showing a spinner while the state is being loaded async
+import spinnerWhileLoading from '../../../../components/LoadingSpinner'
+
+/*
+  Definiing default project criteria. This is used to later to determine if
+  walkthrough component should be rendered instead of no results
+ */
+const defaultCriteria = {sort: 'createdAt desc'}
+
+
+const showErrorMessageIfError = hasLoaded =>
+  branch(hasLoaded, t => t, renderComponent(<CoderBot code={500} />))
+const errorHandler = showErrorMessageIfError(props => !props.error)
+const spinner = spinnerWhileLoading(props => !props.isLoading)
+const enhance = compose(errorHandler, spinner)
+const EnhancedGrid  = enhance(ProjectsView)
+const EnhancedCards = enhance(ProjectsCardView)
 
 class Projects extends Component {
   constructor(props) {
@@ -88,26 +108,35 @@ class Projects extends Component {
   }
 
   render() {
-    const { isPowerUser } = this.props
-    return (
-      <div>
-        { isPowerUser &&
-          <ProjectsView {...this.props}
-            onPageChange={this.onPageChange}
-            sortHandler={this.sortHandler}
-            applyFilters={this.applyFilters}
-            onNewProjectIntent={ this.showCreateProjectDialog }
-          />
-      }
-      { !isPowerUser &&
-        <ProjectsCardView
-          {...this.props }
+    const { isPowerUser, isLoading, totalCount, criteria, currentUser } = this.props
+    // show walk through if user is customer and no projects were returned
+    // for default filters
+    const showWalkThrough = !isLoading && totalCount === 0 &&
+      _.isEqual(criteria, defaultCriteria) &&
+      !isPowerUser
+    const projectsView = isPowerUser
+      ? (
+        <EnhancedGrid {...this.props}
           onPageChange={this.onPageChange}
           sortHandler={this.sortHandler}
           applyFilters={this.applyFilters}
-          onNewProjectIntent={ this.showCreateProjectDialog }
         />
-      }
+      )
+      : (
+        <EnhancedCards
+          {...this.props }
+          // onPageChange={this.onPageChange}
+          // sortHandler={this.sortHandler}
+          applyFilters={this.applyFilters}
+        />
+      )
+    return (
+      <div>
+        <section className="">
+          <div className="container">
+            { showWalkThrough  ? <Walkthrough currentUser={currentUser} /> : projectsView }
+          </div>
+        </section>
       </div>
     )
   }

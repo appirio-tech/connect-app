@@ -41,6 +41,10 @@
             fill: $tc-white;
           }
           margin-bottom: 4 * $base_unit;
+
+          &:hover {
+            @include background-gradient(#3996FF, #127BF3);
+          }
         }
       }
     }

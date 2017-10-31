@@ -1,6 +1,6 @@
-import _ from 'lodash';
+import _ from 'lodash'
 import React, {PropTypes} from 'react'
-import CircularProgressbar from 'react-circular-progressbar';
+import CircularProgressbar from 'react-circular-progressbar'
 import './ProjectProgress.scss'
 import cn from 'classnames'
 
@@ -15,7 +15,7 @@ const Themes = {
   RED     : 'error'
 }
 
-const ProjectProgress = ({title, type, percent, children, viewType=ViewTypes.HBAR }) => (
+const ProjectProgress = ({type, percent, children, viewType=ViewTypes.HBAR }) => (
   <div className="project-progress">
     { viewType === ViewTypes.HBAR && 
       <div className="progress-bar">
