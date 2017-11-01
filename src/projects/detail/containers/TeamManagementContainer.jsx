@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import {
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR,
@@ -46,7 +46,7 @@ class TeamManagementContainer extends Component {
         m => m.userId === this.props.currentUser.userId) === -1
     ) {
       // navigate to project listing
-      this.props.router.push('/projects/')
+      this.props.history.push('/projects/')
     }
   }
 

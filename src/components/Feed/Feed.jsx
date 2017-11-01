@@ -5,7 +5,7 @@ import ActionCard from '../ActionCard/ActionCard'
 import Panel from '../Panel/Panel'
 import FeedComments from './FeedComments'
 import { Avatar } from 'appirio-tech-react-components'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
 

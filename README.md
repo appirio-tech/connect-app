@@ -40,6 +40,18 @@ Install dependencies by running the following in the root of the project:
 
 To contribute to the repository, please create a feature branch off of the dev branch. Once you're finished working on the feature, make a pull request to merge it into dev. Please make sure that every pull request has passed the build checks, which appear just before the "Merge pull request" button in github.
 
+### Updating npm-shrinkwrap.json
+
+Use **npm v5+** for this.
+General workflow to update `npm-shrinkwrap.json` would be:
+
+- `npm install --no-optional` -  with old npm-shrinkwrap (--no-optional to skip fsevents)
+- update `package.json` if you need to remove/update/add any packages
+- remove `npm-shrinkwrap.json`
+- `npm install --no-optional` with new `package.json`
+- `npm shrinkwrap` - to convert `package-lock.json` to `npm-shrinkwrap.json`
+- the new `npm-shrinkwrap.json` will have just the minimal diff
+
 ### Code Style
 
 ***Checkout the code and comments in `src/components/ExampleComponent` for an example React component, `.scss` file, and tests.***

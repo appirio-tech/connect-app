@@ -1,6 +1,6 @@
 
 import React, { Component, PropTypes } from 'react'
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { renderComponent, branch, compose, withProps } from 'recompose'
@@ -39,14 +39,14 @@ class ProjectDetail extends Component {
   }
 
   componentWillMount() {
-    const projectId = this.props.params.projectId
+    const projectId = this.props.match.params.projectId
     this.props.loadProjectDashboard(projectId)
   }
 
   componentWillReceiveProps({isProcessing, isLoading, error, project}) {
     // handle just deleted projects
     if (! (error || isLoading || isProcessing) && _.isEmpty(project))
-      this.props.router.push('/projects/')
+      this.props.history.push('/projects/')
     if (project && project.name) {
       document.title = `${project.name} - Topcoder`
     }
