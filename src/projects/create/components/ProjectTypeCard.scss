@@ -33,12 +33,12 @@
   }
 
   .icon-wrapper {
-    height: 87px;
+    height: 32px;
     display: flex;
+    margin: 6 * $base_unit 0 4 * $base_unit;
 
     .Icon {
-      margin: 4 * $base_unit 0 2 * $base_unit;
-
+      /* TODO .Icon is svg, so style to svg is never applied, probably we should remove it */
       svg {
         fill: $tc-gray-70;
       }
