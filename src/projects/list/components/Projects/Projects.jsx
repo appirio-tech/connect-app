@@ -8,6 +8,7 @@ import ProjectsGridView from './ProjectsGridView'
 import ProjectsCardView from './ProjectsCardView'
 import { loadProjects } from '../../../actions/loadProjects'
 import _ from 'lodash'
+import querystring from 'query-string'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR } from '../../../../config/constants'
 
 // This handles showing a spinner while the state is being loaded async
