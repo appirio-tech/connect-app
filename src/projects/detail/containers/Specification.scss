@@ -196,7 +196,9 @@ $sideBarMaxWidth: 360px;
       border-radius: 4px;
       position: relative;
 
-      form > div {
+      /* this selector is too common and it's applied to .spec-question-list thought it shouldn't
+         if also has big priority so we have to fix it here */
+      form > div:not(.spec-question-list) {
         box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
       }
 
@@ -843,8 +845,11 @@ $sideBarMaxWidth: 360px;
   align-items: flex-start;
   margin-bottom: 20px;
 
-  .dashed-bottom-border,
   .editable-project-name {
+    flex: 1;
+  }
+
+  .dashed-bottom-border {
     flex: 1;
     height: 40px;
     border-bottom: 1px dashed $tc-gray-20;

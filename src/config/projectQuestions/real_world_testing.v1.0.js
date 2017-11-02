@@ -348,7 +348,7 @@ const sections = [
         required: false,
         fieldName: 'details.devSpecification.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
         type: 'notes'
       }
     ]
