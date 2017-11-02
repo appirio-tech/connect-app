@@ -44,6 +44,7 @@ const products = {
       'Watson Chatbot': {
         brief: 'Watson Chatbot',
         details: 'Build Chatbot using IBM Watson',
+        formTitle: 'Chatbot powered by IBM Watson®',
         icon: 'product-chatbot-watson',
         id: 'watson_chatbot',
         aliases: ['watson_chatbot'],

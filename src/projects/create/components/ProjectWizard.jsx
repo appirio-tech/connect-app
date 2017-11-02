@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { unflatten } from 'flat'
 import React, { Component, PropTypes } from 'react'
-
+import { withRouter } from 'react-router-dom'
 import { findProduct, findCategory, findProductCategory, findProductsOfCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
 import Wizard from '../../../components/Wizard'
 import SelectProjectType from './SelectProjectType'
@@ -44,7 +44,8 @@ class ProjectWizard extends Component {
   }
 
   componentDidMount() {
-    const { params, onStepChange, location } = this.props
+    const { onStepChange, location } = this.props
+    const params = this.props.match.params
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
@@ -81,7 +82,7 @@ class ProjectWizard extends Component {
       const updateQuery = {}
       let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
       if (params && params.product) {
-        wizardStep = this.loadProjectAndProductFromURL(params.product, updateQuery)
+        wizardStep = this.loadProjectAndProductFromURL(params, updateQuery)
       }
       // retrieve refCode from query param
       // TODO give warning after truncating
@@ -106,7 +107,8 @@ class ProjectWizard extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { onStepChange, params } = nextProps
+    const { onStepChange } = nextProps
+    const params = nextProps.match.params
     const type = _.get(nextProps.project, 'type', null)
     const product = _.get(nextProps.project, 'details.products[0]', null)
     // redirect user to project details form, if we already have category and product available
@@ -461,4 +463,4 @@ ProjectWizard.Steps = {
   WZ_STEP_ERROR_CREATING_PROJ
 }
 
-export default ProjectWizard
+export default withRouter(ProjectWizard)

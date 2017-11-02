@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { branch, renderComponent, compose } from 'recompose'
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import Walkthrough from '../Walkthrough/Walkthrough'
 import CoderBot from '../../../../components/CoderBot/CoderBot'
 import ProjectsGridView from './ProjectsGridView'
@@ -100,9 +100,9 @@ class Projects extends Component {
   routeWithParams(criteria, page) {
     // remove any null values
     criteria = _.pickBy(criteria, _.identity)
-    this.props.router.push({
-      pathname: '/projects/',
-      query: _.assign({}, criteria, { page })
+    this.props.history.push({
+      pathname: '/projects',
+      search: '?' + querystring.stringify(_.assign({}, criteria, { page }))
     })
     this.props.loadProjects(criteria, page)
   }
