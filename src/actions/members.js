@@ -14,6 +14,9 @@ export function loadMembers(userIds) {
         type: LOAD_MEMBERS,
         payload: getMembersById(userIds)
       })
+    } else {
+      // returns empty resolved promise to avoid error when we call then on this action
+      return Promise.resolve()
     }
   }
 }
