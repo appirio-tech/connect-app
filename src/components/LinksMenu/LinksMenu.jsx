@@ -61,7 +61,7 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
         }
       </ul>
       {links.length > limit && <div className="links-footer">
-        <a href="javascript:" onClick={() => onChangeLimit(10000)}>view more</a>
+        <a href="javascript:" onClick={() => onChangeLimit(10000)}>View all</a>
       </div>}
     </div>
   </Panel>

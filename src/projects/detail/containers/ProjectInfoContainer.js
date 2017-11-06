@@ -10,6 +10,7 @@ import { updateProject, deleteProject } from '../../actions/project'
 import { setDuration } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
    DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
+import ProjectSidebarInfo from '../../../components/ProjectInfo/ProjectSidebarInfo'
 
 class ProjectInfoContainer extends React.Component {
 
@@ -99,18 +100,10 @@ class ProjectInfoContainer extends React.Component {
     }
     return (
       <div>
-        <ProjectInfo
-          projectId={project.id}
-          canDeleteProject={canDeleteProject}
-          onDeleteProject={this.onDeleteProject}
-          directLinks={directLinks}
+        <ProjectSidebarInfo
+          project={project}
           currentMemberRole={currentMemberRole}
-          description={project.description}
-          type={project.type}
-          devices={ devices }
-          status={project.status} onChangeStatus={this.onChangeStatus}
           duration={duration}
-          budget={budget}
         />
         <LinksMenu
           links={project.bookmarks || []}
@@ -118,7 +111,7 @@ class ProjectInfoContainer extends React.Component {
           onAddNewLink={this.onAddNewLink}
           onDelete={this.onDeleteLink}
         />
-      <TeamManagementContainer projectId={project.id} members={project.members}/>
+        <TeamManagementContainer projectId={project.id} members={project.members} />
         <FooterV2 />
       </div>
     )
