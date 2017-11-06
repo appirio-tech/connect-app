@@ -209,7 +209,7 @@ class CreateConainer extends React.Component {
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
             let productUrl = productType ? ('/' + productType) : ''
             productUrl = !productType && projectType ? ('/' + projectType) : productUrl
-            this.props.history.push(NEW_PROJECT_PATH + productUrl + '/incomplete')
+            this.props.history.push(NEW_PROJECT_PATH + productUrl + '/incomplete' + window.location.search)
           }
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
             this.props.history.push(NEW_PROJECT_PATH + '/' + window.location.search)
