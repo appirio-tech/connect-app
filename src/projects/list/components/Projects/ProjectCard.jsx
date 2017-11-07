@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import moment from 'moment'
 import React, { PropTypes as PT } from 'react'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 import TextTruncate from 'react-text-truncate'
 import { getProjectRoleForCurrentUser } from '../../../../helpers/projectHelper'
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
