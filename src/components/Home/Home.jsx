@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router'
+import { withRouter, Link } from 'react-router-dom'
 import './Home.scss'
 import homeImgSrc from '../../assets/images/hero-tc-landing.png'
 import { DOMAIN } from '../../config/constants'
@@ -14,7 +14,7 @@ class Home extends React.Component {
     // redirect to project list if user is logged in.
     document.title = 'Connect - Topcoder'
     if (this.props.isLoggedIn)
-      this.props.router.push('/projects')
+      this.props.history.push('/projects')
   }
 
   render() {
@@ -30,7 +30,7 @@ class Home extends React.Component {
                 <p>Companies and agencies, from the world’s largest to the Valley’s newest, use crowdsourcing to deliver high-quality assets, faster.</p>
                 <p>Connect guides you through the entire crowdsourcing process, from entering requirements to receiving final deliverables, and it facilitates collaboration between your project team and Topcoder community members working on your project.</p>
                 <div className="button-bar">
-                    <Link to="new-project" className="tc-btn tc-btn-primary">Start a project</Link>
+                    <Link to="/new-project" className="tc-btn tc-btn-primary">Start a project</Link>
                     <a href={ learnMoreUrl } className="tc-link">Learn more about Connect</a>
                 </div>
             </div>

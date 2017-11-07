@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React, { PropTypes as PT, Component } from 'react'
 import Sticky from 'react-stickynode'
 
-import config from '../../../config/projectWizard'
+import { findProduct } from '../../../config/projectWizard'
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
 import ProjectOutline from '../components/ProjectOutline'
@@ -33,14 +33,12 @@ class FillProjectDetails extends Component  {
 
   render() {
     const { project, dirtyProject, processing, submitBtnText } = this.props
-    const product = _.get(project, 'details.products[0]')
-    const projectTypeId = _.get(project, 'type')
-    const subConfig = config[_.findKey(config, {id : projectTypeId})]
-    const productName = _.findKey(subConfig.subtypes, {id : product})
+    const productId = _.get(project, 'details.products[0]')
+    const product = findProduct(productId)
 
     let specification = 'topcoder.v1'
-    if (product)
-      specification = typeToSpecification[product]
+    if (productId)
+      specification = typeToSpecification[productId]
     let sections = require(`../../../config/projectQuestions/${specification}`).basicSections
     return (
       <div className="FillProjectDetailsWrapper">
@@ -48,7 +46,7 @@ class FillProjectDetails extends Component  {
         </div>
         <div className="FillProjectDetails">
           <div className="header">
-            <h1>Let's setup your { productName } project</h1>
+            <h1>{ _.get(product, 'formTitle', `Let's setup your ${ product.name } project`) }</h1>
           </div>
           <section className="two-col-content content">
             <div className="container">

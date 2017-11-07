@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import _ from 'lodash'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import { branch, renderComponent, compose } from 'recompose'
 import moment from 'moment'
 import classNames from 'classnames'

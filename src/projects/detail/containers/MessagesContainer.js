@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
-import { withRouter } from 'react-router'
+import { Prompt, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import update from 'react-addons-update'
 import MessageList from '../../../components/MessageList/MessageList'
@@ -57,9 +57,7 @@ class MessagesView extends React.Component {
   }
 
   componentDidMount() {
-    const routeLeaveHook = this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
     window.addEventListener('beforeunload', this.onLeave)
-    this.setState({ routeLeaveHook })
   }
 
   componentWillMount() {
@@ -72,13 +70,10 @@ class MessagesView extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('beforeunload', this.onLeave)
-    if (this.state.routeLeaveHook) {
-      this.state.routeLeaveHook()
-    }
   }
 
   // Notify user if they navigate away while the form is modified.
-  onLeave(e) {
+  onLeave(e = {}) {
     if (this.isChanged()) {
       return e.returnValue = 'You haven\'t posted your message. If you leave this page, your message will not be saved. Are you sure you want to leave?'
     }
@@ -275,7 +270,7 @@ class MessagesView extends React.Component {
         return item
       })
     }, () => {
-      this.props.router.push(`/projects/${this.props.project.id}/discussions/${thread.id}`)
+      this.props.history.push(`/projects/${this.props.project.id}/discussions/${thread.id}`)
     })
   }
 
@@ -418,6 +413,7 @@ class MessagesView extends React.Component {
     const {threads, isCreateNewMessage, showEmptyState, scrollPosition} = this.state
     const { currentUser, isCreatingFeed, currentMemberRole, error } = this.props
     const activeThread = threads.filter((item) => item.isActive)[0]
+    const onLeaveMessage = this.onLeave() || ''
     const renderRightPanel = () => {
       if (!!currentMemberRole && (isCreateNewMessage || !threads.length)) {
         return (
@@ -457,6 +453,10 @@ class MessagesView extends React.Component {
 
     return (
       <FullHeightContainer offset={80}>
+        <Prompt
+          when={!!onLeaveMessage}
+          message={onLeaveMessage}
+        />
         <div className="messages-container">
             <div className="left-area">
               <MessageList
