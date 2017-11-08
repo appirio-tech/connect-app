@@ -19,7 +19,7 @@
     display: none;
   }
 
-  .rc-slider-dot-active {
+  &:not(.null-value) .rc-slider-dot-active {
     border: none;
     background: $tc-dark-blue-90 url('../../../assets/images/check-white.svg') no-repeat 6px 7px;
     // bottom: -2px;

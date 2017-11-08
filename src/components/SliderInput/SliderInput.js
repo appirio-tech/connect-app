@@ -34,7 +34,6 @@ class SliderInput extends Component {
     const { options, min, max, step} = this.props
     const value = this.props.getValue()
     const valueIdx = this.getIndexFromValue(value)
-    console.log(valueIdx, 'valueIdx')
     const marks = {}
     for(var i=0; i < options.length; i++) {
       marks[i] = options[i].title
@@ -42,7 +41,7 @@ class SliderInput extends Component {
     return (
       <div>
         <Slider
-          className="SliderInput"
+          className={ cn('SliderInput', { 'null-value' : valueIdx  < 0}) }
           min={min}
           max={max}
           step={step}
