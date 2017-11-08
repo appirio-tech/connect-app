@@ -143,7 +143,8 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
         min: 0,
         max: q.options.length - 1,
         step :null,
-        included: false
+        included: false,
+        value: elemProps.value ? elemProps.value : q.options[0].value
       })
       break
     default:
