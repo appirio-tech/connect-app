@@ -85,6 +85,57 @@ const sections = [
           },
           {
             icon: 'question',
+            // required: true,
+            fieldName: 'details.appDefinition.budget',
+            description: 'Project budget in USD, please enter 0 if you don\'t have one',
+            title: 'Project Budget',
+            type: 'numberinput'
+          },
+          {
+            icon: 'question',
+            // required: true,
+            title: 'Do you have budget?',
+            description: 'Please let us know if you have any budget in mind.',
+            fieldName: 'details.appDefinition.budgetType',
+            type: 'slide-radiogroup',
+            options: [
+              {value: 'guess', title: 'Its a wild guess'},
+              {value: 'ballpark', title: 'I have a rough idea'},
+              {value: 'exact', title: 'Precise to the penny'}
+            ],
+          },
+          {
+            icon: 'question',
+            // required: true,
+            title: 'When do you want to get started?',
+            description: 'Please let us know if you have any budget in mind.',
+            fieldName: 'details.appDefinition.whenToStart',
+            type: 'slide-radiogroup',
+            options: [
+              // { value: '', title: 'Select'},
+              {value: 'asap', title: 'ASAP'},
+              {value: '1-2 months', title: '1-2 months'},
+              {value: '2-plus-months', title: '2+ months'},
+              {value: 'estimating', title: 'I\'m just browsing' }
+            ],
+          },
+          {
+            icon: 'question',
+            // required: true,
+            fieldName: 'details.appDefinition.deadline',
+            description: 'When do you need the project to be completed?',
+            title: 'Deadline',
+            type: 'slide-radiogroup',
+            options: [
+              // { value: '', title: 'Select'},
+              {value: '2-weeks', title: '2 weeks'},
+              {value: '1-2-months', title: '1-2 months'},
+              {value: '2-plus-months', title: '2+ months'},
+              {value: 'estimating', title: 'I\'m just browsing'}
+            ],
+          },
+          {
+            icon: 'question',
             title: 'Feature requirements',
             description: 'Please list all the features you would like in your application. You can use our wizard to pick from common features or define your own.',
             type: 'see-attached-features',
@@ -160,7 +211,7 @@ const sections = [
         required: false,
         fieldName: 'details.designSpecification.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
         type: 'notes'
       }
     ]
@@ -221,7 +272,7 @@ const sections = [
         required: false,
         fieldName: 'details.devSpecification.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
         type: 'notes'
       }
     ]

@@ -8,6 +8,7 @@ import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
 import SpecFeatureQuestion from './SpecFeatureQuestion'
 import ColorSelector from './../../../components/ColorSelector/ColorSelector'
 import SelectDropdown from './../../../components/SelectDropdown/SelectDropdown'
+import SliderInput from './../../../components/SliderInput/SliderInput'
 
 // HOC for TextareaInput
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
@@ -74,10 +75,14 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       // child = <SeeAttachedTextareaInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'textinput':
-      console.log('TextInput', q)
       ChildElem = TCFormFields.TextInput
       elemProps.wrapperClass = 'row'
       // child = <TCFormFields.TextInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
+      break
+    case 'numberinput':
+      ChildElem = TCFormFields.TextInput
+      elemProps.wrapperClass = 'row'
+      elemProps.type = 'number'
       break
     case 'textbox':
       ChildElem = TCFormFields.Textarea
@@ -129,6 +134,16 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       _.assign(elemProps, {
         options: q.options,
         theme: 'default'
+      })
+      break
+    case 'slide-radiogroup':
+      ChildElem = SliderInput
+      _.assign(elemProps, {
+        options: q.options,
+        min: 0,
+        max: q.options.length - 1,
+        step :null,
+        included: false
       })
       break
     default:
