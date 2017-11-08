@@ -1,0 +1,121 @@
+@import 'tc-includes';
+
+.ProjectCard {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  height: 400px;
+  background-color: $tc-white;
+  border-radius: 6px;
+  padding: 4 * $base_unit;
+
+  &:hover {
+    box-shadow: 0 2px 9px 0 rgba(38,38,40,0.15);
+  }
+
+  &.NewProjectCard {
+    background-color: $tc-gray-neutral-dark;
+    border: 1px dashed $tc-gray-30;
+
+    .card-body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .new-project-link {
+        @include tc-label-md;
+        text-transform: uppercase;
+        color: $tc-dark-blue-90;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+
+        .new-project-icon {
+          width: 40px;
+          height: 40px;
+          background-color: $tc-dark-blue-90;
+          border-radius: 100%;
+          padding: 12px;
+          svg {
+            fill: $tc-white;
+          }
+          margin-bottom: 4 * $base_unit;
+
+          &:hover {
+            @include background-gradient(#3996FF, #127BF3);
+          }
+        }
+      }
+    }
+  }
+
+  .card-header {
+    flex: 1;
+    .project-header {
+      display: flex;
+      flex-direction: row;
+      min-height: 39px;
+      max-height: 39px;
+      overflow: hidden;
+
+      .project-details {
+        display: flex;
+        flex-direction: column;
+        margin-left: 4 * $base_unit;
+
+        .project-name {
+          @include tc-label-md;
+          color: $tc-black;
+          max-height: 2 * 4 * $base_unit;
+          min-height:  2 * 4 * $base_unit;
+        }
+
+        .project-date {
+          @include tc-body-extra-small;
+          color: $tc-gray-50;
+          line-height: 3 * $base_unit;
+        }
+      }
+    }
+  }
+
+  .card-body {
+    flex: 2;
+
+    .project-description {
+      overflow: hidden;
+      max-height: 180px;
+      min-height: 180px;
+      margin: 4 * $base_unit 0px;
+    }
+
+    .project-status {
+      border-top: 1px solid $tc-gray-10;
+      border-bottom: 1px solid $tc-gray-10;
+      padding: 10px 0px;
+      display: flex;
+      justify-content: center;
+
+      .status-header {
+        .status-label {
+          text-transform: uppercase;
+        }
+      }
+
+      .project-progress {
+        display: flex;
+        .progress-text {
+          text-transform: uppercase;
+          margin-left: 10px;
+          line-height: 16px;
+        } 
+      }
+    }
+  }
+
+  .card-footer {
+    flex: 1;
+    padding-top: 4 * $base_unit;
+  }
+}

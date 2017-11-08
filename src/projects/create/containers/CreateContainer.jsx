@@ -4,7 +4,7 @@ import React, { PropTypes } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
-import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
+import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject } from '../../actions/project'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
@@ -65,8 +65,9 @@ class CreateConainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const projectId = _.get(nextProps, 'project.id', null)
-    if (!nextProps.processing && !nextProps.error && projectId) {
+    const projectId = _.get(this.props, 'project.id', null)
+    const nextProjectId = _.get(nextProps, 'project.id', null)
+    if (!nextProps.processing && !nextProps.error && !projectId && nextProjectId) {
       // update state
       this.setState({
         creatingProject: false,
@@ -75,7 +76,7 @@ class CreateConainer extends React.Component {
         // remove incomplete project, and navigate to project dashboard
         console.log('removing incomplete project')
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
-        this.props.history.push('/projects/' + projectId)
+        this.props.history.push('/projects/' + nextProjectId)
       })
 
     } else if (this.state.creatingProject !== nextProps.processing) {
@@ -122,6 +123,9 @@ class CreateConainer extends React.Component {
   componentDidMount() {
     // sets window unload hook save incomplete project
     window.addEventListener('beforeunload', this.onLeave)
+    // dispatches action to clear the project in the redux state to ensure that we never have a project
+    // in context when creating a new project
+    this.props.clearLoadedProject()
   }
 
   componentWillUnmount() {
@@ -263,5 +267,5 @@ const mapStateToProps = ({projectState, loadUser }) => ({
   error: projectState.error,
   project: projectState.project
 })
-const actionCreators = { createProjectAction, fireProjectDirty, fireProjectDirtyUndo  }
+const actionCreators = { createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject }
 export default withRouter(connect(mapStateToProps, actionCreators)(CreateConainer))

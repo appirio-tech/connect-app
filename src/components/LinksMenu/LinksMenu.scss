@@ -4,7 +4,7 @@
   li{
     @include roboto-medium;
     font-size: $tc-label-md;
-    color: $tc-gray-70;
+    color: $tc-dark-blue;
     line-height: $base-unit*6;
     padding-left: $base-unit*4;
     display: flex;
@@ -29,7 +29,7 @@
   .links-footer{
     @include roboto;
     font-size: $tc-label-xs;
-    color: $tc-dark-blue-70;
+    color: $tc-gray-70;
     line-height: $base-unit*6;
     padding-left: $base-unit*4;
   }
@@ -37,4 +37,13 @@
   .delete-link-modal {
     margin-left: -4*$base-unit;
   }
+
+  li:before {
+   content: '\b7\a0';
+   font-size: 200%;
+   color: $tc-dark-blue
+  }
+}
+.panel {
+  box-shadow:none;
 }

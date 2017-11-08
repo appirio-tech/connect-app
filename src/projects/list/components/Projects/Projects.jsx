@@ -1,10 +1,33 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { branch, renderComponent, compose } from 'recompose'
 import { withRouter } from 'react-router-dom'
-import ProjectsView from './ProjectsView'
+import Walkthrough from '../Walkthrough/Walkthrough'
+import CoderBot from '../../../../components/CoderBot/CoderBot'
+import ProjectsGridView from './ProjectsGridView'
+import ProjectsCardView from './ProjectsCardView'
 import { loadProjects } from '../../../actions/loadProjects'
 import _ from 'lodash'
 import querystring from 'query-string'
+import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR } from '../../../../config/constants'
+
+// This handles showing a spinner while the state is being loaded async
+import spinnerWhileLoading from '../../../../components/LoadingSpinner'
+
+/*
+  Definiing default project criteria. This is used to later to determine if
+  walkthrough component should be rendered instead of no results
+ */
+const defaultCriteria = {sort: 'createdAt desc'}
+
+
+const showErrorMessageIfError = hasLoaded =>
+  branch(hasLoaded, t => t, renderComponent(<CoderBot code={500} />))
+const errorHandler = showErrorMessageIfError(props => !props.error)
+const spinner = spinnerWhileLoading(props => !props.isLoading)
+const enhance = compose(errorHandler, spinner)
+const EnhancedGrid  = enhance(ProjectsGridView)
+const EnhancedCards = enhance(ProjectsCardView)
 
 class Projects extends Component {
   constructor(props) {
@@ -86,20 +109,46 @@ class Projects extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <ProjectsView {...this.props}
+    const { isPowerUser, isLoading, totalCount, criteria, currentUser } = this.props
+    // show walk through if user is customer and no projects were returned
+    // for default filters
+    const showWalkThrough = !isLoading && totalCount === 0 &&
+      _.isEqual(criteria, defaultCriteria) &&
+      !isPowerUser
+    const projectsView = isPowerUser
+      ? (
+        <EnhancedGrid {...this.props}
           onPageChange={this.onPageChange}
           sortHandler={this.sortHandler}
           applyFilters={this.applyFilters}
-          onNewProjectIntent={ this.showCreateProjectDialog }
         />
+      )
+      : (
+        <EnhancedCards
+          {...this.props }
+          // onPageChange={this.onPageChange}
+          // sortHandler={this.sortHandler}
+          applyFilters={this.applyFilters}
+        />
+      )
+    return (
+      <div>
+        <section className="">
+          <div className="container">
+            { showWalkThrough  ? <Walkthrough currentUser={currentUser} /> : projectsView }
+          </div>
+        </section>
       </div>
     )
   }
 }
 
 const mapStateToProps = ({ projectSearch, members, loadUser }) => {
+  let isPowerUser = false
+  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
+  if (loadUser.user) {
+    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
+  }
   return {
     currentUser : {
       userId: loadUser.user.profile.userId,
@@ -113,7 +162,8 @@ const mapStateToProps = ({ projectSearch, members, loadUser }) => {
     members     : members.members,
     totalCount  : projectSearch.totalCount,
     pageNum     : projectSearch.pageNum,
-    criteria    : projectSearch.criteria
+    criteria    : projectSearch.criteria,
+    isPowerUser
   }
 }
 

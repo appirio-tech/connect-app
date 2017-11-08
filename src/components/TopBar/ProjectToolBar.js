@@ -2,9 +2,10 @@ require('./ProjectToolBar.scss')
 
 import _ from 'lodash'
 import React, {PropTypes} from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
+import SVGIconImage from '../SVGIconImage'
 import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
@@ -48,11 +49,13 @@ class ProjectToolBar extends React.Component {
           <div className="bar-column">
             {logo}
             {project && <div className="breadcrumb">
-              <NavLink to="/projects">Projects /&nbsp;</NavLink>
-              <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
+              <NavLink to="/projects"><SVGIconImage filePath="arrows-16px-1_tail-left" /> <span>View All Projects</span></NavLink>
             </div>}
-            {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
           </div>
+          {project && <div className="bar-column project-name">
+            <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
+            {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
+          </div>}
           <div className="bar-column">
             {project && <nav className="nav">
               <ul>
@@ -72,6 +75,9 @@ class ProjectToolBar extends React.Component {
                 }
               </ul>
             </nav>}
+            <Link to="/new-project" className="new-project-link">
+              <div className="new-project-icon"><SVGIconImage filePath="ui-16px-1_bold-add" /></div>
+            </Link>
             { userMenu }
           </div>
         </div>

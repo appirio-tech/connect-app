@@ -5,14 +5,15 @@ import { Link, withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'lodash'
-import { SearchBar } from 'appirio-tech-react-components'
+import { SearchBar, MenuBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
 
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
 import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
-  ROLE_ADMINISTRATOR
+  ROLE_ADMINISTRATOR,
+  DOMAIN
 } from '../../config/constants'
 
 
@@ -133,6 +134,23 @@ class ProjectsToolBar extends Component {
     const { isFilterVisible } = this.state
     const isLoggedIn = userRoles && userRoles.length
 
+    const primaryNavigationItems = [
+      {
+        text: 'My Projects',
+        link: '/projects'
+      },
+      {
+        text: 'Getting Started',
+        link: `https://www.${DOMAIN}/about-topcoder/connect/`,
+        target: '_blank'
+      },
+      {
+        text: 'Help',
+        link: 'https://help.topcoder.com/hc/en-us/articles/225540188-Topcoder-Connect-FAQs',
+        target: '_blank'
+      }
+    ]
+
     const noOfFilters = _.keys(criteria).length - 1 // -1 for default sort criteria
     const onLeaveMessage = this.onLeave() || ''
 
@@ -144,6 +162,7 @@ class ProjectsToolBar extends Component {
         />
         <div className="primary-toolbar">
           { logo }
+          { !isPowerUser && <MenuBar items={primaryNavigationItems} orientation="horizontal" forReactRouter />}
           {
             !!isLoggedIn &&
             <div className="search-widget">
@@ -169,7 +188,7 @@ class ProjectsToolBar extends Component {
           }
           <div className="actions">
           {
-            !!isLoggedIn &&
+            !!isLoggedIn && isPowerUser &&
             <div>
               <Link to="/new-project" className="tc-btn tc-btn-sm tc-btn-primary">+ New Project</Link>
             </div>
