@@ -1,8 +1,8 @@
 'use strict'
 
 import React, { Component, PropTypes } from 'react'
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
+import Slider from 'rc-slider'
+import 'rc-slider/assets/index.css'
 import cn from 'classnames'
 import _ from 'lodash'
 import { HOC as hoc } from 'formsy-react'
@@ -13,9 +13,6 @@ class SliderInput extends Component {
     super(props)
     this.onChange = this.onChange.bind(this)
   }
-
-  componentWillMount() {
- }
 
   onChange(value) {
     const {name, options} = this.props
@@ -35,7 +32,7 @@ class SliderInput extends Component {
     const value = this.props.getValue()
     const valueIdx = this.getIndexFromValue(value)
     const marks = {}
-    for(var i=0; i < options.length; i++) {
+    for(let i=0; i < options.length; i++) {
       marks[i] = options[i].title
     }
     return (

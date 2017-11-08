@@ -102,7 +102,7 @@ const sections = [
               {value: 'guess', title: 'Its a wild guess'},
               {value: 'ballpark', title: 'I have a rough idea'},
               {value: 'exact', title: 'Precise to the penny'}
-            ],
+            ]
           },
           {
             icon: 'question',
@@ -117,7 +117,7 @@ const sections = [
               {value: '1-2 months', title: '1-2 months'},
               {value: '2-plus-months', title: '2+ months'},
               {value: 'estimating', title: 'I\'m just browsing' }
-            ],
+            ]
           },
           {
             icon: 'question',
@@ -132,7 +132,7 @@ const sections = [
               {value: '1-2-months', title: '1-2 months'},
               {value: '2-plus-months', title: '2+ months'},
               {value: 'estimating', title: 'I\'m just browsing'}
-            ],
+            ]
           },
           {
             icon: 'question',
