@@ -1,11 +1,14 @@
 @import 'tc-includes';
 
-.project-description {
-  color: $tc-gray-80;
-  @include tc-label-md;
-
-  .read-more-link {
-    white-space: nowrap;
-    color: $tc-dark-blue-90;
-  }
+.project-info {
+  display: flex;
+  flex-direction: column;
+  background-color: $tc-white;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  padding: 4 * $base_unit;
+  @include tc-label-md;  
+}
+.panel {
+  box-shadow:none !important;
 }

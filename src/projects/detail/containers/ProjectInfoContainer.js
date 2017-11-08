@@ -9,7 +9,7 @@ import { updateProject, deleteProject } from '../../actions/project'
 import { setDuration } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
    DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
-import ProjectSidebarInfo from '../../../components/ProjectInfo/ProjectSidebarInfo'
+import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 
 class ProjectInfoContainer extends React.Component {
 
@@ -97,7 +97,7 @@ class ProjectInfoContainer extends React.Component {
     }
     return (
       <div>
-        <ProjectSidebarInfo
+        <ProjectInfo
           project={project}
           currentMemberRole={currentMemberRole}
           duration={duration}
