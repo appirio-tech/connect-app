@@ -51,15 +51,20 @@ class FillProjectDetails extends Component  {
           <section className="two-col-content content">
             <div className="container">
               <div className="left-area">
-                <ProjectBasicDetailsForm
-                  project={project}
-                  sections={sections}
-                  isEdittable
-                  submitHandler={this.props.onCreateProject}
-                  saving={processing}
-                  onProjectChange={this.props.onProjectChange}
-                  submitBtnText={ submitBtnText }
-                />
+                <div className="left-area-content">
+                  <ProjectBasicDetailsForm
+                    project={project}
+                    sections={sections}
+                    isEdittable
+                    submitHandler={this.props.onCreateProject}
+                    saving={processing}
+                    onProjectChange={this.props.onProjectChange}
+                    submitBtnText={ submitBtnText }
+                  />
+                </div>
+                <div className="left-area-footer">
+                  <span>{ _.get(product, 'formDesclaimer') }</span>
+                </div>
               </div>
               <div className="right-area">
                 <Sticky top={20}>
