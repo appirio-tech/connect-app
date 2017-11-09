@@ -87,12 +87,12 @@ const sections = [
             icon: 'question',
             fieldName: 'details.appDefinition.budget',
             description: 'Project budget in USD, please enter 0 if you don\'t have one',
-            title: 'Project Budget',
+            title: 'What is your project budget?',
             type: 'numberinput'
           },
           {
             icon: 'question',
-            title: 'Do you have budget?',
+            title: 'How precise is your budget?',
             description: 'Please let us know if you have any budget in mind.',
             fieldName: 'details.appDefinition.budgetType',
             type: 'slide-radiogroup',
@@ -118,7 +118,7 @@ const sections = [
           {
             icon: 'question',
             fieldName: 'details.appDefinition.deadline',
-            description: 'When do you need the project to be completed?',
+            description: 'What is your project deadline?',
             title: 'Deadline',
             type: 'slide-radiogroup',
             options: [
