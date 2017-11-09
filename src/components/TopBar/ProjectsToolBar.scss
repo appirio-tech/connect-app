@@ -34,6 +34,20 @@ $tc-body-large: 20px;
     display: flex;
   }
 
+  .MenuBar li {
+    align-items: center; // should reside in MenuBar component instead
+
+    a {
+      text-transform: uppercase;
+      font-size: $tc-label-xs;
+      line-height: 6 * $base-unit;
+    }
+
+    &.selected a {
+      color: $tc-gray-10;
+    }
+  }
+
   .search-widget {
     width: 595px;
     height: 30px;

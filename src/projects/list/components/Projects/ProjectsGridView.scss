@@ -85,4 +85,18 @@
   color: $tc-gray-50;
 }
 
+.card-view {
+  display: flex;
+  flex-flow: row wrap;
+  max-width: 1150px;// media query needed for smaller/bigger screens
+  margin: 20px auto;
+
+  .project-card {
+    margin-bottom: 10px;
+  }
+
+  .project-card {
+    margin-left: 10px;
+  }
+}
 

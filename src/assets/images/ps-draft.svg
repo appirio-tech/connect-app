@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="30px" viewBox="0 0 32 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47 (45396) - http://www.bohemiancoding.com/sketch -->
+    <title>status icon/draft</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-1.3%" y="-1.6%" width="102.6%" height="103.7%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="4.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.149019608   0 0 0 0 0.149019608   0 0 0 0 0.156862745  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Transition-updates-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.5">
+        <g id="Projec-grid-update" transform="translate(-1116.000000, -349.000000)" fill-rule="nonzero" fill="#5D5D66">
+            <g id="Group" filter="url(#filter-1)" transform="translate(40.000000, 90.000000)">
+                <g id="status-icon/draft" transform="translate(1084.000000, 264.000000)">
+                    <path d="M15,4 L1,4 C0.448,4 0,3.552 0,3 C0,2.448 0.448,2 1,2 L15,2 C15.552,2 16,2.448 16,3 C16,3.552 15.552,4 15,4 Z M7,9 L1,9 C0.448,9 0,8.552 0,8 C0,7.448 0.448,7 1,7 L7,7 C7.552,7 8,7.448 8,8 C8,8.552 7.552,9 7,9 Z M9.99375,14 L1,14 C0.448,14 0,13.552 0,13 C0,12.448 0.448,12 1,12 L9.99375,12 C10.54575,12 10.99375,12.448 10.99375,13 C10.99375,13.552 10.54575,14 9.99375,14 Z" id="Combined-Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
