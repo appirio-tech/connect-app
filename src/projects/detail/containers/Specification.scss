@@ -300,6 +300,12 @@ $sideBarMaxWidth: 360px;
           resize: vertical;
         }
       }
+
+      .right-area-footer {
+        @include tc-label-sm;
+        color: $tc-gray-50;
+        margin-top: 4 * $base_unit;
+      }
     }
 
     .contents-list {
