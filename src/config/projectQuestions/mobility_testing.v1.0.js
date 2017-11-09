@@ -102,6 +102,51 @@ const sections = [
               {value: 'tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
               {value: 'wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
+          },
+          {
+            icon: 'question',
+            fieldName: 'details.appDefinition.budget',
+            description: 'Project budget in USD, please enter 0 if you don\'t have one',
+            title: 'Project Budget',
+            type: 'numberinput'
+          },
+          {
+            icon: 'question',
+            title: 'Do you have budget?',
+            description: 'Please let us know if you have any budget in mind.',
+            fieldName: 'details.appDefinition.budgetType',
+            type: 'slide-radiogroup',
+            options: [
+              {value: 'guess', title: 'Its a wild guess'},
+              {value: 'ballpark', title: 'I have a rough idea'},
+              {value: 'exact', title: 'Precise to the penny'}
+            ]
+          },
+          {
+            icon: 'question',
+            title: 'When do you want to get started?',
+            description: 'Please let us know if you have any budget in mind.',
+            fieldName: 'details.appDefinition.whenToStart',
+            type: 'slide-radiogroup',
+            options: [
+              {value: 'asap', title: 'ASAP'},
+              {value: '1-2 months', title: '1-2 months'},
+              {value: '2-plus-months', title: '2+ months'},
+              {value: 'estimating', title: 'I\'m just browsing' }
+            ]
+          },
+          {
+            icon: 'question',
+            fieldName: 'details.appDefinition.deadline',
+            description: 'When do you need the project to be completed?',
+            title: 'Deadline',
+            type: 'slide-radiogroup',
+            options: [
+              {value: '2-weeks', title: '2 weeks'},
+              {value: '1-2-months', title: '1-2 months'},
+              {value: '2-plus-months', title: '2+ months'},
+              {value: 'estimating', title: 'I\'m just browsing'}
+            ]
           }
         ]
       },

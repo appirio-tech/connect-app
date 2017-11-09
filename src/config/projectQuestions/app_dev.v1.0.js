@@ -85,7 +85,6 @@ const sections = [
           },
           {
             icon: 'question',
-            // required: true,
             fieldName: 'details.appDefinition.budget',
             description: 'Project budget in USD, please enter 0 if you don\'t have one',
             title: 'Project Budget',
@@ -93,7 +92,6 @@ const sections = [
           },
           {
             icon: 'question',
-            // required: true,
             title: 'Do you have budget?',
             description: 'Please let us know if you have any budget in mind.',
             fieldName: 'details.appDefinition.budgetType',
@@ -106,13 +104,11 @@ const sections = [
           },
           {
             icon: 'question',
-            // required: true,
             title: 'When do you want to get started?',
             description: 'Please let us know if you have any budget in mind.',
             fieldName: 'details.appDefinition.whenToStart',
             type: 'slide-radiogroup',
             options: [
-              // { value: '', title: 'Select'},
               {value: 'asap', title: 'ASAP'},
               {value: '1-2 months', title: '1-2 months'},
               {value: '2-plus-months', title: '2+ months'},
@@ -121,13 +117,11 @@ const sections = [
           },
           {
             icon: 'question',
-            // required: true,
             fieldName: 'details.appDefinition.deadline',
             description: 'When do you need the project to be completed?',
             title: 'Deadline',
             type: 'slide-radiogroup',
             options: [
-              // { value: '', title: 'Select'},
               {value: '2-weeks', title: '2 weeks'},
               {value: '1-2-months', title: '1-2 months'},
               {value: '2-plus-months', title: '2+ months'},
