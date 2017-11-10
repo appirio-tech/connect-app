@@ -16,14 +16,17 @@
         line-height: 3 * $base_unit;
 
         .project-name {
+           @include roboto-medium;
+          font-size: $tc-heading-sm;
+          line-height: $base-unit * 4;
           color: $tc-black;
         }
 
         .project-date {
-          @include tc-body-extra-small;
+          @include tc-label-xs;
           text-transform: uppercase;
-          line-height: 4 * $base_unit;
           color: $tc-gray-50;
+          margin-top: $base_unit;
         }
       }
     }
