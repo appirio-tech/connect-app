@@ -17,6 +17,10 @@
     background-color: $tc-gray-neutral-dark;
     border: 1px dashed $tc-gray-30;
 
+    &:hover {
+      box-shadow: none;
+    }
+
     .card-body {
       display: flex;
       justify-content: center;
