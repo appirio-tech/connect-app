@@ -23,25 +23,23 @@ function ProjectCard({ project, duration, disabled, currentUser, onChangeStatus}
   // icon for the category, use default generic work project icon for categories which no longer exist now
   const categoryIcon =  _.get(category, 'icon', 'tech-32px-outline-work-project')
   return (
-    <div className={className}>
-      <Link to={`/projects/${project.id}/`}>
-        <div className="card-header">
-            <ProjectCardHeader
-              project={project}
-            />
-        </div>
-        <div className="card-body">
-          <ProjectCardBody
+    <Link to={`/projects/${project.id}/`} className={className}>
+      <div className="card-header">
+          <ProjectCardHeader
             project={project}
-            currentMemberRole={currentMemberRole}
-            duration={duration}
           />
-        </div>
-        <div className="card-footer">
-          <AvatarGroup users={ project.members } />
-        </div>
-      </Link>
-    </div>
+      </div>
+      <div className="card-body">
+        <ProjectCardBody
+          project={project}
+          currentMemberRole={currentMemberRole}
+          duration={duration}
+        />
+      </div>
+      <div className="card-footer">
+        <AvatarGroup users={ project.members } />
+      </div>
+    </Link>
   )
 }
 

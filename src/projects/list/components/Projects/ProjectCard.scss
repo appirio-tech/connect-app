@@ -19,6 +19,10 @@
 
     &:hover {
       box-shadow: none;
+
+      .card-body .new-project-button .new-project-icon {
+        @include background-gradient(#3996FF, #127BF3);
+      }
     }
 
     .card-body {
@@ -26,7 +30,7 @@
       justify-content: center;
       align-items: center;
 
-      .new-project-link {
+      .new-project-button {
         @include tc-label-md;
         text-transform: uppercase;
         color: $tc-dark-blue-90;
@@ -45,21 +49,17 @@
             fill: $tc-white;
           }
           margin-bottom: 4 * $base_unit;
-
-          &:hover {
-            @include background-gradient(#3996FF, #127BF3);
-          }
         }
       }
     }
   }
 
   .card-header {
-    flex: 1;
+    margin-bottom: 4 * $base_unit;
   }
 
   .card-body {
-    flex: 2;
+    flex: 1;
 
     .ProjectStatus .status-header {
       cursor: pointer;
@@ -67,7 +67,6 @@
   }
 
   .card-footer {
-    flex: 1;
-    padding-top: 4 * $base_unit;
+    // padding-top: 4 * $base_unit;
   }
 }
