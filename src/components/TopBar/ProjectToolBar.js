@@ -6,6 +6,7 @@ import { NavLink, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import SVGIconImage from '../SVGIconImage'
+import NewProjectNavLink from './NewProjectNavLink'
 import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
@@ -75,9 +76,7 @@ class ProjectToolBar extends React.Component {
                 }
               </ul>
             </nav>}
-            <Link to="/new-project" className="new-project-link">
-              <div className="new-project-icon"><SVGIconImage filePath="ui-16px-1_bold-add" /></div>
-            </Link>
+            <NewProjectNavLink short={true} />
             { userMenu }
           </div>
         </div>
