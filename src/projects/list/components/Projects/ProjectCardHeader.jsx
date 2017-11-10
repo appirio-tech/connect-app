@@ -16,7 +16,7 @@ function ProjectCardHeader({ project }) {
     <div className="project-card-header">
       <div className="project-header">
         <div className="project-type-icon"><SVGIconImage filePath={categoryIcon} /></div>
-        <div className="project-sub-header">
+        <div className="project-header-details">
           <div className="project-name">
             <TextTruncate
               containerClassName="project-name"

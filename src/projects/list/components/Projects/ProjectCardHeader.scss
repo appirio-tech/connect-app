@@ -9,10 +9,10 @@
       max-height: 40px;
       overflow: hidden;
 
-      .project-sub-header {
+      .project-header-details {
         display: flex;
         flex-direction: column;
-        margin-left: 4 * $base_unit;
+        margin-left: 2 * $base_unit;
         line-height: 3 * $base_unit;
 
         .project-name {
