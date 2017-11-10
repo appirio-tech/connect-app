@@ -21,6 +21,13 @@ $tc-body-large: 20px;
       margin-left: 4 * $base-unit;
     }
 
+    .MenuBar {
+      li.selected {
+        // hides the bottom border as per https://github.com/appirio-tech/connect-app/issues/1267#issuecomment-343298713
+        border-bottom: none;
+      }
+    }
+
     .welcome-info {
       margin-right: 4 * $base-unit;
     }

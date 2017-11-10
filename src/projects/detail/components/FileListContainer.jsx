@@ -38,8 +38,18 @@ class FileListContainer extends Component {
   }
 
   render() {
-    const { files, projectId } = this.props
+    const { files, projectId, allMembers } = this.props
     const storePath = `${PROJECT_ATTACHMENTS_FOLDER}/${projectId}/`
+    files.forEach(file => {
+      if (allMembers[file.updatedBy]) {
+        file.updatedByUser = allMembers[file.updatedBy]
+      }
+
+      if (allMembers[file.createdBy]) {
+        file.createdByUser = allMembers[file.createdBy]
+      }
+    })
+
     return (
       <div>
         <FileList files={files} onDelete={ this.deleteFile } onSave={ this.updateFile } />
@@ -51,10 +61,16 @@ class FileListContainer extends Component {
 
 const mapDispatchToProps = {addProjectAttachment, updateProjectAttachment, removeProjectAttachment}
 
+const mapStateToProps = ({ members }) => {
+  return {
+    allMembers     : members.members
+  }
+}
 
 FileListContainer.propTypes = {
   projectId: PropTypes.number.isRequired,
-  files: PropTypes.arrayOf(PropTypes.object).isRequired
+  files: PropTypes.arrayOf(PropTypes.object).isRequired,
+  allMembers: PropTypes.object.isRequired
 }
 
-export default connect(null, mapDispatchToProps)(FileListContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(FileListContainer)

@@ -59,6 +59,17 @@
       font-size: 15px;
       color: $tc-gray-60;
       margin-left: auto;
+      text-align: right;
+
+      .Tooltip {
+        line-height: 100%;
+      }
+
+      .date {
+        font-size: 13px;
+        line-height: normal;
+        margin-top: 5px;
+      }
     }
 
     .edit-icons {

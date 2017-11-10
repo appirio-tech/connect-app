@@ -7,6 +7,7 @@ import cn from 'classnames'
 import _ from 'lodash'
 import { SearchBar, MenuBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
+import NewProjectNavLink from './NewProjectNavLink'
 
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
 import {
@@ -187,13 +188,8 @@ class ProjectsToolBar extends Component {
             </div>
           }
           <div className="actions">
-          {
-            !!isLoggedIn && isPowerUser &&
-            <div>
-              <Link to="/new-project" className="tc-btn tc-btn-sm tc-btn-primary">+ New Project</Link>
-            </div>
-          }
-          { userMenu }
+            { isLoggedIn && <NewProjectNavLink short={!isPowerUser} /> }
+            { userMenu }
           </div>
         </div>
         <div className="secondary-toolbar">

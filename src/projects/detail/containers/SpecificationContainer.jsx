@@ -8,6 +8,7 @@ import Sticky from 'react-stickynode'
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import EditProjectForm from '../components/EditProjectForm'
+import { findProduct } from '../../../config/projectWizard'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 // import { Icons } from 'appirio-tech-react-components'
@@ -49,6 +50,8 @@ class SpecificationContainer extends Component {
 
   render() {
     const { project, currentMemberRole, processing } = this.props
+    const productId = _.get(project, 'details.products[0]')
+    const product = findProduct(productId)
 
     let specification = 'topcoder.v1'
     if (project.details && project.details.products && project.details.products[0])
@@ -76,6 +79,9 @@ class SpecificationContainer extends Component {
               fireProjectDirty={ this.props.fireProjectDirty }
               fireProjectDirtyUndo= { this.props.fireProjectDirtyUndo }
             />
+            <div className="right-area-footer">
+              { _.get(product, 'formDesclaimer') }
+            </div>
           </div>
 
         </div>
