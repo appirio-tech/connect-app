@@ -122,8 +122,7 @@ $status-height :  20px;
 
   .status-label {
     position: relative;
-    @include roboto-medium;
-    font-size: $tc-label-sm;
+    @include tc-label-xs;
     line-height: $base-unit*4;
     height: $base-unit*4;
     padding-right: 4 * $base-unit;
