@@ -15,6 +15,7 @@ function ProjectInfo({ project, duration, currentMemberRole }) {
         project={project}
         currentMemberRole={currentMemberRole}
         duration={duration}
+        descLinesCount={4}
       />
     </div>
   )

@@ -6,14 +6,14 @@ import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
 import { PROJECT_STATUS_ACTIVE } from '../../../../config/constants'
 import './ProjectCardBody.scss'
 
-function ProjectCardBody({ project, duration, currentMemberRole }) {
+function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount=8 }) {
   if (!project) return null
 
   return (
     <div className="project-card-body">
       <TextTruncate
         containerClassName="project-description"
-        line={4}
+        line={ descLinesCount }
         truncateText="..."
         text={project.description}
         textTruncateChild={<span><Link className="read-more-link" to={`/projects/${project.id}/specification`}> read more </Link></span>}
