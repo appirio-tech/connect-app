@@ -55,8 +55,11 @@
     }
 
     .bar-column.project-name {
+      display: flex;
+      align-items: center;
+      
       span {
-        @include roboto;
+        @include tc-heading;
         color: $tc-gray-10;
         display:block;
         text-overflow: ellipsis;
