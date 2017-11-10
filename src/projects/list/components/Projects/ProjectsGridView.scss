@@ -88,15 +88,12 @@
 .card-view {
   display: flex;
   flex-flow: row wrap;
-  max-width: 1115px;// media query needed for smaller/bigger screens
+  max-width: 1160px;// media query needed for smaller/bigger screens
   margin: 20px auto;
 
   .project-card {
-    margin-bottom: 10px;
-  }
-
-  .project-card {
-    margin-left: 10px;
+    margin-bottom: 4 * $base-unit;
+    margin-left: 4 * $base-unit;
   }
 }
 
