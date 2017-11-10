@@ -46,6 +46,8 @@ class SliderInput extends Component {
           defaultValue={''}
           marks={marks}
           onChange={ this.onChange }
+          // handles onAfterChange to fix issue when user clicks on first value/step of untouched slider
+          onAfterChange={ this.onChange }
           included={false}
         />
       </div>
