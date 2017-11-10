@@ -194,7 +194,7 @@ export const PROJECT_STATUS = [
   {color: 'green', name: 'Active', fullName: 'Project is active', value: PROJECT_STATUS_ACTIVE },
   {color: 'black', name: 'Completed', fullName: 'Project is completed', value: PROJECT_STATUS_COMPLETED },
   {color: 'black', name: 'Cancelled', fullName: 'Project is cancelled', value: PROJECT_STATUS_CANCELLED },
-  {color: 'red', name: 'Paused', fullName: '', value: PROJECT_STATUS_PAUSED }
+  {color: 'red', name: 'Paused', fullName: 'Project is paused', value: PROJECT_STATUS_PAUSED }
 ]
 
 
