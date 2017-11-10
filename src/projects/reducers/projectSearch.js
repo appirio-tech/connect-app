@@ -11,7 +11,7 @@ export const initialState = {
   totalCount: 0,
   pageNum: 1,
   criteria: {
-    sort: 'createdAt desc'
+    sort: 'updatedAt desc'
   }
 }
 

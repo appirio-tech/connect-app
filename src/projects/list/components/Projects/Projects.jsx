@@ -18,7 +18,7 @@ import spinnerWhileLoading from '../../../../components/LoadingSpinner'
   Definiing default project criteria. This is used to later to determine if
   walkthrough component should be rendered instead of no results
  */
-const defaultCriteria = {sort: 'createdAt desc'}
+const defaultCriteria = {sort: 'updatedAt desc'}
 
 
 const showErrorMessageIfError = hasLoaded =>
