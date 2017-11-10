@@ -24,23 +24,23 @@ function ProjectCard({ project, duration, disabled, currentUser, onChangeStatus}
   const categoryIcon =  _.get(category, 'icon', 'tech-32px-outline-work-project')
   return (
     <div className={className}>
-      <div className="card-header">
-        <Link to={`/projects/${project.id}/`}>
-          <ProjectCardHeader
+      <Link to={`/projects/${project.id}/`}>
+        <div className="card-header">
+            <ProjectCardHeader
+              project={project}
+            />
+        </div>
+        <div className="card-body">
+          <ProjectCardBody
             project={project}
+            currentMemberRole={currentMemberRole}
+            duration={duration}
           />
-        </Link>
-      </div>
-      <div className="card-body">
-        <ProjectCardBody
-          project={project}
-          currentMemberRole={currentMemberRole}
-          duration={duration}
-        />
-      </div>
-      <div className="card-footer">
-        <AvatarGroup users={ project.members } />
-      </div>
+        </div>
+        <div className="card-footer">
+          <AvatarGroup users={ project.members } />
+        </div>
+      </Link>
     </div>
   )
 }

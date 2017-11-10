@@ -56,6 +56,10 @@
 
   .card-body {
     flex: 2;
+
+    .ProjectStatus .status-header {
+      cursor: pointer;
+    }
   }
 
   .card-footer {
