@@ -139,7 +139,7 @@ const sections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications)',
         type: 'notes'
       },
       {
@@ -240,7 +240,7 @@ export const basicSections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications)',
         type: 'notes'
       }
     ]
