@@ -2,7 +2,7 @@ require('./ProjectToolBar.scss')
 
 import _ from 'lodash'
 import React, {PropTypes} from 'react'
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import SVGIconImage from '../SVGIconImage'
@@ -76,7 +76,7 @@ class ProjectToolBar extends React.Component {
                 }
               </ul>
             </nav>}
-            <NewProjectNavLink short={true} />
+            <NewProjectNavLink compact />
             { userMenu }
           </div>
         </div>

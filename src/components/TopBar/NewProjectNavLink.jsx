@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import SVGIconImage from '../SVGIconImage'
 import './NewProjectNavLink.scss'
 
-const NewProjectNavLink = ({ short=false }) => {
-  if (short) {
+const NewProjectNavLink = ({ compact=false }) => {
+  if (compact) {
     return (
       <Link to="/new-project" className="new-project-link">
         <div className="new-project-icon"><SVGIconImage filePath="ui-16px-1_bold-add" /></div>
@@ -20,7 +20,7 @@ const NewProjectNavLink = ({ short=false }) => {
 }
 
 NewProjectNavLink.propTypes = {
-  short: PropTypes.bool
+  compact: PropTypes.bool
 }
 
 export default NewProjectNavLink
