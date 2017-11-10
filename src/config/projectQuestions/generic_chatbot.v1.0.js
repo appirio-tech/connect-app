@@ -98,7 +98,7 @@ const sections = [
           {
             icon: 'question',
             title: 'How precise is your budget?',
-            description: 'Please let us know if you have any budget in mind.',
+            // description: 'Please let us know if you have any budget in mind.',
             fieldName: 'details.appDefinition.budgetType',
             type: 'slide-radiogroup',
             options: [
@@ -110,7 +110,7 @@ const sections = [
           {
             icon: 'question',
             title: 'When do you want to get started?',
-            description: 'Please let us know if you have any budget in mind.',
+            // description: 'Please let us know if you have any budget in mind.',
             fieldName: 'details.appDefinition.whenToStart',
             type: 'slide-radiogroup',
             options: [
@@ -123,7 +123,7 @@ const sections = [
           {
             icon: 'question',
             fieldName: 'details.appDefinition.deadline',
-            description: 'What is your project deadline?',
+            // description: 'What is your project deadline?',
             title: 'Deadline',
             type: 'slide-radiogroup',
             options: [
