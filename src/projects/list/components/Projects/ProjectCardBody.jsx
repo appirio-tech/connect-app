@@ -1,9 +1,9 @@
 import React, { PropTypes as PT } from 'react'
 import { Link } from 'react-router-dom'
 import TextTruncate from 'react-text-truncate'
-import ProjectProgress from '../ProjectProgress/ProjectProgress'
-import ProjectStatus from '../ProjectStatus/ProjectStatus'
-import { PROJECT_STATUS_ACTIVE } from '../../config/constants'
+import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
+import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
+import { PROJECT_STATUS_ACTIVE } from '../../../../config/constants'
 import './ProjectCardBody.scss'
 
 function ProjectCardBody({ project, duration, currentMemberRole }) {

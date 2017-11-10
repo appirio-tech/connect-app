@@ -52,66 +52,13 @@
 
   .card-header {
     flex: 1;
-    .project-header {
-      display: flex;
-      flex-direction: row;
-      min-height: 39px;
-      max-height: 39px;
-      overflow: hidden;
-
-      .project-details {
-        display: flex;
-        flex-direction: column;
-        margin-left: 4 * $base_unit;
-
-        .project-name {
-          @include tc-label-md;
-          color: $tc-black;
-          max-height: 2 * 4 * $base_unit;
-          min-height:  2 * 4 * $base_unit;
-        }
-
-        .project-date {
-          @include tc-body-extra-small;
-          color: $tc-gray-50;
-          line-height: 3 * $base_unit;
-        }
-      }
-    }
+    
   }
 
   .card-body {
     flex: 2;
 
-    .project-description {
-      overflow: hidden;
-      max-height: 180px;
-      min-height: 180px;
-      margin: 4 * $base_unit 0px;
-    }
-
-    .project-status {
-      border-top: 1px solid $tc-gray-10;
-      border-bottom: 1px solid $tc-gray-10;
-      padding: 10px 0px;
-      display: flex;
-      justify-content: center;
-
-      .status-header {
-        .status-label {
-          text-transform: uppercase;
-        }
-      }
-
-      .project-progress {
-        display: flex;
-        .progress-text {
-          text-transform: uppercase;
-          margin-left: 10px;
-          line-height: 16px;
-        } 
-      }
-    }
+    
   }
 
   .card-footer {

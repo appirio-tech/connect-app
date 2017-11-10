@@ -9,6 +9,8 @@ import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
 import AvatarGroup from '../../../../components/AvatarGroup/AvatarGroup'
 import { findCategory } from '../../../../config/projectWizard'
 import SVGIconImage from '../../../../components/SVGIconImage'
+import ProjectCardHeader from './ProjectCardHeader'
+import ProjectCardBody from './ProjectCardBody'
 import { PROJECT_STATUS_ACTIVE } from '../../../../config/constants'
 import './ProjectCard.scss'
 
@@ -21,52 +23,20 @@ function ProjectCard({ project, duration, disabled, currentUser, onChangeStatus}
   // icon for the category, use default generic work project icon for categories which no longer exist now
   const categoryIcon =  _.get(category, 'icon', 'tech-32px-outline-work-project')
   return (
-    <div
-      className={className}
-    >
+    <div className={className}>
       <div className="card-header">
-        <Link className="read-more-link" to={`/projects/${project.id}/`}>
-          <div className="project-header">
-            <div className="project-type-icon"><SVGIconImage filePath={ categoryIcon } /></div>
-            <div className="project-details">
-              <TextTruncate
-                containerClassName="project-name"
-                line={2}
-                truncateText="..."
-                text={ project.name }
-                title={project.name}
-              />
-              <div className="project-date">{ moment(project.updatedAt).format('MMM D') }</div>
-            </div>
-          </div>
+        <Link to={`/projects/${project.id}/`}>
+          <ProjectCardHeader
+            project={project}
+          />
         </Link>
       </div>
       <div className="card-body">
-        <TextTruncate
-          containerClassName="project-description"
-          line={8}
-          truncateText="..."
-          text={ project.description }
-          textTruncateChild={<Link className="read-more-link" to={`/projects/${project.id}/specification`}>read more &gt;</Link>}
+        <ProjectCardBody
+          project={project}
+          currentMemberRole={currentMemberRole}
+          duration={duration}
         />
-        <div className="project-status">
-          { project.status !== PROJECT_STATUS_ACTIVE &&
-            <ProjectStatus
-              status={ project.status }
-              showText
-              withoutLabel
-              currentMemberRole={ currentMemberRole }
-              onChangeStatus={ onChangeStatus }
-              canEdit={ false }
-              unifiedHeader={ false }
-            />
-          }
-          { project.status === PROJECT_STATUS_ACTIVE &&
-            <ProjectProgress {...duration} viewType={ ProjectProgress.ViewTypes.CIRCLE } percent={46}>
-              <span className="progress-text">{ duration.percent }% completed</span>
-            </ProjectProgress>
-          }
-        </div>
       </div>
       <div className="card-footer">
         <AvatarGroup users={ project.members } />

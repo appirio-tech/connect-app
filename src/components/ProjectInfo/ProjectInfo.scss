@@ -7,7 +7,14 @@
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   padding: 4 * $base_unit;
-  @include tc-label-md;  
+  @include tc-label-md;
+
+  .project-card-body {
+    .project-description {
+      max-height: 120px;
+      min-height: 120px;
+    }
+  }
 }
 .panel {
   box-shadow:none !important;

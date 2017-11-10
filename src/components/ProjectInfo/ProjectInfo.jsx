@@ -1,6 +1,6 @@
 import React, { PropTypes as PT } from 'react'
-import ProjectCardHeader from './ProjectCardHeader'
-import ProjectCardBody from './ProjectCardBody'
+import ProjectCardHeader from '../../projects/list/components/Projects/ProjectCardHeader'
+import ProjectCardBody from '../../projects/list/components/Projects/ProjectCardBody'
 import './ProjectInfo.scss'
 
 function ProjectInfo({ project, duration, currentMemberRole }) {

@@ -2,8 +2,8 @@ import _ from 'lodash'
 import moment from 'moment'
 import React, { PropTypes as PT } from 'react'
 import TextTruncate from 'react-text-truncate'
-import { findCategory } from '../../config/projectWizard'
-import SVGIconImage from '../SVGIconImage'
+import { findCategory } from '../../../../config/projectWizard'
+import SVGIconImage from '../../../../components/SVGIconImage'
 import './ProjectCardHeader.scss'
 
 function ProjectCardHeader({ project }) {
