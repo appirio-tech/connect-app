@@ -5,6 +5,7 @@ import React, {PropTypes} from 'react'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
+import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
@@ -73,6 +74,7 @@ class ProjectToolBar extends React.Component {
               </ul>
             </nav>}
             { userMenu }
+            <NotificationsDropdown />
           </div>
         </div>
       </div>

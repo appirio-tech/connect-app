@@ -7,6 +7,7 @@ import cn from 'classnames'
 import _ from 'lodash'
 import { SearchBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
+import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
 import {
@@ -175,6 +176,7 @@ class ProjectsToolBar extends Component {
             </div>
           }
           { userMenu }
+          { isLoggedIn && <NotificationsDropdown /> }
           </div>
         </div>
         <div className="secondary-toolbar">

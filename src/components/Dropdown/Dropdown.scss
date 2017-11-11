@@ -40,6 +40,10 @@
   }
 }
 
+.Dropdown.no-autoclose {
+  cursor: default;
+}
+
 .dropdown-wrap.default {
   border: 1px solid $tc-gray-20;
   display: flex;
@@ -75,7 +79,7 @@
   border-right: 2px solid $tc-gray-20;
 }
 
-.Dropdown.hide {
+.dropdown-wrap.hide .Dropdown {
   display: none;
 }
 

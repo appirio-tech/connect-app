@@ -1,11 +1,13 @@
 import React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import { withProps } from 'recompose'
-import App from './components/App/App'
+import { renderApp } from './components/App/App'
 import Home from './components/Home/Home'
 import ConnectTerms from './components/ConnectTerms/ConnectTerms'
 import CoderBot from './components/CoderBot/CoderBot'
 import projectRoutes from './projects/routes.jsx'
+import notificationsRoutes from './routes/notifications/routes.jsx'
+import settingsRoutes from './routes/settings/routes.jsx'
 import TopBarContainer from './components/TopBar/TopBarContainer'
 import ProjectsToolBar from './components/TopBar/ProjectsToolBar'
 import RedirectComponent from './components/RedirectComponent'
@@ -91,10 +93,6 @@ class RedirectToProject extends React.Component {
 
 const topBarWithProjectsToolBar = <TopBarContainer toolbar={ ProjectsToolBar } />
 
-const renderApp = (topbar, content) => () => (
-  <App {...{topbar, content}} />
-)
-
 class Routes extends React.Component {
   componentWillMount() {
     redirectToConnectIfNeed()
@@ -133,6 +131,8 @@ class Routes extends React.Component {
         {/* Handle /projects/* routes */}
         {projectRoutes}
         {/* {reportsListRoutes} */}
+        {notificationsRoutes}
+        {settingsRoutes}
 
         <Route path="/error" render={renderApp(topBarWithProjectsToolBar, <CoderBot code={500}/>)} />
         <Route path="/404" render={renderApp(topBarWithProjectsToolBar, <CoderBot code={404}/>)} />

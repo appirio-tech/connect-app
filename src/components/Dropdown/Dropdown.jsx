@@ -65,24 +65,28 @@ class Dropdown extends Component {
   }
 
   render() {
-    const { className, pointerShadow, noPointer, pointerLeft } = this.props
+    const { className, pointerShadow, noPointer, pointerLeft, noAutoclose } = this.props
     const ddClasses = classNames('dropdown-wrap', {
       [`${className}`] : true,
-      [`${ this.props.theme }`] : true
+      [`${ this.props.theme }`] : true,
+      hide : this.state.isHidden
     })
     const ndClasses = classNames('Dropdown', {
       'pointer-shadow' : pointerShadow,
       'pointer-hide'   : noPointer,
       'pointer-left'   : pointerLeft,
-      hide           : this.state.isHidden
+      'no-autoclose'   : noAutoclose
     })
 
     return (
-      <div className={ ddClasses } onClick={ this.onClick } ref="Dropdown">
+      <div className={ ddClasses } onClick={ noAutoclose ? () => {} : this.onClick } ref="Dropdown">
         {
-          this.props.children.map((child) => {
+          this.props.children.map((child, index) => {
             if (child.props.className.indexOf('dropdown-menu-header') > -1)
-              return child
+              return noAutoclose ? React.cloneElement(child, {
+                onClick: this.onClick,
+                key: child.props.key || index
+              }) : child
           })
         }
 
