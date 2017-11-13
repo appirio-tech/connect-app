@@ -117,15 +117,17 @@ class CreateConainer extends React.Component {
         console.log('calling createProjectAction...')
         this.props.createProjectAction(incompleteProject, PROJECT_STATUS_IN_REVIEW)
       }
+    } else {
+      // if there is not incomplete project, clear the exisitng project from the redux state
+      // dispatches action to clear the project in the redux state to ensure that we never have a project
+      // in context when creating a new project
+      this.props.clearLoadedProject()
     }
   }
 
   componentDidMount() {
     // sets window unload hook save incomplete project
     window.addEventListener('beforeunload', this.onLeave)
-    // dispatches action to clear the project in the redux state to ensure that we never have a project
-    // in context when creating a new project
-    this.props.clearLoadedProject()
   }
 
   componentWillUnmount() {
