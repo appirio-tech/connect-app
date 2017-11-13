@@ -4,8 +4,8 @@
   flex: 2;
   .project-description {
     overflow: hidden;
-    max-height: 180px;
-    min-height: 180px;
+    // max-height: 180px;
+    // min-height: 180px;
     color: $tc-gray-80;
     @include tc-label-md;
   
@@ -21,6 +21,7 @@
     padding: 10px 0px;
     display: flex;
     justify-content: center;
+    margin-top: 20px;
 
     .status-header {
       .status-label {
