@@ -24,8 +24,7 @@ export const enhanceDropdown = (CompositeComponent) => class extends Component {
 
   onSelect(value) {
     this.handleClick()
-
-    if (this.props.onChangeStatus) this.props.onChangeStatus(value)
+    if (this.props.onSelect) this.props.onSelect(value)
   }
 
   onClickOutside(evt) {

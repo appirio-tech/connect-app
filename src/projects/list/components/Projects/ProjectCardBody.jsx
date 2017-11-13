@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom'
 import TextTruncate from 'react-text-truncate'
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
-import { PROJECT_STATUS_ACTIVE } from '../../../../config/constants'
+import { PROJECT_STATUS_ACTIVE, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } from '../../../../config/constants'
 import './ProjectCardBody.scss'
+import _ from 'lodash'
 
-function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount=8 }) {
+function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount=8, onChangeStatus }) {
   if (!project) return null
+  const canEdit = currentMemberRole
+      && _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
 
   return (
     <div className="project-card-body">
@@ -25,8 +28,9 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount=
             showText
             withoutLabel
             currentMemberRole={currentMemberRole}
-            canEdit={false}
+            canEdit={canEdit}
             unifiedHeader={false}
+            onSelect={onChangeStatus}
           />
         }
         {project.status === PROJECT_STATUS_ACTIVE &&
