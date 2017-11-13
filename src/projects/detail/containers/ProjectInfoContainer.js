@@ -7,7 +7,7 @@ import FooterV2 from '../../../components/FooterV2/FooterV2'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
 import { setDuration } from '../../../helpers/projectHelper'
-import { PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
+import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
    DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 
@@ -33,7 +33,8 @@ class ProjectInfoContainer extends React.Component {
   }
 
   setDuration({duration, status}) {
-    this.setState({duration: setDuration(duration ? duration : {}, status)})
+
+    this.setState({duration: setDuration(duration || {}, status)})
   }
 
   componentWillMount() {
@@ -88,6 +89,8 @@ class ProjectInfoContainer extends React.Component {
       directLinks.push({name: 'Salesforce Lead', href: `${SALESFORCE_PROJECT_LEAD_LINK}${project.id}`})
     }
 
+    const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER && project.status === 'draft'
+
     let devices = []
     const primaryTarget = _.get(project, 'details.appDefinition.primaryTarget')
     if (primaryTarget && !primaryTarget.seeAttached) {
@@ -101,6 +104,8 @@ class ProjectInfoContainer extends React.Component {
           project={project}
           currentMemberRole={currentMemberRole}
           duration={duration}
+          canDeleteProject={canDeleteProject}
+          onDeleteProject={this.onDeleteProject}
         />
         <LinksMenu
           links={project.bookmarks || []}

@@ -1,27 +1,61 @@
-import React, { PropTypes as PT } from 'react'
+import React, { PropTypes as PT, Component } from 'react'
+import Panel from '../Panel/Panel'
+import DeleteProjectModal from './DeleteProjectModal'
 import ProjectCardHeader from '../../projects/list/components/Projects/ProjectCardHeader'
 import ProjectCardBody from '../../projects/list/components/Projects/ProjectCardBody'
+
 import './ProjectInfo.scss'
 
-function ProjectInfo({ project, duration, currentMemberRole }) {
-  if (!project) return null
+class ProjectInfo extends Component {
 
-  return (
-    <div className="project-info">
-      <ProjectCardHeader
-        project={project}
-      />
-      <ProjectCardBody
-        project={project}
-        currentMemberRole={currentMemberRole}
-        duration={duration}
-        descLinesCount={4}
-      />
-    </div>
-  )
-}
+  constructor(props) {
+    super(props)
+    this.toggleProjectDelete = this.toggleProjectDelete.bind(this)
+    this.onConfirmDelete = this.onConfirmDelete.bind(this)
+  }
 
-ProjectInfo.defaultTypes = {
+  componentWillMount() {
+    this.setState({ showDeleteConfirm: false })
+  }
+
+  toggleProjectDelete() {
+    this.setState({ showDeleteConfirm: !this.state.showDeleteConfirm })
+  }
+
+  onConfirmDelete() {
+    this.props.onDeleteProject()
+  }
+
+  render() {
+    const { project, currentMemberRole, duration, canDeleteProject } = this.props
+    const { showDeleteConfirm } = this.state
+    return (
+      <div className="project-info">
+        <div className="project-info-header">
+          <ProjectCardHeader
+            project={project}
+          />
+          {canDeleteProject && !showDeleteConfirm &&
+            <Panel.DeleteBtn onClick={this.toggleProjectDelete} />
+          }
+        </div>
+        <Panel>
+          {showDeleteConfirm &&
+            <DeleteProjectModal
+              onCancel={this.toggleProjectDelete}
+              onConfirm={this.onConfirmDelete}
+            />
+          }
+        </Panel>
+        <ProjectCardBody
+          project={project}
+          currentMemberRole={currentMemberRole}
+          duration={duration}
+          descLinesCount={4}
+        />
+      </div>
+    )
+  }
 }
 
 ProjectInfo.propTypes = {
