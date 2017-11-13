@@ -13,7 +13,6 @@
     .project-description {
       max-height: 120px;
       min-height: 10px;
-      margin-top: 3 * $base_unit;
       margin-bottom: 4 * $base_unit;
     }
   }
@@ -21,9 +20,6 @@
   .project-info-header {
     display:flex;
     fill: $tc-gray-50;
-    .project-delete-icon {
-      position:static;
-    }
   }
 
 }

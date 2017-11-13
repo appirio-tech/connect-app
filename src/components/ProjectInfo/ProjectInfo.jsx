@@ -35,18 +35,18 @@ class ProjectInfo extends Component {
           <ProjectCardHeader
             project={project}
           />
-          <Panel className="project-delete-icon">
-            {canDeleteProject && !showDeleteConfirm &&
-              <Panel.DeleteBtn onClick={this.toggleProjectDelete} />
-            }
-            {showDeleteConfirm &&
-              <DeleteProjectModal
-                onCancel={this.toggleProjectDelete}
-                onConfirm={this.onConfirmDelete}
-              />
-            }
-          </Panel>
+          {canDeleteProject && !showDeleteConfirm &&
+            <Panel.DeleteBtn onClick={this.toggleProjectDelete} />
+          }
         </div>
+        <Panel>
+          {showDeleteConfirm &&
+            <DeleteProjectModal
+              onCancel={this.toggleProjectDelete}
+              onConfirm={this.onConfirmDelete}
+            />
+          }
+        </Panel>
         <ProjectCardBody
           project={project}
           currentMemberRole={currentMemberRole}
