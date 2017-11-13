@@ -2,11 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import _ from 'lodash'
-import { UserDropdown, Icons } from 'appirio-tech-react-components'
+import { UserDropdown, Icons, MenuBar } from 'appirio-tech-react-components'
 const { ConnectLogo } = Icons
 import {
   ACCOUNTS_APP_LOGIN_URL,
   ACCOUNTS_APP_REGISTER_URL,
+  ROLE_CONNECT_COPILOT,
+  ROLE_CONNECT_MANAGER,
+  ROLE_ADMINISTRATOR,
   DOMAIN
 } from '../../config/constants'
 require('./TopBarContainer.scss')
@@ -31,7 +34,7 @@ class TopBarContainer extends React.Component {
   }
 
   render() {
-    const { user, userRoles, toolbar } = this.props
+    const { user, userRoles, toolbar, isPowerUser } = this.props
 
     const userHandle  = _.get(user, 'handle')
     const userImage = _.get(user, 'profile.photoURL')
@@ -65,9 +68,27 @@ class TopBarContainer extends React.Component {
         { label: 'Log out', onClick: logoutClick, absolute: true, id: 0 }
       ]
     ]
+
+    const primaryNavigationItems = [
+      {
+        text: 'My Projects',
+        link: '/projects'
+      },
+      {
+        text: 'Getting Started',
+        link: `https://www.${DOMAIN}/about-topcoder/connect/`,
+        target: '_blank'
+      },
+      {
+        text: 'Help',
+        link: 'https://help.topcoder.com/hc/en-us/articles/225540188-Topcoder-Connect-FAQs',
+        target: '_blank'
+      }
+    ]
     const logo = (
       <div className="logo-wrapper">
         <Link className="logo" to={logoTargetUrl} target="_self"><ConnectLogo /></Link>
+        { !isPowerUser && <MenuBar items={primaryNavigationItems} orientation="horizontal" forReactRouter />}
       </div>
     )
 
@@ -114,9 +135,15 @@ class TopBarContainer extends React.Component {
 }
 
 const mapStateToProps = ({ loadUser }) => {
+  let isPowerUser = false
+  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
+  if (loadUser.user) {
+    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
+  }
   return {
     userRoles              : _.get(loadUser, 'user.roles', []),
-    user                   : loadUser.user
+    user                   : loadUser.user,
+    isPowerUser
   }
 }
 

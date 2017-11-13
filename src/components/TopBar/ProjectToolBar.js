@@ -7,11 +7,6 @@ import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import SVGIconImage from '../SVGIconImage'
 import NewProjectNavLink from './NewProjectNavLink'
-import {
-  ROLE_CONNECT_COPILOT,
-  ROLE_CONNECT_MANAGER,
-  ROLE_ADMINISTRATOR
-} from '../../config/constants'
 
 function isEllipsisActive(el) {
   return (el.offsetWidth < el.scrollWidth)
@@ -91,16 +86,10 @@ ProjectToolBar.propTypes = {
 }
 
 const mapStateToProps = ({ projectState, loadUser }) => {
-  let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
-  if (loadUser.user) {
-    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
-  }
   return {
     project                : projectState.project,
     userRoles              : _.get(loadUser, 'user.roles', []),
-    user                   : loadUser.user,
-    isPowerUser
+    user                   : loadUser.user
   }
 }
 

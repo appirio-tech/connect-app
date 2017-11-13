@@ -11,9 +11,6 @@ import NewProjectNavLink from './NewProjectNavLink'
 
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
 import {
-  ROLE_CONNECT_COPILOT,
-  ROLE_CONNECT_MANAGER,
-  ROLE_ADMINISTRATOR,
   DOMAIN
 } from '../../config/constants'
 
@@ -135,23 +132,6 @@ class ProjectsToolBar extends Component {
     const { isFilterVisible } = this.state
     const isLoggedIn = userRoles && userRoles.length
 
-    const primaryNavigationItems = [
-      {
-        text: 'My Projects',
-        link: '/projects'
-      },
-      {
-        text: 'Getting Started',
-        link: `https://www.${DOMAIN}/about-topcoder/connect/`,
-        target: '_blank'
-      },
-      {
-        text: 'Help',
-        link: 'https://help.topcoder.com/hc/en-us/articles/225540188-Topcoder-Connect-FAQs',
-        target: '_blank'
-      }
-    ]
-
     const noOfFilters = _.keys(criteria).length - 1 // -1 for default sort criteria
     const onLeaveMessage = this.onLeave() || ''
 
@@ -163,7 +143,6 @@ class ProjectsToolBar extends Component {
         />
         <div className="primary-toolbar">
           { logo }
-          { !isPowerUser && <MenuBar items={primaryNavigationItems} orientation="horizontal" forReactRouter />}
           {
             !!isLoggedIn &&
             <div className="search-widget">
@@ -188,7 +167,7 @@ class ProjectsToolBar extends Component {
             </div>
           }
           <div className="actions">
-            { isLoggedIn && <NewProjectNavLink compact={!isPowerUser} /> }
+            { isLoggedIn && <NewProjectNavLink compact={true} /> }
             { userMenu }
           </div>
         </div>
@@ -216,11 +195,6 @@ ProjectsToolBar.defaultProps = {
 // export default ProjectsToolBar
 
 const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, projectState, loadUser }) => {
-  let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
-  if (loadUser.user) {
-    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
-  }
   return {
     projects               : projectSearchSuggestions.projects,
     previousSearchTerm     : searchTerm.previousSearchTerm,
@@ -230,8 +204,7 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
     project                : projectState.project,
     criteria               : projectSearch.criteria,
     userRoles              : _.get(loadUser, 'user.roles', []),
-    user                   : loadUser.user,
-    isPowerUser
+    user                   : loadUser.user
   }
 }
 
