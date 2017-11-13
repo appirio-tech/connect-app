@@ -33,7 +33,7 @@ class ProjectInfoContainer extends React.Component {
   }
 
   setDuration({duration, status}) {
-    this.setState({duration: setDuration(duration, status)})
+    this.setState({duration: setDuration(duration ? duration : {}, status)})
   }
 
   componentWillMount() {
