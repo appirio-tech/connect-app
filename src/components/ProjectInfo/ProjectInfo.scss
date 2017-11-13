@@ -16,7 +16,17 @@
       margin-bottom: 4 * $base_unit;
     }
   }
+
+  .project-info-header {
+    display:flex;
+    fill: $tc-gray-50;
+    .project-delete-icon {
+      position:static;
+    }
+  }
+
 }
+
 .panel {
   box-shadow:none !important;
 }
