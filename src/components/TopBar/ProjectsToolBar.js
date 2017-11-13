@@ -5,14 +5,11 @@ import { withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'lodash'
-import { SearchBar, MenuBar } from 'appirio-tech-react-components'
+import { SearchBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import NewProjectNavLink from './NewProjectNavLink'
 
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
-import {
-  DOMAIN
-} from '../../config/constants'
 
 
 class ProjectsToolBar extends Component {
@@ -167,7 +164,7 @@ class ProjectsToolBar extends Component {
             </div>
           }
           <div className="actions">
-            { isLoggedIn && <NewProjectNavLink compact={true} /> }
+            { isLoggedIn && <NewProjectNavLink compact /> }
             { userMenu }
           </div>
         </div>
