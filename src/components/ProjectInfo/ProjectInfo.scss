@@ -12,10 +12,18 @@
   .project-card-body {
     .project-description {
       max-height: 120px;
-      min-height: 120px;
+      min-height: 10px;
+      margin-bottom: 5 * $base_unit;
     }
   }
+
+  .project-info-header {
+    display:flex;
+    fill: $tc-gray-50;
+  }
+
 }
+
 .panel {
   box-shadow:none !important;
 }
