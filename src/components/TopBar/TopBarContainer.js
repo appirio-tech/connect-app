@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import _ from 'lodash'
-import { UserDropdown, Icons, MenuBar } from 'appirio-tech-react-components'
+import { UserDropdown, Icons } from 'appirio-tech-react-components'
 const { ConnectLogo } = Icons
 import {
   ACCOUNTS_APP_LOGIN_URL,
@@ -18,6 +18,7 @@ class TopBarContainer extends React.Component {
 
   constructor(props) {
     super(props)
+    this.renderLogo = this.renderLogo.bind(this)
   }
 
   handleMobileClick(se) {
@@ -33,8 +34,20 @@ class TopBarContainer extends React.Component {
     || this.props.location.pathname !== nextProps.location.pathname
   }
 
+  renderLogo(comp){
+    const { userRoles } = this.props
+    const isLoggedIn = userRoles && userRoles.length
+    const logoTargetUrl = isLoggedIn ? '/projects' : '/'
+    return (
+      <div className="logo-wrapper">
+        <Link className="logo" to={logoTargetUrl} target="_self"><ConnectLogo /></Link>
+        {comp}
+      </div>
+    )
+  }
+
   render() {
-    const { user, userRoles, toolbar, isPowerUser } = this.props
+    const { user, toolbar } = this.props
 
     const userHandle  = _.get(user, 'handle')
     const userImage = _.get(user, 'profile.photoURL')
@@ -46,8 +59,6 @@ class TopBarContainer extends React.Component {
     }
     const homePageUrl = `${window.location.protocol}//${window.location.host}/`
     const logoutLink = `https://accounts.${DOMAIN}/#!/logout?retUrl=${homePageUrl}`
-    const isLoggedIn = userRoles && userRoles.length
-    const logoTargetUrl = isLoggedIn ? '/projects' : '/'
     const isHomePage = this.props.match.path === '/'
     // NOTE: hardcoding to connectv2, once connect v1
     window.host
@@ -68,29 +79,6 @@ class TopBarContainer extends React.Component {
         { label: 'Log out', onClick: logoutClick, absolute: true, id: 0 }
       ]
     ]
-
-    const primaryNavigationItems = [
-      {
-        text: 'My Projects',
-        link: '/projects'
-      },
-      {
-        text: 'Getting Started',
-        link: `https://www.${DOMAIN}/about-topcoder/connect/`,
-        target: '_blank'
-      },
-      {
-        text: 'Help',
-        link: 'https://help.topcoder.com/hc/en-us/articles/225540188-Topcoder-Connect-FAQs',
-        target: '_blank'
-      }
-    ]
-    const logo = (
-      <div className="logo-wrapper">
-        <Link className="logo" to={logoTargetUrl} target="_self"><ConnectLogo /></Link>
-        { !isPowerUser && <MenuBar items={primaryNavigationItems} orientation="horizontal" forReactRouter />}
-      </div>
-    )
 
     const avatar = (
       <div className="welcome-info">
@@ -123,7 +111,7 @@ class TopBarContainer extends React.Component {
               ToolBar &&
               <ToolBar
                 {...this.props}
-                logo={ logo }
+                renderLogoSection={ this.renderLogo }
                 userMenu={ avatar }
               />
             }

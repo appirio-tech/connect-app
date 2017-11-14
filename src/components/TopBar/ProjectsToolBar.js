@@ -5,11 +5,14 @@ import { withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'lodash'
-import { SearchBar } from 'appirio-tech-react-components'
+import { SearchBar, MenuBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import NewProjectNavLink from './NewProjectNavLink'
 
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
+import {
+  DOMAIN
+} from '../../config/constants'
 
 
 class ProjectsToolBar extends Component {
@@ -125,12 +128,30 @@ class ProjectsToolBar extends Component {
   }
 
   render() {
-    const { logo, userMenu, userRoles, criteria, isPowerUser } = this.props
+    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser } = this.props
     const { isFilterVisible } = this.state
     const isLoggedIn = userRoles && userRoles.length
 
     const noOfFilters = _.keys(criteria).length - 1 // -1 for default sort criteria
     const onLeaveMessage = this.onLeave() || ''
+
+    const primaryNavigationItems = [
+      {
+        text: 'My Projects',
+        link: '/projects'
+      },
+      {
+        text: 'Getting Started',
+        link: `https://www.${DOMAIN}/about-topcoder/connect/`,
+        target: '_blank'
+      },
+      {
+        text: 'Help',
+        link: 'https://help.topcoder.com/hc/en-us/articles/225540188-Topcoder-Connect-FAQs',
+        target: '_blank'
+      }
+    ]
+    const menuBar = !isPowerUser && <MenuBar items={primaryNavigationItems} orientation="horizontal" forReactRouter />
 
     return (
       <div className="ProjectsToolBar">
@@ -139,7 +160,7 @@ class ProjectsToolBar extends Component {
             message={onLeaveMessage}
         />
         <div className="primary-toolbar">
-          { logo }
+          { renderLogoSection(menuBar) }
           {
             !!isLoggedIn &&
             <div className="search-widget">
@@ -183,7 +204,11 @@ class ProjectsToolBar extends Component {
 }
 
 ProjectsToolBar.propTypes = {
-  criteria              : PropTypes.object.isRequired
+  criteria              : PropTypes.object.isRequired,
+  /**
+   * Function which render the logo section in the top bar
+   */
+  renderLogoSection     : PropTypes.func.isRequired
 }
 
 ProjectsToolBar.defaultProps = {

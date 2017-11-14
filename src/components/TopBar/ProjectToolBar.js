@@ -36,14 +36,14 @@ class ProjectToolBar extends React.Component {
 
   render() {
     // TODO: removing isPowerUser until link challenges is needed once again.
-    const {logo, userMenu, project } = this.props
+    const { renderLogoSection, userMenu, project } = this.props
     const {isTooltipVisible} = this.state
 
     return (
       <div className="ProjectToolBar">
         <div className="tool-bar">
           <div className="bar-column">
-            {logo}
+            { renderLogoSection() }
             {project && <div className="breadcrumb">
               <NavLink to="/projects"><SVGIconImage filePath="arrows-16px-1_tail-left" /> <span>View All Projects</span></NavLink>
             </div>}
@@ -82,7 +82,11 @@ class ProjectToolBar extends React.Component {
 
 ProjectToolBar.propTypes = {
   project: PropTypes.object,
-  isPowerUser: PropTypes.bool
+  isPowerUser: PropTypes.bool,
+  /**
+   * Function which render the logo section in the top bar
+   */
+  renderLogoSection     : PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ projectState, loadUser }) => {
