@@ -1,13 +1,8 @@
-import React, {PropTypes, Component} from 'react'
-import ReactDOM from 'react-dom'
-import PanelProject from '../PanelProject/PanelProject'
+import React, { Component} from 'react'
 import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import cn from 'classnames'
 import _ from 'lodash'
 import {
-  PROJECT_ROLE_COPILOT,
-  PROJECT_ROLE_MANAGER,
-  PROJECT_STATUS,
   PROJECT_STATUS_COMPLETED,
   PROJECT_STATUS_CANCELLED
 } from '../../config/constants'
