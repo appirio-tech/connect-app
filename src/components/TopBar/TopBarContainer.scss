@@ -17,6 +17,8 @@
     width: 60px;
     height: 60px;
     flex-shrink: 0;
+    display: flex;
+    flex-grow: 1;
 
     .logo {
       display: inline-block;
@@ -24,6 +26,13 @@
       margin-top: 12px;
       // width: 60px;
       // height: 36px;
+    }
+
+    .MenuBar {
+      margin-left: 25px;
+      li {
+        white-space: nowrap
+      }
     }
   }
 

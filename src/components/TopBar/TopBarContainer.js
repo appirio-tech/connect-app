@@ -7,6 +7,9 @@ const { ConnectLogo } = Icons
 import {
   ACCOUNTS_APP_LOGIN_URL,
   ACCOUNTS_APP_REGISTER_URL,
+  ROLE_CONNECT_COPILOT,
+  ROLE_CONNECT_MANAGER,
+  ROLE_ADMINISTRATOR,
   DOMAIN
 } from '../../config/constants'
 require('./TopBarContainer.scss')
@@ -15,6 +18,7 @@ class TopBarContainer extends React.Component {
 
   constructor(props) {
     super(props)
+    this.renderLogo = this.renderLogo.bind(this)
   }
 
   handleMobileClick(se) {
@@ -30,8 +34,20 @@ class TopBarContainer extends React.Component {
     || this.props.location.pathname !== nextProps.location.pathname
   }
 
+  renderLogo(comp){
+    const { userRoles } = this.props
+    const isLoggedIn = userRoles && userRoles.length
+    const logoTargetUrl = isLoggedIn ? '/projects' : '/'
+    return (
+      <div className="logo-wrapper">
+        <Link className="logo" to={logoTargetUrl} target="_self"><ConnectLogo /></Link>
+        {comp}
+      </div>
+    )
+  }
+
   render() {
-    const { user, userRoles, toolbar } = this.props
+    const { user, toolbar } = this.props
 
     const userHandle  = _.get(user, 'handle')
     const userImage = _.get(user, 'profile.photoURL')
@@ -43,8 +59,6 @@ class TopBarContainer extends React.Component {
     }
     const homePageUrl = `${window.location.protocol}//${window.location.host}/`
     const logoutLink = `https://accounts.${DOMAIN}/#!/logout?retUrl=${homePageUrl}`
-    const isLoggedIn = userRoles && userRoles.length
-    const logoTargetUrl = isLoggedIn ? '/projects' : '/'
     const isHomePage = this.props.match.path === '/'
     // NOTE: hardcoding to connectv2, once connect v1
     window.host
@@ -65,11 +79,6 @@ class TopBarContainer extends React.Component {
         { label: 'Log out', onClick: logoutClick, absolute: true, id: 0 }
       ]
     ]
-    const logo = (
-      <div className="logo-wrapper">
-        <Link className="logo" to={logoTargetUrl} target="_self"><ConnectLogo /></Link>
-      </div>
-    )
 
     const avatar = (
       <div className="welcome-info">
@@ -102,7 +111,7 @@ class TopBarContainer extends React.Component {
               ToolBar &&
               <ToolBar
                 {...this.props}
-                logo={ logo }
+                renderLogoSection={ this.renderLogo }
                 userMenu={ avatar }
               />
             }
@@ -114,9 +123,15 @@ class TopBarContainer extends React.Component {
 }
 
 const mapStateToProps = ({ loadUser }) => {
+  let isPowerUser = false
+  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
+  if (loadUser.user) {
+    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
+  }
   return {
     userRoles              : _.get(loadUser, 'user.roles', []),
-    user                   : loadUser.user
+    user                   : loadUser.user,
+    isPowerUser
   }
 }
 

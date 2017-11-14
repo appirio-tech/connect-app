@@ -7,11 +7,6 @@ import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import SVGIconImage from '../SVGIconImage'
 import NewProjectNavLink from './NewProjectNavLink'
-import {
-  ROLE_CONNECT_COPILOT,
-  ROLE_CONNECT_MANAGER,
-  ROLE_ADMINISTRATOR
-} from '../../config/constants'
 
 function isEllipsisActive(el) {
   return (el.offsetWidth < el.scrollWidth)
@@ -41,14 +36,14 @@ class ProjectToolBar extends React.Component {
 
   render() {
     // TODO: removing isPowerUser until link challenges is needed once again.
-    const {logo, userMenu, project } = this.props
+    const { renderLogoSection, userMenu, project } = this.props
     const {isTooltipVisible} = this.state
 
     return (
       <div className="ProjectToolBar">
         <div className="tool-bar">
           <div className="bar-column">
-            {logo}
+            { renderLogoSection() }
             {project && <div className="breadcrumb">
               <NavLink to="/projects"><SVGIconImage filePath="arrows-16px-1_tail-left" /> <span>View All Projects</span></NavLink>
             </div>}
@@ -87,20 +82,18 @@ class ProjectToolBar extends React.Component {
 
 ProjectToolBar.propTypes = {
   project: PropTypes.object,
-  isPowerUser: PropTypes.bool
+  isPowerUser: PropTypes.bool,
+  /**
+   * Function which render the logo section in the top bar
+   */
+  renderLogoSection     : PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ projectState, loadUser }) => {
-  let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
-  if (loadUser.user) {
-    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
-  }
   return {
     project                : projectState.project,
     userRoles              : _.get(loadUser, 'user.roles', []),
-    user                   : loadUser.user,
-    isPowerUser
+    user                   : loadUser.user
   }
 }
 
