@@ -3,6 +3,7 @@ import Panel from '../Panel/Panel'
 import DeleteProjectModal from './DeleteProjectModal'
 import ProjectCardHeader from '../../projects/list/components/Projects/ProjectCardHeader'
 import ProjectCardBody from '../../projects/list/components/Projects/ProjectCardBody'
+import ProjectDirectLinks from ''
 
 import './ProjectInfo.scss'
 
@@ -53,6 +54,8 @@ class ProjectInfo extends Component {
           duration={duration}
           descLinesCount={4}
           onChangeStatus={onChangeStatus}
+        />
+        <ProjectDirectLinks
           directLinks={directLinks}
         />
       </div>

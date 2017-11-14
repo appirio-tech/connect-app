@@ -1,5 +1,5 @@
 import React from 'react'
-import './ProjectDirectLink.scss'
+import './ProjectDirectLinks.scss'
 
 function ProjectDirectLink({ directLinks }) {
   if (!directLinks) return null

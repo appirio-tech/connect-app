@@ -7,12 +7,11 @@ import editableProjectStatus from '../../../../components/ProjectStatus/editable
 import { PROJECT_STATUS_ACTIVE, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } from '../../../../config/constants'
 import './ProjectCardBody.scss'
 import _ from 'lodash'
-import ProjectDirectLink from './ProjectDirectLink'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
-function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount=8,
-  onChangeStatus, directLinks }) {
+function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount = 8,
+  onChangeStatus }) {
   if (!project) return null
   const canEdit = currentMemberRole
     && _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -44,9 +43,6 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount=
           </ProjectProgress>
         }
       </div>
-      <ProjectDirectLink
-        directLinks={directLinks}
-      />
     </div>
   )
 }
