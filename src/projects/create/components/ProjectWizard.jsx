@@ -45,7 +45,7 @@ class ProjectWizard extends Component {
   }
 
   componentDidMount() {
-    const { onStepChange, location } = this.props
+    const { onStepChange } = this.props
     const params = this.props.match.params
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)

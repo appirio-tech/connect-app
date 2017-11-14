@@ -6,20 +6,24 @@ import './NewProjectNavLink.scss'
 const NewProjectNavLink = ({ compact=false, returnUrl }) => {
   if (compact) {
     return (
-      <Link to={{
+      <Link
+        to={{
           pathname: '/new-project',
           search: returnUrl ? '?returnUrl=' + returnUrl : ''
-        }} className="new-project-link">
+        }} className="new-project-link"
+      >
         <div className="new-project-icon"><SVGIconImage filePath="ui-16px-1_bold-add" /></div>
       </Link>
     )
   } else {
     return (
       <div className="new-project-link">
-        <Link to={{
-          pathname: '/new-project',
-          search: returnUrl ? '?returnUrl=' + returnUrl : '',
-        }} className="tc-btn tc-btn-sm tc-btn-primary">+ New Project</Link>
+        <Link
+          to={{
+            pathname: '/new-project',
+            search: returnUrl ? '?returnUrl=' + returnUrl : ''
+          }} className="tc-btn tc-btn-sm tc-btn-primary"
+        >+ New Project</Link>
       </div>
     )
   }
