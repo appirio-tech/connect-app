@@ -27,7 +27,7 @@ class ProjectInfo extends Component {
   }
 
   render() {
-    const { project, currentMemberRole, duration, canDeleteProject } = this.props
+    const { project, currentMemberRole, duration, canDeleteProject, onChangeStatus } = this.props
     const { showDeleteConfirm } = this.state
     return (
       <div className="project-info">
@@ -52,6 +52,7 @@ class ProjectInfo extends Component {
           currentMemberRole={currentMemberRole}
           duration={duration}
           descLinesCount={4}
+          onChangeStatus={onChangeStatus}
         />
       </div>
     )

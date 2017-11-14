@@ -4,7 +4,6 @@ $status-height :  20px;
 .ProjectStatus {
   position: relative;
   height: $status-height;
-
   .status-icon {
     position: relative;
     display: inline-block;
@@ -94,6 +93,7 @@ $status-height :  20px;
       }
       .caret {
         // content: '';
+        z-index: 3;
         display: inline-block;
         width: 9px;
         height: 5px;
@@ -129,17 +129,29 @@ $status-height :  20px;
     margin-left: 10px;
   }
 
-  ul.status-dropdown {
+  .status-dropdown {
+    min-width: 110%;
     position: absolute;
     border-radius: $base-unit;
     box-shadow: 0 0 15px rgba(0, 0, 0, .25);
     padding: 10px 0;
     position: absolute;
     background: $tc-white;
-    top: $status-height;
+    top: -2*$base_unit;
     left: 0px;
     right: auto;
     z-index: 2;
+    .status-header {
+      @include roboto-medium;
+      font-size: $tc-label-md;
+      text-align: left;
+      color: $tc-light-blue;
+      line-height: 30px;
+      padding-left: 20px;
+      margin-bottom: 20px;
+      white-space: nowrap;
+    }
+
     a.status-option {
       display: flex;
       @include roboto-medium;

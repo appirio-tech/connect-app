@@ -106,6 +106,7 @@ class ProjectInfoContainer extends React.Component {
           duration={duration}
           canDeleteProject={canDeleteProject}
           onDeleteProject={this.onDeleteProject}
+          onChangeStatus={this.onChangeStatus}
         />
         <LinksMenu
           links={project.bookmarks || []}
