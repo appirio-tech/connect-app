@@ -185,7 +185,7 @@ class ProjectsToolBar extends Component {
             </div>
           }
           <div className="actions">
-            { isLoggedIn && <NewProjectNavLink compact /> }
+            { !!isLoggedIn && <NewProjectNavLink compact /> }
             { userMenu }
           </div>
         </div>

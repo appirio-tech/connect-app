@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { unflatten } from 'flat'
+import qs from 'query-string'
 import React, { Component, PropTypes } from 'react'
 import { withRouter } from 'react-router-dom'
 import { findProduct, findCategory, findProductCategory, findProductsOfCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
@@ -86,7 +87,7 @@ class ProjectWizard extends Component {
       }
       // retrieve refCode from query param
       // TODO give warning after truncating
-      const refCode = _.get(location, 'query.refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
+      const refCode = _.get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
       if (refCode.trim().length > 0) {
         // if refCode exists, update the updateQuery to set that refCode
         if (_.get(updateQuery, 'details')) {
@@ -158,9 +159,13 @@ class ProjectWizard extends Component {
       projectType = findProductCategory(productParam, true)
       // finds product object from product alias
       const product = findProduct(productParam, true)
+      const refCode = _.get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
       if (projectType) {// we can have `incomplete` as params.product
         updateQuery['type'] = { $set : projectType.id }
         updateQuery['details'] = { products : { $set: [product.id] } }
+        if (refCode) {
+          updateQuery.details.utm = { $set : { code : refCode } }
+        }
         return WZ_STEP_FILL_PROJ_DETAILS
       }
     }

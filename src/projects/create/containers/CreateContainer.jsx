@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import Cookies from 'js-cookie'
+import qs from 'query-string'
 import React, { PropTypes } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -178,16 +179,21 @@ class CreateConainer extends React.Component {
   }
 
   closeWizard() {
-    const { userRoles } = this.props
+    const { userRoles, location } = this.props
     const isLoggedIn = userRoles && userRoles.length > 0
     // calls leave handler
     this.onLeave()
-    if (isLoggedIn) {
-      this.props.history.push('/projects')
+    const returnUrl = _.get(qs.parse(location.search), 'returnUrl', null)
+    if (returnUrl) {
+      window.location = returnUrl
     } else {
-      // this.props.history.push('/')
-      // FIXME ideally we should push on router
-      window.location = window.location.origin
+      if (isLoggedIn) {
+        this.props.history.push('/projects')
+      } else {
+        this.props.history.push('/')
+        // FIXME ideally we should push on router
+        // window.location = window.location.origin
+      }
     }
   }
 
