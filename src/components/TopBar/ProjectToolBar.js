@@ -71,7 +71,7 @@ class ProjectToolBar extends React.Component {
                 }
               </ul>
             </nav>}
-            <NewProjectNavLink compact />
+            <NewProjectNavLink compact returnUrl={window.location.href} />
             { userMenu }
           </div>
         </div>
