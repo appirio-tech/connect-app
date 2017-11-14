@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom'
 import TextTruncate from 'react-text-truncate'
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
+import editableProjectStatus from '../../../../components/ProjectStatus/editableProjectStatus'
 import { PROJECT_STATUS_ACTIVE, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } from '../../../../config/constants'
 import './ProjectCardBody.scss'
 import _ from 'lodash'
+
+const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
 function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount=8, onChangeStatus }) {
   if (!project) return null
@@ -23,14 +26,14 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount=
       />
       <div className="project-status">
         {project.status !== PROJECT_STATUS_ACTIVE &&
-          <ProjectStatus
+          <EnhancedProjectStatus
             status={project.status}
             showText
             withoutLabel
             currentMemberRole={currentMemberRole}
             canEdit={canEdit}
             unifiedHeader={false}
-            onSelect={onChangeStatus}
+            onChangeStatus={onChangeStatus}
           />
         }
         {project.status === PROJECT_STATUS_ACTIVE &&
