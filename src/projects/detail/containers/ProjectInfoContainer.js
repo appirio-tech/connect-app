@@ -107,6 +107,7 @@ class ProjectInfoContainer extends React.Component {
           canDeleteProject={canDeleteProject}
           onDeleteProject={this.onDeleteProject}
           onChangeStatus={this.onChangeStatus}
+          directLinks={directLinks}
         />
         <LinksMenu
           links={project.bookmarks || []}
