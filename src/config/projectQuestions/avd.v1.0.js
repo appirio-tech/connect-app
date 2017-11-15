@@ -85,8 +85,8 @@ const sections = [
             // somehow, it is not picking up error message from validationErrors object
             validationError: 'Please provide a description',
             validationErrors: {
-              'isRequired' : 'Please provide a description',
-              'minLength'  : 'Please enter at least 160 characters'
+              isRequired : 'Please provide a description',
+              minLength  : 'Please enter at least 160 characters'
             },
             title: 'Description',
             type: 'textbox'
@@ -303,8 +303,8 @@ export const basicSections = [
             // somehow, it is not picking up error message from validationErrors object
             validationError: 'Please provide a description',
             validationErrors: {
-              'isRequired' : 'Please provide a description',
-              'minLength'  : 'Please enter at least 160 characters'
+              isRequired : 'Please provide a description',
+              minLength  : 'Please enter at least 160 characters'
             },
             id: 'projectInfo',
             fieldName: 'description',
