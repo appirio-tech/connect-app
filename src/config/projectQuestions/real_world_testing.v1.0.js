@@ -75,6 +75,14 @@ const sections = [
             ]
           },
           {
+            id: 'projectInfo',
+            required: true,
+            fieldName: 'description',
+            description: 'Brief Description',
+            title: 'Description',
+            type: 'textbox'
+          },
+          {
             icon: 'question',
             title: 'Please tell us about your users.',
             description: 'Please share information about your end users. Where are they from? What is their goal? This information can help you find the best testers for your application.',
@@ -407,6 +415,16 @@ export const basicSections = [
               {value: 'true', label: 'Yes I have test cases.'},
               {value: 'false', label: 'No I do not have test cases.'}
             ]
+          },
+          {
+            icon: 'question',
+            required: true,
+            validationError: 'Please provide a description',
+            id: 'projectInfo',
+            fieldName: 'description',
+            description: 'Brief Description',
+            title: 'Description',
+            type: 'textbox'
           },
           {
             icon: 'question',
