@@ -321,7 +321,11 @@ export const basicSections = [
           {
             id: 'projectInfo',
             required: true,
-            validationError: 'Please provide a description',
+            validations: 'isRequired,minLength:160',
+            validationErrors: {
+              'isRequired' : 'Please provide a description',
+              'minLength'  : 'Please enter at least 160 characters'
+            },
             fieldName: 'description',
             description: 'Brief Description',
             title: 'Description',

@@ -39,7 +39,8 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       value: _.get(project, q.fieldName, ''),
       required: q.required,
       validations: q.required ? 'isRequired' : null,
-      validationError: q.validationError
+      validationError: q.validationError,
+      validationErrors: q.validationErrors
     }
     if (q.fieldName === 'details.appDefinition.numberScreens') {
       const p = dirtyProject ? dirtyProject : project
@@ -88,6 +89,9 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       ChildElem = TCFormFields.Textarea
       elemProps.wrapperClass = 'row'
       elemProps.autoResize = true
+      if (q.validations) {
+        elemProps.validations = q.validations
+      }
       // child = <TCFormFields.Textarea name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'radio-group':
