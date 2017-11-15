@@ -4,17 +4,18 @@ import TextTruncate from 'react-text-truncate'
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
 import editableProjectStatus from '../../../../components/ProjectStatus/editableProjectStatus'
-import { PROJECT_STATUS_ACTIVE, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } from '../../../../config/constants'
+import { PROJECT_STATUS_ACTIVE, PROJECT_ROLE_COPILOT } from '../../../../config/constants'
 import './ProjectCardBody.scss'
 import _ from 'lodash'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
 function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount = 8,
-  onChangeStatus }) {
+  onChangeStatus, isManager }) {
   if (!project) return null
-  const canEdit = currentMemberRole
-    && _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
+
+  const canEdit = isManager || (currentMemberRole
+    && (_.indexOf([PROJECT_ROLE_COPILOT], currentMemberRole) > -1))
 
   return (
     <div className="project-card-body">
@@ -26,7 +27,7 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
         textTruncateChild={<span><Link className="read-more-link" to={`/projects/${project.id}/specification`}> read more </Link></span>}
       />
       <div className="project-status">
-        {project.status !== PROJECT_STATUS_ACTIVE &&
+        {(duration && duration.percent === 0) &&
           <EnhancedProjectStatus
             status={project.status}
             showText
@@ -37,7 +38,7 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
             onChangeStatus={onChangeStatus}
           />
         }
-        {project.status === PROJECT_STATUS_ACTIVE &&
+        {(project.status === PROJECT_STATUS_ACTIVE && duration && duration.percent !== 0) &&
           <ProjectProgress {...duration} viewType={ProjectProgress.ViewTypes.CIRCLE} percent={46}>
             <span className="progress-text">{duration.percent}% completed</span>
           </ProjectProgress>

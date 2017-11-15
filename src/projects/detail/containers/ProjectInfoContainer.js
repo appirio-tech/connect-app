@@ -74,8 +74,7 @@ class ProjectInfoContainer extends React.Component {
 
   render() {
     const { duration } = this.state
-    const { project, currentMemberRole } = this.props
-
+    const { project, currentMemberRole, isManager } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -108,6 +107,7 @@ class ProjectInfoContainer extends React.Component {
           onDeleteProject={this.onDeleteProject}
           onChangeStatus={this.onChangeStatus}
           directLinks={directLinks}
+          isManager={isManager}
         />
         <LinksMenu
           links={project.bookmarks || []}
