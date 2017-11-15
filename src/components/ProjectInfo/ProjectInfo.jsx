@@ -3,7 +3,7 @@ import Panel from '../Panel/Panel'
 import DeleteProjectModal from './DeleteProjectModal'
 import ProjectCardHeader from '../../projects/list/components/Projects/ProjectCardHeader'
 import ProjectCardBody from '../../projects/list/components/Projects/ProjectCardBody'
-import ProjectDirectLinks from ''
+import ProjectDirectLinks from '../../projects/list/components/Projects/ProjectDirectLinks'
 
 import './ProjectInfo.scss'
 
