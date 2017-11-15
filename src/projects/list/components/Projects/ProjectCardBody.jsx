@@ -27,7 +27,7 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
         textTruncateChild={<span><Link className="read-more-link" to={`/projects/${project.id}/specification`}> read more </Link></span>}
       />
       <div className="project-status">
-        {project.status !== PROJECT_STATUS_ACTIVE &&
+        {(duration && duration.percent === 0) &&
           <EnhancedProjectStatus
             status={project.status}
             showText
@@ -38,7 +38,7 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
             onChangeStatus={onChangeStatus}
           />
         }
-        {project.status === PROJECT_STATUS_ACTIVE &&
+        {(project.status === PROJECT_STATUS_ACTIVE && duration && duration.percent !== 0) &&
           <ProjectProgress {...duration} viewType={ProjectProgress.ViewTypes.CIRCLE} percent={46}>
             <span className="progress-text">{duration.percent}% completed</span>
           </ProjectProgress>
