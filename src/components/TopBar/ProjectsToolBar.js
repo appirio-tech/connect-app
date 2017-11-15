@@ -142,7 +142,7 @@ class ProjectsToolBar extends Component {
       },
       {
         text: 'Getting Started',
-        link: `https://www.${DOMAIN}/about-topcoder/connect/`,
+        link: `https://www.topcoder.com/about-topcoder/connect/`,
         target: '_blank'
       },
       {
