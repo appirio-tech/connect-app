@@ -154,7 +154,7 @@ $status-height :  20px;
       @include roboto-medium;
       font-size: $tc-label-md;
       text-align: left;
-      color: $tc-light-blue;
+      color: $tc-black;
       line-height: 30px;
       padding-left: 20px;
       margin-bottom: 20px;
@@ -179,6 +179,7 @@ $status-height :  20px;
       .status-label {
         color: #394146;
         padding-right: 0px;
+        font-size: 13px;
       }
     }
   }
