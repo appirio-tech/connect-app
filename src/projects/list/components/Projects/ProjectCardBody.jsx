@@ -17,6 +17,8 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
   const canEdit = isManager || (currentMemberRole
     && (_.indexOf([PROJECT_ROLE_COPILOT], currentMemberRole) > -1))
 
+  const progress = _.get(process, 'percent', 0)
+
   return (
     <div className="project-card-body">
       <TextTruncate
@@ -27,7 +29,7 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
         textTruncateChild={<span><Link className="read-more-link" to={`/projects/${project.id}/specification`}> read more </Link></span>}
       />
       <div className="project-status">
-        {(duration && duration.percent === 0) &&
+        {(project.status !== PROJECT_STATUS_ACTIVE || progress === 0) &&
           <EnhancedProjectStatus
             status={project.status}
             showText
@@ -38,9 +40,9 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
             onChangeStatus={onChangeStatus}
           />
         }
-        {(project.status === PROJECT_STATUS_ACTIVE && duration && duration.percent !== 0) &&
-          <ProjectProgress {...duration} viewType={ProjectProgress.ViewTypes.CIRCLE} percent={46}>
-            <span className="progress-text">{duration.percent}% completed</span>
+        {(project.status === PROJECT_STATUS_ACTIVE && progress !== 0) &&
+          <ProjectProgress {...duration} viewType={ProjectProgress.ViewTypes.CIRCLE} percent={progress}>
+            <span className="progress-text">{progress}% completed</span>
           </ProjectProgress>
         }
       </div>
