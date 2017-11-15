@@ -47,6 +47,11 @@ const sections = [
           {
             id: 'projectInfo',
             fieldName: 'description',
+            validations: 'isRequired,minLength:160',
+            validationErrors: {
+              'isRequired' : 'Please provide a description',
+              'minLength'  : 'Please enter at least 160 characters'
+            },
             description: 'Brief Description',
             title: 'Description',
             type: 'textbox'
@@ -87,51 +92,6 @@ const sections = [
             description: '',
             type: 'textbox',
             fieldName: 'details.appDefinition.transferToHumanAgents'
-          },
-          {
-            icon: 'question',
-            fieldName: 'details.appDefinition.budget',
-            description: 'Project budget in USD, please enter 0 if you don\'t have one',
-            title: 'What is your project budget?',
-            type: 'numberinput'
-          },
-          {
-            icon: 'question',
-            title: 'How precise is your budget?',
-            // description: 'Please let us know if you have any budget in mind.',
-            fieldName: 'details.appDefinition.budgetType',
-            type: 'slide-radiogroup',
-            options: [
-              {value: 'guess', title: 'Its a wild guess'},
-              {value: 'ballpark', title: 'I have a rough idea'},
-              {value: 'exact', title: 'Precise to the penny'}
-            ]
-          },
-          {
-            icon: 'question',
-            title: 'When do you want to get started?',
-            // description: 'Please let us know if you have any budget in mind.',
-            fieldName: 'details.appDefinition.whenToStart',
-            type: 'slide-radiogroup',
-            options: [
-              {value: 'asap', title: 'ASAP'},
-              {value: '1-2 months', title: '1-2 months'},
-              {value: '2-plus-months', title: '2+ months'},
-              {value: 'estimating', title: 'I\'m just browsing' }
-            ]
-          },
-          {
-            icon: 'question',
-            fieldName: 'details.appDefinition.deadline',
-            // description: 'What is your project deadline?',
-            title: 'Deadline',
-            type: 'slide-radiogroup',
-            options: [
-              {value: '2-weeks', title: '2 weeks'},
-              {value: '1-2-months', title: '1-2 months'},
-              {value: '2-plus-months', title: '2+ months'},
-              {value: 'estimating', title: 'I\'m just browsing'}
-            ]
           }
         ]
       },
@@ -182,9 +142,14 @@ export const basicSections = [
         questions: [
           {
             id: 'projectInfo',
-            required: true,
             fieldName: 'description',
-            validationError: 'Please provide a description',
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isRequired,minLength:160',
+            validationErrors: {
+              'isRequired' : 'Please provide a description',
+              'minLength'  : 'Please enter at least 160 characters'
+            },
             description: 'Brief Description',
             title: 'Description',
             type: 'textbox'

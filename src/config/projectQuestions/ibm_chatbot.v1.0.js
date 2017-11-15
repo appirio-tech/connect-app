@@ -47,6 +47,11 @@ const sections = [
           {
             id: 'projectInfo',
             fieldName: 'description',
+            validations: 'isRequired,minLength:160',
+            validationErrors: {
+              'isRequired' : 'Please provide a description',
+              'minLength'  : 'Please enter at least 160 characters'
+            },
             description: 'Brief Description',
             title: 'Description',
             type: 'textbox'
@@ -149,9 +154,14 @@ export const basicSections = [
         questions: [
           {
             id: 'projectInfo',
-            required: true,
             fieldName: 'description',
-            validationError: 'Please provide a description',
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isRequired,minLength:160',
+            validationErrors: {
+              'isRequired' : 'Please provide a description',
+              'minLength'  : 'Please enter at least 160 characters'
+            },
             description: 'Brief Description',
             title: 'Description',
             type: 'textbox'
