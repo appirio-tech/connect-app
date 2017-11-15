@@ -63,7 +63,13 @@ const sections = [
           },
           {
             id: 'projectInfo',
-            required: true,
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isRequired,minLength:160',
+            validationErrors: {
+              'isRequired' : 'Please provide a description',
+              'minLength'  : 'Please enter at least 160 characters'
+            },
             fieldName: 'description',
             description: 'Brief Description',
             title: 'Description',
@@ -320,7 +326,8 @@ export const basicSections = [
           },
           {
             id: 'projectInfo',
-            required: true,
+            // required is not needed if we specifiy validations
+            // required: true,
             validations: 'isRequired,minLength:160',
             validationErrors: {
               'isRequired' : 'Please provide a description',
