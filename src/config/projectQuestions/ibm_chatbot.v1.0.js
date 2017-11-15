@@ -62,7 +62,7 @@ const sections = [
           {
             icon: 'question',
             required: true,
-            title: 'Do you have an existing IBM Bluemix account?',
+            title: 'Do you have an existing IBM Cloud (formerly IBM Bluemix) account?',
             description: '',
             type: 'radio-group',
             fieldName: 'details.appDefinition.hasBluemixAccount',
@@ -176,7 +176,7 @@ export const basicSections = [
             icon: 'question',
             required: true,
             validationError: 'Please complete this section',
-            title: 'Do you have an existing IBM Bluemix account?',
+            title: 'Do you have an existing IBM Cloud (formerly IBM Bluemix) account?',
             description: '',
             type: 'radio-group',
             fieldName: 'details.appDefinition.hasBluemixAccount',
