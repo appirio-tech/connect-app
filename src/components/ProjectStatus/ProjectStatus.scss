@@ -46,6 +46,15 @@ $status-height :  20px;
     }
   }
 
+  .ps-active {
+    .status-icon {
+      i {
+        background: url('../../assets/images/ps-active.svg') no-repeat -7px -4px;
+        // background-size: cover;
+      }
+    }
+  }
+
   .ps-cancelled {
     .status-icon {
       i {

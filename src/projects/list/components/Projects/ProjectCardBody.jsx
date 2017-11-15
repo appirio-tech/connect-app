@@ -10,16 +10,17 @@ import _ from 'lodash'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
-function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount=8, onChangeStatus }) {
+function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount = 8,
+  onChangeStatus }) {
   if (!project) return null
   const canEdit = currentMemberRole
-      && _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
+    && _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
 
   return (
     <div className="project-card-body">
       <TextTruncate
         containerClassName="project-description"
-        line={ descLinesCount }
+        line={descLinesCount}
         truncateText="..."
         text={project.description}
         textTruncateChild={<span><Link className="read-more-link" to={`/projects/${project.id}/specification`}> read more </Link></span>}
