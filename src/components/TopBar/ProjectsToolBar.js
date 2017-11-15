@@ -10,9 +10,6 @@ import Filters from './Filters'
 import NewProjectNavLink from './NewProjectNavLink'
 
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
-import {
-  DOMAIN
-} from '../../config/constants'
 
 
 class ProjectsToolBar extends Component {
@@ -142,7 +139,7 @@ class ProjectsToolBar extends Component {
       },
       {
         text: 'Getting Started',
-        link: `https://www.topcoder.com/about-topcoder/connect/`,
+        link: 'https://www.topcoder.com/about-topcoder/connect/',
         target: '_blank'
       },
       {
