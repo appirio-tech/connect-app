@@ -7,13 +7,17 @@ import spinnerWhileLoading from '../../components/LoadingSpinner'
 
 require('./Dashboard.scss')
 
-const DashboardView = ({project, currentMemberRole, route, params}) => (
+const DashboardView = ({project, currentMemberRole, route, params, isManager }) => (
   <div>
     <div className="dashboard-container">
       <div className="left-area">
         <Sticky top={80}>
           <div className="dashboard-left-panel">
-            <ProjectInfoContainer currentMemberRole={currentMemberRole} project={project} />
+            <ProjectInfoContainer
+              currentMemberRole={currentMemberRole}
+              project={project}
+              isManager={isManager}
+            />
           </div>
         </Sticky>
       </div>
