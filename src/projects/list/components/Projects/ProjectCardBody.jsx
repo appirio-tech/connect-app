@@ -14,8 +14,8 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
   onChangeStatus, isManager }) {
   if (!project) return null
 
-  const canEdit = currentMemberRole
-    && (_.indexOf([PROJECT_ROLE_COPILOT], currentMemberRole) > -1 || isManager)
+  const canEdit = isManager || (currentMemberRole
+    && (_.indexOf([PROJECT_ROLE_COPILOT], currentMemberRole) > -1))
 
   return (
     <div className="project-card-body">
