@@ -3,6 +3,7 @@ import Panel from '../Panel/Panel'
 import DeleteProjectModal from './DeleteProjectModal'
 import ProjectCardHeader from '../../projects/list/components/Projects/ProjectCardHeader'
 import ProjectCardBody from '../../projects/list/components/Projects/ProjectCardBody'
+import ProjectDirectLinks from '../../projects/list/components/Projects/ProjectDirectLinks'
 
 import './ProjectInfo.scss'
 
@@ -27,7 +28,7 @@ class ProjectInfo extends Component {
   }
 
   render() {
-    const { project, currentMemberRole, duration, canDeleteProject, onChangeStatus } = this.props
+    const { project, currentMemberRole, duration, canDeleteProject, onChangeStatus, directLinks } = this.props
     const { showDeleteConfirm } = this.state
     return (
       <div className="project-info">
@@ -53,6 +54,9 @@ class ProjectInfo extends Component {
           duration={duration}
           descLinesCount={4}
           onChangeStatus={onChangeStatus}
+        />
+        <ProjectDirectLinks
+          directLinks={directLinks}
         />
       </div>
     )
