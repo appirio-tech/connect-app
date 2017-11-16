@@ -13,7 +13,7 @@ require('./ProjectsGridView.scss')
 const ProjectsCardView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
-  const { projects, members, currentUser, onPageChange, pageNum, totalCount} = props
+  const { projects, members, currentUser, onPageChange, pageNum, totalCount, inifinite } = props
   // const currentSortField = _.get(criteria, 'sort', '')
 
   // annotate projects with member data
@@ -38,18 +38,30 @@ const ProjectsCardView = props => {
       />
     </div>)
   }
+  const handleLoadMore = () => {
+    onPageChange(pageNum + 1)
+  }
   return (
     <div className="projects card-view">
-      <InfiniteScroll
+      { !!inifinite && 
+        <InfiniteScroll
           initialLoad={false}
           pageStart={pageNum}
           loadMore={onPageChange}
           hasMore={ ((pageNum - 1) * 20 + 20 < totalCount)}
           loader={<LoadingIndicator />}
-      >
-        { projects.map(renderProject)}
-        <div className="project-card"><NewProjectCard /></div>
-      </InfiniteScroll>
+        >
+          { projects.map(renderProject)}
+          <div className="project-card"><NewProjectCard /></div>
+        </InfiniteScroll>
+      }
+      { !inifinite &&
+        <div>
+          { projects.map(renderProject)}
+          <div className="project-card"><NewProjectCard /></div>
+        </div>
+      }
+      { !inifinite && <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore}>Load more</button> }
     </div>
   )
 }
@@ -69,6 +81,11 @@ ProjectsCardView.propTypes = {
   // applyFilters: PropTypes.func.isRequired,
   pageNum: PropTypes.number.isRequired
   // criteria: PropTypes.object.isRequired
+}
+
+
+ProjectsCardView.defaultProps = {
+  inifinite : false
 }
 
 export default ProjectsCardView
