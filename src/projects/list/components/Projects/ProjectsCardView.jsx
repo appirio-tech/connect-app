@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import _ from 'lodash'
-import InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from 'react-infinite-scroller'
 import ProjectCard from './ProjectCard'
 import NewProjectCard from './NewProjectCard'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
@@ -67,7 +67,7 @@ ProjectsCardView.propTypes = {
   // onPageChange: PropTypes.func.isRequired,
   // sortHandler: PropTypes.func.isRequired,
   // applyFilters: PropTypes.func.isRequired,
-  pageNum: PropTypes.number.isRequired,
+  pageNum: PropTypes.number.isRequired
   // criteria: PropTypes.object.isRequired
 }
 

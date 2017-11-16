@@ -30,7 +30,7 @@ export const enhanceDropdown = (CompositeComponent) => class extends Component {
 
     document.dispatchEvent(dropdownClicked)
 
-    this.setState({ isOpen: !this.state.isOpen }, ()=> {
+    this.setState({ isOpen: !this.state.isOpen }, () => {
       this.refreshEventHandlers()
     })
   }

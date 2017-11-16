@@ -44,11 +44,12 @@ export default function(state = initialState, action) {
       error: false,
       isLoading: false
     })
-  case GET_PROJECTS_SUCCESS:
+  case GET_PROJECTS_SUCCESS: {
     const updatedProjects = action.meta.keepPrevious
       ? { projects : { $push : action.payload.projects }, totalCount: { $set : action.payload.totalCount} }
       : { projects : { $set : action.payload.projects }, totalCount: { $set : action.payload.totalCount} }
     return update(state, updatedProjects)
+  }
 
   case PROJECT_SEARCH_FAILURE:
   case GET_PROJECTS_FAILURE:
