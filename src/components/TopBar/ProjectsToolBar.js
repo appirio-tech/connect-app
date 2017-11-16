@@ -148,7 +148,7 @@ class ProjectsToolBar extends Component {
         target: '_blank'
       }
     ]
-    const menuBar = !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />
+    const menuBar = !!isLoggedIn && !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />
 
     return (
       <div className="ProjectsToolBar">
