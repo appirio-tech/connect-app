@@ -4,16 +4,16 @@ import TextTruncate from 'react-text-truncate'
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
 import editableProjectStatus from '../../../../components/ProjectStatus/editableProjectStatus'
-import { PROJECT_STATUS_ACTIVE, PROJECT_ROLE_COPILOT } from '../../../../config/constants'
+import { PROJECT_STATUS_ACTIVE, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } from '../../../../config/constants'
 import './ProjectCardBody.scss'
 import _ from 'lodash'
 
 function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount = 8,
-  onChangeStatus, isManager }) {
+  onChangeStatus, isSuperUser }) {
   if (!project) return null
 
-  const canEdit = isManager || (currentMemberRole
-    && (_.indexOf([PROJECT_ROLE_COPILOT], currentMemberRole) > -1))
+  const canEdit = isSuperUser || (currentMemberRole
+    && (_.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1))
 
   const progress = _.get(process, 'percent', 0)
 
