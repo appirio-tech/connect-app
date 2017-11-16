@@ -2,6 +2,7 @@ import React, { Component} from 'react'
 import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import cn from 'classnames'
 import _ from 'lodash'
+import { enhanceDropdown} from './ProjectStatus'
 import {
   PROJECT_STATUS_COMPLETED,
   PROJECT_STATUS_CANCELLED
@@ -51,10 +52,11 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
 
   render() {
     const { showStatusChangeDialog, newStatus, statusChangeReason } = this.state
+    const EnhancedProjectStatus = enhanceDropdown(CompositeComponent)
     return (
       <div className={cn('panel', {'modal-active': showStatusChangeDialog})}>
         <div className="modal-overlay"></div>
-        <CompositeComponent
+        <EnhancedProjectStatus
           { ...this.props }
           onSelect={ this.showStatusChangeDialog }
         />

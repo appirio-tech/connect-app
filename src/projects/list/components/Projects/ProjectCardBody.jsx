@@ -8,8 +8,6 @@ import { PROJECT_STATUS_ACTIVE, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } fro
 import './ProjectCardBody.scss'
 import _ from 'lodash'
 
-const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
-
 function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount = 8,
   onChangeStatus, isSuperUser }) {
   if (!project) return null
@@ -18,6 +16,8 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
     && (_.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1))
 
   const progress = _.get(process, 'percent', 0)
+
+  const EnhancedProjectStatus = canEdit ? editableProjectStatus(ProjectStatus) : ProjectStatus
 
   return (
     <div className="project-card-body">

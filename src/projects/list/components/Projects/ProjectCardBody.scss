@@ -21,6 +21,11 @@
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    padding: 10px 0;
+
+    .panel { // avoid double padding for editable project status
+      padding: 0;
+    }
 
     .status-header {
       .status-label {

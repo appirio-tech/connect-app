@@ -11,6 +11,17 @@ export const enhanceDropdown = (CompositeComponent) => class extends Component {
     this.onSelect = this.onSelect.bind(this)
     this.onClickOutside = this.onClickOutside.bind(this)
     this.onClickOtherDropdown = this.onClickOtherDropdown.bind(this)
+    this.refreshEventHandlers = this.refreshEventHandlers.bind(this)
+  }
+
+  refreshEventHandlers() {
+    if (this.state.isOpen) {
+      document.addEventListener('click', this.onClickOutside)
+      document.addEventListener('dropdownClicked', this.onClickOtherDropdown)
+    } else {
+      document.removeEventListener('click', this.onClickOutside)
+      document.removeEventListener('dropdownClicked', this.onClickOtherDropdown)
+    }
   }
 
   handleClick() {
@@ -19,7 +30,9 @@ export const enhanceDropdown = (CompositeComponent) => class extends Component {
 
     document.dispatchEvent(dropdownClicked)
 
-    this.setState({ isOpen: !this.state.isOpen })
+    this.setState({ isOpen: !this.state.isOpen }, () => {
+      this.refreshEventHandlers()
+    })
   }
 
   onSelect(value) {
@@ -47,20 +60,26 @@ export const enhanceDropdown = (CompositeComponent) => class extends Component {
     } while (currNode.tagName)
 
     if (!isDropdown) {
-      this.setState({ isOpen: false })
+      this.setState({ isOpen: false }, () => {
+        this.refreshEventHandlers()
+      })
     }
   }
 
   onClickOtherDropdown() {
-    this.setState({ isOpen: false })
+    this.setState({ isOpen: false }, () => {
+      this.refreshEventHandlers()
+    })
   }
 
   componentDidMount() {
     document.removeEventListener('click', this.onClickOutside)
     document.removeEventListener('dropdownClicked', this.onClickOtherDropdown)
 
-    document.addEventListener('click', this.onClickOutside)
-    document.addEventListener('dropdownClicked', this.onClickOtherDropdown)
+    if (this.state.isOpen) {
+      document.addEventListener('click', this.onClickOutside)
+      document.addEventListener('dropdownClicked', this.onClickOtherDropdown)
+    }
   }
 
   componentWillUnmount() {
@@ -126,5 +145,5 @@ ProjectStatus.propTypes = {
 ProjectStatus.defaultProps = {
 }
 
-export default enhanceDropdown(ProjectStatus)
+export default ProjectStatus
 

@@ -10,7 +10,7 @@ import { loadMembers } from '../../actions/members'
 
 // ignore action
 /*eslint-disable no-unused-vars */
-const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
+const getProjectsWithMembers = (dispatch, getState, criteria, pageNum, keepPrevious) => {
   return new Promise((resolve, reject) => {
     dispatch({
       type: GET_PROJECTS_SEARCH_CRITERIA,
@@ -38,7 +38,10 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
     }
     return dispatch({
       type: GET_PROJECTS,
-      payload: getProjects(criteria, pageNum)
+      payload: getProjects(criteria, pageNum),
+      meta: {
+        keepPrevious : true
+      }
     })
     .then(({ value, action }) => {
       let userIds = []
@@ -59,11 +62,11 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
 }
 /*eslint-enable*/
 
-export function loadProjects(criteria, pageNum=1) {
+export function loadProjects(criteria, pageNum=1, keepPrevious=false) {
   return (dispatch, getState) => {
     return dispatch({
       type: PROJECT_SEARCH,
-      payload: getProjectsWithMembers(dispatch, getState, criteria, pageNum)
+      payload: getProjectsWithMembers(dispatch, getState, criteria, pageNum, keepPrevious)
     })
   }
 }
