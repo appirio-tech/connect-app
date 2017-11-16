@@ -8676,6 +8676,14 @@
         "source-map": "0.4.4"
       }
     },
+    "react-infinite-scroller": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmjs.org/react-infinite-scroller/-/react-infinite-scroller-1.1.1.tgz",
+      "integrity": "sha512-MooSzKqQmkEOhPUG8cmqw7kyVadT4QKsMqMlwudDhbVfQiobO1ccDDkFgq0Q59S/9+zPSpxomLyhYTAedFoSmA==",
+      "requires": {
+        "prop-types": "15.5.10"
+      }
+    },
     "react-input-autosize": {
       "version": "0.6.13",
       "resolved": "https://registry.npmjs.org/react-input-autosize/-/react-input-autosize-0.6.13.tgz",

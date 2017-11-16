@@ -3,6 +3,7 @@ import {
   GET_PROJECTS_PENDING, GET_PROJECTS_SUCCESS, GET_PROJECTS_FAILURE,
   LOAD_MORE_PROJECTS, CLEAR_PROJECT_SEARCH, GET_PROJECTS_SEARCH_CRITERIA
 } from '../../config/constants'
+import update from 'react-addons-update'
 
 export const initialState = {
   isLoading: true,
@@ -44,10 +45,10 @@ export default function(state = initialState, action) {
       isLoading: false
     })
   case GET_PROJECTS_SUCCESS:
-    return Object.assign({}, state, {
-      projects: action.payload.projects,
-      totalCount: action.payload.totalCount
-    })
+    const updatedProjects = action.meta.keepPrevious
+      ? { projects : { $push : action.payload.projects }, totalCount: { $set : action.payload.totalCount} }
+      : { projects : { $set : action.payload.projects }, totalCount: { $set : action.payload.totalCount} }
+    return update(state, updatedProjects)
 
   case PROJECT_SEARCH_FAILURE:
   case GET_PROJECTS_FAILURE:

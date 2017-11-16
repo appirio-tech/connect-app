@@ -1,7 +1,9 @@
 import React, { PropTypes } from 'react'
 import _ from 'lodash'
+import InfiniteScroll from 'react-infinite-scroller';
 import ProjectCard from './ProjectCard'
 import NewProjectCard from './NewProjectCard'
+import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 
 import { setDuration } from '../../../../helpers/projectHelper'
 
@@ -11,7 +13,7 @@ require('./ProjectsGridView.scss')
 const ProjectsCardView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
-  const { projects, members, currentUser} = props
+  const { projects, members, currentUser, onPageChange, pageNum, totalCount} = props
   // const currentSortField = _.get(criteria, 'sort', '')
 
   // annotate projects with member data
@@ -38,8 +40,16 @@ const ProjectsCardView = props => {
   }
   return (
     <div className="projects card-view">
-      { projects.map(renderProject)}
-      <div className="project-card"><NewProjectCard /></div>
+      <InfiniteScroll
+          initialLoad={false}
+          pageStart={pageNum}
+          loadMore={onPageChange}
+          hasMore={ ((pageNum - 1) * 20 + 20 < totalCount)}
+          loader={<LoadingIndicator />}
+      >
+        { projects.map(renderProject)}
+        <div className="project-card"><NewProjectCard /></div>
+      </InfiniteScroll>
     </div>
   )
 }
@@ -51,13 +61,13 @@ ProjectsCardView.propTypes = {
   totalCount: PropTypes.number.isRequired,
   members: PropTypes.object.isRequired,
   // isLoading: PropTypes.bool.isRequired,
-  error: PropTypes.bool.isRequired
+  error: PropTypes.bool.isRequired,
   // there are no pagination, no sorting feature or no filtering for card view
   // hence commented all next
   // onPageChange: PropTypes.func.isRequired,
   // sortHandler: PropTypes.func.isRequired,
   // applyFilters: PropTypes.func.isRequired,
-  // pageNum: PropTypes.number.isRequired,
+  pageNum: PropTypes.number.isRequired,
   // criteria: PropTypes.object.isRequired
 }
 
