@@ -30,7 +30,7 @@ const ProjectDetailView = (props) => {
     return React.cloneElement(child, {
       project: props.project,
       currentMemberRole: props.currentMemberRole,
-      isManager: props.isManager
+      isSuperUser: props.isSuperUser
     })
   })
   return <div>{children}</div>
@@ -71,13 +71,13 @@ class ProjectDetail extends Component {
 
   render() {
     const currentMemberRole = this.getProjectRoleForCurrentUser(this.props)
-    const managerRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_MANAGER]
-    const isManager = this.props.currentUserRoles.some((role) => managerRoles.indexOf(role) !== -1)
+    const powerRoles = [ROLE_ADMINISTRATOR]
+    const isSuperUser = this.props.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
     return (
       <EnhancedProjectDetailView
         {...this.props}
         currentMemberRole={currentMemberRole}
-        isManager={isManager}
+        isSuperUser={isSuperUser}
       />
     )
   }
@@ -97,13 +97,13 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser}) => {
 const mapDispatchToProps = { loadProjectDashboard }
 
 ProjectDetail.propTypes = {
-  project   : PropTypes.object,
+  project: PropTypes.object,
   currentUserId: PropTypes.number.isRequired,
   error: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object
   ]).isRequired,
-  isLoading : PropTypes.bool.isRequired
+  isLoading: PropTypes.bool.isRequired
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectDetail))

@@ -28,7 +28,7 @@ class ProjectInfo extends Component {
   }
 
   render() {
-    const { project, currentMemberRole, duration, canDeleteProject, onChangeStatus, directLinks, isManager } = this.props
+    const { project, currentMemberRole, duration, canDeleteProject, onChangeStatus, directLinks, isSuperUser } = this.props
     const { showDeleteConfirm } = this.state
     return (
       <div className="project-info">
@@ -54,7 +54,7 @@ class ProjectInfo extends Component {
           duration={duration}
           descLinesCount={4}
           onChangeStatus={onChangeStatus}
-          isManager={isManager}
+          isSuperUser={isSuperUser}
         />
         <ProjectDirectLinks
           directLinks={directLinks}
