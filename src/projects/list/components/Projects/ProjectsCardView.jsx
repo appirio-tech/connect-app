@@ -41,6 +41,7 @@ const ProjectsCardView = props => {
   const handleLoadMore = () => {
     onPageChange(pageNum + 1)
   }
+  const hasMore = ((pageNum - 1) * 20 + 20 < totalCount)
   return (
     <div className="projects card-view">
       { !!inifinite && 
@@ -48,7 +49,7 @@ const ProjectsCardView = props => {
           initialLoad={false}
           pageStart={pageNum}
           loadMore={onPageChange}
-          hasMore={ ((pageNum - 1) * 20 + 20 < totalCount)}
+          hasMore={ hasMore }
           loader={<LoadingIndicator />}
         >
           { projects.map(renderProject)}
@@ -61,7 +62,8 @@ const ProjectsCardView = props => {
           <div className="project-card"><NewProjectCard /></div>
         </div>
       }
-      { !inifinite && <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore}>Load more</button> }
+      { !inifinite && hasMore && <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore}>Load more</button> }
+      { !hasMore && <span>End of results</span>}
     </div>
   )
 }
