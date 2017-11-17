@@ -191,6 +191,10 @@ class ProjectWizard extends Component {
     }
   }
 
+  getRefCodeFromURL() {
+    return _.get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
+  }
+
   /**
    * Removed incomplete project from the local storage and resets the state. Also, moves wizard to the first step.
    */
@@ -198,6 +202,7 @@ class ProjectWizard extends Component {
     const { onStepChange } = this.props
     // remove incomplete project from local storage
     window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
+    // following code assumes that componentDidMount has already updated state with correct project and product types
     const projectType = _.get(this.state.project, 'type')
     const product = _.get(this.state.project, 'details.products[0]')
     let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
@@ -208,6 +213,10 @@ class ProjectWizard extends Component {
     } else if (projectType) {
       project = { type: projectType, details: { products: [] } }
       wizardStep = WZ_STEP_SELECT_PROD_TYPE
+    }
+    const refCode = this.getRefCodeFromURL()
+    if (refCode) {
+      project.details.utm = { code : refCode}
     }
     this.setState({
       project: _.merge({}, project),
