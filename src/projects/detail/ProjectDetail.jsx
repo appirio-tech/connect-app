@@ -5,7 +5,10 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { loadProjectDashboard } from '../actions/projectDashboard'
-import { LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER } from '../../config/constants'
+import {
+  LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
+  ROLE_ADMINISTRATOR
+} from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
 
@@ -26,7 +29,8 @@ const ProjectDetailView = (props) => {
   const children = React.Children.map(props.children, (child) => {
     return React.cloneElement(child, {
       project: props.project,
-      currentMemberRole: props.currentMemberRole
+      currentMemberRole: props.currentMemberRole,
+      isSuperUser: props.isSuperUser
     })
   })
   return <div>{children}</div>
@@ -67,7 +71,15 @@ class ProjectDetail extends Component {
 
   render() {
     const currentMemberRole = this.getProjectRoleForCurrentUser(this.props)
-    return <EnhancedProjectDetailView {...this.props} currentMemberRole={currentMemberRole} />
+    const powerRoles = [ROLE_ADMINISTRATOR]
+    const isSuperUser = this.props.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
+    return (
+      <EnhancedProjectDetailView
+        {...this.props}
+        currentMemberRole={currentMemberRole}
+        isSuperUser={isSuperUser}
+      />
+    )
   }
 }
 
@@ -77,19 +89,21 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser}) => {
     isLoading: projectDashboard.isLoading,
     isProcessing: projectState.processing,
     error: projectState.error,
-    project: projectState.project
+    project: projectState.project,
+    currentUserRoles: loadUser.user.roles
   }
 }
+
 const mapDispatchToProps = { loadProjectDashboard }
 
 ProjectDetail.propTypes = {
-  project   : PropTypes.object,
+  project: PropTypes.object,
   currentUserId: PropTypes.number.isRequired,
   error: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object
   ]).isRequired,
-  isLoading : PropTypes.bool.isRequired
+  isLoading: PropTypes.bool.isRequired
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectDetail))

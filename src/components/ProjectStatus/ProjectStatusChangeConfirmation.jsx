@@ -3,6 +3,8 @@ import {SelectDropdown} from 'appirio-tech-react-components'
 import uncontrollable from 'uncontrollable'
 import { PROJECT_STATUS_COMPLETED, PROJECT_STATUS_CANCELLED } from '../../config/constants'
 
+import './ProjectStatusChangeConfirmation.scss'
+
 const ProjectStatusChangeConfirmation = ({
     newStatus,
     onCancel,

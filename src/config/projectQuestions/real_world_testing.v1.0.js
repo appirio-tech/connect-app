@@ -75,6 +75,23 @@ const sections = [
             ]
           },
           {
+            id: 'projectInfo',
+            fieldName: 'description',
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isRequired,minLength:160',
+            // providing default error message to handle isRequired validation
+            // somehow, it is not picking up error message from validationErrors object
+            validationError: 'Please provide a description',
+            validationErrors: {
+              isRequired : 'Please provide a description',
+              minLength  : 'Please enter at least 160 characters'
+            },
+            description: 'Brief Description',
+            title: 'Description',
+            type: 'textbox'
+          },
+          {
             icon: 'question',
             title: 'Please tell us about your users.',
             description: 'Please share information about your end users. Where are they from? What is their goal? This information can help you find the best testers for your application.',
@@ -407,6 +424,24 @@ export const basicSections = [
               {value: 'true', label: 'Yes I have test cases.'},
               {value: 'false', label: 'No I do not have test cases.'}
             ]
+          },
+          {
+            icon: 'question',
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isRequired,minLength:160',
+            // providing default error message to handle isRequired validation
+            // somehow, it is not picking up error message from validationErrors object
+            validationError: 'Please provide a description',
+            validationErrors: {
+              isRequired : 'Please provide a description',
+              minLength  : 'Please enter at least 160 characters'
+            },
+            id: 'projectInfo',
+            fieldName: 'description',
+            description: 'Brief Description',
+            title: 'Description',
+            type: 'textbox'
           },
           {
             icon: 'question',

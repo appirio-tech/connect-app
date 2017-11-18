@@ -18,7 +18,7 @@ import spinnerWhileLoading from '../../../../components/LoadingSpinner'
   Definiing default project criteria. This is used to later to determine if
   walkthrough component should be rendered instead of no results
  */
-const defaultCriteria = {sort: 'createdAt desc'}
+const defaultCriteria = {sort: 'updatedAt desc'}
 
 
 const showErrorMessageIfError = hasLoaded =>
@@ -27,7 +27,9 @@ const errorHandler = showErrorMessageIfError(props => !props.error)
 const spinner = spinnerWhileLoading(props => !props.isLoading)
 const enhance = compose(errorHandler, spinner)
 const EnhancedGrid  = enhance(ProjectsGridView)
-const EnhancedCards = enhance(ProjectsCardView)
+// not using enhance here to avoid duplciate loading spinner, we are already using infinte scroll's loader
+// FIXME: this is preventing spinner icon in inital load though
+const EnhancedCards = errorHandler(ProjectsCardView)
 
 class Projects extends Component {
   constructor(props) {
@@ -37,6 +39,7 @@ class Projects extends Component {
     this.onPageChange = this.onPageChange.bind(this)
     this.applyFilters = this.applyFilters.bind(this)
     this.init = this.init.bind(this)
+    this.removeScrollPosition = this.removeScrollPosition.bind(this)
   }
 
   componentDidUpdate() {
@@ -44,8 +47,14 @@ class Projects extends Component {
   }
 
   componentWillUnmount(){
-    const scrollingElement = document.scrollingElement || document.documentElement
-    window.sessionStorage.setItem('projectsPageScrollTop', scrollingElement.scrollTop)
+    window.removeEventListener('beforeunload', this.removeScrollPosition)
+    // if grid view, store projects scroll top for next mount
+    if (this.props.gridView) {
+      const scrollingElement = document.scrollingElement || document.documentElement
+      window.sessionStorage.setItem('projectsPageScrollTop', scrollingElement.scrollTop)
+    } else { // for card view remove the scroll position
+      this.removeScrollPosition()
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,6 +67,11 @@ class Projects extends Component {
 
   componentWillMount() {
     this.init(this.props)
+  }
+
+  componentDidMount() {
+    // sets window unload hook to show unsaved changes alert and persist incomplete project
+    window.addEventListener('beforeunload', this.removeScrollPosition)
   }
 
   init(props) {
@@ -81,8 +95,20 @@ class Projects extends Component {
     }
   }
 
-  onPageChange(pageNum) {
+  removeScrollPosition() {
+    // remove scroll position from local storage
     window.sessionStorage.removeItem('projectsPageScrollTop')
+  }
+
+  onPageChange(pageNum) {
+    // if grid view, remove scroll position on page change
+    if (this.props.gridView) {
+      window.sessionStorage.removeItem('projectsPageScrollTop')
+    } else {
+      // for card view update the scroll position in local storage
+      const scrollingElement = document.scrollingElement || document.documentElement
+      window.sessionStorage.setItem('projectsPageScrollTop', scrollingElement.scrollTop)
+    }
     this.routeWithParams(this.props.criteria, pageNum)
   }
 
@@ -129,6 +155,7 @@ class Projects extends Component {
           // onPageChange={this.onPageChange}
           // sortHandler={this.sortHandler}
           applyFilters={this.applyFilters}
+          onPageChange={this.onPageChange}
         />
       )
     return (
@@ -163,7 +190,8 @@ const mapStateToProps = ({ projectSearch, members, loadUser }) => {
     totalCount  : projectSearch.totalCount,
     pageNum     : projectSearch.pageNum,
     criteria    : projectSearch.criteria,
-    isPowerUser
+    isPowerUser,
+    gridView    : isPowerUser
   }
 }
 

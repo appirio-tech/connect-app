@@ -4,7 +4,6 @@ $status-height :  20px;
 .ProjectStatus {
   position: relative;
   height: $status-height;
-
   .status-icon {
     position: relative;
     display: inline-block;
@@ -42,6 +41,15 @@ $status-height :  20px;
     .status-icon {
       i {
         background: url('../../assets/images/ps-reviewed.svg') no-repeat -7px -4px;
+        // background-size: cover;
+      }
+    }
+  }
+
+  .ps-active {
+    .status-icon {
+      i {
+        background: url('../../assets/images/ps-active.svg') no-repeat;
         // background-size: cover;
       }
     }
@@ -94,6 +102,7 @@ $status-height :  20px;
       }
       .caret {
         // content: '';
+        z-index: 3;
         display: inline-block;
         width: 9px;
         height: 5px;
@@ -122,25 +131,36 @@ $status-height :  20px;
 
   .status-label {
     position: relative;
-    @include roboto-medium;
-    font-size: $tc-label-sm;
+    @include tc-label-xs;
     line-height: $base-unit*4;
     height: $base-unit*4;
     padding-right: 4 * $base-unit;
     margin-left: 10px;
   }
 
-  ul.status-dropdown {
+  .status-dropdown {
+    min-width: 110%;
     position: absolute;
     border-radius: $base-unit;
     box-shadow: 0 0 15px rgba(0, 0, 0, .25);
     padding: 10px 0;
     position: absolute;
     background: $tc-white;
-    top: $status-height;
+    top: -2*$base_unit;
     left: 0px;
     right: auto;
     z-index: 2;
+    .status-header {
+      @include roboto-medium;
+      font-size: $tc-label-md;
+      text-align: left;
+      color: $tc-black;
+      line-height: 30px;
+      padding-left: 20px;
+      margin-bottom: 20px;
+      white-space: nowrap;
+    }
+
     a.status-option {
       display: flex;
       @include roboto-medium;
@@ -159,6 +179,7 @@ $status-height :  20px;
       .status-label {
         color: #394146;
         padding-right: 0px;
+        font-size: 13px;
       }
     }
   }

@@ -94,51 +94,6 @@ const sections = [
           },
           {
             icon: 'question',
-            fieldName: 'details.appDefinition.budget',
-            description: 'Project budget in USD, please enter 0 if you don\'t have one',
-            title: 'What is your project budget?',
-            type: 'numberinput'
-          },
-          {
-            icon: 'question',
-            title: 'How precise is your budget?',
-            description: '',
-            fieldName: 'details.appDefinition.budgetType',
-            type: 'slide-radiogroup',
-            options: [
-              {value: 'guess', title: 'Its a wild guess'},
-              {value: 'ballpark', title: 'I have a rough idea'},
-              {value: 'exact', title: 'Precise to the penny'}
-            ]
-          },
-          {
-            icon: 'question',
-            title: 'When do you want to get started?',
-            description: '',
-            fieldName: 'details.appDefinition.whenToStart',
-            type: 'slide-radiogroup',
-            options: [
-              {value: 'asap', title: 'ASAP'},
-              {value: '1-2 months', title: '1-2 months'},
-              {value: '2-plus-months', title: '2+ months'},
-              {value: 'estimating', title: 'I\'m just browsing' }
-            ]
-          },
-          {
-            icon: 'question',
-            fieldName: 'details.appDefinition.deadline',
-            description: '',
-            title: 'Deadline',
-            type: 'slide-radiogroup',
-            options: [
-              {value: '2-weeks', title: '2 weeks'},
-              {value: '1-2-months', title: '1-2 months'},
-              {value: '2-plus-months', title: '2+ months'},
-              {value: 'estimating', title: 'I\'m just browsing'}
-            ]
-          },
-          {
-            icon: 'question',
             title: 'Feature requirements',
             description: 'Please list all the features you would like in your application. You can use our wizard to pick from common features or define your own.',
             type: 'see-attached-features',

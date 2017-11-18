@@ -6,9 +6,28 @@
   background-color: $tc-white;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-  padding: 4 * $base_unit;
-  @include tc-label-md;  
+  @include tc-label-md;
+
+  .project-card-body {
+    padding-left: 4 * $base_unit;
+    padding-right: 4 * $base_unit;
+    .project-description {
+      max-height: 120px;
+      min-height: 10px;
+      margin-bottom: 5 * $base_unit;
+    }
+  }
+
+  .project-info-header {
+    display:flex;
+    fill: $tc-gray-50;
+    padding-left: 4 * $base_unit;
+    padding-right: 4 * $base_unit;
+    padding-top: 4 * $base_unit;
+  }
+
 }
+
 .panel {
   box-shadow:none !important;
 }

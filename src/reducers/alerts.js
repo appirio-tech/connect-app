@@ -32,7 +32,10 @@ export default function(state = {}, action) {
   switch(action.type) {
   case CREATE_PROJECT_SUCCESS: {
     const name = _.truncate(action.payload.name, 20)
-    Alert.success(`Project '${name}' created`)
+
+    //temporary workaround
+    setTimeout(() => { Alert.success(`Project '${name}' created`) }, 0)
+
     return state
   }
 

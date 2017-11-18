@@ -2,8 +2,8 @@ import _ from 'lodash'
 import moment from 'moment'
 import React, { PropTypes as PT } from 'react'
 import TextTruncate from 'react-text-truncate'
-import { findCategory } from '../../config/projectWizard'
-import SVGIconImage from '../SVGIconImage'
+import { findCategory } from '../../../../config/projectWizard'
+import SVGIconImage from '../../../../components/SVGIconImage'
 import './ProjectCardHeader.scss'
 
 function ProjectCardHeader({ project }) {
@@ -16,7 +16,7 @@ function ProjectCardHeader({ project }) {
     <div className="project-card-header">
       <div className="project-header">
         <div className="project-type-icon"><SVGIconImage filePath={categoryIcon} /></div>
-        <div className="project-sub-header">
+        <div className="project-header-details">
           <div className="project-name">
             <TextTruncate
               containerClassName="project-name"

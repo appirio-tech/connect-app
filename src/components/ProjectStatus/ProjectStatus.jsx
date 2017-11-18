@@ -1,4 +1,4 @@
-import React, { Component, PropTypes} from 'react'
+import React, { Component, PropTypes } from 'react'
 import cn from 'classnames'
 import { PROJECT_STATUS } from '../../config/constants'
 import './ProjectStatus.scss'
@@ -6,11 +6,22 @@ import './ProjectStatus.scss'
 export const enhanceDropdown = (CompositeComponent) => class extends Component {
   constructor(props) {
     super(props)
-    this.state = { isOpen : false }
+    this.state = { isOpen: false }
     this.handleClick = this.handleClick.bind(this)
     this.onSelect = this.onSelect.bind(this)
     this.onClickOutside = this.onClickOutside.bind(this)
     this.onClickOtherDropdown = this.onClickOtherDropdown.bind(this)
+    this.refreshEventHandlers = this.refreshEventHandlers.bind(this)
+  }
+
+  refreshEventHandlers() {
+    if (this.state.isOpen) {
+      document.addEventListener('click', this.onClickOutside)
+      document.addEventListener('dropdownClicked', this.onClickOtherDropdown)
+    } else {
+      document.removeEventListener('click', this.onClickOutside)
+      document.removeEventListener('dropdownClicked', this.onClickOtherDropdown)
+    }
   }
 
   handleClick() {
@@ -19,13 +30,14 @@ export const enhanceDropdown = (CompositeComponent) => class extends Component {
 
     document.dispatchEvent(dropdownClicked)
 
-    this.setState({ isOpen : !this.state.isOpen })
+    this.setState({ isOpen: !this.state.isOpen }, () => {
+      this.refreshEventHandlers()
+    })
   }
 
   onSelect(value) {
     this.handleClick()
-
-    if (this.props.onChangeStatus) this.props.onChangeStatus(value)
+    if (this.props.onSelect) this.props.onSelect(value)
   }
 
   onClickOutside(evt) {
@@ -34,7 +46,7 @@ export const enhanceDropdown = (CompositeComponent) => class extends Component {
     console.log('onClickOutside')
 
     do {
-      if(currNode.className
+      if (currNode.className
         && currNode.className.indexOf
         && currNode.className.indexOf('dropdown-wrap') > -1) {
         isDropdown = true
@@ -43,25 +55,31 @@ export const enhanceDropdown = (CompositeComponent) => class extends Component {
 
       currNode = currNode.parentNode
 
-      if(!currNode)
+      if (!currNode)
         break
-    } while(currNode.tagName)
+    } while (currNode.tagName)
 
-    if(!isDropdown) {
-      this.setState({ isOpen: false })
+    if (!isDropdown) {
+      this.setState({ isOpen: false }, () => {
+        this.refreshEventHandlers()
+      })
     }
   }
 
   onClickOtherDropdown() {
-    this.setState({ isOpen: false })
+    this.setState({ isOpen: false }, () => {
+      this.refreshEventHandlers()
+    })
   }
 
   componentDidMount() {
     document.removeEventListener('click', this.onClickOutside)
     document.removeEventListener('dropdownClicked', this.onClickOtherDropdown)
 
-    document.addEventListener('click', this.onClickOutside)
-    document.addEventListener('dropdownClicked', this.onClickOtherDropdown)
+    if (this.state.isOpen) {
+      document.addEventListener('click', this.onClickOutside)
+      document.addEventListener('dropdownClicked', this.onClickOtherDropdown)
+    }
   }
 
   componentWillUnmount() {
@@ -75,9 +93,9 @@ export const enhanceDropdown = (CompositeComponent) => class extends Component {
       <div onClick={(e) => e.stopPropagation()} className="dropdown-wrap">
         <CompositeComponent
           { ...this.props }
-          isOpen={ isOpen }
-          handleClick={ this.handleClick }
-          onSelect={ this.onSelect }
+          isOpen={isOpen}
+          handleClick={this.handleClick}
+          onSelect={this.onSelect}
         />
       </div>
     )
@@ -86,32 +104,35 @@ export const enhanceDropdown = (CompositeComponent) => class extends Component {
 
 
 /*eslint-enable camelcase */
-const ProjectStatus = ({canEdit, isOpen, status, handleClick, onSelect, showText, withoutLabel, unifiedHeader=true }) => {
+const ProjectStatus = ({ canEdit, isOpen, status, handleClick, onSelect, showText, withoutLabel, unifiedHeader = true }) => {
   const selected = PROJECT_STATUS.filter((opt) => opt.value === status)[0]
   return (
     <div className="ProjectStatus">
-      <div className={cn('status-header', 'ps-' + selected.value, {active: isOpen, editable : canEdit, 'unified-header' : unifiedHeader })} onClick={handleClick}>
+      <div className={cn('status-header', 'ps-' + selected.value, { active: isOpen, editable: canEdit, 'unified-header': unifiedHeader })} onClick={handleClick}>
         <div className="status-icon"><i /></div>
-        {showText && (<span className="status-label">{withoutLabel ? selected.fullName : selected.name}<i className="caret" /></span>) }
+        {showText && (<span className="status-label">{withoutLabel ? selected.fullName : selected.name}<i className="caret" /></span>)}
       </div>
-      { isOpen && canEdit && <ul className="status-dropdown">
-        {
-          PROJECT_STATUS.map((item) =>
-            <li key={item.value}>
-              <a
-                href="javascript:"
-                className={cn('status-option', 'ps-' + item.value, {active: item.value === status})}
-                onClick={(e) => {
-                  onSelect(item.value, e)
-                }}
-              >
-                <span className="status-icon"><i/></span>
-                <span className="status-label">{item.name}</span>
-              </a>
-            </li>
-          )
-        }
-      </ul>
+      {isOpen && canEdit && <div className="status-dropdown">
+        <div className="status-header">Project Status</div>
+        <ul>
+          {
+            PROJECT_STATUS.map((item) =>
+              <li key={item.value}>
+                <a
+                  href="javascript:"
+                  className={cn('status-option', 'ps-' + item.value, { active: item.value === status })}
+                  onClick={(e) => {
+                    onSelect(item.value, e)
+                  }}
+                >
+                  <span className="status-icon"><i /></span>
+                  <span className="status-label">{item.name}</span>
+                </a>
+              </li>
+            )
+          }
+        </ul>
+      </div>
       }
     </div>
   )
@@ -124,5 +145,5 @@ ProjectStatus.propTypes = {
 ProjectStatus.defaultProps = {
 }
 
-export default enhanceDropdown(ProjectStatus)
+export default ProjectStatus
 

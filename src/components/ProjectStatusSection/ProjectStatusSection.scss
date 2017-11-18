@@ -177,38 +177,6 @@
   }
 }
 
-.project-status-wrapper.panel {// reset styles of panel class, we need panel class to activate the modal-overlay
-  border: none;
-  box-shadow: none;
-
-  .project-status-change-modal {
-    margin: 0px -4*$base-unit;
-    
-    .cancellation-reason {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-
-      label {
-        align-self: flex-start;
-      }
-
-      .select-cancellation-reason {
-        width: 100%;
-        // margin-bottom: 4 * $base-unit;
-        .dropdown-wrap {
-          margin-left: 0px;
-        }
-      }
-
-      .tc-error-messages {
-        width: 100%;
-      }
-    }
-  }
-}
-
 .project-direct-links {
   @include roboto-medium;
   font-size: $tc-label-md;

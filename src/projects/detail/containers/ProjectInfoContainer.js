@@ -7,7 +7,7 @@ import FooterV2 from '../../../components/FooterV2/FooterV2'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
 import { setDuration } from '../../../helpers/projectHelper'
-import { PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
+import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
    DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 
@@ -33,7 +33,8 @@ class ProjectInfoContainer extends React.Component {
   }
 
   setDuration({duration, status}) {
-    this.setState({duration: setDuration(duration, status)})
+
+    this.setState({duration: setDuration(duration || {}, status)})
   }
 
   componentWillMount() {
@@ -73,8 +74,7 @@ class ProjectInfoContainer extends React.Component {
 
   render() {
     const { duration } = this.state
-    const { project, currentMemberRole } = this.props
-
+    const { project, currentMemberRole, isSuperUser } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -87,6 +87,8 @@ class ProjectInfoContainer extends React.Component {
       }
       directLinks.push({name: 'Salesforce Lead', href: `${SALESFORCE_PROJECT_LEAD_LINK}${project.id}`})
     }
+
+    const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER && project.status === 'draft'
 
     let devices = []
     const primaryTarget = _.get(project, 'details.appDefinition.primaryTarget')
@@ -101,6 +103,11 @@ class ProjectInfoContainer extends React.Component {
           project={project}
           currentMemberRole={currentMemberRole}
           duration={duration}
+          canDeleteProject={canDeleteProject}
+          onDeleteProject={this.onDeleteProject}
+          onChangeStatus={this.onChangeStatus}
+          directLinks={directLinks}
+          isSuperUser={isSuperUser}
         />
         <LinksMenu
           links={project.bookmarks || []}

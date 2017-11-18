@@ -1,20 +1,15 @@
 require('./ProjectsToolBar.scss')
 
 import React, {PropTypes, Component} from 'react'
-import { Link, withRouter, Prompt } from 'react-router-dom'
+import { withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'lodash'
 import { SearchBar, MenuBar } from 'appirio-tech-react-components'
 import Filters from './Filters'
+import NewProjectNavLink from './NewProjectNavLink'
 
 import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
-import {
-  ROLE_CONNECT_COPILOT,
-  ROLE_CONNECT_MANAGER,
-  ROLE_ADMINISTRATOR,
-  DOMAIN
-} from '../../config/constants'
 
 
 class ProjectsToolBar extends Component {
@@ -130,9 +125,12 @@ class ProjectsToolBar extends Component {
   }
 
   render() {
-    const { logo, userMenu, userRoles, criteria, isPowerUser } = this.props
+    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser } = this.props
     const { isFilterVisible } = this.state
     const isLoggedIn = userRoles && userRoles.length
+
+    const noOfFilters = _.keys(criteria).length - 1 // -1 for default sort criteria
+    const onLeaveMessage = this.onLeave() || ''
 
     const primaryNavigationItems = [
       {
@@ -141,7 +139,7 @@ class ProjectsToolBar extends Component {
       },
       {
         text: 'Getting Started',
-        link: `https://www.${DOMAIN}/about-topcoder/connect/`,
+        link: 'https://www.topcoder.com/about-topcoder/connect/',
         target: '_blank'
       },
       {
@@ -150,9 +148,7 @@ class ProjectsToolBar extends Component {
         target: '_blank'
       }
     ]
-
-    const noOfFilters = _.keys(criteria).length - 1 // -1 for default sort criteria
-    const onLeaveMessage = this.onLeave() || ''
+    const menuBar = !!isLoggedIn && !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />
 
     return (
       <div className="ProjectsToolBar">
@@ -161,19 +157,20 @@ class ProjectsToolBar extends Component {
             message={onLeaveMessage}
         />
         <div className="primary-toolbar">
-          { logo }
-          { !isPowerUser && <MenuBar items={primaryNavigationItems} orientation="horizontal" forReactRouter />}
+          { renderLogoSection(menuBar) }
           {
             !!isLoggedIn &&
             <div className="search-widget">
-              <SearchBar
-                hideSuggestionsWhenEmpty
-                showPopularSearchHeader={ false }
-                searchTermKey="keyword"
-                onTermChange={ this.handleTermChange }
-                onSearch={ this.handleSearch }
-                onClearSearch={ this.handleSearch }
-              />
+              { !!isPowerUser &&
+                <SearchBar
+                  hideSuggestionsWhenEmpty
+                  showPopularSearchHeader={ false }
+                  searchTermKey="keyword"
+                  onTermChange={ this.handleTermChange }
+                  onSearch={ this.handleSearch }
+                  onClearSearch={ this.handleSearch }
+                />
+              }
               {
                 !!isPowerUser &&
                 <div className="search-filter">
@@ -187,13 +184,8 @@ class ProjectsToolBar extends Component {
             </div>
           }
           <div className="actions">
-          {
-            !!isLoggedIn && isPowerUser &&
-            <div>
-              <Link to="/new-project" className="tc-btn tc-btn-sm tc-btn-primary">+ New Project</Link>
-            </div>
-          }
-          { userMenu }
+            { !!isLoggedIn && <NewProjectNavLink compact /> }
+            { userMenu }
           </div>
         </div>
         <div className="secondary-toolbar">
@@ -211,7 +203,11 @@ class ProjectsToolBar extends Component {
 }
 
 ProjectsToolBar.propTypes = {
-  criteria              : PropTypes.object.isRequired
+  criteria              : PropTypes.object.isRequired,
+  /**
+   * Function which render the logo section in the top bar
+   */
+  renderLogoSection     : PropTypes.func.isRequired
 }
 
 ProjectsToolBar.defaultProps = {
@@ -220,11 +216,6 @@ ProjectsToolBar.defaultProps = {
 // export default ProjectsToolBar
 
 const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, projectState, loadUser }) => {
-  let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
-  if (loadUser.user) {
-    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
-  }
   return {
     projects               : projectSearchSuggestions.projects,
     previousSearchTerm     : searchTerm.previousSearchTerm,
@@ -234,8 +225,7 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
     project                : projectState.project,
     criteria               : projectSearch.criteria,
     userRoles              : _.get(loadUser, 'user.roles', []),
-    user                   : loadUser.user,
-    isPowerUser
+    user                   : loadUser.user
   }
 }
 
