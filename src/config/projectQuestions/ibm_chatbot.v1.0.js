@@ -47,6 +47,14 @@ const sections = [
           {
             id: 'projectInfo',
             fieldName: 'description',
+            validations: 'isRequired,minLength:160',
+            // providing default error message to handle isRequired validation
+            // somehow, it is not picking up error message from validationErrors object
+            validationError: 'Please provide a description',
+            validationErrors: {
+              isRequired : 'Please provide a description',
+              minLength  : 'Please enter at least 160 characters'
+            },
             description: 'Brief Description',
             title: 'Description',
             type: 'textbox'
@@ -106,7 +114,7 @@ const sections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications)',
         type: 'notes'
       },
       {
@@ -149,9 +157,17 @@ export const basicSections = [
         questions: [
           {
             id: 'projectInfo',
-            required: true,
             fieldName: 'description',
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isRequired,minLength:160',
+            // providing default error message to handle isRequired validation
+            // somehow, it is not picking up error message from validationErrors object
             validationError: 'Please provide a description',
+            validationErrors: {
+              isRequired : 'Please provide a description',
+              minLength  : 'Please enter at least 160 characters'
+            },
             description: 'Brief Description',
             title: 'Description',
             type: 'textbox'
@@ -220,7 +236,7 @@ export const basicSections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications)',
         type: 'notes'
       }
     ]

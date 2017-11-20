@@ -1,20 +1,15 @@
 import 'babel-polyfill'
-import React          from 'react'
-import { render }     from 'react-dom'
-import { Provider }   from 'react-redux'
-import browserHistory from 'react-router/lib/browserHistory'
-import Router         from 'react-router/lib/Router'
-
 import _ from 'lodash'
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import { AppContainer } from 'react-hot-loader'
+import { BrowserRouter } from 'react-router-dom'
 import store  from './config/store'
-import routes from './routes'
-import { TCEmitter } from './helpers'
-import { EVENT_ROUTE_CHANGE, SEGMENT_KEY } from './config/constants'
+import Routes from './routes'
+import { SEGMENT_KEY } from './config/constants'
 
 const mountNode = document.getElementById('root')
-const onRouteChange = () => {
-  TCEmitter.emit(EVENT_ROUTE_CHANGE, window.location.pathname)
-}
 
 /* eslint-disable */
 if (!_.isEmpty(SEGMENT_KEY)) {
@@ -22,11 +17,30 @@ if (!_.isEmpty(SEGMENT_KEY)) {
   analytics.load(SEGMENT_KEY);
   }}();
 }
-
 /* eslint-enable */
 
-render((
-  <Provider store={store}>
-    <Router history={browserHistory} routes={routes} onUpdate={onRouteChange} />
-  </Provider>
-), mountNode)
+const renderApp = (Component) => {
+  render(
+    <AppContainer>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Component />
+        </BrowserRouter>
+      </Provider>
+    </AppContainer>,
+    mountNode
+  )
+}
+
+renderApp(Routes)
+
+if (module.hot) {
+  module.hot.accept('./routes', () => {
+    // TODO
+    // it has to work without explicit require component
+    // but it doesn't update components even though hot reloading is triggered, why?
+    const RoutesNew = require('./routes').default
+
+    renderApp(RoutesNew)
+  })
+}

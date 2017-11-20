@@ -1,14 +1,15 @@
 import _ from 'lodash'
 import Cookies from 'js-cookie'
+import qs from 'query-string'
 import React, { PropTypes } from 'react'
-import { withRouter, browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
-import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
+import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject } from '../../actions/project'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
-import { findProduct, findCategory } from '../../../config/projectWizard'
+import { findProduct, findCategory, findProductCategory } from '../../../config/projectWizard'
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
@@ -37,8 +38,8 @@ const spinner = spinnerWhileLoading(props => !props.processing)
 const enhance = compose(errorHandler, spinner)
 
 const CreateView = (props) => {
-  const { route } = props
-  if (route.path === '/new-project-callback') {
+  const { match } = props
+  if (match.path === '/new-project-callback') {
     // can do some fancy loading (e.g. coderbot animation) here
     return <div><CoderBot code={ 200 } message="Creating your project..." /></div>
   }
@@ -65,8 +66,9 @@ class CreateConainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const projectId = _.get(nextProps, 'project.id', null)
-    if (!nextProps.processing && !nextProps.error && projectId) {
+    const projectId = _.get(this.props, 'project.id', null)
+    const nextProjectId = _.get(nextProps, 'project.id', null)
+    if (!nextProps.processing && !nextProps.error && !projectId && nextProjectId) {
       // update state
       this.setState({
         creatingProject: false,
@@ -75,39 +77,64 @@ class CreateConainer extends React.Component {
         // remove incomplete project, and navigate to project dashboard
         console.log('removing incomplete project')
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
-        this.props.router.push('/projects/' + projectId)
+        this.props.history.push('/projects/' + nextProjectId)
       })
 
     } else if (this.state.creatingProject !== nextProps.processing) {
       this.setState({ creatingProject : nextProps.processing })
     }
+
+    // when route is changed, save incomplete project
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      this.onLeave()
+    }
   }
 
   componentWillMount() {
-    const { processing, userRoles, route } = this.props
+    const { processing, userRoles, match, history } = this.props
+    // if we are on the project page validate product param
+    if (match.path === '/new-project/:product?/:status?') {
+      const product = match.params.product
+      // first try the path param to be a project category
+      let productCategory = findCategory(product, true)
+      // if it is not a category, it should be a product and we should be able to find a category for it
+      productCategory = !productCategory ? findProductCategory(product, true) : productCategory
+      if (product && product.trim().length > 0 && !productCategory) {
+        // workaround to add URL for incomplete project confirmation step
+        // ideally we should have better URL naming which resolves each route with distinct patterns
+        if (product !== 'incomplete') {
+          history.replace('/404')
+        }
+      }
+    }
+
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
       const incompleteProject = JSON.parse(incompleteProjectStr)
-      if (route.path === '/new-project-callback' && !processing && userRoles && userRoles.length > 0) {
+      if (match.path === '/new-project-callback' && !processing && userRoles && userRoles.length > 0) {
         // if project wizard is loaded after redirection from register page
         // TODO should we validate the project again?
         console.log('calling createProjectAction...')
         this.props.createProjectAction(incompleteProject, PROJECT_STATUS_IN_REVIEW)
       }
+    } else {
+      // if there is not incomplete project, clear the exisitng project from the redux state
+      // dispatches action to clear the project in the redux state to ensure that we never have a project
+      // in context when creating a new project
+      this.props.clearLoadedProject()
     }
   }
 
   componentDidMount() {
-    // sets route leave hook to show unsaved changes alert and persist incomplete project
-    this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
-
-    // sets window unload hook to show unsaved changes alert and persist incomplete project
+    // sets window unload hook save incomplete project
     window.addEventListener('beforeunload', this.onLeave)
   }
 
   componentWillUnmount() {
     window.removeEventListener('beforeunload', this.onLeave)
+    // when we leave component, save incomplete project
+    this.onLeave()
   }
 
   // stores the incomplete project in local storage
@@ -152,16 +179,21 @@ class CreateConainer extends React.Component {
   }
 
   closeWizard() {
-    const { userRoles } = this.props
+    const { userRoles, location } = this.props
     const isLoggedIn = userRoles && userRoles.length > 0
     // calls leave handler
     this.onLeave()
-    if (isLoggedIn) {
-      this.props.router.push('/projects')
+    const returnUrl = _.get(qs.parse(location.search), 'returnUrl', null)
+    if (returnUrl) {
+      window.location = returnUrl
     } else {
-      // this.props.router.push('/')
-      // FIXME ideally we should push on router
-      window.location = window.location.origin
+      if (isLoggedIn) {
+        this.props.history.push('/projects')
+      } else {
+        this.props.history.push('/')
+        // FIXME ideally we should push on router
+        // window.location = window.location.origin
+      }
     }
   }
 
@@ -189,16 +221,16 @@ class CreateConainer extends React.Component {
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
             let productUrl = productType ? ('/' + productType) : ''
             productUrl = !productType && projectType ? ('/' + projectType) : productUrl
-            browserHistory.push(NEW_PROJECT_PATH + productUrl + '/incomplete')
+            this.props.history.push(NEW_PROJECT_PATH + productUrl + '/incomplete' + window.location.search)
           }
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
-            browserHistory.push(NEW_PROJECT_PATH + '/' + window.location.search)
+            this.props.history.push(NEW_PROJECT_PATH + '/' + window.location.search)
           }
           if (projectType && wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
-            browserHistory.push(NEW_PROJECT_PATH + '/' + projectType + window.location.search)
+            this.props.history.push(NEW_PROJECT_PATH + '/' + projectType + window.location.search)
           }
           if (projectType && productType && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
-            browserHistory.push(NEW_PROJECT_PATH + '/' + productType + window.location.search)
+            this.props.history.push(NEW_PROJECT_PATH + '/' + productType + window.location.search)
           }
           this.setState({
             wizardStep
@@ -215,7 +247,7 @@ class CreateConainer extends React.Component {
               // intentionally commented because now it should not be require as we handling all URL changes in onStepChange
               // earlier we were not getting updated project in onStepChange handler, hence it was required here
               // still leaving it here for next few release, in case we find any issue because of commenting this line
-              // browserHistory.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
+              // this.props.history.push(NEW_PROJECT_PATH + '/' + product + window.location.search)
             }
           }
           this.setState({
@@ -243,5 +275,5 @@ const mapStateToProps = ({projectState, loadUser }) => ({
   error: projectState.error,
   project: projectState.project
 })
-const actionCreators = { createProjectAction, fireProjectDirty, fireProjectDirtyUndo  }
+const actionCreators = { createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject }
 export default withRouter(connect(mapStateToProps, actionCreators)(CreateConainer))

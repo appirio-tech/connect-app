@@ -2,14 +2,11 @@ require('./ProjectToolBar.scss')
 
 import _ from 'lodash'
 import React, {PropTypes} from 'react'
-import {Link} from 'react-router'
+import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
-import {
-  ROLE_CONNECT_COPILOT,
-  ROLE_CONNECT_MANAGER,
-  ROLE_ADMINISTRATOR
-} from '../../config/constants'
+import SVGIconImage from '../SVGIconImage'
+import NewProjectNavLink from './NewProjectNavLink'
 
 function isEllipsisActive(el) {
   return (el.offsetWidth < el.scrollWidth)
@@ -22,14 +19,8 @@ class ProjectToolBar extends React.Component {
     this.state = {
       isTooltipVisible: false
     }
-    this.onTransition = this.onTransition.bind(this)
     this.onNameEnter = this.onNameEnter.bind(this)
     this.onNameLeave = this.onNameLeave.bind(this)
-  }
-
-  onTransition() {
-    // active links in menu are not automatically updated when navigating between project pages
-    this.forceUpdate()
   }
 
   onNameEnter() {
@@ -43,47 +34,32 @@ class ProjectToolBar extends React.Component {
     this.setState({isTooltipVisible: false})
   }
 
-  componentDidMount() {
-    const {router} = this.context
-    router.registerTransitionHook(this.onTransition)
-  }
-
-  componentWillUnmount() {
-    const {router} = this.context
-    router.unregisterTransitionHook(this.onTransition)
-
-  }
-
   render() {
     // TODO: removing isPowerUser until link challenges is needed once again.
-    const {logo, userMenu, project } = this.props
-    const {router} = this.context
+    const { renderLogoSection, userMenu, project } = this.props
     const {isTooltipVisible} = this.state
-
-    const getLinkProps = (to) => ({
-      to,
-      className: router.isActive(to, true) ? 'active': ''
-    })
 
     return (
       <div className="ProjectToolBar">
         <div className="tool-bar">
           <div className="bar-column">
-            {logo}
+            { renderLogoSection() }
             {project && <div className="breadcrumb">
-              <Link to="/projects">Projects /&nbsp;</Link>
-              <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
+              <NavLink to="/projects"><SVGIconImage filePath="arrows-16px-1_tail-left" /> <span>View All Projects</span></NavLink>
             </div>}
-            {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
           </div>
+          {project && <div className="bar-column project-name">
+            <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
+            {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
+          </div>}
           <div className="bar-column">
             {project && <nav className="nav">
               <ul>
-                <li><Link {...getLinkProps(`/projects/${project.id}`)}><i className="icon-dashboard"/>Dashboard</Link></li>
-                <li><Link {...getLinkProps(`/projects/${project.id}/specification`)}><i className="icon-specification"/>Specification</Link></li>
+                <li><NavLink to={`/projects/${project.id}`} exact activeClassName="active"><i className="icon-dashboard"/>Dashboard</NavLink></li>
+                <li><NavLink to={`/projects/${project.id}/specification`} activeClassName="active"><i className="icon-specification"/>Specification</NavLink></li>
                 {/*
                   TODO: Enable again when challenges link is needed.
-                  isPowerUser && <li><Link {...getLinkProps(`/projects/${project.id}/challenges`)}><i className="icon-challenges"/>Challenges</Link></li>
+                  isPowerUser && <li><NavLink to={`/projects/${project.id}/challenges`} activeClassName="active"><i className="icon-challenges"/>Challenges</Link></li>
                 */}
                 {/*
                   * TODO: Completely remome the discussions list item once there isn't
@@ -91,10 +67,11 @@ class ProjectToolBar extends React.Component {
                   */}
                 {
                   (project.details && !project.details.hideDiscussions) &&
-                  <li><Link {...getLinkProps(`/projects/${project.id}/discussions`)}><i className="icon-messages"/>Discussions</Link></li>
+                  <li><NavLink to={`/projects/${project.id}/discussions`} activeClassName="active"><i className="icon-messages"/>Discussions</NavLink></li>
                 }
               </ul>
             </nav>}
+            <NewProjectNavLink compact returnUrl={window.location.href} />
             { userMenu }
           </div>
         </div>
@@ -105,24 +82,18 @@ class ProjectToolBar extends React.Component {
 
 ProjectToolBar.propTypes = {
   project: PropTypes.object,
-  isPowerUser: PropTypes.bool
-}
-
-ProjectToolBar.contextTypes = {
-  router: PropTypes.object.isRequired
+  isPowerUser: PropTypes.bool,
+  /**
+   * Function which render the logo section in the top bar
+   */
+  renderLogoSection     : PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ projectState, loadUser }) => {
-  let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
-  if (loadUser.user) {
-    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
-  }
   return {
     project                : projectState.project,
     userRoles              : _.get(loadUser, 'user.roles', []),
-    user                   : loadUser.user,
-    isPowerUser
+    user                   : loadUser.user
   }
 }
 

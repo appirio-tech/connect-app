@@ -21,6 +21,13 @@ $tc-body-large: 20px;
       margin-left: 4 * $base-unit;
     }
 
+    .MenuBar {
+      li.selected {
+        // hides the bottom border as per https://github.com/appirio-tech/connect-app/issues/1267#issuecomment-343298713
+        border-bottom: none;
+      }
+    }
+
     .welcome-info {
       margin-right: 4 * $base-unit;
     }
@@ -32,6 +39,20 @@ $tc-body-large: 20px;
 
   .secondary-toolbar {
     display: flex;
+  }
+
+  .MenuBar li {
+    align-items: center; // should reside in MenuBar component instead
+
+    a {
+      text-transform: uppercase;
+      font-size: $tc-label-xs;
+      line-height: 6 * $base-unit;
+    }
+
+    &.selected a {
+      color: $tc-gray-10;
+    }
   }
 
   .search-widget {

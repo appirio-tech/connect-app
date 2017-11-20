@@ -1,0 +1,9 @@
+@import "tc-includes";
+
+.AvatarGroup {
+  display: flex;
+
+  .Avatar + .Avatar {
+    margin-left: $base_unit;
+  }
+}

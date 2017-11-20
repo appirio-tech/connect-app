@@ -1,0 +1,72 @@
+@import 'tc-includes';
+
+.ProjectCard {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  height: 400px;
+  background-color: $tc-white;
+  border-radius: 6px;
+  padding: 4 * $base_unit;
+
+  &:hover {
+    box-shadow: 0 2px 9px 0 rgba(38,38,40,0.15);
+  }
+
+  &.NewProjectCard {
+    background-color: $tc-gray-neutral-dark;
+    border: 1px dashed $tc-gray-30;
+
+    &:hover {
+      box-shadow: none;
+
+      .card-body .new-project-button .new-project-icon {
+        @include background-gradient(#3996FF, #127BF3);
+      }
+    }
+
+    .card-body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .new-project-button {
+        @include tc-label-md;
+        text-transform: uppercase;
+        color: $tc-dark-blue-90;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+
+        .new-project-icon {
+          width: 40px;
+          height: 40px;
+          background-color: $tc-dark-blue-90;
+          border-radius: 100%;
+          padding: 12px;
+          svg {
+            fill: $tc-white;
+          }
+          margin-bottom: 4 * $base_unit;
+        }
+      }
+    }
+  }
+
+  .card-header {
+    margin-bottom: 4 * $base_unit;
+  }
+
+  .card-body {
+    flex: 1;
+
+    .ProjectStatus .status-header {
+      cursor: pointer;
+    }
+  }
+
+  .card-footer {
+    // padding-top: 4 * $base_unit;
+  }
+}

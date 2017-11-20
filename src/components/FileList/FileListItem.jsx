@@ -1,7 +1,10 @@
 import _ from 'lodash'
 import React, {PropTypes} from 'react'
 import filesize from 'filesize'
-import { Icons } from 'appirio-tech-react-components'
+import moment from 'moment'
+import { Icons, Tooltip } from 'appirio-tech-react-components'
+import UserWithName from '../User/UserWithName'
+import { TOOLTIP_DEFAULT_DELAY } from '../../config/constants'
 
 const { TrashIcon, CloseIcon, EditIcon, SaveIcon } = Icons
 
@@ -88,13 +91,22 @@ export default class FileListItem extends React.Component {
   }
 
   renderReadOnly() {
-    const {title, downloadUrl, description, size, isEditable} = this.props
+    const {title, downloadUrl, description, size, isEditable, updatedAt, createdAt, createdByUser, updatedByUser} = this.props
+
     return (
       <div>
         <div className="title">
           <h4><a href={downloadUrl} target="_blank" rel="noopener noreferrer">{title}</a></h4>
           <div className="size">
             {filesize(size)}
+            <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+              <div className="tooltip-target">
+                <p className="date">{moment(updatedAt || createdAt).format('MMM DD, YYYY')}</p>
+              </div>
+              <div className="tooltip-body">
+                <UserWithName {...(updatedByUser || createdByUser)} />
+              </div>
+            </Tooltip>
           </div>
           {isEditable && <div className="edit-icons">
             <i className="icon-edit" onClick={this.startEdit}><EditIcon /></i>
@@ -136,6 +148,10 @@ FileListItem.propTypes = {
   size: PropTypes.number.isRequired,
   contentType: PropTypes.string,
   isEditable: PropTypes.bool,
+  updatedAt: PropTypes.string,
+  createdAt: PropTypes.string.isRequired,
+  updatedByUser: PropTypes.object,
+  createdByUser: PropTypes.object.isRequired,
 
   /**
    * Callback fired when a save button is clicked

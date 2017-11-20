@@ -25,31 +25,50 @@
       margin-left: 4 * $base-unit;
     }
     .breadcrumb {
-      @include roboto-light;
-      font-size: 20px;
+      @include tc-label-xs;
+      line-height: 6 * $base-unit;
       color: $tc-gray-10;
       position: relative;
       overflow: hidden;
       text-overflow: ellipsis;
-      width: 500px;
       display: flex;
+      a {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        color: $tc-gray-50;
+        text-transform: uppercase;
+
+        svg {// Back arrow
+          fill: $tc-gray-50;
+          height: 13px;
+          margin-right: 10px;
+        }
+        &:hover, &.hover{
+          text-decoration: none;
+          color: $tc-orange-30;
+          svg {// Back arrow
+            fill: $tc-orange-30;
+          }
+        }
+      }
+    }
+
+    .bar-column.project-name {
+      display: flex;
+      align-items: center;
+      
       span {
+        @include tc-heading;
+        color: $tc-gray-10;
         display:block;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
-        padding-right: $base-unit * 12;
-      }
-      a {
-        display:block;
-        flex-shrink: 0;
-        color: $tc-gray-50;
-        &:hover, &.hover{
-          text-decoration: none;
-          color: $tc-orange-30;
-        }
+        max-width: 500px;
       }
     }
+
     .bar-column .welcome-info{
       width: 70px;
       display: flex;
@@ -193,7 +212,7 @@
     @include roboto();
     word-break: break-word;
     position: absolute;
-    left: calc(50% - 240px - 230px);
+    left: calc(50% - 280px);
     top: 56px;
     width: 480px;
     padding: 15px;
