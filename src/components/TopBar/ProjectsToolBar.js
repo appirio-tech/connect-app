@@ -108,7 +108,7 @@ class ProjectsToolBar extends Component {
     criteria = _.pickBy(criteria, _.identity)
     this.props.history.push({
       pathname: '/projects',
-      query: '?' + querystring.stringify(_.assign({}, criteria, { page }), {encode : true})
+      query: '?' + querystring.stringify(_.assign({}, criteria, { page }))
     })
     this.props.loadProjects(criteria, page)
   }
