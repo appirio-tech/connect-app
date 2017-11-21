@@ -1,6 +1,7 @@
 require('./ProjectsToolBar.scss')
 
 import React, {PropTypes, Component} from 'react'
+import querystring from 'query-string'
 import { withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'
 import cn from 'classnames'
@@ -106,8 +107,8 @@ class ProjectsToolBar extends Component {
     // remove any null values
     criteria = _.pickBy(criteria, _.identity)
     this.props.history.push({
-      pathname: '/projects/',
-      query: _.assign({}, criteria, { page })
+      pathname: '/projects',
+      query: '?' + querystring.stringify(_.assign({}, criteria, { page }), {encode : true})
     })
     this.props.loadProjects(criteria, page)
   }
