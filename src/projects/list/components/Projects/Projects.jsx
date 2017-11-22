@@ -77,10 +77,10 @@ class Projects extends Component {
   init(props) {
     document.title = 'Projects - Topcoder'
     // this.searchTermFromQuery = this.props.location.query.q || ''
-    const {criteria, loadProjects} = props
+    const {criteria, loadProjects, location} = props
     let pageNum = props.pageNum
     // check for criteria specified in URL.
-    const queryParams = _.get(props, 'location.query', null)
+    const queryParams = querystring.parse(location.search)
     if (!_.isEmpty(queryParams)) {
       const initialCriteria = {}
       if (queryParams.sort) initialCriteria.sort = queryParams.sort
