@@ -24,11 +24,8 @@
   }
 
   .project-description {
-    line-height: 5*$base-unit;
-    margin-top: $base-unit * 4;
-    margin-bottom: $base-unit * 4;
-    word-break: break-all;
-    white-space: pre-line;
+    color: $tc-gray-80;
+    @include tc-label-md;
   }
 
   .project-meta-data {
