@@ -94,13 +94,15 @@
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
-    max-width: 1160px;// media query needed for smaller/bigger screens
-    margin: 20px auto;
+    margin: 20px 10px; // fluid width with 20px margin
   }
 
   .project-card {
-    margin-bottom: 4 * $base-unit;
-    margin-left: 4 * $base-unit;
+    padding: 0 2 * $base-unit 4 * $base-unit;
+    height: 400px;
+    min-width: 280px;
+    max-width: 460px;
+    flex: 1 360px;
   }
 }
 

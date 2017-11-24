@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import cn from 'classnames'
 import { PROJECT_STATUS } from '../../config/constants'
+import SVGIconImage from '../SVGIconImage'
 import './ProjectStatus.scss'
 
 export const enhanceDropdown = (CompositeComponent) => class extends Component {
@@ -110,7 +111,7 @@ const ProjectStatus = ({ canEdit, isOpen, status, handleClick, onSelect, showTex
     <div className="ProjectStatus">
       <div className={cn('status-header', 'ps-' + selected.value, { active: isOpen, editable: canEdit, 'unified-header': unifiedHeader })} onClick={handleClick}>
         <div className="status-icon"><i /></div>
-        {showText && (<span className="status-label">{withoutLabel ? selected.fullName : selected.name}<i className="caret" /></span>)}
+        {showText && (<span className="status-label">{withoutLabel ? selected.fullName : selected.name}<i className="caret" ><SVGIconImage filePath="arrow-9px-carret-down-normal" /></i></span>)}
       </div>
       {isOpen && canEdit && <div className="status-dropdown">
         <div className="status-header">Project Status</div>
