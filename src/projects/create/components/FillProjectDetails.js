@@ -11,6 +11,7 @@ import typeToSpecification from '../../../config/projectSpecification/typeToSpec
 class FillProjectDetails extends Component  {
   constructor(props) {
     super(props)
+    this.createMarkup = this.createMarkup.bind(this)
     this.state = { project: {} }
   }
 
@@ -31,6 +32,10 @@ class FillProjectDetails extends Component  {
    )
   }
 
+  createMarkup(product) {
+    return {__html: _.get(product, 'formTitle', `Let's setup your ${ product.name } project`) }
+  }
+
   render() {
     const { project, dirtyProject, processing, submitBtnText } = this.props
     const productId = _.get(project, 'details.products[0]')
@@ -46,7 +51,7 @@ class FillProjectDetails extends Component  {
         </div>
         <div className="FillProjectDetails">
           <div className="header">
-            <h1>{ _.get(product, 'formTitle', `Let's setup your ${ product.name } project`) }</h1>
+            <h1 dangerouslySetInnerHTML = {this.createMarkup(product)} ></h1>
           </div>
           <section className="two-col-content content">
             <div className="container">
