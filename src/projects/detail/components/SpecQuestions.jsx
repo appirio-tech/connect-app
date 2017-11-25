@@ -14,7 +14,7 @@ import SliderInput from './../../../components/SliderInput/SliderInput'
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
 
 // HOC for SpecFeatureQuestion
-const SeeAttachedSpecFeatureQuestion = seeAttachedWrapperField(SpecFeatureQuestion)
+const SeeAttachedSpecFeatureQuestion = seeAttachedWrapperField(SpecFeatureQuestion, [])
 
 const getIcon = icon => {
   switch (icon) {
@@ -146,7 +146,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
         options: q.options,
         min: 0,
         max: q.options.length - 1,
-        step :null,
+        step: 1,
         included: false
       })
       break
