@@ -2,6 +2,7 @@ import _ from 'lodash'
 import React, { PropTypes as PT } from 'react'
 import config from '../../../config/projectWizard'
 import VisualDesignProjectEstimateSection from '../../detail/components/VisualDesignProjectEstimateSection'
+import ProjectCardHeader from '../../list/components/Projects/ProjectCardHeader'
 import './ProjectOutline.scss'
 
 function ProjectOutline({ project }) {
@@ -21,7 +22,7 @@ function ProjectOutline({ project }) {
   return (
     <div className="ProjectOutline">
       <h5>Project Outline</h5>
-      <div className="project-name">{ project.name }</div>
+      <ProjectCardHeader project={project} />
       <div className="project-product">{ productName }</div>
       <ul className="project-meta-data">
         
