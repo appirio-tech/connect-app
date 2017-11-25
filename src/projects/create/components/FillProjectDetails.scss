@@ -19,70 +19,72 @@
   .two-col-content {
     padding: 0 !important;
     min-width: $minimumPageWidth;
+  
+    &.content{
+      .container {
+        @include flexBox;
+        align-self: flex-start;
+        background-color: none;
+        display: flex;
+        padding: 0;
+        max-width: 1110px;
+        margin: 0 auto;
 
-    .container {
-      @include flexBox;
-      align-self: flex-start;
-      background-color: none;
-      display: flex;
-      padding: 0;
-      max-width: 1110px;
-      margin: 0 auto;
+        /* .left-area */
+        .left-area {
+          flex: auto;
+          width: auto;
+          position: relative;
 
-      /* .left-area */
-      .left-area {
-        flex: auto;
-        width: auto;
-        position: relative;
+          .left-area-content {
+            border-radius: 4px;
+            background: $tc-white;
+            box-shadow: 0px 1px 3px 0px $tc-gray-30;
+            padding: 50px;
 
-        .left-area-content {
-          border-radius: 4px;
-          background: $tc-white;
-          box-shadow: 0px 1px 3px 0px $tc-gray-30;
-          padding: 50px;
+            .title {
+              color: $tc-gray-80;
+              @include roboto-bold;
+            }
 
-          .title {
-            color: $tc-gray-80;
-            @include roboto-bold;
+            .section-footer {
+              margin-top: $base_unit * 4;
+              margin-bottom: 0;
+              background: none;
+              height: 40px;
+            }
           }
 
-          .section-footer {
-            margin-top: $base_unit * 4;
-            margin-bottom: 0;
-            background: none;
-            height: 40px;
+          .left-area-footer {
+            @include tc-label-sm;
+            color: $tc-gray-50;
+            margin-top: 4 * $base_unit;
+
+            span {
+              clear: both;
+              float: none;
+            }
           }
         }
 
-        .left-area-footer {
-          @include tc-label-sm;
-          color: $tc-gray-50;
-          margin-top: 4 * $base_unit;
+        .right-area {
+          flex: auto !important;
+          width: 320px;
+          min-width: 320px;
+          max-width: 320px;
+          margin-left: 4 * $base_unit;
 
-          span {
-            clear: both;
-            float: none;
-          }
-        }
-      }
+          .right-area-footer {
+            @include roboto;
+            padding: 10px 0 0 0;
+            font-size: 13px;
+            line-height: 20px;
+            color: $tc-gray-50;
+            font-style: italic;
 
-      .right-area {
-        flex: auto !important;
-        width: 320px;
-        min-width: 320px;
-        max-width: 320px;
-        margin-left: 4 * $base_unit;
-
-        .right-area-footer {
-          @include roboto;
-          padding: 10px 0 0 0;
-          font-size: 13px;
-          line-height: 20px;
-          color: $tc-gray-50;
-          font-style: italic;
-
-          span {
-            float: right;
+            span {
+              float: right;
+            }
           }
         }
       }
