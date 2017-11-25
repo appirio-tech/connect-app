@@ -16,6 +16,15 @@
     text-transform: uppercase;
   }
 
+  .project-name {
+    color: $tc-gray-80;
+    @include roboto-bold;
+    margin-bottom: $base-unit * 2;
+    align-self: center;
+    width: 100%;
+    word-break: break-all;
+  }
+  
   .project-product {
     color: $tc-gray-50;
     @include roboto;
@@ -24,8 +33,11 @@
   }
 
   .project-description {
-    color: $tc-gray-80;
-    @include tc-label-md;
+    line-height: 5*$base-unit;
+    margin-top: $base-unit * 4;
+    margin-bottom: $base-unit * 4;
+    word-break: break-all;
+    white-space: pre-line;
   }
 
   .project-meta-data {
