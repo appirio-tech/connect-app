@@ -40,7 +40,6 @@ const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent}) => (
 )
 
 FileList.propTypes = {
-  children: PropTypes.any.isRequired
 }
 
 FileList.Item = FileListItem
