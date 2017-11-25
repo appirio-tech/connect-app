@@ -146,7 +146,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
         options: q.options,
         min: 0,
         max: q.options.length - 1,
-        step :null,
+        step: 1,
         included: false
       })
       break
