@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
 import Panel from '../Panel/Panel'
 import FileListItem from './FileListItem'
 import cn from 'classnames'

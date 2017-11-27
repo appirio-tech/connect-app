@@ -357,7 +357,7 @@
       }
     },
     "appirio-tech-react-components": {
-      "version": "github:appirio-tech/react-components#923908dbb7ae84b1dabd7d9fe47994e5459e1af5",
+      "version": "github:appirio-tech/react-components#264cee3ec5e722bfb57a22146c8be9b290b486a3",
       "requires": {
         "appirio-tech-api-schemas": "5.0.70",
         "appirio-tech-client-app-layer": "0.1.3",
