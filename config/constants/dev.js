@@ -41,5 +41,5 @@ module.exports = {
   IBM_COGNITIVE_PROGRAM_ID  : 3449,
   HEAP_ANALYTICS_APP_ID     : '4153837120',
 
-  TC_NOTIFICATION_URL: 'http://192.168.0.101:4000'
+  TC_NOTIFICATION_URL: 'https://dry-ravine-52966.herokuapp.com'
 }
