@@ -10,33 +10,19 @@ import {
   CHANGE_EMAIL_FAILURE,
   CHANGE_PASSWORD_PENDING,
   CHANGE_PASSWORD_SUCCESS,
-  CHANGE_PASSWORD_FAILURE
+  CHANGE_PASSWORD_FAILURE,
+  GET_NOTIFICATION_SETTINGS,
+  SAVE_NOTIFICATION_SETTINGS_PENDING,
+  SAVE_NOTIFICATION_SETTINGS_SUCCESS,
+  SAVE_NOTIFICATION_SETTINGS_FAILURE
 } from '../../../config/constants'
 
 // TODO initial state with mocked data for demo should be removed
 // once service and actions are implemented
 const initialState = {
   notifications: {
-    system: {
-      web: 'Always on',
-      email: true
-    },
-    'member-added': {
-      web: true,
-      email: true
-    },
-    'new-project': {
-      web: false,
-      email: true
-    },
-    mention: {
-      web: true,
-      email: false
-    },
-    promotions: {
-      web: '',
-      email: true
-    },
+    settings: {},
+    pending: true,
     bundleEmail: '24h'
   },
   system: {
@@ -55,6 +41,30 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+
+  case GET_NOTIFICATION_SETTINGS:
+    return {...state,
+      notifications: {...state.notifications,
+        settings: action.payload.data,
+        pending: false
+      }
+    }
+
+  case SAVE_NOTIFICATION_SETTINGS_PENDING:
+    return {...state,
+      notifications: {...state.notifications,
+        pending: true
+      }
+    }
+
+  case SAVE_NOTIFICATION_SETTINGS_SUCCESS:
+  case SAVE_NOTIFICATION_SETTINGS_FAILURE:
+    return {...state,
+      notifications: {...state.notifications,
+        settings: action.payload.data,
+        pending: false
+      }
+    }
 
   case CHECK_EMAIL_AVAILABILITY_PENDING:
     return {...state,

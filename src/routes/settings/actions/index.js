@@ -10,7 +10,11 @@ import {
   CHANGE_EMAIL_FAILURE,
   CHANGE_PASSWORD_PENDING,
   CHANGE_PASSWORD_SUCCESS,
-  CHANGE_PASSWORD_FAILURE
+  CHANGE_PASSWORD_FAILURE,
+  GET_NOTIFICATION_SETTINGS,
+  SAVE_NOTIFICATION_SETTINGS_PENDING,
+  SAVE_NOTIFICATION_SETTINGS_SUCCESS,
+  SAVE_NOTIFICATION_SETTINGS_FAILURE
 } from '../../../config/constants'
 import settingsSerivce from '../services/settings'
 import Alert from 'react-s-alert'
@@ -67,6 +71,37 @@ export const changePassword = (newPassword) => (dispatch) => {
     Alert.error(`Failed to change password. ${err.message}`)
     dispatch({
       type: CHANGE_PASSWORD_FAILURE
+    })
+  })
+}
+
+export const getNotificationSettings = () => (dispatch) => {
+  settingsSerivce.getNotificationSettings().then(data => {
+    dispatch({
+      type: GET_NOTIFICATION_SETTINGS,
+      payload: { data }
+    })
+  }).catch(err => {
+    Alert.error(`Failed to get notification settings. ${err.message}`)
+  })
+}
+
+export const saveNotificationSettings = (data) => (dispatch) => {
+  dispatch({
+    type: SAVE_NOTIFICATION_SETTINGS_PENDING
+  })
+
+  settingsSerivce.saveNotificationSettings(data).then(() => {
+    Alert.success('Settings successfully saved.')
+    dispatch({
+      type: SAVE_NOTIFICATION_SETTINGS_SUCCESS,
+      payload: { data }
+    })
+  }).catch(err => {
+    Alert.error(`Failed to save settings. ${err.message}`)
+    dispatch({
+      type: SAVE_NOTIFICATION_SETTINGS_FAILURE,
+      payload: { data }
     })
   })
 }

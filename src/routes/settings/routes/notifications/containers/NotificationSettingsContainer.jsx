@@ -6,9 +6,10 @@ import { connect } from 'react-redux'
 import NotificationSettingsForm from '../components/NotificationSettingsForm'
 import SettingsPanel from '../../../components/SettingsPanel'
 import { requiresAuthentication } from '../../../../../components/AuthenticatedComponent'
+import { getNotificationSettings, saveNotificationSettings } from '../../../actions'
 
 const NotificationSettingsContainer = (props) => {
-  const { notificationSettings } = props
+  const { notificationSettings, getNotificationSettings, saveNotificationSettings } = props
 
   return (
     <SettingsPanel
@@ -17,13 +18,15 @@ const NotificationSettingsContainer = (props) => {
         You can also provide the needed information in a supporting document—upload it below or add a link in the notes section."
       isWide
     >
-      <NotificationSettingsForm values={notificationSettings} />
+      <NotificationSettingsForm values={notificationSettings} onInit={getNotificationSettings} onSubmit={saveNotificationSettings} />
     </SettingsPanel>
   )
 }
 
 NotificationSettingsContainer.propTypes = {
-  notificationSettings: PropTypes.object.isRequired
+  notificationSettings: PropTypes.object.isRequired,
+  getNotificationSettings: PropTypes.func.isRequired,
+  saveNotificationSettings: PropTypes.func.isRequired
 }
 
 const NotificationSettingsContainerWithAuth = requiresAuthentication(NotificationSettingsContainer)
@@ -32,4 +35,9 @@ const mapStateToProps = ({ settings }) => ({
   notificationSettings: settings.notifications
 })
 
-export default connect(mapStateToProps)(NotificationSettingsContainerWithAuth)
+const mapDispatchToProps = {
+  getNotificationSettings,
+  saveNotificationSettings
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationSettingsContainerWithAuth)

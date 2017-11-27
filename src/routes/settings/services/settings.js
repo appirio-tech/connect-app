@@ -3,6 +3,9 @@
  *
  * TODO has to be replaced with the real service
  */
+import _ from 'lodash'
+import { axiosInstance as axios } from '../../../api/requestInterceptor'
+import { TC_NOTIFICATION_URL } from '../../../../config/constants'
 
 // mocked fetching timeout
 const mockedTimeout = 1000
@@ -58,8 +61,33 @@ const changePassword = (password) => {
   return mockedResponse
 }
 
+const getNotificationSettings = () => {
+  return axios.get(`${TC_NOTIFICATION_URL}/notificationsettings`)
+    .then(resp => resp.data)
+}
+
+const topics = [
+  'notifications.connect.project.created',
+  'notifications.connect.project.updated',
+  'notifications.connect.message.posted',
+  'notifications.connect.message.edited',
+  'notifications.connect.message.deleted',
+  'notifications.connect.project.submittedForReview'
+]
+
+const saveNotificationSettings = (data) => {
+  const body = []
+  _.each(topics, (topic) => {
+    body.push({ topic, deliveryMethod: 'email', value: data[topic] && data[topic].email === 'yes' ? 'yes' : 'no' })
+    body.push({ topic, deliveryMethod: 'web', value: data[topic] && data[topic].web === 'yes' ? 'yes' : 'no' })
+  })
+  return axios.put(`${TC_NOTIFICATION_URL}/notificationsettings`, body)
+}
+
 export default {
   checkEmailAvailability,
   changeEmail,
-  changePassword
+  changePassword,
+  getNotificationSettings,
+  saveNotificationSettings
 }

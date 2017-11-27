@@ -36,7 +36,7 @@ Install dependencies by running the following in the root of the project:
 
 ## Login
 
-If during login your are getting `Invalid URL: http://localhost:3000` error. Once you log in and redirection fails, just go to http://localhost:3000 and it will show up.
+During login, if your see `Invalid URL: http://localhost:3000` error in browser console, just browse http://localhost:3000 and it will show up.
 
 Or, you can add into your `/etc/hosts` the line `127.0.0.1 local.topcoder-dev.com`. And access the app with http://local.topcoder-dev.com:3000. It will prevent you from getting `Invalid URL: http://localhost:3000` and you will be redirected successfully after login.
 

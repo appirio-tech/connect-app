@@ -3,136 +3,62 @@
  *
  * TODO has to be replaced with the real service
  */
+import { axiosInstance as axios } from '../../../api/requestInterceptor'
+import { TC_NOTIFICATION_URL } from '../../../../config/constants'
+import { NOTIFICATIONS_LIMIT, OLD_NOTIFICATION_TIME } from '../../../config/constants'
+import _ from 'lodash'
 
-// mock test data
-const mockOlderNotifications = [
-  {
-    id: 'projectId-02-08',
-    sourceId: 'projectId-02',
-    type: 'new-posts',
-    date: '2017-11-02 20:00',
-    isRead: false,
-    content: '34 new posts in <strong>Architecture Map Specification</strong>'
-  }, {
-    id: 'projectId-02-09',
-    sourceId: 'projectId-02',
-    type: 'updates',
-    date: '2016-11-02 20:00',
-    isRead: false,
-    content: '2 new project updates posted'
-  }, {
-    id: 'projectId-02-10',
-    sourceId: 'projectId-02',
-    type: 'updates',
-    date: '2016-11-02 20:00',
-    isRead: false,
-    content: '1 new project updates posted'
-  }, {
-    id: 'projectId-02-11',
-    sourceId: 'projectId-02',
-    type: 'new-posts',
-    date: '2017-11-02 20:00',
-    isRead: false,
-    content: '4 new posts in <strong>Architecture Map Specification</strong>'
-  }, {
-    id: 'projectId-02-12',
-    sourceId: 'projectId-02',
-    type: 'updates',
-    date: '2017-10-24 20:00',
-    isRead: false,
-    content: 'You were added to the project by <strong>Pat Monahan</strong>'
-  }, {
-    id: 'projectId-02-13',
-    sourceId: 'projectId-02',
-    type: 'updates',
-    date: '2017-10-24 20:00',
-    isRead: false,
-    content: '<strong>Pat Monahan</strong> joined your project as a manager'
-  }, {
-    id: 'projectId-02-14',
-    sourceId: 'projectId-02',
-    type: 'updates',
-    date: '2017-10-24 20:00',
-    isRead: false,
-    content: 'Your project was reviewed'
-  }, {
-    id: 'projectId-02-15',
-    sourceId: 'projectId-02',
-    type: 'new-posts',
-    date: '2017-11-02 20:00',
-    isRead: false,
-    content: '34 new posts in <strong>Architecture Map Specification</strong>'
-  }, {
-    id: 'projectId-02-16',
-    sourceId: 'projectId-02',
-    type: 'updates',
-    date: '2016-11-02 20:00',
-    isRead: false,
-    content: '2 new project updates posted'
-  }, {
-    id: 'projectId-02-17',
-    sourceId: 'projectId-02',
-    type: 'updates',
-    date: '2016-11-02 20:00',
-    isRead: false,
-    content: '1 new project updates posted'
-  }, {
-    id: 'projectId-02-18',
-    sourceId: 'projectId-02',
-    type: 'new-posts',
-    date: '2017-11-02 20:00',
-    isRead: false,
-    content: '4 new posts in <strong>Architecture Map Specification</strong>'
-  }, {
-    id: 'projectId-02-19',
-    sourceId: 'projectId-02',
-    type: 'updates',
-    date: '2017-10-24 20:00',
-    isRead: false,
-    content: 'You were added to the project by <strong>Pat Monahan</strong>'
-  }, {
-    id: 'projectId-02-20',
-    sourceId: 'projectId-02',
-    type: 'updates',
-    date: '2017-10-24 20:00',
-    isRead: false,
-    content: '<strong>Pat Monahan</strong> joined your project as a manager'
-  }, {
-    id: 'projectId-02-21',
-    sourceId: 'projectId-02',
-    type: 'updates',
-    date: '2017-10-24 20:00',
-    isRead: false,
-    content: 'Your project was reviewed'
-  }
-]
 
-// mocked fetching timeout
-const mockedTimeout = 1000
-
-const mockedFetch = (errorMessage, data) => new Promise((resolve, reject) => {
-  setTimeout(() => {
-    if (errorMessage) {
-      reject(new Error(errorMessage))
-    } else {
-      resolve(data)
-    }
-  }, mockedTimeout)
-})
-
-const getOlderNotigications = (sourceId) => {
-  let mockedResponse
-
-  // for demo throw error when sourceId is not like this
-  if (sourceId !== 'projectId-02') {
-    mockedResponse = mockedFetch('This is mocked request error when sourceId is not "projectId-02".')
+// the id can be either: null/undefined (mark all); notification id; or '-' separated ids, e.g. '123-456-789'
+const markNotificationsRead = (id) => {
+  if (id) {
+    return axios.put(`${TC_NOTIFICATION_URL}/notifications/${id}/read`)
   } else {
-    mockedResponse = mockedFetch(null, mockOlderNotifications)
+    return axios.put(`${TC_NOTIFICATION_URL}/notifications/read`)
   }
+}
 
-  return mockedResponse
+const getNotifications = () => {
+  return axios.get(`${TC_NOTIFICATION_URL}/notifications?read=false&limit=${NOTIFICATIONS_LIMIT}`)
+    .then(resp => resp.data.items)
+    .then(items => _.map(items, item => {
+      // convert notification item
+      const notification = {
+        id: `${item.id}`,
+        sourceId: item.contents.projectId ? `${item.contents.projectId}` : 'global',
+        sourceName: item.contents.projectId ? (item.contents.projectName || 'project') : 'Global',
+        type: 'warning',
+        date: item.createdAt,
+        isRead: item.read,
+        isOld: new Date().getTime() - OLD_NOTIFICATION_TIME * 60000 > new Date(item.createdAt).getTime(),
+        content: ''
+      }
+
+      if (item.type === 'notifications.connect.project.created') {
+        notification.type = 'new-project'
+        notification.content = `project created: <strong>${item.contents.projectName}</strong>`
+      } else if (item.type === 'notifications.connect.project.updated') {
+        notification.type = 'updates'
+        notification.content = `project updated: <strong>${item.contents.projectName}</strong>`
+      } else if (item.type === 'notifications.connect.message.posted') {
+        notification.type = 'new-posts'
+        notification.content = `<strong>${item.contents.userName}</strong> posted message: <strong>${item.contents.message}</strong>`
+      } else if (item.type === 'notifications.connect.message.edited') {
+        notification.type = 'updates'
+        notification.content = `<strong>${item.contents.userName}</strong> edited message: <strong>${
+          item.contents.oldMessage}</strong>, new message: <strong>${item.contents.newMessage}</strong>`
+      } else if (item.type === 'notifications.connect.message.deleted') {
+        notification.type = 'updates'
+        notification.content = `<strong>${item.contents.userName}</strong> deleted message: <strong>${item.contents.message}</strong>`
+      } else if (item.type === 'notifications.connect.project.submittedForReview') {
+        notification.type = 'review-pending'
+        notification.content = `project submitted for review: <strong>${item.contents.projectName}</strong>`
+      }
+      return notification
+    }))
 }
 
 export default {
-  getOlderNotigications
+  getNotifications,
+  markNotificationsRead
 }

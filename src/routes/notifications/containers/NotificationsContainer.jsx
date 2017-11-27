@@ -6,7 +6,7 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Sticky from 'react-stickynode'
-import { setNotificationsFilterBy, markAllNotificationsRead, toggleNotificationRead, viewOlderNotifications } from '../actions'
+import { getNotifications, setNotificationsFilterBy, markAllNotificationsRead, toggleNotificationRead, viewOlderNotifications } from '../actions'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import NotificationsSection from '../../../components/NotificationsSection/NotificationsSection'
 import NotificationsSectionTitle from '../../../components/NotificationsSectionTitle/NotificationsSectionTitle'
@@ -20,13 +20,17 @@ import './NotificationsContainer.scss'
 class NotificationsContainer extends React.Component {
   componentDidMount() {
     document.title = 'Notifications - TopCoder'
+    this.props.getNotifications()
   }
 
   render() {
+    if (!this.props.initialized) {
+      return null
+    }
     const { sources, notifications, filterBy, setNotificationsFilterBy,
-      markAllNotificationsRead, toggleNotificationRead, viewOlderNotifications } = this.props
+      markAllNotificationsRead, toggleNotificationRead, viewOlderNotifications, oldSourceIds, pending } = this.props
     const notReadNotifications = filterReadNotifications(notifications)
-    const notificationsBySources = splitNotificationsBySources(sources, notReadNotifications)
+    const notificationsBySources = splitNotificationsBySources(sources, notReadNotifications, oldSourceIds)
     let globalSource = notificationsBySources.length > 0 && notificationsBySources[0].id === 'global' ? notificationsBySources[0] : null
     let projectSources = globalSource ? notificationsBySources.slice(1) : notificationsBySources
     if (filterBy) {
@@ -45,9 +49,9 @@ class NotificationsContainer extends React.Component {
             <NotificationsSection
               {...globalSource}
               isGlobal
-              onMarkAllClick={() => markAllNotificationsRead()}
-              onReadToggleClick={toggleNotificationRead}
-              onViewOlderClick={() => viewOlderNotifications(globalSource.id, globalSource.notifications.length)}
+              onMarkAllClick={() => !pending && markAllNotificationsRead('global', notifications)}
+              onReadToggleClick={(id) => !pending && toggleNotificationRead(id)}
+              onViewOlderClick={() => viewOlderNotifications(globalSource.id)}
             />
           }
           {projectSources.length > 0 && <NotificationsSectionTitle title="Project" isGlobal />}
@@ -55,9 +59,9 @@ class NotificationsContainer extends React.Component {
             <NotificationsSection
               key={source.id}
               {...source}
-              onMarkAllClick={() => markAllNotificationsRead(source.id)}
-              onReadToggleClick={toggleNotificationRead}
-              onViewOlderClick={() => viewOlderNotifications(source.id, source.notifications.length)}
+              onMarkAllClick={() => !pending && markAllNotificationsRead(source.id, notifications)}
+              onReadToggleClick={(id) => !pending && toggleNotificationRead(id)}
+              onViewOlderClick={() => viewOlderNotifications(source.id)}
             />
           )}
           {globalSource || projectSources.length > 0 ?
@@ -89,9 +93,12 @@ class NotificationsContainer extends React.Component {
 
 NotificationsContainer.propTypes = {
   isLoading: PropTypes.bool.isRequired,
+  initialized: PropTypes.bool.isRequired,
   notifications: PropTypes.array,
   sources: PropTypes.array,
-  filterBy: PropTypes.string
+  filterBy: PropTypes.string,
+  oldSourceIds: PropTypes.array,
+  pending: PropTypes.bool
 }
 
 const enhance = spinnerWhileLoading(props => !props.isLoading)
@@ -101,6 +108,7 @@ const NotificationsContainerWithLoaderAndAuth = requiresAuthentication(Notificat
 const mapStateToProps = ({ notifications }) => notifications
 
 const mapDispatchToProps = {
+  getNotifications,
   setNotificationsFilterBy,
   markAllNotificationsRead,
   toggleNotificationRead,
