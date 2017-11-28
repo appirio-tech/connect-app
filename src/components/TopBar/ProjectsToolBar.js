@@ -6,7 +6,7 @@ import { withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'lodash'
-import { SearchBar, MenuBar } from 'appirio-tech-react-components'
+import { SearchBar, MenuBar, SwitchButton } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import NewProjectNavLink from './NewProjectNavLink'
 
@@ -130,7 +130,13 @@ class ProjectsToolBar extends Component {
     const { isFilterVisible } = this.state
     const isLoggedIn = userRoles && userRoles.length
 
-    const noOfFilters = _.keys(criteria).length - 1 // -1 for default sort criteria
+    let excludedFiltersCount = 1 // 1 for default sort criteria
+    if (criteria.memberOnly) {
+      // https://github.com/appirio-tech/connect-app/issues/1319
+      // The switch should not count as a filter in the menu!
+      excludedFiltersCount++
+    }
+    const noOfFilters = _.keys(criteria).length - excludedFiltersCount
     const onLeaveMessage = this.onLeave() || ''
 
     const primaryNavigationItems = [
@@ -185,6 +191,18 @@ class ProjectsToolBar extends Component {
             </div>
           }
           <div className="actions">
+            { !!isLoggedIn && !!isPowerUser &&
+              <div className="primary-filters">
+                <div className="tc-switch clearfix">
+                  <SwitchButton
+                    onChange={ this.handleMyProjectsFilter }
+                    label="My projects"
+                    name="my-projects-only"
+                    checked={criteria.memberOnly}
+                  />
+                </div>
+              </div>
+            }
             { !!isLoggedIn && <NewProjectNavLink compact /> }
             { userMenu }
           </div>
@@ -192,7 +210,6 @@ class ProjectsToolBar extends Component {
         <div className="secondary-toolbar">
         { isFilterVisible &&
           <Filters
-            handleMyProjectsFilter={ this.handleMyProjectsFilter }
             applyFilters={ this.applyFilters }
             criteria={ criteria }
           />

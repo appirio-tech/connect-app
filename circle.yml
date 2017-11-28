@@ -19,7 +19,7 @@ compile:
 
 deployment:
   development:
-    branch: dev
+    branch: [dev, 'feature/move_my_projects_filter_to_primary_toolbar']
     owner: appirio-tech
     commands:
       - ./deploy.sh DEV

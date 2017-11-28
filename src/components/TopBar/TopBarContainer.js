@@ -60,8 +60,6 @@ class TopBarContainer extends React.Component {
     const homePageUrl = `${window.location.protocol}//${window.location.host}/`
     const logoutLink = `https://accounts.${DOMAIN}/#!/logout?retUrl=${homePageUrl}`
     const isHomePage = this.props.match.path === '/'
-    // NOTE: hardcoding to connectv2, once connect v1
-    window.host
     const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.host}/`
     const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
 
