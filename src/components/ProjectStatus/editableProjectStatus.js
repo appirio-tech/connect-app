@@ -54,7 +54,7 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
   }
 
   renderDropdown(props) {
-    const { canEdit, isOpen, handleClick, onSelect, showText, withoutLabel, unifiedHeader, status } = props
+    const { canEdit, isOpen, handleClick, onItemSelect, showText, withoutLabel, unifiedHeader, status } = props
     const selected = PROJECT_STATUS.filter((opt) => opt.value === status)[0]
     return (
       <div className="project-status-dropdown">
@@ -78,7 +78,7 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
                       href="javascript:"
                       className={cn('status-option', 'ps-' + item.value, { active: item.value === status })}
                       onClick={(e) => {
-                        onSelect(item.value, e)
+                        onItemSelect(item.value, e)
                       }}
                     >
                       <ProjectStatus status={item} showText />
@@ -100,7 +100,7 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
     return (
       <div className={cn('panel', 'EditableProjectStatus', {'modal-active': showStatusChangeDialog})}>
         <div className="modal-overlay"></div>
-        <ProjectStatusDropdown {...this.props } onSelect={ this.showStatusChangeDialog } />
+        <ProjectStatusDropdown {...this.props } onItemSelect={ this.showStatusChangeDialog } />
         { showStatusChangeDialog &&
           <ProjectStatusChangeConfirmation
             newStatus={ newStatus }
