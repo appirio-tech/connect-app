@@ -21,18 +21,18 @@ ProjectStatus.propTypes = {
   /**
    * Boolean flag to render the status text
    */
-  showText       : PropTypes.boolean,
+  showText       : PropTypes.bool,
   /**
    * Boolean flag to render the more detailed status text (fullName field form the status object).
    * Its main use case is the place where we don't show a label like `Project Status` before rendering
    * this component.
    */
-  withoutLabel   : PropTypes.boolean,
+  withoutLabel   : PropTypes.bool,
   /**
    * Boolean flag to render a unified(with common background color) project status. It is added for backward
    * compaitability only. We are not rendering this type of view of project status anymore.
    */
-  unifiedHeader  : PropTypes.boolean
+  unifiedHeader  : PropTypes.bool
 }
 
 ProjectStatus.defaultProps = {

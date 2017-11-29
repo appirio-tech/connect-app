@@ -116,10 +116,10 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
 }
 
 editableProjectStatus.propTypes = {
-  canEdit: PropTypes.boolean,
-  isOpen: PropTypes.boolean,
-  handleClick: PropTypes.func,
-  onSelect : PropTypes.func
+  /**
+   * Boolean flag to control editability of the project status. It does not render the dropdown if it is not editable.
+   */
+  canEdit: PropTypes.bool
 }
 
 export default editableProjectStatus
