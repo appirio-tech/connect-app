@@ -1,9 +1,9 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import cn from 'classnames'
 import './ProjectStatus.scss'
 
 /*eslint-enable camelcase */
-const ProjectStatus = ({ isOpen, status, showText, withoutLabel, unifiedHeader = true }) => {
+const ProjectStatus = ({ status, showText, withoutLabel, unifiedHeader = true }) => {
   return (
     <div className={cn('ProjectStatus', 'ps-' + status.value, { 'unified-header': unifiedHeader })}>
       <div className="status-icon"><i /></div>
