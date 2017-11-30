@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import NumberText from '../../components/NumberText/NumberText'
-import { findProduct} from '../projectWizard'
+import { findProduct } from '../projectWizard'
 
 
 const isFileRequired = (project, subSections) => {
@@ -62,8 +62,8 @@ const sections = [
             // required: true,
             validations: 'isRequired,minLength:160',
             validationErrors: {
-              isRequired : 'Please provide a description',
-              minLength  : 'Please enter at least 160 characters'
+              isRequired: 'Please provide a description',
+              minLength: 'Please enter at least 160 characters'
             },
             description: 'Brief Description',
             title: 'Description',
@@ -76,9 +76,9 @@ const sections = [
             fieldName: 'details.testingNeeds.expectedLoad',
             type: 'tiled-radio-group',
             options: [
-              {value: '60%', title: '% load', icon: NumberText, iconOptions: { number: '60' }, desc: 'endurance testing', price: 7000},
-              {value: '100%', title: '% load', icon: NumberText, iconOptions: { number: '100' }, desc: 'load testing', price: 5000},
-              {value: '120%', title: '% load', icon: NumberText, iconOptions: { number: '120' }, desc: 'stress testing', price: 7000}
+              { value: '60%', title: '% load', icon: NumberText, iconOptions: { number: '60' }, desc: 'endurance testing', price: 7000 },
+              { value: '100%', title: '% load', icon: NumberText, iconOptions: { number: '100' }, desc: 'load testing', price: 5000 },
+              { value: '120%', title: '% load', icon: NumberText, iconOptions: { number: '120' }, desc: 'stress testing', price: 7000 }
             ],
             required: true,
             validationError: 'Please provide expected load'
@@ -89,16 +89,16 @@ const sections = [
             description: 'estimated additional cost in ()',
             type: 'checkbox-group',
             options: [
-              {value: 'scenario', label: 'Scenario Booster add 3 more ($1,000)'},
-              {value: '250vusers', label: 'Add 250 vUsers ($1,000)'},
-              {value: '2500vusers', label: 'Add 2500 vUsers ($4,000)'},
-              {value: 'geo', label: 'Add additional Geography($1,500)'},
-              {value: 'poc', label: 'Precurser to purchase - 1 Tool, 2 scripts,1 hour execution ($2,500)'},
-              {value: 'strategy', label: 'Utilize consultant to tailor strategy ($3,000)'},
-              {value: 'execution', label: 'Execution Booster extra 2 hours ($500)'},
-              {value: 'mytool', label: 'Use my own testing tool ($2,500)'},
-              {value: 'myscripts', label: 'Modify/Use own scripts ($5,000)'},
-              {value: 'late', label: 'Late Entry - 1 week lead time ($2,000)'}
+              { value: 'scenario', label: 'Scenario Booster add 3 more ($1,000)' },
+              { value: '250vusers', label: 'Add 250 vUsers ($1,000)' },
+              { value: '2500vusers', label: 'Add 2500 vUsers ($4,000)' },
+              { value: 'geo', label: 'Add additional Geography($1,500)' },
+              { value: 'poc', label: 'Precurser to purchase - 1 Tool, 2 scripts,1 hour execution ($2,500)' },
+              { value: 'strategy', label: 'Utilize consultant to tailor strategy ($3,000)' },
+              { value: 'execution', label: 'Execution Booster extra 2 hours ($500)' },
+              { value: 'mytool', label: 'Use my own testing tool ($2,500)' },
+              { value: 'myscripts', label: 'Modify/Use own scripts ($5,000)' },
+              { value: 'late', label: 'Late Entry - 1 week lead time ($2,000)' }
             ],
             fieldName: 'details.testingNeeds.addons'
           }
@@ -129,69 +129,69 @@ const sections = [
         description: '',
         type: 'questions',
         questions: [
-        {
-          icon: 'question',
-          fieldName: 'details.spoc.business.name',
-          description: '',
-          title: 'Name of the Business SPOC',
-          type: 'textbox',
-          validationError: 'Please provide name of business SPOC'
-        },
-        {
-          icon: 'question',
-          fieldName: 'details.spoc.business.email',
-          description: '',
-          title: 'Email of the Business SPOC',
-          type: 'textbox',
-          // required is not needed if we specifiy validations
-          // required: true,
-          validations: 'isEmail',
-          validationErrors: {
-            isEmail  : 'Please enter a valid email'
+          {
+            icon: 'question',
+            fieldName: 'details.spoc.business.name',
+            description: '',
+            title: 'Name of the Business SPOC',
+            type: 'textbox',
+            validationError: 'Please provide name of business SPOC'
+          },
+          {
+            icon: 'question',
+            fieldName: 'details.spoc.business.email',
+            description: '',
+            title: 'Email of the Business SPOC',
+            type: 'textbox',
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isEmail',
+            validationErrors: {
+              isEmail: 'Please enter a valid email'
+            }
+          },
+          {
+            icon: 'question',
+            fieldName: 'details.spoc.testing.name',
+            description: '',
+            title: 'Name of the Testing SPOC',
+            type: 'textbox',
+            validationError: 'Please provide name of testing SPOC'
+          },
+          {
+            icon: 'question',
+            fieldName: 'details.spoc.testing.email',
+            description: '',
+            title: 'Email of the Testing SPOC',
+            type: 'textbox',
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isEmail',
+            validationErrors: {
+              isEmail: 'Please enter a valid email'
+            }
+          },
+          {
+            icon: 'question',
+            fieldName: 'details.spoc.dev.name',
+            description: '',
+            title: 'Name of the development SPOC',
+            type: 'textbox',
+            validationError: 'Please provide name of development SPOC'
+          },
+          {
+            icon: 'question',
+            fieldName: 'details.spoc.dev.email',
+            description: '',
+            title: 'Email of the development SPOC',
+            type: 'textbox',
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isEmail',
+            validationErrors: {
+              isEmail: 'Please enter a valid email'
+            }
           }
-        },
-        {
-          icon: 'question',
-          fieldName: 'details.spoc.testing.name',
-          description: '',
-          title: 'Name of the Testing SPOC',
-          type: 'textbox',
-          validationError: 'Please provide name of testing SPOC'
-        },
-        {
-          icon: 'question',
-          fieldName: 'details.spoc.testing.email',
-          description: '',
-          title: 'Email of the Testing SPOC',
-          type: 'textbox',
-          // required is not needed if we specifiy validations
-          // required: true,
-          validations: 'isEmail',
-          validationErrors: {
-            isEmail  : 'Please enter a valid email'
-          }
-        },
-        {
-          icon: 'question',
-          fieldName: 'details.spoc.dev.name',
-          description: '',
-          title: 'Name of the development SPOC',
-          type: 'textbox',
-          validationError: 'Please provide name of development SPOC'
-        },
-        {
-          icon: 'question',
-          fieldName: 'details.spoc.dev.email',
-          description: '',
-          title: 'Email of the development SPOC',
-          type: 'textbox',
-          // required is not needed if we specifiy validations
-          // required: true,
-          validations: 'isEmail',
-          validationErrors: {
-            isEmail  : 'Please enter a valid email'
-          }
-        }
         ]
       },
 
@@ -397,8 +397,8 @@ export const basicSections = [
             // required: true,
             validations: 'isRequired,minLength:160',
             validationErrors: {
-              isRequired : 'Please provide a description',
-              minLength  : 'Please enter at least 160 characters'
+              isRequired: 'Please provide a description',
+              minLength: 'Please enter at least 160 characters'
             },
             description: '',
             title: 'Description of the Application being tested',
@@ -410,10 +410,10 @@ export const basicSections = [
             description: ' (Select one/many from the list above)',
             type: 'checkbox-group',
             options: [
-              {value: 'load', label: 'Load'},
-              {value: 'stress', label: 'Stress'},
-              {value: 'endurance', label: 'Endurance'},
-              {value: 'other', label: 'Other'}
+              { value: 'load', label: 'Load' },
+              { value: 'stress', label: 'Stress' },
+              { value: 'endurance', label: 'Endurance' },
+              { value: 'other', label: 'Other' }
             ],
             fieldName: 'details.appDefinition.perfTestingTypes',
             required: true,
@@ -426,9 +426,9 @@ export const basicSections = [
             fieldName: 'details.testingNeeds.expectedLoad',
             type: 'tiled-radio-group',
             options: [
-              {value: '100%', title: '% load', icon: NumberText, iconOptions: { number: '100' }, desc: 'load testing', price: 5000},
-              {value: '120%', title: '% load', icon: NumberText, iconOptions: { number: '120' }, desc: 'stress testing', price: 7000},
-              {value: '60%', title: '% load', icon: NumberText, iconOptions: { number: '60' }, desc: 'endurance testing', price: 7000}
+              { value: '100%', title: '% load', icon: NumberText, iconOptions: { number: '100' }, desc: 'load testing', price: 5000 },
+              { value: '120%', title: '% load', icon: NumberText, iconOptions: { number: '120' }, desc: 'stress testing', price: 7000 },
+              { value: '60%', title: '% load', icon: NumberText, iconOptions: { number: '60' }, desc: 'endurance testing', price: 7000 }
             ],
             required: true,
             validationError: 'Please provide expected load'
@@ -439,16 +439,16 @@ export const basicSections = [
             description: 'estimated additional cost in ()',
             type: 'checkbox-group',
             options: [
-              {value: 'scenario', label: 'Scenario Booster add 3 more ($1,000)'},
-              {value: '250vusers', label: 'Add 250 vUsers ($1,000)'},
-              {value: '2500vusers', label: 'Add 2500 vUsers ($4,000)'},
-              {value: 'geo', label: 'Add additional Geography($1,500)'},
-              {value: 'poc', label: 'Precurser to purchase - 1 Tool, 2 scripts,1 hour execution ($2,500)'},
-              {value: 'strategy', label: 'Utilize consultant to tailor strategy ($3,000)'},
-              {value: 'execution', label: 'Execution Booster extra 2 hours ($500)'},
-              {value: 'mytool', label: 'Use my own testing tool ($2,500)'},
-              {value: 'myscripts', label: 'Modify/Use own scripts ($5,000)'},
-              {value: 'late', label: 'Late Entry - 1 week lead time ($2,000)'}
+              { value: 'scenario', label: 'Scenario Booster add 3 more ($1,000)' },
+              { value: '250vusers', label: 'Add 250 vUsers ($1,000)' },
+              { value: '2500vusers', label: 'Add 2500 vUsers ($4,000)' },
+              { value: 'geo', label: 'Add additional Geography($1,500)' },
+              { value: 'poc', label: 'Precurser to purchase - 1 Tool, 2 scripts,1 hour execution ($2,500)' },
+              { value: 'strategy', label: 'Utilize consultant to tailor strategy ($3,000)' },
+              { value: 'execution', label: 'Execution Booster extra 2 hours ($500)' },
+              { value: 'mytool', label: 'Use my own testing tool ($2,500)' },
+              { value: 'myscripts', label: 'Modify/Use own scripts ($5,000)' },
+              { value: 'late', label: 'Late Entry - 1 week lead time ($2,000)' }
             ],
             fieldName: 'details.testingNeeds.addons'
           }
