@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import { Icons } from 'appirio-tech-react-components'
 import NumberText from '../../components/NumberText/NumberText'
 import { findProduct} from '../projectWizard'
 
@@ -195,7 +194,7 @@ const sections = [
         }
         ]
       },
-      
+
       {
         id: 'files',
         required: isFileRequired,
@@ -203,6 +202,154 @@ const sections = [
         description: '',
         type: 'files',
         fieldName: 'attachments'
+      }
+    ]
+  },
+  {
+    id: 'perfTestEnv',
+    title: 'Performance Test Enviornment',
+    description: 'Please provide information on test environments.',
+    subSections: [
+      {
+        id: 'perfTestEnvSec',
+        title: 'Details',
+        description: '',
+        type: 'questions',
+        questions: [
+        {
+          icon: 'question',
+          fieldName: 'details.perfTestEnv.simulators',
+          description: '',
+          title: 'Are the simulators/stubs available in test enviornemnt for the components not avaiable and do they support concurrent request simulation?',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.perfTestEnv.vendors',
+          description: '',
+          title: 'Will online interfaces/stubs for the payment systems, vendor systems etc. be available for performance testing?',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.perfTestEnv.vendors',
+          description: '',
+          title: 'Please provide details on test data availability? A) Resident or master test data in DB e.g. Customers, products, locations etc. B) User specific data e.g. User Ids, email, credit card, order number etc. Who will support creating/importing/ masking test data',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.perfTestEnv.soa',
+          description: '',
+          title: 'Please let us know if SOA based services needs to be performance tested stand alone. If yes, please provide relevant details',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.perfTestEnv.cloud',
+          description: '',
+          title: 'Are the applications hosted on physical servers or virtual/cloud infrastructure?',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.perfTestEnv.tools',
+          description: '',
+          title: 'Are performance testing tools available with your organisation. e.g. HP Loadrunner, \
+                  Performance Center, Jmeter. If yes, is PoC conducted to validate compatibility of tools \
+                  with application under test.  Will these be tools be made available in with required \
+                  license for Perfomance testing in scope?',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.perfTestEnv.diagnosticTools',
+          description: '',
+          title: 'Are performance Diagnostic tools available with your organisation. e.g. Dynatrace, Yourkit, \
+                 Profiler, If yes, is PoC conducted to validate compatibility of tools with application under \
+test.  Will these be tools be made available in with required license for Perfomance testing \
+in scope?',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.perfTestEnv.monitoring',
+          description: '',
+          title: 'How is application performance being monitored or planned to be monitored in production. Are same tools available in Perf Test env?',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.perfTestEnv.saasTools',
+          description: '',
+          title: 'In case of Cloud based or SaaS performance testing tools, will your organisation allow to open necessary ports in firewall to inject load on to application in test enviornment.',
+          type: 'textbox'
+        }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'previousDetails',
+    title: 'Previous Performance Test Details',
+    description: 'Please provide information on specific points of contacts.',
+    subSections: [
+      {
+        id: 'prevDetails',
+        title: 'Details',
+        description: '',
+        type: 'questions',
+        questions: [
+        {
+          icon: 'question',
+          fieldName: 'details.prevDetails.time',
+          description: '',
+          title: 'When was the last time performance testing carried out. On which version of application code base?',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.prevDetails.reports',
+          description: '',
+          title: 'Please share the previous performance test reports if available',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.prevDetails.changes',
+          description: '',
+          title: 'What are the changes in application, architecture, infrastructure from last testing?',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.prevDetails.types',
+          description: '',
+          title: 'What different types of tests carried out and measurements captured?',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.prevDetails.tools',
+          description: '',
+          title: 'What were the performance testing and performance monitoring tools used?',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.prevDetails.issues',
+          description: '',
+          title: 'Were there any open performance issues from previous testing?',
+          type: 'textbox'
+        },
+        {
+          icon: 'question',
+          fieldName: 'details.prevDetails.fixedIssues',
+          description: '',
+          title: 'What were the issues found and fixed during previous performance testing cycle?',
+          type: 'textbox'
+        }
+        ]
       }
     ]
   }
