@@ -53,6 +53,7 @@
     "webpack-merge": "^4.0.0"
   },
   "dependencies": {
+    "5": "0.0.1",
     "appirio-tech-react-components": "github:appirio-tech/react-components#feature/connectv2",
     "axios": "^0.13.1",
     "classnames": "^2.2.3",
