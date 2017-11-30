@@ -9,7 +9,7 @@ import { updateProject } from '../../actions/project'
 import './ProjectSpecSidebar.scss'
 
 const calcProgress = (project, subSection) => {
-  if (subSection.id === 'questions') {
+  if (subSection.type === 'questions') {
     const vals = _.map(subSection.questions, (q) => {
       const fName = q.fieldName
       // special handling for seeAttached type of fields
