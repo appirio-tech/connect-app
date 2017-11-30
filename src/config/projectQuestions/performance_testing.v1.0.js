@@ -26,7 +26,7 @@ const sections = [
       return 'Definition'
     },
     required: true,
-    description: 'Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.',
+    description: 'Please answer a few basic questions about your project. You can also provide the needed information in a supporting document—add a link in the notes section or upload it below.',
     subSections: [
       {
         id: 'projectName',
@@ -49,8 +49,8 @@ const sections = [
             icon: 'question',
             id: 'targetApplication.appName',
             fieldName: 'details.targetApplication.appName',
-            title: 'Please enter the name of the application being tested',
-            description: 'Name of the application to be tested',
+            title: 'Name of the application we will test',
+            // description: '',
             type: 'textbox',
             required: true,
             validationError: 'Please provide name of the target application'
@@ -357,12 +357,14 @@ in scope?',
 
 export default sections
 
+// This is where the project creation form lives
+
 export const basicSections = [
   {
     id: 'appDefinition',
     title: '',
     required: true,
-    description: 'Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.',
+    description: 'Please answer a few basic questions about your project. If you have any supporting documents, please add the links in the “Notes” section. You can upload any additional files (specifications, diagrams, mock interfaces, etc.) once your project is created.',
     subSections: [
       {
         id: 'projectName',
@@ -383,8 +385,8 @@ export const basicSections = [
         questions: [
           {
             icon: 'question',
-            title: 'Please enter the name of the application being tested',
-            description: 'Name of the application to be tested',
+            title: 'Name of the Application to be tested',
+            description: 'Please enter the name of the application being tested',
             type: 'textbox',
             fieldName: 'details.targetApplication.appName',
             required: true,
@@ -400,14 +402,14 @@ export const basicSections = [
               isRequired: 'Please provide a description',
               minLength: 'Please enter at least 160 characters'
             },
-            description: '',
-            title: 'Description of the Application being tested',
+            description: 'In 160 or more characters tell us what is the app, main functions, problem area, etc..',
+            title: 'Description of the Application to be tested',
             type: 'textbox'
           },
           {
             icon: 'question',
             title: 'What type of tests would you like to be conducted?',
-            description: ' (Select one/many from the list above)',
+            description: 'Please select all that apply',
             type: 'checkbox-group',
             options: [
               { value: 'load', label: 'Load' },
@@ -421,28 +423,28 @@ export const basicSections = [
           },
           {
             icon: 'question',
-            title: 'Expected load on the platform exercised during Performance Test? ',
-            description: '',
+            title: 'Expected load during Performance Test',
+            description: 'How much do you want us to load the platform during Performance Test? Higher loads can uncover more problems.',
             fieldName: 'details.testingNeeds.expectedLoad',
             type: 'tiled-radio-group',
             options: [
+              { value: '60%', title: '% load', icon: NumberText, iconOptions: { number: '60' }, desc: 'endurance testing', price: 7000 },
               { value: '100%', title: '% load', icon: NumberText, iconOptions: { number: '100' }, desc: 'load testing', price: 5000 },
-              { value: '120%', title: '% load', icon: NumberText, iconOptions: { number: '120' }, desc: 'stress testing', price: 7000 },
-              { value: '60%', title: '% load', icon: NumberText, iconOptions: { number: '60' }, desc: 'endurance testing', price: 7000 }
+              { value: '120%', title: '% load', icon: NumberText, iconOptions: { number: '120' }, desc: 'stress testing', price: 7000 }
             ],
             required: true,
             validationError: 'Please provide expected load'
           },
           {
             icon: 'question',
-            title: 'Please select any additional add-ons?',
-            description: 'estimated additional cost in ()',
+            title: 'Testing add-on packs',
+            description: 'Please select all that apply. These addons provide a way to expand the testing parameters.',
             type: 'checkbox-group',
             options: [
-              { value: 'scenario', label: 'Scenario Booster add 3 more ($1,000)' },
+              { value: 'scenario', label: 'Scenario Booster - 3 additional testing scenarios ($1,000)' },
               { value: '250vusers', label: 'Add 250 vUsers ($1,000)' },
               { value: '2500vusers', label: 'Add 2500 vUsers ($4,000)' },
-              { value: 'geo', label: 'Add additional Geography($1,500)' },
+              { value: 'geo', label: 'Add additional Geography ($1,500)' },
               { value: 'poc', label: 'Precurser to purchase - 1 Tool, 2 scripts,1 hour execution ($2,500)' },
               { value: 'strategy', label: 'Utilize consultant to tailor strategy ($3,000)' },
               { value: 'execution', label: 'Execution Booster extra 2 hours ($500)' },
@@ -457,8 +459,8 @@ export const basicSections = [
       {
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
-        title: 'Critical business processes for inclusion in Performance Test',
-        description: 'Please detail any critical business processes \
+        title: 'Notes',
+        description: 'Please add details of any critical business processes \
                        such as peak hour user load, transaction count in peak hours, \
                        SLA (in seconds).',
         type: 'notes'
