@@ -24,6 +24,11 @@
     padding-left: 4 * $base_unit;
     padding-right: 4 * $base_unit;
     padding-top: 4 * $base_unit;
+
+    .project-delete-icon {
+      margin-top: 4px;
+      margin-left: $base_unit;
+    }
   }
 
 }
