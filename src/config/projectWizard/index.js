@@ -165,15 +165,14 @@ const products = {
         id: 'mobility_testing',
         aliases: ['mobility-testing', 'mobility_testing']
       },
-      'Website Performance': {
+      'Performance Testing': {
         brief: 'TBD',
         details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
         icon: 'product-qa-website-performance',
-        id: 'website_performance',
-        aliases: ['website-performance', 'website_performance'],
-        disabled: true
+        id: 'performance_testing',
+        aliases: ['performance-testing', 'performance_testing']
       },
-      'Digital Accessability': {
+      'Digital Accessibility': {
         brief: 'TBD',
         details: 'Make sure you app or website conforms to all rules and regulations',
         icon: 'product-qa-digital-accessability',
@@ -237,7 +236,7 @@ export function findCategory(categoryId, aliasesOnly = false) {
   for(const key in products) {
     const product = products[key]
     if (!product.disabled && ((product.id === categoryId && !aliasesOnly) || (product.aliases && product.aliases.indexOf(categoryId) !== -1))) {
-      return { ...product, name: key} 
+      return { ...product, name: key}
     }
   }
   return null
