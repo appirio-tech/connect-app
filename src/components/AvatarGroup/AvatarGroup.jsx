@@ -5,8 +5,8 @@ import './AvatarGroup.scss'
 
 function AvatarGroup({ users }) {
 
-  let uniqueUserList = []
-  let uniqueUsers = _.filter(users, user => {
+  const uniqueUserList = []
+  const uniqueUsers = _.filter(users, user => {
     if (!_.includes(uniqueUserList, user.userId)) {
       uniqueUserList.push(user.userId)
       return true
