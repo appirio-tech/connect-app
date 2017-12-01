@@ -4,6 +4,16 @@ import React, { PropTypes as PT } from 'react'
 import './AvatarGroup.scss'
 
 function AvatarGroup({ users }) {
+
+  let uniqueUserList = []
+  let uniqueUsers = _.filter(users, user => {
+    if (!_.includes(uniqueUserList, user.userId)) {
+      uniqueUserList.push(user.userId)
+      return true
+    }
+    return false
+  })
+
   const renderAvatar = (user, index) => {
     return (
       <Avatar
@@ -15,7 +25,7 @@ function AvatarGroup({ users }) {
   }
   return (
     <div className="AvatarGroup">
-      { users.map(renderAvatar) }
+      { uniqueUsers.map(renderAvatar) }
     </div>
   )
 }
