@@ -20,7 +20,7 @@ function ProjectCardHeader({ project }) {
           <div className="project-name">
             <TextTruncate
               containerClassName="project-name"
-              line={1}
+              line={2}
               truncateText="..."
               text={project.name}
             />
