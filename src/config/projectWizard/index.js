@@ -63,7 +63,8 @@ const products = {
         details: 'Work with images to recognize patterns, compute correspondences, etc',
         icon: 'product-qa-crowd-testing',
         id: 'computer_vision',
-        aliases: ['computer-vision', 'computer_vision']
+        aliases: ['computer-vision', 'computer_vision'],
+        hidden : true
       },
       'Algorithm Optimization': {
         brief: 'TBD',
@@ -227,12 +228,13 @@ const products = {
       }
     }
   },
-  'Analytics': {
+  Analytics: {
     icon: 'product-cat-qa',
     info: 'Test and fix bugs in your software',
     question: 'What kind of quality assurance (QA) do you need?',
     id: 'analytics',
     aliases: ['all-analytics'],
+    hidden: true,
     subtypes: {
       'Computer Vision': {
         brief: 'TBD',
