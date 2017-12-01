@@ -198,7 +198,8 @@ const products = {
         details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
         icon: 'product-qa-website-performance',
         id: 'performance_testing',
-        aliases: ['performance-testing', 'performance_testing']
+        aliases: ['performance-testing', 'performance_testing'],
+        hidden: true
       },
       'Digital Accessibility': {
         brief: 'TBD',
