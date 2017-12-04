@@ -6,7 +6,7 @@ import linkifyIt from 'linkify-it'
 import tlds from 'tlds'
 import {hasEntity, getCurrentEntity} from '../../helpers/draftJSHelper'
 import EditorIcons from './EditorIcons'
-import Alert from 'react-s-alert';
+import Alert from 'react-s-alert'
 
 const linkify = linkifyIt()
 linkify.tlds(tlds)
@@ -228,7 +228,7 @@ export default class AddLinkButton extends React.Component {
     const editorState = this.props.getEditorState()
     const selection = editorState.getSelection()
     if (selection.isCollapsed()) {
-      Alert.error("Please select some piece of text .")
+      Alert.error('Please select some piece of text .')
     }
     if (!selection.getHasFocus()) {
       return
