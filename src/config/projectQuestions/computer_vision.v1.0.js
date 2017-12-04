@@ -192,7 +192,7 @@ const sections = [
             title: 'If scoring method was other, please provide your approach',
             type: 'textbox'
 
-          },
+          }
         ]
       }
     ]

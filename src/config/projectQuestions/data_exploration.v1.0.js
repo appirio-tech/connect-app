@@ -64,7 +64,7 @@ const sections = [
             title: 'Describe what you would like to learn or accomplish with this data?',
             description: '',
             type: 'textbox',
-            fieldName: 'details.data.learnings',
+            fieldName: 'details.data.learnings'
           },
           {
             icon: 'question',
@@ -188,7 +188,7 @@ export const basicSections = [
             title: 'Describe what you would like to learn or accomplish with this data?',
             description: '',
             type: 'textbox',
-            fieldName: 'details.data.learnings',
+            fieldName: 'details.data.learnings'
           },
           {
             icon: 'question',

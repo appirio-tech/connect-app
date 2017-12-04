@@ -65,7 +65,7 @@ const products = {
         id: 'computer_vision',
         aliases: ['computer-vision', 'computer_vision'],
         hidden : true
-      },/*,
+      }, /*,
       'Algorithm Optimization': {
         brief: 'TBD',
         details: 'Boost the performance (speed or accuracy) of an existing or new algorithm',
