@@ -57,7 +57,7 @@ const products = {
         icon: 'product-chatbot-chatbot',
         id: 'generic_chatbot',
         aliases: ['chatbot', 'generic_chatbot']
-      },
+      }/*,
       'Computer Vision': {
         brief: 'TBD',
         details: 'Work with images to recognize patterns, compute correspondences, etc',
@@ -86,7 +86,7 @@ const products = {
         icon: 'product-qa-crowd-testing',
         id: 'data-exploration',
         aliases: ['data-exploration', 'data_exploration']
-      }
+      }*/
     }
   },
   Design: {
@@ -227,7 +227,8 @@ const products = {
         disabled: true
       }
     }
-  },
+  }
+  /*
   Analytics: {
     icon: 'product-cat-qa',
     info: 'Test and fix bugs in your software',
@@ -266,6 +267,7 @@ const products = {
       }
     }
   }
+  */
 }
 
 export default products
