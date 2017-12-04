@@ -159,7 +159,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
-        required={isRequired}
+        required={q.required || (q.validations && q.validations.indexOf('isRequired') !== -1)}
         hideDescription={elemProps.hideDescription}
       >
         <ChildElem {...elemProps} />
