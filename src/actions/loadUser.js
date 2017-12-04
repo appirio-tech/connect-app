@@ -23,7 +23,6 @@ export function loadUser() {
         return loadUserSuccess(dispatch, token)
       })
       .catch((err) => {
-        console.log(err)
         return loadUserFailure(dispatch)
       })
 
@@ -95,7 +94,6 @@ export function loadUserSuccess(dispatch, token) {
       // if we fail to load user's profile, still dispatch user load success
       // ideally it shouldn't happen, but if it is, we can render the page
       // without profile information
-      console.log(err)
       dispatch({ type: LOAD_USER_SUCCESS, user : currentUser })
     })
   }

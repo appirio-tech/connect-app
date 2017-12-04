@@ -258,7 +258,7 @@ export const MAINTENANCE_MODE = false
 
 export const LS_INCOMPLETE_PROJECT = 'incompleteProject'
 
-export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL
+export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL//*'http://localhost:8001'
 
 export const NEW_PROJECT_PATH = '/new-project'
 

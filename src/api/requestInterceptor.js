@@ -34,7 +34,6 @@ axiosInstance.interceptors.request.use( config => {
     })
     .catch(err => {
       // TODO handle this error somehow
-      console.log(err)
       return config
     })
 })
