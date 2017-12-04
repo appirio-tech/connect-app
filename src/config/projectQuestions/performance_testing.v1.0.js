@@ -46,16 +46,6 @@ const sections = [
         type: 'questions',
         questions: [
           {
-            icon: 'question',
-            id: 'targetApplication.appName',
-            fieldName: 'details.targetApplication.appName',
-            title: 'Name of the application we will test',
-            // description: '',
-            type: 'textbox',
-            required: true,
-            validationError: 'Please provide name of the target application'
-          },
-          {
             id: 'projectInfo',
             fieldName: 'description',
             // required is not needed if we specifiy validations
@@ -65,23 +55,54 @@ const sections = [
               isRequired: 'Please provide a description',
               minLength: 'Please enter at least 160 characters'
             },
-            description: 'Brief Description',
-            title: 'Description',
+            description: 'In 160 or more characters tell us what is the app, main functions, problem area, etc..',
+            title: 'Please provide brief description of the system, application to be Performance tested',
             type: 'textbox'
           },
           {
             icon: 'question',
-            title: 'Expected load on the platform exercised during Performance Test? ',
-            description: '',
-            fieldName: 'details.testingNeeds.expectedLoad',
-            type: 'tiled-radio-group',
+            title: 'What is the load on system in terms concurrent users for Performance Testing?',
+            description: '(Unit package includes 500 virtual users, additional load would require Top-Ups)',
+            type: 'slide-radiogroup',
             options: [
-              { value: '60%', title: '% load', icon: NumberText, iconOptions: { number: '60' }, desc: 'endurance testing', price: 7000 },
-              { value: '100%', title: '% load', icon: NumberText, iconOptions: { number: '100' }, desc: 'load testing', price: 5000 },
-              { value: '120%', title: '% load', icon: NumberText, iconOptions: { number: '120' }, desc: 'stress testing', price: 7000 }
+              { value: 'upto-500', title: 'Upto 500' },
+              { value: 'upto-1000', title: 'Upto 1000' },
+              { value: 'upto-5000', title: 'Upto 5000' },
+              { value: 'above-5000', title: 'More than 5000' }
             ],
+            fieldName: 'details.loadDetails.concurrentUsersCount',
             required: true,
             validationError: 'Please provide expected load'
+          },
+          {
+            icon: 'question',
+            title: 'What is the count of business processes - transactions to be included for Performance Testing?',
+            description: '(Unit package covers 10 transactions, additional transactions would require Top-Ups)',
+            fieldName: 'details.loadDetails.businessProcessesCount',
+            type: 'slide-radiogroup',
+            options: [
+              { value: 'upto-5', title: 'Upto 5'},
+              { value: 'upto-10', title: 'Upto 10' },
+              { value: 'upto-25', title: 'Upto 25' },
+              { value: 'above-25', title: 'More than 25' }
+            ],
+            required: true,
+            validationError: 'Please provide expected number of business processes'
+          },
+          {
+            icon: 'question',
+            title: 'What is the expected hours of execution for all different Performance Tests to be conducted?',
+            description: '(Unit package covers 10 hours of execution, additional execution time would require Top-Ups)',
+            fieldName: 'details.loadDetails.expectedExecutionHours',
+            type: 'slide-radiogroup',
+            options: [
+              { value: 'upto-5', title: 'Upto 5'},
+              { value: 'upto-10', title: 'Upto 10' },
+              { value: 'upto-25', title: 'Upto 25' },
+              { value: 'above-25', title: 'More than 25' }
+            ],
+            required: true,
+            validationError: 'Please provide expected hours of execution'
           },
           {
             icon: 'question',
@@ -100,9 +121,9 @@ const sections = [
               { value: 'myscripts', label: 'Modify/Use own scripts ($5,000)' },
               { value: 'late', label: 'Late Entry - 1 week lead time ($2,000)' }
             ],
+            required: false,
             fieldName: 'details.testingNeeds.addons'
           }
-
         ]
       },
       {
@@ -113,6 +134,14 @@ const sections = [
                       requirements and/or test cases.  After creating \
                        your project you will be able to upload files.',
         type: 'notes'
+      },
+      {
+        id: 'files',
+        required: isFileRequired,
+        title: (project) => `Project Files (${_.get(project, 'attachments', []).length})` || 'Files',
+        description: '',
+        type: 'files',
+        fieldName: 'attachments'
       }
     ]
   },
@@ -123,7 +152,7 @@ const sections = [
     description: 'Please provide information on specific points of contacts.',
     subSections: [
       {
-        id: 'scope',
+        id: 'spoc',
         required: false,
         title: 'SPOCs',
         description: '',
@@ -193,15 +222,155 @@ const sections = [
             }
           }
         ]
-      },
-
+      }
+    ]
+  },
+  {
+    id: 'systemOverview',
+    title: 'System Overview',
+    required: false,
+    description: 'Please provide the overview of the system to be tested',
+    subSections: [
       {
-        id: 'files',
-        required: isFileRequired,
-        title: (project) => `Project Files (${_.get(project, 'attachments', []).length})` || 'Files',
+        id: 'questions',
+        // required: true,
+        hideTitle: true,
+        title: 'Questions',
         description: '',
-        type: 'files',
-        fieldName: 'attachments'
+        type: 'questions',
+        questions: [
+          {
+            id: 'architecture',
+            // required: true,
+            // validationError: 'Please provide architecture details of the applciation',
+            fieldName: 'details.targetApplication.architecture',
+            description: '',
+            title: 'What is the architecture of the System? Please share/embed the Application and Server architecture diagram. Also share Non functional requriements docs and High/Low level design docs if available',
+            type: 'textbox'
+          },
+          {
+            id: 'developmentPlatform',
+            icon: 'question',
+            title: 'What is the application development platform?',
+            description: '',
+            type: 'checkbox-group',
+            options: [
+              { value: 'dotnet', label: '.Net' },
+              { value: 'j2ee', label: 'J2EE' },
+              { value: 'ria', label: 'Rich Internet Applications' },
+              { value: 'oracle', label: 'Oracle Technology' },
+              { value: 'sap', label: 'SAP' },
+              { value: 'mainframe', label: 'Mainframe' },
+              { value: 'adobe-flex', label: 'Adobe Flex' },
+              { value: 'others', label: 'Others' }
+            ],
+            fieldName: 'details.targetApplication.developmentPlatform',
+            // required: true,
+            // validationError: 'Please provide development platform of the application'
+          },
+          {
+            id: 'frontEnd',
+            icon: 'question',
+            title: 'What is the front end of the system?',
+            description: '',
+            fieldName: 'details.targetApplication.frontEnd',
+            type: 'checkbox-group',
+            options: [
+              { value: 'web-browser', label: 'Web Browser - Thin Client'},
+              { value: 'desktop-app', label: 'Desktop App (Executable) - Thick Client' },
+              { value: 'citrix', label: 'Citrix based Desktop App (Executable)' },
+              { value: 'java', label: 'Java based (with Swing/Applets)' },
+              { value: 'oracle-forms', label: 'Web based Oracle Forms' },
+              { value: 'other', label: 'Any other' }
+            ],
+            // required: true,
+            // validationError: 'Please provide front end used in the application'
+          },
+          {
+            icon: 'question',
+            title: 'What are the web servers used?',
+            description: '(For eg. Webserver can be Apache, IIS etc.)',
+            fieldName: 'details.targetApplication.webBrowsers',
+            type: 'textbox',
+            // required: true,
+            // validationError: 'Please provide target web browsers'
+          },
+          {
+            icon: 'question',
+            title: 'What ae the application servers used?',
+            description: '(For eg. Application server can be JBoss or Weblogic or Websphere etc.)',
+            fieldName: 'details.targetApplication.appServers',
+            type: 'textbox',
+            // required: true,
+            // validationError: 'Please provide application servers used'
+          },
+          {
+            icon: 'question',
+            title: 'What is the back end of your application?',
+            description: '(For eg. Back end can be Oracle, MS SQL or Sybase etc)',
+            fieldName: 'details.targetApplication.backEnd',
+            type: 'textbox',
+            // required: true,
+            // validationError: 'Please provide back end used in the application'
+          },
+          {
+            icon: 'question',
+            title: 'If the back end is a legacy system then specify the below',
+            description: 'Mainframe(S390), AS400, Others',
+            fieldName: 'details.targetApplication.legacyBackEnd',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            title: 'What is the middleware used?',
+            description: '(For eg. Middleware can be MQSeries or TIBCO or Webmethod etc)',
+            fieldName: 'details.targetApplication.middleware',
+            type: 'textbox',
+            // required: true,
+            // validationError: 'Please provide middleware used in the application'
+          },
+          {
+            icon: 'question',
+            title: 'Please specify if web services are used and their functions',
+            description: '(For eg. SOAP/REST Webservices deployed in App server for new customer creation and maintenance)',
+            fieldName: 'details.targetApplication.webservices',
+            type: 'textbox',
+            // required: true,
+            // validationError: 'Please provide web services used in the application'
+          },
+          {
+            id: 'targetApplication.authMode',
+            icon: 'question',
+            title: 'What is the authentication mode used by the Application?',
+            description: '',
+            fieldName: 'details.targetApplication.authMode',
+            type: 'checkbox-group',
+            options: [
+              { value: 'ntlm', label: 'NTLM'},
+              { value: 'sso', label: 'Siteminder/SSO' },
+              { value: 'ldap', label: 'LDAP' },
+              { value: 'others', label: 'Others' }
+            ],
+            // required: true,
+            // validationError: 'Please provide authentication mode of the application'
+          },
+          {
+            id: 'targetApplication.interfaces',
+            icon: 'question',
+            title: 'What Interfaces does the application has?',
+            description: '',
+            fieldName: 'details.targetApplication.interfaces',
+            type: 'checkbox-group',
+            options: [
+              { value: 'vendor-system', label: 'Vendor System'},
+              { value: 'document-mgmt-system', label: 'Document Mgmt System' },
+              { value: 'payments', label: 'Payments' },
+              { value: 'other', label: 'Others' }
+            ],
+            // required: true,
+            // validationError: 'Please provide interfaces used in the application'
+          }
+        ]
       }
     ]
   },
@@ -212,27 +381,28 @@ const sections = [
     subSections: [
       {
         id: 'perfTestEnvSec',
-        title: 'Details',
+        title: 'Questions',
+        hideTitle: true,
         description: '',
         type: 'questions',
         questions: [
           {
             icon: 'question',
-            fieldName: 'details.perfTestEnv.simulators',
+            fieldName: 'details.perfTestEnv.missingCompSimulators',
             description: '',
             title: 'Are the simulators/stubs available in test enviornemnt for the components not avaiable and do they support concurrent request simulation?',
             type: 'textbox'
           },
           {
             icon: 'question',
-            fieldName: 'details.perfTestEnv.vendors',
+            fieldName: 'details.perfTestEnv.thirdPartyStubs',
             description: '',
             title: 'Will online interfaces/stubs for the payment systems, vendor systems etc. be available for performance testing?',
             type: 'textbox'
           },
           {
             icon: 'question',
-            fieldName: 'details.perfTestEnv.vendors',
+            fieldName: 'details.perfTestEnv.testDataAvailability',
             description: '',
             title: 'Please provide details on test data availability? A) Resident or master test data in DB e.g. Customers, products, locations etc. B) User specific data e.g. User Ids, email, credit card, order number etc. Who will support creating/importing/ masking test data',
             type: 'textbox'
@@ -246,10 +416,14 @@ const sections = [
           },
           {
             icon: 'question',
-            fieldName: 'details.perfTestEnv.cloud',
-            description: '',
-            title: 'Are the applications hosted on physical servers or virtual/cloud infrastructure?',
-            type: 'textbox'
+            fieldName: 'details.perfTestEnv.hostedOn',
+            description: 'Are the applications hosted on physical servers or virtual/cloud infrastructure',
+            title: 'Where are applications hosted?',
+            type: 'radio-group',
+            options: [
+              {value: 'physical-servers', label: 'Physical servers'},
+              {value: 'cloud', label: 'Virtual/Cloud infrastructure'}
+            ]
           },
           {
             icon: 'question',
@@ -280,7 +454,7 @@ in scope?',
           },
           {
             icon: 'question',
-            fieldName: 'details.perfTestEnv.saasTools',
+            fieldName: 'details.perfTestEnv.saasAllowPortsOpening',
             description: '',
             title: 'In case of Cloud based or SaaS performance testing tools, will your organisation allow to open necessary ports in firewall to inject load on to application in test environment.',
             type: 'textbox'
@@ -296,7 +470,8 @@ in scope?',
     subSections: [
       {
         id: 'prevDetails',
-        title: 'Details',
+        title: 'Questions',
+        hideTitle: true,
         description: '',
         type: 'questions',
         questions: [
@@ -323,16 +498,23 @@ in scope?',
           },
           {
             icon: 'question',
-            fieldName: 'details.prevDetails.types',
+            fieldName: 'details.prevDetails.typesOfTests',
             description: '',
             title: 'What different types of tests carried out and measurements captured?',
             type: 'textbox'
           },
           {
             icon: 'question',
-            fieldName: 'details.prevDetails.tools',
+            fieldName: 'details.prevDetails.monitoringTools',
             description: '',
             title: 'What were the performance testing and performance monitoring tools used?',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            fieldName: 'details.prevDetails.testScripts',
+            description: '',
+            title: 'Are the performance test scenarios and automated test scripts available at project location?',
             type: 'textbox'
           },
           {
@@ -384,15 +566,6 @@ export const basicSections = [
         type: 'questions',
         questions: [
           {
-            icon: 'question',
-            title: 'Name of the Application to be tested',
-            description: 'Please enter the name of the application being tested',
-            type: 'textbox',
-            fieldName: 'details.targetApplication.appName',
-            required: true,
-            validationError: 'Please provide name of the target application'
-          },
-          {
             id: 'projectInfo',
             fieldName: 'description',
             // required is not needed if we specifiy validations
@@ -403,56 +576,53 @@ export const basicSections = [
               minLength: 'Please enter at least 160 characters'
             },
             description: 'In 160 or more characters tell us what is the app, main functions, problem area, etc..',
-            title: 'Description of the Application to be tested',
+            title: 'Please provide brief description of the system, application to be Performance tested',
             type: 'textbox'
           },
           {
             icon: 'question',
-            title: 'What type of tests would you like to be conducted?',
-            description: 'Please select all that apply',
-            type: 'checkbox-group',
+            title: 'What is the load on system in terms concurrent users for Performance Testing?',
+            description: '(Unit package includes 500 virtual users, additional load would require Top-Ups)',
+            type: 'slide-radiogroup',
             options: [
-              { value: 'load', label: 'Load' },
-              { value: 'stress', label: 'Stress' },
-              { value: 'endurance', label: 'Endurance' },
-              { value: 'other', label: 'Other' }
+              { value: 'upto-500', title: 'Upto 500' },
+              { value: 'upto-1000', title: 'Upto 1000' },
+              { value: 'upto-5000', title: 'Upto 5000' },
+              { value: 'above-5000', title: 'More than 5000' }
             ],
-            fieldName: 'details.appDefinition.perfTestingTypes',
-            required: true,
-            validationError: 'Please select at least one type of tests'
-          },
-          {
-            icon: 'question',
-            title: 'Expected load during Performance Test',
-            description: 'How much do you want us to load the platform during Performance Test? Higher loads can uncover more problems.',
-            fieldName: 'details.testingNeeds.expectedLoad',
-            type: 'tiled-radio-group',
-            options: [
-              { value: '60%', title: '% load', icon: NumberText, iconOptions: { number: '60' }, desc: 'endurance testing', price: 7000 },
-              { value: '100%', title: '% load', icon: NumberText, iconOptions: { number: '100' }, desc: 'load testing', price: 5000 },
-              { value: '120%', title: '% load', icon: NumberText, iconOptions: { number: '120' }, desc: 'stress testing', price: 7000 }
-            ],
+            fieldName: 'details.loadDetails.concurrentUsersCount',
             required: true,
             validationError: 'Please provide expected load'
           },
           {
             icon: 'question',
-            title: 'Testing add-on packs',
-            description: 'Please select all that apply. These addons provide a way to expand the testing parameters.',
-            type: 'checkbox-group',
+            title: 'What is the count of business processes - transactions to be included for Performance Testing?',
+            description: '(Unit package covers 10 transactions, additional transactions would require Top-Ups)',
+            fieldName: 'details.loadDetails.businessProcessesCount',
+            type: 'slide-radiogroup',
             options: [
-              { value: 'scenario', label: 'Scenario Booster - 3 additional testing scenarios ($1,000)' },
-              { value: '250vusers', label: 'Add 250 vUsers ($1,000)' },
-              { value: '2500vusers', label: 'Add 2500 vUsers ($4,000)' },
-              { value: 'geo', label: 'Add additional Geography ($1,500)' },
-              { value: 'poc', label: 'Precurser to purchase - 1 Tool, 2 scripts,1 hour execution ($2,500)' },
-              { value: 'strategy', label: 'Utilize consultant to tailor strategy ($3,000)' },
-              { value: 'execution', label: 'Execution Booster extra 2 hours ($500)' },
-              { value: 'mytool', label: 'Use my own testing tool ($2,500)' },
-              { value: 'myscripts', label: 'Modify/Use own scripts ($5,000)' },
-              { value: 'late', label: 'Late Entry - 1 week lead time ($2,000)' }
+              { value: 'upto-5', title: 'Upto 5'},
+              { value: 'upto-10', title: 'Upto 10' },
+              { value: 'upto-25', title: 'Upto 25' },
+              { value: 'above-25', title: 'More than 25' }
             ],
-            fieldName: 'details.testingNeeds.addons'
+            required: true,
+            validationError: 'Please provide expected number of business processes'
+          },
+          {
+            icon: 'question',
+            title: 'What is the expected hours of execution for all different Performance Tests to be conducted?',
+            description: '(Unit package covers 10 hours of execution, additional execution time would require Top-Ups)',
+            fieldName: 'details.loadDetails.expectedExecutionHours',
+            type: 'slide-radiogroup',
+            options: [
+              { value: 'upto-5', title: 'Upto 5'},
+              { value: 'upto-10', title: 'Upto 10' },
+              { value: 'upto-25', title: 'Upto 25' },
+              { value: 'above-25', title: 'More than 25' }
+            ],
+            required: true,
+            validationError: 'Please provide expected hours of execution'
           }
         ]
       },
@@ -460,9 +630,9 @@ export const basicSections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Please add details of any critical business processes \
-                       such as peak hour user load, transaction count in peak hours, \
-                       SLA (in seconds).',
+        description: 'Please enter any additional information like requirements,\
+                       architecture details, tools, performance baseline, etc.\
+                       After creating your project you will be able to upload files.',
         type: 'notes'
       }
     ]
