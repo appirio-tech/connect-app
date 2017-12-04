@@ -32,7 +32,7 @@ axiosInstance.interceptors.request.use( config => {
       config.headers['Authorization'] = `Bearer ${token}`
       return config
     })
-    .catch(err => {
+    .catch(() => {
       // TODO handle this error somehow
       return config
     })
