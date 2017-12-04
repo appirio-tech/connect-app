@@ -4,7 +4,6 @@ import React, { PropTypes as PT } from 'react'
 import './AvatarGroup.scss'
 
 function AvatarGroup({ users }) {
-
   const renderAvatar = (user, index) => {
     return (
       <Avatar
