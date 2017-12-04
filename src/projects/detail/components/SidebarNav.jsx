@@ -21,7 +21,8 @@ const scrollProps = {
  */
 const renderSubNavItems = (child, idx) => {
   const { name, progress, link, required } = child
-  const isComplete = progress.length && progress[0] === progress[1]
+  // Github issue#1399, changed === to >= to determine if all required fields are completed
+  const isComplete = progress.length && progress[0] >= progress[1]
   const showProgress = progress[1] > 0 && name.toLowerCase().indexOf('questions') !== -1
   return (
     <li key={idx}>
