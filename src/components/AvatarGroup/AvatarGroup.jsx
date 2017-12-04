@@ -5,15 +5,6 @@ import './AvatarGroup.scss'
 
 function AvatarGroup({ users }) {
 
-  const uniqueUserList = []
-  const uniqueUsers = _.filter(users, user => {
-    if (!_.includes(uniqueUserList, user.userId)) {
-      uniqueUserList.push(user.userId)
-      return true
-    }
-    return false
-  })
-
   const renderAvatar = (user, index) => {
     return (
       <Avatar
@@ -25,7 +16,7 @@ function AvatarGroup({ users }) {
   }
   return (
     <div className="AvatarGroup">
-      { uniqueUsers.map(renderAvatar) }
+      { _.uniqBy(users, 'userId').map(renderAvatar) }
     </div>
   )
 }
