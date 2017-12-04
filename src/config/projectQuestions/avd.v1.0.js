@@ -81,9 +81,6 @@ const sections = [
             fieldName: 'description',
             description: 'Brief Description',
             validations: 'isRequired,minLength:160',
-            // providing default error message to handle isRequired validation
-            // somehow, it is not picking up error message from validationErrors object
-            validationError: 'Please provide a description',
             validationErrors: {
               isRequired : 'Please provide a description',
               minLength  : 'Please enter at least 160 characters'
@@ -299,9 +296,6 @@ export const basicSections = [
             // required is not needed if we specifiy validations
             // required: true,
             validations: 'isRequired,minLength:160',
-            // providing default error message to handle isRequired validation
-            // somehow, it is not picking up error message from validationErrors object
-            validationError: 'Please provide a description',
             validationErrors: {
               isRequired : 'Please provide a description',
               minLength  : 'Please enter at least 160 characters'

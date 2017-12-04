@@ -43,7 +43,7 @@ class SliderInput extends Component {
           max={max}
           step={step}
           value={ valueIdx }
-          defaultValue={''}
+          defaultValue={0}
           marks={marks}
           onChange={ this.onChange }
           // handles onAfterChange to fix issue when user clicks on first value/step of untouched slider

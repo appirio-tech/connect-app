@@ -14,7 +14,7 @@ import SliderInput from './../../../components/SliderInput/SliderInput'
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
 
 // HOC for SpecFeatureQuestion
-const SeeAttachedSpecFeatureQuestion = seeAttachedWrapperField(SpecFeatureQuestion)
+const SeeAttachedSpecFeatureQuestion = seeAttachedWrapperField(SpecFeatureQuestion, [])
 
 const getIcon = icon => {
   switch (icon) {
@@ -28,7 +28,8 @@ const getIcon = icon => {
   }
 }
 
-const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog, isRequired}) => {
+// { isRequired, represents the overall questions section's compulsion, is also available}
+const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog }) => {
 
   const renderQ = (q, index) => {
     // let child = null
@@ -146,7 +147,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
         options: q.options,
         min: 0,
         max: q.options.length - 1,
-        step :null,
+        step: 1,
         included: false
       })
       break
@@ -159,7 +160,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
-        required={isRequired}
+        required={q.required || (q.validations && q.validations.indexOf('isRequired') !== -1)}
         hideDescription={elemProps.hideDescription}
       >
         <ChildElem {...elemProps} />

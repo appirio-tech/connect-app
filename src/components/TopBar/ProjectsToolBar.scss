@@ -28,8 +28,18 @@ $tc-body-large: 20px;
       }
     }
 
+    .primary-filters {
+      margin-top: 15px;
+    }
+
     .welcome-info {
       margin-right: 4 * $base-unit;
+
+      .avatar-info {
+        .username {
+          display: none;
+        }
+      }
     }
 
     .actions {
