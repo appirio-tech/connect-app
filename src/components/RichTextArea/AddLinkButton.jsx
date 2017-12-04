@@ -6,6 +6,7 @@ import linkifyIt from 'linkify-it'
 import tlds from 'tlds'
 import {hasEntity, getCurrentEntity} from '../../helpers/draftJSHelper'
 import EditorIcons from './EditorIcons'
+import Alert from 'react-s-alert';
 
 const linkify = linkifyIt()
 linkify.tlds(tlds)
@@ -24,7 +25,7 @@ class LinkModal extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      url: props && props.url || '',
+      url: props && props.url || 'http://',
       error: null
     }
     this.onUrlChange = this.onUrlChange.bind(this)
@@ -223,8 +224,12 @@ export default class AddLinkButton extends React.Component {
   }
 
   toggleAddLink() {
+    console.log('ADD LINK')
     const editorState = this.props.getEditorState()
     const selection = editorState.getSelection()
+    if (selection.isCollapsed()) {
+      Alert.error("Please select some piece of text .")
+    }
     if (!selection.getHasFocus()) {
       return
     }
