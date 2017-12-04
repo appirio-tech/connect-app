@@ -87,7 +87,7 @@ const products = {
         icon: 'product-qa-crowd-testing',
         id: 'data_exploration',
         aliases: ['data-exploration', 'data_exploration'],
-        hidden l :true
+        hidden  :true
       }
     }
   },
