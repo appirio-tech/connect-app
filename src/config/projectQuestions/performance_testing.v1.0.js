@@ -65,9 +65,9 @@ const sections = [
             description: '(Unit package includes 500 virtual users, additional load would require Top-Ups)',
             type: 'slide-radiogroup',
             options: [
-              { value: 'upto-500', title: 'Upto 500' },
-              { value: 'upto-1000', title: 'Upto 1000' },
-              { value: 'upto-5000', title: 'Upto 5000' },
+              { value: 'upto-500', title: 'Up to 500' },
+              { value: 'upto-1000', title: 'Up to 1000' },
+              { value: 'upto-5000', title: 'Up to 5000' },
               { value: 'above-5000', title: 'More than 5000' }
             ],
             fieldName: 'details.loadDetails.concurrentUsersCount',
@@ -81,9 +81,9 @@ const sections = [
             fieldName: 'details.loadDetails.businessProcessesCount',
             type: 'slide-radiogroup',
             options: [
-              { value: 'upto-5', title: 'Upto 5'},
-              { value: 'upto-10', title: 'Upto 10' },
-              { value: 'upto-25', title: 'Upto 25' },
+              { value: 'upto-5', title: 'Up to 5'},
+              { value: 'upto-10', title: 'Up to 10' },
+              { value: 'upto-25', title: 'Up to 25' },
               { value: 'above-25', title: 'More than 25' }
             ],
             required: true,
@@ -96,9 +96,9 @@ const sections = [
             fieldName: 'details.loadDetails.expectedExecutionHours',
             type: 'slide-radiogroup',
             options: [
-              { value: 'upto-5', title: 'Upto 5'},
-              { value: 'upto-10', title: 'Upto 10' },
-              { value: 'upto-25', title: 'Upto 25' },
+              { value: 'upto-5', title: 'Up to 5'},
+              { value: 'upto-10', title: 'Up to 10' },
+              { value: 'upto-25', title: 'Up to 25' },
               { value: 'above-25', title: 'More than 25' }
             ],
             required: true,
@@ -107,19 +107,19 @@ const sections = [
           {
             icon: 'question',
             title: 'Please select any additional add-ons?',
-            description: 'estimated additional cost in ()',
+            description: '',
             type: 'checkbox-group',
             options: [
-              { value: 'scenario', label: 'Scenario Booster add 3 more ($1,000)' },
-              { value: '250vusers', label: 'Add 250 vUsers ($1,000)' },
-              { value: '2500vusers', label: 'Add 2500 vUsers ($4,000)' },
-              { value: 'geo', label: 'Add additional Geography($1,500)' },
-              { value: 'poc', label: 'Precurser to purchase - 1 Tool, 2 scripts,1 hour execution ($2,500)' },
-              { value: 'strategy', label: 'Utilize consultant to tailor strategy ($3,000)' },
-              { value: 'execution', label: 'Execution Booster extra 2 hours ($500)' },
-              { value: 'mytool', label: 'Use my own testing tool ($2,500)' },
-              { value: 'myscripts', label: 'Modify/Use own scripts ($5,000)' },
-              { value: 'late', label: 'Late Entry - 1 week lead time ($2,000)' }
+              { value: 'scenario', label: 'Scenario Booster add 3 more' },
+              { value: '250vusers', label: 'Add 250 vUsers' },
+              { value: '2500vusers', label: 'Add 2500 vUsers' },
+              { value: 'geo', label: 'Add additional Geography' },
+              { value: 'poc', label: 'Precurser to purchase - 1 Tool, 2 scripts,1 hour execution' },
+              { value: 'strategy', label: 'Utilize consultant to tailor strategy' },
+              { value: 'execution', label: 'Execution Booster extra 2 hours' },
+              { value: 'mytool', label: 'Use my own testing tool' },
+              { value: 'myscripts', label: 'Modify/Use own scripts' },
+              { value: 'late', label: 'Late Entry - 1 week lead time' }
             ],
             required: false,
             fieldName: 'details.testingNeeds.addons'
@@ -154,7 +154,7 @@ const sections = [
       {
         id: 'spoc',
         required: false,
-        title: 'SPOCs',
+        title: 'SPOCs (Single Point of Contact)',
         description: '',
         type: 'questions',
         questions: [
@@ -255,7 +255,7 @@ const sections = [
             description: '',
             type: 'checkbox-group',
             options: [
-              { value: 'dotnet', label: '.Net' },
+              { value: 'dotnet', label: '.NET' },
               { value: 'j2ee', label: 'J2EE' },
               { value: 'ria', label: 'Rich Internet Applications' },
               { value: 'oracle', label: 'Oracle Technology' },
@@ -585,9 +585,9 @@ export const basicSections = [
             description: '(Unit package includes 500 virtual users, additional load would require Top-Ups)',
             type: 'slide-radiogroup',
             options: [
-              { value: 'upto-500', title: 'Upto 500' },
-              { value: 'upto-1000', title: 'Upto 1000' },
-              { value: 'upto-5000', title: 'Upto 5000' },
+              { value: 'upto-500', title: 'Up to 500' },
+              { value: 'upto-1000', title: 'Up to 1000' },
+              { value: 'upto-5000', title: 'Up to 5000' },
               { value: 'above-5000', title: 'More than 5000' }
             ],
             fieldName: 'details.loadDetails.concurrentUsersCount',
@@ -601,9 +601,9 @@ export const basicSections = [
             fieldName: 'details.loadDetails.businessProcessesCount',
             type: 'slide-radiogroup',
             options: [
-              { value: 'upto-5', title: 'Upto 5'},
-              { value: 'upto-10', title: 'Upto 10' },
-              { value: 'upto-25', title: 'Upto 25' },
+              { value: 'upto-5', title: 'Up to 5'},
+              { value: 'upto-10', title: 'Up to 10' },
+              { value: 'upto-25', title: 'Up to 25' },
               { value: 'above-25', title: 'More than 25' }
             ],
             required: true,
@@ -616,9 +616,9 @@ export const basicSections = [
             fieldName: 'details.loadDetails.expectedExecutionHours',
             type: 'slide-radiogroup',
             options: [
-              { value: 'upto-5', title: 'Upto 5'},
-              { value: 'upto-10', title: 'Upto 10' },
-              { value: 'upto-25', title: 'Upto 25' },
+              { value: 'upto-5', title: 'Up to 5'},
+              { value: 'upto-10', title: 'Up to 10' },
+              { value: 'upto-25', title: 'Up to 25' },
               { value: 'above-25', title: 'More than 25' }
             ],
             required: true,
