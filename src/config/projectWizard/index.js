@@ -57,7 +57,7 @@ const products = {
         icon: 'product-chatbot-chatbot',
         id: 'generic_chatbot',
         aliases: ['chatbot', 'generic_chatbot']
-      }/*,
+      },
       'Computer Vision': {
         brief: 'TBD',
         details: 'Work with images to recognize patterns, compute correspondences, etc',
@@ -65,7 +65,7 @@ const products = {
         id: 'computer_vision',
         aliases: ['computer-vision', 'computer_vision'],
         hidden : true
-      },
+      }, /*,
       'Algorithm Optimization': {
         brief: 'TBD',
         details: 'Boost the performance (speed or accuracy) of an existing or new algorithm',
@@ -80,13 +80,15 @@ const products = {
         id: 'predictive-analytics',
         aliases: ['predictive-analytics', 'predictive_analytics']
       },
+      */
       'Data Exploration': {
         brief: 'TBD',
         details: 'Ask a crowd of experts to look at your data, understand your goals, and suggest solutions',
         icon: 'product-qa-crowd-testing',
-        id: 'data-exploration',
-        aliases: ['data-exploration', 'data_exploration']
-      }*/
+        id: 'data_exploration',
+        aliases: ['data-exploration', 'data_exploration'],
+        hidden  :true
+      }
     }
   },
   Design: {

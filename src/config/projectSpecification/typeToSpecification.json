@@ -17,6 +17,7 @@
   "open_source_automation": "crowd_testing.v1.0",
   "consulting_adivisory": "crowd_testing.v1.0",
   "computer_vision": "computer_vision.v1.0",
+  "data_exploration": "data_exploration.v1.0",
   "api_dev": "app_dev.v1.0",
   "frontend_dev" : "app_dev.v1.0"
 }
