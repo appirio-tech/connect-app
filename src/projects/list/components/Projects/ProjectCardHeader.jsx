@@ -15,12 +15,12 @@ function ProjectCardHeader({ project }) {
   return (
     <div className="project-card-header">
       <div className="project-header">
-        <div className="project-type-icon"><SVGIconImage filePath={categoryIcon} /></div>
+        <div className="project-type-icon" title={project.type !== undefined ? project.type[0].toUpperCase() + project.type.substr(1).replace(/_/g, ' ') : null}><SVGIconImage filePath={categoryIcon} /></div>
         <div className="project-header-details">
           <div className="project-name">
             <TextTruncate
               containerClassName="project-name"
-              line={1}
+              line={2}
               truncateText="..."
               text={project.name}
             />

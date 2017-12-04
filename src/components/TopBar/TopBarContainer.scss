@@ -39,6 +39,12 @@
     display: flex;
     align-content: center;
     text-align: left;
+
+    .Dropdown {
+      min-width: 100px;
+      right: 0;
+      left: auto;
+    }
   }
 
   .sb-avatar {

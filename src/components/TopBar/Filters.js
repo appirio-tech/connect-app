@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import _ from 'lodash'
-import { Dropdown, DropdownItem, SwitchButton } from 'appirio-tech-react-components'
+import { Dropdown, DropdownItem } from 'appirio-tech-react-components'
 import { PROJECT_STATUS } from '../../config/constants'
 import { projectTypes } from '../../config/projectWizard'
 
@@ -10,7 +10,7 @@ const projectStatuses = [
   ...PROJECT_STATUS.map((item) => ({val: item.value, label: item.name}))
 ]
 
-const Filters = ({ criteria, handleMyProjectsFilter, applyFilters }) => {
+const Filters = ({ criteria, applyFilters }) => {
 
   const type = _.find(projectTypes, t => t.id === (criteria.type || null))
   const status = _.find(projectStatuses, t => t.val === (criteria.status || null))
@@ -56,25 +56,12 @@ const Filters = ({ criteria, handleMyProjectsFilter, applyFilters }) => {
           </Dropdown>
         </div>
       </div>
-      <div className="bar-control">
-        <div className="toggle-widget">
-          <div className="tc-switch clearfix">
-            <SwitchButton
-              onChange={ handleMyProjectsFilter }
-              label="My projects"
-              name="my-projects-only"
-              checked={criteria.memberOnly}
-            />
-          </div>
-        </div>
-      </div>
     </div>
   )
 }
 
 Filters.propTypes = {
   criteria: PropTypes.object.isRequired,
-  handleMyProjectsFilter: PropTypes.func.isRequired,
   applyFilters: PropTypes.func.isRequired
 }
 
