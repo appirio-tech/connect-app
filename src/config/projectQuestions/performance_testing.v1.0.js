@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import NumberText from '../../components/NumberText/NumberText'
+// import NumberText from '../../components/NumberText/NumberText'
 import { findProduct } from '../projectWizard'
 
 
@@ -264,7 +264,7 @@ const sections = [
               { value: 'adobe-flex', label: 'Adobe Flex' },
               { value: 'others', label: 'Others' }
             ],
-            fieldName: 'details.targetApplication.developmentPlatform',
+            fieldName: 'details.targetApplication.developmentPlatform'
             // required: true,
             // validationError: 'Please provide development platform of the application'
           },
@@ -282,7 +282,7 @@ const sections = [
               { value: 'java', label: 'Java based (with Swing/Applets)' },
               { value: 'oracle-forms', label: 'Web based Oracle Forms' },
               { value: 'other', label: 'Any other' }
-            ],
+            ]
             // required: true,
             // validationError: 'Please provide front end used in the application'
           },
@@ -291,7 +291,7 @@ const sections = [
             title: 'What are the web servers used?',
             description: '(For eg. Webserver can be Apache, IIS etc.)',
             fieldName: 'details.targetApplication.webBrowsers',
-            type: 'textbox',
+            type: 'textbox'
             // required: true,
             // validationError: 'Please provide target web browsers'
           },
@@ -300,7 +300,7 @@ const sections = [
             title: 'What ae the application servers used?',
             description: '(For eg. Application server can be JBoss or Weblogic or Websphere etc.)',
             fieldName: 'details.targetApplication.appServers',
-            type: 'textbox',
+            type: 'textbox'
             // required: true,
             // validationError: 'Please provide application servers used'
           },
@@ -309,7 +309,7 @@ const sections = [
             title: 'What is the back end of your application?',
             description: '(For eg. Back end can be Oracle, MS SQL or Sybase etc)',
             fieldName: 'details.targetApplication.backEnd',
-            type: 'textbox',
+            type: 'textbox'
             // required: true,
             // validationError: 'Please provide back end used in the application'
           },
@@ -325,7 +325,7 @@ const sections = [
             title: 'What is the middleware used?',
             description: '(For eg. Middleware can be MQSeries or TIBCO or Webmethod etc)',
             fieldName: 'details.targetApplication.middleware',
-            type: 'textbox',
+            type: 'textbox'
             // required: true,
             // validationError: 'Please provide middleware used in the application'
           },
@@ -334,7 +334,7 @@ const sections = [
             title: 'Please specify if web services are used and their functions',
             description: '(For eg. SOAP/REST Webservices deployed in App server for new customer creation and maintenance)',
             fieldName: 'details.targetApplication.webservices',
-            type: 'textbox',
+            type: 'textbox'
             // required: true,
             // validationError: 'Please provide web services used in the application'
           },
@@ -350,7 +350,7 @@ const sections = [
               { value: 'sso', label: 'Siteminder/SSO' },
               { value: 'ldap', label: 'LDAP' },
               { value: 'others', label: 'Others' }
-            ],
+            ]
             // required: true,
             // validationError: 'Please provide authentication mode of the application'
           },
@@ -366,7 +366,7 @@ const sections = [
               { value: 'document-mgmt-system', label: 'Document Mgmt System' },
               { value: 'payments', label: 'Payments' },
               { value: 'other', label: 'Others' }
-            ],
+            ]
             // required: true,
             // validationError: 'Please provide interfaces used in the application'
           }
