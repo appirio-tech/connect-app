@@ -19,6 +19,7 @@ export function requiresAuthentication(Component) {
 
     checkAuth() {
       getFreshToken().then(() => {
+        console.log('success getting fresh token')
         this.setState({isLoggedIn: true})
       }).catch((error) => {
         console.log(error)

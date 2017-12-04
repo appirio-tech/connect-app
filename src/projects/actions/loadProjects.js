@@ -102,11 +102,9 @@ export function loadProjects(searchTerm) {
       method: 'getProjects',
       args: {searchTerm},
       success : (resp, dispatch) => {
-        console.log('dispatch success action')
-        console.log(resp)
         projectSearchSuccess(dispatch, resp)
       },
-      failure : () => { console.log('dispatch failure action') }
+      failure : () => { console.error('dispatch failure action') }
     }
   }
 }
