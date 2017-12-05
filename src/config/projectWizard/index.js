@@ -209,7 +209,7 @@ const products = {
         details: 'Measure your code base against our security baseline using the crowd and tooling ',
         icon: 'product-qa-mobility-testing',
         id: 'health_check',
-        aliases: ['mobility-testing', 'mobility_testing'],
+        aliases: ['health-check', 'health_check'],
         hidden: true
       },
       'Digital Accessibility': {
