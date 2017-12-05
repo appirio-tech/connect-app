@@ -5,13 +5,13 @@
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="project-menu-icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
-        <g id="product-analytics-computer-vision" stroke-width="2">
+        <g id="product-analytics-computer-vision" stroke="#262628" stroke-width="2">
             <g id="big-eyes" transform="translate(1.000000, 1.000000)">
-                <circle id="Oval" stroke="#444444" fill="#CEF0AF" cx="15" cy="15" r="15"></circle>
-                <circle id="Oval" stroke="#444444" fill="#FFFFFF" cx="8" cy="11" r="7"></circle>
-                <circle id="Oval" stroke="#262628" fill="#262628" cx="8" cy="11" r="2"></circle>
-                <circle id="Oval" stroke="#444444" fill="#FFFFFF" cx="22" cy="11" r="7"></circle>
-                <circle id="Oval" stroke="#262628" fill="#262628" cx="22" cy="11" r="2"></circle>
+                <circle id="Oval" fill="#CEF0AF" cx="15" cy="15" r="15"></circle>
+                <circle id="Oval" fill="#FFFFFF" cx="8" cy="11" r="7"></circle>
+                <circle id="Oval" fill="#262628" cx="8" cy="11" r="2"></circle>
+                <circle id="Oval" fill="#FFFFFF" cx="22" cy="11" r="7"></circle>
+                <circle id="Oval" fill="#262628" cx="22" cy="11" r="2"></circle>
             </g>
         </g>
     </g>
