@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import seeAttachedWrapperField from './SeeAttachedWrapperField'
 import { TCFormFields } from 'appirio-tech-react-components'
+import AutosizeTextArea from '../../../components/AutosizeTextArea'
 import _ from 'lodash'
 
 import SpecQuestionList from './SpecQuestionList/SpecQuestionList'
@@ -86,7 +87,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       elemProps.type = 'number'
       break
     case 'textbox':
-      ChildElem = TCFormFields.Textarea
+      ChildElem = AutosizeTextArea
       elemProps.wrapperClass = 'row'
       elemProps.autoResize = true
       if (q.validations) {
