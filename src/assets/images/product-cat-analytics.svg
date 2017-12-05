@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>product-cat-analytics</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="project-menu-icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+        <g id="product-cat-analytics" stroke-width="2">
+            <g id="laptop-72" transform="translate(1.000000, 4.000000)">
+                <path d="M26,24 L4,24 C1.791,24 0,22.209 0,20 L0,20 L30,20 L30,20 C30,22.209 28.209,24 26,24 Z" id="Shape" stroke="#444444" fill="#A3A3AD"></path>
+                <path d="M3,20 L3,2 C3,0.895 3.895,0 5,0 L25,0 C26.105,0 27,0.895 27,2 L27,20 L3,20 Z" id="Shape" stroke="#444444" fill="#FFFFFF"></path>
+                <path d="M15,5 L15,14" id="Shape" stroke="#0681FF"></path>
+                <path d="M9,12 L9,14" id="Shape" stroke="#FF5A4C"></path>
+                <path d="M21,8 L21,14" id="Shape" stroke="#5CC900"></path>
+            </g>
+        </g>
+    </g>
+</svg>

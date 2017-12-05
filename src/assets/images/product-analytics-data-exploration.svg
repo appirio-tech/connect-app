@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>product-analytics-data-exploration</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="project-menu-icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="product-analytics-data-exploration" stroke="#444444" stroke-width="2">
+            <g id="chart-3" transform="translate(1.000000, 1.000000)">
+                <path d="M17,4 C24.18,4 30,9.82 30,17 C30,24.18 24.18,30 17,30 C9.82,30 4,24.18 4,17 L17,17 L17,4 Z" id="Shape" fill="#FFE3CF"></path>
+                <path d="M0,13 C0,5.82 5.82,0 13,0 L13,13 L0,13 Z" id="Shape" fill="#5CC900" stroke-linecap="square"></path>
+            </g>
+        </g>
+    </g>
+</svg>
