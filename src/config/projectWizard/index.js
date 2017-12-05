@@ -204,6 +204,14 @@ const products = {
         aliases: ['performance-testing', 'performance_testing'],
         hidden: true
       },
+      'Health Security Check': {
+      brief: 'TBD',
+      details: 'Measure your code base against our security baseline using the crowd and tooling ',
+      icon: 'product-qa-mobility-testing',
+      id: 'health_check',
+      aliases: ['mobility-testing', 'mobility_testing'],
+        hidden: true
+    },
       'Digital Accessibility': {
         brief: 'TBD',
         details: 'Make sure you app or website conforms to all rules and regulations',
@@ -229,12 +237,12 @@ const products = {
         disabled: true
       }
     }
-  }
-  /*
+  },
+
   Analytics: {
     icon: 'product-cat-qa',
-    info: 'Test and fix bugs in your software',
-    question: 'What kind of quality assurance (QA) do you need?',
+    info: 'Explore algorithm and data science projects',
+    question: 'What type of analytics project are you interested in?',
     id: 'analytics',
     aliases: ['all-analytics'],
     hidden: true,
@@ -269,7 +277,7 @@ const products = {
       }
     }
   }
-  */
+
 }
 
 export default products
