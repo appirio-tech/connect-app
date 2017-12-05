@@ -26,7 +26,10 @@ const sections = [
       return 'Definition'
     },
     required: true,
-    description: 'Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.',
+    description: 'Topcoder will scan your application using our properiatary formula\
+    for security standards. To rate your application we combine state of the art \
+    static code analysis, security scanning, export code review and other techniques \
+    to produce a Security Health Check scorecard.',
     subSections: [
       {
         id: 'projectName',
@@ -61,10 +64,7 @@ const sections = [
               isRequired: 'Please describe your application.',
               minLength: 'Please enter at least 160 characters'
             },
-            description: 'Topcoder will scan your application using our properiatary formula\
-             for security standards. To rate your application we combine state of the art \
-             static code analysis, security scanning, export code review and other techniques \
-             to produce a Security Health Check scorecard.',
+            description: 'Please describe your application.',
             title: 'Description',
             type: 'textbox'
           },
@@ -180,7 +180,10 @@ export const basicSections = [
     id: 'appDefinition',
     title: '',
     required: true,
-    description: 'Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.',
+    description: 'Topcoder will scan your application using our properiatary formula\
+        for security standards. To rate your application we combine state of the art \
+        static code analysis, security scanning, export code review and other techniques \
+        to produce a Security Health Check scorecard.',
     subSections: [
       {
         id: 'projectName',
