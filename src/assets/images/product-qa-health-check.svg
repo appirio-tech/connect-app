@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>product-qa-health-check</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="project-menu-icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="product-qa-health-check" stroke-width="2">
+            <g id="analytics-89" transform="translate(1.000000, 1.000000)">
+                <circle id="Oval" stroke="#262628" fill="#FFFFFF" stroke-linecap="square" cx="15" cy="15" r="15"></circle>
+                <polyline id="Shape" stroke="#0681FF" points="1 15 6.8 15 10.9 7 19.1 23 23.2 15 29 15"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>
