@@ -4,7 +4,7 @@ import InfiniteScroll from 'react-infinite-scroller'
 import ProjectCard from './ProjectCard'
 import NewProjectCard from './NewProjectCard'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
-
+import StatusFilters from '../../../../components/StatusFilters/StatusFilters'
 import { setDuration } from '../../../../helpers/projectHelper'
 
 require('./ProjectsGridView.scss')
@@ -13,7 +13,7 @@ require('./ProjectsGridView.scss')
 const ProjectsCardView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
-  const { projects, members, currentUser, onPageChange, pageNum, totalCount, inifinite } = props
+  const { projects, members, currentUser, onPageChange, pageNum, totalCount, inifinite, applyFilters, criteria } = props
   // const currentSortField = _.get(criteria, 'sort', '')
 
   // annotate projects with member data
@@ -44,6 +44,7 @@ const ProjectsCardView = props => {
   const hasMore = ((pageNum - 1) * 20 + 20 < totalCount)
   return (
     <div className="projects card-view">
+        <StatusFilters criteria={criteria} applyFilters={applyFilters} />
       { !!inifinite && 
         <InfiniteScroll
           initialLoad={false}
@@ -80,9 +81,9 @@ ProjectsCardView.propTypes = {
   // hence commented all next
   // onPageChange: PropTypes.func.isRequired,
   // sortHandler: PropTypes.func.isRequired,
-  // applyFilters: PropTypes.func.isRequired,
-  pageNum: PropTypes.number.isRequired
-  // criteria: PropTypes.object.isRequired
+  applyFilters: PropTypes.func.isRequired,
+  pageNum: PropTypes.number.isRequired,
+  criteria: PropTypes.object.isRequired
 }
 
 
