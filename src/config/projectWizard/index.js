@@ -205,13 +205,13 @@ const products = {
         hidden: true
       },
       'Health Security Check': {
-      brief: 'TBD',
-      details: 'Measure your code base against our security baseline using the crowd and tooling ',
-      icon: 'product-qa-mobility-testing',
-      id: 'health_check',
-      aliases: ['mobility-testing', 'mobility_testing'],
+        brief: 'TBD',
+        details: 'Measure your code base against our security baseline using the crowd and tooling ',
+        icon: 'product-qa-mobility-testing',
+        id: 'health_check',
+        aliases: ['mobility-testing', 'mobility_testing'],
         hidden: true
-    },
+      },
       'Digital Accessibility': {
         brief: 'TBD',
         details: 'Make sure you app or website conforms to all rules and regulations',

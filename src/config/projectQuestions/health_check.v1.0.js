@@ -102,7 +102,7 @@ const sections = [
             description: '(if applicable)',
             type: 'textbox',
             fieldName: 'details.security.baselineOther',
-            required: false,
+            required: false
           }
 
         ]
@@ -205,68 +205,68 @@ export const basicSections = [
         to produce a Security Health Check scorecard.',
         type: 'questions',
         questions: [
-            {
-              id: 'projectInfo',
-              fieldName: 'description',
-              // required is not needed if we specifiy validations
-              // required: true,
-              validations: 'isRequired,minLength:160',
-              validationErrors: {
-                isRequired: 'Please describe your application.',
-                minLength: 'Please enter at least 160 characters'
-              },
-              description: 'Brief describe your application',
-              title: 'Description',
-              type: 'textbox'
+          {
+            id: 'projectInfo',
+            fieldName: 'description',
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isRequired,minLength:160',
+            validationErrors: {
+              isRequired: 'Please describe your application.',
+              minLength: 'Please enter at least 160 characters'
             },
-            {
-              icon: 'question',
-              title: 'How secure is your application?',
-              description: '(this helps default values for the testing)',
-              fieldName: 'details.security.howSecure',
-              type: 'slide-radiogroup',
-              options: [
-                { value: 'low-risk', title: 'Low Risk'},
-                { value: 'medium-risk', title: 'Medium Risk' },
-                { value: 'high-risk', title: 'High Risk' },
-                { value: 'custom', title: 'Custom' }
-              ],
-              required: true,
-              validationError: 'Please select security rating'
-            },
-            {
-              icon: 'question',
-              title: 'Do you wish to baseline your application against the Topcoder Security Standard',
-              description: '',
-              fieldName: 'details.security.baselineBool',
-              type: 'radio-group',
-              options: [
-                {value: 'topcoder', label: 'Topcoder'},
-                {value: 'custom', label: 'Custom'}
-              ],
-              required: true,
-              validationError: 'Please select one'
-            },
-            {
-              icon: 'question',
-              title: 'If you chose other, please detail your baseline testing standard',
-              description: '(if applicable)',
-              type: 'textbox',
-              fieldName: 'details.security.baselineOther',
-              required: false,
-            }
+            description: 'Brief describe your application',
+            title: 'Description',
+            type: 'textbox'
+          },
+          {
+            icon: 'question',
+            title: 'How secure is your application?',
+            description: '(this helps default values for the testing)',
+            fieldName: 'details.security.howSecure',
+            type: 'slide-radiogroup',
+            options: [
+              { value: 'low-risk', title: 'Low Risk'},
+              { value: 'medium-risk', title: 'Medium Risk' },
+              { value: 'high-risk', title: 'High Risk' },
+              { value: 'custom', title: 'Custom' }
+            ],
+            required: true,
+            validationError: 'Please select security rating'
+          },
+          {
+            icon: 'question',
+            title: 'Do you wish to baseline your application against the Topcoder Security Standard',
+            description: '',
+            fieldName: 'details.security.baselineBool',
+            type: 'radio-group',
+            options: [
+              {value: 'topcoder', label: 'Topcoder'},
+              {value: 'custom', label: 'Custom'}
+            ],
+            required: true,
+            validationError: 'Please select one'
+          },
+          {
+            icon: 'question',
+            title: 'If you chose other, please detail your baseline testing standard',
+            description: '(if applicable)',
+            type: 'textbox',
+            fieldName: 'details.security.baselineOther',
+            required: false
+          }
 
-          ]
-        },
-        {
-          id: 'notes',
-          fieldName: 'details.appDefinition.notes',
-          title: 'Additional Notes',
-          description: 'Please detail any other additional information.  After \
+        ]
+      },
+      {
+        id: 'notes',
+        fieldName: 'details.appDefinition.notes',
+        title: 'Additional Notes',
+        description: 'Please detail any other additional information.  After \
           completing this form, you\'ll be able to add additional information about \
           your code base',
-          type: 'notes'
-        }
+        type: 'notes'
+      }
 
     ]
   }
