@@ -32,7 +32,7 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
     if (newStatus === PROJECT_STATUS_COMPLETED || newStatus === PROJECT_STATUS_CANCELLED) {
       this.setState({ newStatus, showStatusChangeDialog : true })
     } else {
-      this.props.onChangeStatus(newStatus)
+      (this.props.projectId) ? this.props.onChangeStatus(this.props.projectId, newStatus) : this.props.onChangeStatus(newStatus)
     }
   }
 
@@ -43,7 +43,10 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
   }
 
   changeStatus() {
-    this.props.onChangeStatus(this.state.newStatus, this.state.statusChangeReason)
+    (this.props.projectId) ?
+    this.props.onChangeStatus(this.props.projectId, this.state.newStatus, this.state.statusChangeReason)
+     : this.props.onChangeStatus(this.state.newStatus, this.state.statusChangeReason)
+
   }
 
   handleReasonUpdate(reason) {

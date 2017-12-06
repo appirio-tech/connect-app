@@ -44,7 +44,7 @@ const ProjectsCardView = props => {
   const hasMore = ((pageNum - 1) * 20 + 20 < totalCount)
   return (
     <div className="projects card-view">
-      { !!inifinite && 
+      { !!inifinite &&
         <InfiniteScroll
           initialLoad={false}
           pageStart={pageNum}
