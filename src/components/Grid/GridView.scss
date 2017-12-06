@@ -23,6 +23,10 @@
     .width6 {
         width: 6%;
     }
+    .width60 {
+        width: 5.5%;
+        min-width: 60px;
+    }
     .width70 {
         width: 70px;
         max-width: 70px;
@@ -55,7 +59,12 @@
         width: 38%;
     }
     .width45 {
-        width: 40%;
+        width: 42%;
+        min-width: 470px;
+    }
+    .width49 {
+        width: 49%;
+        min-width: 545px;
     }
     .txt-black {
         color: $tc-black;
@@ -126,7 +135,7 @@
         .flex-item.item-type .blue-block {
             padding-left: 15px;
         }
-        
+
         .spacing {
             // padding: 0 5px;
         }
@@ -251,7 +260,7 @@
     .txt-box span {
         font-weight: normal;
     }
-    
+
     .linnk-black {
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -361,7 +370,14 @@
         background: url("./images/status-done.svg") no-repeat 0 center;
     }
 }
-
+.project-status-title {
+    position: relative;
+    display: block;
+    background: url('../../assets/images/status-ico.svg') no-repeat;
+    background-position: center center;
+    height: 20px;
+    width: 20px;
+  }
 
 .drop-down {
     position: relative;

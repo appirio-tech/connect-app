@@ -4,12 +4,17 @@ import { branch, renderComponent } from 'recompose'
 import { withRouter } from 'react-router-dom'
 import Walkthrough from '../Walkthrough/Walkthrough'
 import CoderBot from '../../../../components/CoderBot/CoderBot'
+import ProjectListNavHeader from './ProjectListNavHeader'
 import ProjectsGridView from './ProjectsGridView'
 import ProjectsCardView from './ProjectsCardView'
 import { loadProjects, setInfiniteAutoload } from '../../../actions/loadProjects'
 import _ from 'lodash'
 import querystring from 'query-string'
-import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR, PROJECT_STATUS } from '../../../../config/constants'
+import { updateProject } from '../../../actions/project'
+import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR, PROJECT_STATUS, PROJECT_STATUS_CANCELLED } from '../../../../config/constants'
+
+// This handles showing a spinner while the state is being loaded async
+import spinnerWhileLoading from '../../../../components/LoadingSpinner'
 
 /*
   Definiing default project criteria. This is used to later to determine if
@@ -29,6 +34,7 @@ class Projects extends Component {
     super(props)
     this.state = {}
     this.sortHandler = this.sortHandler.bind(this)
+    this.onChangeStatus = this.onChangeStatus.bind(this)
     this.onPageChange = this.onPageChange.bind(this)
     this.applyFilters = this.applyFilters.bind(this)
     this.init = this.init.bind(this)
@@ -50,6 +56,15 @@ class Projects extends Component {
       this.init(nextProps)
     }
   }
+  onChangeStatus(projectId, status, reason) {
+    const { updateProject } = this.props
+    const delta = {status}
+    const pId = projectId || this.props.project.id
+    if (reason && status === PROJECT_STATUS_CANCELLED) {
+      delta.cancelReason = reason
+    }
+    updateProject(pId, delta)
+  }
 
   componentWillMount() {
     this.init(this.props)
@@ -70,11 +85,15 @@ class Projects extends Component {
     const queryParams = querystring.parse(location.search)
     if (!_.isEmpty(queryParams)) {
       const initialCriteria = {}
-      if (queryParams.sort) initialCriteria.sort = queryParams.sort
+      initialCriteria.sort = (queryParams.sort) ? queryParams.sort : 'updatedAt desc'
       if (queryParams.keyword) initialCriteria.keyword = decodeURIComponent(queryParams.keyword)
-      if (queryParams.status) initialCriteria.status = queryParams.status
+      if (queryParams.status) {
+        initialCriteria.status = queryParams.status
+        this.setState({status : queryParams.status})
+      }
       if (queryParams.type) initialCriteria.type = queryParams.type
       if (queryParams.memberOnly) initialCriteria.memberOnly = queryParams.memberOnly
+      if (queryParams.view) this.setState({selectedView : queryParams.view})
       // load projects only if projects were loaded for different criteria
       // or there no loaded projects yet
       if (!_.isEqual(criteria, initialCriteria) || projects.length === 0) {
@@ -129,35 +148,45 @@ class Projects extends Component {
     const showWalkThrough = !isLoading && totalCount === 0 &&
       _.isEqual(criteria, defaultCriteria) &&
       !isPowerUser
-
     const getStatusCriteriaText = (criteria) => {
       return (_.find(PROJECT_STATUS, { value: criteria.status }) || { name: ''}).name
     }
-
-    const projectsView = isPowerUser
-      ? (
-        <EnhancedGrid
-          {...this.props}
-          onPageChange={this.onPageChange}
-          sortHandler={this.sortHandler}
-          applyFilters={this.applyFilters}
-          projectsStatus={getStatusCriteriaText(criteria)}
-        />
-      )
-      : (
-        <EnhancedCards
-          {...this.props }
-          // onPageChange={this.onPageChange}
-          // sortHandler={this.sortHandler}
-          applyFilters={this.applyFilters}
-          onPageChange={this.onPageChange}
-          projectsStatus={getStatusCriteriaText(criteria)}
-        />
-      )
+    const gridView = (
+      <EnhancedGrid {...this.props}
+        onPageChange={this.onPageChange}
+        sortHandler={this.sortHandler}
+        onChangeStatus={this.onChangeStatus}
+        applyFilters={this.applyFilters}
+        projectsStatus={getStatusCriteriaText(criteria)}
+      />
+    )
+    const cardView = (
+      <EnhancedCards
+        {...this.props }
+        // onPageChange={this.onPageChange}
+        // sortHandler={this.sortHandler}
+        applyFilters={this.applyFilters}
+        onPageChange={this.onPageChange}
+        projectsStatus={getStatusCriteriaText(criteria)}
+      />
+    )
+    let projectsView
+    const chosenView = this.state.selectedView || this.props.criteria.view || 'grid'
+    const currentStatus = this.state.status || this.props.criteria.status || false
+    if (isPowerUser) {
+      if (chosenView === 'grid') {
+        projectsView = gridView
+      } else if (chosenView === 'card') {
+        projectsView = cardView
+      }
+    } else {
+      projectsView = cardView
+    }
     return (
       <div>
         <section className="">
           <div className="container">
+            {(isPowerUser && !showWalkThrough) && <ProjectListNavHeader applyFilters={this.applyFilters} selectedView={chosenView} currentStatus={currentStatus}/>}
             { showWalkThrough  ? <Walkthrough currentUser={currentUser} /> : projectsView }
           </div>
         </section>
@@ -192,6 +221,6 @@ const mapStateToProps = ({ projectSearch, members, loadUser }) => {
   }
 }
 
-const actionsToBind = { loadProjects, setInfiniteAutoload }
+const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(Projects))

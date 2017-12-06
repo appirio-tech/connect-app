@@ -4,7 +4,7 @@ import { TC_API_URL, PROJECTS_LIST_PER_PAGE } from '../config/constants'
 
 export function getProjects(criteria, pageNum) {
   // add default params
-  const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'details']
+  const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', 'details']
   const params = {
     limit: PROJECTS_LIST_PER_PAGE,
     offset: (pageNum - 1) * PROJECTS_LIST_PER_PAGE,
@@ -75,7 +75,7 @@ export function createProject(projectProps) {
   // TODO: Remove this once none of the active projects
   // have the discussions tab enabled
   projectProps.details.hideDiscussions = true
-  
+
   return axios.post(`${TC_API_URL}/v4/projects/`, { param: projectProps })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})
