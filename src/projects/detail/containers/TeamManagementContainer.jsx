@@ -222,12 +222,14 @@ class TeamManagementContainer extends Component {
 }
 
 const mapStateToProps = ({ loadUser, members }) => {
+  const adminRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   const powerUserRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   const managerRoles = [ ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_MANAGER ]
   return {
     currentUser: {
       userId: parseInt(loadUser.user.id),
       isCopilot: _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT) > -1,
+      isAdmin: _.intersection(loadUser.user.roles, adminRoles).length > 0,
       isManager: loadUser.user.roles.some((role) => managerRoles.indexOf(role) !== -1),
       isCustomer: !loadUser.user.roles.some((role) => powerUserRoles.indexOf(role) !== -1)
     },
