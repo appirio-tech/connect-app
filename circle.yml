@@ -19,7 +19,7 @@ compile:
 
 deployment:
   development:
-    branch: [dev, 'feature/performance-testing']
+    branch: [dev, 'feature/connect-admin-role']
     owner: appirio-tech
     commands:
       - ./deploy.sh DEV
