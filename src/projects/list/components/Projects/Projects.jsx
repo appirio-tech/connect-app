@@ -1,18 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { branch, renderComponent, compose } from 'recompose'
+import { branch, renderComponent } from 'recompose'
 import { withRouter } from 'react-router-dom'
 import Walkthrough from '../Walkthrough/Walkthrough'
 import CoderBot from '../../../../components/CoderBot/CoderBot'
 import ProjectsGridView from './ProjectsGridView'
 import ProjectsCardView from './ProjectsCardView'
-import { loadProjects } from '../../../actions/loadProjects'
+import { loadProjects, setInfiniteAutoload } from '../../../actions/loadProjects'
 import _ from 'lodash'
 import querystring from 'query-string'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR } from '../../../../config/constants'
-
-// This handles showing a spinner while the state is being loaded async
-import spinnerWhileLoading from '../../../../components/LoadingSpinner'
 
 /*
   Definiing default project criteria. This is used to later to determine if
@@ -24,11 +21,7 @@ const defaultCriteria = {sort: 'updatedAt desc'}
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, t => t, renderComponent(<CoderBot code={500} />))
 const errorHandler = showErrorMessageIfError(props => !props.error)
-const spinner = spinnerWhileLoading(props => !props.isLoading)
-const enhance = compose(errorHandler, spinner)
-const EnhancedGrid  = enhance(ProjectsGridView)
-// not using enhance here to avoid duplciate loading spinner, we are already using infinte scroll's loader
-// FIXME: this is preventing spinner icon in inital load though
+const EnhancedGrid  = errorHandler(ProjectsGridView)
 const EnhancedCards = errorHandler(ProjectsCardView)
 
 class Projects extends Component {
@@ -42,19 +35,12 @@ class Projects extends Component {
     this.removeScrollPosition = this.removeScrollPosition.bind(this)
   }
 
-  componentDidUpdate() {
-    window.scrollTo(0, parseInt(window.sessionStorage.getItem('projectsPageScrollTop')))
-  }
-
   componentWillUnmount(){
     window.removeEventListener('beforeunload', this.removeScrollPosition)
-    // if grid view, store projects scroll top for next mount
-    if (this.props.gridView) {
-      const scrollingElement = document.scrollingElement || document.documentElement
-      window.sessionStorage.setItem('projectsPageScrollTop', scrollingElement.scrollTop)
-    } else { // for card view remove the scroll position
-      this.removeScrollPosition()
-    }
+
+    // save scroll position
+    const scrollingElement = document.scrollingElement || document.documentElement
+    window.sessionStorage.setItem('projectsPageScrollTop', scrollingElement.scrollTop)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -70,15 +56,16 @@ class Projects extends Component {
   }
 
   componentDidMount() {
-    // sets window unload hook to show unsaved changes alert and persist incomplete project
     window.addEventListener('beforeunload', this.removeScrollPosition)
+
+    // restore scroll position
+    window.scrollTo(0, parseInt(window.sessionStorage.getItem('projectsPageScrollTop'), 10))
   }
 
   init(props) {
     document.title = 'Projects - Topcoder'
     // this.searchTermFromQuery = this.props.location.query.q || ''
-    const {criteria, loadProjects, location} = props
-    let pageNum = props.pageNum
+    const {criteria, loadProjects, location, projects} = props
     // check for criteria specified in URL.
     const queryParams = querystring.parse(location.search)
     if (!_.isEmpty(queryParams)) {
@@ -88,10 +75,17 @@ class Projects extends Component {
       if (queryParams.status) initialCriteria.status = queryParams.status
       if (queryParams.type) initialCriteria.type = queryParams.type
       if (queryParams.memberOnly) initialCriteria.memberOnly = queryParams.memberOnly
-      if (queryParams.page) pageNum = parseInt(queryParams.page)
-      loadProjects(initialCriteria, pageNum)
+      // load projects only if projects were loaded for different criteria
+      // or there no loaded projects yet
+      if (!_.isEqual(criteria, initialCriteria) || projects.length === 0) {
+        loadProjects(initialCriteria)
+      }
     } else {
-      this.routeWithParams(criteria, pageNum)
+      // perform initial load only if there are not projects already loaded
+      // otherwise we will get projects duplicated in store
+      if (projects.length === 0) {
+        this.routeWithParams(criteria)
+      }
     }
   }
 
@@ -101,37 +95,31 @@ class Projects extends Component {
   }
 
   onPageChange(pageNum) {
-    // if grid view, remove scroll position on page change
-    if (this.props.gridView) {
-      window.sessionStorage.removeItem('projectsPageScrollTop')
-    } else {
-      // for card view update the scroll position in local storage
-      const scrollingElement = document.scrollingElement || document.documentElement
-      window.sessionStorage.setItem('projectsPageScrollTop', scrollingElement.scrollTop)
-    }
-    this.routeWithParams(this.props.criteria, pageNum)
+    this.props.loadProjects(this.props.criteria, pageNum)
   }
 
   sortHandler(fieldName) {
     const criteria = _.assign({}, this.props.criteria, {
       sort: fieldName
     })
-    this.routeWithParams(criteria, 1 /* reset pageNum */)
+    this.routeWithParams(criteria)
   }
 
   applyFilters(filter) {
     const criteria = _.assign({}, this.props.criteria, filter)
-    this.routeWithParams(criteria, 1)
+    this.routeWithParams(criteria)
   }
 
-  routeWithParams(criteria, page) {
+  routeWithParams(criteria) {
+    // because criteria is changed disable infinite autoload
+    this.props.setInfiniteAutoload(false)
     // remove any null values
     criteria = _.pickBy(criteria, _.identity)
     this.props.history.push({
       pathname: '/projects',
-      search: '?' + querystring.stringify(_.assign({}, criteria, { page }))
+      search: '?' + querystring.stringify(_.assign({}, criteria))
     })
-    this.props.loadProjects(criteria, page)
+    this.props.loadProjects(criteria)
   }
 
   render() {
@@ -143,10 +131,12 @@ class Projects extends Component {
       !isPowerUser
     const projectsView = isPowerUser
       ? (
-        <EnhancedGrid {...this.props}
+        <EnhancedGrid
+          {...this.props}
           onPageChange={this.onPageChange}
           sortHandler={this.sortHandler}
           applyFilters={this.applyFilters}
+          projectsStatus={criteria.status || ''}
         />
       )
       : (
@@ -156,6 +146,7 @@ class Projects extends Component {
           // sortHandler={this.sortHandler}
           applyFilters={this.applyFilters}
           onPageChange={this.onPageChange}
+          projectsStatus={criteria.status || ''}
         />
       )
     return (
@@ -190,11 +181,12 @@ const mapStateToProps = ({ projectSearch, members, loadUser }) => {
     totalCount  : projectSearch.totalCount,
     pageNum     : projectSearch.pageNum,
     criteria    : projectSearch.criteria,
+    infiniteAutoload: projectSearch.infiniteAutoload,
     isPowerUser,
     gridView    : isPowerUser
   }
 }
 
-const actionsToBind = { loadProjects }
+const actionsToBind = { loadProjects, setInfiniteAutoload }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(Projects))
