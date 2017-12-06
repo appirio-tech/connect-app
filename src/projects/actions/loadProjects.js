@@ -48,6 +48,9 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
       let userIds = []
       _.forEach(value.projects, project => {
         userIds = _.union(userIds, _.map(project.members, 'userId'))
+        userIds = _.union(userIds, [project.createdBy])
+        userIds = _.union(userIds, [project.updatedBy])
+
       })
       // this is to remove any nulls from the list (dev had some bad data)
       _.remove(userIds, i => !i)

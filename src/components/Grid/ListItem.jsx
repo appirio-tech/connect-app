@@ -10,9 +10,13 @@ const ListItem = ({ item, columns }) => {
       </div>
     )
   }
+  let rowClasses = 'flex-row'
+  if (item.status === 'completed' || item.status === 'cancelled') {
+    rowClasses += ' dark-row'
+  }
   return (
     <div className="row">
-      <div className="flex-row">
+      <div className={rowClasses}>
           <div className="mask-layer hide" />
           {columns.map(renderColumn)}
       </div>
