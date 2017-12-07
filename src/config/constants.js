@@ -270,4 +270,4 @@ export const GA_CLIENT_ID = '_gacid'
 export const TOOLTIP_DEFAULT_DELAY = 300 // in ms
 
 //Project listing
-export const CHUNK_PROJECT_LIST = 20
+export const PROJECT_LIST_CHUNK = 20

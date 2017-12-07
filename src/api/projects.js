@@ -1,13 +1,13 @@
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
-import { TC_API_URL, CHUNK_PROJECT_LIST } from '../config/constants'
+import { TC_API_URL, PROJECT_LIST_CHUNK } from '../config/constants'
 
 export function getProjects(criteria, pageNum) {
   // add default params
   const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'details']
   const params = {
-    limit: CHUNK_PROJECT_LIST,
-    offset: (pageNum - 1) * CHUNK_PROJECT_LIST,
+    limit: PROJECT_LIST_CHUNK,
+    offset: (pageNum - 1) * PROJECT_LIST_CHUNK,
     fields: includeFields.join(',')
   }
   // filters
