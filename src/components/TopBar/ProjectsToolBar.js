@@ -10,7 +10,7 @@ import { SearchBar, MenuBar, SwitchButton } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import NewProjectNavLink from './NewProjectNavLink'
 
-import { projectSuggestions, loadProjects } from '../../projects/actions/loadProjects'
+import { projectSuggestions, loadProjects, setInfiniteAutoload } from '../../projects/actions/loadProjects'
 
 
 class ProjectsToolBar extends Component {
@@ -88,7 +88,7 @@ class ProjectsToolBar extends Component {
       // force sort criteria to best match
       criteria.sort = 'best match'
     }
-    this.routeWithParams(criteria, 1)
+    this.routeWithParams(criteria)
   }
 
   toggleFilter() {
@@ -103,14 +103,16 @@ class ProjectsToolBar extends Component {
     })
   }
 
-  routeWithParams(criteria, page) {
+  routeWithParams(criteria) {
+    // because criteria is changed disable infinite autoload
+    this.props.setInfiniteAutoload(false)
     // remove any null values
     criteria = _.pickBy(criteria, _.identity)
     this.props.history.push({
       pathname: '/projects',
-      query: '?' + querystring.stringify(_.assign({}, criteria, { page }))
+      search: '?' + querystring.stringify(_.assign({}, criteria))
     })
-    this.props.loadProjects(criteria, page)
+    this.props.loadProjects(criteria)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -225,7 +227,8 @@ ProjectsToolBar.propTypes = {
   /**
    * Function which render the logo section in the top bar
    */
-  renderLogoSection     : PropTypes.func.isRequired
+  renderLogoSection     : PropTypes.func.isRequired,
+  setInfiniteAutoload   : PropTypes.func.isRequired
 }
 
 ProjectsToolBar.defaultProps = {
@@ -247,6 +250,6 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
   }
 }
 
-const actionsToBind = { projectSuggestions, loadProjects }
+const actionsToBind = { projectSuggestions, loadProjects, setInfiniteAutoload }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(ProjectsToolBar))

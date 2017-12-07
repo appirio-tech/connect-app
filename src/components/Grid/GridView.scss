@@ -257,6 +257,18 @@
         text-overflow: ellipsis;
     }
 }
+
+.gridview-load-more {
+  text-align: center;
+}
+
+.gridview-no-more {
+  @include roboto
+  color: $tc-gray-40;
+  font-size: 13px;
+  padding: 10px 0;
+  text-align: center;
+}
 /* .user-block  - remove as it is extended at UserWithName.scss */
 
 // .user-block {
@@ -298,7 +310,7 @@
 //         line-height: $base-unit * 6;
 //         display: inline-block;
 //     }
-    
+
 //     .item-mask-layer {
 //         background: rgba(255,255,255,0.7);
 //         width: 100%;
