@@ -13,6 +13,14 @@ export function getProjects(criteria, pageNum) {
   // filters
   const filter = _.omit(criteria, ['sort'])
   if (!_.isEmpty(filter)) {
+    // support for multiple comma separated types
+    if (filter.type && filter.type.indexOf(',') > -1) {
+      filter.type = `in(${filter.type})`
+    }
+    // support for multiple comma separated segments
+    if (filter.segment && filter.segment.indexOf(',') > -1) {
+      filter.segment = `in(${filter.segment})`
+    }
     // convert filter object to string
     const filterStr = _.map(filter, (v, k) => `${k}=${v}`)
     params.filter = filterStr.join('&')
