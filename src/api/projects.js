@@ -7,7 +7,7 @@ export function getProjects(criteria, pageNum) {
   const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'details']
   const params = {
     limit: CHUNK_PROJECT_LIST,
-    offset: (pageNum - 1) * 20,
+    offset: (pageNum - 1) * CHUNK_PROJECT_LIST,
     fields: includeFields.join(',')
   }
   // filters
