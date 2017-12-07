@@ -9,7 +9,7 @@ import ProjectsCardView from './ProjectsCardView'
 import { loadProjects, setInfiniteAutoload } from '../../../actions/loadProjects'
 import _ from 'lodash'
 import querystring from 'query-string'
-import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR } from '../../../../config/constants'
+import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR, PROJECT_STATUS } from '../../../../config/constants'
 
 /*
   Definiing default project criteria. This is used to later to determine if
@@ -129,6 +129,11 @@ class Projects extends Component {
     const showWalkThrough = !isLoading && totalCount === 0 &&
       _.isEqual(criteria, defaultCriteria) &&
       !isPowerUser
+
+    const getStatusCriteriaText = (criteria) => {
+      return (_.find(PROJECT_STATUS, { value: criteria.status }) || { name: ''}).name
+    }
+
     const projectsView = isPowerUser
       ? (
         <EnhancedGrid
@@ -136,7 +141,7 @@ class Projects extends Component {
           onPageChange={this.onPageChange}
           sortHandler={this.sortHandler}
           applyFilters={this.applyFilters}
-          projectsStatus={criteria.status || ''}
+          projectsStatus={getStatusCriteriaText(criteria)}
         />
       )
       : (
@@ -146,7 +151,7 @@ class Projects extends Component {
           // sortHandler={this.sortHandler}
           applyFilters={this.applyFilters}
           onPageChange={this.onPageChange}
-          projectsStatus={criteria.status || ''}
+          projectsStatus={getStatusCriteriaText(criteria)}
         />
       )
     return (
