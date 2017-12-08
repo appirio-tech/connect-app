@@ -1,7 +1,8 @@
 import {
   PROJECT_SEARCH_PENDING, PROJECT_SEARCH_SUCCESS, PROJECT_SEARCH_FAILURE,
   GET_PROJECTS_PENDING, GET_PROJECTS_SUCCESS, GET_PROJECTS_FAILURE,
-  LOAD_MORE_PROJECTS, CLEAR_PROJECT_SEARCH, GET_PROJECTS_SEARCH_CRITERIA
+  LOAD_MORE_PROJECTS, CLEAR_PROJECT_SEARCH, SET_PROJECTS_SEARCH_CRITERIA,
+  SET_PROJECTS_INFINITE_AUTOLOAD
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -25,9 +26,9 @@ export default function(state = initialState, action) {
     return Object.assign({}, state, {
       isLoading: true,
       error: false,
-      totalCount: 0
+      totalCount: action.meta && action.meta.keepPrevious ? state.totalCount : 0
     })
-  case GET_PROJECTS_SEARCH_CRITERIA:
+  case SET_PROJECTS_SEARCH_CRITERIA:
     return Object.assign({}, state, {
       criteria: action.criteria,
       pageNum: action.pageNum
@@ -63,6 +64,11 @@ export default function(state = initialState, action) {
   case LOAD_MORE_PROJECTS:
     return Object.assign({}, state, {
       loadingMore: true
+    })
+
+  case SET_PROJECTS_INFINITE_AUTOLOAD:
+    return Object.assign({}, state, {
+      infiniteAutoload: action.payload
     })
 
   default:

@@ -8,7 +8,7 @@ import GridView from '../../../../components/Grid/GridView'
 
 import UserWithName from '../../../../components/User/UserWithName'
 import { findCategory } from '../../../../config/projectWizard'
-import { PROJECT_STATUS } from '../../../../config/constants'
+import { PROJECT_STATUS, PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
 
 require('./ProjectsGridView.scss')
 
@@ -29,7 +29,8 @@ const projectTypeClassMap = {
 const ProjectsGridView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
-  const { projects, members, totalCount, criteria, pageNum, sortHandler, onPageChange, error, isLoading} = props
+  const { projects, members, totalCount, criteria, pageNum, sortHandler, onPageChange,
+    error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus } = props
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
   // it defines what columns should be displayed and more importantly
@@ -178,6 +179,7 @@ const ProjectsGridView = props => {
       members[m.userId.toString()])
     })
   })
+
   const gridProps = {
     error,
     isLoading,
@@ -188,7 +190,11 @@ const ProjectsGridView = props => {
     resultSet: projects,
     totalCount,
     currentPageNum: pageNum,
-    pageSize: 20
+    pageSize: PROJECTS_LIST_PER_PAGE,
+    infiniteAutoload,
+    infiniteScroll: true,
+    setInfiniteAutoload,
+    projectsStatus
   }
 
   return (
