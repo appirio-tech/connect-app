@@ -127,20 +127,21 @@ $tc-body-large: 20px;
 
   /* .bar__search */
   .bar__search {
+    align-items: center;
+    box-sizing: border-box;
     position: relative;
     min-height: 60px;
-    height: 60px;
-    padding: 0 20px;
-    background-color: $tc-gray-neutral-light;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    background-color: $tc-gray-20;
+    border-bottom: 1px solid $tc-gray-40;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25);
     display: flex;
+    justify-content: space-between;
     width: 100%;
 
     h2 {
       font-size: $tc-body-large;
-      line-height: 60px;
       color: $tc-black;
-      width: 120px;
       white-space: nowrap;
     }
 
@@ -162,25 +163,30 @@ $tc-body-large: 20px;
       margin: 0 auto;
       text-align: center;
       display: flex;
-      justify-content: center;
-      padding-top: 15px;
-      flex-wrap: wrap;
-
-      label {
-        @include roboto-medium;
-        width: 83px;
-        display: inline-block;
-        line-height: 30px;
-        height: 30px;
-        font-size: 13px;
-        color: $tc-gray-70;
-        text-align: right;
-      }
+      justify-content: space-between;
+      padding-right: 30px;
 
       .search-select-widget {
-        width: 280px;
-        margin-left: 10px;
-        display: inline-block;
+        align-items: center;
+        display: flex;
+        margin-left: 40px;
+        flex: 1;
+
+        label {
+          @include roboto-medium;
+          display: inline-block;
+          line-height: 30px;
+          height: 30px;
+          font-size: 13px;
+          color: $tc-gray-70;
+          padding-right: 15px;
+          text-align: right;
+          white-space: nowrap;
+        }
+      }
+
+      .search-select-field {
+        flex: 1;
       }
     }
 
@@ -256,33 +262,3 @@ $tc-body-large: 20px;
     height: 100%;
   }
 }*/
-
-
-@media all and (max-width: 1023px) {
-  .bar__search {
-    h2 {
-      width: 110px;
-    }
-
-    .search-panel {
-      flex: 1;
-      margin: 0 auto;
-      text-align: left;
-      display: flex;
-      justify-content: flex-start;
-
-      label {
-        width: auto;
-        margin-left: 30px;
-
-        &.first {
-          margin-left: 0;
-        }
-      }
-
-      .search-select-widget {
-        width: 170px;
-      }
-    }
-  }
-}
