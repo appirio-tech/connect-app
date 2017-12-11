@@ -50,8 +50,8 @@ class Projects extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const prevQueryParams = _.get(this.props, 'location.query', null)
-    const queryParams = _.get(nextProps, 'location.query', null)
+    const prevQueryParams = _.get(this.props, 'location.search', null)
+    const queryParams = _.get(nextProps, 'location.search', null)
     if (!_.isEqual(prevQueryParams, queryParams)) {
       this.init(nextProps)
     }
@@ -83,6 +83,7 @@ class Projects extends Component {
     const {criteria, loadProjects, location, projects} = props
     // check for criteria specified in URL.
     const queryParams = querystring.parse(location.search)
+    this.setState({status : null})
     if (!_.isEmpty(queryParams)) {
       const initialCriteria = {}
       initialCriteria.sort = (queryParams.sort) ? queryParams.sort : 'updatedAt desc'
@@ -174,7 +175,7 @@ class Projects extends Component {
     )
     let projectsView
     const chosenView = this.state.selectedView || 'grid'
-    const currentStatus = this.state.status || this.props.criteria.status || false
+    const currentStatus = this.state.status || null
     if (isPowerUser) {
       if (chosenView === 'grid') {
         projectsView = gridView

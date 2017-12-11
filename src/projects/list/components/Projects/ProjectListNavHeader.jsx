@@ -17,6 +17,11 @@ export default class ProjectListNavHeader extends Component {
       currentStatus: this.props.currentStatus
     })
   }
+  componentWillReceiveProps(nextProps) {
+    if (this.state.currentStatus !== nextProps.currentStatus) {
+      this.setState({currentStatus : nextProps.currentStatus})
+    }
+  }
   onItemClick (e) {
     e.preventDefault()
     this.setState({ currentStatus : e.currentTarget.dataset.status })

@@ -47,8 +47,10 @@ const Filters = ({ criteria, applyFilters }) => {
         className="tc-btn"
         onClick={() => {
           applyFilters({
-            type: '',
-            segment: ''
+            type: null,
+            segment: null,
+            status: null,
+            sort: 'updatedAt desc'
           })
         }}
       >Clear all</button>
