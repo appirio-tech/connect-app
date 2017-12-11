@@ -7,10 +7,7 @@ import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 import ProjectSegmentSelect from './ProjectSegmentSelect'
 import GridView from '../../../../components/Grid/GridView'
 
-import StatusFilters from '../../../../components/StatusFilters/StatusFilters'
-import UserWithName from '../../../../components/User/UserWithName'
-import { findCategory } from '../../../../config/projectWizard'
-import { PROJECT_STATUS, PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
+import { PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
 
 import UserAvatar from '../../../../components/User/UserAvatar'
 import { DOMAIN } from '../../../../config/constants'
@@ -278,7 +275,6 @@ const ProjectsGridView = props => {
 
   return (
     <div>
-      <StatusFilters criteria={criteria} applyFilters={applyFilters} />
       <GridView {...gridProps} />
     </div>
   )

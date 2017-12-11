@@ -13,9 +13,6 @@ import querystring from 'query-string'
 import { updateProject } from '../../../actions/project'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR, PROJECT_STATUS, PROJECT_STATUS_CANCELLED } from '../../../../config/constants'
 
-// This handles showing a spinner while the state is being loaded async
-import spinnerWhileLoading from '../../../../components/LoadingSpinner'
-
 /*
   Definiing default project criteria. This is used to later to determine if
   walkthrough component should be rendered instead of no results
