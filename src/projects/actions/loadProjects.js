@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import {
-  PROJECT_SEARCH, GET_PROJECTS,
+  PROJECT_SEARCH, GET_PROJECTS, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
   SET_SEARCH_TERM, GET_PROJECTS_SEARCH_CRITERIA,
   CLEAR_PROJECT_SUGGESTIONS_SEARCH, PROJECT_SUGGESTIONS_SEARCH_SUCCESS,
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR
@@ -27,6 +27,14 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
     if (loadUser.user) {
       // determine if user is a power user
       isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
+      if (!isPowerUser) {
+        // list of all project statuses
+        const statuses = PROJECT_STATUS.map((item) => item.value)
+        // statuses to be excluded for non power users
+        const excluded = [PROJECT_STATUS_CANCELLED]
+        // updates the criteria with status filter
+        _.set(criteria, 'status', `in(${_.difference(statuses, excluded)})`)
+      }
     }
     return dispatch({
       type: GET_PROJECTS,

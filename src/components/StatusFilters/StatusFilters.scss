@@ -1,9 +1,9 @@
 @import 'tc-includes';
 
-.card-view .filterContainer {
+.filterContainer {
+  @include roboto-medium;
   align-self: left;
-  font-family: "Roboto", Arial, Helvetica, sans-serif;
-  margin: 20px 10px 0;
+  margin: 20px;
 }
 
 .filterList {

@@ -176,12 +176,6 @@ const mapStateToProps = ({ projectSearch, members, loadUser }) => {
   if (loadUser.user) {
     isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
   }
-  let projects
-  if (projectSearch.criteria.status) {
-    projects = projectSearch.projects.filter(project => project.status === projectSearch.criteria.status)
-  } else {
-    projects = projectSearch.projects
-  }
   return {
     currentUser : {
       userId: loadUser.user.profile.userId,
@@ -191,7 +185,7 @@ const mapStateToProps = ({ projectSearch, members, loadUser }) => {
     },
     isLoading   : projectSearch.isLoading,
     error       : projectSearch.error,
-    projects    : _.uniqBy(projects, 'id'),
+    projects    : projectSearch.projects,
     members     : members.members,
     totalCount  : projectSearch.totalCount,
     pageNum     : projectSearch.pageNum,
