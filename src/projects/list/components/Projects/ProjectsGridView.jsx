@@ -58,7 +58,7 @@ const ProjectsGridView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
   const { projects, members, totalCount, criteria, pageNum, sortHandler, onPageChange,
-    error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, applyFilters, onChangeStatus } = props
+    error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus } = props
 
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
@@ -290,7 +290,6 @@ ProjectsGridView.propTypes = {
   error: PropTypes.bool.isRequired,
   onPageChange: PropTypes.func.isRequired,
   sortHandler: PropTypes.func.isRequired,
-  applyFilters: PropTypes.func.isRequired,
   pageNum: PropTypes.number.isRequired,
   criteria: PropTypes.object.isRequired
 }

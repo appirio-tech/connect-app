@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { branch, renderComponent } from 'recompose'
+import { branch, renderComponent, compose, withProps } from 'recompose'
 import { withRouter } from 'react-router-dom'
 import Walkthrough from '../Walkthrough/Walkthrough'
 import CoderBot from '../../../../components/CoderBot/CoderBot'
@@ -19,10 +19,12 @@ import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR, PROJECT
  */
 const defaultCriteria = {sort: 'updatedAt desc'}
 
-
+const page500 = compose(
+  withProps({code:500})
+)
 const showErrorMessageIfError = hasLoaded =>
-  branch(hasLoaded, t => t, renderComponent(<CoderBot code={500} />))
-const errorHandler = showErrorMessageIfError(props => !props.error)
+  branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
+const errorHandler = showErrorMessageIfError(props => props.error)
 const EnhancedGrid  = errorHandler(ProjectsGridView)
 const EnhancedCards = errorHandler(ProjectsCardView)
 
@@ -34,6 +36,7 @@ class Projects extends Component {
     this.onChangeStatus = this.onChangeStatus.bind(this)
     this.onPageChange = this.onPageChange.bind(this)
     this.applyFilters = this.applyFilters.bind(this)
+    this.changeView = this.changeView.bind(this)
     this.init = this.init.bind(this)
     this.removeScrollPosition = this.removeScrollPosition.bind(this)
   }
@@ -126,6 +129,10 @@ class Projects extends Component {
     this.routeWithParams(criteria)
   }
 
+  changeView(view) {
+    this.setState({selectedView : view})
+  }
+
   routeWithParams(criteria) {
     // because criteria is changed disable infinite autoload
     this.props.setInfiniteAutoload(false)
@@ -153,7 +160,6 @@ class Projects extends Component {
         onPageChange={this.onPageChange}
         sortHandler={this.sortHandler}
         onChangeStatus={this.onChangeStatus}
-        applyFilters={this.applyFilters}
         projectsStatus={getStatusCriteriaText(criteria)}
       />
     )
@@ -162,13 +168,12 @@ class Projects extends Component {
         {...this.props }
         // onPageChange={this.onPageChange}
         // sortHandler={this.sortHandler}
-        applyFilters={this.applyFilters}
         onPageChange={this.onPageChange}
         projectsStatus={getStatusCriteriaText(criteria)}
       />
     )
     let projectsView
-    const chosenView = this.state.selectedView || this.props.criteria.view || 'grid'
+    const chosenView = this.state.selectedView || 'grid'
     const currentStatus = this.state.status || this.props.criteria.status || false
     if (isPowerUser) {
       if (chosenView === 'grid') {
@@ -183,7 +188,8 @@ class Projects extends Component {
       <div>
         <section className="">
           <div className="container">
-            {(isPowerUser && !showWalkThrough) && <ProjectListNavHeader applyFilters={this.applyFilters} selectedView={chosenView} currentStatus={currentStatus}/>}
+            {(isPowerUser && !showWalkThrough) &&
+              <ProjectListNavHeader applyFilters={this.applyFilters} selectedView={chosenView} changeView={this.changeView} currentStatus={currentStatus}/>}
             { showWalkThrough  ? <Walkthrough currentUser={currentUser} /> : projectsView }
           </div>
         </section>

@@ -1,6 +1,7 @@
 require('./ProjectListNavHeader.scss')
 
 import React, {PropTypes, Component} from 'react'
+import { PROJECT_STATUS } from '../../../../config/constants'
 
 export default class ProjectListNavHeader extends Component {
 
@@ -26,17 +27,15 @@ export default class ProjectListNavHeader extends Component {
     e.preventDefault()
     if (this.state.selectedView === e.currentTarget.dataset.view)
       return
-    window.location = window.location.protocol + '//' + window.location.host +  window.location.pathname + '?view=' + e.currentTarget.dataset.view
-
+    this.setState({selectedView: e.currentTarget.dataset.view})
+    this.props.changeView(e.currentTarget.dataset.view)
   }
 
   render() {
     const options = [
-      { status: 'active', label: 'Active Projects' },
-      { status: 'draft', label: 'Draft' },
-      { status: 'reviewed', label: 'Reviewed' },
-      { status: 'completed', label: 'Completed' },
-      { status: 'cancelled', label: 'Canceled' }
+      { status: 'in(draft,in_review,reviewed,active)', label: 'Open' },
+      { status: null, label: 'All Statuses' },
+      ...PROJECT_STATUS.sort((a, b) => a.order > b.order).map((item) => ({status: item.value, label: item.name}))
     ]
 
     return (
@@ -45,7 +44,7 @@ export default class ProjectListNavHeader extends Component {
         {
           options.map((item, i) =>
             <div className="list-nav-item" key={i}>
-              <a href="javascript;" data-status={item.status} onClick={this.onItemClick} className={`list-nav-btn lg ${(this.state.currentStatus === item.status) ? 'active' : ''}`}>{item.label}</a>
+              <a href="javascript;" data-status={item.status} onClick={this.onItemClick} className={`list-nav-btn lg ${(item.label === 'All Statuses' && !this.state.currentStatus) || this.state.currentStatus === item.status ? 'active' : ''}`}>{item.label}</a>
             </div>
           )
         }
@@ -63,5 +62,6 @@ export default class ProjectListNavHeader extends Component {
   }
 }
 ProjectListNavHeader.propTypes = {
-  applyFilters: PropTypes.func.isRequired
+  applyFilters: PropTypes.func.isRequired,
+  changeView: PropTypes.func.isRequired
 }

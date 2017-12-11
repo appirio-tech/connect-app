@@ -14,6 +14,9 @@
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-content: flex-start;
+    .list-nav-item {
+      flex: 0 1 auto;
+    }
   }
   .right-wrapper {
     flex: 1 1 20%;
@@ -21,9 +24,11 @@
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-end;
+    .list-nav-item {
+      flex: 1;
+    }
   }
   .list-nav-item {
-    flex: 1;
     position: relative;
     display: block;
     &.nav-icon {
@@ -39,10 +44,11 @@
     }
     &.lg {
       padding: 0 15px;
+      margin-right: 5px;
       font-size: 13px;
       line-height: 30px;
       font-family: 'Roboto', Helvetica, Arial, sans-serif;
-      font-weight: 400;
+      font-weight: 500;
       color: #5D5D66;
       overflow: hidden;
       white-space: nowrap;
