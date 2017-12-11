@@ -1,18 +1,26 @@
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
-import { TC_API_URL } from '../config/constants'
+import { TC_API_URL, PROJECTS_LIST_PER_PAGE } from '../config/constants'
 
 export function getProjects(criteria, pageNum) {
   // add default params
   const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'details']
   const params = {
-    limit: 20,
-    offset: (pageNum - 1) * 20,
+    limit: PROJECTS_LIST_PER_PAGE,
+    offset: (pageNum - 1) * PROJECTS_LIST_PER_PAGE,
     fields: includeFields.join(',')
   }
   // filters
   const filter = _.omit(criteria, ['sort'])
   if (!_.isEmpty(filter)) {
+    // support for multiple comma separated types
+    if (filter.type && filter.type.indexOf(',') > -1) {
+      filter.type = `in(${filter.type})`
+    }
+    // support for multiple comma separated segments
+    if (filter.segment && filter.segment.indexOf(',') > -1) {
+      filter.segment = `in(${filter.segment})`
+    }
     // convert filter object to string
     const filterStr = _.map(filter, (v, k) => `${k}=${v}`)
     params.filter = filterStr.join('&')

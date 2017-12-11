@@ -204,7 +204,7 @@
       }
     }
     p{
-      line-height: 1;
+      line-height: 1.5em;
     }
     sup{
       font-size: 0.5em;
@@ -421,6 +421,14 @@
   input {
     @include placeholder {
       text-transform: none;
+    }
+  }
+}
+
+.dashboard-container{
+  .action-card{
+    &.modal{
+      padding: $base-unit*4 0;
     }
   }
 }

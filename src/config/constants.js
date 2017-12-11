@@ -22,7 +22,8 @@ export const GET_PROJECTS               = 'GET_PROJECTS'
 export const GET_PROJECTS_PENDING       = 'GET_PROJECTS_PENDING'
 export const GET_PROJECTS_SUCCESS       = 'GET_PROJECTS_SUCCESS'
 export const GET_PROJECTS_FAILURE       = 'GET_PROJECTS_FAILURE'
-export const GET_PROJECTS_SEARCH_CRITERIA = 'GET_PROJECTS_SEARCH_CRITERIA'
+export const SET_PROJECTS_SEARCH_CRITERIA = 'SET_PROJECTS_SEARCH_CRITERIA'
+export const SET_PROJECTS_INFINITE_AUTOLOAD = 'SET_PROJECTS_INFINITE_AUTOLOAD'
 
 
 // Delete project
@@ -268,3 +269,7 @@ export const GA_CLIENT_ID = '_gacid'
 
 // ToolTip
 export const TOOLTIP_DEFAULT_DELAY = 300 // in ms
+
+
+// Projects list
+export const PROJECTS_LIST_PER_PAGE = 20
