@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import ProjectListProjectColHeader from './ProjectListProjectColHeader'
 import GridView from '../../../../components/Grid/GridView'
 
+import StatusFilters from '../../../../components/StatusFilters/StatusFilters'
 import UserWithName from '../../../../components/User/UserWithName'
 import { findCategory } from '../../../../config/projectWizard'
 import { PROJECT_STATUS, PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
@@ -30,7 +31,7 @@ const ProjectsGridView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
   const { projects, members, totalCount, criteria, pageNum, sortHandler, onPageChange,
-    error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus } = props
+    error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, applyFilters } = props
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
   // it defines what columns should be displayed and more importantly
@@ -198,7 +199,10 @@ const ProjectsGridView = props => {
   }
 
   return (
-    <GridView {...gridProps} />
+    <div>
+      <StatusFilters criteria={criteria} applyFilters={applyFilters} />
+      <GridView {...gridProps} />
+    </div>
   )
 }
 
