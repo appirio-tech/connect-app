@@ -425,6 +425,14 @@
   }
 }
 
+.dashboard-container{
+  .action-card{
+    &.modal{
+      padding: $base-unit*4 0;
+    }
+  }
+}
+
 .panel,
 .modal {
   .object {
