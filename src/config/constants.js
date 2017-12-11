@@ -268,3 +268,9 @@ export const GA_CLIENT_ID = '_gacid'
 
 // ToolTip
 export const TOOLTIP_DEFAULT_DELAY = 300 // in ms
+
+/*
+  * Project listing page size - maximum value can be 20 due to max 20 records
+  * restriction at back-end api end.
+*/
+export const PROJECT_LIST_PAGE_SIZE = 20
