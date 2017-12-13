@@ -148,13 +148,7 @@ const sections = [
             accessing your code base',
             description: '',
             fieldName: 'details.security.additionalInfo',
-            type: 'radio-group',
-            options: [
-              {value: 'topcoder', label: 'Topcoder'},
-              {value: 'custom', label: 'Custom'}
-            ],
-            required: true,
-            validationError: 'Please select one'
+            type: 'textbox',
           }
         ]
       },
