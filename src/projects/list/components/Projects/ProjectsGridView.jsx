@@ -68,8 +68,8 @@ const ProjectsGridView = props => {
     {
       id: 'id',
       headerLabel: 'ID',
-      classes: 'width60 item-id',
-      sortable: true,
+      classes: 'item-id',
+      sortable: false,
       renderText: item => {
         const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
@@ -96,7 +96,7 @@ const ProjectsGridView = props => {
     }, {
       id: 'projects',
       headerLabel: 'Project',
-      classes: 'width49 item-projects',
+      classes: 'item-projects',
       sortable: false,
       renderText: item => {
         const url = `/projects/${item.id}`
@@ -140,7 +140,7 @@ const ProjectsGridView = props => {
       id: 'customer',
       headerLabel: 'Customer',
       sortable: false,
-      classes: 'item-customer width12',
+      classes: 'item-customer',
       renderText: item => {
         const m = _.find(item.members, m => m.isPrimary && m.role === 'customer')
         const rating = _.get(m, 'maxRating.rating', 0)
@@ -196,7 +196,7 @@ const ProjectsGridView = props => {
       id: 'managers',
       headerLabel: 'Managers',
       sortable: false,
-      classes: 'item-manager width11',
+      classes: 'item-manager',
       renderText: item => {
         const m = _.filter(item.members, m => m.role === 'manager')
         let extM = false
@@ -225,7 +225,7 @@ const ProjectsGridView = props => {
       id: 'status',
       headerLabel: <div className="project-status-title"></div>,
       sortable: false,
-      classes: 'item-status width9',
+      classes: 'item-status',
       renderText: item => {
         return (
           <div className="spacing">

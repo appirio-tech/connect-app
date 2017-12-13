@@ -3,25 +3,37 @@
 .flex-data {
   .flex-row {
     .item-id {
+      flex: none;
       min-width: 80px;
+      width: 80px;
     }
     .item-icon {
-      min-width: 50px;
+      flex: none;
+      min-width: 52px;
+      width: 52px;
     }
     .item-projects {
-      min-width: 510px;
+      flex: 8 1 505px;
+      min-width: 505px;
+      overflow: hidden;
     }
     .item-status-date {
+      flex: 1 3 142px;
       min-width: 142px;
     }
     .item-customer {
+      flex: 2 2 187px;
       min-width: 187px;
     }
     .item-manager {
-      min-width: 100px;
+      flex: none;
+      min-width: 113px;
+      width: 113px;
     }
     .item-status {
-      min-width: 50px;
+      flex: none;
+      min-width: 40px;
+      width: 40px;
     }
 
 
@@ -30,18 +42,43 @@
     }
     &.row-th {
       height: 60px;
+      border-radius: 10px 10px 0 0;
       .flex-item-title,
       .flex-item {
         min-height: 60px;
+        &.item-id,
+        &.item-projects,
+        &.item-status-date,
+        &.item-customer,
+        &.item-manager,
+        &.item-status {
+            .spacing {
+                color: $tc-gray-40;
+                @include roboto-bold;
+                font-weight: 700;
+                .project-drop-down {
+                  a.dropdown-menu-header.txt-link {
+                    @include roboto-bold;
+                    font-weight: 700;
+                    font-size: 13px;
+                    color: $tc-black;
+                    &:focus {
+                      color: $tc-dark-blue-90;
+                    }
+                  }
+                }
+            }
+        }
       }
       .item-id {
         .spacing {
           padding-left: 20px;
+          padding-right: 20px;
         }
       }
 
       .item-icon {
-        width: 75px;
+        width: 52px;
       }
       .item-customer {
         .spacing {
@@ -58,14 +95,16 @@
 .item-id {
   .spacing {
     padding-left: 20px;
-    font-family: 'Roboto-Bold', 'Roboto', Helvetica, Arial, sans-serif;
-    font-weight: bold;
+    padding-right: 20px;
+    @include roboto-bold;
+    font-weight: 700;
     font-size: 13px;
+    overflow: hidden;
   }
 }
 .item-icon {
   display: flex;
-  width: 75px;
+  width: 52px;
   height: 100%;
 }
 .item-projects {
@@ -80,15 +119,17 @@
       display: flex;
       .link-title {
         flex: 1;
+        @include roboto-medium;
+        color: $tc-black;
+        font-size: 15px;
       }
       .item-ref-code {
         flex: none;
         justify-content: flex-end;
-        background: #EDEDF2;
+        background: $tc-gray-10;
+        @include roboto-medium;
         font-size: 13px;
-        font-weight: 400;
-        color: #888894;
-        font-weight: 400;
+        color: $tc-gray-50;
         border-radius: 2px;
         line-height: 20px;
         padding: 0px 2 * $base-unit;
@@ -96,6 +137,9 @@
     }
     .project-description {
       display: flex;
+      @include roboto;
+      color: $tc-gray-50;
+      font-size: 13px;
       align-items: center;
       margin-top: $base-unit;
       margin-right: 40px;
@@ -116,7 +160,7 @@
     }
   }
 }
-.item-status  {
+.item-status {
   .spacing {
     .panel {
       background-color: transparent;
@@ -181,15 +225,16 @@
   .time-container {
     .txt-normal {
       font-size: 13px;
-      font-family: 'Roboto', Helvetica, Arial, sans-serif;
-      font-weight: 600;
-      color: #47474F;
+      @include roboto-bold;
+      font-weight: 700;
+      color: $tc-gray-80;
       line-height: 20px;
       height: 25px;
     }
     .project-last-editor {
       font-size: 11px;
-      color: #888894;
+      @include roboto;
+      color: $tc-gray-50;
       height: 1rem;
       white-space: nowrap;
       overflow: hidden;
@@ -206,10 +251,10 @@
     .project-customer {
       position: relative;
       display: block;
-      font-family: 'Roboto', Helvetica, Arial, sans-serif;
-      font-weight: 600;
+      @include roboto-bold;
+      font-weight: 700;
       font-size: 13px;
-      color: #47474f;
+      color: $tc-gray-80;
       border-radius: 2px;
       line-height: 20px;
       padding: 5px 10px;
@@ -218,13 +263,22 @@
       overflow: hidden;
       text-overflow: ellipsis;
       &:hover {
-      background-color: #EBEBEB;
+      background-color: $tc-gray-neutral-dark;
       }
     }
     .project-segment {
       margin-left: 10px;
       .project-drop-down {
         font-size: 11px;
+        background-color: $tc-gray-neutral-light;
+        .txt-link {
+          @include roboto;
+          font-size: 11px;
+          color: $tc-gray-60;
+          &:focus {
+            color: $tc-dark-blue-90;
+          }
+        }
         .down-layer ul li a {
           font-size: 11px;
         }
@@ -259,10 +313,12 @@
   }
   .plus-user {
     position: relative;
+    @include roboto-bold;
+    font-weight: 700;
     font-size: 12px;
-    font-weight: 400;
-    color: #47474F;
+    color: $tc-gray-80;
     top: 7px;
+    left: -10px;
   }
 }
 }
@@ -459,7 +515,6 @@
     outline: 0;
   }
   .txt-link {
-      color: #888894;
       position: relative;
       padding-right: 16px;
       display: block;
@@ -551,13 +606,13 @@
 
   }
   .tooltip-content-container {
-    background-color: #FFFFFF;
+    background-color: $tc-white;
     width: 400px;
     min-height: 180px;
     padding-top: 20px;
     padding-left: 20px;
     .tooltip-pointer {
-      background-color: #FFFFFF;
+      background-color: $tc-white;
       &.downward-pointer {
         border-right: 1px solid rgba(10,10,10,0.2);
         border-bottom: 1px solid rgba(10,10,10,0.2);
@@ -570,7 +625,7 @@
       }
     }
     .tooltip-body {
-      color: #262628;
+      color: $tc-black;
       overflow: hidden;
       white-space: normal;
       .top-container {
@@ -595,18 +650,18 @@
           span {
             font-size: 15px;
             font-weight: 600;
-            color: #262628;
+            color: $tc-black;
             line-height: 20px;
           }
         }
         .user-handle-container {
           flex: 0 1 80px;
           padding-right: 10px;
-          border-right: 1px solid #888894;
+          border-right: 1px solid $tc-gray-50;
           height: 20px;
           span {
             font-size: 12px;
-            color: #888894;
+            color: $tc-gray-50;
             line-height: 20px;
           }
         }
@@ -615,7 +670,7 @@
           padding-left: 10px;
           a {
             font-size: 12px;
-            color: #888894;
+            color: $tc-gray-50;
             line-height: 20px;
             text-decoration: none;
             &:hover {
@@ -630,10 +685,10 @@
         .segment-data {
           flex: 1;
           font-size: 13px;
-          color: #262628;
+          color: $tc-black;
           line-height: 25px;
           &:first-of-type {
-            border-top: 1px solid #888894;
+            border-top: 1px solid $tc-gray-50;
             padding-top: 11px;
           }
           .ext-link {
