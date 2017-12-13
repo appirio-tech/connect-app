@@ -209,7 +209,7 @@ const products = {
         icon: 'product-qa-website-performance',
         id: 'performance_tuning',
         aliases: ['performance-tuning', 'performance_tuning'],
-        hidden: false 
+        hidden: false
       },
       'Performance Testing': {
         brief: 'TBD',
@@ -224,8 +224,7 @@ const products = {
         details: 'Measure your code base against our security baseline using the crowd and tooling ',
         icon: 'product-qa-mobility-testing',
         id: 'health_check',
-        aliases: ['health-check', 'health_check'],
-        hidden: true
+        aliases: ['health-check', 'health_check']
       },
       'Digital Accessibility': {
         brief: 'TBD',
