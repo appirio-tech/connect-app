@@ -189,12 +189,19 @@ $tc-body-large: 20px;
         flex: 1;
       }
     }
+  }
+}
 
-    .SwitchButton {
-      .label {
-        padding-right: 10px;
-      }
-    }
+.SwitchButton .label {
+  padding-right: 10px;
+  text-align: right;
+  width: auto;
+  width: auto;
+  cursor: pointer;
+  transition: 200ms ease-in-out all;
+
+  &:hover {
+    color: $tc-gray-30;
   }
 }
 
@@ -231,8 +238,8 @@ $tc-body-large: 20px;
   }
 
   // .FillProjectDetailsWrapper {
-//   margin-top: -60px; // Counteract the push from the main wrapper, top of vewport
-// }
+  //   margin-top: -60px; // Counteract the push from the main wrapper, top of vewport
+  // }
 }
 
 .project-creation-dialog {
