@@ -51,13 +51,16 @@ const MemberRow = ({ member, currentMember, currentUser, onMemberDelete, onChang
     }
 
     // manager can remove all except owner
-    if (currentMember && (currentMember.isManager || currentUser.isAdmin) && !isOwner) {
+    if ((currentMember && currentMember.isManager) || currentUser.isAdmin) {
       let tooltip = 'Remove team member from project'
       if (member.isCopilot) {
         tooltip = 'Remove copilot from project'
       }
       if (member.isManager) {
         tooltip = 'Remove manager from project'
+      }
+      if (member.isCustomer && isOwner) {
+        tooltip = 'Remove owner from project'
       }
       buttons.push(<ActionBtn key={2} type="user-remove" title={tooltip} onClick={onDelete} />)
     }
