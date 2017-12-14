@@ -6,10 +6,11 @@
   width: 100%;
   .container {
     width: auto;
+    min-width: 1120px;
     padding: 0;
     background: #fff;
     margin: 0 20px 20px 20px;
-    box-shadow: 0px 1px 3px 0px #C3C3C8;
+    border-radius: 10px 10px 0 0;
   }
 }
 
@@ -91,7 +92,6 @@
 
             &.item-id .spacing {
                 color: $tc-gray-30;
-                font-weight: 400;
             }
 
             .spacing {
@@ -100,7 +100,6 @@
                 color: $tc-gray-50;
                 line-height: $base-unit + 11;
                 .sort-txt {
-                    color: $tc-gray-50;
                     &.icon-up,
                     &.icon-down {
                         color: $tc-black;
@@ -134,10 +133,6 @@
         .flex-item-title.item-type,
         .flex-item.item-type .blue-block {
             padding-left: 15px;
-        }
-
-        .spacing {
-            // padding: 0 5px;
         }
 
         .blue-border {
@@ -272,7 +267,7 @@
 }
 
 .gridview-no-more {
-  @include roboto
+  @include roboto;
   color: $tc-gray-40;
   font-size: 13px;
   padding: 10px 0;
@@ -424,7 +419,7 @@
                     display: block;
                     padding: 0 10px 0 20px;
                     &:hover {
-                        background: $tc-dark-blue-10;
+                        background-color: $tc-dark-blue-10;
                     }
                 }
                 &.active,
@@ -616,9 +611,6 @@
                 padding: 0 30px 0 0;
                 min-width: 85px;
             }
-        }
-        .txt-box .link-black {
-            // letterSpacing: -0.5px;
         }
         .txt-box .link-black,
         .txt-gray-md,
