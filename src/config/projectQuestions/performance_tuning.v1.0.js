@@ -52,63 +52,12 @@ const sections = [
             // required: true,
             validations: 'isRequired,minLength:160',
             validationErrors: {
-              isRequired: 'Please provide your objectives',
+              isRequired: 'Please describe your application',
               minLength: 'Please enter at least 160 characters'
             },
-            description: 'Brief Description of your objectives',
-            title: 'Objectives',
+            description: 'Brief Description of your application',
+            title: 'Description',
             type: 'textbox'
-          },
-
-          {
-            icon: 'question',
-            title: 'Do you have ground truth defined?',
-            description: '',
-
-            fieldName: 'details.vision.groundtruth',
-            type: 'radio-group',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ],
-            required: true,
-            validationError: 'Please select one'
-          },
-          {
-            icon: 'question',
-            title: 'Describe your ground truth?',
-            description: '(if applicable)',
-            type: 'textbox',
-            fieldName: 'details.vision.groundtruthDesc',
-            required: true,
-            validationError: 'Please tell us about your ground truth'
-          },
-          {
-            icon: 'question',
-            title: 'Describe your data set',
-            description: '(if applicable)',
-            type: 'textbox',
-            fieldName: 'details.vision.dataDesc',
-            required: true,
-            validationError: 'Please tell us about your data set'
-          },
-          {
-            icon: 'question',
-            title: 'Approximately how large is your data set in MB, GB, TB?',
-            description: '',
-            type: 'textbox',
-            fieldName: 'details.vision.datasetSize',
-            required: true,
-            validationError: 'Please tell us the size of your data set'
-          },
-          {
-            icon: 'question',
-            title: 'Approximately how many images are in your data set?',
-            description: '',
-            type: 'textbox',
-            fieldName: 'details.vision.imageSet',
-            required: true,
-            validationError: 'Please tell us roughly the number of images in your set'
           }
 
         ]
@@ -117,7 +66,7 @@ const sections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Additional Notes',
-        description: 'Please detail any other additional information',
+        description: 'Please detail any other additional information, you will be able to upload files on the next screen',
         type: 'notes'
       },
       {
@@ -130,71 +79,8 @@ const sections = [
       }
 
 
-    ]
-  },
-  {
-    id: 'optionals',
-    required: false,
-    title: 'Additional Questions',
-    description: 'Please complete these optional questions.',
-    subSections: [
-      {
-        id: 'additional',
-        required: false,
-        title: 'Additional Questions',
-        description: '',
-        type: 'questions',
-        questions: [
-          {
-            icon: 'question',
-            fieldName: 'details.dataURL',
-            description: '',
-            title: 'Please provide a URL to your data',
-            type: 'textbox'
 
-          },
-          {
-            icon: 'question',
-            fieldName: 'details.performanceInfo',
-            description: '',
-            title: 'Please describe the performance of your existing software',
-            type: 'textbox'
 
-          },
-          {
-            icon: 'question',
-            fieldName: 'details.externalDataUsage',
-            description: '',
-            title: 'Do you anticipate allowing contestants to use external data?',
-            type: 'radio-group',
-            options: [
-              {value: 'Yes', label: 'Yes'},
-              {value: 'No', label: 'No'},
-              {value: 'Unsure', label: 'Unsure'}
-            ]
-          },
-          {
-            icon: 'question',
-            fieldName: 'details.externalDataUsage',
-            description: '',
-            title: 'If you have already thought of a scoring method, please indicate them here',
-            type: 'checkbox-group',
-            options: [
-              {value: 'F1/Dice', label: 'F1/Dice'},
-              {value: 'Jaccard Index', label: 'Jaccard Index'},
-              {value: 'Harmonic Mean', label: 'Harmonic Mean'}
-            ]
-          },
-          {
-            icon: 'question',
-            fieldName: 'details.otherScoringInfo',
-            description: '',
-            title: 'If scoring method was other, please provide your approach',
-            type: 'textbox'
-
-          }
-        ]
-      }
     ]
   }
 
@@ -234,63 +120,12 @@ export const basicSections = [
             // required: true,
             validations: 'isRequired,minLength:160',
             validationErrors: {
-              isRequired: 'Please provide your objectives',
+              isRequired: 'Please provide a description of your application',
               minLength: 'Please enter at least 160 characters'
             },
-            description: 'Brief Description of your objectives',
-            title: 'Objectives',
+            description: 'Brief Description of your application',
+            title: 'Description',
             type: 'textbox'
-          },
-
-          {
-            icon: 'question',
-            title: 'Do you have ground truth defined?',
-            description: '',
-
-            fieldName: 'details.vision.groundtruth',
-            type: 'radio-group',
-            options: [
-              {value: 'true', label: 'Yes'},
-              {value: 'false', label: 'No'}
-            ],
-            required: true,
-            validationError: 'Please select one'
-          },
-          {
-            icon: 'question',
-            title: 'Describe your ground truth?',
-            description: '(if applicable)',
-            type: 'textbox',
-            fieldName: 'details.vision.groundtruthDesc',
-            required: true,
-            validationError: 'Please tell us about your ground truth'
-          },
-          {
-            icon: 'question',
-            title: 'Describe your data set',
-            description: '(if applicable)',
-            type: 'textbox',
-            fieldName: 'details.vision.dataDesc',
-            required: true,
-            validationError: 'Please tell us about your data set'
-          },
-          {
-            icon: 'question',
-            title: 'Approximately how large is your data set in MB, GB, TB?',
-            description: '',
-            type: 'textbox',
-            fieldName: 'details.vision.datasetSize',
-            required: true,
-            validationError: 'Please tell us the size of your data set'
-          },
-          {
-            icon: 'question',
-            title: 'Approximately how many images are in your data set?',
-            description: '',
-            type: 'textbox',
-            fieldName: 'details.vision.imageSet',
-            required: true,
-            validationError: 'Please tell us roughly the number of images in your set'
           }
 
         ]
