@@ -78,7 +78,7 @@ class Projects extends Component {
     document.title = 'Projects - Topcoder'
     // this.searchTermFromQuery = this.props.location.query.q || ''
     const {criteria, loadProjects, location} = props
-    let pageNum = props.pageNum
+    let pageNum = this.props.gridView ? props.pageNum : 1 /* reload cardview */
     // check for criteria specified in URL.
     const queryParams = querystring.parse(location.search)
     if (!_.isEmpty(queryParams)) {
@@ -100,7 +100,7 @@ class Projects extends Component {
     window.sessionStorage.removeItem('projectsPageScrollTop')
   }
 
-  onPageChange(pageNum) {
+  onPageChange(pageNum, keepPrevious = false) {
     // if grid view, remove scroll position on page change
     if (this.props.gridView) {
       window.sessionStorage.removeItem('projectsPageScrollTop')
@@ -109,7 +109,7 @@ class Projects extends Component {
       const scrollingElement = document.scrollingElement || document.documentElement
       window.sessionStorage.setItem('projectsPageScrollTop', scrollingElement.scrollTop)
     }
-    this.routeWithParams(this.props.criteria, pageNum)
+    this.routeWithParams(this.props.criteria, pageNum, keepPrevious)
   }
 
   sortHandler(fieldName) {
@@ -124,14 +124,14 @@ class Projects extends Component {
     this.routeWithParams(criteria, 1)
   }
 
-  routeWithParams(criteria, page) {
+  routeWithParams(criteria, page, keepPrevious = false) {
     // remove any null values
     criteria = _.pickBy(criteria, _.identity)
     this.props.history.push({
       pathname: '/projects',
       search: '?' + querystring.stringify(_.assign({}, criteria, { page }))
     })
-    this.props.loadProjects(criteria, page)
+    this.props.loadProjects(criteria, page, keepPrevious)
   }
 
   render() {
