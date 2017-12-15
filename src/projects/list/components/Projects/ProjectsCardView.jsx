@@ -39,7 +39,7 @@ const ProjectsCardView = props => {
     </div>)
   }
   const handleLoadMore = () => {
-    onPageChange(pageNum + 1)
+    onPageChange(pageNum + 1, true /* keepPrevious */)
   }
   const hasMore = ((pageNum - 1) * PROJECT_LIST_PAGE_SIZE + PROJECT_LIST_PAGE_SIZE < totalCount)
   return (

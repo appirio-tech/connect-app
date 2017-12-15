@@ -10,7 +10,7 @@ import { loadMembers } from '../../actions/members'
 
 // ignore action
 /*eslint-disable no-unused-vars */
-const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
+const getProjectsWithMembers = (dispatch, getState, criteria, pageNum, keepPrevious = false) => {
   return new Promise((resolve, reject) => {
     dispatch({
       type: GET_PROJECTS_SEARCH_CRITERIA,
@@ -41,7 +41,7 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
       payload: getProjects(criteria, pageNum),
       meta: {
         // for non power users (i.e. customers) keep previous to enable the loading without paginator
-        keepPrevious : !isPowerUser
+        keepPrevious
       }
     })
     .then(({ value, action }) => {
@@ -63,11 +63,11 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
 }
 /*eslint-enable*/
 
-export function loadProjects(criteria, pageNum=1) {
+export function loadProjects(criteria, pageNum=1, keepPrevious = false) {
   return (dispatch, getState) => {
     return dispatch({
       type: PROJECT_SEARCH,
-      payload: getProjectsWithMembers(dispatch, getState, criteria, pageNum)
+      payload: getProjectsWithMembers(dispatch, getState, criteria, pageNum, keepPrevious)
     })
   }
 }
