@@ -70,8 +70,8 @@ const sections = [
           },
           {
             icon: 'question',
-            title: 'How secure is your application?',
-            description: '(this helps default values for the testing)',
+            title: 'What is the maximum level of acceptable risk for this application?',
+            description: 'Based on the features and data, how secure do you feel this application should be?',
             fieldName: 'details.security.howSecure',
             type: 'slide-radiogroup',
             options: [
@@ -148,13 +148,7 @@ const sections = [
             accessing your code base',
             description: '',
             fieldName: 'details.security.additionalInfo',
-            type: 'radio-group',
-            options: [
-              {value: 'topcoder', label: 'Topcoder'},
-              {value: 'custom', label: 'Custom'}
-            ],
-            required: true,
-            validationError: 'Please select one'
+            type: 'textbox'
           }
         ]
       },
@@ -224,8 +218,8 @@ export const basicSections = [
           },
           {
             icon: 'question',
-            title: 'How secure is your application?',
-            description: '(this helps default values for the testing)',
+            title: 'What is the maximum level of acceptable risk for this application?',
+            description: 'Based on the features and data, how secure do you feel this application should be?',
             fieldName: 'details.security.howSecure',
             type: 'slide-radiogroup',
             options: [

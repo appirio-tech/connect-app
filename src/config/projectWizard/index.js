@@ -177,7 +177,7 @@ const products = {
         brief: 'TBD',
         details: 'Review your data, extrapolate patterns, and suggest solutions',
         icon: 'product-analytics-data-exploration',
-        id: 'data-exploration',
+        id: 'data_exploration',
         aliases: ['data-exploration', 'data_exploration']
       }
     }
@@ -209,7 +209,7 @@ const products = {
         icon: 'product-qa-website-performance',
         id: 'performance_tuning',
         aliases: ['performance-tuning', 'performance_tuning'],
-        hidden: false 
+        hidden: false
       },
       'Performance Testing': {
         brief: 'TBD',
@@ -222,10 +222,9 @@ const products = {
       'Health Security Check': {
         brief: 'TBD',
         details: 'Measure your code base against our security baseline using the crowd and tooling ',
-        icon: 'product-qa-mobility-testing',
+        icon: 'product-qa-health-check',
         id: 'health_check',
-        aliases: ['health-check', 'health_check'],
-        hidden: true
+        aliases: ['health-check', 'health_check'  ]
       },
       'Digital Accessibility': {
         brief: 'TBD',
