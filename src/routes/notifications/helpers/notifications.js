@@ -2,6 +2,11 @@
  * Helper methods to filter and preprocess notifications
  */
 import _ from 'lodash'
+import { OLD_NOTIFICATION_TIME } from '../../../config/constants'
+import { NOTIFICATIONS } from '../constants/notifications'
+
+// how many milliseconds in one minute
+const MILLISECONDS_IN_MINUTE = 60000
 
 /**
  * Get notification filters by sources
@@ -94,4 +99,92 @@ export const limitQuantityInSources = (notificationsBySources, maxPerSource, max
   }
 
   return notificationsBySourceLimited
+}
+
+/**
+ * Render template with [variable] placeholders
+ *
+ * @param  {String} templateStr template
+ * @param  {Object} values      values for template placeholders
+ *
+ * @return {String}             rendered template
+ */
+const renderTemplate = (templateStr, values) => {
+  const regexp = /\[([^\]]+)\]/g
+  let output = templateStr
+  let match
+
+  while (match = regexp.exec(templateStr)) { // eslint-disable-line no-cond-assign
+    if (values[match[1]]) {
+      output = output.replace(match[0], values[match[1]])
+    }
+  }
+
+  return output
+}
+
+/**
+ * Get a rule for notification
+ *
+ * @param  {Object} notification notification
+ *
+ * @return {Object}              notification tule
+ */
+const getNotificationRule = (notification) => {
+  const notificationRule = _.find(NOTIFICATIONS, (_notificationRule) => {
+    let match = _notificationRule.eventType === notification.eventType
+
+    if (notification.contents.projectRole) {
+      match = match && _notificationRule.projectRoles && _.includes(_notificationRule.projectRoles, notification.contents.projectRole)
+    }
+
+    if (notification.contents.topcoderRole) {
+      match = match && _notificationRule.topcoderRoles && _.includes(_notificationRule.topcoderRoles, notification.contents.topcoderRole)
+    }
+
+    if (notification.contents.toUserHandle) {
+      match = match && _notificationRule.toUserHandle
+    }
+
+    return match
+  })
+
+  if (!notificationRule) {
+    throw new Error(`Cannot find notification rule for eventType ${notification.eventType}.`)
+  }
+
+  return notificationRule
+}
+
+/**
+ * Prepare notifications
+ *
+ * @param  {Array} notifications notifications list
+ *
+ * @return {Array}               notification list
+ */
+export const prepareNotifications = (rowNotifications) => {
+  const notifications = rowNotifications.map((rowNotification) => ({
+    id: `${rowNotification.id}`,
+    sourceId: rowNotification.contents.projectId ? `${rowNotification.contents.projectId}` : 'global',
+    sourceName: rowNotification.contents.projectId ? (rowNotification.contents.projectName || 'project') : 'Global',
+    eventType: rowNotification.type,
+    date: rowNotification.createdAt,
+    isRead: rowNotification.read,
+    isOld: new Date().getTime() - OLD_NOTIFICATION_TIME * MILLISECONDS_IN_MINUTE > new Date(rowNotification.createdAt).getTime(),
+    contents: rowNotification.contents
+  })).map((notification) => {
+    const notificationRule = getNotificationRule(notification)
+    console.log(notification)
+    console.log(notificationRule) 
+
+    // populate notification data
+    notification.type = notificationRule.type
+    notification.text = renderTemplate(notificationRule.text, notification.contents)
+    notification.goto = renderTemplate(notificationRule.goTo, notification.contents)
+
+    return notification
+  })
+
+  return notifications
 }

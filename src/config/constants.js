@@ -223,6 +223,14 @@ export const PROJECT_STATUS = [
   {color: 'red', name: 'Paused', value: PROJECT_STATUS_PAUSED }
 ]
 
+export const NOTIFICATION_TYPE = {
+  WARNING: 'warning',
+  NEW_PROJECT: 'new-project',
+  UPDATES: 'updates',
+  NEW_POSTS: 'new-posts',
+  REVIEW_PENDING: 'review-pending',
+  MEMBER_ADDED: 'member-added'
+}
 
 /*
  * Project member role
@@ -231,6 +239,7 @@ export const PROJECT_ROLE_COPILOT = 'copilot'
 export const PROJECT_ROLE_MANAGER = 'manager'
 export const PROJECT_ROLE_CUSTOMER = 'customer'
 export const PROJECT_ROLE_OWNER = 'owner'
+export const PROJECT_ROLE_MEMBER = 'member' // this is need for notifications
 
 /*
  * Events
@@ -284,6 +293,8 @@ export const MAINTENANCE_MODE = false
 
 export const LS_INCOMPLETE_PROJECT = 'incompleteProject'
 
+
+export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
 export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL
 
 export const NEW_PROJECT_PATH = '/new-project'

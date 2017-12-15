@@ -15,6 +15,8 @@ module.exports = {
   ENV               : 'PROD',
   NODE_ENV          : 'production',
 
+  PROJECTS_API_URL  : 'http://api.topcoder.com',
+
   NEW_RELIC_APPLICATION_ID: process.env.TRAVIS_BRANCH ? '11352758' : '',
 
   ARENA_URL          : '//arena.topcoder.com',
@@ -41,5 +43,5 @@ module.exports = {
   IBM_COGNITIVE_PROGRAM_ID  : 3449,
   HEAP_ANALYTICS_APP_ID     : '638908330',
 
-  TC_NOTIFICATION_URL: 'http://192.168.0.101:4000'
+  TC_NOTIFICATION_URL: 'http://api.topcoder.com/'
 }

@@ -67,12 +67,30 @@ const getNotificationSettings = () => {
 }
 
 const topics = [
-  'notifications.connect.project.created',
   'notifications.connect.project.updated',
+  'notifications.connect.project.created',
   'notifications.connect.message.posted',
   'notifications.connect.message.edited',
   'notifications.connect.message.deleted',
-  'notifications.connect.project.submittedForReview'
+  'notifications.connect.project.submittedForReview',
+  'notifications.connect.project.canceled',
+  'notifications.connect.project.post.edited',
+  'notifications.connect.project.linkCreated',
+  'notifications.connect.project.member.removed',
+  'notifications.connect.project.post.created',
+  'notifications.connect.project.approved',
+  'notifications.connect.project.member.assignedAsOwner',
+  'notifications.connect.project.paused',
+  'notifications.connect.project.completed',
+  'notifications.connect.project.member.copilotJoined',
+  'notifications.connect.project.fileUploaded',
+  'notifications.connect.project.member.managerJoined',
+  'notifications.connect.project.post.deleted',
+  'notifications.connect.project.specificationModified',
+  'notifications.connect.project.topic.deleted',
+  'notifications.connect.project.topic.created',
+  'notifications.connect.project.member.left',
+  'notifications.connect.project.member.joined'
 ]
 
 const saveNotificationSettings = (data) => {

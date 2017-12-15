@@ -4,8 +4,11 @@
  * Has a tick to toggle read status
  */
 import React, { PropTypes } from 'react'
+import _ from 'lodash'
+import { NOTIFICATION_TYPE } from '../../config/constants'
 import SVGIconImage from '../SVGIconImage'
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 import './NotificationItem.scss'
 
 /**
@@ -37,23 +40,38 @@ const formatDate = (date) => {
 }
 
 const NotificationItem = (props) => {
-  return (
+  const notificationItem = (
     <div className="notification-item">
       <div className="icon"><SVGIconImage filePath={'notification-' + props.type} /></div>
       <div className="body">
-        <p className="content" dangerouslySetInnerHTML={{ __html: props.content }} />
+        <p className="content" dangerouslySetInnerHTML={{ __html: props.text }} />
         <p className="date">{formatDate(props.date)}</p>
       </div>
       <div className="mark-read">
-        <button onClick={() => props.onReadToggleClick(props.id)}><SVGIconImage filePath="check" /></button>
+        <button
+          onClick={(evt) => {
+            evt.preventDefault()
+            props.onReadToggleClick(props.id)
+          }}
+        >
+          <SVGIconImage filePath="check" />
+        </button>
       </div>
     </div>
   )
+
+  return ( props.goto
+    ? <Link className="notification-item-link" to={props.goto}>{notificationItem}</Link>
+    : notificationItem
+  )
 }
 
+const notificationType = PropTypes.oneOf(_.values(NOTIFICATION_TYPE))
+
 NotificationItem.propTypes = {
-  type: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
+  type: notificationType.isRequired,
+  text: PropTypes.string.isRequired,
+  goTo: PropTypes.string,
   date: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   onReadToggleClick: PropTypes.func.isRequired

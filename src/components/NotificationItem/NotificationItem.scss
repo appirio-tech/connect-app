@@ -1,12 +1,22 @@
 // this is to include tc styles in the output library
 @import 'tc-includes';
 
+.notification-item-link {
+  display: block;
+
+  & + &,
+  .notification-item + & {
+    border-top: 1px solid $tc-gray-10;
+  }
+}
+
 .notification-item {
   display: flex;
   background-color: $tc-white;
   justify-content: space-between;
 
-  & + & {
+  & + &,
+  .notification-item-link + & {
     border-top: 1px solid $tc-gray-10;
   }
 

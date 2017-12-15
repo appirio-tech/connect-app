@@ -49,18 +49,55 @@ class NotificationSettingsForm extends React.Component {
     const topics = [
       'notifications.connect.project.created',
       'notifications.connect.project.updated',
-      'notifications.connect.message.posted',
-      'notifications.connect.message.edited',
-      'notifications.connect.message.deleted',
-      'notifications.connect.project.submittedForReview'
+      'notifications.connect.project.canceled',
+      'notifications.connect.project.approved',
+      'notifications.connect.project.paused',
+      'notifications.connect.project.completed',
+      'notifications.connect.project.submittedForReview',
+
+      'notifications.connect.project.fileUploaded',
+      'notifications.connect.project.specificationModified',
+      'notifications.connect.project.linkCreated',
+      
+      'notifications.connect.project.member.joined',
+      'notifications.connect.project.member.left',
+      'notifications.connect.project.member.removed',
+      'notifications.connect.project.member.managerJoined',
+      'notifications.connect.project.member.copilotJoined',
+      'notifications.connect.project.member.assignedAsOwner',
+
+      'notifications.connect.project.topic.created',
+      'notifications.connect.project.topic.deleted',      
+      'notifications.connect.project.post.created',
+      'notifications.connect.project.post.edited',
+      'notifications.connect.project.post.deleted'
     ]
     const titles = [
       'Project Created',
       'Project Updated',
-      'Message Posted',
-      'Message Edited',
-      'Message Deleted',
-      'Project Submitted For Review'
+      'Project Canceled',
+      'Project Approved',
+      'Project Paused',
+      'Project Completed',
+      'Project Submitted For Review',
+
+      'Project File uploaded',
+      'Project Specification modified',
+      'Project link added',
+
+      'Project member joined',
+      'Project member left',
+      'Project member removed',
+      'Project manager joined',
+      'Project copilot joined',
+      'Project member assigned as owner',
+
+      'Project topic created',
+      'Project topic deleted',
+      'Project post created',
+      'Project post edited',
+      'Project post deleted'
+
     ]
 
     return (

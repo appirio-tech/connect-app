@@ -14,6 +14,8 @@ module.exports = {
   DOMAIN            : 'topcoder-qa.com',
   ENV               : 'QA',
 
+  PROJECTS_API_URL  : 'http://api.topcoder-dev.com',
+  
   NEW_RELIC_APPLICATION_ID: process.env.TRAVIS_BRANCH ? '11199233' : '',
 
   ARENA_URL          : '//arena.topcoder-qa.com',
@@ -40,5 +42,5 @@ module.exports = {
   IBM_COGNITIVE_PROGRAM_ID  : 3449,
   HEAP_ANALYTICS_APP_ID     : '4153837120',
 
-  TC_NOTIFICATION_URL: 'http://192.168.0.101:4000'
+  TC_NOTIFICATION_URL: 'http://api.topcoder-dev.com/'
 }
