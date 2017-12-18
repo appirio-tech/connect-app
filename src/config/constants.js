@@ -273,3 +273,40 @@ export const TOOLTIP_DEFAULT_DELAY = 300 // in ms
 
 // Projects list
 export const PROJECTS_LIST_PER_PAGE = 20
+
+/*eslint-disable camelcase */
+//Project type to icon name mapping
+export const PROJECT_ICON_MAP = {
+  app: 'product-cat-app',
+  application_development: 'product-app-app',
+  website: 'product-cat-website',
+  website_development: 'product-website-website',
+  chatbot: 'product-cat-chatbot',
+  watson_chatbot: 'product-chatbot-watson',
+  generic_chatbot: 'product-chatbot-chatbot',
+  visual_design: 'product-cat-design',
+  wireframes: 'product-design-wireframes',
+  visual_design_concepts: 'product-design-app-visual',
+  visual_design_prod: 'product-design-app-visual',
+  infographic: 'product-design-infographic',
+  generic_design: 'product-design-other',
+  app_dev: 'product-cat-development',
+  visual_prototype: 'product-dev-prototype',
+  frontend_dev: 'product-dev-front-end-dev',
+  api_dev: 'product-dev-integration',
+  generic_dev: 'product-dev-other',
+  quality_assurance: 'product-cat-qa',
+  real_world_testing: 'product-qa-crowd-testing',
+  mobility_testing: 'product-qa-mobility-testing',
+  performance_testing: 'product-qa-website-performance',
+  digital_accessability: 'product-qa-digital-accessability',
+  open_source_automation: 'product-qa-os-automation',
+  consulting_adivisory: 'product-qa-consulting'
+}
+/*eslint-enable */
+//Project sort options
+export const SORT_OPTIONS = [
+  { val: 'updatedAt desc', field: 'updatedAt' },
+  { val: 'createdAt', field: 'createdAt' },
+  { val: 'createdAt desc', field: 'createdAt' }
+]
