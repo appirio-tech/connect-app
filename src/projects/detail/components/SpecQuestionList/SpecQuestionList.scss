@@ -70,12 +70,15 @@
       }
 
       textarea {
+        box-sizing: content-box;
+        padding: 5px 10px;
         min-height: 45px;
-        max-width: 100%;
+        max-width: calc(100% - 22px);
         text-align: left;
         text-indent: 0;
         margin-bottom: 0;
         line-height: 25px;
+        overflow-y: hidden;
       }
 
       .radio-group-input,

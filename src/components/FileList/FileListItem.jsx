@@ -5,6 +5,7 @@ import moment from 'moment'
 import { Icons, Tooltip } from 'appirio-tech-react-components'
 import UserWithName from '../User/UserWithName'
 import { TOOLTIP_DEFAULT_DELAY } from '../../config/constants'
+import AutosizeTextarea from '../AutosizeTextArea'
 
 const { TrashIcon, CloseIcon, EditIcon, SaveIcon } = Icons
 
@@ -84,7 +85,7 @@ export default class FileListItem extends React.Component {
           </div>
         </div>
         { (errors && errors.title) && <div className="error-message">{ errors.title }</div> }
-        <textarea defaultValue={description} ref="desc" maxLength={250} className="tc-textarea" />
+        <AutosizeTextarea name="desc" defaultValue={description} ref="desc" maxLength={250} className="tc-textarea" />
         { (errors && errors.desc) && <div className="error-message">{ errors.desc }</div> }
       </div>
     )
