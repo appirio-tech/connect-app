@@ -44,7 +44,7 @@ const Filters = ({ criteria, applyFilters }) => {
         </div>
       </div>
       <button
-        className="tc-btn"
+        className="tc-btn tc-btn-secondary"
         onClick={() => {
           applyFilters({
             type: null,
@@ -53,7 +53,7 @@ const Filters = ({ criteria, applyFilters }) => {
             sort: 'updatedAt desc'
           })
         }}
-      >Clear all</button>
+      >Clear filters</button>
     </div>
   )
 }
