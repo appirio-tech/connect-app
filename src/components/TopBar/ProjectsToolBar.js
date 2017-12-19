@@ -21,6 +21,7 @@ class ProjectsToolBar extends Component {
       errorCreatingProject: false,
       isFilterVisible: false
     }
+    this.state.isFilterVisible = sessionStorage.getItem('isFilterVisible') === 'true'
     this.applyFilters = this.applyFilters.bind(this)
     this.toggleFilter = this.toggleFilter.bind(this)
     this.handleTermChange = this.handleTermChange.bind(this)
@@ -95,6 +96,7 @@ class ProjectsToolBar extends Component {
     const {isFilterVisible} = this.state
     const contentDiv = document.getElementById('wrapper-main')
     this.setState({isFilterVisible: !isFilterVisible}, () => {
+      sessionStorage.setItem('isFilterVisible', (!isFilterVisible).toString())
       if (this.state.isFilterVisible) {
         contentDiv.classList.add('with-filters')
       } else {
