@@ -138,7 +138,8 @@ class ProjectsToolBar extends Component {
       // The switch should not count as a filter in the menu!
       excludedFiltersCount++
     }
-    const noOfFilters = _.keys(criteria).length - excludedFiltersCount
+    // Ignore status from filters count
+    const noOfFilters = _.keys(_.omit(criteria, ['status'])).length - excludedFiltersCount
     const onLeaveMessage = this.onLeave() || ''
 
     const primaryNavigationItems = [
