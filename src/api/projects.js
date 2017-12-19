@@ -1,18 +1,26 @@
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
-import { TC_API_URL, PROJECT_LIST_PAGE_SIZE } from '../config/constants'
+import { TC_API_URL, PROJECTS_LIST_PER_PAGE } from '../config/constants'
 
 export function getProjects(criteria, pageNum) {
   // add default params
-  const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'details']
+  const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', 'details']
   const params = {
-    limit: PROJECT_LIST_PAGE_SIZE,
-    offset: (pageNum - 1) * PROJECT_LIST_PAGE_SIZE,
+    limit: PROJECTS_LIST_PER_PAGE,
+    offset: (pageNum - 1) * PROJECTS_LIST_PER_PAGE,
     fields: includeFields.join(',')
   }
   // filters
   const filter = _.omit(criteria, ['sort'])
   if (!_.isEmpty(filter)) {
+    // support for multiple comma separated types
+    if (filter.type && filter.type.indexOf(',') > -1) {
+      filter.type = `in(${filter.type})`
+    }
+    // support for multiple comma separated segments
+    if (filter.segment && filter.segment.indexOf(',') > -1) {
+      filter.segment = `in(${filter.segment})`
+    }
     // convert filter object to string
     const filterStr = _.map(filter, (v, k) => `${k}=${v}`)
     params.filter = filterStr.join('&')
@@ -67,7 +75,7 @@ export function createProject(projectProps) {
   // TODO: Remove this once none of the active projects
   // have the discussions tab enabled
   projectProps.details.hideDiscussions = true
-  
+
   return axios.post(`${TC_API_URL}/v4/projects/`, { param: projectProps })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})

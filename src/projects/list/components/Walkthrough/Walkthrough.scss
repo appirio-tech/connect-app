@@ -42,7 +42,7 @@
       margin-right:20px;
     }
     a{
-      background: rgba(220,220,224,0.39);
+      background: rgba($tc-gray-neutral-dark,0.39);
       border-radius: 4px;
       width: 100%;
       height: 306px;
@@ -71,7 +71,7 @@
       width: 436px;
       min-height: 235px;
       padding: 30px 30px 50px 30px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, .15);
+      box-shadow: 0 0 15px rgba($tc-black, .15);
       border-radius: 4px;
       h3{
         @include roboto-medium;

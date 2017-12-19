@@ -110,7 +110,7 @@ const ProjectStatus = ({ canEdit, isOpen, status, handleClick, onSelect, showTex
   return (
     <div className="ProjectStatus">
       <div className={cn('status-header', 'ps-' + selected.value, { active: isOpen, editable: canEdit, 'unified-header': unifiedHeader })} onClick={handleClick}>
-        <div className="status-icon"><i /></div>
+        <div className="status-icon"><i title={selected.fullName} /></div>
         {showText && (<span className="status-label">{withoutLabel ? selected.fullName : selected.name}<i className="caret" ><SVGIconImage filePath="arrow-9px-carret-down-normal" /></i></span>)}
       </div>
       {isOpen && canEdit && <div className="status-dropdown">

@@ -22,7 +22,8 @@ export const GET_PROJECTS               = 'GET_PROJECTS'
 export const GET_PROJECTS_PENDING       = 'GET_PROJECTS_PENDING'
 export const GET_PROJECTS_SUCCESS       = 'GET_PROJECTS_SUCCESS'
 export const GET_PROJECTS_FAILURE       = 'GET_PROJECTS_FAILURE'
-export const GET_PROJECTS_SEARCH_CRITERIA = 'GET_PROJECTS_SEARCH_CRITERIA'
+export const SET_PROJECTS_SEARCH_CRITERIA = 'SET_PROJECTS_SEARCH_CRITERIA'
+export const SET_PROJECTS_INFINITE_AUTOLOAD = 'SET_PROJECTS_INFINITE_AUTOLOAD'
 
 
 // Delete project
@@ -188,13 +189,13 @@ export const PROJECT_STATUS_CANCELLED = 'cancelled'
 export const PROJECT_STATUS_PAUSED = 'paused'
 
 export const PROJECT_STATUS = [
-  {color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT },
-  {color: 'gray', name: 'In Review', fullName: 'Project is in review', value: PROJECT_STATUS_IN_REVIEW },
-  {color: 'gray', name: 'Reviewed', fullName: 'Project is reviewed', value: PROJECT_STATUS_REVIEWED },
-  {color: 'green', name: 'Active', fullName: 'Project is active', value: PROJECT_STATUS_ACTIVE },
-  {color: 'black', name: 'Completed', fullName: 'Project is completed', value: PROJECT_STATUS_COMPLETED },
-  {color: 'black', name: 'Cancelled', fullName: 'Project is cancelled', value: PROJECT_STATUS_CANCELLED },
-  {color: 'red', name: 'Paused', fullName: 'Project is paused', value: PROJECT_STATUS_PAUSED }
+  {color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT, order: 2 },
+  {color: 'gray', name: 'In review', fullName: 'Project is in review', value: PROJECT_STATUS_IN_REVIEW, order: 3 },
+  {color: 'gray', name: 'Reviewed', fullName: 'Project is reviewed', value: PROJECT_STATUS_REVIEWED, order: 4 },
+  {color: 'green', name: 'Active', fullName: 'Project is active', value: PROJECT_STATUS_ACTIVE, order: 1 },
+  {color: 'black', name: 'Completed', fullName: 'Project is completed', value: PROJECT_STATUS_COMPLETED, order: 5 },
+  {color: 'black', name: 'Cancelled', fullName: 'Project is cancelled', value: PROJECT_STATUS_CANCELLED, order: 6 },
+  {color: 'red', name: 'Paused', fullName: 'Project is paused', value: PROJECT_STATUS_PAUSED, order: 7 }
 ]
 
 
@@ -269,8 +270,43 @@ export const GA_CLIENT_ID = '_gacid'
 // ToolTip
 export const TOOLTIP_DEFAULT_DELAY = 300 // in ms
 
-/*
-  * Project listing page size - maximum value can be 20 due to max 20 records
-  * restriction at back-end api end.
-*/
-export const PROJECT_LIST_PAGE_SIZE = 20
+
+// Projects list
+export const PROJECTS_LIST_PER_PAGE = 20
+
+/*eslint-disable camelcase */
+//Project type to icon name mapping
+export const PROJECT_ICON_MAP = {
+  app: 'product-cat-app',
+  application_development: 'product-app-app',
+  website: 'product-cat-website',
+  website_development: 'product-website-website',
+  chatbot: 'product-cat-chatbot',
+  watson_chatbot: 'product-chatbot-watson',
+  generic_chatbot: 'product-chatbot-chatbot',
+  visual_design: 'product-cat-design',
+  wireframes: 'product-design-wireframes',
+  visual_design_concepts: 'product-design-app-visual',
+  visual_design_prod: 'product-design-app-visual',
+  infographic: 'product-design-infographic',
+  generic_design: 'product-design-other',
+  app_dev: 'product-cat-development',
+  visual_prototype: 'product-dev-prototype',
+  frontend_dev: 'product-dev-front-end-dev',
+  api_dev: 'product-dev-integration',
+  generic_dev: 'product-dev-other',
+  quality_assurance: 'product-cat-qa',
+  real_world_testing: 'product-qa-crowd-testing',
+  mobility_testing: 'product-qa-mobility-testing',
+  performance_testing: 'product-qa-website-performance',
+  digital_accessability: 'product-qa-digital-accessability',
+  open_source_automation: 'product-qa-os-automation',
+  consulting_adivisory: 'product-qa-consulting'
+}
+/*eslint-enable */
+//Project sort options
+export const SORT_OPTIONS = [
+  { val: 'updatedAt desc', field: 'updatedAt' },
+  { val: 'createdAt', field: 'createdAt' },
+  { val: 'createdAt desc', field: 'createdAt' }
+]

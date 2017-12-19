@@ -40,7 +40,7 @@ const ListHeader = ({ columns, sortHandler, currentSortField }) => {
   }
 
   return (
-    <div className="row">
+    <div className="row header">
       <div className="flex-row row-th">
         <div className="mask-layer hide" />
         { columns.map( col =>

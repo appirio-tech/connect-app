@@ -6,7 +6,7 @@
   .title {
     @include roboto-bold;
     font-size: 13px;
-    color: #262628;
+    color: $tc-black;
     line-height: 30px;
     padding-left: 22px;
     position: relative;
@@ -28,7 +28,7 @@
     .txt {
       @include roboto;
       font-size: 13px;
-      color: #262628;
+      color: $tc-black;
       line-height: 16px;
       padding: 7px 0;
       display: inline-block;
@@ -51,7 +51,7 @@
     }
     .subtract {
       float: right;
-      background: #DCDCE0;
+      background: $tc-gray-20;
       margin: 13px 5px 0 0;
       width: 9px;
       height: 2px;
@@ -62,7 +62,7 @@
       padding: 0 20px 0 42px;
       position: relative;
       &:hover {
-        background: #FAFAFB;
+        background: $tc-gray-neutral-light;
       }
       &.complete {
         .schedule {

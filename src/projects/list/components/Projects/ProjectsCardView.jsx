@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroller'
 import ProjectCard from './ProjectCard'
 import NewProjectCard from './NewProjectCard'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
+import { PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
 import { setDuration } from '../../../../helpers/projectHelper'
 import { PROJECT_LIST_PAGE_SIZE } from '../../../../config/constants'
 
@@ -13,7 +14,7 @@ require('./ProjectsGridView.scss')
 const ProjectsCardView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
-  const { projects, members, currentUser, onPageChange, pageNum, totalCount, inifinite } = props
+  const { projects, members, currentUser, onPageChange, pageNum, totalCount, infiniteAutoload, setInfiniteAutoload, isLoading, projectsStatus } = props
   // const currentSortField = _.get(criteria, 'sort', '')
 
   // annotate projects with member data
@@ -28,9 +29,9 @@ const ProjectsCardView = props => {
     })
   })
 
-  const renderProject = (project, index) => {
+  const renderProject = (project) => {
     const duration = setDuration({}, project.status)
-    return (<div key={index} className="project-card">
+    return (<div key={project.id} className="project-card">
       <ProjectCard
         project={project}
         currentUser={currentUser}
@@ -40,30 +41,25 @@ const ProjectsCardView = props => {
   }
   const handleLoadMore = () => {
     onPageChange(pageNum + 1)
+    setInfiniteAutoload(true)
   }
-  const hasMore = ((pageNum - 1) * PROJECT_LIST_PAGE_SIZE + PROJECT_LIST_PAGE_SIZE < totalCount)
+  const hasMore = pageNum * PROJECTS_LIST_PER_PAGE < totalCount
+
   return (
     <div className="projects card-view">
-      { !!inifinite && 
-        <InfiniteScroll
-          initialLoad={false}
-          pageStart={pageNum}
-          loadMore={onPageChange}
-          hasMore={ hasMore }
-          loader={<LoadingIndicator />}
-        >
-          { projects.map(renderProject)}
-          <div className="project-card"><NewProjectCard /></div>
-        </InfiniteScroll>
-      }
-      { !inifinite &&
-        <div>
-          { projects.map(renderProject)}
-          <div className="project-card"><NewProjectCard /></div>
-        </div>
-      }
-      { !inifinite && hasMore && <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore}>Load more</button> }
-      { !hasMore && <span>End of results</span>}
+      <InfiniteScroll
+        initialLoad={false}
+        pageStart={pageNum}
+        loadMore={infiniteAutoload ? onPageChange : () => {}}
+        hasMore={hasMore}
+        threshold={500}
+      >
+        { projects.map(renderProject)}
+        <div className="project-card"><NewProjectCard /></div>
+      </InfiniteScroll>
+      { isLoading && <LoadingIndicator /> }
+      { !isLoading && !infiniteAutoload && hasMore && <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore} key="loadMore">Load more projects</button>}
+      { !isLoading && !hasMore && <span key="end">No more {projectsStatus} projects</span>}
     </div>
   )
 }
@@ -81,13 +77,16 @@ ProjectsCardView.propTypes = {
   // onPageChange: PropTypes.func.isRequired,
   // sortHandler: PropTypes.func.isRequired,
   // applyFilters: PropTypes.func.isRequired,
-  pageNum: PropTypes.number.isRequired
+  pageNum: PropTypes.number.isRequired,
   // criteria: PropTypes.object.isRequired
+  infiniteAutoload: PropTypes.bool,
+  setInfiniteAutoload: PropTypes.func,
+  isLoading: PropTypes.bool
 }
 
 
 ProjectsCardView.defaultProps = {
-  inifinite : false
+  infiniteAutoload : false
 }
 
 export default ProjectsCardView
