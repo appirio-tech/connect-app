@@ -87,11 +87,15 @@ const ProjectsGridView = props => {
       renderText: item => {
         const sortMetric = _.find(SORT_OPTIONS, o => currentSortField === o.val) || SORT_OPTIONS[0]
         const lastAction = item[sortMetric.field] === 'createdAt' ? 'createdBy' : 'updatedBy'
-        const lastEditor = members[item[lastAction]] || {}
+        const lastEditor = members[item[lastAction]]
         return (
           <div className="spacing time-container">
             <div className="txt-normal">{moment(item[sortMetric.field]).format('MMM D, h:mm a')}</div>
-            <div className="project-last-editor">{lastEditor.firstName} {lastEditor.lastName}</div>
+            <div className="project-last-editor">
+              {
+                lastEditor ? `${lastEditor.firstName} ${lastEditor.lastName}` : 'Unknown'
+              }
+            </div>
           </div>
         )
       }
