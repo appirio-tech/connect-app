@@ -64,7 +64,7 @@ const products = {
         icon: 'product-qa-crowd-testing',
         id: 'computer_vision',
         aliases: ['computer-vision', 'computer_vision'],
-        hidden : true
+        hidden : false
       }, /*,
       'Algorithm Optimization': {
         brief: 'TBD',
@@ -87,7 +87,7 @@ const products = {
         icon: 'product-qa-crowd-testing',
         id: 'data_exploration',
         aliases: ['data-exploration', 'data_exploration'],
-        hidden  :true
+        hidden  : false
       }
     }
   },
@@ -203,7 +203,7 @@ const products = {
         id: 'performance_testing',
         aliases: ['performance-testing', 'performance_testing'],
         hidden: true
-      },
+      }
       'Digital Accessibility': {
         brief: 'TBD',
         details: 'Make sure you app or website conforms to all rules and regulations',
@@ -229,7 +229,7 @@ const products = {
         disabled: true
       }
     }
-  }
+
   /*
   Analytics: {
     icon: 'product-cat-qa',
