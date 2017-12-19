@@ -38,22 +38,21 @@ export default class ProjectListNavHeader extends Component {
 
   render() {
     const options = [
-      { status: 'in(draft,in_review,reviewed,active)', label: 'Open' },
-      { status: null, label: 'All Statuses' },
+      { status: null, label: 'All projects' },
       ...PROJECT_STATUS.sort((a, b) => a.order > b.order).map((item) => ({status: item.value, label: item.name}))
     ]
 
     return (
-      <div className="list-nav-container">
-        <div className="left-wrapper">
+      <nav className="list-nav-container">
+        <ul className="left-wrapper">
         {
           options.map((item, i) =>
-            <div className="list-nav-item" key={i}>
+            <li className="list-nav-item" key={i}>
               <a href="javascript;" data-status={item.status} onClick={this.onItemClick} className={`list-nav-btn lg ${(item.label === 'All Statuses' && !this.state.currentStatus) || this.state.currentStatus === item.status ? 'active' : ''}`}>{item.label}</a>
-            </div>
+            </li>
           )
         }
-        </div>
+      </ul>
         <div className="right-wrapper">
           <div className="list-nav-item nav-icon">
             <a href="javascript;" data-view="grid" onClick={this.switchViews} className={`list-nav-btn sm right grid-view-ico ${(this.state.selectedView === 'grid') ? 'active' : ''}`}><i/></a>
@@ -62,7 +61,7 @@ export default class ProjectListNavHeader extends Component {
             <a href="javascript;" data-view="card" onClick={this.switchViews} className={`list-nav-btn sm right card-view-ico ${(this.state.selectedView === 'card') ? 'active' : ''}`}><i/></a>
           </div>
         </div>
-      </div>
+      </nav>
     )
   }
 }
