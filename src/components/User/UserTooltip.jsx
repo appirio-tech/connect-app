@@ -33,17 +33,9 @@ const UserTooltip = ({ usr, id }) => {
             </div>
           </div>
         </div>
-        <div className="sf-data-bottom-container">
-          <div className="segment-data">
-            <span>Wipro Digital Jaipur / Topgear</span>
-          </div>
-          <div className="segment-data">
-            <span>0141-2211258</span>
-          </div>
-          <div className="segment-data">
-            <a href="https://google.com" target="_blank" rel="noopener noreferrer" className="ext-link">SDFC Lead Page</a>
-          </div>
-        </div>
+        {/*<div className="sf-data-bottom-container">
+           // place additional info here
+        </div>*/}
       </div>
     </Tooltip>
   )
