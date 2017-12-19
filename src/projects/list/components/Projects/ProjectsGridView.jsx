@@ -99,7 +99,7 @@ const ProjectsGridView = props => {
       renderText: item => {
         const m = _.find(item.members, m => m.isPrimary && m.role === 'customer')
         if (!m)
-          return <div className="user-block txt-italic">Unknown</div>
+          return (<div className="user-block txt-italic">Unknown</div>)
         return (
           <div className="spacing">
             <div className="user-block">
