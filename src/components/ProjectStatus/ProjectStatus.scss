@@ -150,7 +150,7 @@ $status-height :  20px;
     min-width: 110%;
     position: absolute;
     border-radius: $base-unit;
-    box-shadow: 0 0 15px rgba(0, 0, 0, .25);
+    box-shadow: 0 0 15px rgba($tc-black, .25);
     padding: 10px 0;
     position: absolute;
     background: $tc-white;
@@ -185,7 +185,7 @@ $status-height :  20px;
       }
 
       .status-label {
-        color: #394146;
+        color: $tc-gray-80;
         padding-right: 0px;
         font-size: 13px;
       }

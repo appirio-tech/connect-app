@@ -41,7 +41,7 @@
     position: absolute;
     display: flex;
     padding: 10px;
-    box-shadow: rgba(0, 0, 0, 0.14902) 0px 0px 0px 1px, rgba(0, 0, 0, 0.14902) 0px 8px 16px;
+    box-shadow: rgba($tc-black, 0.14902) 0px 0px 0px 1px, rgba($tc-black, 0.14902) 0px 8px 16px;
     > div {
       box-shadow: none !important;
     }

@@ -3,11 +3,11 @@
 .Tooltip {
   &.customer-data {
     .tooltip-container {
-      border: 1px solid rgba(10, 10, 10, 0.2);
+      border: 1px solid rgba($tc-black, 0.2);
       -webkit-border-radius: 5px;
       -moz-border-radius: 5px;
       border-radius: 5px;
-      box-shadow: 0 0 10px rgba(10, 10, 10, 0.2);
+      box-shadow: 0 0 10px rgba($tc-black, 0.2);
     }
 
     .tooltip-content-container {
@@ -21,14 +21,14 @@
         background-color: $tc-white;
 
         &.downward-pointer {
-          border-right: 1px solid rgba(10, 10, 10, 0.2);
-          border-bottom: 1px solid rgba(10, 10, 10, 0.2);
+          border-right: 1px solid rgba($tc-black, 0.2);
+          border-bottom: 1px solid rgba($tc-black, 0.2);
           bottom: -11px !important;
         }
 
         &.upward-pointer {
-          border-left: 1px solid rgba(10, 10, 10, 0.2);
-          border-top: 1px solid rgba(10, 10, 10, 0.2);
+          border-left: 1px solid rgba($tc-black, 0.2);
+          border-top: 1px solid rgba($tc-black, 0.2);
           top: -11px !important;
         }
       }
@@ -117,7 +117,7 @@
             .ext-link {
               position: relative;
               font-size: 11px;
-              color: #0681ff;
+              color: $tc-dark-blue-90;
               padding-right: 20px;
 
               &:after {

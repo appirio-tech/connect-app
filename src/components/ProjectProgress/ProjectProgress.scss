@@ -46,7 +46,7 @@
 }
 
 .CircularProgressbar .CircularProgressbar-trail {
-  stroke: #d6d6d6;
+  stroke: $tc-gray-20;
 }
 
 .CircularProgressbar .CircularProgressbar-text {
@@ -57,7 +57,7 @@
 }
 
 .CircularProgressbar .CircularProgressbar-background {
-  fill: #d6d6d6;
+  fill: $tc-gray-20;
 }
 
 /*
@@ -74,11 +74,11 @@
 }
 
 .CircularProgressbar.CircularProgressbar-inverted .CircularProgressbar-text {
-  fill: #fff;
+  fill: $tc-white;
 }
 
 .CircularProgressbar.CircularProgressbar-inverted .CircularProgressbar-path {
-  stroke: #fff;
+  stroke: $tc-white;
 }
 
 .CircularProgressbar.CircularProgressbar-inverted .CircularProgressbar-trail {

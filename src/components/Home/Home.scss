@@ -45,7 +45,7 @@
 
 			a.tc-link {
 				text-align: center;
-			    color: #1a85ff;
+			    color: $tc-dark-blue-90;
 			    @include roboto;
 			    font-size: 13px;
 			    margin: 0 auto;
@@ -70,7 +70,7 @@
 			padding-bottom: $base-unit*6;
 		}
 		.tc-btn{
-			color: #cfe6ff;
+			color: $tc-dark-blue-30;
 			height:$base-unit*8;
 			width: $base-unit*50;
 			text-align: center;
@@ -81,12 +81,12 @@
 			display: block;
 			margin-bottom: $base-unit * 4;
 			&:hover {
-				color:#ffffff;
-				background-image: linear-gradient(#3996FF 0%, #127BF3 100%) !important;				
+				color:$tc-white;
+				background-image: linear-gradient($tc-dark-blue-70 0%, $tc-dark-blue-90 100%) !important;				
 			}			
 			&:active {
-				color:#ffffff;
-				background-image: linear-gradient(#3996FF 0%, #127BF3 100%) !important;
+				color:$tc-white;
+				background-image: linear-gradient($tc-dark-blue-70 0%, $tc-dark-blue-90 100%) !important;
 			}
 		}
 	}

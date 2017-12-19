@@ -5,7 +5,7 @@
 // FIXME: non-standard units (use $base-unit and $corner-radius)
 $gray-color: $tc-gray-50;
 $title-color: $tc-gray-80;
-$hr-color-base: #000;
+$hr-color-base: $tc-black;
 $hr-color-darker: lighten($hr-color-base, 13.5%);
 $hr-color-dark: lighten($hr-color-base, 20%);
 $hr-color: lighten($hr-color-base, 33.5%);
@@ -15,7 +15,7 @@ $hr-color-lighter: lighten($hr-color-base, 93.5%);
 .projectSpecSidebar {
   margin-right: 20px;
   margin-bottom: 10px;
-  background-color: #fff;
+  background-color: $tc-white;
   box-shadow: 0px 1px 3px 0px $tc-gray-30;
   padding: 20px 0;
   border-radius: 4px;
@@ -31,7 +31,7 @@ $hr-color-lighter: lighten($hr-color-base, 93.5%);
     text-transform: uppercase;
 
     &.normal-txt {
-      color: #262628;
+      color: $tc-black;
     }
   }
   /* .text-box 8/29 */

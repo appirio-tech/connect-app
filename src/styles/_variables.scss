@@ -5,7 +5,7 @@ $tc-heading            	: 20px;
 $tc-heading-extra-small	: 14px;
 
 
-$gray-base    : #000 !default;
+$gray-base    : $tc-black !default;
 $gray-darkest : lighten($gray-base, 3.5%);
 $gray-darker  : lighten($gray-base, 13.5%);
 $gray-dark    : lighten($gray-base, 20%);

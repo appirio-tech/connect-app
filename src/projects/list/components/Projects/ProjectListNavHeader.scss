@@ -62,7 +62,7 @@
     }
     &.active,
     &:hover {
-      color: #262628;
+      color: $tc-black;
       @include roboto-medium;
       font-size: 13px;
       background-color: $tc-white;

@@ -9,7 +9,7 @@
   padding: 4 * $base_unit;
 
   &:hover {
-    box-shadow: 0 2px 9px 0 rgba(38,38,40,0.15);
+    box-shadow: 0 2px 9px 0 rgba($tc-gray-90,0.15);
   }
 
   &.NewProjectCard {
@@ -20,7 +20,7 @@
       box-shadow: none;
 
       .card-body .new-project-button .new-project-icon {
-        @include background-gradient(#3996FF, #127BF3);
+        @include background-gradient($tc-dark-blue-70, $tc-dark-blue-90);
       }
     }
 
