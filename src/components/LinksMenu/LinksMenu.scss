@@ -21,7 +21,7 @@
     }
   }
   li:not(.delete-confirmation-modal):hover{
-    background: #FAFAFB;
+    background: $tc-gray-neutral-light;
     color: $tc-dark-blue;
     .buttons{
       display: block;

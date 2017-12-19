@@ -7,8 +7,8 @@
 }
 
 .Dropdown {
-  background-color: #fff;
-  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.17);
+  background-color: $tc-white;
+  box-shadow: 0 2px 7px rgba($tc-black, 0.17);
   border-radius: 5px;
   display: inline-block;
   position: absolute;
@@ -22,7 +22,7 @@
     width: 100%;
     position: relative;
     z-index: 10;
-    background-color: #fff;
+    background-color: $tc-white;
     padding: 11px 20px;
     border-radius: 5px;
 
@@ -31,7 +31,7 @@
     }
 
     li a {
-      color: #394146;
+      color: $tc-gray-80;
       font-family: "Roboto", Arial, Helvetica, sans-serif;
       font-size: 12px;
       display: block;
@@ -95,7 +95,7 @@
     right: 24px;
     width: 12px;
     height: 12px;
-    background: #FFFFFF;
+    background: $tc-white;
     border-right: 1px solid $tc-gray-20;;
     border-bottom: 1px solid $tc-gray-20;;
     transform: rotate(-135deg);

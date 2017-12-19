@@ -10,7 +10,7 @@
 
   .status-dropdown {
     border-radius: $base-unit;
-    box-shadow: 0 0 15px rgba(0, 0, 0, .25);
+    box-shadow: 0 0 15px rgba($tc-black, .25);
     padding: 10px 0;
     position: absolute;
     background: $tc-white;
@@ -21,7 +21,7 @@
       display: block;
       @include roboto-medium;
       font-size: $tc-label-md;
-      color: #394146;
+      color: $tc-gray-80;
       text-align: left;
       line-height: 30px;
       padding: 0 16px 0 10px;

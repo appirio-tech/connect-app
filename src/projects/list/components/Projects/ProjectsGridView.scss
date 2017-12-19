@@ -223,7 +223,7 @@
 
           .status-header {
             position: relative;
-            color: #006dea;
+            color: $tc-dark-blue-90;
             font-size: 13px;
             font-weight: 400;
 
@@ -337,7 +337,7 @@
 .txt-price {
   @include roboto-medium;
   font-size: $tc-label-md;
-  color: #202a36;
+  color: $tc-black;
   text-align: center;
   height: 20px;
   line-height: $base-unit + 16;
@@ -598,7 +598,7 @@
     position: absolute;
     top: -18px;
     left: -20px;
-    box-shadow: 0 0 10px rgba(10, 10, 10, 0.2);
+    box-shadow: 0 0 10px rgba($tc-black, 0.2);
     z-index: 599;
     padding-top: 26px;
 
@@ -608,7 +608,7 @@
       li {
         a {
           font-size: $tc-label-md;
-          color: #394146;
+          color: $tc-gray-80;
           line-height: $base-unit * 6;
           display: block;
           padding: 0 10px 0 20px;

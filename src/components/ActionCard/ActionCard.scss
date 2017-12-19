@@ -2,7 +2,7 @@
 
 .action-card {
   padding: $base-unit*4 0;
-  box-shadow: 0px 1px 3px 0px #c3c3c8;
+  box-shadow: 0px 1px 3px 0px $tc-gray-30;
 
   // FIXME: Hide the top border on the new post composer to be better looking
   .new-post-title + .tc-textarea .textarea-footer {
@@ -27,7 +27,7 @@
         font-family: 'Roboto', Helvetica, Arial, sans-serif;
         font-weight: 500;
         font-size: 12px;
-        color: #FFFFFF;
+        color: $tc-white;
         line-height: 20px;
         height: 20px;
         padding: 0 25px 0 25px;
@@ -62,7 +62,7 @@
           margin-left:-24px;
           width: 12px;
           height: 12px;
-          background: #FFFFFF;
+          background: $tc-white;
           transform: rotate(-135deg);
           z-index: 999;
       }
@@ -228,7 +228,7 @@
   // Embedded content overrides -- end
 
   .comment {
-    box-shadow: 0px 0px 3px 0px rgba(89, 167, 255, 0.00);
+    box-shadow: 0px 0px 3px 0px rgba($tc-dark-blue-70, 0.00);
     border-radius: 4px;
     padding: $base-unit*2;
     margin-bottom: -10px;
@@ -248,7 +248,7 @@
         border-top: 12px solid transparent;
         border-bottom: 12px solid transparent; 
         
-        border-right:12px solid #F4F9FF; 
+        border-right:12px solid $tc-dark-blue-10; 
         content: '';
         display: block;
         position: absolute;
@@ -264,7 +264,7 @@
     .comment-body {
       @include roboto;
       font-size: 13px;
-      color: #47474f;
+      color: $tc-gray-80;
       line-height: $base-unit*4;
       width: 100%;
       overflow-x: auto;
@@ -273,7 +273,7 @@
     .comment-read-more {
       @include roboto;
       font-size: 11px;
-      color: #59a7ff;
+      color: $tc-dark-blue-70;
       line-height: $base-unit*6;
     }
   }
@@ -302,7 +302,7 @@
       textarea {
         @include roboto;
         font-size: 13px;
-        color: #47474f;
+        color: $tc-gray-80;
         line-height: 20px;
         min-height: 80px;
       }
@@ -614,7 +614,7 @@
   height: 100%;
   width: 100%;
   position: absolute;
-  background: #F4F9FF;
+  background: $tc-dark-blue-10;
   border-radius: 3px;
   display: flex;
   justify-content: center; /* align horizontal */
@@ -622,7 +622,7 @@
   div {
     @include roboto-bold;
     font-size: 15px;
-    color: #59A7FF;
+    color: $tc-dark-blue-70;
     letter-spacing: 0;
   }
   &:before {
@@ -631,7 +631,7 @@
     border-top: 12px solid transparent;
     border-bottom: 12px solid transparent; 
     
-    border-right:12px solid #F4F9FF; 
+    border-right:12px solid $tc-dark-blue-10; 
     content: '';
     display: block;
     position: absolute;
@@ -654,12 +654,12 @@
   position:absolute;
   background: white;
 
-  box-shadow: 0 2px 9px 0 rgba(38,38,40,0.15);
+  box-shadow: 0 2px 9px 0 rgba($tc-gray-90,0.15);
   border-radius: 6px;
 }
 
 .delete-post-dialog-overlay{
-  background   : rgba(38, 38, 40, 0.6);
+  background   : rgba($tc-gray-90, 0.6);
   z-index:20;
   position          : fixed;
   top               : 0;
@@ -671,7 +671,7 @@
 .modal-title{
   font-family: Roboto-Medium;
   font-size: 20px;
-  color: #47474F;
+  color: $tc-gray-80;
   line-height: 30px;
 }
 
@@ -679,7 +679,7 @@
   margin-top:20px;
   font-family: Roboto-Regular;
   font-size: 15px;
-  color: #747480;
+  color: $tc-gray-60;
   line-height: 25px;
 }
 

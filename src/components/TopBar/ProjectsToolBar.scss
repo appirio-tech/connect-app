@@ -2,8 +2,8 @@
 @import 'tc-includes';
 
 // TODO: move to includes
-$tc-rgba-10: rgba(71, 71, 79, 0.38);
-$tc-rgba-20: rgba(0, 0, 0, 0.17);
+$tc-rgba-10: rgba($tc-gray-80, 0.38);
+$tc-rgba-20: rgba($tc-black, 0.17);
 $tc-body-large: 20px;
 
 .ProjectsToolBar {
@@ -134,7 +134,7 @@ $tc-body-large: 20px;
     padding: 10px 20px;
     background-color: $tc-gray-20;
     border-bottom: 1px solid $tc-gray-40;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 5px 0 rgba($tc-black, 0.25);
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -212,7 +212,7 @@ $tc-body-large: 20px;
   right: 0;
   bottom: 0;
   z-index: 21;/* +1 of the z-index of the topbar */
-  background-color: #fafafb;
+  background-color: $tc-gray-neutral-light;
   /*background-color: $tc-gray-neutral-dark;*/
   overflow-y: scroll;
   opacity: 1;

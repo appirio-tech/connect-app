@@ -267,7 +267,7 @@ $tc-body-extra-small: 12px;
           display: flex;
           background: $tc-white;
           border: 1px solid $tc-gray-20;
-          box-shadow: inset 0px 0px 2px 0px rgba(183, 183, 183, 0.2);
+          box-shadow: inset 0px 0px 2px 0px rgba($tc-gray-30, 0.2);
 
           input {
             flex-grow: 1;
@@ -387,7 +387,7 @@ $tc-body-extra-small: 12px;
           cursor: default;
           background: $tc-dark-blue-90;
           color: $tc-white;
-          // box-shadow: inset 0px 1px 3px 0px rgba(71,71,79,0.38);
+          // box-shadow: inset 0px 1px 3px 0px rgba($tc-gray-80,0.38);
           a {
           }
         }
@@ -415,7 +415,7 @@ $tc-body-extra-small: 12px;
     margin: 0 auto;
     background: $tc-white;
     border: 1px solid $tc-gray-30;
-    box-shadow: 0px 1px 2px 1px rgba(38, 38, 40, 0.09);
+    box-shadow: 0px 1px 2px 1px rgba($tc-gray-90, 0.09);
     border-radius: 2px;
     padding: 10px 0 10px 0;
     max-height: 210px;
