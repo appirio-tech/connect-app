@@ -30,12 +30,13 @@ const ProjectsGridView = props => {
       classes: 'item-id',
       sortable: false,
       renderText: item => {
+        const url = `/projects/${item.id}`
         const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
-          <div className="spacing">
+          <Link to={url} className="spacing">
             { recentlyCreated  && <span className="blue-border" /> }
             { item.id.toLocaleString(navigator.language, { minimumFractionDigits: 0 }) }
-          </div>
+          </Link>
         )
       }
     }, {
@@ -44,12 +45,13 @@ const ProjectsGridView = props => {
       classes: 'item-icon',
       sortable: false,
       renderText: item => {
+        const url = `/projects/${item.id}`
         const projectIconClass = PROJECT_ICON_MAP[item.type]
         return (
-          <div className="spacing">
+          <Link to={url} className="spacing">
             <div className={ projectIconClass }>
             </div>
-          </div>
+          </Link>
         )
       }
     }, {
@@ -66,12 +68,14 @@ const ProjectsGridView = props => {
               <Link to={url} className="link-title">{item.name}</Link>
               { code && <span className="item-ref-code txt-gray-md">{code}</span> }
             </div>
-            <TextTruncate
-              containerClassName="project-description"
-              line={2}
-              truncateText="..."
-              text={ item.description }
-            />
+            <Link to={url}>
+              <TextTruncate
+                containerClassName="project-description"
+                line={2}
+                truncateText="..."
+                text={ item.description }
+              />
+            </Link>
           </div>
         )
       }
