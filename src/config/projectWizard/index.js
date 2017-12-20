@@ -234,14 +234,6 @@ const products = {
         id: 'mobility_testing',
         aliases: ['mobility-testing', 'mobility_testing']
       },
-      'Performance Tuning': {
-        brief: 'TBD',
-        details: 'Submit your JVM based application for performance tuning recommendations',
-        icon: 'product-qa-website-performance',
-        id: 'performance_tuning',
-        aliases: ['performance-tuning', 'performance_tuning'],
-        hidden: false
-      },
       'Performance Testing': {
         brief: 'TBD',
         details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
