@@ -19,7 +19,6 @@
     .tooltip-content-container {
       background-color: $tc-white;
       width: 400px;
-      min-height: 180px;
       padding-top: 20px;
       padding-left: 20px;
 
@@ -76,10 +75,12 @@
           }
 
           .user-handle-container {
-            flex: 0 1 80px;
             padding-right: 10px;
-            border-right: 1px solid $tc-gray-50;
             height: 20px;
+
+            &.with-email {
+              border-right: 1px solid $tc-gray-50;
+            }
 
             span {
               font-size: 12px;
@@ -89,7 +90,7 @@
           }
 
           .user-email-container {
-            flex: 1 1 40%;
+            flex: 1;
             padding-left: 10px;
 
             a {
