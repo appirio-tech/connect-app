@@ -25,23 +25,12 @@ const UserTooltip = ({ usr, id }) => {
             <div className="user-name-container">
               <span>{usr.firstName} {usr.lastName}</span>
             </div>
-            <div className="user-handle-container">
+            <div className={`user-handle-container ${usr.email ? 'with-email' : ''}`}>
               <span>{usr.handle}</span>
             </div>
             <div className="user-email-container">
               <a href={`mailto:${usr.email}`}>{usr.email}</a>
             </div>
-          </div>
-        </div>
-        <div className="sf-data-bottom-container">
-          <div className="segment-data">
-            <span>Wipro Digital Jaipur / Topgear</span>
-          </div>
-          <div className="segment-data">
-            <span>0141-2211258</span>
-          </div>
-          <div className="segment-data">
-            <a href="https://google.com" target="_blank" rel="noopener noreferrer" className="ext-link">SDFC Lead Page</a>
           </div>
         </div>
       </div>
