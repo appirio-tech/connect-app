@@ -181,14 +181,15 @@ const products = {
     question: 'What type of analytics project are you interested in?',
     id: 'analytics',
     aliases: ['all-analytics'],
-    hidden: false,
+    hidden: true,
     subtypes: {
       'Computer Vision': {
         brief: 'TBD',
         details: 'Recognize patters in images, compute correspondences, etc.',
         icon: 'product-analytics-computer-vision',
         id: 'computer_vision',
-        aliases: ['computer-vision', 'computer_vision']
+        aliases: ['computer-vision', 'computer_vision'],
+        hidden: true
       },
       // 'Algorithm Optimization': {
       //   brief: 'TBD',
@@ -209,7 +210,8 @@ const products = {
         details: 'Review your data, extrapolate patterns, and suggest solutions',
         icon: 'product-analytics-data-exploration',
         id: 'data_exploration',
-        aliases: ['data-exploration', 'data_exploration']
+        aliases: ['data-exploration', 'data_exploration'],
+        hidden: true
       }
     }
   },
@@ -247,7 +249,8 @@ const products = {
         details: 'Measure your code base against our security baseline using the crowd and tooling ',
         icon: 'product-qa-health-check',
         id: 'health_check',
-        aliases: ['health-check', 'health_check'  ]
+        aliases: ['health-check', 'health_check'  ],
+        hidden: true
       },
       'Performance Tuning': {
         brief: 'TBD',
