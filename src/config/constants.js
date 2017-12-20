@@ -217,6 +217,7 @@ export const EVENT_ROUTE_CHANGE = 'event.route_change'
 export const ROLE_TOPCODER_USER = 'Topcoder User'
 export const ROLE_CONNECT_COPILOT = 'Connect Copilot'
 export const ROLE_CONNECT_MANAGER = 'Connect Manager'
+export const ROLE_CONNECT_ADMIN = 'Connect Admin'
 export const ROLE_ADMINISTRATOR = 'administrator'
 
 // FIXME .. remove defaults
