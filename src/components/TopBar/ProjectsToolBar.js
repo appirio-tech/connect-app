@@ -38,7 +38,9 @@ class ProjectsToolBar extends Component {
         this.setState({
           isProjectDirty : false
         }, () => {
-          this.props.history.push('/projects/' + nextProps.project.id)
+          if (!nextProps.updateExisting) {
+            this.props.history.push('/projects/' + nextProps.project.id)
+          }
         })
       } else {
         this.setState({
@@ -247,6 +249,7 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
     creatingProject        : projectState.processing,
     projectCreationError   : projectState.error,
     project                : projectState.project,
+    updateExisting         : projectState.updateExisting,
     criteria               : projectSearch.criteria,
     userRoles              : _.get(loadUser, 'user.roles', []),
     user                   : loadUser.user

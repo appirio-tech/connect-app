@@ -63,7 +63,7 @@ class Projects extends Component {
     if (reason && status === PROJECT_STATUS_CANCELLED) {
       delta.cancelReason = reason
     }
-    updateProject(pId, delta)
+    updateProject(pId, delta, true)
   }
 
   componentWillMount() {
@@ -199,11 +199,15 @@ class Projects extends Component {
   }
 }
 
-const mapStateToProps = ({ projectSearch, members, loadUser }) => {
+const mapStateToProps = ({ projectSearch, members, loadUser, projectState }) => {
   let isPowerUser = false
   const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
   if (loadUser.user) {
     isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
+  }
+  if (projectState.project && projectState.project.id && projectSearch.projects) {
+    const index = _.findIndex(projectSearch.projects, {id: projectState.project.id})
+    projectSearch.projects.splice(index, 1, projectState.project)
   }
   return {
     currentUser : {
