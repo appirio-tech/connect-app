@@ -87,7 +87,7 @@ const products = {
         icon: 'product-qa-crowd-testing',
         id: 'data_exploration',
         aliases: ['data-exploration', 'data_exploration'],
-        hidden  : true 
+        hidden  : true
       }
     }
   },
@@ -202,6 +202,14 @@ const products = {
         icon: 'product-qa-website-performance',
         id: 'performance_testing',
         aliases: ['performance-testing', 'performance_testing'],
+        hidden: true
+      },
+      'Performance Tuning': {
+        brief: 'TBD',
+        details: 'Analyze your JVM based applications and generate recommendations',
+        icon: 'product-qa-website-performance',
+        id: 'performance_tuning',
+        aliases: ['performance-tuning', 'performance_tuning'],
         hidden: true
       },
       'Digital Accessibility': {
