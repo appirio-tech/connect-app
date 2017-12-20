@@ -2,6 +2,54 @@
 
 .Tooltip {
   &.customer-data {
+
+    &.level-0 {
+
+      .tooltip-target {
+        z-index: 3;
+      }
+
+      .tooltip-container {
+        margin-left: -40px;
+      }
+    }
+
+    &.level-1 {
+
+      .tooltip-target {
+        z-index: 2;
+      }
+
+      .tooltip-container {
+        margin-left: -60px;
+      }
+    }
+
+    &.level-2 {
+
+      .tooltip-target {
+        z-index: 1;
+      }
+
+      .tooltip-container {
+        margin-left: -80px;
+      }
+    }
+
+    .stack-avatar-0 {
+      z-index: 3;
+    }
+
+    .stack-avatar-1 {
+      margin-left: -10px;
+      z-index: 2;
+    }
+
+    .stack-avatar-2 {
+      margin-left: -10px;
+      z-index: 1;
+    }
+
     .tooltip-container {
       border: 1px solid rgba($tc-black, 0.2);
       border-radius: 5px;

@@ -1,26 +1,9 @@
 @import 'tc-includes';
 
-.stack-avatar-0 {
+.stack-avatar {
   position: relative;
   display: block;
   float: left;
-  z-index: 3;
-}
-
-.stack-avatar-1 {
-  position: relative;
-  display: block;
-  float: left;
-  left: -10px;
-  z-index: 2;
-}
-
-.stack-avatar-2 {
-  position: relative;
-  display: block;
-  float: left;
-  left: -20px;
-  z-index: 1;
 }
 
 .plus-user {
