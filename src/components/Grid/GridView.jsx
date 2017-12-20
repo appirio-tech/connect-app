@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import ListHeader from './ListHeader'
 import ListItem from './ListItem'
 import PaginationBar from './PaginationBar'
+import Placeholder from './Placeholder'
 import InfiniteScroll from 'react-infinite-scroller'
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator'
 import { PROJECTS_LIST_PER_PAGE } from '../../config/constants'
@@ -15,7 +16,7 @@ const GridView = props => {
   const headerProps = { columns, sortHandler, currentSortField }
 
   const renderItem = (item, index) => {
-    return <ListComponent columns={columns} item={item} key={index}/>
+    return item.isPlaceholder ? <Placeholder columns={columns} /> : <ListComponent columns={columns} item={item} key={index}/>
   }
 
   const handleLoadMore = () => {
@@ -48,7 +49,12 @@ const GridView = props => {
 
   const renderGridWithInfiniteScroll = () => {
     const hasMore = currentPageNum * PROJECTS_LIST_PER_PAGE < totalCount
-
+    const placeholders = []
+    if (isLoading & hasMore) {
+      for (let i = 0; i < PROJECTS_LIST_PER_PAGE; i++) {
+        placeholders.push({ isPlaceholder: true })
+      }
+    }
     return (
       isLoading && currentPageNum === 1 ? (
         <LoadingIndicator />
@@ -61,16 +67,16 @@ const GridView = props => {
                 <InfiniteScroll
                   initialLoad={false}
                   pageStart={currentPageNum}
-                  loadMore={infiniteAutoload ? onPageChange : () => {}}
+                  loadMore={infiniteAutoload && !isLoading ? onPageChange : () => {}}
                   hasMore={hasMore}
                   threshold={500}
                 >
-                  {resultSet.map(renderItem)}
+                  {[...resultSet, ...placeholders].map(renderItem)}
                 </InfiniteScroll>
               </div>
             </div>
           </div>
-          { isLoading && <LoadingIndicator /> }
+          { false && isLoading && <LoadingIndicator /> }
           { !isLoading && !infiniteAutoload && hasMore &&
             <div className="gridview-load-more">
               <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore} key="loadMore">Load more projects</button>
