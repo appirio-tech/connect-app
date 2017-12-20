@@ -7,7 +7,6 @@ const ProjectManagerAvatars = ({ managers }) => {
   let extM = false
   if (!managers || !managers.length)
     return <div className="user-block txt-italic">Unclaimed</div>
-  managers.push(managers[0])
   if (managers.length > 3) {
     extM = managers.length - 3
     managers.length = 3
