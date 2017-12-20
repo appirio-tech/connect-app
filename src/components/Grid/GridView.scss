@@ -43,6 +43,11 @@
     display: -webkit-flex;
     display: flex;
     position: relative;
+    transition: 200ms all;
+
+    &:hover {
+      background-color: rgba($tc-dark-blue-10, .5);
+    }
 
     .flex-item-title,
     .flex-item {
@@ -119,6 +124,11 @@
     background: $tc-gray-neutral-light;
     height: 70px;
     border-radius: 6px 6px 0 0;
+    user-select: none;
+
+    &:hover {
+      background-color: rgba($tc-gray-10, .5);
+    }
   }
 
   .mask-layer {
@@ -519,7 +529,7 @@
       display: block;
     }
 
-    .flex-row {
+    .flex-59 {
       .flex-item-title .spacing,
       .flex-item .spacing {
         padding-top: 5px;

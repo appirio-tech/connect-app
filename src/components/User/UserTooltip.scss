@@ -4,10 +4,16 @@
   &.customer-data {
     .tooltip-container {
       border: 1px solid rgba($tc-black, 0.2);
-      -webkit-border-radius: 5px;
-      -moz-border-radius: 5px;
       border-radius: 5px;
       box-shadow: 0 0 10px rgba($tc-black, 0.2);
+      transition-delay: 400ms !important;
+      transition-duration: 150ms !important;
+      transition-easing: ease-in-out;
+
+      &:hover {
+        transition-dealy: 0 !important;
+        transition-duration: 0 !important;
+      }
     }
 
     .tooltip-content-container {

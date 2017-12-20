@@ -28,7 +28,8 @@ const getIcon = icon => {
   }
 }
 
-const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog, isRequired}) => {
+// { isRequired, represents the overall questions section's compulsion, is also available}
+const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog }) => {
 
   const renderQ = (q, index) => {
     // let child = null
@@ -159,7 +160,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
-        required={isRequired}
+        required={q.required || (q.validations && q.validations.indexOf('isRequired') !== -1)}
         hideDescription={elemProps.hideDescription}
       >
         <ChildElem {...elemProps} />

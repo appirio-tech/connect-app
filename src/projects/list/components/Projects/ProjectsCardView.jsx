@@ -6,6 +6,7 @@ import NewProjectCard from './NewProjectCard'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import { PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
 import { setDuration } from '../../../../helpers/projectHelper'
+import { PROJECT_LIST_PAGE_SIZE } from '../../../../config/constants'
 
 require('./ProjectsGridView.scss')
 

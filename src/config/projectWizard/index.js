@@ -144,6 +144,44 @@ const products = {
       }
     }
   },
+  'Analytics & Data Science': {
+    icon: 'product-cat-analytics',
+    info: 'Algorithm optimization, analtytics & data science projects',
+    question: 'What type of analytics project are you interested in?',
+    id: 'analytics',
+    aliases: ['all-analytics'],
+    hidden: false,
+    subtypes: {
+      'Computer Vision': {
+        brief: 'TBD',
+        details: 'Recognize patters in images, compute correspondences, etc.',
+        icon: 'product-analytics-computer-vision',
+        id: 'computer_vision',
+        aliases: ['computer-vision', 'computer_vision']
+      },
+      // 'Algorithm Optimization': {
+      //   brief: 'TBD',
+      //   details: 'Boost the performance of an existing or new algorithm',
+      //   icon: 'product-analytics-algorithm-optimization',
+      //   id: 'algorithm_optimization',
+      //   aliases: ['algorithm_optimization', 'algorithm-optimization', 'algo_optimization']
+      // },
+      // 'Predictive Analytics': {
+      //   brief: 'TBD',
+      //   details: 'Model trends and predict outcomes via set of data and objectives',
+      //   icon: 'product-analytics-predictive-analytics',
+      //   id: 'predictive-analytics',
+      //   aliases: ['predictive-analytics', 'predictive_analytics']
+      // },
+      'Data Exploration': {
+        brief: 'TBD',
+        details: 'Review your data, extrapolate patterns, and suggest solutions',
+        icon: 'product-analytics-data-exploration',
+        id: 'data_exploration',
+        aliases: ['data-exploration', 'data_exploration']
+      }
+    }
+  },
   QA: {
     icon: 'product-cat-qa',
     info: 'Test and fix bugs in your software',
@@ -165,12 +203,28 @@ const products = {
         id: 'mobility_testing',
         aliases: ['mobility-testing', 'mobility_testing']
       },
+      'Performance Tuning': {
+        brief: 'TBD',
+        details: 'Submit your JVM based application for performance tuning recommendations',
+        icon: 'product-qa-website-performance',
+        id: 'performance_tuning',
+        aliases: ['performance-tuning', 'performance_tuning'],
+        hidden: false
+      },
       'Performance Testing': {
         brief: 'TBD',
         details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
         icon: 'product-qa-website-performance',
         id: 'performance_testing',
-        aliases: ['performance-testing', 'performance_testing']
+        aliases: ['performance-testing', 'performance_testing'],
+        hidden: true
+      },
+      'Health Security Check': {
+        brief: 'TBD',
+        details: 'Measure your code base against our security baseline using the crowd and tooling ',
+        icon: 'product-qa-health-check',
+        id: 'health_check',
+        aliases: ['health-check', 'health_check'  ]
       },
       'Digital Accessibility': {
         brief: 'TBD',
