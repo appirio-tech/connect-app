@@ -57,6 +57,37 @@ const products = {
         icon: 'product-chatbot-chatbot',
         id: 'generic_chatbot',
         aliases: ['chatbot', 'generic_chatbot']
+      },
+      'Computer Vision': {
+        brief: 'TBD',
+        details: 'Work with images to recognize patterns, compute correspondences, etc',
+        icon: 'product-qa-crowd-testing',
+        id: 'computer_vision',
+        aliases: ['computer-vision', 'computer_vision'],
+        hidden : true
+      }, /*,
+      'Algorithm Optimization': {
+        brief: 'TBD',
+        details: 'Boost the performance (speed or accuracy) of an existing or new algorithm',
+        icon: 'product-qa-crowd-testing',
+        id: 'algorithm_optimization',
+        aliases: ['algorithm_optimization', 'algorithm-optimization', 'algo_optimization']
+      },
+      'Predictive Analytics': {
+        brief: 'TBD',
+        details: 'Starting with a set of data and well-defined objectives, model trends and predict outcomes',
+        icon: 'product-qa-crowd-testing',
+        id: 'predictive-analytics',
+        aliases: ['predictive-analytics', 'predictive_analytics']
+      },
+      */
+      'Data Exploration': {
+        brief: 'TBD',
+        details: 'Ask a crowd of experts to look at your data, understand your goals, and suggest solutions',
+        icon: 'product-qa-crowd-testing',
+        id: 'data_exploration',
+        aliases: ['data-exploration', 'data_exploration'],
+        hidden  : true 
       }
     }
   },
@@ -252,6 +283,47 @@ const products = {
       }
     }
   }
+
+  /*
+  Analytics: {
+    icon: 'product-cat-qa',
+    info: 'Test and fix bugs in your software',
+    question: 'What kind of quality assurance (QA) do you need?',
+    id: 'analytics',
+    aliases: ['all-analytics'],
+    hidden: true,
+    subtypes: {
+      'Computer Vision': {
+        brief: 'TBD',
+        details: 'Work with images to recognize patterns, compute correspondences, etc',
+        icon: 'product-qa-crowd-testing',
+        id: 'computer_vision',
+        aliases: ['computer-vision', 'computer_vision']
+      },
+      'Algorithm Optimization': {
+        brief: 'TBD',
+        details: 'Boost the performance (speed or accuracy) of an existing or new algorithm',
+        icon: 'product-qa-crowd-testing',
+        id: 'algorithm_optimization',
+        aliases: ['algorithm_optimization', 'algorithm-optimization', 'algo_optimization']
+      },
+      'Predictive Analytics': {
+        brief: 'TBD',
+        details: 'Starting with a set of data and well-defined objectives, model trends and predict outcomes',
+        icon: 'product-qa-crowd-testing',
+        id: 'predictive-analytics',
+        aliases: ['predictive-analytics', 'predictive_analytics']
+      },
+      'Data Exploration': {
+        brief: 'TBD',
+        details: 'Ask a crowd of experts to look at your data, understand your goals, and suggest solutions',
+        icon: 'product-qa-crowd-testing',
+        id: 'data-exploration',
+        aliases: ['data-exploration', 'data_exploration']
+      }
+    }
+  }
+  */
 }
 
 export default products
