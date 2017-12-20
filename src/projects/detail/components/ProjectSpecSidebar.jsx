@@ -9,7 +9,7 @@ import { updateProject } from '../../actions/project'
 import './ProjectSpecSidebar.scss'
 
 const calcProgress = (project, subSection) => {
-  if (subSection.id === 'questions') {
+  if (subSection.type === 'questions') {
     const vals = _.map(subSection.questions, (q) => {
       const fName = q.fieldName
       // special handling for seeAttached type of fields
@@ -21,7 +21,11 @@ const calcProgress = (project, subSection) => {
     })
     let count = 0
     _.forEach(vals, (v) => {if (v) count++ })
-    return [count, subSection.questions.length]
+    // Github issue#1399, filtered only required questions to set expected length of valid answers
+    const filterRequiredQuestions = (q) => (
+      q.required || (q.validations && q.validations.indexOf('isRequired') !== -1)
+    )
+    return [count, _.filter(subSection.questions, filterRequiredQuestions).length]
   } else if (subSection.id === 'screens') {
     const screens = _.get(project, 'details.appScreens.screens', [])
     const validScreens = screens.filter((s) => {

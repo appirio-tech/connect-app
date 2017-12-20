@@ -8,7 +8,7 @@ import GridView from '../../../../components/Grid/GridView'
 
 import UserWithName from '../../../../components/User/UserWithName'
 import { findCategory } from '../../../../config/projectWizard'
-import { PROJECT_STATUS } from '../../../../config/constants'
+import { PROJECT_STATUS, PROJECT_LIST_PAGE_SIZE } from '../../../../config/constants'
 
 require('./ProjectsGridView.scss')
 
@@ -188,7 +188,7 @@ const ProjectsGridView = props => {
     resultSet: projects,
     totalCount,
     currentPageNum: pageNum,
-    pageSize: 20
+    pageSize: PROJECT_LIST_PAGE_SIZE
   }
 
   return (

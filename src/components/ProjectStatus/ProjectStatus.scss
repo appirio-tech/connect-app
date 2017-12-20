@@ -151,7 +151,15 @@ $status-height :  20px;
         color: $tc-white;
       }
     }
-  } 
+  }
+
+  .status-label {
+    position: relative;
+    @include tc-label-xs;
+    height: $base-unit*4;
+    padding-right: 4 * $base-unit;
+    margin-left: 10px;
+  }
 
   .status-dropdown {
     min-width: 110%;

@@ -217,6 +217,7 @@ export const EVENT_ROUTE_CHANGE = 'event.route_change'
 export const ROLE_TOPCODER_USER = 'Topcoder User'
 export const ROLE_CONNECT_COPILOT = 'Connect Copilot'
 export const ROLE_CONNECT_MANAGER = 'Connect Manager'
+export const ROLE_CONNECT_ADMIN = 'Connect Admin'
 export const ROLE_ADMINISTRATOR = 'administrator'
 
 // FIXME .. remove defaults
@@ -268,3 +269,9 @@ export const GA_CLIENT_ID = '_gacid'
 
 // ToolTip
 export const TOOLTIP_DEFAULT_DELAY = 300 // in ms
+
+/*
+  * Project listing page size - maximum value can be 20 due to max 20 records
+  * restriction at back-end api end.
+*/
+export const PROJECT_LIST_PAGE_SIZE = 20

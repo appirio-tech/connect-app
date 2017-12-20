@@ -4,8 +4,8 @@ import InfiniteScroll from 'react-infinite-scroller'
 import ProjectCard from './ProjectCard'
 import NewProjectCard from './NewProjectCard'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
-
 import { setDuration } from '../../../../helpers/projectHelper'
+import { PROJECT_LIST_PAGE_SIZE } from '../../../../config/constants'
 
 require('./ProjectsGridView.scss')
 
@@ -41,7 +41,7 @@ const ProjectsCardView = props => {
   const handleLoadMore = () => {
     onPageChange(pageNum + 1)
   }
-  const hasMore = ((pageNum - 1) * 20 + 20 < totalCount)
+  const hasMore = ((pageNum - 1) * PROJECT_LIST_PAGE_SIZE + PROJECT_LIST_PAGE_SIZE < totalCount)
   return (
     <div className="projects card-view">
       { !!inifinite && 

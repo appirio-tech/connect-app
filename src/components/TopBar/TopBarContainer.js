@@ -10,6 +10,7 @@ import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_MANAGER,
   ROLE_ADMINISTRATOR,
+  ROLE_CONNECT_ADMIN,
   DOMAIN
 } from '../../config/constants'
 require('./TopBarContainer.scss')
@@ -122,7 +123,7 @@ class TopBarContainer extends React.Component {
 
 const mapStateToProps = ({ loadUser }) => {
   let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
+  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   if (loadUser.user) {
     isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
   }

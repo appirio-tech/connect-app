@@ -15,7 +15,7 @@ function AvatarGroup({ users }) {
   }
   return (
     <div className="AvatarGroup">
-      { users.map(renderAvatar) }
+      { _.uniqBy(users, 'userId').map(renderAvatar) }
     </div>
   )
 }
