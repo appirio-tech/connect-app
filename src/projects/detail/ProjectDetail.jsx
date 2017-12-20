@@ -7,7 +7,7 @@ import { renderComponent, branch, compose, withProps } from 'recompose'
 import { loadProjectDashboard } from '../actions/projectDashboard'
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
-  ROLE_ADMINISTRATOR
+  ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN
 } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
@@ -71,7 +71,7 @@ class ProjectDetail extends Component {
 
   render() {
     const currentMemberRole = this.getProjectRoleForCurrentUser(this.props)
-    const powerRoles = [ROLE_ADMINISTRATOR]
+    const powerRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
     const isSuperUser = this.props.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
     return (
       <EnhancedProjectDetailView

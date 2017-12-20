@@ -61,7 +61,7 @@ const TeamManagement = (props) => {
   return (
     <div className="team-management">
       <Panel className={cn({'modal-active': modalActive})}>
-        {currentMember && <Panel.AddBtn onClick={() => onToggleAddTeamMember(true)}>Add Team Member</Panel.AddBtn>}
+        {(currentMember || currentUser.isAdmin) && <Panel.AddBtn onClick={() => onToggleAddTeamMember(true)}>Add Team Member</Panel.AddBtn>}
 
         {modalActive && <div className="modal-overlay" />}
         <Panel.Title>
@@ -114,7 +114,7 @@ const TeamManagement = (props) => {
         })}
 
         {canJoin && <Join {...props} isCopilot={currentUser.isCopilot} owner={owner} />}
-        {currentMember && <AddTeamMember {...props} owner={owner} />}
+        {(currentMember || currentUser.isAdmin) && <AddTeamMember {...props} owner={owner} />}
 
         { showNewMemberConfirmation && <NewMemberConfirmModal onConfirm={ _onAddNewMember } onCancel={ _onAddMemberCancel } />}
       </Panel>

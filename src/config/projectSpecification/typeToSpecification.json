@@ -20,5 +20,6 @@
   "computer_vision": "computer_vision.v1.0",
   "data_exploration": "data_exploration.v1.0",
   "api_dev": "app_dev.v1.0",
+  "health_check": "health_check.v1.0",
   "frontend_dev" : "app_dev.v1.0"
 }
