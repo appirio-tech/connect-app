@@ -19,7 +19,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-draft {
+  &.ps-draft {
     .status-icon {
       i {
         background: url('../../assets/images/ps-draft.svg') no-repeat -7px -4px;
@@ -28,7 +28,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-in_review {
+  &.ps-in_review {
     .status-icon {
       i {
         background: url('../../assets/images/ps-in_review.svg') no-repeat -7px -4px;
@@ -37,7 +37,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-reviewed {
+  &.ps-reviewed {
     .status-icon {
       i {
         background: url('../../assets/images/ps-reviewed.svg') no-repeat -7px -4px;
@@ -46,7 +46,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-active {
+  &.ps-active {
     .status-icon {
       i {
         background: url('../../assets/images/ps-active.svg') no-repeat;
@@ -55,7 +55,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-cancelled {
+  &.ps-cancelled {
     .status-icon {
       i {
         background: url('../../assets/images/ps-cancelled.svg') no-repeat -7px -4px;
@@ -64,7 +64,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-completed {
+  &.ps-completed {
     .status-icon {
       i {
         background: url('../../assets/images/ps-completed.svg') no-repeat -7px -4px;
@@ -73,7 +73,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-paused {
+  &.ps-paused {
     .status-icon {
       i {
         background: url('../../assets/images/ps-paused.svg') no-repeat -7px -4px;
@@ -82,6 +82,21 @@ $status-height :  20px;
     }
   }
 
+  .status-label {
+    position: relative;
+    @include tc-label-xs;
+    line-height: $base-unit*4;
+    height: $base-unit*4;
+    padding-right: 4 * $base-unit;
+    margin-left: 10px;
+  }
+}
+
+.EditableProjectStatus {
+
+  .status-label {
+    vertical-align: top;
+  }
   .status-header {
     display: flex;
     // position: absolute;
