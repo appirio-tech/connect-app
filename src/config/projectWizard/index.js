@@ -87,7 +87,7 @@ const products = {
         icon: 'product-qa-crowd-testing',
         id: 'data_exploration',
         aliases: ['data-exploration', 'data_exploration'],
-        hidden  :true
+        hidden  : true 
       }
     }
   },
@@ -230,6 +230,7 @@ const products = {
       }
     }
   }
+
   /*
   Analytics: {
     icon: 'product-cat-qa',
