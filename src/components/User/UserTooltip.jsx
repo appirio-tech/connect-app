@@ -6,13 +6,19 @@ import { DOMAIN } from '../../../config/constants'
 
 require('./UserTooltip.scss')
 
-const UserTooltip = ({ usr, id }) => {
+const UserTooltip = ({ usr, id, previewAvatar }) => {
   const rating = _.get(usr, 'maxRating.rating', 0)
-
+  const theme = `customer-data level-${id}`
+  const tooltipMargin = previewAvatar ? -(100 + (id * 20)) : 0
   return (
-    <Tooltip theme="customer-data" pointerWidth={20}>
+    <Tooltip theme={theme} pointerWidth={20} tooltipMargin={tooltipMargin}>
       <div className="tooltip-target" id={`tt-${id}`}>
-        <span className="project-customer">{usr.firstName} {usr.lastName}</span>
+        {
+          previewAvatar ? (<div className={`stack-avatar-${id}`}>
+            <UserAvatar rating={0} showLevel={false} photoURL={usr.photoURL} />
+          </div>) :
+          <span className="project-customer">{usr.firstName} {usr.lastName}</span>
+        }
       </div>
       <div className="tooltip-body">
         <div className="top-container">
@@ -43,7 +49,12 @@ UserTooltip.propTypes = {
   id: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number
-  ]).isRequired
+  ]).isRequired,
+  previewAvatar: PropTypes.bool
+}
+
+UserTooltip.defaultProps = {
+  previewAvatar: false
 }
 
 export default UserTooltip
