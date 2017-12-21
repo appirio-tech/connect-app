@@ -164,8 +164,8 @@ export const NOTIFICATIONS = [
   {
     eventType: 'notifications.connect.project.post.created',
     type: NOTIFICATION_TYPE.NEW_POSTS,
-    text: '<strong>[Who]</strong> responded to your post',
-    toUserHandle: true,
+    text: '<strong>[userHandle]</strong> responded to your post',
+    toTopicStarter: true,
     goTo: GOTO.POST
   }, {
     eventType: 'notifications.connect.project.post.created',

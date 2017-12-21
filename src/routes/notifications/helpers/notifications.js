@@ -128,11 +128,19 @@ const renderTemplate = (templateStr, values) => {
  *
  * @param  {Object} notification notification
  *
- * @return {Object}              notification tule
+ * @return {Object}              notification rule
  */
 const getNotificationRule = (notification) => {
   const notificationRule = _.find(NOTIFICATIONS, (_notificationRule) => {
     let match = _notificationRule.eventType === notification.eventType
+
+    if (notification.contents.toTopicStarter) {
+      match = match && _notificationRule.toTopicStarter
+    }
+
+    if (notification.contents.toUserHandle) {
+      match = match && _notificationRule.toUserHandle
+    }
 
     if (notification.contents.projectRole) {
       match = match && _notificationRule.projectRoles && _.includes(_notificationRule.projectRoles, notification.contents.projectRole)
@@ -140,10 +148,6 @@ const getNotificationRule = (notification) => {
 
     if (notification.contents.topcoderRole) {
       match = match && _notificationRule.topcoderRoles && _.includes(_notificationRule.topcoderRoles, notification.contents.topcoderRole)
-    }
-
-    if (notification.contents.toUserHandle) {
-      match = match && _notificationRule.toUserHandle
     }
 
     return match
