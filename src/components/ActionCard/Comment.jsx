@@ -49,6 +49,8 @@ class Comment extends React.Component {
 
   render() {
     const {message, avatarUrl, authorName, date, edited, children, active, self, isSaving, hasError, readonly} = this.props
+    const messageAnchor = `comment-${message.id}`
+    const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#${messageAnchor}`
 
     if (this.state.editMode) {
       const content = message.newContent === null || message.newContent === undefined ? message.rawContent : message.newContent
@@ -73,7 +75,7 @@ class Comment extends React.Component {
 
     return (
       <Panel.Body active={active} className="comment-panel-body">
-        <div className="portrait">
+        <div className="portrait" id={messageAnchor}>
           <Avatar avatarUrl={avatarUrl} userName={authorName} />
         </div>
         <div className={cn('object comment', {self})}>
@@ -82,7 +84,7 @@ class Comment extends React.Component {
               {authorName}
             </div>
             <div className="card-time">
-              {date} {edited && '• Edited'}
+              <Link to={messageLink}>{date}</Link> {edited && '• Edited'}
             </div>
             {self && !readonly &&
               <CommentEditToggle

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { withProps } from 'recompose'
-import App from '../components/App/App'
+import { renderApp } from '../components/App/App'
 import ProjectLayout from './ProjectLayout'
 import Projects from './list/components/Projects/Projects'
 import TopBarContainer from '../components/TopBar/TopBarContainer'
@@ -12,10 +12,6 @@ import Dashboard     from './detail/Dashboard'
 import ProjectMessages from './detail/Messages'
 import SpecificationContainer from './detail/containers/SpecificationContainer'
 import { requiresAuthentication } from '../components/AuthenticatedComponent'
-
-const renderApp = (topbar, content) => () => (
-  <App {...{topbar, content}} />
-)
 
 const ProjectLayoutWithAuth = requiresAuthentication(ProjectLayout)
 

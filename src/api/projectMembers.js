@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
-import { TC_API_URL, CONNECT_MESSAGE_API_URL } from '../config/constants'
+import { TC_API_URL, PROJECTS_API_URL, CONNECT_MESSAGE_API_URL } from '../config/constants'
 
 export function getMembersById (userIds) {
   const _userIdArr = _.map(userIds, _id => `userId:${_id}`)
@@ -26,7 +26,7 @@ export function loadMemberSuggestions(value) {
 
 
 export function addProjectMember(projectId, newMember) {
-  const url = `${TC_API_URL}/v4/projects/${projectId}/members/`
+  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/`
   return axios.post(url, { param: newMember})
   .then(resp => {
     return axios.put(`${CONNECT_MESSAGE_API_URL}/v4/topics/syncUsers`,
@@ -37,7 +37,7 @@ export function addProjectMember(projectId, newMember) {
 
 
 export function updateProjectMember(projectId, memberId, updatedProps) {
-  const url = `${TC_API_URL}/v4/projects/${projectId}/members/${memberId}/`
+  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/${memberId}/`
   return axios.patch(url, { param: updatedProps })
   .then(resp => {
     return resp.data.result.content
@@ -45,7 +45,7 @@ export function updateProjectMember(projectId, memberId, updatedProps) {
 }
 
 export function removeProjectMember(projectId, memberId, isUserLeaving) {
-  const url = `${TC_API_URL}/v4/projects/${projectId}/members/${memberId}/`
+  const url = `${PROJECTS_API_URL}/v4/projects/${projectId}/members/${memberId}/`
   let promise = { then: fn => fn() }
   if (isUserLeaving) {
     promise = axios.put(`${CONNECT_MESSAGE_API_URL}/v4/topics/syncUsers`,

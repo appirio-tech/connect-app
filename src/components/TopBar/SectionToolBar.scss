@@ -1,0 +1,78 @@
+// this is to include tc styles in the output library
+@import 'tc-includes';
+
+.section-tool-bar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+
+  > .section {
+    align-items: center;
+    display: flex;
+  }
+
+  .title {
+    @include roboto-light;
+    font-size: 20px;
+    color: $tc-gray-10;
+    text-align: center;
+  }
+
+  > .section > .title {
+    margin-left: 24px;
+  }
+
+  .close {
+    align-items: center;
+    background-color: $tc-gray-50;
+    border-radius: 29px;
+    display: flex;
+    height: 30px;
+    justify-content: center;
+    width: 30px;
+
+    &:hover {
+      background-color: #55a5ff;
+
+      > svg {
+        fill: $tc-white;
+      }
+    }
+
+    > svg {
+      fill: $tc-black;
+    }
+  }
+
+  > .section > .menu {
+    margin-right: 30px;
+
+    > a {
+      @include roboto-medium;
+      color: $tc-gray-50;
+      font-size: 13px;
+      line-height: 20px;
+      margin-left: 40px;
+
+      &.active,
+      &:hover {
+        color: $tc-white;
+      }
+    }
+  }
+
+  .logo {
+    align-items: center;
+    display: flex;
+
+    > svg {
+      height: auto;
+      width: 53px;
+
+      path {
+        fill: $tc-gray-10;
+      }
+    }
+  }
+}

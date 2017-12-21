@@ -2,12 +2,13 @@ require('./ProjectsToolBar.scss')
 
 import React, {PropTypes, Component} from 'react'
 import querystring from 'query-string'
-import { withRouter, Prompt } from 'react-router-dom'
+import { Link, withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'lodash'
 import { SearchBar, MenuBar, SwitchButton } from 'appirio-tech-react-components'
 import Filters from './Filters'
+import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
 
 import { projectSuggestions, loadProjects, setInfiniteAutoload } from '../../projects/actions/loadProjects'
@@ -212,6 +213,7 @@ class ProjectsToolBar extends Component {
             }
             { !!isLoggedIn && <NewProjectNavLink compact /> }
             { userMenu }
+	    { isLoggedIn && <NotificationsDropdown /> }
           </div>
         </div>
         <div className="secondary-toolbar">

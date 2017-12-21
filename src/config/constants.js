@@ -6,6 +6,34 @@
 export const LOAD_USER_SUCCESS     = 'LOAD_USER_SUCCESS'
 export const LOAD_USER_FAILURE     = 'LOAD_USER_FAILURE'
 
+// Notifications
+export const GET_NOTIFICATIONS = 'GET_NOTIFICATIONS'
+export const SET_NOTIFICATIONS_FILTER_BY = 'SET_NOTIFICATIONS_FILTER_BY'
+export const MARK_ALL_NOTIFICATIONS_READ = 'MARK_ALL_NOTIFICATIONS_READ'
+export const TOGGLE_NOTIFICATION_READ = 'TOGGLE_NOTIFICATION_READ'
+export const VIEW_OLDER_NOTIFICATIONS_SUCCESS = 'VIEW_OLDER_NOTIFICATIONS_SUCCESS'
+export const NOTIFICATIONS_PENDING = 'NOTIFICATIONS_PENDING'
+
+// Settings
+export const CHECK_EMAIL_AVAILABILITY_PENDING = 'CHECK_EMAIL_AVAILABILITY_PENDING'
+export const CHECK_EMAIL_AVAILABILITY_SUCCESS = 'CHECK_EMAIL_AVAILABILITY_SUCCESS'
+export const CHECK_EMAIL_AVAILABILITY_FAILURE = 'CHECK_EMAIL_AVAILABILITY_FAILURE'
+
+export const CHANGE_EMAIL_PENDING = 'CHANGE_EMAIL_PENDING'
+export const CHANGE_EMAIL_SUCCESS = 'CHANGE_EMAIL_SUCCESS'
+export const CHANGE_EMAIL_FAILURE = 'CHANGE_EMAIL_FAILURE'
+
+export const CHANGE_PASSWORD_PENDING = 'CHANGE_PASSWORD_PENDING'
+export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS'
+export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE'
+
+export const GET_NOTIFICATION_SETTINGS_PENDING = 'GET_NOTIFICATION_SETTINGS_PENDING'
+export const GET_NOTIFICATION_SETTINGS_SUCCESS = 'GET_NOTIFICATION_SETTINGS_SUCCESS'
+export const GET_NOTIFICATION_SETTINGS_FAILURE = 'GET_NOTIFICATION_SETTINGS_FAILURE'
+export const SAVE_NOTIFICATION_SETTINGS_PENDING = 'SAVE_NOTIFICATION_SETTINGS_PENDING'
+export const SAVE_NOTIFICATION_SETTINGS_SUCCESS = 'SAVE_NOTIFICATION_SETTINGS_SUCCESS'
+export const SAVE_NOTIFICATION_SETTINGS_FAILURE = 'SAVE_NOTIFICATION_SETTINGS_FAILURE'
+
 // Search Term
 export const SET_SEARCH_TERM   = 'SET_SEARCH_TERM'
 export const SET_SEARCH_TAG    = 'SET_SEARCH_TAG'
@@ -198,6 +226,14 @@ export const PROJECT_STATUS = [
   {color: 'red', name: 'Paused', fullName: 'Project is paused', value: PROJECT_STATUS_PAUSED }
 ]
 
+export const NOTIFICATION_TYPE = {
+  WARNING: 'warning',
+  NEW_PROJECT: 'new-project',
+  UPDATES: 'updates',
+  NEW_POSTS: 'new-posts',
+  REVIEW_PENDING: 'review-pending',
+  MEMBER_ADDED: 'member-added'
+}
 
 /*
  * Project member role
@@ -206,6 +242,7 @@ export const PROJECT_ROLE_COPILOT = 'copilot'
 export const PROJECT_ROLE_MANAGER = 'manager'
 export const PROJECT_ROLE_CUSTOMER = 'customer'
 export const PROJECT_ROLE_OWNER = 'owner'
+export const PROJECT_ROLE_MEMBER = 'member' // this is need for notifications
 
 /*
  * Events
@@ -260,6 +297,8 @@ export const MAINTENANCE_MODE = false
 
 export const LS_INCOMPLETE_PROJECT = 'incompleteProject'
 
+
+export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
 export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL
 
 export const NEW_PROJECT_PATH = '/new-project'
@@ -311,3 +350,20 @@ export const SORT_OPTIONS = [
   { val: 'createdAt', field: 'createdAt' },
   { val: 'createdAt desc', field: 'createdAt' }
 ]
+
+// Notifications
+export const NOTIFCATIONS_DROPDOWN_PER_SOURCE = 2
+export const NOTIFCATIONS_DROPDOWN_MAX_TOTAL = 10
+
+export const NOTIFICATIONS_LIMIT = 1000
+// old notification time in minutes, a notification is old if its date is later than this time
+export const OLD_NOTIFICATION_TIME = 60 * 48 // 2 day2
+
+export const SCROLL_TO_MARGIN = 70 // px - 60px of toolbar height + 10px to make sume margin
+export const SCROLL_TO_DURATION = 500 // ms
+
+// Settings
+export const MAX_USERNAME_LENGTH = 15
+export const EMAIL_AVAILABILITY_CHECK_DEBOUNCE = 300 /* in ms */
+export const PASSWORD_MIN_LENGTH = 8
+export const PASSWORD_REG_EXP = /^(?=.*[a-z])(?=.*[^a-z]).+$/i
