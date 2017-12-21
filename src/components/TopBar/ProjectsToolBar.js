@@ -2,7 +2,7 @@ require('./ProjectsToolBar.scss')
 
 import React, {PropTypes, Component} from 'react'
 import querystring from 'query-string'
-import { Link, withRouter, Prompt } from 'react-router-dom'
+import { withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'lodash'
@@ -213,7 +213,7 @@ class ProjectsToolBar extends Component {
             }
             { !!isLoggedIn && <NewProjectNavLink compact /> }
             { userMenu }
-	    { isLoggedIn && <NotificationsDropdown /> }
+            { isLoggedIn && <NotificationsDropdown /> }
           </div>
         </div>
         <div className="secondary-toolbar">
