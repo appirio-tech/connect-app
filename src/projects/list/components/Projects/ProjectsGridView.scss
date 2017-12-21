@@ -37,8 +37,9 @@
 
     .item-status {
       flex: none;
-      min-width: 40px;
-      width: 40px;
+      min-width: 55px;
+      padding-right: 20px;
+      // width: 40px;
       position: relative;
 
       .modal-active {
