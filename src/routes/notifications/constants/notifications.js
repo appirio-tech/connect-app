@@ -7,9 +7,9 @@ import {
 const GOTO = {
   PROJECT_DASHBOARD: '/projects/[projectId]',
   PROJECT_SPECIFICATION: '/projects/[projectId]/specification',
-  TOPIC: '/projects/[projectId]/#feed=[topicId]', // use with anchor for now
-  POST: '/projects/[projectId]/#feed=[topicId]', // same as topic for now
-  FILE_LIST: '/projects/[projectId]' // same as dashboard for now
+  TOPIC: '/projects/[projectId]/#feed-[topicId]',
+  POST: '/projects/[projectId]/#comment-[postId]',
+  FILE_LIST: '/projects/[projectId]/specification#appDefinition-files'
 }
 
 export const NOTIFICATIONS = [
@@ -164,8 +164,8 @@ export const NOTIFICATIONS = [
   {
     eventType: 'notifications.connect.project.post.created',
     type: NOTIFICATION_TYPE.NEW_POSTS,
-    text: '<strong>[Who]</strong> responded to your post',
-    toUserHandle: true,
+    text: '<strong>[userHandle]</strong> responded to your post',
+    toTopicStarter: true,
     goTo: GOTO.POST
   }, {
     eventType: 'notifications.connect.project.post.created',

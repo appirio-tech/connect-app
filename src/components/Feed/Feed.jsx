@@ -40,7 +40,7 @@ class Feed extends React.Component {
 
   render() {
     const {
-      user, currentUser, date, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
+      id, user, currentUser, date, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
       allowComments, comments, unread, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
       onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, permalink
     } = this.props
@@ -74,7 +74,7 @@ class Feed extends React.Component {
         )}
         {!editTopicMode && (
         <Panel.Body className={cn({active: unread})}>
-          <div className="portrait">
+          <div className="portrait" id={`feed-${id}`}>
             <Avatar avatarUrl={user.photoURL} userName={authorName} />
           </div>
           <div className="object topicBody">

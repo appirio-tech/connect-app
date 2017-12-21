@@ -55,6 +55,10 @@
       }
     }
 
+    tbody > tr:last-child {
+      border-bottom: 1px solid $tc-gray-50;
+    }
+
     .fixed-value {
       @include roboto-medium;
       background-color: $tc-gray-40;
@@ -108,5 +112,24 @@
   > .controls {
     margin-top: 10px;
     text-align: center;
+  }
+
+  > .email-settings {
+    @include roboto;
+    margin: 20px 0;
+
+    a {
+      text-decoration: underline;
+    }
+    // Link colors
+    a:link,
+    a:visited {
+      color: $tc-dark-blue;
+    }
+
+    a:hover,
+    a:active {
+      color: $tc-dark-blue-70;
+    }
   }
 }

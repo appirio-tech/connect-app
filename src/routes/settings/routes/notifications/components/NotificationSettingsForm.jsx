@@ -139,7 +139,8 @@ class NotificationSettingsForm extends React.Component {
             <tr>
               <th>Notifications</th>
               <th><span className="th-with-icon"><img src={iconWeb} /><span>Web</span></span></th>
-              <th><span className="th-with-icon"><img src={iconMail} /><span>Email</span></span></th>
+              {/* as email notification currently not supported, hide them for now */}
+              {/*<th><span className="th-with-icon"><img src={iconMail} /><span>Email</span></span></th>*/}
             </tr>
           </thead>
           <tbody>
@@ -149,7 +150,8 @@ class NotificationSettingsForm extends React.Component {
                 <tr key={topic}>
                   <th>{title}</th>
                   <td><SwitchButton onChange={() => this.handleChange(topic, 'web')} defaultChecked={settings[topic] && settings[topic].web === 'yes'} /></td>
-                  <td><SwitchButton onChange={() => this.handleChange(topic, 'email')} defaultChecked={settings[topic] && settings[topic].email === 'yes'} /></td>
+                  {/* as email notification currently not supported, hide them for now */}
+                  {/*<td><SwitchButton onChange={() => this.handleChange(topic, 'email')} defaultChecked={settings[topic] && settings[topic].email === 'yes'} /></td>*/}
                 </tr>
               )
             })}
@@ -173,6 +175,10 @@ class NotificationSettingsForm extends React.Component {
             }
           </tbody>
         </table>
+
+        <div className="email-settings">
+          <a href="https://www.topcoder.com/settings/email/">Manage email settings</a>
+        </div>
 
         <div className="controls">
           <button type="submit" className="tc-btn tc-btn-primary" disabled={this.props.values.pending}>Save settings</button>
