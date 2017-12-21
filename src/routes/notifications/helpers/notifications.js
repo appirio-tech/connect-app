@@ -175,8 +175,6 @@ export const prepareNotifications = (rowNotifications) => {
     contents: rowNotification.contents
   })).map((notification) => {
     const notificationRule = getNotificationRule(notification)
-    console.log(notification)
-    console.log(notificationRule) 
 
     // populate notification data
     notification.type = notificationRule.type
