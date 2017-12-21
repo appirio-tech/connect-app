@@ -7,20 +7,31 @@ import NotificationSettingsForm from '../components/NotificationSettingsForm'
 import SettingsPanel from '../../../components/SettingsPanel'
 import { requiresAuthentication } from '../../../../../components/AuthenticatedComponent'
 import { getNotificationSettings, saveNotificationSettings } from '../../../actions'
+import spinnerWhileLoading from '../../../../../components/LoadingSpinner'
 
-const NotificationSettingsContainer = (props) => {
-  const { notificationSettings, getNotificationSettings, saveNotificationSettings } = props
+// show loader instead of form when settings are being loaded
+const enhance = spinnerWhileLoading(props => !props.values.isLoading)
+const NotificationSettingsFormWithLoader = enhance(NotificationSettingsForm)
 
-  return (
-    <SettingsPanel
-      title="Notifications"
-      text="Answer just a few questions about your application.
-        You can also provide the needed information in a supporting document—upload it below or add a link in the notes section."
-      isWide
-    >
-      <NotificationSettingsForm values={notificationSettings} onInit={getNotificationSettings} onSubmit={saveNotificationSettings} />
-    </SettingsPanel>
-  )
+class NotificationSettingsContainer extends React.Component {
+  componentDidMount() {
+    this.props.getNotificationSettings()
+  }
+
+  render() {
+    const { notificationSettings, saveNotificationSettings } = this.props
+
+    return (
+      <SettingsPanel
+        title="Notifications"
+        text="Answer just a few questions about your application.
+          You can also provide the needed information in a supporting document—upload it below or add a link in the notes section."
+        isWide
+      >
+        <NotificationSettingsFormWithLoader values={notificationSettings} onSubmit={saveNotificationSettings} />
+      </SettingsPanel>
+    )
+  }
 }
 
 NotificationSettingsContainer.propTypes = {

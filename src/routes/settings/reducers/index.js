@@ -11,7 +11,9 @@ import {
   CHANGE_PASSWORD_PENDING,
   CHANGE_PASSWORD_SUCCESS,
   CHANGE_PASSWORD_FAILURE,
-  GET_NOTIFICATION_SETTINGS,
+  GET_NOTIFICATION_SETTINGS_PENDING,
+  GET_NOTIFICATION_SETTINGS_SUCCESS,
+  GET_NOTIFICATION_SETTINGS_FAILURE,
   SAVE_NOTIFICATION_SETTINGS_PENDING,
   SAVE_NOTIFICATION_SETTINGS_SUCCESS,
   SAVE_NOTIFICATION_SETTINGS_FAILURE
@@ -21,8 +23,9 @@ import {
 // once service and actions are implemented
 const initialState = {
   notifications: {
-    settings: {},
-    pending: true,
+    settings: null,
+    pending: false,
+    isLoading: true,
     bundleEmail: '24h'
   },
   system: {
@@ -42,11 +45,25 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
 
-  case GET_NOTIFICATION_SETTINGS:
+  case GET_NOTIFICATION_SETTINGS_PENDING:
+    return {...state,
+      notifications: {...state.notifications,
+        isLoading: true
+      }
+    }
+
+  case GET_NOTIFICATION_SETTINGS_SUCCESS:
     return {...state,
       notifications: {...state.notifications,
         settings: action.payload.data,
-        pending: false
+        isLoading: false
+      }
+    }
+
+  case GET_NOTIFICATION_SETTINGS_FAILURE:
+    return {...state,
+      notifications: {...state.notifications,
+        isLoading: false
       }
     }
 

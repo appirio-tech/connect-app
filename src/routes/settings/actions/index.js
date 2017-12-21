@@ -11,7 +11,9 @@ import {
   CHANGE_PASSWORD_PENDING,
   CHANGE_PASSWORD_SUCCESS,
   CHANGE_PASSWORD_FAILURE,
-  GET_NOTIFICATION_SETTINGS,
+  GET_NOTIFICATION_SETTINGS_PENDING,
+  GET_NOTIFICATION_SETTINGS_SUCCESS,
+  GET_NOTIFICATION_SETTINGS_FAILURE,
   SAVE_NOTIFICATION_SETTINGS_PENDING,
   SAVE_NOTIFICATION_SETTINGS_SUCCESS,
   SAVE_NOTIFICATION_SETTINGS_FAILURE
@@ -76,13 +78,20 @@ export const changePassword = (newPassword) => (dispatch) => {
 }
 
 export const getNotificationSettings = () => (dispatch) => {
+  dispatch({
+    type: GET_NOTIFICATION_SETTINGS_PENDING
+  })
+
   settingsSerivce.getNotificationSettings().then(data => {
     dispatch({
-      type: GET_NOTIFICATION_SETTINGS,
+      type: GET_NOTIFICATION_SETTINGS_SUCCESS,
       payload: { data }
     })
   }).catch(err => {
     Alert.error(`Failed to get notification settings. ${err.message}`)
+    dispatch({
+      type: GET_NOTIFICATION_SETTINGS_FAILURE
+    })
   })
 }
 
