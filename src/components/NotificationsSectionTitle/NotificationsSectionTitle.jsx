@@ -15,7 +15,7 @@ const NotificationsSectionTitle = (props) => {
       }
       {props.onMarkAllClick &&
         <div className="controls">
-          <button className="tc-btn tc-btn-sm mark-all" onClick={props.onMarkAllClick}>Mark All</button>
+          <button className="tc-btn tc-btn-sm tc-btn-link mark-all" onClick={props.onMarkAllClick}>Mark All</button>
         </div>
       }
     </section>

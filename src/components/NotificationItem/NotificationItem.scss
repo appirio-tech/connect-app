@@ -22,7 +22,7 @@
 
   > .icon {
     align-items: center;
-    border-left: 2px solid #55a5ff;
+    // border-left: 2px solid #55a5ff;
     display: flex;
     flex: 0 0 44px;
     justify-content: center;
@@ -69,6 +69,11 @@
 
       > svg {
         fill: $tc-gray-20;
+        transition: all 150ms;
+
+        &:hover {
+          fill: $tc-dark-blue-90;
+        }
       }
     }
   }

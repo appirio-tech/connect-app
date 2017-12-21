@@ -9,7 +9,7 @@ import './NotificationsDropdownHeader.scss'
 const NotificationsDropdownHeader = (props) => (
   <div className="notifications-dropdown-header">
     <h3 className="header">Notifications</h3>
-    <button className="tc-btn mark-all" onClick={props.onMarkAllClick} disabled={!props.hasUnread}>Mark all as read</button>
+    <button className="tc-btn tc-btn-link mark-all" onClick={props.onMarkAllClick} disabled={!props.hasUnread}>Mark all as read</button>
   </div>
 )
 
