@@ -16,6 +16,7 @@ import LoadingIndicator from './components/LoadingIndicator/LoadingIndicator'
 import {ACCOUNTS_APP_LOGIN_URL, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from './config/constants'
 import { getTopic } from './api/messages'
 import { getFreshToken } from 'tc-accounts'
+import { scrollToHash } from './components/ScrollToAnchors.jsx'
 
 import { TCEmitter } from './helpers'
 import { EVENT_ROUTE_CHANGE } from './config/constants'
@@ -113,8 +114,14 @@ class Routes extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.location !== prevProps.location) {
-      window.scrollTo(0, 0)
+    if (this.props.location.pathname !== prevProps.location.pathname) {
+      if (this.props.location.hash !== '') {
+        scrollToHash(this.props.location.hash)
+      } else {
+        window.scrollTo(0, 0)
+      }
+    } else if (this.props.location.hash !== prevProps.location.hash && this.props.location.hash !== '') {
+      scrollToHash(this.props.location.hash)
     }
   }
 
