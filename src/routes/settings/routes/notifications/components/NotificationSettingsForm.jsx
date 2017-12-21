@@ -5,7 +5,6 @@ import React, { PropTypes } from 'react'
 import { Formsy, SwitchButton } from 'appirio-tech-react-components'
 import BtnGroup from '../../../../../components/BtnGroup/BtnGroup'
 import iconWeb from '../../../../../assets/images/icon-web.png'
-import iconMail from '../../../../../assets/images/icon-mail.png'
 import './NotificationSettingsForm.scss'
 import _ from 'lodash'
 

@@ -7,7 +7,7 @@
  * If there is any hash we check if component has element with such id and scroll to it.
  */
 import React from 'react'
-import { SCROLL_TO_MARGIN, SCROLL_TO_DURATION } from '../config/constants'
+import { SCROLL_TO_MARGIN } from '../config/constants'
 import { scroller } from 'react-scroll'
 
 /**
