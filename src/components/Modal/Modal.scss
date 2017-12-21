@@ -82,7 +82,7 @@
         flex-grow: 1;
         display: flex;
         border: 1px solid $tc-gray-20;
-        box-shadow: inset 0px 0px 2px 0px rgba(183, 183, 183, 0.2);
+        box-shadow: inset 0px 0px 2px 0px rgba($tc-gray-30, 0.2);
         input {
           flex-grow: 1;
           display: inline-block;

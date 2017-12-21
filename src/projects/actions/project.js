@@ -33,11 +33,11 @@ export function createProject(newProject) {
   }
 }
 
-export function updateProject(projectId, updatedProps) {
+export function updateProject(projectId, updatedProps, updateExisting = false) {
   return (dispatch) => {
     return dispatch({
       type: UPDATE_PROJECT,
-      payload: updateProjectAPI(projectId, updatedProps)
+      payload: updateProjectAPI(projectId, updatedProps, updateExisting)
     })
   }
 }

@@ -39,7 +39,7 @@ $title-color: $tc-gray-80;
       margin-right: 20px;
       margin-left: 20px;
       margin-bottom: 20px;
-      background-color: #fff;
+      background-color: $tc-white;
       padding: 20px 0;
       border-radius: 4px;
       // min-width: 100px;
@@ -58,7 +58,7 @@ $title-color: $tc-gray-80;
       padding: 50px 0 20px 0;
       margin-bottom: $base-unit;
       border-radius: 4px;
-      background-color: #fff;
+      background-color: $tc-white;
       .boxes {
         margin: 0 15%;
       }

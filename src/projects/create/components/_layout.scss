@@ -16,7 +16,7 @@ $minimumPageWidth: 984px;
   margin-top: -60px; // Counteract the push from the main wrapper, top of vewport
   min-width: $minimumPageWidth;
   // FIXME: This is hack to stop the div of growing
-  border-top: 1px solid #fafafb;
+  border-top: 1px solid $tc-gray-neutral-light;
   // end hack;
   overflow-x: scroll;
 }

@@ -60,7 +60,7 @@ export default function(state = {}, action) {
       project: action.payload
     })
   }
-  
+
   case REMOVE_PROJECT_MEMBER_SUCCESS:
     // show notification message if user leaving a project
     if (action.meta.isUserLeaving) {

@@ -2,34 +2,23 @@ import React, { PropTypes } from 'react'
 import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
-import classNames from 'classnames'
-import ProjectListProjectColHeader from './ProjectListProjectColHeader'
+import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
+import ProjectSegmentSelect from './ProjectSegmentSelect'
 import GridView from '../../../../components/Grid/GridView'
-
-import UserWithName from '../../../../components/User/UserWithName'
-import { findCategory } from '../../../../config/projectWizard'
-import { PROJECT_STATUS, PROJECT_LIST_PAGE_SIZE } from '../../../../config/constants'
-
+import UserTooltip from '../../../../components/User/UserTooltip'
+import { PROJECTS_LIST_PER_PAGE, PROJECT_ICON_MAP, SORT_OPTIONS } from '../../../../config/constants'
+import TextTruncate from 'react-text-truncate'
+import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
+import editableProjectStatus from '../../../../components/ProjectStatus/editableProjectStatus'
+import ProjectManagerAvatars from './ProjectManagerAvatars'
 require('./ProjectsGridView.scss')
 
-/*eslint-disable quote-props */
-const projectTypeClassMap = {
-  'generic'             : 'purple-block',
-  'visual_design'       : 'blue-block',
-  'visual_prototype'    : 'blue-block',
-  'app_dev'             : 'green-block',
-  'app'                 : 'green-block',
-  'website'             : 'green-block',
-  'chatbot'             : 'green-block',
-  'quality_assurance'   : 'green-block'
-}
-/*eslint-enable */
-
+const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
 const ProjectsGridView = props => {
-  //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
-  // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
-  const { projects, members, totalCount, criteria, pageNum, sortHandler, onPageChange, error, isLoading} = props
+  const { projects, members, totalCount, criteria, pageNum, sortHandler, onPageChange,
+    error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus } = props
+
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
   // it defines what columns should be displayed and more importantly
@@ -38,64 +27,75 @@ const ProjectsGridView = props => {
     {
       id: 'id',
       headerLabel: 'ID',
-      classes: 'width70 item-id',
-      sortable: true,
+      classes: 'item-id',
+      sortable: false,
       renderText: item => {
+        const url = `/projects/${item.id}`
         const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
-          <div className="spacing">
+          <Link to={url} className="spacing">
             { recentlyCreated  && <span className="blue-border" /> }
-            { item.id }
-          </div>
+            { item.id.toLocaleString(navigator.language, { minimumFractionDigits: 0 }) }
+          </Link>
+        )
+      }
+    }, {
+      id: 'icon',
+      headerLabel: '',
+      classes: 'item-icon',
+      sortable: false,
+      renderText: item => {
+        const url = `/projects/${item.id}`
+        const projectIconClass = PROJECT_ICON_MAP[item.type]
+        return (
+          <Link to={url} className="spacing">
+            <div className={ projectIconClass }>
+            </div>
+          </Link>
         )
       }
     }, {
       id: 'projects',
-      headerLabel: <ProjectListProjectColHeader currentSortField={currentSortField} sortHandler={sortHandler}/>,
-      classes: 'width45 item-projects',
+      headerLabel: 'Project',
+      classes: 'item-projects',
       sortable: false,
       renderText: item => {
         const url = `/projects/${item.id}`
         const code = _.get(item, 'details.utm.code', '')
-        const projectTypeClass = projectTypeClassMap[item.type]
-        const projectType = _.get(findCategory(item.type), 'name', '')
         return (
-          <div className="spacing">
-            <Link to={url} className="link-title">{item.name}</Link>
-            <div className="project-metadata">
-              <span className={ projectTypeClass }>{ projectType }</span>
-              { code && <span className="item-ref-code txt-gray-md">Ref: {code}</span> }
-              <span className="txt-time">{moment(item.createdAt).format('DD MMM YYYY')}</span>
+          <div className="spacing project-container">
+            <div className="project-title">
+              <Link to={url} className="link-title">{item.name}</Link>
+              { code && <span className="item-ref-code txt-gray-md">{code}</span> }
             </div>
-          </div>
-        )
-      }
-    }, {
-      id: 'status',
-      headerLabel: 'Status',
-      sortable: true,
-      classes: 'item-status width9',
-      renderText: item => {
-        const s = PROJECT_STATUS.filter((opt) => opt.value === item.status)[0]
-        const classes = `txt-status ${s.color}`
-        return (
-          <div className="spacing">
-            <span className={classes}>{s.name}</span>
+            <Link to={url}>
+              <TextTruncate
+                containerClassName="project-description"
+                line={2}
+                truncateText="..."
+                text={ item.description }
+              />
+            </Link>
           </div>
         )
       }
     }, {
       id: 'updatedAt',
-      headerLabel: 'Last Updated',
-      sortable: true,
-      classes: 'item-status-date width9',
+      headerLabel: <ProjectListTimeSortColHeader currentSortField={currentSortField} sortHandler={sortHandler}/>,
+      sortable: false,
+      classes: 'item-status-date',
       renderText: item => {
-        const classes = classNames('txt-normal', {
-          'txt-italic': false // TODO when should we use this
-        })
+        const sortMetric = _.find(SORT_OPTIONS, o => currentSortField === o.val) || SORT_OPTIONS[0]
+        const lastAction = item[sortMetric.field] === 'createdAt' ? 'createdBy' : 'updatedBy'
+        const lastEditor = members[item[lastAction]]
         return (
-          <div className="spacing">
-            <span className={classes}>{moment(item.updatedAt).format('MMM D')}</span>
+          <div className="spacing time-container">
+            <div className="txt-normal">{moment(item[sortMetric.field]).format('MMM D, h:mm a')}</div>
+            <div className="project-last-editor">
+              {
+                lastEditor ? `${lastEditor.firstName} ${lastEditor.lastName}` : 'Unknown'
+              }
+            </div>
           </div>
         )
       }
@@ -103,64 +103,52 @@ const ProjectsGridView = props => {
       id: 'customer',
       headerLabel: 'Customer',
       sortable: false,
-      classes: 'item-customer width12',
+      classes: 'item-customer',
       renderText: item => {
         const m = _.find(item.members, m => m.isPrimary && m.role === 'customer')
         if (!m)
           return <div className="user-block txt-italic">Unknown</div>
         return (
           <div className="spacing">
-            <UserWithName {...m} showLevel={false} />
+            <div className="user-block">
+              <UserTooltip usr={m} id={item.id}/>
+              <div className="project-segment">
+                <ProjectSegmentSelect currentSegment={item.segment || 'self-service'}/>
+              </div>
+            </div>
           </div>
         )
       }
     }, {
-      id: 'copilot',
-      headerLabel: 'Copilot',
+      id: 'managers',
+      headerLabel: 'Managers',
       sortable: false,
-      classes: 'item-copilot width11',
+      classes: 'item-manager',
       renderText: item => {
-        const m = _.find(item.members, m => m.isPrimary && m.role === 'copilot')
-        const rating = _.get(m, 'maxRating.rating', 0)
-        if (!m)
-          return <div className="user-block txt-italic">Unclaimed</div>
+        const m = _.filter(item.members, m => m.role === 'manager')
         return (
           <div className="spacing">
-            <UserWithName {...m} rating={rating} showLevel={false} />
+            <ProjectManagerAvatars managers={m}/>
           </div>
         )
       }
     }, {
-      id: 'price',
-      headerLabel: 'Price',
+      id: 'status',
+      headerLabel: <div className="project-status-title"></div>,
       sortable: false,
-      classes: 'item-price width7',
+      classes: 'item-status',
       renderText: item => {
-        let desc = ''
-        let price = null
-        switch (item.status) {
-        case 'active':
-          desc = 'Pending'
-          break
-        case 'in_review':
-          price = item.estimatedPrice || null
-          desc = 'Estimated'
-          break
-        case 'reviewed':
-          price = item.estimatedPrice || null
-          desc = 'Quoted'
-          break
-        case 'completed':
-          desc = 'Paid'
-          price = item.actualPrice || null
-          break
-        }
-        // if (price)
-        //   price = price.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
         return (
           <div className="spacing">
-            { price ? <span className="txt-price yellow-light">$ {price}</span> : <noscript /> }
-            <span className="txt-gray-sm">{desc}</span>
+            <EnhancedProjectStatus
+              status={item.status}
+              showText={false}
+              withoutLabel
+              canEdit
+              unifiedHeader={false}
+              onChangeStatus={onChangeStatus}
+              projectId={item.id}
+            />
           </div>
         )
       }
@@ -178,6 +166,7 @@ const ProjectsGridView = props => {
       members[m.userId.toString()])
     })
   })
+
   const gridProps = {
     error,
     isLoading,
@@ -188,11 +177,17 @@ const ProjectsGridView = props => {
     resultSet: projects,
     totalCount,
     currentPageNum: pageNum,
-    pageSize: PROJECT_LIST_PAGE_SIZE
+    pageSize: PROJECTS_LIST_PER_PAGE,
+    infiniteAutoload,
+    infiniteScroll: true,
+    setInfiniteAutoload,
+    projectsStatus
   }
 
   return (
-    <GridView {...gridProps} />
+    <div>
+      <GridView {...gridProps} />
+    </div>
   )
 }
 
@@ -206,7 +201,6 @@ ProjectsGridView.propTypes = {
   error: PropTypes.bool.isRequired,
   onPageChange: PropTypes.func.isRequired,
   sortHandler: PropTypes.func.isRequired,
-  applyFilters: PropTypes.func.isRequired,
   pageNum: PropTypes.number.isRequired,
   criteria: PropTypes.object.isRequired
 }

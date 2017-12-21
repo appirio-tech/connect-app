@@ -1,0 +1,27 @@
+@import 'tc-includes';
+
+.filterContainer {
+  @include roboto-medium;
+  align-self: left;
+  margin: 20px;
+}
+
+.filterList {
+  display: inline-flex;
+}
+
+.filterItem {
+  line-height: 30px;
+  font-size: 13px;
+  padding: 5px 15px;
+  color: $tc-gray-70;
+  cursor: pointer;
+
+  &.active {
+    background: $tc-white;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px 0 rgba($tc-gray-90,0.10);
+    color: $tc-black;
+    font-weight: 500;
+  }
+}

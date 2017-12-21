@@ -21,7 +21,8 @@ const initialState = {
   processingAttachments: false,
   error: false,
   project: {},
-  projectNonDirty: {}
+  projectNonDirty: {},
+  updateExisting: false
 }
 
 // NOTE: We should always update projectNonDirty state whenever we update the project state
@@ -105,7 +106,8 @@ export const projectState = function (state=initialState, action) {
       processing: false,
       error: false,
       project: action.payload,
-      projectNonDirty: _.cloneDeep(action.payload)
+      projectNonDirty: _.cloneDeep(action.payload),
+      updateExisting: action.payload.updateExisting
     })
 
   case DELETE_PROJECT_SUCCESS:
