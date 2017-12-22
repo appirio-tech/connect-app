@@ -23,7 +23,11 @@ const calcProgress = (project, subSection) => {
     _.forEach(vals, (v) => {if (v) count++ })
     // Github issue#1399, filtered only required questions to set expected length of valid answers
     const filterRequiredQuestions = (q) => (
-      q.required || (q.validations && q.validations.indexOf('isRequired') !== -1)
+      // if required attribute is missing on question, but sub section has required flag, assume question as required
+      // or question should have required flag or validation isRequired
+      (typeof q.required === 'undefined' && subSection.required)
+      || q.required
+      || (q.validations && q.validations.indexOf('isRequired') !== -1)
     )
     return [count, _.filter(subSection.questions, filterRequiredQuestions).length]
   } else if (subSection.id === 'screens') {
