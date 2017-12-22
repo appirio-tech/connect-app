@@ -9,8 +9,8 @@ const SettingsToolBar = () => (
   <SectionTopBar
     title="Profile and Settings"
     menu={[
-      <NavLink key="profile" to="/settings/profile">Profile</NavLink>,
-      <NavLink key="system" to="/settings/system">System</NavLink>,
+      // <NavLink key="profile" to="/settings/profile">Profile</NavLink>,
+      // <NavLink key="system" to="/settings/system">System</NavLink>,
       <NavLink key="notifications" to="/settings/notifications">Notifications</NavLink>
     ]}
   />
