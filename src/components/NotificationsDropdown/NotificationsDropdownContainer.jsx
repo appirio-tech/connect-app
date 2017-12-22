@@ -64,10 +64,7 @@ class NotificationsDropdownContainer extends React.Component {
             </NotificationsEmpty>
           </div>
         ) : ([
-          <div key="body"
-              className="notifications-dropdown-body"
-                onMouseEnter={this.freezeBody}
-                onMouseLeave={this.unfreezeBody}>
+          <div key="body" className="notifications-dropdown-body" onMouseEnter={this.freezeBody} onMouseLeave={this.unfreezeBody} >
             {globalSource && globalSource.notifications.length &&
               <NotificationsSection
                 {...globalSource}
