@@ -21,12 +21,9 @@ class NotificationsDropdownContainer extends React.Component {
     this.props.getNotifications()
   }
 
-  freezeBody(){
-    document.body.classList.add('noScroll')
-  }
-
-  unfreezeBody(){
-    document.body.classList.remove('noScroll')
+  // Make sure the body isn't scrollable when mouse is over the drop-down menu
+  freezeBodyToggle(){
+    document.body.classList.toggle('noScroll')
   }
 
   render() {
@@ -64,7 +61,7 @@ class NotificationsDropdownContainer extends React.Component {
             </NotificationsEmpty>
           </div>
         ) : ([
-          <div key="body" className="notifications-dropdown-body" onMouseEnter={this.freezeBody} onMouseLeave={this.unfreezeBody} >
+          <div key="body" className="notifications-dropdown-body" onMouseEnter={this.freezeBodyToggle} onMouseLeave={this.freezeBodyToggle} >
             {globalSource && globalSource.notifications.length &&
               <NotificationsSection
                 {...globalSource}
