@@ -15,7 +15,7 @@ module.exports = {
   CONNECT_MESSAGE_API_URL: process.env.CONNECT_MESSAGE_API_URL, 
   ENV               : 'DEV',
 
-  PROJECTS_API_URL  : 'http://api.topcoder-dev.com',
+  PROJECTS_API_URL  : 'https://api.topcoder-dev.com',
 
   NEW_RELIC_APPLICATION_ID: process.env.TRAVIS_BRANCH ? '8957921' : '',
 
@@ -27,8 +27,8 @@ module.exports = {
   MAIN_URL           : 'https://www.topcoder-dev.com',
   PHOTO_LINK_LOCATION: 'https://community.topcoder-dev.com',
   SWIFT_PROGRAM_URL  : 'apple.topcoder-dev.com',
-  TCO16_URL          : 'http://tco16.topcoder-dev.com',
-  TCO17_URL          : 'http://tco17.topcoder-dev.com',
+  TCO16_URL          : 'https://tco16.topcoder-dev.com',
+  TCO17_URL          : 'https://tco17.topcoder-dev.com',
   TCO_HOME_URL       : 'https://www.topcoder-dev.com/tco',
 
   ACCOUNTS_APP_URL             : 'https://accounts.topcoder-dev.com/#!/member',

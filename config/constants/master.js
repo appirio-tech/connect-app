@@ -15,7 +15,7 @@ module.exports = {
   ENV               : 'PROD',
   NODE_ENV          : 'production',
 
-  PROJECTS_API_URL  : 'http://api.topcoder.com',
+  PROJECTS_API_URL  : 'https://api.topcoder.com',
 
   NEW_RELIC_APPLICATION_ID: process.env.TRAVIS_BRANCH ? '11352758' : '',
 
@@ -27,8 +27,8 @@ module.exports = {
   MAIN_URL           : 'https://www.topcoder.com',
   PHOTO_LINK_LOCATION: 'https://community.topcoder.com',
   SWIFT_PROGRAM_URL  : 'apple.topcoder.com',
-  TCO16_URL          : 'http://tco16.topcoder.com',
-  TCO17_URL          : 'http://tco17.topcoder.com',
+  TCO16_URL          : 'https://tco16.topcoder.com',
+  TCO17_URL          : 'https://tco17.topcoder.com',
   TCO_HOME_URL       : 'https://www.topcoder.com/tco',
 
   ACCOUNTS_APP_URL             : 'https://accounts.topcoder.com/#!/member',
@@ -43,5 +43,5 @@ module.exports = {
   IBM_COGNITIVE_PROGRAM_ID  : 3449,
   HEAP_ANALYTICS_APP_ID     : '638908330',
 
-  TC_NOTIFICATION_URL: 'http://api.topcoder.com/'
+  TC_NOTIFICATION_URL: 'https://api.topcoder.com/'
 }
