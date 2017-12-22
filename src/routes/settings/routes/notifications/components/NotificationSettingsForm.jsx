@@ -8,60 +8,55 @@ import iconWeb from '../../../../../assets/images/icon-web.png'
 import './NotificationSettingsForm.scss'
 import _ from 'lodash'
 
-// TODO move this list to constants together with the same list in service/settings.js
+// list of the notification groups and related event types
+// TODO move it to constants and reuse the same list in services/settings.js
 const topics = [
-  'notifications.connect.project.created',
-  'notifications.connect.project.updated',
-  'notifications.connect.project.canceled',
-  'notifications.connect.project.approved',
-  'notifications.connect.project.paused',
-  'notifications.connect.project.completed',
-  'notifications.connect.project.submittedForReview',
-
-  'notifications.connect.project.fileUploaded',
-  'notifications.connect.project.specificationModified',
-  'notifications.connect.project.linkCreated',
-
-  'notifications.connect.project.member.joined',
-  'notifications.connect.project.member.left',
-  'notifications.connect.project.member.removed',
-  'notifications.connect.project.member.managerJoined',
-  'notifications.connect.project.member.copilotJoined',
-  'notifications.connect.project.member.assignedAsOwner',
-
-  'notifications.connect.project.topic.created',
-  'notifications.connect.project.topic.deleted',
-  'notifications.connect.project.post.created',
-  'notifications.connect.project.post.edited',
-  'notifications.connect.project.post.deleted'
-]
-
-// TODO put these values to one list with `topics`
-const titles = [
-  'Project Created',
-  'Project Updated',
-  'Project Canceled',
-  'Project Approved',
-  'Project Paused',
-  'Project Completed',
-  'Project Submitted For Review',
-
-  'Project File uploaded',
-  'Project Specification modified',
-  'Project link added',
-
-  'Project member joined',
-  'Project member left',
-  'Project member removed',
-  'Project manager joined',
-  'Project copilot joined',
-  'Project member assigned as owner',
-
-  'Project topic created',
-  'Project topic deleted',
-  'Project post created',
-  'Project post edited',
-  'Project post deleted'
+  {
+    title: 'New posts and replies',
+    types: [
+      'notifications.connect.project.topic.created',
+      'notifications.connect.project.topic.deleted',
+      'notifications.connect.project.post.created',
+      'notifications.connect.project.post.edited',
+      'notifications.connect.project.post.deleted'
+    ]
+  }, {
+    title: 'Project status changes',
+    types: [
+      'notifications.connect.project.created',
+      'notifications.connect.project.updated',
+      'notifications.connect.project.canceled',
+      'notifications.connect.project.approved',
+      'notifications.connect.project.paused',
+      'notifications.connect.project.completed',
+      'notifications.connect.project.submittedForReview'
+    ]
+  }, {
+    title: 'Project specification changes',
+    types: [
+      'notifications.connect.project.specificationModified'
+    ]
+  }, {
+    title: 'File uploads',
+    types: [
+      'notifications.connect.project.fileUploaded'
+    ]
+  }, {
+    title: 'New project links',
+    types: [
+      'notifications.connect.project.linkCreated'
+    ]
+  }, {
+    title: 'Team changes',
+    types: [
+      'notifications.connect.project.member.joined',
+      'notifications.connect.project.member.left',
+      'notifications.connect.project.member.removed',
+      'notifications.connect.project.member.managerJoined',
+      'notifications.connect.project.member.copilotJoined',
+      'notifications.connect.project.member.assignedAsOwner'
+    ]
+  }
 ]
 
 /**
@@ -78,17 +73,18 @@ const titles = [
  */
 const initSettings = (notInitedSettings) => {
   const settings = {...notInitedSettings}
+  const allTypes = _.flatten(_.map(topics, 'types'))
 
-  topics.forEach((topic) => {
-    if (!settings[topic]) {
-      settings[topic] = {}
+  allTypes.forEach((type) => {
+    if (!settings[type]) {
+      settings[type] = {}
     }
 
     // check each of deliveryMethod method separately as some can have
     // values and some don't have
     ['web', 'email'].forEach((deliveryMethod) => {
-      if (_.isUndefined(settings[topic][deliveryMethod])) {
-        settings[topic][deliveryMethod] = 'yes'
+      if (_.isUndefined(settings[type][deliveryMethod])) {
+        settings[type][deliveryMethod] = 'yes'
       }
     })
   })
@@ -108,13 +104,17 @@ class NotificationSettingsForm extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange(topic, deliveryMethod) {
+  handleChange(topicIndex, deliveryMethod) {
     const s = {
       settings: {
         ...this.state.settings
       }
     }
-    s.settings[topic][deliveryMethod] = s.settings[topic][deliveryMethod] === 'yes' ? 'no' : 'yes'
+
+    // update values for all types of the topic
+    topics[topicIndex].types.forEach((type) => {
+      s.settings[type][deliveryMethod] = s.settings[type][deliveryMethod] === 'yes' ? 'no' : 'yes'
+    })
 
     this.setState(s)
   }
@@ -144,11 +144,13 @@ class NotificationSettingsForm extends React.Component {
           </thead>
           <tbody>
             {_.map(topics, (topic, index) => {
-              const title = titles[index]
+              // we toggle settings for all the types in one topic all together
+              // so we can use values from the first type to get current value for the whole topic
+              const topicFirstType = topic.types[0]
               return (
-                <tr key={topic}>
-                  <th>{title}</th>
-                  <td><SwitchButton onChange={() => this.handleChange(topic, 'web')} defaultChecked={settings[topic] && settings[topic].web === 'yes'} /></td>
+                <tr key={index}>
+                  <th>{topic.title}</th>
+                  <td><SwitchButton onChange={() => this.handleChange(index, 'web')} defaultChecked={settings[topicFirstType] && settings[topicFirstType].web === 'yes'} /></td>
                   {/* as email notification currently not supported, hide them for now */}
                   {/*<td><SwitchButton onChange={() => this.handleChange(topic, 'email')} defaultChecked={settings[topic] && settings[topic].email === 'yes'} /></td>*/}
                 </tr>
