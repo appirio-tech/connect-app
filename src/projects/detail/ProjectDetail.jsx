@@ -47,12 +47,17 @@ class ProjectDetail extends Component {
     this.props.loadProjectDashboard(projectId)
   }
 
-  componentWillReceiveProps({isProcessing, isLoading, error, project}) {
+  componentWillReceiveProps({isProcessing, isLoading, error, project, match}) {
     // handle just deleted projects
     if (! (error || isLoading || isProcessing) && _.isEmpty(project))
       this.props.history.push('/projects/')
     if (project && project.name) {
       document.title = `${project.name} - Topcoder`
+    }
+
+    // load project if URL changed
+    if (this.props.match.params.projectId !== match.params.projectId) {
+      this.props.loadProjectDashboard(match.params.projectId)
     }
   }
 
