@@ -1,15 +1,17 @@
 @import 'tc-includes';
 
-.UserDropdownMenu {
-  padding: 0;
-  display: flex;
-  align-content: center;
-  text-align: left;
+.welcome-info {
+  .UserDropdownMenu {
+    padding: 0;
+    display: flex;
+    align-content: center;
+    text-align: left;
 
-  .Dropdown {
-    min-width: 160px;
-    right: -25px;
-    left: auto;
+    .Dropdown {
+      min-width: 160px;
+      right: -25px;
+      left: auto;
+    }
   }
 }
 

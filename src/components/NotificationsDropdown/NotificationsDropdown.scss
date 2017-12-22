@@ -20,9 +20,13 @@ body.noScroll {
   margin-right: 12px;
   position: relative;
 
+  .UserDropdownMenu {
+    padding: 0;
+  }
+
   .Dropdown {
     right: 10px;
-    // left: auto;
+    left: auto;
     padding-bottom: 0;
     position: fixed;
     top: 54px;

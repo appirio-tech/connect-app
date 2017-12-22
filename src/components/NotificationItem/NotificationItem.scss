@@ -3,13 +3,10 @@
 
 .notification-item-link {
   display: block;
+  border-top: 1px solid $tc-gray-10;
 
-  .notification-item {
-    border-top: 1px solid $tc-gray-10;
-
-    &:first-child {
-      border: none;
-    }
+  &:first-child {
+    border: none;
   }
 }
 
