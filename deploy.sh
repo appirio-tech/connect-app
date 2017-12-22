@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+set -x
 ENV=$1
 
 if [ "$2" = "no-cache" ]; then
