@@ -4,9 +4,12 @@
 .notification-item-link {
   display: block;
 
-  & + &,
-  .notification-item + & {
+  .notification-item {
     border-top: 1px solid $tc-gray-10;
+
+    &:first-child {
+      border: none;
+    }
   }
 }
 
@@ -14,13 +17,18 @@
   display: flex;
   background-color: $tc-white;
   justify-content: space-between;
+  transition: 150ms all;
+
+  &:hover {
+    background-color: $tc-dark-blue-10;
+  }
 
   & + &,
   .notification-item-link + & {
     border-top: 1px solid $tc-gray-10;
   }
 
-  > .icon {
+  .icon {
     align-items: center;
     // border-left: 2px solid #55a5ff;
     display: flex;
@@ -28,11 +36,11 @@
     justify-content: center;
   }
 
-  > .body {
+  .body {
     flex: 1;
     padding: 15px 0;
 
-    > .content {
+    .content {
       @include roboto;
       color: $tc-black;
       font-size: 13px;
@@ -52,13 +60,22 @@
     }
   }
 
-  > .mark-read {
+  .mark-read {
     align-items: center;
     display: flex;
-    flex: 0 0 55px;
+    flex: 0 0 40px;
     justify-content: flex-end;
+    transition: all 150ms;
 
-    > button {
+    &:hover {
+      background-color: $tc-dark-blue-30;
+
+      svg {
+        fill: $tc-dark-blue-90;
+      }
+    }
+
+    button {
       background: none;
       border: 0;
       display: block;
@@ -67,13 +84,8 @@
       padding: 0;
       width: 42px;
 
-      > svg {
+      svg {
         fill: $tc-gray-20;
-        transition: all 150ms;
-
-        &:hover {
-          fill: $tc-dark-blue-90;
-        }
       }
     }
   }

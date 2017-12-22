@@ -4,12 +4,12 @@
 .notifications-dropdown-header {
   align-items: center;
   background: $tc-gray-neutral-light;
-  border-bottom: 1px solid $tc-gray-10;
+  border-bottom: 1px solid $tc-gray-20;
   display: flex;
   justify-content: space-between;
   padding: 0 15px;
 
-  > .header {
+  .header {
     @include roboto-medium;
     color: $tc-gray-70;
     font-size: 12px;
@@ -18,7 +18,7 @@
     text-transform: uppercase;
   }
 
-  > .mark-all {
+  .mark-all {
     @include roboto;
     background: none;
     border: 0;

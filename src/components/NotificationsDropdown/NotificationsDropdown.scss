@@ -9,6 +9,8 @@ body.noScroll {
 // project override for dropdown shadow
 .Dropdown {
   box-shadow: 0 3px 30px 2px rgba(0, 0, 0, 0.5);
+  cursor: default;
+  user-select: none;
 }
 
 .notifications-dropdown {

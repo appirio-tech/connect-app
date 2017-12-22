@@ -4,20 +4,20 @@
 .notifications-section-title {
   align-items: center;
   background-color: $tc-gray-20;
+  // border-bottom: 1px solid $tc-gray-20;
   display: flex;
   justify-content: space-between;
 
-  > .title {
-    @include roboto-medium;
-
+  .title {
+    @include roboto-bold;
     color: $tc-gray-80;
     font-size: 13px;
-    line-height: 38px;
+    line-height: 30px;
     margin-left: 15px;
   }
 
-  > .controls {
-    > .mark-all {
+  .controls {
+    .mark-all {
       @include roboto;
       background: none;
       border: 0;
@@ -38,7 +38,7 @@
       margin-top: 0;
     }
 
-    > .title {
+    .title {
       color: $tc-black;
       font-size: 20px;
       font-weight: 400;
@@ -46,8 +46,8 @@
       margin-left: 0;
     }
 
-    > .controls {
-      > .mark-all {
+    .controls {
+      .mark-all {
         height: 20px;
         line-height: 20px;
         padding: 0;

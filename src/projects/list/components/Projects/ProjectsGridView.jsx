@@ -112,12 +112,15 @@ const ProjectsGridView = props => {
           <div className="spacing">
             <div className="user-block">
               <UserTooltip usr={m} id={item.id}/>
-              <div className="project-segment">
-                <ProjectSegmentSelect currentSegment={item.segment || 'self-service'}/>
-              </div>
+              
             </div>
           </div>
         )
+        // TODO: Restore user segment when we support it
+        // <div className="project-segment">
+        //  <ProjectSegmentSelect currentSegment={item.segment || 'self-service'}/>
+        // </div>
+        // Hiding the user segment for the momemnt
       }
     }, {
       id: 'managers',
