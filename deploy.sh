@@ -26,14 +26,8 @@ deploy_s3bucket() {
 		S3_CACHE_OPTIONS="--cache-control max-age=0,s-maxage=86400"
 	fi
 
-	S3_OPTIONS='--exclude "*.txt" --exclude "*.js" --exclude "*.css"'
-	S3_OPTIONS=(
-	--exclude \"*.txt\" 
-	--exclude \"*.js\" 
-	--exclude \"*.css\" )
-	echo aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS[@]}
-	aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS[@]}
-	result=`aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS[@]}`
+	aws s3 sync --dryrun /home/osboxes/notifications/connect-app/dist s3://gondzotest  --exclude "*.txt" --exclude "*.js" --exclude "*.css" ${S3_CACHE_OPTIONS}
+	result=$(aws s3 sync /home/osboxes/notifications/connect-app/dist s3://gondzotest  --exclude "*.txt" --exclude "*.js" --exclude "*.css" ${S3_CACHE_OPTIONS})
 	if [ $? -eq 0 ]; then
 		echo "All html, font, image, map and media files are Deployed without gzip encoding!"
 	else
@@ -41,15 +35,8 @@ deploy_s3bucket() {
 		exit 1
 	fi
 
-	S3_OPTIONS=(
-		--exclude \"*\" 
-		--include \"*.txt\" 
-		--include \"*.js\" 
-		--include \"*.css\" 
-		--content-encoding gzip)
-	echo aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS[@]}
-	aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS[@]}
-	result=$(aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS[@]})
+	aws s3 sync --dryrun /home/osboxes/notifications/connect-app/dist s3://gondzotest --exclude "*" --include "*.txt" --include "*.js" --include "*.css" --content-encoding gzip ${S3_CACHE_OPTIONS}
+	result=$(aws s3 sync /home/osboxes/notifications/connect-app/dist s3://gondzotest --exclude "*" --include "*.txt" --include "*.js" --include "*.css" --content-encoding gzip ${S3_CACHE_OPTIONS})
 	if [ $? -eq 0 ]; then
 		echo "All txt, css, and js files are Deployed! with gzip"
 	else
