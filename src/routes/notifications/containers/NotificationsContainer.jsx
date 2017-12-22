@@ -15,12 +15,18 @@ import NotificationsEmpty from '../../../components/NotificationsEmpty/Notificat
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import { getNotificationsFilters, splitNotificationsBySources, filterReadNotifications } from '../helpers/notifications'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
+import { REFRESH_NOTIFICATIONS_INTERVAL } from '../../../config/constants'
 import './NotificationsContainer.scss'
 
 class NotificationsContainer extends React.Component {
   componentDidMount() {
     document.title = 'Notifications - TopCoder'
     this.props.getNotifications()
+    this.autoRefreshNotifications = setInterval(() => this.props.getNotifications(), REFRESH_NOTIFICATIONS_INTERVAL)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.autoRefreshNotifications)
   }
 
   render() {

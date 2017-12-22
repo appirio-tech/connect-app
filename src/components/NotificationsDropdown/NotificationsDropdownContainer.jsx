@@ -12,13 +12,18 @@ import NotificationsSection from '../NotificationsSection/NotificationsSection'
 import NotificationsEmpty from '../NotificationsEmpty/NotificationsEmpty'
 import NotificationsDropdownHeader from  '../NotificationsDropdownHeader/NotificationsDropdownHeader'
 import NotificationsDropdown from  './NotificationsDropdown'
-import { NOTIFCATIONS_DROPDOWN_PER_SOURCE, NOTIFCATIONS_DROPDOWN_MAX_TOTAL } from '../../config/constants'
+import { NOTIFCATIONS_DROPDOWN_PER_SOURCE, NOTIFCATIONS_DROPDOWN_MAX_TOTAL, REFRESH_NOTIFICATIONS_INTERVAL } from '../../config/constants'
 import './NotificationsDropdown.scss'
 
 class NotificationsDropdownContainer extends React.Component {
 
   componentDidMount() {
     this.props.getNotifications()
+    this.autoRefreshNotifications = setInterval(() => this.props.getNotifications(), REFRESH_NOTIFICATIONS_INTERVAL)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.autoRefreshNotifications)
   }
 
   // Make sure the body isn't scrollable when mouse is over the drop-down menu
