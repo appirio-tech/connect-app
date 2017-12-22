@@ -1,11 +1,6 @@
 // this is to include tc styles in the output library
 @import 'tc-includes';
 
-// Prevent the page scrolling while scrolling into the notification dropdown
-body.noScroll {
-  overflow: hidden;
-}
-
 // project override for dropdown shadow
 .Dropdown {
   box-shadow: 0 3px 30px 2px rgba(0, 0, 0, 0.5);
