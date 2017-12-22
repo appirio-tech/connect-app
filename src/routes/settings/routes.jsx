@@ -7,8 +7,8 @@ import { renderApp } from '../../components/App/App'
 import TopBarContainer from '../../components/TopBar/TopBarContainer'
 import SettingsToolBar from './components/SettingsToolBar'
 import NotificationSettingsContainer from './routes/notifications/containers/NotificationSettingsContainer'
-import SystemSettingsContainer from './routes/system/containers/SystemSettingsContainer'
-import ProfileSettingsContainer from './routes/profile/containers/ProfileSettingsContainer'
+// import SystemSettingsContainer from './routes/system/containers/SystemSettingsContainer'
+// import ProfileSettingsContainer from './routes/profile/containers/ProfileSettingsContainer'
 
 export default (
   <Switch>
