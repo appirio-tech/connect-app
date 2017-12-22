@@ -3,6 +3,7 @@ import cn from 'classnames'
 import Panel from '../Panel/Panel'
 import { Avatar } from 'appirio-tech-react-components'
 import RichTextArea from '../RichTextArea/RichTextArea'
+import { Link } from 'react-router-dom'
 import CommentEditToggle from './CommentEditToggle'
 
 class Comment extends React.Component {
