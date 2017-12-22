@@ -24,7 +24,7 @@ const hocStatusDropdown = (CompositeComponent) => {
       return false
     }
 
-    render(props) {
+    render() {
       const { canEdit, isOpen, handleClick, onItemSelect, showText, withoutLabel, unifiedHeader, status } = this.props
       const selected = PROJECT_STATUS.filter((opt) => opt.value === status)[0]
 
