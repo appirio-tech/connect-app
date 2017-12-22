@@ -12,8 +12,8 @@ import ProfileSettingsContainer from './routes/profile/containers/ProfileSetting
 
 export default (
   <Switch>
-    <Route path="/settings/profile" render={renderApp(<TopBarContainer toolbar={SettingsToolBar} />, <ProfileSettingsContainer />)} />
-    <Route path="/settings/system" render={renderApp(<TopBarContainer toolbar={SettingsToolBar} />, <SystemSettingsContainer />)} />
+    {/*<Route path="/settings/profile" render={renderApp(<TopBarContainer toolbar={SettingsToolBar} />, <ProfileSettingsContainer />)} />*/}
+    {/*<Route path="/settings/system" render={renderApp(<TopBarContainer toolbar={SettingsToolBar} />, <SystemSettingsContainer />)} />*/}
     <Route path="/settings/notifications" render={renderApp(<TopBarContainer toolbar={SettingsToolBar} />, <NotificationSettingsContainer />)} />
   </Switch>
 )
