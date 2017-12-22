@@ -22,12 +22,15 @@ configure_aws_cli() {
 deploy_s3bucket() {
 	if [ "$NOCACHE" = "true" ]; then
 		S3_CACHE_OPTIONS="--cache-control private,no-store,no-cache,must-revalidate,max-age=0"
+		echo "*** Deploying with Cloudfront Cache disabled ***"
 	else
 		S3_CACHE_OPTIONS="--cache-control max-age=0,s-maxage=86400"
 	fi
 
-	aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET}  --exclude "*.txt" --exclude "*.js" --exclude "*.css" ${S3_CACHE_OPTIONS}
-	result=$(aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET}  --exclude "*.txt" --exclude "*.js" --exclude "*.css" ${S3_CACHE_OPTIONS})
+	S3_OPTIONS="--exclude '*.txt' --exclude '*.js' --exclude '*.css'"
+	echo aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}
+	eval "aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"
+	result=`eval "aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"`
 	if [ $? -eq 0 ]; then
 		echo "All html, font, image, map and media files are Deployed without gzip encoding!"
 	else
@@ -35,15 +38,16 @@ deploy_s3bucket() {
 		exit 1
 	fi
 
-	aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} --exclude "*" --include "*.txt" --include "*.js" --include "*.css" --content-encoding gzip ${S3_CACHE_OPTIONS}
-	result=$(aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} --exclude "*" --include "*.txt" --include "*.js" --include "*.css" --content-encoding gzip ${S3_CACHE_OPTIONS})
+	S3_OPTIONS="--exclude '*' --include '*.txt' --include '*.js' --include '*.css' --content-encoding gzip"
+	echo aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}
+	eval "aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"
+	result=`eval "aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"`
 	if [ $? -eq 0 ]; then
 		echo "All txt, css, and js files are Deployed! with gzip"
 	else
 		echo "Deployment Failed  - $result"
 		exit 1
-	fi	
-
+	fi
 }
 
 echo -e "application/font-woff\t\t\t\twoff2" >> /etc/mime.types
