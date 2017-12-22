@@ -34,6 +34,7 @@ class NotificationsDropdownContainer extends React.Component {
     if (!this.props.initialized) {
       return null
     }
+
     const { sources, notifications, markAllNotificationsRead, toggleNotificationRead, pending } = this.props
     const notReadNotifications = filterReadNotifications(notifications)
     const notificationsBySources = limitQuantityInSources(
@@ -71,7 +72,7 @@ class NotificationsDropdownContainer extends React.Component {
                 {...globalSource}
                 isGlobal
                 isSimple
-                onReadToggleClick={toggleNotificationReadWithDelay}
+                onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
               />
             }
             {projectSources.filter(source => source.notifications.length > 0).map(source =>
@@ -79,7 +80,7 @@ class NotificationsDropdownContainer extends React.Component {
                 {...source}
                 key={source.id}
                 isSimple
-                onReadToggleClick={toggleNotificationReadWithDelay}
+                onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
               />
             )}
           </div>,
