@@ -9,9 +9,9 @@ const Filters = ({ criteria, applyFilters }) => {
   })
 
   // TODO add segments list
-  const segments = _.map([], segment => {
-    return { value: segment.id, label: segment.value }
-  })
+  // const segments = _.map([], segment => {
+  //   return { value: segment.id, label: segment.value }
+  // })
 
   return (
     <div className="bar__search clearfix">
@@ -30,7 +30,7 @@ const Filters = ({ criteria, applyFilters }) => {
           </div>
         </div>
 
-        <div className="search-select-widget">
+        {/* <div className="search-select-widget">
           <label>Segment</label>
           <div className="search-select-field">
             <Select
@@ -41,7 +41,7 @@ const Filters = ({ criteria, applyFilters }) => {
               onChange={(selectedOptions) => applyFilters({ segment: selectedOptions })}
             />
           </div>
-        </div>
+        </div> */}
       </div>
       <button
         className="tc-btn tc-btn-secondary"
