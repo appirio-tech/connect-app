@@ -2,15 +2,17 @@
 @import 'tc-includes';
 
 .notifications-section {
+  border: 1px solid $tc-gray-20;
+
   & + & {
-    margin-top: 21px;
+    margin-top: 20px;
   }
 
   &.is-simple + &.is-simple {
     margin-top: 0;
   }
 
-  > .view-older {
+  .view-older {
     @include roboto;
     align-items: center;
     background: $tc-gray-neutral-light;
@@ -26,4 +28,9 @@
     text-align: center;
     width: 100%;
   }
+}
+
+// Hide border in dropdown menu
+.Dropdown .notifications-section {
+  border: none;
 }
