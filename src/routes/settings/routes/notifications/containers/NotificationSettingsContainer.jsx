@@ -24,8 +24,11 @@ class NotificationSettingsContainer extends React.Component {
     return (
       <SettingsPanel
         title="Notifications"
-        text="Answer just a few questions about your application.
-          You can also provide the needed information in a supporting document—upload it below or add a link in the notes section."
+        link={{
+          to: 'https://www.topcoder.com/settings/email/',
+          text: 'Manage email settings'
+        }}
+        text="Notifications are a great way to get back to what matters. Somethimes things can be a bit overwhelming, we get it, so here you can turn off the things that bugg you. You can always turn them back on later. To modify your email notifications please follow: "
         isWide
       >
         <NotificationSettingsFormWithLoader values={notificationSettings} onSubmit={saveNotificationSettings} />
