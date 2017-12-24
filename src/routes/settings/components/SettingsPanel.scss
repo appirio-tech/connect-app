@@ -45,4 +45,19 @@
       }
     }
   }
+
+  a {
+    @include roboto;
+    text-decoration: underline;
+  }
+  // Link colors
+  a:link,
+  a:visited {
+    color: $tc-dark-blue;
+  }
+
+  a:hover,
+  a:active {
+    color: $tc-dark-blue-70;
+  }
 }
