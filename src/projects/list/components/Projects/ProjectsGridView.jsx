@@ -6,10 +6,12 @@ import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 // import ProjectSegmentSelect from './ProjectSegmentSelect'
 import GridView from '../../../../components/Grid/GridView'
 import UserTooltip from '../../../../components/User/UserTooltip'
-import { PROJECTS_LIST_PER_PAGE, PROJECT_ICON_MAP, SORT_OPTIONS } from '../../../../config/constants'
+import { PROJECTS_LIST_PER_PAGE, SORT_OPTIONS } from '../../../../config/constants'
+import { findProduct } from '../../../../config/projectWizard'
 import TextTruncate from 'react-text-truncate'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
 import editableProjectStatus from '../../../../components/ProjectStatus/editableProjectStatus'
+import SVGIconImage from '../../../../components/SVGIconImage'
 import ProjectManagerAvatars from './ProjectManagerAvatars'
 require('./ProjectsGridView.scss')
 
@@ -46,10 +48,14 @@ const ProjectsGridView = props => {
       sortable: false,
       renderText: item => {
         const url = `/projects/${item.id}`
-        const projectIconClass = PROJECT_ICON_MAP[item.type]
+        const productType = _.get(item, 'details.products[0]')
+        const product = findProduct(productType)
+        // icon for the product, use default generic work project icon for categories which no longer exist now
+        const productIcon = _.get(product, 'icon', 'tech-32px-outline-work-project')
         return (
           <Link to={url} className="spacing">
-            <div className={ projectIconClass }>
+            <div className="project-type-icon" title={item.type !== undefined ? item.type[0].toUpperCase() + item.type.substr(1).replace(/_/g, ' ') : null}>
+              <SVGIconImage filePath={productIcon} />
             </div>
           </Link>
         )
@@ -112,7 +118,7 @@ const ProjectsGridView = props => {
           <div className="spacing">
             <div className="user-block">
               <UserTooltip usr={m} id={item.id}/>
-              
+
             </div>
           </div>
         )
