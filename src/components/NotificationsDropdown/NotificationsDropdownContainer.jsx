@@ -82,9 +82,13 @@ class NotificationsDropdownContainer extends React.Component {
               />
             )}
           </div>,
-          (olderNotificationsCount > 0 ? <Link key="footer" to="/notifications" className="notifications-read-all tc-btn-link">
-            View {olderNotificationsCount} older notification{olderNotificationsCount > 1 ? 's' : ''}
-          </Link> : null)
+          <Link key="footer" to="/notifications" className="notifications-read-all tc-btn-link">
+            {
+              olderNotificationsCount > 0 ?
+              `View ${olderNotificationsCount} older notification${olderNotificationsCount > 1 ? 's' : ''}` :
+              'View all notifications'
+            }
+          </Link>
         ])}
       </NotificationsDropdown>
     )
