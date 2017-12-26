@@ -6,6 +6,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { sumBy } from 'lodash'
 import { getNotifications, markAllNotificationsRead, toggleNotificationRead } from '../../routes/notifications/actions'
 import { splitNotificationsBySources, filterReadNotifications, limitQuantityInSources } from '../../routes/notifications/helpers/notifications'
 import NotificationsSection from '../NotificationsSection/NotificationsSection'
@@ -41,6 +42,7 @@ class NotificationsDropdownContainer extends React.Component {
     const globalSource = notificationsBySources.length > 0 && notificationsBySources[0].id === 'global' ? notificationsBySources[0] : null
     const projectSources = notificationsBySources.length > 1 && globalSource ? notificationsBySources.slice(1) : notificationsBySources
     const hasUnread = notReadNotifications.length > 0
+    const olderNotificationsCount = sumBy(projectSources, 'total') - sumBy(projectSources, 'notifications.length')
     // we have to give Dropdown component some time
     // before removing notification item node from the list
     // otherwise dropdown thinks we clicked outside and closes dropdown
@@ -80,7 +82,9 @@ class NotificationsDropdownContainer extends React.Component {
               />
             )}
           </div>,
-          <Link key="footer" to="/notifications" className="notifications-read-all tc-btn-link">View all notifications</Link>
+          (olderNotificationsCount > 0 ? <Link key="footer" to="/notifications" className="notifications-read-all tc-btn-link">
+            View {olderNotificationsCount} older notification{olderNotificationsCount > 1 ? 's' : ''}
+          </Link> : null)
         ])}
       </NotificationsDropdown>
     )
