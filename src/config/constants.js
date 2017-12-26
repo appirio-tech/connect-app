@@ -353,8 +353,8 @@ export const SORT_OPTIONS = [
 
 // Notifications
 export const REFRESH_NOTIFICATIONS_INTERVAL = 1000 * 60 * 1 // 1 minute interval
-export const NOTIFCATIONS_DROPDOWN_PER_SOURCE = 2
-export const NOTIFCATIONS_DROPDOWN_MAX_TOTAL = 10
+export const NOTIFCATIONS_DROPDOWN_PER_SOURCE = 10
+export const NOTIFCATIONS_DROPDOWN_MAX_TOTAL = Infinity
 
 export const NOTIFICATIONS_LIMIT = 1000
 // old notification time in minutes, a notification is old if its date is later than this time
