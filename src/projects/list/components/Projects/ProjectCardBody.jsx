@@ -1,6 +1,5 @@
 import React from 'react'
 import PT from 'prop-types'
-import { Link } from 'react-router-dom'
 import TextTruncate from 'react-text-truncate'
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
