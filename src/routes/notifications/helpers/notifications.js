@@ -18,9 +18,11 @@ const MILLISECONDS_IN_MINUTE = 60000
 export const getNotificationsFilters = (sources) => {
   const globalNotificationsQuantity = _.find(sources, { id: 'global' }).total
   const filterSections = [
-    [{ title: 'All Notifications', value: '' }],
-    [{ title: 'Global', value: 'global', quantity: globalNotificationsQuantity }]
+    [{ title: 'All Notifications', value: '' }]
   ]
+  if (globalNotificationsQuantity > 0) {
+    filterSections.push([{ title: 'Global', value: 'global', quantity: globalNotificationsQuantity }])
+  }
   const filtersBySource = []
 
   sources.forEach(source => {
