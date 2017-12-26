@@ -1,6 +1,7 @@
 require('./ProjectListNavHeader.scss')
 
-import React, {PropTypes, Component} from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { PROJECT_STATUS } from '../../../../config/constants'
 
 export default class ProjectListNavHeader extends Component {

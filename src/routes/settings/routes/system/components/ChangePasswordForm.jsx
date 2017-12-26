@@ -3,7 +3,8 @@
  *
  * - Validates form client side
  */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { PASSWORD_MIN_LENGTH, PASSWORD_REG_EXP } from '../../../../../config/constants'
 import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 import './ChangePasswordForm.scss'

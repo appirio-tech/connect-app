@@ -1,5 +1,6 @@
 import _ from 'lodash'
-import React, { PropTypes as PT } from 'react'
+import React from 'react'
+import PT from 'prop-types'
 import './ProductCard.scss'
 
 function ProductCard(props) {

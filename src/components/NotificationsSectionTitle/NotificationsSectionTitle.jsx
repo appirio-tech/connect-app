@@ -3,7 +3,8 @@
  *
  * Can be two types depend on isGlobal flag
  */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import './NotificationsSectionTitle.scss'
 
 const NotificationsSectionTitle = (props) => {

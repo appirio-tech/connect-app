@@ -3,7 +3,8 @@
  * It contains input fields to enter project name and optional reference.
  */
 
-import React, { PropTypes as PT } from 'react'
+import React from 'react'
+import PT from 'prop-types'
 import { PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
 import TextInput from '../../../components/TextInput'
 import './WizardHeader.scss'

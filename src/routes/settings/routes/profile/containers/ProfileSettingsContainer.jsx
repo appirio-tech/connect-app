@@ -1,7 +1,8 @@
 /**
  * Container for profile settings
  */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ProfileSettingsForm from '../components/ProfileSettingsForm'
 import SettingsPanel from '../../../components/SettingsPanel'

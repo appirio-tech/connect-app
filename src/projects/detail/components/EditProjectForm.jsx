@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Prompt } from 'react-router-dom'
 import Modal from 'react-modal'
 import _ from 'lodash'

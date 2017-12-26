@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import ProjectStatus from './ProjectStatus'
 import cn from 'classnames'

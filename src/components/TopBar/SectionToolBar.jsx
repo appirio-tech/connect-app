@@ -7,7 +7,8 @@
  * - optional right side menu
  * - close (cross) button
  */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import SVGIconImage from '../SVGIconImage'
 import './SectionToolBar.scss'

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
 

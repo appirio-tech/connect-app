@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import {Avatar} from 'appirio-tech-react-components'
-import React, { PropTypes as PT } from 'react'
+import React from 'react'
+import PT from 'prop-types'
 import './AvatarGroup.scss'
 
 function AvatarGroup({ users }) {

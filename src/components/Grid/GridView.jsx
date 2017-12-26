@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import ListHeader from './ListHeader'
 import ListItem from './ListItem'
 import PaginationBar from './PaginationBar'

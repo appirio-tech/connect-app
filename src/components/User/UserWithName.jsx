@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { DOMAIN } from '../../config/constants'
 import UserAvatar from './UserAvatar'
 require('./UserWithName.scss')
@@ -22,7 +23,7 @@ UserWithName.propTypes = {
   handle  : PropTypes.string.isRequired,
   firstName : PropTypes.string.isRequired,
   lastName  : PropTypes.string.isRequired,
-  photoURL  : PropTypes.string.isRequired,
+  photoURL  : PropTypes.string,
   maxRating : PropTypes.object,
   showLevel : PropTypes.bool
 }

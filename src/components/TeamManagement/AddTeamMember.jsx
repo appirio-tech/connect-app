@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import AutoCompleteInput from './AutoCompleteInput'
 import cn from 'classnames'
 import { Icons } from 'appirio-tech-react-components'

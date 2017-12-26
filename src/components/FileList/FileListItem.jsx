@@ -1,5 +1,6 @@
 import _ from 'lodash'
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import filesize from 'filesize'
 import moment from 'moment'
 import { Icons, Tooltip } from 'appirio-tech-react-components'

@@ -1,5 +1,6 @@
 import _ from 'lodash'
-import React, { PropTypes as PT, Component } from 'react'
+import React, { Component } from 'react'
+import PT from 'prop-types'
 import Sticky from 'react-stickynode'
 
 import { findProduct } from '../../../config/projectWizard'

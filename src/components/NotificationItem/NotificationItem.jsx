@@ -3,7 +3,8 @@
  *
  * Has a tick to toggle read status
  */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { NOTIFICATION_TYPE } from '../../config/constants'
 import SVGIconImage from '../SVGIconImage'
