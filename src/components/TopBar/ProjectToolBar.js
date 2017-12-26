@@ -1,7 +1,8 @@
 require('./ProjectToolBar.scss')
 
 import _ from 'lodash'
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'

@@ -1,7 +1,8 @@
 /**
  * Message to show when there is no notifications
  */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import SVGIconImage from '../SVGIconImage'
 import './NotificationsEmpty.scss'
 

@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import moment from 'moment'
-import React, { PropTypes as PT } from 'react'
+import React from 'react'
+import PT from 'prop-types'
 import TextTruncate from 'react-text-truncate'
 import { findProduct } from '../../../../config/projectWizard'
 import SVGIconImage from '../../../../components/SVGIconImage'

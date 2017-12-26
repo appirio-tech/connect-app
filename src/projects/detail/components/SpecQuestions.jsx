@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import seeAttachedWrapperField from './SeeAttachedWrapperField'
 import { TCFormFields } from 'appirio-tech-react-components'
 import _ from 'lodash'

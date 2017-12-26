@@ -1,5 +1,6 @@
 import _ from 'lodash'
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import update from 'react-addons-update'
 import PickerFeatureList from './PickerFeatureList'
 // import FeatureForm from './FeatureForm'

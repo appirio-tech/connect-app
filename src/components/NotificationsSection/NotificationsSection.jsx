@@ -3,7 +3,8 @@
  *
  * Displays source title, "mark all" button and list of notifications
  */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import NotificationItem from '../NotificationItem/NotificationItem'
 import NotificationsSectionTitle from '../NotificationsSectionTitle/NotificationsSectionTitle'
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'

@@ -1,6 +1,7 @@
 require('./ProjectsToolBar.scss')
 
-import React, {PropTypes, Component} from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import querystring from 'query-string'
 import { withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'

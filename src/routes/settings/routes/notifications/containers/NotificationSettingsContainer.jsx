@@ -1,7 +1,8 @@
 /**
  * Container for notification settings
  */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import NotificationSettingsForm from '../components/NotificationSettingsForm'
 import SettingsPanel from '../../../components/SettingsPanel'

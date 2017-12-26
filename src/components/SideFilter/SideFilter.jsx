@@ -3,7 +3,8 @@
  *
  * Visually splits filters into sections.
  */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import SideFilterSection from './SideFilterSection'
 import './SideFilter.scss'
 

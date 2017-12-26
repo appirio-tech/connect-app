@@ -1,7 +1,8 @@
 /**
  * Notification settings form
  */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Formsy, SwitchButton } from 'appirio-tech-react-components'
 import BtnGroup from '../../../../../components/BtnGroup/BtnGroup'
 import iconWeb from '../../../../../assets/images/icon-web.png'

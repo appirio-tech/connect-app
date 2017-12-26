@@ -1,6 +1,7 @@
 
 
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Editor, {composeDecorators} from 'draft-js-plugins-editor'
 import {EditorState, RichUtils} from 'draft-js'
 import {Avatar} from 'appirio-tech-react-components'

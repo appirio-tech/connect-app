@@ -5,7 +5,8 @@
  * - Validates email server side (check if available)
  * - Doesn't validate server side initially inputted email
  */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import _ from 'lodash'
 import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
 import SVGIconImage from '../../../../../components/SVGIconImage'

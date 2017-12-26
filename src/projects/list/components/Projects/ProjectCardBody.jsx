@@ -1,4 +1,5 @@
-import React, { PropTypes as PT } from 'react'
+import React from 'react'
+import PT from 'prop-types'
 import { Link } from 'react-router-dom'
 import TextTruncate from 'react-text-truncate'
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
@@ -26,7 +27,7 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
         line={descLinesCount}
         truncateText="..."
         text={project.description}
-        textTruncateChild={<span><Link className="read-more-link" to={`/projects/${project.id}/specification`}> read more </Link></span>}
+        textTruncateChild={<span className="read-more-link">read more</span>}
       />
       <div className="project-status">
         {(project.status !== PROJECT_STATUS_ACTIVE || progress === 0) &&

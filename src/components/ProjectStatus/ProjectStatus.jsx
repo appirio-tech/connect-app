@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import cn from 'classnames'
 import './ProjectStatus.scss'
 
@@ -17,7 +18,10 @@ ProjectStatus.propTypes = {
   /**
    * Status object, containing name, fullName and value fields
    */
-  status         : PropTypes.arrayOf(PropTypes.object).isRequired,
+  status         : PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.object),
+    PropTypes.object
+  ]).isRequired,
   /**
    * Boolean flag to render the status text
    */
@@ -42,4 +46,3 @@ ProjectStatus.defaultProps = {
 }
 
 export default ProjectStatus
-

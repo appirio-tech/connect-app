@@ -1,7 +1,8 @@
 /**
  * Text field with counter
  */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { TCFormFields } from 'appirio-tech-react-components'
 import './TextInputWithCounter.scss'
 

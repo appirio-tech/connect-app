@@ -3,7 +3,8 @@
  *
  * A bell icon which toggles a dropdown with notifications
  */
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import SVGIconImage from '../SVGIconImage'
 import Dropdown from '../Dropdown/Dropdown'
 import cn from 'classnames'
