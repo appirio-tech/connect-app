@@ -39,6 +39,15 @@
       margin-top: 12px;
       // width: 60px;
       // height: 36px;
+
+      > svg {
+        height: auto;
+        width: 53px;
+
+        path {
+          fill: $tc-gray-10;
+        }
+      }
     }
 
     .MenuBar {

@@ -2,8 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import _ from 'lodash'
-import { UserDropdown, Icons } from 'appirio-tech-react-components'
-const { ConnectLogo } = Icons
+import { UserDropdown } from 'appirio-tech-react-components'
+import SVGIconImage from '../SVGIconImage'
 import {
   ACCOUNTS_APP_LOGIN_URL,
   ACCOUNTS_APP_REGISTER_URL,
@@ -41,7 +41,9 @@ class TopBarContainer extends React.Component {
     const logoTargetUrl = isLoggedIn ? '/projects' : '/'
     return (
       <div className="logo-wrapper">
-        <Link className="logo" to={logoTargetUrl} target="_self"><ConnectLogo /></Link>
+        <Link className="logo" to={logoTargetUrl} target="_self">
+          <SVGIconImage filePath="connect-logo-mono" />
+        </Link>
         {comp}
       </div>
     )
