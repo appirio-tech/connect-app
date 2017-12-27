@@ -214,7 +214,7 @@ class ProjectsToolBar extends Component {
             }
             { !!isLoggedIn && <NewProjectNavLink compact /> }
             { userMenu }
-            { isLoggedIn && <NotificationsDropdown /> }
+            { !!isLoggedIn && <NotificationsDropdown /> }
           </div>
         </div>
         <div className="secondary-toolbar">
