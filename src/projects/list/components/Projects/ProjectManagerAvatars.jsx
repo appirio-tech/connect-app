@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
 import UserTooltip from '../../../../components/User/UserTooltip'
