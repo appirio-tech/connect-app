@@ -57,6 +57,10 @@
 
     &.dark-row {
       background-color: $tc-gray-neutral-light;
+
+      &:hover {
+        background-color: rgba($tc-gray-neutral-dark, 0.45);
+      }
     }
 
     &.row-th {
