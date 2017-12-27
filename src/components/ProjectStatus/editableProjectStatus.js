@@ -49,7 +49,7 @@ const hocStatusDropdown = (CompositeComponent) => {
               <div className="status-header">Project Status</div>
               <ul>
                 {
-                  PROJECT_STATUS.map((item) =>
+                  PROJECT_STATUS.sort((a, b) => a.dropDownOrder > b.dropDownOrder).map((item) =>
                     <li key={item.value}>
                       <a
                         href="javascript:"
