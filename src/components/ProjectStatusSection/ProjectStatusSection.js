@@ -92,7 +92,7 @@ class ProjectStatusSection extends React.Component {
             </div>
             {isOpen && <dir className="status-dropdown">
               <ul>
-                {PROJECT_STATUS.map((item) =>
+                {PROJECT_STATUS.sort((a, b) => a.dropDownOrder > b.dropDownOrder).map((item) =>
                   <li key={item.value}>
                     <a
                       href="javascript:"
