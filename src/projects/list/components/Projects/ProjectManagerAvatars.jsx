@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
 import UserTooltip from '../../../../components/User/UserTooltip'
@@ -14,7 +15,7 @@ const ProjectManagerAvatars = ({ managers }) => {
   }
   return (
     <div className="user-block">
-      {managers.map((user, i) => {
+      {_.uniqBy(managers, 'userId').map((user, i) => {
         return (
           <div className={`stack-avatar stack-avatar-${i}`} key={i}>
             <UserTooltip usr={user} id={i} previewAvatar />
