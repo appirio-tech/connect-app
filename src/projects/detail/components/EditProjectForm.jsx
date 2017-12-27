@@ -99,6 +99,15 @@ class EditProjectForm extends Component {
     window.addEventListener('beforeunload', this.onLeave)
   }
 
+  autoResize() {
+    if (self.autoResizeSet === true) { return }
+    self.autoResizeSet = true;
+    
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'))
+    }, 1000)
+  }
+
   componentWillUnmount() {
     this.props.fireProjectDirtyUndo()
     window.removeEventListener('beforeunload', this.onLeave)
@@ -106,6 +115,7 @@ class EditProjectForm extends Component {
 
   // Notify user if they navigate away while the form is modified.
   onLeave(e = {}) {
+    this.autoResize()
     if (this.isChanged()) {
       // TODO: remove this block - it disables unsaved changes popup 
       // for app screens changes
