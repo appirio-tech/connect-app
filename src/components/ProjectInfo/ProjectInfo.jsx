@@ -58,6 +58,7 @@ class ProjectInfo extends Component {
           descLinesCount={4}
           onChangeStatus={onChangeStatus}
           isSuperUser={isSuperUser}
+          showLink
         />
         <ProjectDirectLinks
           directLinks={directLinks}
