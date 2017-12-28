@@ -2,7 +2,7 @@
  * Mocked service for notifications
  */
 import { axiosInstance as axios } from '../../../api/requestInterceptor'
-import { TC_NOTIFICATION_URL } from '../../../../config/constants'
+import { TC_NOTIFICATION_URL } from '../../../config/constants'
 import { NOTIFICATIONS_LIMIT } from '../../../config/constants'
 import { prepareNotifications } from '../helpers/notifications'
 
