@@ -1,4 +1,5 @@
-import React, { PropTypes as PT, Component } from 'react'
+import React, { Component } from 'react'
+import PT from 'prop-types'
 import Panel from '../Panel/Panel'
 import DeleteProjectModal from './DeleteProjectModal'
 import ProjectCardHeader from '../../projects/list/components/Projects/ProjectCardHeader'
@@ -57,6 +58,7 @@ class ProjectInfo extends Component {
           descLinesCount={4}
           onChangeStatus={onChangeStatus}
           isSuperUser={isSuperUser}
+          showLink
         />
         <ProjectDirectLinks
           directLinks={directLinks}

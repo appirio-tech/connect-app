@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import ProjectStatus from './ProjectStatus'
 import cn from 'classnames'
@@ -10,6 +11,68 @@ import {
   PROJECT_STATUS_COMPLETED,
   PROJECT_STATUS_CANCELLED
 } from '../../config/constants'
+
+const hocStatusDropdown = (CompositeComponent) => {
+  class StatusDropdown extends Component {
+    shouldDropdownUp() {
+      if (this.refs.dropdown) {
+        const bounds = this.refs.dropdown.getBoundingClientRect()
+        const windowHeight = window.innerHeight
+
+        return bounds.top > windowHeight / 2
+      }
+
+      return false
+    }
+
+    render() {
+      const { canEdit, isOpen, handleClick, onItemSelect, showText, withoutLabel, unifiedHeader, status } = this.props
+      const selected = PROJECT_STATUS.filter((opt) => opt.value === status)[0]
+
+      this.shouldDropdownUp()
+      return (
+        <div className="project-status-dropdown" ref="dropdown">
+          <div
+            className={cn('status-header', 'ps-' + selected.value, { active: isOpen, editable: canEdit })}
+            onClick={handleClick}
+          >
+            <CompositeComponent
+              status={selected}
+              showText={showText}
+              withoutLabel={withoutLabel}
+              unifiedHeader={unifiedHeader}
+            />
+            { canEdit && <i className="caret" ><SVGIconImage filePath="arrow-9px-carret-down-normal" /></i> }
+          </div>
+          { isOpen && canEdit &&
+            <div className={cn('status-dropdown', { 'dropdown-up': this.shouldDropdownUp() })}>
+              <div className="status-header">Project Status</div>
+              <ul>
+                {
+                  PROJECT_STATUS.sort((a, b) => a.dropDownOrder > b.dropDownOrder).map((item) =>
+                    <li key={item.value}>
+                      <a
+                        href="javascript:"
+                        className={cn('status-option', 'ps-' + item.value, { active: item.value === status })}
+                        onClick={(e) => {
+                          onItemSelect(item.value, e)
+                        }}
+                      >
+                        <ProjectStatus status={item} showText />
+                      </a>
+                    </li>
+                  )
+                }
+              </ul>
+            </div>
+          }
+        </div>
+      )
+    }
+  }
+
+  return StatusDropdown
+}
 
 const editableProjectStatus = (CompositeComponent) => class extends Component {
   constructor(props) {
@@ -35,7 +98,7 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
     if (newStatus === PROJECT_STATUS_COMPLETED || newStatus === PROJECT_STATUS_CANCELLED) {
       this.setState({ newStatus, showStatusChangeDialog : true })
     } else {
-      this.props.onChangeStatus(newStatus)
+      (this.props.projectId) ? this.props.onChangeStatus(this.props.projectId, newStatus) : this.props.onChangeStatus(newStatus)
     }
   }
 
@@ -46,57 +109,20 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
   }
 
   changeStatus() {
-    this.props.onChangeStatus(this.state.newStatus, this.state.statusChangeReason)
+    (this.props.projectId) ?
+    this.props.onChangeStatus(this.props.projectId, this.state.newStatus, this.state.statusChangeReason)
+     : this.props.onChangeStatus(this.state.newStatus, this.state.statusChangeReason)
+
   }
 
   handleReasonUpdate(reason) {
     this.setState({ statusChangeReason : _.get(reason, 'value') })
   }
 
-  renderDropdown(props) {
-    const { canEdit, isOpen, handleClick, onItemSelect, showText, withoutLabel, unifiedHeader, status } = props
-    const selected = PROJECT_STATUS.filter((opt) => opt.value === status)[0]
-    return (
-      <div className="project-status-dropdown">
-        <div className={cn('status-header', 'ps-' + selected.value, { active: isOpen, editable: canEdit })} onClick={handleClick}>
-          <CompositeComponent
-            status={selected}
-            showText={showText}
-            withoutLabel={withoutLabel}
-            unifiedHeader={unifiedHeader}
-          />
-          { canEdit && <i className="caret" ><SVGIconImage filePath="arrow-9px-carret-down-normal" /></i> }
-        </div>
-        { isOpen && canEdit &&
-          <div className="status-dropdown">
-            <div className="status-header">Project Status</div>
-            <ul>
-              {
-                PROJECT_STATUS.map((item) =>
-                  <li key={item.value}>
-                    <a
-                      href="javascript:"
-                      className={cn('status-option', 'ps-' + item.value, { active: item.value === status })}
-                      onClick={(e) => {
-                        onItemSelect(item.value, e)
-                      }}
-                    >
-                      <ProjectStatus status={item} showText />
-                    </a>
-                  </li>
-                )
-              }
-            </ul>
-          </div>
-        }
-      </div>
-    )
-  }
-
   render() {
     const { showStatusChangeDialog, newStatus, statusChangeReason } = this.state
     const { canEdit } = this.props
-    const ProjectStatusDropdown = canEdit ? enhanceDropdown(this.renderDropdown) : this.renderDropdown
+    const ProjectStatusDropdown = canEdit ? enhanceDropdown(hocStatusDropdown(CompositeComponent)) : hocStatusDropdown(CompositeComponent)
     return (
       <div className={cn('panel', 'EditableProjectStatus', {'modal-active': showStatusChangeDialog})}>
         <div className="modal-overlay"></div>

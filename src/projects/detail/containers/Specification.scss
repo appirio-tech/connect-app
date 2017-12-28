@@ -82,25 +82,25 @@ $sideBarMaxWidth: 360px;
     color: $tc-black;*/
 
     &::-webkit-input-placeholder {
-      color: #888894;
+      color: $tc-gray-50;
       text-transform: none;
     }
 
     &::-moz-placeholder {
       line-height: 45px;
-      color: #888894;
+      color: $tc-gray-50;
       opacity: 1;
       text-transform: none;
     }
 
     &:-ms-input-placeholder {
-      color: #888894;
+      color: $tc-gray-50;
       text-transform: none;
     }
   }
   /* .dashed-bottom-border */
   .app-screen-header {
-    border-bottom: 1px solid #c3c3c8;
+    border-bottom: 1px solid $tc-gray-30;
     display: flex;
     justify-content: space-between;
     padding: 15px 0;
@@ -199,7 +199,7 @@ $sideBarMaxWidth: 360px;
       /* this selector is too common and it's applied to .spec-question-list thought it shouldn't
          if also has big priority so we have to fix it here */
       form > div:not(.spec-question-list) {
-        box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 1px 3px 0px rgba($tc-black, 0.2);
       }
 
       .title {
@@ -241,7 +241,7 @@ $sideBarMaxWidth: 360px;
 
           .required {
             background: $tc-orange-70;
-            color: #fff;
+            color: $tc-white;
           }
 
           .optional {
@@ -279,7 +279,7 @@ $sideBarMaxWidth: 360px;
             float: left;
             @include roboto;
             font-size: 13px;
-            color: #47474f;
+            color: $tc-gray-80;
             line-height: 16px;
           }
         }
@@ -289,7 +289,7 @@ $sideBarMaxWidth: 360px;
         .textarea-title {
           @include roboto;
           font-size: 13px;
-          color: #5d5d66;
+          color: $tc-gray-70;
           line-height: 20px;
           padding-bottom: 10px;
         }
@@ -370,8 +370,8 @@ $sideBarMaxWidth: 360px;
     .bg-contents {
       @include roboto-medium;
       font-size: 15px;
-      color: #b47dd6;
-      background: #f8f2fb;
+      color: $tc-purple-70;
+      background: $tc-purple-10;
       // letter-spacing: 10px;
       width: 100%;
       height: 40px;
@@ -575,10 +575,10 @@ $sideBarMaxWidth: 360px;
   }
   /* .dashed-boxes */
   .dashed-boxes {
-    border: 1px dashed #c3c3c8;
+    border: 1px dashed $tc-gray-30;
     text-align: center;
     margin-bottom: 20px;
-    background: #fafafb;
+    background: $tc-gray-neutral-light;
     border-radius: 2px;
 
     .title {
@@ -591,7 +591,7 @@ $sideBarMaxWidth: 360px;
     .gray-txt {
       @include roboto;
       font-size: 15px;
-      color: #747480;
+      color: $tc-gray-60;
       line-height: 20px;
     }
 
@@ -633,7 +633,7 @@ $sideBarMaxWidth: 360px;
 
     &.flie-list-boxes {
       .flie-list {
-        border-bottom: 1px dashed #c3c3c8;
+        border-bottom: 1px dashed $tc-gray-30;
         padding-bottom: 5px;
       }
 
@@ -663,13 +663,13 @@ $sideBarMaxWidth: 360px;
           width: 100%;
           height: 4px;
           margin-top: 5px;
-          background: #dcdce0;
+          background: $tc-gray-20;
           border-radius: 12px;
           position: relative;
 
           .blue-bar {
-            background: #59a7ff;
-            border-right: 2px solid #fafafb;
+            background: $tc-dark-blue-70;
+            border-right: 2px solid $tc-gray-neutral-light;
             border-radius: 10px 0px 0px 10px;
             height: 4px;
             position: absolute;
@@ -713,7 +713,7 @@ $sideBarMaxWidth: 360px;
     .gray-txt {
       @include roboto;
       font-size: 15px;
-      color: #747480;
+      color: $tc-gray-60;
       line-height: 20px;
     }
 
@@ -751,7 +751,7 @@ $sideBarMaxWidth: 360px;
         .point {
           @include roboto-medium;
           font-size: 15px;
-          color: #262628;
+          color: $tc-black;
           line-height: 18px;
           padding: 10px 0;
           @include roboto-bold;
@@ -920,7 +920,7 @@ $sideBarMaxWidth: 360px;
   border: 1px solid $tc-gray-20;
   border-radius: 4px;
   cursor: pointer;
-  border: 1px solid #dcdce0;
+  border: 1px solid $tc-gray-20;
   border-radius: 4px;
   display: inline-block;
   margin: 10px 10px 0;
@@ -952,7 +952,7 @@ $sideBarMaxWidth: 360px;
       right: 10px;
       width: 15px;
       height: 15px;
-      background: #1a85ff;
+      background: $tc-dark-blue-90;
       border-radius: 2px;
     }
 
@@ -965,7 +965,7 @@ $sideBarMaxWidth: 360px;
       width: 5px;
       border-width: 0 2px 2px 0;
       border-style: solid;
-      border-color: #fff;
+      border-color: $tc-white;
       height: 10px;
       transform: rotate(45deg);
       -o-transform: rotate(45deg);

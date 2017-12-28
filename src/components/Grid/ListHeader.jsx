@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
 
@@ -40,7 +41,7 @@ const ListHeader = ({ columns, sortHandler, currentSortField }) => {
   }
 
   return (
-    <div className="row">
+    <div className="row header">
       <div className="flex-row row-th">
         <div className="mask-layer hide" />
         { columns.map( col =>

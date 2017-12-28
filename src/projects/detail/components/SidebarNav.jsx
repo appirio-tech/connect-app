@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link as DirectLink } from 'react-scroll'
 import cn from 'classnames'
 import { Icons } from 'appirio-tech-react-components'

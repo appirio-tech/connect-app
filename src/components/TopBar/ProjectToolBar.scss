@@ -57,7 +57,7 @@
     .bar-column.project-name {
       display: flex;
       align-items: center;
-      
+
       span {
         @include tc-heading;
         color: $tc-gray-10;
@@ -259,20 +259,41 @@
         left: 28px;
       }
     }
-  }
-  .nav {
-    padding-right: 10px;
-    ul{
-      width: 134px;
-    }
-    ul li {
-      padding: 0 10px;
-      &:first-child {
-        padding-left: 0;
+    .nav {
+      padding-right: 10px;
+      ul{
+        width: auto;
       }
-      a {
-        padding-left: 16px;
-        text-indent: -9999px;
+      ul li {
+        padding: 0 10px;
+        &:first-child {
+          padding-left: 0;
+        }
+        a {
+          padding-left: 16px;
+          text-indent: -9999px;
+        }
+      }
+    }
+  }
+}
+
+@media all and (max-width: 1300px) {
+  .ProjectToolBar {
+    .nav.long-menu {
+      padding-right: 10px;
+      ul{
+        width: auto;
+      }
+      ul li {
+        padding: 0 10px;
+        &:first-child {
+          padding-left: 0;
+        }
+        a {
+          padding-left: 16px;
+          text-indent: -9999px;
+        }
       }
     }
   }

@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import PanelProject from '../PanelProject/PanelProject'
 import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
@@ -91,7 +92,7 @@ class ProjectStatusSection extends React.Component {
             </div>
             {isOpen && <dir className="status-dropdown">
               <ul>
-                {PROJECT_STATUS.map((item) =>
+                {PROJECT_STATUS.sort((a, b) => a.dropDownOrder > b.dropDownOrder).map((item) =>
                   <li key={item.value}>
                     <a
                       href="javascript:"

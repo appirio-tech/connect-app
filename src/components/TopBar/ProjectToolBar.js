@@ -1,10 +1,12 @@
 require('./ProjectToolBar.scss')
 
 import _ from 'lodash'
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
+import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import SVGIconImage from '../SVGIconImage'
 import NewProjectNavLink from './NewProjectNavLink'
 
@@ -53,7 +55,7 @@ class ProjectToolBar extends React.Component {
             {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
           </div>}
           <div className="bar-column">
-            {project && <nav className="nav">
+            {project && <nav className={`nav ${(project.details && !project.details.hideDiscussions) ? 'long-menu' : ''}`}>
               <ul>
                 <li><NavLink to={`/projects/${project.id}`} exact activeClassName="active"><i className="icon-dashboard"/>Dashboard</NavLink></li>
                 <li><NavLink to={`/projects/${project.id}/specification`} activeClassName="active"><i className="icon-specification"/>Specification</NavLink></li>
@@ -62,7 +64,7 @@ class ProjectToolBar extends React.Component {
                   isPowerUser && <li><NavLink to={`/projects/${project.id}/challenges`} activeClassName="active"><i className="icon-challenges"/>Challenges</Link></li>
                 */}
                 {/*
-                  * TODO: Completely remome the discussions list item once there isn't
+                  * TODO: Completely remove the discussions list item once there isn't
                   * any active project that uses discussions.
                   */}
                 {
@@ -73,6 +75,7 @@ class ProjectToolBar extends React.Component {
             </nav>}
             <NewProjectNavLink compact returnUrl={window.location.href} />
             { userMenu }
+            <NotificationsDropdown />
           </div>
         </div>
       </div>

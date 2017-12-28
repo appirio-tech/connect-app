@@ -5,5 +5,6 @@ module.exports = (() => {
   if (['master', 'qa'].indexOf(branch) < 0) {
     return require('./dev')
   }
+
   return require('./' + branch)
 })()

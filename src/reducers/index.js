@@ -9,6 +9,8 @@ import projectSearch from '../projects/reducers/projectSearch'
 import projectSearchSuggestions from '../projects/reducers/projectSearchSuggestions'
 import members from './members'
 import alerts from './alerts'
+import notifications from '../routes/notifications/reducers'
+import settings from '../routes/settings/reducers'
 
 export default combineReducers({
   loadUser,
@@ -20,5 +22,7 @@ export default combineReducers({
   members,
   projectDashboard,
   projectTopics,
-  alerts
+  alerts,
+  notifications,
+  settings
 })

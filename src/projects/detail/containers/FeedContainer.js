@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Prompt } from 'react-router-dom'
 import _ from 'lodash'
 import {
@@ -139,7 +140,7 @@ class FeedView extends React.Component {
       item.topicMessage.newContent = feedFromState ? feedFromState.topicMessage.newContent : null
       item.editTopicMode = feedFromState && feedFromState.editTopicMode
     }
-      
+
     const validPost = (post) => {
       return post.type === 'post' && (post.body && post.body.trim().length || !isSystemUser(post.userId))
     }
@@ -342,13 +343,13 @@ class FeedView extends React.Component {
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
     const onLeaveMessage = this.onLeave() || ''
 
-    const renderFeed = (item) => {
+    const renderFeed = (item, i) => {
       if ((item.spec || item.sendForReview) && !showDraftSpec) {
         return null
       }
       const anchorId = 'feed-' + item.id
       return (
-        <div className="feed-action-card" key={item.id}>
+        <div className="feed-action-card" key={`${item.id}-${i}`}>
           <ScrollableFeed
             {...Object.assign({}, item, {id: `${item.id}`})}
             name={anchorId}

@@ -25,7 +25,7 @@
   outline: none;
   background: $tc-white;
   border: 1px solid $tc-gray-20;
-  box-shadow: inset 0px 0px 2px 0px rgba(183, 183, 183, 0.2);
+  box-shadow: inset 0px 0px 2px 0px rgba($tc-gray-30, 0.2);
   border-radius: 2px;
   cursor: auto;
 
@@ -38,7 +38,7 @@
   &.focus {
     border: 1px solid $tc-dark-blue-90;
     outline: none;
-    box-shadow: inset 0px 0px 2px 1px rgba(133,203,255,0.4);
+    box-shadow: inset 0px 0px 2px 1px rgba($tc-light-blue-70,0.4);
   }
   transition: .15s all;
   blockquote {
@@ -65,13 +65,13 @@
   list-style-type: disc;
 }
 .public-DraftStyleDefault-pre {
-  background: #fafafb;
+  background: $tc-gray-neutral-light;
   padding: 10px;
   font-family: Roboto Mono, SF Mono, monospace;
   font-size: 13px;
   font-weight: normal;
-  color: #333;
-  border: 1px solid #ededf2;
+  color: $tc-gray-90;
+  border: 1px solid $tc-gray-10;
   border-radius: 4px;
 }
 .public-DraftStyleDefault-block {
@@ -96,14 +96,15 @@
     border-left: $corner-radius * 2 solid $tc-gray-10
   }
   pre {
-    background: #fafafb;
+    background: $tc-gray-neutral-light;
     padding: 10px;
     font-family: Roboto Mono, SF Mono, monospace;
     font-size: 13px;
     font-weight: normal;
-    color: #333;
-    border: 1px solid #ededf2;
+    color: $tc-gray-90;
+    border: 1px solid $tc-gray-10;
     border-radius: 4px;
+    white-space: inherit;
   }
   strong {
     font-weight: bold;

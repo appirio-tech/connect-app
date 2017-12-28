@@ -91,7 +91,7 @@
     -webkit-transition: 300ms all ease;
     position: relative;
     background: $tc-white;
-    box-shadow: 0 2px 9px 0 rgba(38, 38, 38, 0.1);
+    box-shadow: 0 2px 9px 0 rgba($tc-gray-90, 0.1);
 
     h1 {
       color: $tc-dark-blue;

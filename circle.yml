@@ -22,14 +22,14 @@ deployment:
     branch: dev
     owner: appirio-tech
     commands:
-      - ./deploy.sh DEV
+      - ./deploy.sh DEV no-cache
   test:
     branch: [qa]
     owner: appirio-tech
     commands:
       - ./deploy.sh TEST01
   test02:
-    branch: test02
+    branch: notifications
     owner: appirio-tech
     commands:
       - ./deploy.sh TEST02

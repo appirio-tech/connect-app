@@ -1,5 +1,6 @@
 import _ from 'lodash'
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import Panel from '../Panel/Panel'
 import AddComment from '../ActionCard/AddComment'

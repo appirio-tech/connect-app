@@ -1,4 +1,5 @@
-import React, { PropTypes as PT } from 'react'
+import React from 'react'
+import PT from 'prop-types'
 import {Link} from 'react-router-dom'
 import { getProjectRoleForCurrentUser } from '../../../../helpers/projectHelper'
 import AvatarGroup from '../../../../components/AvatarGroup/AvatarGroup'

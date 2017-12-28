@@ -1,18 +1,26 @@
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
-import { TC_API_URL, PROJECT_LIST_PAGE_SIZE } from '../config/constants'
+import { TC_API_URL, PROJECTS_API_URL, PROJECTS_LIST_PER_PAGE } from '../config/constants'
 
 export function getProjects(criteria, pageNum) {
   // add default params
-  const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'details']
+  const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', 'details']
   const params = {
-    limit: PROJECT_LIST_PAGE_SIZE,
-    offset: (pageNum - 1) * PROJECT_LIST_PAGE_SIZE,
+    limit: PROJECTS_LIST_PER_PAGE,
+    offset: (pageNum - 1) * PROJECTS_LIST_PER_PAGE,
     fields: includeFields.join(',')
   }
   // filters
   const filter = _.omit(criteria, ['sort'])
   if (!_.isEmpty(filter)) {
+    // support for multiple comma separated types
+    if (filter.type && filter.type.indexOf(',') > -1) {
+      filter.type = `in(${filter.type})`
+    }
+    // support for multiple comma separated segments
+    if (filter.segment && filter.segment.indexOf(',') > -1) {
+      filter.segment = `in(${filter.segment})`
+    }
     // convert filter object to string
     const filterStr = _.map(filter, (v, k) => `${k}=${v}`)
     params.filter = filterStr.join('&')
@@ -21,7 +29,7 @@ export function getProjects(criteria, pageNum) {
   const sort = _.get(criteria, 'sort', null)
   if (sort) params.sort = sort
 
-  return axios.get(`${TC_API_URL}/v4/projects/`, { params })
+  return axios.get(`${PROJECTS_API_URL}/v4/projects/`, { params })
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
@@ -42,7 +50,7 @@ export function getProjectSuggestions() {
  */
 export function getProjectById(projectId) {
   projectId = parseInt(projectId)
-  return axios.get(`${TC_API_URL}/v4/projects/${projectId}/`)
+  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/`)
     .then(resp => {
       return _.get(resp.data, 'result.content', {})
     })
@@ -52,12 +60,13 @@ export function getProjectById(projectId) {
  * Update project using patch
  * @param  {integer} projectId    project Id
  * @param  {object} updatedProps updated project properties
+ * @param  {boolean} updateExisting update existing or new project
  * @return {promise}              updated project
  */
-export function updateProject(projectId, updatedProps) {
-  return axios.patch(`${TC_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
+export function updateProject(projectId, updatedProps, updateExisting) {
+  return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
     .then(resp => {
-      return _.get(resp.data, 'result.content')
+      return _.extend(_.get(resp.data, 'result.content'), { updateExisting })
     })
 }
 
@@ -68,7 +77,7 @@ export function createProject(projectProps) {
   // have the discussions tab enabled
   projectProps.details.hideDiscussions = true
   
-  return axios.post(`${TC_API_URL}/v4/projects/`, { param: projectProps })
+  return axios.post(`${PROJECTS_API_URL}/v4/projects/`, { param: projectProps })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})
     })
@@ -80,14 +89,14 @@ export function createProjectWithStatus(projectProps, status) {
   // have the discussions tab enabled
   projectProps.details.hideDiscussions = true
 
-  return axios.post(`${TC_API_URL}/v4/projects/`, { param: projectProps })
+  return axios.post(`${PROJECTS_API_URL}/v4/projects/`, { param: projectProps })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})
     })
     .then(project => {
       const updatedProps = { status }
       const projectId = project.id
-      return axios.patch(`${TC_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
+      return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
         .then(resp => {
           return _.get(resp.data, 'result.content')
         })
@@ -99,7 +108,7 @@ export function createProjectWithStatus(projectProps, status) {
 }
 
 export function deleteProject(projectId) {
-  return axios.delete(`${TC_API_URL}/v4/projects/${projectId}/`)
+  return axios.delete(`${PROJECTS_API_URL}/v4/projects/${projectId}/`)
     .then(() => {
       return projectId
     })

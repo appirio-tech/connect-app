@@ -1,4 +1,5 @@
-import React, { PropTypes as PT } from 'react'
+import React from 'react'
+import PT from 'prop-types'
 import ModalControl from '../ModalControl'
 import SVGIconImage from '../SVGIconImage'
 import './Wizard.scss'

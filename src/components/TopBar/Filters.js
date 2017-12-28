@@ -1,61 +1,60 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import _ from 'lodash'
-import { Dropdown, DropdownItem } from 'appirio-tech-react-components'
-import { PROJECT_STATUS } from '../../config/constants'
+import Select from '../../components/Select/Select'
 import { projectTypes } from '../../config/projectWizard'
 
-const projectStatuses = [
-  { val: 'in(draft,in_review,reviewed,active)', label: 'Open' },
-  { val: null, label: 'All Statuses' },
-  ...PROJECT_STATUS.map((item) => ({val: item.value, label: item.name}))
-]
-
 const Filters = ({ criteria, applyFilters }) => {
-
-  const type = _.find(projectTypes, t => t.id === (criteria.type || null))
-  const status = _.find(projectStatuses, t => t.val === (criteria.status || null))
-
-  const _types = _.map(projectTypes, p => {
-    return { val: { type: p.id }, label: p.name }
+  const types = _.map(projectTypes, projectType => {
+    return { value: projectType.id, label: projectType.name }
   })
-  // adds null valued object for All Types selection
-  _types.splice(0, 0, { val: { type: null}, label: 'All Types' })
 
-  const _statuses = _.map(projectStatuses, p => {
-    return { val: { status: p.val }, label: p.label }
-  })
+  // TODO add segments list
+  // const segments = _.map([], segment => {
+  //   return { value: segment.id, label: segment.value }
+  // })
 
   return (
     <div className="bar__search clearfix">
       <h2>Filters</h2>
       <div className="search-panel">
-        <label className="first">Project Type</label>
         <div className="search-select-widget">
-          <Dropdown theme="new-theme" noPointer pointerShadow>
-            <a className="dropdown-menu-header">{ _.get(type, 'name') || 'All Types' }</a>
-            <ul className="dropdown-menu-list">
-              {
-                _types.map((item, i) =>
-                  <DropdownItem key={i} item={item} onItemClick={applyFilters}/>
-                )
-              }
-            </ul>
-          </Dropdown>
+          <label>Project Type</label>
+          <div className="search-select-field">
+            <Select
+              multi
+              value={criteria.type}
+              options={types}
+              placeholder="All (no filters applied)"
+              onChange={(selectedOptions) => applyFilters({ type: selectedOptions })}
+            />
+          </div>
         </div>
-        <label>Status</label>
-        <div className="search-select-widget">
-          <Dropdown theme="new-theme" noPointer pointerShadow>
-            <a className="dropdown-menu-header">{ status.label || 'All Status' }</a>
-            <ul className="dropdown-menu-list">
-              {
-                _statuses.map((item, i) =>
-                  <DropdownItem key={i} item={item} onItemClick={applyFilters}/>
-                )
-              }
-            </ul>
-          </Dropdown>
-        </div>
+
+        {/* <div className="search-select-widget">
+          <label>Segment</label>
+          <div className="search-select-field">
+            <Select
+              multi
+              value={criteria.segment}
+              options={segments}
+              placeholder="All (no filters applied)"
+              onChange={(selectedOptions) => applyFilters({ segment: selectedOptions })}
+            />
+          </div>
+        </div> */}
       </div>
+      <button
+        className="tc-btn tc-btn-secondary"
+        onClick={() => {
+          applyFilters({
+            type: null,
+            segment: null,
+            status: null,
+            sort: 'updatedAt desc'
+          })
+        }}
+      >Clear filters</button>
     </div>
   )
 }

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { HOC as hoc } from 'formsy-react'
 import { Tooltip } from 'appirio-tech-react-components'
 import _ from 'lodash'

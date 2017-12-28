@@ -1,5 +1,6 @@
 import _ from 'lodash'
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import CircularProgressbar from 'react-circular-progressbar'
 import './ProjectProgress.scss'
 import cn from 'classnames'

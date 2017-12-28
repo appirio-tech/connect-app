@@ -1,0 +1,112 @@
+// this is to include tc styles in the output library
+@import 'tc-includes';
+
+// project override for dropdown shadow
+.Dropdown {
+  box-shadow: 0 3px 30px 2px rgba(0, 0, 0, 0.5);
+  cursor: default;
+  user-select: none;
+}
+
+.notifications-dropdown {
+  align-items: center;
+  display: flex;
+  margin-left: -8px;
+  margin-right: 12px;
+  position: relative;
+
+  .UserDropdownMenu {
+    padding: 0;
+  }
+
+  .Dropdown {
+    right: 10px;
+    left: auto;
+    padding-bottom: 0;
+    position: fixed;
+    top: 54px;
+    width: auto;
+  }
+
+  .UserDropdownMenu .Dropdown.pointer-shadow {
+    margin-top: 0;
+
+    &::before {
+      background-color: $tc-gray-neutral-light;
+      right: 12px;
+    }
+  }
+
+  .notifications-dropdown-bell {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    height: 32px;
+    /* prevent notifications text selection when clicking the bell fast */
+    user-select: none;
+    position: relative;
+    width: 32px;
+
+    > svg > g > g {
+      fill: $tc-white;
+    }
+  }
+
+  .notifications-dropdown-bell.has-unread {
+    &::after {
+      background-color: $tc-red-70;
+      border-radius: 50%;
+      content: '';
+      display: block;
+      height: 8px;
+      position: absolute;
+      right: -2px;
+      top: 2px;
+      width: 8px;
+    }
+  }
+
+  .dropdown-wrap.hide .notifications-dropdown-bell:not(.has-unread) {
+    > svg > g > g {
+      fill: $tc-gray-50;
+    }
+  }
+
+  .notifications-dropdown-body {
+    // window height
+    // - 54px dropdown top position
+    // - 40px dropdown header
+    // - 41px dropdown footer
+    // - 10px dropdown margin bottom
+    height: calc(100vh - 145px);
+    max-height: 500px;
+    overflow: auto;
+  }
+
+  .notifications-dropdown-content {
+    border-radius: 4px;
+    overflow: hidden;
+    width: 480px;
+  }
+
+  .notifications-read-all {
+    @include roboto;
+    background-color: $tc-gray-neutral-light;
+    border-top: 1px solid $tc-gray-10;
+    color: $tc-gray-50;
+    display: block;
+    font-size: 12px;
+    line-height: 40px;
+    letter-spacing: 0;
+    text-align: center;
+  }
+
+  .notifications-empty {
+    padding: 50px 0 60px;
+
+    .notification-settings {
+      margin-top: 30px;
+    }
+  }
+}
