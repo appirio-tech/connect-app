@@ -101,7 +101,7 @@ class EditProjectForm extends Component {
 
   autoResize() {
     if (self.autoResizeSet === true) { return }
-    self.autoResizeSet = true;
+    self.autoResizeSet = true
     
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'))
