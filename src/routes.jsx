@@ -62,8 +62,8 @@ class RedirectToProject extends React.Component {
     const feedId = match.params.feedId
     getFreshToken().then(() => {
       getTopic(feedId).then(resp => {
-        if (resp.topics && resp.topics.length > 0) {
-          const topic = resp.topics[0]
+        if (resp.topic) {
+          const topic = resp.topic
           const projectId = topic.referenceId
           if (topic.tag === PROJECT_FEED_TYPE_PRIMARY) {
             history.replace(`/projects/${projectId}/`)
