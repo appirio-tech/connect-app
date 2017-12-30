@@ -28,7 +28,7 @@ export function getTopic(topicId) {
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
-        topics: _.get(resp.data, 'result.content', []),
+        topic: _.get(resp.data, 'result.content', {}),
         topicId
       }
     })
