@@ -1,5 +1,14 @@
 import _ from 'lodash'
-import { ACCOUNTS_APP_CONNECTOR_URL, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, ROLE_ADMINISTRATOR, ROLE_CONNECT_COPILOT, ROLE_TOPCODER_USER, ROLE_CONNECT_MANAGER } from '../config/constants'
+import {
+  ACCOUNTS_APP_CONNECTOR_URL,
+  LOAD_USER_SUCCESS,
+  LOAD_USER_FAILURE,
+  ROLE_ADMINISTRATOR,
+  ROLE_CONNECT_COPILOT,
+  ROLE_TOPCODER_USER,
+  ROLE_CONNECT_MANAGER,
+  ROLE_CONNECT_ADMIN
+} from '../config/constants'
 import { getFreshToken, configureConnector, decodeToken } from 'tc-accounts'
 import { getUserProfile } from '../api/users'
 import { EventTypes } from 'redux-segment'
@@ -46,6 +55,8 @@ export function loadUserSuccess(dispatch, token) {
       let userRole
       if (_.indexOf(currentUser.roles, ROLE_ADMINISTRATOR) > -1) {
         userRole = ROLE_ADMINISTRATOR
+      } else if (_.indexOf(currentUser.roles, ROLE_CONNECT_ADMIN) > -1) {
+        userRole = ROLE_CONNECT_ADMIN
       } else if (_.indexOf(currentUser.roles, ROLE_CONNECT_MANAGER) > -1) {
         userRole = ROLE_CONNECT_MANAGER
       } else if (_.indexOf(currentUser.roles, ROLE_CONNECT_COPILOT) > -1) {

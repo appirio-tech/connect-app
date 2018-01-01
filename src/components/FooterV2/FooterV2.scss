@@ -2,11 +2,18 @@
 
 .footer-v2 {
   @include roboto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
   font-size: $tc-label-xs;
   color: $tc-gray-50;
   line-height: $base-unit*6;
   padding: 0 10px;
   margin-top: $base-unit*2;
+
+  ul {
+    white-space: nowrap;
+  }
 
   li {
     display: inline-block;
@@ -22,6 +29,7 @@
   }
 
   .footer-copyright {
-    color: $tc-gray-50;
+    color: $tc-gray-30;
+    white-space: nowrap;
   }
 }

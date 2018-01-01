@@ -1,0 +1,26 @@
+// this is to include tc styles in the output library
+@import 'tc-includes';
+
+.btn-group {
+  > .tc-btn {
+    border-radius: 0;
+    border-left-width: 0;
+  }
+
+  > .tc-btn:first-child {
+    border-radius: 2 * $corner-radius 0 0 2 * $corner-radius;
+    border-left-width: 1px;
+  }
+
+  > .tc-btn:last-child {
+    border-radius: 0 2 * $corner-radius 2 * $corner-radius 0;
+  }
+
+  > .tc-btn.active,
+  > .tc-btn.active:hover,
+  > .tc-btn.active:active {
+    background: $tc-gray-20;
+    box-shadow: inset 0 1px 3px 0 rgba($tc-gray-80, 0.38);
+    cursor: default;
+  }
+}

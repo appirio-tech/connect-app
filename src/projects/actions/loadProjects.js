@@ -3,7 +3,7 @@ import {
   PROJECT_SEARCH, GET_PROJECTS, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
   SET_SEARCH_TERM, SET_PROJECTS_SEARCH_CRITERIA,
   CLEAR_PROJECT_SUGGESTIONS_SEARCH, PROJECT_SUGGESTIONS_SEARCH_SUCCESS,
-  ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR,
+  ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN,
   SET_PROJECTS_INFINITE_AUTOLOAD
 } from '../../config/constants'
 import { getProjects } from '../../api/projects'
@@ -26,7 +26,7 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
     let isPowerUser = false
     const loadUser = getState().loadUser
     // power user roles
-    const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
+    const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
     if (loadUser.user) {
       // determine if user is a power user
       isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)

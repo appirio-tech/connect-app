@@ -1,3 +1,5 @@
+#### For folks working on this code base, we're ogaznizing coding style and general guidelines [here](https://github.com/appirio-tech/connect-app/wiki/Community-Work-Read-Me-First!).
+
 # TC Deployment Notes
 _[TC Deployment Notes should always be kept up to date **on the default branch**. Update these notes when changes to this information occur]_
 
@@ -33,6 +35,12 @@ Install dependencies by running the following in the root of the project:
 - Run tests with `npm test` or use `npm run test:watch` to rerun tests after files change
 - To make sure your code passes linting: `npm run lint`
 - To create the build: `npm run build`
+
+## Login
+
+During login, if your see `Invalid URL: http://localhost:3000` error in browser console, just browse http://localhost:3000 and it will show up.
+
+Or, you can add into your `/etc/hosts` the line `127.0.0.1 local.topcoder-dev.com`. And access the app with http://local.topcoder-dev.com:3000. It will prevent you from getting `Invalid URL: http://localhost:3000` and you will be redirected successfully after login.
 
 ## Contributing
 

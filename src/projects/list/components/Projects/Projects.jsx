@@ -11,7 +11,8 @@ import { loadProjects, setInfiniteAutoload } from '../../../actions/loadProjects
 import _ from 'lodash'
 import querystring from 'query-string'
 import { updateProject } from '../../../actions/project'
-import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR, PROJECT_STATUS, PROJECT_STATUS_CANCELLED } from '../../../../config/constants'
+import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR, 
+ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED } from '../../../../config/constants'
 
 /*
   Definiing default project criteria. This is used to later to determine if
@@ -201,7 +202,7 @@ class Projects extends Component {
 
 const mapStateToProps = ({ projectSearch, members, loadUser, projectState }) => {
   let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
+  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   if (loadUser.user) {
     isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
   }

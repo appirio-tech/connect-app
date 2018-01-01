@@ -5,6 +5,7 @@ import React, {PropTypes} from 'react'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
+import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import SVGIconImage from '../SVGIconImage'
 import NewProjectNavLink from './NewProjectNavLink'
 
@@ -73,6 +74,7 @@ class ProjectToolBar extends React.Component {
             </nav>}
             <NewProjectNavLink compact returnUrl={window.location.href} />
             { userMenu }
+            <NotificationsDropdown />
           </div>
         </div>
       </div>

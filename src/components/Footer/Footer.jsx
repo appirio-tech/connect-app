@@ -15,8 +15,10 @@ const Footer = () => {
   ]
   const isProjectDetails = /projects\/\d+/.test(window.location.pathname)
   const isCreateProject = window.location.pathname.startsWith(NEW_PROJECT_PATH)
+  const isNotificationsPage = window.location.pathname.startsWith('/notifications')
 
-  if (isProjectDetails || isCreateProject) {
+  // TODO this looks like a bad way of doing it, I think it should be re-factored
+  if (isProjectDetails || isCreateProject || isNotificationsPage) {
     return null
   }
 

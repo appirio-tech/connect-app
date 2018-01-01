@@ -20,7 +20,7 @@ const ActionBtn = (props) => {
   )
 }
 
-const MemberRow = ({ member, currentMember, onMemberDelete, onChangeOwner }) => {
+const MemberRow = ({ member, currentMember, currentUser, onMemberDelete, onChangeOwner }) => {
   let title
   // rendered member
   const isOwner = member.isPrimary && member.isCustomer
@@ -44,20 +44,23 @@ const MemberRow = ({ member, currentMember, onMemberDelete, onChangeOwner }) => 
     if (!isCurrentOwner && !member.isCopilot) {
       buttons.push(<ActionBtn key={0} type="leave" title="Leave Project" onClick={onDelete} />)
     }
-  } else if (currentMember) {
+  } else if (currentMember || currentUser.isAdmin) {
     // owner can remove only customers
     if (isCurrentOwner && member.isCustomer) {
       buttons.push(<ActionBtn key={1} type="user-remove" title="Remove team member from project" onClick={onDelete} />)
     }
 
     // manager can remove all except owner
-    if (currentMember.isManager && !isOwner) {
+    if ((currentMember && currentMember.isManager) || currentUser.isAdmin) {
       let tooltip = 'Remove team member from project'
       if (member.isCopilot) {
         tooltip = 'Remove copilot from project'
       }
       if (member.isManager) {
         tooltip = 'Remove manager from project'
+      }
+      if (member.isCustomer && isOwner) {
+        tooltip = 'Remove owner from project'
       }
       buttons.push(<ActionBtn key={2} type="user-remove" title={tooltip} onClick={onDelete} />)
     }

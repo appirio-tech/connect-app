@@ -37,8 +37,9 @@
 
     .item-status {
       flex: none;
-      min-width: 40px;
-      width: 40px;
+      min-width: 55px;
+      padding-right: 20px;
+      // width: 40px;
       position: relative;
 
       .modal-active {
@@ -309,7 +310,8 @@
             text-overflow: ellipsis;
 
             &:hover {
-              background-color: $tc-gray-neutral-dark;
+              background-color: $tc-dark-blue-30;
+              color: $tc-black;
             }
           }
 

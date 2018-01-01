@@ -1,9 +1,10 @@
 @import 'tc-includes';
-$status-height :  20px;
+$status-height: 20px;
 
 .ProjectStatus {
   position: relative;
   height: $status-height;
+
   .status-icon {
     position: relative;
     display: inline-block;
@@ -19,7 +20,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-draft {
+  &.ps-draft {
     .status-icon {
       i {
         background: url('../../assets/images/ps-draft.svg') no-repeat -7px -4px;
@@ -28,7 +29,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-in_review {
+  &.ps-in_review {
     .status-icon {
       i {
         background: url('../../assets/images/ps-in_review.svg') no-repeat -7px -4px;
@@ -37,7 +38,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-reviewed {
+  &.ps-reviewed {
     .status-icon {
       i {
         background: url('../../assets/images/ps-reviewed.svg') no-repeat -7px -4px;
@@ -46,7 +47,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-active {
+  &.ps-active {
     .status-icon {
       i {
         background: url('../../assets/images/ps-active.svg') no-repeat;
@@ -55,7 +56,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-cancelled {
+  &.ps-cancelled {
     .status-icon {
       i {
         background: url('../../assets/images/ps-cancelled.svg') no-repeat -7px -4px;
@@ -64,7 +65,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-completed {
+  &.ps-completed {
     .status-icon {
       i {
         background: url('../../assets/images/ps-completed.svg') no-repeat -7px -4px;
@@ -73,7 +74,7 @@ $status-height :  20px;
     }
   }
 
-  .ps-paused {
+  &.ps-paused {
     .status-icon {
       i {
         background: url('../../assets/images/ps-paused.svg') no-repeat -7px -4px;
@@ -82,40 +83,57 @@ $status-height :  20px;
     }
   }
 
+  .status-label {
+    position: relative;
+    @include tc-label-xs;
+    line-height: $base-unit*4;
+    height: $base-unit*4;
+    padding-right: $base-unit;
+    margin-left: 10px;
+  }
+}
+
+.EditableProjectStatus {
+  .status-label {
+    vertical-align: top;
+  }
+
   .status-header {
     display: flex;
     // position: absolute;
     height: $status-height;
-    -webkit-user-select: none; 
-    -moz-user-select: none; 
-    -ms-user-select: none; 
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     border-radius: $base-unit*4;
     cursor: default;
 
-    .caret{
+    .caret {
       display: none;
     }
 
     &.editable {
       cursor: pointer;
+
       &:hover {
         &::after {
-
         }
       }
+
       .caret {
         // content: '';
-        z-index: 3;
+        // z-index: 3;
         display: inline-block;
         width: 9px;
-        height: 5px;
-        position: absolute;
-        right: 5px;
-        top: 8px;
+        height: 20px;
+        position: relative;
+        margin-left: 5px;
+        // right: 5px;
+        // top: 8px;
         background-size: 9px 4px;
 
-        .Icon{
+        .Icon {
           width: 100%;
           height: 100%;
           display: block;
@@ -142,22 +160,29 @@ $status-height :  20px;
     position: relative;
     @include tc-label-xs;
     height: $base-unit*4;
-    padding-right: 4 * $base-unit;
+    padding-right: $base-unit;
     margin-left: 10px;
   }
 
   .status-dropdown {
-    min-width: 110%;
+    min-width: 150px;
     position: absolute;
     border-radius: $base-unit;
     box-shadow: 0 0 15px rgba($tc-black, .25);
     padding: 10px 0;
     position: absolute;
     background: $tc-white;
-    top: -2*$base_unit;
-    left: 0px;
-    right: auto;
+    top: -2 * $base_unit;
+    left: auto;
+    right: -10px;
     z-index: 2;
+    transition: 250ms all;
+
+    &.dropdown-up {
+      top: auto;
+      bottom: 0;
+    }
+
     .status-header {
       @include roboto-medium;
       font-size: $tc-label-md;
@@ -177,9 +202,11 @@ $status-height :  20px;
       line-height: 30px;
       padding: 5px 16px 5px 10px;
       white-space: nowrap;
+
       &:hover {
         background: $tc-dark-blue-10;
       }
+
       &.active {
         background: $tc-dark-blue-10;
       }

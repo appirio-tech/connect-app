@@ -3,7 +3,7 @@ require('./SelectDropdown.scss')
 import _ from 'lodash'
 import React, { Component, PropTypes } from 'react'
 import { HOC as hoc } from 'formsy-react'
-import Dropdown from '../Dropdown/Dropdown'
+import { Dropdown } from 'appirio-tech-react-components'
 
 class SelectDropdown extends Component {
   constructor(props) {

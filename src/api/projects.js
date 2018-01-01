@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
-import { TC_API_URL, PROJECTS_LIST_PER_PAGE } from '../config/constants'
+import { TC_API_URL, PROJECTS_API_URL, PROJECTS_LIST_PER_PAGE } from '../config/constants'
 
 export function getProjects(criteria, pageNum) {
   // add default params
@@ -29,7 +29,7 @@ export function getProjects(criteria, pageNum) {
   const sort = _.get(criteria, 'sort', null)
   if (sort) params.sort = sort
 
-  return axios.get(`${TC_API_URL}/v4/projects/`, { params })
+  return axios.get(`${PROJECTS_API_URL}/v4/projects/`, { params })
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
@@ -50,7 +50,7 @@ export function getProjectSuggestions() {
  */
 export function getProjectById(projectId) {
   projectId = parseInt(projectId)
-  return axios.get(`${TC_API_URL}/v4/projects/${projectId}/`)
+  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/`)
     .then(resp => {
       return _.get(resp.data, 'result.content', {})
     })
@@ -64,7 +64,7 @@ export function getProjectById(projectId) {
  * @return {promise}              updated project
  */
 export function updateProject(projectId, updatedProps, updateExisting) {
-  return axios.patch(`${TC_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
+  return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
     .then(resp => {
       return _.extend(_.get(resp.data, 'result.content'), { updateExisting })
     })
@@ -76,8 +76,8 @@ export function createProject(projectProps) {
   // TODO: Remove this once none of the active projects
   // have the discussions tab enabled
   projectProps.details.hideDiscussions = true
-
-  return axios.post(`${TC_API_URL}/v4/projects/`, { param: projectProps })
+  
+  return axios.post(`${PROJECTS_API_URL}/v4/projects/`, { param: projectProps })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})
     })
@@ -89,14 +89,14 @@ export function createProjectWithStatus(projectProps, status) {
   // have the discussions tab enabled
   projectProps.details.hideDiscussions = true
 
-  return axios.post(`${TC_API_URL}/v4/projects/`, { param: projectProps })
+  return axios.post(`${PROJECTS_API_URL}/v4/projects/`, { param: projectProps })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})
     })
     .then(project => {
       const updatedProps = { status }
       const projectId = project.id
-      return axios.patch(`${TC_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
+      return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
         .then(resp => {
           return _.get(resp.data, 'result.content')
         })
@@ -108,7 +108,7 @@ export function createProjectWithStatus(projectProps, status) {
 }
 
 export function deleteProject(projectId) {
-  return axios.delete(`${TC_API_URL}/v4/projects/${projectId}/`)
+  return axios.delete(`${PROJECTS_API_URL}/v4/projects/${projectId}/`)
     .then(() => {
       return projectId
     })

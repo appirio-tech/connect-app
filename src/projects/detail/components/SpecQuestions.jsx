@@ -8,7 +8,6 @@ import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
 import SpecFeatureQuestion from './SpecFeatureQuestion'
 import ColorSelector from './../../../components/ColorSelector/ColorSelector'
 import SelectDropdown from './../../../components/SelectDropdown/SelectDropdown'
-import SliderInput from './../../../components/SliderInput/SliderInput'
 
 // HOC for TextareaInput
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
@@ -28,7 +27,8 @@ const getIcon = icon => {
   }
 }
 
-const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog, isRequired}) => {
+// { isRequired, represents the overall questions section's compulsion, is also available}
+const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog }) => {
 
   const renderQ = (q, index) => {
     // let child = null
@@ -141,7 +141,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       })
       break
     case 'slide-radiogroup':
-      ChildElem = SliderInput
+      ChildElem = TCFormFields.SliderRadioGroup
       _.assign(elemProps, {
         options: q.options,
         min: 0,
@@ -159,7 +159,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
-        required={isRequired}
+        required={q.required || (q.validations && q.validations.indexOf('isRequired') !== -1)}
         hideDescription={elemProps.hideDescription}
       >
         <ChildElem {...elemProps} />
