@@ -57,8 +57,8 @@ const getTopicsWithComments = (projectId, tag) => {
       // if a topic has more than 20 posts then to display the latest posts,
       // we'll have to first retrieve them from the server
       _.forEach(topics, (t) => {
-        if (t.postIds.length > 20) {
-          const postIds = t.postIds.slice(20).slice(-6)
+        if (t.posts.length < t.postIds.length) {
+          const postIds = t.postIds.slice(t.postIds.length).slice(-6)
           additionalPosts.push(getTopicPosts(t.id, postIds))
         }
         t.posts = _.sortBy(t.posts, ['id'])
