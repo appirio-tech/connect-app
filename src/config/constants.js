@@ -226,6 +226,11 @@ export const PROJECT_STATUS = [
   {color: 'red', name: 'Paused', fullName: 'Project is paused', value: PROJECT_STATUS_PAUSED, order: 7, dropDownOrder: 7 }
 ]
 
+// this defines default criteria to filter projects for projects list
+export const PROJECT_LIST_DEFAULT_CRITERIA = {
+  sort: 'updatedAt desc'
+}
+
 export const NOTIFICATION_TYPE = {
   WARNING: 'warning',
   NEW_PROJECT: 'new-project',
