@@ -13,7 +13,8 @@ export const initialState = {
   totalCount: 0,
   pageNum: 1,
   criteria: {
-    sort: 'updatedAt desc'
+    sort: 'updatedAt desc',
+    status: 'active'
   }
 }
 
