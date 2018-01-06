@@ -30,6 +30,7 @@
     "extract-css-chunks-webpack-plugin": "github:birdofpreyru/extract-css-chunks-webpack-plugin#develop",
     "favicons-webpack-plugin": "0.0.7",
     "html-webpack-plugin": "^2.30.1",
+    "ignore-styles": "^1.2.0",
     "mocha": "^2.4.5",
     "mocha-jsdom": "^1.1.0",
     "react-hot-loader": "^3.0.0-beta.6",
