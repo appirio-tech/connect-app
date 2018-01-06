@@ -13,7 +13,8 @@ export const initialState = {
   error: false,
   totalCount: 0,
   pageNum: 1,
-  criteria: PROJECT_LIST_DEFAULT_CRITERIA
+  // make a copy of constant to avoid unintentional modifications
+  criteria: {...PROJECT_LIST_DEFAULT_CRITERIA}
 }
 
 export default function(state = initialState, action) {
