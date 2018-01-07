@@ -9,13 +9,14 @@ const ProjectManagerAvatars = ({ managers }) => {
   let extM = false
   if (!managers || !managers.length)
     return <div className="user-block txt-italic">Unclaimed</div>
-  if (managers.length > 3) {
-    extM = managers.length - 3
-    managers.length = 3
+  const uniqManagers = _.uniqBy(managers, 'userId')
+  if (uniqManagers.length > 3) {
+    extM = uniqManagers.length - 3
+    uniqManagers.length = 3
   }
   return (
     <div className="user-block">
-      {_.uniqBy(managers, 'userId').map((user, i) => {
+      {uniqManagers.map((user, i) => {
         return (
           <div className={`stack-avatar stack-avatar-${i}`} key={i}>
             <UserTooltip usr={user} id={i} previewAvatar />
