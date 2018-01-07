@@ -12,14 +12,8 @@ import _ from 'lodash'
 import querystring from 'query-string'
 import { updateProject } from '../../../actions/project'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
-ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
-PROJECTS_LIST_VIEW } from '../../../../config/constants'
-
-/*
-  Definiing default project criteria. This is used to later to determine if
-  walkthrough component should be rendered instead of no results
- */
-const defaultCriteria = {sort: 'updatedAt desc'}
+  ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED, PROJECT_STATUS_ACTIVE,
+  PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW } from '../../../../config/constants'
 
 const page500 = compose(
   withProps({code:500})
@@ -106,6 +100,12 @@ class Projects extends Component {
       // perform initial load only if there are not projects already loaded
       // otherwise we will get projects duplicated in store
       if (projects.length === 0) {
+        // for powerful user filter by 'active' status by default
+        // we cannot put it to PROJECT_LIST_DEFAULT_CRITERIA because
+        // it would apply for both powerful and regular users
+        if (props.isPowerUser && !criteria.status) {
+          criteria.status = PROJECT_STATUS_ACTIVE
+        }
         this.routeWithParams(criteria)
       }
     }
@@ -153,7 +153,7 @@ class Projects extends Component {
     // show walk through if user is customer and no projects were returned
     // for default filters
     const showWalkThrough = !isLoading && totalCount === 0 &&
-      _.isEqual(criteria, defaultCriteria) &&
+      _.isEqual(criteria, PROJECT_LIST_DEFAULT_CRITERIA) &&
       !isPowerUser
     const getStatusCriteriaText = (criteria) => {
       return (_.find(PROJECT_STATUS, { value: criteria.status }) || { name: ''}).name

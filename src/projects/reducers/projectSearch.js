@@ -4,7 +4,8 @@ import {
   LOAD_MORE_PROJECTS, CLEAR_PROJECT_SEARCH, SET_PROJECTS_SEARCH_CRITERIA,
   SET_PROJECTS_INFINITE_AUTOLOAD,
   SET_PROJECTS_LIST_VIEW,
-  PROJECTS_LIST_VIEW
+  PROJECTS_LIST_VIEW,
+  PROJECT_LIST_DEFAULT_CRITERIA
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -14,9 +15,8 @@ export const initialState = {
   error: false,
   totalCount: 0,
   pageNum: 1,
-  criteria: {
-    sort: 'updatedAt desc'
-  },
+  // make a copy of constant to avoid unintentional modifications
+  criteria: {...PROJECT_LIST_DEFAULT_CRITERIA},
   projectsListView: PROJECTS_LIST_VIEW.GRID
 }
 
