@@ -13,6 +13,7 @@ import NotificationsSection from '../NotificationsSection/NotificationsSection'
 import NotificationsEmpty from '../NotificationsEmpty/NotificationsEmpty'
 import NotificationsDropdownHeader from  '../NotificationsDropdownHeader/NotificationsDropdownHeader'
 import NotificationsDropdown from  './NotificationsDropdown'
+import ScrollLock from 'react-scroll-lock-component'
 import { NOTIFCATIONS_DROPDOWN_PER_SOURCE, NOTIFCATIONS_DROPDOWN_MAX_TOTAL, REFRESH_NOTIFICATIONS_INTERVAL } from '../../config/constants'
 import './NotificationsDropdown.scss'
 
@@ -64,24 +65,26 @@ class NotificationsDropdownContainer extends React.Component {
             </NotificationsEmpty>
           </div>
         ) : ([
-          <div key="body" className="notifications-dropdown-body">
-            {globalSource && globalSource.notifications.length &&
-              <NotificationsSection
-                {...globalSource}
-                isGlobal
-                isSimple
-                onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
-              />
-            }
-            {projectSources.filter(source => source.notifications.length > 0).map(source =>
-              <NotificationsSection
-                {...source}
-                key={source.id}
-                isSimple
-                onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
-              />
-            )}
-          </div>,
+          <ScrollLock key="body">
+            <div className="notifications-dropdown-body">
+              {globalSource && globalSource.notifications.length &&
+                <NotificationsSection
+                  {...globalSource}
+                  isGlobal
+                  isSimple
+                  onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                />
+              }
+              {projectSources.filter(source => source.notifications.length > 0).map(source =>
+                <NotificationsSection
+                  {...source}
+                  key={source.id}
+                  isSimple
+                  onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                />
+              )}
+            </div>
+          </ScrollLock>,
           <Link key="footer" to="/notifications" className="notifications-read-all tc-btn-link">
             {
               olderNotificationsCount > 0 ?
