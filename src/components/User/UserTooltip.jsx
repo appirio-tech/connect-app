@@ -2,13 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { Tooltip } from 'appirio-tech-react-components'
-import UserAvatar from './UserAvatar'
+import { Avatar } from 'appirio-tech-react-components'
 import { DOMAIN } from '../../../config/constants'
 
 require('./UserTooltip.scss')
 
 const UserTooltip = ({ usr, id, previewAvatar }) => {
-  const rating = _.get(usr, 'maxRating.rating', 0)
   const theme = `customer-data level-${id}`
   const tooltipMargin = previewAvatar ? -(100 + (id * 20)) : 0
   return (
@@ -16,7 +15,11 @@ const UserTooltip = ({ usr, id, previewAvatar }) => {
       <div className="tooltip-target" id={`tt-${id}`}>
         {
           previewAvatar ? (<div className={`stack-avatar-${id}`}>
-            <UserAvatar rating={0} showLevel={false} photoURL={usr.photoURL} />
+            <Avatar
+              avatarUrl={_.get(usr, 'photoURL', require('../../assets/images/avatar-coder.png'))}
+              userName={usr.firstName ? (usr.firstName + ' ' + usr.lastName) : 'Connect user'}
+              size={30}
+            />
           </div>) :
           <span className="project-customer">{usr.firstName} {usr.lastName}</span>
         }
@@ -25,7 +28,10 @@ const UserTooltip = ({ usr, id, previewAvatar }) => {
         <div className="top-container">
           <div className="tt-col-avatar">
             <a href={`//www.${DOMAIN}/members/${usr.handle}/`} target="_blank" rel="noopener noreferrer" className="tt-user-avatar">
-              <UserAvatar rating={rating} showLevel={false} photoURL={usr.photoURL} />
+              <Avatar
+                avatarUrl={_.get(usr, 'photoURL', require('../../assets/images/avatar-coder.png'))}
+                userName={usr.firstName ? (usr.firstName + ' ' + usr.lastName) : 'Connect user'}
+              />
             </a>
           </div>
           <div className="tt-col-user-data">

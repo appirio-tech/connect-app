@@ -36,17 +36,24 @@
       }
     }
 
+    .tooltip-target {
+      .Avatar {
+        height: 30px;
+        width: 30px;
+      }
+    }
+
     .stack-avatar-0 {
       z-index: 3;
     }
 
     .stack-avatar-1 {
-      margin-left: -10px;
+      margin-left: -5px;
       z-index: 2;
     }
 
     .stack-avatar-2 {
-      margin-left: -10px;
+      margin-left: -5px;
       z-index: 1;
     }
 
