@@ -3,7 +3,7 @@
  */
 import _ from 'lodash'
 import { OLD_NOTIFICATION_TIME } from '../../../config/constants'
-import { NOTIFICATIONS } from '../constants/notifications'
+import { NOTIFICATION_RULES } from '../constants/notifications'
 
 // how many milliseconds in one minute
 const MILLISECONDS_IN_MINUTE = 60000
@@ -133,8 +133,12 @@ const renderTemplate = (templateStr, values) => {
  * @return {Object}              notification rule
  */
 const getNotificationRule = (notification) => {
-  const notificationRule = _.find(NOTIFICATIONS, (_notificationRule) => {
+  const notificationRule = _.find(NOTIFICATION_RULES, (_notificationRule) => {
     let match = _notificationRule.eventType === notification.eventType
+
+    if (notification.version) {
+      match = match && _notificationRule.version === notification.version
+    }
 
     if (notification.contents.toTopicStarter) {
       match = match && _notificationRule.toTopicStarter
@@ -156,7 +160,7 @@ const getNotificationRule = (notification) => {
   })
 
   if (!notificationRule) {
-    throw new Error(`Cannot find notification rule for eventType ${notification.eventType}.`)
+    throw new Error(`Cannot find notification rule for eventType '${notification.eventType}' version '${notification.version}'.`)
   }
 
   return notificationRule
@@ -178,7 +182,8 @@ export const prepareNotifications = (rowNotifications) => {
     date: rowNotification.createdAt,
     isRead: rowNotification.read,
     isOld: new Date().getTime() - OLD_NOTIFICATION_TIME * MILLISECONDS_IN_MINUTE > new Date(rowNotification.createdAt).getTime(),
-    contents: rowNotification.contents
+    contents: rowNotification.contents,
+    version: rowNotification.version
   })).map((notification) => {
     const notificationRule = getNotificationRule(notification)
 
