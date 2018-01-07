@@ -52,6 +52,7 @@ export const GET_PROJECTS_SUCCESS       = 'GET_PROJECTS_SUCCESS'
 export const GET_PROJECTS_FAILURE       = 'GET_PROJECTS_FAILURE'
 export const SET_PROJECTS_SEARCH_CRITERIA = 'SET_PROJECTS_SEARCH_CRITERIA'
 export const SET_PROJECTS_INFINITE_AUTOLOAD = 'SET_PROJECTS_INFINITE_AUTOLOAD'
+export const SET_PROJECTS_LIST_VIEW = 'SET_PROJECTS_LIST_VIEW'
 
 
 // Delete project
@@ -233,6 +234,12 @@ export const NOTIFICATION_TYPE = {
   NEW_POSTS: 'new-posts',
   REVIEW_PENDING: 'review-pending',
   MEMBER_ADDED: 'member-added'
+}
+
+// projects list view types
+export const PROJECTS_LIST_VIEW = {
+  GRID: 'grid',
+  CARD: 'card'
 }
 
 /*

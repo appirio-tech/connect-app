@@ -7,12 +7,13 @@ import CoderBot from '../../../../components/CoderBot/CoderBot'
 import ProjectListNavHeader from './ProjectListNavHeader'
 import ProjectsGridView from './ProjectsGridView'
 import ProjectsCardView from './ProjectsCardView'
-import { loadProjects, setInfiniteAutoload } from '../../../actions/loadProjects'
+import { loadProjects, setInfiniteAutoload, setProjectsListView } from '../../../actions/loadProjects'
 import _ from 'lodash'
 import querystring from 'query-string'
 import { updateProject } from '../../../actions/project'
-import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR, 
-ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED } from '../../../../config/constants'
+import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
+ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
+PROJECTS_LIST_VIEW } from '../../../../config/constants'
 
 /*
   Definiing default project criteria. This is used to later to determine if
@@ -148,7 +149,7 @@ class Projects extends Component {
   }
 
   render() {
-    const { isPowerUser, isLoading, totalCount, criteria, currentUser } = this.props
+    const { isPowerUser, isLoading, totalCount, criteria, currentUser, projectsListView, setProjectsListView } = this.props
     // show walk through if user is customer and no projects were returned
     // for default filters
     const showWalkThrough = !isLoading && totalCount === 0 &&
@@ -175,12 +176,12 @@ class Projects extends Component {
       />
     )
     let projectsView
-    const chosenView = this.state.selectedView || 'grid'
+    const chosenView = projectsListView
     const currentStatus = this.state.status || null
     if (isPowerUser) {
-      if (chosenView === 'grid') {
+      if (chosenView === PROJECTS_LIST_VIEW.GRID) {
         projectsView = gridView
-      } else if (chosenView === 'card') {
+      } else if (chosenView === PROJECTS_LIST_VIEW.CARD) {
         projectsView = cardView
       }
     } else {
@@ -191,7 +192,7 @@ class Projects extends Component {
         <section className="">
           <div className="container">
             {(isPowerUser && !showWalkThrough) &&
-              <ProjectListNavHeader applyFilters={this.applyFilters} selectedView={chosenView} changeView={this.changeView} currentStatus={currentStatus}/>}
+              <ProjectListNavHeader applyFilters={this.applyFilters} selectedView={chosenView} changeView={setProjectsListView} currentStatus={currentStatus}/>}
             { showWalkThrough  ? <Walkthrough currentUser={currentUser} /> : projectsView }
           </div>
         </section>
@@ -225,11 +226,12 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState }) => 
     pageNum     : projectSearch.pageNum,
     criteria    : projectSearch.criteria,
     infiniteAutoload: projectSearch.infiniteAutoload,
+    projectsListView: projectSearch.projectsListView,
     isPowerUser,
     gridView    : isPowerUser
   }
 }
 
-const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject }
+const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject, setProjectsListView }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(Projects))
