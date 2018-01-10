@@ -11,7 +11,7 @@ class NewPost extends React.Component {
   }
 
   render() {
-    const {currentUser, titlePlaceholder, isCreating, hasError} = this.props
+    const {currentUser, allMembers, titlePlaceholder, isCreating, hasError} = this.props
     let authorName = currentUser.firstName
     if (authorName && currentUser.lastName) {
       authorName += ' ' + currentUser.lastName
@@ -33,6 +33,7 @@ class NewPost extends React.Component {
           hasError={hasError}
           avatarUrl={currentUser.photoURL}
           authorName={authorName}
+          allMembers={allMembers}
       />
     )
   }
@@ -41,6 +42,7 @@ class NewPost extends React.Component {
 
 NewPost.propTypes = {
   currentUser: PropTypes.object.isRequired,
+  allMembers: PropTypes.object.isRequired,
   onPost: PropTypes.func.isRequired,
   onNewPostChange: PropTypes.func.isRequired,
   hasError: PropTypes.bool,

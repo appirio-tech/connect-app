@@ -338,7 +338,7 @@ class FeedView extends React.Component {
   }
 
   render () {
-    const {currentUser, project, currentMemberRole, isCreatingFeed, error } = this.props
+    const {currentUser, project, currentMemberRole, isCreatingFeed, error, allMembers} = this.props
     const { feeds } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
     const onLeaveMessage = this.onLeave() || ''
@@ -383,6 +383,7 @@ class FeedView extends React.Component {
         />
         <NewPost
           currentUser={currentUser}
+          allMembers={allMembers}
           onPost={this.onNewPost}
           isCreating={isCreatingFeed}
           hasError={error}
