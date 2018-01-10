@@ -208,21 +208,21 @@ class RichTextArea extends React.Component {
     }
     const title = this.state.titleValue
 
-    var that = this
+    const that = this
     const replaceMentionWithUserID = (content) =>
     {
       const encodeContent = (text) => {
-          return text.replace(/[*_`]/g, '\\$&')
+        return text.replace(/[*_`]/g, '\\$&')
       }
 
       const userIdMap = _.reduce(that.mentions, (obj, item) => {
-        obj[encodeContent(item.name)] = encodeContent(item.handle)
+        obj[encodeContent(item.name)] = item.userId
         return obj
       }, {})
       
-      for (var item in userIdMap)
+      for (const item in userIdMap)
       {
-        content = content.replace('@' + item, '@' + userIdMap[item])
+        content = content.split('@' + item).join('@' + userIdMap[item])
       }
       return content
     }
@@ -234,13 +234,15 @@ class RichTextArea extends React.Component {
     }
   }
 
-  onSearchChange = ({ value }) => {
+  /* eslint-disable */
+  onSearchChange = ({value}) => {
     this.setState({
-      suggestions: defaultSuggestionsFilter(value, this.mentions),
-    });
-  };
+      suggestions: defaultSuggestionsFilter(value, this.mentions)
+    })
+  }
+  /* eslint-enable */
 
-  onAddMention = (mention) => {
+  onAddMention() {
   }
 
   cancelEdit() {
@@ -276,7 +278,7 @@ class RichTextArea extends React.Component {
         searchValue, // eslint-disable-line no-unused-vars
         isFocused, // eslint-disable-line no-unused-vars
         ...parentProps
-      } = props;
+      } = props
 
       return (
         <div {...parentProps}>
@@ -288,9 +290,9 @@ class RichTextArea extends React.Component {
             </div>
           </div>
         </div>
-      );
-    };
-
+      )
+    }
+    
     return (
       <div className={cn(className, 'rich-editor', {expanded: editorExpanded || editMode})} ref="richEditor">
         {(isCreating || isGettingComment) &&
