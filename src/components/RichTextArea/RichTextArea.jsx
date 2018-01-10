@@ -228,7 +228,7 @@ class RichTextArea extends React.Component {
     }
 
     const content = replaceMentionWithUserID(this.state.currentMDContent)
-    
+
     if ((this.props.disableTitle || title) && content) {
       this.props.onPost({title, content})
     }
@@ -268,6 +268,28 @@ class RichTextArea extends React.Component {
     const blockType = RichUtils.getCurrentBlockType(editorState)
     const currentEntity = getCurrentEntity(editorState)
     const disableForCodeBlock = blockType === 'code-block'
+
+    const Entry = (props) => {
+      const {
+        mention,
+        theme,
+        searchValue, // eslint-disable-line no-unused-vars
+        isFocused, // eslint-disable-line no-unused-vars
+        ...parentProps
+      } = props;
+
+      return (
+        <div {...parentProps}>
+          <div className={theme.mentionSuggestionsEntryContainer}>
+            <div className={theme.mentionSuggestionsEntryContainerRight}>
+              <div className={theme.mentionSuggestionsEntryText}>
+                {mention.get('handle')}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
 
     return (
       <div className={cn(className, 'rich-editor', {expanded: editorExpanded || editMode})} ref="richEditor">
@@ -309,6 +331,7 @@ class RichTextArea extends React.Component {
                     onSearchChange={this.onSearchChange}
                     suggestions={this.state.suggestions}
                     onAddMention={this.onAddMention}
+                    entryComponent={Entry}
                   />
                 </div>
               }
