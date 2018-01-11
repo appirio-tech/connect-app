@@ -6,7 +6,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import SVGIconImage from '../SVGIconImage'
-import Dropdown from '../Dropdown/Dropdown'
+import { Dropdown } from 'appirio-tech-react-components'
 import cn from 'classnames'
 
 const NotificationsDropdown = (props) => {
