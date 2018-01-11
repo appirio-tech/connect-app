@@ -69,6 +69,7 @@
     "filesize": "^3.3.0",
     "flat": "^2.0.1",
     "formsy-react": "^0.19.5",
+    "handlebars": "^4.0.11",
     "history": "^1.17.0",
     "html5-uploader": "^0.1.1",
     "isomorphic-fetch": "^2.2.1",

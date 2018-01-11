@@ -1,3 +1,9 @@
+/**
+ * Notifications rules
+ *
+ * Templates for `text`, `bundledText` and `GOTO` are handlebars templates.
+ * There are several custom Handlebars helpers defined in `../helpers/notifications.js`
+ */
 import {
   NOTIFICATION_TYPE,
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR,
@@ -5,11 +11,11 @@ import {
 } from '../../../config/constants'
 
 const GOTO = {
-  PROJECT_DASHBOARD: '/projects/[projectId]',
-  PROJECT_SPECIFICATION: '/projects/[projectId]/specification',
-  TOPIC: '/projects/[projectId]/#feed-[topicId]',
-  POST: '/projects/[projectId]/#comment-[postId]',
-  FILE_LIST: '/projects/[projectId]/specification#appDefinition-files'
+  PROJECT_DASHBOARD: '/projects/{{projectId}}',
+  PROJECT_SPECIFICATION: '/projects/{{projectId}}/specification',
+  TOPIC: '/projects/{{projectId}}/#feed-{{topicId}}',
+  POST: '/projects/{{projectId}}/#comment-{{postId}}',
+  FILE_LIST: '/projects/{{projectId}}/specification#appDefinition-files'
 }
 
 // each notification can be displayed differently depend on WHO see them
@@ -101,6 +107,8 @@ export const NOTIFICATIONS = [
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
       text: 'A new team member joined your project',
+      shouldBundle: true,
+      bundledText: '{{bundledCount}} new team members joined your project',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
@@ -110,7 +118,9 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.member.left',
     type: NOTIFICATION_TYPE.WARNING,
     rules: [{
-      text: '<strong>[userHandle]</strong> left a project',
+      text: '<strong>{{userHandle}}</strong> left a project',
+      shouldBundle: true,
+      bundledText: '{{bundledCount}} team members left your project',
       projectRoles: [PROJECT_ROLE_MANAGER]
     }]
   }, {
@@ -118,7 +128,9 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.member.left',
     type: NOTIFICATION_TYPE.WARNING,
     rules: [{
-      text: '<strong>[userFullName]</strong> left a project',
+      text: '<strong>{{userFullName}}</strong> left a project',
+      shouldBundle: true,
+      bundledText: '{{bundledCount}} team members left your project',
       projectRoles: [PROJECT_ROLE_MANAGER]
     }]
   },
@@ -127,7 +139,9 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.member.removed',
     type: NOTIFICATION_TYPE.WARNING,
     rules: [{
-      text: '<strong>[userHandle]</strong> was removed from project',
+      text: '<strong>{{userHandle}}</strong> was removed from project',
+      shouldBundle: true,
+      bundledText: '{{bundledCount}} team members were removed from your project',
       projectRoles: [PROJECT_ROLE_MANAGER]
     }, {
       text: 'You were removed from a project',
@@ -138,7 +152,9 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.member.removed',
     type: NOTIFICATION_TYPE.WARNING,
     rules: [{
-      text: '<strong>[userFullName]</strong> was removed from project',
+      text: '<strong>{{userFullName}}</strong> was removed from project',
+      shouldBundle: true,
+      bundledText: '{{bundledCount}} team members were removed from your project',
       projectRoles: [PROJECT_ROLE_MANAGER]
     }, {
       text: 'You were removed from a project',
@@ -154,7 +170,7 @@ export const NOTIFICATIONS = [
       toUserHandle: true,
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
-      text: 'Project owner was changed to <strong>[userHandle]</strong>',
+      text: 'Project owner was changed to <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
@@ -167,7 +183,7 @@ export const NOTIFICATIONS = [
       toUserHandle: true,
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
-      text: 'Project owner was changed to <strong>[userFullName]</strong>',
+      text: 'Project owner was changed to <strong>{{userFullName}}</strong>',
       projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
@@ -178,6 +194,8 @@ export const NOTIFICATIONS = [
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
       text: 'A copilot joined your project team',
+      shouldBundle: true,
+      bundledText: '{{bundledCount}} copilots joined your project team',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
@@ -188,6 +206,8 @@ export const NOTIFICATIONS = [
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
       text: 'A manager joined your project team',
+      shouldBundle: true,
+      bundledText: '{{bundledCount}} managers joined your project team',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
@@ -197,7 +217,7 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.topic.created',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>[userHandle]</strong> created a new post ',
+      text: '<strong>{{userHandle}}</strong> created a new post ',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.TOPIC
     }]
@@ -206,7 +226,7 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.topic.created',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>[userFullName]</strong> created a new post ',
+      text: '<strong>{{userFullName}}</strong> created a new post ',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.TOPIC
     }]
@@ -216,11 +236,15 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.post.created',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>[userHandle]</strong> responded to your post',
+      text: '<strong>{{userHandle}}</strong> responded to your post',
+      shouldBundle: true,
+      bundledText: '{{#showMore __history__ 3}}<strong>{{userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts to your topic',
       toTopicStarter: true,
       goTo: GOTO.POST
     }, {
-      text: '<strong>[userHandle]</strong> responded to a post',
+      text: '<strong>{{userHandle}}</strong> responded to a post',
+      shouldBundle: true,
+      bundledText: '{{#showMore __history__ 3}}<strong>{{userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.POST
     }]
@@ -229,11 +253,15 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.post.created',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>[userFullName]</strong> responded to your post',
+      text: '<strong>{{userFullName}}</strong> responded to your post',
+      shouldBundle: true,
+      bundledText: '{{#showMore __history__ 3}}<strong>{{fallback userFullName userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts to your topic',
       toTopicStarter: true,
       goTo: GOTO.POST
     }, {
-      text: '<strong>[userFullName]</strong> responded to a post',
+      text: '<strong>{{userFullName}}</strong> responded to a post',
+      shouldBundle: true,
+      bundledText: '{{#showMore __history__ 3}}<strong>{{fallback userFullName userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.POST
     }]
@@ -243,7 +271,7 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.linkCreated',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>[userHandle]</strong> added to your project',
+      text: '<strong>{{userHandle}}</strong> added to your project',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
@@ -252,7 +280,7 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.linkCreated',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>[userFullName]</strong> added to your project',
+      text: '<strong>{{userFullName}}</strong> added to your project',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
@@ -262,7 +290,9 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.fileUploaded',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>[userHandle]</strong> added a new file',
+      text: '<strong>{{userHandle}}</strong> added a new file',
+      shouldBundle: true,
+      bundledText: '{{bundledCount}} new files were added',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.FILE_LIST
     }]
@@ -271,7 +301,9 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.fileUploaded',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>[userFullName]</strong> added a new file',
+      text: '<strong>{{userFullName}}</strong> added a new file',
+      shouldBundle: true,
+      bundledText: '{{bundledCount}} new files were added',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.FILE_LIST
     }]
@@ -281,7 +313,9 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.specificationModified',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
-      text: '<strong>[userHandle]</strong> updated the project specification',
+      text: '<strong>{{userHandle}}</strong> updated the project specification',
+      shouldBundle: true,
+      bundledText: 'Project specification is modified',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_SPECIFICATION
     }]
@@ -290,7 +324,9 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.specificationModified',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
-      text: '<strong>[userFullName]</strong> updated the project specification',
+      text: '<strong>{{userFullName}}</strong> updated the project specification',
+      shouldBundle: true,
+      bundledText: 'Project specification is modified',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_SPECIFICATION
     }]
