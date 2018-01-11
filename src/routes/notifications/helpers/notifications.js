@@ -27,7 +27,6 @@ const MILLISECONDS_IN_MINUTE = 60000
  * @param {Object} options handlebars options
  */
 const handlebarsShowMoreHelper = (items, max, options) => {
-  items.push({ userHandle: 'test1' }, { userHandle: 'test2' }, { userHandle: 'test3' })
   const renderedItems = items.map(options.fn)
   const uniqRenderedItems = _.uniq(renderedItems)
   const maxRenderedItems = uniqRenderedItems.slice(0, max)
