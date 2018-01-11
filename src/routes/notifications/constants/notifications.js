@@ -160,7 +160,7 @@ export const NOTIFICATIONS = [
     projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
     goTo: GOTO.TOPIC
   },
-
+  
   {
     eventType: 'notifications.connect.project.post.created',
     type: NOTIFICATION_TYPE.NEW_POSTS,
@@ -170,14 +170,14 @@ export const NOTIFICATIONS = [
   }, {
     eventType: 'notifications.connect.project.post.created',
     type: NOTIFICATION_TYPE.NEW_POSTS,
-    text: '<strong>[userHandle]</strong> mentioned your in a post',
-    toUserHandle: true,
-    goTo: GOTO.POST
-  }, {
-    eventType: 'notifications.connect.project.post.created',
-    type: NOTIFICATION_TYPE.NEW_POSTS,
     text: '<strong>[userHandle]</strong> responded to a post',
     projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+    goTo: GOTO.POST
+  }, {
+    eventType: 'notifications.connect.project.post.mention',
+    type: NOTIFICATION_TYPE.NEW_POSTS,
+    text: '<strong>[userHandle]</strong> mentioned your in a post',
+    toUserHandle: true,
     goTo: GOTO.POST
   },
 
