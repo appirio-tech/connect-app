@@ -1,5 +1,3 @@
-
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import Editor, {composeDecorators} from 'draft-js-plugins-editor'
@@ -18,14 +16,19 @@ import stateToMarkdown from '../../helpers/stateToMarkdown'
 import 'draft-js-link-plugin/lib/plugin.css'
 import EditorIcons from './EditorIcons'
 import './RichTextArea.scss'
+import 'draft-js-mention-plugin/lib/plugin.css'
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'
+import _ from 'lodash'
 
 const linkPlugin = createLinkPlugin()
 const blockDndPlugin = createBlockDndPlugin()
+const mentionPlugin = createMentionPlugin({mentionPrefix: '@'})
+
 const decorator = composeDecorators(
   blockDndPlugin.decorator
 )
 const allowImages = false
-const plugins = [linkPlugin, blockDndPlugin]
+const plugins = [linkPlugin, blockDndPlugin, mentionPlugin]
 if (allowImages){
   const imagePlugin = createImagePlugin({ decorator })
   plugins.push(handleDropPlugin)
@@ -51,7 +54,7 @@ const blocks = [
 class RichTextArea extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {editorExpanded: false, editorState: EditorState.createEmpty(), titleValue: ''}
+    this.state = {editorExpanded: false, editorState: EditorState.createEmpty(), titleValue: '', suggestions: [], allSuggestions:[]}
     this.onTitleChange = this.onTitleChange.bind(this)
     this.onEditorChange = this.onEditorChange.bind(this)
     this.handleKeyCommand = this.handleKeyCommand.bind(this)
@@ -64,6 +67,8 @@ class RichTextArea extends React.Component {
     this.getEditorState = this.getEditorState.bind(this)
     this.setEditorState = this.setEditorState.bind(this)
     this.setUploadState = this.setUploadState.bind(this)
+    this.onSearchChange = this.onSearchChange.bind(this)
+    this.onAddMention = this.onAddMention.bind(this)
   }
 
   componentDidMount() {
@@ -72,12 +77,15 @@ class RichTextArea extends React.Component {
   }
 
   componentWillMount() {
+    const suggestions = _.map(_.values(this.props.allMembers), (e) => { return {name: e.firstName + ' ' + e.lastName, handle: e.handle, userId: e.userId} })
     this.setState({
       editorExpanded: this.props.editMode,
       titleValue: this.props.title || '',
       editorState: this.props.content ? EditorState.createWithContent(markdownToState(this.props.content)) : EditorState.createEmpty(),
       currentMDContent: this.props.content,
-      oldMDContent: this.props.oldContent
+      oldMDContent: this.props.oldContent,
+      suggestions: suggestions,
+      allSuggestions:suggestions
     })
   }
 
@@ -86,6 +94,7 @@ class RichTextArea extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    
     if (nextProps.isCreating !== this.props.isCreating && !nextProps.isCreating && !nextProps.hasError) {
       this.clearState()
     } else if ((nextProps.isGettingComment !== this.props.isGettingComment && !nextProps.isGettingComment)
@@ -201,12 +210,35 @@ class RichTextArea extends React.Component {
       return
     }
     const title = this.state.titleValue
-    const content = this.state.currentMDContent
+
+    let content = this.state.currentMDContent;
+    
+    const encodeContent = (text) => {
+      return text.replace(/[*_`]/g, '\\$&')
+    }
+
+    const userIdMap = _.reduce(this.state.suggestions, (obj, item) => {
+      obj[encodeContent(item.name)] = item.userId
+      return obj
+    }, {})
+      
+    for (const item in userIdMap)
+    {
+      content = content.split('@' + item).join('@' + userIdMap[item])
+    }
+      
+
     if ((this.props.disableTitle || title) && content) {
       this.props.onPost({title, content})
     }
   }
-
+  onSearchChange({value}){
+    this.setState({
+      suggestions: defaultSuggestionsFilter(value, this.state.allSuggestions)
+    })
+  }
+  onAddMention() {
+  }
   cancelEdit() {
     this.props.cancelEdit()
   }
@@ -220,6 +252,7 @@ class RichTextArea extends React.Component {
     this.setState({uploading})
   }
   render() {
+    const {MentionSuggestions} = mentionPlugin
     const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating, isGettingComment, disableTitle} = this.props
     const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading} = this.state
     let canSubmit = (disableTitle || titleValue.trim())
@@ -232,6 +265,28 @@ class RichTextArea extends React.Component {
     const currentEntity = getCurrentEntity(editorState)
     const disableForCodeBlock = blockType === 'code-block'
 
+    const Entry = (props) => {
+      const {
+        mention,
+        theme,
+        searchValue, // eslint-disable-line no-unused-vars
+        isFocused, // eslint-disable-line no-unused-vars
+        ...parentProps
+      } = props
+
+      return (
+        <div {...parentProps}>
+          <div className={theme.mentionSuggestionsEntryContainer}>
+            <div className={theme.mentionSuggestionsEntryContainerRight}>
+              <div className={theme.mentionSuggestionsEntryText}>
+                {mention.get('handle')}
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+    
     return (
       <div className={cn(className, 'rich-editor', {expanded: editorExpanded || editMode})} ref="richEditor">
         {(isCreating || isGettingComment) &&
@@ -258,15 +313,23 @@ class RichTextArea extends React.Component {
             />
             <div className="draftjs-editor tc-textarea">
               {!isGettingComment &&
-              <Editor
-                ref="editor"
-                placeholder={contentPlaceholder}
-                editorState={editorState}
-                onChange={this.onEditorChange}
-                handleKeyCommand={this.handleKeyCommand}
-                plugins={plugins}
-                setUploadState={this.setUploadState}
-              />
+                <div>
+                  <Editor
+                    ref="editor"
+                    placeholder={contentPlaceholder}
+                    editorState={editorState}
+                    onChange={this.onEditorChange}
+                    handleKeyCommand={this.handleKeyCommand}
+                    plugins={plugins}
+                    setUploadState={this.setUploadState}
+                  />
+                  <MentionSuggestions
+                    onSearchChange={this.onSearchChange.bind(this)}
+                    suggestions={this.state.suggestions}
+                    onAddMention={this.onAddMention}
+                    entryComponent={Entry}
+                  />
+                </div>
               }
               <div className="textarea-footer">
                 <div className="textarea-buttons">
@@ -358,7 +421,8 @@ RichTextArea.propTypes = {
   oldTitle: PropTypes.string,
   oldContent: PropTypes.string,
   title: PropTypes.string,
-  content: PropTypes.string
+  content: PropTypes.string,
+  allMembers: PropTypes.object
 }
 
 export default RichTextArea

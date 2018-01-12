@@ -31,7 +31,7 @@ class FeedComments extends React.Component {
   render() {
     const {
     comments, currentUser, totalComments, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
-    onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage
+    onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage, allMembers
   } = this.props
     let authorName = currentUser.firstName
     if (authorName && currentUser.lastName) {
@@ -99,6 +99,7 @@ class FeedComments extends React.Component {
         authorName={authorName}
         isAdding={isAddingComment}
         hasError={error}
+        allMembers={allMembers}
       />}
     </div>
   )

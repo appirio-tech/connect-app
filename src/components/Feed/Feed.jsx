@@ -43,7 +43,7 @@ class Feed extends React.Component {
     const {
       id, user, currentUser, date, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
       allowComments, comments, unread, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
-      onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, permalink
+      onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, permalink, allMembers
     } = this.props
     const {editTopicMode} = this.state
     let authorName = user.firstName
@@ -71,6 +71,7 @@ class Feed extends React.Component {
             avatarUrl={user.photoURL}
             authorName={authorName}
             cancelEdit={this.cancelEditTopic}
+            allMembers={allMembers}
         />
         )}
         {!editTopicMode && (
@@ -118,6 +119,7 @@ class Feed extends React.Component {
           onSaveMessageChange={onSaveMessageChange}
           onSaveMessage={onSaveMessage}
           onDeleteMessage={onDeleteMessage}
+          allMembers={allMembers}
         />
         {children}
         {isDeletingTopic &&
