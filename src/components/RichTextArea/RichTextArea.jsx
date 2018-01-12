@@ -22,13 +22,12 @@ import _ from 'lodash'
 
 const linkPlugin = createLinkPlugin()
 const blockDndPlugin = createBlockDndPlugin()
-const mentionPlugin = createMentionPlugin({mentionPrefix: '@'})
 
 const decorator = composeDecorators(
   blockDndPlugin.decorator
 )
 const allowImages = false
-const plugins = [linkPlugin, blockDndPlugin, mentionPlugin]
+const plugins = [linkPlugin, blockDndPlugin]
 if (allowImages){
   const imagePlugin = createImagePlugin({ decorator })
   plugins.push(handleDropPlugin)
@@ -69,6 +68,9 @@ class RichTextArea extends React.Component {
     this.setUploadState = this.setUploadState.bind(this)
     this.onSearchChange = this.onSearchChange.bind(this)
     this.onAddMention = this.onAddMention.bind(this)
+    this.mentionPlugin = createMentionPlugin({mentionPrefix: '@'})
+    this.plugins = plugins.slice(0)
+    this.plugins.push(this.mentionPlugin)
   }
 
   componentDidMount() {
@@ -252,7 +254,7 @@ class RichTextArea extends React.Component {
     this.setState({uploading})
   }
   render() {
-    const {MentionSuggestions} = mentionPlugin
+    const {MentionSuggestions} = this.mentionPlugin
     const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating, isGettingComment, disableTitle} = this.props
     const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading} = this.state
     let canSubmit = (disableTitle || titleValue.trim())
@@ -320,7 +322,7 @@ class RichTextArea extends React.Component {
                     editorState={editorState}
                     onChange={this.onEditorChange}
                     handleKeyCommand={this.handleKeyCommand}
-                    plugins={plugins}
+                    plugins={this.plugins}
                     setUploadState={this.setUploadState}
                   />
                   <MentionSuggestions
