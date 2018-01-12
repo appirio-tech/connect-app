@@ -268,10 +268,11 @@ export const NOTIFICATIONS = [
   }, 
 
   {
+    version: 2,                 
     eventType: 'notifications.connect.project.post.mention',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>[userHandle]</strong> mentioned your in a post',
+      text: '<strong>{{userFullName}}</strong> mentioned your in a post',
       toUserHandle: true,
       goTo: GOTO.POST
     }]

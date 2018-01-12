@@ -84,7 +84,7 @@ class RichTextArea extends React.Component {
       editorState: this.props.content ? EditorState.createWithContent(markdownToState(this.props.content)) : EditorState.createEmpty(),
       currentMDContent: this.props.content,
       oldMDContent: this.props.oldContent,
-      suggestions: suggestions,
+      suggestions,
       allSuggestions:suggestions
     })
   }
@@ -211,7 +211,7 @@ class RichTextArea extends React.Component {
     }
     const title = this.state.titleValue
 
-    let content = this.state.currentMDContent;
+    let content = this.state.currentMDContent
     
     const encodeContent = (text) => {
       return text.replace(/[*_`]/g, '\\$&')
