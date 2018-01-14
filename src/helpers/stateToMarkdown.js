@@ -246,7 +246,7 @@ class MarkupGenerator {
       } else if (entity !== null && entity.getType().toLowerCase() === 'mention') {
         const data = entity.getData()
         const url = data.mention.get('link') || ''
-        const title = data.mention.get('name') ? ` "@${escapeTitle(data.mention.get('name'))}"` : ''
+        const title = data.mention.get('handle') ? ` "@${escapeTitle(data.mention.get('handle'))}"` : ''
         return `[${content}](${encodeURL(url)}${title})`
       } else {
         return content
