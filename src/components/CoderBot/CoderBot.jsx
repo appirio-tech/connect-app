@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import './CoderBot.scss'
+import SVGIcons from '../Icons/Icons'
 
 const getHeading = code => {
   switch(code) {
@@ -30,6 +31,7 @@ const CoderBot = ({code, message}) => {
         <div className="page-error">
           <h3>{ getHeading(code) }</h3>
           <p dangerouslySetInnerHTML={ {__html : message || getMessage(code) } }></p>
+          <SVGIcons.IconCoderBroken className="icon-coder-broken" />
           <span>{code !== 200 && code}</span>
         </div>
       </div>

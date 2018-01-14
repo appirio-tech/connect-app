@@ -4,6 +4,8 @@ import cn from 'classnames'
 import _ from 'lodash'
 import { branch, renderComponent } from 'recompose'
 import { Tooltip } from 'appirio-tech-react-components'
+import IconBtnPrev from './images/arrow-left.svg'
+import IconBtnNext from './images/arrow-left.svg'
 
 const NUMBER_OF_PILLS = 5
 
@@ -160,11 +162,21 @@ const PaginationBar = enhance(({onPageChange, currentPageNum, totalCount, pageSi
   return (
     <div className="pages">
       <nav className="right-page">
-        { currentPageNum > 1 && <a href="javascript:" onClick={handlePageSelection} className="btn-prev">Prev</a> }
+        { currentPageNum > 1 && 
+        <a href="javascript:" onClick={handlePageSelection}>
+          Prev
+          <IconBtnPrev className="btn-prev"/>
+        </a>
+        }
         <ul>
           { pagePills.map(pagePill => pagePill)}
         </ul>
-        { currentPageNum < pages && <a href="javascript:" onClick={handlePageSelection} className="btn-next">Next</a> }
+        { currentPageNum < pages && 
+          <a href="javascript:" onClick={handlePageSelection}>
+            Next
+            <IconBtnNext className="btn-next"/>
+          </a>
+        }
       </nav>
     </div>
   )

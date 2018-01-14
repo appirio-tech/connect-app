@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import cn from 'classnames'
 import { Dropdown, DropdownItem } from 'appirio-tech-react-components'
+import SVGIcons from '../../Icons/Icons'
 
 const options = [
   { val: 'enterprise', label: 'Enterprise' },
@@ -24,12 +26,15 @@ const ProjectSegmentSelect = ({currentSegment}) => {
         <div className="dropdown-menu-list down-layer">
         <ul>
           {
-            options.map((item, i) =>
-              <DropdownItem key={i} item={item}
-                onItemClick={setSegment}
-                currentSelection={currentSegment}
-              />
-            )
+            options.map((item, i) => {
+              const activeClass = cn({
+                active: item.val === currentSortField
+              })
+              return <li key={i} className={activeClass} onClick={sortHandler}>
+                {activeClass? <SVGIcons.IconCheckDark className="icon-check-dark"/>: ""}
+                <a href="javascript:;">{item.label}</a>
+              </li>
+            })
           }
         </ul>
         </div>

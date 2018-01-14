@@ -34,7 +34,7 @@ module.exports = {
       options: {
         babelrc: false,
         presets: [ 'env', 'react', 'stage-2' ],
-        plugins: [ 'lodash' ]
+        plugins: ['lodash', 'inline-react-svg']
       }
     }, {
       test: /\.(coffee|litcoffee|cjsx)$/,

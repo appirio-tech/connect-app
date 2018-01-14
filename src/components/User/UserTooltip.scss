@@ -1,5 +1,5 @@
 @import 'tc-includes';
-
+// TODO: unused css
 .Tooltip {
   &.customer-data {
 
@@ -177,7 +177,7 @@
 
               &:after {
                 content: "";
-                background: url('./images/external-link.svg') no-repeat 0 0;
+                // background: url('./images/external-link.svg') no-repeat 0 0;
                 width: 13px;
                 height: 13px;
                 position: absolute;

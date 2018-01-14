@@ -1,5 +1,5 @@
 @import 'tc-includes';
-
+// TODO: unused css
 .gridview-content.content {
   overflow: visible;
   width: 100%;
@@ -89,13 +89,15 @@
             margin-top: -12px;
           }
 
+
           &.icon-up::after {
-            background: url("./images/arrow-up-big.svg") no-repeat right center;
+            // background: url("./images/arrow-up-big.svg") no-repeat right center;
           }
 
           &.icon-down::after {
-            background: url("./images/arrow-down-big.svg") no-repeat right center;
+            // background: url("./images/arrow-down-big.svg") no-repeat right center;
           }
+
 
           &a:hover {
             cursor: pointer;
@@ -250,29 +252,29 @@
 
   &.status-draft,
   &.gray {
-    background: url("./images/status-draft.svg") no-repeat 0 center;
+    // background: url("./images/status-draft.svg") no-repeat 0 center;
   }
 
   &.status-active,
   &.green {
-    background: url("./images/status-active.svg") no-repeat 0 center;
+    // background: url("./images/status-active.svg") no-repeat 0 center;
   }
 
   &.status-error,
   &.red {
-    background: url("./images/status-error.svg") no-repeat 0 center;
+    // background: url("./images/status-error.svg") no-repeat 0 center;
   }
 
   &.status-done,
   &.black {
-    background: url("./images/status-done.svg") no-repeat 0 center;
+    // background: url("./images/status-done.svg") no-repeat 0 center;
   }
+
 }
 
 .project-status-title {
   position: relative;
   display: block;
-  background: url('../../assets/images/status-ico.svg') no-repeat;
   background-position: center center;
   height: 20px;
   width: 20px;
@@ -296,7 +298,7 @@
     &:after {
       font-size: 0;
       line-height: 0;
-      background: url('./images/icon-drop-down.svg') no-repeat 0 0;
+      // background: url('./images/icon-drop-down.svg') no-repeat 0 0;
       width: 9px;
       height: 12px;
       content: "";
@@ -482,7 +484,7 @@
         &:before {
           font-size: 0;
           line-height: 0;
-          background: url("./images/arrow-left.svg") no-repeat 0 0;
+          // background: url("./images/arrow-left.svg") no-repeat 0 0;
           width: 12px;
           height: 12px;
           content: "";
@@ -501,7 +503,7 @@
         &:after {
           font-size: 0;
           line-height: 0;
-          background: url("./images/arrow-right.svg") no-repeat 0 0;
+          /*background: url("./images/arrow-right.svg") no-repeat 0 0;*/
           width: 12px;
           height: 12px;
           content: "";

@@ -13,6 +13,7 @@ import {
   PROJECT_STATUS_COMPLETED,
   PROJECT_STATUS_CANCELLED
 } from '../../config/constants'
+import SVGIcons from '../Icons/Icons'
 
 class ProjectStatusSection extends React.Component {
 

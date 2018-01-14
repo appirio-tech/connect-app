@@ -1,5 +1,5 @@
 @import "tc-includes";
-
+// TODO: unused css
 .project-status-section {
   display: flex;
   border-top: 1px solid $tc-gray-10;
@@ -59,7 +59,7 @@
             display: block;
             height: 12px;
             width: 12px;
-            background: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
+            // background: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
             background-size: 12px 12px;
             // -webkit-mask: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
             // background-color: $tc-white;
@@ -77,7 +77,7 @@
             display: block;
             height: 12px;
             width: 12px;
-            background: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
+            // background: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
             background-size: 12px 12px;
             // -webkit-mask: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
             // background-color: $tc-white;
@@ -123,7 +123,7 @@
         display: block;
         height: 12px;
         width: 12px;
-        background: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
+        // background: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
         background-size: 12px 12px;
         // -webkit-mask: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
         // background-color: $tc-white;
@@ -141,7 +141,7 @@
         display: block;
         height: 12px;
         width: 12px;
-        background: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
+        // background: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
         background-size: 12px 12px;
         // -webkit-mask: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
         // background-color: $tc-white;
@@ -153,7 +153,7 @@
       cursor: pointer;
       &:hover {
         &::after {
-          background: url('../../assets/images/arrows-9px-carret-down-expanded.svg') no-repeat 50% 50%;
+          // background: url('../../assets/images/arrows-9px-carret-down-expanded.svg') no-repeat 50% 50%;
         }
       }
       &::after {
@@ -165,12 +165,12 @@
         right: 10px;
         top: 8px;
         background-size: 9px 4px;
-        background: url('../../assets/images/arrow-9px-carret-down-normal.svg') no-repeat 50% 50%;
+        // background: url('../../assets/images/arrow-9px-carret-down-normal.svg') no-repeat 50% 50%;
       }
     }
     &.active {
       &::after {
-        background: url('../../assets/images/arrows-9px-carret-down-expanded.svg') no-repeat 50% 50%;
+        // background: url('../../assets/images/arrows-9px-carret-down-expanded.svg') no-repeat 50% 50%;
       }
     }
 
@@ -185,7 +185,7 @@
   ul {
     padding: 0;
     li {
-      background: url("../../assets/images/icon-direct-arrow.svg") no-repeat 0 center;
+      // background: url("../../assets/images/icon-direct-arrow.svg") no-repeat 0 center;
       padding-left: $base-unit*6;
     }
   }

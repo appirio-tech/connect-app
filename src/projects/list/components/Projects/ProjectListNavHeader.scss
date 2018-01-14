@@ -72,38 +72,32 @@
     &.right {
       justify-content: flex-end;
     }
-    &.grid-view-ico {
+    .grid-view-ico {
       position: relative;
-      i {
-        font-size: 0;
-        line-height: 0;
-        background: url('./images/grid-list-ico.svg') no-repeat 0 0;
-        width: 16px;
-        height: 14px;
-        display: block;
-        position: absolute;
-        top: 8px;
-        left: 10px;
-      }
+      font-size: 0;
+      line-height: 0;
+      width: 16px;
+      height: 14px;
+      display: block;
+      position: absolute;
+      top: 8px;
+      left: 10px;
     }
-    &.card-view-ico {
+    .card-view-ico {
       position: relative;
-      i {
-        font-size: 0;
-        line-height: 0;
-        background: url('./images/ui-16px-2_grid-45-gray.svg') no-repeat 0 0;
-        width: 16px;
-        height: 16px;
-        display: block;
-        position: absolute;
-        top: 7px;
-        left: 10px;
-      }
+      font-size: 0;
+      line-height: 0;
+      width: 16px;
+      height: 16px;
+      display: block;
+      position: absolute;
+      top: 7px;
+      left: 10px;
+
       &:hover i,
       &.active i {
         font-size: 0;
         line-height: 0;
-        background: url('./images/ui-16px-2_grid-45.svg') no-repeat 0 0;
       }
     }
   }

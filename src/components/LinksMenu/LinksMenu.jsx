@@ -6,6 +6,7 @@ import AddLink from './AddLink'
 import DeleteLinkModal from './DeleteLinkModal'
 import uncontrollable from 'uncontrollable'
 import cn from 'classnames'
+import SVGIcons from '../Icons/Icons'
 
 const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, onDeleteIntent, onDelete }) => (
   <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0) })}>
@@ -53,7 +54,9 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
                 <li key={idx}>
                   <a href={link.address} target="_blank" rel="noopener noreferrer">{link.title}</a>
                   {canDelete && <div className="buttons">
-                    <button onClick={ handleDeleteClick } type="button" className="btn-remove"/>
+                    <button onClick={ handleDeleteClick } type="button">
+                      <SVGIcons.IconBtnRemove className="btn-remove"/>
+                    </button>
                   </div>}
                 </li>
               )

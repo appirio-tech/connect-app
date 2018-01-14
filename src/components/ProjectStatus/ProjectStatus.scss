@@ -1,6 +1,6 @@
 @import 'tc-includes';
 $status-height: 20px;
-
+// TODO: unsed css
 .ProjectStatus {
   position: relative;
   height: $status-height;
@@ -19,7 +19,7 @@ $status-height: 20px;
       height: 4 * $base-unit;
     }
   }
-
+  /*
   &.ps-draft {
     .status-icon {
       i {
@@ -82,6 +82,7 @@ $status-height: 20px;
       }
     }
   }
+  */
 
   .status-label {
     position: relative;
@@ -140,12 +141,13 @@ $status-height: 20px;
         }
       }
     }
-
+    /* TODO: Unsolved 
     &.active {
       &::after {
         background: url('../../assets/images/arrows-9px-carret-down-expanded.svg') no-repeat 50% 50%;
       }
     }
+    */
 
     &.unified-header {
       background-color: $tc-gray-40;
@@ -200,7 +202,7 @@ $status-height: 20px;
       font-size: $tc-label-md;
       text-align: left;
       line-height: 30px;
-      padding: 5px 16px 5px 10px;
+      padding: 5px 16px 5px 2px;
       white-space: nowrap;
 
       &:hover {

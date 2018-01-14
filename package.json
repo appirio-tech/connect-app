@@ -55,6 +55,7 @@
   "dependencies": {
     "appirio-tech-react-components": "github:appirio-tech/react-components#feature/connectv2",
     "axios": "^0.13.1",
+    "babel-plugin-inline-react-svg": "^0.5.2",
     "classnames": "^2.2.3",
     "coffeescript": "^1.12.7",
     "draft-js": "^0.10.1",

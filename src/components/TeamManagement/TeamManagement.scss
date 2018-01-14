@@ -1,6 +1,7 @@
 @import "~tc-ui/src/styles/tc-includes";
 // @import "../../styles/variables";
 // TODO where do we add these
+// TODO: unused css
 $tc-heading-extra-small: 14px;
 $tc-body-small: 14px;
 $tc-body-extra-small: 12px;
@@ -97,7 +98,7 @@ $tc-body-extra-small: 12px;
             opacity: 1.0;
           }
         }
-
+        // Unused: memberrow component users apperio-tech-components which already have the icons
         .btn-user-remove {
           // @include icon('user-remove.svg');
         }
