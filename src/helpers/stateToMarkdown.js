@@ -243,6 +243,11 @@ class MarkupGenerator {
         const src = data.src || ''
         const alt = data.alt ? ` "${escapeTitle(data.alt)}"` : ''
         return `![${alt}](${encodeURL(src)})`
+      } else if (entity !== null && entity.getType().toLowerCase() === 'mention') {
+        const data = entity.getData()
+        const url = data.mention.get('link') || ''
+        const title = data.mention.get('name') ? ` "@${escapeTitle(data.mention.get('name'))}"` : ''
+        return `[${content}](${encodeURL(url)}${title})`
       } else {
         return content
       }

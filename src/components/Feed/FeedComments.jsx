@@ -86,6 +86,7 @@ class FeedComments extends React.Component {
           onDelete={onDeleteMessage}
           isSaving={item.isSavingComment}
           hasError={item.error}
+          allMembers={allMembers}
         >
           <div dangerouslySetInnerHTML={{__html: item.content}} />
         </Comment>

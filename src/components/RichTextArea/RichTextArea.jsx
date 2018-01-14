@@ -70,7 +70,7 @@ class RichTextArea extends React.Component {
     this.onAddMention = this.onAddMention.bind(this)
     this.mentionPlugin = createMentionPlugin({mentionPrefix: '@'})
     this.plugins = plugins.slice(0)
-    this.plugins.push(this.mentionPlugin)
+    this.plugins.push(this.mentionPlugin) 
   }
 
   componentDidMount() {
@@ -79,7 +79,7 @@ class RichTextArea extends React.Component {
   }
 
   componentWillMount() {
-    const suggestions = _.map(_.values(this.props.allMembers), (e) => { return {name: e.firstName + ' ' + e.lastName, handle: e.handle, userId: e.userId} })
+    const suggestions = _.map(_.values(this.props.allMembers), (e) => { return {name: e.firstName + ' ' + e.lastName, handle: e.handle, userId: e.userId, link:'/users/'+e.handle} })
     this.setState({
       editorExpanded: this.props.editMode,
       titleValue: this.props.title || '',
@@ -213,22 +213,7 @@ class RichTextArea extends React.Component {
     }
     const title = this.state.titleValue
 
-    let content = this.state.currentMDContent
-    
-    const encodeContent = (text) => {
-      return text.replace(/[*_`]/g, '\\$&')
-    }
-
-    const userIdMap = _.reduce(this.state.suggestions, (obj, item) => {
-      obj[encodeContent(item.name)] = item.userId
-      return obj
-    }, {})
-      
-    for (const item in userIdMap)
-    {
-      content = content.split('@' + item).join('@' + userIdMap[item])
-    }
-      
+    const content = this.state.currentMDContent
 
     if ((this.props.disableTitle || title) && content) {
       this.props.onPost({title, content})
@@ -281,7 +266,7 @@ class RichTextArea extends React.Component {
           <div className={theme.mentionSuggestionsEntryContainer}>
             <div className={theme.mentionSuggestionsEntryContainerRight}>
               <div className={theme.mentionSuggestionsEntryText}>
-                {mention.get('handle')}
+                {mention.get('name') +' - '+mention.get('handle')}
               </div>
             </div>
           </div>
