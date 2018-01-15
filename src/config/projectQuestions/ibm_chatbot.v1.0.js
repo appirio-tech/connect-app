@@ -74,7 +74,7 @@ const sections = [
             title: 'Does your organization currently have a chatbot?',
             description: '',
             type: 'radio-group',
-            fieldName: 'details.appDefinition.hasChatBot',
+            fieldName: 'details.appDefinition.hasChatbot',
             options: [
               {value: 'true', label: 'Yes'},
               {value: 'false', label: 'No'}
@@ -85,7 +85,7 @@ const sections = [
             title: 'If yes, can you provide some brief specifics about your current chatbot?',
             description: '',
             type: 'textbox',
-            fieldName: 'details.appDefinition.chatBotBrief'
+            fieldName: 'details.appDefinition.existingChatbotDesc'
           },
           {
             icon: 'question',
@@ -204,7 +204,7 @@ export const basicSections = [
             title: 'Does your organization currently have a chatbot?',
             description: '',
             type: 'radio-group',
-            fieldName: 'details.appDefinition.hasChatBot',
+            fieldName: 'details.appDefinition.hasChatbot',
             options: [
               {value: 'true', label: 'Yes'},
               {value: 'false', label: 'No'}
@@ -215,7 +215,7 @@ export const basicSections = [
             title: 'If yes, can you provide some brief specifics about your current chatbot?',
             description: '',
             type: 'textbox',
-            fieldName: 'details.appDefinition.chatBotBrief'
+            fieldName: 'details.appDefinition.existingChatbotDesc'
           },
           {
             icon: 'question',
