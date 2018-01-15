@@ -48,7 +48,7 @@ const products = {
         formDesclaimer: 'IBM is receiving compensation from Topcoder for referring customers to IBM Watson Conversation Service.',
         icon: 'product-chatbot-watson',
         id: 'watson_chatbot',
-        aliases: ['watson_chatbot'],
+        aliases: ['watson_chatbot','watson-chatbot'],
         hidden: true
       },
       Chatbot: {
