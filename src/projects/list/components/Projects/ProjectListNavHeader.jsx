@@ -2,7 +2,7 @@ require('./ProjectListNavHeader.scss')
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { PROJECT_STATUS } from '../../../../config/constants'
+import { PROJECT_STATUS, PROJECTS_LIST_VIEW } from '../../../../config/constants'
 
 export default class ProjectListNavHeader extends Component {
 
@@ -14,7 +14,6 @@ export default class ProjectListNavHeader extends Component {
   }
   componentWillMount() {
     this.setState({
-      selectedView: this.props.selectedView,
       currentStatus: this.props.currentStatus
     })
   }
@@ -31,9 +30,8 @@ export default class ProjectListNavHeader extends Component {
 
   switchViews(e) {
     e.preventDefault()
-    if (this.state.selectedView === e.currentTarget.dataset.view)
+    if (this.props.selectedView === e.currentTarget.dataset.view)
       return
-    this.setState({selectedView: e.currentTarget.dataset.view})
     this.props.changeView(e.currentTarget.dataset.view)
   }
 
@@ -56,10 +54,10 @@ export default class ProjectListNavHeader extends Component {
       </ul>
         <div className="right-wrapper">
           <div className="list-nav-item nav-icon">
-            <a href="javascript;" data-view="grid" onClick={this.switchViews} className={`list-nav-btn sm right grid-view-ico ${(this.state.selectedView === 'grid') ? 'active' : ''}`}><i/></a>
+            <a href="javascript;" data-view={PROJECTS_LIST_VIEW.GRID} onClick={this.switchViews} className={`list-nav-btn sm right grid-view-ico ${(this.props.selectedView === PROJECTS_LIST_VIEW.GRID) ? 'active' : ''}`}><i/></a>
           </div>
           <div className="list-nav-item nav-icon">
-            <a href="javascript;" data-view="card" onClick={this.switchViews} className={`list-nav-btn sm right card-view-ico ${(this.state.selectedView === 'card') ? 'active' : ''}`}><i/></a>
+            <a href="javascript;" data-view={PROJECTS_LIST_VIEW.CARD} onClick={this.switchViews} className={`list-nav-btn sm right card-view-ico ${(this.props.selectedView === PROJECTS_LIST_VIEW.CARD) ? 'active' : ''}`}><i/></a>
           </div>
         </div>
       </nav>

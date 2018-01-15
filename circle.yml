@@ -29,7 +29,7 @@ deployment:
     commands:
       - ./deploy.sh TEST01
   test02:
-    branch: notifications
+    branch: bugBash06
     owner: appirio-tech
     commands:
       - ./deploy.sh TEST02

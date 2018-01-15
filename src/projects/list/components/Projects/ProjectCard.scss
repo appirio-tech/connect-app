@@ -2,6 +2,7 @@
 
 .ProjectCard {
   display: flex;
+  cursor: pointer;
   flex-direction: column;
   height: 100%;
   background-color: $tc-white;
