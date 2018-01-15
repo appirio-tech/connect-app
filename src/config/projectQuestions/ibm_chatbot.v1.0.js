@@ -82,7 +82,6 @@ const sections = [
           },
           {
             icon: 'question',
-            validationError: 'Please complete this section',
             title: 'If yes, can you provide some brief specifics about your current chatbot?',
             description: '',
             type: 'textbox',
@@ -213,7 +212,6 @@ export const basicSections = [
           },
           {
             icon: 'question',
-            validationError: 'Please complete this section',
             title: 'If yes, can you provide some brief specifics about your current chatbot?',
             description: '',
             type: 'textbox',
