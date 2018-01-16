@@ -6,7 +6,6 @@ import IconStatusReviewed from '../../../assets/images/ps-reviewed.svg'
 import IconStatusCancelled from '../../../assets/images/ps-cancelled.svg'
 import IconStatusPaused from '../../../assets/images/ps-paused.svg'
 import IconStatusCompleted from '../../../assets/images/ps-completed.svg'
-import './statusIcons.scss'
 
 class StatusIcon extends React.Component {
 
