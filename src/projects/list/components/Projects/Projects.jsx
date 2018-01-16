@@ -172,6 +172,7 @@ class Projects extends Component {
         // onPageChange={this.onPageChange}
         // sortHandler={this.sortHandler}
         onPageChange={this.onPageChange}
+        onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
       />
     )

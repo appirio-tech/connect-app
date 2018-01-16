@@ -7,7 +7,7 @@ import ProjectCardHeader from './ProjectCardHeader'
 import ProjectCardBody from './ProjectCardBody'
 import './ProjectCard.scss'
 
-function ProjectCard({ project, duration, disabled, currentUser, history }) {
+function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus}) {
   let className = `ProjectCard ${ disabled ? 'disabled' : 'enabled'}`
   if (!project) return null
   const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
@@ -28,6 +28,7 @@ function ProjectCard({ project, duration, disabled, currentUser, history }) {
           project={project}
           currentMemberRole={currentMemberRole}
           duration={duration}
+          onChangeStatus={onChangeStatus}
         />
       </div>
       <div className="card-footer">
