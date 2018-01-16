@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
 import { Dropdown } from 'appirio-tech-react-components'
-import SVGIcons from '../../../../Components/Icons/Icons'
+import SVGIcons from '../../../../components/Icons/Icons'
 
 const options = [
   { val: 'updatedAt desc', label: 'Last Updated' },
