@@ -5,7 +5,6 @@ import IconNotificationNewProject from '../../../assets/images/notification-new-
 import IconNotificationReviewPending from '../../../assets/images/notification-review-pending.svg'
 import IconNotificationUpdates from '../../../assets/images/notification-updates.svg'
 import IconNotificationWarning from '../../../assets/images/notification-warning.svg'
-import './notificationIcons.scss'
 
 class NotificationIcons extends React.Component {
 
