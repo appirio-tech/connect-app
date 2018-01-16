@@ -28,12 +28,7 @@ module.exports = webpackMerge.strategy({
           // add react hot reloader
           'react-hot-loader/babel',
           'inline-react-svg'
-        ],
-        resolve: {
-          alias: {
-            Icons$: path.resolve(__dirname, 'Icons.jsx')
-          }
-        }
+        ]
       }
     }, {
       test: /\.scss$/,
