@@ -7,7 +7,8 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Sticky from 'react-stickynode'
-import { getNotifications, setNotificationsFilterBy, markAllNotificationsRead, toggleNotificationRead, viewOlderNotifications } from '../actions'
+import { getNotifications, setNotificationsFilterBy, markAllNotificationsRead,
+  toggleNotificationRead, viewOlderNotifications, toggleBundledNotificationRead } from '../actions'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import NotificationsSection from '../../../components/NotificationsSection/NotificationsSection'
 import NotificationsSectionTitle from '../../../components/NotificationsSectionTitle/NotificationsSectionTitle'
@@ -35,7 +36,8 @@ class NotificationsContainer extends React.Component {
       return null
     }
     const { sources, notifications, filterBy, setNotificationsFilterBy,
-      markAllNotificationsRead, toggleNotificationRead, viewOlderNotifications, oldSourceIds, pending } = this.props
+      markAllNotificationsRead, toggleNotificationRead, viewOlderNotifications,
+      oldSourceIds, pending, toggleBundledNotificationRead } = this.props
     const notReadNotifications = filterReadNotifications(notifications)
     const notificationsBySources = splitNotificationsBySources(sources, notReadNotifications, oldSourceIds)
     let globalSource = notificationsBySources.length > 0 && notificationsBySources[0].id === 'global' ? notificationsBySources[0] : null
@@ -49,6 +51,18 @@ class NotificationsContainer extends React.Component {
       }
     }
 
+    const toggleNotificationOrBundleRead = (notificationId) => {
+      if (!pending) {
+        const notification = _.find(notReadNotifications, { id: notificationId })
+        // if it's bundled notification, then toggle all notifications inside the bundle
+        if (notification.bundledIds) {
+          toggleBundledNotificationRead(notificationId, notification.bundledIds)
+        } else {
+          toggleNotificationRead(notificationId)
+        }
+      }
+    }
+
     return (
       <div className="notifications-container">
         <div className="content">
@@ -57,7 +71,7 @@ class NotificationsContainer extends React.Component {
               {...globalSource}
               isGlobal
               onMarkAllClick={() => !pending && markAllNotificationsRead('global', notifications)}
-              onReadToggleClick={(id) => !pending && toggleNotificationRead(id)}
+              onReadToggleClick={toggleNotificationOrBundleRead}
               onViewOlderClick={() => viewOlderNotifications(globalSource.id)}
             />
           }
@@ -67,7 +81,7 @@ class NotificationsContainer extends React.Component {
               key={source.id}
               {...source}
               onMarkAllClick={() => !pending && markAllNotificationsRead(source.id, notifications)}
-              onReadToggleClick={(id) => !pending && toggleNotificationRead(id)}
+              onReadToggleClick={toggleNotificationOrBundleRead}
               onViewOlderClick={() => viewOlderNotifications(source.id)}
             />
           )}
@@ -119,7 +133,8 @@ const mapDispatchToProps = {
   setNotificationsFilterBy,
   markAllNotificationsRead,
   toggleNotificationRead,
-  viewOlderNotifications
+  viewOlderNotifications,
+  toggleBundledNotificationRead
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsContainerWithLoaderAndAuth)

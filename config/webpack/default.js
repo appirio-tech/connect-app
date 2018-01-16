@@ -91,7 +91,10 @@ module.exports = {
       '.gif',
       '.jpg',
       '.cjsx'
-    ]
+    ],
+    alias: {
+      handlebars: 'handlebars/dist/handlebars.min.js'
+    }
   },
 
   plugins: [

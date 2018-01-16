@@ -4,7 +4,8 @@ import {
   SET_SEARCH_TERM, SET_PROJECTS_SEARCH_CRITERIA,
   CLEAR_PROJECT_SUGGESTIONS_SEARCH, PROJECT_SUGGESTIONS_SEARCH_SUCCESS,
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN,
-  SET_PROJECTS_INFINITE_AUTOLOAD
+  SET_PROJECTS_INFINITE_AUTOLOAD,
+  SET_PROJECTS_LIST_VIEW
 } from '../../config/constants'
 import { getProjects } from '../../api/projects'
 import { loadMembers } from '../../actions/members'
@@ -108,6 +109,12 @@ export function projectSuggestions(searchTerm) {
 export function setInfiniteAutoload(infiniteAutload) {
   return (dispatch) => {
     dispatch({ type: SET_PROJECTS_INFINITE_AUTOLOAD, payload: infiniteAutload })
+  }
+}
+
+export function setProjectsListView(projectsListView) {
+  return (dispatch) => {
+    dispatch({ type: SET_PROJECTS_LIST_VIEW, payload: projectsListView })
   }
 }
 

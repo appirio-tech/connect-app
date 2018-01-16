@@ -309,7 +309,8 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-
+			width: 178px;
+			
             &:hover {
               background-color: $tc-dark-blue-30;
               color: $tc-black;

@@ -12,7 +12,7 @@ module.exports = {
   AUTH0_CLIENT_ID   : process.env.AUTH0_CLIENT_ID_DEV,
   domain            : 'topcoder-dev.com',
   DOMAIN            : 'topcoder-dev.com',
-  CONNECT_MESSAGE_API_URL: process.env.CONNECT_MESSAGE_API_URL, 
+  CONNECT_MESSAGE_API_URL: process.env.CONNECT_MESSAGE_API_URL,
   ENV               : 'DEV',
 
   PROJECTS_API_URL  : 'https://api.topcoder-dev.com',

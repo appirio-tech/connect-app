@@ -50,7 +50,7 @@ class Comment extends React.Component {
   }
 
   render() {
-    const {message, avatarUrl, authorName, date, edited, children, active, self, isSaving, hasError, readonly} = this.props
+    const {message, avatarUrl, authorName, date, edited, children, active, self, isSaving, hasError, readonly, allMembers} = this.props
     const messageAnchor = `comment-${message.id}`
     const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#${messageAnchor}`
 
@@ -71,6 +71,7 @@ class Comment extends React.Component {
             avatarUrl={avatarUrl}
             authorName={authorName}
             cancelEdit={this.cancelEdit}
+            allMembers={allMembers}
         />
       )
     }
@@ -165,7 +166,8 @@ Comment.propTypes = {
   /**
    * The readonly flag
    */
-  readonly: PropTypes.bool
+  readonly: PropTypes.bool,
+  allMembers: PropTypes.object.isRequired
 }
 
 export default Comment
