@@ -5,6 +5,7 @@ import { SketchPicker } from 'react-color'
 import { HOC as hoc } from 'formsy-react'
 import {PROJECT_MAX_COLORS} from '../../config/constants'
 import { Icons } from 'appirio-tech-react-components'
+import SVGIcons from '../Icons/Icons'
 
 class ColorSelector extends React.Component {
   
@@ -61,8 +62,9 @@ class ColorSelector extends React.Component {
           <a
             href="javascript:"
             onClick={() => this.setState({isPickerVisible: true})}
-            className="color-card color-card-add"
+            className="color-card"
           >
+          <SVGIcons.IconAddColor className="color-card-add" />
           {isPickerVisible &&
             <div className="picker-wrapper" onClick={(e) => e.stopPropagation()}>
               <SketchPicker

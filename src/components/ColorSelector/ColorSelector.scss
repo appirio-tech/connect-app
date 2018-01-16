@@ -26,11 +26,10 @@
       }
     }
   }
-  .color-card-add{
+  .icon-add-color{
     position: relative;
     border-color: $tc-gray-30;
-    background: url('../../assets/images/icon-add-color.svg') no-repeat;
-    background-position: center center;
+    margin: 10px;
   }
   .picker-wrapper {
     z-index: 2;

@@ -2,7 +2,7 @@ import React from 'react'
 import PT from 'prop-types'
 import config from '../../../config/projectWizard'
 import ProjectTypeCard from './ProjectTypeCard'
-import SVGIconImage from '../../../components/SVGIconImage'
+import SVGIcons from '../../../components/Icons/Icons'
 import { findProductsOfCategory } from '../../../config/projectWizard'
 import './SelectProjectType.scss'
 
@@ -10,7 +10,7 @@ function SelectProjectType(props) {
   const cards = []
   for (const key in config) {
     const item = config[key]
-    const icon = <SVGIconImage filePath={item.icon} />
+    const icon = <SVGIcons.ProjectTypeIcons type={item.icon} />
     const products = findProductsOfCategory(item.id, false) || []
     // don't render disabled items for selection
     // don't render hidden items as well, hidden items can be reached via direct link though
@@ -29,7 +29,7 @@ function SelectProjectType(props) {
   return (
     <div>
       <div className="header headerSelectProjectType">
-        <SVGIconImage filePath="connect-logo-mono" className="connectLogo"/>
+        <SVGIcons.IconConnectLogoMono className="icon-connect-logo-mono"/>
       </div>
       <div className="SelectProjectType">
         <h1>Create a new project</h1>

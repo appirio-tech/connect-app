@@ -1,7 +1,7 @@
 
 import React from 'react'
 import {Link} from 'react-router-dom'
-import SVGIconImage from '../../../../components/SVGIconImage'
+import SVGIcons from '../../../../components/Icons/Icons'
 import './ProjectCard.scss'
 
 function NewProjectCard() {
@@ -11,7 +11,7 @@ function NewProjectCard() {
       </div>
       <div className="card-body">
         <div className="new-project-button">
-          <div className="new-project-icon"><SVGIconImage filePath="ui-16px-1_bold-add" /></div>
+          <div className="new-project-icon"><SVGIcons.IconBoldAdd className="icon-bold-add"/></div>
           <div>New Project</div>
         </div>
       </div>

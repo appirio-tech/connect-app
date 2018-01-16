@@ -1,5 +1,4 @@
 @import "tc-includes";
-
 .action-card {
   padding: $base-unit*4 0;
   box-shadow: 0px 1px 3px 0px $tc-gray-30;
@@ -530,26 +529,6 @@
       &:hover {
         opacity: 1.0;
       }
-    }
-
-    .btn-user-remove {
-      background: url('../../assets/images/user-remove.svg') no-repeat;
-    }
-
-    .btn-promote {
-      background: url('../../assets/images/promote.svg') no-repeat;
-    }
-
-    .btn-leave {
-      background: url('../../assets/images/exit.svg') no-repeat;
-    }
-
-    .btn-edit {
-      background: url('../../assets/images/ui-16px-1_pencil.svg') no-repeat;
-    }
-
-    .btn-remove {
-      background: url('../../assets/images/ui-16px-1_trash-simple.svg') no-repeat;
     }
   }
 }

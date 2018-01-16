@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import SVGIconImage from '../SVGIconImage'
+import SVGIcons from '../Icons/Icons'
 import './NewProjectNavLink.scss'
 
 const NewProjectNavLink = ({ compact=false, returnUrl }) => {
@@ -13,7 +13,9 @@ const NewProjectNavLink = ({ compact=false, returnUrl }) => {
           search: returnUrl ? '?returnUrl=' + returnUrl : ''
         }} className="new-project-link"
       >
-        <div className="new-project-icon"><SVGIconImage filePath="ui-16px-1_bold-add" /></div>
+        <div className="new-project-icon">
+          <SVGIcons.IconBoldAdd className="icon-bold-add" />
+        </div>
       </Link>
     )
   } else {

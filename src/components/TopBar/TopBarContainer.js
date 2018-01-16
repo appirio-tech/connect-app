@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import { UserDropdown } from 'appirio-tech-react-components'
-import SVGIconImage from '../SVGIconImage'
+import SVGIcons from '../Icons/Icons'
 import {
   ACCOUNTS_APP_LOGIN_URL,
   ACCOUNTS_APP_REGISTER_URL,
@@ -42,7 +42,7 @@ class TopBarContainer extends React.Component {
     return (
       <div className="logo-wrapper">
         <Link className="logo" to={logoTargetUrl} target="_self">
-          <SVGIconImage filePath="connect-logo-mono" />
+          <SVGIcons.IconConnectLogoMono className="icon-connect-logo-mono" />
         </Link>
         {comp}
       </div>

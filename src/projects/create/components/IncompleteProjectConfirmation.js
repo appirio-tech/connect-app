@@ -1,6 +1,6 @@
 import React from 'react'
 import PT from 'prop-types'
-import SVGIconImage from '../../../components/SVGIconImage'
+import SVGIcons from '../../../components/Icons/Icons'
 import './IncompleteProjectConfirmation.scss'
 
 function IncompleteProjectConfirmation({ loadIncompleteProject, removeIncompleteProject }) {
@@ -8,7 +8,7 @@ function IncompleteProjectConfirmation({ loadIncompleteProject, removeIncomplete
   return (
     <div className="IncompleteProjectConfirmation">
       <div className="header">
-        <SVGIconImage filePath="connect-logo-mono" className="connectLogo"/>
+        <SVGIcons.IconConnectLogoMono className="connectLogo"/>
       </div>
       <h3>Welcome back!</h3>
       <h5>You started a project with us recently.</h5>

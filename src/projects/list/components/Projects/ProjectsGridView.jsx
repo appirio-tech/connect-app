@@ -12,8 +12,8 @@ import { findProduct } from '../../../../config/projectWizard'
 import TextTruncate from 'react-text-truncate'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
 import editableProjectStatus from '../../../../components/ProjectStatus/editableProjectStatus'
-import SVGIconImage from '../../../../components/SVGIconImage'
 import ProjectManagerAvatars from './ProjectManagerAvatars'
+import SVGIcons from '../../../../components/Icons/Icons'
 require('./ProjectsGridView.scss')
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
@@ -56,7 +56,7 @@ const ProjectsGridView = props => {
         return (
           <Link to={url} className="spacing">
             <div className="project-type-icon" title={item.type !== undefined ? item.type[0].toUpperCase() + item.type.substr(1).replace(/_/g, ' ') : null}>
-              <SVGIconImage filePath={productIcon} />
+              <SVGIcons.ProjectTypeIcons type={productIcon} />
             </div>
           </Link>
         )
@@ -144,7 +144,7 @@ const ProjectsGridView = props => {
       }
     }, {
       id: 'status',
-      headerLabel: <div className="project-status-title"></div>,
+      headerLabel: <SVGIcons.IconProjectStatusTitle className="project-status-title" />,
       sortable: false,
       classes: 'item-status',
       renderText: item => {

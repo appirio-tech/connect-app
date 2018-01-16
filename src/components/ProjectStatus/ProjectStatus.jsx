@@ -2,12 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import './ProjectStatus.scss'
+import SVGIcons from '../Icons/Icons'
 
 /*eslint-enable camelcase */
 const ProjectStatus = ({ status, showText, withoutLabel, unifiedHeader = true }) => {
   return (
     <div className={cn('ProjectStatus', 'ps-' + status.value, { 'unified-header': unifiedHeader })}>
-      <div className="status-icon"><i /></div>
+      <SVGIcons.StatusIcons status={status.value} />
       {showText && (<span className="status-label">{withoutLabel ? status.fullName : status.name}</span>)}
     </div>
   )

@@ -35,13 +35,19 @@
     &:hover {
       background-color: #55a5ff;
 
-      > svg {
-        fill: $tc-white;
+      object {
+        .icon-x-mark {
+          fill: $tc-white;
+          margin: -6px;
+        }
       }
     }
 
-    > svg {
-      fill: $tc-black;
+    object {
+      .icon-x-mark {
+        fill: $tc-black;
+        margin: -6px;
+      }
     }
   }
 
@@ -66,12 +72,15 @@
     align-items: center;
     display: flex;
 
-    > svg {
-      height: auto;
-      width: 53px;
-
-      path {
-        fill: $tc-gray-10;
+    object {
+      .icon-connect-logo-mono {
+        height: auto;
+        width: 53px;
+        margin-top: 13px;
+  
+        path {
+          fill: $tc-gray-10;
+        }
       }
     }
   }

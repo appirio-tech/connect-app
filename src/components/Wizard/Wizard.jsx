@@ -1,7 +1,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import ModalControl from '../ModalControl'
-import SVGIconImage from '../SVGIconImage'
+import SVGIcons from '../Icons/Icons'
 import './Wizard.scss'
 
 function Wizard(props) {
@@ -12,7 +12,7 @@ function Wizard(props) {
     backControl = (
       <ModalControl
         className="back-button"
-        icon={<SVGIconImage filePath="arrows-16px-1_tail-left" />}
+        icon={<SVGIcons.IconTailLeft className="icon-tail-left"/>}
         label="back"
         onClick={() => onStepChange(step - 1)}
       />
@@ -22,7 +22,7 @@ function Wizard(props) {
     modalCloseControl = (
       <ModalControl
         className="escape-button"
-        icon={<SVGIconImage filePath="x-mark" />}
+        icon={<SVGIcons.IconXMark className="icon-x-mark"/>}
         label="esc"
         onClick={ onCancel }
       />

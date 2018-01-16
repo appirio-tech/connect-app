@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import uncontrollable from 'uncontrollable'
 import { Avatar } from 'appirio-tech-react-components'
 import { AUTOCOMPLETE_TRIGGER_LENGTH } from '../../config/constants'
+import SVGIcons from '../Icons/Icons'
 
 class AutoCompleteInput extends React.Component {
 
@@ -60,7 +61,8 @@ class AutoCompleteInput extends React.Component {
           </div>
         }
 
-        <span className="input-icon">
+        <span>
+          <SVGIcons.IconInputIcon className="input-icon"/>
           {selectedNewMember && <img src={selectedNewMember.photoURL} />}
         </span>
         <input

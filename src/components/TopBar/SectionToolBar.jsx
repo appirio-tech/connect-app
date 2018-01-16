@@ -10,13 +10,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import SVGIconImage from '../SVGIconImage'
+import SVGIcons from '../Icons/Icons'
 import './SectionToolBar.scss'
 
 const SectionToolBar = (props) => {
-  const logo = <Link key="logo" to="/" className="logo"><SVGIconImage filePath="connect-logo-mono" /></Link>
+  const logo = <Link key="logo" to="/" className="logo"><SVGIcons.IconConnectLogoMono className="icon-connect-logo-mono" /></Link>
   const title = <div key="title" className="title">{props.title}</div>
-  const close = <Link key="close" to="/" className="close"><SVGIconImage filePath="x-mark" /></Link>
+  const close = <Link key="close" to="/" className="close"><SVGIcons.IconXMark className="icon-x-mark" /></Link>
   const menu = props.menu ? <div key="menu" className="menu">{props.menu}</div> : null
 
   return (

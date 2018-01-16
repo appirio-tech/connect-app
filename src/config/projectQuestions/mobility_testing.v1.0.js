@@ -420,7 +420,7 @@ export const basicSections = [
               {value: 'upto5', title: 'configurations', icon: NumberText, iconOptions: { number: '5' }, desc: 'or fewer'},
               {value: 'upTo10', title: 'configurations', icon: NumberText, iconOptions: { number: '10' }, desc: 'or fewer'},
               {value: 'upTo20', title: 'configurations', icon: NumberText, iconOptions: { number: '20' }, desc: 'or fewer'},
-              {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know',  fill: '#00000'}, desc: 'We will find the best fit for you.'}
+              {value: 'dontKnow', title: 'Do not know', iconOptions: { filePath: 'icon-dont-know',  fill: '#00000'}, desc: 'We will find the best fit for you.'}
             ]
           }
           {

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
-
+import SVGIcons from '../Icons/Icons'
 
 const HeaderItem = ({item, onItemClick, currentSortField}) => {
   const _onClick = () => onItemClick(item.id)
@@ -16,6 +16,11 @@ const HeaderItem = ({item, onItemClick, currentSortField}) => {
       <div className="spacing">
         { item.sortable ?
           <a href="javascript:" className={sortClasses} onClick={_onClick}>
+            if (sortClasses === 'icon-up') {
+              <SVGIcons.IconUp className={sortClasses}/>
+            } else {
+              <SVGIcons.IconDown className={sortClasses}/>
+            }
             {item.headerLabel}
           </a>
           : item.headerLabel

@@ -7,10 +7,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { NOTIFICATION_TYPE } from '../../config/constants'
-import SVGIconImage from '../SVGIconImage'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import './NotificationItem.scss'
+import SVGIcons from '../Icons/Icons'
+
 
 /**
  * Format date
@@ -43,7 +44,9 @@ const formatDate = (date) => {
 const NotificationItem = (props) => {
   const notificationItem = (
     <div className="notification-item">
-      <div className="icon"><SVGIconImage filePath={'notification-' + props.type} /></div>
+      <div className="icon">
+      <SVGIcons.NotificationIcons type={props.type} className={'icon-notification' + props.type }/>
+      </div>
       <div className="body">
         <p className="content" dangerouslySetInnerHTML={{ __html: props.text }} />
         <p className="date">{formatDate(props.date)}</p>
@@ -55,7 +58,7 @@ const NotificationItem = (props) => {
             props.onReadToggleClick(props.id)
           }}
         >
-          <SVGIconImage filePath="check" />
+          <SVGIcons.IconCheck className="icon-check"/>
         </button>
       </div>
     </div>

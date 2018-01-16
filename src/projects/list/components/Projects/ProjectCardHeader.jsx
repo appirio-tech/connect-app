@@ -4,7 +4,7 @@ import React from 'react'
 import PT from 'prop-types'
 import TextTruncate from 'react-text-truncate'
 import { findProduct } from '../../../../config/projectWizard'
-import SVGIconImage from '../../../../components/SVGIconImage'
+import SVGIcons from '../../../../components/Icons/Icons'
 import './ProjectCardHeader.scss'
 
 function ProjectCardHeader({ project }) {
@@ -17,7 +17,9 @@ function ProjectCardHeader({ project }) {
   return (
     <div className="project-card-header">
       <div className="project-header">
-        <div className="project-type-icon" title={project.type !== undefined ? project.type[0].toUpperCase() + project.type.substr(1).replace(/_/g, ' ') : null}><SVGIconImage filePath={productIcon} /></div>
+        <div className="project-type-icon" title={project.type !== undefined ? project.type[0].toUpperCase() + project.type.substr(1).replace(/_/g, ' ') : null}>
+          <SVGIcons.ProjectTypeIcons type={productIcon} />
+        </div>
         <div className="project-header-details">
           <div className="project-name">
             <TextTruncate

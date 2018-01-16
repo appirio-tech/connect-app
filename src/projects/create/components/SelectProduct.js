@@ -2,7 +2,7 @@ import React from 'react'
 import PT from 'prop-types'
 import config from '../../../config/projectWizard'
 import ProductCard from './ProductCard'
-import SVGIconImage from '../../../components/SVGIconImage'
+import SVGIcons from '../../../components/Icons/Icons'
 import { findCategory } from '../../../config/projectWizard'
 import './SelectProduct.scss'
 
@@ -18,7 +18,7 @@ function SelectProduct(props) {
       // don't render disabled items for selection
       // don't render hidden items as well, hidden items can be reached via direct link though
       if (item.disabled || item.hidden) continue
-      const icon = <SVGIconImage filePath={item.icon} />
+      const icon = <SVGIcons.ProjectTypeIcons type={item.icon} />
       cards.push(
         <ProductCard
           icon={icon}
