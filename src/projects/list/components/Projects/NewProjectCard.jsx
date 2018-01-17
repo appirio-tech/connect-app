@@ -1,8 +1,18 @@
 
 import React from 'react'
+import PT from 'prop-types'
 import {Link} from 'react-router-dom'
-import SVGIcons from '../../../../components/Icons/Icons'
 import './ProjectCard.scss'
+import BoldAdd from '../../../../assets/icons/ui-16px-1_bold-add.svg'
+
+const IconBoldAdd = ({ className }) => {
+  return <BoldAdd className={className}/>
+}
+
+IconBoldAdd.propTypes = {
+  className: PT.string.Required
+}
+
 
 function NewProjectCard() {
   return (
@@ -11,7 +21,7 @@ function NewProjectCard() {
       </div>
       <div className="card-body">
         <div className="new-project-button">
-          <div className="new-project-icon"><SVGIcons.IconBoldAdd className="icon-bold-add"/></div>
+          <div className="new-project-icon"><IconBoldAdd className="icon-bold-add"/></div>
           <div>New Project</div>
         </div>
       </div>

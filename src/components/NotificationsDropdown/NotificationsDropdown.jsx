@@ -7,7 +7,21 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Dropdown } from 'appirio-tech-react-components'
 import cn from 'classnames'
-import SVGIcons from '../Icons/Icons'
+import Bell from '../../assets/icons/ui-bell.svg'
+
+/**
+ * @params {string} class name
+ */
+const IconBell = ({ className }) => {
+  return(
+    <Bell className={className}/>
+  )
+}
+
+IconBell.propTypes = {
+  className: PropTypes.string.isRequired
+}
+
 
 const NotificationsDropdown = (props) => {
   return (
@@ -15,7 +29,7 @@ const NotificationsDropdown = (props) => {
       <Dropdown theme="UserDropdownMenu" pointerShadow noAutoclose>
         <div className="dropdown-menu-header">
           <div className={cn('notifications-dropdown-bell', { 'has-unread': props.hasUnread })}>
-            <SVGIcons.IconBell className="icon-ui-bell"/>
+            <IconBell className="icon-ui-bell"/>
           </div>
         </div>
         <div className="dropdown-menu-list">

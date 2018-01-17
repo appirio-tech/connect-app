@@ -1,9 +1,47 @@
+import React from 'react'
 import _ from 'lodash'
+import PT from 'prop-types'
 import { Icons } from 'appirio-tech-react-components'
-import SVGIcons from '../../components/Icons/Icons'
 // import NumberText from '../../components/NumberText/NumberText'
 import { findProduct} from '../projectWizard'
 
+import DontKnow from '../../assets/icons/icon-dont-know.svg'
+import TestStructured from '../../assets/icons/icon-test-structured.svg'
+import TestUnstructured from '../../assets/icons/icon-test-unstructured.svg'
+
+
+/**
+ * @params {string} class name
+ */
+const IconDontKnow = ({ className }) => {
+  return <DontKnow className={className} />
+}
+
+IconDontKnow.propTypes = {
+  className: PT.string
+}
+
+/**
+ * @params {string} class name
+ */
+const IconTestStructured = ({ className }) => {
+  return <TestStructured className={className} />
+}
+
+IconTestStructured.propTypes = {
+  className: PT.string
+}
+
+/**
+ * @params {string} class name
+ */
+const IconTestUnstructured = ({ className }) => {
+  return <TestUnstructured className={className} />
+}
+
+IconTestUnstructured.propTypes = {
+  className: PT.string
+}
 
 const isFileRequired = (project, subSections) => {
   const subSection = _.find(subSections, (s) => s.type === 'questions')
@@ -56,9 +94,9 @@ const sections = [
             fieldName: 'details.appDefinition.testType',
             type: 'tiled-radio-group',
             options: [
-              {value: 'unstructured', title: 'Unstructured', icon: SVGIcons.IconTestUnstructured, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: '', price: 6000},
-              {value: 'structured', title: 'Structured', icon: SVGIcons.IconTestStructured, iconOptions: { filePath: 'icon-test-structured', fill: '#00000'}, desc: '', price: 4000},
-              {value: 'dontKnow', title: 'Do not know', icon: SVGIcons.IconDontKnow, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
+              {value: 'unstructured', title: 'Unstructured', icon: IconTestUnstructured, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: '', price: 6000},
+              {value: 'structured', title: 'Structured', icon: IconTestStructured, iconOptions: { filePath: 'icon-test-structured', fill: '#00000'}, desc: '', price: 4000},
+              {value: 'dontKnow', title: 'Do not know', icon: IconDontKnow, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
             ]
           },
           {
@@ -404,9 +442,9 @@ export const basicSections = [
             fieldName: 'details.appDefinition.testType',
             type: 'tiled-radio-group',
             options: [
-              {value: 'unstructured', title: 'Unstructured', icon: SVGIcons.IconTestUnstructured, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: ''},
-              {value: 'structured', title: 'Structured', icon: SVGIcons.IconTestStructured, iconOptions: { filePath: 'icon-test-structured',  fill: '#00000'}, desc: ''},
-              {value: 'dontKnow', title: 'Do not know', icon: SVGIcons.IconDontKnow, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
+              {value: 'unstructured', title: 'Unstructured', icon: IconTestUnstructured, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: ''},
+              {value: 'structured', title: 'Structured', icon: IconTestStructured, iconOptions: { filePath: 'icon-test-structured',  fill: '#00000'}, desc: ''},
+              {value: 'dontKnow', title: 'Do not know', icon: IconDontKnow, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
             ]
           },
           {
@@ -471,7 +509,7 @@ export const basicSections = [
               {value: 'upto5', title: 'configurations', icon: NumberText, iconOptions: { number: '5' }, desc: 'or fewer'},
               {value: 'upTo10', title: 'configurations', icon: NumberText, iconOptions: { number: '10' }, desc: 'or fewer'},
               {value: 'upTo20', title: 'configurations', icon: NumberText, iconOptions: { number: '20' }, desc: 'or fewer'},
-              {value: 'dontKnow', title: 'Do not know', icon: SVGIcons, iconOptions: { filePath: 'icon-dont-know',  fill: '#00000'}, desc: 'We will find the best fit for you.'}
+              {value: 'dontKnow', title: 'Do not know', icon: IconTestUnstructured, iconOptions: { filePath: 'icon-dont-know',  fill: '#00000'}, desc: 'We will find the best fit for you.'}
             ]
           }
           {

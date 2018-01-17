@@ -1,11 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import './ColorSelector.scss'
 import { SketchPicker } from 'react-color'
 import { HOC as hoc } from 'formsy-react'
 import {PROJECT_MAX_COLORS} from '../../config/constants'
 import { Icons } from 'appirio-tech-react-components'
-import SVGIcons from '../Icons/Icons'
+import AddColor from  '../../assets/icons/icon-add-color.svg'
+import './ColorSelector.scss'
+
+
+/**
+ * @params {string} classname
+ */
+const IconAddColor = ({ className }) => {
+  return <AddColor className={className}/>
+}
+
+IconAddColor.propTypes = {
+  className: PropTypes.string.isRequired
+}
 
 class ColorSelector extends React.Component {
   
@@ -64,7 +76,7 @@ class ColorSelector extends React.Component {
             onClick={() => this.setState({isPickerVisible: true})}
             className="color-card"
           >
-          <SVGIcons.IconAddColor className="color-card-add" />
+          <IconAddColor className="icon-card-add" />
           {isPickerVisible &&
             <div className="picker-wrapper" onClick={(e) => e.stopPropagation()}>
               <SketchPicker

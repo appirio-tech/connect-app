@@ -1,9 +1,32 @@
 require('./ProjectListNavHeader.scss')
 
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import PT from 'prop-types'
 import { PROJECT_STATUS } from '../../../../config/constants'
-import SVGIcons from '../../../../components/Icons/Icons'
+import CardView from '../../../../assets/icons/ui-16px-2_grid-45-gray.svg'
+import GridView from '../../../../assets/icons/grid-list-ico.svg'
+
+/**
+ * @params {string} class name
+ */
+const IconCardView = ({ className }) => {
+  return <CardView className={className}/>
+}
+
+IconCardView.propTypes = {
+  className: PT.string.isRequired
+}
+
+/**
+ * @params {string} type project type
+ */
+const IconGridView = ({ className }) => {
+  return <GridView className={className}/>
+}
+
+IconGridView.propTypes = {
+  className: PT.string.isRequired
+}
 
 export default class ProjectListNavHeader extends Component {
 
@@ -58,13 +81,13 @@ export default class ProjectListNavHeader extends Component {
         <div className="right-wrapper">
           <div className="list-nav-item nav-icon">
             <a href="javascript;" data-view="grid" onClick={this.switchViews} className={`list-nav-btn sm right ${(this.state.selectedView === 'grid') ? 'active' : ''}`}>
-              <SVGIcons.IconGridView className="grid-view-ico" />
+              <IconGridView className="grid-view-ico" />
               <i/>
             </a>
           </div>
           <div className="list-nav-item nav-icon">
             <a href="javascript;" data-view="card" onClick={this.switchViews} className={`list-nav-btn sm right ${(this.state.selectedView === 'card') ? 'active' : ''}`}>
-              <SVGIcons.IconCardView className="card-view-ico" />
+              <IconCardView className="card-view-ico" />
               <i/>
             </a>
           </div>
@@ -74,6 +97,6 @@ export default class ProjectListNavHeader extends Component {
   }
 }
 ProjectListNavHeader.propTypes = {
-  applyFilters: PropTypes.func.isRequired,
-  changeView: PropTypes.func.isRequired
+  applyFilters: PT.func.isRequired,
+  changeView: PT.func.isRequired
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 44.1 (41455) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-product-design-other</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="spec" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="specification" transform="translate(-915.000000, -1004.000000)">
+            <g id="icon-product-design-other" transform="translate(915.000000, 1004.000000)">
+                <circle id="round-background" fill="#EBEBEB" cx="25" cy="25" r="25"></circle>
+                <g id="icon" transform="translate(10.000000, 10.000000)">
+                    <path d="M23.8804118,10.4707994 C23.9590839,9.99219608 24,9.50087627 24,9 C24,4.02943725 19.9705627,0 15,0 C10.0294373,0 6,4.02943725 6,9 C6,9.50087627 6.0409161,9.99219608 6.11958823,10.4707994 C2.56168374,11.6719109 0,15.0367988 0,19 C0,23.9705627 4.02943725,28 9,28 C11.3050633,28 13.4077305,27.1334393 15,25.7083195 C16.5922695,27.1334393 18.6949367,28 21,28 C25.9705627,28 30,23.9705627 30,19 C30,15.0367988 27.4383163,11.6719109 23.8804118,10.4707994 L23.8804118,10.4707994 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+                    <circle id="Oval" stroke="#3A3A3F" stroke-width="2" stroke-linecap="square" cx="15" cy="9" r="9"></circle>
+                    <circle id="Oval" stroke="#3A3A3F" stroke-width="2" stroke-linecap="square" cx="9" cy="19" r="9"></circle>
+                    <circle id="Oval" stroke="#3A3A3F" stroke-width="2" stroke-linecap="square" cx="21" cy="19" r="9"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

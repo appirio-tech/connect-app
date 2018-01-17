@@ -25,11 +25,11 @@
         align-items: center;
       }
     }
-  }
-  .icon-add-color{
-    position: relative;
-    border-color: $tc-gray-30;
-    margin: 10px;
+    svg {
+      position: relative;
+      border-color: $tc-gray-30;
+      margin: 10px;
+    }
   }
   .picker-wrapper {
     z-index: 2;

@@ -142,6 +142,11 @@ $status-height: 20px;
         background: $tc-dark-blue-10;
       }
 
+      svg.active-status-icon {
+        margin-left: 7px;
+        margin-right: 10px;
+      }
+
       .status-label {
         color: $tc-gray-80;
         padding-right: 0px;

@@ -4,8 +4,31 @@ import cn from 'classnames'
 import _ from 'lodash'
 import { branch, renderComponent } from 'recompose'
 import { Tooltip } from 'appirio-tech-react-components'
-import IconBtnPrev from './images/arrow-left.svg'
-import IconBtnNext from './images/arrow-left.svg'
+import BtnPrev from '../../assets/icons/arrow-left.svg'
+import BtnNext from '../../assets/icons/arrow-left.svg'
+
+
+/**
+ * @params {string} classname
+ */
+const IconBtnPrev = ({ className }) => {
+  return <BtnPrev className={className}/>
+}
+
+IconBtnPrev.propTypes = {
+  className: PropTypes.string.isRequired
+}
+
+/**
+ * @params {string} classname
+ */
+const IconBtnNext = ({ className }) => {
+  return <BtnNext className={className}/>
+}
+
+IconBtnNext.propTypes = {
+  className: PropTypes.string.isRequired
+}
 
 const NUMBER_OF_PILLS = 5
 

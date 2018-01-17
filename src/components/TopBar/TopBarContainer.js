@@ -1,9 +1,9 @@
 import React from 'react'
+import PT from 'prop-types'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import { UserDropdown } from 'appirio-tech-react-components'
-import SVGIcons from '../Icons/Icons'
 import {
   ACCOUNTS_APP_LOGIN_URL,
   ACCOUNTS_APP_REGISTER_URL,
@@ -13,7 +13,22 @@ import {
   ROLE_CONNECT_ADMIN,
   DOMAIN
 } from '../../config/constants'
+import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
 require('./TopBarContainer.scss')
+
+
+
+/**
+ * @params {string} class name
+ */
+const IconConnectLogoMono = ({ className }) => {
+  return <ConnectLogoMono className={className} />
+}
+
+IconConnectLogoMono.propTypes = {
+  className: PT.string.isRequired
+}
+
 
 class TopBarContainer extends React.Component {
 
@@ -42,7 +57,7 @@ class TopBarContainer extends React.Component {
     return (
       <div className="logo-wrapper">
         <Link className="logo" to={logoTargetUrl} target="_self">
-          <SVGIcons.IconConnectLogoMono className="icon-connect-logo-mono" />
+          <IconConnectLogoMono className="icon-connect-logo-mono" />
         </Link>
         {comp}
       </div>

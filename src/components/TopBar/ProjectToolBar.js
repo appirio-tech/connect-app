@@ -2,16 +2,74 @@ require('./ProjectToolBar.scss')
 
 import _ from 'lodash'
 import React from 'react'
-import PropTypes from 'prop-types'
+import PT from 'prop-types'
 import { NavLink, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
-import SVGIcons from '../Icons/Icons'
+import Dashboard from '../../assets/images/icon-dashboard.svg'
+import DashboardActive from '../../assets/images/icon-dashboard-active.svg'
+import Specification from '../../assets/images/icon-ruler-pencil.svg'
+import SpecificationActive from '../../assets/images/icon-ruler-pencil-active.svg'
+import TailLeft from '../../assets/images/arrows-16px-1_tail-left.svg'
 
 function isEllipsisActive(el) {
   return (el.offsetWidth < el.scrollWidth)
+}
+
+/**
+ * @params {string} class name
+ */
+const IconDashboard = ({ className }) => {
+  return  <Dashboard className={className} />
+}
+/**
+ * @params {string} class name
+ */
+
+IconDashboard.propTypes = {
+  className: PT.string.isRequired
+}
+/**
+ * @params {string} class name
+ */
+const IconDashboardActive = ({ className }) => {
+  return <DashboardActive className={className} />
+}
+
+IconDashboardActive.propTypes = {
+  className: PT.string.isRequired
+}
+/**
+ * @params {string} class name
+ */
+const IconSpecification = ({ className }) => {
+  return <Specification className={className} />
+}
+
+IconSpecification.propTypes = {
+  className: PT.string.isRequired
+}
+/**
+ * @params {string} class name
+ */
+const IconSpecificationActive = ({ className }) => {
+  return <SpecificationActive className={className} />
+}
+
+IconSpecificationActive.propTypes = {
+  className: PT.string.isRequired
+}
+/**
+ * @params {string} class name
+ */
+const IconTailLeft = ({ className }) => {
+  return <TailLeft className={className} />
+}
+
+IconTailLeft.propTypes = {
+  className: PT.string.isRequired
 }
 
 class ProjectToolBar extends React.Component {
@@ -37,13 +95,13 @@ class ProjectToolBar extends React.Component {
 
     if (activeSpecificationPage) {
       this.state.activePage = 'specification'
-      this.state.specificationIcon = <SVGIcons.IconSpecificationActive className="icon-specification-active"/>
-      this.state.dashboardIcon = <SVGIcons.IconDashboard className="icon-dashboard" />
+      this.state.specificationIcon = <IconSpecificationActive className="icon-specification-active"/>
+      this.state.dashboardIcon = <IconDashboard className="icon-dashboard" />
     } else
       if (activeDashboardPage) {
         this.state.activePage = 'dashboard'
-        this.state.dashboardIcon = <SVGIcons.IconDashboardActive className="icon-dashboard-active" />
-        this.state.specificationIcon = <SVGIcons.IconSpecification className="icon-specification" />
+        this.state.dashboardIcon = <IconDashboardActive className="icon-dashboard-active" />
+        this.state.specificationIcon = <IconSpecification className="icon-specification" />
       }
   }
 
@@ -111,7 +169,7 @@ class ProjectToolBar extends React.Component {
             {renderLogoSection()}
             {project && <div className="breadcrumb">
               <NavLink to="/projects">
-                <SVGIcons.IconTailLeft className="icon-tail-left" />
+                <IconTailLeft className="icon-tail-left" />
               <span>View All Projects</span></NavLink>
             </div>}
           </div>
@@ -155,12 +213,12 @@ class ProjectToolBar extends React.Component {
 }
 
 ProjectToolBar.propTypes = {
-  project: PropTypes.object,
-  isPowerUser: PropTypes.bool,
+  project: PT.object,
+  isPowerUser: PT.bool,
   /**
    * Function which render the logo section in the top bar
    */
-  renderLogoSection: PropTypes.func.isRequired
+  renderLogoSection: PT.func.isRequired
 }
 
 const mapStateToProps = ({ projectState, loadUser }) => {

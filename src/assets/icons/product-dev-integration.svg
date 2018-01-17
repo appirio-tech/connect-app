@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>product-dev-integration</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="project-menu-icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+        <g id="product-dev-integration" stroke-width="2">
+            <g id="files-32px-outline_settings-99" transform="translate(3.000000, 1.000000)">
+                <rect id="Rectangle-path" stroke="#262628" fill="#FFFFFF" x="0" y="0" width="26" height="30"></rect>
+                <circle id="Oval" stroke="#0681FF" cx="13" cy="15" r="4"></circle>
+                <path d="M13,11 L13,9" id="Shape" stroke="#0681FF"></path>
+                <path d="M15.828,12.172 L17.243,10.757" id="Shape" stroke="#0681FF"></path>
+                <path d="M17,15 L19,15" id="Shape" stroke="#0681FF"></path>
+                <path d="M15.828,17.828 L17.243,19.243" id="Shape" stroke="#0681FF"></path>
+                <path d="M13,19 L13,21" id="Shape" stroke="#0681FF"></path>
+                <path d="M10.172,17.828 L8.757,19.243" id="Shape" stroke="#0681FF"></path>
+                <path d="M9,15 L7,15" id="Shape" stroke="#0681FF"></path>
+                <path d="M10.172,12.172 L8.757,10.757" id="Shape" stroke="#0681FF"></path>
+            </g>
+        </g>
+    </g>
+</svg>

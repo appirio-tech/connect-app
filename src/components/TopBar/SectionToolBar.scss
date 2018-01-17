@@ -35,20 +35,16 @@
     &:hover {
       background-color: #55a5ff;
 
-      object {
-        .icon-x-mark {
-          fill: $tc-white;
-          margin: -6px;
-        }
+      .icon-x-mark {
+        fill: $tc-white;
+        margin: -6px;
       }
     }
 
-    object {
       .icon-x-mark {
         fill: $tc-black;
         margin: -6px;
       }
-    }
   }
 
   > .section > .menu {
@@ -72,15 +68,13 @@
     align-items: center;
     display: flex;
 
-    object {
-      .icon-connect-logo-mono {
-        height: auto;
-        width: 53px;
-        margin-top: 13px;
-  
-        path {
-          fill: $tc-gray-10;
-        }
+    .icon-connect-logo-mono {
+      height: auto;
+      width: 53px;
+      margin-top: 13px;
+
+      path {
+        fill: $tc-gray-10;
       }
     }
   }

@@ -4,8 +4,117 @@ import React from 'react'
 import PT from 'prop-types'
 import TextTruncate from 'react-text-truncate'
 import { findProduct } from '../../../../config/projectWizard'
-import SVGIcons from '../../../../components/Icons/Icons'
 import './ProjectCardHeader.scss'
+import IconAnalyticsAlgorithmOptimization from '../../../../assets/images/product-analytics-algorithm-optimization.svg'
+import IconAnalyticsComputerVision from '../../../../assets/images/product-analytics-computer-vision.svg'
+import IconAnalyticsDataExploration from '../../../../assets/images/product-analytics-data-exploration.svg'
+import IconAnalyticsPredictiveAnalytics from '../../../../assets/images/product-analytics-predictive-analytics.svg'
+import IconAppApp from '../../../../assets/images/product-app-app.svg'
+import IconCatAnalytics from '../../../../assets/images/product-cat-analytics.svg'
+import IconCatApp from '../../../../assets/images/product-cat-app.svg'
+import IconCatChatbot from '../../../../assets/images/product-cat-chatbot.svg'
+import IconCatDesign from '../../../../assets/images/product-cat-design.svg'
+import IconCatDevelopment from '../../../../assets/images/product-cat-development.svg'
+import IconCatQa from '../../../../assets/images/product-cat-qa.svg'
+import IconCatWebsite from '../../../../assets/images/product-cat-website.svg'
+import IconChatbotChatbot from '../../../../assets/images/product-chatbot-chatbot.svg'
+import IconChatbotWatson from '../../../../assets/images/product-chatbot-watson.svg'
+import IconDesignAppVisual from '../../../../assets/images/product-design-app-visual.svg'
+import IconDesignInfographic from '../../../../assets/images/product-design-infographic.svg'
+import IconDesignOther from '../../../../assets/images/product-design-other.svg'
+import IconDesignWireframes from '../../../../assets/images/product-design-wireframes.svg'
+import IconDevFrontendDev from '../../../../assets/images/product-dev-front-end-dev.svg'
+import IconDevIntegration from '../../../../assets/images/product-dev-integration.svg'
+import IconDevOther from '../../../../assets/images/product-dev-other.svg'
+import IconDevPrototype from '../../../../assets/images/product-dev-prototype.svg'
+import IconOtherDesign from '../../../../assets/images/product-other-design.svg'
+import IconQaConsulting from '../../../../assets/images/product-qa-consulting.svg'
+import IconQaCrowdTesting from '../../../../assets/images/product-qa-crowd-testing.svg'
+import IconQaDigitalAccessability from '../../../../assets/images/product-qa-digital-accessability.svg'
+import IconQaHelthCheck from '../../../../assets/images/product-qa-health-check.svg'
+import IconQaMobilityTesting from '../../../../assets/images/product-qa-mobility-testing.svg'
+import IconQaOsAutomation from '../../../../assets/images/product-qa-os-automation.svg'
+import IconQaWebsitePrerfomance from '../../../../assets/images/product-qa-website-performance.svg'
+import IconWebsiteWebsite from '../../../../assets/images/product-website-website.svg'
+import IconOutlineWorkProject from '../../../../assets/images/tech-32px-outline-work-project.svg'
+
+/**
+ * @params {string} type project type
+ */
+const ProjectTypeIcons = ({ type }) => {
+  switch(type){
+  case 'product-analytics-algorithm-optimization':
+    return <IconAnalyticsAlgorithmOptimization className="icon-analytics-algorithm-optimization"/>
+  case 'product-analytics-computer-vision':
+    return <IconAnalyticsComputerVision className="icon-analytics-computer-vision"/>
+  case 'product-analytics-data-exploration':
+    return <IconAnalyticsDataExploration className="icon-analytics-data-exploration"/>
+  case 'product-analytics-predictive-analytics':
+    return <IconAnalyticsPredictiveAnalytics className="icon-analytics-predictive-analytics"/>
+  case 'product-app-app':
+    return <IconAppApp className="icon-app-app"/>
+  case 'product-cat-analytics':
+    return <IconCatAnalytics className="icon-cat-analytics"/>
+  case 'product-cat-app':
+    return <IconCatApp className="icon-cat-app"/>
+  case 'product-cat-chatbot':
+    return <IconCatChatbot className="icon-cat-chatbot"/>
+  case 'product-cat-design':
+    return <IconCatDesign className="icon-cat-design"/>
+  case 'product-cat-development':
+    return <IconCatDevelopment className="icon-cat-development"/>
+  case 'product-cat-qa':
+    return <IconCatQa className="icon-cat-qa"/>
+  case 'product-cat-website':
+    return <IconCatWebsite className="icon-cat-website"/>
+  case 'product-chatbot-chatbot':
+    return <IconChatbotChatbot className="icon-chatbot-chatbot"/>
+  case 'product-chatbot-watson':
+    return <IconChatbotWatson className="icon-chatbot-watson"/>
+  case 'product-design-app-visual':
+    return <IconDesignAppVisual className="icon-design-app-visual"/>
+  case 'product-design-infographic':
+    return <IconDesignInfographic className="icon-design-infographic"/>
+  case 'product-design-other':
+    return <IconDesignOther className="icon-design-other"/>
+  case 'product-design-wireframes':
+    return <IconDesignWireframes className="icon-design-wireframes"/>
+  case 'product-dev-front-end-dev':
+    return <IconDevFrontendDev className="icon-dev-frontend-dev"/>
+  case 'product-dev-integration':
+    return <IconDevIntegration className="icon-dev-integration"/>
+  case 'product-dev-other':
+    return <IconDevOther className="icon-dev-other"/>
+  case 'product-dev-prototype':
+    return <IconDevPrototype className="icon-dev-prototype"/>
+  case 'product-other-design':
+    return <IconOtherDesign  className="icon-dev-other"/>
+  case 'product-qa-consulting':
+    return <IconQaConsulting className="icon-qa-consulting"/>
+  case 'product-qa-crowd-testing':
+    return <IconQaCrowdTesting className="icon-qa-crowd-testing"/>
+  case 'product-qa-digital-accessability':
+    return <IconQaDigitalAccessability className="icon-qa-digital-accessability"/>
+  case 'product-qa-health-check':
+    return <IconQaHelthCheck className="icon-qa-health-check"/>
+  case 'product-qa-mobility-testing':
+    return <IconQaMobilityTesting className="icon-qa-mobility-testing"/>
+  case 'product-qa-os-automation':
+    return <IconQaOsAutomation className="icon-qa-os-automation"/>
+  case 'product-qa-website-performance':
+    return <IconQaWebsitePrerfomance className="icon-qa-website-performance"/>
+  case 'product-website-website':
+    return <IconWebsiteWebsite className="icon-website-website"/>
+  case 'tech-32px-outline-work-project':
+    return <IconOutlineWorkProject className="icon-outline-work-project" />
+  default:
+    return 'undefined icon'
+  }
+}
+
+ProjectTypeIcons.propTypes = {
+  type: PT.string.isRequired
+}
 
 function ProjectCardHeader({ project }) {
   if (!project) return null
@@ -18,7 +127,7 @@ function ProjectCardHeader({ project }) {
     <div className="project-card-header">
       <div className="project-header">
         <div className="project-type-icon" title={project.type !== undefined ? project.type[0].toUpperCase() + project.type.substr(1).replace(/_/g, ' ') : null}>
-          <SVGIcons.ProjectTypeIcons type={productIcon} />
+          <ProjectTypeIcons type={productIcon} />
         </div>
         <div className="project-header-details">
           <div className="project-name">

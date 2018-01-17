@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
 import { Dropdown } from 'appirio-tech-react-components'
-import SVGIcons from '../../../../Icons/Icons'
+import CarretDownActive from '../../assets/icons/arrow-6px-carret-down-active.svg'
+import CarretDownNormal from '../../../../assets/icons/arrow-6px-carret-down-normal.svg'
+import CheckDark from '../../../../assets/icons/check-dark.svg'
 
 const options = [
   { val: 'best match', label: 'Best Match' },
@@ -11,6 +13,41 @@ const options = [
   { val: 'createdAt', label: 'Oldest first' },
   { val: 'name', label: 'Name A-Z' }
 ]
+
+/**
+ * @params {string} class name
+ */
+const IconCarretDownNormal = ({ className }) => {
+  return <CarretDownNormal className={className}/>
+}
+
+IconCarretDownNormal.propTypes = {
+  className: PropTypes.string.isRequired
+}
+
+
+/**
+ * @params {string} class name
+ */
+const IconCarretDownActive = ({ className }) => {
+  return <CarretDownActive className={className}/>
+}
+
+IconCarretDownActive.propTypes = {
+  className: PropTypes.string.isRequired
+}
+
+
+/**
+ * @params {string} class name
+ */
+const IconCheckDark = ({ className }) => {
+  return <CheckDark className={className}/>
+}
+
+IconCheckDark.propTypes = {
+  className: PropTypes.string.isRequired
+}
 
 class ProjectListProjectColHeader extends React.Component {
 
@@ -50,7 +87,7 @@ class ProjectListProjectColHeader extends React.Component {
         <Dropdown>
           <a href="javascript:;" className="dropdown-menu-header txt-link" onClick={ev => this.toggleFocusState(ev)}>
             {cur.label}
-            {!this.state.focused? <SVGIcons.IconCarretDownNormal className="icon-carret-down-normal"/> : <SVGIcons.IconCarretDownActive className="icon-carret-down-active" />}
+            {!this.state.focused? <IconCarretDownNormal className="icon-carret-down-normal"/> : <IconCarretDownActive className="icon-carret-down-active" />}
           </a>
           <div className="dropdown-menu-list down-layer">
             <ul>
@@ -60,7 +97,7 @@ class ProjectListProjectColHeader extends React.Component {
                     active: item.val === currentSortField
                   })
                   return (<li key={i} className={activeClass} onClick={sortHandler}>
-                    {activeClass? <SVGIcons.IconCheckDark className="icon-check-dark"/>: ''}
+                    {activeClass? <IconCheckDark className="icon-check-dark"/>: ''}
                     <a href="javascript:;">{item.label}</a>
                   </li>)
                 })

@@ -8,10 +8,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import SVGIcons from '../../../components/Icons/Icons'
 import { EMAIL_AVAILABILITY_CHECK_DEBOUNCE } from '../../../../../config/constants'
 import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 import './ChangeEmailForm.scss'
+import Check from '../../assets/icons/check.svg'
+
+/**
+ * @params {string} class name
+ */
+const IconCheck = ({ className }) => {
+  return <Check className={className}/>
+}
+
+IconCheck.propTypes = {
+  className: PropTypes.string.isRequired
+}
+
 
 class ChangeEmailForm extends React.Component {
   constructor(props) {
@@ -110,7 +122,7 @@ class ChangeEmailForm extends React.Component {
           />
           <div className="field-status">
             {isCheckingCurrentEmail && <LoadingIndicator isSmall />}
-            {isEmailChanged && currentEmailAvailable && <SVGIcons.IconCheck className="icon-check"/>}
+            {isEmailChanged && currentEmailAvailable && <IconCheck className="icon-check"/>}
           </div>
         </div>
         <div className="controls">

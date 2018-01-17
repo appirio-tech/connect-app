@@ -5,12 +5,23 @@ import ProjectStatus from './ProjectStatus'
 import cn from 'classnames'
 import _ from 'lodash'
 import { enhanceDropdown } from 'appirio-tech-react-components'
-import SVGIcons from '../Icons/Icons'
 import {
   PROJECT_STATUS,
   PROJECT_STATUS_COMPLETED,
   PROJECT_STATUS_CANCELLED
 } from '../../config/constants'
+import CarretDownNormal9px from '../../assets/icons/arrow-9px-carret-down-normal.svg'
+
+/**
+ * @params {string} class name
+ */
+const IconCarretDownNormal9px = ({ className }) => {
+  return <CarretDownNormal9px className={className}/>
+}
+
+IconCarretDownNormal9px.propTypes = {
+  className: PropTypes.string.isRequired
+}
 
 const hocStatusDropdown = (CompositeComponent) => {
   class StatusDropdown extends Component {
@@ -43,7 +54,7 @@ const hocStatusDropdown = (CompositeComponent) => {
               unifiedHeader={unifiedHeader}
             />
             { canEdit && <i className="caret" >
-              <SVGIcons.IconCarretDownNormal9px className="icon-carret-down-normal"/>
+              <IconCarretDownNormal9px className="icon-carret-down-normal"/>
             </i> }
           </div>
           { isOpen && canEdit &&

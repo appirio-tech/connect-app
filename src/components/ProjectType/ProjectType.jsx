@@ -6,15 +6,29 @@ import PanelProject from '../PanelProject/PanelProject'
 import TextTruncate from 'react-text-truncate'
 import { findCategory } from '../../config/projectWizard'
 import {Link} from 'react-router-dom'
-import SVGIcons from '../Icons/Icons'
+import WorkProject from '../../assets/icons/tech-32px-outline-work-project.svg'
 
 const deviceMap = {
-  phone: <div key="IPHONE">Phone<SVGIcons.IconIPhone className="icon icon-iphone" /></div>,
-  tablet: <div key="IPAD">Tablet<SVGIcons.IconIpad className="icon icon-ipad"/></div>,
-  desktop: <div key="WEB">Desktop<SVGIcons.IconWeb className="icon icon-web"/></div>,
-  wearable: <div key="APPLE_WATCH">Apple Watch<SVGIcons.IconAppleWatch className="icon icon-apple-watch"/></div>,
-  'apple-watch': <div key="APPLE_WATCH">Apple Watch<SVGIcons.IconAppleWatch className="icon icon-apple-watch"/></div>,
-  'android-watch': <div  key="ANDROID_WEAR">Android Watch<SVGIcons.IconAndroidWear className="icon icon-android-wear"/></div>
+  phone: <div key="IPHONE">Phone</div>,
+  tablet: <div key="IPAD">Tablet</div>,
+  desktop: <div key="WEB">Desktop</div>,
+  wearable: <div key="APPLE_WATCH">Apple Watch</div>,
+  'apple-watch': <div key="APPLE_WATCH">Apple Watch</div>,
+  'android-watch': <div  key="ANDROID_WEAR">Android Watch</div>
+}
+
+
+/**
+ * @params {string} status project status
+ */
+const IconWorkProject = ({ className }) => {
+  return(
+    <WorkProject className={className}/>
+  )
+}
+
+IconWorkProject.propTypes = {
+  className: PropTypes.string.isRequired
 }
 
 /*eslint-enable camelcase */
@@ -34,7 +48,7 @@ const ProjectType = ({projectId, type, description, devices}) => (
     <div className="project-icons">
       {type === 'generic' &&
         <div key="GENERIC">
-          <SVGIcons.IconWorkProject className="icon icon-work-project" />
+          <IconWorkProject className="icon icon-work-project" />
           Work Project
         </div>}
       {type !== 'generic' &&

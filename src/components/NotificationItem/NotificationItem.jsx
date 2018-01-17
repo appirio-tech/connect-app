@@ -10,8 +10,41 @@ import { NOTIFICATION_TYPE } from '../../config/constants'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import './NotificationItem.scss'
-import SVGIcons from '../Icons/Icons'
+import Check from '../../assets/icons/check.svg'
+import IconNotificationMememberAdded from '../../assets/icons/notification-member-added.svg'
+import IconNotificationNewPosts from '../../assets/icons/notification-new-posts.svg'
+import IconNotificationNewProject from '../../assets/icons/notification-new-project.svg'
+import IconNotificationReviewPending from '../../assets/icons/notification-review-pending.svg'
+import IconNotificationUpdates from '../../assets/icons/notification-updates.svg'
+import IconNotificationWarning from '../../assets/icons/notification-warning.svg'
 
+/**
+ * @parmas {string} type notification type
+ * @parmas {string} class name
+ */
+const NotificationIcons = ({ type, className }) => {
+  switch(type){
+  case 'member-added':
+    return <IconNotificationMememberAdded className={className}/>
+  case 'new-posts':
+    return <IconNotificationNewPosts className={className}/>
+  case 'new-project':
+    return <IconNotificationNewProject className={className}/>
+  case 'review-pending':
+    return <IconNotificationReviewPending className={className}/>
+  case 'updates':
+    return <IconNotificationUpdates className={className}/>
+  case 'warning':
+    return <IconNotificationWarning className={className}/>
+  default:
+    return 'undefined icon'
+  }
+}
+
+NotificationIcons.propTypes = {
+  type: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired
+}
 
 /**
  * Format date
@@ -41,11 +74,15 @@ const formatDate = (date) => {
   return format
 }
 
+const IconCheck = ({ className }) => {
+  return <Check className={className}/>
+}
+
 const NotificationItem = (props) => {
   const notificationItem = (
     <div className="notification-item">
       <div className="icon">
-      <SVGIcons.NotificationIcons type={props.type} className={'icon-notification' + props.type }/>
+      <NotificationIcons type={props.type} className={'icon-notification' + props.type }/>
       </div>
       <div className="body">
         <p className="content" dangerouslySetInnerHTML={{ __html: props.text }} />
@@ -58,7 +95,7 @@ const NotificationItem = (props) => {
             props.onReadToggleClick(props.id)
           }}
         >
-          <SVGIcons.IconCheck className="icon-check"/>
+          <IconCheck className="icon-check"/>
         </button>
       </div>
     </div>

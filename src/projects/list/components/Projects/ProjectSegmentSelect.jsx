@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
 import { Dropdown } from 'appirio-tech-react-components'
-import SVGIcons from '../../Icons/Icons'
+import CheckDark from '../../assets/icons/check-dark.svg'
+
 
 const options = [
   { val: 'enterprise', label: 'Enterprise' },
@@ -12,6 +13,17 @@ const options = [
   { val: 'qaas', label: 'Wipro QAaS' },
   { val: 'emea', label: 'Wipro Digital EMEA' }
 ]
+
+/**
+ * @params {string} class name
+ */
+const IconCheckDark = ({ className }) => {
+  return <CheckDark className={className}/>
+}
+
+IconCheckDark.propTypes = {
+  className: PropTypes.string.isRequired
+}
 
 class ProjectSegmentSelect extends React.Component {
 
@@ -32,7 +44,7 @@ class ProjectSegmentSelect extends React.Component {
                   active: item.val === currentSortField
                 })
                 return (<li key={i} className={activeClass} onClick={sortHandler}>
-                  {activeClass? <SVGIcons.IconCheckDark className="icon-check-dark"/>: ''}
+                  {activeClass? <IconCheckDark className="icon-check-dark"/>: ''}
                   <a href="javascript:;">{item.label}</a>
                 </li>)
               })

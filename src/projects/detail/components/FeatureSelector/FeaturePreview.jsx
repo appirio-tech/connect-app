@@ -1,11 +1,32 @@
 import React from 'react'
-import SVGIcons from '../../../../components/Icons/Icons'
+import PT from 'prop-types'
+import DeviceIphone from '../../../../assets/icons/Device-iPhone.svg'
 
 require('./FeaturePreview.scss')
+
+/**
+ * @params {string} class name
+ */
+const IconDeviceIphone = ({className}) => {
+  return <DeviceIphone className={className}/>
+}
+
+IconDeviceIphone.propTypes = {
+  className: PT.string.isRequired
+}
 
 class FeaturePreview extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {maskUrl: ''}
+  }
+
+  componentDidMount() {
+    document.querySelector('.mask').href.baseVal = this.state.maskUrl
+  }
+
+  componentDidUpdate() {
+    document.querySelector('.mask').href.baseVal = this.state.maskUrl
   }
 
   render() {
@@ -20,7 +41,7 @@ class FeaturePreview extends React.Component {
       // TODO change image names to match feature id
       previewImg = require('./images/' + feature.title + '.png')
     }
-
+    this.state.maskUrl = previewImg
     // // if feature is activated and is not a customer feature
     // if (feature && feature.type !== 'custom') {
     //   previewImg = require('./images/' + feature.title + '.png')
@@ -31,7 +52,7 @@ class FeaturePreview extends React.Component {
     // }
     return (
       <div className="feature-preview flex-grow">
-        <SVGIcons.IconDeviceIphone maskUrl={previewImg} className="icon-feature-preview-img" />
+        <IconDeviceIphone className="icon-feature-preview-img" />
       </div>
     )
   }

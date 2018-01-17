@@ -1,14 +1,26 @@
 import React from 'react'
 import PT from 'prop-types'
-import SVGIcons from '../../../components/Icons/Icons'
 import './IncompleteProjectConfirmation.scss'
+import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
+
+
+/**
+ * @params {string} class name
+ */
+const IconConnectLogoMono = ({ className }) => {
+  return <ConnectLogoMono className={className} />
+}
+
+IconConnectLogoMono.propTypes = {
+  className: PT.string.isRequired
+}
 
 function IncompleteProjectConfirmation({ loadIncompleteProject, removeIncompleteProject }) {
   // const isLoggedIn = userRoles && userRoles.length
   return (
     <div className="IncompleteProjectConfirmation">
       <div className="header">
-        <SVGIcons.IconConnectLogoMono className="connectLogo"/>
+        <IconConnectLogoMono className="connectLogo"/>
       </div>
       <h3>Welcome back!</h3>
       <h5>You started a project with us recently.</h5>

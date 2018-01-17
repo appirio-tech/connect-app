@@ -10,13 +10,36 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import SVGIcons from '../Icons/Icons'
 import './SectionToolBar.scss'
+import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
+import XMark from '../../assets/icons/x-mark.svg'
+
+/**
+ * @params {string} class name
+ */
+const IconXMark = ({ className }) => {
+  return <XMark className={className}/>
+}
+
+IconXMark.propTypes = {
+  className: PropTypes.string.isRequired
+}
+
+/**
+ * @params {string} class name
+ */
+const IconConnectLogoMono = ({ className }) => {
+  return <ConnectLogoMono className={className}/>
+}
+
+IconXMark.propTypes = {
+  className: PropTypes.string.isRequired
+}
 
 const SectionToolBar = (props) => {
-  const logo = <Link key="logo" to="/" className="logo"><SVGIcons.IconConnectLogoMono className="icon-connect-logo-mono" /></Link>
+  const logo = <Link key="logo" to="/" className="logo"><IconConnectLogoMono className="icon-connect-logo-mono" /></Link>
   const title = <div key="title" className="title">{props.title}</div>
-  const close = <Link key="close" to="/" className="close"><SVGIcons.IconXMark className="icon-x-mark" /></Link>
+  const close = <Link key="close" to="/" className="close"><IconXMark className="icon-x-mark" /></Link>
   const menu = props.menu ? <div key="menu" className="menu">{props.menu}</div> : null
 
   return (
