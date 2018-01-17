@@ -8,11 +8,11 @@ import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
-import Dashboard from '../../assets/images/icon-dashboard.svg'
-import DashboardActive from '../../assets/images/icon-dashboard-active.svg'
-import Specification from '../../assets/images/icon-ruler-pencil.svg'
-import SpecificationActive from '../../assets/images/icon-ruler-pencil-active.svg'
-import TailLeft from '../../assets/images/arrows-16px-1_tail-left.svg'
+import Dashboard from '../../assets/icons/icon-dashboard.svg'
+import DashboardActive from '../../assets/icons/icon-dashboard-active.svg'
+import Specification from '../../assets/icons/icon-ruler-pencil.svg'
+import SpecificationActive from '../../assets/icons/icon-ruler-pencil-active.svg'
+import TailLeft from '../../assets/icons/arrows-16px-1_tail-left.svg'
 
 function isEllipsisActive(el) {
   return (el.offsetWidth < el.scrollWidth)
