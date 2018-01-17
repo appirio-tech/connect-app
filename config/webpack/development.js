@@ -26,8 +26,8 @@ module.exports = webpackMerge.strategy({
         plugins: [
           'lodash',
           // add react hot reloader
-         'react-hot-loader/babel',
-         'inline-react-svg'
+          'react-hot-loader/babel',
+          'inline-react-svg'
         ]
       }
     }, {

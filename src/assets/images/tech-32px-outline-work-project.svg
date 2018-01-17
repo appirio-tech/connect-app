@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32"><g  transform="translate(0, 0)">
-<polyline data-cap="butt" fill="none" stroke="#37373c" stroke-width="2" stroke-miterlimit="10" points="24,9 30,15 27,18 21,12 " stroke-linejoin="miter" stroke-linecap="butt"/>
-<path fill="none" stroke="#37373c" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" d="M11,21H2c0,0,1,5,9,5" stroke-linejoin="miter"/>
-<rect x="14.1" y="5.7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -6.096469e-03 16.9853)" fill="none" stroke="#37373c" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" width="12.7" height="5.7" stroke-linejoin="miter"/>
-<line data-color="color-2" fill="none" stroke="#37373c" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" x1="8" y1="17" x2="4" y2="17" stroke-linejoin="miter"/>
-<line data-color="color-2" fill="none" stroke="#37373c" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" x1="9.5" y1="13.5" x2="6.6" y2="10.6" stroke-linejoin="miter"/>
-<path fill="none" stroke="#37373c" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" d="M30,26v-5H11v10h14
-C25,28.2,27.2,26,30,26z" stroke-linejoin="miter"/>
-</g></svg>
