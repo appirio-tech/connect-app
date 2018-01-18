@@ -11,9 +11,19 @@ import { SearchBar, MenuBar, SwitchButton } from 'appirio-tech-react-components'
 import Filters from './Filters'
 import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
-
+import SearchFilter from '../../assets/icons/ui-filters.svg'
 import { projectSuggestions, loadProjects, setInfiniteAutoload } from '../../projects/actions/loadProjects'
 
+/**
+ * @param {string} class name 
+ */
+const IconSearchFilter = ({className}) => {
+  return <SearchFilter className={className}/>
+}
+
+IconSearchFilter.propTypes = {
+  className: PropTypes.string.isRequired
+}
 
 class ProjectsToolBar extends Component {
 
@@ -194,7 +204,7 @@ class ProjectsToolBar extends Component {
                     href="javascript:"
                     className={cn('tc-btn tc-btn-sm', {active: isFilterVisible})}
                     onClick={ this.toggleFilter }
-                  >Filters { noOfFilters > 0 && <span className="filter-indicator">{ noOfFilters }</span> }</a>
+                  ><IconSearchFilter className="icon-search-filter" />Filters { noOfFilters > 0 && <span className="filter-indicator">{ noOfFilters }</span> }</a>
                 </div>
               }
             </div>

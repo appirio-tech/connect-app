@@ -82,13 +82,11 @@ export default class ProjectListNavHeader extends Component {
           <div className="list-nav-item nav-icon">
             <a href="javascript;" data-view="grid" onClick={this.switchViews} className={`list-nav-btn sm right ${(this.state.selectedView === 'grid') ? 'active' : ''}`}>
               <IconGridView className="grid-view-ico" />
-              <i/>
             </a>
           </div>
           <div className="list-nav-item nav-icon">
             <a href="javascript;" data-view="card" onClick={this.switchViews} className={`list-nav-btn sm right ${(this.state.selectedView === 'card') ? 'active' : ''}`}>
               <IconCardView className="card-view-ico" />
-              <i/>
             </a>
           </div>
         </div>

@@ -12,6 +12,8 @@ import Dashboard from '../../assets/icons/icon-dashboard.svg'
 import DashboardActive from '../../assets/icons/icon-dashboard-active.svg'
 import Specification from '../../assets/icons/icon-ruler-pencil.svg'
 import SpecificationActive from '../../assets/icons/icon-ruler-pencil-active.svg'
+import Chat from '../../assets/icons/icon-chat.svg'
+import ChatActive from '../../assets/icons/icon-chat-active.svg'
 import TailLeft from '../../assets/icons/arrows-16px-1_tail-left.svg'
 
 function isEllipsisActive(el) {
@@ -22,7 +24,7 @@ function isEllipsisActive(el) {
  * @params {string} class name
  */
 const IconDashboard = ({ className }) => {
-  return  <Dashboard className={className} />
+  return <Dashboard className={className} />
 }
 /**
  * @params {string} class name
@@ -72,6 +74,29 @@ IconTailLeft.propTypes = {
   className: PT.string.isRequired
 }
 
+/**
+ * @params {string} class name
+ */
+const IconChat = ({ className }) => {
+  return <Chat className={className} />
+}
+
+IconChat.propTypes = {
+  className: PT.string.isRequired
+}
+
+/**
+ * @params {string} class name
+ */
+const IconChatActive = ({ className }) => {
+  return <ChatActive className={className} />
+}
+
+IconChatActive.propTypes = {
+  className: PT.string.isRequired
+}
+
+
 class ProjectToolBar extends React.Component {
 
   constructor(props) {
@@ -82,7 +107,8 @@ class ProjectToolBar extends React.Component {
       specificationIcon: '',
       activePage: 'dashboard',
       activeDashboard: 'not-active',
-      activeSpecification: 'not-active'
+      activeSpecification: 'not-active',
+      activeMessages: 'not-active'
     }
     this.onNameEnter = this.onNameEnter.bind(this)
     this.onNameLeave = this.onNameLeave.bind(this)
@@ -92,17 +118,27 @@ class ProjectToolBar extends React.Component {
     const path = this.props.location.pathname
     const activeDashboardPage = path.search('projects') > 0
     const activeSpecificationPage = path.search('specification') > 0
+    const activeChatPage = path.search('discussions') > 0
 
     if (activeSpecificationPage) {
       this.state.activePage = 'specification'
-      this.state.specificationIcon = <IconSpecificationActive className="icon-specification-active"/>
+      this.state.specificationIcon = <IconSpecificationActive className="icon-specification-active" />
       this.state.dashboardIcon = <IconDashboard className="icon-dashboard" />
+      this.state.messagesIcon = <IconChat className="icon-chat-active" />
     } else
       if (activeDashboardPage) {
         this.state.activePage = 'dashboard'
         this.state.dashboardIcon = <IconDashboardActive className="icon-dashboard-active" />
         this.state.specificationIcon = <IconSpecification className="icon-specification" />
+        this.state.messagesIcon = <IconChat className="icon-chat-active" />
       }
+      else
+        if (activeChatPage) {
+          this.state.activePage = 'discussions'
+          this.state.dashboardIcon = <IconDashboardActive className="icon-dashboard-active" />
+          this.state.specificationIcon = <IconSpecification className="icon-specification" />
+          this.state.messagesIcon = <IconChatActive className="icon-chat-active" />
+        }
   }
 
   onDashboardEnter() {
@@ -133,6 +169,20 @@ class ProjectToolBar extends React.Component {
     })
   }
 
+  onMessagesEnter() {
+    if (this.state.activePage === 'discussions') { return }
+    this.setState({
+      activeMessages: 'active'
+    })
+  }
+
+  onMessagesLeave() {
+    if (this.state.activePage === 'discussions') { return }
+    this.setState({
+      activeMessages: 'not-active'
+    })
+  }
+
   onNameEnter() {
     const el = ReactDOM.findDOMNode(this.refs.name)
     if (isEllipsisActive(el)) {
@@ -148,7 +198,7 @@ class ProjectToolBar extends React.Component {
     this.props.history.listen(() => {
       this.setActivePage()
       this.state.activeSpecification = this.state.activePage === 'dashboard' ? 'not-active' : this.state.activeSpecification,
-      this.state.activeDashboard = this.state.activePage === 'specification' ? 'not-active' : this.state.activeDashboard
+        this.state.activeDashboard = this.state.activePage === 'specification' ? 'not-active' : this.state.activeDashboard
     })
   }
 
@@ -170,7 +220,7 @@ class ProjectToolBar extends React.Component {
             {project && <div className="breadcrumb">
               <NavLink to="/projects">
                 <IconTailLeft className="icon-tail-left" />
-              <span>View All Projects</span></NavLink>
+                <span>View All Projects</span></NavLink>
             </div>}
           </div>
           {project && <div className="bar-column project-name">
@@ -181,7 +231,7 @@ class ProjectToolBar extends React.Component {
             {project && <nav className={`nav ${(project.details && !project.details.hideDiscussions) ? 'long-menu' : ''}`}>
               <ul>
                 <li id={this.state.activeDashboard} onMouseOver={ev => this.onDashboardEnter(ev)} onMouseLeave={ev => this.onDashboardLeave(ev)}><NavLink to={`/projects/${project.id}`} exact activeClassName="dashboard active">
-                    <i >{this.state.dashboardIcon}</i>Dashboard</NavLink>
+                  <i >{this.state.dashboardIcon}</i>Dashboard</NavLink>
                 </li>
                 <li id={this.state.activeSpecification} onMouseEnter={ev => this.onSpecificationEnter(ev)} onMouseLeave={ev => this.onSpecificationLeave(ev)}><NavLink to={`/projects/${project.id}/specification`} activeClassName="specification active">
                   <i >{this.state.specificationIcon}</i>Specification</NavLink>
@@ -196,7 +246,7 @@ class ProjectToolBar extends React.Component {
                   */}
                 {
                   (project.details && !project.details.hideDiscussions) &&
-                  <li><NavLink to={`/projects/${project.id}/discussions`} activeClassName="active">
+                  <li id={this.state.activeMessages} onMouseOver={ev => this.onMessagesEnter(ev)} onMouseLeave={ev => this.onMessagesLeave(ev)}><NavLink to={`/projects/${project.id}/discussions`} activeClassName="discussions active">
                     <i >{this.state.messagesIcon}</i>Discussions</NavLink>
                   </li>
                 }
