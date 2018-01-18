@@ -305,8 +305,10 @@ export const prepareNotifications = (rowNotifications) => {
 
     // populate notification data
     notification.type = notificationRule.type
-    const renderGoTo = Handlebars.compile(notificationRule.goTo)
-    notification.goto = renderGoTo(notification.contents)
+    if (notificationRule.goTo){
+      const renderGoTo = Handlebars.compile(notificationRule.goTo)
+      notification.goto = renderGoTo(notification.contents)
+    }
 
     return {
       notification,
