@@ -15,6 +15,7 @@ const AddTeamMember = (props) => {
   } = props
   const onTypeChangeCustomer = () => onFilterTypeChange('customer')
   const onTypeChangeCopilot = () => onFilterTypeChange('copilot')
+  const onTypeChangeManager = () => onFilterTypeChange('manager')
   const onBtnClose = () => {
     onKeywordChange('')
     onToggleAddTeamMember(false)
@@ -42,6 +43,23 @@ const AddTeamMember = (props) => {
         Add a Team Member
       </div>
       <div className="modal-body">
+        {(currentUser.isManager || currentUser.isCopilot) && <div className="tab-group">
+          <ul>
+            <li className={cn({active: filterType === 'customer'})} onClick={onTypeChangeCustomer}>
+              Member
+            </li>
+            <li className={cn({active: filterType === 'copilot'})} onClick={onTypeChangeCopilot}>
+              Copilot
+            </li>
+            {currentUser.isManager ? (
+              <li className={cn({active: filterType === 'manager'})} onClick={onTypeChangeManager}>
+                Manager
+              </li>
+            ) : (
+              null
+            )}
+          </ul>
+        </div>}
         <div className="modal-inline-form">
           <AutoCompleteInput {...props} />
           <button
@@ -54,16 +72,6 @@ const AddTeamMember = (props) => {
         {error && <p className="error-message">
           {error}
         </p>}
-        {(currentUser.isManager || currentUser.isCopilot) && <div className="tab-group">
-          <ul>
-            <li className={cn({active: filterType === 'customer'})} onClick={onTypeChangeCustomer}>
-              Member
-            </li>
-            <li className={cn({active: filterType === 'copilot'})} onClick={onTypeChangeCopilot}>
-              Copilot
-            </li>
-          </ul>
-        </div>}
       </div>
     </div>
   )
