@@ -88,7 +88,7 @@
                 color: $tc-black;
 
                 &:focus {
-                  color: $tc-dark-blue-90;
+                  color: $tc-dark-blue;
                 }
               }
             }
@@ -238,7 +238,7 @@
 
           .status-header {
             position: relative;
-            color: $tc-dark-blue-90;
+            color: $tc-dark-blue;
             font-size: 13px;
             font-weight: 400;
 
@@ -309,8 +309,8 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-			width: 178px;
-			
+            width: 178px;
+
             &:hover {
               background-color: $tc-dark-blue-30;
               color: $tc-black;
@@ -330,7 +330,7 @@
                 color: $tc-gray-60;
 
                 &:focus {
-                  color: $tc-dark-blue-90;
+                  color: $tc-dark-blue;
                 }
               }
 
@@ -366,7 +366,7 @@
   margin-top: 3px;
 
   &.yellow-light {
-    background: $tc-gold-30;
+    background: $tc-yellow-30;
   }
 }
 
@@ -420,7 +420,7 @@
     z-index: 1;
 
     &:focus {
-      color: $tc-dark-blue-90;
+      color: $tc-dark-blue;
       outline: 0;
       z-index: 3;
     }

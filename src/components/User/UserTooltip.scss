@@ -1,9 +1,7 @@
 @import 'tc-includes';
 .Tooltip {
   &.customer-data {
-
     &.level-0 {
-
       .tooltip-target {
         z-index: 3;
       }
@@ -14,7 +12,6 @@
     }
 
     &.level-1 {
-
       .tooltip-target {
         z-index: 2;
       }
@@ -25,7 +22,6 @@
     }
 
     &.level-2 {
-
       .tooltip-target {
         z-index: 1;
       }
@@ -178,7 +174,7 @@
             .ext-link {
               position: relative;
               font-size: 11px;
-              color: $tc-dark-blue-90;
+              color: $tc-dark-blue;
               padding-right: 20px;
 
               &:after {

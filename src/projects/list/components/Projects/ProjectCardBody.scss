@@ -2,16 +2,17 @@
 
 .project-card-body {
   flex: 2;
+
   .project-description {
     overflow: hidden;
     // max-height: 180px;
     // min-height: 180px;
     color: $tc-gray-80;
     @include tc-label-md;
-  
+
     .read-more-link {
       white-space: nowrap;
-      color: $tc-dark-blue-90;
+      color: $tc-dark-blue;
     }
   }
 
@@ -35,11 +36,12 @@
 
     .project-progress {
       display: flex;
+
       .progress-text {
         text-transform: uppercase;
         margin-left: 10px;
         line-height: 16px;
-      } 
+      }
     }
   }
 }

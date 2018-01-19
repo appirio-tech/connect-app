@@ -219,7 +219,7 @@ $tc-body-extra-small: 12px;
 
         &:focus {
           background: $tc-white !important;
-          border-color: $tc-dark-blue-90 !important;
+          border-color: $tc-dark-blue !important;
         }
 
         &.error {
@@ -228,7 +228,7 @@ $tc-body-extra-small: 12px;
 
           &:focus {
             background: $tc-white !important;
-            border-color: $tc-dark-blue-90 !important;
+            border-color: $tc-dark-blue !important;
           }
         }
       }
@@ -370,7 +370,7 @@ $tc-body-extra-small: 12px;
 
         &.active {
           cursor: default;
-          background: $tc-dark-blue-90;
+          background: $tc-dark-blue;
           color: $tc-white;
           // box-shadow: inset 0px 1px 3px 0px rgba($tc-gray-80,0.38);
           a {

@@ -39,6 +39,7 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
             canEdit={canEdit}
             unifiedHeader={false}
             onChangeStatus={onChangeStatus}
+            projectId={project.id}
           />
         }
         {(project.status === PROJECT_STATUS_ACTIVE && progress !== 0) &&
