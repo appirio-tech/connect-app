@@ -16,7 +16,7 @@ const UserTooltip = ({ usr, id, previewAvatar }) => {
         {
           previewAvatar ? (<div className={`stack-avatar-${id}`}>
             <Avatar
-              avatarUrl={_.get(usr, 'photoURL', require('../../assets/images/avatar-coder.png'))}
+              avatarUrl={_.get(usr, 'photoURL', require('../../assets/images/avatar-coder.svg'))}
               userName={usr.firstName ? (usr.firstName + ' ' + usr.lastName) : 'Connect user'}
               size={30}
             />
@@ -29,7 +29,7 @@ const UserTooltip = ({ usr, id, previewAvatar }) => {
           <div className="tt-col-avatar">
             <a href={`//www.${DOMAIN}/members/${usr.handle}/`} target="_blank" rel="noopener noreferrer" className="tt-user-avatar">
               <Avatar
-                avatarUrl={_.get(usr, 'photoURL', require('../../assets/images/avatar-coder.png'))}
+                avatarUrl={_.get(usr, 'photoURL', require('../../assets/images/avatar-coder.svg'))}
                 userName={usr.firstName ? (usr.firstName + ' ' + usr.lastName) : 'Connect user'}
               />
             </a>
