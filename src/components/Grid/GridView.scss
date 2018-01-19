@@ -1,4 +1,5 @@
 @import 'tc-includes';
+
 .gridview-content.content {
   overflow: visible;
   width: 100%;
@@ -244,8 +245,12 @@
   position: relative;
   display: block;
   background-position: center center;
-  height: 20px;
-  width: 20px;
+  height: 16px;
+  width: 16px;
+
+  & * {
+    fill: $tc-gray-40;
+  }
 }
 
 .drop-down {
