@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
-import { Icons, Avatar } from 'appirio-tech-react-components'
+import { Icons } from 'appirio-tech-react-components'
+import UserToolpit from '../User/UserTooltip'
 
 const ActionBtn = (props) => {
   let icon
@@ -77,7 +78,7 @@ const MemberRow = ({ member, currentMember, currentUser, onMemberDelete, onChang
 
   return (
     <div className="panel-row">
-      <Avatar avatarUrl={member.photoURL} userName={`${member.firstName} ${member.lastName}`}   />
+      <UserToolpit usr={member} id="1" previewAvatar size={35} />
       <div className="profile">
         <span className="name">{member.firstName} {member.lastName}</span>
         {member === currentMember && <span className="self"> (you) </span>}
