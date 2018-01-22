@@ -1,6 +1,4 @@
-import React from 'react'
 import _ from 'lodash'
-import PT from 'prop-types'
 import { Icons } from 'appirio-tech-react-components'
 // import NumberText from '../../components/NumberText/NumberText'
 import { findProduct} from '../projectWizard'

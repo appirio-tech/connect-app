@@ -1,5 +1,4 @@
 import React from 'react'
-import PT from 'prop-types'
 import DeviceIphone from '../../../../assets/icons/Device-iPhone.svg'
 
 require('./FeaturePreview.scss')

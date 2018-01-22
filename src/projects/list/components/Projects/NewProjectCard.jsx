@@ -1,6 +1,5 @@
 
 import React from 'react'
-import PT from 'prop-types'
 import {Link} from 'react-router-dom'
 import './ProjectCard.scss'
 import BoldAdd from '../../../../assets/icons/ui-16px-1_bold-add.svg'

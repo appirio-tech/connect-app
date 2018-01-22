@@ -1,5 +1,4 @@
 import React from 'react'
-import PT from 'prop-types'
 import './ProjectDirectLinks.scss'
 import DirectArrow from '../../../../assets/icons/icon-direct-arrow.svg'
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import PT from 'prop-types'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import _ from 'lodash'
