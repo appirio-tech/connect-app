@@ -1,6 +1,6 @@
+import React from 'react' // eslint-disable-line no-unused-vars
 import _ from 'lodash'
 import { Icons } from 'appirio-tech-react-components'
-// import NumberText from '../../components/NumberText/NumberText'
 import { findProduct} from '../projectWizard'
 
 import IconDontKnow from '../../assets/icons/icon-dont-know.svg'
