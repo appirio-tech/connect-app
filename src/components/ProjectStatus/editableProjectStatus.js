@@ -127,7 +127,7 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
     const { canEdit } = this.props
     const ProjectStatusDropdown = canEdit ? enhanceDropdown(hocStatusDropdown(CompositeComponent)) : hocStatusDropdown(CompositeComponent)
     return (
-      <div className={cn('panel', 'EditableProjectStatus', {'modal-active': showStatusChangeDialog})}>
+      <div className={cn('EditableProjectStatus', {'modal-active': showStatusChangeDialog})}>
         <div className="modal-overlay"></div>
         <ProjectStatusDropdown {...this.props } onItemSelect={ this.showStatusChangeDialog } />
         { showStatusChangeDialog &&

@@ -46,12 +46,12 @@ class ProjectInfoContainer extends React.Component {
     this.setDuration(project)
   }
 
-  onChangeStatus(status, reason) {
+  onChangeStatus(projectId, status, reason) {
     const delta = {status}
     if (reason && status === PROJECT_STATUS_CANCELLED) {
       delta.cancelReason = reason
     }
-    this.props.updateProject(this.props.project.id, delta)
+    this.props.updateProject(projectId, delta)
   }
 
   onAddNewLink(link) {
