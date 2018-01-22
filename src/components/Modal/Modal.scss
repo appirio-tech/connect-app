@@ -1,6 +1,6 @@
 @import "tc-includes";
 @import "../../styles/variables";
-
+// TODO: unused css
 .modal {
   background: $tc-gray-neutral-light;
   border-radius: $corner-radius;
@@ -14,7 +14,6 @@
     height: 15px;
     top: $base-unit*3;
     right: $base-unit*3;
-    background: url('../../assets/images/x-mark-big.svg') no-repeat 0 0;
     background-size: $tc-heading-extra-small;
   }
 
@@ -111,7 +110,6 @@
 
           &:empty {
             width: 36px;
-            background: url('../../assets/images/username-icon.svg') no-repeat;
             background-size: 30px 30px;
             background-color: $tc-gray-20;
             background-position: center;

@@ -80,7 +80,7 @@ $tc-body-large: 20px;
       display: flex;
       align-items: center;
       // justify-content: center;
-      padding: 0 2 * $base-unit 0 34px;
+      padding: 0 2 * $base-unit 0 10px;
       text-align: left;
       color: $tc-gray-40;
       background-color: transparent;
@@ -88,26 +88,17 @@ $tc-body-large: 20px;
       border: 0;
       font-size: 12px;
       position: relative;
-
-      &:before {
-        display: block;
-        content: '';
-        width: 14px;
-        height: 16px;
-        position: absolute;
-        top: 7px;
-        left: 10px;
-        background: url("../../styles/i/icon-filter.png") left top no-repeat;
-        background-size: 14px 32px;
+      
+      svg.icon-search-filter {
+        margin-right: 10px;
       }
 
       &.active {
         background: $tc-gray-80;
         box-shadow: inset 0px 1px 3px 0px $tc-rgba-10;
 
-        &:before {
-          background: url("../../styles/i/icon-filter.png") left -16px no-repeat;
-          background-size: 14px 32px;
+        svg.icon-search-filter g {
+          fill: #fff;
         }
       }
     }

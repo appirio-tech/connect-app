@@ -2,10 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './Modal.scss'
 import cn from 'classnames'
+import BtnClose from '../../assets/icons/x-mark-big.svg'
+
 
 const Modal = ({children, className, onClose}) => (
   <div className={cn('modal', className)}>
-    <a href="javascript:" onClick={onClose} className="btn-close"/>
+    <a href="javascript:" onClick={onClose} className="btn-close">
+      <BtnClose className="btn-close" />
+    </a>
     {children}
   </div>
 )

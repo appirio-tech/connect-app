@@ -1,5 +1,4 @@
 @import 'tc-includes';
-
 .flex-data {
   .flex-row {
     .item-id {
@@ -226,7 +225,6 @@
               &:after {
                 font-size: 0;
                 line-height: 0;
-                background: url('./images/check-dark.svg') no-repeat 0 0;
                 width: 9px;
                 height: 7px;
                 content: "";
@@ -247,7 +245,6 @@
             &:after {
               font-size: 0;
               line-height: 0;
-              background: url('./images/arrow-6px-carret-down-active.svg') no-repeat 0 0;
               width: 10px;
               height: 6px;
               content: "";
@@ -368,9 +365,6 @@
   display: inline-block;
   margin-top: 3px;
 
-  &.yellow-light {
-    background: $tc-yellow-30;
-  }
 }
 
 .txt-gray-sm {
@@ -426,25 +420,30 @@
       color: $tc-dark-blue;
       outline: 0;
       z-index: 3;
-
-      &:after {
-        font-size: 0;
-        line-height: 0;
-        background: url('./images/arrow-6px-carret-down-active.svg') no-repeat 0 0;
-        width: 10px;
-        height: 6px;
-        content: "";
-        display: block;
-        position: absolute;
-        top: 5px;
-        right: 0;
-      }
     }
 
-    &:after {
+    .icon-carret-down-active g g {
+      color:  rgb(6, 129, 255) !important;
+    }
+    
+    .icon-carret-down-active {
+      color: $tc-dark-blue-90;
+      outline: 0;
+      z-index: 3;
       font-size: 0;
       line-height: 0;
-      background: url('./images/arrow-6px-carret-down-normal.svg') no-repeat 0 0;
+      width: 10px;
+      height: 6px;
+      content: "";
+      display: block;
+      position: absolute;
+      top: 5px;
+      right: 0;      
+    }
+
+    .icon-carret-down-normal {
+      font-size: 0;
+      line-height: 0;
       width: 10px;
       height: 6px;
       content: "";
@@ -483,24 +482,23 @@
           }
         }
 
+        .icon-check-dark {
+          font-size: 0;
+          line-height: 0;
+          width: 9px;
+          height: 7px;
+          content: "";
+          display: block;
+          position: absolute;
+          top: 11px;
+          left: 6px;
+        }
+
         &.active,
         &.active:hover {
           position: relative;
           @include roboto-bold;
           background: $tc-gray-neutral-light;
-
-          &:after {
-            font-size: 0;
-            line-height: 0;
-            background: url('./images/check-dark.svg') no-repeat 0 0;
-            width: 9px;
-            height: 7px;
-            content: "";
-            display: block;
-            position: absolute;
-            top: 11px;
-            left: 6px;
-          }
         }
       }
     }

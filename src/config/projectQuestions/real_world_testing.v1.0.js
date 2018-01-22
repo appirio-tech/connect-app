@@ -1,8 +1,11 @@
+import React from 'react' // eslint-disable-line no-unused-vars
 import _ from 'lodash'
 import { Icons } from 'appirio-tech-react-components'
-import SVGIconImage from '../../components/SVGIconImage'
-// import NumberText from '../../components/NumberText/NumberText'
 import { findProduct} from '../projectWizard'
+
+import IconDontKnow from '../../assets/icons/icon-dont-know.svg'
+import IconTestStructured from '../../assets/icons/icon-test-structured.svg'
+import IconTestUnstructured from '../../assets/icons/icon-test-unstructured.svg'
 
 
 const isFileRequired = (project, subSections) => {
@@ -56,9 +59,9 @@ const sections = [
             fieldName: 'details.appDefinition.testType',
             type: 'tiled-radio-group',
             options: [
-              {value: 'unstructured', title: 'Unstructured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: '', price: 6000},
-              {value: 'structured', title: 'Structured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-structured', fill: '#00000'}, desc: '', price: 4000},
-              {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
+              {value: 'unstructured', title: 'Unstructured', icon: IconTestUnstructured, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: '', price: 6000},
+              {value: 'structured', title: 'Structured', icon: IconTestStructured, iconOptions: { filePath: 'icon-test-structured', fill: '#00000'}, desc: '', price: 4000},
+              {value: 'dontKnow', title: 'Do not know', icon: IconDontKnow, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
             ]
           },
           {
@@ -404,9 +407,9 @@ export const basicSections = [
             fieldName: 'details.appDefinition.testType',
             type: 'tiled-radio-group',
             options: [
-              {value: 'unstructured', title: 'Unstructured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: ''},
-              {value: 'structured', title: 'Structured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-structured',  fill: '#00000'}, desc: ''},
-              {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
+              {value: 'unstructured', title: 'Unstructured', icon: IconTestUnstructured, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: ''},
+              {value: 'structured', title: 'Structured', icon: IconTestStructured, iconOptions: { filePath: 'icon-test-structured',  fill: '#00000'}, desc: ''},
+              {value: 'dontKnow', title: 'Do not know', icon: IconDontKnow, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
             ]
           },
           {
@@ -471,7 +474,7 @@ export const basicSections = [
               {value: 'upto5', title: 'configurations', icon: NumberText, iconOptions: { number: '5' }, desc: 'or fewer'},
               {value: 'upTo10', title: 'configurations', icon: NumberText, iconOptions: { number: '10' }, desc: 'or fewer'},
               {value: 'upTo20', title: 'configurations', icon: NumberText, iconOptions: { number: '20' }, desc: 'or fewer'},
-              {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know',  fill: '#00000'}, desc: 'We will find the best fit for you.'}
+              {value: 'dontKnow', title: 'Do not know', icon: IconTestUnstructured, iconOptions: { filePath: 'icon-dont-know',  fill: '#00000'}, desc: 'We will find the best fit for you.'}
             ]
           }
           {

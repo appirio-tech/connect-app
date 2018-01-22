@@ -97,18 +97,6 @@ $tc-body-extra-small: 12px;
             opacity: 1.0;
           }
         }
-
-        .btn-user-remove {
-          // @include icon('user-remove.svg');
-        }
-
-        .btn-promote {
-          // @include icon('promote.svg');
-        }
-
-        .btn-leave {
-          // @include icon('exit.svg');
-        }
       }
 
       &.add-team-member {
@@ -121,7 +109,6 @@ $tc-body-extra-small: 12px;
           padding-left: 10px;
           width: 40px;
           height: 40px;
-          // @include icon('user-add.svg');
           border: 2px solid $tc-gray-50;
           background-position: center;
           background-size: 16px;
@@ -181,7 +168,6 @@ $tc-body-extra-small: 12px;
       position: absolute;
       top: $base-unit*3;
       right: $base-unit*3;
-      // @include icon('x-mark-big.svg');
       background-size: $tc-heading-extra-small;
       overflow: hidden;
     }
@@ -294,7 +280,6 @@ $tc-body-extra-small: 12px;
             &:empty {
               flex-shrink: 0;
               width: 30px;
-              // @include icon('username-icon.svg');
               background-size: 30px 30px;
               background-color: $tc-gray-20;
               background-position: center;
@@ -354,11 +339,11 @@ $tc-body-extra-small: 12px;
       width: 160px;
       list-style-type: none;
       padding: 0;
-      margin: 10px 0 0 0;
+      margin: 10px 0 10px 0;
 
       ul {
         display: flex;
-        width: 160px;
+        width: 200px;
       }
 
       li {

@@ -1,8 +1,10 @@
 import React from 'react'
 import PT from 'prop-types'
 import ModalControl from '../ModalControl'
-import SVGIconImage from '../SVGIconImage'
+import TailLeft from '../../assets/icons/arrows-16px-1_tail-left.svg'
+import XMark from '../../assets/icons/x-mark.svg'
 import './Wizard.scss'
+
 
 function Wizard(props) {
   const { step, shouldRenderBackButton, onStepChange, showModal, onCancel } = props
@@ -12,7 +14,7 @@ function Wizard(props) {
     backControl = (
       <ModalControl
         className="back-button"
-        icon={<SVGIconImage filePath="arrows-16px-1_tail-left" />}
+        icon={<TailLeft className="icon-tail-left"/>}
         label="back"
         onClick={() => onStepChange(step - 1)}
       />
@@ -22,7 +24,7 @@ function Wizard(props) {
     modalCloseControl = (
       <ModalControl
         className="escape-button"
-        icon={<SVGIconImage filePath="x-mark" />}
+        icon={<XMark className="icon-x-mark"/>}
         label="esc"
         onClick={ onCancel }
       />
