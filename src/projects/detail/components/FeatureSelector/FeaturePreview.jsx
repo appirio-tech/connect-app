@@ -4,16 +4,6 @@ import DeviceIphone from '../../../../assets/icons/Device-iPhone.svg'
 
 require('./FeaturePreview.scss')
 
-/**
- * @params {string} class name
- */
-const IconDeviceIphone = ({className}) => {
-  return <DeviceIphone className={className}/>
-}
-
-IconDeviceIphone.propTypes = {
-  className: PT.string.isRequired
-}
 
 class FeaturePreview extends React.Component {
   constructor(props) {
@@ -52,7 +42,7 @@ class FeaturePreview extends React.Component {
     // }
     return (
       <div className="feature-preview flex-grow">
-        <IconDeviceIphone className="icon-feature-preview-img" />
+        <DeviceIphone className="icon-feature-preview-img" />
       </div>
     )
   }

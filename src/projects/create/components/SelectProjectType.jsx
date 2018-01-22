@@ -116,10 +116,6 @@ ProjectTypeIcons.propTypes = {
   type: PT.string.isRequired
 }
 
-const IconConnectLogoMono = ({ className }) => {
-  return <ConnectLogoMono className={className} />
-}
-
 function SelectProjectType(props) {
   const cards = []
   for (const key in config) {
@@ -143,7 +139,7 @@ function SelectProjectType(props) {
   return (
     <div>
       <div className="header headerSelectProjectType">
-        <IconConnectLogoMono className="icon-connect-logo-mono"/>
+        <ConnectLogoMono className="icon-connect-logo-mono"/>
       </div>
       <div className="SelectProjectType">
         <h1>Create a new project</h1>

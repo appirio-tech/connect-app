@@ -5,16 +5,6 @@ import { Dropdown, DropdownItem } from 'appirio-tech-react-components'
 import Modal from 'react-modal'
 import EditComment from '../../assets/icons/ui-16px-1_edit-73.svg'
 
-/**
- * @params {string} class name
- */
-const IconEditComment = ({ className }) => {
-  return <EditComment className={className}/>
-}
-
-IconEditComment.propTypes = {
-  className: PropTypes.string.isRequired
-}
 
 export default class CommentEditToggle extends React.Component {
 
@@ -52,7 +42,7 @@ export default class CommentEditToggle extends React.Component {
     <div className="dropdownContainer">
       <Dropdown pointerShadow className="drop-down edit-toggle-container">
         <div className={cn('dropdown-menu-header', 'edit-toggle')} >
-          <IconEditComment className="icon-edit-comment" />
+          <EditComment className="icon-edit-comment" />
         </div>
         <div className="dropdown-menu-list down-layer">
           <ul>

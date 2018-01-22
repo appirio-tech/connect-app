@@ -12,16 +12,6 @@ import {
 } from '../../config/constants'
 import CarretDownNormal9px from '../../assets/icons/arrow-9px-carret-down-normal.svg'
 
-/**
- * @params {string} class name
- */
-const IconCarretDownNormal9px = ({ className }) => {
-  return <CarretDownNormal9px className={className}/>
-}
-
-IconCarretDownNormal9px.propTypes = {
-  className: PropTypes.string.isRequired
-}
 
 const hocStatusDropdown = (CompositeComponent) => {
   class StatusDropdown extends Component {
@@ -54,7 +44,7 @@ const hocStatusDropdown = (CompositeComponent) => {
               unifiedHeader={unifiedHeader}
             />
             { canEdit && <i className="caret" >
-              <IconCarretDownNormal9px className="icon-carret-down-normal"/>
+              <CarretDownNormal9px className="icon-carret-down-normal"/>
             </i> }
           </div>
           { isOpen && canEdit &&

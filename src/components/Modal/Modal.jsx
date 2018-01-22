@@ -4,21 +4,11 @@ import './Modal.scss'
 import cn from 'classnames'
 import BtnClose from '../../assets/icons/x-mark-big.svg'
 
-/**
- * @params {string} classname
- */
-const IconBtnClose = ({ className }) => {
-  return <BtnClose className={className}/>    
-}
-
-IconBtnClose.propTypes = {
-  className: PropTypes.string.isRequired
-}
 
 const Modal = ({children, className, onClose}) => (
   <div className={cn('modal', className)}>
     <a href="javascript:" onClick={onClose} className="btn-close">
-      <IconBtnClose className="btn-close" />
+      <BtnClose className="btn-close" />
     </a>
     {children}
   </div>

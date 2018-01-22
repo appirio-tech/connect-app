@@ -20,82 +20,6 @@ function isEllipsisActive(el) {
   return (el.offsetWidth < el.scrollWidth)
 }
 
-/**
- * @params {string} class name
- */
-const IconDashboard = ({ className }) => {
-  return <Dashboard className={className} />
-}
-/**
- * @params {string} class name
- */
-
-IconDashboard.propTypes = {
-  className: PT.string.isRequired
-}
-/**
- * @params {string} class name
- */
-const IconDashboardActive = ({ className }) => {
-  return <DashboardActive className={className} />
-}
-
-IconDashboardActive.propTypes = {
-  className: PT.string.isRequired
-}
-/**
- * @params {string} class name
- */
-const IconSpecification = ({ className }) => {
-  return <Specification className={className} />
-}
-
-IconSpecification.propTypes = {
-  className: PT.string.isRequired
-}
-/**
- * @params {string} class name
- */
-const IconSpecificationActive = ({ className }) => {
-  return <SpecificationActive className={className} />
-}
-
-IconSpecificationActive.propTypes = {
-  className: PT.string.isRequired
-}
-/**
- * @params {string} class name
- */
-const IconTailLeft = ({ className }) => {
-  return <TailLeft className={className} />
-}
-
-IconTailLeft.propTypes = {
-  className: PT.string.isRequired
-}
-
-/**
- * @params {string} class name
- */
-const IconChat = ({ className }) => {
-  return <Chat className={className} />
-}
-
-IconChat.propTypes = {
-  className: PT.string.isRequired
-}
-
-/**
- * @params {string} class name
- */
-const IconChatActive = ({ className }) => {
-  return <ChatActive className={className} />
-}
-
-IconChatActive.propTypes = {
-  className: PT.string.isRequired
-}
-
 
 class ProjectToolBar extends React.Component {
 
@@ -122,22 +46,22 @@ class ProjectToolBar extends React.Component {
 
     if (activeSpecificationPage) {
       this.state.activePage = 'specification'
-      this.state.specificationIcon = <IconSpecificationActive className="icon-specification-active" />
-      this.state.dashboardIcon = <IconDashboard className="icon-dashboard" />
-      this.state.messagesIcon = <IconChat className="icon-chat-active" />
+      this.state.specificationIcon = <SpecificationActive className="icon-specification-active" />
+      this.state.dashboardIcon = <Dashboard className="icon-dashboard" />
+      this.state.messagesIcon = <Chat className="icon-chat-active" />
     } else
       if (activeDashboardPage) {
         this.state.activePage = 'dashboard'
-        this.state.dashboardIcon = <IconDashboardActive className="icon-dashboard-active" />
-        this.state.specificationIcon = <IconSpecification className="icon-specification" />
-        this.state.messagesIcon = <IconChat className="icon-chat-active" />
+        this.state.dashboardIcon = <DashboardActive className="icon-dashboard-active" />
+        this.state.specificationIcon = <Specification className="icon-specification" />
+        this.state.messagesIcon = <Chat className="icon-chat-active" />
       }
       else
         if (activeChatPage) {
           this.state.activePage = 'discussions'
-          this.state.dashboardIcon = <IconDashboardActive className="icon-dashboard-active" />
-          this.state.specificationIcon = <IconSpecification className="icon-specification" />
-          this.state.messagesIcon = <IconChatActive className="icon-chat-active" />
+          this.state.dashboardIcon = <DashboardActive className="icon-dashboard-active" />
+          this.state.specificationIcon = <Specification className="icon-specification" />
+          this.state.messagesIcon = <ChatActive className="icon-chat-active" />
         }
   }
 
@@ -219,7 +143,7 @@ class ProjectToolBar extends React.Component {
             {renderLogoSection()}
             {project && <div className="breadcrumb">
               <NavLink to="/projects">
-                <IconTailLeft className="icon-tail-left" />
+                <TailLeft className="icon-tail-left" />
                 <span>View All Projects</span></NavLink>
             </div>}
           </div>

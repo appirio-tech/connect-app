@@ -4,16 +4,6 @@ import { Link } from 'react-router-dom'
 import './NewProjectNavLink.scss'
 import BoldAdd from '../../assets/icons/ui-16px-1_bold-add.svg'
 
-/**
- * @params {string} class name
- */
-const IconBoldAdd = ({ className }) => {
-  return <BoldAdd className={className}/>
-}
-
-IconBoldAdd.propTypes = {
-  className: PropTypes.string.isRequired
-}
 
 const NewProjectNavLink = ({ compact=false, returnUrl }) => {
   if (compact) {
@@ -25,7 +15,7 @@ const NewProjectNavLink = ({ compact=false, returnUrl }) => {
         }} className="new-project-link"
       >
         <div className="new-project-icon">
-          <IconBoldAdd className="icon-bold-add" />
+          <BoldAdd className="icon-bold-add" />
         </div>
       </Link>
     )

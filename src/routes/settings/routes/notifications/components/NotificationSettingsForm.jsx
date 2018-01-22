@@ -5,17 +5,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Formsy, SwitchButton } from 'appirio-tech-react-components'
 import BtnGroup from '../../../../../components/BtnGroup/BtnGroup'
-import SettingsWeb from '../../../../../assets/icons/settings-icon-web.svg'
+import IconSettingsWeb from '../../../../../assets/icons/settings-icon-web.svg'
 import './NotificationSettingsForm.scss'
 import _ from 'lodash'
 
-const IconSettingsWeb = ({className}) => {
-  return <SettingsWeb className={className}/>
-}
-
-IconSettingsWeb.propTypes = {
-  className: PropTypes.string.isRequired
-}
 
 // list of the notification groups and related event types
 // TODO move it to constants and reuse the same list in services/settings.js

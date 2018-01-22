@@ -8,17 +8,6 @@ import AddColor from  '../../assets/icons/icon-add-color.svg'
 import './ColorSelector.scss'
 
 
-/**
- * @params {string} classname
- */
-const IconAddColor = ({ className }) => {
-  return <AddColor className={className}/>
-}
-
-IconAddColor.propTypes = {
-  className: PropTypes.string.isRequired
-}
-
 class ColorSelector extends React.Component {
   
   constructor(props) {
@@ -76,7 +65,7 @@ class ColorSelector extends React.Component {
             onClick={() => this.setState({isPickerVisible: true})}
             className="color-card"
           >
-          <IconAddColor className="icon-card-add" />
+          <AddColor className="icon-card-add" />
           {isPickerVisible &&
             <div className="picker-wrapper" onClick={(e) => e.stopPropagation()}>
               <SketchPicker

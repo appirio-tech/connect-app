@@ -18,19 +18,6 @@ const deviceMap = {
 }
 
 
-/**
- * @params {string} status project status
- */
-const IconWorkProject = ({ className }) => {
-  return(
-    <WorkProject className={className}/>
-  )
-}
-
-IconWorkProject.propTypes = {
-  className: PropTypes.string.isRequired
-}
-
 /*eslint-enable camelcase */
 const ProjectType = ({projectId, type, description, devices}) => (
   <PanelProject>
@@ -48,7 +35,7 @@ const ProjectType = ({projectId, type, description, devices}) => (
     <div className="project-icons">
       {type === 'generic' &&
         <div key="GENERIC">
-          <IconWorkProject className="icon icon-work-project" />
+          <WorkProject className="icon icon-work-project" />
           Work Project
         </div>}
       {type !== 'generic' &&

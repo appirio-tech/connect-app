@@ -74,9 +74,6 @@ const formatDate = (date) => {
   return format
 }
 
-const IconCheck = ({ className }) => {
-  return <Check className={className}/>
-}
 
 const NotificationItem = (props) => {
   const notificationItem = (
@@ -95,7 +92,7 @@ const NotificationItem = (props) => {
             props.onReadToggleClick(props.id)
           }}
         >
-          <IconCheck className="icon-check"/>
+          <Check className="icon-check"/>
         </button>
       </div>
     </div>

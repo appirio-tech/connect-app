@@ -11,18 +11,7 @@ import _ from 'lodash'
 import { EMAIL_AVAILABILITY_CHECK_DEBOUNCE } from '../../../../../config/constants'
 import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 import './ChangeEmailForm.scss'
-import Check from '../../assets/icons/check.svg'
-
-/**
- * @params {string} class name
- */
-const IconCheck = ({ className }) => {
-  return <Check className={className}/>
-}
-
-IconCheck.propTypes = {
-  className: PropTypes.string.isRequired
-}
+import IconCheck from '../../assets/icons/check.svg'
 
 
 class ChangeEmailForm extends React.Component {

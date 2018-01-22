@@ -9,19 +9,6 @@ import { Dropdown } from 'appirio-tech-react-components'
 import cn from 'classnames'
 import Bell from '../../assets/icons/ui-bell.svg'
 
-/**
- * @params {string} class name
- */
-const IconBell = ({ className }) => {
-  return(
-    <Bell className={className}/>
-  )
-}
-
-IconBell.propTypes = {
-  className: PropTypes.string.isRequired
-}
-
 
 const NotificationsDropdown = (props) => {
   return (
@@ -29,7 +16,7 @@ const NotificationsDropdown = (props) => {
       <Dropdown theme="UserDropdownMenu" pointerShadow noAutoclose>
         <div className="dropdown-menu-header">
           <div className={cn('notifications-dropdown-bell', { 'has-unread': props.hasUnread })}>
-            <IconBell className="icon-ui-bell"/>
+            <Bell className="icon-ui-bell"/>
           </div>
         </div>
         <div className="dropdown-menu-list">

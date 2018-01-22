@@ -7,18 +7,6 @@ import { AUTOCOMPLETE_TRIGGER_LENGTH } from '../../config/constants'
 import InputIcon from  '../../assets/icons/username-icon.svg'
 
 
-/**
- * @params {string} class name
- */
-const IconInputIcon = ({ className }) => {
-  return <InputIcon className={className}/>
-}
-
-IconInputIcon.propTypes = {
-  className: PT.string.isRequired
-}
-
-
 class AutoCompleteInput extends React.Component {
 
   constructor(props) {
@@ -75,7 +63,7 @@ class AutoCompleteInput extends React.Component {
         }
 
         <span>
-          <IconInputIcon className="input-icon"/>
+          <InputIcon className="input-icon"/>
           {selectedNewMember && <img src={selectedNewMember.photoURL} />}
         </span>
         <input

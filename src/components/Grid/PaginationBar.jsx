@@ -7,29 +7,6 @@ import { Tooltip } from 'appirio-tech-react-components'
 import BtnPrev from '../../assets/icons/arrow-left.svg'
 import BtnNext from '../../assets/icons/arrow-left.svg'
 
-
-/**
- * @params {string} classname
- */
-const IconBtnPrev = ({ className }) => {
-  return <BtnPrev className={className}/>
-}
-
-IconBtnPrev.propTypes = {
-  className: PropTypes.string.isRequired
-}
-
-/**
- * @params {string} classname
- */
-const IconBtnNext = ({ className }) => {
-  return <BtnNext className={className}/>
-}
-
-IconBtnNext.propTypes = {
-  className: PropTypes.string.isRequired
-}
-
 const NUMBER_OF_PILLS = 5
 
 const noop = () => <noscript />
@@ -188,7 +165,7 @@ const PaginationBar = enhance(({onPageChange, currentPageNum, totalCount, pageSi
         { currentPageNum > 1 && 
         <a href="javascript:" onClick={handlePageSelection}>
           Prev
-          <IconBtnPrev className="btn-prev"/>
+          <BtnPrev className="btn-prev"/>
         </a>
         }
         <ul>
@@ -197,7 +174,7 @@ const PaginationBar = enhance(({onPageChange, currentPageNum, totalCount, pageSi
         { currentPageNum < pages && 
           <a href="javascript:" onClick={handlePageSelection}>
             Next
-            <IconBtnNext className="btn-next"/>
+            <BtnNext className="btn-next"/>
           </a>
         }
       </nav>

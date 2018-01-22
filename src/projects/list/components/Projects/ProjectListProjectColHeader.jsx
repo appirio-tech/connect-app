@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
 import { Dropdown } from 'appirio-tech-react-components'
-import CarretDownActive from '../../assets/icons/arrow-6px-carret-down-active.svg'
-import CarretDownNormal from '../../../../assets/icons/arrow-6px-carret-down-normal.svg'
-import CheckDark from '../../../../assets/icons/check-dark.svg'
+import IconCarretDownActive from '../../assets/icons/arrow-6px-carret-down-active.svg'
+import IconCarretDownNormal from '../../../../assets/icons/arrow-6px-carret-down-normal.svg'
+import IconCheckDark from '../../../../assets/icons/check-dark.svg'
 
 const options = [
   { val: 'best match', label: 'Best Match' },
@@ -13,41 +13,6 @@ const options = [
   { val: 'createdAt', label: 'Oldest first' },
   { val: 'name', label: 'Name A-Z' }
 ]
-
-/**
- * @params {string} class name
- */
-const IconCarretDownNormal = ({ className }) => {
-  return <CarretDownNormal className={className}/>
-}
-
-IconCarretDownNormal.propTypes = {
-  className: PropTypes.string.isRequired
-}
-
-
-/**
- * @params {string} class name
- */
-const IconCarretDownActive = ({ className }) => {
-  return <CarretDownActive className={className}/>
-}
-
-IconCarretDownActive.propTypes = {
-  className: PropTypes.string.isRequired
-}
-
-
-/**
- * @params {string} class name
- */
-const IconCheckDark = ({ className }) => {
-  return <CheckDark className={className}/>
-}
-
-IconCheckDark.propTypes = {
-  className: PropTypes.string.isRequired
-}
 
 class ProjectListProjectColHeader extends React.Component {
 

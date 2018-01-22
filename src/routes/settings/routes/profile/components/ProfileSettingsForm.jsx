@@ -8,18 +8,8 @@ import TextInputWithCounter from '../../../../../components/TextInputWithCounter
 import ProfileSeetingsAvatar from './ProfileSeetingsAvatar'
 import { MAX_USERNAME_LENGTH } from '../../../../../config/constants'
 import './ProfileSettingsForm.scss'
-import Image from '../../assets/icons/users-16px_single-01.svg'
+import IconImage from '../../assets/icons/users-16px_single-01.svg'
 
-/**
- * @params {string} class name
- */
-const IconImage = ({ className }) => {
-  return <Image className={className}/>
-}
-
-IconImage.propTypes = {
-  className: PropTypes.string.isRequired
-}
 
 
 const ProfileSettingsForm = (props) => {

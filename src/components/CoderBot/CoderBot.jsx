@@ -4,17 +4,6 @@ import './CoderBot.scss'
 import CoderBroken from '../../assets/icons/coder-broken.svg'
 
 
-/**
- * @params {string} class name
- */
-const IconCoderBroken = ({ className }) => {
-  return <CoderBroken className={className}/>
-}
-
-IconCoderBroken.propTypes = {
-  className: PropTypes.string.isRequired
-}
-
 
 const getHeading = code => {
   switch(code) {
@@ -44,7 +33,7 @@ const CoderBot = ({code, message}) => {
         <div className="page-error">
           <h3>{ getHeading(code) }</h3>
           <p dangerouslySetInnerHTML={ {__html : message || getMessage(code) } }></p>
-          <IconCoderBroken className="icon-coder-broken" />
+          <CoderBroken className="icon-coder-broken" />
           <span>{code !== 200 && code}</span>
         </div>
       </div>

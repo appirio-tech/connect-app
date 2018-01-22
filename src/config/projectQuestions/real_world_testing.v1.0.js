@@ -5,43 +5,10 @@ import { Icons } from 'appirio-tech-react-components'
 // import NumberText from '../../components/NumberText/NumberText'
 import { findProduct} from '../projectWizard'
 
-import DontKnow from '../../assets/icons/icon-dont-know.svg'
-import TestStructured from '../../assets/icons/icon-test-structured.svg'
-import TestUnstructured from '../../assets/icons/icon-test-unstructured.svg'
+import IconDontKnow from '../../assets/icons/icon-dont-know.svg'
+import IconTestStructured from '../../assets/icons/icon-test-structured.svg'
+import IconTestUnstructured from '../../assets/icons/icon-test-unstructured.svg'
 
-
-/**
- * @params {string} class name
- */
-const IconDontKnow = ({ className }) => {
-  return <DontKnow className={className} />
-}
-
-IconDontKnow.propTypes = {
-  className: PT.string
-}
-
-/**
- * @params {string} class name
- */
-const IconTestStructured = ({ className }) => {
-  return <TestStructured className={className} />
-}
-
-IconTestStructured.propTypes = {
-  className: PT.string
-}
-
-/**
- * @params {string} class name
- */
-const IconTestUnstructured = ({ className }) => {
-  return <TestUnstructured className={className} />
-}
-
-IconTestUnstructured.propTypes = {
-  className: PT.string
-}
 
 const isFileRequired = (project, subSections) => {
   const subSection = _.find(subSections, (s) => s.type === 'questions')

@@ -5,27 +5,6 @@ import cn from 'classnames'
 import Down from '../../assets/icons/arrow-down-big.svg'
 import Up from '../../assets/icons/arrow-up-big.svg'
 
-/**
- * @params {string} classname
- */
-const IconDown = ({ className }) => {
-  return<Down className={className}/>
-}
-
-IconDown.propTypes = {
-  className: PropTypes.string.isRequired
-}
-
-/**
- * @params {string} classname
- */
-const IconUp = ({ className }) => {
-  return <Up className={className}/>
-}
-
-IconUp.propTypes = {
-  className: PropTypes.string.isRequired
-}
 
 const HeaderItem = ({item, onItemClick, currentSortField}) => {
   const _onClick = () => onItemClick(item.id)
@@ -40,9 +19,9 @@ const HeaderItem = ({item, onItemClick, currentSortField}) => {
         { item.sortable ?
           <a href="javascript:" className={sortClasses} onClick={_onClick}>
             if (sortClasses === 'icon-up') {
-              <IconUp className={sortClasses}/>
+              <Up className={sortClasses}/>
             } else {
-              <IconDown className={sortClasses}/>
+              <Down className={sortClasses}/>
             }
             {item.headerLabel}
           </a>

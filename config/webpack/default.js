@@ -114,8 +114,7 @@ module.exports = {
     // Only emit files when there are no errors
     new webpack.NoEmitOnErrorsPlugin(),
     new ExtractCssChunks({
-      filename: '[name].css',
-      justExtract: true
+      filename: '[name].css'
     })
   ]
 }

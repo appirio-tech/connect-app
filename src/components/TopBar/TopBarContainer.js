@@ -17,19 +17,6 @@ import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
 require('./TopBarContainer.scss')
 
 
-
-/**
- * @params {string} class name
- */
-const IconConnectLogoMono = ({ className }) => {
-  return <ConnectLogoMono className={className} />
-}
-
-IconConnectLogoMono.propTypes = {
-  className: PT.string.isRequired
-}
-
-
 class TopBarContainer extends React.Component {
 
   constructor(props) {
@@ -57,7 +44,7 @@ class TopBarContainer extends React.Component {
     return (
       <div className="logo-wrapper">
         <Link className="logo" to={logoTargetUrl} target="_self">
-          <IconConnectLogoMono className="icon-connect-logo-mono" />
+          <ConnectLogoMono className="icon-connect-logo-mono" />
         </Link>
         {comp}
       </div>

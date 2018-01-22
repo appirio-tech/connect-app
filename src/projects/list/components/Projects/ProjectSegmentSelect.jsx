@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
 import { Dropdown } from 'appirio-tech-react-components'
-import CheckDark from '../../assets/icons/check-dark.svg'
+import IconCheckDark from '../../assets/icons/check-dark.svg'
 
 
 const options = [
@@ -14,16 +14,6 @@ const options = [
   { val: 'emea', label: 'Wipro Digital EMEA' }
 ]
 
-/**
- * @params {string} class name
- */
-const IconCheckDark = ({ className }) => {
-  return <CheckDark className={className}/>
-}
-
-IconCheckDark.propTypes = {
-  className: PropTypes.string.isRequired
-}
 
 class ProjectSegmentSelect extends React.Component {
 

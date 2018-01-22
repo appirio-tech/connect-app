@@ -6,27 +6,6 @@ import { PROJECT_STATUS } from '../../../../config/constants'
 import CardView from '../../../../assets/icons/ui-16px-2_grid-45-gray.svg'
 import GridView from '../../../../assets/icons/grid-list-ico.svg'
 
-/**
- * @params {string} class name
- */
-const IconCardView = ({ className }) => {
-  return <CardView className={className}/>
-}
-
-IconCardView.propTypes = {
-  className: PT.string.isRequired
-}
-
-/**
- * @params {string} type project type
- */
-const IconGridView = ({ className }) => {
-  return <GridView className={className}/>
-}
-
-IconGridView.propTypes = {
-  className: PT.string.isRequired
-}
 
 export default class ProjectListNavHeader extends Component {
 
@@ -81,12 +60,12 @@ export default class ProjectListNavHeader extends Component {
         <div className="right-wrapper">
           <div className="list-nav-item nav-icon">
             <a href="javascript;" data-view="grid" onClick={this.switchViews} className={`list-nav-btn sm right ${(this.state.selectedView === 'grid') ? 'active' : ''}`}>
-              <IconGridView className="grid-view-ico" />
+              <GridView className="grid-view-ico" />
             </a>
           </div>
           <div className="list-nav-item nav-icon">
             <a href="javascript;" data-view="card" onClick={this.switchViews} className={`list-nav-btn sm right ${(this.state.selectedView === 'card') ? 'active' : ''}`}>
-              <IconCardView className="card-view-ico" />
+              <CardView className="card-view-ico" />
             </a>
           </div>
         </div>

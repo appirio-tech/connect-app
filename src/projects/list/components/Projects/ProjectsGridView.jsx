@@ -13,7 +13,7 @@ import TextTruncate from 'react-text-truncate'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
 import editableProjectStatus from '../../../../components/ProjectStatus/editableProjectStatus'
 import ProjectManagerAvatars from './ProjectManagerAvatars'
-import ProjectStatusTitle from '../../../../assets/icons/status-ico.svg'
+import IconProjectStatusTitle from '../../../../assets/icons/status-ico.svg'
 import IconAnalyticsAlgorithmOptimization from '../../../../assets/icons/product-analytics-algorithm-optimization.svg'
 import IconAnalyticsComputerVision from '../../../../assets/icons/product-analytics-computer-vision.svg'
 import IconAnalyticsDataExploration from '../../../../assets/icons/product-analytics-data-exploration.svg'
@@ -50,16 +50,7 @@ require('./ProjectsGridView.scss')
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
-/**
- * @params {string} class name
- */
-const IconProjectStatusTitle = ({ className }) => {
-  return <ProjectStatusTitle className={className}/>
-}
 
-IconProjectStatusTitle.propTypes = {
-  className: PropTypes.string.isRequired
-}
 
 /**
  * @params {string} class name

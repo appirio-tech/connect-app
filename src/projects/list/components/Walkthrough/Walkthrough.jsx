@@ -1,42 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import './Walkthrough.scss'
-import Shadow from '../../../../assets/icons/ground-shadow.svg'
-import Robot from '../../../../assets/icons/coder-welcome.svg'
-import TextImg from '../../../../assets/icons/pointer-new-project.svg'
+import IconShadow from '../../../../assets/icons/ground-shadow.svg'
+import IconRobot from '../../../../assets/icons/coder-welcome.svg'
+import IconTextImg from '../../../../assets/icons/pointer-new-project.svg'
 
-/**
- * @params {string} class name
- */
-const IconRobot = ({ className }) => {
-  return <Robot className={className}/>
-}
 
-IconRobot.propTypes = {
-  className: PropTypes.string.isRequired
-}
-
-/**
- * @params {string} class name
- */
-const IconShadow = ({ className }) => {
-  return <Shadow className={className}/>
-}
-
-IconShadow.propTypes = {
-  className: PropTypes.string.isRequired
-}
-
-/**
- * @params {string} class name
- */
-const IconTextImg = ({ className }) => {
-  return <TextImg className={className}/>
-}
-
-IconTextImg.propTypes = {
-  className: PropTypes.string.isRequired
-}
 
 const Walkthrough = ({currentUser}) => (
   <div className="walkthrough-column">

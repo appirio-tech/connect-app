@@ -8,16 +8,6 @@ import uncontrollable from 'uncontrollable'
 import cn from 'classnames'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
 
-/**
- * @params {string} classname
- */
-const IconBtnRemove = ({ className }) => {
-  return <BtnRemove className={className}/>
-}
-
-IconBtnRemove.propTypes = {
-  className: PropTypes.string.isRequired
-}
 
 const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, onDeleteIntent, onDelete }) => (
   <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0) })}>
@@ -66,7 +56,7 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
                   <a href={link.address} target="_blank" rel="noopener noreferrer">{link.title}</a>
                   {canDelete && <div className="buttons">
                     <button onClick={ handleDeleteClick } type="button">
-                      <IconBtnRemove className="btn-remove"/>
+                      <BtnRemove className="btn-remove"/>
                     </button>
                   </div>}
                 </li>
