@@ -4,11 +4,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Formsy, TCFormFields } from 'appirio-tech-react-components'
-import SVGIconImage from '../../../../../components/SVGIconImage'
 import TextInputWithCounter from '../../../../../components/TextInputWithCounter/TextInputWithCounter'
 import ProfileSeetingsAvatar from './ProfileSeetingsAvatar'
 import { MAX_USERNAME_LENGTH } from '../../../../../config/constants'
 import './ProfileSettingsForm.scss'
+import IconImage from '../../assets/icons/users-16px_single-01.svg'
+
+
 
 const ProfileSettingsForm = (props) => {
   const { username, photoSrc, firstname, lastname, company, mobilephone1, mobilephone2 } = props
@@ -22,7 +24,7 @@ const ProfileSettingsForm = (props) => {
 
       <div className="field">
         <div className="username">
-          <div className="username-icon"><SVGIconImage filePath="users-16px_single-01" /></div>
+          <div className="username-icon"><IconImage className="icon-image" /></div>
           <TextInputWithCounter type="text" name="username" label="Username" value={username} maxLength={`${MAX_USERNAME_LENGTH}`} />
         </div>
       </div>

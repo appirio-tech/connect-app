@@ -9,7 +9,7 @@ function AvatarGroup({ users }) {
     return (
       <Avatar
         key={ index }
-        avatarUrl={ _.get(user, 'photoURL', require('../../assets/images/avatar-coder.png'))}
+        avatarUrl={ _.get(user, 'photoURL', require('../../assets/images/avatar-coder.svg'))}
         userName={ user.firstName ? (user.firstName + ' ' + user.lastName) : 'Connect user'}
       />
     )

@@ -1,6 +1,5 @@
 @import 'tc-includes';
 $status-height: 20px;
-
 .ProjectStatus {
   position: relative;
   height: $status-height;
@@ -17,69 +16,6 @@ $status-height: 20px;
       display: block;
       width: 4 * $base-unit;
       height: 4 * $base-unit;
-    }
-  }
-
-  &.ps-draft {
-    .status-icon {
-      i {
-        background: url('../../assets/images/ps-draft.svg') no-repeat -7px -4px;
-        // background-size: cover;
-      }
-    }
-  }
-
-  &.ps-in_review {
-    .status-icon {
-      i {
-        background: url('../../assets/images/ps-in_review.svg') no-repeat -7px -4px;
-        // background-size: cover;
-      }
-    }
-  }
-
-  &.ps-reviewed {
-    .status-icon {
-      i {
-        background: url('../../assets/images/ps-reviewed.svg') no-repeat -7px -4px;
-        // background-size: cover;
-      }
-    }
-  }
-
-  &.ps-active {
-    .status-icon {
-      i {
-        background: url('../../assets/images/ps-active.svg') no-repeat;
-        // background-size: cover;
-      }
-    }
-  }
-
-  &.ps-cancelled {
-    .status-icon {
-      i {
-        background: url('../../assets/images/ps-cancelled.svg') no-repeat -7px -4px;
-        // background-size: cover;
-      }
-    }
-  }
-
-  &.ps-completed {
-    .status-icon {
-      i {
-        background: url('../../assets/images/ps-completed.svg') no-repeat -7px -4px;
-        // background-size: cover;
-      }
-    }
-  }
-
-  &.ps-paused {
-    .status-icon {
-      i {
-        background: url('../../assets/images/ps-paused.svg') no-repeat -7px -4px;
-        // background-size: cover;
-      }
     }
   }
 
@@ -141,11 +77,6 @@ $status-height: 20px;
       }
     }
 
-    &.active {
-      &::after {
-        background: url('../../assets/images/arrows-9px-carret-down-expanded.svg') no-repeat 50% 50%;
-      }
-    }
 
     &.unified-header {
       background-color: $tc-gray-40;
@@ -200,7 +131,7 @@ $status-height: 20px;
       font-size: $tc-label-md;
       text-align: left;
       line-height: 30px;
-      padding: 5px 16px 5px 10px;
+      padding: 5px 16px 5px 2px;
       white-space: nowrap;
 
       &:hover {
@@ -209,6 +140,11 @@ $status-height: 20px;
 
       &.active {
         background: $tc-dark-blue-10;
+      }
+
+      svg.active-status-icon {
+        margin-left: 7px;
+        margin-right: 10px;
       }
 
       .status-label {

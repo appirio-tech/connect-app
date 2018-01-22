@@ -1,9 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import PT from 'prop-types'
 import ReactDOM from 'react-dom'
 import uncontrollable from 'uncontrollable'
 import { Avatar } from 'appirio-tech-react-components'
 import { AUTOCOMPLETE_TRIGGER_LENGTH } from '../../config/constants'
+import InputIcon from  '../../assets/icons/username-icon.svg'
+
 
 class AutoCompleteInput extends React.Component {
 
@@ -60,7 +62,8 @@ class AutoCompleteInput extends React.Component {
           </div>
         }
 
-        <span className="input-icon">
+        <span>
+          <InputIcon className="input-icon"/>
           {selectedNewMember && <img src={selectedNewMember.photoURL} />}
         </span>
         <input
@@ -80,12 +83,12 @@ class AutoCompleteInput extends React.Component {
 }
 
 AutoCompleteInput.propTypes = {
-  searchMembers: PropTypes.array,
-  keyword: PropTypes.string,
-  isPopupVisible: PropTypes.bool,
-  onKeywordChange: PropTypes.func,
-  onSelectNewMember: PropTypes.func,
-  onToggleSearchPopup: PropTypes.func
+  searchMembers: PT.array,
+  keyword: PT.string,
+  isPopupVisible: PT.bool,
+  onKeywordChange: PT.func,
+  onSelectNewMember: PT.func,
+  onToggleSearchPopup: PT.func
 }
 
 export default uncontrollable(AutoCompleteInput, {

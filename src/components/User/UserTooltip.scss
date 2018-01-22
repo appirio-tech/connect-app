@@ -1,5 +1,4 @@
 @import 'tc-includes';
-
 .Tooltip {
   &.customer-data {
     &.level-0 {
@@ -180,7 +179,6 @@
 
               &:after {
                 content: "";
-                background: url('./images/external-link.svg') no-repeat 0 0;
                 width: 13px;
                 height: 13px;
                 position: absolute;

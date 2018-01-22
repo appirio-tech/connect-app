@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
+import Down from '../../assets/icons/arrow-down-big.svg'
+import Up from '../../assets/icons/arrow-up-big.svg'
 
 
 const HeaderItem = ({item, onItemClick, currentSortField}) => {
@@ -16,6 +18,11 @@ const HeaderItem = ({item, onItemClick, currentSortField}) => {
       <div className="spacing">
         { item.sortable ?
           <a href="javascript:" className={sortClasses} onClick={_onClick}>
+            if (sortClasses === 'icon-up') {
+              <Up className={sortClasses}/>
+            } else {
+              <Down className={sortClasses}/>
+            }
             {item.headerLabel}
           </a>
           : item.headerLabel

@@ -35,14 +35,16 @@
     &:hover {
       background-color: #55a5ff;
 
-      > svg {
+      .icon-x-mark {
         fill: $tc-white;
+        margin: -6px;
       }
     }
 
-    > svg {
-      fill: $tc-black;
-    }
+      .icon-x-mark {
+        fill: $tc-black;
+        margin: -6px;
+      }
   }
 
   > .section > .menu {
@@ -66,9 +68,10 @@
     align-items: center;
     display: flex;
 
-    > svg {
+    .icon-connect-logo-mono {
       height: auto;
       width: 53px;
+      margin-top: 13px;
 
       path {
         fill: $tc-gray-10;

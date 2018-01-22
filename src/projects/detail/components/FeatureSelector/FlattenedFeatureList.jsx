@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FeaturePicker from './FeaturePicker'
+import IconCustomFeatures from '../../../../assets/icons/custom-features.svg'
 require('./FlattenedFeatureList.scss')
+
 
 const allFeaturesMap = FeaturePicker.ALL_FEATURES_MAP
 
@@ -14,7 +16,7 @@ const FlattenedFeatureList = ({ addedFeatures }) => {
       if (f.disabled) return
       const feature = f.categoryId === 'custom' ? f : allFeaturesMap[f.id]
       if (feature.categoryId === 'custom') {
-        feature.icon = require('./images/custom-features.svg')
+        feature.icon = IconCustomFeatures
       }
       childrenDom.push(
         <div className="flattened-feature-list-item" key={idx}>
