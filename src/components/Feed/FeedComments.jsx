@@ -75,8 +75,7 @@ class FeedComments extends React.Component {
         <Comment
           key={idx}
           message={item}
-          avatarUrl={ _.get(item, 'author.photoURL', null)}
-          authorName={item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user'}
+          author={item.author}
           date={moment(item.date).fromNow()}
           edited={item.edited}
           active={item.unread}

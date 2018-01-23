@@ -7,8 +7,8 @@ import { DOMAIN } from '../../../config/constants'
 
 require('./UserTooltip.scss')
 
-const UserTooltip = ({ usr, id, previewAvatar }) => {
-  const theme = `customer-data level-${id}`
+const UserTooltip = ({ usr, id, previewAvatar, size }) => {
+  const theme = `customer-data size-${size}`
   const tooltipMargin = previewAvatar ? -(100 + (id * 20)) : 0
   return (
     <Tooltip theme={theme} pointerWidth={20} tooltipMargin={tooltipMargin}>
@@ -16,9 +16,9 @@ const UserTooltip = ({ usr, id, previewAvatar }) => {
         {
           previewAvatar ? (<div className={`stack-avatar-${id}`}>
             <Avatar
-              avatarUrl={_.get(usr, 'photoURL', require('../../assets/images/avatar-coder.svg'))}
+              avatarUrl={usr.photoURL}
               userName={usr.firstName ? (usr.firstName + ' ' + usr.lastName) : 'Connect user'}
-              size={30}
+              size={size}
             />
           </div>) :
           <span className="project-customer">{usr.firstName} {usr.lastName}</span>
@@ -29,7 +29,7 @@ const UserTooltip = ({ usr, id, previewAvatar }) => {
           <div className="tt-col-avatar">
             <a href={`//www.${DOMAIN}/members/${usr.handle}/`} target="_blank" rel="noopener noreferrer" className="tt-user-avatar">
               <Avatar
-                avatarUrl={_.get(usr, 'photoURL', require('../../assets/images/avatar-coder.svg'))}
+                avatarUrl={usr.photoURL}
                 userName={usr.firstName ? (usr.firstName + ' ' + usr.lastName) : 'Connect user'}
               />
             </a>
@@ -57,10 +57,12 @@ UserTooltip.propTypes = {
     PropTypes.string,
     PropTypes.number
   ]).isRequired,
-  previewAvatar: PropTypes.bool
+  previewAvatar: PropTypes.bool,
+  size: PropTypes.number
 }
 
 UserTooltip.defaultProps = {
+  size: 30,
   previewAvatar: false
 }
 

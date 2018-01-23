@@ -1,40 +1,19 @@
 @import 'tc-includes';
 .Tooltip {
   &.customer-data {
-    &.level-0 {
-      .tooltip-target {
-        z-index: 3;
-      }
-
-      .tooltip-container {
-        margin-left: -40px;
-      }
-    }
-
-    &.level-1 {
-      .tooltip-target {
-        z-index: 2;
-      }
-
-      .tooltip-container {
-        margin-left: -60px;
-      }
-    }
-
-    &.level-2 {
-      .tooltip-target {
-        z-index: 1;
-      }
-
-      .tooltip-container {
-        margin-left: -80px;
-      }
-    }
-
     .tooltip-target {
       .Avatar {
         height: 30px;
         width: 30px;
+      }
+    }
+
+    &.size-35 {
+      .tooltip-target {
+        .Avatar {
+          height: 35px;
+          width: 35px;
+        }
       }
     }
 
@@ -66,27 +45,28 @@
       }
     }
 
+    .tooltip-pointer {
+      background-color: $tc-white;
+      display: block;
+    }
+
+    [data-placement="top"] .tooltip-pointer {
+      border-right: 1px solid rgba($tc-black, 0.2);
+      border-bottom: 1px solid rgba($tc-black, 0.2);
+      bottom: -11px !important;
+    }
+
+    [data-placement="bottom"] .tooltip-pointer {
+      border-left: 1px solid rgba($tc-black, 0.2);
+      border-top: 1px solid rgba($tc-black, 0.2);
+      top: -11px !important;
+    }
+
     .tooltip-content-container {
       background-color: $tc-white;
       width: 400px;
       padding-top: 20px;
       padding-left: 20px;
-
-      .tooltip-pointer {
-        background-color: $tc-white;
-
-        &.downward-pointer {
-          border-right: 1px solid rgba($tc-black, 0.2);
-          border-bottom: 1px solid rgba($tc-black, 0.2);
-          bottom: -11px !important;
-        }
-
-        &.upward-pointer {
-          border-left: 1px solid rgba($tc-black, 0.2);
-          border-top: 1px solid rgba($tc-black, 0.2);
-          top: -11px !important;
-        }
-      }
 
       .tooltip-body {
         color: $tc-black;

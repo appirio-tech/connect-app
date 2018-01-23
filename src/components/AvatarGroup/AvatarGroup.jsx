@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import {Avatar} from 'appirio-tech-react-components'
+import UserTooltip from '../User/UserTooltip'
 import React from 'react'
 import PT from 'prop-types'
 import './AvatarGroup.scss'
@@ -7,11 +7,7 @@ import './AvatarGroup.scss'
 function AvatarGroup({ users }) {
   const renderAvatar = (user, index) => {
     return (
-      <Avatar
-        key={ index }
-        avatarUrl={ _.get(user, 'photoURL', require('../../assets/images/avatar-coder.svg'))}
-        userName={ user.firstName ? (user.firstName + ' ' + user.lastName) : 'Connect user'}
-      />
+      <UserTooltip usr={user} id={index} size={35} previewAvatar />
     )
   }
   return (
