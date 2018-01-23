@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 import { Tooltip } from 'appirio-tech-react-components'
 import { Avatar } from 'appirio-tech-react-components'
 import { DOMAIN } from '../../../config/constants'
