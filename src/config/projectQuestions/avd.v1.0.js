@@ -52,10 +52,11 @@ const sections = [
             description: 'This is the most popular project size that can get a medium-sized app designed in a breeze',
             fieldName: 'details.appDefinition.numberScreens',
             type: 'tiled-radio-group',
+            affectsQuickQuote: true,
             options: [
-              {value: '1-3', title: 'screens', icon: NumberText, iconOptions: { number: '1-3' }, desc: '5-7 days', price: 5000},
-              {value: '4-8', title: 'screens', icon: NumberText, iconOptions: { number: '4-8' }, desc: '7-10 days', price: 7000},
-              {value: '9-15', title: 'screens', icon: NumberText, iconOptions: { number: '9-15' }, desc: '8-10 days', price: 8500}
+              {value: '1-3', title: 'screens', icon: NumberText, iconOptions: { number: '1-3' }, desc: '5-7 days', quoteUp: 0, minTimeUp: 0, maxTimeUp: 0},
+              {value: '4-8', title: 'screens', icon: NumberText, iconOptions: { number: '4-8' }, desc: '7-10 days', quoteUp: 2000, minTimeUp: 3, maxTimeUp: 5},
+              {value: '9-15', title: 'screens', icon: NumberText, iconOptions: { number: '9-15' }, desc: '8-10 days', quoteUp: 3500, minTimeUp: 8, maxTimeUp: 12}
             ]
           },
           {

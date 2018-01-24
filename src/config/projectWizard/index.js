@@ -103,7 +103,10 @@ const products = {
         details: 'Plan and explore the navigation and structure of your app',
         icon: 'product-design-wireframes',
         id: 'wireframes',
-        aliases: ['wireframes']
+        aliases: ['wireframes'],
+        basePriceEstimate: 5000,
+        baseTimeEstimateMin: 7,
+        baseTimeEstimateMax: 10
       },
       'App Visual Design - Concepts': {
         brief: '1-15 screens',
@@ -118,7 +121,10 @@ const products = {
         details: 'Create development-ready designs',
         icon: 'product-design-app-visual',
         id: 'visual_design_prod',
-        aliases: ['visual-design', 'visual_design_prod']
+        aliases: ['visual-design', 'visual_design_prod'],
+        basePriceEstimate: 5000,
+        baseTimeEstimateMin: 7,
+        baseTimeEstimateMax: 10
       },
       Infographic: {
         brief: 'Infographic',
@@ -133,7 +139,10 @@ const products = {
         details: 'Get help with other types of design',
         icon: 'product-design-other',
         id: 'generic_design',
-        aliases: ['generic-design', 'generic_design']
+        aliases: ['generic-design', 'generic_design'],
+        basePriceEstimate: 5000,
+        baseTimeEstimateMin: 7,
+        baseTimeEstimateMax: 10
       }
     }
   },
@@ -440,4 +449,52 @@ export function getProjectCreationTemplateField(product, sectionId, subSectionId
     return subSection.fieldName === fieldName ? subSection : null
   }
   return null
+}
+
+/**
+ * Helper method to get price and time estimate for the given product.
+ *
+ * @param {string} productId id of the product. It should resolve to a valid product template
+ * @param {object} productConfig project object which contains the current value
+ * 
+ * @return {object} object containing price and time estimate
+ */
+export function getProductEstimate(productId, productConfig) {
+  let specification = 'topcoder.v1'
+  let product = null
+  let price = 0
+  let minTime = 0
+  let maxTime = 0
+  if (productId) {
+    specification = typeToSpecification[productId]
+    product = findProduct(productId)
+    price = _.get(product, 'basePriceEstimate', 0)
+    minTime = _.get(product, 'baseTimeEstimateMin', 0)
+    maxTime = _.get(product, 'baseTimeEstimateMax', 0)
+  }
+  const sections = require(`../projectQuestions/${specification}`).default
+  if (sections) {
+    sections.forEach(function(section) {
+      const subSections = section.subSections
+      if (subSections) {
+        subSections.forEach((subSection) => {
+          // supporting only questions sub section
+          if (subSection.type === 'questions') {
+            const questions = subSection.questions
+            questions.forEach((q) => {
+              // right now we are supporting only radio-group and tiled-radio-group type of questions
+              if(['radio-group', 'tiled-radio-group'].indexOf(q.type) !== -1 && q.affectsQuickQuote) {
+                const answer = _.get(productConfig, q.fieldName)
+                const qOption = _.find(q.options, (o) => o.value === answer)
+                price += _.get(qOption, 'quoteUp', 0)
+                minTime += _.get(qOption, 'minTimeUp', 0)
+                maxTime += _.get(qOption, 'maxTimeUp', 0)
+              }
+            })
+          }
+        })
+      }
+    })
+  }
+  return { priceEstimate: price, minTime, maxTime, durationEstimate: `${minTime}-${maxTime} days`}
 }
