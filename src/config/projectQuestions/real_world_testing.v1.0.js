@@ -1,23 +1,11 @@
 import React from 'react' // eslint-disable-line no-unused-vars
 import _ from 'lodash'
 import { Icons } from 'appirio-tech-react-components'
-import { findProduct} from '../projectWizard'
+import { findProduct, isFileRequired } from '../projectWizard'
 
 import IconDontKnow from '../../assets/icons/icon-dont-know.svg'
 import IconTestStructured from '../../assets/icons/icon-test-structured.svg'
 import IconTestUnstructured from '../../assets/icons/icon-test-unstructured.svg'
-
-
-const isFileRequired = (project, subSections) => {
-  const subSection = _.find(subSections, (s) => s.type === 'questions')
-  const fields = _.filter(subSection.questions, q => q.type.indexOf('see-attached') > -1)
-  // iterate over all seeAttached type fields to check
-  //  if any see attached is checked.
-  return _.some(_.map(
-    _.map(fields, 'fieldName'),
-    fn => _.get(project, `${fn}.seeAttached`)
-  ))
-}
 
 const sections = [
   {
