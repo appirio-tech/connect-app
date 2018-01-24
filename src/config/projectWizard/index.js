@@ -441,3 +441,40 @@ export function getProjectCreationTemplateField(product, sectionId, subSectionId
   }
   return null
 }
+
+/**
+ * Finds if files are required for project
+ *
+ * @param {object} project       project object
+ * @param {object} subSections   subSections object
+ *
+ * @return {boolean} true if files required, else false
+ */
+
+export function isFileRequired(project, subSections) {
+  const subSection = _.find(subSections, (s) => s.type === 'questions')
+  const fields = _.filter(subSection.questions, q => q.type.indexOf('see-attached') > -1)
+  // iterate over all seeAttached type fields to check
+  //  if any see attached is checked.
+  return _.some(_.map(
+    _.map(fields, 'fieldName'),
+    fn => _.get(project, `${fn}.seeAttached`)
+  ))
+}
+
+/**
+ * Finds the title
+ *
+ * @param {object}  project       project object
+ * @param {boolean} showProduct   flag to check whether to show title from config or not
+ *
+ * @return {string} title of the product
+ */
+export function findTitle(project, showProduct) {
+  const product = _.get(project, 'details.products[0]')
+  if (showProduct && product) {
+    const prd = findProduct(product)
+    if (prd) return prd.name
+  }
+  return 'Definition'
+}
