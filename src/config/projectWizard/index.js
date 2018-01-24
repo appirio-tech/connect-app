@@ -474,7 +474,7 @@ export function getProductEstimate(productId, productConfig) {
   }
   const sections = require(`../projectQuestions/${specification}`).default
   if (sections) {
-    sections.forEach(function(section) {
+    sections.forEach((section) => {
       const subSections = section.subSections
       if (subSections) {
         subSections.forEach((subSection) => {

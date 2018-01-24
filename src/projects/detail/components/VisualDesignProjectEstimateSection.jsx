@@ -1,12 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import './VisualDesignProjectEstimateSection.scss'
-import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
 import { getProductEstimate, findProduct } from '../../../config/projectWizard'
-import _ from 'lodash'
 
 const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-const DEFAULT_DESIGN_TEMPLATE = 'visual_design.v1.0'
 
 const VisualDesignProjectEstimateSection = ({products, project}) => {
   // TODO when we support multiple products per project, we can loop through products and sum up the estimates
