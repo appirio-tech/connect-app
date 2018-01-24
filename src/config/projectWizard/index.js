@@ -461,3 +461,20 @@ export function isFileRequired(project, subSections) {
     fn => _.get(project, `${fn}.seeAttached`)
   ))
 }
+
+/**
+ * Finds the title
+ *
+ * @param {object}  project       project object
+ * @param {boolean} showProduct   flag to check whether to show title from config or not
+ *
+ * @return {string} title of the product
+ */
+export function findTitle(project, showProduct) {
+  const product = _.get(project, 'details.products[0]')
+  if (showProduct && product) {
+    const prd = findProduct(product)
+    if (prd) return prd.name
+  }
+  return 'Definition'
+}

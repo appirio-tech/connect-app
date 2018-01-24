@@ -1,18 +1,11 @@
 import _ from 'lodash'
 // import NumberText from '../../components/NumberText/NumberText'
-import { findProduct, isFileRequired } from '../projectWizard'
+import { isFileRequired, findTitle } from '../projectWizard'
 
 const sections = [
   {
     id: 'appDefinition',
-    title: (project, showProduct) => {
-      const product = _.get(project, 'details.products[0]')
-      if (showProduct && product) {
-        const prd = findProduct(product)
-        if (prd) return prd.name
-      }
-      return 'Definition'
-    },
+    title: findTitle,
     required: true,
     description: 'Topcoder will scan your application using our properiatary formula\
     for security standards. To rate your application we combine state of the art \

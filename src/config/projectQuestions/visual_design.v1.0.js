@@ -2,19 +2,12 @@ import React from 'react'
 import _ from 'lodash'
 import { Icons } from 'appirio-tech-react-components'
 import NumberText from '../../components/NumberText/NumberText'
-import { findProduct, isFileRequired } from '../projectWizard'
+import { isFileRequired, findTitle } from '../projectWizard'
 
 const sections = [
   {
     id: 'appDefinition',
-    title: (project, showProduct) => {
-      const product = _.get(project, 'details.products[0]')
-      if (showProduct && product) {
-        const prd = findProduct(product)
-        if (prd) return prd.name
-      }
-      return 'Definition'
-    },
+    title: findTitle,
     required: true,
     pricePerPage: 1000,
     description: 'Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.',
