@@ -463,9 +463,9 @@ export function isFileRequired(project, subSections) {
 }
 
 /**
- * Finds the title
+ * Finds the title for the product
  *
- * @param {object}  project       project object
+ * @param {object}  project       project object to fetch the product title
  * @param {boolean} showProduct   flag to check whether to show title from config or not
  *
  * @return {string} title of the product
@@ -478,3 +478,16 @@ export function findTitle(project, showProduct) {
   }
   return 'Definition'
 }
+
+/**
+ * Finds the title for the project files section 
+ *
+ * @param {object}  project    project object to fetch the product title
+ *
+ *
+ * @return {string} title for the project files section
+ */
+export function findFilesSectionTitle(project) {
+  return `Project Files (${_.get(project, 'attachments', []).length})` || 'Files'
+}
+

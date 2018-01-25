@@ -1,6 +1,5 @@
-import _ from 'lodash'
 // import NumberText from '../../components/NumberText/NumberText'
-import { isFileRequired, findTitle } from '../projectWizard'
+import { isFileRequired, findTitle, findFilesSectionTitle } from '../projectWizard'
 
 const sections = [
   {
@@ -136,7 +135,7 @@ const sections = [
       {
         id: 'files',
         required: isFileRequired,
-        title: (project) => `Project Files (${_.get(project, 'attachments', []).length})` || 'Files',
+        title: findFilesSectionTitle,
         description: '',
         type: 'files',
         fieldName: 'attachments'

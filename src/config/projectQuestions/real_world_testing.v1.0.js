@@ -1,7 +1,6 @@
 import React from 'react' // eslint-disable-line no-unused-vars
-import _ from 'lodash'
 import { Icons } from 'appirio-tech-react-components'
-import { isFileRequired, findTitle } from '../projectWizard'
+import { isFileRequired, findTitle, findFilesSectionTitle } from '../projectWizard'
 
 import IconDontKnow from '../../assets/icons/icon-dont-know.svg'
 import IconTestStructured from '../../assets/icons/icon-test-structured.svg'
@@ -282,7 +281,7 @@ const sections = [
       {
         id: 'files',
         required: isFileRequired,
-        title: (project) => `Project Files (${_.get(project, 'attachments', []).length})` || 'Files',
+        title: findFilesSectionTitle,
         description: '',
         type: 'files',
         fieldName: 'attachments'
