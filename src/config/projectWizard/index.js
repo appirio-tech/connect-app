@@ -498,3 +498,51 @@ export function getProductEstimate(productId, productConfig) {
   }
   return { priceEstimate: price, minTime, maxTime, durationEstimate: `${minTime}-${maxTime} days`}
 }
+
+/**
+ * Finds if files are required for project
+ *
+ * @param {object} project       project object
+ * @param {object} subSections   subSections object
+ *
+ * @return {boolean} true if files required, else false
+ */
+export function isFileRequired(project, subSections) {
+  const subSection = _.find(subSections, (s) => s.type === 'questions')
+  const fields = _.filter(subSection.questions, q => q.type.indexOf('see-attached') > -1)
+  // iterate over all seeAttached type fields to check
+  //  if any see attached is checked.
+  return _.some(_.map(
+    _.map(fields, 'fieldName'),
+    fn => _.get(project, `${fn}.seeAttached`)
+  ))
+}
+
+/**
+ * Finds the title for the product
+ *
+ * @param {object}  project       project object to fetch the product title
+ * @param {boolean} showProduct   flag to check whether to show title from config or not
+ *
+ * @return {string} title of the product
+ */
+export function findTitle(project, showProduct) {
+  const product = _.get(project, 'details.products[0]')
+  if (showProduct && product) {
+    const prd = findProduct(product)
+    if (prd) return prd.name
+  }
+  return 'Definition'
+}
+
+/**
+ * Finds the title for the project files section 
+ *
+ * @param {object}  project    project object to fetch the product title
+ *
+ *
+ * @return {string} title for the project files section
+ */
+export function findFilesSectionTitle(project) {
+  return `Project Files (${_.get(project, 'attachments', []).length})` || 'Files'
+}
