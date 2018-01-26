@@ -12,7 +12,6 @@ import EditProjectForm from '../components/EditProjectForm'
 import { findProduct } from '../../../config/projectWizard'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-// import { Icons } from 'appirio-tech-react-components'
 import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
 
 require('./Specification.scss')

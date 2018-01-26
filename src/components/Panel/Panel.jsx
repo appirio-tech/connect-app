@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { defaultProps } from 'recompose'
-import { Icons } from 'appirio-tech-react-components'
+import IconUIBoldAdd from  '../../assets/icons/icon-ui-bold-add.svg'
+import IconUITrashSimple from  '../../assets/icons/icon-ui-trash-simple.svg'
 import './Panel.scss'
 import cn from 'classnames'
 
@@ -29,8 +30,8 @@ Title.propTypes = {
 
 const ActionBtn = ({children, onClick, type}) => (
   <a href="javascript:" onClick={onClick} className="btn-action" title={children}>
-    { type === 'add' && <i className="plus"><Icons.IconUIBoldAdd /></i> }
-    { type === 'remove' && <i className="remove"><Icons.IconUITrashSimple /></i> }
+    { type === 'add' && <i className="plus"><IconUIBoldAdd /></i> }
+    { type === 'remove' && <i className="remove"><IconUITrashSimple /></i> }
   </a>
 )
 

@@ -4,7 +4,10 @@ import _ from 'lodash'
 import cn from 'classnames'
 import Panel from '../../../../components/Panel/Panel'
 import DeleteFeatureModal from './DeleteFeatureModal'
-import { Icons, Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
+import { Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
+import IconUIPencil from  '../../../../assets/icons/icon-ui-pencil.svg'
+import IconUITrashSimple from  '../../../../assets/icons/icon-ui-trash-simple.svg'
+
 
 require('./FeatureForm.scss')
 
@@ -109,8 +112,8 @@ class CustomFeatureForm extends Component {
                   />
                 }
                 <div className="separator"/>
-                <button className="clean feature-edit-action" onClick={ this.editFeature }><Icons.IconUIPencil /></button>
-                <button className="clean feature-delete-action" onClick={ this.onDeleteIntent }><Icons.IconUITrashSimple /></button>
+                <button className="clean feature-edit-action" onClick={ this.editFeature }><IconUIPencil /></button>
+                <button className="clean feature-delete-action" onClick={ this.onDeleteIntent }><IconUITrashSimple /></button>
               </div>
           </div>
         }

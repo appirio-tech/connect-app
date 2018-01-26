@@ -2,13 +2,13 @@ import React from 'react'
 import './MessagingEmptyState.scss'
 import Panel from '../Panel/Panel'
 import Comment from '../ActionCard/Comment'
-import { Icons } from 'appirio-tech-react-components'
+import CloseIcon from  '../../assets/icons/icon-close.svg'
 
 const MessagingEmptyState = ({ currentUser, onClose }) => (
   <Panel className="panel-orange action-card messaging-empty-state">
     <div className="empty-state-content">
       <a href="javascript:" className="btn-action btn-close" onClick={onClose}>
-        <Icons.CloseIcon />
+        <CloseIcon />
       </a>
       <Comment
         avatarUrl={require('../../assets/images/avatar-coder.svg')}
