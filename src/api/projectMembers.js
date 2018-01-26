@@ -10,6 +10,7 @@ export function getMembersById (userIds) {
   const url = `${TC_API_URL}/v3/members/_search/?fields=`
     + encodeURIComponent(fields)
     + `&query=${encodeURIComponent(query)}`
+    + '&limit=' + userIds.length
   return axios.get(url)
   .then(resp => {
     return resp.data.result.content

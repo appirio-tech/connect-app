@@ -5,7 +5,7 @@ import cn from 'classnames'
 import ActionCard from '../ActionCard/ActionCard'
 import Panel from '../Panel/Panel'
 import FeedComments from './FeedComments'
-import { Avatar } from 'appirio-tech-react-components'
+import UserTooltip from '../User/UserTooltip'
 import {Link} from 'react-router-dom'
 import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
@@ -43,7 +43,7 @@ class Feed extends React.Component {
     const {
       id, user, currentUser, date, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
       allowComments, comments, unread, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
-      onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, permalink
+      onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, permalink, allMembers
     } = this.props
     const {editTopicMode} = this.state
     let authorName = user.firstName
@@ -71,12 +71,14 @@ class Feed extends React.Component {
             avatarUrl={user.photoURL}
             authorName={authorName}
             cancelEdit={this.cancelEditTopic}
+            allMembers={allMembers}
         />
         )}
         {!editTopicMode && (
         <Panel.Body className={cn({active: unread})}>
           <div className="portrait" id={`feed-${id}`}>
-            <Avatar avatarUrl={user.photoURL} userName={authorName} />
+            {/* <Avatar avatarUrl={user.photoURL} userName={authorName} /> */}
+            <UserTooltip usr={user} id={id} previewAvatar size={35} />
           </div>
           <div className="object topicBody">
             <div className="card-title">
@@ -118,6 +120,7 @@ class Feed extends React.Component {
           onSaveMessageChange={onSaveMessageChange}
           onSaveMessage={onSaveMessage}
           onDeleteMessage={onDeleteMessage}
+          allMembers={allMembers}
         />
         {children}
         {isDeletingTopic &&

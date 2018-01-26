@@ -25,12 +25,11 @@
         align-items: center;
       }
     }
-  }
-  .color-card-add{
-    position: relative;
-    border-color: $tc-gray-30;
-    background: url('../../assets/images/icon-add-color.svg') no-repeat;
-    background-position: center center;
+    svg {
+      position: relative;
+      border-color: $tc-gray-30;
+      margin: 10px;
+    }
   }
   .picker-wrapper {
     z-index: 2;

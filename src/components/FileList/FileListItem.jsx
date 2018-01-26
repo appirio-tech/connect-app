@@ -3,11 +3,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import filesize from 'filesize'
 import moment from 'moment'
-import { Icons, Tooltip } from 'appirio-tech-react-components'
+import { Tooltip } from 'appirio-tech-react-components'
 import UserWithName from '../User/UserWithName'
 import { TOOLTIP_DEFAULT_DELAY } from '../../config/constants'
+import TrashIcon from  '../../assets/icons/icon-trash.svg'
+import CloseIcon from  '../../assets/icons/icon-close.svg'
+import EditIcon from  '../../assets/icons/icon-edit.svg'
+import SaveIcon from  '../../assets/icons/icon-save.svg'
 
-const { TrashIcon, CloseIcon, EditIcon, SaveIcon } = Icons
 
 export default class FileListItem extends React.Component {
 
@@ -123,9 +126,9 @@ export default class FileListItem extends React.Component {
     const { isEditing } = this.state
     let iconPath
     try {
-      iconPath = require('./images/' + this.props.contentType.split('/')[1] +'.svg')
+      iconPath = require('../../assets/icons/' + this.props.contentType.split('/')[1] +'.svg')
     } catch(err) {
-      iconPath = require('./images/default.svg')
+      iconPath = require('../../assets/icons/default.svg')
     }
 
     return (

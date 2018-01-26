@@ -8,11 +8,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
-import SVGIconImage from '../../../../../components/SVGIconImage'
 import { EMAIL_AVAILABILITY_CHECK_DEBOUNCE } from '../../../../../config/constants'
 import { Formsy, TCFormFields } from 'appirio-tech-react-components'
 import './ChangeEmailForm.scss'
+import IconCheck from '../../assets/icons/check.svg'
+
 
 class ChangeEmailForm extends React.Component {
   constructor(props) {
@@ -111,7 +111,7 @@ class ChangeEmailForm extends React.Component {
           />
           <div className="field-status">
             {isCheckingCurrentEmail && <LoadingIndicator isSmall />}
-            {isEmailChanged && currentEmailAvailable && <SVGIconImage filePath="ui-16px-1_check-bold" />}
+            {isEmailChanged && currentEmailAvailable && <IconCheck className="icon-check"/>}
           </div>
         </div>
         <div className="controls">

@@ -1,5 +1,4 @@
 import _ from 'lodash'
-// import { Icons } from 'appirio-tech-react-components'
 import { findProduct} from '../projectWizard'
 
 const isFileRequired = (project, subSections) => {
@@ -67,6 +66,25 @@ const sections = [
               {value: 'true', label: 'Yes'},
               {value: 'false', label: 'No'}
             ]
+          },
+          {
+            icon: 'question',
+            required: true,
+            title: 'Does your organization currently have a chatbot?',
+            description: '',
+            type: 'radio-group',
+            fieldName: 'details.appDefinition.hasChatbot',
+            options: [
+              {value: 'true', label: 'Yes'},
+              {value: 'false', label: 'No'}
+            ]
+          },
+          {
+            icon: 'question',
+            title: 'If yes, can you provide some brief specifics about your current chatbot?',
+            description: '',
+            type: 'textbox',
+            fieldName: 'details.appDefinition.existingChatbotDesc'
           },
           {
             icon: 'question',
@@ -178,6 +196,25 @@ export const basicSections = [
               {value: 'true', label: 'Yes'},
               {value: 'false', label: 'No'}
             ]
+          },
+          {
+            icon: 'question',
+            required: true,
+            title: 'Does your organization currently have a chatbot?',
+            description: '',
+            type: 'radio-group',
+            fieldName: 'details.appDefinition.hasChatbot',
+            options: [
+              {value: 'true', label: 'Yes'},
+              {value: 'false', label: 'No'}
+            ]
+          },
+          {
+            icon: 'question',
+            title: 'If yes, can you provide some brief specifics about your current chatbot?',
+            description: '',
+            type: 'textbox',
+            fieldName: 'details.appDefinition.existingChatbotDesc'
           },
           {
             icon: 'question',

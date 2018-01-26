@@ -25,4 +25,9 @@
       width: 100%;
     }
   }
+
+  &.dropdown-up {
+    top: auto;
+    bottom: 320px;
+  }
 }

@@ -68,6 +68,21 @@ export const toggleNotificationRead = (notificationId) => (dispatch) => {
   })
 }
 
+export const toggleBundledNotificationRead = (bundledNotificationId, bundledIds) => (dispatch) => {
+  dispatch({
+    type: NOTIFICATIONS_PENDING
+  })
+
+  notificationsService.markNotificationsRead(bundledIds.join('-')).then(() => {
+    dispatch({
+      type: TOGGLE_NOTIFICATION_READ,
+      payload: bundledNotificationId
+    })
+  }).catch(err => {
+    Alert.error(`Failed to mark notification read. ${err.message}`)
+  })
+}
+
 export const viewOlderNotifications = (sourceId) => (dispatch) => dispatch({
   type: VIEW_OLDER_NOTIFICATIONS_SUCCESS,
   payload: sourceId

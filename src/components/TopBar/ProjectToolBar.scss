@@ -39,15 +39,16 @@
         color: $tc-gray-50;
         text-transform: uppercase;
 
-        svg {// Back arrow
+        .icon-tail-left {// Back arrow
           fill: $tc-gray-50;
           height: 13px;
           margin-right: 10px;
+          margin-right: 12px;
         }
         &:hover, &.hover{
           text-decoration: none;
           color: $tc-orange-30;
-          svg {// Back arrow
+          .icon-tail-left {// Back arrow
             fill: $tc-orange-30;
           }
         }
@@ -125,6 +126,12 @@
       margin: 0;
       padding: 0;
     }
+    li#active a i svg g {
+      fill: #fee3d0 !important;
+    }
+    li#active a i svg path {
+      fill: #fee3d0 !important;
+    }
     ul li{
       padding: 0 15px;
       height: 20px;
@@ -143,62 +150,88 @@
         position: relative;
         padding-left: 26px;
         /* menu icons */
-        >i{
+        >svg{
           display: block;
           width: 16px;
           height: 16px;
           position: absolute;
           left: 0;
           top: 2px;
-          &.icon-dashboard{
-            background: url("../../styles/i/icon-dashboard.svg") left top no-repeat;
-          }
-          &.icon-specification{
-            background: url("../../styles/i/icon-ruler-pencil.svg") left top no-repeat;
-          }
-          &.icon-challenges{
-            background: url("../../styles/i/icon-hammer.svg") left top no-repeat;
-          }
-          &.icon-messages{
-            background: url("../../styles/i/icon-chat.svg") left top no-repeat;
-          }
         }
       }
+
+      .icon-dashboard {
+        width: 16px;
+        height: 16px;
+      }
+      #active svg.icon-dashboard g {
+        color: #fee3d0 !important;
+      }
+      #active svg.icon-dashboard-active g {
+        color: #fee3d0 !important;
+      }
+      .icon-dashboard-hover {
+        color: $tc-orange-30;
+      }
+      .icon-dashboard-active {
+        color: $tc-orange-70;
+      }
+      
+      .icon-specification {
+        width: 16px;
+        height: 16px;
+      }
+      #active svg.icon-specification g {
+        color: #fee3d0 !important;
+      }
+      #active svg.icon-specification-active g {
+        color: #fee3d0 !important;
+      }
+      li#active a i svg g {
+        fill: #fee3d0 !important;
+      }
+      .icon-specification-hover {
+        color: $tc-orange-30;
+      }
+      .icon-specification-active {
+        color: $tc-orange-70;
+      }
+
+      .icon-messages {
+        width: 16px;
+        height: 16px;
+      }
+      #active a i svg g {
+        color: #fee3d0 !important;
+      }
+      .icon-messages-hover {
+        color: $tc-orange-30;
+      }
+      .icon-messages-active {
+        color: $tc-orange-70;
+      }
+      
+      .icon-challenges {
+        width: 16px;
+        height: 16px;
+      }
+      #active a i svg g {
+        color: #fee3d0 !important;
+      }
+      .icon-challenges-hover {
+        color: $tc-orange-30;
+      }
+      .icon-challenges-active {
+        color: $tc-orange-70;
+      }
+
       &:hover, &.hover{
         a, a:hover{
           color: $tc-orange-30;
-          >i{
-            &.icon-dashboard{
-              background: url("../../styles/i/icon-dashboard-hover.svg") left top no-repeat;
-            }
-            &.icon-specification{
-              background: url("../../styles/i/icon-ruler-pencil-hover.svg") left top no-repeat;
-            }
-            &.icon-challenges{
-              background: url("../../styles/i/icon-hammer-hover.svg") left top no-repeat;
-            }
-            &.icon-messages{
-              background: url("../../styles/i/icon-chat-hover.svg") left top no-repeat;
-            }
-          }
         }
       }
       a.active, a.active:hover{
         color: $tc-orange-70;
-        >i{
-          &.icon-dashboard{
-            background: url("../../styles/i/icon-dashboard-active.svg") left top no-repeat;
-          }
-          &.icon-specification{
-            background: url("../../styles/i/icon-ruler-pencil-active.svg") left top no-repeat;
-          }
-          &.icon-challenges{
-            background: url("../../styles/i/icon-hammer-active.svg") left top no-repeat;
-          }
-          &.icon-messages{
-            background: url("../../styles/i/icon-chat-active.svg") left top no-repeat;
-          }
-        }
       }
     }
   }
@@ -271,7 +304,12 @@
         }
         a {
           padding-left: 16px;
-          text-indent: -9999px;
+          span {
+            display: none;
+          }
+          svg {
+            position:relative;
+          }
         }
       }
     }

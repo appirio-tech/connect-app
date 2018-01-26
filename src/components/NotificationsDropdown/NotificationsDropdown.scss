@@ -48,7 +48,7 @@
     position: relative;
     width: 32px;
 
-    > svg > g > g {
+    .icon-ui-bell path {
       fill: $tc-white;
     }
   }

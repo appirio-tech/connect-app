@@ -1,8 +1,11 @@
 require('./ProjectListNavHeader.scss')
 
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import PT from 'prop-types'
 import { PROJECT_STATUS } from '../../../../config/constants'
+import CardView from '../../../../assets/icons/ui-16px-2_grid-45-gray.svg'
+import GridView from '../../../../assets/icons/grid-list-ico.svg'
+
 
 export default class ProjectListNavHeader extends Component {
 
@@ -56,10 +59,14 @@ export default class ProjectListNavHeader extends Component {
       </ul>
         <div className="right-wrapper">
           <div className="list-nav-item nav-icon">
-            <a href="javascript;" data-view="grid" onClick={this.switchViews} className={`list-nav-btn sm right grid-view-ico ${(this.state.selectedView === 'grid') ? 'active' : ''}`}><i/></a>
+            <a href="javascript;" data-view="grid" onClick={this.switchViews} className={`list-nav-btn sm right ${(this.state.selectedView === 'grid') ? 'active' : ''}`}>
+              <GridView className="grid-view-ico" />
+            </a>
           </div>
           <div className="list-nav-item nav-icon">
-            <a href="javascript;" data-view="card" onClick={this.switchViews} className={`list-nav-btn sm right card-view-ico ${(this.state.selectedView === 'card') ? 'active' : ''}`}><i/></a>
+            <a href="javascript;" data-view="card" onClick={this.switchViews} className={`list-nav-btn sm right ${(this.state.selectedView === 'card') ? 'active' : ''}`}>
+              <CardView className="card-view-ico" />
+            </a>
           </div>
         </div>
       </nav>
@@ -67,6 +74,6 @@ export default class ProjectListNavHeader extends Component {
   }
 }
 ProjectListNavHeader.propTypes = {
-  applyFilters: PropTypes.func.isRequired,
-  changeView: PropTypes.func.isRequired
+  applyFilters: PT.func.isRequired,
+  changeView: PT.func.isRequired
 }
