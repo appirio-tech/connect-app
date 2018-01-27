@@ -846,6 +846,19 @@
     color: white;
   }
   
+  .prompt {
+    text-align: center;
+    z-index: 999;
+    left: 0;
+    right: 0;
+    margin: auto;
+    position: absolute
+  }
+
+  .icon-refresh path {
+    fill: $tc-white;
+  }
+
   .project-name-section {
     display: flex;
     align-items: flex-start;
@@ -1004,4 +1017,3 @@
     }
   }
 }
-  

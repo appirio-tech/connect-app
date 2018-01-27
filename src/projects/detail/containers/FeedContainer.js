@@ -19,6 +19,11 @@ import Feed from '../../../components/Feed/Feed'
 import ProjectSpecification from '../../../components/ProjectSpecification/ProjectSpecification'
 import { loadDashboardFeeds, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import { toggleNotificationRead } from '../../../routes/notifications/actions'
+import { filterReadNotifications, filterNotificationsByProjectId, filterTopicAndPostChangedNotifications } from '../../../routes/notifications/helpers/notifications'
+import { REFRESH_UNREAD_UPDATE_INTERVAL } from '../../../config/constants'
+import './Specification.scss'
+import Refresh from '../../../assets/icons/icon-refresh.svg'
 
 import { ScrollElement, scroller } from 'react-scroll'
 
@@ -48,15 +53,26 @@ class FeedView extends React.Component {
     this.onSaveMessageChange = this.onSaveMessageChange.bind(this)
     this.onEditTopic = this.onEditTopic.bind(this)
     this.onTopicChange = this.onTopicChange.bind(this)
-    this.state = { feeds : [], showAll: [], newPost: {} }
+    this.onRefreshFeeds = this.onRefreshFeeds.bind(this)
+    this.onScroll = this.onScroll.bind(this)
+    this.state = { feeds : [], showAll: [], newPost: {}, unreadUpdate: [], scrolled: false } 
   }
 
   componentDidMount() {
     window.addEventListener('beforeunload', this.onLeave)
+    this.refreshUnreadUpdate = setInterval(() => {
+      const notReadNotifications = filterReadNotifications(this.props.notifications)
+      const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
+      this.setState({ unreadUpdate: _.map(unreadTopicAndPostChangedNotifications, 'id' ) })
+      if (!this.state.scrolled && this.state.unreadUpdate.length > 0) {
+        this.onRefreshFeeds()
+      }
+    }, REFRESH_UNREAD_UPDATE_INTERVAL)
   }
 
   componentWillMount() {
     this.init(this.props)
+    window.addEventListener('scroll', this.onScroll)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -65,6 +81,8 @@ class FeedView extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('beforeunload', this.onLeave)
+    window.removeEventListener('scroll', this.onScroll)
+    clearInterval(this.refreshUnreadUpdate)
   }
 
   // Notify user if they navigate away while the form is modified.
@@ -177,6 +195,7 @@ class FeedView extends React.Component {
     }
     this.setState({
       newPost: resetNewPost ? {} : this.state.newPost,
+      scrolled: false,
       feeds: feeds.map((feed) => {
         // finds the same feed from previous props, if exists
         let prevFeed
@@ -337,9 +356,22 @@ class FeedView extends React.Component {
     this.props.deleteProjectTopic(feedId, PROJECT_FEED_TYPE_PRIMARY)
   }
 
+  onRefreshFeeds() {
+    const { toggleNotificationRead } = this.props
+    _.map(this.state.unreadUpdate, (notificationId) => {
+      toggleNotificationRead(notificationId)
+    })
+    this.setState({ unreadUpdate : []})
+    this.props.loadDashboardFeeds(this.props.project.id)
+  }
+
+  onScroll() {
+    this.setState({ scrolled : true })
+  }
+
   render () {
     const {currentUser, project, currentMemberRole, isCreatingFeed, error, allMembers} = this.props
-    const { feeds } = this.state
+    const { feeds, unreadUpdate, scrolled } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
     const onLeaveMessage = this.onLeave() || ''
 
@@ -377,22 +409,29 @@ class FeedView extends React.Component {
       )
     }
     return (
-      <div>
-        <Prompt
-          when={!!onLeaveMessage}
-          message={onLeaveMessage}
-        />
-        <NewPost
-          currentUser={currentUser}
-          allMembers={allMembers}
-          onPost={this.onNewPost}
-          isCreating={isCreatingFeed}
-          hasError={error}
-          heading="NEW STATUS POST"
-          onNewPostChange={this.onNewPostChange}
-          titlePlaceholder="Share the latest project updates with the team"
-        />
-        { feeds.map(renderFeed) }
+      <div style={{position: 'relative'}}>
+        { unreadUpdate.length > 0 && !this.isChanged() && scrolled &&
+        <div className="prompt">
+          <Refresh className="icon-refresh" style={{position: 'absolute', top: '4px'}}/>
+          <button className="tc-btn tc-btn-primary tc-btn-md" onClick={this.onRefreshFeeds}>&nbsp;&nbsp;&nbsp;Reload page to view updates</button>
+        </div>}
+        <div>
+          <Prompt
+            when={!!onLeaveMessage}
+            message={onLeaveMessage}
+          />
+          <NewPost
+            currentUser={currentUser}
+            allMembers={allMembers}
+            onPost={this.onNewPost}
+            isCreating={isCreatingFeed}
+            hasError={error}
+            heading="NEW STATUS POST"
+            onNewPostChange={this.onNewPostChange}
+            titlePlaceholder="Share the latest project updates with the team"
+          />
+          { feeds.map(renderFeed) }
+        </div>
       </div>
     )
   }
@@ -420,7 +459,7 @@ FeedContainer.PropTypes = {
   project: PropTypes.object.isRequired
 }
 
-const mapStateToProps = ({ projectTopics, members, loadUser }) => {
+const mapStateToProps = ({ projectTopics, members, loadUser, notifications }) => {
   return {
     currentUser    : loadUser.user,
     feeds          : projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
@@ -428,7 +467,8 @@ const mapStateToProps = ({ projectTopics, members, loadUser }) => {
     isLoading      : projectTopics.isLoading,
     isCreatingFeed : projectTopics.isCreatingFeed,
     error          : projectTopics.error,
-    allMembers     : members.members
+    allMembers     : members.members,
+    notifications 
   }
 }
 const mapDispatchToProps = {
@@ -440,7 +480,8 @@ const mapDispatchToProps = {
   addFeedComment,
   saveFeedComment,
   deleteFeedComment,
-  getFeedComment
+  getFeedComment,
+  toggleNotificationRead
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedContainer)

@@ -131,6 +131,32 @@ export const splitNotificationsBySources = (sources, notifications, oldSourceIds
 export const filterReadNotifications = (notifications) => _.filter(notifications, { isRead: false })
 
 /**
+ * Filter notifications that belongs to project:projectId
+ *
+ * @param  {Array}  notifications list of notifications
+ *
+ * @param  {Number}  projectId
+ *
+ * @return {Array}                notifications list filtered of notifications
+ */
+export const filterNotificationsByProjectId = (notifications, projectId) => _.filter(notifications, (notification) => {
+  return notification.sourceId === `${projectId}`
+})
+
+/**
+ * Filter notifications about Topic and Post changed
+ *
+ * @param  {Array}  notifications list of notifications
+ *
+ * @return {Array}                notifications list filtered of notifications
+ */
+export const filterTopicAndPostChangedNotifications = (notifications) => _.filter(notifications, (notification) => {
+  return notification.eventType === 'notifications.connect.project.topic.created' ||
+         notification.eventType === 'notifications.connect.project.post.created' ||
+         notification.eventType === 'notifications.connect.project.post.mention'
+})
+
+/**
  * Limits notifications quantity per source
  * and total quantity of notifications
  *
