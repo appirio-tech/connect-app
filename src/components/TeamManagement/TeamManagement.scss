@@ -242,7 +242,7 @@ $tc-body-extra-small: 12px;
         margin-bottom: $base-unit*2;
 
         button {
-          margin-left: $base-unit*2;
+          padding: 0 $base-unit*4 $base-unit*4;
         }
 
         .input-icon-group {
