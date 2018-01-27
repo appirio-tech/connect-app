@@ -34,9 +34,12 @@ class ProjectListTimeSortColHeader extends React.Component {
       return
     }
 
-    this.setState({
-      focused: false
-    })
+    if (this.refs.myRef) {
+      this.setState({
+        focused: false
+      })
+    }
+
   }
 
   componentDidMount() {

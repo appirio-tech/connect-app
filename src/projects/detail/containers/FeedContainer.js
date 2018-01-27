@@ -20,10 +20,10 @@ import ProjectSpecification from '../../../components/ProjectSpecification/Proje
 import { loadDashboardFeeds, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
-import { Helpers, scroller } from 'react-scroll'
+import { ScrollElement, scroller } from 'react-scroll'
 
 /*eslint-disable new-cap */
-const ScrollableFeed = Helpers.Element(Feed)
+const ScrollableFeed = ScrollElement(Feed)
 
 const SYSTEM_USER = {
   firstName: CODER_BOT_USER_FNAME,
