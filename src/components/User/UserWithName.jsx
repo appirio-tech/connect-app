@@ -26,7 +26,7 @@ UserWithName.propTypes = {
   handle  : PropTypes.string.isRequired,
   firstName : PropTypes.string.isRequired,
   lastName  : PropTypes.string.isRequired,
-  photoURL  : PropTypes.string,
+  photoURL  : PropTypes.string
 }
 
 export default UserWithName
