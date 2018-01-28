@@ -311,7 +311,7 @@ export const MAINTENANCE_MODE = false
 export const LS_INCOMPLETE_PROJECT = 'incompleteProject'
 
 
-export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
+export const PROJECTS_API_URL = 'http://local.topcoder-dev.com:8001'
 export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL
 
 export const NEW_PROJECT_PATH = '/new-project'
