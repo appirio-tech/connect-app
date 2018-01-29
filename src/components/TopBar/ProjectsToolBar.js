@@ -145,7 +145,7 @@ class ProjectsToolBar extends Component {
       excludedFiltersCount++
     }
     // Ignore status from filters count
-    const noOfFilters = _.keys(_.omit(criteria, ['status'])).length - excludedFiltersCount
+    const noOfFilters = _.keys(_.omit(criteria, ['status', 'keyword'])).length - excludedFiltersCount
     const onLeaveMessage = this.onLeave() || ''
 
     const primaryNavigationItems = [
