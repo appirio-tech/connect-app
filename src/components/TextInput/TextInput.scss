@@ -1,73 +1,76 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-.two-col-content.content .tc-file-field__inputs,
-.two-col-content.content .tc-textarea,
-.child-component textarea,
-.project-refcode input,
-.TextInput[type="text"] {
-  @include roboto;
-  border: none;
-  border-bottom: 1px dashed $tc-gray-20;
-  border-radius: 0;
-  box-shadow: none;
-  -ms-overflow-style: none;
-  font-size: $base-unit*3;
-  line-height: $base-unit*4;
-  &.empty {
-    background: $tc-gray-neutral-light;
-    border-bottom: 1px solid $tc-gray-40;
-    color: $tc-gray-30;
-  }
-
-  @include placeholder {
+:global {
+  .two-col-content.content .tc-file-field__inputs,
+  .two-col-content.content .tc-textarea,
+  .child-component textarea,
+  .project-refcode input,
+  .TextInput[type="text"] {
     @include roboto;
-    color: $tc-gray-30;
-    text-transform: none;
-    font-style: italic;
+    border: none;
+    border-bottom: 1px dashed $tc-gray-20;
+    border-radius: 0;
+    box-shadow: none;
+    -ms-overflow-style: none;
     font-size: $base-unit*3;
     line-height: $base-unit*4;
+    &.empty {
+      background: $tc-gray-neutral-light;
+      border-bottom: 1px solid $tc-gray-40;
+      color: $tc-gray-30;
+    }
+  
+    @include placeholder {
+      @include roboto;
+      color: $tc-gray-30;
+      text-transform: none;
+      font-style: italic;
+      font-size: $base-unit*3;
+      line-height: $base-unit*4;
+    }
+  
+    &:focus {
+      background: $tc-dark-blue-10 !important;
+      border: none;
+      border-bottom: 1px solid $tc-dark-blue-70;
+      box-shadow: none;
+      color: $tc-gray-80;
+    }
+    &:hover {
+      border: none;
+      border-bottom: 1px solid $tc-dark-blue-70;
+      box-shadow: none;
+    }
+    &:disabled {
+      background: $tc-gray-neutral-light;
+      border-bottom: 1px solid $tc-gray-40;
+      color: $tc-gray-30;
+    }
+    &.error{
+      border: 1px solid $tc-red-70!important;
+      background: $tc-gray-neutral-light!important;
+    }
   }
-
-  &:focus {
-    background: $tc-dark-blue-10 !important;
-    border: none;
-    border-bottom: 1px solid $tc-dark-blue-70;
-    box-shadow: none;
-    color: $tc-gray-80;
-  }
-  &:hover {
-    border: none;
-    border-bottom: 1px solid $tc-dark-blue-70;
-    box-shadow: none;
-  }
-  &:disabled {
-    background: $tc-gray-neutral-light;
-    border-bottom: 1px solid $tc-gray-40;
-    color: $tc-gray-30;
-  }
-  &.error{
-    border: 1px solid $tc-red-70!important;
-    background: $tc-gray-neutral-light!important;
-  }
-}
-
-.input-lg,
-.two-col-content.content .tc-file-field__inputs{
-  font-size: $base-unit*4;
-  line-height: $base-unit*6;
-
-  @include placeholder {
+  
+  .input-lg,
+  .two-col-content.content .tc-file-field__inputs{
     font-size: $base-unit*4;
     line-height: $base-unit*6;
+  
+    @include placeholder {
+      font-size: $base-unit*4;
+      line-height: $base-unit*6;
+    }
   }
-}
-
-.two-col-content.content .tc-textarea {
-  font-size: $base-unit*3;
-  line-height: $base-unit*5;
-
-  @include placeholder {
+  
+  .two-col-content.content .tc-textarea {
     font-size: $base-unit*3;
     line-height: $base-unit*5;
+  
+    @include placeholder {
+      font-size: $base-unit*3;
+      line-height: $base-unit*5;
+    }
   }
 }
+  

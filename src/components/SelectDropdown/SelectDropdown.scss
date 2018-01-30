@@ -1,12 +1,15 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-.SelectDropdown {
-  border: none;
-  padding: 0px;
-  min-width: 100px;
-  margin-left: calc(2 * #{$base_unit});
-
-  .Dropdown {
-    top: 20px;
+:global {
+  .SelectDropdown {
+    border: none;
+    padding: 0px;
+    min-width: 100px;
+    margin-left: calc(2 * #{$base_unit});
+  
+    .Dropdown {
+      top: 20px;
+    }
   }
 }
+  

@@ -1,9 +1,12 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-.messaging-empty-state {
-  .btn-close {
-    fill: $tc-orange-70;
-    top: $base-unit;
-    right: 0px;
+:global {
+  .messaging-empty-state {
+    .btn-close {
+      fill: $tc-orange-70;
+      top: $base-unit;
+      right: 0px;
+    }
   }
 }
+  

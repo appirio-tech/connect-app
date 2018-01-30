@@ -1,14 +1,17 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-.add-file {
-  position: relative;
-  margin-top: 10px;
-
-  .tc-btn {
-    position: absolute;
-    bottom: $base-unit*4;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1;
+:global {
+  .add-file {
+    position: relative;
+    margin-top: 10px;
+  
+    .tc-btn {
+      position: absolute;
+      bottom: $base-unit*4;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+    }
   }
 }
+  

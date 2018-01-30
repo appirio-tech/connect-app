@@ -1,15 +1,18 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-.AvatarGroup {
-  display: flex;
-
-  .Tooltip + .Tooltip {
-    margin-left: $base_unit;
-  }
-
-  .Tooltip.customer-data .stack-avatar-1,
-  .Tooltip.customer-data .stack-avatar-2,
-  .Tooltip.customer-data .stack-avatar-3 {
-    margin-left: 0;
+:global {
+  .AvatarGroup {
+    display: flex;
+  
+    .Tooltip + .Tooltip {
+      margin-left: $base_unit;
+    }
+  
+    .Tooltip.customer-data .stack-avatar-1,
+    .Tooltip.customer-data .stack-avatar-2,
+    .Tooltip.customer-data .stack-avatar-3 {
+      margin-left: 0;
+    }
   }
 }
+  

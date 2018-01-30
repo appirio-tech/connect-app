@@ -1,84 +1,87 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-@mixin transition {
-  transition: 150ms ease-in-out all;
-}
-
-.ProductCard {
-  width: 185px;
-  height: 185px;
-  margin: 10px 8px;
-  background: $tc-white;
-  border-radius: 4px;
-  padding: 30px 15px 20px;
-  text-align: center;
-  box-shadow: 0 0 0 1px $tc-gray-20;
-  @include transition;
-
-  .Icon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 auto 20px;
-    width: 32px;
-    height: 32px;
+:global {
+  @mixin transition {
+    transition: 150ms ease-in-out all;
   }
-
-  h3 {
-    @include tc-heading;
-    @include roboto-bold;
-    font-size: 15px;
-    line-height: 20px;
-    color: $tc-gray-80;
-    margin-bottom: 5px;
-    margin-top: 0px;
+  
+  .ProductCard {
+    width: 185px;
+    height: 185px;
+    margin: 10px 8px;
+    background: $tc-white;
+    border-radius: 4px;
+    padding: 30px 15px 20px;
+    text-align: center;
+    box-shadow: 0 0 0 1px $tc-gray-20;
     @include transition;
-  }
-
-  .details {
-    margin: 0;
-    color: $tc-gray-50;
-    line-height: 20px;
-    font-family: 'Roboto', Helvetica, Arial, sans-serif;
-    font-weight: 400;
-    font-size: 13px;
-    letter-spacing: -0.4px;
-    @include transition;
-  }
-
-  .icon-wrapper {
-    svg {
-      fill: $tc-gray-70;
+  
+    .Icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 auto 20px;
+      width: 32px;
+      height: 32px;
     }
-
-    &:hover {
+  
+    h3 {
+      @include tc-heading;
+      @include roboto-bold;
+      font-size: 15px;
+      line-height: 20px;
+      color: $tc-gray-80;
+      margin-bottom: 5px;
+      margin-top: 0px;
+      @include transition;
+    }
+  
+    .details {
+      margin: 0;
+      color: $tc-gray-50;
+      line-height: 20px;
+      font-family: 'Roboto', Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: -0.4px;
+      @include transition;
+    }
+  
+    .icon-wrapper {
       svg {
-        fill: $tc-dark-blue;
+        fill: $tc-gray-70;
+      }
+  
+      &:hover {
+        svg {
+          fill: $tc-dark-blue;
+        }
       }
     }
-  }
-
-  .list-cards {
-    user-select: none;
-  }
-
-  &:not(.active):hover {
-    box-shadow: 0 0 0 1px $tc-dark-blue-70;
-    background-color: $tc-dark-blue-10;
-    cursor: pointer;
-
-    h3 {
-      color: $tc-black;
+  
+    .list-cards {
+      user-select: none;
     }
-
-    p {
-      color: $tc-gray-80;
+  
+    &:not(.active):hover {
+      box-shadow: 0 0 0 1px $tc-dark-blue-70;
+      background-color: $tc-dark-blue-10;
+      cursor: pointer;
+  
+      h3 {
+        color: $tc-black;
+      }
+  
+      p {
+        color: $tc-gray-80;
+      }
     }
-  }
-
-  &:active,
-  &.active {
-    background-color: $tc-dark-blue-30;
-    box-shadow: 0 0 0 1px $tc-dark-blue-70;
+  
+    &:active,
+    &.active {
+      background-color: $tc-dark-blue-30;
+      box-shadow: 0 0 0 1px $tc-dark-blue-70;
+    }
   }
 }
+  

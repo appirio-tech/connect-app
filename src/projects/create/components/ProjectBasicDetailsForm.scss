@@ -1,7 +1,10 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-.ProjectBasicDetailsForm {
-  .sections {
-    margin-bottom: 20px;
+:global {
+  .ProjectBasicDetailsForm {
+    .sections {
+      margin-bottom: 20px;
+    }
   }
 }
+  

@@ -1,19 +1,22 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-.main-wrapper {
-  min-height: calc(100vh - 60px); // header and footer width
-  padding-top: 60px;
-  transition: all 150ms ease-in-out;
-  overflow: hidden;
-  &.with-filters {
-    padding-top: 120px;
-    min-height: calc(100vh - 120px);
+:global {
+  .main-wrapper {
+    min-height: calc(100vh - 60px); // header and footer width
+    padding-top: 60px;
+    transition: all 150ms ease-in-out;
+    overflow: hidden;
+    &.with-filters {
+      padding-top: 120px;
+      min-height: calc(100vh - 120px);
+    }
+  
+    &[data-route*='new-project'] {
+      background-color: $tc-gray-neutral-light;
+    }
   }
-
-  &[data-route*='new-project'] {
-    background-color: $tc-gray-neutral-light;
+  
+  .content-area {
   }
 }
-
-.content-area {
-}
+  

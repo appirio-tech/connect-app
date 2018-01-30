@@ -1,98 +1,101 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-// FIXME: multiple problems: floats, colors, units, deep nesting, global tag "svg" restyling
-
-.list-group {
-  .title {
-    @include roboto-bold;
-    font-size: 13px;
-    color: $tc-black;
-    line-height: 30px;
-    padding-left: 22px;
-    position: relative;
-    margin: 0 20px;
-    .number {
-      position: absolute;
-      left: 0;
-    }
-    /* required 8/29 */
-    .required {
-      float: right;
-      @include roboto;
-      color: $tc-orange;
-      font-size: 11px; // FIXME: non-standard font size
-    }
-    /* required End */
-  }
-  li {
-    .txt {
-      @include roboto;
+:global {
+  // FIXME: multiple problems: floats, colors, units, deep nesting, global tag "svg" restyling
+  
+  .list-group {
+    .title {
+      @include roboto-bold;
       font-size: 13px;
       color: $tc-black;
-      line-height: 16px;
-      padding: 7px 0;
-      display: inline-block;
-    }
-    /* required 8/29 */
-    .required {
-      @include roboto;
-      font-size: 13px;
-      color: $tc-orange;
-    }
-    /* required End */
-    .schedule {
-      @include roboto;
-      font-size: 13px;
-      line-height: 16px;
-      color: $tc-gray-50;
-      // change the schedule color to gray - 8/30
-      padding: 7px 0;
-      float: right;
-    }
-    .subtract {
-      float: right;
-      background: $tc-gray-20;
-      margin: 13px 5px 0 0;
-      width: 9px;
-      height: 2px;
-      display: inline-block;
-    }
-    .boxs {
-      display: block;
-      padding: 0 20px 0 42px;
+      line-height: 30px;
+      padding-left: 22px;
       position: relative;
-      &:hover {
-        background: $tc-gray-neutral-light;
+      margin: 0 20px;
+      .number {
+        position: absolute;
+        left: 0;
       }
-      &.complete {
-        .schedule {
+      /* required 8/29 */
+      .required {
+        float: right;
+        @include roboto;
+        color: $tc-orange;
+        font-size: 11px; // FIXME: non-standard font size
+      }
+      /* required End */
+    }
+    li {
+      .txt {
+        @include roboto;
+        font-size: 13px;
+        color: $tc-black;
+        line-height: 16px;
+        padding: 7px 0;
+        display: inline-block;
+      }
+      /* required 8/29 */
+      .required {
+        @include roboto;
+        font-size: 13px;
+        color: $tc-orange;
+      }
+      /* required End */
+      .schedule {
+        @include roboto;
+        font-size: 13px;
+        line-height: 16px;
+        color: $tc-gray-50;
+        // change the schedule color to gray - 8/30
+        padding: 7px 0;
+        float: right;
+      }
+      .subtract {
+        float: right;
+        background: $tc-gray-20;
+        margin: 13px 5px 0 0;
+        width: 9px;
+        height: 2px;
+        display: inline-block;
+      }
+      .boxs {
+        display: block;
+        padding: 0 20px 0 42px;
+        position: relative;
+        &:hover {
+          background: $tc-gray-neutral-light;
+        }
+        &.complete {
+          .schedule {
+            display: none;
+          }
+          .icon-complete {
+            display: block;
+          }
+        }
+        svg {
+          width: 10px;
+          height: 10px;
+          position: absolute;
+          right: 21px;
+          top: 10px;
+        }
+      }
+    }
+  
+    &.single-section {
+      .title {
+        padding-left: 0px;
+  
+        .number {
           display: none;
         }
-        .icon-complete {
-          display: block;
-        }
       }
-      svg {
-        width: 10px;
-        height: 10px;
-        position: absolute;
-        right: 21px;
-        top: 10px;
+  
+      .boxs {
+        padding-left: 20px;// 42 - 22
       }
-    }
-  }
-
-  &.single-section {
-    .title {
-      padding-left: 0px;
-
-      .number {
-        display: none;
-      }
-    }
-
-    .boxs {
-      padding-left: 20px;// 42 - 22
     }
   }
 }
+  

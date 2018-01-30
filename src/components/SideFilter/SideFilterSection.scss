@@ -1,9 +1,12 @@
 // this is to include tc styles in the output library
 @import '~tc-ui/src/styles/tc-includes';
 
-.side-filter-section + .side-filter-section::before {
-  content: '';
-  display: block;
-  border-top: 1px solid $tc-gray-10;
-  margin: 10px;
+:global {
+  .side-filter-section + .side-filter-section::before {
+    content: '';
+    display: block;
+    border-top: 1px solid $tc-gray-10;
+    margin: 10px;
+  }
 }
+  

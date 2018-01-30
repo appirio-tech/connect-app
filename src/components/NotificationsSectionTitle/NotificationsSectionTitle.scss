@@ -1,59 +1,62 @@
 // this is to include tc styles in the output library
 @import '~tc-ui/src/styles/tc-includes';
 
-.notifications-section-title {
-  align-items: center;
-  background-color: $tc-gray-20;
-  // border-bottom: 1px solid $tc-gray-20;
-  display: flex;
-  justify-content: space-between;
-
-  .title {
-    @include roboto-bold;
-    color: $tc-gray-80;
-    font-size: 13px;
-    line-height: 20px;
-    padding: 5px 0;
-    margin-left: 15px;
-  }
-
-  .controls {
-    .mark-all {
-      @include roboto;
-      background: none;
-      border: 0;
-      color: $tc-gray-50;
-      display: block;
-      font-size: 11px;
-      line-height: 30px;
-      white-space: nowrap;
-    }
-  }
-
-  &.global {
-    align-items: flex-end;
-    background-color: transparent;
-    margin: 31px 0 10px;
-    padding: 0;
-
-    &:first-child {
-      margin-top: 0;
-    }
-
+:global {
+  .notifications-section-title {
+    align-items: center;
+    background-color: $tc-gray-20;
+    // border-bottom: 1px solid $tc-gray-20;
+    display: flex;
+    justify-content: space-between;
+  
     .title {
-      color: $tc-black;
-      font-size: 20px;
-      font-weight: 400;
-      line-height: 30px;
-      margin-left: 0;
+      @include roboto-bold;
+      color: $tc-gray-80;
+      font-size: 13px;
+      line-height: 20px;
+      padding: 5px 0;
+      margin-left: 15px;
     }
-
+  
     .controls {
       .mark-all {
-        height: 20px;
-        line-height: 20px;
-        padding: 0;
+        @include roboto;
+        background: none;
+        border: 0;
+        color: $tc-gray-50;
+        display: block;
+        font-size: 11px;
+        line-height: 30px;
+        white-space: nowrap;
+      }
+    }
+  
+    &.global {
+      align-items: flex-end;
+      background-color: transparent;
+      margin: 31px 0 10px;
+      padding: 0;
+  
+      &:first-child {
+        margin-top: 0;
+      }
+  
+      .title {
+        color: $tc-black;
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 30px;
+        margin-left: 0;
+      }
+  
+      .controls {
+        .mark-all {
+          height: 20px;
+          line-height: 20px;
+          padding: 0;
+        }
       }
     }
   }
 }
+  

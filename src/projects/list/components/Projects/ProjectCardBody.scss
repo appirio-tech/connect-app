@@ -1,47 +1,50 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-.project-card-body {
-  flex: 2;
-
-  .project-description {
-    overflow: hidden;
-    // max-height: 180px;
-    // min-height: 180px;
-    color: $tc-gray-80;
-    @include tc-label-md;
-
-    .read-more-link {
-      white-space: nowrap;
-      color: $tc-dark-blue;
-    }
-  }
-
-  .project-status {
-    border-top: 1px solid $tc-gray-10;
-    border-bottom: 1px solid $tc-gray-10;
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    padding: 10px 0;
-
-    .panel { // avoid double padding for editable project status
-      padding: 0;
-    }
-
-    .status-header {
-      .status-label {
-        text-transform: uppercase;
+:global {
+  .project-card-body {
+    flex: 2;
+  
+    .project-description {
+      overflow: hidden;
+      // max-height: 180px;
+      // min-height: 180px;
+      color: $tc-gray-80;
+      @include tc-label-md;
+  
+      .read-more-link {
+        white-space: nowrap;
+        color: $tc-dark-blue;
       }
     }
-
-    .project-progress {
+  
+    .project-status {
+      border-top: 1px solid $tc-gray-10;
+      border-bottom: 1px solid $tc-gray-10;
       display: flex;
-
-      .progress-text {
-        text-transform: uppercase;
-        margin-left: 10px;
-        line-height: 16px;
+      justify-content: center;
+      margin-top: 20px;
+      padding: 10px 0;
+  
+      .panel { // avoid double padding for editable project status
+        padding: 0;
+      }
+  
+      .status-header {
+        .status-label {
+          text-transform: uppercase;
+        }
+      }
+  
+      .project-progress {
+        display: flex;
+  
+        .progress-text {
+          text-transform: uppercase;
+          margin-left: 10px;
+          line-height: 16px;
+        }
       }
     }
   }
 }
+  

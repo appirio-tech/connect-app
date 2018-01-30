@@ -1,48 +1,51 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-.panel-links{
-  li{
-    @include roboto-medium;
-    font-size: $tc-label-md;
-    color: $tc-dark-blue;
-    line-height: 1;
-    padding: $base-unit 0 $base-unit $base-unit*4;
-    display: flex;
-    .buttons{
-      display: none;
-      margin-right: 20px;
-      margin-left: auto;
+:global {
+  .panel-links{
+    li{
+      @include roboto-medium;
+      font-size: $tc-label-md;
+      color: $tc-dark-blue;
+      line-height: 1;
+      padding: $base-unit 0 $base-unit $base-unit*4;
+      display: flex;
+      .buttons{
+        display: none;
+        margin-right: 20px;
+        margin-left: auto;
+      }
+      a{
+        line-height: $base-unit*4;
+        max-width: 275px;
+        text-overflow: ellipsis;
+        overflow-x: hidden;
+      }
     }
-    a{
-      line-height: $base-unit*4;
-      max-width: 275px;
-      text-overflow: ellipsis;
-      overflow-x: hidden;
+    li:not(.delete-confirmation-modal):hover{
+      background: $tc-gray-neutral-light;
+      color: $tc-dark-blue;
+      .buttons{
+        display: block;
+      }
     }
-  }
-  li:not(.delete-confirmation-modal):hover{
-    background: $tc-gray-neutral-light;
-    color: $tc-dark-blue;
-    .buttons{
-      display: block;
+    .links-footer{
+      @include roboto;
+      font-size: $tc-label-xs;
+      color: $tc-gray-70;
+      line-height: $base-unit*6;
+      padding-left: $base-unit*4;
     }
-  }
-  .links-footer{
-    @include roboto;
-    font-size: $tc-label-xs;
-    color: $tc-gray-70;
-    line-height: $base-unit*6;
-    padding-left: $base-unit*4;
-  }
-
-  .delete-link-modal {
-    margin-left: -4*$base-unit;
-  }
-
-  li:before {
-   content: '\b7\a0';
-   font-size: 200%;
-   color: $tc-dark-blue;
-   line-height: $base-unit*4;
+  
+    .delete-link-modal {
+      margin-left: -4*$base-unit;
+    }
+  
+    li:before {
+     content: '\b7\a0';
+     font-size: 200%;
+     color: $tc-dark-blue;
+     line-height: $base-unit*4;
+    }
   }
 }
+  

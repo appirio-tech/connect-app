@@ -1,167 +1,170 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-.welcome-info {
-  .UserDropdownMenu {
-    padding: 0;
-    display: flex;
-    align-content: center;
-    text-align: left;
-
-    .Dropdown {
-      min-width: 160px;
-      right: -25px;
-      left: auto;
+:global {
+  .welcome-info {
+    .UserDropdownMenu {
+      padding: 0;
+      display: flex;
+      align-content: center;
+      text-align: left;
+  
+      .Dropdown {
+        min-width: 160px;
+        right: -25px;
+        left: auto;
+      }
     }
   }
-}
-
-.tc-header {
-  height: 60px;
-  // background: $tc-gray-neutral-light;
-  line-height: 60px;
-  height: 60px;
-  background-color: $tc-black;
-  z-index: 20;
-  padding: 0 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-
-  .logo-wrapper {
+  
+  .tc-header {
     height: 60px;
-    flex-shrink: 0;
-    display: flex;
-
-    .logo {
-      display: inline-block;
-      position: relative;
-      margin-top: 12px;
-      // width: 60px;
-      // height: 36px;
-
-      .icon-connect-logo-mono {
-        height: auto;
-        width: 53px;
-
-        path {
-          fill: $tc-gray-10;
-        }
-      }
-    }
-
-    .MenuBar {
-      margin-left: 25px;
-
-      li {
-        white-space: nowrap;
-      }
-    }
-  }
-
-  .sb-avatar {
-    display: block !important;
-  }
-
-  &.tc-header__connect {
-    padding: 0;
-    min-height: 60px;
-    height: auto;
-
-    .top-bar {
+    // background: $tc-gray-neutral-light;
+    line-height: 60px;
+    height: 60px;
+    background-color: $tc-black;
+    z-index: 20;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  
+    .logo-wrapper {
       height: 60px;
-      background-color: $tc-black;
-      position: relative;
-
-      .welcome-info {
-        height: 60px;
-        font-size: 13px;
-        color: $tc-gray-50;
-        display: flex;
-        justify-content: space-between;
-        @include roboto-medium;
-
-        > .tc-btn {
-          margin-top: 15px;
-          border: 0;
-          width: 116px;
-          text-align: center;
+      flex-shrink: 0;
+      display: flex;
+  
+      .logo {
+        display: inline-block;
+        position: relative;
+        margin-top: 12px;
+        // width: 60px;
+        // height: 36px;
+  
+        .icon-connect-logo-mono {
+          height: auto;
+          width: 53px;
+  
+          path {
+            fill: $tc-gray-10;
+          }
         }
-
-        .avatar-info {
-          position: relative;
-          margin-left: 20px;
+      }
+  
+      .MenuBar {
+        margin-left: 25px;
+  
+        li {
+          white-space: nowrap;
+        }
+      }
+    }
+  
+    .sb-avatar {
+      display: block !important;
+    }
+  
+    &.tc-header__connect {
+      padding: 0;
+      min-height: 60px;
+      height: auto;
+  
+      .top-bar {
+        height: 60px;
+        background-color: $tc-black;
+        position: relative;
+  
+        .welcome-info {
+          height: 60px;
+          font-size: 13px;
+          color: $tc-gray-50;
           display: flex;
-          align-items: center;
-
-          .avatar {
-            width: 30px;
-            height: 30px;
-            background-color: $tc-dark-blue-70;
-            border-radius: 15px;
-            overflow: hidden;
+          justify-content: space-between;
+          @include roboto-medium;
+  
+          > .tc-btn {
+            margin-top: 15px;
+            border: 0;
+            width: 116px;
             text-align: center;
-            line-height: 30px;
-            color: $tc-white;
-            @include roboto-medium;
-            font-size: 15px;
-            position: absolute;
-            left: 0;
-            top: 15px;
-
-            img {
+          }
+  
+          .avatar-info {
+            position: relative;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+  
+            .avatar {
               width: 30px;
               height: 30px;
+              background-color: $tc-dark-blue-70;
               border-radius: 15px;
-            }
-          }
-
-          .avatar-link {
-            display: inline-block;
-            padding-right: 16px;
-            position: relative;
-
-            &:after {
-              display: block;
-              content: '';
-              width: 10px;
+              overflow: hidden;
+              text-align: center;
+              line-height: 30px;
+              color: $tc-white;
+              @include roboto-medium;
+              font-size: 15px;
               position: absolute;
-              right: 0;
-              top: 50%;
-              margin-top: -4px;
-              height: 7.5px;
-              // background: url("../../styles/i/arrow-down-black.png") right center no-repeat;
-              background-size: 10px 7.5px;
+              left: 0;
+              top: 15px;
+  
+              img {
+                width: 30px;
+                height: 30px;
+                border-radius: 15px;
+              }
+            }
+  
+            .avatar-link {
+              display: inline-block;
+              padding-right: 16px;
+              position: relative;
+  
+              &:after {
+                display: block;
+                content: '';
+                width: 10px;
+                position: absolute;
+                right: 0;
+                top: 50%;
+                margin-top: -4px;
+                height: 7.5px;
+                // background: url("../../styles/i/arrow-down-black.png") right center no-repeat;
+                background-size: 10px 7.5px;
+              }
             }
           }
+  
+          .tc-btn-primary {
+            margin-left: 7px;
+            color: $tc-white;
+          }
         }
-
-        .tc-btn-primary {
-          margin-left: 7px;
-          color: $tc-white;
+      }
+    }
+  }
+  
+  @media all and (max-width: 1023px) {
+    .tc-header {
+      &.tc-header__connect {
+        .top-bar .search-bar {
+          width: 383px;
+          margin-left: 110px;
+  
+          .search-widget {
+            width: 296px;
+          }
+        }
+  
+        .top-bar .welcome-info .avatar-info .avatar-link {
+          text-indent: -9999px;
+          width: 10px;
+          padding-right: 0;
         }
       }
     }
   }
 }
-
-@media all and (max-width: 1023px) {
-  .tc-header {
-    &.tc-header__connect {
-      .top-bar .search-bar {
-        width: 383px;
-        margin-left: 110px;
-
-        .search-widget {
-          width: 296px;
-        }
-      }
-
-      .top-bar .welcome-info .avatar-info .avatar-link {
-        text-indent: -9999px;
-        width: 10px;
-        padding-right: 0;
-      }
-    }
-  }
-}
+  

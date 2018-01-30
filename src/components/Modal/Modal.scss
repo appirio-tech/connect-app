@@ -1,154 +1,157 @@
 @import '~tc-ui/src/styles/tc-includes';
 @import "../../styles/variables";
-// TODO: unused css
-.modal {
-  background: $tc-gray-neutral-light;
-  border-radius: $corner-radius;
-  position: relative;
-  padding: $base-unit*2 0;
-
-  .btn-close {
-    position: absolute;
-    display: block;
-    width: 15px;
-    height: 15px;
-    top: $base-unit*3;
-    right: $base-unit*3;
-    background-size: $tc-heading-extra-small;
-  }
-
-  .modal-title {
-    @include roboto-bold;
-    font-size: $tc-label-lg;
-    padding: $base-unit*2 $base-unit*4 0 $base-unit*4;
-    line-height: $base-unit*4;
-    text-align: center;
-
-    &.title-muted {
-      @include roboto-medium;
-      color: $tc-gray-50;
-      font-size: $tc-label-sm;
-      text-transform: uppercase;
-      padding-top: $base-unit;
-      padding-bottom: $base-unit;
-    }
-
-    &.danger {
-      color: $tc-red;
-    }
-  }
-
-  .modal-body {
-    @include roboto;
-    font-size: $tc-label-md;
-    line-height: $base-unit * 4;
-    margin: $base-unit*2 $base-unit*4;
-
-    input {
+:global {
+  // TODO: unused css
+  .modal {
+    background: $tc-gray-neutral-light;
+    border-radius: $corner-radius;
+    position: relative;
+    padding: $base-unit*2 0;
+  
+    .btn-close {
+      position: absolute;
       display: block;
-      height: 38px;
-      margin: 0 auto;
-      color: $tc-black;
-      background: $tc-gray-neutral-light;
-      border-color: $tc-gray-20;
-      @include tc-label-md;
-      @include placeholder {
-        text-transform: none;
+      width: 15px;
+      height: 15px;
+      top: $base-unit*3;
+      right: $base-unit*3;
+      background-size: $tc-heading-extra-small;
+    }
+  
+    .modal-title {
+      @include roboto-bold;
+      font-size: $tc-label-lg;
+      padding: $base-unit*2 $base-unit*4 0 $base-unit*4;
+      line-height: $base-unit*4;
+      text-align: center;
+  
+      &.title-muted {
+        @include roboto-medium;
+        color: $tc-gray-50;
+        font-size: $tc-label-sm;
+        text-transform: uppercase;
+        padding-top: $base-unit;
+        padding-bottom: $base-unit;
       }
-
-      &[disabled] {
-        color: $tc-gray-20;
-        background: $tc-white;
+  
+      &.danger {
+        color: $tc-red;
       }
-
-      &:hover {
-        border-color: $tc-gray-40;
+    }
+  
+    .modal-body {
+      @include roboto;
+      font-size: $tc-label-md;
+      line-height: $base-unit * 4;
+      margin: $base-unit*2 $base-unit*4;
+  
+      input {
+        display: block;
+        height: 38px;
+        margin: 0 auto;
+        color: $tc-black;
         background: $tc-gray-neutral-light;
-      }
-
-      &:focus {
-        background: $tc-white !important;
-        border-color: $tc-dark-blue !important;
-      }
-
-      &.error {
-        border-left: 3px solid $tc-red-70 !important;
-        background: $tc-gray-neutral-light !important;
-
+        border-color: $tc-gray-20;
+        @include tc-label-md;
+        @include placeholder {
+          text-transform: none;
+        }
+  
+        &[disabled] {
+          color: $tc-gray-20;
+          background: $tc-white;
+        }
+  
+        &:hover {
+          border-color: $tc-gray-40;
+          background: $tc-gray-neutral-light;
+        }
+  
         &:focus {
           background: $tc-white !important;
           border-color: $tc-dark-blue !important;
         }
+  
+        &.error {
+          border-left: 3px solid $tc-red-70 !important;
+          background: $tc-gray-neutral-light !important;
+  
+          &:focus {
+            background: $tc-white !important;
+            border-color: $tc-dark-blue !important;
+          }
+        }
       }
-    }
-
-    .modal-inline-form {
-      display: flex;
-      margin-bottom: $base-unit*2;
-
-      button {
-        margin-left: $base-unit;
-      }
-
-      .input-icon-group {
-        position: relative;
-        flex-grow: 1;
+  
+      .modal-inline-form {
         display: flex;
-        border: 1px solid $tc-gray-20;
-        box-shadow: inset 0px 0px 2px 0px rgba($tc-gray-30, 0.2);
-
-        input {
+        margin-bottom: $base-unit*2;
+  
+        button {
+          margin-left: $base-unit;
+        }
+  
+        .input-icon-group {
+          position: relative;
           flex-grow: 1;
-          display: inline-block;
-          border: none;
-          box-shadow: none;
-        }
-
-        .input-icon {
-          height: 30px;
-          margin: 4px;
-
-          &:empty {
-            width: 36px;
-            background-size: 30px 30px;
-            background-color: $tc-gray-20;
-            background-position: center;
-            border-radius: 34px;
+          display: flex;
+          border: 1px solid $tc-gray-20;
+          box-shadow: inset 0px 0px 2px 0px rgba($tc-gray-30, 0.2);
+  
+          input {
+            flex-grow: 1;
+            display: inline-block;
+            border: none;
+            box-shadow: none;
           }
-
-          img {
-            width: 30px;
+  
+          .input-icon {
             height: 30px;
-            border-radius: 34px;
+            margin: 4px;
+  
+            &:empty {
+              width: 36px;
+              background-size: 30px 30px;
+              background-color: $tc-gray-20;
+              background-position: center;
+              border-radius: 34px;
+            }
+  
+            img {
+              width: 30px;
+              height: 30px;
+              border-radius: 34px;
+            }
           }
         }
       }
+  
+      .message {
+        text-align: center;
+        margin-bottom: $base-unit*4;
+        color: $tc-black;
+      }
+  
+      .button-area {
+        button:not(:last-child) {
+          margin-right: 2 * $base-unit;
+        }
+  
+        .btn-cancel {
+          border: 1px solid $tc-dark-blue;
+          box-shadow: 0px 0px 3px 0px $tc-dark-blue-30;
+        }
+      }
     }
-
-    .message {
+  
+    .form-group {
+      margin-top: 20px;
+      margin-bottom: 15px;
+    }
+  
+    .center-buttons {
       text-align: center;
-      margin-bottom: $base-unit*4;
-      color: $tc-black;
     }
-
-    .button-area {
-      button:not(:last-child) {
-        margin-right: 2 * $base-unit;
-      }
-
-      .btn-cancel {
-        border: 1px solid $tc-dark-blue;
-        box-shadow: 0px 0px 3px 0px $tc-dark-blue-30;
-      }
-    }
-  }
-
-  .form-group {
-    margin-top: 20px;
-    margin-bottom: 15px;
-  }
-
-  .center-buttons {
-    text-align: center;
   }
 }
+  

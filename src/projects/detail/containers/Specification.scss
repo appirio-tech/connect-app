@@ -1,1004 +1,1007 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-//TODO  Additional variables - need to find a home for these
-$gray-color: $tc-gray-50;
-$title-color: $tc-gray-80;
-$sideBarWidth: 280px;
-$sideBarMaxWidth: 360px;
-
-@mixin flexBox {
-  display: flex;
-  flex-direction: row;
-  width: auto;
-}
-
-@mixin flexWidth($number) {
-  -webkit-box-flex: $number;
-  -moz-box-flex: $number;
-  -webkit-flex: $number;
-  -ms-flex: $number;
-  flex: $number;
-}
-
-.feature-selection-dialog-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 21;/* +1 of the z-index of the topbar */
-}
-
-.feature-selection-dialog {
-  top: 0px;
-  left: 0px;
-  height: 100%;
-}
-
-.feature-selection-dialog-close {
-  @include roboto;
-  cursor: pointer;
-  position: absolute;
-  top: 20px;
-  right: 25px;
-  width: 185px;
-  height: 20px;
-  line-height: 20px;
-  text-align: right;
-  color: $tc-gray-60;
-  transition: all 200ms ease-in-out;
-
-  .x-mark-icon {
-    display: inline-block;
-    margin: 0 0 0 5px;
-    transition: all 200ms ease-in-out;
-
-    & > svg {
-      padding-top: 3px;
-      transition: all 200ms ease-in-out;
-    }
+:global {
+  //TODO  Additional variables - need to find a home for these
+  $gray-color: $tc-gray-50;
+  $title-color: $tc-gray-80;
+  $sideBarWidth: 280px;
+  $sideBarMaxWidth: 360px;
+  
+  @mixin flexBox {
+    display: flex;
+    flex-direction: row;
+    width: auto;
   }
-
-  &:hover {
-    color: $tc-black;
+  
+  @mixin flexWidth($number) {
+    -webkit-box-flex: $number;
+    -moz-box-flex: $number;
+    -webkit-flex: $number;
+    -ms-flex: $number;
+    flex: $number;
+  }
+  
+  .feature-selection-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 21;/* +1 of the z-index of the topbar */
+  }
+  
+  .feature-selection-dialog {
+    top: 0px;
+    left: 0px;
+    height: 100%;
+  }
+  
+  .feature-selection-dialog-close {
+    @include roboto;
     cursor: pointer;
-
-    .x-mark-icon > svg {
-      fill: $tc-black;
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    width: 185px;
+    height: 20px;
+    line-height: 20px;
+    text-align: right;
+    color: $tc-gray-60;
+    transition: all 200ms ease-in-out;
+  
+    .x-mark-icon {
+      display: inline-block;
+      margin: 0 0 0 5px;
+      transition: all 200ms ease-in-out;
+  
+      & > svg {
+        padding-top: 3px;
+        transition: all 200ms ease-in-out;
+      }
     }
-  }
-}
-
-.two-col-content.content {
-  .tc-file-field__inputs {
-    height: 45px;
-  }
-  /* .tc-file-field__inputs */
-  .tc-file-field__inputs,
-  .tc-textarea {
-    /*background: $tc-gray-neutral-light;
-    border-color: $tc-gray-20;
-    color: $tc-black;*/
-
-    &::-webkit-input-placeholder {
-      color: $tc-gray-50;
-      text-transform: none;
-    }
-
-    &::-moz-placeholder {
-      line-height: 45px;
-      color: $tc-gray-50;
-      opacity: 1;
-      text-transform: none;
-    }
-
-    &:-ms-input-placeholder {
-      color: $tc-gray-50;
-      text-transform: none;
-    }
-  }
-  /* .dashed-bottom-border */
-  .app-screen-header {
-    border-bottom: 1px solid $tc-gray-30;
-    display: flex;
-    justify-content: space-between;
-    padding: 15px 0;
-    position: relative;
-
-    .screen-title,
-    .project-name {
-      @include roboto;
-      color: black;
-      font-weight: bold;
-    }
-
-    .screen-title {
-      font-size: 18px;
-    }
-
-    .project-name {
-      font-size: 20px;
-    }
-
-    button.tc-btn-xs {//TODO ideally we should fix it in react-components repo
-      padding-top: 2px;
-      padding-bottom: 2px;
-    }
-  }
-  /* .bottom-border-titles */
-  .bottom-border-titles {
-    border-bottom: 1px solid $tc-gray-30;
-    padding-bottom: $base-unit;
-    margin: 30px 0 20px 0;
-    position: relative;
-
-    .title {
-      @include roboto;
-      font-size: 20px;
-      line-height: 30px;
-    }
-
-    .section-actions {
-      position: absolute;
-      right: 0;
-      top: 0;
-      padding: 0 15px;
-
-      &.hide {
-        display: none;
+  
+    &:hover {
+      color: $tc-black;
+      cursor: pointer;
+  
+      .x-mark-icon > svg {
+        fill: $tc-black;
       }
     }
   }
-
-  .sub-title {
-    margin: 30px 0 10px;
-
-    .title {
-      font-size: 15px;
-      line-height: 25px;
-      color: $tc-gray-80;
-
-      span {
-        color: $tc-orange;
-        font-size: 15px;
-        padding-left: 5px;
-      }
+  
+  .two-col-content.content {
+    .tc-file-field__inputs {
+      height: 45px;
     }
-  }
-
-  .container {
-    @include flexBox;
-    background-color: transparent;
-    display: flex;
-    padding: 0px;
-    max-width: 1110px;
-    margin: 20px auto;
-    /* .left-area */
-    .left-area {
-      flex: auto;
-
-      .left-area-footer {
-        @include roboto;
-        padding: 0 10px;
-        font-size: 11px;
-        line-height: 30px;
-        color: $tc-gray-50;
-
-        span {
-          float: right;
-        }
-      }
-    }
-
-    .right-area {
-      flex: auto;
-      border-radius: 4px;
-      position: relative;
-
-      /* this selector is too common and it's applied to .spec-question-list thought it shouldn't
-         if also has big priority so we have to fix it here */
-      form > div:not(.spec-question-list) {
-        box-shadow: 0px 1px 3px 0px rgba($tc-black, 0.2);
-      }
-
-      .title {
-        color: $tc-gray-80;
-        @include roboto-bold;
-      }
-
-      .right-area-item {
-        padding: 0 0 70px 0;
-        margin-bottom: 20px;
-        border-radius: 4px;
-        background-color: $tc-white;
-
-        .boxes {
-          margin: 0 50px;
-        }
-
-        .big-titles {
-          @include roboto-light;
-          font-size: 28px;
-          color: $tc-gray-70;
-          line-height: 30px;
-          padding: 30px 0 30px 6%;
-          margin: 0 -50px 20px;
-          border-radius: 4px 4px 0 0;
-          background: $tc-gray-neutral-light;
-          border-bottom: 1px dashed $tc-gray-20;
-
-          .optional,
-          .required {
-            @include roboto;
-            position: absolute;
-            right: 0;
-            font-size: 13px;
-            float: right;
-            padding: 0 20px;
-            border-radius: 20px 0 0 20px;
-          }
-
-          .required {
-            background: $tc-orange-70;
-            color: $tc-white;
-          }
-
-          .optional {
-            background: $tc-gray-10;
-            color: $gray-color;
-          }
-        }
-
-        .gray-text {
-          @include roboto;
-          font-size: 15px;
-          color: $gray-color;
-          line-height: 25px;
-
-          strong {
-            font-weight: bold;
-          }
-        }
-
-        &.design-specification-two {
-          padding-bottom: 1px;
-        }
-
-        &.option-groups {
-          padding-bottom: 46px;
-        }
-      }
-
-      .tab-nav {
-        .center-area {
-          margin: 0 0 0 111px;
-
-          .btn-nav {
-            padding: 0 15px;
-            float: left;
-            @include roboto;
-            font-size: 13px;
-            color: $tc-gray-80;
-            line-height: 16px;
-          }
-        }
-      }
-
-      .section-additional-notes {
-        .textarea-title {
-          @include roboto;
-          font-size: 13px;
-          color: $tc-gray-70;
-          line-height: 20px;
-          padding-bottom: 10px;
-        }
-
-        textarea {
-          height: 45px;
-          max-width: 100%;
-          text-align: left;
-          text-indent: 0;
-          resize: vertical;
-        }
-      }
-
-      .right-area-footer {
-        @include tc-label-sm;
-        color: $tc-gray-50;
-        margin-top: 4 * $base_unit;
-      }
-    }
-
-    .contents-list {
-      .right-area {
-        padding-left: 40px;
-
-        .title {
-          @include roboto-bold;
-          font-size: 15px;
-          letter-spacing: 0px;
-          line-height: 25px;
-        }
-
-        .txt {
-          @include roboto;
-          font-size: 13px;
-          color: $tc-gray-80;
-          line-height: 25px;
-        }
-      }
-
-      &.part-one {
-        .icons {
-          width: 16px;
-          height: 16px;
-          float: left;
-          margin-top: 3px;
-        }
-
-        .icon-box {
-          background-position: -28px -29px;
-        }
-
-        .icon-magic {
-          background-position: -4px -52px;
-        }
-      }
-    }
-  }
-
-  /* .section-features-module */
-  .section-features-module {
-    margin-top: 20px;
-
-    &.open {
-      .content-boxes {
-        display: block;
-      }
-
-      .bg-contents,
-      .btn-gray-border {
-        display: none;
-      }
-    }
-
-    .row {
-      margin-bottom: 5px;
-    }
-
-    .bg-contents {
-      @include roboto-medium;
-      font-size: 15px;
-      color: $tc-purple-70;
-      background: $tc-purple-10;
-      // letter-spacing: 10px;
-      width: 100%;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-    }
-
-    .content-boxes {
-      display: none;
-    }
-
-    .textarea-title {
-      @include roboto;
-      font-size: 13px;
-      color: $tc-gray-70;
-      line-height: 20px;
-      padding-bottom: 10px;
-    }
-
-    textarea {
-      min-height: 45px;
-      max-width: 100%;
-      text-align: left;
-      text-indent: 0;
-      resize: none;
-      overflow: auto;
-    }
-  }
-
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-
-    .section-number {
-      @include tc-label-lg;
-      color: $tc-gray-30;
-      padding-right: 6 * $base-unit;
-    }
-  }
-
-  .section-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: $tc-gray-neutral-light;
-    height: 70px;
-    margin-top: -70px;
-    margin-bottom: 20px;
-    border-radius: $corner-radius * 2;
-  }
-
-  .section-footer-spec {
-    border-radius: 0 0 $corner-radius * 2 $corner-radius * 2;
-    // margin-top: -10px;
-    // margin-bottom: $base-unit * 4;
-
-    // &:last-child {
-    //   margin-bottom: 0;
-    // }
-  }
-
-  /* .section-file-interface */
-  .section-file-interface {
+    /* .tc-file-field__inputs */
+    .tc-file-field__inputs,
     .tc-textarea {
-      padding: 5px 10px;
-      font-size: 13px;
-      background: $tc-gray-neutral-light;
-      min-height: 55px;
-      max-width: 100%;
-      line-height: 20px;
-      resize: vertical;
-    }
-
-    .dashed-bottom-border {
-      border-top: 1px dashed $tc-gray-20;
-      border-bottom: none;
-    }
-
-    .textarea-boxes {
-      display: none;
-    }
-
-    .row {
-      &.hover-after {
-        .edit-box {
-          display: block;
-          float: right;
-        }
+      /*background: $tc-gray-neutral-light;
+      border-color: $tc-gray-20;
+      color: $tc-black;*/
+  
+      &::-webkit-input-placeholder {
+        color: $tc-gray-50;
+        text-transform: none;
       }
-
-      &.edit-status {
-        .tc-file-field__inputs,
-        .textarea-boxes,
-        .edit-box {
-          display: block;
-        }
-
-        .title,
-        .txt,
-        .right-txt {
+  
+      &::-moz-placeholder {
+        line-height: 45px;
+        color: $tc-gray-50;
+        opacity: 1;
+        text-transform: none;
+      }
+  
+      &:-ms-input-placeholder {
+        color: $tc-gray-50;
+        text-transform: none;
+      }
+    }
+    /* .dashed-bottom-border */
+    .app-screen-header {
+      border-bottom: 1px solid $tc-gray-30;
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 0;
+      position: relative;
+  
+      .screen-title,
+      .project-name {
+        @include roboto;
+        color: black;
+        font-weight: bold;
+      }
+  
+      .screen-title {
+        font-size: 18px;
+      }
+  
+      .project-name {
+        font-size: 20px;
+      }
+  
+      button.tc-btn-xs {//TODO ideally we should fix it in react-components repo
+        padding-top: 2px;
+        padding-bottom: 2px;
+      }
+    }
+    /* .bottom-border-titles */
+    .bottom-border-titles {
+      border-bottom: 1px solid $tc-gray-30;
+      padding-bottom: $base-unit;
+      margin: 30px 0 20px 0;
+      position: relative;
+  
+      .title {
+        @include roboto;
+        font-size: 20px;
+        line-height: 30px;
+      }
+  
+      .section-actions {
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 0 15px;
+  
+        &.hide {
           display: none;
         }
-
-        .status {
-          .icon-pen {
-            background-position: -24px 0;
-            margin-top: 4px;
-          }
-
-          .icon-delete {
-            background-position: -24px -48px;
-            margin-top: 4px;
-          }
-        }
       }
     }
-
-    .edit-box {
-      display: none;
-
-      .icons {
-        width: 24px;
-        height: 24px;
-        vertical-align: middle;
-        margin-top: -2px;
-        margin-left: 10px;
-      }
-
-      .icon-pen {
-        background-position: -48px 0;
-      }
-
-      .icon-delete {
-        background-position: -72px 0;
-      }
-    }
-
-    .contents-list {
-      .titles {
-        @include roboto-medium;
+  
+    .sub-title {
+      margin: 30px 0 10px;
+  
+      .title {
         font-size: 15px;
-        color: $gray-color;
-        line-height: 20px;
-        margin-bottom: 2px;
-      }
-    }
-
-    .icon-zip {
-      background-position: -51px -27px;
-      width: 42px;
-      height: 42px;
-      float: left;
-      margin-top: 3px;
-    }
-
-    .icon-pen {
-      background-position: 0 0;
-    }
-
-    .right-area {
-      &.padding-left60 {
-        padding-left: 60px;
-      }
-
-      .tc-file-field__inputs {
-        width: 80%;
-        margin-right: 100px;
-        display: none;
-        @include roboto-bold;
-
-        &.height100 {
-          height: 100px;
-          line-height: 10px;
-        }
-
-        &.width {
-          width: 100%;
+        line-height: 25px;
+        color: $tc-gray-80;
+  
+        span {
+          color: $tc-orange;
+          font-size: 15px;
+          padding-left: 5px;
         }
       }
-
-      .zip-title-bar {
+    }
+  
+    .container {
+      @include flexBox;
+      background-color: transparent;
+      display: flex;
+      padding: 0px;
+      max-width: 1110px;
+      margin: 20px auto;
+      /* .left-area */
+      .left-area {
+        flex: auto;
+  
+        .left-area-footer {
+          @include roboto;
+          padding: 0 10px;
+          font-size: 11px;
+          line-height: 30px;
+          color: $tc-gray-50;
+  
+          span {
+            float: right;
+          }
+        }
+      }
+  
+      .right-area {
+        flex: auto;
+        border-radius: 4px;
         position: relative;
-
-        .status {
-          float: right;
-
-          .txt {
+  
+        /* this selector is too common and it's applied to .spec-question-list thought it shouldn't
+           if also has big priority so we have to fix it here */
+        form > div:not(.spec-question-list) {
+          box-shadow: 0px 1px 3px 0px rgba($tc-black, 0.2);
+        }
+  
+        .title {
+          color: $tc-gray-80;
+          @include roboto-bold;
+        }
+  
+        .right-area-item {
+          padding: 0 0 70px 0;
+          margin-bottom: 20px;
+          border-radius: 4px;
+          background-color: $tc-white;
+  
+          .boxes {
+            margin: 0 50px;
+          }
+  
+          .big-titles {
+            @include roboto-light;
+            font-size: 28px;
+            color: $tc-gray-70;
+            line-height: 30px;
+            padding: 30px 0 30px 6%;
+            margin: 0 -50px 20px;
+            border-radius: 4px 4px 0 0;
+            background: $tc-gray-neutral-light;
+            border-bottom: 1px dashed $tc-gray-20;
+  
+            .optional,
+            .required {
+              @include roboto;
+              position: absolute;
+              right: 0;
+              font-size: 13px;
+              float: right;
+              padding: 0 20px;
+              border-radius: 20px 0 0 20px;
+            }
+  
+            .required {
+              background: $tc-orange-70;
+              color: $tc-white;
+            }
+  
+            .optional {
+              background: $tc-gray-10;
+              color: $gray-color;
+            }
+          }
+  
+          .gray-text {
             @include roboto;
             font-size: 15px;
             color: $gray-color;
-            letter-spacing: 0px;
+            line-height: 25px;
+  
+            strong {
+              font-weight: bold;
+            }
+          }
+  
+          &.design-specification-two {
+            padding-bottom: 1px;
+          }
+  
+          &.option-groups {
+            padding-bottom: 46px;
+          }
+        }
+  
+        .tab-nav {
+          .center-area {
+            margin: 0 0 0 111px;
+  
+            .btn-nav {
+              padding: 0 15px;
+              float: left;
+              @include roboto;
+              font-size: 13px;
+              color: $tc-gray-80;
+              line-height: 16px;
+            }
+          }
+        }
+  
+        .section-additional-notes {
+          .textarea-title {
+            @include roboto;
+            font-size: 13px;
+            color: $tc-gray-70;
             line-height: 20px;
+            padding-bottom: 10px;
+          }
+  
+          textarea {
+            height: 45px;
+            max-width: 100%;
+            text-align: left;
+            text-indent: 0;
+            resize: vertical;
           }
         }
-
-        &:after {
-          clear: right;
+  
+        .right-area-footer {
+          @include tc-label-sm;
+          color: $tc-gray-50;
+          margin-top: 4 * $base_unit;
+        }
+      }
+  
+      .contents-list {
+        .right-area {
+          padding-left: 40px;
+  
+          .title {
+            @include roboto-bold;
+            font-size: 15px;
+            letter-spacing: 0px;
+            line-height: 25px;
+          }
+  
+          .txt {
+            @include roboto;
+            font-size: 13px;
+            color: $tc-gray-80;
+            line-height: 25px;
+          }
+        }
+  
+        &.part-one {
+          .icons {
+            width: 16px;
+            height: 16px;
+            float: left;
+            margin-top: 3px;
+          }
+  
+          .icon-box {
+            background-position: -28px -29px;
+          }
+  
+          .icon-magic {
+            background-position: -4px -52px;
+          }
         }
       }
     }
-  }
-  /* .dashed-boxes */
-  .dashed-boxes {
-    border: 1px dashed $tc-gray-30;
-    text-align: center;
-    margin-bottom: 20px;
-    background: $tc-gray-neutral-light;
-    border-radius: 2px;
-
-    .title {
-      @include roboto-medium;
-      font-size: 15px;
-      letter-spacing: 0px;
-      line-height: 20px;
-    }
-
-    .gray-txt {
-      @include roboto;
-      font-size: 15px;
-      color: $tc-gray-60;
-      line-height: 20px;
-    }
-
-    .btn-boxes {
-      margin-top: 10px;
-    }
-
-    .tc-btn-primary {
-      position: relative;
-      cursor: pointer;
-      height: 30px;
-      line-height: 30px;
-      padding: 0 13px;
-      display: inline-block;
-    }
-
-    .file-box {
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-      position: absolute;
-      left: 0;
-      top: 0;
-      margin: 0;
-      z-index: 555;
-    }
-
-    .icon-file {
-      background-position: -4px -28px;
-      width: 15px;
-      height: 17px;
-      vertical-align: middle;
-    }
-
-    &.drag-boxes {
-      padding: 20px 0;
-    }
-
-    &.flie-list-boxes {
-      .flie-list {
-        border-bottom: 1px dashed $tc-gray-30;
-        padding-bottom: 5px;
+  
+    /* .section-features-module */
+    .section-features-module {
+      margin-top: 20px;
+  
+      &.open {
+        .content-boxes {
+          display: block;
+        }
+  
+        .bg-contents,
+        .btn-gray-border {
+          display: none;
+        }
       }
-
+  
       .row {
-        text-align: left;
-        padding: 10px 20px;
-
-        .file-name {
-          @include roboto-bold;
-          font-size: 15px;
-          color: $title-color;
-          letter-spacing: 0px;
-          line-height: 20px;
-          padding-left: 7px;
-        }
-
-        .upload-status {
-          @include roboto;
-          font-size: 15px;
-          color: $gray-color;
-          // letter-spacing: 0px;
-          line-height: 20px;
-          float: right;
-        }
-
-        .white-bar {
-          width: 100%;
-          height: 4px;
-          margin-top: 5px;
-          background: $tc-gray-20;
-          border-radius: 12px;
-          position: relative;
-
-          .blue-bar {
-            background: $tc-dark-blue-70;
-            border-right: 2px solid $tc-gray-neutral-light;
-            border-radius: 10px 0px 0px 10px;
-            height: 4px;
-            position: absolute;
-            left: 0;
-            top: 0;
-
-            &.width23 {
-              width: 23%;
-            }
-
-            &.width75 {
-              width: 75%;
-            }
-          }
-        }
+        margin-bottom: 5px;
       }
-
-      .file-list-bottom {
-        .txt {
-          color: $title-color;
-          @include roboto-bold;
-        }
-        padding: 20px 0;
+  
+      .bg-contents {
+        @include roboto-medium;
+        font-size: 15px;
+        color: $tc-purple-70;
+        background: $tc-purple-10;
+        // letter-spacing: 10px;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
       }
-    }
-  }
-  /* .section-form-option */
-  .section-form-option {
-    .bottom-border-titles {
-      margin-bottom: 20px;
-    }
-
-    .titles {
-      text-align: left;
-      @include roboto-bold;
-      font-size: 15px;
-      color: $title-color;
-      line-height: 25px;
-    }
-
-    .gray-txt {
-      @include roboto;
-      font-size: 15px;
-      color: $tc-gray-60;
-      line-height: 20px;
-    }
-
-    .content-boxes {
-      margin-top: -20px;
-    }
-
-    .checkbox-group {
-      margin-top: 10px;
-    }
-
-    .group-item {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 42px;
-    }
-
-    .radios-group {
-      margin-top: 10px;
-    }
-
-    .radio {
-      float: left;
-    }
-
-    .ul-list {
-      .hide {
+  
+      .content-boxes {
         display: none;
       }
-
-      li {
-        position: relative;
-
-        .text,
-        .point {
-          @include roboto-medium;
-          font-size: 15px;
-          color: $tc-black;
-          line-height: 18px;
-          padding: 10px 0;
-          @include roboto-bold;
-          color: $title-color;
+  
+      .textarea-title {
+        @include roboto;
+        font-size: 13px;
+        color: $tc-gray-70;
+        line-height: 20px;
+        padding-bottom: 10px;
+      }
+  
+      textarea {
+        min-height: 45px;
+        max-width: 100%;
+        text-align: left;
+        text-indent: 0;
+        resize: none;
+        overflow: auto;
+      }
+    }
+  
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+  
+      .section-number {
+        @include tc-label-lg;
+        color: $tc-gray-30;
+        padding-right: 6 * $base-unit;
+      }
+    }
+  
+    .section-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: $tc-gray-neutral-light;
+      height: 70px;
+      margin-top: -70px;
+      margin-bottom: 20px;
+      border-radius: $corner-radius * 2;
+    }
+  
+    .section-footer-spec {
+      border-radius: 0 0 $corner-radius * 2 $corner-radius * 2;
+      // margin-top: -10px;
+      // margin-bottom: $base-unit * 4;
+  
+      // &:last-child {
+      //   margin-bottom: 0;
+      // }
+    }
+  
+    /* .section-file-interface */
+    .section-file-interface {
+      .tc-textarea {
+        padding: 5px 10px;
+        font-size: 13px;
+        background: $tc-gray-neutral-light;
+        min-height: 55px;
+        max-width: 100%;
+        line-height: 20px;
+        resize: vertical;
+      }
+  
+      .dashed-bottom-border {
+        border-top: 1px dashed $tc-gray-20;
+        border-bottom: none;
+      }
+  
+      .textarea-boxes {
+        display: none;
+      }
+  
+      .row {
+        &.hover-after {
+          .edit-box {
+            display: block;
+            float: right;
+          }
+        }
+  
+        &.edit-status {
+          .tc-file-field__inputs,
+          .textarea-boxes,
+          .edit-box {
+            display: block;
+          }
+  
+          .title,
+          .txt,
+          .right-txt {
+            display: none;
+          }
+  
+          .status {
+            .icon-pen {
+              background-position: -24px 0;
+              margin-top: 4px;
+            }
+  
+            .icon-delete {
+              background-position: -24px -48px;
+              margin-top: 4px;
+            }
+          }
         }
       }
-
-      .btn-delete {
+  
+      .edit-box {
+        display: none;
+  
+        .icons {
+          width: 24px;
+          height: 24px;
+          vertical-align: middle;
+          margin-top: -2px;
+          margin-left: 10px;
+        }
+  
+        .icon-pen {
+          background-position: -48px 0;
+        }
+  
+        .icon-delete {
+          background-position: -72px 0;
+        }
+      }
+  
+      .contents-list {
+        .titles {
+          @include roboto-medium;
+          font-size: 15px;
+          color: $gray-color;
+          line-height: 20px;
+          margin-bottom: 2px;
+        }
+      }
+  
+      .icon-zip {
+        background-position: -51px -27px;
+        width: 42px;
+        height: 42px;
+        float: left;
+        margin-top: 3px;
+      }
+  
+      .icon-pen {
+        background-position: 0 0;
+      }
+  
+      .right-area {
+        &.padding-left60 {
+          padding-left: 60px;
+        }
+  
+        .tc-file-field__inputs {
+          width: 80%;
+          margin-right: 100px;
+          display: none;
+          @include roboto-bold;
+  
+          &.height100 {
+            height: 100px;
+            line-height: 10px;
+          }
+  
+          &.width {
+            width: 100%;
+          }
+        }
+  
+        .zip-title-bar {
+          position: relative;
+  
+          .status {
+            float: right;
+  
+            .txt {
+              @include roboto;
+              font-size: 15px;
+              color: $gray-color;
+              letter-spacing: 0px;
+              line-height: 20px;
+            }
+          }
+  
+          &:after {
+            clear: right;
+          }
+        }
+      }
+    }
+    /* .dashed-boxes */
+    .dashed-boxes {
+      border: 1px dashed $tc-gray-30;
+      text-align: center;
+      margin-bottom: 20px;
+      background: $tc-gray-neutral-light;
+      border-radius: 2px;
+  
+      .title {
+        @include roboto-medium;
+        font-size: 15px;
+        letter-spacing: 0px;
+        line-height: 20px;
+      }
+  
+      .gray-txt {
+        @include roboto;
+        font-size: 15px;
+        color: $tc-gray-60;
+        line-height: 20px;
+      }
+  
+      .btn-boxes {
+        margin-top: 10px;
+      }
+  
+      .tc-btn-primary {
+        position: relative;
+        cursor: pointer;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 13px;
+        display: inline-block;
+      }
+  
+      .file-box {
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
         position: absolute;
-        right: 0;
-        top: 50%;
-        margin-top: -14px;
-
-        &:hover .icon-delete {
-          background-position: -96px 0;
+        left: 0;
+        top: 0;
+        margin: 0;
+        z-index: 555;
+      }
+  
+      .icon-file {
+        background-position: -4px -28px;
+        width: 15px;
+        height: 17px;
+        vertical-align: middle;
+      }
+  
+      &.drag-boxes {
+        padding: 20px 0;
+      }
+  
+      &.flie-list-boxes {
+        .flie-list {
+          border-bottom: 1px dashed $tc-gray-30;
+          padding-bottom: 5px;
+        }
+  
+        .row {
+          text-align: left;
+          padding: 10px 20px;
+  
+          .file-name {
+            @include roboto-bold;
+            font-size: 15px;
+            color: $title-color;
+            letter-spacing: 0px;
+            line-height: 20px;
+            padding-left: 7px;
+          }
+  
+          .upload-status {
+            @include roboto;
+            font-size: 15px;
+            color: $gray-color;
+            // letter-spacing: 0px;
+            line-height: 20px;
+            float: right;
+          }
+  
+          .white-bar {
+            width: 100%;
+            height: 4px;
+            margin-top: 5px;
+            background: $tc-gray-20;
+            border-radius: 12px;
+            position: relative;
+  
+            .blue-bar {
+              background: $tc-dark-blue-70;
+              border-right: 2px solid $tc-gray-neutral-light;
+              border-radius: 10px 0px 0px 10px;
+              height: 4px;
+              position: absolute;
+              left: 0;
+              top: 0;
+  
+              &.width23 {
+                width: 23%;
+              }
+  
+              &.width75 {
+                width: 75%;
+              }
+            }
+          }
+        }
+  
+        .file-list-bottom {
+          .txt {
+            color: $title-color;
+            @include roboto-bold;
+          }
+          padding: 20px 0;
+        }
+      }
+    }
+    /* .section-form-option */
+    .section-form-option {
+      .bottom-border-titles {
+        margin-bottom: 20px;
+      }
+  
+      .titles {
+        text-align: left;
+        @include roboto-bold;
+        font-size: 15px;
+        color: $title-color;
+        line-height: 25px;
+      }
+  
+      .gray-txt {
+        @include roboto;
+        font-size: 15px;
+        color: $tc-gray-60;
+        line-height: 20px;
+      }
+  
+      .content-boxes {
+        margin-top: -20px;
+      }
+  
+      .checkbox-group {
+        margin-top: 10px;
+      }
+  
+      .group-item {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 42px;
+      }
+  
+      .radios-group {
+        margin-top: 10px;
+      }
+  
+      .radio {
+        float: left;
+      }
+  
+      .ul-list {
+        .hide {
+          display: none;
+        }
+  
+        li {
+          position: relative;
+  
+          .text,
+          .point {
+            @include roboto-medium;
+            font-size: 15px;
+            color: $tc-black;
+            line-height: 18px;
+            padding: 10px 0;
+            @include roboto-bold;
+            color: $title-color;
+          }
+        }
+  
+        .btn-delete {
+          position: absolute;
+          right: 0;
+          top: 50%;
+          margin-top: -14px;
+  
+          &:hover .icon-delete {
+            background-position: -96px 0;
+            width: 24px;
+            height: 24px;
+          }
+        }
+  
+        .point {
+          display: inline-block;
+          margin-right: 20px;
+        }
+  
+        .icons.icon-delete {
+          background-position: -24px -48px;
           width: 24px;
           height: 24px;
         }
       }
-
-      .point {
-        display: inline-block;
-        margin-right: 20px;
+  
+      .input-box {
+        margin-top: 15px;
       }
-
-      .icons.icon-delete {
-        background-position: -24px -48px;
-        width: 24px;
-        height: 24px;
-      }
-    }
-
-    .input-box {
-      margin-top: 15px;
-    }
-
-    .btn-input-boxes {
-      position: relative;
-      margin-top: 15px;
-      padding-right: 64px;
-
-      .tc-file-field__inputs {
-        width: 100%;
-      }
-
-      .btn-gray-border {
-        width: 54px;
-        position: absolute;
-        right: 0;
+  
+      .btn-input-boxes {
+        position: relative;
+        margin-top: 15px;
+        padding-right: 64px;
+  
+        .tc-file-field__inputs {
+          width: 100%;
+        }
+  
+        .btn-gray-border {
+          width: 54px;
+          position: absolute;
+          right: 0;
+        }
       }
     }
   }
-}
-
-.two-col-content.specificationContainer {
-  padding: 0 20px;
-  min-width: 960px;
-  max-width: 1120px;
-  width: auto;
-  margin: 0 auto;
-
-  .left-area {
-    min-width: $sideBarWidth;
-    max-width: $sideBarMaxWidth;
-    margin-right: 20px;
-  }
-
-  .right-area {
-    min-width: 500px;
-  }
-}
-
-.tc-link {
-  @include roboto;
-}
-
-.SelectDropdown {
-  margin-bottom: 20px;
-}
-
-.edit-screen-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 40px;
-  position: relative;
-}
-
-.screen-number-reached-message {
-  @include roboto;
-  color: white;
-}
-
-.project-name-section {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 20px;
-
-  .editable-project-name {
-    flex: 1;
-  }
-
-  .dashed-bottom-border {
-    flex: 1;
-    height: 40px;
-    border-bottom: 1px dashed $tc-gray-20;
-
-    .project-name {
-      word-break: break-all;
-      font-size: 20px;
-      /*margin-top: 10px;*/
+  
+  .two-col-content.specificationContainer {
+    padding: 0 20px;
+    min-width: 960px;
+    max-width: 1120px;
+    width: auto;
+    margin: 0 auto;
+  
+    .left-area {
+      min-width: $sideBarWidth;
+      max-width: $sideBarMaxWidth;
+      margin-right: 20px;
+    }
+  
+    .right-area {
+      min-width: 500px;
     }
   }
-
-  .read-only-refcode {
-    height: 40px;
-    align-self: flex-end;
-    border-bottom: 1px solid $tc-gray-20;
-    padding: 10px;
-    position: relative;
-    margin-left: 20px;
-
-    .refcode-desc {
-      @include roboto;
-      font-size: 13px;
-      color: $tc-gray-30;
-      position: absolute;
-      bottom: -20px;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      font-style: italic;
-      white-space: nowrap;
-    }
-  }
-
-  .textinput-refcode {
-    position: relative;
-    width: 100px;
-    height: 100%;
-    margin-left: 10px;
-
-    .refcode-desc {
-      @include roboto;
-      font-size: 12px;
-      line-height: 20px;
-      color: $tc-gray-50;
-      position: absolute;
-      bottom: -20px;
-      font-style: italic;
-    }
-
-    .project-refcode {
-    }
-  }
-}
-
-.two-col-content.content .container .tiled-group-item {
-  position: relative;
-  -webkit-flex: initial;
-  flex: initial;
-  margin-right: 20px;
-  height: 155px;
-  width: 135px;
-  border: 1px solid $tc-gray-20;
-  border-radius: 4px;
-  cursor: pointer;
-  border: 1px solid $tc-gray-20;
-  border-radius: 4px;
-  display: inline-block;
-  margin: 10px 10px 0;
-  position: relative;
-  vertical-align: top;
-
-  .check-mark {
-    display: none;
-  }
-
-  &.disabled {
-    opacity: 0.3;
-  }
-
-  &:hover {
-    border-color: $tc-dark-blue-70;
-    cursor: pointer;
-  }
-
-  &.active {
-    background: $tc-gray-10;
-    border-color: $tc-gray-10;
-
-    &:after {
-      content: '';
-      display: block;
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 15px;
-      height: 15px;
-      background: $tc-dark-blue;
-      border-radius: 2px;
-    }
-
-    &:before {
-      content: '';
-      position: absolute;
-      z-index: 1;
-      top: 12px;
-      right: 15px;
-      width: 5px;
-      border-width: 0 2px 2px 0;
-      border-style: solid;
-      border-color: $tc-white;
-      height: 10px;
-      transform: rotate(45deg);
-      -o-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-      -webkit-transform: rotate(45deg);
-    }
-
-    &:hover {
-      border-color: $tc-gray-10;
-    }
-  }
-
-  span.title {
-    display: block;
-    margin-top: 20px;
-    @include roboto-bold;
-    color: $tc-black;
-    font-size: 13px;
-    text-align: center;
-  }
-
-  span.icon {
-    text-align: center;
-    display: block;
-    height: 50px;
-    margin: 30px auto 20px auto;
-  }
-
-  small {
-    display: block;
-    font-size: 11px;
-    text-align: center;
-    color: $tc-gray-50;
+  
+  .tc-link {
     @include roboto;
-    margin-top: 10px;
+  }
+  
+  .SelectDropdown {
+    margin-bottom: 20px;
+  }
+  
+  .edit-screen-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  
+  .screen-number-reached-message {
+    @include roboto;
+    color: white;
+  }
+  
+  .project-name-section {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  
+    .editable-project-name {
+      flex: 1;
+    }
+  
+    .dashed-bottom-border {
+      flex: 1;
+      height: 40px;
+      border-bottom: 1px dashed $tc-gray-20;
+  
+      .project-name {
+        word-break: break-all;
+        font-size: 20px;
+        /*margin-top: 10px;*/
+      }
+    }
+  
+    .read-only-refcode {
+      height: 40px;
+      align-self: flex-end;
+      border-bottom: 1px solid $tc-gray-20;
+      padding: 10px;
+      position: relative;
+      margin-left: 20px;
+  
+      .refcode-desc {
+        @include roboto;
+        font-size: 13px;
+        color: $tc-gray-30;
+        position: absolute;
+        bottom: -20px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-style: italic;
+        white-space: nowrap;
+      }
+    }
+  
+    .textinput-refcode {
+      position: relative;
+      width: 100px;
+      height: 100%;
+      margin-left: 10px;
+  
+      .refcode-desc {
+        @include roboto;
+        font-size: 12px;
+        line-height: 20px;
+        color: $tc-gray-50;
+        position: absolute;
+        bottom: -20px;
+        font-style: italic;
+      }
+  
+      .project-refcode {
+      }
+    }
+  }
+  
+  .two-col-content.content .container .tiled-group-item {
+    position: relative;
+    -webkit-flex: initial;
+    flex: initial;
+    margin-right: 20px;
+    height: 155px;
+    width: 135px;
+    border: 1px solid $tc-gray-20;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid $tc-gray-20;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 10px 10px 0;
+    position: relative;
+    vertical-align: top;
+  
+    .check-mark {
+      display: none;
+    }
+  
+    &.disabled {
+      opacity: 0.3;
+    }
+  
+    &:hover {
+      border-color: $tc-dark-blue-70;
+      cursor: pointer;
+    }
+  
+    &.active {
+      background: $tc-gray-10;
+      border-color: $tc-gray-10;
+  
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 15px;
+        height: 15px;
+        background: $tc-dark-blue;
+        border-radius: 2px;
+      }
+  
+      &:before {
+        content: '';
+        position: absolute;
+        z-index: 1;
+        top: 12px;
+        right: 15px;
+        width: 5px;
+        border-width: 0 2px 2px 0;
+        border-style: solid;
+        border-color: $tc-white;
+        height: 10px;
+        transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+      }
+  
+      &:hover {
+        border-color: $tc-gray-10;
+      }
+    }
+  
+    span.title {
+      display: block;
+      margin-top: 20px;
+      @include roboto-bold;
+      color: $tc-black;
+      font-size: 13px;
+      text-align: center;
+    }
+  
+    span.icon {
+      text-align: center;
+      display: block;
+      height: 50px;
+      margin: 30px auto 20px auto;
+    }
+  
+    small {
+      display: block;
+      font-size: 11px;
+      text-align: center;
+      color: $tc-gray-50;
+      @include roboto;
+      margin-top: 10px;
+    }
   }
 }
+  
