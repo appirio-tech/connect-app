@@ -1,5 +1,3 @@
-@import '~tc-ui/src/styles/tc-includes';
-
 @mixin flexBox {
   display: flex;
   flex-direction: row;
@@ -8,6 +6,8 @@
 
 // Stop the page from shrinking, modify the variable;
 $minimumPageWidth: 984px;
+
+@import '~tc-ui/src/styles/tc-includes';
 
 .wizardWrapper {
   min-height: 100vh;

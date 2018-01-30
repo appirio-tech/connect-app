@@ -20,11 +20,6 @@
     background-color: $tc-dark-blue-10;
   }
 
-  & + &,
-  .notification-item-link + & {
-    border-top: 1px solid $tc-gray-10;
-  }
-
   .icon {
     align-items: center;
     // border-left: 2px solid #55a5ff;
@@ -85,5 +80,10 @@
         fill: $tc-gray-20;
       }
     }
+  }
+
+  .notification-item + .notification-item,
+  .notification-item-link + .notification-item {
+    border-top: 1px solid $tc-gray-10;
   }
 }

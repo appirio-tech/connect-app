@@ -4,14 +4,6 @@
 .notifications-section {
   border: 1px solid $tc-gray-20;
 
-  & + & {
-    margin-top: 20px;
-  }
-
-  &.is-simple + &.is-simple {
-    margin-top: 0;
-  }
-
   .view-older {
     @include roboto;
     align-items: center;
@@ -28,6 +20,14 @@
     text-align: center;
     width: 100%;
   }
+}
+
+.notifications-section + .notifications-section {
+  margin-top: 20px;
+}
+
+.notifications-section.is-simple+.notifications-section.is-simple {
+  margin-top: 0;
 }
 
 // Hide border in dropdown menu
