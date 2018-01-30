@@ -1,7 +1,7 @@
 // Product category page
 
 @import 'layout';
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
 .headerSelectProduct {
   @extend .wizardHeader;

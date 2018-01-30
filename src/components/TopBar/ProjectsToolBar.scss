@@ -1,5 +1,5 @@
 // this is to include tc styles in the output library
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
 // TODO: move to includes
 $tc-rgba-10: rgba($tc-gray-80, 0.38);
@@ -88,7 +88,7 @@ $tc-body-large: 20px;
       border: 0;
       font-size: 12px;
       position: relative;
-      
+
       svg.icon-search-filter {
         margin-right: 10px;
       }

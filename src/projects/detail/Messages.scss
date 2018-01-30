@@ -1,4 +1,4 @@
-@import "tc-includes";
+@import '~tc-ui/src/styles/tc-includes';
 // FIXME
 @mixin flexBox {
   display: flex;
@@ -19,7 +19,7 @@
   max-width: 1110px;
   margin: 20px auto;
   height: calc(100% - 80px);// 20px is for bottom margin, 60px for footer
-  
+
   .left-area {
     @include flexWidth(1);
     max-width: 360px;

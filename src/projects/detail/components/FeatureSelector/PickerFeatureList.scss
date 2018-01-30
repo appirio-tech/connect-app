@@ -1,4 +1,4 @@
-@import "tc-styles";
+@import '~tc-ui/src/styles/tc-styles';
 
 .feature-picker-feature-list {
   // background-color: $tc-gray-10;
@@ -34,7 +34,7 @@
     .selected-feature-icon {
       visibility: hidden;
     }
-    
+
     // The feature list styles
     .feature-title {
       @include tc-label-md;
@@ -42,7 +42,7 @@
       color: $tc-gray-60;
       padding: 10px 0;
     }
-    
+
     &.active-feature {
       background-color: $tc-white;
 
@@ -56,7 +56,7 @@
     }
   }
 
-  
+
 
 
   button.clean {
@@ -66,9 +66,9 @@
   li {
     cursor: pointer;
     line-height: 8 * $base-unit;
-    
+
     &.active {
-      
+
       button {
         background-color: $tc-gray-neutral-dark;
 

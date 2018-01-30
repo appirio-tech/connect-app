@@ -3,6 +3,7 @@
 const _ = require('lodash')
 const path = require('path')
 const webpack = require('webpack')
+const webpackMerge = require('webpack-merge')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const ExtractCssChunks = require('extract-css-chunks-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -11,7 +12,7 @@ const constants = require('../constants')
 
 const dirname = path.resolve(__dirname, '../..')
 
-module.exports = {
+/* const old = {
   context: dirname,
 
   entry: [
@@ -54,8 +55,8 @@ module.exports = {
       test: /\.json$/,
       loader: 'json-loader'
     }, {
-      /* We have to support css loading for third-party plugins,
-       * we are not supposed to use css files inside the project. */
+      // We have to support css loading for third-party plugins,
+      // we are not supposed to use css files inside the project.
       test: /\.css$/,
       use: ExtractCssChunks.extract({
         fallback: 'style-loader',
@@ -116,5 +117,59 @@ module.exports = {
     new ExtractCssChunks({
       filename: '[name].css'
     })
+  ]
+} */
+
+module.exports = {
+  // update output as we have different output folder and file naming
+  output: {
+    path: path.join(dirname, '/dist'),
+    filename: '[name].[hash].js',
+    chunkFilename: '[name].[hash].js',
+    publicPath: '/'
+  },
+
+  resolve: {
+    extensions: [
+      '.coffee',
+      '.litcoffee',
+      '.cjsx',
+      '.svg'
+    ],
+    alias: {
+      handlebars: 'handlebars/dist/handlebars.min.js'
+    }
+  },
+
+  module: {
+    rules: [{
+      test: /\.(coffee|litcoffee|cjsx)$/,
+      use: [
+        {
+          loader: 'babel-loader',
+          options: {
+            babelrc: false,
+            presets: ['env', 'react', 'stage-2'],
+            plugins: ['lodash']
+          }
+        },
+        'coffee-loader',
+        'cjsx-loader'
+      ]
+    }, {
+      test: /\.svg$/,
+      loader: 'file-loader'
+    }],
+  },
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.join(dirname, '/src/index.html'),
+      inject: 'body'
+    }),
+
+    new webpack.DefinePlugin({
+      'process.env': _.mapValues(constants, (value) => JSON.stringify(value))
+    }),
   ]
 }

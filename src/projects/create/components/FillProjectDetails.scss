@@ -1,7 +1,7 @@
 // Project form styles
 
 @import 'layout';
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
 .FillProjectDetailsWrapper {
   // @extend .wizardWrapper;
@@ -19,7 +19,7 @@
   .two-col-content {
     padding: 0 !important;
     min-width: $minimumPageWidth;
-  
+
     &.content{
       .container {
         @include flexBox;

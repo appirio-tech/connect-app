@@ -1,4 +1,4 @@
-@import "tc-includes";
+@import '~tc-ui/src/styles/tc-includes';
 .rich-editor{
   position: relative;
   .addLinkButton {
@@ -111,7 +111,7 @@ span.bbcode-u {
 }
 
 .editor-tool{
-  border-radius:3px;  
+  border-radius:3px;
   display:flex;
   height:30px;
   width:30px;
@@ -121,7 +121,7 @@ span.bbcode-u {
 
 .tool-active{
   background-color:$tc-gray-90;
-  
+
 }
 .tool-inactive{
   background-color: transparent;

@@ -1,6 +1,6 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.two-col-content.content .tc-file-field__inputs, 
+.two-col-content.content .tc-file-field__inputs,
 .two-col-content.content .tc-textarea,
 .child-component textarea,
 .project-refcode input,
@@ -27,7 +27,7 @@
     font-size: $base-unit*3;
     line-height: $base-unit*4;
   }
-  
+
   &:focus {
     background: $tc-dark-blue-10 !important;
     border: none;

@@ -1,4 +1,4 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
 //TODO  Additional variables - need to find a home for these
 $gray-color: $tc-gray-50;
@@ -7,7 +7,6 @@ $sideBarWidth: 280px;
 $sideBarMaxWidth: 360px;
 
 @mixin flexBox {
-  display: box;
   display: flex;
   flex-direction: row;
   width: auto;

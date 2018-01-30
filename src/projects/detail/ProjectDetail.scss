@@ -5,11 +5,6 @@ $gray-color: $tc-gray-50;
 $title-color: $tc-gray-80;
 // FIXME: repeated mixin use! Use global
 @mixin flexBox {
-  display: box;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
   display: flex;
   -webkit-box-orient: horizontal;
   -webkit-flex-direction: row;

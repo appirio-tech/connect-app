@@ -1,5 +1,5 @@
 // this is to include tc styles in the output library
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
 .ProjectToolBar {
   padding: 0;
@@ -176,7 +176,7 @@
       .icon-dashboard-active {
         color: $tc-orange-70;
       }
-      
+
       .icon-specification {
         width: 16px;
         height: 16px;
@@ -210,7 +210,7 @@
       .icon-messages-active {
         color: $tc-orange-70;
       }
-      
+
       .icon-challenges {
         width: 16px;
         height: 16px;

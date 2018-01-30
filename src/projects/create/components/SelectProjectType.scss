@@ -1,7 +1,7 @@
 // Project wizard main page
 
 @import 'layout';
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
 .ProjectWizard {
   @extend .wizardWrapper;

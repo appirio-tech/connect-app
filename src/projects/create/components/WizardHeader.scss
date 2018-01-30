@@ -1,4 +1,4 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
 .WizardHeader {
   min-width: 700px;
@@ -24,7 +24,7 @@
     text-align: left;
     width: 90px;
   }
-  
+
   input::-ms-clear{
     display:none;
   }

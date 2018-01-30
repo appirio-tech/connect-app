@@ -22,7 +22,7 @@
     .txt-box {
         .link-black {
             @include roboto-bold;
-            
+
             font-size: $tc-label-md;
             color: $tc-gray-80;
             line-height: $base-unit * 3;

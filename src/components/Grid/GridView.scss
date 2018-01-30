@@ -1,4 +1,4 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
 .gridview-content.content {
   overflow: visible;
@@ -38,9 +38,6 @@
   }
 
   .flex-row {
-    display: box;
-    display: -webkit-box;
-    display: -webkit-flex;
     display: flex;
     position: relative;
     transition: 200ms all;

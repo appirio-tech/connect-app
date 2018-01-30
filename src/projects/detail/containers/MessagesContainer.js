@@ -24,7 +24,7 @@ import {
 const SYSTEM_USER = {
   firstName: CODER_BOT_USER_FNAME,
   lastName: CODER_BOT_USER_LNAME,
-  photoURL: require('../../../assets/images/avatar-coder.svg')
+  photoURL: require('file-loader?../../../assets/images/avatar-coder.svg')
 }
 const isSystemUser = (userId) => [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(userId) > -1
 

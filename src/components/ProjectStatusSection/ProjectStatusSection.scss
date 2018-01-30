@@ -1,4 +1,4 @@
-@import "tc-includes";
+@import '~tc-ui/src/styles/tc-includes';
 .project-status-section {
   display: flex;
   border-top: 1px solid $tc-gray-10;
@@ -50,7 +50,7 @@
         }
         &.red {
           background-color: $tc-red;
-          
+
           .status-icon {
             position: absolute;
             left: 4px;
@@ -79,9 +79,9 @@
   }
 
   .status-label {
-    -webkit-user-select: none; 
-    -moz-user-select: none; 
-    -ms-user-select: none; 
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     position: relative;
     margin-left: auto;
@@ -104,7 +104,7 @@
     }
     &.red {
       background-color: $tc-red;
-      
+
       .status-icon {
         position: absolute;
         left: 5px;

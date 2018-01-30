@@ -1,4 +1,4 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 .flex-data {
   .flex-row {
     .item-id {
@@ -425,7 +425,7 @@
     .icon-carret-down-active g g {
       color:  rgb(6, 129, 255) !important;
     }
-    
+
     .icon-carret-down-active {
       color: $tc-dark-blue-90;
       outline: 0;
@@ -438,7 +438,7 @@
       display: block;
       position: absolute;
       top: 5px;
-      right: 0;      
+      right: 0;
     }
 
     .icon-carret-down-normal {

@@ -1,8 +1,8 @@
-@import "tc-includes";
+@import '~tc-ui/src/styles/tc-includes';
 
 .project-status-change-modal {
   margin: 0px -4*$base-unit;
-  
+
   .cancellation-reason {
     display: flex;
     flex-direction: column;

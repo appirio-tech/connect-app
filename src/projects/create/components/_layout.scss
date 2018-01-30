@@ -1,7 +1,6 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
 @mixin flexBox {
-  display: box;
   display: flex;
   flex-direction: row;
   width: auto;

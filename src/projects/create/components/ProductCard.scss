@@ -1,4 +1,4 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
 @mixin transition {
   transition: 150ms ease-in-out all;
