@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "Customer pages in React and Redux",
   "scripts": {
-    "start": "webpack-dev-server --history-api-fallback --env=development --inline --progress --port 3000 --host 0.0.0.0 --public local.topcoder-dev.com",
+    "start": "webpack-dev-server --history-api-fallback --env=development --hot --inline --progress --port 3000 --host 0.0.0.0 --public local.topcoder-dev.com",
     "build": "npm rebuild node-sass; ./node_modules/.bin/webpack --bail --progress  --colors --env=production",
     "lint": "eslint --format table --ext .js,.jsx .",
     "lint:fix": "eslint --fix --format table --ext .js,.jsx .",
