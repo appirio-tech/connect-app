@@ -28,7 +28,7 @@ const SpecSection = props => {
         !subSection.hideTitle &&
         <div className="sub-title">
           <h4 className="title">
-            {typeof subSection.title === 'function' ? subSection.title(project): subSection.title } 
+            {typeof subSection.title === 'function' ? subSection.title(project): subSection.title }
             <span>{((typeof subSection.required === 'function') ? subSection.required(project, subSections) : subSection.required) ? '*' : ''}</span>
           </h4>
         </div>

@@ -6,13 +6,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { sumBy } from 'lodash'
-import { getNotifications, markAllNotificationsRead, toggleNotificationRead } from '../../routes/notifications/actions'
+import _ from 'lodash'
+import { getNotifications, markAllNotificationsRead, toggleNotificationRead, toggleBundledNotificationRead } from '../../routes/notifications/actions'
 import { splitNotificationsBySources, filterReadNotifications, limitQuantityInSources } from '../../routes/notifications/helpers/notifications'
 import NotificationsSection from '../NotificationsSection/NotificationsSection'
 import NotificationsEmpty from '../NotificationsEmpty/NotificationsEmpty'
 import NotificationsDropdownHeader from  '../NotificationsDropdownHeader/NotificationsDropdownHeader'
 import NotificationsDropdown from  './NotificationsDropdown'
+import ScrollLock from 'react-scroll-lock-component'
 import { NOTIFCATIONS_DROPDOWN_PER_SOURCE, NOTIFCATIONS_DROPDOWN_MAX_TOTAL, REFRESH_NOTIFICATIONS_INTERVAL } from '../../config/constants'
 import './NotificationsDropdown.scss'
 
@@ -32,7 +33,7 @@ class NotificationsDropdownContainer extends React.Component {
       return null
     }
 
-    const { sources, notifications, markAllNotificationsRead, toggleNotificationRead, pending } = this.props
+    const { sources, notifications, markAllNotificationsRead, toggleNotificationRead, pending, toggleBundledNotificationRead } = this.props
     const notReadNotifications = filterReadNotifications(notifications)
     const notificationsBySources = limitQuantityInSources(
       splitNotificationsBySources(sources, notReadNotifications),
@@ -42,13 +43,21 @@ class NotificationsDropdownContainer extends React.Component {
     const globalSource = notificationsBySources.length > 0 && notificationsBySources[0].id === 'global' ? notificationsBySources[0] : null
     const projectSources = notificationsBySources.length > 1 && globalSource ? notificationsBySources.slice(1) : notificationsBySources
     const hasUnread = notReadNotifications.length > 0
-    const olderNotificationsCount = sumBy(projectSources, 'total') - sumBy(projectSources, 'notifications.length')
+    const olderNotificationsCount = _.sumBy(projectSources, 'total') - _.sumBy(projectSources, 'notifications.length')
     // we have to give Dropdown component some time
     // before removing notification item node from the list
     // otherwise dropdown thinks we clicked outside and closes dropdown
     const toggleNotificationReadWithDelay = (notificationId) => {
       if (!pending) {
-        setTimeout(() => toggleNotificationRead(notificationId), 0)
+        const notification = _.find(notReadNotifications, { id: notificationId })
+        setTimeout(() => {
+          // if it's bundled notification, then toggle all notifications inside the bundle
+          if (notification.bundledIds) {
+            toggleBundledNotificationRead(notificationId, notification.bundledIds)
+          } else {
+            toggleNotificationRead(notificationId)
+          }
+        }, 0)
       }
     }
 
@@ -64,24 +73,26 @@ class NotificationsDropdownContainer extends React.Component {
             </NotificationsEmpty>
           </div>
         ) : ([
-          <div key="body" className="notifications-dropdown-body">
-            {globalSource && globalSource.notifications.length &&
-              <NotificationsSection
-                {...globalSource}
-                isGlobal
-                isSimple
-                onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
-              />
-            }
-            {projectSources.filter(source => source.notifications.length > 0).map(source =>
-              <NotificationsSection
-                {...source}
-                key={source.id}
-                isSimple
-                onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
-              />
-            )}
-          </div>,
+          <ScrollLock key="body">
+            <div className="notifications-dropdown-body">
+              {globalSource && globalSource.notifications.length &&
+                <NotificationsSection
+                  {...globalSource}
+                  isGlobal
+                  isSimple
+                  onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                />
+              }
+              {projectSources.filter(source => source.notifications.length > 0).map(source =>
+                <NotificationsSection
+                  {...source}
+                  key={source.id}
+                  isSimple
+                  onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                />
+              )}
+            </div>
+          </ScrollLock>,
           <Link key="footer" to="/notifications" className="notifications-read-all tc-btn-link">
             {
               olderNotificationsCount > 0 ?
@@ -100,7 +111,8 @@ const mapStateToProps = ({ notifications }) => notifications
 const mapDispatchToProps = {
   getNotifications,
   markAllNotificationsRead,
-  toggleNotificationRead
+  toggleNotificationRead,
+  toggleBundledNotificationRead
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsDropdownContainer)

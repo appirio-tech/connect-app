@@ -3,10 +3,65 @@
  */
 import _ from 'lodash'
 import { OLD_NOTIFICATION_TIME } from '../../../config/constants'
-import { NOTIFICATIONS } from '../constants/notifications'
+import { NOTIFICATION_RULES } from '../constants/notifications'
+import Handlebars from 'handlebars'
 
 // how many milliseconds in one minute
 const MILLISECONDS_IN_MINUTE = 60000
+
+/**
+ * Handlebars helper to display limited quantity of item and text +N more
+ *
+ * Example:
+ *   ```
+ *   {{#showMore __history__ 3}}<strong>{{userHandle}}</strong>{{/showMore}}
+ *   ```
+ *   Gets 3 items from `__history__` array and render them comma-separated.
+ *   If there are more than 3 items, adds '+N more'. Output can be:
+ *   ```
+ *   <strong>userHandle1</strong>, <strong>userHandle1</strong>, <strong>userHandle3</strong> +7 more
+ *   ```
+ *
+ * @param {Array}  items   list of items
+ * @param {Number} max     max items to display
+ * @param {Object} options handlebars options
+ */
+const handlebarsShowMoreHelper = (items, max, options) => {
+  const renderedItems = items.map(options.fn)
+  const uniqRenderedItems = _.uniq(renderedItems)
+  const maxRenderedItems = uniqRenderedItems.slice(0, max)
+  const restItemsCount = uniqRenderedItems.length - maxRenderedItems.length
+
+  let out = maxRenderedItems.join(', ')
+
+  if (restItemsCount > 0) {
+    out += ` +${restItemsCount} more`
+  }
+
+  return out
+}
+
+/**
+ * Handlebars helper which displays fallback value if the value is not provided (falsy)
+ *
+ * Example:
+ *  ```
+ *  {{fallback userFullName userHandle}}
+ *  ```
+ *  Will output `userHandle` if `userFullName` is not provided
+ *
+ * @param {String} value         value
+ * @param {String} fallbackValue fallback value
+ */
+const handlebarsFallbackHelper = (value, fallbackValue) => {
+  const out = value || fallbackValue
+
+  return new Handlebars.SafeString(out)
+}
+
+// register handlebars helpers
+Handlebars.registerHelper('showMore', handlebarsShowMoreHelper)
+Handlebars.registerHelper('fallback', handlebarsFallbackHelper)
 
 /**
  * Get notification filters by sources
@@ -104,28 +159,6 @@ export const limitQuantityInSources = (notificationsBySources, maxPerSource, max
 }
 
 /**
- * Render template with [variable] placeholders
- *
- * @param  {String} templateStr template
- * @param  {Object} values      values for template placeholders
- *
- * @return {String}             rendered template
- */
-const renderTemplate = (templateStr, values) => {
-  const regexp = /\[([^\]]+)\]/g
-  let output = templateStr
-  let match
-
-  while (match = regexp.exec(templateStr)) { // eslint-disable-line no-cond-assign
-    if (values[match[1]]) {
-      output = output.replace(match[0], values[match[1]])
-    }
-  }
-
-  return output
-}
-
-/**
  * Get a rule for notification
  *
  * @param  {Object} notification notification
@@ -133,8 +166,12 @@ const renderTemplate = (templateStr, values) => {
  * @return {Object}              notification rule
  */
 const getNotificationRule = (notification) => {
-  const notificationRule = _.find(NOTIFICATIONS, (_notificationRule) => {
+  const notificationRule = _.find(NOTIFICATION_RULES, (_notificationRule) => {
     let match = _notificationRule.eventType === notification.eventType
+
+    if (notification.version) {
+      match = match && _notificationRule.version === notification.version
+    }
 
     if (notification.contents.toTopicStarter) {
       match = match && _notificationRule.toTopicStarter
@@ -156,10 +193,93 @@ const getNotificationRule = (notification) => {
   })
 
   if (!notificationRule) {
-    throw new Error(`Cannot find notification rule for eventType ${notification.eventType}.`)
+    throw new Error(`Cannot find notification rule for eventType '${notification.eventType}' version '${notification.version}'.`)
   }
 
   return notificationRule
+}
+
+/**
+ * Compare notification rules ignoring version
+ *
+ * @param {Object} rule1 notification rule 1
+ * @param {Object} rule2 notification rule 2
+ *
+ * @returns {Boolean} true if rules are equal
+ */
+const isNotificationRuleEqual = (rule1, rule2) => {
+  /**
+   * Properties which distinguish one rule from another
+   *
+   * @type {Array<String>}
+   */
+  const ESSENTIAL_RULE_PROPERTIES = ['eventType', 'toTopicStarter', 'toUserHandle', 'projectRole', 'topcoderRole']
+  const essentialRule1 = _.pick(rule1, ESSENTIAL_RULE_PROPERTIES)
+  const essentialRule2 = _.pick(rule2, ESSENTIAL_RULE_PROPERTIES)
+
+  return _.isEqual(essentialRule1, essentialRule2)
+}
+
+/**
+ * Bundle same type notifications for the same project
+ *
+ * @param {Array<{notification, notificationRule}>} notificationsWithRules list of notification with rules
+ *
+ * @returns {Array<{notification, notificationRule}>} bundled notifications with rules
+ */
+const bundleNotifications = (notificationsWithRules) => {
+  /**
+   * List of `contents` properties for which we want to keep the whole history
+   *
+   * @type {Array<String>}
+   */
+  const PROPERTIES_KEEP_IN_HISTORY = ['userHandle', 'userFullName']
+  const bundledNotificationsWithRules = []
+
+  // starting from the latest notifications
+  // find older notifications with the same notification rule and the same project
+  _.reverse(notificationsWithRules).forEach((notificationWithRule) => {
+    // if notifications doesn't have to be bundled, add it to notifications list as it is
+    if (!notificationWithRule.notificationRule.shouldBundle) {
+      bundledNotificationsWithRules.push(notificationWithRule)
+    }
+
+    // try to find existent notification in the list to which we can bundle current one
+    const existentNotificationWithRule = _.find(bundledNotificationsWithRules, (bundledNotificationWithRule) => (
+      // same source id means same project
+      bundledNotificationWithRule.notification.sourceId === notificationWithRule.notification.sourceId
+      // same notification rule means same type
+      && isNotificationRuleEqual(bundledNotificationWithRule.notificationRule, notificationWithRule.notificationRule)
+    ))
+
+    // if already have notification of the same type, update it instead of adding new notification to the list
+    if (existentNotificationWithRule) {
+      // if haven't bundled any notifications yet, then init properties which only bundled notifications has
+      if (!existentNotificationWithRule.notification.bundledIds) {
+        existentNotificationWithRule.notification.bundledIds = [
+          existentNotificationWithRule.notification.id
+        ]
+        existentNotificationWithRule.notification.contents.bundledCount = 1
+        existentNotificationWithRule.notification.contents.__history__ = [
+          _.pick(existentNotificationWithRule.notification.contents, PROPERTIES_KEEP_IN_HISTORY)
+        ]
+      }
+
+      // at this point bundled notification is initialized,
+      // so we just update values of bundled notifications
+      existentNotificationWithRule.notification.bundledIds.push(
+        notificationWithRule.notification.id
+      )
+      existentNotificationWithRule.notification.contents.bundledCount += 1
+      existentNotificationWithRule.notification.contents.__history__.push(
+        _.pick(notificationWithRule.notification.contents, PROPERTIES_KEEP_IN_HISTORY)
+      )
+    } else {
+      bundledNotificationsWithRules.push(notificationWithRule)
+    }
+  })
+
+  return bundledNotificationsWithRules
 }
 
 /**
@@ -170,7 +290,7 @@ const getNotificationRule = (notification) => {
  * @return {Array}               notification list
  */
 export const prepareNotifications = (rowNotifications) => {
-  const notifications = rowNotifications.map((rowNotification) => ({
+  const notificationsWithRules = rowNotifications.map((rowNotification) => ({
     id: `${rowNotification.id}`,
     sourceId: rowNotification.contents.projectId ? `${rowNotification.contents.projectId}` : 'global',
     sourceName: rowNotification.contents.projectId ? (rowNotification.contents.projectName || 'project') : 'Global',
@@ -178,17 +298,39 @@ export const prepareNotifications = (rowNotifications) => {
     date: rowNotification.createdAt,
     isRead: rowNotification.read,
     isOld: new Date().getTime() - OLD_NOTIFICATION_TIME * MILLISECONDS_IN_MINUTE > new Date(rowNotification.createdAt).getTime(),
-    contents: rowNotification.contents
+    contents: rowNotification.contents,
+    version: rowNotification.version
   })).map((notification) => {
     const notificationRule = getNotificationRule(notification)
 
     // populate notification data
     notification.type = notificationRule.type
-    notification.text = renderTemplate(notificationRule.text, notification.contents)
-    notification.goto = renderTemplate(notificationRule.goTo, notification.contents)
+    if (notificationRule.goTo){
+      const renderGoTo = Handlebars.compile(notificationRule.goTo)
+      notification.goto = renderGoTo(notification.contents)
+    }
 
-    return notification
+    return {
+      notification,
+      notificationRule
+    }
   })
+
+  const bundledNotificationsWithRules = bundleNotifications(notificationsWithRules)
+
+  // render notifications texts
+  bundledNotificationsWithRules.forEach((bundledNotificationWithRule) => {
+    const { notification, notificationRule } = bundledNotificationWithRule
+    const textTpl = notification.contents.bundledCount
+      // if text for bundled notification is not defined, just use regular text
+      ? (notificationRule.bundledText || notificationRule.text)
+      : notificationRule.text
+
+    const renderText = Handlebars.compile(textTpl)
+    notification.text = renderText(notification.contents)
+  })
+
+  const notifications = _.map(bundledNotificationsWithRules, 'notification')
 
   return notifications
 }

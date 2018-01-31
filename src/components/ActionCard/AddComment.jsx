@@ -25,7 +25,7 @@ export default class AddComment extends React.Component {
   }
 
   render() {
-    const { className, avatarUrl, authorName, placeholder, isAdding, hasError } = this.props
+    const { className, avatarUrl, authorName, placeholder, isAdding, hasError, allMembers } = this.props
 
     return (
       <RichTextArea ref="richTextArea"
@@ -38,6 +38,7 @@ export default class AddComment extends React.Component {
           hasError={hasError}
           avatarUrl={avatarUrl}
           authorName={authorName}
+          allMembers={allMembers}
       />
     )
   }
@@ -52,5 +53,6 @@ AddComment.propTypes = {
   authorName: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   hasError: PropTypes.bool,
-  isAdding: PropTypes.bool
+  isAdding: PropTypes.bool,
+  allMembers: PropTypes.object
 }

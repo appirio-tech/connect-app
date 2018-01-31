@@ -6,8 +6,8 @@ import _ from 'lodash'
 import { unflatten } from 'flat'
 import update from 'react-addons-update'
 import FeaturePicker from './FeatureSelector/FeaturePicker'
-import { Formsy, Icons } from 'appirio-tech-react-components'
-
+import { Formsy } from 'appirio-tech-react-components'
+import XMarkIcon from  '../../../assets/icons/icon-x-mark.svg'
 import SpecSection from './SpecSection'
 import { HOC as hoc } from 'formsy-react'
 
@@ -33,7 +33,7 @@ const FeaturePickerModal = ({ project, isEdittable, showFeaturesDialog, hideFeat
         isEdittable={isEdittable} onSave={ setFormValue }
       />
       <div onClick={ hideFeaturesDialog } className="feature-selection-dialog-close">
-        Save and close <Icons.XMarkIcon />
+        Save and close <XMarkIcon />
       </div>
     </Modal>
   )
@@ -100,6 +100,14 @@ class EditProjectForm extends Component {
     window.addEventListener('beforeunload', this.onLeave)
   }
 
+  autoResize() {
+    if (self.autoResizeSet === true) { return }
+    self.autoResizeSet = true
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'))
+    }, 1000)
+  }
+
   componentWillUnmount() {
     this.props.fireProjectDirtyUndo()
     window.removeEventListener('beforeunload', this.onLeave)
@@ -107,8 +115,9 @@ class EditProjectForm extends Component {
 
   // Notify user if they navigate away while the form is modified.
   onLeave(e = {}) {
+    this.autoResize()
     if (this.isChanged()) {
-      // TODO: remove this block - it disables unsaved changes popup 
+      // TODO: remove this block - it disables unsaved changes popup
       // for app screens changes
       if (this.refs.form){
         const pristine = this.refs.form.getPristineValues()
@@ -237,7 +246,7 @@ class EditProjectForm extends Component {
             value={ _.get(project, 'details.appDefinition.features', {})}
           />
         </Formsy.Form>
-        
+
       </div>
     )
   }

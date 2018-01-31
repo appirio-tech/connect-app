@@ -2,16 +2,17 @@
 
 .project-card-body {
   flex: 2;
+
   .project-description {
     overflow: hidden;
     // max-height: 180px;
     // min-height: 180px;
     color: $tc-gray-80;
     @include tc-label-md;
-  
+
     .read-more-link {
       white-space: nowrap;
-      color: $tc-dark-blue-90;
+      color: $tc-dark-blue;
     }
   }
 
@@ -21,25 +22,36 @@
     display: flex;
     justify-content: center;
     margin-top: 20px;
-    padding: 10px 0;
+    padding: 5px 0;
 
     .panel { // avoid double padding for editable project status
       padding: 0;
     }
 
+    svg {
+      margin-top: 7px;
+      display: inline-block;
+    }
+
     .status-header {
       .status-label {
         text-transform: uppercase;
+        line-height: 30px;
+      }
+
+      .caret {
+        margin-top: 3px;
       }
     }
 
     .project-progress {
       display: flex;
+
       .progress-text {
         text-transform: uppercase;
         margin-left: 10px;
         line-height: 16px;
-      } 
+      }
     }
   }
 }

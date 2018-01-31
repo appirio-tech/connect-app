@@ -7,6 +7,7 @@ import Projects from './list/components/Projects/Projects'
 import TopBarContainer from '../components/TopBar/TopBarContainer'
 import ProjectsToolBar from '../components/TopBar/ProjectsToolBar'
 import ProjectToolBar from '../components/TopBar/ProjectToolBar'
+import FileDownload from '../components/FileDownload'
 import ProjectDetail from './detail/ProjectDetail'
 import Dashboard     from './detail/Dashboard'
 import ProjectMessages from './detail/Messages'
@@ -14,6 +15,7 @@ import SpecificationContainer from './detail/containers/SpecificationContainer'
 import { requiresAuthentication } from '../components/AuthenticatedComponent'
 
 const ProjectLayoutWithAuth = requiresAuthentication(ProjectLayout)
+const FileDownloadWithAuth = requiresAuthentication(FileDownload)
 
 // NOTE:
 // we cannot move up ProjectDetail component
@@ -36,6 +38,7 @@ const projectRoutes = (
     path="/projects"
     render={() => (
       <Switch>
+        <Route path="/projects/:projectId/attachments/:attachmentId" render={renderApp(<FileDownloadWithAuth />, null)} />
         <Route path="/projects/:projectId" render={renderApp(<TopBarContainer toolbar={ProjectToolBar} />, <ProjectDetailWithAuth />)} />
         <Route path="/projects" render={renderApp(<TopBarContainer toolbar={ProjectsToolBar} />, <ProjectsWithAuth />)} />
       </Switch>

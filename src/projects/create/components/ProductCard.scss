@@ -45,6 +45,7 @@
     letter-spacing: -0.4px;
     @include transition;
   }
+
   .icon-wrapper {
     svg {
       fill: $tc-gray-70;
@@ -52,7 +53,7 @@
 
     &:hover {
       svg {
-        fill: $tc-dark-blue-90;
+        fill: $tc-dark-blue;
       }
     }
   }

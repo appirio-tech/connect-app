@@ -34,7 +34,7 @@ module.exports = {
       options: {
         babelrc: false,
         presets: [ 'env', 'react', 'stage-2' ],
-        plugins: [ 'lodash' ]
+        plugins: ['lodash', 'inline-react-svg']
       }
     }, {
       test: /\.(coffee|litcoffee|cjsx)$/,
@@ -91,7 +91,10 @@ module.exports = {
       '.gif',
       '.jpg',
       '.cjsx'
-    ]
+    ],
+    alias: {
+      handlebars: 'handlebars/dist/handlebars.min.js'
+    }
   },
 
   plugins: [
@@ -111,8 +114,7 @@ module.exports = {
     // Only emit files when there are no errors
     new webpack.NoEmitOnErrorsPlugin(),
     new ExtractCssChunks({
-      filename: '[name].css',
-      justExtract: true
+      filename: '[name].css'
     })
   ]
 }

@@ -89,7 +89,7 @@
                 color: $tc-black;
 
                 &:focus {
-                  color: $tc-dark-blue-90;
+                  color: $tc-dark-blue;
                 }
               }
             }
@@ -226,7 +226,6 @@
               &:after {
                 font-size: 0;
                 line-height: 0;
-                background: url('./images/check-dark.svg') no-repeat 0 0;
                 width: 9px;
                 height: 7px;
                 content: "";
@@ -240,14 +239,13 @@
 
           .status-header {
             position: relative;
-            color: $tc-dark-blue-90;
+            color: $tc-dark-blue;
             font-size: 13px;
             font-weight: 400;
 
             &:after {
               font-size: 0;
               line-height: 0;
-              background: url('./images/arrow-6px-carret-down-active.svg') no-repeat 0 0;
               width: 10px;
               height: 6px;
               content: "";
@@ -332,7 +330,7 @@
                 color: $tc-gray-60;
 
                 &:focus {
-                  color: $tc-dark-blue-90;
+                  color: $tc-dark-blue;
                 }
               }
 
@@ -366,10 +364,6 @@
   border-radius: 13px;
   display: inline-block;
   margin-top: 3px;
-
-  &.yellow-light {
-    background: $tc-gold-30;
-  }
 }
 
 .txt-gray-sm {
@@ -422,28 +416,33 @@
     z-index: 1;
 
     &:focus {
+      color: $tc-dark-blue;
+      outline: 0;
+      z-index: 3;
+    }
+
+    .icon-carret-down-active g g {
+      color: rgb(6, 129, 255) !important;
+    }
+
+    .icon-carret-down-active {
       color: $tc-dark-blue-90;
       outline: 0;
       z-index: 3;
-
-      &:after {
-        font-size: 0;
-        line-height: 0;
-        background: url('./images/arrow-6px-carret-down-active.svg') no-repeat 0 0;
-        width: 10px;
-        height: 6px;
-        content: "";
-        display: block;
-        position: absolute;
-        top: 5px;
-        right: 0;
-      }
-    }
-
-    &:after {
       font-size: 0;
       line-height: 0;
-      background: url('./images/arrow-6px-carret-down-normal.svg') no-repeat 0 0;
+      width: 10px;
+      height: 6px;
+      content: "";
+      display: block;
+      position: absolute;
+      top: 5px;
+      right: 0;
+    }
+
+    .icon-carret-down-normal {
+      font-size: 0;
+      line-height: 0;
       width: 10px;
       height: 6px;
       content: "";
@@ -482,24 +481,23 @@
           }
         }
 
+        .icon-check-dark {
+          font-size: 0;
+          line-height: 0;
+          width: 9px;
+          height: 7px;
+          content: "";
+          display: block;
+          position: absolute;
+          top: 11px;
+          left: 6px;
+        }
+
         &.active,
         &.active:hover {
           position: relative;
           @include roboto-bold;
           background: $tc-gray-neutral-light;
-
-          &:after {
-            font-size: 0;
-            line-height: 0;
-            background: url('./images/check-dark.svg') no-repeat 0 0;
-            width: 9px;
-            height: 7px;
-            content: "";
-            display: block;
-            position: absolute;
-            top: 11px;
-            left: 6px;
-          }
         }
       }
     }

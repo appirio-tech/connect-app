@@ -11,8 +11,9 @@
   ul {
     padding: 0;
     li {
-      background: url("../../assets/images/icon-direct-arrow.svg") no-repeat 0 center;
-      padding-left: $base-unit*6;
+      .icon-direct-arrow {
+        margin-right: 20px;
+      }
     }
   }
 }

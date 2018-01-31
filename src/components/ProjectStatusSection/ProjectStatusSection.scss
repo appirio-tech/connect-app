@@ -1,5 +1,4 @@
 @import "tc-includes";
-
 .project-status-section {
   display: flex;
   border-top: 1px solid $tc-gray-10;
@@ -39,18 +38,7 @@
         border-radius: 100%;
         width: 20px;
         height: 20px;
-        &.gray {
-          background: url('../../assets/images/dot.png') no-repeat 6px 50%;
-          background-size: 8px;
-          background-color: $tc-gray-40;
-        }
-        &.green {
-          background: url('../../assets/images/dot.png') no-repeat 6px 50%;
-          background-size: 8px;
-          background-color: $tc-green;
-        }
-        &.red {
-          background-color: $tc-red;
+        background-color: $tc-red;
           
           .status-icon {
             position: absolute;
@@ -59,12 +47,7 @@
             display: block;
             height: 12px;
             width: 12px;
-            background: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
             background-size: 12px 12px;
-            // -webkit-mask: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
-            // background-color: $tc-white;
-            // mask-size: 12px;
-            // -webkit-mask-size: 12px;
           }
         }
 
@@ -77,12 +60,7 @@
             display: block;
             height: 12px;
             width: 12px;
-            background: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
             background-size: 12px 12px;
-            // -webkit-mask: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
-            // background-color: $tc-white;
-            // mask-size: 12px;
-            // -webkit-mask-size: 12px;
           }
         }
       }
@@ -123,12 +101,7 @@
         display: block;
         height: 12px;
         width: 12px;
-        background: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
         background-size: 12px 12px;
-        // -webkit-mask: url('../../assets/images/ui-16px-e_round-e-alert.svg') no-repeat 50% 50%;
-        // background-color: $tc-white;
-        // mask-size: 12px;
-        // -webkit-mask-size: 12px;
       }
 
     }
@@ -141,21 +114,11 @@
         display: block;
         height: 12px;
         width: 12px;
-        background: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
         background-size: 12px 12px;
-        // -webkit-mask: url('../../assets/images/ui-16px-1_check-simple.svg') no-repeat 50% 50%;
-        // background-color: $tc-white;
-        // mask-size: 12px;
-        // -webkit-mask-size: 12px;
       }
     }
     &.editable {
       cursor: pointer;
-      &:hover {
-        &::after {
-          background: url('../../assets/images/arrows-9px-carret-down-expanded.svg') no-repeat 50% 50%;
-        }
-      }
       &::after {
         content: '';
         display: inline-block;
@@ -165,15 +128,8 @@
         right: 10px;
         top: 8px;
         background-size: 9px 4px;
-        background: url('../../assets/images/arrow-9px-carret-down-normal.svg') no-repeat 50% 50%;
       }
     }
-    &.active {
-      &::after {
-        background: url('../../assets/images/arrows-9px-carret-down-expanded.svg') no-repeat 50% 50%;
-      }
-    }
-
   }
 }
 
@@ -185,7 +141,6 @@
   ul {
     padding: 0;
     li {
-      background: url("../../assets/images/icon-direct-arrow.svg") no-repeat 0 center;
       padding-left: $base-unit*6;
     }
   }

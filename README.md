@@ -107,6 +107,15 @@ SCSS Files
       }
     }
   }
+SVG Icons
+  - This repository uses plugin babel-plugin-inline-react-svg 
+  - The plugin is used to inline-embed svg icons inside the markup
+  
+  Steps to adding new icons
+  - Insert the svg file in the ~/src/assets/images/ directory 
+  - Add a new icon component file in directory ~/src/components/Icons/Icon-Name.jsx and reference it on the global 
+    icon component in the ~/src/components/icons/ directory
+  - Wrap the svg icon inside an object for caching to optimize on perfomance.
   ```
 
 ### Writing Tests

@@ -7,6 +7,7 @@ export function addProjectAttachment(projectId, fileData) {
   fileData.s3Bucket = FILE_PICKER_SUBMISSION_CONTAINER_NAME
   return axios.post(`${PROJECTS_API_URL}/v4/projects/${projectId}/attachments`, { param: fileData })
     .then( resp => {
+      resp.data.result.content.downloadUrl = `/projects/${projectId}/attachments/${resp.data.result.content.id}`
       return _.get(resp.data, 'result.content', {})
     })
 }
@@ -22,4 +23,10 @@ export function removeProjectAttachment(projectId, attachmentId) {
   // return attachmentId so reducer knows which one to remove from list
   return axios.delete(`${PROJECTS_API_URL}/v4/projects/${projectId}/attachments/${attachmentId}`)
     .then(() => attachmentId)
+}
+
+export function getProjectAttachment(projectId, attachmentId) {
+  return axios.get(
+    `${PROJECTS_API_URL}/v4/projects/${projectId}/attachments/${attachmentId}`)
+    .then ( resp => resp.data.result.content.url )
 }

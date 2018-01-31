@@ -5,7 +5,7 @@ import { TC_API_URL, PROJECTS_API_URL, CONNECT_MESSAGE_API_URL } from '../config
 export function getMembersById (userIds) {
   const _userIdArr = _.map(userIds, _id => `userId:${_id}`)
   // only requesting certain member attributes
-  const fields = 'userId,handle,photoURL,firstName,lastName,maxRating,details,email'
+  const fields = 'userId,handle,photoURL,firstName,lastName,details,email'
   const query = _userIdArr.join(' OR ')
   const url = `${TC_API_URL}/v3/members/_search/?fields=`
     + encodeURIComponent(fields)

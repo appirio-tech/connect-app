@@ -20,15 +20,15 @@ import ProjectSpecification from '../../../components/ProjectSpecification/Proje
 import { loadDashboardFeeds, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
-import { Helpers, scroller } from 'react-scroll'
+import { ScrollElement, scroller } from 'react-scroll'
 
 /*eslint-disable new-cap */
-const ScrollableFeed = Helpers.Element(Feed)
+const ScrollableFeed = ScrollElement(Feed)
 
 const SYSTEM_USER = {
   firstName: CODER_BOT_USER_FNAME,
   lastName: CODER_BOT_USER_LNAME,
-  photoURL: require('../../../assets/images/avatar-coder.png')
+  photoURL: require('../../../assets/images/avatar-coder.svg')
 }
 const isSystemUser = (userId) => [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(userId) > -1
 
@@ -338,7 +338,7 @@ class FeedView extends React.Component {
   }
 
   render () {
-    const {currentUser, project, currentMemberRole, isCreatingFeed, error } = this.props
+    const {currentUser, project, currentMemberRole, isCreatingFeed, error, allMembers} = this.props
     const { feeds } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
     const onLeaveMessage = this.onLeave() || ''
@@ -366,6 +366,7 @@ class FeedView extends React.Component {
             onTopicChange={this.onTopicChange.bind(this, item.id)}
             onSaveTopic={this.onSaveTopic.bind(this, item.id)}
             onDeleteTopic={this.onDeleteTopic.bind(this, item.id)}
+             allMembers={allMembers}
           >
             {item.sendForReview && <div className="panel-buttons">
               <button className="tc-btn tc-btn-primary tc-btn-md">Send for review</button>
@@ -383,6 +384,7 @@ class FeedView extends React.Component {
         />
         <NewPost
           currentUser={currentUser}
+          allMembers={allMembers}
           onPost={this.onNewPost}
           isCreating={isCreatingFeed}
           hasError={error}
