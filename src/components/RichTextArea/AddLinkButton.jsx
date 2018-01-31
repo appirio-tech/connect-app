@@ -114,8 +114,8 @@ class LinkModal extends React.Component {
   render () {
     const { theme, showUnlink } = this.props
     const { error } = this.state
-    let toolbarBackgroundStyle = { background: error ? '#e83f26' : '#fff' }
-    let toolbarErrorStyle = {
+    const toolbarBackgroundStyle = { background: error ? '#e83f26' : '#fff' }
+    const toolbarErrorStyle = {
       height: error ? '28px' : '0',
       paddingBottom: error ? '12px' : '0'
     }
@@ -185,10 +185,10 @@ class AddLinkModal extends React.Component {
     if (entitySelected && entity) {
       entityData = entity.getData()
     }
-    let url = entityData ? entityData.url : null
+    const url = entityData ? entityData.url : null
 
     return (
-      <div className={"addLinkModal"}>
+      <div className={'addLinkModal'}>
         <LinkModal
           url={url}
           showUnlink={entitySelected}
@@ -203,7 +203,7 @@ class AddLinkModal extends React.Component {
 class AddImageModal extends React.Component {
   render () {
     return (
-      <div className={"addLinkModal"}>
+      <div className={'addLinkModal'}>
         <LinkModal
           type={'IMAGE'}
           {...this.props}
@@ -284,7 +284,7 @@ export default class AddLinkButton extends React.Component {
     const { modalVisible } = this.state
 
     return (
-      <div className={"addLinkButton"}>
+      <div className={'addLinkButton'}>
         <button
           disabled={disabled}
           onMouseDown={(e) => {

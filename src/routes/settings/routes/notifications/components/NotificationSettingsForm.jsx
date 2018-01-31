@@ -176,7 +176,7 @@ class NotificationSettingsForm extends React.Component {
                   />
                 </div>
               </td>
-              </tr>
+            </tr>
             }
           </tbody>
         </table>

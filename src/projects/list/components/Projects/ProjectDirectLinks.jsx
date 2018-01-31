@@ -10,8 +10,8 @@ function ProjectDirectLink({ directLinks }) {
     <div className="project-direct-links">
       <ul>
         {directLinks.map((link, i) => 
-        <li key={i}><DirectArrow className="icon-direct-arrow" />
-        <a href={link.href} target="_blank" rel="noopener noreferrer">{link.name}</a></li>)}
+          (<li key={i}><DirectArrow className="icon-direct-arrow" />
+            <a href={link.href} target="_blank" rel="noopener noreferrer">{link.name}</a></li>))}
       </ul>
     </div>
   )

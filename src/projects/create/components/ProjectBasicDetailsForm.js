@@ -18,12 +18,12 @@ class ProjectBasicDetailsForm extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return !(
-        _.isEqual(nextProps.project, this.props.project)
+      _.isEqual(nextProps.project, this.props.project)
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextState.canSubmit, this.state.canSubmit)
      && _.isEqual(nextProps.sections, this.props.sections)
      && _.isEqual(nextState.isSaving, this.state.isSaving)
-   )
+    )
   }
 
   componentWillMount() {

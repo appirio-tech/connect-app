@@ -23,7 +23,7 @@ import {
   DELETE_PROJECT_FEED_FAILURE,
   DELETE_PROJECT_FEED_COMMENT_FAILURE,
   GET_PROJECT_FEED_COMMENT_FAILURE,
-// Project status
+  // Project status
   PROJECT_STATUS_IN_REVIEW
 } from '../config/constants'
 /* eslint-enable no-unused-vars */

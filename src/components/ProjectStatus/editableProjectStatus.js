@@ -53,7 +53,7 @@ const hocStatusDropdown = (CompositeComponent) => {
               <ul>
                 {
                   PROJECT_STATUS.sort((a, b) => a.dropDownOrder > b.dropDownOrder).map((item) =>
-                    <li key={item.value}>
+                    (<li key={item.value}>
                       <a
                         href="javascript:"
                         className={cn('status-option', 'ps-' + item.value, { active: item.value === status })}
@@ -63,7 +63,7 @@ const hocStatusDropdown = (CompositeComponent) => {
                       >
                         <ProjectStatus status={item} showText />
                       </a>
-                    </li>
+                    </li>)
                   )
                 }
               </ul>
@@ -113,8 +113,8 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
 
   changeStatus() {
     (this.props.projectId) ?
-    this.props.onChangeStatus(this.props.projectId, this.state.newStatus, this.state.statusChangeReason)
-     : this.props.onChangeStatus(this.state.newStatus, this.state.statusChangeReason)
+      this.props.onChangeStatus(this.props.projectId, this.state.newStatus, this.state.statusChangeReason)
+      : this.props.onChangeStatus(this.state.newStatus, this.state.statusChangeReason)
 
   }
 
@@ -128,7 +128,7 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
     const ProjectStatusDropdown = canEdit ? enhanceDropdown(hocStatusDropdown(CompositeComponent)) : hocStatusDropdown(CompositeComponent)
     return (
       <div className={cn('EditableProjectStatus', {'modal-active': showStatusChangeDialog})}>
-        <div className="modal-overlay"></div>
+        <div className="modal-overlay" />
         <ProjectStatusDropdown {...this.props } onItemSelect={ this.showStatusChangeDialog } />
         { showStatusChangeDialog &&
           <ProjectStatusChangeConfirmation

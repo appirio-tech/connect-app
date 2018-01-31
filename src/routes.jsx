@@ -39,7 +39,7 @@ const onRouteChange = (pathname) => {
       window.analytics.page('New Project : Select Product')
     } else if (/^new-project\/incomplete$/.test(pathname)) {
       window.analytics.page('New Project : Incomplete Project')
-    } else if (/^new-project\/[a-zA-Z0-9\_]+$/.test(pathname)) {
+    } else if (/^new-project\/[a-zA-Z0-9_]+$/.test(pathname)) {
       window.analytics.page('New Project : Project Details')
     }
   }
@@ -76,9 +76,9 @@ class RedirectToProject extends React.Component {
           }
         }
       })
-      .catch(() => {
-        history.replace('/projects')
-      })
+        .catch(() => {
+          history.replace('/projects')
+        })
     }).catch(() => {
       // FIXME should we include hash, search etc
       const redirectBackToUrl = window.location.origin + '/' + match.location.pathname

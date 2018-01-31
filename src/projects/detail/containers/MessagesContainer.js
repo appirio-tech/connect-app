@@ -458,26 +458,26 @@ class MessagesView extends React.Component {
           message={onLeaveMessage}
         />
         <div className="messages-container">
-            <div className="left-area">
-              <MessageList
-                onAdd={this.onNewThreadClick}
-                threads={threads}
-                onSelect={this.onThreadSelect}
-                showAddButton={!!currentMemberRole}
-                showEmptyState={showEmptyState && !threads.length}
-                scrollPosition={scrollPosition}
-              />
-              <FooterV2 />
-            </div>
-            <div className="right-area">
-              { (showEmptyState && !threads.length) &&
+          <div className="left-area">
+            <MessageList
+              onAdd={this.onNewThreadClick}
+              threads={threads}
+              onSelect={this.onThreadSelect}
+              showAddButton={!!currentMemberRole}
+              showEmptyState={showEmptyState && !threads.length}
+              scrollPosition={scrollPosition}
+            />
+            <FooterV2 />
+          </div>
+          <div className="right-area">
+            { (showEmptyState && !threads.length) &&
                 <MessagingEmptyState
                   currentUser={currentUser}
                   onClose={() => this.setState({showEmptyState: false})}
                 />
-              }
-              { renderRightPanel() }
-            </div>
+            }
+            { renderRightPanel() }
+          </div>
         </div>
       </FullHeightContainer>
     )

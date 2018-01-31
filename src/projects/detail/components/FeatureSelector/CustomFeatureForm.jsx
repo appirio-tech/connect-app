@@ -101,8 +101,8 @@ class CustomFeatureForm extends Component {
         { (isAdded && !editMode) &&
           <div className="feature-title-row">
             <span className="title">{ _.get(data, 'title', 'Define a new feature')}</span>
-              <div className="feature-actions">
-                { isAdded &&
+            <div className="feature-actions">
+              { isAdded &&
                   <SwitchButton
                     disabled={!isEdittable}
                     onChange={ this.toggleFeature }
@@ -110,11 +110,11 @@ class CustomFeatureForm extends Component {
                     checked={isActive ? 'checked' : null }
                     label="Enable Feature"
                   />
-                }
-                <div className="separator"/>
-                <button className="clean feature-edit-action" onClick={ this.editFeature }><IconUIPencil /></button>
-                <button className="clean feature-delete-action" onClick={ this.onDeleteIntent }><IconUITrashSimple /></button>
-              </div>
+              }
+              <div className="separator"/>
+              <button className="clean feature-edit-action" onClick={ this.editFeature }><IconUIPencil /></button>
+              <button className="clean feature-delete-action" onClick={ this.onDeleteIntent }><IconUITrashSimple /></button>
+            </div>
           </div>
         }
         <div className="feature-form-content">

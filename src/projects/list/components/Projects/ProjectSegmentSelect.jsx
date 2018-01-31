@@ -27,19 +27,19 @@ class ProjectSegmentSelect extends React.Component {
         <Dropdown className="project-drop-down">
           <a href="javascript:;" className="dropdown-menu-header txt-link">{cur.label}</a>
           <div className="dropdown-menu-list down-layer">
-          <ul>
-            {
-              options.map((item, i) => {
-                const activeClass = cn({
-                  active: item.val === currentSortField
+            <ul>
+              {
+                options.map((item, i) => {
+                  const activeClass = cn({
+                    active: item.val === currentSortField
+                  })
+                  return (<li key={i} className={activeClass} onClick={sortHandler}>
+                    {activeClass? <IconCheckDark className="icon-check-dark"/>: ''}
+                    <a href="javascript:;">{item.label}</a>
+                  </li>)
                 })
-                return (<li key={i} className={activeClass} onClick={sortHandler}>
-                  {activeClass? <IconCheckDark className="icon-check-dark"/>: ''}
-                  <a href="javascript:;">{item.label}</a>
-                </li>)
-              })
-            }
-          </ul>
+              }
+            </ul>
           </div>
         </Dropdown>
       </div>

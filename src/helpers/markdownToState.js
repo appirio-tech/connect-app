@@ -72,8 +72,8 @@ const DefaultBlockEntities = {
         mutability: 'MUTABLE',
         data: {
           mention: new Map([
-              ['name', item.title.slice(1)],
-              ['link', item.href]
+            ['name', item.title.slice(1)],
+            ['link', item.href]
           ])
         }
       }

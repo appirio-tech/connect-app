@@ -15,7 +15,7 @@ const noop = () => <noscript />
  */
 const identity = t => t
 const showPagination = (hasPages) =>
- branch (hasPages, identity, renderComponent(noop))
+  branch (hasPages, identity, renderComponent(noop))
 const enhance = showPagination( ({totalCount, pageSize}) =>
   Math.ceil(totalCount / pageSize) > 1)
 

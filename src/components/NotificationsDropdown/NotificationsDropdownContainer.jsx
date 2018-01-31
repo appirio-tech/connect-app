@@ -83,21 +83,21 @@ class NotificationsDropdownContainer extends React.Component {
                   onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
                 />
               }
-              {projectSources.filter(source => source.notifications.length > 0).map(source =>
+              {projectSources.filter(source => source.notifications.length > 0).map(source => (
                 <NotificationsSection
                   {...source}
                   key={source.id}
                   isSimple
                   onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
                 />
-              )}
+              ))}
             </div>
           </ScrollLock>,
           <Link key="footer" to="/notifications" className="notifications-read-all tc-btn-link">
             {
               olderNotificationsCount > 0 ?
-              `View ${olderNotificationsCount} older notification${olderNotificationsCount > 1 ? 's' : ''}` :
-              'View all notifications'
+                `View ${olderNotificationsCount} older notification${olderNotificationsCount > 1 ? 's' : ''}` :
+                'View all notifications'
             }
           </Link>
         ])}

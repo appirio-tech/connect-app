@@ -84,7 +84,7 @@ class DefaultFeatureForm extends Component {
                   value={featureData.notes}
                 />
               </Formsy.Form>
-            : <noscript />
+              : <noscript />
           }
         </div>
       </div>

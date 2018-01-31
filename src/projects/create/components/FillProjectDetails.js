@@ -26,11 +26,11 @@ class FillProjectDetails extends Component  {
 
   shouldComponentUpdate(nextProps, nextState) {
     return !(
-        _.isEqual(nextProps.project, this.props.project)
+      _.isEqual(nextProps.project, this.props.project)
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextProps.dirtyProject, this.props.dirtyProject)
      && _.isEqual(nextProps.error, this.props.error)
-   )
+    )
   }
 
   createMarkup(product) {
@@ -45,14 +45,13 @@ class FillProjectDetails extends Component  {
     let specification = 'topcoder.v1'
     if (productId)
       specification = typeToSpecification[productId]
-    let sections = require(`../../../config/projectQuestions/${specification}`).basicSections
+    const sections = require(`../../../config/projectQuestions/${specification}`).basicSections
     return (
       <div className="FillProjectDetailsWrapper">
-        <div className="header headerFillProjectDetails">
-        </div>
+        <div className="header headerFillProjectDetails" />
         <div className="FillProjectDetails">
           <div className="header">
-            <h1 dangerouslySetInnerHTML = {this.createMarkup(product)} ></h1>
+            <h1 dangerouslySetInnerHTML = {this.createMarkup(product)}  />
           </div>
           <section className="two-col-content content">
             <div className="container">

@@ -20,7 +20,7 @@ const UserTooltip = ({ usr, id, previewAvatar, size }) => {
               size={size}
             />
           </div>) :
-          <span className="project-customer">{usr.firstName} {usr.lastName}</span>
+            <span className="project-customer">{usr.firstName} {usr.lastName}</span>
         }
       </div>
       <div className="tooltip-body">

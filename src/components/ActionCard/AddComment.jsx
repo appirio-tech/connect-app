@@ -29,16 +29,16 @@ export default class AddComment extends React.Component {
 
     return (
       <RichTextArea ref="richTextArea"
-          className={className}
-          disableTitle
-          contentPlaceholder={placeholder || 'New reply...'}
-          onPost={this.onPost}
-          onPostChange={this.onChange}
-          isCreating={isAdding}
-          hasError={hasError}
-          avatarUrl={avatarUrl}
-          authorName={authorName}
-          allMembers={allMembers}
+        className={className}
+        disableTitle
+        contentPlaceholder={placeholder || 'New reply...'}
+        onPost={this.onPost}
+        onPostChange={this.onChange}
+        isCreating={isAdding}
+        hasError={hasError}
+        avatarUrl={avatarUrl}
+        authorName={authorName}
+        allMembers={allMembers}
       />
     )
   }
