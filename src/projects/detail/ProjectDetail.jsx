@@ -61,10 +61,7 @@ class ProjectDetail extends Component {
       this.props.loadProjectDashboard(match.params.projectId)
     }
 
-    // reload project details if navigating by Link to same page
-    if (this.props.location.key !== location.key) {
-      this.props.loadProjectDashboard(match.params.projectId)
-    }
+    
   }
 
   getProjectRoleForCurrentUser({currentUserId, project}) {
