@@ -15,19 +15,29 @@ const configFactory = require('topcoder-react-utils/config/webpack/app-productio
 const productionTopCoderConfig = configFactory({
   context: dirname,
 
-  entry: [
-    './src/styles/main.scss',
-    './src/index'
-  ]
+  entry: './src/index'
 })
 
+// merge standard production TopCoder config with common config specific to connect app
+const combinedConfig = webpackMerge.smart(
+  productionTopCoderConfig,
+  commonProjectConfig
+)
+
 // apply common modifications specific to connect app which cannot by applied by webpack merge
-applyCommonModifications(productionTopCoderConfig)
+applyCommonModifications(combinedConfig)
+
+/*
+  Set babel environment to `production` for CoffeeScript babel config
+ */
+const coffeeRule = combinedConfig.module.rules.find(rule => /coffee/.test(rule.test.toString()))
+const coffeeBabelUse = coffeeRule.use.find((use) => use.loader === 'babel-loader')
+coffeeBabelUse.options.forceEnv = 'production'
 
 /*
   Add compression plugin which gzip files output files
  */
-productionTopCoderConfig.plugins.push(
+combinedConfig.plugins.push(
   new CompressionPlugin({
     asset: '[file]',
     algorithm: 'gzip',
@@ -35,12 +45,6 @@ productionTopCoderConfig.plugins.push(
     threshold: 10240,
     minRatio: 0.8
   })
-)
-
-// merge standard production TopCoder config with common config specific to connect app
-const combinedConfig = webpackMerge.smart(
-  productionTopCoderConfig,
-  commonProjectConfig
 )
 
 module.exports = combinedConfig

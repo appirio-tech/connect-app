@@ -50,6 +50,8 @@ module.exports = {
       /*
         Connect app depends on `appirio-tech-react-components` which uses
         CoffeeScript so we have to add support for it
+
+        Note, that we use custom babel config for coffee script which disables modules
        */
       test: /\.(coffee|litcoffee|cjsx)$/,
       use: [
@@ -57,7 +59,8 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             babelrc: false,
-            presets: ['env', 'react', 'stage-2'],
+            forceEnv: 'development', // by default set env to 'development'
+            presets: [path.resolve(dirname, './config/babel/webpack-coffee.js')],
             plugins: ['lodash']
           }
         },
@@ -66,7 +69,7 @@ module.exports = {
       ]
     }, {
       /*
-        Without this rule there are lots of SVG issues
+        Load SVG files not handled by inline-react-svg babel plugin
       */
       test: /\.svg$/,
       loader: 'file-loader'
