@@ -9,7 +9,7 @@ import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
 import { laodProjectMessages, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import {FullHeightContainer} from 'appirio-tech-react-components'
+import FullHeightContainer from 'appirio-tech-react-components/components/FullHeightContainer/FullHeightContainer'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 
 import {

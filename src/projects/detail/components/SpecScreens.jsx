@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { HOC as hoc } from 'formsy-react'
-import { Tooltip } from 'appirio-tech-react-components'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import _ from 'lodash'
 
 import EditAppScreenForm from './EditAppScreenForm'

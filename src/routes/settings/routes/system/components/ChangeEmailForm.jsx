@@ -9,7 +9,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { EMAIL_AVAILABILITY_CHECK_DEBOUNCE } from '../../../../../config/constants'
-import { Formsy, TCFormFields } from 'appirio-tech-react-components'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
+const Formsy = FormsyForm.Formsy
 import './ChangeEmailForm.scss'
 import IconCheck from '../../assets/icons/check.svg'
 

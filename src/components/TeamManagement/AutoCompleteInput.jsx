@@ -2,7 +2,7 @@ import React from 'react'
 import PT from 'prop-types'
 import ReactDOM from 'react-dom'
 import uncontrollable from 'uncontrollable'
-import { Avatar } from 'appirio-tech-react-components'
+import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { AUTOCOMPLETE_TRIGGER_LENGTH } from '../../config/constants'
 import InputIcon from  '../../assets/icons/username-icon.svg'
 

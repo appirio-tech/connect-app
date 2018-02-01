@@ -1,6 +1,8 @@
 import classNames from 'classnames'
 import React, { Component} from 'react'
-import { Formsy, TCFormFields } from 'appirio-tech-react-components'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
+const Formsy = FormsyForm.Formsy
 
 require('./FeatureForm.scss')
 
