@@ -48,7 +48,7 @@ class ProjectDetail extends Component {
     this.props.loadProjectDashboard(projectId)
   }
 
-  componentWillReceiveProps({isProcessing, isLoading, error, project, match, location}) {
+  componentWillReceiveProps({isProcessing, isLoading, error, project, match}) {
     // handle just deleted projects
     if (! (error || isLoading || isProcessing) && _.isEmpty(project))
       this.props.history.push('/projects/')
