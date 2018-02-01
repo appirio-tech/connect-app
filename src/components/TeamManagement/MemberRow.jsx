@@ -1,20 +1,22 @@
-import React from 'react'
+import React from 'react' // eslint-disable-line no-unused-vars
 import PropTypes from 'prop-types'
 import cn from 'classnames'
-import { Icons } from 'appirio-tech-react-components'
+import IconUsersDelete from  '../../assets/icons/icon-users-delete.svg'
+import IconLeave from  '../../assets/icons/icon-leave.svg'
+import IconArrowPriorityHigh from  '../../assets/icons/icon-arrow-priority-high.svg'
 import UserToolpit from '../User/UserTooltip'
 
 const ActionBtn = (props) => {
   let icon
   switch (props.type) {
   case 'user-remove':
-    icon = <Icons.IconUsersDelete />
+    icon = <IconUsersDelete />
     break
   case 'leave':
-    icon = <Icons.IconLeave />
+    icon = <IconLeave />
     break
   case 'promote':
-    icon = <Icons.IconArrowPriorityHigh />
+    icon = <IconArrowPriorityHigh />
     break
   }
   return (

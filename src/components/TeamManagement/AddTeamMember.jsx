@@ -2,11 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import AutoCompleteInput from './AutoCompleteInput'
 import cn from 'classnames'
-import { Icons } from 'appirio-tech-react-components'
+import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
 import { PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 import Scroll from 'react-scroll'
-
-const { XMarkIcon } = Icons
 
 const AddTeamMember = (props) => {
   const {

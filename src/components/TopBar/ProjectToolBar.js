@@ -155,14 +155,14 @@ class ProjectToolBar extends React.Component {
             {project && <nav className={`nav ${(project.details && !project.details.hideDiscussions) ? 'long-menu' : ''}`}>
               <ul>
                 <li id={this.state.activeDashboard} onMouseOver={ev => this.onDashboardEnter(ev)} onMouseLeave={ev => this.onDashboardLeave(ev)}><NavLink to={`/projects/${project.id}`} exact activeClassName="dashboard active">
-                  <i >{this.state.dashboardIcon}</i>Dashboard</NavLink>
+                  {this.state.dashboardIcon}<span>Dashboard</span></NavLink>
                 </li>
                 <li id={this.state.activeSpecification} onMouseEnter={ev => this.onSpecificationEnter(ev)} onMouseLeave={ev => this.onSpecificationLeave(ev)}><NavLink to={`/projects/${project.id}/specification`} activeClassName="specification active">
-                  <i >{this.state.specificationIcon}</i>Specification</NavLink>
+                  {this.state.specificationIcon}<span>Specification</span></NavLink>
                 </li>
                 {/*
                   TODO: Enable again when challenges link is needed.
-                  isPowerUser && <li><NavLink to={`/projects/${project.id}/challenges`} activeClassName="active"><i>{this.state.challengesIcon}<i/>Challenges</Link></li>
+                  isPowerUser && <li><NavLink to={`/projects/${project.id}/challenges`} activeClassName="active">{this.state.challengesIcon}<span>Challenges</span></Link></li>
                 */}
                 {/*
                   * TODO: Completely remove the discussions list item once there isn't
@@ -171,7 +171,7 @@ class ProjectToolBar extends React.Component {
                 {
                   (project.details && !project.details.hideDiscussions) &&
                   <li id={this.state.activeMessages} onMouseOver={ev => this.onMessagesEnter(ev)} onMouseLeave={ev => this.onMessagesLeave(ev)}><NavLink to={`/projects/${project.id}/discussions`} activeClassName="discussions active">
-                    <i >{this.state.messagesIcon}</i>Discussions</NavLink>
+                    {this.state.messagesIcon}<span>Discussions</span></NavLink>
                   </li>
                 }
               </ul>

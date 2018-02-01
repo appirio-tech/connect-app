@@ -1,4 +1,13 @@
-import { Icons } from 'appirio-tech-react-components'
+import React from 'react' // eslint-disable-line no-unused-vars
+import IconTechOutlineMobile from  '../../assets/icons/icon-tech-outline-mobile.svg'
+import IconTechOutlineTablet from  '../../assets/icons/icon-tech-outline-tablet.svg'
+import IconTechOutlineDesktop from  '../../assets/icons/icon-tech-outline-desktop.svg'
+import IconTechOutlineWatchApple from  '../../assets/icons/icon-tech-outline-watch-apple.svg'
+import IconTcSpecTypeSerif from  '../../assets/icons/icon-tc-spec-type-serif.svg'
+import IconTcSpecTypeSansSerif from  '../../assets/icons/icon-tc-spec-type-sans-serif.svg'
+import IconTcSpecIconTypeColorHome from  '../../assets/icons/icon-tc-spec-icon-type-color-home.svg'
+import IconTcSpecIconTypeOutlineHome from  '../../assets/icons/icon-tc-spec-icon-type-outline-home.svg'
+import IconTcSpecIconTypeGlyphHome from  '../../assets/icons/icon-tc-spec-icon-type-glyph-home.svg'
 import { isFileRequired, findTitle, findFilesSectionTitle } from '../projectWizard'
 
 const sections = [
@@ -36,10 +45,10 @@ const sections = [
             fieldName: 'details.appDefinition.primaryTarget',
             type: 'tiled-radio-group',
             options: [
-              {value: 'phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
-              {value: 'wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+              {value: 'phone', title: 'Phone', icon: IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'tablet', title: 'Tablet', icon: IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'desktop', title: 'Desktop', icon: IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'wearable', title: 'Wearable', icon: IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
           },
           {
@@ -160,8 +169,8 @@ const sections = [
             description: 'The typography used in your designs will fit within these broad font styles',
             type: 'tiled-radio-group',
             options: [
-              {value: 'serif', title: 'Serif', icon: Icons.IconTcSpecTypeSerif, iconOptions: { fill: '#00000'}, desc: 'formal, old style'},
-              {value: 'sanSerif', title: 'Sans Serif', icon: Icons.IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: 'clean, modern, informal'}
+              {value: 'serif', title: 'Serif', icon: IconTcSpecTypeSerif, iconOptions: { fill: '#00000'}, desc: 'formal, old style'},
+              {value: 'sanSerif', title: 'Sans Serif', icon: IconTcSpecTypeSansSerif, iconOptions: { fill: '#00000'}, desc: 'clean, modern, informal'}
             ],
             fieldName: 'details.designSpecification.fontStyle'
           },
@@ -179,9 +188,9 @@ const sections = [
             description: 'Icons within your designs will follow these styles',
             type: 'tiled-radio-group',
             options: [
-              {value: 'flatColor', title: 'Flat Color', icon: Icons.IconTcSpecIconTypeColorHome, iconOptions: { fill: '#00000'}, desc: 'playful'},
-              {value: 'thinLine', title: 'Thin Line', icon: Icons.IconTcSpecIconTypeOutlineHome, iconOptions: { fill: '#00000'}, desc: 'modern'},
-              {value: 'solidLine', title: 'Solid Line', icon: Icons.IconTcSpecIconTypeGlyphHome, iconOptions: { fill: '#00000'}, desc: 'classic'}
+              {value: 'flatColor', title: 'Flat Color', icon: IconTcSpecIconTypeColorHome, iconOptions: { fill: '#00000'}, desc: 'playful'},
+              {value: 'thinLine', title: 'Thin Line', icon: IconTcSpecIconTypeOutlineHome, iconOptions: { fill: '#00000'}, desc: 'modern'},
+              {value: 'solidLine', title: 'Solid Line', icon: IconTcSpecIconTypeGlyphHome, iconOptions: { fill: '#00000'}, desc: 'classic'}
             ],
             fieldName: 'details.designSpecification.iconStyle'
           }
@@ -299,10 +308,10 @@ export const basicSections = [
             fieldName: 'details.appDefinition.primaryTarget',
             type: 'tiled-radio-group',
             options: [
-              {value: 'phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
-              {value: 'wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+              {value: 'phone', title: 'Phone', icon: IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'tablet', title: 'Tablet', icon: IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'desktop', title: 'Desktop', icon: IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'wearable', title: 'Wearable', icon: IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
           },
           {

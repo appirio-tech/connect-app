@@ -2,13 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import './ProjectStatus.scss'
-import IconStatusActive from '../../assets/icons/ps-active.svg'
-import IconStatusDraft from '../../assets/icons/ps-draft.svg'
-import IconStatusReview from '../../assets/icons/ps-in_review.svg'
-import IconStatusReviewed from '../../assets/icons/ps-reviewed.svg'
-import IconStatusCancelled from '../../assets/icons/ps-cancelled.svg'
-import IconStatusPaused from '../../assets/icons/ps-paused.svg'
-import IconStatusCompleted from '../../assets/icons/ps-completed.svg'
+import IconStatusActive from '../../assets/icons/status-active.svg'
+import IconStatusDraft from '../../assets/icons/status-draft.svg'
+import IconStatusReview from '../../assets/icons/status-in_review.svg'
+import IconStatusReviewed from '../../assets/icons/status-reviewed.svg'
+import IconStatusCancelled from '../../assets/icons/status-cancelled.svg'
+import IconStatusPaused from '../../assets/icons/status-paused.svg'
+import IconStatusCompleted from '../../assets/icons/status-completed.svg'
 
 
 /**
@@ -42,7 +42,7 @@ StatusIcons.propTypes = {
 /*eslint-enable camelcase */
 const ProjectStatus = ({ status, showText, withoutLabel, unifiedHeader = true }) => {
   return (
-    <div className={cn('ProjectStatus', 'ps-' + status.value, { 'unified-header': unifiedHeader })}>
+    <div className={cn('ProjectStatus', 'status-' + status.value, { 'unified-header': unifiedHeader })}>
       <StatusIcons status={status.value} />
       {showText && (<span className="status-label">{withoutLabel ? status.fullName : status.name}</span>)}
     </div>

@@ -3,11 +3,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import filesize from 'filesize'
 import moment from 'moment'
-import { Icons, Tooltip } from 'appirio-tech-react-components'
+import { Tooltip } from 'appirio-tech-react-components'
 import UserWithName from '../User/UserWithName'
 import { TOOLTIP_DEFAULT_DELAY } from '../../config/constants'
+import TrashIcon from  '../../assets/icons/icon-trash.svg'
+import CloseIcon from  '../../assets/icons/icon-close.svg'
+import EditIcon from  '../../assets/icons/icon-edit.svg'
+import SaveIcon from  '../../assets/icons/icon-save.svg'
 
-const { TrashIcon, CloseIcon, EditIcon, SaveIcon } = Icons
 
 export default class FileListItem extends React.Component {
 

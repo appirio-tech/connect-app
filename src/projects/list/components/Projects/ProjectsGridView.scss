@@ -1,4 +1,5 @@
 @import 'tc-includes';
+
 .flex-data {
   .flex-row {
     .item-id {
@@ -309,7 +310,6 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            width: 178px;
 
             &:hover {
               background-color: $tc-dark-blue-30;
@@ -364,7 +364,6 @@
   border-radius: 13px;
   display: inline-block;
   margin-top: 3px;
-
 }
 
 .txt-gray-sm {
@@ -423,9 +422,9 @@
     }
 
     .icon-carret-down-active g g {
-      color:  rgb(6, 129, 255) !important;
+      color: rgb(6, 129, 255) !important;
     }
-    
+
     .icon-carret-down-active {
       color: $tc-dark-blue-90;
       outline: 0;
@@ -438,7 +437,7 @@
       display: block;
       position: absolute;
       top: 5px;
-      right: 0;      
+      right: 0;
     }
 
     .icon-carret-down-normal {

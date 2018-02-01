@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { SketchPicker } from 'react-color'
 import { HOC as hoc } from 'formsy-react'
 import {PROJECT_MAX_COLORS} from '../../config/constants'
-import { Icons } from 'appirio-tech-react-components'
+import CloseIcon from  '../../assets/icons/icon-close.svg'
 import AddColor from  '../../assets/icons/icon-add-color.svg'
 import './ColorSelector.scss'
 
@@ -54,7 +54,7 @@ class ColorSelector extends React.Component {
             style={{backgroundColor: color}}
           >
             <span className="remove-color">
-              <Icons.CloseIcon />
+              <CloseIcon />
             </span>
           </a>
         )}

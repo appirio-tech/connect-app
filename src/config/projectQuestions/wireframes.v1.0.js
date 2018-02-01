@@ -1,5 +1,8 @@
-import React from 'react'
-import { Icons } from 'appirio-tech-react-components'
+import React from 'react' // eslint-disable-line no-unused-vars
+import IconTechOutlineMobile from  '../../assets/icons/icon-tech-outline-mobile.svg'
+import IconTechOutlineTablet from  '../../assets/icons/icon-tech-outline-tablet.svg'
+import IconTechOutlineDesktop from  '../../assets/icons/icon-tech-outline-desktop.svg'
+import IconTechOutlineWatchApple from  '../../assets/icons/icon-tech-outline-watch-apple.svg'
 import NumberText from '../../components/NumberText/NumberText'
 import { isFileRequired, findTitle, findFilesSectionTitle } from '../projectWizard'
 
@@ -51,10 +54,10 @@ const sections = [
             fieldName: 'details.appDefinition.primaryTarget',
             type: 'tiled-radio-group',
             options: [
-              {value: 'Phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'Tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'Desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
-              {value: 'Wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+              {value: 'Phone', title: 'Phone', icon: IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Tablet', title: 'Tablet', icon: IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Desktop', title: 'Desktop', icon: IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'Wearable', title: 'Wearable', icon: IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
           },
           {
@@ -267,10 +270,10 @@ export const basicSections = [
             fieldName: 'details.appDefinition.primaryTarget',
             type: 'tiled-radio-group',
             options: [
-              {value: 'Phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'Tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'Desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
-              {value: 'Wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+              {value: 'Phone', title: 'Phone', icon: IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Tablet', title: 'Tablet', icon: IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Desktop', title: 'Desktop', icon: IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'Wearable', title: 'Wearable', icon: IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
           },
           {

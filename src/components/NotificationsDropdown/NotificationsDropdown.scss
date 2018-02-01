@@ -51,6 +51,12 @@
     .icon-ui-bell path {
       fill: $tc-white;
     }
+
+    &:not(.has-unread) {
+      .icon-ui-bell path {
+        fill: $tc-gray-50;
+      }
+    }
   }
 
   .notifications-dropdown-bell.has-unread {
@@ -64,12 +70,6 @@
       right: -2px;
       top: 2px;
       width: 8px;
-    }
-  }
-
-  .dropdown-wrap.hide .notifications-dropdown-bell:not(.has-unread) {
-    > svg > g > g {
-      fill: $tc-gray-50;
     }
   }
 

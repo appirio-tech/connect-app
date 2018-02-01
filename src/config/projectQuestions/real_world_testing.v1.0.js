@@ -1,10 +1,12 @@
 import React from 'react' // eslint-disable-line no-unused-vars
-import { Icons } from 'appirio-tech-react-components'
-import { isFileRequired, findTitle, findFilesSectionTitle } from '../projectWizard'
-
+import IconTechOutlineMobile from  '../../assets/icons/icon-tech-outline-mobile.svg'
+import IconTechOutlineTablet from  '../../assets/icons/icon-tech-outline-tablet.svg'
+import IconTechOutlineDesktop from  '../../assets/icons/icon-tech-outline-desktop.svg'
+import IconTechOutlineWatchApple from  '../../assets/icons/icon-tech-outline-watch-apple.svg'
 import IconDontKnow from '../../assets/icons/icon-dont-know.svg'
 import IconTestStructured from '../../assets/icons/icon-test-structured.svg'
 import IconTestUnstructured from '../../assets/icons/icon-test-unstructured.svg'
+import { isFileRequired, findTitle, findFilesSectionTitle } from '../projectWizard'
 
 const sections = [
   {
@@ -89,10 +91,10 @@ const sections = [
             fieldName: 'details.appDefinition.primaryTarget',
             type: 'tiled-radio-group',
             options: [
-              {value: 'phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
-              {value: 'wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+              {value: 'phone', title: 'Phone', icon: IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'tablet', title: 'Tablet', icon: IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'desktop', title: 'Desktop', icon: IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'wearable', title: 'Wearable', icon: IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
           }
         ]
@@ -438,10 +440,10 @@ export const basicSections = [
             fieldName: 'details.appDefinition.primaryTarget',
             type: 'tiled-radio-group',
             options: [
-              {value: 'phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
-              {value: 'wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+              {value: 'phone', title: 'Phone', icon: IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'tablet', title: 'Tablet', icon: IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'desktop', title: 'Desktop', icon: IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'wearable', title: 'Wearable', icon: IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
           }
           /*{

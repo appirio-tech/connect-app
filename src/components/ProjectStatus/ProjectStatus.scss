@@ -1,5 +1,10 @@
 @import 'tc-includes';
-$status-height: 20px;
+$status-height: 30px;
+
+.gridview-content .EditableProjectStatus {
+  margin-top: 10px;
+}
+
 .ProjectStatus {
   position: relative;
   height: $status-height;
@@ -67,7 +72,10 @@ $status-height: 20px;
         margin-left: 5px;
         // right: 5px;
         // top: 8px;
-        background-size: 9px 4px;
+        // background-size: 9px 4px;
+        path {
+          stroke: $tc-gray-70;
+        }
 
         .Icon {
           width: 100%;
@@ -76,7 +84,6 @@ $status-height: 20px;
         }
       }
     }
-
 
     &.unified-header {
       background-color: $tc-gray-40;
@@ -95,6 +102,8 @@ $status-height: 20px;
     margin-left: 10px;
   }
 
+  // Stylize the dropdown elements
+
   .status-dropdown {
     min-width: 150px;
     position: absolute;
@@ -106,7 +115,7 @@ $status-height: 20px;
     top: -2 * $base_unit;
     left: auto;
     right: -10px;
-    z-index: 2;
+    z-index: 20;
     transition: 250ms all;
 
     &.dropdown-up {
@@ -121,17 +130,16 @@ $status-height: 20px;
       color: $tc-black;
       line-height: 30px;
       padding-left: 20px;
-      margin-bottom: 20px;
       white-space: nowrap;
     }
 
-    a.status-option {
+    .status-option {
       display: flex;
       @include roboto-medium;
       font-size: $tc-label-md;
       text-align: left;
       line-height: 30px;
-      padding: 5px 16px 5px 2px;
+      padding: 0 20px;
       white-space: nowrap;
 
       &:hover {
@@ -139,18 +147,17 @@ $status-height: 20px;
       }
 
       &.active {
-        background: $tc-dark-blue-10;
+        background: $tc-gray-10;
       }
 
-      svg.active-status-icon {
-        margin-left: 7px;
-        margin-right: 10px;
+      svg {
+        margin-top: 7px;
       }
 
       .status-label {
         color: $tc-gray-80;
-        padding-right: 0px;
         font-size: 13px;
+        line-height: 30px;
       }
     }
   }

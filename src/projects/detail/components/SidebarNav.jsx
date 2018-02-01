@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link as DirectLink } from 'react-scroll'
 import cn from 'classnames'
-import { Icons } from 'appirio-tech-react-components'
+import IconUICheckBold from  '../../../assets/icons/icon-ui-check-bold.svg'
 
 require('./SidebarNav.scss')
 
@@ -29,7 +29,7 @@ const renderSubNavItems = (child, idx) => {
     <li key={idx}>
       <DirectLink to={link} className="boxs" {...scrollProps} href="javascript:">
         <span className="txt">{name}&nbsp;{required && <span className="required">*</span>}</span>
-        <span className="schedule">{ isComplete ? <Icons.IconUICheckBold fill={'#FB7D22'} /> : showProgress && `${progress[0]} of ${progress[1]}`}</span>
+        <span className="schedule">{ isComplete ? <IconUICheckBold fill={'#FB7D22'} /> : showProgress && `${progress[0]} of ${progress[1]}`}</span>
       </DirectLink>
     </li>
   )
