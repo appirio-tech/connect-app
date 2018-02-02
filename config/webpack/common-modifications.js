@@ -15,6 +15,11 @@ module.exports = function (config) {
   ]
 
   /*
+    Add babel-plugin-lodash to exclude full lodash lib and include only necessary methods
+   */
+  jsxRule.options.plugins = (jsxRule.options.plugins || []).concat(['lodash'])
+
+  /*
     Include packages `appirio-tech-react-components` and `tc-ui`
     to `.scss` rule
    */
