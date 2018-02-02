@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
-import _ from 'lodash'
+import get from 'lodash/get'
 import UserDropdown from 'appirio-tech-react-components/components/UserDropdownMenu/UserDropdownMenu'
 import {
   ACCOUNTS_APP_LOGIN_URL,
@@ -53,10 +53,10 @@ class TopBarContainer extends React.Component {
   render() {
     const { user, toolbar } = this.props
 
-    const userHandle  = _.get(user, 'handle')
-    const userImage = _.get(user, 'profile.photoURL')
-    const userFirstName = _.get(user, 'profile.firstName')
-    const userLastName = _.get(user, 'profile.lastName')
+    const userHandle  = get(user, 'handle')
+    const userImage = get(user, 'profile.photoURL')
+    const userFirstName = get(user, 'profile.firstName')
+    const userLastName = get(user, 'profile.lastName')
     let userName = userFirstName
     if (userName && userLastName) {
       userName += ' ' + userLastName
@@ -133,7 +133,7 @@ const mapStateToProps = ({ loadUser }) => {
     isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
   }
   return {
-    userRoles              : _.get(loadUser, 'user.roles', []),
+    userRoles              : get(loadUser, 'user.roles', []),
     user                   : loadUser.user,
     isPowerUser
   }

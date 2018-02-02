@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import get from 'lodash/get'
 import { axiosInstance as axios } from './requestInterceptor'
 import { PROJECTS_API_URL, FILE_PICKER_SUBMISSION_CONTAINER_NAME } from '../config/constants'
 
@@ -7,7 +7,7 @@ export function addProjectAttachment(projectId, fileData) {
   fileData.s3Bucket = FILE_PICKER_SUBMISSION_CONTAINER_NAME
   return axios.post(`${PROJECTS_API_URL}/v4/projects/${projectId}/attachments`, { param: fileData })
     .then( resp => {
-      return _.get(resp.data, 'result.content', {})
+      return get(resp.data, 'result.content', {})
     })
 }
 

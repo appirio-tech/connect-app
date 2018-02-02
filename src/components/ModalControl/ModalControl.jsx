@@ -4,7 +4,7 @@
  * label underneath. The onClick() callback is triggered on click.
  */
 
-import _ from 'lodash'
+import noop from 'lodash/noop'
 import React from 'react'
 import PT from 'prop-types'
 import './ModalControl.scss'
@@ -28,7 +28,7 @@ ModalControl.defaultProps = {
   className: '',
   icon: null,
   label: '',
-  onClick: _.noop
+  onClick: noop
 }
 
 ModalControl.propTypes = {

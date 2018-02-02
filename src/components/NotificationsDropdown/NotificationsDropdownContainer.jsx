@@ -6,7 +6,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import _ from 'lodash'
+import find from 'lodash/find'
+import sumBy from 'lodash/sumBy'
 import { getNotifications, markAllNotificationsRead, toggleNotificationRead, toggleBundledNotificationRead } from '../../routes/notifications/actions'
 import { splitNotificationsBySources, filterReadNotifications, limitQuantityInSources } from '../../routes/notifications/helpers/notifications'
 import NotificationsSection from '../NotificationsSection/NotificationsSection'
@@ -43,13 +44,13 @@ class NotificationsDropdownContainer extends React.Component {
     const globalSource = notificationsBySources.length > 0 && notificationsBySources[0].id === 'global' ? notificationsBySources[0] : null
     const projectSources = notificationsBySources.length > 1 && globalSource ? notificationsBySources.slice(1) : notificationsBySources
     const hasUnread = notReadNotifications.length > 0
-    const olderNotificationsCount = _.sumBy(projectSources, 'total') - _.sumBy(projectSources, 'notifications.length')
+    const olderNotificationsCount = sumBy(projectSources, 'total') - sumBy(projectSources, 'notifications.length')
     // we have to give Dropdown component some time
     // before removing notification item node from the list
     // otherwise dropdown thinks we clicked outside and closes dropdown
     const toggleNotificationReadWithDelay = (notificationId) => {
       if (!pending) {
-        const notification = _.find(notReadNotifications, { id: notificationId })
+        const notification = find(notReadNotifications, { id: notificationId })
         setTimeout(() => {
           // if it's bundled notification, then toggle all notifications inside the bundle
           if (notification.bundledIds) {

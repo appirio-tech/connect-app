@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import seeAttachedWrapperField from './SeeAttachedWrapperField'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
-import _ from 'lodash'
+import get from 'lodash/get'
+import assign from 'lodash/assign'
 
 import SpecQuestionList from './SpecQuestionList/SpecQuestionList'
 import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
@@ -38,7 +39,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
     const elemProps = {
       name: q.fieldName,
       label: q.label,
-      value: _.get(project, q.fieldName, ''),
+      value: get(project, q.fieldName, ''),
       required: q.required,
       validations: q.required ? 'isRequired' : null,
       validationError: q.validationError,
@@ -46,9 +47,9 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
     }
     if (q.fieldName === 'details.appDefinition.numberScreens') {
       const p = dirtyProject ? dirtyProject : project
-      const screens = _.get(p, 'details.appScreens.screens', [])
+      const screens = get(p, 'details.appScreens.screens', [])
       const definedScreens = screens.length
-      _.each(q.options, (option) => {
+      q.options.forEach((option) => {
         let maxValue = 0
         const hyphenIdx = option.value.indexOf('-')
         if (hyphenIdx === -1) {
@@ -98,22 +99,22 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       break
     case 'radio-group':
       ChildElem = TCFormFields.RadioGroup
-      _.assign(elemProps, {wrapperClass: 'row', options: q.options})
+      assign(elemProps, {wrapperClass: 'row', options: q.options})
       // child = <TCFormFields.RadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
     case 'tiled-radio-group':
       ChildElem = TCFormFields.TiledRadioGroup
-      _.assign(elemProps, {wrapperClass: 'row', options: q.options, theme: 'dark', tabable: true})
+      assign(elemProps, {wrapperClass: 'row', options: q.options, theme: 'dark', tabable: true})
       // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
     case 'see-attached-tiled-radio-group':
       ChildElem = TCFormFields.TiledRadioGroup
-      _.assign(elemProps, {wrapperClass: 'row', options: q.options, hideDescription: true, description: q.description})
+      assign(elemProps, {wrapperClass: 'row', options: q.options, hideDescription: true, description: q.description})
       // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
     case 'checkbox-group':
       ChildElem = TCFormFields.CheckboxGroup
-      _.assign(elemProps, {options: q.options})
+      assign(elemProps, {options: q.options})
       // child = <TCFormFields.CheckboxGroup name={q.fieldName} label={q.label} value={value} options={q.options} />
       break
     case 'checkbox':
@@ -122,7 +123,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       break
     case 'see-attached-features':
       ChildElem = SeeAttachedSpecFeatureQuestion
-      _.assign(elemProps, {
+      assign(elemProps, {
         resetValue: resetFeatures,
         question: q, showFeaturesDialog,
         hideDescription: true,
@@ -132,19 +133,19 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       break
     case 'colors':
       ChildElem = ColorSelector
-      _.assign(elemProps, { defaultColors: q.defaultColors })
+      assign(elemProps, { defaultColors: q.defaultColors })
       // child = <ColorSelector name={q.fieldName} defaultColors={q.defaultColors} value={value} />
       break
     case 'select-dropdown':
       ChildElem = SelectDropdown
-      _.assign(elemProps, {
+      assign(elemProps, {
         options: q.options,
         theme: 'default'
       })
       break
     case 'slide-radiogroup':
       ChildElem = TCFormFields.SliderRadioGroup
-      _.assign(elemProps, {
+      assign(elemProps, {
         options: q.options,
         min: 0,
         max: q.options.length - 1,

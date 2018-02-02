@@ -1,4 +1,5 @@
-import _ from 'lodash'
+import map from 'lodash/map'
+import remove from 'lodash/remove'
 import { loadMembers } from '../../actions/members'
 import { loadProject, loadDirectProjectData } from './project'
 import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
@@ -14,9 +15,9 @@ const getDashboardData = (dispatch, projectId) => {
     return dispatch(loadProject(projectId))
       .then(({value, action}) => {
         // action.type should be LOAD_PROJECT_SUCCESS
-        const userIds = _.map(value.members, 'userId')
+        const userIds = map(value.members, 'userId')
         // this is to remove any nulls from the list (dev had some bad data)
-        _.remove(userIds, i => !i)
+        remove(userIds, i => !i)
         // load additional data in parallel
         const promises = [
           dispatch(loadMembers(userIds))

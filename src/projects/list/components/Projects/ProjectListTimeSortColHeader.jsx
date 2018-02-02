@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 import cn from 'classnames'
 import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 import IconCarretDownActive from '../../../../assets/icons/arrow-6px-carret-down-active.svg'
@@ -44,7 +43,7 @@ class ProjectListTimeSortColHeader extends React.Component {
   }
 
   render() {
-    const cur = _.find(options, o => currentSortField === o.val)
+    const cur = options.find(o => currentSortField === o.val)
       || options[0]
     const {currentSortField, sortHandler} = this.props
 

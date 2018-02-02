@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 import cn from 'classnames'
 import Down from '../../assets/icons/arrow-down-big.svg'
 import Up from '../../assets/icons/arrow-up-big.svg'
@@ -36,7 +35,7 @@ const HeaderItem = ({item, onItemClick, currentSortField}) => {
 const ListHeader = ({ columns, sortHandler, currentSortField }) => {
 
   const toggleSort = (fieldName) => {
-    const f = _.find(columns, h => h.id === fieldName)
+    const f = columns.find(h => h.id === fieldName)
     if (f && f.sortable) {
       let newSortField = fieldName
       if (currentSortField.split(' ')[0] === fieldName) {

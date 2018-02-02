@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import noop from 'lodash/noop'
 import React from 'react'
 import PT from 'prop-types'
 import './ProjectTypeCard.scss'
@@ -11,7 +11,7 @@ function ProjectTypeCard(p) {
   return (
     <div
       className={className}
-      onClick={p.disabled ? _.noop : p.onClick}
+      onClick={p.disabled ? noop : p.onClick}
     >
       <div className="icon-wrapper">{ p.icon }</div>
       <h1 className="header">{ p.type }</h1>

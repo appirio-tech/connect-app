@@ -1,16 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 import Select from '../../components/Select/Select'
 import { projectTypes } from '../../config/projectWizard'
 
 const Filters = ({ criteria, applyFilters }) => {
-  const types = _.map(projectTypes, projectType => {
+  const types = projectTypes.map(projectType => {
     return { value: projectType.id, label: projectType.name }
   })
 
   // TODO add segments list
-  // const segments = _.map([], segment => {
+  // const segments = [].map(segment => {
   //   return { value: segment.id, label: segment.value }
   // })
 

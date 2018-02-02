@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
+import find from 'lodash/find'
 import moment from 'moment'
 import { singlePluralFormatter } from '../../helpers'
 import ISOCountries from '../../helpers/ISOCountries'
@@ -8,7 +8,7 @@ import ISOCountries from '../../helpers/ISOCountries'
 require('./UsernameAndDetails.scss')
 
 const UsernameAndDetails = ({ username, country, numWins, memberSince }) => {
-  const countryObject = _.find(ISOCountries, {alpha3: country})
+  const countryObject = find(ISOCountries, {alpha3: country})
   const userCountry = countryObject ? countryObject.name : ''
 
   const numberWins = singlePluralFormatter(numWins, 'win')

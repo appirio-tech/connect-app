@@ -1,9 +1,11 @@
-import _ from 'lodash'
+import startCase from 'lodash/startCase'
+import camelCase from 'lodash/camelCase'
+import isFinite from 'lodash/isFinite'
 import fetch from 'isomorphic-fetch'
 import tcEmitter from './emitter'
 
 export const TCEmitter = tcEmitter
-export const titleCase = (str) => _.startCase(_.camelCase(str))
+export const titleCase = (str) => startCase(camelCase(str))
 
 
 // Fetch helpers
@@ -83,7 +85,7 @@ export function isEndOfScreen(callback, ...callbackArguments) {
 
 // Miscellaneous helpers
 export function getRoundedPercentage(number) {
-  if (_.isFinite(number)) {
+  if (isFinite(number)) {
     const roundedNumber = Math.round(number)
 
     return String(roundedNumber) + '%'

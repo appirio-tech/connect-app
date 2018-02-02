@@ -1,4 +1,9 @@
-import _ from 'lodash'
+import get from 'lodash/get'
+import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
+import isString from 'lodash/isString'
+import capitalize from 'lodash/capitalize'
+import isFunction from 'lodash/isFunction'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
@@ -11,17 +16,17 @@ import './ProjectSpecSidebar.scss'
 
 const calcProgress = (project, subSection) => {
   if (subSection.type === 'questions') {
-    const vals = _.map(subSection.questions, (q) => {
+    const vals = subSection.questions.map((q) => {
       const fName = q.fieldName
       // special handling for seeAttached type of fields
       if (q.type.indexOf('see-attached') > -1) {
-        const val = _.get(project, fName, null)
-        return val && (val.seeAttached || !_.isEmpty(_.get(project, `${fName}.value`)))
+        const val = get(project, fName, null)
+        return val && (val.seeAttached || !isEmpty(get(project, `${fName}.value`)))
       }
-      return !_.isEmpty(_.get(project, fName))
+      return !isEmpty(get(project, fName))
     })
     let count = 0
-    _.forEach(vals, (v) => {if (v) count++ })
+    vals.forEach((v) => {if (v) count++ })
     // Github issue#1399, filtered only required questions to set expected length of valid answers
     const filterRequiredQuestions = (q) => (
       // if required attribute is missing on question, but sub section has required flag, assume question as required
@@ -30,24 +35,24 @@ const calcProgress = (project, subSection) => {
       || q.required
       || (q.validations && q.validations.indexOf('isRequired') !== -1)
     )
-    return [count, _.filter(subSection.questions, filterRequiredQuestions).length]
+    return [count, subSection.questions.filter(filterRequiredQuestions).length]
   } else if (subSection.id === 'screens') {
-    const screens = _.get(project, 'details.appScreens.screens', [])
+    const screens = get(project, 'details.appScreens.screens', [])
     const validScreens = screens.filter((s) => {
-      const vals = _.filter(subSection.questions, (q) => {
+      const vals = subSection.questions.filter((q) => {
         const fName = q.fieldName
-        return !_.isEmpty(_.get(s, fName))
+        return !isEmpty(get(s, fName))
       })
       return vals.length === subSection.questions.filter((q) => q.required).length
     })
     return [validScreens.length, screens.length]//TODO we should do range comparison here
   } else {
     // assuming there is only one question
-    let val = _.get(project, subSection.fieldName, null)
+    let val = get(project, subSection.fieldName, null)
     if (val && typeof val.trim === 'function') {
       val = val.trim()
     }
-    return [_.isEmpty(val) ? 0 : 1, 1]
+    return [isEmpty(val) ? 0 : 1, 1]
   }
 }
 
@@ -60,9 +65,9 @@ class ProjectSpecSidebar extends Component {
 
   shouldComponentUpdate(nextProps) {
     return !(
-      _.isEqual(this.props.project, nextProps.project)
-      && _.isEqual(this.props.currentMemberRole, nextProps.currentMemberRole)
-      && _.isEqual(this.props.sections, nextProps.sections)
+      isEqual(this.props.project, nextProps.project)
+      && isEqual(this.props.currentMemberRole, nextProps.currentMemberRole)
+      && isEqual(this.props.sections, nextProps.sections)
     )
   }
 
@@ -72,15 +77,15 @@ class ProjectSpecSidebar extends Component {
 
   componentWillReceiveProps(nextProps) {
     const {project, sections} = nextProps
-    const navItems = _.map(sections, s => {
+    const navItems = sections.map(s => {
       return {
         name: typeof s.title === 'function' ? s.title(project, false): s.title,
         required: s.required,
         link: s.id,
-        subItems: _.map(s.subSections, sub => {
+        subItems: s.subSections.map(sub => {
           return {
-            name: _.isString(sub.title) ? sub.title : _.capitalize(sub.id),
-            required: _.isFunction(sub.required) ? sub.required(project, s.subSections) : sub.required,
+            name: isString(sub.title) ? sub.title : capitalize(sub.id),
+            required: isFunction(sub.required) ? sub.required(project, s.subSections) : sub.required,
             link: `${s.id}-${sub.id}`,
             progress: calcProgress(project, sub)
           }
@@ -90,8 +95,8 @@ class ProjectSpecSidebar extends Component {
 
     // determine if spec is complete
     let canSubmitForReview = true
-    _.forEach(navItems, i => {
-      _.forEach(i.subItems, s => {
+    navItems.forEach(i => {
+      i.subItems.forEach(s => {
         if (s.required)
           canSubmitForReview = canSubmitForReview && s.progress[0] === s.progress[1]
       })
@@ -110,7 +115,7 @@ class ProjectSpecSidebar extends Component {
     const { navItems, canSubmitForReview } = this.state
     const { currentMemberRole, project } = this.props
     const showReviewBtn = project.status === 'draft' &&
-      _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
+      [PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER].indexOf(currentMemberRole) > -1
 
     // NOTE: May be beneficial to refactor all of these logics into a higher-order
     // component that returns different project estimate components for different

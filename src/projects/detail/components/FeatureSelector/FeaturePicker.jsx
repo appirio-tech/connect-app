@@ -1,4 +1,6 @@
-import _ from 'lodash'
+import groupBy from 'lodash/groupBy'
+import findIndex from 'lodash/findIndex'
+import keyBy from 'lodash/keyBy'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import update from 'react-addons-update'
@@ -201,7 +203,7 @@ const AVAILABLE_FEATURES = [
     icon: IconAudio
   }
 ]
-const categorizedFeatureSet = _.groupBy(AVAILABLE_FEATURES, val => val.categoryId)
+const categorizedFeatureSet = groupBy(AVAILABLE_FEATURES, val => val.categoryId)
 
 // const customFeatureTemplate = {
 //   categoryId: 'custom',
@@ -262,7 +264,7 @@ class FeaturePicker extends Component {
   }
 
   updateSelectedFeature(feature) {
-    const idx = _.findIndex(this.state.activeFeatureList, f => f.id === feature.id )
+    const idx = findIndex(this.state.activeFeatureList, f => f.id === feature.id )
     const newState = update(this.state, {
       activeFeatureList: { $splice: [[idx, 1, feature]]}
     })
@@ -271,7 +273,7 @@ class FeaturePicker extends Component {
   }
 
   toggleFeature(featureId, disable) {
-    const featureIndex = _.findIndex(this.state.activeFeatureList, (f) => f.id === featureId )
+    const featureIndex = findIndex(this.state.activeFeatureList, (f) => f.id === featureId )
     if (featureIndex >= 0) {
       const feature = this.state.activeFeatureList[featureIndex]
       let featureListQuery
@@ -306,7 +308,7 @@ class FeaturePicker extends Component {
   // removeFeature is only called for custom feature
   removeFeature(featureId) {
     // lookup index
-    const idx = _.findIndex(this.state.activeFeatureList, f => f.id === featureId )
+    const idx = findIndex(this.state.activeFeatureList, f => f.id === featureId )
     const newState = update(this.state, {
       activeFeatureCount: {$set: this.state.activeFeatureCount - 1},
       activeFeatureList: { $splice: [[idx, 1]] },
@@ -328,8 +330,8 @@ class FeaturePicker extends Component {
   render() {
     const { selectedFeatureId, activeFeatureList, activeFeatureCount, showCutsomFeatureForm, addingCustomFeature  } = this.state
     const { isEdittable } = this.props
-    const selectedFeature = _.find(AVAILABLE_FEATURES, f => f.id === selectedFeatureId )
-    const selectedFeatureData = _.find(activeFeatureList, f => f.id === selectedFeatureId )
+    const selectedFeature = AVAILABLE_FEATURES.find(f => f.id === selectedFeatureId )
+    const selectedFeatureData = activeFeatureList.find(f => f.id === selectedFeatureId )
     const renderFeatureCategory = (category, idx) => {
       return (
         <li key={ idx }>
@@ -403,7 +405,7 @@ class FeaturePicker extends Component {
 }
 
 FeaturePicker.AVAILABLE_FEATURES = AVAILABLE_FEATURES
-FeaturePicker.ALL_FEATURES_MAP = _.keyBy(AVAILABLE_FEATURES, 'id')
+FeaturePicker.ALL_FEATURES_MAP = keyBy(AVAILABLE_FEATURES, 'id')
 
 FeaturePicker.PropTypes = {
   features: PropTypes.arrayOf(PropTypes.object).isRequired,

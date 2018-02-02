@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import ProjectStatus from './ProjectStatus'
 import cn from 'classnames'
-import _ from 'lodash'
+import get from 'lodash/get'
 import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
 import {
   PROJECT_STATUS,
@@ -119,7 +119,7 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
   }
 
   handleReasonUpdate(reason) {
-    this.setState({ statusChangeReason : _.get(reason, 'value') })
+    this.setState({ statusChangeReason : get(reason, 'value') })
   }
 
   render() {

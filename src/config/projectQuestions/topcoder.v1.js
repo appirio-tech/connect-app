@@ -1,5 +1,6 @@
 import React from 'react' // eslint-disable-line no-unused-vars
-import _ from 'lodash'
+import get from 'lodash/get'
+import identity from 'lodash/identity'
 import IconTcSpecTypeSerif from  '../../assets/icons/icon-tc-spec-type-serif.svg'
 import IconTcSpecTypeSansSerif from  '../../assets/icons/icon-tc-spec-type-sans-serif.svg'
 import IconTcSpecIconTypeColorHome from  '../../assets/icons/icon-tc-spec-icon-type-color-home.svg'
@@ -11,10 +12,9 @@ const isFileRequired = (project, subSections) => {
   const fields = _.filter(subSection.questions, q => q.type.indexOf('see-attached') > -1)
   // iterate over all seeAttached type fields to check
   //  if any see attached is checked.
-  return _.some(_.map(
-    _.map(fields, 'fieldName'),
-    fn => _.get(project, `${fn}.seeAttached`)
-  ))
+  return fields
+    .map(field => get(project, `${field.fieldName}.seeAttached`))
+    .some(identity)
 }
 
 const sections = [
@@ -27,7 +27,7 @@ const sections = [
       {
         id: 'projectName',
         required: true,
-        validationError: 'Please provide a name for your project',        
+        validationError: 'Please provide a name for your project',
         fieldName: 'name',
         description: '',
         title: 'Project Name',
@@ -219,7 +219,7 @@ export const basicSections = [
       {
         id: 'projectName',
         required: true,
-        validationError: 'Please provide a name for your project',        
+        validationError: 'Please provide a name for your project',
         fieldName: 'name',
         description: '',
         title: 'Project Name',
@@ -242,7 +242,7 @@ export const basicSections = [
             description: 'Brief Description',
             title: 'Description',
             type: 'textbox'
-          },        
+          },
           {
             icon: 'question',
             required: true,

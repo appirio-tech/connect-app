@@ -1,5 +1,6 @@
 import React from 'react' // eslint-disable-line no-unused-vars
-import _ from 'lodash'
+import get from 'lodash/get'
+import identity from 'lodash/identity'
 import IconTechOutlineMobile from  '../../assets/icons/icon-tech-outline-mobile.svg'
 import IconTechOutlineTablet from  '../../assets/icons/icon-tech-outline-tablet.svg'
 import IconTechOutlineDesktop from  '../../assets/icons/icon-tech-outline-desktop.svg'
@@ -17,10 +18,9 @@ const isFileRequired = (project, subSections) => {
   const fields = _.filter(subSection.questions, q => q.type.indexOf('see-attached') > -1)
   // iterate over all seeAttached type fields to check
   //  if any see attached is checked.
-  return _.some(_.map(
-    _.map(fields, 'fieldName'),
-    fn => _.get(project, `${fn}.seeAttached`)
-  ))
+  return fields
+    .map(field => get(project, `${field.fieldName}.seeAttached`))
+    .some(identity)
 }
 
 const sections = [

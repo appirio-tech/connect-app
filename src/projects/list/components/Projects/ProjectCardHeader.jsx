@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import get from 'lodash/get'
 import moment from 'moment'
 import React from 'react'
 import PT from 'prop-types'
@@ -119,10 +119,10 @@ ProjectTypeIcons.propTypes = {
 function ProjectCardHeader({ project }) {
   if (!project) return null
 
-  const productType = _.get(project, 'details.products[0]')
+  const productType = get(project, 'details.products[0]')
   const product = findProduct(productType)
   // icon for the product, use default generic work project icon for categories which no longer exist now
-  const productIcon = _.get(product, 'icon', 'tech-32px-outline-work-project')
+  const productIcon = get(product, 'icon', 'tech-32px-outline-work-project')
   return (
     <div className="project-card-header">
       <div className="project-header">

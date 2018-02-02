@@ -5,7 +5,7 @@ import PanelProject from '../PanelProject/PanelProject'
 import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import './ProjectStatusSection.scss'
 import cn from 'classnames'
-import _ from 'lodash'
+import get from 'lodash/get'
 import {
   PROJECT_ROLE_COPILOT,
   PROJECT_ROLE_MANAGER,
@@ -64,7 +64,7 @@ class ProjectStatusSection extends React.Component {
   }
 
   handleReasonUpdate(reason) {
-    this.setState({ statusChangeReason : _.get(reason, 'value') })
+    this.setState({ statusChangeReason : get(reason, 'value') })
   }
 
   render() {
@@ -72,7 +72,7 @@ class ProjectStatusSection extends React.Component {
     const { showStatusChangeDialog, isOpen, newStatus, statusChangeReason } = this.state
     const selected = PROJECT_STATUS.filter((opt) => opt.value === status)[0]
     const canEdit = currentMemberRole
-      && _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
+      && [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER].indexOf(currentMemberRole) > -1
 
     return (
       <PanelProject>

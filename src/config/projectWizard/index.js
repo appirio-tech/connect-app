@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import find from 'lodash/find'
 import typeToSpecification from '../projectSpecification/typeToSpecification'
 
 const products = {
@@ -332,7 +332,7 @@ const products = {
 export default products
 
 // exports all project types as an array
-export const projectTypes = _.mapValues(products, (p, key) => ({...p, name: key }) )
+export const projectTypes = Object.keys(products).map((key) => ({ ...products[key], name: key }) )
 
 /**
  * Finds product for the given product id. It compares the given value against product id and aliases.
@@ -428,14 +428,14 @@ export function getProjectCreationTemplateField(product, sectionId, subSectionId
   if (product)
     specification = typeToSpecification[product]
   const sections = require(`../projectQuestions/${specification}`).basicSections
-  const section = _.find(sections, {id: sectionId})
+  const section = find(sections, {id: sectionId})
   let subSection = null
   if (subSectionId && section) {
-    subSection = _.find(section.subSections, {id : subSectionId })
+    subSection = find(section.subSections, {id : subSectionId })
   }
   if (subSection) {
     if (subSectionId === 'questions') {
-      return _.find(subSection.questions, { fieldName })
+      return find(subSection.questions, { fieldName })
     }
     return subSection.fieldName === fieldName ? subSection : null
   }

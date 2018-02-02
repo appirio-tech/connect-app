@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import _ from 'lodash'
+import findIndex from 'lodash/findIndex'
+import isEmpty from 'lodash/isEmpty'
+import intersection from 'lodash/intersection'
 import {
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN,
   PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER,
@@ -44,7 +46,7 @@ class TeamManagementContainer extends Component {
     if (isAddingTeamMember && keyword.length)
       this.updateSearchMembers(nextProps)
     if (this.state.isUserLeaving &&
-      _.findIndex(nextProps.members,
+      findIndex(nextProps.members,
         m => m.userId === this.props.currentUser.userId) === -1
     ) {
       // navigate to project listing
@@ -132,7 +134,7 @@ class TeamManagementContainer extends Component {
     this.props.addProjectMember(
       this.props.projectId, {
         userId,
-        role: _.isEmpty(filterType) ? PROJECT_ROLE_CUSTOMER: filterType
+        role: isEmpty(filterType) ? PROJECT_ROLE_CUSTOMER: filterType
       }
     )
     this.setState({
@@ -177,7 +179,7 @@ class TeamManagementContainer extends Component {
   anontateMemberProps() {
     const { members, allMembers } = this.props
     // fill project members from state.members object
-    return _.map(members, m => {
+    return members.map(m => {
       if (!m.userId) return m
       // map role
       switch (m.role) {
@@ -192,10 +194,11 @@ class TeamManagementContainer extends Component {
         m.isManager = true
         break
       }
-      return _.assign({}, m, {
-        photoURL: ''
-      },
-      _.find(allMembers, mem => mem.userId === m.userId))
+      return ({
+        ...m,
+        photoURL: '',
+        ...allMembers.find(mem => mem.userId === m.userId)
+      })
     })
   }
 
@@ -229,12 +232,12 @@ const mapStateToProps = ({ loadUser, members }) => {
   return {
     currentUser: {
       userId: parseInt(loadUser.user.id),
-      isCopilot: _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT) > -1,
-      isAdmin: _.intersection(loadUser.user.roles, adminRoles).length > 0,
+      isCopilot: loadUser.user.roles.indexOf(ROLE_CONNECT_COPILOT) > -1,
+      isAdmin: intersection(loadUser.user.roles, adminRoles).length > 0,
       isManager: loadUser.user.roles.some((role) => managerRoles.indexOf(role) !== -1),
       isCustomer: !loadUser.user.roles.some((role) => powerUserRoles.indexOf(role) !== -1)
     },
-    allMembers: _.values(members.members)
+    allMembers: Object.values(members.members)
   }
 }
 

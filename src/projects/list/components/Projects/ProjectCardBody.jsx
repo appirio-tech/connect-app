@@ -7,7 +7,7 @@ import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
 import editableProjectStatus from '../../../../components/ProjectStatus/editableProjectStatus'
 import { PROJECT_STATUS_ACTIVE, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } from '../../../../config/constants'
 import './ProjectCardBody.scss'
-import _ from 'lodash'
+import get from 'lodash/get'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
@@ -16,9 +16,9 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
   if (!project) return null
 
   const canEdit = isSuperUser || (currentMemberRole
-    && (_.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1))
+    && ([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER].indexOf(currentMemberRole) > -1))
 
-  const progress = _.get(process, 'percent', 0)
+  const progress = get(process, 'percent', 0)
 
   return (
     <div className="project-card-body">

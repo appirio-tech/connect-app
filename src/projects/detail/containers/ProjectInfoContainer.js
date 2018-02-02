@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import update from 'react-addons-update'
-import _ from 'lodash'
+import isEqual from 'lodash/isEqual'
+import get from 'lodash/get'
 import LinksMenu from '../../../components/LinksMenu/LinksMenu'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import TeamManagementContainer from './TeamManagementContainer'
@@ -30,7 +31,7 @@ class ProjectInfoContainer extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
-    return !_.isEqual(nextProps.project, this.props.project)
+    return !isEqual(nextProps.project, this.props.project)
   }
 
   setDuration({duration, status}) {
@@ -78,7 +79,7 @@ class ProjectInfoContainer extends React.Component {
     const { project, currentMemberRole, isSuperUser } = this.props
     let directLinks = null
     // check if direct links need to be added
-    const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
+    const isMemberOrCopilot = [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER].indexOf(currentMemberRole) > -1
     if (isMemberOrCopilot) {
       directLinks = []
       if (project.directProjectId) {
@@ -92,11 +93,11 @@ class ProjectInfoContainer extends React.Component {
     const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER && project.status === 'draft'
 
     let devices = []
-    const primaryTarget = _.get(project, 'details.appDefinition.primaryTarget')
+    const primaryTarget = get(project, 'details.appDefinition.primaryTarget')
     if (primaryTarget && !primaryTarget.seeAttached) {
       devices.push(primaryTarget.value)
     } else {
-      devices = _.get(project, 'details.devices', [])
+      devices = get(project, 'details.devices', [])
     }
     return (
       <div>

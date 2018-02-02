@@ -1,4 +1,5 @@
-import { branch, renderComponent } from 'recompose'
+import branch from 'recompose/branch'
+import renderComponent from 'recompose/renderComponent'
 import LoadingIndicator from './LoadingIndicator/LoadingIndicator'
 const identity = t => t
 

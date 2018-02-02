@@ -6,7 +6,10 @@ import querystring from 'query-string'
 import { withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'
 import cn from 'classnames'
-import _ from 'lodash'
+import identity from 'lodash/identity'
+import pickBy from 'lodash/pickBy'
+import omit from 'lodash/omit'
+import get from 'lodash/get'
 import SearchBar from 'appirio-tech-react-components/components/SearchBar/SearchBar'
 import MenuBar from 'appirio-tech-react-components/components/MenuBar/MenuBar'
 import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
@@ -89,7 +92,7 @@ class ProjectsToolBar extends Component {
   }
 
   applyFilters(filter) {
-    const criteria = _.assign({}, this.props.criteria, filter)
+    const criteria = {...this.props.criteria, ...filter}
     if (criteria && criteria.keyword) {
       criteria.keyword = encodeURIComponent(criteria.keyword)
       // force sort criteria to best match
@@ -115,10 +118,10 @@ class ProjectsToolBar extends Component {
     // because criteria is changed disable infinite autoload
     this.props.setInfiniteAutoload(false)
     // remove any null values
-    criteria = _.pickBy(criteria, _.identity)
+    criteria = pickBy(criteria, identity)
     this.props.history.push({
       pathname: '/projects',
-      search: '?' + querystring.stringify(_.assign({}, criteria))
+      search: '?' + querystring.stringify({...criteria})
     })
     this.props.loadProjects(criteria)
   }
@@ -147,7 +150,7 @@ class ProjectsToolBar extends Component {
       excludedFiltersCount++
     }
     // Ignore status from filters count
-    const noOfFilters = _.keys(_.omit(criteria, ['status', 'keyword'])).length - excludedFiltersCount
+    const noOfFilters = Object.keys(omit(criteria, ['status', 'keyword'])).length - excludedFiltersCount
     const onLeaveMessage = this.onLeave() || ''
 
     const primaryNavigationItems = [
@@ -256,7 +259,7 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
     project                : projectState.project,
     updateExisting         : projectState.updateExisting,
     criteria               : projectSearch.criteria,
-    userRoles              : _.get(loadUser, 'user.roles', []),
+    userRoles              : get(loadUser, 'user.roles', []),
     user                   : loadUser.user
   }
 }

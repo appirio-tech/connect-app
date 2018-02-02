@@ -3,11 +3,11 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
+import pick from 'lodash/pick'
 import './FileBtn.scss'
 
 const FileBtn = (props) => {
-  const fileProps = _.pick(props, 'accept', 'onChange')
+  const fileProps = pick(props, 'accept', 'onChange')
 
   return (
     <div className="file-btn">

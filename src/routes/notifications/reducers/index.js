@@ -9,8 +9,6 @@ import {
   VIEW_OLDER_NOTIFICATIONS_SUCCESS,
   NOTIFICATIONS_PENDING
 } from '../../../config/constants'
-import _ from 'lodash'
-
 
 const initialState = {
   isLoading: false,
@@ -26,9 +24,9 @@ const initialState = {
 // get sources from notifications
 const getSources = (notifications) => {
   const sources = [{ id: 'global', title: 'Global', total: 0 }]
-  _.each(notifications, notification => {
+  notifications.forEach(notification => {
     if (!notification.isRead) {
-      const source = _.find(sources, s => s.id === notification.sourceId)
+      const source = sources.find(s => s.id === notification.sourceId)
       if (source) {
         source.total++
       } else {

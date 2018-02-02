@@ -1,4 +1,7 @@
-import _ from 'lodash'
+import sortBy from 'lodash/sortBy'
+import union from 'lodash/union'
+import map from 'lodash/map'
+import remove from 'lodash/remove'
 import { getTopics, getTopicPosts, createTopic, saveTopic, deleteTopic, addTopicPost, saveTopicPost, getTopicPost, deleteTopicPost } from '../../api/messages'
 import {
   PROJECT_FEED_TYPE_PRIMARY,
@@ -56,12 +59,12 @@ const getTopicsWithComments = (projectId, tag) => {
       const additionalPosts = []
       // if a topic has more than 20 posts then to display the latest posts,
       // we'll have to first retrieve them from the server
-      _.forEach(topics, (t) => {
+      topics.forEach((t) => {
         if (t.posts.length < t.postIds.length) {
           const postIds = t.postIds.slice(t.postIds.length).slice(-6)
           additionalPosts.push(getTopicPosts(t.id, postIds))
         }
-        t.posts = _.sortBy(t.posts, ['id'])
+        t.posts = sortBy(t.posts, ['id'])
       })
       if (additionalPosts.length === 0) {
         // we dont need to retrieve any additional posts
@@ -69,9 +72,9 @@ const getTopicsWithComments = (projectId, tag) => {
       }
       return Promise.all(additionalPosts)
         .then(postArr => {
-          _.forEach(postArr, (p) => {
-            const topic = _.find(topics, t => t.id === p.topicId)
-            topic.posts = _.sortBy(topic.posts.concat(p.posts), ['id'])
+          postArr.forEach((p) => {
+            const topic = topics.find(t => t.id === p.topicId)
+            topic.posts = sortBy(topic.posts.concat(p.posts), ['id'])
           })
           return { topics, totalCount }
         })
@@ -87,12 +90,12 @@ const getProjectTopicsWithMember = (dispatch, projectId, tag) => {
     })
       .then(({ value, action }) => {
         let userIds = []
-        userIds = _.union(userIds, _.map(value.topics, 'userId'))
-        _.forEach(value.topics, topic => {
-          userIds = _.union(userIds, _.map(topic.posts, 'userId'))
+        userIds = union(userIds, map(value.topics, 'userId'))
+        value.topics.forEach(topic => {
+          userIds = union(userIds, map(topic.posts, 'userId'))
         })
         // this is to remove any nulls from the list (dev had some bad data)
-        _.remove(userIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(i) > -1)
+        remove(userIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(i) > -1)
         // return if there are no userIds to retrieve, empty result set
         if (!userIds.length)
           resolve(value)
@@ -106,10 +109,10 @@ const getProjectTopicsWithMember = (dispatch, projectId, tag) => {
 /*eslint-enable*/
 
 export function createProjectTopic(projectId, topic) {
-  const updatedTopic = _.assign({
+  const updatedTopic = {...{
     reference: 'project',
     referenceId: projectId.toString()
-  }, topic)
+  }, ...topic}
   return (dispatch, getState) => {
     const projectStatus = getState().projectState.project.status
     return dispatch({

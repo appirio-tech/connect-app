@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import get from 'lodash/get'
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
@@ -61,7 +61,7 @@ class MessageDetails extends React.Component {
           <Comment
             key={idx}
             message={item}
-            avatarUrl={_.get(item, 'author.photoURL', null)}
+            avatarUrl={get(item, 'author.photoURL', null)}
             authorName={item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user'}
             date={moment(item.date).fromNow()}
             edited={item.edited}

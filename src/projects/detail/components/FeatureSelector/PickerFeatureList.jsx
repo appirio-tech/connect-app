@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import IconUICheckBold from  '../../../../assets/icons/icon-ui-check-bold.svg'
 import classNames from 'classnames'
-import _ from 'lodash'
+import findIndex from 'lodash/findIndex'
 require('./PickerFeatureList.scss')
 
 class PickerFeatureList extends Component {
@@ -18,10 +18,10 @@ class PickerFeatureList extends Component {
     if (id !== 'custom') {
       allFeatures = features
     } else {
-      allFeatures = _.filter(activeFeatureList, f => f.categoryId === id)
+      allFeatures = activeFeatureList.filter(f => f.categoryId === id)
     }
     const renderFeature = (feature, idx) => {
-      const isActive = _.findIndex(activeFeatureList, f => f.id === feature.id) > -1 && !feature.disabled
+      const isActive = findIndex(activeFeatureList, f => f.id === feature.id) > -1 && !feature.disabled
       const featureClasses = classNames('feature-list-feature', {
         'active-feature' : feature.id === selectedFeatureId,
         'selected-feature' : isActive

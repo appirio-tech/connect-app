@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 import InfiniteScroll from 'react-infinite-scroller'
 import ProjectCard from './ProjectCard'
 import NewProjectCard from './NewProjectCard'
@@ -15,17 +14,18 @@ const ProjectsCardView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
   const { projects, members, currentUser, onPageChange, pageNum, totalCount, infiniteAutoload, setInfiniteAutoload, isLoading, projectsStatus, onChangeStatus } = props
-  // const currentSortField = _.get(criteria, 'sort', '')
+  // const currentSortField = get(criteria, 'sort', '')
 
   // annotate projects with member data
-  _.forEach(projects, prj => {
-    prj.members = _.map(prj.members, m => {
+  projects.forEach(prj => {
+    prj.members = prj.members.map(m => {
       // there is some bad data in the system
       if (!m.userId) return m
-      return _.assign({}, m, {
-        photoURL: ''
-      },
-      members[m.userId.toString()])
+      return ({
+        ...m,
+        photoURL: '',
+        ...members[m.userId.toString()]
+      })
     })
   })
 

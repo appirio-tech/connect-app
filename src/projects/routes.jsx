@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { withProps } from 'recompose'
+import withProps from 'recompose/withProps'
 import { renderApp } from '../components/App/App'
 import ProjectLayout from './ProjectLayout'
 import Projects from './list/components/Projects/Projects'

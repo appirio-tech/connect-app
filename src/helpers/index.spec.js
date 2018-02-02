@@ -1,6 +1,5 @@
 import chai from 'chai'
 import jsdom from 'mocha-jsdom'
-// import _ from 'lodash'
 import * as helpers from './index'
 
 chai.should()

@@ -1,4 +1,7 @@
-import _ from 'lodash'
+import get from 'lodash/get'
+import merge from 'lodash/merge'
+import mergeWith from 'lodash/mergeWith'
+import isArray from 'lodash/isArray'
 import { unflatten } from 'flat'
 import qs from 'query-string'
 import React, { Component } from 'react'
@@ -52,7 +55,7 @@ class ProjectWizard extends Component {
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
       const incompleteProject = JSON.parse(incompleteProjectStr)
-      const incompleteProduct = _.get(incompleteProject, 'details.products[0]')
+      const incompleteProduct = get(incompleteProject, 'details.products[0]')
       let wizardStep = WZ_STEP_INCOMP_PROJ_CONF
       let updateQuery = {}
       if (incompleteProduct && params && params.product) {
@@ -88,10 +91,10 @@ class ProjectWizard extends Component {
       }
       // retrieve refCode from query param
       // TODO give warning after truncating
-      const refCode = _.get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
+      const refCode = get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
       if (refCode.trim().length > 0) {
         // if refCode exists, update the updateQuery to set that refCode
-        if (_.get(updateQuery, 'details')) {
+        if (get(updateQuery, 'details')) {
           updateQuery['details']['utm'] = { $set : { code : refCode }}
         } else {
           updateQuery['details'] = { utm : { $set : { code : refCode }}}
@@ -111,8 +114,8 @@ class ProjectWizard extends Component {
   componentWillReceiveProps(nextProps) {
     const { onStepChange } = nextProps
     const params = nextProps.match.params
-    const type = _.get(nextProps.project, 'type', null)
-    const product = _.get(nextProps.project, 'details.products[0]', null)
+    const type = get(nextProps.project, 'type', null)
+    const product = get(nextProps.project, 'details.products[0]', null)
     // redirect user to project details form, if we already have category and product available
     let wizardStep = type && product ? WZ_STEP_FILL_PROJ_DETAILS : null
     const updateQuery = {}
@@ -160,7 +163,7 @@ class ProjectWizard extends Component {
       projectType = findProductCategory(productParam, true)
       // finds product object from product alias
       const product = findProduct(productParam, true)
-      const refCode = _.get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
+      const refCode = get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
       if (projectType) {// we can have `incomplete` as params.product
         updateQuery['type'] = { $set : projectType.id }
         updateQuery['details'] = { products : { $set: [product.id] } }
@@ -193,7 +196,7 @@ class ProjectWizard extends Component {
   }
 
   getRefCodeFromURL() {
-    return _.get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
+    return get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
   }
 
   /**
@@ -204,8 +207,8 @@ class ProjectWizard extends Component {
     // remove incomplete project from local storage
     window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
     // following code assumes that componentDidMount has already updated state with correct project and product types
-    const projectType = _.get(this.state.project, 'type')
-    const product = _.get(this.state.project, 'details.products[0]')
+    const projectType = get(this.state.project, 'type')
+    const product = get(this.state.project, 'details.products[0]')
     let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
     let project = null
     if (product) {
@@ -220,8 +223,8 @@ class ProjectWizard extends Component {
       project.details.utm = { code : refCode}
     }
     this.setState({
-      project: _.merge({}, project),
-      dirtyProject: _.merge({}, project),
+      project: merge({}, project),
+      dirtyProject: merge({}, project),
       wizardStep
     }, () => {
       typeof onStepChange === 'function' && onStepChange(this.state.wizardStep, this.state.project)
@@ -229,12 +232,12 @@ class ProjectWizard extends Component {
   }
 
   updateProjectRef(projectRef) {
-    const details = _.get(this.state.project, 'details.utm.code')
+    const details = get(this.state.project, 'details.utm.code')
     let updateQuery = { details: { utm : { code : {$set : projectRef }}}}
     if (!details) {
       updateQuery = { details: { $set : { utm : { code : projectRef }}}}
     }
-    this.setState({ 
+    this.setState({
       project: update(this.state.project, updateQuery),
       dirtyProject: update(this.state.project, updateQuery)
     })
@@ -253,7 +256,7 @@ class ProjectWizard extends Component {
         updateQuery.details = { $set : { products : [products[0].id]} }
       }
     }
-    this.setState({ 
+    this.setState({
       project: update(this.state.project, updateQuery),
       dirtyProject: update(this.state.project, updateQuery),
       wizardStep: products.length === 1 ? WZ_STEP_FILL_PROJ_DETAILS : WZ_STEP_SELECT_PROD_TYPE
@@ -266,7 +269,7 @@ class ProjectWizard extends Component {
   updateProducts(projectType, product) {
     window.scrollTo(0, 0)
     const { onStepChange, onProjectUpdate } = this.props
-    // const products = _.get(this.state.project, 'details.products')
+    // const products = get(this.state.project, 'details.products')
     const updateQuery = { }
     const detailsQuery = { products : [product] }
     // restore common fields from dirty project
@@ -275,7 +278,7 @@ class ProjectWizard extends Component {
     if (projectType) {
       updateQuery.type = {$set : projectType }
     }
-    this.setState({ 
+    this.setState({
       project: update(this.state.project, updateQuery),
       dirtyProject: update(this.state.project, updateQuery),
       wizardStep: WZ_STEP_FILL_PROJ_DETAILS
@@ -287,27 +290,27 @@ class ProjectWizard extends Component {
 
   /**
    * Restores common details of the project while changing product type.
-   * 
+   *
    * Added for Github issue#1037
    */
   restoreCommonDetails(updatedProduct, updateQuery, detailsQuery) {
-    const name = _.get(this.state.dirtyProject, 'name')
+    const name = get(this.state.dirtyProject, 'name')
     // if name was already entered, restore it
     if (name) {
       updateQuery.name = { $set: name }
     }
-    const description = _.get(this.state.dirtyProject, 'description')
+    const description = get(this.state.dirtyProject, 'description')
     // if description was already entered, restore it
     if (description) {
       updateQuery.description = { $set: description }
     }
-    const utm = _.get(this.state.dirtyProject, 'details.utm')
+    const utm = get(this.state.dirtyProject, 'details.utm')
     // if UTM code was already entered, restore it
     if (utm) {
       detailsQuery.utm = { code : utm.code }
     }
     const appDefinitionQuery = {}
-    const goal = _.get(this.state.dirtyProject, 'details.appDefinition.goal')
+    const goal = get(this.state.dirtyProject, 'details.appDefinition.goal')
     // finds the goal field from the updated product template
     const goalField = getProjectCreationTemplateField(
       updatedProduct,
@@ -319,7 +322,7 @@ class ProjectWizard extends Component {
     if (goalField && goal) {
       appDefinitionQuery.goal = goal
     }
-    const users = _.get(this.state.dirtyProject, 'details.appDefinition.users')
+    const users = get(this.state.dirtyProject, 'details.appDefinition.users')
     // finds the users field from the target product template
     const usersField = getProjectCreationTemplateField(
       updatedProduct,
@@ -331,7 +334,7 @@ class ProjectWizard extends Component {
     if (usersField && users) {
       appDefinitionQuery.users = users
     }
-    const notes = _.get(this.state.dirtyProject, 'details.appDefinition.notes')
+    const notes = get(this.state.dirtyProject, 'details.appDefinition.notes')
     // finds the notes field from the target product template
     const notesField = getProjectCreationTemplateField(
       updatedProduct,
@@ -350,10 +353,10 @@ class ProjectWizard extends Component {
     const { onProjectUpdate } = this.props
     this.setState({
       // update only dirtyProject when Form changes the model
-      dirtyProject: _.mergeWith({}, this.state.dirtyProject, unflatten(change),
+      dirtyProject: mergeWith({}, this.state.dirtyProject, unflatten(change),
         // customizer to override array value with changed values
         (objValue, srcValue, key) => {// eslint-disable-line no-unused-vars
-          if (_.isArray(srcValue)) {
+          if (isArray(srcValue)) {
             return srcValue// srcValue contains the changed values from action payload
           }
         }

@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import uniqBy from 'lodash/uniqBy'
 import React from 'react'
 import PropTypes from 'prop-types'
 import UserTooltip from '../../../../components/User/UserTooltip'
@@ -9,7 +9,7 @@ const ProjectManagerAvatars = ({ managers }) => {
   let extM = false
   if (!managers || !managers.length)
     return <div className="user-block txt-italic">Unclaimed</div>
-  const uniqManagers = _.uniqBy(managers, 'userId')
+  const uniqManagers = uniqBy(managers, 'userId')
   if (uniqManagers.length > 3) {
     extM = uniqManagers.length - 3
     uniqManagers.length = 3

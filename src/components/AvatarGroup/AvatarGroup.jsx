@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import uniqBy from 'lodash/uniqBy'
 import UserTooltip from '../User/UserTooltip'
 import React from 'react'
 import PT from 'prop-types'
@@ -12,7 +12,7 @@ function AvatarGroup({ users }) {
   }
   return (
     <div className="AvatarGroup">
-      { _.uniqBy(users, 'userId').map(renderAvatar) }
+      { uniqBy(users, 'userId').map(renderAvatar) }
     </div>
   )
 }

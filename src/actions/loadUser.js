@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import {
   ACCOUNTS_APP_CONNECTOR_URL,
   LOAD_USER_SUCCESS,
@@ -48,18 +47,18 @@ export function loadUserSuccess(dispatch, token) {
   }
   if (currentUser) {
     getUserProfile(currentUser.handle).then((profile) => {
-      currentUser = _.assign(currentUser, profile)
+      currentUser = {...currentUser, ...profile}
       // keeping profile for backward compaitability
       currentUser.profile = profile
       // determine user role
       let userRole
-      if (_.indexOf(currentUser.roles, ROLE_ADMINISTRATOR) > -1) {
+      if (currentUser.roles.indexOf(ROLE_ADMINISTRATOR) > -1) {
         userRole = ROLE_ADMINISTRATOR
-      } else if (_.indexOf(currentUser.roles, ROLE_CONNECT_ADMIN) > -1) {
+      } else if (currentUser.roles.indexOf(ROLE_CONNECT_ADMIN) > -1) {
         userRole = ROLE_CONNECT_ADMIN
-      } else if (_.indexOf(currentUser.roles, ROLE_CONNECT_MANAGER) > -1) {
+      } else if (currentUser.roles.indexOf(ROLE_CONNECT_MANAGER) > -1) {
         userRole = ROLE_CONNECT_MANAGER
-      } else if (_.indexOf(currentUser.roles, ROLE_CONNECT_COPILOT) > -1) {
+      } else if (currentUser.roles.indexOf(ROLE_CONNECT_COPILOT) > -1) {
         userRole = ROLE_CONNECT_COPILOT
       } else {
         userRole = ROLE_TOPCODER_USER

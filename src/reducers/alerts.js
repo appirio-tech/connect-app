@@ -1,4 +1,5 @@
-import _ from 'lodash'
+import truncate from 'lodash/truncate'
+import get from 'lodash/get'
 import Alert from 'react-s-alert'
 /* eslint-disable no-unused-vars */
 import {
@@ -31,7 +32,7 @@ import {
 export default function(state = {}, action) {
   switch(action.type) {
   case CREATE_PROJECT_SUCCESS: {
-    const name = _.truncate(action.payload.name, 20)
+    const name = truncate(action.payload.name, 20)
 
     //temporary workaround
     setTimeout(() => { Alert.success(`Project '${name}' created`) }, 0)
@@ -49,7 +50,7 @@ export default function(state = {}, action) {
     })
 
   case UPDATE_PROJECT_SUCCESS: {
-    const prevStatus = _.get(state, 'project.status', '')
+    const prevStatus = get(state, 'project.status', '')
     if (action.payload.status === PROJECT_STATUS_IN_REVIEW
       && prevStatus && prevStatus !== PROJECT_STATUS_IN_REVIEW) {
       Alert.success('Project submitted.')
