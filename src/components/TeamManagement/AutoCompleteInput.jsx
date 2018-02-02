@@ -63,8 +63,8 @@ class AutoCompleteInput extends React.Component {
         }
 
         <span>
-          <InputIcon className="input-icon"/>
-          {selectedNewMember && <img src={selectedNewMember.photoURL} />}
+          {!selectedNewMember && <InputIcon className="input-icon"/>}
+          {selectedNewMember && <Avatar size={36} avatarUrl={selectedNewMember.photoURL}/>}
         </span>
         <input
           autoFocus
