@@ -1,13 +1,7 @@
 /**
  * Helper methods to filter and preprocess notifications
  */
-import uniq from 'lodash/uniq'
-import find from 'lodash/find'
-import filter from 'lodash/filter'
-import includes from 'lodash/includes'
-import pick from 'lodash/pick'
-import isEqual from 'lodash/isEqual'
-import map from 'lodash/map'
+import _ from 'lodash'
 import { OLD_NOTIFICATION_TIME } from '../../../config/constants'
 import { NOTIFICATION_RULES } from '../constants/notifications'
 import Handlebars from 'handlebars'
@@ -34,7 +28,7 @@ const MILLISECONDS_IN_MINUTE = 60000
  */
 const handlebarsShowMoreHelper = (items, max, options) => {
   const renderedItems = items.map(options.fn)
-  const uniqRenderedItems = uniq(renderedItems)
+  const uniqRenderedItems = _.uniq(renderedItems)
   const maxRenderedItems = uniqRenderedItems.slice(0, max)
   const restItemsCount = uniqRenderedItems.length - maxRenderedItems.length
 
@@ -77,7 +71,7 @@ Handlebars.registerHelper('fallback', handlebarsFallbackHelper)
  * @return {Array}               list of filters by sources
  */
 export const getNotificationsFilters = (sources) => {
-  const globalNotificationsQuantity = find(sources, { id: 'global' }).total
+  const globalNotificationsQuantity = _.find(sources, { id: 'global' }).total
   const filterSections = [
     [{ title: 'All Notifications', value: '' }]
   ]
@@ -116,9 +110,9 @@ export const splitNotificationsBySources = (sources, notifications, oldSourceIds
   const notificationsBySources = []
 
   sources.filter(source => source.total > 0).forEach(source => {
-    source.notifications = notifications.filter(n => {
+    source.notifications = _.filter(notifications, n => {
       if (n.sourceId !== source.id) return false
-      if (oldSourceIds.indexOf(source.id) < 0 && n.isOld) return false
+      if (_.indexOf(oldSourceIds, source.id) < 0 && n.isOld) return false
       return true
     })
     notificationsBySources.push(source)
@@ -134,7 +128,7 @@ export const splitNotificationsBySources = (sources, notifications, oldSourceIds
  *
  * @return {Array}                notifications list filtered of notifications
  */
-export const filterReadNotifications = (notifications) => filter(notifications, { isRead: false })
+export const filterReadNotifications = (notifications) => _.filter(notifications, { isRead: false })
 
 /**
  * Limits notifications quantity per source
@@ -172,7 +166,7 @@ export const limitQuantityInSources = (notificationsBySources, maxPerSource, max
  * @return {Object}              notification rule
  */
 const getNotificationRule = (notification) => {
-  const notificationRule = NOTIFICATION_RULES.find((_notificationRule) => {
+  const notificationRule = _.find(NOTIFICATION_RULES, (_notificationRule) => {
     let match = _notificationRule.eventType === notification.eventType
 
     if (notification.version) {
@@ -188,11 +182,11 @@ const getNotificationRule = (notification) => {
     }
 
     if (notification.contents.projectRole) {
-      match = match && _notificationRule.projectRoles && includes(_notificationRule.projectRoles, notification.contents.projectRole)
+      match = match && _notificationRule.projectRoles && _.includes(_notificationRule.projectRoles, notification.contents.projectRole)
     }
 
     if (notification.contents.topcoderRole) {
-      match = match && _notificationRule.topcoderRoles && includes(_notificationRule.topcoderRoles, notification.contents.topcoderRole)
+      match = match && _notificationRule.topcoderRoles && _.includes(_notificationRule.topcoderRoles, notification.contents.topcoderRole)
     }
 
     return match
@@ -220,10 +214,10 @@ const isNotificationRuleEqual = (rule1, rule2) => {
    * @type {Array<String>}
    */
   const ESSENTIAL_RULE_PROPERTIES = ['eventType', 'toTopicStarter', 'toUserHandle', 'projectRole', 'topcoderRole']
-  const essentialRule1 = pick(rule1, ESSENTIAL_RULE_PROPERTIES)
-  const essentialRule2 = pick(rule2, ESSENTIAL_RULE_PROPERTIES)
+  const essentialRule1 = _.pick(rule1, ESSENTIAL_RULE_PROPERTIES)
+  const essentialRule2 = _.pick(rule2, ESSENTIAL_RULE_PROPERTIES)
 
-  return isEqual(essentialRule1, essentialRule2)
+  return _.isEqual(essentialRule1, essentialRule2)
 }
 
 /**
@@ -244,14 +238,14 @@ const bundleNotifications = (notificationsWithRules) => {
 
   // starting from the latest notifications
   // find older notifications with the same notification rule and the same project
-  notificationsWithRules.reverse().forEach((notificationWithRule) => {
+  _.reverse(notificationsWithRules).forEach((notificationWithRule) => {
     // if notifications doesn't have to be bundled, add it to notifications list as it is
     if (!notificationWithRule.notificationRule.shouldBundle) {
       bundledNotificationsWithRules.push(notificationWithRule)
     }
 
     // try to find existent notification in the list to which we can bundle current one
-    const existentNotificationWithRule = bundledNotificationsWithRules.find((bundledNotificationWithRule) => (
+    const existentNotificationWithRule = _.find(bundledNotificationsWithRules, (bundledNotificationWithRule) => (
       // same source id means same project
       bundledNotificationWithRule.notification.sourceId === notificationWithRule.notification.sourceId
       // same notification rule means same type
@@ -267,7 +261,7 @@ const bundleNotifications = (notificationsWithRules) => {
         ]
         existentNotificationWithRule.notification.contents.bundledCount = 1
         existentNotificationWithRule.notification.contents.__history__ = [
-          pick(existentNotificationWithRule.notification.contents, PROPERTIES_KEEP_IN_HISTORY)
+          _.pick(existentNotificationWithRule.notification.contents, PROPERTIES_KEEP_IN_HISTORY)
         ]
       }
 
@@ -278,7 +272,7 @@ const bundleNotifications = (notificationsWithRules) => {
       )
       existentNotificationWithRule.notification.contents.bundledCount += 1
       existentNotificationWithRule.notification.contents.__history__.push(
-        pick(notificationWithRule.notification.contents, PROPERTIES_KEEP_IN_HISTORY)
+        _.pick(notificationWithRule.notification.contents, PROPERTIES_KEEP_IN_HISTORY)
       )
     } else {
       bundledNotificationsWithRules.push(notificationWithRule)
@@ -336,7 +330,7 @@ export const prepareNotifications = (rowNotifications) => {
     notification.text = renderText(notification.contents)
   })
 
-  const notifications = map(bundledNotificationsWithRules, 'notification')
+  const notifications = _.map(bundledNotificationsWithRules, 'notification')
 
   return notifications
 }

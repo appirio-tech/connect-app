@@ -5,6 +5,7 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 import { NOTIFICATION_TYPE } from '../../config/constants'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
@@ -103,7 +104,7 @@ const NotificationItem = (props) => {
   )
 }
 
-const notificationType = PropTypes.oneOf(Object.values(NOTIFICATION_TYPE))
+const notificationType = PropTypes.oneOf(_.values(NOTIFICATION_TYPE))
 
 NotificationItem.propTypes = {
   type: notificationType.isRequired,

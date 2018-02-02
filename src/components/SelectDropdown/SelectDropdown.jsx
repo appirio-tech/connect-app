@@ -1,5 +1,6 @@
 require('./SelectDropdown.scss')
 
+import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { HOC as hoc } from 'formsy-react'
@@ -8,11 +9,11 @@ import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown
 class SelectDropdown extends Component {
   constructor(props) {
     super(props)
-    this.state = { selectedOption : null }
+    this.state = _.assign(this.state, { selectedOption : null })
   }
 
   componentWillMount() {
-    let selectedOption = this.props.options.find((o) => o.value === this.props.value)
+    let selectedOption = _.find(this.props.options, (o) => o.value === this.props.value)
     if (!selectedOption) {
       selectedOption = this.props.options[0]
     }
@@ -21,7 +22,7 @@ class SelectDropdown extends Component {
     }/*, function() {
       // FIXME intentionally commented because it was causing multiple renders when used in mobility testing template
       // Need to further analyze
-      // It does not seem to add any value either in both of its usage (it is used in App Screens section
+      // It does not seem to add any value either in both of its usage (it is used in App Screens section 
       // for design projects and in mobility testing projects)
       this.props.setValue(this.state.selectedOption.value)
     }*/)

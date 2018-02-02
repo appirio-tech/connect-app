@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import isArray from 'lodash/isArray'
+import _ from 'lodash'
 import FileList from '../../../components/FileList/FileList'
 import AddFiles from '../../../components/FileList/AddFiles'
 import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
@@ -24,8 +24,8 @@ class FileListContainer extends Component {
   }
 
   processUploadedFiles(fpFiles, category) {
-    fpFiles = isArray(fpFiles) ? fpFiles : [fpFiles]
-    fpFiles.forEach(f => {
+    fpFiles = _.isArray(fpFiles) ? fpFiles : [fpFiles]
+    _.forEach(fpFiles, f => {
       const attachment = {
         title: f.filename,
         description: '',

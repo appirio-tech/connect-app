@@ -3,6 +3,7 @@
  *
  * TODO has to be replaced with the real service
  */
+import _ from 'lodash'
 import { axiosInstance as axios } from '../../../api/requestInterceptor'
 import { TC_NOTIFICATION_URL } from '../../../../config/constants'
 
@@ -95,7 +96,7 @@ const topics = [
 
 const saveNotificationSettings = (data) => {
   const body = []
-  topics.forEach((topic) => {
+  _.each(topics, (topic) => {
     body.push({ topic, deliveryMethod: 'email', value: data[topic] && data[topic].email === 'yes' ? 'yes' : 'no' })
     body.push({ topic, deliveryMethod: 'web', value: data[topic] && data[topic].web === 'yes' ? 'yes' : 'no' })
   })

@@ -1,15 +1,11 @@
-import get from 'lodash/get'
-import set from 'lodash/get'
+import _ from 'lodash'
 import Cookies from 'js-cookie'
 import qs from 'query-string'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import branch from 'recompose/branch'
-import renderComponent from 'recompose/renderComponent'
-import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
+import { renderComponent, branch, compose, withProps } from 'recompose'
 import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject } from '../../actions/project'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
@@ -71,8 +67,8 @@ class CreateConainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const projectId = get(this.props, 'project.id', null)
-    const nextProjectId = get(nextProps, 'project.id', null)
+    const projectId = _.get(this.props, 'project.id', null)
+    const nextProjectId = _.get(nextProps, 'project.id', null)
     if (!nextProps.processing && !nextProps.error && !projectId && nextProjectId) {
       // update state
       this.setState({
@@ -172,7 +168,7 @@ class CreateConainer extends React.Component {
           const googleAnalytics = {}
           googleAnalytics[GA_CLICK_ID]  = gaClickId
           googleAnalytics[GA_CLIENT_ID] = gaClientId
-          set(project, 'details.utm.google', googleAnalytics)
+          _.set(project, 'details.utm.google', googleAnalytics)
         }
         this.props.createProjectAction(project, PROJECT_STATUS_IN_REVIEW)
       } else {
@@ -188,7 +184,7 @@ class CreateConainer extends React.Component {
     const isLoggedIn = userRoles && userRoles.length > 0
     // calls leave handler
     this.onLeave()
-    const returnUrl = get(qs.parse(location.search), 'returnUrl', null)
+    const returnUrl = _.get(qs.parse(location.search), 'returnUrl', null)
     if (returnUrl) {
       window.location = returnUrl
     } else {
@@ -212,17 +208,17 @@ class CreateConainer extends React.Component {
         closeModal={ this.closeWizard }
         onStepChange={ (wizardStep, updatedProject) => {
           // type of the project
-          let projectType = get(updatedProject, 'type', null)
+          let projectType = _.get(updatedProject, 'type', null)
           // finds project category object from the catalogue
           const projectCategory = findCategory(projectType)
           // updates the projectType variable to use first alias to create SEO friendly URL
-          projectType = get(projectCategory, 'aliases[0]', projectType)
+          projectType = _.get(projectCategory, 'aliases[0]', projectType)
           // product of the project
-          let productType = get(updatedProject, 'details.products[0]', null)
+          let productType = _.get(updatedProject, 'details.products[0]', null)
           // finds product object from the catalogue
           const product = findProduct(productType)
           // updates the productType variable to use first alias to create SEO friendly URL
-          productType = get(product, 'aliases[0]', productType)
+          productType = _.get(product, 'aliases[0]', productType)
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
             let productUrl = productType ? ('/' + productType) : ''
             productUrl = !productType && projectType ? ('/' + projectType) : productUrl
@@ -243,9 +239,9 @@ class CreateConainer extends React.Component {
         }
         }
         onProjectUpdate={ (updatedProject, dirty=true) => {
-          // const projectType = get(this.state.updatedProject, 'type', null)
-          const prevProduct = get(this.state.updatedProject, 'details.products[0]', null)
-          const product = get(updatedProject, 'details.products[0]', null)
+          // const projectType = _.get(this.state.updatedProject, 'type', null)
+          const prevProduct = _.get(this.state.updatedProject, 'details.products[0]', null)
+          const product = _.get(updatedProject, 'details.products[0]', null)
           // compares updated product with previous product to know if user has updated the product
           if (prevProduct !== product) {
             if (product) {
@@ -275,7 +271,7 @@ CreateConainer.defaultProps = {
 }
 
 const mapStateToProps = ({projectState, loadUser }) => ({
-  userRoles: get(loadUser, 'user.roles', []),
+  userRoles: _.get(loadUser, 'user.roles', []),
   processing: projectState.processing,
   error: projectState.error,
   project: projectState.project

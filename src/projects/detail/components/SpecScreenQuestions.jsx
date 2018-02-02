@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
-import get from 'lodash/get'
-import assign from 'lodash/assign'
+import _ from 'lodash'
 
 import SpecQuestionList from './SpecQuestionList/SpecQuestionList'
 import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
@@ -28,7 +27,7 @@ const SpecScreenQuestions = ({questions, screen}) => {
     const elemProps = {
       name: q.fieldName,
       label: q.label,
-      value: get(screen, q.fieldName, undefined),
+      value: _.get(screen, q.fieldName, undefined),
       validationError: q.validationError,
       validations: q.validations
     }
@@ -45,27 +44,27 @@ const SpecScreenQuestions = ({questions, screen}) => {
       break
     case 'radio-group':
       ChildElem = TCFormFields.RadioGroup
-      assign(elemProps, {wrapperClass: 'row', options: q.options})
+      _.assign(elemProps, {wrapperClass: 'row', options: q.options})
       break
     case 'tiled-radio-group':
       ChildElem = TCFormFields.TiledRadioGroup
-      assign(elemProps, {wrapperClass: 'row', options: q.options})
+      _.assign(elemProps, {wrapperClass: 'row', options: q.options})
       break
     case 'checkbox-group':
       ChildElem = TCFormFields.CheckboxGroup
-      assign(elemProps, {options: q.options})
+      _.assign(elemProps, {options: q.options})
       break
     case 'checkbox':
       ChildElem = TCFormFields.Checkbox
       break
     case 'colors':
       ChildElem = ColorSelector
-      assign(elemProps, { defaultColors: q.defaultColors })
+      _.assign(elemProps, { defaultColors: q.defaultColors })
       break
     case 'select-dropdown': {
       ChildElem = SelectDropdown
-      const importanceLevel = get(screen, 'importanceLevel')
-      assign(elemProps, {
+      const importanceLevel = _.get(screen, 'importanceLevel')
+      _.assign(elemProps, {
         options: q.options,
         theme: 'default',
         // overrides value to be backward compatible when it used to save full option object as selected value

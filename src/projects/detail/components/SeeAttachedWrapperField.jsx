@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
-import get from 'lodash/get'
-import merge from 'lodash/merge'
-import omit from 'lodash/omit'
+import _ from 'lodash'
 
 const SeeAttachedWrapperField = (ComposedComponent, defaultValue = '') => class extends Component {
   constructor(props) {
@@ -12,7 +10,7 @@ const SeeAttachedWrapperField = (ComposedComponent, defaultValue = '') => class 
   }
 
   componentWillMount() {
-    this.setState(Object.assign({}, { displayComponent: !get(this.props.value, 'seeAttached', false)}))
+    this.setState(Object.assign({}, { displayComponent: !_.get(this.props.value, 'seeAttached', false)}))
   }
 
   onChange(field, value) {
@@ -33,11 +31,11 @@ const SeeAttachedWrapperField = (ComposedComponent, defaultValue = '') => class 
   render() {
     const cb = {
       name: `${this.props.name}.seeAttached`,
-      value: get(this.props.value, 'seeAttached', false)
+      value: _.get(this.props.value, 'seeAttached', false)
     }
-    const ccProps = merge({}, omit(this.props, ['name', 'value']), {
+    const ccProps = _.merge({}, _.omit(this.props, ['name', 'value']), {
       name: this.props.name + '.value',
-      value: get(this.props.value, 'value', defaultValue),
+      value: _.get(this.props.value, 'value', defaultValue),
       onChange: this.onChange
     })
 

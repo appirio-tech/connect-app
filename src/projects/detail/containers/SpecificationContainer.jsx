@@ -3,8 +3,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import isEqual from 'lodash/isEqual'
-import get from 'lodash/get'
+import _ from 'lodash'
 import Sticky from 'react-stickynode'
 
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
@@ -39,9 +38,9 @@ class SpecificationContainer extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return !(
-      isEqual(nextProps.project, this.props.project)
-     && isEqual(nextState.project, this.state.project)
-     && isEqual(nextProps.error, this.props.error)
+      _.isEqual(nextProps.project, this.props.project)
+     && _.isEqual(nextState.project, this.state.project)
+     && _.isEqual(nextProps.error, this.props.error)
     )
   }
   saveProject(model) {
@@ -51,7 +50,7 @@ class SpecificationContainer extends Component {
 
   render() {
     const { project, currentMemberRole, processing } = this.props
-    const productId = get(project, 'details.products[0]')
+    const productId = _.get(project, 'details.products[0]')
     const product = findProduct(productId)
 
     let specification = 'topcoder.v1'
@@ -81,7 +80,7 @@ class SpecificationContainer extends Component {
               fireProjectDirtyUndo= { this.props.fireProjectDirtyUndo }
             />
             <div className="right-area-footer">
-              { get(product, 'formDesclaimer') }
+              { _.get(product, 'formDesclaimer') }
             </div>
           </div>
 

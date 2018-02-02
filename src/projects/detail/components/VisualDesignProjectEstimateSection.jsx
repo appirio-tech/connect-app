@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './VisualDesignProjectEstimateSection.scss'
 import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
+import _ from 'lodash'
 
 const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 const DEFAULT_DESIGN_TEMPLATE = 'visual_design.v1.0'
@@ -12,21 +13,22 @@ const VisualDesignProjectEstimateSection = ({products, numberScreens}) => {
   const specTemplate = products.length > 0 ? typeToSpecification[products[0]] : DEFAULT_DESIGN_TEMPLATE
   const sections = require('../../../config/projectQuestions/' + specTemplate).default
   // appDefinition section
-  const section = sections.find((section) => section.id === 'appDefinition')
+  const section = _.find(sections, (section) => section.id === 'appDefinition')
   const { subSections } = section
   // questions sub section
-  const sectionQuestions = subSections.find((subSection) => subSection.id === 'questions').questions
+  const sectionQuestions = _.find(subSections, (subSection) => subSection.id === 'questions').questions
 
   // options provided in the number of screens question
   let projectDurationOptions = []
-  const numberScreensQuestion = sectionQuestions.find(
+  const numberScreensQuestion = _.find(
+    sectionQuestions,
     (question) => question.fieldName === 'details.appDefinition.numberScreens'
   )
   if (numberScreensQuestion) {
     projectDurationOptions = numberScreensQuestion.options
   }
   // selected option
-  const pickedDurationOption = projectDurationOptions.find((option) => option.value === numberScreens)
+  const pickedDurationOption = _.find(projectDurationOptions, (option) => option.value === numberScreens)
   const durationEstimate = pickedDurationOption ? pickedDurationOption.desc : '0 days'
   const priceEstimate = pickedDurationOption && pickedDurationOption.price ? pickedDurationOption.price : 0
 

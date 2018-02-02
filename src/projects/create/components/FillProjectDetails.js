@@ -1,5 +1,4 @@
-import isEqual from 'lodash/isEqual'
-import get from 'lodash/get'
+import _ from 'lodash'
 import React, { Component } from 'react'
 import PT from 'prop-types'
 import Sticky from 'react-stickynode'
@@ -27,20 +26,20 @@ class FillProjectDetails extends Component  {
 
   shouldComponentUpdate(nextProps, nextState) {
     return !(
-      isEqual(nextProps.project, this.props.project)
-     && isEqual(nextState.project, this.state.project)
-     && isEqual(nextProps.dirtyProject, this.props.dirtyProject)
-     && isEqual(nextProps.error, this.props.error)
+      _.isEqual(nextProps.project, this.props.project)
+     && _.isEqual(nextState.project, this.state.project)
+     && _.isEqual(nextProps.dirtyProject, this.props.dirtyProject)
+     && _.isEqual(nextProps.error, this.props.error)
     )
   }
 
   createMarkup(product) {
-    return {__html: get(product, 'formTitle', `Let's setup your ${ product.name } project`) }
+    return {__html: _.get(product, 'formTitle', `Let's setup your ${ product.name } project`) }
   }
 
   render() {
     const { project, dirtyProject, processing, submitBtnText } = this.props
-    const productId = get(project, 'details.products[0]')
+    const productId = _.get(project, 'details.products[0]')
     const product = findProduct(productId)
 
     let specification = 'topcoder.v1'
@@ -69,7 +68,7 @@ class FillProjectDetails extends Component  {
                   />
                 </div>
                 <div className="left-area-footer">
-                  <span>{ get(product, 'formDesclaimer') }</span>
+                  <span>{ _.get(product, 'formDesclaimer') }</span>
                 </div>
               </div>
               <div className="right-area">

@@ -1,4 +1,4 @@
-import noop from 'lodash/noop'
+import _ from 'lodash'
 import React from 'react'
 import PT from 'prop-types'
 import './ProductCard.scss'
@@ -12,7 +12,7 @@ function ProductCard(props) {
   return (
     <div
       className={className}
-      onClick={p.disabled ? noop : p.onClick}
+      onClick={p.disabled ? _.noop : p.onClick}
     >
       <div className="icon-wrapper">{p.icon}</div>
       <h3 className="header">{p.type}</h3>
@@ -22,7 +22,7 @@ function ProductCard(props) {
 }
 
 ProductCard.defaultTypes = {
-  onClick: noop
+  onClick: _.noop
 }
 
 ProductCard.propTypes = {

@@ -1,10 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Prompt } from 'react-router-dom'
-import isUndefined from 'lodash/isUndefined'
-import pick from 'lodash/pick'
-import findIndex from 'lodash/findIndex'
-import forEachRight from 'lodash/forEachRight'
+import _ from 'lodash'
 import {
   THREAD_MESSAGES_PAGE_SIZE,
   PROJECT_STATUS_DRAFT,
@@ -79,11 +76,11 @@ class FeedView extends React.Component {
 
   isChanged() {
     const { newPost } = this.state
-    const hasComment = !isUndefined(this.state.feeds.find((feed) => (feed.isSavingTopic || feed.isDeletingTopic || feed.isAddingComment)
+    const hasComment = !_.isUndefined(_.find(this.state.feeds, (feed) => (feed.isSavingTopic || feed.isDeletingTopic || feed.isAddingComment)
       || (feed.newComment && feed.newComment.length)
       || (feed.newTitle && feed.newTitle.length && feed.newTitle !== feed.title)
       || (feed.topicMessage && feed.topicMessage.newContent && feed.topicMessage.newContent.length && feed.topicMessage.rawContent && feed.topicMessage.newContent !== feed.topicMessage.rawContent)
-      || !isUndefined(feed.comments.find((message) => message.isSavingComment || message.isDeletingComment || (message.newContent && message.newContent.length && message.rawContent && message.newContent !== message.rawContent)))
+      || !_.isUndefined(_.find(feed.comments, (message) => message.isSavingComment || message.isDeletingComment || (message.newContent && message.newContent.length && message.rawContent && message.newContent !== message.rawContent)))
     ))
     const hasThread = (newPost.title && !!newPost.title.trim().length) || ( newPost.content && !!newPost.content.trim().length)
     return hasThread || hasComment
@@ -91,7 +88,7 @@ class FeedView extends React.Component {
 
   mapFeed(feed, showAll = false, resetNewComment = false, prevProps) {
     const { allMembers, project } = this.props
-    const item = pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isSavingTopic', 'isDeletingTopic', 'isAddingComment', 'isLoadingComments', 'error'])
+    const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isSavingTopic', 'isDeletingTopic', 'isAddingComment', 'isLoadingComments', 'error'])
     // Github issue##623, allow comments on all posts (including system posts)
     item.allowComments = true
     if (isSystemUser(item.userId)) {
@@ -105,7 +102,7 @@ class FeedView extends React.Component {
     item.comments = []
     let prevFeed = null
     if (prevProps) {
-      prevFeed = prevProps.feeds.find(t => feed.id === t.id)
+      prevFeed = _.find(prevProps.feeds, t => feed.id === t.id)
     }
     const _toComment = (p) => {
       const date = p.updatedDate?p.updatedDate:p.date
@@ -123,12 +120,12 @@ class FeedView extends React.Component {
         edited,
         author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
       }
-      const prevComment = prevFeed ? prevFeed.posts.find(t => p.id === t.id) : null
+      const prevComment = prevFeed ? _.find(prevFeed.posts, t => p.id === t.id) : null
       if (prevComment && prevComment.isSavingComment && !comment.isSavingComment && !comment.error) {
         comment.editMode = false
       } else {
-        const feedFromState = this.state.feeds.find(t => feed.id === t.id)
-        const commentFromState = feedFromState ? feedFromState.comments.find(t => comment.id === t.id) : null
+        const feedFromState = _.find(this.state.feeds, t => feed.id === t.id)
+        const commentFromState = feedFromState ? _.find(feedFromState.comments, t => comment.id === t.id) : null
         comment.newContent = commentFromState ? commentFromState.newContent : null
         comment.editMode = commentFromState && commentFromState.editMode
       }
@@ -138,7 +135,7 @@ class FeedView extends React.Component {
     if (prevFeed && prevFeed.isSavingTopic && !feed.isSavingTopic && !feed.error) {
       item.editTopicMode = false
     } else {
-      const feedFromState = this.state.feeds.find(t => feed.id === t.id)
+      const feedFromState = _.find(this.state.feeds, t => feed.id === t.id)
       item.newTitle = feedFromState ? feedFromState.newTitle : null
       item.topicMessage.newContent = feedFromState ? feedFromState.topicMessage.newContent : null
       item.editTopicMode = feedFromState && feedFromState.editTopicMode
@@ -149,12 +146,12 @@ class FeedView extends React.Component {
     }
     if (showAll) {
       // if we are showing all comments, just iterate through the entire array
-      feed.posts.slice(1).forEach(p => {
+      _.forEach(_.slice(feed.posts, 1), p => {
         validPost(p) ? item.comments.push(_toComment(p)) : item.totalComments--
       })
     } else {
       // otherwise iterate from right and add to the beginning of the array
-      forEachRight(feed.posts.slice(1), (p) => {
+      _.forEachRight(_.slice(feed.posts, 1), (p) => {
         validPost(p) ? item.comments.unshift(_toComment(p)) : item.totalComments--
         if (!feed.showAll && item.comments.length === THREAD_MESSAGES_PAGE_SIZE)
           return false
@@ -162,7 +159,7 @@ class FeedView extends React.Component {
     }
     item.newComment = ''
     if (!resetNewComment) {
-      const feedFromState = this.state.feeds.find(f => feed.id === f.id)
+      const feedFromState = _.find(this.state.feeds, f => feed.id === f.id)
       item.newComment = feedFromState ? feedFromState.newComment : ''
     }
     item.hasMoreComments = item.comments.length !== item.totalComments
@@ -184,7 +181,7 @@ class FeedView extends React.Component {
         // finds the same feed from previous props, if exists
         let prevFeed
         if (prevProps && prevProps.feeds) {
-          prevFeed = prevProps.feeds.find(f => feed.id === f.id)
+          prevFeed = _.find(prevProps.feeds, f => feed.id === f.id)
         }
         // reset new comment if we were adding comment and there is no error in doing so
         const resetNewComment = prevFeed && prevFeed.isAddingComment && !feed.isAddingComment && !feed.error
@@ -196,7 +193,7 @@ class FeedView extends React.Component {
         return
       }
       const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
-      // const scrollTo = get(props, 'params.statusId', null)
+      // const scrollTo = _.get(props, 'params.statusId', null)
       if (scrollTo) {
         scroller.scrollTo(scrollTo, {
           spy: true,
@@ -238,8 +235,8 @@ class FeedView extends React.Component {
 
   onShowAllComments(feedId) {
     const { feeds } = this.props
-    const feed = feeds.find(feed => feed.id === feedId)
-    const stateFeedIdx = findIndex(this.state.feeds, (f) => f.id === feedId)
+    const feed = _.find(feeds, feed => feed.id === feedId)
+    const stateFeedIdx = _.findIndex(this.state.feeds, (f) => f.id === feedId)
     // in case we have already have all comments for that feed from the server,
     // just change the state to show all comments for that FeedId.
     // Otherwise load more comments from the server
@@ -248,8 +245,8 @@ class FeedView extends React.Component {
       const updatedFeed = update(this.state.feeds[stateFeedIdx], {
         isLoadingComments: { $set : true }
       })
-      const retrievedPostIds = feed.posts.map('id')
-      const commentIdsToRetrieve = feed.postIds.filter(_id => retrievedPostIds.indexOf(_id) === -1 )
+      const retrievedPostIds = _.map(feed.posts, 'id')
+      const commentIdsToRetrieve = _.filter(feed.postIds, _id => retrievedPostIds.indexOf(_id) === -1 )
       this.setState(update(this.state, {
         showAll: { $push: [feedId] },
         feeds: { $splice: [[stateFeedIdx, 1, updatedFeed ]] }
@@ -277,12 +274,12 @@ class FeedView extends React.Component {
     this.setState({
       feeds: this.state.feeds.map((item) => {
         if (item.id === feedId) {
-          const messageIndex = findIndex(item.comments, message => message.id === messageId)
+          const messageIndex = _.findIndex(item.comments, message => message.id === messageId)
           const message = item.comments[messageIndex]
           message.newContent = content
           message.editMode = editMode
           item.comments[messageIndex] = {...message}
-          item.comments = item.comments.map(message => message)
+          item.comments = _.map(item.comments, message => message)
           return {...item}
         }
         return item
@@ -301,8 +298,8 @@ class FeedView extends React.Component {
   }
 
   onEditMessage(feedId, postId) {
-    const thread = this.state.feeds.find(t => feedId === t.id)
-    const comment = thread.comments.find(message => message.id === postId)
+    const thread = _.find(this.state.feeds, t => feedId === t.id)
+    const comment = _.find(thread.comments, message => message.id === postId)
     if (!comment.rawContent) {
       this.props.getFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, postId)
     }
@@ -310,7 +307,7 @@ class FeedView extends React.Component {
   }
 
   onEditTopic(feedId) {
-    const thread = this.state.feeds.find(t => feedId === t.id)
+    const thread = _.find(this.state.feeds, t => feedId === t.id)
     const comment = thread.topicMessage
     if (!comment.rawContent) {
       this.props.getFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, comment.id)

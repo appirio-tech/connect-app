@@ -3,11 +3,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import isEmpty from 'lodash/isEmpty'
-import renderComponent from 'recompose/renderComponent'
-import branch from 'recompose/branch'
-import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
+import _ from 'lodash'
+import { renderComponent, branch, compose, withProps } from 'recompose'
 import { loadProjectDashboard } from '../actions/projectDashboard'
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
@@ -53,7 +50,7 @@ class ProjectDetail extends Component {
 
   componentWillReceiveProps({isProcessing, isLoading, error, project, match, location}) {
     // handle just deleted projects
-    if (! (error || isLoading || isProcessing) && isEmpty(project))
+    if (! (error || isLoading || isProcessing) && _.isEmpty(project))
       this.props.history.push('/projects/')
     if (project && project.name) {
       document.title = `${project.name} - Topcoder`
@@ -73,7 +70,7 @@ class ProjectDetail extends Component {
   getProjectRoleForCurrentUser({currentUserId, project}) {
     let role = null
     if (project) {
-      const member = (project.members || []).find(m => m.userId === currentUserId)
+      const member = _.find(project.members, m => m.userId === currentUserId)
       if (member) {
         role = member.role
         if (role === PROJECT_ROLE_CUSTOMER && member.isPrimary)

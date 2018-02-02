@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import isEqual from 'lodash/isEqual'
-import merge from 'lodash/merge'
+import _ from 'lodash'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
 const Formsy = FormsyForm.Formsy
@@ -18,8 +17,8 @@ class DefaultFeatureForm extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return !(isEqual(nextProps.featureData, this.props.featureData) &&
-      isEqual(nextProps.featureDesc, this.props.featureDesc))
+    return !(_.isEqual(nextProps.featureData, this.props.featureData) &&
+      _.isEqual(nextProps.featureDesc, this.props.featureDesc))
   }
 
   componentWillMount() {
@@ -57,13 +56,13 @@ class DefaultFeatureForm extends Component {
     const { featureData } = this.props
     // trim the notes (as of now only notes field is auto updated)
     data.notes = data.notes.trim()
-    this.props.updateFeature(merge({}, featureData, data))
+    this.props.updateFeature(_.merge({}, featureData, data))
   }
 
   render() {
     const { featureDesc, featureData, isEdittable } = this.props
     const { isActive } = this.state
-    // const _debouncedOnChange = debounce(this.onChange, 2000, { trailing: true, maxWait: 10000 })
+    // const _debouncedOnChange = _.debounce(this.onChange, 2000, { trailing: true, maxWait: 10000 })
     return (
       <div className="feature-form">
         <div className="feature-title-row flex space-between">

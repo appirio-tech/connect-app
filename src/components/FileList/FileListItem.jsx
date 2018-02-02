@@ -1,4 +1,4 @@
-import isEmpty from 'lodash/isEmpty'
+import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
 import filesize from 'filesize'
@@ -45,7 +45,7 @@ export default class FileListItem extends React.Component {
   handleSave(e) {
     const title = this.refs.title.value
     const errors = this.validateForm()
-    if (!isEmpty(errors)) {
+    if (!_.isEmpty(errors)) {
       this.setState({ errors })
     } else {
       this.props.onSave(this.props.id, {title, description: this.refs.desc.value}, e)

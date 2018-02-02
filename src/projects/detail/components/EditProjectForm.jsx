@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Prompt } from 'react-router-dom'
 import Modal from 'react-modal'
-import get from 'lodash/get'
-import isEqual from 'lodash/isEqual'
-import some from 'lodash/some'
+import _ from 'lodash'
 import { unflatten } from 'flat'
 import update from 'react-addons-update'
 import FeaturePicker from './FeatureSelector/FeaturePicker'
@@ -32,7 +30,7 @@ const FeaturePickerModal = ({ project, isEdittable, showFeaturesDialog, hideFeat
       contentLabel=""
     >
       <FeaturePicker
-        features={ get(project, 'details.appDefinition.features.value', []) }
+        features={ _.get(project, 'details.appDefinition.features.value', []) }
         isEdittable={isEdittable} onSave={ setFormValue }
       />
       <div onClick={ hideFeaturesDialog } className="feature-selection-dialog-close">
@@ -126,7 +124,7 @@ class EditProjectForm extends Component {
         const pristine = this.refs.form.getPristineValues()
         const current = this.refs.form.getCurrentValues()
         pristine['details.appScreens.screens']=current['details.appScreens.screens']
-        if (isEqual(pristine, current)){
+        if (_.isEqual(pristine, current)){
           return
         }
       }
@@ -202,7 +200,7 @@ class EditProjectForm extends Component {
     const { project, dirtyProject } = this.state
     const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
-      const anySectionInvalid = some(this.props.sections, (s) => s.isInvalid)
+      const anySectionInvalid = _.some(this.props.sections, (s) => s.isInvalid)
       return (
         <div key={idx}>
           <SpecSection
@@ -246,7 +244,7 @@ class EditProjectForm extends Component {
             showFeaturesDialog={ this.state.showFeaturesDialog }
             hideFeaturesDialog={ this.hideFeaturesDialog }
             saveFeatures={ this.saveFeatures }
-            value={ get(project, 'details.appDefinition.features', {})}
+            value={ _.get(project, 'details.appDefinition.features', {})}
           />
         </Formsy.Form>
 

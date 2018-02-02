@@ -3,8 +3,7 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import filter from 'lodash/filter'
-import find from 'lodash/find'
+import _ from 'lodash'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Sticky from 'react-stickynode'
@@ -48,13 +47,13 @@ class NotificationsContainer extends React.Component {
         projectSources = []
       } else {
         globalSource = null
-        projectSources = filter(projectSources, { id: filterBy })
+        projectSources = _.filter(projectSources, { id: filterBy })
       }
     }
 
     const toggleNotificationOrBundleRead = (notificationId) => {
       if (!pending) {
-        const notification = find(notReadNotifications, { id: notificationId })
+        const notification = _.find(notReadNotifications, { id: notificationId })
         // if it's bundled notification, then toggle all notifications inside the bundle
         if (notification.bundledIds) {
           toggleBundledNotificationRead(notificationId, notification.bundledIds)

@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import MenuBar from 'appirio-tech-react-components/components/MenuBar/MenuBar'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 import { LOAD_PROJECT_FAILURE } from '../../../../config/constants'
 
 class ProjectToolBar extends Component {
@@ -35,7 +36,7 @@ class ProjectToolBar extends Component {
         link: `/projects/${project.id}/messages/`
       }
     ]
-    const isCopilotOrManager = !!userRoles.find((r) => {
+    const isCopilotOrManager = !!_.find(userRoles, (r) => {
       r = r.toLowerCase()
       return r.indexOf('copilot') > -1 || r.indexOf('manager') > -1
     })

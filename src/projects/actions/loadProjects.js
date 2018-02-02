@@ -1,9 +1,4 @@
-import difference from 'lodash/difference'
-import set from 'lodash/set'
-import map from 'lodash/map'
-import union from 'lodash/union'
-import remove from 'lodash/remove'
-import isString from 'lodash/isString'
+import _ from 'lodash'
 import {
   PROJECT_SEARCH, GET_PROJECTS, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
   SET_SEARCH_TERM, SET_PROJECTS_SEARCH_CRITERIA,
@@ -42,7 +37,7 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
         // statuses to be excluded for non power users
         const excluded = [PROJECT_STATUS_CANCELLED]
         // updates the criteria with status filter
-        set(requestCriteria, 'status', `in(${difference(statuses, excluded)})`)
+        _.set(requestCriteria, 'status', `in(${_.difference(statuses, excluded)})`)
       }
     }
 
@@ -56,14 +51,14 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
     })
       .then(({ value, action }) => {
         let userIds = []
-        value.projects.forEach(project => {
-          userIds = union(userIds, map(project.members, 'userId'))
-          userIds = union(userIds, [project.createdBy])
-          userIds = union(userIds, [project.updatedBy])
+        _.forEach(value.projects, project => {
+          userIds = _.union(userIds, _.map(project.members, 'userId'))
+          userIds = _.union(userIds, [project.createdBy])
+          userIds = _.union(userIds, [project.updatedBy])
 
         })
         // this is to remove any nulls from the list (dev had some bad data)
-        remove(userIds, i => !i)
+        _.remove(userIds, i => !i)
         // return if there are no userIds to retrieve, empty result set
         if (!userIds.length)
           resolve(true)
@@ -94,7 +89,7 @@ export function projectSuggestions(searchTerm) {
     const state = getState()
     // const numCurrentUsernameMatches = state.memberSearch.usernameMatches.length
     const previousSearchTerm = state.searchTerm.previousSearchTerm
-    const isPreviousSearchTerm = isString(previousSearchTerm)
+    const isPreviousSearchTerm = _.isString(previousSearchTerm)
     const isNewSearchTerm = isPreviousSearchTerm && searchTerm.toLowerCase() !== previousSearchTerm.toLowerCase()
 
     if (isNewSearchTerm) {

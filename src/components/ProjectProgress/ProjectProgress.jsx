@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
 import CircularProgressbar from 'react-circular-progressbar'
@@ -17,7 +18,7 @@ const Themes = {
 
 const ProjectProgress = ({type, percent, children, viewType=ViewTypes.HBAR }) => (
   <div className="project-progress">
-    { viewType === ViewTypes.HBAR &&
+    { viewType === ViewTypes.HBAR && 
       <div className="progress-bar">
         <div className={cn('progress', type)} style={{width: percent + '%'}} />
       </div>
@@ -34,12 +35,12 @@ ProjectProgress.ViewTypes = ViewTypes
 ProjectProgress.Themes = Themes
 
 ProjectProgress.defaultProps = {
-  type: Themes.BLUE
+  type: Themes.BLUE 
 }
 
 ProjectProgress.propTypes = {
   title: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(Object.values(Themes)),
+  type: PropTypes.oneOf(_.values(Themes)),
   percent: PropTypes.number.isRequired,
   children: PropTypes.any.isRequired
 }

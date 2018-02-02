@@ -1,6 +1,6 @@
 require('./ProjectToolBar.scss')
 
-import get from 'lodash/get'
+import _ from 'lodash'
 import React from 'react'
 import PT from 'prop-types'
 import { NavLink, withRouter } from 'react-router-dom'
@@ -198,7 +198,7 @@ ProjectToolBar.propTypes = {
 const mapStateToProps = ({ projectState, loadUser }) => {
   return {
     project: projectState.project,
-    userRoles: get(loadUser, 'user.roles', []),
+    userRoles: _.get(loadUser, 'user.roles', []),
     user: loadUser.user
   }
 }

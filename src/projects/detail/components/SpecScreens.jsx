@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { HOC as hoc } from 'formsy-react'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
-import find from 'lodash/find'
-import last from 'lodash/last'
-import get from 'lodash/get'
+import _ from 'lodash'
 
 import EditAppScreenForm from './EditAppScreenForm'
 
@@ -31,7 +29,7 @@ class SpecScreens extends Component {
   validateScreen(index, screen) {
     const screens = [...this.state.screens.slice(0, index),
       screen, ...this.state.screens.slice(index + 1)]
-    this.props.onValidate(!(!find(screens, (screen) => screen.name.trim() === '' || screen.description.trim() === '')))
+    this.props.onValidate(!(!_.find(screens, (screen) => screen.name.trim() === '' || screen.description.trim() === '')))
   }
 
   deleteScreen(index) {
@@ -59,7 +57,7 @@ class SpecScreens extends Component {
   render() {
     const { screens } = this.state
     const { appDefinition } = this.props.project.details
-    const numberScreensSelected = parseInt(last(get(appDefinition, 'numberScreens', '0').split('-')))
+    const numberScreensSelected = parseInt(_.last(_.get(appDefinition, 'numberScreens', '0').split('-')))
 
     const renderCurrentScreen = (screen, index) => {
       return (

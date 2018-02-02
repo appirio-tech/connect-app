@@ -11,10 +11,7 @@ import {
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
   GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO
 } from '../../config/constants'
-import get from 'lodash/get'
-import cloneDeep from 'lodash/cloneDeep'
-import findIndex from 'lodash/findIndex'
-import mergeWith from 'lodash/mergeWith'
+import _ from 'lodash'
 import update from 'react-addons-update'
 
 const initialState = {
@@ -31,12 +28,12 @@ const initialState = {
 // NOTE: We should always update projectNonDirty state whenever we update the project state
 
 const parseErrorObj = (action) => {
-  const data = get(action.payload, 'response.data.result')
+  const data = _.get(action.payload, 'response.data.result')
   return {
     type: action.type,
-    code: get(data, 'status', 500),
-    msg: get(data, 'content.message', ''),
-    details: JSON.parse(get(data, 'details', null))
+    code: _.get(data, 'status', 500),
+    msg: _.get(data, 'content.message', ''),
+    details: JSON.parse(_.get(data, 'details', null))
   }
 }
 
@@ -54,7 +51,7 @@ export const projectState = function (state=initialState, action) {
     return Object.assign({}, state, {
       isLoading: false,
       project: action.payload,
-      projectNonDirty: cloneDeep(action.payload),
+      projectNonDirty: _.cloneDeep(action.payload),
       lastUpdated: new Date()
     })
 
@@ -109,7 +106,7 @@ export const projectState = function (state=initialState, action) {
       processing: false,
       error: false,
       project: action.payload,
-      projectNonDirty: cloneDeep(action.payload),
+      projectNonDirty: _.cloneDeep(action.payload),
       updateExisting: action.payload.updateExisting
     })
 
@@ -138,7 +135,7 @@ export const projectState = function (state=initialState, action) {
 
   case UPDATE_PROJECT_ATTACHMENT_SUCCESS: {
     // get index
-    const idx = findIndex(state.project.attachments, a => a.id === action.payload.id)
+    const idx = _.findIndex(state.project.attachments, a => a.id === action.payload.id)
     return update(state, {
       processingAttachments: { $set : false },
       project: { attachments: { $splice : [[idx, 1, action.payload]] } },
@@ -149,7 +146,7 @@ export const projectState = function (state=initialState, action) {
   case REMOVE_PROJECT_ATTACHMENT_SUCCESS: {
     // action.payload will contain id of the attachment
     // that was just removed
-    const idx = findIndex(state.project.attachments, a => a.id === action.payload)
+    const idx = _.findIndex(state.project.attachments, a => a.id === action.payload)
     return update(state, {
       processing: { $set : false },
       project: { attachments: { $splice: [[idx, 1]] } },
@@ -173,10 +170,10 @@ export const projectState = function (state=initialState, action) {
 
   case UPDATE_PROJECT_MEMBER_SUCCESS: {
     // get index
-    const idx = findIndex(state.project.members, a => a.id === action.payload.id)
+    const idx = _.findIndex(state.project.members, a => a.id === action.payload.id)
     // in case this member was marked as owner unset any other member that was owner
-    const updatedMembers = cloneDeep(state.project.members)
-    updatedMembers.forEach(m => {
+    const updatedMembers = _.cloneDeep(state.project.members)
+    _.forEach(updatedMembers, m => {
       if (m.role === action.payload.role) m.isPrimary = false
     })
     updatedMembers.splice(idx, 1, action.payload)
@@ -189,7 +186,7 @@ export const projectState = function (state=initialState, action) {
 
   case REMOVE_PROJECT_MEMBER_SUCCESS: {
     // NOTE action.payload will contain memberId of the record just removed
-    const idx = findIndex(state.project.members, a => a.id === action.payload)
+    const idx = _.findIndex(state.project.members, a => a.id === action.payload)
     return update(state, {
       processingMembers: { $set : false },
       project: { members: { $splice: [[idx, 1]] } },
@@ -199,7 +196,7 @@ export const projectState = function (state=initialState, action) {
 
   case PROJECT_DIRTY: {// payload contains only changed values from the project form
     return Object.assign({}, state, {
-      project: mergeWith({}, state.project, action.payload, { isDirty : true},
+      project: _.mergeWith({}, state.project, action.payload, { isDirty : true},
         // customizer to override screens array with changed values
         (objValue, srcValue, key) => {
           if (key === 'screens' || key === 'features') {
@@ -212,7 +209,7 @@ export const projectState = function (state=initialState, action) {
 
   case PROJECT_DIRTY_UNDO: {
     return Object.assign({}, state, {
-      project: cloneDeep(state.projectNonDirty)
+      project: _.cloneDeep(state.projectNonDirty)
     })
   }
 

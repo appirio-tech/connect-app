@@ -9,9 +9,7 @@ import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/
 import BtnGroup from '../../../../../components/BtnGroup/BtnGroup'
 import IconSettingsWeb from '../../../../../assets/icons/settings-icon-web.svg'
 import './NotificationSettingsForm.scss'
-import flatten from 'lodash/flatten'
-import map from 'lodash/map'
-import isUndefined from 'lodash/isUndefined'
+import _ from 'lodash'
 
 
 // list of the notification groups and related event types
@@ -79,7 +77,7 @@ const topics = [
  */
 const initSettings = (notInitedSettings) => {
   const settings = {...notInitedSettings}
-  const allTypes = flatten(map(topics, 'types'))
+  const allTypes = _.flatten(_.map(topics, 'types'))
 
   allTypes.forEach((type) => {
     if (!settings[type]) {
@@ -89,7 +87,7 @@ const initSettings = (notInitedSettings) => {
     // check each of deliveryMethod method separately as some can have
     // values and some don't have
     ['web', 'email'].forEach((deliveryMethod) => {
-      if (isUndefined(settings[type][deliveryMethod])) {
+      if (_.isUndefined(settings[type][deliveryMethod])) {
         settings[type][deliveryMethod] = 'yes'
       }
     })
@@ -151,7 +149,7 @@ class NotificationSettingsForm extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {map(topics, (topic, index) => {
+            {_.map(topics, (topic, index) => {
               // we toggle settings for all the types in one topic all together
               // so we can use values from the first type to get current value for the whole topic
               const topicFirstType = topic.types[0]

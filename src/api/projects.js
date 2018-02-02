@@ -1,6 +1,4 @@
-import omit from 'lodash/omit'
-import isEmpty from 'lodash/isEmpty'
-import get from 'lodash/get'
+import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL, PROJECTS_API_URL, PROJECTS_LIST_PER_PAGE } from '../config/constants'
 
@@ -13,8 +11,8 @@ export function getProjects(criteria, pageNum) {
     fields: includeFields.join(',')
   }
   // filters
-  const filter = omit(criteria, ['sort'])
-  if (!isEmpty(filter)) {
+  const filter = _.omit(criteria, ['sort'])
+  if (!_.isEmpty(filter)) {
     // support for multiple comma separated types
     if (filter.type && filter.type.indexOf(',') > -1) {
       filter.type = `in(${filter.type})`
@@ -24,18 +22,18 @@ export function getProjects(criteria, pageNum) {
       filter.segment = `in(${filter.segment})`
     }
     // convert filter object to string
-    const filterStr = Object.keys(filter).map(k => `${k}=${filter[k]}`)
+    const filterStr = _.map(filter, (v, k) => `${k}=${v}`)
     params.filter = filterStr.join('&')
   }
   // sort fields
-  const sort = get(criteria, 'sort', null)
+  const sort = _.get(criteria, 'sort', null)
   if (sort) params.sort = sort
 
   return axios.get(`${PROJECTS_API_URL}/v4/projects/`, { params })
     .then( resp => {
       return {
-        totalCount: get(resp.data, 'result.metadata.totalCount', 0),
-        projects: get(resp.data, 'result.content', [])
+        totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
+        projects: _.get(resp.data, 'result.content', [])
       }
     })
 }
@@ -54,7 +52,7 @@ export function getProjectById(projectId) {
   projectId = parseInt(projectId)
   return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/`)
     .then(resp => {
-      return get(resp.data, 'result.content', {})
+      return _.get(resp.data, 'result.content', {})
     })
 }
 
@@ -68,7 +66,7 @@ export function getProjectById(projectId) {
 export function updateProject(projectId, updatedProps, updateExisting) {
   return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
     .then(resp => {
-      return {...get(resp.data, 'result.content'), updateExisting }
+      return _.extend(_.get(resp.data, 'result.content'), { updateExisting })
     })
 }
 
@@ -78,10 +76,10 @@ export function createProject(projectProps) {
   // TODO: Remove this once none of the active projects
   // have the discussions tab enabled
   projectProps.details.hideDiscussions = true
-
+  
   return axios.post(`${PROJECTS_API_URL}/v4/projects/`, { param: projectProps })
     .then( resp => {
-      return get(resp.data, 'result.content', {})
+      return _.get(resp.data, 'result.content', {})
     })
 }
 
@@ -93,14 +91,14 @@ export function createProjectWithStatus(projectProps, status) {
 
   return axios.post(`${PROJECTS_API_URL}/v4/projects/`, { param: projectProps })
     .then( resp => {
-      return get(resp.data, 'result.content', {})
+      return _.get(resp.data, 'result.content', {})
     })
     .then(project => {
       const updatedProps = { status }
       const projectId = project.id
       return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
         .then(resp => {
-          return get(resp.data, 'result.content')
+          return _.get(resp.data, 'result.content')
         })
         .catch(error => { // eslint-disable-line no-unused-vars
           // return created project even if status update fails to prevent error page

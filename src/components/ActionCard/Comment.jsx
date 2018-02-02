@@ -6,7 +6,7 @@ import UserTooltip from '../User/UserTooltip'
 import RichTextArea from '../RichTextArea/RichTextArea'
 import { Link } from 'react-router-dom'
 import CommentEditToggle from './CommentEditToggle'
-import get from 'lodash/get'
+import _ from 'lodash'
 
 class Comment extends React.Component {
 
@@ -55,7 +55,7 @@ class Comment extends React.Component {
     const messageAnchor = `comment-${message.id}`
     const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#${messageAnchor}`
     const authorName = author ? (author.firstName + ' ' + author.lastName) : 'Connect user'
-    const avatarUrl = get(author, 'photoURL', null)
+    const avatarUrl = _.get(author, 'photoURL', null)
 
     if (this.state.editMode) {
       const content = message.newContent === null || message.newContent === undefined ? message.rawContent : message.newContent

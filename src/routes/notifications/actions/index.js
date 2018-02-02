@@ -11,6 +11,7 @@ import {
 } from '../../../config/constants'
 import notificationsService from '../services/notifications.js'
 import Alert from 'react-s-alert'
+import _ from 'lodash'
 
 export const getNotifications = () => (dispatch) => {
   notificationsService.getNotifications().then(notifications => {
@@ -31,11 +32,11 @@ export const setNotificationsFilterBy = (filterBy) => (dispatch) => dispatch({
 export const markAllNotificationsRead = (sourceId, notifications = []) => (dispatch) => {
   let ids = null
   if (sourceId) {
-    const sourceNfs = notifications.filter(n => n.sourceId === sourceId && !n.isRead)
+    const sourceNfs = _.filter(notifications, n => n.sourceId === sourceId && !n.isRead)
     if (sourceNfs.length === 0) {
       return
     }
-    ids = sourceNfs.map(n => n.id).join('-')
+    ids = _.map(sourceNfs, n => n.id).join('-')
   }
 
   dispatch({

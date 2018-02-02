@@ -1,6 +1,5 @@
 import React from 'react' // eslint-disable-line no-unused-vars
-import get from 'lodash/get'
-import identity from 'lodash/identity'
+import _ from 'lodash'
 import IconTechOutlineMobile from  '../../assets/icons/icon-tech-outline-mobile.svg'
 import IconTechOutlineTablet from  '../../assets/icons/icon-tech-outline-tablet.svg'
 import IconTechOutlineDesktop from  '../../assets/icons/icon-tech-outline-desktop.svg'
@@ -13,20 +12,21 @@ import IconTcSpecIconTypeGlyphHome from  '../../assets/icons/icon-tc-spec-icon-t
 import { findProduct} from '../projectWizard'
 
 const isFileRequired = (project, subSections) => {
-  const subSection = subSections.find((s) => s.type === 'questions')
-  const fields = subSection.questions.filter(q => q.type.indexOf('see-attached') > -1)
+  const subSection = _.find(subSections, (s) => s.type === 'questions')
+  const fields = _.filter(subSection.questions, q => q.type.indexOf('see-attached') > -1)
   // iterate over all seeAttached type fields to check
   //  if any see attached is checked.
-  return fields
-    .map(field => get(project, `${field.fieldName}.seeAttached`))
-    .some(identity)
+  return _.some(_.map(
+    _.map(fields, 'fieldName'),
+    fn => _.get(project, `${fn}.seeAttached`)
+  ))
 }
 
 const sections = [
   {
     id: 'appDefinition',
     title: (project, showProduct) => {
-      const product = get(project, 'details.products[0]')
+      const product = _.get(project, 'details.products[0]')
       if (showProduct && product) {
         const prd = findProduct(product)
         if (prd) return prd.name
@@ -162,7 +162,7 @@ const sections = [
       {
         id: 'files',
         required: isFileRequired,
-        title: (project) => `Project Files (${get(project, 'attachments', []).length})` || 'Files',
+        title: (project) => `Project Files (${_.get(project, 'attachments', []).length})` || 'Files',
         description: '',
         type: 'files',
         fieldName: 'attachments'

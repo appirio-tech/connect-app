@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 import cn from 'classnames'
 import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 import IconCarretDownActive from '../../assets/icons/arrow-6px-carret-down-active.svg'
@@ -42,9 +43,9 @@ class ProjectListProjectColHeader extends React.Component {
 
   render() {
     const {currentSortField, sortHandler} = this.props
-    const cur = options.find(o => currentSortField.indexOf(o.val) > -1)
+    const cur = _.find(options, o => currentSortField.indexOf(o.val) > -1)
       || options[0]
-
+  
     return (
       <div>
         <span className="txt txt-black">Projects</span>

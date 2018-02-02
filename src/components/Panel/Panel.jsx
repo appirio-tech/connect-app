@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import defaultProps from 'recompose/defaultProps'
+import { defaultProps } from 'recompose'
 import IconUIBoldAdd from  '../../assets/icons/icon-ui-bold-add.svg'
 import IconUITrashSimple from  '../../assets/icons/icon-ui-trash-simple.svg'
 import './Panel.scss'

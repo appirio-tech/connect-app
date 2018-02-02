@@ -1,6 +1,4 @@
-import sortBy from 'lodash/sortBy'
-import get from 'lodash/get'
-import findIndex from 'lodash/findIndex'
+import _ from 'lodash'
 import {
   CLEAR_LOADED_PROJECT,
   LOAD_PROJECT_PENDING,
@@ -85,7 +83,7 @@ export const projectTopics = function (state=initialState, action) {
      * Also, update the total count.
      */
 
-    const topics = sortBy(payload.topics, (t) => {
+    const topics = _.sortBy(payload.topics, (t) => {
       return new Date(t.lastActivityAt)
     }).reverse()
 
@@ -116,8 +114,8 @@ export const projectTopics = function (state=initialState, action) {
      * NOTE: we don't need to re-sort since we are inserting the new topic
      * to the beginning of the list
      */
-    const tag = get(action, 'meta.tag', null)
-    const rawContent = get(action, 'meta.rawContent', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const rawContent = _.get(action, 'meta.rawContent', null)
     if (!tag) return state
     const feed = payload
     if (!feed) {
@@ -144,10 +142,10 @@ export const projectTopics = function (state=initialState, action) {
       error: true
     })
   case LOAD_PROJECT_FEED_COMMENTS_PENDING: {
-    const feedId = get(action, 'meta.topicId', null)
-    const tag = get(action, 'meta.tag', null)
+    const feedId = _.get(action, 'meta.topicId', null)
+    const tag = _.get(action, 'meta.tag', null)
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     // if we find the feed
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
@@ -164,10 +162,10 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case LOAD_PROJECT_FEED_COMMENTS_SUCCESS: {
-    const feedId = get(action, 'meta.topicId', null)
-    const tag = get(action, 'meta.tag', null)
+    const feedId = _.get(action, 'meta.topicId', null)
+    const tag = _.get(action, 'meta.tag', null)
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     // if we find the feed
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
@@ -179,7 +177,7 @@ export const projectTopics = function (state=initialState, action) {
         posts: { $push: payload.posts },
         isLoadingComments: { $set : false }
       })
-      updatedFeed.posts = sortBy(updatedFeed.posts, ['id'])
+      updatedFeed.posts = _.sortBy(updatedFeed.posts, ['id'])
       const feedUpdateQuery = {}
       feedUpdateQuery[tag] = { topics: { $splice: [[feedIndex, 1, updatedFeed]] } }
       // update the state
@@ -190,10 +188,10 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case LOAD_PROJECT_FEED_COMMENTS_FAILURE: {
-    const feedId = get(action, 'meta.topicId', null)
-    const tag = get(action, 'meta.tag', null)
+    const feedId = _.get(action, 'meta.topicId', null)
+    const tag = _.get(action, 'meta.tag', null)
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     // if we find the feed
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
@@ -210,11 +208,11 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case SAVE_PROJECT_FEED_PENDING: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
     if (!feedId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
       const updatedFeed = update (feed, {
@@ -231,13 +229,13 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case SAVE_PROJECT_FEED_SUCCESS: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
-    const rawContent = get(action, 'meta.rawContent', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const rawContent = _.get(action, 'meta.rawContent', null)
     const topic = payload.topic
     const topicPost = payload.post
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
       const topicMessage = topicPost ? update (feed.posts[0], {
@@ -262,11 +260,11 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case SAVE_PROJECT_FEED_FAILURE: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
     if (!feedId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
       const updatedFeed = update (feed, {
@@ -283,11 +281,11 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case DELETE_PROJECT_FEED_PENDING: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
     if (!feedId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
       const updatedFeed = update (feed, {
@@ -303,10 +301,10 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case DELETE_PROJECT_FEED_SUCCESS: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
     if (!feedId) return state
-    const topics = state.feeds[tag].topics.filter(t => t.id !== feedId)
+    const topics = _.filter(state.feeds[tag].topics, t => t.id !== feedId)
     const feedUpdateQuery = {}
     feedUpdateQuery[tag] = { topics: { $set: topics }, totalCount: {$apply: (n) => n - 1} }
     return update (state, {
@@ -315,11 +313,11 @@ export const projectTopics = function (state=initialState, action) {
     })
   }
   case DELETE_PROJECT_FEED_FAILURE: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
     if (!feedId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
       const updatedFeed = update (feed, {
@@ -336,11 +334,11 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case CREATE_PROJECT_FEED_COMMENT_PENDING: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
     if (!feedId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
       const updatedFeed = update (feed, {
@@ -356,16 +354,16 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case CREATE_PROJECT_FEED_COMMENT_SUCCESS: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
-    const rawContent = get(action, 'meta.rawContent', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const rawContent = _.get(action, 'meta.rawContent', null)
     const comment = payload.comment
     comment.rawContent = rawContent
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
-      const commentIndex = findIndex(feed.postIds, id => id === comment.id)
+      const commentIndex = _.findIndex(feed.postIds, id => id === comment.id)
       let updatedFeed
       if (commentIndex >= 0) {
         // The created comment already exists, it's duplicate
@@ -394,11 +392,11 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case CREATE_PROJECT_FEED_COMMENT_FAILURE: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
     if (!feedId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
       const updatedFeed = update (feed, {
@@ -415,15 +413,15 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case SAVE_PROJECT_FEED_COMMENT_PENDING: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
-    const commentId = get(action, 'meta.commentId', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
     if (!feedId || !commentId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
-      const commentIndex = findIndex(feed.posts, post => post.id === commentId)
+      const commentIndex = _.findIndex(feed.posts, post => post.id === commentId)
       if (commentIndex < 0) {
         return state
       }
@@ -444,17 +442,17 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case SAVE_PROJECT_FEED_COMMENT_SUCCESS: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
-    const commentId = get(action, 'meta.commentId', null)
-    const rawContent = get(action, 'meta.rawContent', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
+    const rawContent = _.get(action, 'meta.rawContent', null)
     const savedComment = payload.comment
     if (!feedId || !commentId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
-      const commentIndex = findIndex(feed.posts, post => post.id === commentId)
+      const commentIndex = _.findIndex(feed.posts, post => post.id === commentId)
       if (commentIndex < 0) {
         return state
       }
@@ -478,15 +476,15 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case SAVE_PROJECT_FEED_COMMENT_FAILURE: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
-    const commentId = get(action, 'meta.commentId', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
     if (!feedId || !commentId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
-      const commentIndex = findIndex(feed.posts, post => post.id === commentId)
+      const commentIndex = _.findIndex(feed.posts, post => post.id === commentId)
       if (commentIndex < 0) {
         return state
       }
@@ -507,15 +505,15 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case DELETE_PROJECT_FEED_COMMENT_PENDING: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
-    const commentId = get(action, 'meta.commentId', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
     if (!feedId || !commentId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
-      const commentIndex = findIndex(feed.posts, post => post.id === commentId)
+      const commentIndex = _.findIndex(feed.posts, post => post.id === commentId)
       if (commentIndex < 0) {
         return state
       }
@@ -536,15 +534,15 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case DELETE_PROJECT_FEED_COMMENT_SUCCESS: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
-    const commentId = get(action, 'meta.commentId', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
-      const postIds = feed.postIds.filter(p => p !== commentId)
-      const posts = feed.posts.filter(p => p.id !== commentId)
+      const postIds = _.filter(feed.postIds, p => p !== commentId)
+      const posts = _.filter(feed.posts, p => p.id !== commentId)
       const updatedFeed = update (feed, {
         // no need to update hasMoreComments, it should maintain its prev value
         totalPosts: { $apply: n => n - 1},
@@ -563,15 +561,15 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case DELETE_PROJECT_FEED_COMMENT_FAILURE: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
-    const commentId = get(action, 'meta.commentId', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
     if (!feedId || !commentId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
-      const commentIndex = findIndex(feed.posts, post => post.id === commentId)
+      const commentIndex = _.findIndex(feed.posts, post => post.id === commentId)
       if (commentIndex < 0) {
         return state
       }
@@ -592,15 +590,15 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case GET_PROJECT_FEED_COMMENT_PENDING: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
-    const commentId = get(action, 'meta.commentId', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
     if (!feedId || !commentId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
-      const commentIndex = findIndex(feed.posts, post => post.id === commentId)
+      const commentIndex = _.findIndex(feed.posts, post => post.id === commentId)
       if (commentIndex < 0) {
         return state
       }
@@ -621,16 +619,16 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case GET_PROJECT_FEED_COMMENT_SUCCESS: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
-    const commentId = get(action, 'meta.commentId', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
     const comment = payload.comment
     if (!feedId || !commentId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
-      const commentIndex = findIndex(feed.posts, post => post.id === commentId)
+      const commentIndex = _.findIndex(feed.posts, post => post.id === commentId)
       if (commentIndex < 0) {
         return state
       }
@@ -652,15 +650,15 @@ export const projectTopics = function (state=initialState, action) {
     return state
   }
   case GET_PROJECT_FEED_COMMENT_FAILURE: {
-    const feedId = get(action, 'meta.feedId', null)
-    const tag = get(action, 'meta.tag', null)
-    const commentId = get(action, 'meta.commentId', null)
+    const feedId = _.get(action, 'meta.feedId', null)
+    const tag = _.get(action, 'meta.tag', null)
+    const commentId = _.get(action, 'meta.commentId', null)
     if (!feedId || !commentId) return state
     // find feed index from the state
-    const feedIndex = findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
+    const feedIndex = _.findIndex(state.feeds[tag].topics, feed => feed.id === feedId)
     if (feedIndex >= 0) {
       const feed = state.feeds[tag].topics[feedIndex]
-      const commentIndex = findIndex(feed.posts, post => post.id === commentId)
+      const commentIndex = _.findIndex(feed.posts, post => post.id === commentId)
       if (commentIndex < 0) {
         return state
       }

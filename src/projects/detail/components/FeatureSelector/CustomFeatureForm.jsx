@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import merge from 'lodash/merge'
-import get from 'lodash/get'
+import _ from 'lodash'
 import cn from 'classnames'
 import Panel from '../../../../components/Panel/Panel'
 import DeleteFeatureModal from './DeleteFeatureModal'
@@ -69,12 +68,12 @@ class CustomFeatureForm extends Component {
 
   onSave(data) {
     const { featureData } = this.props
-    this.props.addFeature(merge({
+    this.props.addFeature(_.merge({
       id: data.title.toLowerCase().replace(/\s/g, '_'),
       categoryId: 'custom',
       notes: ''
     }, featureData, { title : data.title.trim() }))
-    // assumes addFeature to be a synchronous call, otherwise it could lead to inconsistent UI state
+    // assumes addFeature to be a synchronous call, otherwise it could lead to inconsistent UI state 
     // e.g. if async addFeature fails, it would close the edit mode
     // this call is needed here because debounce call (for notes change) is closing the edit mode if
     // we do set the editMode in componentWillReceiveProps method
@@ -89,14 +88,14 @@ class CustomFeatureForm extends Component {
     if (featureData) {// feature is already added
       // trim the notes (as of now only notes field is auto updated)
       data.notes = data.notes.trim()
-      this.props.updateFeature(merge({}, featureData, data))
+      this.props.updateFeature(_.merge({}, featureData, data))
     }
   }
 
   render() {
     const { isEdittable, onCancel } = this.props
     const { data, isAdded, editMode, isActive, showDeleteModal } = this.state
-    // const _debouncedOnChange = debounce(this.onChange, 2000, { trailing: true, maxWait: 10000 })
+    // const _debouncedOnChange = _.debounce(this.onChange, 2000, { trailing: true, maxWait: 10000 })
     const formClasses = cn('feature-form', {
       'modal-active': showDeleteModal
     })
@@ -104,7 +103,7 @@ class CustomFeatureForm extends Component {
       <Panel className={ formClasses }>
         { (isAdded && !editMode) &&
           <div className="feature-title-row">
-            <span className="title">{ get(data, 'title', 'Define a new feature')}</span>
+            <span className="title">{ _.get(data, 'title', 'Define a new feature')}</span>
             <div className="feature-actions">
               { isAdded &&
                   <SwitchButton
@@ -131,7 +130,7 @@ class CustomFeatureForm extends Component {
                 validationError="Feature name is required"
                 wrapperClass="row"
                 maxLength={40}
-                value={ get(data, 'title', '') }
+                value={ _.get(data, 'title', '') }
               />
             }
             { (isActive && !editMode) ?
@@ -139,7 +138,7 @@ class CustomFeatureForm extends Component {
                 name="notes"
                 label="Feature Notes"
                 wrapperClass="feature-notes"
-                value={ get(data, 'notes', '') }
+                value={ _.get(data, 'notes', '') }
               />
               : null
             }

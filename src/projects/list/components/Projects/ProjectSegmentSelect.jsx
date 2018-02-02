@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 import cn from 'classnames'
 import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 import IconCheckDark from '../../assets/icons/check-dark.svg'
@@ -18,7 +19,7 @@ class ProjectSegmentSelect extends React.Component {
 
   render() {
     const {currentSegment, currentSortField, sortHandler} = this.props
-    const cur = options.find(o => currentSegment === o.val)
+    const cur = _.find(options, o => currentSegment === o.val)
       || options[0]
 
     return (

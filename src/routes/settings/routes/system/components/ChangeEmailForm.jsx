@@ -7,7 +7,7 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import debounce from 'lodash/debounce'
+import _ from 'lodash'
 import { EMAIL_AVAILABILITY_CHECK_DEBOUNCE } from '../../../../../config/constants'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
@@ -30,7 +30,7 @@ class ChangeEmailForm extends React.Component {
     this.onChange = this.onChange.bind(this)
 
     // debounced checkEmailAvailability function to prevent polluting server with requests
-    this.debouncedAvailabilityCheck = debounce(this.checkEmailAvailability, EMAIL_AVAILABILITY_CHECK_DEBOUNCE)
+    this.debouncedAvailabilityCheck = _.debounce(this.checkEmailAvailability, EMAIL_AVAILABILITY_CHECK_DEBOUNCE)
   }
 
   componentWillReceiveProps(nextProps) {

@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
-import isNumber from 'lodash/isNumber'
-import branch from 'recompose/branch'
-import renderComponent from 'recompose/renderComponent'
+import _ from 'lodash'
+import { branch, renderComponent } from 'recompose'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import BtnPrev from '../../assets/icons/arrow-left.svg'
 import BtnNext from '../../assets/icons/arrow-left.svg'
@@ -57,7 +56,7 @@ const GoToPagePill = ({minPage, maxPage, onPageClick}) => {
 const PaginationBar = enhance(({onPageChange, currentPageNum, totalCount, pageSize}) => {
   const handlePageSelection = val => {
     // if it's a number then call handler
-    if (currentPageNum !== val && isNumber(val)) return onPageChange(val)
+    if (currentPageNum !== val && _.isNumber(val)) return onPageChange(val)
     // val must be an event-  handle prev / next
     val = val.target.innerText.toLowerCase()
     if (val === 'prev') onPageChange(currentPageNum-1)
@@ -94,7 +93,7 @@ const PaginationBar = enhance(({onPageChange, currentPageNum, totalCount, pageSi
     }
     // render current page pill
     pagePills.push(renderPill(currentPageNum))
-
+    
     // render last page pill
     if (currentPageNum < pages) {
       pagePills.push(renderPill(pages))
@@ -103,7 +102,7 @@ const PaginationBar = enhance(({onPageChange, currentPageNum, totalCount, pageSi
     const leftPagePills = []
     // initially assumes equal partition between left and right side of the current page
     let remainingPillsLeft = Math.ceil((NUMBER_OF_PILLS - pagePills.length) / 2)
-
+    
     // if pills avialable to render before current page, add pills determined by remainingPillsLeft
     if (pagesBeforeCurrent > 0) {
       for(let i=1; i <= remainingPillsLeft && i <= pagesBeforeCurrent; i++) {
@@ -114,7 +113,7 @@ const PaginationBar = enhance(({onPageChange, currentPageNum, totalCount, pageSi
     pagePills.splice(1, 0, ...leftPagePills)
     // calculates the pills to render on the right side of the current page, it may be greater than the left side pills
     const remainingPillsRight = NUMBER_OF_PILLS - pagePills.length
-
+    
     // if pills available to render after the current page, add pills determined by remainingPillsRight
     if (pagesAfterCurrent > 0) {
       for(let i=1; i <= remainingPillsRight && i <= pagesAfterCurrent; i++) {
@@ -144,7 +143,7 @@ const PaginationBar = enhance(({onPageChange, currentPageNum, totalCount, pageSi
     // adds go to page pill if there are missing pills between current page and last pill
     if (pagesAfterCurrent - remainingPillsRight > 0) {
       pagePills.splice(pagePills.length - 1,
-        0,
+        0, 
         <GoToPagePill
           key="goToPagePill-2"
           onPageClick={ handlePageSelection }
@@ -163,7 +162,7 @@ const PaginationBar = enhance(({onPageChange, currentPageNum, totalCount, pageSi
   return (
     <div className="pages">
       <nav className="right-page">
-        { currentPageNum > 1 &&
+        { currentPageNum > 1 && 
         <a href="javascript:" onClick={handlePageSelection}>
           Prev
           <BtnPrev className="btn-prev"/>
@@ -172,7 +171,7 @@ const PaginationBar = enhance(({onPageChange, currentPageNum, totalCount, pageSi
         <ul>
           { pagePills.map(pagePill => pagePill)}
         </ul>
-        { currentPageNum < pages &&
+        { currentPageNum < pages && 
           <a href="javascript:" onClick={handlePageSelection}>
             Next
             <BtnNext className="btn-next"/>

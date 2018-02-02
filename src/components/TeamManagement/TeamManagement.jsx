@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
@@ -46,9 +47,9 @@ const TeamManagement = (props) => {
   const modalActive = isAddingTeamMember || deletingMember || isShowJoin || showNewMemberConfirmation
   const canJoin = !currentMember && (currentUser.isCopilot || currentUser.isManager)
 
-  const sortedMembers = members.sort((member1, member2) => (
-    calcMemberPriority(member1) - calcMemberPriority(member2)
-  ))
+  const sortedMembers = _.sortBy(members, [(member) => {
+    return calcMemberPriority(member)
+  }])
 
   const _onAddNewMember = () => {
     onToggleNewMemberConfirm(false)

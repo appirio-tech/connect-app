@@ -7,7 +7,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import isNumber from 'lodash/isNumber'
+import _ from 'lodash'
 import './SideFilterSectionItem.scss'
 
 const SideFilterSectionItem = (props) => (
@@ -17,7 +17,7 @@ const SideFilterSectionItem = (props) => (
     onClick={() => props.onClick(props.value)}
   >
     <div className="title">{props.title}</div>
-    {isNumber(props.quantity) && <div className="quantity">{props.quantity}</div>}
+    {_.isNumber(props.quantity) && <div className="quantity">{props.quantity}</div>}
   </li>
 )
 

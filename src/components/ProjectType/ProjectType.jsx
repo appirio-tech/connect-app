@@ -1,4 +1,4 @@
-import get from 'lodash/get'
+import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
 import './ProjectType.scss'
@@ -22,7 +22,7 @@ const deviceMap = {
 const ProjectType = ({projectId, type, description, devices}) => (
   <PanelProject>
     <PanelProject.Heading>
-      { get(findCategory(type), 'name', '') }
+      { _.get(findCategory(type), 'name', '') }
     </PanelProject.Heading>
     <TextTruncate
       containerClassName="project-description"

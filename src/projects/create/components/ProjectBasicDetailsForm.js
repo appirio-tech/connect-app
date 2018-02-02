@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual'
+import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
@@ -19,11 +19,11 @@ class ProjectBasicDetailsForm extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return !(
-      isEqual(nextProps.project, this.props.project)
-     && isEqual(nextState.project, this.state.project)
-     && isEqual(nextState.canSubmit, this.state.canSubmit)
-     && isEqual(nextProps.sections, this.props.sections)
-     && isEqual(nextState.isSaving, this.state.isSaving)
+      _.isEqual(nextProps.project, this.props.project)
+     && _.isEqual(nextState.project, this.state.project)
+     && _.isEqual(nextState.canSubmit, this.state.canSubmit)
+     && _.isEqual(nextProps.sections, this.props.sections)
+     && _.isEqual(nextState.isSaving, this.state.isSaving)
     )
   }
 

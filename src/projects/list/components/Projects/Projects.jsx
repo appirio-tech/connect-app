@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import branch from 'recompose/branch'
-import renderComponent from 'recompose/renderComponent'
-import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
+import { branch, renderComponent, compose, withProps } from 'recompose'
 import { withRouter } from 'react-router-dom'
 import Walkthrough from '../Walkthrough/Walkthrough'
 import CoderBot from '../../../../components/CoderBot/CoderBot'
@@ -11,13 +8,7 @@ import ProjectListNavHeader from './ProjectListNavHeader'
 import ProjectsGridView from './ProjectsGridView'
 import ProjectsCardView from './ProjectsCardView'
 import { loadProjects, setInfiniteAutoload, setProjectsListView } from '../../../actions/loadProjects'
-import get from 'lodash/get'
-import isEqual from 'lodash/isEqual'
-import isEmpty from 'lodash/isEmpty'
-import pickBy from 'lodash/pickBy'
-import identity from 'lodash/identity'
-import find from 'lodash/find'
-import findIndex from 'lodash/findIndex'
+import _ from 'lodash'
 import querystring from 'query-string'
 import { updateProject } from '../../../actions/project'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
@@ -55,9 +46,9 @@ class Projects extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const prevQueryParams = get(this.props, 'location.search', null)
-    const queryParams = get(nextProps, 'location.search', null)
-    if (!isEqual(prevQueryParams, queryParams)) {
+    const prevQueryParams = _.get(this.props, 'location.search', null)
+    const queryParams = _.get(nextProps, 'location.search', null)
+    if (!_.isEqual(prevQueryParams, queryParams)) {
       this.init(nextProps)
     }
   }
@@ -89,7 +80,7 @@ class Projects extends Component {
     // check for criteria specified in URL.
     const queryParams = querystring.parse(location.search)
     this.setState({status : null})
-    if (!isEmpty(queryParams)) {
+    if (!_.isEmpty(queryParams)) {
       const initialCriteria = {}
       initialCriteria.sort = (queryParams.sort) ? queryParams.sort : 'updatedAt desc'
       if (queryParams.keyword) initialCriteria.keyword = decodeURIComponent(queryParams.keyword)
@@ -102,7 +93,7 @@ class Projects extends Component {
       if (queryParams.view) this.setState({selectedView : queryParams.view})
       // load projects only if projects were loaded for different criteria
       // or there no loaded projects yet
-      if (!isEqual(criteria, initialCriteria) || projects.length === 0) {
+      if (!_.isEqual(criteria, initialCriteria) || projects.length === 0) {
         loadProjects(initialCriteria)
       }
     } else {
@@ -130,14 +121,14 @@ class Projects extends Component {
   }
 
   sortHandler(fieldName) {
-    const criteria = {...this.props.criteria, ...{
+    const criteria = _.assign({}, this.props.criteria, {
       sort: fieldName
-    }}
+    })
     this.routeWithParams(criteria)
   }
 
   applyFilters(filter) {
-    const criteria = {...this.props.criteria, ...filter}
+    const criteria = _.assign({}, this.props.criteria, filter)
     this.routeWithParams(criteria)
   }
 
@@ -149,10 +140,10 @@ class Projects extends Component {
     // because criteria is changed disable infinite autoload
     this.props.setInfiniteAutoload(false)
     // remove any null values
-    criteria = pickBy(criteria, identity)
+    criteria = _.pickBy(criteria, _.identity)
     this.props.history.push({
       pathname: '/projects',
-      search: '?' + querystring.stringify({...criteria})
+      search: '?' + querystring.stringify(_.assign({}, criteria))
     })
     this.props.loadProjects(criteria)
   }
@@ -162,10 +153,10 @@ class Projects extends Component {
     // show walk through if user is customer and no projects were returned
     // for default filters
     const showWalkThrough = !isLoading && totalCount === 0 &&
-      isEqual(criteria, PROJECT_LIST_DEFAULT_CRITERIA) &&
+      _.isEqual(criteria, PROJECT_LIST_DEFAULT_CRITERIA) &&
       !isPowerUser
     const getStatusCriteriaText = (criteria) => {
-      return (find(PROJECT_STATUS, { value: criteria.status }) || { name: ''}).name
+      return (_.find(PROJECT_STATUS, { value: criteria.status }) || { name: ''}).name
     }
     const gridView = (
       <EnhancedGrid {...this.props}
@@ -218,7 +209,7 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState }) => 
     isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
   }
   if (projectState.project && projectState.project.id && projectSearch.projects) {
-    const index = findIndex(projectSearch.projects, {id: projectState.project.id})
+    const index = _.findIndex(projectSearch.projects, {id: projectState.project.id})
     projectSearch.projects.splice(index, 1, projectState.project)
   }
   return {

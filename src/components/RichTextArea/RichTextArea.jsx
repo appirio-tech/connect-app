@@ -18,6 +18,7 @@ import EditorIcons from './EditorIcons'
 import './RichTextArea.scss'
 import 'draft-js-mention-plugin/lib/plugin.css'
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'
+import _ from 'lodash'
 
 const linkPlugin = createLinkPlugin()
 const blockDndPlugin = createBlockDndPlugin()
@@ -78,7 +79,7 @@ class RichTextArea extends React.Component {
   }
 
   componentWillMount() {
-    const suggestions = Object.values(this.props.allMembers).map((e) => { return {name: e.firstName + ' ' + e.lastName, handle: e.handle, userId: e.userId, link:'/users/'+e.handle} })
+    const suggestions = _.map(_.values(this.props.allMembers), (e) => { return {name: e.firstName + ' ' + e.lastName, handle: e.handle, userId: e.userId, link:'/users/'+e.handle} })
     this.setState({
       editorExpanded: this.props.editMode,
       titleValue: this.props.title || '',

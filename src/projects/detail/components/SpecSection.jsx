@@ -5,7 +5,7 @@ import Tabs from 'appirio-tech-react-components/components/Tabs/Tabs'
 import Tab from 'appirio-tech-react-components/components/Tabs/Tab'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
-import get from 'lodash/get'
+import _ from 'lodash'
 import SpecQuestions from './SpecQuestions'
 import FileListContainer from './FileListContainer'
 import SpecScreens from './SpecScreens'
@@ -48,7 +48,7 @@ const SpecSection = props => {
     const {type} = props
     switch(type) {
     case 'tabs': {
-      const tabs = get(props, 'tabs')
+      const tabs = _.get(props, 'tabs')
       const renderTab = (t, idx) => (
         <Tab key={idx+1} eventKey={idx+1} title={t.title}>
           {renderChild(t)}
@@ -80,16 +80,16 @@ const SpecSection = props => {
           <TCFormFields.Textarea
             autoResize
             name={props.fieldName}
-            value={get(project, props.fieldName) || ''}
+            value={_.get(project, props.fieldName) || ''}
           />
         </div>
       )
     case 'files': {
-      const files = get(project, props.fieldName, [])
+      const files = _.get(project, props.fieldName, [])
       return <FileListContainer projectId={project.id} files={files} />
     }
     case 'screens': {
-      const screens = get(project, props.fieldName, [])
+      const screens = _.get(project, props.fieldName, [])
       return (
         <SpecScreens
           name={props.fieldName}
@@ -102,7 +102,7 @@ const SpecSection = props => {
     }
     case 'project-name': {
       const refCodeFieldName = 'details.utm.code'
-      const refCode = get(project, refCodeFieldName, undefined)
+      const refCode = _.get(project, refCodeFieldName, undefined)
       const queryParamRefCode = qs.parse(window.location.search).refCode
       return (
         <div className="project-name-section">
@@ -111,7 +111,7 @@ const SpecSection = props => {
               <TCFormFields.TextInput
                 name="name"
                 placeholder="Project Name"
-                value={get(project, 'name', undefined)}
+                value={_.get(project, 'name', undefined)}
                 wrapperClass="project-name"
                 maxLength={ PROJECT_NAME_MAX_LENGTH }
                 required={props.required}

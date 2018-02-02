@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
+import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
@@ -135,7 +135,7 @@ const ProjectsGridView = props => {
   const { projects, members, totalCount, criteria, pageNum, sortHandler, onPageChange,
     error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus } = props
 
-  const currentSortField = get(criteria, 'sort', '')
+  const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
   // it defines what columns should be displayed and more importantly
   // how they should be displayed.
@@ -162,10 +162,10 @@ const ProjectsGridView = props => {
       sortable: false,
       renderText: item => {
         const url = `/projects/${item.id}`
-        const productType = get(item, 'details.products[0]')
+        const productType = _.get(item, 'details.products[0]')
         const product = findProduct(productType)
         // icon for the product, use default generic work project icon for categories which no longer exist now
-        const productIcon = get(product, 'icon', 'tech-32px-outline-work-project')
+        const productIcon = _.get(product, 'icon', 'tech-32px-outline-work-project')
         return (
           <Link to={url} className="spacing">
             <div className="project-type-icon" title={item.type !== undefined ? item.type[0].toUpperCase() + item.type.substr(1).replace(/_/g, ' ') : null}>
@@ -181,7 +181,7 @@ const ProjectsGridView = props => {
       sortable: false,
       renderText: item => {
         const url = `/projects/${item.id}`
-        const code = get(item, 'details.utm.code', '')
+        const code = _.get(item, 'details.utm.code', '')
         return (
           <div className="spacing project-container">
             <div className="project-title">
@@ -205,7 +205,7 @@ const ProjectsGridView = props => {
       sortable: false,
       classes: 'item-status-date',
       renderText: item => {
-        const sortMetric = SORT_OPTIONS.find(o => currentSortField === o.val) || SORT_OPTIONS[0]
+        const sortMetric = _.find(SORT_OPTIONS, o => currentSortField === o.val) || SORT_OPTIONS[0]
         const lastAction = item[sortMetric.field] === 'createdAt' ? 'createdBy' : 'updatedBy'
         const lastEditor = members[item[lastAction]]
         return (
@@ -225,7 +225,7 @@ const ProjectsGridView = props => {
       sortable: false,
       classes: 'item-customer',
       renderText: item => {
-        const m = item.members.find(m => m.isPrimary && m.role === 'customer')
+        const m = _.find(item.members, m => m.isPrimary && m.role === 'customer')
         if (!m)
           return <div className="user-block txt-italic">Unknown</div>
         return (
@@ -248,7 +248,7 @@ const ProjectsGridView = props => {
       sortable: false,
       classes: 'item-manager',
       renderText: item => {
-        const m = item.members.filter(m => m.role === 'manager')
+        const m = _.filter(item.members, m => m.role === 'manager')
         return (
           <div className="spacing">
             <ProjectManagerAvatars managers={m}/>
@@ -279,15 +279,14 @@ const ProjectsGridView = props => {
   ]
 
   // annotate projects with member data
-  projects.forEach(prj => {
-    prj.members = prj.members.map(m => {
+  _.forEach(projects, prj => {
+    prj.members = _.map(prj.members, m => {
       // there is some bad data in the system
       if (!m.userId) return m
-      return ({
-        ...m,
-        photoURL: '',
-        ...members[m.userId.toString()]
-      })
+      return _.assign({}, m, {
+        photoURL: ''
+      },
+      members[m.userId.toString()])
     })
   })
 

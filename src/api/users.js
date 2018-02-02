@@ -1,4 +1,4 @@
-import get from 'lodash/get'
+import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL } from '../config/constants'
 
@@ -10,6 +10,6 @@ import { TC_API_URL } from '../config/constants'
 export function getUserProfile(handle) {
   return axios.get(`${TC_API_URL}/v3/members/${handle}/`)
     .then(resp => {
-      return get(resp.data, 'result.content', {})
+      return _.get(resp.data, 'result.content', {})
     })
 }

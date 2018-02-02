@@ -87,14 +87,12 @@ module.exports = {
 
     /*
       Connect app requires a lot of env vars which are defined in constants.
+
+      WARNING this plugin will be a duplicate of the same plugin from topcoder-react-utils,
+              most likely this hides variables defined in topcoder-react-utils
      */
     new webpack.DefinePlugin({
       'process.env': _.mapValues(constants, (value) => JSON.stringify(value))
-    }),
-
-    /*
-      Remove some unused files to reduce bundle size
-     */
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+    })
   ]
 }

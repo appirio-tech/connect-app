@@ -1,8 +1,4 @@
-import isUndefined from 'lodash/isUndefined'
-import pick from 'lodash/pick'
-import forEachRight from 'lodash/forEachRight'
-import get from 'lodash/get'
-import findIndex from 'lodash/findIndex'
+import _ from 'lodash'
 import React from 'react'
 import { Prompt, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -85,11 +81,11 @@ class MessagesView extends React.Component {
 
   isChanged() {
     const { newPost } = this.state
-    const hasMessage = !isUndefined(this.state.threads.find((thread) => (thread.isSavingTopic || thread.isDeletingTopic || thread.isAddingComment)
+    const hasMessage = !_.isUndefined(_.find(this.state.threads, (thread) => (thread.isSavingTopic || thread.isDeletingTopic || thread.isAddingComment)
       || (thread.newMessage && thread.newMessage.length)
       || (thread.newTitle && thread.newTitle.length && thread.newTitle !== thread.title)
       || (thread.topicMessage && thread.topicMessage.newContent && thread.topicMessage.newContent.length && thread.topicMessage.rawContent && thread.topicMessage.newContent !== thread.topicMessage.rawContent)
-      || !isUndefined(thread.messages.find((message) => message.isSavingComment || message.isDeletingComment || (message.newContent && message.newContent.length && message.rawContent && message.newContent !== message.rawContent)))
+      || !_.isUndefined(_.find(thread.messages, (message) => message.isSavingComment || message.isDeletingComment || (message.newContent && message.newContent.length && message.rawContent && message.newContent !== message.rawContent)))
     ))
     const hasThread = (newPost.title && !!newPost.title.trim().length) || ( newPost.content && !!newPost.content.trim().length)
     return hasThread || hasMessage
@@ -97,7 +93,7 @@ class MessagesView extends React.Component {
 
   mapFeed(feed, isActive, showAll = false, resetNewMessage = false, prevProps) {
     const { allMembers } = this.props
-    const item = pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isSavingTopic', 'isDeletingTopic', 'isAddingComment', 'isLoadingComments', 'error'])
+    const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isSavingTopic', 'isDeletingTopic', 'isAddingComment', 'isLoadingComments', 'error'])
     item.isActive = isActive
     // Github issue##623, allow comments on all posts (including system posts)
     item.allowComments = true
@@ -113,7 +109,7 @@ class MessagesView extends React.Component {
     item.messages = []
     let prevThread = null
     if (prevProps) {
-      prevThread = prevProps.threads.find(t => feed.id === t.id)
+      prevThread = _.find(prevProps.threads, t => feed.id === t.id)
     }
     const _toComment = (p) => {
       const date = p.updatedDate?p.updatedDate:p.date
@@ -131,12 +127,12 @@ class MessagesView extends React.Component {
         edited,
         author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
       }
-      const prevComment = prevThread ? prevThread.posts.find(t => p.id === t.id) : null
+      const prevComment = prevThread ? _.find(prevThread.posts, t => p.id === t.id) : null
       if (prevComment && prevComment.isSavingComment && !comment.isSavingComment && !comment.error) {
         comment.editMode = false
       } else {
-        const threadFromState = this.state.threads.find(t => feed.id === t.id)
-        const commentFromState = threadFromState ? threadFromState.messages.find(t => comment.id === t.id) : null
+        const threadFromState = _.find(this.state.threads, t => feed.id === t.id)
+        const commentFromState = threadFromState ? _.find(threadFromState.messages, t => comment.id === t.id) : null
         comment.newContent = commentFromState ? commentFromState.newContent : null
         comment.editMode = commentFromState && commentFromState.editMode
       }
@@ -146,7 +142,7 @@ class MessagesView extends React.Component {
     if (prevThread && prevThread.isSavingTopic && !feed.isSavingTopic && !feed.error) {
       item.editTopicMode = false
     } else {
-      const threadFromState = this.state.threads.find(t => feed.id === t.id)
+      const threadFromState = _.find(this.state.threads, t => feed.id === t.id)
       item.newTitle = threadFromState ? threadFromState.newTitle : null
       item.topicMessage.newContent = threadFromState ? threadFromState.topicMessage.newContent : null
       item.editTopicMode = threadFromState && threadFromState.editTopicMode
@@ -156,12 +152,12 @@ class MessagesView extends React.Component {
     }
     if (showAll) {
       // if we are showing all comments, just iterate through the entire array
-      feed.posts.forEach(p => {
+      _.forEach(feed.posts, p => {
         validPost(p) ? item.messages.push(_toComment(p)) : item.totalComments--
       })
     } else {
       // otherwise iterate from right and add to the beginning of the array
-      forEachRight(feed.posts, (p) => {
+      _.forEachRight(feed.posts, (p) => {
         validPost(p) ? item.messages.unshift(_toComment(p)) : item.totalComments--
         if (!feed.showAll && item.messages.length === THREAD_MESSAGES_PAGE_SIZE)
           return false
@@ -169,7 +165,7 @@ class MessagesView extends React.Component {
     }
     item.newMessage = ''
     if (!resetNewMessage) {
-      const threadFromState = this.state.threads.find(t => feed.id === t.id)
+      const threadFromState = _.find(this.state.threads, t => feed.id === t.id)
       item.newMessage = threadFromState ? threadFromState.newMessage : ''
     }
     item.hasMoreMessages = item.messages.length < item.totalComments
@@ -178,10 +174,10 @@ class MessagesView extends React.Component {
 
   init(props, prevProps) {
     const { activeThreadId } = this.state
-    const propsThreadId = get(props, 'params.discussionId', null)
+    const propsThreadId = _.get(props, 'params.discussionId', null)
     const threadId = activeThreadId ? activeThreadId : parseInt(propsThreadId)
     let activeThreadIndex = threadId
-      ? findIndex(props.threads, (thread) => thread.id === threadId )
+      ? _.findIndex(props.threads, (thread) => thread.id === threadId )
       : 0
     if (activeThreadIndex < 0) {
       activeThreadIndex = 0
@@ -198,7 +194,7 @@ class MessagesView extends React.Component {
         // finds the same thread from previous props, if exists
         let prevThread
         if (prevProps && prevProps.threads) {
-          prevThread = prevProps.threads.find(t => thread.id === t.id)
+          prevThread = _.find(prevProps.threads, t => thread.id === t.id)
         }
         // reset new message if we were adding message and there is no error in doing so
         const resetNewMessage = prevThread && prevThread.isAddingComment && !thread.isAddingComment && !thread.error
@@ -213,8 +209,8 @@ class MessagesView extends React.Component {
 
   onShowAllComments(theadId) {
     const { threads } = this.props
-    const thread = threads.find(thread => thread.id === theadId)
-    const stateFeedIdx = findIndex(this.state.threads, (f) => f.id === theadId)
+    const thread = _.find(threads, thread => thread.id === theadId)
+    const stateFeedIdx = _.findIndex(this.state.threads, (f) => f.id === theadId)
     // in case we have already have all comments for that thread from the server,
     // just change the state to show all comments for that FeedId.
     // Otherwise load more comments from the server
@@ -223,8 +219,8 @@ class MessagesView extends React.Component {
       const updatedFeed = update(this.state.threads[stateFeedIdx], {
         isLoadingComments: { $set : true }
       })
-      const retrievedPostIds = thread.posts.map('id')
-      const commentIdsToRetrieve = thread.postIds.filter(_id => retrievedPostIds.indexOf(_id) === -1 )
+      const retrievedPostIds = _.map(thread.posts, 'id')
+      const commentIdsToRetrieve = _.filter(thread.postIds, _id => retrievedPostIds.indexOf(_id) === -1 )
       this.setState(update(this.state, {
         showAll: { $push: [theadId] },
         threads: { $splice: [[stateFeedIdx, 1, updatedFeed ]] }
@@ -336,12 +332,12 @@ class MessagesView extends React.Component {
     this.setState({
       threads: this.state.threads.map((item) => {
         if (item.id === threadId) {
-          const messageIndex = findIndex(item.messages, message => message.id === messageId)
+          const messageIndex = _.findIndex(item.messages, message => message.id === messageId)
           const message = item.messages[messageIndex]
           message.newContent = content
           message.editMode = editMode
           item.messages[messageIndex] = {...message}
-          item.messages = item.messages.map(message => message)
+          item.messages = _.map(item.messages, message => message)
           return {...item}
         }
         return item
@@ -360,8 +356,8 @@ class MessagesView extends React.Component {
   }
 
   onEditMessage(threadId, postId) {
-    const thread = this.state.threads.find(t => threadId === t.id)
-    const comment = thread.messages.find(message => message.id === postId)
+    const thread = _.find(this.state.threads, t => threadId === t.id)
+    const comment = _.find(thread.messages, message => message.id === postId)
     if (!comment.rawContent) {
       this.props.getFeedComment(threadId, PROJECT_FEED_TYPE_MESSAGES, postId)
     }
@@ -369,7 +365,7 @@ class MessagesView extends React.Component {
   }
 
   onEditTopic(threadId) {
-    const thread = this.state.threads.find(t => threadId === t.id)
+    const thread = _.find(this.state.threads, t => threadId === t.id)
     const comment = thread.topicMessage
     if (!comment.rawContent) {
       this.props.getFeedComment(threadId, PROJECT_FEED_TYPE_MESSAGES, comment.id)

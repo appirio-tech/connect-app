@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 import { PROJECT_STATUS } from '../../config/constants'
 
 import './StatusFilters.scss'
@@ -11,13 +12,13 @@ const projectStatuses = [
 ]
 
 const StatusFilters = ({criteria, applyFilters}) => {
-  const _statuses = projectStatuses.map(p => {
+  const _statuses = _.map(projectStatuses, p => {
     return { val:  p.val, label: p.label }
   })
   return (
     <div className="filterContainer">
       <ul className="filterList">
-        { _statuses.map((status, i) =>
+        { _statuses.map((status, i) => 
           <li key={i} className={`filterItem ${(status.label ==='All Statuses' && !criteria.status) || status.val===criteria.status ? 'active' : ''}`} onClick={() => applyFilters({status: status.val})}>{status.label}</li>
         )}
       </ul>

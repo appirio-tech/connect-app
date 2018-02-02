@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
-import withProps from 'recompose/withProps'
+import { withProps } from 'recompose'
 import { renderApp } from './components/App/App'
 import Home from './components/Home/Home'
 import ConnectTerms from './components/ConnectTerms/ConnectTerms'
