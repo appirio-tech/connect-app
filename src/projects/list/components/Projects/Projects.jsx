@@ -8,12 +8,13 @@ import ProjectListNavHeader from './ProjectListNavHeader'
 import ProjectsGridView from './ProjectsGridView'
 import ProjectsCardView from './ProjectsCardView'
 import { loadProjects, setInfiniteAutoload, setProjectsListView } from '../../../actions/loadProjects'
+import { sortProjects } from '../../../actions/sortProjects'
 import _ from 'lodash'
 import querystring from 'query-string'
 import { updateProject } from '../../../actions/project'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED, PROJECT_STATUS_ACTIVE,
-  PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW } from '../../../../config/constants'
+  PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
 
 const page500 = compose(
   withProps({code:500})
@@ -121,10 +122,18 @@ class Projects extends Component {
   }
 
   sortHandler(fieldName) {
-    const criteria = _.assign({}, this.props.criteria, {
-      sort: fieldName
-    })
-    this.routeWithParams(criteria)
+    const hasMore = this.props.pageNum * PROJECTS_LIST_PER_PAGE < this.props.totalCount
+    if (hasMore)
+    {
+      const criteria = _.assign({}, this.props.criteria, {
+        sort: fieldName
+      })
+      this.routeWithParams(criteria)
+    }
+    else
+    {
+      this.props.sortProjects(fieldName)
+    }
   }
 
   applyFilters(filter) {
@@ -233,6 +242,6 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState }) => 
   }
 }
 
-const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject, setProjectsListView }
+const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject, setProjectsListView, sortProjects }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(Projects))
