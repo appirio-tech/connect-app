@@ -73,7 +73,6 @@ class ProjectsToolBar extends Component {
 
   /*eslint-disable no-unused-vars */
   handleTermChange(oldTerm, searchTerm, reqNo, callback) {
-    this.props.projectSuggestions(searchTerm)
     callback(reqNo, this.props.projects)
   }
   /*eslint-enable */
