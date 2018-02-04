@@ -7,7 +7,6 @@
   overflow: hidden;
   &.with-filters {
     padding-top: 120px;
-    min-height: calc(100vh - 120px);
   }
 
   &[data-route*='new-project'] {
