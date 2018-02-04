@@ -30,9 +30,14 @@
     flex-wrap: nowrap;
     justify-content: flex-end;
 
-    .list-nav-item {
+    .list-nav-item{
       flex: 1;
     }
+
+  }
+
+  .primary-filter {
+    margin-right: 20px;
   }
 
   .list-nav-item {
