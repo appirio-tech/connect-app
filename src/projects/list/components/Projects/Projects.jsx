@@ -32,6 +32,7 @@ class Projects extends Component {
     this.onChangeStatus = this.onChangeStatus.bind(this)
     this.onPageChange = this.onPageChange.bind(this)
     this.applyFilters = this.applyFilters.bind(this)
+    this.applySearchFilter = this.applySearchFilter.bind(this)
     this.changeView = this.changeView.bind(this)
     this.init = this.init.bind(this)
     this.removeScrollPosition = this.removeScrollPosition.bind(this)
@@ -132,6 +133,16 @@ class Projects extends Component {
     this.routeWithParams(criteria)
   }
 
+  applySearchFilter(filter) {
+    const criteria = _.assign({}, this.props.criteria, filter)
+    if (criteria && criteria.keyword) {
+      criteria.keyword = encodeURIComponent(criteria.keyword)
+      // force sort criteria to best match
+      criteria.sort = 'best match'
+    }
+    this.routeWithParams(criteria)
+  }
+
   changeView(view) {
     this.setState({selectedView : view})
   }
@@ -162,6 +173,7 @@ class Projects extends Component {
       <EnhancedGrid {...this.props}
         onPageChange={this.onPageChange}
         sortHandler={this.sortHandler}
+        applyFilters={this.applySearchFilter}
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
       />

@@ -96,7 +96,7 @@
     "react-redux": "^4.4.5",
     "react-router-dom": "^4.2.2",
     "react-s-alert": "^1.1.4",
-    "react-scroll": "^1.5.4",
+    "react-scroll": "^1.7.6",
     "react-scroll-lock-component": "^1.1.2",
     "react-select": "^0.9.1",
     "react-stickynode": "^1.2.1",
