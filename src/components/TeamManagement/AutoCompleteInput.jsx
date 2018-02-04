@@ -35,8 +35,6 @@ class AutoCompleteInput extends React.Component {
       isPopupVisible, searchMembers, keyword, onKeywordChange, onSelectNewMember, onToggleSearchPopup, selectedNewMember
     } = this.props
 
-    const defaultMemberPhotoStyle = { "max-width": "100%", width: "30px", height: "30px", "border-radius": "0px"}
-
     const renderMember = (member, i) => {
       const onClick = (e) => {
         ReactDOM.findDOMNode(this.refs.input).focus()
@@ -67,10 +65,7 @@ class AutoCompleteInput extends React.Component {
 
         <div className="input-icon">
           {selectedNewMember
-            ? <Avatar
-                size={30}
-                avatarUrl={selectedNewMember.photoURL}
-                userName={selectedNewMember.firstName ? (selectedNewMember.firstName + ' ' + selectedNewMember.lastName) : 'Connect user'} />
+            ? <Avatar size={30} avatarUrl={selectedNewMember.photoURL} userName={selectedNewMember.firstName ? (selectedNewMember.firstName + ' ' + selectedNewMember.lastName) : 'Connect user'} />
             : <UserIcon/>
           }
         </div>
