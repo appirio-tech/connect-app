@@ -13,6 +13,7 @@ import {
   CODER_BOT_USER_LNAME
 } from '../../../config/constants'
 import { connect } from 'react-redux'
+import Sticky from 'react-stickynode'
 import update from 'react-addons-update'
 import NewPost from '../../../components/Feed/NewPost'
 import Feed from '../../../components/Feed/Feed'
@@ -60,11 +61,20 @@ class FeedView extends React.Component {
 
   componentDidMount() {
     window.addEventListener('beforeunload', this.onLeave)
+
+    // after reload, mark all feed update notifications read
+    this.setState({ unreadUpdate : []})
+    const notReadNotifications = filterReadNotifications(this.props.notifications)
+    const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
+    _.map(_.map(unreadTopicAndPostChangedNotifications, 'id' ), (notificationId) => {
+      this.props.toggleNotificationRead(notificationId)
+    })
+
     this.refreshUnreadUpdate = setInterval(() => {
       const notReadNotifications = filterReadNotifications(this.props.notifications)
       const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
       this.setState({ unreadUpdate: _.map(unreadTopicAndPostChangedNotifications, 'id' ) })
-      if (!this.state.scrolled && this.state.unreadUpdate.length > 0) {
+      if (!this.isChanged() && !this.state.scrolled && this.state.unreadUpdate.length > 0) {
         this.onRefreshFeeds()
       }
     }, REFRESH_UNREAD_UPDATE_INTERVAL)
@@ -357,11 +367,6 @@ class FeedView extends React.Component {
   }
 
   onRefreshFeeds() {
-    const { toggleNotificationRead } = this.props
-    _.map(this.state.unreadUpdate, (notificationId) => {
-      toggleNotificationRead(notificationId)
-    })
-    this.setState({ unreadUpdate : []})
     this.props.loadDashboardFeeds(this.props.project.id)
   }
 
@@ -411,10 +416,12 @@ class FeedView extends React.Component {
     return (
       <div style={{position: 'relative'}}>
         { unreadUpdate.length > 0 && !this.isChanged() && scrolled &&
-        <div className="prompt">
-          <Refresh className="icon-refresh" style={{position: 'absolute', top: '4px'}}/>
-          <button className="tc-btn tc-btn-primary tc-btn-md" onClick={this.onRefreshFeeds}>&nbsp;&nbsp;&nbsp;Reload page to view updates</button>
-        </div>}
+          <Sticky top={80} innerZ={999}>
+            <div className="prompt">
+              <Refresh className="icon-refresh" style={{position: 'absolute', top: '4px'}}/>
+              <button className="tc-btn tc-btn-primary tc-btn-md" onClick={this.onRefreshFeeds}>&nbsp;&nbsp;&nbsp;Reload page to view updates</button>
+            </div>
+          </Sticky>}
         <div>
           <Prompt
             when={!!onLeaveMessage}
