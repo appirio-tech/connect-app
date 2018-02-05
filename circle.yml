@@ -19,7 +19,7 @@ compile:
 
 deployment:
   development:
-    branch: ['dev', 'project_configuration_documentation']
+    branch: dev
     owner: appirio-tech
     commands:
       - ./deploy.sh DEV no-cache
