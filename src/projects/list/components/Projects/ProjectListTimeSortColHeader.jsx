@@ -53,9 +53,9 @@ class ProjectListTimeSortColHeader extends React.Component {
   }
 
   render() {
+    const {currentSortField, sortHandler} = this.props
     const cur = _.find(options, o => currentSortField === o.val)
       || options[0]
-    const {currentSortField, sortHandler} = this.props
 
     return (
       <div>

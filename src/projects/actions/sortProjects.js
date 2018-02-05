@@ -7,10 +7,11 @@ export function sortProjects(criteria) {
     const order = _.split(criteria, ' ')[1] || 'asc'
     const state = getState()
     const oldProjects = state.projectSearch.projects
+    const oldCriteria = state.projectSearch.criteria
     
     return dispatch({
       type: PROJECT_SORT,
-      payload: { projects: _.orderBy(oldProjects, [fieldName], [order]), criteria: { sort: criteria, status: 'active' }}
+      payload: { projects: _.orderBy(oldProjects, [fieldName], [order]), criteria: _.assign(oldCriteria, { sort: criteria }) }
     })
   }
 }
