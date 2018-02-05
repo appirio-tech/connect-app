@@ -7,7 +7,7 @@ const ListItem = ({ item, columns }) => {
     const divClasses = `flex-item-title ${col.classes}`
     return (
       <div className={divClasses} key={index}>
-          {col.renderText(item)}
+        {col.renderText(item)}
       </div>
     )
   }
@@ -18,8 +18,8 @@ const ListItem = ({ item, columns }) => {
   return (
     <div className="row">
       <div className={rowClasses}>
-          <div className="mask-layer hide" />
-          {columns.map(renderColumn)}
+        <div className="mask-layer hide" />
+        {columns.map(renderColumn)}
       </div>
     </div>
   )

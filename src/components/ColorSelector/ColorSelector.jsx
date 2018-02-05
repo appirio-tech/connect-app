@@ -9,7 +9,7 @@ import './ColorSelector.scss'
 
 
 class ColorSelector extends React.Component {
-  
+
   constructor(props) {
     super(props)
 
@@ -18,7 +18,7 @@ class ColorSelector extends React.Component {
       newColor: '#fff'
     }
   }
-  
+
   render() {
     const {getValue, name, onChange, setValue, defaultColors } = this.props
     const value = getValue() || defaultColors
@@ -42,10 +42,10 @@ class ColorSelector extends React.Component {
 
       updateNewColorPalette(newValue)
     }
-    
+
     return (
       <div className="colorSelector">
-        {value.map((color) =>
+        {value.map((color) => (
           <a
             key={color}
             href="javascript:"
@@ -57,16 +57,16 @@ class ColorSelector extends React.Component {
               <CloseIcon />
             </span>
           </a>
-        )}
+        ))}
 
-        {value.length < PROJECT_MAX_COLORS && 
+        {value.length < PROJECT_MAX_COLORS &&
           <a
             href="javascript:"
             onClick={() => this.setState({isPickerVisible: true})}
             className="color-card"
           >
-          <AddColor className="icon-card-add" />
-          {isPickerVisible &&
+            <AddColor className="icon-card-add" />
+            {isPickerVisible &&
             <div className="picker-wrapper" onClick={(e) => e.stopPropagation()}>
               <SketchPicker
                 color={newColor}
@@ -94,12 +94,12 @@ class ColorSelector extends React.Component {
                 </button>
               </div>
             </div>
-          }
-        </a>}
+            }
+          </a>}
       </div>
     )
   }
-  
+
 }
 
 ColorSelector.propTypes = {

@@ -50,19 +50,19 @@ class ProjectToolBar extends React.Component {
       this.state.dashboardIcon = <Dashboard className="icon-dashboard" />
       this.state.messagesIcon = <Chat className="icon-chat-active" />
     } else
-      if (activeDashboardPage) {
-        this.state.activePage = 'dashboard'
-        this.state.dashboardIcon = <DashboardActive className="icon-dashboard-active" />
-        this.state.specificationIcon = <Specification className="icon-specification" />
-        this.state.messagesIcon = <Chat className="icon-chat-active" />
-      }
-      else
-        if (activeChatPage) {
-          this.state.activePage = 'discussions'
-          this.state.dashboardIcon = <DashboardActive className="icon-dashboard-active" />
-          this.state.specificationIcon = <Specification className="icon-specification" />
-          this.state.messagesIcon = <ChatActive className="icon-chat-active" />
-        }
+    if (activeDashboardPage) {
+      this.state.activePage = 'dashboard'
+      this.state.dashboardIcon = <DashboardActive className="icon-dashboard-active" />
+      this.state.specificationIcon = <Specification className="icon-specification" />
+      this.state.messagesIcon = <Chat className="icon-chat-active" />
+    }
+    else
+    if (activeChatPage) {
+      this.state.activePage = 'discussions'
+      this.state.dashboardIcon = <DashboardActive className="icon-dashboard-active" />
+      this.state.specificationIcon = <Specification className="icon-specification" />
+      this.state.messagesIcon = <ChatActive className="icon-chat-active" />
+    }
   }
 
   onDashboardEnter() {
@@ -122,7 +122,7 @@ class ProjectToolBar extends React.Component {
     this.props.history.listen(() => {
       this.setActivePage()
       this.state.activeSpecification = this.state.activePage === 'dashboard' ? 'not-active' : this.state.activeSpecification,
-        this.state.activeDashboard = this.state.activePage === 'specification' ? 'not-active' : this.state.activeDashboard
+      this.state.activeDashboard = this.state.activePage === 'specification' ? 'not-active' : this.state.activeDashboard
     })
   }
 

@@ -25,15 +25,15 @@ class NewPost extends React.Component {
 
     return (
       <RichTextArea
-          className={composerClasses}
-          titlePlaceholder={titlePlaceholder || 'Title of the post'}
-          onPost={this.props.onPost}
-          onPostChange={this.props.onNewPostChange}
-          isCreating={isCreating}
-          hasError={hasError}
-          avatarUrl={currentUser.photoURL}
-          authorName={authorName}
-          allMembers={allMembers}
+        className={composerClasses}
+        titlePlaceholder={titlePlaceholder || 'Title of the post'}
+        onPost={this.props.onPost}
+        onPostChange={this.props.onNewPostChange}
+        isCreating={isCreating}
+        hasError={hasError}
+        avatarUrl={currentUser.photoURL}
+        authorName={authorName}
+        allMembers={allMembers}
       />
     )
   }

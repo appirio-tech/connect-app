@@ -65,19 +65,19 @@ class ProjectListTimeSortColHeader extends React.Component {
             {!this.state.focused? <IconCarretDownNormal className="icon-carret-down-normal"/> : <IconCarretDownActive className="icon-carret-down-active" />}
           </a>
           <div className="dropdown-menu-list down-layer">
-          <ul>
-            {
-              options.map((item, i) => {
-                const activeClass = cn({
-                  active: item.val === currentSortField
+            <ul>
+              {
+                options.map((item, i) => {
+                  const activeClass = cn({
+                    active: item.val === currentSortField
+                  })
+                  return (<li key={i} className={activeClass} onClick={() => sortHandler(item.val)}>
+                    {activeClass? <IconCheckDark className="icon-check-dark"/>: ''}
+                    <a href="javascript:;">{item.label}</a>
+                  </li>)
                 })
-                return (<li key={i} className={activeClass} onClick={() => sortHandler(item.val)}>
-                  {activeClass? <IconCheckDark className="icon-check-dark"/>: ''}
-                  <a href="javascript:;">{item.label}</a>
-                </li>)
-              })
-            }
-          </ul>
+              }
+            </ul>
           </div>
         </Dropdown>
       </div>

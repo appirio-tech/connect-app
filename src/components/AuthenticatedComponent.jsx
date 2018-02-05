@@ -35,8 +35,8 @@ export function requiresAuthentication(Component) {
         <div>
           {
             this.state.isLoggedIn === true
-            ? <Component { ...this.props}/>
-            : null
+              ? <Component { ...this.props}/>
+              : null
           }
         </div>
       )

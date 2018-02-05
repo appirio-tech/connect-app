@@ -40,7 +40,7 @@ class SelectDropdown extends Component {
   render() {
     const { options, theme } = this.props
     const { selectedOption } = this.state
-    let selectedValue = selectedOption.title
+    const selectedValue = selectedOption.title
 
     const renderOption = (option, optIdx) => {
       const handleOptionClick = this.handleClick.bind(this, option)

@@ -366,7 +366,7 @@ class FeedView extends React.Component {
             onTopicChange={this.onTopicChange.bind(this, item.id)}
             onSaveTopic={this.onSaveTopic.bind(this, item.id)}
             onDeleteTopic={this.onDeleteTopic.bind(this, item.id)}
-             allMembers={allMembers}
+            allMembers={allMembers}
           >
             {item.sendForReview && <div className="panel-buttons">
               <button className="tc-btn tc-btn-primary tc-btn-md">Send for review</button>

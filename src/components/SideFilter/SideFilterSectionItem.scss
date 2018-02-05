@@ -1,32 +1,35 @@
 // this is to include tc styles in the output library
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.side-filter-section-item {
-  @include roboto;
-  border-radius: 4px;
-  color: $tc-black;
-  cursor: pointer;
-  display: flex;
-  font-size: 13px;
-  justify-content: space-between;
-  line-height: 30px;
-  padding: 0 10px;
-
-  &.active {
-    @include roboto-bold;
-    background-color: $tc-gray-10;
-    cursor: default;
-    font-weight: bold;
-  }
-
-  .title {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .quantity {
-    text-align: right;
-    width: 40px;
+:global {
+  .side-filter-section-item {
+    @include roboto;
+    border-radius: 4px;
+    color: $tc-black;
+    cursor: pointer;
+    display: flex;
+    font-size: 13px;
+    justify-content: space-between;
+    line-height: 30px;
+    padding: 0 10px;
+  
+    &.active {
+      @include roboto-bold;
+      background-color: $tc-gray-10;
+      cursor: default;
+      font-weight: bold;
+    }
+  
+    .title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  
+    .quantity {
+      text-align: right;
+      width: 40px;
+    }
   }
 }
+  

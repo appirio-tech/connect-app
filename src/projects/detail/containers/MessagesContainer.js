@@ -24,7 +24,7 @@ import {
 const SYSTEM_USER = {
   firstName: CODER_BOT_USER_FNAME,
   lastName: CODER_BOT_USER_LNAME,
-  photoURL: require('../../../assets/images/avatar-coder.svg')
+  photoURL: require('file-loader?../../../assets/images/avatar-coder.svg')
 }
 const isSystemUser = (userId) => [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(userId) > -1
 
@@ -458,26 +458,26 @@ class MessagesView extends React.Component {
           message={onLeaveMessage}
         />
         <div className="messages-container">
-            <div className="left-area">
-              <MessageList
-                onAdd={this.onNewThreadClick}
-                threads={threads}
-                onSelect={this.onThreadSelect}
-                showAddButton={!!currentMemberRole}
-                showEmptyState={showEmptyState && !threads.length}
-                scrollPosition={scrollPosition}
-              />
-              <FooterV2 />
-            </div>
-            <div className="right-area">
-              { (showEmptyState && !threads.length) &&
+          <div className="left-area">
+            <MessageList
+              onAdd={this.onNewThreadClick}
+              threads={threads}
+              onSelect={this.onThreadSelect}
+              showAddButton={!!currentMemberRole}
+              showEmptyState={showEmptyState && !threads.length}
+              scrollPosition={scrollPosition}
+            />
+            <FooterV2 />
+          </div>
+          <div className="right-area">
+            { (showEmptyState && !threads.length) &&
                 <MessagingEmptyState
                   currentUser={currentUser}
                   onClose={() => this.setState({showEmptyState: false})}
                 />
-              }
-              { renderRightPanel() }
-            </div>
+            }
+            { renderRightPanel() }
+          </div>
         </div>
       </FullHeightContainer>
     )

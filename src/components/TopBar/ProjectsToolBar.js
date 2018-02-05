@@ -163,8 +163,8 @@ class ProjectsToolBar extends Component {
     return (
       <div className="ProjectsToolBar">
         <Prompt
-            when={!!onLeaveMessage}
-            message={onLeaveMessage}
+          when={!!onLeaveMessage}
+          message={onLeaveMessage}
         />
         <div className="primary-toolbar">
           { renderLogoSection(menuBar) }
@@ -200,12 +200,12 @@ class ProjectsToolBar extends Component {
           </div>
         </div>
         <div className="secondary-toolbar">
-        { isFilterVisible && isLoggedIn &&
+          { isFilterVisible && isLoggedIn &&
           <Filters
             applyFilters={ this.applyFilters }
             criteria={ criteria }
           />
-        }
+          }
         </div>
       </div>
     )

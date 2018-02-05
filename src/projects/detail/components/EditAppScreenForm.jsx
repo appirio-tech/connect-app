@@ -50,8 +50,8 @@ class EditAppScreenForm extends Component {
   }
 
   render() {
-    let { questions } = this.props
-    let { screen } = this.state
+    const { questions } = this.props
+    const { screen } = this.state
 
     return (
       <Formsy.Form
@@ -60,8 +60,8 @@ class EditAppScreenForm extends Component {
         onChange={this.update}
       >
         <SpecScreenQuestions
-        questions={questions}
-        screen={screen}
+          questions={questions}
+          screen={screen}
         />
       </Formsy.Form>
     )

@@ -81,17 +81,17 @@ export default class ProjectListNavHeader extends Component {
     return (
       <nav className="list-nav-container">
         <ul className="left-wrapper">
-        {
-          options.map((item, i) =>
-            <li className="list-nav-item" key={i}>
-              <a href="javascript;" data-status={item.status} onClick={this.onItemClick} className={`list-nav-btn lg ${(item.label === 'All Statuses' && !this.state.currentStatus) || this.state.currentStatus === item.status ? 'active' : ''}`}>{item.label}</a>
-            </li>
-          )
-        }
-      </ul>
+          {
+            options.map((item, i) =>
+              (<li className="list-nav-item" key={i}>
+                <a href="javascript;" data-status={item.status} onClick={this.onItemClick} className={`list-nav-btn lg ${(item.label === 'All Statuses' && !this.state.currentStatus) || this.state.currentStatus === item.status ? 'active' : ''}`}>{item.label}</a>
+              </li>)
+            )
+          }
+        </ul>
         <div className="right-wrapper">
 
-        <div className="primary-filter">
+          <div className="primary-filter">
             <div className="tc-switch clearfix">
               <SwitchButton
                 onChange={ this.handleMyProjectsFilter }
@@ -99,8 +99,8 @@ export default class ProjectListNavHeader extends Component {
                 name="my-projects-only"
                 checked={this.props.criteria.memberOnly}
               />
+            </div>
           </div>
-        </div>
           <div className="list-nav-item nav-icon">
             <a href="javascript;" data-view="grid" onClick={this.switchViews} className={`list-nav-btn sm right ${(this.state.selectedView === 'grid') ? 'active' : ''}`}>
               <GridView className="grid-view-ico" />

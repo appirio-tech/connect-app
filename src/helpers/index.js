@@ -21,8 +21,8 @@ export function json(response) {
 
 export function fetchJSON(url, options) {
   return fetch(url, options)
-  .then(status)
-  .then(json)
+    .then(status)
+    .then(json)
 }
 
 // Subtrack Abbreviations

@@ -8,7 +8,7 @@ import ProjectManagerAvatars from './ProjectManagerAvatars'
 import './ProjectCard.scss'
 
 function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus}) {
-  let className = `ProjectCard ${ disabled ? 'disabled' : 'enabled'}`
+  const className = `ProjectCard ${ disabled ? 'disabled' : 'enabled'}`
   if (!project) return null
   const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
   return (
@@ -19,9 +19,9 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
       }}
     >
       <div className="card-header">
-          <ProjectCardHeader
-            project={project}
-          />
+        <ProjectCardHeader
+          project={project}
+        />
       </div>
       <div className="card-body">
         <ProjectCardBody
