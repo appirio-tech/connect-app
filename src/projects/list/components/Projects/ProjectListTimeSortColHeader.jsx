@@ -19,6 +19,7 @@ class ProjectListTimeSortColHeader extends React.Component {
   constructor(props) {
     super(props)
     this.state = { focused:  false }
+    this.onOutsideClick = this.onOutsideClick.bind(this)
   }
 
   toggleFocusState() {
@@ -34,13 +35,21 @@ class ProjectListTimeSortColHeader extends React.Component {
       return
     }
 
-    this.setState({
-      focused: false
-    })
+    if (this.refs.myRef) {
+      this.setState({
+        focused: false
+      })
+    }
+
   }
 
   componentDidMount() {
-    document.addEventListener('click', ev => this.onOutsideClick(ev))
+    document.removeEventListener('click', this.onOutsideClick)
+    document.addEventListener('click', this.onOutsideClick)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.onOutsideClick)
   }
 
   render() {
@@ -62,7 +71,7 @@ class ProjectListTimeSortColHeader extends React.Component {
                 const activeClass = cn({
                   active: item.val === currentSortField
                 })
-                return (<li key={i} className={activeClass} onClick={sortHandler.bind(this, item.val)}>
+                return (<li key={i} className={activeClass} onClick={() => sortHandler(item.val)}>
                   {activeClass? <IconCheckDark className="icon-check-dark"/>: ''}
                   <a href="javascript:;">{item.label}</a>
                 </li>)

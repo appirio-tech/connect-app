@@ -2,9 +2,9 @@ import React from 'react'
 import PT from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { getProjectRoleForCurrentUser } from '../../../../helpers/projectHelper'
-import AvatarGroup from '../../../../components/AvatarGroup/AvatarGroup'
 import ProjectCardHeader from './ProjectCardHeader'
 import ProjectCardBody from './ProjectCardBody'
+import ProjectManagerAvatars from './ProjectManagerAvatars'
 import './ProjectCard.scss'
 
 function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus}) {
@@ -32,7 +32,7 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
         />
       </div>
       <div className="card-footer">
-        <AvatarGroup users={ project.members } />
+        <ProjectManagerAvatars managers={project.members} maxShownNum={10} />
       </div>
     </div>
   )

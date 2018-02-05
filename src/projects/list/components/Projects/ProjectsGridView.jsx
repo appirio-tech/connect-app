@@ -133,7 +133,7 @@ ProjectTypeIcons.propTypes = {
 
 const ProjectsGridView = props => {
   const { projects, members, totalCount, criteria, pageNum, sortHandler, onPageChange,
-    error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus } = props
+    error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus, applyFilters } = props
 
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
@@ -186,7 +186,7 @@ const ProjectsGridView = props => {
           <div className="spacing project-container">
             <div className="project-title">
               <Link to={url} className="link-title">{item.name}</Link>
-              { code && <span className="item-ref-code txt-gray-md">{code}</span> }
+              { code && <span className="item-ref-code txt-gray-md" onClick={ () => { applyFilters({ keyword: code })} }>{code}</span> }
             </div>
             <Link to={url}>
               <TextTruncate

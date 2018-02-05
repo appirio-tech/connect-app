@@ -101,7 +101,7 @@ class ProjectStatusSection extends React.Component {
                         this.showStatusChangeDialog(item.value, e)
                       }}
                     >
-                      <span className={item.color}><i className="status-icon"/></span>
+                      <span className={item.color}><icon className="status-icon"/></span>
                       {item.name}
                     </a>
                   </li>)}

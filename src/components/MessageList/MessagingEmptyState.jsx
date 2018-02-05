@@ -11,6 +11,8 @@ const MessagingEmptyState = ({ currentUser, onClose }) => (
         <CloseIcon />
       </a>
       <Comment
+        message=""
+        author=""
         avatarUrl={require('../../assets/images/avatar-coder.svg')}
         authorName="Coder the Bot"
         self={false}

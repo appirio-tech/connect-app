@@ -242,7 +242,7 @@ $tc-body-extra-small: 12px;
         margin-bottom: $base-unit*2;
 
         button {
-          margin-left: $base-unit*2;
+          padding: 0 $base-unit*4 $base-unit*4;
         }
 
         .input-icon-group {
@@ -274,23 +274,21 @@ $tc-body-extra-small: 12px;
           }
 
           .input-icon {
-            height: 30px;
             margin: 4px;
+            height: 30px;
+            width: 30px;
 
-            &:empty {
-              flex-shrink: 0;
-              width: 30px;
-              background-size: 30px 30px;
-              background-color: $tc-gray-20;
-              background-position: center;
-              border-radius: 34px;
+            .Avatar {
+              height: inherit;
+              width: inherit;
             }
 
-            img {
-              width: 30px;
-              height: 30px;
-              border-radius: 34px;
-            }
+          }
+
+          span .Avatar {
+            margin: 4px;
+            width: 30px;
+            height: 30px;
           }
         }
       }

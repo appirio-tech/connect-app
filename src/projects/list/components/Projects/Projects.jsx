@@ -33,6 +33,7 @@ class Projects extends Component {
     this.onChangeStatus = this.onChangeStatus.bind(this)
     this.onPageChange = this.onPageChange.bind(this)
     this.applyFilters = this.applyFilters.bind(this)
+    this.applySearchFilter = this.applySearchFilter.bind(this)
     this.changeView = this.changeView.bind(this)
     this.init = this.init.bind(this)
     this.removeScrollPosition = this.removeScrollPosition.bind(this)
@@ -141,6 +142,16 @@ class Projects extends Component {
     this.routeWithParams(criteria)
   }
 
+  applySearchFilter(filter) {
+    const criteria = _.assign({}, this.props.criteria, filter)
+    if (criteria && criteria.keyword) {
+      criteria.keyword = encodeURIComponent(criteria.keyword)
+      // force sort criteria to best match
+      criteria.sort = 'best match'
+    }
+    this.routeWithParams(criteria)
+  }
+
   changeView(view) {
     this.setState({selectedView : view})
   }
@@ -158,7 +169,7 @@ class Projects extends Component {
   }
 
   render() {
-    const { isPowerUser, isLoading, totalCount, criteria, currentUser, projectsListView, setProjectsListView } = this.props
+    const { isPowerUser, isLoading, totalCount, criteria, currentUser, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history } = this.props
     // show walk through if user is customer and no projects were returned
     // for default filters
     const showWalkThrough = !isLoading && totalCount === 0 &&
@@ -171,6 +182,7 @@ class Projects extends Component {
       <EnhancedGrid {...this.props}
         onPageChange={this.onPageChange}
         sortHandler={this.sortHandler}
+        applyFilters={this.applySearchFilter}
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
       />
@@ -202,7 +214,7 @@ class Projects extends Component {
         <section className="">
           <div className="container">
             {(isPowerUser && !showWalkThrough) &&
-              <ProjectListNavHeader applyFilters={this.applyFilters} selectedView={chosenView} changeView={setProjectsListView} currentStatus={currentStatus}/>}
+              <ProjectListNavHeader applyFilters={this.applyFilters} selectedView={chosenView} changeView={setProjectsListView} currentStatus={currentStatus} criteria={criteria} setInfiniteAutoload={setInfiniteAutoload} loadProjects={loadProjects} history={history}/>}
             { showWalkThrough  ? <Walkthrough currentUser={currentUser} /> : projectsView }
           </div>
         </section>

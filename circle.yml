@@ -19,7 +19,7 @@ compile:
 
 deployment:
   development:
-    branch: dev
+    branch: bugBash07
     owner: appirio-tech
     commands:
       - ./deploy.sh DEV no-cache
