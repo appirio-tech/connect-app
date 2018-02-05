@@ -57,31 +57,31 @@ const GridView = props => {
       }
     }
     return (
-        <div>
-          <div className="container">
-            <div className="flex-area">
-              <div className="flex-data">
-                <ListHeader {...headerProps} />
-                <InfiniteScroll
-                  initialLoad={false}
-                  pageStart={currentPageNum}
-                  loadMore={infiniteAutoload && !isLoading ? onPageChange : () => {}}
-                  hasMore={hasMore}
-                  threshold={500}
-                >
-                  {[...resultSet, ...placeholders].map(renderItem)}
-                </InfiniteScroll>
-              </div>
+      <div>
+        <div className="container">
+          <div className="flex-area">
+            <div className="flex-data">
+              <ListHeader {...headerProps} />
+              <InfiniteScroll
+                initialLoad={false}
+                pageStart={currentPageNum}
+                loadMore={infiniteAutoload && !isLoading ? onPageChange : () => {}}
+                hasMore={hasMore}
+                threshold={500}
+              >
+                {[...resultSet, ...placeholders].map(renderItem)}
+              </InfiniteScroll>
             </div>
           </div>
-          { false && isLoading && <LoadingIndicator /> }
-          { !isLoading && !infiniteAutoload && hasMore &&
+        </div>
+        { false && isLoading && <LoadingIndicator /> }
+        { !isLoading && !infiniteAutoload && hasMore &&
             <div className="gridview-load-more">
               <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore} key="loadMore">Load more projects</button>
             </div>
-          }
-          { !isLoading && !hasMore && <div key="end" className="gridview-no-more">No more {projectsStatus} projects</div>}
-        </div>
+        }
+        { !isLoading && !hasMore && <div key="end" className="gridview-no-more">No more {projectsStatus} projects</div>}
+      </div>
     )
   }
 
