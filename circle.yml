@@ -10,7 +10,7 @@ dependencies:
     - sudo apt-get update -y
     - sudo apt-get install g++-4.8  -y
   override:
-    - npm install
+    - npm install --no-save
     
 compile:
   override:
