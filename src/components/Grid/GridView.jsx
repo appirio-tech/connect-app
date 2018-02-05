@@ -57,9 +57,6 @@ const GridView = props => {
       }
     }
     return (
-      isLoading && currentPageNum === 1 ? (
-        <LoadingIndicator />
-      ) : (
         <div>
           <div className="container">
             <div className="flex-area">
@@ -85,7 +82,6 @@ const GridView = props => {
           }
           { !isLoading && !hasMore && <div key="end" className="gridview-no-more">No more {projectsStatus} projects</div>}
         </div>
-      )
     )
   }
 
