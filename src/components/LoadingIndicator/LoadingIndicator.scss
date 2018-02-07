@@ -6,6 +6,7 @@
     min-width: 70px;
     background: 50% 50% no-repeat;
     background-size: 70px 70px;
+    background-image: url('../../assets/images/loader.gif');
   
     &.small {
       height: 32px;
@@ -16,4 +17,3 @@
     }
   }
 }
-  
