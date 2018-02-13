@@ -45,7 +45,7 @@ const products = {
         brief: 'Watson Chatbot',
         details: 'Build Chatbot using IBM Watson',
         formTitle: 'AI Chatbot with Watson',
-        formDesclaimer: 'IBM is receiving compensation from Topcoder for referring customers to IBM Watson Conversation Service.',
+        formDesclaimer: 'IBM is receiving compensation from Topcoder for referring customers to Topcoder.',
         icon: 'product-chatbot-watson',
         id: 'watson_chatbot',
         aliases: ['watson_chatbot', 'watson-chatbot'],
