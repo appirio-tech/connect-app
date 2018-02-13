@@ -373,6 +373,7 @@ export const SORT_OPTIONS = [
 
 // Notifications
 export const REFRESH_NOTIFICATIONS_INTERVAL = 1000 * 60 * 1 // 1 minute interval
+export const REFRESH_UNREAD_UPDATE_INTERVAL = 1000 * 10 * 1 // 10 second interval
 export const NOTIFCATIONS_DROPDOWN_PER_SOURCE = 10
 export const NOTIFCATIONS_DROPDOWN_MAX_TOTAL = Infinity
 
