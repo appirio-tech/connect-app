@@ -64,15 +64,19 @@ class FeedView extends React.Component {
 
     // after reload, mark all feed update notifications read
     this.setState({ unreadUpdate : []})
-    const notReadNotifications = filterReadNotifications(this.props.notifications)
+    const notReadNotifications = filterReadNotifications(this.props.notifications.notifications)
     const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
     _.map(_.map(unreadTopicAndPostChangedNotifications, 'id' ), (notificationId) => {
       this.props.toggleNotificationRead(notificationId)
     })
 
     this.refreshUnreadUpdate = setInterval(() => {
-      const notReadNotifications = filterReadNotifications(this.props.notifications)
+      console.log('looking for new notifications '+JSON.stringify(this.props.notifications.notifications));
+      const notReadNotifications = filterReadNotifications(this.props.notifications.notifications)
+      console.log ('not read '+JSON.stringify(notReadNotifications));
+      console.log('project '+this.props.project.id);
       const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
+      console.log ('unreadTopicAndPostChangedNotifications '+JSON.stringify(unreadTopicAndPostChangedNotifications));
       this.setState({ unreadUpdate: _.map(unreadTopicAndPostChangedNotifications, 'id' ) })
       if (!this.isChanged() && !this.state.scrolled && this.state.unreadUpdate.length > 0) {
         this.onRefreshFeeds()
