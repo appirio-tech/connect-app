@@ -3,7 +3,9 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Formsy, SwitchButton } from 'appirio-tech-react-components'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const Formsy = FormsyForm.Formsy
+import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 import BtnGroup from '../../../../../components/BtnGroup/BtnGroup'
 import IconSettingsWeb from '../../../../../assets/icons/settings-icon-web.svg'
 import './NotificationSettingsForm.scss'

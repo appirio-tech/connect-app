@@ -4,7 +4,10 @@ import _ from 'lodash'
 import cn from 'classnames'
 import Panel from '../../../../components/Panel/Panel'
 import DeleteFeatureModal from './DeleteFeatureModal'
-import { Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
+const Formsy = FormsyForm.Formsy
+import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 import IconUIPencil from  '../../../../assets/icons/icon-ui-pencil.svg'
 import IconUITrashSimple from  '../../../../assets/icons/icon-ui-trash-simple.svg'
 

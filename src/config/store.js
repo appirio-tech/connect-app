@@ -15,7 +15,7 @@ const middleware = [
   tracker
 ]
 
-if (process.env.ENV === 'DEV') {
+if (process.env.NODE_ENV === 'development') {
   const createLogger = require('redux-logger')
   const logger = createLogger()
   middleware.push(logger)

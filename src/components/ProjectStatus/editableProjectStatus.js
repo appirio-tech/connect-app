@@ -4,7 +4,7 @@ import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import ProjectStatus from './ProjectStatus'
 import cn from 'classnames'
 import _ from 'lodash'
-import { enhanceDropdown } from 'appirio-tech-react-components'
+import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
 import {
   PROJECT_STATUS,
   PROJECT_STATUS_COMPLETED,

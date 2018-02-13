@@ -6,7 +6,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { PASSWORD_MIN_LENGTH, PASSWORD_REG_EXP } from '../../../../../config/constants'
-import { Formsy, TCFormFields } from 'appirio-tech-react-components'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
+const Formsy = FormsyForm.Formsy
 import './ChangePasswordForm.scss'
 
 class ChangePasswordForm extends React.Component {

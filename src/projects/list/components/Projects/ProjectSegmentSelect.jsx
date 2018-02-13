@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
-import { Dropdown } from 'appirio-tech-react-components'
+import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 import IconCheckDark from '../../assets/icons/check-dark.svg'
 
 

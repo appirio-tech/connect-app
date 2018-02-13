@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
-import { Dropdown, DropdownItem } from 'appirio-tech-react-components'
+import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
+import DropdownItem from 'appirio-tech-react-components/components/Dropdown/DropdownItem'
 import Modal from 'react-modal'
 import EditComment from '../../assets/icons/ui-16px-1_edit-73.svg'
 
