@@ -15,16 +15,16 @@ const middleware = [
   tracker
 ]
 
-if (process.env.ENV === 'DEV') {
+if (process.env.NODE_ENV === 'development') {
   const createLogger = require('redux-logger')
   const logger = createLogger()
   middleware.push(logger)
 }
 
 const store = createStore(reducers, compose(
-    applyMiddleware(...middleware),
-    window.devToolsExtension ? window.devToolsExtension() : f => f
-  )
+  applyMiddleware(...middleware),
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+)
 )
 
 export default store

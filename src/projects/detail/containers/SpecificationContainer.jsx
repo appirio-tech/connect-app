@@ -38,10 +38,10 @@ class SpecificationContainer extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return !(
-        _.isEqual(nextProps.project, this.props.project)
+      _.isEqual(nextProps.project, this.props.project)
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextProps.error, this.props.error)
-   )
+    )
   }
   saveProject(model) {
     // compare old & new
@@ -56,7 +56,7 @@ class SpecificationContainer extends Component {
     let specification = 'topcoder.v1'
     if (project.details && project.details.products && project.details.products[0])
       specification = typeToSpecification[project.details.products[0]]
-    let sections = require(`../../../config/projectQuestions/${specification}`).default
+    const sections = require(`../../../config/projectQuestions/${specification}`).default
 
     return (
       <section className="two-col-content content specificationContainer">

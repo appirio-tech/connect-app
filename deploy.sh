@@ -28,9 +28,9 @@ deploy_s3bucket() {
 	fi
 
 	S3_OPTIONS="--exclude '*.txt' --exclude '*.js' --exclude '*.css'"
-	echo aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}
-	eval "aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"
-	result=`eval "aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"`
+	echo aws s3 sync ./workspace/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}
+	eval "aws s3 sync --dryrun ./workspace/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"
+	result=`eval "aws s3 sync ./workspace/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"`
 	if [ $? -eq 0 ]; then
 		echo "All html, font, image, map and media files are Deployed without gzip encoding!"
 	else
@@ -39,9 +39,9 @@ deploy_s3bucket() {
 	fi
 
 	S3_OPTIONS="--exclude '*' --include '*.txt' --include '*.js' --include '*.css' --content-encoding gzip"
-	echo aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}
-	eval "aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"
-	result=`eval "aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"`
+	echo aws s3 sync --dryrun ./workspace/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}
+	eval "aws s3 sync --dryrun ./workspace/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"
+	result=`eval "aws s3 sync ./workspace/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"`
 	if [ $? -eq 0 ]; then
 		echo "All txt, css, and js files are Deployed! with gzip"
 	else

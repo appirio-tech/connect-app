@@ -46,13 +46,13 @@ export default (state = initialState, action) => {
 
   case SET_NOTIFICATIONS_FILTER_BY:
     return {...state,
-        filterBy: action.payload
-      }
+      filterBy: action.payload
+    }
 
   case NOTIFICATIONS_PENDING:
     return {...state,
-        pending: true
-      }
+      pending: true
+    }
 
   case MARK_ALL_NOTIFICATIONS_READ: {
     const newState = {
@@ -80,8 +80,8 @@ export default (state = initialState, action) => {
 
   case VIEW_OLDER_NOTIFICATIONS_SUCCESS:
     return {...state,
-        oldSourceIds: [...state.oldSourceIds, action.payload]
-      }
+      oldSourceIds: [...state.oldSourceIds, action.payload]
+    }
 
   default:
     return state

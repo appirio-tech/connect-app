@@ -3,7 +3,9 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Formsy, TCFormFields } from 'appirio-tech-react-components'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
+const Formsy = FormsyForm.Formsy
 import TextInputWithCounter from '../../../../../components/TextInputWithCounter/TextInputWithCounter'
 import ProfileSeetingsAvatar from './ProfileSeetingsAvatar'
 import { MAX_USERNAME_LENGTH } from '../../../../../config/constants'

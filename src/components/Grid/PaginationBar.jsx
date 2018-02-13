@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import _ from 'lodash'
 import { branch, renderComponent } from 'recompose'
-import { Tooltip } from 'appirio-tech-react-components'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import BtnPrev from '../../assets/icons/arrow-left.svg'
 import BtnNext from '../../assets/icons/arrow-left.svg'
 
@@ -15,7 +15,7 @@ const noop = () => <noscript />
  */
 const identity = t => t
 const showPagination = (hasPages) =>
- branch (hasPages, identity, renderComponent(noop))
+  branch (hasPages, identity, renderComponent(noop))
 const enhance = showPagination( ({totalCount, pageSize}) =>
   Math.ceil(totalCount / pageSize) > 1)
 

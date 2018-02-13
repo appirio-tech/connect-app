@@ -42,9 +42,9 @@ const ProjectType = ({projectId, type, description, devices}) => (
         <div className="icon-set">
           {devices.slice(0, 3).map((device) => deviceMap[device])}
         </div>}
-        {type !== 'generic' && devices.length > 3 && <div className="icon-set">
-          {devices.slice(3).map((device) => deviceMap[device])}
-        </div>}
+      {type !== 'generic' && devices.length > 3 && <div className="icon-set">
+        {devices.slice(3).map((device) => deviceMap[device])}
+      </div>}
     </div>
 
   </PanelProject>

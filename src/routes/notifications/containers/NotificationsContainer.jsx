@@ -76,7 +76,7 @@ class NotificationsContainer extends React.Component {
             />
           }
           {projectSources.length > 0 && <NotificationsSectionTitle title="Project" isGlobal />}
-          {projectSources.filter(source => source.total > 0).map(source =>
+          {projectSources.filter(source => source.total > 0).map(source => (
             <NotificationsSection
               key={source.id}
               {...source}
@@ -84,7 +84,7 @@ class NotificationsContainer extends React.Component {
               onReadToggleClick={toggleNotificationOrBundleRead}
               onViewOlderClick={() => viewOlderNotifications(source.id)}
             />
-          )}
+          ))}
           {globalSource || projectSources.length > 0 ?
             <div className="end-of-list">End of list</div> :
             <NotificationsEmpty>

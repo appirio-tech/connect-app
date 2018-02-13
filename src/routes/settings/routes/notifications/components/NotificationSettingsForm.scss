@@ -1,137 +1,140 @@
   // this is to include tc styles in the output library
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.notification-settings-form {
-  > .table {
-    margin-top: 22px;
-    width: 100%;
-
-    td {
-      padding: 0;
-      text-align: left;
-      vertical-align: top;
-    }
-
-    tr > th,
-    tr .th {
-      @include roboto;
-      color: $tc-gray-80;
-      font-size: 15px;
-      line-height: 25px;
-      text-align: left;
-      padding: 0;
-      vertical-align: top;
-    }
-
-    tbody > tr {
-      border-top: 1px dashed $tc-gray-30;
-
-      > th {
-        padding: 20px 0;
+:global {
+  .notification-settings-form {
+    > .table {
+      margin-top: 22px;
+      width: 100%;
+  
+      td {
+        padding: 0;
+        text-align: left;
+        vertical-align: top;
       }
-
-      > td {
-        padding: 22.5px 0;
+  
+      tr > th,
+      tr .th {
+        @include roboto;
+        color: $tc-gray-80;
+        font-size: 15px;
+        line-height: 25px;
+        text-align: left;
+        padding: 0;
+        vertical-align: top;
       }
-    }
-
-    thead > tr {
-      border-bottom: 1px solid $tc-gray-50;
-
-      > th {
-        padding-bottom: 11px;
+  
+      tbody > tr {
+        border-top: 1px dashed $tc-gray-30;
+  
+        > th {
+          padding: 20px 0;
+        }
+  
+        > td {
+          padding: 22.5px 0;
+        }
       }
-
-      > th:last-child {
-        width: 90px;
+  
+      thead > tr {
+        border-bottom: 1px solid $tc-gray-50;
+  
+        > th {
+          padding-bottom: 11px;
+        }
+  
+        > th:last-child {
+          width: 90px;
+        }
+  
+        > th:nth-child(2) {
+          width: 170px;
+        }
+  
+        > th:first-child {
+          font-size: 20px;
+        }
       }
-
-      > th:nth-child(2) {
-        width: 170px;
+  
+      tbody > tr:last-child {
+        border-bottom: 1px solid $tc-gray-50;
       }
-
-      > th:first-child {
-        font-size: 20px;
-      }
-    }
-
-    tbody > tr:last-child {
-      border-bottom: 1px solid $tc-gray-50;
-    }
-
-    .fixed-value {
-      @include roboto-medium;
-      background-color: $tc-gray-40;
-      border-radius: 10px;
-      display: inline-block;
-      color: $tc-white;
-      font-size: 11px;
-      height: 20px;
-      line-height: 20px;
-      padding: 0 10px;
-    }
-
-    .th-with-icon {
-      display: inline-block;
-      height: 0;
-
-      > img,
-      > span {
+  
+      .fixed-value {
+        @include roboto-medium;
+        background-color: $tc-gray-40;
+        border-radius: 10px;
         display: inline-block;
-        vertical-align: middle;
+        color: $tc-white;
+        font-size: 11px;
+        height: 20px;
+        line-height: 20px;
+        padding: 0 10px;
       }
-
-      > span {
-        margin-left: 10px;
-        margin-bottom: 10px;
+  
+      .th-with-icon {
+        display: inline-block;
+        height: 0;
+  
+        > img,
+        > span {
+          display: inline-block;
+          vertical-align: middle;
+        }
+  
+        > span {
+          margin-left: 10px;
+          margin-bottom: 10px;
+        }
+      }
+  
+      .none {
+        background-color: $tc-gray-40;
+        display: inline-block;
+        height: 2px;
+        margin-top: 9px;
+        width: 21px;
+      }
+  
+      .bundle-emails {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin: -3px 0;
+      }
+  
+      .SwitchButton label {
+        margin-top: 0;
+      }
+  
+      .SwitchButton .label {
+        display: none;
       }
     }
-
-    .none {
-      background-color: $tc-gray-40;
-      display: inline-block;
-      height: 2px;
-      margin-top: 9px;
-      width: 21px;
+  
+    > .controls {
+      margin-top: 10px;
+      text-align: center;
     }
-
-    .bundle-emails {
-      align-items: center;
-      display: flex;
-      justify-content: space-between;
-      margin: -3px 0;
-    }
-
-    .SwitchButton label {
-      margin-top: 0;
-    }
-
-    .SwitchButton .label {
-      display: none;
-    }
-  }
-
-  > .controls {
-    margin-top: 10px;
-    text-align: center;
-  }
-
-  > .email-settings {
-    @include roboto;
-    margin: 20px 0;
-
-    a {
-      text-decoration: underline;
-    }
-    // Link colors
-    a:link,
-    a:visited {
-      color: $tc-dark-blue;
-    }
-
-    a:hover,
-    a:active {
-      color: $tc-dark-blue-70;
+  
+    > .email-settings {
+      @include roboto;
+      margin: 20px 0;
+  
+      a {
+        text-decoration: underline;
+      }
+      // Link colors
+      a:link,
+      a:visited {
+        color: $tc-dark-blue;
+      }
+  
+      a:hover,
+      a:active {
+        color: $tc-dark-blue-70;
+      }
     }
   }
 }
+  

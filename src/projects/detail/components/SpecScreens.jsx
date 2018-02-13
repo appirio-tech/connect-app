@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { HOC as hoc } from 'formsy-react'
-import { Tooltip } from 'appirio-tech-react-components'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import _ from 'lodash'
 
 import EditAppScreenForm from './EditAppScreenForm'
@@ -93,23 +93,23 @@ class SpecScreens extends Component {
         <div className="edit-screen-footer">
           {
             screens.length >= numberScreensSelected ?
-            <Tooltip>
-              <div className="tooltip-target" id="tooltip-define-screen-error">
-                <button disabled className="tc-btn tc-btn-default tc-btn-md">
+              <Tooltip>
+                <div className="tooltip-target" id="tooltip-define-screen-error">
+                  <button disabled className="tc-btn tc-btn-default tc-btn-md">
                   Define another screen
-                </button>
-              </div>
-              <div className="tooltip-body">
-                <p className="screen-number-reached-message">
+                  </button>
+                </div>
+                <div className="tooltip-body">
+                  <p className="screen-number-reached-message">
                   You have reached the number of screens selected.
-                  <br/>
+                    <br/>
                   Please select and save a higher number to keep adding new screens.
-                </p>
-              </div>
-            </Tooltip> :
-            <button type="button" className="tc-btn tc-btn-default tc-btn-md" onClick={() => this.addScreen(null, true)}>
-              { screens.length === 0 ? 'Define screen' : 'Define another screen' }
-            </button>
+                  </p>
+                </div>
+              </Tooltip> :
+              <button type="button" className="tc-btn tc-btn-default tc-btn-md" onClick={() => this.addScreen(null, true)}>
+                { screens.length === 0 ? 'Define screen' : 'Define another screen' }
+              </button>
           }
         </div>
       </div>

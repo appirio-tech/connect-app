@@ -1,19 +1,22 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.project-direct-links {
-  @include roboto-medium;
-  font-size: $tc-label-md;
-  color: $tc-gray-40;
-  line-height: $base-unit*6;
-  padding-top: 2 * $base_unit;
-  padding-left: 4 * $base_unit;
-  padding-right: 4 * $base_unit;
-  ul {
-    padding: 0;
-    li {
-      .icon-direct-arrow {
-        margin-right: 20px;
+:global {
+  .project-direct-links {
+    @include roboto-medium;
+    font-size: $tc-label-md;
+    color: $tc-gray-40;
+    line-height: $base-unit*6;
+    padding-top: 2 * $base_unit;
+    padding-left: 4 * $base_unit;
+    padding-right: 4 * $base_unit;
+    ul {
+      padding: 0;
+      li {
+        .icon-direct-arrow {
+          margin-right: 20px;
+        }
       }
     }
   }
 }
+  

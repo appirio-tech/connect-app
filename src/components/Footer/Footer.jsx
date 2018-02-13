@@ -1,5 +1,5 @@
 import React from 'react'
-import { MenuBar } from 'appirio-tech-react-components'
+import MenuBar from 'appirio-tech-react-components/components/MenuBar/MenuBar'
 import moment from 'moment'
 import { NEW_PROJECT_PATH } from '../../config/constants'
 

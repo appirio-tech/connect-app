@@ -1,13 +1,16 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.add-edit-features {
-  margin-bottom: 0; // FIXME: use $variables for units
-  .add-edit-features__header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60px;
-    background-color: $tc-gray-neutral-light;
-    border: 1px solid $tc-gray-10;
+:global {
+  .add-edit-features {
+    margin-bottom: 0; // FIXME: use $variables for units
+    .add-edit-features__header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 60px;
+      background-color: $tc-gray-neutral-light;
+      border: 1px solid $tc-gray-10;
+    }
   }
 }
+  

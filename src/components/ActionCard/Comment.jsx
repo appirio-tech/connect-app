@@ -61,20 +61,20 @@ class Comment extends React.Component {
       const content = message.newContent === null || message.newContent === undefined ? message.rawContent : message.newContent
       return (
         <RichTextArea
-            disableTitle
-            editMode
-            messageId={message.id}
-            isGettingComment={message.isGettingComment}
-            content={content}
-            oldContent={message.rawContent}
-            onPost={this.onSave}
-            onPostChange={this.onChange}
-            isCreating={isSaving}
-            hasError={hasError}
-            avatarUrl={avatarUrl}
-            authorName={authorName}
-            cancelEdit={this.cancelEdit}
-            allMembers={allMembers}
+          disableTitle
+          editMode
+          messageId={message.id}
+          isGettingComment={message.isGettingComment}
+          content={content}
+          oldContent={message.rawContent}
+          onPost={this.onSave}
+          onPostChange={this.onChange}
+          isCreating={isSaving}
+          hasError={hasError}
+          avatarUrl={avatarUrl}
+          authorName={authorName}
+          cancelEdit={this.cancelEdit}
+          allMembers={allMembers}
         />
       )
     }

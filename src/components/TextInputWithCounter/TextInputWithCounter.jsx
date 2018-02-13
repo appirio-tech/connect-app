@@ -3,7 +3,8 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TCFormFields } from 'appirio-tech-react-components'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
 import './TextInputWithCounter.scss'
 
 class TextInputWithCounter extends React.Component {

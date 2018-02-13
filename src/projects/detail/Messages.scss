@@ -1,55 +1,58 @@
-@import "tc-includes";
-// FIXME
-@mixin flexBox {
-  display: flex;
-  flex-direction: row;
-}
-// FIXME
-@mixin flexWidth($number) {
-  -webkit-box-flex: $number;
-  -moz-box-flex: $number;
-  -webkit-flex: $number;
-  -ms-flex: $number;
-  flex: $number;
-}
-
-// FIXME
-.messages-container {
-  @include flexBox;
-  max-width: 1110px;
-  margin: 20px auto;
-  height: calc(100% - 80px);// 20px is for bottom margin, 60px for footer
+@import '~tc-ui/src/styles/tc-includes';
+:global {
+  // FIXME
+  @mixin flexBox {
+    display: flex;
+    flex-direction: row;
+  }
+  // FIXME
+  @mixin flexWidth($number) {
+    -webkit-box-flex: $number;
+    -moz-box-flex: $number;
+    -webkit-flex: $number;
+    -ms-flex: $number;
+    flex: $number;
+  }
   
-  .left-area {
-    @include flexWidth(1);
-    max-width: 360px;
-    z-index: 14;/* Don't know the exact reason, but it needs explicit z-index to get behind the topbar*/
-    transform: translate3d(0px, 0px, 0px);
-  }
-  .right-area {
-    @include flexWidth(2);
-    margin-left: 4 * $base-unit;
-    overflow-y: auto;
-
-    .messaging-empty-state {
-      margin-bottom: 4 * $base-unit;
+  // FIXME
+  .messages-container {
+    @include flexBox;
+    max-width: 1110px;
+    margin: 20px auto;
+    height: calc(100% - 80px);// 20px is for bottom margin, 60px for footer
+  
+    .left-area {
+      @include flexWidth(1);
+      max-width: 360px;
+      z-index: 14;/* Don't know the exact reason, but it needs explicit z-index to get behind the topbar*/
+      transform: translate3d(0px, 0px, 0px);
     }
-
-    .new-post-composer {
-      margin-bottom: 4 * $base-unit;
-      background-color: $tc-white;
-
-      .modal-row:hover {
+    .right-area {
+      @include flexWidth(2);
+      margin-left: 4 * $base-unit;
+      overflow-y: auto;
+  
+      .messaging-empty-state {
+        margin-bottom: 4 * $base-unit;
+      }
+  
+      .new-post-composer {
+        margin-bottom: 4 * $base-unit;
         background-color: $tc-white;
+  
+        .modal-row:hover {
+          background-color: $tc-white;
+        }
+  
+        .btn-close {
+          display: none;
+        }
       }
-
-      .btn-close {
-        display: none;
+  
+      .feed-action-card + .feed-action-card {
+        margin-top: 4 * $base-unit;
       }
-    }
-
-    .feed-action-card + .feed-action-card {
-      margin-top: 4 * $base-unit;
     }
   }
 }
+  

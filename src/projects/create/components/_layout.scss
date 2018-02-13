@@ -1,7 +1,4 @@
-@import 'tc-includes';
-
 @mixin flexBox {
-  display: box;
   display: flex;
   flex-direction: row;
   width: auto;
@@ -10,106 +7,111 @@
 // Stop the page from shrinking, modify the variable;
 $minimumPageWidth: 984px;
 
-.wizardWrapper {
-  min-height: 100vh;
-  background-color: $tc-gray-neutral-light;
-  margin-top: -60px; // Counteract the push from the main wrapper, top of vewport
-  min-width: $minimumPageWidth;
-  // FIXME: This is hack to stop the div of growing
-  border-top: 1px solid $tc-gray-neutral-light;
-  // end hack;
-  overflow-x: scroll;
-}
+@import '~tc-ui/src/styles/tc-includes';
 
-.ReactModalPortal .wizardWrapper {
-  margin-top: 0;
-}
-
-.wizardHeader {
-  display: flex;
-  justify-content: space-between;
-  margin: 20px 0 0;
-  height: 43px;
-
-  button {
-    align-self: flex-start;
-    white-space: nowrap;
-
-    .Icon {
-      vertical-align: middle;
-      margin-right: 10px;
+:global {
+  .wizardWrapper {
+    min-height: 100vh;
+    background-color: $tc-gray-neutral-light;
+    margin-top: -60px; // Counteract the push from the main wrapper, top of vewport
+    min-width: $minimumPageWidth;
+    // FIXME: This is hack to stop the div of growing
+    border-top: 1px solid $tc-gray-neutral-light;
+    // end hack;
+    overflow-x: scroll;
+  }
+  
+  .ReactModalPortal .wizardWrapper {
+    margin-top: 0;
+  }
+  
+  .wizardHeader {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0 0;
+    height: 43px;
+  
+    button {
+      align-self: flex-start;
+      white-space: nowrap;
+  
+      .Icon {
+        vertical-align: middle;
+        margin-right: 10px;
+      }
     }
   }
-}
-
-.wizardHeadline {
-  @include tc-heading;
-  width: 100%;
-  text-align: center;
-  margin: 0 0 50px;
-  @include roboto-light;
-  font-size: 36px;
-  color: $tc-black;
-  line-height: 40px;
-}
-
-.ReactModalPortal .header > h1:first-child {
-  margin-top: 40px;
-}
-
-.wizardCardContainer {
-  @include tc-body;
-  color: $tc-gray-50;
-  text-align: center;
-  max-width: 1000px;
-  position: relative;
-  min-height: calc(100vh - 130px);
-  margin: 0 auto;
-  padding-bottom: 90px;
-
-  a,
-  a:visited,
-  a:hover,
-  a:active {
-    color: $tc-dark-blue;
-    cursor: pointer;
+  
+  .wizardHeadline {
+    @include tc-heading;
+    width: 100%;
+    text-align: center;
+    margin: 0 0 50px;
+    @include roboto-light;
+    font-size: 36px;
+    color: $tc-black;
+    line-height: 40px;
   }
-
-  a:hover {
-    text-decoration: underline;
+  
+  .ReactModalPortal .header > h1:first-child {
+    margin-top: 40px;
   }
-
-  .cards {
-    // margin-top: 50px;
-    display: flex;
-    justify-content: center;
-    flex-flow: row wrap;
+  
+  .wizardCardContainer {
+    @include tc-body;
+    color: $tc-gray-50;
+    text-align: center;
+    max-width: 1000px;
+    position: relative;
+    min-height: calc(100vh - 130px);
+    margin: 0 auto;
+    padding-bottom: 90px;
+  
+    a,
+    a:visited,
+    a:hover,
+    a:active {
+      color: $tc-dark-blue;
+      cursor: pointer;
+    }
+  
+    a:hover {
+      text-decoration: underline;
+    }
+  
+    .cards {
+      // margin-top: 50px;
+      display: flex;
+      justify-content: center;
+      flex-flow: row wrap;
+    }
+  
+    .ProjectTypeCard:nth-child(1) {
+      margin-left: 40px;
+    }
+  
+    .ProjectTypeCard:nth-child(3) {
+      margin-right: 40px;
+    }
+  
+    .footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin-bottom: 15px;
+      margin-top: 50px;
+    }
   }
-
-  .ProjectTypeCard:nth-child(1) {
-    margin-left: 40px;
+  
+  sup {
+    font-size: 0.5em;
+    vertical-align: text-top;
   }
-
-  .ProjectTypeCard:nth-child(3) {
-    margin-right: 40px;
-  }
-
-  .footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin-bottom: 15px;
-    margin-top: 50px;
+  
+  sub {
+    font-size: 0.5em;
+    vertical-align: text-bottom;
   }
 }
-
-sup {
-  font-size: 0.5em;
-  vertical-align: text-top;
-}
-
-sub {
-  font-size: 0.5em;
-  vertical-align: text-bottom;
-}
+  

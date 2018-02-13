@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Formsy } from 'appirio-tech-react-components'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const Formsy = FormsyForm.Formsy
 import SpecScreenQuestions from './SpecScreenQuestions'
 
 class EditAppScreenForm extends Component {
@@ -50,8 +51,8 @@ class EditAppScreenForm extends Component {
   }
 
   render() {
-    let { questions } = this.props
-    let { screen } = this.state
+    const { questions } = this.props
+    const { screen } = this.state
 
     return (
       <Formsy.Form
@@ -60,8 +61,8 @@ class EditAppScreenForm extends Component {
         onChange={this.update}
       >
         <SpecScreenQuestions
-        questions={questions}
-        screen={screen}
+          questions={questions}
+          screen={screen}
         />
       </Formsy.Form>
     )

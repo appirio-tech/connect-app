@@ -1,25 +1,28 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.flex-row {
-  > .placeholder-parent {
-    align-items: center !important;
-    padding: 0 20px 0 0 !important;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: row;
-
-    .placeholder {
-      background-color: $tc-gray-neutral-light;
-      padding: 25px 10px;
-      flex: .85;
-    }
-
-    &:first-child {
-      padding-left: 20px !important;
-    }
-
-    &:last-child {
-      padding-right: 20px !important;
+:global {
+  .flex-row {
+    > .placeholder-parent {
+      align-items: center !important;
+      padding: 0 20px 0 0 !important;
+      display: flex;
+      justify-content: flex-start;
+      flex-direction: row;
+  
+      .placeholder {
+        background-color: $tc-gray-neutral-light;
+        padding: 25px 10px;
+        flex: .85;
+      }
+  
+      &:first-child {
+        padding-left: 20px !important;
+      }
+  
+      &:last-child {
+        padding-right: 20px !important;
+      }
     }
   }
 }
+  

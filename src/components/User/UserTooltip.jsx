@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Tooltip } from 'appirio-tech-react-components'
-import { Avatar } from 'appirio-tech-react-components'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
+import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { DOMAIN } from '../../../config/constants'
 
 require('./UserTooltip.scss')
@@ -20,7 +20,7 @@ const UserTooltip = ({ usr, id, previewAvatar, size }) => {
               size={size}
             />
           </div>) :
-          <span className="project-customer">{usr.firstName} {usr.lastName}</span>
+            <span className="project-customer">{usr.firstName} {usr.lastName}</span>
         }
       </div>
       <div className="tooltip-body">
