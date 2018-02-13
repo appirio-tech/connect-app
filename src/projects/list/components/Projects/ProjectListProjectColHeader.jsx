@@ -61,7 +61,7 @@ class ProjectListProjectColHeader extends React.Component {
                   const activeClass = cn({
                     active: item.val === currentSortField
                   })
-                  return (<li key={i} className={activeClass} onClick={sortHandler}>
+                  return (<li key={i} className={activeClass} onClick={() => sortHandler(item.val)}>
                     {activeClass? <IconCheckDark className="icon-check-dark"/>: ''}
                     <a href="javascript:;">{item.label}</a>
                   </li>)

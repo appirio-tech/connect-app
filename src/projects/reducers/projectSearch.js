@@ -5,7 +5,8 @@ import {
   SET_PROJECTS_INFINITE_AUTOLOAD,
   SET_PROJECTS_LIST_VIEW,
   PROJECTS_LIST_VIEW,
-  PROJECT_LIST_DEFAULT_CRITERIA
+  PROJECT_LIST_DEFAULT_CRITERIA,
+  PROJECT_SORT
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -53,6 +54,11 @@ export default function(state = initialState, action) {
       ? { projects : { $push : action.payload.projects }, totalCount: { $set : action.payload.totalCount} }
       : { projects : { $set : action.payload.projects }, totalCount: { $set : action.payload.totalCount} }
     return update(state, updatedProjects)
+  }
+
+  case PROJECT_SORT: {
+    const updatedProjectsAndCriteria = { projects : { $set : action.payload.projects }, criteria: { $set : action.payload.criteria } }
+    return update(state, updatedProjectsAndCriteria)
   }
 
   case PROJECT_SEARCH_FAILURE:

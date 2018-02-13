@@ -1,15 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
-    <title>status-active</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Grid---Components" stroke="none" stroke-width="1" fill="none" fillRule="evenodd">
-        <g id="Grid---components" transform="translate(-391.000000, -197.000000)">
-            <g id="status-active" transform="translate(391.000000, 197.000000)">
-                <rect id="0-10-0-5" fill="#60C700" x="0" y="0" width="20" height="20" rx="10"></rect>
-                <ellipse id="Oval-7" fill="#FFFFFF" cx="10" cy="10" rx="4" ry="4"></ellipse>
-            </g>
-        </g>
-    </g>
-</svg>
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>status icon/active</title><defs><circle id="a" cx="8" cy="8" r="8"/></defs><g fill="none" fill-rule="evenodd"><use fill="#FFF" xlink:href="#a"/><circle stroke="#0681FF" stroke-width="3" cx="8" cy="8" r="6.5"/></g></svg>

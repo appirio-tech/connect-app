@@ -57,27 +57,29 @@ class MessageDetails extends React.Component {
             {isLoadingComments ? 'Loading...' : 'Load earlier messages'}
           </BtnSeparator>}
         </ActionCard.Header>
-        {messages && messages.map((item, idx) => (
-          <Comment
-            key={idx}
-            message={item}
-            avatarUrl={_.get(item, 'author.photoURL', null)}
-            authorName={item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user'}
-            date={moment(item.date).fromNow()}
-            edited={item.edited}
-            active={item.unread}
-            self={item.author && item.author.userId === currentUser.userId}
-            onEdit={this.onEditMessage.bind(this, item.id)}
-            onChange={this.onSaveMessageChange.bind(this, item.id)}
-            onSave={onSaveMessage}
-            onDelete={onDeleteMessage}
-            isSaving={item.isSavingComment}
-            hasError={item.error}
-            readonly={item.id === topicMessage.id}
-          >
-            <div dangerouslySetInnerHTML={{__html: item.content}} />
-          </Comment>
-        ))}
+        {messages && messages.map((item, idx) =>
+          (
+            <Comment
+              key={idx}
+              message={item}
+              author={item.author}
+              avatarUrl={_.get(item, 'author.photoURL', null)}
+              authorName={item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user'}
+              date={moment(item.date).fromNow()}
+              edited={item.edited}
+              active={item.unread}
+              self={item.author && item.author.userId === currentUser.userId}
+              onEdit={this.onEditMessage.bind(this, item.id)}
+              onChange={this.onSaveMessageChange.bind(this, item.id)}
+              onSave={onSaveMessage}
+              onDelete={onDeleteMessage}
+              isSaving={item.isSavingComment}
+              hasError={item.error}
+              readonly={item.id === topicMessage.id}
+            >
+              <div dangerouslySetInnerHTML={{__html: item.content}} />
+            </Comment>)
+        )}
 
         { allowAddingComment &&
         <AddComment
@@ -94,7 +96,7 @@ class MessageDetails extends React.Component {
         {isDeletingTopic &&
       <div className="deleting-layer">
         <div>Deleting post ...</div>
-      </div>
+      </div> 
         }
       </ActionCard>
     )

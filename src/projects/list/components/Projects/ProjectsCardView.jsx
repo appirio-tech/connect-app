@@ -4,7 +4,6 @@ import _ from 'lodash'
 import InfiniteScroll from 'react-infinite-scroller'
 import ProjectCard from './ProjectCard'
 import NewProjectCard from './NewProjectCard'
-import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import { PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
 import { setDuration } from '../../../../helpers/projectHelper'
 
@@ -45,6 +44,12 @@ const ProjectsCardView = props => {
     setInfiniteAutoload(true)
   }
   const hasMore = pageNum * PROJECTS_LIST_PER_PAGE < totalCount
+  const placeholders = []
+  if (isLoading & hasMore) {
+    for (let i = 0; i < PROJECTS_LIST_PER_PAGE; i++) {
+      placeholders.push({ isPlaceholder: true })
+    }
+  }
 
   return (
     <div className="projects card-view">
@@ -55,10 +60,9 @@ const ProjectsCardView = props => {
         hasMore={hasMore}
         threshold={500}
       >
-        { projects.map(renderProject)}
+        { [...projects, ...placeholders].map(renderProject)}
         <div className="project-card"><NewProjectCard /></div>
       </InfiniteScroll>
-      { isLoading && <LoadingIndicator /> }
       { !isLoading && !infiniteAutoload && hasMore && <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore} key="loadMore">Load more projects</button>}
       { !isLoading && !hasMore && <span key="end">No more {projectsStatus} projects</span>}
     </div>

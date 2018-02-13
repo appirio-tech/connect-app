@@ -9,7 +9,6 @@ import cn from 'classnames'
 import _ from 'lodash'
 import SearchBar from 'appirio-tech-react-components/components/SearchBar/SearchBar'
 import MenuBar from 'appirio-tech-react-components/components/MenuBar/MenuBar'
-import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 import Filters from './Filters'
 import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
@@ -30,7 +29,6 @@ class ProjectsToolBar extends Component {
     this.toggleFilter = this.toggleFilter.bind(this)
     this.handleTermChange = this.handleTermChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
-    this.handleMyProjectsFilter = this.handleMyProjectsFilter.bind(this)
     this.onLeave = this.onLeave.bind(this)
   }
 
@@ -75,17 +73,12 @@ class ProjectsToolBar extends Component {
 
   /*eslint-disable no-unused-vars */
   handleTermChange(oldTerm, searchTerm, reqNo, callback) {
-    this.props.projectSuggestions(searchTerm)
     callback(reqNo, this.props.projects)
   }
   /*eslint-enable */
 
   handleSearch(keyword) {
     this.applyFilters({ keyword })
-  }
-
-  handleMyProjectsFilter(event) {
-    this.applyFilters({memberOnly: event.target.checked})
   }
 
   applyFilters(filter) {
@@ -202,18 +195,6 @@ class ProjectsToolBar extends Component {
             </div>
           }
           <div className="actions">
-            { !!isLoggedIn && !!isPowerUser &&
-              <div className="primary-filters">
-                <div className="tc-switch clearfix">
-                  <SwitchButton
-                    onChange={ this.handleMyProjectsFilter }
-                    label="My projects"
-                    name="my-projects-only"
-                    checked={criteria.memberOnly}
-                  />
-                </div>
-              </div>
-            }
             { !!isLoggedIn && <NewProjectNavLink compact /> }
             { userMenu }
             { !!isLoggedIn && <NotificationsDropdown /> }

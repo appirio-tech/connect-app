@@ -34,7 +34,7 @@ const hocStatusDropdown = (CompositeComponent) => {
       return (
         <div className="project-status-dropdown" ref="dropdown">
           <div
-            className={cn('status-header', 'ps-' + selected.value, { active: isOpen, editable: canEdit })}
+            className={cn('status-header', 'status-' + selected.value, { active: isOpen, editable: canEdit })}
             onClick={handleClick}
           >
             <CompositeComponent
@@ -56,7 +56,7 @@ const hocStatusDropdown = (CompositeComponent) => {
                     (<li key={item.value}>
                       <a
                         href="javascript:"
-                        className={cn('status-option', 'ps-' + item.value, { active: item.value === status })}
+                        className={cn('status-option', 'status-' + item.value, { active: item.value === status })}
                         onClick={(e) => {
                           onItemSelect(item.value, e)
                         }}

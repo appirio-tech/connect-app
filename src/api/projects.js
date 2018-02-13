@@ -52,7 +52,11 @@ export function getProjectById(projectId) {
   projectId = parseInt(projectId)
   return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/`)
     .then(resp => {
-      return _.get(resp.data, 'result.content', {})
+      const res = _.get(resp.data, 'result.content', {})
+      _.forEach(res.attachments, a => {
+        a.downloadUrl = `/projects/${projectId}/attachments/${a.id}`
+      })
+      return res
     })
 }
 
