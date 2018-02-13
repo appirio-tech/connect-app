@@ -71,13 +71,10 @@ class FeedView extends React.Component {
     })
 
     this.refreshUnreadUpdate = setInterval(() => {
-      console.log('looking for new notifications '+JSON.stringify(this.props.notifications.notifications));
       const notReadNotifications = filterReadNotifications(this.props.notifications.notifications)
-      console.log ('not read '+JSON.stringify(notReadNotifications));
-      console.log('project '+this.props.project.id);
       const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
-      console.log ('unreadTopicAndPostChangedNotifications '+JSON.stringify(unreadTopicAndPostChangedNotifications));
       this.setState({ unreadUpdate: _.map(unreadTopicAndPostChangedNotifications, 'id' ) })
+      console.log('scrolled '+this.state.scrolled);
       if (!this.isChanged() && !this.state.scrolled && this.state.unreadUpdate.length > 0) {
         this.onRefreshFeeds()
       }
@@ -209,7 +206,7 @@ class FeedView extends React.Component {
     }
     this.setState({
       newPost: resetNewPost ? {} : this.state.newPost,
-      scrolled: false,
+      scrolled: window.scrollY>0,
       feeds: feeds.map((feed) => {
         // finds the same feed from previous props, if exists
         let prevFeed
@@ -375,7 +372,7 @@ class FeedView extends React.Component {
   }
 
   onScroll() {
-    this.setState({ scrolled : true })
+    this.setState({ scrolled : window.scrollY>0 })
   }
 
   render () {
@@ -422,8 +419,8 @@ class FeedView extends React.Component {
         { unreadUpdate.length > 0 && !this.isChanged() && scrolled &&
           <Sticky top={80} innerZ={999}>
             <div className="prompt">
-              <Refresh className="icon-refresh" style={{position: 'absolute', top: '4px'}}/>
-              <button className="tc-btn tc-btn-primary tc-btn-md" onClick={this.onRefreshFeeds}>&nbsp;&nbsp;&nbsp;Reload page to view updates</button>
+              <Refresh className="icon-refresh" width="20" style={{position: 'absolute', top: '4px'}}/>
+              <button className="tc-btn tc-btn-primary tc-btn-md" style={{borderRadius: '20px', marginLeft: '-15px'}} onClick={this.onRefreshFeeds}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reload page to view updates</button>
             </div>
           </Sticky>}
         <div>
