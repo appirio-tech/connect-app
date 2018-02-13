@@ -166,10 +166,10 @@ class CreateConainer extends React.Component {
         const gaClientId = Cookies.get(GA_CLIENT_ID)
         if(gaClientId || gaClickId) {
           const googleAnalytics = {}
-          if (gaClickId !== "null") {
+          if (gaClickId !== 'null') {
             googleAnalytics[GA_CLICK_ID]  = gaClickId
           }
-          if (gaClientId !== "null") {
+          if (gaClientId !== 'null') {
             googleAnalytics[GA_CLIENT_ID] = gaClientId
           }
           _.set(project, 'details.utm.google', googleAnalytics)
