@@ -5,12 +5,9 @@ import cn from 'classnames'
 require('./LoadingIndicator.scss')
 
 const LoadingIndicator = ({ isSmall }) => {
-  const backgroundImageUrl = { backgroundImage: `url(${require('./loader.gif')})` }
-
   return (
     <div
       className={cn('loading-indicator', { small: isSmall })}
-      style={backgroundImageUrl}
     />
   )
 }
