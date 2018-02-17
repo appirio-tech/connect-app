@@ -15,7 +15,13 @@ const configFactory = require('topcoder-react-utils/config/webpack/app-productio
 const productionTopCoderConfig = configFactory({
   context: dirname,
 
-  entry: './src/index'
+  entry: [
+    'babel-polyfill', // Load this first
+    'react-hot-loader/patch', // This package already requires/loads react (but not react-dom). It must be loaded after babel-polyfill to ensure both react and react-dom use the same Symbol.
+    'react', // Include this to enforce order
+    'react-dom', // Include this to enforce order
+    './src/index'
+  ]
 })
 
 // merge standard production TopCoder config with common config specific to connect app
