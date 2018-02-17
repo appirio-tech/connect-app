@@ -12,6 +12,8 @@
     .project-card-body {
       padding-left: 4 * $base_unit;
       padding-right: 4 * $base_unit;
+      z-index: 1;
+      min-height: 135px; 
       .project-description {
         max-height: 120px;
         min-height: 10px;
