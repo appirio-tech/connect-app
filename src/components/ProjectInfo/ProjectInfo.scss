@@ -7,6 +7,7 @@
     background-color: $tc-white;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
+    padding-bottom: 25px;
     @include tc-label-md;
   
     .project-card-body {
