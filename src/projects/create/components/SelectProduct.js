@@ -142,8 +142,7 @@ function SelectProduct(props) {
   const projectCategory = findCategory(props.projectType)
   return (
     <div>
-      <div className="header headerSelectProduct">
-      </div>
+      <div className="header headerSelectProduct" />
       <div className="SelectProduct">
         <h1> { projectCategory.name } projects </h1>
         <h2>{ projectCategory.question }</h2>

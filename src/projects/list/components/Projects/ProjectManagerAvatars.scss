@@ -1,18 +1,21 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.stack-avatar {
-  position: relative;
-  display: block;
-  float: left;
+:global {
+  .stack-avatar {
+    position: relative;
+    display: block;
+    float: left;
+  }
+  
+  .plus-user {
+    position: relative;
+    @include roboto-bold;
+    font-weight: 700;
+    font-size: 12px;
+    color: $tc-gray-80;
+    top: 7px;
+    left: 10px;
+    user-select: none;
+  }
 }
-
-.plus-user {
-  position: relative;
-  @include roboto-bold;
-  font-weight: 700;
-  font-size: 12px;
-  color: $tc-gray-80;
-  top: 7px;
-  left: 10px;
-  user-select: none;
-}
+  

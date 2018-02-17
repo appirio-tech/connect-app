@@ -11,8 +11,7 @@ class ProjectViewLayout extends Component {
     const { main } = this.props
     return (
       <div className="content-pane">
-        <div className="top-bar">
-        </div>
+        <div className="top-bar" />
         {main}
       </div>
     )

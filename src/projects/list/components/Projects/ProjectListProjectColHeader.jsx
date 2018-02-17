@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
-import { Dropdown } from 'appirio-tech-react-components'
+import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 import IconCarretDownActive from '../../assets/icons/arrow-6px-carret-down-active.svg'
 import IconCarretDownNormal from '../../../../assets/icons/arrow-6px-carret-down-normal.svg'
 import IconCheckDark from '../../../../assets/icons/check-dark.svg'
@@ -61,7 +61,7 @@ class ProjectListProjectColHeader extends React.Component {
                   const activeClass = cn({
                     active: item.val === currentSortField
                   })
-                  return (<li key={i} className={activeClass} onClick={sortHandler}>
+                  return (<li key={i} className={activeClass} onClick={() => sortHandler(item.val)}>
                     {activeClass? <IconCheckDark className="icon-check-dark"/>: ''}
                     <a href="javascript:;">{item.label}</a>
                   </li>)

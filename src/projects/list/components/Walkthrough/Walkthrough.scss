@@ -1,130 +1,133 @@
-@import "tc-includes";
+@import '~tc-ui/src/styles/tc-includes';
 @import '../../../../styles/variables';
 
 
-.walkthrough-column {
-  position: relative;
-  text-align: center;
-  min-width: 768px;
-  min-height: 496px;
-  padding: 20px 86px;
-  
-  .text-img{
-    background-size: 100% 100%;
-    position: absolute;
-    display:block;
-    width: 640px;
-    height: 160px;
-    right: 80px;
-    z-index:2;
-  }
-
-  h3{
-    color: $tc-gray-70;
-    @include roboto-medium;
-    font-size: 48px;
-    letter-spacing: 0px;
-    padding: 0 0 25px 0;
-    line-height: inherit;
-  }
-  ul{
-    width: 100%;
-    left:50%;
-    margin-left: -50%;
+:global {
+  .walkthrough-column {
     position: relative;
-    li{
-      float: left;
-      width: calc((100% - 40px)/3);
+    text-align: center;
+    min-width: 768px;
+    min-height: 496px;
+    padding: 20px 86px;
+  
+    .text-img{
+      background-size: 100% 100%;
+      position: absolute;
+      display:block;
+      width: 640px;
+      height: 160px;
+      right: 80px;
+      z-index:2;
     }
-    li:nth-child(2){
-      margin-left:20px;
-      margin-right:20px;
+  
+    h3{
+      color: $tc-gray-70;
+      @include roboto-medium;
+      font-size: 48px;
+      letter-spacing: 0px;
+      padding: 0 0 25px 0;
+      line-height: inherit;
     }
-    a{
-      background: rgba($tc-gray-neutral-dark,0.39);
-      border-radius: 4px;
+    ul{
       width: 100%;
-      height: 306px;
-      display: block;
-      margin-bottom:20px;
-      font-size: 88px;
-      line-height: 306px;
-      text-align: center;
-      @include roboto-bold;
-      color: $tc-gray-20;
-      &:hover {
-        color: $tc-gray-80;
+      left:50%;
+      margin-left: -50%;
+      position: relative;
+      li{
+        float: left;
+        width: calc((100% - 40px)/3);
+      }
+      li:nth-child(2){
+        margin-left:20px;
+        margin-right:20px;
+      }
+      a{
+        background: rgba($tc-gray-neutral-dark,0.39);
+        border-radius: 4px;
+        width: 100%;
+        height: 306px;
+        display: block;
+        margin-bottom:20px;
+        font-size: 88px;
+        line-height: 306px;
+        text-align: center;
+        @include roboto-bold;
+        color: $tc-gray-20;
+        &:hover {
+          color: $tc-gray-80;
+        }
       }
     }
-  }
-
-  .bubble{
-    position: absolute;
-    top: 180px;
-    left: calc(50% - 300px);
-    padding-left:243px;
-
-    div{
-      position:relative;
-      background: $tc-white;
-      width: 436px;
-      min-height: 235px;
-      padding: 30px 30px 50px 30px;
-      box-shadow: 0 0 15px rgba($tc-black, .15);
-      border-radius: 4px;
-      h3{
-        @include roboto-medium;
-        line-height:35px;
-        font-size: $tc-heading;
-        color: $tc-black;
-        text-align:left;
-        padding-bottom: 10px;
-      }
-      p{
-        @include roboto;
-        font-size: $tc-label-lg;
-        color: $tc-gray-80;
-        line-height: 25px;
-        padding: 0;
-      }
-      .arrow{
-        width:0;
-        height:0;
-        position: absolute;
-        left:-20px;
-        top: 42px;
-        border-left:34px solid transparent;
-        border-top:34px solid $tc-white;
+  
+    .bubble{
+      position: absolute;
+      top: 180px;
+      left: calc(50% - 300px);
+      padding-left:243px;
+  
+      div{
+        position:relative;
+        background: $tc-white;
+        width: 436px;
+        min-height: 235px;
+        padding: 30px 30px 50px 30px;
+        box-shadow: 0 0 15px rgba($tc-black, .15);
+        border-radius: 4px;
+        h3{
+          @include roboto-medium;
+          line-height:35px;
+          font-size: $tc-heading;
+          color: $tc-black;
+          text-align:left;
+          padding-bottom: 10px;
+        }
+        p{
+          @include roboto;
+          font-size: $tc-label-lg;
+          color: $tc-gray-80;
+          line-height: 25px;
+          padding: 0;
+        }
+        .arrow{
+          width:0;
+          height:0;
+          position: absolute;
+          left:-20px;
+          top: 42px;
+          border-left:34px solid transparent;
+          border-top:34px solid $tc-white;
+        }
       }
     }
-  }
-  .robot{
-    background-size: 238px 281px;
-    position: absolute;
-    width: 238px;
-    height: 281px;
-    left:0;
-    display:block;
-    top:0;
-    z-index:2;
-  }
-  .shadow{
-    background-size: 960px 11px;
-    position: absolute;
-    width: 960px;
-    z-index:1;
-    display:block;
-    height: 11px;
-    left:-150px;
-    bottom:-48px;
-  }
-  p{
-    text-align: left;
-    padding: 0 168px;
-    @include roboto;
-    font-size: $tc-label-lg;
-    color: $tc-gray-70;
-    letter-spacing: 0px;
-    line-height: 23px;
+    .robot{
+      background-size: 238px 281px;
+      position: absolute;
+      width: 238px;
+      height: 281px;
+      left:0;
+      display:block;
+      top:0;
+      z-index:2;
+    }
+    .shadow{
+      background-size: 960px 11px;
+      position: absolute;
+      width: 960px;
+      z-index:1;
+      display:block;
+      height: 11px;
+      left:-150px;
+      bottom:-48px;
+    }
+    p{
+      text-align: left;
+      padding: 0 168px;
+      @include roboto;
+      font-size: $tc-label-lg;
+      color: $tc-gray-70;
+      letter-spacing: 0px;
+      line-height: 23px;
+    }
   }
 }
+  

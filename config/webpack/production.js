@@ -1,54 +1,50 @@
-const path              = require('path')
-const webpack = require('webpack')
+/**
+ * Webpack config for production mode
+ */
+const path = require('path')
 const webpackMerge = require('webpack-merge')
 const CompressionPlugin = require('compression-webpack-plugin')
-const ExtractCssChunks = require('extract-css-chunks-webpack-plugin')
-
-const defaultConfig = require('./default')
 
 const dirname = path.resolve(__dirname, '../..')
 
-module.exports = webpackMerge(defaultConfig, {
-  devtool: 'source-map',
+const commonProjectConfig = require('./common')
+const applyCommonModifications = require('./common-modifications')
+const configFactory = require('topcoder-react-utils/config/webpack/app-production')
 
-  module: {
-    rules: [{
-      test: /\.scss$/,
-      use: ExtractCssChunks.extract({
-        fallback: 'style-loader',
-        use: [{
-          loader: 'css-loader',
-          options: {
-            sourceMap: true
-          }
-        },
-        'resolve-url-loader',
-        {
-          loader: 'sass-loader',
-          options: {
-            sourceMap: true,
-            includePaths: [
-              path.join(dirname, '/node_modules/bourbon/app/assets/stylesheets'),
-              path.join(dirname, '/node_modules/tc-ui/src/styles')
-            ]
-          }
-        }]
-      })
-    }]
-  },
+// get standard TopCoder production webpack config
+const productionTopCoderConfig = configFactory({
+  context: dirname,
 
-  plugins: [
-    // Do not include any .mock.js files if this is a build
-    new webpack.IgnorePlugin(/\.mock\.js/),
-    new webpack.optimize.UglifyJsPlugin({
-      mangle: true
-    }),
-    new CompressionPlugin({
-      asset: '[file]',
-      algorithm: 'gzip',
-      regExp: /\.js$|\.css$/,
-      threshold: 10240,
-      minRatio: 0.8
-    })
-  ]
+  entry: './src/index'
 })
+
+// merge standard production TopCoder config with common config specific to connect app
+const combinedConfig = webpackMerge.smart(
+  productionTopCoderConfig,
+  commonProjectConfig
+)
+
+// apply common modifications specific to connect app which cannot by applied by webpack merge
+applyCommonModifications(combinedConfig)
+
+/*
+  Set babel environment to `production` for CoffeeScript babel config
+ */
+const coffeeRule = combinedConfig.module.rules.find(rule => /coffee/.test(rule.test.toString()))
+const coffeeBabelUse = coffeeRule.use.find((use) => use.loader === 'babel-loader')
+coffeeBabelUse.options.forceEnv = 'production'
+
+/*
+  Add compression plugin which gzip files output files
+ */
+combinedConfig.plugins.push(
+  new CompressionPlugin({
+    asset: '[file]',
+    algorithm: 'gzip',
+    regExp: /\.js$|\.css$/,
+    threshold: 10240,
+    minRatio: 0.8
+  })
+)
+
+module.exports = combinedConfig

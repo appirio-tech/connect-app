@@ -32,7 +32,7 @@ const CoderBot = ({code, message}) => {
       <div className="container">
         <div className="page-error">
           <h3>{ getHeading(code) }</h3>
-          <p dangerouslySetInnerHTML={ {__html : message || getMessage(code) } }></p>
+          <p dangerouslySetInnerHTML={ {__html : message || getMessage(code) } } />
           <CoderBroken className="icon-coder-broken" />
           <span>{code !== 200 && code}</span>
         </div>

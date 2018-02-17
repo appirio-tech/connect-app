@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import seeAttachedWrapperField from './SeeAttachedWrapperField'
-import { TCFormFields } from 'appirio-tech-react-components'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
 import _ from 'lodash'
 
 import SpecQuestionList from './SpecQuestionList/SpecQuestionList'

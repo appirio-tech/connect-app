@@ -1,7 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import qs from 'query-string'
-import { Tabs, Tab, TCFormFields } from 'appirio-tech-react-components'
+import Tabs from 'appirio-tech-react-components/components/Tabs/Tabs'
+import Tab from 'appirio-tech-react-components/components/Tabs/Tab'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
 import _ from 'lodash'
 import SpecQuestions from './SpecQuestions'
 import FileListContainer from './FileListContainer'

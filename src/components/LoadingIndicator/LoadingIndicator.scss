@@ -1,16 +1,19 @@
-.loading-indicator {
-  height: 80%;
-  width: 100%;
-  min-height: 70px;
-  min-width: 70px;
-  background: 50% 50% no-repeat;
-  background-size: 70px 70px;
-
-  &.small {
-    height: 32px;
-    width: 32px;
-    min-height: 0;
-    min-width: 0;
-    background-size: 32px 32px;
+:global {
+  .loading-indicator {
+    height: 80%;
+    width: 100%;
+    min-height: 70px;
+    min-width: 70px;
+    background: 50% 50% no-repeat;
+    background-size: 70px 70px;
+    background-image: url('../../assets/images/loader.gif');
+  
+    &.small {
+      height: 32px;
+      width: 32px;
+      min-height: 0;
+      min-width: 0;
+      background-size: 32px 32px;
+    }
   }
 }

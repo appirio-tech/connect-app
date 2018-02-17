@@ -77,7 +77,7 @@ class ProjectStatusSection extends React.Component {
     return (
       <PanelProject>
         <div className={cn('panel', 'project-status-wrapper', {'modal-active': showStatusChangeDialog})}>
-          <div className="modal-overlay"></div>
+          <div className="modal-overlay" />
           <div className="project-status-section">
             <PanelProject.Heading>
               Status
@@ -93,7 +93,7 @@ class ProjectStatusSection extends React.Component {
             {isOpen && <dir className="status-dropdown">
               <ul>
                 {PROJECT_STATUS.sort((a, b) => a.dropDownOrder > b.dropDownOrder).map((item) =>
-                  <li key={item.value}>
+                  (<li key={item.value}>
                     <a
                       href="javascript:"
                       className={cn({active: item.value === status})}
@@ -101,10 +101,10 @@ class ProjectStatusSection extends React.Component {
                         this.showStatusChangeDialog(item.value, e)
                       }}
                     >
-                      <span className={item.color}><i className="status-icon"/></span>
+                      <span className={item.color}><icon className="status-icon"/></span>
                       {item.name}
                     </a>
-                  </li>)}
+                  </li>))}
               </ul>
             </dir>}
           </div>

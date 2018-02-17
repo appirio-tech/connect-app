@@ -53,20 +53,20 @@ class Header extends React.Component{
       const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
       return (
         <RichTextArea
-            editMode
-            messageId={topicMessage.id}
-            isGettingComment={topicMessage.isGettingComment}
-            title={title}
-            content={content}
-            oldTitle={this.props.title}
-            oldContent={topicMessage.rawContent}
-            onPost={this.onSaveTopic}
-            onPostChange={this.onTopicChange}
-            isCreating={this.props.isSavingTopic}
-            hasError={this.props.error}
-            avatarUrl={this.props.avatarUrl}
-            authorName={this.props.authorName}
-            cancelEdit={this.cancelEditTopic}
+          editMode
+          messageId={topicMessage.id}
+          isGettingComment={topicMessage.isGettingComment}
+          title={title}
+          content={content}
+          oldTitle={this.props.title}
+          oldContent={topicMessage.rawContent}
+          onPost={this.onSaveTopic}
+          onPostChange={this.onTopicChange}
+          isCreating={this.props.isSavingTopic}
+          hasError={this.props.error}
+          avatarUrl={this.props.avatarUrl}
+          authorName={this.props.authorName}
+          cancelEdit={this.cancelEditTopic}
         />
       )
     }

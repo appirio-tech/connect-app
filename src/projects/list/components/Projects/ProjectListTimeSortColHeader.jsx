@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
-import { Dropdown } from 'appirio-tech-react-components'
+import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 import IconCarretDownActive from '../../../../assets/icons/arrow-6px-carret-down-active.svg'
 import IconCarretDownNormal from '../../../../assets/icons/arrow-6px-carret-down-normal.svg'
 import IconCheckDark from '../../../../assets/icons/check-dark.svg'
@@ -19,6 +19,7 @@ class ProjectListTimeSortColHeader extends React.Component {
   constructor(props) {
     super(props)
     this.state = { focused:  false }
+    this.onOutsideClick = this.onOutsideClick.bind(this)
   }
 
   toggleFocusState() {
@@ -34,19 +35,27 @@ class ProjectListTimeSortColHeader extends React.Component {
       return
     }
 
-    this.setState({
-      focused: false
-    })
+    if (this.refs.myRef) {
+      this.setState({
+        focused: false
+      })
+    }
+
   }
 
   componentDidMount() {
-    document.addEventListener('click', ev => this.onOutsideClick(ev))
+    document.removeEventListener('click', this.onOutsideClick)
+    document.addEventListener('click', this.onOutsideClick)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.onOutsideClick)
   }
 
   render() {
+    const {currentSortField, sortHandler} = this.props
     const cur = _.find(options, o => currentSortField === o.val)
       || options[0]
-    const {currentSortField, sortHandler} = this.props
 
     return (
       <div>
@@ -56,19 +65,19 @@ class ProjectListTimeSortColHeader extends React.Component {
             {!this.state.focused? <IconCarretDownNormal className="icon-carret-down-normal"/> : <IconCarretDownActive className="icon-carret-down-active" />}
           </a>
           <div className="dropdown-menu-list down-layer">
-          <ul>
-            {
-              options.map((item, i) => {
-                const activeClass = cn({
-                  active: item.val === currentSortField
+            <ul>
+              {
+                options.map((item, i) => {
+                  const activeClass = cn({
+                    active: item.val === currentSortField
+                  })
+                  return (<li key={i} className={activeClass} onClick={() => sortHandler(item.val)}>
+                    {activeClass? <IconCheckDark className="icon-check-dark"/>: ''}
+                    <a href="javascript:;">{item.label}</a>
+                  </li>)
                 })
-                return (<li key={i} className={activeClass} onClick={sortHandler}>
-                  {activeClass? <IconCheckDark className="icon-check-dark"/>: ''}
-                  <a href="javascript:;">{item.label}</a>
-                </li>)
-              })
-            }
-          </ul>
+              }
+            </ul>
           </div>
         </Dropdown>
       </div>

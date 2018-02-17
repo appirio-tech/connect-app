@@ -1,21 +1,10 @@
 import React from 'react' // eslint-disable-line no-unused-vars
-import _ from 'lodash'
 import IconTcSpecTypeSerif from  '../../assets/icons/icon-tc-spec-type-serif.svg'
 import IconTcSpecTypeSansSerif from  '../../assets/icons/icon-tc-spec-type-sans-serif.svg'
 import IconTcSpecIconTypeColorHome from  '../../assets/icons/icon-tc-spec-icon-type-color-home.svg'
 import IconTcSpecIconTypeOutlineHome from  '../../assets/icons/icon-tc-spec-icon-type-outline-home.svg'
 import IconTcSpecIconTypeGlyphHome from  '../../assets/icons/icon-tc-spec-icon-type-glyph-home.svg'
-
-const isFileRequired = (project, subSections) => {
-  const subSection = _.find(subSections, (s) => s.type === 'questions')
-  const fields = _.filter(subSection.questions, q => q.type.indexOf('see-attached') > -1)
-  // iterate over all seeAttached type fields to check
-  //  if any see attached is checked.
-  return _.some(_.map(
-    _.map(fields, 'fieldName'),
-    fn => _.get(project, `${fn}.seeAttached`)
-  ))
-}
+import { isFileRequired } from '../projectWizard'
 
 const sections = [
   {

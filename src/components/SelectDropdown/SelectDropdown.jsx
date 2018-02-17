@@ -4,7 +4,7 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { HOC as hoc } from 'formsy-react'
-import { Dropdown } from 'appirio-tech-react-components'
+import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 
 class SelectDropdown extends Component {
   constructor(props) {
@@ -40,7 +40,7 @@ class SelectDropdown extends Component {
   render() {
     const { options, theme } = this.props
     const { selectedOption } = this.state
-    let selectedValue = selectedOption.title
+    const selectedValue = selectedOption.title
 
     const renderOption = (option, optIdx) => {
       const handleOptionClick = this.handleClick.bind(this, option)

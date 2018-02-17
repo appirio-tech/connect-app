@@ -1,13 +1,16 @@
-.system-settings-container {
-  margin: 42px auto 0;
-  width: 452px;
-
-  > .controls {
-    margin-top: 30px;
-    text-align: center;
-  }
-
-  > .form:not(:first-child) {
-    margin-top: 33px;
+:global {
+  .system-settings-container {
+    margin: 42px auto 0;
+    width: 452px;
+  
+    > .controls {
+      margin-top: 30px;
+      text-align: center;
+    }
+  
+    > .form:not(:first-child) {
+      margin-top: 33px;
+    }
   }
 }
+  

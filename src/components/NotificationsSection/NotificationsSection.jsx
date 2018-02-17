@@ -25,12 +25,12 @@ const NotificationsSection = (props) => {
         <NotificationItem key={notification.id} {...notification} onReadToggleClick={props.onReadToggleClick}/>
       ))}
       {props.onViewOlderClick && props.total > props.notifications.length && (
-          props.isLoading ? (
-            <div className="view-older"><LoadingIndicator isSmall /></div>
-          ) : (
-            <button className="tc-btn view-older" onClick={props.onViewOlderClick}>View {props.total - props.notifications.length} older notifications</button>
-          )
+        props.isLoading ? (
+          <div className="view-older"><LoadingIndicator isSmall /></div>
+        ) : (
+          <button className="tc-btn view-older" onClick={props.onViewOlderClick}>View {props.total - props.notifications.length} older notifications</button>
         )
+      )
       }
     </div>
   )

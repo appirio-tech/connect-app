@@ -4,7 +4,10 @@ import _ from 'lodash'
 import cn from 'classnames'
 import Panel from '../../../../components/Panel/Panel'
 import DeleteFeatureModal from './DeleteFeatureModal'
-import { Formsy, TCFormFields, SwitchButton } from 'appirio-tech-react-components'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
+const Formsy = FormsyForm.Formsy
+import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 import IconUIPencil from  '../../../../assets/icons/icon-ui-pencil.svg'
 import IconUITrashSimple from  '../../../../assets/icons/icon-ui-trash-simple.svg'
 
@@ -101,8 +104,8 @@ class CustomFeatureForm extends Component {
         { (isAdded && !editMode) &&
           <div className="feature-title-row">
             <span className="title">{ _.get(data, 'title', 'Define a new feature')}</span>
-              <div className="feature-actions">
-                { isAdded &&
+            <div className="feature-actions">
+              { isAdded &&
                   <SwitchButton
                     disabled={!isEdittable}
                     onChange={ this.toggleFeature }
@@ -110,11 +113,11 @@ class CustomFeatureForm extends Component {
                     checked={isActive ? 'checked' : null }
                     label="Enable Feature"
                   />
-                }
-                <div className="separator"/>
-                <button className="clean feature-edit-action" onClick={ this.editFeature }><IconUIPencil /></button>
-                <button className="clean feature-delete-action" onClick={ this.onDeleteIntent }><IconUITrashSimple /></button>
-              </div>
+              }
+              <div className="separator"/>
+              <button className="clean feature-edit-action" onClick={ this.editFeature }><IconUIPencil /></button>
+              <button className="clean feature-delete-action" onClick={ this.onDeleteIntent }><IconUITrashSimple /></button>
+            </div>
           </div>
         }
         <div className="feature-form-content">

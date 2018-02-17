@@ -79,7 +79,7 @@ const NotificationItem = (props) => {
   const notificationItem = (
     <div className="notification-item">
       <div className="icon">
-      <NotificationIcons type={props.type} className={'icon-notification' + props.type }/>
+        <NotificationIcons type={props.type} className={'icon-notification' + props.type }/>
       </div>
       <div className="body">
         <p className="content" dangerouslySetInnerHTML={{ __html: props.text }} />

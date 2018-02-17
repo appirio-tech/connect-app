@@ -4,7 +4,7 @@ import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import ProjectStatus from './ProjectStatus'
 import cn from 'classnames'
 import _ from 'lodash'
-import { enhanceDropdown } from 'appirio-tech-react-components'
+import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
 import {
   PROJECT_STATUS,
   PROJECT_STATUS_COMPLETED,
@@ -34,7 +34,7 @@ const hocStatusDropdown = (CompositeComponent) => {
       return (
         <div className="project-status-dropdown" ref="dropdown">
           <div
-            className={cn('status-header', 'ps-' + selected.value, { active: isOpen, editable: canEdit })}
+            className={cn('status-header', 'status-' + selected.value, { active: isOpen, editable: canEdit })}
             onClick={handleClick}
           >
             <CompositeComponent
@@ -53,17 +53,17 @@ const hocStatusDropdown = (CompositeComponent) => {
               <ul>
                 {
                   PROJECT_STATUS.sort((a, b) => a.dropDownOrder > b.dropDownOrder).map((item) =>
-                    <li key={item.value}>
+                    (<li key={item.value}>
                       <a
                         href="javascript:"
-                        className={cn('status-option', 'ps-' + item.value, { active: item.value === status })}
+                        className={cn('status-option', 'status-' + item.value, { active: item.value === status })}
                         onClick={(e) => {
                           onItemSelect(item.value, e)
                         }}
                       >
                         <ProjectStatus status={item} showText />
                       </a>
-                    </li>
+                    </li>)
                   )
                 }
               </ul>
@@ -113,8 +113,8 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
 
   changeStatus() {
     (this.props.projectId) ?
-    this.props.onChangeStatus(this.props.projectId, this.state.newStatus, this.state.statusChangeReason)
-     : this.props.onChangeStatus(this.state.newStatus, this.state.statusChangeReason)
+      this.props.onChangeStatus(this.props.projectId, this.state.newStatus, this.state.statusChangeReason)
+      : this.props.onChangeStatus(this.state.newStatus, this.state.statusChangeReason)
 
   }
 
@@ -128,7 +128,7 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
     const ProjectStatusDropdown = canEdit ? enhanceDropdown(hocStatusDropdown(CompositeComponent)) : hocStatusDropdown(CompositeComponent)
     return (
       <div className={cn('EditableProjectStatus', {'modal-active': showStatusChangeDialog})}>
-        <div className="modal-overlay"></div>
+        <div className="modal-overlay" />
         <ProjectStatusDropdown {...this.props } onItemSelect={ this.showStatusChangeDialog } />
         { showStatusChangeDialog &&
           <ProjectStatusChangeConfirmation

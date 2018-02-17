@@ -85,22 +85,22 @@ const getProjectTopicsWithMember = (dispatch, projectId, tag) => {
       payload: getTopicsWithComments(projectId, tag),
       meta: { tag, projectId }
     })
-    .then(({ value, action }) => {
-      let userIds = []
-      userIds = _.union(userIds, _.map(value.topics, 'userId'))
-      _.forEach(value.topics, topic => {
-        userIds = _.union(userIds, _.map(topic.posts, 'userId'))
+      .then(({ value, action }) => {
+        let userIds = []
+        userIds = _.union(userIds, _.map(value.topics, 'userId'))
+        _.forEach(value.topics, topic => {
+          userIds = _.union(userIds, _.map(topic.posts, 'userId'))
+        })
+        // this is to remove any nulls from the list (dev had some bad data)
+        _.remove(userIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(i) > -1)
+        // return if there are no userIds to retrieve, empty result set
+        if (!userIds.length)
+          resolve(value)
+        return dispatch(loadMembers(userIds))
+          .then(() => resolve(value))
+          .catch(err => reject(err))
       })
-      // this is to remove any nulls from the list (dev had some bad data)
-      _.remove(userIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(i) > -1)
-      // return if there are no userIds to retrieve, empty result set
-      if (!userIds.length)
-        resolve(value)
-      return dispatch(loadMembers(userIds))
-        .then(() => resolve(value))
-        .catch(err => reject(err))
-    })
-    .catch(err => reject(err))
+      .catch(err => reject(err))
   })
 }
 /*eslint-enable*/

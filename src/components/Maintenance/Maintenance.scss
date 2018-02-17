@@ -1,53 +1,56 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.content.content-error {
-  .container {
-    width: 1220px;
-    background: $tc-gray-neutral-dark;
-  }
-}
-
-.page-error {
-  border-radius:4px;
-  position: relative;
-  padding-top: 55px;
-  text-align: center;
-  min-height: 606px;
-  min-width: 768px;
-  width: 970px;
-  margin: 20px auto 0;
-  background: $tc-white url('../../assets/icons/coder-broken.svg') no-repeat 18% 85%;
-  background-size: 307px 300px;
-  a{
-    color: $tc-dark-blue;
-    &:hover {
-      text-decoration: underline;
+:global {
+  .content.content-error {
+    .container {
+      width: 1220px;
+      background: $tc-gray-neutral-dark;
     }
   }
-  h3{
-    color: $tc-gray-70;
-    @include roboto-medium;
-    font-size: 48px;
-    letter-spacing: 0px;
-    padding: 0 168px 25px 168px;
-    line-height: inherit;
-  }
-  p{
-    text-align: left;
-    padding: 0 168px;
-    @include roboto;
-    font-size: $tc-label-lg;
-    color: $tc-gray-70;
-    letter-spacing: 0px;
-    line-height: 23px;
-  }
-  span{
-    position: absolute;
-    left: 49%;
-    top: 45%;
-    @include roboto-medium;
-    font-size: 190px;
-    color: $tc-orange-30;
-    letter-spacing: 0px;
+  
+  .page-error {
+    border-radius:4px;
+    position: relative;
+    padding-top: 55px;
+    text-align: center;
+    min-height: 606px;
+    min-width: 768px;
+    width: 970px;
+    margin: 20px auto 0;
+    /* background: $tc-white url('../../assets/icons/coder-broken.svg') no-repeat 18% 85%; */
+    background-size: 307px 300px;
+    a{
+      color: $tc-dark-blue;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    h3{
+      color: $tc-gray-70;
+      @include roboto-medium;
+      font-size: 48px;
+      letter-spacing: 0px;
+      padding: 0 168px 25px 168px;
+      line-height: inherit;
+    }
+    p{
+      text-align: left;
+      padding: 0 168px;
+      @include roboto;
+      font-size: $tc-label-lg;
+      color: $tc-gray-70;
+      letter-spacing: 0px;
+      line-height: 23px;
+    }
+    span{
+      position: absolute;
+      left: 49%;
+      top: 45%;
+      @include roboto-medium;
+      font-size: 190px;
+      color: $tc-orange-30;
+      letter-spacing: 0px;
+    }
   }
 }
+  

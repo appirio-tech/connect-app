@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { DOMAIN } from '../../config/constants'
-import { Avatar } from 'appirio-tech-react-components'
+import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 require('./UserWithName.scss')
 
 const UserWithName = ({ handle, firstName, lastName, photoURL }) => {
