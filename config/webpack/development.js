@@ -40,4 +40,10 @@ combinedConfig.entry.main = combinedConfig.entry.main.filter((entry) => (
   entry !== 'webpack-hot-middleware/client?reload=true'
 ))
 
+/*
+  Enable source maps.
+  This also let us see original file names in browser console.
+ */
+combinedConfig.devtool = 'eval'
+
 module.exports = combinedConfig
