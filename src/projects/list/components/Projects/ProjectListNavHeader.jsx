@@ -77,12 +77,12 @@ export default class ProjectListNavHeader extends Component {
       { status: null, label: 'All projects' },
       ...PROJECT_STATUS.sort((a, b) => { 
         if ( a.order < b.order ){
-            return -1;
+          return -1
         }
         if ( a.order > b.order ){
-            return 1;
+          return 1
         }
-        return 0;
+        return 0
       }).map((item) => ({status: item.value, label: item.name}))
     ]
 
