@@ -1,32 +1,17 @@
-import _ from 'lodash'
-import { Icons } from 'appirio-tech-react-components'
-import SVGIconImage from '../../components/SVGIconImage'
-// import NumberText from '../../components/NumberText/NumberText'
-import { findProduct} from '../projectWizard'
-
-
-const isFileRequired = (project, subSections) => {
-  const subSection = _.find(subSections, (s) => s.type === 'questions')
-  const fields = _.filter(subSection.questions, q => q.type.indexOf('see-attached') > -1)
-  // iterate over all seeAttached type fields to check
-  //  if any see attached is checked.
-  return _.some(_.map(
-    _.map(fields, 'fieldName'),
-    fn => _.get(project, `${fn}.seeAttached`)
-  ))
-}
+import React from 'react' // eslint-disable-line no-unused-vars
+import IconTechOutlineMobile from  '../../assets/icons/icon-tech-outline-mobile.svg'
+import IconTechOutlineTablet from  '../../assets/icons/icon-tech-outline-tablet.svg'
+import IconTechOutlineDesktop from  '../../assets/icons/icon-tech-outline-desktop.svg'
+import IconTechOutlineWatchApple from  '../../assets/icons/icon-tech-outline-watch-apple.svg'
+import IconDontKnow from '../../assets/icons/icon-dont-know.svg'
+import IconTestStructured from '../../assets/icons/icon-test-structured.svg'
+import IconTestUnstructured from '../../assets/icons/icon-test-unstructured.svg'
+import { isFileRequired, findTitle, findFilesSectionTitle } from '../projectWizard'
 
 const sections = [
   {
     id: 'appDefinition',
-    title: (project, showProduct) => {
-      const product = _.get(project, 'details.products[0]')
-      if (showProduct && product) {
-        const prd = findProduct(product)
-        if (prd) return prd.name
-      }
-      return 'Definition'
-    },
+    title: findTitle,
     required: true,
     description: 'Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.',
     subSections: [
@@ -56,9 +41,9 @@ const sections = [
             fieldName: 'details.appDefinition.testType',
             type: 'tiled-radio-group',
             options: [
-              {value: 'unstructured', title: 'Unstructured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: '', price: 6000},
-              {value: 'structured', title: 'Structured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-structured', fill: '#00000'}, desc: '', price: 4000},
-              {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
+              {value: 'unstructured', title: 'Unstructured', icon: IconTestUnstructured, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: '', price: 6000},
+              {value: 'structured', title: 'Structured', icon: IconTestStructured, iconOptions: { filePath: 'icon-test-structured', fill: '#00000'}, desc: '', price: 4000},
+              {value: 'dontKnow', title: 'Do not know', icon: IconDontKnow, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
             ]
           },
           {
@@ -73,6 +58,20 @@ const sections = [
               {value: 'true', label: 'Yes I have test cases.'},
               {value: 'false', label: 'No I do not have test cases.'}
             ]
+          },
+          {
+            id: 'projectInfo',
+            fieldName: 'description',
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isRequired,minLength:160',
+            validationErrors: {
+              isRequired : 'Please provide a description',
+              minLength  : 'Please enter at least 160 characters'
+            },
+            description: 'Brief Description',
+            title: 'Description',
+            type: 'textbox'
           },
           {
             icon: 'question',
@@ -92,10 +91,10 @@ const sections = [
             fieldName: 'details.appDefinition.primaryTarget',
             type: 'tiled-radio-group',
             options: [
-              {value: 'phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
-              {value: 'wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+              {value: 'phone', title: 'Phone', icon: IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'tablet', title: 'Tablet', icon: IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'desktop', title: 'Desktop', icon: IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'wearable', title: 'Wearable', icon: IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
           }
         ]
@@ -284,7 +283,7 @@ const sections = [
       {
         id: 'files',
         required: isFileRequired,
-        title: (project) => `Project Files (${_.get(project, 'attachments', []).length})` || 'Files',
+        title: findFilesSectionTitle,
         description: '',
         type: 'files',
         fieldName: 'attachments'
@@ -348,7 +347,7 @@ const sections = [
         required: false,
         fieldName: 'details.devSpecification.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
         type: 'notes'
       }
     ]
@@ -390,9 +389,9 @@ export const basicSections = [
             fieldName: 'details.appDefinition.testType',
             type: 'tiled-radio-group',
             options: [
-              {value: 'unstructured', title: 'Unstructured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: ''},
-              {value: 'structured', title: 'Structured', icon: SVGIconImage, iconOptions: { filePath: 'icon-test-structured',  fill: '#00000'}, desc: ''},
-              {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
+              {value: 'unstructured', title: 'Unstructured', icon: IconTestUnstructured, iconOptions: { filePath: 'icon-test-unstructured', fill: '#00000'}, desc: ''},
+              {value: 'structured', title: 'Structured', icon: IconTestStructured, iconOptions: { filePath: 'icon-test-structured',  fill: '#00000'}, desc: ''},
+              {value: 'dontKnow', title: 'Do not know', icon: IconDontKnow, iconOptions: { filePath: 'icon-dont-know', fill: '#00000'}, desc: ''}
             ]
           },
           {
@@ -407,6 +406,21 @@ export const basicSections = [
               {value: 'true', label: 'Yes I have test cases.'},
               {value: 'false', label: 'No I do not have test cases.'}
             ]
+          },
+          {
+            icon: 'question',
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isRequired,minLength:160',
+            validationErrors: {
+              isRequired : 'Please provide a description',
+              minLength  : 'Please enter at least 160 characters'
+            },
+            id: 'projectInfo',
+            fieldName: 'description',
+            description: 'Brief Description',
+            title: 'Description',
+            type: 'textbox'
           },
           {
             icon: 'question',
@@ -426,10 +440,10 @@ export const basicSections = [
             fieldName: 'details.appDefinition.primaryTarget',
             type: 'tiled-radio-group',
             options: [
-              {value: 'phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
-              {value: 'wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+              {value: 'phone', title: 'Phone', icon: IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'tablet', title: 'Tablet', icon: IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'desktop', title: 'Desktop', icon: IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'wearable', title: 'Wearable', icon: IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
           }
           /*{
@@ -442,7 +456,7 @@ export const basicSections = [
               {value: 'upto5', title: 'configurations', icon: NumberText, iconOptions: { number: '5' }, desc: 'or fewer'},
               {value: 'upTo10', title: 'configurations', icon: NumberText, iconOptions: { number: '10' }, desc: 'or fewer'},
               {value: 'upTo20', title: 'configurations', icon: NumberText, iconOptions: { number: '20' }, desc: 'or fewer'},
-              {value: 'dontKnow', title: 'Do not know', icon: SVGIconImage, iconOptions: { filePath: 'icon-dont-know',  fill: '#00000'}, desc: 'We will find the best fit for you.'}
+              {value: 'dontKnow', title: 'Do not know', icon: IconTestUnstructured, iconOptions: { filePath: 'icon-dont-know',  fill: '#00000'}, desc: 'We will find the best fit for you.'}
             ]
           }
           {

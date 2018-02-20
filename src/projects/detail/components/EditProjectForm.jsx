@@ -1,12 +1,14 @@
-import React, { Component, PropTypes } from 'react'
-import { withRouter } from 'react-router'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Prompt } from 'react-router-dom'
 import Modal from 'react-modal'
 import _ from 'lodash'
 import { unflatten } from 'flat'
 import update from 'react-addons-update'
 import FeaturePicker from './FeatureSelector/FeaturePicker'
-import { Formsy, Icons } from 'appirio-tech-react-components'
-
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const Formsy = FormsyForm.Formsy
+import XMarkIcon from  '../../../assets/icons/icon-x-mark.svg'
 import SpecSection from './SpecSection'
 import { HOC as hoc } from 'formsy-react'
 
@@ -32,7 +34,7 @@ const FeaturePickerModal = ({ project, isEdittable, showFeaturesDialog, hideFeat
         isEdittable={isEdittable} onSave={ setFormValue }
       />
       <div onClick={ hideFeaturesDialog } className="feature-selection-dialog-close">
-        Save and close <Icons.XMarkIcon />
+        Save and close <XMarkIcon />
       </div>
     </Modal>
   )
@@ -96,8 +98,15 @@ class EditProjectForm extends Component {
   }
 
   componentDidMount() {
-    this.props.router.setRouteLeaveHook(this.props.route, this.onLeave)
     window.addEventListener('beforeunload', this.onLeave)
+  }
+
+  autoResize() {
+    if (self.autoResizeSet === true) { return }
+    self.autoResizeSet = true
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'))
+    }, 1000)
   }
 
   componentWillUnmount() {
@@ -106,9 +115,10 @@ class EditProjectForm extends Component {
   }
 
   // Notify user if they navigate away while the form is modified.
-  onLeave(e) {
+  onLeave(e = {}) {
+    this.autoResize()
     if (this.isChanged()) {
-      // TODO: remove this block - it disables unsaved changes popup 
+      // TODO: remove this block - it disables unsaved changes popup
       // for app screens changes
       if (this.refs.form){
         const pristine = this.refs.form.getPristineValues()
@@ -188,6 +198,7 @@ class EditProjectForm extends Component {
   render() {
     const { isEdittable, sections } = this.props
     const { project, dirtyProject } = this.state
+    const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
       const anySectionInvalid = _.some(this.props.sections, (s) => s.isInvalid)
       return (
@@ -213,6 +224,10 @@ class EditProjectForm extends Component {
 
     return (
       <div>
+        <Prompt
+          when={!!onLeaveMessage}
+          message={onLeaveMessage}
+        />
         <Formsy.Form
           ref="form"
           disabled={!isEdittable}
@@ -232,7 +247,7 @@ class EditProjectForm extends Component {
             value={ _.get(project, 'details.appDefinition.features', {})}
           />
         </Formsy.Form>
-        
+
       </div>
     )
   }
@@ -248,4 +263,4 @@ EditProjectForm.propTypes = {
   fireProjectDirtyUndo: PropTypes.func.isRequired
 }
 
-export default withRouter(EditProjectForm)
+export default EditProjectForm

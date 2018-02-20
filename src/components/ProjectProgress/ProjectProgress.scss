@@ -1,29 +1,89 @@
-@import "tc-includes";
+@import '~tc-ui/src/styles/tc-includes';
 
-.project-progress{
-  margin: 10px 0;
-  .progress-bar{
+:global {
+  .project-progress{
     margin: 10px 0;
-    position: relative;
-    background-color: $tc-gray-neutral-dark;
-    height: 4px;
-
-    .progress{
+    .progress-bar{
+      margin: 10px 0;
+      position: relative;
+      background-color: $tc-gray-neutral-dark;
       height: 4px;
-      &.working{
-        background-color: $tc-green;
-      }
-      &.error{
-        background-color: $tc-red-70;
-      }
-      &.completed{
-        background-color: $tc-gray-70;
+  
+      .progress{
+        height: 4px;
+        &.working{
+          background-color: $tc-green;
+        }
+        &.error{
+          background-color: $tc-red-70;
+        }
+        &.completed{
+          background-color: $tc-gray-70;
+        }
       }
     }
+    .progress-remaining{
+      @include roboto-medium;
+      font-size: $tc-label-sm;
+      color: $tc-gray-50;
+    }
   }
-  .progress-remaining{
-    @include roboto-medium;
-    font-size: $tc-label-sm;
-    color: $tc-gray-50;
+  
+  /*
+   * react-circular-progressbar styles
+   *
+   * All of the styles in this file are optional and configurable!
+   */
+  
+  .CircularProgressbar {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .CircularProgressbar .CircularProgressbar-path {
+    stroke: $tc-dark-blue;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.5s ease 0s;
+  }
+  
+  .CircularProgressbar .CircularProgressbar-trail {
+    stroke: $tc-gray-20;
+  }
+  
+  .CircularProgressbar .CircularProgressbar-text {
+    fill: $tc-dark-blue;
+    font-size: 20px;
+    dominant-baseline: middle;
+    text-anchor: middle;
+  }
+  
+  .CircularProgressbar .CircularProgressbar-background {
+    fill: $tc-gray-20;
+  }
+  
+  /*
+   * Sample background styles. Use these with e.g.:
+   *
+   *   <CircularProgressbar
+   *     className="CircularProgressbar-inverted"
+   *     background
+   *     percentage={50}
+   *   />
+   */
+  .CircularProgressbar.CircularProgressbar-inverted .CircularProgressbar-background {
+    fill: $tc-dark-blue;
+  }
+  
+  .CircularProgressbar.CircularProgressbar-inverted .CircularProgressbar-text {
+    fill: $tc-white;
+  }
+  
+  .CircularProgressbar.CircularProgressbar-inverted .CircularProgressbar-path {
+    stroke: $tc-white;
+  }
+  
+  .CircularProgressbar.CircularProgressbar-inverted .CircularProgressbar-trail {
+    stroke: transparent;
   }
 }
+  

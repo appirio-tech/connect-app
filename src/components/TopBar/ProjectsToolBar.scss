@@ -1,257 +1,265 @@
 // this is to include tc styles in the output library
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-// TODO: move to includes
-$tc-rgba-10: rgba(71, 71, 79, 0.38);
-$tc-rgba-20: rgba(0, 0, 0, 0.17);
-$tc-body-large: 20px;
-
-.ProjectsToolBar {
-  margin: 0 auto;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-
-  .primary-toolbar {
-    display: flex;
+:global {
+  // TODO: move to includes
+  $tc-rgba-10: rgba($tc-gray-80, 0.38);
+  $tc-rgba-20: rgba($tc-black, 0.17);
+  $tc-body-large: 20px;
+  
+  .ProjectsToolBar {
+    margin: 0 auto;
     width: 100%;
-    justify-content: space-between;
-
-    .logo-wrapper {
-      margin-left: 4 * $base-unit;
-    }
-
-    .welcome-info {
-      margin-right: 4 * $base-unit;
-    }
-
-    .actions {
-      display: flex;
-    }
-  }
-
-  .secondary-toolbar {
     display: flex;
-  }
-
-  .search-widget {
-    width: 595px;
-    height: 30px;
-    margin-top: 15px;
-    display: flex;
-  }
-
-  .search-filter {
-    width: 97px;
-    margin-left: 2 * $base-unit;
-
-    .tc-btn {
+    flex-direction: column;
+  
+    .primary-toolbar {
       display: flex;
-      align-items: center;
-      // justify-content: center;
-      padding: 0 2 * $base-unit 0 34px;
-      text-align: left;
-      color: $tc-gray-40;
-      background-color: transparent;
-      border-radius: 2px;
-      border: 0;
-      font-size: 12px;
-      position: relative;
-
-      &:before {
-        display: block;
-        content: '';
-        width: 14px;
-        height: 16px;
-        position: absolute;
-        top: 7px;
-        left: 10px;
-        background: url("../../styles/i/icon-filter.png") left top no-repeat;
-        background-size: 14px 32px;
+      width: 100%;
+      justify-content: space-between;
+  
+      .logo-wrapper {
+        margin-left: 4 * $base-unit;
       }
-
-      &.active {
-        background: $tc-gray-80;
-        box-shadow: inset 0px 1px 3px 0px $tc-rgba-10;
-
-        &:before {
-          background: url("../../styles/i/icon-filter.png") left -16px no-repeat;
-          background-size: 14px 32px;
+  
+      .MenuBar {
+        li.selected {
+          // hides the bottom border as per https://github.com/appirio-tech/connect-app/issues/1267#issuecomment-343298713
+          border-bottom: none;
         }
       }
+  
+      .primary-filters {
+        margin-top: 15px;
+      }
+  
+      .welcome-info {
+        margin-right: 4 * $base-unit;
+  
+        .avatar-info {
+          .username {
+            display: none;
+          }
+        }
+      }
+  
+      .actions {
+        display: flex;
+      }
     }
-
-    .filter-indicator {
-      width: 15px;
-      height: 15px;
-      margin-left: $base-unit;
-      background-color: $tc-dark-blue-90;
-      border-radius: 26px;
-      color: $tc-white;
+  
+    .secondary-toolbar {
       display: flex;
-      justify-content: center;
-      align-items: center;
     }
-  }
-
-  /* .bar__search */
-  .bar__search {
-    position: relative;
-    min-height: 60px;
-    height: 60px;
-    padding: 0 20px;
-    background-color: $tc-gray-neutral-light;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-    display: flex;
-    width: 100%;
-
-    h2 {
-      font-size: $tc-body-large;
-      line-height: 60px;
-      color: $tc-black;
-      width: 120px;
-      white-space: nowrap;
+  
+    .MenuBar li {
+      align-items: center; // should reside in MenuBar component instead
+  
+      a {
+        text-transform: uppercase;
+        font-size: $tc-label-xs;
+        line-height: 6 * $base-unit;
+      }
+  
+      &.selected a {
+        color: $tc-gray-10;
+      }
     }
-
-    .bar-control {
-      width: 120px;
-      text-align: right;
-      min-height: 30px;
-      padding-top: 15px;
-
+  
+    .search-widget {
+      width: 595px;
+      height: 30px;
+      margin-top: 15px;
+      display: flex;
+    }
+  
+    .search-filter {
+      width: 97px;
+      margin-left: 2 * $base-unit;
+  
       .tc-btn {
-        display: inline-block;
-        height: 30px;
+        display: flex;
+        align-items: center;
+        // justify-content: center;
+        padding: 0 2 * $base-unit 0 10px;
+        text-align: left;
+        color: $tc-gray-40;
+        background-color: transparent;
+        border-radius: 2px;
+        border: 0;
+        font-size: 12px;
+        position: relative;
+  
+        svg.icon-search-filter {
+          margin-right: 10px;
+        }
+  
+        &.active {
+          background: $tc-gray-80;
+          box-shadow: inset 0px 1px 3px 0px $tc-rgba-10;
+  
+          svg.icon-search-filter g {
+            fill: #fff;
+          }
+        }
+      }
+  
+      .filter-indicator {
+        width: 15px;
+        height: 15px;
+        margin-left: $base-unit;
+        background-color: $tc-dark-blue;
+        border-radius: 26px;
+        color: $tc-white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  
+    /* .bar__search */
+    .bar__search {
+      align-items: center;
+      box-sizing: border-box;
+      position: relative;
+      min-height: 60px;
+      padding: 10px 20px;
+      background-color: $tc-gray-20;
+      border-bottom: 1px solid $tc-gray-40;
+      box-shadow: 0 2px 5px 0 rgba($tc-black, 0.25);
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+  
+      h2 {
+        font-size: $tc-body-large;
+        color: $tc-black;
         white-space: nowrap;
       }
-    }
-
-    .search-panel {
-      flex: 1;
-      margin: 0 auto;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      padding-top: 15px;
-      flex-wrap: wrap;
-
-      label {
-        @include roboto-medium;
-        width: 83px;
-        display: inline-block;
-        line-height: 30px;
-        height: 30px;
-        font-size: 13px;
-        color: $tc-gray-70;
+  
+      .bar-control {
+        width: 120px;
         text-align: right;
-      }
-
-      .search-select-widget {
-        width: 280px;
-        margin-left: 10px;
-        display: inline-block;
-      }
-    }
-
-    .SwitchButton {
-      .label {
-        padding-right: 10px;
-      }
-    }
-  }
-}
-
-.project-creation-dialog-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 21;/* +1 of the z-index of the topbar */
-  background-color: #fafafb;
-  /*background-color: $tc-gray-neutral-dark;*/
-  overflow-y: scroll;
-  opacity: 1;
-  transition: all .250ms ease-in-out;
-
-  .IncompleteProjectConfirmation {
-    margin-top: 0px;
-  }
-
-  .SelectProduct {
-    margin-top: 30px;
-  }
-
-  section.content {
-    padding: 1px 0;
-  }
-
-  .escape-button {
-    position: absolute;
-    right: 12px;
-    top: 12px;
-    z-index: 22;/* +1 from z-index of the modal overlay */
-  }
-
-  // .FillProjectDetailsWrapper {
-//   margin-top: -60px; // Counteract the push from the main wrapper, top of vewport
-// }
-}
-
-.project-creation-dialog {
-  top: 0px;
-  left: 0px;
-
-  .Wizard .content {
-  }
-
-  .TextInput.project-name,
-  .TextInput.project-ref-code {
-    height: 45px;
-  }
-}
-
-/*.project-creation-dialog-close {
-  cursor: pointer;
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  text-align: center;
-
-  & .x-mark-icon {
-    width: 100%;
-    height: 100%;
-  }
-}*/
-
-
-@media all and (max-width: 1023px) {
-  .bar__search {
-    h2 {
-      width: 110px;
-    }
-
-    .search-panel {
-      flex: 1;
-      margin: 0 auto;
-      text-align: left;
-      display: flex;
-      justify-content: flex-start;
-
-      label {
-        width: auto;
-        margin-left: 30px;
-
-        &.first {
-          margin-left: 0;
+        min-height: 30px;
+        padding-top: 15px;
+  
+        .tc-btn {
+          display: inline-block;
+          height: 30px;
+          white-space: nowrap;
         }
       }
-
-      .search-select-widget {
-        width: 170px;
+  
+      .search-panel {
+        flex: 1;
+        margin: 0 auto;
+        text-align: center;
+        display: flex;
+        justify-content: space-between;
+        padding-right: 30px;
+  
+        .search-select-widget {
+          align-items: center;
+          display: flex;
+          margin-left: 40px;
+          flex: 1;
+  
+          label {
+            @include roboto-medium;
+            display: inline-block;
+            line-height: 30px;
+            height: 30px;
+            font-size: 13px;
+            color: $tc-gray-70;
+            padding-right: 15px;
+            text-align: right;
+            white-space: nowrap;
+          }
+        }
+  
+        .search-select-field {
+          flex: 1;
+        }
       }
     }
   }
+  
+  .SwitchButton .label {
+    padding-right: 10px;
+    text-align: right;
+    width: auto;
+    width: auto;
+    cursor: pointer;
+    transition: 200ms ease-in-out all;
+  
+    &:hover {
+      color: $tc-gray-30;
+    }
+  }
+  
+  .project-creation-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 21;/* +1 of the z-index of the topbar */
+    background-color: $tc-gray-neutral-light;
+    /*background-color: $tc-gray-neutral-dark;*/
+    overflow-y: scroll;
+    opacity: 1;
+    transition: all .250ms ease-in-out;
+  
+    .IncompleteProjectConfirmation {
+      margin-top: 0px;
+    }
+  
+    .SelectProduct {
+      margin-top: 30px;
+    }
+  
+    section.content {
+      padding: 1px 0;
+    }
+  
+    .escape-button {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      z-index: 22;/* +1 from z-index of the modal overlay */
+    }
+  
+    // .FillProjectDetailsWrapper {
+    //   margin-top: -60px; // Counteract the push from the main wrapper, top of vewport
+    // }
+  }
+  
+  .project-creation-dialog {
+    top: 0px;
+    left: 0px;
+  
+    .Wizard .content {
+    }
+  
+    .TextInput.project-name,
+    .TextInput.project-ref-code {
+      height: 45px;
+    }
+  }
+  
+  /*.project-creation-dialog-close {
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+  
+    & .x-mark-icon {
+      width: 100%;
+      height: 100%;
+    }
+  }*/
 }
+  

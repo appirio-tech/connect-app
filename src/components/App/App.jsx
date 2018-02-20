@@ -11,4 +11,8 @@ const App = (props) => {
   )
 }
 
+export const renderApp = (topbar, content) => () => (
+  <App {...{topbar, content}} />
+)
+
 export default App

@@ -1,148 +1,151 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.feature-form {
-  padding: 10 * $base-unit;
-  border: none;
-  box-shadow: none;
-
-  &.modal-active {
-    position: inherit;
-
-    .modal-overlay {
-      background-color: $tc-gray-neutral-dark;
+:global {
+  .feature-form {
+    padding: 10 * $base-unit;
+    border: none;
+    box-shadow: none;
+  
+    &.modal-active {
+      position: inherit;
+  
+      .modal-overlay {
+        background-color: $tc-gray-neutral-dark;
+      }
     }
-  }
-
-  .feature-title-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 4 * $base-unit;
-    padding-bottom: 2 * $base-unit;
-    border-bottom: 1px solid $tc-gray-10;
-
-    .title {
-      @include tc-heading;
-      @include roboto-medium;
-      flex: 1;
-      color: $tc-black;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .separator {
-      width: 1px;
-      height: 25px;
-      background-color: $tc-gray-10;
-      margin: 0px 2 * $base-unit;
-    }
-
-    .feature-actions {
+  
+    .feature-title-row {
       display: flex;
-      align-items: center;
-
-      .feature-edit-action {
-        margin-right: 2 * $base-unit;
-        fill: $tc-gray-40;
-        height: 16px;
+      justify-content: space-between;
+      margin-bottom: 4 * $base-unit;
+      padding-bottom: 2 * $base-unit;
+      border-bottom: 1px solid $tc-gray-10;
+  
+      .title {
+        @include tc-heading;
+        @include roboto-medium;
+        flex: 1;
+        color: $tc-black;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
-
-      .feature-delete-action {
-        fill: $tc-gray-40;
-        height: 16px;
+  
+      .separator {
+        width: 1px;
+        height: 25px;
+        background-color: $tc-gray-10;
+        margin: 0px 2 * $base-unit;
       }
-    }
-  }
-
-  .feature-form-content {
-    .feature-description {
-      @include roboto;
-      font-size: $tc-body-md;
-      line-height: 5 * $base-unit;
-      font-weight: 400;
-      color: $tc-gray-50;
-      margin: 4 * $base-unit 0px;
-    }
-
-    .predefined-feature-form,
-    .custom-feature-form {
-      .feature-notes {
-        label {
-          @include tc-label-md;
-          color: $tc-gray-70;
+  
+      .feature-actions {
+        display: flex;
+        align-items: center;
+  
+        .feature-edit-action {
+          margin-right: 2 * $base-unit;
+          fill: $tc-gray-40;
+          height: 16px;
         }
-
-        textarea {
-          height: 100px;
-          overflow: auto;
-          @include tc-label-lg;
-          color: $tc-black;
+  
+        .feature-delete-action {
+          fill: $tc-gray-40;
+          height: 16px;
         }
       }
     }
-
-    .custom-feature-form {
+  
+    .feature-form-content {
       .feature-description {
-        label {
-          @include tc-label-md;
-          color: $tc-gray-70;
+        @include roboto;
+        font-size: $tc-body-md;
+        line-height: 5 * $base-unit;
+        font-weight: 400;
+        color: $tc-gray-50;
+        margin: 4 * $base-unit 0px;
+      }
+  
+      .predefined-feature-form,
+      .custom-feature-form {
+        .feature-notes {
+          label {
+            @include tc-label-md;
+            color: $tc-gray-70;
+          }
+  
+          textarea {
+            height: 100px;
+            overflow: auto;
+            @include tc-label-lg;
+            color: $tc-black;
+          }
         }
-
-        textarea {
-          height: 100px;
-          @include tc-label-lg;
-          color: $tc-black;
+      }
+  
+      .custom-feature-form {
+        .feature-description {
+          label {
+            @include tc-label-md;
+            color: $tc-gray-70;
+          }
+  
+          textarea {
+            height: 100px;
+            @include tc-label-lg;
+            color: $tc-black;
+          }
+        }
+      }
+  
+      .feature-form-actions {
+        display: flex;
+        justify-content: center;
+  
+        button + button {
+          margin-left: 4 * $base-unit;
         }
       }
     }
-
-    .feature-form-actions {
-      display: flex;
-      justify-content: center;
-
-      button + button {
-        margin-left: 4 * $base-unit;
+  
+    .delete-feature-modal {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 21;/* +1 of the z-index of the topbar */
+  
+      .button-area {
+        button + button {
+          margin-left: 2 * $base-unit;
+        }
       }
     }
-  }
-
-  .delete-feature-modal {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 21;/* +1 of the z-index of the topbar */
-
-    .button-area {
-      button + button {
-        margin-left: 2 * $base-unit;
+  
+    .description {
+      textarea {
+        margin-top: 64px;
+        height: 150px;
       }
     }
-  }
-
-  .description {
-    textarea {
-      margin-top: 64px;
-      height: 150px;
-    }
-  }
-
-  // Switch button extensions
-  .SwitchButton {
-    & > * {
-      cursor: pointer;
-    }
-
-    .label {
-      transition: color 200ms ease-in-out;
-      -moz-user-select: none;
-      -webkit-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-
-    &:hover .label {
-      color: $tc-black;
+  
+    // Switch button extensions
+    .SwitchButton {
+      & > * {
+        cursor: pointer;
+      }
+  
+      .label {
+        transition: color 200ms ease-in-out;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+  
+      &:hover .label {
+        color: $tc-black;
+      }
     }
   }
 }
+  

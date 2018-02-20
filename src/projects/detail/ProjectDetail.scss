@@ -1,75 +1,73 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-// FIXME: bad names for variables;
-$gray-color: $tc-gray-50;
-$title-color: $tc-gray-80;
-// FIXME: repeated mixin use! Use global
-@mixin flexBox {
-  display: box;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  -o-flex-direction: row;
-  flex-direction: row;
-  width: auto;
-}
-// FIXME: repeated mixin use!
-@mixin flexWidth($number) {
-  -webkit-box-flex: $number;
-  -moz-box-flex: $number;
-  -webkit-flex: $number;
-  -ms-flex: $number;
-  flex: $number;
-}
-.project-detail {
-.container {
-  @include flexBox;
-  background-color: transparent;
-  /* .left-area */
-  .left-area {
-    @include flexWidth(1);
-    .left-area-panel {
-      min-width: 400px;
-      margin-right: 20px;
-      margin-left: 20px;
-      margin-bottom: 20px;
-      background-color: #fff;
-      padding: 20px 0;
-      border-radius: 4px;
-      // min-width: 100px;
-    }
+:global {
+  // FIXME: bad names for variables;
+  $gray-color: $tc-gray-50;
+  $title-color: $tc-gray-80;
+  // FIXME: repeated mixin use! Use global
+  @mixin flexBox {
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    -o-flex-direction: row;
+    flex-direction: row;
+    width: auto;
   }
-  // FIXME: overly nexted code
-  .right-area {
-    @include flexWidth(2);
-    border-radius: 4px;
-    .title {
-      color: $title-color;
-      @include roboto;
-    }
-    .right-area-item {
-      overflow: hidden;
-      padding: 50px 0 20px 0;
-      margin-bottom: $base-unit;
-      border-radius: 4px;
-      background-color: #fff;
-      .boxes {
-        margin: 0 15%;
-      }
-      .big-titles {
-        @include roboto-light;
-        font-size: 28px;
-        color: $gray-color;
-        line-height: 30px;
+  // FIXME: repeated mixin use!
+  @mixin flexWidth($number) {
+    -webkit-box-flex: $number;
+    -moz-box-flex: $number;
+    -webkit-flex: $number;
+    -ms-flex: $number;
+    flex: $number;
+  }
+  .project-detail {
+  .container {
+    @include flexBox;
+    background-color: transparent;
+    /* .left-area */
+    .left-area {
+      @include flexWidth(1);
+      .left-area-panel {
+        min-width: 400px;
+        margin-right: 20px;
+        margin-left: 20px;
         margin-bottom: 20px;
+        background-color: $tc-white;
+        padding: 20px 0;
+        border-radius: 4px;
+        // min-width: 100px;
+      }
+    }
+    // FIXME: overly nexted code
+    .right-area {
+      @include flexWidth(2);
+      border-radius: 4px;
+      .title {
+        color: $title-color;
+        @include roboto;
+      }
+      .right-area-item {
+        overflow: hidden;
+        padding: 50px 0 20px 0;
+        margin-bottom: $base-unit;
+        border-radius: 4px;
+        background-color: $tc-white;
+        .boxes {
+          margin: 0 15%;
+        }
+        .big-titles {
+          @include roboto-light;
+          font-size: 28px;
+          color: $gray-color;
+          line-height: 30px;
+          margin-bottom: 20px;
+        }
       }
     }
   }
+  }
 }
-}
+  

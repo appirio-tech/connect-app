@@ -44,9 +44,11 @@ const products = {
       'Watson Chatbot': {
         brief: 'Watson Chatbot',
         details: 'Build Chatbot using IBM Watson',
+        formTitle: 'AI Chatbot with Watson',
+        formDesclaimer: 'IBM is receiving compensation from Topcoder for referring customers to Topcoder.',
         icon: 'product-chatbot-watson',
         id: 'watson_chatbot',
-        aliases: ['watson_chatbot'],
+        aliases: ['watson_chatbot', 'watson-chatbot'],
         hidden: true
       },
       Chatbot: {
@@ -55,6 +57,37 @@ const products = {
         icon: 'product-chatbot-chatbot',
         id: 'generic_chatbot',
         aliases: ['chatbot', 'generic_chatbot']
+      },
+      'Computer Vision': {
+        brief: 'TBD',
+        details: 'Work with images to recognize patterns, compute correspondences, etc',
+        icon: 'product-qa-crowd-testing',
+        id: 'computer_vision',
+        aliases: ['computer-vision', 'computer_vision'],
+        hidden : true
+      }, /*,
+      'Algorithm Optimization': {
+        brief: 'TBD',
+        details: 'Boost the performance (speed or accuracy) of an existing or new algorithm',
+        icon: 'product-qa-crowd-testing',
+        id: 'algorithm_optimization',
+        aliases: ['algorithm_optimization', 'algorithm-optimization', 'algo_optimization']
+      },
+      'Predictive Analytics': {
+        brief: 'TBD',
+        details: 'Starting with a set of data and well-defined objectives, model trends and predict outcomes',
+        icon: 'product-qa-crowd-testing',
+        id: 'predictive-analytics',
+        aliases: ['predictive-analytics', 'predictive_analytics']
+      },
+      */
+      'Data Exploration': {
+        brief: 'TBD',
+        details: 'Ask a crowd of experts to look at your data, understand your goals, and suggest solutions',
+        icon: 'product-qa-crowd-testing',
+        id: 'data_exploration',
+        aliases: ['data-exploration', 'data_exploration'],
+        hidden  : true
       }
     }
   },
@@ -70,7 +103,10 @@ const products = {
         details: 'Plan and explore the navigation and structure of your app',
         icon: 'product-design-wireframes',
         id: 'wireframes',
-        aliases: ['wireframes']
+        aliases: ['wireframes'],
+        basePriceEstimate: 5000,
+        baseTimeEstimateMin: 7,
+        baseTimeEstimateMax: 10
       },
       'App Visual Design - Concepts': {
         brief: '1-15 screens',
@@ -85,7 +121,10 @@ const products = {
         details: 'Create development-ready designs',
         icon: 'product-design-app-visual',
         id: 'visual_design_prod',
-        aliases: ['visual-design', 'visual_design_prod']
+        aliases: ['visual-design', 'visual_design_prod'],
+        basePriceEstimate: 5000,
+        baseTimeEstimateMin: 7,
+        baseTimeEstimateMax: 10
       },
       Infographic: {
         brief: 'Infographic',
@@ -100,7 +139,10 @@ const products = {
         details: 'Get help with other types of design',
         icon: 'product-design-other',
         id: 'generic_design',
-        aliases: ['generic-design', 'generic_design']
+        aliases: ['generic-design', 'generic_design'],
+        basePriceEstimate: 5000,
+        baseTimeEstimateMin: 7,
+        baseTimeEstimateMax: 10
       }
     }
   },
@@ -142,9 +184,49 @@ const products = {
       }
     }
   },
-  'Real World Testing': {
-    icon: 'product-qa-crowd-testing',
-    info: 'Exploratory Testing, Cross browser-device Testing',
+  'Analytics & Data Science': {
+    icon: 'product-cat-analytics',
+    info: 'Algorithm optimization, analtytics & data science projects',
+    question: 'What type of analytics project are you interested in?',
+    id: 'analytics',
+    aliases: ['all-analytics'],
+    hidden: true,
+    subtypes: {
+      'Computer Vision': {
+        brief: 'TBD',
+        details: 'Recognize patters in images, compute correspondences, etc.',
+        icon: 'product-analytics-computer-vision',
+        id: 'computer_vision',
+        aliases: ['computer-vision', 'computer_vision'],
+        hidden: true
+      },
+      // 'Algorithm Optimization': {
+      //   brief: 'TBD',
+      //   details: 'Boost the performance of an existing or new algorithm',
+      //   icon: 'product-analytics-algorithm-optimization',
+      //   id: 'algorithm_optimization',
+      //   aliases: ['algorithm_optimization', 'algorithm-optimization', 'algo_optimization']
+      // },
+      // 'Predictive Analytics': {
+      //   brief: 'TBD',
+      //   details: 'Model trends and predict outcomes via set of data and objectives',
+      //   icon: 'product-analytics-predictive-analytics',
+      //   id: 'predictive-analytics',
+      //   aliases: ['predictive-analytics', 'predictive_analytics']
+      // },
+      'Data Exploration': {
+        brief: 'TBD',
+        details: 'Review your data, extrapolate patterns, and suggest solutions',
+        icon: 'product-analytics-data-exploration',
+        id: 'data_exploration',
+        aliases: ['data-exploration', 'data_exploration'],
+        hidden: true
+      }
+    }
+  },
+  QA: {
+    icon: 'product-cat-qa',
+    info: 'Test and fix bugs in your software',
     question: 'What kind of quality assurance (QA) do you need?',
     id: 'quality_assurance',
     aliases: ['all-quality-assurance'],
@@ -161,18 +243,33 @@ const products = {
         details: 'App Certification, Lab on Hire, User Sentiment Analysis',
         icon: 'product-qa-mobility-testing',
         id: 'mobility_testing',
-        aliases: ['mobility-testing', 'mobility_testing'],
-        disabled: true
+        aliases: ['mobility-testing', 'mobility_testing']
       },
-      'Website Performance': {
+      'Performance Testing': {
         brief: 'TBD',
         details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
         icon: 'product-qa-website-performance',
-        id: 'website_performance',
-        aliases: ['website-performance', 'website_performance'],
-        disabled: true
+        id: 'performance_testing',
+        aliases: ['performance-testing', 'performance_testing'],
+        hidden: true
       },
-      'Digital Accessability': {
+      'Health Security Check': {
+        brief: 'TBD',
+        details: 'Measure your code base against our security baseline using the crowd and tooling ',
+        icon: 'product-qa-health-check',
+        id: 'health_check',
+        aliases: ['health-check', 'health_check'  ],
+        hidden: true
+      },
+      'Performance Tuning': {
+        brief: 'TBD',
+        details: 'Analyze your JVM based applications and generate recommendations',
+        icon: 'product-qa-website-performance',
+        id: 'performance_tuning',
+        aliases: ['performance-tuning', 'performance_tuning'],
+        hidden: true
+      },
+      'Digital Accessibility': {
         brief: 'TBD',
         details: 'Make sure you app or website conforms to all rules and regulations',
         icon: 'product-qa-digital-accessability',
@@ -198,6 +295,47 @@ const products = {
       }
     }
   }
+
+  /*
+  Analytics: {
+    icon: 'product-cat-qa',
+    info: 'Test and fix bugs in your software',
+    question: 'What kind of quality assurance (QA) do you need?',
+    id: 'analytics',
+    aliases: ['all-analytics'],
+    hidden: true,
+    subtypes: {
+      'Computer Vision': {
+        brief: 'TBD',
+        details: 'Work with images to recognize patterns, compute correspondences, etc',
+        icon: 'product-qa-crowd-testing',
+        id: 'computer_vision',
+        aliases: ['computer-vision', 'computer_vision']
+      },
+      'Algorithm Optimization': {
+        brief: 'TBD',
+        details: 'Boost the performance (speed or accuracy) of an existing or new algorithm',
+        icon: 'product-qa-crowd-testing',
+        id: 'algorithm_optimization',
+        aliases: ['algorithm_optimization', 'algorithm-optimization', 'algo_optimization']
+      },
+      'Predictive Analytics': {
+        brief: 'TBD',
+        details: 'Starting with a set of data and well-defined objectives, model trends and predict outcomes',
+        icon: 'product-qa-crowd-testing',
+        id: 'predictive-analytics',
+        aliases: ['predictive-analytics', 'predictive_analytics']
+      },
+      'Data Exploration': {
+        brief: 'TBD',
+        details: 'Ask a crowd of experts to look at your data, understand your goals, and suggest solutions',
+        icon: 'product-qa-crowd-testing',
+        id: 'data-exploration',
+        aliases: ['data-exploration', 'data_exploration']
+      }
+    }
+  }
+  */
 }
 
 export default products
@@ -236,7 +374,7 @@ export function findCategory(categoryId, aliasesOnly = false) {
   for(const key in products) {
     const product = products[key]
     if (!product.disabled && ((product.id === categoryId && !aliasesOnly) || (product.aliases && product.aliases.indexOf(categoryId) !== -1))) {
-      return { ...product, name: key} 
+      return { ...product, name: key}
     }
   }
   return null
@@ -311,4 +449,100 @@ export function getProjectCreationTemplateField(product, sectionId, subSectionId
     return subSection.fieldName === fieldName ? subSection : null
   }
   return null
+}
+
+/**
+ * Helper method to get price and time estimate for the given product.
+ *
+ * @param {string} productId id of the product. It should resolve to a valid product template
+ * @param {object} productConfig project object which contains the current value
+ * 
+ * @return {object} object containing price and time estimate
+ */
+export function getProductEstimate(productId, productConfig) {
+  let specification = 'topcoder.v1'
+  let product = null
+  let price = 0
+  let minTime = 0
+  let maxTime = 0
+  if (productId) {
+    specification = typeToSpecification[productId]
+    product = findProduct(productId)
+    price = _.get(product, 'basePriceEstimate', 0)
+    minTime = _.get(product, 'baseTimeEstimateMin', 0)
+    maxTime = _.get(product, 'baseTimeEstimateMax', 0)
+  }
+  const sections = require(`../projectQuestions/${specification}`).default
+  if (sections) {
+    sections.forEach((section) => {
+      const subSections = section.subSections
+      if (subSections) {
+        subSections.forEach((subSection) => {
+          // supporting only questions sub section
+          if (subSection.type === 'questions') {
+            const questions = subSection.questions
+            questions.forEach((q) => {
+              // right now we are supporting only radio-group and tiled-radio-group type of questions
+              if(['radio-group', 'tiled-radio-group'].indexOf(q.type) !== -1 && q.affectsQuickQuote) {
+                const answer = _.get(productConfig, q.fieldName)
+                const qOption = _.find(q.options, (o) => o.value === answer)
+                price += _.get(qOption, 'quoteUp', 0)
+                minTime += _.get(qOption, 'minTimeUp', 0)
+                maxTime += _.get(qOption, 'maxTimeUp', 0)
+              }
+            })
+          }
+        })
+      }
+    })
+  }
+  return { priceEstimate: price, minTime, maxTime, durationEstimate: `${minTime}-${maxTime} days`}
+}
+
+/**
+ * Finds if files are required for project
+ *
+ * @param {object} project       project object
+ * @param {object} subSections   subSections object
+ *
+ * @return {boolean} true if files required, else false
+ */
+export function isFileRequired(project, subSections) {
+  const subSection = _.find(subSections, (s) => s.type === 'questions')
+  const fields = _.filter(subSection.questions, q => q.type.indexOf('see-attached') > -1)
+  // iterate over all seeAttached type fields to check
+  //  if any see attached is checked.
+  return _.some(_.map(
+    _.map(fields, 'fieldName'),
+    fn => _.get(project, `${fn}.seeAttached`)
+  ))
+}
+
+/**
+ * Finds the title for the product
+ *
+ * @param {object}  project       project object to fetch the product title
+ * @param {boolean} showProduct   flag to check whether to show title from config or not
+ *
+ * @return {string} title of the product
+ */
+export function findTitle(project, showProduct) {
+  const product = _.get(project, 'details.products[0]')
+  if (showProduct && product) {
+    const prd = findProduct(product)
+    if (prd) return prd.name
+  }
+  return 'Definition'
+}
+
+/**
+ * Finds the title for the project files section 
+ *
+ * @param {object}  project    project object to fetch the product title
+ *
+ *
+ * @return {string} title for the project files section
+ */
+export function findFilesSectionTitle(project) {
+  return `Project Files (${_.get(project, 'attachments', []).length})` || 'Files'
 }

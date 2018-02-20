@@ -1,8 +1,11 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import cn from 'classnames'
 import _ from 'lodash'
 import { branch, renderComponent } from 'recompose'
-import { Tooltip } from 'appirio-tech-react-components'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
+import BtnPrev from '../../assets/icons/arrow-left.svg'
+import BtnNext from '../../assets/icons/arrow-left.svg'
 
 const NUMBER_OF_PILLS = 5
 
@@ -12,7 +15,7 @@ const noop = () => <noscript />
  */
 const identity = t => t
 const showPagination = (hasPages) =>
- branch (hasPages, identity, renderComponent(noop))
+  branch (hasPages, identity, renderComponent(noop))
 const enhance = showPagination( ({totalCount, pageSize}) =>
   Math.ceil(totalCount / pageSize) > 1)
 
@@ -159,11 +162,21 @@ const PaginationBar = enhance(({onPageChange, currentPageNum, totalCount, pageSi
   return (
     <div className="pages">
       <nav className="right-page">
-        { currentPageNum > 1 && <a href="javascript:" onClick={handlePageSelection} className="btn-prev">Prev</a> }
+        { currentPageNum > 1 && 
+        <a href="javascript:" onClick={handlePageSelection}>
+          Prev
+          <BtnPrev className="btn-prev"/>
+        </a>
+        }
         <ul>
           { pagePills.map(pagePill => pagePill)}
         </ul>
-        { currentPageNum < pages && <a href="javascript:" onClick={handlePageSelection} className="btn-next">Next</a> }
+        { currentPageNum < pages && 
+          <a href="javascript:" onClick={handlePageSelection}>
+            Next
+            <BtnNext className="btn-next"/>
+          </a>
+        }
       </nav>
     </div>
   )

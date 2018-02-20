@@ -1,9 +1,16 @@
 import _ from 'lodash'
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import filesize from 'filesize'
-import { Icons } from 'appirio-tech-react-components'
+import moment from 'moment'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
+import UserWithName from '../User/UserWithName'
+import { TOOLTIP_DEFAULT_DELAY } from '../../config/constants'
+import TrashIcon from  '../../assets/icons/icon-trash.svg'
+import CloseIcon from  '../../assets/icons/icon-close.svg'
+import EditIcon from  '../../assets/icons/icon-edit.svg'
+import SaveIcon from  '../../assets/icons/icon-save.svg'
 
-const { TrashIcon, CloseIcon, EditIcon, SaveIcon } = Icons
 
 export default class FileListItem extends React.Component {
 
@@ -88,13 +95,22 @@ export default class FileListItem extends React.Component {
   }
 
   renderReadOnly() {
-    const {title, downloadUrl, description, size, isEditable} = this.props
+    const {title, downloadUrl, description, size, isEditable, updatedAt, createdAt, createdByUser, updatedByUser} = this.props
+
     return (
       <div>
         <div className="title">
           <h4><a href={downloadUrl} target="_blank" rel="noopener noreferrer">{title}</a></h4>
           <div className="size">
             {filesize(size)}
+            <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+              <div className="tooltip-target">
+                <p className="date">{moment(updatedAt || createdAt).format('MMM DD, YYYY')}</p>
+              </div>
+              <div className="tooltip-body">
+                <UserWithName {...(updatedByUser || createdByUser)} />
+              </div>
+            </Tooltip>
           </div>
           {isEditable && <div className="edit-icons">
             <i className="icon-edit" onClick={this.startEdit}><EditIcon /></i>
@@ -110,9 +126,9 @@ export default class FileListItem extends React.Component {
     const { isEditing } = this.state
     let iconPath
     try {
-      iconPath = require('./images/' + this.props.contentType.split('/')[1] +'.svg')
+      iconPath = require('../../assets/icons/' + this.props.contentType.split('/')[1] +'.svg')
     } catch(err) {
-      iconPath = require('./images/default.svg')
+      iconPath = require('../../assets/icons/default.svg')
     }
 
     return (
@@ -136,6 +152,10 @@ FileListItem.propTypes = {
   size: PropTypes.number.isRequired,
   contentType: PropTypes.string,
   isEditable: PropTypes.bool,
+  updatedAt: PropTypes.string,
+  createdAt: PropTypes.string.isRequired,
+  updatedByUser: PropTypes.object,
+  createdByUser: PropTypes.object.isRequired,
 
   /**
    * Callback fired when a save button is clicked

@@ -1,8 +1,11 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PT from 'prop-types'
 import ReactDOM from 'react-dom'
 import uncontrollable from 'uncontrollable'
-import { Avatar } from 'appirio-tech-react-components'
+import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { AUTOCOMPLETE_TRIGGER_LENGTH } from '../../config/constants'
+import UserIcon from  '../../assets/icons/username-icon.svg'
+
 
 class AutoCompleteInput extends React.Component {
 
@@ -37,13 +40,14 @@ class AutoCompleteInput extends React.Component {
         ReactDOM.findDOMNode(this.refs.input).focus()
         onSelectNewMember(member, e)
       }
+
       return (
         <div
           onClick={onClick}
           className="dropdown-cell"
           key={i}
         >
-          <Avatar size={30} avatarUrl={member.photoURL}/>
+          <Avatar size={30} avatarUrl={member.photoURL} userName={member.firstName ? (member.firstName + ' ' + member.lastName) : 'Connect user'} />
           <div className="handle">{member.handle}</div>
         </div>
       )
@@ -59,9 +63,12 @@ class AutoCompleteInput extends React.Component {
           </div>
         }
 
-        <span className="input-icon">
-          {selectedNewMember && <img src={selectedNewMember.photoURL} />}
-        </span>
+        <div className="input-icon">
+          {selectedNewMember
+            ? <Avatar size={30} avatarUrl={selectedNewMember.photoURL} userName={selectedNewMember.firstName ? (selectedNewMember.firstName + ' ' + selectedNewMember.lastName) : 'Connect user'} />
+            : <UserIcon/>
+          }
+        </div>
         <input
           autoFocus
           ref="input"
@@ -79,12 +86,12 @@ class AutoCompleteInput extends React.Component {
 }
 
 AutoCompleteInput.propTypes = {
-  searchMembers: PropTypes.array,
-  keyword: PropTypes.string,
-  isPopupVisible: PropTypes.bool,
-  onKeywordChange: PropTypes.func,
-  onSelectNewMember: PropTypes.func,
-  onToggleSearchPopup: PropTypes.func
+  searchMembers: PT.array,
+  keyword: PT.string,
+  isPopupVisible: PT.bool,
+  onKeywordChange: PT.func,
+  onSelectNewMember: PT.func,
+  onToggleSearchPopup: PT.func
 }
 
 export default uncontrollable(AutoCompleteInput, {

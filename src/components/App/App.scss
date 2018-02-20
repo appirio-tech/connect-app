@@ -1,18 +1,21 @@
-@import 'tc-styles';
+@import '~tc-ui/src/styles/tc-styles';
 
-body {
-  min-width: 320px;
-  background-color: $tc-gray-neutral-dark;
-
-  iframe#tc-accounts-iframe {
-    display: none;
+:global {
+  body {
+    min-width: 320px;
+    background-color: $tc-gray-neutral-dark;
+  
+    iframe#tc-accounts-iframe {
+      display: none;
+    }
+  }
+  
+  .ReactModal__Body--open {
+    overflow: hidden;
+  }
+  
+  .ReactModal__Content--after-open {
+    outline: none;
   }
 }
-
-.ReactModal__Body--open {
-  overflow: hidden;
-}
-
-.ReactModal__Content--after-open {
-  outline: none;
-}
+  

@@ -57,8 +57,8 @@ const getTopicsWithComments = (projectId, tag) => {
       // if a topic has more than 20 posts then to display the latest posts,
       // we'll have to first retrieve them from the server
       _.forEach(topics, (t) => {
-        if (t.postIds.length > 20) {
-          const postIds = t.postIds.slice(20).slice(-6)
+        if (t.posts.length < t.postIds.length) {
+          const postIds = t.postIds.slice(t.postIds.length).slice(-6)
           additionalPosts.push(getTopicPosts(t.id, postIds))
         }
         t.posts = _.sortBy(t.posts, ['id'])
@@ -85,22 +85,22 @@ const getProjectTopicsWithMember = (dispatch, projectId, tag) => {
       payload: getTopicsWithComments(projectId, tag),
       meta: { tag, projectId }
     })
-    .then(({ value, action }) => {
-      let userIds = []
-      userIds = _.union(userIds, _.map(value.topics, 'userId'))
-      _.forEach(value.topics, topic => {
-        userIds = _.union(userIds, _.map(topic.posts, 'userId'))
+      .then(({ value, action }) => {
+        let userIds = []
+        userIds = _.union(userIds, _.map(value.topics, 'userId'))
+        _.forEach(value.topics, topic => {
+          userIds = _.union(userIds, _.map(topic.posts, 'userId'))
+        })
+        // this is to remove any nulls from the list (dev had some bad data)
+        _.remove(userIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(i) > -1)
+        // return if there are no userIds to retrieve, empty result set
+        if (!userIds.length)
+          resolve(value)
+        return dispatch(loadMembers(userIds))
+          .then(() => resolve(value))
+          .catch(err => reject(err))
       })
-      // this is to remove any nulls from the list (dev had some bad data)
-      _.remove(userIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(i) > -1)
-      // return if there are no userIds to retrieve, empty result set
-      if (!userIds.length)
-        resolve(value)
-      return dispatch(loadMembers(userIds))
-        .then(() => resolve(value))
-        .catch(err => reject(err))
-    })
-    .catch(err => reject(err))
+      .catch(err => reject(err))
   })
 }
 /*eslint-enable*/

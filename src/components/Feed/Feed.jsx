@@ -1,11 +1,12 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import cn from 'classnames'
 import ActionCard from '../ActionCard/ActionCard'
 import Panel from '../Panel/Panel'
 import FeedComments from './FeedComments'
-import { Avatar } from 'appirio-tech-react-components'
-import {Link} from 'react-router'
+import UserTooltip from '../User/UserTooltip'
+import {Link} from 'react-router-dom'
 import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
 
@@ -40,9 +41,9 @@ class Feed extends React.Component {
 
   render() {
     const {
-      user, currentUser, date, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
+      id, user, currentUser, date, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
       allowComments, comments, unread, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
-      onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, permalink
+      onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, permalink, allMembers
     } = this.props
     const {editTopicMode} = this.state
     let authorName = user.firstName
@@ -55,7 +56,7 @@ class Feed extends React.Component {
     return (
       <ActionCard>
         {editTopicMode && (
-        <RichTextArea
+          <RichTextArea
             editMode
             messageId={topicMessage.id}
             isGettingComment={topicMessage.isGettingComment}
@@ -70,36 +71,38 @@ class Feed extends React.Component {
             avatarUrl={user.photoURL}
             authorName={authorName}
             cancelEdit={this.cancelEditTopic}
-        />
+            allMembers={allMembers}
+          />
         )}
         {!editTopicMode && (
-        <Panel.Body className={cn({active: unread})}>
-          <div className="portrait">
-            <Avatar avatarUrl={user.photoURL} userName={authorName} />
-          </div>
-          <div className="object topicBody">
-            <div className="card-title">
-              <div>{title}</div>
-              {self && (
-                <CommentEditToggle
-                  forTopic
-                  hideDelete={comments.length > 0}
-                  onEdit={this.onEditTopic}
-                  onDelete={onDeleteTopic}
-                />
-              )}
+          <Panel.Body className={cn({active: unread})}>
+            <div className="portrait" id={`feed-${id}`}>
+              {/* <Avatar avatarUrl={user.photoURL} userName={authorName} /> */}
+              <UserTooltip usr={user} id={id} previewAvatar size={35} />
             </div>
-            <div className="card-profile">
-              <div className="card-author">
-                { authorName }
+            <div className="object topicBody">
+              <div className="card-title">
+                <div>{title}</div>
+                {self && (
+                  <CommentEditToggle
+                    forTopic
+                    hideDelete={comments.length > 0}
+                    onEdit={this.onEditTopic}
+                    onDelete={onDeleteTopic}
+                  />
+                )}
               </div>
-              <div className="card-time">
-                <Link to={permalink}>{moment(date).fromNow()}</Link>
+              <div className="card-profile">
+                <div className="card-author">
+                  { authorName }
+                </div>
+                <div className="card-time">
+                  <Link to={permalink}>{moment(date).fromNow()}</Link>
+                </div>
               </div>
+              <div className="card-body draftjs-post" dangerouslySetInnerHTML={{__html: topicMessage.content}} />
             </div>
-            <div className="card-body draftjs-post" dangerouslySetInnerHTML={{__html: topicMessage.content}} />
-          </div>
-        </Panel.Body>
+          </Panel.Body>
         )}
         <FeedComments
           allowComments={allowComments}
@@ -117,6 +120,7 @@ class Feed extends React.Component {
           onSaveMessageChange={onSaveMessageChange}
           onSaveMessage={onSaveMessage}
           onDeleteMessage={onDeleteMessage}
+          allMembers={allMembers}
         />
         {children}
         {isDeletingTopic &&

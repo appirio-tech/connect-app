@@ -1,5 +1,5 @@
-import _ from 'lodash'
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import Panel from '../Panel/Panel'
 import AddComment from '../ActionCard/AddComment'
@@ -29,17 +29,17 @@ class FeedComments extends React.Component {
 
   render() {
     const {
-    comments, currentUser, totalComments, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
-    onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage
-  } = this.props
+      comments, currentUser, totalComments, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
+      onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage, allMembers
+    } = this.props
     let authorName = currentUser.firstName
     if (authorName && currentUser.lastName) {
       authorName += ' ' + currentUser.lastName
     }
     const handleLoadMoreClick = () => {
       this.setState({showAll: true})
-    // TODO - handle the case when a topic has more than 20 comments
-    // since those will have to retrieved from the server
+      // TODO - handle the case when a topic has more than 20 comments
+      // since those will have to retrieved from the server
       if (!isLoadingComments) {
         onLoadMoreComments()
       }
@@ -53,43 +53,43 @@ class FeedComments extends React.Component {
     // }
 
     return (
-    <div>
-      <Panel.Body className="comment-count-container">
-        <div className="portrait" />
-        <div className="object">
-          <div className="card-body comment-section">
-            <div className="comment-count">
-              {getCommentCount(totalComments)}
+      <div>
+        <Panel.Body className="comment-count-container">
+          <div className="portrait" />
+          <div className="object">
+            <div className="card-body comment-section">
+              <div className="comment-count">
+                {getCommentCount(totalComments)}
+              </div>
+              <hr className={cn({'no-margin': !comments.length})} />
+              {hasMoreComments && <div className={cn('comment-collapse', {'loading-comments': isLoadingComments})}>
+                <a href="javascript:" onClick={ handleLoadMoreClick } className="comment-collapse-button">
+                  {isLoadingComments ? 'Loading...' : 'View older comments'}
+                </a>
+              </div>}
             </div>
-            <hr className={cn({'no-margin': !comments.length})} />
-            {hasMoreComments && <div className={cn('comment-collapse', {'loading-comments': isLoadingComments})}>
-              <a href="javascript:" onClick={ handleLoadMoreClick } className="comment-collapse-button">
-                {isLoadingComments ? 'Loading...' : 'View older comments'}
-              </a>
-            </div>}
           </div>
-        </div>
-      </Panel.Body>
-      {comments.map((item, idx) =>
-        <Comment
-          key={idx}
-          message={item}
-          avatarUrl={ _.get(item, 'author.photoURL', null)}
-          authorName={item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user'}
-          date={moment(item.date).fromNow()}
-          edited={item.edited}
-          active={item.unread}
-          self={item.author && item.author.userId === currentUser.userId}
-          onChange={this.onSaveMessageChange.bind(this, item.id)}
-          onSave={onSaveMessage}
-          onDelete={onDeleteMessage}
-          isSaving={item.isSavingComment}
-          hasError={item.error}
-        >
-          <div dangerouslySetInnerHTML={{__html: item.content}} />
-        </Comment>
-      )}
-      {allowComments &&
+        </Panel.Body>
+        {comments.map((item, idx) => (
+          <Comment
+            key={idx}
+            message={item}
+            author={item.author}
+            date={moment(item.date).fromNow()}
+            edited={item.edited}
+            active={item.unread}
+            self={item.author && item.author.userId === currentUser.userId}
+            onChange={this.onSaveMessageChange.bind(this, item.id)}
+            onSave={onSaveMessage}
+            onDelete={onDeleteMessage}
+            isSaving={item.isSavingComment}
+            hasError={item.error}
+            allMembers={allMembers}
+          >
+            <div dangerouslySetInnerHTML={{__html: item.content}} />
+          </Comment>
+        ))}
+        {allowComments &&
       <AddComment
         placeholder="Create a new comment..."
         onAdd={onAddNewComment}
@@ -98,9 +98,10 @@ class FeedComments extends React.Component {
         authorName={authorName}
         isAdding={isAddingComment}
         hasError={error}
+        allMembers={allMembers}
       />}
-    </div>
-  )
+      </div>
+    )
   }
 }
 FeedComments.propTypes = {

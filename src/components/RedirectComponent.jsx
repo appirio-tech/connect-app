@@ -1,7 +1,8 @@
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 
 const RedirectComponent = (props) => {
   window.location = props.redirectTo
+  return null
 }
 
 RedirectComponent.propTypes = {

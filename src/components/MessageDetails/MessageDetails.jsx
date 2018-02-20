@@ -1,5 +1,6 @@
 import _ from 'lodash'
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import './MessageDetails.scss'
 import ActionCard from '../ActionCard/ActionCard'
@@ -45,40 +46,42 @@ class MessageDetails extends React.Component {
       authorName += ' ' + currentUser.lastName
     }
     return (
-    <ActionCard className="main-messaging">
-      <ActionCard.Header {...this.props}
-        self={topicMessage.author && topicMessage.author.userId === currentUser.userId}
-        authorName={authorName}
-        avatarUrl={topicMessage.author.photoURL}
-        hideDelete={messages && messages.length > 1}
-      >
-        {hasMoreMessages && <BtnSeparator onClick={this.handleLoadMoreClick} isLoadingComments={isLoadingComments}>
-          {isLoadingComments ? 'Loading...' : 'Load earlier messages'}
-        </BtnSeparator>}
-      </ActionCard.Header>
-      {messages && messages.map((item, idx) =>
-        <Comment
-          key={idx}
-          message={item}
-          avatarUrl={_.get(item, 'author.photoURL', null)}
-          authorName={item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user'}
-          date={moment(item.date).fromNow()}
-          edited={item.edited}
-          active={item.unread}
-          self={item.author && item.author.userId === currentUser.userId}
-          onEdit={this.onEditMessage.bind(this, item.id)}
-          onChange={this.onSaveMessageChange.bind(this, item.id)}
-          onSave={onSaveMessage}
-          onDelete={onDeleteMessage}
-          isSaving={item.isSavingComment}
-          hasError={item.error}
-          readonly={item.id === topicMessage.id}
+      <ActionCard className="main-messaging">
+        <ActionCard.Header {...this.props}
+          self={topicMessage.author && topicMessage.author.userId === currentUser.userId}
+          authorName={authorName}
+          avatarUrl={topicMessage.author.photoURL}
+          hideDelete={messages && messages.length > 1}
         >
-          <div dangerouslySetInnerHTML={{__html: item.content}} />
-        </Comment>
-      )}
+          {hasMoreMessages && <BtnSeparator onClick={this.handleLoadMoreClick} isLoadingComments={isLoadingComments}>
+            {isLoadingComments ? 'Loading...' : 'Load earlier messages'}
+          </BtnSeparator>}
+        </ActionCard.Header>
+        {messages && messages.map((item, idx) =>
+          (
+            <Comment
+              key={idx}
+              message={item}
+              author={item.author}
+              avatarUrl={_.get(item, 'author.photoURL', null)}
+              authorName={item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user'}
+              date={moment(item.date).fromNow()}
+              edited={item.edited}
+              active={item.unread}
+              self={item.author && item.author.userId === currentUser.userId}
+              onEdit={this.onEditMessage.bind(this, item.id)}
+              onChange={this.onSaveMessageChange.bind(this, item.id)}
+              onSave={onSaveMessage}
+              onDelete={onDeleteMessage}
+              isSaving={item.isSavingComment}
+              hasError={item.error}
+              readonly={item.id === topicMessage.id}
+            >
+              <div dangerouslySetInnerHTML={{__html: item.content}} />
+            </Comment>)
+        )}
 
-      { allowAddingComment &&
+        { allowAddingComment &&
         <AddComment
           className="messaging-comment-section"
           isAdding={isAddingComment}
@@ -89,14 +92,14 @@ class MessageDetails extends React.Component {
           onChange={onNewMessageChange}
           threadId={this.props.id}
         />
-      }
-      {isDeletingTopic &&
+        }
+        {isDeletingTopic &&
       <div className="deleting-layer">
         <div>Deleting post ...</div>
       </div> 
-      }
-    </ActionCard>
-  )
+        }
+      </ActionCard>
+    )
   }
 }
 

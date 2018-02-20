@@ -1,66 +1,57 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.ProjectOutline {
-  display: flex;
-  flex-direction: column;
-  background-color: $tc-white;
-  box-shadow: 0px 1px 3px 0px $tc-gray-30;
-  padding: 5*$base-unit;
-  border-radius: 4px;
-
-  h5 {
-    width: 100%;
-    margin-bottom: $base-unit * 4;
-    font-size: 12px;
-    color: $tc-gray-50;
-    text-transform: uppercase;
-  }
-
-  .project-name {
-    color: $tc-gray-80;
-    @include roboto-bold;
-    margin-bottom: $base-unit * 2;
-    align-self: center;
-    width: 100%;
-    word-break: break-all;
-  }
+:global {
+  .ProjectOutline {
+    display: flex;
+    flex-direction: column;
+    background-color: $tc-white;
+    box-shadow: 0px 1px 3px 0px $tc-gray-30;
+    padding: 5*$base-unit;
+    border-radius: 4px;
   
-  .project-product {
-    color: $tc-gray-50;
-    @include roboto;
-    margin-bottom: $base-unit * 4;
-    display: none;
-  }
-
-  .project-description {
-    line-height: 5*$base-unit;
-    margin-top: $base-unit * 4;
-    margin-bottom: $base-unit * 4;
-    word-break: break-all;
-    white-space: pre-line;
-  }
-
-  .project-meta-data {
-    margin-top: $base-unit * 4;
-    .project-meta-data-row {
-      display: flex;
-      .visual-design-project-estimate-section {
-        margin-left: 0;
-        margin-right: 0;
-      }
-      .project-meta-data-label {
-        flex: 1;
-        color: $tc-gray-50;
-
-        @include tc-label-md;
-        @include roboto-bold;
-      }
-
-      .project-meta-data-value {
-        flex: 3;
-        @include tc-label-md;
-        @include roboto-bold;
+    h5 {
+      width: 100%;
+      margin-bottom: $base-unit * 4;
+      font-size: 12px;
+      color: $tc-gray-50;
+      text-transform: uppercase;
+    }
+  
+    .project-product {
+      color: $tc-gray-50;
+      @include roboto;
+      margin-bottom: $base-unit * 4;
+      display: none;
+    }
+  
+    .project-description {
+      color: $tc-gray-80;
+      @include tc-label-md;
+    }
+  
+    .project-meta-data {
+      margin-top: $base-unit * 4;
+      .project-meta-data-row {
+        display: flex;
+        .visual-design-project-estimate-section {
+          margin-left: 0;
+          margin-right: 0;
+        }
+        .project-meta-data-label {
+          flex: 1;
+          color: $tc-gray-50;
+  
+          @include tc-label-md;
+          @include roboto-bold;
+        }
+  
+        .project-meta-data-value {
+          flex: 3;
+          @include tc-label-md;
+          @include roboto-bold;
+        }
       }
     }
   }
 }
+  

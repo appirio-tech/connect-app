@@ -6,6 +6,34 @@
 export const LOAD_USER_SUCCESS     = 'LOAD_USER_SUCCESS'
 export const LOAD_USER_FAILURE     = 'LOAD_USER_FAILURE'
 
+// Notifications
+export const GET_NOTIFICATIONS = 'GET_NOTIFICATIONS'
+export const SET_NOTIFICATIONS_FILTER_BY = 'SET_NOTIFICATIONS_FILTER_BY'
+export const MARK_ALL_NOTIFICATIONS_READ = 'MARK_ALL_NOTIFICATIONS_READ'
+export const TOGGLE_NOTIFICATION_READ = 'TOGGLE_NOTIFICATION_READ'
+export const VIEW_OLDER_NOTIFICATIONS_SUCCESS = 'VIEW_OLDER_NOTIFICATIONS_SUCCESS'
+export const NOTIFICATIONS_PENDING = 'NOTIFICATIONS_PENDING'
+
+// Settings
+export const CHECK_EMAIL_AVAILABILITY_PENDING = 'CHECK_EMAIL_AVAILABILITY_PENDING'
+export const CHECK_EMAIL_AVAILABILITY_SUCCESS = 'CHECK_EMAIL_AVAILABILITY_SUCCESS'
+export const CHECK_EMAIL_AVAILABILITY_FAILURE = 'CHECK_EMAIL_AVAILABILITY_FAILURE'
+
+export const CHANGE_EMAIL_PENDING = 'CHANGE_EMAIL_PENDING'
+export const CHANGE_EMAIL_SUCCESS = 'CHANGE_EMAIL_SUCCESS'
+export const CHANGE_EMAIL_FAILURE = 'CHANGE_EMAIL_FAILURE'
+
+export const CHANGE_PASSWORD_PENDING = 'CHANGE_PASSWORD_PENDING'
+export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS'
+export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE'
+
+export const GET_NOTIFICATION_SETTINGS_PENDING = 'GET_NOTIFICATION_SETTINGS_PENDING'
+export const GET_NOTIFICATION_SETTINGS_SUCCESS = 'GET_NOTIFICATION_SETTINGS_SUCCESS'
+export const GET_NOTIFICATION_SETTINGS_FAILURE = 'GET_NOTIFICATION_SETTINGS_FAILURE'
+export const SAVE_NOTIFICATION_SETTINGS_PENDING = 'SAVE_NOTIFICATION_SETTINGS_PENDING'
+export const SAVE_NOTIFICATION_SETTINGS_SUCCESS = 'SAVE_NOTIFICATION_SETTINGS_SUCCESS'
+export const SAVE_NOTIFICATION_SETTINGS_FAILURE = 'SAVE_NOTIFICATION_SETTINGS_FAILURE'
+
 // Search Term
 export const SET_SEARCH_TERM   = 'SET_SEARCH_TERM'
 export const SET_SEARCH_TAG    = 'SET_SEARCH_TAG'
@@ -22,7 +50,9 @@ export const GET_PROJECTS               = 'GET_PROJECTS'
 export const GET_PROJECTS_PENDING       = 'GET_PROJECTS_PENDING'
 export const GET_PROJECTS_SUCCESS       = 'GET_PROJECTS_SUCCESS'
 export const GET_PROJECTS_FAILURE       = 'GET_PROJECTS_FAILURE'
-export const GET_PROJECTS_SEARCH_CRITERIA = 'GET_PROJECTS_SEARCH_CRITERIA'
+export const SET_PROJECTS_SEARCH_CRITERIA = 'SET_PROJECTS_SEARCH_CRITERIA'
+export const SET_PROJECTS_INFINITE_AUTOLOAD = 'SET_PROJECTS_INFINITE_AUTOLOAD'
+export const SET_PROJECTS_LIST_VIEW = 'SET_PROJECTS_LIST_VIEW'
 
 
 // Delete project
@@ -113,6 +143,13 @@ export const DELETE_PROJECT_FEED_COMMENT_PENDING  = 'DELETE_PROJECT_FEED_COMMENT
 export const DELETE_PROJECT_FEED_COMMENT_SUCCESS  = 'DELETE_PROJECT_FEED_COMMENT_SUCCESS'
 export const DELETE_PROJECT_FEED_COMMENT_FAILURE  = 'DELETE_PROJECT_FEED_COMMENT_FAILURE'
 
+// Project Sort
+export const PROJECT_SORT             = 'PROJECT_SORT'
+export const PROJECT_SORT_FAILURE     = 'PROJECT_SORT_FAILURE'
+export const PROJECT_SORT_SUCCESS     = 'PROJECT_SORT_SUCCESS'
+export const PROJECT_SORT_PENDING     = 'PROJECT_SORT_PENDING'
+
+
 // Project Load
 export const LOAD_PROJECT             = 'LOAD_PROJECT'
 export const LOAD_PROJECT_PENDING     = 'LOAD_PROJECT_PENDING'
@@ -188,15 +225,34 @@ export const PROJECT_STATUS_CANCELLED = 'cancelled'
 export const PROJECT_STATUS_PAUSED = 'paused'
 
 export const PROJECT_STATUS = [
-  {color: 'gray', name: 'Draft', value: PROJECT_STATUS_DRAFT },
-  {color: 'gray', name: 'In Review', value: PROJECT_STATUS_IN_REVIEW },
-  {color: 'gray', name: 'Reviewed', value: PROJECT_STATUS_REVIEWED },
-  {color: 'green', name: 'Active', value: PROJECT_STATUS_ACTIVE },
-  {color: 'black', name: 'Completed', value: PROJECT_STATUS_COMPLETED },
-  {color: 'black', name: 'Cancelled', value: PROJECT_STATUS_CANCELLED },
-  {color: 'red', name: 'Paused', value: PROJECT_STATUS_PAUSED }
+  {color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
+  {color: 'gray', name: 'In review', fullName: 'Project is in review', value: PROJECT_STATUS_IN_REVIEW, order: 3, dropDownOrder: 2 },
+  {color: 'gray', name: 'Reviewed', fullName: 'Project is reviewed', value: PROJECT_STATUS_REVIEWED, order: 4, dropDownOrder: 3 },
+  {color: 'green', name: 'Active', fullName: 'Project is active', value: PROJECT_STATUS_ACTIVE, order: 1, dropDownOrder: 4 },
+  {color: 'black', name: 'Completed', fullName: 'Project is completed', value: PROJECT_STATUS_COMPLETED, order: 5, dropDownOrder: 5 },
+  {color: 'black', name: 'Cancelled', fullName: 'Project is cancelled', value: PROJECT_STATUS_CANCELLED, order: 6, dropDownOrder: 6 },
+  {color: 'red', name: 'Paused', fullName: 'Project is paused', value: PROJECT_STATUS_PAUSED, order: 7, dropDownOrder: 7 }
 ]
 
+// this defines default criteria to filter projects for projects list
+export const PROJECT_LIST_DEFAULT_CRITERIA = {
+  sort: 'updatedAt desc'
+}
+
+export const NOTIFICATION_TYPE = {
+  WARNING: 'warning',
+  NEW_PROJECT: 'new-project',
+  UPDATES: 'updates',
+  NEW_POSTS: 'new-posts',
+  REVIEW_PENDING: 'review-pending',
+  MEMBER_ADDED: 'member-added'
+}
+
+// projects list view types
+export const PROJECTS_LIST_VIEW = {
+  GRID: 'grid',
+  CARD: 'card'
+}
 
 /*
  * Project member role
@@ -205,6 +261,7 @@ export const PROJECT_ROLE_COPILOT = 'copilot'
 export const PROJECT_ROLE_MANAGER = 'manager'
 export const PROJECT_ROLE_CUSTOMER = 'customer'
 export const PROJECT_ROLE_OWNER = 'owner'
+export const PROJECT_ROLE_MEMBER = 'member' // this is need for notifications
 
 /*
  * Events
@@ -217,6 +274,7 @@ export const EVENT_ROUTE_CHANGE = 'event.route_change'
 export const ROLE_TOPCODER_USER = 'Topcoder User'
 export const ROLE_CONNECT_COPILOT = 'Connect Copilot'
 export const ROLE_CONNECT_MANAGER = 'Connect Manager'
+export const ROLE_CONNECT_ADMIN = 'Connect Admin'
 export const ROLE_ADMINISTRATOR = 'administrator'
 
 // FIXME .. remove defaults
@@ -237,6 +295,7 @@ export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL |
 export const TC_API_URL = `https://api.${DOMAIN}`
 export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?formData.projectId=`
 export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
+export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || TC_API_URL
 
 export const PROJECT_NAME_MAX_LENGTH = 255
 export const PROJECT_REF_CODE_MAX_LENGTH = 7
@@ -258,6 +317,75 @@ export const MAINTENANCE_MODE = false
 
 export const LS_INCOMPLETE_PROJECT = 'incompleteProject'
 
+
+export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
 export const CONNECT_MESSAGE_API_URL = process.env.CONNECT_MESSAGE_API_URL || TC_API_URL
 
 export const NEW_PROJECT_PATH = '/new-project'
+
+// Analytics constants
+export const GA_CLICK_ID  = '_gclid'
+export const GA_CLIENT_ID = '_gacid'
+
+// ToolTip
+export const TOOLTIP_DEFAULT_DELAY = 300 // in ms
+
+
+// Projects list
+export const PROJECTS_LIST_PER_PAGE = 20
+
+/*eslint-disable camelcase */
+//Project type to icon name mapping
+export const PROJECT_ICON_MAP = {
+  app: 'product-cat-app',
+  application_development: 'product-app-app',
+  website: 'product-cat-website',
+  website_development: 'product-website-website',
+  chatbot: 'product-cat-chatbot',
+  watson_chatbot: 'product-chatbot-watson',
+  generic_chatbot: 'product-chatbot-chatbot',
+  visual_design: 'product-cat-design',
+  wireframes: 'product-design-wireframes',
+  visual_design_concepts: 'product-design-app-visual',
+  visual_design_prod: 'product-design-app-visual',
+  infographic: 'product-design-infographic',
+  generic_design: 'product-design-other',
+  app_dev: 'product-cat-development',
+  visual_prototype: 'product-dev-prototype',
+  frontend_dev: 'product-dev-front-end-dev',
+  api_dev: 'product-dev-integration',
+  generic_dev: 'product-dev-other',
+  quality_assurance: 'product-cat-qa',
+  real_world_testing: 'product-qa-crowd-testing',
+  mobility_testing: 'product-qa-mobility-testing',
+  performance_testing: 'product-qa-website-performance',
+  digital_accessability: 'product-qa-digital-accessability',
+  open_source_automation: 'product-qa-os-automation',
+  consulting_adivisory: 'product-qa-consulting'
+}
+/*eslint-enable */
+//Project sort options
+export const SORT_OPTIONS = [
+  { val: 'updatedAt desc', field: 'updatedAt' },
+  { val: 'createdAt', field: 'createdAt' },
+  { val: 'createdAt desc', field: 'createdAt' }
+]
+
+// Notifications
+export const REFRESH_NOTIFICATIONS_INTERVAL = 1000 * 60 * 1 // 1 minute interval
+export const REFRESH_UNREAD_UPDATE_INTERVAL = 1000 * 10 * 1 // 10 second interval
+export const NOTIFCATIONS_DROPDOWN_PER_SOURCE = 10
+export const NOTIFCATIONS_DROPDOWN_MAX_TOTAL = Infinity
+
+export const NOTIFICATIONS_LIMIT = 1000
+// old notification time in minutes, a notification is old if its date is later than this time
+export const OLD_NOTIFICATION_TIME = 60 * 48 // 2 day2
+
+export const SCROLL_TO_MARGIN = 70 // px - 60px of toolbar height + 10px to make sume margin
+export const SCROLL_TO_DURATION = 500 // ms
+
+// Settings
+export const MAX_USERNAME_LENGTH = 15
+export const EMAIL_AVAILABILITY_CHECK_DEBOUNCE = 300 /* in ms */
+export const PASSWORD_MIN_LENGTH = 8
+export const PASSWORD_REG_EXP = /^(?=.*[a-z])(?=.*[^a-z]).+$/i

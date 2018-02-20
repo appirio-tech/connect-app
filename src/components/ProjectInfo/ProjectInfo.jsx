@@ -1,11 +1,12 @@
-import React, {PropTypes, Component} from 'react'
+import React, { Component } from 'react'
+import PT from 'prop-types'
 import Panel from '../Panel/Panel'
-import ProjectType from '../ProjectType/ProjectType'
-import ProjectStatus from '../ProjectStatus/ProjectStatus'
-import ProjectProgress from '../ProjectProgress/ProjectProgress'
 import DeleteProjectModal from './DeleteProjectModal'
+import ProjectCardHeader from '../../projects/list/components/Projects/ProjectCardHeader'
+import ProjectCardBody from '../../projects/list/components/Projects/ProjectCardBody'
+import ProjectDirectLinks from '../../projects/list/components/Projects/ProjectDirectLinks'
 
-require('./ProjectInfo.scss')
+import './ProjectInfo.scss'
 
 class ProjectInfo extends Component {
 
@@ -28,44 +29,49 @@ class ProjectInfo extends Component {
   }
 
   render() {
-    const { projectId, description, type, directLinks, devices, currentMemberRole, status, onChangeStatus, duration,
-      canDeleteProject } = this.props
+    const { project, currentMemberRole, duration, canDeleteProject, onChangeStatus, directLinks, isSuperUser } = this.props
     const { showDeleteConfirm } = this.state
-    const displayProgress = status !== 'cancelled'
     return (
-      <Panel>
-        <Panel.Title>Project</Panel.Title>
-        { canDeleteProject && !showDeleteConfirm &&
-          <Panel.DeleteBtn onClick={this.toggleProjectDelete} />
-        }
-        { showDeleteConfirm &&
-          <DeleteProjectModal
-            onCancel={this.toggleProjectDelete}
-            onConfirm={this.onConfirmDelete}
+      <div className="project-info">
+        <div className="project-info-header">
+          <ProjectCardHeader
+            project={project}
           />
-        }
-        <ProjectType projectId={projectId} type={type} devices={devices} description={ description } />
-        <ProjectStatus directLinks={directLinks} currentMemberRole={currentMemberRole} status={status} onChangeStatus={onChangeStatus} />
-        {displayProgress && <ProjectProgress {...duration}>
-          {duration.text}
-        </ProjectProgress>}
-        {/* <ProjectProgress title="Budget" percent={budget.percent} type="working">
-          {budget.text}
-        </ProjectProgress> */}
-      </Panel>
+          {canDeleteProject && !showDeleteConfirm &&
+            <div className="project-delete-icon">
+              <Panel.DeleteBtn onClick={this.toggleProjectDelete} />
+            </div>
+          }
+        </div>
+        <Panel>
+          {showDeleteConfirm &&
+            <DeleteProjectModal
+              onCancel={this.toggleProjectDelete}
+              onConfirm={this.onConfirmDelete}
+            />
+          }
+        </Panel>
+        <ProjectCardBody
+          project={project}
+          currentMemberRole={currentMemberRole}
+          duration={duration}
+          descLinesCount={4}
+          onChangeStatus={onChangeStatus}
+          isSuperUser={isSuperUser}
+          showLink
+        />
+        <ProjectDirectLinks
+          directLinks={directLinks}
+        />
+      </div>
     )
   }
 }
 
 ProjectInfo.propTypes = {
-  currentMemberRole: PropTypes.string,
-  type: PropTypes.string.isRequired,
-  devices: PropTypes.array.isRequired,
-  directLinks: PropTypes.array,
-  status: PropTypes.string.isRequired,
-  onChangeStatus: PropTypes.func.isRequired,
-  duration: PropTypes.object.isRequired,
-  budget: PropTypes.object.isRequired
+  project: PT.object.isRequired,
+  currentMemberRole: PT.string,
+  duration: PT.object.isRequired
 }
 
 export default ProjectInfo

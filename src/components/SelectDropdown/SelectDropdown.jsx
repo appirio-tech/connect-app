@@ -1,9 +1,10 @@
 require('./SelectDropdown.scss')
 
 import _ from 'lodash'
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { HOC as hoc } from 'formsy-react'
-import Dropdown from '../Dropdown/Dropdown'
+import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 
 class SelectDropdown extends Component {
   constructor(props) {
@@ -12,11 +13,19 @@ class SelectDropdown extends Component {
   }
 
   componentWillMount() {
+    let selectedOption = _.find(this.props.options, (o) => o.value === this.props.value)
+    if (!selectedOption) {
+      selectedOption = this.props.options[0]
+    }
     this.setState({
-      selectedOption: this.props.selectedOption || this.props.options[0]
-    }, function() {
-      this.props.setValue(this.state.selectedOption)
-    })
+      selectedOption
+    }/*, function() {
+      // FIXME intentionally commented because it was causing multiple renders when used in mobility testing template
+      // Need to further analyze
+      // It does not seem to add any value either in both of its usage (it is used in App Screens section 
+      // for design projects and in mobility testing projects)
+      this.props.setValue(this.state.selectedOption.value)
+    }*/)
   }
 
   handleClick(option) {
@@ -25,13 +34,13 @@ class SelectDropdown extends Component {
         this.props.onSelect(this.state.selectedOption)
       }
     })
-    this.props.setValue(option)
+    this.props.setValue(option.value)
   }
 
   render() {
     const { options, theme } = this.props
     const { selectedOption } = this.state
-    let selectedValue = selectedOption.title
+    const selectedValue = selectedOption.title
 
     const renderOption = (option, optIdx) => {
       const handleOptionClick = this.handleClick.bind(this, option)

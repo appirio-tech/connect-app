@@ -1,31 +1,15 @@
-import React from 'react'
-import _ from 'lodash'
-import { Icons } from 'appirio-tech-react-components'
+import React from 'react' // eslint-disable-line no-unused-vars
+import IconTechOutlineMobile from  '../../assets/icons/icon-tech-outline-mobile.svg'
+import IconTechOutlineTablet from  '../../assets/icons/icon-tech-outline-tablet.svg'
+import IconTechOutlineDesktop from  '../../assets/icons/icon-tech-outline-desktop.svg'
+import IconTechOutlineWatchApple from  '../../assets/icons/icon-tech-outline-watch-apple.svg'
 import NumberText from '../../components/NumberText/NumberText'
-import { findProduct} from '../projectWizard'
-
-const isFileRequired = (project, subSections) => {
-  const subSection = _.find(subSections, (s) => s.type === 'questions')
-  const fields = _.filter(subSection.questions, q => q.type.indexOf('see-attached') > -1)
-  // iterate over all seeAttached type fields to check
-  //  if any see attached is checked.
-  return _.some(_.map(
-    _.map(fields, 'fieldName'),
-    fn => _.get(project, `${fn}.seeAttached`)
-  ))
-}
+import { isFileRequired, findTitle, findFilesSectionTitle } from '../projectWizard'
 
 const sections = [
   {
     id: 'appDefinition',
-    title: (project, showProduct) => {
-      const product = _.get(project, 'details.products[0]')
-      if (showProduct && product) {
-        const prd = findProduct(product)
-        if (prd) return prd.name
-      }
-      return 'Definition'
-    },
+    title: findTitle,
     required: true,
     description: 'Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.',
     subSections: [
@@ -52,10 +36,11 @@ const sections = [
             description: 'This is the most popular project size that can get a medium-sized app designed in a breeze',
             fieldName: 'details.appDefinition.numberScreens',
             type: 'tiled-radio-group',
+            affectsQuickQuote: true,
             options: [
-              {value: '1-3', title: 'screens', icon: NumberText, iconOptions: { number: '1-3' }, desc: '5-7 days', price: 5000},
-              {value: '4-8', title: 'screens', icon: NumberText, iconOptions: { number: '4-8' }, desc: '7-10 days', price: 7000},
-              {value: '9-15', title: 'screens', icon: NumberText, iconOptions: { number: '9-15' }, desc: '8-10 days', price: 8500}
+              {value: '1-3', title: 'screens', icon: NumberText, iconOptions: { number: '1-3' }, desc: '5-7 days', quoteUp: 0, minTimeUp: 0, maxTimeUp: 0},
+              {value: '4-8', title: 'screens', icon: NumberText, iconOptions: { number: '4-8' }, desc: '7-10 days', quoteUp: 2000, minTimeUp: 3, maxTimeUp: 5},
+              {value: '9-15', title: 'screens', icon: NumberText, iconOptions: { number: '9-15' }, desc: '8-10 days', quoteUp: 3500, minTimeUp: 8, maxTimeUp: 12}
             ]
           },
           {
@@ -69,10 +54,10 @@ const sections = [
             fieldName: 'details.appDefinition.primaryTarget',
             type: 'tiled-radio-group',
             options: [
-              {value: 'Phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'Tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'Desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
-              {value: 'Wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+              {value: 'Phone', title: 'Phone', icon: IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Tablet', title: 'Tablet', icon: IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Desktop', title: 'Desktop', icon: IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'Wearable', title: 'Wearable', icon: IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
           },
           {
@@ -80,6 +65,11 @@ const sections = [
             id: 'projectInfo',
             fieldName: 'description',
             description: 'Brief Description',
+            validations: 'isRequired,minLength:160',
+            validationErrors: {
+              isRequired : 'Please provide a description',
+              minLength  : 'Please enter at least 160 characters'
+            },
             title: 'Description',
             type: 'textbox'
           },
@@ -103,13 +93,13 @@ const sections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications)',
         type: 'notes'
       },
       {
         id: 'files',
         required: isFileRequired,
-        title: (project) => `Project Files (${_.get(project, 'attachments', []).length})` || 'Files',
+        title: findFilesSectionTitle,
         description: '',
         type: 'files',
         fieldName: 'attachments'
@@ -136,7 +126,7 @@ const sections = [
         fieldName: 'details.appScreens.screens',
         title: 'Screens',
         hideTitle: true,
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timeing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
         type: 'screens',
         questions: [
           {
@@ -280,16 +270,21 @@ export const basicSections = [
             fieldName: 'details.appDefinition.primaryTarget',
             type: 'tiled-radio-group',
             options: [
-              {value: 'Phone', title: 'Phone', icon: Icons.IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'Tablet', title: 'Tablet', icon: Icons.IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
-              {value: 'Desktop', title: 'Desktop', icon: Icons.IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
-              {value: 'Wearable', title: 'Wearable', icon: Icons.IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
+              {value: 'Phone', title: 'Phone', icon: IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Tablet', title: 'Tablet', icon: IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'iOS, Android, Hybrid'},
+              {value: 'Desktop', title: 'Desktop', icon: IconTechOutlineDesktop, iconOptions: { fill: '#00000'}, desc: 'all OS'},
+              {value: 'Wearable', title: 'Wearable', icon: IconTechOutlineWatchApple, iconOptions: { fill: '#00000'}, desc: 'Watch OS, Android Wear'}
             ]
           },
           {
             icon: 'question',
-            required: true,
-            validationError: 'Please provide a description',
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isRequired,minLength:160',
+            validationErrors: {
+              isRequired : 'Please provide a description',
+              minLength  : 'Please enter at least 160 characters'
+            },
             id: 'projectInfo',
             fieldName: 'description',
             description: 'Brief Description',
@@ -320,7 +315,7 @@ export const basicSections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications)',
         type: 'notes'
       }
     ]

@@ -23,7 +23,7 @@ import {
   DELETE_PROJECT_FEED_FAILURE,
   DELETE_PROJECT_FEED_COMMENT_FAILURE,
   GET_PROJECT_FEED_COMMENT_FAILURE,
-// Project status
+  // Project status
   PROJECT_STATUS_IN_REVIEW
 } from '../config/constants'
 /* eslint-enable no-unused-vars */
@@ -32,7 +32,10 @@ export default function(state = {}, action) {
   switch(action.type) {
   case CREATE_PROJECT_SUCCESS: {
     const name = _.truncate(action.payload.name, 20)
-    Alert.success(`Project '${name}' created`)
+
+    //temporary workaround
+    setTimeout(() => { Alert.success(`Project '${name}' created`) }, 0)
+
     return state
   }
 
@@ -57,7 +60,7 @@ export default function(state = {}, action) {
       project: action.payload
     })
   }
-  
+
   case REMOVE_PROJECT_MEMBER_SUCCESS:
     // show notification message if user leaving a project
     if (action.meta.isUserLeaving) {

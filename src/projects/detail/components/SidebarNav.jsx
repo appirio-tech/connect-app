@@ -1,8 +1,9 @@
 
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link as DirectLink } from 'react-scroll'
 import cn from 'classnames'
-import { Icons } from 'appirio-tech-react-components'
+import IconUICheckBold from  '../../../assets/icons/icon-ui-check-bold.svg'
 
 require('./SidebarNav.scss')
 
@@ -21,13 +22,14 @@ const scrollProps = {
  */
 const renderSubNavItems = (child, idx) => {
   const { name, progress, link, required } = child
-  const isComplete = progress.length && progress[0] === progress[1]
+  // Github issue#1399, changed === to >= to determine if all required fields are completed
+  const isComplete = progress.length && progress[0] >= progress[1]
   const showProgress = progress[1] > 0 && name.toLowerCase().indexOf('questions') !== -1
   return (
     <li key={idx}>
       <DirectLink to={link} className="boxs" {...scrollProps} href="javascript:">
         <span className="txt">{name}&nbsp;{required && <span className="required">*</span>}</span>
-        <span className="schedule">{ isComplete ? <Icons.IconUICheckBold fill={'#FB7D22'} /> : showProgress && `${progress[0]} of ${progress[1]}`}</span>
+        <span className="schedule">{ isComplete ? <IconUICheckBold fill={'#FB7D22'} /> : showProgress && `${progress[0]} of ${progress[1]}`}</span>
       </DirectLink>
     </li>
   )
@@ -37,17 +39,17 @@ const renderSubNavItems = (child, idx) => {
  * Dumb component that renders NavItems
  */
 const SidebarNavItem = ({ name, link, required, subItems, index}) =>
-  <div className="item">
+  (<div className="item">
     <DirectLink to={link} {...scrollProps} href="javascript:">
       <h4 className="title">
         <span className="number" >{index}.</span>{name}
-          {required && <span className="required">* required</span>}
+        {required && <span className="required">* required</span>}
       </h4>
     </DirectLink>
     <ul>
       {subItems.map(renderSubNavItems)}
     </ul>
-  </div>
+  </div>)
 
 class SidebarNav extends Component {
   render() {

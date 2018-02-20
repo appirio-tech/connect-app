@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47 (45396) - http://www.bohemiancoding.com/sketch -->
+    <title>notification-new-posts</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Notifications-Page" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="notification-new-posts" fill="#55A5FF">
+            <path d="M14,2 L2,2 L2,11 L5.42842712,11 L8,13.5715729 L10.5715729,11 L14,11 L14,2 Z M15,0 C15.6,0 16,0.4 16,1 L16,12 C16,12.6 15.6,13 15,13 L11.4,13 L8.7,15.7 C8.5,15.9 8.3,16 8,16 C7.7,16 7.5,15.9 7.3,15.7 L4.6,13 L1,13 C0.4,13 0,12.6 0,12 L0,1 C0,0.4 0.4,0 1,0 L15,0 Z" id="Shape" fill-rule="nonzero"></path>
+            <rect id="Rectangle" x="4" y="4" width="8" height="2"></rect>
+            <rect id="Rectangle" x="4" y="7" width="4" height="2"></rect>
+        </g>
+    </g>
+</svg>

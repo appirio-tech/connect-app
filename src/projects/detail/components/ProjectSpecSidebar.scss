@@ -1,76 +1,79 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-//TODO  Additional variables - need to find a home for these
-// FIXME: remove non-standard variables! Deep nesting, non-standard line-height;
-// FIXME: non-standard units (use $base-unit and $corner-radius)
-$gray-color: $tc-gray-50;
-$title-color: $tc-gray-80;
-$hr-color-base: #000;
-$hr-color-darker: lighten($hr-color-base, 13.5%);
-$hr-color-dark: lighten($hr-color-base, 20%);
-$hr-color: lighten($hr-color-base, 33.5%);
-$hr-color-light: lighten($hr-color-base, 46.7%);
-$hr-color-lighter: lighten($hr-color-base, 93.5%);
-
-.projectSpecSidebar {
-  margin-right: 20px;
-  margin-bottom: 10px;
-  background-color: #fff;
-  box-shadow: 0px 1px 3px 0px $tc-gray-30;
-  padding: 20px 0;
-  border-radius: 4px;
-  min-width: 280px;
-
-  .titles {
-    @include roboto-medium;
-    font-size: 12px;
-    color: $tc-gray-50;
-    line-height: 20px;
-    padding: 6px 0;
-    margin: 0 20px;
-    text-transform: uppercase;
-
-    &.normal-txt {
-      color: #262628;
-    }
-  }
-  /* .text-box 8/29 */
-  .text-box {
-    margin: 0 20px;
-
-    hr {
-      display: block;
-      height: 1px;
-      border: 0;
-      border-top: 1px solid $hr-color-lighter;
-      margin: 1em 0;
-      padding: 0;
-    }
-
-    p {
-      @include roboto;
-      font-size: 13px;
-      line-height: 25px;
-      color: $gray-color;
-    }
-  }
-  /* text-box End */
-  .btn-boxs {
-    margin-top: 20px;
-    text-align: center;
-  }
-
-  &.no-number {
-    .list-group {
-      .title {
-        padding-left: 0;
+:global {
+  //TODO  Additional variables - need to find a home for these
+  // FIXME: remove non-standard variables! Deep nesting, non-standard line-height;
+  // FIXME: non-standard units (use $base-unit and $corner-radius)
+  $gray-color: $tc-gray-50;
+  $title-color: $tc-gray-80;
+  $hr-color-base: $tc-black;
+  $hr-color-darker: lighten($hr-color-base, 13.5%);
+  $hr-color-dark: lighten($hr-color-base, 20%);
+  $hr-color: lighten($hr-color-base, 33.5%);
+  $hr-color-light: lighten($hr-color-base, 46.7%);
+  $hr-color-lighter: lighten($hr-color-base, 93.5%);
+  
+  .projectSpecSidebar {
+    margin-right: 20px;
+    margin-bottom: 10px;
+    background-color: $tc-white;
+    box-shadow: 0px 1px 3px 0px $tc-gray-30;
+    padding: 20px 0;
+    border-radius: 4px;
+    min-width: 280px;
+  
+    .titles {
+      @include roboto-medium;
+      font-size: 12px;
+      color: $tc-gray-50;
+      line-height: 20px;
+      padding: 6px 0;
+      margin: 0 20px;
+      text-transform: uppercase;
+  
+      &.normal-txt {
+        color: $tc-black;
       }
-
-      li {
-        .boxs {
-          padding: 0 20px;
+    }
+    /* .text-box 8/29 */
+    .text-box {
+      margin: 0 20px;
+  
+      hr {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 1px solid $hr-color-lighter;
+        margin: 1em 0;
+        padding: 0;
+      }
+  
+      p {
+        @include roboto;
+        font-size: 13px;
+        line-height: 25px;
+        color: $gray-color;
+      }
+    }
+    /* text-box End */
+    .btn-boxs {
+      margin-top: 20px;
+      text-align: center;
+    }
+  
+    &.no-number {
+      .list-group {
+        .title {
+          padding-left: 0;
+        }
+  
+        li {
+          .boxs {
+            padding: 0 20px;
+          }
         }
       }
     }
   }
 }
+  

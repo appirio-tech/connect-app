@@ -1,12 +1,15 @@
-import React, {PropTypes} from 'react'
-import './ColorSelector.scss'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { SketchPicker } from 'react-color'
 import { HOC as hoc } from 'formsy-react'
 import {PROJECT_MAX_COLORS} from '../../config/constants'
-import { Icons } from 'appirio-tech-react-components'
+import CloseIcon from  '../../assets/icons/icon-close.svg'
+import AddColor from  '../../assets/icons/icon-add-color.svg'
+import './ColorSelector.scss'
+
 
 class ColorSelector extends React.Component {
-  
+
   constructor(props) {
     super(props)
 
@@ -15,7 +18,7 @@ class ColorSelector extends React.Component {
       newColor: '#fff'
     }
   }
-  
+
   render() {
     const {getValue, name, onChange, setValue, defaultColors } = this.props
     const value = getValue() || defaultColors
@@ -39,10 +42,10 @@ class ColorSelector extends React.Component {
 
       updateNewColorPalette(newValue)
     }
-    
+
     return (
       <div className="colorSelector">
-        {value.map((color) =>
+        {value.map((color) => (
           <a
             key={color}
             href="javascript:"
@@ -51,18 +54,19 @@ class ColorSelector extends React.Component {
             style={{backgroundColor: color}}
           >
             <span className="remove-color">
-              <Icons.CloseIcon />
+              <CloseIcon />
             </span>
           </a>
-        )}
+        ))}
 
-        {value.length < PROJECT_MAX_COLORS && 
+        {value.length < PROJECT_MAX_COLORS &&
           <a
             href="javascript:"
             onClick={() => this.setState({isPickerVisible: true})}
-            className="color-card color-card-add"
+            className="color-card"
           >
-          {isPickerVisible &&
+            <AddColor className="icon-card-add" />
+            {isPickerVisible &&
             <div className="picker-wrapper" onClick={(e) => e.stopPropagation()}>
               <SketchPicker
                 color={newColor}
@@ -90,12 +94,12 @@ class ColorSelector extends React.Component {
                 </button>
               </div>
             </div>
-          }
-        </a>}
+            }
+          </a>}
       </div>
     )
   }
-  
+
 }
 
 ColorSelector.propTypes = {

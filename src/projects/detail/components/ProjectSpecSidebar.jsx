@@ -1,6 +1,7 @@
 import _ from 'lodash'
-import React, { PropTypes, Component } from 'react'
-import { browserHistory } from 'react-router'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import SidebarNav from './SidebarNav'
 import VisualDesignProjectEstimateSection from './VisualDesignProjectEstimateSection'
@@ -9,7 +10,7 @@ import { updateProject } from '../../actions/project'
 import './ProjectSpecSidebar.scss'
 
 const calcProgress = (project, subSection) => {
-  if (subSection.id === 'questions') {
+  if (subSection.type === 'questions') {
     const vals = _.map(subSection.questions, (q) => {
       const fName = q.fieldName
       // special handling for seeAttached type of fields
@@ -21,7 +22,15 @@ const calcProgress = (project, subSection) => {
     })
     let count = 0
     _.forEach(vals, (v) => {if (v) count++ })
-    return [count, subSection.questions.length]
+    // Github issue#1399, filtered only required questions to set expected length of valid answers
+    const filterRequiredQuestions = (q) => (
+      // if required attribute is missing on question, but sub section has required flag, assume question as required
+      // or question should have required flag or validation isRequired
+      (typeof q.required === 'undefined' && subSection.required)
+      || q.required
+      || (q.validations && q.validations.indexOf('isRequired') !== -1)
+    )
+    return [count, _.filter(subSection.questions, filterRequiredQuestions).length]
   } else if (subSection.id === 'screens') {
     const screens = _.get(project, 'details.appScreens.screens', [])
     const validScreens = screens.filter((s) => {
@@ -93,7 +102,7 @@ class ProjectSpecSidebar extends Component {
   onSubmitForReview() {
     const { updateProject, project } = this.props
     updateProject(project.id, { status: 'in_review'}).then(() => {
-      browserHistory.push(`/projects/${project.id}`)
+      this.props.history.push(`/projects/${project.id}`)
     })
   }
 
@@ -108,19 +117,11 @@ class ProjectSpecSidebar extends Component {
     // types of projects in the future. But let's keep it this way for now because
     // project estimate is only available for one kind of projects
     const getProjectEstimateSection = () => {
-      const { appDefinition, products } = project.details
-
-      // project estimate only available for visual design porjects right now
-      // estimation is support with introduction of products, hence it would rendered only for new projects
-      if (project.type !== 'visual_design' || !products || project.details.products[0] === 'generic_design') return
-
-      if (!appDefinition || !appDefinition.numberScreens) return (
-        <div className="list-group"><VisualDesignProjectEstimateSection  products={products} /></div>
-      )
+      const { products } = project.details
 
       return (
         <div className="list-group">
-          <VisualDesignProjectEstimateSection products={products} numberScreens={appDefinition.numberScreens} />
+          <VisualDesignProjectEstimateSection products={products} project={project} />
         </div>
       )
     }
@@ -166,4 +167,4 @@ ProjectSpecSidebar.PropTypes = {
 }
 const mapDispatchToProps = { updateProject }
 
-export default connect(null, mapDispatchToProps)(ProjectSpecSidebar)
+export default withRouter(connect(null, mapDispatchToProps)(ProjectSpecSidebar))

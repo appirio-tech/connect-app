@@ -1,0 +1,39 @@
+// this is to include tc styles in the output library
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .notifications-section {
+    border: 1px solid $tc-gray-20;
+  
+    .view-older {
+      @include roboto;
+      align-items: center;
+      background: $tc-gray-neutral-light;
+      border: 0;
+      color: $tc-gray-50;
+      border-radius: 0;
+      border-top: 1px solid $tc-gray-10;
+      display: flex;
+      font-size: 13px;
+      height: 40px;
+      justify-content: center;
+      line-height: 40px;
+      text-align: center;
+      width: 100%;
+    }
+  }
+  
+  .notifications-section + .notifications-section {
+    margin-top: 20px;
+  }
+  
+  .notifications-section.is-simple+.notifications-section.is-simple {
+    margin-top: 0;
+  }
+  
+  // Hide border in dropdown menu
+  .Dropdown .notifications-section {
+    border: none;
+  }
+}
+  

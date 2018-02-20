@@ -1,6 +1,7 @@
 'use strict'
 
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import Sticky from 'react-stickynode'
@@ -8,9 +9,9 @@ import Sticky from 'react-stickynode'
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import EditProjectForm from '../components/EditProjectForm'
+import { findProduct } from '../../../config/projectWizard'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-// import { Icons } from 'appirio-tech-react-components'
 import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
 
 require('./Specification.scss')
@@ -37,10 +38,10 @@ class SpecificationContainer extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return !(
-        _.isEqual(nextProps.project, this.props.project)
+      _.isEqual(nextProps.project, this.props.project)
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextProps.error, this.props.error)
-   )
+    )
   }
   saveProject(model) {
     // compare old & new
@@ -49,11 +50,13 @@ class SpecificationContainer extends Component {
 
   render() {
     const { project, currentMemberRole, processing } = this.props
+    const productId = _.get(project, 'details.products[0]')
+    const product = findProduct(productId)
 
     let specification = 'topcoder.v1'
     if (project.details && project.details.products && project.details.products[0])
       specification = typeToSpecification[project.details.products[0]]
-    let sections = require(`../../../config/projectQuestions/${specification}`).default
+    const sections = require(`../../../config/projectQuestions/${specification}`).default
 
     return (
       <section className="two-col-content content specificationContainer">
@@ -76,6 +79,9 @@ class SpecificationContainer extends Component {
               fireProjectDirty={ this.props.fireProjectDirty }
               fireProjectDirtyUndo= { this.props.fireProjectDirtyUndo }
             />
+            <div className="right-area-footer">
+              { _.get(product, 'formDesclaimer') }
+            </div>
           </div>
 
         </div>

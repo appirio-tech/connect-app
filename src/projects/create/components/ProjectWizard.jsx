@@ -1,7 +1,9 @@
 import _ from 'lodash'
 import { unflatten } from 'flat'
-import React, { Component, PropTypes } from 'react'
-
+import qs from 'query-string'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import { findProduct, findCategory, findProductCategory, findProductsOfCategory, getProjectCreationTemplateField } from '../../../config/projectWizard'
 import Wizard from '../../../components/Wizard'
 import SelectProjectType from './SelectProjectType'
@@ -44,7 +46,8 @@ class ProjectWizard extends Component {
   }
 
   componentDidMount() {
-    const { params, onStepChange, location } = this.props
+    const { onStepChange } = this.props
+    const params = this.props.match.params
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if(incompleteProjectStr) {
@@ -81,11 +84,11 @@ class ProjectWizard extends Component {
       const updateQuery = {}
       let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
       if (params && params.product) {
-        wizardStep = this.loadProjectAndProductFromURL(params.product, updateQuery)
+        wizardStep = this.loadProjectAndProductFromURL(params, updateQuery)
       }
       // retrieve refCode from query param
       // TODO give warning after truncating
-      const refCode = _.get(location, 'query.refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
+      const refCode = _.get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
       if (refCode.trim().length > 0) {
         // if refCode exists, update the updateQuery to set that refCode
         if (_.get(updateQuery, 'details')) {
@@ -106,7 +109,8 @@ class ProjectWizard extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { onStepChange, params } = nextProps
+    const { onStepChange } = nextProps
+    const params = nextProps.match.params
     const type = _.get(nextProps.project, 'type', null)
     const product = _.get(nextProps.project, 'details.products[0]', null)
     // redirect user to project details form, if we already have category and product available
@@ -156,9 +160,13 @@ class ProjectWizard extends Component {
       projectType = findProductCategory(productParam, true)
       // finds product object from product alias
       const product = findProduct(productParam, true)
+      const refCode = _.get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
       if (projectType) {// we can have `incomplete` as params.product
         updateQuery['type'] = { $set : projectType.id }
         updateQuery['details'] = { products : { $set: [product.id] } }
+        if (refCode) {
+          updateQuery.details.utm = { $set : { code : refCode } }
+        }
         return WZ_STEP_FILL_PROJ_DETAILS
       }
     }
@@ -184,6 +192,10 @@ class ProjectWizard extends Component {
     }
   }
 
+  getRefCodeFromURL() {
+    return _.get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
+  }
+
   /**
    * Removed incomplete project from the local storage and resets the state. Also, moves wizard to the first step.
    */
@@ -191,6 +203,7 @@ class ProjectWizard extends Component {
     const { onStepChange } = this.props
     // remove incomplete project from local storage
     window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
+    // following code assumes that componentDidMount has already updated state with correct project and product types
     const projectType = _.get(this.state.project, 'type')
     const product = _.get(this.state.project, 'details.products[0]')
     let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
@@ -201,6 +214,10 @@ class ProjectWizard extends Component {
     } else if (projectType) {
       project = { type: projectType, details: { products: [] } }
       wizardStep = WZ_STEP_SELECT_PROD_TYPE
+    }
+    const refCode = this.getRefCodeFromURL()
+    if (refCode) {
+      project.details.utm = { code : refCode}
     }
     this.setState({
       project: _.merge({}, project),
@@ -461,4 +478,4 @@ ProjectWizard.Steps = {
   WZ_STEP_ERROR_CREATING_PROJ
 }
 
-export default ProjectWizard
+export default withRouter(ProjectWizard)

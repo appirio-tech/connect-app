@@ -1,18 +1,21 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import seeAttachedWrapperField from './SeeAttachedWrapperField'
-import { TCFormFields } from 'appirio-tech-react-components'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
 import _ from 'lodash'
 
 import SpecQuestionList from './SpecQuestionList/SpecQuestionList'
 import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
 import SpecFeatureQuestion from './SpecFeatureQuestion'
 import ColorSelector from './../../../components/ColorSelector/ColorSelector'
+import SelectDropdown from './../../../components/SelectDropdown/SelectDropdown'
 
 // HOC for TextareaInput
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
 
 // HOC for SpecFeatureQuestion
-const SeeAttachedSpecFeatureQuestion = seeAttachedWrapperField(SpecFeatureQuestion)
+const SeeAttachedSpecFeatureQuestion = seeAttachedWrapperField(SpecFeatureQuestion, [])
 
 const getIcon = icon => {
   switch (icon) {
@@ -26,7 +29,8 @@ const getIcon = icon => {
   }
 }
 
-const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog, isRequired}) => {
+// { isRequired, represents the overall questions section's compulsion, is also available}
+const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog }) => {
 
   const renderQ = (q, index) => {
     // let child = null
@@ -37,7 +41,8 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       value: _.get(project, q.fieldName, ''),
       required: q.required,
       validations: q.required ? 'isRequired' : null,
-      validationError: q.validationError
+      validationError: q.validationError,
+      validationErrors: q.validationErrors
     }
     if (q.fieldName === 'details.appDefinition.numberScreens') {
       const p = dirtyProject ? dirtyProject : project
@@ -73,15 +78,22 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       // child = <SeeAttachedTextareaInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'textinput':
-      console.log('TextInput', q)
       ChildElem = TCFormFields.TextInput
       elemProps.wrapperClass = 'row'
       // child = <TCFormFields.TextInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
+      break
+    case 'numberinput':
+      ChildElem = TCFormFields.TextInput
+      elemProps.wrapperClass = 'row'
+      elemProps.type = 'number'
       break
     case 'textbox':
       ChildElem = TCFormFields.Textarea
       elemProps.wrapperClass = 'row'
       elemProps.autoResize = true
+      if (q.validations) {
+        elemProps.validations = q.validations
+      }
       // child = <TCFormFields.Textarea name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'radio-group':
@@ -123,6 +135,23 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       _.assign(elemProps, { defaultColors: q.defaultColors })
       // child = <ColorSelector name={q.fieldName} defaultColors={q.defaultColors} value={value} />
       break
+    case 'select-dropdown':
+      ChildElem = SelectDropdown
+      _.assign(elemProps, {
+        options: q.options,
+        theme: 'default'
+      })
+      break
+    case 'slide-radiogroup':
+      ChildElem = TCFormFields.SliderRadioGroup
+      _.assign(elemProps, {
+        options: q.options,
+        min: 0,
+        max: q.options.length - 1,
+        step: 1,
+        included: false
+      })
+      break
     default:
       ChildElem = <noscript />
     }
@@ -132,7 +161,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
-        required={isRequired}
+        required={q.required || (q.validations && q.validations.indexOf('isRequired') !== -1)}
         hideDescription={elemProps.hideDescription}
       >
         <ChildElem {...elemProps} />

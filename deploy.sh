@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
 ENV=$1
-echo $ENV
+
 if [ "$2" = "no-cache" ]; then
-    NOCACHE=true
+	NOCACHE=true
 fi
 
+echo $ENV
 AWS_ACCESS_KEY_ID=$(eval "echo \$${ENV}_AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY=$(eval "echo \$${ENV}_AWS_SECRET_ACCESS_KEY")
 AWS_S3_BUCKET=$(eval "echo \$${ENV}_S3_BUCKET")
@@ -19,37 +20,29 @@ configure_aws_cli() {
 }
 
 deploy_s3bucket() {
-
 	if [ "$NOCACHE" = "true" ]; then
-		echo "Deploying without cache-control"
-		aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} --cache-control private,no-store,no-cache,must-revalidate,max-age=0 --exclude "*.txt" --exclude "*.js" --exclude "*.css"
-		result=`aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} --cache-control private,no-store,no-cache,must-revalidate,max-age=0 --exclude "*.txt" --exclude "*.js" --exclude "*.css"`
+		S3_CACHE_OPTIONS="--cache-control private,no-store,no-cache,must-revalidate,max-age=0"
+		echo "*** Deploying with Cloudfront Cache disabled ***"
 	else
-		echo "Deploying with cache-control"
-		aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} --cache-control max-age=0,s-maxage=86400 --exclude "*.txt" --exclude "*.js" --exclude "*.css"
-		result=`aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} --cache-control max-age=0,s-maxage=86400 --exclude "*.txt" --exclude "*.js" --exclude "*.css"`
+		S3_CACHE_OPTIONS="--cache-control max-age=0,s-maxage=86400"
 	fi
 
+	S3_OPTIONS="--exclude '*.txt' --exclude '*.js' --exclude '*.css'"
+	echo aws s3 sync ./workspace/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}
+	eval "aws s3 sync --dryrun ./workspace/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"
+	result=`eval "aws s3 sync ./workspace/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"`
 	if [ $? -eq 0 ]; then
-		#echo $result
 		echo "All html, font, image, map and media files are Deployed without gzip encoding!"
 	else
 		echo "Deployment Failed  - $result"
 		exit 1
 	fi
 
-	if [ "$NOCACHE" = "true" ]; then
-		echo "Deploying without cache-control"
-		aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} --cache-control private,no-store,no-cache,must-revalidate,max-age=0 --exclude "*" --include "*.txt" --include "*.js" --include "*.css" --content-encoding gzip
-		result=`aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET}  --cache-control private,no-store,no-cache,must-revalidate,max-age=0 --exclude "*" --include "*.txt" --include "*.js" --include "*.css" --content-encoding gzip`
-	else
-		echo "Deploying with cache-control"
-		aws s3 sync --dryrun ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET} --cache-control max-age=0,s-maxage=86400 --exclude "*" --include "*.txt" --include "*.js" --include "*.css" --content-encoding gzip
-		result=`aws s3 sync ${HOME}/${CIRCLE_PROJECT_REPONAME}/dist s3://${AWS_S3_BUCKET}  --cache-control max-age=0,s-maxage=86400 --exclude "*" --include "*.txt" --include "*.js" --include "*.css" --content-encoding gzip`
-	fi
-
+	S3_OPTIONS="--exclude '*' --include '*.txt' --include '*.js' --include '*.css' --content-encoding gzip"
+	echo aws s3 sync --dryrun ./workspace/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}
+	eval "aws s3 sync --dryrun ./workspace/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"
+	result=`eval "aws s3 sync ./workspace/dist s3://${AWS_S3_BUCKET} ${S3_CACHE_OPTIONS} ${S3_OPTIONS}"`
 	if [ $? -eq 0 ]; then
-		#echo $result
 		echo "All txt, css, and js files are Deployed! with gzip"
 	else
 		echo "Deployment Failed  - $result"

@@ -1,10 +1,12 @@
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import {
-  ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR,
-  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER, AUTOCOMPLETE_TRIGGER_LENGTH
+  ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN,
+  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER,
+  AUTOCOMPLETE_TRIGGER_LENGTH
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import { addProjectMember, updateProjectMember, removeProjectMember,
@@ -46,7 +48,7 @@ class TeamManagementContainer extends Component {
         m => m.userId === this.props.currentUser.userId) === -1
     ) {
       // navigate to project listing
-      this.props.router.push('/projects/')
+      this.props.history.push('/projects/')
     }
   }
 
@@ -221,12 +223,14 @@ class TeamManagementContainer extends Component {
 }
 
 const mapStateToProps = ({ loadUser, members }) => {
-  const powerUserRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR]
-  const managerRoles = [ ROLE_ADMINISTRATOR, ROLE_CONNECT_MANAGER ]
+  const adminRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
+  const powerUserRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
+  const managerRoles = [ ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_MANAGER ]
   return {
     currentUser: {
       userId: parseInt(loadUser.user.id),
       isCopilot: _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT) > -1,
+      isAdmin: _.intersection(loadUser.user.roles, adminRoles).length > 0,
       isManager: loadUser.user.roles.some((role) => managerRoles.indexOf(role) !== -1),
       isCustomer: !loadUser.user.roles.some((role) => powerUserRoles.indexOf(role) !== -1)
     },

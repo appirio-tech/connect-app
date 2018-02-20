@@ -1,20 +1,26 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter } from 'react-router-dom'
 import _ from 'lodash'
-import { UserDropdown, Icons } from 'appirio-tech-react-components'
-const { ConnectLogo } = Icons
+import UserDropdown from 'appirio-tech-react-components/components/UserDropdownMenu/UserDropdownMenu'
 import {
   ACCOUNTS_APP_LOGIN_URL,
   ACCOUNTS_APP_REGISTER_URL,
+  ROLE_CONNECT_COPILOT,
+  ROLE_CONNECT_MANAGER,
+  ROLE_ADMINISTRATOR,
+  ROLE_CONNECT_ADMIN,
   DOMAIN
 } from '../../config/constants'
+import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
 require('./TopBarContainer.scss')
+
 
 class TopBarContainer extends React.Component {
 
   constructor(props) {
     super(props)
+    this.renderLogo = this.renderLogo.bind(this)
   }
 
   handleMobileClick(se) {
@@ -25,12 +31,27 @@ class TopBarContainer extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.user.handle !== this.props.user.handle
-    || nextProps.toolbar.type !== this.props.toolbar.type
+    return (nextProps.user || {}).handle !== (this.props.user || {}).handle
+    || nextProps.toolbar !== this.props.toolbar
+    || this.props.location.pathname !== nextProps.location.pathname
+  }
+
+  renderLogo(comp){
+    const { userRoles } = this.props
+    const isLoggedIn = userRoles && userRoles.length
+    const logoTargetUrl = isLoggedIn ? '/projects' : '/'
+    return (
+      <div className="logo-wrapper">
+        <Link className="logo" to={logoTargetUrl} target="_self">
+          <ConnectLogoMono className="icon-connect-logo-mono" />
+        </Link>
+        {comp}
+      </div>
+    )
   }
 
   render() {
-    const { user, userRoles, toolbar } = this.props
+    const { user, toolbar } = this.props
 
     const userHandle  = _.get(user, 'handle')
     const userImage = _.get(user, 'profile.photoURL')
@@ -42,13 +63,10 @@ class TopBarContainer extends React.Component {
     }
     const homePageUrl = `${window.location.protocol}//${window.location.host}/`
     const logoutLink = `https://accounts.${DOMAIN}/#!/logout?retUrl=${homePageUrl}`
-    const isLoggedIn = userRoles && userRoles.length
-    const logoTargetUrl = isLoggedIn ? '/projects' : '/'
-    const isHomePage = this.props.router.isActive('/', true)
-    // NOTE: hardcoding to connectv2, once connect v1
-    window.host
+    const isHomePage = this.props.match.path === '/'
     const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.host}/`
     const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
+    const profileUrl = `https://${DOMAIN}/settings/profile/`
 
     const logoutClick = (evt) => {
       evt.preventDefault()
@@ -58,17 +76,13 @@ class TopBarContainer extends React.Component {
 
     const userMenuItems = [
       [
+        { label: 'Profile Settings', link: profileUrl, absolute: true, id: 0},
         { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true, id: 0 }
       ],
       [
         { label: 'Log out', onClick: logoutClick, absolute: true, id: 0 }
       ]
     ]
-    const logo = (
-      <div className="logo-wrapper">
-        <Link className="logo" to={logoTargetUrl} target="_self"><ConnectLogo /></Link>
-      </div>
-    )
 
     const avatar = (
       <div className="welcome-info">
@@ -101,7 +115,7 @@ class TopBarContainer extends React.Component {
               ToolBar &&
               <ToolBar
                 {...this.props}
-                logo={ logo }
+                renderLogoSection={ this.renderLogo }
                 userMenu={ avatar }
               />
             }
@@ -113,9 +127,15 @@ class TopBarContainer extends React.Component {
 }
 
 const mapStateToProps = ({ loadUser }) => {
+  let isPowerUser = false
+  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
+  if (loadUser.user) {
+    isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
+  }
   return {
     userRoles              : _.get(loadUser, 'user.roles', []),
-    user                   : loadUser.user
+    user                   : loadUser.user,
+    isPowerUser
   }
 }
 

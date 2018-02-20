@@ -1,18 +1,22 @@
-import React, {PropTypes} from 'react'
+import React from 'react' // eslint-disable-line no-unused-vars
+import PropTypes from 'prop-types'
 import cn from 'classnames'
-import { Icons, Avatar } from 'appirio-tech-react-components'
+import IconUsersDelete from  '../../assets/icons/icon-users-delete.svg'
+import IconLeave from  '../../assets/icons/icon-leave.svg'
+import IconArrowPriorityHigh from  '../../assets/icons/icon-arrow-priority-high.svg'
+import UserToolpit from '../User/UserTooltip'
 
 const ActionBtn = (props) => {
   let icon
   switch (props.type) {
   case 'user-remove':
-    icon = <Icons.IconUsersDelete />
+    icon = <IconUsersDelete />
     break
   case 'leave':
-    icon = <Icons.IconLeave />
+    icon = <IconLeave />
     break
   case 'promote':
-    icon = <Icons.IconArrowPriorityHigh />
+    icon = <IconArrowPriorityHigh />
     break
   }
   return (
@@ -20,7 +24,7 @@ const ActionBtn = (props) => {
   )
 }
 
-const MemberRow = ({ member, currentMember, onMemberDelete, onChangeOwner }) => {
+const MemberRow = ({ member, currentMember, currentUser, onMemberDelete, onChangeOwner }) => {
   let title
   // rendered member
   const isOwner = member.isPrimary && member.isCustomer
@@ -44,20 +48,23 @@ const MemberRow = ({ member, currentMember, onMemberDelete, onChangeOwner }) => 
     if (!isCurrentOwner && !member.isCopilot) {
       buttons.push(<ActionBtn key={0} type="leave" title="Leave Project" onClick={onDelete} />)
     }
-  } else if (currentMember) {
+  } else if (currentMember || currentUser.isAdmin) {
     // owner can remove only customers
     if (isCurrentOwner && member.isCustomer) {
       buttons.push(<ActionBtn key={1} type="user-remove" title="Remove team member from project" onClick={onDelete} />)
     }
 
     // manager can remove all except owner
-    if (currentMember.isManager && !isOwner) {
+    if ((currentMember && currentMember.isManager) || currentUser.isAdmin) {
       let tooltip = 'Remove team member from project'
       if (member.isCopilot) {
         tooltip = 'Remove copilot from project'
       }
       if (member.isManager) {
         tooltip = 'Remove manager from project'
+      }
+      if (member.isCustomer && isOwner) {
+        tooltip = 'Remove owner from project'
       }
       buttons.push(<ActionBtn key={2} type="user-remove" title={tooltip} onClick={onDelete} />)
     }
@@ -73,7 +80,7 @@ const MemberRow = ({ member, currentMember, onMemberDelete, onChangeOwner }) => 
 
   return (
     <div className="panel-row">
-      <Avatar avatarUrl={member.photoURL} userName={`${member.firstName} ${member.lastName}`}   />
+      <UserToolpit usr={member} id="1" previewAvatar size={35} />
       <div className="profile">
         <span className="name">{member.firstName} {member.lastName}</span>
         {member === currentMember && <span className="self"> (you) </span>}

@@ -1,0 +1,47 @@
+// this is to include tc styles in the output library
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .profile-settings-form {
+    margin: 18px auto 0;
+    width: 452px;
+  
+    > .field {
+      &:not(:first-child) {
+        margin-top: 32px;
+      }
+    }
+  
+    .username {
+      position: relative;
+  
+      > .username-icon {
+        bottom: 13px;
+        content: '';
+        display: block;
+        left: 12px;
+        pointer-events: none;
+        position: absolute;
+        z-index: 1;
+  
+        > svg {
+          display: block;
+        }
+  
+        > svg > path {
+          fill: $tc-gray-30;
+        }
+      }
+  
+      input {
+        padding-left: 36px;
+      }
+    }
+  
+    > .controls {
+      margin-top: 30px;
+      text-align: center;
+    }
+  }
+}
+  

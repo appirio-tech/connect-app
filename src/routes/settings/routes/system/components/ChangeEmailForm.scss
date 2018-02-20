@@ -1,0 +1,32 @@
+// this is to include tc styles in the output library
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .change-email-form {
+    > .field {
+      position: relative;
+  
+      > .field-status {
+        bottom: 4px;
+        height: 32px;
+        position: absolute;
+        right: -34px;
+        width: 32px;
+  
+        > svg {
+          margin: 8px 0 0 8px;
+  
+          > polygon {
+            fill: $tc-green-70
+          }
+        }
+      }
+    }
+  
+    > .controls {
+      margin-top: 10px;
+      text-align: center;
+    }
+  }
+}
+  

@@ -1,0 +1,37 @@
+// this is to include tc styles in the output library
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .notifications-empty {
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 70px 0 110px;
+    text-align: center;
+  
+    > .icon {
+      line-height: 0;
+  
+      > svg {
+        height: 32px;
+        width: 32px;
+  
+        > g > g {
+          fill: #6a6a72;
+        }
+      }
+    }
+  
+    > .additional-content {
+      line-height: normal;
+    }
+  
+    > .message {
+      @include roboto;
+      color: $tc-gray-70;
+      font-size: 20px;
+      line-height: 30px;
+      margin-top: 14px;
+    }
+  }
+}
+  

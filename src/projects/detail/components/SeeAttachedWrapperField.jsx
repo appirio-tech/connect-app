@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { TCFormFields } from 'appirio-tech-react-components'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
 import _ from 'lodash'
 
-const SeeAttachedWrapperField = ComposedComponent => class extends Component {
+const SeeAttachedWrapperField = (ComposedComponent, defaultValue = '') => class extends Component {
   constructor(props) {
     super(props)
     this.onChange = this.onChange.bind(this)
@@ -34,7 +35,7 @@ const SeeAttachedWrapperField = ComposedComponent => class extends Component {
     }
     const ccProps = _.merge({}, _.omit(this.props, ['name', 'value']), {
       name: this.props.name + '.value',
-      value: _.get(this.props.value, 'value', ''),
+      value: _.get(this.props.value, 'value', defaultValue),
       onChange: this.onChange
     })
 

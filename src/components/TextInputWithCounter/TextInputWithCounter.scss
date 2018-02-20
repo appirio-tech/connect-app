@@ -1,0 +1,23 @@
+// this is to include tc styles in the output library
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .text-input-with-counter {
+    position: relative;
+  
+    > .counter {
+      @include roboto-medium;
+      bottom: 45px;
+      color: $tc-gray-50;
+      font-size: 11px;
+      line-height: 13px;
+      position: absolute;
+      right: 0;
+  
+      > span {
+        color: $tc-gray-80;
+      }
+    }
+  }
+}
+  

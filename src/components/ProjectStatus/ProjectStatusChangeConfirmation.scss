@@ -1,0 +1,36 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .project-status-change-modal {
+    margin: 0px -4*$base-unit;
+  
+    .cancellation-reason {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+  
+      label {
+        align-self: flex-start;
+      }
+  
+      .select-cancellation-reason {
+        width: 100%;
+        // margin-bottom: 4 * $base-unit;
+        .dropdown-wrap {
+          margin-left: 0px;
+        }
+      }
+  
+      .tc-error-messages {
+        width: 100%;
+      }
+    }
+  
+    &.dropdown-up {
+      top: auto;
+      bottom: 320px;
+    }
+  }
+}
+  

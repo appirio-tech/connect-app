@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import RichTextArea from '../RichTextArea/RichTextArea'
 
 export default class AddComment extends React.Component {
@@ -24,19 +25,20 @@ export default class AddComment extends React.Component {
   }
 
   render() {
-    const { className, avatarUrl, authorName, placeholder, isAdding, hasError } = this.props
+    const { className, avatarUrl, authorName, placeholder, isAdding, hasError, allMembers } = this.props
 
     return (
       <RichTextArea ref="richTextArea"
-          className={className}
-          disableTitle
-          contentPlaceholder={placeholder || 'New reply...'}
-          onPost={this.onPost}
-          onPostChange={this.onChange}
-          isCreating={isAdding}
-          hasError={hasError}
-          avatarUrl={avatarUrl}
-          authorName={authorName}
+        className={className}
+        disableTitle
+        contentPlaceholder={placeholder || 'New reply...'}
+        onPost={this.onPost}
+        onPostChange={this.onChange}
+        isCreating={isAdding}
+        hasError={hasError}
+        avatarUrl={avatarUrl}
+        authorName={authorName}
+        allMembers={allMembers}
       />
     )
   }
@@ -51,5 +53,6 @@ AddComment.propTypes = {
   authorName: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   hasError: PropTypes.bool,
-  isAdding: PropTypes.bool
+  isAdding: PropTypes.bool,
+  allMembers: PropTypes.object
 }

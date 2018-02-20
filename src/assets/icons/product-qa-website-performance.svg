@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>product-qa-website-performance</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="project-menu-icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="product-qa-website-performance" stroke-width="2">
+            <g id="Group-3" transform="translate(1.000000, 1.000000)">
+                <circle id="Oval" stroke="#262628" fill="#FFFFFF" stroke-linecap="square" transform="translate(15.000000, 15.000000) scale(-1, 1) translate(-15.000000, -15.000000) " cx="15" cy="15" r="15"></circle>
+                <path d="M4.8,5.6 C6,5.1 7.4,4.8 8.8,4.8 C14.4,4.8 19,9.4 19,15" id="Shape" stroke="#C3C3C8" transform="translate(11.900000, 9.900000) scale(-1, 1) translate(-11.900000, -9.900000) "></path>
+                <path d="M24.2,15 C24.2,13.6 24.5,12.2 25,11" id="Shape" stroke="#0681FF" transform="translate(24.700000, 13.000000) scale(-1, 1) translate(-24.700000, -13.000000) "></path>
+                <path d="M22.6,12.9 L17.1,7.4" id="Shape" stroke="#0681FF" stroke-linecap="square" transform="translate(19.850000, 10.150000) scale(-1, 1) translate(-19.850000, -10.150000) "></path>
+                <circle id="Oval" stroke="#0681FF" stroke-linecap="square" transform="translate(15.000000, 15.000000) scale(-1, 1) translate(-15.000000, -15.000000) " cx="15" cy="15" r="3"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

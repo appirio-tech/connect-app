@@ -1,23 +1,26 @@
-@import "tc-includes";
+@import '~tc-ui/src/styles/tc-includes';
 
-.panel-specifications{
-  .specifications-title {
-    text-align: center;
-    @include roboto-light;
-    font-size: $tc-heading-lg;
-    color: $tc-gray-50;
-    line-height: $base-unit*6;
-  }
-  .specifications-list{
-    width: 300px;
-    margin: 0px auto 40px auto;
-    @include roboto;
-    font-size: $tc-label-md;
-    line-height: $base-unit*6;
-    color: $tc-black;
-    .titles {
+:global {
+  .panel-specifications{
+    .specifications-title {
       text-align: center;
-      @include roboto-bold;
+      @include roboto-light;
+      font-size: $tc-heading-lg;
+      color: $tc-gray-50;
+      line-height: $base-unit*6;
+    }
+    .specifications-list{
+      width: 300px;
+      margin: 0px auto 40px auto;
+      @include roboto;
+      font-size: $tc-label-md;
+      line-height: $base-unit*6;
+      color: $tc-black;
+      .titles {
+        text-align: center;
+        @include roboto-bold;
+      }
     }
   }
 }
+  

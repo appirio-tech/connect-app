@@ -1,5 +1,9 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import './CoderBot.scss'
+import CoderBroken from '../../assets/icons/coder-broken.svg'
+
+
 
 const getHeading = code => {
   switch(code) {
@@ -28,7 +32,8 @@ const CoderBot = ({code, message}) => {
       <div className="container">
         <div className="page-error">
           <h3>{ getHeading(code) }</h3>
-          <p dangerouslySetInnerHTML={ {__html : message || getMessage(code) } }></p>
+          <p dangerouslySetInnerHTML={ {__html : message || getMessage(code) } } />
+          <CoderBroken className="icon-coder-broken" />
           <span>{code !== 200 && code}</span>
         </div>
       </div>

@@ -1,117 +1,133 @@
-@import "tc-includes";
+@import '~tc-ui/src/styles/tc-includes';
 
-
-.collapsedEditor {
-  display: none !important;
-}
-
-.expandedEditor {
-  display: block !important;
-}
-
-.new-post-composer {
-  .modal-title {
-    text-transform: uppercase;
+:global {
+  .collapsedEditor {
+    display: none !important;
   }
-}
-
-.public-DraftEditor-content {
-  width: 100%;
-  font-size: 15px;
-  @include roboto;
-  line-height: 20px;
-  color: $tc-gray-80;
-  padding-left: 10px;
-  outline: none;
-  background: $tc-white;
-  border: 1px solid $tc-gray-20;
-  box-shadow: inset 0px 0px 2px 0px rgba(183, 183, 183, 0.2);
-  border-radius: 2px;
-  cursor: auto;
-
-  &:hover {
-    border: 1px solid $tc-gray-80;
-    box-shadow: inset 0px 0px 2px 0px $tc-gray-30;
+  
+  .expandedEditor {
+    display: block !important;
   }
-
-  &:focus,
-  &.focus {
-    border: 1px solid $tc-dark-blue-90;
+  
+  .new-post-composer {
+    .modal-title {
+      text-transform: uppercase;
+    }
+  }
+  
+  .public-DraftEditor-content {
+    width: 100%;
+    font-size: 15px;
+    @include roboto;
+    line-height: 20px;
+    color: $tc-gray-80;
+    padding-left: 10px;
     outline: none;
-    box-shadow: inset 0px 0px 2px 1px rgba(133,203,255,0.4);
+    background: $tc-white;
+    border: 1px solid $tc-gray-20;
+    box-shadow: inset 0px 0px 2px 0px rgba($tc-gray-30, 0.2);
+    border-radius: 2px;
+    cursor: auto;
+  
+    &:hover {
+      border: 1px solid $tc-gray-80;
+      box-shadow: inset 0px 0px 2px 0px $tc-gray-30;
+    }
+  
+    &:focus,
+    &.focus {
+      border: 1px solid $tc-dark-blue;
+      outline: none;
+      box-shadow: inset 0px 0px 2px 1px rgba($tc-light-blue-70, 0.4);
+    }
+    transition: .15s all;
+  
+    blockquote {
+      @include roboto-medium;
+      font-weight: 600;
+      margin: $base-unit*2 0 $base-unit*2 $base-unit*6;
+      padding: $base-unit*3 0 $base-unit*3 $base-unit*3;
+      border-left: $corner-radius * 2 solid $tc-gray-10;
+    }
+  
+    figure img {
+      max-width: 600px;
+    }
   }
-  transition: .15s all;
-  blockquote {
-    @include roboto-medium;
-    font-weight: 600;
+  
+  .public-DraftStyleDefault-ul,
+  .public-DraftStyleDefault-ol {
     margin: $base-unit*2 0 $base-unit*2 $base-unit*6;
-    padding: $base-unit*3 0 $base-unit*3 $base-unit*3;
-    border-left: $corner-radius * 2 solid $tc-gray-10
   }
-  figure img {
-    max-width: 600px;
-  }
-}
-
-.public-DraftStyleDefault-ul,
-.public-DraftStyleDefault-ol {
-  margin: $base-unit*2 0 $base-unit*2 $base-unit*6
-}
-
-.public-DraftStyleDefault-ol {
-  list-style-type: decimal;
-}
-.public-DraftStyleDefault-ul {
-  list-style-type: disc;
-}
-.public-DraftStyleDefault-pre {
-  background: #fafafb;
-  padding: 10px;
-  font-family: Roboto Mono, SF Mono, monospace;
-  font-size: 13px;
-  font-weight: normal;
-  color: #333;
-  border: 1px solid #ededf2;
-  border-radius: 4px;
-}
-.public-DraftStyleDefault-block {
-  white-space: pre-wrap;
-}
-
-.draftjs-post {
-  ul, ol {
-    margin: $base-unit*2 0 $base-unit*2 $base-unit*6
-  }
-  ul {
-    list-style-type: disc;
-  }
-  ol {
+  
+  .public-DraftStyleDefault-ol {
     list-style-type: decimal;
   }
-  blockquote {
-    @include roboto-medium;
-    font-weight: 600;
-    margin: $base-unit*2 0 $base-unit*2 $base-unit*6;
-    padding: $base-unit*3 0 $base-unit*3 $base-unit*3;
-    border-left: $corner-radius * 2 solid $tc-gray-10
+  
+  .public-DraftStyleDefault-ul {
+    list-style-type: disc;
   }
-  pre {
-    background: #fafafb;
+  
+  .public-DraftStyleDefault-pre {
+    background: $tc-gray-neutral-light;
     padding: 10px;
     font-family: Roboto Mono, SF Mono, monospace;
     font-size: 13px;
     font-weight: normal;
-    color: #333;
-    border: 1px solid #ededf2;
+    color: $tc-gray-90;
+    border: 1px solid $tc-gray-10;
     border-radius: 4px;
   }
-  strong {
-    font-weight: bold;
+  
+  .public-DraftStyleDefault-block {
+    white-space: pre-wrap;
   }
-  em {
-    font-style: italic;
-  }
-  img {
-    max-width: 600px;
+  
+  .draftjs-post {
+    ul,
+    ol {
+      margin: $base-unit*2 0 $base-unit*2 $base-unit*6;
+    }
+  
+    ul {
+      list-style-type: disc;
+    }
+  
+    ol {
+      list-style-type: decimal;
+    }
+  
+    blockquote {
+      @include roboto-medium;
+      font-weight: 600;
+      margin: $base-unit*2 0 $base-unit*2 $base-unit*6;
+      padding: $base-unit*3 0 $base-unit*3 $base-unit*3;
+      border-left: $corner-radius * 2 solid $tc-gray-10;
+    }
+  
+    pre {
+      background: $tc-gray-neutral-light;
+      padding: 10px;
+      font-family: Roboto Mono, SF Mono, monospace;
+      font-size: 13px;
+      font-weight: normal;
+      color: $tc-gray-90;
+      border: 1px solid $tc-gray-10;
+      border-radius: 4px;
+      white-space: inherit;
+    }
+  
+    strong {
+      font-weight: bold;
+    }
+  
+    em {
+      font-style: italic;
+    }
+  
+    img {
+      max-width: 600px;
+    }
   }
 }
+  

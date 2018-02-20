@@ -1,122 +1,136 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.file-list {
-  // reset styles of panel class, we need panel class to activate the modal-overlay
-  border: none;
-  box-shadow: none;
-
-  &.panel {
-    padding: 0;
-  }
-
-  > h4 {
-    @include roboto-medium;
-    font-size: 15px;
-    color: $tc-gray-50;
-    line-height: 20px;
-    margin-bottom: 2px;
-  }
-}
-
-.file-list-item {
-  display: flex;
-  border-top: 1px dashed $tc-gray-30;
-  padding: 15px 0;
-  width: 100%;
-  align-items: stretch;
-
-  .icon-col {
-    padding-top: 3px;
-    width: 60px;
-  }
-
-  .content-col {
-    flex: 2;
-
-    h4 {
-      @include roboto-bold;
-      font-size: 15px;
-      color: $tc-gray-80;
-      max-width: 380px;
+:global {
+  .file-list {
+    // reset styles of panel class, we need panel class to activate the modal-overlay
+    border: none;
+    box-shadow: none;
+  
+    &.panel {
+      padding: 0;
     }
-
-    p {
-      @include roboto;
-      font-size: 13px;
-      font-weight: 400;
-      color: $tc-gray-70;
+  
+    > h4 {
+      @include roboto-medium;
+      font-size: 15px;
+      color: $tc-gray-50;
       line-height: 20px;
+      margin-bottom: 2px;
     }
-
-    .title {
-      width: 100%;
-      display: flex;
-      line-height: 25px;
+  }
+  
+  .file-list-item {
+    display: flex;
+    border-top: 1px dashed $tc-gray-30;
+    padding: 15px 0;
+    width: 100%;
+    align-items: stretch;
+  
+    .icon-col {
+      padding-top: 3px;
+      width: 60px;
     }
-
-    .size {
-      @include roboto;
-      font-size: 15px;
-      color: $tc-gray-60;
-      margin-left: auto;
-    }
-
-    .edit-icons {
-      margin-left: 5px;
-
-      i {
-        cursor: pointer;
-      }
-    }
-
-    .title-edit {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-
-      input {
+  
+    .content-col {
+      flex: 2;
+  
+      h4 {
         @include roboto-bold;
         font-size: 15px;
         color: $tc-gray-80;
-        width: 80%;
-        height: 30px;
+        max-width: 380px;
+      }
+  
+      p {
+        @include roboto;
+        font-size: 13px;
+        font-weight: 400;
+        color: $tc-gray-70;
+        line-height: 20px;
+      }
+  
+      .title {
+        width: 100%;
+        display: flex;
+        line-height: 25px;
+      }
+  
+      .size {
+        @include roboto;
+        font-size: 15px;
+        color: $tc-gray-60;
+        margin-left: auto;
+        text-align: right;
+  
+        .Tooltip {
+          line-height: 100%;
+        }
+  
+        .date {
+          font-size: 13px;
+          line-height: normal;
+          margin-top: 5px;
+        }
+      }
+  
+      .edit-icons {
+        margin-left: 5px;
+  
+        i {
+          cursor: pointer;
+        }
+      }
+  
+      .title-edit {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+  
+        input {
+          @include roboto-bold;
+          font-size: 15px;
+          color: $tc-gray-80;
+          width: 80%;
+          height: 30px;
+          margin-left: 0;
+          margin-bottom: 0;
+          background: $tc-gray-neutral-light;
+        }
+      }
+  
+      .tc-textarea {
         margin-left: 0;
-        margin-bottom: 0;
+        padding: 5px 10px;
+        font-size: 13px;
         background: $tc-gray-neutral-light;
+        color: $tc-gray-50;
+        min-height: 55px;
+        max-width: 100%;
+        line-height: 20px;
+        resize: none;
       }
     }
-
-    .tc-textarea {
-      margin-left: 0;
-      padding: 5px 10px;
-      font-size: 13px;
-      background: $tc-gray-neutral-light;
-      color: $tc-gray-50;
-      min-height: 55px;
-      max-width: 100%;
-      line-height: 20px;
-      resize: none;
+  
+    .icon-trash,
+    .icon-edit {
+      margin-left: 13px;
+      vertical-align: middle;
+    }
+  
+    .icon-trash {
+      margin-left: 22px;
+    }
+  
+    .icon-save {
+      margin-right: 25px;
+    }
+  
+    .icon-close {
+      margin-right: 10px;
     }
   }
-
-  .icon-trash,
-  .icon-edit {
-    margin-left: 13px;
-    vertical-align: middle;
-  }
-
-  .icon-trash {
-    margin-left: 22px;
-  }
-
-  .icon-save {
-    margin-right: 25px;
-  }
-
-  .icon-close {
-    margin-right: 10px;
+  
+  .delete-file-modal {
   }
 }
-
-.delete-file-modal {
-}
+  

@@ -1,35 +1,19 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import './VisualDesignProjectEstimateSection.scss'
-import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
-import _ from 'lodash'
+import { getProductEstimate, findProduct } from '../../../config/projectWizard'
 
 const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-const DEFAULT_DESIGN_TEMPLATE = 'visual_design.v1.0'
 
-const VisualDesignProjectEstimateSection = ({products, numberScreens}) => {
-  // determine the spec template to use for the first product used in the project
+const VisualDesignProjectEstimateSection = ({products, project}) => {
   // TODO when we support multiple products per project, we can loop through products and sum up the estimates
-  const specTemplate = products.length > 0 ? typeToSpecification[products[0]] : DEFAULT_DESIGN_TEMPLATE
-  const sections = require('../../../config/projectQuestions/' + specTemplate).default
-  // appDefinition section
-  const section = _.find(sections, (section) => section.id === 'appDefinition')
-  const { subSections } = section
-  // questions sub section
-  const sectionQuestions = _.find(subSections, (subSection) => subSection.id === 'questions').questions
-
-  // options provided in the number of screens question
-  let projectDurationOptions = []
-  const numberScreensQuestion = _.find(
-    sectionQuestions,
-    (question) => question.fieldName === 'details.appDefinition.numberScreens'
-  )
-  if (numberScreensQuestion) {
-    projectDurationOptions = numberScreensQuestion.options
+  const productId = products[0]
+  const product = findProduct(productId)
+  if (!product || typeof product.basePriceEstimate === 'undefined') {
+    return <div />
   }
-  // selected option
-  const pickedDurationOption = _.find(projectDurationOptions, (option) => option.value === numberScreens)
-  const durationEstimate = pickedDurationOption ? pickedDurationOption.desc : '0 days'
-  const priceEstimate = pickedDurationOption && pickedDurationOption.price ? pickedDurationOption.price : 0
+
+  const { priceEstimate, durationEstimate} = getProductEstimate(productId, project)
 
   return (
     <div className="visual-design-project-estimate-section">
@@ -43,7 +27,8 @@ const VisualDesignProjectEstimateSection = ({products, numberScreens}) => {
 }
 
 VisualDesignProjectEstimateSection.propTypes = {
-  numberScreens: PropTypes.string
+  project: PropTypes.object.isRequired,
+  products: PropTypes.arrayOf(PropTypes.string).isRequired
 }
 
 export default VisualDesignProjectEstimateSection

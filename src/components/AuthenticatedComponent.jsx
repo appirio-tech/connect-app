@@ -1,7 +1,7 @@
 import React from 'react'
-
-import {getFreshToken} from 'tc-accounts'
-import {ACCOUNTS_APP_LOGIN_URL} from '../config/constants'
+import { withRouter } from 'react-router-dom'
+import { getFreshToken } from 'tc-accounts'
+import { ACCOUNTS_APP_LOGIN_URL } from '../config/constants'
 
 export function requiresAuthentication(Component) {
 
@@ -23,7 +23,7 @@ export function requiresAuthentication(Component) {
       }).catch((error) => {
         console.log(error)
         // FIXME should we include hash, search etc
-        const redirectBackToUrl = window.location.origin + '/' + this.props.location.pathname
+        const redirectBackToUrl = window.location.origin + this.props.location.pathname
         const newLocation = ACCOUNTS_APP_LOGIN_URL + '?retUrl=' + redirectBackToUrl
         console.log('redirecting... ', newLocation)
         window.location = newLocation
@@ -35,13 +35,13 @@ export function requiresAuthentication(Component) {
         <div>
           {
             this.state.isLoggedIn === true
-            ? <Component { ...this.props}/>
-            : null
+              ? <Component { ...this.props}/>
+              : null
           }
         </div>
       )
     }
   }
 
-  return AuthenticatedComponent
+  return withRouter(AuthenticatedComponent)
 }

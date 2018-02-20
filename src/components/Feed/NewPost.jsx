@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import cn from 'classnames'
 import './draftjs.scss'
 import RichTextArea from '../RichTextArea/RichTextArea'
@@ -10,7 +11,7 @@ class NewPost extends React.Component {
   }
 
   render() {
-    const {currentUser, titlePlaceholder, isCreating, hasError} = this.props
+    const {currentUser, allMembers, titlePlaceholder, isCreating, hasError} = this.props
     let authorName = currentUser.firstName
     if (authorName && currentUser.lastName) {
       authorName += ' ' + currentUser.lastName
@@ -24,14 +25,15 @@ class NewPost extends React.Component {
 
     return (
       <RichTextArea
-          className={composerClasses}
-          titlePlaceholder={titlePlaceholder || 'Title of the post'}
-          onPost={this.props.onPost}
-          onPostChange={this.props.onNewPostChange}
-          isCreating={isCreating}
-          hasError={hasError}
-          avatarUrl={currentUser.photoURL}
-          authorName={authorName}
+        className={composerClasses}
+        titlePlaceholder={titlePlaceholder || 'Title of the post'}
+        onPost={this.props.onPost}
+        onPostChange={this.props.onNewPostChange}
+        isCreating={isCreating}
+        hasError={hasError}
+        avatarUrl={currentUser.photoURL}
+        authorName={authorName}
+        allMembers={allMembers}
       />
     )
   }
@@ -40,6 +42,7 @@ class NewPost extends React.Component {
 
 NewPost.propTypes = {
   currentUser: PropTypes.object.isRequired,
+  allMembers: PropTypes.object.isRequired,
   onPost: PropTypes.func.isRequired,
   onNewPostChange: PropTypes.func.isRequired,
   hasError: PropTypes.bool,

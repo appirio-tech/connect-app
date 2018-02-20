@@ -1,3 +1,5 @@
+#### For folks working on this code base, we're organizing coding style and general guidelines [here](https://github.com/appirio-tech/connect-app/wiki/Community-Work-Read-Me-First!).
+
 # TC Deployment Notes
 _[TC Deployment Notes should always be kept up to date **on the default branch**. Update these notes when changes to this information occur]_
 
@@ -20,7 +22,7 @@ _[TC Deployment Notes should always be kept up to date **on the default branch**
 
 This repository houses new Customer pages, using React, Redux, and Webpack.
 
-## Installation dsa
+## Installation
 
 We use node 5.x and npm 3.x, so you may need to download a new version of node. The easiest way is to download [nvm](https://github.com/creationix/nvm). We have a `.nvmrc` file in the root of the project, so you can just run `nvm use` to switch to the correct version of node.
 
@@ -34,11 +36,29 @@ Install dependencies by running the following in the root of the project:
 - To make sure your code passes linting: `npm run lint`
 - To create the build: `npm run build`
 
+## Login
+
+During login, if your see `Invalid URL: http://localhost:3000` error in browser console, just browse http://localhost:3000 and it will show up.
+
+Or, you can add into your `/etc/hosts` the line `127.0.0.1 local.topcoder-dev.com`. And access the app with http://local.topcoder-dev.com:3000. It will prevent you from getting `Invalid URL: http://localhost:3000` and you will be redirected successfully after login.
+
 ## Contributing
 
 ### Pull Requests
 
 To contribute to the repository, please create a feature branch off of the dev branch. Once you're finished working on the feature, make a pull request to merge it into dev. Please make sure that every pull request has passed the build checks, which appear just before the "Merge pull request" button in github.
+
+### Updating npm-shrinkwrap.json
+
+Use **npm v5+** for this.
+General workflow to update `npm-shrinkwrap.json` would be:
+
+- `npm install --no-optional` -  with old npm-shrinkwrap (--no-optional to skip fsevents)
+- update `package.json` if you need to remove/update/add any packages
+- remove `npm-shrinkwrap.json`
+- `npm install --no-optional` with new `package.json`
+- `npm shrinkwrap` - to convert `package-lock.json` to `npm-shrinkwrap.json`
+- the new `npm-shrinkwrap.json` will have just the minimal diff
 
 ### Code Style
 
@@ -87,6 +107,15 @@ SCSS Files
       }
     }
   }
+SVG Icons
+  - This repository uses plugin babel-plugin-inline-react-svg 
+  - The plugin is used to inline-embed svg icons inside the markup
+  
+  Steps to adding new icons
+  - Insert the svg file in the ~/src/assets/images/ directory 
+  - Add a new icon component file in directory ~/src/components/Icons/Icon-Name.jsx and reference it on the global 
+    icon component in the ~/src/components/icons/ directory
+  - Wrap the svg icon inside an object for caching to optimize on perfomance.
   ```
 
 ### Writing Tests

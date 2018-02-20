@@ -1,10 +1,13 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import './LinksMenu.scss'
 import Panel from '../Panel/Panel'
 import AddLink from './AddLink'
 import DeleteLinkModal from './DeleteLinkModal'
 import uncontrollable from 'uncontrollable'
 import cn from 'classnames'
+import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
+
 
 const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, onDeleteIntent, onDelete }) => (
   <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0) })}>
@@ -52,7 +55,9 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
                 <li key={idx}>
                   <a href={link.address} target="_blank" rel="noopener noreferrer">{link.title}</a>
                   {canDelete && <div className="buttons">
-                    <button onClick={ handleDeleteClick } type="button" className="btn-remove"/>
+                    <button onClick={ handleDeleteClick } type="button">
+                      <BtnRemove className="btn-remove"/>
+                    </button>
                   </div>}
                 </li>
               )
@@ -61,7 +66,7 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
         }
       </ul>
       {links.length > limit && <div className="links-footer">
-        <a href="javascript:" onClick={() => onChangeLimit(10000)}>view more</a>
+        <a href="javascript:" onClick={() => onChangeLimit(10000)}>View all</a>
       </div>}
     </div>
   </Panel>

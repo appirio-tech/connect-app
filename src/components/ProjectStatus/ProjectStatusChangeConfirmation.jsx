@@ -1,96 +1,123 @@
-import React, {PropTypes} from 'react'
-import {SelectDropdown} from 'appirio-tech-react-components'
-import uncontrollable from 'uncontrollable'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import SelectDropdown from 'appirio-tech-react-components/components/SelectDropdown/SelectDropdown'
+import cn from 'classnames'
 import { PROJECT_STATUS_COMPLETED, PROJECT_STATUS_CANCELLED } from '../../config/constants'
 
-const ProjectStatusChangeConfirmation = ({
-    newStatus,
-    onCancel,
-    onConfirm,
-    onReasonUpdate,
-    statusChangeReason,
-    emptyCancelReason,
-    showEmptyReasonError
-  }) => {
-  let confirmText
-  let titleStatus
-  switch(newStatus) {
-  case PROJECT_STATUS_COMPLETED:
-    confirmText = 'Close Project'
-    titleStatus = 'close'
-    break
-  case PROJECT_STATUS_CANCELLED:
-    confirmText = 'Cancel Project'
-    titleStatus = 'cancel'
-    break
-  default:
-    confirmText = 'Confirm'
-    titleStatus = 'close'
+import './ProjectStatusChangeConfirmation.scss'
+
+class ProjectStatusChangeConfirmation extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {showUp:false, emptyCancelReason:false}
+    this.handleReasonChange = this.handleReasonChange.bind(this)
+    this.handleConfirm = this.handleConfirm.bind(this)
+    this.shouldDropdownUp = this.shouldDropdownUp.bind(this)
+
   }
-  const cancelReasons = [
-    { value: null, title: '-- Select Reason --'},
-    { value: 'spam', title: 'Spam'},
-    { value: 'demo', title: 'Demo/Test'},
-    { value: 'competitor', title: 'Customer selected competitor'},
-    { value: 'price', title: 'Price too high'},
-    { value: 'customer-inhouse', title: 'Being done in-house'},
-    { value: 'customer-inactivity', title: 'Customer not responsive'},
-    { value: 'non-community', title: 'Poor community fit'},
-    { value: 'by-choice', title: 'Declined by us'}
-  ]
-  const handleReasonChange = (option) => {
+
+  componentWillMount(){
+    let confirmText
+    let titleStatus
+    switch(this.props.newStatus) {
+    case PROJECT_STATUS_COMPLETED:
+      confirmText = 'Close Project'
+      titleStatus = 'close'
+      break
+    case PROJECT_STATUS_CANCELLED:
+      confirmText = 'Cancel Project'
+      titleStatus = 'cancel'
+      break
+    default:
+      confirmText = 'Confirm'
+      titleStatus = 'close'
+    }
+    this.cancelReasons = [
+      { value: null, title: '-- Select Reason --'},
+      { value: 'spam', title: 'Spam'},
+      { value: 'demo', title: 'Demo/Test'},
+      { value: 'competitor', title: 'Customer selected competitor'},
+      { value: 'price', title: 'Price too high'},
+      { value: 'customer-inhouse', title: 'Being done in-house'},
+      { value: 'customer-inactivity', title: 'Customer not responsive'},
+      { value: 'non-community', title: 'Poor community fit'},
+      { value: 'by-choice', title: 'Declined by us'}
+    ]
+    this.confirmText = confirmText
+    this.titleStatus = titleStatus
+
+  }
+
+  handleReasonChange(option){
     // after reason change, remove the error
-    showEmptyReasonError(false)
+    this.setState({emptyCancelReason:false})
     // update reason in parent component
-    onReasonUpdate(option)
+    this.props.onReasonUpdate(option)
   }
-  const handleConfirm = () => {
+  handleConfirm(){
     // if new status is cancelled but cancel reason is not set, show error
-    if (newStatus === PROJECT_STATUS_CANCELLED && !statusChangeReason) {
-      showEmptyReasonError(true)
+    if (this.props.newStatus === PROJECT_STATUS_CANCELLED && !this.props.statusChangeReason) {
+      this.setState({emptyCancelReason:true})
     } else { // otherwise update the status
-      onConfirm()
+      this.props.onConfirm()
     }
   }
-  return (
-    <div className="modal project-status-change-modal">
-      <div className="modal-title danger">
-        You are about to { titleStatus } the project
-      </div>
-      <div className="modal-body">
-        <p className="message">
-          This action will permanently change the status of your project and cannot be undone.
-        </p>
+  shouldDropdownUp(){
+    if (this.wrapper) {
+      const bounds = this.wrapper.getBoundingClientRect()
+      const windowHeight = window.innerHeight
 
-        { newStatus === PROJECT_STATUS_CANCELLED &&
-          <div className="cancellation-reason">
-            <label>Why is this project being canceled?</label>
-            <div className="select-cancellation-reason">
-              <SelectDropdown
-                options={ cancelReasons }
-                onSelect={ handleReasonChange }
-                theme="default"
-                // support passing selected value for the dropdown
-              />
+      return bounds.top > windowHeight / 2
+    }
+
+    return false
+  }
+
+  render() {
+    const { newStatus, onCancel } = this.props
+    this.shouldDropdownUp()
+    return (
+      <div className={cn('modal', 'project-status-change-modal', { 'dropdown-up': this.state.showUp })} ref={(input) => { if (input && ! this.wrapper){this.wrapper = input; this.setState({showUp:this.shouldDropdownUp()}) }}}>
+        <div className="modal-title danger">
+          You are about to { this.titleStatus } the project
+        </div>
+        <div className="modal-body">
+          <p className="message">
+            This action will permanently change the status of your project and cannot be undone.
+          </p>
+
+          { newStatus === PROJECT_STATUS_CANCELLED &&
+            <div className="cancellation-reason">
+              <label>Why is this project being canceled?</label>
+              <div className="select-cancellation-reason">
+                <SelectDropdown
+                  options={ this.cancelReasons }
+                  onSelect={ this.handleReasonChange }
+                  theme="default"
+                  // support passing selected value for the dropdown
+                />
+              </div>
+              { this.state.emptyCancelReason && <div className="tc-error-messages">Please select reason to cancel the project</div> }
             </div>
-            { emptyCancelReason && <div className="tc-error-messages">Please select reason to cancel the project</div> }
-          </div>
-        }
+          }
 
-        <div className="button-area flex center">
-          <button className="tc-btn tc-btn-default tc-btn-sm btn-cancel" onClick={onCancel}>Cancel</button>
-          <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={ handleConfirm }>{ confirmText }</button>
+          <div className="button-area flex center">
+            <button className="tc-btn tc-btn-default tc-btn-sm btn-cancel" onClick={onCancel}>Cancel</button>
+            <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={ this.handleConfirm }>{ this.confirmText }</button>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
 
 ProjectStatusChangeConfirmation.propTypes = {
+  newStatus: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
-  onConfirm: PropTypes.func.isRequired
+  onConfirm: PropTypes.func.isRequired,
+  onReasonUpdate: PropTypes.func.isRequired,
+  statusChangeReason: PropTypes.string
 }
 
-export default uncontrollable(ProjectStatusChangeConfirmation, {
-  emptyCancelReason: 'showEmptyReasonError'
-})
+export default ProjectStatusChangeConfirmation

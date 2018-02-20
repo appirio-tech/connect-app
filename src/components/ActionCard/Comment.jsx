@@ -1,9 +1,12 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import cn from 'classnames'
 import Panel from '../Panel/Panel'
-import { Avatar } from 'appirio-tech-react-components'
+import UserTooltip from '../User/UserTooltip'
 import RichTextArea from '../RichTextArea/RichTextArea'
+import { Link } from 'react-router-dom'
 import CommentEditToggle from './CommentEditToggle'
+import _ from 'lodash'
 
 class Comment extends React.Component {
 
@@ -48,34 +51,38 @@ class Comment extends React.Component {
   }
 
   render() {
-    const {message, avatarUrl, authorName, date, edited, children, active, self, isSaving, hasError, readonly} = this.props
-    console.log('comment '+date+edited)
+    const {message, author, date, edited, children, active, self, isSaving, hasError, readonly, allMembers} = this.props
+    const messageAnchor = `comment-${message.id}`
+    const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#${messageAnchor}`
+    const authorName = author ? (author.firstName + ' ' + author.lastName) : 'Connect user'
+    const avatarUrl = _.get(author, 'photoURL', null)
 
     if (this.state.editMode) {
       const content = message.newContent === null || message.newContent === undefined ? message.rawContent : message.newContent
       return (
         <RichTextArea
-            disableTitle
-            editMode
-            messageId={message.id}
-            isGettingComment={message.isGettingComment}
-            content={content}
-            oldContent={message.rawContent}
-            onPost={this.onSave}
-            onPostChange={this.onChange}
-            isCreating={isSaving}
-            hasError={hasError}
-            avatarUrl={avatarUrl}
-            authorName={authorName}
-            cancelEdit={this.cancelEdit}
+          disableTitle
+          editMode
+          messageId={message.id}
+          isGettingComment={message.isGettingComment}
+          content={content}
+          oldContent={message.rawContent}
+          onPost={this.onSave}
+          onPostChange={this.onChange}
+          isCreating={isSaving}
+          hasError={hasError}
+          avatarUrl={avatarUrl}
+          authorName={authorName}
+          cancelEdit={this.cancelEdit}
+          allMembers={allMembers}
         />
       )
     }
 
     return (
       <Panel.Body active={active} className="comment-panel-body">
-        <div className="portrait">
-          <Avatar avatarUrl={avatarUrl} userName={authorName} />
+        <div className="portrait" id={messageAnchor}>
+          <UserTooltip usr={author} previewAvatar size={35} />
         </div>
         <div className={cn('object comment', {self})}>
           <div className="card-profile">
@@ -83,7 +90,7 @@ class Comment extends React.Component {
               {authorName}
             </div>
             <div className="card-time">
-              {date} {edited && '• Edited'}
+              <Link to={messageLink}>{date}</Link> {edited && '• Edited'}
             </div>
             {self && !readonly &&
               <CommentEditToggle
@@ -98,7 +105,7 @@ class Comment extends React.Component {
           {message && message.isDeletingComment &&
             <div className="deleting-layer">
               <div>Deleting post ...</div>
-            </div> 
+            </div>
           }
         </div>
       </Panel.Body>
@@ -108,15 +115,11 @@ class Comment extends React.Component {
 
 Comment.propTypes = {
   /**
-   * The user avatar url
+   * The author (user object)
    */
-  avatarUrl: PropTypes.string,
+  author: PropTypes.object.isRequired,
   /**
-   * The author name
-   */
-  authorName: PropTypes.string.isRequired,
-  /**
-   * The comment date (formatted) 
+   * The comment date (formatted)
    */
   date: PropTypes.string.isRequired,
   /**
@@ -162,7 +165,8 @@ Comment.propTypes = {
   /**
    * The readonly flag
    */
-  readonly: PropTypes.bool
+  readonly: PropTypes.bool,
+  allMembers: PropTypes.object.isRequired
 }
 
 export default Comment

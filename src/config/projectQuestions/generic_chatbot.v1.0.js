@@ -1,29 +1,10 @@
-import _ from 'lodash'
 // import { Icons } from 'appirio-tech-react-components'
-import { findProduct} from '../projectWizard'
-
-const isFileRequired = (project, subSections) => {
-  const subSection = _.find(subSections, (s) => s.type === 'questions')
-  const fields = _.filter(subSection.questions, q => q.type.indexOf('see-attached') > -1)
-  // iterate over all seeAttached type fields to check
-  //  if any see attached is checked.
-  return _.some(_.map(
-    _.map(fields, 'fieldName'),
-    fn => _.get(project, `${fn}.seeAttached`)
-  ))
-}
+import { isFileRequired, findTitle, findFilesSectionTitle } from '../projectWizard'
 
 const sections = [
   {
     id: 'appDefinition',
-    title: (project, showProduct) => {
-      const product = _.get(project, 'details.products[0]')
-      if (showProduct && product) {
-        const prd = findProduct(product)
-        if (prd) return prd.name
-      }
-      return 'Definition'
-    },
+    title: findTitle,
     required: true,
     description: 'Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.',
     subSections: [
@@ -47,6 +28,11 @@ const sections = [
           {
             id: 'projectInfo',
             fieldName: 'description',
+            validations: 'isRequired,minLength:160',
+            validationErrors: {
+              isRequired : 'Please provide a description',
+              minLength  : 'Please enter at least 160 characters'
+            },
             description: 'Brief Description',
             title: 'Description',
             type: 'textbox'
@@ -94,13 +80,13 @@ const sections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications)',
         type: 'notes'
       },
       {
         id: 'files',
         required: isFileRequired,
-        title: (project) => `Project Files (${_.get(project, 'attachments', []).length})` || 'Files',
+        title: findFilesSectionTitle,
         description: '',
         type: 'files',
         fieldName: 'attachments'
@@ -137,9 +123,14 @@ export const basicSections = [
         questions: [
           {
             id: 'projectInfo',
-            required: true,
             fieldName: 'description',
-            validationError: 'Please provide a description',
+            // required is not needed if we specifiy validations
+            // required: true,
+            validations: 'isRequired,minLength:160',
+            validationErrors: {
+              isRequired : 'Please provide a description',
+              minLength  : 'Please enter at least 160 characters'
+            },
             description: 'Brief Description',
             title: 'Description',
             type: 'textbox'
@@ -195,7 +186,7 @@ export const basicSections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)',
+        description: 'Add any other important information regarding your project (e.g., links to documents or existing applications)',
         type: 'notes'
       }
     ]

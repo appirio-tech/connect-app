@@ -1,0 +1,36 @@
+// this is to include tc styles in the output library
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .notifications-dropdown-header {
+    align-items: center;
+    background: $tc-gray-neutral-light;
+    border-bottom: 1px solid $tc-gray-20;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+  
+    .header {
+      @include roboto-medium;
+      color: $tc-gray-70;
+      font-size: 12px;
+      line-height: 39px;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+  
+    .mark-all {
+      @include roboto;
+      background: none;
+      border: 0;
+      color: $tc-gray-50;
+      height: 39px;
+      line-height: 39px;
+      display: block;
+      font-size: 12px;
+      letter-spacing: 0;
+      padding: 0;
+    }
+  }
+}
+  

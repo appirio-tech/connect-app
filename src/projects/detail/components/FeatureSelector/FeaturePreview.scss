@@ -1,30 +1,31 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.feature-preview {
-  text-align: center;
-  // padding: (8 * $base-unit) (12 * $base-unit) ;
-  // background: url('./images/Device-iPhone.svg') no-repeat;
-  background-color: #fbfdff;
-  background-position: 50% 22px;
-  padding: 8 * $base-unit;
-  border-left: 1px solid $tc-dark-blue-30;
-  min-width: 260px;
-  display: block;
-
-  .feature-preview-img {
-    background: url('./images/Device-iPhone.svg') no-repeat;
-    /*padding: (8 * $base-unit) (12 * $base-unit) ;*/
-    padding: 22% 7%;
-    width: 100%;
-    max-width: 273px;
-    background-size: contain;
+:global {
+  .feature-preview {
+    text-align: center;
+    // padding: (8 * $base-unit) (12 * $base-unit) ;
+    // background: url('p') no-repeat;
+    background-color: $tc-gray-neutral-light;
+    background-position: 50% 22px;
+    padding: 8 * $base-unit;
+    border-left: 1px solid $tc-dark-blue-30;
+    min-width: 260px;
+    display: block;
+    position: relative;
+  
+    .icon-feature-preview-img {
+      /*padding: (8 * $base-unit) (12 * $base-unit) ;*/
+      width: 100%;
+      max-width: 273px;
+    }
+  
+    img {
+  
+      /*max-height: 500px;*/
+    }
   }
-
-  img {
-    display: inline-block;
-    width: 100%;
-    max-width: 235px;
-
-    /*max-height: 500px;*/
+  .mask {
+    margin: 100px;
   }
 }
+  

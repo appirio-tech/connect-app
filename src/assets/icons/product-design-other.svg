@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>product-design-other</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="project-menu-icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="product-design-other">
+            <g id="design-32px-outline_photo-editor" transform="translate(1.000000, 2.000000)">
+                <path d="M23.8804118,10.4707994 C23.9590839,9.99219608 24,9.50087627 24,9 C24,4.02943725 19.9705627,0 15,0 C10.0294373,0 6,4.02943725 6,9 C6,9.50087627 6.0409161,9.99219608 6.11958823,10.4707994 C2.56168374,11.6719109 0,15.0367988 0,19 C0,23.9705627 4.02943725,28 9,28 C11.3050633,28 13.4077305,27.1334393 15,25.7083195 C16.5922695,27.1334393 18.6949367,28 21,28 C25.9705627,28 30,23.9705627 30,19 C30,15.0367988 27.4383163,11.6719109 23.8804118,10.4707994 L23.8804118,10.4707994 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+                <circle id="Oval" fill="#CEE6FF" cx="21" cy="19" r="9"></circle>
+                <circle id="Oval" fill="#FFE3CF" cx="9" cy="19" r="9"></circle>
+                <circle id="Oval" stroke="#262628" stroke-width="2" fill="#CEF0AF" stroke-linecap="square" cx="15" cy="9" r="9"></circle>
+                <path d="M6.11958823,10.4707994 C6.82163736,14.7417275 10.5303135,18 15,18 C16.0073616,18 16.976068,17.8344977 17.8804118,17.5292006 C17.1783626,13.2582725 13.4696865,10 9,10 C7.99263843,10 7.02393199,10.1655023 6.11958823,10.4707994 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+                <path d="M15,25.7083195 C13.1587519,24.0603579 12,21.6654994 12,19 C12,16.3345006 13.1587519,13.9396421 15,12.2916805 C16.8412481,13.9396421 18,16.3345006 18,19 C18,21.6654994 16.8412481,24.0603579 15,25.7083195 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+                <path d="M12.1195882,17.5292006 C13.023932,17.8344977 13.9926384,18 15,18 C19.4696865,18 23.1783626,14.7417275 23.8804118,10.4707994 C22.976068,10.1655023 22.0073616,10 21,10 C16.5303135,10 12.8216374,13.2582725 12.1195882,17.5292006 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+                <path d="M12.1195882,17.5292006 C12.4595834,15.4608341 13.5047424,13.6299723 15,12.2916805 C16.4952576,13.6299723 17.5404166,15.4608341 17.8804118,17.5292006 C16.976068,17.8344977 16.0073616,18 15,18 C13.9926384,18 13.023932,17.8344977 12.1195882,17.5292006 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+                <circle id="Oval" stroke="#3A3A3F" stroke-width="2" stroke-linecap="square" cx="15" cy="9" r="9"></circle>
+                <circle id="Oval" stroke="#262628" stroke-width="2" stroke-linecap="square" cx="9" cy="19" r="9"></circle>
+                <circle id="Oval" stroke="#262628" stroke-width="2" stroke-linecap="square" cx="21" cy="19" r="9"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

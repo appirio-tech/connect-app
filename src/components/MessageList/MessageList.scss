@@ -1,69 +1,72 @@
-@import "tc-includes";
+@import '~tc-ui/src/styles/tc-includes';
 
-.message-list{
-  height: 100%;
-  overflow: hidden;
-
-  .panel-title{
-    padding: $base-unit*2 $base-unit*4 $base-unit*4 $base-unit*4;
-  }
-  .panel-messages{
-    min-height: 430px;
-    background-color: $tc-gray-neutral-light;
-    margin-bottom: -10px;
-    @include roboto;
-    line-height: $base-unit*4;
-    height: calc(100% - 45px);// 45px is the height of panel-title
-    overflow-y: auto;
-    .message:last-child{
-      border-bottom: 1px solid $tc-gray-10;
+:global {
+  .message-list{
+    height: 100%;
+    overflow: hidden;
+  
+    .panel-title{
+      padding: $base-unit*2 $base-unit*4 $base-unit*4 $base-unit*4;
     }
-    .message{
-      padding: $base-unit*3 $base-unit*4;
-      display: flex;
-      background-color: $tc-white;
-      border-top: 1px solid $tc-gray-10;
-      cursor: pointer;
-      &:hover{
-        background-color: $tc-gray-neutral-light;
-      }
-    }
-    .message-body{
-      margin-right: $base-unit*2;
-    }
-    .message-title{
-      word-break: break-word;
-      font-size: $tc-label-lg;
-      color: #354052;
+    .panel-messages{
+      min-height: 430px;
+      background-color: $tc-gray-neutral-light;
+      margin-bottom: -10px;
+      @include roboto;
       line-height: $base-unit*4;
-    }
-    .message-subtitle{
-      color: $tc-gray-50;
-      font-size: $tc-label-md;
-    }
-    .message-time{
-      margin-left: auto;
-      font-size: $tc-label-sm;
-      color: $tc-gray-40;
-      .badge{
-        padding: 0 $base-unit;
-        background: $tc-orange-70;
-        min-width: 20px;
-        text-align: center;
-        border-radius: 50%;
-        color: $tc-white;
+      height: calc(100% - 45px);// 45px is the height of panel-title
+      overflow-y: auto;
+      .message:last-child{
+        border-bottom: 1px solid $tc-gray-10;
       }
-    }
-    .message.active{
-      background-color: $tc-dark-blue-10;
-      border-top: 1px solid $tc-dark-blue-30;
-      border-bottom: 1px solid $tc-dark-blue-30;
+      .message{
+        padding: $base-unit*3 $base-unit*4;
+        display: flex;
+        background-color: $tc-white;
+        border-top: 1px solid $tc-gray-10;
+        cursor: pointer;
+        &:hover{
+          background-color: $tc-gray-neutral-light;
+        }
+      }
+      .message-body{
+        margin-right: $base-unit*2;
+      }
       .message-title{
-        @include roboto-medium;
+        word-break: break-word;
+        font-size: $tc-label-lg;
+        color: $tc-gray-90;
+        line-height: $base-unit*4;
       }
-    }
-    .message.active + .message{
-      border-top: none;
+      .message-subtitle{
+        color: $tc-gray-50;
+        font-size: $tc-label-md;
+      }
+      .message-time{
+        margin-left: auto;
+        font-size: $tc-label-sm;
+        color: $tc-gray-40;
+        .badge{
+          padding: 0 $base-unit;
+          background: $tc-orange-70;
+          min-width: 20px;
+          text-align: center;
+          border-radius: 50%;
+          color: $tc-white;
+        }
+      }
+      .message.active{
+        background-color: $tc-dark-blue-10;
+        border-top: 1px solid $tc-dark-blue-30;
+        border-bottom: 1px solid $tc-dark-blue-30;
+        .message-title{
+          @include roboto-medium;
+        }
+      }
+      .message.active + .message{
+        border-top: none;
+      }
     }
   }
 }
+  

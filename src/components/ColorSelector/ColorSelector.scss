@@ -1,56 +1,58 @@
-@import "tc-includes";
+@import '~tc-ui/src/styles/tc-includes';
 
-.colorSelector {
-  text-align: center;
-  .color-card{
-    height: 40px;
-    width: 40px;
-    display: inline-block;
-    border: 1px solid $tc-gray-60;
-    border-radius: 4px;
-    margin: 0 15px;
-    position: relative;
-    .remove-color {
-      background-color: $tc-gray-60;
-      opacity: 0.7;
-      display: none;
-      position: absolute;
-      width: 39px;
-      height: 38px;
-    }
-    &:hover {
+:global {
+  .colorSelector {
+    text-align: center;
+    .color-card{
+      height: 40px;
+      width: 40px;
+      display: inline-block;
+      border: 1px solid $tc-gray-60;
+      border-radius: 4px;
+      margin: 0 15px;
+      position: relative;
       .remove-color {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        background-color: $tc-gray-60;
+        opacity: 0.7;
+        display: none;
+        position: absolute;
+        width: 39px;
+        height: 38px;
+      }
+      &:hover {
+        .remove-color {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+      svg {
+        position: relative;
+        border-color: $tc-gray-30;
+        margin: 10px;
       }
     }
-  }
-  .color-card-add{
-    position: relative;
-    border-color: $tc-gray-30;
-    background: url('../../assets/images/icon-add-color.svg') no-repeat;
-    background-position: center center;
-  }
-  .picker-wrapper {
-    z-index: 2;
-    right: 0;
-    top: 50px;
-    width: 340px;
-    background: white;
-    position: absolute;
-    display: flex;
-    padding: 10px;
-    box-shadow: rgba(0, 0, 0, 0.14902) 0px 0px 0px 1px, rgba(0, 0, 0, 0.14902) 0px 8px 16px;
-    > div {
-      box-shadow: none !important;
-    }
-    .buttons {
-      width: 100px;
-      .tc-btn {
-        width: 100%;
-        margin-top: 10px;
+    .picker-wrapper {
+      z-index: 2;
+      right: 0;
+      top: 50px;
+      width: 340px;
+      background: white;
+      position: absolute;
+      display: flex;
+      padding: 10px;
+      box-shadow: rgba($tc-black, 0.14902) 0px 0px 0px 1px, rgba($tc-black, 0.14902) 0px 8px 16px;
+      > div {
+        box-shadow: none !important;
+      }
+      .buttons {
+        width: 100px;
+        .tc-btn {
+          width: 100%;
+          margin-top: 10px;
+        }
       }
     }
   }
 }
+  

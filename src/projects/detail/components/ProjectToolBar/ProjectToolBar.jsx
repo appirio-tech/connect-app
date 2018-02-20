@@ -1,7 +1,8 @@
 require('./ProjectToolBar.scss')
 
-import React, {PropTypes, Component} from 'react'
-import { MenuBar } from 'appirio-tech-react-components'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import MenuBar from 'appirio-tech-react-components/components/MenuBar/MenuBar'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { LOAD_PROJECT_FAILURE } from '../../../../config/constants'

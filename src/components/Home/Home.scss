@@ -1,93 +1,108 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 @import '../../styles/variables';
 
-.content-home {
-	margin: $base-unit*4;
-
-	.container {
-		display: flex;
-		justify-content: space-around;
-		max-width: 1200px;
-		width: auto;
-		margin: auto;
-		padding: $base-unit*12 $base-unit*9 $base-unit*18;
-		background: $tc-white;
-		box-shadow: 0 1px 3px 0px rgba($tc-black,.2);
-		border-radius: $corner-radius;
-		@media screen and (max-width: $screen-rg - 1) {
-        	flex-direction: column;
-			width: 100%;
-        	padding:$base-unit*6 $base-unit*12 $base-unit*6;
-        	.content-container{
-				padding: $base-unit*15 0 0 0;
-			}
+:global {
+  .content-home {
+    margin: $base-unit*4;
+  
+    .container {
+      display: flex;
+      justify-content: space-around;
+      max-width: 1200px;
+      width: auto;
+      margin: auto;
+      padding: $base-unit*12 $base-unit*9 $base-unit*18;
+      background: $tc-white;
+      box-shadow: 0 1px 3px 0px rgba($tc-black, .2);
+      border-radius: $corner-radius;
+  
+      @media screen and (max-width: $screen-rg - 1) {
+        flex-direction: column;
+        width: 100%;
+        padding: $base-unit*6 $base-unit*12 $base-unit*6;
+  
+        .content-container {
+          padding: $base-unit*15 0 0 0;
         }
-        @media screen and (max-width: $screen-md - 174) {
-			img{
-				width:100%;
-				height: auto;
-			}
-			.image-container{
-				min-width: 100%;
-			}
-		}        
-	}
-	.image-container{
-		text-align: center;
-		min-width: $base-unit*86;
-	}
-	.content-container{
-		padding: $base-unit*7 0 0 $base-unit*17;
-		.button-bar{
-			display: flex;
-			flex-direction: column;
-			padding-top:$base-unit*6;
-
-			a.tc-link {
-				text-align: center;
-			    color: #1a85ff;
-			    @include roboto;
-			    font-size: 13px;
-			    margin: 0 auto;
-			    display: inline-block;
-			    margin-top: 10px;
-			}
-		}
-		h1{
-			@include tc-heading-extra-large;
-			@include roboto-medium;
-			color: $tc-black;
-			letter-spacing: 0;
-			padding: 0 0 $base-unit*6;
-			text-align: center;
-		}
-		p{
-			@include roboto;
-			font-size: $tc-body-large;
-			color: $tc-gray-70;
-			letter-spacing: 0;
-			line-height: $base-unit * 6;
-			padding-bottom: $base-unit*6;
-		}
-		.tc-btn{
-			color: #cfe6ff;
-			height:$base-unit*8;
-			width: $base-unit*50;
-			text-align: center;
-			margin: 0 auto;
-			line-height: 38px;
-			@include roboto-medium;
-			font-size: $tc-label-lg;
-			display: block;
-			margin-bottom: $base-unit * 4;
-			&:hover {
-				color:#ffffff;
-				background-image: linear-gradient(#3996FF 0%, #127BF3 100%) !important;				
-			}			
-			&:active {
-				color:#ffffff;
-				background-image: linear-gradient(#3996FF 0%, #127BF3 100%) !important;
-			}
-		}
-	}
+      }
+  
+      @media screen and (max-width: $screen-md - 174) {
+        img {
+          width: 100%;
+          height: auto;
+        }
+  
+        .image-container {
+          min-width: 100%;
+        }
+      }
+    }
+  
+    .image-container {
+      text-align: center;
+      min-width: $base-unit*86;
+    }
+  
+    .content-container {
+      padding: $base-unit*7 0 0 $base-unit*17;
+  
+      .button-bar {
+        display: flex;
+        flex-direction: column;
+        padding-top: $base-unit*6;
+  
+        a.tc-link {
+          text-align: center;
+          color: $tc-dark-blue;
+          @include roboto;
+          font-size: 13px;
+          margin: 0 auto;
+          display: inline-block;
+          margin-top: 10px;
+        }
+      }
+  
+      h1 {
+        @include tc-heading-extra-large;
+        @include roboto-medium;
+        color: $tc-black;
+        letter-spacing: 0;
+        padding: 0 0 $base-unit*6;
+        text-align: center;
+      }
+  
+      p {
+        @include roboto;
+        font-size: $tc-body-large;
+        color: $tc-gray-70;
+        letter-spacing: 0;
+        line-height: $base-unit * 6;
+        padding-bottom: $base-unit*6;
+      }
+  
+      .tc-btn {
+        color: $tc-dark-blue-30;
+        height: $base-unit*8;
+        width: $base-unit*50;
+        text-align: center;
+        margin: 0 auto;
+        line-height: 38px;
+        @include roboto-medium;
+        font-size: $tc-label-lg;
+        display: block;
+        margin-bottom: $base-unit * 4;
+  
+        &:hover {
+          color: $tc-white;
+          background-image: linear-gradient($tc-dark-blue-70 0%, $tc-dark-blue 100%) !important;
+        }
+  
+        &:active {
+          color: $tc-white;
+          background-image: linear-gradient($tc-dark-blue-70 0%, $tc-dark-blue 100%) !important;
+        }
+      }
+    }
+  }
 }
+  

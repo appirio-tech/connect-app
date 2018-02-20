@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47 (45396) - http://www.bohemiancoding.com/sketch -->
+    <title>notification-new-project</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Notifications-Page" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="notification-new-project" fill="#55A5FF">
+            <path d="M15.75,4.4 L13.75,1.4 C13.55,1.2 13.25,1 12.95,1 L2.95,1 C2.65,1 2.35,1.2 2.15,1.4 L0.15,4.4 C-0.05,4.8 -0.05,5.2 0.15,5.6 L7.15,14.6 C7.55,15.1 8.35,15.1 8.75,14.6 L15.75,5.6 C16.05,5.3 16.05,4.8 15.75,4.4 Z M7.95,12.4 L2.15,5 L3.45,3 L12.35,3 L13.65,5 L7.95,12.4 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

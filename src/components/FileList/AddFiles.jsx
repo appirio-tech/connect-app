@@ -1,5 +1,6 @@
-import React, { PropTypes } from 'react'
-import { FilePicker } from 'appirio-tech-react-components'
+import React from 'react'
+import PropTypes from 'prop-types'
+import FilePicker from 'appirio-tech-react-components/components/FilePicker/FilePicker'
 import './AddFiles.scss'
 
 import { FILE_PICKER_API_KEY, FILE_PICKER_SUBMISSION_CONTAINER_NAME } from '../../config/constants'

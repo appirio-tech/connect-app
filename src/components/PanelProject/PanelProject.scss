@@ -1,16 +1,19 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 @import "../../styles/variables";
 
-.panel-project {
-  padding: $base-unit*2 $base-unit*4;
-
-  .project-heading {
-    @include roboto-medium;
-    font-size: $tc-heading;
-    color: $tc-black;
-    line-height: $base-unit*6;
-    .text-muted {
-      color: $tc-gray-50;
+:global {
+  .panel-project {
+    padding: $base-unit*2 $base-unit*4;
+  
+    .project-heading {
+      @include roboto-medium;
+      font-size: $tc-heading;
+      color: $tc-black;
+      line-height: $base-unit*6;
+      .text-muted {
+        color: $tc-gray-50;
+      }
     }
   }
 }
+  

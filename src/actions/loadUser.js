@@ -1,5 +1,14 @@
 import _ from 'lodash'
-import { ACCOUNTS_APP_CONNECTOR_URL, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, ROLE_ADMINISTRATOR, ROLE_CONNECT_COPILOT, ROLE_TOPCODER_USER, ROLE_CONNECT_MANAGER } from '../config/constants'
+import {
+  ACCOUNTS_APP_CONNECTOR_URL,
+  LOAD_USER_SUCCESS,
+  LOAD_USER_FAILURE,
+  ROLE_ADMINISTRATOR,
+  ROLE_CONNECT_COPILOT,
+  ROLE_TOPCODER_USER,
+  ROLE_CONNECT_MANAGER,
+  ROLE_CONNECT_ADMIN
+} from '../config/constants'
 import { getFreshToken, configureConnector, decodeToken } from 'tc-accounts'
 import { getUserProfile } from '../api/users'
 import { EventTypes } from 'redux-segment'
@@ -46,6 +55,8 @@ export function loadUserSuccess(dispatch, token) {
       let userRole
       if (_.indexOf(currentUser.roles, ROLE_ADMINISTRATOR) > -1) {
         userRole = ROLE_ADMINISTRATOR
+      } else if (_.indexOf(currentUser.roles, ROLE_CONNECT_ADMIN) > -1) {
+        userRole = ROLE_CONNECT_ADMIN
       } else if (_.indexOf(currentUser.roles, ROLE_CONNECT_MANAGER) > -1) {
         userRole = ROLE_CONNECT_MANAGER
       } else if (_.indexOf(currentUser.roles, ROLE_CONNECT_COPILOT) > -1) {
@@ -71,7 +82,7 @@ export function loadUserSuccess(dispatch, token) {
           }
         }
       }]
-      if (window.analytics && window.analytics.user()) {
+      if (window.analytics && window.analytics.user && window.analytics.user()) {
         const anonymousId = window.analytics.user().anonymousId()
         if (anonymousId) {
           analyticsEvents.push({
@@ -91,13 +102,13 @@ export function loadUserSuccess(dispatch, token) {
         }
       })
     })
-    .catch((err) => {
+      .catch((err) => {
       // if we fail to load user's profile, still dispatch user load success
       // ideally it shouldn't happen, but if it is, we can render the page
       // without profile information
-      console.log(err)
-      dispatch({ type: LOAD_USER_SUCCESS, user : currentUser })
-    })
+        console.log(err)
+        dispatch({ type: LOAD_USER_SUCCESS, user : currentUser })
+      })
   }
 }
 

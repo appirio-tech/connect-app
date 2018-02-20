@@ -1,0 +1,182 @@
+@import '~tc-ui/src/styles/tc-includes';
+:global {
+  .Tooltip {
+    &.customer-data {
+      .tooltip-target {
+        .Avatar {
+          height: 30px;
+          width: 30px;
+        }
+      }
+  
+      &.size-35 {
+        .tooltip-target {
+          .Avatar {
+            height: 35px;
+            width: 35px;
+          }
+        }
+      }
+  
+      .stack-avatar-0 {
+        z-index: 3;
+      }
+  
+      .stack-avatar-1 {
+        margin-left: -5px;
+        z-index: 2;
+      }
+  
+      .stack-avatar-2 {
+        margin-left: -5px;
+        z-index: 1;
+      }
+  
+      .tooltip-container {
+        border: 1px solid rgba($tc-black, 0.2);
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba($tc-black, 0.2);
+        transition-delay: 400ms !important;
+        transition-duration: 150ms !important;
+        transition-easing: ease-in-out;
+  
+        &:hover {
+          transition-dealy: 0 !important;
+          transition-duration: 0 !important;
+        }
+      }
+  
+      .tooltip-pointer {
+        background-color: $tc-white;
+        display: block;
+      }
+  
+      [data-placement="top"] .tooltip-pointer {
+        border-right: 1px solid rgba($tc-black, 0.2);
+        border-bottom: 1px solid rgba($tc-black, 0.2);
+        bottom: -11px !important;
+      }
+  
+      [data-placement="bottom"] .tooltip-pointer {
+        border-left: 1px solid rgba($tc-black, 0.2);
+        border-top: 1px solid rgba($tc-black, 0.2);
+        top: -11px !important;
+      }
+  
+      .tooltip-content-container {
+        background-color: $tc-white;
+        width: 400px;
+        padding-top: 20px;
+        padding-left: 20px;
+  
+        .tooltip-body {
+          color: $tc-black;
+          overflow: hidden;
+          white-space: normal;
+  
+          .top-container {
+            display: flex;
+            position: relative;
+            flex-direction: row;
+  
+            .tt-col-avatar {
+              flex: none;
+              width: 40px;
+              height: 40px;
+              margin-right: 10px;
+              margin-bottom: 10px;
+            }
+  
+            .tt-col-user-data {
+              flex: 1;
+              display: flex;
+              flex-wrap: wrap;
+              align-content: flex-start;
+            }
+  
+            .user-name-container {
+              flex: 1 0 90%;
+  
+              span {
+                font-size: 15px;
+                font-weight: 600;
+                color: $tc-black;
+                line-height: 20px;
+              }
+            }
+  
+            .user-handle-container {
+              padding-right: 10px;
+              height: 20px;
+  
+              &.with-email {
+                border-right: 1px solid $tc-gray-50;
+              }
+  
+              span {
+                font-size: 12px;
+                color: $tc-gray-50;
+                line-height: 20px;
+              }
+            }
+  
+            .user-email-container {
+              flex: 1;
+              padding-left: 10px;
+  
+              a {
+                font-size: 12px;
+                color: $tc-gray-50;
+                line-height: 20px;
+                text-decoration: none;
+  
+                &:hover {
+                  text-decoration: none;
+                }
+              }
+            }
+          }
+  
+          .sf-data-bottom-container {
+            display: flex;
+            flex-direction: column;
+  
+            .segment-data {
+              flex: 1;
+              font-size: 13px;
+              color: $tc-black;
+              line-height: 25px;
+  
+              &:first-of-type {
+                border-top: 1px solid $tc-gray-50;
+                padding-top: 11px;
+              }
+  
+              .ext-link {
+                position: relative;
+                font-size: 11px;
+                color: $tc-dark-blue;
+                padding-right: 20px;
+  
+                &:after {
+                  content: "";
+                  width: 13px;
+                  height: 13px;
+                  position: absolute;
+                  top: 2px;
+                  right: 0px;
+                }
+              }
+            }
+          }
+  
+          .user-avatar {
+            width: 40px;
+            height: 40px;
+          }
+        }
+      }
+    }
+  }
+}
+  
