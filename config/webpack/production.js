@@ -47,7 +47,7 @@ combinedConfig.plugins.push(
   new CompressionPlugin({
     asset: '[file]',
     algorithm: 'gzip',
-    regExp: /\.js$|\.css$/,
+    include: /\.js$|\.css$/,
     threshold: 10240,
     minRatio: 0.8
   })
