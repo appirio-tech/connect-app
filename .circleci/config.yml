@@ -70,6 +70,5 @@ workflows:
             - test
           filters:
             branches:
-              only: master
-
+              only: dev-auth0
             
