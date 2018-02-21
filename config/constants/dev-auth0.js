@@ -33,6 +33,7 @@ module.exports = {
 
   ACCOUNTS_APP_URL             : 'https://accounts-auth0.topcoder-dev.com/#!/member',
   ACCOUNTS_APP_CONNECTOR_URL   : 'https://accounts-auth0.topcoder-dev.com/connector.html',
+  ACCOUNTS_APP_LOGIN_URL       : 'https://accounts-auth0.topcoder-dev.com/#!/connect?retUrl=http://connect-auth0.topcoder-dev.com/',
 
   FILE_PICKER_API_KEY: process.env.FILE_PICKER_API_KEY_DEV,
   FILE_PICKER_SUBMISSION_CONTAINER_NAME: 'submission-staging-dev',
