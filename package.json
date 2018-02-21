@@ -131,7 +131,7 @@
     "redux-thunk": "^2.1.0",
     "remarkable": "^1.7.1",
     "svg-react-loader": "^0.4.5",
-    "tc-accounts": "git+https://github.com/appirio-tech/accounts-app.git#0.0.11",
+    "tc-accounts": "git+https://github.com/appirio-tech/accounts-app.git#dev-auth0",
     "tc-ui": "git+https://github.com/appirio-tech/tc-ui.git#feature/connectv2",
     "tlds": "^1.191.0",
     "topcoder-react-utils": "0.0.39"
