@@ -50,6 +50,6 @@ combinedConfig.entry.main = combinedConfig.entry.main.filter((entry) => (
   Enable source maps.
   This also let us see original file names in browser console.
  */
-combinedConfig.devtool = 'eval'
+combinedConfig.devtool = 'source-map'
 
 module.exports = combinedConfig

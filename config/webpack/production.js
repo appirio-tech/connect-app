@@ -53,4 +53,10 @@ combinedConfig.plugins.push(
   })
 )
 
+/*
+  Enable source maps.
+  This also let us see original file names in browser console.
+ */
+combinedConfig.devtool = 'source-map'
+
 module.exports = combinedConfig
