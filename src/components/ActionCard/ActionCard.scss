@@ -28,7 +28,7 @@
       right: 0;
       top: 10px;
       height: 20px;
-      width: 30px;
+      width: 16px;
       margin: 0;
 
       .down-layer {
@@ -42,6 +42,7 @@
 
     .edit-toggle-container {
       display: block;
+      margin: 0;
       // float: right;
 
       .edit-toggle {
@@ -137,7 +138,7 @@
       line-height: $base-unit*4;
       margin-bottom: 10px;
       position: relative;
-      padding-top: 10px;
+      padding: 10px 25px 0 0;
 
       .card-author {
         white-space: nowrap;
