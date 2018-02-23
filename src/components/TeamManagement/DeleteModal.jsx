@@ -30,7 +30,7 @@ const DeleteModal = ({onCancel, onConfirm, isCustomer, isCopilot, isManager, isL
 
   if (isLeave) {
     title = 'You are about to leave the project'
-    content = 'Once you leave, somebody on the team has to add you fo you to be able to see the project. Do you still want to leave the project?'
+    content = 'Once you leave, somebody on the team has to add you for you to be able to see the project. Do you still want to leave the project?'
     btnText = 'Leave Project'
   }
 
