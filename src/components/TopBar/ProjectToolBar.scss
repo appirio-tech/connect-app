@@ -7,24 +7,29 @@
     min-height: 60px;
     width: 100%;
     height: auto;
+
     .tool-bar {
       display: flex;
       justify-content: space-between;
       width: 100%;
       height: 60px;
       background-color: $tc-black;
-      .bar-column:first-child{
+
+      .bar-column:first-child {
         display: flex;
         // width: calc(100% - 560px);
       }
-      .bar-column:last-child{
+
+      .bar-column:last-child {
         // width: 560px;
         display: flex;
       }
+
       .logo-wrapper {
-        width: 110px;
-        margin-left: 4 * $base-unit;
+        width: 60px;
+        margin: 0 20px;
       }
+
       .breadcrumb {
         @include tc-label-xs;
         line-height: 6 * $base-unit;
@@ -33,58 +38,64 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: flex;
+
         a {
           display: flex;
           align-items: center;
           flex-shrink: 0;
           color: $tc-gray-50;
           text-transform: uppercase;
-  
+
           .icon-tail-left {// Back arrow
             fill: $tc-gray-50;
             height: 13px;
-            margin-right: 10px;
-            margin-right: 12px;
+            margin-right: 5px;
           }
-          &:hover, &.hover{
+
+          &:hover,
+          &.hover {
             text-decoration: none;
             color: $tc-orange-30;
+
             .icon-tail-left {// Back arrow
               fill: $tc-orange-30;
             }
           }
         }
       }
-  
+
       .bar-column.project-name {
         display: flex;
         align-items: center;
-  
+
         span {
           @include tc-heading;
           color: $tc-gray-10;
-          display:block;
+          display: block;
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
           max-width: 500px;
         }
       }
-  
-      .bar-column .welcome-info{
+
+      .bar-column .welcome-info {
         width: 70px;
         display: flex;
         align-items: center;
-        margin-right: 4*$base-unit;
+        margin-right: 4 * $base-unit;
+
         .avatar-info {
           position: relative;
+
           .username {
             display: none;
           }
-          .avatar{
+
+          .avatar {
             width: 30px;
             height: 30px;
-            background-color: $tc-dark-blue-70 ;
+            background-color: $tc-dark-blue-70;
             border-radius: 15px;
             overflow: hidden;
             text-align: center;
@@ -95,13 +106,15 @@
             position: absolute;
             left: 0;
             top: 0;
-            img{
+
+            img {
               width: 30px;
               height: 30px;
               border-radius: 15px;
             }
           }
-          .avatar-link-arrow{
+
+          .avatar-link-arrow {
             display: block;
             width: 10px;
             height: 30px;
@@ -111,13 +124,14 @@
         }
       }
     }
-  
-    .nav{
+
+    .nav {
       padding-right: 5px;
       height: 20px;
       margin-top: 20px;
       border-right: 1px solid $tc-gray-80;
-      ul{
+
+      ul {
         /*width: 484px;*/
         width: auto;
         height: 20px;
@@ -126,22 +140,27 @@
         margin: 0;
         padding: 0;
       }
+
       li#active a i svg g {
         fill: #fee3d0 !important;
       }
+
       li#active a i svg path {
         fill: #fee3d0 !important;
       }
-      ul li{
+
+      ul li {
         padding: 0 15px;
         height: 20px;
         line-height: 20px;
         text-align: center;
         vertical-align: middle;
-        &:first-child{
+
+        &:first-child {
           padding-left: 0;
         }
-        a{
+
+        a {
           display: inline-block;
           @include roboto-medium;
           font-size: $tc-label-md;
@@ -150,7 +169,7 @@
           position: relative;
           padding-left: 26px;
           /* menu icons */
-          >svg{
+          > svg {
             display: block;
             width: 16px;
             height: 16px;
@@ -159,84 +178,103 @@
             top: 2px;
           }
         }
-  
+
         .icon-dashboard {
           width: 16px;
           height: 16px;
         }
+
         #active svg.icon-dashboard g {
           color: #fee3d0 !important;
         }
+
         #active svg.icon-dashboard-active g {
           color: #fee3d0 !important;
         }
+
         .icon-dashboard-hover {
           color: $tc-orange-30;
         }
+
         .icon-dashboard-active {
           color: $tc-orange-70;
         }
-  
+
         .icon-specification {
           width: 16px;
           height: 16px;
         }
+
         #active svg.icon-specification g {
           color: #fee3d0 !important;
         }
+
         #active svg.icon-specification-active g {
           color: #fee3d0 !important;
         }
+
         li#active a i svg g {
           fill: #fee3d0 !important;
         }
+
         .icon-specification-hover {
           color: $tc-orange-30;
         }
+
         .icon-specification-active {
           color: $tc-orange-70;
         }
-  
+
         .icon-messages {
           width: 16px;
           height: 16px;
         }
+
         #active a i svg g {
           color: #fee3d0 !important;
         }
+
         .icon-messages-hover {
           color: $tc-orange-30;
         }
+
         .icon-messages-active {
           color: $tc-orange-70;
         }
-  
+
         .icon-challenges {
           width: 16px;
           height: 16px;
         }
+
         #active a i svg g {
           color: #fee3d0 !important;
         }
+
         .icon-challenges-hover {
           color: $tc-orange-30;
         }
+
         .icon-challenges-active {
           color: $tc-orange-70;
         }
-  
-        &:hover, &.hover{
-          a, a:hover{
+
+        &:hover,
+        &.hover {
+          a,
+          a:hover {
             color: $tc-orange-30;
           }
         }
-        a.active, a.active:hover{
+
+        a.active,
+        a.active:hover {
           color: $tc-orange-70;
         }
       }
     }
-  
-    .breadcrumb-tooltip{
+
+    .breadcrumb-tooltip {
       @include roboto();
       word-break: break-word;
       position: absolute;
@@ -251,7 +289,8 @@
       background-color: $tc-gray-80;
       border-radius: 4px;
       z-index: 10;
-      &:before{
+
+      &:before {
         display: block;
         content: '';
         position: absolute;
@@ -267,11 +306,11 @@
       }
     }
   }
-  
+
   @media all and (max-width: 1023px) {
     .ProjectToolBar {
-      .top-bar{
-        &:after{
+      .top-bar {
+        &:after {
           display: block;
           content: '';
           width: 0;
@@ -279,55 +318,70 @@
           clear: both;
           overflow: hidden;
         }
+
         .bar-column:first-child {
           width: calc(100% - 215px);
         }
-        .bar-column:last-child{
+
+        .bar-column:last-child {
           width: 215px;
         }
+
         .logo-wrapper {
           width: 90px;
         }
-        .breadcrumb .breadcrumb-tooltip{
+
+        .breadcrumb .breadcrumb-tooltip {
           left: 28px;
         }
       }
+
       .nav {
         padding-right: 10px;
-        ul{
+
+        ul {
           width: auto;
         }
+
         ul li {
           padding: 0 10px;
+
           &:first-child {
             padding-left: 0;
           }
+
           a {
             padding-left: 16px;
+
             span {
               display: none;
             }
+
             svg {
-              position:relative;
+              position: relative;
             }
           }
         }
       }
     }
   }
-  
+
   @media all and (max-width: 1300px) {
     .ProjectToolBar {
       .nav.long-menu {
         padding-right: 10px;
-        ul{
+
+        ul {
           width: auto;
         }
+
         ul li {
           padding: 0 10px;
+
           &:first-child {
             padding-left: 0;
           }
+
           a {
             padding-left: 16px;
             text-indent: -9999px;
