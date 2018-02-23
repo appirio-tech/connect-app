@@ -61,7 +61,6 @@ class FeedComments extends React.Component {
               <div className="comment-count">
                 {getCommentCount(totalComments)}
               </div>
-              <hr className={cn({'no-margin': !comments.length})} />
               {hasMoreComments && <div className={cn('comment-collapse', {'loading-comments': isLoadingComments})}>
                 <a href="javascript:" onClick={ handleLoadMoreClick } className="comment-collapse-button">
                   {isLoadingComments ? 'Loading...' : 'View older comments'}
@@ -91,7 +90,7 @@ class FeedComments extends React.Component {
         ))}
         {allowComments &&
       <AddComment
-        placeholder="Create a new comment..."
+        placeholder="Write a message"
         onAdd={onAddNewComment}
         onChange={onNewCommentChange}
         avatarUrl={avatarUrl}

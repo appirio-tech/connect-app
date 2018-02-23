@@ -1,10 +1,13 @@
 @import '~tc-ui/src/styles/tc-includes';
+
 :global {
-  .rich-editor{
+  .rich-editor {
     position: relative;
+
     .addLinkButton {
       position: relative;
     }
+
     .addLinkModal {
       top: 30px;
       left: 50%;
@@ -16,7 +19,7 @@
       box-shadow: 0 1px 18px 0 rgba($tc-black, 0.3);
       z-index: 2;
       box-sizing: border-box;
-  
+
       .modalWrapper {
         white-space: nowrap;
         background: $tc-white;
@@ -25,7 +28,7 @@
         background-color: white;
         width: 360px;
       }
-  
+
       .modalInput {
         display: inline-block;
         background-color: transparent;
@@ -39,16 +42,16 @@
         padding: 16px;
         width: 270px;
         @include placeholder {
-          font-size:15px;
+          font-size: 15px;
         }
       }
-  
+
       .modalInput:focus {
         outline: none;
         box-shadow: none !important;
         background: transparent !important;
       }
-  
+
       .modalButton {
         padding: 0;
         cursor: pointer;
@@ -60,16 +63,16 @@
         padding-right: 16px;
         color: $tc-gray-30;
       }
-  
+
       .modalButton:hover {
         color: $tc-red;
       }
-  
+
       .modalButtonWrapper {
         display: inline-block;
         vertical-align: middle;
       }
-  
+
       .modalError {
         transition: height 0.2s ease-in-out;
         color: $tc-white;
@@ -78,53 +81,57 @@
       }
     }
   }
+
   .public-DraftEditorPlaceholder-root {
     position: absolute;
     padding-left: 10px;
     padding-top: 5px;
+    line-height: 30px;
     color: $tc-gray-40;
   }
+
   .public-DraftEditorPlaceholder-hasFocus {
     display: none !important;
   }
-  
+
   .action-card .comment .tc-textarea .public-DraftEditor-content {
-    min-height: 60px !important;
+    min-height: 40px;
   }
-  .action-card .expanded .comment .tc-textarea .public-DraftEditor-content {
-    min-height: 145px !important;
-  }
-  
+
+  // .action-card .expanded .comment .tc-textarea .public-DraftEditor-content {
+//   min-height: 145px;
+// }
+
   .action-card .comment .textarea-footer {
     display: none !important;
   }
-  
+
   .action-card .expanded .comment .textarea-footer {
     display: flex !important;
   }
-  
+
   .hide-title {
     display: none !important;
   }
-  
+
   span.bbcode-u {
-      text-decoration: underline;
+    text-decoration: underline;
   }
-  
-  .editor-tool{
-    border-radius:3px;
-    display:flex;
-    height:30px;
-    width:30px;
+
+  .editor-tool {
+    border-radius: 3px;
+    display: flex;
+    height: 30px;
+    width: 30px;
     align-items: center;
-    justify-content:center;
+    justify-content: center;
   }
-  
-  .tool-active{
-    background-color:$tc-gray-90;
-  
+
+  .tool-active {
+    background-color: $tc-gray-90;
   }
-  .tool-inactive{
+
+  .tool-inactive {
     background-color: transparent;
   }
 }

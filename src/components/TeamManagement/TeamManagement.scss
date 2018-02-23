@@ -13,10 +13,13 @@
 
   /* wrap to avoid conflicts */
   .team-management {
+    border-radius: 0 0 4px 4px;
+
     .panel {
       background: $tc-white;
-      border-radius: $corner-radius;
+      border-radius: 0 0 4px 4px;
       padding: $base-unit*2 0;
+      box-shadow: none;
 
       .panel-title,
       .panel-body,
@@ -277,7 +280,7 @@
 
             .input-icon {
               height: 30px;
-              width:30px;
+              width: 30px;
               margin: 4px;
 
               &:empty {

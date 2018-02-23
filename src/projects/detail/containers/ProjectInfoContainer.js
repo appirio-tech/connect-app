@@ -100,23 +100,25 @@ class ProjectInfoContainer extends React.Component {
     }
     return (
       <div>
-        <ProjectInfo
-          project={project}
-          currentMemberRole={currentMemberRole}
-          duration={duration}
-          canDeleteProject={canDeleteProject}
-          onDeleteProject={this.onDeleteProject}
-          onChangeStatus={this.onChangeStatus}
-          directLinks={directLinks}
-          isSuperUser={isSuperUser}
-        />
-        <LinksMenu
-          links={project.bookmarks || []}
-          canDelete={!!currentMemberRole}
-          onAddNewLink={this.onAddNewLink}
-          onDelete={this.onDeleteLink}
-        />
-        <TeamManagementContainer projectId={project.id} members={project.members} />
+        <div className="sideAreaWrapper">
+          <ProjectInfo
+            project={project}
+            currentMemberRole={currentMemberRole}
+            duration={duration}
+            canDeleteProject={canDeleteProject}
+            onDeleteProject={this.onDeleteProject}
+            onChangeStatus={this.onChangeStatus}
+            directLinks={directLinks}
+            isSuperUser={isSuperUser}
+          />
+          <LinksMenu
+            links={project.bookmarks || []}
+            canDelete={!!currentMemberRole}
+            onAddNewLink={this.onAddNewLink}
+            onDelete={this.onDeleteLink}
+          />
+          <TeamManagementContainer projectId={project.id} members={project.members} />
+        </div>
         <FooterV2 />
       </div>
     )

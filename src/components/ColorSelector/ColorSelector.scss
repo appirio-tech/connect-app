@@ -3,7 +3,8 @@
 :global {
   .colorSelector {
     text-align: center;
-    .color-card{
+
+    .color-card {
       height: 40px;
       width: 40px;
       display: inline-block;
@@ -11,6 +12,7 @@
       border-radius: 4px;
       margin: 0 15px;
       position: relative;
+
       .remove-color {
         background-color: $tc-gray-60;
         opacity: 0.7;
@@ -19,6 +21,7 @@
         width: 39px;
         height: 38px;
       }
+
       &:hover {
         .remove-color {
           display: flex;
@@ -26,12 +29,14 @@
           align-items: center;
         }
       }
+
       svg {
         position: relative;
         border-color: $tc-gray-30;
         margin: 10px;
       }
     }
+
     .picker-wrapper {
       z-index: 2;
       right: 0;
@@ -42,11 +47,14 @@
       display: flex;
       padding: 10px;
       box-shadow: rgba($tc-black, 0.14902) 0px 0px 0px 1px, rgba($tc-black, 0.14902) 0px 8px 16px;
+
       > div {
-        box-shadow: none !important;
+        // box-shadow: none !important;
       }
+
       .buttons {
         width: 100px;
+
         .tc-btn {
           width: 100%;
           margin-top: 10px;
