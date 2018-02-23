@@ -90,7 +90,7 @@ class FeedComments extends React.Component {
         ))}
         {allowComments &&
       <AddComment
-        placeholder="Write a message"
+        placeholder="Write a comment"
         onAdd={onAddNewComment}
         onChange={onNewCommentChange}
         avatarUrl={avatarUrl}
