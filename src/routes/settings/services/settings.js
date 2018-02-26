@@ -5,7 +5,7 @@
  */
 import _ from 'lodash'
 import { axiosInstance as axios } from '../../../api/requestInterceptor'
-import { TC_NOTIFICATION_URL } from '../../../../config/constants'
+import { TC_NOTIFICATION_URL } from '../../../config/constants'
 
 // mocked fetching timeout
 const mockedTimeout = 1000
