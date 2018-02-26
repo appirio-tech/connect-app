@@ -6,77 +6,81 @@
   $tc-rgba-10: rgba($tc-gray-80, 0.38);
   $tc-rgba-20: rgba($tc-black, 0.17);
   $tc-body-large: 20px;
-  
+
   .ProjectsToolBar {
     margin: 0 auto;
     width: 100%;
     display: flex;
     flex-direction: column;
-  
+
     .primary-toolbar {
       display: flex;
       width: 100%;
+      min-height: 60px;
+      height: 60px;
       justify-content: space-between;
-  
+
       .logo-wrapper {
         margin-left: 4 * $base-unit;
       }
-  
+
       .MenuBar {
         li.selected {
           // hides the bottom border as per https://github.com/appirio-tech/connect-app/issues/1267#issuecomment-343298713
           border-bottom: none;
         }
       }
-  
+
       .primary-filters {
         margin-top: 15px;
       }
-  
+
       .welcome-info {
         margin-right: 4 * $base-unit;
-  
+
         .avatar-info {
           .username {
             display: none;
           }
         }
       }
-  
+
       .actions {
         display: flex;
       }
     }
-  
+
     .secondary-toolbar {
       display: flex;
+      min-height: 60px;
+      height: 60px;
     }
-  
+
     .MenuBar li {
       align-items: center; // should reside in MenuBar component instead
-  
+
       a {
         text-transform: uppercase;
         font-size: $tc-label-xs;
         line-height: 6 * $base-unit;
       }
-  
+
       &.selected a {
         color: $tc-gray-10;
       }
     }
-  
+
     .search-widget {
       width: 595px;
       height: 30px;
       margin-top: 15px;
       display: flex;
     }
-  
+
     .search-filter {
       width: 97px;
       margin-left: 2 * $base-unit;
-  
+
       .tc-btn {
         display: flex;
         align-items: center;
@@ -89,21 +93,21 @@
         border: 0;
         font-size: 12px;
         position: relative;
-  
+
         svg.icon-search-filter {
           margin-right: 10px;
         }
-  
+
         &.active {
           background: $tc-gray-80;
           box-shadow: inset 0px 1px 3px 0px $tc-rgba-10;
-  
+
           svg.icon-search-filter g {
             fill: #fff;
           }
         }
       }
-  
+
       .filter-indicator {
         width: 15px;
         height: 15px;
@@ -116,7 +120,7 @@
         align-items: center;
       }
     }
-  
+
     /* .bar__search */
     .bar__search {
       align-items: center;
@@ -130,26 +134,26 @@
       display: flex;
       justify-content: space-between;
       width: 100%;
-  
+
       h2 {
         font-size: $tc-body-large;
         color: $tc-black;
         white-space: nowrap;
       }
-  
+
       .bar-control {
         width: 120px;
         text-align: right;
         min-height: 30px;
         padding-top: 15px;
-  
+
         .tc-btn {
           display: inline-block;
           height: 30px;
           white-space: nowrap;
         }
       }
-  
+
       .search-panel {
         flex: 1;
         margin: 0 auto;
@@ -157,13 +161,13 @@
         display: flex;
         justify-content: space-between;
         padding-right: 30px;
-  
+
         .search-select-widget {
           align-items: center;
           display: flex;
           margin-left: 40px;
           flex: 1;
-  
+
           label {
             @include roboto-medium;
             display: inline-block;
@@ -176,14 +180,14 @@
             white-space: nowrap;
           }
         }
-  
+
         .search-select-field {
           flex: 1;
         }
       }
     }
   }
-  
+
   .SwitchButton .label {
     padding-right: 10px;
     text-align: right;
@@ -191,12 +195,12 @@
     width: auto;
     cursor: pointer;
     transition: 200ms ease-in-out all;
-  
+
     &:hover {
       color: $tc-gray-30;
     }
   }
-  
+
   .project-creation-dialog-overlay {
     position: fixed;
     top: 0;
@@ -209,44 +213,44 @@
     overflow-y: scroll;
     opacity: 1;
     transition: all .250ms ease-in-out;
-  
+
     .IncompleteProjectConfirmation {
       margin-top: 0px;
     }
-  
+
     .SelectProduct {
       margin-top: 30px;
     }
-  
+
     section.content {
       padding: 1px 0;
     }
-  
+
     .escape-button {
       position: absolute;
       right: 12px;
       top: 12px;
       z-index: 22;/* +1 from z-index of the modal overlay */
     }
-  
+
     // .FillProjectDetailsWrapper {
     //   margin-top: -60px; // Counteract the push from the main wrapper, top of vewport
     // }
   }
-  
+
   .project-creation-dialog {
     top: 0px;
     left: 0px;
-  
+
     .Wizard .content {
     }
-  
+
     .TextInput.project-name,
     .TextInput.project-ref-code {
       height: 45px;
     }
   }
-  
+
   /*.project-creation-dialog-close {
     cursor: pointer;
     position: fixed;

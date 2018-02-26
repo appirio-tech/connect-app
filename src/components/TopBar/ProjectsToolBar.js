@@ -200,14 +200,16 @@ class ProjectsToolBar extends Component {
             { !!isLoggedIn && <NotificationsDropdown /> }
           </div>
         </div>
+        { isFilterVisible && isLoggedIn &&
         <div className="secondary-toolbar">
-          { isFilterVisible && isLoggedIn &&
+          
           <Filters
             applyFilters={ this.applyFilters }
             criteria={ criteria }
           />
-          }
         </div>
+        }
+        
       </div>
     )
   }
