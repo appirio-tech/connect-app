@@ -1,35 +1,38 @@
-@import "tc-includes";
+@import '~tc-ui/src/styles/tc-includes';
 
-.footer-v2 {
-  @include roboto;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  font-size: $tc-label-xs;
-  color: $tc-gray-50;
-  line-height: $base-unit*6;
-  padding: 0 10px;
-  margin-top: $base-unit*2;
+:global {
+  .footer-v2 {
+    @include roboto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    font-size: $tc-label-xs;
+    color: $tc-gray-50;
+    line-height: $base-unit*6;
+    // padding: 0 10px;
+    margin-top: $base-unit*2;
 
-  ul {
-    white-space: nowrap;
-  }
+    ul {
+      white-space: nowrap;
+    }
 
-  li {
-    display: inline-block;
-  }
+    li {
+      display: inline-block;
+    }
 
-  li:not(:first-child)::before {
-    content: " • "; // U+00B7
-    padding-left: $base-unit;
-  }
+    li:not(:first-child)::before {
+      content: " • "; // U+00B7
+      padding-left: $base-unit;
+    }
 
-  a:hover {
-    color: $tc-dark-blue;
-  }
+    a:hover {
+      color: $tc-dark-blue-110;
+    }
 
-  .footer-copyright {
-    color: $tc-gray-30;
-    white-space: nowrap;
+    .footer-copyright {
+      color: $tc-gray-30;
+      white-space: nowrap;
+    }
   }
 }
+  

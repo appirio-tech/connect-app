@@ -117,19 +117,11 @@ class ProjectSpecSidebar extends Component {
     // types of projects in the future. But let's keep it this way for now because
     // project estimate is only available for one kind of projects
     const getProjectEstimateSection = () => {
-      const { appDefinition, products } = project.details
-
-      // project estimate only available for visual design porjects right now
-      // estimation is support with introduction of products, hence it would rendered only for new projects
-      if (project.type !== 'visual_design' || !products || project.details.products[0] === 'generic_design') return
-
-      if (!appDefinition || !appDefinition.numberScreens) return (
-        <div className="list-group"><VisualDesignProjectEstimateSection  products={products} /></div>
-      )
+      const { products } = project.details
 
       return (
         <div className="list-group">
-          <VisualDesignProjectEstimateSection products={products} numberScreens={appDefinition.numberScreens} />
+          <VisualDesignProjectEstimateSection products={products} project={project} />
         </div>
       )
     }

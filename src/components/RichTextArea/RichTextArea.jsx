@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Editor, {composeDecorators} from 'draft-js-plugins-editor'
 import {EditorState, RichUtils} from 'draft-js'
-import {Avatar} from 'appirio-tech-react-components'
+import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import cn from 'classnames'
 import createLinkPlugin from 'draft-js-link-plugin'
 import createImagePlugin from 'draft-js-image-plugin'
@@ -70,7 +70,7 @@ class RichTextArea extends React.Component {
     this.onAddMention = this.onAddMention.bind(this)
     this.mentionPlugin = createMentionPlugin({mentionPrefix: '@'})
     this.plugins = plugins.slice(0)
-    this.plugins.push(this.mentionPlugin) 
+    this.plugins.push(this.mentionPlugin)
   }
 
   componentDidMount() {
@@ -96,7 +96,7 @@ class RichTextArea extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    
+
     if (nextProps.isCreating !== this.props.isCreating && !nextProps.isCreating && !nextProps.hasError) {
       this.clearState()
     } else if ((nextProps.isGettingComment !== this.props.isGettingComment && !nextProps.isGettingComment)
@@ -273,12 +273,11 @@ class RichTextArea extends React.Component {
         </div>
       )
     }
-    
+
     return (
       <div className={cn(className, 'rich-editor', {expanded: editorExpanded || editMode})} ref="richEditor">
         {(isCreating || isGettingComment) &&
-         <div className="editing-layer">
-         </div>
+         <div className="editing-layer" />
         }
         {uploading &&
          <div className="editing-layer">
@@ -320,7 +319,7 @@ class RichTextArea extends React.Component {
               }
               <div className="textarea-footer">
                 <div className="textarea-buttons">
-                  {styles.map((item) =>
+                  {styles.map((item) => (
                     <button
                       key={item.style}
                       disabled={disableForCodeBlock}
@@ -333,9 +332,9 @@ class RichTextArea extends React.Component {
                         EditorIcons.render(item.className, currentStyle.has(item.style))
                       }
                     </button>
-                    )}
+                  ))}
                   <div className="separator"/>
-                  {blocks.map((item) =>
+                  {blocks.map((item) => (
                     <button
                       disabled={item.style !== 'code-block' && disableForCodeBlock}
                       key={item.style}
@@ -348,7 +347,7 @@ class RichTextArea extends React.Component {
                         EditorIcons.render(item.className, item.style === blockType)
                       }
                     </button>
-                    )}
+                  ))}
                   <AddLinkButton
                     type={'link'}
                     getEditorState={this.getEditorState}
@@ -357,7 +356,7 @@ class RichTextArea extends React.Component {
                     active={currentEntity && 'LINK' === currentEntity.getType()}
                   />
                   <div className="separator"/>
-                  { allowImages && 
+                  { allowImages &&
                     <AddLinkButton
                       type={'image'}
                       getEditorState={this.getEditorState}
@@ -367,21 +366,21 @@ class RichTextArea extends React.Component {
                   }
                 </div>
                 <div className="tc-btns">
-                { editMode && !isCreating &&
+                  { editMode && !isCreating &&
                 <button className="tc-btn tc-btn-link tc-btn-sm" onClick={this.cancelEdit}>
                   Cancel
                 </button>
-                }
-                { editMode &&
+                  }
+                  { editMode &&
                 <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
                   { isCreating ? 'Saving...' : 'Save changes' }
                 </button>
-                }
-                { !editMode &&
+                  }
+                  { !editMode &&
                 <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
                   { isCreating ? 'Posting...' : 'Post' }
                 </button>
-                }
+                  }
                 </div>
               </div>
             </div>

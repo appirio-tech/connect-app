@@ -1,38 +1,40 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.project-info {
-  display: flex;
-  flex-direction: column;
-  background-color: $tc-white;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  @include tc-label-md;
+:global {
+  .project-info {
+    display: flex;
+    flex-direction: column;
+    background-color: $tc-white;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    padding-bottom: 25px;
+    @include tc-label-md;
 
-  .project-card-body {
-    padding-left: 4 * $base_unit;
-    padding-right: 4 * $base_unit;
-    .project-description {
-      max-height: 120px;
-      min-height: 10px;
-      margin-bottom: 5 * $base_unit;
+    .project-card-body {
+      padding-left: 4 * $base_unit;
+      padding-right: 4 * $base_unit;
+      z-index: 1;
+      min-height: 135px;
+
+      .project-description {
+        max-height: 120px;
+        min-height: 10px;
+        margin-bottom: 5 * $base_unit;
+      }
+    }
+
+    .project-info-header {
+      display: flex;
+      fill: $tc-gray-50;
+      padding-left: 4 * $base_unit;
+      padding-right: 4 * $base_unit;
+      padding-top: 4 * $base_unit;
+
+      .project-delete-icon {
+        margin-top: 4px;
+        margin-left: $base_unit;
+      }
     }
   }
-
-  .project-info-header {
-    display:flex;
-    fill: $tc-gray-50;
-    padding-left: 4 * $base_unit;
-    padding-right: 4 * $base_unit;
-    padding-top: 4 * $base_unit;
-
-    .project-delete-icon {
-      margin-top: 4px;
-      margin-left: $base_unit;
-    }
-  }
-
 }
-
-.panel {
-  box-shadow:none !important;
-}
+  

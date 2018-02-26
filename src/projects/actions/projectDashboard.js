@@ -8,7 +8,7 @@ import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../conf
  * @param  {integer} projectId project identifier
  */
 
- /*eslint-disable no-unused-vars */
+/*eslint-disable no-unused-vars */
 const getDashboardData = (dispatch, projectId) => {
   return new Promise((resolve, reject) => {
     return dispatch(loadProject(projectId))

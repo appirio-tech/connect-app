@@ -1,63 +1,66 @@
 // this is to include tc styles in the output library
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.settings-panel {
-  margin: 20px auto 0;
-  padding: 0 20px;
-  min-width: 960px;
-
-  > .inner {
-    background-color: $tc-white;
-    border-radius: 6px;
-    margin: 0 auto;
-    max-width: 720px;
-    padding: 50px 60px 40px;
-
-    > .title {
-      @include roboto-light;
-      color: $tc-gray-50;
-      font-size: 28px;
-      line-height: 30px;
-      text-align: center;
-    }
-
-    > .text {
-      @include roboto;
-      color: $tc-gray-50;
-      font-size: 15px;
-      line-height: 25px;
-      margin-top: 20px;
-    }
-
-    > .content {
-      border-top: 1px solid $tc-gray-50;
-      margin-top: 30px;
-    }
-  }
-
-  &.wide {
+:global {
+  .settings-panel {
+    margin: 20px auto 0;
+    padding: 0 20px;
+    min-width: 960px;
+  
     > .inner {
-      max-width: 960px;
-
+      background-color: $tc-white;
+      border-radius: 6px;
+      margin: 0 auto;
+      max-width: 720px;
+      padding: 50px 60px 40px;
+  
+      > .title {
+        @include roboto-light;
+        color: $tc-gray-50;
+        font-size: 28px;
+        line-height: 30px;
+        text-align: center;
+      }
+  
+      > .text {
+        @include roboto;
+        color: $tc-gray-50;
+        font-size: 15px;
+        line-height: 25px;
+        margin-top: 20px;
+      }
+  
       > .content {
-        border-top: 0;
-        margin-top: 0;
+        border-top: 1px solid $tc-gray-50;
+        margin-top: 30px;
       }
     }
-  }
-
-  a {
-    @include roboto;
-    text-decoration: underline;
-  }
-  // Link colors
-  a:link,
-  a:visited {
-    color: $tc-dark-blue;
-  }
-
-  a:hover,
-  a:active {
-    color: $tc-dark-blue-70;
+  
+    &.wide {
+      > .inner {
+        max-width: 960px;
+  
+        > .content {
+          border-top: 0;
+          margin-top: 0;
+        }
+      }
+    }
+  
+    a {
+      @include roboto;
+      text-decoration: underline;
+    }
+    // Link colors
+    a:link,
+    a:visited {
+      color: $tc-dark-blue;
+    }
+  
+    a:hover,
+    a:active {
+      color: $tc-dark-blue-70;
+    }
   }
 }
+  

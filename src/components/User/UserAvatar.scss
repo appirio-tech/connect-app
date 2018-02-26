@@ -1,20 +1,23 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 
-.user-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 100%;
-  position: relative;
-  background-size: cover;
-  background-position: center;
-  @media (max-width: 700px) {
-    margin-right: 10px;
-  }
-
-  .user-rank {
-    position: absolute;
-    top: 0;
-    right: 0;
+:global {
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    @media (max-width: 700px) {
+      margin-right: 10px;
+    }
+  
+    .user-rank {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
   }
 }
+  

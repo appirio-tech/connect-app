@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { TCFormFields } from 'appirio-tech-react-components'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
 import _ from 'lodash'
 
 const SeeAttachedWrapperField = (ComposedComponent, defaultValue = '') => class extends Component {

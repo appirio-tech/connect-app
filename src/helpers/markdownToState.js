@@ -65,19 +65,19 @@ const DefaultBlockTypes = {
 // meethod that returns the draftjs key + any data needed.
 const DefaultBlockEntities = {
   link_open: (item) => { //eslint-disable-line
-  
+
     if (item.title && item.title.startsWith('@')){
       return {
         type: 'mention',
         mutability: 'MUTABLE',
         data: {
           mention: new Map([
-              ['name', item.title.slice(1)],
-              ['link', item.href]
+            ['name', item.title.slice(1)],
+            ['link', item.href]
           ])
         }
       }
-    }  
+    }
 
     return {
       type: 'LINK',
@@ -265,4 +265,4 @@ function markdownToState(markdown, options = {}) {
   })
 }
 
-module.exports = markdownToState
+export default markdownToState

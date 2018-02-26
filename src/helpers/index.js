@@ -1,29 +1,8 @@
 import _ from 'lodash'
-import fetch from 'isomorphic-fetch'
 import tcEmitter from './emitter'
 
 export const TCEmitter = tcEmitter
 export const titleCase = (str) => _.startCase(_.camelCase(str))
-
-
-// Fetch helpers
-export function status(response) {
-  if (response.status >= 200 && response.status < 400) {
-    return Promise.resolve(response)
-  } else {
-    return Promise.reject(new Error(response.statusText))
-  }
-}
-
-export function json(response) {
-  return response.json()
-}
-
-export function fetchJSON(url, options) {
-  return fetch(url, options)
-  .then(status)
-  .then(json)
-}
 
 // Subtrack Abbreviations
 export function getSubtrackAbbreviation(subtrack) {

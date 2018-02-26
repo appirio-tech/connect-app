@@ -343,8 +343,8 @@ class FeaturePicker extends Component {
         </li>
       )
     }
-    const defaultFeatureForm = selectedFeatureId
-    ? (<DefaultFeatureForm
+    const defaultFeatureForm = selectedFeatureId ? (
+      <DefaultFeatureForm
         isEdittable={isEdittable}
         featureDesc={selectedFeature}
         featureData={selectedFeatureData}
@@ -352,11 +352,13 @@ class FeaturePicker extends Component {
         toggleFeature={ this.toggleFeature }
         addFeature={this.addFeature}
         removeFeature={this.removeFeature}
-       />)
-    : (<div className="feature-form-instructions">
-      <h3>Select and define features for your app</h3>
-      <p>Select from the most popular features, listed on the left, or define your own custom features.</p>
-      </div>)
+      />
+    ) : (
+      <div className="feature-form-instructions">
+        <h3>Select and define features for your app</h3>
+        <p>Select from the most popular features, listed on the left, or define your own custom features.</p>
+      </div>
+    )
 
     return (
       <div className="define-features">
@@ -377,8 +379,9 @@ class FeaturePicker extends Component {
             </ul>
           </div>
           <div className="contents features-content flex column flex-grow">
-            { showCutsomFeatureForm
-              ? (<CustomFeatureForm
+            {
+              showCutsomFeatureForm ? (
+                <CustomFeatureForm
                   isEdittable={isEdittable}
                   featureData={selectedFeatureData}
                   updateFeature={this.updateSelectedFeature}
@@ -386,8 +389,8 @@ class FeaturePicker extends Component {
                   addFeature={this.addFeature}
                   removeFeature={this.removeFeature}
                   onCancel={this.renderDefaultFeatureForm}
-                 />)
-              : defaultFeatureForm
+                />
+              ) : defaultFeatureForm
             }
           </div>
           <div className="contents flex column">

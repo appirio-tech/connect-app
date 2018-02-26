@@ -5,7 +5,7 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Dropdown } from 'appirio-tech-react-components'
+import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 import cn from 'classnames'
 import Bell from '../../assets/icons/ui-bell.svg'
 

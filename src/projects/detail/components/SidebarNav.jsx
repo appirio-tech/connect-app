@@ -39,17 +39,17 @@ const renderSubNavItems = (child, idx) => {
  * Dumb component that renders NavItems
  */
 const SidebarNavItem = ({ name, link, required, subItems, index}) =>
-  <div className="item">
+  (<div className="item">
     <DirectLink to={link} {...scrollProps} href="javascript:">
       <h4 className="title">
         <span className="number" >{index}.</span>{name}
-          {required && <span className="required">* required</span>}
+        {required && <span className="required">* required</span>}
       </h4>
     </DirectLink>
     <ul>
       {subItems.map(renderSubNavItems)}
     </ul>
-  </div>
+  </div>)
 
 class SidebarNav extends Component {
   render() {

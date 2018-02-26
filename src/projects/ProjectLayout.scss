@@ -1,7 +1,10 @@
 // this is to include tc styles in the output library
 @import '~tc-ui/src/styles/tc-includes';
 
-.main-pane {
-  width: 100%;
-  margin: 0px 20px 20px 20px;
+:global {
+  .main-pane {
+    width: 100%;
+    margin: 0px 20px 20px 20px;
+  }
 }
+  

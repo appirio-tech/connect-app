@@ -17,11 +17,11 @@ const StatusFilters = ({criteria, applyFilters}) => {
   })
   return (
     <div className="filterContainer">
-    <ul className="filterList">
-      { _statuses.map((status, i) => 
-        <li key={i} className={`filterItem ${(status.label ==='All Statuses' && !criteria.status) || status.val===criteria.status ? 'active' : ''}`} onClick={() => applyFilters({status: status.val})}>{status.label}</li>
-      )}
-    </ul>
+      <ul className="filterList">
+        { _statuses.map((status, i) => 
+          <li key={i} className={`filterItem ${(status.label ==='All Statuses' && !criteria.status) || status.val===criteria.status ? 'active' : ''}`} onClick={() => applyFilters({status: status.val})}>{status.label}</li>
+        )}
+      </ul>
     </div>
   )
 }

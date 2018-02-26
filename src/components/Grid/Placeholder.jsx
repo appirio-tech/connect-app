@@ -16,7 +16,7 @@ const Placeholder = ({ columns }) => {
   return (
     <div className="row">
       <div className="flex-row">
-          {columns.map(renderColumn)}
+        {columns.map(renderColumn)}
       </div>
     </div>
   )

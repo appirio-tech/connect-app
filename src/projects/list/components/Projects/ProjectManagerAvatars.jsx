@@ -5,14 +5,14 @@ import UserTooltip from '../../../../components/User/UserTooltip'
 
 require('./ProjectManagerAvatars.scss')
 
-const ProjectManagerAvatars = ({ managers }) => {
+const ProjectManagerAvatars = ({ managers, maxShownNum = 3 }) => {
   let extM = false
   if (!managers || !managers.length)
     return <div className="user-block txt-italic">Unclaimed</div>
   const uniqManagers = _.uniqBy(managers, 'userId')
-  if (uniqManagers.length > 3) {
-    extM = uniqManagers.length - 3
-    uniqManagers.length = 3
+  if (uniqManagers.length > maxShownNum) {
+    extM = uniqManagers.length - maxShownNum
+    uniqManagers.length = maxShownNum
   }
   return (
     <div className="user-block">

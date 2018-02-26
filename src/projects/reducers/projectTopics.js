@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import moment from 'moment'
 import {
   CLEAR_LOADED_PROJECT,
   LOAD_PROJECT_PENDING,
@@ -84,7 +85,7 @@ export const projectTopics = function (state=initialState, action) {
      */
 
     const topics = _.sortBy(payload.topics, (t) => {
-      return new Date(t.lastActivityAt)
+      return moment(t.lastActivityAt)
     }).reverse()
 
     const feedUpdateQuery = {}

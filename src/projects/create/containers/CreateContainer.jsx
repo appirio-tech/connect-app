@@ -166,8 +166,12 @@ class CreateConainer extends React.Component {
         const gaClientId = Cookies.get(GA_CLIENT_ID)
         if(gaClientId || gaClickId) {
           const googleAnalytics = {}
-          googleAnalytics[GA_CLICK_ID]  = gaClickId
-          googleAnalytics[GA_CLIENT_ID] = gaClientId
+          if (gaClickId !== 'null') {
+            googleAnalytics[GA_CLICK_ID]  = gaClickId
+          }
+          if (gaClientId !== 'null') {
+            googleAnalytics[GA_CLIENT_ID] = gaClientId
+          }
           _.set(project, 'details.utm.google', googleAnalytics)
         }
         this.props.createProjectAction(project, PROJECT_STATUS_IN_REVIEW)
@@ -242,7 +246,7 @@ class CreateConainer extends React.Component {
           // const projectType = _.get(this.state.updatedProject, 'type', null)
           const prevProduct = _.get(this.state.updatedProject, 'details.products[0]', null)
           const product = _.get(updatedProject, 'details.products[0]', null)
-            // compares updated product with previous product to know if user has updated the product
+          // compares updated product with previous product to know if user has updated the product
           if (prevProduct !== product) {
             if (product) {
               // intentionally commented because now it should not be require as we handling all URL changes in onStepChange

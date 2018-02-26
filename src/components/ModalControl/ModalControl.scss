@@ -1,45 +1,48 @@
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.ModalControl {
-  cursor: pointer;
-  display: inline-block;
-  text-align: center;
-  .bubble {
-    background: $tc-gray-10;
-    border-radius: 40px;
-    height: 40px;
-    margin: 8px;
-    width: 40px;
-  }
-  .icon-wrapper {
-    display: table-cell;
-    vertical-align: middle;
-    height: 43px;
+:global {
+  .ModalControl {
+    cursor: pointer;
+    display: inline-block;
     text-align: center;
-    width: 40px;
-    color: $tc-gray-70;
-
-    svg {
-      fill: $tc-gray-70;
-    }
-  }
-  .label {
-    @include roboto-medium;
-    color: $tc-gray-70;
-    font-size: 13px;
-    text-transform: uppercase;
-  }
-  &:hover {
-    color: $tc-white;
     .bubble {
-      background: $tc-dark-blue-70;
+      background: $tc-gray-10;
+      border-radius: 40px;
+      height: 40px;
+      margin: 8px;
+      width: 40px;
+    }
+    .icon-wrapper {
+      display: table-cell;
+      vertical-align: middle;
+      height: 43px;
+      text-align: center;
+      width: 40px;
+      color: $tc-gray-70;
+  
+      svg {
+        fill: $tc-gray-70;
+      }
     }
     .label {
-      color: $tc-black;
+      @include roboto-medium;
+      color: $tc-gray-70;
+      font-size: 13px;
+      text-transform: uppercase;
     }
-
-    svg {
-      fill: $tc-white;
+    &:hover {
+      color: $tc-white;
+      .bubble {
+        background: $tc-dark-blue-70;
+      }
+      .label {
+        color: $tc-black;
+      }
+  
+      svg {
+        fill: $tc-white;
+      }
     }
   }
 }
+  

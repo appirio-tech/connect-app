@@ -6,7 +6,7 @@ import { addProjectMember as addMember,
 import { loadMembers } from '../../actions/members'
 
 import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
- LOAD_MEMBER_SUGGESTIONS
+  LOAD_MEMBER_SUGGESTIONS
 } from '../../config/constants'
 
 

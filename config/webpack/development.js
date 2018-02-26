@@ -1,65 +1,55 @@
+/**
+ * Webpack config for development mode
+ */
 const path = require('path')
-const webpack = require('webpack')
 const webpackMerge = require('webpack-merge')
-
-const defaultConfig = require('./default')
 
 const dirname = path.resolve(__dirname, '../..')
 
-module.exports = webpackMerge.strategy({
-  entry: 'prepend' // to put 'react-hot-loader/patch' first
-})(defaultConfig, {
+const commonProjectConfig = require('./common')
+const applyCommonModifications = require('./common-modifications')
+const configFactory = require('topcoder-react-utils/config/webpack/app-development')
+
+// get standard TopCoder development webpack config
+const developmentTopCoderConfig = configFactory({
+  context: dirname,
+
   entry: [
-    'react-hot-loader/patch'
-  ],
-
-  devtool: 'eval',
-
-  module: {
-    rules: [{
-      test: /\.(js|jsx)$/,
-      loader: 'babel-loader',
-      exclude: /node_modules\/(?!appirio-tech.*|topcoder|tc-)/,
-      options: {
-        babelrc: false,
-        presets: [ ['env', { modules: false }], 'react', 'stage-2' ],
-        plugins: [
-          'lodash',
-          // add react hot reloader
-          'react-hot-loader/babel',
-          'inline-react-svg'
-        ]
-      }
-    }, {
-      test: /\.scss$/,
-      use: [
-        'style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            sourceMap: true
-          }
-        },
-        'resolve-url-loader',
-        {
-          loader: 'sass-loader',
-          options: {
-            sourceMap: true,
-            includePaths: [
-              path.join(dirname, '/node_modules/bourbon/app/assets/stylesheets'),
-              path.join(dirname, '/node_modules/tc-ui/src/styles')
-            ]
-          }
-        }
-      ]
-    }]
-  },
-
-  plugins: [
-    // don't add HotModuleReplacementPlugin, because run webpack-dev-server with --hot param
-    // otherwise this plugin will be added twice and cause bugs
-    // new webpack.HotModuleReplacementPlugin(),
-
-    new webpack.NamedModulesPlugin()
+    'babel-polyfill', // Load this first
+    'react-hot-loader/patch', // This package already requires/loads react (but not react-dom). It must be loaded after babel-polyfill to ensure both react and react-dom use the same Symbol.
+    'react', // Include this to enforce order
+    'react-dom', // Include this to enforce order
+    './src/index'
   ]
 })
+
+// merge standard development TopCoder config with common config specific to connect app
+const combinedConfig = webpackMerge.smart(
+  developmentTopCoderConfig,
+  commonProjectConfig
+)
+
+// apply common modifications specific to connect app which cannot by applied by webpack merge
+applyCommonModifications(combinedConfig)
+
+/*
+  Remove HotModuleReplacementPlugin, because we run webpack-dev-server with --hot param
+  Otherwise this plugin will be added twice and cause bugs
+ */
+const hotReloadPluginIndex = combinedConfig.plugins.findIndex(plugin => plugin.constructor.name === 'HotModuleReplacementPlugin')
+combinedConfig.plugins.splice(hotReloadPluginIndex, 1)
+
+/*
+  Remove 'webpack-hot-middleware/client?reload=true' as we use webpack-dev-server, not middleware
+ */
+combinedConfig.entry.main = combinedConfig.entry.main.filter((entry) => (
+  entry !== 'webpack-hot-middleware/client?reload=true'
+))
+
+/*
+  Enable source maps.
+  This also let us see original file names in browser console.
+ */
+combinedConfig.devtool = 'eval'
+
+module.exports = combinedConfig

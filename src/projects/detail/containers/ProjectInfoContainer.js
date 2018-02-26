@@ -9,7 +9,7 @@ import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
 import { setDuration } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
-   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
+  DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 
 class ProjectInfoContainer extends React.Component {
@@ -100,23 +100,25 @@ class ProjectInfoContainer extends React.Component {
     }
     return (
       <div>
-        <ProjectInfo
-          project={project}
-          currentMemberRole={currentMemberRole}
-          duration={duration}
-          canDeleteProject={canDeleteProject}
-          onDeleteProject={this.onDeleteProject}
-          onChangeStatus={this.onChangeStatus}
-          directLinks={directLinks}
-          isSuperUser={isSuperUser}
-        />
-        <LinksMenu
-          links={project.bookmarks || []}
-          canDelete={!!currentMemberRole}
-          onAddNewLink={this.onAddNewLink}
-          onDelete={this.onDeleteLink}
-        />
-        <TeamManagementContainer projectId={project.id} members={project.members} />
+        <div className="sideAreaWrapper">
+          <ProjectInfo
+            project={project}
+            currentMemberRole={currentMemberRole}
+            duration={duration}
+            canDeleteProject={canDeleteProject}
+            onDeleteProject={this.onDeleteProject}
+            onChangeStatus={this.onChangeStatus}
+            directLinks={directLinks}
+            isSuperUser={isSuperUser}
+          />
+          <LinksMenu
+            links={project.bookmarks || []}
+            canDelete={!!currentMemberRole}
+            onAddNewLink={this.onAddNewLink}
+            onDelete={this.onDeleteLink}
+          />
+          <TeamManagementContainer projectId={project.id} members={project.members} />
+        </div>
         <FooterV2 />
       </div>
     )

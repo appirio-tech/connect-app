@@ -1,28 +1,31 @@
 // this is to include tc styles in the output library
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
-.profile-settings-avatar {
-  padding-bottom: 27px;
-  text-align: center;
-
-  > .label {
-    @include roboto;
-    color: $tc-gray-70;
-    font-size: 13px;
-    line-height: 20px;
+:global {
+  .profile-settings-avatar {
+    padding-bottom: 27px;
     text-align: center;
-  }
-
-  > .photo {
-    box-sizing: content-box;
-    border: 2px solid $tc-gray-50;
-    border-radius: 50%;
-    height: 120px;
-    margin-top: 10px;
-    width: 120px;
-  }
-
-  > .controls {
-    margin-top: 15px;
+  
+    > .label {
+      @include roboto;
+      color: $tc-gray-70;
+      font-size: 13px;
+      line-height: 20px;
+      text-align: center;
+    }
+  
+    > .photo {
+      box-sizing: content-box;
+      border: 2px solid $tc-gray-50;
+      border-radius: 50%;
+      height: 120px;
+      margin-top: 10px;
+      width: 120px;
+    }
+  
+    > .controls {
+      margin-top: 15px;
+    }
   }
 }
+  

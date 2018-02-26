@@ -1,30 +1,33 @@
 // this is to include tc styles in the output library
-@import 'tc-includes';
+@import '~tc-ui/src/styles/tc-includes';
 
 
-.new-project-link {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 20px;
-
-  .new-project-icon {
-    width: 20px;
-    height: 20px;
-    background-color: $tc-gray-50;
-    border-radius: 100%;
+:global {
+  .new-project-link {
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
-    svg {
-      fill: $tc-black;
-      width: 10px;
-      height: 10px;
-    }
-
-    &:hover {
-      background-color: $tc-orange-30;
+    margin-left: 20px;
+  
+    .new-project-icon {
+      width: 20px;
+      height: 20px;
+      background-color: $tc-gray-50;
+      border-radius: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      svg {
+        fill: $tc-black;
+        width: 10px;
+        height: 10px;
+      }
+  
+      &:hover {
+        background-color: $tc-orange-30;
+      }
     }
   }
 }
+  
