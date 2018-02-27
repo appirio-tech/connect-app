@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react' // eslint-disable-line no-unused-vars
 import IconTcSpecTypeSerif from  '../../assets/icons/icon-tc-spec-type-serif.svg'
 import IconTcSpecTypeSansSerif from  '../../assets/icons/icon-tc-spec-type-sans-serif.svg'
