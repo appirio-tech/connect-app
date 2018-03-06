@@ -7,6 +7,7 @@
     min-height: 60px;
     width: 100%;
     height: auto;
+    $tc-body-large: 20px;
 
     .tool-bar {
       display: flex;
@@ -125,7 +126,33 @@
       }
     }
 
-    .nav {
+    /* .secondary_toolbar_items */
+    .secondary_toolbar_items {
+      align-items: center;
+      box-sizing: border-box;
+      position: relative;
+      padding: 10px 550px;
+      background-color: $tc-gray-20;
+      border-bottom: 1px solid $tc-gray-40;
+      box-shadow: 0 2px 5px 0 rgba($tc-black, 0.25);
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      h2 {
+        font-size: $tc-body-large;
+        color: $tc-black;
+        white-space: nowrap;
+      }
+    }
+
+    .secondary-toolbar {
+      display: flex;
+      min-height: 25px;
+      height: 30px;
+    }
+   
+    .nav{
       padding-right: 5px;
       height: 20px;
       margin-top: 20px;

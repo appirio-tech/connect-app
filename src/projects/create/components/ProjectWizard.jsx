@@ -167,6 +167,7 @@ class ProjectWizard extends Component {
         if (refCode) {
           updateQuery.details.utm = { $set : { code : refCode } }
         }
+        update(this.state.project, updateQuery)
         return WZ_STEP_FILL_PROJ_DETAILS
       }
     }
@@ -250,7 +251,10 @@ class ProjectWizard extends Component {
     if (projectType) {
       updateQuery.type = {$set : projectType }
       if (products.length === 1) {
-        updateQuery.details = { $set : { products : [products[0].id]} }
+        const productType = {
+          productType : products[0].id
+        }
+        updateQuery.details = { $set : { products : [productType]} }
       }
     }
     this.setState({ 
@@ -268,7 +272,10 @@ class ProjectWizard extends Component {
     const { onStepChange, onProjectUpdate } = this.props
     // const products = _.get(this.state.project, 'details.products')
     const updateQuery = { }
-    const detailsQuery = { products : [product] }
+    const productType = {
+      productType : product
+    }
+    const detailsQuery = { products : [productType] }
     // restore common fields from dirty project
     this.restoreCommonDetails(product, updateQuery, detailsQuery)
     updateQuery.details = { $set : detailsQuery}

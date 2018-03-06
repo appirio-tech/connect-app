@@ -12,6 +12,8 @@ import ProjectDetail from './detail/ProjectDetail'
 import Dashboard     from './detail/Dashboard'
 import ProjectMessages from './detail/Messages'
 import SpecificationContainer from './detail/containers/SpecificationContainer'
+import ProjectProductsContainer from './detail/containers/ProjectProductsContainer'
+import CreateContainer from './create/containers/CreateContainer'
 import { requiresAuthentication } from '../components/AuthenticatedComponent'
 
 const ProjectLayoutWithAuth = requiresAuthentication(ProjectLayout)
@@ -26,7 +28,9 @@ const ProjectDetailWithAuth = withProps({ main:
   <Switch>
     <Route exact path="/projects/:projectId" render={() => <ProjectDetail><Dashboard /></ProjectDetail>} />
     <Route path="/projects/:projectId/status/:statusId" render={() => <ProjectDetail><Dashboard /></ProjectDetail>} />
-    <Route path="/projects/:projectId/specification" render={() => <ProjectDetail><SpecificationContainer /></ProjectDetail>} />
+    <Route path="/projects/:projectId/specification/stage/:stageId" render={() => <ProjectDetail><SpecificationContainer /></ProjectDetail>} />
+    <Route path="/projects/:projectId/stage/new-product" render={() => <ProjectDetail><CreateContainer /></ProjectDetail>} />
+    <Route path="/projects/:projectId/stages" render={() => <ProjectDetail><ProjectProductsContainer /></ProjectDetail>} />
     <Route path="/projects/:projectId/discussions/:discussionId?" render={() => <ProjectDetail><ProjectMessages /></ProjectDetail>} />
   </Switch>
 })(ProjectLayoutWithAuth)

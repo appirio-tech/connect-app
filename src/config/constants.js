@@ -169,6 +169,7 @@ export const UPDATE_PROJECT_FAILURE   = 'UPDATE_PROJECT_FAILURE'
 
 export const PROJECT_DIRTY            = 'PROJECT_DIRTY'
 export const PROJECT_DIRTY_UNDO       = 'PROJECT_DIRTY_UNDO'
+export const PROJECT_ADD_PRODUCT      = 'PROJECT_ADD_PRODUCT'
 
 export const LOAD_MEMBERS             = 'LOAD_MEMBERS'
 export const LOAD_MEMBERS_PENDING     = 'LOAD_MEMBERS_PENDING'
@@ -389,3 +390,7 @@ export const MAX_USERNAME_LENGTH = 15
 export const EMAIL_AVAILABILITY_CHECK_DEBOUNCE = 300 /* in ms */
 export const PASSWORD_MIN_LENGTH = 8
 export const PASSWORD_REG_EXP = /^(?=.*[a-z])(?=.*[^a-z]).+$/i
+
+// ProductIndex
+export const UPDATE_PRODUCT_INDEX = 'UPDATE_PRODUCT_INDEX'
+export const ADD_PRODUCT_TO_PROJECT = 'ADD_PRODUCT_TO_PROJECT'

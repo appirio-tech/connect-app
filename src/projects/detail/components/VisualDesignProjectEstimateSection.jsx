@@ -7,7 +7,7 @@ const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',
 
 const VisualDesignProjectEstimateSection = ({products, project}) => {
   // TODO when we support multiple products per project, we can loop through products and sum up the estimates
-  const productId = products[0]
+  const productId = products.productType
   const product = findProduct(productId)
   if (!product || typeof product.basePriceEstimate === 'undefined') {
     return <div />
@@ -28,7 +28,7 @@ const VisualDesignProjectEstimateSection = ({products, project}) => {
 
 VisualDesignProjectEstimateSection.propTypes = {
   project: PropTypes.object.isRequired,
-  products: PropTypes.arrayOf(PropTypes.string).isRequired
+  products: PropTypes.object.isRequired
 }
 
 export default VisualDesignProjectEstimateSection

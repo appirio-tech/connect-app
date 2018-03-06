@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Prompt } from 'react-router-dom'
 import Modal from 'react-modal'
 import _ from 'lodash'
-import { unflatten } from 'flat'
+import { unflatten, flatten } from 'flat'
 import update from 'react-addons-update'
 import FeaturePicker from './FeatureSelector/FeaturePicker'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
@@ -62,6 +62,8 @@ class EditProjectForm extends Component {
       isProjectDirty: false,
       isFeaturesDirty: false,
       project: Object.assign({}, this.props.project),
+      productObject: Object.assign({}, this.props.productObject),
+      productIndex: this.props.productIndex,
       canSubmit: false,
       showFeaturesDialog: false
     })
@@ -180,7 +182,19 @@ class EditProjectForm extends Component {
     //   model.details.appDefinition.features = this.state.project.details.appDefinition.features
     // }
     this.setState({isSaving: true })
-    this.props.submitHandler(model)
+    //const products = _.get(model, "details.products", [])
+    //if (products.length > 0) {// if there is any change in products array
+    //  model.details.products = _.clone(_.get(this.state.dirtyProject, "details.products", []));
+    //} else {
+    // should not land here because we have separate forms for project scope and product specs
+    // only case to land here is having a common form for project scope specs and product specs
+    // or if we reuse this component for project scope form as well, it would land here as well
+    //}
+    model.details.products = _.clone(_.get(this.state.dirtyProject, 'details.products', []))
+    //In case if we are pushing new values to array object, flatten/unflatten hack restores the 
+    //length variable of array object
+    const unflatModel = unflatten(flatten(model))
+    this.props.submitHandler(unflatModel)
   }
 
   /**
@@ -212,6 +226,8 @@ class EditProjectForm extends Component {
             showFeaturesDialog={this.showFeaturesDialog}
             // TODO we shoudl not update the props (section is coming from props)
             validate={(isInvalid) => section.isInvalid = isInvalid}
+            productObject ={this.state.productObject}
+            productIndex={this.state.productIndex}
           />
           <div className="section-footer section-footer-spec">
             <button className="tc-btn tc-btn-primary tc-btn-md"

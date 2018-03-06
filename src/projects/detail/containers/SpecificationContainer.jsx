@@ -49,13 +49,18 @@ class SpecificationContainer extends Component {
   }
 
   render() {
-    const { project, currentMemberRole, processing } = this.props
-    const productId = _.get(project, 'details.products[0]')
+    const { project, currentMemberRole, processing, productIndexVal } = this.props
+    const productIndex = productIndexVal
+    const productId = _.get(project, 'details.products['+ productIndex+'].productType')
     const product = findProduct(productId)
 
-    let specification = 'topcoder.v1'
-    if (project.details && project.details.products && project.details.products[0])
-      specification = typeToSpecification[project.details.products[0]]
+    let productObject = ''
+    productObject = project.details.products[productIndex]
+    //let specification = 'topcoder.v1'
+    let specification = ''
+    const productType = productObject.productType
+    if (productType)
+      specification = typeToSpecification[productType]
     const sections = require(`../../../config/projectQuestions/${specification}`).default
 
     return (
@@ -63,7 +68,12 @@ class SpecificationContainer extends Component {
         <div className="container">
           <div className="left-area">
             <Sticky top={80}>
-              <ProjectSpecSidebar project={project} sections={sections} currentMemberRole={currentMemberRole} />
+              <ProjectSpecSidebar 
+                project={project} 
+                sections={sections} 
+                currentMemberRole={currentMemberRole}
+                productIndex={productIndex}
+              />
               <FooterV2 />
             </Sticky>
           </div>
@@ -78,6 +88,8 @@ class SpecificationContainer extends Component {
               route={this.props.route}
               fireProjectDirty={ this.props.fireProjectDirty }
               fireProjectDirtyUndo= { this.props.fireProjectDirtyUndo }
+              productObject = {productObject}
+              productIndex={productIndex}
             />
             <div className="right-area-footer">
               { _.get(product, 'formDesclaimer') }
@@ -100,11 +112,12 @@ SpecificationContainer.propTypes = {
   ])
 }
 
-const mapStateToProps = ({projectState, loadUser}) => {
+const mapStateToProps = ({projectState, loadUser, projectSpecification}) => {
   return {
     processing: projectState.processing,
     error: projectState.error,
-    currentUserId: parseInt(loadUser.user.id)
+    currentUserId: parseInt(loadUser.user.id),
+    productIndexVal: projectSpecification.productIndex
   }
 }
 

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
-import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject } from '../../actions/project'
+import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject, addProductToExistingProject } from '../../actions/project'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
@@ -92,7 +92,7 @@ class CreateConainer extends React.Component {
   }
 
   componentWillMount() {
-    const { processing, userRoles, match, history } = this.props
+    const { processing, userRoles, match, history, addingProduct } = this.props
     // if we are on the project page validate product param
     if (match.path === '/new-project/:product?/:status?') {
       const product = match.params.product
@@ -123,7 +123,8 @@ class CreateConainer extends React.Component {
       // if there is not incomplete project, clear the exisitng project from the redux state
       // dispatches action to clear the project in the redux state to ensure that we never have a project
       // in context when creating a new project
-      this.props.clearLoadedProject()
+      if(!addingProduct)
+        this.props.clearLoadedProject()
     }
   }
 
@@ -211,6 +212,14 @@ class CreateConainer extends React.Component {
         showModal
         closeModal={ this.closeWizard }
         onStepChange={ (wizardStep, updatedProject) => {
+          if(this.props.addingProduct) {
+            if(updatedProject && updatedProject.details.products) { 
+              const newStage = this.props.project.details.products.length
+              this.props.addProductToExistingProject(updatedProject.details.products[0].productType, newStage)
+              this.props.history.push('/projects/' + this.props.project.id + '/specification/stage/new-product/' + newStage + window.location.search) 
+            }
+            return
+          }
           // type of the project
           let projectType = _.get(updatedProject, 'type', null)
           // finds project category object from the catalogue
@@ -218,7 +227,7 @@ class CreateConainer extends React.Component {
           // updates the projectType variable to use first alias to create SEO friendly URL
           projectType = _.get(projectCategory, 'aliases[0]', projectType)
           // product of the project
-          let productType = _.get(updatedProject, 'details.products[0]', null)
+          let productType = _.get(updatedProject, 'details.products[0].productType', null)
           // finds product object from the catalogue
           const product = findProduct(productType)
           // updates the productType variable to use first alias to create SEO friendly URL
@@ -243,6 +252,9 @@ class CreateConainer extends React.Component {
         }
         }
         onProjectUpdate={ (updatedProject, dirty=true) => {
+          if(this.props.addingProduct) {
+            return
+          }
           // const projectType = _.get(this.state.updatedProject, 'type', null)
           const prevProduct = _.get(this.state.updatedProject, 'details.products[0]', null)
           const product = _.get(updatedProject, 'details.products[0]', null)
@@ -274,11 +286,12 @@ CreateConainer.defaultProps = {
   userRoles: []
 }
 
-const mapStateToProps = ({projectState, loadUser }) => ({
+const mapStateToProps = ({projectState, loadUser, projectSpecification }) => ({
   userRoles: _.get(loadUser, 'user.roles', []),
   processing: projectState.processing,
   error: projectState.error,
-  project: projectState.project
+  project: projectState.project,
+  addingProduct: projectSpecification.addingNewProduct
 })
-const actionCreators = { createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject }
+const actionCreators = { createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject, addProductToExistingProject }
 export default withRouter(connect(mapStateToProps, actionCreators)(CreateConainer))

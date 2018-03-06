@@ -4,7 +4,7 @@ import { getProjectById, createProject as createProjectAPI,
   deleteProject as deleteProjectAPI,
   getDirectProjectData } from '../../api/projects'
 import { LOAD_PROJECT, CREATE_PROJECT, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
-  LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO } from '../../config/constants'
+  LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, PROJECT_ADD_PRODUCT } from '../../config/constants'
 
 
 export function loadProject(projectId) {
@@ -83,6 +83,16 @@ export function fireProjectDirtyUndo() {
   return (dispatch) => {
     return dispatch({
       type: PROJECT_DIRTY_UNDO
+    })
+  }
+}
+
+export function addProductToExistingProject(productId, index) {
+  return (dispatch) => {
+    return dispatch({
+      type: PROJECT_ADD_PRODUCT,
+      id: index,
+      payload: productId
     })
   }
 }

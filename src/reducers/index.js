@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import searchTerm from './searchTerm'
 import loadUser from './loadUser'
 import { projectState } from '../projects/reducers/project'
+import { projectSpecification } from '../projects/reducers/projectSpecification'
 import { projectDashboard } from '../projects/reducers/projectDashboard'
 import { projectTopics } from '../projects/reducers/projectTopics'
 import navSearch from './navSearch'
@@ -24,5 +25,6 @@ export default combineReducers({
   projectTopics,
   alerts,
   notifications,
-  settings
+  settings,
+  projectSpecification
 })
