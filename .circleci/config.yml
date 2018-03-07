@@ -37,7 +37,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: ./workspace
-      - run: ./deploy.sh TEST01 no-cache
+      - run: ./deploy.sh TEST02 no-cache
 
   deployProd:
     docker:
