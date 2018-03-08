@@ -366,11 +366,9 @@ class RichTextArea extends React.Component {
                   }
                 </div>
                 <div className="tc-btns">
-                  { editMode && !isCreating &&
-                <button className="tc-btn tc-btn-link tc-btn-sm" onClick={this.cancelEdit}>
-                  Cancel
-                </button>
-                  }
+                  <button className="tc-btn tc-btn-link tc-btn-sm" onClick={this.cancelEdit}>
+                    Cancel
+                  </button>
                   { editMode &&
                 <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
                   { isCreating ? 'Saving...' : 'Save changes' }
