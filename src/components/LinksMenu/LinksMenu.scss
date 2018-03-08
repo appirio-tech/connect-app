@@ -13,6 +13,10 @@
         display: none;
         margin-right: 20px;
         margin-left: auto;
+        button {
+          padding: 0;
+          background: rgba(0, 0, 0, 0);
+        }
       }
       a{
         line-height: $base-unit*4;
