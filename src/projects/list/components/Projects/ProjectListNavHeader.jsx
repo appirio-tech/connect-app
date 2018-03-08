@@ -53,7 +53,6 @@ export default class ProjectListNavHeader extends Component {
 
     const criteria = _.assign({}, this.props.criteria, filter)
     if (criteria && criteria.keyword) {
-      criteria.keyword = encodeURIComponent(criteria.keyword)
       // force sort criteria to best match
       criteria.sort = 'best match'
     }
@@ -75,7 +74,7 @@ export default class ProjectListNavHeader extends Component {
   render() {
     const options = [
       { status: null, label: 'All projects' },
-      ...PROJECT_STATUS.sort((a, b) => { 
+      ...PROJECT_STATUS.sort((a, b) => {
         if ( a.order < b.order ){
           return -1
         }
