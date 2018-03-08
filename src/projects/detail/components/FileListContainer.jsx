@@ -39,7 +39,7 @@ class FileListContainer extends Component {
   }
 
   render() {
-    const { files, projectId, allMembers } = this.props
+    const { files, projectId, allMembers, isEditable } = this.props
     const storePath = `${PROJECT_ATTACHMENTS_FOLDER}/${projectId}/`
     files.forEach(file => {
       if (allMembers[file.updatedBy]) {
@@ -53,8 +53,8 @@ class FileListContainer extends Component {
 
     return (
       <div>
-        <FileList files={files} onDelete={ this.deleteFile } onSave={ this.updateFile } />
-        <AddFiles successHandler={this.processUploadedFiles} storePath={storePath} category={'appDefinition'} />
+        <FileList files={files} onDelete={ this.deleteFile } onSave={ this.updateFile } isEditable={ isEditable } />
+        { isEditable && <AddFiles successHandler={this.processUploadedFiles} storePath={storePath} category={'appDefinition'} /> }
       </div>
     )
   }
@@ -71,7 +71,8 @@ const mapStateToProps = ({ members }) => {
 FileListContainer.propTypes = {
   projectId: PropTypes.number.isRequired,
   files: PropTypes.arrayOf(PropTypes.object).isRequired,
-  allMembers: PropTypes.object.isRequired
+  allMembers: PropTypes.object.isRequired,
+  isEditable: PropTypes.bool.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FileListContainer)

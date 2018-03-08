@@ -23,7 +23,8 @@ const SpecSection = props => {
     description,
     subSections,
     validate,
-    sectionNumber
+    sectionNumber,
+    isMemberOrCopilot
   } = props
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
@@ -69,6 +70,7 @@ const SpecSection = props => {
           project={project}
           dirtyProject={dirtyProject}
           isRequired={props.required}
+          isMemberOrCopilot={isMemberOrCopilot}
         />
       )
     case 'notes':
@@ -86,7 +88,7 @@ const SpecSection = props => {
       )
     case 'files': {
       const files = _.get(project, props.fieldName, [])
-      return <FileListContainer projectId={project.id} files={files} />
+      return <FileListContainer projectId={project.id} files={files} isEditable={isMemberOrCopilot} />
     }
     case 'screens': {
       const screens = _.get(project, props.fieldName, [])

@@ -30,7 +30,7 @@ const getIcon = icon => {
 }
 
 // { isRequired, represents the overall questions section's compulsion, is also available}
-const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog }) => {
+const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog, isMemberOrCopilot }) => {
 
   const renderQ = (q, index) => {
     // let child = null
@@ -126,7 +126,8 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
         resetValue: resetFeatures,
         question: q, showFeaturesDialog,
         hideDescription: true,
-        description: q.description
+        description: q.description,
+        isDisabled: !isMemberOrCopilot
       })
       // child = <SeeAttachedSpecFeatureQuestion name={q.fieldName} value={value} question={q} resetValue={resetFeatures} showFeaturesDialog={showFeaturesDialog} />
       break
@@ -186,7 +187,7 @@ SpecQuestions.propTypes = {
    */
   dirtyProject: PropTypes.object,
   /**
-   * Callback to be called when user clicks on Add/Edit Features button in feature picker component
+   * Callback to be called when user clicks on AddAddFike/Edit Features button in feature picker component
    */
   showFeaturesDialog: PropTypes.func.isRequired,
   /**
@@ -197,7 +198,11 @@ SpecQuestions.propTypes = {
   /**
    * Array of questions to be rendered. This comes from the spec template for the product
    */
-  questions: PropTypes.arrayOf(PropTypes.object).isRequired
+  questions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  /**
+   * Is user a member or copilot
+   */
+  isMemberOrCopilot: PropTypes.bool
 }
 
 export default SpecQuestions

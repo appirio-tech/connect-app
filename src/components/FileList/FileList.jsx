@@ -6,7 +6,7 @@ import uncontrollable from 'uncontrollable'
 import FileDeletionConfirmModal from './FileDeletionConfirmModal'
 import './FileList.scss'
 
-const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent}) => (
+const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent, isEditable}) => (
   <Panel className={cn('file-list', {'modal-active': deletingFile})}>
     {deletingFile && <div className="modal-overlay" />}
     {
@@ -32,6 +32,7 @@ const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent}) => (
             key={i}
             onDelete={ onDeleteIntent }
             onSave={ onSave }
+            isEditable={ isEditable }
           />
         )
       })

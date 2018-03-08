@@ -13,6 +13,7 @@ import { findProduct } from '../../../config/projectWizard'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
+import {PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER} from '../../../config/constants';
 
 require('./Specification.scss')
 
@@ -50,6 +51,7 @@ class SpecificationContainer extends Component {
 
   render() {
     const { project, currentMemberRole, processing } = this.props
+    const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
     const productId = _.get(project, 'details.products[0]')
     const product = findProduct(productId)
 
@@ -78,6 +80,7 @@ class SpecificationContainer extends Component {
               route={this.props.route}
               fireProjectDirty={ this.props.fireProjectDirty }
               fireProjectDirtyUndo= { this.props.fireProjectDirtyUndo }
+              isMemberOrCopilot={isMemberOrCopilot}
             />
             <div className="right-area-footer">
               { _.get(product, 'formDesclaimer') }
