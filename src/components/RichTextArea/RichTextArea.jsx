@@ -140,6 +140,18 @@ class RichTextArea extends React.Component {
         isCloseButton = true
       }
 
+      if (currNode.className
+        && currNode.className.indexOf
+        && currNode.className.indexOf('btn-close-creat') > -1) {
+        isCloseButton = true,
+        this.setState({
+          titleValue: '',
+          editorState: EditorState.push(this.state.editorState, EditorState.createEmpty().getCurrentContent()),
+          currentMDContent: null,
+          oldMDContent: null
+        })
+      }
+
       if (currNode === this.refs.richEditor) {
         isEditor = true
         break
@@ -366,9 +378,14 @@ class RichTextArea extends React.Component {
                   }
                 </div>
                 <div className="tc-btns">
+                  {!editMode &&
+                    <button className="tc-btn tc-btn-link tc-btn-sm btn-close-creat">Cancel</button>
+                  }
+                  {editMode && !isCreating &&
                   <button className="tc-btn tc-btn-link tc-btn-sm" onClick={this.cancelEdit}>
                     Cancel
                   </button>
+                  }
                   { editMode &&
                 <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
                   { isCreating ? 'Saving...' : 'Save changes' }
