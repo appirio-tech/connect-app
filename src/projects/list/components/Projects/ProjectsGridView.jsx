@@ -186,7 +186,7 @@ const ProjectsGridView = props => {
           <div className="spacing project-container">
             <div className="project-title">
               <Link to={url} className="link-title">{item.name}</Link>
-              { code && <span className="item-ref-code txt-gray-md" onClick={ () => { applyFilters({ keyword: code })} }>{code}</span> }
+              { code && <span className="item-ref-code txt-gray-md" onClick={ () => { applyFilters({ keyword: code })} } dangerouslySetInnerHTML={{ __html: code }} />}
             </div>
             <Link to={url}>
               <TextTruncate
