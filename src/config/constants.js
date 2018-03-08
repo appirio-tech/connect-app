@@ -230,7 +230,7 @@ export const PROJECT_STATUS = [
   {color: 'gray', name: 'Reviewed', fullName: 'Project is reviewed', value: PROJECT_STATUS_REVIEWED, order: 4, dropDownOrder: 3 },
   {color: 'green', name: 'Active', fullName: 'Project is active', value: PROJECT_STATUS_ACTIVE, order: 1, dropDownOrder: 4 },
   {color: 'black', name: 'Completed', fullName: 'Project is completed', value: PROJECT_STATUS_COMPLETED, order: 5, dropDownOrder: 5 },
-  {color: 'black', name: 'Cancelled', fullName: 'Project is cancelled', value: PROJECT_STATUS_CANCELLED, order: 6, dropDownOrder: 6 },
+  {color: 'black', name: 'Cancelled', fullName: 'Project is canceled', value: PROJECT_STATUS_CANCELLED, order: 6, dropDownOrder: 6 },
   {color: 'red', name: 'Paused', fullName: 'Project is paused', value: PROJECT_STATUS_PAUSED, order: 7, dropDownOrder: 7 }
 ]
 
