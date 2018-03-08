@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import FileList from '../../../components/FileList/FileList'
 import AddFiles from '../../../components/FileList/AddFiles'
-import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
+import { getProjectRoleForCurrentUser } from '../../../helpers/projectHelper'
+import { PROJECT_ATTACHMENTS_FOLDER, PROJECT_ROLE_CUSTOMER } from '../../../config/constants'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 
 class FileListContainer extends Component {
@@ -16,11 +17,11 @@ class FileListContainer extends Component {
   }
 
   updateFile(attachmentId, updatedAttachment) {
-    this.props.updateProjectAttachment(this.props.projectId, attachmentId, updatedAttachment)
+    this.props.updateProjectAttachment(this.props.project.id, attachmentId, updatedAttachment)
   }
 
   deleteFile(attachmentId) {
-    this.props.removeProjectAttachment(this.props.projectId, attachmentId)
+    this.props.removeProjectAttachment(this.props.project.id, attachmentId)
   }
 
   processUploadedFiles(fpFiles, category) {
@@ -34,13 +35,15 @@ class FileListContainer extends Component {
         filePath: f.key,
         contentType: f.mimetype || 'application/unknown'
       }
-      this.props.addProjectAttachment(this.props.projectId, attachment)
+      this.props.addProjectAttachment(this.props.project.id, attachment)
     })
   }
 
   render() {
-    const { files, projectId, allMembers } = this.props
-    const storePath = `${PROJECT_ATTACHMENTS_FOLDER}/${projectId}/`
+    const { files, project, allMembers, userId } = this.props
+    const storePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
+    const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: userId})
+    const canAddFile = currentMemberRole && currentMemberRole !== PROJECT_ROLE_CUSTOMER
     files.forEach(file => {
       if (allMembers[file.updatedBy]) {
         file.updatedByUser = allMembers[file.updatedBy]
@@ -54,7 +57,7 @@ class FileListContainer extends Component {
     return (
       <div>
         <FileList files={files} onDelete={ this.deleteFile } onSave={ this.updateFile } />
-        <AddFiles successHandler={this.processUploadedFiles} storePath={storePath} category={'appDefinition'} />
+        {canAddFile && <AddFiles successHandler={this.processUploadedFiles} storePath={storePath} category={'appDefinition'} /> }
       </div>
     )
   }
@@ -62,14 +65,15 @@ class FileListContainer extends Component {
 
 const mapDispatchToProps = {addProjectAttachment, updateProjectAttachment, removeProjectAttachment}
 
-const mapStateToProps = ({ members }) => {
+const mapStateToProps = ({ members, loadUser }) => {
   return {
-    allMembers     : members.members
+    allMembers: members.members,
+    userId: parseInt(loadUser.user.id)
   }
 }
 
 FileListContainer.propTypes = {
-  projectId: PropTypes.number.isRequired,
+  project: PropTypes.object.isRequired,
   files: PropTypes.arrayOf(PropTypes.object).isRequired,
   allMembers: PropTypes.object.isRequired
 }
