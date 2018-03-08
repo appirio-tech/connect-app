@@ -17,6 +17,8 @@ const calcProgress = (project, subSection) => {
       if (q.type.indexOf('see-attached') > -1) {
         const val = _.get(project, fName, null)
         return val && (val.seeAttached || !_.isEmpty(_.get(project, `${fName}.value`)))
+      } else if (q.type === 'checkbox-group'){
+        return _.get(project, q.fieldName, []).length
       }
       return !_.isEmpty(_.get(project, fName))
     })

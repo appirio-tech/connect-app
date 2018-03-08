@@ -199,7 +199,7 @@ export const projectState = function (state=initialState, action) {
       project: _.mergeWith({}, state.project, action.payload, { isDirty : true},
         // customizer to override screens array with changed values
         (objValue, srcValue, key) => {
-          if (key === 'screens' || key === 'features') {
+          if (key === 'screens' || key === 'features' || key === 'capabilities') {
             return srcValue// srcValue contains the changed values from action payload
           }
         }
