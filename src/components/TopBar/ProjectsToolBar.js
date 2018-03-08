@@ -84,7 +84,6 @@ class ProjectsToolBar extends Component {
   applyFilters(filter) {
     const criteria = _.assign({}, this.props.criteria, filter)
     if (criteria && criteria.keyword) {
-      criteria.keyword = encodeURIComponent(criteria.keyword)
       // force sort criteria to best match
       criteria.sort = 'best match'
     }
@@ -202,14 +201,14 @@ class ProjectsToolBar extends Component {
         </div>
         { isFilterVisible && isLoggedIn &&
         <div className="secondary-toolbar">
-          
+
           <Filters
             applyFilters={ this.applyFilters }
             criteria={ criteria }
           />
         </div>
         }
-        
+
       </div>
     )
   }

@@ -85,7 +85,7 @@ class Projects extends Component {
     if (!_.isEmpty(queryParams)) {
       const initialCriteria = {}
       initialCriteria.sort = (queryParams.sort) ? queryParams.sort : 'updatedAt desc'
-      if (queryParams.keyword) initialCriteria.keyword = decodeURIComponent(queryParams.keyword)
+      if (queryParams.keyword) initialCriteria.keyword = queryParams.keyword
       if (queryParams.status) {
         initialCriteria.status = queryParams.status
         this.setState({status : queryParams.status})
@@ -145,7 +145,6 @@ class Projects extends Component {
   applySearchFilter(filter) {
     const criteria = _.assign({}, this.props.criteria, filter)
     if (criteria && criteria.keyword) {
-      criteria.keyword = encodeURIComponent(criteria.keyword)
       // force sort criteria to best match
       criteria.sort = 'best match'
     }
