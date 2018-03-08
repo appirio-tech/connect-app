@@ -52,15 +52,15 @@ class ProjectToolBar extends React.Component {
     } else
     if (activeDashboardPage) {
       this.state.activePage = 'dashboard'
-      this.state.dashboardIcon = <DashboardActive className="icon-dashboard-active" />
       this.state.specificationIcon = <Specification className="icon-specification" />
+      this.state.dashboardIcon = <DashboardActive className="icon-dashboard-active" />
       this.state.messagesIcon = <Chat className="icon-messages" />
     }
     else
     if (activeMessages) {
       this.state.activePage = 'discussions'
-      this.state.dashboardIcon = <DashboardActive className="icon-dashboard" />
       this.state.specificationIcon = <Specification className="icon-specification" />
+      this.state.dashboardIcon = <Dashboard className="icon-dashboard" />
       this.state.messagesIcon = <ChatActive className="icon-messages-active" />
     }
   }
@@ -121,9 +121,9 @@ class ProjectToolBar extends React.Component {
   componentWillMount() {
     this.props.history.listen(() => {
       this.setActivePage()
-      this.state.activeSpecification = this.state.activePage === 'dashboard' ? 'not-active' : this.state.activeSpecification,
-      this.state.activeDashboard = this.state.activePage === 'specification' ? 'not-active' : this.state.activeDashboard,
-      this.state.activeMessages = this.state.activePage === 'discussions' ? 'not-active' : this.state.activeMessages
+      this.state.activeSpecification = this.state.activePage === 'dashboard' || this.state.activePage === 'discussions' ? 'not-active' : this.state.activeSpecification,
+      this.state.activeDashboard = this.state.activePage === 'specification' || this.state.activePage === 'discussions' ? 'not-active' : this.state.activeDashboard,
+      this.state.activeMessages = this.state.activePage === 'specification' || this.state.activePage === 'dashboard' ? 'not-active' : this.state.activeMessages
     })
   }
 
