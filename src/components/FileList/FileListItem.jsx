@@ -83,8 +83,8 @@ export default class FileListItem extends React.Component {
         <div className="title-edit">
           <input type="text" defaultValue={title} ref="title" maxLength={50} onChange={ this.onTitleChange }/>
           <div className="save-icons">
-            <a href="javascript:" className="icon-save" onClick={this.handleSave}><SaveIcon /></a>
-            <a href="javascript:" className="icon-close" onClick={onExitEdit}><CloseIcon /></a>
+            <a href="javascript:" className="icon-save" onClick={this.handleSave} title="Save"><SaveIcon /></a>
+            <a href="javascript:" className="icon-close" onClick={onExitEdit} title="Cancel"><CloseIcon /></a>
           </div>
         </div>
         { (errors && errors.title) && <div className="error-message">{ errors.title }</div> }
