@@ -47,6 +47,20 @@ combinedConfig.entry.main = combinedConfig.entry.main.filter((entry) => (
 ))
 
 /*
+  Remove ExtractTextPlugin, because we want hot reload when editing styles
+ */
+const extractTextPluginIndex = combinedConfig.plugins.findIndex(plugin => plugin.constructor.name === 'ExtractTextPlugin')
+combinedConfig.plugins.splice(extractTextPluginIndex, 1)
+
+combinedConfig.module.rules.forEach(rule => {
+  if (rule.use){
+    const extractTextLoaderIndex = rule.use.findIndex(use => use.loader && use.loader.indexOf('extract-css-chunks-webpack-plugin') >= 0)
+    if (extractTextLoaderIndex >= 0) {
+      rule.use.splice(extractTextLoaderIndex, 1)
+    }
+  }
+})
+/*
   Enable source maps.
   This also let us see original file names in browser console.
  */
