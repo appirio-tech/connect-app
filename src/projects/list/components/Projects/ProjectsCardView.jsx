@@ -61,7 +61,7 @@ const ProjectsCardView = props => {
         threshold={500}
       >
         { [...projects, ...placeholders].map(renderProject)}
-        <div className="project-card"><NewProjectCard /></div>
+        <div className="project-card"><NewProjectCard setInfiniteAutoload={setInfiniteAutoload} /></div>
       </InfiniteScroll>
       { !isLoading && !infiniteAutoload && hasMore && <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore} key="loadMore">Load more projects</button>}
       { !isLoading && !hasMore && <span key="end">No more {projectsStatus} projects</span>}
