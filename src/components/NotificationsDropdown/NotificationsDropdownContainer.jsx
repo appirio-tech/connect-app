@@ -78,6 +78,7 @@ class NotificationsDropdownContainer extends React.Component {
               {globalSource && globalSource.notifications.length &&
                 <NotificationsSection
                   {...globalSource}
+                  notifications={globalSource.notifications.slice(0, 5)}
                   isGlobal
                   isSimple
                   onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
@@ -86,6 +87,7 @@ class NotificationsDropdownContainer extends React.Component {
               {projectSources.filter(source => source.notifications.length > 0).map(source => (
                 <NotificationsSection
                   {...source}
+                  notifications={source.notifications.slice(0, 5)}
                   key={source.id}
                   isSimple
                   onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
