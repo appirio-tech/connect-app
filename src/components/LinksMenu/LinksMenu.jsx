@@ -4,12 +4,14 @@ import './LinksMenu.scss'
 import Panel from '../Panel/Panel'
 import AddLink from './AddLink'
 import DeleteLinkModal from './DeleteLinkModal'
+import EditLinkModal from './EditLinkModal'
 import uncontrollable from 'uncontrollable'
 import cn from 'classnames'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
+import BtnEdit from '../../assets/icons/ui-16px-1_edit-73.svg'
 
 
-const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, onDeleteIntent, onDelete }) => (
+const LinksMenu = ({ links, limit, canDelete, canEdit, isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, linkToEdit, onDeleteIntent, onEditIntent, onDelete, onEdit }) => (
   <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0) })}>
     {!isAddingNewLink && <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Create New Link</Panel.AddBtn>}
     {!isAddingNewLink && <Panel.Title>
@@ -40,6 +42,13 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
             }
             const onDeleteCancel = () => onDeleteIntent(-1)
             const handleDeleteClick = () => onDeleteIntent(idx)
+
+            const onEditConfirm = (title, address) => {
+              onEdit(idx, title, address)
+              onEditIntent(-1)
+            }
+            const onEditCancel = () => onEditIntent(-1)
+            const handleEditClick = () => onEditIntent(idx)
             if (linkToDelete === idx) {
               return (
                 <li className="delete-confirmation-modal" key={ 'delete-confirmation-' + idx }>
@@ -50,22 +59,39 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
                   />
                 </li>
               )
+            } else if (linkToEdit === idx) {
+              return (
+                <li className="delete-confirmation-modal" key={ 'delete-confirmation-' + idx }>
+                  <EditLinkModal
+                    link={ link }
+                    onCancel={ onEditCancel }
+                    onConfirm={ onEditConfirm }
+                  />
+                </li>
+              )
             } else {
               return (
                 <li key={idx}>
                   <a href={link.address} target="_blank" rel="noopener noreferrer">{link.title}</a>
-                  {canDelete && <div className="buttons">
-                    <button onClick={ handleDeleteClick } type="button">
-                      <BtnRemove className="btn-remove"/>
-                    </button>
-                  </div>}
+                  <div className="button-group">
+                    {canEdit && <div className="buttons link-buttons">
+                      <button onClick={ handleEditClick } type="button">
+                        <BtnEdit className="btn-remove"/>
+                      </button>
+                    </div>}
+                    {canDelete && <div className="buttons link-buttons">
+                      <button onClick={ handleDeleteClick } type="button">
+                        <BtnRemove className="btn-edit"/>
+                      </button>
+                    </div>}
+                  </div>
                 </li>
               )
             }
           })
         }
       </ul>
-      {links.length > limit && <div className="links-footer">
+      {links.length > limit && <div className="buttons links-footer">
         <a href="javascript:" onClick={() => onChangeLimit(10000)}>View all</a>
       </div>}
     </div>
@@ -76,6 +102,7 @@ LinksMenu.propTypes = {
   links: PropTypes.array.isRequired,
   limit: PropTypes.number,
   canDelete: PropTypes.bool,
+  canEdit: PropTypes.bool,
   onAddingNewLink: PropTypes.func,
   onAddNewLink: PropTypes.func.isRequired,
   onChangeLimit: PropTypes.func,
@@ -88,6 +115,7 @@ LinksMenu.defaultProps = {
 
 export default uncontrollable(LinksMenu, {
   linkToDelete: 'onDeleteIntent',
+  linkToEdit: 'onEditIntent',
   isAddingNewLink: 'onAddingNewLink',
   limit: 'onChangeLimit'
 })

@@ -27,6 +27,7 @@ class ProjectInfoContainer extends React.Component {
     this.onDeleteProject = this.onDeleteProject.bind(this)
     this.onAddNewLink = this.onAddNewLink.bind(this)
     this.onDeleteLink = this.onDeleteLink.bind(this)
+    this.onEditLink = this.onEditLink.bind(this)
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
@@ -65,6 +66,17 @@ class ProjectInfoContainer extends React.Component {
     const { updateProject, project } = this.props
     updateProject(project.id, {
       bookmarks: update(project.bookmarks, { $splice: [[idx, 1]] })
+    })
+  }
+
+  onEditLink(idx, title, address) {
+    const { updateProject, project } = this.props
+    const updatedLink = {
+      title,
+      address
+    }
+    updateProject(project.id, {
+      bookmarks: update(project.bookmarks, { $splice: [[idx, 1, updatedLink]] })
     })
   }
 
@@ -114,8 +126,10 @@ class ProjectInfoContainer extends React.Component {
           <LinksMenu
             links={project.bookmarks || []}
             canDelete={!!currentMemberRole}
+            canEdit={!!currentMemberRole}
             onAddNewLink={this.onAddNewLink}
             onDelete={this.onDeleteLink}
+            onEdit={this.onEditLink}
           />
           <TeamManagementContainer projectId={project.id} members={project.members} />
         </div>
