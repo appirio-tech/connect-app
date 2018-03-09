@@ -9,10 +9,10 @@ import BoldAdd from '../../../../assets/icons/ui-16px-1_bold-add.svg'
 class NewProjectCard extends Component {
   constructor(props) {
     super(props)
-    this.onClick = this.onClick(this);
+    this.onClick = this.onClick(this)
   }
 
-  onClick(e) {
+  onClick() {
     this.props.setInfiniteAutoload(false)
   }
 
