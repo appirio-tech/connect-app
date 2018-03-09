@@ -16,8 +16,8 @@ export class EditLinkModal extends React.Component {
   }
 
   handleAddressChange(event) {
-    this.isURLValid()
     this.setState({ address: event.target.value})
+    this.isURLValid()
   }
 
   isURLValid() {
