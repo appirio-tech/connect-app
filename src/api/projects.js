@@ -22,7 +22,7 @@ export function getProjects(criteria, pageNum) {
       filter.segment = `in(${filter.segment})`
     }
     // convert filter object to string
-    const filterStr = _.map(filter, (v, k) => `${k}=${v}`)
+    const filterStr = _.map(filter, (v, k) => `${k}=${encodeURIComponent(v)}`)
     params.filter = filterStr.join('&')
   }
   // sort fields

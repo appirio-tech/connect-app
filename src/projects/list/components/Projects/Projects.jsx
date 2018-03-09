@@ -50,7 +50,8 @@ class Projects extends Component {
   componentWillReceiveProps(nextProps) {
     const prevQueryParams = _.get(this.props, 'location.search', null)
     const queryParams = _.get(nextProps, 'location.search', null)
-    if (!_.isEqual(prevQueryParams, queryParams)) {
+    const { refresh } = nextProps
+    if (!_.isEqual(prevQueryParams, queryParams) || refresh) {
       this.init(nextProps)
     }
   }
@@ -78,7 +79,7 @@ class Projects extends Component {
   init(props) {
     document.title = 'Projects - Topcoder'
     // this.searchTermFromQuery = this.props.location.query.q || ''
-    const {criteria, loadProjects, location, projects} = props
+    const {criteria, loadProjects, location, projects, refresh} = props
     // check for criteria specified in URL.
     const queryParams = querystring.parse(location.search)
     this.setState({status : null})
@@ -95,13 +96,13 @@ class Projects extends Component {
       if (queryParams.view) this.setState({selectedView : queryParams.view})
       // load projects only if projects were loaded for different criteria
       // or there no loaded projects yet
-      if (!_.isEqual(criteria, initialCriteria) || projects.length === 0) {
+      if (!_.isEqual(criteria, initialCriteria) || projects.length === 0 || refresh) {
         loadProjects(initialCriteria)
       }
     } else {
       // perform initial load only if there are not projects already loaded
       // otherwise we will get projects duplicated in store
-      if (projects.length === 0) {
+      if (projects.length === 0 || refresh) {
         // for powerful user filter by 'active' status by default
         // we cannot put it to PROJECT_LIST_DEFAULT_CRITERIA because
         // it would apply for both powerful and regular users
@@ -250,7 +251,8 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState }) => 
     infiniteAutoload: projectSearch.infiniteAutoload,
     projectsListView: projectSearch.projectsListView,
     isPowerUser,
-    gridView    : isPowerUser
+    gridView    : isPowerUser,
+    refresh     : projectSearch.refresh
   }
 }
 
