@@ -102,17 +102,15 @@ export const getNotificationsFilters = (sources) => {
  *
  * @param  {Array}  sources       list of sources
  * @param  {Array}  notifications list of notifications
- * @param  {Array}  oldSourceIds  list of ids of sources that will also show old notifications
  *
  * @return {Array}                list of sources with related notifications
  */
-export const splitNotificationsBySources = (sources, notifications, oldSourceIds = []) => {
+export const splitNotificationsBySources = (sources, notifications) => {
   const notificationsBySources = []
 
   sources.filter(source => source.total > 0).forEach(source => {
     source.notifications = _.filter(notifications, n => {
       if (n.sourceId !== source.id) return false
-      if (_.indexOf(oldSourceIds, source.id) < 0 && n.isOld) return false
       return true
     })
     notificationsBySources.push(source)
