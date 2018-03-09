@@ -150,7 +150,7 @@ class ProjectSpecSidebar extends Component {
           <div className="btn-boxs">
             <button className="tc-btn tc-btn-primary tc-btn-md"
               onClick={this.onSubmitForReview}
-              disabled={!canSubmitForReview}
+              disabled={!canSubmitForReview || project.isDirty}
             >Submit for Review</button>
           </div>
         </div>

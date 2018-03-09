@@ -202,14 +202,14 @@ class ProjectsToolBar extends Component {
         </div>
         { isFilterVisible && isLoggedIn &&
         <div className="secondary-toolbar">
-          
+
           <Filters
             applyFilters={ this.applyFilters }
             criteria={ criteria }
           />
         </div>
         }
-        
+
       </div>
     )
   }
