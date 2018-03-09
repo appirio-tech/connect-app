@@ -73,7 +73,8 @@ class EditProjectForm extends Component {
       this.setState({
         // sets a new state variable with dirty project
         // any component who wants to listen for unsaved changes in project form can listen to this state variable
-        dirtyProject : Object.assign({}, nextProps.project)
+        dirtyProject: Object.assign({}, nextProps.project),
+        isProjectDirty: true
       })
       return
     }
@@ -92,6 +93,7 @@ class EditProjectForm extends Component {
     this.setState({
       project: updatedProject,
       isFeaturesDirty: false, // Since we just saved, features are not dirty anymore.
+      isProjectDirty: false,
       canSubmit: false,
       isSaving: false
     })
@@ -207,6 +209,7 @@ class EditProjectForm extends Component {
             {...section}
             project={project}
             dirtyProject={dirtyProject}
+            isProjectDirty={this.state.isProjectDirty}
             sectionNumber={idx + 1}
             resetFeatures={this.onFeaturesSaveAttachedClick}
             showFeaturesDialog={this.showFeaturesDialog}
