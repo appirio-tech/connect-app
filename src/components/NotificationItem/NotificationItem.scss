@@ -5,9 +5,18 @@
   .notification-item-link {
     display: block;
     border-top: 1px solid $tc-gray-10;
-  
+
     &:first-child {
       border: none;
+    }
+
+    &.untouched {
+      .notification-item {
+        box-shadow: inset 2px 0 0 0 $tc-light-blue;
+        &:hover{
+          box-shadow: none;
+        }
+      }
     }
   }
   

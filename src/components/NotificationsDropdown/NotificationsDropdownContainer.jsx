@@ -7,7 +7,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { getNotifications, markAllNotificationsRead, toggleNotificationRead, toggleBundledNotificationRead } from '../../routes/notifications/actions'
+import { getNotifications, visitNotifications, touchNotification, markAllNotificationsRead, toggleNotificationRead, toggleBundledNotificationRead } from '../../routes/notifications/actions'
 import { splitNotificationsBySources, filterReadNotifications, limitQuantityInSources } from '../../routes/notifications/helpers/notifications'
 import NotificationsSection from '../NotificationsSection/NotificationsSection'
 import NotificationsEmpty from '../NotificationsEmpty/NotificationsEmpty'
@@ -33,7 +33,14 @@ class NotificationsDropdownContainer extends React.Component {
       return null
     }
 
-    const { sources, notifications, markAllNotificationsRead, toggleNotificationRead, pending, toggleBundledNotificationRead } = this.props
+    const {lastVisited, sources, notifications, touchedIds, markAllNotificationsRead, toggleNotificationRead, touchNotification, pending, toggleBundledNotificationRead, visitNotifications } = this.props
+    const getPathname = link => link.split(/[?#]/)[0].replace(/\/?$/, '')
+
+    const touchingNotificationIds = notifications
+      .filter(({ id, isRead, goto = '' }) => !isRead && !touchedIds[id] && getPathname(goto) === getPathname(window.location.pathname))
+      .map(({ id }) => id)
+    touchingNotificationIds.length && setTimeout(() => _.map(touchingNotificationIds, touchNotification), 100)
+
     const notReadNotifications = filterReadNotifications(notifications)
     const notificationsBySources = limitQuantityInSources(
       splitNotificationsBySources(sources, notReadNotifications),
@@ -60,10 +67,11 @@ class NotificationsDropdownContainer extends React.Component {
         }, 0)
       }
     }
+    const hasNew = hasUnread && lastVisited < _.maxBy(_.map(notifications, n => new Date(n.date)))
 
     return (
-      <NotificationsDropdown hasUnread={hasUnread}>
-        <NotificationsDropdownHeader onMarkAllClick={() => !pending && markAllNotificationsRead()} hasUnread={hasUnread} />
+      <NotificationsDropdown hasUnread={hasUnread} hasNew={hasNew} onToggle={visitNotifications}>
+        <NotificationsDropdownHeader onMarkAllClick={() => !pending && markAllNotificationsRead()} hasUnread={hasUnread}/>
         {!hasUnread ? (
           <div className="notifications-dropdown-body">
             <NotificationsEmpty>
@@ -81,6 +89,8 @@ class NotificationsDropdownContainer extends React.Component {
                   isGlobal
                   isSimple
                   onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                  touchedIds={touchedIds}
+                  onLinkClick={touchNotification}
                 />
               }
               {projectSources.filter(source => source.notifications.length > 0).map(source => (
@@ -89,6 +99,8 @@ class NotificationsDropdownContainer extends React.Component {
                   key={source.id}
                   isSimple
                   onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                  touchedIds={touchedIds}
+                  onLinkClick={touchNotification}
                 />
               ))}
             </div>
@@ -110,6 +122,8 @@ const mapStateToProps = ({ notifications }) => notifications
 
 const mapDispatchToProps = {
   getNotifications,
+  visitNotifications,
+  touchNotification,
   markAllNotificationsRead,
   toggleNotificationRead,
   toggleBundledNotificationRead

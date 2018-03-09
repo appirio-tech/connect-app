@@ -3,6 +3,8 @@
  */
 import {
   GET_NOTIFICATIONS,
+  VISIT_NOTIFICATIONS,
+  TOUCH_NOTIFICATION,
   SET_NOTIFICATIONS_FILTER_BY,
   MARK_ALL_NOTIFICATIONS_READ,
   TOGGLE_NOTIFICATION_READ,
@@ -21,6 +23,19 @@ export const getNotifications = () => (dispatch) => {
     })
   }).catch(err => {
     Alert.error(`Failed to load notifications. ${err.message}`)
+  })
+}
+
+export const visitNotifications = () => (dispatch) => {
+  dispatch({
+    type: VISIT_NOTIFICATIONS
+  })
+}
+
+export const touchNotification = (notificationId) => (dispatch) => {
+  dispatch({
+    type: TOUCH_NOTIFICATION,
+    payload: notificationId
   })
 }
 
