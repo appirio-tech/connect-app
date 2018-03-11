@@ -30,7 +30,7 @@ class NotificationsDropdownContainer extends React.Component {
 
   render() {
     if (!this.props.initialized) {
-      return null
+      return <NotificationsDropdown hasUnread={false} />
     }
 
     const { sources, notifications, markAllNotificationsRead, toggleNotificationRead, pending, toggleBundledNotificationRead } = this.props
