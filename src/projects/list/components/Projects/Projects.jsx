@@ -99,9 +99,9 @@ class Projects extends Component {
         loadProjects(initialCriteria)
       }
     } else {
-      // perform initial load only if there are not projects already loaded
+      // perform initial load only if there are not projects already loaded or only one projects
       // otherwise we will get projects duplicated in store
-      if (projects.length === 0) {
+      if (projects.length <= 1) {
         // for powerful user filter by 'active' status by default
         // we cannot put it to PROJECT_LIST_DEFAULT_CRITERIA because
         // it would apply for both powerful and regular users
