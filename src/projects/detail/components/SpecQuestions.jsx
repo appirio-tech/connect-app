@@ -48,6 +48,8 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       const p = dirtyProject ? dirtyProject : project
       const screens = _.get(p, 'details.appScreens.screens', [])
       const definedScreens = screens.length
+      const maxImportanceLevel = _.maxBy(screens, 'importanceLevel').importanceLevel
+
       _.each(q.options, (option) => {
         let maxValue = 0
         const hyphenIdx = option.value.indexOf('-')
@@ -56,14 +58,28 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
         } else {
           maxValue = parseInt(option.value.substring(hyphenIdx+1))
         }
-        option.disabled = maxValue < definedScreens
-        option.errorMessage = (
-          <p>
-            You've defined more than {option.value} screens.
-            <br/>
-            Please delete screens to select this option.
-          </p>
-        )
+
+        if (maxValue < definedScreens) {
+          option.disabled = true
+          option.errorMessage = (
+            <p>
+              You've defined more than {option.value} screens.
+              <br />
+              Please delete screens to select this option.
+            </p>
+          )
+        } else if (maxValue < maxImportanceLevel) {
+          option.disabled = true
+          option.errorMessage = (
+            <p>
+              You've defined more than { option.value } importance level.
+              <br />
+              Please reduce importance level to select this option.
+            </p>
+          )
+        } else{
+          option.disabled = false
+        }
       })
     }
 
