@@ -4,7 +4,7 @@
 import {
   GET_NOTIFICATIONS,
   VISIT_NOTIFICATIONS,
-  TOUCH_NOTIFICATION,
+  TOGGLE_NOTIFICATION_SEEN,
   SET_NOTIFICATIONS_FILTER_BY,
   MARK_ALL_NOTIFICATIONS_READ,
   TOGGLE_NOTIFICATION_READ,
@@ -23,7 +23,6 @@ const initialState = {
   // ids of sources that will also show old notifications
   oldSourceIds: [],
   lastVisited: new Date(0),
-  touchedIds: {},
   pending: false
 }
 
@@ -51,11 +50,18 @@ export default (state = initialState, action) => {
   case VISIT_NOTIFICATIONS:
     return {...state, lastVisited: _.maxBy(_.map(state.notifications, n => new Date(n.date)))}
 
-  case TOUCH_NOTIFICATION:
-    return {
+  case TOGGLE_NOTIFICATION_SEEN: {
+    const ids = action.payload.split('-')
+    const newState = {
       ...state,
-      touchedIds: {...state.touchedIds, [action.payload]: true}
+      pending: false,
+      notifications: state.notifications.map(n => (
+        ids.indexOf(n.id) >= 0 ? { ...n, seen: true } : n
+      ))
     }
+    newState.sources = getSources(newState.notifications)
+    return newState
+  }
 
   case SET_NOTIFICATIONS_FILTER_BY:
     return {...state,

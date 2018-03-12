@@ -16,6 +16,11 @@ const markNotificationsRead = (id) => {
   }
 }
 
+// the id can be either: notification id; or '-' separated ids, e.g. '123-456-789'
+const markNotificationsSeen = (id) => {
+  return axios.put(`${TC_NOTIFICATION_URL}/notifications/${id}/seen`)
+}
+
 const getNotifications = () => {
   return axios.get(`${TC_NOTIFICATION_URL}/notifications?read=false&limit=${NOTIFICATIONS_LIMIT}`)
     .then(resp => prepareNotifications(resp.data.items))
@@ -23,5 +28,6 @@ const getNotifications = () => {
 
 export default {
   getNotifications,
-  markNotificationsRead
+  markNotificationsRead,
+  markNotificationsSeen,
 }

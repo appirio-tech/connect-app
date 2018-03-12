@@ -25,7 +25,6 @@ const NotificationsSection = (props) => {
         <NotificationItem
           key={notification.id}
           {...notification}
-          isTouched={props.touchedIds[notification.id]}
           onReadToggleClick={props.onReadToggleClick}
           onLinkClick={props.onLinkClick}
         />
@@ -52,7 +51,6 @@ NotificationsSection.propTypes = {
   onViewOlderClick: PropTypes.func,
   total: PropTypes.number,
   notifications: PropTypes.array.isRequired,
-  touchedIds:PropTypes.object.isRequired,
 }
 
 export default NotificationsSection

@@ -101,7 +101,7 @@ const NotificationItem = (props) => {
   )
 
   return ( props.goto
-    ? <Link className={cn('notification-item-link', {untouched: !props.isTouched})} to={props.goto} onClick={() => onLinkClick(id)}>{notificationItem}</Link>
+    ? <Link className={cn('notification-item-link', {unseen: !props.seen})} to={props.goto} onClick={() => props.seen || onLinkClick(id)}>{notificationItem}</Link>
     : notificationItem
   )
 }
@@ -114,7 +114,7 @@ NotificationItem.propTypes = {
   goTo: PropTypes.string,
   date: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
-  isTouched: PropTypes.bool,
+  seen: PropTypes.bool,
   onReadToggleClick: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
 }

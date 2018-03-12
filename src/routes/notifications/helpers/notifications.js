@@ -311,21 +311,22 @@ const bundleNotifications = (notificationsWithRules) => {
 /**
  * Prepare notifications
  *
- * @param  {Array} notifications notifications list
+ * @param  {Array} rawNotifications notifications list
  *
  * @return {Array}               notification list
  */
-export const prepareNotifications = (rowNotifications) => {
-  const notificationsWithRules = rowNotifications.map((rowNotification) => ({
-    id: `${rowNotification.id}`,
-    sourceId: rowNotification.contents.projectId ? `${rowNotification.contents.projectId}` : 'global',
-    sourceName: rowNotification.contents.projectId ? (rowNotification.contents.projectName || 'project') : 'Global',
-    eventType: rowNotification.type,
-    date: rowNotification.createdAt,
-    isRead: rowNotification.read,
-    isOld: new Date().getTime() - OLD_NOTIFICATION_TIME * MILLISECONDS_IN_MINUTE > new Date(rowNotification.createdAt).getTime(),
-    contents: rowNotification.contents,
-    version: rowNotification.version
+export const prepareNotifications = (rawNotifications) => {
+  const notificationsWithRules = rawNotifications.map((rawNotification) => ({
+    id: `${rawNotification.id}`,
+    sourceId: rawNotification.contents.projectId ? `${rawNotification.contents.projectId}` : 'global',
+    sourceName: rawNotification.contents.projectId ? (rawNotification.contents.projectName || 'project') : 'Global',
+    eventType: rawNotification.type,
+    date: rawNotification.createdAt,
+    isRead: rawNotification.read,
+    seen: rawNotification.seen,
+    isOld: new Date().getTime() - OLD_NOTIFICATION_TIME * MILLISECONDS_IN_MINUTE > new Date(rawNotification.createdAt).getTime(),
+    contents: rawNotification.contents,
+    version: rawNotification.version
   })).map((notification) => {
     const notificationRule = getNotificationRule(notification)
 

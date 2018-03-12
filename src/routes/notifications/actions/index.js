@@ -4,7 +4,7 @@
 import {
   GET_NOTIFICATIONS,
   VISIT_NOTIFICATIONS,
-  TOUCH_NOTIFICATION,
+  TOGGLE_NOTIFICATION_SEEN,
   SET_NOTIFICATIONS_FILTER_BY,
   MARK_ALL_NOTIFICATIONS_READ,
   TOGGLE_NOTIFICATION_READ,
@@ -29,13 +29,6 @@ export const getNotifications = () => (dispatch) => {
 export const visitNotifications = () => (dispatch) => {
   dispatch({
     type: VISIT_NOTIFICATIONS
-  })
-}
-
-export const touchNotification = (notificationId) => (dispatch) => {
-  dispatch({
-    type: TOUCH_NOTIFICATION,
-    payload: notificationId
   })
 }
 
@@ -95,6 +88,21 @@ export const toggleBundledNotificationRead = (bundledNotificationId, bundledIds)
     })
   }).catch(err => {
     Alert.error(`Failed to mark notification read. ${err.message}`)
+  })
+}
+
+export const toggleNotificationSeen = (notificationId) => (dispatch) => {
+  dispatch({
+    type: NOTIFICATIONS_PENDING
+  })
+
+  notificationsService.markNotificationsSeen(notificationId).then(() => {
+    dispatch({
+      type: TOGGLE_NOTIFICATION_SEEN,
+      payload: notificationId
+    })
+  }).catch(err => {
+    Alert.error(`Failed to mark notification seen. ${err.message}`)
   })
 }
 
