@@ -308,7 +308,7 @@ export const PROJECT_FEED_TYPE_MESSAGES = 'MESSAGES'
 export const DISCOURSE_BOT_USERID = 'system'
 export const CODER_BOT_USERID = 'CoderBot'
 export const CODER_BOT_USER_FNAME = 'Coder'
-export const CODER_BOT_USER_LNAME = 'Bot'
+export const CODER_BOT_USER_LNAME = 'the Bot'
 
 export const PROJECT_MAX_COLORS = 5
 
