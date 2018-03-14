@@ -113,8 +113,8 @@ export default class FileListItem extends React.Component {
             </Tooltip>
           </div>
           {isEditable && <div className="edit-icons">
-            <i className="icon-edit" onClick={this.startEdit}><EditIcon /></i>
-            <i className="icon-trash" onClick={this.onDelete}><TrashIcon /></i>
+            <i className="icon-edit" onClick={this.startEdit} title="edit"><EditIcon /></i>
+            <i className="icon-trash" onClick={this.onDelete} title="trash"><TrashIcon /></i>
           </div>}
         </div>
         <p>{description}</p>

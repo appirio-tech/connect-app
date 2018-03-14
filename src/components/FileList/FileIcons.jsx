@@ -3,8 +3,6 @@ import React from 'react'
 const Gzip = ({ width = '42px', height = '42px' }) => {
   return (
     <svg width={width} height={height} viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg">
-      {/* <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch --> */}
-      <title>Group</title>
       <desc>Created with Sketch.</desc>
       <defs />
       <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
