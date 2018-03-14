@@ -8,7 +8,7 @@ import './FileList.scss'
 
 const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent}) => (
   <Panel className={cn('file-list', {'modal-active': deletingFile})}>
-    {deletingFile && <div className="modal-overlay edit-modal-overlay" />}
+    {deletingFile && <div className="modal-overlay" />}
     {
       files.map((file, i) => {
         const _onConfirmDelete = () => {
