@@ -79,7 +79,7 @@ class ProjectInfoContainer extends React.Component {
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
-    if (isMemberOrCopilot) {
+    if (isMemberOrCopilot || isSuperUser) {
       directLinks = []
       if (project.directProjectId) {
         directLinks.push({name: 'Project in Topcoder Direct', href: `${DIRECT_PROJECT_URL}${project.directProjectId}`})
