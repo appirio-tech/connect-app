@@ -29,7 +29,7 @@ class NotificationSettingsContainer extends React.Component {
         //   to: 'https://www.topcoder.com/settings/email/',
         //   text: 'email settings here'
         // }}
-        text="Notifications are a great way to get back to what matters. Sometimes things can be a bit overwhelming, we get it, so here you can turn off the things that bug you. Once off, you won’t get any notifications of that category until you turn it back on. To manage your email notifications, follow the link at the boottom of the page."
+        text="Notifications are a great way to get back to what matters. Sometimes things can be a bit overwhelming, we get it, so here you can turn off the things that bug you. Once off, you won’t get any notifications of that category until you turn it back on. To manage your email notifications, follow the link at the bottom of the page."
         isWide
       >
         <NotificationSettingsFormWithLoader values={notificationSettings} onSubmit={saveNotificationSettings} />
