@@ -64,7 +64,7 @@ const ProjectsCardView = props => {
         <div className="project-card"><NewProjectCard /></div>
       </InfiniteScroll>
       { !isLoading && !infiniteAutoload && hasMore && <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore} key="loadMore">Load more projects</button>}
-      { !isLoading && !hasMore && <span key="end">No more {projectsStatus} projects</span>}
+      { !isLoading && !hasMore && <span key="end" className="gridview-no-more">No more {projectsStatus} projects</span>}
     </div>
   )
 }
