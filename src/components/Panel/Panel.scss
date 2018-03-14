@@ -78,6 +78,10 @@
       height: 100%;
       border-radius: $corner-radius;
       z-index: 1;
+      &.edit-modal-overlay {
+        height: calc(100% + 140px);
+        z-index: 2;
+      }
     }
 
     .modal,
