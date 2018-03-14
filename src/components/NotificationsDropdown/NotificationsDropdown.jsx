@@ -13,7 +13,7 @@ import Bell from '../../assets/icons/ui-bell.svg'
 const NotificationsDropdown = (props) => {
   return (
     <div className="notifications-dropdown">
-      <Dropdown theme="UserDropdownMenu" pointerShadow noAutoclose>
+      <Dropdown theme="UserDropdownMenu" pointerShadow>
         <div className="dropdown-menu-header">
           <div className={cn('notifications-dropdown-bell', { 'has-unread': props.hasUnread })}>
             <Bell className="icon-ui-bell"/>
