@@ -90,6 +90,7 @@ class ProjectInfoContainer extends React.Component {
     }
 
     const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER && project.status === 'draft'
+    const canAddLink = !!currentMemberRole || isSuperUser
 
     let devices = []
     const primaryTarget = _.get(project, 'details.appDefinition.primaryTarget')
@@ -114,6 +115,7 @@ class ProjectInfoContainer extends React.Component {
           <LinksMenu
             links={project.bookmarks || []}
             canDelete={!!currentMemberRole}
+            canAdd={canAddLink}
             onAddNewLink={this.onAddNewLink}
             onDelete={this.onDeleteLink}
           />
