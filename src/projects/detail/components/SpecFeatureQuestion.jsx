@@ -12,14 +12,14 @@ class SpecFeatureQuestion extends Component {
   }
 
   render() {
-    const { value, showFeaturesDialog } = this.props
+    const { value, showFeaturesDialog, isDisabled } = this.props
     return (
       <div className="add-edit-features">
         <div className="add-edit-features__added-features">
           <FlattenedFeatureList addedFeatures={ value } />
         </div>
         <div className="add-edit-features__header">
-          <button type="button" onClick={ showFeaturesDialog } className="tc-btn-secondary tc-btn-sm">Add / Edit Features</button>
+          <button type="button" onClick={ showFeaturesDialog } disabled={ isDisabled } className="tc-btn-secondary tc-btn-sm">Add / Edit Features</button>
         </div>
       </div>
     )
@@ -34,7 +34,8 @@ SpecFeatureQuestion.propTypes = {
   value: PropTypes.arrayOf(PropTypes.object).isRequired,
   question: PropTypes.object.isRequired,
   resetValue: PropTypes.func.isRequired,
-  showFeaturesDialog: PropTypes.func.isRequired
+  showFeaturesDialog: PropTypes.func.isRequired,
+  isDisabled: PropTypes.bool.isRequired
 }
 
 export default SpecFeatureQuestion
