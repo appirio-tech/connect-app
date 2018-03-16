@@ -7,7 +7,7 @@ import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 // import ProjectSegmentSelect from './ProjectSegmentSelect'
 import GridView from '../../../../components/Grid/GridView'
 import UserTooltip from '../../../../components/User/UserTooltip'
-import { PROJECTS_LIST_PER_PAGE, SORT_OPTIONS } from '../../../../config/constants'
+import { PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED } from '../../../../config/constants'
 import { findProduct } from '../../../../config/projectWizard'
 import TextTruncate from 'react-text-truncate'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
@@ -262,13 +262,14 @@ const ProjectsGridView = props => {
       sortable: false,
       classes: 'item-status',
       renderText: item => {
+        const canEdit = item.status !== PROJECT_STATUS_COMPLETED
         return (
           <div className="spacing">
             <EnhancedProjectStatus
               status={item.status}
               showText={false}
               withoutLabel
-              canEdit
+              canEdit={canEdit}
               unifiedHeader={false}
               onChangeStatus={onChangeStatus}
               projectId={item.id}
