@@ -30,6 +30,7 @@
     .left-area {
       @include flexWidth(1);
       max-width: 360px;
+      overflow: hidden;
 
       .dashboard-left-panel {
         padding-bottom: 2 * $base-unit;
