@@ -319,6 +319,9 @@ const bundleNotifications = (notificationsWithRules) => {
       existentNotificationWithRule.notification.contents.__history__.push(
         _.pick(notificationWithRule.notification.contents, PROPERTIES_KEEP_IN_HISTORY)
       )
+      if (notificationWithRule.notification.date > existentNotificationWithRule.notification.date) {
+        _.merge(existentNotificationWithRule.notification, notificationWithRule.notification)
+      }
     } else {
       bundledNotificationsWithRules.push(notificationWithRule)
     }

@@ -74,7 +74,6 @@ class FeedView extends React.Component {
     this.refreshUnreadUpdate = setInterval(() => {
       const notReadNotifications = filterReadNotifications(this.props.notifications.notifications)
       const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
-      const unreadProjectNotifications = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
       this.setState({ unreadUpdate: _.map(unreadTopicAndPostChangedNotifications, 'id' ) })
       console.log('scrolled '+this.state.scrolled)
       if (!this.isChanged() && !this.state.scrolled && this.state.unreadUpdate.length > 0) {
@@ -378,7 +377,10 @@ class FeedView extends React.Component {
   }
 
   onNotificationsRead(notifications) {
-    _.map(_.map(notifications, 'id' ), (notificationId) => {
+    const pickId = function(o) {
+      return o.bundledIds ? o.bundledIds : o.id
+    }
+    _.map(_.flatMap(notifications, pickId), (notificationId) => {
       this.props.toggleNotificationRead(notificationId)
     })
   }
@@ -441,7 +443,7 @@ class FeedView extends React.Component {
           { unreadProjectUpdate.length > 0 &&
             <div className="feed-action-card system-feed">
               <SystemFeed
-                messages={unreadProjectUpdate}
+                messages={sortedUnreadProjectUpdates}
                 user={SYSTEM_USER}
                 onNotificationsRead={this.onNotificationsRead.bind(this, sortedUnreadProjectUpdates)}
               >

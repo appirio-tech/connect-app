@@ -64,7 +64,7 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.approved',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
-      text: 'Your project was approved, work would soon start',
+      text: 'Your project was approved, work will soon start',
       projectRoles: [PROJECT_ROLE_OWNER]
     }, {
       text: 'Project is available for pickup',
@@ -340,7 +340,7 @@ export const NOTIFICATIONS = [
     rules: [{
       text: '<strong>{{userHandle}}</strong> updated the project specification',
       shouldBundle: true,
-      bundledText: 'Project specification is modified',
+      bundledText: 'Project specification has been modified {{bundledCount}} times',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_SPECIFICATION
     }]
@@ -351,7 +351,7 @@ export const NOTIFICATIONS = [
     rules: [{
       text: '<strong>{{userFullName}}</strong> updated the project specification',
       shouldBundle: true,
-      bundledText: 'Project specification is modified',
+      bundledText: 'Project specification has been modified {{bundledCount}} times',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_SPECIFICATION
     }]

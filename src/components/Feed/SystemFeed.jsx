@@ -50,7 +50,7 @@ class SystemFeed extends React.Component {
                 </div>
               </div>
               <div className="card-body">
-                <span>{ message.text }</span>
+                <span dangerouslySetInnerHTML={{__html: message.text}} />
               </div>
             </div>
           </Panel.Body>
