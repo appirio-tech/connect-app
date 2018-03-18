@@ -96,6 +96,7 @@ const SpecSection = props => {
           screens={screens}
           questions={props.questions}
           project={project}
+          dirtyProject={dirtyProject}
           onValidate={onValidate}
         />
       )
