@@ -53,6 +53,10 @@ class ProjectsToolBar extends Component {
   }
 
   componentDidMount() {
+    const contentDiv = document.getElementById('wrapper-main')
+    if (this.state.isFilterVisible) {
+      contentDiv.classList.add('with-filters')
+    }
     // sets window unload hook to show unsaved changes alert and persist incomplete project
     window.addEventListener('beforeunload', this.onLeave)
   }
