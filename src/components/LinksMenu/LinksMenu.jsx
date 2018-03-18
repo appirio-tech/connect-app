@@ -8,7 +8,7 @@ import EditLinkModal from './EditLinkModal'
 import uncontrollable from 'uncontrollable'
 import cn from 'classnames'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
-import BtnEdit from '../../assets/icons/ui-16px-1_edit-73.svg'
+import BtnEdit from '../../assets/icons/icon-edit.svg'
 
 
 const LinksMenu = ({ links, limit, canAdd, canDelete, canEdit,  isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, linkToEdit, onDeleteIntent, onEditIntent, onDelete, onEdit }) => (

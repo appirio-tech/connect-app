@@ -11,11 +11,12 @@
       display: flex;
       .button-group {
         margin-left: auto;
+        padding-left:20px;
         width: 110px;
       }
       .buttons{
         display: none;
-        margin-right: 20px;
+        margin-right: 5px;
         margin-left: auto;
         button {
           padding: 0;
