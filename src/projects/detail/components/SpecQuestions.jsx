@@ -87,6 +87,12 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       elemProps.wrapperClass = 'row'
       elemProps.type = 'number'
       break
+    case 'numberinputpositive':
+      ChildElem = TCFormFields.TextInput
+      elemProps.wrapperClass = 'rowchut'
+      elemProps.type = 'number'
+      elemProps.minValue = 0
+      break
     case 'textbox':
       ChildElem = TCFormFields.Textarea
       elemProps.wrapperClass = 'row'
