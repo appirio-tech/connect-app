@@ -90,11 +90,23 @@ const SpecSection = props => {
     }
     case 'screens': {
       const screens = _.get(project, props.fieldName, [])
+      const questions = props.questions.map(question => {
+        if (question.fieldName==='importanceLevel'){
+          const numImportance = +_.get(dirtyProject || project, 'details.appDefinition.numberScreens')
+          return {
+            ...question,
+            description: `Pick how important is this screen for your project from 1 to ${numImportance}`,
+            options: _.range(1, numImportance + 1).map(i => ({value: i, title: `${i}`}))
+          }
+        }
+        return question
+      })
+
       return (
         <SpecScreens
           name={props.fieldName}
           screens={screens}
-          questions={props.questions}
+          questions={questions}
           project={project}
           dirtyProject={dirtyProject}
           onValidate={onValidate}
