@@ -84,7 +84,7 @@ const sections = [
             fieldName: 'details.appDefinition.budget',
             description: 'Project budget in USD, please enter 0 if you don\'t have one',
             title: 'What is your project budget?',
-            type: 'numberinput'
+            type: 'numberinputpositive'
           },
           {
             icon: 'question',

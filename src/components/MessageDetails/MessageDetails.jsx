@@ -75,7 +75,6 @@ class MessageDetails extends React.Component {
               onDelete={onDeleteMessage}
               isSaving={item.isSavingComment}
               hasError={item.error}
-              readonly={item.id === topicMessage.id}
             >
               <div dangerouslySetInnerHTML={{__html: item.content}} />
             </Comment>)
