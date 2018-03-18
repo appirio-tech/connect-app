@@ -6,7 +6,8 @@ import {
   SET_PROJECTS_LIST_VIEW,
   PROJECTS_LIST_VIEW,
   PROJECT_LIST_DEFAULT_CRITERIA,
-  PROJECT_SORT
+  PROJECT_SORT,
+  DELETE_PROJECT_SUCCESS
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -18,19 +19,20 @@ export const initialState = {
   pageNum: 1,
   // make a copy of constant to avoid unintentional modifications
   criteria: {...PROJECT_LIST_DEFAULT_CRITERIA},
-  projectsListView: PROJECTS_LIST_VIEW.GRID
+  projectsListView: PROJECTS_LIST_VIEW.GRID,
+  refresh: false
 }
 
 export default function(state = initialState, action) {
   switch (action.type) {
-
   // project search state
   case GET_PROJECTS_PENDING:
   case PROJECT_SEARCH_PENDING:
     return Object.assign({}, state, {
       isLoading: true,
       error: false,
-      totalCount: action.meta && action.meta.keepPrevious ? state.totalCount : 0
+      totalCount: action.meta && action.meta.keepPrevious ? state.totalCount : 0,
+      refresh: false
     })
   case SET_PROJECTS_SEARCH_CRITERIA:
     return Object.assign({}, state, {
@@ -84,6 +86,12 @@ export default function(state = initialState, action) {
     return Object.assign({}, state, {
       projectsListView: action.payload
     })
+
+  case DELETE_PROJECT_SUCCESS: {
+    return Object.assign({}, state, {
+      refresh: true
+    })
+  }
 
   default:
     return state
