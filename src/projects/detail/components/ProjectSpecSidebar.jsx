@@ -30,7 +30,7 @@ const calcProgress = (project, subSection) => {
       || q.required
       || (q.validations && q.validations.indexOf('isRequired') !== -1)
     )
-    return [count, _.filter(subSection.questions, filterRequiredQuestions).length]
+    return [count, Math.max(_.filter(subSection.questions, filterRequiredQuestions).length, 1)]
   } else if (subSection.id === 'screens') {
     const screens = _.get(project, 'details.appScreens.screens', [])
     const validScreens = screens.filter((s) => {
@@ -40,7 +40,7 @@ const calcProgress = (project, subSection) => {
       })
       return vals.length === subSection.questions.filter((q) => q.required).length
     })
-    return [validScreens.length, screens.length]//TODO we should do range comparison here
+    return [validScreens.length, Math.max(screens.length, 1)]//TODO we should do range comparison here
   } else {
     // assuming there is only one question
     let val = _.get(project, subSection.fieldName, null)
