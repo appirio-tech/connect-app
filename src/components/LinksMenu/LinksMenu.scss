@@ -9,9 +9,14 @@
       line-height: 1;
       padding: $base-unit 0 $base-unit $base-unit*4;
       display: flex;
+      .button-group {
+        margin-left: auto;
+        padding-left:20px;
+        width: 110px;
+      }
       .buttons{
         display: none;
-        margin-right: 20px;
+        margin-right: 5px;
         margin-left: auto;
         button {
           padding: 0;
@@ -20,7 +25,7 @@
       }
       a{
         line-height: $base-unit*4;
-        max-width: 275px;
+        max-width: 220px;
         text-overflow: ellipsis;
         overflow-x: hidden;
       }
@@ -30,6 +35,9 @@
       color: $tc-dark-blue;
       .buttons{
         display: block;
+      }
+      .link-buttons{
+        display: inline-block;
       }
     }
     .links-footer{
@@ -42,6 +50,7 @@
   
     .delete-link-modal {
       margin-left: -4*$base-unit;
+      width: 100%;
     }
   
     li:before {
