@@ -42,7 +42,7 @@ class FileListContainer extends Component {
   canManageFiles() {
     const { currentUserId, project } = this.props
     const role = getProjectRoleForCurrentUser({ currentUserId, project })
-    return role && role !== PROJECT_ROLE_CUSTOMER
+    return role && true;
   }
 
   render() {
