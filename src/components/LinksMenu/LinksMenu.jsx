@@ -11,7 +11,7 @@ import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
 import BtnEdit from '../../assets/icons/ui-16px-1_edit-73.svg'
 
 
-const LinksMenu = ({ links, limit, canAdd, canDelete,canEdit,  isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, linkToEdit, onDeleteIntent, onEditIntent, onDelete, onEdit }) => (
+const LinksMenu = ({ links, limit, canAdd, canDelete, canEdit,  isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, linkToEdit, onDeleteIntent, onEditIntent, onDelete, onEdit }) => (
   <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0) })}>
     {canAdd && !isAddingNewLink && <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Create New Link</Panel.AddBtn>}
     {!isAddingNewLink && <Panel.Title>
