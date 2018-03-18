@@ -88,7 +88,6 @@ class ProjectsToolBar extends Component {
   applyFilters(filter) {
     const criteria = _.assign({}, this.props.criteria, filter)
     if (criteria && criteria.keyword) {
-      criteria.keyword = encodeURIComponent(criteria.keyword)
       // force sort criteria to updatedAt desc
       criteria.sort = 'updatedAt desc'
     }

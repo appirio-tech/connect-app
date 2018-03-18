@@ -53,7 +53,7 @@ export default class ProjectListNavHeader extends Component {
 
     const criteria = _.assign({}, this.props.criteria, filter)
     if (criteria && criteria.keyword) {
-      criteria.keyword = encodeURIComponent(criteria.keyword)
+      criteria.keyword = criteria.keyword
       // force sort criteria to updatedAt desc
       criteria.sort = 'updatedAt desc'
     }
