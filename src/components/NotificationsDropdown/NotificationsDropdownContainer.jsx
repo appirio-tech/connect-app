@@ -7,7 +7,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { getNotifications, markAllNotificationsRead, toggleNotificationRead, toggleBundledNotificationRead } from '../../routes/notifications/actions'
+import { getNotifications, visitNotifications, toggleNotificationSeen, markAllNotificationsRead, toggleNotificationRead, toggleBundledNotificationRead } from '../../routes/notifications/actions'
 import { splitNotificationsBySources, filterReadNotifications, limitQuantityInSources } from '../../routes/notifications/helpers/notifications'
 import NotificationsSection from '../NotificationsSection/NotificationsSection'
 import NotificationsEmpty from '../NotificationsEmpty/NotificationsEmpty'
@@ -33,7 +33,18 @@ class NotificationsDropdownContainer extends React.Component {
       return <NotificationsDropdown hasUnread={false} />
     }
 
-    const { sources, notifications, markAllNotificationsRead, toggleNotificationRead, pending, toggleBundledNotificationRead } = this.props
+    const {lastVisited, sources, notifications, markAllNotificationsRead, toggleNotificationRead, toggleNotificationSeen, pending, toggleBundledNotificationRead, visitNotifications } = this.props
+    const getPathname = link => link.split(/[?#]/)[0].replace(/\/?$/, '')
+
+    // mark notifications with url mathc current page's url as seen
+    if (!pending) {
+      const seenNotificationIds = notifications
+        .filter(({ isRead, seen, goto = '' }) => !isRead && !seen && getPathname(goto) === getPathname(window.location.pathname))
+        .map(({ id }) => id)
+        .join('-')
+      seenNotificationIds.length && setTimeout(() => toggleNotificationSeen(seenNotificationIds), 0)
+    }
+
     const notReadNotifications = filterReadNotifications(notifications)
     const notificationsBySources = limitQuantityInSources(
       splitNotificationsBySources(sources, notReadNotifications),
@@ -60,10 +71,11 @@ class NotificationsDropdownContainer extends React.Component {
         }, 0)
       }
     }
+    const hasNew = hasUnread && lastVisited < _.maxBy(_.map(notifications, n => new Date(n.date)))
 
     return (
-      <NotificationsDropdown hasUnread={hasUnread}>
-        <NotificationsDropdownHeader onMarkAllClick={() => !pending && markAllNotificationsRead()} hasUnread={hasUnread} />
+      <NotificationsDropdown hasUnread={hasUnread} hasNew={hasNew} onToggle={visitNotifications}>
+        <NotificationsDropdownHeader onMarkAllClick={() => !pending && markAllNotificationsRead()} hasUnread={hasUnread}/>
         {!hasUnread ? (
           <div className="notifications-dropdown-body">
             <NotificationsEmpty>
@@ -81,6 +93,7 @@ class NotificationsDropdownContainer extends React.Component {
                   isGlobal
                   isSimple
                   onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                  onLinkClick={toggleNotificationSeen}
                 />
               }
               {projectSources.filter(source => source.notifications.length > 0).map(source => (
@@ -89,6 +102,7 @@ class NotificationsDropdownContainer extends React.Component {
                   key={source.id}
                   isSimple
                   onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                  onLinkClick={toggleNotificationSeen}
                 />
               ))}
             </div>
@@ -110,6 +124,8 @@ const mapStateToProps = ({ notifications }) => notifications
 
 const mapDispatchToProps = {
   getNotifications,
+  visitNotifications,
+  toggleNotificationSeen,
   markAllNotificationsRead,
   toggleNotificationRead,
   toggleBundledNotificationRead

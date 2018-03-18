@@ -6,6 +6,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import cn from 'classnames'
 import { NOTIFICATION_TYPE } from '../../config/constants'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
@@ -76,6 +77,7 @@ const formatDate = (date) => {
 
 
 const NotificationItem = (props) => {
+  const { id, onLinkClick } = props
   const notificationItem = (
     <div className="notification-item">
       <div className="icon">
@@ -99,7 +101,7 @@ const NotificationItem = (props) => {
   )
 
   return ( props.goto
-    ? <Link className="notification-item-link" to={props.goto}>{notificationItem}</Link>
+    ? <Link className={cn('notification-item-link', {unseen: !props.seen})} to={props.goto} onClick={() => props.seen || onLinkClick(id)}>{notificationItem}</Link>
     : notificationItem
   )
 }
@@ -112,7 +114,9 @@ NotificationItem.propTypes = {
   goTo: PropTypes.string,
   date: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
-  onReadToggleClick: PropTypes.func.isRequired
+  seen: PropTypes.bool,
+  onReadToggleClick: PropTypes.func.isRequired,
+  onLinkClick: PropTypes.func.isRequired,
 }
 
 export default NotificationItem

@@ -15,7 +15,7 @@ const NotificationsDropdown = (props) => {
     <div className="notifications-dropdown">
       <Dropdown theme="UserDropdownMenu" pointerShadow noAutoclose>
         <div className="dropdown-menu-header">
-          <div className={cn('notifications-dropdown-bell', { 'has-unread': props.hasUnread })}>
+          <div className={cn('notifications-dropdown-bell', { 'has-unread': props.hasUnread, 'has-new': props.hasNew })} onClick={props.onToggle}>
             <Bell className="icon-ui-bell"/>
           </div>
         </div>
@@ -31,6 +31,8 @@ const NotificationsDropdown = (props) => {
 
 NotificationsDropdown.propTypes = {
   hasUnread: PropTypes.bool,
+  hasNew: PropTypes.bool,
+  onToggle: PropTypes.func.isRequired,
   children: PropTypes.node
 }
 
