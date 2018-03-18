@@ -75,6 +75,12 @@
       height: 30px;
       margin-top: 15px;
       display: flex;
+
+      input::-ms-clear{
+        width: 0;
+        height: 0;
+        display: none;
+      }
     }
 
     .search-filter {

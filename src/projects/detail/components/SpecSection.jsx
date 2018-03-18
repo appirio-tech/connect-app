@@ -86,7 +86,7 @@ const SpecSection = props => {
       )
     case 'files': {
       const files = _.get(project, props.fieldName, [])
-      return <FileListContainer projectId={project.id} files={files} />
+      return <FileListContainer project={project} files={files} />
     }
     case 'screens': {
       const screens = _.get(project, props.fieldName, [])

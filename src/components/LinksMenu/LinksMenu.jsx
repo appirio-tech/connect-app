@@ -9,9 +9,9 @@ import cn from 'classnames'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
 
 
-const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, onDeleteIntent, onDelete }) => (
+const LinksMenu = ({ links, limit, canAdd, canDelete, isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, onDeleteIntent, onDelete }) => (
   <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0) })}>
-    {!isAddingNewLink && <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Create New Link</Panel.AddBtn>}
+    {canAdd && !isAddingNewLink && <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Create New Link</Panel.AddBtn>}
     {!isAddingNewLink && <Panel.Title>
       Links ({links.length})
     </Panel.Title>}
@@ -75,6 +75,7 @@ const LinksMenu = ({ links, limit, canDelete, isAddingNewLink, onAddingNewLink, 
 LinksMenu.propTypes = {
   links: PropTypes.array.isRequired,
   limit: PropTypes.number,
+  canAdd: PropTypes.bool,
   canDelete: PropTypes.bool,
   onAddingNewLink: PropTypes.func,
   onAddNewLink: PropTypes.func.isRequired,

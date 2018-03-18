@@ -26,6 +26,7 @@
             font-size: $tc-heading-sm;
             line-height: $base-unit * 4;
             color: $tc-black;
+            word-break: break-all;
           }
   
           .project-date {

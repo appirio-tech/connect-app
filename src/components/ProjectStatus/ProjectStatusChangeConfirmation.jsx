@@ -78,7 +78,10 @@ class ProjectStatusChangeConfirmation extends Component {
     const { newStatus, onCancel } = this.props
     this.shouldDropdownUp()
     return (
-      <div className={cn('modal', 'project-status-change-modal', { 'dropdown-up': this.state.showUp })} ref={(input) => { if (input && ! this.wrapper){this.wrapper = input; this.setState({showUp:this.shouldDropdownUp()}) }}}>
+      <div className={cn('modal', 'project-status-change-modal', { 'dropdown-up': this.state.showUp })}
+        ref={(input) => { if (input && ! this.wrapper){this.wrapper = input; this.setState({showUp:this.shouldDropdownUp()}) }}}
+        onClick={e => e.stopPropagation()}
+      >
         <div className="modal-title danger">
           You are about to { this.titleStatus } the project
         </div>

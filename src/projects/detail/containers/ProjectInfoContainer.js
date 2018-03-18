@@ -79,7 +79,7 @@ class ProjectInfoContainer extends React.Component {
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
-    if (isMemberOrCopilot) {
+    if (isMemberOrCopilot || isSuperUser) {
       directLinks = []
       if (project.directProjectId) {
         directLinks.push({name: 'Project in Topcoder Direct', href: `${DIRECT_PROJECT_URL}${project.directProjectId}`})
@@ -90,6 +90,7 @@ class ProjectInfoContainer extends React.Component {
     }
 
     const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER && project.status === 'draft'
+    const canAddLink = !!currentMemberRole || isSuperUser
 
     let devices = []
     const primaryTarget = _.get(project, 'details.appDefinition.primaryTarget')
@@ -114,6 +115,7 @@ class ProjectInfoContainer extends React.Component {
           <LinksMenu
             links={project.bookmarks || []}
             canDelete={!!currentMemberRole}
+            canAdd={canAddLink}
             onAddNewLink={this.onAddNewLink}
             onDelete={this.onDeleteLink}
           />

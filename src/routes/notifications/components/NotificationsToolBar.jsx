@@ -5,7 +5,7 @@ import React from 'react'
 import SectionTopBar from '../../../components/TopBar/SectionToolBar'
 
 const NotificationsToolBar = () => (
-  <SectionTopBar title="Notifications" />
+  <SectionTopBar title="Notification Settings" menu={[]} />
 )
 
 export default NotificationsToolBar

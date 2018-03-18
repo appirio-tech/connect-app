@@ -75,6 +75,7 @@ const topics = [
   'notifications.connect.project.paused',
   'notifications.connect.project.completed',
   'notifications.connect.project.submittedForReview',
+  'notifications.connect.project.active',
 
   'notifications.connect.project.fileUploaded',
   'notifications.connect.project.specificationModified',
