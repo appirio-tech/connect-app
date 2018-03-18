@@ -146,7 +146,7 @@ class RichTextArea extends React.Component {
         isCloseButton = true,
         this.setState({
           titleValue: '',
-          editorState: EditorState.push(this.state.editorState, EditorState.createEmpty().getCurrentContent()),
+          editorState: EditorState.createEmpty(),
           currentMDContent: null,
           oldMDContent: null
         })
