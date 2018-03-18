@@ -52,10 +52,6 @@ class ProjectsToolBar extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    return !nextProps.user.isLoading
-  }
-
   componentDidMount() {
     const contentDiv = document.getElementById('wrapper-main')
     if (this.state.isFilterVisible) {
