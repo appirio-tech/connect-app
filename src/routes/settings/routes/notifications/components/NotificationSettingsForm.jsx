@@ -33,7 +33,8 @@ const topics = [
       'notifications.connect.project.approved',
       'notifications.connect.project.paused',
       'notifications.connect.project.completed',
-      'notifications.connect.project.submittedForReview'
+      'notifications.connect.project.submittedForReview',
+      'notifications.connect.project.active'
     ]
   }, {
     title: 'Project specification changes',

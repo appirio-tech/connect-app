@@ -81,7 +81,7 @@ const TeamManagement = (props) => {
           }
           const _onMemberDeleteCancel = () => onMemberDelete(null)
           const _onChangeOwnerCancel = () => onChangeOwner(null)
-          if (deletingMember === member) {
+          if (deletingMember && deletingMember.userId === member.userId) {
             return (
               <DeleteModal
                 {...member}
@@ -92,7 +92,7 @@ const TeamManagement = (props) => {
               />
             )
           }
-          if (newOwner === member) {
+          if (newOwner && newOwner.userId === member.userId) {
             return (
               <OwnerModal
                 key="ownerModal"
