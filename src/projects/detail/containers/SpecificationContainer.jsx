@@ -49,7 +49,8 @@ class SpecificationContainer extends Component {
   }
 
   render() {
-    const { project, currentMemberRole, processing } = this.props
+    const { project, currentMemberRole, isSuperUser, processing } = this.props
+    const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
     const productId = _.get(project, 'details.products[0]')
     const product = findProduct(productId)
 
@@ -72,7 +73,7 @@ class SpecificationContainer extends Component {
             <EnhancedEditProjectForm
               project={project}
               sections={sections}
-              isEdittable={!!currentMemberRole}
+              isEdittable={editPriv}
               submitHandler={this.saveProject}
               saving={processing}
               route={this.props.route}

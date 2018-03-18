@@ -20,7 +20,7 @@ const FlattenedFeatureList = ({ addedFeatures }) => {
       }
       childrenDom.push(
         <div className="flattened-feature-list-item" key={idx}>
-          {feature.icon && <div className="icon-col">{ <img src={feature.icon} /> }</div>}
+          {feature.icon && <div className="icon-col">{ feature.icon }</div>}
           <div className="content-col">
             <h4>{ feature.title }</h4>
             <p>{ feature.categoryId === 'custom' ? feature.notes : feature.description }</p>
