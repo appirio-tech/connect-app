@@ -95,7 +95,7 @@ export default class FileListItem extends React.Component {
   }
 
   renderReadOnly() {
-    const {title, downloadUrl, description, size, isEditable, updatedAt, createdAt, createdByUser, updatedByUser} = this.props
+    const {title, downloadUrl, description, size, isEditable, updatedAt, createdAt, createdByUser, updatedByUser, canModify} = this.props
 
     return (
       <div>
@@ -112,7 +112,7 @@ export default class FileListItem extends React.Component {
               </div>
             </Tooltip>
           </div>
-          {isEditable && <div className="edit-icons">
+          {isEditable && canModify && <div className="edit-icons">
             <i className="icon-edit" onClick={this.startEdit} title="edit"><EditIcon /></i>
             <i className="icon-trash" onClick={this.onDelete} title="trash"><TrashIcon /></i>
           </div>}
@@ -179,7 +179,8 @@ FileListItem.propTypes = {
    * )
    *
    */
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
+  canModify: PropTypes.bool.isRequired
 }
 
 FileListItem.defaultProps = {
