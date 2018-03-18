@@ -80,7 +80,7 @@ export function createProject(projectProps) {
   // TODO: Remove this once none of the active projects
   // have the discussions tab enabled
   projectProps.details.hideDiscussions = true
-  
+
   return axios.post(`${PROJECTS_API_URL}/v4/projects/`, { param: projectProps })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})

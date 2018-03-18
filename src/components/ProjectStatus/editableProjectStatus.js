@@ -29,6 +29,9 @@ const hocStatusDropdown = (CompositeComponent) => {
     render() {
       const { canEdit, isOpen, handleClick, onItemSelect, showText, withoutLabel, unifiedHeader, status } = this.props
       const selected = PROJECT_STATUS.filter((opt) => opt.value === status)[0] || PROJECT_STATUS[0]
+      if (!selected) {
+        return null
+      }
 
       this.shouldDropdownUp()
       return (
@@ -128,7 +131,7 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
     const ProjectStatusDropdown = canEdit ? enhanceDropdown(hocStatusDropdown(CompositeComponent)) : hocStatusDropdown(CompositeComponent)
     return (
       <div className={cn('EditableProjectStatus', {'modal-active': showStatusChangeDialog})}>
-        <div className="modal-overlay" />
+        <div className="modal-overlay" onClick={ this.hideStatusChangeDialog }/>
         <ProjectStatusDropdown {...this.props } onItemSelect={ this.showStatusChangeDialog } />
         { showStatusChangeDialog &&
           <ProjectStatusChangeConfirmation

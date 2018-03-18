@@ -17,7 +17,7 @@ function ProjectOutline({ project }) {
   const projectEstimate = (projectsWithEstimate.indexOf(productName)<0) ? (null) : (<li className="project-meta-data-row">
     <VisualDesignProjectEstimateSection
       products={ _.get(project, 'details.products', []) }
-      numberScreens={ _.get(project, 'details.appDefinition.numberScreens', '') }
+      project={ project }
     />
   </li>)
   return (

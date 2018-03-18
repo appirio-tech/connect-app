@@ -9,13 +9,14 @@ import _ from 'lodash'
 import SpecQuestions from './SpecQuestions'
 import FileListContainer from './FileListContainer'
 import SpecScreens from './SpecScreens'
-import { PROJECT_STATUS_DRAFT, PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
+import { PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
 import { scrollToAnchors } from '../../../components/ScrollToAnchors'
 
 const SpecSection = props => {
   const {
     project,
     dirtyProject,
+    isProjectDirty,
     resetFeatures,
     showFeaturesDialog,
     id,
@@ -85,8 +86,9 @@ const SpecSection = props => {
         </div>
       )
     case 'files': {
-      const files = _.get(project, props.fieldName, [])
-      return <FileListContainer projectId={project.id} files={files} />
+      const projectLatest = isProjectDirty ? dirtyProject : project
+      const files = _.get(projectLatest, props.fieldName, [])
+      return <FileListContainer project={projectLatest} files={files} />
     }
     case 'screens': {
       const screens = _.get(project, props.fieldName, [])
@@ -96,6 +98,7 @@ const SpecSection = props => {
           screens={screens}
           questions={props.questions}
           project={project}
+          dirtyProject={dirtyProject}
           onValidate={onValidate}
         />
       )
@@ -106,27 +109,20 @@ const SpecSection = props => {
       const queryParamRefCode = qs.parse(window.location.search).refCode
       return (
         <div className="project-name-section">
-          { (!project.status || project.status === PROJECT_STATUS_DRAFT) &&
-            <div className="editable-project-name">
-              <TCFormFields.TextInput
-                name="name"
-                placeholder="Project Name"
-                value={_.get(project, 'name', undefined)}
-                wrapperClass="project-name"
-                maxLength={ PROJECT_NAME_MAX_LENGTH }
-                required={props.required}
-                validations={props.required ? 'isRequired' : null}
-                validationError={props.validationError}
-                theme="paper-form-dotted"
-              />
-            </div>
-          }
-          { (project.status && project.status !== PROJECT_STATUS_DRAFT) &&
-            <div className="dashed-bottom-border">
-              <h5 className="project-name">{project.name}</h5>
-            </div>
-          }
-          { (!queryParamRefCode && (!project.status || project.status === PROJECT_STATUS_DRAFT)) &&
+          <div className="editable-project-name">
+            <TCFormFields.TextInput
+              name="name"
+              placeholder="Project Name"
+              value={_.get(project, 'name', undefined)}
+              wrapperClass="project-name"
+              maxLength={ PROJECT_NAME_MAX_LENGTH }
+              required={props.required}
+              validations={props.required ? 'isRequired' : null}
+              validationError={props.validationError}
+              theme="paper-form-dotted"
+            />
+          </div>
+          { !queryParamRefCode &&
             <div className="textinput-refcode">
               <TCFormFields.TextInput
                 name={refCodeFieldName}
@@ -139,14 +135,6 @@ const SpecSection = props => {
               />
               <div className="refcode-desc">
                 Optional
-              </div>
-            </div>
-          }
-          { (!queryParamRefCode && project.status && project.status !== PROJECT_STATUS_DRAFT) &&
-            <div className="read-only-refcode">
-              <h5 className="project-refcode">{ refCode }</h5>
-              <div className="refcode-desc">
-                REF Code
               </div>
             </div>
           }
