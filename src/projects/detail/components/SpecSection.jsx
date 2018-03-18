@@ -16,6 +16,7 @@ const SpecSection = props => {
   const {
     project,
     dirtyProject,
+    isProjectDirty,
     resetFeatures,
     showFeaturesDialog,
     id,
@@ -85,8 +86,9 @@ const SpecSection = props => {
         </div>
       )
     case 'files': {
-      const files = _.get(project, props.fieldName, [])
-      return <FileListContainer project={project} files={files} />
+      const projectLatest = isProjectDirty ? dirtyProject : project
+      const files = _.get(projectLatest, props.fieldName, [])
+      return <FileListContainer project={projectLatest} files={files} />
     }
     case 'screens': {
       const screens = _.get(project, props.fieldName, [])
