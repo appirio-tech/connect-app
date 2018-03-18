@@ -52,6 +52,10 @@ class ProjectsToolBar extends Component {
     }
   }
 
+  shouldComponentUpdate(nextProps) {
+    return !nextProps.user.isLoading
+  }
+
   componentDidMount() {
     const contentDiv = document.getElementById('wrapper-main')
     if (this.state.isFilterVisible) {
@@ -134,7 +138,7 @@ class ProjectsToolBar extends Component {
   render() {
     const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser } = this.props
     const { isFilterVisible } = this.state
-    const isLoggedIn = userRoles && userRoles.length
+    const isLoggedIn = !!(userRoles && userRoles.length)
 
     let excludedFiltersCount = 1 // 1 for default sort criteria
     if (criteria.memberOnly) {
@@ -162,7 +166,7 @@ class ProjectsToolBar extends Component {
         target: '_blank'
       }
     ]
-    const menuBar = !!isLoggedIn && !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />
+    const menuBar = isLoggedIn && !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />
 
     return (
       <div className="ProjectsToolBar">
@@ -173,7 +177,7 @@ class ProjectsToolBar extends Component {
         <div className="primary-toolbar">
           { renderLogoSection(menuBar) }
           {
-            !!isLoggedIn &&
+            isLoggedIn &&
             <div className="search-widget">
               { !!isPowerUser &&
                 <SearchBar
@@ -198,14 +202,13 @@ class ProjectsToolBar extends Component {
             </div>
           }
           <div className="actions">
-            { !!isLoggedIn && <NewProjectNavLink compact /> }
+            { isLoggedIn && <NewProjectNavLink compact /> }
             { userMenu }
-            { !!isLoggedIn && <NotificationsDropdown /> }
+            { isLoggedIn && <NotificationsDropdown /> }
           </div>
         </div>
         { isFilterVisible && isLoggedIn &&
         <div className="secondary-toolbar">
-          
           <Filters
             applyFilters={ this.applyFilters }
             criteria={ criteria }
