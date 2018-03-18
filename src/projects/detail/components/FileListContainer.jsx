@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import FileList from '../../../components/FileList/FileList'
 import AddFiles from '../../../components/FileList/AddFiles'
-import { PROJECT_ATTACHMENTS_FOLDER, PROJECT_ROLE_CUSTOMER } from '../../../config/constants'
+import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import { getProjectRoleForCurrentUser } from '../../../helpers/projectHelper'
 
@@ -42,7 +42,7 @@ class FileListContainer extends Component {
   canManageFiles() {
     const { currentUserId, project } = this.props
     const role = getProjectRoleForCurrentUser({ currentUserId, project })
-    return role && true;
+    return role && true
   }
 
   render() {
