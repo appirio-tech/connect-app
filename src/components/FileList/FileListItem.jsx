@@ -83,8 +83,8 @@ export default class FileListItem extends React.Component {
         <div className="title-edit">
           <input type="text" defaultValue={title} ref="title" maxLength={50} onChange={ this.onTitleChange }/>
           <div className="save-icons">
-            <a href="javascript:" className="icon-save" onClick={this.handleSave}><SaveIcon /></a>
-            <a href="javascript:" className="icon-close" onClick={onExitEdit}><CloseIcon /></a>
+            <a href="javascript:" className="icon-save" onClick={this.handleSave} title="Save"><SaveIcon /></a>
+            <a href="javascript:" className="icon-close" onClick={onExitEdit} title="Cancel"><CloseIcon /></a>
           </div>
         </div>
         { (errors && errors.title) && <div className="error-message">{ errors.title }</div> }
@@ -113,8 +113,8 @@ export default class FileListItem extends React.Component {
             </Tooltip>
           </div>
           {isEditable && canModify && <div className="edit-icons">
-            <i className="icon-edit" onClick={this.startEdit}><EditIcon /></i>
-            <i className="icon-trash" onClick={this.onDelete}><TrashIcon /></i>
+            <i className="icon-edit" onClick={this.startEdit} title="edit"><EditIcon /></i>
+            <i className="icon-trash" onClick={this.onDelete} title="trash"><TrashIcon /></i>
           </div>}
         </div>
         <p>{description}</p>

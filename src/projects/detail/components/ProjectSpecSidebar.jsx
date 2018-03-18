@@ -143,7 +143,7 @@ class ProjectSpecSidebar extends Component {
             <hr />
             <p>
               In order to submit your project please fill in all the required
-              information. Once that you do that we&quot;ll be able to give
+              information. Once you do that we&quot;ll be able to give
               you a good estimate.
             </p>
           </div>

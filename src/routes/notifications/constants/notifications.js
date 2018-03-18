@@ -34,6 +34,20 @@ export const NOTIFICATIONS = [
   },
 
   {
+    eventType: 'notifications.connect.project.active',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: 'Your project is now active',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PROJECT_DASHBOARD
+    }, {
+      text: 'A project has been set to active',
+      topcoderRoles: [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR],
+      goTo: GOTO.PROJECT_DASHBOARD
+    }]
+  },
+
+  {
     eventType: 'notifications.connect.project.submittedForReview',
     type: NOTIFICATION_TYPE.REVIEW_PENDING,
     rules: [{
@@ -265,10 +279,10 @@ export const NOTIFICATIONS = [
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.POST
     }]
-  }, 
+  },
 
   {
-    version: 2,                 
+    version: 2,
     eventType: 'notifications.connect.project.post.mention',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{

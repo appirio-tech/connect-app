@@ -53,6 +53,10 @@ class ProjectsToolBar extends Component {
   }
 
   componentDidMount() {
+    const contentDiv = document.getElementById('wrapper-main')
+    if (this.state.isFilterVisible) {
+      contentDiv.classList.add('with-filters')
+    }
     // sets window unload hook to show unsaved changes alert and persist incomplete project
     window.addEventListener('beforeunload', this.onLeave)
   }
@@ -85,8 +89,8 @@ class ProjectsToolBar extends Component {
     const criteria = _.assign({}, this.props.criteria, filter)
     if (criteria && criteria.keyword) {
       criteria.keyword = encodeURIComponent(criteria.keyword)
-      // force sort criteria to best match
-      criteria.sort = 'best match'
+      // force sort criteria to updatedAt desc
+      criteria.sort = 'updatedAt desc'
     }
     this.routeWithParams(criteria)
   }
