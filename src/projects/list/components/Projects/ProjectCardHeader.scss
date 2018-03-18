@@ -1,6 +1,14 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
+    @mixin word-wrap {
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      -ms-word-break: break-all;
+      word-break: break-all;
+      word-break: break-word;
+    }
+
     .project-card-header {
       .project-header {
         display: flex;
@@ -22,7 +30,8 @@
           line-height: 3 * $base_unit;
   
           .project-name {
-             @include roboto-medium;
+            @include roboto-medium;
+            @include word-wrap;
             font-size: $tc-heading-sm;
             line-height: $base-unit * 4;
             color: $tc-black;
