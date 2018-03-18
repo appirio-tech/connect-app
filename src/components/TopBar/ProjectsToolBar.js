@@ -211,7 +211,7 @@ class ProjectsToolBar extends Component {
           />
         </div>
         }
-        
+
       </div>
     )
   }

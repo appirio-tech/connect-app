@@ -192,8 +192,11 @@ class EditProjectForm extends Component {
    * @param isChanged flag that indicates if form actually changed from initial model values
    */
   handleChange(change) {
-    // removed check for isChanged argument to fire the PROJECT_DIRTY event for every change in the form
-    this.props.fireProjectDirty(unflatten(change))
+    if (this.isChanged()) {
+      this.props.fireProjectDirty(unflatten(change))
+    } else {
+      this.props.fireProjectDirtyUndo()
+    }
   }
 
 
