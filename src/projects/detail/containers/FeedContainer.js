@@ -76,7 +76,6 @@ class FeedView extends React.Component {
       const notReadNotifications = filterReadNotifications(this.props.notifications.notifications)
       const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
       this.setState({ unreadUpdate: _.map(unreadTopicAndPostChangedNotifications, 'id' ) })
-      console.log('scrolled '+this.state.scrolled)
       if (!this.isChanged() && !this.state.scrolled && this.state.unreadUpdate.length > 0) {
         this.onRefreshFeeds()
       }

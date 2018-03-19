@@ -296,7 +296,7 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.linkCreated',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>{{userHandle}}</strong> added to your project',
+      text: '<strong>{{userHandle}}</strong> added a link to your project',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
@@ -305,7 +305,7 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.linkCreated',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>{{userFullName}}</strong> added to your project',
+      text: '<strong>{{userFullName}}</strong> added a link to your project',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
