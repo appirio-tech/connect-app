@@ -69,6 +69,7 @@ class NotificationsContainer extends React.Component {
           {globalSource && globalSource.total > 0 &&
             <NotificationsSection
               {...globalSource}
+              maxShow={10}
               isGlobal
               onMarkAllClick={() => !pending && markAllNotificationsRead('global', notifications)}
               onReadToggleClick={toggleNotificationOrBundleRead}
@@ -80,6 +81,7 @@ class NotificationsContainer extends React.Component {
             <NotificationsSection
               key={source.id}
               {...source}
+              maxShow={10}
               onMarkAllClick={() => !pending && markAllNotificationsRead(source.id, notifications)}
               onReadToggleClick={toggleNotificationOrBundleRead}
               onViewOlderClick={() => viewOlderNotifications(source.id)}
