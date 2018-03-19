@@ -446,8 +446,7 @@ class FeedView extends React.Component {
                 messages={sortedUnreadProjectUpdates}
                 user={SYSTEM_USER}
                 onNotificationRead={this.onNotificationRead}
-              >
-              </SystemFeed>
+              />
             </div>
           }
           <NewPost
