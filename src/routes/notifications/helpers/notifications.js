@@ -286,8 +286,8 @@ const bundleNotifications = (notificationsWithRules) => {
   _.reverse(notificationsWithRules).forEach((notificationWithRule) => {
     // if notifications doesn't have to be bundled, add it to notifications list as it is
     if (!notificationWithRule.notificationRule.shouldBundle) {
-      bundledNotificationsWithRules.push(notificationWithRule);
-      return;
+      bundledNotificationsWithRules.push(notificationWithRule)
+      return
     }
 
     // try to find existent notification in the list to which we can bundle current one
