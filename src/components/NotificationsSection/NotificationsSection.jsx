@@ -22,7 +22,12 @@ const NotificationsSection = (props) => {
         />
       }
       {props.notifications.slice(0, props.maxShow).map(notification => (
-        <NotificationItem key={notification.id} {...notification} onReadToggleClick={props.onReadToggleClick}/>
+        <NotificationItem
+          key={notification.id}
+          {...notification}
+          onReadToggleClick={props.onReadToggleClick}
+          onLinkClick={props.onLinkClick}
+        />
       ))}
       {props.onViewOlderClick && props.total > Math.min(props.notifications.length, props.maxShow) && (
         props.isLoading ? (
@@ -41,6 +46,7 @@ NotificationsSection.propTypes = {
   isGlobal: PropTypes.bool,
   title: PropTypes.string.isRequired,
   onMarkAllClick: PropTypes.func,
+  onLinkClick: PropTypes.func.isRequired,
   onReadToggleClick: PropTypes.func.isRequired,
   onViewOlderClick: PropTypes.func,
   total: PropTypes.number,

@@ -3,7 +3,8 @@
 :global {
   .user-block {
       position: relative;
-  
+      cursor: default;
+
       .photo,
       .txt-box {
           height: 30px;
