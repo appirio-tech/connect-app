@@ -34,6 +34,20 @@ export const NOTIFICATIONS = [
   },
 
   {
+    eventType: 'notifications.connect.project.active',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: 'Your project is now active',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PROJECT_DASHBOARD
+    }, {
+      text: 'A project has been set to active',
+      topcoderRoles: [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR],
+      goTo: GOTO.PROJECT_DASHBOARD
+    }]
+  },
+
+  {
     eventType: 'notifications.connect.project.submittedForReview',
     type: NOTIFICATION_TYPE.REVIEW_PENDING,
     rules: [{
@@ -50,7 +64,7 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.approved',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
-      text: 'Your project was approved, work would soon start',
+      text: 'Your project was approved, work will soon start',
       projectRoles: [PROJECT_ROLE_OWNER]
     }, {
       text: 'Project is available for pickup',
@@ -265,14 +279,23 @@ export const NOTIFICATIONS = [
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.POST
     }]
-  }, 
-
-  {
-    version: 2,                 
+  }, {
+    version: 2,
+    eventType: 'notifications.connect.project.post.edited',
+    type: NOTIFICATION_TYPE.NEW_POSTS,
+    rules: [{
+      text: '<strong>{{userFullName}}</strong> edited post',
+      shouldBundle: true,
+      bundledText: '{{#showMore __history__ 3}}<strong>{{fallback userFullName userHandle}}</strong>{{/showMore}} edited {{bundledCount}} posts',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.POST
+    }]
+  }, {
+    version: 2,
     eventType: 'notifications.connect.project.post.mention',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>{{userFullName}}</strong> mentioned your in a post',
+      text: '<strong>{{userFullName}}</strong> mentioned you in a post',
       toUserHandle: true,
       goTo: GOTO.POST
     }]
@@ -282,7 +305,7 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.linkCreated',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>{{userHandle}}</strong> added to your project',
+      text: '<strong>{{userHandle}}</strong> added a link to your project',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
@@ -291,7 +314,7 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.linkCreated',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
-      text: '<strong>{{userFullName}}</strong> added to your project',
+      text: '<strong>{{userFullName}}</strong> added a link to your project',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
@@ -326,7 +349,7 @@ export const NOTIFICATIONS = [
     rules: [{
       text: '<strong>{{userHandle}}</strong> updated the project specification',
       shouldBundle: true,
-      bundledText: 'Project specification is modified',
+      bundledText: 'Project specification has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_SPECIFICATION
     }]
@@ -337,7 +360,7 @@ export const NOTIFICATIONS = [
     rules: [{
       text: '<strong>{{userFullName}}</strong> updated the project specification',
       shouldBundle: true,
-      bundledText: 'Project specification is modified',
+      bundledText: 'Project specification has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_SPECIFICATION
     }]

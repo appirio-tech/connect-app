@@ -42,7 +42,7 @@ export default class CommentEditToggle extends React.Component {
     return (
       <div className="dropdownContainer">
         <Dropdown pointerShadow className="drop-down edit-toggle-container">
-          <div className={cn('dropdown-menu-header', 'edit-toggle')} >
+          <div className={cn('dropdown-menu-header', 'edit-toggle')} title="Edit">
             <EditComment className="icon-edit-comment" />
           </div>
           <div className="dropdown-menu-list down-layer">

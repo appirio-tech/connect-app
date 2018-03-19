@@ -40,9 +40,9 @@ class ProjectToolBar extends React.Component {
 
   setActivePage() {
     const path = this.props.location.pathname
-    const activeDashboardPage = path.search('projects') > 0
-    const activeSpecificationPage = path.search('specification') > 0
-    const activeChatPage = path.search('discussions') > 0
+    const activeDashboardPage = /\/projects\/\d+\/?$/.test(path)
+    const activeSpecificationPage = /specification\/?$/.test(path)
+    const activeChatPage = /discussions\/?(\d+)?$/.test(path)
 
     if (activeSpecificationPage) {
       this.state.activePage = 'specification'
@@ -73,7 +73,7 @@ class ProjectToolBar extends React.Component {
   }
 
   onDashboardLeave() {
-    if (this.state.activePage === 'dashboard') { return }
+    if (this.state.activePage === 'dashboard') { window.location.reload() }
     this.setState({
       activeDashboard: 'not-active'
     })
@@ -87,7 +87,7 @@ class ProjectToolBar extends React.Component {
   }
 
   onSpecificationLeave() {
-    if (this.state.activePage === 'specification') { return }
+    if (this.state.activePage === 'specification') { window.location.reload() }
     this.setState({
       activeSpecification: 'not-active'
     })
@@ -101,7 +101,7 @@ class ProjectToolBar extends React.Component {
   }
 
   onMessagesLeave() {
-    if (this.state.activePage === 'discussions') { return }
+    if (this.state.activePage === 'discussions') { window.location.reload() }
     this.setState({
       activeMessages: 'not-active'
     })
@@ -130,6 +130,10 @@ class ProjectToolBar extends React.Component {
     this.setActivePage()
   }
 
+  shouldComponentUpdate(nextProps) {
+    return !nextProps.isProjectLoading
+  }
+
   render() {
     // TODO: removing isPowerUser until link challenges is needed once again.
     const { renderLogoSection, userMenu, project } = this.props
@@ -141,18 +145,18 @@ class ProjectToolBar extends React.Component {
         <div className="tool-bar">
           <div className="bar-column">
             {renderLogoSection()}
-            {project && <div className="breadcrumb">
+            <div className="breadcrumb">
               <NavLink to="/projects">
                 <TailLeft className="icon-tail-left" />
                 <span>View All Projects</span></NavLink>
-            </div>}
+            </div>
           </div>
-          {project && <div className="bar-column project-name">
+          {project && project.name && <div className="bar-column project-name">
             <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
             {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
           </div>}
           <div className="bar-column">
-            {project && <nav className={`nav ${(project.details && !project.details.hideDiscussions) ? 'long-menu' : ''}`}>
+            {project && project.details && <nav className={`nav ${!project.details.hideDiscussions ? 'long-menu' : ''}`}>
               <ul>
                 <li id={this.state.activeDashboard} onMouseOver={ev => this.onDashboardEnter(ev)} onMouseLeave={ev => this.onDashboardLeave(ev)}><NavLink to={`/projects/${project.id}`} exact activeClassName="dashboard active">
                   {this.state.dashboardIcon}<span>Dashboard</span></NavLink>
@@ -169,7 +173,7 @@ class ProjectToolBar extends React.Component {
                   * any active project that uses discussions.
                   */}
                 {
-                  (project.details && !project.details.hideDiscussions) &&
+                  !project.details.hideDiscussions &&
                   <li id={this.state.activeMessages} onMouseOver={ev => this.onMessagesEnter(ev)} onMouseLeave={ev => this.onMessagesLeave(ev)}><NavLink to={`/projects/${project.id}/discussions`} activeClassName="discussions active">
                     {this.state.messagesIcon}<span>Discussions</span></NavLink>
                   </li>
@@ -187,6 +191,7 @@ class ProjectToolBar extends React.Component {
 }
 
 ProjectToolBar.propTypes = {
+  isProjectLoading: PT.bool,
   project: PT.object,
   isPowerUser: PT.bool,
   /**
@@ -197,6 +202,7 @@ ProjectToolBar.propTypes = {
 
 const mapStateToProps = ({ projectState, loadUser }) => {
   return {
+    isProjectLoading: projectState.isLoading,
     project: projectState.project,
     userRoles: _.get(loadUser, 'user.roles', []),
     user: loadUser.user

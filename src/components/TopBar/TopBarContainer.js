@@ -71,6 +71,7 @@ class TopBarContainer extends React.Component {
     const logoutClick = (evt) => {
       evt.preventDefault()
       window.analytics && window.analytics.reset()
+      window.sessionStorage && window.sessionStorage.clear()
       window.location = logoutLink
     }
 

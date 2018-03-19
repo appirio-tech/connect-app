@@ -16,7 +16,10 @@ export function updateProjectAttachment(projectId, attachmentId, attachment) {
   return axios.patch(
     `${PROJECTS_API_URL}/v4/projects/${projectId}/attachments/${attachmentId}`,
     { param: attachment })
-    .then ( resp => resp.data.result.content )
+    .then ( resp => {
+      resp.data.result.content.downloadUrl = `/projects/${projectId}/attachments/${attachmentId}`
+      return _.get(resp.data, 'result.content', {})
+    })
 }
 
 export function removeProjectAttachment(projectId, attachmentId) {

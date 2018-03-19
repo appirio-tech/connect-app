@@ -17,6 +17,8 @@ const calcProgress = (project, subSection) => {
       if (q.type.indexOf('see-attached') > -1) {
         const val = _.get(project, fName, null)
         return val && (val.seeAttached || !_.isEmpty(_.get(project, `${fName}.value`)))
+      } else if (q.type === 'checkbox-group'){
+        return _.get(project, q.fieldName, []).length
       }
       return !_.isEmpty(_.get(project, fName))
     })
@@ -30,7 +32,7 @@ const calcProgress = (project, subSection) => {
       || q.required
       || (q.validations && q.validations.indexOf('isRequired') !== -1)
     )
-    return [count, _.filter(subSection.questions, filterRequiredQuestions).length]
+    return [count, Math.max(_.filter(subSection.questions, filterRequiredQuestions).length, 1)]
   } else if (subSection.id === 'screens') {
     const screens = _.get(project, 'details.appScreens.screens', [])
     const validScreens = screens.filter((s) => {
@@ -40,7 +42,7 @@ const calcProgress = (project, subSection) => {
       })
       return vals.length === subSection.questions.filter((q) => q.required).length
     })
-    return [validScreens.length, screens.length]//TODO we should do range comparison here
+    return [validScreens.length, Math.max(screens.length, 1)]//TODO we should do range comparison here
   } else {
     // assuming there is only one question
     let val = _.get(project, subSection.fieldName, null)
@@ -143,14 +145,14 @@ class ProjectSpecSidebar extends Component {
             <hr />
             <p>
               In order to submit your project please fill in all the required
-              information. Once that you do that we&quot;ll be able to give
+              information. Once you do that we&quot;ll be able to give
               you a good estimate.
             </p>
           </div>
           <div className="btn-boxs">
             <button className="tc-btn tc-btn-primary tc-btn-md"
               onClick={this.onSubmitForReview}
-              disabled={!canSubmitForReview}
+              disabled={!canSubmitForReview || project.isDirty}
             >Submit for Review</button>
           </div>
         </div>

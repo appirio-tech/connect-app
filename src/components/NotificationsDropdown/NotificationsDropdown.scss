@@ -61,7 +61,7 @@
       }
     }
   
-    .notifications-dropdown-bell.has-unread {
+    .notifications-dropdown-bell.has-new {
       &::after {
         background-color: $tc-red-70;
         border-radius: 50%;

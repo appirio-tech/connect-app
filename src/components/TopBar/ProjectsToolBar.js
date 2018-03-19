@@ -53,6 +53,10 @@ class ProjectsToolBar extends Component {
   }
 
   componentDidMount() {
+    const contentDiv = document.getElementById('wrapper-main')
+    if (this.state.isFilterVisible) {
+      contentDiv.classList.add('with-filters')
+    }
     // sets window unload hook to show unsaved changes alert and persist incomplete project
     window.addEventListener('beforeunload', this.onLeave)
   }
@@ -84,9 +88,8 @@ class ProjectsToolBar extends Component {
   applyFilters(filter) {
     const criteria = _.assign({}, this.props.criteria, filter)
     if (criteria && criteria.keyword) {
-      criteria.keyword = encodeURIComponent(criteria.keyword)
-      // force sort criteria to best match
-      criteria.sort = 'best match'
+      // force sort criteria to updatedAt desc
+      criteria.sort = 'updatedAt desc'
     }
     this.routeWithParams(criteria)
   }
@@ -131,7 +134,7 @@ class ProjectsToolBar extends Component {
   render() {
     const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser } = this.props
     const { isFilterVisible } = this.state
-    const isLoggedIn = userRoles && userRoles.length
+    const isLoggedIn = !!(userRoles && userRoles.length)
 
     let excludedFiltersCount = 1 // 1 for default sort criteria
     if (criteria.memberOnly) {
@@ -159,7 +162,7 @@ class ProjectsToolBar extends Component {
         target: '_blank'
       }
     ]
-    const menuBar = !!isLoggedIn && !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />
+    const menuBar = isLoggedIn && !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />
 
     return (
       <div className="ProjectsToolBar">
@@ -170,7 +173,7 @@ class ProjectsToolBar extends Component {
         <div className="primary-toolbar">
           { renderLogoSection(menuBar) }
           {
-            !!isLoggedIn &&
+            isLoggedIn &&
             <div className="search-widget">
               { !!isPowerUser &&
                 <SearchBar
@@ -195,21 +198,20 @@ class ProjectsToolBar extends Component {
             </div>
           }
           <div className="actions">
-            { !!isLoggedIn && <NewProjectNavLink compact /> }
+            { isLoggedIn && <NewProjectNavLink compact /> }
             { userMenu }
-            { !!isLoggedIn && <NotificationsDropdown /> }
+            { isLoggedIn && <NotificationsDropdown /> }
           </div>
         </div>
         { isFilterVisible && isLoggedIn &&
         <div className="secondary-toolbar">
-          
           <Filters
             applyFilters={ this.applyFilters }
             criteria={ criteria }
           />
         </div>
         }
-        
+
       </div>
     )
   }

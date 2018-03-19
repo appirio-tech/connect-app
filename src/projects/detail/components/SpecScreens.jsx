@@ -56,7 +56,7 @@ class SpecScreens extends Component {
 
   render() {
     const { screens } = this.state
-    const { appDefinition } = this.props.project.details
+    const { appDefinition } = (this.props.dirtyProject || this.props.project).details
     const numberScreensSelected = parseInt(_.last(_.get(appDefinition, 'numberScreens', '0').split('-')))
 
     const renderCurrentScreen = (screen, index) => {
@@ -120,7 +120,8 @@ class SpecScreens extends Component {
 SpecScreens.propTypes = {
   screens: PropTypes.arrayOf(PropTypes.object).isRequired,
   questions: PropTypes.arrayOf(PropTypes.object).isRequired,
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
+  dirtyProject: PropTypes.object.isRequired,
 }
 
 export default hoc(SpecScreens)

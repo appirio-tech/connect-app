@@ -175,6 +175,7 @@ class CreateConainer extends React.Component {
           _.set(project, 'details.utm.google', googleAnalytics)
         }
         this.props.createProjectAction(project, PROJECT_STATUS_IN_REVIEW)
+        this.closeWizard()
       } else {
         // redirect to registration/login page
         const retUrl = window.location.origin + '/new-project-callback'
