@@ -279,9 +279,17 @@ export const NOTIFICATIONS = [
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.POST
     }]
-  },
-
-  {
+  }, {
+    version: 2,
+    eventType: 'notifications.connect.project.post.edited',
+    type: NOTIFICATION_TYPE.NEW_POSTS,
+    rules: [{
+      text: '<strong>{{userFullName}}</strong> edited post',
+      shouldBundle: true,
+      bundledText: '{{#showMore __history__ 3}}<strong>{{fallback userFullName userHandle}}</strong>{{/showMore}} edited {{bundledCount}} posts',
+      goTo: GOTO.POST
+    }]
+  }, {
     version: 2,
     eventType: 'notifications.connect.project.post.mention',
     type: NOTIFICATION_TYPE.NEW_POSTS,
