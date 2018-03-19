@@ -21,10 +21,10 @@ const NotificationsSection = (props) => {
           onMarkAllClick={props.onMarkAllClick}
         />
       }
-      {props.notifications.map(notification => (
+      {props.notifications.slice(0, props.maxShow).map(notification => (
         <NotificationItem key={notification.id} {...notification} onReadToggleClick={props.onReadToggleClick}/>
       ))}
-      {props.onViewOlderClick && props.total > props.notifications.length && (
+      {props.onViewOlderClick && props.total > Math.min(props.notifications.length, props.maxShow) && (
         props.isLoading ? (
           <div className="view-older"><LoadingIndicator isSmall /></div>
         ) : (
@@ -44,6 +44,7 @@ NotificationsSection.propTypes = {
   onReadToggleClick: PropTypes.func.isRequired,
   onViewOlderClick: PropTypes.func,
   total: PropTypes.number,
+  maxShow: PropTypes.number,
   notifications: PropTypes.array.isRequired
 }
 
