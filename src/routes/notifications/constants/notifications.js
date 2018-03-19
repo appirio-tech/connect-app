@@ -340,7 +340,7 @@ export const NOTIFICATIONS = [
     rules: [{
       text: '<strong>{{userHandle}}</strong> updated the project specification',
       shouldBundle: true,
-      bundledText: 'Project specification has been modified {{bundledCount}} times',
+      bundledText: 'Project specification has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_SPECIFICATION
     }]
@@ -351,7 +351,7 @@ export const NOTIFICATIONS = [
     rules: [{
       text: '<strong>{{userFullName}}</strong> updated the project specification',
       shouldBundle: true,
-      bundledText: 'Project specification has been modified {{bundledCount}} times',
+      bundledText: 'Project specification has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_SPECIFICATION
     }]

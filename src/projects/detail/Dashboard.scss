@@ -109,8 +109,16 @@
       }
 
       .system-feed {
+        position: relative;
         margin-bottom: 10px;
-
+        .project-notification {
+          position: absolute;
+          visibility: hidden;
+          &:first-of-type {
+            position: relative;
+            visibility: visible;
+          }
+        }
         .action-card {
           background: $tc-dark-blue-10;
 
@@ -138,7 +146,7 @@
               font-size: 20px;
               position: absolute;
               left: -9px;
-              top: 1px;
+              top: -2px;
             }
           }
         }

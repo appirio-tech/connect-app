@@ -11,30 +11,22 @@ import { toggleNotificationRead } from '../../routes/notifications/actions'
 class SystemFeed extends React.Component {
   constructor(props) {
     super(props)
-    this.onDelete = this.onDelete.bind(this)
-
-  }
-
-  onDelete() {
-    if (this.props.onNotificationsRead) {
-      this.props.onNotificationsRead(this.props.messages)
-    }
   }
 
   render() {
     const {
-      messages, user, onNotificationsRead
+      messages, user, onNotificationRead
     } = this.props
-    const message = messages[messages.length - 1]
     let authorName = user.firstName
     if (authorName && user.lastName) {
       authorName += ' ' + user.lastName
     }
-
+    const renderMessages = (msg, i) => {
     return (
+      <div className="project-notification" key={`${msg.id}-${i}`}>
       <ActionCard>
           <Panel.Body>
-            <div className="portrait" id={`feed-${message.id}`}>
+            <div className="portrait" id={`feed-${msg.id}`}>
               <UserTooltip usr={user} id={'CoderBot'} previewAvatar size={40} />
             </div>
             <div className="object topicBody">
@@ -43,26 +35,33 @@ class SystemFeed extends React.Component {
                   { authorName }
                 </div>
                 <div className="card-time">
-                  <span>{moment(message.date).fromNow()}</span>
+                  <span>{moment(msg.date).fromNow()}</span>
                 </div>
                 <div className="hide-project-notification">
-                  <i className="icon-remove-notification" onClick={this.onDelete}><RemoveNotification /></i>
+                  <i className="icon-remove-notification" onClick={() => onNotificationRead(msg)}><RemoveNotification /></i>
                 </div>
               </div>
               <div className="card-body">
-                <span dangerouslySetInnerHTML={{__html: message.text}} />
+                <span dangerouslySetInnerHTML={{__html: msg.text}} />
               </div>
             </div>
           </Panel.Body>
       </ActionCard>
+      </div>
     )
+  }
+  return (
+    <div className="project-feed">
+      { messages.map(renderMessages) }
+    </div>
+  )
   }
 }
 
 SystemFeed.propTypes = {
   user: PropTypes.object.isRequired,
   messages: PropTypes.array.isRequired,
-  onNotificationsRead: PropTypes.func.isRequired
+  onNotificationRead: PropTypes.func.isRequired
 }
 
 export default SystemFeed

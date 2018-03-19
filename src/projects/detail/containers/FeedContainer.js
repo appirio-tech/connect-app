@@ -21,7 +21,7 @@ import SystemFeed from '../../../components/Feed/SystemFeed'
 import ProjectSpecification from '../../../components/ProjectSpecification/ProjectSpecification'
 import { loadDashboardFeeds, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import { toggleNotificationRead } from '../../../routes/notifications/actions'
+import { toggleNotificationRead, toggleBundledNotificationRead } from '../../../routes/notifications/actions'
 import { filterReadNotifications, filterNotificationsByProjectId, filterTopicAndPostChangedNotifications, filterProjectNotifications } from '../../../routes/notifications/helpers/notifications'
 import { REFRESH_UNREAD_UPDATE_INTERVAL } from '../../../config/constants'
 import './Specification.scss'
@@ -57,6 +57,7 @@ class FeedView extends React.Component {
     this.onTopicChange = this.onTopicChange.bind(this)
     this.onRefreshFeeds = this.onRefreshFeeds.bind(this)
     this.onScroll = this.onScroll.bind(this)
+    this.onNotificationRead = this.onNotificationRead.bind(this)
     this.state = { feeds : [], showAll: [], newPost: {}, unreadUpdate: [], scrolled: false }
   }
 
@@ -376,13 +377,12 @@ class FeedView extends React.Component {
     this.setState({ scrolled : window.scrollY>0 })
   }
 
-  onNotificationsRead(notifications) {
-    const pickId = function(o) {
-      return o.bundledIds ? o.bundledIds : o.id
+  onNotificationRead(notification) {
+    if (notification.bundledIds) {
+      this.props.toggleBundledNotificationRead(notification.id, notification.bundledIds)
+    } else {
+      this.props.toggleNotificationRead(notification.id)
     }
-    _.map(_.flatMap(notifications, pickId), (notificationId) => {
-      this.props.toggleNotificationRead(notificationId)
-    })
   }
 
   render () {
@@ -392,7 +392,7 @@ class FeedView extends React.Component {
     const onLeaveMessage = this.onLeave() || ''
     const notReadNotifications = filterReadNotifications(this.props.notifications.notifications)
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
-    const sortedUnreadProjectUpdates = _.sortBy(unreadProjectUpdate, ['date'])
+    const sortedUnreadProjectUpdates = _.orderBy(unreadProjectUpdate, ['date'], ['desc'])
     const renderFeed = (item, i) => {
       if ((item.spec || item.sendForReview) && !showDraftSpec || isSystemUser(item.userId)) {
         return null
@@ -445,7 +445,7 @@ class FeedView extends React.Component {
               <SystemFeed
                 messages={sortedUnreadProjectUpdates}
                 user={SYSTEM_USER}
-                onNotificationsRead={this.onNotificationsRead.bind(this, sortedUnreadProjectUpdates)}
+                onNotificationRead={this.onNotificationRead}
               >
               </SystemFeed>
             </div>
@@ -511,7 +511,8 @@ const mapDispatchToProps = {
   saveFeedComment,
   deleteFeedComment,
   getFeedComment,
-  toggleNotificationRead
+  toggleNotificationRead,
+  toggleBundledNotificationRead
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedContainer)
