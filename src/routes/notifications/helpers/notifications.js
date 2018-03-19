@@ -157,6 +157,25 @@ export const filterTopicAndPostChangedNotifications = (notifications) => _.filte
 })
 
 /**
+ * Filter notifications about the project
+ *
+ * @param  {Array}  notifications list of notifications
+ *
+ * @return {Array}                notifications list filtered of notifications
+ */
+export const filterProjectNotifications = (notifications) => _.filter(notifications, (notification) => {
+  return notification.eventType === 'notifications.connect.project.created' ||
+         notification.eventType === 'notifications.connect.project.approved' ||
+         notification.eventType === 'notifications.connect.project.paused' ||
+         notification.eventType === 'notifications.connect.project.completed' ||
+         notification.eventType === 'notifications.connect.project.specificationModified' ||
+         notification.eventType === 'notifications.connect.project.submittedForReview' ||
+         notification.eventType === 'notifications.connect.project.fileUploaded' ||
+         notification.eventType === 'notifications.connect.project.canceled' ||
+         notification.eventType === 'notifications.connect.project.linkCreated'
+})
+
+/**
  * Limits notifications quantity per source
  * and total quantity of notifications
  *
@@ -300,6 +319,9 @@ const bundleNotifications = (notificationsWithRules) => {
       existentNotificationWithRule.notification.contents.__history__.push(
         _.pick(notificationWithRule.notification.contents, PROPERTIES_KEEP_IN_HISTORY)
       )
+      if (notificationWithRule.notification.date > existentNotificationWithRule.notification.date) {
+        _.merge(existentNotificationWithRule.notification, notificationWithRule.notification)
+      }
     } else {
       bundledNotificationsWithRules.push(notificationWithRule)
     }
