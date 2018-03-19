@@ -153,6 +153,7 @@ export const filterNotificationsByProjectId = (notifications, projectId) => _.fi
 export const filterTopicAndPostChangedNotifications = (notifications) => _.filter(notifications, (notification) => {
   return notification.eventType === 'notifications.connect.project.topic.created' ||
          notification.eventType === 'notifications.connect.project.post.created' ||
+         notification.eventType === 'notifications.connect.project.post.edited' ||
          notification.eventType === 'notifications.connect.project.post.mention'
 })
 
