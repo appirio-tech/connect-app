@@ -54,7 +54,7 @@ class NotificationsDropdownContainer extends React.Component {
     const globalSource = notificationsBySources.length > 0 && notificationsBySources[0].id === 'global' ? notificationsBySources[0] : null
     const projectSources = notificationsBySources.length > 1 && globalSource ? notificationsBySources.slice(1) : notificationsBySources
     const hasUnread = notReadNotifications.length > 0
-    const olderNotificationsCount = _.sumBy(projectSources, 'total') - _.sumBy(projectSources, 'notifications.length')
+    const olderNotificationsCount = _.sumBy(projectSources, 'total') - _.sumBy(projectSources.map(source => Math.min(source.notifications.length, 5)))
     // we have to give Dropdown component some time
     // before removing notification item node from the list
     // otherwise dropdown thinks we clicked outside and closes dropdown
@@ -90,6 +90,7 @@ class NotificationsDropdownContainer extends React.Component {
               {globalSource && globalSource.notifications.length &&
                 <NotificationsSection
                   {...globalSource}
+                  notifications={globalSource.notifications.slice(0, 5)}
                   isGlobal
                   isSimple
                   onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
@@ -99,6 +100,7 @@ class NotificationsDropdownContainer extends React.Component {
               {projectSources.filter(source => source.notifications.length > 0).map(source => (
                 <NotificationsSection
                   {...source}
+                  notifications={source.notifications.slice(0, 5)}
                   key={source.id}
                   isSimple
                   onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
