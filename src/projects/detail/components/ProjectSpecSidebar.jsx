@@ -108,7 +108,7 @@ class ProjectSpecSidebar extends Component {
 
   render() {
     const { navItems, canSubmitForReview } = this.state
-    const { currentMemberRole, project } = this.props
+    const { currentMemberRole, project, productIndex } = this.props
     const showReviewBtn = project.status === 'draft' &&
       _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
 
@@ -117,11 +117,10 @@ class ProjectSpecSidebar extends Component {
     // types of projects in the future. But let's keep it this way for now because
     // project estimate is only available for one kind of projects
     const getProjectEstimateSection = () => {
-      const { products } = project.details
 
       return (
         <div className="list-group">
-          <VisualDesignProjectEstimateSection products={products} project={project} />
+          <VisualDesignProjectEstimateSection products={project.details.products[productIndex]} project={project} />
         </div>
       )
     }
@@ -163,7 +162,8 @@ class ProjectSpecSidebar extends Component {
 ProjectSpecSidebar.PropTypes = {
   project: PropTypes.object.isRequired,
   sections: PropTypes.arrayOf(PropTypes.object).isRequired,
-  currentMemberRole: PropTypes.string
+  currentMemberRole: PropTypes.string,
+  productIndex: PropTypes.Integer
 }
 const mapDispatchToProps = { updateProject }
 

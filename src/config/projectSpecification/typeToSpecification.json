@@ -1,11 +1,11 @@
 {
 	"wireframes": "wireframes.v1.0",
   "visual_design_concepts": "avd.v1.0",
-  "visual_design_prod": "avd.v1.0",
+  "visual_design_prod": "avd.v3.0",
   "infographic": "avd.v1.0",
 	"generic_design": "topcoder.v1",
 	"visual_prototype": "app_dev.v1.0",
-  "website_development": "website.v1.0",
+  "website_development": "website.v3.0",
   "application_development": "app_dev.v1.0",
   "watson_chatbot": "ibm_chatbot.v1.0",
   "generic_chatbot": "generic_chatbot.v1.0",

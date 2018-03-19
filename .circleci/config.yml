@@ -30,6 +30,15 @@ jobs:
           at: ./workspace
       - run: ./deploy.sh DEV no-cache
 
+  deployTest:
+    docker:
+      - image: cibuilds/aws
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./workspace
+      - run: ./deploy.sh TEST02 no-cache
+
   deployProd:
     docker:
       - image: cibuilds/aws
@@ -50,6 +59,12 @@ workflows:
           filters:
             branches:
               only: dev
+      - deployTest:
+          requires:
+            - test
+          filters:
+            branches:
+              only: feature/project_plan_section_connect_v3
       - deployProd:
           requires:
             - test

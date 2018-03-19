@@ -30,15 +30,16 @@ const getIcon = icon => {
 }
 
 // { isRequired, represents the overall questions section's compulsion, is also available}
-const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog }) => {
-
+const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog, productIndex }) => {
+  
   const renderQ = (q, index) => {
     // let child = null
     // const value =
+    const prefix = q.fieldName.includes('appDefinition')  || q.fieldName === 'description'? '' : 'details.products.' + productIndex + '.'
     const elemProps = {
-      name: q.fieldName,
+      name: prefix + q.fieldName,
       label: q.label,
-      value: _.get(project, q.fieldName, ''),
+      value: _.get(project, prefix + q.fieldName, ''),
       required: q.required,
       validations: q.required ? 'isRequired' : null,
       validationError: q.validationError,

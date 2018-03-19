@@ -108,6 +108,17 @@
       .feed-action-card + .feed-action-card {
         margin-top: 10px;
       }
+    
+      .add-stage-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 70px;
+        margin: 10px 0 0 10px;
+        margin-bottom: 20px;
+        border-radius: $corner-radius * 2;
+        width: 500px;
+      }
     }
   }
 }

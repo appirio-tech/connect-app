@@ -15,6 +15,7 @@ import SpecificationActive from '../../assets/icons/icon-ruler-pencil-active.svg
 import Chat from '../../assets/icons/icon-chat.svg'
 import ChatActive from '../../assets/icons/icon-chat-active.svg'
 import TailLeft from '../../assets/icons/arrows-16px-1_tail-left.svg'
+import { Link } from 'react-router-dom'
 
 function isEllipsisActive(el) {
   return (el.offsetWidth < el.scrollWidth)
@@ -181,6 +182,16 @@ class ProjectToolBar extends React.Component {
             <NotificationsDropdown />
           </div>
         </div>
+        {project && <div className="secondary-toolbar">
+          <div className="secondary_toolbar_items">
+            <h2>
+              <Link to={'/projects/' + project.id} className="trigger go-home hidden" >Dashboard</Link>
+            </h2>
+            <h2>
+              <Link to={'/projects/' + project.id + '/stages'} className="trigger go-home hidden" >Project Plan</Link>
+            </h2>
+          </div>
+        </div>}
       </div>
     )
   }

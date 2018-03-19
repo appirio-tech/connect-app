@@ -9,7 +9,7 @@ import {
   ADD_PROJECT_MEMBER_PENDING, ADD_PROJECT_MEMBER_SUCCESS, ADD_PROJECT_MEMBER_FAILURE,
   UPDATE_PROJECT_MEMBER_PENDING, UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
-  GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO
+  GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, PROJECT_ADD_PRODUCT
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -105,7 +105,16 @@ export const projectState = function (state=initialState, action) {
     return Object.assign({}, state, {
       processing: false,
       error: false,
-      project: action.payload,
+      project: _.mergeWith({}, state.project, action.payload,
+        // customizer to override products array with changed values
+        (objValue, srcValue, key) => {
+          if(key === 'products') {
+            return _.merge(objValue, srcValue)
+          }
+          if (key==='productType') {
+            return srcValue
+          }
+        }),
       projectNonDirty: _.cloneDeep(action.payload),
       updateExisting: action.payload.updateExisting
     })
@@ -199,11 +208,13 @@ export const projectState = function (state=initialState, action) {
       project: _.mergeWith({}, state.project, action.payload, { isDirty : true},
         // customizer to override screens array with changed values
         (objValue, srcValue, key) => {
-          if (key === 'screens' || key === 'features') {
-            return srcValue// srcValue contains the changed values from action payload
+          if(key === 'products'){
+            return _.merge(objValue, srcValue)
           }
-        }
-      )
+          if (key === 'screens' || key === 'features' || key==='productType') {
+            return srcValue //srcValue contains the changed values from action payload
+          }
+        })
     })
   }
 
@@ -230,6 +241,25 @@ export const projectState = function (state=initialState, action) {
       processingAttachments: false,
       error: parseErrorObj(action)
     })
+
+  case PROJECT_ADD_PRODUCT: {
+    const newState = {
+      ...state,
+      project : {
+        ...state.project,
+        details : {
+          ...state.project.details,
+          products : {
+            ...state.project.details.products,
+            [action.id] : {
+              productType : action.payload
+            }
+          }
+        }
+      }
+    }
+    return newState
+  }
 
   default:
     return state

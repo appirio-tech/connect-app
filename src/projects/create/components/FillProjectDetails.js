@@ -39,7 +39,7 @@ class FillProjectDetails extends Component  {
 
   render() {
     const { project, dirtyProject, processing, submitBtnText } = this.props
-    const productId = _.get(project, 'details.products[0]')
+    const productId = _.get(project, 'details.products[0].productType')
     const product = findProduct(productId)
 
     let specification = 'topcoder.v1'

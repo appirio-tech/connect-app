@@ -23,7 +23,9 @@ const SpecSection = props => {
     description,
     subSections,
     validate,
-    sectionNumber
+    sectionNumber,
+    productObject,
+    productIndex
   } = props
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
@@ -45,6 +47,7 @@ const SpecSection = props => {
   const onValidate = (isInvalid) => validate(isInvalid)
 
   const renderChild = props => {
+    const prefix = props.type !== 'questions' && props.fieldName.includes('appDefinition') ? '' : 'details.products.'+ productIndex + '.'
     const {type} = props
     switch(type) {
     case 'tabs': {
@@ -69,6 +72,8 @@ const SpecSection = props => {
           project={project}
           dirtyProject={dirtyProject}
           isRequired={props.required}
+          productObject={productObject}
+          productIndex={productIndex}
         />
       )
     case 'notes':
@@ -79,8 +84,8 @@ const SpecSection = props => {
           </div>
           <TCFormFields.Textarea
             autoResize
-            name={props.fieldName}
-            value={_.get(project, props.fieldName) || ''}
+            name={prefix + props.fieldName}
+            value={_.get(project, prefix + props.fieldName) || ''}
           />
         </div>
       )
@@ -89,10 +94,10 @@ const SpecSection = props => {
       return <FileListContainer projectId={project.id} files={files} />
     }
     case 'screens': {
-      const screens = _.get(project, props.fieldName, [])
+      const screens = _.get(project, prefix + props.fieldName, [])
       return (
         <SpecScreens
-          name={props.fieldName}
+          name={prefix + props.fieldName}
           screens={screens}
           questions={props.questions}
           project={project}
@@ -163,7 +168,7 @@ const SpecSection = props => {
       <div className="boxes">
         <div className="section-header big-titles">
           <h2 id={id}>
-            {typeof title === 'function' ? title(project, true): title }
+            {typeof title === 'function' ? title(project, productIndex, true): title }
           </h2>
           <span className="section-number">{ sectionNumber }</span>
         </div>

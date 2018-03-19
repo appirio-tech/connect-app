@@ -522,12 +522,13 @@ export function isFileRequired(project, subSections) {
  * Finds the title for the product
  *
  * @param {object}  project       project object to fetch the product title
+ * @param {object}  productIndex  index of the product to be fetched from products array
  * @param {boolean} showProduct   flag to check whether to show title from config or not
  *
  * @return {string} title of the product
  */
-export function findTitle(project, showProduct) {
-  const product = _.get(project, 'details.products[0]')
+export function findTitle(project, productIndex, showProduct) {
+  const product = _.get(project, 'details.products[' + productIndex + '].productType')
   if (showProduct && product) {
     const prd = findProduct(product)
     if (prd) return prd.name
