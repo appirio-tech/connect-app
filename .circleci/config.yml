@@ -59,6 +59,12 @@ workflows:
           filters:
             branches:
               only: dev
+      - deployTest02:
+          requires:
+            - test
+          filters:
+            branches:
+              only: "feature/discourse-migration"
       - deployProd:
           requires:
             - test

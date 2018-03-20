@@ -3,7 +3,7 @@ import { axiosInstance as axios } from './requestInterceptor'
 import { CONNECT_MESSAGE_API_URL, DOMAIN } from '../config/constants'
 
 const timeout = 1.5 * 60 * 1000
-const apiBaseUrl = `https://api.${DOMAIN}/v5` || CONNECT_MESSAGE_API_URL
+const apiBaseUrl = `https://api.${DOMAIN}/v4` || CONNECT_MESSAGE_API_URL
 
 export function getTopics(criteria) {
   const params = {}
