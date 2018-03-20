@@ -5,7 +5,7 @@ import Panel from '../Panel/Panel'
 import AddComment from '../ActionCard/AddComment'
 import Comment from '../ActionCard/Comment'
 import cn from 'classnames'
-import {markdownToState, markdownToHTML} from '../../helpers/markdownToState'
+import {markdownToHTML} from '../../helpers/markdownToState'
 
 // import { THREAD_MESSAGES_PAGE_SIZE } from '../../config/constants'
 

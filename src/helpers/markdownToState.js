@@ -197,7 +197,7 @@ function parseInline(inlineItem, BlockEntities, BlockStyles) {
  *
  * @return {Object} ContentState
 **/
-export function markdownToHTML(markdown, options = {}) {
+export function markdownToHTML(markdown) {
   const md = new Remarkable('full', {
     html: true,
     linkify: true,
