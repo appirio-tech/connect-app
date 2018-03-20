@@ -29,6 +29,15 @@ jobs:
       - attach_workspace:
           at: ./workspace
       - run: ./deploy.sh DEV no-cache
+  # deploy to test02
+  deployTest02:
+    docker:
+      - image: cibuilds/aws
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./workspace
+      - run: ./deploy.sh TEST02 no-cache
 
   deployProd:
     docker:
@@ -50,6 +59,12 @@ workflows:
           filters:
             branches:
               only: dev
+      - deployTest02:
+          requires:
+            - test
+          filters:
+            branches:
+              only: "feature/discourse-migration"
       - deployProd:
           requires:
             - test
