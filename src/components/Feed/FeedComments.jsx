@@ -5,6 +5,8 @@ import Panel from '../Panel/Panel'
 import AddComment from '../ActionCard/AddComment'
 import Comment from '../ActionCard/Comment'
 import cn from 'classnames'
+import {markdownToState, markdownToHTML} from '../../helpers/markdownToState'
+
 // import { THREAD_MESSAGES_PAGE_SIZE } from '../../config/constants'
 
 const getCommentCount = (totalComments) => {
@@ -85,7 +87,7 @@ class FeedComments extends React.Component {
             hasError={item.error}
             allMembers={allMembers}
           >
-            <div dangerouslySetInnerHTML={{__html: item.content}} />
+            <div className="card-body draftjs-post" dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
           </Comment>
         ))}
         {allowComments &&
