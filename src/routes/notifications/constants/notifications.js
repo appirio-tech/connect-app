@@ -288,6 +288,7 @@ export const NOTIFICATIONS = [
       shouldBundle: true,
       bundledText: '{{#showMore __history__ 3}}<strong>{{fallback userFullName userHandle}}</strong>{{/showMore}} edited {{bundledCount}} posts',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
+      toTopicStarter: true,
       goTo: GOTO.POST
     }]
   }, {
