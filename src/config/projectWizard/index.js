@@ -292,6 +292,13 @@ const products = {
         id: 'consulting_adivisory',
         aliases: ['consulting-adivisory', 'consulting_adivisory'],
         disabled: true
+      },
+      'Salesforce Accelerator': {
+        brief: 'TBD',
+        details: 'SalesForce Testing, Cross browser-device Testing',
+        icon: 'product-qa-sfdc-accelerator',
+        id: 'sfdc_testing',
+        aliases: ['sfdc_testing']
       }
     }
   }

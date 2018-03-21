@@ -28,7 +28,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: ./workspace
-      - run: ./deploy.sh DEV no-cache
+      - run: ./deploy.sh TEST02 no-cache
 
   deployProd:
     docker:
@@ -49,7 +49,7 @@ workflows:
             - test
           filters:
             branches:
-              only: dev
+              only: feature/Adding_sfdc_accelerator
       - deployProd:
           requires:
             - test

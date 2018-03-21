@@ -34,6 +34,7 @@ import IconQaHelthCheck from '../../../assets/icons/product-qa-health-check.svg'
 import IconQaMobilityTesting from '../../../assets/icons/product-qa-mobility-testing.svg'
 import IconQaOsAutomation from '../../../assets/icons/product-qa-os-automation.svg'
 import IconQaWebsitePrerfomance from '../../../assets/icons/product-qa-website-performance.svg'
+import IconQaSFDCAccelerator from '../../../assets/icons/product-qa-sfdc-accelerator.svg'
 import IconWebsiteWebsite from '../../../assets/icons/product-website-website.svg'
 import IconOutlineWorkProject from '../../../assets/icons/tech-32px-outline-work-project.svg'
 
@@ -102,6 +103,8 @@ const ProjectTypeIcons = ({ type }) => {
     return <IconQaOsAutomation className="icon-qa-os-automation" />
   case 'product-qa-website-performance':
     return <IconQaWebsitePrerfomance className="icon-qa-website-performance" />
+  case 'product-qa-sfdc-accelerator':
+    return <IconQaSFDCAccelerator className="icon-qa-sfdc-accelerator" />
   case 'product-website-website':
     return <IconWebsiteWebsite className="icon-website-website" />
   case 'tech-32px-outline-work-project':
