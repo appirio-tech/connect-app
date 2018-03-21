@@ -1,5 +1,5 @@
 import React from 'react' // eslint-disable-line no-unused-vars
-import { findTitle } from '../projectWizard'
+import { findTitle, isFileRequired, findFilesSectionTitle } from '../projectWizard'
 import IconTechOutlineMobile from  '../../assets/icons/icon-tech-outline-mobile.svg'
 import IconTechOutlineTablet from  '../../assets/icons/icon-tech-outline-tablet.svg'
 
@@ -8,7 +8,7 @@ const sections = [
     id: 'appDefinition',
     title: findTitle,
     required: true,
-    description: 'Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later. *AssureNXT  - Rapid Test Design Module is a Component of AssureNXT which is a Test Management Platform. It helps in Automated Test Case and Test Data Model generation through business process diagrams. RTD establishes direct relationship between business requirements, process flows and test coverage. Accelerated Test Case generation for changed business process',
+    description: 'Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.',
     subSections: [
       {
         id: 'projectName',
@@ -76,7 +76,7 @@ const sections = [
             icon: 'question',
             required: true,
             validationError: 'Need Descrition Content',
-            title: 'Are you using the Lightning Experience? (YES/NO/I DO NOT KNOW)',
+            title: 'Are you using the Lightning Experience? (Yes/ No/ Don\'t Know)',
             description: 'Need Description Content',
             type: 'textbox',
             fieldName: 'details.appDefinition.lightningExperience.value'
@@ -91,6 +91,14 @@ const sections = [
                        architecture details, tools, performance baseline, etc.\
                        After creating your project you will be able to upload files.',
         type: 'notes'
+      },
+      {
+        id: 'files',
+        required: isFileRequired,
+        title: findFilesSectionTitle,
+        description: '',
+        type: 'files',
+        fieldName: 'attachments'
       }
     ]
   }
@@ -105,7 +113,7 @@ export const basicSections = [
     id: 'appDefinition',
     title: '',
     required: true,
-    description: 'Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later. *AssureNXT  - Rapid Test Design Module is a Component of AssureNXT which is a Test Management Platform. It helps in Automated Test Case and Test Data Model generation through business process diagrams. RTD establishes direct relationship between business requirements, process flows and test coverage. Accelerated Test Case generation for changed business process',
+    description: 'Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.',
     subSections: [
       {
         id: 'projectName',
