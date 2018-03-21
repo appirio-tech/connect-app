@@ -181,7 +181,7 @@ export const basicSections = [
             icon: 'question',
             required: true,
             validationError: 'Need Descrition Content',
-            title: 'Are you using the Lightning Experience? (YES/NO/I DO NOT KNOW)',
+            title: 'Are you using the Lightning Experience? (Yes/ No/ Don\'t Know)',
             description: 'Need Description Content',
             type: 'textbox',
             fieldName: 'details.appDefinition.lightningExperience.value'
