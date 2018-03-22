@@ -115,7 +115,7 @@ export const splitNotificationsBySources = (sources, notifications, oldSourceIds
       return true
     })
     if (_.indexOf(oldSourceIds, source.id) < 0) {
-      source.notifications = source.notifications.slice(0,10);
+      source.notifications = source.notifications.slice(0, 10)
     }
     notificationsBySources.push(source)
   })
