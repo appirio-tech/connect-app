@@ -8,7 +8,17 @@ const sections = [
     id: 'appDefinition',
     title: findTitle,
     required: true,
-    description: 'Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.',
+    description: 'Please answer a few basic questions about your project and, as an option,\
+                  add links to supporting documents in the “Notes” section.\
+                  \
+                  *AssureNXT - Rapid Test Design Module is a Component of AssureNXT which is a Test Management Platform.\
+                  It helps in Automated Test Case and Test Data Model generation through business process diagrams.\
+                  RTD establishes direct relationship between business requirements, process flows and test coverage.\
+                  Accelerated Test Case generation for changed business process.\
+                  \
+                  *Tosca - Tricentis Tosca is a testing tool that is used to automate end-to-end testing for software applications.\
+                  Tricentis Tosca combines multiple aspects of software testing (test case design, test automation, test data design \
+                  and generation, and analytics) to test GUIs and APIs from a business perspective',
     subSections: [
       {
         id: 'projectName',
@@ -37,21 +47,24 @@ const sections = [
               minLength  : 'Please enter at least 160 characters'
             },
             fieldName: 'description',
-            description: 'Brief Description',
+            description: 'Brief description of your project, salesforce implementation testing objectives',
             title: 'Description',
             type: 'textbox'
           },
           {
             icon: 'question',
             required: true,
-            validationError: 'Need Descrition Content',
-            title: 'Would you like to purchase all the components of the accelerator pack or only a subset of it? (choose all that apply)',
-            description: 'The salesforce accelerator pack comprises of pre-built test assets and tools/licenses support to enable customization services.',
-            fieldName: 'details.appDefinition.solution.value',
-            type: 'tiled-radio-group',
+            validationError: 'Please provide the required options',
+            title: 'The salesforce accelerator pack comprises of pre-built test assets and tools/licenses support to enable customization services.\
+                    Would you like to purchase all the components of the accelerator pack or only a subset of it? (choose all that apply)',
+            description: 'Full solution will have all the above components, while Partial solution - \
+                    can have just either the sfdc assets mentioned in option 1 OR SFDC assets + customized service without the license',
+            fieldName: 'details.appDefinition.components',
+            type: 'checkbox-group',
             options: [
-              {value: 'phone', title: 'Full Solution', icon: IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'Description about full solution'},
-              {value: 'tablet', title: 'Partial Solution', icon: IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'Description about partial solution'}
+              {value: 'pack_one', label: 'Manual Test packs + Business Models + Automation scripts'},
+              {value: 'pack_two', label: 'License for AssureNXT and Tosca for 2 months'},
+              {value: 'pack_three', label: 'Customization services to fit the pre-built assets to your specific use cases'}
             ]
           },
           {
@@ -75,11 +88,15 @@ const sections = [
           {
             icon: 'question',
             required: true,
-            validationError: 'Need Descrition Content',
-            title: 'Are you using the Lightning Experience? (Yes/ No/ Don\'t Know)',
-            description: 'Need Description Content',
-            type: 'textbox',
-            fieldName: 'details.appDefinition.lightningExperience.value'
+            title: 'Are you using the Lightning Experience?',
+            description: '',
+            fieldName: 'details.appDefinition.lightningExperience.value',
+            type: 'radio-group',
+            options: [
+              {value: 'Yes', label: 'Yes'},
+              {value: 'No', label: 'No'},
+              {value: 'Neither', label: 'I Don\'t Know'}
+            ]
           }
         ]
       },
@@ -87,9 +104,8 @@ const sections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Please enter any additional information like requirements,\
-                       architecture details, tools, performance baseline, etc.\
-                       After creating your project you will be able to upload files.',
+        description: 'Please enter any additional information such as any existing test automation tool used,\
+                      known constraints for automation, % of customizations in your salesforce implementation, etc.',
         type: 'notes'
       },
       {
@@ -113,7 +129,18 @@ export const basicSections = [
     id: 'appDefinition',
     title: '',
     required: true,
-    description: 'Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.',
+    description: 'Please answer a few basic questions about your project and, as an option,\
+                  add links to supporting documents in the “Notes” section. If you have any \
+                  files to upload, you’ll be able to do so later.\
+                  \
+                  *AssureNXT - Rapid Test Design Module is a Component of AssureNXT which is a Test Management Platform.\
+                  It helps in Automated Test Case and Test Data Model generation through business process diagrams.\
+                  RTD establishes direct relationship between business requirements, process flows and test coverage.\
+                  Accelerated Test Case generation for changed business process.\
+                  \
+                  *Tosca - Tricentis Tosca is a testing tool that is used to automate end-to-end testing for software applications.\
+                  Tricentis Tosca combines multiple aspects of software testing (test case design, test automation, test data design \
+                  and generation, and analytics) to test GUIs and APIs from a business perspective',
     subSections: [
       {
         id: 'projectName',
@@ -142,21 +169,24 @@ export const basicSections = [
               minLength  : 'Please enter at least 160 characters'
             },
             fieldName: 'description',
-            description: 'Brief Description',
+            description: 'Brief description of your project, salesforce implementation testing objectives',
             title: 'Description',
             type: 'textbox'
           },
           {
             icon: 'question',
             required: true,
-            validationError: 'Need Descrition Content',
-            title: 'Would you like to purchase all the components of the accelerator pack or only a subset of it? (choose all that apply)',
-            description: 'The salesforce accelerator pack comprises of pre-built test assets and tools/licenses support to enable customization services.',
-            fieldName: 'details.appDefinition.solution.value',
-            type: 'tiled-radio-group',
+            validationError: 'Please provide the required options',
+            title: 'The salesforce accelerator pack comprises of pre-built test assets and tools/licenses support to enable customization services.\
+                    Would you like to purchase all the components of the accelerator pack or only a subset of it? (choose all that apply)',
+            description: 'Full solution will have all the above components, while Partial solution - \
+                    can have just either the sfdc assets mentioned in option 1 OR SFDC assets + customized service without the license',
+            fieldName: 'details.appDefinition.components',
+            type: 'checkbox-group',
             options: [
-              {value: 'phone', title: 'Full Solution', icon: IconTechOutlineMobile, iconOptions: { fill: '#00000'}, desc: 'Description about full solution'},
-              {value: 'tablet', title: 'Partial Solution', icon: IconTechOutlineTablet, iconOptions: { fill: '#00000'}, desc: 'Description about partial solution'}
+              {value: 'pack_one', label: 'Manual Test packs + Business Models + Automation scripts'},
+              {value: 'pack_two', label: 'License for AssureNXT and Tosca for 2 months'},
+              {value: 'pack_three', label: 'Customization services to fit the pre-built assets to your specific use cases'}
             ]
           },
           {
@@ -180,11 +210,15 @@ export const basicSections = [
           {
             icon: 'question',
             required: true,
-            validationError: 'Need Descrition Content',
-            title: 'Are you using the Lightning Experience? (Yes/ No/ Don\'t Know)',
-            description: 'Need Description Content',
-            type: 'textbox',
-            fieldName: 'details.appDefinition.lightningExperience.value'
+            title: 'Are you using the Lightning Experience?',
+            description: '',
+            fieldName: 'details.appDefinition.lightningExperience.value',
+            type: 'radio-group',
+            options: [
+              {value: 'Yes', label: 'Yes'},
+              {value: 'No', label: 'No'},
+              {value: 'Neither', label: 'I Don\'t Know'}
+            ]
           }
         ]
       },
@@ -192,9 +226,8 @@ export const basicSections = [
         id: 'notes',
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
-        description: 'Please enter any additional information like requirements,\
-                       architecture details, tools, performance baseline, etc.\
-                       After creating your project you will be able to upload files.',
+        description: 'Please enter any additional information such as any existing test automation tool used,\
+                      known constraints for automation, % of customizations in your salesforce implementation, etc.',
         type: 'notes'
       }
     ]
