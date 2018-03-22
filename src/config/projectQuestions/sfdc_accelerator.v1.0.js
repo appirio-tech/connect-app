@@ -1,7 +1,5 @@
 import React from 'react' // eslint-disable-line no-unused-vars
 import { findTitle, isFileRequired, findFilesSectionTitle } from '../projectWizard'
-import IconTechOutlineMobile from  '../../assets/icons/icon-tech-outline-mobile.svg'
-import IconTechOutlineTablet from  '../../assets/icons/icon-tech-outline-tablet.svg'
 
 const sections = [
   {
