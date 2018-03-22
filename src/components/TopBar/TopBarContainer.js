@@ -43,7 +43,7 @@ class TopBarContainer extends React.Component {
     return (
       <div className="logo-wrapper">
         <Link className="logo" to={logoTargetUrl} target="_self">
-          <ConnectLogoMono className="icon-connect-logo-mono" />
+          <ConnectLogoMono className="icon-connect-logo-mono" title="Connect" />
         </Link>
         {comp}
       </div>
@@ -71,6 +71,7 @@ class TopBarContainer extends React.Component {
     const logoutClick = (evt) => {
       evt.preventDefault()
       window.analytics && window.analytics.reset()
+      window.sessionStorage && window.sessionStorage.clear()
       window.location = logoutLink
     }
 

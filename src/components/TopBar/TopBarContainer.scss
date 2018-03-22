@@ -20,7 +20,6 @@
     height: 60px;
     // background: $tc-gray-neutral-light;
     line-height: 60px;
-    height: 60px;
     background-color: $tc-black;
     z-index: 20;
     padding: 0 20px;
@@ -81,7 +80,11 @@
           display: flex;
           justify-content: space-between;
           @include roboto-medium;
-  
+
+          .dropdown-arrow {
+            min-width: 10px;
+          }
+
           > .tc-btn {
             margin-top: 15px;
             border: 0;

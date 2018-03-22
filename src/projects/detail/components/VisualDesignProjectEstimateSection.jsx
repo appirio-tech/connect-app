@@ -28,7 +28,7 @@ const VisualDesignProjectEstimateSection = ({products, project}) => {
 
 VisualDesignProjectEstimateSection.propTypes = {
   project: PropTypes.object.isRequired,
-  products: PropTypes.arrayOf(PropTypes.string).isRequired
+  products: PropTypes.arrayOf(PropTypes.string)
 }
 
 export default VisualDesignProjectEstimateSection

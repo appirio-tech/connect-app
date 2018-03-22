@@ -54,6 +54,9 @@ const getTopicsWithComments = (projectId, tag) => {
   return getTopics({ reference : 'project', referenceId: projectId, tag })
     .then(({topics, totalCount}) => {
       const additionalPosts = []
+      //remove coderBot posts
+      const rTopics = _.remove(topics, i => [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(i.userId) > -1)
+      totalCount -= rTopics.length
       // if a topic has more than 20 posts then to display the latest posts,
       // we'll have to first retrieve them from the server
       _.forEach(topics, (t) => {

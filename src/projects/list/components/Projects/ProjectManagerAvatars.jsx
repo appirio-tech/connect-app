@@ -15,7 +15,7 @@ const ProjectManagerAvatars = ({ managers, maxShownNum = 3 }) => {
     uniqManagers.length = maxShownNum
   }
   return (
-    <div className="user-block">
+    <div className="user-block" onClick={e => e.stopPropagation()}>
       {uniqManagers.map((user, i) => {
         return (
           <div className={`stack-avatar stack-avatar-${i}`} key={i}>

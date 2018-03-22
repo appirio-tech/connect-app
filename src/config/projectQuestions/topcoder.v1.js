@@ -1,11 +1,10 @@
-import _ from 'lodash'
 import React from 'react' // eslint-disable-line no-unused-vars
 import IconTcSpecTypeSerif from  '../../assets/icons/icon-tc-spec-type-serif.svg'
 import IconTcSpecTypeSansSerif from  '../../assets/icons/icon-tc-spec-type-sans-serif.svg'
 import IconTcSpecIconTypeColorHome from  '../../assets/icons/icon-tc-spec-icon-type-color-home.svg'
 import IconTcSpecIconTypeOutlineHome from  '../../assets/icons/icon-tc-spec-icon-type-outline-home.svg'
 import IconTcSpecIconTypeGlyphHome from  '../../assets/icons/icon-tc-spec-icon-type-glyph-home.svg'
-import { isFileRequired } from '../projectWizard'
+import { isFileRequired, findFilesSectionTitle } from '../projectWizard'
 
 const sections = [
   {
@@ -71,7 +70,7 @@ const sections = [
       {
         id: 'files',
         required: isFileRequired,
-        title: (project) => `Project Files (${_.get(project, 'attachments', []).length})` || 'Files',
+        title: findFilesSectionTitle,
         description: '',
         type: 'files',
         fieldName: 'attachments'
