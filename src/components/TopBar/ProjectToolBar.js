@@ -73,7 +73,7 @@ class ProjectToolBar extends React.Component {
   }
 
   onDashboardLeave() {
-    if (this.state.activePage === 'dashboard') { window.location.reload() }
+    if (this.state.activePage === 'dashboard') { return }
     this.setState({
       activeDashboard: 'not-active'
     })
@@ -87,7 +87,7 @@ class ProjectToolBar extends React.Component {
   }
 
   onSpecificationLeave() {
-    if (this.state.activePage === 'specification') { window.location.reload() }
+    if (this.state.activePage === 'specification') { return }
     this.setState({
       activeSpecification: 'not-active'
     })
@@ -101,7 +101,7 @@ class ProjectToolBar extends React.Component {
   }
 
   onMessagesLeave() {
-    if (this.state.activePage === 'discussions') { window.location.reload() }
+    if (this.state.activePage === 'discussions') { return }
     this.setState({
       activeMessages: 'not-active'
     })
