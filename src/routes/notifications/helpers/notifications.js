@@ -112,9 +112,11 @@ export const splitNotificationsBySources = (sources, notifications, oldSourceIds
   sources.filter(source => source.total > 0).forEach(source => {
     source.notifications = _.filter(notifications, n => {
       if (n.sourceId !== source.id) return false
-      if (_.indexOf(oldSourceIds, source.id) < 0 && n.isOld) return false
       return true
     })
+    if (_.indexOf(oldSourceIds, source.id) < 0) {
+      source.notifications = source.notifications.slice(0,10);
+    }
     notificationsBySources.push(source)
   })
 
