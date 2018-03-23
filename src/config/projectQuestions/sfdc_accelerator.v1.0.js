@@ -45,7 +45,7 @@ const sections = [
               minLength  : 'Please enter at least 160 characters'
             },
             fieldName: 'description',
-            description: 'Brief description of your project, salesforce implementation testing objectives',
+            description: 'Brief description of your project, Salesforce.com implementation testing objectives',
             title: 'Description',
             type: 'textbox'
           },
@@ -53,7 +53,7 @@ const sections = [
             icon: 'question',
             required: true,
             validationError: 'Please provide the required options',
-            title: 'The salesforce accelerator pack comprises of pre-built test assets and tools/licenses support to enable customization services.\
+            title: 'The Salesforce.com accelerator pack comprises of pre-built test assets and tools/licenses support to enable customization services.\
                     Would you like to purchase all the components of the accelerator pack or only a subset of it? (choose all that apply)',
             description: 'Full solution will have all the above components, while Partial solution - \
                     can have just either the sfdc assets mentioned in option 1 OR SFDC assets + customized service without the license',
@@ -67,7 +67,7 @@ const sections = [
           },
           {
             icon: 'question',
-            title: 'Select the functionalities which are applicable for your salesforce Implementation ( 1 or multiple from the 10 listed below)',
+            title: 'Select the functionalities which are applicable for your Salesforce.com Implementation ( 1 or multiple from the 10 listed below)',
             description: '',
             type: 'checkbox-group',
             fieldName: 'details.appDefinition.functionalities',
@@ -103,7 +103,7 @@ const sections = [
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
         description: 'Please enter any additional information such as any existing test automation tool used,\
-                      known constraints for automation, % of customizations in your salesforce implementation, etc.',
+                      known constraints for automation, % of customizations in your Salesforce.com implementation, etc.',
         type: 'notes'
       },
       {
@@ -167,7 +167,7 @@ export const basicSections = [
               minLength  : 'Please enter at least 160 characters'
             },
             fieldName: 'description',
-            description: 'Brief description of your project, salesforce implementation testing objectives',
+            description: 'Brief description of your project, Salesforce.com implementation testing objectives',
             title: 'Description',
             type: 'textbox'
           },
@@ -175,7 +175,7 @@ export const basicSections = [
             icon: 'question',
             required: true,
             validationError: 'Please provide the required options',
-            title: 'The salesforce accelerator pack comprises of pre-built test assets and tools/licenses support to enable customization services.\
+            title: 'The Salesforce.com accelerator pack comprises of pre-built test assets and tools/licenses support to enable customization services.\
                     Would you like to purchase all the components of the accelerator pack or only a subset of it? (choose all that apply)',
             description: 'Full solution will have all the above components, while Partial solution - \
                     can have just either the sfdc assets mentioned in option 1 OR SFDC assets + customized service without the license',
@@ -189,7 +189,7 @@ export const basicSections = [
           },
           {
             icon: 'question',
-            title: 'Select the functionalities which are applicable for your salesforce Implementation ( 1 or multiple from the 10 listed below)',
+            title: 'Select the functionalities which are applicable for your Salesforce.com Implementation ( 1 or multiple from the 10 listed below)',
             description: '',
             type: 'checkbox-group',
             fieldName: 'details.appDefinition.functionalities',
@@ -225,7 +225,7 @@ export const basicSections = [
         fieldName: 'details.appDefinition.notes',
         title: 'Notes',
         description: 'Please enter any additional information such as any existing test automation tool used,\
-                      known constraints for automation, % of customizations in your salesforce implementation, etc.',
+                      known constraints for automation, % of customizations in your Salesforce.com implementation, etc.',
         type: 'notes'
       }
     ]
