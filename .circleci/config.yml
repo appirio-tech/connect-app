@@ -49,7 +49,7 @@ workflows:
             - test
           filters:
             branches:
-              only: feature/Adding_sfdc_accelerator
+              only: dev
       - deployProd:
           requires:
             - test
