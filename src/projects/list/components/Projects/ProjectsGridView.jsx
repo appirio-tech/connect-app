@@ -46,6 +46,7 @@ import IconQaOsAutomation from '../../../../assets/icons/product-qa-os-automatio
 import IconQaWebsitePrerfomance from '../../../../assets/icons/product-qa-website-performance.svg'
 import IconWebsiteWebsite from '../../../../assets/icons/product-website-website.svg'
 import IconOutlineWorkProject from '../../../../assets/icons/tech-32px-outline-work-project.svg'
+import IconQaSFDCAccelerator from '../../../../assets/icons/product-qa-sfdc-accelerator.svg'
 require('./ProjectsGridView.scss')
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
@@ -117,6 +118,8 @@ const ProjectTypeIcons = ({ type }) => {
     return <IconQaOsAutomation className="icon-qa-os-automation"/>
   case 'product-qa-website-performance':
     return <IconQaWebsitePrerfomance className="icon-qa-website-performance"/>
+  case 'product-qa-sfdc-accelerator':
+    return <IconQaSFDCAccelerator className="icon-qa-sfdc-accelerator" />
   case 'product-website-website':
     return <IconWebsiteWebsite className="icon-website-website"/>
   case 'tech-32px-outline-work-project':
