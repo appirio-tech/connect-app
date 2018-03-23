@@ -117,7 +117,7 @@ class FeedView extends React.Component {
   }
 
   mapFeed(feed, showAll = false, resetNewComment = false, prevProps) {
-    const { allMembers, project } = this.props
+    const { allMembers, project, currentMemberRole } = this.props
     const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isSavingTopic', 'isDeletingTopic', 'isAddingComment', 'isLoadingComments', 'error'])
     // Github issue##623, allow comments on all posts (including system posts)
     item.allowComments = true
@@ -126,7 +126,7 @@ class FeedView extends React.Component {
     } else {
       item.user = allMembers[item.userId]
     }
-    item.unread = !feed.read
+    item.unread = !feed.read && !!currentMemberRole
     // skip over the first post since that is the topic post
     item.totalComments = feed.totalPosts-1
     item.comments = []
@@ -145,7 +145,7 @@ class FeedView extends React.Component {
         isSavingComment: p.isSavingComment,
         isDeletingComment: p.isDeletingComment,
         error: p.error,
-        unread: !p.read,
+        unread: !p.read && !!currentMemberRole,
         date,
         edited,
         author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
