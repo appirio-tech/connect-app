@@ -38,10 +38,10 @@
   .Select-item {
     background-color: $tc-gray-10;
     border: 0;
-    height: 20px;
+    height: 21px;
     margin-left: 4px;
     margin-top: 4px;
-    padding: 0 10px;
+    padding: 0 10px 0 4px;
   }
   
   .Select-item-label {
@@ -50,11 +50,20 @@
     color: $tc-black;
     font-size: 13px;
     line-height: 20px;
-    padding: 0;
+    padding: 0 0 0 4px;
   }
   
   .Select-item-icon {
-    display: none;
+    color:rgb(153, 153, 153);
+    border-right-color: rgb(220, 220, 224);
+    padding: 0 5px 1px;
+    
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: transparent;
+        color: rgb(208, 2, 27);
+    }
   }
   
   .Select-option {

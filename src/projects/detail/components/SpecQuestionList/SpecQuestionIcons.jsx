@@ -3,8 +3,6 @@ import React from 'react'
 const Placeholder = ({ width = '16px', height = '16px' }) => {
   return (
     <svg width={width} height={height} viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
-      {/* <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch --> */}
-      <title>icon-definedfeature-placeholder</title>
       <desc>Created with Sketch.</desc>
       <defs />
       <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
@@ -19,8 +17,6 @@ const Placeholder = ({ width = '16px', height = '16px' }) => {
 const Generic = ({ width = '16px', height = '16px' }) => {
   return (
     <svg width={width} height={height} viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
-      {/* <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch --> */}
-      <title>icon-feature-placeholder</title>
       <desc>Created with Sketch.</desc>
       <defs />
       <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">

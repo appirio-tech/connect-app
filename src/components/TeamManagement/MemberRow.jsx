@@ -52,10 +52,8 @@ const MemberRow = ({ member, currentMember, currentUser, onMemberDelete, onChang
     // owner can remove only customers
     if (isCurrentOwner && member.isCustomer) {
       buttons.push(<ActionBtn key={1} type="user-remove" title="Remove team member from project" onClick={onDelete} />)
-    }
-
-    // manager can remove all except owner
-    if ((currentMember && currentMember.isManager) || currentUser.isAdmin) {
+    } else if ((currentMember && currentMember.isManager) || currentUser.isAdmin) {
+      // manager can remove all except owner
       let tooltip = 'Remove team member from project'
       if (member.isCopilot) {
         tooltip = 'Remove copilot from project'
@@ -66,7 +64,7 @@ const MemberRow = ({ member, currentMember, currentUser, onMemberDelete, onChang
       if (member.isCustomer && isOwner) {
         tooltip = 'Remove owner from project'
       }
-      buttons.push(<ActionBtn key={2} type="user-remove" title={tooltip} onClick={onDelete} />)
+      buttons.push(<ActionBtn key={1} type="user-remove" title={tooltip} onClick={onDelete} />)
     }
 
     const canAssignOwner = isCurrentOwner || member.isManager
@@ -74,7 +72,7 @@ const MemberRow = ({ member, currentMember, currentUser, onMemberDelete, onChang
     if (canAssignOwner && !isOwner && member.isCustomer) {
       const onClick = (e) => onChangeOwner(member, e)
       const tooltip = 'Assign member as owner'
-      buttons.push(<ActionBtn key={3} type="promote" title={tooltip} onClick={onClick} />)
+      buttons.push(<ActionBtn key={2} type="promote" title={tooltip} onClick={onClick} />)
     }
   }
 

@@ -112,9 +112,11 @@ export const splitNotificationsBySources = (sources, notifications, oldSourceIds
   sources.filter(source => source.total > 0).forEach(source => {
     source.notifications = _.filter(notifications, n => {
       if (n.sourceId !== source.id) return false
-      if (_.indexOf(oldSourceIds, source.id) < 0 && n.isOld) return false
       return true
     })
+    if (_.indexOf(oldSourceIds, source.id) < 0) {
+      source.notifications = source.notifications.slice(0, 10)
+    }
     notificationsBySources.push(source)
   })
 
@@ -153,7 +155,27 @@ export const filterNotificationsByProjectId = (notifications, projectId) => _.fi
 export const filterTopicAndPostChangedNotifications = (notifications) => _.filter(notifications, (notification) => {
   return notification.eventType === 'notifications.connect.project.topic.created' ||
          notification.eventType === 'notifications.connect.project.post.created' ||
+         notification.eventType === 'notifications.connect.project.post.edited' ||
          notification.eventType === 'notifications.connect.project.post.mention'
+})
+
+/**
+ * Filter notifications about the project
+ *
+ * @param  {Array}  notifications list of notifications
+ *
+ * @return {Array}                notifications list filtered of notifications
+ */
+export const filterProjectNotifications = (notifications) => _.filter(notifications, (notification) => {
+  return notification.eventType === 'notifications.connect.project.created' ||
+         notification.eventType === 'notifications.connect.project.approved' ||
+         notification.eventType === 'notifications.connect.project.paused' ||
+         notification.eventType === 'notifications.connect.project.completed' ||
+         notification.eventType === 'notifications.connect.project.specificationModified' ||
+         notification.eventType === 'notifications.connect.project.submittedForReview' ||
+         notification.eventType === 'notifications.connect.project.fileUploaded' ||
+         notification.eventType === 'notifications.connect.project.canceled' ||
+         notification.eventType === 'notifications.connect.project.linkCreated'
 })
 
 /**
@@ -268,6 +290,7 @@ const bundleNotifications = (notificationsWithRules) => {
     // if notifications doesn't have to be bundled, add it to notifications list as it is
     if (!notificationWithRule.notificationRule.shouldBundle) {
       bundledNotificationsWithRules.push(notificationWithRule)
+      return
     }
 
     // try to find existent notification in the list to which we can bundle current one
@@ -300,6 +323,9 @@ const bundleNotifications = (notificationsWithRules) => {
       existentNotificationWithRule.notification.contents.__history__.push(
         _.pick(notificationWithRule.notification.contents, PROPERTIES_KEEP_IN_HISTORY)
       )
+      if (notificationWithRule.notification.date > existentNotificationWithRule.notification.date) {
+        _.merge(existentNotificationWithRule.notification, notificationWithRule.notification)
+      }
     } else {
       bundledNotificationsWithRules.push(notificationWithRule)
     }
@@ -311,21 +337,22 @@ const bundleNotifications = (notificationsWithRules) => {
 /**
  * Prepare notifications
  *
- * @param  {Array} notifications notifications list
+ * @param  {Array} rawNotifications notifications list
  *
  * @return {Array}               notification list
  */
-export const prepareNotifications = (rowNotifications) => {
-  const notificationsWithRules = rowNotifications.map((rowNotification) => ({
-    id: `${rowNotification.id}`,
-    sourceId: rowNotification.contents.projectId ? `${rowNotification.contents.projectId}` : 'global',
-    sourceName: rowNotification.contents.projectId ? (rowNotification.contents.projectName || 'project') : 'Global',
-    eventType: rowNotification.type,
-    date: rowNotification.createdAt,
-    isRead: rowNotification.read,
-    isOld: new Date().getTime() - OLD_NOTIFICATION_TIME * MILLISECONDS_IN_MINUTE > new Date(rowNotification.createdAt).getTime(),
-    contents: rowNotification.contents,
-    version: rowNotification.version
+export const prepareNotifications = (rawNotifications) => {
+  const notificationsWithRules = rawNotifications.map((rawNotification) => ({
+    id: `${rawNotification.id}`,
+    sourceId: rawNotification.contents.projectId ? `${rawNotification.contents.projectId}` : 'global',
+    sourceName: rawNotification.contents.projectId ? (rawNotification.contents.projectName || 'project') : 'Global',
+    eventType: rawNotification.type,
+    date: rawNotification.createdAt,
+    isRead: rawNotification.read,
+    seen: rawNotification.seen,
+    isOld: new Date().getTime() - OLD_NOTIFICATION_TIME * MILLISECONDS_IN_MINUTE > new Date(rawNotification.createdAt).getTime(),
+    contents: rawNotification.contents,
+    version: rawNotification.version
   })).map((notification) => {
     const notificationRule = getNotificationRule(notification)
 

@@ -8,9 +8,11 @@ export const LOAD_USER_FAILURE     = 'LOAD_USER_FAILURE'
 
 // Notifications
 export const GET_NOTIFICATIONS = 'GET_NOTIFICATIONS'
+export const VISIT_NOTIFICATIONS = 'VISIT_NOTIFICATIONS'
 export const SET_NOTIFICATIONS_FILTER_BY = 'SET_NOTIFICATIONS_FILTER_BY'
 export const MARK_ALL_NOTIFICATIONS_READ = 'MARK_ALL_NOTIFICATIONS_READ'
 export const TOGGLE_NOTIFICATION_READ = 'TOGGLE_NOTIFICATION_READ'
+export const TOGGLE_NOTIFICATION_SEEN = 'TOGGLE_NOTIFICATION_SEEN'
 export const VIEW_OLDER_NOTIFICATIONS_SUCCESS = 'VIEW_OLDER_NOTIFICATIONS_SUCCESS'
 export const NOTIFICATIONS_PENDING = 'NOTIFICATIONS_PENDING'
 
@@ -230,7 +232,7 @@ export const PROJECT_STATUS = [
   {color: 'gray', name: 'Reviewed', fullName: 'Project is reviewed', value: PROJECT_STATUS_REVIEWED, order: 4, dropDownOrder: 3 },
   {color: 'green', name: 'Active', fullName: 'Project is active', value: PROJECT_STATUS_ACTIVE, order: 1, dropDownOrder: 4 },
   {color: 'black', name: 'Completed', fullName: 'Project is completed', value: PROJECT_STATUS_COMPLETED, order: 5, dropDownOrder: 5 },
-  {color: 'black', name: 'Cancelled', fullName: 'Project is cancelled', value: PROJECT_STATUS_CANCELLED, order: 6, dropDownOrder: 6 },
+  {color: 'black', name: 'Cancelled', fullName: 'Project is canceled', value: PROJECT_STATUS_CANCELLED, order: 6, dropDownOrder: 6 },
   {color: 'red', name: 'Paused', fullName: 'Project is paused', value: PROJECT_STATUS_PAUSED, order: 7, dropDownOrder: 7 }
 ]
 
@@ -306,7 +308,7 @@ export const PROJECT_FEED_TYPE_MESSAGES = 'MESSAGES'
 export const DISCOURSE_BOT_USERID = 'system'
 export const CODER_BOT_USERID = 'CoderBot'
 export const CODER_BOT_USER_FNAME = 'Coder'
-export const CODER_BOT_USER_LNAME = 'Bot'
+export const CODER_BOT_USER_LNAME = 'the Bot'
 
 export const PROJECT_MAX_COLORS = 5
 
@@ -374,7 +376,7 @@ export const SORT_OPTIONS = [
 // Notifications
 export const REFRESH_NOTIFICATIONS_INTERVAL = 1000 * 60 * 1 // 1 minute interval
 export const REFRESH_UNREAD_UPDATE_INTERVAL = 1000 * 10 * 1 // 10 second interval
-export const NOTIFCATIONS_DROPDOWN_PER_SOURCE = 10
+export const NOTIFCATIONS_DROPDOWN_PER_SOURCE = 5
 export const NOTIFCATIONS_DROPDOWN_MAX_TOTAL = Infinity
 
 export const NOTIFICATIONS_LIMIT = 1000

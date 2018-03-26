@@ -17,11 +17,12 @@ import Sticky from 'react-stickynode'
 import update from 'react-addons-update'
 import NewPost from '../../../components/Feed/NewPost'
 import Feed from '../../../components/Feed/Feed'
+import SystemFeed from '../../../components/Feed/SystemFeed'
 import ProjectSpecification from '../../../components/ProjectSpecification/ProjectSpecification'
 import { loadDashboardFeeds, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import { toggleNotificationRead } from '../../../routes/notifications/actions'
-import { filterReadNotifications, filterNotificationsByProjectId, filterTopicAndPostChangedNotifications } from '../../../routes/notifications/helpers/notifications'
+import { toggleNotificationRead, toggleBundledNotificationRead } from '../../../routes/notifications/actions'
+import { filterReadNotifications, filterNotificationsByProjectId, filterTopicAndPostChangedNotifications, filterProjectNotifications } from '../../../routes/notifications/helpers/notifications'
 import { REFRESH_UNREAD_UPDATE_INTERVAL } from '../../../config/constants'
 import './Specification.scss'
 import Refresh from '../../../assets/icons/icon-refresh.svg'
@@ -56,7 +57,8 @@ class FeedView extends React.Component {
     this.onTopicChange = this.onTopicChange.bind(this)
     this.onRefreshFeeds = this.onRefreshFeeds.bind(this)
     this.onScroll = this.onScroll.bind(this)
-    this.state = { feeds : [], showAll: [], newPost: {}, unreadUpdate: [], scrolled: false } 
+    this.onNotificationRead = this.onNotificationRead.bind(this)
+    this.state = { feeds : [], showAll: [], newPost: {}, unreadUpdate: [], scrolled: false }
   }
 
   componentDidMount() {
@@ -74,7 +76,6 @@ class FeedView extends React.Component {
       const notReadNotifications = filterReadNotifications(this.props.notifications.notifications)
       const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
       this.setState({ unreadUpdate: _.map(unreadTopicAndPostChangedNotifications, 'id' ) })
-      console.log('scrolled '+this.state.scrolled)
       if (!this.isChanged() && !this.state.scrolled && this.state.unreadUpdate.length > 0) {
         this.onRefreshFeeds()
       }
@@ -116,7 +117,7 @@ class FeedView extends React.Component {
   }
 
   mapFeed(feed, showAll = false, resetNewComment = false, prevProps) {
-    const { allMembers, project } = this.props
+    const { allMembers, project, currentMemberRole } = this.props
     const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isSavingTopic', 'isDeletingTopic', 'isAddingComment', 'isLoadingComments', 'error'])
     // Github issue##623, allow comments on all posts (including system posts)
     item.allowComments = true
@@ -125,7 +126,7 @@ class FeedView extends React.Component {
     } else {
       item.user = allMembers[item.userId]
     }
-    item.unread = !feed.read
+    item.unread = !feed.read && !!currentMemberRole
     // skip over the first post since that is the topic post
     item.totalComments = feed.totalPosts-1
     item.comments = []
@@ -144,7 +145,7 @@ class FeedView extends React.Component {
         isSavingComment: p.isSavingComment,
         isDeletingComment: p.isDeletingComment,
         error: p.error,
-        unread: !p.read,
+        unread: !p.read && !!currentMemberRole,
         date,
         edited,
         author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
@@ -375,14 +376,24 @@ class FeedView extends React.Component {
     this.setState({ scrolled : window.scrollY>0 })
   }
 
+  onNotificationRead(notification) {
+    if (notification.bundledIds) {
+      this.props.toggleBundledNotificationRead(notification.id, notification.bundledIds)
+    } else {
+      this.props.toggleNotificationRead(notification.id)
+    }
+  }
+
   render () {
     const {currentUser, project, currentMemberRole, isCreatingFeed, error, allMembers} = this.props
     const { feeds, unreadUpdate, scrolled } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
     const onLeaveMessage = this.onLeave() || ''
-
+    const notReadNotifications = filterReadNotifications(this.props.notifications.notifications)
+    const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
+    const sortedUnreadProjectUpdates = _.orderBy(unreadProjectUpdate, ['date'], ['desc'])
     const renderFeed = (item, i) => {
-      if ((item.spec || item.sendForReview) && !showDraftSpec) {
+      if ((item.spec || item.sendForReview) && !showDraftSpec || isSystemUser(item.userId)) {
         return null
       }
       const anchorId = 'feed-' + item.id
@@ -428,6 +439,15 @@ class FeedView extends React.Component {
             when={!!onLeaveMessage}
             message={onLeaveMessage}
           />
+          { unreadProjectUpdate.length > 0 &&
+            <div className="feed-action-card system-feed">
+              <SystemFeed
+                messages={sortedUnreadProjectUpdates}
+                user={SYSTEM_USER}
+                onNotificationRead={this.onNotificationRead}
+              />
+            </div>
+          }
           <NewPost
             currentUser={currentUser}
             allMembers={allMembers}
@@ -476,7 +496,7 @@ const mapStateToProps = ({ projectTopics, members, loadUser, notifications }) =>
     isCreatingFeed : projectTopics.isCreatingFeed,
     error          : projectTopics.error,
     allMembers     : members.members,
-    notifications 
+    notifications
   }
 }
 const mapDispatchToProps = {
@@ -489,7 +509,8 @@ const mapDispatchToProps = {
   saveFeedComment,
   deleteFeedComment,
   getFeedComment,
-  toggleNotificationRead
+  toggleNotificationRead,
+  toggleBundledNotificationRead
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedContainer)

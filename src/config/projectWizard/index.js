@@ -250,8 +250,7 @@ const products = {
         details: 'Webpage rendering effiency, Load, Stress and Endurance Test',
         icon: 'product-qa-website-performance',
         id: 'performance_testing',
-        aliases: ['performance-testing', 'performance_testing'],
-        hidden: true
+        aliases: ['performance-testing', 'performance_testing']
       },
       'Health Security Check': {
         brief: 'TBD',
@@ -292,6 +291,13 @@ const products = {
         id: 'consulting_adivisory',
         aliases: ['consulting-adivisory', 'consulting_adivisory'],
         disabled: true
+      },
+      'Salesforce Accelerator': {
+        brief: 'TBD',
+        details: 'SalesForce Testing, Cross browser-device Testing',
+        icon: 'product-qa-sfdc-accelerator',
+        id: 'sfdc_testing',
+        aliases: ['sfdc_testing', 'sfdc-testing']
       }
     }
   }
