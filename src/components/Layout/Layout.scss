@@ -7,6 +7,10 @@
     transition: all 150ms ease-in-out;
     overflow: hidden;
 
+    @media screen and (max-width: $screen-md - 1px) {
+      padding-top: 50px;
+    }
+
     &.with-filters {
       padding-top: 120px;
     }
@@ -19,4 +23,3 @@
   .content-area {
   }
 }
-  

@@ -22,6 +22,7 @@ class Home extends React.Component {
     return (
       <div className="content content-home">
         <div className="container">
+          <div className="h1-mobile">Topcoder Connect: the easiest way to go from idea to app</div>
           <div className="image-container">
             <img src={homeImgSrc} alt="" />
           </div>
