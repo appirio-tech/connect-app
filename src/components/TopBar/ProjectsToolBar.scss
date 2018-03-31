@@ -20,15 +20,28 @@
       height: 60px;
       justify-content: space-between;
       @media screen and (max-width: $screen-md - 1px) {
-        height: 50px;
+        height: auto;
         min-height: 50px;
+      }
+
+      .projects-title-mobile {
+        @include tc-heading;
+        color: $tc-gray-10;
+        font-size: 15px;
+        line-height: 50px;
+
+        @media screen and (min-width: $screen-md) {
+          display: none;
+        }
       }
 
       .logo-wrapper {
         margin-left: 4 * $base-unit;
+        margin-right: 4 * $base-unit;
 
         @media screen and (max-width: $screen-md - 1px) {
           margin-left: 3 * $base-unit;
+          margin-right: 0;
         }
       }
 
@@ -86,6 +99,10 @@
       height: 30px;
       margin-top: 15px;
       display: flex;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        display: none;
+      }
 
       input::-ms-clear{
         width: 0;

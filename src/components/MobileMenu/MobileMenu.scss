@@ -1,0 +1,98 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  margin-top: -50px;
+  background-color: #000;
+  color: #fff;
+  position: relative;
+
+  @media screen and (min-width: $screen-md) {
+    display: none;
+  }
+}
+
+.header {
+  background-color: #151516;
+  display: flex;
+  justify-content: space-between;
+  padding: $base-unit * 2 $base-unit * 2 $base-unit * 2 $base-unit * 3;
+}
+
+.close {
+  cursor: pointer;
+  height: 30px;
+  margin-top: $base-unit;
+  padding: 7px 0 0 7px;
+  width: 30px;
+
+  > svg {
+    display: block;
+  }
+}
+
+.body {
+  background-color: $tc-black;
+}
+
+.menu {
+  padding-bottom: $base-unit * 2;
+
+  &::before {
+    content: '';
+    border-top: 1px solid #404041;
+    display: block;
+    margin: 0 $base-unit * 4 $base-unit * 2;
+  }
+
+  &:first-child {
+    padding-top: $base-unit * 2;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  > li {
+    padding: 0 $base-unit * 2;
+
+    > a {
+      @include roboto;
+      color: #AAAAAB;
+      display: block;
+      font-size: 15px;
+      line-height: $base-unit * 10;
+      padding: 0 $base-unit * 2;
+
+      &:hover {
+        color: $tc-white;
+      }
+
+      &.menu-item-active {
+        background-color: $tc-dark-blue-70;
+        border-radius: 6px;
+        color: $tc-white;
+      }
+    }
+  }
+
+  &.big {
+    > li + li {
+      margin-top: $base-unit * 2;
+    }
+
+    > li > a {
+      @include roboto-bold;
+      font-size: 20px;
+    }
+  }
+}
+
+
+
+.footer {
+  @include roboto;
+  background-color: $tc-black;
+  color: $tc-gray-50;
+  font-size: 12px;
+  text-align: center;
+}

@@ -1,0 +1,9 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.toggle {
+  padding-right: $base-unit * 3;
+
+  @media screen and (min-width: $screen-md) {
+    display: none;
+  }
+}

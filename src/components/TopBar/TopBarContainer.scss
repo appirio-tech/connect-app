@@ -1,6 +1,16 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
+  .login-wrapper {
+    align-items: center;
+    display: flex;
+    margin-right: 4 * $base-unit;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      margin-right: 3 * $base-unit;
+    }
+  }
+
   .welcome-info {
     .UserDropdownMenu {
       padding: 0;
@@ -28,8 +38,9 @@
     left: 0;
     right: 0;
     @media screen and (max-width: $screen-md - 1px) {
-      height: 50px;
+      height: auto;
       line-height: 50px;
+      position: relative;
     }
 
     .logo-wrapper {
@@ -100,7 +111,7 @@
         background-color: $tc-black;
         position: relative;
         @media screen and (max-width: $screen-md - 1px) {
-          height: 50px;
+          height: auto;
         }
 
         .welcome-info {
@@ -111,7 +122,7 @@
           justify-content: space-between;
           @include roboto-medium;
           @media screen and (max-width: $screen-md - 1px) {
-            height: 50px;
+            display: none;
           }
 
           .dropdown-arrow {

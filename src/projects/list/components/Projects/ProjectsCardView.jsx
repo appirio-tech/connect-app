@@ -13,7 +13,7 @@ require('./ProjectsGridView.scss')
 const ProjectsCardView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
-  const { projects, members, currentUser, onPageChange, pageNum, totalCount, infiniteAutoload, setInfiniteAutoload, isLoading, onChangeStatus } = props
+  const { projects, members, currentUser, onPageChange, pageNum, totalCount, infiniteAutoload, setInfiniteAutoload, isLoading, onChangeStatus, projectsStatus } = props
   // const currentSortField = _.get(criteria, 'sort', '')
 
   // annotate projects with member data
@@ -63,9 +63,9 @@ const ProjectsCardView = props => {
         { [...projects, ...placeholders].map(renderProject)}
         <div className="project-card"><NewProjectCard /></div>
       </InfiniteScroll>
-      { hasMore ? 
-        !isLoading && !infiniteAutoload && <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore} key="loadMore">Load more projects</button> 
-        : !isLoading && !infiniteAutoload && <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore} key="loadMore" disabled>Load more projects</button>}
+      { hasMore ?
+        !isLoading && !infiniteAutoload && <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore} key="loadMore">Load more projects</button>
+        : !isLoading && !infiniteAutoload && <div key="end" className="cardview-no-more">No more {projectsStatus} projects</div>}
     </div>
   )
 }

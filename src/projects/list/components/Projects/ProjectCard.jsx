@@ -12,15 +12,13 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
   if (!project) return null
   const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
   return (
-    <div
-      className={className}
-      onClick={() => {
-        history.push(`/projects/${project.id}/`)
-      }}
-    >
+    <div className={className}>
       <div className="card-header">
         <ProjectCardHeader
           project={project}
+          onClick={() => {
+            history.push(`/projects/${project.id}/`)
+          }}
         />
       </div>
       <div className="card-body">
@@ -29,6 +27,7 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
           currentMemberRole={currentMemberRole}
           duration={duration}
           onChangeStatus={onChangeStatus}
+          showLink
         />
       </div>
       <div className="card-footer">

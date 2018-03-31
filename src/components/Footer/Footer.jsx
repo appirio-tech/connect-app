@@ -1,6 +1,8 @@
 import React from 'react'
 import MenuBar from 'appirio-tech-react-components/components/MenuBar/MenuBar'
 import moment from 'moment'
+import MediaQeury from 'react-responsive'
+import FooterV2 from '../FooterV2/FooterV2'
 import { NEW_PROJECT_PATH } from '../../config/constants'
 
 require('./Footer.scss')
@@ -23,12 +25,18 @@ const Footer = () => {
   }
 
   return (
-    <div className="Footer">
-      <p className="copyright-notice">© Topcoder { currentYear }</p>
-      <div className="footer-menu">
-        <MenuBar items={otherNavigationItems} orientation="horizontal" mobileBreakPoint={767} />
-      </div>
-    </div>
+    <MediaQeury minWidth={768}>
+      {(matches) => (matches? (
+        <div className="Footer">
+          <p className="copyright-notice">© Topcoder { currentYear }</p>
+          <div className="footer-menu">
+            <MenuBar items={otherNavigationItems} orientation="horizontal" mobileBreakPoint={767} />
+          </div>
+        </div>
+      ) : (
+        <FooterV2 />
+      ))}
+    </MediaQeury>
   )
 }
 

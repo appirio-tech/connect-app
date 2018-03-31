@@ -9,7 +9,11 @@
     flex-direction: column;
     align-items: center;
     margin-left: 20px;
-  
+
+    @media screen and (max-width: $screen-md - 1px) {
+      display: none;
+    }
+
     .new-project-icon {
       width: 20px;
       height: 20px;
@@ -23,11 +27,10 @@
         width: 10px;
         height: 10px;
       }
-  
+
       &:hover {
         background-color: $tc-orange-30;
       }
     }
   }
 }
-  
