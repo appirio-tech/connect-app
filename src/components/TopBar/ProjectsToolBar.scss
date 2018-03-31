@@ -19,9 +19,30 @@
       min-height: 60px;
       height: 60px;
       justify-content: space-between;
+      @media screen and (max-width: $screen-md - 1px) {
+        height: auto;
+        min-height: 50px;
+      }
+
+      .projects-title-mobile {
+        @include tc-heading;
+        color: $tc-gray-10;
+        font-size: 15px;
+        line-height: 50px;
+
+        @media screen and (min-width: $screen-md) {
+          display: none;
+        }
+      }
 
       .logo-wrapper {
         margin-left: 4 * $base-unit;
+        margin-right: 4 * $base-unit;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-left: 3 * $base-unit;
+          margin-right: 0;
+        }
       }
 
       .MenuBar {
@@ -37,6 +58,9 @@
 
       .welcome-info {
         margin-right: 4 * $base-unit;
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-right: 3 * $base-unit;
+        }
 
         .avatar-info {
           .username {
@@ -75,6 +99,10 @@
       height: 30px;
       margin-top: 15px;
       display: flex;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        display: none;
+      }
 
       input::-ms-clear{
         width: 0;
@@ -265,11 +293,10 @@
     width: 40px;
     height: 40px;
     text-align: center;
-  
+
     & .x-mark-icon {
       width: 100%;
       height: 100%;
     }
   }*/
 }
-  

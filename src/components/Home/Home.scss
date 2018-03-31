@@ -4,7 +4,11 @@
 :global {
   .content-home {
     margin: $base-unit*4;
-  
+
+    @media screen and (max-width: $screen-md - 1px) {
+      margin: $base-unit*2;
+    }
+
     .container {
       display: flex;
       justify-content: space-around;
@@ -15,42 +19,67 @@
       background: $tc-white;
       box-shadow: 0 1px 3px 0px rgba($tc-black, .2);
       border-radius: $corner-radius;
-  
+
       @media screen and (max-width: $screen-rg - 1) {
         flex-direction: column;
         width: 100%;
         padding: $base-unit*6 $base-unit*12 $base-unit*6;
-  
+
         .content-container {
           padding: $base-unit*15 0 0 0;
         }
       }
-  
-      @media screen and (max-width: $screen-md - 174) {
+
+      @media screen and (max-width: $screen-md - 1px) {
+        padding: $base-unit*4;
+
         img {
-          width: 100%;
+          display: block;
           height: auto;
+          margin: 0 auto;
+          width: 183px;
         }
-  
+
         .image-container {
           min-width: 100%;
         }
+
+        .content-container {
+          padding-top: $base-unit*4;
+        }
       }
     }
-  
+
     .image-container {
       text-align: center;
       min-width: $base-unit*86;
     }
-  
+
+    .h1-mobile {
+      @include roboto-medium;
+      display: none;
+      font-size: 22px;
+      line-height: $base-unit*6;
+      margin-bottom: $base-unit*4;
+      text-align: center;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        display: block;
+      }
+    }
+
     .content-container {
       padding: $base-unit*7 0 0 $base-unit*17;
-  
+
       .button-bar {
         display: flex;
         flex-direction: column;
         padding-top: $base-unit*6;
-  
+
+        @media screen and (max-width: $screen-md - 1px) {
+          padding-top: $base-unit*4;
+        }
+
         a.tc-link {
           text-align: center;
           color: $tc-dark-blue;
@@ -59,9 +88,14 @@
           margin: 0 auto;
           display: inline-block;
           margin-top: 10px;
+
+          @media screen and (max-width: $screen-md - 1px) {
+            font-size: 15px;
+            margin-top: 5px;
+          }
         }
       }
-  
+
       h1 {
         @include tc-heading-extra-large;
         @include roboto-medium;
@@ -69,8 +103,11 @@
         letter-spacing: 0;
         padding: 0 0 $base-unit*6;
         text-align: center;
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
       }
-  
+
       p {
         @include roboto;
         font-size: $tc-body-large;
@@ -78,8 +115,15 @@
         letter-spacing: 0;
         line-height: $base-unit * 6;
         padding-bottom: $base-unit*6;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          font-size: 15px;
+          line-height: $base-unit * 4;
+          padding-bottom: $base-unit*2;
+          text-align: center;
+        }
       }
-  
+
       .tc-btn {
         color: $tc-dark-blue-30;
         height: $base-unit*8;
@@ -91,12 +135,12 @@
         font-size: $tc-label-lg;
         display: block;
         margin-bottom: $base-unit * 4;
-  
+
         &:hover {
           color: $tc-white;
           background-image: linear-gradient($tc-dark-blue-70 0%, $tc-dark-blue 100%) !important;
         }
-  
+
         &:active {
           color: $tc-white;
           background-image: linear-gradient($tc-dark-blue-70 0%, $tc-dark-blue 100%) !important;
@@ -105,4 +149,3 @@
     }
   }
 }
-  

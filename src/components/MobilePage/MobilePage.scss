@@ -1,0 +1,62 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  body.hidden-content #wrapper-main {
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
+.container {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1000;
+}
+
+.header {
+  align-items: center;
+  background-color: $tc-black;
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  padding: 0 $base-unit * 3;
+}
+
+.logo {
+  display: block;
+  height: 20px;
+  overflow: hidden;
+
+  svg {
+    margin-left: -4px;
+    margin-top: -1px;
+    width: 60px;
+
+    path {
+      fill: $tc-gray-10;
+
+      &:last-child {
+        display: none;
+      }
+    }
+  }
+}
+
+.title {
+  @include roboto;
+  color: $tc-gray-10;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.close-wrapper {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  /* same width as notification bell icon together with hamburger menu
+     minus header padding right */
+  width: 71px - $base-unit * 3;
+}

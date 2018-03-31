@@ -8,6 +8,8 @@ import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
+import MobileMenu from '../MobileMenu/MobileMenu'
+import MobileMenuToggle from '../MobileMenu/MobileMenuToggle'
 import Dashboard from '../../assets/icons/icon-dashboard.svg'
 import DashboardActive from '../../assets/icons/icon-dashboard-active.svg'
 import Specification from '../../assets/icons/icon-ruler-pencil.svg'
@@ -32,10 +34,12 @@ class ProjectToolBar extends React.Component {
       activePage: 'dashboard',
       activeDashboard: 'not-active',
       activeSpecification: 'not-active',
-      activeMessages: 'not-active'
+      activeMessages: 'not-active',
+      isMobileMenuOpen: false
     }
     this.onNameEnter = this.onNameEnter.bind(this)
     this.onNameLeave = this.onNameLeave.bind(this)
+    this.toggleMobileMenu = this.toggleMobileMenu.bind(this)
   }
 
   setActivePage() {
@@ -118,6 +122,10 @@ class ProjectToolBar extends React.Component {
     this.setState({ isTooltipVisible: false })
   }
 
+  toggleMobileMenu() {
+    this.setState({ isMobileMenuOpen: !this.state.isMobileMenuOpen })
+  }
+
   componentWillMount() {
     this.props.history.listen(() => {
       this.setActivePage()
@@ -136,8 +144,8 @@ class ProjectToolBar extends React.Component {
 
   render() {
     // TODO: removing isPowerUser until link challenges is needed once again.
-    const { renderLogoSection, userMenu, project } = this.props
-    const { isTooltipVisible } = this.state
+    const { renderLogoSection, userMenu, project, user, mobileMenu } = this.props
+    const { isTooltipVisible, isMobileMenuOpen } = this.state
     this.setActivePage()
 
     return (
@@ -155,6 +163,7 @@ class ProjectToolBar extends React.Component {
             <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
             {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
           </div>}
+          <div className="bar-column project-name mobile"><span>PROJECT DETAILS</span></div>
           <div className="bar-column">
             {project && project.details && <nav className={`nav ${!project.details.hideDiscussions ? 'long-menu' : ''}`}>
               <ul>
@@ -183,8 +192,10 @@ class ProjectToolBar extends React.Component {
             <NewProjectNavLink compact returnUrl={window.location.href} />
             {userMenu}
             <NotificationsDropdown />
+            <MobileMenuToggle onToggle={this.toggleMobileMenu}/>
           </div>
         </div>
+        {isMobileMenuOpen && <MobileMenu user={user} onClose={this.toggleMobileMenu} menu={mobileMenu} />}
       </div>
     )
   }
