@@ -8,12 +8,23 @@ import PropTypes from 'prop-types'
 import './MobilePage.scss'
 
 class MobilePage extends React.Component {
+  constructor(props) {
+    super(props)
+
+    // to remember page scroll position
+    this.scrollTop
+  }
+
   componentWillMount() {
+    // save scroll position
+    this.scrollTop = document.body.scrollTop || document.documentElement.scrollTop
     document.body.classList.add('hidden-content')
   }
 
   componentWillUnmount() {
     document.body.classList.remove('hidden-content')
+    // restore scroll position
+    document.body.scrollTop = document.documentElement.scrollTop = this.scrollTop
   }
 
   render() {
