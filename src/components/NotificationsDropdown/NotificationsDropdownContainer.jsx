@@ -122,24 +122,29 @@ class NotificationsDropdownContainer extends React.Component {
           </NotificationsDropdown>
         ) : (
           <NotificationsMobilePage hasUnread={hasUnread} hasNew={hasNew} onToggle={visitNotifications}>
-            {globalSource && globalSource.notifications.length &&
-              <NotificationsSection
-                {...globalSource}
-                isGlobal
-                isSimple
-                onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
-                onLinkClick={toggleNotificationSeen}
-              />
-            }
-            {projectSources.filter(source => source.notifications.length > 0).map(source => (
-              <NotificationsSection
-                {...source}
-                key={source.id}
-                isSimple
-                onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
-                onLinkClick={toggleNotificationSeen}
-              />
-            ))}
+            {!hasUnread ? (
+              <NotificationsEmpty />
+            ) : (
+              <div>
+                {globalSource && globalSource.notifications.length &&
+                  <NotificationsSection
+                    {...globalSource}
+                    isGlobal
+                    isSimple
+                    onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                    onLinkClick={toggleNotificationSeen}
+                  />}
+                {projectSources.filter(source => source.notifications.length > 0).map(source => (
+                  <NotificationsSection
+                    {...source}
+                    key={source.id}
+                    isSimple
+                    onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                    onLinkClick={toggleNotificationSeen}
+                  />
+                ))}
+              </div>
+            )}
           </NotificationsMobilePage>
         ))}
       </MediaQuery>
