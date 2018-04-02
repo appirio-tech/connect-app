@@ -21,8 +21,8 @@ const MobileMenu = ({ user, onClose, menu }) => {
     const params = {}
 
     if (link.onClick) {
-      params.onClick = () => {
-        link.onClick()
+      params.onClick = (evt) => {
+        link.onClick(evt)
         onClose && onClose()
       }
     } else {
