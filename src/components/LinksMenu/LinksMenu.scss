@@ -59,7 +59,11 @@
       line-height: $base-unit*6;
       padding-left: $base-unit*4;
 
-      a {
+      @media screen and (max-width: $screen-md - 1px) {
+        padding-right: $base-unit*4;
+      }
+
+      &.buttons a {
         margin-left: 0;
         width: auto;
 
