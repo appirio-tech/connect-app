@@ -18,7 +18,7 @@ const UserWithName = ({ handle, firstName, lastName, photoURL, photoSize, theme 
       </a>
       <span styleName="info">
         <a styleName="name" href={url} target="_blank" rel="noopener noreferrer">{firstName} {lastName}</a>
-        <span styleName="handle">{handle}</span>
+        {handle && <span styleName="handle">{handle}</span>}
       </span>
     </div>
   )
@@ -30,7 +30,7 @@ UserWithName.defaultProps = {
 }
 
 UserWithName.propTypes = {
-  handle: PropTypes.string.isRequired,
+  handle: PropTypes.string,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
   photoURL: PropTypes.string,

@@ -1,7 +1,7 @@
 import React from 'react'
 import MenuBar from 'appirio-tech-react-components/components/MenuBar/MenuBar'
 import moment from 'moment'
-import MediaQeury from 'react-responsive'
+import MediaQuery from 'react-responsive'
 import FooterV2 from '../FooterV2/FooterV2'
 import { NEW_PROJECT_PATH } from '../../config/constants'
 
@@ -20,23 +20,28 @@ const Footer = () => {
   const isNotificationsPage = window.location.pathname.startsWith('/notifications')
 
   // TODO this looks like a bad way of doing it, I think it should be re-factored
-  if (isProjectDetails || isCreateProject || isNotificationsPage) {
-    return null
-  }
+  const shouldHideOnDesktop = isProjectDetails || isCreateProject || isNotificationsPage
+  const shouldHideOnMobile =  isCreateProject || isNotificationsPage
 
   return (
-    <MediaQeury minWidth={768}>
-      {(matches) => (matches? (
-        <div className="Footer">
-          <p className="copyright-notice">© Topcoder { currentYear }</p>
-          <div className="footer-menu">
-            <MenuBar items={otherNavigationItems} orientation="horizontal" mobileBreakPoint={767} />
-          </div>
-        </div>
-      ) : (
-        <FooterV2 />
-      ))}
-    </MediaQeury>
+    <MediaQuery minWidth={768}>
+      {(matches) => {
+        if (matches) {
+          return (shouldHideOnDesktop ? null :
+            <div className="Footer">
+              <p className="copyright-notice">© Topcoder { currentYear }</p>
+              <div className="footer-menu">
+                <MenuBar items={otherNavigationItems} orientation="horizontal" mobileBreakPoint={767} />
+              </div>
+            </div>
+          )
+        } else {
+          return (shouldHideOnMobile ? null :
+            <FooterV2 />
+          )
+        }
+      }}
+    </MediaQuery>
   )
 }
 

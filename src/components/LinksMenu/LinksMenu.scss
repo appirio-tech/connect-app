@@ -39,14 +39,17 @@
         overflow-x: hidden;
       }
     }
-    li:not(.delete-confirmation-modal):hover{
-      background: $tc-gray-neutral-light;
-      color: $tc-dark-blue;
-      .buttons{
-        display: block;
-      }
-      .link-buttons{
-        display: inline-block;
+    @media screen and (min-width: $screen-md) {
+      li:not(.delete-confirmation-modal):hover{
+        background: $tc-gray-neutral-light;
+        color: $tc-dark-blue;
+
+        .buttons{
+          display: block;
+        }
+        .link-buttons{
+          display: inline-block;
+        }
       }
     }
     .links-footer{
@@ -55,6 +58,18 @@
       color: $tc-gray-70;
       line-height: $base-unit*6;
       padding-left: $base-unit*4;
+
+      a {
+        margin-left: 0;
+        width: auto;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          display: inline-block;
+          height: 40px;
+          line-height: 40px;
+          font-size: 13px;
+        }
+      }
     }
 
     .delete-link-modal {

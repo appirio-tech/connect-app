@@ -5,9 +5,6 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
-import XMartIcon from '../../assets/icons/x-mark-white.svg'
 import './MobilePage.scss'
 
 class MobilePage extends React.Component {
@@ -20,16 +17,11 @@ class MobilePage extends React.Component {
   }
 
   render() {
-    const { title, children, onClose } = this.props
+    const { children } = this.props
 
     return (
       <div styleName="container">
-        <div styleName="header">
-          <Link styleName="logo" to="/"><ConnectLogoMono title="Connect" /></Link>
-          <div styleName="title">{title}</div>
-          <div styleName="close-wrapper"><XMartIcon onClick={onClose} /></div>
-        </div>
-        <div>{children}</div>
+        {children}
       </div>
     )
   }

@@ -1,0 +1,17 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.button {
+  align-items: center;
+  background-color: $tc-dark-blue-100;
+  border-radius: 50%;
+  bottom: 4 * $base-unit;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.5);
+  color: p;
+  display: flex;
+  justify-content: center;
+  height: 56px;
+  position: fixed;
+  right: 4 * $base-unit;
+  width: 56px;
+  z-index: 10;
+}

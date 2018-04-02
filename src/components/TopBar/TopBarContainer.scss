@@ -88,6 +88,10 @@
       .MenuBar {
         margin-left: 25px;
 
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
+
         li {
           white-space: nowrap;
         }
