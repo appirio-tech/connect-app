@@ -100,8 +100,6 @@ class FeedMobile extends React.Component {
             submitText="Post Comment"
             nextStepText="Add comment"
             onClose={this.toggleNewCommentMobile}
-            allMembers={allMembers}
-            currentUser={currentUser}
             onPost={this.onAddNewComment}
             isCreating={isAddingComment}
             hasError={error}

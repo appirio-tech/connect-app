@@ -45,7 +45,8 @@
   }
 }
 
-.status-textarea {
+.textarea,
+.textarea[disabled] {
   @include roboto;
   border-radius: 0;
   display: block;
@@ -61,15 +62,9 @@
   }
 }
 
-.overlay {
-  bottom: 67px; /* dont' overlay submit button 47px + 20px padding bottom */
-  z-index: 21;
-  top: 0;
-  left: 0;
-  width: 100%;
-  position: absolute;
-  background-color: whitesmoke;
-  opacity: 0.7;
+.textarea[disabled] {
+  /* keep border for disabled textarea to avoid text jumping */
+  border: 1px solid $tc-gray-40;
 }
 
 /* rewrite styles for RichTextEditor */
@@ -108,9 +103,9 @@
 
     .action-card .tc-textarea .public-DraftEditor-content, .action-card .tc-textarea textarea {
       @include roboto;
-      /* window height - top bar height - submit button height - padding bottom */
       font-size: 15px;
       line-height: 25px;
+      /* window height - top bar height - submit button height - padding bottom */
       height: calc(100vh - 50px - 47px - 20px);
       padding: 4 * $base-unit;
     }
