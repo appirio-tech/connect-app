@@ -4,34 +4,37 @@
   .ProjectCard {
     position: relative;
     display: flex;
-    cursor: pointer;
     flex-direction: column;
     height: 100%;
     background-color: $tc-white;
     border-radius: 6px;
     padding: 4 * $base_unit;
-  
+
+    @media screen and (max-width: $screen-md - 1px) {
+      padding: 3 * $base_unit;
+    }
+
     &:hover {
       box-shadow: 0 2px 9px 0 rgba($tc-gray-90, 0.15);
     }
-  
+
     &.NewProjectCard {
       background-color: $tc-gray-neutral-dark;
       border: 1px dashed $tc-gray-30;
-  
+
       &:hover {
         box-shadow: none;
-  
+
         .card-body .new-project-button .new-project-icon {
           @include background-gradient($tc-dark-blue-70, $tc-dark-blue);
         }
       }
-  
+
       .card-body {
         display: flex;
         justify-content: center;
         align-items: center;
-  
+
         .new-project-button {
           @include tc-label-md;
           text-transform: uppercase;
@@ -40,14 +43,14 @@
           justify-content: center;
           flex-direction: column;
           align-items: center;
-  
+
           .new-project-icon {
             width: 40px;
             height: 40px;
             background-color: $tc-dark-blue;
             border-radius: 100%;
             padding: 12px;
-  
+
             svg {
               fill: $tc-white;
             }
@@ -56,22 +59,26 @@
         }
       }
     }
-  
+
     .card-header {
+      cursor: pointer;
       margin-bottom: 4 * $base_unit;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        margin-bottom: 3 * $base_unit;
+      }
     }
-  
+
     .card-body {
       flex: 1;
-  
+
       .ProjectStatus .status-header {
         cursor: pointer;
       }
     }
-  
+
     .card-footer {
       // padding-top: 4 * $base_unit;
     }
   }
 }
-  

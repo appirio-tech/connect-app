@@ -6,8 +6,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
-import cn from 'classnames'
-import Bell from '../../assets/icons/ui-bell.svg'
+import NotificationsBell from './NotificationsBell'
 
 
 const NotificationsDropdown = (props) => {
@@ -15,9 +14,11 @@ const NotificationsDropdown = (props) => {
     <div className="notifications-dropdown">
       <Dropdown theme="UserDropdownMenu" pointerShadow noAutoclose>
         <div className="dropdown-menu-header">
-          <div className={cn('notifications-dropdown-bell', { 'has-unread': props.hasUnread, 'has-new': props.hasNew })} onClick={props.onToggle}>
-            <Bell className="icon-ui-bell"/>
-          </div>
+          <NotificationsBell
+            hasUnread={props.hasUnread}
+            hasNew={props.hasNew}
+            onClick={props.onToggl}
+          />
         </div>
         <div className="dropdown-menu-list">
           <div className="notifications-dropdown-content">
@@ -32,7 +33,7 @@ const NotificationsDropdown = (props) => {
 NotificationsDropdown.propTypes = {
   hasUnread: PropTypes.bool,
   hasNew: PropTypes.bool,
-  onToggle: PropTypes.func.isRequired,
+  onToggle: PropTypes.func,
   children: PropTypes.node
 }
 

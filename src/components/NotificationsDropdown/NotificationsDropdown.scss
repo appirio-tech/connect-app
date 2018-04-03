@@ -8,19 +8,19 @@
     cursor: default;
     user-select: none;
   }
-  
+
   .notifications-dropdown {
     align-items: center;
     display: flex;
     margin-left: -8px;
     margin-right: 12px;
     position: relative;
-  
+
     .UserDropdownMenu {
       padding: 0;
       display: flex;
     }
-  
+
     .Dropdown {
       right: 10px;
       left: auto;
@@ -29,52 +29,16 @@
       top: 54px;
       width: auto;
     }
-  
+
     .UserDropdownMenu .Dropdown.pointer-shadow {
       margin-top: 0;
-  
+
       &::before {
         background-color: $tc-gray-neutral-light;
         right: 12px;
       }
     }
-  
-    .notifications-dropdown-bell {
-      align-items: center;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      height: 32px;
-      /* prevent notifications text selection when clicking the bell fast */
-      user-select: none;
-      position: relative;
-      width: 32px;
-  
-      .icon-ui-bell path {
-        fill: $tc-white;
-      }
 
-      &:not(.has-unread) {
-        .icon-ui-bell path {
-          fill: $tc-gray-50;
-        }
-      }
-    }
-  
-    .notifications-dropdown-bell.has-new {
-      &::after {
-        background-color: $tc-red-70;
-        border-radius: 50%;
-        content: '';
-        display: block;
-        height: 8px;
-        position: absolute;
-        right: -2px;
-        top: 2px;
-        width: 8px;
-      }
-    }
-  
     .notifications-dropdown-body {
       // window height
       // - 54px dropdown top position
@@ -85,13 +49,13 @@
       max-height: 500px;
       overflow: auto;
     }
-  
+
     .notifications-dropdown-content {
       border-radius: 4px;
       overflow: hidden;
       width: 480px;
     }
-  
+
     .notifications-read-all {
       @include roboto;
       background-color: $tc-gray-neutral-light;
@@ -103,14 +67,13 @@
       letter-spacing: 0;
       text-align: center;
     }
-  
+
     .notifications-empty {
       padding: 50px 0 60px;
-  
+
       .notification-settings {
         margin-top: 30px;
       }
     }
   }
 }
-  

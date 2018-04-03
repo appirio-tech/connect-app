@@ -6,6 +6,10 @@
     display: block;
     border-top: 1px solid $tc-gray-10;
 
+    @media screen and (max-width: $screen-md - 1px) {
+      border-top: 0;
+    }
+
     &:first-child {
       border: none;
     }
@@ -19,17 +23,17 @@
       }
     }
   }
-  
+
   .notification-item {
     display: flex;
     background-color: $tc-white;
     justify-content: space-between;
     transition: 150ms all;
-  
+
     &:hover {
       background-color: $tc-dark-blue-10;
     }
-  
+
     .icon {
       align-items: center;
       // border-left: 2px solid #55a5ff;
@@ -37,46 +41,55 @@
       flex: 0 0 44px;
       justify-content: center;
     }
-  
+
     .body {
       flex: 1;
       padding: 15px 0;
-  
+
       .content {
         @include roboto;
         color: $tc-black;
         font-size: 13px;
         line-height: 20px;
-  
+
+        @media screen and (max-width: $screen-md - 1px) {
+          font-size: 15px;
+          line-height: 25px;
+        }
+
         > strong {
           color: #000;
           font-weight: bold;
         }
       }
-  
+
       > .date {
         @include roboto;
         color: $tc-gray-50;
         font-size: 11px;
         line-height: 20px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          font-size: 13px;
+        }
       }
     }
-  
+
     .mark-read {
       align-items: center;
       display: flex;
       flex: 0 0 40px;
       justify-content: flex-end;
       transition: all 150ms;
-  
+
       &:hover {
         background-color: $tc-dark-blue-30;
-  
+
         svg {
           fill: $tc-dark-blue;
         }
       }
-  
+
       button {
         background: none;
         border: 0;
@@ -85,17 +98,16 @@
         margin: 0;
         padding: 0;
         width: 42px;
-  
+
         svg {
           fill: $tc-gray-20;
         }
       }
     }
-  
+
     .notification-item + .notification-item,
     .notification-item-link + .notification-item {
       border-top: 1px solid $tc-gray-10;
     }
   }
 }
-  

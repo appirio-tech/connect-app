@@ -5,6 +5,8 @@ import Panel from '../Panel/Panel'
 import AddComment from '../ActionCard/AddComment'
 import Comment from '../ActionCard/Comment'
 import cn from 'classnames'
+import MediaQuery from 'react-responsive'
+import CommentMobile from '../ActionCard/CommentMobile'
 // import { THREAD_MESSAGES_PAGE_SIZE } from '../../config/constants'
 
 const getCommentCount = (totalComments) => {
@@ -69,36 +71,56 @@ class FeedComments extends React.Component {
             </div>
           </div>
         </Panel.Body>
-        {comments.map((item, idx) => (
-          <Comment
-            key={idx}
-            message={item}
-            author={item.author}
-            date={moment(item.date).fromNow()}
-            edited={item.edited}
-            active={item.unread}
-            self={item.author && item.author.userId === currentUser.userId}
-            onChange={this.onSaveMessageChange.bind(this, item.id)}
-            onSave={onSaveMessage}
-            onDelete={onDeleteMessage}
-            isSaving={item.isSavingComment}
-            hasError={item.error}
-            allMembers={allMembers}
-          >
-            <div dangerouslySetInnerHTML={{__html: item.content}} />
-          </Comment>
-        ))}
-        {allowComments &&
-      <AddComment
-        placeholder="Write a comment"
-        onAdd={onAddNewComment}
-        onChange={onNewCommentChange}
-        avatarUrl={avatarUrl}
-        authorName={authorName}
-        isAdding={isAddingComment}
-        hasError={error}
-        allMembers={allMembers}
-      />}
+        <MediaQuery minWidth={768}>
+          {(matches) => (matches ? (
+            <div>
+              {comments.map((item, idx) => (
+                <Comment
+                  key={idx}
+                  message={item}
+                  author={item.author}
+                  date={moment(item.date).fromNow()}
+                  edited={item.edited}
+                  active={item.unread}
+                  self={item.author && item.author.userId === currentUser.userId}
+                  onChange={this.onSaveMessageChange.bind(this, item.id)}
+                  onSave={onSaveMessage}
+                  onDelete={onDeleteMessage}
+                  isSaving={item.isSavingComment}
+                  hasError={item.error}
+                  allMembers={allMembers}
+                >
+                  <div dangerouslySetInnerHTML={{__html: item.content}} />
+                </Comment>
+              ))}
+              {allowComments &&
+                <AddComment
+                  placeholder="Write a comment"
+                  onAdd={onAddNewComment}
+                  onChange={onNewCommentChange}
+                  avatarUrl={avatarUrl}
+                  authorName={authorName}
+                  isAdding={isAddingComment}
+                  hasError={error}
+                  allMembers={allMembers}
+                />
+              }
+            </div>
+          ) : (
+            <div>
+              {comments.map((item, idx) => (
+                <CommentMobile
+                  key={idx}
+                  messageId={item.id.toString()}
+                  author={item.author}
+                  date={item.date}
+                >
+                  <div dangerouslySetInnerHTML={{__html: item.content}} />
+                </CommentMobile>
+              ))}
+            </div>
+          ))}
+        </MediaQuery>
       </div>
     )
   }

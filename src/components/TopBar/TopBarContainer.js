@@ -51,7 +51,7 @@ class TopBarContainer extends React.Component {
   }
 
   render() {
-    const { user, toolbar } = this.props
+    const { user, toolbar, userRoles } = this.props
 
     const userHandle  = _.get(user, 'handle')
     const userImage = _.get(user, 'profile.photoURL')
@@ -67,6 +67,7 @@ class TopBarContainer extends React.Component {
     const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.host}/`
     const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
     const profileUrl = `https://${DOMAIN}/settings/profile/`
+    const isLoggedIn = !!(userRoles && userRoles.length)
 
     const logoutClick = (evt) => {
       evt.preventDefault()
@@ -84,6 +85,30 @@ class TopBarContainer extends React.Component {
         { label: 'Log out', onClick: logoutClick, absolute: true, id: 0 }
       ]
     ]
+
+    const mobileMenu = [
+      {
+        style: 'big',
+        items: [
+          { label: 'My projects', link: '/projects?sort=updatedAt%20desc&status=active' },
+          { label: 'Getting Started', link: 'https://www.topcoder.com/about-topcoder/connect/', absolute: true },
+          { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true },
+        ]
+      }, {
+        items: [
+          { label: 'About', link: 'https://www.topcoder.com/about-topcoder/', absolute: true },
+          { label: 'Contacts', link: 'https://www.topcoder.com/about-topcoder/contact/', absolute: true },
+          { label: 'Privacy', link: 'https://www.topcoder.com/community/how-it-works/privacy-policy/', absolute: true },
+          { label: 'Terms', link: 'https://connect.topcoder.com/terms', absolute: true },
+        ]
+      }, {
+        items: [
+          { label: 'Log Out', link: logoutLink, absolute: true, onClick: logoutClick },
+        ]
+      }
+    ]
+
+    const logInBtn = <div className="login-wrapper"><a className="tc-btn tc-btn-sm tc-btn-default" href={loginUrl}>Log in</a></div>
 
     const avatar = (
       <div className="welcome-info">
@@ -117,7 +142,8 @@ class TopBarContainer extends React.Component {
               <ToolBar
                 {...this.props}
                 renderLogoSection={ this.renderLogo }
-                userMenu={ avatar }
+                userMenu={ isLoggedIn ? avatar : logInBtn }
+                mobileMenu={mobileMenu}
               />
             }
           </div>

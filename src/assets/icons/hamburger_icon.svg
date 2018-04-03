@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="14px" viewBox="0 0 20 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48 (47235) - http://www.bohemiancoding.com/sketch -->
+    <title>hamburger_icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="nav_br/project_details" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-340.000000, -18.000000)">
+        <g id="nav-bar" fill="#FFFFFF">
+            <g id="Group-2" transform="translate(0.000000, 0.500000)">
+                <g id="hamburger_icon" transform="translate(340.000000, 17.000000)">
+                    <g id="Rectangle-2">
+                        <rect x="0" y="0.5" width="20" height="2"></rect>
+                        <rect x="0" y="6.5" width="20" height="2"></rect>
+                        <rect x="0" y="12.5" width="20" height="2"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

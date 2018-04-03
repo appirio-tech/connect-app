@@ -13,7 +13,9 @@ import NotificationsSection from '../NotificationsSection/NotificationsSection'
 import NotificationsEmpty from '../NotificationsEmpty/NotificationsEmpty'
 import NotificationsDropdownHeader from  '../NotificationsDropdownHeader/NotificationsDropdownHeader'
 import NotificationsDropdown from  './NotificationsDropdown'
+import NotificationsMobilePage from  './NotificationsMobilePage'
 import ScrollLock from 'react-scroll-lock-component'
+import MediaQuery from 'react-responsive'
 import { NOTIFCATIONS_DROPDOWN_PER_SOURCE, NOTIFCATIONS_DROPDOWN_MAX_TOTAL, REFRESH_NOTIFICATIONS_INTERVAL } from '../../config/constants'
 import './NotificationsDropdown.scss'
 
@@ -74,48 +76,78 @@ class NotificationsDropdownContainer extends React.Component {
     const hasNew = hasUnread && lastVisited < _.maxBy(_.map(notifications, n => new Date(n.date)))
 
     return (
-      <NotificationsDropdown hasUnread={hasUnread} hasNew={hasNew} onToggle={visitNotifications}>
-        <NotificationsDropdownHeader onMarkAllClick={() => !pending && markAllNotificationsRead()} hasUnread={hasUnread}/>
-        {!hasUnread ? (
-          <div className="notifications-dropdown-body">
-            <NotificationsEmpty>
-              <div className="notification-settings">
-                <Link to="/settings/notifications" className="tc-btn tc-btn-secondary">Notification Settings</Link>
+      <MediaQuery minWidth={768}>
+        {(matches) => (matches ? (
+          <NotificationsDropdown hasUnread={hasUnread} hasNew={hasNew} onToggle={visitNotifications}>
+            <NotificationsDropdownHeader onMarkAllClick={() => !pending && markAllNotificationsRead()} hasUnread={hasUnread}/>
+            {!hasUnread ? (
+              <div className="notifications-dropdown-body">
+                <NotificationsEmpty>
+                  <div className="notification-settings">
+                    <Link to="/settings/notifications" className="tc-btn tc-btn-secondary">Notification Settings</Link>
+                  </div>
+                </NotificationsEmpty>
               </div>
-            </NotificationsEmpty>
-          </div>
-        ) : ([
-          <ScrollLock key="body">
-            <div className="notifications-dropdown-body">
-              {globalSource && globalSource.notifications.length &&
-                <NotificationsSection
-                  {...globalSource}
-                  isGlobal
-                  isSimple
-                  onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
-                  onLinkClick={toggleNotificationSeen}
-                />
-              }
-              {projectSources.filter(source => source.notifications.length > 0).map(source => (
-                <NotificationsSection
-                  {...source}
-                  key={source.id}
-                  isSimple
-                  onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
-                  onLinkClick={toggleNotificationSeen}
-                />
-              ))}
-            </div>
-          </ScrollLock>,
-          <Link key="footer" to="/notifications" className="notifications-read-all tc-btn-link">
-            {
-              olderNotificationsCount > 0 ?
-                `View ${olderNotificationsCount} older notification${olderNotificationsCount > 1 ? 's' : ''}` :
-                'View all notifications'
-            }
-          </Link>
-        ])}
-      </NotificationsDropdown>
+            ) : ([
+              <ScrollLock key="body">
+                <div className="notifications-dropdown-body">
+                  {globalSource && globalSource.notifications.length &&
+                    <NotificationsSection
+                      {...globalSource}
+                      isGlobal
+                      isSimple
+                      onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                      onLinkClick={toggleNotificationSeen}
+                    />
+                  }
+                  {projectSources.filter(source => source.notifications.length > 0).map(source => (
+                    <NotificationsSection
+                      {...source}
+                      key={source.id}
+                      isSimple
+                      onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                      onLinkClick={toggleNotificationSeen}
+                    />
+                  ))}
+                </div>
+              </ScrollLock>,
+              <Link key="footer" to="/notifications" className="notifications-read-all tc-btn-link">
+                {
+                  olderNotificationsCount > 0 ?
+                    `View ${olderNotificationsCount} older notification${olderNotificationsCount > 1 ? 's' : ''}` :
+                    'View all notifications'
+                }
+              </Link>
+            ])}
+          </NotificationsDropdown>
+        ) : (
+          <NotificationsMobilePage hasUnread={hasUnread} hasNew={hasNew} onToggle={visitNotifications}>
+            {!hasUnread ? (
+              <NotificationsEmpty />
+            ) : (
+              <div>
+                {globalSource && globalSource.notifications.length &&
+                  <NotificationsSection
+                    {...globalSource}
+                    isGlobal
+                    isSimple
+                    onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                    onLinkClick={toggleNotificationSeen}
+                  />}
+                {projectSources.filter(source => source.notifications.length > 0).map(source => (
+                  <NotificationsSection
+                    {...source}
+                    key={source.id}
+                    isSimple
+                    onReadToggleClick={document.body.classList.remove('noScroll'), toggleNotificationReadWithDelay}
+                    onLinkClick={toggleNotificationSeen}
+                  />
+                ))}
+              </div>
+            )}
+          </NotificationsMobilePage>
+        ))}
+      </MediaQuery>
     )
   }
 }
