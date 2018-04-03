@@ -6,3 +6,4 @@ build
 dist
 npm-debug.log
 .history
+.build-info
