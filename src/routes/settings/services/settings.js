@@ -62,7 +62,7 @@ const changePassword = (password) => {
 }
 
 const getNotificationSettings = () => {
-  return axios.get(`${TC_NOTIFICATION_URL}/notificationsettings`)
+  return axios.get(`${TC_NOTIFICATION_URL}/settings`)
     .then(resp => resp.data)
 }
 
@@ -101,7 +101,7 @@ const saveNotificationSettings = (data) => {
     body.push({ topic, deliveryMethod: 'email', value: data[topic] && data[topic].email === 'yes' ? 'yes' : 'no' })
     body.push({ topic, deliveryMethod: 'web', value: data[topic] && data[topic].web === 'yes' ? 'yes' : 'no' })
   })
-  return axios.put(`${TC_NOTIFICATION_URL}/notificationsettings`, body)
+  return axios.put(`${TC_NOTIFICATION_URL}/settings`, body)
 }
 
 export default {
