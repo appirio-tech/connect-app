@@ -442,13 +442,17 @@ $screen-one-column: 720px;
         height: 355px;
         padding-bottom: $base-unit * 2;
       }
-    }
 
-    .project-card-new {
-      @media screen and (max-width: $screen-md - 1px) {
+      @media screen and (max-width: $screen-one-column - 1px) {
         height: auto;
+
+        .card-footer {
+          margin-top: 3 * $base-unit;
+        }
       }
+    }
       
+    .project-card-new {
       @media screen and (max-width: $screen-one-column - 1px) {
         margin-top: 2 * $base-unit;
       }
