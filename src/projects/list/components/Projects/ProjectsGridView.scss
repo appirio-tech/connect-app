@@ -1,4 +1,8 @@
 @import '~tc-ui/src/styles/tc-includes';
+
+/* cards are arranged in one column when width is less than 720, as one card minimum width is 360 */
+$screen-one-column: 720px;
+
 :global {
   .flex-data {
     .flex-row {
@@ -407,6 +411,26 @@
       }
     }
 
+    /* more-wrapper forces block to always make a new line instead of staying next to card */
+    .more-wrapper {
+      display: flex;
+      justify-content: center;
+      min-width: 360px;
+      overflow: hidden;
+
+      @media screen and (max-width: $screen-one-column - 1px) {
+        display: none;
+      }
+    }
+
+    .more-wrapper-before-new-card {
+      display: none;
+
+      @media screen and (max-width: $screen-one-column - 1px) {
+        display: flex;
+      }
+    }
+
     .project-card {
       padding: 0 2 * $base-unit 4 * $base-unit;
       height: 400px;
@@ -420,6 +444,16 @@
       }
     }
 
+    .project-card-new {
+      @media screen and (max-width: $screen-md - 1px) {
+        height: auto;
+      }
+      
+      @media screen and (max-width: $screen-one-column - 1px) {
+        margin-top: 2 * $base-unit;
+      }
+    }
+
     .cardview-no-more {
       @include roboto;
       color: $tc-gray-40;
@@ -428,7 +462,8 @@
       text-align: center;
 
       @media screen and (max-width: $screen-md - 1px) {
-        margin-top: -$base-unit * 2;
+        margin-bottom: -$base-unit;
+        margin-top: -$base-unit;
       }
     }
   }
