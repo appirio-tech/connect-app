@@ -48,6 +48,21 @@ jobs:
           at: ./workspace
       - run: ./deploy.sh DEV_AUTH0 no-cache
 
+  deployDevAuth0CircleciMaster:
+    docker:
+      - image: cibuilds/aws
+    steps:
+      - run:
+          name: checking out build repo
+          command: git clone --branch master https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
+      - checkout
+      - attach_workspace:
+          at: ./workspace
+      - run:
+          name: Deployment.
+          command: |
+            cp ./../buildscript/master_deploy.sh .
+            ./master_deploy.sh -d CFRONT -e DEV -s GIT
 workflows:
   version: 2
   build:
@@ -71,4 +86,10 @@ workflows:
           filters:
             branches:
               only: dev-auth0
+      - deployDevAuth0CircleciMaster:
+          requires:
+            - test
+          filters:
+            branches:
+              only: dev-auth0-circleci-script
             
