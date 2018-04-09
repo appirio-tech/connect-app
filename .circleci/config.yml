@@ -59,6 +59,9 @@ jobs:
       - attach_workspace:
           at: ./workspace
       - run:
+          name: Installation of build dependencies.
+          command: apk add --no-cache bash openssl
+      - run:
           name: Deployment.
           command: |
             cp ./../buildscript/master_deploy.sh .
