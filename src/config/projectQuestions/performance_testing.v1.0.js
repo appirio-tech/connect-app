@@ -36,12 +36,12 @@ const sections = [
               minLength: 'Please enter at least 160 characters'
             },
             description: 'In 160 or more characters tell us what is the app, main functions, problem area, etc..',
-            title: 'Please provide brief description of the system, application to be Performance tested',
+            title: 'Please provide brief description of the system and/or application you would like to execute Performance Testing on.',
             type: 'textbox'
           },
           {
             icon: 'question',
-            title: 'What is the load on system in terms concurrent users for Performance Testing?',
+            title: 'What is the desired load on the system in terms of concurrent users for this test?',
             description: '(Unit package includes 500 virtual users, additional load would require Top-Ups)',
             type: 'slide-radiogroup',
             options: [
@@ -56,7 +56,7 @@ const sections = [
           },
           {
             icon: 'question',
-            title: 'What is the count of business processes - transactions to be included for Performance Testing?',
+            title: 'Approximately how many business processes/transactions will be included in your Performance Test?',
             description: '(Unit package covers 10 transactions, additional transactions would require Top-Ups)',
             fieldName: 'details.loadDetails.businessProcessesCount',
             type: 'slide-radiogroup',
@@ -71,7 +71,7 @@ const sections = [
           },
           {
             icon: 'question',
-            title: 'What is the expected hours of execution for all different Performance Tests to be conducted?',
+            title: 'How many hours do you expect the Performance Test to be executed for?',
             description: '(Unit package covers 10 hours of execution, additional execution time would require Top-Ups)',
             fieldName: 'details.loadDetails.expectedExecutionHours',
             type: 'slide-radiogroup',
@@ -86,7 +86,7 @@ const sections = [
           },
           {
             icon: 'question',
-            title: 'Please select any additional add-ons?',
+            title: 'Please select any additional add-ons.',
             description: '',
             type: 'checkbox-group',
             options: [
@@ -225,7 +225,7 @@ const sections = [
             // validationError: 'Please provide architecture details of the applciation',
             fieldName: 'details.targetApplication.architecture',
             description: '',
-            title: 'What is the architecture of the System? Please share/embed the Application and Server architecture diagram. Also share Non functional requriements docs and High/Low level design docs if available',
+            title: 'Briefly describe the architecture of the system. Please attach any architecture diagrams, design documents, and non-functional requirements in the Files section of this page.',
             type: 'textbox'
           },
           {
@@ -268,7 +268,7 @@ const sections = [
           },
           {
             icon: 'question',
-            title: 'What are the web servers used?',
+            title: 'If applicable what web servers are used?',
             description: '(For eg. Webserver can be Apache, IIS etc.)',
             fieldName: 'details.targetApplication.webBrowsers',
             type: 'textbox'
@@ -277,7 +277,7 @@ const sections = [
           },
           {
             icon: 'question',
-            title: 'What ae the application servers used?',
+            title: 'If applicable what application servers are used?',
             description: '(For eg. Application server can be JBoss or Weblogic or Websphere etc.)',
             fieldName: 'details.targetApplication.appServers',
             type: 'textbox'
@@ -286,7 +286,7 @@ const sections = [
           },
           {
             icon: 'question',
-            title: 'What is the back end of your application?',
+            title: 'What data store technology is used?',
             description: '(For eg. Back end can be Oracle, MS SQL or Sybase etc)',
             fieldName: 'details.targetApplication.backEnd',
             type: 'textbox'
@@ -302,7 +302,7 @@ const sections = [
           },
           {
             icon: 'question',
-            title: 'What is the middleware used?',
+            title: 'What middleware is used, if any?',
             description: '(For eg. Middleware can be MQSeries or TIBCO or Webmethod etc)',
             fieldName: 'details.targetApplication.middleware',
             type: 'textbox'
@@ -311,7 +311,7 @@ const sections = [
           },
           {
             icon: 'question',
-            title: 'Please specify if web services are used and their functions',
+            title: 'If your system uses web services, what architecture do they use? What functions do your web services perform?',
             description: '(For eg. SOAP/REST Webservices deployed in App server for new customer creation and maintenance)',
             fieldName: 'details.targetApplication.webservices',
             type: 'textbox'
@@ -321,7 +321,7 @@ const sections = [
           {
             id: 'targetApplication.authMode',
             icon: 'question',
-            title: 'What is the authentication mode used by the Application?',
+            title: 'What is the authentication mode used by the application?',
             description: '',
             fieldName: 'details.targetApplication.authMode',
             type: 'checkbox-group',
@@ -337,7 +337,7 @@ const sections = [
           {
             id: 'targetApplication.interfaces',
             icon: 'question',
-            title: 'What Interfaces does the application has?',
+            title: 'What interfaces does the application have?',
             description: '',
             fieldName: 'details.targetApplication.interfaces',
             type: 'checkbox-group',
@@ -370,7 +370,7 @@ const sections = [
             icon: 'question',
             fieldName: 'details.perfTestEnv.missingCompSimulators',
             description: '',
-            title: 'Are the simulators/stubs available in test enviornemnt for the components not avaiable and do they support concurrent request simulation?',
+            title: 'Are the simulators/stubs available in test environment for the components available and if so do they support concurrent request simulation?',
             type: 'textbox'
           },
           {
@@ -384,14 +384,17 @@ const sections = [
             icon: 'question',
             fieldName: 'details.perfTestEnv.testDataAvailability',
             description: '',
-            title: 'Please provide details on test data availability? A) Resident or master test data in DB e.g. Customers, products, locations etc. B) User specific data e.g. User Ids, email, credit card, order number etc. Who will support creating/importing/ masking test data',
+            title: 'Please provide details on test data availability - \
+                    A) Resident or master test data in DB e.g. Customers, products, locations etc.\
+                    B) User specific data e.g. User Ids, email, credit card, order number etc.\
+                    Who will support creating/importing/masking test data?',
             type: 'textbox'
           },
           {
             icon: 'question',
             fieldName: 'details.perfTestEnv.soa',
             description: '',
-            title: 'Please let us know if SOA based services needs to be performance tested stand alone. If yes, please provide relevant details',
+            title: 'Please let us know if SOA based services need to be performance tested in a stand alone manner. If yes, please provide relevant details',
             type: 'textbox'
           },
           {
@@ -409,34 +412,37 @@ const sections = [
             icon: 'question',
             fieldName: 'details.perfTestEnv.tools',
             description: '',
-            title: 'Are performance testing tools available with your organisation. e.g. HP Loadrunner, \
-                  Performance Center, Jmeter. If yes, is PoC conducted to validate compatibility of tools \
-                  with application under test.  Will these be tools be made available in with required \
-                  license for Perfomance testing in scope?',
+            title: 'Are performance testing tools available within your organization? \
+                    (e.g. HP Loadrunner, Performance Center, Jmeter) If yes, has a PoC \
+                    been conducted to validate the compatibility of these tools with the \
+                    application to be tested? Will these be tools be made available in with \
+                    required license for this performance test?',
             type: 'textbox'
           },
           {
             icon: 'question',
             fieldName: 'details.perfTestEnv.diagnosticTools',
             description: '',
-            title: 'Are performance Diagnostic tools available with your organisation. e.g. Dynatrace, Yourkit, \
-                 Profiler, If yes, is PoC conducted to validate compatibility of tools with application under \
-test.  Will these be tools be made available in with required license for Perfomance testing \
-in scope?',
+            title: 'Are performance diagnostic tools available within your organization? \
+            (e.g. Dynatrace, Yourkit, Profiler) If yes, has a PoC been conducted to validate \
+            compatibility ofthese tools with the applicationto be tested? Will these be tools \
+            be made available in with required license for this performance test?',
             type: 'textbox'
           },
           {
             icon: 'question',
             fieldName: 'details.perfTestEnv.monitoring',
             description: '',
-            title: 'How is application performance being monitored or planned to be monitored in production. Are same tools available in Perf Test env?',
+            title: 'How is application performance being monitored or planned to be monitored in production.\
+            Are same tools available in testing environment?',
             type: 'textbox'
           },
           {
             icon: 'question',
             fieldName: 'details.perfTestEnv.saasAllowPortsOpening',
             description: '',
-            title: 'In case of Cloud based or SaaS performance testing tools, will your organisation allow to open necessary ports in firewall to inject load on to application in test environment.',
+            title: 'In case of cloud based or SaaS performance testing tools, will your organization open necessary \
+                    ports in any firewalls required to inject load on the application in a test environment?',
             type: 'textbox'
           }
         ]
@@ -459,28 +465,28 @@ in scope?',
             icon: 'question',
             fieldName: 'details.prevDetails.time',
             description: '',
-            title: 'When was the last time performance testing carried out. On which version of application code base?',
+            title: 'When was the last time performance test carried out? On which version of application code base?',
             type: 'textbox'
           },
           {
             icon: 'question',
             fieldName: 'details.prevDetails.reports',
             description: '',
-            title: 'Please share the previous performance test reports if available',
+            title: 'Please share the previous performance test reports if available by pasting here, or attaching in the Files section.',
             type: 'textbox'
           },
           {
             icon: 'question',
             fieldName: 'details.prevDetails.changes',
             description: '',
-            title: 'What are the changes in application, architecture, infrastructure from last testing?',
+            title: 'What are the changes in application, architecture, infrastructure since the last test?',
             type: 'textbox'
           },
           {
             icon: 'question',
             fieldName: 'details.prevDetails.typesOfTests',
             description: '',
-            title: 'What different types of tests carried out and measurements captured?',
+            title: 'What different types of tests were carried out and which measurements were captured?',
             type: 'textbox'
           },
           {
@@ -494,21 +500,21 @@ in scope?',
             icon: 'question',
             fieldName: 'details.prevDetails.testScripts',
             description: '',
-            title: 'Are the performance test scenarios and automated test scripts available at project location?',
+            title: 'Are the performance test scenarios and automated test scripts previously used still available?',
             type: 'textbox'
           },
           {
             icon: 'question',
             fieldName: 'details.prevDetails.issues',
             description: '',
-            title: 'Were there any open performance issues from previous testing?',
+            title: 'Are there any open performance issues from previous tests?',
             type: 'textbox'
           },
           {
             icon: 'question',
             fieldName: 'details.prevDetails.fixedIssues',
             description: '',
-            title: 'What were the issues found and fixed during previous performance testing cycle?',
+            title: 'Please detail any issues previously identified and resolved from previous performance tests.',
             type: 'textbox'
           }
         ]
@@ -556,12 +562,12 @@ export const basicSections = [
               minLength: 'Please enter at least 160 characters'
             },
             description: 'In 160 or more characters tell us what is the app, main functions, problem area, etc..',
-            title: 'Please provide brief description of the system, application to be Performance tested',
+            title: 'Please provide brief description of the system and/or application you would like to execute Performance Testing on.',
             type: 'textbox'
           },
           {
             icon: 'question',
-            title: 'What is the load on system in terms concurrent users for Performance Testing?',
+            title: 'What is the desired load on the system in terms of concurrent users for this test??',
             description: '(Unit package includes 500 virtual users, additional load would require Top-Ups)',
             type: 'slide-radiogroup',
             options: [
@@ -576,7 +582,7 @@ export const basicSections = [
           },
           {
             icon: 'question',
-            title: 'What is the count of business processes - transactions to be included for Performance Testing?',
+            title: 'Approximately how many business processes/transactions will be included in your Performance Test?',
             description: '(Unit package covers 10 transactions, additional transactions would require Top-Ups)',
             fieldName: 'details.loadDetails.businessProcessesCount',
             type: 'slide-radiogroup',
@@ -591,7 +597,7 @@ export const basicSections = [
           },
           {
             icon: 'question',
-            title: 'What is the expected hours of execution for all different Performance Tests to be conducted?',
+            title: 'How many hours do you expect the Performance Test to be executed for?',
             description: '(Unit package covers 10 hours of execution, additional execution time would require Top-Ups)',
             fieldName: 'details.loadDetails.expectedExecutionHours',
             type: 'slide-radiogroup',

@@ -1,0 +1,40 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  background-color: $tc-white;
+  height: 100vh;
+  padding: 7 * $base-unit 4 * $base-unit;
+}
+
+.illustration {
+  margin-bottom: 10 * $base-unit;
+  text-align: center;
+
+  > svg {
+    max-width: 100%;
+  }
+}
+
+.title {
+  @include roboto-bold;
+  color: $tc-black;
+  font-size: 20px;
+  text-align: center;
+}
+
+.text {
+  @include roboto;
+  color: $tc-gray-80;
+  font-size: 15px;
+  line-height: 25px;
+  text-align: center;
+
+  > a {
+    color: $tc-dark-blue-70;
+  }
+}
+
+.back-home {
+  margin-top: 6 * $base-unit;
+  text-align: center;
+}

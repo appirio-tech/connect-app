@@ -20,7 +20,7 @@
     }
 
     // Edit post section
-    // 
+    //
 
     .dropdownContainer {
       display: block;
@@ -457,6 +457,19 @@
         text-transform: none;
       }
     }
+
+    .hide-project-notification {
+      display: block;
+      position: absolute;
+      right: -5px;
+      top: -5px;
+      height: 24px;
+      width: 24px;
+      margin: 0;
+      .icon-remove-notification {
+        cursor: pointer;
+      }
+    }
   }
 
   // .dashboard-container {
@@ -713,4 +726,3 @@
     margin-top: 45px;
   }
 }
-  

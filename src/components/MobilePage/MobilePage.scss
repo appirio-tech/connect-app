@@ -1,0 +1,17 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  body.hidden-content #wrapper-main {
+    height: 1px;
+    overflow: hidden;
+  }
+}
+
+.container {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1000;
+}

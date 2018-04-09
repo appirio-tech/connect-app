@@ -22,7 +22,12 @@ const NotificationsSection = (props) => {
         />
       }
       {props.notifications.map(notification => (
-        <NotificationItem key={notification.id} {...notification} onReadToggleClick={props.onReadToggleClick}/>
+        <NotificationItem
+          key={notification.id}
+          {...notification}
+          onReadToggleClick={props.onReadToggleClick}
+          onLinkClick={props.onLinkClick}
+        />
       ))}
       {props.onViewOlderClick && props.total > props.notifications.length && (
         props.isLoading ? (
@@ -41,10 +46,11 @@ NotificationsSection.propTypes = {
   isGlobal: PropTypes.bool,
   title: PropTypes.string.isRequired,
   onMarkAllClick: PropTypes.func,
+  onLinkClick: PropTypes.func.isRequired,
   onReadToggleClick: PropTypes.func.isRequired,
   onViewOlderClick: PropTypes.func,
   total: PropTypes.number,
-  notifications: PropTypes.array.isRequired
+  notifications: PropTypes.array.isRequired,
 }
 
 export default NotificationsSection

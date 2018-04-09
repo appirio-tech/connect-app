@@ -1,0 +1,35 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.comment {
+  background-color: $tc-gray-neutral-light;
+  border-radius: 4px;
+  padding: 2 * $base-unit 2 * $base-unit 3 * $base-unit 2 * $base-unit;
+
+  & + & {
+    margin-top: 3 * $base-unit;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date {
+  @include roboto;
+  color: $tc-gray-50;
+  font-size: 13px;
+  line-height: 40px;
+}
+
+.text {
+  @include roboto;
+  color: $tc-gray-70;
+  font-size: 15px;
+  line-height: 25px;
+  margin-top: 1 * $base-unit;
+
+  > p + p {
+    margin-top: 25px;
+  }
+}

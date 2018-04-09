@@ -7,7 +7,7 @@ import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 // import ProjectSegmentSelect from './ProjectSegmentSelect'
 import GridView from '../../../../components/Grid/GridView'
 import UserTooltip from '../../../../components/User/UserTooltip'
-import { PROJECTS_LIST_PER_PAGE, SORT_OPTIONS } from '../../../../config/constants'
+import { PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED } from '../../../../config/constants'
 import { findProduct } from '../../../../config/projectWizard'
 import TextTruncate from 'react-text-truncate'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
@@ -46,6 +46,7 @@ import IconQaOsAutomation from '../../../../assets/icons/product-qa-os-automatio
 import IconQaWebsitePrerfomance from '../../../../assets/icons/product-qa-website-performance.svg'
 import IconWebsiteWebsite from '../../../../assets/icons/product-website-website.svg'
 import IconOutlineWorkProject from '../../../../assets/icons/tech-32px-outline-work-project.svg'
+import IconQaSFDCAccelerator from '../../../../assets/icons/product-qa-sfdc-accelerator.svg'
 require('./ProjectsGridView.scss')
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
@@ -117,6 +118,8 @@ const ProjectTypeIcons = ({ type }) => {
     return <IconQaOsAutomation className="icon-qa-os-automation"/>
   case 'product-qa-website-performance':
     return <IconQaWebsitePrerfomance className="icon-qa-website-performance"/>
+  case 'product-qa-sfdc-accelerator':
+    return <IconQaSFDCAccelerator className="icon-qa-sfdc-accelerator" />
   case 'product-website-website':
     return <IconWebsiteWebsite className="icon-website-website"/>
   case 'tech-32px-outline-work-project':
@@ -186,7 +189,7 @@ const ProjectsGridView = props => {
           <div className="spacing project-container">
             <div className="project-title">
               <Link to={url} className="link-title">{item.name}</Link>
-              { code && <span className="item-ref-code txt-gray-md" onClick={ () => { applyFilters({ keyword: code })} }>{code}</span> }
+              { code && <span className="item-ref-code txt-gray-md" onClick={ () => { applyFilters({ keyword: code })} } dangerouslySetInnerHTML={{ __html: code }} />}
             </div>
             <Link to={url}>
               <TextTruncate
@@ -208,9 +211,10 @@ const ProjectsGridView = props => {
         const sortMetric = _.find(SORT_OPTIONS, o => currentSortField === o.val) || SORT_OPTIONS[0]
         const lastAction = item[sortMetric.field] === 'createdAt' ? 'createdBy' : 'updatedBy'
         const lastEditor = members[item[lastAction]]
+        const time = moment(item[sortMetric.field])
         return (
           <div className="spacing time-container">
-            <div className="txt-normal">{moment(item[sortMetric.field]).format('MMM D, h:mm a')}</div>
+            <div className="txt-normal">{time.year() === moment().year() ? time.format('MMM D, h:mm a') : time.format('MMM D YYYY, h:mm a')}</div>
             <div className="project-last-editor">
               {
                 lastEditor ? `${lastEditor.firstName} ${lastEditor.lastName}` : 'Unknown'
@@ -261,13 +265,14 @@ const ProjectsGridView = props => {
       sortable: false,
       classes: 'item-status',
       renderText: item => {
+        const canEdit = item.status !== PROJECT_STATUS_COMPLETED
         return (
           <div className="spacing">
             <EnhancedProjectStatus
               status={item.status}
               showText={false}
               withoutLabel
-              canEdit
+              canEdit={canEdit}
               unifiedHeader={false}
               onChangeStatus={onChangeStatus}
               projectId={item.id}

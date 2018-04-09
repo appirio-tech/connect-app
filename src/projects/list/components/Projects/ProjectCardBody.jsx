@@ -5,18 +5,18 @@ import { Link } from 'react-router-dom'
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
 import editableProjectStatus from '../../../../components/ProjectStatus/editableProjectStatus'
-import { PROJECT_STATUS_ACTIVE, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } from '../../../../config/constants'
+import { PROJECT_STATUS_ACTIVE, PROJECT_STATUS_COMPLETED, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER } from '../../../../config/constants'
 import './ProjectCardBody.scss'
 import _ from 'lodash'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
 function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount = 8,
-  onChangeStatus, isSuperUser, showLink }) {
+  onChangeStatus, isSuperUser, showLink, showLinkURL }) {
   if (!project) return null
 
-  const canEdit = isSuperUser || (currentMemberRole
-    && (_.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1))
+  const canEdit = project.status !== PROJECT_STATUS_COMPLETED && (isSuperUser || (currentMemberRole
+    && (_.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1)))
 
   const progress = _.get(process, 'percent', 0)
 
@@ -27,7 +27,7 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
         line={descLinesCount}
         truncateText="..."
         text={project.description}
-        textTruncateChild={showLink ? <Link className="read-more-link" to={`/projects/${project.id}/specification`}>read more</Link> : <span className="read-more-link">read more</span>}
+        textTruncateChild={showLink ? <Link className="read-more-link" to={showLinkURL || `/projects/${project.id}/specification`}>read more</Link> : <span className="read-more-link">read more</span>}
       />
       <div className="project-status">
         {(project.status !== PROJECT_STATUS_ACTIVE || progress === 0) &&
@@ -53,14 +53,16 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
 }
 
 ProjectCardBody.defaultTypes = {
-  showLink: false
+  showLink: false,
+  showLinkURL: ''
 }
 
 ProjectCardBody.propTypes = {
   project: PT.object.isRequired,
   currentMemberRole: PT.string,
   duration: PT.object.isRequired,
-  showLink: PT.bool
+  showLink: PT.bool,
+  showLinkURL: PT.string
 }
 
 export default ProjectCardBody

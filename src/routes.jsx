@@ -12,6 +12,8 @@ import TopBarContainer from './components/TopBar/TopBarContainer'
 import ProjectsToolBar from './components/TopBar/ProjectsToolBar'
 import RedirectComponent from './components/RedirectComponent'
 import CreateContainer from './projects/create/containers/CreateContainer'
+import CreateContainerMobilePlug from './projects/create/containers/CreateContainerMobilePlug'
+import MediaQuery from 'react-responsive'
 import LoadingIndicator from './components/LoadingIndicator/LoadingIndicator'
 import {ACCOUNTS_APP_LOGIN_URL, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from './config/constants'
 import { getTopic } from './api/messages'
@@ -94,6 +96,12 @@ class RedirectToProject extends React.Component {
 
 const topBarWithProjectsToolBar = <TopBarContainer toolbar={ ProjectsToolBar } />
 
+const CreateContainerResponsive = () => (
+  <MediaQuery minWidth={768}>
+    {(matches) => (matches ? <CreateContainer/> : <CreateContainerMobilePlug/>)}
+  </MediaQuery>
+)
+
 class Routes extends React.Component {
   componentWillMount() {
     redirectToConnectIfNeed()
@@ -129,8 +137,8 @@ class Routes extends React.Component {
     return (
       <Switch>
         <Route exact path="/" render={renderApp(topBarWithProjectsToolBar, <Home/>)} />
-        <Route path="/new-project/:product?/:status?" render={renderApp(null, <CreateContainer/>)} />
-        <Route path="/new-project-callback" render={renderApp(null, <CreateContainer/>)} />
+        <Route path="/new-project/:product?/:status?" render={renderApp(null, <CreateContainerResponsive/>)} />
+        <Route path="/new-project-callback" render={renderApp(null, <CreateContainerResponsive/>)} />
         <Route path="/terms" render={renderApp(topBarWithProjectsToolBar, <ConnectTerms/>)} />
         <Route path="/login" render={renderApp(topBarWithProjectsToolBar, <LoginRedirect/>)} />
         <Route path="/discussions/:feedId" component={ RedirectToProject } />

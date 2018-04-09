@@ -2,10 +2,15 @@
 
 :global {
   .main-wrapper {
-    min-height: calc(100vh - 40px); // header and footer width
+    min-height: calc(100vh - 40px); // minus footer height
     padding-top: 60px;
     transition: all 150ms ease-in-out;
     overflow: hidden;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      padding-top: 0;
+      min-height: calc(100vh - 100px); // minus header and footer height
+    }
 
     &.with-filters {
       padding-top: 120px;
@@ -19,4 +24,3 @@
   .content-area {
   }
 }
-  

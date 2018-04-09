@@ -7,6 +7,10 @@
     background-color: #262628;
     position: relative;
     display: flex;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      height: auto;
+    }
   }
 
   .section-tool-bar {
@@ -15,23 +19,23 @@
     justify-content: space-between;
     padding: 0 20px;
     width: 100%;
-  
+
     > .section {
       align-items: center;
       display: flex;
     }
-  
+
     .title {
       @include roboto-light;
       font-size: 20px;
       color: $tc-gray-10;
       text-align: center;
     }
-  
+
     > .section > .title {
       margin-left: 24px;
     }
-  
+
     .close {
       align-items: center;
       background-color: $tc-gray-50;
@@ -40,48 +44,48 @@
       height: 30px;
       justify-content: center;
       width: 30px;
-  
+
       &:hover {
         background-color: #55a5ff;
-  
+
         .icon-x-mark {
           fill: $tc-white;
           margin: -6px;
         }
       }
-  
+
         .icon-x-mark {
           fill: $tc-black;
           margin: -6px;
         }
     }
-  
+
     > .section > .menu {
       margin-right: 30px;
-  
+
       > a {
         @include roboto-medium;
         color: $tc-gray-50;
         font-size: 13px;
         line-height: 20px;
         margin-left: 40px;
-  
+
         &.active,
         &:hover {
           color: $tc-white;
         }
       }
     }
-  
+
     .logo {
       align-items: center;
       display: flex;
-  
+
       .icon-connect-logo-mono {
         height: auto;
         width: 53px;
         margin-top: 13px;
-  
+
         path {
           fill: $tc-gray-10;
         }
@@ -89,4 +93,3 @@
     }
   }
 }
-  

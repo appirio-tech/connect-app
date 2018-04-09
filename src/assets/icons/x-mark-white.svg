@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48 (47235) - http://www.bohemiancoding.com/sketch -->
+    <title>X</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="X" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-7.000000, -7.000000)">
+        <g transform="translate(14.935029, 14.935029) rotate(-315.000000) translate(-14.935029, -14.935029) translate(4.935029, 4.935029)" fill="#FAFAFB">
+            <rect id="Rectangle-6" x="0" y="8.75" width="20" height="2.5"></rect>
+            <rect id="Rectangle-6-Copy" transform="translate(10.000000, 10.000000) rotate(-90.000000) translate(-10.000000, -10.000000) " x="0" y="8.75" width="20" height="2.5"></rect>
+        </g>
+    </g>
+</svg>
