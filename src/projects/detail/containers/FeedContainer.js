@@ -24,6 +24,10 @@ import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import { toggleNotificationRead, toggleBundledNotificationRead } from '../../../routes/notifications/actions'
 import { filterReadNotifications, filterNotificationsByProjectId, filterTopicAndPostChangedNotifications, filterProjectNotifications } from '../../../routes/notifications/helpers/notifications'
 import { REFRESH_UNREAD_UPDATE_INTERVAL } from '../../../config/constants'
+import MediaQuery from 'react-responsive'
+import ChatButton from '../../../components/ChatButton/ChatButton'
+import NewPostMobile from '../../../components/Feed/NewPostMobile'
+import FeedMobile from '../../../components/Feed/FeedMobile'
 import './Specification.scss'
 import Refresh from '../../../assets/icons/icon-refresh.svg'
 
@@ -58,7 +62,15 @@ class FeedView extends React.Component {
     this.onRefreshFeeds = this.onRefreshFeeds.bind(this)
     this.onScroll = this.onScroll.bind(this)
     this.onNotificationRead = this.onNotificationRead.bind(this)
-    this.state = { feeds : [], showAll: [], newPost: {}, unreadUpdate: [], scrolled: false }
+    this.toggleNewPostMobile = this.toggleNewPostMobile.bind(this)
+    this.state = {
+      feeds : [],
+      showAll: [],
+      newPost: {},
+      unreadUpdate: [],
+      scrolled: false,
+      isNewPostMobileOpen: false
+    }
   }
 
   componentDidMount() {
@@ -102,6 +114,10 @@ class FeedView extends React.Component {
     if (this.isChanged()) {
       return e.returnValue = 'You haven\'t posted your message. If you leave this page, your message will not be saved. Are you sure you want to leave?'
     }
+  }
+
+  toggleNewPostMobile() {
+    this.setState({ isNewPostMobileOpen: !this.state.isNewPostMobileOpen })
   }
 
   isChanged() {
@@ -386,7 +402,7 @@ class FeedView extends React.Component {
 
   render () {
     const {currentUser, project, currentMemberRole, isCreatingFeed, error, allMembers} = this.props
-    const { feeds, unreadUpdate, scrolled } = this.state
+    const { feeds, unreadUpdate, scrolled, isNewPostMobileOpen } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
     const onLeaveMessage = this.onLeave() || ''
     const notReadNotifications = filterReadNotifications(this.props.notifications.notifications)
@@ -399,34 +415,63 @@ class FeedView extends React.Component {
       const anchorId = 'feed-' + item.id
       return (
         <div className="feed-action-card" key={`${item.id}-${i}`}>
-          <ScrollableFeed
-            {...Object.assign({}, item, {id: `${item.id}`})}
-            name={anchorId}
-            allowComments={item.allowComments && !!currentMemberRole}
-            currentUser={currentUser}
-            onNewCommentChange={this.onNewCommentChange.bind(this, item.id)}
-            onAddNewComment={this.onAddNewComment.bind(this, item.id)}
-            onLoadMoreComments={this.onShowAllComments.bind(this, item.id)}
-            onEditMessage={this.onEditMessage.bind(this, item.id)}
-            onSaveMessageChange={this.onSaveMessageChange.bind(this, item.id)}
-            onSaveMessage={this.onSaveMessage.bind(this, item.id)}
-            onDeleteMessage={this.onDeleteMessage.bind(this, item.id)}
-            onEditTopic={this.onEditTopic.bind(this, item.id)}
-            onTopicChange={this.onTopicChange.bind(this, item.id)}
-            onSaveTopic={this.onSaveTopic.bind(this, item.id)}
-            onDeleteTopic={this.onDeleteTopic.bind(this, item.id)}
-            allMembers={allMembers}
-          >
-            {item.sendForReview && <div className="panel-buttons">
-              <button className="tc-btn tc-btn-primary tc-btn-md">Send for review</button>
-            </div>}
-          </ScrollableFeed>
+          <MediaQuery minWidth={768}>
+            {(matches) => (matches ?
+              (
+                <ScrollableFeed
+                  {...Object.assign({}, item, {id: `${item.id}`})}
+                  name={anchorId}
+                  allowComments={item.allowComments && !!currentMemberRole}
+                  currentUser={currentUser}
+                  onNewCommentChange={this.onNewCommentChange.bind(this, item.id)}
+                  onAddNewComment={this.onAddNewComment.bind(this, item.id)}
+                  onLoadMoreComments={this.onShowAllComments.bind(this, item.id)}
+                  onEditMessage={this.onEditMessage.bind(this, item.id)}
+                  onSaveMessageChange={this.onSaveMessageChange.bind(this, item.id)}
+                  onSaveMessage={this.onSaveMessage.bind(this, item.id)}
+                  onDeleteMessage={this.onDeleteMessage.bind(this, item.id)}
+                  onEditTopic={this.onEditTopic.bind(this, item.id)}
+                  onTopicChange={this.onTopicChange.bind(this, item.id)}
+                  onSaveTopic={this.onSaveTopic.bind(this, item.id)}
+                  onDeleteTopic={this.onDeleteTopic.bind(this, item.id)}
+                  allMembers={allMembers}
+                >
+                  {item.sendForReview && <div className="panel-buttons">
+                    <button className="tc-btn tc-btn-primary tc-btn-md">Send for review</button>
+                  </div>}
+                </ScrollableFeed>
+              ) : (
+                <FeedMobile
+                  {...Object.assign({}, item, {id: `${item.id}`})}
+                  name={anchorId}
+                  allowComments={item.allowComments && !!currentMemberRole}
+                  currentUser={currentUser}
+                  onNewCommentChange={this.onNewCommentChange.bind(this, item.id)}
+                  onAddNewComment={this.onAddNewComment.bind(this, item.id)}
+                  onLoadMoreComments={this.onShowAllComments.bind(this, item.id)}
+                  onEditMessage={this.onEditMessage.bind(this, item.id)}
+                  onSaveMessageChange={this.onSaveMessageChange.bind(this, item.id)}
+                  onSaveMessage={this.onSaveMessage.bind(this, item.id)}
+                  onDeleteMessage={this.onDeleteMessage.bind(this, item.id)}
+                  onEditTopic={this.onEditTopic.bind(this, item.id)}
+                  onTopicChange={this.onTopicChange.bind(this, item.id)}
+                  onSaveTopic={this.onSaveTopic.bind(this, item.id)}
+                  onDeleteTopic={this.onDeleteTopic.bind(this, item.id)}
+                  allMembers={allMembers}
+                >
+                  {item.sendForReview && <div className="panel-buttons">
+                    <button className="tc-btn tc-btn-primary tc-btn-md">Send for review</button>
+                  </div>}
+                </FeedMobile>
+              )
+            )}
+          </MediaQuery>
           {item.spec && <ProjectSpecification project={project} currentMemberRole={currentMemberRole} />  }
         </div>
       )
     }
     return (
-      <div style={{position: 'relative'}}>
+      <div>
         { unreadUpdate.length > 0 && !this.isChanged() && scrolled &&
           <Sticky top={80} innerZ={999}>
             <div className="prompt">
@@ -448,18 +493,40 @@ class FeedView extends React.Component {
               />
             </div>
           }
-          <NewPost
-            currentUser={currentUser}
+          <MediaQuery minWidth={768}>
+            <NewPost
+              currentUser={currentUser}
+              allMembers={allMembers}
+              onPost={this.onNewPost}
+              isCreating={isCreatingFeed}
+              hasError={error}
+              heading="NEW STATUS POST"
+              onNewPostChange={this.onNewPostChange}
+              titlePlaceholder="Share the latest project updates with the team"
+            />
+          </MediaQuery>
+          { feeds.map(renderFeed) }
+        </div>
+        <MediaQuery maxWidth={768 - 1}>
+          <ChatButton onClick={this.toggleNewPostMobile} />
+        </MediaQuery>
+        { isNewPostMobileOpen &&
+          <NewPostMobile
+            statusTitle="NEW STATUS"
+            commentTitle="WRITE COMMENT"
+            statusPlaceholder="Share the latest project updates with the team"
+            commentPlaceholder="Write your comment about the status here"
+            submitText="Post Comment"
+            nextStepText="Add comment"
+            onClose={this.toggleNewPostMobile}
             allMembers={allMembers}
+            currentUser={currentUser}
             onPost={this.onNewPost}
             isCreating={isCreatingFeed}
             hasError={error}
-            heading="NEW STATUS POST"
             onNewPostChange={this.onNewPostChange}
-            titlePlaceholder="Share the latest project updates with the team"
           />
-          { feeds.map(renderFeed) }
-        </div>
+        }
       </div>
     )
   }

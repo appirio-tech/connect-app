@@ -42,5 +42,5 @@ module.exports = {
   IBM_COGNITIVE_PROGRAM_ID  : 3449,
   HEAP_ANALYTICS_APP_ID     : '4153837120',
 
-  TC_NOTIFICATION_URL: 'http://api.topcoder-dev.com/'
+  TC_NOTIFICATION_URL: 'https://api.topcoder-dev.com/v5/notifications'
 }

@@ -11,6 +11,10 @@
     margin-left: 20px;
     margin-right: 20px;
 
+    @media screen and (max-width: $screen-md - 1px) {
+      display: none;
+    }
+
     .left-wrapper {
       flex: 1 1 auto;
       display: flex;
@@ -128,4 +132,3 @@
     }
   }
 }
-  

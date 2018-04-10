@@ -1,60 +1,60 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-:global {
-  .user-block {
-      position: relative;
-      cursor: default;
+.container {
+  align-items: center;
+  display: flex;
+}
 
-      .photo,
-      .txt-box {
-          height: 30px;
-          display: inline-block;
-          vertical-align: middle;
-      }
-  
-      .photo{
-          padding-right: 5px;
-          img {
-              width: 30px;
-              height: 30px;
-              border-radius: 100%;
-          }
-      }
-  
-      .txt-box {
-          .link-black {
-              @include roboto-bold;
-  
-              font-size: $tc-label-md;
-              color: $tc-gray-80;
-              line-height: $base-unit * 3;
-              &:hover {
-                  text-decoration: underline;
-              }
-          }
-  
-          .txt-gray {
-              font-size: $tc-label-sm;
-              color: $tc-gray-50;
-              line-height: $base-unit * 3;
-              display: block;
-          }
-      }
-  
-      &.single-block .txt-box a {
-          line-height: $base-unit * 6;
-          display: inline-block;
-      }
-  
-      .item-mask-layer {
-          background: rgba($tc-white,0.7);
-          width: 100%;
-          height: 100%;
-          position: absolute;
-          top: 0;
-          left: 0;
-          z-index: 99;
-      }
+.photo {
+  display: block;
+}
+
+.photo-size-35 :global(.Avatar) {
+  height: 35px;
+  width: 35px;
+}
+
+.photo-size-40 :global(.Avatar) {
+  height: 40px;
+  width: 40px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: normal;
+  margin-left: $base-unit * 3;
+  text-align-last: left;
+}
+
+.name {
+  @include roboto-medium;
+  font-size: 15px;
+}
+
+.handle {
+  @include roboto;
+  display: block;
+  font-size: 13px;
+}
+
+.container.dark {
+  .name {
+    color: $tc-gray-neutral-light;
+  }
+
+  .handle {
+    color: rgba($tc-gray-neutral-light, 0.7);
   }
 }
-  
+
+.container.light {
+  .name {
+    color: $tc-gray-80;
+  }
+
+  .handle {
+    color: $tc-gray-50;
+  }
+}

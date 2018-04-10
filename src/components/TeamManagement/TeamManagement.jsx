@@ -11,6 +11,7 @@ import OwnerModal from './OwnerModal'
 import AddTeamMember from './AddTeamMember'
 import NewMemberConfirmModal from './NewMemberConfirmModal'
 import Join from './Join'
+import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import { PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 const userShape = PropTypes.shape({
   userId: PropTypes.number.isRequired,
@@ -61,64 +62,71 @@ const TeamManagement = (props) => {
   }
   return (
     <div className="team-management">
-      <Panel className={cn({'modal-active': modalActive})}>
-        {(currentMember || currentUser.isAdmin) && <Panel.AddBtn onClick={() => onToggleAddTeamMember(true)}>Add Team Member</Panel.AddBtn>}
+      <MobileExpandable title={`PROJECT TEAM (${members.length})`}>
+        <Panel className={cn({'modal-active': modalActive})}>
+          {(currentMember || currentUser.isAdmin) && <Panel.AddBtn onClick={() => onToggleAddTeamMember(true)}>Add Team Member</Panel.AddBtn>}
 
-        {modalActive && <div className="modal-overlay" />}
-        <Panel.Title>
-          Project Team ({members.length})
-        </Panel.Title>
+          {modalActive && <div className="modal-overlay" />}
+          <Panel.Title>
+            Project Team ({members.length})
+          </Panel.Title>
 
-        {sortedMembers.map((member) => {
-          const _onConfirmDelete = () => {
-            onMemberDeleteConfirm(member)
-            onMemberDelete(null)
-          }
+          {sortedMembers.map((member) => {
+            const _onConfirmDelete = () => {
+              onMemberDeleteConfirm(member)
+              onMemberDelete(null)
+            }
 
-          const _onConfirmOwnerChange = () => {
-            onChangeOwnerConfirm(member)
-            onChangeOwner(null)
-          }
-          const _onMemberDeleteCancel = () => onMemberDelete(null)
-          const _onChangeOwnerCancel = () => onChangeOwner(null)
-          if (deletingMember && deletingMember.userId === member.userId) {
+            const _onConfirmOwnerChange = () => {
+              onChangeOwnerConfirm(member)
+              onChangeOwner(null)
+            }
+            const _onMemberDeleteCancel = () => onMemberDelete(null)
+            const _onChangeOwnerCancel = () => onChangeOwner(null)
+            if (deletingMember && deletingMember.userId === member.userId) {
+              return (
+                <DeleteModal
+                  {...member}
+                  isLeave={currentMember === member}
+                  key={member.userId}
+                  onCancel={_onMemberDeleteCancel}
+                  onConfirm={_onConfirmDelete}
+                />
+              )
+            }
+            if (newOwner && newOwner.userId === member.userId) {
+              return (
+                <OwnerModal
+                  key="ownerModal"
+                  member={member}
+                  onCancel={_onChangeOwnerCancel}
+                  onConfirm={_onConfirmOwnerChange}
+                />
+              )
+            }
             return (
-              <DeleteModal
-                {...member}
-                isLeave={currentMember === member}
+              <MemberRow
                 key={member.userId}
-                onCancel={_onMemberDeleteCancel}
-                onConfirm={_onConfirmDelete}
-              />
-            )
-          }
-          if (newOwner && newOwner.userId === member.userId) {
-            return (
-              <OwnerModal
-                key="ownerModal"
+                onMemberDelete={onMemberDelete}
+                onChangeOwner={onChangeOwner}
+                currentMember={currentMember}
                 member={member}
-                onCancel={_onChangeOwnerCancel}
-                onConfirm={_onConfirmOwnerChange}
+                currentUser={currentUser}
               />
             )
-          }
-          return (
-            <MemberRow
-              key={member.userId}
-              onMemberDelete={onMemberDelete}
-              onChangeOwner={onChangeOwner}
-              currentMember={currentMember}
-              member={member}
-              currentUser={currentUser}
-            />
-          )
-        })}
+          })}
 
-        {canJoin && <Join {...props} isCopilot={currentUser.isCopilot} owner={owner} />}
-        {(currentMember || currentUser.isAdmin) && <AddTeamMember {...props} owner={owner} />}
+          {canJoin && <Join {...props} isCopilot={currentUser.isCopilot} owner={owner} />}
+          {(currentMember || currentUser.isAdmin) && <AddTeamMember {...props} owner={owner} />}
 
-        { showNewMemberConfirmation && <NewMemberConfirmModal onConfirm={ _onAddNewMember } onCancel={ _onAddMemberCancel } />}
-      </Panel>
+          { showNewMemberConfirmation && <NewMemberConfirmModal onConfirm={ _onAddNewMember } onCancel={ _onAddMemberCancel } />}
+          {(currentMember || currentUser.isAdmin) && (
+            <div className="add-member-mobile">
+              <button className="tc-btn tc-btn-secondary tc-btn-md" onClick={() => onToggleAddTeamMember(true)}>Add Team Member</button>
+            </div>
+          )}
+        </Panel>
+      </MobileExpandable>
     </div>
   )
 }

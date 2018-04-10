@@ -1,13 +1,23 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
+  .login-wrapper {
+    align-items: center;
+    display: flex;
+    margin-right: 4 * $base-unit;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      margin-right: 3 * $base-unit;
+    }
+  }
+
   .welcome-info {
     .UserDropdownMenu {
       padding: 0;
       display: flex;
       align-content: center;
       text-align: left;
-  
+
       .Dropdown {
         min-width: 160px;
         right: -25px;
@@ -15,7 +25,7 @@
       }
     }
   }
-  
+
   .tc-header {
     height: 60px;
     // background: $tc-gray-neutral-light;
@@ -27,52 +37,87 @@
     top: 0;
     left: 0;
     right: 0;
-  
+    @media screen and (max-width: $screen-md - 1px) {
+      height: auto;
+      line-height: 50px;
+      position: relative;
+    }
+
     .logo-wrapper {
       height: 60px;
       flex-shrink: 0;
       display: flex;
-  
+      @media screen and (max-width: $screen-md - 1px) {
+        height: 50px;
+      }
+
       .logo {
-        display: inline-block;
+        display: block;
         position: relative;
         margin-top: 12px;
         // width: 60px;
         // height: 36px;
-  
+        @media screen and (max-width: $screen-md - 1px) {
+          height: 23px;
+          margin-top: 15px;
+          overflow: hidden;
+        }
+
         .icon-connect-logo-mono {
           height: auto;
           width: 53px;
-  
+          @media screen and (max-width: $screen-md - 1px) {
+            /* adjust so visible logo starts from the beginning of .logo  */
+            margin-left: -4px;
+            margin-top: -1px;
+            /* real visible logo is 53px when svg has width 60px */
+            width: 60px;
+
+            /* hide "connect" text under the logo */
+            path:last-child {
+              display: none;
+            }
+          }
+
           path {
             fill: $tc-gray-10;
           }
         }
       }
-  
+
       .MenuBar {
         margin-left: 25px;
-  
+
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
+
         li {
           white-space: nowrap;
         }
       }
     }
-  
+
     .sb-avatar {
       display: block !important;
     }
-  
+
     &.tc-header__connect {
       padding: 0;
       min-height: 60px;
       height: auto;
-  
+      @media screen and (max-width: $screen-md - 1px) {
+        min-height: 50px;
+      }
+
       .top-bar {
         height: 60px;
         background-color: $tc-black;
         position: relative;
-  
+        @media screen and (max-width: $screen-md - 1px) {
+          height: auto;
+        }
+
         .welcome-info {
           height: 60px;
           font-size: 13px;
@@ -80,6 +125,9 @@
           display: flex;
           justify-content: space-between;
           @include roboto-medium;
+          @media screen and (max-width: $screen-md - 1px) {
+            display: none;
+          }
 
           .dropdown-arrow {
             min-width: 10px;
@@ -91,13 +139,13 @@
             width: 116px;
             text-align: center;
           }
-  
+
           .avatar-info {
             position: relative;
             margin-left: 20px;
             display: flex;
             align-items: center;
-  
+
             .avatar {
               width: 30px;
               height: 30px;
@@ -112,19 +160,19 @@
               position: absolute;
               left: 0;
               top: 15px;
-  
+
               img {
                 width: 30px;
                 height: 30px;
                 border-radius: 15px;
               }
             }
-  
+
             .avatar-link {
               display: inline-block;
               padding-right: 16px;
               position: relative;
-  
+
               &:after {
                 display: block;
                 content: '';
@@ -139,7 +187,7 @@
               }
             }
           }
-  
+
           .tc-btn-primary {
             margin-left: 7px;
             color: $tc-white;
@@ -148,19 +196,19 @@
       }
     }
   }
-  
+
   @media all and (max-width: 1023px) {
     .tc-header {
       &.tc-header__connect {
         .top-bar .search-bar {
           width: 383px;
           margin-left: 110px;
-  
+
           .search-widget {
             width: 296px;
           }
         }
-  
+
         .top-bar .welcome-info .avatar-info .avatar-link {
           text-indent: -9999px;
           width: 10px;
@@ -170,4 +218,3 @@
     }
   }
 }
-  
