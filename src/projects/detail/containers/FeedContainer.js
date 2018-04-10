@@ -513,11 +513,11 @@ class FeedView extends React.Component {
         { isNewPostMobileOpen &&
           <NewPostMobile
             statusTitle="NEW STATUS"
-            commentTitle="WRITE COMMENT"
+            commentTitle="WRITE POST"
             statusPlaceholder="Share the latest project updates with the team"
-            commentPlaceholder="Write your comment about the status here"
-            submitText="Post Comment"
-            nextStepText="Add comment"
+            commentPlaceholder="Write your post about the status here"
+            submitText="Post"
+            nextStepText="Add post"
             onClose={this.toggleNewPostMobile}
             allMembers={allMembers}
             currentUser={currentUser}
