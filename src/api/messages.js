@@ -15,7 +15,7 @@ export function getTopics(criteria) {
     params.filter = filterStr.join('&')
   }
 
-  return axios.get(`${apiBaseUrl}/topics/`, { params })
+  return axios.get(`${apiBaseUrl}/topics/list`, { params })
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
@@ -25,7 +25,7 @@ export function getTopics(criteria) {
 }
 
 export function getTopic(topicId) {
-  return axios.get(`${apiBaseUrl}/topics/${topicId}`)
+  return axios.get(`${apiBaseUrl}/topics/${topicId}/read`)
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
@@ -37,7 +37,7 @@ export function getTopic(topicId) {
 
 export function getTopicPosts(topicId, postIds) {
   const params = { postIds : postIds.join(',') }
-  return axios.get(`${apiBaseUrl}/topics/${topicId}/posts`, { params })
+  return axios.get(`${apiBaseUrl}/topics/${topicId}/posts/list`, { params })
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
@@ -48,7 +48,7 @@ export function getTopicPosts(topicId, postIds) {
 }
 
 export function createTopic(topicProps) {
-  return axios.post(`${apiBaseUrl}/topics/`, topicProps, { timeout })
+  return axios.post(`${apiBaseUrl}/topics/create`, topicProps, { timeout })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})
     })
@@ -62,7 +62,7 @@ export function saveTopic(topicId, topicProps) {
 }
 
 export function deleteTopic(topicId) {
-  return axios.delete(`${apiBaseUrl}/topics/${topicId}`, null, { timeout } )
+  return axios.delete(`${apiBaseUrl}/topics/${topicId}/remove`, null, { timeout } )
     .then( resp => {
       return {
         result : _.get(resp.data, 'result.content', {})
@@ -71,7 +71,7 @@ export function deleteTopic(topicId) {
 }
 
 export function addTopicPost(topicId, post) {
-  return axios.post(`${apiBaseUrl}/topics/${topicId}/posts`, { post: post.content }, { timeout } )
+  return axios.post(`${apiBaseUrl}/topics/${topicId}/posts/create`, { post: post.content }, { timeout } )
     .then( resp => {
       return {
         topicId,
@@ -91,7 +91,7 @@ export function saveTopicPost(topicId, post) {
 }
 
 export function getTopicPost(topicId, postId) {
-  return axios.get(`${apiBaseUrl}/topics/${topicId}/posts/${postId}`, null, { timeout } )
+  return axios.get(`${apiBaseUrl}/topics/${topicId}/posts/${postId}/read`, null, { timeout } )
     .then( resp => {
       return {
         topicId,
@@ -101,7 +101,7 @@ export function getTopicPost(topicId, postId) {
 }
 
 export function deleteTopicPost(topicId, postId) {
-  return axios.delete(`${apiBaseUrl}/topics/${topicId}/posts/${postId}`, null, { timeout } )
+  return axios.delete(`${apiBaseUrl}/topics/${topicId}/posts/${postId}/remove`, null, { timeout } )
     .then( resp => {
       return {
         result : _.get(resp.data, 'result.content', {})
