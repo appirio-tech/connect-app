@@ -48,6 +48,15 @@ jobs:
           at: ./workspace
       - run: ./deploy.sh PROD
 
+  deployDiscourseFree:
+    docker:
+      - image: cibuilds/aws
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./workspace
+      - run: ./deploy.sh DISCOURSE
+
 workflows:
   version: 2
   build:
@@ -71,4 +80,10 @@ workflows:
           filters:
             branches:
               only: master
+      - deployDiscourseFree:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master-discourse-free
             
