@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
-import { CONNECT_MESSAGE_API_URL, DOMAIN } from '../config/constants'
+import { CONNECT_MESSAGE_API_URL } from '../config/constants'
 
 const timeout = 1.5 * 60 * 1000
 const apiBaseUrl = CONNECT_MESSAGE_API_URL
