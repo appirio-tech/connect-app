@@ -11,12 +11,12 @@ import CommentMobile from '../ActionCard/CommentMobile'
 
 const getCommentCount = (totalComments) => {
   if (!totalComments) {
-    return 'No comments yet'
+    return 'No posts yet'
   }
   if (totalComments === 1) {
-    return '1 comment'
+    return '1 post'
   }
-  return `${totalComments} comments`
+  return `${totalComments} posts`
 }
 
 class FeedComments extends React.Component {
@@ -65,7 +65,7 @@ class FeedComments extends React.Component {
               </div>
               {hasMoreComments && <div className={cn('comment-collapse', {'loading-comments': isLoadingComments})}>
                 <a href="javascript:" onClick={ handleLoadMoreClick } className="comment-collapse-button">
-                  {isLoadingComments ? 'Loading...' : 'View older comments'}
+                  {isLoadingComments ? 'Loading...' : 'View older posts'}
                 </a>
               </div>}
             </div>
@@ -95,7 +95,7 @@ class FeedComments extends React.Component {
               ))}
               {allowComments &&
                 <AddComment
-                  placeholder="Write a comment"
+                  placeholder="Write a post"
                   onAdd={onAddNewComment}
                   onChange={onNewCommentChange}
                   avatarUrl={avatarUrl}

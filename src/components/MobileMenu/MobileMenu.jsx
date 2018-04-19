@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { NavLink } from 'react-router-dom'
 import UserWithName from '../User/UserWithName'
+import MobilePage from '../MobilePage/MobilePage'
 import cn from 'classnames'
 import XMartIcon from '../../assets/icons/x-mark-white.svg'
 import style from './MobileMenu.scss'
@@ -38,20 +39,22 @@ const MobileMenu = ({ user, onClose, menu }) => {
   }
 
   return (
-    <div styleName="container">
-      <div styleName="header">
-        <UserWithName {..._.pick(user, 'handle', 'firstName', 'lastName', 'photoURL')} photoSize={40} theme="dark" />
-        <div styleName="close" onClick={onClose}><XMartIcon /></div>
+    <MobilePage>
+      <div styleName="container">
+        <div styleName="header">
+          <UserWithName {..._.pick(user, 'handle', 'firstName', 'lastName', 'photoURL')} photoSize={40} theme="dark" isLink />
+          <div styleName="close" onClick={onClose}><XMartIcon /></div>
+        </div>
+        <div styleName="body">
+          {menu.map((submenu, submenuIndex) => (
+            <ul styleName={cn('menu', submenu.style)} key={submenuIndex}>
+              {submenu.items.map((item, itemIndex) => <li key={itemIndex}>{renderLink(item)}</li>)}
+            </ul>
+          ))}
+        </div>
+        <div styleName="footer">Topcoder &copy; 2018</div>
       </div>
-      <div styleName="body">
-        {menu.map((submenu, submenuIndex) => (
-          <ul styleName={cn('menu', submenu.style)} key={submenuIndex}>
-            {submenu.items.map((item, itemIndex) => <li key={itemIndex}>{renderLink(item)}</li>)}
-          </ul>
-        ))}
-      </div>
-      <div styleName="footer">Topcoder &copy; 2018</div>
-    </div>
+    </MobilePage>
   )
 }
 

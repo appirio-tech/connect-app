@@ -4,20 +4,27 @@ import { DOMAIN } from '../../config/constants'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import './UserWithName.scss'
 
-const UserWithName = ({ handle, firstName, lastName, photoURL, photoSize, theme }) => {
-  const url = `//www.${DOMAIN}/members/${handle}/`
+const UserWithName = ({ handle, firstName, lastName, photoURL, photoSize, theme, isLink }) => {
+  const url = handle ? `//www.${DOMAIN}/members/${handle}/` : null
+  const avatar = (
+    <Avatar
+      avatarUrl={photoURL}
+      userName={firstName + ' ' + lastName}
+      size={photoSize}
+    />
+  )
 
   return (
     <div styleName={`container ${theme}`}>
-      <a styleName={`photo photo-size-${photoSize}`} href={url} target="_blank" rel="noopener noreferrer">
-        <Avatar
-          avatarUrl={photoURL}
-          userName={firstName + ' ' + lastName}
-          size={photoSize}
-        />
-      </a>
+      {url && isLink ?
+        <a styleName={`photo photo-size-${photoSize}`} href={url} target="_blank" rel="noopener noreferrer">{avatar}</a> :
+        <span styleName={`photo photo-size-${photoSize}`}>{avatar}</span>
+      }
       <span styleName="info">
-        <a styleName="name" href={url} target="_blank" rel="noopener noreferrer">{firstName} {lastName}</a>
+        {url && isLink ?
+          <a styleName="name" href={url} target="_blank" rel="noopener noreferrer">{firstName} {lastName}</a> :
+          <span styleName="name">{firstName} {lastName}</span>
+        }
         {handle && <span styleName="handle">{handle}</span>}
       </span>
     </div>
@@ -25,6 +32,8 @@ const UserWithName = ({ handle, firstName, lastName, photoURL, photoSize, theme 
 }
 
 UserWithName.defaultProps = {
+  handle: null,
+  isLink: false,
   photoSize: 35,
   theme: 'light'
 }
@@ -32,6 +41,7 @@ UserWithName.defaultProps = {
 UserWithName.propTypes = {
   handle: PropTypes.string,
   firstName: PropTypes.string.isRequired,
+  isLink: PropTypes.bool,
   lastName: PropTypes.string.isRequired,
   photoURL: PropTypes.string,
   photoSize: PropTypes.oneOf([35, 40]),

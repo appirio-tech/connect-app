@@ -1,14 +1,17 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-.container {
-  margin-top: -50px;
-  background-color: #000;
-  color: #fff;
-  position: relative;
-
+.mobile-page {
   @media screen and (min-width: $screen-md) {
     display: none;
   }
+}
+
+.container {
+  background-color: $tc-black;
+  color: #fff;
+  min-height: 100vh;
+  padding-bottom: 50px;
+  position: relative;
 }
 
 .header {
@@ -87,12 +90,15 @@
   }
 }
 
-
-
 .footer {
   @include roboto;
   background-color: $tc-black;
+  bottom: 0;
   color: $tc-gray-50;
   font-size: 12px;
+  height: 50px;
+  left: 0;
+  position: absolute;
   text-align: center;
+  width: 100%;
 }

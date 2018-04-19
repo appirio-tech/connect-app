@@ -19,7 +19,7 @@
     }
 
     &.NewProjectCard {
-      background-color: $tc-gray-neutral-dark;
+      background-color: $tc-gray-neutral-light;
       border: 1px dashed $tc-gray-30;
 
       &:hover {
@@ -30,6 +30,11 @@
         }
       }
 
+      .card-header,
+      .card-footer {
+        margin-bottom: 2 * $base-unit;
+      }
+
       .card-body {
         display: flex;
         justify-content: center;
@@ -37,7 +42,6 @@
 
         .new-project-button {
           @include tc-label-md;
-          text-transform: uppercase;
           color: $tc-dark-blue;
           display: flex;
           justify-content: center;

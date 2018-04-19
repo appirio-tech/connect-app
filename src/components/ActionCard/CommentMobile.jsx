@@ -18,7 +18,7 @@ const CommentMobile = ({ messageId, author, date, children }) => {
   return (
     <div styleName="comment">
       <div styleName="header">
-        <UserWithName {..._.pick(author, 'firstName', 'lastName', 'photoUR')} size="40" />
+        <UserWithName {..._.pick(author, 'firstName', 'lastName', 'photoURL')} size="40" />
         <Link styleName="date" to={messageLink}>{moment(date).fromNow()}</Link>
       </div>
       <div styleName="text">{children}</div>
