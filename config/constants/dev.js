@@ -45,5 +45,5 @@ module.exports = {
 
   TC_NOTIFICATION_URL: 'https://api.topcoder-dev.com/v5/notifications',
   CONNECT_MESSAGE_API_URL: 'https://api.topcoder-dev.com/v5',
-  TC_SYSTEM_USERID: DEV_TC_SYSTEM_USERID
+  TC_SYSTEM_USERID: process.env.DEV_TC_SYSTEM_USERID
 }
