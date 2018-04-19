@@ -108,7 +108,7 @@ export default class FileListItem extends React.Component {
                 <p className="date">{moment(updatedAt || createdAt).format('MMM DD, YYYY')}</p>
               </div>
               <div className="tooltip-body">
-                <UserWithName {...(updatedByUser || createdByUser)} />
+                <UserWithName {...(updatedByUser || createdByUser)} isLink />
               </div>
             </Tooltip>
           </div>

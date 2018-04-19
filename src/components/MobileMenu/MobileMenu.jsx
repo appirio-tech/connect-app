@@ -42,7 +42,7 @@ const MobileMenu = ({ user, onClose, menu }) => {
     <MobilePage>
       <div styleName="container">
         <div styleName="header">
-          <UserWithName {..._.pick(user, 'handle', 'firstName', 'lastName', 'photoURL')} photoSize={40} theme="dark" />
+          <UserWithName {..._.pick(user, 'handle', 'firstName', 'lastName', 'photoURL')} photoSize={40} theme="dark" isLink />
           <div styleName="close" onClick={onClose}><XMartIcon /></div>
         </div>
         <div styleName="body">
