@@ -141,9 +141,8 @@
         margin-top: 10px;
 
         @media screen and (max-width: $screen-md - 1px) {
-          background-color: #fff;
           margin-top: 0;
-          padding-top: 4 * $base-unit;
+          padding-top: $base-unit;
         }
       }
 
