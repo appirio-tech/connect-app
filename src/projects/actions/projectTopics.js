@@ -14,7 +14,8 @@ import {
   DELETE_PROJECT_FEED_COMMENT,
   LOAD_PROJECT_FEEDS_MEMBERS,
   DISCOURSE_BOT_USERID,
-  CODER_BOT_USERID
+  CODER_BOT_USERID,
+  TC_SYSTEM_USERID
 } from '../../config/constants'
 import { loadMembers } from '../../actions/members'
 import { EventTypes } from 'redux-segment'
@@ -55,7 +56,9 @@ const getTopicsWithComments = (projectId, tag) => {
     .then(({topics, totalCount}) => {
       const additionalPosts = []
       //remove coderBot posts
-      const rTopics = _.remove(topics, i => [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(i.userId) > -1)
+      const rTopics = _.remove(topics, i =>
+        [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(i.userId) > -1
+      )
       totalCount -= rTopics.length
       // if a topic has more than 20 posts then to display the latest posts,
       // we'll have to first retrieve them from the server
@@ -95,7 +98,7 @@ const getProjectTopicsWithMember = (dispatch, projectId, tag) => {
           userIds = _.union(userIds, _.map(topic.posts, 'userId'))
         })
         // this is to remove any nulls from the list (dev had some bad data)
-        _.remove(userIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(i) > -1)
+        _.remove(userIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(i) > -1)
         // return if there are no userIds to retrieve, empty result set
         if (!userIds.length)
           resolve(value)

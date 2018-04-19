@@ -44,5 +44,6 @@ module.exports = {
   HEAP_ANALYTICS_APP_ID     : '638908330',
 
   TC_NOTIFICATION_URL: 'https://api.topcoder.com/v5/notifications',
-  CONNECT_MESSAGE_API_URL: 'https://api.topcoder.com/v5'
+  CONNECT_MESSAGE_API_URL: 'https://api.topcoder.com/v5',
+  TC_SYSTEM_USERID: PROD_TC_SYSTEM_USERID
 }

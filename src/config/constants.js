@@ -307,6 +307,7 @@ export const PROJECT_FEED_TYPE_MESSAGES = 'MESSAGES'
 
 export const DISCOURSE_BOT_USERID = 'system'
 export const CODER_BOT_USERID = 'CoderBot'
+export const TC_SYSTEM_USERID = process.env.TC_SYSTEM_USERID || ''
 export const CODER_BOT_USER_FNAME = 'Coder'
 export const CODER_BOT_USER_LNAME = 'the Bot'
 
