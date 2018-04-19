@@ -56,7 +56,7 @@ class FeedMobile extends React.Component {
     return (
       <div styleName="feed" id={`feed-${id}`}>
         <div styleName="header">
-          <UserWithName {..._.pick(user, 'firstName', 'lastName', 'photoUR')} size="40" />
+          <UserWithName {..._.pick(user, 'firstName', 'lastName', 'photoURL')} size="40" />
           <Link styleName="date" to={permalink}>{moment(date).fromNow()}</Link>
         </div>
         <h4 styleName="title">{title}</h4>
