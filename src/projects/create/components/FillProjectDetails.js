@@ -41,6 +41,7 @@ class FillProjectDetails extends Component  {
     const { project, dirtyProject, processing, submitBtnText } = this.props
     const productId = _.get(project, 'details.products[0]')
     const product = findProduct(productId)
+    const formDesclaimer = _.get(product, 'formDesclaimer')
 
     let specification = 'topcoder.v1'
     if (productId)
@@ -67,9 +68,11 @@ class FillProjectDetails extends Component  {
                     submitBtnText={ submitBtnText }
                   />
                 </div>
-                <div className="left-area-footer">
-                  <span>{ _.get(product, 'formDesclaimer') }</span>
-                </div>
+                {formDesclaimer && (
+                  <div className="left-area-footer">
+                    <span>{formDesclaimer}</span>
+                  </div>
+                )}
               </div>
               <div className="right-area">
                 <Sticky top={20}>

@@ -2,25 +2,33 @@
 
 @import 'layout';
 @import '~tc-ui/src/styles/tc-includes';
+@import '~styles/_variables.scss';
 
 :global {
   .FillProjectDetailsWrapper {
     // @extend .wizardWrapper;
   }
-  
+
   .headerFillProjectDetails {
     @extend .wizardHeader;
   }
-  
+
   .FillProjectDetails {
     h1 {
       @extend .wizardHeadline;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        font-size: 20px;
+        line-height: 24px;
+        margin-bottom: 0;
+        padding: 4 * $base-unit 4 * $base-unit 4 * $base-unit 12 * $base-unit;
+        text-align: left;
+      }
     }
-  
+
     .two-col-content {
       padding: 0 !important;
-      min-width: $minimumPageWidth;
-  
+
       &.content{
         .container {
           @include flexBox;
@@ -28,53 +36,68 @@
           background-color: none;
           display: flex;
           padding: 0;
-          max-width: 1110px;
           margin: 0 auto;
-  
+
           /* .left-area */
           .left-area {
             flex: auto;
             width: auto;
             position: relative;
-  
+
             .left-area-content {
               border-radius: 4px;
               background: $tc-white;
               box-shadow: 0px 1px 3px 0px $tc-gray-30;
               padding: 50px;
-  
+
+              @media screen and (max-width: $screen-md - 1px) {
+                background-color: $tc-white;
+                border-radius: 0;
+                box-shadow: none;
+                padding: 3 * $base-unit 4 * $base-unit;
+              }
+
               .title {
                 color: $tc-gray-80;
                 @include roboto-bold;
               }
-  
+
               .section-footer {
                 margin-top: $base_unit * 4;
                 margin-bottom: 0;
                 background: none;
                 height: 40px;
+
+                @media screen and (max-width: $screen-md - 1px) {
+                  margin-bottom: 10 * $base-unit;
+                  margin-top: 10 * $base-unit;
+                }
               }
             }
-  
+
             .left-area-footer {
               @include tc-label-sm;
               color: $tc-gray-50;
               margin-top: 4 * $base_unit;
-  
+
               span {
                 clear: both;
                 float: none;
               }
             }
           }
-  
+
           .right-area {
             flex: auto !important;
             width: 320px;
             min-width: 320px;
             max-width: 320px;
             margin-left: 4 * $base_unit;
-  
+
+            @media screen and (max-width: $screen-rg - 1px) {
+              display: none;
+            }
+
             .right-area-footer {
               @include roboto;
               padding: 10px 0 0 0;
@@ -82,7 +105,7 @@
               line-height: 20px;
               color: $tc-gray-50;
               font-style: italic;
-  
+
               span {
                 float: right;
               }
@@ -92,14 +115,13 @@
       }
     }
   }
-  
+
   .ProjectWizard {
     .FillProjectDetails {
-      .left-area-content .title span,
       .section-header .section-number {
         display: none;
       }
-  
+
       .gray-text {
         @include roboto;
         font-size: 15px;
@@ -107,10 +129,17 @@
         line-height: 25px;
       }
     }
-  
-    .spec-question-list-item .content-col > h5 span {
-      display: none;
+  }
+
+  @media screen and (max-width: $screen-md - 1px) {
+    .ProjectWizard-step-3 {
+      .content {
+        padding: 0;
+      }
+
+      .escape-button {
+        display: none;
+      }
     }
   }
 }
-  
