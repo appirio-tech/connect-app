@@ -40,7 +40,7 @@ class StatusFiltersMobile extends React.Component {
   }
 
   render() {
-    const { currentStatus, onStatusClick } = this.props
+    const { currentStatus } = this.props
     const { isOpen } = this.state
     const currentSatusLabel = _.find(projectStatuses, { val: currentStatus }).label
 
