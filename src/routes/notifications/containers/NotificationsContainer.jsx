@@ -15,7 +15,7 @@ import NotificationsSectionTitle from '../../../components/NotificationsSectionT
 import SideFilter from '../../../components/SideFilter/SideFilter'
 import NotificationsEmpty from '../../../components/NotificationsEmpty/NotificationsEmpty'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import { getNotificationsFilters, splitNotificationsBySources, filterReadNotifications } from '../helpers/notifications'
+import { getNotificationsFilters, splitNotificationsBySources, filterReadNotifications, filterOldNotifications } from '../helpers/notifications'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import { REFRESH_NOTIFICATIONS_INTERVAL } from '../../../config/constants'
 import './NotificationsContainer.scss'
@@ -39,7 +39,8 @@ class NotificationsContainer extends React.Component {
       markAllNotificationsRead, toggleNotificationRead, viewOlderNotifications,
       oldSourceIds, pending, toggleBundledNotificationRead } = this.props
     const notReadNotifications = filterReadNotifications(notifications)
-    const notificationsBySources = splitNotificationsBySources(sources, notReadNotifications, oldSourceIds)
+    const notOldNotifications = filterOldNotifications(notReadNotifications, oldSourceIds)
+    const notificationsBySources = splitNotificationsBySources(sources, notOldNotifications)
     let globalSource = notificationsBySources.length > 0 && notificationsBySources[0].id === 'global' ? notificationsBySources[0] : null
     let projectSources = globalSource ? notificationsBySources.slice(1) : notificationsBySources
     if (filterBy) {

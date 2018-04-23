@@ -102,11 +102,10 @@ export const getNotificationsFilters = (sources) => {
  *
  * @param  {Array}  sources       list of sources
  * @param  {Array}  notifications list of notifications
- * @param  {Array}  oldSourceIds  list of ids of sources that will also show old notifications
  *
  * @return {Array}                list of sources with related notifications
  */
-export const splitNotificationsBySources = (sources, notifications, oldSourceIds = []) => {
+export const splitNotificationsBySources = (sources, notifications) => {
   const notificationsBySources = []
 
   sources.filter(source => source.total > 0).forEach(source => {
@@ -114,9 +113,6 @@ export const splitNotificationsBySources = (sources, notifications, oldSourceIds
       if (n.sourceId !== source.id) return false
       return true
     })
-    if (_.indexOf(oldSourceIds, source.id) < 0) {
-      source.notifications = source.notifications.slice(0, 10)
-    }
     notificationsBySources.push(source)
   })
 
@@ -128,9 +124,22 @@ export const splitNotificationsBySources = (sources, notifications, oldSourceIds
  *
  * @param  {Array}  notifications list of notifications
  *
- * @return {Array}                notifications list filtered of notifications
+ * @return {Array}                list of filtered notifications
  */
 export const filterReadNotifications = (notifications) => _.filter(notifications, { isRead: false })
+
+/**
+ * Filter notifications to only not old or if their source in special oldSourceIds array
+ *
+ * @param  {Array}  notifications list of notifications
+ * @param  {Array}  oldSourceIds  list of ids of sources that will also show old notifications
+ *
+ * @return {Array}                list of filtered notifications
+ */
+export const filterOldNotifications = (notifications, oldSourceIds) => _.filter(notifications, (notification) => (
+  _.includes(oldSourceIds, notification.sourceId) ||
+  new Date().getTime() - OLD_NOTIFICATION_TIME * MILLISECONDS_IN_MINUTE < new Date(notification.date).getTime()
+))
 
 /**
  * Filter notifications that belongs to project:projectId
@@ -350,7 +359,6 @@ export const prepareNotifications = (rawNotifications) => {
     date: rawNotification.createdAt,
     isRead: rawNotification.read,
     seen: rawNotification.seen,
-    isOld: new Date().getTime() - OLD_NOTIFICATION_TIME * MILLISECONDS_IN_MINUTE > new Date(rawNotification.createdAt).getTime(),
     contents: rawNotification.contents,
     version: rawNotification.version
   })).map((notification) => {

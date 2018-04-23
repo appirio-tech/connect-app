@@ -5,9 +5,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import MobilePage from '../MobilePage/MobilePage'
 import { Link } from 'react-router-dom'
-import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
 import NotificationsBell from './NotificationsBell'
 import XMartIcon from '../../assets/icons/x-mark-white.svg'
+import SettingsIcon from '../../assets/icons/ui-16px-1_settings-gear-64.svg'
 import './NotificationsMobilePage.scss'
 
 class NotificationsDropdown extends React.Component {
@@ -42,9 +42,9 @@ class NotificationsDropdown extends React.Component {
         {isOpen && (
           <MobilePage>
             <div styleName="header">
-              <Link styleName="logo" to="/"><ConnectLogoMono title="Connect" /></Link>
+              <Link styleName="btn" to="/settings/notifications"><SettingsIcon styleName="settings-icon" /></Link>
               <div styleName="title">Notifications</div>
-              <div styleName="close-wrapper"><XMartIcon onClick={this.toggle} /></div>
+              <div styleName="btn" onClick={this.toggle}><XMartIcon /></div>
             </div>
             <div styleName="body">
               {children}

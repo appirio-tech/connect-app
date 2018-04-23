@@ -54,7 +54,7 @@
 
         @media screen and (max-width: $screen-md - 1px) {
           font-size: 15px;
-          line-height: 25px;
+          line-height: 22px;
         }
 
         > strong {
@@ -100,7 +100,9 @@
         width: 42px;
 
         svg {
+          height: auto;
           fill: $tc-gray-20;
+          width: 16px;
         }
       }
     }

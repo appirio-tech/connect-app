@@ -56,24 +56,16 @@
       width: 480px;
     }
 
-    .notifications-read-all {
-      @include roboto;
-      background-color: $tc-gray-neutral-light;
-      border-top: 1px solid $tc-gray-10;
-      color: $tc-gray-50;
-      display: block;
-      font-size: 12px;
-      line-height: 40px;
-      letter-spacing: 0;
-      text-align: center;
+    .notifications-empty {
+      justify-content: center;
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      padding: 0;
     }
 
-    .notifications-empty {
-      padding: 50px 0 60px;
-
-      .notification-settings {
-        margin-top: 30px;
-      }
+    .notifications-empty-note {
+      max-width: 270px;
     }
   }
 }

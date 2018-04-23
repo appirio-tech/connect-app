@@ -40,5 +40,26 @@
       line-height: 30px;
       margin-top: 14px;
     }
+
+    > .notification-settings {
+      margin-top: 30px;
+    }
+
+    .notifications-empty-note {
+      @include roboto;
+      color: $tc-gray-50;
+      font-size: 13px;
+      line-height: 20px;
+      margin: 10 * $base-unit auto 6 * $base-unit;
+      max-width: 440px;
+
+      > a {
+        color: #55a5ff;
+
+        &:hover {
+          color: $tc-dark-blue;
+        }
+      }
+    }
   }
 }

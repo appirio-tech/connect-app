@@ -13,7 +13,6 @@ import { Link } from 'react-router-dom'
 import MediaQuery from 'react-responsive'
 import './NotificationItem.scss'
 import Check from '../../assets/icons/check.svg'
-import CheckLight from '../../assets/icons/icon-check-light.svg'
 import IconNotificationMememberAdded from '../../assets/icons/notification-member-added.svg'
 import IconNotificationNewPosts from '../../assets/icons/notification-new-posts.svg'
 import IconNotificationNewProject from '../../assets/icons/notification-new-project.svg'
@@ -77,7 +76,6 @@ const formatDate = (date) => {
   return format
 }
 
-
 const NotificationItem = (props) => {
   const { id, onLinkClick } = props
   const notificationItem = (
@@ -96,9 +94,7 @@ const NotificationItem = (props) => {
             props.onReadToggleClick(props.id)
           }}
         >
-          <MediaQuery minWidth={768}>
-            {(matches) => (matches ? <Check className="icon-check"/> : <CheckLight className="icon-check"/>)}
-          </MediaQuery>
+          <Check className="icon-check"/>
         </button>
       </div>
     </div>
