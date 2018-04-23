@@ -15,6 +15,7 @@ import NewProjectNavLink from './NewProjectNavLink'
 import MobileMenu from '../MobileMenu/MobileMenu'
 import MobileMenuToggle from '../MobileMenu/MobileMenuToggle'
 import SearchFilter from '../../assets/icons/ui-filters.svg'
+import SearchIcon from '../../assets/icons/ui-16px-1_zoom.svg'
 import { projectSuggestions, loadProjects, setInfiniteAutoload } from '../../projects/actions/loadProjects'
 
 
@@ -25,7 +26,8 @@ class ProjectsToolBar extends Component {
     this.state = {
       errorCreatingProject: false,
       isFilterVisible: false,
-      isMobileMenuOpen: false
+      isMobileMenuOpen: false,
+      isMobileSearchVisible: false
     }
     this.state.isFilterVisible = sessionStorage.getItem('isFilterVisible') === 'true'
     this.applyFilters = this.applyFilters.bind(this)
@@ -33,6 +35,7 @@ class ProjectsToolBar extends Component {
     this.handleTermChange = this.handleTermChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.toggleMobileMenu = this.toggleMobileMenu.bind(this)
+    this.toggleMobileSearch = this.toggleMobileSearch.bind(this)
     this.onLeave = this.onLeave.bind(this)
   }
 
@@ -99,7 +102,7 @@ class ProjectsToolBar extends Component {
   }
 
   toggleFilter() {
-    const {isFilterVisible} = this.state
+    const {isFilterVisible, isMobileSearchVisible} = this.state
     const contentDiv = document.getElementById('wrapper-main')
     this.setState({isFilterVisible: !isFilterVisible}, () => {
       sessionStorage.setItem('isFilterVisible', (!isFilterVisible).toString())
@@ -109,10 +112,25 @@ class ProjectsToolBar extends Component {
         contentDiv.classList.remove('with-filters')
       }
     })
+    // if open filters, close search panel on mobile
+    if (!isFilterVisible && isMobileSearchVisible) {
+      this.toggleMobileSearch()
+    }
   }
 
   toggleMobileMenu() {
     this.setState({ isMobileMenuOpen: !this.state.isMobileMenuOpen })
+  }
+
+  toggleMobileSearch() {
+    const { isFilterVisible, isMobileSearchVisible } = this.state
+
+    // if open mobile search and filter is visible, then close filter
+    if (!isMobileSearchVisible && isFilterVisible) {
+      this.toggleFilter()
+    }
+
+    this.setState({ isMobileSearchVisible: !isMobileSearchVisible })
   }
 
   routeWithParams(criteria) {
@@ -129,7 +147,7 @@ class ProjectsToolBar extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { user, criteria, creatingProject, projectCreationError, searchTermTag } = this.props
-    const { errorCreatingProject, isFilterVisible, isMobileMenuOpen } = this.state
+    const { errorCreatingProject, isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
     return nextProps.user.handle !== user.handle
     || JSON.stringify(nextProps.criteria) !== JSON.stringify(criteria)
     || nextProps.creatingProject !== creatingProject
@@ -138,11 +156,12 @@ class ProjectsToolBar extends Component {
     || nextState.errorCreatingProject !== errorCreatingProject
     || nextState.isFilterVisible !== isFilterVisible
     || nextState.isMobileMenuOpen !== isMobileMenuOpen
+    || nextState.isMobileSearchVisible !== isMobileSearchVisible
   }
 
   render() {
     const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser, user, mobileMenu } = this.props
-    const { isFilterVisible, isMobileMenuOpen } = this.state
+    const { isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
     const isLoggedIn = !!(userRoles && userRoles.length)
 
     let excludedFiltersCount = 1 // 1 for default sort criteria
@@ -181,11 +200,10 @@ class ProjectsToolBar extends Component {
         />
         <div className="primary-toolbar">
           { renderLogoSection(menuBar) }
-          { isLoggedIn && <div className="projects-title-mobile">MY PROJECTS</div> }
           {
             isLoggedIn &&
             <div className="search-widget">
-              { !!isPowerUser &&
+              { !!isPowerUser && (
                 <SearchBar
                   hideSuggestionsWhenEmpty
                   showPopularSearchHeader={ false }
@@ -194,15 +212,20 @@ class ProjectsToolBar extends Component {
                   onSearch={ this.handleSearch }
                   onClearSearch={ this.handleSearch }
                 />
-              }
+              )}
               {
                 !!isPowerUser &&
                 <div className="search-filter">
                   <a
                     href="javascript:"
+                    className={cn('tc-btn tc-btn-sm mobile-search-toggle', {active: isMobileSearchVisible})}
+                    onClick={ this.toggleMobileSearch }
+                  ><SearchIcon /></a>
+                  <a
+                    href="javascript:"
                     className={cn('tc-btn tc-btn-sm', {active: isFilterVisible})}
                     onClick={ this.toggleFilter }
-                  ><SearchFilter className="icon-search-filter" />Filters { noOfFilters > 0 && <span className="filter-indicator">{ noOfFilters }</span> }</a>
+                  ><SearchFilter className="icon-search-filter" /><span className="filter-text">Filters</span> { noOfFilters > 0 && <span className="filter-indicator">{ noOfFilters }</span> }</a>
                 </div>
               }
             </div>
@@ -214,13 +237,25 @@ class ProjectsToolBar extends Component {
             { isLoggedIn && <MobileMenuToggle onToggle={this.toggleMobileMenu}/> }
           </div>
         </div>
+        { isMobileSearchVisible && isLoggedIn &&
+          <div className="secondary-toolbar">
+            <SearchBar
+              hideSuggestionsWhenEmpty
+              showPopularSearchHeader={ false }
+              searchTermKey="keyword"
+              onTermChange={ this.handleTermChange }
+              onSearch={ this.handleSearch }
+              onClearSearch={ this.handleSearch }
+            />
+          </div>
+        }
         { isFilterVisible && isLoggedIn &&
-        <div className="secondary-toolbar">
-          <Filters
-            applyFilters={ this.applyFilters }
-            criteria={ criteria }
-          />
-        </div>
+          <div className="secondary-toolbar">
+            <Filters
+              applyFilters={ this.applyFilters }
+              criteria={ criteria }
+            />
+          </div>
         }
         {isMobileMenuOpen && <MobileMenu user={user} onClose={this.toggleMobileMenu} menu={mobileMenu} />}
       </div>

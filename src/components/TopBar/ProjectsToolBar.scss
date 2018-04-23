@@ -24,17 +24,6 @@
         min-height: 50px;
       }
 
-      .projects-title-mobile {
-        @include tc-heading;
-        color: $tc-gray-10;
-        font-size: 15px;
-        line-height: 50px;
-
-        @media screen and (min-width: $screen-md) {
-          display: none;
-        }
-      }
-
       .logo-wrapper {
         margin-left: 4 * $base-unit;
         margin-right: 4 * $base-unit;
@@ -78,6 +67,64 @@
       display: flex;
       min-height: 60px;
       height: 60px;
+
+      .SearchBar {
+        display: none;
+      }
+
+      @media screen and (max-width: $screen-md - 1px) {
+        height: auto;
+        min-height: 50px;
+
+        /* update styles for SearchBar
+           if same mobile styles has to be used at some other places,
+           this style has to be updated in SearchBar component in react-components
+        */
+        .SearchBar {
+          background-color: $tc-gray-90;
+          display: block;
+          height: 50px;
+          padding: 0;
+
+          &::before {
+            @include roboto;
+            color: $tc-gray-40;
+            font-size: 15px;
+          }
+
+          .search-bar__text {
+            @include roboto;
+            border: 0;
+            border-radius: 0;
+            color: $tc-gray-40;
+            height: 50px;
+            font-size: 15px;
+            margin-bottom: 0;
+            padding: 0 3 * $base-unit;
+            text-indent: 0;
+
+            &:focus {
+              box-shadow: none;
+            }
+          }
+
+          .search-icon-wrap {
+            display: none;
+          }
+
+          .search-bar__clear {
+            right: 4 * $base-unit;
+          }
+
+          &.state-focused,
+          &.state-filled {
+            border: 0;
+            border-radius: 0;
+            background-color: $tc-gray-90;
+            padding-right: 0;
+          }
+        }
+      }
     }
 
     .MenuBar li {
@@ -101,7 +148,8 @@
       display: flex;
 
       @media screen and (max-width: $screen-md - 1px) {
-        display: none;
+        height: 32px;
+        margin-top: 9px;
       }
 
       input::-ms-clear{
@@ -109,11 +157,26 @@
         height: 0;
         display: none;
       }
+
+      .SearchBar {
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
+      }
     }
 
     .search-filter {
       width: 97px;
       margin-left: 2 * $base-unit;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        border: 1px solid $tc-gray-80;
+        border-radius: 2px;
+        display: flex;
+        height: 32px;
+        margin: 0 auto;
+        width: auto;
+      }
 
       .tc-btn {
         display: flex;
@@ -128,8 +191,41 @@
         font-size: 12px;
         position: relative;
 
+        @media screen and (max-width: $screen-md - 1px) {
+          text-align: center;
+          width: 46px;
+
+          &:first-child {
+            border-right: 1px solid $tc-gray-80;
+          }
+
+          > svg {
+            margin: 0 auto;
+          }
+        }
+
+        &.mobile-search-toggle {
+          display: none;
+
+          @media screen and (max-width: $screen-md - 1px) {
+            display: flex;
+          }
+
+          > svg {
+            fill: $tc-gray-50;
+          }
+
+          &.active > svg {
+            fill: $tc-white;
+          }
+        }
+
         svg.icon-search-filter {
           margin-right: 10px;
+
+          @media screen and (max-width: $screen-md - 1px) {
+            margin-right: auto;
+          }
         }
 
         &.active {
@@ -139,6 +235,12 @@
           svg.icon-search-filter g {
             fill: #fff;
           }
+        }
+      }
+
+      .filter-text {
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
         }
       }
 
@@ -152,6 +254,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          right: -8px;
+          position: absolute;
+          top: 3px;
+        }
       }
     }
 
@@ -169,10 +277,21 @@
       justify-content: space-between;
       width: 100%;
 
+      @media screen and (max-width: $screen-md - 1px) {
+        border-bottom: 0;
+        box-shadow: none;
+        min-height: 50px;
+        padding: 0;
+      }
+
       h2 {
         font-size: $tc-body-large;
         color: $tc-black;
         white-space: nowrap;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
       }
 
       .bar-control {
@@ -188,6 +307,12 @@
         }
       }
 
+      > .tc-btn {
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
+      }
+
       .search-panel {
         flex: 1;
         margin: 0 auto;
@@ -196,11 +321,19 @@
         justify-content: space-between;
         padding-right: 30px;
 
+        @media screen and (max-width: $screen-md - 1px) {
+          padding-right: 0;
+        }
+
         .search-select-widget {
           align-items: center;
           display: flex;
           margin-left: 40px;
           flex: 1;
+
+          @media screen and (max-width: $screen-md - 1px) {
+            margin-left: 0;
+          }
 
           label {
             @include roboto-medium;
@@ -212,11 +345,106 @@
             padding-right: 15px;
             text-align: right;
             white-space: nowrap;
+
+            @media screen and (max-width: $screen-md - 1px) {
+              display: none;
+            }
           }
         }
 
         .search-select-field {
           flex: 1;
+
+          /* update styles for Select,
+             it could make sense to update styles for Select globally
+             if somewhere else we use it for mobile */
+          @media screen and (max-width: $screen-md - 1px) {
+            .Select-control {
+              background-color: $tc-gray-90;
+              border: 0;
+              border-radius: 0;
+              height: 50px;
+              padding-left: 2 * $base-unit;
+            }
+
+            .Select-arrow-zone {
+              display: none;
+            }
+
+            .Select-clear-zone {
+              padding-right: 4 * $base-unit;
+            }
+
+            .Select-clear {
+              background: url(~appirio-tech-react-components/components/SearchBar/x-mark.svg) no-repeat center;
+              height: 10px;
+              overflow: hidden;
+              text-indent: -9999px;
+              width: 10px;
+            }
+
+            .Select-placeholder {
+              color: $tc-gray-40;
+              font-size: 15px;
+              line-height: 50px;
+              padding-left: 3 * $base-unit;
+            }
+
+            .Select-item {
+              background-color: $tc-gray-70;
+              border-radius: 2px;
+              height: 30px;
+              margin-left: $base-unit;
+              margin-top: 2 * $base-unit;
+              padding: $base-unit 2 * $base-unit;
+
+              .Select-item-icon {
+                display: none;
+              }
+
+              .Select-item-label {
+                color: $tc-white;
+                padding-left: 0;
+              }
+            }
+
+            .Select-input  {
+              height: 50px;
+              margin-left: $base-unit;
+
+              > input:not([type="checkbox"]) {
+                color: $tc-gray-40;
+                background-color: transparent;
+                height: 50px;
+
+                &:focus {
+                   /* because we have global style for all inputs with !important */
+                  background-color: transparent !important;
+                }
+              }
+            }
+
+            .Select.is-open .Select-input > input:not([type="checkbox"]) {
+              background-color: transparent;
+            }
+
+            .Select-menu {
+              padding: 2 * $base-unit 0;
+            }
+
+            .Select-option {
+              @include roboto;
+              color: $tc-black;
+              height: 50px;
+              font-size: 15px;
+              line-height: 50px;
+              padding: 0 4 * $base-unit;
+
+              &.is-focused {
+                background-color: $tc-white;
+              }
+            }
+          }
         }
       }
     }

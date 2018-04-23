@@ -3,7 +3,7 @@
 .container {
   align-items: center;
   display: flex;
-  padding-right: $base-unit * 2;
+  padding-right: 14px;
 
   :global(.notifications-empty-note) {
     max-width: 270px;

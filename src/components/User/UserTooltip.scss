@@ -78,6 +78,10 @@
         padding-top: 20px;
         padding-left: 20px;
 
+        @media screen and (max-width: $screen-md - 1px) {
+          width: 300px;
+        }
+
         .tooltip-body {
           color: $tc-black;
           overflow: hidden;

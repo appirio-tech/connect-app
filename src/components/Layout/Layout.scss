@@ -13,6 +13,10 @@
 
     &.with-filters {
       padding-top: 120px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        padding-top: 0;
+      }
     }
 
     &[data-route*='new-project'] {

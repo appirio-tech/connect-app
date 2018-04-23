@@ -5,6 +5,8 @@ import querystring from 'query-string'
 import React, { Component } from 'react'
 import PT from 'prop-types'
 import StatusFilters from '../../../../components/StatusFilters/StatusFilters'
+import StatusFiltersMobile from '../../../../components/StatusFilters/StatusFiltersMobile'
+import MediaQuery from 'react-responsive'
 import CardView from '../../../../assets/icons/ui-16px-2_grid-45-gray.svg'
 import GridView from '../../../../assets/icons/grid-list-ico.svg'
 import { SwitchButton } from 'appirio-tech-react-components'
@@ -75,7 +77,15 @@ export default class ProjectListNavHeader extends Component {
     return (
       <nav className="list-nav-container">
         <div className="left-wrapper">
-          <StatusFilters currentStatus={this.state.currentStatus} onStatusClick={this.onStatusClick}/>
+          <MediaQuery minWidth={640}>
+            {(matches) => (
+              matches ? (
+                <StatusFilters currentStatus={this.state.currentStatus} onStatusClick={this.onStatusClick}/>
+              ) : (
+                <StatusFiltersMobile currentStatus={this.state.currentStatus} onStatusClick={this.onStatusClick}/>
+              )
+            )}
+          </MediaQuery>
         </div>
         <div className="right-wrapper">
 
