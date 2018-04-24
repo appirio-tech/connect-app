@@ -90,7 +90,7 @@ class TopBarContainer extends React.Component {
       {
         style: 'big',
         items: [
-          { label: 'My projects', link: '/projects?sort=updatedAt%20desc&status=active' },
+          { label: 'All projects', link: '/projects?sort=updatedAt%20desc' },
           { label: 'Getting Started', link: 'https://www.topcoder.com/about-topcoder/connect/', absolute: true },
           { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true },
         ]
