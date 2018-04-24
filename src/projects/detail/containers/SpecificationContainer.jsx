@@ -5,8 +5,10 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import Sticky from 'react-stickynode'
+import MediaQuery from 'react-responsive'
 
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
+import MobileNavigationTabs from '../components/MobileNavigationTabs'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import EditProjectForm from '../components/EditProjectForm'
 import { findProduct } from '../../../config/projectWizard'
@@ -59,14 +61,27 @@ class SpecificationContainer extends Component {
       specification = typeToSpecification[project.details.products[0]]
     const sections = require(`../../../config/projectQuestions/${specification}`).default
 
+    const leftArea = (
+      <div>
+        <ProjectSpecSidebar project={project} sections={sections} currentMemberRole={currentMemberRole} />
+        <FooterV2 />
+      </div>
+    )
+
     return (
       <section className="two-col-content content specificationContainer">
+        <MobileNavigationTabs projectId={project.id} />
         <div className="container">
           <div className="left-area">
-            <Sticky top={80}>
-              <ProjectSpecSidebar project={project} sections={sections} currentMemberRole={currentMemberRole} />
-              <FooterV2 />
-            </Sticky>
+            <MediaQuery minWidth={768}>
+              {(matches) => {
+                if (matches) {
+                  return <Sticky top={80}>{leftArea}</Sticky>
+                } else {
+                  return leftArea
+                }
+              }}
+            </MediaQuery>
           </div>
 
           <div className="right-area">

@@ -213,8 +213,17 @@
           border-radius: 4px;
           background-color: $tc-white;
 
+          @media screen and (max-width: $screen-md - 1px) {
+            margin-bottom: 0;
+            padding-bottom: 4 * $base-unit;
+          }
+
           .boxes {
             margin: 0 50px;
+
+            @media screen and (max-width: $screen-md - 1px) {
+              margin: 0 4 * $base-unit;
+            }
           }
 
           .big-titles {
@@ -227,6 +236,17 @@
             border-radius: 4px 4px 0 0;
             background: $tc-gray-neutral-light;
             border-bottom: 1px dashed $tc-gray-20;
+
+            @media screen and (max-width: $screen-md - 1px) {
+              margin: 0 -4 * $base-unit 20px;
+              padding: 4 * $base-unit;
+            }
+
+            h2 {
+              @media screen and (max-width: $screen-md - 1px) {
+                line-height: 8 * $base-unit;
+              }
+            }
 
             .optional,
             .required {
@@ -307,6 +327,10 @@
           @include tc-label-sm;
           color: $tc-gray-50;
           margin-top: 4 * $base_unit;
+
+          @media screen and (max-width: $screen-md - 1px) {
+            display: none;
+          }
         }
       }
 
@@ -413,6 +437,10 @@
         @include tc-label-lg;
         color: $tc-gray-30;
         padding-right: 6 * $base-unit;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          padding-right: 0;
+        }
       }
     }
 
@@ -425,6 +453,12 @@
       margin-top: -70px;
       margin-bottom: 20px;
       border-radius: $corner-radius * 2;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        border-radius: 0;
+        height: 80px;
+        margin-top: 0;
+      }
     }
 
     .section-footer-spec {
@@ -817,14 +851,56 @@
     width: auto;
     margin: 0 auto;
 
+    @media screen and (max-width: $screen-md - 1px) {
+      min-width: 0;
+      padding: 0;
+    }
+
+    .container {
+      @media screen and (max-width: $screen-md - 1px) {
+        flex-direction: column;
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+    }
+
     .left-area {
       min-width: $sideBarWidth;
       max-width: $sideBarMaxWidth;
       margin-right: 20px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        margin-right: 0;
+        max-width: 100%;
+      }
+
+      .footer-v2 {
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
+      }
     }
 
     .right-area {
       min-width: 500px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        min-width: 0;
+        padding-top: 4 * $base-unit;
+      }
+
+      form div:last-of-type .section-footer-spec {
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .section-footer-spec {
+      @media screen and (max-width: $screen-md - 1px) {
+        border-top: 1px dashed $tc-gray-20;
+        border-radius: 0;
+      }
     }
   }
 

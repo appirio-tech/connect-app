@@ -3,10 +3,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import cn from 'classnames'
+import Sticky from 'react-stickynode'
+import MediaQuery from 'react-responsive'
 import SidebarNav from './SidebarNav'
 import VisualDesignProjectEstimateSection from './VisualDesignProjectEstimateSection'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../../config/constants'
 import { updateProject } from '../../actions/project'
+import { findProduct } from '../../../config/projectWizard'
 import './ProjectSpecSidebar.scss'
 
 const calcProgress = (project, subSection) => {
@@ -128,14 +132,26 @@ class ProjectSpecSidebar extends Component {
       )
     }
 
+    const submitButton = (
+      <button className="tc-btn tc-btn-primary tc-btn-md"
+        onClick={this.onSubmitForReview}
+        disabled={!canSubmitForReview || project.isDirty}
+      >Submit for Review</button>
+    )
+
+    // check if project has estimation the same way as VisualDesignProjectEstimateSection does
+    // probably this can be done in more elegant way
+    const { products } = project.details
+    const productId = products ? products[0] : null
+    const product = findProduct(productId)
+    const hasEstimation = product && typeof product.basePriceEstimate !== 'undefined'
+
     return (
-      <div className="projectSpecSidebar">
+      <div className={cn('projectSpecSidebar', { 'has-review-btn': showReviewBtn })}>
         <h4 className="titles gray-font">Specifications</h4>
         <div className="list-group">
           <SidebarNav items={navItems} />
         </div>
-
-        <br/>
 
         {getProjectEstimateSection()}
 
@@ -149,12 +165,26 @@ class ProjectSpecSidebar extends Component {
               you a good estimate.
             </p>
           </div>
-          <div className="btn-boxs">
-            <button className="tc-btn tc-btn-primary tc-btn-md"
-              onClick={this.onSubmitForReview}
-              disabled={!canSubmitForReview || project.isDirty}
-            >Submit for Review</button>
-          </div>
+          <MediaQuery minWidth={768}>
+            {(matches) => {
+              if (matches) {
+                return (
+                  <div className="btn-boxs">
+                    {submitButton}
+                  </div>
+                )
+              } else {
+                return (
+                  <Sticky top={0}>
+                    <div className={cn('btn-boxs', { 'has-estimation': hasEstimation })}>
+                      {getProjectEstimateSection()}
+                      {submitButton}
+                    </div>
+                  </Sticky>
+                )
+              }
+            }}
+          </MediaQuery>
         </div>
         }
       </div>

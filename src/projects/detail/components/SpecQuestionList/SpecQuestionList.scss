@@ -99,10 +99,38 @@
           margin-right: 0;
         }
 
+        .radio-group-input {
+          @media screen and (max-width: $screen-md - 1px) {
+            margin-bottom: 0;
+            padding: 4 * $base-unit 0;
+          }
+        }
+
+        .radio-group-options {
+          @media screen and (max-width: $screen-md - 1px) {
+            flex-direction: column;
+          }
+
+          .radio label {
+            @media screen and (max-width: $screen-md - 1px) {
+              @include roboto;
+              color: $tc-gray-80;
+              font-size: 15px;
+            }
+          }
+
+          .radio:not(:first-child) {
+            @media screen and (max-width: $screen-md - 1px) {
+              margin-top: 4 * $base-unit;
+            }
+          }
+        }
+
         .checkbox-group-item {
           border-radius: 4px;
           background: $tc-gray-neutral-light;
           padding-left: 10px;
+          padding-right: 10px;
           display: flex;
 
           .tc-checkbox {
@@ -121,6 +149,19 @@
           background: none;
           padding: 0;
           margin: 15px 30px 15px 0;
+
+          @media screen and (max-width: $screen-md - 1px) {
+            margin-bottom: 4 * $base-unit;
+            margin-top: 4 * $base-unit;
+          }
+
+          label {
+            @media screen and (max-width: $screen-md - 1px) {
+              @include roboto;
+              color: $tc-gray-80;
+              font-size: 15px;
+            }
+          }
         }
 
         .SliderRadioGroup {

@@ -34,6 +34,7 @@
     @media screen and (max-width: $screen-md - 1px) {
       flex-direction: column;
       margin-bottom: 0;
+      margin-top: 0;
       /* leave space for new message flying button and space around it */
       padding: 0 0 (56px + 8 * $base-unit) 0;
     }

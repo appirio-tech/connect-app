@@ -12,6 +12,7 @@
 
     @media screen and (max-width: $screen-md - 1px) {
       border-radius: 0;
+      margin-top: 4 * $base_unit;
       padding-bottom: 0;
     }
 
@@ -38,6 +39,7 @@
     .project-info-header {
       display: flex;
       fill: $tc-gray-50;
+      justify-content: space-between;
       padding-left: 4 * $base_unit;
       padding-right: 4 * $base_unit;
       padding-top: 4 * $base_unit;
