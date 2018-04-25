@@ -61,14 +61,6 @@ class FeedMobile extends React.Component {
         </div>
         <h4 styleName="title">{title}</h4>
         <div styleName="text" dangerouslySetInnerHTML={{__html: topicMessage.content}} />
-        <div styleName="feed-actions">
-          {totalComments > 0 ? (
-            <button className="tc-btn tc-btn-link tc-btn-md" onClick={this.toggleComments}>{commentsButtonText}</button>
-          ) : (
-            <div styleName="no-comments">No posts yet</div>
-          )}
-          {allowComments && <button className="tc-btn tc-btn-link tc-btn-md" onClick={this.toggleNewCommentMobile}>Write a post</button>}
-        </div>
         {isCommentsShown &&
           <FeedComments
             allowComments={allowComments}
@@ -89,6 +81,14 @@ class FeedMobile extends React.Component {
             allMembers={allMembers}
           />
         }
+        <div styleName="feed-actions">
+          {totalComments > 0 ? (
+            <button className="tc-btn tc-btn-link tc-btn-md" onClick={this.toggleComments}>{commentsButtonText}</button>
+          ) : (
+            <div styleName="no-comments">No posts yet</div>
+          )}
+          {allowComments && <button className="tc-btn tc-btn-link tc-btn-md" onClick={this.toggleNewCommentMobile}>Write a post</button>}
+        </div>
         {children}
         {isNewCommentMobileOpen &&
           <NewPostMobile
