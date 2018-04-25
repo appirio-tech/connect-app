@@ -507,9 +507,11 @@ class FeedView extends React.Component {
           </MediaQuery>
           { feeds.map(renderFeed) }
         </div>
-        <MediaQuery maxWidth={768 - 1}>
-          <ChatButton onClick={this.toggleNewPostMobile} />
-        </MediaQuery>
+        { !isNewPostMobileOpen &&
+          <MediaQuery maxWidth={768 - 1}>
+            <ChatButton onClick={this.toggleNewPostMobile} />
+          </MediaQuery>
+        }
         { isNewPostMobileOpen &&
           <NewPostMobile
             statusTitle="NEW STATUS"
