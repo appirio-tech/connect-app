@@ -200,34 +200,30 @@ class ProjectsToolBar extends Component {
         />
         <div className="primary-toolbar">
           { renderLogoSection(menuBar) }
+          { isLoggedIn && !isPowerUser && <div className="projects-title-mobile">MY PROJECTS</div> }
           {
-            isLoggedIn &&
+            isLoggedIn && !!isPowerUser &&
             <div className="search-widget">
-              { !!isPowerUser && (
-                <SearchBar
-                  hideSuggestionsWhenEmpty
-                  showPopularSearchHeader={ false }
-                  searchTermKey="keyword"
-                  onTermChange={ this.handleTermChange }
-                  onSearch={ this.handleSearch }
-                  onClearSearch={ this.handleSearch }
-                />
-              )}
-              {
-                !!isPowerUser &&
-                <div className="search-filter">
-                  <a
-                    href="javascript:"
-                    className={cn('tc-btn tc-btn-sm mobile-search-toggle', {active: isMobileSearchVisible})}
-                    onClick={ this.toggleMobileSearch }
-                  ><SearchIcon /></a>
-                  <a
-                    href="javascript:"
-                    className={cn('tc-btn tc-btn-sm', {active: isFilterVisible})}
-                    onClick={ this.toggleFilter }
-                  ><SearchFilter className="icon-search-filter" /><span className="filter-text">Filters</span> { noOfFilters > 0 && <span className="filter-indicator">{ noOfFilters }</span> }</a>
-                </div>
-              }
+              <SearchBar
+                hideSuggestionsWhenEmpty
+                showPopularSearchHeader={ false }
+                searchTermKey="keyword"
+                onTermChange={ this.handleTermChange }
+                onSearch={ this.handleSearch }
+                onClearSearch={ this.handleSearch }
+              />
+              <div className="search-filter">
+                <a
+                  href="javascript:"
+                  className={cn('tc-btn tc-btn-sm mobile-search-toggle', {active: isMobileSearchVisible})}
+                  onClick={ this.toggleMobileSearch }
+                ><SearchIcon /></a>
+                <a
+                  href="javascript:"
+                  className={cn('tc-btn tc-btn-sm', {active: isFilterVisible})}
+                  onClick={ this.toggleFilter }
+                ><SearchFilter className="icon-search-filter" /><span className="filter-text">Filters</span> { noOfFilters > 0 && <span className="filter-indicator">{ noOfFilters }</span> }</a>
+              </div>
             </div>
           }
           <div className="actions">
