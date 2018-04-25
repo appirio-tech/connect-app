@@ -21,6 +21,7 @@
     padding: 20px 0;
     border-radius: 4px;
     min-width: 280px;
+    position: relative;
 
     @media screen and (max-width: $screen-md - 1px) {
       border-radius: 0;
@@ -136,10 +137,6 @@
 
     /* styles related to animations when .btn-boxs sticks using Sticky module */
     @media screen and (max-width: $screen-md - 1px) {
-      .sticky-inner-wrapper {
-        z-index: 10;
-      }
-
       /* restyle estimations component */
       .btn-boxs {
         .list-group {
@@ -182,6 +179,10 @@
       }
 
       .sticky-outer-wrapper.active {
+        .sticky-inner-wrapper {
+          z-index: 10;
+        }
+
         .btn-boxs {
           box-shadow: 0px 1px 3px 0px rgba($tc-black, 0.2);
         }
@@ -194,6 +195,24 @@
         .visual-design-project-estimate-section {
           opacity: 1;
         }
+      }
+    }
+
+    .sticky-estimation-only {
+      .sticky-outer-wrapper {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        width: 100%;
+        z-index: -1;
+
+        &.active {
+          z-index: 10;
+        }
+      }
+
+      .btn-boxs {
+        height: 70px;
       }
     }
   }

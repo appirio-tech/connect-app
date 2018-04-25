@@ -187,6 +187,17 @@ class ProjectSpecSidebar extends Component {
           </MediaQuery>
         </div>
         }
+        {!showReviewBtn && hasEstimation &&
+          <MediaQuery maxWidth={SCREEN_BREAKPOINT_MD - 1}>
+            <div className="sticky-estimation-only">
+              <Sticky top={0}>
+                <div className="btn-boxs">
+                  {getProjectEstimateSection()}
+                </div>
+              </Sticky>
+            </div>
+          </MediaQuery>
+        }
       </div>
     )
   }
