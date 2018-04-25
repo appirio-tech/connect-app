@@ -18,7 +18,7 @@ import NotificationsMobilePage from  './NotificationsMobilePage'
 import NotificationsReadAll from './NotificationsReadAll'
 import ScrollLock from 'react-scroll-lock-component'
 import MediaQuery from 'react-responsive'
-import { NOTIFICATIONS_DROPDOWN_PER_SOURCE, NOTIFICATIONS_DROPDOWN_MAX_TOTAL, REFRESH_NOTIFICATIONS_INTERVAL } from '../../config/constants'
+import { NOTIFICATIONS_DROPDOWN_PER_SOURCE, NOTIFICATIONS_DROPDOWN_MAX_TOTAL, REFRESH_NOTIFICATIONS_INTERVAL, SCREEN_BREAKPOINT_MD } from '../../config/constants'
 import './NotificationsDropdown.scss'
 
 class NotificationsDropdownContainer extends React.Component {
@@ -141,7 +141,7 @@ class NotificationsDropdownContainer extends React.Component {
     }
 
     return (
-      <MediaQuery minWidth={768}>
+      <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
         {(matches) => (matches ? (
           <NotificationsDropdown hasUnread={hasUnread} hasNew={hasNew} onToggle={visitNotifications}>
             <NotificationsDropdownHeader onMarkAllClick={() => !pending && markAllNotificationsRead()} hasUnread={hasUnread}/>

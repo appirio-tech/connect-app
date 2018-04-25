@@ -8,7 +8,7 @@ import Sticky from 'react-stickynode'
 import MediaQuery from 'react-responsive'
 import SidebarNav from './SidebarNav'
 import VisualDesignProjectEstimateSection from './VisualDesignProjectEstimateSection'
-import { PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../../config/constants'
+import { PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER, SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import { updateProject } from '../../actions/project'
 import { findProduct } from '../../../config/projectWizard'
 import './ProjectSpecSidebar.scss'
@@ -165,7 +165,7 @@ class ProjectSpecSidebar extends Component {
               you a good estimate.
             </p>
           </div>
-          <MediaQuery minWidth={768}>
+          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
               if (matches) {
                 return (

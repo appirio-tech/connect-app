@@ -7,6 +7,7 @@ import PT from 'prop-types'
 import StatusFilters from '../../../../components/StatusFilters/StatusFilters'
 import StatusFiltersMobile from '../../../../components/StatusFilters/StatusFiltersMobile'
 import MediaQuery from 'react-responsive'
+import { SCREEN_BREAKPOINT_SM } from '../../../../config/constants'
 import CardView from '../../../../assets/icons/ui-16px-2_grid-45-gray.svg'
 import GridView from '../../../../assets/icons/grid-list-ico.svg'
 import { SwitchButton } from 'appirio-tech-react-components'
@@ -77,7 +78,7 @@ export default class ProjectListNavHeader extends Component {
     return (
       <nav className="list-nav-container">
         <div className="left-wrapper">
-          <MediaQuery minWidth={640}>
+          <MediaQuery minWidth={SCREEN_BREAKPOINT_SM}>
             {(matches) => (
               matches ? (
                 <StatusFilters currentStatus={this.state.currentStatus} onStatusClick={this.onStatusClick}/>

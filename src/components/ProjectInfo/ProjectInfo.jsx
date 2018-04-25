@@ -7,6 +7,7 @@ import ProjectCardBody from '../../projects/list/components/Projects/ProjectCard
 import ProjectDirectLinks from '../../projects/list/components/Projects/ProjectDirectLinks'
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import MediaQuery from 'react-responsive'
+import { SCREEN_BREAKPOINT_MD } from '../../config/constants'
 
 import './ProjectInfo.scss'
 
@@ -54,7 +55,7 @@ class ProjectInfo extends Component {
               />
             }
           </Panel>
-          <MediaQuery minWidth={768}>
+          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => (
               <ProjectCardBody
                 project={project}

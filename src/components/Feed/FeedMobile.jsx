@@ -26,6 +26,33 @@ class FeedMobile extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    // if comments just has been loaded, check if have to open the thread
+    if (this.props.comments.length === 0 && nextProps.comments.length > 0) {
+      this.openCommentFromHash(nextProps.comments)
+    }
+  }
+
+  componentWillMount() {
+    this.openCommentFromHash(this.props.comments)
+  }
+
+  /**
+   * If there is hash in the URL referencing some comment,
+   * open the comments thread by default
+   *
+   * @param {Array} comments list of comments
+   */
+  openCommentFromHash(comments) {
+    const { isCommentsShown } = this.state
+    const commentInHash = window.location.hash.match(/#comment-(\d+)/)
+    const isCommentInTheFeed = !!(commentInHash && _.find(comments, (comment) => (comment.id.toString() === commentInHash[1])))
+
+    if (!isCommentsShown && isCommentInTheFeed) {
+      this.toggleComments()
+    }
+  }
+
   toggleComments() {
     this.setState({ isCommentsShown: !this.state.isCommentsShown })
   }

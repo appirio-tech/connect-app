@@ -384,7 +384,7 @@ export const NOTIFICATIONS_LIMIT = 1000
 // old notification time in minutes, a notification is old if its date is later than this time
 export const OLD_NOTIFICATION_TIME = 60 * 48 // 2 day2
 
-export const SCROLL_TO_MARGIN = 70 // px - 60px of toolbar height + 10px to make sume margin
+export const SCROLL_TO_MARGIN = 70 // px - 60px of toolbar height + 10px to make some margin
 export const SCROLL_TO_DURATION = 500 // ms
 
 // Settings
@@ -392,3 +392,10 @@ export const MAX_USERNAME_LENGTH = 15
 export const EMAIL_AVAILABILITY_CHECK_DEBOUNCE = 300 /* in ms */
 export const PASSWORD_MIN_LENGTH = 8
 export const PASSWORD_REG_EXP = /^(?=.*[a-z])(?=.*[^a-z]).+$/i
+
+// Screen breakpoints
+export const SCREEN_BREAKPOINT_LG = 1360
+export const SCREEN_BREAKPOINT_RG = 992
+export const SCREEN_BREAKPOINT_MD = 768
+export const SCREEN_BREAKPOINT_SM = 640
+export const SCREEN_BREAKPOINT_XS = 320

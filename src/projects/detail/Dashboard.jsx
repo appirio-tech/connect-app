@@ -6,6 +6,7 @@ import FeedContainer from './containers/FeedContainer'
 import MobileNavigationTabs from './components/MobileNavigationTabs'
 import Sticky from 'react-stickynode'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
+import { SCREEN_BREAKPOINT_MD } from '../../config/constants'
 
 require('./Dashboard.scss')
 
@@ -25,7 +26,7 @@ const DashboardView = ({project, currentMemberRole, route, params, isSuperUser }
       <div className="dashboard-container">
         <MobileNavigationTabs projectId={project.id} />
         <div className="left-area">
-          <MediaQuery minWidth={768}>
+          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
               if (matches) {
                 return <Sticky top={80}>{leftArea}</Sticky>

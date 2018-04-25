@@ -6,6 +6,7 @@ import ProjectCardHeader from './ProjectCardHeader'
 import ProjectCardBody from './ProjectCardBody'
 import ProjectManagerAvatars from './ProjectManagerAvatars'
 import MediaQuery from 'react-responsive'
+import { SCREEN_BREAKPOINT_MD } from '../../../../config/constants'
 import './ProjectCard.scss'
 
 function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus}) {
@@ -23,7 +24,7 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
         />
       </div>
       <div className="card-body">
-        <MediaQuery minWidth={768}>
+        <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
           {(matches) => (
             <ProjectCardBody
               project={project}
