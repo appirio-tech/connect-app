@@ -55,12 +55,20 @@
 
     .visual-design-project-estimate-section {
       @media screen and (max-width: $screen-md - 1px) {
-        padding-bottom: 2 * $base-unit;
+        padding-bottom: 5 * $base-unit;
       }
 
       @media screen and (max-width: $screen-md - 1px) {
         .titles {
           display: block;
+        }
+      }
+    }
+
+    &.has-review-btn {
+      .visual-design-project-estimate-section {
+        @media screen and (max-width: $screen-md - 1px) {
+          padding-bottom: 2 * $base-unit;
         }
       }
     }
