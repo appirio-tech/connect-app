@@ -51,13 +51,13 @@ class FeedMobile extends React.Component {
     } = this.props
     const { isCommentsShown, isNewCommentMobileOpen } = this.state
     const commentsButtonText = isCommentsShown ?
-      'Hide comments' :
-      `${totalComments} ${totalComments > 1 ? 'comments' : 'comment'}`
+      'Hide posts' :
+      `${totalComments} ${totalComments > 1 ? 'posts' : 'post'}`
 
     return (
       <div styleName="feed" id={`feed-${id}`}>
         <div styleName="header">
-          <UserWithName {..._.pick(user, 'firstName', 'lastName', 'photoUR')} size="40" />
+          <UserWithName {..._.pick(user, 'firstName', 'lastName', 'photoURL')} size="40" />
           <Link styleName="date" to={permalink}>{moment(date).fromNow()}</Link>
         </div>
         <h4 styleName="title">{title}</h4>
@@ -66,9 +66,9 @@ class FeedMobile extends React.Component {
           {totalComments > 0 ? (
             <button className="tc-btn tc-btn-link tc-btn-md" onClick={this.toggleComments}>{commentsButtonText}</button>
           ) : (
-            <div styleName="no-comments">No comments yet</div>
+            <div styleName="no-comments">No posts yet</div>
           )}
-          {allowComments && <button className="tc-btn tc-btn-link tc-btn-md" onClick={this.toggleNewCommentMobile}>Write a comment</button>}
+          {allowComments && <button className="tc-btn tc-btn-link tc-btn-md" onClick={this.toggleNewCommentMobile}>Write a post</button>}
         </div>
         {isCommentsShown &&
           <FeedComments
@@ -95,11 +95,11 @@ class FeedMobile extends React.Component {
           <NewPostMobile
             step={NEW_POST_STEP.COMMENT}
             statusTitle="NEW STATUS"
-            commentTitle="WRITE COMMENT"
+            commentTitle="WRITE POST"
             statusPlaceholder="Share the latest project updates with the team"
-            commentPlaceholder="Write your comment about the status here"
-            submitText="Post Comment"
-            nextStepText="Add comment"
+            commentPlaceholder="Write your post about the status here"
+            submitText="Post"
+            nextStepText="Add a post"
             onClose={this.toggleNewCommentMobile}
             onPost={this.onAddNewComment}
             isCreating={isAddingComment}

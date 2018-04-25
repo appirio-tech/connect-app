@@ -12,7 +12,7 @@ function NewProjectCard() {
       <div className="card-body">
         <div className="new-project-button">
           <div className="new-project-icon"><BoldAdd className="icon-bold-add"/></div>
-          <div>New Project</div>
+          <div>Create a new project</div>
         </div>
       </div>
       <div className="card-footer" />

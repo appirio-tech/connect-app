@@ -34,7 +34,8 @@
     @media screen and (max-width: $screen-md - 1px) {
       flex-direction: column;
       margin-bottom: 0;
-      padding: 0;
+      /* leave space for new message flying button and space around it */
+      padding: 0 0 (56px + 8 * $base-unit) 0;
     }
 
     .left-area {
@@ -53,7 +54,7 @@
         padding-bottom: 2 * $base-unit;
 
         @media screen and (max-width: $screen-md - 1px) {
-          padding-bottom: 4 * $base-unit;
+          padding-bottom: 0;
         }
 
         .form-group {
@@ -132,13 +133,16 @@
         }
       }
 
+      .feed-action-card:first-child {
+        margin-top: 4 * $base-unit;
+      }
+
       .feed-action-card + .feed-action-card {
         margin-top: 10px;
 
         @media screen and (max-width: $screen-md - 1px) {
-          background-color: #fff;
           margin-top: 0;
-          padding-top: 4 * $base-unit;
+          padding-top: $base-unit;
         }
       }
 
