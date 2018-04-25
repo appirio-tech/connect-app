@@ -131,14 +131,35 @@
     }
   }
 
-  @media screen and (max-width: $screen-md - 1px) {
-    .ProjectWizard-step-3 {
-      .content {
-        padding: 0;
+  .ProjectWizard-step-3 {
+    .FillProjectDetails .header {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+
+      h1 {
+        padding-left: 2px;
       }
 
-      .escape-button {
+      .back-button {
         display: none;
+        margin-left: 12px;
+        position: static;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          display: block;
+        }
+      }
+    }
+
+    @media screen and (max-width: $screen-md - 1px) {
+      .content {
+        padding: 0;
+
+        > .escape-button,
+        > .back-button {
+          display: none;
+        }
       }
     }
   }

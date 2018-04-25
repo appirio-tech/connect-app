@@ -394,14 +394,14 @@ class ProjectWizard extends Component {
 
   render() {
     const { processing, showModal, userRoles } = this.props
-    const { project, dirtyProject } = this.state
+    const { project, dirtyProject, wizardStep } = this.state
     return (
       <Wizard
         showModal={showModal}
         className="ProjectWizard"
         onCancel={this.handleWizardCancel}
         onStepChange={ this.handleStepChange }
-        step={this.state.wizardStep}
+        step={wizardStep}
         shouldRenderBackButton={ (step) => step > 1 }
       >
         <IncompleteProjectConfirmation
@@ -428,6 +428,7 @@ class ProjectWizard extends Component {
           onProjectChange={ this.handleProjectChange }
           submitBtnText="Continue"
           userRoles={ userRoles }
+          onBackClick={() => this.handleStepChange(wizardStep - 1)}
         />
       </Wizard>
     )
