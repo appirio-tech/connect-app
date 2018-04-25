@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 import FeedComments from './FeedComments'
 import UserWithName from '../User/UserWithName'
 import NewPostMobile, { NEW_POST_STEP } from './NewPostMobile'
+import { markdownToHTML } from '../../helpers/markdownToState'
 
 import './FeedMobile.scss'
 
@@ -60,7 +61,7 @@ class FeedMobile extends React.Component {
           <Link styleName="date" to={permalink}>{moment(date).fromNow()}</Link>
         </div>
         <h4 styleName="title">{title}</h4>
-        <div styleName="text" dangerouslySetInnerHTML={{__html: topicMessage.content}} />
+        <div styleName="text" dangerouslySetInnerHTML={{__html: markdownToHTML(topicMessage.content)}} />
         <div styleName="feed-actions">
           {totalComments > 0 ? (
             <button className="tc-btn tc-btn-link tc-btn-md" onClick={this.toggleComments}>{commentsButtonText}</button>

@@ -5,6 +5,7 @@ import Panel from '../Panel/Panel'
 import AddComment from '../ActionCard/AddComment'
 import Comment from '../ActionCard/Comment'
 import cn from 'classnames'
+import {markdownToHTML} from '../../helpers/markdownToState'
 import MediaQuery from 'react-responsive'
 import CommentMobile from '../ActionCard/CommentMobile'
 // import { THREAD_MESSAGES_PAGE_SIZE } from '../../config/constants'
@@ -90,7 +91,7 @@ class FeedComments extends React.Component {
                   hasError={item.error}
                   allMembers={allMembers}
                 >
-                  <div dangerouslySetInnerHTML={{__html: item.content}} />
+                  <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
                 </Comment>
               ))}
               {allowComments &&
@@ -115,7 +116,7 @@ class FeedComments extends React.Component {
                   author={item.author}
                   date={item.date}
                 >
-                  <div dangerouslySetInnerHTML={{__html: item.content}} />
+                  <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
                 </CommentMobile>
               ))}
             </div>

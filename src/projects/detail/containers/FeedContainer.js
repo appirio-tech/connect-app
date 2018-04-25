@@ -10,7 +10,8 @@ import {
   DISCOURSE_BOT_USERID,
   CODER_BOT_USERID,
   CODER_BOT_USER_FNAME,
-  CODER_BOT_USER_LNAME
+  CODER_BOT_USER_LNAME,
+  TC_SYSTEM_USERID
 } from '../../../config/constants'
 import { connect } from 'react-redux'
 import Sticky from 'react-stickynode'
@@ -41,7 +42,7 @@ const SYSTEM_USER = {
   lastName: CODER_BOT_USER_LNAME,
   photoURL: require('../../../assets/images/avatar-coder.svg')
 }
-const isSystemUser = (userId) => [DISCOURSE_BOT_USERID, CODER_BOT_USERID].indexOf(userId) > -1
+const isSystemUser = (userId) => [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(userId) > -1
 
 
 class FeedView extends React.Component {
