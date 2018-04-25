@@ -22,6 +22,10 @@
       z-index: 1;
       min-height: 135px;
 
+      @media screen and (max-width: $screen-md - 1px) {
+        min-height: 0;
+      }
+
       .project-description {
         max-height: 120px;
         min-height: 10px;
