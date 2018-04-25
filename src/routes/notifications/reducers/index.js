@@ -9,7 +9,8 @@ import {
   MARK_ALL_NOTIFICATIONS_READ,
   TOGGLE_NOTIFICATION_READ,
   VIEW_OLDER_NOTIFICATIONS_SUCCESS,
-  NOTIFICATIONS_PENDING
+  NOTIFICATIONS_PENDING,
+  TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE
 } from '../../../config/constants'
 import _ from 'lodash'
 
@@ -23,7 +24,9 @@ const initialState = {
   // ids of sources that will also show old notifications
   oldSourceIds: [],
   lastVisited: new Date(0),
-  pending: false
+  pending: false,
+  // indicates if notifications dropdown opened for mobile devices
+  isDropdownMobileOpen: false
 }
 
 // get sources from notifications
@@ -100,6 +103,11 @@ export default (state = initialState, action) => {
   case VIEW_OLDER_NOTIFICATIONS_SUCCESS:
     return {...state,
       oldSourceIds: [...state.oldSourceIds, action.payload]
+    }
+
+  case TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE:
+    return {...state,
+      isDropdownMobileOpen: !_.isUndefined(action.payload) ? action.payload : !state.isDropdownMobileOpen
     }
 
   default:

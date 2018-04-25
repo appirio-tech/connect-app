@@ -9,7 +9,8 @@ import {
   MARK_ALL_NOTIFICATIONS_READ,
   TOGGLE_NOTIFICATION_READ,
   VIEW_OLDER_NOTIFICATIONS_SUCCESS,
-  NOTIFICATIONS_PENDING
+  NOTIFICATIONS_PENDING,
+  TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE
 } from '../../../config/constants'
 import notificationsService from '../services/notifications.js'
 import Alert from 'react-s-alert'
@@ -109,4 +110,9 @@ export const toggleNotificationSeen = (notificationId) => (dispatch) => {
 export const viewOlderNotifications = (sourceId) => (dispatch) => dispatch({
   type: VIEW_OLDER_NOTIFICATIONS_SUCCESS,
   payload: sourceId
+})
+
+export const toggleNotificationsDropdownMobile = (isOpen) => (dispatch) => dispatch({
+  type: TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE,
+  payload: isOpen
 })

@@ -10,7 +10,6 @@ import cn from 'classnames'
 import { NOTIFICATION_TYPE } from '../../config/constants'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
-import MediaQuery from 'react-responsive'
 import './NotificationItem.scss'
 import Check from '../../assets/icons/check.svg'
 import IconNotificationMememberAdded from '../../assets/icons/notification-member-added.svg'
@@ -101,13 +100,9 @@ const NotificationItem = (props) => {
   )
 
   return (
-    <MediaQuery minWidth={768}>
-      {(matches) => (
-        matches && props.goto
-          ? <Link className={cn('notification-item-link', {unseen: !props.seen})} to={props.goto} onClick={() => props.seen || onLinkClick(id)}>{notificationItem}</Link>
-          : notificationItem
-      )}
-    </MediaQuery>
+    props.goto
+      ? <Link className={cn('notification-item-link', {unseen: !props.seen})} to={props.goto} onClick={() => onLinkClick(id)}>{notificationItem}</Link>
+      : notificationItem
   )
 }
 

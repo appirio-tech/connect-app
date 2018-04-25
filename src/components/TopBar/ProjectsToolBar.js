@@ -160,7 +160,7 @@ class ProjectsToolBar extends Component {
   }
 
   render() {
-    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser, user, mobileMenu } = this.props
+    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser, user, mobileMenu, location } = this.props
     const { isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
     const isLoggedIn = !!(userRoles && userRoles.length)
 
@@ -233,7 +233,9 @@ class ProjectsToolBar extends Component {
           <div className="actions">
             { isLoggedIn && <NewProjectNavLink compact /> }
             { userMenu }
-            { isLoggedIn && <NotificationsDropdown /> }
+            {/* pass location, to make sure that component is re-rendered when location is changed
+                it's necessary to hide notification dropdown on mobile when users uses browser history back/forward buttons */}
+            { isLoggedIn && <NotificationsDropdown location={location} /> }
             { isLoggedIn && <MobileMenuToggle onToggle={this.toggleMobileMenu}/> }
           </div>
         </div>

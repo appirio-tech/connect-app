@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { getNotifications, visitNotifications, toggleNotificationSeen, markAllNotificationsRead,
-  toggleNotificationRead, toggleBundledNotificationRead, viewOlderNotifications } from '../../routes/notifications/actions'
+  toggleNotificationRead, toggleBundledNotificationRead, viewOlderNotifications, toggleNotificationsDropdownMobile } from '../../routes/notifications/actions'
 import { splitNotificationsBySources, filterReadNotifications, limitQuantityInSources, filterOldNotifications } from '../../routes/notifications/helpers/notifications'
 import NotificationsSection from '../NotificationsSection/NotificationsSection'
 import NotificationsEmpty from '../NotificationsEmpty/NotificationsEmpty'
@@ -40,6 +40,19 @@ class NotificationsDropdownContainer extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.autoRefreshNotifications)
+    // hide notifications dropdown for mobile, when this component is unmounted
+    this.props.toggleNotificationsDropdownMobile(false)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const currentPathname = this.props.location.pathname
+    const nextPathname = nextProps.location.pathname
+
+    if (currentPathname !== nextPathname) {
+      // hide notifications dropdown for mobile,
+      // when this component persist but URL changed
+      this.props.toggleNotificationsDropdownMobile(false)
+    }
   }
 
   viewAll() {
@@ -52,7 +65,8 @@ class NotificationsDropdownContainer extends React.Component {
     }
 
     const {lastVisited, sources, notifications, markAllNotificationsRead, toggleNotificationRead, toggleNotificationSeen,
-      pending, toggleBundledNotificationRead, visitNotifications, oldSourceIds, viewOlderNotifications } = this.props
+      pending, toggleBundledNotificationRead, visitNotifications, oldSourceIds, viewOlderNotifications, isDropdownMobileOpen,
+      toggleNotificationsDropdownMobile } = this.props
     const {isViewAll} = this.state
     const getPathname = link => link.split(/[?#]/)[0].replace(/\/?$/, '')
 
@@ -116,6 +130,16 @@ class NotificationsDropdownContainer extends React.Component {
       </NotificationsEmpty>
     )
 
+    // this function checks that notification is not seen yet,
+    // before marking it as seen
+    const markNotificationSeen = (notificationId) => {
+      const notification = _.find(notifications, { id: notificationId })
+
+      if (notification && !notification.seen) {
+        toggleNotificationSeen(notificationId)
+      }
+    }
+
     return (
       <MediaQuery minWidth={768}>
         {(matches) => (matches ? (
@@ -134,7 +158,7 @@ class NotificationsDropdownContainer extends React.Component {
                       isGlobal
                       isSimple
                       onReadToggleClick={toggleNotificationReadWithDelay}
-                      onLinkClick={toggleNotificationSeen}
+                      onLinkClick={markNotificationSeen}
                     />
                   }
                   {projectSources.filter(source => source.notifications.length > 0).map(source => (
@@ -143,7 +167,7 @@ class NotificationsDropdownContainer extends React.Component {
                       key={source.id}
                       isSimple
                       onReadToggleClick={toggleNotificationReadWithDelay}
-                      onLinkClick={toggleNotificationSeen}
+                      onLinkClick={markNotificationSeen}
                     />
                   ))}
                 </div>
@@ -158,7 +182,15 @@ class NotificationsDropdownContainer extends React.Component {
             ])}
           </NotificationsDropdown>
         ) : (
-          <NotificationsMobilePage hasUnread={hasUnread} hasNew={hasNew} onToggle={visitNotifications}>
+          <NotificationsMobilePage
+            hasUnread={hasUnread}
+            hasNew={hasNew}
+            onToggle={() => {
+              toggleNotificationsDropdownMobile()
+              visitNotifications()
+            }}
+            isOpen={isDropdownMobileOpen}
+          >
             {!hasUnread ? (
               notificationsEmpty
             ) : (
@@ -171,7 +203,10 @@ class NotificationsDropdownContainer extends React.Component {
                     isLoading={globalSource.isLoading}
                     onReadToggleClick={toggleNotificationReadWithDelay}
                     onViewOlderClick={isViewAll ? () => viewOlderNotifications(globalSource.id) : null}
-                    onLinkClick={toggleNotificationSeen}
+                    onLinkClick={(notificationId) => {
+                      toggleNotificationsDropdownMobile()
+                      markNotificationSeen(notificationId)
+                    }}
                   />}
                 {projectSources.filter(source => source.notifications.length || isViewAll && source.total).map(source => (
                   <NotificationsSection
@@ -181,7 +216,10 @@ class NotificationsDropdownContainer extends React.Component {
                     isLoading={source.isLoading}
                     onReadToggleClick={toggleNotificationReadWithDelay}
                     onViewOlderClick={isViewAll ? () => viewOlderNotifications(source.id) : null}
-                    onLinkClick={toggleNotificationSeen}
+                    onLinkClick={(notificationId) => {
+                      toggleNotificationsDropdownMobile()
+                      markNotificationSeen(notificationId)
+                    }}
                   />
                 ))}
                 {!isViewAll && (olderNotificationsCount > 0 || hiddenByLimitCount > 0) &&
@@ -204,7 +242,8 @@ const mapDispatchToProps = {
   markAllNotificationsRead,
   toggleNotificationRead,
   toggleBundledNotificationRead,
-  viewOlderNotifications
+  viewOlderNotifications,
+  toggleNotificationsDropdownMobile
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsDropdownContainer)
