@@ -7,20 +7,20 @@
         flex-direction: row;
         min-height: 40px;
         overflow: hidden;
-  
+
         .project-type-icon {
           height: 32px;
           margin-top: 4px;
           vertical-align: middle;
           display: inline-block;
         }
-  
+
         .project-header-details {
           display: flex;
           flex-direction: column;
           margin-left: 2 * $base_unit;
           line-height: 3 * $base_unit;
-  
+
           .project-name {
              @include roboto-medium;
             font-size: $tc-heading-sm;
@@ -28,16 +28,22 @@
             color: $tc-black;
             word-break: break-all;
           }
-  
+
           .project-date {
             @include tc-label-xs;
             text-transform: uppercase;
             color: $tc-gray-50;
             margin-top: $base_unit;
+
+            @media screen and (max-width: $screen-md - 1px) {
+              font-size: 13px;
+              line-height: 15px;
+              margin-top: 2px;
+            }
           }
         }
       }
     }
-  
+
 }
-  
+

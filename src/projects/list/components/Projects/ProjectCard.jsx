@@ -5,6 +5,7 @@ import { getProjectRoleForCurrentUser } from '../../../../helpers/projectHelper'
 import ProjectCardHeader from './ProjectCardHeader'
 import ProjectCardBody from './ProjectCardBody'
 import ProjectManagerAvatars from './ProjectManagerAvatars'
+import MediaQuery from 'react-responsive'
 import './ProjectCard.scss'
 
 function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus}) {
@@ -12,24 +13,28 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
   if (!project) return null
   const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
   return (
-    <div
-      className={className}
-      onClick={() => {
-        history.push(`/projects/${project.id}/`)
-      }}
-    >
+    <div className={className}>
       <div className="card-header">
         <ProjectCardHeader
           project={project}
+          onClick={() => {
+            history.push(`/projects/${project.id}/`)
+          }}
         />
       </div>
       <div className="card-body">
-        <ProjectCardBody
-          project={project}
-          currentMemberRole={currentMemberRole}
-          duration={duration}
-          onChangeStatus={onChangeStatus}
-        />
+        <MediaQuery minWidth={768}>
+          {(matches) => (
+            <ProjectCardBody
+              project={project}
+              currentMemberRole={currentMemberRole}
+              duration={duration}
+              onChangeStatus={onChangeStatus}
+              showLink
+              showLinkURL={matches ? `/projects/${project.id}/specification` : `/projects/${project.id}`}
+            />
+          )}
+        </MediaQuery>
       </div>
       <div className="card-footer">
         <ProjectManagerAvatars managers={project.members} maxShownNum={10} />

@@ -197,6 +197,25 @@ function parseInline(inlineItem, BlockEntities, BlockStyles) {
  *
  * @return {Object} ContentState
 **/
+export function markdownToHTML(markdown) {
+  const md = new Remarkable('full', {
+    html: true,
+    linkify: true,
+    // typographer: true,
+  })
+  // Replace the BBCode [u][/u] to markdown '++' for underline style
+  const _markdown = markdown.replace(new RegExp('\\[/?u\\]', 'g'), '++')
+  return md.render(_markdown, {}) // remarkable js takes markdown and makes it an array of style objects for us to easily parse
+}
+
+/**
+ * Convert markdown into raw draftjs state
+ *
+ * @param {String} markdown - markdown to convert into raw draftjs object
+ * @param {Object} options - optional additional data
+ *
+ * @return {Object} ContentState
+**/
 function markdownToState(markdown, options = {}) {
   const md = new Remarkable('full')
   // Replace the BBCode [u][/u] to markdown '++' for underline style

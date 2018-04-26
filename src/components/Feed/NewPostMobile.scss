@@ -1,0 +1,120 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import './draftjs.scss';
+
+.header {
+  align-items: center;
+  background-color: $tc-black;
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  padding: 0 $base-unit * 3;
+}
+
+.title {
+  @include roboto;
+  color: $tc-gray-10;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.close-wrapper {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.plug {
+  width: 16px; /* same width as close button to align center title */
+}
+
+.body {
+  background-color: $tc-gray-neutral-dark;
+  height: calc(100vh - 50px); /* window height - header height */
+  position: relative;
+}
+
+.submit-wrapper {
+  padding-bottom: 4 * $base-unit;
+
+  > button:global(.tc-btn.tc-btn-md) {
+    border-radius: 0;
+    height: 47px;
+    line-height: 47px;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+.textarea,
+.textarea[disabled] {
+  @include roboto;
+  border-radius: 0;
+  display: block;
+  font-size: 15px;
+  line-height: 25px;
+  height: calc(100vh - 50px - 47px - 20px);
+  margin: 0;
+  padding: 4 * $base-unit;
+  resize: none;
+
+  &::placholder {
+    color: $tc-gray-40;
+  }
+}
+
+.textarea[disabled] {
+  /* keep border for disabled textarea to avoid text jumping */
+  border: 1px solid $tc-gray-40;
+}
+
+/* rewrite styles for RichTextEditor */
+:global(.dashboard-container) :global(.right-area) .body {
+  :global {
+    .new-post-composer {
+      background-color: transparent;
+      border-radius: 0;
+      margin-bottom: 0;
+
+      .draftjs-editor {
+        display: block;
+      }
+    }
+
+    .action-card {
+      box-shadow: none;
+      padding: 0;
+    }
+
+    .modal-row {
+      padding: 0;
+    }
+
+    .modal .object {
+      margin-left: 0;
+    }
+
+    .btn-close,
+    .new-post-title,
+    .portrait,
+    .tc-btns,
+    .textarea-footer {
+      display: none;
+    }
+
+    .action-card .tc-textarea .public-DraftEditor-content, .action-card .tc-textarea textarea {
+      @include roboto;
+      font-size: 15px;
+      line-height: 25px;
+      /* window height - top bar height - submit button height - padding bottom */
+      height: calc(100vh - 50px - 47px - 20px);
+      padding: 4 * $base-unit;
+    }
+
+    .public-DraftEditorPlaceholder-root {
+      @include roboto;
+      font-size: 15px;
+      line-height: 25px;
+      padding: 4 * $base-unit;
+    }
+  }
+}

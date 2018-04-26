@@ -9,6 +9,11 @@
     padding-top: 2 * $base_unit;
     padding-left: 4 * $base_unit;
     padding-right: 4 * $base_unit;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      padding-bottom: 4 * $base_unit;
+    }
+
     ul {
       padding: 0;
       li {
@@ -19,4 +24,3 @@
     }
   }
 }
-  

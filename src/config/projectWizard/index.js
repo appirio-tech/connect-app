@@ -294,7 +294,7 @@ const products = {
       },
       'Salesforce Accelerator': {
         brief: 'TBD',
-        details: 'SalesForce Testing, Cross browser-device Testing',
+        details: 'Prebuilt customizable SFDC test scenarios',
         icon: 'product-qa-sfdc-accelerator',
         id: 'sfdc_testing',
         aliases: ['sfdc_testing', 'sfdc-testing']

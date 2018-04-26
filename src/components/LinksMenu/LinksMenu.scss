@@ -1,6 +1,15 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
+  .panel-links-container {
+    @media screen and (max-width: $screen-md - 1px) {
+      > .panel-title,
+      > .btn-action {
+        display: none;
+      }
+    }
+  }
+
   .panel-links{
     li{
       @include roboto-medium;
@@ -30,14 +39,17 @@
         overflow-x: hidden;
       }
     }
-    li:not(.delete-confirmation-modal):hover{
-      background: $tc-gray-neutral-light;
-      color: $tc-dark-blue;
-      .buttons{
-        display: block;
-      }
-      .link-buttons{
-        display: inline-block;
+    @media screen and (min-width: $screen-md) {
+      li:not(.delete-confirmation-modal):hover{
+        background: $tc-gray-neutral-light;
+        color: $tc-dark-blue;
+
+        .buttons{
+          display: block;
+        }
+        .link-buttons{
+          display: inline-block;
+        }
       }
     }
     .links-footer{
@@ -46,13 +58,29 @@
       color: $tc-gray-70;
       line-height: $base-unit*6;
       padding-left: $base-unit*4;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        padding-right: $base-unit*4;
+      }
+
+      &.buttons a {
+        margin-left: 0;
+        width: auto;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          display: inline-block;
+          height: 40px;
+          line-height: 40px;
+          font-size: 13px;
+        }
+      }
     }
-  
+
     .delete-link-modal {
       margin-left: -4*$base-unit;
       width: 100%;
     }
-  
+
     li:before {
      content: '\b7\a0';
      font-size: 200%;
@@ -60,5 +88,17 @@
      line-height: $base-unit*4;
     }
   }
+
+  .add-link-mobile {
+    padding: $base-unit * 2 $base-unit * 5;
+
+    @media screen and (min-width: $screen-md) {
+      display: none;
+    }
+
+    > button.tc-btn {
+      justify-content: center;
+      width: 100%;
+    }
+  }
 }
-  

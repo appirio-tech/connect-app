@@ -10,8 +10,10 @@ import cn from 'classnames'
 import { NOTIFICATION_TYPE } from '../../config/constants'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
+import MediaQuery from 'react-responsive'
 import './NotificationItem.scss'
 import Check from '../../assets/icons/check.svg'
+import CheckLight from '../../assets/icons/icon-check-light.svg'
 import IconNotificationMememberAdded from '../../assets/icons/notification-member-added.svg'
 import IconNotificationNewPosts from '../../assets/icons/notification-new-posts.svg'
 import IconNotificationNewProject from '../../assets/icons/notification-new-project.svg'
@@ -94,15 +96,22 @@ const NotificationItem = (props) => {
             props.onReadToggleClick(props.id)
           }}
         >
-          <Check className="icon-check"/>
+          <MediaQuery minWidth={768}>
+            {(matches) => (matches ? <Check className="icon-check"/> : <CheckLight className="icon-check"/>)}
+          </MediaQuery>
         </button>
       </div>
     </div>
   )
 
-  return ( props.goto
-    ? <Link className={cn('notification-item-link', {unseen: !props.seen})} to={props.goto} onClick={() => props.seen || onLinkClick(id)}>{notificationItem}</Link>
-    : notificationItem
+  return (
+    <MediaQuery minWidth={768}>
+      {(matches) => (
+        matches && props.goto
+          ? <Link className={cn('notification-item-link', {unseen: !props.seen})} to={props.goto} onClick={() => props.seen || onLinkClick(id)}>{notificationItem}</Link>
+          : notificationItem
+      )}
+    </MediaQuery>
   )
 }
 
