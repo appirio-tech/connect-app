@@ -67,7 +67,7 @@ workflows:
             - test
           filters:
             branches:
-              only: dev
+              only: feature/connectMobile
       - deployTest02:
           requires:
             - test
