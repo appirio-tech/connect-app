@@ -1,4 +1,5 @@
 @import '~tc-ui/src/styles/tc-includes';
+@import '../../styles/variables';
 
 :global {
   .gridview-content.content {
@@ -7,7 +8,6 @@
 
     .container {
       width: auto;
-      min-width: 1120px;
       padding: 0;
       background: $tc-white;
       margin: 0 20px 20px 20px;
@@ -552,7 +552,36 @@
     }
   }
 
-  @media screen and (max-width: $screen-md - 1px) {
+  @media screen and (max-width: 1180px - 1px) {
+    .flex-data {
+      .flex-row .flex-item-title.item-id {
+        display: none;
+      }
+
+      .flex-row:not(.row-th) .flex-item-title.item-icon {
+        justify-content: center;
+        width: 62px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1160px - 1px) {
+    .flex-data {
+      .flex-row .flex-item-title.item-manager {
+        display: none;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1024px - 1px) {
+    .flex-data {
+      .flex-row .flex-item-title.item-status {
+        display: none;
+      }
+    }
+  }
+
+  @media screen and (max-width: $screen-rg - 1px) {
     .flex-data {
       .row .flex-item-title {
         display: none;
