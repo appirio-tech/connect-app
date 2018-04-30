@@ -1,19 +1,8 @@
 import React from 'react' // eslint-disable-line no-unused-vars
-import IconTechOutlineMobile from  '../../assets/icons/icon-tech-outline-mobile.svg'
-import IconTechOutlineTablet from  '../../assets/icons/icon-tech-outline-tablet.svg'
-import IconTechOutlineDesktop from  '../../assets/icons/icon-tech-outline-desktop.svg'
-import IconTechOutlineWatchApple from  '../../assets/icons/icon-tech-outline-watch-apple.svg'
-import IconTcSpecTypeSerif from  '../../assets/icons/icon-tc-spec-type-serif.svg'
-import IconTcSpecTypeSansSerif from  '../../assets/icons/icon-tc-spec-type-sans-serif.svg'
-import IconTcSpecIconTypeColorHome from  '../../assets/icons/icon-tc-spec-icon-type-color-home.svg'
-import IconTcSpecIconTypeOutlineHome from  '../../assets/icons/icon-tc-spec-icon-type-outline-home.svg'
-import IconTcSpecIconTypeGlyphHome from  '../../assets/icons/icon-tc-spec-icon-type-glyph-home.svg'
-import { isFileRequired, findTitle, findFilesSectionTitle } from '../projectWizard'
 
 const sections = [
   {
     id: 'appDefinition',
-    title: findTitle,
     required: true,
     description: 'Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.',
     subSections: [
