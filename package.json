@@ -117,6 +117,7 @@
     "react-layout-pane": "^0.1.16",
     "react-modal": "^1.9.7",
     "react-redux": "^4.4.5",
+    "react-responsive": "^4.1.0",
     "react-router-dom": "^4.2.2",
     "react-s-alert": "^1.1.4",
     "react-scroll": "^1.7.6",

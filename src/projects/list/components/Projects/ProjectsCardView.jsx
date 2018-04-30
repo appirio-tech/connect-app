@@ -4,6 +4,7 @@ import _ from 'lodash'
 import InfiniteScroll from 'react-infinite-scroller'
 import ProjectCard from './ProjectCard'
 import NewProjectCard from './NewProjectCard'
+import cn from 'classnames'
 import { PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
 import { setDuration } from '../../../../helpers/projectHelper'
 
@@ -13,7 +14,7 @@ require('./ProjectsGridView.scss')
 const ProjectsCardView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
-  const { projects, members, currentUser, onPageChange, pageNum, totalCount, infiniteAutoload, setInfiniteAutoload, isLoading, projectsStatus, onChangeStatus } = props
+  const { projects, members, currentUser, onPageChange, pageNum, totalCount, infiniteAutoload, setInfiniteAutoload, isLoading, onChangeStatus, projectsStatus } = props
   // const currentSortField = _.get(criteria, 'sort', '')
 
   // annotate projects with member data
@@ -51,6 +52,15 @@ const ProjectsCardView = props => {
     }
   }
 
+  const moreProject = (isBeforeNewCard) => !isLoading && !infiniteAutoload && (
+    <div className={cn('more-wrapper', {'more-wrapper-before-new-card': isBeforeNewCard})}>
+      {hasMore
+        ? <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore} key="loadMore">Load more projects</button>
+        : <div key="end" className="cardview-no-more">No more {projectsStatus} projects</div>
+      }
+    </div>
+  )
+
   return (
     <div className="projects card-view">
       <InfiniteScroll
@@ -61,10 +71,10 @@ const ProjectsCardView = props => {
         threshold={500}
       >
         { [...projects, ...placeholders].map(renderProject)}
-        <div className="project-card"><NewProjectCard /></div>
+        {moreProject(true)}
+        <div className="project-card project-card-new"><NewProjectCard /></div>
       </InfiniteScroll>
-      { !isLoading && !infiniteAutoload && hasMore && <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore} key="loadMore">Load more projects</button>}
-      { !isLoading && !hasMore && <span key="end">No more {projectsStatus} projects</span>}
+      {moreProject(false)}
     </div>
   )
 }

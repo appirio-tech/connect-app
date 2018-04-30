@@ -29,6 +29,15 @@ jobs:
       - attach_workspace:
           at: ./workspace
       - run: ./deploy.sh DEV no-cache
+  # deploy to test02
+  deployTest02:
+    docker:
+      - image: cibuilds/aws
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./workspace
+      - run: ./deploy.sh TEST02 no-cache
 
   deployTest:
     docker:
@@ -48,6 +57,15 @@ jobs:
           at: ./workspace
       - run: ./deploy.sh PROD
 
+  deployDiscourseFree:
+    docker:
+      - image: cibuilds/aws
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./workspace
+      - run: ./deploy.sh DISCOURSE
+
 workflows:
   version: 2
   build:
@@ -59,16 +77,15 @@ workflows:
           filters:
             branches:
               only: dev
-      - deployTest:
-          requires:
-            - test
-          filters:
-            branches:
-              only: feature/project_plan_section_connect_v3
       - deployProd:
           requires:
             - test
           filters:
             branches:
               only: master
-            
+      - deployDiscourseFree:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master-discourse-free

@@ -13,5 +13,11 @@
       z-index: 1;
     }
   }
+
+  #filepicker_shade {
+    a {
+      pointer-events: none;
+    }
+  }
 }
   

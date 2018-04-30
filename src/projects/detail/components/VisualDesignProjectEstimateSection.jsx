@@ -5,11 +5,11 @@ import { getProductEstimate, findProduct } from '../../../config/projectWizard'
 
 const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
-const VisualDesignProjectEstimateSection = ({products, project}) => {
+const VisualDesignProjectEstimateSection = ({product, project}) => {
   // TODO when we support multiple products per project, we can loop through products and sum up the estimates
-  const productId = products.productType
-  const product = findProduct(productId)
-  if (!product || typeof product.basePriceEstimate === 'undefined') {
+  const productId = product.productType
+  const productDetails = findProduct(productId)
+  if (!productDetails || typeof productDetails.basePriceEstimate === 'undefined') {
     return <div />
   }
 

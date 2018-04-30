@@ -9,12 +9,20 @@
     height: auto;
     $tc-body-large: 20px;
 
+    @media screen and (max-width: $screen-md - 1px) {
+      min-height: 50px;
+    }
+
     .tool-bar {
       display: flex;
       justify-content: space-between;
       width: 100%;
       height: 60px;
       background-color: $tc-black;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        height: 50px;
+      }
 
       .bar-column:first-child {
         display: flex;
@@ -29,6 +37,10 @@
       .logo-wrapper {
         width: 60px;
         margin: 0 20px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
       }
 
       .breadcrumb {
@@ -47,10 +59,24 @@
           color: $tc-gray-50;
           text-transform: uppercase;
 
+          @media screen and (max-width: $screen-md - 1px) {
+            span {
+              display: none;
+            }
+          }
+
           .icon-tail-left {// Back arrow
             fill: $tc-gray-50;
             height: 13px;
             margin-right: 5px;
+
+            @media screen and (max-width: $screen-md - 1px) {
+              fill: $tc-white;
+              height: auto;
+              margin-left: 3 * $base-unit;
+              margin-right: 40px; /* take same space to align title at the center */
+              width: 22px;
+            }
           }
 
           &:hover,
@@ -60,6 +86,10 @@
 
             .icon-tail-left {// Back arrow
               fill: $tc-orange-30;
+
+              @media screen and (max-width: $screen-md - 1px) {
+                fill: $tc-white;
+              }
             }
           }
         }
@@ -78,6 +108,23 @@
           white-space: nowrap;
           max-width: 500px;
         }
+
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
+      }
+
+      .bar-column.project-name.mobile {
+        display: flex;
+        align-items: center;
+
+        span {
+          font-size: 15px;
+        }
+
+        @media screen and (min-width: $screen-md) {
+          display: none;
+        }
       }
 
       .bar-column .welcome-info {
@@ -85,6 +132,10 @@
         display: flex;
         align-items: center;
         margin-right: 4 * $base-unit;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
 
         .avatar-info {
           position: relative;
@@ -157,6 +208,10 @@
       height: 20px;
       margin-top: 20px;
       border-right: 1px solid $tc-gray-80;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        display: none;
+      }
 
       ul {
         /*width: 484px;*/
@@ -418,4 +473,3 @@
     }
   }
 }
-  

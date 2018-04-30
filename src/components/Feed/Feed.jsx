@@ -9,6 +9,7 @@ import UserTooltip from '../User/UserTooltip'
 import {Link} from 'react-router-dom'
 import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
+import { markdownToHTML } from '../../helpers/markdownToState'
 
 class Feed extends React.Component {
   constructor(props) {
@@ -100,7 +101,7 @@ class Feed extends React.Component {
                   <Link to={permalink}>{moment(date).fromNow()}</Link>
                 </div>
               </div>
-              <div className="card-body draftjs-post" dangerouslySetInnerHTML={{__html: topicMessage.content}} />
+              <div className="card-body draftjs-post" dangerouslySetInnerHTML={{__html: markdownToHTML(topicMessage.content)}} />
             </div>
           </Panel.Body>
         )}

@@ -15,7 +15,6 @@
 	.st9{fill:#FFFFFF;stroke:#CFE6FF;stroke-width:2;}
 	.st10{fill:none;stroke:#FF5252;stroke-miterlimit:10;}
 </style>
-<title>Device-iPhone</title>
 <desc>Created with Sketch.</desc>
 <g id="Feature-Screens">
 	<g id="Artboard">
@@ -80,7 +79,6 @@
 			</g>
 		</g>
 	</g>
-
 </g>
 <image x="-50" y="59" class="mask" alt="feaure preview img" xlink:href="" width="136%" height="77.7%"></image>
 </svg>

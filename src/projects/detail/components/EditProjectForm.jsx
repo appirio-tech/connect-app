@@ -75,7 +75,8 @@ class EditProjectForm extends Component {
       this.setState({
         // sets a new state variable with dirty project
         // any component who wants to listen for unsaved changes in project form can listen to this state variable
-        dirtyProject : Object.assign({}, nextProps.project)
+        dirtyProject: Object.assign({}, nextProps.project),
+        isProjectDirty: true
       })
       return
     }
@@ -94,6 +95,7 @@ class EditProjectForm extends Component {
     this.setState({
       project: updatedProject,
       isFeaturesDirty: false, // Since we just saved, features are not dirty anymore.
+      isProjectDirty: false,
       canSubmit: false,
       isSaving: false
     })
@@ -204,8 +206,11 @@ class EditProjectForm extends Component {
    * @param isChanged flag that indicates if form actually changed from initial model values
    */
   handleChange(change) {
-    // removed check for isChanged argument to fire the PROJECT_DIRTY event for every change in the form
-    this.props.fireProjectDirty(unflatten(change))
+    if (this.isChanged()) {
+      this.props.fireProjectDirty(unflatten(change))
+    } else {
+      this.props.fireProjectDirtyUndo()
+    }
   }
 
 
@@ -221,6 +226,7 @@ class EditProjectForm extends Component {
             {...section}
             project={project}
             dirtyProject={dirtyProject}
+            isProjectDirty={this.state.isProjectDirty}
             sectionNumber={idx + 1}
             resetFeatures={this.onFeaturesSaveAttachedClick}
             showFeaturesDialog={this.showFeaturesDialog}

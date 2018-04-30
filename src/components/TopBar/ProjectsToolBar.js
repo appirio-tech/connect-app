@@ -12,6 +12,8 @@ import MenuBar from 'appirio-tech-react-components/components/MenuBar/MenuBar'
 import Filters from './Filters'
 import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
+import MobileMenu from '../MobileMenu/MobileMenu'
+import MobileMenuToggle from '../MobileMenu/MobileMenuToggle'
 import SearchFilter from '../../assets/icons/ui-filters.svg'
 import { projectSuggestions, loadProjects, setInfiniteAutoload } from '../../projects/actions/loadProjects'
 
@@ -22,13 +24,15 @@ class ProjectsToolBar extends Component {
     super(props)
     this.state = {
       errorCreatingProject: false,
-      isFilterVisible: false
+      isFilterVisible: false,
+      isMobileMenuOpen: false
     }
     this.state.isFilterVisible = sessionStorage.getItem('isFilterVisible') === 'true'
     this.applyFilters = this.applyFilters.bind(this)
     this.toggleFilter = this.toggleFilter.bind(this)
     this.handleTermChange = this.handleTermChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
+    this.toggleMobileMenu = this.toggleMobileMenu.bind(this)
     this.onLeave = this.onLeave.bind(this)
   }
 
@@ -53,6 +57,10 @@ class ProjectsToolBar extends Component {
   }
 
   componentDidMount() {
+    const contentDiv = document.getElementById('wrapper-main')
+    if (this.state.isFilterVisible) {
+      contentDiv.classList.add('with-filters')
+    }
     // sets window unload hook to show unsaved changes alert and persist incomplete project
     window.addEventListener('beforeunload', this.onLeave)
   }
@@ -84,9 +92,8 @@ class ProjectsToolBar extends Component {
   applyFilters(filter) {
     const criteria = _.assign({}, this.props.criteria, filter)
     if (criteria && criteria.keyword) {
-      criteria.keyword = encodeURIComponent(criteria.keyword)
-      // force sort criteria to best match
-      criteria.sort = 'best match'
+      // force sort criteria to updatedAt desc
+      criteria.sort = 'updatedAt desc'
     }
     this.routeWithParams(criteria)
   }
@@ -104,6 +111,10 @@ class ProjectsToolBar extends Component {
     })
   }
 
+  toggleMobileMenu() {
+    this.setState({ isMobileMenuOpen: !this.state.isMobileMenuOpen })
+  }
+
   routeWithParams(criteria) {
     // because criteria is changed disable infinite autoload
     this.props.setInfiniteAutoload(false)
@@ -118,7 +129,7 @@ class ProjectsToolBar extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { user, criteria, creatingProject, projectCreationError, searchTermTag } = this.props
-    const { errorCreatingProject, isFilterVisible } = this.state
+    const { errorCreatingProject, isFilterVisible, isMobileMenuOpen } = this.state
     return nextProps.user.handle !== user.handle
     || JSON.stringify(nextProps.criteria) !== JSON.stringify(criteria)
     || nextProps.creatingProject !== creatingProject
@@ -126,12 +137,13 @@ class ProjectsToolBar extends Component {
     || nextProps.searchTermTag !== searchTermTag
     || nextState.errorCreatingProject !== errorCreatingProject
     || nextState.isFilterVisible !== isFilterVisible
+    || nextState.isMobileMenuOpen !== isMobileMenuOpen
   }
 
   render() {
-    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser } = this.props
-    const { isFilterVisible } = this.state
-    const isLoggedIn = userRoles && userRoles.length
+    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser, user, mobileMenu } = this.props
+    const { isFilterVisible, isMobileMenuOpen } = this.state
+    const isLoggedIn = !!(userRoles && userRoles.length)
 
     let excludedFiltersCount = 1 // 1 for default sort criteria
     if (criteria.memberOnly) {
@@ -159,7 +171,7 @@ class ProjectsToolBar extends Component {
         target: '_blank'
       }
     ]
-    const menuBar = !!isLoggedIn && !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />
+    const menuBar = isLoggedIn && !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />
 
     return (
       <div className="ProjectsToolBar">
@@ -169,8 +181,9 @@ class ProjectsToolBar extends Component {
         />
         <div className="primary-toolbar">
           { renderLogoSection(menuBar) }
+          { isLoggedIn && <div className="projects-title-mobile">MY PROJECTS</div> }
           {
-            !!isLoggedIn &&
+            isLoggedIn &&
             <div className="search-widget">
               { !!isPowerUser &&
                 <SearchBar
@@ -195,21 +208,21 @@ class ProjectsToolBar extends Component {
             </div>
           }
           <div className="actions">
-            { !!isLoggedIn && <NewProjectNavLink compact /> }
+            { isLoggedIn && <NewProjectNavLink compact /> }
             { userMenu }
-            { !!isLoggedIn && <NotificationsDropdown /> }
+            { isLoggedIn && <NotificationsDropdown /> }
+            { isLoggedIn && <MobileMenuToggle onToggle={this.toggleMobileMenu}/> }
           </div>
         </div>
         { isFilterVisible && isLoggedIn &&
         <div className="secondary-toolbar">
-          
           <Filters
             applyFilters={ this.applyFilters }
             criteria={ criteria }
           />
         </div>
         }
-        
+        {isMobileMenuOpen && <MobileMenu user={user} onClose={this.toggleMobileMenu} menu={mobileMenu} />}
       </div>
     )
   }

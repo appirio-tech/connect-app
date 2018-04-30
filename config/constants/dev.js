@@ -12,7 +12,6 @@ module.exports = {
   AUTH0_CLIENT_ID   : process.env.AUTH0_CLIENT_ID_DEV,
   domain            : 'topcoder-dev.com',
   DOMAIN            : 'topcoder-dev.com',
-  CONNECT_MESSAGE_API_URL: process.env.CONNECT_MESSAGE_API_URL,
   ENV               : 'DEV',
 
   PROJECTS_API_URL  : 'https://api.topcoder-dev.com',
@@ -44,5 +43,7 @@ module.exports = {
   IBM_COGNITIVE_PROGRAM_ID  : 3449,
   HEAP_ANALYTICS_APP_ID     : '4153837120',
 
-  TC_NOTIFICATION_URL: 'https://api.topcoder-dev.com'
+  TC_NOTIFICATION_URL: 'https://api.topcoder-dev.com/v5/notifications',
+  CONNECT_MESSAGE_API_URL: 'https://api.topcoder-dev.com/v5',
+  TC_SYSTEM_USERID: process.env.DEV_TC_SYSTEM_USERID
 }

@@ -1,0 +1,40 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.header {
+  align-items: center;
+  background-color: $tc-gray-neutral-light;
+  display: flex;
+  height: 39px;
+  justify-content: space-between;
+  padding: 0 $base-unit * 4;
+
+  @media screen and (min-width: $screen-md) {
+    display: none;
+  }
+}
+
+.title {
+  @include roboto;
+  color: $tc-gray-70;
+  font-size: 15px;
+}
+
+.arrow {
+  transform: rotate(0);
+
+  .open & {
+    transform: rotate(180deg);
+  }
+}
+
+.body {
+  display: none;
+
+  @media screen and (min-width: $screen-md) {
+    display: block;
+  }
+
+  .open & {
+    display: block;
+  }
+}

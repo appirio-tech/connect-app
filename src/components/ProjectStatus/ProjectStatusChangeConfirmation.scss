@@ -2,8 +2,16 @@
 
 :global {
   .project-status-change-modal {
-    margin: 0px -4*$base-unit;
-  
+    margin: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 20;
+
+    &.modal{
+      position: absolute;
+    }
+
     .cancellation-reason {
       display: flex;
       flex-direction: column;

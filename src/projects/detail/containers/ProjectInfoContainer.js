@@ -27,6 +27,7 @@ class ProjectInfoContainer extends React.Component {
     this.onDeleteProject = this.onDeleteProject.bind(this)
     this.onAddNewLink = this.onAddNewLink.bind(this)
     this.onDeleteLink = this.onDeleteLink.bind(this)
+    this.onEditLink = this.onEditLink.bind(this)
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
@@ -68,6 +69,17 @@ class ProjectInfoContainer extends React.Component {
     })
   }
 
+  onEditLink(idx, title, address) {
+    const { updateProject, project } = this.props
+    const updatedLink = {
+      title,
+      address
+    }
+    updateProject(project.id, {
+      bookmarks: update(project.bookmarks, { $splice: [[idx, 1, updatedLink]] })
+    })
+  }
+
   onDeleteProject() {
     const { deleteProject, project } = this.props
     deleteProject(project.id)
@@ -79,7 +91,7 @@ class ProjectInfoContainer extends React.Component {
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
-    if (isMemberOrCopilot) {
+    if (isMemberOrCopilot || isSuperUser) {
       directLinks = []
       if (project.directProjectId) {
         directLinks.push({name: 'Project in Topcoder Direct', href: `${DIRECT_PROJECT_URL}${project.directProjectId}`})
@@ -90,6 +102,7 @@ class ProjectInfoContainer extends React.Component {
     }
 
     const canDeleteProject = currentMemberRole === PROJECT_ROLE_OWNER && project.status === 'draft'
+    const canManageLinks = !!currentMemberRole || isSuperUser
 
     let devices = []
     const primaryTarget = _.get(project, 'details.appDefinition.primaryTarget')
@@ -113,9 +126,12 @@ class ProjectInfoContainer extends React.Component {
           />
           <LinksMenu
             links={project.bookmarks || []}
-            canDelete={!!currentMemberRole}
+            canDelete={canManageLinks}
+            canEdit={canManageLinks}
+            canAdd={canManageLinks}
             onAddNewLink={this.onAddNewLink}
             onDelete={this.onDeleteLink}
+            onEdit={this.onEditLink}
           />
           <TeamManagementContainer projectId={project.id} members={project.members} />
         </div>

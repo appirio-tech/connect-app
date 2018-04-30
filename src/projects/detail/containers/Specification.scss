@@ -876,7 +876,7 @@
   
     .dashed-bottom-border {
       flex: 1;
-      height: 40px;
+      min-height: 40px;
       border-bottom: 1px dashed $tc-gray-20;
   
       .project-name {

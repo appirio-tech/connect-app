@@ -205,13 +205,13 @@ export const projectState = function (state=initialState, action) {
 
   case PROJECT_DIRTY: {// payload contains only changed values from the project form
     return Object.assign({}, state, {
-      project: _.mergeWith({}, state.project, action.payload, { isDirty : true},
+      project: _.mergeWith({}, state.project, action.payload, { isDirty : true },
         // customizer to override screens array with changed values
         (objValue, srcValue, key) => {
           if(key === 'products'){
             return _.merge(objValue, srcValue)
           }
-          if (key === 'screens' || key === 'features' || key==='productType') {
+          if (key === 'screens' || key === 'features' || key ==='productType'  || key === 'capabilities') {
             return srcValue //srcValue contains the changed values from action payload
           }
         })

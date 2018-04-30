@@ -18,7 +18,11 @@
   .sideAreaWrapper {
     border: 1px solid $tc-gray-20;
     border-radius: 4px;
-    overflow: hidden;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      border: 0;
+      border-radius: 0;
+    }
   }
 
   .dashboard-container {
@@ -27,12 +31,31 @@
     margin: 20px auto;
     padding: 0 20px;
 
+    @media screen and (max-width: $screen-md - 1px) {
+      flex-direction: column;
+      margin-bottom: 0;
+      /* leave space for new message flying button and space around it */
+      padding: 0 0 (56px + 8 * $base-unit) 0;
+    }
+
     .left-area {
       @include flexWidth(1);
       max-width: 360px;
 
+      @media screen and (max-width: $screen-md - 1px) {
+        max-width: 100%;
+
+        .footer-v2 {
+          display: none;
+        }
+      }
+
       .dashboard-left-panel {
         padding-bottom: 2 * $base-unit;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          padding-bottom: 0;
+        }
 
         .form-group {
           .tc-label {
@@ -56,7 +79,12 @@
     .right-area {
       @include flexWidth(2);
       margin-left: 4 * $base-unit;
-      max-width: 730px;//1110px - 360px - 20px(margin-left)
+      max-width: 730px;//1110px - 360px - 20px(margin-left);
+
+      @media screen and (max-width: $screen-md - 1px) {
+        max-width: 100%;
+        margin-left: 0;
+      }
 
       .new-post-composer {
         margin-bottom: 10px;
@@ -105,8 +133,77 @@
         }
       }
 
+      .feed-action-card:first-child {
+        margin-top: 4 * $base-unit;
+      }
+
       .feed-action-card + .feed-action-card {
         margin-top: 10px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-top: 0;
+          padding-top: $base-unit;
+        }
+      }
+
+      .system-feed {
+        position: relative;
+        margin-bottom: 10px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-bottom: 4 * $base-unit;
+        }
+
+        .project-notification {
+          position: absolute;
+          visibility: hidden;
+          &:first-of-type {
+            position: relative;
+            visibility: visible;
+          }
+        }
+        .action-card {
+          background: $tc-dark-blue-10;
+
+          @media screen and (max-width: $screen-md - 1px) {
+            border-radius: 0;
+          }
+
+          .card-profile {
+            padding-top: 0;
+            margin-bottom: 0;
+          }
+
+          .card-body {
+            padding: 0;
+            margin-top: -5px;
+
+            @media screen and (max-width: $screen-md - 1px) {
+              margin-top: 0;
+              line-height: normal;
+              overflow: hidden;
+            }
+
+            strong {
+              color: #000;
+              font-weight: bold;
+            }
+          }
+
+          .card-time {
+            margin-left: 12px;
+            position: relative;
+
+            &::before {
+              content: " \B7 ";
+              color: #000;
+              font-size: 20px;
+              position: absolute;
+              left: -9px;
+              top: -2px;
+            }
+          }
+        }
       }
     
       .add-stage-btn {
@@ -122,4 +219,3 @@
     }
   }
 }
-  
