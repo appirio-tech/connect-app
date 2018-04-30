@@ -16,7 +16,7 @@ const CommentMobile = ({ messageId, author, date, children }) => {
   const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#comment-${messageId}`
 
   return (
-    <div styleName="comment">
+    <div styleName="comment" id={`comment-${messageId}`}>
       <div styleName="header">
         <UserWithName {..._.pick(author, 'firstName', 'lastName', 'photoURL')} size="40" />
         <Link styleName="date" to={messageLink}>{moment(date).fromNow()}</Link>

@@ -9,12 +9,12 @@
     max-width: 1150px;
     min-width: 960px;
     padding: 30px 20px 0;
-  
+
     > .content {
       flex: 1;
       margin-right: 30px;
       max-width: 720px;
-  
+
       > .end-of-list {
         @include roboto-medium;
         color: $tc-gray-50;
@@ -24,28 +24,10 @@
         padding: 20px 0;
       }
     }
-  
+
     > .filters {
       flex: 1;
       max-width: 360px;
     }
-  
-    .notifications-empty-note {
-      @include roboto;
-      color: $tc-gray-50;
-      font-size: 13px;
-      line-height: 20px;
-      margin: 50px auto 0;
-      max-width: 440px;
-  
-      > a {
-        color: #55a5ff;
-  
-        &:hover {
-          color: $tc-dark-blue;
-        }
-      }
-    }
   }
 }
-  

@@ -144,7 +144,7 @@ class ProjectToolBar extends React.Component {
 
   render() {
     // TODO: removing isPowerUser until link challenges is needed once again.
-    const { renderLogoSection, userMenu, project, user, mobileMenu } = this.props
+    const { renderLogoSection, userMenu, project, user, mobileMenu, location } = this.props
     const { isTooltipVisible, isMobileMenuOpen } = this.state
     this.setActivePage()
 
@@ -191,7 +191,9 @@ class ProjectToolBar extends React.Component {
             </nav>}
             <NewProjectNavLink compact returnUrl={window.location.href} />
             {userMenu}
-            <NotificationsDropdown />
+            {/* pass location, to make sure that component is re-rendered when location is changed
+                it's necessary to hide notification dropdown on mobile when users uses browser history back/forward buttons */}
+            <NotificationsDropdown location={location} />
             <MobileMenuToggle onToggle={this.toggleMobileMenu}/>
           </div>
         </div>

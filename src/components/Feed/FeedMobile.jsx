@@ -27,6 +27,33 @@ class FeedMobile extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    // if comments just has been loaded, check if have to open the thread
+    if (this.props.comments.length === 0 && nextProps.comments.length > 0) {
+      this.openCommentFromHash(nextProps.comments)
+    }
+  }
+
+  componentWillMount() {
+    this.openCommentFromHash(this.props.comments)
+  }
+
+  /**
+   * If there is hash in the URL referencing some comment,
+   * open the comments thread by default
+   *
+   * @param {Array} comments list of comments
+   */
+  openCommentFromHash(comments) {
+    const { isCommentsShown } = this.state
+    const commentInHash = window.location.hash.match(/#comment-(\d+)/)
+    const isCommentInTheFeed = !!(commentInHash && _.find(comments, (comment) => (comment.id.toString() === commentInHash[1])))
+
+    if (!isCommentsShown && isCommentInTheFeed) {
+      this.toggleComments()
+    }
+  }
+
   toggleComments() {
     this.setState({ isCommentsShown: !this.state.isCommentsShown })
   }
@@ -62,14 +89,6 @@ class FeedMobile extends React.Component {
         </div>
         <h4 styleName="title">{title}</h4>
         <div styleName="text" dangerouslySetInnerHTML={{__html: markdownToHTML(topicMessage.content)}} />
-        <div styleName="feed-actions">
-          {totalComments > 0 ? (
-            <button className="tc-btn tc-btn-link tc-btn-md" onClick={this.toggleComments}>{commentsButtonText}</button>
-          ) : (
-            <div styleName="no-comments">No posts yet</div>
-          )}
-          {allowComments && <button className="tc-btn tc-btn-link tc-btn-md" onClick={this.toggleNewCommentMobile}>Write a post</button>}
-        </div>
         {isCommentsShown &&
           <FeedComments
             allowComments={allowComments}
@@ -90,6 +109,14 @@ class FeedMobile extends React.Component {
             allMembers={allMembers}
           />
         }
+        <div styleName="feed-actions">
+          {totalComments > 0 ? (
+            <button className="tc-btn tc-btn-link tc-btn-md" onClick={this.toggleComments}>{commentsButtonText}</button>
+          ) : (
+            <div styleName="no-comments">No posts yet</div>
+          )}
+          {allowComments && <button className="tc-btn tc-btn-link tc-btn-md" onClick={this.toggleNewCommentMobile}>Write a post</button>}
+        </div>
         {children}
         {isNewCommentMobileOpen &&
           <NewPostMobile

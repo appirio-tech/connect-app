@@ -8,6 +8,8 @@ import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
 import ProjectOutline from '../components/ProjectOutline'
 import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
+import ModalControl from '../../../components/ModalControl'
+import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
 
 class FillProjectDetails extends Component  {
   constructor(props) {
@@ -38,9 +40,10 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, dirtyProject, processing, submitBtnText } = this.props
+    const { project, dirtyProject, processing, submitBtnText, onBackClick } = this.props
     const productId = _.get(project, 'details.products[0]')
     const product = findProduct(productId)
+    const formDesclaimer = _.get(product, 'formDesclaimer')
 
     let specification = 'topcoder.v1'
     if (productId)
@@ -51,6 +54,12 @@ class FillProjectDetails extends Component  {
         <div className="header headerFillProjectDetails" />
         <div className="FillProjectDetails">
           <div className="header">
+            <ModalControl
+              className="back-button"
+              icon={<TailLeft className="icon-tail-left"/>}
+              label="back"
+              onClick={onBackClick}
+            />
             <h1 dangerouslySetInnerHTML = {this.createMarkup(product)}  />
           </div>
           <section className="two-col-content content">
@@ -67,9 +76,11 @@ class FillProjectDetails extends Component  {
                     submitBtnText={ submitBtnText }
                   />
                 </div>
-                <div className="left-area-footer">
-                  <span>{ _.get(product, 'formDesclaimer') }</span>
-                </div>
+                {formDesclaimer && (
+                  <div className="left-area-footer">
+                    <span>{formDesclaimer}</span>
+                  </div>
+                )}
               </div>
               <div className="right-area">
                 <Sticky top={20}>
@@ -87,6 +98,7 @@ class FillProjectDetails extends Component  {
 
 FillProjectDetails.propTypes = {
   // onProjectChange: PT.func.isRequired,
+  onBackClick: PT.func.isRequired,
   onCreateProject: PT.func.isRequired,
   onChangeProjectType: PT.func.isRequired,
   project: PT.object.isRequired,

@@ -51,7 +51,7 @@ class TopBarContainer extends React.Component {
   }
 
   render() {
-    const { user, toolbar, userRoles } = this.props
+    const { user, toolbar, userRoles, isPowerUser } = this.props
 
     const userHandle  = _.get(user, 'handle')
     const userImage = _.get(user, 'profile.photoURL')
@@ -90,7 +90,7 @@ class TopBarContainer extends React.Component {
       {
         style: 'big',
         items: [
-          { label: 'My projects', link: '/projects?sort=updatedAt%20desc&status=active' },
+          { label: 'All projects', link: isPowerUser ? '/projects?sort=updatedAt%20desc' : '/projects' },
           { label: 'Getting Started', link: 'https://www.topcoder.com/about-topcoder/connect/', absolute: true },
           { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true },
         ]

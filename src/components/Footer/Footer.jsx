@@ -3,7 +3,7 @@ import MenuBar from 'appirio-tech-react-components/components/MenuBar/MenuBar'
 import moment from 'moment'
 import MediaQuery from 'react-responsive'
 import FooterV2 from '../FooterV2/FooterV2'
-import { NEW_PROJECT_PATH } from '../../config/constants'
+import { NEW_PROJECT_PATH, SCREEN_BREAKPOINT_MD } from '../../config/constants'
 
 require('./Footer.scss')
 
@@ -25,14 +25,14 @@ const Footer = () => {
   const shouldHideOnMobile =  window.location.pathname !== '/'
 
   return (
-    <MediaQuery minWidth={768}>
+    <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
       {(matches) => {
         if (matches) {
           return (shouldHideOnDesktop ? null :
             <div className="Footer">
               <p className="copyright-notice">© Topcoder { currentYear }</p>
               <div className="footer-menu">
-                <MenuBar items={otherNavigationItems} orientation="horizontal" mobileBreakPoint={767} />
+                <MenuBar items={otherNavigationItems} orientation="horizontal" mobileBreakPoint={SCREEN_BREAKPOINT_MD - 1} />
               </div>
             </div>
           )

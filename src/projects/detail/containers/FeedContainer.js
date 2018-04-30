@@ -11,7 +11,8 @@ import {
   CODER_BOT_USERID,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
-  TC_SYSTEM_USERID
+  TC_SYSTEM_USERID,
+  SCREEN_BREAKPOINT_MD
 } from '../../../config/constants'
 import { connect } from 'react-redux'
 import Sticky from 'react-stickynode'
@@ -32,10 +33,12 @@ import FeedMobile from '../../../components/Feed/FeedMobile'
 import './Specification.scss'
 import Refresh from '../../../assets/icons/icon-refresh.svg'
 
-import { ScrollElement, scroller } from 'react-scroll'
+import { ScrollElement } from 'react-scroll'
+import { scrollToHash } from '../../../components/ScrollToAnchors'
 
 /*eslint-disable new-cap */
 const ScrollableFeed = ScrollElement(Feed)
+const ScrollableFeedMobile = ScrollElement(FeedMobile)
 
 const SYSTEM_USER = {
   firstName: CODER_BOT_USER_FNAME,
@@ -241,15 +244,8 @@ class FeedView extends React.Component {
         return
       }
       const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
-      // const scrollTo = _.get(props, 'params.statusId', null)
       if (scrollTo) {
-        scroller.scrollTo(scrollTo, {
-          spy: true,
-          smooth: true,
-          offset: -80, // 60px for top bar and 20px for margin from nav bar
-          duration: 500,
-          activeClass: 'active'
-        })
+        scrollToHash(scrollTo)
       }
     })
   }
@@ -416,7 +412,7 @@ class FeedView extends React.Component {
       const anchorId = 'feed-' + item.id
       return (
         <div className="feed-action-card" key={`${item.id}-${i}`}>
-          <MediaQuery minWidth={768}>
+          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => (matches ?
               (
                 <ScrollableFeed
@@ -442,7 +438,7 @@ class FeedView extends React.Component {
                   </div>}
                 </ScrollableFeed>
               ) : (
-                <FeedMobile
+                <ScrollableFeedMobile
                   {...Object.assign({}, item, {id: `${item.id}`})}
                   name={anchorId}
                   allowComments={item.allowComments && !!currentMemberRole}
@@ -463,7 +459,7 @@ class FeedView extends React.Component {
                   {item.sendForReview && <div className="panel-buttons">
                     <button className="tc-btn tc-btn-primary tc-btn-md">Send for review</button>
                   </div>}
-                </FeedMobile>
+                </ScrollableFeedMobile>
               )
             )}
           </MediaQuery>
@@ -494,7 +490,7 @@ class FeedView extends React.Component {
               />
             </div>
           }
-          <MediaQuery minWidth={768}>
+          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             <NewPost
               currentUser={currentUser}
               allMembers={allMembers}
@@ -508,9 +504,11 @@ class FeedView extends React.Component {
           </MediaQuery>
           { feeds.map(renderFeed) }
         </div>
-        <MediaQuery maxWidth={768 - 1}>
-          <ChatButton onClick={this.toggleNewPostMobile} />
-        </MediaQuery>
+        { !isNewPostMobileOpen &&
+          <MediaQuery maxWidth={SCREEN_BREAKPOINT_MD - 1}>
+            <ChatButton onClick={this.toggleNewPostMobile} />
+          </MediaQuery>
+        }
         { isNewPostMobileOpen &&
           <NewPostMobile
             statusTitle="NEW STATUS"

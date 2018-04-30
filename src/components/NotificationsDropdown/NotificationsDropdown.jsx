@@ -17,7 +17,7 @@ const NotificationsDropdown = (props) => {
           <NotificationsBell
             hasUnread={props.hasUnread}
             hasNew={props.hasNew}
-            onClick={props.onToggl}
+            onClick={props.onToggle}
           />
         </div>
         <div className="dropdown-menu-list">

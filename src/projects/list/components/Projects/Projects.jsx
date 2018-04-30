@@ -7,7 +7,6 @@ import CoderBot from '../../../../components/CoderBot/CoderBot'
 import ProjectListNavHeader from './ProjectListNavHeader'
 import ProjectsGridView from './ProjectsGridView'
 import ProjectsCardView from './ProjectsCardView'
-import MediaQuery from 'react-responsive'
 import { loadProjects, setInfiniteAutoload, setProjectsListView } from '../../../actions/loadProjects'
 import { sortProjects } from '../../../actions/sortProjects'
 import _ from 'lodash'
@@ -220,15 +219,7 @@ class Projects extends Component {
               (
                 <Walkthrough currentUser={currentUser} />
               ) : (
-                <MediaQuery minWidth={768}>
-                  {(matches) => {
-                    if (matches) {
-                      return projectsView
-                    } else {
-                      return cardView
-                    }
-                  }}
-                </MediaQuery>
+                projectsView
               )
             }
           </div>
