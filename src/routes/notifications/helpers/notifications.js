@@ -2,12 +2,8 @@
  * Helper methods to filter and preprocess notifications
  */
 import _ from 'lodash'
-import { OLD_NOTIFICATION_TIME } from '../../../config/constants'
 import { NOTIFICATION_RULES } from '../constants/notifications'
 import Handlebars from 'handlebars'
-
-// how many milliseconds in one minute
-const MILLISECONDS_IN_MINUTE = 60000
 
 /**
  * Handlebars helper to display limited quantity of item and text +N more
@@ -129,19 +125,6 @@ export const splitNotificationsBySources = (sources, notifications) => {
 export const filterReadNotifications = (notifications) => _.filter(notifications, { isRead: false })
 
 /**
- * Filter notifications to only not old or if their source in special oldSourceIds array
- *
- * @param  {Array}  notifications list of notifications
- * @param  {Array}  oldSourceIds  list of ids of sources that will also show old notifications
- *
- * @return {Array}                list of filtered notifications
- */
-export const filterOldNotifications = (notifications, oldSourceIds) => _.filter(notifications, (notification) => (
-  _.includes(oldSourceIds, notification.sourceId) ||
-  new Date().getTime() - OLD_NOTIFICATION_TIME * MILLISECONDS_IN_MINUTE < new Date(notification.date).getTime()
-))
-
-/**
  * Filter notifications that belongs to project:projectId
  *
  * @param  {Array}  notifications list of notifications
@@ -189,31 +172,25 @@ export const filterProjectNotifications = (notifications) => _.filter(notificati
 
 /**
  * Limits notifications quantity per source
- * and total quantity of notifications
  *
  * @param  {Array}  notificationsBySources list of sources with notifications
  * @param  {Number} maxPerSource           maximum number of notifications to include per source
- * @param  {Number} maxTotal               maximum number of notifications in total
+ * @param  {Array}  skipSourceIds          list of ids of sources that will have all notifications
  *
  * @return {Array}                         list of sources with related notifications
  */
-export const limitQuantityInSources = (notificationsBySources, maxPerSource, maxTotal) => {
-  const notificationsBySourceLimited = []
-  let total = 0
-  let sourceIndex = 0
+export const limitQuantityInSources = (notificationsBySources, maxPerSource, skipSourceIds) => (
+  notificationsBySources.map((source) => {
+    // clone sources to avoid updating existent objects
+    const limitedSource = {...source}
 
-  while (total < maxTotal && sourceIndex < notificationsBySources.length) {
-    const source = notificationsBySources[sourceIndex]
-    const maxPerThisSource = Math.min(maxTotal - total, maxPerSource)
-    source.notifications = source.notifications.slice(0, maxPerThisSource)
-    notificationsBySourceLimited.push(source)
+    if (!_.includes(skipSourceIds, limitedSource.id)) {
+      limitedSource.notifications = limitedSource.notifications.slice(0, maxPerSource)
+    }
 
-    total += source.notifications.length
-    sourceIndex += 1
-  }
-
-  return notificationsBySourceLimited
-}
+    return limitedSource
+  })
+)
 
 /**
  * Get a rule for notification
