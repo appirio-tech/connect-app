@@ -5,11 +5,11 @@
     // reset styles of panel class, we need panel class to activate the modal-overlay
     border: none;
     box-shadow: none;
-  
+
     &.panel {
       padding: 0;
     }
-  
+
     > h4 {
       @include roboto-medium;
       font-size: 15px;
@@ -18,29 +18,41 @@
       margin-bottom: 2px;
     }
   }
-  
+
   .file-list-item {
     display: flex;
     border-top: 1px dashed $tc-gray-30;
     padding: 15px 0;
     width: 100%;
     align-items: stretch;
-  
+
+    @media screen and (max-width: $screen-md - 1px) {
+      padding-top: 13px + 20px + 11px; /* date line height and its margins  */
+      position: relative;
+    }
+
     .icon-col {
       padding-top: 3px;
       width: 60px;
     }
-  
+
     .content-col {
       flex: 2;
-  
+
       h4 {
         @include roboto-bold;
         font-size: 15px;
         color: $tc-gray-80;
         max-width: 380px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-right: 67px;
+          max-width: calc(100vw - 160px);
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
-  
+
       p {
         @include roboto;
         font-size: 13px;
@@ -48,44 +60,70 @@
         color: $tc-gray-70;
         line-height: 20px;
       }
-  
+
       .title {
         width: 100%;
         display: flex;
         line-height: 25px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          flex-direction: column;
+        }
       }
-  
+
       .size {
         @include roboto;
         font-size: 15px;
         color: $tc-gray-60;
         margin-left: auto;
         text-align: right;
-  
+
+        @media screen and (max-width: $screen-md - 1px) {
+          color: $tc-gray-40;
+          margin-left: 0;
+          text-align: left;
+        }
+
         .Tooltip {
           line-height: 100%;
+
+          @media screen and (max-width: $screen-md - 1px) {
+            left: 0;
+            position: absolute;
+            top: 13px;
+          }
         }
-  
+
         .date {
           font-size: 13px;
-          line-height: normal;
+          line-height: 20px;
           margin-top: 5px;
+
+          @media screen and (max-width: $screen-md - 1px) {
+            margin-top: 0;
+          }
         }
       }
-  
+
       .edit-icons {
         margin-left: 5px;
-  
+
+        @media screen and (max-width: $screen-md - 1px) {
+          right: 0;
+          position: absolute;
+          top: 46px;
+        }
+
         i {
           cursor: pointer;
         }
       }
-  
+
       .title-edit {
         display: flex;
         align-items: center;
         margin-bottom: 10px;
-  
+
         input {
           @include roboto-bold;
           font-size: 15px;
@@ -97,7 +135,7 @@
           background: $tc-gray-neutral-light;
         }
       }
-  
+
       .tc-textarea {
         margin-left: 0;
         padding: 5px 10px;
@@ -110,27 +148,34 @@
         resize: none;
       }
     }
-  
+
     .icon-trash,
     .icon-edit {
       margin-left: 13px;
       vertical-align: middle;
     }
-  
+
     .icon-trash {
       margin-left: 22px;
     }
-  
+
     .icon-save {
       margin-right: 25px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        margin-right: 15px;
+      }
     }
-  
+
     .icon-close {
       margin-right: 10px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        margin-right: 0;
+      }
     }
   }
-  
+
   .delete-file-modal {
   }
 }
-  

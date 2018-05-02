@@ -1,0 +1,42 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.handle {
+  @include roboto-medium;
+  align-items: center;
+  background-color: $tc-white;
+  cursor: pointer;
+  display: flex;
+  height: 10 * $base-unit;
+  font-size: 15px;
+  justify-content: space-between;
+  padding: 0 4 * $base-unit;
+
+  > svg {
+    width: 12px;
+  }
+
+  &.is-open > svg {
+    transform: rotate(180deg);
+  }
+}
+
+.list {
+  background-color: $tc-white;
+}
+
+.item {
+  @include roboto-medium;
+  align-items: center;
+  border-top: 1px solid $tc-gray-10;
+  color: $tc-gray-40;
+  cursor: pointer;
+  display: flex;
+  font-size: 15px;
+  height: 50px;
+  padding: 0 4 * $base-unit;
+
+  &.active,
+  &:hover {
+    color: $tc-black;
+  }
+}

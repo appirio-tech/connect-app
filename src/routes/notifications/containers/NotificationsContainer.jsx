@@ -8,16 +8,16 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Sticky from 'react-stickynode'
 import { getNotifications, setNotificationsFilterBy, markAllNotificationsRead,
-  toggleNotificationRead, viewOlderNotifications, toggleBundledNotificationRead } from '../actions'
+  toggleNotificationRead, viewOlderNotifications, toggleBundledNotificationRead, hideOlderNotifications } from '../actions'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import NotificationsSection from '../../../components/NotificationsSection/NotificationsSection'
 import NotificationsSectionTitle from '../../../components/NotificationsSectionTitle/NotificationsSectionTitle'
 import SideFilter from '../../../components/SideFilter/SideFilter'
 import NotificationsEmpty from '../../../components/NotificationsEmpty/NotificationsEmpty'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import { getNotificationsFilters, splitNotificationsBySources, filterReadNotifications } from '../helpers/notifications'
+import { getNotificationsFilters, splitNotificationsBySources, filterReadNotifications, limitQuantityInSources } from '../helpers/notifications'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
-import { REFRESH_NOTIFICATIONS_INTERVAL } from '../../../config/constants'
+import { REFRESH_NOTIFICATIONS_INTERVAL, NOTIFICATIONS_NEW_PER_SOURCE } from '../../../config/constants'
 import './NotificationsContainer.scss'
 
 class NotificationsContainer extends React.Component {
@@ -29,6 +29,7 @@ class NotificationsContainer extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.autoRefreshNotifications)
+    this.props.hideOlderNotifications()
   }
 
   render() {
@@ -39,7 +40,12 @@ class NotificationsContainer extends React.Component {
       markAllNotificationsRead, toggleNotificationRead, viewOlderNotifications,
       oldSourceIds, pending, toggleBundledNotificationRead } = this.props
     const notReadNotifications = filterReadNotifications(notifications)
-    const notificationsBySources = splitNotificationsBySources(sources, notReadNotifications, oldSourceIds)
+    const allNotificationsBySources = splitNotificationsBySources(sources, notReadNotifications)
+    const notificationsBySources = limitQuantityInSources(
+      allNotificationsBySources,
+      NOTIFICATIONS_NEW_PER_SOURCE,
+      oldSourceIds
+    )
     let globalSource = notificationsBySources.length > 0 && notificationsBySources[0].id === 'global' ? notificationsBySources[0] : null
     let projectSources = globalSource ? notificationsBySources.slice(1) : notificationsBySources
     if (filterBy) {
@@ -134,6 +140,7 @@ const mapDispatchToProps = {
   markAllNotificationsRead,
   toggleNotificationRead,
   viewOlderNotifications,
+  hideOlderNotifications,
   toggleBundledNotificationRead
 }
 

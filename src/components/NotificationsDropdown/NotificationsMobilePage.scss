@@ -3,7 +3,11 @@
 .container {
   align-items: center;
   display: flex;
-  padding-right: $base-unit * 2;
+  padding-right: 14px;
+
+  :global(.notifications-empty-note) {
+    max-width: 270px;
+  }
 }
 
 .header {
@@ -12,7 +16,7 @@
   display: flex;
   justify-content: space-between;
   height: 50px;
-  padding: 0 $base-unit * 3;
+  padding: 0 ($base-unit * 3 - 8); /* -8px to align buttons */
 }
 
 .logo {
@@ -42,16 +46,31 @@
   text-transform: uppercase;
 }
 
-.close-wrapper {
+.btn {
   align-items: center;
   display: flex;
-  justify-content: flex-end;
-  /* same width as notification bell icon together with hamburger menu
-     minus header padding right */
-  width: 71px - $base-unit * 3;
+  justify-content: center;
+  height: 32px;
+  width: 32px;
+}
+
+.settings-icon {
+  fill: $tc-white;
 }
 
 .body {
   background-color: #fff;
   height: calc(100vh - 50px); /* window height - header height */
+}
+
+.read-all {
+  @include roboto;
+  background-color: $tc-gray-neutral-light;
+  border-top: 1px solid $tc-gray-10;
+  color: $tc-gray-50;
+  display: block;
+  font-size: 12px;
+  line-height: 40px;
+  letter-spacing: 0;
+  text-align: center;
 }

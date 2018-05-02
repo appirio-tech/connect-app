@@ -8,7 +8,7 @@ import cn from 'classnames'
 import {markdownToHTML} from '../../helpers/markdownToState'
 import MediaQuery from 'react-responsive'
 import CommentMobile from '../ActionCard/CommentMobile'
-// import { THREAD_MESSAGES_PAGE_SIZE } from '../../config/constants'
+import { SCREEN_BREAKPOINT_MD } from '../../config/constants'
 
 const getCommentCount = (totalComments) => {
   if (!totalComments) {
@@ -72,7 +72,7 @@ class FeedComments extends React.Component {
             </div>
           </div>
         </Panel.Body>
-        <MediaQuery minWidth={768}>
+        <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
           {(matches) => (matches ? (
             <div>
               {comments.map((item, idx) => (

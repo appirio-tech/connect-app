@@ -15,15 +15,27 @@
     transition: 300ms all ease;
     -moz-transition: 300ms all ease;
     -webkit-transition: 300ms all ease;
-  
+
+    @media screen and (max-width: $screen-md - 1px) {
+      border-radius: 6px;
+      height: 207px;
+      margin: 5px;
+      max-width: 172px;
+      width: calc(50% - 10px);
+    }
+
     .sub-type-details {
       padding: 0 20px;
       font-size: 13px;
       color: $tc-gray-50;
       line-height: 20px;
       width: 100%;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        padding: 0 10px;
+      }
     }
-  
+
     .header {
       @include tc-body;
       @include roboto-bold;
@@ -32,12 +44,12 @@
       margin-bottom: 10px;
       margin-top: 0px;
     }
-  
+
     .icon-wrapper {
       height: 32px;
       display: flex;
       margin: 6 * $base_unit 0 4 * $base_unit;
-  
+
       .Icon {
         /* TODO .Icon is svg, so style to svg is never applied, probably we should remove it */
         svg {
@@ -45,39 +57,45 @@
         }
       }
     }
-  
+
     &.disabled {
       opacity: 0.3;
     }
-  
+
     &.enabled:hover {
       border-color: $tc-dark-blue-70;
       cursor: pointer;
-  
+
       .button {
         background: $tc-dark-blue;
         border-color: transparent;
         color: $tc-white;
       }
-  
+
       svg {
         fill: $tc-dark-blue;
       }
+
+      @media screen and (max-width: $screen-md - 1px) {
+        .tc-btn {
+          display: none;
+        }
+      }
     }
-  
+
     &.selected {
       background: $tc-gray-10;
       border-color: transparent;
-  
+
       &:hover {
         border-color: transparent;
       }
     }
-  
+
     .tc-btn {
       margin-top: 2 * $base_unit;
     }
-  
+
     .tc-btn {
       position: absolute;
       bottom: 30px;
@@ -85,7 +103,7 @@
       transform: translateX(-50%);
       opacity: 0;
     }
-  
+
     &:hover {
       transition: 300ms all ease;
       -moz-transition: 300ms all ease;
@@ -93,19 +111,18 @@
       position: relative;
       background: $tc-white;
       box-shadow: 0 2px 9px 0 rgba($tc-gray-90, 0.1);
-  
+
       h1 {
         color: $tc-dark-blue;
       }
-  
+
       .tc-btn {
         opacity: 1;
       }
     }
-  
+
     &:active {
       background: $tc-dark-blue-10;
     }
   }
 }
-  

@@ -323,11 +323,11 @@ $screen-one-column: 720px;
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
+            }
 
-              &:hover {
-                background-color: $tc-dark-blue-30;
-                color: $tc-black;
-              }
+            .tooltip-target.active .project-customer {
+              background-color: $tc-dark-blue-30;
+              color: $tc-black;
             }
 
             .project-segment {

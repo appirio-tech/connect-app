@@ -31,7 +31,7 @@ function Wizard(props) {
     )
   }
   return (
-    <div className={`Wizard ${props.className}`}>
+    <div className={`Wizard ${props.className} ${props.className}-step-${step}`}>
       <div className="content">
         {backControl}
         { modalCloseControl }

@@ -1,6 +1,8 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 .toggle {
+  align-items: center;
+  display: flex;
   padding-right: $base-unit * 3;
 
   @media screen and (min-width: $screen-md) {

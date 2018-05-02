@@ -15,6 +15,24 @@ const products = {
         icon: 'product-app-app',
         id: 'application_development',
         aliases: ['app', 'application_development']
+      },
+      'Enterprise Mobile': {
+        brief: 'Enterprise Mobile',
+        details: 'Enterprise Mobile',
+        formTitle: 'Enterprise Mobile',
+        icon: 'product-app-app',
+        id: 'enterprise_mobile',
+        aliases: ['enterprise-mobile'],
+        hidden: true
+      },
+      'topgear-dev': {
+        brief: 'Topgear',
+        details: 'Topgear',
+        formTitle: 'Topgear',
+        icon: 'product-app-app',
+        id: 'topgear_dev',
+        aliases: ['topgear-dev'],
+        hidden: true
       }
     }
   },
@@ -294,7 +312,7 @@ const products = {
       },
       'Salesforce Accelerator': {
         brief: 'TBD',
-        details: 'Prebuilt customizable SFDC test scenarios',
+        details: 'SalesForce Testing, Cross browser-device Testing',
         icon: 'product-qa-sfdc-accelerator',
         id: 'sfdc_testing',
         aliases: ['sfdc_testing', 'sfdc-testing']
@@ -462,7 +480,7 @@ export function getProjectCreationTemplateField(product, sectionId, subSectionId
  *
  * @param {string} productId id of the product. It should resolve to a valid product template
  * @param {object} productConfig project object which contains the current value
- * 
+ *
  * @return {object} object containing price and time estimate
  */
 export function getProductEstimate(productId, productConfig) {
@@ -542,7 +560,7 @@ export function findTitle(project, showProduct) {
 }
 
 /**
- * Finds the title for the project files section 
+ * Finds the title for the project files section
  *
  * @param {object}  project    project object to fetch the product title
  *

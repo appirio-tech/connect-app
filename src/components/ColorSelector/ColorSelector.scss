@@ -13,6 +13,10 @@
       margin: 0 15px;
       position: relative;
 
+      @media screen and (max-width: $screen-md - 1px) {
+        position: static;
+      }
+
       .remove-color {
         background-color: $tc-gray-60;
         opacity: 0.7;
@@ -31,9 +35,10 @@
       }
 
       svg {
+        display: block;
         position: relative;
         border-color: $tc-gray-30;
-        margin: 10px;
+        margin: 11px;
       }
     }
 
@@ -47,6 +52,18 @@
       display: flex;
       padding: 10px;
       box-shadow: rgba($tc-black, 0.14902) 0px 0px 0px 1px, rgba($tc-black, 0.14902) 0px 8px 16px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        left: 50%;
+        transform: translateX(-50%);
+        top: auto;
+        width: 340px;
+      }
+
+      /* if picker doesn't fit screen, make it even smaller */
+      @media screen and (max-width: 350px - 1px) {
+        width: 310px;
+      }
 
       > div {
         // box-shadow: none !important;
@@ -63,4 +80,3 @@
     }
   }
 }
-  

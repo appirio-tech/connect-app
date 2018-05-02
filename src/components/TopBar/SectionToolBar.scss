@@ -20,6 +20,17 @@
     padding: 0 20px;
     width: 100%;
 
+    @media screen and (max-width: $screen-md - 1px) {
+      padding: 0;
+
+      /* add pseudo element to center title */
+      &::before {
+        content: '';
+        display: block;
+        width: 39px; /* close button width with padding */
+      }
+    }
+
     > .section {
       align-items: center;
       display: flex;
@@ -34,6 +45,10 @@
 
     > .section > .title {
       margin-left: 24px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        margin-left: 0;
+      }
     }
 
     .close {
@@ -45,6 +60,13 @@
       justify-content: center;
       width: 30px;
 
+      @media screen and (max-width: $screen-md - 1px) {
+        background-color: transparent;
+        margin-right: 7px;
+        height: 32px;
+        width: 32px;
+      }
+
       &:hover {
         background-color: #55a5ff;
 
@@ -54,10 +76,14 @@
         }
       }
 
-        .icon-x-mark {
-          fill: $tc-black;
-          margin: -6px;
+      .icon-x-mark {
+        fill: $tc-black;
+        margin: -6px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          fill: $tc-white;
         }
+      }
     }
 
     > .section > .menu {
@@ -81,6 +107,10 @@
       align-items: center;
       display: flex;
 
+      @media screen and (max-width: $screen-md - 1px) {
+        display: none;
+      }
+
       .icon-connect-logo-mono {
         height: auto;
         width: 53px;
@@ -90,6 +120,10 @@
           fill: $tc-gray-10;
         }
       }
+    }
+
+    > .section .logo .icon-connect-logo-mono {
+      margin-top: 0;
     }
   }
 }

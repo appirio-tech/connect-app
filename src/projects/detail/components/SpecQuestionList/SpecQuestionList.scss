@@ -3,33 +3,41 @@
 :global {
   .spec-question-list {
   }
-  
+
   .spec-question-list-item {
     padding: 0;
     margin-bottom: 30px;
-  
+
+    @media screen and (max-width: $screen-md - 1px) {
+      margin-top: 9 * $base-unit;
+    }
+
     .icon-col {
       padding-top: 3px;
       padding-right: 10px;
       display: none;
     }
-  
+
     .content-col {
       width: 100%;
-  
+
       > h5 {
-        @include roboto;
+        @include roboto-medium;
         font-size: 15px;
         line-height: 25px;
         color: $tc-gray-70;
         margin-bottom: 0;
-  
+
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-bottom: 2 * $base-unit;
+        }
+
         span {
           color: $tc-orange;
           padding-left: $base-unit;
         }
       }
-  
+
       > p,
       .description {
         @include roboto-light;
@@ -38,38 +46,42 @@
         font-weight: 400;
         font-style: italic;
         line-height: 20px;
-  
+
         &.bigger {
           font-size: 15px;
         }
+
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-top: 2 * $base-unit;
+        }
       }
-  
+
       .description {
         margin-bottom: $base-unit * 4;
       }
-  
+
       .child-component {
         .colorSelector {
           margin-bottom: $base-unit * 4;
         }
-  
+
         .checkbox-group-item.checkbox-item-checked {
           background: $tc-dark-blue-10;
           border-radius: 4px;
         }
-  
+
         .dropdown-wrap.default {
           background: $tc-gray-neutral-light;
           border-color: $tc-gray-20;
           max-width: 300px;
           margin-left: 0px;
-  
+
           &:after {
             border-bottom-color: $tc-gray-70;
             border-right-color: $tc-gray-70;
           }
         }
-  
+
         textarea {
           min-height: 45px;
           max-width: 100%;
@@ -78,7 +90,7 @@
           margin-bottom: 0;
           line-height: 24.5px;
         }
-  
+
         .radio-group-input,
         .checkbox-group-item {
           width: 100%;
@@ -86,33 +98,131 @@
           margin-bottom: 20px;
           margin-right: 0;
         }
-  
+
+        .radio-group-input {
+          @media screen and (max-width: $screen-md - 1px) {
+            margin-bottom: 0;
+            padding: 4 * $base-unit 0;
+          }
+        }
+
+        .radio-group-options {
+          @media screen and (max-width: $screen-md - 1px) {
+            flex-direction: column;
+          }
+
+          .radio label {
+            @media screen and (max-width: $screen-md - 1px) {
+              @include roboto;
+              color: $tc-gray-80;
+              font-size: 15px;
+            }
+          }
+
+          .radio:not(:first-child) {
+            @media screen and (max-width: $screen-md - 1px) {
+              margin-top: 4 * $base-unit;
+            }
+          }
+        }
+
         .checkbox-group-item {
           border-radius: 4px;
           background: $tc-gray-neutral-light;
           padding-left: 10px;
-          display: block;
-  
+          padding-right: 10px;
+          display: flex;
+
+          .tc-checkbox {
+            flex: 0 0 20px;
+          }
+
           label {
             font-weight: 400;
             color: $tc-black;
             font-size: 12px;
           }
         }
-  
+
         .checkbox-group-options .checkbox-group-item {
           width: auto;
           background: none;
           padding: 0;
           margin: 15px 30px 15px 0;
+
+          @media screen and (max-width: $screen-md - 1px) {
+            margin-bottom: 4 * $base-unit;
+            margin-top: 4 * $base-unit;
+          }
+
+          label {
+            @media screen and (max-width: $screen-md - 1px) {
+              @include roboto;
+              color: $tc-gray-80;
+              font-size: 15px;
+            }
+          }
         }
-  
+
         .SliderRadioGroup {
-          margin: 40px auto 15px auto;
-          width: 80%;
+          height: auto;
+          margin: 10px auto;
+          padding-bottom: 20px;
+
+          .rc-slider-rail {
+            display: none;
+          }
+
+          .rc-slider-step {
+            display: flex;
+            justify-content: space-around;
+            bottom: 8px;
+            left: 0;
+            width: 100%;
+          }
+
+          /* use important to override inline styles which comes from rc-slider */
+          .rc-slider-dot {
+            bottom: 8px;
+            left: auto !important;
+            position: relative;
+            z-index: 1;
+          }
+
+          .rc-slider-mark {
+            display: flex;
+            justify-content: space-between;
+            top: 0;
+          }
+
+          /* use important to override inline styles which comes from rc-slider */
+          .rc-slider-mark-text {
+            align-items: flex-end;
+            display: flex;
+            flex: 1;
+            justify-content: center;
+            left: auto !important;
+            margin-left: 0 !important;
+            position: relative;
+            width: 0 !important; /* 0 to force equal width with flex */
+
+            &::before {
+              background-color: $tc-gray-10;
+              bottom: -12px;
+              content: '';
+              display: block;
+              height: 4px;
+              left: 50%;
+              position: absolute;
+              width: 100%;
+            }
+
+            &:last-child::before {
+              display: none;
+            }
+          }
         }
       }
     }
   }
 }
-  
