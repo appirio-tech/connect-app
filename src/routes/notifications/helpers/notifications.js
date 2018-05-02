@@ -75,8 +75,9 @@ export const getNotificationsFilters = (sources) => {
     filterSections.push([{ title: 'Global', value: 'global', quantity: globalNotificationsQuantity }])
   }
   const filtersBySource = []
+  const sortedSources = [...sources].sort(compareSourcesByLastNotificationDate)
 
-  sources.forEach(source => {
+  sortedSources.forEach(source => {
     if (source.id !== 'global') {
       filtersBySource.push({
         title: source.title,
@@ -94,6 +95,20 @@ export const getNotificationsFilters = (sources) => {
 }
 
 /**
+ * Compare two sources by the first's (latest) notification date
+ * If source doesn't have notifications, such source is "less" than another
+ *
+ * @param {Object} s1 source object
+ * @param {Object} s2 source object
+ */
+const compareSourcesByLastNotificationDate = (s1, s2) => {
+  const date1 = s1.notifications && s1.notifications.length ? new Date(s1.notifications[0].date).getTime() : 0
+  const date2 = s2.notifications && s2.notifications.length ? new Date(s2.notifications[0].date).getTime() : 0
+
+  return date2 - date1
+}
+
+/**
  * Split notifications by sources
  *
  * @param  {Array}  sources       list of sources
@@ -105,12 +120,12 @@ export const splitNotificationsBySources = (sources, notifications) => {
   const notificationsBySources = []
 
   sources.filter(source => source.total > 0).forEach(source => {
-    source.notifications = _.filter(notifications, n => {
-      if (n.sourceId !== source.id) return false
-      return true
-    })
+    source.notifications = _.filter(notifications, n => n.sourceId === source.id)
     notificationsBySources.push(source)
   })
+
+  // source that has the most recent notification should be on top
+  notificationsBySources.sort(compareSourcesByLastNotificationDate)
 
   return notificationsBySources
 }
@@ -369,6 +384,14 @@ export const prepareNotifications = (rawNotifications) => {
   })
 
   const notifications = _.map(bundledNotificationsWithRules, 'notification')
+
+  // sort notifications by date (newer first)
+  notifications.sort((n1, n2) => {
+    const date1 = new Date(n1.date).getTime()
+    const date2 = new Date(n2.date).getTime()
+
+    return date2 - date1
+  })
 
   return notifications
 }
