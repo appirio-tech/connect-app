@@ -3,6 +3,7 @@
 :global {
   .ProjectCard {
     position: relative;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -65,7 +66,6 @@
     }
 
     .card-header {
-      cursor: pointer;
       margin-bottom: 4 * $base_unit;
 
       @media screen and (max-width: $screen-md - 1px) {
