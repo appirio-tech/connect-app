@@ -66,42 +66,8 @@ const getNotificationSettings = () => {
     .then(resp => resp.data)
 }
 
-// TODO move this list to constants together with the same list in NotificationSettingsForm.jsx
-const topics = [
-  'notifications.connect.project.created',
-  'notifications.connect.project.updated',
-  'notifications.connect.project.canceled',
-  'notifications.connect.project.approved',
-  'notifications.connect.project.paused',
-  'notifications.connect.project.completed',
-  'notifications.connect.project.submittedForReview',
-  'notifications.connect.project.active',
-
-  'notifications.connect.project.fileUploaded',
-  'notifications.connect.project.specificationModified',
-  'notifications.connect.project.linkCreated',
-
-  'notifications.connect.project.member.joined',
-  'notifications.connect.project.member.left',
-  'notifications.connect.project.member.removed',
-  'notifications.connect.project.member.managerJoined',
-  'notifications.connect.project.member.copilotJoined',
-  'notifications.connect.project.member.assignedAsOwner',
-
-  'notifications.connect.project.topic.created',
-  'notifications.connect.project.topic.deleted',
-  'notifications.connect.project.post.created',
-  'notifications.connect.project.post.edited',
-  'notifications.connect.project.post.deleted'
-]
-
 const saveNotificationSettings = (data) => {
-  const body = []
-  _.each(topics, (topic) => {
-    body.push({ topic, deliveryMethod: 'email', value: data[topic] && data[topic].email === 'yes' ? 'yes' : 'no' })
-    body.push({ topic, deliveryMethod: 'web', value: data[topic] && data[topic].web === 'yes' ? 'yes' : 'no' })
-  })
-  return axios.put(`${TC_NOTIFICATION_URL}/settings`, body)
+  return axios.put(`${TC_NOTIFICATION_URL}/settings`, data)
 }
 
 export default {

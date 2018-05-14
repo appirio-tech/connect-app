@@ -5,9 +5,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
+import { NOTIFICATION_SETTINGS_PERIODS } from '../../../../../config/constants'
 import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 import BtnGroup from '../../../../../components/BtnGroup/BtnGroup'
 import IconSettingsWeb from '../../../../../assets/icons/settings-icon-web.svg'
+import IconSettingsEmail from '../../../../../assets/icons/settings-icon-mail.svg'
 import './NotificationSettingsForm.scss'
 import _ from 'lodash'
 
@@ -78,21 +80,27 @@ const topics = [
  */
 const initSettings = (notInitedSettings) => {
   const settings = {...notInitedSettings}
+  const notifications = {...settings.notifications}
   const allTypes = _.flatten(_.map(topics, 'types'))
 
   allTypes.forEach((type) => {
-    if (!settings[type]) {
-      settings[type] = {}
+    if (!notifications[type]) {
+      notifications[type] = {}
     }
 
-    // check each of deliveryMethod method separately as some can have
+    // check each of serviceId method separately as some can have
     // values and some don't have
-    ['web', 'email'].forEach((deliveryMethod) => {
-      if (_.isUndefined(settings[type][deliveryMethod])) {
-        settings[type][deliveryMethod] = 'yes'
+    ['web', 'email'].forEach((serviceId) => {
+      if (!notifications[type][serviceId]) {
+        notifications[type][serviceId] = {}
+      }
+      if (_.isUndefined(notifications[type][serviceId].enabled)) {
+        notifications[type][serviceId].enabled = 'yes'
       }
     })
   })
+
+  settings.notifications = notifications
 
   return settings
 }
@@ -107,26 +115,45 @@ class NotificationSettingsForm extends React.Component {
     }
 
     this.handleChange = this.handleChange.bind(this)
+    this.handleBundleEmailChange = this.handleBundleEmailChange.bind(this)
   }
 
-  handleChange(topicIndex, deliveryMethod) {
-    const s = {
-      settings: {
-        ...this.state.settings
-      }
-    }
+  handleChange(topicIndex, serviceId) {
+    const notifications = {...this.state.settings.notifications}
 
     // update values for all types of the topic
     topics[topicIndex].types.forEach((type) => {
-      s.settings[type][deliveryMethod] = s.settings[type][deliveryMethod] === 'yes' ? 'no' : 'yes'
+      notifications[type][serviceId].enabled = notifications[type][serviceId].enabled === 'yes' ? 'no' : 'yes'
     })
 
-    this.setState(s)
+    this.setState({
+      settings: {
+        ...this.state.settings,
+        notifications,
+      }
+    })
+  }
+
+  handleBundleEmailChange(bundlePeriod) {
+    this.setState({
+      settings: {
+        ...this.state.settings,
+        services: {
+          ...this.state.settings.services,
+          email: {
+            ...this.state.settings.services.email,
+            // this will be send to backend which uses null instead of 'immediately'
+            bundlePeriod: bundlePeriod === 'immediately' ? null : bundlePeriod,
+          }
+        }
+      }
+    })
   }
 
   render() {
     const areSettingsProvided = !!this.props.values.settings
     const settings = this.state.settings
+    const notifications = settings.notifications
 
     // if settings weren't provided (not loaded) don't render anything
     if (!areSettingsProvided) {
@@ -145,8 +172,9 @@ class NotificationSettingsForm extends React.Component {
               <th><span className="th-with-icon">
                 <IconSettingsWeb className="icon-settings-web"/>
                 <span>Web</span></span></th>
-              {/* as email notification currently not supported, hide them for now */}
-              {/*<th><span className="th-with-icon"><img src={iconMail} /><span>Email</span></span></th>*/}
+              <th><span className="th-with-icon">
+                <IconSettingsEmail />
+                <span>Email</span></span></th>
             </tr>
           </thead>
           <tbody>
@@ -157,36 +185,25 @@ class NotificationSettingsForm extends React.Component {
               return (
                 <tr key={index}>
                   <th>{topic.title}</th>
-                  <td><SwitchButton onChange={() => this.handleChange(index, 'web')} defaultChecked={settings[topicFirstType] && settings[topicFirstType].web === 'yes'} /></td>
-                  {/* as email notification currently not supported, hide them for now */}
-                  {/*<td><SwitchButton onChange={() => this.handleChange(topic, 'email')} defaultChecked={settings[topic] && settings[topic].email === 'yes'} /></td>*/}
+                  <td><SwitchButton onChange={() => this.handleChange(index, 'web')} defaultChecked={notifications[topicFirstType].web.enabled === 'yes'} /></td>
+                  <td><SwitchButton onChange={() => this.handleChange(index, 'email')} defaultChecked={notifications[topicFirstType].email.enabled === 'yes'} /></td>
                 </tr>
               )
             })}
-
-            { false && <tr>
+            <tr>
               <td colSpan="3">
                 <div className="bundle-emails">
                   <div className="th">Bundle emails:</div>
                   <BtnGroup
-                    items={[
-                      { text: 'Send as they happen', value: 'immediately' },
-                      { text: 'Every hour', value: 'hourly' },
-                      { text: 'Every 12h.', value: '12h' },
-                      { text: 'Every 24h.', value: '24h' }
-                    ]}
-                    defaultValue={this.props.values.bundleEmail}
+                    items={NOTIFICATION_SETTINGS_PERIODS}
+                    onChange={this.handleBundleEmailChange}
+                    defaultValue={_.get(this.props.values, 'settings.services.email.bundlePeriod') || 'immediately'}
                   />
                 </div>
               </td>
             </tr>
-            }
           </tbody>
         </table>
-
-        <div className="email-settings">
-          <a href="https://www.topcoder.com/settings/email/">Manage email settings</a>
-        </div>
 
         <div className="controls">
           <button type="submit" className="tc-btn tc-btn-primary" disabled={this.props.values.pending}>Save settings</button>
