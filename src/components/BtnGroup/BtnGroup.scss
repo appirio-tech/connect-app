@@ -6,18 +6,17 @@
     > .tc-btn {
       border-radius: 0;
       border-left-width: 0;
-      margin: 0;
     }
-
+  
     > .tc-btn:first-child {
       border-radius: 2 * $corner-radius 0 0 2 * $corner-radius;
       border-left-width: 1px;
     }
-
+  
     > .tc-btn:last-child {
       border-radius: 0 2 * $corner-radius 2 * $corner-radius 0;
     }
-
+  
     > .tc-btn.active,
     > .tc-btn.active:hover,
     > .tc-btn.active:active {
@@ -25,15 +24,6 @@
       box-shadow: inset 0 1px 3px 0 rgba($tc-gray-80, 0.38);
       cursor: default;
     }
-
-    @media screen and (max-width: $screen-md - 1px) {
-      > .tc-btn,
-      > .tc-btn:first-child,
-      > .tc-btn:last-child {
-        border-radius: 2 * $corner-radius;
-        border-width: 1px;
-        margin: 5px;
-      }
-    }
   }
 }
+  
