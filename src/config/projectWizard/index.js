@@ -33,6 +33,15 @@ const products = {
         id: 'topgear_dev',
         aliases: ['topgear-dev'],
         hidden: true
+      },
+      'caas-intake': {
+        brief: 'CaaS',
+        details: 'CaaS',
+        formTitle: 'CaaS',
+        icon: 'product-app-app',
+        id: 'caas_intake',
+        aliases: ['caas-intake', 'caas', 'caas_intake'],
+        hidden: true
       }
     }
   },
