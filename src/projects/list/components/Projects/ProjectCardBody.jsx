@@ -12,11 +12,13 @@ import _ from 'lodash'
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
 function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount = 8,
-  onChangeStatus, isSuperUser, showLink, showLinkURL }) {
+  onChangeStatus, isSuperUser, showLink, showLinkURL, canEditStatus = true }) {
   if (!project) return null
 
-  const canEdit = project.status !== PROJECT_STATUS_COMPLETED && (isSuperUser || (currentMemberRole
+  const canEdit = canEditStatus && (
+    project.status !== PROJECT_STATUS_COMPLETED && (isSuperUser || (currentMemberRole
     && (_.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1)))
+  )
 
   const progress = _.get(process, 'percent', 0)
 
@@ -54,7 +56,8 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
 
 ProjectCardBody.defaultTypes = {
   showLink: false,
-  showLinkURL: ''
+  showLinkURL: '',
+  canEditStatus: true
 }
 
 ProjectCardBody.propTypes = {
@@ -62,7 +65,8 @@ ProjectCardBody.propTypes = {
   currentMemberRole: PT.string,
   duration: PT.object.isRequired,
   showLink: PT.bool,
-  showLinkURL: PT.string
+  showLinkURL: PT.string,
+  canEditStatus: PT.bool
 }
 
 export default ProjectCardBody

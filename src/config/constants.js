@@ -14,6 +14,7 @@ export const MARK_ALL_NOTIFICATIONS_READ = 'MARK_ALL_NOTIFICATIONS_READ'
 export const TOGGLE_NOTIFICATION_READ = 'TOGGLE_NOTIFICATION_READ'
 export const TOGGLE_NOTIFICATION_SEEN = 'TOGGLE_NOTIFICATION_SEEN'
 export const VIEW_OLDER_NOTIFICATIONS_SUCCESS = 'VIEW_OLDER_NOTIFICATIONS_SUCCESS'
+export const HIDE_OLDER_NOTIFICATIONS_SUCCESS = 'HIDE_OLDER_NOTIFICATIONS_SUCCESS'
 export const NOTIFICATIONS_PENDING = 'NOTIFICATIONS_PENDING'
 export const TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE = 'TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE'
 
@@ -379,11 +380,9 @@ export const SORT_OPTIONS = [
 export const REFRESH_NOTIFICATIONS_INTERVAL = 1000 * 60 * 1 // 1 minute interval
 export const REFRESH_UNREAD_UPDATE_INTERVAL = 1000 * 10 * 1 // 10 second interval
 export const NOTIFICATIONS_DROPDOWN_PER_SOURCE = 5
-export const NOTIFICATIONS_DROPDOWN_MAX_TOTAL = Infinity
+export const NOTIFICATIONS_NEW_PER_SOURCE = 10
 
 export const NOTIFICATIONS_LIMIT = 1000
-// old notification time in minutes, a notification is old if its date is later than this time
-export const OLD_NOTIFICATION_TIME = 60 * 48 // 2 day2
 
 export const SCROLL_TO_MARGIN = 70 // px - 60px of toolbar height + 10px to make some margin
 export const SCROLL_TO_DURATION = 500 // ms

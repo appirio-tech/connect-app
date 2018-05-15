@@ -9,6 +9,7 @@ import {
   MARK_ALL_NOTIFICATIONS_READ,
   TOGGLE_NOTIFICATION_READ,
   VIEW_OLDER_NOTIFICATIONS_SUCCESS,
+  HIDE_OLDER_NOTIFICATIONS_SUCCESS,
   NOTIFICATIONS_PENDING,
   TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE
 } from '../../../config/constants'
@@ -110,6 +111,10 @@ export const toggleNotificationSeen = (notificationId) => (dispatch) => {
 export const viewOlderNotifications = (sourceId) => (dispatch) => dispatch({
   type: VIEW_OLDER_NOTIFICATIONS_SUCCESS,
   payload: sourceId
+})
+
+export const hideOlderNotifications = () => (dispatch) => dispatch({
+  type: HIDE_OLDER_NOTIFICATIONS_SUCCESS
 })
 
 export const toggleNotificationsDropdownMobile = (isOpen) => (dispatch) => dispatch({
