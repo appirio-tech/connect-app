@@ -3,6 +3,8 @@
   "visual_design_concepts": "avd.v1.0",
   "visual_design_prod": "avd.v1.0",
   "infographic": "avd.v1.0",
+  "topgear_dev": "topgear-dev.v1.0",
+  "caas_intake": "caas_intake.v1.0",
 	"generic_design": "topcoder.v1",
 	"visual_prototype": "app_dev.v1.0",
   "website_development": "website.v1.0",
@@ -22,5 +24,6 @@
   "api_dev": "app_dev.v1.0",
   "health_check": "health_check.v1.0",
   "frontend_dev" : "app_dev.v1.0",
+  "enterprise_mobile" : "enterprise_mobile.v1.0",
   "sfdc_testing" : "sfdc_accelerator.v1.0"
 }
