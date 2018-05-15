@@ -15,11 +15,37 @@
   .team-management {
     border-radius: 0 0 4px 4px;
 
+    @media screen and (max-width: $screen-md - 1px) {
+      border-radius: 0;
+
+      .panel .panel-title,
+      .panel .btn-action {
+        display: none;
+      }
+    }
+
     .panel {
       background: $tc-white;
       border-radius: 0 0 4px 4px;
       padding: $base-unit*2 0;
       box-shadow: none;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        border-radius: 0;
+      }
+
+      .add-member-mobile {
+        padding: $base-unit * 2 $base-unit * 5;
+
+        @media screen and (min-width: $screen-md) {
+          display: none;
+        }
+
+        > button.tc-btn {
+          justify-content: center;
+          width: 100%;
+        }
+      }
 
       .panel-title,
       .panel-body,

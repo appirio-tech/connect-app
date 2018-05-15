@@ -14,7 +14,9 @@ export const MARK_ALL_NOTIFICATIONS_READ = 'MARK_ALL_NOTIFICATIONS_READ'
 export const TOGGLE_NOTIFICATION_READ = 'TOGGLE_NOTIFICATION_READ'
 export const TOGGLE_NOTIFICATION_SEEN = 'TOGGLE_NOTIFICATION_SEEN'
 export const VIEW_OLDER_NOTIFICATIONS_SUCCESS = 'VIEW_OLDER_NOTIFICATIONS_SUCCESS'
+export const HIDE_OLDER_NOTIFICATIONS_SUCCESS = 'HIDE_OLDER_NOTIFICATIONS_SUCCESS'
 export const NOTIFICATIONS_PENDING = 'NOTIFICATIONS_PENDING'
+export const TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE = 'TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE'
 
 // Settings
 export const CHECK_EMAIL_AVAILABILITY_PENDING = 'CHECK_EMAIL_AVAILABILITY_PENDING'
@@ -307,6 +309,7 @@ export const PROJECT_FEED_TYPE_MESSAGES = 'MESSAGES'
 
 export const DISCOURSE_BOT_USERID = 'system'
 export const CODER_BOT_USERID = 'CoderBot'
+export const TC_SYSTEM_USERID = parseInt(process.env.TC_SYSTEM_USERID || '0', 10)
 export const CODER_BOT_USER_FNAME = 'Coder'
 export const CODER_BOT_USER_LNAME = 'the Bot'
 
@@ -376,14 +379,12 @@ export const SORT_OPTIONS = [
 // Notifications
 export const REFRESH_NOTIFICATIONS_INTERVAL = 1000 * 60 * 1 // 1 minute interval
 export const REFRESH_UNREAD_UPDATE_INTERVAL = 1000 * 10 * 1 // 10 second interval
-export const NOTIFCATIONS_DROPDOWN_PER_SOURCE = 5
-export const NOTIFCATIONS_DROPDOWN_MAX_TOTAL = Infinity
+export const NOTIFICATIONS_DROPDOWN_PER_SOURCE = 5
+export const NOTIFICATIONS_NEW_PER_SOURCE = 10
 
 export const NOTIFICATIONS_LIMIT = 1000
-// old notification time in minutes, a notification is old if its date is later than this time
-export const OLD_NOTIFICATION_TIME = 60 * 48 // 2 day2
 
-export const SCROLL_TO_MARGIN = 70 // px - 60px of toolbar height + 10px to make sume margin
+export const SCROLL_TO_MARGIN = 70 // px - 60px of toolbar height + 10px to make some margin
 export const SCROLL_TO_DURATION = 500 // ms
 
 // Settings
@@ -391,3 +392,10 @@ export const MAX_USERNAME_LENGTH = 15
 export const EMAIL_AVAILABILITY_CHECK_DEBOUNCE = 300 /* in ms */
 export const PASSWORD_MIN_LENGTH = 8
 export const PASSWORD_REG_EXP = /^(?=.*[a-z])(?=.*[^a-z]).+$/i
+
+// Screen breakpoints
+export const SCREEN_BREAKPOINT_LG = 1360
+export const SCREEN_BREAKPOINT_RG = 992
+export const SCREEN_BREAKPOINT_MD = 768
+export const SCREEN_BREAKPOINT_SM = 640
+export const SCREEN_BREAKPOINT_XS = 320

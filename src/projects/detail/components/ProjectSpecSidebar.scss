@@ -12,7 +12,7 @@
   $hr-color: lighten($hr-color-base, 33.5%);
   $hr-color-light: lighten($hr-color-base, 46.7%);
   $hr-color-lighter: lighten($hr-color-base, 93.5%);
-  
+
   .projectSpecSidebar {
     margin-right: 20px;
     margin-bottom: 10px;
@@ -21,7 +21,21 @@
     padding: 20px 0;
     border-radius: 4px;
     min-width: 280px;
-  
+    position: relative;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      border-radius: 0;
+      box-shadow: none;
+      margin-bottom: 0;
+      margin-right: 0;
+      padding: 0;
+
+      &.has-review-btn {
+        padding-bottom: 2 * $base-unit;
+        padding-top: 2 * $base-unit;
+      }
+    }
+
     .titles {
       @include roboto-medium;
       font-size: 12px;
@@ -30,15 +44,44 @@
       padding: 6px 0;
       margin: 0 20px;
       text-transform: uppercase;
-  
+
+      @media screen and (max-width: $screen-md - 1px) {
+        display: none;
+      }
+
       &.normal-txt {
         color: $tc-black;
       }
     }
+
+    .visual-design-project-estimate-section {
+      @media screen and (max-width: $screen-md - 1px) {
+        padding-bottom: 5 * $base-unit;
+      }
+
+      @media screen and (max-width: $screen-md - 1px) {
+        .titles {
+          display: block;
+        }
+      }
+    }
+
+    &.has-review-btn {
+      .visual-design-project-estimate-section {
+        @media screen and (max-width: $screen-md - 1px) {
+          padding-bottom: 2 * $base-unit;
+        }
+      }
+    }
+
     /* .text-box 8/29 */
     .text-box {
       margin: 0 20px;
-  
+
+      @media screen and (max-width: $screen-md - 1px) {
+        display: none;
+      }
+
       hr {
         display: block;
         height: 1px;
@@ -46,8 +89,12 @@
         border-top: 1px solid $hr-color-lighter;
         margin: 1em 0;
         padding: 0;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
       }
-  
+
       p {
         @include roboto;
         font-size: 13px;
@@ -55,18 +102,31 @@
         color: $gray-color;
       }
     }
+
     /* text-box End */
     .btn-boxs {
       margin-top: 20px;
       text-align: center;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        background-color: $tc-white;
+        margin-top: 0;
+        padding: 3 * $base-unit 4 * $base-unit;
+      }
     }
-  
+
+    .list-group:first-of-type {
+      @media screen and (max-width: $screen-md - 1px) {
+        display: none;
+      }
+    }
+
     &.no-number {
       .list-group {
         .title {
           padding-left: 0;
         }
-  
+
         li {
           .boxs {
             padding: 0 20px;
@@ -74,6 +134,86 @@
         }
       }
     }
+
+    /* styles related to animations when .btn-boxs sticks using Sticky module */
+    @media screen and (max-width: $screen-md - 1px) {
+      /* restyle estimations component */
+      .btn-boxs {
+        .list-group {
+          display: block;
+        }
+
+        .visual-design-project-estimate-section {
+          flex-direction: column-reverse;
+          left: 4 * $base-unit;
+          margin: 0;
+          opacity: 0;
+          position: absolute;
+          transition: opacity 0.5s ease;
+          width: auto;
+
+          h4,
+          .label {
+            display: none;
+          }
+
+          .estimate {
+            margin-top: 0;
+            text-align: left;
+
+            &:not(:last-child) {
+              color: $tc-gray-50;
+              font-size: 13px;
+              margin-top: 2px;
+            }
+          }
+        }
+      }
+
+      .btn-boxs button {
+        display: block;
+        left: 50%;
+        position: relative;
+        transform: translateX(-50%);
+        transition: all 0.5s ease;
+      }
+
+      .sticky-outer-wrapper.active {
+        .sticky-inner-wrapper {
+          z-index: 10;
+        }
+
+        .btn-boxs {
+          box-shadow: 0px 1px 3px 0px rgba($tc-black, 0.2);
+        }
+
+        .btn-boxs.has-estimation button {
+          left: 100%;
+          transform: translateX(-100%);
+        }
+
+        .visual-design-project-estimate-section {
+          opacity: 1;
+        }
+      }
+    }
+
+    .sticky-estimation-only {
+      .sticky-outer-wrapper {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        width: 100%;
+        z-index: -1;
+
+        &.active {
+          z-index: 10;
+        }
+      }
+
+      .btn-boxs {
+        height: 70px;
+      }
+    }
   }
 }
-  

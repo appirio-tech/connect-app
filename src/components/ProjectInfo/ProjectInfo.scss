@@ -10,26 +10,47 @@
     padding-bottom: 25px;
     @include tc-label-md;
 
+    @media screen and (max-width: $screen-md - 1px) {
+      border-radius: 0;
+      margin-top: 4 * $base_unit;
+      padding-bottom: 0;
+    }
+
     .project-card-body {
       padding-left: 4 * $base_unit;
       padding-right: 4 * $base_unit;
       z-index: 1;
       min-height: 135px;
 
+      @media screen and (max-width: $screen-md - 1px) {
+        min-height: 0;
+      }
+
       .project-description {
         max-height: 120px;
         min-height: 10px;
         margin-bottom: 5 * $base_unit;
         word-wrap: break-word;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          .read-more-link {
+            display: none;
+          }
+        }
       }
     }
 
     .project-info-header {
       display: flex;
       fill: $tc-gray-50;
+      justify-content: space-between;
       padding-left: 4 * $base_unit;
       padding-right: 4 * $base_unit;
       padding-top: 4 * $base_unit;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        margin-bottom: 4 * $base_unit;
+      }
 
       .project-delete-icon {
         margin-top: 4px;
@@ -38,4 +59,4 @@
     }
   }
 }
-  
+

@@ -234,7 +234,7 @@ class ProjectWizard extends Component {
     if (!details) {
       updateQuery = { details: { $set : { utm : { code : projectRef }}}}
     }
-    this.setState({ 
+    this.setState({
       project: update(this.state.project, updateQuery),
       dirtyProject: update(this.state.project, updateQuery)
     })
@@ -253,7 +253,7 @@ class ProjectWizard extends Component {
         updateQuery.details = { $set : { products : [products[0].id]} }
       }
     }
-    this.setState({ 
+    this.setState({
       project: update(this.state.project, updateQuery),
       dirtyProject: update(this.state.project, updateQuery),
       wizardStep: products.length === 1 ? WZ_STEP_FILL_PROJ_DETAILS : WZ_STEP_SELECT_PROD_TYPE
@@ -275,7 +275,7 @@ class ProjectWizard extends Component {
     if (projectType) {
       updateQuery.type = {$set : projectType }
     }
-    this.setState({ 
+    this.setState({
       project: update(this.state.project, updateQuery),
       dirtyProject: update(this.state.project, updateQuery),
       wizardStep: WZ_STEP_FILL_PROJ_DETAILS
@@ -287,7 +287,7 @@ class ProjectWizard extends Component {
 
   /**
    * Restores common details of the project while changing product type.
-   * 
+   *
    * Added for Github issue#1037
    */
   restoreCommonDetails(updatedProduct, updateQuery, detailsQuery) {
@@ -394,14 +394,14 @@ class ProjectWizard extends Component {
 
   render() {
     const { processing, showModal, userRoles } = this.props
-    const { project, dirtyProject } = this.state
+    const { project, dirtyProject, wizardStep } = this.state
     return (
       <Wizard
         showModal={showModal}
         className="ProjectWizard"
         onCancel={this.handleWizardCancel}
         onStepChange={ this.handleStepChange }
-        step={this.state.wizardStep}
+        step={wizardStep}
         shouldRenderBackButton={ (step) => step > 1 }
       >
         <IncompleteProjectConfirmation
@@ -428,6 +428,7 @@ class ProjectWizard extends Component {
           onProjectChange={ this.handleProjectChange }
           submitBtnText="Continue"
           userRoles={ userRoles }
+          onBackClick={() => this.handleStepChange(wizardStep - 1)}
         />
       </Wizard>
     )

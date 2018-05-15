@@ -1,0 +1,39 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.tabs {
+  align-items: center;
+  background-color: $tc-gray-neutral-light;
+  border-bottom: 1px solid $tc-gray-10;
+  display: none;
+  height: 50px;
+  justify-content: center;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    display: flex;
+  }
+}
+
+.link {
+  @include roboto;
+  color: $tc-gray-50;
+  font-size: 14px;
+  padding: 0 4 * $base-unit;
+  position: relative;
+  text-transform: uppercase;
+
+  &.active {
+    @include roboto-bold;
+
+    &::after {
+      background-color: $tc-dark-blue-70;
+      bottom: - $base-unit;
+      content: '';
+      display: block;
+      height: 2px;
+      left: 50%;
+      margin-left: - (5 * $base-unit) / 2;
+      position: absolute;
+      width: 5 * $base-unit;
+    }
+  }
+}

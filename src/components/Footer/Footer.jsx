@@ -1,7 +1,9 @@
 import React from 'react'
 import MenuBar from 'appirio-tech-react-components/components/MenuBar/MenuBar'
 import moment from 'moment'
-import { NEW_PROJECT_PATH } from '../../config/constants'
+import MediaQuery from 'react-responsive'
+import FooterV2 from '../FooterV2/FooterV2'
+import { NEW_PROJECT_PATH, SCREEN_BREAKPOINT_MD } from '../../config/constants'
 
 require('./Footer.scss')
 
@@ -18,17 +20,29 @@ const Footer = () => {
   const isNotificationsPage = window.location.pathname.startsWith('/notifications')
 
   // TODO this looks like a bad way of doing it, I think it should be re-factored
-  if (isProjectDetails || isCreateProject || isNotificationsPage) {
-    return null
-  }
+  const shouldHideOnDesktop = isProjectDetails || isCreateProject || isNotificationsPage
+  // on mobile show footer only when user is logged-out, so only root page is available
+  const shouldHideOnMobile =  window.location.pathname !== '/'
 
   return (
-    <div className="Footer">
-      <p className="copyright-notice">© Topcoder { currentYear }</p>
-      <div className="footer-menu">
-        <MenuBar items={otherNavigationItems} orientation="horizontal" mobileBreakPoint={767} />
-      </div>
-    </div>
+    <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+      {(matches) => {
+        if (matches) {
+          return (shouldHideOnDesktop ? null :
+            <div className="Footer">
+              <p className="copyright-notice">© Topcoder { currentYear }</p>
+              <div className="footer-menu">
+                <MenuBar items={otherNavigationItems} orientation="horizontal" mobileBreakPoint={SCREEN_BREAKPOINT_MD - 1} />
+              </div>
+            </div>
+          )
+        } else {
+          return (shouldHideOnMobile ? null :
+            <FooterV2 />
+          )
+        }
+      }}
+    </MediaQuery>
   )
 }
 

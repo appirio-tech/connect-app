@@ -2,12 +2,8 @@
  * Helper methods to filter and preprocess notifications
  */
 import _ from 'lodash'
-import { OLD_NOTIFICATION_TIME } from '../../../config/constants'
 import { NOTIFICATION_RULES } from '../constants/notifications'
 import Handlebars from 'handlebars'
-
-// how many milliseconds in one minute
-const MILLISECONDS_IN_MINUTE = 60000
 
 /**
  * Handlebars helper to display limited quantity of item and text +N more
@@ -79,8 +75,9 @@ export const getNotificationsFilters = (sources) => {
     filterSections.push([{ title: 'Global', value: 'global', quantity: globalNotificationsQuantity }])
   }
   const filtersBySource = []
+  const sortedSources = [...sources].sort(compareSourcesByLastNotificationDate)
 
-  sources.forEach(source => {
+  sortedSources.forEach(source => {
     if (source.id !== 'global') {
       filtersBySource.push({
         title: source.title,
@@ -98,27 +95,37 @@ export const getNotificationsFilters = (sources) => {
 }
 
 /**
+ * Compare two sources by the first's (latest) notification date
+ * If source doesn't have notifications, such source is "less" than another
+ *
+ * @param {Object} s1 source object
+ * @param {Object} s2 source object
+ */
+const compareSourcesByLastNotificationDate = (s1, s2) => {
+  const date1 = s1.notifications && s1.notifications.length ? new Date(s1.notifications[0].date).getTime() : 0
+  const date2 = s2.notifications && s2.notifications.length ? new Date(s2.notifications[0].date).getTime() : 0
+
+  return date2 - date1
+}
+
+/**
  * Split notifications by sources
  *
  * @param  {Array}  sources       list of sources
  * @param  {Array}  notifications list of notifications
- * @param  {Array}  oldSourceIds  list of ids of sources that will also show old notifications
  *
  * @return {Array}                list of sources with related notifications
  */
-export const splitNotificationsBySources = (sources, notifications, oldSourceIds = []) => {
+export const splitNotificationsBySources = (sources, notifications) => {
   const notificationsBySources = []
 
   sources.filter(source => source.total > 0).forEach(source => {
-    source.notifications = _.filter(notifications, n => {
-      if (n.sourceId !== source.id) return false
-      return true
-    })
-    if (_.indexOf(oldSourceIds, source.id) < 0) {
-      source.notifications = source.notifications.slice(0, 10)
-    }
+    source.notifications = _.filter(notifications, n => n.sourceId === source.id)
     notificationsBySources.push(source)
   })
+
+  // source that has the most recent notification should be on top
+  notificationsBySources.sort(compareSourcesByLastNotificationDate)
 
   return notificationsBySources
 }
@@ -128,7 +135,7 @@ export const splitNotificationsBySources = (sources, notifications, oldSourceIds
  *
  * @param  {Array}  notifications list of notifications
  *
- * @return {Array}                notifications list filtered of notifications
+ * @return {Array}                list of filtered notifications
  */
 export const filterReadNotifications = (notifications) => _.filter(notifications, { isRead: false })
 
@@ -180,31 +187,25 @@ export const filterProjectNotifications = (notifications) => _.filter(notificati
 
 /**
  * Limits notifications quantity per source
- * and total quantity of notifications
  *
  * @param  {Array}  notificationsBySources list of sources with notifications
  * @param  {Number} maxPerSource           maximum number of notifications to include per source
- * @param  {Number} maxTotal               maximum number of notifications in total
+ * @param  {Array}  skipSourceIds          list of ids of sources that will have all notifications
  *
  * @return {Array}                         list of sources with related notifications
  */
-export const limitQuantityInSources = (notificationsBySources, maxPerSource, maxTotal) => {
-  const notificationsBySourceLimited = []
-  let total = 0
-  let sourceIndex = 0
+export const limitQuantityInSources = (notificationsBySources, maxPerSource, skipSourceIds) => (
+  notificationsBySources.map((source) => {
+    // clone sources to avoid updating existent objects
+    const limitedSource = {...source}
 
-  while (total < maxTotal && sourceIndex < notificationsBySources.length) {
-    const source = notificationsBySources[sourceIndex]
-    const maxPerThisSource = Math.min(maxTotal - total, maxPerSource)
-    source.notifications = source.notifications.slice(0, maxPerThisSource)
-    notificationsBySourceLimited.push(source)
+    if (!_.includes(skipSourceIds, limitedSource.id)) {
+      limitedSource.notifications = limitedSource.notifications.slice(0, maxPerSource)
+    }
 
-    total += source.notifications.length
-    sourceIndex += 1
-  }
-
-  return notificationsBySourceLimited
-}
+    return limitedSource
+  })
+)
 
 /**
  * Get a rule for notification
@@ -350,7 +351,6 @@ export const prepareNotifications = (rawNotifications) => {
     date: rawNotification.createdAt,
     isRead: rawNotification.read,
     seen: rawNotification.seen,
-    isOld: new Date().getTime() - OLD_NOTIFICATION_TIME * MILLISECONDS_IN_MINUTE > new Date(rawNotification.createdAt).getTime(),
     contents: rawNotification.contents,
     version: rawNotification.version
   })).map((notification) => {
@@ -384,6 +384,14 @@ export const prepareNotifications = (rawNotifications) => {
   })
 
   const notifications = _.map(bundledNotificationsWithRules, 'notification')
+
+  // sort notifications by date (newer first)
+  notifications.sort((n1, n2) => {
+    const date1 = new Date(n1.date).getTime()
+    const date2 = new Date(n2.date).getTime()
+
+    return date2 - date1
+  })
 
   return notifications
 }

@@ -1,0 +1,41 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  height: 32px;
+  /* prevent notifications text selection when clicking the bell fast */
+  user-select: none;
+  position: relative;
+  width: 32px;
+
+  svg path {
+    fill: $tc-white;
+  }
+
+  &:not(.has-unread) {
+    svg path {
+      fill: $tc-gray-50;
+    }
+  }
+}
+
+.container.has-new {
+  &::after {
+    background-color: $tc-red-70;
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: 8px;
+    position: absolute;
+    right: -2px;
+    top: 2px;
+    width: 8px;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      right: 2px;
+    }
+  }
+}

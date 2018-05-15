@@ -2,6 +2,15 @@
 
 :global {
   .ProjectWizard {
+    @media screen and (max-width: $screen-md - 1px) {
+      align-items: center;
+      display: flex;
+
+      &.ProjectWizard-step-1 {
+        align-items: flex-start;
+      }
+    }
+
     .content {
       background: transparent;
       box-shadow: none;
@@ -9,10 +18,14 @@
       display: block;
       margin: 0px;
       padding-top: 0px;//to align the wizard header to the bottom of logo
-  
+
+      @media screen and (max-width: $screen-md - 1px) {
+        padding-top: 0;
+      }
+
       .ProductCard {
         background: $tc-white;
-  
+
         &.selected {
           background: $tc-gray-10;
         }
@@ -20,4 +33,3 @@
     }
   }
 }
-  

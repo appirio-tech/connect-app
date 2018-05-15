@@ -4,7 +4,10 @@ import _ from 'lodash'
 import querystring from 'query-string'
 import React, { Component } from 'react'
 import PT from 'prop-types'
-import { PROJECT_STATUS } from '../../../../config/constants'
+import StatusFilters from '../../../../components/StatusFilters/StatusFilters'
+import StatusFiltersMobile from '../../../../components/StatusFilters/StatusFiltersMobile'
+import MediaQuery from 'react-responsive'
+import { SCREEN_BREAKPOINT_SM } from '../../../../config/constants'
 import CardView from '../../../../assets/icons/ui-16px-2_grid-45-gray.svg'
 import GridView from '../../../../assets/icons/grid-list-ico.svg'
 import { SwitchButton } from 'appirio-tech-react-components'
@@ -15,7 +18,7 @@ export default class ProjectListNavHeader extends Component {
   constructor(props) {
     super(props)
     this.state = {}
-    this.onItemClick = this.onItemClick.bind(this)
+    this.onStatusClick = this.onStatusClick.bind(this)
     this.switchViews = this.switchViews.bind(this)
     this.handleMyProjectsFilter = this.handleMyProjectsFilter.bind(this)
   }
@@ -30,10 +33,9 @@ export default class ProjectListNavHeader extends Component {
       this.setState({currentStatus : nextProps.currentStatus})
     }
   }
-  onItemClick (e) {
-    e.preventDefault()
-    this.setState({ currentStatus : e.currentTarget.dataset.status })
-    this.props.applyFilters({status : e.currentTarget.dataset.status})
+  onStatusClick(status) {
+    this.setState({ currentStatus : status })
+    this.props.applyFilters({ status })
   }
 
   switchViews(e) {
@@ -73,30 +75,19 @@ export default class ProjectListNavHeader extends Component {
   }
 
   render() {
-    const options = [
-      { status: null, label: 'All projects' },
-      ...PROJECT_STATUS.sort((a, b) => { 
-        if ( a.order < b.order ){
-          return -1
-        }
-        if ( a.order > b.order ){
-          return 1
-        }
-        return 0
-      }).map((item) => ({status: item.value, label: item.name}))
-    ]
-
     return (
       <nav className="list-nav-container">
-        <ul className="left-wrapper">
-          {
-            options.map((item, i) =>
-              (<li className="list-nav-item" key={i}>
-                <a href="javascript;" data-status={item.status} onClick={this.onItemClick} className={`list-nav-btn lg ${(item.label === 'All Statuses' && !this.state.currentStatus) || this.state.currentStatus === item.status ? 'active' : ''}`}>{item.label}</a>
-              </li>)
-            )
-          }
-        </ul>
+        <div className="left-wrapper">
+          <MediaQuery minWidth={SCREEN_BREAKPOINT_SM}>
+            {(matches) => (
+              matches ? (
+                <StatusFilters currentStatus={this.state.currentStatus} onStatusClick={this.onStatusClick}/>
+              ) : (
+                <StatusFiltersMobile currentStatus={this.state.currentStatus} onStatusClick={this.onStatusClick}/>
+              )
+            )}
+          </MediaQuery>
+        </div>
         <div className="right-wrapper">
 
           <div className="primary-filter">

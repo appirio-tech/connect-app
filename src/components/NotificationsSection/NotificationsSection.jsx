@@ -51,6 +51,7 @@ NotificationsSection.propTypes = {
   onViewOlderClick: PropTypes.func,
   total: PropTypes.number,
   notifications: PropTypes.array.isRequired,
+  isLoading: PropTypes.bool
 }
 
 export default NotificationsSection

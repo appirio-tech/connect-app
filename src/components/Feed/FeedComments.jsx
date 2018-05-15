@@ -5,16 +5,19 @@ import Panel from '../Panel/Panel'
 import AddComment from '../ActionCard/AddComment'
 import Comment from '../ActionCard/Comment'
 import cn from 'classnames'
-// import { THREAD_MESSAGES_PAGE_SIZE } from '../../config/constants'
+import {markdownToHTML} from '../../helpers/markdownToState'
+import MediaQuery from 'react-responsive'
+import CommentMobile from '../ActionCard/CommentMobile'
+import { SCREEN_BREAKPOINT_MD } from '../../config/constants'
 
 const getCommentCount = (totalComments) => {
   if (!totalComments) {
-    return 'No comments yet'
+    return 'No posts yet'
   }
   if (totalComments === 1) {
-    return '1 comment'
+    return '1 post'
   }
-  return `${totalComments} comments`
+  return `${totalComments} posts`
 }
 
 class FeedComments extends React.Component {
@@ -63,42 +66,62 @@ class FeedComments extends React.Component {
               </div>
               {hasMoreComments && <div className={cn('comment-collapse', {'loading-comments': isLoadingComments})}>
                 <a href="javascript:" onClick={ handleLoadMoreClick } className="comment-collapse-button">
-                  {isLoadingComments ? 'Loading...' : 'View older comments'}
+                  {isLoadingComments ? 'Loading...' : 'View older posts'}
                 </a>
               </div>}
             </div>
           </div>
         </Panel.Body>
-        {comments.map((item, idx) => (
-          <Comment
-            key={idx}
-            message={item}
-            author={item.author}
-            date={moment(item.date).fromNow()}
-            edited={item.edited}
-            active={item.unread}
-            self={item.author && item.author.userId === currentUser.userId}
-            onChange={this.onSaveMessageChange.bind(this, item.id)}
-            onSave={onSaveMessage}
-            onDelete={onDeleteMessage}
-            isSaving={item.isSavingComment}
-            hasError={item.error}
-            allMembers={allMembers}
-          >
-            <div dangerouslySetInnerHTML={{__html: item.content}} />
-          </Comment>
-        ))}
-        {allowComments &&
-      <AddComment
-        placeholder="Write a comment"
-        onAdd={onAddNewComment}
-        onChange={onNewCommentChange}
-        avatarUrl={avatarUrl}
-        authorName={authorName}
-        isAdding={isAddingComment}
-        hasError={error}
-        allMembers={allMembers}
-      />}
+        <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+          {(matches) => (matches ? (
+            <div>
+              {comments.map((item, idx) => (
+                <Comment
+                  key={idx}
+                  message={item}
+                  author={item.author}
+                  date={moment(item.date).fromNow()}
+                  edited={item.edited}
+                  active={item.unread}
+                  self={item.author && item.author.userId === currentUser.userId}
+                  onChange={this.onSaveMessageChange.bind(this, item.id)}
+                  onSave={onSaveMessage}
+                  onDelete={onDeleteMessage}
+                  isSaving={item.isSavingComment}
+                  hasError={item.error}
+                  allMembers={allMembers}
+                >
+                  <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
+                </Comment>
+              ))}
+              {allowComments &&
+                <AddComment
+                  placeholder="Write a post"
+                  onAdd={onAddNewComment}
+                  onChange={onNewCommentChange}
+                  avatarUrl={avatarUrl}
+                  authorName={authorName}
+                  isAdding={isAddingComment}
+                  hasError={error}
+                  allMembers={allMembers}
+                />
+              }
+            </div>
+          ) : (
+            <div>
+              {comments.map((item, idx) => (
+                <CommentMobile
+                  key={idx}
+                  messageId={item.id.toString()}
+                  author={item.author}
+                  date={item.date}
+                >
+                  <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
+                </CommentMobile>
+              ))}
+            </div>
+          ))}
+        </MediaQuery>
       </div>
     )
   }

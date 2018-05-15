@@ -7,7 +7,7 @@
  * If there is any hash we check if component has element with such id and scroll to it.
  */
 import React from 'react'
-import { SCROLL_TO_MARGIN } from '../config/constants'
+import { SCROLL_TO_MARGIN, SCROLL_TO_DURATION, SCREEN_BREAKPOINT_MD } from '../config/constants'
 import { scroller } from 'react-scroll'
 
 /**
@@ -17,12 +17,16 @@ import { scroller } from 'react-scroll'
  */
 export function scrollToHash(hash) {
   const id = hash.replace('#', '')
+  const windowWidth = window.innerWidth
+    || document.documentElement.clientWidth
+    || document.body.clientWidth
 
   scroller.scrollTo(id, {
     spy: true,
     smooth: true,
-    offset: -SCROLL_TO_MARGIN,
-    duration: 500
+    offset: windowWidth < SCREEN_BREAKPOINT_MD ? 0 : -SCROLL_TO_MARGIN,
+    duration: SCROLL_TO_DURATION,
+    activeClass: 'active'
   })
 }
 

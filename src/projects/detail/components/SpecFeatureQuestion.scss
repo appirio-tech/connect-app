@@ -10,7 +10,20 @@
       height: 60px;
       background-color: $tc-gray-neutral-light;
       border: 1px solid $tc-gray-10;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        &::after {
+          @include roboto;
+          content: 'Editing features is not available on mobile devices.';
+          display: block;
+          font-size: 12px;
+          font-style: italic;
+        }
+
+        button {
+          display: none;
+        }
+      }
     }
   }
 }
-  

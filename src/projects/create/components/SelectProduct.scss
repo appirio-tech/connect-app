@@ -7,13 +7,21 @@
   .headerSelectProduct {
     @extend .wizardHeader;
   }
-  
+
   .SelectProduct {
     @extend .wizardCardContainer;
-  
+
     h1 {
       @extend .wizardHeadline;
-  
+
+      @media screen and (max-width: $screen-md - 1px) {
+        font-size: 20px;
+        line-height: 30px;
+        margin-bottom: 0;
+        margin-top: 10px;
+        padding: 5px 40px 0;
+      }
+
       + h2 {
         font-size: 15px;
         line-height: 20px;
@@ -22,30 +30,35 @@
         color: $tc-gray-80;
         margin-bottom: 13px;
         margin-top: 0px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          @include roboto-medium;
+          font-size: 15px;
+          margin-top: 4 * $base-unit;
+        }
       }
     }
-  
+
     .header {
       display: block;
     }
   }
-  
+
   @media screen and (max-width: 1100px) {
     .SelectProduct {
       max-width: 750px;
     }
   }
-  
+
   @media screen and (max-width: 850px) {
     .SelectProduct {
       max-width: 500px;
     }
   }
-  
-  @media screen and (max-width: 500px) {
+
+  @media screen and (max-width: $screen-md - 1px) {
     .SelectProduct {
-      max-width: 250px;
+      max-width: 100%;
     }
   }
 }
-  

@@ -215,7 +215,13 @@ class Projects extends Component {
           <div className="container">
             {(isPowerUser && !showWalkThrough) &&
               <ProjectListNavHeader applyFilters={this.applyFilters} selectedView={chosenView} changeView={setProjectsListView} currentStatus={currentStatus} criteria={criteria} setInfiniteAutoload={setInfiniteAutoload} loadProjects={loadProjects} history={history}/>}
-            { showWalkThrough  ? <Walkthrough currentUser={currentUser} /> : projectsView }
+            { showWalkThrough  ?
+              (
+                <Walkthrough currentUser={currentUser} />
+              ) : (
+                projectsView
+              )
+            }
           </div>
         </section>
       </div>

@@ -19,9 +19,7 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
       }}
     >
       <div className="card-header">
-        <ProjectCardHeader
-          project={project}
-        />
+        <ProjectCardHeader project={project} />
       </div>
       <div className="card-body">
         <ProjectCardBody
@@ -29,6 +27,9 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
           currentMemberRole={currentMemberRole}
           duration={duration}
           onChangeStatus={onChangeStatus}
+          showLink
+          showLinkURL={`/projects/${project.id}/specification`}
+          canEditStatus={false}
         />
       </div>
       <div className="card-footer">

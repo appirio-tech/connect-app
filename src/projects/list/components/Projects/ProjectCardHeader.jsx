@@ -119,7 +119,7 @@ ProjectTypeIcons.propTypes = {
   type: PT.string.isRequired
 }
 
-function ProjectCardHeader({ project }) {
+function ProjectCardHeader({ project, onClick }) {
   if (!project) return null
 
   const productType = _.get(project, 'details.products[0]')
@@ -127,7 +127,7 @@ function ProjectCardHeader({ project }) {
   // icon for the product, use default generic work project icon for categories which no longer exist now
   const productIcon = _.get(product, 'icon', 'tech-32px-outline-work-project')
   return (
-    <div className="project-card-header">
+    <div className="project-card-header" onClick={onClick}>
       <div className="project-header">
         <div className="project-type-icon" title={project.type !== undefined ? project.type[0].toUpperCase() + project.type.substr(1).replace(/_/g, ' ') : null}>
           <ProjectTypeIcons type={productIcon} />
@@ -152,7 +152,8 @@ ProjectCardHeader.defaultTypes = {
 }
 
 ProjectCardHeader.propTypes = {
-  project: PT.object.isRequired
+  project: PT.object.isRequired,
+  onClick: PT.func
 }
 
 export default ProjectCardHeader

@@ -6,13 +6,13 @@
   $title-color: $tc-gray-80;
   $sideBarWidth: 280px;
   $sideBarMaxWidth: 360px;
-  
+
   @mixin flexBox {
     display: flex;
     flex-direction: row;
     width: auto;
   }
-  
+
   @mixin flexWidth($number) {
     -webkit-box-flex: $number;
     -moz-box-flex: $number;
@@ -20,7 +20,7 @@
     -ms-flex: $number;
     flex: $number;
   }
-  
+
   .feature-selection-dialog-overlay {
     position: fixed;
     top: 0;
@@ -29,13 +29,13 @@
     bottom: 0;
     z-index: 21;/* +1 of the z-index of the topbar */
   }
-  
+
   .feature-selection-dialog {
     top: 0px;
     left: 0px;
     height: 100%;
   }
-  
+
   .feature-selection-dialog-close {
     @include roboto;
     cursor: pointer;
@@ -48,28 +48,28 @@
     text-align: right;
     color: $tc-gray-60;
     transition: all 200ms ease-in-out;
-  
+
     .x-mark-icon {
       display: inline-block;
       margin: 0 0 0 5px;
       transition: all 200ms ease-in-out;
-  
+
       & > svg {
         padding-top: 3px;
         transition: all 200ms ease-in-out;
       }
     }
-  
+
     &:hover {
       color: $tc-black;
       cursor: pointer;
-  
+
       .x-mark-icon > svg {
         fill: $tc-black;
       }
     }
   }
-  
+
   .two-col-content.content {
     .tc-file-field__inputs {
       height: 45px;
@@ -80,19 +80,19 @@
       /*background: $tc-gray-neutral-light;
       border-color: $tc-gray-20;
       color: $tc-black;*/
-  
+
       &::-webkit-input-placeholder {
         color: $tc-gray-50;
         text-transform: none;
       }
-  
+
       &::-moz-placeholder {
         line-height: 45px;
         color: $tc-gray-50;
         opacity: 1;
         text-transform: none;
       }
-  
+
       &:-ms-input-placeholder {
         color: $tc-gray-50;
         text-transform: none;
@@ -105,22 +105,22 @@
       justify-content: space-between;
       padding: 15px 0;
       position: relative;
-  
+
       .screen-title,
       .project-name {
         @include roboto;
         color: black;
         font-weight: bold;
       }
-  
+
       .screen-title {
         font-size: 18px;
       }
-  
+
       .project-name {
         font-size: 20px;
       }
-  
+
       button.tc-btn-xs {//TODO ideally we should fix it in react-components repo
         padding-top: 2px;
         padding-bottom: 2px;
@@ -132,33 +132,33 @@
       padding-bottom: $base-unit;
       margin: 30px 0 20px 0;
       position: relative;
-  
+
       .title {
         @include roboto;
         font-size: 20px;
         line-height: 30px;
       }
-  
+
       .section-actions {
         position: absolute;
         right: 0;
         top: 0;
         padding: 0 15px;
-  
+
         &.hide {
           display: none;
         }
       }
     }
-  
+
     .sub-title {
       margin: 30px 0 10px;
-  
+
       .title {
         font-size: 15px;
         line-height: 25px;
         color: $tc-gray-80;
-  
+
         span {
           color: $tc-orange;
           font-size: 15px;
@@ -166,7 +166,7 @@
         }
       }
     }
-  
+
     .container {
       @include flexBox;
       background-color: transparent;
@@ -177,46 +177,55 @@
       /* .left-area */
       .left-area {
         flex: auto;
-  
+
         .left-area-footer {
           @include roboto;
           padding: 0 10px;
           font-size: 11px;
           line-height: 30px;
           color: $tc-gray-50;
-  
+
           span {
             float: right;
           }
         }
       }
-  
+
       .right-area {
         flex: auto;
         border-radius: 4px;
         position: relative;
-  
+
         /* this selector is too common and it's applied to .spec-question-list thought it shouldn't
            if also has big priority so we have to fix it here */
         form > div:not(.spec-question-list) {
           box-shadow: 0px 1px 3px 0px rgba($tc-black, 0.2);
         }
-  
+
         .title {
           color: $tc-gray-80;
           @include roboto-bold;
         }
-  
+
         .right-area-item {
           padding: 0 0 70px 0;
           margin-bottom: 20px;
           border-radius: 4px;
           background-color: $tc-white;
-  
+
+          @media screen and (max-width: $screen-md - 1px) {
+            margin-bottom: 0;
+            padding-bottom: 4 * $base-unit;
+          }
+
           .boxes {
             margin: 0 50px;
+
+            @media screen and (max-width: $screen-md - 1px) {
+              margin: 0 4 * $base-unit;
+            }
           }
-  
+
           .big-titles {
             @include roboto-light;
             font-size: 28px;
@@ -227,7 +236,18 @@
             border-radius: 4px 4px 0 0;
             background: $tc-gray-neutral-light;
             border-bottom: 1px dashed $tc-gray-20;
-  
+
+            @media screen and (max-width: $screen-md - 1px) {
+              margin: 0 -4 * $base-unit 20px;
+              padding: 4 * $base-unit;
+            }
+
+            h2 {
+              @media screen and (max-width: $screen-md - 1px) {
+                line-height: 8 * $base-unit;
+              }
+            }
+
             .optional,
             .required {
               @include roboto;
@@ -238,42 +258,42 @@
               padding: 0 20px;
               border-radius: 20px 0 0 20px;
             }
-  
+
             .required {
               background: $tc-orange-70;
               color: $tc-white;
             }
-  
+
             .optional {
               background: $tc-gray-10;
               color: $gray-color;
             }
           }
-  
+
           .gray-text {
             @include roboto;
             font-size: 15px;
             color: $gray-color;
             line-height: 25px;
-  
+
             strong {
               font-weight: bold;
             }
           }
-  
+
           &.design-specification-two {
             padding-bottom: 1px;
           }
-  
+
           &.option-groups {
             padding-bottom: 46px;
           }
         }
-  
+
         .tab-nav {
           .center-area {
             margin: 0 0 0 111px;
-  
+
             .btn-nav {
               padding: 0 15px;
               float: left;
@@ -284,7 +304,7 @@
             }
           }
         }
-  
+
         .section-additional-notes {
           .textarea-title {
             @include roboto;
@@ -293,7 +313,7 @@
             line-height: 20px;
             padding-bottom: 10px;
           }
-  
+
           textarea {
             height: 45px;
             max-width: 100%;
@@ -302,25 +322,29 @@
             resize: vertical;
           }
         }
-  
+
         .right-area-footer {
           @include tc-label-sm;
           color: $tc-gray-50;
           margin-top: 4 * $base_unit;
+
+          @media screen and (max-width: $screen-md - 1px) {
+            display: none;
+          }
         }
       }
-  
+
       .contents-list {
         .right-area {
           padding-left: 40px;
-  
+
           .title {
             @include roboto-bold;
             font-size: 15px;
             letter-spacing: 0px;
             line-height: 25px;
           }
-  
+
           .txt {
             @include roboto;
             font-size: 13px;
@@ -328,7 +352,7 @@
             line-height: 25px;
           }
         }
-  
+
         &.part-one {
           .icons {
             width: 16px;
@@ -336,37 +360,41 @@
             float: left;
             margin-top: 3px;
           }
-  
+
           .icon-box {
             background-position: -28px -29px;
           }
-  
+
           .icon-magic {
             background-position: -4px -52px;
           }
         }
       }
     }
-  
+
     /* .section-features-module */
     .section-features-module {
       margin-top: 20px;
-  
+
+      @media screen and (max-width: $screen-md - 1px) {
+        margin-top: 8 * $base-unit;
+      }
+
       &.open {
         .content-boxes {
           display: block;
         }
-  
+
         .bg-contents,
         .btn-gray-border {
           display: none;
         }
       }
-  
+
       .row {
         margin-bottom: 5px;
       }
-  
+
       .bg-contents {
         @include roboto-medium;
         font-size: 15px;
@@ -378,11 +406,11 @@
         line-height: 40px;
         text-align: center;
       }
-  
+
       .content-boxes {
         display: none;
       }
-  
+
       .textarea-title {
         @include roboto;
         font-size: 13px;
@@ -390,7 +418,7 @@
         line-height: 20px;
         padding-bottom: 10px;
       }
-  
+
       textarea {
         min-height: 45px;
         max-width: 100%;
@@ -400,18 +428,22 @@
         overflow: hidden;
       }
     }
-  
+
     .section-header {
       display: flex;
       justify-content: space-between;
-  
+
       .section-number {
         @include tc-label-lg;
         color: $tc-gray-30;
         padding-right: 6 * $base-unit;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          padding-right: 0;
+        }
       }
     }
-  
+
     .section-footer {
       display: flex;
       align-items: center;
@@ -421,18 +453,24 @@
       margin-top: -70px;
       margin-bottom: 20px;
       border-radius: $corner-radius * 2;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        border-radius: 0;
+        height: 80px;
+        margin-top: 0;
+      }
     }
-  
+
     .section-footer-spec {
       border-radius: 0 0 $corner-radius * 2 $corner-radius * 2;
       // margin-top: -10px;
       // margin-bottom: $base-unit * 4;
-  
+
       // &:last-child {
       //   margin-bottom: 0;
       // }
     }
-  
+
     /* .section-file-interface */
     .section-file-interface {
       .tc-textarea {
@@ -444,16 +482,16 @@
         line-height: 20px;
         resize: vertical;
       }
-  
+
       .dashed-bottom-border {
         border-top: 1px dashed $tc-gray-20;
         border-bottom: none;
       }
-  
+
       .textarea-boxes {
         display: none;
       }
-  
+
       .row {
         &.hover-after {
           .edit-box {
@@ -461,26 +499,26 @@
             float: right;
           }
         }
-  
+
         &.edit-status {
           .tc-file-field__inputs,
           .textarea-boxes,
           .edit-box {
             display: block;
           }
-  
+
           .title,
           .txt,
           .right-txt {
             display: none;
           }
-  
+
           .status {
             .icon-pen {
               background-position: -24px 0;
               margin-top: 4px;
             }
-  
+
             .icon-delete {
               background-position: -24px -48px;
               margin-top: 4px;
@@ -488,10 +526,10 @@
           }
         }
       }
-  
+
       .edit-box {
         display: none;
-  
+
         .icons {
           width: 24px;
           height: 24px;
@@ -499,16 +537,16 @@
           margin-top: -2px;
           margin-left: 10px;
         }
-  
+
         .icon-pen {
           background-position: -48px 0;
         }
-  
+
         .icon-delete {
           background-position: -72px 0;
         }
       }
-  
+
       .contents-list {
         .titles {
           @include roboto-medium;
@@ -518,7 +556,7 @@
           margin-bottom: 2px;
         }
       }
-  
+
       .icon-zip {
         background-position: -51px -27px;
         width: 42px;
@@ -526,38 +564,38 @@
         float: left;
         margin-top: 3px;
       }
-  
+
       .icon-pen {
         background-position: 0 0;
       }
-  
+
       .right-area {
         &.padding-left60 {
           padding-left: 60px;
         }
-  
+
         .tc-file-field__inputs {
           width: 80%;
           margin-right: 100px;
           display: none;
           @include roboto-bold;
-  
+
           &.height100 {
             height: 100px;
             line-height: 10px;
           }
-  
+
           &.width {
             width: 100%;
           }
         }
-  
+
         .zip-title-bar {
           position: relative;
-  
+
           .status {
             float: right;
-  
+
             .txt {
               @include roboto;
               font-size: 15px;
@@ -566,7 +604,7 @@
               line-height: 20px;
             }
           }
-  
+
           &:after {
             clear: right;
           }
@@ -580,25 +618,25 @@
       margin-bottom: 20px;
       background: $tc-gray-neutral-light;
       border-radius: 2px;
-  
+
       .title {
         @include roboto-medium;
         font-size: 15px;
         letter-spacing: 0px;
         line-height: 20px;
       }
-  
+
       .gray-txt {
         @include roboto;
         font-size: 15px;
         color: $tc-gray-60;
         line-height: 20px;
       }
-  
+
       .btn-boxes {
         margin-top: 10px;
       }
-  
+
       .tc-btn-primary {
         position: relative;
         cursor: pointer;
@@ -607,7 +645,7 @@
         padding: 0 13px;
         display: inline-block;
       }
-  
+
       .file-box {
         opacity: 0;
         width: 100%;
@@ -619,28 +657,28 @@
         margin: 0;
         z-index: 555;
       }
-  
+
       .icon-file {
         background-position: -4px -28px;
         width: 15px;
         height: 17px;
         vertical-align: middle;
       }
-  
+
       &.drag-boxes {
         padding: 20px 0;
       }
-  
+
       &.flie-list-boxes {
         .flie-list {
           border-bottom: 1px dashed $tc-gray-30;
           padding-bottom: 5px;
         }
-  
+
         .row {
           text-align: left;
           padding: 10px 20px;
-  
+
           .file-name {
             @include roboto-bold;
             font-size: 15px;
@@ -649,7 +687,7 @@
             line-height: 20px;
             padding-left: 7px;
           }
-  
+
           .upload-status {
             @include roboto;
             font-size: 15px;
@@ -658,7 +696,7 @@
             line-height: 20px;
             float: right;
           }
-  
+
           .white-bar {
             width: 100%;
             height: 4px;
@@ -666,7 +704,7 @@
             background: $tc-gray-20;
             border-radius: 12px;
             position: relative;
-  
+
             .blue-bar {
               background: $tc-dark-blue-70;
               border-right: 2px solid $tc-gray-neutral-light;
@@ -675,18 +713,18 @@
               position: absolute;
               left: 0;
               top: 0;
-  
+
               &.width23 {
                 width: 23%;
               }
-  
+
               &.width75 {
                 width: 75%;
               }
             }
           }
         }
-  
+
         .file-list-bottom {
           .txt {
             color: $title-color;
@@ -701,7 +739,7 @@
       .bottom-border-titles {
         margin-bottom: 20px;
       }
-  
+
       .titles {
         text-align: left;
         @include roboto-bold;
@@ -709,44 +747,44 @@
         color: $title-color;
         line-height: 25px;
       }
-  
+
       .gray-txt {
         @include roboto;
         font-size: 15px;
         color: $tc-gray-60;
         line-height: 20px;
       }
-  
+
       .content-boxes {
         margin-top: -20px;
       }
-  
+
       .checkbox-group {
         margin-top: 10px;
       }
-  
+
       .group-item {
         display: inline-block;
         vertical-align: middle;
         margin-right: 42px;
       }
-  
+
       .radios-group {
         margin-top: 10px;
       }
-  
+
       .radio {
         float: left;
       }
-  
+
       .ul-list {
         .hide {
           display: none;
         }
-  
+
         li {
           position: relative;
-  
+
           .text,
           .point {
             @include roboto-medium;
@@ -758,45 +796,45 @@
             color: $title-color;
           }
         }
-  
+
         .btn-delete {
           position: absolute;
           right: 0;
           top: 50%;
           margin-top: -14px;
-  
+
           &:hover .icon-delete {
             background-position: -96px 0;
             width: 24px;
             height: 24px;
           }
         }
-  
+
         .point {
           display: inline-block;
           margin-right: 20px;
         }
-  
+
         .icons.icon-delete {
           background-position: -24px -48px;
           width: 24px;
           height: 24px;
         }
       }
-  
+
       .input-box {
         margin-top: 15px;
       }
-  
+
       .btn-input-boxes {
         position: relative;
         margin-top: 15px;
         padding-right: 64px;
-  
+
         .tc-file-field__inputs {
           width: 100%;
         }
-  
+
         .btn-gray-border {
           width: 54px;
           position: absolute;
@@ -805,33 +843,75 @@
       }
     }
   }
-  
+
   .two-col-content.specificationContainer {
     padding: 0 20px;
     min-width: 960px;
     max-width: 1120px;
     width: auto;
     margin: 0 auto;
-  
+
+    @media screen and (max-width: $screen-md - 1px) {
+      min-width: 0;
+      padding: 0;
+    }
+
+    .container {
+      @media screen and (max-width: $screen-md - 1px) {
+        flex-direction: column;
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+    }
+
     .left-area {
       min-width: $sideBarWidth;
       max-width: $sideBarMaxWidth;
       margin-right: 20px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        margin-right: 0;
+        max-width: 100%;
+      }
+
+      .footer-v2 {
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
+      }
     }
-  
+
     .right-area {
       min-width: 500px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        min-width: 0;
+        padding-top: 4 * $base-unit;
+      }
+
+      form div:last-of-type .section-footer-spec {
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .section-footer-spec {
+      @media screen and (max-width: $screen-md - 1px) {
+        border-top: 1px dashed $tc-gray-20;
+        border-radius: 0;
+      }
     }
   }
-  
+
   .tc-link {
     @include roboto;
   }
-  
+
   .SelectDropdown {
     margin-bottom: 20px;
   }
-  
+
   .edit-screen-footer {
     display: flex;
     align-items: center;
@@ -840,12 +920,12 @@
     margin-bottom: 40px;
     position: relative;
   }
-  
+
   .screen-number-reached-message {
     @include roboto;
     color: white;
   }
-  
+
   .prompt {
     text-align: center;
     z-index: 999;
@@ -863,23 +943,32 @@
     display: flex;
     align-items: flex-start;
     margin-bottom: 20px;
-  
+
+    @media screen and (max-width: $screen-sm - 1px) {
+      flex-direction: column;
+      margin-bottom: 11 * $base-unit;
+    }
+
     .editable-project-name {
       flex: 1;
+
+      @media screen and (max-width: $screen-sm - 1px) {
+        width: 100%;
+      }
     }
-  
+
     .dashed-bottom-border {
       flex: 1;
       min-height: 40px;
       border-bottom: 1px dashed $tc-gray-20;
-  
+
       .project-name {
         word-break: break-all;
         font-size: 20px;
         /*margin-top: 10px;*/
       }
     }
-  
+
     .read-only-refcode {
       height: 40px;
       align-self: flex-end;
@@ -887,7 +976,7 @@
       padding: 10px;
       position: relative;
       margin-left: 20px;
-  
+
       .refcode-desc {
         @include roboto;
         font-size: 13px;
@@ -901,13 +990,19 @@
         white-space: nowrap;
       }
     }
-  
+
     .textinput-refcode {
       position: relative;
       width: 100px;
       height: 100%;
       margin-left: 10px;
-  
+
+      @media screen and (max-width: $screen-sm - 1px) {
+        margin-left: 0;
+        margin-top: 4 * $base-unit;
+        width: 100%;
+      }
+
       .refcode-desc {
         @include roboto;
         font-size: 12px;
@@ -917,12 +1012,39 @@
         bottom: -20px;
         font-style: italic;
       }
-  
+
       .project-refcode {
+        input {
+          background-color: $tc-gray-neutral-light;
+          border-bottom: 1px solid $tc-gray-40;
+        }
       }
     }
   }
-  
+
+  .two-col-content.content .container .tiled-group-row {
+    @media screen and (max-width: $screen-md - 1px) {
+      margin: -4 * $base-unit -2 * $base-unit 0 -2 * $base-unit;
+    }
+  }
+
+  .two-col-content.content .container .tiled-group-row > span {
+    @media screen and (max-width: $screen-md - 1px) {
+      display: block;
+      margin-top: 2 * $base-unit;
+      max-width: 180px;
+      width: 25%;
+
+      > a {
+        width: calc(100% - 20px);
+      }
+    }
+
+    @media screen and (max-width: $screen-sm - 1px) {
+      width: 50%;
+    }
+  }
+
   .two-col-content.content .container .tiled-group-item {
     position: relative;
     -webkit-flex: initial;
@@ -939,24 +1061,24 @@
     margin: 10px 10px 0;
     position: relative;
     vertical-align: top;
-  
+
     .check-mark {
       display: none;
     }
-  
+
     &.disabled {
       opacity: 0.3;
     }
-  
+
     &:hover {
       border-color: $tc-dark-blue-70;
       cursor: pointer;
     }
-  
+
     &.active {
       background: $tc-gray-10;
       border-color: $tc-gray-10;
-  
+
       &:after {
         content: '';
         display: block;
@@ -968,7 +1090,7 @@
         background: $tc-dark-blue;
         border-radius: 2px;
       }
-  
+
       &:before {
         content: '';
         position: absolute;
@@ -985,12 +1107,12 @@
         -ms-transform: rotate(45deg);
         -webkit-transform: rotate(45deg);
       }
-  
+
       &:hover {
         border-color: $tc-gray-10;
       }
     }
-  
+
     span.title {
       display: block;
       margin-top: 20px;
@@ -999,14 +1121,14 @@
       font-size: 13px;
       text-align: center;
     }
-  
+
     span.icon {
       text-align: center;
       display: block;
       height: 50px;
       margin: 30px auto 20px auto;
     }
-  
+
     small {
       display: block;
       font-size: 11px;
@@ -1015,5 +1137,9 @@
       @include roboto;
       margin-top: 10px;
     }
+  }
+
+  .SliderRadioGroup .rc-slider-mark {
+    position: relative;
   }
 }

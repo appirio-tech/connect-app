@@ -13,13 +13,13 @@
       width: 40px;
     }
     .icon-wrapper {
-      display: table-cell;
-      vertical-align: middle;
-      height: 43px;
-      text-align: center;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      height: 40px;
       width: 40px;
       color: $tc-gray-70;
-  
+
       svg {
         fill: $tc-gray-70;
       }
@@ -29,6 +29,11 @@
       color: $tc-gray-70;
       font-size: 13px;
       text-transform: uppercase;
+
+
+      @media screen and (max-width: $screen-md - 1px) {
+        display: none;
+      }
     }
     &:hover {
       color: $tc-white;
@@ -38,11 +43,10 @@
       .label {
         color: $tc-black;
       }
-  
+
       svg {
         fill: $tc-white;
       }
     }
   }
 }
-  

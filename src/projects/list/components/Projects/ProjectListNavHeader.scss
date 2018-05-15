@@ -11,25 +11,32 @@
     margin-left: 20px;
     margin-right: 20px;
 
+    @media screen and (max-width: $screen-md - 1px) {
+      margin-top: 4 * $base-unit;
+    }
+
+    @media screen and (max-width: $screen-sm - 1px) {
+      margin: 0 0 4 * $base-unit 0;
+    }
+
     .left-wrapper {
       flex: 1 1 auto;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      align-content: flex-start;
-
-      .list-nav-item {
-        flex: 0 1 auto;
-      }
     }
 
     .right-wrapper {
-      flex: 1 1 20%;
+      flex: 0 0 250px;
       display: flex;
       flex-direction: row;
       flex-wrap: nowrap;
       justify-content: flex-end;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        flex: 0 0 120px;
+      }
+
+      @media screen and (max-width: $screen-sm - 1px) {
+        display: none;
+      }
 
       .list-nav-item {
         flex: 1;
@@ -42,11 +49,23 @@
 
       &.nav-icon {
         flex: 0 0 46px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          text-align: right;
+        }
       }
     }
 
     .primary-filter {
       margin-right: 20px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        display: none;
+      }
+
+      .tc-switch .label {
+        white-space: nowrap;
+      }
     }
 
     .list-nav-btn {
@@ -128,4 +147,3 @@
     }
   }
 }
-  

@@ -75,7 +75,6 @@ const formatDate = (date) => {
   return format
 }
 
-
 const NotificationItem = (props) => {
   const { id, onLinkClick } = props
   const notificationItem = (
@@ -100,9 +99,10 @@ const NotificationItem = (props) => {
     </div>
   )
 
-  return ( props.goto
-    ? <Link className={cn('notification-item-link', {unseen: !props.seen})} to={props.goto} onClick={() => props.seen || onLinkClick(id)}>{notificationItem}</Link>
-    : notificationItem
+  return (
+    props.goto
+      ? <Link className={cn('notification-item-link', {unseen: !props.seen})} to={props.goto} onClick={() => onLinkClick(id)}>{notificationItem}</Link>
+      : notificationItem
   )
 }
 
