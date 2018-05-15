@@ -20,6 +20,13 @@ import { getTopic } from './api/messages'
 import { getFreshToken } from 'tc-accounts'
 import { scrollToHash } from './components/ScrollToAnchors.jsx'
 
+import V3ComponentDemo from './containers/V3ComponentDemo'
+import V3ComponentTimelineDemo from './containers/V3ComponentTimelineDemo'
+import V3ComponentPostcardDemo from './containers/V3ComponentPostcardDemo'
+import V3ComponentSubmissionSelectionDemo from './containers/V3ComponentSubmissionSelectionDemo'
+import V3ComponentWinnerSelectionDemo from './containers/V3ComponentWinnerSelectionDemo'
+import V3ComponentAlertDemo from './containers/V3ComponentAlertDemo'
+
 import { TCEmitter } from './helpers'
 import { EVENT_ROUTE_CHANGE } from './config/constants'
 
@@ -142,6 +149,12 @@ class Routes extends React.Component {
         <Route path="/terms" render={renderApp(topBarWithProjectsToolBar, <ConnectTerms/>)} />
         <Route path="/login" render={renderApp(topBarWithProjectsToolBar, <LoginRedirect/>)} />
         <Route path="/discussions/:feedId" component={ RedirectToProject } />
+        <Route path="/V3ComponentDemo" component= { V3ComponentDemo } />
+        <Route path="/V3ComponentTimelineDemo" component= { V3ComponentTimelineDemo } />
+        <Route path="/V3ComponentPostcardDemo" component= { V3ComponentPostcardDemo } />
+        <Route path="/V3ComponentSubmissionSelectionDemo" component= { V3ComponentSubmissionSelectionDemo } />
+        <Route path="/V3ComponentWinnerSelectionDemo" component= { V3ComponentWinnerSelectionDemo } />
+        <Route path="/V3ComponentAlertDemo" component= { V3ComponentAlertDemo } />
 
         {/* Handle /projects/* routes */}
         {projectRoutes}

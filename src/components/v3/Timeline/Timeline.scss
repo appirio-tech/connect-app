@@ -1,0 +1,8 @@
+@import '../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+// timeline specific styles
+.timeline {
+  @include roboto-bold;
+  background-color: #fff;
+}

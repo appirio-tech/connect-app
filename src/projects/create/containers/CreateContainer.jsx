@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import Cookies from 'js-cookie'
 import qs from 'query-string'
-import React from 'react'
+import React from 'react' 
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'

@@ -1,0 +1,68 @@
+@import '../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// project-progress style
+.post-feed {
+  position: relative;
+  display: flex;
+  background-color: #fff;
+  padding: 10px 20px;
+  @include roboto;
+  .thumb-wrap {
+    flex: 0 50px;
+  }
+  .thumb {
+    background: url('../../../assets/images/avatar-coder.png') 0 0 no-repeat;
+    background-size: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  .post-content {
+    flex: 1;
+    .head {
+      display: flex;
+      h3 {
+        color: #151516;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 20px;
+        text-align: left;
+        padding: 0;
+      }
+      .timestamp {
+        color: #888894;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 20px;
+        text-align: left;
+        padding-left: 20px;
+        display: inline-block;
+        position: relative;
+
+        &:before{
+          content: '';
+          position: absolute;
+          left: 9px;
+          top: 8px;
+          width: 3px;
+          height: 3px;
+          background-color: #151516;
+          border-radius: 50%;
+        }
+      }
+    }
+    .post-text {
+      color: #151516;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 20px;
+      text-align: left;
+    }
+  }
+}

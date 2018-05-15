@@ -1,0 +1,143 @@
+@import '~tc-ui/src/styles/tc-includes';
+:global {
+  .rich-editor {
+    position: relative;
+    .addLinkButton {
+      position: relative;
+    }
+    .addLinkModal {
+      top: 30px;
+      left: 50%;
+      transform: translate(-50%) scale(1);
+      position: absolute;
+      border: 1px solid $tc-gray-20;
+      background: $tc-white;
+      border-radius: 2px;
+      box-shadow: 0 1px 18px 0 rgba($tc-black, 0.3);
+      z-index: 2;
+      box-sizing: border-box;
+      .modalWrapper {
+        white-space: nowrap;
+        background: $tc-white;
+        box-shadow: 0 1px 18px 0 rgba($tc-black, 0.3);
+        position: relative;
+        background-color: white;
+        width: 360px;
+      }
+      .modalInput {
+        display: inline-block;
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+        color: $tc-black !important;
+        font-size: 15px;
+        height: auto;
+        line-height: 1.2;
+        margin: 0;
+        padding: 16px;
+        width: 270px;
+        @include placeholder {
+          font-size: 15px;
+        }
+      }
+      .modalInput:focus {
+        outline: none;
+        box-shadow: none !important;
+        background: transparent !important;
+      }
+      .modalButton {
+        padding: 0;
+        cursor: pointer;
+        border: 0;
+        height: 26px;
+        width: 26px;
+        margin-right: 5px !important;
+        background: transparent;
+        padding-right: 16px;
+        color: $tc-gray-30;
+      }
+      .modalButton:hover {
+        color: $tc-red;
+      }
+      .modalButtonWrapper {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .modalError {
+        transition: height 0.2s ease-in-out;
+        color: $tc-white;
+        font-size: 12px;
+        margin: -8px 2rem 0 2rem;
+      }
+    }
+  }
+  .public-DraftEditorPlaceholder-root {
+    position: absolute;
+    padding-left: 10px;
+    padding-top: 10px;
+    line-height: 20px;
+    color: $tc-gray-40;
+    pointer-events: none;
+  }
+  .tc-btns{
+    display: block;
+  }
+  .separator{
+    opacity: 0;
+  }
+  .public-DraftEditorPlaceholder-hasFocus {
+    display: none !important;
+  }
+  .action-card .comment {
+    width: auto;
+    padding: 0;
+
+    &:before {
+      display: none;
+    }
+    .tc-textarea {
+      max-width: 99999px;
+    }
+  }
+  .action-card .comment .tc-textarea .public-DraftEditor-content {
+    height: auto;
+    min-height: 40px;
+    line-height: 20px;
+    padding: 10px;
+  } 
+  .action-card .comment .textarea-footer {
+    display: none !important;
+  }
+  .action-card .comment .textarea-footer {
+    &.focused{
+      display: flex !important;
+    }
+  }
+  .hide-title {
+    display: none !important;
+  }
+  span.bbcode-u {
+    text-decoration: underline;
+  }
+  .editor-tool {
+    border-radius: 3px;
+    display: flex;
+    height: 30px;
+    width: 30px;
+    align-items: center;
+    justify-content: center;
+  }
+  .tool-active {
+    background-color: $tc-gray-90;
+  }
+  .tool-inactive {
+    background-color: transparent;
+  }
+  .seperator{
+    opacity: 0;
+  }
+  .action-card .comment .textarea-footer {
+    border-color: transparent;
+    padding: 5px 0;
+  }
+}

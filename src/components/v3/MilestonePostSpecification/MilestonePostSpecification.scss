@@ -1,0 +1,157 @@
+@import '../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// project-progress specific styles
+.milestone-post-specification {
+  position: relative;
+  background-color: #FAFAFB;
+  border-radius: 4px;
+  color: #151516;
+  min-height: $base-unit*10;
+  line-height: $base-unit*10;
+  @include roboto;
+  font-weight: 400;
+  font-size: 15px;
+
+  &.clear{
+    background-color: transparent;
+  }
+  strong{
+    font-weight: 500;
+  }
+  .hide-sm {
+    display: inline-block;
+  }
+  .dot {
+    position: absolute;
+    background-color: #ffffff;
+    border: 2px solid #aaaaab;
+    border-radius: 100%;
+    width: 8px;
+    height: 8px;
+    left: -22px;
+    top: calc(50% - 4px);
+    z-index: 11;
+  }
+  /* mobile view specific style */
+  @include viewSm {
+    min-height: $base-unit*10;
+    line-height: $base-unit*8;
+    border-radius: 0;
+    .hide-sm {
+      display: none;
+    }
+  }
+  .label-layer {
+    display: flex;
+    justify-content: space-between;
+    height: inherit;
+    position: relative;
+    line-height: inherit;
+    padding-left: $base-unit*3;
+    padding-right: $base-unit*3;
+    z-index: 10;
+    @include viewSm {
+      padding-right: $base-unit*7;
+    }
+    .group-right {
+      width: 405px;
+      display: flex;
+      line-height: 50px;
+      justify-content: space-between;
+      text-align: right;
+      color: #808080;
+      @include viewSm {
+        min-width: 100px;
+      }
+    }
+    .label-milestone {
+      padding-left: 36px;
+      position: relative;
+      background: url('../../../assets/icons/timeline-invoice.svg') 0 50% no-repeat;
+      background-size: 30px;
+    }
+  }
+  .milestone-text {
+    color: #808080;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 50px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .link {
+    color: #808080;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 30px;
+    text-align: left;
+    
+    @include viewSm {
+      display: none;
+    }
+  }
+
+  /* in-progress state */
+  &.in-progress {
+    .dot {
+      background-color: #ffffff;
+      border: 2px solid #0681ff;
+    }
+  }
+
+  /* completed state */
+  &.completed {
+    .dot {
+      background-color: #0681ff;
+      border: 2px solid #0681ff;
+    }
+  }
+
+  // add-specification-layer
+  .add-specification-layer {
+    background-color: transparent;
+  }
+  .addlink-bar {
+    min-height: 50px;
+    position: relative;
+    border-radius: 4px;
+
+    .thumb{
+      left: 10px;
+      top: 10px;
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: #ebebeb;
+      border-radius: 50%;
+
+      &.timeline-marvelapp{
+        background: url(../../../assets/icons/timeline-marvelapp.svg);
+        background-size: 30px;
+      }
+    }
+
+    .label{
+      color: #151516;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 30px;
+      text-align: left;
+    }
+
+    &:before{
+      content: '';
+      width: 4px;
+      background-color: #fff;
+      position: absolute;
+      left: -20px;
+      top: -25px;
+      bottom: 0;
+    }
+  }
+}

@@ -1,0 +1,47 @@
+@import '../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+.message-window {
+  background-color: #37373C;
+  border-radius: 6px;
+  box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.30000001192092896);
+  width: 320px;
+  min-height: 90px;
+  padding: 20px;
+  position: relative;
+  color: #C3C3C8;
+  @include roboto;
+
+  .title {
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: left;
+    font-weight: 700;
+  }
+  .message {
+    margin: 10px;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+    margin: 10px 0 0 0;
+    text-align: left;
+  }
+  .close{
+    position: absolute;
+    background: url(../../../assets/icons/x-mark-white.svg);
+    background-size: 16px;
+    width: 16px;
+    height: 16px;
+    top: 20px;
+    right: 20px;
+  }
+  &.warning {
+    background-color: #FF5A4C;
+    color: #FFD4D0;
+  }
+  &.offline {
+    background-color: #C3C3C8;
+    color: #555555;
+  }
+}

@@ -1,0 +1,219 @@
+@import '../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// project-progress specific styles
+.milestone-post-specification {
+  position: relative;
+  border-radius: 4px;
+  color: #151516;
+  @include roboto;
+  font-weight: 400;
+  font-size: 15px;
+  &.clear {
+    background-color: transparent;
+  }
+  strong {
+    font-weight: 500;
+  }
+  .hide-sm {
+    display: inline-block;
+  }
+  .dot {
+    position: absolute;
+    background-color: #ffffff;
+    border: 2px solid #aaaaab;
+    border-radius: 100%;
+    width: 8px;
+    height: 8px;
+    left: -22px;
+    top: 22px;
+    z-index: 11;
+  }
+  /* mobile view specific style */
+  @include viewSm {
+    min-height: $base-unit*10;
+    line-height: $base-unit*8;
+    border-radius: 0;
+    .hide-sm {
+      display: none;
+    }
+  }
+  .label-layer {
+    display: flex;
+    justify-content: space-between;
+    height: inherit;
+    position: relative;
+    line-height: inherit;
+    padding-left: $base-unit*3;
+    padding-right: $base-unit*3;
+    z-index: 10;
+    @include viewSm {
+      padding-right: $base-unit*7;
+    }
+    .group-right {
+      width: 405px;
+      display: flex;
+      line-height: 50px;
+      justify-content: space-between;
+      text-align: right;
+      color: #808080;
+      @include viewSm {
+        min-width: 100px;
+      }
+    }
+    .label-milestone {
+      padding-left: 36px;
+      position: relative;
+      background: url('../../../assets/icons/timeline-invoice.svg') 0 50% no-repeat;
+      background-size: 30px;
+    }
+  }
+  .milestone-text {
+    color: #808080;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 50px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  /* in-progress state */
+  &.in-progress {
+    .dot {
+      background-color: #ffffff;
+      border: 2px solid #0681ff;
+    }
+  }
+  /* completed state */
+  &.completed {
+    .dot {
+      background-color: #0681ff;
+      border: 2px solid #0681ff;
+    }
+  }
+  /* milestone heading */
+  .milestone-heading {
+    background-color: #CEE6FF;
+    border-radius: 4px 4px 0 0;
+    padding: 0 15px;
+    font-weight: 500;
+    height: 50px;
+    line-height: 50px;
+    position: relative;
+
+    &.no-line:before{
+      content: '';
+      width: 4px;
+      background-color: #fff;
+      position: absolute;
+      left: -20px;
+      top: -25px;
+      bottom: 0;
+    }
+
+    &.sepeartion-md{
+      margin-top: 5px;
+    }
+
+    &.selected-theme {
+      background-color: #ebebeb;
+      color: #151516;
+    }
+    &.rejected-theme {
+      background-color: #ebebeb;
+      color: #808080;
+    }
+    &.open {
+      cursor: pointer;
+
+        &:after {
+          content: '';
+          background: url('../../../assets/icons/arrow-minimal-right.svg') 0 50% no-repeat;
+          transform: rotate(90deg);
+          width: 16px;
+          height: 16px;
+          position: absolute;
+          top: 18px;
+          right: 12px;
+        }
+    }
+    &.close {
+      cursor: pointer;
+      border-radius: 4px;
+
+      &:after{
+        content: '';
+        background: url('../../../assets/icons/arrow-minimal-right.svg') 0 50% no-repeat;
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        top: 18px;
+        right: 12px;
+      }
+    }
+  }
+  .content-link-wrap {
+    display: block;
+    &.open {
+      display: block;
+    }
+    &.close {
+      display: none;
+    }
+  }
+  .add-specification-wrap {
+    margin-top: 10px;
+    &.seperation-sm {
+      margin-top: 5px;
+    }
+  }
+  .seperation-sm {
+    margin-top: 5px;
+  }
+  .message-bar {
+    background-color: #fff8ca;
+    border-radius: 25px;
+    text-align: center;
+    font-size: 13px;
+    font-style: italic;
+    height: 25px;
+    line-height: 25px;
+    margin-top: 10px;
+    position: relative;
+    :before {
+      content: '';
+      width: 4px;
+      background-color: #fff;
+      position: absolute;
+      left: -20px;
+      top: -25px;
+      bottom: 0;
+    }
+  }
+  .action-bar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: relative;
+
+    :before {
+      content: '';
+      width: 4px;
+      background-color: #fff;
+      position: absolute;
+      left: -20px;
+      top: -25px;
+      bottom: 0;
+    }
+    .tc-btn {
+      color: #fff;
+    }
+  }
+  .hide {
+    display: none;
+  }
+  .show {
+    display: block;
+  }
+}
