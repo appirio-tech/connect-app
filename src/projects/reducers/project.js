@@ -9,7 +9,7 @@ import {
   ADD_PROJECT_MEMBER_PENDING, ADD_PROJECT_MEMBER_SUCCESS, ADD_PROJECT_MEMBER_FAILURE,
   UPDATE_PROJECT_MEMBER_PENDING, UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
-  GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO
+  GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -59,7 +59,7 @@ export const projectState = function (state=initialState, action) {
   case GET_PROJECTS_SUCCESS:
     return Object.assign({}, state, {
       project: {},
-      projectNonDirty: {}
+      projectNonDirty: {},
     })
 
   case LOAD_DIRECT_PROJECT_SUCCESS:
@@ -87,6 +87,16 @@ export const projectState = function (state=initialState, action) {
           plannedDuration: action.payload.plannedDuration,
           projectedDuration: action.payload.projectedDuration
         }}
+      }
+    })
+
+  case LOAD_PROJECT_PHASES_SUCCESS:
+    return update(state, {
+      project: {
+        phases: { $set: action.payload.phases },
+      },
+      projectNonDirty: {
+        phases: { $set: action.payload.phases },
       }
     })
 

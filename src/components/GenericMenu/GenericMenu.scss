@@ -1,0 +1,57 @@
+@import '../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+// generic-menu specific styles
+.generic-menu {
+  @include roboto-bold;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 1px 3px 0 #C0C0C0, 0 1px 0 0 #C0C0C0;
+  height: 50px;
+  background-color: #fafafb;
+  .list {
+    display: flex;
+    justify-content: space-between;
+    height: inherit;
+    li {
+      position: relative;
+      line-height: 50px;
+      margin: 0 20px;
+      .dot {
+        position: absolute;
+        right: -12px;
+        top: 10px;
+        width: 8px;
+        height: 8px;
+        border-radius: 100%;
+        background-color: #FF5B52;
+      }
+    }
+    a {
+      color: #959596;
+      ;
+      font-size: 13px;
+      text-align: center;
+      display: inline-block;
+      min-height: 30px;
+      line-height: 30px;
+      position: relative;
+      cursor: pointer;
+      &:after {
+        content: '';
+        bottom: 0;
+        position: absolute;
+        width: 30px;
+        height: 2px;
+        left: calc(50% - 15px);
+        background-color: transparent;
+      }
+      &.active {
+        color: #151516;
+        &:after {
+          background-color: #0681FF;
+        }
+      }
+    }
+  }
+}

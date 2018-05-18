@@ -2,9 +2,10 @@ import { getProjectById, createProject as createProjectAPI,
   createProjectWithStatus as createProjectWithStatusAPI,
   updateProject as updateProjectAPI,
   deleteProject as deleteProjectAPI,
-  getDirectProjectData } from '../../api/projects'
+  getDirectProjectData,
+  getProjectPhases } from '../../api/projects'
 import { LOAD_PROJECT, CREATE_PROJECT, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
-  LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO } from '../../config/constants'
+  LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES } from '../../config/constants'
 
 
 export function loadProject(projectId) {
@@ -12,6 +13,15 @@ export function loadProject(projectId) {
     return dispatch({
       type: LOAD_PROJECT,
       payload: getProjectById(projectId)
+    })
+  }
+}
+
+export function loadProjectPhases(projectId) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_PROJECT_PHASES,
+      payload: getProjectPhases(projectId)
     })
   }
 }

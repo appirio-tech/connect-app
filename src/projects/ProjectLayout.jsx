@@ -1,22 +1,14 @@
-import React, { Component } from 'react'
+import React from 'react'
+import SecondaryToolBarContainer from './detail/containers/SecondaryToolBarContainer'
+import './ProjectLayout.scss'
 
-require('./ProjectLayout.scss')
-
-class ProjectViewLayout extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
-    const { main } = this.props
-    return (
-      <div className="content-pane">
-        <div className="top-bar" />
-        {main}
-      </div>
-    )
-    // return this.props.children
-  }
-}
+const ProjectViewLayout = ({
+  main,
+}) => (
+  <div className="content-pane">
+    <SecondaryToolBarContainer />
+    {main}
+  </div>
+)
 
 export default ProjectViewLayout

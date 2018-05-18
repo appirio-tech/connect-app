@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { loadMembers } from '../../actions/members'
-import { loadProject, loadDirectProjectData } from './project'
+import { loadProject, loadDirectProjectData, loadProjectPhases } from './project'
 import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
 
 /**
@@ -23,6 +23,7 @@ const getDashboardData = (dispatch, projectId) => {
         ]
         if (value.directProjectId)
           promises.push(dispatch(loadDirectProjectData(value.directProjectId)))
+        promises.push(dispatch(loadProjectPhases(projectId)))
         return resolve(dispatch({
           type: LOAD_ADDITIONAL_PROJECT_DATA,
           payload: Promise.all(promises)
