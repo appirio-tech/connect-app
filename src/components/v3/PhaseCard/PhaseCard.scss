@@ -2,20 +2,57 @@
 @import '~tc-ui/src/styles/tc-includes';
 // phase-card style
 .phase-card {
-  background-color: #FAFAFB;
+  background-color: #fff;
   border-radius: 6px;
   box-shadow: 0 1px 1px 0 #D5D5D5;
   overflow: hidden;
+  position: relative;
+  
+  @include viewSm {
+    border-radius: 0;
+  }
+  &.card-delivered {
+    background-color: #FAFAFB;
+  }
+  &.card-inprogress {
+    background-color: #fff;
+    &:after {
+      content: '';
+      z-index: 5;
+      border-radius: 50%;
+      background-color: #FF5B52;
+      width: 8px;
+      height: 8px;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+  }
+  &.card-planned {
+    background-color: #fff;
+  }
   .static-view {
     min-height: 80px;
     display: flex;
     align-items: center;
     position: relative;
+    justify-content: space-between;
+    padding-right: 50px;
     border-radius: inherit;
+    @include viewSm {
+      min-height: 100px;
+      padding-right: 40px;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
   }
   .col {
     &:nth-child(1) {
       flex: 0 500px;
+      @include viewSm {
+        flex: 1;
+        padding-right: 20px;
+      }
     }
     &:nth-child(2) {
       flex: 0 140px;
@@ -23,10 +60,28 @@
     &:nth-child(3) {
       flex: 0 80px;
     }
+    &.show-md {
+      display: none;
+      @include viewSm {
+        display: block;
+      }
+    }
+    &.hide-md {
+      display: block;
+      @include viewSm {
+        display: none;
+      }
+    }
   }
   .project-details {
     padding-left: 80px;
     position: relative;
+    @include viewSm {
+      padding-left: 0;
+      display: flex;
+      flex-wrap: wrap;
+      height: 80px;
+    }
     .project-ico {
       position: absolute;
       left: 25px;
@@ -37,12 +92,18 @@
         background: url('assets/icons/product-design-app-visual.svg') 0 50% no-repeat;
         background-size: 30px;
       }
+      @include viewSm {
+        display: none;
+      }
     }
     .project-title {
       color: #151516;
       font-size: 20px;
       font-weight: 400;
       line-height: 30px;
+      @include viewSm {
+        line-height: 25px;
+      }
     }
   }
   h5 {
@@ -56,6 +117,11 @@
     padding-right: 18px;
     .meta-list {
       margin-top: 5px;
+    }
+    @include viewSm {
+      height: 70px;
+      display: flex;
+      flex-wrap: wrap;
     }
   }
   .meta-list {
@@ -115,6 +181,9 @@
     &:hover {
       opacity: 0.7;
     }
+    @include viewSm {
+      right: 0;
+    }
   }
   /*  expandable-view */
   .expandable-view {
@@ -135,7 +204,6 @@
       height: 40px;
       position: relative;
       margin: 0 auto;
-
       .CircularProgressbar {
         width: 40px;
         height: 40px;
@@ -158,6 +226,25 @@
             display: none;
           }
         }
+      }
+    }
+  } // progressbar
+  .progressbar {
+    display: none;
+    @include viewSm {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background-color: #E0E0E0;
+      .fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 5px;
+        background-color: #0681FF;
       }
     }
   }

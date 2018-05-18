@@ -22,7 +22,9 @@ class PhaseCard extends React.Component {
   render() {
     const { attr } = { ...this.props }
     return (
-      <div styleName={'phase-card ' + (this.state.isExpanded ? 'expanded' : '')}>
+      <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')
+        + (attr && attr.status ? ' card-' + attr.status.toLowerCase() : ' ')}
+      >
         <div styleName="static-view">
           <div styleName="col">
             <div styleName="project-details">
@@ -35,23 +37,34 @@ class PhaseCard extends React.Component {
               </div>
             </div>
           </div>
-          <div styleName="col">
+          <div styleName="col hide-md">
             <div styleName="price-details">
               <h5>{attr.price}</h5>
               <div styleName="meta-list">{attr.paidStatus}</div>
             </div>
           </div>
 
-          <div styleName="col">
-            {attr && attr.status && attr.status.toLowerCase() !== 'inprogress' && 
-            (<div styleName="status-details">
-              <div styleName={'status ' + (attr.status ? attr.status.toLowerCase() : '')}>
-                {attr.status}
+
+          <div styleName="col show-md">
+            <div styleName="price-details">
+              <h5>{attr.price}</h5>
+              <div styleName="meta-list">
+                {!attr.progressInPercent && attr.status && (<span>{attr.status}</span>)}
+                {attr.progressInPercent && (<span>{attr.progressInPercent || 0}% done</span>)}
               </div>
-            </div>)
+            </div>
+          </div>
+
+          <div styleName="col hide-md">
+            {attr && attr.status && attr.status.toLowerCase() !== 'inprogress' &&
+              (<div styleName="status-details">
+                <div styleName={'status ' + (attr.status ? attr.status.toLowerCase() : '')}>
+                  {attr.status}
+                </div>
+              </div>)
             }
 
-            {attr && attr.status && attr.status.toLowerCase() === 'inprogress' && 
+            {attr && attr.status && attr.status.toLowerCase() === 'inprogress' &&
               (<div styleName="status-details">
                 <div styleName={'status ' + (attr.status ? attr.status.toLowerCase() : '')}>
 
@@ -59,7 +72,7 @@ class PhaseCard extends React.Component {
                     title=""
                     viewType={ProjectProgress.ViewTypes.CIRCLE}
                     percent={attr.progressInPercent || 0}
-                    thickness = {7}
+                    thickness={7}
                   >
                     <span className="progress-text">{attr.progressInPercent || 0}% <span className="unit">completed</span></span>
                   </ProjectProgress>
@@ -72,6 +85,12 @@ class PhaseCard extends React.Component {
           <a styleName="toggle-arrow"
             onClick={this.toggleCardView}
           />
+
+          {attr && attr.status && attr.status.toLowerCase() === 'inprogress' &&
+            (
+              <div styleName="progressbar"><div styleName="fill" style={{ width: (attr.progressInPercent || 0)+'%' }} /></div>
+            )
+          }
         </div>
         <div styleName="expandable-view">
           {this.props.children}
