@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './containers/ProjectInfoContainer'
 import FeedContainer from './containers/FeedContainer'
-import MobileNavigationTabs from './components/MobileNavigationTabs'
 import Sticky from 'react-stickynode'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import { SCREEN_BREAKPOINT_MD } from '../../config/constants'
@@ -24,7 +23,6 @@ const DashboardView = ({project, currentMemberRole, route, params, isSuperUser }
   return (
     <div>
       <div className="dashboard-container">
-        <MobileNavigationTabs projectId={project.id} />
         <div className="left-area">
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {

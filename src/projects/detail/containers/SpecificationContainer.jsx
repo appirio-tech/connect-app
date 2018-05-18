@@ -8,7 +8,6 @@ import Sticky from 'react-stickynode'
 import MediaQuery from 'react-responsive'
 
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
-import MobileNavigationTabs from '../components/MobileNavigationTabs'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import EditProjectForm from '../components/EditProjectForm'
 import { findProduct } from '../../../config/projectWizard'
@@ -71,7 +70,6 @@ class SpecificationContainer extends Component {
 
     return (
       <section className="two-col-content content specificationContainer">
-        <MobileNavigationTabs projectId={project.id} />
         <div className="container">
           <div className="left-area">
             <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
