@@ -24,6 +24,7 @@ Please visit these following pages for the demo.
 - Submission selection component: http://local.topcoder-dev.com:3000/V3ComponentSubmissionSelectionDemo
 - Winner selection component : http://local.topcoder-dev.com:3000/V3ComponentWinnerSelectionDemo
 - Alert component : http://local.topcoder-dev.com:3000/V3ComponentAlertDemo
+- V3PhaseCard : http://local.topcoder-dev.com:3000/V3PhaseCard
 
 ## Note
 Please note that timeline is a container component that's in scope

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>ui-calendar</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="ui-calendar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M15,2 L13,2 L13,0 L10,0 L10,2 L6,2 L6,0 L3,0 L3,2 L1,2 C0.448,2 0,2.448 0,3 L0,15 C0,15.552 0.448,16 1,16 L15,16 C15.552,16 16,15.552 16,15 L16,3 C16,2.448 15.552,2 15,2 Z M14,14 L2,14 L2,5 L14,5 L14,14 Z M4,7 L4,9 L6,9 L6,7 L4,7 Z M7,7 L7,9 L9,9 L9,7 L7,7 Z M4,10 L4,12 L6,12 L6,10 L4,10 Z M7,10 L7,12 L9,12 L9,10 L7,10 Z M10,7 L10,9 L12,9 L12,7 L10,7 Z M10,10 L10,12 L12,12 L12,10 L10,10 Z" id="Combined-Shape" fill="#808080" fill-rule="nonzero"></path>
+    </g>
+</svg>

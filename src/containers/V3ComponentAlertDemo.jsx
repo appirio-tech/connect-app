@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import V3Template from './V3Template'
 import AlertComponent from '../components/v3/AlertComponent'
 import './V3ComponentDemo.scss'
 
@@ -11,18 +11,9 @@ class V3ComponentAlertDemo extends React.Component {
   render() {
     return (
       <div styleName="v3-component-demolist">
-        <section>
+        <V3Template>
           <div styleName="viewport">
-            <h2 styleName="group-title">Demo Links</h2>
-            <ul>
-              <li><NavLink to="/V3ComponentDemo"> Progress & menu components </NavLink></li>
-              <li><NavLink to="/V3ComponentTimelineDemo"> Timeline & Child Timeline components </NavLink></li>
-              <li><NavLink to="/V3ComponentPostcardDemo"> Posts card and post feed components </NavLink></li>
-              <li><NavLink to="/V3ComponentSubmissionSelectionDemo"> Submission selection component </NavLink></li>
-              <li><NavLink to="/V3ComponentWinnerSelectionDemo"> Winner selection component </NavLink></li>
-              <li><NavLink to="/V3ComponentAlertDemo"> Alert component </NavLink></li>
-            </ul>
-         
+
             <h2 styleName="group-title">Alerts</h2>
             <h3>NORMAL/SUCCESS</h3>
             <AlertComponent
@@ -33,18 +24,18 @@ class V3ComponentAlertDemo extends React.Component {
             <AlertComponent
               title="PROJECT DATA SAVED"
               message="All looks good. Keep it going."
-              type = "warning"
+              type="warning"
             />
             <h3>OFFLINE</h3>
             <AlertComponent
               title="NO INTERNET CONNECTION"
               message="We’re offline. We can’t save any changes"
-              type = "offline"
+              type="offline"
             />
           </div>
 
-        </section>
-      </div >
+        </V3Template>
+      </div>
     )
   }
 }

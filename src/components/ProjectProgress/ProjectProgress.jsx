@@ -16,14 +16,14 @@ const Themes = {
   RED     : 'error'
 }
 
-const ProjectProgress = ({type, percent, children, viewType=ViewTypes.HBAR }) => (
+const ProjectProgress = ({type, percent, thickness, children, viewType=ViewTypes.HBAR }) => (
   <div className="project-progress">
     { viewType === ViewTypes.HBAR && 
       <div className="progress-bar">
         <div className={cn('progress', type)} style={{width: percent + '%'}} />
       </div>
     }
-    { viewType === ViewTypes.CIRCLE && <CircularProgressbar textForPercentage="" strokeWidth={20} percentage={percent} /> }
+    { viewType === ViewTypes.CIRCLE && <CircularProgressbar textForPercentage="" strokeWidth={thickness || 20} percentage={percent} /> }
     <div className="progress-remaining">
       {children}
     </div>
@@ -42,7 +42,8 @@ ProjectProgress.propTypes = {
   title: PropTypes.string.isRequired,
   type: PropTypes.oneOf(_.values(Themes)),
   percent: PropTypes.number.isRequired,
-  children: PropTypes.any.isRequired
+  children: PropTypes.any.isRequired,
+  thickness: PropTypes.number
 }
 
 export default ProjectProgress
