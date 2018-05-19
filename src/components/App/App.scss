@@ -2,6 +2,7 @@
 
 :global {
   body {
+    @include roboto;
     min-width: 320px;
     background-color: $tc-gray-neutral-dark;
   
@@ -9,6 +10,10 @@
       display: none;
     }
   }
+  html body{
+    @include roboto;
+  }
+
   
   .ReactModal__Body--open {
     overflow: hidden;

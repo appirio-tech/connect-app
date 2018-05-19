@@ -32,3 +32,13 @@ h3 {
   padding-bottom: $base-unit*2;
   padding-top: $base-unit*2;
 }
+.component-container{
+  display: block;
+}
+.placeholder-data{
+  margin-top: 5px;
+  background-color: #fff;
+  padding: 20px;
+  color: #404041;
+  line-height: 1.6;
+}
