@@ -27,7 +27,7 @@ const DashboardView = ({project, currentMemberRole, route, params, isSuperUser }
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
               if (matches) {
-                return <Sticky top={80}>{leftArea}</Sticky>
+                return <Sticky top={60}>{leftArea}</Sticky>
               } else {
                 return leftArea
               }
@@ -35,7 +35,9 @@ const DashboardView = ({project, currentMemberRole, route, params, isSuperUser }
           </MediaQuery>
         </div>
         <div className="right-area">
-          <FeedContainer currentMemberRole={currentMemberRole} project={project} route={route} params={params} />
+          <div className="right-area-content">
+            <FeedContainer currentMemberRole={currentMemberRole} project={project} route={route} params={params} />
+          </div>
         </div>
       </div>
     </div>

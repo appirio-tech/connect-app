@@ -14,25 +14,15 @@ const SecondaryToolBarContainer = ({
   match,
   project,
 }) => {
-  // if project is not loaded yet, we don't know if we should display Discussions link
-  // if phases hasn't been loaded yet, we don't know if project has phases or no
-  if (isProjectLoading || _.isUndefined(project.phases)) {
-    return null
-  }
-
-  const hasPhases = _.isArray(project.phases)
-
-  // different menu items depend on if project has phases (new) or no (old)
-  const navLinks = hasPhases ? [
+  const navLinks = [
     { label: 'Dashboard', to: `/projects/${match.params.projectId}` },
     { label: 'Scope', to: `/projects/${match.params.projectId}/scope` },
     { label: 'Project Plan', to: `/projects/${match.params.projectId}/plan` },
-  ] : [
-    { label: 'Dashboard', to: `/projects/${match.params.projectId}` },
-    { label: 'Specification', to: `/projects/${match.params.projectId}/specification` },
   ]
 
-  if (!project.details.hideDiscussions) {
+  // `Discussions` items can be added as soon as project is loaded
+  // if discussions are not hidden for it
+  if (!isProjectLoading && !project.details.hideDiscussions) {
     navLinks.push({ label: 'Discussions', to: `/projects/${match.params.projectId}/discussions` })
   }
 

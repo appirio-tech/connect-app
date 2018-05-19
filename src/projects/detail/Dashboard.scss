@@ -1,35 +1,8 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
-  // FIXME
-  @mixin flexBox {
-    display: flex;
-    flex-direction: row;
-  }
-  // FIXME
-  @mixin flexWidth($number) {
-    -webkit-box-flex: $number;
-    -moz-box-flex: $number;
-    -webkit-flex: $number;
-    -ms-flex: $number;
-    flex: $number;
-  }
-
-  .sideAreaWrapper {
-    border: 1px solid $tc-gray-20;
-    border-radius: 4px;
-
-    @media screen and (max-width: $screen-md - 1px) {
-      border: 0;
-      border-radius: 0;
-    }
-  }
-
   .dashboard-container {
-    @include flexBox;
-    max-width: 1110px;
-    margin: 20px auto;
-    padding: 0 20px;
+    display: flex;
 
     @media screen and (max-width: $screen-md - 1px) {
       flex-direction: column;
@@ -40,21 +13,35 @@
     }
 
     .left-area {
-      @include flexWidth(1);
+      flex: 1;
       max-width: 360px;
 
       @media screen and (max-width: $screen-md - 1px) {
         max-width: 100%;
+      }
 
-        .footer-v2 {
+      .footer-v2 {
+        bottom: 2 * $base-unit;
+        left: 0;
+        margin-top: 0;
+        padding: 0 4 * $base-unit;
+        position: absolute;
+        width: 100%;
+
+        @media screen and (max-width: $screen-md - 1px) {
           display: none;
         }
       }
 
       .dashboard-left-panel {
-        padding-bottom: 2 * $base-unit;
+        background-color: $tc-white;
+        box-shadow: 1px 1px 0 0 #DCDCE0, 0 1px 0 0 #DCDCE0;
+        min-height: calc(100vh - 110px);
+        padding-bottom: 10 * $base-unit;
+        position: relative;
 
         @media screen and (max-width: $screen-md - 1px) {
+          min-height: 0;
           padding-bottom: 0;
         }
 
@@ -78,9 +65,12 @@
     }
 
     .right-area {
-      @include flexWidth(2);
-      margin-left: 4 * $base-unit;
-      max-width: 730px;//1110px - 360px - 20px(margin-left);
+      flex: 2;
+
+      .right-area-content {
+        margin: 0 auto;
+        max-width: 760px;
+      }
 
       @media screen and (max-width: $screen-md - 1px) {
         max-width: 100%;

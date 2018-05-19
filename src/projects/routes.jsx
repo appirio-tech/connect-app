@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { withProps } from 'recompose'
 import { renderApp } from '../components/App/App'
-import ProjectLayout from './ProjectLayout'
+import ProjectLayout from './detail/components/ProjectLayout'
 import Projects from './list/components/Projects/Projects'
 import TopBarContainer from '../components/TopBar/TopBarContainer'
 import ProjectsToolBar from '../components/TopBar/ProjectsToolBar'
@@ -37,7 +37,7 @@ const ProjectDetailWithAuth = withProps({ main:
   </Switch>
 })(ProjectLayoutWithAuth)
 
-const ProjectsWithAuth = withProps({ main: <Projects /> })(ProjectLayoutWithAuth)
+const ProjectsWithAuth = requiresAuthentication(Projects)
 
 const projectRoutes = (
   <Route

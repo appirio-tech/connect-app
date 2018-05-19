@@ -17,11 +17,7 @@ class ProjectInfoContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      duration: {},
-      budget: { // FIXME
-        percent: 80,
-        text: '$1000 remaining'
-      }
+      duration: {}
     }
     this.onChangeStatus = this.onChangeStatus.bind(this)
     this.onDeleteProject = this.onDeleteProject.bind(this)
@@ -111,6 +107,13 @@ class ProjectInfoContainer extends React.Component {
     } else {
       devices = _.get(project, 'details.devices', [])
     }
+
+    const attachments = _.sortBy(project.attachments, attachment => -new Date(attachment.updatedAt).getTime())
+      .map(attachment => ({
+        title: attachment.title,
+        address: attachment.downloadUrl,
+      }))
+
     return (
       <div>
         <div className="sideAreaWrapper">
@@ -123,6 +126,10 @@ class ProjectInfoContainer extends React.Component {
             onChangeStatus={this.onChangeStatus}
             directLinks={directLinks}
             isSuperUser={isSuperUser}
+          />
+          <LinksMenu
+            links={attachments}
+            title="Latest files"
           />
           <LinksMenu
             links={project.bookmarks || []}
