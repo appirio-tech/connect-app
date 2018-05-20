@@ -3,7 +3,6 @@
  *
  * TODO has to be replaced with the real service
  */
-import _ from 'lodash'
 import { axiosInstance as axios } from '../../../api/requestInterceptor'
 import { TC_NOTIFICATION_URL } from '../../../config/constants'
 
