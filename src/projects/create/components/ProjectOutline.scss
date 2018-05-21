@@ -8,7 +8,7 @@
     box-shadow: 0px 1px 3px 0px $tc-gray-30;
     padding: 5*$base-unit;
     border-radius: 4px;
-  
+
     h5 {
       width: 100%;
       margin-bottom: $base-unit * 4;
@@ -16,19 +16,12 @@
       color: $tc-gray-50;
       text-transform: uppercase;
     }
-  
-    .project-product {
-      color: $tc-gray-50;
-      @include roboto;
-      margin-bottom: $base-unit * 4;
-      display: none;
-    }
-  
+
     .project-description {
       color: $tc-gray-80;
       @include tc-label-md;
     }
-  
+
     .project-meta-data {
       margin-top: $base-unit * 4;
       .project-meta-data-row {
@@ -40,11 +33,11 @@
         .project-meta-data-label {
           flex: 1;
           color: $tc-gray-50;
-  
+
           @include tc-label-md;
           @include roboto-bold;
         }
-  
+
         .project-meta-data-value {
           flex: 3;
           @include tc-label-md;
@@ -54,4 +47,3 @@
     }
   }
 }
-  

@@ -1,35 +1,32 @@
-import _ from 'lodash'
+// import _ from 'lodash'
 import React from 'react'
 import PT from 'prop-types'
-import config from '../../../config/projectWizard'
-import VisualDesignProjectEstimateSection from '../../detail/components/VisualDesignProjectEstimateSection'
+// import VisualDesignProjectEstimateSection from '../../detail/components/VisualDesignProjectEstimateSection'
 import ProjectCardHeader from '../../list/components/Projects/ProjectCardHeader'
 import './ProjectOutline.scss'
 
 function ProjectOutline({ project }) {
-  const product = _.get(project, 'details.products[0]')
+  // TODO $PROJECT_PLAN$
+  // comment getting estimation until I know where they have to come from
+  /* const product = _.get(project, 'details.products[0]')
   const projectTypeId = _.get(project, 'type')
   if (!projectTypeId || !product) return <div />
-  const projectType = _.findKey(config, {id : projectTypeId})
-  const subConfig = config[projectType]
-  const productName = _.findKey(subConfig.subtypes, {id : product})
+  const projectTemplate = _.findKey(projectTemplates, {key: projectTypeId})
+  const productName = projectTemplate.name
   const projectsWithEstimate = ['Wireframes', 'Visual Design', 'Front-end Prototype']
   const projectEstimate = (projectsWithEstimate.indexOf(productName)<0) ? (null) : (<li className="project-meta-data-row">
     <VisualDesignProjectEstimateSection
       products={ _.get(project, 'details.products', []) }
       project={ project }
     />
-  </li>)
+  </li>) */
   return (
     <div className="ProjectOutline">
       <h5>Project Outline</h5>
       <ProjectCardHeader project={project} />
-      <div className="project-product">{ productName }</div>
       <ul className="project-meta-data">
-        
         <div className="project-description">{ project.description }</div>
         <li><hr /></li>
-        {projectEstimate}
       </ul>
     </div>
   )

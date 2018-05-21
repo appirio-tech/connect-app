@@ -11,6 +11,7 @@ import members from './members'
 import alerts from './alerts'
 import notifications from '../routes/notifications/reducers'
 import settings from '../routes/settings/reducers'
+import templates from './templates'
 
 export default combineReducers({
   loadUser,
@@ -24,5 +25,6 @@ export default combineReducers({
   projectTopics,
   alerts,
   notifications,
-  settings
+  settings,
+  templates,
 })

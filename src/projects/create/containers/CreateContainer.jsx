@@ -7,10 +7,11 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject } from '../../actions/project'
+import { loadProjectTemplates } from '../../../actions/templates'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
-import { findProduct, findCategory, findProductCategory } from '../../../config/projectWizard'
+import { findProduct, findCategory } from '../../../config/projectWizard'
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
@@ -34,7 +35,11 @@ const showCoderBotIfError = (hasError) =>
 const errorHandler = showCoderBotIfError(props => props.error && props.error.type === CREATE_PROJECT_FAILURE)
 
 // This handles showing a spinner while the state is being loaded async
-const spinner = spinnerWhileLoading(props => !props.processing)
+const spinner = spinnerWhileLoading(props =>
+  !props.processing &&
+  !props.templates.isProjectTemplatesLoading &&
+  props.templates.projectTemplates !== null
+)
 
 const enhance = compose(errorHandler, spinner)
 
@@ -92,20 +97,21 @@ class CreateConainer extends React.Component {
   }
 
   componentWillMount() {
-    const { processing, userRoles, match, history } = this.props
-    // if we are on the project page validate product param
-    if (match.path === '/new-project/:product?/:status?') {
-      const product = match.params.product
-      // first try the path param to be a project category
-      let productCategory = findCategory(product, true)
-      // if it is not a category, it should be a product and we should be able to find a category for it
-      productCategory = !productCategory ? findProductCategory(product, true) : productCategory
-      if (product && product.trim().length > 0 && !productCategory) {
+    const { processing, userRoles, match, history, templates, loadProjectTemplates } = this.props
+    // if we are on the project page validate project param
+    if (match.path === '/new-project/:project?/:status?') {
+      const project = match.params.project
+
+      if (
+        // if project is defined in URL
+        project &&
         // workaround to add URL for incomplete project confirmation step
         // ideally we should have better URL naming which resolves each route with distinct patterns
-        if (product !== 'incomplete') {
-          history.replace('/404')
-        }
+        project !== 'incomplete' &&
+        // if project template doesn't exist
+        !_.find(templates.projectTemplates, (projectTemplate) => projectTemplate.aliases[0] === project)
+      ) {
+        history.replace('/404')
       }
     }
 
@@ -124,6 +130,11 @@ class CreateConainer extends React.Component {
       // dispatches action to clear the project in the redux state to ensure that we never have a project
       // in context when creating a new project
       this.props.clearLoadedProject()
+    }
+
+    // if templates are not loaded yet - then load them
+    if (templates.projectTemplates === null && !templates.isProjectTemplatesLoading) {
+      loadProjectTemplates()
     }
   }
 
@@ -262,6 +273,7 @@ class CreateConainer extends React.Component {
           })
         }
         }
+        projectTemplates={this.props.templates.projectTemplates}
       />
     )
   }
@@ -275,11 +287,20 @@ CreateConainer.defaultProps = {
   userRoles: []
 }
 
-const mapStateToProps = ({projectState, loadUser }) => ({
+const mapStateToProps = ({projectState, loadUser, templates }) => ({
   userRoles: _.get(loadUser, 'user.roles', []),
   processing: projectState.processing,
   error: projectState.error,
-  project: projectState.project
+  project: projectState.project,
+  templates,
 })
-const actionCreators = { createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject }
+
+const actionCreators = {
+  createProjectAction,
+  fireProjectDirty,
+  fireProjectDirtyUndo,
+  clearLoadedProject,
+  loadProjectTemplates,
+}
+
 export default withRouter(connect(mapStateToProps, actionCreators)(CreateConainer))
