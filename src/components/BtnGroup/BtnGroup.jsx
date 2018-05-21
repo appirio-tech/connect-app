@@ -24,7 +24,9 @@ class BtnGroup extends React.Component {
           <button
             key={item.value}
             className={cn('tc-btn tc-btn-sm tc-btn-default', { active: item.value === this.state.value })}
-            onClick={() => {
+            onClick={(evt) => {
+              // prevent parent form to be submitted
+              evt.preventDefault()
               if (item.value !== this.state.value) {
                 this.setState({ value: item.value })
                 if (this.props.onChange) {

@@ -399,3 +399,11 @@ export const SCREEN_BREAKPOINT_RG = 992
 export const SCREEN_BREAKPOINT_MD = 768
 export const SCREEN_BREAKPOINT_SM = 640
 export const SCREEN_BREAKPOINT_XS = 320
+
+export const NOTIFICATION_SETTINGS_PERIODS = [
+  { text: 'Send as they happen', value: 'immediately' },
+  { text: 'Every 10m.', value: 'every10minutes' },
+  { text: 'Hourly', value: 'hourly' },
+  { text: 'Daily', value: 'daily' },
+  { text: 'Weekly', value: 'weekly' },
+]
