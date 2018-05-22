@@ -37,7 +37,7 @@ jobs:
             npm install
             npm test
             pwd
-      - store_test_results:
+      - store_artifacts:
           path: /home/circleci/qa-framework/allure-report            
             
   # Just tests commited code.
