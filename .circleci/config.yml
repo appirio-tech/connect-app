@@ -33,6 +33,8 @@ jobs:
             cd $HOME/qa-framework
             sudo chmod 777 /usr/local/lib/node_modules
             sudo chmod 777 /usr/local/bin
+            sudo echo "127.0.0.1  local.topcoder-dev.com" >>/etc/hosts
+            sudo echo "127.0.0.1  local.topcoder.com" >>/etc/hosts
             mv -f test/config/ci-config.js test/config/config.js
             npm install
             npm test
