@@ -13,14 +13,24 @@
     position: relative;
     padding-top: 55px;
     text-align: center;
-    min-height: 606px;
-    min-width: 768px;
-    width: 970px;
+    min-height: 706px;
+    @media screen and (max-width: $screen-sm - 1px) {
+      min-height: 780px;
+    }
     margin: 20px auto 0;
     background: #ffffff;
     .icon-coder-broken {
       margin: 6% 20%;
       float: left;
+      @media screen and (max-width: $screen-md - 1px) {
+        margin: 6% 10%;
+      }
+      @media screen and (max-width: $screen-sm - 1px) {
+        margin: 6% 5%;
+      }
+      @media screen and (max-width: 321px) {
+        margin: 6% 1%;
+      }
     }
     background-size: 307px 300px;
     a{
@@ -36,24 +46,52 @@
       letter-spacing: 0px;
       padding: 0 168px 25px 168px;
       line-height: inherit;
+      @media screen and (max-width: 1000px - 1px) {
+        padding: 0 100px 25px 100px;
+      }
+      @media screen and (max-width: $screen-md - 1px) {
+        padding: 0 28px 25px 28px;
+      }
+      @media screen and (max-width: $screen-sm - 1px) {
+        font-size: 30px;
+      }
     }
     p{
       text-align: left;
+      min-height: 120px;
       padding: 0 168px;
       @include roboto;
       font-size: $tc-label-lg;
       color: $tc-gray-70;
       letter-spacing: 0px;
       line-height: 23px;
+      @media screen and (max-width: 1000px - 1px) {
+        padding: 0 100px;
+      }
+      @media screen and (max-width: $screen-md - 1px) {
+        padding: 0 28px;
+      }
     }
     span{
       position: absolute;
       left: 49%;
-      top: 45%;
+      bottom: 25%;
       @include roboto-medium;
       font-size: 190px;
       color: $tc-orange-30;
       letter-spacing: 0px;
+      @media screen and (max-width: $screen-md - 1px) {
+        font-size: 150px;
+        bottom: 30%;
+      }
+      @media screen and (max-width: $screen-sm - 1px) {
+        font-size: 100px;
+        bottom: 45%;
+      }
+      @media screen and (max-width: 400px) {
+        font-size: 65px;
+        left: 63%;
+      }
     }
   }
 }
