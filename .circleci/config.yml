@@ -2,8 +2,11 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/node:8.9.4
+      - image: circleci/node:8.9.4-browsers
     steps:
+      - run:
+          name: checking out qa framework repo
+          command: git clone --branch master https://github.com/appirio-tech/qa-framework.git ../qa-framework    
       - checkout
       - restore_cache:
           key: test-node-modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "package-lock.json" }}
@@ -18,8 +21,19 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - dist
-
+            - dist      
+      - run:
+          name: starting server locally
+          command: npm run start
+          background: true
+      - run: sleep 90         
+      - run:
+          name: Running qa frame work
+          command: |
+            cd $HOME/qa-framework
+            npm install
+            pwd
+            
   # Just tests commited code.
   deployDev:
     docker:
@@ -56,6 +70,16 @@ jobs:
       - attach_workspace:
           at: ./workspace
       - run: ./deploy.sh DISCOURSE
+  # Just tests commited code.
+  devtesting:
+    docker:
+      - image: cibuilds/aws
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./workspace
+      - run: echo "proceed deploy"
+  # deploy to test02      
 
 workflows:
   version: 2
@@ -86,3 +110,9 @@ workflows:
           filters:
             branches:
               only: master-discourse-free
+      - devtesting:
+          requires:
+            - test
+          filters:
+            branches:
+              only: dev-testing
