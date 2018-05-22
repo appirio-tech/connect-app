@@ -6,7 +6,7 @@ jobs:
     steps:
       - run:
           name: checking out qa framework repo
-          command: git clone --branch master https://github.com/appirio-tech/qa-framework-js.git ../qa-framework    
+          command: git clone --branch master https://$GITUSER:$GITPASSWD@github.com/appirio-tech/qa-framework-js.git ../qa-framework    
       - checkout
       - restore_cache:
           key: test-node-modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "package-lock.json" }}
@@ -32,6 +32,7 @@ jobs:
           command: |
             cd $HOME/qa-framework
             npm install
+            npm test
             pwd
             
   # Just tests commited code.
