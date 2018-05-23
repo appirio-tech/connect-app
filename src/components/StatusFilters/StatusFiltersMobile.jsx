@@ -47,7 +47,7 @@ class StatusFiltersMobile extends React.Component {
     return (
       <div>
         <div styleName={cn('handle', { 'is-open': isOpen })} onClick={this.toggle}>
-          <span>{currentSatusLabel}</span>
+          <div>{currentSatusLabel}</div>
           <IconCarretDown />
         </div>
         {isOpen && <ul styleName="list">

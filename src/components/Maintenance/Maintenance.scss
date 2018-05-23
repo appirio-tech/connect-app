@@ -8,15 +8,14 @@
     }
   }
   
-  .page-error {
+  .page-error-maintenance {
     border-radius:4px;
     position: relative;
     padding-top: 55px;
     text-align: center;
     min-height: 606px;
-    min-width: 768px;
-    width: 970px;
     margin: 20px auto 0;
+    background: #ffffff;
     /* background: $tc-white url('../../assets/icons/coder-broken.svg') no-repeat 18% 85%; */
     background-size: 307px 300px;
     a{
@@ -30,17 +29,25 @@
       @include roboto-medium;
       font-size: 48px;
       letter-spacing: 0px;
-      padding: 0 168px 25px 168px;
+      padding: 0 28px 25px 28px;
       line-height: inherit;
+      @media screen and (max-width: $screen-sm - 1px) {
+        font-size: 30px;
+      }
     }
     p{
-      text-align: left;
+      text-align: center;
       padding: 0 168px;
       @include roboto;
       font-size: $tc-label-lg;
       color: $tc-gray-70;
       letter-spacing: 0px;
       line-height: 23px;
+      padding: 0 28px 25px 28px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        text-align: justify;
+      }
     }
     span{
       position: absolute;
