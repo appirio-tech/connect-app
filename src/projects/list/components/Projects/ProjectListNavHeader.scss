@@ -16,7 +16,7 @@
     }
 
     @media screen and (max-width: $screen-sm - 1px) {
-      margin: 0 0 4 * $base-unit 0;
+      margin: 0 0 $base-unit 0;
     }
 
     .left-wrapper {
