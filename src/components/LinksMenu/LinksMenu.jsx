@@ -33,7 +33,7 @@ const LinksMenu = ({
 }) => (
   <MobileExpandable title={`${title} (${links.length})`}>
     <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0) }, 'panel-links-container')}>
-      {canAdd && !isAddingNewLink && <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Create New Link</Panel.AddBtn>}
+      {canAdd && !isAddingNewLink && onAddingNewLink && <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Create New Link</Panel.AddBtn>}
       {!isAddingNewLink && <Panel.Title>
         {title} ({links.length})
       </Panel.Title>}
@@ -132,7 +132,7 @@ LinksMenu.propTypes = {
   links: PropTypes.array.isRequired,
   moreText: PropTypes.string,
   onAddingNewLink: PropTypes.func,
-  onAddNewLink: PropTypes.func.isRequired,
+  onAddNewLink: PropTypes.func,
   onChangeLimit: PropTypes.func,
   onDelete: PropTypes.func,
   title: PropTypes.string,

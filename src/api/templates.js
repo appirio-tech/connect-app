@@ -8,6 +8,7 @@
 import _ from 'lodash'
 
 import projectTemplates from './templates-json/project-templates.json'
+import projectTypes from './templates-json/project-types.json'
 
 export function getProjectTemplates() {
   return new Promise((resolve) => {
@@ -19,5 +20,19 @@ export function getProjectTemplates() {
 }
 
 export function getProjectTemplate(projectTemplateId) {
-  return Promise.resolve(_.find(projectTemplates, { id: projectTemplateId }))
+  return new Promise((resolve) => {
+    // simulate loading
+    setTimeout(() => {
+      resolve(_.find(projectTemplates, { id: projectTemplateId }))
+    }, 1000)
+  })
+}
+
+export function getProjectTypes() {
+  return new Promise((resolve) => {
+    // simulate loading
+    setTimeout(() => {
+      resolve(projectTypes)
+    }, 3000)
+  })
 }

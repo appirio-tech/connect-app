@@ -11,7 +11,7 @@ import { loadProjectTemplates } from '../../../actions/templates'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
-import { findProduct, findCategory } from '../../../config/projectWizard'
+import { getProjectTemplateByKey, getProjectTemplateByAlias } from '../../../helpers/templates'
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
@@ -57,7 +57,7 @@ const CreateView = (props) => {
 }
 const EnhancedCreateView = enhance(CreateView)
 
-class CreateConainer extends React.Component {
+class CreateContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -97,7 +97,8 @@ class CreateConainer extends React.Component {
   }
 
   componentWillMount() {
-    const { processing, userRoles, match, history, templates, loadProjectTemplates } = this.props
+    const { processing, userRoles, match, history,
+      templates, loadProjectTemplates } = this.props
     // if we are on the project page validate project param
     if (match.path === '/new-project/:project?/:status?') {
       const project = match.params.project
@@ -108,8 +109,10 @@ class CreateConainer extends React.Component {
         // workaround to add URL for incomplete project confirmation step
         // ideally we should have better URL naming which resolves each route with distinct patterns
         project !== 'incomplete' &&
+        // project templates are loaded
+        templates.projectTemplates &&
         // if project template doesn't exist
-        !_.find(templates.projectTemplates, (projectTemplate) => projectTemplate.aliases[0] === project)
+        !getProjectTemplateByAlias(templates.projectTemplates, project)
       ) {
         history.replace('/404')
       }
@@ -215,6 +218,8 @@ class CreateConainer extends React.Component {
   }
 
   render() {
+    const { templates: { projectTemplates }} = this.props
+
     return (
       <EnhancedCreateView
         {...this.props}
@@ -223,31 +228,24 @@ class CreateConainer extends React.Component {
         showModal
         closeModal={ this.closeWizard }
         onStepChange={ (wizardStep, updatedProject) => {
-          // type of the project
-          let projectType = _.get(updatedProject, 'type', null)
-          // finds project category object from the catalogue
-          const projectCategory = findCategory(projectType)
-          // updates the projectType variable to use first alias to create SEO friendly URL
-          projectType = _.get(projectCategory, 'aliases[0]', projectType)
-          // product of the project
-          let productType = _.get(updatedProject, 'details.products[0]', null)
-          // finds product object from the catalogue
-          const product = findProduct(productType)
-          // updates the productType variable to use first alias to create SEO friendly URL
-          productType = _.get(product, 'aliases[0]', productType)
-          if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
-            let productUrl = productType ? ('/' + productType) : ''
-            productUrl = !productType && projectType ? ('/' + projectType) : productUrl
-            this.props.history.push(NEW_PROJECT_PATH + productUrl + '/incomplete' + window.location.search)
+          const projectTemplateKey = _.get(updatedProject, 'details.products[0]', null)
+          const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
+          const alias = _.get(projectTemplate, 'aliases[0]')
+
+          switch (wizardStep) {
+          case ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF: {
+            const aliasParam = alias ? `/${alias}` : ''
+            this.props.history.push(NEW_PROJECT_PATH + aliasParam + '/incomplete' + window.location.search)
+            break
           }
-          if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
+          case ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE:
             this.props.history.push(NEW_PROJECT_PATH + '/' + window.location.search)
-          }
-          if (projectType && wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
-            this.props.history.push(NEW_PROJECT_PATH + '/' + projectType + window.location.search)
-          }
-          if (projectType && productType && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
-            this.props.history.push(NEW_PROJECT_PATH + '/' + productType + window.location.search)
+            break
+          case ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS:
+            if (alias) {
+              this.props.history.push(NEW_PROJECT_PATH + '/' + alias + window.location.search)
+            }
+            break
           }
           this.setState({
             wizardStep
@@ -279,11 +277,11 @@ class CreateConainer extends React.Component {
   }
 }
 
-CreateConainer.propTypes = {
+CreateContainer.propTypes = {
   userRoles: PropTypes.arrayOf(PropTypes.string).isRequired
 }
 
-CreateConainer.defaultProps = {
+CreateContainer.defaultProps = {
   userRoles: []
 }
 
@@ -303,4 +301,4 @@ const actionCreators = {
   loadProjectTemplates,
 }
 
-export default withRouter(connect(mapStateToProps, actionCreators)(CreateConainer))
+export default withRouter(connect(mapStateToProps, actionCreators)(CreateContainer))

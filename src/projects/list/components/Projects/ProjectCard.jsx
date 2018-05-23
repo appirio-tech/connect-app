@@ -7,7 +7,7 @@ import ProjectCardBody from './ProjectCardBody'
 import ProjectManagerAvatars from './ProjectManagerAvatars'
 import './ProjectCard.scss'
 
-function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus}) {
+function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus, projectTemplates }) {
   const className = `ProjectCard ${ disabled ? 'disabled' : 'enabled'}`
   if (!project) return null
   const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
@@ -19,7 +19,7 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
       }}
     >
       <div className="card-header">
-        <ProjectCardHeader project={project} />
+        <ProjectCardHeader project={project} projectTemplates={projectTemplates} />
       </div>
       <div className="card-body">
         <ProjectCardBody
@@ -44,7 +44,8 @@ ProjectCard.defaultTypes = {
 
 ProjectCard.propTypes = {
   project: PT.object.isRequired,
-  currentMemberRole: PT.string
+  currentMemberRole: PT.string,
+  projectTemplates: PT.array.isRequired,
   // duration: PT.object.isRequired,
 }
 

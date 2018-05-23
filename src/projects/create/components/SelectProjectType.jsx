@@ -2,7 +2,7 @@ import React from 'react'
 import PT from 'prop-types'
 
 import ProjectTypeCard from './ProjectTypeCard'
-import ProjectTypeIcon from './ProjectTypeIcon'
+import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 
 import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
 

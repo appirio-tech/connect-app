@@ -2,11 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import Select from '../../components/Select/Select'
-import { projectTypes } from '../../config/projectWizard'
 
-const Filters = ({ criteria, applyFilters }) => {
-  const types = _.map(projectTypes, projectType => {
-    return { value: projectType.id, label: projectType.name }
+const Filters = ({ criteria, applyFilters, projectTypes }) => {
+  const types = _.map(projectTypes, type => {
+    return { value: type.typeId, label: type.typeName }
   })
 
   // TODO add segments list
@@ -61,7 +60,11 @@ const Filters = ({ criteria, applyFilters }) => {
 
 Filters.propTypes = {
   criteria: PropTypes.object.isRequired,
-  applyFilters: PropTypes.func.isRequired
+  applyFilters: PropTypes.func.isRequired,
+  projectTypes: PropTypes.arrayOf(PropTypes.shape({
+    typeId: PropTypes.string.isRequired,
+    typeName: PropTypes.string.isRequired,
+  }))
 }
 
 export default Filters

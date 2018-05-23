@@ -390,7 +390,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 2,
@@ -1005,7 +1007,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 3,
@@ -1081,7 +1085,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 4,
@@ -1363,7 +1369,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 5,
@@ -1678,7 +1686,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 6,
@@ -1844,7 +1854,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 7,
@@ -1967,7 +1979,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 8,
@@ -2167,7 +2181,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 9,
@@ -2292,7 +2308,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 10,
@@ -2645,7 +2663,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 11,
@@ -3009,7 +3029,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 12,
@@ -3374,7 +3396,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 13,
@@ -3738,7 +3762,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 14,
@@ -4004,7 +4030,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 15,
@@ -4397,7 +4425,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 16,
@@ -4790,7 +4820,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 17,
@@ -5183,7 +5215,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 18,
@@ -5576,7 +5610,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 19,
@@ -5776,7 +5812,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 20,
@@ -5901,7 +5939,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 21,
@@ -6253,7 +6293,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 22,
@@ -6604,7 +6646,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 23,
@@ -7229,7 +7273,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 24,
@@ -7379,7 +7425,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 25,
@@ -7444,7 +7492,9 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 26,
@@ -7457,7 +7507,9 @@
       "digital-accessability",
       "digital_accessability"
     ],
-    "template": null
+    "template": null,
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 27,
@@ -7470,7 +7522,9 @@
       "open-source-automation",
       "open_source_automation"
     ],
-    "template": null
+    "template": null,
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 28,
@@ -7483,7 +7537,9 @@
       "consulting-adivisory",
       "consulting_adivisory"
     ],
-    "template": null
+    "template": null,
+    "disabled": false,
+    "hidden": false
   },
   {
     "id": 29,
@@ -7638,6 +7694,8 @@
           }
         ]
       }
-    ]
+    ],
+    "disabled": false,
+    "hidden": false
   }
 ]

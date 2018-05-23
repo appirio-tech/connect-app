@@ -1,0 +1,30 @@
+[
+  {
+    "typeId": "app",
+    "typeName": "App"
+  },
+  {
+    "typeId": "website",
+    "typeName": "Website"
+  },
+  {
+    "typeId": "chatbot",
+    "typeName": "Chatbot"
+  },
+  {
+    "typeId": "visual_design",
+    "typeName": "Design"
+  },
+  {
+    "typeId": "app_dev",
+    "typeName": "Software Development"
+  },
+  {
+    "typeId": "analytics",
+    "typeName": "Analytics & Data Science"
+  },
+  {
+    "typeId": "quality_assurance",
+    "typeName": "QA"
+  }
+]

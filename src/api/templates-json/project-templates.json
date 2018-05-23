@@ -3,7 +3,7 @@
     "id": 1,
     "name": "App",
     "key": "application_development",
-    "category": "app",
+    "type": "app",
     "phases": [
       {
         "productTemplateId": 1
@@ -136,7 +136,7 @@
     "id": 2,
     "name": "Enterprise Mobile",
     "key": "enterprise_mobile",
-    "category": "app",
+    "type": "app",
     "phases": [
       {
         "productTemplateId": 2
@@ -760,7 +760,7 @@
     "id": 3,
     "name": "topgear-dev",
     "key": "topgear_dev",
-    "category": "app",
+    "type": "app",
     "phases": [
       {
         "productTemplateId": 3
@@ -845,7 +845,7 @@
     "id": 4,
     "name": "caas-intake",
     "key": "caas_intake",
-    "category": "app",
+    "type": "app",
     "phases": [
       {
         "productTemplateId": 4
@@ -1099,7 +1099,7 @@
     "id": 5,
     "name": "Website",
     "key": "website_development",
-    "category": "website",
+    "type": "website",
     "phases": [
       {
         "productTemplateId": 5
@@ -1232,7 +1232,7 @@
     "id": 6,
     "name": "Watson Chatbot",
     "key": "watson_chatbot",
-    "category": "chatbot",
+    "type": "chatbot",
     "phases": [
       {
         "productTemplateId": 6
@@ -1410,7 +1410,7 @@
     "id": 7,
     "name": "Chatbot",
     "key": "generic_chatbot",
-    "category": "chatbot",
+    "type": "chatbot",
     "phases": [
       {
         "productTemplateId": 7
@@ -1544,7 +1544,7 @@
     "id": 8,
     "name": "Computer Vision",
     "key": "computer_vision",
-    "category": "chatbot",
+    "type": "chatbot",
     "phases": [
       {
         "productTemplateId": 8
@@ -1667,7 +1667,7 @@
     "id": 9,
     "name": "Data Exploration",
     "key": "data_exploration",
-    "category": "chatbot",
+    "type": "chatbot",
     "phases": [
       {
         "productTemplateId": 9
@@ -1788,7 +1788,7 @@
     "id": 10,
     "name": "Wireframes",
     "key": "wireframes",
-    "category": "visual_design",
+    "type": "visual_design",
     "phases": [
       {
         "productTemplateId": 10
@@ -1953,7 +1953,7 @@
     "id": 11,
     "name": "App Visual Design - Concepts",
     "key": "visual_design_concepts",
-    "category": "visual_design",
+    "type": "visual_design",
     "phases": [
       {
         "productTemplateId": 11
@@ -2127,7 +2127,7 @@
     "id": 12,
     "name": "Visual Design",
     "key": "visual_design_prod",
-    "category": "visual_design",
+    "type": "visual_design",
     "phases": [
       {
         "productTemplateId": 12
@@ -2302,7 +2302,7 @@
     "id": 13,
     "name": "Infographic",
     "key": "infographic",
-    "category": "visual_design",
+    "type": "visual_design",
     "phases": [
       {
         "productTemplateId": 13
@@ -2476,7 +2476,7 @@
     "id": 14,
     "name": "Other Design",
     "key": "generic_design",
-    "category": "visual_design",
+    "type": "visual_design",
     "phases": [
       {
         "productTemplateId": 14
@@ -2560,7 +2560,7 @@
     "id": 15,
     "name": "Front-end Prototype",
     "key": "visual_prototype",
-    "category": "app_dev",
+    "type": "app_dev",
     "phases": [
       {
         "productTemplateId": 15
@@ -2693,7 +2693,7 @@
     "id": 16,
     "name": "Front-end",
     "key": "frontend_dev",
-    "category": "app_dev",
+    "type": "app_dev",
     "phases": [
       {
         "productTemplateId": 16
@@ -2826,7 +2826,7 @@
     "id": 17,
     "name": "Back-end & API",
     "key": "api_dev",
-    "category": "app_dev",
+    "type": "app_dev",
     "phases": [
       {
         "productTemplateId": 17
@@ -2959,7 +2959,7 @@
     "id": 18,
     "name": "Development Integration",
     "key": "generic_dev",
-    "category": "app_dev",
+    "type": "app_dev",
     "phases": [
       {
         "productTemplateId": 18
@@ -3092,7 +3092,7 @@
     "id": 19,
     "name": "Computer Vision",
     "key": "computer_vision",
-    "category": "analytics",
+    "type": "analytics",
     "phases": [
       {
         "productTemplateId": 19
@@ -3215,7 +3215,7 @@
     "id": 20,
     "name": "Data Exploration",
     "key": "data_exploration",
-    "category": "analytics",
+    "type": "analytics",
     "phases": [
       {
         "productTemplateId": 20
@@ -3336,7 +3336,7 @@
     "id": 21,
     "name": "Real World Testing",
     "key": "real_world_testing",
-    "category": "quality_assurance",
+    "type": "quality_assurance",
     "phases": [
       {
         "productTemplateId": 21
@@ -3517,7 +3517,7 @@
     "id": 22,
     "name": "Mobility Testing",
     "key": "mobility_testing",
-    "category": "quality_assurance",
+    "type": "quality_assurance",
     "phases": [
       {
         "productTemplateId": 22
@@ -3699,7 +3699,7 @@
     "id": 23,
     "name": "Performance Testing",
     "key": "performance_testing",
-    "category": "quality_assurance",
+    "type": "quality_assurance",
     "phases": [
       {
         "productTemplateId": 23
@@ -3848,7 +3848,7 @@
     "id": 24,
     "name": "Health Security Check",
     "key": "health_check",
-    "category": "quality_assurance",
+    "type": "quality_assurance",
     "phases": [
       {
         "productTemplateId": 24
@@ -3970,7 +3970,7 @@
     "id": 25,
     "name": "Performance Tuning",
     "key": "performance_tuning",
-    "category": "quality_assurance",
+    "type": "quality_assurance",
     "phases": [
       {
         "productTemplateId": 25
@@ -4038,7 +4038,7 @@
     "id": 26,
     "name": "Digital Accessibility",
     "key": "digital_accessability",
-    "category": "quality_assurance",
+    "type": "quality_assurance",
     "phases": [
       {
         "productTemplateId": 26
@@ -4059,7 +4059,7 @@
     "id": 27,
     "name": "Open Source Automation",
     "key": "open_source_automation",
-    "category": "quality_assurance",
+    "type": "quality_assurance",
     "phases": [
       {
         "productTemplateId": 27
@@ -4080,7 +4080,7 @@
     "id": 28,
     "name": "Consulting & Adivisory",
     "key": "consulting_adivisory",
-    "category": "quality_assurance",
+    "type": "quality_assurance",
     "phases": [
       {
         "productTemplateId": 28
@@ -4101,7 +4101,7 @@
     "id": 29,
     "name": "Salesforce Accelerator",
     "key": "sfdc_testing",
-    "category": "quality_assurance",
+    "type": "quality_assurance",
     "phases": [
       {
         "productTemplateId": 29
