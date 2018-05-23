@@ -20,7 +20,6 @@ import update from 'react-addons-update'
 import NewPost from '../../../components/Feed/NewPost'
 import Feed from '../../../components/Feed/Feed'
 import SystemFeed from '../../../components/Feed/SystemFeed'
-import ProjectSpecification from '../../../components/ProjectSpecification/ProjectSpecification'
 import { loadDashboardFeeds, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import { toggleNotificationRead, toggleBundledNotificationRead } from '../../../routes/notifications/actions'
@@ -463,7 +462,6 @@ class FeedView extends React.Component {
               )
             )}
           </MediaQuery>
-          {item.spec && <ProjectSpecification project={project} currentMemberRole={currentMemberRole} />  }
         </div>
       )
     }
