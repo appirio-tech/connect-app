@@ -12,6 +12,32 @@ import SpecScreens from './SpecScreens'
 import { PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
 import { scrollToAnchors } from '../../../components/ScrollToAnchors'
 
+// icons for "tiled-radio-group" field type
+import NumberText from '../../../components/NumberText/NumberText'
+import IconTechOutlineMobile from  '../../../assets/icons/icon-tech-outline-mobile.svg'
+import IconTechOutlineTablet from  '../../../assets/icons/icon-tech-outline-tablet.svg'
+import IconTechOutlineDesktop from  '../../../assets/icons/icon-tech-outline-desktop.svg'
+import IconTechOutlineWatchApple from  '../../../assets/icons/icon-tech-outline-watch-apple.svg'
+import IconTcSpecTypeSerif from  '../../../assets/icons/icon-tc-spec-type-serif.svg'
+import IconTcSpecTypeSansSerif from  '../../../assets/icons/icon-tc-spec-type-sans-serif.svg'
+import IconTcSpecIconTypeColorHome from  '../../../assets/icons/icon-tc-spec-icon-type-color-home.svg'
+import IconTcSpecIconTypeOutlineHome from  '../../../assets/icons/icon-tc-spec-icon-type-outline-home.svg'
+import IconTcSpecIconTypeGlyphHome from  '../../../assets/icons/icon-tc-spec-icon-type-glyph-home.svg'
+
+// map string values to icon components for "tiled-radio-group" field type
+const tiledRadioGroupIcons = {
+  NumberText,
+  'icon-tech-outline-mobile': IconTechOutlineMobile,
+  'icon-tech-outline-tablet': IconTechOutlineTablet,
+  'icon-tech-outline-desktop': IconTechOutlineDesktop,
+  'icon-tech-outline-watch-apple': IconTechOutlineWatchApple,
+  'icon-tc-spec-type-serif': IconTcSpecTypeSerif,
+  'icon-tc-spec-type-sans-serif': IconTcSpecTypeSansSerif,
+  'icon-tc-spec-icon-type-color-home': IconTcSpecIconTypeColorHome,
+  'icon-tc-spec-icon-type-outline-home': IconTcSpecIconTypeOutlineHome,
+  'icon-tc-spec-icon-type-glyph-home': IconTcSpecIconTypeGlyphHome,
+}
+
 const SpecSection = props => {
   const {
     project,
@@ -22,10 +48,24 @@ const SpecSection = props => {
     id,
     title,
     description,
-    subSections,
     validate,
     sectionNumber
   } = props
+
+  // make a copy to avoid modifying redux store
+  const subSections = _.cloneDeep(props.subSections || [])
+
+  // replace string icon values in the "tiled-radio-group" questions with icon components
+  subSections.forEach((subSection) => {
+    (subSection.questions || []).forEach(question => {
+      if (question.type === 'tiled-radio-group') {
+        question.options.forEach((option) => {
+          option.icon = tiledRadioGroupIcons[option.icon]
+        })
+      }
+    })
+  })
+
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
       {

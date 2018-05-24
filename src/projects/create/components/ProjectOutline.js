@@ -5,7 +5,7 @@ import PT from 'prop-types'
 import ProjectCardHeader from '../../list/components/Projects/ProjectCardHeader'
 import './ProjectOutline.scss'
 
-function ProjectOutline({ project }) {
+function ProjectOutline({ project, projectTemplates }) {
   // TODO $PROJECT_PLAN$
   // comment getting estimation until I know where they have to come from
   /* const product = _.get(project, 'details.products[0]')
@@ -23,7 +23,7 @@ function ProjectOutline({ project }) {
   return (
     <div className="ProjectOutline">
       <h5>Project Outline</h5>
-      <ProjectCardHeader project={project} />
+      <ProjectCardHeader project={project} projectTemplates={projectTemplates} />
       <ul className="project-meta-data">
         <div className="project-description">{ project.description }</div>
         <li><hr /></li>
@@ -36,7 +36,8 @@ ProjectOutline.defaultProps = {
 }
 
 ProjectOutline.propTypes = {
-  project: PT.object.isRequired
+  project: PT.object.isRequired,
+  projectTemplates: PT.array.isRequired,
 }
 
 export default ProjectOutline

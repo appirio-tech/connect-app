@@ -140,7 +140,7 @@ class ProjectWizard extends Component {
    * @return {number} step where wizard should move after parsing the URL param
    */
   loadProjectFromURL(urlParams, updateQuery) {
-    const { projectTemplates, projectCategories } = this.props
+    const { projectTemplates } = this.props
     const projectUrlAlias = urlParams && urlParams.project
     const statusParam  = urlParams && urlParams.status
 

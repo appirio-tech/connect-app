@@ -19,11 +19,11 @@ export function getProjectTemplates() {
   })
 }
 
-export function getProjectTemplate(projectTemplateId) {
+export function getProjectTemplateByKey(projectTemplateKey) {
   return new Promise((resolve) => {
     // simulate loading
     setTimeout(() => {
-      resolve(_.find(projectTemplates, { id: projectTemplateId }))
+      resolve(_.find(projectTemplates, { key: projectTemplateKey }))
     }, 1000)
   })
 }

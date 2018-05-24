@@ -65,6 +65,9 @@
     }
 
     .right-area {
+      padding-top: 4 * $base-unit;
+      padding-left: 4 * $base-unit;
+      padding-right: 4 * $base-unit;
       flex: 2;
 
       .right-area-content {
@@ -75,6 +78,8 @@
       @media screen and (max-width: $screen-md - 1px) {
         max-width: 100%;
         margin-left: 0;
+        padding-left: 0;
+        padding-right: 0;
       }
 
       .new-post-composer {

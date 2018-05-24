@@ -4,8 +4,10 @@ import { getProjectById, createProject as createProjectAPI,
   deleteProject as deleteProjectAPI,
   getDirectProjectData,
   getProjectPhases } from '../../api/projects'
+import { getProjectTemplateByKey } from '../../api/templates'
 import { LOAD_PROJECT, CREATE_PROJECT, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
-  LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES } from '../../config/constants'
+  LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES,
+  LOAD_PROJECT_TEMPLATE } from '../../config/constants'
 
 
 export function loadProject(projectId) {
@@ -22,6 +24,15 @@ export function loadProjectPhases(projectId) {
     return dispatch({
       type: LOAD_PROJECT_PHASES,
       payload: getProjectPhases(projectId)
+    })
+  }
+}
+
+export function loadProjectTemplateByKey(templateKey) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_PROJECT_TEMPLATE,
+      payload: getProjectTemplateByKey(templateKey)
     })
   }
 }

@@ -10,6 +10,7 @@ import {
   UPDATE_PROJECT_MEMBER_PENDING, UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
   GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS,
+  LOAD_PROJECT_TEMPLATE_SUCCESS,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -22,7 +23,8 @@ const initialState = {
   error: false,
   project: {},
   projectNonDirty: {},
-  updateExisting: false
+  updateExisting: false,
+  projectTemplate: null,
 }
 
 // NOTE: We should always update projectNonDirty state whenever we update the project state
@@ -54,6 +56,11 @@ export const projectState = function (state=initialState, action) {
       projectNonDirty: _.cloneDeep(action.payload),
       lastUpdated: new Date()
     })
+
+  case LOAD_PROJECT_TEMPLATE_SUCCESS:
+    return {...state,
+      projectTemplate: action.payload,
+    }
 
   case CLEAR_LOADED_PROJECT:
   case GET_PROJECTS_SUCCESS:

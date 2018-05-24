@@ -4,7 +4,7 @@
     "name": "App",
     "productKey": "application_development",
     "icon": "product-app-app",
-    "brief": "Build apps for mobile, web, or wearables",
+    "brief": "Apps",
     "details": "Build apps for mobile, web, or wearables",
     "aliases": [
       "app",
@@ -13,6 +13,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -1005,7 +1006,8 @@
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
             "type": "notes"
           }
-        ]
+        ],
+        "title": "Definition"
       }
     ],
     "disabled": false,
@@ -1083,7 +1085,8 @@
               }
             ]
           }
-        ]
+        ],
+        "title": "Definition"
       }
     ],
     "disabled": false,
@@ -1104,6 +1107,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Welcome to your own private Gig Crowd",
         "subSections": [
@@ -1378,7 +1382,7 @@
     "name": "Website",
     "productKey": "website_development",
     "icon": "product-website-website",
-    "brief": "Build responsive or regular websites",
+    "brief": "Websites",
     "details": "Build responsive or regular websites",
     "aliases": [
       "website",
@@ -1387,6 +1391,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -1695,7 +1700,7 @@
     "name": "Watson Chatbot",
     "productKey": "watson_chatbot",
     "icon": "product-chatbot-watson",
-    "brief": "Build Chatbot using IBM Watson",
+    "brief": "Watson Chatbot",
     "details": "Build Chatbot using IBM Watson",
     "aliases": [
       "watson_chatbot",
@@ -1704,6 +1709,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -1863,7 +1869,7 @@
     "name": "Chatbot",
     "productKey": "generic_chatbot",
     "icon": "product-chatbot-chatbot",
-    "brief": "Build, train and test a custom conversation for your chat bot",
+    "brief": "Chatbot",
     "details": "Build, train and test a custom conversation for your chat bot",
     "aliases": [
       "chatbot",
@@ -1872,6 +1878,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -1988,7 +1995,7 @@
     "name": "Computer Vision",
     "productKey": "computer_vision",
     "icon": "product-qa-crowd-testing",
-    "brief": "Work with images to recognize patterns, compute correspondences, etc",
+    "brief": "TBD",
     "details": "Work with images to recognize patterns, compute correspondences, etc",
     "aliases": [
       "computer-vision",
@@ -1997,6 +2004,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -2190,7 +2198,7 @@
     "name": "Data Exploration",
     "productKey": "data_exploration",
     "icon": "product-qa-crowd-testing",
-    "brief": "Ask a crowd of experts to look at your data, understand your goals, and suggest solutions",
+    "brief": "TBD",
     "details": "Ask a crowd of experts to look at your data, understand your goals, and suggest solutions",
     "aliases": [
       "data-exploration",
@@ -2199,6 +2207,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -2317,7 +2326,7 @@
     "name": "Wireframes",
     "productKey": "wireframes",
     "icon": "product-design-wireframes",
-    "brief": "Plan and explore the navigation and structure of your app",
+    "brief": "10-15 screens",
     "details": "Plan and explore the navigation and structure of your app",
     "aliases": [
       "wireframes"
@@ -2325,6 +2334,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "productName": "Wireframes",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
@@ -2672,7 +2682,7 @@
     "name": "App Visual Design - Concepts",
     "productKey": "visual_design_concepts",
     "icon": "product-design-app-visual",
-    "brief": "Visualize and test your app requirements and ideas",
+    "brief": "1-15 screens",
     "details": "Visualize and test your app requirements and ideas",
     "aliases": [
       "visual_design_concepts"
@@ -2680,6 +2690,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -3038,7 +3049,7 @@
     "name": "Visual Design",
     "productKey": "visual_design_prod",
     "icon": "product-design-app-visual",
-    "brief": "Create development-ready designs",
+    "brief": "1-15 screens",
     "details": "Create development-ready designs",
     "aliases": [
       "visual-design",
@@ -3047,6 +3058,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -3405,7 +3417,7 @@
     "name": "Infographic",
     "productKey": "infographic",
     "icon": "product-design-infographic",
-    "brief": "Present your data in an easy-to-understand and interesting way",
+    "brief": "Infographic",
     "details": "Present your data in an easy-to-understand and interesting way",
     "aliases": [
       "infographic"
@@ -3413,6 +3425,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -3771,7 +3784,7 @@
     "name": "Other Design",
     "productKey": "generic_design",
     "icon": "product-design-other",
-    "brief": "Get help with other types of design",
+    "brief": "other designs",
     "details": "Get help with other types of design",
     "aliases": [
       "generic-design",
@@ -3780,7 +3793,7 @@
     "template": [
       {
         "id": "appDefinition",
-        "title": "App Definition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -4039,7 +4052,7 @@
     "name": "Front-end Prototype",
     "productKey": "visual_prototype",
     "icon": "product-dev-prototype",
-    "brief": "Translate designs to a web (HTML/CSS/JavaScript) or mobile prototype",
+    "brief": "3-20 screens",
     "details": "Translate designs to a web (HTML/CSS/JavaScript) or mobile prototype",
     "aliases": [
       "visual-prototype",
@@ -4048,6 +4061,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -4434,7 +4448,7 @@
     "name": "Front-end",
     "productKey": "frontend_dev",
     "icon": "product-dev-front-end-dev",
-    "brief": "Translate your designs into Web or Mobile front-end",
+    "brief": "",
     "details": "Translate your designs into Web or Mobile front-end",
     "aliases": [
       "frontend-development",
@@ -4443,6 +4457,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -4829,7 +4844,7 @@
     "name": "Back-end & API",
     "productKey": "api_dev",
     "icon": "product-dev-integration",
-    "brief": "Build the server, DB, and API for your app",
+    "brief": "",
     "details": "Build the server, DB, and API for your app",
     "aliases": [
       "api-development",
@@ -4838,6 +4853,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -5224,7 +5240,7 @@
     "name": "Development Integration",
     "productKey": "generic_dev",
     "icon": "product-dev-other",
-    "brief": "Get help with any part of your app or software",
+    "brief": "Tasks or adhoc",
     "details": "Get help with any part of your app or software",
     "aliases": [
       "generic-development",
@@ -5233,6 +5249,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -5619,7 +5636,7 @@
     "name": "Computer Vision",
     "productKey": "computer_vision",
     "icon": "product-analytics-computer-vision",
-    "brief": "Recognize patters in images, compute correspondences, etc.",
+    "brief": "TBD",
     "details": "Recognize patters in images, compute correspondences, etc.",
     "aliases": [
       "computer-vision",
@@ -5628,6 +5645,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -5821,7 +5839,7 @@
     "name": "Data Exploration",
     "productKey": "data_exploration",
     "icon": "product-analytics-data-exploration",
-    "brief": "Review your data, extrapolate patterns, and suggest solutions",
+    "brief": "TBD",
     "details": "Review your data, extrapolate patterns, and suggest solutions",
     "aliases": [
       "data-exploration",
@@ -5830,6 +5848,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -5948,7 +5967,7 @@
     "name": "Real World Testing",
     "productKey": "real_world_testing",
     "icon": "product-qa-crowd-testing",
-    "brief": "Exploratory Testing, Cross browser-device Testing",
+    "brief": "TBD",
     "details": "Exploratory Testing, Cross browser-device Testing",
     "aliases": [
       "real-world-testing",
@@ -5957,6 +5976,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -6302,7 +6322,7 @@
     "name": "Mobility Testing",
     "productKey": "mobility_testing",
     "icon": "product-qa-mobility-testing",
-    "brief": "App Certification, Lab on Hire, User Sentiment Analysis",
+    "brief": "TBD",
     "details": "App Certification, Lab on Hire, User Sentiment Analysis",
     "aliases": [
       "mobility-testing",
@@ -6311,6 +6331,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -6655,7 +6676,7 @@
     "name": "Performance Testing",
     "productKey": "performance_testing",
     "icon": "product-qa-website-performance",
-    "brief": "Webpage rendering effiency, Load, Stress and Endurance Test",
+    "brief": "TBD",
     "details": "Webpage rendering effiency, Load, Stress and Endurance Test",
     "aliases": [
       "performance-testing",
@@ -6664,6 +6685,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document—add a link in the notes section or upload it below.",
         "subSections": [
@@ -7282,7 +7304,7 @@
     "name": "Health Security Check",
     "productKey": "health_check",
     "icon": "product-qa-health-check",
-    "brief": "Measure your code base against our security baseline using the crowd and tooling ",
+    "brief": "TBD",
     "details": "Measure your code base against our security baseline using the crowd and tooling ",
     "aliases": [
       "health-check",
@@ -7291,6 +7313,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Topcoder will scan your application using our properiatary formula    for security standards. To rate your application we combine state of the art     static code analysis, security scanning, export code review and other techniques     to produce a Security Health Check scorecard.",
         "subSections": [
@@ -7434,7 +7457,7 @@
     "name": "Performance Tuning",
     "productKey": "performance_tuning",
     "icon": "product-qa-website-performance",
-    "brief": "Analyze your JVM based applications and generate recommendations",
+    "brief": "TBD",
     "details": "Analyze your JVM based applications and generate recommendations",
     "aliases": [
       "performance-tuning",
@@ -7443,6 +7466,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project. You can also provide the needed information in a supporting document--add a link in the notes section or upload it below.",
         "subSections": [
@@ -7501,13 +7525,13 @@
     "name": "Digital Accessibility",
     "productKey": "digital_accessability",
     "icon": "product-qa-digital-accessability",
-    "brief": "Make sure you app or website conforms to all rules and regulations",
+    "brief": "TBD",
     "details": "Make sure you app or website conforms to all rules and regulations",
     "aliases": [
       "digital-accessability",
       "digital_accessability"
     ],
-    "template": null,
+    "template": [],
     "disabled": false,
     "hidden": false
   },
@@ -7516,13 +7540,13 @@
     "name": "Open Source Automation",
     "productKey": "open_source_automation",
     "icon": "product-qa-os-automation",
-    "brief": "Exploratory testing, cross browser testing",
+    "brief": "TBD",
     "details": "Exploratory testing, cross browser testing",
     "aliases": [
       "open-source-automation",
       "open_source_automation"
     ],
-    "template": null,
+    "template": [],
     "disabled": false,
     "hidden": false
   },
@@ -7531,13 +7555,13 @@
     "name": "Consulting & Adivisory",
     "productKey": "consulting_adivisory",
     "icon": "product-qa-consulting",
-    "brief": "Expert services to get your project covered end-to-end",
+    "brief": "TBD",
     "details": "Expert services to get your project covered end-to-end",
     "aliases": [
       "consulting-adivisory",
       "consulting_adivisory"
     ],
-    "template": null,
+    "template": [],
     "disabled": false,
     "hidden": false
   },
@@ -7546,7 +7570,7 @@
     "name": "Salesforce Accelerator",
     "productKey": "sfdc_testing",
     "icon": "product-qa-sfdc-accelerator",
-    "brief": "SalesForce Testing, Cross browser-device Testing",
+    "brief": "TBD",
     "details": "SalesForce Testing, Cross browser-device Testing",
     "aliases": [
       "sfdc_testing",
@@ -7555,6 +7579,7 @@
     "template": [
       {
         "id": "appDefinition",
+        "title": "Definition",
         "required": true,
         "description": "Please answer a few basic questions about your project and, as an option,                  add links to supporting documents in the “Notes” section.                                    *AssureNXT - Rapid Test Design Module is a Component of AssureNXT which is a Test Management Platform.                  It helps in Automated Test Case and Test Data Model generation through business process diagrams.                  RTD establishes direct relationship between business requirements, process flows and test coverage.                  Accelerated Test Case generation for changed business process.                                    *Tosca - Tricentis Tosca is a testing tool that is used to automate end-to-end testing for software applications.                  Tricentis Tosca combines multiple aspects of software testing (test case design, test automation, test data design                   and generation, and analytics) to test GUIs and APIs from a business perspective",
         "subSections": [

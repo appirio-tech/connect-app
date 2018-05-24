@@ -43,7 +43,7 @@ class FillProjectDetails extends Component  {
     const projectTemplate = _.find(projectTemplates, { key: projectKey })
     const formDisclaimer = _.get(projectTemplate, 'formDisclaimer')
 
-    const sections = projectTemplate.scope
+    const sections = projectTemplate.scope.sections
     return (
       <div className="FillProjectDetailsWrapper">
         <div className="header headerFillProjectDetails" />
@@ -79,7 +79,7 @@ class FillProjectDetails extends Component  {
               </div>
               <div className="right-area">
                 <Sticky top={20}>
-                  <ProjectOutline project={ dirtyProject } />
+                  <ProjectOutline project={ dirtyProject } projectTemplates={ projectTemplates } />
                   <div className="right-area-footer">In 24 hours our project managers will contact you for more information and a detailed quote that accurately reflects your project needs.</div>
                 </Sticky>
               </div>
