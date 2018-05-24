@@ -7,6 +7,8 @@ import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 import { NOTIFICATION_SETTINGS_PERIODS } from '../../../../../config/constants'
 import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
+import { TOOLTIP_DEFAULT_DELAY } from '../../../../../config/constants'
 import BtnGroup from '../../../../../components/BtnGroup/BtnGroup'
 import IconSettingsWeb from '../../../../../assets/icons/settings-icon-web.svg'
 import IconSettingsEmail from '../../../../../assets/icons/settings-icon-mail.svg'
@@ -19,6 +21,7 @@ import _ from 'lodash'
 const topics = [
   {
     title: 'New posts and replies',
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.topic.created',
       'notifications.connect.project.topic.deleted',
@@ -28,6 +31,7 @@ const topics = [
     ]
   }, {
     title: 'Project status changes',
+    enabledMethods:['web'],
     types: [
       'notifications.connect.project.created',
       'notifications.connect.project.updated',
@@ -40,21 +44,25 @@ const topics = [
     ]
   }, {
     title: 'Project specification changes',
+    enabledMethods:['web'],
     types: [
       'notifications.connect.project.specificationModified'
     ]
   }, {
     title: 'File uploads',
+    enabledMethods:['web'],
     types: [
       'notifications.connect.project.fileUploaded'
     ]
   }, {
     title: 'New project links',
+    enabledMethods:['web'],
     types: [
       'notifications.connect.project.linkCreated'
     ]
   }, {
     title: 'Team changes',
+    enabledMethods:['web'],
     types: [
       'notifications.connect.project.member.joined',
       'notifications.connect.project.member.left',
@@ -182,18 +190,29 @@ class NotificationSettingsForm extends React.Component {
               // we toggle settings for all the types in one topic all together
               // so we can use values from the first type to get current value for the whole topic
               const topicFirstType = topic.types[0]
+              const emailStatus = topic.enabledMethods.indexOf('email')<0?'disabled':null
+              const emailTooltip = topic.enabledMethods.indexOf('email')<0?'Emails are not yet supported for this event type':''
               return (
                 <tr key={index}>
                   <th>{topic.title}</th>
                   <td><SwitchButton onChange={() => this.handleChange(index, 'web')} defaultChecked={notifications[topicFirstType].web.enabled === 'yes'} /></td>
-                  <td><SwitchButton onChange={() => this.handleChange(index, 'email')} defaultChecked={notifications[topicFirstType].email.enabled === 'yes'} /></td>
+                  <td>
+                    <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+                      <div className="tooltip-target">
+                        <SwitchButton onChange={() => this.handleChange(index, 'email')} defaultChecked={notifications[topicFirstType].email.enabled === 'yes' && emailStatus===null} disabled={emailStatus}/>
+                      </div>
+                      <div className="tooltip-body">
+                        {emailTooltip}
+                      </div>
+                    </Tooltip>
+                  </td>
                 </tr>
               )
             })}
             <tr>
               <td colSpan="3">
                 <div className="bundle-emails">
-                  <div className="th">Bundle emails:</div>
+                  <div className="th">Bundle emails (beta):</div>
                   <BtnGroup
                     items={NOTIFICATION_SETTINGS_PERIODS}
                     onChange={this.handleBundleEmailChange}
