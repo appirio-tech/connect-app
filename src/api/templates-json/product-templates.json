@@ -24,7 +24,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -190,14 +191,16 @@
                 "type": "see-attached-features",
                 "fieldName": "details.appDefinition.features"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -418,7 +421,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "user",
@@ -505,7 +509,8 @@
                   }
                 ]
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "required": false,
@@ -782,7 +787,8 @@
                   }
                 ]
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "techStack",
@@ -817,7 +823,8 @@
                 "title": "Hosting Environment",
                 "type": "textbox"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "hideTitle": true,
@@ -1004,7 +1011,8 @@
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           }
         ],
         "title": "Definition"
@@ -1036,7 +1044,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -1083,7 +1092,8 @@
                 "type": "textbox",
                 "fieldName": "details.appDefinition.users.ng3"
               }
-            ]
+            ],
+            "hidden": true
           }
         ],
         "title": "Definition"
@@ -1118,7 +1128,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -1325,14 +1336,16 @@
                 "title": "Project Tools you utilize for interacting with developers",
                 "type": "textbox"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Additional Notes",
             "description": "Please detail any other additional information.  After         completing this form, you'll be able to add additional information about         your code base",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           }
         ]
       },
@@ -1402,7 +1415,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -1490,14 +1504,16 @@
                 "type": "see-attached-features",
                 "fieldName": "details.appDefinition.features"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -1720,7 +1736,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -1843,14 +1860,16 @@
                 "type": "textbox",
                 "fieldName": "details.appDefinition.transferToHumanAgents"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -1889,7 +1908,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -1969,14 +1989,16 @@
                 "type": "textbox",
                 "fieldName": "details.appDefinition.transferToHumanAgents"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -2015,7 +2037,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -2092,14 +2115,16 @@
                 "required": true,
                 "validationError": "Please tell us roughly the number of images in your set"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Additional Notes",
             "description": "Please detail any other additional information",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -2218,7 +2243,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -2300,7 +2326,8 @@
                 "title": "Please provide a URL to your data ",
                 "type": "textbox"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "files",
@@ -2313,7 +2340,8 @@
             "fieldName": "details.appDefinition.notes",
             "title": "Additional Notes",
             "description": "Please detail any other additional information",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           }
         ]
       }
@@ -2346,7 +2374,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -2462,14 +2491,16 @@
                 "type": "see-attached-textbox",
                 "fieldName": "details.appDefinition.users"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -2701,7 +2732,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -2829,14 +2861,16 @@
                 "type": "see-attached-textbox",
                 "fieldName": "details.appDefinition.users"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -3069,7 +3103,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -3197,14 +3232,16 @@
                 "type": "see-attached-textbox",
                 "fieldName": "details.appDefinition.users"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -3436,7 +3473,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -3564,14 +3602,16 @@
                 "type": "see-attached-textbox",
                 "fieldName": "details.appDefinition.users"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -3804,7 +3844,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "projectInfo",
@@ -3842,14 +3883,16 @@
                 "type": "see-attached-features",
                 "fieldName": "details.appDefinition.features"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications, budget or timing constraints)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -4072,7 +4115,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -4238,14 +4282,16 @@
                 "type": "see-attached-features",
                 "fieldName": "details.appDefinition.features"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -4468,7 +4514,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -4634,14 +4681,16 @@
                 "type": "see-attached-features",
                 "fieldName": "details.appDefinition.features"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -4864,7 +4913,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -5030,14 +5080,16 @@
                 "type": "see-attached-features",
                 "fieldName": "details.appDefinition.features"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -5260,7 +5312,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -5426,14 +5479,16 @@
                 "type": "see-attached-features",
                 "fieldName": "details.appDefinition.features"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Add any other important information regarding your project (e.g., links to documents or existing applications)",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -5656,7 +5711,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -5733,14 +5789,16 @@
                 "required": true,
                 "validationError": "Please tell us roughly the number of images in your set"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Additional Notes",
             "description": "Please detail any other additional information",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -5859,7 +5917,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -5941,7 +6000,8 @@
                 "title": "Please provide a URL to your data ",
                 "type": "textbox"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "files",
@@ -5954,7 +6014,8 @@
             "fieldName": "details.appDefinition.notes",
             "title": "Additional Notes",
             "description": "Please detail any other additional information",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           }
         ]
       }
@@ -5987,7 +6048,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -6123,14 +6185,16 @@
                   }
                 ]
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Please enter any additional information like                       requirements and/or test cases.  After creating                        your project you will be able to upload files.",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           }
         ]
       },
@@ -6342,7 +6406,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -6477,14 +6542,16 @@
                   }
                 ]
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Please enter any additional information like                       requirements and/or test cases.  After creating                        your project you will be able to upload files.",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           }
         ]
       },
@@ -6696,7 +6763,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -6849,14 +6917,16 @@
                 "required": false,
                 "fieldName": "details.testingNeeds.addons"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Please enter any additional information like                       requirements and/or test cases.  After creating                        your project you will be able to upload files.",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -7324,7 +7394,8 @@
             "fieldName": "name",
             "description": "Topcoder will scan your application using our properiatary formula        for security standards. To rate your application we combine state of the art         static code analysis, security scanning, export code review and other techniques         to produce a Security Health Check scorecard.",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -7400,14 +7471,16 @@
                 "fieldName": "details.security.baselineOther",
                 "required": false
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Additional Notes",
             "description": "Please detail any other additional information.  After         completing this form, you'll be able to add additional information about         your code base",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           }
         ]
       },
@@ -7477,7 +7550,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -7499,14 +7573,16 @@
                 "title": "Description",
                 "type": "textbox"
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Additional Notes",
             "description": "Please detail any other additional information, you will be able to upload files on the next screen",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",
@@ -7590,7 +7666,8 @@
             "fieldName": "name",
             "description": "",
             "title": "Project Name",
-            "type": "project-name"
+            "type": "project-name",
+            "hidden": true
           },
           {
             "id": "questions",
@@ -7702,14 +7779,16 @@
                   }
                 ]
               }
-            ]
+            ],
+            "hidden": true
           },
           {
             "id": "notes",
             "fieldName": "details.appDefinition.notes",
             "title": "Notes",
             "description": "Please enter any additional information such as any existing test automation tool used,                      known constraints for automation, % of customizations in your Salesforce.com implementation, etc.",
-            "type": "notes"
+            "type": "notes",
+            "hidden": true
           },
           {
             "id": "files",

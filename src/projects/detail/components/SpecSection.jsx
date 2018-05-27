@@ -198,7 +198,7 @@ const SpecSection = props => {
         <p className="gray-text">
           {description}
         </p>
-        {subSections.map(renderSubSection)}
+        {subSections.filter((subSection) => !subSection.hidden).map(renderSubSection)}
       </div>
     </div>
   )
