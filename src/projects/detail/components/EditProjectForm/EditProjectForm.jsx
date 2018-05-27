@@ -1,3 +1,7 @@
+/**
+ * EditProjectFrom component
+ * shows forms to edit some set of project specification sections
+ */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Prompt } from 'react-router-dom'
@@ -5,12 +9,14 @@ import Modal from 'react-modal'
 import _ from 'lodash'
 import { unflatten } from 'flat'
 import update from 'react-addons-update'
-import FeaturePicker from './FeatureSelector/FeaturePicker'
+import FeaturePicker from '../FeatureSelector/FeaturePicker'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
-import XMarkIcon from  '../../../assets/icons/icon-x-mark.svg'
-import SpecSection from './SpecSection'
+import XMarkIcon from  '../../../../assets/icons/icon-x-mark.svg'
+import SpecSection from '../SpecSection'
 import { HOC as hoc } from 'formsy-react'
+
+import './EditProjectForm.scss'
 
 const FeaturePickerModal = ({ project, isEdittable, showFeaturesDialog, hideFeaturesDialog, saveFeatures, setValue }) => {
   const setFormValue = (features, featureSeeAttached=false) => {
@@ -229,7 +235,7 @@ class EditProjectForm extends Component {
     }
 
     return (
-      <div>
+      <div className="editProjectForm">
         <Prompt
           when={!!onLeaveMessage}
           message={onLeaveMessage}

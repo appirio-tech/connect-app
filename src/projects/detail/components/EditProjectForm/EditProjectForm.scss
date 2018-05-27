@@ -21,56 +21,57 @@
     flex: $number;
   }
 
-  .feature-selection-dialog-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 21;/* +1 of the z-index of the topbar */
-  }
+  .editProjectForm {
 
-  .feature-selection-dialog {
-    top: 0px;
-    left: 0px;
-    height: 100%;
-  }
+    .feature-selection-dialog-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 21;/* +1 of the z-index of the topbar */
+    }
 
-  .feature-selection-dialog-close {
-    @include roboto;
-    cursor: pointer;
-    position: absolute;
-    top: 20px;
-    right: 25px;
-    width: 185px;
-    height: 20px;
-    line-height: 20px;
-    text-align: right;
-    color: $tc-gray-60;
-    transition: all 200ms ease-in-out;
+    .feature-selection-dialog {
+      top: 0px;
+      left: 0px;
+      height: 100%;
+    }
 
-    .x-mark-icon {
-      display: inline-block;
-      margin: 0 0 0 5px;
+    .feature-selection-dialog-close {
+      @include roboto;
+      cursor: pointer;
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      width: 185px;
+      height: 20px;
+      line-height: 20px;
+      text-align: right;
+      color: $tc-gray-60;
       transition: all 200ms ease-in-out;
 
-      & > svg {
-        padding-top: 3px;
+      .x-mark-icon {
+        display: inline-block;
+        margin: 0 0 0 5px;
         transition: all 200ms ease-in-out;
+
+        & > svg {
+          padding-top: 3px;
+          transition: all 200ms ease-in-out;
+        }
+      }
+
+      &:hover {
+        color: $tc-black;
+        cursor: pointer;
+
+        .x-mark-icon > svg {
+          fill: $tc-black;
+        }
       }
     }
 
-    &:hover {
-      color: $tc-black;
-      cursor: pointer;
-
-      .x-mark-icon > svg {
-        fill: $tc-black;
-      }
-    }
-  }
-
-  .two-col-content.content {
     .tc-file-field__inputs {
       height: 45px;
     }
@@ -167,200 +168,176 @@
       }
     }
 
-    .container {
-      .left-area {
-        flex: auto;
+    /* this selector is too common and it's applied to .spec-question-list thought it shouldn't
+      if also has big priority so we have to fix it here */
+    form > div:not(.spec-question-list) {
+      box-shadow: 0px 1px 3px 0px rgba($tc-black, 0.2);
+    }
 
-        .left-area-footer {
-          @include roboto;
-          padding: 0 10px;
-          font-size: 11px;
-          line-height: 30px;
-          color: $tc-gray-50;
+    .title {
+      color: $tc-gray-80;
+      @include roboto-bold;
+    }
 
-          span {
-            float: right;
-          }
+    .right-area-item {
+      padding: 0 0 70px 0;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      background-color: $tc-white;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        margin-bottom: 0;
+        padding-bottom: 4 * $base-unit;
+      }
+
+      .boxes {
+        margin: 0 50px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          margin: 0 4 * $base-unit;
         }
       }
 
-      .right-area {
-        flex: auto;
-        border-radius: 4px;
-        position: relative;
+      .big-titles {
+        @include roboto-light;
+        font-size: 28px;
+        color: $tc-gray-70;
+        line-height: 30px;
+        padding: 30px 0 30px 6%;
+        margin: 0 -50px 20px;
+        border-radius: 4px 4px 0 0;
+        background: $tc-gray-neutral-light;
+        border-bottom: 1px dashed $tc-gray-20;
 
-        /* this selector is too common and it's applied to .spec-question-list thought it shouldn't
-           if also has big priority so we have to fix it here */
-        form > div:not(.spec-question-list) {
-          box-shadow: 0px 1px 3px 0px rgba($tc-black, 0.2);
+        @media screen and (max-width: $screen-md - 1px) {
+          margin: 0 -4 * $base-unit 20px;
+          padding: 4 * $base-unit;
         }
+
+        h2 {
+          @media screen and (max-width: $screen-md - 1px) {
+            line-height: 8 * $base-unit;
+          }
+        }
+
+        .optional,
+        .required {
+          @include roboto;
+          position: absolute;
+          right: 0;
+          font-size: 13px;
+          float: right;
+          padding: 0 20px;
+          border-radius: 20px 0 0 20px;
+        }
+
+        .required {
+          background: $tc-orange-70;
+          color: $tc-white;
+        }
+
+        .optional {
+          background: $tc-gray-10;
+          color: $gray-color;
+        }
+      }
+
+      .gray-text {
+        @include roboto;
+        font-size: 15px;
+        color: $gray-color;
+        line-height: 25px;
+
+        strong {
+          font-weight: bold;
+        }
+      }
+
+      &.design-specification-two {
+        padding-bottom: 1px;
+      }
+
+      &.option-groups {
+        padding-bottom: 46px;
+      }
+    }
+
+    .tab-nav {
+      .center-area {
+        margin: 0 0 0 111px;
+
+        .btn-nav {
+          padding: 0 15px;
+          float: left;
+          @include roboto;
+          font-size: 13px;
+          color: $tc-gray-80;
+          line-height: 16px;
+        }
+      }
+    }
+
+    .section-additional-notes {
+      .textarea-title {
+        @include roboto;
+        font-size: 13px;
+        color: $tc-gray-70;
+        line-height: 20px;
+        padding-bottom: 10px;
+      }
+
+      textarea {
+        height: 45px;
+        max-width: 100%;
+        text-align: left;
+        text-indent: 0;
+        resize: vertical;
+      }
+    }
+
+    .right-area-footer {
+      @include tc-label-sm;
+      color: $tc-gray-50;
+      margin-top: 4 * $base_unit;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        display: none;
+      }
+    }
+
+    .contents-list {
+      .right-area {
+        padding-left: 40px;
 
         .title {
-          color: $tc-gray-80;
           @include roboto-bold;
+          font-size: 15px;
+          letter-spacing: 0px;
+          line-height: 25px;
         }
 
-        .right-area-item {
-          padding: 0 0 70px 0;
-          margin-bottom: 20px;
-          border-radius: 4px;
-          background-color: $tc-white;
-
-          @media screen and (max-width: $screen-md - 1px) {
-            margin-bottom: 0;
-            padding-bottom: 4 * $base-unit;
-          }
-
-          .boxes {
-            margin: 0 50px;
-
-            @media screen and (max-width: $screen-md - 1px) {
-              margin: 0 4 * $base-unit;
-            }
-          }
-
-          .big-titles {
-            @include roboto-light;
-            font-size: 28px;
-            color: $tc-gray-70;
-            line-height: 30px;
-            padding: 30px 0 30px 6%;
-            margin: 0 -50px 20px;
-            border-radius: 4px 4px 0 0;
-            background: $tc-gray-neutral-light;
-            border-bottom: 1px dashed $tc-gray-20;
-
-            @media screen and (max-width: $screen-md - 1px) {
-              margin: 0 -4 * $base-unit 20px;
-              padding: 4 * $base-unit;
-            }
-
-            h2 {
-              @media screen and (max-width: $screen-md - 1px) {
-                line-height: 8 * $base-unit;
-              }
-            }
-
-            .optional,
-            .required {
-              @include roboto;
-              position: absolute;
-              right: 0;
-              font-size: 13px;
-              float: right;
-              padding: 0 20px;
-              border-radius: 20px 0 0 20px;
-            }
-
-            .required {
-              background: $tc-orange-70;
-              color: $tc-white;
-            }
-
-            .optional {
-              background: $tc-gray-10;
-              color: $gray-color;
-            }
-          }
-
-          .gray-text {
-            @include roboto;
-            font-size: 15px;
-            color: $gray-color;
-            line-height: 25px;
-
-            strong {
-              font-weight: bold;
-            }
-          }
-
-          &.design-specification-two {
-            padding-bottom: 1px;
-          }
-
-          &.option-groups {
-            padding-bottom: 46px;
-          }
-        }
-
-        .tab-nav {
-          .center-area {
-            margin: 0 0 0 111px;
-
-            .btn-nav {
-              padding: 0 15px;
-              float: left;
-              @include roboto;
-              font-size: 13px;
-              color: $tc-gray-80;
-              line-height: 16px;
-            }
-          }
-        }
-
-        .section-additional-notes {
-          .textarea-title {
-            @include roboto;
-            font-size: 13px;
-            color: $tc-gray-70;
-            line-height: 20px;
-            padding-bottom: 10px;
-          }
-
-          textarea {
-            height: 45px;
-            max-width: 100%;
-            text-align: left;
-            text-indent: 0;
-            resize: vertical;
-          }
-        }
-
-        .right-area-footer {
-          @include tc-label-sm;
-          color: $tc-gray-50;
-          margin-top: 4 * $base_unit;
-
-          @media screen and (max-width: $screen-md - 1px) {
-            display: none;
-          }
+        .txt {
+          @include roboto;
+          font-size: 13px;
+          color: $tc-gray-80;
+          line-height: 25px;
         }
       }
 
-      .contents-list {
-        .right-area {
-          padding-left: 40px;
-
-          .title {
-            @include roboto-bold;
-            font-size: 15px;
-            letter-spacing: 0px;
-            line-height: 25px;
-          }
-
-          .txt {
-            @include roboto;
-            font-size: 13px;
-            color: $tc-gray-80;
-            line-height: 25px;
-          }
+      &.part-one {
+        .icons {
+          width: 16px;
+          height: 16px;
+          float: left;
+          margin-top: 3px;
         }
 
-        &.part-one {
-          .icons {
-            width: 16px;
-            height: 16px;
-            float: left;
-            margin-top: 3px;
-          }
+        .icon-box {
+          background-position: -28px -29px;
+        }
 
-          .icon-box {
-            background-position: -28px -29px;
-          }
-
-          .icon-magic {
-            background-position: -4px -52px;
-          }
+        .icon-magic {
+          background-position: -4px -52px;
         }
       }
     }
@@ -835,75 +812,10 @@
         }
       }
     }
-  }
 
-  .two-col-content.content.scopeContainer {
-    .container {
-      max-width: 100%;
-      margin: 0;
-
+    form div:last-of-type .section-footer-spec {
       @media screen and (max-width: $screen-md - 1px) {
-        flex-direction: column;
-      }
-    }
-
-    .left-area {
-      flex: 1;
-      max-width: 360px;
-
-      @media screen and (max-width: $screen-md - 1px) {
-        max-width: 100%;
-      }
-
-      .scope-left-panel {
-        background-color: $tc-white;
-        box-shadow: 1px 1px 0 0 #DCDCE0, 0 1px 0 0 #DCDCE0;
-        min-height: calc(100vh - 110px);
-        padding-bottom: 10 * $base-unit;
-        position: relative;
-
-        @media screen and (max-width: $screen-md - 1px) {
-          min-height: 0;
-          padding-bottom: 0;
-        }
-      }
-
-      .footer-v2 {
-        bottom: 2 * $base-unit;
-        left: 0;
-        margin-top: 0;
-        padding: 0 4 * $base-unit;
-        position: absolute;
-        width: 100%;
-
-        @media screen and (max-width: $screen-md - 1px) {
-          display: none;
-        }
-      }
-    }
-
-    .right-area {
-      padding-top: 4 * $base-unit;
-      padding-left: 4 * $base-unit;
-      padding-right: 4 * $base-unit;
-      flex: 2;
-
-      .right-area-content {
-        margin: 0 auto;
-        max-width: 760px;
-      }
-
-      @media screen and (max-width: $screen-md - 1px) {
-        max-width: 100%;
-        margin-left: 0;
-        padding-left: 0;
-        padding-right: 0;
-      }
-
-      form div:last-of-type .section-footer-spec {
-        @media screen and (max-width: $screen-md - 1px) {
-          margin-bottom: 0;
-        }
+        margin-bottom: 0;
       }
     }
 
@@ -913,244 +825,245 @@
         border-radius: 0;
       }
     }
-  }
 
-  .tc-link {
-    @include roboto;
-  }
-
-  .SelectDropdown {
-    margin-bottom: 20px;
-  }
-
-  .edit-screen-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    margin-bottom: 40px;
-    position: relative;
-  }
-
-  .screen-number-reached-message {
-    @include roboto;
-    color: white;
-  }
-
-  .prompt {
-    text-align: center;
-    z-index: 999;
-    left: 0;
-    right: 0;
-    margin: auto;
-    position: absolute
-  }
-
-  .icon-refresh path {
-    fill: $tc-white;
-  }
-
-  .project-name-section {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 20px;
-
-    @media screen and (max-width: $screen-sm - 1px) {
-      flex-direction: column;
-      margin-bottom: 11 * $base-unit;
+    .tc-link {
+      @include roboto;
     }
 
-    .editable-project-name {
-      flex: 1;
+    .SelectDropdown {
+      margin-bottom: 20px;
+    }
+
+    .edit-screen-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .screen-number-reached-message {
+      @include roboto;
+      color: white;
+    }
+
+    .prompt {
+      text-align: center;
+      z-index: 999;
+      left: 0;
+      right: 0;
+      margin: auto;
+      position: absolute
+    }
+
+    .icon-refresh path {
+      fill: $tc-white;
+    }
+
+    .project-name-section {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
 
       @media screen and (max-width: $screen-sm - 1px) {
-        width: 100%;
-      }
-    }
-
-    .dashed-bottom-border {
-      flex: 1;
-      min-height: 40px;
-      border-bottom: 1px dashed $tc-gray-20;
-
-      .project-name {
-        word-break: break-all;
-        font-size: 20px;
-        /*margin-top: 10px;*/
-      }
-    }
-
-    .read-only-refcode {
-      height: 40px;
-      align-self: flex-end;
-      border-bottom: 1px solid $tc-gray-20;
-      padding: 10px;
-      position: relative;
-      margin-left: 20px;
-
-      .refcode-desc {
-        @include roboto;
-        font-size: 13px;
-        color: $tc-gray-30;
-        position: absolute;
-        bottom: -20px;
-        left: 0;
-        width: 100%;
-        text-align: center;
-        font-style: italic;
-        white-space: nowrap;
-      }
-    }
-
-    .textinput-refcode {
-      position: relative;
-      width: 100px;
-      height: 100%;
-      margin-left: 10px;
-
-      @media screen and (max-width: $screen-sm - 1px) {
-        margin-left: 0;
-        margin-top: 4 * $base-unit;
-        width: 100%;
+        flex-direction: column;
+        margin-bottom: 11 * $base-unit;
       }
 
-      .refcode-desc {
-        @include roboto;
-        font-size: 12px;
-        line-height: 20px;
-        color: $tc-gray-50;
-        position: absolute;
-        bottom: -20px;
-        font-style: italic;
+      .editable-project-name {
+        flex: 1;
+
+        @media screen and (max-width: $screen-sm - 1px) {
+          width: 100%;
+        }
       }
 
-      .project-refcode {
-        input {
-          background-color: $tc-gray-neutral-light;
-          border-bottom: 1px solid $tc-gray-40;
+      .dashed-bottom-border {
+        flex: 1;
+        min-height: 40px;
+        border-bottom: 1px dashed $tc-gray-20;
+
+        .project-name {
+          word-break: break-all;
+          font-size: 20px;
+          /*margin-top: 10px;*/
+        }
+      }
+
+      .read-only-refcode {
+        height: 40px;
+        align-self: flex-end;
+        border-bottom: 1px solid $tc-gray-20;
+        padding: 10px;
+        position: relative;
+        margin-left: 20px;
+
+        .refcode-desc {
+          @include roboto;
+          font-size: 13px;
+          color: $tc-gray-30;
+          position: absolute;
+          bottom: -20px;
+          left: 0;
+          width: 100%;
+          text-align: center;
+          font-style: italic;
+          white-space: nowrap;
+        }
+      }
+
+      .textinput-refcode {
+        position: relative;
+        width: 100px;
+        height: 100%;
+        margin-left: 10px;
+
+        @media screen and (max-width: $screen-sm - 1px) {
+          margin-left: 0;
+          margin-top: 4 * $base-unit;
+          width: 100%;
+        }
+
+        .refcode-desc {
+          @include roboto;
+          font-size: 12px;
+          line-height: 20px;
+          color: $tc-gray-50;
+          position: absolute;
+          bottom: -20px;
+          font-style: italic;
+        }
+
+        .project-refcode {
+          input {
+            background-color: $tc-gray-neutral-light;
+            border-bottom: 1px solid $tc-gray-40;
+          }
         }
       }
     }
-  }
 
-  .two-col-content.content .container .tiled-group-row {
-    @media screen and (max-width: $screen-md - 1px) {
-      margin: -4 * $base-unit -2 * $base-unit 0 -2 * $base-unit;
-    }
-  }
-
-  .two-col-content.content .container .tiled-group-row > span {
-    @media screen and (max-width: $screen-md - 1px) {
-      display: block;
-      margin-top: 2 * $base-unit;
-      max-width: 180px;
-      width: 25%;
-
-      > a {
-        width: calc(100% - 20px);
+    .two-col-content.content .container .tiled-group-row {
+      @media screen and (max-width: $screen-md - 1px) {
+        margin: -4 * $base-unit -2 * $base-unit 0 -2 * $base-unit;
       }
     }
 
-    @media screen and (max-width: $screen-sm - 1px) {
-      width: 50%;
-    }
-  }
-
-  .two-col-content.content .container .tiled-group-item {
-    position: relative;
-    -webkit-flex: initial;
-    flex: initial;
-    margin-right: 20px;
-    height: 155px;
-    width: 135px;
-    border: 1px solid $tc-gray-20;
-    border-radius: 4px;
-    cursor: pointer;
-    border: 1px solid $tc-gray-20;
-    border-radius: 4px;
-    display: inline-block;
-    margin: 10px 10px 0;
-    position: relative;
-    vertical-align: top;
-
-    .check-mark {
-      display: none;
-    }
-
-    &.disabled {
-      opacity: 0.3;
-    }
-
-    &:hover {
-      border-color: $tc-dark-blue-70;
-      cursor: pointer;
-    }
-
-    &.active {
-      background: $tc-gray-10;
-      border-color: $tc-gray-10;
-
-      &:after {
-        content: '';
+    .two-col-content.content .container .tiled-group-row > span {
+      @media screen and (max-width: $screen-md - 1px) {
         display: block;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        width: 15px;
-        height: 15px;
-        background: $tc-dark-blue;
-        border-radius: 2px;
+        margin-top: 2 * $base-unit;
+        max-width: 180px;
+        width: 25%;
+
+        > a {
+          width: calc(100% - 20px);
+        }
       }
 
-      &:before {
-        content: '';
-        position: absolute;
-        z-index: 1;
-        top: 12px;
-        right: 15px;
-        width: 5px;
-        border-width: 0 2px 2px 0;
-        border-style: solid;
-        border-color: $tc-white;
-        height: 10px;
-        transform: rotate(45deg);
-        -o-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        -webkit-transform: rotate(45deg);
+      @media screen and (max-width: $screen-sm - 1px) {
+        width: 50%;
+      }
+    }
+
+    .two-col-content.content .container .tiled-group-item {
+      position: relative;
+      -webkit-flex: initial;
+      flex: initial;
+      margin-right: 20px;
+      height: 155px;
+      width: 135px;
+      border: 1px solid $tc-gray-20;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid $tc-gray-20;
+      border-radius: 4px;
+      display: inline-block;
+      margin: 10px 10px 0;
+      position: relative;
+      vertical-align: top;
+
+      .check-mark {
+        display: none;
+      }
+
+      &.disabled {
+        opacity: 0.3;
       }
 
       &:hover {
+        border-color: $tc-dark-blue-70;
+        cursor: pointer;
+      }
+
+      &.active {
+        background: $tc-gray-10;
         border-color: $tc-gray-10;
+
+        &:after {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          width: 15px;
+          height: 15px;
+          background: $tc-dark-blue;
+          border-radius: 2px;
+        }
+
+        &:before {
+          content: '';
+          position: absolute;
+          z-index: 1;
+          top: 12px;
+          right: 15px;
+          width: 5px;
+          border-width: 0 2px 2px 0;
+          border-style: solid;
+          border-color: $tc-white;
+          height: 10px;
+          transform: rotate(45deg);
+          -o-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+          -webkit-transform: rotate(45deg);
+        }
+
+        &:hover {
+          border-color: $tc-gray-10;
+        }
+      }
+
+      span.title {
+        display: block;
+        margin-top: 20px;
+        @include roboto-bold;
+        color: $tc-black;
+        font-size: 13px;
+        text-align: center;
+      }
+
+      span.icon {
+        text-align: center;
+        display: block;
+        height: 50px;
+        margin: 30px auto 20px auto;
+      }
+
+      small {
+        display: block;
+        font-size: 11px;
+        text-align: center;
+        color: $tc-gray-50;
+        @include roboto;
+        margin-top: 10px;
       }
     }
 
-    span.title {
-      display: block;
-      margin-top: 20px;
-      @include roboto-bold;
-      color: $tc-black;
-      font-size: 13px;
-      text-align: center;
+    .SliderRadioGroup .rc-slider-mark {
+      position: relative;
     }
 
-    span.icon {
-      text-align: center;
-      display: block;
-      height: 50px;
-      margin: 30px auto 20px auto;
-    }
-
-    small {
-      display: block;
-      font-size: 11px;
-      text-align: center;
-      color: $tc-gray-50;
-      @include roboto;
-      margin-top: 10px;
-    }
-  }
-
-  .SliderRadioGroup .rc-slider-mark {
-    position: relative;
   }
 }

@@ -68,22 +68,27 @@ export function getProjectById(projectId) {
  * @return {Promise} resolves to project phases
  */
 export function getProjectPhases(projectId) {
-  // remove this mock data when real endpoint is implemented
-  // we moch all project with id > 2000 as new one with phases
-  // and with id <= 2000 as old one without phases
-  return Promise.resolve(parseInt(projectId, 10) > 2000 ? {
-    phases: []
-  } : {
-    phases: null,
-  })
-
-
-  // uncomment below when real endpoint is implemented
-  /* return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases`)
+  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases`)
     .then(resp => {
       const res = _.get(resp.data, 'result.content', {})
       return res
-    }) */
+    })
+}
+
+/**
+ * Get project phase products
+ *
+ * @param {String} projectId project id
+ * @param {String} phaseId   phase id
+ *
+ * @return {Promise} resolves to project phase products
+ */
+export function getProjectPhaseProducts(projectId, phaseId) {
+  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}/products`)
+    .then(resp => {
+      const res = _.get(resp.data, 'result.content', {})
+      return res
+    })
 }
 
 /**

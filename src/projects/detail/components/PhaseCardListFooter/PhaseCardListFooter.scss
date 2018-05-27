@@ -1,0 +1,54 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  @include roboto-bold;
+  align-items: center;
+  background-color: $tc-gray-80;
+  border-radius: 0 0 6px 6px;
+  color: $tc-white;
+  display: flex;
+  font-size: 15px;
+  height: 50px;
+  justify-content: space-between;
+  margin-top: $base-unit;
+  padding-right: 50px;
+}
+
+.main {
+  display: flex;
+  flex: 0 500px;
+}
+
+.total {
+  color: $tc-gray-30;
+  padding-left: 4 * $base-unit;
+  width: 80px;
+}
+
+.price {
+  flex: 0 140px;
+  padding-right: 18px;
+  text-align: right;
+}
+
+.status {
+  width: 40px;
+}
+
+.meta-list {
+  .meta {
+    &::after {
+      content: " • ";
+      display: inline-block;
+      margin: 0 $base-unit;
+    }
+
+    &:last-child::after {
+      display: none;
+    }
+
+    &.meta-dark {
+      color: $tc-gray-30;
+    }
+  }
+}

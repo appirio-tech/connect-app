@@ -2,7 +2,6 @@
  * Secondary toolbar container for project details pages
  */
 import React from 'react'
-import _ from 'lodash'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PT from 'prop-types'
@@ -22,7 +21,7 @@ const SecondaryToolBarContainer = ({
 
   // `Discussions` items can be added as soon as project is loaded
   // if discussions are not hidden for it
-  if (!isProjectLoading && !project.details.hideDiscussions) {
+  if (!isProjectLoading && project && project.details && !project.details.hideDiscussions) {
     navLinks.push({ label: 'Discussions', to: `/projects/${match.params.projectId}/discussions` })
   }
 

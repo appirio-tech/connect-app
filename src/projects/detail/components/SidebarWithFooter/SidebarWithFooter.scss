@@ -1,0 +1,25 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  min-height: calc(100vh - 110px);
+  padding-bottom: 10 * $base-unit;
+  position: relative;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    min-height: 0;
+    padding-bottom: 0;
+  }
+
+  :global(.footer-v2) {
+    bottom: 2 * $base-unit;
+    left: 0;
+    margin-top: 0;
+    padding: 0 4 * $base-unit;
+    position: absolute;
+    width: 100%;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      display: none;
+    }
+  }
+}

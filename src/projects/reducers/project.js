@@ -100,10 +100,10 @@ export const projectState = function (state=initialState, action) {
   case LOAD_PROJECT_PHASES_SUCCESS:
     return update(state, {
       project: {
-        phases: { $set: action.payload.phases },
+        phases: { $set: action.payload },
       },
       projectNonDirty: {
-        phases: { $set: action.payload.phases },
+        phases: { $set: action.payload },
       }
     })
 

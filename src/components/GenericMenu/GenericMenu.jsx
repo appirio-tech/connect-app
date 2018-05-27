@@ -12,8 +12,11 @@ const GenericMenu = ({
     <ul styleName="list">
       {!!navLinks && navLinks.map((item, i) => (
         <li key={i}>
-          {item.hasNewItems && <i styleName="dot" />}
-          <NavLink to={item.to} activeClassName={styles.active} exact>{item.label}</NavLink>
+          {item.hasNotifications && <i styleName="dot" />}
+          {item.to
+            ? <NavLink to={item.to} activeClassName={styles.active} exact>{item.label}</NavLink>
+            : <span onClick={item.onClick} styleName={item.isActive ? 'active' : ''}>{item.label}</span>
+          }
         </li>
       ))}
     </ul>
@@ -22,9 +25,11 @@ const GenericMenu = ({
 
 GenericMenu.propTypes = {
   navLinks: PT.arrayOf(PT.shape({
-    hasNewItems: PT.bool,
+    hasNotifications: PT.bool,
     label: PT.string,
     to: PT.string,
+    isActive: PT.bool,
+    onClick: PT.func,
   }))
 }
 

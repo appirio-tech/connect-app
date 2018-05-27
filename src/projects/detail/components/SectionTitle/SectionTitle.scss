@@ -1,0 +1,18 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  @include roboto;
+  color: $tc-gray-80;
+  font-size: 15px;
+  line-height: 30px;
+  padding-bottom: $base-unit * 2;
+  padding-top: $base-unit * 2;
+  text-align: left;
+  text-transform: uppercase;
+}

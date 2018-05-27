@@ -25,13 +25,16 @@ const showCoderBotIfError = (hasError) =>
 const errorHandler = showCoderBotIfError(props => props.error && props.error.type === LOAD_PROJECT_FAILURE)
 
 // This handles showing a spinner while the state is being loaded async
-const spinner = spinnerWhileLoading(props => !props.isLoading && props.projectTemplate)
+const spinner = spinnerWhileLoading(props =>
+  !props.isLoading && (props.projectTemplate || props.error && props.error.type === LOAD_PROJECT_FAILURE)
+)
 const ProjectDetailView = (props) => {
   const children = React.Children.map(props.children, (child) => {
     return React.cloneElement(child, {
       project: props.project,
       currentMemberRole: props.currentMemberRole,
-      isSuperUser: props.isSuperUser
+      isSuperUser: props.isSuperUser,
+      isProcessing: props.isProcessing,
     })
   })
   return <div>{children}</div>
