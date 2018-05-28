@@ -80,14 +80,6 @@ jobs:
           at: ./workspace
       - run: ./deploy.sh DISCOURSE
   # Just tests commited code.
-  devtesting:
-    docker:
-      - image: cibuilds/aws
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ./workspace
-      - run: echo "proceed deploy"
   # deploy to test02      
 
 workflows:
@@ -119,9 +111,3 @@ workflows:
           filters:
             branches:
               only: master-discourse-free
-      - devtesting:
-          requires:
-            - test
-          filters:
-            branches:
-              only: dev-testing
