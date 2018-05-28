@@ -79,8 +79,7 @@ jobs:
       - attach_workspace:
           at: ./workspace
       - run: ./deploy.sh DISCOURSE
-  # Just tests commited code.
-  # deploy to test02      
+   
 
 workflows:
   version: 2
