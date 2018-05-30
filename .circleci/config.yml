@@ -2,8 +2,11 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/node:8.9.4
+      - image: circleci/node:8.9.4-browsers
     steps:
+      - run:
+          name: checking out qa framework repo
+          command: git clone --branch develop https://$GITUSER:$GITPASSWD@github.com/appirio-tech/qa-framework-js.git ../qa-framework    
       - checkout
       - restore_cache:
           key: test-node-modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "package-lock.json" }}
@@ -18,8 +21,28 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - dist
-
+            - dist      
+      - run:
+          name: starting server locally
+          command: npm run start
+          background: true
+      - run: sleep 90         
+      - run:
+          name: Running qa frame work
+          command: |
+            cd $HOME/qa-framework
+            sudo chmod 777 /usr/local/lib/node_modules
+            sudo chmod 777 /usr/local/bin
+            echo 127.0.0.1 local.topcoder-dev.com | sudo tee -a /etc/hosts
+            echo 127.0.0.1 local.topcoder.com | sudo tee -a /etc/hosts
+            cat /etc/hosts
+            mv -f test/config/ci-config.js test/config/config.js
+            npm install
+            npm test
+            pwd
+      - store_artifacts:
+          path: /home/circleci/qa-framework/allure-report            
+            
   # Just tests commited code.
   deployDev:
     docker:
@@ -56,6 +79,7 @@ jobs:
       - attach_workspace:
           at: ./workspace
       - run: ./deploy.sh DISCOURSE
+   
 
 workflows:
   version: 2
