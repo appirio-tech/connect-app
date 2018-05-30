@@ -191,7 +191,7 @@ $screen-one-column: 720px;
               font-size: 13px;
               align-items: center;
               margin-top: $base-unit;
-              margin-right: 40px;
+              margin-right: $base-unit;
 
               > div {
                 overflow: hidden;

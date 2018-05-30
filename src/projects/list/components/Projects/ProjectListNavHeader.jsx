@@ -87,6 +87,16 @@ export default class ProjectListNavHeader extends Component {
               )
             )}
           </MediaQuery>
+          <div className="primary-filter">
+            <div className="tc-switch clearfix">
+              <SwitchButton
+                onChange={ this.handleMyProjectsFilter }
+                label="My projects"
+                name="my-projects-only"
+                checked={this.props.criteria.memberOnly}
+              />
+            </div>
+          </div>
         </div>
         <div className="right-wrapper">
 
