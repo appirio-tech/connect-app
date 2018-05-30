@@ -207,7 +207,7 @@ class EditProjectForm extends Component {
 
 
   render() {
-    const { isEdittable, sections } = this.props
+    const { isEdittable, sections, showHidden } = this.props
     const { project, dirtyProject } = this.state
     const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
@@ -224,6 +224,7 @@ class EditProjectForm extends Component {
             showFeaturesDialog={this.showFeaturesDialog}
             // TODO we shoudl not update the props (section is coming from props)
             validate={(isInvalid) => section.isInvalid = isInvalid}
+            showHidden={showHidden}
           />
           <div className="section-footer section-footer-spec">
             <button className="tc-btn tc-btn-primary tc-btn-md"
@@ -272,7 +273,8 @@ EditProjectForm.propTypes = {
   isEdittable: PropTypes.bool.isRequired,
   submitHandler: PropTypes.func.isRequired,
   fireProjectDirty: PropTypes.func.isRequired,
-  fireProjectDirtyUndo: PropTypes.func.isRequired
+  fireProjectDirtyUndo: PropTypes.func.isRequired,
+  showHidden: PropTypes.bool,
 }
 
 export default EditProjectForm

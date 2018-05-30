@@ -12,6 +12,8 @@ import SpecScreens from './SpecScreens'
 import { PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
 import { scrollToAnchors } from '../../../components/ScrollToAnchors'
 
+import './SpecSection.scss'
+
 // icons for "tiled-radio-group" field type
 import NumberText from '../../../components/NumberText/NumberText'
 import IconTechOutlineMobile from  '../../../assets/icons/icon-tech-outline-mobile.svg'
@@ -25,16 +27,26 @@ import IconTcSpecIconTypeOutlineHome from  '../../../assets/icons/icon-tc-spec-i
 import IconTcSpecIconTypeGlyphHome from  '../../../assets/icons/icon-tc-spec-icon-type-glyph-home.svg'
 
 // map string values to icon components for "tiled-radio-group" field type
+// this map contains TWO types of map, dashed and CamesCased
 const tiledRadioGroupIcons = {
   NumberText,
+  IconTechOutlineMobile,
   'icon-tech-outline-mobile': IconTechOutlineMobile,
+  IconTechOutlineTablet,
   'icon-tech-outline-tablet': IconTechOutlineTablet,
+  IconTechOutlineDesktop,
   'icon-tech-outline-desktop': IconTechOutlineDesktop,
+  IconTechOutlineWatchApple,
   'icon-tech-outline-watch-apple': IconTechOutlineWatchApple,
+  IconTcSpecTypeSerif,
   'icon-tc-spec-type-serif': IconTcSpecTypeSerif,
+  IconTcSpecTypeSansSerif,
   'icon-tc-spec-type-sans-serif': IconTcSpecTypeSansSerif,
+  IconTcSpecIconTypeColorHome,
   'icon-tc-spec-icon-type-color-home': IconTcSpecIconTypeColorHome,
+  IconTcSpecIconTypeOutlineHome,
   'icon-tc-spec-icon-type-outline-home': IconTcSpecIconTypeOutlineHome,
+  IconTcSpecIconTypeGlyphHome,
   'icon-tc-spec-icon-type-glyph-home': IconTcSpecIconTypeGlyphHome,
 }
 
@@ -49,7 +61,8 @@ const SpecSection = props => {
     title,
     description,
     validate,
-    sectionNumber
+    sectionNumber,
+    showHidden,
   } = props
 
   // make a copy to avoid modifying redux store
@@ -60,7 +73,9 @@ const SpecSection = props => {
     (subSection.questions || []).forEach(question => {
       if (question.type === 'tiled-radio-group') {
         question.options.forEach((option) => {
-          option.icon = tiledRadioGroupIcons[option.icon]
+          // if icon is defined as a relative path to the icon, convert it to icon "id"
+          const iconAsPath = option.icon.match(/(?:\.\.\/)+assets\/icons\/([^.]+)\.svg/)
+          option.icon = tiledRadioGroupIcons[iconAsPath ? iconAsPath[1] : option.icon]
         })
       }
     })
@@ -110,6 +125,7 @@ const SpecSection = props => {
           project={project}
           dirtyProject={dirtyProject}
           isRequired={props.required}
+          showHidden={showHidden}
         />
       )
     case 'notes':
@@ -191,14 +207,14 @@ const SpecSection = props => {
       <div className="boxes">
         <div className="section-header big-titles">
           <h2 id={id}>
-            {typeof title === 'function' ? title(project, true): title }
+            {title}
           </h2>
           <span className="section-number">{ sectionNumber }</span>
         </div>
         <p className="gray-text">
           {description}
         </p>
-        {subSections.filter((subSection) => !subSection.hidden).map(renderSubSection)}
+        {subSections.filter((subSection) => showHidden || !subSection.hidden).map(renderSubSection)}
       </div>
     </div>
   )
@@ -206,7 +222,8 @@ const SpecSection = props => {
 
 SpecSection.propTypes = {
   project: PropTypes.object.isRequired,
-  sectionNumber: PropTypes.number.isRequired
+  sectionNumber: PropTypes.number.isRequired,
+  showHidden: PropTypes.bool,
 }
 
 export default scrollToAnchors(SpecSection)

@@ -4,16 +4,19 @@
     "name": "App",
     "key": "application_development",
     "type": "app",
-    "phases": [
-      {
-        "productTemplateId": 1
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "application_development",
+          "id": 1
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Development Integration",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -139,16 +142,19 @@
     "name": "Enterprise Mobile",
     "key": "enterprise_mobile",
     "type": "app",
-    "phases": [
-      {
-        "productTemplateId": 2
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "enterprise_mobile",
+          "id": 2
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Enterprise Mobile",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -766,16 +772,19 @@
     "name": "topgear-dev",
     "key": "topgear_dev",
     "type": "app",
-    "phases": [
-      {
-        "productTemplateId": 3
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "topgear_dev",
+          "id": 3
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "topgear-dev",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -854,16 +863,19 @@
     "name": "caas-intake",
     "key": "caas_intake",
     "type": "app",
-    "phases": [
-      {
-        "productTemplateId": 4
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "caas_intake",
+          "id": 4
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "caas-intake",
           "required": true,
           "description": "Create your own private Gig Workforce with Topcoder by answering         a few simple questions",
           "subSections": [
@@ -1111,16 +1123,19 @@
     "name": "Website",
     "key": "website_development",
     "type": "website",
-    "phases": [
-      {
-        "productTemplateId": 5
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "website_development",
+          "id": 5
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Website",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -1246,16 +1261,19 @@
     "name": "Watson Chatbot",
     "key": "watson_chatbot",
     "type": "chatbot",
-    "phases": [
-      {
-        "productTemplateId": 6
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "watson_chatbot",
+          "id": 6
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Watson Chatbot",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -1428,16 +1446,19 @@
     "name": "Chatbot",
     "key": "generic_chatbot",
     "type": "chatbot",
-    "phases": [
-      {
-        "productTemplateId": 7
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "generic_chatbot",
+          "id": 7
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Chatbot",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -1564,16 +1585,19 @@
     "name": "Computer Vision",
     "key": "computer_vision",
     "type": "chatbot",
-    "phases": [
-      {
-        "productTemplateId": 8
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "computer_vision",
+          "id": 8
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Computer Vision",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -1689,16 +1713,19 @@
     "name": "Data Exploration",
     "key": "data_exploration",
     "type": "chatbot",
-    "phases": [
-      {
-        "productTemplateId": 9
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "data_exploration",
+          "id": 9
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Data Exploration",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -1812,16 +1839,19 @@
     "name": "Wireframes",
     "key": "wireframes",
     "type": "visual_design",
-    "phases": [
-      {
-        "productTemplateId": 10
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "wireframes",
+          "id": 10
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Wireframes",
           "productName": "Wireframes",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
@@ -1979,16 +2009,19 @@
     "name": "App Visual Design - Concepts",
     "key": "visual_design_concepts",
     "type": "visual_design",
-    "phases": [
-      {
-        "productTemplateId": 11
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "visual_design_concepts",
+          "id": 11
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Infographic",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -2155,16 +2188,19 @@
     "name": "Visual Design",
     "key": "visual_design_prod",
     "type": "visual_design",
-    "phases": [
-      {
-        "productTemplateId": 12
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "visual_design_prod",
+          "id": 12
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Infographic",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -2332,16 +2368,19 @@
     "name": "Infographic",
     "key": "infographic",
     "type": "visual_design",
-    "phases": [
-      {
-        "productTemplateId": 13
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "infographic",
+          "id": 13
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Infographic",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -2508,16 +2547,19 @@
     "name": "Other Design",
     "key": "generic_design",
     "type": "visual_design",
-    "phases": [
-      {
-        "productTemplateId": 14
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "generic_design",
+          "id": 14
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Other Design",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -2594,16 +2636,19 @@
     "name": "Front-end Prototype",
     "key": "visual_prototype",
     "type": "app_dev",
-    "phases": [
-      {
-        "productTemplateId": 15
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "visual_prototype",
+          "id": 15
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Development Integration",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -2729,16 +2774,19 @@
     "name": "Front-end",
     "key": "frontend_dev",
     "type": "app_dev",
-    "phases": [
-      {
-        "productTemplateId": 16
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "frontend_dev",
+          "id": 16
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Development Integration",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -2864,16 +2912,19 @@
     "name": "Back-end & API",
     "key": "api_dev",
     "type": "app_dev",
-    "phases": [
-      {
-        "productTemplateId": 17
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "api_dev",
+          "id": 17
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Development Integration",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -2999,16 +3050,19 @@
     "name": "Development Integration",
     "key": "generic_dev",
     "type": "app_dev",
-    "phases": [
-      {
-        "productTemplateId": 18
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "generic_dev",
+          "id": 18
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Development Integration",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -3134,16 +3188,19 @@
     "name": "Computer Vision",
     "key": "computer_vision",
     "type": "analytics",
-    "phases": [
-      {
-        "productTemplateId": 19
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "computer_vision",
+          "id": 19
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Computer Vision",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -3259,16 +3316,19 @@
     "name": "Data Exploration",
     "key": "data_exploration",
     "type": "analytics",
-    "phases": [
-      {
-        "productTemplateId": 20
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "data_exploration",
+          "id": 20
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Data Exploration",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -3382,16 +3442,19 @@
     "name": "Real World Testing",
     "key": "real_world_testing",
     "type": "quality_assurance",
-    "phases": [
-      {
-        "productTemplateId": 21
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "real_world_testing",
+          "id": 21
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Real World Testing",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -3565,16 +3628,19 @@
     "name": "Mobility Testing",
     "key": "mobility_testing",
     "type": "quality_assurance",
-    "phases": [
-      {
-        "productTemplateId": 22
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "mobility_testing",
+          "id": 22
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Mobility Testing",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -3749,16 +3815,19 @@
     "name": "Performance Testing",
     "key": "performance_testing",
     "type": "quality_assurance",
-    "phases": [
-      {
-        "productTemplateId": 23
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "performance_testing",
+          "id": 23
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Performance Testing",
           "required": true,
           "description": "Please answer a few basic questions about your project. If you have any supporting documents, please add the links in the “Notes” section. You can upload any additional files (specifications, diagrams, mock interfaces, etc.) once your project is created.",
           "subSections": [
@@ -3900,16 +3969,19 @@
     "name": "Health Security Check",
     "key": "health_check",
     "type": "quality_assurance",
-    "phases": [
-      {
-        "productTemplateId": 24
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "health_check",
+          "id": 24
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Health Security Check",
           "required": true,
           "description": "Topcoder will scan your application using our properiatary formula        for security standards. To rate your application we combine state of the art         static code analysis, security scanning, export code review and other techniques         to produce a Security Health Check scorecard.",
           "subSections": [
@@ -4024,16 +4096,19 @@
     "name": "Performance Tuning",
     "key": "performance_tuning",
     "type": "quality_assurance",
-    "phases": [
-      {
-        "productTemplateId": 25
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "performance_tuning",
+          "id": 25
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Performance Tuning",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option, add links to supporting documents in the “Notes” section. If you have any files to upload, you’ll be able to do so later.",
           "subSections": [
@@ -4094,11 +4169,14 @@
     "name": "Digital Accessibility",
     "key": "digital_accessability",
     "type": "quality_assurance",
-    "phases": [
-      {
-        "productTemplateId": 26
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "digital_accessability",
+          "id": 26
+        }
+      ]
+    },
     "scope": {
       "sections": []
     },
@@ -4117,11 +4195,14 @@
     "name": "Open Source Automation",
     "key": "open_source_automation",
     "type": "quality_assurance",
-    "phases": [
-      {
-        "productTemplateId": 27
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "open_source_automation",
+          "id": 27
+        }
+      ]
+    },
     "scope": {
       "sections": []
     },
@@ -4140,11 +4221,14 @@
     "name": "Consulting & Adivisory",
     "key": "consulting_adivisory",
     "type": "quality_assurance",
-    "phases": [
-      {
-        "productTemplateId": 28
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "consulting_adivisory",
+          "id": 28
+        }
+      ]
+    },
     "scope": {
       "sections": []
     },
@@ -4163,16 +4247,19 @@
     "name": "Salesforce Accelerator",
     "key": "sfdc_testing",
     "type": "quality_assurance",
-    "phases": [
-      {
-        "productTemplateId": 29
-      }
-    ],
+    "phases": {
+      "products": [
+        {
+          "productKey": "sfdc_testing",
+          "id": 29
+        }
+      ]
+    },
     "scope": {
       "sections": [
         {
           "id": "appDefinition",
-          "title": "Definition",
+          "title": "Salesforce Accelerator",
           "required": true,
           "description": "Please answer a few basic questions about your project and, as an option,                  add links to supporting documents in the “Notes” section. If you have any                   files to upload, you’ll be able to do so later.                                    *AssureNXT - Rapid Test Design Module is a Component of AssureNXT which is a Test Management Platform.                  It helps in Automated Test Case and Test Data Model generation through business process diagrams.                  RTD establishes direct relationship between business requirements, process flows and test coverage.                  Accelerated Test Case generation for changed business process.                                    *Tosca - Tricentis Tosca is a testing tool that is used to automate end-to-end testing for software applications.                  Tricentis Tosca combines multiple aspects of software testing (test case design, test automation, test data design                   and generation, and analytics) to test GUIs and APIs from a business perspective",
           "subSections": [

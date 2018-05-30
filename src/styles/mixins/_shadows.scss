@@ -1,0 +1,17 @@
+@mixin stand-alone-item-shadow {
+  background-color: $tc-white;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.20000000298023224);
+}
+
+@mixin group-list-item-shadow {
+  background-color: $tc-white;
+  border-radius: 6px;
+  box-shadow: 0 1px 1px 0 $tc-gray-70;
+}
+
+@mixin modal-shadow {
+  background-color: $tc-white;
+  border-radius: 6px;
+  box-shadow: 0 5px 35px 5px rgba(21, 21, 22, 0.10000000149011612), 0 10px 14px 0 rgba(21, 21, 22, 0.30000001192092896);
+}

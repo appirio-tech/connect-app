@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import update from 'react-addons-update'
 import _ from 'lodash'
 import LinksMenu from '../../../components/LinksMenu/LinksMenu'
-import FooterV2 from '../../../components/FooterV2/FooterV2'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
 import { setDuration } from '../../../helpers/projectHelper'
@@ -142,7 +141,6 @@ class ProjectInfoContainer extends React.Component {
           />
           <TeamManagementContainer projectId={project.id} members={project.members} />
         </div>
-        <FooterV2 />
       </div>
     )
   }

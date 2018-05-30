@@ -171,6 +171,9 @@ class CreateContainer extends React.Component {
    * Creates new project if user is already logged in, otherwise, redirects user for registration/login.
    */
   createProject(project) {
+    const { templates: { projectTemplates }} = this.props
+    const projectTemplate = getProjectTemplateByKey(projectTemplates, _.get(project, 'details.products[0]'))
+
     this.setState({ creatingProject: true }, () => {
       if (this.props.userRoles && this.props.userRoles.length > 0) {
         // if user is logged in and has a valid role, create project
@@ -188,7 +191,10 @@ class CreateContainer extends React.Component {
           }
           _.set(project, 'details.utm.google', googleAnalytics)
         }
-        this.props.createProjectAction(project, PROJECT_STATUS_IN_REVIEW)
+        project.version = 'v3'
+        project.templateId = projectTemplate.id
+        project.type = projectTemplate.category
+        this.props.createProjectAction(project, projectTemplate)
         this.closeWizard()
       } else {
         // redirect to registration/login page

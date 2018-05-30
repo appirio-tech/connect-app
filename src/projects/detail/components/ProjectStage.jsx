@@ -20,27 +20,30 @@ const EnhancedEditProjectForm = enhance(EditProjectForm)
 /**
  * Format PhaseCard attr property
  *
- * @param {Object} phase phase
+ * @param {Object} phase            phase
+ * @param {Array}  productTemplates product templates
  *
  * @returns {Object} PhaseCard attr property
  */
-function formatPhaseCardAttr(phase) {
-  const { status } = phase
+function formatPhaseCardAttr(phase, productTemplates) {
   // NOTE so far one phase always has 1 product
   // but as in the future this may be changed, we work with products as an array
-  const budget = _.get(phase, 'products[0].budget', 0)
+  const product = _.get(phase, 'products[0]')
+  const { status } = phase
+  const productTemplate = _.find(productTemplates, { id: product.templateId })
+  const budget = product.budget || 0
   const price = `$${formatNumberWithCommas(budget)}`
-  const icon = _.get(phase, 'products[0].template.icon')
-  const title = _.get(phase, 'products[0].template.name')
+  const icon = _.get(productTemplate, 'icon')
+  const title = _.get(productTemplate, 'name')
   const startDate = phase.startDate && moment(phase.startDate)
   const endDate = phase.endDate && moment(phase.endDate)
-  const duration = phase.startDate && phase.endDate
-    ? endDate.subtract(startDate).duration().days() + ' days'
+  const duration = startDate && endDate
+    ? moment.duration(endDate.diff(startDate)).days() + ' days'
     : '0 days'
   let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
   startEndDates += startDate && endDate ? `–${endDate.format('MMM D')}` : ''
 
-  const actualPrice = _.get(phase, 'products[0].actualPrice')
+  const actualPrice = product.actualPrice
   let paidStatus = 'Quoted'
   if (actualPrice && actualPrice === budget) {
     paidStatus = 'Paid in full'
@@ -63,10 +66,11 @@ const ProjectStage = ({
   activeTab,
   phase,
   project,
+  productTemplates,
   currentMemberRole,
   isProcessing,
   isSuperUser,
-  updateProject,
+  updateProduct,
   fireProjectDirty,
   fireProjectDirtyUndo,
   onTabClick,
@@ -87,8 +91,14 @@ const ProjectStage = ({
     }
   ]
 
+  // NOTE even though in store we keep products as an array,
+  // so far we always have only one product per phase, so will display only one
+  const productTemplate = _.find(productTemplates, { id: _.get(phase, 'products[0].templateId') })
+  const product = _.get(phase, 'products[0]')
+  const sections = _.get(productTemplate, 'template.questions', [])
+
   return (
-    <PhaseCard attr={formatPhaseCardAttr(phase)}>
+    <PhaseCard attr={formatPhaseCardAttr(phase, productTemplates)}>
       <div>
         <GenericMenu navLinks={tabs} />
 
@@ -103,12 +113,12 @@ const ProjectStage = ({
         {activeTab === 'specification' &&
           <div className="two-col-content content">
             <EnhancedEditProjectForm
-              project={project}
-              sections={_.get(phase, 'products[0].template.template')}
+              project={product}
+              sections={sections}
               isEdittable={isSuperUser || !!currentMemberRole}
-              submitHandler={(model) => updateProject(project.id, model)}
+              submitHandler={(model) => updateProduct(project.id, phase.id, product.id, model)}
               saving={isProcessing}
-              fireProjectDirty={fireProjectDirty}
+              fireProjectDirty={(values) => fireProjectDirty(phase.id, product.id, values)}
               fireProjectDirtyUndo= {fireProjectDirtyUndo}
             />
           </div>
@@ -130,7 +140,7 @@ ProjectStage.propTypes = {
   currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
-  updateProject: PT.func.isRequired,
+  updateProduct: PT.func.isRequired,
   fireProjectDirty: PT.func.isRequired,
   fireProjectDirtyUndo: PT.func.isRequired,
 }

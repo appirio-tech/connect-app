@@ -1,0 +1,26 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import '../../styles/includes';
+
+.feedContainer {
+  @include stand-alone-item-shadow;
+}
+
+.feedHeader {
+  background-color: $tc-gray-neutral-light;
+  height: 60px;
+  border-radius: 6px;
+}
+
+.titleWrapper {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 4 * $base-unit;
+}
+
+.title {
+  @include roboto;
+  color: $tc-black;
+  font-size: 20px;
+}

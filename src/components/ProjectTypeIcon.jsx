@@ -41,6 +41,12 @@ import IconWebsiteWebsite from '../assets/icons/product-website-website.svg'
 import IconOutlineWorkProject from '../assets/icons/tech-32px-outline-work-project.svg'
 
 const ProjectTypeIcon = ({ type }) => {
+  // if type is defined as a relative path to the icon, convert it to icon "id"
+  const typeAsPath = type.match(/(?:\.\.\/)+assets\/icons\/([^.]+)\.svg/)
+  if (typeAsPath) {
+    type = typeAsPath[1]
+  }
+
   switch(type){
   case 'product-analytics-algorithm-optimization':
     return <IconAnalyticsAlgorithmOptimization className="icon-analytics-algorithm-optimization"/>
@@ -109,12 +115,13 @@ const ProjectTypeIcon = ({ type }) => {
   case 'tech-32px-outline-work-project':
     return <IconOutlineWorkProject className="icon-outline-work-project" />
   default:
-    return 'undefined icon'
+    // this will be default icon
+    return <IconDevOther className="icon-dev-other"/>
   }
 }
 
 ProjectTypeIcon.propTypes = {
-  type: PT.string.isRequired
+  type: PT.string,
 }
 
 export default ProjectTypeIcon

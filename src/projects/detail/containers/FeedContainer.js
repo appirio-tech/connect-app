@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Prompt } from 'react-router-dom'
+import { Prompt, Link } from 'react-router-dom'
 import _ from 'lodash'
 import {
   THREAD_MESSAGES_PAGE_SIZE,
@@ -25,11 +25,15 @@ import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import { toggleNotificationRead, toggleBundledNotificationRead } from '../../../routes/notifications/actions'
 import { filterReadNotifications, filterNotificationsByProjectId, filterTopicAndPostChangedNotifications, filterProjectNotifications } from '../../../routes/notifications/helpers/notifications'
 import { REFRESH_UNREAD_UPDATE_INTERVAL } from '../../../config/constants'
+import { updateProduct, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import MediaQuery from 'react-responsive'
 import ChatButton from '../../../components/ChatButton/ChatButton'
 import NewPostMobile from '../../../components/Feed/NewPostMobile'
 import FeedMobile from '../../../components/Feed/FeedMobile'
-import './Specification.scss'
+import Section from '../components/Section'
+import SectionTitle from '../components/SectionTitle'
+import ProjectStage from '../components/ProjectStage'
+// import './Specification.scss'
 import Refresh from '../../../assets/icons/icon-refresh.svg'
 
 import { ScrollElement } from 'react-scroll'
@@ -397,7 +401,8 @@ class FeedView extends React.Component {
   }
 
   render () {
-    const {currentUser, project, currentMemberRole, isCreatingFeed, error, allMembers} = this.props
+    const {currentUser, project, currentMemberRole, isCreatingFeed, error, allMembers,
+      productTemplates, isProcessing, isSuperUser, updateProduct, fireProjectDirty, fireProjectDirtyUndo} = this.props
     const { feeds, unreadUpdate, scrolled, isNewPostMobileOpen } = this.state
     const showDraftSpec = project.status === PROJECT_STATUS_DRAFT && currentMemberRole === PROJECT_ROLE_CUSTOMER
     const onLeaveMessage = this.onLeave() || ''
@@ -488,6 +493,25 @@ class FeedView extends React.Component {
               />
             </div>
           }
+          {project.phases && project.phases.length > 0 &&
+            <Section>
+              <SectionTitle title="Work in progress">
+                <Link to={`/projects/${project.id}/plan`}>View all</Link>
+              </SectionTitle>
+              <ProjectStage
+                key={project.phases[0].id}
+                productTemplates={productTemplates}
+                currentMemberRole={currentMemberRole}
+                isProcessing={isProcessing}
+                isSuperUser={isSuperUser}
+                project={project}
+                phase={project.phases[0]}
+                updateProduct={updateProduct}
+                fireProjectDirty={fireProjectDirty}
+                fireProjectDirtyUndo={fireProjectDirtyUndo}
+              />
+            </Section>
+          }
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             <NewPost
               currentUser={currentUser}
@@ -551,7 +575,7 @@ FeedContainer.PropTypes = {
   project: PropTypes.object.isRequired
 }
 
-const mapStateToProps = ({ projectTopics, members, loadUser, notifications }) => {
+const mapStateToProps = ({ projectTopics, members, loadUser, notifications, projectState }) => {
   return {
     currentUser    : loadUser.user,
     feeds          : projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
@@ -560,7 +584,9 @@ const mapStateToProps = ({ projectTopics, members, loadUser, notifications }) =>
     isCreatingFeed : projectTopics.isCreatingFeed,
     error          : projectTopics.error,
     allMembers     : members.members,
-    notifications
+    notifications,
+    productTemplates: projectState.productTemplates,
+    isProcessing: projectState.processing,
   }
 }
 const mapDispatchToProps = {
@@ -574,7 +600,10 @@ const mapDispatchToProps = {
   deleteFeedComment,
   getFeedComment,
   toggleNotificationRead,
-  toggleBundledNotificationRead
+  toggleBundledNotificationRead,
+  updateProduct,
+  fireProjectDirty,
+  fireProjectDirtyUndo,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedContainer)

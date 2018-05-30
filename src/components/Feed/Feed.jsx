@@ -11,6 +11,8 @@ import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
 import { markdownToHTML } from '../../helpers/markdownToState'
 
+import './Feed.scss'
+
 class Feed extends React.Component {
   constructor(props) {
     super(props)
@@ -55,56 +57,40 @@ class Feed extends React.Component {
     const title = this.props.newTitle === null || this.props.newTitle === undefined ? this.props.title : this.props.newTitle
     const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
     return (
-      <ActionCard>
-        {editTopicMode && (
-          <RichTextArea
-            editMode
-            messageId={topicMessage.id}
-            isGettingComment={topicMessage.isGettingComment}
-            title={title}
-            content={content}
-            oldTitle={this.props.title}
-            oldContent={topicMessage.rawContent}
-            onPost={this.onSaveTopic}
-            onPostChange={this.onTopicChange}
-            isCreating={isSavingTopic}
-            hasError={error}
-            avatarUrl={user.photoURL}
-            authorName={authorName}
-            cancelEdit={this.cancelEditTopic}
-            allMembers={allMembers}
-          />
-        )}
-        {!editTopicMode && (
-          <Panel.Body className={cn({active: unread})}>
-            <div className="portrait" id={`feed-${id}`}>
-              {/* <Avatar avatarUrl={user.photoURL} userName={authorName} /> */}
-              <UserTooltip usr={user} id={id} previewAvatar size={35} />
+      <div styleName="feedContainer" id={`feed-${id}`}>
+        <header styleName="feedHeader">
+          {editTopicMode ? (
+            <RichTextArea
+              editMode
+              messageId={topicMessage.id}
+              isGettingComment={topicMessage.isGettingComment}
+              title={title}
+              content={content}
+              oldTitle={this.props.title}
+              oldContent={topicMessage.rawContent}
+              onPost={this.onSaveTopic}
+              onPostChange={this.onTopicChange}
+              isCreating={isSavingTopic}
+              hasError={error}
+              avatarUrl={user.photoURL}
+              authorName={authorName}
+              cancelEdit={this.cancelEditTopic}
+              allMembers={allMembers}
+            />
+          ) : (
+            <div styleName="titleWrapper">
+              <div styleName="title">{title}</div>
+              {self && (
+                <CommentEditToggle
+                  forTopic
+                  hideDelete={comments.length > 0}
+                  onEdit={this.onEditTopic}
+                  onDelete={onDeleteTopic}
+                />
+              )}
             </div>
-            <div className="object topicBody">
-              <div className="card-title">
-                <div>{title}</div>
-                {self && (
-                  <CommentEditToggle
-                    forTopic
-                    hideDelete={comments.length > 0}
-                    onEdit={this.onEditTopic}
-                    onDelete={onDeleteTopic}
-                  />
-                )}
-              </div>
-              <div className="card-profile">
-                <div className="card-author">
-                  { authorName }
-                </div>
-                <div className="card-time">
-                  <Link to={permalink}>{moment(date).fromNow()}</Link>
-                </div>
-              </div>
-              <div className="card-body draftjs-post" dangerouslySetInnerHTML={{__html: markdownToHTML(topicMessage.content)}} />
-            </div>
-          </Panel.Body>
-        )}
+          )}
+        </header>
         <FeedComments
           allowComments={allowComments}
           totalComments={totalComments}
@@ -127,9 +113,9 @@ class Feed extends React.Component {
         {isDeletingTopic &&
         <div className="deleting-layer">
           <div>Deleting post ...</div>
-        </div> 
+        </div>
         }
-      </ActionCard>
+      </div>
     )
   }
 }

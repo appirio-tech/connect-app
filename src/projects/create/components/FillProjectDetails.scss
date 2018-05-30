@@ -4,6 +4,12 @@
 @import '~tc-ui/src/styles/tc-includes';
 @import '~styles/_variables.scss';
 
+@mixin flexBox {
+  display: flex;
+  flex-direction: row;
+  width: auto;
+}
+
 :global {
   .FillProjectDetailsWrapper {
     // @extend .wizardWrapper;
@@ -28,6 +34,25 @@
 
     .two-col-content {
       padding: 0 !important;
+
+      .container {
+        @include flexBox;
+        background-color: transparent;
+        display: flex;
+        padding: 0px;
+        max-width: 1110px;
+        margin: 20px auto;
+        /* .left-area */
+        .left-area {
+          flex: auto;
+        }
+
+        .right-area {
+          flex: auto;
+          border-radius: 4px;
+          position: relative;
+        }
+      }
 
       &.content{
         .container {
@@ -111,6 +136,22 @@
               }
             }
           }
+        }
+      }
+    }
+
+    .sub-title {
+      margin: 30px 0 10px;
+
+      .title {
+        font-size: 15px;
+        line-height: 25px;
+        color: $tc-gray-80;
+
+        span {
+          color: $tc-orange;
+          font-size: 15px;
+          padding-left: 5px;
         }
       }
     }

@@ -10,7 +10,7 @@ import {
   UPDATE_PROJECT_MEMBER_PENDING, UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
   GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS,
-  LOAD_PROJECT_TEMPLATE_SUCCESS,
+  LOAD_PROJECT_TEMPLATE_SUCCESS, LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS, PRODUCT_DIRTY,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -25,6 +25,7 @@ const initialState = {
   projectNonDirty: {},
   updateExisting: false,
   projectTemplate: null,
+  productTemplates: [],
 }
 
 // NOTE: We should always update projectNonDirty state whenever we update the project state
@@ -60,6 +61,12 @@ export const projectState = function (state=initialState, action) {
   case LOAD_PROJECT_TEMPLATE_SUCCESS:
     return {...state,
       projectTemplate: action.payload,
+    }
+
+  case LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS:
+    return {...state,
+      // replace all loaded product templates so we keep only the one for current project
+      productTemplates: action.payload,
     }
 
   case CLEAR_LOADED_PROJECT:
@@ -212,6 +219,7 @@ export const projectState = function (state=initialState, action) {
   }
 
   case PROJECT_DIRTY: {// payload contains only changed values from the project form
+    console.warn('PROJECT_DIRTY payload', action.payload)
     return Object.assign({}, state, {
       project: _.mergeWith({}, state.project, action.payload, { isDirty : true },
         // customizer to override screens array with changed values
@@ -222,6 +230,43 @@ export const projectState = function (state=initialState, action) {
         }
       )
     })
+  }
+
+  case PRODUCT_DIRTY: {
+    const { phaseId, productId, values } = action.payload
+    return {
+      ...state,
+      project: {
+        ...state.project,
+        phases: state.project.phases.map((phase) => {
+          if (phase.id !== phaseId) {
+            return phase
+          }
+
+          const updatedPhase = {...phase}
+          updatedPhase.products = phase.products.map((product) => {
+            if (product.id !== productId) {
+              return product
+            }
+
+            const updatedProduct = {
+              ...product,
+              // for product we only update values in 'details' property for now
+              // if we need to update some other values, we can adjust code here
+              details: {
+                ...product.details,
+                ...values.details,
+              },
+              isDirty: true,
+            }
+
+            return updatedProduct
+          })
+
+          return updatedPhase
+        })
+      }
+    }
   }
 
   case PROJECT_DIRTY_UNDO: {

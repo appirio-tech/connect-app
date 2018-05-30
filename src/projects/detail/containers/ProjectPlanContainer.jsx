@@ -8,7 +8,7 @@ import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
 
-import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
+import { updateProduct, fireProductDirty, fireProjectDirtyUndo } from '../../actions/project'
 
 import TwoColsLayout from '../components/TwoColsLayout'
 import ProjectPlanProgress from '../components/ProjectPlanProgress'
@@ -17,6 +17,7 @@ import ProjectStages from '../components/ProjectStages'
 const ProjectPlanContainer = (props) => {
   const {
     project,
+    fireProductDirty,
   } = props
 
   return (
@@ -27,7 +28,7 @@ const ProjectPlanContainer = (props) => {
 
       <TwoColsLayout.Content>
         <ProjectPlanProgress project={project} />
-        <ProjectStages {...props} />
+        <ProjectStages {...props} fireProjectDirty={fireProductDirty} />
       </TwoColsLayout.Content>
     </TwoColsLayout>
   )
@@ -38,10 +39,13 @@ ProjectPlanContainer.propTypes = {
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
   project: PT.object.isRequired,
+  productTemplates: PT.array.isRequired,
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = ({ projectState }) => ({
+  productTemplates: projectState.productTemplates
+})
 
-const mapDispatchToProps = { updateProject, fireProjectDirty, fireProjectDirtyUndo }
+const mapDispatchToProps = { updateProduct, fireProductDirty, fireProjectDirtyUndo }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectPlanContainer)

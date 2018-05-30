@@ -13,10 +13,19 @@ const SecondaryToolBarContainer = ({
   match,
   project,
 }) => {
-  const navLinks = [
+  // we only know which menu items to render when we know project version
+  if (isProjectLoading || !project) {
+    return null
+  }
+
+  // choose set of menu links based on the project version
+  const navLinks = project.version === 'v3' ? [
     { label: 'Dashboard', to: `/projects/${match.params.projectId}` },
     { label: 'Scope', to: `/projects/${match.params.projectId}/scope` },
     { label: 'Project Plan', to: `/projects/${match.params.projectId}/plan` },
+  ] : [
+    { label: 'Dashboard', to: `/projects/${match.params.projectId}` },
+    { label: 'Specification', to: `/projects/${match.params.projectId}/specification` },
   ]
 
   // `Discussions` items can be added as soon as project is loaded

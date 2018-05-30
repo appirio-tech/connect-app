@@ -86,6 +86,7 @@ class ScopeContainer extends Component {
             route={this.props.route}
             fireProjectDirty={ this.props.fireProjectDirty }
             fireProjectDirtyUndo= { this.props.fireProjectDirtyUndo }
+            showHidden
           />
           {formDisclaimer &&
             <ContentFooter>{formDisclaimer}</ContentFooter>

@@ -82,7 +82,7 @@ class Comment extends React.Component {
     return (
       <Panel.Body active={active} className="comment-panel-body">
         <div className="portrait" id={messageAnchor}>
-          <UserTooltip usr={author} previewAvatar size={35} />
+          <UserTooltip usr={author} id={messageAnchor} previewAvatar size={35} />
         </div>
         <div className={cn('object comment', {self})}>
           <div className="card-profile">

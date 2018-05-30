@@ -35,7 +35,7 @@ function formatPhaseCardListFooterProps(phases) {
 
   const totalPrice = _.sum(phases.map((phase) => _.get(phase, 'products[0].budget', 0)))
 
-  const duration = minStartDate && maxEndDate ? maxEndDate.subtract(minStartDate).duration().days() : '0 days'
+  const duration = `${minStartDate && maxEndDate ? moment.duration(maxEndDate.diff(minStartDate)).days() : 0} days`
   const price = `$${formatNumberWithCommas(totalPrice)}`
 
   return {
@@ -47,10 +47,11 @@ function formatPhaseCardListFooterProps(phases) {
 
 const ProjectStages = ({
   project,
+  productTemplates,
   currentMemberRole,
   isProcessing,
   isSuperUser,
-  updateProject,
+  updateProduct,
   fireProjectDirty,
   fireProjectDirtyUndo,
 }) => (
@@ -59,13 +60,13 @@ const ProjectStages = ({
     {project.phases.map((phase) => (
       <ProjectStage
         key={phase.id}
-        phase={phase}
+        productTemplates={productTemplates}
         currentMemberRole={currentMemberRole}
         isProcessing={isProcessing}
         isSuperUser={isSuperUser}
         project={project}
         phase={phase}
-        updateProject={(model) => updateProject(project.id, model)}
+        updateProduct={updateProduct}
         fireProjectDirty={fireProjectDirty}
         fireProjectDirtyUndo={fireProjectDirtyUndo}
       />
@@ -80,10 +81,11 @@ ProjectStages.defaultProps = {
 
 ProjectStages.propTypes = {
   project: PT.object.isRequired,
+  productTemplates: PT.array.isRequired,
   currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
-  updateProject: PT.func.isRequired,
+  updateProduct: PT.func.isRequired,
   fireProjectDirty: PT.func.isRequired,
   fireProjectDirtyUndo: PT.func.isRequired,
 }

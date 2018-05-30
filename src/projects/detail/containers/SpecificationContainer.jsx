@@ -1,5 +1,8 @@
-'use strict'
-
+/**
+ * Displays Scope tab
+ *
+ * NOTE data is loaded by the parent ProjectDetail component
+ */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -8,16 +11,12 @@ import Sticky from 'react-stickynode'
 import MediaQuery from 'react-responsive'
 
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
-import FooterV2 from '../../../components/FooterV2/FooterV2'
+import SidebarWithFooter from '../components/SidebarWithFooter'
 import EditProjectForm from '../components/EditProjectForm'
-import { findProduct } from '../../../config/projectWizard'
+import TwoColsLayout from '../components/TwoColsLayout'
 import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
-
-require('./Specification.scss')
-
 
 // This handles showing a spinner while the state is being loaded async
 const enhance = spinnerWhileLoading(props => !props.processing)
@@ -51,56 +50,44 @@ class SpecificationContainer extends Component {
   }
 
   render() {
-    const { project, currentMemberRole, isSuperUser, processing } = this.props
+    const { project, currentMemberRole, isSuperUser, processing, productTemplates } = this.props
     const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
-    const productId = _.get(project, 'details.products[0]')
-    const product = findProduct(productId)
-
-    let specification = 'topcoder.v1'
-    if (project.details && project.details.products && project.details.products[0])
-      specification = typeToSpecification[project.details.products[0]]
-    const sections = require(`../../../config/projectQuestions/${specification}`).default
+    const sections = productTemplates[0].template.questions
 
     const leftArea = (
-      <div>
+      <SidebarWithFooter>
         <ProjectSpecSidebar project={project} sections={sections} currentMemberRole={currentMemberRole} />
-        <FooterV2 />
-      </div>
+      </SidebarWithFooter>
     )
 
     return (
-      <section className="two-col-content content specificationContainer">
-        <div className="container">
-          <div className="left-area">
-            <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
-              {(matches) => {
-                if (matches) {
-                  return <Sticky top={80}>{leftArea}</Sticky>
-                } else {
-                  return leftArea
-                }
-              }}
-            </MediaQuery>
-          </div>
+      <TwoColsLayout>
+        <TwoColsLayout.Sidebar>
+          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+            {(matches) => {
+              if (matches) {
+                return <Sticky top={80}>{leftArea}</Sticky>
+              } else {
+                return leftArea
+              }
+            }}
+          </MediaQuery>
+        </TwoColsLayout.Sidebar>
 
-          <div className="right-area">
-            <EnhancedEditProjectForm
-              project={project}
-              sections={sections}
-              isEdittable={editPriv}
-              submitHandler={this.saveProject}
-              saving={processing}
-              route={this.props.route}
-              fireProjectDirty={ this.props.fireProjectDirty }
-              fireProjectDirtyUndo= { this.props.fireProjectDirtyUndo }
-            />
-            <div className="right-area-footer">
-              { _.get(product, 'formDesclaimer') }
-            </div>
-          </div>
-
-        </div>
-      </section>
+        <TwoColsLayout.Content>
+          <EnhancedEditProjectForm
+            project={project}
+            sections={sections}
+            isEdittable={editPriv}
+            submitHandler={this.saveProject}
+            saving={processing}
+            route={this.props.route}
+            fireProjectDirty={ this.props.fireProjectDirty }
+            fireProjectDirtyUndo= { this.props.fireProjectDirtyUndo }
+            showHidden
+          />
+        </TwoColsLayout.Content>
+      </TwoColsLayout>
     )
   }
 }
@@ -109,6 +96,7 @@ SpecificationContainer.propTypes = {
   project: PropTypes.object.isRequired,
   currentMemberRole: PropTypes.string,
   processing: PropTypes.bool,
+  productTemplates: PropTypes.array.isRequired,
   error: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object
@@ -119,7 +107,8 @@ const mapStateToProps = ({projectState, loadUser}) => {
   return {
     processing: projectState.processing,
     error: projectState.error,
-    currentUserId: parseInt(loadUser.user.id)
+    currentUserId: parseInt(loadUser.user.id),
+    productTemplates: projectState.productTemplates,
   }
 }
 

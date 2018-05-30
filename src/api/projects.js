@@ -83,7 +83,7 @@ export function getProjectPhases(projectId) {
  *
  * @return {Promise} resolves to project phase products
  */
-export function getProjectPhaseProducts(projectId, phaseId) {
+export function getPhaseProducts(projectId, phaseId) {
   return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}/products`)
     .then(resp => {
       const res = _.get(resp.data, 'result.content', {})
@@ -105,6 +105,31 @@ export function updateProject(projectId, updatedProps, updateExisting) {
     })
 }
 
+/**
+ * Update product using patch
+ *
+ * @param  {Number} projectId    project Id
+ * @param  {Number} phaseId      phase Id
+ * @param  {Number} productId    product Id
+ * @param  {Object} updatedProps updated project properties
+ *
+ * @return {Promise}             updated product
+ */
+export function updateProduct(projectId, phaseId, productId, updatedProps) {
+  // TODO $PROJECT_PLAN$ only update details for now as product template has some values which has to be hidden
+  // so to avoid validation error, we only allow update details for now
+  updatedProps = {
+    details: updatedProps.details
+  }
+
+  return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}/products/${productId}`, {
+    param: updatedProps,
+  })
+    .then(resp => {
+      return _.get(resp.data, 'result.content')
+    })
+}
+
 
 export function createProject(projectProps) {
   // Phase out discussions
@@ -113,6 +138,37 @@ export function createProject(projectProps) {
   projectProps.details.hideDiscussions = true
 
   return axios.post(`${PROJECTS_API_URL}/v4/projects/`, { param: projectProps })
+    .then( resp => {
+      return _.get(resp.data, 'result.content', {})
+    })
+}
+
+/**
+ * Create new phase for project
+ *
+ * @param {String} projectId project id
+ * @param {Object} phase     new phase
+ *
+ * @return {Promise} resolves to new phase
+ */
+export function createProjectPhase(projectId, phase) {
+  return axios.post(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases`, { param: phase })
+    .then( resp => {
+      return _.get(resp.data, 'result.content', {})
+    })
+}
+
+/**
+ * Create new product for project's phase
+ *
+ * @param {String} projectId project id
+ * @param {String} phaseId   phase id
+ * @param {Object} product   new product
+ *
+ * @return {Promise} resolves to new product
+ */
+export function createPhaseProduct(projectId, phaseId, product) {
+  return axios.post(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}/products`, { param: product })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})
     })
