@@ -473,7 +473,7 @@
                     },
                     {
                       "value": "web",
-                      "label": "Mobile Web App - An app that is accessed by using a mobile web browser like Safari or Chrome."
+                      "label": "Progressive Mobile Web App - An app that is accessed by using a mobile web browser like Safari or Chrome, but that provides a native mobile app experience (rich features, i.e access device features such as GPS)"
                     }
                   ],
                   "hidden": true
@@ -495,7 +495,7 @@
                 {
                   "icon": "question",
                   "title": "Form Factor/Orientation",
-                  "description": "Please place an X in the Required column for each                            form factor/orientation that must be supported.",
+                  "description": "Please select each for each                            form factor/orientation that must be supported.",
                   "fieldName": "details.appDefinition.formFactor",
                   "type": "checkbox-group",
                   "options": [
@@ -523,7 +523,7 @@
             {
               "required": false,
               "hideTitle": false,
-              "title": "Style Guide & Brand Guidelines",
+              "title": "Style Guide & Brand Guidelines -- Please add your answers below. If you do not know the answer, please add “Open to suggestions from the community/looking for creative solutions”",
               "description": "",
               "type": "questions",
               "questions": [
@@ -554,7 +554,7 @@
               "hideTitle": false,
               "title": "User Roles",
               "type": "questions",
-              "description": "Please place an X in the Required column for each user type/role. Please provide details on what the user/role should do in the Description column.",
+              "description": "Please select each for each user type/role. Please provide details on what the user/role should do in the Description column.",
               "questions": [
                 {
                   "fieldName": "details.userRoles.standard",
@@ -601,7 +601,7 @@
               "id": "screen-features",
               "required": false,
               "hideTitle": false,
-              "title": "Screen and Features",
+              "title": "Screens and Features",
               "description": "",
               "type": "questions",
               "questions": [
@@ -871,12 +871,12 @@
                       "label": "System will be working with confidential, health or financial records"
                     }
                   ],
-                  "description": "Please place an X in the Required column for each required security requirement."
+                  "description": "Please select each for each required security requirement."
                 },
                 {
                   "icon": "question",
                   "title": "Quality Assurance, Test Data & Performance Testing",
-                  "description": "Please place an X in the Required column for each required QA requirement.",
+                  "description": "Please select each for each required QA requirement.",
                   "fieldName": "details.qaTesting.testing",
                   "type": "checkbox-group",
                   "options": [
@@ -937,7 +937,7 @@
                 {
                   "icon": "question",
                   "title": "User Acceptance / Beta Testing",
-                  "description": "UAT is the process of sharing the final application with users and gathering feedback. Please place an X in the Required column for each required UAT requirement.",
+                  "description": "UAT is the process of sharing the final application with users and gathering feedback. Please select each for each required UAT requirement.",
                   "fieldName": "details.qaTesting.uat",
                   "type": "checkbox-group",
                   "options": [
@@ -961,7 +961,7 @@
               "questions": [
                 {
                   "icon": "question",
-                  "description": "How much budget do you have? Please place an X in the Confirm column to specify your budget.",
+                  "description": "How much budget do you have?",
                   "title": "Budget",
                   "fieldName": "details.loadDetails.budget",
                   "type": "slide-radiogroup",
@@ -992,7 +992,7 @@
                 },
                 {
                   "icon": "question",
-                  "description": "When do you need your app by? Please place an X in the Confirm column to specify your timeline.",
+                  "description": "When do you need your app by? ",
                   "title": "Timeline",
                   "fieldName": "details.loadDetails.timeline",
                   "type": "slide-radiogroup",
