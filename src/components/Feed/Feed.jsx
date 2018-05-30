@@ -1,15 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
-import cn from 'classnames'
-import ActionCard from '../ActionCard/ActionCard'
-import Panel from '../Panel/Panel'
 import FeedComments from './FeedComments'
-import UserTooltip from '../User/UserTooltip'
-import {Link} from 'react-router-dom'
 import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
-import { markdownToHTML } from '../../helpers/markdownToState'
 
 import './Feed.scss'
 
@@ -44,9 +37,9 @@ class Feed extends React.Component {
 
   render() {
     const {
-      id, user, currentUser, date, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
-      allowComments, comments, unread, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
-      onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, permalink, allMembers
+      id, user, currentUser, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
+      allowComments, comments, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
+      onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, allMembers
     } = this.props
     const {editTopicMode} = this.state
     let authorName = user.firstName
