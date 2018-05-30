@@ -190,21 +190,26 @@ class NotificationSettingsForm extends React.Component {
               // we toggle settings for all the types in one topic all together
               // so we can use values from the first type to get current value for the whole topic
               const topicFirstType = topic.types[0]
-              const emailStatus = topic.enabledMethods.indexOf('email')<0?'disabled':null
-              const emailTooltip = topic.enabledMethods.indexOf('email')<0?'Emails are not yet supported for this event type':''
+              const emailStatus = topic.enabledMethods.indexOf('email') < 0 ? 'disabled' : null
+              const emailTooltip = topic.enabledMethods.indexOf('email') < 0 ? 'Emails are not yet supported for this event type' : null
               return (
                 <tr key={index}>
                   <th>{topic.title}</th>
                   <td><SwitchButton onChange={() => this.handleChange(index, 'web')} defaultChecked={notifications[topicFirstType].web.enabled === 'yes'} /></td>
                   <td>
-                    <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
-                      <div className="tooltip-target">
-                        <SwitchButton onChange={() => this.handleChange(index, 'email')} defaultChecked={notifications[topicFirstType].email.enabled === 'yes' && emailStatus===null} disabled={emailStatus}/>
-                      </div>
-                      <div className="tooltip-body">
-                        {emailTooltip}
-                      </div>
-                    </Tooltip>
+                    { !!emailTooltip &&
+                      <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+                        <div className="tooltip-target">
+                          <SwitchButton onChange={() => this.handleChange(index, 'email')} defaultChecked={notifications[topicFirstType].email.enabled === 'yes' && emailStatus===null} disabled={emailStatus}/>
+                        </div>
+                        <div className="tooltip-body">
+                          {emailTooltip}
+                        </div>
+                      </Tooltip>
+                    }
+                    {
+                      !emailTooltip && <SwitchButton onChange={() => this.handleChange(index, 'email')} defaultChecked={notifications[topicFirstType].email.enabled === 'yes' && emailStatus===null} disabled={emailStatus}/>
+                    }
                   </td>
                 </tr>
               )
