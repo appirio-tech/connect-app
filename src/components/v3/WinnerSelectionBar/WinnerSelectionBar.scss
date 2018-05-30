@@ -163,6 +163,16 @@
     }
     .position {
       display: flex;
+      .purchase-for {
+        color: #404041;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 25px;
+        margin: auto 0;
+      }
+      .switch-button {
+        padding-bottom: 3%;
+      }
     }
   }
   .item-checked {

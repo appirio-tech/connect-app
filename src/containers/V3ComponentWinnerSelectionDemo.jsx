@@ -24,6 +24,7 @@ class V3ComponentSubmissionSelectionDemo extends React.Component {
               date: '29',
               title: 'Final designs',
               inProgress: true,
+              isCompleted: false,
               postMsg: 'Now pick the designs',
               content: [{
                 id: 'a103',
@@ -31,6 +32,8 @@ class V3ComponentSubmissionSelectionDemo extends React.Component {
                 checkpointHeading: 'Select the top 3 winning designs',
                 selectedHeading: 'Final designs',
                 rejectedHeading: 'Rejected designs',
+                inProgress: true,
+                isCompleted: false,
                 submissions: [
                   {
                     id: 'd101',

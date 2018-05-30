@@ -17,6 +17,11 @@ const ProjectProgress = (props) => {
         <div styleName="group-right">
           <span styleName="spent">{props.labelSpent}</span>
           <span styleName="hide-sm">{props.labelStatus}</span>
+          {
+            props.readyForReview && (
+              <button className="tc-btn tc-btn-primary">{'Ready for review'}</button>
+            )
+          }
         </div>
       </div>
     </div>

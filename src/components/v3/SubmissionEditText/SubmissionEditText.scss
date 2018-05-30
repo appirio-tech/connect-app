@@ -1,0 +1,35 @@
+@import '../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// project-progress specific styles
+.milestone-post-specification {
+  padding-bottom: 10px;
+  
+  &.in-progress {
+    &:before{
+      content: '';
+      width: 4px;
+      background-color: #fff;
+      position: absolute;
+      left: 16px;
+      top: -25px;
+      bottom: 0;
+    }
+  }
+  
+  .invoice-wrap {
+    margin-top: 10px;
+  }
+
+  .group-bottom {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    
+    button {
+      margin: 0 5px 0 5px;
+    }
+  }
+}

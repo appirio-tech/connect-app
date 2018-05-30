@@ -31,6 +31,20 @@
     top: 22px;
     z-index: 11;
   }
+  /* in-progress state */
+  &.in-progress {
+    .dot {
+      background-color: #ffffff;
+      border: 2px solid #0681ff;
+    }
+  }
+  /* completed state */
+  &.completed {
+    .dot {
+      background-color: #0681ff;
+      border: 2px solid #0681ff;
+    }
+  }
   /* mobile view specific style */
   @include viewSm {
     min-height: $base-unit*10;
@@ -80,20 +94,6 @@
     overflow: hidden;
     &:hover {
       text-decoration: underline;
-    }
-  }
-  /* in-progress state */
-  &.in-progress {
-    .dot {
-      background-color: #ffffff;
-      border: 2px solid #0681ff;
-    }
-  }
-  /* completed state */
-  &.completed {
-    .dot {
-      background-color: #0681ff;
-      border: 2px solid #0681ff;
     }
   }
   /* milestone heading */

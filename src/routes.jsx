@@ -27,6 +27,7 @@ import V3ComponentSubmissionSelectionDemo from './containers/V3ComponentSubmissi
 import V3ComponentWinnerSelectionDemo from './containers/V3ComponentWinnerSelectionDemo'
 import V3ComponentAlertDemo from './containers/V3ComponentAlertDemo'
 import V3PhaseCard from './containers/V3PhaseCard'
+import V3TimeChildComponents from './containers/V3TimeChildComponents'
 
 import { TCEmitter } from './helpers'
 import { EVENT_ROUTE_CHANGE } from './config/constants'
@@ -152,6 +153,7 @@ class Routes extends React.Component {
         <Route path="/discussions/:feedId" component={ RedirectToProject } />
         <Route path="/V3ComponentDemo" component= { V3ComponentDemo } />
         <Route path="/V3ComponentTimelineDemo" component= { V3ComponentTimelineDemo } />
+        <Route path="/V3TimeChildComponents" component= { V3TimeChildComponents } />
         <Route path="/V3ComponentPostcardDemo" component= { V3ComponentPostcardDemo } />
         <Route path="/V3ComponentSubmissionSelectionDemo" component= { V3ComponentSubmissionSelectionDemo } />
         <Route path="/V3ComponentWinnerSelectionDemo" component= { V3ComponentWinnerSelectionDemo } />

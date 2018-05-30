@@ -5,10 +5,14 @@ import './MilestonePostSpecification.scss'
 class MilestonePostSpecification extends React.Component {
   constructor(props) {
     super(props)
-
+    this.buttonClick = this.buttonClick.bind(this)
     this.state = {
       isSpecificationLinkAdded: false
     }
+  }
+  
+  buttonClick() {
+    this.props.onClick()
   }
 
   render() {
@@ -23,8 +27,13 @@ class MilestonePostSpecification extends React.Component {
       >
         <div styleName="add-specification-layer addlink-bar" className="flex center middle">
           <figure styleName={'thumb ' + (props.icon ? props.icon : '')} />
+          {
+            props.fakeName !== '' && (
+              <div styleName="fake-name">{props.fakeName}</div>
+            )
+          }
           <button className="tc-btn tc-btn-default"
-            onClick={this.cancelDelete}
+            onClick={this.buttonClick}
           ><strong>{props.label}</strong></button>
         </div>
       </div>
@@ -32,13 +41,14 @@ class MilestonePostSpecification extends React.Component {
   }
 }
 
+MilestonePostSpecification.defaultProps = {
+  fakeName: '',
+  onClick: () => {},
+}
+
 MilestonePostSpecification.propTypes = {
-  progressPercent: PT.string,
-  labelDayStatus: PT.string,
-  labelSpent: PT.string,
-  labelStatus: PT.string,
-  isCompleted: PT.bool,
-  inProgress: PT.bool
+  fakeName: PT.string,
+  onClick: PT.func
 }
 
 export default MilestonePostSpecification

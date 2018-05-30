@@ -2,7 +2,16 @@ import React from 'react'
 import PT from 'prop-types'
 import './MilestonePost.scss'
 
+
+
 const MilestonePost = (props) => {
+  const image = props.image ? props.image : require('../../../assets/icons/timeline-invoice.svg')
+  const labelMilestoneStyle = {
+    paddingLeft: '36px',
+    position: 'relative',
+    background: 'url('+ image +') 0 50% no-repeat',
+    backgroundSize: '30px'
+  }
   return (
     <div styleName={'milestone-post ' 
     + (props.theme ? props.theme : '')
@@ -10,9 +19,13 @@ const MilestonePost = (props) => {
     + (props.inProgress ? 'in-progress' : '')
     }
     >
-      <span styleName="dot" />
+      {
+        props.inProgress !== null && props.inProgress !== undefined && (
+          <span styleName="dot" >{ props.inProgress}</span>
+        )
+      }
       <div styleName="label-layer">
-        <span styleName="label-milestone">{props.label}</span>
+        <span style={ labelMilestoneStyle }>{props.label}</span>
         <div styleName="group-right hide-sm">
           <a href={props.milestonePostLink} styleName="milestone-text" dangerouslySetInnerHTML={{ __html: props.milestonePostLink }} />
         </div>

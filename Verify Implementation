@@ -1,0 +1,58 @@
+Please visit these following pages for the demo.
+
+1. All the individual components is in:
+http://local.topcoder-dev.com:3000/V3TimeChildComponents
+
+
+Overal Flow
+http://local.topcoder-dev.com:3000/V3ComponentTimelineDemo
+
+1.a,,c,d,e
+http://local.topcoder-dev.com:3000/V3ComponentTimelineDemo
+
+1.G: Design checkpoint selection
+http://local.topcoder-dev.com:3000/V3ComponentTimelineDemo
+Last section
+
+1.H->1.M demo is in
+http://local.topcoder-dev.com:3000/V3ComponentTimelineDemo
+
+1.H: Final design winner selection component
+This section will show after pass 1.G form above ( or you can set 'currentStep: 4' in line 14 file Timeline.jsx for debuging)
+
+1.I: Add design link
+implemented in 1.H
+
+1.J: Request extension component
+implemented in 1.H
+click Request extension button in 1.H section
+
+1.K: Complete milestone
+implemented in 1.H
+chose 5 designs -> Click Complete Preview button -> show 1.K
+
+1.L.A: (wrong typo in requirement)
+Milestone request admin
+implemented in 1.H
+click Request extension button -> click another Request extension button -> show 1.L.A
+
+1.L.B: (wrong typo in requirement)
+Design Acceptance
+This section will show after pass 1.H form above ( or you can set 'currentStep: 5' in line 14 file Timeline.jsx for debuging)
+
+1.K Final Fix request:
+implemented in 1.L.B
+click Request fixes button -> show 1.K
+
+1.m: Specification milestones
+This section will show after pass 1.B form above ( or you can set 'currentStep: 6' in line 14 file Timeline.jsx for debuging)
+
+1.n: Edit links
+http://local.topcoder-dev.com:3000/V3TimeChildComponents
+
+1.o: Edit milestones
+http://local.topcoder-dev.com:3000/V3TimeChildComponents
+
+1.p: Download links
+http://local.topcoder-dev.com:3000/V3TimeChildComponents
+

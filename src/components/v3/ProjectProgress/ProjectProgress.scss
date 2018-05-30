@@ -54,6 +54,9 @@
       @include viewSm {
         min-width: 100px;
       }
+      button {
+        margin: auto 0;
+      }
     }
     .spent {
       @include viewSm {

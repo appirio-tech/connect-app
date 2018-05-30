@@ -32,7 +32,7 @@ class MilestonePostLink extends React.Component {
 
     return (
       <div styleName={'milestone-post-specification '
-        + (this.state.isSelected && !props.isReadonly ? 'selected' : '')
+        + (this.state.isSelected && !props.isReadonly ? 'selected ' : '')
         + (props.isCompleted ? ' completed ' : '')
         + (props.inProgress ? 'in-progress' : '')
       }
