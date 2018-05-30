@@ -53,7 +53,7 @@ const sections = [
               { value: 'ios', label: 'iOS App - An app built for iPhone or iPads' },
               { value: 'android', label: 'Android App - An app built for mobile phones or tablets running Android.' },
               { value: 'hybrid', label: 'Hybrid App - An app built using a hybrid framework (ex. Ionic/Cordova/Xamarin) and exported to one or more operating systems (iOS, Android or both).' },
-              { value: 'web', label: 'Mobile Web App - An app that is accessed by using a mobile web browser like Safari or Chrome.' }
+              { value: 'web', label: 'Progressive Mobile Web App - An app that is accessed by using a mobile web browser like Safari or Chrome, but that provides a native mobile app experience (rich features, i.e access device features such as GPS)' }
             ]
           },
           {
@@ -75,7 +75,7 @@ const sections = [
           {
             icon: 'question',
             title: 'Form Factor/Orientation',
-            description: 'Please place an X in the Required column for each  \
+            description: 'Please select each for each  \
                           form factor/orientation that must be supported.',
             fieldName: 'details.appDefinition.formFactor',
             type: 'checkbox-group',
@@ -92,7 +92,7 @@ const sections = [
       {
         required: false,
         hideTitle: false,
-        title: 'Style Guide & Brand Guidelines',
+        title: 'Style Guide & Brand Guidelines -- Please add your answers below. If you do not know the answer, please add “Open to suggestions from the community/looking for creative solutions”',
         description: '',
         type: 'questions',
         questions: [
@@ -135,7 +135,7 @@ const sections = [
         hideTitle: false,
         title: 'User Roles',
         type: 'questions',
-        description: 'Please place an X in the Required column for each user type/role. Please provide details on what the user/role should do in the Description column.',
+        description: 'Please select each for each user type/role. Please provide details on what the user/role should do in the Description column.',
         questions: [
           {
             // required is not needed if we specifiy validations
@@ -200,7 +200,7 @@ const sections = [
         id: 'screen-features',
         required: false,
         hideTitle: false,
-        title: 'Screen and Features',
+        title: 'Screens and Features',
         description: '',
         type: 'questions',
         questions: [
@@ -339,12 +339,12 @@ const sections = [
               { value: 'auditing', label: 'Audit - Auditing will record user information on actions performed.' },
               { value: 'confidential', label: 'System will be working with confidential, health or financial records'}
             ],
-            description: 'Please place an X in the Required column for each required security requirement.',
+            description: 'Please select each for each required security requirement.',
           },
           {
             icon: 'question',
             title: 'Quality Assurance, Test Data & Performance Testing',
-            description: 'Please place an X in the Required column for each required QA requirement.',
+            description: 'Please select each for each required QA requirement.',
             fieldName: 'details.qaTesting.testing',
             type: 'checkbox-group',
             options: [
@@ -378,7 +378,7 @@ const sections = [
           {
             icon: 'question',
             title: 'User Acceptance / Beta Testing',
-            description: 'UAT is the process of sharing the final application with users and gathering feedback. Please place an X in the Required column for each required UAT requirement.',
+            description: 'UAT is the process of sharing the final application with users and gathering feedback. Please select each for each required UAT requirement.',
             fieldName: 'details.qaTesting.uat',
             type: 'checkbox-group',
             options: [
@@ -398,8 +398,7 @@ const sections = [
         questions: [
           {
             icon: 'question',
-            description: 'How much budget do you have? Please place an X in the Confirm column to specify your budget.',
-
+            description: 'How much budget do you have?',
             title: 'Budget',
             fieldName: 'details.loadDetails.budget',
             type: 'slide-radiogroup',
@@ -415,7 +414,7 @@ const sections = [
           },
           {
             icon: 'question',
-            description: 'When do you need your app by? Please place an X in the Confirm column to specify your timeline.',
+            description: 'When do you need your app by? ',
             title: 'Timeline',
             fieldName: 'details.loadDetails.timeline',
             type: 'slide-radiogroup',
@@ -487,7 +486,7 @@ export const basicSections = [
             validationError: 'Please let us know the target device',
             title: 'App Type',
             description: 'What type of application are we developing? Please \
-                          place an X in the Required column for each required app \
+                           the required app \
                           type. Please note that each additional app type incurs \
                           a cost, but that the cost will be detailed and broken \
                           out in the final project proposal. ',
@@ -519,7 +518,7 @@ export const basicSections = [
           {
             icon: 'question',
             title: 'Form Factor/Orientation',
-            description: 'Please place an X in the Required column for each  \
+            description: 'Please select each for each  \
                           form factor/orientation that must be supported.',
             fieldName: 'details.appDefinition.formFactor',
             type: 'checkbox-group',
@@ -536,7 +535,7 @@ export const basicSections = [
       {
         required: false,
         hideTitle: false,
-        title: 'Style Guide & Brand Guidelines',
+        title: 'Style Guide & Brand Guidelines - Please add your answers below. If you do not know the answer, please add “Open to suggestions from the community/looking for creative solutions”',
         description: '',
         type: 'questions',
         questions: [
@@ -577,9 +576,9 @@ export const basicSections = [
       {
         required: false,
         hideTitle: false,
-        title: 'User Roles',
+        title: 'User Roles - Please use the fields below to specify the type of users/roles for the application. If the role is not applicable, please enter N/A',
         type: 'questions',
-        description: 'Please place an X in the Required column for each user type/role. Please provide details on what the user/role should do in the Description column.',
+        description: 'Please select each for each user type/role. Please provide details on what the user/role should do in the Description column.',
         questions: [
           {
             // required is not needed if we specifiy validations
@@ -610,7 +609,7 @@ export const basicSections = [
       {
         required: false,
         hideTitle: false,
-        title: 'Integrations',
+        title: ' - Will this application be dependant on data from another system or tool? If yes, please briefly describe that dependency here.  This can include integration with an API or an existing backend/database.',
         description: 'Will this application be dependant on data from another system or tool? If yes, please briefly describe that dependency here.  This can include integration with an API or an existing backend/database.',
         type: 'questions',
         questions: [
@@ -651,9 +650,7 @@ export const basicSections = [
           {
             icon: 'question',
             title: 'Screen / Feature List',
-            description: 'Please note that each added feature incurs a cost, \
-                         but that the cost will be detailed and broken out in the \
-                         final project proposal.  ',
+            description: 'Please select each required feature. Please note that each added feature incurs a cost, but that the cost will be detailed and broken out in the final project proposal. ',
             fieldName: 'details.appDefinition.screens',
             type: 'checkbox-group',
             options: [
@@ -691,8 +688,8 @@ export const basicSections = [
 
           {
             icon: 'question',
-            title: 'Tech Features',
-            description: '',
+            title: 'Technology Requirements',
+            description: 'Please select each required technology requirement above',
             fieldName: 'details.appDefinition.techFeatures',
             type: 'checkbox-group',
             options: [
@@ -719,7 +716,7 @@ export const basicSections = [
         id: 'techStack',
         required: false,
         hideTitle: false,
-        title: 'Technology Stack',
+        title: 'Technology Stack - Do you have a preferred technology stack? If yes, please list those requirements here:',
         description: 'Do you have a preferred technology stack? If yes, please list those requirements here:',
         type: 'questions',
         questions: [
@@ -776,29 +773,36 @@ export const basicSections = [
             title: 'Security Requirements',
             type: 'checkbox-group',
             options: [
-              { value: 'standard', label: 'Standard Security' },
-              { value: 'enterprise', label: 'Enterprise - if your application will house\
-                   or transmit PII or sensitive data. The data will be encrypted on the device and the server.' },
-              { value: 'vulnerability', label: 'Vulnerability Scanning - Scan your application for weaknesses' },
-              { value: 'auditing', label: 'Audit - Auditing will record user information on actions performed.' },
-              { value: 'confidential', label: 'System will be working with confidential, health or financial records'}
+              { value: 'standard', label: 'Standard Security - Select this option if your app requires standard security.' },
+              { value: 'enterprise', label: 'Enterprise - Select this option if your application will house or transmit PII or sensitive data. The data will be encrypted on the device and the server.' },
+              { value: 'vulnerability', label: 'Vulnerability Scanning - Vulnerability scanning is a security technique used to identify security weaknesses in a computer system.' },
+              { value: 'auditing', label: 'Audit - Is it necessary to audit user actions? Auditing will keep a record of specific user actions like data creation/modification and will be helpful in identifying which user performed a particular action.' },
+              { value: 'confidential', label: 'Confidential Information, Sensitive Financial Data or Personally Identifiable Information (PII) - Will the user be working directly with financial or other protected information such has health records?'},
+              { value: 'mdm', label: 'Mobile Device Management (MDM) - Do you employ an MDM solution? If yes, what service do you use?'}
             ],
-            description: 'Please place an X in the Required column for each required security requirement.',
+            description: 'Please select each required security requirement above.',
           },
           {
             icon: 'question',
             title: 'Quality Assurance, Test Data & Performance Testing',
-            description: 'Please place an X in the Required column for each required QA requirement.',
+            description: 'Please select each for each required QA requirement.',
             fieldName: 'details.qaTesting.testing',
             type: 'checkbox-group',
             options: [
-              { value: 'rw-unstructured', label: 'Real World Unstructured - Users search on their own for bugs or usability issues.' },
-              { value: 'rw-structured', label: 'Structured Functional - execution of predefined test scripts' },
-              { value: 'testcases', label: 'Test Case Creation - creation of scenarios, instructions and exepected results' },
-              { value: 'certification', label: 'Certify your mobile application release against predefined device set including.' },
-              { value: 'devicelab', label: 'Test real devices in real cell networks across the world' },
-              { value: 'performanceTuning', label: 'Identify and provide perfromance improvements' },
-              { value: 'performanceTesting', label: 'Testing web application robustness' },
+              { value: 'rw-unstructured', label: 'Real World Unstructured - Functional testing performed without test scripts. Users search on their own for bugs or usability issues.' },
+              { value: 'rw-structured', label: 'Real World Testing - Structured - Test case based execution, covering all the functional requirements & cross-browser device testing.' },
+              { value: 'testcases', label: 'Test Cases/Scenarios - \
+Creation of test cases/test scenarios including scenario setup, pre/post conditions to scenario, instructions to execute scenario, and expected results' },
+              { value: 'certification', label: 'App Certification - Certify your mobile application release against predefined device set including; \
+\
+ --App profiling to see the device vital monitoring – CPU, battery and memory usage of APP;\
+\
+ --App behavior analysis in different modes (inactive, active, low battery, );\
+\
+ --App performance under various interrupts, under simulated network conditions, etc. ' },
+              { value: 'devicelab', label: 'Mobile Device Lab on Hire - Allows you to remotely access devices in real cell networks across the world' },
+              { value: 'performanceTuning', label: 'Performance Testing - Testing web application’s robustness, availability, and reliability for defined business scenarios and concurrent users.' },
+              { value: 'performanceTesting', label: 'Performance Tuning - Analyze and identify performance issues, actionable items for improvement.' },
             ]
           },
           {
@@ -822,7 +826,7 @@ export const basicSections = [
           {
             icon: 'question',
             title: 'User Acceptance / Beta Testing',
-            description: 'UAT is the process of sharing the final application with users and gathering feedback. Please place an X in the Required column for each required UAT requirement.',
+            description: 'UAT is the process of sharing the final application with users and gathering feedback. Please select each required UAT requirement.',
             fieldName: 'details.qaTesting.uat',
             type: 'checkbox-group',
             options: [
@@ -842,8 +846,7 @@ export const basicSections = [
         questions: [
           {
             icon: 'question',
-            description: 'How much budget do you have? Please place an X in the Confirm column to specify your budget.',
-
+            description: 'How much budget do you have?',
             title: 'Budget',
             fieldName: 'details.loadDetails.budget',
             type: 'slide-radiogroup',
@@ -859,7 +862,7 @@ export const basicSections = [
           },
           {
             icon: 'question',
-            description: 'When do you need your app by? Please place an X in the Confirm column to specify your timeline.',
+            description: 'When do you need your app by?',
             title: 'Timeline',
             fieldName: 'details.loadDetails.timeline',
             type: 'slide-radiogroup',
