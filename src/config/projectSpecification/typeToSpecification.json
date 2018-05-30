@@ -25,5 +25,6 @@
   "health_check": "health_check.v1.0",
   "frontend_dev" : "app_dev.v1.0",
   "enterprise_mobile" : "enterprise_mobile.v1.0",
+  "enterprise_web" : "enterprise_web.v1.0",
   "sfdc_testing" : "sfdc_accelerator.v1.0"
 }
