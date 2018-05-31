@@ -15,7 +15,7 @@ import { getProductTemplate, getProjectTemplate, getProductTemplateByKey } from 
 import { LOAD_PROJECT, CREATE_PROJECT, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
   LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES,
   LOAD_PROJECT_TEMPLATE, LOAD_PROJECT_PRODUCT_TEMPLATES, UPDATE_PRODUCT,
-  PROJECT_STATUS_DRAFT, PRODUCT_DIRTY,
+  PROJECT_STATUS_DRAFT, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
 } from '../../config/constants'
 
 export function loadProject(projectId) {
@@ -240,7 +240,6 @@ export function fireProjectDirty(dirtyProject) {
 
 export function fireProductDirty(phaseId, productId, values) {
   return (dispatch) => {
-    console.warn('PRODUCT_DIRTY')
     return dispatch({
       type: PRODUCT_DIRTY,
       payload: {
@@ -256,6 +255,14 @@ export function fireProjectDirtyUndo() {
   return (dispatch) => {
     return dispatch({
       type: PROJECT_DIRTY_UNDO
+    })
+  }
+}
+
+export function fireProductDirtyUndo() {
+  return (dispatch) => {
+    return dispatch({
+      type: PRODUCT_DIRTY_UNDO
     })
   }
 }

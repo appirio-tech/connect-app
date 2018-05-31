@@ -47,17 +47,18 @@ function formatPhaseCardListFooterProps(phases) {
 
 const ProjectStages = ({
   project,
+  phases,
   productTemplates,
   currentMemberRole,
   isProcessing,
   isSuperUser,
   updateProduct,
-  fireProjectDirty,
-  fireProjectDirtyUndo,
+  fireProductDirty,
+  fireProductDirtyUndo,
 }) => (
   <Section>
     <PhaseCardListHeader />
-    {project.phases.map((phase) => (
+    {phases.map((phase) => (
       <ProjectStage
         key={phase.id}
         productTemplates={productTemplates}
@@ -67,11 +68,11 @@ const ProjectStages = ({
         project={project}
         phase={phase}
         updateProduct={updateProduct}
-        fireProjectDirty={fireProjectDirty}
-        fireProjectDirtyUndo={fireProjectDirtyUndo}
+        fireProductDirty={fireProductDirty}
+        fireProductDirtyUndo={fireProductDirtyUndo}
       />
     ))}
-    <PhaseCardListFooter {...formatPhaseCardListFooterProps(project.phases)} />
+    <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases)} />
   </Section>
 )
 
@@ -86,8 +87,8 @@ ProjectStages.propTypes = {
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
   updateProduct: PT.func.isRequired,
-  fireProjectDirty: PT.func.isRequired,
-  fireProjectDirtyUndo: PT.func.isRequired,
+  fireProductDirty: PT.func.isRequired,
+  fireProductDirtyUndo: PT.func.isRequired,
 }
 
 export default ProjectStages

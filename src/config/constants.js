@@ -179,6 +179,7 @@ export const PROJECT_DIRTY            = 'PROJECT_DIRTY'
 export const PROJECT_DIRTY_UNDO       = 'PROJECT_DIRTY_UNDO'
 
 export const PRODUCT_DIRTY            = 'PRODUCT_DIRTY'
+export const PRODUCT_DIRTY_UNDO       = 'PRODUCT_DIRTY_UNDO'
 
 export const LOAD_PROJECT_PHASES             = 'LOAD_PROJECT_PHASES'
 export const LOAD_PROJECT_PHASES_PENDING     = 'LOAD_PROJECT_PHASES_PENDING'

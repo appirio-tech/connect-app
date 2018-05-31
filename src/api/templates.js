@@ -20,9 +20,7 @@ import productTemplates from './templates-json/product-templates.json'
  */
 export function getProjectTemplates() {
   return axios.get(`${TC_API_URL}/v4/projectTemplates`)
-    .then(resp => {
-      return _.get(resp.data, 'result.content', {})
-    })
+    .then(resp => _.get(resp.data, 'result.content', {}))
 }
 
 /**
@@ -34,9 +32,7 @@ export function getProjectTemplates() {
  */
 export function getProjectTemplate(projectTemplateId) {
   return axios.get(`${TC_API_URL}/v4/projectTemplates/${projectTemplateId}`)
-    .then(resp => {
-      return _.get(resp.data, 'result.content', {})
-    })
+    .then(resp => _.get(resp.data, 'result.content', {}))
 }
 
 /**
@@ -48,8 +44,11 @@ export function getProjectTemplate(projectTemplateId) {
  */
 export function getProductTemplate(productTemplateId) {
   return axios.get(`${TC_API_URL}/v4/productTemplates/${productTemplateId}`)
-    .then(resp => {
-      return _.get(resp.data, 'result.content', {})
+    .then(resp => _.get(resp.data, 'result.content', {})).then((template) => {
+      // TODO $PROJECT_PLAN$ remove this when question which duplicate scope questions are removed
+      // that question broke the logic, and this is the rough hide of these questions
+      template.template.questions[0].subSections[1].hidden = true
+      return template
     })
 }
 

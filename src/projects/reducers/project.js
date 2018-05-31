@@ -10,7 +10,8 @@ import {
   UPDATE_PROJECT_MEMBER_PENDING, UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
   GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS,
-  LOAD_PROJECT_TEMPLATE_SUCCESS, LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS, PRODUCT_DIRTY,
+  LOAD_PROJECT_TEMPLATE_SUCCESS, LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
+  UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_SUCCESS,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -26,9 +27,12 @@ const initialState = {
   updateExisting: false,
   projectTemplate: null,
   productTemplates: [],
+  phases: null,
+  phasesNonDirty: null,
 }
 
 // NOTE: We should always update projectNonDirty state whenever we update the project state
+// same for phasesNonDirty
 
 const parseErrorObj = (action) => {
   const data = _.get(action.payload, 'response.data.result')
@@ -38,6 +42,24 @@ const parseErrorObj = (action) => {
     msg: _.get(data, 'content.message', ''),
     details: JSON.parse(_.get(data, 'details', null))
   }
+}
+
+function updateProductInPhases(phases, phaseId, productId, newProduct, shouldReplace) {
+  const phaseIdx = _.findIndex(phases, { id: phaseId })
+  const productIdx = _.findIndex(phases[phaseIdx].products, { id: productId })
+
+  // use merge here as newProduct has `details` property which is a deep nested object
+  const updatedProduct = shouldReplace ? newProduct : _.merge(
+    {},
+    phases[phaseIdx].products[productIdx],
+    newProduct
+  )
+
+  const updatedPhase = update(phases[phaseIdx], {
+    products: { $splice: [[productIdx, 1, updatedProduct]] }
+  })
+
+  return update(phases, { $splice : [[phaseIdx, 1, updatedPhase]] })
 }
 
 export const projectState = function (state=initialState, action) {
@@ -74,6 +96,8 @@ export const projectState = function (state=initialState, action) {
     return Object.assign({}, state, {
       project: {},
       projectNonDirty: {},
+      phases: null,
+      phasesNonDirty: null,
     })
 
   case LOAD_DIRECT_PROJECT_SUCCESS:
@@ -106,12 +130,8 @@ export const projectState = function (state=initialState, action) {
 
   case LOAD_PROJECT_PHASES_SUCCESS:
     return update(state, {
-      project: {
-        phases: { $set: action.payload },
-      },
-      projectNonDirty: {
-        phases: { $set: action.payload },
-      }
+      phases: { $set: action.payload },
+      phasesNonDirty: { $set: action.payload },
     })
 
   // Create & Edit project
@@ -125,14 +145,35 @@ export const projectState = function (state=initialState, action) {
     })
 
   case CREATE_PROJECT_SUCCESS:
-  case UPDATE_PROJECT_SUCCESS:
+  case UPDATE_PROJECT_SUCCESS: {
+    // after loading project initially, we also load direct project
+    // and add additional properties to the `project` object in LOAD_DIRECT_PROJECT_SUCCESS action
+    // after updating project they will be lost, so here we restore them
+    // TODO better don't add additional values to `project` object and keep additional values separately
+    const restoredProject = {
+      ...action.payload,
+      budget: _.cloneDeep(state.project.budget),
+      duration: _.cloneDeep(state.project.duration),
+    }
+
     return Object.assign({}, state, {
       processing: false,
       error: false,
-      project: action.payload,
-      projectNonDirty: _.cloneDeep(action.payload),
+      project: restoredProject,
+      projectNonDirty: _.cloneDeep(restoredProject),
       updateExisting: action.payload.updateExisting
     })
+  }
+
+  case UPDATE_PRODUCT_SUCCESS:
+    return {...state,
+      phases: updateProductInPhases(
+        state.phases, action.payload.phaseId, action.payload.id, action.payload, true
+      ),
+      phasesNonDirty: updateProductInPhases(
+        state.phasesNonDirty, action.payload.phaseId, action.payload.id, _.cloneDeep(action.payload), true
+      ),
+    }
 
   case DELETE_PROJECT_SUCCESS:
     return Object.assign({}, state, {
@@ -219,7 +260,6 @@ export const projectState = function (state=initialState, action) {
   }
 
   case PROJECT_DIRTY: {// payload contains only changed values from the project form
-    console.warn('PROJECT_DIRTY payload', action.payload)
     return Object.assign({}, state, {
       project: _.mergeWith({}, state.project, action.payload, { isDirty : true },
         // customizer to override screens array with changed values
@@ -232,42 +272,21 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
-  case PRODUCT_DIRTY: {
-    const { phaseId, productId, values } = action.payload
+  case PRODUCT_DIRTY:
     return {
       ...state,
-      project: {
-        ...state.project,
-        phases: state.project.phases.map((phase) => {
-          if (phase.id !== phaseId) {
-            return phase
-          }
-
-          const updatedPhase = {...phase}
-          updatedPhase.products = phase.products.map((product) => {
-            if (product.id !== productId) {
-              return product
-            }
-
-            const updatedProduct = {
-              ...product,
-              // for product we only update values in 'details' property for now
-              // if we need to update some other values, we can adjust code here
-              details: {
-                ...product.details,
-                ...values.details,
-              },
-              isDirty: true,
-            }
-
-            return updatedProduct
-          })
-
-          return updatedPhase
-        })
-      }
+      phases: updateProductInPhases(
+        state.phases, action.payload.phaseId, action.payload.productId, {
+          // TODO $PROJECT_PLAN$
+          // for product we only update values in 'details' property for now
+          // because product template contains some fields which update
+          // properties of the product which doesn't exists for a product like
+          // description or notes
+          details: action.payload.values.details,
+          isDirty: true,
+        }
+      )
     }
-  }
 
   case PROJECT_DIRTY_UNDO: {
     return Object.assign({}, state, {
@@ -275,10 +294,18 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
+  case PRODUCT_DIRTY_UNDO: {
+    return {
+      ...state,
+      phases: _.cloneDeep(state.phasesNonDirty)
+    }
+  }
+
   case LOAD_PROJECT_FAILURE:
   case CREATE_PROJECT_FAILURE:
   case DELETE_PROJECT_FAILURE:
   case UPDATE_PROJECT_FAILURE:
+  case UPDATE_PRODUCT_FAILURE:
   case ADD_PROJECT_MEMBER_FAILURE:
   case REMOVE_PROJECT_MEMBER_FAILURE:
   case UPDATE_PROJECT_MEMBER_FAILURE:

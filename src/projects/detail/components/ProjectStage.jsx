@@ -71,8 +71,8 @@ const ProjectStage = ({
   isProcessing,
   isSuperUser,
   updateProduct,
-  fireProjectDirty,
-  fireProjectDirtyUndo,
+  fireProductDirty,
+  fireProductDirtyUndo,
   onTabClick,
 }) => {
   const tabs = [
@@ -118,8 +118,8 @@ const ProjectStage = ({
               isEdittable={isSuperUser || !!currentMemberRole}
               submitHandler={(model) => updateProduct(project.id, phase.id, product.id, model)}
               saving={isProcessing}
-              fireProjectDirty={(values) => fireProjectDirty(phase.id, product.id, values)}
-              fireProjectDirtyUndo= {fireProjectDirtyUndo}
+              fireProjectDirty={(values) => fireProductDirty(phase.id, product.id, values)}
+              fireProjectDirtyUndo= {fireProductDirtyUndo}
             />
           </div>
         }
@@ -141,8 +141,8 @@ ProjectStage.propTypes = {
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
   updateProduct: PT.func.isRequired,
-  fireProjectDirty: PT.func.isRequired,
-  fireProjectDirtyUndo: PT.func.isRequired,
+  fireProductDirty: PT.func.isRequired,
+  fireProductDirtyUndo: PT.func.isRequired,
 }
 
 export default uncontrollable(ProjectStage, {
