@@ -8,11 +8,11 @@
   display: flex;
   height: 10 * $base-unit;
   font-size: 15px;
-  justify-content: space-between;
   padding: 0 4 * $base-unit;
 
   > svg {
     width: 12px;
+    margin-left: 10px;
   }
 
   &.is-open > svg {

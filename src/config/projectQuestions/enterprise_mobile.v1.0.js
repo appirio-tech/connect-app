@@ -53,7 +53,7 @@ const sections = [
               { value: 'ios', label: 'iOS App - An app built for iPhone or iPads' },
               { value: 'android', label: 'Android App - An app built for mobile phones or tablets running Android.' },
               { value: 'hybrid', label: 'Hybrid App - An app built using a hybrid framework (ex. Ionic/Cordova/Xamarin) and exported to one or more operating systems (iOS, Android or both).' },
-              { value: 'web', label: 'Mobile Web App - An app that is accessed by using a mobile web browser like Safari or Chrome.' }
+              { value: 'web', label: 'Progressive Mobile Web App - An app that is accessed by using a mobile web browser like Safari or Chrome, but that provides a native mobile app experience (rich features, i.e access device features such as GPS)' }
             ]
           },
           {
@@ -92,7 +92,7 @@ const sections = [
       {
         required: false,
         hideTitle: false,
-        title: 'Style Guide & Brand Guidelines - Please add your answers below. If you do not know the answer, please add “Open to suggestions from the community/looking for creative solutions”',
+        title: 'Style Guide & Brand Guidelines -- Please add your answers below. If you do not know the answer, please add “Open to suggestions from the community/looking for creative solutions”',
         description: '',
         type: 'questions',
         questions: [
@@ -200,7 +200,7 @@ const sections = [
         id: 'screen-features',
         required: false,
         hideTitle: false,
-        title: 'Screen and Features',
+        title: 'Screens and Features',
         description: '',
         type: 'questions',
         questions: [
@@ -337,7 +337,7 @@ const sections = [
               { value: 'confidential', label: 'Confidential Information, Sensitive Financial Data or Personally Identifiable Information (PII) - Will the user be working directly with financial or other protected information such has health records?'},
               { value: 'mdm', label: 'Mobile Device Management (MDM) - Do you employ an MDM solution? If yes, what service do you use?'}
             ],
-            description: 'Please select each required security requirement above.',
+            description: 'Please select each required security requirement above.'
           },
           {
             icon: 'question',
@@ -404,7 +404,6 @@ Creation of test cases/test scenarios including scenario setup, pre/post conditi
           {
             icon: 'question',
             description: 'How much budget do you have?',
-
             title: 'Budget',
             fieldName: 'details.loadDetails.budget',
             type: 'slide-radiogroup',
@@ -853,7 +852,6 @@ Creation of test cases/test scenarios including scenario setup, pre/post conditi
           {
             icon: 'question',
             description: 'How much budget do you have?',
-
             title: 'Budget',
             fieldName: 'details.loadDetails.budget',
             type: 'slide-radiogroup',

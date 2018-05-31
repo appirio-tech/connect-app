@@ -16,11 +16,20 @@
     }
 
     @media screen and (max-width: $screen-sm - 1px) {
-      margin: 0 0 4 * $base-unit 0;
+      margin: 0 0 $base-unit 0;
     }
 
     .left-wrapper {
       flex: 1 1 auto;
+      .primary-filter {
+        position: absolute;
+        top: 60px;
+        right: 0;
+
+        @media screen and (min-width: $screen-sm) {
+          display: none;
+        }
+      }
     }
 
     .right-wrapper {
@@ -58,10 +67,6 @@
 
     .primary-filter {
       margin-right: 20px;
-
-      @media screen and (max-width: $screen-md - 1px) {
-        display: none;
-      }
 
       .tc-switch .label {
         white-space: nowrap;
