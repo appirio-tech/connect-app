@@ -337,7 +337,7 @@ const sections = [
               { value: 'confidential', label: 'Confidential Information, Sensitive Financial Data or Personally Identifiable Information (PII) - Will the user be working directly with financial or other protected information such has health records?'},
               { value: 'mdm', label: 'Mobile Device Management (MDM) - Do you employ an MDM solution? If yes, what service do you use?'}
             ],
-            description: 'Please select each required security requirement above.',
+            description: 'Please select each required security requirement above.'
           },
           {
             icon: 'question',
@@ -404,7 +404,6 @@ Creation of test cases/test scenarios including scenario setup, pre/post conditi
           {
             icon: 'question',
             description: 'How much budget do you have?',
-
             title: 'Budget',
             fieldName: 'details.loadDetails.budget',
             type: 'slide-radiogroup',
@@ -853,7 +852,6 @@ Creation of test cases/test scenarios including scenario setup, pre/post conditi
           {
             icon: 'question',
             description: 'How much budget do you have?',
-
             title: 'Budget',
             fieldName: 'details.loadDetails.budget',
             type: 'slide-radiogroup',

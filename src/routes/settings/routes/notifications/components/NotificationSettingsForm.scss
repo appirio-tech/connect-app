@@ -104,6 +104,14 @@
           margin-left: 10px;
           margin-bottom: 10px;
         }
+
+        @media screen and (max-width: 430px - 1px) {
+          > span {
+            display: block;
+            margin-left: $base-unit;
+            margin-right: $base-unit;
+          }
+        }
       }
 
       .none {
@@ -134,22 +142,6 @@
       margin-bottom: 3 * $base-unit;
       margin-top: 6 * $base-unit;
       text-align: center;
-    }
-
-    > .email-settings {
-      @include roboto;
-      margin: 20px 0;
-
-      // Link colors
-      a:link,
-      a:visited {
-        color: $tc-dark-blue;
-      }
-
-      a:hover,
-      a:active {
-        color: $tc-dark-blue-70;
-      }
     }
   }
 }
