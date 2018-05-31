@@ -65,7 +65,7 @@ const MilestonePostMessage = (props) => {
 
 MilestonePostMessage.defaultProps = {
   isCompleted: false,
-  inProgress: false,
+  inProgress: true,
   labelStatus: '',
   backgroundColor: '#FAFAFB',
   cancelCallback: () => {},
