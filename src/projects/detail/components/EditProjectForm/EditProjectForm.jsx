@@ -225,6 +225,11 @@ class EditProjectForm extends Component {
             // TODO we shoudl not update the props (section is coming from props)
             validate={(isInvalid) => section.isInvalid = isInvalid}
             showHidden={showHidden}
+            addAttachment={this.props.addAttachment}
+            updateAttachment={this.props.updateAttachment}
+            removeAttachment={this.props.removeAttachment}
+            attachmentsStorePath={this.props.attachmentsStorePath}
+            canManageAttachments={this.props.canManageAttachments}
           />
           <div className="section-footer section-footer-spec">
             <button className="tc-btn tc-btn-primary tc-btn-md"
@@ -275,6 +280,9 @@ EditProjectForm.propTypes = {
   fireProjectDirty: PropTypes.func.isRequired,
   fireProjectDirtyUndo: PropTypes.func.isRequired,
   showHidden: PropTypes.bool,
+  addAttachment: PropTypes.func.isRequired,
+  updateAttachment: PropTypes.func.isRequired,
+  removeAttachment: PropTypes.func.isRequired,
 }
 
 export default EditProjectForm

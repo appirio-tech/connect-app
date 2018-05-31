@@ -55,6 +55,9 @@ const ProjectStages = ({
   updateProduct,
   fireProductDirty,
   fireProductDirtyUndo,
+  addProductAttachment,
+  updateProductAttachment,
+  removeProductAttachment,
 }) => (
   <Section>
     <PhaseCardListHeader />
@@ -70,6 +73,9 @@ const ProjectStages = ({
         updateProduct={updateProduct}
         fireProductDirty={fireProductDirty}
         fireProductDirtyUndo={fireProductDirtyUndo}
+        addProductAttachment={addProductAttachment}
+        updateProductAttachment={updateProductAttachment}
+        removeProductAttachment={removeProductAttachment}
       />
     ))}
     <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases)} />
@@ -89,6 +95,9 @@ ProjectStages.propTypes = {
   updateProduct: PT.func.isRequired,
   fireProductDirty: PT.func.isRequired,
   fireProductDirtyUndo: PT.func.isRequired,
+  addProductAttachment: PT.func.isRequired,
+  updateProductAttachment: PT.func.isRequired,
+  removeProductAttachment: PT.func.isRequired,
 }
 
 export default ProjectStages

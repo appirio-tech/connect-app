@@ -27,7 +27,7 @@ import IconTcSpecIconTypeOutlineHome from  '../../../assets/icons/icon-tc-spec-i
 import IconTcSpecIconTypeGlyphHome from  '../../../assets/icons/icon-tc-spec-icon-type-glyph-home.svg'
 
 // map string values to icon components for "tiled-radio-group" field type
-// this map contains TWO types of map, dashed and CamesCased
+// this map contains TWO types of map, dashed and CamelCased
 const tiledRadioGroupIcons = {
   NumberText,
   IconTechOutlineMobile,
@@ -63,6 +63,11 @@ const SpecSection = props => {
     validate,
     sectionNumber,
     showHidden,
+    addAttachment,
+    updateAttachment,
+    removeAttachment,
+    attachmentsStorePath,
+    canManageAttachments,
   } = props
 
   // make a copy to avoid modifying redux store
@@ -144,7 +149,17 @@ const SpecSection = props => {
     case 'files': {
       const projectLatest = isProjectDirty ? dirtyProject : project
       const files = _.get(projectLatest, props.fieldName, [])
-      return <FileListContainer project={projectLatest} files={files} />
+      return (
+        <FileListContainer
+          project={projectLatest}
+          files={files}
+          addAttachment={addAttachment}
+          updateAttachment={updateAttachment}
+          removeAttachment={removeAttachment}
+          attachmentsStorePath={attachmentsStorePath}
+          canManageAttachments={canManageAttachments}
+        />
+      )
     }
     case 'screens': {
       const screens = _.get(project, props.fieldName, [])
@@ -224,6 +239,9 @@ SpecSection.propTypes = {
   project: PropTypes.object.isRequired,
   sectionNumber: PropTypes.number.isRequired,
   showHidden: PropTypes.bool,
+  addAttachment: PropTypes.func.isRequired,
+  updateAttachment: PropTypes.func.isRequired,
+  removeAttachment: PropTypes.func.isRequired,
 }
 
 export default scrollToAnchors(SpecSection)

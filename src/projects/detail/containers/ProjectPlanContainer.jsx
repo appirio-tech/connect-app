@@ -9,6 +9,7 @@ import PT from 'prop-types'
 import { connect } from 'react-redux'
 
 import { updateProduct, fireProductDirty, fireProductDirtyUndo } from '../../actions/project'
+import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
 import TwoColsLayout from '../components/TwoColsLayout'
 import ProjectPlanProgress from '../components/ProjectPlanProgress'
@@ -46,6 +47,13 @@ const mapStateToProps = ({ projectState }) => ({
   phases: projectState.phases,
 })
 
-const mapDispatchToProps = { updateProduct, fireProductDirty, fireProductDirtyUndo }
+const mapDispatchToProps = {
+  updateProduct,
+  fireProductDirty,
+  fireProductDirtyUndo,
+  addProductAttachment,
+  updateProductAttachment,
+  removeProductAttachment,
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectPlanContainer)

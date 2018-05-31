@@ -4,24 +4,12 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import FileList from '../../../components/FileList/FileList'
 import AddFiles from '../../../components/FileList/AddFiles'
-import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
-import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import { getProjectRoleForCurrentUser } from '../../../helpers/projectHelper'
 
 class FileListContainer extends Component {
   constructor(props) {
     super(props)
     this.processUploadedFiles = this.processUploadedFiles.bind(this)
-    this.deleteFile = this.deleteFile.bind(this)
-    this.updateFile = this.updateFile.bind(this)
-  }
-
-  updateFile(attachmentId, updatedAttachment) {
-    this.props.updateProjectAttachment(this.props.project.id, attachmentId, updatedAttachment)
-  }
-
-  deleteFile(attachmentId) {
-    this.props.removeProjectAttachment(this.props.project.id, attachmentId)
   }
 
   processUploadedFiles(fpFiles, category) {
@@ -35,7 +23,7 @@ class FileListContainer extends Component {
         filePath: f.key,
         contentType: f.mimetype || 'application/unknown'
       }
-      this.props.addProjectAttachment(this.props.project.id, attachment)
+      this.props.addAttachment(attachment)
     })
   }
 
@@ -46,8 +34,15 @@ class FileListContainer extends Component {
   }
 
   render() {
-    const { files, project, allMembers } = this.props
-    const storePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
+    const {
+      files,
+      allMembers,
+      attachmentsStorePath,
+      canManageAttachments,
+      removeAttachment,
+      updateAttachment,
+    } = this.props
+
     files.forEach(file => {
       if (allMembers[file.updatedBy]) {
         file.updatedByUser = allMembers[file.updatedBy]
@@ -60,27 +55,27 @@ class FileListContainer extends Component {
 
     return (
       <div>
-        <FileList files={files} onDelete={ this.deleteFile } onSave={ this.updateFile } canModify={this.canManageFiles()}/>
-        <AddFiles successHandler={this.processUploadedFiles} storePath={storePath} category={'appDefinition'} />
+        <FileList files={files} onDelete={removeAttachment} onSave={updateAttachment} canModify={canManageAttachments}/>
+        <AddFiles successHandler={this.processUploadedFiles} storePath={attachmentsStorePath} category={'appDefinition'} />
       </div>
     )
   }
 }
 
-const mapDispatchToProps = {addProjectAttachment, updateProjectAttachment, removeProjectAttachment}
+const mapDispatchToProps = {}
 
-const mapStateToProps = ({ members, loadUser }) => {
+const mapStateToProps = ({ members }) => {
   return {
-    allMembers     : members.members,
-    currentUserId    : loadUser.user.userId
+    allMembers: members.members,
   }
 }
 
 FileListContainer.propTypes = {
-  project: PropTypes.object.isRequired,
   files: PropTypes.arrayOf(PropTypes.object).isRequired,
   allMembers: PropTypes.object.isRequired,
-  currentUserId: PropTypes.number.isRequired
+  addAttachment: PropTypes.func.isRequired,
+  updateAttachment: PropTypes.func.isRequired,
+  removeAttachment: PropTypes.func.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FileListContainer)

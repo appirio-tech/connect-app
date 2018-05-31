@@ -6,6 +6,9 @@ import {
   ADD_PROJECT_ATTACHMENT_PENDING, ADD_PROJECT_ATTACHMENT_SUCCESS, ADD_PROJECT_ATTACHMENT_FAILURE,
   UPDATE_PROJECT_ATTACHMENT_PENDING, UPDATE_PROJECT_ATTACHMENT_SUCCESS, UPDATE_PROJECT_ATTACHMENT_FAILURE,
   REMOVE_PROJECT_ATTACHMENT_PENDING, REMOVE_PROJECT_ATTACHMENT_SUCCESS, REMOVE_PROJECT_ATTACHMENT_FAILURE,
+  ADD_PRODUCT_ATTACHMENT_PENDING, ADD_PRODUCT_ATTACHMENT_SUCCESS, ADD_PRODUCT_ATTACHMENT_FAILURE,
+  UPDATE_PRODUCT_ATTACHMENT_PENDING, UPDATE_PRODUCT_ATTACHMENT_SUCCESS, UPDATE_PRODUCT_ATTACHMENT_FAILURE,
+  REMOVE_PRODUCT_ATTACHMENT_PENDING, REMOVE_PRODUCT_ATTACHMENT_SUCCESS, REMOVE_PRODUCT_ATTACHMENT_FAILURE,
   ADD_PROJECT_MEMBER_PENDING, ADD_PROJECT_MEMBER_SUCCESS, ADD_PROJECT_MEMBER_FAILURE,
   UPDATE_PROJECT_MEMBER_PENDING, UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
@@ -44,15 +47,25 @@ const parseErrorObj = (action) => {
   }
 }
 
-function updateProductInPhases(phases, phaseId, productId, newProduct, shouldReplace) {
+/**
+ * Updates a product in the phase list without mutations
+ *
+ * @param {Array}  phases         phases list in store
+ * @param {Number} phaseId        phase id
+ * @param {Number} productId      product id
+ * @param {Object} updateProduct  this object has to be in a special shape for `update` function
+ *                                from 'react-addons-update' package, or simple object if `shouldReplace` === true
+ * @param {Boolean} shouldReplace if this is true, updateProduct replaces current product directly
+ *
+ * @return {Array} new array of phases with updated product
+ */
+function updateProductInPhases(phases, phaseId, productId, updateProduct, shouldReplace) {
   const phaseIdx = _.findIndex(phases, { id: phaseId })
   const productIdx = _.findIndex(phases[phaseIdx].products, { id: productId })
 
-  // use merge here as newProduct has `details` property which is a deep nested object
-  const updatedProduct = shouldReplace ? newProduct : _.merge(
-    {},
+  const updatedProduct = shouldReplace ? updateProduct : update(
     phases[phaseIdx].products[productIdx],
-    newProduct
+    updateProduct
   )
 
   const updatedPhase = update(phases[phaseIdx], {
@@ -60,6 +73,22 @@ function updateProductInPhases(phases, phaseId, productId, newProduct, shouldRep
   })
 
   return update(phases, { $splice : [[phaseIdx, 1, updatedPhase]] })
+}
+
+/**
+ * Finds product in the list of phases
+ *
+ * @param {Array}  phases         phases list in store
+ * @param {Number} phaseId        phase id
+ * @param {Number} productId      product id
+ *
+ * @return {Object} product
+ */
+function getProductInPhases(phases, phaseId, productId) {
+  const phase = _.find(phases, { id: phaseId })
+  const product = _.find(phase.products, { id: productId })
+
+  return product
 }
 
 export const projectState = function (state=initialState, action) {
@@ -166,7 +195,8 @@ export const projectState = function (state=initialState, action) {
   }
 
   case UPDATE_PRODUCT_SUCCESS:
-    return {...state,
+    return {
+      ...state,
       phases: updateProductInPhases(
         state.phases, action.payload.phaseId, action.payload.id, action.payload, true
       ),
@@ -206,6 +236,64 @@ export const projectState = function (state=initialState, action) {
       project: { attachments: { $splice : [[idx, 1, action.payload]] } },
       projectNonDirty: { attachments: { $splice : [[idx, 1, action.payload]] } }
     })
+  }
+
+  // Product attachments
+  case ADD_PRODUCT_ATTACHMENT_PENDING:
+  case UPDATE_PRODUCT_ATTACHMENT_PENDING:
+  case REMOVE_PRODUCT_ATTACHMENT_PENDING:
+    return {
+      ...state,
+      processingAttachments: true
+    }
+
+  case ADD_PRODUCT_ATTACHMENT_SUCCESS: {
+    const { phaseId, productId, attachment } = action.payload
+
+    return {
+      ...state,
+      processingAttachments: false,
+      phases: updateProductInPhases(state.phases, phaseId, productId, {
+        attachments: { $push: [attachment] }
+      }),
+      phasesNonDirty: updateProductInPhases(state.phasesNonDirty, phaseId, productId, {
+        attachments: { $push: [_.cloneDeep(attachment)] }
+      }),
+    }
+  }
+
+  case UPDATE_PRODUCT_ATTACHMENT_SUCCESS: {
+    const { phaseId, productId, attachment } = action.payload
+    const product = getProductInPhases(state.phases, phaseId, productId)
+    const idx = _.findIndex(product.attachments, { id: attachment.id })
+
+    return {
+      ...state,
+      processingAttachments: false,
+      phases: updateProductInPhases(state.phases, phaseId, productId, {
+        attachments: { $splice : [[idx, 1, attachment]] }
+      }),
+      phasesNonDirty: updateProductInPhases(state.phasesNonDirty, phaseId, productId, {
+        attachments: { $splice : [[idx, 1, _.cloneDeep(attachment)]] }
+      }),
+    }
+  }
+
+  case REMOVE_PRODUCT_ATTACHMENT_SUCCESS: {
+    const { phaseId, productId, attachmentId } = action.payload
+    const product = getProductInPhases(state.phases, phaseId, productId)
+    const idx = _.findIndex(product.attachments, { id: attachmentId })
+
+    return {
+      ...state,
+      processingAttachments: false,
+      phases: updateProductInPhases(state.phases, phaseId, productId, {
+        attachments: { $splice : [[idx, 1]] }
+      }),
+      phasesNonDirty: updateProductInPhases(state.phasesNonDirty, phaseId, productId, {
+        attachments: { $splice : [[idx, 1]] }
+      }),
+    }
   }
 
   case REMOVE_PROJECT_ATTACHMENT_SUCCESS: {
@@ -275,17 +363,15 @@ export const projectState = function (state=initialState, action) {
   case PRODUCT_DIRTY:
     return {
       ...state,
-      phases: updateProductInPhases(
-        state.phases, action.payload.phaseId, action.payload.productId, {
-          // TODO $PROJECT_PLAN$
-          // for product we only update values in 'details' property for now
-          // because product template contains some fields which update
-          // properties of the product which doesn't exists for a product like
-          // description or notes
-          details: action.payload.values.details,
-          isDirty: true,
-        }
-      )
+      phases: updateProductInPhases(state.phases, action.payload.phaseId, action.payload.productId, {
+        // TODO $PROJECT_PLAN$
+        // for product we only update values in 'details' property for now
+        // because product template contains some fields which update
+        // properties of the product which doesn't exists for a product like
+        // description or notes
+        details: { $merge: action.payload.values.details },
+        isDirty: { $set: true },
+      })
     }
 
   case PROJECT_DIRTY_UNDO: {
@@ -312,6 +398,9 @@ export const projectState = function (state=initialState, action) {
   case UPDATE_PROJECT_ATTACHMENT_FAILURE:
   case ADD_PROJECT_ATTACHMENT_FAILURE:
   case REMOVE_PROJECT_ATTACHMENT_FAILURE:
+  case UPDATE_PRODUCT_ATTACHMENT_FAILURE:
+  case ADD_PRODUCT_ATTACHMENT_FAILURE:
+  case REMOVE_PRODUCT_ATTACHMENT_FAILURE:
     return Object.assign({}, state, {
       isLoading: false,
       processing: false,

@@ -8,6 +8,7 @@ import moment from 'moment'
 import uncontrollable from 'uncontrollable'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
+import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
 
 import PhaseCard from './PhaseCard'
 import GenericMenu from '../../../components/GenericMenu'
@@ -62,70 +63,110 @@ function formatPhaseCardAttr(phase, productTemplates) {
   }
 }
 
-const ProjectStage = ({
-  activeTab,
-  phase,
-  project,
-  productTemplates,
-  currentMemberRole,
-  isProcessing,
-  isSuperUser,
-  updateProduct,
-  fireProductDirty,
-  fireProductDirtyUndo,
-  onTabClick,
-}) => {
-  const tabs = [
-    {
-      onClick: () => onTabClick('timeline'),
-      label: 'Timeline',
-      isActive: activeTab === 'timeline'
-    }, {
-      onClick: () => onTabClick('posts'),
-      label: 'Posts',
-      isActive: activeTab === 'posts'
-    }, {
-      onClick: () => onTabClick('specification'),
-      label: 'Specification',
-      isActive: activeTab === 'specification'
-    }
-  ]
+class ProjectStage extends React.Component{
+  constructor(props) {
+    super(props)
 
-  // NOTE even though in store we keep products as an array,
-  // so far we always have only one product per phase, so will display only one
-  const productTemplate = _.find(productTemplates, { id: _.get(phase, 'products[0].templateId') })
-  const product = _.get(phase, 'products[0]')
-  const sections = _.get(productTemplate, 'template.questions', [])
+    this.removeProductAttachment = this.removeProductAttachment.bind(this)
+    this.updateProductAttachment = this.updateProductAttachment.bind(this)
+    this.addProductAttachment = this.addProductAttachment.bind(this)
+  }
 
-  return (
-    <PhaseCard attr={formatPhaseCardAttr(phase, productTemplates)}>
-      <div>
-        <GenericMenu navLinks={tabs} />
+  removeProductAttachment(attachmentId) {
+    const { project, phase, removeProductAttachment } = this.props
+    const product = _.get(phase, 'products[0]')
 
-        {activeTab === 'timeline' &&
-          <div>Timeline</div>
-        }
+    removeProductAttachment(project.id, phase.id, product.id, attachmentId)
+  }
 
-        {activeTab === 'posts' &&
-          <div>Posts</div>
-        }
+  updateProductAttachment(attachmentId, updatedAttachment) {
+    const { project, phase, updateProductAttachment } = this.props
+    const product = _.get(phase, 'products[0]')
 
-        {activeTab === 'specification' &&
-          <div className="two-col-content content">
-            <EnhancedEditProjectForm
-              project={product}
-              sections={sections}
-              isEdittable={isSuperUser || !!currentMemberRole}
-              submitHandler={(model) => updateProduct(project.id, phase.id, product.id, model)}
-              saving={isProcessing}
-              fireProjectDirty={(values) => fireProductDirty(phase.id, product.id, values)}
-              fireProjectDirtyUndo= {fireProductDirtyUndo}
-            />
-          </div>
-        }
-      </div>
-    </PhaseCard>
-  )
+    updateProductAttachment(project.id, phase.id, product.id, attachmentId, updatedAttachment)
+  }
+
+  addProductAttachment(attachment) {
+    const { project, phase, addProductAttachment } = this.props
+    const product = _.get(phase, 'products[0]')
+
+    addProductAttachment(project.id, phase.id, product.id, attachment)
+  }
+
+  render() {
+    const {
+      activeTab,
+      phase,
+      project,
+      productTemplates,
+      currentMemberRole,
+      isProcessing,
+      isSuperUser,
+      updateProduct,
+      fireProductDirty,
+      fireProductDirtyUndo,
+      onTabClick,
+    } = this.props
+
+    const tabs = [
+      {
+        onClick: () => onTabClick('timeline'),
+        label: 'Timeline',
+        isActive: activeTab === 'timeline'
+      }, {
+        onClick: () => onTabClick('posts'),
+        label: 'Posts',
+        isActive: activeTab === 'posts'
+      }, {
+        onClick: () => onTabClick('specification'),
+        label: 'Specification',
+        isActive: activeTab === 'specification'
+      }
+    ]
+
+    // NOTE even though in store we keep products as an array,
+    // so far we always have only one product per phase, so will display only one
+    const productTemplate = _.find(productTemplates, { id: _.get(phase, 'products[0].templateId') })
+    const product = _.get(phase, 'products[0]')
+    const sections = _.get(productTemplate, 'template.questions', [])
+
+    const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
+
+    return (
+      <PhaseCard attr={formatPhaseCardAttr(phase, productTemplates)}>
+        <div>
+          <GenericMenu navLinks={tabs} />
+
+          {activeTab === 'timeline' &&
+            <div>Timeline</div>
+          }
+
+          {activeTab === 'posts' &&
+            <div>Posts</div>
+          }
+
+          {activeTab === 'specification' &&
+            <div className="two-col-content content">
+              <EnhancedEditProjectForm
+                project={product}
+                sections={sections}
+                isEdittable={isSuperUser || !!currentMemberRole}
+                submitHandler={(model) => updateProduct(project.id, phase.id, product.id, model)}
+                saving={isProcessing}
+                fireProjectDirty={(values) => fireProductDirty(phase.id, product.id, values)}
+                fireProjectDirtyUndo= {fireProductDirtyUndo}
+                addAttachment={this.addProductAttachment}
+                updateAttachment={this.updateProductAttachment}
+                removeAttachment={this.removeProductAttachment}
+                attachmentsStorePath={attachmentsStorePath}
+                canManageAttachments={!!currentMemberRole}
+              />
+            </div>
+          }
+        </div>
+      </PhaseCard>
+    )
+  }
 }
 
 ProjectStage.defaultProps = {
@@ -143,6 +184,9 @@ ProjectStage.propTypes = {
   updateProduct: PT.func.isRequired,
   fireProductDirty: PT.func.isRequired,
   fireProductDirtyUndo: PT.func.isRequired,
+  addProductAttachment: PT.func.isRequired,
+  updateProductAttachment: PT.func.isRequired,
+  removeProductAttachment: PT.func.isRequired,
 }
 
 export default uncontrollable(ProjectStage, {
