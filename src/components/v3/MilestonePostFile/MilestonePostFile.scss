@@ -18,8 +18,6 @@
   /* mobile view specific style */
   @include viewSm {
     height: auto;
-    min-height: $base-unit*10;
-    line-height: $base-unit*8;
     border-radius: 0;
     .hide-sm {
       display: none;

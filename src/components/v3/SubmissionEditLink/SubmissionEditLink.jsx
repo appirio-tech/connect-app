@@ -6,7 +6,7 @@ import MilestonePostEditLinkDropDown from '../MilestonePostEditLinkDropDown'
 import MilestonePostEditDate from '../MilestonePostEditDate'
 import MilestonePostEditTextArea from '../MilestonePostEditTextArea'
 
-
+/**use for create custom form */
 class SubmissionEditLink extends React.Component {
   constructor(props) {
     super(props)
@@ -18,15 +18,15 @@ class SubmissionEditLink extends React.Component {
     this.changeURL = this.changeURL.bind(this)
     this.okBtnClicked = this.okBtnClicked.bind(this)
   }
-
+  /**event when change title input */
   changeTitle(value) {
     this.value.title = value
   }
-
+  /**event when change url input */
   changeURL(value) {
     this.value.URL = value
   }
-
+  /**finish form */
   okBtnClicked() {
     this.props.callbackOK(this.value)
   }

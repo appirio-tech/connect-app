@@ -1,9 +1,11 @@
 import React from 'react'
 import V3Template from './V3Template'
 import TimelinePost from '../components/v3/TimelinePost'
+import TimelineHeader from '../components/v3/TimelineHeader'
 import TimelineFinalFix from '../components/v3/TimelineFinalFix'
 import './V3ComponentDemo.scss'
 
+// use for demo all individual component
 class V3ComponentDemo extends React.Component {
   constructor(props) {
     super(props)
@@ -15,6 +17,14 @@ class V3ComponentDemo extends React.Component {
         <V3Template>
           <div styleName="viewport">
             <h2 styleName="group-title">Timeline Child components</h2>
+
+            <h3>Timeline header</h3>
+            <TimelineHeader postContent={{
+              title: 'Welcome to the design phase',
+              postMsg : 'This is the first stage in our project. We’re going to show you the detailed plan in your timeline, with all the milestones. During the execution the milestones will change to reflect the progress, collect your feedback, and deliver the final product. Check the <a href="https://www.youtube.com/">YouTube video</a> and our <a href="https://www.youtube.com/">help article</a> for more information. If you still have questions, please ask them in the stage message channel and we’ll be happy to assist you.'
+            }}
+            />
+
             <h3>Design acceptance</h3>
             <TimelineFinalFix postContent={{
               postId: '100',
@@ -25,6 +35,24 @@ class V3ComponentDemo extends React.Component {
               postMsg: 'This milestone was completed and is no more interactive.',
             }}
             />
+
+            <h3>Specification</h3>
+            <TimelinePost postContent={{
+              postId: '100',
+              inProgress: false,
+              month: 'MAR',
+              date: '10',
+              title: 'Design delivery',
+              postMsg: 'Please find all the source files from the winning designs attached as a .zip file bellow. This concludes our design stage.',
+              content: [{
+                id: 'a100',
+                type: 'specification',
+                inProgress: (true),
+                isCompleted: (false),
+              }]
+            }}
+            />
+
             <h3>Download links</h3>
             <TimelinePost postContent={{
               postId: '100',

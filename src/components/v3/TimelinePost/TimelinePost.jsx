@@ -140,7 +140,7 @@ class TimelinePost extends React.Component {
 
                   {!!content && !!content.type && content.type === 'edit-text' &&
                     (<div styleName="progress-wrap">
-                      <SubmissionEditText isSubmitted={this.isSubmitted} isCancel={this.isCancel} isCompleted={content.isCompleted} inProgress={content.inProgress} finish={this.props.finish}/>
+                      <SubmissionEditText isCompleted={content.isCompleted} inProgress={content.inProgress} finish={this.props.finish}/>
                     </div>)
                   }
                 </div>)

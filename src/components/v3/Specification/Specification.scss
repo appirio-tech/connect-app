@@ -46,8 +46,6 @@
   /* mobile view specific style */
   @include viewSm {
     height: auto;
-    min-height: $base-unit*10;
-    line-height: $base-unit*8;
     border-radius: 0;
     .hide-sm {
       display: none;
@@ -101,7 +99,6 @@
       background: url('../../../assets/icons/ui-x-mark.svg') 0 50% no-repeat;
     }
     .group-right {
-      width: 405px;
       display: flex;
       line-height: 50px;
       justify-content: space-between;

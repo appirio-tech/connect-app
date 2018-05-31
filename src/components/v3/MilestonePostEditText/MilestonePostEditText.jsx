@@ -21,7 +21,7 @@ class MilestonePostEditText extends React.Component {
     const props = this.props
     props.action(this.state.value, props.index)
   }
-
+  /**get update value from input text */
   onValueChange (event) {
     event.stopPropagation()
     const value = event.target.value

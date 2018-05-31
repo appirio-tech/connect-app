@@ -11,7 +11,7 @@ class Timeline extends React.Component {
 
     this.state = {
       activeMenu: '',
-      currentStep: 3,
+      currentStep: 3, // current step , each milestone is one step
     }
     this.finishStep3 = this.finishStep3.bind(this)
     this.finishStep4 = this.finishStep4.bind(this)
@@ -19,19 +19,22 @@ class Timeline extends React.Component {
     this.finishStep6 = this.finishStep6.bind(this)
 
   }
-  
+  /**move to step 4*/
   finishStep3() {
     this.setState({currentStep: 4})
   }
   
+  /**move to step 5*/
   finishStep4() {
     this.setState({currentStep: 5})
   }
 
+  /**move to step 6*/
   finishStep5() {
     this.setState({currentStep: 6})
   }
 
+  /**move to step 7*/
   finishStep6() {
     this.setState({currentStep: 7})
   }

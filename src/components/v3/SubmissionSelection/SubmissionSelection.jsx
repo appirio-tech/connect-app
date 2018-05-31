@@ -128,6 +128,7 @@ class SubmissionSelection extends React.Component {
       isShowRequestingMessage2: true})
   }
 
+  /** call if adding link and there is no links yet */
   finishAddingLink(value) {
     const contentList = this.state.contentList
     contentList.push({
@@ -141,6 +142,7 @@ class SubmissionSelection extends React.Component {
     this.setState({contentList})
   }
 
+  /**complete milestone review */
   completeMilestoneReview() {
     this.props.finish()
     const isFinishMilestoneReview = true

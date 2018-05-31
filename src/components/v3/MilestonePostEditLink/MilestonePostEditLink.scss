@@ -27,9 +27,6 @@
     line-height: inherit;
     z-index: 10;
     overflow: hidden;
-    @include viewSm {
-      padding-right: $base-unit*7;
-    }
 
     .label-title {
       color: #404041;

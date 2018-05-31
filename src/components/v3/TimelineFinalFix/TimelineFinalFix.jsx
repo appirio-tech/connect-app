@@ -5,37 +5,16 @@ import MilestonePostMessage from '../MilestonePostMessage'
 import PT from 'prop-types'
 import './TimelineFinalFix.scss'
 
+// use for demo edit multiple link
 class TimelineFinalFix extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      activeMenu: '',
       isCompleted: false,
       inProgress: true,
       isCancel: false
     }
-    this.isSubmitted = this.isSubmitted.bind(this)
-    this.isCancel = this.isCancel.bind(this)
-  }
-
-  componentDidMount() {
-    !!this.props.navLinks && this.props.navLinks.map((item) => {
-      item.isActive && this.setState({ activeMenu: item.id })
-    })
-  }
-
-  isSubmitted() {
-    const isCompleted = true
-    const inProgress = false
-    this.setState({isCompleted})
-    this.setState({inProgress})
-  }
-
-  isCancel() {
-    this.isSubmitted()
-    const isCancel = true
-    this.setState({isCancel})
   }
 
   render() {
@@ -57,7 +36,7 @@ class TimelineFinalFix extends React.Component {
           <div styleName="post-con" dangerouslySetInnerHTML={{ __html: postContent.postMsg }} />
           {
             !this.state.isCancel && (
-              <SubmissionEditText inProgress={false} isSubmitted={this.isSubmitted} isCancel={this.isCancel}/>
+              <SubmissionEditText inProgress={false}/>
             )
           }
           {

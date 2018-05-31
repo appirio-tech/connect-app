@@ -18,7 +18,7 @@ class MilestonePostLink extends React.Component {
       isSelected: !!this.props.isSelected
     })
   }
-
+  /**get update value from toggle button */
   toggleSelected(e) {
     const isChecked = e.target.checked
     this.setState({

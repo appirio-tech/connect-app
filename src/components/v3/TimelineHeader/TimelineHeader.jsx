@@ -2,19 +2,10 @@ import React from 'react'
 import PT from 'prop-types'
 import './TimelineHeader.scss'
 
+/**header of timeline */
 class TimelineHeader extends React.Component {
   constructor(props) {
     super(props)
-
-    this.state = {
-      activeMenu: ''
-    }
-  }
-
-  componentDidMount() {
-    !!this.props.navLinks && this.props.navLinks.map((item) => {
-      item.isActive && this.setState({ activeMenu: item.id })
-    })
   }
 
   render() {

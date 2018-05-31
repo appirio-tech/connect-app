@@ -53,8 +53,6 @@ class SubmissionEditText extends React.Component {
   cancelRequestFixes() {
     const contentList = []
     this.setState({contentList})
-    const props = this.props
-    props.isCancel()
     this.setState({isRequestFixes: false})
   }
 
@@ -150,8 +148,8 @@ class SubmissionEditText extends React.Component {
           <div style={ {textAlign: 'center', marginTop:'-20px'}} className="modal-title">{'Design phase competition'}</div>
           <div className="modal-body">{'This selection is final and cannot be undone. Once you confirm your selection we will close the design phase and can proceed to the next one. Clicking on the Confirm selection button would make the source files available for download.'}</div>
           <div style={ {marginBottom:'-20px'}}  className="button-area flex center action-area">
-            <button onClick={this.cancelAcceptDesign} className="tc-btn tc-btn-default action-btn btn-cancel">{'Cancel'}</button>
-            <button onClick={this.confirmedAcceptDesign} className="tc-btn tc-btn-primary action-btn ">{'Confirm selection'}</button>
+            <button style={{whiteSpace: 'nowrap'}} onClick={this.cancelAcceptDesign} className="tc-btn tc-btn-default action-btn btn-cancel">{'Cancel'}</button>
+            <button style={{whiteSpace: 'nowrap'}} onClick={this.confirmedAcceptDesign} className="tc-btn tc-btn-primary action-btn ">{'Confirm selection'}</button>
           </div>
         </Modal>
 
@@ -162,7 +160,6 @@ class SubmissionEditText extends React.Component {
 
 SubmissionEditText.defaultProps = {
   isSubmitted: () => {},
-  isCancel: () => {},
   inProgress: true,
   isCompleted: false,
   finish: () => {}
@@ -170,7 +167,6 @@ SubmissionEditText.defaultProps = {
 
 SubmissionEditText.propTypes = {
   isSubmitted: PT.func,
-  isCancel: PT.func,
   inProgress: PT.bool,
   isCompleted: PT.bool,
   finish: PT.func

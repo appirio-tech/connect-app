@@ -17,12 +17,14 @@ class MilestonePostEditDate extends React.Component {
     this.onValueChange2 = this.onValueChange2.bind(this)
   }
 
+  // update text for text box 1
   onValueChange1 (event) {
     event.stopPropagation()
     const start = event.target.value
     this.setState({start})
   }
 
+  // update text for text box 2
   onValueChange2 (event) {
     event.stopPropagation()
     const end = event.target.value

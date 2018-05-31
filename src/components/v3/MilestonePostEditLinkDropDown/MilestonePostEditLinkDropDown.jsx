@@ -13,6 +13,7 @@ class MilestonePostEditLinkDropDown extends React.Component {
     this.onValueChange = this.onValueChange.bind(this)
   }
 
+  /**use for update value for input text */
   onValueChange (event) {
     event.stopPropagation()
     const value = event.target.value

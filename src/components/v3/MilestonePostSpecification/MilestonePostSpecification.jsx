@@ -1,7 +1,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import './MilestonePostSpecification.scss'
-
+/**this is cell for specification form */
 class MilestonePostSpecification extends React.Component {
   constructor(props) {
     super(props)

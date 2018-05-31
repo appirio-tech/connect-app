@@ -27,9 +27,6 @@
     line-height: inherit;
     z-index: 10;
     overflow: hidden;
-    @include viewSm {
-      padding-right: $base-unit*7;
-    }
 
     .label-title {
       color: #404041;
@@ -48,6 +45,7 @@
       text-transform: initial;
       margin-bottom: 0;
       height: 100px;
+      resize: none;
       &::-webkit-input-placeholder {
         text-transform: initial;
         color:#A3A3AD;

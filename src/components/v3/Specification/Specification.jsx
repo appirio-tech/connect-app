@@ -19,34 +19,34 @@ class Specification extends React.Component {
     this.onComplete = this.onComplete.bind(this)
     this.isEmpty = this.isEmpty.bind(this)
   }
-
+  /**close edit ui */
   closeEditUrl() {
     this.setState({isShowEditText: false})
   }
-
+  /**update link */
   updatedUrl(value) {
     this.closeEditUrl()
     if (value.URL) {
       this.setState({milestonePostLink: value.URL})
     }
   }
-
+  /**add link to this */
   addUrl() {
     this.setState({isShowEditText: true})
   }
-
+  /**reset the link */
   resetUrl() {
     this.setState({milestonePostLink: ''})
   }
-  
+  /**link is empty */
   isEmpty() {
     return this.state.milestonePostLink === ''
   }
-  
+  /**is no section in ui */
   isNoContent() {
     return this.state.milestonePostLink === '' && !this.state.isShowEditText
   }
-  
+  /**finish specification form */
   onComplete() {
     this.closeEditUrl()
     this.props.finish()
@@ -75,7 +75,7 @@ class Specification extends React.Component {
 
         {this.state.milestonePostLink !== '' && (<div styleName="label-layer">
           <span styleName={ 'label-specification span-one' }>{'Specification'}</span>
-          <div styleName="group-right hide-sm">
+          <div styleName="group-right">
             <a href={this.state.milestonePostLink} styleName="milestone-text" dangerouslySetInnerHTML={{ __html: this.state.milestonePostLink }} />
           </div>
           <span onClick={this.addUrl} styleName={ 'label-specification span-two' } />

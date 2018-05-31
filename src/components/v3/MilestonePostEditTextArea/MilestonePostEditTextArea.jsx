@@ -14,7 +14,7 @@ class MilestonePostEditTextArea extends React.Component {
     }
     this.onValueChange = this.onValueChange.bind(this)
   }
-
+  /**get update value from textarea */
   onValueChange (event) {
     event.stopPropagation()
     const value = event.target.value

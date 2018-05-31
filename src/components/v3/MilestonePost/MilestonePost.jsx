@@ -7,10 +7,7 @@ import './MilestonePost.scss'
 const MilestonePost = (props) => {
   const image = props.image ? props.image : require('../../../assets/icons/timeline-invoice.svg')
   const labelMilestoneStyle = {
-    paddingLeft: '36px',
-    position: 'relative',
-    background: 'url('+ image +') 0 50% no-repeat',
-    backgroundSize: '30px'
+    background: 'url('+ image +') 0 50% no-repeat'
   }
   return (
     <div styleName={'milestone-post ' 
@@ -25,7 +22,7 @@ const MilestonePost = (props) => {
         )
       }
       <div styleName="label-layer">
-        <span style={ labelMilestoneStyle }>{props.label}</span>
+        <span styleName="label-title" style={ labelMilestoneStyle }>{props.label}</span>
         <div styleName="group-right hide-sm">
           <a href={props.milestonePostLink} styleName="milestone-text" dangerouslySetInnerHTML={{ __html: props.milestonePostLink }} />
         </div>
