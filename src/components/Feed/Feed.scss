@@ -1,26 +1,43 @@
 @import '~tc-ui/src/styles/tc-includes';
 @import '../../styles/includes';
 
-.feedContainer {
+.feed-container {
   @include stand-alone-item-shadow;
-}
-
-.feedHeader {
   background-color: $tc-gray-neutral-light;
-  height: 60px;
-  border-radius: 6px;
+  border-radius: $card-border-radius;
+
+  & + & {
+    margin-top: 2 * $base-unit;
+  }
 }
 
-.titleWrapper {
+.feed-header {
+  background-color: $tc-gray-neutral-light;
+  border-radius: $card-border-radius;
+}
+
+.header-view {
   align-items: center;
+  box-shadow: 0 1px 2px 0 $tc-gray-20, 0 1px 0 0 $tc-gray-20;
   display: flex;
   justify-content: space-between;
-  height: 100%;
+  min-height: 60px;
   padding: 0 4 * $base-unit;
+
+  :global(.drop-down) :global(.down-layer) {
+    left: auto;
+    right: - 2 * $base-unit;
+    top: 2 * $base-unit;
+    z-index: 4;
+  }
 }
 
 .title {
   @include roboto;
   color: $tc-black;
   font-size: 20px;
+}
+
+.header-edit {
+  min-height: 60px;
 }

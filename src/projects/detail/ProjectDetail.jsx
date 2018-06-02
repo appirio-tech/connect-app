@@ -27,12 +27,12 @@ const errorHandler = showCoderBotIfError(props => props.error && props.error.typ
 // This handles showing a spinner while the state is being loaded async
 const spinner = spinnerWhileLoading(props =>
   !props.isLoading && (
+    // first check that there are no error, before checking project properties
+    props.error && props.error.type === LOAD_PROJECT_FAILURE ||
     // old project or has projectTemplate loaded
     (props.project.version !== 'v3' || props.projectTemplate)
     // has product templates loaded
     && props.productTemplates.length > 0
-    // or error happened
-    || props.error && props.error.type === LOAD_PROJECT_FAILURE
   )
 )
 const ProjectDetailView = (props) => {

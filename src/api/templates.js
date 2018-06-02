@@ -44,12 +44,7 @@ export function getProjectTemplate(projectTemplateId) {
  */
 export function getProductTemplate(productTemplateId) {
   return axios.get(`${TC_API_URL}/v4/productTemplates/${productTemplateId}`)
-    .then(resp => _.get(resp.data, 'result.content', {})).then((template) => {
-      // TODO $PROJECT_PLAN$ remove this when question which duplicate scope questions are removed
-      // that question broke the logic, and this is the rough hide of these questions
-      template.template.questions[0].subSections[1].hidden = true
-      return template
-    })
+    .then(resp => _.get(resp.data, 'result.content', {}))
 }
 
 /**

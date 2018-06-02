@@ -3,26 +3,27 @@
 :global {
   .new-post-composer {
     margin-bottom: 10px;
-    background-color: $tc-white;
 
     .btn-close {
       display: none;
     }
 
-    .modal-row {
+    &.modal {
+      padding-bottom: 0;
+      padding-top: 2 * $base-unit;
+    }
+
+    &.modal .modal-row {
       padding-bottom: 0px;
 
       &:hover {
-        background-color: inherit;
+        background-color: transparent;
       }
 
       .new-post-title {
         font-size: 20px;
+        margin-bottom: 2 * $base-unit;
       }
-    }
-
-    input {
-      margin-bottom: 0px;
     }
 
     .draftjs-editor {

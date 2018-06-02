@@ -50,28 +50,27 @@ class Feed extends React.Component {
     const title = this.props.newTitle === null || this.props.newTitle === undefined ? this.props.title : this.props.newTitle
     const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
     return (
-      <div styleName="feedContainer" id={`feed-${id}`}>
-        <header styleName="feedHeader">
+      <div styleName="feed-container" id={`feed-${id}`}>
+        <header styleName="feed-header">
           {editTopicMode ? (
-            <RichTextArea
-              editMode
-              messageId={topicMessage.id}
-              isGettingComment={topicMessage.isGettingComment}
-              title={title}
-              content={content}
-              oldTitle={this.props.title}
-              oldContent={topicMessage.rawContent}
-              onPost={this.onSaveTopic}
-              onPostChange={this.onTopicChange}
-              isCreating={isSavingTopic}
-              hasError={error}
-              avatarUrl={user.photoURL}
-              authorName={authorName}
-              cancelEdit={this.cancelEditTopic}
-              allMembers={allMembers}
-            />
+            <div styleName="header-edit">
+              <RichTextArea
+                editMode
+                messageId={topicMessage.id}
+                isGettingComment={topicMessage.isGettingComment}
+                content={content}
+                title={title}
+                oldTitle={this.props.title}
+                onPost={this.onSaveTopic}
+                onPostChange={this.onTopicChange}
+                isCreating={isSavingTopic}
+                hasError={error}
+                cancelEdit={this.cancelEditTopic}
+                disableContent
+              />
+            </div>
           ) : (
-            <div styleName="titleWrapper">
+            <div styleName="header-view">
               <div styleName="title">{title}</div>
               {self && (
                 <CommentEditToggle
@@ -104,9 +103,9 @@ class Feed extends React.Component {
         />
         {children}
         {isDeletingTopic &&
-        <div className="deleting-layer">
-          <div>Deleting post ...</div>
-        </div>
+          <div className="deleting-layer">
+            <div>Deleting post ...</div>
+          </div>
         }
       </div>
     )

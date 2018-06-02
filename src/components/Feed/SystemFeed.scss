@@ -3,6 +3,7 @@
 :global {
   .system-feed {
     position: relative;
+    margin-top: 4 * $base-unit;
     margin-bottom: 10px;
 
     @media screen and (max-width: $screen-md - 1px) {
@@ -31,7 +32,6 @@
 
       .card-body {
         padding: 0;
-        margin-top: -5px;
 
         @media screen and (max-width: $screen-md - 1px) {
           margin-top: 0;

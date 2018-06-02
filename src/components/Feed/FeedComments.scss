@@ -1,0 +1,145 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import '../../styles/includes';
+
+.container {
+  background-color: $tc-white;
+  border-radius: 0 0 $card-border-radius $card-border-radius;
+
+  :global(.rich-editor) :global(.tc-textarea) :global(.public-DraftEditor-content) {
+    min-height: 40px
+  }
+}
+
+.comments {
+  padding-bottom: 2 * $base-unit;
+}
+
+.load-more {
+  background-color: $tc-white;
+  padding: 2 * $base-unit 0 $base-unit;
+  text-align: center;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    position: relative;
+    height: 24px;
+    margin: 3 * $base-unit 0;
+
+    &::before {
+      border-top: 1px solid $tc-gray-10;
+      content: '';
+      display: block;
+      left: 0;
+      top: 12px;
+      position: absolute;
+      width: 100%;
+    }
+  }
+
+  .load-btn {
+    @include roboto;
+
+    background-color: $tc-white;
+    border: 1px solid $tc-gray-neutral-dark;
+    border-radius: 40px;
+    color: $tc-dark-blue-110;
+    height: 20px;
+    font-size: 11px;
+    line-height: 20px;
+    padding: 0 2 * $base-unit;
+
+    &:hover {
+      color: $tc-dark-blue-110;
+    }
+
+    @media screen and (max-width: $screen-md - 1px) {
+      background-color: $tc-gray-10;
+      border-radius: 12px;
+      color: $tc-gray-50;
+      font-size: 13px;
+      height: 24px;
+      line-height: 24px;
+      position: absolute;
+      padding: 0 3 * $base-unit;
+
+      &:hover {
+        color: $tc-dark-blue-110;
+      }
+    }
+  }
+}
+
+.date-splitter,
+.unread-splitter {
+  height: 20px;
+  margin: 0 4 * $base-unit;
+  position: relative;
+  text-align: center;
+
+  &::before {
+    content: '';
+    border-top: 1px solid $tc-gray-20;
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 10px;
+    width: 100%;
+  }
+
+  &:first-child {
+    margin: 0 0 -10px 0;
+    top: -10px;
+    position: relative;
+
+    .date,
+    .unread {
+      background-color: $tc-gray-neutral-light;
+      box-shadow: 0 1px 2px 0 $tc-gray-20, 0 1px 0 0 $tc-gray-20;
+    }
+
+    .unread {
+      padding-right: 3 * $base-unit;
+      right: $base-unit;
+    }
+  }
+
+  .date,
+  .unread {
+    @include roboto-bold;
+    background-color: $tc-white;
+    border-radius: 23px;
+    color: $tc-black;
+    display: inline-block;
+    font-size: 11px;
+    line-height: 20px;
+    height: 20px;
+    padding: 0 3 * $base-unit;
+    position: relative;
+    z-index: 3;
+  }
+
+  .unread {
+    @include roboto;
+
+    color: $tc-red-70;
+    display: none;
+    right: 0;
+    top: 0;
+    padding-right: 0;
+    position: absolute;
+  }
+}
+
+.unread-splitter {
+  &::before {
+    border-top-color: $tc-red-30;
+  }
+
+  .unread {
+    display: block;
+  }
+}
+
+.add-comment {
+  background-color: $tc-gray-neutral-light;
+  border-radius: 0 0 $card-border-radius $card-border-radius;
+}

@@ -4,37 +4,8 @@
   background-color: #fff;
   padding: 3 * $base-unit 4 * $base-unit 1 * $base-unit;
 
-  :global(.comment-count) {
-    display: none;
-  }
-
-  :global(.comment-collapse) {
-    overflow: hidden;
-    position: relative;
-    height: 24px;
-    margin: 3 * $base-unit 0;
-
-    &::before {
-      border-top: 1px solid $tc-gray-10;
-      content: '';
-      display: block;
-      margin-top: 12px;
-    }
-
-    > a {
-      @include roboto;
-      background-color: $tc-gray-10;
-      border-radius: 12px;
-      color: $tc-gray-50;
-      display: block;
-      font-size: 13px;
-      left: 50%;
-      line-height: 24px;
-      position: absolute;
-      padding: 0 3 * $base-unit;
-      transform: translateX(-50%);
-      top: 0;
-    }
+  & + & {
+    margin-top: 2 * $base-unit;
   }
 }
 

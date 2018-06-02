@@ -1,0 +1,79 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  display: flex;
+  padding: $base-unit 4 * $base-unit;
+
+  &.self:hover {
+    background-color: $tc-gray-neutral-light;
+  }
+
+  :global(.drop-down) :global(.down-layer) {
+    left: auto;
+    right: - 2 * $base-unit;
+    top: 2 * $base-unit;
+  }
+}
+
+.avatar {
+  width: 40px;
+}
+
+.body {
+  flex: 1;
+  margin-left: 2 * $base-unit;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.info {
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.author {
+  @include roboto-bold;
+  color: $tc-black;
+}
+
+.time,
+.edited {
+  @include roboto;
+  color: $tc-gray-50;
+
+  &::before {
+    content: " \B7 ";
+    display: inline-block;
+    font-size: 20px;
+    line-height: 20px;
+    margin: 0 $base-unit;
+    vertical-align: middle;
+  }
+}
+
+.controls {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  .container.self:hover & {
+    display: block;
+  }
+}
+
+.text {
+  @include roboto;
+  color: $tc-black;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.comment-editor {
+  background-color: $tc-gray-neutral-light;
+  padding-left: 8 * $base-unit;
+}

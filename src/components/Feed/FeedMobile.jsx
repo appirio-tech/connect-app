@@ -88,7 +88,6 @@ class FeedMobile extends React.Component {
           <Link styleName="date" to={permalink}>{moment(date).fromNow()}</Link>
         </div>
         <h4 styleName="title">{title}</h4>
-        <div styleName="text" dangerouslySetInnerHTML={{__html: markdownToHTML(topicMessage.content)}} />
         {isCommentsShown &&
           <FeedComments
             allowComments={allowComments}

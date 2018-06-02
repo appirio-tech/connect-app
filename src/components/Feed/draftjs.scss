@@ -4,17 +4,17 @@
   .collapsedEditor {
     display: none !important;
   }
-  
+
   .expandedEditor {
     display: block !important;
   }
-  
+
   .new-post-composer {
     .modal-title {
       text-transform: uppercase;
     }
   }
-  
+
   .public-DraftEditor-content {
     width: 100%;
     font-size: 15px;
@@ -26,14 +26,14 @@
     background: $tc-white;
     border: 1px solid $tc-gray-20;
     box-shadow: inset 0px 0px 2px 0px rgba($tc-gray-30, 0.2);
-    border-radius: 2px;
+    border-radius: 4px;
     cursor: auto;
-  
+
     &:hover {
       border: 1px solid $tc-gray-80;
       box-shadow: inset 0px 0px 2px 0px $tc-gray-30;
     }
-  
+
     &:focus,
     &.focus {
       border: 1px solid $tc-dark-blue;
@@ -41,7 +41,7 @@
       box-shadow: inset 0px 0px 2px 1px rgba($tc-light-blue-70, 0.4);
     }
     transition: .15s all;
-  
+
     blockquote {
       @include roboto-medium;
       font-weight: 600;
@@ -49,25 +49,25 @@
       padding: $base-unit*3 0 $base-unit*3 $base-unit*3;
       border-left: $corner-radius * 2 solid $tc-gray-10;
     }
-  
+
     figure img {
       max-width: 600px;
     }
   }
-  
+
   .public-DraftStyleDefault-ul,
   .public-DraftStyleDefault-ol {
     margin: $base-unit*2 0 $base-unit*2 $base-unit*6;
   }
-  
+
   .public-DraftStyleDefault-ol {
     list-style-type: decimal;
   }
-  
+
   .public-DraftStyleDefault-ul {
     list-style-type: disc;
   }
-  
+
   .public-DraftStyleDefault-pre {
     background: $tc-gray-neutral-light;
     padding: 10px;
@@ -78,25 +78,25 @@
     border: 1px solid $tc-gray-10;
     border-radius: 4px;
   }
-  
+
   .public-DraftStyleDefault-block {
     white-space: pre-wrap;
   }
-  
+
   .draftjs-post {
     ul,
     ol {
       margin: $base-unit*2 0 $base-unit*2 $base-unit*6;
     }
-  
+
     ul {
       list-style-type: disc;
     }
-  
+
     ol {
       list-style-type: decimal;
     }
-  
+
     blockquote {
       @include roboto-medium;
       font-weight: 600;
@@ -104,7 +104,7 @@
       padding: $base-unit*3 0 $base-unit*3 $base-unit*3;
       border-left: $corner-radius * 2 solid $tc-gray-10;
     }
-  
+
     pre {
       background: $tc-gray-neutral-light;
       padding: 10px;
@@ -116,18 +116,17 @@
       border-radius: 4px;
       white-space: inherit;
     }
-  
+
     strong {
       font-weight: bold;
     }
-  
+
     em {
       font-style: italic;
     }
-  
+
     img {
       max-width: 600px;
     }
   }
 }
-  

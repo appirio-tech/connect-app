@@ -2,7 +2,31 @@
 
 :global {
   .rich-editor {
+    padding: 2 * $base-unit 0 0;
     position: relative;
+
+    &.expanded {
+      .tc-textarea .textarea-footer .textarea-footer-inner {
+        display: flex;
+      }
+    }
+
+    .modal-row {
+      display: flex;
+      padding: 0 4 * $base-unit;
+
+      .object {
+        flex-grow: 1;
+      }
+
+      .portrait + .object {
+        margin-left: 2 * $base-unit;
+      }
+    }
+
+    .new-post-title {
+      margin: 0;
+    }
 
     .addLinkButton {
       position: relative;
@@ -80,9 +104,88 @@
         margin: -8px 2rem 0 2rem;
       }
     }
+
+    .tc-textarea {
+      max-width: 100%;
+
+      .public-DraftEditor-content,
+      textarea {
+        @include roboto;
+        min-height: 75px;
+        color: $tc-gray-80;
+        line-height: $base-unit*5;
+        font-size: $tc-label-md;
+      }
+
+      &.has-footer {
+        textarea {
+          margin-bottom: 0;
+          border-bottom: none;
+        }
+      }
+
+      .textarea-footer {
+        padding: $base-unit 0;
+
+        .textarea-footer-inner {
+          display: none;
+        }
+
+        .textarea-buttons {
+          display: flex;
+          align-items: center;
+
+          button,
+          .separator {
+            margin-right: 1px;
+            display: inline-block;
+            border: none;
+            background-color: transparent;
+            padding: 0px;
+          }
+
+          .button {
+            cursor: pointer;
+          }
+
+          .separator {
+            width: 1px;
+            height: 20px;
+            background-color: $tc-gray-30;
+            margin-left: 8px;
+            margin-right: 8px;
+          }
+
+          button {
+            &:hover,
+            &:disabled {
+              opacity: 0.5;
+            }
+
+            &.active {
+              opacity: 1;
+            }
+          }
+        }
+
+        .tc-btn {
+          margin-left: auto;
+        }
+
+        .tc-btns {
+          margin-left: auto;
+
+          .tc-btn {
+            margin-left: 10px;
+          }
+        }
+      }
+    }
   }
 
   .public-DraftEditorPlaceholder-root {
+    @include roboto;
+
     position: absolute;
     padding-left: 10px;
     padding-top: 5px;
@@ -98,10 +201,6 @@
   .action-card .comment .tc-textarea .public-DraftEditor-content {
     min-height: 40px;
   }
-
-  // .action-card .expanded .comment .tc-textarea .public-DraftEditor-content {
-//   min-height: 145px;
-// }
 
   .action-card .comment .textarea-footer {
     display: none !important;
@@ -136,4 +235,3 @@
     background-color: transparent;
   }
 }
-  
