@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom'
 import FeedComments from './FeedComments'
 import UserWithName from '../User/UserWithName'
 import NewPostMobile, { NEW_POST_STEP } from './NewPostMobile'
-import { markdownToHTML } from '../../helpers/markdownToState'
 
 import './FeedMobile.scss'
 
@@ -72,7 +71,7 @@ class FeedMobile extends React.Component {
 
   render() {
     const {
-      id, user, currentUser, date, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
+      id, user, currentUser, date, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
       allowComments, comments, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
       onEditMessage, onSaveMessage, onDeleteMessage, error, permalink, allMembers, title
     } = this.props

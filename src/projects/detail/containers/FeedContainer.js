@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Prompt, Link } from 'react-router-dom'
+import { Prompt } from 'react-router-dom'
 import _ from 'lodash'
 import {
   THREAD_MESSAGES_PAGE_SIZE,
@@ -33,9 +33,7 @@ import NewPostMobile from '../../../components/Feed/NewPostMobile'
 import FeedMobile from '../../../components/Feed/FeedMobile'
 import Section from '../components/Section'
 import SectionTitle from '../components/SectionTitle'
-import ProjectStage from '../components/ProjectStage'
 import WorkInProgress from '../components/WorkInProgress'
-// import './Specification.scss'
 import Refresh from '../../../assets/icons/icon-refresh.svg'
 
 import { ScrollElement } from 'react-scroll'
