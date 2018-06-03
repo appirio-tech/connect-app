@@ -82,7 +82,7 @@ class SpecificationContainer extends Component {
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
               if (matches) {
-                return <Sticky top={80}>{leftArea}</Sticky>
+                return <Sticky top={60}>{leftArea}</Sticky>
               } else {
                 return leftArea
               }
