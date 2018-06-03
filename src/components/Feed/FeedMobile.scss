@@ -7,6 +7,11 @@
   & + & {
     margin-top: 2 * $base-unit;
   }
+
+  &.no-topic {
+    background-color: transparent;
+    padding-top: 0;
+  }
 }
 
 .header {
@@ -47,10 +52,10 @@
   font-weight: normal;
   padding-left: 0;
   padding-right: 0;
+}
 
-  &:first-child {
-    color: $tc-gray-40;
-  }
+.feed-actions div :global(.tc-btn.tc-btn-md) {
+  color: $tc-gray-40;
 }
 
 .no-comments {

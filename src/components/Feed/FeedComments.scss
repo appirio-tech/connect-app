@@ -8,6 +8,10 @@
   :global(.rich-editor) :global(.tc-textarea) :global(.public-DraftEditor-content) {
     min-height: 40px
   }
+
+  @media screen and (max-width: $screen-md - 1px) {
+    background-color: transparent;
+  }
 }
 
 .comments {
@@ -20,16 +24,16 @@
   text-align: center;
 
   @media screen and (max-width: $screen-md - 1px) {
+    background-color: transparent;
+    padding-bottom: 0;
     position: relative;
-    height: 24px;
-    margin: 3 * $base-unit 0;
 
     &::before {
       border-top: 1px solid $tc-gray-10;
       content: '';
       display: block;
       left: 0;
-      top: 12px;
+      top: 12px + 2 * $base-unit; // padding-top + half of .load-btn
       position: absolute;
       width: 100%;
     }
@@ -42,10 +46,12 @@
     border: 1px solid $tc-gray-neutral-dark;
     border-radius: 40px;
     color: $tc-dark-blue-110;
+    display: inline-block;
     height: 20px;
     font-size: 11px;
     line-height: 20px;
     padding: 0 2 * $base-unit;
+    position: relative;
 
     &:hover {
       color: $tc-dark-blue-110;
@@ -58,11 +64,10 @@
       font-size: 13px;
       height: 24px;
       line-height: 24px;
-      position: absolute;
       padding: 0 3 * $base-unit;
 
       &:hover {
-        color: $tc-dark-blue-110;
+        color: $tc-gray-50;
       }
     }
   }

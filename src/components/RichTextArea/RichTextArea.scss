@@ -1,4 +1,5 @@
 @import '~tc-ui/src/styles/tc-includes';
+@import '../../styles/includes';
 
 :global {
   .rich-editor {
@@ -8,6 +9,10 @@
     &.expanded {
       .tc-textarea .textarea-footer .textarea-footer-inner {
         display: flex;
+
+        @media screen and (max-width: $screen-rg - 1px) {
+          display: block;
+        }
       }
     }
 
@@ -174,9 +179,17 @@
 
         .tc-btns {
           margin-left: auto;
+          @media screen and (max-width: $screen-rg - 1px) {
+            padding-top: $base-unit;
+          }
 
           .tc-btn {
             margin-left: 10px;
+
+            @media screen and (max-width: $screen-rg - 1px) {
+              margin-left: 0;
+              margin-right: 2 * $base-unit;
+            }
           }
         }
       }

@@ -32,6 +32,8 @@ import Refresh from '../../../assets/icons/icon-refresh.svg'
 import { scrollToHash } from '../../../components/ScrollToAnchors'
 import { isSystemUser } from '../../../helpers/tcHelpers'
 
+import './FeedContainer.scss'
+
 class FeedView extends React.Component {
 
   constructor(props) {
@@ -435,7 +437,9 @@ class FeedView extends React.Component {
         </Section>
         { !isNewPostMobileOpen &&
           <MediaQuery maxWidth={SCREEN_BREAKPOINT_MD - 1}>
-            <ChatButton onClick={this.toggleNewPostMobile} />
+            <div styleName="chat-button-space">
+              <ChatButton onClick={this.toggleNewPostMobile} />
+            </div>
           </MediaQuery>
         }
         { isNewPostMobileOpen &&

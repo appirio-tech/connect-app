@@ -12,6 +12,11 @@
   justify-content: space-between;
   margin-top: $base-unit;
   padding-right: 50px;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    padding-left: 4 * $base-unit;
+    padding-right: 4 * $base-unit;
+  }
 }
 
 .main {
@@ -23,16 +28,24 @@
   color: $tc-gray-30;
   padding-left: 4 * $base-unit;
   width: 80px;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    display: none;
+  }
 }
 
 .price {
   flex: 0 140px;
-  padding-right: 18px;
+  padding-right: 5 * $base-unit;
   text-align: right;
 }
 
 .status {
-  width: 40px;
+  flex: 1 0 40px;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    display: none;
+  }
 }
 
 .meta-list {

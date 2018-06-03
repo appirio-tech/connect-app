@@ -14,7 +14,7 @@
   .hide-sm {
     display: inline-block;
   }
-  @include viewSm {
+  @media screen and (max-width: $screen-md - 1px) {
     height: $base-unit*8;
     line-height: $base-unit*8;
     border-radius: 0;
@@ -30,7 +30,7 @@
     width: 0;
     background-color: #0681FF;
     border-radius: 6px 0 0 6px;
-    @include viewSm {
+    @media screen and (max-width: $screen-md - 1px) {
       border-radius: 0;
     }
   }
@@ -44,19 +44,19 @@
     padding-right: $base-unit*3;
     z-index: 10;
     overflow: hidden;
-    @include viewSm {
+    @media screen and (max-width: $screen-md - 1px) {
       padding-right: $base-unit*7;
     }
     .group-right {
       min-width: 240px;
       display: flex;
       justify-content: space-between;
-      @include viewSm {
+      @media screen and (max-width: $screen-md - 1px) {
         min-width: 100px;
       }
     }
     .spent {
-      @include viewSm {
+      @media screen and (max-width: $screen-md - 1px) {
         margin-left: auto;
       }
     }

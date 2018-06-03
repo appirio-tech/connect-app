@@ -1,7 +1,0 @@
-/* mobile breakpoint */
-
-@mixin viewSm {
-  @media (max-width: 640px) {
-    @content;
-  }
-}

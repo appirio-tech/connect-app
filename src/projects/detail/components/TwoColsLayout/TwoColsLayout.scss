@@ -18,12 +18,16 @@
   position: relative;
 
   @media screen and (max-width: $screen-md - 1px) {
+    background-color: transparent;
+    box-shadow: none;
     max-width: 100%;
     min-height: 0;
+    padding-bottom: 0;
   }
 }
 
 .content {
+  padding-bottom: 4 * $base-unit;
   padding-left: 4 * $base-unit;
   padding-right: 4 * $base-unit;
   flex: 2;

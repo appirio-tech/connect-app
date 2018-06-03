@@ -20,8 +20,14 @@
      + 10px to slightly align center the price header */
   padding-right: 18px + 10px;
   text-align: right;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    display: none;
+  }
 }
 
 .status {
-  display: block;
+  @media screen and (max-width: $screen-md - 1px) {
+    display: none;
+  }
 }

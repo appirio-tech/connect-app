@@ -5,10 +5,8 @@
   background-color: #fff;
   border-radius: 6px;
   box-shadow: 0 1px 1px 0 #D5D5D5;
-  overflow: hidden;
-  position: relative;
 
-  @include viewSm {
+  @media screen and (max-width: $screen-md - 1px) {
     border-radius: 0;
   }
 
@@ -38,18 +36,18 @@
     position: relative;
     justify-content: space-between;
     padding-right: 50px;
+    padding-bottom: 15px;
+    padding-top: 15px;
     border-radius: inherit;
-    @include viewSm {
-      min-height: 100px;
-      padding-right: 40px;
-      padding-left: 15px;
-      padding-right: 15px;
+    @media screen and (max-width: $screen-md - 1px) {
+      padding-left: 4 * $base-unit;
+      padding-right: 4 * $base-unit;
     }
   }
   .col {
     &:nth-child(1) {
       flex: 0 500px;
-      @include viewSm {
+      @media screen and (max-width: $screen-md - 1px) {
         flex: 1;
         padding-right: 20px;
       }
@@ -62,13 +60,13 @@
     }
     &.show-md {
       display: none;
-      @include viewSm {
+      @media screen and (max-width: $screen-md - 1px) {
         display: block;
       }
     }
     &.hide-md {
       display: block;
-      @include viewSm {
+      @media screen and (max-width: $screen-md - 1px) {
         display: none;
       }
     }
@@ -76,12 +74,11 @@
   .project-details {
     padding-left: 80px;
     position: relative;
-    @include viewSm {
+
+    @media screen and (max-width: $screen-md - 1px) {
       padding-left: 0;
-      display: flex;
-      flex-wrap: wrap;
-      height: 80px;
     }
+
     .project-ico {
       position: absolute;
       left: 25px;
@@ -90,16 +87,17 @@
       width: 32px;
       height: 32px;
 
-      @include viewSm {
+      @media screen and (max-width: $screen-md - 1px) {
         display: none;
       }
     }
+
     .project-title {
       color: #151516;
       font-size: 20px;
       font-weight: 400;
       line-height: 30px;
-      @include viewSm {
+      @media screen and (max-width: $screen-md - 1px) {
         line-height: 25px;
       }
     }
@@ -112,14 +110,9 @@
   }
   .price-details {
     text-align: right;
-    padding-right: 18px;
+    padding-right: 25px;
     .meta-list {
       margin-top: 5px;
-    }
-    @include viewSm {
-      height: 70px;
-      display: flex;
-      flex-wrap: wrap;
     }
   }
   .meta-list {
@@ -127,6 +120,11 @@
     font-size: 11px;
     font-weight: 400;
     line-height: 20px;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      font-size: 13px;
+    }
+
     .meta {
       line-height: 20px;
       position: relative;
@@ -179,7 +177,7 @@
     &:hover {
       opacity: 0.7;
     }
-    @include viewSm {
+    @media screen and (max-width: $screen-md - 1px) {
       right: 0;
     }
   }
@@ -229,7 +227,7 @@
   } // progressbar
   .progressbar {
     display: none;
-    @include viewSm {
+    @media screen and (max-width: $screen-md - 1px) {
       display: block;
       position: absolute;
       bottom: 0;

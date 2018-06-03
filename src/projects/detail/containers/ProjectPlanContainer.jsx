@@ -23,7 +23,7 @@ const ProjectPlanContainer = (props) => {
   return (
     <TwoColsLayout>
       <TwoColsLayout.Sidebar>
-        &nbsp;
+        Left column
       </TwoColsLayout.Sidebar>
 
       <TwoColsLayout.Content>
