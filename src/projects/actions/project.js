@@ -170,7 +170,7 @@ function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT
     name: projectTemplate.name,
     startDate: new Date(),
 
-    // TODO $PROJECT_PLAN$ remove the next dummy values
+    // TODO $PROJECT_PLAN$ remove the next dummy values when endDate is not mandatory by back-end
     endDate: moment().add(17, 'days').format(),
   }).then((phase) => {
     return createPhaseProduct(project.id, phase.id, {

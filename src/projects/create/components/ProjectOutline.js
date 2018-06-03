@@ -8,6 +8,7 @@ import './ProjectOutline.scss'
 function ProjectOutline({ project, projectTemplates }) {
   // TODO $PROJECT_PLAN$
   // comment getting estimation until I know where they have to come from
+  // see https://github.com/appirio-tech/connect-app/issues/2016
   /* const product = _.get(project, 'details.products[0]')
   const projectTypeId = _.get(project, 'type')
   if (!projectTypeId || !product) return <div />

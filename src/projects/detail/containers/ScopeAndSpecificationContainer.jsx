@@ -12,7 +12,6 @@ import Sticky from 'react-stickynode'
 import MediaQuery from 'react-responsive'
 
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
-import SidebarWithFooter from '../components/SidebarWithFooter'
 import EditProjectForm from '../components/EditProjectForm'
 import TwoColsLayout from '../components/TwoColsLayout'
 import { SCREEN_BREAKPOINT_MD, PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'

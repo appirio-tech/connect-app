@@ -1,15 +1,15 @@
 import {
   LOAD_PROJECT_TEMPLATES_PENDING,
   LOAD_PROJECT_TEMPLATES_SUCCESS,
-  LOAD_PROJECT_TYPES_PENDING,
-  LOAD_PROJECT_TYPES_SUCCESS,
+  LOAD_PROJECT_CATEGORIES_PENDING,
+  LOAD_PROJECT_CATEGORIES_SUCCESS,
 } from '../config/constants'
 
 export const initialState = {
   projectTemplates: null,
   isProjectTemplatesLoading: false,
-  projectTypes: null,
-  isProjectTypesLoading: false,
+  projectCategories: null,
+  isProjectCategoriesLoading: false,
 }
 
 export default function(state = initialState, action) {
@@ -24,15 +24,15 @@ export default function(state = initialState, action) {
       projectTemplates: action.payload,
       isProjectTemplatesLoading: false,
     }
-  case LOAD_PROJECT_TYPES_PENDING:
+  case LOAD_PROJECT_CATEGORIES_PENDING:
     return {...state,
-      isProjectTypesLoading: true,
+      isProjectCategoriesLoading: true,
     }
 
-  case LOAD_PROJECT_TYPES_SUCCESS:
+  case LOAD_PROJECT_CATEGORIES_SUCCESS:
     return {...state,
-      projectTypes: action.payload,
-      isProjectTypesLoading: false,
+      projectCategories: action.payload,
+      isProjectCategoriesLoading: false,
     }
 
   default: return state

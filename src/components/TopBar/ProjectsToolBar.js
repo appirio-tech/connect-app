@@ -17,7 +17,7 @@ import MobileMenuToggle from '../MobileMenu/MobileMenuToggle'
 import SearchFilter from '../../assets/icons/ui-filters.svg'
 import SearchIcon from '../../assets/icons/ui-16px-1_zoom.svg'
 import { projectSuggestions, loadProjects, setInfiniteAutoload } from '../../projects/actions/loadProjects'
-import { loadProjectTypes } from '../../actions/templates'
+import { loadProjectCategories } from '../../actions/templates'
 
 
 class ProjectsToolBar extends Component {
@@ -41,10 +41,10 @@ class ProjectsToolBar extends Component {
   }
 
   componentWillMount() {
-    const { projectTypes, isProjectTypesLoading, loadProjectTypes } = this.props
+    const { projectCategories, isProjectCategoriesLoading, loadProjectCategories } = this.props
 
-    if (!isProjectTypesLoading && !projectTypes) {
-      loadProjectTypes()
+    if (!isProjectCategoriesLoading && !projectCategories) {
+      loadProjectCategories()
     }
   }
 
@@ -155,14 +155,14 @@ class ProjectsToolBar extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { user, criteria, creatingProject, projectCreationError, searchTermTag, projectTypes } = this.props
+    const { user, criteria, creatingProject, projectCreationError, searchTermTag, projectCategories } = this.props
     const { errorCreatingProject, isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
     return nextProps.user.handle !== user.handle
     || JSON.stringify(nextProps.criteria) !== JSON.stringify(criteria)
     || nextProps.creatingProject !== creatingProject
     || nextProps.projectCreationError !== projectCreationError
     || nextProps.searchTermTag !== searchTermTag
-    || !!nextProps.projectTypes && !projectTypes
+    || !!nextProps.projectCategories && !projectCategories
     || nextState.errorCreatingProject !== errorCreatingProject
     || nextState.isFilterVisible !== isFilterVisible
     || nextState.isMobileMenuOpen !== isMobileMenuOpen
@@ -170,7 +170,7 @@ class ProjectsToolBar extends Component {
   }
 
   render() {
-    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser, user, mobileMenu, location, projectTypes } = this.props
+    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser, user, mobileMenu, location, projectCategories } = this.props
     const { isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
     const isLoggedIn = !!(userRoles && userRoles.length)
 
@@ -228,7 +228,7 @@ class ProjectsToolBar extends Component {
                   className={cn('tc-btn tc-btn-sm mobile-search-toggle', {active: isMobileSearchVisible})}
                   onClick={ this.toggleMobileSearch }
                 ><SearchIcon /></a>
-                { !!projectTypes &&
+                { !!projectCategories &&
                 <a
                   href="javascript:"
                   className={cn('tc-btn tc-btn-sm', {active: isFilterVisible})}
@@ -259,12 +259,12 @@ class ProjectsToolBar extends Component {
             />
           </div>
         }
-        { !!projectTypes && isFilterVisible && isLoggedIn &&
+        { !!projectCategories && isFilterVisible && isLoggedIn &&
           <div className="secondary-toolbar">
             <Filters
               applyFilters={ this.applyFilters }
               criteria={ criteria }
-              projectTypes={ projectTypes }
+              projectCategories={ projectCategories }
             />
           </div>
         }
@@ -300,11 +300,11 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
     criteria               : projectSearch.criteria,
     userRoles              : _.get(loadUser, 'user.roles', []),
     user                   : loadUser.user,
-    projectTypes           : templates.projectTypes,
-    isProjectTypesLoading  : templates.isProjectTypesLoading,
+    projectCategories           : templates.projectCategories,
+    isProjectCategoriesLoading  : templates.isProjectCategoriesLoading,
   }
 }
 
-const actionsToBind = { projectSuggestions, loadProjects, setInfiniteAutoload, loadProjectTypes }
+const actionsToBind = { projectSuggestions, loadProjects, setInfiniteAutoload, loadProjectCategories }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(ProjectsToolBar))

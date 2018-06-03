@@ -364,13 +364,10 @@ export const projectState = function (state=initialState, action) {
     return {
       ...state,
       phases: updateProductInPhases(state.phases, action.payload.phaseId, action.payload.productId, {
-        // TODO $PROJECT_PLAN$
-        // for product we only update values in 'details' property for now
-        // because product template contains some fields which update
-        // properties of the product which doesn't exists for a product like
-        // description or notes
-        details: { $merge: action.payload.values.details },
-        isDirty: { $set: true },
+        $merge: {
+          ...action.payload.values,
+          isDirty: true,
+        }
       })
     }
 

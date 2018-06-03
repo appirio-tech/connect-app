@@ -198,7 +198,6 @@ const ProjectsGridView = props => {
     projectsStatus
   }
 
-  console.warn('projects', projects)
   return (
     <div>
       <GridView {...gridProps} />

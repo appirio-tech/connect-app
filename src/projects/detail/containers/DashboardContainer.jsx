@@ -23,7 +23,6 @@ import FeedContainer from './FeedContainer'
 import Sticky from 'react-stickynode'
 import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import TwoColsLayout from '../components/TwoColsLayout'
-import SidebarWithFooter from '../components/SidebarWithFooter'
 import SystemFeed from '../../../components/Feed/SystemFeed'
 import WorkInProgress from '../components/WorkInProgress'
 

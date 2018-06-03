@@ -1,16 +1,12 @@
 /**
  * Project and product templates API service
- *
- * TODO $PROJECT_PLAN$
- *   This is mock for API service, which tough returns **real data** already.
- *   It has to bbe replaced with real API calling when API is ready.
  */
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL } from '../config/constants'
 
 // import projectTemplates from './templates-json/project-templates.json'
-import projectTypes from './templates-json/project-types.json'
+import projectCategories from './templates-json/project-categories.json'
 // import productTemplates from './templates-json/product-templates.json'
 
 /**
@@ -73,11 +69,11 @@ export function getProductTemplateByKey(productKey) {
  *
  * @return {Promise} list of project categories
  */
-export function getProjectTypes() {
+export function getProjectCategories() {
   return new Promise((resolve) => {
     // simulate loading
     setTimeout(() => {
-      resolve(projectTypes)
+      resolve(projectCategories)
     }, 3000)
   })
 }

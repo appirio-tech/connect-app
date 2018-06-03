@@ -1,8 +1,8 @@
 /**
  * Project and product templates actions
  */
-import { LOAD_PROJECT_TEMPLATES, LOAD_PROJECT_TYPES } from '../config/constants'
-import { getProjectTemplates, getProjectTypes } from '../api/templates'
+import { LOAD_PROJECT_TEMPLATES, LOAD_PROJECT_CATEGORIES } from '../config/constants'
+import { getProjectTemplates, getProjectCategories } from '../api/templates'
 
 export function loadProjectTemplates() {
   return (dispatch) => {
@@ -13,11 +13,11 @@ export function loadProjectTemplates() {
   }
 }
 
-export function loadProjectTypes() {
+export function loadProjectCategories() {
   return (dispatch) => {
     return dispatch({
-      type: LOAD_PROJECT_TYPES,
-      payload: getProjectTypes()
+      type: LOAD_PROJECT_CATEGORIES,
+      payload: getProjectCategories()
     })
   }
 }

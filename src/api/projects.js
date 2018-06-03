@@ -116,12 +116,6 @@ export function updateProject(projectId, updatedProps, updateExisting) {
  * @return {Promise}             updated product
  */
 export function updateProduct(projectId, phaseId, productId, updatedProps) {
-  // TODO $PROJECT_PLAN$ only update details for now as product template has some values which has to be hidden
-  // so to avoid validation error, we only allow update details for now
-  updatedProps = {
-    details: updatedProps.details
-  }
-
   return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}/products/${productId}`, {
     param: updatedProps,
   })
