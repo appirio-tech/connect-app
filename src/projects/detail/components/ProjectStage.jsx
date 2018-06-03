@@ -25,10 +25,11 @@ const EnhancedEditProjectForm = enhance(EditProjectForm)
  *
  * @param {Object} phase            phase
  * @param {Array}  productTemplates product templates
+ * @param {Object} feed             phase feed object
  *
  * @returns {Object} PhaseCard attr property
  */
-function formatPhaseCardAttr(phase, productTemplates) {
+function formatPhaseCardAttr(phase, productTemplates, feed) {
   // NOTE so far one phase always has 1 product
   // but as in the future this may be changed, we work with products as an array
   const product = _.get(phase, 'products[0]')
@@ -54,6 +55,10 @@ function formatPhaseCardAttr(phase, productTemplates) {
     paidStatus = `$${formatNumberWithCommas(budget - actualPrice)} remaining`
   }
 
+  const postsCount = _.get(feed, 'posts.length')
+  const postsWord = postsCount === 1 ? 'post' : 'posts'
+  const posts = _.isNumber(postsCount) ? `${postsCount} ${postsWord}` : null
+
   return {
     icon,
     title,
@@ -62,6 +67,7 @@ function formatPhaseCardAttr(phase, productTemplates) {
     price,
     paidStatus,
     status,
+    posts,
   }
 }
 
@@ -145,7 +151,7 @@ class ProjectStage extends React.Component{
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
 
     return (
-      <PhaseCard attr={formatPhaseCardAttr(phase, productTemplates)}>
+      <PhaseCard attr={formatPhaseCardAttr(phase, productTemplates, feed)}>
         <div>
           <GenericMenu navLinks={tabs} />
 
