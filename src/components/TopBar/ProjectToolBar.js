@@ -72,7 +72,7 @@ class ProjectToolBar extends React.Component {
             <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{project.name}</span>
             {isTooltipVisible && <div className="breadcrumb-tooltip">{project.name}</div>}
           </div>}
-          <div className="bar-column project-name mobile"><span>PROJECT DETAILS</span></div>
+          <div className="bar-column project-name mobile"><span>{project.name}</span></div>
           <div className="bar-column">
             <NewProjectNavLink compact returnUrl={window.location.href} />
             {userMenu}
