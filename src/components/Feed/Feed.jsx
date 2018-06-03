@@ -46,11 +46,14 @@ class Feed extends React.Component {
     if (authorName && user.lastName) {
       authorName += ' ' + user.lastName
     }
-    const self = user && user.userId === currentUser.userId
-    const title = this.props.newTitle === null || this.props.newTitle === undefined ? this.props.title : this.props.newTitle
-    const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
-    return (
-      <div styleName="feed-container" id={`feed-${id}`}>
+
+    let topicHeader = null
+    if (topicMessage) {
+      const self = user && user.userId === currentUser.userId
+      const title = this.props.newTitle === null || this.props.newTitle === undefined ? this.props.title : this.props.newTitle
+      const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
+
+      topicHeader = (
         <header styleName="feed-header">
           {editTopicMode ? (
             <div styleName="header-edit">
@@ -83,6 +86,12 @@ class Feed extends React.Component {
             </div>
           )}
         </header>
+      )
+    }
+
+    return (
+      <div styleName="feed-container" id={`feed-${id}`}>
+        {topicHeader}
         <FeedComments
           allowComments={allowComments}
           totalComments={totalComments}
@@ -116,20 +125,20 @@ Feed.propTypes = {
   user: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
-  topicMessage: PropTypes.any.isRequired,
+  topicMessage: PropTypes.any,
   allowComments: PropTypes.bool.isRequired,
   hasMoreComments: PropTypes.bool,
   comments: PropTypes.array,
   children: PropTypes.any,
   onLoadMoreComments: PropTypes.func.isRequired,
-  onNewCommentChange: PropTypes.func.isRequired,
+  onNewCommentChange: PropTypes.func,
   onAddNewComment: PropTypes.func.isRequired,
-  onSaveMessageChange: PropTypes.func.isRequired,
+  onSaveMessageChange: PropTypes.func,
   onSaveMessage: PropTypes.func.isRequired,
   onDeleteMessage: PropTypes.func.isRequired,
-  onTopicChange: PropTypes.func.isRequired,
-  onSaveTopic: PropTypes.func.isRequired,
-  onDeleteTopic: PropTypes.func.isRequired,
+  onTopicChange: PropTypes.func,
+  onSaveTopic: PropTypes.func,
+  onDeleteTopic: PropTypes.func,
   isAddingComment: PropTypes.bool,
   isSavingTopic: PropTypes.bool
 }

@@ -39,7 +39,7 @@ class FeedComments extends React.Component {
   }
 
   onSaveMessageChange(messageId, content, editMode) {
-    this.props.onSaveMessageChange(messageId, content, editMode)
+    this.props.onSaveMessageChange && this.props.onSaveMessageChange(messageId, content, editMode)
   }
 
   render() {
@@ -73,19 +73,19 @@ class FeedComments extends React.Component {
     }
 
     comments.forEach((item, idx) => {
-      const date = moment(item.date)
+      const createdAt = moment(item.createdAt)
       const prevComment = comments[idx - 1]
-      const isSameAuthor = prevComment && prevComment.author.id === item.author.id
-      const isSameDay = prevComment && moment(prevComment.date).isSame(date, 'day')
+      const isSameAuthor = prevComment && prevComment.author.userId === item.author.userId
+      const isSameDay = prevComment && moment(prevComment.createdAt).isSame(createdAt, 'day')
       const isFirstUnread = prevComment && !prevComment.unread && item.unread
 
       if (!isSameDay) {
         desktopBlocks.push(
           <div
-            key={`date-splitter-${date.valueOf()}`}
+            key={`date-splitter-${createdAt.valueOf()}`}
             styleName={cn('date-splitter', { 'unread-splitter': isFirstUnread })}
           >
-            <span styleName="date">{formatCommentDate(date)}</span>
+            <span styleName="date">{formatCommentDate(createdAt)}</span>
             <span styleName="unread">New posts</span>
           </div>
         )
@@ -100,7 +100,7 @@ class FeedComments extends React.Component {
           key={idx}
           message={item}
           author={item.author}
-          date={date.fromNow()}
+          date={moment(item.date).fromNow()}
           edited={item.edited}
           active={item.unread}
           self={item.author && item.author.userId === currentUser.userId}

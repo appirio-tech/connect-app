@@ -22,11 +22,11 @@ class Comment extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({editMode: this.props.message && this.props.message.editMode})
+    this.setState({editMode: this.props.message && this.props.message.editMode || this.props.isSaving})
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({editMode: nextProps.message && nextProps.message.editMode})
+    this.setState({editMode: nextProps.message && nextProps.message.editMode || nextProps.isSaving})
   }
 
   onSave({content}) {
@@ -57,6 +57,7 @@ class Comment extends React.Component {
     const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#${messageAnchor}`
     const authorName = author ? (author.firstName + ' ' + author.lastName) : 'Connect user'
     const avatarUrl = _.get(author, 'photoURL', null)
+    const isDeleting = message && message.isDeletingComment
 
     if (this.state.editMode) {
       const content = message.newContent === null || message.newContent === undefined ? message.rawContent : message.newContent
@@ -83,9 +84,9 @@ class Comment extends React.Component {
     }
 
     return (
-      <div styleName={cn('container', { self })}>
+      <div styleName={cn('container', { self, 'is-deleting': isDeleting })} id={messageAnchor}>
         <div styleName="avatar">
-          {!noInfo && <UserTooltip usr={author} id={messageAnchor} previewAvatar size={40} />}
+          {!noInfo && <UserTooltip usr={author} id={`${messageAnchor}-${author.userId}`} previewAvatar size={40} />}
         </div>
         <div styleName="body">
           {!noInfo &&
@@ -112,8 +113,8 @@ class Comment extends React.Component {
           <div styleName="text">
             {children}
           </div>
-          {message && message.isDeletingComment &&
-            <div className="deleting-layer">
+          {isDeleting &&
+            <div styleName="deleting-layer">
               <div>Deleting post ...</div>
             </div>
           }

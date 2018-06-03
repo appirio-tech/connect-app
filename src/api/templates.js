@@ -11,7 +11,7 @@ import { TC_API_URL } from '../config/constants'
 
 // import projectTemplates from './templates-json/project-templates.json'
 import projectTypes from './templates-json/project-types.json'
-import productTemplates from './templates-json/product-templates.json'
+// import productTemplates from './templates-json/product-templates.json'
 
 /**
  * Get the list of project templates
@@ -50,8 +50,6 @@ export function getProductTemplate(productTemplateId) {
 /**
  * Get product template by key
  *
- * TODO $PROJECT_PLAN$ so far this method is mocked and has to be updated with real one
- *
  * This is only need for old project which doesn't have `templateId`
  *
  * @param {String} productKey product template key
@@ -59,12 +57,12 @@ export function getProductTemplate(productTemplateId) {
  * @return {Promise} product template
  */
 export function getProductTemplateByKey(productKey) {
-  return new Promise((resolve) => {
-    // simulate loading
-    setTimeout(() => {
-      resolve(_.find(productTemplates, { productKey }))
-    }, 1000)
-  })
+  const params = {
+    filter: `productKey=${productKey}`
+  }
+
+  return axios.get(`${TC_API_URL}/v4/productTemplates/`, { params })
+    .then(resp => _.get(resp.data, 'result.content[0]', {}))
 }
 
 /**

@@ -13,6 +13,8 @@ import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
 import PhaseCard from './PhaseCard'
 import GenericMenu from '../../../components/GenericMenu'
 import EditProjectForm from './EditProjectForm'
+import PhaseFeed from './PhaseFeed'
+import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
 const enhance = spinnerWhileLoading(props => !props.processing)
@@ -106,6 +108,16 @@ class ProjectStage extends React.Component{
       fireProductDirty,
       fireProductDirtyUndo,
       onTabClick,
+
+      // comes from phaseFeedHOC
+      currentUser,
+      feed,
+      onLoadMoreComments,
+      onAddNewComment,
+      isAddingComment,
+      onDeleteMessage,
+      allMembers,
+      onSaveMessage,
     } = this.props
 
     const tabs = [
@@ -142,7 +154,16 @@ class ProjectStage extends React.Component{
           }
 
           {activeTab === 'posts' &&
-            <div>Posts</div>
+            <PhaseFeed
+              currentUser={currentUser}
+              feed={feed}
+              onLoadMoreComments={onLoadMoreComments}
+              onAddNewComment={onAddNewComment}
+              isAddingComment={isAddingComment}
+              onDeleteMessage={onDeleteMessage}
+              allMembers={allMembers}
+              onSaveMessage={onSaveMessage}
+            />
           }
 
           {activeTab === 'specification' &&
@@ -189,6 +210,8 @@ ProjectStage.propTypes = {
   removeProductAttachment: PT.func.isRequired,
 }
 
-export default uncontrollable(ProjectStage, {
+const ProjectStageUncontrollable = uncontrollable(ProjectStage, {
   activeTab: 'onTabClick',
 })
+
+export default phaseFeedHOC(ProjectStageUncontrollable)

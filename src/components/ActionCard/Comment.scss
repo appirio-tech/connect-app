@@ -4,7 +4,7 @@
   display: flex;
   padding: $base-unit 4 * $base-unit;
 
-  &.self:hover {
+  &.self:not(.is-deleting):hover {
     background-color: $tc-gray-neutral-light;
   }
 
@@ -61,7 +61,7 @@
   right: 0;
   top: 0;
 
-  .container.self:hover & {
+  .container.self:not(.is-deleting):hover & {
     display: block;
   }
 }
@@ -76,4 +76,25 @@
 .comment-editor {
   background-color: $tc-gray-neutral-light;
   padding-left: 8 * $base-unit;
+}
+
+.deleting-layer {
+  align-items: center; /* align vertical */
+  background-color: $tc-gray-neutral-light;
+  bottom: 0;
+  display: flex;
+  justify-content: center; /* align horizontal */
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+
+  > div {
+    @include roboto;
+    color: $tc-gray-50;
+    font-size: 11px;
+    height: 20px;
+    line-height: 20px;
+  }
 }
