@@ -78,13 +78,11 @@ class DashboardContainer extends React.Component {
     )
 
     const leftArea = (
-      <SidebarWithFooter>
-        <ProjectInfoContainer
-          currentMemberRole={currentMemberRole}
-          project={project}
-          isSuperUser={isSuperUser}
-        />
-      </SidebarWithFooter>
+      <ProjectInfoContainer
+        currentMemberRole={currentMemberRole}
+        project={project}
+        isSuperUser={isSuperUser}
+      />
     )
 
     return (

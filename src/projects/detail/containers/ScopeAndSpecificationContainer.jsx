@@ -74,9 +74,7 @@ class SpecificationContainer extends Component {
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
 
     const leftArea = (
-      <SidebarWithFooter>
-        <ProjectSpecSidebar project={project} sections={sections} currentMemberRole={currentMemberRole} />
-      </SidebarWithFooter>
+      <ProjectSpecSidebar project={project} sections={sections} currentMemberRole={currentMemberRole} />
     )
 
     return (
