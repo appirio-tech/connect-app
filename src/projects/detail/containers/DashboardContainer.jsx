@@ -27,10 +27,17 @@ import SystemFeed from '../../../components/Feed/SystemFeed'
 import WorkInProgress from '../components/WorkInProgress'
 
 import {
-  SYSTEM_USER,
   PROJECT_STATUS_ACTIVE,
   PROJECT_STATUS_DRAFT,
+  CODER_BOT_USER_FNAME,
+  CODER_BOT_USER_LNAME,
 } from '../../../config/constants'
+
+const SYSTEM_USER = {
+  firstName: CODER_BOT_USER_FNAME,
+  lastName: CODER_BOT_USER_LNAME,
+  photoURL: require('../../../assets/images/avatar-coder.svg')
+}
 
 class DashboardContainer extends React.Component {
   constructor(props) {

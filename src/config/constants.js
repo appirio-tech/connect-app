@@ -500,9 +500,3 @@ export const NOTIFICATION_SETTINGS_PERIODS = [
   { text: 'Daily', value: 'daily' },
   { text: 'Weekly', value: 'weekly' },
 ]
-
-export const SYSTEM_USER = {
-  firstName: CODER_BOT_USER_FNAME,
-  lastName: CODER_BOT_USER_LNAME,
-  photoURL: require('../assets/images/avatar-coder.svg')
-}

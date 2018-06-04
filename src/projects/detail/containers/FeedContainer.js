@@ -9,7 +9,8 @@ import {
   THREAD_MESSAGES_PAGE_SIZE,
   PROJECT_FEED_TYPE_PRIMARY,
   SCREEN_BREAKPOINT_MD,
-  SYSTEM_USER,
+  CODER_BOT_USER_FNAME,
+  CODER_BOT_USER_LNAME,
 } from '../../../config/constants'
 import { connect } from 'react-redux'
 import Sticky from 'react-stickynode'
@@ -33,6 +34,12 @@ import { scrollToHash } from '../../../components/ScrollToAnchors'
 import { isSystemUser } from '../../../helpers/tcHelpers'
 
 import './FeedContainer.scss'
+
+const SYSTEM_USER = {
+  firstName: CODER_BOT_USER_FNAME,
+  lastName: CODER_BOT_USER_LNAME,
+  photoURL: require('../../../assets/images/avatar-coder.svg')
+}
 
 class FeedView extends React.Component {
 

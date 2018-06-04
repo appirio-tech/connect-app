@@ -13,9 +13,16 @@ import {
 } from '../../actions/phasesTopics'
 import { isSystemUser } from '../../../helpers/tcHelpers'
 import {
-  SYSTEM_USER,
   THREAD_MESSAGES_PAGE_SIZE,
+  CODER_BOT_USER_FNAME,
+  CODER_BOT_USER_LNAME,
 } from '../../../config/constants'
+
+const SYSTEM_USER = {
+  firstName: CODER_BOT_USER_FNAME,
+  lastName: CODER_BOT_USER_LNAME,
+  photoURL: require('../../../assets/images/avatar-coder.svg')
+}
 
 const phaseFeedHOC = (Component) => {
   class PhaseFeedContainer extends React.Component {
