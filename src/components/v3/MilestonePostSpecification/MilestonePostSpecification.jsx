@@ -44,11 +44,15 @@ class MilestonePostSpecification extends React.Component {
 MilestonePostSpecification.defaultProps = {
   fakeName: '',
   onClick: () => {},
+  isCompleted: false,
+  inProgress: false
 }
 
 MilestonePostSpecification.propTypes = {
   fakeName: PT.string,
-  onClick: PT.func
+  onClick: PT.func,
+  isCompleted: PT.bool,
+  inProgress: PT.bool
 }
 
 export default MilestonePostSpecification

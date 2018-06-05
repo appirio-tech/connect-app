@@ -1,7 +1,8 @@
 import React from 'react'
 import PT from 'prop-types'
 import './Specification.scss'
-import SubmissionEditLink from '../SubmissionEditLink' 
+import SubmissionEditLink from '../SubmissionEditLink'
+import MilestonePost from '../MilestonePost'
 
 class Specification extends React.Component {
   constructor(props) {
@@ -73,21 +74,16 @@ class Specification extends React.Component {
           <button className="tc-btn tc-btn-default tc-btn-sm action-btn" onClick={this.addUrl}>{'Add specification document link'}</button>
         </div>)}
 
-        {this.state.milestonePostLink !== '' && (<div styleName="label-layer">
-          <span styleName={ 'label-specification span-one' }>{'Specification'}</span>
-          <div styleName="group-right">
-            <a href={this.state.milestonePostLink} styleName="milestone-text" dangerouslySetInnerHTML={{ __html: this.state.milestonePostLink }} />
-          </div>
-          <span onClick={this.addUrl} styleName={ 'label-specification span-two' } />
-          <span onClick={this.resetUrl} styleName={ 'label-specification span-three' } />
-        </div>)}
+        {this.state.milestonePostLink !== '' && (
+          <MilestonePost isHideDot={trueValue} milestonePostLink={this.state.milestonePostLink} isCompleted={props.isCompleted} inProgress={props.inProgress} milestoneType={'specification'} deletePost={this.resetUrl} />
+        )}
 
         {this.state.isShowEditText && (<div styleName="top-space">
-          <SubmissionEditLink callbackCancel={this.closeEditUrl} callbackOK={this.updatedUrl} label={'Edit specification document link'} isHaveUrl={trueValue} inProgress={false} okButtonTitle={this.isEmpty() ? 'Add link' : 'Save changes'}/>
+          <SubmissionEditLink callbackCancel={this.closeEditUrl} callbackOK={this.updatedUrl} label={'Specification document link'} isHaveUrl={trueValue} inProgress={false} okButtonTitle={this.isEmpty() ? 'Add link' : 'Save changes'} />
         </div>)}
 
         {this.state.milestonePostLink !== '' && !props.isCompleted && (<div styleName="top-space button-layer">
-          <button className="tc-btn tc-btn-primary tc-btn-sm action-btn" onClick={this.onComplete}>{'Mark as completed'}</button>
+          <button className="tc-btn tc-btn-primary tc-btn-sm action-btn" onClick={this.onComplete}>{props.buttonFinishTitle}</button>
         </div>)}
 
       </div>
@@ -95,14 +91,16 @@ class Specification extends React.Component {
   }
 }
 
-Specification.defaultProp = {
-  finish: () => {}
+Specification.defaultProps = {
+  finish: () => {},
+  buttonFinishTitle: 'Mark as completed'
 }
 
 Specification.propTypes = {
   isCompleted: PT.bool,
   inProgress: PT.bool,
-  finish: PT.func
+  finish: PT.func,
+  buttonFinishTitle: PT.string
 }
 
 export default Specification

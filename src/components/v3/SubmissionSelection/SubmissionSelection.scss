@@ -172,16 +172,7 @@
   .seperation-sm {
     margin-top: 5px;
   }
-  .message-bar {
-    background-color: #fff8ca;
-    border-radius: 25px;
-    text-align: center;
-    font-size: 13px;
-    font-style: italic;
-    height: 25px;
-    line-height: 25px;
-    margin-top: 10px;
-    position: relative;
+  .hide-progress-bar {
     :before {
       content: '';
       width: 4px;
@@ -192,26 +183,38 @@
       bottom: 0;
     }
   }
+  .message-bar {
+    background-color: #fff8ca;
+    border-radius: 25px;
+    text-align: center;
+    font-size: 13px;
+    font-style: italic;
+    height: 25px;
+    line-height: 25px;
+    margin-top: 10px;
+    position: relative;
+  }
   .action-bar {
     padding-top: 10px;
     padding-bottom: 10px;
     position: relative;
-
-    :before {
-      content: '';
-      width: 4px;
-      background-color: #fff;
-      position: absolute;
-      left: -20px;
-      top: -25px;
-      bottom: 0;
-    }
     .tc-btn {
-      color: #fff;
-    }
-
-    button {
       margin: 0px 5px;
+      &.disable {
+        border: 1px solid #ccc;
+        background-color: #ddd;
+        background: #ddd;
+        color: #888;
+        box-shadow: none;
+        opacity: 0.8;
+        &:hover {
+          border: 1px solid #ccc;
+          background-color: #ddd;
+          background: #ddd;
+          color: #888;
+          opacity: 0.8;
+        }
+      }
     }
   }
   .hide {

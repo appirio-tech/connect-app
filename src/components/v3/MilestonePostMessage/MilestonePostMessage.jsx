@@ -71,6 +71,14 @@ MilestonePostMessage.defaultProps = {
   cancelCallback: () => {},
   okCallback: () => {},
   warningCallBack: () => {},
+  theme: '',
+  button1Title: '',
+  button2Title: '',
+  button3Title: '',
+  isShowSelection: false,
+  message: '',
+  label: ''
+
 }
 
 MilestonePostMessage.propTypes = {
@@ -80,7 +88,14 @@ MilestonePostMessage.propTypes = {
   backgroundColor: PT.string,
   cancelCallback: PT.func,
   okCallback: PT.func,
-  warningCallBack: PT.func
+  warningCallBack: PT.func,
+  theme: PT.string,
+  button1Title: PT.string,
+  button2Title: PT.string,
+  button4Title: PT.string,
+  isShowSelection: PT.bool,
+  message: PT.string,
+  label: PT.string
 }
 
 export default MilestonePostMessage

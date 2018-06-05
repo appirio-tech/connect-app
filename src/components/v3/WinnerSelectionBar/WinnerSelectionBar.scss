@@ -172,6 +172,11 @@
       }
       .switch-button {
         padding-bottom: 3%;
+        i {
+          &:hover {
+            box-shadow: 0 0 3px #0681ff;
+          }
+        }
       }
     }
   }

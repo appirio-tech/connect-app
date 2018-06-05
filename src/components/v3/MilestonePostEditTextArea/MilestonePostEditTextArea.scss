@@ -25,7 +25,6 @@
     height: inherit;
     position: relative;
     line-height: inherit;
-    z-index: 10;
     overflow: hidden;
 
     .label-title {
@@ -49,18 +48,26 @@
       &::-webkit-input-placeholder {
         text-transform: initial;
         color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
       }
-      &:-moz-placeholder { 
-          text-transform: initial;
-          color:#A3A3AD;
+      &:-moz-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
       }
-      &::-moz-placeholder {  
-          text-transform: initial;
-          color:#A3A3AD;
+      &::-moz-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
       }
-      &:-ms-input-placeholder { 
-          text-transform: initial;
-          color:#A3A3AD;
+      &:-ms-input-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
       }
     }
 

@@ -31,7 +31,7 @@ class MilestonePostEditTextArea extends React.Component {
       >
         <div styleName="label-layer">
           <div styleName="label-title">{title}</div>
-          <textarea type="text" onChange={this.onValueChange} value={this.state.value}  placeholder={'title'} rows="5"/>
+          <textarea type="text" onChange={this.onValueChange} value={this.state.value}  placeholder={props.title} rows="5"/>
         </div>
       </div>
     )

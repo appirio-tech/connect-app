@@ -5,6 +5,9 @@ import MilestonePostLink from '../MilestonePostLink'
 import MilestonePostSpecification from '../MilestonePostSpecification'
 import SubmissionEditLink from '../SubmissionEditLink'
 import MilestonePostMessage from '../MilestonePostMessage'
+import ProjectProgress from '../ProjectProgress'
+import MilestonePost from '../MilestonePost'
+
 
 class SubmissionSelection extends React.Component {
   constructor(props) {
@@ -20,6 +23,7 @@ class SubmissionSelection extends React.Component {
     this.requestExtensionCancel = this.requestExtensionCancel.bind(this)
     this.completeMilestoneReview = this.completeMilestoneReview.bind(this)
     this.requestExtensionOK1 = this.requestExtensionOK1.bind(this)
+    this.moveToReviewingState = this.moveToReviewingState.bind(this)
 
     const contentListItems = this.props.postContent ? this.props.postContent.submissions.slice(0) : []
     this.state = {
@@ -28,6 +32,7 @@ class SubmissionSelection extends React.Component {
       contentList: contentListItems,
       selectedItems: [],
       rejectedItems: [],
+      isWillReview: false,
       isReviewed: false,
       isAddingNewLink: false,
       isShowRequestingMessage1: false,
@@ -149,6 +154,13 @@ class SubmissionSelection extends React.Component {
     this.setState({isFinishMilestoneReview})
   }
 
+  /**
+   * move to reviewing state
+   */
+  moveToReviewingState() {
+    this.setState({isWillReview: true})
+  }
+
   render() {
     const props = this.props
     const postContent = this.props.postContent
@@ -160,13 +172,23 @@ class SubmissionSelection extends React.Component {
         + (props.inProgress ? 'in-progress ' : '')
       }
       >
-        <span styleName="dot" />
+
+        {this.state.isWillReview && (<span styleName="dot" />)}
+
+        {!this.state.isWillReview &&  (
+          <div styleName={'seperation-sm ' 
+          + (this.state.isWillReview ? 'hide-progress-bar' : '')}
+          >
+            <ProjectProgress labelDayStatus={'6 days until designs are completed'} progressPercent="12" theme={'light'}
+              isCompleted={props.isCompleted} inProgress={props.inProgress} readyForReview={trueValue} isHaveDot={!this.state.isWillReview} finish={this.moveToReviewingState}
+            />
+          </div>)}
 
         <div styleName={this.state.isReviewed ? 'hide' : 'show'}>
           {/* all items list for section */}
-          <header styleName="milestone-heading">
+          {this.state.isWillReview && (<header styleName="milestone-heading">
             {postContent.checkpointHeading}
-          </header>
+          </header>)}
           {
             this.state.contentList && this.state.contentList.length > 0 && this.state.contentList.map((content, i) => {
               return (
@@ -174,7 +196,7 @@ class SubmissionSelection extends React.Component {
                   {/* milestone add-a-link type content  */}
                   {!!content && !!content.type && content.type === 'submission-selection-entry' &&
                     (<div styleName="add-specification-wrap seperation-sm">
-                      <MilestonePostLink label={content.label} link={content.link} icon={content.linkType} index={i} checkActionHandler={this.checkActionHandler} />
+                      <MilestonePostLink label={content.label} link={content.link} icon={content.linkType} index={i} checkActionHandler={this.checkActionHandler} isHideCheckBox={!this.state.isWillReview}/>
                     </div>)
                   }
                 </div>
@@ -187,7 +209,7 @@ class SubmissionSelection extends React.Component {
           </div>
           )}
 
-          {!this.state.isAddingNewLink && (
+          {!this.state.isAddingNewLink && !props.isCompleted && (
             <div styleName="seperation-sm">
               <MilestonePostSpecification label={'Add a design link'} fakeName={`Design ${this.state.contentList.length+1}`} onClick={this.addDesignLink} />
             </div>
@@ -207,14 +229,14 @@ class SubmissionSelection extends React.Component {
           
 
           {this.state.showWarning && (
-            <div styleName="message-bar" className="flex center">
+            <div styleName="message-bar hide-progress-bar" className="flex center">
               <i>Please select all 5 designs to complete the review</i>
             </div>
           )}
-          {(
-            <div styleName="action-bar" className="flex center">
-              {this.state.selectedItemCount >= 5 && (
-                <button styleName="tc-btn" className={'tc-btn tc-btn-primary'} onClick={this.completeReview} >Complete review (48h remaining)</button>
+          { !props.isCompleted && (
+            <div styleName="action-bar hide-progress-bar" className="flex center">
+              {(
+                <button styleName={'tc-btn ' + (this.state.selectedItemCount < 5 ? 'disable ': '')} className={'tc-btn tc-btn-primary'} onClick={this.completeReview} >Complete review (48h remaining)</button>
               )}
               {!this.state.isShowRequestingMessage1 && !this.state.isShowRequestingMessage2 && (
                 <button styleName="tc-btn" className={'tc-btn tc-btn-warning'} onClick={this.requestExtensionClicked} >Request Extension</button>
@@ -283,6 +305,9 @@ class SubmissionSelection extends React.Component {
           </div>
         )}
         
+        {props.isCompleted && (<div styleName="seperation-sm">
+          <MilestonePost label={'All design source files (567MB .zip)'} milestonePostFile={'https://docs.google.com/affdisdfg?5234fasdf&asdfasdf&asdf3vasddfaasdfadfasddsfjlk43jkldsfjas'} isCompleted={props.isCompleted} inProgress={props.inProgress} milestoneType={'download'}/>
+        </div>)}
 
       </div>
     )

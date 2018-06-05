@@ -7,39 +7,51 @@ class MilestonePostEditLinkDropDown extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: 'test',
-      currentCount: 0
+      value: props.value,
+      currentCount: 0,
+      isShowDropDownList: false
     }
     this.onValueChange = this.onValueChange.bind(this)
+    this.chooseItem = this.chooseItem.bind(this)
+    this.toggleDropdownList = this.toggleDropdownList.bind(this)
   }
 
   /**use for update value for input text */
   onValueChange (event) {
     event.stopPropagation()
-    const value = event.target.value
-    this.setState({value})
+  }
+
+  chooseItem (event) {
+    this.toggleDropdownList()
+    this.setState({value: event.target.innerHTML})
+    this.props.onChange(event.target.innerHTML)
+  }
+
+  toggleDropdownList() {
+    this.setState({isShowDropDownList: !this.state.isShowDropDownList})
   }
 
   render() {
     const props = this.props
     const title = props.title ? props.title : 'Title'
-    const value = props.value ? props.value : ''
-    const labelStyle = {}
-    if (props.titleSpace !== '') {
-      labelStyle['marginRight'] = props.titleSpace
-    }
-    if (props.paddingLeft !== '') {
-      labelStyle['paddingLeft'] = props.paddingLeft
-    }
     return (
       <div styleName={'milestone-post ' 
       + (props.theme ? props.theme : '')
       }
       >
         <div styleName="label-layer">
-          <div style={labelStyle} styleName="label-title">{title}</div>
-          <input type="text" onChange={this.onValueChange} value={value}  placeholder={'title'} />
-          <span />
+          <div styleName={'label-title ' + props.titleExtraStyle}>{title}</div>
+          <input onClick={this.toggleDropdownList} type="text" onChange={this.onValueChange} value={this.state.value}  placeholder={'title'} readOnly/>
+          <span onClick={this.toggleDropdownList} />
+          {this.state.isShowDropDownList && ( <div styleName={'dropdow-list ' + props.titleExtraStyle}>
+            <ul>
+              <li onClick={this.chooseItem}> ZIP FILE </li>
+              <li onClick={this.chooseItem}> PNG FILE </li>
+              <li onClick={this.chooseItem}> RAR FILE </li>
+              <li onClick={this.chooseItem}> JPEG FILE </li>
+            </ul>
+          </div>)}
+          
         </div>
       </div>
     )
@@ -47,19 +59,21 @@ class MilestonePostEditLinkDropDown extends React.Component {
 }
 
 MilestonePostEditLinkDropDown.defaultProps = {
-  titleSpace: '',
-  paddingLeft: '',
+  titleExtraStyle: '',
+  value: '',
+  onChange: () => {},
+  title: '',
+  theme: ''
 }
 
 MilestonePostEditLinkDropDown.propTypes = {
-  progressPercent: PT.string,
-  labelDayStatus: PT.string,
-  labelSpent: PT.string,
-  labelStatus: PT.string,
   isCompleted: PT.bool,
   inProgress: PT.bool,
-  titleSpace: PT.string,
-  paddingLeft: PT.string
+  titleExtraStyle: PT.string,
+  value: PT.string,
+  onChange: PT.func,
+  title: PT.string,
+  theme: PT.string
 }
 
 export default MilestonePostEditLinkDropDown

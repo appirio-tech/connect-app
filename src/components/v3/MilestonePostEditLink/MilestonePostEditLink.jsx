@@ -29,13 +29,6 @@ class MilestonePostEditLink extends React.Component {
     const maxTitle = props.maxTitle ? props.maxTitle : 0
     const numberOfCharacter = this.state.value.length
     const maxLength = (maxTitle > 0) ? maxTitle : -1
-    const labelStyle = {}
-    if (props.titleSpace !== '') {
-      labelStyle['marginRight'] = props.titleSpace
-    }
-    if (props.paddingLeft !== '') {
-      labelStyle['paddingLeft'] = props.paddingLeft
-    }
     return (
       <div styleName={'milestone-post ' 
       + (props.theme ? props.theme : '')
@@ -47,8 +40,8 @@ class MilestonePostEditLink extends React.Component {
           )
         }
         <div styleName="label-layer">
-          <div style={labelStyle} styleName="label-title">{title}</div>
-          <input type="text" onChange={this.onValueChange} value={this.state.value}  placeholder={title} maxLength={maxLength}/>
+          <div styleName={'label-title ' + props.titleExtraStyle}>{title}</div>
+          <input type="url" onChange={this.onValueChange} value={this.state.value}  placeholder={title} maxLength={maxLength}/>
         </div>
       </div>
     )
@@ -58,15 +51,13 @@ class MilestonePostEditLink extends React.Component {
 MilestonePostEditLink.defaultProps = {
   onChange: () => {},
   valueDefault: '',
-  titleSpace: '',
-  paddingLeft: '',
+  titleExtraStyle: '',
 }
 
 MilestonePostEditLink.propTypes = {
   onChange: PT.func,
   valueDefault: PT.string,
-  titleSpace: PT.string,
-  paddingLeft: PT.string
+  titleExtraStyle: PT.string,
 }
 
 export default MilestonePostEditLink

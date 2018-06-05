@@ -12,10 +12,15 @@ class SubmissionEditLink extends React.Component {
     super(props)
     this.value = {
       title: props.titleValueDefault,
-      URL: ''
+      URL: props.urlValueDefault,
+      type: 'ZIP FILE',
+      plannedText: ''
     }
     this.changeTitle = this.changeTitle.bind(this)
     this.changeURL = this.changeURL.bind(this)
+    this.changeType = this.changeType.bind(this)
+    this.changePlannedText = this.changePlannedText.bind(this)
+    
     this.okBtnClicked = this.okBtnClicked.bind(this)
   }
   /**event when change title input */
@@ -25,6 +30,14 @@ class SubmissionEditLink extends React.Component {
   /**event when change url input */
   changeURL(value) {
     this.value.URL = value
+  }
+  /**event when change type input */
+  changeType(value) {
+    this.value.type = value
+  }
+  /**event when change planned text input */
+  changePlannedText(value) {
+    this.value.plannedText = value
   }
   /**finish form */
   okBtnClicked() {
@@ -43,41 +56,20 @@ class SubmissionEditLink extends React.Component {
     const isHaveActiveText = props.isHaveActiveText ? props.isHaveActiveText : false
     const isHaveCompletedText = props.isHaveCompletedText ? props.isHaveCompletedText : false
 
-    let spaceTitle = ''
-    let spaceURL = ''
-    let spaceType = ''
-    let spaceStart = ''
-    let spacePlanned = ''
-    let spaceActive = ''
-    let spaceCompleted = ''
-    let spaceSubmission = ''
-
-    let paddingTitle = ''
-    let paddingURL = ''
-    let paddingType = ''
-    let paddingStart = ''
-    let paddingPlanned = ''
-    let paddingActive = ''
-    let paddingCompleted = ''
-    let paddingSubmission = ''
+    let titleExtraStyleTitle = ''
+    let titleExtraStyleURL = ''
+    let titleExtraStyleType = ''
+    let titleExtraStyleStart = ''
+    let titleExtraStylePlannedText = ''
+    let titleExtraStyleSumissionId = ''
+    
     if (isHaveSubmissionId || isHavePlannedText || isHaveActiveText || isHaveCompletedText) {
-      spaceTitle = '18px'
-      spaceURL = '18px'
-      spaceType = '22px'
-      spaceStart = '22px'
-      spacePlanned = '28px'
-      spaceActive = ''
-      spaceCompleted = ''
-      spaceSubmission = '15px'
-
-      paddingTitle = '60px'
-      paddingURL = '60px'
-      paddingType = '56px'
-      paddingStart = '56px'
-      paddingPlanned = '5px'
-      paddingActive = ''
-      paddingCompleted = ''
-      paddingSubmission = '-15px'
+      titleExtraStyleTitle = 'pos_18_60'
+      titleExtraStyleURL = 'pos_18_60'
+      titleExtraStyleType = 'pos_22_56'
+      titleExtraStyleStart = 'pos_22_56'
+      titleExtraStylePlannedText = 'pos_28_5'
+      titleExtraStyleSumissionId = 'pos_20_-15'
     }
 
     return (
@@ -87,56 +79,56 @@ class SubmissionEditLink extends React.Component {
         {
           isHaveTitle && (
             <div>
-              <MilestonePostEditLink paddingLeft={paddingTitle} titleSpace={spaceTitle} valueDefault={this.value.title} title={'Title'}  maxTitle={props.maxTitle} onChange={this.changeTitle}/>
+              <MilestonePostEditLink titleExtraStyle={titleExtraStyleTitle} valueDefault={this.value.title} title={'Title'}  maxTitle={props.maxTitle} onChange={this.changeTitle}/>
             </div>
           )
         }
         {
           isHaveUrl && (
             <div styleName="invoice-wrap">
-              <MilestonePostEditLink paddingLeft={paddingURL}  titleSpace={spaceURL} title={'URL'} onChange={this.changeURL}/>
+              <MilestonePostEditLink titleExtraStyle={titleExtraStyleURL} valueDefault={this.value.URL} title={'URL'} onChange={this.changeURL}/>
             </div>
           )
         }
         {
           isHaveDate && (
             <div styleName="invoice-wrap">
-              <MilestonePostEditDate paddingLeft={paddingStart} titleSpace={spaceStart} />
+              <MilestonePostEditDate titleExtraStyle={titleExtraStyleStart} />
             </div>
           )
         }
         {
           isHaveType && (
             <div styleName="invoice-wrap">
-              <MilestonePostEditLinkDropDown paddingLeft={paddingType} titleSpace={spaceType} title={'Type'} value={'ZIP File'}/>
+              <MilestonePostEditLinkDropDown titleExtraStyle={titleExtraStyleType} title={'Type'} value={this.value.type} onChange={this.changeType}/>
             </div>
           )
         }
         {
           isHaveSubmissionId && (
             <div styleName="invoice-wrap">
-              <MilestonePostEditLink paddingLeft={paddingSubmission} titleSpace={spaceSubmission} title={'Submission ID'}/>
+              <MilestonePostEditLink titleExtraStyle={titleExtraStyleSumissionId} title={'Submission ID'}/>
             </div>
           )
         }
         {
           isHavePlannedText && (
             <div styleName="invoice-wrap">
-              <MilestonePostEditLink paddingLeft={paddingPlanned} titleSpace={spacePlanned} title={'Planned text'}/>
+              <MilestonePostEditLink titleExtraStyle={titleExtraStylePlannedText} title={'Planned text'} onChange={this.changePlannedText}/>
             </div>
           )
         }
         {
           isHaveActiveText && (
             <div styleName="invoice-wrap">
-              <MilestonePostEditTextArea paddingLeft={paddingActive} titleSpace={spaceActive} title={'Active text'}/>
+              <MilestonePostEditTextArea title={'Active text'}/>
             </div>
           )
         }
         {
           isHaveCompletedText && (
             <div styleName="invoice-wrap">
-              <MilestonePostEditTextArea paddingLeft={paddingCompleted} titleSpace={spaceCompleted} title={'Completed text'}/>
+              <MilestonePostEditTextArea title={'Completed text'}/>
             </div>
           )
         }
@@ -154,7 +146,9 @@ SubmissionEditLink.defaultProps = {
   callbackCancel: () => {},
   callbackOK: () => {},
   titleValueDefault: '',
-  inProgress: true
+  inProgress: true,
+  urlValueDefault: '',
+  maxTitle: 0
 }
 
 SubmissionEditLink.propTypes = {
@@ -162,7 +156,9 @@ SubmissionEditLink.propTypes = {
   callbackCancel: PT.func,
   callbackOK: PT.func,
   titleValueDefault: PT.string,
-  inProgress: PT.bool
+  inProgress: PT.bool,
+  urlValueDefault: PT.string,
+  maxTitle: PT.number
 }
 
 export default SubmissionEditLink

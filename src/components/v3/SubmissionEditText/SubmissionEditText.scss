@@ -1,7 +1,26 @@
 @import '../../../styles/includes';
 @import '~tc-ui/src/styles/tc-includes';
 // project-progress specific styles
+
+:global {
+  .modal-title {
+    @include roboto;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 30px;
+    text-align: center;
+  }
+  .modal-body {
+    @include roboto;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+  }
+}
+
 .milestone-post-specification {
+  @include roboto;
   padding-bottom: 10px;
   
   &.in-progress {
@@ -15,7 +34,6 @@
       bottom: 0;
     }
   }
-  
   .invoice-wrap {
     margin-top: 10px;
   }

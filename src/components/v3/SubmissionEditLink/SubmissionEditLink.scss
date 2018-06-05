@@ -2,7 +2,7 @@
 @import '~tc-ui/src/styles/tc-includes';
 // project-progress specific styles
 .milestone-post-specification {
-  position: relative;
+  // position: relative;
   border-radius: 4px;
   background-color: #FAFAFB;
   color: #151516;
@@ -13,6 +13,7 @@
   font-weight: 400;
   font-size: 15px;
   padding: 5px 20px 20px 20px;
+  z-index: 1000;
 
   &.in-progress {
     &:before {

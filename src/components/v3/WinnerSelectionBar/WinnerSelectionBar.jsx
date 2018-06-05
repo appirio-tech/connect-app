@@ -15,7 +15,11 @@ class WinnerSelectionBar extends React.Component {
     this.isWinTop3Prize = this.isWinTop3Prize.bind(this)
     
     this.state = {
-      isSelected: false
+      isSelected: false,
+      checkBox1: {},
+      checkBox2: {},
+      checkBox3: {},
+
     }
   }
 
@@ -28,7 +32,8 @@ class WinnerSelectionBar extends React.Component {
   toggleSelected(e) {
     const isChecked = e.target.checked
     this.setState({
-      isSelected: isChecked
+      isSelected: isChecked,
+      checkBox1: e.target
     })
     this.props.checkActionHandler(1, isChecked, this.props.index)
   }
@@ -36,7 +41,8 @@ class WinnerSelectionBar extends React.Component {
   toggleSelected2nd(e) {
     const isChecked = e.target.checked
     this.setState({
-      isSelected: isChecked
+      isSelected: isChecked,
+      checkBox2: e.target
     })
     this.props.checkActionHandler(2, isChecked, this.props.index)
   }
@@ -44,7 +50,8 @@ class WinnerSelectionBar extends React.Component {
   toggleSelected3rd(e) {
     const isChecked = e.target.checked
     this.setState({
-      isSelected: isChecked
+      isSelected: isChecked,
+      checkBox3: e.target
     })
     this.props.checkActionHandler(3, isChecked, this.props.index)
   }
@@ -54,9 +61,16 @@ class WinnerSelectionBar extends React.Component {
     this.props.checkBonusActionHandler(isChecked, this.props.index)
   }
 
+  isSelected() {
+    if (this.state.checkBox1 && this.state.checkBox2 && this.state.checkBox3) {
+      return (this.state.checkBox1.checked || this.state.checkBox2.checked || this.state.checkBox3.checked)
+    }
+    return false
+  } 
+
   shouldHideCheckbox() {
     const props = this.props
-    return ((props.postionIndex[0] > -1) && !this.state.isSelected) && ((props.postionIndex[1] > -1) && !this.state.isSelected) && ((props.postionIndex[2] > -1) && !this.state.isSelected)
+    return ((props.postionIndex[0] > -1) && !this.isSelected()) && ((props.postionIndex[1] > -1) && !this.isSelected()) && ((props.postionIndex[2] > -1) && !this.isSelected())
   }
 
   isWinTop3Prize() {
@@ -81,7 +95,7 @@ class WinnerSelectionBar extends React.Component {
             <a href={props.link} target="_blank" styleName="link">{props.link}</a>
           </div>
           {
-            !this.shouldHideCheckbox() && !props.isReviewed && (
+            (!this.shouldHideCheckbox() || !props.isSelected3TopWin) && !props.isReviewed && (
               <div styleName="position">
                 <label styleName={'checkbox-ctrl'} >
                   <input type="radio" styleName="checkbox" name="pos1" onChange={this.toggleSelected} /> 
@@ -99,7 +113,7 @@ class WinnerSelectionBar extends React.Component {
             )
           }
           {
-            this.shouldHideCheckbox() && !props.isReviewed && (
+            this.shouldHideCheckbox() && props.isSelected3TopWin && (
               <div styleName="position">
                 <div styleName="purchase-for">purchase for $100</div>
                 <div styleName="switch-button">
@@ -116,7 +130,7 @@ class WinnerSelectionBar extends React.Component {
             )
           }
           {
-            this.props.postionIndex[2] > -1 && props.isReviewed && this.isWinTop3Prize() && (
+            props.isReviewed && this.isWinTop3Prize() && (
               <div styleName="position">
                 {
                   props.index === 0 && (
@@ -159,7 +173,9 @@ class WinnerSelectionBar extends React.Component {
 }
 
 WinnerSelectionBar.defaultProps = {
-  isReviewed: false
+  isReviewed: false,
+  isSelected: false,
+  isSelected3TopWin: false
 }
 
 WinnerSelectionBar.propTypes = {
@@ -171,7 +187,8 @@ WinnerSelectionBar.propTypes = {
   inProgress: PT.bool,
   isSelected: PT.bool,
   isReadonly: PT.bool,
-  isReviewed: PT.bool
+  isReviewed: PT.bool,
+  isSelected3TopWin: PT.bool
 }
 
 export default WinnerSelectionBar

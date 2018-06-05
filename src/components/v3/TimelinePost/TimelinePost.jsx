@@ -2,8 +2,6 @@ import React from 'react'
 import ProjectProgress from '../ProjectProgress'
 import MilestonePost from '../MilestonePost'
 import MilestonePostMessage from '../MilestonePostMessage'
-import MilestonePostFile from '../MilestonePostFile'
-import MilestonePostDownload from '../MilestonePostDownload'
 import MilestonePostSpecification from '../MilestonePostSpecification'
 import SubmissionSelection from '../SubmissionSelection'
 import SubmissionEditLink from '../SubmissionEditLink'
@@ -18,27 +16,67 @@ class TimelinePost extends React.Component {
   constructor(props) {
     super(props)
 
+    this.deletePost = this.deletePost.bind(this)
+    this.hoverHeader = this.hoverHeader.bind(this)
+    this.unHoverHeader = this.unHoverHeader.bind(this)
+    this.toggleEditLink = this.toggleEditLink.bind(this)
+    this.closeEditForm = this.closeEditForm.bind(this)
+    this.updateMilestoneWithData = this.updateMilestoneWithData.bind(this)
+
+    const { postContent } = this.props
     this.state = {
-      activeMenu: ''
+      activeMenu: '',
+      isHoverHeader: false,
+      isEditing: false,
+      title: postContent.title,
+      postMsg: postContent.postMsg
     }
   }
 
   componentDidMount() {
+    const { postContent } = this.props
+    const contentList = postContent.content || []
+    this.setState(contentList)
     !!this.props.navLinks && this.props.navLinks.map((item) => {
       item.isActive && this.setState({ activeMenu: item.id })
     })
   }
 
+  deletePost(index) {
+    const contentList = this.state.contentList
+    contentList.splice(index, 1)
+    this.setState(contentList)
+  }
+
+  hoverHeader() {
+    this.setState({isHoverHeader: true})
+  }
+
+  unHoverHeader() {
+    this.setState({isHoverHeader: false})
+  }
+
+  toggleEditLink() {
+    this.setState({isEditing: true})
+  }
+  
+  closeEditForm() {
+    this.setState({isEditing: false})
+  }
+
+  updateMilestoneWithData(value) {
+    this.closeEditForm()
+    this.setState({title: value.title, postMsg: value.plannedText})
+  }
+
   render() {
     const { postContent } = this.props
     let contentList = []
-    !!this.props && this.props.postContent
-      ? contentList = postContent.content
-      : contentList = []
-
-
+    contentList = this.state.contentList ? this.state.contentList : postContent.content || []
+    const trueValue = true
     return (
       <div styleName={'timeline-post '}>
+        {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing) ? 'hover ': '')} />)}
         <div styleName="col-date">
           <div styleName="month">{postContent.month}</div>
           <div styleName="day">{postContent.date}</div>
@@ -49,13 +87,22 @@ class TimelinePost extends React.Component {
         }
         >
           <i styleName={'status-ring'} />
-          <h4 styleName="post-title" dangerouslySetInnerHTML={{ __html: postContent.title }} />
-          <div styleName="post-con" dangerouslySetInnerHTML={{ __html: postContent.postMsg }} />
+          {!this.state.isEditing && (<dir onMouseEnter={this.hoverHeader} onMouseLeave={this.unHoverHeader} styleName="post-title-container">
+            <h4 styleName="post-title" dangerouslySetInnerHTML={{ __html: this.state.title }} />
+            {this.state.isHoverHeader && (
+              <div onClick={this.toggleEditLink} styleName={ 'post-edit' } >
+                <span styleName="tooltiptext">Edit milestone properties</span>
+              </div>)}
+          </dir>)}
+
+          {this.state.isEditing && (<SubmissionEditLink callbackCancel={this.closeEditForm} callbackOK={this.updateMilestoneWithData} label={'Milestone Properties'} isHaveType={trueValue} isHaveTitle={trueValue} isHaveDate={trueValue} isHavePlannedText={trueValue} isHaveActiveText={trueValue} isHaveCompletedText={trueValue} inProgress={trueValue} okButtonTitle={'Update milestone'}/>)}
+
+          {(<div styleName={'post-con ' + (this.state.isEditing ? 'isHide' : '')} dangerouslySetInnerHTML={{ __html: this.state.postMsg }} />)}
           {
             !!contentList && contentList.map((content, i) => {
 
               return (
-                <div key={i}>
+                <div styleName={(this.state.isEditing ? 'isHide' : '')} key={i}>
 
                   {/* milestone progressbar type content  */}
                   {!!content && !!content.type && content.type === 'progressBar' &&
@@ -69,39 +116,42 @@ class TimelinePost extends React.Component {
                   {/* milestone invoice type content  */}
                   {!!content && !!content.type && content.type === 'invoice' &&
                     (<div styleName="invoice-wrap">
-                      <MilestonePost label={content.label} milestonePostLink={content.mileStoneLink} isCompleted={content.isCompleted} inProgress={content.inProgress} image={content.image} />
+                      <MilestonePost label={content.label} milestonePostLink={content.mileStoneLink} isCompleted={content.isCompleted} inProgress={content.inProgress} image={content.image} milestoneType={'only-text'} deletePost={() => {this.deletePost(i)}}/>
                     </div>)
                   }
 
                   {/* Specification type content  */}
                   {!!content && !!content.type && content.type === 'specification' &&
                     (<div styleName="invoice-wrap">
-                      <Specification isCompleted={content.isCompleted} inProgress={content.inProgress} finish={this.props.finish} />
+                      <Specification isCompleted={content.isCompleted} inProgress={content.inProgress} finish={this.props.finish} buttonFinishTitle={content.buttonFinishTitle}/>
+                    </div>)
+                  }
+
+                  {/* Specification cell type content  */}
+                  {!!content && !!content.type && content.type === 'specification-cell' &&
+                    (<div styleName="invoice-wrap">
+                      <MilestonePost label={content.label} milestonePostLink={content.mileStoneLink} isCompleted={content.isCompleted} inProgress={content.inProgress} image={content.image} milestoneType={'specification'} deletePost={() => {this.deletePost(i)}} />
                     </div>)
                   }
 
                   {/* milestone file type content  */}
                   {!!content && !!content.type && content.type === 'file' &&
                     (<div styleName="file-wrap">
-                      <MilestonePostFile label={content.label} milestonePostFile={content.milestoneFile} milestonePostFileInfo={content.milestoneFileInfo}
-                        isCompleted={content.isCompleted} inProgress={content.inProgress}
-                      />
+                      <MilestonePost  label={content.label} milestonePostFile={content.milestoneFile} milestonePostFileInfo={content.milestoneFileInfo} isCompleted={content.isCompleted} inProgress={content.inProgress} milestoneType={'file'} deletePost={() => {this.deletePost(i)}} />
                     </div>)
                   }
 
                   {/* milestone download file type content  */}
                   {!!content && !!content.type && content.type === 'download' &&
                     (<div styleName="file-wrap">
-                      <MilestonePostDownload label={content.label} milestonePostFile={content.milestoneFile} isCompleted={content.isCompleted} inProgress={content.inProgress} />
+                      <MilestonePost label={content.label} milestonePostFile={content.milestoneFile} isCompleted={content.isCompleted} inProgress={content.inProgress} milestoneType={'download'} deletePost={() => {this.deletePost(i)}} />
                     </div>)
                   }
 
                   {/* milestone add-a-link type content  */}
                   {!!content && !!content.type && content.type === 'add-a-link' &&
                     (<div styleName="add-specification-wrap seperation-sm">
-                      <MilestonePostSpecification label={content.label} milestonePostLink={content.mileStoneLink}
-                        isCompleted={content.isCompleted} inProgress={content.inProgress}
-                      />
+                      <MilestonePostSpecification label={content.label} milestonePostLink={content.mileStoneLink} isCompleted={content.isCompleted} inProgress={content.inProgress} />
                     </div>)
                   }
 
@@ -134,7 +184,7 @@ class TimelinePost extends React.Component {
                   {/* milestone message type content  */}
                   {!!content && !!content.type && content.type === 'edit-link' &&
                     (<div styleName="progress-wrap">
-                      <SubmissionEditLink label={content.label} maxTitle={content.maxTitle} isHaveTitle={content.isHaveTitle} isHaveUrl={content.isHaveUrl} isHaveDate={content.isHaveDate} isHaveType={content.isHaveType} isHaveSubmissionId={content.isHaveSubmissionId} isHavePlannedText={content.isHavePlannedText} isHaveActiveText={content.isHaveActiveText} isHaveCompletedText={content.isHaveCompletedText}/>
+                      <SubmissionEditLink label={content.label} okButtonTitle={content.okButtonTitle} maxTitle={content.maxTitle} isHaveTitle={content.isHaveTitle} isHaveUrl={content.isHaveUrl} isHaveDate={content.isHaveDate} isHaveType={content.isHaveType} isHaveSubmissionId={content.isHaveSubmissionId} isHavePlannedText={content.isHavePlannedText} isHaveActiveText={content.isHaveActiveText} isHaveCompletedText={content.isHaveCompletedText}/>
                     </div>)
                   }
 
@@ -153,7 +203,7 @@ class TimelinePost extends React.Component {
 }
 
 TimelinePost.defaultProps = {
-  finish: () => {}
+  finish: () => {},
 }
 
 TimelinePost.propTypes = {
@@ -164,7 +214,8 @@ TimelinePost.propTypes = {
     date: PT.string,
     title: PT.string,
     postMsg: PT.string,
-    finish: PT.func
+    finish: PT.func,
+    content: PT.array
   })
 }
 

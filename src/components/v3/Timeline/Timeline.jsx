@@ -1,6 +1,8 @@
 import React from 'react'
 import TimelinePost from '../TimelinePost'
+
 import TimelineHeader from '../TimelineHeader'
+import PT from 'prop-types'
 
 import './Timeline.scss'
 import GenericMenu from '../../../components/v3/GenericMenu'
@@ -11,32 +13,20 @@ class Timeline extends React.Component {
 
     this.state = {
       activeMenu: '',
-      currentStep: 3, // current step , each milestone is one step
+      currentStep: props.section, // current step , each milestone is one step
     }
-    this.finishStep3 = this.finishStep3.bind(this)
-    this.finishStep4 = this.finishStep4.bind(this)
-    this.finishStep5 = this.finishStep5.bind(this)
-    this.finishStep6 = this.finishStep6.bind(this)
+    this.finishStep0 = this.finishStep0.bind(this)
+    this.nextStep = this.nextStep.bind(this)
 
   }
   /**move to step 4*/
-  finishStep3() {
+  finishStep0() {
     this.setState({currentStep: 4})
   }
   
-  /**move to step 5*/
-  finishStep4() {
-    this.setState({currentStep: 5})
-  }
-
-  /**move to step 6*/
-  finishStep5() {
-    this.setState({currentStep: 6})
-  }
-
-  /**move to step 7*/
-  finishStep6() {
-    this.setState({currentStep: 7})
+  /**move to next step*/
+  nextStep() {
+    this.setState({currentStep: this.state.currentStep + 1})
   }
 
   render() {
@@ -64,7 +54,28 @@ class Timeline extends React.Component {
           postMsg : 'This is the first stage in our project. We’re going to show you the detailed plan in your timeline, with all the milestones. During the execution the milestones will change to reflect the progress, collect your feedback, and deliver the final product. Check the <a href="https://www.youtube.com/">YouTube video</a> and our <a href="https://www.youtube.com/">help article</a> for more information. If you still have questions, please ask them in the stage message channel and we’ll be happy to assist you.'
         }}
         />
+
         {this.state.currentStep >= 0 && (
+          <TimelinePost finish={this.finishStep0} postContent={{
+            postId: 'a109',
+            inProgress: (this.state.currentStep <= 0),
+            isCompleted: (this.state.currentStep > 0),
+            month: 'MAR',
+            date: '28',
+            title: 'Complete specification',
+            postMsg: 'Please review and answer all the questions on the specification document before we can proceed',
+            content: [{
+              id: 'a100',
+              type: 'specification',
+              buttonFinishTitle: 'Specification is completed',
+              inProgress: (this.state.currentStep <= 0),
+              isCompleted: (this.state.currentStep > 0),
+            }]
+          }} 
+          />
+        )}
+
+        {this.state.currentStep >= 1 && (
           <TimelinePost postContent={{
             postId: '100',
             isCompleted: true,
@@ -75,7 +86,7 @@ class Timeline extends React.Component {
           />
         )}
         
-        {this.state.currentStep >= 1 && (
+        {this.state.currentStep >= 2 && (
           <TimelinePost postContent={{
             postId: '100',
             isCompleted: true,
@@ -87,7 +98,7 @@ class Timeline extends React.Component {
           />
         )}
 
-        {this.state.currentStep >= 2 && (
+        {this.state.currentStep >= 3 && (
           <TimelinePost postContent={{
             postId: 'a101',
             isCompleted: true,
@@ -106,14 +117,14 @@ class Timeline extends React.Component {
           />
         )}
 
-        {this.state.currentStep >= 3 && (
-          <TimelinePost finish={this.finishStep3} postContent={{
+        {this.state.currentStep >= 4 && (
+          <TimelinePost finish={this.nextStep} postContent={{
             postId: 'a201',
             month: 'MAR',
             date: '29',
             title: 'Final designs',
-            inProgress: (this.state.currentStep <= 3),
-            isCompleted: (this.state.currentStep > 3),
+            inProgress: (this.state.currentStep <= 4),
+            isCompleted: (this.state.currentStep > 4),
             postMsg: 'Now pick the designs',
             content: [{
               id: 'a103',
@@ -121,8 +132,8 @@ class Timeline extends React.Component {
               checkpointHeading: 'Select the top 5 design variants for our next round',
               selectedHeading: 'Selected designs',
               rejectedHeading: 'Rejected designs',
-              inProgress: (this.state.currentStep <= 3),
-              isCompleted: (this.state.currentStep > 3),
+              inProgress: (this.state.currentStep <= 4),
+              isCompleted: (this.state.currentStep > 4),
               submissions: [
                 {
                   id: 'd101',
@@ -131,8 +142,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/44b43db',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 3),
-                  isCompleted: (this.state.currentStep > 3),
+                  inProgress: (this.state.currentStep <= 4),
+                  isCompleted: (this.state.currentStep > 4),
                 },
                 {
                   id: 'd101',
@@ -141,8 +152,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/82346d5',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 3),
-                  isCompleted: (this.state.currentStep > 3),
+                  inProgress: (this.state.currentStep <= 4),
+                  isCompleted: (this.state.currentStep > 4),
                 },
                 {
                   id: 'd101',
@@ -151,8 +162,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/82346d5',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 3),
-                  isCompleted: (this.state.currentStep > 3),
+                  inProgress: (this.state.currentStep <= 4),
+                  isCompleted: (this.state.currentStep > 4),
                 },
                 {
                   id: 'd101',
@@ -161,8 +172,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/44b43db',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 3),
-                  isCompleted: (this.state.currentStep > 3),
+                  inProgress: (this.state.currentStep <= 4),
+                  isCompleted: (this.state.currentStep > 4),
                 },
                 {
                   id: 'd101',
@@ -171,8 +182,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/44b43db',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 3),
-                  isCompleted: (this.state.currentStep > 3),
+                  inProgress: (this.state.currentStep <= 4),
+                  isCompleted: (this.state.currentStep > 4),
                 },
                 {
                   id: 'd101',
@@ -181,8 +192,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/82346d5',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 3),
-                  isCompleted: (this.state.currentStep > 3),
+                  inProgress: (this.state.currentStep <= 4),
+                  isCompleted: (this.state.currentStep > 4),
                 },
                 {
                   id: 'd101',
@@ -191,8 +202,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/44b43db',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 3),
-                  isCompleted: (this.state.currentStep > 3),
+                  inProgress: (this.state.currentStep <= 4),
+                  isCompleted: (this.state.currentStep > 4),
                 },
                 {
                   id: 'd101',
@@ -201,8 +212,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/44b43db',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 3),
-                  isCompleted: (this.state.currentStep > 3),
+                  inProgress: (this.state.currentStep <= 4),
+                  isCompleted: (this.state.currentStep > 4),
                 },
                 {
                   id: 'd101',
@@ -211,8 +222,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/44b43db',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 3),
-                  isCompleted: (this.state.currentStep > 3),
+                  inProgress: (this.state.currentStep <= 4),
+                  isCompleted: (this.state.currentStep > 4),
                 }
               ]
             }
@@ -221,11 +232,11 @@ class Timeline extends React.Component {
           />
         )}
 
-        {this.state.currentStep >= 4 && (
-          <TimelinePost finish={this.finishStep4} postContent={{
+        {this.state.currentStep >= 5 && (
+          <TimelinePost finish={this.nextStep} postContent={{
             postId: 'a109',
-            inProgress: (this.state.currentStep <= 4),
-            isCompleted: (this.state.currentStep > 4),
+            inProgress: (this.state.currentStep <= 5),
+            isCompleted: (this.state.currentStep > 5),
             month: 'MAR',
             date: '28',
             title: 'Final designs',
@@ -236,8 +247,8 @@ class Timeline extends React.Component {
               label: '6 days until designs are completed',
               progressPercent: 20,
               theme: 'light',
-              inProgress: (this.state.currentStep <= 4),
-              isCompleted: (this.state.currentStep > 4),
+              inProgress: (this.state.currentStep <= 5),
+              isCompleted: (this.state.currentStep > 5),
             },
             {
               id: 'a103',
@@ -245,8 +256,8 @@ class Timeline extends React.Component {
               checkpointHeading: 'Select the top 3 winning designs',
               selectedHeading: 'Final designs',
               rejectedHeading: 'Rejected designs',
-              inProgress: (this.state.currentStep <= 4),
-              isCompleted: (this.state.currentStep > 4),
+              inProgress: (this.state.currentStep <= 5),
+              isCompleted: (this.state.currentStep > 5),
               submissions: [
                 {
                   id: 'd101',
@@ -255,8 +266,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/44b43db',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 4),
-                  isCompleted: (this.state.currentStep > 4),
+                  inProgress: (this.state.currentStep <= 5),
+                  isCompleted: (this.state.currentStep > 5),
                 },
                 {
                   id: 'd101',
@@ -265,8 +276,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/82346d5',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 4),
-                  isCompleted: (this.state.currentStep > 4),
+                  inProgress: (this.state.currentStep <= 5),
+                  isCompleted: (this.state.currentStep > 5),
                 },
                 {
                   id: 'd101',
@@ -275,8 +286,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/82346d5',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 4),
-                  isCompleted: (this.state.currentStep > 4),
+                  inProgress: (this.state.currentStep <= 5),
+                  isCompleted: (this.state.currentStep > 5),
                 },
                 {
                   id: 'd101',
@@ -285,8 +296,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/44b43db',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 4),
-                  isCompleted: (this.state.currentStep > 4),
+                  inProgress: (this.state.currentStep <= 5),
+                  isCompleted: (this.state.currentStep > 5),
                 },
                 {
                   id: 'd101',
@@ -295,8 +306,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/44b43db',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 4),
-                  isCompleted: (this.state.currentStep > 4),
+                  inProgress: (this.state.currentStep <= 5),
+                  isCompleted: (this.state.currentStep > 5),
                 },
                 {
                   id: 'd101',
@@ -305,8 +316,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/82346d5',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 4),
-                  isCompleted: (this.state.currentStep > 4),
+                  inProgress: (this.state.currentStep <= 5),
+                  isCompleted: (this.state.currentStep > 5),
                 },
                 {
                   id: 'd101',
@@ -315,8 +326,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/44b43db',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 4),
-                  isCompleted: (this.state.currentStep > 4),
+                  inProgress: (this.state.currentStep <= 5),
+                  isCompleted: (this.state.currentStep > 5),
                 },
                 {
                   id: 'd101',
@@ -325,8 +336,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/44b43db',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 4),
-                  isCompleted: (this.state.currentStep > 4),
+                  inProgress: (this.state.currentStep <= 5),
+                  isCompleted: (this.state.currentStep > 5),
                 },
                 {
                   id: 'd101',
@@ -335,8 +346,8 @@ class Timeline extends React.Component {
                   link: 'https://marvelapp.com/44b43db',
                   linkType: 'timeline-marvelapp',
                   isSelected: false,
-                  inProgress: (this.state.currentStep <= 4),
-                  isCompleted: (this.state.currentStep > 4),
+                  inProgress: (this.state.currentStep <= 5),
+                  isCompleted: (this.state.currentStep > 5),
                 }
               ]
             }]
@@ -344,36 +355,17 @@ class Timeline extends React.Component {
           />
         )}
 
-        {this.state.currentStep >= 5 && (
-          <TimelinePost finish={this.finishStep5} postContent={{
+        {this.state.currentStep >= 6 && (
+          <TimelinePost finish={this.nextStep} postContent={{
             postId: 'a109',
-            inProgress: (this.state.currentStep <= 5),
-            isCompleted: (this.state.currentStep > 5),
+            inProgress: (this.state.currentStep <= 6),
+            isCompleted: (this.state.currentStep > 6),
             month: 'MAR',
             date: '28',
             title: 'Design delivery',
             content: [{
               id: 'a100',
               type: 'edit-text',
-              inProgress: (this.state.currentStep <= 5),
-              isCompleted: (this.state.currentStep > 5),
-            }]
-          }} 
-          />
-        )}
-
-        {this.state.currentStep >= 6 && (
-          <TimelinePost finish={this.finishStep6} postContent={{
-            postId: 'a109',
-            inProgress: (this.state.currentStep <= 6),
-            isCompleted: (this.state.currentStep > 6),
-            month: 'MAR',
-            date: '28',
-            title: 'Complete specification',
-            postMsg: 'Please review and answer all the questions on the specification document before we can proceed',
-            content: [{
-              id: 'a100',
-              type: 'specification',
               inProgress: (this.state.currentStep <= 6),
               isCompleted: (this.state.currentStep > 6),
             }]
@@ -383,6 +375,16 @@ class Timeline extends React.Component {
       </div>
     )
   }
+}
+
+
+
+Timeline.defaultProps = {
+  section: 3,
+}
+
+Timeline.propTypes = {
+  section: PT.number,
 }
 
 export default Timeline

@@ -5,3 +5,9 @@
     @content;
   }
 }
+
+@mixin viewMd {
+  @media screen and (max-width: $screen-md - 1px) {
+    @content;
+  }
+}

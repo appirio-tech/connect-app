@@ -25,7 +25,6 @@
     height: inherit;
     position: relative;
     line-height: inherit;
-    z-index: 10;
     overflow: hidden;
 
     .label-title {
@@ -38,6 +37,19 @@
       white-space: nowrap;
       min-width: 40px;
       padding-right: 10px;
+
+      &.pos_18_60 {
+        margin-right: 18px;
+        padding-left: 60px;
+      }
+      &.pos_28_5 {
+        margin-right: 28px;
+        padding-left: 5px;
+      }
+      &.pos_20_-15 {
+        margin-right: 20px;
+        padding-left: -15px;
+      }
     }
 
     input {
@@ -46,18 +58,26 @@
       &::-webkit-input-placeholder {
         text-transform: initial;
         color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
       }
-      &:-moz-placeholder { 
-          text-transform: initial;
-          color:#A3A3AD;
+      &:-moz-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
       }
-      &::-moz-placeholder {  
-          text-transform: initial;
-          color:#A3A3AD;
+      &::-moz-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
       }
-      &:-ms-input-placeholder { 
-          text-transform: initial;
-          color:#A3A3AD;
+      &:-ms-input-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
       }
     }
 

@@ -10,7 +10,7 @@ const ProjectProgress = (props) => {
       + (props.inProgress ? ' in-progress' : '')
     }
     >
-      <span styleName="dot" />
+      {props.isHaveDot && (<span styleName="dot" />)}
       <div styleName="filled" style={{ width: props.progressPercent + '%' }} />
       <div styleName="label-layer">
         <span>{props.labelDayStatus}</span>
@@ -19,7 +19,7 @@ const ProjectProgress = (props) => {
           <span styleName="hide-sm">{props.labelStatus}</span>
           {
             props.readyForReview && (
-              <button className="tc-btn tc-btn-primary">{'Ready for review'}</button>
+              <button onClick={props.finish} className="tc-btn tc-btn-primary">{'Ready for review'}</button>
             )
           }
         </div>
@@ -28,13 +28,20 @@ const ProjectProgress = (props) => {
   )
 }
 
+ProjectProgress.defaultProps = {
+  isHaveDot: true,
+  finish: () => {}
+}
+
 ProjectProgress.propTypes = {
   progressPercent: PT.string,
   labelDayStatus: PT.string,
   labelSpent: PT.string,
   labelStatus: PT.string,
   isCompleted: PT.bool,
-  inProgress: PT.bool
+  inProgress: PT.bool,
+  isHaveDot: PT.bool,
+  finish: PT.func
 }
 
 export default ProjectProgress

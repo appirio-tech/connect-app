@@ -38,7 +38,7 @@
     position: relative;
     line-height: inherit;
     z-index: 10;
-    overflow: hidden;
+    // overflow: hidden;
     @include viewSm {
       padding-right: $base-unit*7;
     }
@@ -52,6 +52,37 @@
       margin: auto 10px auto 0;
       white-space: nowrap;
       min-width: 40px;
+      &.pos_22_56 {
+        margin-right: 22px;
+        padding-left: 56px;
+      }
+    }
+
+    .dropdow-list {
+      ul {
+        position: absolute;
+        top: 40px;
+        left: 50px;
+        height: 166px;
+        width: 30%;
+        overflow-y: scroll;
+        li {
+          background: white;
+          display: block;
+          text-decoration: none;
+          border: 1px solid #bbb;
+          padding: 0 10px;
+          white-space: nowrap;
+          margin-top: -1px;
+          height: 40px;
+          line-height: 40px;
+        }
+      }
+      &.pos_22_56 {
+        ul {
+          left: 110px;
+        }
+      }
     }
 
     input {

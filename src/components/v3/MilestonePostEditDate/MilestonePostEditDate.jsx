@@ -33,23 +33,16 @@ class MilestonePostEditDate extends React.Component {
 
   render() {
     const props = this.props
-    const labelStyle = {}
-    if (props.titleSpace !== '') {
-      labelStyle['marginRight'] = props.titleSpace
-    }
-    if (props.paddingLeft !== '') {
-      labelStyle['paddingLeft'] = props.paddingLeft
-    }
     return (
       <div styleName={'milestone-post ' 
       + (props.theme ? props.theme : '')
       }
       >
         <div styleName="label-layer">
-          <div style={labelStyle} styleName="label-title">{'Start'}</div>
-          <input type="text" onChange={this.onValueChange1} value={this.state.start}  placeholder={'Date'}/>
+          <div styleName={'label-title ' + props.titleExtraStyle}>{'Start'}</div>
+          <input type="date" onChange={this.onValueChange1} value={this.state.start}  placeholder={'Date'}/>
           <div styleName="label-title">{'End'}</div>
-          <input type="text" onChange={this.onValueChange} value={this.state.end}  placeholder={'Date'}/>
+          <input type="date" onChange={this.onValueChange} value={this.state.end}  placeholder={'Date'}/>
         </div>
       </div>
     )
@@ -57,8 +50,7 @@ class MilestonePostEditDate extends React.Component {
 }
 
 MilestonePostEditDate.defaultProps = {
-  titleSpace: '',
-  paddingLeft: '',
+  titleExtraStyle: '',
 }
 
 MilestonePostEditDate.propTypes = {
@@ -68,8 +60,7 @@ MilestonePostEditDate.propTypes = {
   labelStatus: PT.string,
   isCompleted: PT.bool,
   inProgress: PT.bool,
-  titleSpace: PT.string,
-  paddingLeft: PT.string
+  titleExtraStyle: PT.string,
 }
 
 export default MilestonePostEditDate

@@ -6,10 +6,21 @@
   position: relative;
   padding: 10px 0;
   background: #fff;
+  
 
   @include roboto;
   a {
     color: #0681FF;
+  }
+  .background {
+    height: 30px;
+    top: 10px;
+    position: absolute;
+    left: 0px;
+    right: 0;
+    &.hover {
+      background: #F4F9FF
+    };
   }
   .status-ring {
     background-color: #FFFFFF;
@@ -33,6 +44,7 @@
       font-weight: 400;
       letter-spacing: 0.4px;
       text-align: right;
+      position: relative;
     }
     .day {
       color: #19191A;
@@ -40,6 +52,7 @@
       font-weight: 500;
       line-height: 20px;
       text-align: right;
+      position: relative;
     }
   }
   .col-timeline-post-con {
@@ -94,12 +107,59 @@
       }
     }
   }
-  .post-title {
-    color: #151516;
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 30px;
-    text-align: left;
+  .post-title-container {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-content: space-between;
+    .post-title {
+      color: #151516;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 30px;
+      text-align: left;
+    }
+
+  }
+  .post-edit {
+    padding-left: 20px;
+    margin-left: auto;
+    margin-right: 0;
+    background: url('../../../assets/icons/ui-pencil.svg') 0 50% no-repeat;
+    opacity: 0.5;
+    &:hover {
+      opacity: 1;
+      .tooltiptext {
+        visibility: visible;
+      }
+    }
+
+    .tooltiptext {
+      visibility: hidden;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      padding: 3px 10px;
+      position: absolute;
+      z-index: 100;
+      bottom: 100%;
+      right: 0%;
+      margin-left: 60px;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 25px;
+
+      &:after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: 50px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: black transparent transparent transparent;
+      }
+    }
   }
   .post-con {
     color: #6B6B6B;
@@ -107,7 +167,9 @@
     font-weight: 400;
     line-height: 20px;
     text-align: left;
-
+    &.isHide {
+      display: none;
+    }
     strong{
       font-weight: bold;
     }
@@ -119,5 +181,8 @@
         text-decoration: underline;
       }
     }
+  }
+  .isHide {
+    display: none;
   }
 }

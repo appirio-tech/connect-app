@@ -44,7 +44,7 @@ class MilestonePostLink extends React.Component {
             <a href={props.link} target="_blank" styleName="link">{props.link}</a>
           </div>
           {
-            !props.isReadonly && (
+            !props.isReadonly && !props.isHideCheckBox && (
               <label styleName="checkbox-ctrl">
                 <input type="checkbox" styleName="checkbox" onChange={this.toggleSelected} /> <span styleName="checkbox-text" />
               </label>
@@ -62,6 +62,10 @@ class MilestonePostLink extends React.Component {
   }
 }
 
+MilestonePostLink.defaultProps = {
+  isHideCheckBox: false
+}
+
 MilestonePostLink.propTypes = {
   progressPercent: PT.string,
   labelDayStatus: PT.string,
@@ -70,7 +74,8 @@ MilestonePostLink.propTypes = {
   isCompleted: PT.bool,
   inProgress: PT.bool,
   isSelected: PT.bool,
-  isReadonly: PT.bool
+  isReadonly: PT.bool,
+  isHideCheckBox: PT.bool
 }
 
 export default MilestonePostLink

@@ -17,7 +17,11 @@ class V3Template extends React.Component {
             <h2 styleName="group-title">Demo Links</h2>
             <ul>
               <li><NavLink to="/V3ComponentDemo"> Progress & menu components </NavLink></li>
-              <li><NavLink to="/V3ComponentTimelineDemo"> Timeline component </NavLink></li>
+              <li><NavLink to="/V3ComponentTimelineDemo"> Timeline component life cycle</NavLink></li>
+              <li><NavLink to="/V3ComponentTimelineDemo?section=0"> Timeline component life cycle complete specification step</NavLink></li>
+              <li><NavLink to="/V3ComponentTimelineDemo?section=4"> Timeline component life cycle submission selection component step</NavLink></li>
+              <li><NavLink to="/V3ComponentTimelineDemo?section=5"> Timeline component life cycle winner selection component step</NavLink></li>
+              <li><NavLink to="/V3ComponentTimelineDemo?section=6"> Timeline component life cycle final fix request step</NavLink></li>
               <li><NavLink to="/V3ComponentPostcardDemo"> Posts card and post feed components </NavLink></li>
               <li><NavLink to="/V3ComponentSubmissionSelectionDemo"> Submission selection component </NavLink></li>
               <li><NavLink to="/V3ComponentWinnerSelectionDemo"> Winner selection component </NavLink></li>
