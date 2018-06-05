@@ -65,7 +65,6 @@ export function getProductTemplateByKey(productKey) {
  * Get the list of project categories
  *
  * TODO $PROJECT_PLAN$ so far this method is mocked and has to be updated with real one
- * TODO $PROJECT_PLAN$ this mock has to be updated to be project categories instead of project types
  *
  * @return {Promise} list of project categories
  */
