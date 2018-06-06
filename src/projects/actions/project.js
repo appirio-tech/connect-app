@@ -98,7 +98,7 @@ export function loadProjectProductTemplates(projectTemplate) {
 
     // check which product templates we have already loaded, and which we have to load
     for(const phaseName in projectTemplate.phases) {
-      const phase = projectTemplate.phases[phaseName];
+      const phase = projectTemplate.phases[phaseName]
       phase.products.forEach((product) => {
         const alreadyLoadedProductTemplate = _.find(productTemplates, { id: product.id })
 
