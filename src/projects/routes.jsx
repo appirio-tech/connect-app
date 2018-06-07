@@ -33,6 +33,7 @@ const ProjectDetailWithAuth = withProps({ main:
     <Route path="/projects/:projectId/specification" render={() => <ProjectDetail><SpecificationContainer /></ProjectDetail>} />
     <Route path="/projects/:projectId/scope" render={() => <ProjectDetail><Scope /></ProjectDetail>} />
     <Route path="/projects/:projectId/plan" render={() => <ProjectDetail><ProjectPlan /></ProjectDetail>} />
+    <Route path="/projects/:projectId/add-phase" render={() => <ProjectDetail><ProjectAddPhaseContainer /></ProjectDetail>} />
     <Route path="/projects/:projectId/discussions/:discussionId?" render={() => <ProjectDetail><ProjectMessages /></ProjectDetail>} />
     <Route render={() => <CoderBot code={404}/>} />
   </Switch>
@@ -46,7 +47,6 @@ const projectRoutes = (
     render={() => (
       <Switch>
         <Route path="/projects/:projectId/attachments/:attachmentId" render={renderApp(<FileDownloadWithAuth />, null)} />
-        <Route path="/projects/:projectId/add-phase" render={renderApp(null, <ProjectDetail><ProjectAddPhaseContainer /></ProjectDetail>)} />
         <Route path="/projects/:projectId" render={renderApp(<TopBarContainer toolbar={ProjectToolBar} />, <ProjectDetailWithAuth />)} />
         <Route path="/projects" render={renderApp(<TopBarContainer toolbar={ProjectsToolBar} />, <ProjectsWithAuth />)} />
       </Switch>

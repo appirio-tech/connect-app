@@ -30,6 +30,7 @@ const initialState = {
   updateExisting: false,
   projectTemplate: null,
   productTemplates: [],
+  allProductTemplates: [],
   phases: null,
   phasesNonDirty: null,
 }

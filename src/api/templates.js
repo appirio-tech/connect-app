@@ -48,7 +48,7 @@ export function getProductTemplate(productTemplateId) {
  *
  * @return {Promise} all product template
  */
-export function getAllProductTemplate() {
+export function getAllProductTemplates() {
   return axios.get(`${TC_API_URL}/v4/productTemplates/`)
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
