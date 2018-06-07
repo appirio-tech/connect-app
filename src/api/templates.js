@@ -44,6 +44,16 @@ export function getProductTemplate(productTemplateId) {
 }
 
 /**
+ * Get all product template
+ *
+ * @return {Promise} all product template
+ */
+export function getAllProductTemplate() {
+  return axios.get(`${TC_API_URL}/v4/productTemplates/`)
+    .then(resp => _.get(resp.data, 'result.content', {}))
+}
+
+/**
  * Get product template by key
  *
  * This is only need for old project which doesn't have `templateId`

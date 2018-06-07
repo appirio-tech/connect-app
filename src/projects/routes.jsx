@@ -12,6 +12,7 @@ import ProjectDetail from './detail/ProjectDetail'
 import Dashboard from './detail/containers/DashboardContainer'
 import Scope from './detail/containers/ScopeContainer'
 import ProjectPlan from './detail/containers/ProjectPlanContainer'
+import ProjectAddPhaseContainer from './detail/containers/ProjectAddPhaseContainer'
 import ProjectMessages from './detail/Messages'
 import CoderBot from '../components/CoderBot/CoderBot'
 import SpecificationContainer from './detail/containers/SpecificationContainer'
@@ -45,6 +46,7 @@ const projectRoutes = (
     render={() => (
       <Switch>
         <Route path="/projects/:projectId/attachments/:attachmentId" render={renderApp(<FileDownloadWithAuth />, null)} />
+        <Route path="/projects/:projectId/add-phase" render={renderApp(null, <ProjectDetail><ProjectAddPhaseContainer /></ProjectDetail>)} />
         <Route path="/projects/:projectId" render={renderApp(<TopBarContainer toolbar={ProjectToolBar} />, <ProjectDetailWithAuth />)} />
         <Route path="/projects" render={renderApp(<TopBarContainer toolbar={ProjectsToolBar} />, <ProjectsWithAuth />)} />
       </Switch>

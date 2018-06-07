@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { loadMembers } from '../../actions/members'
 import { loadProject, loadDirectProjectData, loadProjectPhasesWithProducts,
-  loadProjectTemplate, loadProjectProductTemplates, loadProjectProductTemplatesByKey } from './project'
+  loadProjectTemplate, loadProjectProductTemplates, loadAllProductTemplates, loadProjectProductTemplatesByKey } from './project'
 import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
 
 /**
@@ -44,6 +44,7 @@ const getDashboardData = (dispatch, getState, projectId) => {
         } else {
           promises.push(dispatch(loadProjectProductTemplatesByKey(_.get(project, 'details.products[0]'))))
         }
+        promises.push(dispatch(loadAllProductTemplates()))
 
         return resolve(dispatch({
           type: LOAD_ADDITIONAL_PROJECT_DATA,

@@ -43,7 +43,7 @@ ProjectPlanContainer.propTypes = {
 }
 
 const mapStateToProps = ({ projectState }) => ({
-  productTemplates: projectState.productTemplates,
+  productTemplates: projectState.allProductTemplates,
   phases: projectState.phases,
 })
 

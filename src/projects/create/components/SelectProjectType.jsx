@@ -21,11 +21,11 @@ function SelectProjectType(props) {
     cards.push(
       <ProjectTypeCard
         icon={icon}
-        info={item.info}
+        info={item.info || item.details}
         key={item.id}
-        onClick={() => props.onProjectTypeChange(item.key)}
+        onClick={() => props.onProjectTypeChange(item.key || item.productKey)}
         type={item.name}
-        buttonText="Select Project"
+        buttonText={props.selectButtonTitle}
       />
     )
   })
@@ -36,7 +36,7 @@ function SelectProjectType(props) {
         <ConnectLogoMono className="icon-connect-logo-mono"/>
       </div>
       <div className="SelectProjectType">
-        <h1>Create a new project</h1>
+        <h1>{props.header}</h1>
         <div className="cards">{cards}</div>
         <div className="footer">
           Looking for something else? <a href="http://crowdsourcing.topcoder.com/piqued_by_crowdsourcing">Get in touch with us &rarr;</a>
@@ -46,10 +46,17 @@ function SelectProjectType(props) {
   )
 }
 
+SelectProjectType.defaultProps = {
+  header: '',
+  selectButtonTitle: ''
+}
+
 SelectProjectType.propTypes = {
   onProjectTypeChange: PT.func.isRequired,
   userRoles: PT.arrayOf(PT.string),
   projectTemplates: PT.array.isRequired,
+  header: PT.string,
+  selectButtonTitle: ''
 }
 
 export default SelectProjectType

@@ -78,7 +78,7 @@ const ProjectStages = ({
         removeProductAttachment={removeProductAttachment}
       />
     ))}
-    <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases)} />
+    <PhaseCardListFooter projectId={project.id} {...formatPhaseCardListFooterProps(phases)} />
   </Section>
 )
 

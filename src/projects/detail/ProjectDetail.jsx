@@ -42,6 +42,7 @@ const ProjectDetailView = (props) => {
       currentMemberRole: props.currentMemberRole,
       isSuperUser: props.isSuperUser,
       isProcessing: props.isProcessing,
+      allProductTemplates: props.allProductTemplates
     })
   })
   return <div>{children}</div>
@@ -110,6 +111,7 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser}) => {
     project: projectState.project,
     projectTemplate: projectState.projectTemplate,
     productTemplates: projectState.productTemplates,
+    allProductTemplates: projectState.allProductTemplates,
     currentUserRoles: loadUser.user.roles
   }
 }
