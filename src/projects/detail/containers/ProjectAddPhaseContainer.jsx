@@ -14,6 +14,9 @@ import { renderComponent, branch, compose, withProps } from 'recompose'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import { createProduct } from '../../actions/project'
 import { getProductTemplateByKey } from '../../../helpers/templates'
+import { loadProjectPhasesWithProducts } from '../../actions/project'
+import { loadProjectDashboard } from '../../../projects/actions/projectDashboard'
+
 
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import Wizard from '../../../components/Wizard'
@@ -23,6 +26,7 @@ import {
 } from '../../../config/constants'
 
 import '../../../projects/create/components/ProjectWizard.scss'
+import './ProjectAddPhaseContainer.scss'
 
 const page404 = compose(
   withProps({code:500})
@@ -39,7 +43,7 @@ const errorHandler = showCoderBotIfError(props => props.error && props.error.typ
 
 // This handles showing a spinner while the state is being loaded async
 const spinner = spinnerWhileLoading(props =>
-  !props.processing && !props.addingState
+  !props.processing && !props.addingState && !props.isLoadingPhases
 )
 
 const enhance = compose(errorHandler, spinner)
@@ -77,7 +81,8 @@ class ProjectAddPhaseContainer extends React.Component {
     this.closeWizard = this.closeWizard.bind(this)
     this.updateProjectType = this.updateProjectType.bind(this)
     this.state = {
-      isChosenProduct: false
+      isChosenProduct: false,
+      shouldReloadPhases: false
     }
   }
 
@@ -102,20 +107,24 @@ class ProjectAddPhaseContainer extends React.Component {
     console.log('componentWillReceiveProps test')
     const projectId = _.get(nextProps, 'project.id', null)
     if (!nextProps.processing && !nextProps.error && projectId && this.state.isChosenProduct) {
-      // update state
-      this.setState(() => {
-        this.props.history.push(`/projects/${projectId}/plan`)
-      })
-
+      if (this.state.shouldReloadPhases) {
+        // reload the project
+        nextProps.loadProjectPhasesWithProducts(projectId)
+        this.setState({shouldReloadPhases: false})
+      } else if (!nextProps.isLoadingPhases) {
+        // back to plan
+        this.closeWizard()
+      }
     }
   }
 
   updateProjectType(projectTemplateKey) {
     const props = this.props
+
     const productTemplate = getProductTemplateByKey(props.allProductTemplates, projectTemplateKey)
     if (productTemplate) {
       props.createProduct(props.project, productTemplate)
-      this.setState({isChosenProduct: true})
+      this.setState({isChosenProduct: true, shouldReloadPhases: true})
     }
   }
 
@@ -151,9 +160,10 @@ const mapStateToProps = ({projectState, loadUser, templates }) => ({
   processing: projectState.processing,
   error: projectState.error,
   project: projectState.project,
+  isLoadingPhases: projectState.isLoadingPhases,
   templates,
 })
 
-const actionCreators = {createProduct}
+const actionCreators = {createProduct, loadProjectPhasesWithProducts, loadProjectDashboard}
 
 export default withRouter(connect(mapStateToProps, actionCreators)(ProjectAddPhaseContainer))

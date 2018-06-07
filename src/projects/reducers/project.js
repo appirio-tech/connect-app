@@ -12,7 +12,7 @@ import {
   ADD_PROJECT_MEMBER_PENDING, ADD_PROJECT_MEMBER_SUCCESS, ADD_PROJECT_MEMBER_FAILURE,
   UPDATE_PROJECT_MEMBER_PENDING, UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
-  GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS,
+  GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS, LOAD_PROJECT_PHASES_PENDING,
   LOAD_PROJECT_TEMPLATE_SUCCESS, LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS, LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
   UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_SUCCESS,
 } from '../../config/constants'
@@ -33,6 +33,7 @@ const initialState = {
   allProductTemplates: [],
   phases: null,
   phasesNonDirty: null,
+  isLoadingPhases: false
 }
 
 // NOTE: We should always update projectNonDirty state whenever we update the project state
@@ -162,11 +163,17 @@ export const projectState = function (state=initialState, action) {
         }}
       }
     })
+  
+  case LOAD_PROJECT_PHASES_PENDING:
+    return Object.assign({}, state, {
+      isLoadingPhases: true
+    })
 
   case LOAD_PROJECT_PHASES_SUCCESS:
     return update(state, {
       phases: { $set: action.payload },
       phasesNonDirty: { $set: action.payload },
+      isLoadingPhases: { $set: false}
     })
 
   // Create & Edit project

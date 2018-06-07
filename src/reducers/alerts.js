@@ -49,8 +49,8 @@ export default function(state = {}, action) {
   case CREATE_PROJECT_STAGE_SUCCESS: {
     const name = _.truncate(action.payload.name, 20)
 
-    //temporary workaround
-    setTimeout(() => { Alert.success(`Added New Stage To Project '${name}'`) }, 0)
+    //delay time for reload stage list of project after creating state
+    setTimeout(() => { Alert.success(`Added New Stage To Project '${name}'`) }, 2000)
 
     return state
   }

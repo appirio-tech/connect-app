@@ -1,5 +1,4 @@
 import React from 'react'
-import qs from 'query-string'
 import SecondaryToolBarContainer from '../containers/SecondaryToolBarContainer'
 import './ProjectLayout.scss'
 

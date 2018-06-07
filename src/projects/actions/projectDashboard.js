@@ -13,7 +13,7 @@ import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../conf
  *
  * @return {Promise} LOAD_ADDITIONAL_PROJECT_DATA action
  */
-const getDashboardData = (dispatch, getState, projectId) => {
+const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) => {
   return new Promise((resolve, reject) => {
     return dispatch(loadProject(projectId))
       .then(({ value: project }) => {
@@ -21,11 +21,14 @@ const getDashboardData = (dispatch, getState, projectId) => {
         // this is to remove any nulls from the list (dev had some bad data)
         _.remove(userIds, i => !i)
         // load additional data in parallel
-        const promises = [
+        let promises = [
           dispatch(loadMembers(userIds))
         ]
+        if (isOnlyLoadProjectInfo) {
+          promises = []
+        }
 
-        if (project.directProjectId) {
+        if (project.directProjectId && !isOnlyLoadProjectInfo) {
           promises.push(dispatch(loadDirectProjectData(project.directProjectId)))
         }
 
@@ -44,7 +47,9 @@ const getDashboardData = (dispatch, getState, projectId) => {
         } else {
           promises.push(dispatch(loadProjectProductTemplatesByKey(_.get(project, 'details.products[0]'))))
         }
-        promises.push(dispatch(loadAllProductTemplates()))
+        if (!isOnlyLoadProjectInfo) {
+          promises.push(dispatch(loadAllProductTemplates()))
+        }
 
         return resolve(dispatch({
           type: LOAD_ADDITIONAL_PROJECT_DATA,
@@ -56,11 +61,11 @@ const getDashboardData = (dispatch, getState, projectId) => {
   })
 }
 
-export function loadProjectDashboard(projectId) {
+export function loadProjectDashboard(projectId, isOnlyLoadProjectInfo = false) {
   return (dispatch, getState) => {
     return dispatch({
       type: LOAD_PROJECT_DASHBOARD,
-      payload: getDashboardData(dispatch, getState, projectId)
+      payload: getDashboardData(dispatch, getState, projectId, isOnlyLoadProjectInfo)
     })
   }
 }
