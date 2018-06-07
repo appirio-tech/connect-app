@@ -56,7 +56,7 @@ SelectProjectType.propTypes = {
   userRoles: PT.arrayOf(PT.string),
   projectTemplates: PT.array.isRequired,
   header: PT.string,
-  selectButtonTitle: ''
+  selectButtonTitle: PT.string
 }
 
 export default SelectProjectType

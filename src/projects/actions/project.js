@@ -12,7 +12,7 @@ import { getProjectById, createProject as createProjectAPI,
   createPhaseProduct,
 } from '../../api/projects'
 import { getProductTemplate, getAllProductTemplate, getProjectTemplate, getProductTemplateByKey } from '../../api/templates'
-import { LOAD_PROJECT, CREATE_PROJECT, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
+import { LOAD_PROJECT, CREATE_PROJECT, CREATE_PROJECT_STAGE, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
   LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES,
   LOAD_PROJECT_TEMPLATE, LOAD_PROJECT_PRODUCT_TEMPLATES, LOAD_ALL_PRODUCT_TEMPLATES, UPDATE_PRODUCT,
   PROJECT_STATUS_DRAFT, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
@@ -106,7 +106,7 @@ export function loadProjectProductTemplates(projectTemplate) {
           alreadyLoadedProductTemplates.push(alreadyLoadedProductTemplate)
         } else {
           notLoadedProductTemplatesIds.push(product.id)
-        }
+        } 
       })
     }
 
@@ -182,7 +182,7 @@ export function createProject(newProject, projectTemplate) {
 export function createProduct(project, productTemplate) {
   return (dispatch) => {
     return dispatch({
-      type: CREATE_PROJECT,
+      type: CREATE_PROJECT_STAGE,
       payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, null, null)
     })
   }

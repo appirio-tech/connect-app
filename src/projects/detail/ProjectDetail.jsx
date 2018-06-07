@@ -36,10 +36,14 @@ const spinner = spinnerWhileLoading(props =>
   )
 )
 const ProjectDetailView = (props) => {
+  let currentMemberRole = props.currentMemberRole
+  if (!currentMemberRole && props.currentUserRoles && props.currentUserRoles.length > 0) {
+    currentMemberRole = props.currentUserRoles[0]
+  }
   const children = React.Children.map(props.children, (child) => {
     return React.cloneElement(child, {
       project: props.project,
-      currentMemberRole: props.currentMemberRole,
+      currentMemberRole: currentMemberRole || '',
       isSuperUser: props.isSuperUser,
       isProcessing: props.isProcessing,
       allProductTemplates: props.allProductTemplates

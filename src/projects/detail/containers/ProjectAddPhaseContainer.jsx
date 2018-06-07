@@ -99,9 +99,9 @@ class ProjectAddPhaseContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const projectId = _.get(this.props, 'project.id', null)
-    const nextProjectId = _.get(nextProps, 'project.id', null)
-    if (!nextProps.processing && !nextProps.error && !projectId && nextProjectId && this.state.isChosenProduct) {
+    console.log('componentWillReceiveProps test')
+    const projectId = _.get(nextProps, 'project.id', null)
+    if (!nextProps.processing && !nextProps.error && projectId && this.state.isChosenProduct) {
       // update state
       this.setState(() => {
         this.props.history.push(`/projects/${projectId}/plan`)
