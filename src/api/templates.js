@@ -44,16 +44,6 @@ export function getProductTemplate(productTemplateId) {
 }
 
 /**
- * Get all product template
- *
- * @return {Promise} all product template
- */
-export function getAllProductTemplates() {
-  return axios.get(`${TC_API_URL}/v4/productTemplates/`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
-}
-
-/**
  * Get product template by key
  *
  * This is only need for old project which doesn't have `templateId`
@@ -63,12 +53,14 @@ export function getAllProductTemplates() {
  * @return {Promise} product template
  */
 export function getProductTemplateByKey(productKey) {
-  const params = {
-    filter: `productKey=${productKey}`
+  const params = {}
+  if (productKey) {
+    params['filter'] = `productKey=${productKey}`
   }
 
   return axios.get(`${TC_API_URL}/v4/productTemplates/`, { params })
-    .then(resp => _.get(resp.data, 'result.content[0]', {}))
+  // we only get first product of result in case provide productKey ortherwise we get all the product
+    .then(resp => _.get(resp.data, (productKey ? 'result.content[0]' : 'result.content'), {}))
 }
 
 /**

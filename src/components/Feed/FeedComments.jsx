@@ -72,7 +72,7 @@ class FeedComments extends React.Component {
       )
     }
 
-    comments.forEach((item, idx) => {
+    comments && comments.forEach((item, idx) => {
       const createdAt = moment(item.createdAt)
       const prevComment = comments[idx - 1]
       const isSameAuthor = prevComment && prevComment.author.userId === item.author.userId

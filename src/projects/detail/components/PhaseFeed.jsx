@@ -14,7 +14,7 @@ const PhaseFeedView = (props) => (
     {...{
       ..._.omit(props, 'feed'),
       ...props.feed,
-      id: props.feed.id.toString(),
+      id: (props.feed ? props.feed.id.toString() : 0),
     }}
   />
 )

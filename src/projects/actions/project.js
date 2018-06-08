@@ -11,7 +11,7 @@ import { getProjectById, createProject as createProjectAPI,
   createProjectPhase,
   createPhaseProduct,
 } from '../../api/projects'
-import { getProductTemplate, getAllProductTemplates, getProjectTemplate, getProductTemplateByKey } from '../../api/templates'
+import { getProductTemplate, getProjectTemplate, getProductTemplateByKey } from '../../api/templates'
 import { LOAD_PROJECT, CREATE_PROJECT, CREATE_PROJECT_STAGE, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
   LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES,
   LOAD_PROJECT_TEMPLATE, LOAD_PROJECT_PRODUCT_TEMPLATES, LOAD_ALL_PRODUCT_TEMPLATES, UPDATE_PRODUCT,
@@ -137,7 +137,7 @@ export function loadAllProductTemplates() {
   return (dispatch) => {
     return dispatch({
       type: LOAD_ALL_PRODUCT_TEMPLATES,
-      payload: Promise.resolve(getAllProductTemplates())
+      payload: Promise.resolve(getProductTemplateByKey())
     })
   }
 }

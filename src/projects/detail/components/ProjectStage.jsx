@@ -161,6 +161,7 @@ class ProjectStage extends React.Component{
 
           {activeTab === 'posts' &&
             <PhaseFeed
+              user={currentUser}
               currentUser={currentUser}
               feed={feed}
               onLoadMoreComments={onLoadMoreComments}

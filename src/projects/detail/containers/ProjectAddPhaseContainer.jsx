@@ -1,6 +1,6 @@
 /**
- * ProjectPlanContainer container
- * displays content of the Project Plan tab
+ * ProjectAddPhaseContainer container
+ * displays content of the Project Add Phase tab
  *
  * NOTE data is loaded by the parent ProjectDetail component
  */
