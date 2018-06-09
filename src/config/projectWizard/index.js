@@ -25,6 +25,15 @@ const products = {
         aliases: ['enterprise-mobile'],
         hidden: true
       },
+      'Enterprise Web': {
+        brief: 'Enterprise Web',
+        details: 'Enterprise Web',
+        formTitle: 'Enterprise Web',
+        icon: 'product-app-app',
+        id: 'enterprise_web',
+        aliases: ['enterprise-web'],
+        hidden: true
+      },
       'topgear-dev': {
         brief: 'Topgear',
         details: 'Topgear',
@@ -321,7 +330,7 @@ const products = {
       },
       'Salesforce Accelerator': {
         brief: 'TBD',
-        details: 'SalesForce Testing, Cross browser-device Testing',
+        details: 'Salesforce Testing, Cross browser-device Testing',
         icon: 'product-qa-sfdc-accelerator',
         id: 'sfdc_testing',
         aliases: ['sfdc_testing', 'sfdc-testing']

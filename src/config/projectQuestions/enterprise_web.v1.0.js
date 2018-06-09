@@ -42,18 +42,12 @@ const sections = [
             required: true,
             validationError: 'Please let us know the target device',
             title: 'App Type',
-            description: 'What type of application are we developing? Please \
-                           the required app \
-                          type. Please note that each additional app type incurs \
-                          a cost, but that the cost will be detailed and broken \
-                          out in the final project proposal. ',
+            description: 'What type of application are we developing? Please place an X in the Required column for each required app type. Please note that each additional app type incurs a cost, but that the cost will be detailed and broken out in the final project proposal.  ',
             fieldName: 'details.appDefinition.appType',
             type: 'checkbox-group',
             options: [
-              { value: 'ios', label: 'iOS App - An app built for iPhone or iPads' },
-              { value: 'android', label: 'Android App - An app built for mobile phones or tablets running Android.' },
-              { value: 'hybrid', label: 'Hybrid App - An app built using a hybrid framework (ex. Ionic/Cordova/Xamarin) and exported to one or more operating systems (iOS, Android or both).' },
-              { value: 'web', label: 'Mobile Web App - An app that is accessed by using a mobile web browser like Safari or Chrome.' }
+              { value: 'desktop', label: 'Desktop Web App - An app built to be accessed over the web using a desktop browser such as Chrome, Safari and MS Explorer' },
+              { value: 'responsive', label: 'Responsive Web App - An app built to be accessed over the web using a desktop, tablet or mobile browser such as Chrome, Safari and MS Explorer. The application will render on multiple devices types, with a optimized screen for each type of device.' },
             ]
           },
           {
@@ -71,20 +65,6 @@ const sections = [
             description: 'What are the main business objectives you want to achieve by developing this application?',
             title: 'Objectives',
             type: 'textbox'
-          },
-          {
-            icon: 'question',
-            title: 'Form Factor/Orientation',
-            description: 'Please select each for each  \
-                          form factor/orientation that must be supported.',
-            fieldName: 'details.appDefinition.formFactor',
-            type: 'checkbox-group',
-            options: [
-              { value: 'mobile-phone-portrait', label: 'Mobile Phone - Portrait' },
-              { value: 'mobile-phone-landscape', label: 'Mobile Phone - Landscape' },
-              { value: 'tablet-device-portrait', label: 'Tablet Device - Portrait'},
-              { value: 'tablet-device-landscape', label: 'Tablet Device - Landscape' }
-            ]
           }
 
         ]
@@ -238,8 +218,7 @@ const sections = [
               { value: 'admin-tool', label:'Admin Tool - App must have an administrative tool or panel to enable direct management of users, content and the application.'},
               { value: 'social-media-integration', label:'Social Media Integration - App must integrate with social media providers (Facebook, Instagram, Twitter, Google+, etc)'},
               { value: 'reporting', label:'Reporting - App must have the ability to report/export data'},
-              { value: 'contact-us', label:'Contact Us - App must have the ability to allow users to contact an administrator/send feedback to administrators.'},
-              { value: '3d-touch', label:'3D Touch - If this is an iOS App -- should the designers make use of 3D Touch?'}
+              { value: 'contact-us', label:'Contact Us - App must have the ability to allow users to contact an administrator/send feedback to administrators.'}
             ]
           },
 
@@ -258,12 +237,8 @@ const sections = [
               { value: 'continuous-integration-/-continuous-deployment', label:'Continuous Integration / Continuous Deployment - Establishment of a CI/CD pipeline.'},
               { value: 'analytics-implementation', label:'Analytics Implementation - Implementation of analytics to track user behavior and app usage.'},
               { value: 'email-(smtp-server)-setup', label:'Email (SMTP Server) Setup - Development and configuration of an SMTP server to provide email notifications. Design, content and development of the emails will need to be handled separately.'},
-              { value: 'offline-capability', label:'Offline Capability - Ability to use features of the application offline, and have the data persist/saved locally and then sent back to a server for syncing.'},
-              { value: 'camera', label:'Minimal Battery Usage Implementation - Update to the core features of a mobile application to support the ability to minimize usage of network bandwidth and battery usage.'},
-              { value: 'apple-app-store-&-google-play-submission-support', label:'Apple App Store & Google Play Submission Support - Consulting support to help streamline the app publishing process to Apple App Store or Google Play.'},
               { value: 'sms-gateway-integration', label:'SMS Gateway Integration - App must integrate with an external SMS gateway/provider for notifications via SMS.'},
-              { value: 'error-logging', label:'Error Logging - Does the application need error logging (this will log all errors, exceptions, warnings, debug information during the application execution and will be helpful to rectify the issues)?'},
-              { value: 'faceid-touchid', label:'Face ID / Touch ID -- If this is an iOS App -- should we support Face ID/Touch ID for login'}
+              { value: 'error-logging', label:'Error Logging - Does the application need error logging (this will log all errors, exceptions, warnings, debug information during the application execution and will be helpful to rectify the issues)?'}
             ]
           }
         ]
@@ -334,10 +309,9 @@ const sections = [
               { value: 'enterprise', label: 'Enterprise - Select this option if your application will house or transmit PII or sensitive data. The data will be encrypted on the device and the server.' },
               { value: 'vulnerability', label: 'Vulnerability Scanning - Vulnerability scanning is a security technique used to identify security weaknesses in a computer system.' },
               { value: 'auditing', label: 'Audit - Is it necessary to audit user actions? Auditing will keep a record of specific user actions like data creation/modification and will be helpful in identifying which user performed a particular action.' },
-              { value: 'confidential', label: 'Confidential Information, Sensitive Financial Data or Personally Identifiable Information (PII) - Will the user be working directly with financial or other protected information such has health records?'},
-              { value: 'mdm', label: 'Mobile Device Management (MDM) - Do you employ an MDM solution? If yes, what service do you use?'}
+              { value: 'confidential', label: 'Confidential Information, Sensitive Financial Data or Personally Identifiable Information (PII) - Will the user be working directly with financial or other protected information such has health records?'}
             ],
-            description: 'Please select each required security requirement above.'
+            description: 'Please select each required security requirement above.',
           },
           {
             icon: 'question',
@@ -357,7 +331,6 @@ Creation of test cases/test scenarios including scenario setup, pre/post conditi
  --App behavior analysis in different modes (inactive, active, low battery, );\
 \
  --App performance under various interrupts, under simulated network conditions, etc. ' },
-              { value: 'devicelab', label: 'Mobile Device Lab on Hire - Allows you to remotely access devices in real cell networks across the world' },
               { value: 'performanceTuning', label: 'Performance Testing - Testing web application’s robustness, availability, and reliability for defined business scenarios and concurrent users.' },
               { value: 'performanceTesting', label: 'Performance Tuning - Analyze and identify performance issues, actionable items for improvement.' },
             ]
@@ -404,6 +377,7 @@ Creation of test cases/test scenarios including scenario setup, pre/post conditi
           {
             icon: 'question',
             description: 'How much budget do you have?',
+
             title: 'Budget',
             fieldName: 'details.loadDetails.budget',
             type: 'slide-radiogroup',
@@ -490,18 +464,12 @@ export const basicSections = [
             required: true,
             validationError: 'Please let us know the target device',
             title: 'App Type',
-            description: 'What type of application are we developing? Please \
-                           the required app \
-                          type. Please note that each additional app type incurs \
-                          a cost, but that the cost will be detailed and broken \
-                          out in the final project proposal. ',
+            description: 'What type of application are we developing? Please place an X in the Required column for each required app type. Please note that each additional app type incurs a cost, but that the cost will be detailed and broken out in the final project proposal.  ',
             fieldName: 'details.appDefinition.appType',
             type: 'checkbox-group',
             options: [
-              { value: 'ios', label: 'iOS App - An app built for iPhone or iPads' },
-              { value: 'android', label: 'Android App - An app built for mobile phones or tablets running Android.' },
-              { value: 'hybrid', label: 'Hybrid App - An app built using a hybrid framework (ex. Ionic/Cordova/Xamarin) and exported to one or more operating systems (iOS, Android or both).' },
-              { value: 'web', label: 'Mobile Web App - An app that is accessed by using a mobile web browser like Safari or Chrome.' }
+              { value: 'desktop', label: 'Desktop Web App - An app built to be accessed over the web using a desktop browser such as Chrome, Safari and MS Explorer' },
+              { value: 'responsive', label: 'Responsive Web App - An app built to be accessed over the web using a desktop, tablet or mobile browser such as Chrome, Safari and MS Explorer. The application will render on multiple devices types, with a optimized screen for each type of device.' },
             ]
           },
           {
@@ -519,20 +487,6 @@ export const basicSections = [
             description: 'What are the main business objectives you want to achieve by developing this application?',
             title: 'Objectives',
             type: 'textbox'
-          },
-          {
-            icon: 'question',
-            title: 'Form Factor/Orientation',
-            description: 'Please select each for each  \
-                          form factor/orientation that must be supported.',
-            fieldName: 'details.appDefinition.formFactor',
-            type: 'checkbox-group',
-            options: [
-              { value: 'mobile-phone-portrait', label: 'Mobile Phone - Portrait' },
-              { value: 'mobile-phone-landscape', label: 'Mobile Phone - Landscape' },
-              { value: 'tablet-device-portrait', label: 'Tablet Device - Portrait'},
-              { value: 'tablet-device-landscape', label: 'Tablet Device - Landscape' }
-            ]
           }
 
         ]
@@ -686,8 +640,7 @@ export const basicSections = [
               { value: 'admin-tool', label:'Admin Tool - App must have an administrative tool or panel to enable direct management of users, content and the application.'},
               { value: 'social-media-integration', label:'Social Media Integration - App must integrate with social media providers (Facebook, Instagram, Twitter, Google+, etc)'},
               { value: 'reporting', label:'Reporting - App must have the ability to report/export data'},
-              { value: 'contact-us', label:'Contact Us - App must have the ability to allow users to contact an administrator/send feedback to administrators.'},
-              { value: '3d-touch', label:'3D Touch - If this is an iOS App -- should the designers make use of 3D Touch?'}
+              { value: 'contact-us', label:'Contact Us - App must have the ability to allow users to contact an administrator/send feedback to administrators.'}
             ]
           },
 
@@ -706,12 +659,8 @@ export const basicSections = [
               { value: 'continuous-integration-/-continuous-deployment', label:'Continuous Integration / Continuous Deployment - Establishment of a CI/CD pipeline.'},
               { value: 'analytics-implementation', label:'Analytics Implementation - Implementation of analytics to track user behavior and app usage.'},
               { value: 'email-(smtp-server)-setup', label:'Email (SMTP Server) Setup - Development and configuration of an SMTP server to provide email notifications. Design, content and development of the emails will need to be handled separately.'},
-              { value: 'offline-capability', label:'Offline Capability - Ability to use features of the application offline, and have the data persist/saved locally and then sent back to a server for syncing.'},
-              { value: 'camera', label:'Minimal Battery Usage Implementation - Update to the core features of a mobile application to support the ability to minimize usage of network bandwidth and battery usage.'},
-              { value: 'apple-app-store-&-google-play-submission-support', label:'Apple App Store & Google Play Submission Support - Consulting support to help streamline the app publishing process to Apple App Store or Google Play.'},
               { value: 'sms-gateway-integration', label:'SMS Gateway Integration - App must integrate with an external SMS gateway/provider for notifications via SMS.'},
-              { value: 'error-logging', label:'Error Logging - Does the application need error logging (this will log all errors, exceptions, warnings, debug information during the application execution and will be helpful to rectify the issues)?'},
-              { value: 'faceid-touchid', label:'Face ID / Touch ID -- If this is an iOS App -- should we support Face ID/Touch ID for login'}
+              { value: 'error-logging', label:'Error Logging - Does the application need error logging (this will log all errors, exceptions, warnings, debug information during the application execution and will be helpful to rectify the issues)?'}
             ]
           }
         ]
@@ -782,8 +731,7 @@ export const basicSections = [
               { value: 'enterprise', label: 'Enterprise - Select this option if your application will house or transmit PII or sensitive data. The data will be encrypted on the device and the server.' },
               { value: 'vulnerability', label: 'Vulnerability Scanning - Vulnerability scanning is a security technique used to identify security weaknesses in a computer system.' },
               { value: 'auditing', label: 'Audit - Is it necessary to audit user actions? Auditing will keep a record of specific user actions like data creation/modification and will be helpful in identifying which user performed a particular action.' },
-              { value: 'confidential', label: 'Confidential Information, Sensitive Financial Data or Personally Identifiable Information (PII) - Will the user be working directly with financial or other protected information such has health records?'},
-              { value: 'mdm', label: 'Mobile Device Management (MDM) - Do you employ an MDM solution? If yes, what service do you use?'}
+              { value: 'confidential', label: 'Confidential Information, Sensitive Financial Data or Personally Identifiable Information (PII) - Will the user be working directly with financial or other protected information such has health records?'}
             ],
             description: 'Please select each required security requirement above.',
           },
@@ -805,7 +753,6 @@ Creation of test cases/test scenarios including scenario setup, pre/post conditi
  --App behavior analysis in different modes (inactive, active, low battery, );\
 \
  --App performance under various interrupts, under simulated network conditions, etc. ' },
-              { value: 'devicelab', label: 'Mobile Device Lab on Hire - Allows you to remotely access devices in real cell networks across the world' },
               { value: 'performanceTuning', label: 'Performance Testing - Testing web application’s robustness, availability, and reliability for defined business scenarios and concurrent users.' },
               { value: 'performanceTesting', label: 'Performance Tuning - Analyze and identify performance issues, actionable items for improvement.' },
             ]
@@ -852,6 +799,7 @@ Creation of test cases/test scenarios including scenario setup, pre/post conditi
           {
             icon: 'question',
             description: 'How much budget do you have?',
+
             title: 'Budget',
             fieldName: 'details.loadDetails.budget',
             type: 'slide-radiogroup',
