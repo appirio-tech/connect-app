@@ -1,6 +1,6 @@
 import {
   LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
-  CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CLEAR_LOADED_PROJECT,
+  CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CREATE_PROJECT_STAGE_PENDING, CREATE_PROJECT_STAGE_SUCCESS, CREATE_PROJECT_STAGE_FAILURE, CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT_PENDING, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   DELETE_PROJECT_PENDING, DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
   ADD_PROJECT_ATTACHMENT_PENDING, ADD_PROJECT_ATTACHMENT_SUCCESS, ADD_PROJECT_ATTACHMENT_FAILURE,
@@ -12,8 +12,8 @@ import {
   ADD_PROJECT_MEMBER_PENDING, ADD_PROJECT_MEMBER_SUCCESS, ADD_PROJECT_MEMBER_FAILURE,
   UPDATE_PROJECT_MEMBER_PENDING, UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
-  GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS,
-  LOAD_PROJECT_TEMPLATE_SUCCESS, LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
+  GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS, LOAD_PROJECT_PHASES_PENDING,
+  LOAD_PROJECT_TEMPLATE_SUCCESS, LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS, LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
   UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_SUCCESS,
 } from '../../config/constants'
 import _ from 'lodash'
@@ -30,8 +30,10 @@ const initialState = {
   updateExisting: false,
   projectTemplate: null,
   productTemplates: [],
+  allProductTemplates: [],
   phases: null,
   phasesNonDirty: null,
+  isLoadingPhases: false
 }
 
 // NOTE: We should always update projectNonDirty state whenever we update the project state
@@ -120,6 +122,11 @@ export const projectState = function (state=initialState, action) {
       productTemplates: action.payload,
     }
 
+  case LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS:
+    return {...state,
+      allProductTemplates: action.payload,
+    }
+
   case CLEAR_LOADED_PROJECT:
   case GET_PROJECTS_SUCCESS:
     return Object.assign({}, state, {
@@ -156,14 +163,21 @@ export const projectState = function (state=initialState, action) {
         }}
       }
     })
+  
+  case LOAD_PROJECT_PHASES_PENDING:
+    return Object.assign({}, state, {
+      isLoadingPhases: true
+    })
 
   case LOAD_PROJECT_PHASES_SUCCESS:
     return update(state, {
       phases: { $set: action.payload },
       phasesNonDirty: { $set: action.payload },
+      isLoadingPhases: { $set: false}
     })
 
   // Create & Edit project
+  case CREATE_PROJECT_STAGE_PENDING:
   case CREATE_PROJECT_PENDING:
   case DELETE_PROJECT_PENDING:
   case UPDATE_PROJECT_PENDING:
@@ -173,6 +187,7 @@ export const projectState = function (state=initialState, action) {
       error: false
     })
 
+  case CREATE_PROJECT_STAGE_SUCCESS:
   case CREATE_PROJECT_SUCCESS:
   case UPDATE_PROJECT_SUCCESS: {
     // after loading project initially, we also load direct project
@@ -385,6 +400,7 @@ export const projectState = function (state=initialState, action) {
   }
 
   case LOAD_PROJECT_FAILURE:
+  case CREATE_PROJECT_STAGE_FAILURE:
   case CREATE_PROJECT_FAILURE:
   case DELETE_PROJECT_FAILURE:
   case UPDATE_PROJECT_FAILURE:

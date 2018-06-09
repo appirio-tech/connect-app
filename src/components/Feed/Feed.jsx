@@ -121,12 +121,18 @@ class Feed extends React.Component {
   }
 }
 
+Feed.defaultProps = {
+  title: '',
+  date:'',
+  allowComments: false,
+}
+
 Feed.propTypes = {
   user: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  date: PropTypes.string,
   topicMessage: PropTypes.any,
-  allowComments: PropTypes.bool.isRequired,
+  allowComments: PropTypes.bool,
   hasMoreComments: PropTypes.bool,
   comments: PropTypes.array,
   children: PropTypes.any,

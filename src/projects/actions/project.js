@@ -12,9 +12,9 @@ import { getProjectById, createProject as createProjectAPI,
   createPhaseProduct,
 } from '../../api/projects'
 import { getProductTemplate, getProjectTemplate, getProductTemplateByKey } from '../../api/templates'
-import { LOAD_PROJECT, CREATE_PROJECT, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
+import { LOAD_PROJECT, CREATE_PROJECT, CREATE_PROJECT_STAGE, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
   LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES,
-  LOAD_PROJECT_TEMPLATE, LOAD_PROJECT_PRODUCT_TEMPLATES, UPDATE_PRODUCT,
+  LOAD_PROJECT_TEMPLATE, LOAD_PROJECT_PRODUCT_TEMPLATES, LOAD_ALL_PRODUCT_TEMPLATES, UPDATE_PRODUCT,
   PROJECT_STATUS_DRAFT, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
 } from '../../config/constants'
 
@@ -34,14 +34,16 @@ export function loadProject(projectId) {
  *
  * @return {Promise} modified array of phases with `products` property
  */
-function populatePhasesProducts(phases) {
-  return Promise.all(phases.map((phase) => getPhaseProducts(phase.projectId, phase.id)))
-    .then((phasesProducts) => {
-      phases.forEach((phase, phaseIndex) => {
-        phase.products = phasesProducts[phaseIndex]
+function populatePhasesProducts(result) {
+  const phases = result.phases
+  const existingPhases = result.existingPhases
+  const unLoadedPhases = _.differenceWith(phases, existingPhases, (a, b) => a.id === b.id)
+  return Promise.all(unLoadedPhases.map((phase) => getPhaseProducts(phase.projectId, phase.id)))
+    .then((unLoadedPhasesProducts) => {
+      unLoadedPhases.forEach((phase, phaseIndex) => {
+        phase.products = unLoadedPhasesProducts[phaseIndex]
       })
-
-      return phases
+      return _.concat(existingPhases, unLoadedPhases)
     })
 }
 
@@ -49,14 +51,16 @@ function populatePhasesProducts(phases) {
  * Load project phases with populated products
  *
  * @param {String} projectId        project id
+ * @param {String} project        project info
+ * @param {String} existingPhases        loaded phases of project in redux
  *
  * @return {Promise} LOAD_PROJECT_PHASES action with payload as array of phases
  */
-export function loadProjectPhasesWithProducts(projectId) {
+export function loadProjectPhasesWithProducts(projectId, project, existingPhases) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_PROJECT_PHASES,
-      payload: getProjectPhases(projectId)
+      payload: getProjectPhases(projectId, existingPhases)
         .then(populatePhasesProducts)
     })
   }
@@ -106,7 +110,7 @@ export function loadProjectProductTemplates(projectTemplate) {
           alreadyLoadedProductTemplates.push(alreadyLoadedProductTemplate)
         } else {
           notLoadedProductTemplatesIds.push(product.id)
-        }
+        } 
       })
     }
 
@@ -117,6 +121,27 @@ export function loadProjectProductTemplates(projectTemplate) {
           ...alreadyLoadedProductTemplates,
           ...loadedProductTemplates,
         ])
+    })
+  }
+}
+
+
+
+/**
+ * Load all product templates
+ *
+ * NOTE
+ *   This function loads all product templates which are not in the store yet
+ *
+ * @param {Object} projectTemplate project template of the project
+ *
+ * @return {Promise} LOAD_ALL_PRODUCT_TEMPLATES action with payload as array of product templates
+ */
+export function loadAllProductTemplates() {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_ALL_PRODUCT_TEMPLATES,
+      payload: Promise.resolve(getProductTemplateByKey())
     })
   }
 }
@@ -158,6 +183,15 @@ export function createProject(newProject, projectTemplate) {
   }
 }
 
+export function createProduct(project, productTemplate) {
+  return (dispatch) => {
+    return dispatch({
+      type: CREATE_PROJECT_STAGE,
+      payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, null, null)
+    })
+  }
+}
+
 /**
  * Create phase and product for the project
  *
@@ -167,19 +201,22 @@ export function createProject(newProject, projectTemplate) {
  *
  * @return {Promise} project
  */
-function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT_STATUS_DRAFT) {
-  return createProjectPhase(project.id, {
+export function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT_STATUS_DRAFT, startDate = new Date(), endDate = moment().add(17, 'days').format()) {
+  const param = {
     status,
-    name: projectTemplate.name,
-    startDate: new Date(),
-
-    // TODO $PROJECT_PLAN$ remove the next dummy values when endDate is not mandatory by back-end
-    endDate: moment().add(17, 'days').format(),
-  }).then((phase) => {
+    name: projectTemplate.name
+  }
+  if (startDate) {
+    param['startDate'] = startDate
+  }
+  if (endDate) {
+    param['endDate'] = endDate
+  }
+  return createProjectPhase(project.id, param).then((phase) => {
     return createPhaseProduct(project.id, phase.id, {
       name: projectTemplate.name,
       templateId: projectTemplate.id,
-      type: projectTemplate.key,
+      type: projectTemplate.key || projectTemplate.productKey,
     })
       .then(() => project)
   })

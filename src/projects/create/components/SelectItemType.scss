@@ -8,11 +8,11 @@
     @extend .wizardWrapper;
   }
 
-  .headerSelectProjectType {
+  .headerSelectItemType {
     @extend .wizardHeader;
   }
 
-  .SelectProjectType {
+  .SelectItemType {
     @extend .wizardCardContainer;
 
     .cards {

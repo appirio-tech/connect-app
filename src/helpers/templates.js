@@ -58,3 +58,16 @@ export function getProjectTemplateByAlias(projectTemplates, alias) {
 export function getProjectTemplateByKey(projectTemplates, projectTemplateKey) {
   return _.find(projectTemplates, { key: projectTemplateKey }) || null
 }
+
+/**
+ * Finds product template by its key
+ *
+ * @param {Array}  productTemplates   list of product templates
+ * @param {String} productTemplateKey product template key to search by
+ *
+ * @return {Object} project template or null
+ */
+export function getProductTemplateByKey(productTemplates, productTemplateKey) {
+  return _.find(productTemplates, { productKey: productTemplateKey }) || null
+}
+

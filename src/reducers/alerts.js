@@ -3,6 +3,7 @@ import Alert from 'react-s-alert'
 /* eslint-disable no-unused-vars */
 import {
   // Project
+  CREATE_PROJECT_STAGE_SUCCESS,
   CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE,
   UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
@@ -41,6 +42,15 @@ export default function(state = {}, action) {
 
     //temporary workaround
     setTimeout(() => { Alert.success(`Project '${name}' created`) }, 0)
+
+    return state
+  }
+
+  case CREATE_PROJECT_STAGE_SUCCESS: {
+    const name = _.truncate(action.payload.name, 20)
+
+    //delay time for reload stage list of project after creating state
+    setTimeout(() => { Alert.success(`Added New Stage To Project '${name}'`) }, 2000)
 
     return state
   }

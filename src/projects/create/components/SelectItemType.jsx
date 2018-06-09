@@ -6,9 +6,9 @@ import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 
 import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
 
-import './SelectProjectType.scss'
+import './SelectItemType.scss'
 
-function SelectProjectType(props) {
+function SelectItemType(props) {
   const cards = []
 
   props.projectTemplates.forEach((item) => {
@@ -21,22 +21,22 @@ function SelectProjectType(props) {
     cards.push(
       <ProjectTypeCard
         icon={icon}
-        info={item.info}
+        info={item.info || item.details}
         key={item.id}
-        onClick={() => props.onProjectTypeChange(item.key)}
+        onClick={() => props.onProjectTypeChange(item.key || item.productKey)}
         type={item.name}
-        buttonText="Select Project"
+        buttonText={props.selectButtonTitle}
       />
     )
   })
 
   return (
     <div>
-      <div className="header headerSelectProjectType">
+      <div className="header headerSelectItemType">
         <ConnectLogoMono className="icon-connect-logo-mono"/>
       </div>
-      <div className="SelectProjectType">
-        <h1>Create a new project</h1>
+      <div className="SelectItemType">
+        <h1>{props.header}</h1>
         <div className="cards">{cards}</div>
         <div className="footer">
           Looking for something else? <a href="http://crowdsourcing.topcoder.com/piqued_by_crowdsourcing">Get in touch with us &rarr;</a>
@@ -46,10 +46,17 @@ function SelectProjectType(props) {
   )
 }
 
-SelectProjectType.propTypes = {
+SelectItemType.defaultProps = {
+  header: '',
+  selectButtonTitle: ''
+}
+
+SelectItemType.propTypes = {
   onProjectTypeChange: PT.func.isRequired,
   userRoles: PT.arrayOf(PT.string),
   projectTemplates: PT.array.isRequired,
+  header: PT.string,
+  selectButtonTitle: PT.string
 }
 
-export default SelectProjectType
+export default SelectItemType

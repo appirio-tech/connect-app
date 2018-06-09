@@ -12,6 +12,7 @@ import ProjectDetail from './detail/ProjectDetail'
 import Dashboard from './detail/containers/DashboardContainer'
 import Scope from './detail/containers/ScopeContainer'
 import ProjectPlan from './detail/containers/ProjectPlanContainer'
+import ProjectAddPhaseContainer from './detail/containers/ProjectAddPhaseContainer'
 import ProjectMessages from './detail/Messages'
 import CoderBot from '../components/CoderBot/CoderBot'
 import SpecificationContainer from './detail/containers/SpecificationContainer'
@@ -32,6 +33,7 @@ const ProjectDetailWithAuth = withProps({ main:
     <Route path="/projects/:projectId/specification" render={() => <ProjectDetail><SpecificationContainer /></ProjectDetail>} />
     <Route path="/projects/:projectId/scope" render={() => <ProjectDetail><Scope /></ProjectDetail>} />
     <Route path="/projects/:projectId/plan" render={() => <ProjectDetail><ProjectPlan /></ProjectDetail>} />
+    <Route path="/projects/:projectId/add-phase" render={() => <ProjectDetail><ProjectAddPhaseContainer /></ProjectDetail>} />
     <Route path="/projects/:projectId/discussions/:discussionId?" render={() => <ProjectDetail><ProjectMessages /></ProjectDetail>} />
     <Route render={() => <CoderBot code={404}/>} />
   </Switch>

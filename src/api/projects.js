@@ -67,11 +67,11 @@ export function getProjectById(projectId) {
  *
  * @return {Promise} resolves to project phases
  */
-export function getProjectPhases(projectId) {
+export function getProjectPhases(projectId, existingPhases) {
   return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases`)
     .then(resp => {
       const res = _.get(resp.data, 'result.content', {})
-      return res
+      return {phases: res, existingPhases: existingPhases || []}
     })
 }
 
