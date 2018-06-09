@@ -174,7 +174,7 @@ export function createProject(newProject, projectTemplate) {
     return dispatch({
       type: CREATE_PROJECT,
       payload: createProjectAPI(newProject)
-        .then((project) => createProjectPhaseAndProduct(project, projectTemplate, PROJECT_STATUS_DRAFT, new Date(), moment().add(17, 'days').format()))
+        .then((project) => createProjectPhaseAndProduct(project, projectTemplate))
     })
   }
 }
@@ -197,7 +197,7 @@ export function createProduct(project, productTemplate) {
  *
  * @return {Promise} project
  */
-export function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT_STATUS_DRAFT, startDate, endDate) {
+export function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT_STATUS_DRAFT, startDate = new Date(), endDate = moment().add(17, 'days').format()) {
   const param = {
     status,
     name: projectTemplate.name
@@ -241,7 +241,7 @@ export function createProjectWithStatus(newProject, status, projectTemplate) {
     return dispatch({
       type: CREATE_PROJECT,
       payload: createProjectWithStatusAPI(newProject, status)
-        .then((project) => createProjectPhaseAndProduct(project, projectTemplate, status, new Date(), moment().add(17, 'days').format()))
+        .then((project) => createProjectPhaseAndProduct(project, projectTemplate, status))
     })
   }
 }

@@ -20,7 +20,7 @@ import { loadProjectDashboard } from '../../../projects/actions/projectDashboard
 
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import Wizard from '../../../components/Wizard'
-import SelectProjectType from '../../create/components/SelectProjectType'
+import SelectItemType from '../../create/components/SelectItemType'
 import {
   CREATE_PROJECT_FAILURE,
 } from '../../../config/constants'
@@ -61,7 +61,7 @@ const CreateView = (props) => {
         shouldRenderBackButton={ (step) => step > 1 }
       >
         <div />
-        <SelectProjectType
+        <SelectItemType
           header={'Add New Stage'}
           onProjectTypeChange={ props.onProjectTypeChange }
           userRoles={ props.userRoles }

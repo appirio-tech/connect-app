@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom'
 import { getProjectCreationTemplateField, getProjectTemplateByAlias,
   getProjectTemplateByKey } from '../../../helpers/templates'
 import Wizard from '../../../components/Wizard'
-import SelectProjectType from './SelectProjectType'
+import SelectItemType from './SelectItemType'
 import IncompleteProjectConfirmation from './IncompleteProjectConfirmation'
 import FillProjectDetails from './FillProjectDetails'
 import update from 'react-addons-update'
@@ -375,7 +375,7 @@ class ProjectWizard extends Component {
           removeIncompleteProject={ this.removeIncompleteProject }
           userRoles={ userRoles }
         />
-        <SelectProjectType
+        <SelectItemType
           header={'Create a new project'}
           onProjectTypeChange={ this.updateProjectType }
           userRoles={ userRoles }

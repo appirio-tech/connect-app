@@ -6,9 +6,9 @@ import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 
 import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
 
-import './SelectProjectType.scss'
+import './SelectItemType.scss'
 
-function SelectProjectType(props) {
+function SelectItemType(props) {
   const cards = []
 
   props.projectTemplates.forEach((item) => {
@@ -32,10 +32,10 @@ function SelectProjectType(props) {
 
   return (
     <div>
-      <div className="header headerSelectProjectType">
+      <div className="header headerSelectItemType">
         <ConnectLogoMono className="icon-connect-logo-mono"/>
       </div>
-      <div className="SelectProjectType">
+      <div className="SelectItemType">
         <h1>{props.header}</h1>
         <div className="cards">{cards}</div>
         <div className="footer">
@@ -46,12 +46,12 @@ function SelectProjectType(props) {
   )
 }
 
-SelectProjectType.defaultProps = {
+SelectItemType.defaultProps = {
   header: '',
   selectButtonTitle: ''
 }
 
-SelectProjectType.propTypes = {
+SelectItemType.propTypes = {
   onProjectTypeChange: PT.func.isRequired,
   userRoles: PT.arrayOf(PT.string),
   projectTemplates: PT.array.isRequired,
@@ -59,4 +59,4 @@ SelectProjectType.propTypes = {
   selectButtonTitle: PT.string
 }
 
-export default SelectProjectType
+export default SelectItemType
