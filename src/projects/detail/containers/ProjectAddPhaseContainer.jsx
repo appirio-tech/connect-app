@@ -103,15 +103,14 @@ class ProjectAddPhaseContainer extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps test')
-    const projectId = _.get(nextProps, 'project.id', null)
-    if (!nextProps.processing && !nextProps.error && projectId && this.state.isChosenProduct) {
+  componentWillReceiveProps(props) {
+    const project = _.get(props, 'project', null)
+    if (!props.processing && !props.error && project && this.state.isChosenProduct) {
       if (this.state.shouldReloadPhases) {
         // reload the project
-        nextProps.loadProjectPhasesWithProducts(projectId)
+        props.loadProjectPhasesWithProducts(project.id, project, props.phases)
         this.setState({shouldReloadPhases: false})
-      } else if (!nextProps.isLoadingPhases) {
+      } else if (!props.isLoadingPhases) {
         // back to plan
         this.closeWizard()
       }
@@ -120,7 +119,6 @@ class ProjectAddPhaseContainer extends React.Component {
 
   updateProjectType(projectTemplateKey) {
     const props = this.props
-
     const productTemplate = getProductTemplateByKey(props.allProductTemplates, projectTemplateKey)
     if (productTemplate) {
       props.createProduct(props.project, productTemplate)
@@ -161,6 +159,7 @@ const mapStateToProps = ({projectState, loadUser, templates }) => ({
   error: projectState.error,
   project: projectState.project,
   isLoadingPhases: projectState.isLoadingPhases,
+  phases: projectState.phases,
   templates,
 })
 

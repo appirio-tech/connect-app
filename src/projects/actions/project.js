@@ -34,14 +34,16 @@ export function loadProject(projectId) {
  *
  * @return {Promise} modified array of phases with `products` property
  */
-function populatePhasesProducts(phases) {
-  return Promise.all(phases.map((phase) => getPhaseProducts(phase.projectId, phase.id)))
-    .then((phasesProducts) => {
-      phases.forEach((phase, phaseIndex) => {
-        phase.products = phasesProducts[phaseIndex]
+function populatePhasesProducts(result) {
+  const phases = result.phases
+  const existingPhases = result.existingPhases
+  const unLoadedPhases = _.differenceWith(phases, existingPhases, (a, b) => a.id === b.id)
+  return Promise.all(unLoadedPhases.map((phase) => getPhaseProducts(phase.projectId, phase.id)))
+    .then((unLoadedPhasesProducts) => {
+      unLoadedPhases.forEach((phase, phaseIndex) => {
+        phase.products = unLoadedPhasesProducts[phaseIndex]
       })
-
-      return phases
+      return _.concat(existingPhases, unLoadedPhases)
     })
 }
 
@@ -49,14 +51,16 @@ function populatePhasesProducts(phases) {
  * Load project phases with populated products
  *
  * @param {String} projectId        project id
+ * @param {String} project        project info
+ * @param {String} existingPhases        loaded phases of project in redux
  *
  * @return {Promise} LOAD_PROJECT_PHASES action with payload as array of phases
  */
-export function loadProjectPhasesWithProducts(projectId) {
+export function loadProjectPhasesWithProducts(projectId, project, existingPhases) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_PROJECT_PHASES,
-      payload: getProjectPhases(projectId)
+      payload: getProjectPhases(projectId, existingPhases)
         .then(populatePhasesProducts)
     })
   }
