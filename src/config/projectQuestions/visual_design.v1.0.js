@@ -116,15 +116,11 @@ const sections = [
     id: 'appScreens',
     required: true,
     title: 'App Screens',
-    description: (
-      <span>
-        Please describe all the primary screens first. It is important to think about the biggest
-        problem of your application, rather than list all possible screens. Well documented and
-        researched design patterns like <strong>Settings</strong>, <strong>Search</strong>, <strong>Listing</strong>, <strong>Log In</strong>, <strong>Registration</strong> do not need
-        to be the focus of the design, unless you're doing something transformative with said
-        screens. In that case please list in details what is the novel approach for your screens.
-      </span>
-    ),
+    description: 'Please describe all the primary screens first. It is important to think about the biggest\
+        problem of your application, rather than list all possible screens. Well documented and\
+        researched design patterns like "Settings", "Search", "Listing", "Log In", "Registration" do not need\
+        to be the focus of the design, unless you\'re doing something transformative with said\
+        screens. In that case please list in details what is the novel approach for your screens.',
     subSections: [
       {
         id: 'screens',

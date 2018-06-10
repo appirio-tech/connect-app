@@ -3,11 +3,9 @@ import React, { Component } from 'react'
 import PT from 'prop-types'
 import Sticky from 'react-stickynode'
 
-import { findProduct } from '../../../config/projectWizard'
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
 import ProjectOutline from '../components/ProjectOutline'
-import typeToSpecification from '../../../config/projectSpecification/typeToSpecification'
 import ModalControl from '../../../components/ModalControl'
 import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
 
@@ -35,20 +33,17 @@ class FillProjectDetails extends Component  {
     )
   }
 
-  createMarkup(product) {
-    return {__html: _.get(product, 'formTitle', `Let's setup your ${ product.name } project`) }
+  createMarkup(projectTemplate) {
+    return {__html: _.get(projectTemplate, 'formTitle', `Let's setup your ${ projectTemplate.name } project`) }
   }
 
   render() {
-    const { project, dirtyProject, processing, submitBtnText, onBackClick } = this.props
-    const productId = _.get(project, 'details.products[0]')
-    const product = findProduct(productId)
-    const formDesclaimer = _.get(product, 'formDesclaimer')
+    const { project, dirtyProject, processing, submitBtnText, onBackClick, projectTemplates } = this.props
+    const projectKey = _.get(project, 'details.products[0]')
+    const projectTemplate = _.find(projectTemplates, { key: projectKey })
+    const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
 
-    let specification = 'topcoder.v1'
-    if (productId)
-      specification = typeToSpecification[productId]
-    const sections = require(`../../../config/projectQuestions/${specification}`).basicSections
+    const sections = projectTemplate.scope.sections
     return (
       <div className="FillProjectDetailsWrapper">
         <div className="header headerFillProjectDetails" />
@@ -60,7 +55,7 @@ class FillProjectDetails extends Component  {
               label="back"
               onClick={onBackClick}
             />
-            <h1 dangerouslySetInnerHTML = {this.createMarkup(product)}  />
+            <h1 dangerouslySetInnerHTML = {this.createMarkup(projectTemplate)}  />
           </div>
           <section className="two-col-content content">
             <div className="container">
@@ -69,22 +64,22 @@ class FillProjectDetails extends Component  {
                   <ProjectBasicDetailsForm
                     project={project}
                     sections={sections}
-                    isEdittable
+                    isEditable
                     submitHandler={this.props.onCreateProject}
                     saving={processing}
                     onProjectChange={this.props.onProjectChange}
                     submitBtnText={ submitBtnText }
                   />
                 </div>
-                {formDesclaimer && (
+                {formDisclaimer && (
                   <div className="left-area-footer">
-                    <span>{formDesclaimer}</span>
+                    <span>{formDisclaimer}</span>
                   </div>
                 )}
               </div>
               <div className="right-area">
                 <Sticky top={20}>
-                  <ProjectOutline project={ dirtyProject } />
+                  <ProjectOutline project={ dirtyProject } projectTemplates={ projectTemplates } />
                   <div className="right-area-footer">In 24 hours our project managers will contact you for more information and a detailed quote that accurately reflects your project needs.</div>
                 </Sticky>
               </div>
@@ -102,6 +97,7 @@ FillProjectDetails.propTypes = {
   onCreateProject: PT.func.isRequired,
   onChangeProjectType: PT.func.isRequired,
   project: PT.object.isRequired,
+  projectTemplates: PT.array.isRequired,
   userRoles: PT.arrayOf(PT.string),
   processing: PT.bool,
   error: PT.oneOfType([

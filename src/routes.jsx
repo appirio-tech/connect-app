@@ -129,7 +129,7 @@ class Routes extends React.Component {
     return (
       <Switch>
         <Route exact path="/" render={renderApp(topBarWithProjectsToolBar, <Home/>)} />
-        <Route path="/new-project/:product?/:status?" render={renderApp(null, <CreateContainer/>)} />
+        <Route path="/new-project/:project?/:status?" render={renderApp(null, <CreateContainer/>)} />
         <Route path="/new-project-callback" render={renderApp(null, <CreateContainer/>)} />
         <Route path="/terms" render={renderApp(topBarWithProjectsToolBar, <ConnectTerms/>)} />
         <Route path="/login" render={renderApp(topBarWithProjectsToolBar, <LoginRedirect/>)} />

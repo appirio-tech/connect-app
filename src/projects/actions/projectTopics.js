@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { getTopics, getTopicPosts, createTopic, saveTopic, deleteTopic, addTopicPost, saveTopicPost, getTopicPost, deleteTopicPost } from '../../api/messages'
+import { getTopicsWithComments, getTopicPosts, createTopic, saveTopic, deleteTopic, addTopicPost, saveTopicPost, getTopicPost, deleteTopicPost } from '../../api/messages'
 import {
   PROJECT_FEED_TYPE_PRIMARY,
   PROJECT_FEED_TYPE_MESSAGES,
@@ -48,50 +48,14 @@ export function laodProjectMessages(projectId) {
   }
 }
 
-// ignore action param
-/*eslint-disable no-unused-vars */
-
-const getTopicsWithComments = (projectId, tag) => {
-  return getTopics({ reference : 'project', referenceId: projectId, tag })
-    .then(({topics, totalCount}) => {
-      const additionalPosts = []
-      //remove coderBot posts
-      const rTopics = _.remove(topics, i =>
-        [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(i.userId) > -1
-      )
-      totalCount -= rTopics.length
-      // if a topic has more than 20 posts then to display the latest posts,
-      // we'll have to first retrieve them from the server
-      _.forEach(topics, (t) => {
-        if (t.posts.length < t.postIds.length) {
-          const postIds = t.postIds.slice(t.postIds.length).slice(-6)
-          additionalPosts.push(getTopicPosts(t.id, postIds))
-        }
-        t.posts = _.sortBy(t.posts, ['id'])
-      })
-      if (additionalPosts.length === 0) {
-        // we dont need to retrieve any additional posts
-        return { topics, totalCount }
-      }
-      return Promise.all(additionalPosts)
-        .then(postArr => {
-          _.forEach(postArr, (p) => {
-            const topic = _.find(topics, t => t.id === p.topicId)
-            topic.posts = _.sortBy(topic.posts.concat(p.posts), ['id'])
-          })
-          return { topics, totalCount }
-        })
-
-    })
-}
 const getProjectTopicsWithMember = (dispatch, projectId, tag) => {
   return new Promise((resolve, reject) => {
     return dispatch({
       type: LOAD_PROJECT_FEEDS,
-      payload: getTopicsWithComments(projectId, tag),
+      payload: getTopicsWithComments('project', projectId, tag),
       meta: { tag, projectId }
     })
-      .then(({ value, action }) => {
+      .then(({ value }) => {
         let userIds = []
         userIds = _.union(userIds, _.map(value.topics, 'userId'))
         _.forEach(value.topics, topic => {

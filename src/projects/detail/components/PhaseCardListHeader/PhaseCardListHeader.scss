@@ -1,0 +1,33 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  @include roboto;
+  align-items: center;
+  color: $tc-gray-80;
+  display: flex;
+  font-size: 11px;
+  justify-content: space-between;
+  padding-right: 50px;
+}
+
+.title {
+  flex: 0 500px;
+}
+
+.price {
+  flex: 0 140px;
+  /* 18px minimum padding between price status column
+     + 10px to slightly align center the price header */
+  padding-right: 18px + 10px;
+  text-align: right;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    display: none;
+  }
+}
+
+.status {
+  @media screen and (max-width: $screen-md - 1px) {
+    display: none;
+  }
+}

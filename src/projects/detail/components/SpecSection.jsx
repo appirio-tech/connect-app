@@ -12,6 +12,44 @@ import SpecScreens from './SpecScreens'
 import { PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
 import { scrollToAnchors } from '../../../components/ScrollToAnchors'
 
+import './SpecSection.scss'
+
+// icons for "tiled-radio-group" field type
+import NumberText from '../../../components/NumberText/NumberText'
+import IconTechOutlineMobile from  '../../../assets/icons/icon-tech-outline-mobile.svg'
+import IconTechOutlineTablet from  '../../../assets/icons/icon-tech-outline-tablet.svg'
+import IconTechOutlineDesktop from  '../../../assets/icons/icon-tech-outline-desktop.svg'
+import IconTechOutlineWatchApple from  '../../../assets/icons/icon-tech-outline-watch-apple.svg'
+import IconTcSpecTypeSerif from  '../../../assets/icons/icon-tc-spec-type-serif.svg'
+import IconTcSpecTypeSansSerif from  '../../../assets/icons/icon-tc-spec-type-sans-serif.svg'
+import IconTcSpecIconTypeColorHome from  '../../../assets/icons/icon-tc-spec-icon-type-color-home.svg'
+import IconTcSpecIconTypeOutlineHome from  '../../../assets/icons/icon-tc-spec-icon-type-outline-home.svg'
+import IconTcSpecIconTypeGlyphHome from  '../../../assets/icons/icon-tc-spec-icon-type-glyph-home.svg'
+
+// map string values to icon components for "tiled-radio-group" field type
+// this map contains TWO types of map, dashed and CamelCased
+const tiledRadioGroupIcons = {
+  NumberText,
+  IconTechOutlineMobile,
+  'icon-tech-outline-mobile': IconTechOutlineMobile,
+  IconTechOutlineTablet,
+  'icon-tech-outline-tablet': IconTechOutlineTablet,
+  IconTechOutlineDesktop,
+  'icon-tech-outline-desktop': IconTechOutlineDesktop,
+  IconTechOutlineWatchApple,
+  'icon-tech-outline-watch-apple': IconTechOutlineWatchApple,
+  IconTcSpecTypeSerif,
+  'icon-tc-spec-type-serif': IconTcSpecTypeSerif,
+  IconTcSpecTypeSansSerif,
+  'icon-tc-spec-type-sans-serif': IconTcSpecTypeSansSerif,
+  IconTcSpecIconTypeColorHome,
+  'icon-tc-spec-icon-type-color-home': IconTcSpecIconTypeColorHome,
+  IconTcSpecIconTypeOutlineHome,
+  'icon-tc-spec-icon-type-outline-home': IconTcSpecIconTypeOutlineHome,
+  IconTcSpecIconTypeGlyphHome,
+  'icon-tc-spec-icon-type-glyph-home': IconTcSpecIconTypeGlyphHome,
+}
+
 const SpecSection = props => {
   const {
     project,
@@ -22,10 +60,32 @@ const SpecSection = props => {
     id,
     title,
     description,
-    subSections,
     validate,
-    sectionNumber
+    sectionNumber,
+    showHidden,
+    addAttachment,
+    updateAttachment,
+    removeAttachment,
+    attachmentsStorePath,
+    canManageAttachments,
   } = props
+
+  // make a copy to avoid modifying redux store
+  const subSections = _.cloneDeep(props.subSections || [])
+
+  // replace string icon values in the "tiled-radio-group" questions with icon components
+  subSections.forEach((subSection) => {
+    (subSection.questions || []).forEach(question => {
+      if (question.type === 'tiled-radio-group') {
+        question.options.forEach((option) => {
+          // if icon is defined as a relative path to the icon, convert it to icon "id"
+          const iconAsPath = option.icon.match(/(?:\.\.\/)+assets\/icons\/([^.]+)\.svg/)
+          option.icon = tiledRadioGroupIcons[iconAsPath ? iconAsPath[1] : option.icon]
+        })
+      }
+    })
+  })
+
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
       {
@@ -70,6 +130,7 @@ const SpecSection = props => {
           project={project}
           dirtyProject={dirtyProject}
           isRequired={props.required}
+          showHidden={showHidden}
         />
       )
     case 'notes':
@@ -88,7 +149,17 @@ const SpecSection = props => {
     case 'files': {
       const projectLatest = isProjectDirty ? dirtyProject : project
       const files = _.get(projectLatest, props.fieldName, [])
-      return <FileListContainer project={projectLatest} files={files} />
+      return (
+        <FileListContainer
+          project={projectLatest}
+          files={files}
+          addAttachment={addAttachment}
+          updateAttachment={updateAttachment}
+          removeAttachment={removeAttachment}
+          attachmentsStorePath={attachmentsStorePath}
+          canManageAttachments={canManageAttachments}
+        />
+      )
     }
     case 'screens': {
       const screens = _.get(project, props.fieldName, [])
@@ -151,14 +222,14 @@ const SpecSection = props => {
       <div className="boxes">
         <div className="section-header big-titles">
           <h2 id={id}>
-            {typeof title === 'function' ? title(project, true): title }
+            {title}
           </h2>
           <span className="section-number">{ sectionNumber }</span>
         </div>
         <p className="gray-text">
           {description}
         </p>
-        {subSections.map(renderSubSection)}
+        {subSections.filter((subSection) => showHidden || !subSection.hidden).map(renderSubSection)}
       </div>
     </div>
   )
@@ -166,7 +237,11 @@ const SpecSection = props => {
 
 SpecSection.propTypes = {
   project: PropTypes.object.isRequired,
-  sectionNumber: PropTypes.number.isRequired
+  sectionNumber: PropTypes.number.isRequired,
+  showHidden: PropTypes.bool,
+  addAttachment: PropTypes.func.isRequired,
+  updateAttachment: PropTypes.func.isRequired,
+  removeAttachment: PropTypes.func.isRequired,
 }
 
 export default scrollToAnchors(SpecSection)

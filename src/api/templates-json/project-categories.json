@@ -1,0 +1,30 @@
+[
+  {
+    "categoryId": "app",
+    "categoryName": "App"
+  },
+  {
+    "categoryId": "website",
+    "categoryName": "Website"
+  },
+  {
+    "categoryId": "chatbot",
+    "categoryName": "Chatbot"
+  },
+  {
+    "categoryId": "visual_design",
+    "categoryName": "Design"
+  },
+  {
+    "categoryId": "app_dev",
+    "categoryName": "Software Development"
+  },
+  {
+    "categoryId": "analytics",
+    "categoryName": "Analytics & Data Science"
+  },
+  {
+    "categoryId": "quality_assurance",
+    "categoryName": "QA"
+  }
+]

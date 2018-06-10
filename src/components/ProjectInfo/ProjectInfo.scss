@@ -16,6 +16,23 @@
       padding-bottom: 0;
     }
 
+    .project-overview-header {
+      @include roboto-medium;
+      color: $tc-black;
+      font-size: 15px;
+      line-height: 20px;
+    }
+
+    .project-overview-time {
+      @include roboto;
+      color: $tc-gray-50;
+      font-size: 10px;
+      letter-spacing: 0.4px;
+      line-height: 15px;
+      margin-top: $base_unit;
+      text-transform: uppercase;
+    }
+
     .project-card-body {
       padding-left: 4 * $base_unit;
       padding-right: 4 * $base_unit;

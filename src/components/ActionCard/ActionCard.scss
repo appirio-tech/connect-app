@@ -348,80 +348,7 @@
       text-align: center;
     }
 
-    .tc-textarea {
-      .public-DraftEditor-content,
-      textarea {
-        @include roboto;
-        min-height: 75px;
-        color: $tc-gray-80;
-        line-height: $base-unit*5;
-        font-size: $tc-label-md;
-      }
 
-      &.has-footer {
-        textarea {
-          margin-bottom: 0;
-          border-bottom: none;
-        }
-      }
-
-      .textarea-footer {
-        padding: 12px 15px;
-        background: $tc-gray-neutral-light;
-        border: 1px solid $tc-gray-20;
-        border-top: 1px solid $tc-dark-blue;
-        display: flex;
-
-        .textarea-buttons {
-          display: flex;
-          align-items: center;
-
-          button,
-          .separator {
-            margin-right: 1px;
-            display: inline-block;
-            border: none;
-            background-color: transparent;
-            padding: 0px;
-          }
-
-          .button {
-            cursor: pointer;
-          }
-
-          .separator {
-            width: 1px;
-            height: 20px;
-            background-color: $tc-gray-30;
-            margin-left: 8px;
-            margin-right: 8px;
-          }
-
-          button {
-            &:hover,
-            &:disabled {
-              opacity: 0.5;
-            }
-
-            &.active {
-              opacity: 1;
-            }
-          }
-        }
-
-        .tc-btn {
-          margin-left: auto;
-        }
-
-        .tc-btns {
-          margin-left: auto;
-
-          .tc-btn {
-            margin-left: 10px;
-          }
-        }
-      }
-    }
 
     input {
       @include roboto-medium;
@@ -530,7 +457,6 @@
       }
 
       .new-post-title {
-        max-width: 640px;
         margin-left: 0px;
       }
 

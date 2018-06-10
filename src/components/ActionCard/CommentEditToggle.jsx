@@ -4,8 +4,8 @@ import cn from 'classnames'
 import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 import DropdownItem from 'appirio-tech-react-components/components/Dropdown/DropdownItem'
 import Modal from 'react-modal'
-import EditComment from '../../assets/icons/ui-16px-1_edit-73.svg'
 
+import './CommentEditToggle.scss'
 
 export default class CommentEditToggle extends React.Component {
 
@@ -43,18 +43,18 @@ export default class CommentEditToggle extends React.Component {
       <div className="dropdownContainer">
         <Dropdown pointerShadow className="drop-down edit-toggle-container">
           <div className={cn('dropdown-menu-header', 'edit-toggle')} title="Edit">
-            <EditComment className="icon-edit-comment" />
+            <div styleName="edit-toggle-btn"><i/><i/><i/></div>
           </div>
           <div className="dropdown-menu-list down-layer">
             <ul>
               <DropdownItem key={1} item={editOptions}
                 onItemClick={this.onEdit}
-                currentSelection="" 
+                currentSelection=""
               />
               {! this.props.hideDelete &&
             <DropdownItem key={2} item={deleteOptions}
               onItemClick={this.showDelete}
-              currentSelection="" 
+              currentSelection=""
             />}
             </ul>
           </div>
@@ -83,7 +83,7 @@ export default class CommentEditToggle extends React.Component {
 
       </div>
 
-      
+
     )
   }
 }

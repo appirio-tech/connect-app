@@ -53,14 +53,6 @@
         padding: $base-unit*2 $base-unit*4;
       }
 
-      .panel-title {
-        @include roboto-medium;
-        color: $tc-gray-50;
-        text-transform: uppercase;
-        font-size: $tc-label-sm;
-        line-height: $base-unit*3;
-      }
-
       .panel-body {
         &.join-project {
           justify-content: center;

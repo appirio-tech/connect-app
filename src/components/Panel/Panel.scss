@@ -14,11 +14,11 @@
     }
 
     .panel-title {
-      @include roboto-medium;
-      color: $tc-gray-50;
+      @include roboto;
+      color: $tc-gray-80;
       text-transform: uppercase;
-      font-size: $tc-label-sm;
-      line-height: $base-unit*3;
+      font-size: $tc-label-xs;
+      line-height: $base-unit*4;
     }
 
     .panel-body {
@@ -29,7 +29,7 @@
 
     .btn-action {
       position: absolute;
-      top: $base-unit*3;
+      top: $base-unit*4;
       right: $base-unit*4;
       border-radius: 21px;
       height: 4 * $base-unit;
@@ -115,4 +115,3 @@
     }
   }
 }
-  

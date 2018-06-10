@@ -4,6 +4,8 @@ import cn from 'classnames'
 import './draftjs.scss'
 import RichTextArea from '../RichTextArea/RichTextArea'
 
+import './NewPost.scss'
+
 class NewPost extends React.Component {
 
   constructor(props) {

@@ -1,0 +1,44 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  display: flex;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    flex-direction: column;
+  }
+}
+
+.sidebar {
+  flex: 1;
+  max-width: 360px;
+  background-color: $tc-white;
+  box-shadow: 1px 1px 0 0 #DCDCE0, 0 1px 0 0 #DCDCE0;
+  min-height: calc(100vh - 110px);
+  padding-bottom: 10 * $base-unit;
+  position: relative;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    background-color: transparent;
+    box-shadow: none;
+    max-width: 100%;
+    min-height: 0;
+    padding-bottom: 0;
+  }
+}
+
+.content {
+  padding-bottom: 4 * $base-unit;
+  padding-left: 4 * $base-unit;
+  padding-right: 4 * $base-unit;
+  flex: 2;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.content-inner {
+  margin: 0 auto;
+  max-width: 760px;
+}
