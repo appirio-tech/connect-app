@@ -178,7 +178,7 @@ export function createProject(newProject, projectTemplate) {
     return dispatch({
       type: CREATE_PROJECT,
       payload: Promise.resolve(createProjectAPI(newProject))
-        //Commenting as now project service is taking care of creating default stages for a product
+        //Commenting as now project service is taking care of creating default stages for a project
         //.then((project) => createProjectPhaseAndProduct(project, projectTemplate))
     })
   }
