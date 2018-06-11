@@ -126,12 +126,7 @@ class ProjectStage extends React.Component{
       onSaveMessage,
     } = this.props
 
-    const tabs = [
-      {
-        onClick: () => onTabClick('timeline'),
-        label: 'Timeline',
-        isActive: activeTab === 'timeline'
-      }, {
+    const tabs = [{
         onClick: () => onTabClick('posts'),
         label: 'Posts',
         isActive: activeTab === 'posts'
@@ -154,10 +149,6 @@ class ProjectStage extends React.Component{
       <PhaseCard attr={formatPhaseCardAttr(phase, productTemplates, feed)}>
         <div>
           <GenericMenu navLinks={tabs} />
-
-          {activeTab === 'timeline' &&
-            <div>Timeline</div>
-          }
 
           {activeTab === 'posts' &&
             <PhaseFeed
