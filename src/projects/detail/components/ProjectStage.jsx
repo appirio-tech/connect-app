@@ -126,11 +126,13 @@ class ProjectStage extends React.Component{
       onSaveMessage,
     } = this.props
 
-    const tabs = [{
+    const tabs = [
+      {
         onClick: () => onTabClick('posts'),
         label: 'Posts',
         isActive: activeTab === 'posts'
-      }, {
+      }, 
+      {
         onClick: () => onTabClick('specification'),
         label: 'Specification',
         isActive: activeTab === 'specification'

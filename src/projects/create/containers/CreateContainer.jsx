@@ -194,7 +194,7 @@ class CreateContainer extends React.Component {
         project.version = 'v3'
         project.templateId = projectTemplate.id
         project.type = projectTemplate.category
-        this.props.createProjectAction(project, projectTemplate)
+        this.props.createProjectAction(project)
         this.closeWizard()
       } else {
         // redirect to registration/login page

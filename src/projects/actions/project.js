@@ -173,13 +173,13 @@ export function clearLoadedProject() {
   }
 }
 
-export function createProject(newProject, projectTemplate) {
+export function createProject(newProject) {
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT,
       payload: Promise.resolve(createProjectAPI(newProject))
-        //Commenting as now project service is taking care of creating default stages for a project
-        //.then((project) => createProjectPhaseAndProduct(project, projectTemplate))
+      //Commenting as now project service is taking care of creating default stages for a project
+      //.then((project) => createProjectPhaseAndProduct(project, projectTemplate))
     })
   }
 }
