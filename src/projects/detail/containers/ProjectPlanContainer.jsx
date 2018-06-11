@@ -14,16 +14,37 @@ import { addProductAttachment, updateProductAttachment, removeProductAttachment 
 import TwoColsLayout from '../components/TwoColsLayout'
 import ProjectPlanProgress from '../components/ProjectPlanProgress'
 import ProjectStages from '../components/ProjectStages'
+import MediaQuery from 'react-responsive'
+import ProjectInfoContainer from './ProjectInfoContainer'
+import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
+import Sticky from 'react-stickynode'
 
 const ProjectPlanContainer = (props) => {
   const {
     project,
+    isSuperUser,
+    currentMemberRole,
   } = props
 
+  const leftArea = (
+    <ProjectInfoContainer
+      currentMemberRole={currentMemberRole}
+      project={project}
+      isSuperUser={isSuperUser}
+    />
+  )
   return (
     <TwoColsLayout>
       <TwoColsLayout.Sidebar>
-        Left column
+        <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+          {(matches) => {
+            if (matches) {
+              return <Sticky top={60}>{leftArea}</Sticky>
+            } else {
+              return leftArea
+            }
+          }}
+        </MediaQuery>
       </TwoColsLayout.Sidebar>
 
       <TwoColsLayout.Content>
