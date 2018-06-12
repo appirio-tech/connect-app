@@ -10,10 +10,6 @@ import Section from './Section'
 import SectionTitle from './SectionTitle'
 import ProjectProgress from './ProjectProgress'
 
-import {
-  PHASE_STATUS_DELIVERED,
-} from '../../../config/constants'
-
 /**
  * Format ProjectProgress props
  *
@@ -22,7 +18,7 @@ import {
  * @return {Object} ProjectProgress props
  */
 function formatProjectProgressProps(project, phases) {
-  const actualDuration = 0
+  const actualDuration =  _.sumBy(phases, 'directProject.actualDuration')
 
   const startDates = _.compact(phases.map((phase) =>
     phase.startDate ? moment(phase.startDate) : null
