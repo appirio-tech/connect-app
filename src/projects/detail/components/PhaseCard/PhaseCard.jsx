@@ -51,7 +51,7 @@ class PhaseCard extends React.Component {
               <h4 styleName="project-title">{attr.title}</h4>
               <div styleName="meta-list">
                 <span styleName="meta">{attr.duration}</span>
-                <span styleName="meta">{attr.startEndDates}</span>
+                {attr.startEndDates && (<span styleName="meta">{attr.startEndDates}</span>)}
                 {attr.posts && <span styleName="meta">{attr.posts}</span>}
               </div>
             </div>

@@ -18,18 +18,24 @@ import ProjectProgress from './ProjectProgress'
  * @return {Object} ProjectProgress props
  */
 function formatProjectProgressProps(project, phases) {
-  const actualDuration =  _.sumBy(_.uniqBy(phases, 'directProject.project.projectId'), 'directProject.actualDuration')
 
-  const startDates = _.compact(phases.map((phase) =>
-    phase.startDate ? moment(phase.startDate) : null
-  ))
-  const endDates = _.compact(phases.map((phase) =>
-    phase.endDate ? moment(phase.endDate) : null
-  ))
-  const minStartDate = startDates.length > 0 ? moment.min(startDates) : null
-  const maxEndDate = endDates.length > 0 ? moment.max(endDates) : null
-  const projectedDuration = maxEndDate.diff(minStartDate, 'days') + 1
-
+  let actualDuration = 0
+  let now = Date()
+  now = now && moment(now)
+  for (let i = 0; i < phases.length; i++) {
+    const phase = phases[i]
+    const startDate = phase.startDate && moment(phase.startDate)
+    const duration = now.diff(startDate, 'days') + 1
+    if (duration <= phase.directProject.plannedDuration) {
+      if (duration > 0) {
+        actualDuration += duration
+      }
+      break
+    } else {
+      actualDuration += phase.directProject.plannedDuration
+    }
+  }
+  const projectedDuration = _.sumBy(_.uniqBy(phases, 'directProject.project.projectId'), 'directProject.plannedDuration') + 1
 
   const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
   const labelSpent = `Spent $${_.get(project, 'budget.actualCost')}`
