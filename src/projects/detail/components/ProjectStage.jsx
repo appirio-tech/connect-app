@@ -47,11 +47,11 @@ function formatPhaseCardAttr(phase, productTemplates, feed) {
   let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
   startEndDates += startDate && endDate ? `–${endDate.format('MMM D')}` : ''
 
-  const actualPrice = product.actualPrice || 0
+  const actualPrice = product.actualPrice
   let paidStatus = 'Quoted'
   if (actualPrice && actualPrice === budget) {
     paidStatus = 'Paid in full'
-  } else if (actualPrice < budget) {
+  } else if (actualPrice && actualPrice < budget) {
     paidStatus = `$${formatNumberWithCommas(budget - actualPrice)} remaining`
   }
 
