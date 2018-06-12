@@ -144,7 +144,7 @@ class DashboardContainer extends React.Component {
 
 const mapStateToProps = ({ notifications, projectState }) => ({
   notifications,
-  productTemplates: projectState.productTemplates,
+  productTemplates: projectState.allProductTemplates,
   isProcessing: projectState.processing,
   phases: projectState.phases,
 })
