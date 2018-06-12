@@ -58,19 +58,20 @@ function populatePhasesDirectProject(phases) {
   const directProjectIds = _.uniq(_.map(phases, 'products[0].directProjectId'))
   return Promise.all(directProjectIds.map((directProjectId) => getDirectProjectData(directProjectId)))
     .then((directProjects) => {
+
+      const directProjectsMap = {}
+      directProjects.forEach((directProject) => {
+        directProjectsMap[directProject.project.projectId] = directProject
+      })
       phases.forEach((phase) => {
-        let i
-        for (i = 0; i < directProjects.length; i++) { 
-          const directProject = directProjects[i]
-          if (phase.products.length > 0 && phase.products[0].directProjectId === directProject.project.projectId) {
-            phase.directProject = directProject
-            // recalculate endDate, budget, progress of phase base on direct project
-            phase.endDate = phase.startDate ? moment(phase.startDate).add(directProject.plannedDuration || 0, 'days').format() : null
-            phase.budget = directProject.projectedCost || 0
-            
-            phase.progress = (directProject.actualDuration  && directProject.plannedDuration) ? Math.round((directProject.actualDuration / directProject.plannedDuration) * 100) : 0
-            break
-          }
+        if (phase.products.length > 0) {
+          const directProject = directProjectsMap[phase.products[0].directProjectId]
+          phase.directProject = directProject
+          // recalculate endDate, budget, progress of phase base on direct project
+          phase.endDate = phase.startDate ? moment(phase.startDate).add(directProject.plannedDuration || 0, 'days').format() : null
+          phase.budget = directProject.projectedCost || 0
+          
+          phase.progress = (directProject.actualDuration  && directProject.plannedDuration) ? Math.round((directProject.actualDuration / directProject.plannedDuration) * 100) : 0
         }
       })
       return phases

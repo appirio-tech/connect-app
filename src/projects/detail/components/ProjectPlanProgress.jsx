@@ -18,7 +18,7 @@ import ProjectProgress from './ProjectProgress'
  * @return {Object} ProjectProgress props
  */
 function formatProjectProgressProps(project, phases) {
-  const actualDuration =  _.sumBy(phases, 'directProject.actualDuration')
+  const actualDuration =  _.sumBy(_.uniqBy(phases, 'directProject.project.projectId'), 'directProject.actualDuration')
 
   const startDates = _.compact(phases.map((phase) =>
     phase.startDate ? moment(phase.startDate) : null
