@@ -48,7 +48,7 @@ const ProjectPlanContainer = (props) => {
       </TwoColsLayout.Sidebar>
 
       <TwoColsLayout.Content>
-        <ProjectPlanProgress project={project} />
+        <ProjectPlanProgress project={project} {...props}/>
         <ProjectStages {...props} />
       </TwoColsLayout.Content>
     </TwoColsLayout>

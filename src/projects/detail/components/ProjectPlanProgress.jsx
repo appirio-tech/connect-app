@@ -4,10 +4,15 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
+import moment from 'moment'
 
 import Section from './Section'
 import SectionTitle from './SectionTitle'
 import ProjectProgress from './ProjectProgress'
+
+import {
+  PHASE_STATUS_DELIVERED,
+} from '../../../config/constants'
 
 /**
  * Format ProjectProgress props
@@ -16,9 +21,19 @@ import ProjectProgress from './ProjectProgress'
  *
  * @return {Object} ProjectProgress props
  */
-function formatProjectProgressProps(project) {
-  const actualDuration = _.get(project, 'duration.actualDuration', 0)
-  const projectedDuration = _.get(project, 'duration.projectedDuration', 0)
+function formatProjectProgressProps(project, phases) {
+  const actualDuration = 0
+
+  const startDates = _.compact(phases.map((phase) =>
+    phase.startDate ? moment(phase.startDate) : null
+  ))
+  const endDates = _.compact(phases.map((phase) =>
+    phase.endDate ? moment(phase.endDate) : null
+  ))
+  const minStartDate = startDates.length > 0 ? moment.min(startDates) : null
+  const maxEndDate = endDates.length > 0 ? moment.max(endDates) : null
+  const projectedDuration = maxEndDate.diff(minStartDate, 'days') + 1
+
 
   const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
   const labelSpent = `Spent $${_.get(project, 'budget.actualCost')}`
@@ -35,10 +50,11 @@ function formatProjectProgressProps(project) {
 
 const ProjectPlanProgress = ({
   project,
+  phases
 }) => (
   <Section>
     <SectionTitle title="Project status" />
-    <ProjectProgress {...formatProjectProgressProps(project)} />
+    <ProjectProgress {...formatProjectProgressProps(project, phases)} />
   </Section>
 )
 

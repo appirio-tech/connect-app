@@ -35,30 +35,30 @@ function formatPhaseCardAttr(phase, productTemplates, feed) {
   const product = _.get(phase, 'products[0]')
   const { status } = phase
   const productTemplate = _.find(productTemplates, { id: product.templateId })
-  const budget = product.budget || 0
+  const budget = phase.budget || 0
   const price = `$${formatNumberWithCommas(budget)}`
   const icon = _.get(productTemplate, 'icon')
   const title = _.get(productTemplate, 'name')
   const startDate = phase.startDate && moment(phase.startDate)
   const endDate = phase.endDate && moment(phase.endDate)
   const duration = startDate && endDate
-    ? moment.duration(endDate.diff(startDate)).days() + ' days'
+    ? (endDate.diff(startDate, 'days') + 1) + ' days'
     : '0 days'
   let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
   startEndDates += startDate && endDate ? `–${endDate.format('MMM D')}` : ''
 
-  const actualPrice = product.actualPrice
+  const actualPrice = product.actualPrice || 0
   let paidStatus = 'Quoted'
   if (actualPrice && actualPrice === budget) {
     paidStatus = 'Paid in full'
-  } else if (actualPrice && actualPrice < budget) {
+  } else if (actualPrice < budget) {
     paidStatus = `$${formatNumberWithCommas(budget - actualPrice)} remaining`
   }
 
   const postsCount = _.get(feed, 'posts.length')
   const postsWord = postsCount === 1 ? 'post' : 'posts'
   const posts = _.isNumber(postsCount) ? `${postsCount} ${postsWord}` : null
-
+  const progressInPercent = phase.progress || 0
   return {
     icon,
     title,
@@ -68,6 +68,7 @@ function formatPhaseCardAttr(phase, productTemplates, feed) {
     paidStatus,
     status,
     posts,
+    progressInPercent
   }
 }
 

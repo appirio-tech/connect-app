@@ -33,9 +33,9 @@ function formatPhaseCardListFooterProps(phases) {
   let startEndDates = minStartDate ? `${minStartDate.format('MMM D')}` : ''
   startEndDates += minStartDate && maxEndDate ? `–${maxEndDate.format('MMM D')}` : ''
 
-  const totalPrice = _.sum(phases.map((phase) => _.get(phase, 'products[0].budget', 0)))
+  const totalPrice = _.sum(phases.map((phase) => _.get(phase, 'budget', 0)))
 
-  const duration = `${minStartDate && maxEndDate ? moment.duration(maxEndDate.diff(minStartDate)).days() : 0} days`
+  const duration = `${minStartDate && maxEndDate ? maxEndDate.diff(minStartDate, 'days') + 1 : 0} days`
   const price = `$${formatNumberWithCommas(totalPrice)}`
 
   return {
