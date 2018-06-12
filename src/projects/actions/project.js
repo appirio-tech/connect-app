@@ -67,7 +67,8 @@ function populatePhasesDirectProject(phases) {
             // recalculate endDate, budget, progress of phase base on direct project
             phase.endDate = phase.startDate ? moment(phase.startDate).add(directProject.plannedDuration || 0, 'days').format() : null
             phase.budget = directProject.projectedCost || 0
-            phase.progress = (directProject.actualDuration  && directProject.plannedDuration) ? (directProject.actualDuration / directProject.plannedDuration * 100) : 0
+            
+            phase.progress = (directProject.actualDuration  && directProject.plannedDuration) ? Math.round((directProject.actualDuration / directProject.plannedDuration) * 100) : 0
             break
           }
         }

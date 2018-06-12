@@ -33,7 +33,7 @@ function formatProjectProgressProps(project, phases) {
 
   const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
   const labelSpent = `Spent $${_.get(project, 'budget.actualCost')}`
-  const progressPercent = (projectedDuration !== 0 ? actualDuration / projectedDuration : 0).toString()
+  const progressPercent = (projectedDuration !== 0 ? Math.round(actualDuration * 100 / projectedDuration) : 0).toString()
   const labelStatus = `${progressPercent}% done`
 
   return {
