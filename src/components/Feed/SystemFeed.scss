@@ -1,0 +1,64 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .system-feed {
+    position: relative;
+    margin-top: 4 * $base-unit;
+    margin-bottom: 10px;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      margin-bottom: 4 * $base-unit;
+    }
+
+    .project-notification {
+      position: absolute;
+      visibility: hidden;
+      &:first-of-type {
+        position: relative;
+        visibility: visible;
+      }
+    }
+    .action-card {
+      background: $tc-dark-blue-10;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        border-radius: 0;
+      }
+
+      .card-profile {
+        padding-top: 0;
+        margin-bottom: 0;
+      }
+
+      .card-body {
+        padding: 0;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-top: 0;
+          line-height: normal;
+          overflow: hidden;
+        }
+
+        strong {
+          color: #000;
+          font-weight: bold;
+        }
+      }
+
+      .card-time {
+        font-weight: 400;
+        margin-left: 12px;
+        position: relative;
+
+        &::before {
+          content: " \B7 ";
+          color: #000;
+          font-size: 20px;
+          position: absolute;
+          left: -7px;
+          top: 2px;
+        }
+      }
+    }
+  }
+}

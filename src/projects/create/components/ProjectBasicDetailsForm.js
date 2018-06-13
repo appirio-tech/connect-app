@@ -79,7 +79,7 @@ class ProjectBasicDetailsForm extends Component {
 
 
   render() {
-    const { isEdittable, sections, submitBtnText } = this.props
+    const { isEditable, sections, submitBtnText } = this.props
     const { project, canSubmit } = this.state
     const renderSection = (section, idx) => {
       return (
@@ -109,7 +109,7 @@ class ProjectBasicDetailsForm extends Component {
       <div>
         <Formsy.Form
           ref="form"
-          disabled={!isEdittable}
+          disabled={!isEditable}
           onInvalid={this.disableButton}
           onValid={this.enableButton}
           onValidSubmit={this.submit}
@@ -126,7 +126,7 @@ ProjectBasicDetailsForm.propTypes = {
   project: PropTypes.object.isRequired,
   saving: PropTypes.bool.isRequired,
   sections: PropTypes.arrayOf(PropTypes.object).isRequired,
-  isEdittable: PropTypes.bool.isRequired,
+  isEditable: PropTypes.bool.isRequired,
   submitHandler: PropTypes.func.isRequired
 }
 

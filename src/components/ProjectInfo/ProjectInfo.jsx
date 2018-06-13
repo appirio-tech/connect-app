@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PT from 'prop-types'
+import moment from 'moment'
 import Panel from '../Panel/Panel'
 import DeleteProjectModal from './DeleteProjectModal'
-import ProjectCardHeader from '../../projects/list/components/Projects/ProjectCardHeader'
 import ProjectCardBody from '../../projects/list/components/Projects/ProjectCardBody'
 import ProjectDirectLinks from '../../projects/list/components/Projects/ProjectDirectLinks'
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
@@ -37,9 +37,10 @@ class ProjectInfo extends Component {
     return (
       <div className="project-info">
         <div className="project-info-header">
-          <ProjectCardHeader
-            project={project}
-          />
+          <div className="project-overview">
+            <div className="project-overview-header">Project overview</div>
+            <div className="project-overview-time">Created {moment(project.updatedAt).format('MMM DD, YYYY')}</div>
+          </div>
           {canDeleteProject && !showDeleteConfirm &&
             <div className="project-delete-icon">
               <Panel.DeleteBtn onClick={this.toggleProjectDelete} />

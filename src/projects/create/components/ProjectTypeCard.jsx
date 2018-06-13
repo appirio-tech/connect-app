@@ -28,8 +28,8 @@ ProjectTypeCard.defaultProps = {
 
 ProjectTypeCard.propTypes = {
   disabled: PT.bool,
-  icon: PT.element.isRequired,
-  info: PT.string.isRequired,
+  icon: PT.element,
+  info: PT.string,
   onClick: PT.func.isRequired,
   selected: PT.bool,
   type: PT.string.isRequired,

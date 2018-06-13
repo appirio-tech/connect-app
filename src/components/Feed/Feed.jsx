@@ -1,15 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
-import cn from 'classnames'
-import ActionCard from '../ActionCard/ActionCard'
-import Panel from '../Panel/Panel'
 import FeedComments from './FeedComments'
-import UserTooltip from '../User/UserTooltip'
-import {Link} from 'react-router-dom'
 import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
-import { markdownToHTML } from '../../helpers/markdownToState'
+
+import './Feed.scss'
 
 class Feed extends React.Component {
   constructor(props) {
@@ -42,69 +37,61 @@ class Feed extends React.Component {
 
   render() {
     const {
-      id, user, currentUser, date, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
-      allowComments, comments, unread, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
-      onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, permalink, allMembers
+      id, user, currentUser, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
+      allowComments, comments, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
+      onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, allMembers
     } = this.props
     const {editTopicMode} = this.state
     let authorName = user.firstName
     if (authorName && user.lastName) {
       authorName += ' ' + user.lastName
     }
-    const self = user && user.userId === currentUser.userId
-    const title = this.props.newTitle === null || this.props.newTitle === undefined ? this.props.title : this.props.newTitle
-    const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
+
+    let topicHeader = null
+    if (topicMessage) {
+      const self = user && user.userId === currentUser.userId
+      const title = this.props.newTitle === null || this.props.newTitle === undefined ? this.props.title : this.props.newTitle
+      const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
+
+      topicHeader = (
+        <header styleName="feed-header">
+          {editTopicMode ? (
+            <div styleName="header-edit">
+              <RichTextArea
+                editMode
+                messageId={topicMessage.id}
+                isGettingComment={topicMessage.isGettingComment}
+                content={content}
+                title={title}
+                oldTitle={this.props.title}
+                onPost={this.onSaveTopic}
+                onPostChange={this.onTopicChange}
+                isCreating={isSavingTopic}
+                hasError={error}
+                cancelEdit={this.cancelEditTopic}
+                disableContent
+              />
+            </div>
+          ) : (
+            <div styleName="header-view">
+              <div styleName="title">{title}</div>
+              {self && (
+                <CommentEditToggle
+                  forTopic
+                  hideDelete={comments.length > 0}
+                  onEdit={this.onEditTopic}
+                  onDelete={onDeleteTopic}
+                />
+              )}
+            </div>
+          )}
+        </header>
+      )
+    }
+
     return (
-      <ActionCard>
-        {editTopicMode && (
-          <RichTextArea
-            editMode
-            messageId={topicMessage.id}
-            isGettingComment={topicMessage.isGettingComment}
-            title={title}
-            content={content}
-            oldTitle={this.props.title}
-            oldContent={topicMessage.rawContent}
-            onPost={this.onSaveTopic}
-            onPostChange={this.onTopicChange}
-            isCreating={isSavingTopic}
-            hasError={error}
-            avatarUrl={user.photoURL}
-            authorName={authorName}
-            cancelEdit={this.cancelEditTopic}
-            allMembers={allMembers}
-          />
-        )}
-        {!editTopicMode && (
-          <Panel.Body className={cn({active: unread})}>
-            <div className="portrait" id={`feed-${id}`}>
-              {/* <Avatar avatarUrl={user.photoURL} userName={authorName} /> */}
-              <UserTooltip usr={user} id={id} previewAvatar size={35} />
-            </div>
-            <div className="object topicBody">
-              <div className="card-title">
-                <div>{title}</div>
-                {self && (
-                  <CommentEditToggle
-                    forTopic
-                    hideDelete={comments.length > 0}
-                    onEdit={this.onEditTopic}
-                    onDelete={onDeleteTopic}
-                  />
-                )}
-              </div>
-              <div className="card-profile">
-                <div className="card-author">
-                  { authorName }
-                </div>
-                <div className="card-time">
-                  <Link to={permalink}>{moment(date).fromNow()}</Link>
-                </div>
-              </div>
-              <div className="card-body draftjs-post" dangerouslySetInnerHTML={{__html: markdownToHTML(topicMessage.content)}} />
-            </div>
-          </Panel.Body>
-        )}
+      <div styleName="feed-container" id={`feed-${id}`}>
+        {topicHeader}
         <FeedComments
           allowComments={allowComments}
           totalComments={totalComments}
@@ -125,33 +112,39 @@ class Feed extends React.Component {
         />
         {children}
         {isDeletingTopic &&
-        <div className="deleting-layer">
-          <div>Deleting post ...</div>
-        </div> 
+          <div className="deleting-layer">
+            <div>Deleting post ...</div>
+          </div>
         }
-      </ActionCard>
+      </div>
     )
   }
 }
 
+Feed.defaultProps = {
+  title: '',
+  date:'',
+  allowComments: false,
+}
+
 Feed.propTypes = {
   user: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  topicMessage: PropTypes.any.isRequired,
-  allowComments: PropTypes.bool.isRequired,
+  title: PropTypes.string,
+  date: PropTypes.string,
+  topicMessage: PropTypes.any,
+  allowComments: PropTypes.bool,
   hasMoreComments: PropTypes.bool,
   comments: PropTypes.array,
   children: PropTypes.any,
   onLoadMoreComments: PropTypes.func.isRequired,
-  onNewCommentChange: PropTypes.func.isRequired,
+  onNewCommentChange: PropTypes.func,
   onAddNewComment: PropTypes.func.isRequired,
-  onSaveMessageChange: PropTypes.func.isRequired,
+  onSaveMessageChange: PropTypes.func,
   onSaveMessage: PropTypes.func.isRequired,
   onDeleteMessage: PropTypes.func.isRequired,
-  onTopicChange: PropTypes.func.isRequired,
-  onSaveTopic: PropTypes.func.isRequired,
-  onDeleteTopic: PropTypes.func.isRequired,
+  onTopicChange: PropTypes.func,
+  onSaveTopic: PropTypes.func,
+  onDeleteTopic: PropTypes.func,
   isAddingComment: PropTypes.bool,
   isSavingTopic: PropTypes.bool
 }

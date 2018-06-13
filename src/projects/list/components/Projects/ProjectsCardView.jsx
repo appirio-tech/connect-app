@@ -14,7 +14,8 @@ require('./ProjectsGridView.scss')
 const ProjectsCardView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
-  const { projects, members, currentUser, onPageChange, pageNum, totalCount, infiniteAutoload, setInfiniteAutoload, isLoading, onChangeStatus, projectsStatus } = props
+  const { projects, members, currentUser, onPageChange, pageNum, totalCount, infiniteAutoload,
+    setInfiniteAutoload, isLoading, onChangeStatus, projectsStatus, projectTemplates } = props
   // const currentSortField = _.get(criteria, 'sort', '')
 
   // annotate projects with member data
@@ -37,6 +38,7 @@ const ProjectsCardView = props => {
         currentUser={currentUser}
         duration={duration}
         onChangeStatus={onChangeStatus}
+        projectTemplates={projectTemplates}
       />
     </div>)
   }
@@ -96,7 +98,8 @@ ProjectsCardView.propTypes = {
   // criteria: PropTypes.object.isRequired
   infiniteAutoload: PropTypes.bool,
   setInfiniteAutoload: PropTypes.func,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  projectTemplates: PropTypes.array.isRequired,
 }
 
 

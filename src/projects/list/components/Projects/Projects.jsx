@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { branch, renderComponent, compose, withProps } from 'recompose'
+import { branch, renderComponent, compose, withProps, renderNothing } from 'recompose'
 import { withRouter } from 'react-router-dom'
 import Walkthrough from '../Walkthrough/Walkthrough'
 import CoderBot from '../../../../components/CoderBot/CoderBot'
@@ -8,6 +8,7 @@ import ProjectListNavHeader from './ProjectListNavHeader'
 import ProjectsGridView from './ProjectsGridView'
 import ProjectsCardView from './ProjectsCardView'
 import { loadProjects, setInfiniteAutoload, setProjectsListView } from '../../../actions/loadProjects'
+import { loadProjectTemplates } from '../../../../actions/templates'
 import { sortProjects } from '../../../actions/sortProjects'
 import _ from 'lodash'
 import querystring from 'query-string'
@@ -22,8 +23,11 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.error)
-const EnhancedGrid  = errorHandler(ProjectsGridView)
-const EnhancedCards = errorHandler(ProjectsCardView)
+const waitDataLoad = isNotLoaded =>
+  branch(isNotLoaded, renderNothing)
+const dataLoadHandler = waitDataLoad(props => !props.projectTemplates)
+const EnhancedGrid  = dataLoadHandler(errorHandler(ProjectsGridView))
+const EnhancedCards = dataLoadHandler(errorHandler(ProjectsCardView))
 
 class Projects extends Component {
   constructor(props) {
@@ -79,7 +83,8 @@ class Projects extends Component {
   init(props) {
     document.title = 'Projects - Topcoder'
     // this.searchTermFromQuery = this.props.location.query.q || ''
-    const {criteria, loadProjects, location, projects, refresh} = props
+    const {criteria, loadProjects, location, projects, refresh,
+      projectTemplates, isProjectTemplatesLoading, loadProjectTemplates} = props
     // check for criteria specified in URL.
     const queryParams = querystring.parse(location.search)
     this.setState({status : null})
@@ -111,6 +116,11 @@ class Projects extends Component {
         }
         this.routeWithParams(criteria)
       }
+    }
+
+    // load project templates if not yet
+    if (!isProjectTemplatesLoading && !projectTemplates) {
+      loadProjectTemplates()
     }
   }
 
@@ -229,7 +239,7 @@ class Projects extends Component {
   }
 }
 
-const mapStateToProps = ({ projectSearch, members, loadUser, projectState }) => {
+const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templates }) => {
   let isPowerUser = false
   const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   if (loadUser.user) {
@@ -257,10 +267,12 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState }) => 
     projectsListView: projectSearch.projectsListView,
     isPowerUser,
     gridView    : isPowerUser,
-    refresh     : projectSearch.refresh
+    refresh     : projectSearch.refresh,
+    projectTemplates: templates.projectTemplates,
+    isProjectTemplatesLoading: templates.isProjectTemplatesLoading,
   }
 }
 
-const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject, setProjectsListView, sortProjects }
+const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject, setProjectsListView, sortProjects, loadProjectTemplates }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(Projects))
