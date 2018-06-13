@@ -19,40 +19,47 @@ import ProjectInfoContainer from './ProjectInfoContainer'
 import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import Sticky from 'react-stickynode'
 
-const ProjectPlanContainer = (props) => {
-  const {
-    project,
-    isSuperUser,
-    currentMemberRole,
-  } = props
+class ProjectPlanContainer extends React.Component{
+  constructor(props) {
+    super(props)
+  }
 
-  const leftArea = (
-    <ProjectInfoContainer
-      currentMemberRole={currentMemberRole}
-      project={project}
-      isSuperUser={isSuperUser}
-    />
-  )
-  return (
-    <TwoColsLayout>
-      <TwoColsLayout.Sidebar>
-        <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
-          {(matches) => {
-            if (matches) {
-              return <Sticky top={60}>{leftArea}</Sticky>
-            } else {
-              return leftArea
-            }
-          }}
-        </MediaQuery>
-      </TwoColsLayout.Sidebar>
+  render() {
+    const props = this.props
+    const {
+      project,
+      isSuperUser,
+      currentMemberRole,
+    } = props
 
-      <TwoColsLayout.Content>
-        <ProjectPlanProgress project={project} />
-        <ProjectStages {...props} />
-      </TwoColsLayout.Content>
-    </TwoColsLayout>
-  )
+    const leftArea = (
+      <ProjectInfoContainer
+        currentMemberRole={currentMemberRole}
+        project={project}
+        isSuperUser={isSuperUser}
+      />
+    )
+    return (
+      <TwoColsLayout>
+        <TwoColsLayout.Sidebar>
+          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+            {(matches) => {
+              if (matches) {
+                return <Sticky top={60}>{leftArea}</Sticky>
+              } else {
+                return leftArea
+              }
+            }}
+          </MediaQuery>
+        </TwoColsLayout.Sidebar>
+
+        <TwoColsLayout.Content>
+          <ProjectPlanProgress project={project} />
+          <ProjectStages {...props} />
+        </TwoColsLayout.Content>
+      </TwoColsLayout>
+    )
+  }
 }
 
 ProjectPlanContainer.propTypes = {
@@ -63,10 +70,11 @@ ProjectPlanContainer.propTypes = {
   productTemplates: PT.array.isRequired,
 }
 
-const mapStateToProps = ({ projectState }) => ({
-  productTemplates: projectState.allProductTemplates,
-  phases: projectState.phases,
-})
+const mapStateToProps = ({ projectState }) => {
+  return ({
+    productTemplates: projectState.allProductTemplates,
+    phases: projectState.phases,
+  })}
 
 const mapDispatchToProps = {
   updateProduct,

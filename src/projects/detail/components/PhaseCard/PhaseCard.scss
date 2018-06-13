@@ -14,6 +14,10 @@
     margin-top: $base-unit;
   }
 
+  .sm-separator {
+    margin-top: 10px;
+  }
+
   &.has-notifications {
     &:after {
       content: '';
@@ -164,6 +168,21 @@
         display: block;
       }
     }
+  }
+  .project-title-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: space-between;
+  }
+  .edit-btn {
+    width: 40px;
+    height: 40px;
+    background: url('assets/icons/ui-pencil.svg') 50% 50% no-repeat;
+    background-size: 15px;
+    cursor: pointer;
+    transition: 0.25s;
+    margin: auto auto auto 0;
   }
   .toggle-arrow {
     position: absolute;

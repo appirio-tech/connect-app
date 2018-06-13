@@ -13,7 +13,7 @@ import { getProjectById, createProject as createProjectAPI,
 } from '../../api/projects'
 import { getProductTemplate, getProjectTemplate, getProductTemplateByKey } from '../../api/templates'
 import { LOAD_PROJECT, CREATE_PROJECT, CREATE_PROJECT_STAGE, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
-  LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES,
+  LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES, UPDATE_PHASE_LOCAL,
   LOAD_PROJECT_TEMPLATE, LOAD_PROJECT_PRODUCT_TEMPLATES, LOAD_ALL_PRODUCT_TEMPLATES, UPDATE_PRODUCT,
   PROJECT_STATUS_DRAFT, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
 } from '../../config/constants'
@@ -62,6 +62,24 @@ export function loadProjectPhasesWithProducts(projectId, project, existingPhases
       type: LOAD_PROJECT_PHASES,
       payload: getProjectPhases(projectId, existingPhases)
         .then(populatePhasesProducts)
+    })
+  }
+}
+
+/**
+ * Load project phases with populated products
+ *
+ * @param {String} projectId        project id
+ * @param {String} project        project info
+ * @param {String} existingPhases        loaded phases of project in redux
+ *
+ * @return {Promise} LOAD_PROJECT_PHASES action with payload as array of phases
+ */
+export function updatePhase(phase, phaseIndex) {
+  return (dispatch) => {
+    return dispatch({
+      type: UPDATE_PHASE_LOCAL,
+      payload: Promise.resolve({phase: phase || {}, phaseIndex: phaseIndex || 0})
     })
   }
 }

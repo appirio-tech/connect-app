@@ -61,7 +61,7 @@ const ProjectStages = ({
 }) => (
   <Section>
     <PhaseCardListHeader />
-    {phases.map((phase) => (
+    {phases.map((phase, index) => (
       <ProjectStage
         key={phase.id}
         productTemplates={productTemplates}
@@ -70,6 +70,7 @@ const ProjectStages = ({
         isSuperUser={isSuperUser}
         project={project}
         phase={phase}
+        phaseIndex={index}
         updateProduct={updateProduct}
         fireProductDirty={fireProductDirty}
         fireProductDirtyUndo={fireProductDirtyUndo}
