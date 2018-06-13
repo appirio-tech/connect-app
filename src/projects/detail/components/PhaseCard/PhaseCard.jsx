@@ -18,6 +18,7 @@ import {
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
 import ProjectTypeIcon from '../../../../components/ProjectTypeIcon'
 import EditStageForm from './EditStageForm'
+import { ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER } from '../../../../config/constants'
 
 import './PhaseCard.scss'
 
@@ -58,6 +59,11 @@ class PhaseCard extends React.Component {
 
   render() {
     const { attr } = this.props
+
+    const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
+    const isManageUser = attr.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
+
+
     let status = attr && attr.status ? toPhaseCardStatus[attr.status] : 'nostatus'
     if (!status) {
       status = 'nostatus'
@@ -72,7 +78,7 @@ class PhaseCard extends React.Component {
               </div>
               <div styleName="project-title-container">
                 <h4 styleName="project-title">{attr.title}</h4>
-                {!this.state.isEditting && !this.state.isExpanded && (<a styleName="edit-btn" onClick={this.toggleEditView} />
+                {isManageUser && !this.state.isEditting && !this.state.isExpanded && (<a styleName="edit-btn" onClick={this.toggleEditView} />
                 )}
               </div>
               <div styleName="meta-list">
@@ -139,7 +145,7 @@ class PhaseCard extends React.Component {
         {!this.state.isEditting && (<div styleName="expandable-view">
           {this.props.children}
         </div>)}
-        {this.state.isEditting && (<div styleName="sm-separator" >
+        {isManageUser && this.state.isEditting && (<div styleName="sm-separator" >
           <EditStageForm phase={attr.phase} phaseIndex={attr.phaseIndex} cancel={this.toggleEditView} update={this.toggleEditView} />
         </div>)}
 

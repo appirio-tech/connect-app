@@ -19,47 +19,40 @@ import ProjectInfoContainer from './ProjectInfoContainer'
 import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import Sticky from 'react-stickynode'
 
-class ProjectPlanContainer extends React.Component{
-  constructor(props) {
-    super(props)
-  }
+const ProjectPlanContainer = (props) => {
+  const {
+    project,
+    isSuperUser,
+    currentMemberRole,
+  } = props
 
-  render() {
-    const props = this.props
-    const {
-      project,
-      isSuperUser,
-      currentMemberRole,
-    } = props
+  const leftArea = (
+    <ProjectInfoContainer
+      currentMemberRole={currentMemberRole}
+      project={project}
+      isSuperUser={isSuperUser}
+    />
+  )
+  return (
+    <TwoColsLayout>
+      <TwoColsLayout.Sidebar>
+        <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+          {(matches) => {
+            if (matches) {
+              return <Sticky top={60}>{leftArea}</Sticky>
+            } else {
+              return leftArea
+            }
+          }}
+        </MediaQuery>
+      </TwoColsLayout.Sidebar>
 
-    const leftArea = (
-      <ProjectInfoContainer
-        currentMemberRole={currentMemberRole}
-        project={project}
-        isSuperUser={isSuperUser}
-      />
-    )
-    return (
-      <TwoColsLayout>
-        <TwoColsLayout.Sidebar>
-          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
-            {(matches) => {
-              if (matches) {
-                return <Sticky top={60}>{leftArea}</Sticky>
-              } else {
-                return leftArea
-              }
-            }}
-          </MediaQuery>
-        </TwoColsLayout.Sidebar>
-
-        <TwoColsLayout.Content>
-          <ProjectPlanProgress project={project} />
-          <ProjectStages {...props} />
-        </TwoColsLayout.Content>
-      </TwoColsLayout>
-    )
-  }
+      <TwoColsLayout.Content>
+        <ProjectPlanProgress project={project} />
+        <ProjectStages {...props} />
+      </TwoColsLayout.Content>
+    </TwoColsLayout>
+  )
 }
 
 ProjectPlanContainer.propTypes = {

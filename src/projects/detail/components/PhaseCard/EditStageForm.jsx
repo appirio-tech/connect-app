@@ -5,7 +5,7 @@ import _ from 'lodash'
 import './EditStageForm.scss'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { updatePhaseLocal, updatePhase as updatePhaseAPI } from '../../../actions/project'
+import { updatePhase as updatePhaseAPI } from '../../../actions/project'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 
 
@@ -15,7 +15,7 @@ class EditStageForm extends React.Component {
     this.state = {
       duration: '',
       startDate: '',
-      spent: '',
+      spentBudget: '',
       budget: '',
       isUpdating: false
     }
@@ -31,12 +31,15 @@ class EditStageForm extends React.Component {
     const phase = props.phase
     const updateParam = {
       startDate: this.state.startDate,
-      budget: Number(this.state.budget)
+      budget: Number(this.state.budget),
+      spentBudget: Number(this.state.spentBudget),
+      duration: Number(this.state.duration)
     }
     this.setState({isUpdating: true})
-    props.updatePhaseAPI(phase.projectId, phase.id, updateParam).then(() => {
+    props.updatePhaseAPI(phase.projectId, phase.id, updateParam, props.phaseIndex).then(() => {
       _.assign(phase, updateParam)
-      props.updatePhaseLocal(props.phase, props.phaseIndex)
+      props.update()
+    }).catch(() => {
       props.update()
     })
   }
@@ -53,7 +56,7 @@ class EditStageForm extends React.Component {
 
   onSpentChange(event) {
     event.stopPropagation()
-    this.setState({spent: event.target.value})
+    this.setState({spentBudget: event.target.value})
   }
 
   onBudgetChange(event) {
@@ -64,7 +67,7 @@ class EditStageForm extends React.Component {
   render() {
     const props = this.props
     const opts = {}
-    if (!this.state.duration || !this.state.startDate || !this.state.spent || !this.state.budget) {
+    if (!this.state.duration || !this.state.startDate || !this.state.spentBudget || !this.state.budget) {
       opts['disabled'] = 'disabled'
     }
     return (
@@ -82,7 +85,7 @@ class EditStageForm extends React.Component {
             </div>
             <div styleName="label-layer">
               <div styleName={'label-title'}>{'Spent'}</div>
-              <input styleName="input" onChange={this.onSpentChange} value={this.state.spent} type="number" placeholder={'Spent'}/>
+              <input styleName="input" onChange={this.onSpentChange} value={this.state.spentBudget} type="number" placeholder={'Spent'}/>
               <div styleName={'label-title'}>{'Budget'}</div>
               <input styleName="input" onChange={this.onBudgetChange} value={this.state.budget} type="number" placeholder={'Budget'}/>
             </div>
@@ -99,7 +102,7 @@ class EditStageForm extends React.Component {
 
 EditStageForm.defaultProps = {
   cancel: () => {},
-  update: () => {},
+  update: () => {}
 }
 
 EditStageForm.propTypes = {
@@ -111,6 +114,6 @@ EditStageForm.propTypes = {
 
 const mapStateToProps = () => ({})
 
-const actionCreators = {updatePhaseLocal, updatePhaseAPI}
+const actionCreators = {updatePhaseAPI}
 
 export default withRouter(connect(mapStateToProps, actionCreators)(EditStageForm))

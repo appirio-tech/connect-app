@@ -50,6 +50,7 @@ const ProjectStages = ({
   phases,
   productTemplates,
   currentMemberRole,
+  currentUserRoles,
   isProcessing,
   isSuperUser,
   updateProduct,
@@ -77,6 +78,7 @@ const ProjectStages = ({
         addProductAttachment={addProductAttachment}
         updateProductAttachment={updateProductAttachment}
         removeProductAttachment={removeProductAttachment}
+        currentUserRoles={currentUserRoles}
       />
     ))}
     <PhaseCardListFooter projectId={project.id} {...formatPhaseCardListFooterProps(phases)} />

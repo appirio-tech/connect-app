@@ -108,14 +108,15 @@ export function updateProject(projectId, updatedProps, updateExisting) {
 /**
  * Update phase using patch
  * @param  {integer} projectId    project Id
- * @param  {phaseId} phaseId    phase Id
+ * @param  {integer} phaseId    phase Id
  * @param  {object} updatedProps updated phase properties
+ * @param  {integer} phaseIndex index of phase in phase list redux store
  * @return {promise}              updated phase
  */
-export function updatePhase(projectId, phaseId, updatedProps) {
+export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
   return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}`, { param: updatedProps })
     .then(resp => {
-      return _.get(resp.data, 'result.content')
+      return _.extend(_.get(resp.data, 'result.content'), {phaseIndex})
     })
 }
 

@@ -14,7 +14,7 @@ import {
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
   GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS, LOAD_PROJECT_PHASES_PENDING,
   LOAD_PROJECT_TEMPLATE_SUCCESS, LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS, LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
-  UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_SUCCESS, UPDATE_PHASE_LOCAL_SUCCESS
+  UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_SUCCESS, UPDATE_PHASE_SUCCESS
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -94,17 +94,18 @@ function getProductInPhases(phases, phaseId, productId) {
 }
 
 /**
- * Update phase in local
+ * Update phase from server result
  *
- * @param {Array}  phases         phases list in store
- * @param {Object} phase        phase
+ * @param {Array}  phases          phases list in store
+ * @param {Object} phase           phase
  * @param {Number} phaseIndex      index of phase to update
  *
  * @return {Array}  phases
  */
-function updatePhaseInLocal(phases, phase, phaseIndex) {
+function updateSomeBasicInfoIntoPhase(phases, phase, phaseIndex) {
+  console.log('updateSomeBasicInfoIntoPhase')
   if (phase && phaseIndex >= 0) {
-    phases[phaseIndex] = phase
+    _.assign(phases[phaseIndex], phase)
   }
   return _.cloneDeep(phases || [])
 }
@@ -127,9 +128,9 @@ export const projectState = function (state=initialState, action) {
       lastUpdated: new Date()
     })
 
-  case UPDATE_PHASE_LOCAL_SUCCESS:
+  case UPDATE_PHASE_SUCCESS:
     return update(state, {
-      phases: { $set: updatePhaseInLocal(state.phases, action.payload.phase, action.payload.phaseIndex)}
+      phases: { $set: updateSomeBasicInfoIntoPhase(state.phases, action.payload, action.payload.phaseIndex || 0)}
     })
 
   case LOAD_PROJECT_TEMPLATE_SUCCESS:
