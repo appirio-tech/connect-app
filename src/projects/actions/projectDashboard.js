@@ -13,7 +13,7 @@ import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../conf
  *
  * @return {Promise} LOAD_ADDITIONAL_PROJECT_DATA action
  */
-const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) => {
+const getDashboardData = (dispatch, getState, projectId) => {
   return new Promise((resolve, reject) => {
     return dispatch(loadProject(projectId))
       .then(({ value: project }) => {
@@ -21,14 +21,11 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
         // this is to remove any nulls from the list (dev had some bad data)
         _.remove(userIds, i => !i)
         // load additional data in parallel
-        let promises = [
+        const promises = [
           dispatch(loadMembers(userIds))
         ]
-        if (isOnlyLoadProjectInfo) {
-          promises = []
-        }
 
-        if (project.directProjectId && !isOnlyLoadProjectInfo) {
+        if (project.directProjectId) {
           promises.push(dispatch(loadDirectProjectData(project.directProjectId)))
         }
 
@@ -47,9 +44,8 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
         } else {
           promises.push(dispatch(loadProjectProductTemplatesByKey(_.get(project, 'details.products[0]'))))
         }
-        if (!isOnlyLoadProjectInfo) {
-          promises.push(dispatch(loadAllProductTemplates()))
-        }
+        promises.push(dispatch(loadAllProductTemplates()))
+        
 
         return resolve(dispatch({
           type: LOAD_ADDITIONAL_PROJECT_DATA,
@@ -61,11 +57,11 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
   })
 }
 
-export function loadProjectDashboard(projectId, isOnlyLoadProjectInfo = false) {
+export function loadProjectDashboard(projectId) {
   return (dispatch, getState) => {
     return dispatch({
       type: LOAD_PROJECT_DASHBOARD,
-      payload: getDashboardData(dispatch, getState, projectId, isOnlyLoadProjectInfo)
+      payload: getDashboardData(dispatch, getState, projectId)
     })
   }
 }
