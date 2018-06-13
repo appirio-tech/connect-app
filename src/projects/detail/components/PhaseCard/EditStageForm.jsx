@@ -1,6 +1,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
+import moment from 'moment'
 
 import './EditStageForm.scss'
 import { connect } from 'react-redux'
@@ -12,11 +13,14 @@ import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingInd
 class EditStageForm extends React.Component {
   constructor(props) {
     super(props)
+
+    const today = moment(Date())
+    const todayStr = today.format('YYYY-MM-DD')
     this.state = {
-      duration: '',
-      startDate: '',
-      spentBudget: '',
-      budget: '',
+      duration: '0',
+      startDate: todayStr,
+      spentBudget: '0',
+      budget: '0',
       isUpdating: false
     }
     this.submitValue = this.submitValue.bind(this)
