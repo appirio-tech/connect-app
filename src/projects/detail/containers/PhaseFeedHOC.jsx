@@ -43,10 +43,10 @@ const phaseFeedHOC = (Component) => {
     }
 
     componentWillMount() {
-      const { isLoading, loadPhaseFeed, phase } = this.props
+      const { isLoading, loadPhaseFeed, phase, project } = this.props
 
       if (!isLoading) {
-        loadPhaseFeed(phase.id)
+        loadPhaseFeed(project.id, phase.id)
       }
     }
 

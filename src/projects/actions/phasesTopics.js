@@ -22,24 +22,24 @@ import {
 import { loadMembers } from '../../actions/members'
 import { EventTypes } from 'redux-segment'
 
-export function loadPhaseFeed(phaseId) {
+export function loadPhaseFeed(projectId, phaseId) {
   const tag = PROJECT_FEED_TYPE_PHASE
   return (dispatch) => {
     return dispatch({
       type: LOAD_PHASE_FEED_MEMBERS,
-      payload: getPhaseTopicWithMember(dispatch, phaseId, tag),
+      payload: getPhaseTopicWithMember(dispatch, projectId, phaseId, tag),
       meta: { tag, phaseId }
     })
   }
 }
 
-const getPhaseTopicWithMember = (dispatch, phaseId, tag) => {
+const getPhaseTopicWithMember = (dispatch, projectId, phaseId, tag) => {
   return new Promise((resolve, reject) => {
     return dispatch({
       type: LOAD_PHASE_FEED,
       // TODO $PROJECT_PLAN$ remove getting topics for project 5021
       // and uncomment calling for getting topics for phase
-      payload: getTopicsWithComments('project', '5021', 'PRIMARY'), // getTopicsWithComments('phase', phaseId, tag),
+      payload: getTopicsWithComments('project', `${projectId}`, `phase#${phaseId}`), // getTopicsWithComments('phase', phaseId, tag),
       meta: { tag, phaseId }
     })
       .then(({ value }) => {
