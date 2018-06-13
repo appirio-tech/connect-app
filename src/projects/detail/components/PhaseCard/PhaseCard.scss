@@ -163,6 +163,9 @@
         background: url('assets/icons/ui-calendar.svg') 50% 4px no-repeat;
         background-size: 16px;
       }
+      &.nostatus {
+        opacity: 0;
+      }
       &.inprogress {
         padding-top: 0;
         display: block;

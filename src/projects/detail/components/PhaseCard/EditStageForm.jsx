@@ -1,10 +1,13 @@
 import React from 'react'
 import PT from 'prop-types'
+import _ from 'lodash'
 
 import './EditStageForm.scss'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { updatePhase } from '../../../actions/project'
+import { updatePhaseLocal, updatePhase as updatePhaseAPI } from '../../../actions/project'
+import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
+
 
 class EditStageForm extends React.Component {
   constructor(props) {
@@ -13,7 +16,8 @@ class EditStageForm extends React.Component {
       duration: '',
       startDate: '',
       spent: '',
-      budget: ''
+      budget: '',
+      isUpdating: false
     }
     this.submitValue = this.submitValue.bind(this)
     this.onDurationChange = this.onDurationChange.bind(this)
@@ -25,10 +29,16 @@ class EditStageForm extends React.Component {
   submitValue() {
     const props = this.props
     const phase = props.phase
-    phase.startDate = this.state.startDate
-    phase.budget = Number(this.state.budget)
-    props.updatePhase(props.phase, props.phaseIndex)
-    props.update()
+    const updateParam = {
+      startDate: this.state.startDate,
+      budget: Number(this.state.budget)
+    }
+    this.setState({isUpdating: true})
+    props.updatePhaseAPI(phase.projectId, phase.id, updateParam).then(() => {
+      _.assign(phase, updateParam)
+      props.updatePhaseLocal(props.phase, props.phaseIndex)
+      props.update()
+    })
   }
 
   onDurationChange (event) {
@@ -59,31 +69,29 @@ class EditStageForm extends React.Component {
     }
     return (
       <div styleName="container">
-
-        <div styleName="label-title">{'Edit Stage'}</div>
-        <div />
-        <div styleName="form">
-          <div styleName="label-layer">
-            <div styleName={'label-title'}>{'Start Date'}</div>
-            <input styleName="input" onChange={this.onStartDateChange} value={this.state.startDate} type="date" placeholder={'Start Date'}/>
+        {this.state.isUpdating && (<LoadingIndicator />)}
+        {!this.state.isUpdating && (<div>
+          <div styleName="label-title">{'Edit Stage'}</div>
+          <div />
+          <div styleName="form">
+            <div styleName="label-layer">
+              <div styleName={'label-title'}>{'Start Date'}</div>
+              <input styleName="input" onChange={this.onStartDateChange} value={this.state.startDate} type="date" placeholder={'Start Date'}/>
+              <div styleName={'label-title'}>{'Duration'}</div>
+              <input styleName="input" onChange={this.onDurationChange} value={this.state.duration} type="number" placeholder={'Duration'}/>
+            </div>
+            <div styleName="label-layer">
+              <div styleName={'label-title'}>{'Spent'}</div>
+              <input styleName="input" onChange={this.onSpentChange} value={this.state.spent} type="number" placeholder={'Spent'}/>
+              <div styleName={'label-title'}>{'Budget'}</div>
+              <input styleName="input" onChange={this.onBudgetChange} value={this.state.budget} type="number" placeholder={'Budget'}/>
+            </div>
+            <div styleName="group-bottom">
+              <button onClick={props.cancel} className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
+              <button onClick={this.submitValue} {...opts} className="tc-btn tc-btn-primary"><strong>{'Update Stage'}</strong></button>
+            </div>
           </div>
-          <div styleName="label-layer">
-            <div styleName={'label-title'}>{'Duration'}</div>
-            <input styleName="input" onChange={this.onDurationChange} value={this.state.duration} type="number" placeholder={'Duration'}/>
-          </div>
-          <div styleName="label-layer">
-            <div styleName={'label-title'}>{'Spent'}</div>
-            <input styleName="input" onChange={this.onSpentChange} value={this.state.spent} type="number" placeholder={'Spent'}/>
-          </div>
-          <div styleName="label-layer">
-            <div styleName={'label-title'}>{'Budget'}</div>
-            <input styleName="input" onChange={this.onBudgetChange} value={this.state.budget} type="number" placeholder={'Budget'}/>
-          </div>
-          <div styleName="group-bottom">
-            <button onClick={props.cancel} className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
-            <button onClick={this.submitValue} {...opts} className="tc-btn tc-btn-primary"><strong>{'Update Stage'}</strong></button>
-          </div>
-        </div>
+        </div>)}
       </div>
     )
   }
@@ -103,6 +111,6 @@ EditStageForm.propTypes = {
 
 const mapStateToProps = () => ({})
 
-const actionCreators = {updatePhase}
+const actionCreators = {updatePhaseLocal, updatePhaseAPI}
 
 export default withRouter(connect(mapStateToProps, actionCreators)(EditStageForm))

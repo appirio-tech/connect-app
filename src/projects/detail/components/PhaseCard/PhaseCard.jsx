@@ -58,8 +58,10 @@ class PhaseCard extends React.Component {
 
   render() {
     const { attr } = this.props
-    const status = attr && attr.status ? toPhaseCardStatus[attr.status] : null
-
+    let status = attr && attr.status ? toPhaseCardStatus[attr.status] : 'nostatus'
+    if (!status) {
+      status = 'nostatus'
+    }
     return (
       <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')}>
         <div styleName="static-view">

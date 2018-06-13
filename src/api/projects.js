@@ -106,6 +106,20 @@ export function updateProject(projectId, updatedProps, updateExisting) {
 }
 
 /**
+ * Update phase using patch
+ * @param  {integer} projectId    project Id
+ * @param  {phaseId} phaseId    phase Id
+ * @param  {object} updatedProps updated phase properties
+ * @return {promise}              updated phase
+ */
+export function updatePhase(projectId, phaseId, updatedProps) {
+  return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}`, { param: updatedProps })
+    .then(resp => {
+      return _.get(resp.data, 'result.content')
+    })
+}
+
+/**
  * Update product using patch
  *
  * @param  {Number} projectId    project Id
