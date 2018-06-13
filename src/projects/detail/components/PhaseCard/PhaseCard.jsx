@@ -61,7 +61,8 @@ class PhaseCard extends React.Component {
     const { attr } = this.props
 
     const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
-    const isManageUser = attr.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
+    const currentUserRoles = attr.currentUserRoles || []
+    const isManageUser = currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
 
 
     let status = attr && attr.status ? toPhaseCardStatus[attr.status] : 'nostatus'
