@@ -28,6 +28,7 @@ class EditStageForm extends React.Component {
     phase.startDate = this.state.startDate
     phase.budget = Number(this.state.budget)
     props.updatePhase(props.phase, props.phaseIndex)
+    props.update()
   }
 
   onDurationChange (event) {
