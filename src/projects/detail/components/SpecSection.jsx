@@ -25,6 +25,9 @@ import IconTcSpecTypeSansSerif from  '../../../assets/icons/icon-tc-spec-type-sa
 import IconTcSpecIconTypeColorHome from  '../../../assets/icons/icon-tc-spec-icon-type-color-home.svg'
 import IconTcSpecIconTypeOutlineHome from  '../../../assets/icons/icon-tc-spec-icon-type-outline-home.svg'
 import IconTcSpecIconTypeGlyphHome from  '../../../assets/icons/icon-tc-spec-icon-type-glyph-home.svg'
+import IconDontKnow from '../../../assets/icons/icon-dont-know.svg'
+import IconTestStructured from '../../../assets/icons/icon-test-structured.svg'
+import IconTestUnstructured from '../../../assets/icons/icon-test-unstructured.svg'
 
 // map string values to icon components for "tiled-radio-group" field type
 // this map contains TWO types of map, dashed and CamelCased
@@ -48,6 +51,12 @@ const tiledRadioGroupIcons = {
   'icon-tc-spec-icon-type-outline-home': IconTcSpecIconTypeOutlineHome,
   IconTcSpecIconTypeGlyphHome,
   'icon-tc-spec-icon-type-glyph-home': IconTcSpecIconTypeGlyphHome,
+  IconDontKnow,
+  'icon-dont-know': IconDontKnow,
+  IconTestStructured,
+  'icon-test-structured': IconTestStructured,
+  IconTestUnstructured,
+  'icon-test-unstructured': IconTestUnstructured,
 }
 
 const SpecSection = props => {
