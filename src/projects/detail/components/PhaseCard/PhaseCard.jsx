@@ -6,30 +6,15 @@ import React from 'react'
 import PT from 'prop-types'
 
 import {
-  PROJECT_STATUS_DRAFT,
-  PROJECT_STATUS_IN_REVIEW,
-  PROJECT_STATUS_REVIEWED,
-  PROJECT_STATUS_ACTIVE,
-  PROJECT_STATUS_COMPLETED,
-  PROJECT_STATUS_CANCELLED,
-  PROJECT_STATUS_PAUSED,
+  PHASE_STATUS_PLANNED,
+  PHASE_STATUS_IN_PROGRESS,
+  PHASE_STATUS_DELIVERED,
 } from '../../../../config/constants'
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
 import ProjectTypeIcon from '../../../../components/ProjectTypeIcon'
 
 import './PhaseCard.scss'
-
-// map project statuses with displayed statuses
-const toPhaseCardStatus = {
-  [PROJECT_STATUS_DRAFT]: 'Planned',
-  [PROJECT_STATUS_IN_REVIEW]: 'inprogress',
-  [PROJECT_STATUS_REVIEWED]: 'inprogress',
-  [PROJECT_STATUS_ACTIVE]: 'inprogress',
-  [PROJECT_STATUS_COMPLETED]: 'Delivered',
-  [PROJECT_STATUS_CANCELLED]: 'Planned',
-  [PROJECT_STATUS_PAUSED]: 'Planned',
-}
 
 class PhaseCard extends React.Component {
   constructor(props) {
@@ -49,7 +34,11 @@ class PhaseCard extends React.Component {
 
   render() {
     const { attr } = this.props
-    const status = attr && attr.status ? toPhaseCardStatus[attr.status] : null
+    let status = attr && attr.status ? attr.status : null
+    if (status !== PHASE_STATUS_PLANNED && status !== PHASE_STATUS_IN_PROGRESS &&  status !== PHASE_STATUS_DELIVERED) {
+      status = PHASE_STATUS_PLANNED
+    }
+    const progressInPercent = attr.progressInPercent
 
     return (
       <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')}>
@@ -62,7 +51,7 @@ class PhaseCard extends React.Component {
               <h4 styleName="project-title">{attr.title}</h4>
               <div styleName="meta-list">
                 <span styleName="meta">{attr.duration}</span>
-                <span styleName="meta">{attr.startEndDates}</span>
+                {attr.startEndDates && (<span styleName="meta">{attr.startEndDates}</span>)}
                 {attr.posts && <span styleName="meta">{attr.posts}</span>}
               </div>
             </div>
@@ -79,14 +68,14 @@ class PhaseCard extends React.Component {
             <div styleName="price-details">
               <h5>{attr.price}</h5>
               <div styleName="meta-list">
-                {!attr.progressInPercent && status && (<span>{status}</span>)}
-                {attr.progressInPercent && (<span>{attr.progressInPercent || 0}% done</span>)}
+                {!progressInPercent && status && (<span>{status}</span>)}
+                {progressInPercent && (<span>{progressInPercent || 0}% done</span>)}
               </div>
             </div>
           </div>
 
           <div styleName="col hide-md">
-            {status && status.toLowerCase() !== 'inprogress' &&
+            {status && status !== PHASE_STATUS_IN_PROGRESS &&
               (<div styleName="status-details">
                 <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                   {status}
@@ -94,16 +83,16 @@ class PhaseCard extends React.Component {
               </div>)
             }
 
-            {status && status.toLowerCase() === 'inprogress' &&
+            {status && status === PHASE_STATUS_IN_PROGRESS &&
               (<div styleName="status-details">
                 <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                   <ProjectProgress
                     title=""
                     viewType={ProjectProgress.ViewTypes.CIRCLE}
-                    percent={attr.progressInPercent || 0}
+                    percent={progressInPercent || 0}
                     thickness={7}
                   >
-                    <span className="progress-text">{attr.progressInPercent || 0}% <span className="unit">completed</span></span>
+                    <span className="progress-text">{progressInPercent || 0}% <span className="unit">completed</span></span>
                   </ProjectProgress>
 
                 </div>
@@ -115,9 +104,9 @@ class PhaseCard extends React.Component {
             onClick={this.toggleCardView}
           />
 
-          {status && status.toLowerCase() === 'inprogress' &&
+          {status && status === PHASE_STATUS_IN_PROGRESS &&
             (
-              <div styleName="progressbar"><div styleName="fill" style={{ width: (attr.progressInPercent || 0)+'%' }} /></div>
+              <div styleName="progressbar"><div styleName="fill" style={{ width: (progressInPercent || 0)+'%' }} /></div>
             )
           }
         </div>

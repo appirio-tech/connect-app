@@ -15,7 +15,7 @@ import { getProductTemplate, getProjectTemplate, getProductTemplateByKey } from 
 import { LOAD_PROJECT, CREATE_PROJECT, CREATE_PROJECT_STAGE, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
   LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES,
   LOAD_PROJECT_TEMPLATE, LOAD_PROJECT_PRODUCT_TEMPLATES, LOAD_ALL_PRODUCT_TEMPLATES, UPDATE_PRODUCT,
-  PROJECT_STATUS_DRAFT, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
+  PROJECT_STATUS_DRAFT, PHASE_STATUS_PLANNED, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
 } from '../../config/constants'
 
 export function loadProject(projectId) {
@@ -48,6 +48,37 @@ function populatePhasesProducts(result) {
 }
 
 /**
+ * Populate each phase with `directProject` property containing direct project
+ *
+ * @param {Array} phases list of phases
+ *
+ * @return {Promise} modified array of phases with `directProject` property
+ */
+function populatePhasesDirectProject(phases) {
+  const directProjectIds = _.uniq(_.map(phases, 'products[0].directProjectId'))
+  return Promise.all(directProjectIds.map((directProjectId) => getDirectProjectData(directProjectId)))
+    .then((directProjects) => {
+
+      const directProjectsMap = {}
+      directProjects.forEach((directProject) => {
+        directProjectsMap[directProject.project.projectId] = directProject
+      })
+      phases.forEach((phase) => {
+        if (phase.products.length > 0) {
+          const directProject = directProjectsMap[phase.products[0].directProjectId]
+          phase.directProject = directProject
+          // recalculate endDate, budget, progress of phase base on direct project
+          phase.endDate = phase.startDate ? moment(phase.startDate).add(directProject.plannedDuration || 0, 'days').format() : null
+          phase.budget = directProject.projectedCost || 0
+          
+          phase.progress = (directProject.actualDuration  && directProject.plannedDuration) ? Math.round((directProject.actualDuration / directProject.plannedDuration) * 100) : 0
+        }
+      })
+      return phases
+    })
+}
+
+/**
  * Load project phases with populated products
  *
  * @param {String} projectId        project id
@@ -61,7 +92,7 @@ export function loadProjectPhasesWithProducts(projectId, project, existingPhases
     return dispatch({
       type: LOAD_PROJECT_PHASES,
       payload: getProjectPhases(projectId, existingPhases)
-        .then(populatePhasesProducts)
+        .then(populatePhasesProducts).then(populatePhasesDirectProject)
     })
   }
 }
@@ -188,7 +219,7 @@ export function createProduct(project, productTemplate) {
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT_STAGE,
-      payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, null, null)
+      payload: createProjectPhaseAndProduct(project, productTemplate, PHASE_STATUS_PLANNED, null, null)
     })
   }
 }
