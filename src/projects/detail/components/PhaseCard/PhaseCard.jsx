@@ -146,7 +146,7 @@ class PhaseCard extends React.Component {
         {!this.state.isEditting && (<div styleName="expandable-view">
           {this.props.children}
         </div>)}
-        {isManageUser && this.state.isEditting && (<div styleName="sm-separator" >
+        {(<div styleName={'sm-separator ' + ((!isManageUser || !this.state.isEditting) ? 'hide ': '')} >
           <EditStageForm phase={attr.phase} phaseIndex={attr.phaseIndex} cancel={this.toggleEditView} update={this.toggleEditView} />
         </div>)}
 
