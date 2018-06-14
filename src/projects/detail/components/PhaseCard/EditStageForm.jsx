@@ -14,7 +14,7 @@ class EditStageForm extends React.Component {
   constructor(props) {
     super(props)
 
-    const today = moment(Date())
+    const today = moment(new Date())
     const todayStr = today.format('YYYY-MM-DD')
     this.state = {
       duration: '0',
@@ -33,18 +33,22 @@ class EditStageForm extends React.Component {
   submitValue() {
     const props = this.props
     const phase = props.phase
+    const endDate = moment(new Date(this.state.startDate)).add(this.state.duration, 'days').format('YYYY-MM-DD')
     const updateParam = {
       startDate: this.state.startDate,
+      endDate: endDate || '',
       budget: Number(this.state.budget),
       spentBudget: Number(this.state.spentBudget),
-      duration: Number(this.state.duration)
+      duration: Number(this.state.duration),
     }
     this.setState({isUpdating: true})
     props.updatePhaseAPI(phase.projectId, phase.id, updateParam, props.phaseIndex).then(() => {
       _.assign(phase, updateParam)
       props.update()
+      this.setState({isUpdating: false})
     }).catch(() => {
       props.update()
+      this.setState({isUpdating: false})
     })
   }
 
@@ -71,7 +75,7 @@ class EditStageForm extends React.Component {
   render() {
     const props = this.props
     const opts = {}
-    if (!this.state.duration || !this.state.startDate || !this.state.spentBudget || !this.state.budget) {
+    if (!(this.state.duration && this.state.duration !== '0' && this.state.startDate && this.state.spentBudget && this.state.spentBudget !== '0' && this.state.budget && this.state.budget !== '0')) {
       opts['disabled'] = 'disabled'
     }
     return (
