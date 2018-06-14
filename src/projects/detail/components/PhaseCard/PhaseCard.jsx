@@ -17,6 +17,8 @@ import {
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
 import ProjectTypeIcon from '../../../../components/ProjectTypeIcon'
+import EditStageForm from './EditStageForm'
+import { ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER } from '../../../../config/constants'
 
 import './PhaseCard.scss'
 
@@ -35,9 +37,11 @@ class PhaseCard extends React.Component {
   constructor(props) {
     super(props)
     this.toggleCardView = this.toggleCardView.bind(this)
+    this.toggleEditView = this.toggleEditView.bind(this)
 
     this.state = {
-      isExpanded: ''
+      isExpanded: '',
+      isEditting: false
     }
   }
 
@@ -47,10 +51,24 @@ class PhaseCard extends React.Component {
     })
   }
 
+  toggleEditView() {
+    this.setState({
+      isEditting: !this.state.isEditting
+    })
+  }
+
   render() {
     const { attr } = this.props
-    const status = attr && attr.status ? toPhaseCardStatus[attr.status] : null
 
+    const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
+    const currentUserRoles = attr.currentUserRoles || []
+    const isManageUser = currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
+
+
+    let status = attr && attr.status ? toPhaseCardStatus[attr.status] : 'nostatus'
+    if (!status) {
+      status = 'nostatus'
+    }
     return (
       <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')}>
         <div styleName="static-view">
@@ -59,7 +77,11 @@ class PhaseCard extends React.Component {
               <div styleName="project-ico">
                 <ProjectTypeIcon type={attr.icon} />
               </div>
-              <h4 styleName="project-title">{attr.title}</h4>
+              <div styleName="project-title-container">
+                <h4 styleName="project-title">{attr.title}</h4>
+                {isManageUser && !this.state.isEditting && !this.state.isExpanded && (<a styleName="edit-btn" onClick={this.toggleEditView} />
+                )}
+              </div>
               <div styleName="meta-list">
                 <span styleName="meta">{attr.duration}</span>
                 <span styleName="meta">{attr.startEndDates}</span>
@@ -67,6 +89,7 @@ class PhaseCard extends React.Component {
               </div>
             </div>
           </div>
+
           <div styleName="col hide-md">
             <div styleName="price-details">
               <h5>{attr.price}</h5>
@@ -111,9 +134,8 @@ class PhaseCard extends React.Component {
             }
           </div>
 
-          <a styleName="toggle-arrow"
-            onClick={this.toggleCardView}
-          />
+          {!this.state.isEditting && (<a styleName="toggle-arrow" onClick={this.toggleCardView} />
+          )}
 
           {status && status.toLowerCase() === 'inprogress' &&
             (
@@ -121,9 +143,13 @@ class PhaseCard extends React.Component {
             )
           }
         </div>
-        <div styleName="expandable-view">
+        {!this.state.isEditting && (<div styleName="expandable-view">
           {this.props.children}
-        </div>
+        </div>)}
+        {(<div styleName={'sm-separator ' + ((!isManageUser || !this.state.isEditting) ? 'hide ': '')} >
+          <EditStageForm phase={attr.phase} phaseIndex={attr.phaseIndex} cancel={this.toggleEditView} update={this.toggleEditView} />
+        </div>)}
+
       </div>
     )
   }

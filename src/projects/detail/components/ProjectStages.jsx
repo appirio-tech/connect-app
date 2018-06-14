@@ -50,6 +50,7 @@ const ProjectStages = ({
   phases,
   productTemplates,
   currentMemberRole,
+  currentUserRoles,
   isProcessing,
   isSuperUser,
   updateProduct,
@@ -61,7 +62,7 @@ const ProjectStages = ({
 }) => (
   <Section>
     <PhaseCardListHeader />
-    {phases.map((phase) => (
+    {phases.map((phase, index) => (
       <ProjectStage
         key={phase.id}
         productTemplates={productTemplates}
@@ -70,12 +71,14 @@ const ProjectStages = ({
         isSuperUser={isSuperUser}
         project={project}
         phase={phase}
+        phaseIndex={index}
         updateProduct={updateProduct}
         fireProductDirty={fireProductDirty}
         fireProductDirtyUndo={fireProductDirtyUndo}
         addProductAttachment={addProductAttachment}
         updateProductAttachment={updateProductAttachment}
         removeProductAttachment={removeProductAttachment}
+        currentUserRoles={currentUserRoles}
       />
     ))}
     <PhaseCardListFooter projectId={project.id} {...formatPhaseCardListFooterProps(phases)} />

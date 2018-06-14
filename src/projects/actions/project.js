@@ -8,6 +8,7 @@ import { getProjectById, createProject as createProjectAPI,
   getProjectPhases,
   getPhaseProducts,
   updateProduct as updateProductAPI,
+  updatePhase as updatePhaseAPI,
   createProjectPhase,
   createPhaseProduct,
 } from '../../api/projects'
@@ -15,7 +16,7 @@ import { getProductTemplate, getProjectTemplate, getProductTemplateByKey } from 
 import { LOAD_PROJECT, CREATE_PROJECT, CREATE_PROJECT_STAGE, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
   LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES,
   LOAD_PROJECT_TEMPLATE, LOAD_PROJECT_PRODUCT_TEMPLATES, LOAD_ALL_PRODUCT_TEMPLATES, UPDATE_PRODUCT,
-  PROJECT_STATUS_DRAFT, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
+  PROJECT_STATUS_DRAFT, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO, UPDATE_PHASE
 } from '../../config/constants'
 
 export function loadProject(projectId) {
@@ -228,6 +229,26 @@ export function updateProject(projectId, updatedProps, updateExisting = false) {
     return dispatch({
       type: UPDATE_PROJECT,
       payload: updateProjectAPI(projectId, updatedProps, updateExisting)
+    })
+  }
+}
+
+
+/**
+ * Update phase info
+ *
+ * @param {Number} projectId           project id
+ * @param {Number} phaseId             phase id
+ * @param {Object} updatedProps        param need to update
+ * @param {Number} phaseIndex          index of phase need to update in phase list redux
+ *
+ * @return {Promise} phase
+ */
+export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
+  return (dispatch) => {
+    return dispatch({
+      type: UPDATE_PHASE,
+      payload: updatePhaseAPI(projectId, phaseId, updatedProps, phaseIndex)
     })
   }
 }
