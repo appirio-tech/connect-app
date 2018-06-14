@@ -103,7 +103,6 @@ function getProductInPhases(phases, phaseId, productId) {
  * @return {Array}  phases
  */
 function updateSomeBasicInfoIntoPhase(phases, phase, phaseIndex) {
-  console.log('updateSomeBasicInfoIntoPhase')
   if (phase && phaseIndex >= 0) {
     _.assign(phases[phaseIndex], phase)
   }

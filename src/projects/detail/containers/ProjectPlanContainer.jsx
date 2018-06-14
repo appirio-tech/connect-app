@@ -63,11 +63,10 @@ ProjectPlanContainer.propTypes = {
   productTemplates: PT.array.isRequired,
 }
 
-const mapStateToProps = ({ projectState }) => {
-  return ({
-    productTemplates: projectState.allProductTemplates,
-    phases: projectState.phases,
-  })}
+const mapStateToProps = ({ projectState }) => ({
+  productTemplates: projectState.allProductTemplates,
+  phases: projectState.phases,
+})
 
 const mapDispatchToProps = {
   updateProduct,
