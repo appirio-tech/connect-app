@@ -35,19 +35,33 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, currentU
   const product = _.get(phase, 'products[0]')
   const { status } = phase
   const productTemplate = _.find(productTemplates, { id: product.templateId })
-  const budget = product.budget || 0
+  const budget = phase.budget || 0
   const price = `$${formatNumberWithCommas(budget)}`
   const icon = _.get(productTemplate, 'icon')
   const title = _.get(productTemplate, 'name')
   const startDate = phase.startDate && moment(phase.startDate)
   const endDate = phase.endDate && moment(phase.endDate)
-  const duration = startDate && endDate
-    ? moment.duration(endDate.diff(startDate)).days() + ' days'
-    : '0 days'
+
+  const plannedDuration = (startDate && endDate) ? (moment.duration(endDate.diff(startDate)).days() + 1) : 0
+  const duration = `${plannedDuration} days`
   let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
   startEndDates += startDate && endDate ? `–${endDate.format('MMM D')}` : ''
 
-  const actualPrice = product.actualPrice
+  // calculate progress of phase
+  let actualDuration = 0
+  let now = new Date()
+  now = now && moment(now)
+  const durationFromNow = now.diff(startDate, 'days') + 1
+  if (durationFromNow <= plannedDuration) {
+    if (durationFromNow > 0) {
+      actualDuration = durationFromNow
+    }
+  } else {
+    actualDuration = plannedDuration
+  }
+  const progressInPercent = (actualDuration  && plannedDuration) ? Math.round((actualDuration / plannedDuration) * 100) : 0
+
+  const actualPrice = phase.spentBudget
   let paidStatus = 'Quoted'
   if (actualPrice && actualPrice === budget) {
     paidStatus = 'Paid in full'
@@ -70,7 +84,8 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, currentU
     posts,
     phaseIndex,
     phase,
-    currentUserRoles
+    currentUserRoles,
+    progressInPercent
   }
 }
 

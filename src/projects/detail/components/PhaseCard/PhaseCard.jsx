@@ -6,13 +6,9 @@ import React from 'react'
 import PT from 'prop-types'
 
 import {
-  PROJECT_STATUS_DRAFT,
-  PROJECT_STATUS_IN_REVIEW,
-  PROJECT_STATUS_REVIEWED,
-  PROJECT_STATUS_ACTIVE,
-  PROJECT_STATUS_COMPLETED,
-  PROJECT_STATUS_CANCELLED,
-  PROJECT_STATUS_PAUSED,
+  PHASE_STATUS_PLANNED,
+  PHASE_STATUS_IN_PROGRESS,
+  PHASE_STATUS_DELIVERED,
 } from '../../../../config/constants'
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
@@ -24,13 +20,9 @@ import './PhaseCard.scss'
 
 // map project statuses with displayed statuses
 const toPhaseCardStatus = {
-  [PROJECT_STATUS_DRAFT]: 'Planned',
-  [PROJECT_STATUS_IN_REVIEW]: 'inprogress',
-  [PROJECT_STATUS_REVIEWED]: 'inprogress',
-  [PROJECT_STATUS_ACTIVE]: 'inprogress',
-  [PROJECT_STATUS_COMPLETED]: 'Delivered',
-  [PROJECT_STATUS_CANCELLED]: 'Planned',
-  [PROJECT_STATUS_PAUSED]: 'Planned',
+  [PHASE_STATUS_PLANNED]: PHASE_STATUS_PLANNED,
+  [PHASE_STATUS_IN_PROGRESS]: PHASE_STATUS_IN_PROGRESS,
+  [PHASE_STATUS_DELIVERED]: PHASE_STATUS_DELIVERED,
 }
 
 class PhaseCard extends React.Component {
@@ -63,11 +55,11 @@ class PhaseCard extends React.Component {
     const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
     const currentUserRoles = attr.currentUserRoles || []
     const isManageUser = currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
+    const progressInPercent = attr.progressInPercent || 0
 
-
-    let status = attr && attr.status ? toPhaseCardStatus[attr.status] : 'nostatus'
+    let status = attr && attr.status ? toPhaseCardStatus[attr.status] : PHASE_STATUS_PLANNED
     if (!status) {
-      status = 'nostatus'
+      status = PHASE_STATUS_PLANNED
     }
     return (
       <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')}>
@@ -102,14 +94,14 @@ class PhaseCard extends React.Component {
             <div styleName="price-details">
               <h5>{attr.price}</h5>
               <div styleName="meta-list">
-                {!attr.progressInPercent && status && (<span>{status}</span>)}
-                {attr.progressInPercent && (<span>{attr.progressInPercent || 0}% done</span>)}
+                {!progressInPercent && status && status !== 'nostatus' && (<span>{status}</span>)}
+                {progressInPercent && (<span>{progressInPercent}% done</span>)}
               </div>
             </div>
           </div>
 
           <div styleName="col hide-md">
-            {status && status.toLowerCase() !== 'inprogress' &&
+            {status && status !== PHASE_STATUS_IN_PROGRESS &&
               (<div styleName="status-details">
                 <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                   {status}
@@ -117,16 +109,16 @@ class PhaseCard extends React.Component {
               </div>)
             }
 
-            {status && status.toLowerCase() === 'inprogress' &&
+            {status && status === PHASE_STATUS_IN_PROGRESS &&
               (<div styleName="status-details">
                 <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                   <ProjectProgress
                     title=""
                     viewType={ProjectProgress.ViewTypes.CIRCLE}
-                    percent={attr.progressInPercent || 0}
+                    percent={progressInPercent}
                     thickness={7}
                   >
-                    <span className="progress-text">{attr.progressInPercent || 0}% <span className="unit">completed</span></span>
+                    <span className="progress-text">{progressInPercent}% <span className="unit">completed</span></span>
                   </ProjectProgress>
 
                 </div>
@@ -137,9 +129,9 @@ class PhaseCard extends React.Component {
           {!this.state.isEditting && (<a styleName="toggle-arrow" onClick={this.toggleCardView} />
           )}
 
-          {status && status.toLowerCase() === 'inprogress' &&
+          {status && status === PHASE_STATUS_IN_PROGRESS &&
             (
-              <div styleName="progressbar"><div styleName="fill" style={{ width: (attr.progressInPercent || 0)+'%' }} /></div>
+              <div styleName="progressbar"><div styleName="fill" style={{ width: progressInPercent + '%' }} /></div>
             )
           }
         </div>
@@ -156,7 +148,6 @@ class PhaseCard extends React.Component {
 }
 
 PhaseCard.defaultProps = {
-  progressInPercent: 0,
   posts: null,
 }
 
@@ -167,7 +158,6 @@ PhaseCard.propTypes = {
     isExpanded: PT.bool,
     paidStatus: PT.string.isRequired,
     posts: PT.string,
-    progressInPercent: PT.number,
     startEndDates: PT.string.isRequired,
     status: PT.string.isRequired,
     title: PT.string.isRequired,

@@ -336,6 +336,10 @@ export const PROJECT_STATUS_COMPLETED = 'completed'
 export const PROJECT_STATUS_CANCELLED = 'cancelled'
 export const PROJECT_STATUS_PAUSED = 'paused'
 
+export const PHASE_STATUS_PLANNED = 'Planned'
+export const PHASE_STATUS_IN_PROGRESS = 'Inprogress'
+export const PHASE_STATUS_DELIVERED = 'Delivered'
+
 export const PROJECT_STATUS = [
   {color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
   {color: 'gray', name: 'In review', fullName: 'Project is in review', value: PROJECT_STATUS_IN_REVIEW, order: 3, dropDownOrder: 2 },
