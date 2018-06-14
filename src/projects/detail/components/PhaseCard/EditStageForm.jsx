@@ -14,13 +14,26 @@ class EditStageForm extends React.Component {
   constructor(props) {
     super(props)
 
-    const today = moment(new Date())
-    const todayStr = today.format('YYYY-MM-DD')
+    let startDate = null
+    let spentBudget = '0'
+    let budget = '0'
+    let duration = '0'
+
+    if (!props.phase.duration || !props.phase.startDate || !props.phase.spentBudget || !props.phase.budget) {
+      const today = moment(new Date())
+      startDate = today.format('YYYY-MM-DD')
+    } else {
+      duration = `${props.phase.duration}`
+      startDate = moment(new Date(props.phase.startDate)).format('YYYY-MM-DD')
+      spentBudget = `${props.phase.spentBudget}`
+      budget = `${props.phase.budget}`
+    }
+    
     this.state = {
-      duration: '0',
-      startDate: todayStr,
-      spentBudget: '0',
-      budget: '0',
+      duration: duration || '0',
+      startDate: startDate || '',
+      spentBudget: spentBudget || '0',
+      budget: budget || '0',
       isUpdating: false
     }
     this.submitValue = this.submitValue.bind(this)
