@@ -35,7 +35,7 @@ function formatPhaseCardListFooterProps(phases) {
 
   const totalPrice = _.sum(phases.map((phase) => _.get(phase, 'budget', 0)))
 
-  const duration = _.sum(phases.map((phase) => _.get(phase, 'duration', 0))) + phases.length
+  const duration = `${_.sum(phases.map((phase) => _.get(phase, 'duration', 0))) + phases.length} days`
   const price = `$${formatNumberWithCommas(totalPrice)}`
 
   return {
