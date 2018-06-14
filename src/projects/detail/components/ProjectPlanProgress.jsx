@@ -19,7 +19,7 @@ import ProjectProgress from './ProjectProgress'
  */
 function formatProjectProgressProps(project, phases) {
   let actualDuration = 0
-  let now = Date()
+  let now = new Date()
   now = now && moment(now)
   for (let i = 0; i < phases.length; i++) {
     const phase = phases[i]
