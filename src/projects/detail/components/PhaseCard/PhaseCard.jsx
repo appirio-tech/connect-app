@@ -4,6 +4,8 @@
  */
 import React from 'react'
 import PT from 'prop-types'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 
 import {
   PHASE_STATUS_PLANNED,
@@ -53,7 +55,7 @@ class PhaseCard extends React.Component {
     const { attr } = this.props
 
     const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
-    const currentUserRoles = attr.currentUserRoles || []
+    const currentUserRoles = this.props.currentUserRoles || []
     const isManageUser = currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
     const progressInPercent = attr.progressInPercent || 0
 
@@ -164,4 +166,14 @@ PhaseCard.propTypes = {
   })
 }
 
-export default PhaseCard
+
+
+const mapStateToProps = ({loadUser}) => {
+  return {
+    currentUserRoles: loadUser.user.roles
+  }
+}
+
+const actionCreators = {}
+
+export default withRouter(connect(mapStateToProps, actionCreators)(PhaseCard))

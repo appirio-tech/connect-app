@@ -10,6 +10,11 @@ import Section from './Section'
 import SectionTitle from './SectionTitle'
 import ProjectProgress from './ProjectProgress'
 
+import {
+  PHASE_STATUS_IN_PROGRESS,
+  PHASE_STATUS_DELIVERED,
+} from '../../../../config/constants'
+
 /**
  * Format ProjectProgress props
  *
@@ -25,6 +30,10 @@ function formatProjectProgressProps(project, phases) {
     const phase = phases[i]
     const startDate = phase.startDate && moment(phase.startDate)
     const duration = now.diff(startDate, 'days') + 1
+
+    if (phase.status !== PHASE_STATUS_IN_PROGRESS && phase.status !== PHASE_STATUS_DELIVERED) {
+      break
+    }
     if (duration <= phase.duration) {
       if (duration > 0) {
         actualDuration += duration

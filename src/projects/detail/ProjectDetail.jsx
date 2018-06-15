@@ -47,7 +47,6 @@ const ProjectDetailView = (props) => {
       isSuperUser: props.isSuperUser,
       isProcessing: props.isProcessing,
       allProductTemplates: props.allProductTemplates,
-      currentUserRoles: props.currentUserRoles
     })
   })
   return <div>{children}</div>

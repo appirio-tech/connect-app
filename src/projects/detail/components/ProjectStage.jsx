@@ -29,7 +29,7 @@ const EnhancedEditProjectForm = enhance(EditProjectForm)
  *
  * @returns {Object} PhaseCard attr property
  */
-function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, currentUserRoles) {
+function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed) {
   // NOTE so far one phase always has 1 product
   // but as in the future this may be changed, we work with products as an array
   const product = _.get(phase, 'products[0]')
@@ -84,7 +84,6 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, currentU
     posts,
     phaseIndex,
     phase,
-    currentUserRoles,
     progressInPercent
   }
 }
@@ -127,7 +126,6 @@ class ProjectStage extends React.Component{
       project,
       productTemplates,
       currentMemberRole,
-      currentUserRoles,
       isProcessing,
       isSuperUser,
       updateProduct,
@@ -168,7 +166,7 @@ class ProjectStage extends React.Component{
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
 
     return (
-      <PhaseCard attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, currentUserRoles)}>
+      <PhaseCard attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed)}>
         <div>
           <GenericMenu navLinks={tabs} />
 
