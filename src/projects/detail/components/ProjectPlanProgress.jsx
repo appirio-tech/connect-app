@@ -13,7 +13,7 @@ import ProjectProgress from './ProjectProgress'
 import {
   PHASE_STATUS_IN_PROGRESS,
   PHASE_STATUS_DELIVERED,
-} from '../../../../config/constants'
+} from '../../../config/constants'
 
 /**
  * Format ProjectProgress props
@@ -31,9 +31,6 @@ function formatProjectProgressProps(project, phases) {
     const startDate = phase.startDate && moment(phase.startDate)
     const duration = now.diff(startDate, 'days') + 1
 
-    if (phase.status !== PHASE_STATUS_IN_PROGRESS && phase.status !== PHASE_STATUS_DELIVERED) {
-      break
-    }
     if (duration <= phase.duration) {
       if (duration > 0) {
         actualDuration += duration
@@ -47,7 +44,8 @@ function formatProjectProgressProps(project, phases) {
   const projectedDuration = _.sumBy(phases, 'duration') + phases.length
 
   const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
-  const labelSpent = `Spent $${(_.sumBy(phases, 'spentBudget') || 0)}`
+  
+  const labelSpent = `Spent $${(_.sumBy(_.filter(phases, (phase) => (phase.status === PHASE_STATUS_IN_PROGRESS || phase.status === PHASE_STATUS_DELIVERED)), 'spentBudget') || 0)}`
   const progressPercent = (projectedDuration !== 0 ? Math.round(actualDuration * 100 / projectedDuration) : 0).toString()
   const labelStatus = `${progressPercent}% done`
 
