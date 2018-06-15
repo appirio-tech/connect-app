@@ -29,25 +29,39 @@ const EnhancedEditProjectForm = enhance(EditProjectForm)
  *
  * @returns {Object} PhaseCard attr property
  */
-function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, currentUserRoles) {
+function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed) {
   // NOTE so far one phase always has 1 product
   // but as in the future this may be changed, we work with products as an array
   const product = _.get(phase, 'products[0]')
   const { status } = phase
   const productTemplate = _.find(productTemplates, { id: product.templateId })
-  const budget = product.budget || 0
+  const budget = phase.budget || 0
   const price = `$${formatNumberWithCommas(budget)}`
   const icon = _.get(productTemplate, 'icon')
   const title = _.get(productTemplate, 'name')
   const startDate = phase.startDate && moment(phase.startDate)
   const endDate = phase.endDate && moment(phase.endDate)
-  const duration = startDate && endDate
-    ? moment.duration(endDate.diff(startDate)).days() + ' days'
-    : '0 days'
+
+  const plannedDuration = (startDate && endDate) ? (moment.duration(endDate.diff(startDate)).days() + 1) : 0
+  const duration = `${plannedDuration} days`
   let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
   startEndDates += startDate && endDate ? `–${endDate.format('MMM D')}` : ''
 
-  const actualPrice = product.actualPrice
+  // calculate progress of phase
+  let actualDuration = 0
+  let now = new Date()
+  now = now && moment(now)
+  const durationFromNow = now.diff(startDate, 'days') + 1
+  if (durationFromNow <= plannedDuration) {
+    if (durationFromNow > 0) {
+      actualDuration = durationFromNow
+    }
+  } else {
+    actualDuration = plannedDuration
+  }
+  const progressInPercent = (actualDuration  && plannedDuration) ? Math.round((actualDuration / plannedDuration) * 100) : 0
+
+  const actualPrice = phase.spentBudget
   let paidStatus = 'Quoted'
   if (actualPrice && actualPrice === budget) {
     paidStatus = 'Paid in full'
@@ -70,7 +84,7 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, currentU
     posts,
     phaseIndex,
     phase,
-    currentUserRoles
+    progressInPercent
   }
 }
 
@@ -112,7 +126,6 @@ class ProjectStage extends React.Component{
       project,
       productTemplates,
       currentMemberRole,
-      currentUserRoles,
       isProcessing,
       isSuperUser,
       updateProduct,
@@ -153,7 +166,7 @@ class ProjectStage extends React.Component{
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
 
     return (
-      <PhaseCard attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, currentUserRoles)}>
+      <PhaseCard attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed)}>
         <div>
           <GenericMenu navLinks={tabs} />
 
