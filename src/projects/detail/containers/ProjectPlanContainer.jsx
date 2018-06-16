@@ -24,6 +24,7 @@ const ProjectPlanContainer = (props) => {
     project,
     isSuperUser,
     currentMemberRole,
+    phases,
   } = props
 
   const leftArea = (
@@ -48,7 +49,7 @@ const ProjectPlanContainer = (props) => {
       </TwoColsLayout.Sidebar>
 
       <TwoColsLayout.Content>
-        <ProjectPlanProgress project={project} />
+        <ProjectPlanProgress phases={phases} project={project} />
         <ProjectStages {...props} />
       </TwoColsLayout.Content>
     </TwoColsLayout>
