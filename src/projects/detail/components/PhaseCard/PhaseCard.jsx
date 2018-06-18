@@ -45,7 +45,8 @@ class PhaseCard extends React.Component {
     })
   }
 
-  toggleEditView() {
+  toggleEditView(e) {
+    e.stopPropagation();
     this.setState({
       isEditting: !this.state.isEditting
     })
@@ -65,7 +66,7 @@ class PhaseCard extends React.Component {
     }
     return (
       <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')}>
-        <div styleName="static-view">
+        <div styleName="static-view" onClick={!this.state.editing && this.toggleCardView}>
           <div styleName="col">
             <div styleName="project-details">
               <div styleName="project-ico">
@@ -128,7 +129,7 @@ class PhaseCard extends React.Component {
             }
           </div>
 
-          {!this.state.isEditting && (<a styleName="toggle-arrow" onClick={this.toggleCardView} />
+          {!this.state.isEditting && (<a styleName="toggle-arrow" />
           )}
 
           {status && status === PHASE_STATUS_IN_PROGRESS &&
