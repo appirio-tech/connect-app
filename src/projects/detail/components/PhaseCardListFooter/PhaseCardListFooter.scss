@@ -46,7 +46,7 @@
 }
 
 .status {
-  flex: 1 0 40px;
+  flex: 0 1 40px;
 
   @media screen and (max-width: $screen-md - 1px) {
     display: none;

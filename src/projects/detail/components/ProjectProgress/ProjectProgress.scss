@@ -45,20 +45,28 @@
     z-index: 10;
     overflow: hidden;
     @media screen and (max-width: $screen-md - 1px) {
-      padding-right: $base-unit*7;
+      padding-right: $base-unit*3.8;
     }
+
     .group-right {
       min-width: 240px;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       @media screen and (max-width: $screen-md - 1px) {
         min-width: 100px;
       }
     }
+
     .spent {
+      padding-right: 25px;
       @media screen and (max-width: $screen-md - 1px) {
         margin-left: auto;
       }
+    }
+
+    .status {
+      text-align: right;
+      min-width: 89px;
     }
   }
 
