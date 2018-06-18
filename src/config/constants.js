@@ -520,3 +520,6 @@ export const NOTIFICATION_SETTINGS_PERIODS = [
   { text: 'Daily', value: 'daily' },
   { text: 'Weekly', value: 'weekly' },
 ]
+
+// date time formats
+export const POST_TIME_FORMAT = 'h:mm a'

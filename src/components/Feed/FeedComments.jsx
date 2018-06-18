@@ -100,7 +100,7 @@ class FeedComments extends React.Component {
           key={idx}
           message={item}
           author={item.author}
-          date={moment(item.date).fromNow()}
+          date={item.date}
           edited={item.edited}
           active={item.unread}
           self={item.author && item.author.userId === currentUser.userId}
