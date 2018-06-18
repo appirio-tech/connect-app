@@ -293,9 +293,7 @@
     }
 
     form div:last-of-type .section-footer-spec {
-      @media screen and (max-width: $screen-md - 1px) {
-        margin-bottom: 0;
-      }
+      margin-bottom: 0;
     }
 
     .section-footer-spec {
