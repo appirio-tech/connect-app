@@ -20,7 +20,7 @@ export function getTopics(criteria) {
     params.filter = filterStr.join('&')
   }
 
-  return axios.get(`${apiBaseUrl}/topics/list`, { params })
+  return axios.get(`${apiBaseUrl}/topics/list/db`, { params })
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
@@ -30,7 +30,7 @@ export function getTopics(criteria) {
 }
 
 export function getTopic(topicId) {
-  return axios.get(`${apiBaseUrl}/topics/${topicId}/read`)
+  return axios.get(`${apiBaseUrl}/topics/${topicId}/read/db`)
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
