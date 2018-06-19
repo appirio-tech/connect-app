@@ -1,6 +1,6 @@
 import React from 'react'
 import PT from 'prop-types'
-import _ from 'lodash'
+// import _ from 'lodash'
 import moment from 'moment'
 
 import './EditStageForm.scss'
@@ -44,7 +44,7 @@ class EditStageForm extends React.Component {
   }
   
   componentWillReceiveProps(nextProps) {
-    this.setState({ isUpdating: nextProps.isUpdating });
+    this.setState({ isUpdating: nextProps.isUpdating })
   }
 
   submitValue() {
@@ -119,13 +119,11 @@ class EditStageForm extends React.Component {
 }
 
 EditStageForm.defaultProps = {
-  cancel: () => {},
-  update: () => {}
+  cancel: () => {}
 }
 
 EditStageForm.propTypes = {
   cancel: PT.func,
-  update: PT.func,
   phase: PT.object,
   phaseIndex: PT.number
 }

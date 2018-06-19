@@ -42,7 +42,7 @@ class PhaseCard extends React.Component {
   componentWillReceiveProps(nextProps) {
     // update phase finished successfully
     if(nextProps.isUpdating === false && this.props.isUpdating === true) {
-      this.toggleEditView();
+      this.toggleEditView()
     }
   }
 
@@ -149,7 +149,7 @@ class PhaseCard extends React.Component {
           {this.props.children}
         </div>)}
         {(<div styleName={'sm-separator ' + ((!isManageUser || !this.state.isEditting) ? 'hide ': '')} >
-          <EditStageForm phase={attr.phase} phaseIndex={attr.phaseIndex} cancel={this.toggleEditView} update={this.toggleEditView} />
+          <EditStageForm phase={attr.phase} phaseIndex={attr.phaseIndex} cancel={this.toggleEditView} />
         </div>)}
 
       </div>
