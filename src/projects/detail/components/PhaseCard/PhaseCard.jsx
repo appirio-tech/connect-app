@@ -46,7 +46,7 @@ class PhaseCard extends React.Component {
   }
 
   toggleEditView(e) {
-    e.stopPropagation();
+    e.stopPropagation()
     this.setState({
       isEditting: !this.state.isEditting
     })
