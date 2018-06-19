@@ -6,7 +6,7 @@ import moment from 'moment'
 import './EditStageForm.scss'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { updatePhase as updatePhaseAPI } from '../../../actions/project'
+import { updatePhase as updatePhaseAction } from '../../../actions/project'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 
 
@@ -42,6 +42,10 @@ class EditStageForm extends React.Component {
     this.onSpentChange = this.onSpentChange.bind(this)
     this.onBudgetChange = this.onBudgetChange.bind(this)
   }
+  
+  componentWillReceiveProps(nextProps) {
+    this.setState({ isUpdating: nextProps.isUpdating });
+  }
 
   submitValue() {
     const props = this.props
@@ -55,14 +59,7 @@ class EditStageForm extends React.Component {
       duration: Number(this.state.duration),
     }
     this.setState({isUpdating: true})
-    props.updatePhaseAPI(phase.projectId, phase.id, updateParam, props.phaseIndex).then(() => {
-      _.assign(phase, updateParam)
-      props.update()
-      this.setState({isUpdating: false})
-    }).catch(() => {
-      props.update()
-      this.setState({isUpdating: false})
-    })
+    props.updatePhaseAction(phase.projectId, phase.id, updateParam, props.phaseIndex)
   }
 
   onDurationChange (event) {
@@ -133,8 +130,10 @@ EditStageForm.propTypes = {
   phaseIndex: PT.number
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = ({projectState}) => ({
+  isUpdating: projectState.processing
+})
 
-const actionCreators = {updatePhaseAPI}
+const actionCreators = {updatePhaseAction}
 
 export default withRouter(connect(mapStateToProps, actionCreators)(EditStageForm))

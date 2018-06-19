@@ -38,6 +38,13 @@ class PhaseCard extends React.Component {
       isEditting: false
     }
   }
+  
+  componentWillReceiveProps(nextProps) {
+    // update phase finished successfully
+    if(nextProps.isUpdating === false && this.props.isUpdating === true) {
+      this.toggleEditView();
+    }
+  }
 
   toggleCardView() {
     this.setState({
@@ -169,9 +176,10 @@ PhaseCard.propTypes = {
 
 
 
-const mapStateToProps = ({loadUser}) => {
+const mapStateToProps = ({loadUser, projectState}) => {
   return {
-    currentUserRoles: loadUser.user.roles
+    currentUserRoles: loadUser.user.roles,
+    isUpdating: projectState.processing
   }
 }
 
