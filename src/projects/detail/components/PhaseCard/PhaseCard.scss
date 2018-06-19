@@ -47,6 +47,7 @@
     padding-bottom: 15px;
     padding-top: 15px;
     border-radius: inherit;
+    cursor: pointer;
     @media screen and (max-width: $screen-md - 1px) {
       padding-left: 4 * $base-unit;
       padding-right: 4 * $base-unit;

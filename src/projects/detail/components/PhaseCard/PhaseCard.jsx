@@ -74,7 +74,7 @@ class PhaseCard extends React.Component {
               </div>
               <div styleName="project-title-container">
                 <h4 styleName="project-title">{attr.title}</h4>
-                {isManageUser && !this.state.isEditting && !this.state.isExpanded && (<a styleName="edit-btn" onClick={this.toggleEditView} />
+                {isManageUser && !this.state.isEditting && (<a styleName="edit-btn" onClick={this.toggleEditView} />
                 )}
               </div>
               <div styleName="meta-list">
