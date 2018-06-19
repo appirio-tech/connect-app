@@ -16,7 +16,7 @@ const ProjectProgress = (props) => {
         <span>{props.labelDayStatus}</span>
         <div styleName="group-right">
           <span styleName="spent">{props.labelSpent}</span>
-          <span styleName="hide-sm">{props.labelStatus}</span>
+          <span styleName="status hide-sm">{props.labelStatus}</span>
         </div>
       </div>
     </div>
