@@ -118,7 +118,7 @@ export function getTopicsWithComments(reference, referenceId, tag, removeCoderBo
   return getTopics({ reference, referenceId, tag })
     .then(({topics, totalCount}) => {
       const additionalPosts = []
-      if (!!removeCoderBotTopics) {
+      if (removeCoderBotTopics) {
         //remove coderBot posts
         const rTopics = _.remove(topics, i =>
           [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(i.userId) > -1
