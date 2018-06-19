@@ -39,7 +39,7 @@ const getPhaseTopicWithMember = (dispatch, projectId, phaseId, tag) => {
       type: LOAD_PHASE_FEED,
       // TODO $PROJECT_PLAN$ remove getting topics for project 5021
       // and uncomment calling for getting topics for phase
-      payload: getTopicsWithComments('project', `${projectId}`, `phase#${phaseId}`), // getTopicsWithComments('phase', phaseId, tag),
+      payload: getTopicsWithComments('project', `${projectId}`, `phase#${phaseId}`, false),
       meta: { tag, phaseId }
     })
       .then(({ value }) => {
