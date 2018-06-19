@@ -209,7 +209,7 @@ class ProjectStage extends React.Component{
 }
 
 ProjectStage.defaultProps = {
-  activeTab: 'timeline',
+  activeTab: 'posts',
   currentMemberRole: null,
 }
 
