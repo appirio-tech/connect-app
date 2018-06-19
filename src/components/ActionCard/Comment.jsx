@@ -6,6 +6,8 @@ import RichTextArea from '../RichTextArea/RichTextArea'
 import { Link } from 'react-router-dom'
 import CommentEditToggle from './CommentEditToggle'
 import _ from 'lodash'
+import moment from 'moment'
+import { POST_TIME_FORMAT } from '../../config/constants.js'
 
 import './Comment.scss'
 
@@ -96,7 +98,7 @@ class Comment extends React.Component {
                   {authorName}
                 </span>
                 <span styleName="time">
-                  <Link to={messageLink}>{date}</Link>
+                  <Link to={messageLink}>{moment(date).format(POST_TIME_FORMAT)}</Link>
                 </span>
                 {edited && <span styleName="edited">edited</span>}
               </div>

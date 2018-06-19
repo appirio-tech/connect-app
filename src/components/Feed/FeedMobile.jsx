@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom'
 import FeedComments from './FeedComments'
 import UserWithName from '../User/UserWithName'
 import NewPostMobile, { NEW_POST_STEP } from './NewPostMobile'
+import { POST_TIME_FORMAT } from '../../config/constants.js'
 
 import './FeedMobile.scss'
 
@@ -87,7 +88,7 @@ class FeedMobile extends React.Component {
         <div>
           <div styleName="header">
             <UserWithName {..._.pick(user, 'firstName', 'lastName', 'photoURL')} size="40" />
-            <Link styleName="date" to={permalink}>{moment(date).fromNow()}</Link>
+            <Link styleName="date" to={permalink}>{moment(date).format(POST_TIME_FORMAT)}</Link>
           </div>
           <h4 styleName="title">{title}</h4>
         </div>
