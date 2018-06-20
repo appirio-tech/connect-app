@@ -7,7 +7,7 @@ import cn from 'classnames'
 import {markdownToHTML} from '../../helpers/markdownToState'
 import MediaQuery from 'react-responsive'
 import CommentMobile from '../ActionCard/CommentMobile'
-import { SCREEN_BREAKPOINT_MD } from '../../config/constants'
+import { SCREEN_BREAKPOINT_MD, POSTS_BUNDLE_TIME_DIFF } from '../../config/constants'
 
 import './FeedComments.scss'
 
@@ -75,7 +75,9 @@ class FeedComments extends React.Component {
     comments && comments.forEach((item, idx) => {
       const createdAt = moment(item.createdAt)
       const prevComment = comments[idx - 1]
-      const isSameAuthor = prevComment && prevComment.author.userId === item.author.userId
+      const timeDiffPrevComment = prevComment && moment(item.date).diff(prevComment.date)
+      const isSameAuthor = prevComment && prevComment.author.userId === item.author.userId &&
+            timeDiffPrevComment && timeDiffPrevComment <= POSTS_BUNDLE_TIME_DIFF
       const isSameDay = prevComment && moment(prevComment.createdAt).isSame(createdAt, 'day')
       const isFirstUnread = prevComment && !prevComment.unread && item.unread
 
