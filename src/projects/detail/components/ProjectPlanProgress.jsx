@@ -26,20 +26,19 @@ function formatProjectProgressProps(project, phases) {
   let actualDuration = 0
   let now = new Date()
   now = now && moment(now)
-  for (let i = 0; i < phases.length; i++) {
-    const phase = phases[i]
-    const startDate = phase.startDate && moment(phase.startDate)
-    const duration = now.diff(startDate, 'days') + 1
 
-    if (duration <= phase.duration) {
-      if (duration > 0) {
+  const filteredPhases = _.filter(phases, (phase) => (phase.startDate))
+  filteredPhases.map((phase) => {
+    const startDate = moment(phase.startDate)
+    const duration = now.diff(startDate, 'days')
+    if(duration >= 0) {
+      if(duration <= phase.duration) {
         actualDuration += duration
+      } else {
+        actualDuration += phase.duration
       }
-      break
-    } else {
-      actualDuration += phase.duration
     }
-  }
+  })
 
   const projectedDuration = _.sumBy(phases, 'duration') + phases.length
 
