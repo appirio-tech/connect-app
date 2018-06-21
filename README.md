@@ -28,7 +28,7 @@ We use node 8.9.x and npm 6.x, so you may need to download a new version of node
 
 Install dependencies by running the following in the root of the project:
  - `npm i`
- - **Note:** You must use npm 3. Type `npm -v` to ensure you have a 3.x version.
+ - **Note:** You must use npm 6.x. Type `npm -v` to ensure you have the correct version.
 
 ## NPM Commands
 - To run locally, run `npm start` and head to `http://localhost:3000/new_project`
@@ -50,7 +50,6 @@ To contribute to the repository, please create a feature branch off of the dev b
 
 ### Updating npm-shrinkwrap.json
 
-Use **npm v5+** for this.
 General workflow to update `npm-shrinkwrap.json` would be:
 
 - `npm install --no-optional` -  with old npm-shrinkwrap (--no-optional to skip fsevents)
