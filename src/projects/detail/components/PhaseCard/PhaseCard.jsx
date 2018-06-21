@@ -78,7 +78,7 @@ class PhaseCard extends React.Component {
     }
     return (
       <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')}>
-        <div styleName="static-view" onClick={!this.state.editing && this.toggleCardView}>
+        <div styleName="static-view" onClick={!this.state.isEditting && this.toggleCardView}>
           <div styleName="col">
             <div styleName="project-details">
               <div styleName="project-ico">

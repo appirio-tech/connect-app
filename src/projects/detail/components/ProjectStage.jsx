@@ -42,7 +42,7 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed) {
   const startDate = phase.startDate && moment(phase.startDate)
   const endDate = phase.endDate && moment(phase.endDate)
 
-  const plannedDuration = (startDate && endDate) ? (moment.duration(endDate.diff(startDate)).days() + 1) : 0
+  const plannedDuration = phase.duration ? phase.duration : 0
   const duration = `${plannedDuration} days`
   let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
   startEndDates += startDate && endDate ? `–${endDate.format('MMM D')}` : ''
