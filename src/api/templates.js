@@ -71,10 +71,6 @@ export function getProductTemplateByKey(productKey) {
  * @return {Promise} list of project categories
  */
 export function getProjectCategories() {
-  return new Promise((resolve) => {
-    // simulate loading
-    setTimeout(() => {
-      resolve(projectCategories)
-    }, 3000)
-  })
+  return axios.get(`${TC_API_URL}/v4/projectTypes`)
+    .then(resp => _.get(resp.data, 'result.content', {}))
 }
