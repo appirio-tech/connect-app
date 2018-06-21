@@ -6,7 +6,7 @@ import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL } from '../config/constants'
 
 // import projectTemplates from './templates-json/project-templates.json'
-import projectCategories from './templates-json/project-categories.json'
+// import projectCategories from './templates-json/project-categories.json'
 // import productTemplates from './templates-json/product-templates.json'
 
 /**
