@@ -7,7 +7,7 @@ import cn from 'classnames'
 import {markdownToHTML} from '../../helpers/markdownToState'
 import MediaQuery from 'react-responsive'
 import CommentMobile from '../ActionCard/CommentMobile'
-import { SCREEN_BREAKPOINT_MD } from '../../config/constants'
+import { SCREEN_BREAKPOINT_MD, POSTS_BUNDLE_TIME_DIFF } from '../../config/constants'
 
 import './FeedComments.scss'
 
@@ -61,6 +61,7 @@ class FeedComments extends React.Component {
     }
 
     const desktopBlocks = []
+    const mobileBlocks = []
 
     if (hasMoreComments) {
       desktopBlocks.push(
@@ -72,10 +73,12 @@ class FeedComments extends React.Component {
       )
     }
 
-    comments && comments.forEach((item, idx) => {
+    comments && comments.forEach((item, idx) => { 
       const createdAt = moment(item.createdAt)
       const prevComment = comments[idx - 1]
-      const isSameAuthor = prevComment && prevComment.author.userId === item.author.userId
+      const timeDiffPrevComment = prevComment && moment(item.createdAt).diff(prevComment.createdAt)
+      const isSameAuthor = prevComment && prevComment.author.userId === item.author.userId &&
+            timeDiffPrevComment && timeDiffPrevComment <= POSTS_BUNDLE_TIME_DIFF
       const isSameDay = prevComment && moment(prevComment.createdAt).isSame(createdAt, 'day')
       const isFirstUnread = prevComment && !prevComment.unread && item.unread
 
@@ -100,7 +103,7 @@ class FeedComments extends React.Component {
           key={idx}
           message={item}
           author={item.author}
-          date={item.date}
+          date={item.createdAt}
           edited={item.edited}
           active={item.unread}
           self={item.author && item.author.userId === currentUser.userId}
@@ -114,6 +117,18 @@ class FeedComments extends React.Component {
         >
           <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
         </Comment>
+      )
+
+      mobileBlocks.push(
+        <CommentMobile
+          key={idx}
+          messageId={item.id.toString()}
+          author={item.author}
+          date={item.createdAt}
+          noInfo={isSameAuthor}
+        >
+          <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
+        </CommentMobile>
       )
     })
 
@@ -149,16 +164,7 @@ class FeedComments extends React.Component {
                   </a>
                 </div>
               }
-              {comments.map((item, idx) => (
-                <CommentMobile
-                  key={idx}
-                  messageId={item.id.toString()}
-                  author={item.author}
-                  date={item.date}
-                >
-                  <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
-                </CommentMobile>
-              ))}
+              {mobileBlocks}
             </div>
           ))}
         </MediaQuery>
