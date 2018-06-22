@@ -6,6 +6,7 @@ import PT from 'prop-types'
 import _ from 'lodash'
 import moment from 'moment'
 
+import { formatNumberWithCommas } from '../../../helpers/format'
 import Section from './Section'
 import SectionTitle from './SectionTitle'
 import ProjectProgress from './ProjectProgress'
@@ -44,7 +45,8 @@ function formatProjectProgressProps(project, phases) {
 
   const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
   
-  const labelSpent = `Spent $${(_.sumBy(_.filter(phases, (phase) => (phase.status === PHASE_STATUS_IN_PROGRESS || phase.status === PHASE_STATUS_DELIVERED)), 'spentBudget') || 0)}`
+  const spentAmount = _.sumBy(_.filter(phases, (phase) => (phase.status === PHASE_STATUS_IN_PROGRESS || phase.status === PHASE_STATUS_DELIVERED)), 'spentBudget') || 0
+  const labelSpent = `Spent $${formatNumberWithCommas(spentAmount)}`
   const progressPercent = (projectedDuration !== 0 ? Math.round(actualDuration * 100 / projectedDuration) : 0).toString()
   const labelStatus = `${progressPercent}% done`
 
