@@ -22,7 +22,7 @@ const CommentMobile = ({ messageId, author, date, children }) => {
         <UserWithName {..._.pick(author, 'firstName', 'lastName', 'photoURL')} size="40" />
         <Link styleName="date" to={messageLink}>{moment(date).format(POST_TIME_FORMAT)}</Link>
       </div>
-      <div styleName="text">{children}</div>
+      <div styleName="text" className="draftjs-post">{children}</div>
     </div>
   )
 }
