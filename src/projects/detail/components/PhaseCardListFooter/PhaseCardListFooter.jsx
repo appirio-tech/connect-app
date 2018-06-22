@@ -26,7 +26,7 @@ const PhaseCardListFooter = ({
       <div styleName="status" />
     </div>
     <div styleName="add-button-contaner">
-      <Link to={`/projects/${projectId}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Stage</Link>
+      <Link to={`/projects/${projectId}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
     </div>
   </div>
 )

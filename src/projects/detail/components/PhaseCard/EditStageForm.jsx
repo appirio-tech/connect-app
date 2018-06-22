@@ -162,8 +162,6 @@ class EditStageForm extends React.Component {
       <div styleName="container">
         {this.state.isUpdating && (<LoadingIndicator />)}
         {!this.state.isUpdating && (<div>
-          <div styleName="label-title">{'Edit Phase'}</div>
-          <div />
           <Formsy.Form
             ref="form"
             disabled={!isEdittable}
@@ -185,7 +183,7 @@ class EditStageForm extends React.Component {
                 <button onClick={cancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
                 <button className="tc-btn tc-btn-primary tc-btn-sm"
                   type="submit" disabled={(!this.isChanged() || isUpdating) || !this.state.canSubmit}
-                >Update Stage</button>
+                >Update Phase</button>
               </div>
             </div>
           </Formsy.Form>
