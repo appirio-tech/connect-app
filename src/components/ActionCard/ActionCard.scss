@@ -108,6 +108,8 @@
     .card-title {
       @include roboto-medium;
       flex-grow: 1;
+      display: flex;
+      justify-content: space-between;
       word-break: break-word;
       align-items: center;
       line-height: $base-unit*6;
@@ -115,8 +117,8 @@
       margin-bottom: 10px;
       position: relative;
 
-      div {
-        display: inline;
+      .dropdownContainer {
+        position: static;
       }
 
       .edit-toggle-container {
