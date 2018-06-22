@@ -1,117 +1,203 @@
 import React from 'react'
 import PT from 'prop-types'
-// import _ from 'lodash'
+import _ from 'lodash'
 import moment from 'moment'
 
-import './EditStageForm.scss'
+import styles from './EditStageForm.scss'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { updatePhase as updatePhaseAction } from '../../../actions/project'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const Formsy = FormsyForm.Formsy
+const TCFormFields = FormsyForm.Fields
+// import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
+import { updatePhase as updatePhaseAction, syncPhases as syncPhasesAction } from '../../../actions/project'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
+import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
+import { PHASE_STATUS_COMPLETED, PHASE_STATUS } from '../../../../config/constants'
 
+
+const phaseStatuses = PHASE_STATUS.map(ps => ({ title: ps.name, value: ps.value }))
 
 class EditStageForm extends React.Component {
   constructor(props) {
     super(props)
-
-    let startDate = null
-    let spentBudget = '0'
-    let budget = '0'
-    let duration = '0'
-
-    if (!props.phase.duration || !props.phase.startDate || !props.phase.spentBudget || !props.phase.budget) {
-      const today = moment(new Date())
-      startDate = today.format('YYYY-MM-DD')
-    } else {
-      duration = `${props.phase.duration}`
-      startDate = moment(new Date(props.phase.startDate)).format('YYYY-MM-DD')
-      spentBudget = `${props.phase.spentBudget}`
-      budget = `${props.phase.budget}`
-    }
     
     this.state = {
-      duration: duration || '0',
-      startDate: startDate || '',
-      spentBudget: spentBudget || '0',
-      budget: budget || '0',
-      isUpdating: false
+      isUpdating: false,
+      isEdittable: _.get(props, 'phase.status') !== PHASE_STATUS_COMPLETED
     }
     this.submitValue = this.submitValue.bind(this)
-    this.onDurationChange = this.onDurationChange.bind(this)
-    this.onStartDateChange = this.onStartDateChange.bind(this)
-    this.onSpentChange = this.onSpentChange.bind(this)
-    this.onBudgetChange = this.onBudgetChange.bind(this)
+    this.enableButton = this.enableButton.bind(this)
+    this.disableButton = this.disableButton.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
   
   componentWillReceiveProps(nextProps) {
-    this.setState({ isUpdating: nextProps.isUpdating })
+    this.setState({
+      isUpdating: nextProps.isUpdating,
+      isEdittable: nextProps.phase.status !== 'completed'
+    })
   }
 
-  submitValue() {
-    const props = this.props
-    const phase = props.phase
-    const endDate = moment(new Date(this.state.startDate)).add(this.state.duration, 'days').format('YYYY-MM-DD')
-    const updateParam = {
-      startDate: this.state.startDate,
-      endDate: endDate || '',
-      budget: Number(this.state.budget),
-      spentBudget: Number(this.state.spentBudget),
-      duration: Number(this.state.duration),
-    }
+  submitValue(model) {
+    const { phase, phaseIndex, updatePhaseAction } = this.props
+
+    const updatedStartDate = moment(new Date(model.startDate))
+    const endDate = moment(updatedStartDate).add(model.duration - 1, 'days').utc()
+    const updateParam = _.assign({}, model, {
+      startDate: updatedStartDate.utc(),
+      endDate: endDate || ''
+    })
     this.setState({isUpdating: true})
-    props.updatePhaseAction(phase.projectId, phase.id, updateParam, props.phaseIndex)
+    updatePhaseAction(phase.projectId, phase.id, updateParam, phaseIndex)
   }
 
-  onDurationChange (event) {
-    event.stopPropagation()
-    this.setState({duration: event.target.value})
+  enableButton() {
+    this.setState( { canSubmit: true })
   }
 
-  onStartDateChange (event) {
-    event.stopPropagation()
-    this.setState({startDate: event.target.value})
+  disableButton() {
+    this.setState({ canSubmit: false })
   }
 
-  onSpentChange(event) {
-    event.stopPropagation()
-    this.setState({spentBudget: event.target.value})
+  isChanged() {
+    // We check if this.refs.form exists because this may be called before the
+    // first render, in which case it will be undefined.
+    return (this.refs.form && this.refs.form.isChanged()) || this.state.isFeaturesDirty
   }
 
-  onBudgetChange(event) {
-    event.stopPropagation()
-    this.setState({budget: event.target.value})
+  /**
+   * Handles the change event of the form.
+   *
+   * @param change changed form model in flattened form
+   * @param isChanged flag that indicates if form actually changed from initial model values
+   */
+  handleChange(change) {
+    const { phases, phase, phaseIndex } = this.props
+    // if start date or duration is updated for a phase, we need to update other phases dates accordingly
+    if (phase.startDate !== change.startDate || phase.duration !== change.duration) {
+      console.log('Need to sync phases')
+      console.log(change)
+      this.syncPhases(phases, phase, phaseIndex, change)
+    } else {
+      console.log('No needto sync phases')
+    }
+    if (this.isChanged()) {
+      // TODO fire dirty event for phase
+      // this.props.fireProjectDirty(unflatten(change))
+    } else {
+      // this.props.fireProjectDirtyUndo()
+    }
+  }
+
+  syncPhases(phases, refPhase, refPhaseIndex, updatedPhase) {
+    // if startDate or duration is not set in the current update, we don't need to do anything
+    if (!updatedPhase.startDate || !updatedPhase.duration) return
+    const updatedStartDate = moment(new Date(updatedPhase.startDate))
+    // if startDate was not set before the current update, we use updated startDate as previous startDate
+    let refPhaseStartDate = refPhase.startDate ? moment(new Date(refPhase.startDate)) : moment(updatedStartDate)
+    // if endDate was not set before the current update, we use updated endDate as previous endDate
+    let refPhaseEndDate = refPhase.endDate ? moment(new Date(refPhase.endDate)) : moment(new Date(updatedPhase.startDate)).add(updatedPhase.duration - 1, 'days')
+    // delta in startDate, it would be 0 when startDate was not set before the current update
+    const deltaStart = updatedStartDate.diff(refPhaseStartDate, 'days')
+    // delta in duration, it would be 0 when duration was not set before the current update
+    const deltaDuration = updatedPhase.duration - (refPhase.duration ? refPhase.duration : updatedPhase.duration)
+    const phasesToBeUpdated = []
+    // handles phases before the refPhase
+    if (deltaStart <= 0) {
+      let delta = deltaStart
+      for (let i = refPhaseIndex - 1; i >= 0 ; i--) {
+        const phase = phases[i]
+        if (!phase.startDate || !phase.duration) break
+        const startDate = moment(new Date(phase.startDate))
+        const endDate = moment(new Date(phase.startDate)).add(phase.duration - 1, 'days')
+        const bufferDays = refPhaseStartDate.diff(endDate, 'days') - 1
+        console.log(bufferDays, 'bufferDays')
+        console.log(delta, 'delta')
+        const offset = Math.abs(delta) - bufferDays
+        if (offset > 0) { // change in refPhase is has decreased start date
+          startDate.subtract(offset, 'days')
+          phasesToBeUpdated.push({ id: phase.id, startDate: startDate.utc()})
+        } else { // change in refPhase is has increased start date
+          // break the loop, as we won't have any cascading effect now on
+          break
+        }
+        // updates refPhaseStartDate to be start date of the current phase
+        refPhaseStartDate = moment(new Date(phase.startDate))
+        delta = Math.abs(offset)
+      }
+    }
+  
+    // handles phases after the refPhase
+    if (deltaStart + deltaDuration >= 0) {
+      let delta = deltaStart + deltaDuration
+      for (let i = refPhaseIndex + 1; i < phases.length ; i++) {
+        const phase = phases[i]
+        if (!phase.startDate || !phase.duration) break
+        const startDate = moment(new Date(phase.startDate))
+        const endDate = moment(new Date(phase.startDate)).add(phase.duration - 1, 'days')
+        const bufferDays = startDate.diff(refPhaseEndDate, 'days') - 1
+        console.log(bufferDays, 'bufferDays')
+        console.log(delta, 'delta')
+        const offset = delta - bufferDays
+        // change in refPhase is has caused end date of the refPhase to be pushed forward
+        if (offset > 0) {
+          startDate.add(offset, 'days')
+          phasesToBeUpdated.push({ id: phase.id, startDate: startDate.utc()})
+        } else { // change in refPhase is has not caused the end date of the refPhase to be pushed forward
+          // break the loop, as we won't have any cascading effect now on
+          break
+        }
+        // updates refPhaseEndDate to be end date of the current phase
+        refPhaseEndDate = endDate//moment(startDate).add(phase.duration, 'days')
+        delta = offset
+      }
+    }
+    console.log(phasesToBeUpdated)
+    return Promise.resolve(phasesToBeUpdated)
   }
 
   render() {
-    const props = this.props
-    const opts = {}
-    if (!(this.state.duration && this.state.duration !== '0' && this.state.startDate && this.state.spentBudget && this.state.spentBudget !== '0' && this.state.budget && this.state.budget !== '0')) {
-      opts['disabled'] = 'disabled'
-    }
+    const { phase, cancel, isUpdating } = this.props
+    const { isEdittable } = this.state
+    let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
+    startDate = moment(startDate).format('YYYY-MM-DD')
     return (
       <div styleName="container">
         {this.state.isUpdating && (<LoadingIndicator />)}
         {!this.state.isUpdating && (<div>
-          <div styleName="label-title">{'Edit Stage'}</div>
-          <div />
-          <div styleName="form">
-            <div styleName="label-layer">
-              <div styleName={'label-title'}>{'Start Date'}</div>
-              <input styleName="input" onChange={this.onStartDateChange} value={this.state.startDate} type="date" placeholder={'Start Date'}/>
-              <div styleName={'label-title'}>{'Duration'}</div>
-              <input styleName="input" onChange={this.onDurationChange} value={this.state.duration} type="number" placeholder={'Duration'}/>
+          <Formsy.Form
+            ref="form"
+            disabled={!isEdittable}
+            onInvalid={this.disableButton}
+            onValid={this.enableButton}
+            onValidSubmit={this.submitValue}
+            onChange={ this.handleChange }
+          >
+            <div styleName="form">
+              <div styleName="label-layer">
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Start Date" type="date" name="startDate" value={startDate} />
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Duration" type="number" name="duration" value={phase.duration} />
+              </div>
+              <div styleName="label-layer">
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Spent" type="number" name="spentBudget" value={phase.spentBudget} />
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Budget" type="number" name="budget" value={phase.budget} />
+              </div>
+              <div styleName="label-layer">
+                <div styleName="input-row">
+                  <label className="tc-label">Status</label>
+                  <SelectDropdown name="status" value={phase.status} theme="default" options={phaseStatuses} />
+                </div>
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress" type="number" name="progress" value={phase.progress} />
+              </div>
+              <div styleName="group-bottom">
+                <button onClick={cancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
+                <button className="tc-btn tc-btn-primary tc-btn-sm"
+                  type="submit" disabled={(!this.isChanged() || isUpdating) || !this.state.canSubmit}
+                >Update Phase</button>
+              </div>
             </div>
-            <div styleName="label-layer">
-              <div styleName={'label-title'}>{'Spent'}</div>
-              <input styleName="input" onChange={this.onSpentChange} value={this.state.spentBudget} type="number" placeholder={'Spent'}/>
-              <div styleName={'label-title'}>{'Budget'}</div>
-              <input styleName="input" onChange={this.onBudgetChange} value={this.state.budget} type="number" placeholder={'Budget'}/>
-            </div>
-            <div styleName="group-bottom">
-              <button onClick={props.cancel} className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
-              <button onClick={this.submitValue} {...opts} className="tc-btn tc-btn-primary"><strong>{'Update Stage'}</strong></button>
-            </div>
-          </div>
+          </Formsy.Form>
         </div>)}
       </div>
     )
@@ -129,9 +215,10 @@ EditStageForm.propTypes = {
 }
 
 const mapStateToProps = ({projectState}) => ({
-  isUpdating: projectState.processing
+  isUpdating: projectState.processing,
+  phases: projectState.phases
 })
 
-const actionCreators = {updatePhaseAction}
+const actionCreators = {updatePhaseAction, syncPhasesAction}
 
 export default withRouter(connect(mapStateToProps, actionCreators)(EditStageForm))

@@ -26,13 +26,14 @@
       display: block;
       position: absolute;
       right: 0;
-      top: 10px;
-      height: 20px;
-      width: 16px;
+      top: 0;
       margin: 0;
 
       .down-layer {
-        top: 22px;
+        top: 20px;
+        left: auto;
+        right: -10px;
+        z-index: 4;
       }
 
       .pointer-shadow {
@@ -46,15 +47,12 @@
       // float: right;
 
       .edit-toggle {
-        background-size: 16px;
         user-select: none;
         position: relative;
         font-family: 'Roboto', Helvetica, Arial, sans-serif;
         font-weight: 500;
         font-size: 12px;
         color: $tc-white;
-        line-height: 20px;
-        height: 20px;
         padding: 0;
         cursor: pointer;
       }
@@ -75,10 +73,6 @@
         &:hover {
           background: $tc-gray-10;
         }
-      }
-
-      .pointer-shadow .dropdown-menu-list {
-        transform: translate(-65%, 0%);
       }
 
       .pointer-shadow .dropdown-menu-list::after {
@@ -114,6 +108,8 @@
     .card-title {
       @include roboto-medium;
       flex-grow: 1;
+      display: flex;
+      justify-content: space-between;
       word-break: break-word;
       align-items: center;
       line-height: $base-unit*6;
@@ -121,8 +117,8 @@
       margin-bottom: 10px;
       position: relative;
 
-      div {
-        display: inline;
+      .dropdownContainer {
+        position: static;
       }
 
       .edit-toggle-container {

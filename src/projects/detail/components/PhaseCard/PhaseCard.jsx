@@ -2,15 +2,16 @@
  * PhaseCard component
  * phase summary with expandable content
  */
+import _ from 'lodash'
 import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import {
-  PHASE_STATUS_PLANNED,
-  PHASE_STATUS_IN_PROGRESS,
-  PHASE_STATUS_DELIVERED,
+  PHASE_STATUS,
+  PHASE_STATUS_DRAFT,
+  PHASE_STATUS_ACTIVE,
 } from '../../../../config/constants'
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
@@ -19,13 +20,6 @@ import EditStageForm from './EditStageForm'
 import { ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER } from '../../../../config/constants'
 
 import './PhaseCard.scss'
-
-// map project statuses with displayed statuses
-const toPhaseCardStatus = {
-  [PHASE_STATUS_PLANNED]: PHASE_STATUS_PLANNED,
-  [PHASE_STATUS_IN_PROGRESS]: PHASE_STATUS_IN_PROGRESS,
-  [PHASE_STATUS_DELIVERED]: PHASE_STATUS_DELIVERED,
-}
 
 class PhaseCard extends React.Component {
   constructor(props) {
@@ -42,7 +36,12 @@ class PhaseCard extends React.Component {
   componentWillReceiveProps(nextProps) {
     // update phase finished successfully
     if(nextProps.isUpdating === false && this.props.isUpdating === true) {
-      this.toggleEditView()
+      // NOTE: following condition would be true for all stages after user updates only one of them
+      // and we don't have phase id with update phase action reducer so we can't determine which card is updated
+      // so we close all the edit forms for now
+      this.setState({
+        isEditting: false
+      })
     }
   }
 
@@ -67,13 +66,11 @@ class PhaseCard extends React.Component {
     const isManageUser = currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
     const progressInPercent = attr.progressInPercent || 0
 
-    let status = attr && attr.status ? toPhaseCardStatus[attr.status] : PHASE_STATUS_PLANNED
-    if (!status) {
-      status = PHASE_STATUS_PLANNED
-    }
+    const status = attr && attr.status ? attr.status : PHASE_STATUS_DRAFT
+    const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
     return (
       <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')}>
-        <div styleName="static-view" onClick={!this.state.editing && this.toggleCardView}>
+        <div styleName="static-view" onClick={!this.state.isEditting && this.toggleCardView}>
           <div styleName="col">
             <div styleName="project-details">
               <div styleName="project-ico">
@@ -104,22 +101,22 @@ class PhaseCard extends React.Component {
             <div styleName="price-details">
               <h5>{attr.price}</h5>
               <div styleName="meta-list">
-                {!progressInPercent && status && (<span>{status}</span>)}
+                {!progressInPercent && status && (<span>{statusDetails.name}</span>)}
                 {progressInPercent && (<span>{progressInPercent}% done</span>)}
               </div>
             </div>
           </div>
 
           <div styleName="col hide-md">
-            {status && status !== PHASE_STATUS_IN_PROGRESS &&
+            {status && status !== PHASE_STATUS_ACTIVE &&
               (<div styleName="status-details">
                 <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
-                  {status}
+                  {statusDetails.name}
                 </div>
               </div>)
             }
 
-            {status && status === PHASE_STATUS_IN_PROGRESS &&
+            {status && status === PHASE_STATUS_ACTIVE &&
               (<div styleName="status-details">
                 <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
                   <ProjectProgress
@@ -139,7 +136,7 @@ class PhaseCard extends React.Component {
           {!this.state.isEditting && (<a styleName="toggle-arrow" />
           )}
 
-          {status && status === PHASE_STATUS_IN_PROGRESS &&
+          {status && status === PHASE_STATUS_ACTIVE &&
             (
               <div styleName="progressbar"><div styleName="fill" style={{ width: progressInPercent + '%' }} /></div>
             )

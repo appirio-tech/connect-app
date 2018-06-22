@@ -112,7 +112,7 @@ class Comment extends React.Component {
               />
             </aside>
           }
-          <div styleName="text">
+          <div styleName="text" className="draftjs-post">
             {children}
           </div>
           {isDeleting &&

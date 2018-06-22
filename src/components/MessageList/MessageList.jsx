@@ -4,6 +4,7 @@ import Panel from '../Panel/Panel'
 import './MessageList.scss'
 import cn from 'classnames'
 import moment from 'moment'
+import { markdownToHTML } from '../../helpers/markdownToState'
 
 const formatTime = (date) => {
   const now = moment()
@@ -31,7 +32,7 @@ const strip = (html) => {
 
 const MessageRow = ({title, messages, isActive, unreadCount, onClick}) => {
   const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null
-  const excerpt = lastMessage ? strip(lastMessage.content).split(' ').slice(0, 15).join(' ') : 'Loading...'
+  const excerpt = lastMessage ? strip(markdownToHTML(lastMessage.content)).split(' ').slice(0, 15).join(' ') : 'Loading...'
 
   return (<div className={cn('message', {active: isActive})} onClick={onClick}>
     <div className="message-body">

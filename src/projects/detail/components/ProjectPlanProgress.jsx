@@ -6,13 +6,14 @@ import PT from 'prop-types'
 import _ from 'lodash'
 import moment from 'moment'
 
+import { formatNumberWithCommas } from '../../../helpers/format'
 import Section from './Section'
 import SectionTitle from './SectionTitle'
 import ProjectProgress from './ProjectProgress'
 
 import {
-  PHASE_STATUS_IN_PROGRESS,
-  PHASE_STATUS_DELIVERED,
+  PHASE_STATUS_ACTIVE,
+  PHASE_STATUS_COMPLETED,
 } from '../../../config/constants'
 
 /**
@@ -26,27 +27,50 @@ function formatProjectProgressProps(project, phases) {
   let actualDuration = 0
   let now = new Date()
   now = now && moment(now)
-  for (let i = 0; i < phases.length; i++) {
-    const phase = phases[i]
-    const startDate = phase.startDate && moment(phase.startDate)
-    const duration = now.diff(startDate, 'days') + 1
 
-    if (duration <= phase.duration) {
-      if (duration > 0) {
-        actualDuration += duration
+  let totalProgress = 0
+
+  // phases where start date is set
+  const filteredPhases = _.filter(phases, (phase) => (phase.startDate))
+  filteredPhases.map((phase) => {
+    let progress = 0
+    // calculates days spent and day based progress for the phase
+    if (phase.startDate && phase.duration) {
+      const startDate = moment(phase.startDate)
+      const duration = now.diff(startDate, 'days')
+      if(duration >= 0) {
+        console.log(progress)
+        if(duration <= phase.duration) {
+          progress = (duration / phase.duration) * 100
+          actualDuration += duration
+        } else {
+          progress = 100
+          actualDuration += phase.duration
+        }
       }
-      break
-    } else {
-      actualDuration += phase.duration
     }
-  }
+    // override the progress use custom progress set by manager
+    if (phase.progress) {
+      progress = phase.progress
+    }
+    // override project progress if status is delivered
+    if (phase.status === PHASE_STATUS_COMPLETED) {
+      progress = 100
+    }
+    totalProgress += progress
+  })
 
   const projectedDuration = _.sumBy(phases, 'duration') + phases.length
 
   const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
   
-  const labelSpent = `Spent $${(_.sumBy(_.filter(phases, (phase) => (phase.status === PHASE_STATUS_IN_PROGRESS || phase.status === PHASE_STATUS_DELIVERED)), 'spentBudget') || 0)}`
-  const progressPercent = (projectedDuration !== 0 ? Math.round(actualDuration * 100 / projectedDuration) : 0).toString()
+
+  const activeOrCompletedPhases = _.filter(phases, (phase) => (
+    phase.status === PHASE_STATUS_ACTIVE || phase.status === PHASE_STATUS_COMPLETED)
+  )
+  const spentAmount = _.sumBy(activeOrCompletedPhases, 'spentBudget') || 0
+  const labelSpent = `Spent $${formatNumberWithCommas(spentAmount)}`
+  const progressPercent = phases.length > 0 ? Math.round(totalProgress/phases.length) : 0
   const labelStatus = `${progressPercent}% done`
 
   return {
