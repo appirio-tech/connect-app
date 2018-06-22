@@ -30,7 +30,10 @@
       margin: 0;
 
       .down-layer {
-        top: 22px;
+        top: 20px;
+        left: auto;
+        right: -10px;
+        z-index: 4;
       }
 
       .pointer-shadow {
