@@ -48,18 +48,21 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed) {
   startEndDates += startDate && endDate ? `–${endDate.format('MMM D')}` : ''
 
   // calculate progress of phase
-  let actualDuration = 0
-  let now = new Date()
-  now = now && moment(now)
-  const durationFromNow = now.diff(startDate, 'days') + 1
-  if (durationFromNow <= plannedDuration) {
-    if (durationFromNow > 0) {
-      actualDuration = durationFromNow
+  let progressInPercent = phase.progress
+  if (!progressInPercent) {
+    let actualDuration = 0
+    let now = new Date()
+    now = now && moment(now)
+    const durationFromNow = now.diff(startDate, 'days') + 1
+    if (durationFromNow <= plannedDuration) {
+      if (durationFromNow > 0) {
+        actualDuration = durationFromNow
+      }
+    } else {
+      actualDuration = plannedDuration
     }
-  } else {
-    actualDuration = plannedDuration
+    progressInPercent = (actualDuration  && plannedDuration) ? Math.round((actualDuration / plannedDuration) * 100) : 0
   }
-  const progressInPercent = (actualDuration  && plannedDuration) ? Math.round((actualDuration / plannedDuration) * 100) : 0
 
   const actualPrice = phase.spentBudget
   let paidStatus = 'Quoted'

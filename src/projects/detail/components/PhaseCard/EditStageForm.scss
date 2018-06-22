@@ -22,8 +22,12 @@
   height: inherit;
   position: relative;
   line-height: inherit;
-  overflow: hidden;
-  flex: 0 300px;  
+  flex: 0 300px; 
+
+  :global .dropdown-wrap {
+    width: 100%;
+    margin-left: 0px;
+  } 
 
   label {
     margin: auto 10px;
@@ -71,8 +75,6 @@
     height: inherit;
     position: relative;
     line-height: inherit;
-    overflow: hidden;
-    height: 50px;
 }
 
 .group-bottom {

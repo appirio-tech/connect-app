@@ -12,8 +12,8 @@ import SectionTitle from './SectionTitle'
 import ProjectProgress from './ProjectProgress'
 
 import {
-  PHASE_STATUS_IN_PROGRESS,
-  PHASE_STATUS_DELIVERED,
+  PHASE_STATUS_ACTIVE,
+  PHASE_STATUS_COMPLETED,
 } from '../../../config/constants'
 
 /**
@@ -28,26 +28,49 @@ function formatProjectProgressProps(project, phases) {
   let now = new Date()
   now = now && moment(now)
 
+  let totalProgress = 0
+
+  // phases where start date is set
   const filteredPhases = _.filter(phases, (phase) => (phase.startDate))
   filteredPhases.map((phase) => {
-    const startDate = moment(phase.startDate)
-    const duration = now.diff(startDate, 'days')
-    if(duration >= 0) {
-      if(duration <= phase.duration) {
-        actualDuration += duration
-      } else {
-        actualDuration += phase.duration
+    let progress = 0
+    // calculates days spent and day based progress for the phase
+    if (phase.startDate && phase.duration) {
+      const startDate = moment(phase.startDate)
+      const duration = now.diff(startDate, 'days')
+      if(duration >= 0) {
+        console.log(progress)
+        if(duration <= phase.duration) {
+          progress = (duration / phase.duration) * 100
+          actualDuration += duration
+        } else {
+          progress = 100
+          actualDuration += phase.duration
+        }
       }
     }
+    // override the progress use custom progress set by manager
+    if (phase.progress) {
+      progress = phase.progress
+    }
+    // override project progress if status is delivered
+    if (phase.status === PHASE_STATUS_COMPLETED) {
+      progress = 100
+    }
+    totalProgress += progress
   })
 
   const projectedDuration = _.sumBy(phases, 'duration') + phases.length
 
   const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
   
-  const spentAmount = _.sumBy(_.filter(phases, (phase) => (phase.status === PHASE_STATUS_IN_PROGRESS || phase.status === PHASE_STATUS_DELIVERED)), 'spentBudget') || 0
+
+  const activeOrCompletedPhases = _.filter(phases, (phase) => (
+    phase.status === PHASE_STATUS_ACTIVE || phase.status === PHASE_STATUS_COMPLETED)
+  )
+  const spentAmount = _.sumBy(activeOrCompletedPhases, 'spentBudget') || 0
   const labelSpent = `Spent $${formatNumberWithCommas(spentAmount)}`
-  const progressPercent = (projectedDuration !== 0 ? Math.round(actualDuration * 100 / projectedDuration) : 0).toString()
+  const progressPercent = phases.length > 0 ? Math.round(totalProgress/phases.length) : 0
   const labelStatus = `${progressPercent}% done`
 
   return {

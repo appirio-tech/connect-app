@@ -158,20 +158,25 @@
       font-weight: 400;
       line-height: 20px;
       padding-top: 25px;
-      &.delivered {
+      &.completed {
         background-repeat: no-repeat;
         background: url('assets/icons/ui-rocket.svg') 50% 4px no-repeat;
         background-size: 16px;
       }
-      &.planned {
+      &.reviewed {
         background-repeat: no-repeat;
         background: url('assets/icons/ui-calendar.svg') 50% 4px no-repeat;
+        background-size: 16px;
+      }
+      &.draft {
+        background-repeat: no-repeat;
+        background: url('assets/icons/status-draft.svg') 50% 4px no-repeat;
         background-size: 16px;
       }
       &.nostatus {
         opacity: 0;
       }
-      &.inprogress {
+      &.active {
         padding-top: 0;
         display: block;
       }

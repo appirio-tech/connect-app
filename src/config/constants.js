@@ -336,9 +336,14 @@ export const PROJECT_STATUS_COMPLETED = 'completed'
 export const PROJECT_STATUS_CANCELLED = 'cancelled'
 export const PROJECT_STATUS_PAUSED = 'paused'
 
-export const PHASE_STATUS_PLANNED = 'Planned'
-export const PHASE_STATUS_IN_PROGRESS = 'Inprogress'
-export const PHASE_STATUS_DELIVERED = 'Delivered'
+
+export const PHASE_STATUS_DRAFT = 'draft'
+export const PHASE_STATUS_IN_REVIEW = 'in_review'
+export const PHASE_STATUS_REVIEWED = 'reviewed'
+export const PHASE_STATUS_ACTIVE = 'active'
+export const PHASE_STATUS_COMPLETED = 'completed'
+export const PHASE_STATUS_CANCELLED = 'cancelled'
+export const PHASE_STATUS_PAUSED = 'paused'
 
 export const PROJECT_STATUS = [
   {color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
@@ -348,6 +353,16 @@ export const PROJECT_STATUS = [
   {color: 'black', name: 'Completed', fullName: 'Project is completed', value: PROJECT_STATUS_COMPLETED, order: 5, dropDownOrder: 5 },
   {color: 'black', name: 'Cancelled', fullName: 'Project is canceled', value: PROJECT_STATUS_CANCELLED, order: 6, dropDownOrder: 6 },
   {color: 'red', name: 'Paused', fullName: 'Project is paused', value: PROJECT_STATUS_PAUSED, order: 7, dropDownOrder: 7 }
+]
+
+export const PHASE_STATUS = [
+  {color: 'gray', name: 'Unplanned', fullName: 'Phase is in draft', value: PHASE_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
+  // {color: 'gray', name: 'In review', fullName: 'Phase is in review', value: PHASE_STATUS_IN_REVIEW, order: 3, dropDownOrder: 2 },
+  {color: 'gray', name: 'Planned', fullName: 'Phase is reviewed', value: PHASE_STATUS_REVIEWED, order: 4, dropDownOrder: 3 },
+  {color: 'green', name: 'In Progress', fullName: 'Phase is active', value: PHASE_STATUS_ACTIVE, order: 1, dropDownOrder: 4 },
+  {color: 'black', name: 'Delivered', fullName: 'Phase is completed', value: PHASE_STATUS_COMPLETED, order: 5, dropDownOrder: 5 },
+  // {color: 'black', name: 'Cancelled', fullName: 'Phase is canceled', value: PHASE_STATUS_CANCELLED, order: 6, dropDownOrder: 6 },
+  // {color: 'red', name: 'Paused', fullName: 'Phase is paused', value: PHASE_STATUS_PAUSED, order: 7, dropDownOrder: 7 }
 ]
 
 // this defines default criteria to filter projects for projects list

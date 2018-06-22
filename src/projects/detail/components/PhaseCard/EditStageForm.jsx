@@ -9,10 +9,14 @@ import { withRouter } from 'react-router-dom'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 const TCFormFields = FormsyForm.Fields
+// import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
 import { updatePhase as updatePhaseAction, syncPhases as syncPhasesAction } from '../../../actions/project'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
-import { PHASE_STATUS_DELIVERED } from '../../../../config/constants'
+import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
+import { PHASE_STATUS_COMPLETED, PHASE_STATUS } from '../../../../config/constants'
 
+
+const phaseStatuses = PHASE_STATUS.map(ps => ({ title: ps.name, value: ps.value }))
 
 class EditStageForm extends React.Component {
   constructor(props) {
@@ -20,7 +24,7 @@ class EditStageForm extends React.Component {
     
     this.state = {
       isUpdating: false,
-      isEdittable: _.get(props, 'phase.status') !== PHASE_STATUS_DELIVERED
+      isEdittable: _.get(props, 'phase.status') !== PHASE_STATUS_COMPLETED
     }
     this.submitValue = this.submitValue.bind(this)
     this.enableButton = this.enableButton.bind(this)
@@ -178,6 +182,13 @@ class EditStageForm extends React.Component {
               <div styleName="label-layer">
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Spent" type="number" name="spentBudget" value={phase.spentBudget} />
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Budget" type="number" name="budget" value={phase.budget} />
+              </div>
+              <div styleName="label-layer">
+                <div styleName="input-row">
+                  <label className="tc-label">Status</label>
+                  <SelectDropdown name="status" value={phase.status} theme="default" options={phaseStatuses} />
+                </div>
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress" type="number" name="progress" value={phase.progress} />
               </div>
               <div styleName="group-bottom">
                 <button onClick={cancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
