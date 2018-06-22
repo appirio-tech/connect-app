@@ -3,6 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './MessageDetails.scss'
 import ActionCard from '../ActionCard/ActionCard'
+import { markdownToHTML } from '../../helpers/markdownToState'
 import BtnSeparator from '../ActionCard/BtnSeparator'
 import Comment from '../ActionCard/Comment'
 import AddComment from '../ActionCard/AddComment'
@@ -75,7 +76,7 @@ class MessageDetails extends React.Component {
               isSaving={item.isSavingComment}
               hasError={item.error}
             >
-              <div dangerouslySetInnerHTML={{__html: item.content}} />
+              <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
             </Comment>)
         )}
 
