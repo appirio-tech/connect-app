@@ -5,17 +5,6 @@
   border-radius: 4px;
   margin-top: 3 * $base-unit;
   padding: 2 * $base-unit 2 * $base-unit 3 * $base-unit 2 * $base-unit;
-
-  &.is-bundled {
-    margin-top: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-
-
-  &:not(.is-bundled) + .comment.is-bundled {
-    margin-top: -15px;
-  }
 }
 
 .header {

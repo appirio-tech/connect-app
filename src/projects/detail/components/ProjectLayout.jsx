@@ -12,7 +12,7 @@ class ProjectViewLayout extends React.Component {
     const location = this.props.location.pathname
     const isAddPhasePage = location && (location.substr(location.lastIndexOf('/') + 1) === 'add-phase')
     return (
-      <div>
+      <div styleName="container">
         <div styleName="secondary-toolbar">
           {!isAddPhasePage && (<SecondaryToolBarContainer />)}
         </div>
