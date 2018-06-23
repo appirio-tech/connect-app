@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import _ from 'lodash'
 import AddComment from '../ActionCard/AddComment'
 import Comment from '../ActionCard/Comment'
 import cn from 'classnames'
@@ -73,13 +74,49 @@ class FeedComments extends React.Component {
       )
     }
 
-    comments && comments.forEach((item, idx) => { 
+    let bundleCreatedAt = false
+    let isBundleEdited = false
+    let bundleIndex = -1
+
+    // to be able to mark the head comment in a bundle as edited if any of the comments in the bundle is edited
+    comments && _.forEach(comments, (item, idx) => {
       const createdAt = moment(item.createdAt)
       const prevComment = comments[idx - 1]
-      const timeDiffPrevComment = prevComment && moment(item.createdAt).diff(prevComment.createdAt)
-      const isSameAuthor = prevComment && prevComment.author.userId === item.author.userId &&
-            timeDiffPrevComment && timeDiffPrevComment <= POSTS_BUNDLE_TIME_DIFF
-      const isSameDay = prevComment && moment(prevComment.createdAt).isSame(createdAt, 'day')
+      const prevCreatedAt = prevComment && moment(prevComment.createdAt)
+      const isSameDay = prevCreatedAt && prevCreatedAt.isSame(createdAt, 'day')
+      const isSameAuthor = prevComment && prevComment.author.userId === item.author.userId
+      const isFirstUnread = prevComment && !prevComment.unread && item.unread
+
+      const timeDiffComment = bundleCreatedAt && createdAt.diff(bundleCreatedAt)
+      const shouldBundle = isSameDay && isSameAuthor && !isFirstUnread && timeDiffComment && timeDiffComment <= POSTS_BUNDLE_TIME_DIFF
+      
+      if (shouldBundle) {
+        isBundleEdited = isBundleEdited || item.edited
+        item.noInfo = true
+      } else {
+        const bundleStart = comments[bundleIndex]
+        if (bundleStart) {
+          bundleStart.edited = isBundleEdited
+        }
+        bundleIndex = idx
+        isBundleEdited = item.edited
+        bundleCreatedAt = createdAt
+        item.noInfo = false
+      }
+
+      if (idx === (comments.length - 1)) {
+        const bundleStart = comments[bundleIndex]
+        if (bundleStart) {
+          bundleStart.edited = isBundleEdited
+        }
+      }
+    })
+
+    comments && _.forEach(comments, (item, idx) => {
+      const createdAt = moment(item.createdAt)
+      const prevComment = comments[idx - 1]
+      const prevCreatedAt = prevComment && moment(prevComment.createdAt)
+      const isSameDay = prevCreatedAt && prevCreatedAt.isSame(createdAt, 'day')
       const isFirstUnread = prevComment && !prevComment.unread && item.unread
 
       if (!isSameDay) {
@@ -113,7 +150,7 @@ class FeedComments extends React.Component {
           isSaving={item.isSavingComment}
           hasError={item.error}
           allMembers={allMembers}
-          noInfo={isSameAuthor}
+          noInfo={item.noInfo}
         >
           <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
         </Comment>
@@ -125,7 +162,7 @@ class FeedComments extends React.Component {
           messageId={item.id.toString()}
           author={item.author}
           date={item.createdAt}
-          noInfo={isSameAuthor}
+          noInfo={item.noInfo}
         >
           <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
         </CommentMobile>
