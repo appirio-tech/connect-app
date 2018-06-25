@@ -84,9 +84,7 @@ class EditStageForm extends React.Component {
     } else {
       console.log('No needto sync phases')
     }
-    this.setState({
-      disableActiveStatusFields: change.status !== PHASE_STATUS_ACTIVE
-    })
+    this.setState({ disableActiveStatusFields: change.status !== PHASE_STATUS_ACTIVE })
     if (this.isChanged()) {
       // TODO fire dirty event for phase
       // this.props.fireProjectDirty(unflatten(change))
@@ -185,8 +183,7 @@ class EditStageForm extends React.Component {
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Duration" type="number" name="duration" value={phase.duration} />
               </div>
               <div styleName="label-layer">
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Spent" type="number" name="spentBudget" 
-                  value={phase.spentBudget} disabled={this.state.disableActiveStatusFields} />
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Spent" type="number" name="spentBudget" value={phase.spentBudget} disabled={this.state.disableActiveStatusFields} />
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Budget" type="number" name="budget" value={phase.budget} />
               </div>
               <div styleName="label-layer">
@@ -194,8 +191,7 @@ class EditStageForm extends React.Component {
                   <label className="tc-label">Status</label>
                   <SelectDropdown name="status" value={phase.status} theme="default" options={phaseStatuses} />
                 </div>
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress" type="number" name="progress" 
-                  value={phase.progress} disabled={this.state.disableActiveStatusFields} />
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress" type="number" name="progress" value={phase.progress} disabled={this.state.disableActiveStatusFields} />
               </div>
               <div styleName="group-bottom">
                 <button onClick={cancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
