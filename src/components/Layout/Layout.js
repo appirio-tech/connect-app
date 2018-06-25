@@ -18,10 +18,13 @@ class Layout extends Component {
   }
 }
 
-const mapStateToProps = ({ loadUser }) => {
+const mapStateToProps = ({ loadUser, projectState, projectSearch }) => {
+  const projectDetailApiCheck = !projectState.isLoading && !!projectState.error
+  const projectListingApiCheck = !projectSearch.isLoading && !!projectSearch.error
   return {
     user : loadUser.user,
-    isLoadingUser: loadUser.isLoading
+    isLoadingUser: loadUser.isLoading,
+    maintenanceMode: projectDetailApiCheck || projectListingApiCheck
   }
 }
 
