@@ -30,7 +30,7 @@ class FeedMobile extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // if comments just has been loaded, check if have to open the thread
-    if (this.props.comments.length === 0 && nextProps.comments.length > 0) {
+    if (this.props.comments && this.props.comments.length === 0 && nextProps.comments.length > 0) {
       this.openCommentFromHash(nextProps.comments)
     }
   }

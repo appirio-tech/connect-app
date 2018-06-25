@@ -42,8 +42,8 @@ class Feed extends React.Component {
       onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, allMembers
     } = this.props
     const {editTopicMode} = this.state
-    let authorName = user.firstName
-    if (authorName && user.lastName) {
+    let authorName = user ? user.firstName : 'Unknown'
+    if (authorName && user && user.lastName) {
       authorName += ' ' + user.lastName
     }
 

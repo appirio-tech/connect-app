@@ -88,7 +88,7 @@ class Comment extends React.Component {
     return (
       <div styleName={cn('container', { self, 'is-deleting': isDeleting })} id={messageAnchor}>
         <div styleName="avatar">
-          {!noInfo && <UserTooltip usr={author} id={`${messageAnchor}-${author.userId}`} previewAvatar size={40} />}
+          {!noInfo && author && <UserTooltip usr={author} id={`${messageAnchor}-${author.userId}`} previewAvatar size={40} />}
         </div>
         <div styleName="body">
           {!noInfo &&
