@@ -41,9 +41,10 @@ const initialState = {
 
 const parseErrorObj = (action) => {
   const data = _.get(action.payload, 'response.data.result')
+  const httpStatus = _.get(action.payload, 'response.status')
   return {
     type: action.type,
-    code: _.get(data, 'status', 500),
+    code: _.get(data, 'status', httpStatus || 500),
     msg: _.get(data, 'content.message', ''),
     details: JSON.parse(_.get(data, 'details', null))
   }
