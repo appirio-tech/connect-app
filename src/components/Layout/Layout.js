@@ -19,7 +19,7 @@ class Layout extends Component {
 }
 
 const mapStateToProps = ({ loadUser, projectState, projectSearch }) => {
-  const projectDetailApiCheck = !projectState.isLoading && !!projectState.error
+  const projectDetailApiCheck = !projectState.isLoading && !!projectState.error && projectState.error.code === 404
   const projectListingApiCheck = !projectSearch.isLoading && !!projectSearch.error
   return {
     user : loadUser.user,
