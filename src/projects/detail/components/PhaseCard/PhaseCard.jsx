@@ -12,6 +12,9 @@ import {
   PHASE_STATUS,
   PHASE_STATUS_DRAFT,
   PHASE_STATUS_ACTIVE,
+  PHASE_STATUS_COMPLETED,
+  PROJECT_STATUS_COMPLETED,
+  PROJECT_STATUS_CANCELLED
 } from '../../../../config/constants'
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
@@ -59,7 +62,7 @@ class PhaseCard extends React.Component {
   }
 
   render() {
-    const { attr } = this.props
+    const { attr, projectStatus } = this.props
 
     const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
     const currentUserRoles = this.props.currentUserRoles || []
@@ -68,6 +71,9 @@ class PhaseCard extends React.Component {
 
     const status = attr && attr.status ? attr.status : PHASE_STATUS_DRAFT
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
+
+    const phaseEditable = isManageUser && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
+
     return (
       <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')}>
         <div styleName="static-view" onClick={!this.state.isEditting && this.toggleCardView}>
@@ -78,7 +84,7 @@ class PhaseCard extends React.Component {
               </div>
               <div styleName="project-title-container">
                 <h4 styleName="project-title">{attr.title}</h4>
-                {isManageUser && !this.state.isEditting && (<a styleName="edit-btn" onClick={this.toggleEditView} />
+                {phaseEditable && !this.state.isEditting && (<a styleName="edit-btn" onClick={this.toggleEditView} />
                 )}
               </div>
               <div styleName="meta-list">

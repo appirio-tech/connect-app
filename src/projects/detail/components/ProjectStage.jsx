@@ -169,7 +169,10 @@ class ProjectStage extends React.Component{
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
 
     return (
-      <PhaseCard attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed)}>
+      <PhaseCard
+        attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed)}
+        projectStatus={project.status}
+      >
         <div>
           <GenericMenu navLinks={tabs} />
 
