@@ -13,7 +13,7 @@ const TCFormFields = FormsyForm.Fields
 import { updatePhase as updatePhaseAction, syncPhases as syncPhasesAction } from '../../../actions/project'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
-import { PHASE_STATUS_COMPLETED, PHASE_STATUS } from '../../../../config/constants'
+import { PHASE_STATUS_COMPLETED, PHASE_STATUS, PHASE_STATUS_ACTIVE } from '../../../../config/constants'
 
 
 const phaseStatuses = PHASE_STATUS.map(ps => ({ title: ps.name, value: ps.value }))
@@ -24,18 +24,20 @@ class EditStageForm extends React.Component {
     
     this.state = {
       isUpdating: false,
-      isEdittable: _.get(props, 'phase.status') !== PHASE_STATUS_COMPLETED
+      isEdittable: _.get(props, 'phase.status') !== PHASE_STATUS_COMPLETED,
+      disableActiveStatusFields: _.get(props, 'phase.status') !== PHASE_STATUS_ACTIVE
     }
     this.submitValue = this.submitValue.bind(this)
     this.enableButton = this.enableButton.bind(this)
     this.disableButton = this.disableButton.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
-  
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       isUpdating: nextProps.isUpdating,
-      isEdittable: nextProps.phase.status !== 'completed'
+      isEdittable: nextProps.phase.status !== PHASE_STATUS_COMPLETED,
+      disableActiveStatusFields: nextProps.phase.status !== PHASE_STATUS_ACTIVE
     })
   }
 
@@ -82,6 +84,9 @@ class EditStageForm extends React.Component {
     } else {
       console.log('No needto sync phases')
     }
+    this.setState({
+      disableActiveStatusFields: change.status !== PHASE_STATUS_ACTIVE
+    })
     if (this.isChanged()) {
       // TODO fire dirty event for phase
       // this.props.fireProjectDirty(unflatten(change))
@@ -180,7 +185,8 @@ class EditStageForm extends React.Component {
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Duration" type="number" name="duration" value={phase.duration} />
               </div>
               <div styleName="label-layer">
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Spent" type="number" name="spentBudget" value={phase.spentBudget} />
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Spent" type="number" name="spentBudget" 
+                  value={phase.spentBudget} disabled={this.state.disableActiveStatusFields} />
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Budget" type="number" name="budget" value={phase.budget} />
               </div>
               <div styleName="label-layer">
@@ -188,7 +194,8 @@ class EditStageForm extends React.Component {
                   <label className="tc-label">Status</label>
                   <SelectDropdown name="status" value={phase.status} theme="default" options={phaseStatuses} />
                 </div>
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress" type="number" name="progress" value={phase.progress} />
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress" type="number" name="progress" 
+                  value={phase.progress} disabled={this.state.disableActiveStatusFields} />
               </div>
               <div styleName="group-bottom">
                 <button onClick={cancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
