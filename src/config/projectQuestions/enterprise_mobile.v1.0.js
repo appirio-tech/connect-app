@@ -404,6 +404,7 @@ Creation of test cases/test scenarios including scenario setup, pre/post conditi
           {
             icon: 'question',
             description: 'How much budget do you have?',
+
             title: 'Budget',
             fieldName: 'details.loadDetails.budget',
             type: 'slide-radiogroup',
@@ -852,6 +853,7 @@ Creation of test cases/test scenarios including scenario setup, pre/post conditi
           {
             icon: 'question',
             description: 'How much budget do you have?',
+
             title: 'Budget',
             fieldName: 'details.loadDetails.budget',
             type: 'slide-radiogroup',

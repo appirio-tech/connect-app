@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import Panel from '../Panel/Panel'
 import AddComment from '../ActionCard/AddComment'
 import Comment from '../ActionCard/Comment'
 import cn from 'classnames'
@@ -10,14 +9,27 @@ import MediaQuery from 'react-responsive'
 import CommentMobile from '../ActionCard/CommentMobile'
 import { SCREEN_BREAKPOINT_MD } from '../../config/constants'
 
-const getCommentCount = (totalComments) => {
-  if (!totalComments) {
-    return 'No posts yet'
+import './FeedComments.scss'
+
+function formatCommentDate(date) {
+  const today = moment()
+
+  let formated = date.format('MMM D')
+
+  // if another year
+  if (!date.isSame(today, 'year')) {
+    formated += `, ${formated.format('YYYY')}`
+
+    // if today
+  } else if (date.isSame(today, 'day')) {
+    formated = 'Today'
+
+  // if yesterday
+  } else if (date.isSame(today.subtract(1, 'day'), 'day')) {
+    formated = 'Yesterday'
   }
-  if (totalComments === 1) {
-    return '1 post'
-  }
-  return `${totalComments} posts`
+
+  return formated
 }
 
 class FeedComments extends React.Component {
@@ -27,12 +39,12 @@ class FeedComments extends React.Component {
   }
 
   onSaveMessageChange(messageId, content, editMode) {
-    this.props.onSaveMessageChange(messageId, content, editMode)
+    this.props.onSaveMessageChange && this.props.onSaveMessageChange(messageId, content, editMode)
   }
 
   render() {
     const {
-      comments, currentUser, totalComments, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
+      comments, currentUser, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
       onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage, allMembers
     } = this.props
     let authorName = currentUser.firstName
@@ -48,67 +60,95 @@ class FeedComments extends React.Component {
       }
     }
 
-    // let _comments = comments
-    // let _hasMoreComments = hasMoreComments
-    // if (!this.state.showAll && _comments.length > THREAD_MESSAGES_PAGE_SIZE) {
-    //   _comments = _comments.slice(-THREAD_MESSAGES_PAGE_SIZE)
-    //   _hasMoreComments = true
-    // }
+    const desktopBlocks = []
+
+    if (hasMoreComments) {
+      desktopBlocks.push(
+        <div styleName="load-more" key="load-more">
+          <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
+            {isLoadingComments ? 'Loading...' : 'load earlier posts'}
+          </a>
+        </div>
+      )
+    }
+
+    comments && comments.forEach((item, idx) => {
+      const createdAt = moment(item.createdAt)
+      const prevComment = comments[idx - 1]
+      const isSameAuthor = prevComment && prevComment.author.userId === item.author.userId
+      const isSameDay = prevComment && moment(prevComment.createdAt).isSame(createdAt, 'day')
+      const isFirstUnread = prevComment && !prevComment.unread && item.unread
+
+      if (!isSameDay) {
+        desktopBlocks.push(
+          <div
+            key={`date-splitter-${createdAt.valueOf()}`}
+            styleName={cn('date-splitter', { 'unread-splitter': isFirstUnread })}
+          >
+            <span styleName="date">{formatCommentDate(createdAt)}</span>
+            <span styleName="unread">New posts</span>
+          </div>
+        )
+      } else if (isFirstUnread) {
+        <div styleName="unread-splitter" key="unread-splitter">
+          <span styleName="unread">New posts</span>
+        </div>
+      }
+
+      desktopBlocks.push(
+        <Comment
+          key={idx}
+          message={item}
+          author={item.author}
+          date={item.date}
+          edited={item.edited}
+          active={item.unread}
+          self={item.author && item.author.userId === currentUser.userId}
+          onChange={this.onSaveMessageChange.bind(this, item.id)}
+          onSave={onSaveMessage}
+          onDelete={onDeleteMessage}
+          isSaving={item.isSavingComment}
+          hasError={item.error}
+          allMembers={allMembers}
+          noInfo={isSameAuthor}
+        >
+          <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
+        </Comment>
+      )
+    })
 
     return (
-      <div>
-        <Panel.Body className="comment-count-container">
-          <div className="portrait" />
-          <div className="object">
-            <div className="card-body comment-section">
-              <div className="comment-count">
-                {getCommentCount(totalComments)}
-              </div>
-              {hasMoreComments && <div className={cn('comment-collapse', {'loading-comments': isLoadingComments})}>
-                <a href="javascript:" onClick={ handleLoadMoreClick } className="comment-collapse-button">
-                  {isLoadingComments ? 'Loading...' : 'View older posts'}
-                </a>
-              </div>}
-            </div>
-          </div>
-        </Panel.Body>
+      <div styleName="container">
         <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
           {(matches) => (matches ? (
             <div>
-              {comments.map((item, idx) => (
-                <Comment
-                  key={idx}
-                  message={item}
-                  author={item.author}
-                  date={moment(item.date).fromNow()}
-                  edited={item.edited}
-                  active={item.unread}
-                  self={item.author && item.author.userId === currentUser.userId}
-                  onChange={this.onSaveMessageChange.bind(this, item.id)}
-                  onSave={onSaveMessage}
-                  onDelete={onDeleteMessage}
-                  isSaving={item.isSavingComment}
-                  hasError={item.error}
-                  allMembers={allMembers}
-                >
-                  <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
-                </Comment>
-              ))}
+              <div styleName="comments">
+                {desktopBlocks}
+              </div>
               {allowComments &&
-                <AddComment
-                  placeholder="Write a post"
-                  onAdd={onAddNewComment}
-                  onChange={onNewCommentChange}
-                  avatarUrl={avatarUrl}
-                  authorName={authorName}
-                  isAdding={isAddingComment}
-                  hasError={error}
-                  allMembers={allMembers}
-                />
+                <div styleName="add-comment" key="add-comment">
+                  <AddComment
+                    placeholder="Write a post"
+                    onAdd={onAddNewComment}
+                    onChange={onNewCommentChange}
+                    avatarUrl={avatarUrl}
+                    authorName={authorName}
+                    isAdding={isAddingComment}
+                    hasError={error}
+                    allMembers={allMembers}
+                  />
+                </div>
               }
             </div>
           ) : (
             <div>
+              {hasMoreComments &&
+                <div styleName="load-more" key="load-more">
+                  <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
+                    {isLoadingComments ? 'Loading...' : 'load earlier posts'}
+                  </a>
+                </div>
+              }
               {comments.map((item, idx) => (
                 <CommentMobile
                   key={idx}
@@ -126,8 +166,11 @@ class FeedComments extends React.Component {
     )
   }
 }
+FeedComments.defaultProps = {
+  comments: []
+}
 FeedComments.propTypes = {
-  comments: PropTypes.array.isRequired
+  comments: PropTypes.array
 }
 
 export default FeedComments

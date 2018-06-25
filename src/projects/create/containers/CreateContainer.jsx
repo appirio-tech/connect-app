@@ -7,10 +7,11 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject } from '../../actions/project'
+import { loadProjectTemplates } from '../../../actions/templates'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
-import { findProduct, findCategory, findProductCategory } from '../../../config/projectWizard'
+import { getProjectTemplateByKey, getProjectTemplateByAlias } from '../../../helpers/templates'
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
@@ -34,7 +35,11 @@ const showCoderBotIfError = (hasError) =>
 const errorHandler = showCoderBotIfError(props => props.error && props.error.type === CREATE_PROJECT_FAILURE)
 
 // This handles showing a spinner while the state is being loaded async
-const spinner = spinnerWhileLoading(props => !props.processing)
+const spinner = spinnerWhileLoading(props =>
+  !props.processing &&
+  !props.templates.isProjectTemplatesLoading &&
+  props.templates.projectTemplates !== null
+)
 
 const enhance = compose(errorHandler, spinner)
 
@@ -52,7 +57,7 @@ const CreateView = (props) => {
 }
 const EnhancedCreateView = enhance(CreateView)
 
-class CreateConainer extends React.Component {
+class CreateContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -92,20 +97,24 @@ class CreateConainer extends React.Component {
   }
 
   componentWillMount() {
-    const { processing, userRoles, match, history } = this.props
-    // if we are on the project page validate product param
-    if (match.path === '/new-project/:product?/:status?') {
-      const product = match.params.product
-      // first try the path param to be a project category
-      let productCategory = findCategory(product, true)
-      // if it is not a category, it should be a product and we should be able to find a category for it
-      productCategory = !productCategory ? findProductCategory(product, true) : productCategory
-      if (product && product.trim().length > 0 && !productCategory) {
+    const { processing, userRoles, match, history,
+      templates, loadProjectTemplates } = this.props
+    // if we are on the project page validate project param
+    if (match.path === '/new-project/:project?/:status?') {
+      const project = match.params.project
+
+      if (
+        // if project is defined in URL
+        project &&
         // workaround to add URL for incomplete project confirmation step
         // ideally we should have better URL naming which resolves each route with distinct patterns
-        if (product !== 'incomplete') {
-          history.replace('/404')
-        }
+        project !== 'incomplete' &&
+        // project templates are loaded
+        templates.projectTemplates &&
+        // if project template doesn't exist
+        !getProjectTemplateByAlias(templates.projectTemplates, project)
+      ) {
+        history.replace('/404')
       }
     }
 
@@ -124,6 +133,11 @@ class CreateConainer extends React.Component {
       // dispatches action to clear the project in the redux state to ensure that we never have a project
       // in context when creating a new project
       this.props.clearLoadedProject()
+    }
+
+    // if templates are not loaded yet - then load them
+    if (templates.projectTemplates === null && !templates.isProjectTemplatesLoading) {
+      loadProjectTemplates()
     }
   }
 
@@ -157,6 +171,9 @@ class CreateConainer extends React.Component {
    * Creates new project if user is already logged in, otherwise, redirects user for registration/login.
    */
   createProject(project) {
+    const { templates: { projectTemplates }} = this.props
+    const projectTemplate = getProjectTemplateByKey(projectTemplates, _.get(project, 'details.products[0]'))
+
     this.setState({ creatingProject: true }, () => {
       if (this.props.userRoles && this.props.userRoles.length > 0) {
         // if user is logged in and has a valid role, create project
@@ -174,7 +191,10 @@ class CreateConainer extends React.Component {
           }
           _.set(project, 'details.utm.google', googleAnalytics)
         }
-        this.props.createProjectAction(project, PROJECT_STATUS_IN_REVIEW)
+        project.version = 'v3'
+        project.templateId = projectTemplate.id
+        project.type = projectTemplate.category
+        this.props.createProjectAction(project)
         this.closeWizard()
       } else {
         // redirect to registration/login page
@@ -204,6 +224,8 @@ class CreateConainer extends React.Component {
   }
 
   render() {
+    const { templates: { projectTemplates }} = this.props
+
     return (
       <EnhancedCreateView
         {...this.props}
@@ -212,31 +234,24 @@ class CreateConainer extends React.Component {
         showModal
         closeModal={ this.closeWizard }
         onStepChange={ (wizardStep, updatedProject) => {
-          // type of the project
-          let projectType = _.get(updatedProject, 'type', null)
-          // finds project category object from the catalogue
-          const projectCategory = findCategory(projectType)
-          // updates the projectType variable to use first alias to create SEO friendly URL
-          projectType = _.get(projectCategory, 'aliases[0]', projectType)
-          // product of the project
-          let productType = _.get(updatedProject, 'details.products[0]', null)
-          // finds product object from the catalogue
-          const product = findProduct(productType)
-          // updates the productType variable to use first alias to create SEO friendly URL
-          productType = _.get(product, 'aliases[0]', productType)
-          if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
-            let productUrl = productType ? ('/' + productType) : ''
-            productUrl = !productType && projectType ? ('/' + projectType) : productUrl
-            this.props.history.push(NEW_PROJECT_PATH + productUrl + '/incomplete' + window.location.search)
+          const projectTemplateKey = _.get(updatedProject, 'details.products[0]', null)
+          const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
+          const alias = _.get(projectTemplate, 'aliases[0]')
+
+          switch (wizardStep) {
+          case ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF: {
+            const aliasParam = alias ? `/${alias}` : ''
+            this.props.history.push(NEW_PROJECT_PATH + aliasParam + '/incomplete' + window.location.search)
+            break
           }
-          if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
+          case ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE:
             this.props.history.push(NEW_PROJECT_PATH + '/' + window.location.search)
-          }
-          if (projectType && wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROD_TYPE) {
-            this.props.history.push(NEW_PROJECT_PATH + '/' + projectType + window.location.search)
-          }
-          if (projectType && productType && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
-            this.props.history.push(NEW_PROJECT_PATH + '/' + productType + window.location.search)
+            break
+          case ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS:
+            if (alias) {
+              this.props.history.push(NEW_PROJECT_PATH + '/' + alias + window.location.search)
+            }
+            break
           }
           this.setState({
             wizardStep
@@ -262,24 +277,34 @@ class CreateConainer extends React.Component {
           })
         }
         }
+        projectTemplates={this.props.templates.projectTemplates}
       />
     )
   }
 }
 
-CreateConainer.propTypes = {
+CreateContainer.propTypes = {
   userRoles: PropTypes.arrayOf(PropTypes.string).isRequired
 }
 
-CreateConainer.defaultProps = {
+CreateContainer.defaultProps = {
   userRoles: []
 }
 
-const mapStateToProps = ({projectState, loadUser }) => ({
+const mapStateToProps = ({projectState, loadUser, templates }) => ({
   userRoles: _.get(loadUser, 'user.roles', []),
   processing: projectState.processing,
   error: projectState.error,
-  project: projectState.project
+  project: projectState.project,
+  templates,
 })
-const actionCreators = { createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject }
-export default withRouter(connect(mapStateToProps, actionCreators)(CreateConainer))
+
+const actionCreators = {
+  createProjectAction,
+  fireProjectDirty,
+  fireProjectDirtyUndo,
+  clearLoadedProject,
+  loadProjectTemplates,
+}
+
+export default withRouter(connect(mapStateToProps, actionCreators)(CreateContainer))

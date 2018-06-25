@@ -1,9 +1,9 @@
 import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 import './MessageDetails.scss'
 import ActionCard from '../ActionCard/ActionCard'
+import { markdownToHTML } from '../../helpers/markdownToState'
 import BtnSeparator from '../ActionCard/BtnSeparator'
 import Comment from '../ActionCard/Comment'
 import AddComment from '../ActionCard/AddComment'
@@ -65,7 +65,7 @@ class MessageDetails extends React.Component {
               author={item.author}
               avatarUrl={_.get(item, 'author.photoURL', null)}
               authorName={item.author ? (item.author.firstName + ' ' + item.author.lastName) : 'Connect user'}
-              date={moment(item.date).fromNow()}
+              date={item.date}
               edited={item.edited}
               active={item.unread}
               self={item.author && item.author.userId === currentUser.userId}
@@ -76,7 +76,7 @@ class MessageDetails extends React.Component {
               isSaving={item.isSavingComment}
               hasError={item.error}
             >
-              <div dangerouslySetInnerHTML={{__html: item.content}} />
+              <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
             </Comment>)
         )}
 

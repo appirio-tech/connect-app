@@ -91,7 +91,7 @@ workflows:
             - test
           filters:
             branches:
-              only: dev
+              only: ['dev', 'feature/project_plan_v3']
       - deployTest02:
           requires:
             - test

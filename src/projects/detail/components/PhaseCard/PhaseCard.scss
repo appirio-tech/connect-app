@@ -1,0 +1,280 @@
+@import '../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// phase-card style
+.phase-card {
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 1px 0 #D5D5D5;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    border-radius: 0;
+  }
+
+  & + & {
+    margin-top: $base-unit;
+  }
+
+  .hide {
+    display: none;
+  }
+
+  .sm-separator {
+    margin-top: 10px;
+  }
+
+  &.has-notifications {
+    &:after {
+      content: '';
+      z-index: 5;
+      border-radius: 50%;
+      background-color: #FF5B52;
+      width: 8px;
+      height: 8px;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+  }
+
+  .static-view {
+    @include roboto;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: space-between;
+    padding-right: 50px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    border-radius: inherit;
+    cursor: pointer;
+    background-color: $tc-gray-neutral-light;
+    @media screen and (max-width: $screen-md - 1px) {
+      padding-left: 4 * $base-unit;
+      padding-right: 4 * $base-unit;
+    }
+  }
+  .col {
+    &:nth-child(1) {
+      flex: 0 500px;
+      @media screen and (max-width: $screen-md - 1px) {
+        flex: 1;
+        padding-right: 20px;
+      }
+    }
+    &:nth-child(2) {
+      flex: 0 140px;
+    }
+    &:nth-child(3) {
+      flex: 0 80px;
+    }
+    &.show-md {
+      display: none;
+      @media screen and (max-width: $screen-md - 1px) {
+        display: block;
+      }
+    }
+    &.hide-md {
+      display: block;
+      @media screen and (max-width: $screen-md - 1px) {
+        display: none;
+      }
+    }
+  }
+  .project-details {
+    padding-left: 80px;
+    position: relative;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      padding-left: 0;
+    }
+
+    .project-ico {
+      position: absolute;
+      left: 25px;
+      margin-top: -16px;
+      top: 50%;
+      width: 32px;
+      height: 32px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        display: none;
+      }
+    }
+
+    .project-title {
+      color: #151516;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 30px;
+      @media screen and (max-width: $screen-md - 1px) {
+        line-height: 25px;
+      }
+    }
+  }
+  h5 {
+    color: #404041;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+  .price-details {
+    text-align: right;
+    padding-right: 25px;
+    .meta-list {
+      margin-top: 5px;
+    }
+  }
+  .meta-list {
+    color: #808080;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 20px;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      font-size: 13px;
+    }
+
+    .meta {
+      line-height: 20px;
+      position: relative;
+      &:after {
+        content: " • ";
+        display: inline-block;
+        margin: 0 4px;
+      }
+      &:last-child {
+        &:after {
+          display: none;
+        }
+      }
+    }
+  }
+  .status-details {
+    display: block;
+    .status {
+      text-align: center;
+      color: #808080;
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 20px;
+      padding-top: 25px;
+      &.completed {
+        background-repeat: no-repeat;
+        background: url('assets/icons/ui-rocket.svg') 50% 4px no-repeat;
+        background-size: 16px;
+      }
+      &.reviewed {
+        background-repeat: no-repeat;
+        background: url('assets/icons/ui-calendar.svg') 50% 4px no-repeat;
+        background-size: 16px;
+      }
+      &.draft {
+        background-repeat: no-repeat;
+        background: url('assets/icons/status-draft.svg') 50% 4px no-repeat;
+        background-size: 16px;
+      }
+      &.nostatus {
+        opacity: 0;
+      }
+      &.active {
+        padding-top: 0;
+        display: block;
+      }
+    }
+  }
+  .project-title-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: space-between;
+  }
+  .edit-btn {
+    width: 40px;
+    height: 40px;
+    background: url('assets/icons/ui-pencil.svg') 50% 50% no-repeat;
+    background-size: 15px;
+    cursor: pointer;
+    transition: 0.25s;
+    margin: auto auto auto 0;
+  }
+  .toggle-arrow {
+    position: absolute;
+    right: 7px;
+    width: 40px;
+    height: 80px;
+    background: url('assets/icons/arrow-minimal-right.svg') 50% 50% no-repeat;
+    background-size: 15px;
+    cursor: pointer;
+    transition: 0.25s;
+    &:hover {
+      opacity: 0.7;
+    }
+    @media screen and (max-width: $screen-md - 1px) {
+      right: 0;
+    }
+  }
+  /*  expandable-view */
+  .expandable-view {
+    display: none;
+  }
+  &.expanded {
+    .expandable-view {
+      display: block;
+    }
+    .toggle-arrow {
+      transform: rotate(90deg);
+    }
+  }
+  :global {
+    .project-progress {
+      margin: 0;
+      width: 40px;
+      height: 40px;
+      position: relative;
+      margin: 0 auto;
+      .CircularProgressbar {
+        width: 40px;
+        height: 40px;
+      }
+      .progress-remaining {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        z-index: 1;
+        height: 40px;
+        line-height: 38px;
+        .progress-text {
+          color: #0681FF;
+          font-size: 10px;
+          font-weight: 400;
+          line-height: 12px;
+          text-align: center;
+          .unit {
+            display: none;
+          }
+        }
+      }
+    }
+  } // progressbar
+  .progressbar {
+    display: none;
+    @media screen and (max-width: $screen-md - 1px) {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background-color: #E0E0E0;
+      .fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 5px;
+        background-color: #0681FF;
+      }
+    }
+  }
+}

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import update from 'react-addons-update'
 import _ from 'lodash'
 import LinksMenu from '../../../components/LinksMenu/LinksMenu'
-import FooterV2 from '../../../components/FooterV2/FooterV2'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
 import { setDuration } from '../../../helpers/projectHelper'
@@ -17,11 +16,7 @@ class ProjectInfoContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      duration: {},
-      budget: { // FIXME
-        percent: 80,
-        text: '$1000 remaining'
-      }
+      duration: {}
     }
     this.onChangeStatus = this.onChangeStatus.bind(this)
     this.onDeleteProject = this.onDeleteProject.bind(this)
@@ -111,6 +106,13 @@ class ProjectInfoContainer extends React.Component {
     } else {
       devices = _.get(project, 'details.devices', [])
     }
+
+    const attachments = _.sortBy(project.attachments, attachment => -new Date(attachment.updatedAt).getTime())
+      .map(attachment => ({
+        title: attachment.title,
+        address: attachment.downloadUrl,
+      }))
+
     return (
       <div>
         <div className="sideAreaWrapper">
@@ -125,6 +127,10 @@ class ProjectInfoContainer extends React.Component {
             isSuperUser={isSuperUser}
           />
           <LinksMenu
+            links={attachments}
+            title="Latest files"
+          />
+          <LinksMenu
             links={project.bookmarks || []}
             canDelete={canManageLinks}
             canEdit={canManageLinks}
@@ -135,7 +141,6 @@ class ProjectInfoContainer extends React.Component {
           />
           <TeamManagementContainer projectId={project.id} members={project.members} />
         </div>
-        <FooterV2 />
       </div>
     )
   }

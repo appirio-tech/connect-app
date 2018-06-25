@@ -1,6 +1,11 @@
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
-import { CONNECT_MESSAGE_API_URL } from '../config/constants'
+import {
+  CONNECT_MESSAGE_API_URL,
+  DISCOURSE_BOT_USERID,
+  CODER_BOT_USERID,
+  TC_SYSTEM_USERID,
+} from '../config/constants'
 
 const timeout = 1.5 * 60 * 1000
 const apiBaseUrl = CONNECT_MESSAGE_API_URL
@@ -15,7 +20,7 @@ export function getTopics(criteria) {
     params.filter = filterStr.join('&')
   }
 
-  return axios.get(`${apiBaseUrl}/topics/list`, { params })
+  return axios.get(`${apiBaseUrl}/topics/list/db`, { params })
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
@@ -25,7 +30,7 @@ export function getTopics(criteria) {
 }
 
 export function getTopic(topicId) {
-  return axios.get(`${apiBaseUrl}/topics/${topicId}/read`)
+  return axios.get(`${apiBaseUrl}/topics/${topicId}/read/db`)
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
@@ -106,5 +111,41 @@ export function deleteTopicPost(topicId, postId) {
       return {
         result : _.get(resp.data, 'result.content', {})
       }
+    })
+}
+
+export function getTopicsWithComments(reference, referenceId, tag, removeCoderBotTopics = true) {
+  return getTopics({ reference, referenceId, tag })
+    .then(({topics, totalCount}) => {
+      const additionalPosts = []
+      if (removeCoderBotTopics) {
+        //remove coderBot posts
+        const rTopics = _.remove(topics, i =>
+          [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(i.userId) > -1
+        )
+        totalCount -= rTopics.length
+      }
+      // if a topic has more than 20 posts then to display the latest posts,
+      // we'll have to first retrieve them from the server
+      _.forEach(topics, (t) => {
+        if (t.posts.length < t.postIds.length) {
+          const postIds = t.postIds.slice(t.postIds.length).slice(-6)
+          additionalPosts.push(getTopicPosts(t.id, postIds))
+        }
+        t.posts = _.sortBy(t.posts, ['id'])
+      })
+      if (additionalPosts.length === 0) {
+        // we dont need to retrieve any additional posts
+        return { topics, totalCount }
+      }
+      return Promise.all(additionalPosts)
+        .then(postArr => {
+          _.forEach(postArr, (p) => {
+            const topic = _.find(topics, t => t.id === p.topicId)
+            topic.posts = _.sortBy(topic.posts.concat(p.posts), ['id'])
+          })
+          return { topics, totalCount }
+        })
+
     })
 }

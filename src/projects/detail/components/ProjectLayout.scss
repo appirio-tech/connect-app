@@ -1,0 +1,22 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+
+  @media screen and (min-width: $screen-md) {
+    padding-top: 50px;
+  }
+}
+
+.secondary-toolbar {
+  position: relative;
+  z-index: 1;
+
+  @media  screen and (min-width: $screen-md) {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+}
+

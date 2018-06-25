@@ -1,0 +1,95 @@
+@import '../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+.container {
+  background: #FAFAFB;
+  padding: 10px;
+  border-radius: 6px;
+  @include roboto;
+}
+
+.form {
+
+}
+
+.input-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-around;
+  align-items: center;
+  height: inherit;
+  position: relative;
+  line-height: inherit;
+  flex: 0 300px; 
+
+  :global .dropdown-wrap {
+    width: 100%;
+    margin-left: 0px;
+  } 
+
+  label {
+    margin: auto 10px;
+    flex: 0 250px;
+    text-align: right;
+    line-height: 30px;
+    white-space: nowrap;
+  }
+  
+  .input {
+      &::-webkit-input-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
+      }
+      &:-moz-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
+      }
+      &::-moz-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
+      }
+      &:-ms-input-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
+      }
+  }
+}
+
+.label-layer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-around;
+    height: inherit;
+    position: relative;
+    line-height: inherit;
+}
+
+.group-bottom {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    
+    button {
+      margin: 0 5px 0 5px;
+      &.disable {
+          opacity: 0.5;
+      }
+    }
+}

@@ -25,13 +25,28 @@ const showCoderBotIfError = (hasError) =>
 const errorHandler = showCoderBotIfError(props => props.error && props.error.type === LOAD_PROJECT_FAILURE)
 
 // This handles showing a spinner while the state is being loaded async
-const spinner = spinnerWhileLoading(props => !props.isLoading)
+const spinner = spinnerWhileLoading(props =>
+  !props.isLoading && (
+    // first check that there are no error, before checking project properties
+    props.error && props.error.type === LOAD_PROJECT_FAILURE ||
+    // old project or has projectTemplate loaded
+    (props.project.version !== 'v3' || props.projectTemplate)
+    // has product templates loaded
+    && props.productTemplates.length > 0
+  )
+)
 const ProjectDetailView = (props) => {
+  let currentMemberRole = props.currentMemberRole
+  if (!currentMemberRole && props.currentUserRoles && props.currentUserRoles.length > 0) {
+    currentMemberRole = props.currentUserRoles[0]
+  }
   const children = React.Children.map(props.children, (child) => {
     return React.cloneElement(child, {
       project: props.project,
-      currentMemberRole: props.currentMemberRole,
-      isSuperUser: props.isSuperUser
+      currentMemberRole: currentMemberRole || '',
+      isSuperUser: props.isSuperUser,
+      isProcessing: props.isProcessing,
+      allProductTemplates: props.allProductTemplates,
     })
   })
   return <div>{children}</div>
@@ -61,7 +76,7 @@ class ProjectDetail extends Component {
       this.props.loadProjectDashboard(match.params.projectId)
     }
 
-    
+
   }
 
   getProjectRoleForCurrentUser({currentUserId, project}) {
@@ -98,6 +113,9 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser}) => {
     isProcessing: projectState.processing,
     error: projectState.error,
     project: projectState.project,
+    projectTemplate: projectState.projectTemplate,
+    productTemplates: projectState.productTemplates,
+    allProductTemplates: projectState.allProductTemplates,
     currentUserRoles: loadUser.user.roles
   }
 }

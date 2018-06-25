@@ -9,6 +9,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import UserWithName from '../User/UserWithName'
+import { POST_TIME_FORMAT } from '../../config/constants.js'
 
 import './CommentMobile.scss'
 
@@ -19,9 +20,9 @@ const CommentMobile = ({ messageId, author, date, children }) => {
     <div styleName="comment" id={`comment-${messageId}`}>
       <div styleName="header">
         <UserWithName {..._.pick(author, 'firstName', 'lastName', 'photoURL')} size="40" />
-        <Link styleName="date" to={messageLink}>{moment(date).fromNow()}</Link>
+        <Link styleName="date" to={messageLink}>{moment(date).format(POST_TIME_FORMAT)}</Link>
       </div>
-      <div styleName="text">{children}</div>
+      <div styleName="text" className="draftjs-post">{children}</div>
     </div>
   )
 }

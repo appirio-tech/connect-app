@@ -4,6 +4,7 @@ import loadUser from './loadUser'
 import { projectState } from '../projects/reducers/project'
 import { projectDashboard } from '../projects/reducers/projectDashboard'
 import { projectTopics } from '../projects/reducers/projectTopics'
+import { phasesTopics } from '../projects/reducers/phasesTopics'
 import navSearch from './navSearch'
 import projectSearch from '../projects/reducers/projectSearch'
 import projectSearchSuggestions from '../projects/reducers/projectSearchSuggestions'
@@ -11,6 +12,7 @@ import members from './members'
 import alerts from './alerts'
 import notifications from '../routes/notifications/reducers'
 import settings from '../routes/settings/reducers'
+import templates from './templates'
 
 export default combineReducers({
   loadUser,
@@ -22,7 +24,9 @@ export default combineReducers({
   members,
   projectDashboard,
   projectTopics,
+  phasesTopics,
   alerts,
   notifications,
-  settings
+  settings,
+  templates,
 })

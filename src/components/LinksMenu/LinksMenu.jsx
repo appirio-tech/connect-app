@@ -12,12 +12,30 @@ import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
 import BtnEdit from '../../assets/icons/icon-edit.svg'
 
 
-const LinksMenu = ({ links, limit, canAdd, canDelete, canEdit,  isAddingNewLink, onAddingNewLink, onAddNewLink, onChangeLimit, linkToDelete, linkToEdit, onDeleteIntent, onEditIntent, onDelete, onEdit }) => (
-  <MobileExpandable title={`LINKS (${links.length})`}>
+const LinksMenu = ({
+  canAdd,
+  canDelete,
+  canEdit,
+  isAddingNewLink,
+  limit,
+  links,
+  linkToDelete,
+  linkToEdit,
+  onAddingNewLink,
+  onAddNewLink,
+  onChangeLimit,
+  onDelete,
+  onDeleteIntent,
+  onEdit,
+  onEditIntent,
+  title,
+  moreText,
+}) => (
+  <MobileExpandable title={`${title} (${links.length})`}>
     <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0) }, 'panel-links-container')}>
-      {canAdd && !isAddingNewLink && <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Create New Link</Panel.AddBtn>}
+      {canAdd && !isAddingNewLink && onAddingNewLink && <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Create New Link</Panel.AddBtn>}
       {!isAddingNewLink && <Panel.Title>
-        Links ({links.length})
+        {title} ({links.length})
       </Panel.Title>}
       { (isAddingNewLink || linkToDelete >= 0) && <div className="modal-overlay" />}
       {isAddingNewLink &&
@@ -93,8 +111,8 @@ const LinksMenu = ({ links, limit, canAdd, canDelete, canEdit,  isAddingNewLink,
             })
           }
         </ul>
-        {links.length > limit && <div className="buttons links-footer">
-          <a href="javascript:" onClick={() => onChangeLimit(10000)}>View all</a>
+        {links.length > limit && <div className="links-footer">
+          <a href="javascript:" onClick={() => onChangeLimit(10000)}>{moreText}</a>
         </div>}
       </div>
       {canAdd && !isAddingNewLink && (
@@ -107,19 +125,23 @@ const LinksMenu = ({ links, limit, canAdd, canDelete, canEdit,  isAddingNewLink,
 )
 
 LinksMenu.propTypes = {
-  links: PropTypes.array.isRequired,
-  limit: PropTypes.number,
   canAdd: PropTypes.bool,
   canDelete: PropTypes.bool,
   canEdit: PropTypes.bool,
+  limit: PropTypes.number,
+  links: PropTypes.array.isRequired,
+  moreText: PropTypes.string,
   onAddingNewLink: PropTypes.func,
-  onAddNewLink: PropTypes.func.isRequired,
+  onAddNewLink: PropTypes.func,
   onChangeLimit: PropTypes.func,
-  onDelete: PropTypes.func
+  onDelete: PropTypes.func,
+  title: PropTypes.string,
 }
 
 LinksMenu.defaultProps = {
-  limit: 7
+  limit: 5,
+  moreText: 'load more',
+  title: 'Links',
 }
 
 export default uncontrollable(LinksMenu, {
