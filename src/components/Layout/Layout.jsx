@@ -12,11 +12,11 @@ import '../../styles/vendors/s-alert-default.css'
 import 'react-s-alert/dist/s-alert-css-effects/slide.css'
 
 const Layout = (props) => {
-  const { isLoadingUser } = props
+  const { isLoadingUser, maintenanceMode } = props
 
   if (isLoadingUser) {
     return (<div />)
-  } else if (MAINTENANCE_MODE) {
+  } else if (maintenanceMode) {
     return <Maintenance />
   } else {
     return (
