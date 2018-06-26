@@ -8,7 +8,10 @@
 }
 
 .form {
-
+  :global .error-message {
+    color: $tc-orange-70;
+    border: 1px solid $tc-orange-30;
+  }
 }
 
 .input-row {
@@ -30,7 +33,7 @@
   } 
 
   label {
-    margin: auto 10px;
+    margin: 0px 10px 10px;
     flex: 0 250px;
     text-align: right;
     line-height: 30px;

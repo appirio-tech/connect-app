@@ -23,8 +23,9 @@ const ProjectPlanContainer = (props) => {
   const {
     project,
     isSuperUser,
+    isManageUser,
     currentMemberRole,
-    phases,
+    phases
   } = props
 
   const leftArea = (
@@ -50,7 +51,7 @@ const ProjectPlanContainer = (props) => {
 
       <TwoColsLayout.Content>
         <ProjectPlanProgress phases={phases} project={project} />
-        <ProjectStages {...props} />
+        <ProjectStages {...props} isManageUser={isManageUser}/>
       </TwoColsLayout.Content>
     </TwoColsLayout>
   )
@@ -60,13 +61,14 @@ ProjectPlanContainer.propTypes = {
   currentMemberRole: PT.string.isRequired,
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
+  isManageUser: PT.bool.isRequired,
   project: PT.object.isRequired,
   productTemplates: PT.array.isRequired,
 }
 
 const mapStateToProps = ({ projectState }) => ({
   productTemplates: projectState.allProductTemplates,
-  phases: projectState.phases,
+  phases: projectState.phases
 })
 
 const mapDispatchToProps = {

@@ -131,6 +131,7 @@ class ProjectStage extends React.Component{
       currentMemberRole,
       isProcessing,
       isSuperUser,
+      isManageUser,
       updateProduct,
       fireProductDirty,
       fireProductDirtyUndo,
@@ -172,6 +173,7 @@ class ProjectStage extends React.Component{
       <PhaseCard
         attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed)}
         projectStatus={project.status}
+        isManageUser={isManageUser}
       >
         <div>
           <GenericMenu navLinks={tabs} />

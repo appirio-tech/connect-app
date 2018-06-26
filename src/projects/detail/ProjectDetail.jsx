@@ -8,7 +8,7 @@ import { renderComponent, branch, compose, withProps } from 'recompose'
 import { loadProjectDashboard } from '../actions/projectDashboard'
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
-  ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN
+  ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER
 } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
@@ -45,6 +45,7 @@ const ProjectDetailView = (props) => {
       project: props.project,
       currentMemberRole: currentMemberRole || '',
       isSuperUser: props.isSuperUser,
+      isManageUser: props.isManageUser,
       isProcessing: props.isProcessing,
       allProductTemplates: props.allProductTemplates,
     })
@@ -94,13 +95,16 @@ class ProjectDetail extends Component {
 
   render() {
     const currentMemberRole = this.getProjectRoleForCurrentUser(this.props)
-    const powerRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-    const isSuperUser = this.props.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
+    const adminRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
+    const isSuperUser = this.props.currentUserRoles.some((role) => adminRoles.indexOf(role) !== -1)
+    const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
+    const isManageUser = this.props.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
     return (
       <EnhancedProjectDetailView
         {...this.props}
         currentMemberRole={currentMemberRole}
         isSuperUser={isSuperUser}
+        isManageUser={isManageUser}
       />
     )
   }

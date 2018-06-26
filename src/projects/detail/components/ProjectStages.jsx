@@ -12,6 +12,7 @@ import Section from '../components/Section'
 import ProjectStage from '../components/ProjectStage'
 import PhaseCardListHeader from '../components/PhaseCardListHeader'
 import PhaseCardListFooter from '../components/PhaseCardListFooter'
+import { PROJECT_STATUS_COMPLETED, PROJECT_STATUS_CANCELLED} from '../../../config/constants'
 
 /**
  * Format PhaseCardListFooter props
@@ -20,7 +21,7 @@ import PhaseCardListFooter from '../components/PhaseCardListFooter'
  *
  * @returns {Object} PhaseCardListFooter props
  */
-function formatPhaseCardListFooterProps(phases) {
+function formatPhaseCardListFooterProps(phases, projectStatus) {
   const startDates = _.compact(phases.map((phase) =>
     phase.startDate ? moment(phase.startDate) : null
   ))
@@ -38,10 +39,13 @@ function formatPhaseCardListFooterProps(phases) {
   const duration = `${_.sum(phases.map((phase) => _.get(phase, 'duration', 0))) + phases.length} days`
   const price = `$${formatNumberWithCommas(totalPrice)}`
 
+  const isProjectLive = projectStatus !== PROJECT_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED
+
   return {
     duration,
     startEndDates,
     price,
+    isProjectLive
   }
 }
 
@@ -58,6 +62,7 @@ const ProjectStages = ({
   addProductAttachment,
   updateProductAttachment,
   removeProductAttachment,
+  isManageUser,
 }) => (
   <Section>
     <PhaseCardListHeader />
@@ -68,6 +73,7 @@ const ProjectStages = ({
         currentMemberRole={currentMemberRole}
         isProcessing={isProcessing}
         isSuperUser={isSuperUser}
+        isManageUser={isManageUser}
         project={project}
         phase={phase}
         phaseIndex={index}
@@ -79,7 +85,7 @@ const ProjectStages = ({
         removeProductAttachment={removeProductAttachment}
       />
     ))}
-    <PhaseCardListFooter projectId={project.id} {...formatPhaseCardListFooterProps(phases)} />
+    <PhaseCardListFooter projectId={project.id} {...formatPhaseCardListFooterProps(phases, project.status)} isManageUser={isManageUser}/>
   </Section>
 )
 

@@ -25,6 +25,7 @@ WorkInProgress.propTypes = {
   currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
+  isManageUser: PT.bool.isRequired,
   updateProduct: PT.func.isRequired,
   fireProductDirty: PT.func.isRequired,
   fireProductDirtyUndo: PT.func.isRequired,

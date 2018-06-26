@@ -25,7 +25,8 @@ class EditStageForm extends React.Component {
     this.state = {
       isUpdating: false,
       isEdittable: _.get(props, 'phase.status') !== PHASE_STATUS_COMPLETED,
-      disableActiveStatusFields: _.get(props, 'phase.status') !== PHASE_STATUS_ACTIVE
+      disableActiveStatusFields: _.get(props, 'phase.status') !== PHASE_STATUS_ACTIVE,
+      showPhaseOverlapWarning: false
     }
     this.submitValue = this.submitValue.bind(this)
     this.enableButton = this.enableButton.bind(this)
@@ -76,15 +77,22 @@ class EditStageForm extends React.Component {
    */
   handleChange(change) {
     const { phases, phase, phaseIndex } = this.props
+    let showPhaseOverlapWarning = false
     // if start date or duration is updated for a phase, we need to update other phases dates accordingly
     if (phase.startDate !== change.startDate || phase.duration !== change.duration) {
-      console.log('Need to sync phases')
-      console.log(change)
-      this.syncPhases(phases, phase, phaseIndex, change)
+      // console.log('Need to sync phases')
+      const reqChanges = this.syncPhases(phases, phase, phaseIndex, change)
+      if (reqChanges && reqChanges.length > 0) {
+        showPhaseOverlapWarning = true
+      }
     } else {
-      console.log('No needto sync phases')
+      // No need to sync phases
+      // console.log('No need to sync phases')
     }
-    this.setState({ disableActiveStatusFields: change.status !== PHASE_STATUS_ACTIVE })
+    this.setState({
+      disableActiveStatusFields: change.status !== PHASE_STATUS_ACTIVE,
+      showPhaseOverlapWarning
+    })
     if (this.isChanged()) {
       // TODO fire dirty event for phase
       // this.props.fireProjectDirty(unflatten(change))
@@ -115,8 +123,6 @@ class EditStageForm extends React.Component {
         const startDate = moment(new Date(phase.startDate))
         const endDate = moment(new Date(phase.startDate)).add(phase.duration - 1, 'days')
         const bufferDays = refPhaseStartDate.diff(endDate, 'days') - 1
-        console.log(bufferDays, 'bufferDays')
-        console.log(delta, 'delta')
         const offset = Math.abs(delta) - bufferDays
         if (offset > 0) { // change in refPhase is has decreased start date
           startDate.subtract(offset, 'days')
@@ -140,8 +146,6 @@ class EditStageForm extends React.Component {
         const startDate = moment(new Date(phase.startDate))
         const endDate = moment(new Date(phase.startDate)).add(phase.duration - 1, 'days')
         const bufferDays = startDate.diff(refPhaseEndDate, 'days') - 1
-        console.log(bufferDays, 'bufferDays')
-        console.log(delta, 'delta')
         const offset = delta - bufferDays
         // change in refPhase is has caused end date of the refPhase to be pushed forward
         if (offset > 0) {
@@ -156,13 +160,12 @@ class EditStageForm extends React.Component {
         delta = offset
       }
     }
-    console.log(phasesToBeUpdated)
-    return Promise.resolve(phasesToBeUpdated)
+    return phasesToBeUpdated
   }
 
   render() {
     const { phase, cancel, isUpdating } = this.props
-    const { isEdittable } = this.state
+    const { isEdittable, showPhaseOverlapWarning } = this.state
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment(startDate).format('YYYY-MM-DD')
     return (
@@ -178,20 +181,23 @@ class EditStageForm extends React.Component {
             onChange={ this.handleChange }
           >
             <div styleName="form">
+              { showPhaseOverlapWarning && <div className="error-message">
+                Warning: You are about to manually change the start/end date of this phase, Please ensure the start and end dates of all subsequent phases (where applicable) are updated in line with this change.
+              </div> }
               <div styleName="label-layer">
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Start Date" type="date" name="startDate" value={startDate} />
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Duration" type="number" name="duration" value={phase.duration} />
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Duration" type="number" name="duration" value={phase.duration} minValue={1}/>
               </div>
               <div styleName="label-layer">
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Spent" type="number" name="spentBudget" value={phase.spentBudget} disabled={this.state.disableActiveStatusFields} />
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Budget" type="number" name="budget" value={phase.budget} />
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Spent" type="number" name="spentBudget" value={phase.spentBudget} disabled={this.state.disableActiveStatusFields} minValue={0}/>
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Budget" type="number" name="budget" value={phase.budget} minValue={0}/>
               </div>
               <div styleName="label-layer">
                 <div styleName="input-row">
                   <label className="tc-label">Status</label>
                   <SelectDropdown name="status" value={phase.status} theme="default" options={phaseStatuses} />
                 </div>
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress" type="number" name="progress" value={phase.progress} disabled={this.state.disableActiveStatusFields} />
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress" type="number" name="progress" value={phase.progress} disabled={this.state.disableActiveStatusFields} minValue={0} />
               </div>
               <div styleName="group-bottom">
                 <button onClick={cancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
