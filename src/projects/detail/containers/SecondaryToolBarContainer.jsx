@@ -53,4 +53,4 @@ const mapStateToProps = (state) => ({
   project: state.projectState.project,
 })
 
-export default connect(mapStateToProps)(withRouter(SecondaryToolBarContainer))
+export default withRouter(connect(mapStateToProps)(SecondaryToolBarContainer))
