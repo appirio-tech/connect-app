@@ -58,6 +58,7 @@ const ProjectStages = ({
   addProductAttachment,
   updateProductAttachment,
   removeProductAttachment,
+  isManageUser,
 }) => (
   <Section>
     <PhaseCardListHeader />
@@ -79,7 +80,7 @@ const ProjectStages = ({
         removeProductAttachment={removeProductAttachment}
       />
     ))}
-    <PhaseCardListFooter projectId={project.id} {...formatPhaseCardListFooterProps(phases)} />
+    <PhaseCardListFooter projectId={project.id} {...formatPhaseCardListFooterProps(phases)} isManageUser={isManageUser} />
   </Section>
 )
 
