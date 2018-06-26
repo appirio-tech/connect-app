@@ -7,7 +7,7 @@
   @include roboto;
 }
 
-form {
+.form {
   :global .error-message {
     color: $tc-orange-70;
     border: 1px solid $tc-orange-30;

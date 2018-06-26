@@ -39,7 +39,6 @@ function formatProjectProgressProps(project, phases) {
       const startDate = moment(phase.startDate)
       const duration = now.diff(startDate, 'days')
       if(duration >= 0) {
-        console.log(progress)
         if(duration <= phase.duration) {
           progress = (duration / phase.duration) * 100
           actualDuration += duration

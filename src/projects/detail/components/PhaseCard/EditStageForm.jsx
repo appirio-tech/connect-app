@@ -80,14 +80,14 @@ class EditStageForm extends React.Component {
     let showPhaseOverlapWarning = false
     // if start date or duration is updated for a phase, we need to update other phases dates accordingly
     if (phase.startDate !== change.startDate || phase.duration !== change.duration) {
-      console.log('Need to sync phases')
-      console.log(change)
+      // console.log('Need to sync phases')
       const reqChanges = this.syncPhases(phases, phase, phaseIndex, change)
       if (reqChanges && reqChanges.length > 0) {
         showPhaseOverlapWarning = true
       }
     } else {
-      console.log('No needto sync phases')
+      // No need to sync phases
+      // console.log('No need to sync phases')
     }
     this.setState({
       disableActiveStatusFields: change.status !== PHASE_STATUS_ACTIVE,
@@ -123,8 +123,6 @@ class EditStageForm extends React.Component {
         const startDate = moment(new Date(phase.startDate))
         const endDate = moment(new Date(phase.startDate)).add(phase.duration - 1, 'days')
         const bufferDays = refPhaseStartDate.diff(endDate, 'days') - 1
-        console.log(bufferDays, 'bufferDays')
-        console.log(delta, 'delta')
         const offset = Math.abs(delta) - bufferDays
         if (offset > 0) { // change in refPhase is has decreased start date
           startDate.subtract(offset, 'days')
@@ -148,8 +146,6 @@ class EditStageForm extends React.Component {
         const startDate = moment(new Date(phase.startDate))
         const endDate = moment(new Date(phase.startDate)).add(phase.duration - 1, 'days')
         const bufferDays = startDate.diff(refPhaseEndDate, 'days') - 1
-        console.log(bufferDays, 'bufferDays')
-        console.log(delta, 'delta')
         const offset = delta - bufferDays
         // change in refPhase is has caused end date of the refPhase to be pushed forward
         if (offset > 0) {
@@ -164,7 +160,6 @@ class EditStageForm extends React.Component {
         delta = offset
       }
     }
-    console.log(phasesToBeUpdated)
     return phasesToBeUpdated
   }
 
