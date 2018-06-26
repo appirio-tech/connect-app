@@ -97,16 +97,28 @@ class PhaseCard extends React.Component {
             </div>
           </div>
 
-
-          <div styleName="col show-md">
-            <div styleName="price-details">
-              <h5>{attr.price}</h5>
-              <div styleName="meta-list">
-                {!progressInPercent && status && (<span>{statusDetails.name}</span>)}
-                {progressInPercent && (<span>{progressInPercent}% done</span>)}
+          {status && status !== PHASE_STATUS_ACTIVE &&
+            (<div styleName="col show-md">
+              <div styleName="price-details">
+                <h5>{attr.price}</h5>
+                <div styleName="meta-list">
+                  {status && (<span>{statusDetails.name}</span>)}
+                </div>
               </div>
-            </div>
-          </div>
+            </div>)
+          }
+
+          {status && status === PHASE_STATUS_ACTIVE &&
+            (<div styleName="col show-md">
+              <div styleName="price-details">
+                <h5>{attr.price}</h5>
+                <div styleName="meta-list">
+                  {!progressInPercent && status && (<span>{statusDetails.name}</span>)}
+                  {progressInPercent && (<span>{progressInPercent}% done</span>)}
+                </div>
+              </div>
+            </div>)
+          }
 
           <div styleName="col hide-md">
             {status && status !== PHASE_STATUS_ACTIVE &&
