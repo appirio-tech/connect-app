@@ -14,7 +14,7 @@ class ProjectViewLayout extends React.Component {
     return (
       <div styleName="container">
         <div styleName="secondary-toolbar">
-          {!isAddPhasePage && (<SecondaryToolBarContainer />)}
+          {!isAddPhasePage && (<SecondaryToolBarContainer location={location} />)}
         </div>
         {this.props.main}
       </div>
