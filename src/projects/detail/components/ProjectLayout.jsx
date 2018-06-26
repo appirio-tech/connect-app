@@ -14,6 +14,8 @@ class ProjectViewLayout extends React.Component {
     return (
       <div styleName="container">
         <div styleName="secondary-toolbar">
+          { /* pass location, to make sure that component is re-rendered when location is changed
+                it's necessary to update the active state of the tabs */ }
           {!isAddPhasePage && (<SecondaryToolBarContainer location={location} />)}
         </div>
         {this.props.main}
