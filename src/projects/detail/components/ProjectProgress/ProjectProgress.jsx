@@ -24,7 +24,7 @@ const ProjectProgress = (props) => {
 }
 
 ProjectProgress.propTypes = {
-  progressPercent: PT.string,
+  progressPercent: PT.number,
   labelDayStatus: PT.string,
   labelSpent: PT.string,
   labelStatus: PT.string,

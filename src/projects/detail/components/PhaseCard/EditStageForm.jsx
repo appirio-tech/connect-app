@@ -25,7 +25,8 @@ class EditStageForm extends React.Component {
     this.state = {
       isUpdating: false,
       isEdittable: _.get(props, 'phase.status') !== PHASE_STATUS_COMPLETED,
-      disableActiveStatusFields: _.get(props, 'phase.status') !== PHASE_STATUS_ACTIVE
+      disableActiveStatusFields: _.get(props, 'phase.status') !== PHASE_STATUS_ACTIVE,
+      showPhaseOverlapWarning: false
     }
     this.submitValue = this.submitValue.bind(this)
     this.enableButton = this.enableButton.bind(this)
@@ -76,15 +77,22 @@ class EditStageForm extends React.Component {
    */
   handleChange(change) {
     const { phases, phase, phaseIndex } = this.props
+    let showPhaseOverlapWarning = false
     // if start date or duration is updated for a phase, we need to update other phases dates accordingly
     if (phase.startDate !== change.startDate || phase.duration !== change.duration) {
       console.log('Need to sync phases')
       console.log(change)
-      this.syncPhases(phases, phase, phaseIndex, change)
+      const reqChanges = this.syncPhases(phases, phase, phaseIndex, change)
+      if (reqChanges && reqChanges.length > 0) {
+        showPhaseOverlapWarning = true
+      }
     } else {
       console.log('No needto sync phases')
     }
-    this.setState({ disableActiveStatusFields: change.status !== PHASE_STATUS_ACTIVE })
+    this.setState({
+      disableActiveStatusFields: change.status !== PHASE_STATUS_ACTIVE,
+      showPhaseOverlapWarning
+    })
     if (this.isChanged()) {
       // TODO fire dirty event for phase
       // this.props.fireProjectDirty(unflatten(change))
@@ -157,12 +165,12 @@ class EditStageForm extends React.Component {
       }
     }
     console.log(phasesToBeUpdated)
-    return Promise.resolve(phasesToBeUpdated)
+    return phasesToBeUpdated
   }
 
   render() {
     const { phase, cancel, isUpdating } = this.props
-    const { isEdittable } = this.state
+    const { isEdittable, showPhaseOverlapWarning } = this.state
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment(startDate).format('YYYY-MM-DD')
     return (
@@ -178,6 +186,9 @@ class EditStageForm extends React.Component {
             onChange={ this.handleChange }
           >
             <div styleName="form">
+              { showPhaseOverlapWarning && <div className="error-message">
+                Warning: You are about to manually change the start/end date of this phase, Please ensure the start and end dates of all subsequent phases (where applicable) are updated in line with this change.
+              </div> }
               <div styleName="label-layer">
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Start Date" type="date" name="startDate" value={startDate} />
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Duration" type="number" name="duration" value={phase.duration} />
