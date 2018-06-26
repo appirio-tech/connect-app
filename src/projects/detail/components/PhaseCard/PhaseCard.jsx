@@ -20,7 +20,6 @@ import {
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
 import ProjectTypeIcon from '../../../../components/ProjectTypeIcon'
 import EditStageForm from './EditStageForm'
-import { ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER } from '../../../../config/constants'
 
 import './PhaseCard.scss'
 
@@ -62,11 +61,7 @@ class PhaseCard extends React.Component {
   }
 
   render() {
-    const { attr, projectStatus } = this.props
-
-    const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
-    const currentUserRoles = this.props.currentUserRoles || []
-    const isManageUser = currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
+    const { attr, projectStatus, isManageUser } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
     const status = attr && attr.status ? attr.status : PHASE_STATUS_DRAFT

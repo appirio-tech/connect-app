@@ -69,6 +69,7 @@ const ProjectStages = ({
         currentMemberRole={currentMemberRole}
         isProcessing={isProcessing}
         isSuperUser={isSuperUser}
+        isManageUser={isManageUser}
         project={project}
         phase={phase}
         phaseIndex={index}

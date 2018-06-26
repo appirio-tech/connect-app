@@ -60,6 +60,7 @@ class DashboardContainer extends React.Component {
       phases,
       currentMemberRole,
       isSuperUser,
+      isManageUser,
       notifications,
       productTemplates,
       isProcessing,
@@ -120,6 +121,7 @@ class DashboardContainer extends React.Component {
               currentMemberRole={currentMemberRole}
               isProcessing={isProcessing}
               isSuperUser={isSuperUser}
+              isManageUser={isManageUser}
               project={project}
               phase={activePhase}
               updateProduct={updateProduct}

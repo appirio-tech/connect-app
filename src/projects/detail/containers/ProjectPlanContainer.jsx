@@ -18,15 +18,14 @@ import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import Sticky from 'react-stickynode'
-import { ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER } from '../../../config/constants'
 
 const ProjectPlanContainer = (props) => {
   const {
     project,
     isSuperUser,
+    isManageUser,
     currentMemberRole,
-    phases,
-    currentUserRoles,
+    phases
   } = props
 
   const leftArea = (
@@ -36,8 +35,6 @@ const ProjectPlanContainer = (props) => {
       isSuperUser={isSuperUser}
     />
   )
-  const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
-  const isManageUser = currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
   return (
     <TwoColsLayout>
       <TwoColsLayout.Sidebar>
@@ -64,14 +61,14 @@ ProjectPlanContainer.propTypes = {
   currentMemberRole: PT.string.isRequired,
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
+  isManageUser: PT.bool.isRequired,
   project: PT.object.isRequired,
   productTemplates: PT.array.isRequired,
 }
 
-const mapStateToProps = ({ projectState, loadUser }) => ({
+const mapStateToProps = ({ projectState }) => ({
   productTemplates: projectState.allProductTemplates,
-  phases: projectState.phases,
-  currentUserRoles: loadUser.user.roles
+  phases: projectState.phases
 })
 
 const mapDispatchToProps = {
