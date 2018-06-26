@@ -12,7 +12,8 @@ const PhaseCardListFooter = ({
   price,
   startEndDates,
   projectId,
-  isManageUser
+  isManageUser,
+  isProjectLive
 }) => (
   <div>
     <div styleName="container">
@@ -26,7 +27,7 @@ const PhaseCardListFooter = ({
       <div styleName="price">{price}</div>
       <div styleName="status" />
     </div>
-    {isManageUser && (<div styleName="add-button-contaner">
+    {isProjectLive && isManageUser && (<div styleName="add-button-contaner">
       <Link to={`/projects/${projectId}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
     </div>)}
   </div>
@@ -45,6 +46,7 @@ PhaseCardListFooter.propTypes = {
   startEndDates: PT.string,
   projectId: PT.number,
   isManageUser: PT.bool,
+  isProjectLive: PT.bool
 }
 
 export default PhaseCardListFooter
