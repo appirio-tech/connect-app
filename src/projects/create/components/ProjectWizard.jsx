@@ -242,7 +242,7 @@ class ProjectWizard extends Component {
       const detailsQuery = { products : [projectTemplateKey] }
       this.restoreCommonDetails(projectTemplate, updateQuery, detailsQuery)
 
-      updateQuery.type = { $set : projectTemplate.key }
+      updateQuery.type = { $set : projectTemplate.type }
       updateQuery.details = { $set : detailsQuery }
     }
     this.setState({
