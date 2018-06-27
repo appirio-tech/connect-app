@@ -144,7 +144,10 @@ class ProjectSpecSidebar extends Component {
     const { products } = project.details
     const productId = products ? products[0] : null
     const product = findProduct(productId)
-    const hasEstimation = product && typeof product.basePriceEstimate !== 'undefined'
+    // TODO $PROJECT_PLAN$
+    // hide estimations until we get real data from server
+    // see https://github.com/appirio-tech/connect-app/issues/2016#issuecomment-400552992
+    const hasEstimation = false && product && typeof product.basePriceEstimate !== 'undefined'
 
     return (
       <div className={cn('projectSpecSidebar', { 'has-review-btn': showReviewBtn })}>
@@ -153,7 +156,7 @@ class ProjectSpecSidebar extends Component {
           <SidebarNav items={navItems} />
         </div>
 
-        {getProjectEstimateSection()}
+        {hasEstimation && getProjectEstimateSection()}
 
         { showReviewBtn &&
         <div>
