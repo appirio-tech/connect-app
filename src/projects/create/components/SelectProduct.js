@@ -3,6 +3,7 @@ import PT from 'prop-types'
 import config from '../../../config/projectWizard'
 import ProductCard from './ProductCard'
 import { findCategory } from '../../../config/projectWizard'
+import { DOMAIN } from '../../../config/constants'
 import './SelectProduct.scss'
 import IconAnalyticsAlgorithmOptimization from '../../../assets/icons/product-analytics-algorithm-optimization.svg'
 import IconAnalyticsComputerVision from '../../../assets/icons/product-analytics-computer-vision.svg'
@@ -151,7 +152,7 @@ function SelectProduct(props) {
         <h2>{ projectCategory.question }</h2>
         <div className="cards">{cards}</div>
         <div className="footer">
-          Looking for something else? <a href="http://crowdsourcing.topcoder.com/piqued_by_crowdsourcing">Get in touch with us &rarr;</a>
+          Looking for something else? <a href={`https://${DOMAIN}/contact?utm_source=Connect&utm_medium=Referral&utm_campaign=FooterContact`}>Get in touch with us &rarr;</a>
         </div>
       </div>
     </div>

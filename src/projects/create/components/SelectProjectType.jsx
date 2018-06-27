@@ -3,6 +3,7 @@ import PT from 'prop-types'
 import config from '../../../config/projectWizard'
 import ProjectTypeCard from './ProjectTypeCard'
 import { findProductsOfCategory } from '../../../config/projectWizard'
+import { DOMAIN } from '../../../config/constants'
 import './SelectProjectType.scss'
 import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
 import IconAnalyticsAlgorithmOptimization from '../../../assets/icons/product-analytics-algorithm-optimization.svg'
@@ -145,7 +146,7 @@ function SelectProjectType(props) {
         <h1>Create a new project</h1>
         <div className="cards">{cards}</div>
         <div className="footer">
-          Looking for something else? <a href="http://crowdsourcing.topcoder.com/piqued_by_crowdsourcing">Get in touch with us &rarr;</a>
+          Looking for something else? <a href={`https://${DOMAIN}/contact?utm_source=Connect&utm_medium=Referral&utm_campaign=FooterContact`}>Get in touch with us &rarr;</a>
         </div>
       </div>
     </div>
