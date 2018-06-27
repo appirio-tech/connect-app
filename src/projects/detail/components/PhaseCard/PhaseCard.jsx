@@ -70,6 +70,7 @@ class PhaseCard extends React.Component {
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
     const phaseEditable = isManageUser && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
+    const canDelete = status !== PHASE_STATUS_ACTIVE && status !== PHASE_STATUS_COMPLETED
 
     return (
       <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')}>
@@ -168,7 +169,7 @@ class PhaseCard extends React.Component {
               cancel={this.toggleEditView}
             />
           )}
-          {!isUpdating && (
+          {canDelete && !isUpdating && (
             <DeletePhase
               onDeleteClick={() => {
                 if (confirm(`Are you sure you want to delete phase '${attr.phase.name}'?`)) {
