@@ -146,7 +146,7 @@ function SelectProjectType(props) {
         <h1>Create a new project</h1>
         <div className="cards">{cards}</div>
         <div className="footer">
-          Looking for something else? <a href="{`https://${DOMAIN}/contact?utm_source=Connect&utm_medium=Referral&utm_campaign=FooterContact`}">Get in touch with us &rarr;</a>
+          Looking for something else? <a href={`https://${DOMAIN}/contact?utm_source=Connect&utm_medium=Referral&utm_campaign=FooterContact`}>Get in touch with us &rarr;</a>
         </div>
       </div>
     </div>
