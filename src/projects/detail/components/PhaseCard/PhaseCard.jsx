@@ -116,7 +116,7 @@ class PhaseCard extends React.Component {
                 <h5>{attr.price}</h5>
                 <div styleName="meta-list">
                   {!progressInPercent && status && (<span>{statusDetails.name}</span>)}
-                  {progressInPercent && (<span>{progressInPercent}% done</span>)}
+                  {progressInPercent !== 0 && (<span>{progressInPercent}% done</span>)}
                 </div>
               </div>
             </div>)
