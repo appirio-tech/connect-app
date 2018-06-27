@@ -17,7 +17,7 @@ import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
-import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
+import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT } from '../../../config/constants'
 import Sticky from 'react-stickynode'
 
 const ProjectPlanContainer = (props) => {
@@ -28,6 +28,12 @@ const ProjectPlanContainer = (props) => {
     currentMemberRole,
     phases
   } = props
+
+  // manager user sees all phases
+  // customer user doesn't see unplanned (draft) phases
+  const visiblePhases = phases.filter((phase) => (
+    isManageUser || phase.status !== PHASE_STATUS_DRAFT
+  ))
 
   const leftArea = (
     <ProjectInfoContainer
@@ -51,10 +57,17 @@ const ProjectPlanContainer = (props) => {
       </TwoColsLayout.Sidebar>
 
       <TwoColsLayout.Content>
-        {phases.length > 0 ? (
+        {visiblePhases.length > 0 ? (
           [
-            <ProjectPlanProgress phases={phases} project={project} key="progress" />,
-            <ProjectStages {...props} isManageUser={isManageUser} key="stages"/>
+            <ProjectPlanProgress phases={visiblePhases} project={project} key="progress" />,
+            <ProjectStages
+              {...{
+                ...props,
+                phases: visiblePhases,
+              }}
+              isManageUser={isManageUser}
+              key="stages"
+            />
           ]
         ) : (
           <ProjectPlanEmpty />
