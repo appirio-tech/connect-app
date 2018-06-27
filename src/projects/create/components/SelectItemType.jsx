@@ -5,6 +5,7 @@ import ProjectTypeCard from './ProjectTypeCard'
 import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 
 import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
+import { DOMAIN } from '../../../config/constants'
 
 import './SelectItemType.scss'
 
@@ -39,7 +40,7 @@ function SelectItemType(props) {
         <h1>{props.header}</h1>
         <div className="cards">{cards}</div>
         <div className="footer">
-          Looking for something else? <a href="http://crowdsourcing.topcoder.com/piqued_by_crowdsourcing">Get in touch with us &rarr;</a>
+          Looking for something else? <a href={`https://${DOMAIN}/contact?utm_source=Connect&utm_medium=Referral&utm_campaign=FooterContact`}>Get in touch with us &rarr;</a>
         </div>
       </div>
     </div>
