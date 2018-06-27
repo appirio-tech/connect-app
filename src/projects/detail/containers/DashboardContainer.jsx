@@ -112,7 +112,7 @@ class DashboardContainer extends React.Component {
             />
           }
 
-          {activePhases &&
+          {activePhases.length > 0 &&
             <WorkInProgress
               productTemplates={productTemplates}
               currentMemberRole={currentMemberRole}
