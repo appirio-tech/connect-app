@@ -27,8 +27,7 @@ import SystemFeed from '../../../components/Feed/SystemFeed'
 import WorkInProgress from '../components/WorkInProgress'
 
 import {
-  PROJECT_STATUS_ACTIVE,
-  PROJECT_STATUS_DRAFT,
+  PHASE_STATUS_ACTIVE,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
 } from '../../../config/constants'
@@ -78,12 +77,9 @@ class DashboardContainer extends React.Component {
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
     const sortedUnreadProjectUpdates = _.orderBy(unreadProjectUpdate, ['date'], ['desc'])
 
-    // work in progress phase
-    // find active phase otherwise fallback to some draft phase
-    const activePhase = phases && phases.length > 0 && (
-      _.find(phases, { status: PROJECT_STATUS_ACTIVE }) ||
-      _.find(phases, { status: PROJECT_STATUS_DRAFT })
-    )
+    // work in progress phases
+    // find active phases
+    const activePhases = _.orderBy(_.filter(phases, phase => phase.status === PHASE_STATUS_ACTIVE), ['endDate'])
 
     const leftArea = (
       <ProjectInfoContainer
@@ -116,7 +112,7 @@ class DashboardContainer extends React.Component {
             />
           }
 
-          {activePhase &&
+          {activePhases &&
             <WorkInProgress
               productTemplates={productTemplates}
               currentMemberRole={currentMemberRole}
@@ -124,7 +120,7 @@ class DashboardContainer extends React.Component {
               isSuperUser={isSuperUser}
               isManageUser={isManageUser}
               project={project}
-              phase={activePhase}
+              activePhases={activePhases}
               updateProduct={updateProduct}
               fireProductDirty={fireProductDirty}
               fireProductDirtyUndo={fireProductDirtyUndo}
