@@ -4,6 +4,7 @@ import { getProjectById, createProject as createProjectAPI,
   createProjectWithStatus as createProjectWithStatusAPI,
   updateProject as updateProjectAPI,
   deleteProject as deleteProjectAPI,
+  deleteProjectPhase as deleteProjectPhaseAPI,
   getDirectProjectData,
   getProjectPhases,
   getPhaseProducts,
@@ -16,7 +17,7 @@ import { getProductTemplate, getProjectTemplate, getProductTemplateByKey } from 
 import { LOAD_PROJECT, CREATE_PROJECT, CREATE_PROJECT_STAGE, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
   LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES,
   LOAD_PROJECT_TEMPLATE, LOAD_PROJECT_PRODUCT_TEMPLATES, LOAD_ALL_PRODUCT_TEMPLATES, UPDATE_PRODUCT,
-  PROJECT_STATUS_DRAFT, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO, UPDATE_PHASE
+  PROJECT_STATUS_DRAFT, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO, UPDATE_PHASE, DELETE_PROJECT_PHASE,
 } from '../../config/constants'
 
 export function loadProject(projectId) {
@@ -222,6 +223,15 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
     })
       .then(() => project)
   })
+}
+
+export function deleteProjectPhase(projectId, phaseId) {
+  return (dispatch) => {
+    return dispatch({
+      type: DELETE_PROJECT_PHASE,
+      payload: deleteProjectPhaseAPI(projectId, phaseId)
+    })
+  }
 }
 
 export function updateProject(projectId, updatedProps, updateExisting = false) {

@@ -136,6 +136,7 @@ class ProjectStage extends React.Component{
       fireProductDirty,
       fireProductDirtyUndo,
       onTabClick,
+      deleteProjectPhase,
 
       // comes from phaseFeedHOC
       currentUser,
@@ -153,7 +154,7 @@ class ProjectStage extends React.Component{
         onClick: () => onTabClick('posts'),
         label: 'Posts',
         isActive: activeTab === 'posts'
-      }, 
+      },
       {
         onClick: () => onTabClick('specification'),
         label: 'Specification',
@@ -174,6 +175,7 @@ class ProjectStage extends React.Component{
         attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed)}
         projectStatus={project.status}
         isManageUser={isManageUser}
+        deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
       >
         <div>
           <GenericMenu navLinks={tabs} />
@@ -234,6 +236,7 @@ ProjectStage.propTypes = {
   addProductAttachment: PT.func.isRequired,
   updateProductAttachment: PT.func.isRequired,
   removeProductAttachment: PT.func.isRequired,
+  deleteProjectPhase: PT.func.isRequired,
 }
 
 const ProjectStageUncontrollable = uncontrollable(ProjectStage, {

@@ -14,7 +14,8 @@ import {
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
   GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS, LOAD_PROJECT_PHASES_PENDING,
   LOAD_PROJECT_TEMPLATE_SUCCESS, LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS, LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
-  UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_SUCCESS, UPDATE_PHASE_SUCCESS, UPDATE_PHASE_PENDING, UPDATE_PHASE_FAILURE
+  UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_SUCCESS, UPDATE_PHASE_SUCCESS, UPDATE_PHASE_PENDING, UPDATE_PHASE_FAILURE,
+  DELETE_PROJECT_PHASE_PENDING, DELETE_PROJECT_PHASE_SUCCESS, DELETE_PROJECT_PHASE_FAILURE,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -186,7 +187,7 @@ export const projectState = function (state=initialState, action) {
         }}
       }
     })
-  
+
   case LOAD_PROJECT_PHASES_PENDING:
     return Object.assign({}, state, {
       isLoadingPhases: true
@@ -205,6 +206,7 @@ export const projectState = function (state=initialState, action) {
   case DELETE_PROJECT_PENDING:
   case UPDATE_PROJECT_PENDING:
   case UPDATE_PHASE_PENDING:
+  case DELETE_PROJECT_PHASE_PENDING:
     return Object.assign({}, state, {
       isLoading: false,
       processing: true,
@@ -230,6 +232,18 @@ export const projectState = function (state=initialState, action) {
       project: restoredProject,
       projectNonDirty: _.cloneDeep(restoredProject),
       updateExisting: action.payload.updateExisting
+    })
+  }
+
+  case DELETE_PROJECT_PHASE_SUCCESS: {
+    const { phaseId } = action.payload
+
+    const phaseIndex = _.findIndex(state.phases, { id: phaseId })
+
+    return update(state, {
+      phases: { $splice: [[phaseIndex, 1]] },
+      phasesNonDirty: { $splice: [[phaseIndex, 1]] },
+      processing: { $set: false },
     })
   }
 
@@ -439,6 +453,7 @@ export const projectState = function (state=initialState, action) {
   case UPDATE_PRODUCT_ATTACHMENT_FAILURE:
   case ADD_PRODUCT_ATTACHMENT_FAILURE:
   case REMOVE_PRODUCT_ATTACHMENT_FAILURE:
+  case DELETE_PROJECT_PHASE_FAILURE:
     return Object.assign({}, state, {
       isLoading: false,
       processing: false,

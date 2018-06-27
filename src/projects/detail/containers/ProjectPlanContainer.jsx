@@ -8,12 +8,13 @@ import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
 
-import { updateProduct, fireProductDirty, fireProductDirtyUndo } from '../../actions/project'
+import { updateProduct, fireProductDirty, fireProductDirtyUndo, deleteProjectPhase } from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
 import TwoColsLayout from '../components/TwoColsLayout'
 import ProjectPlanProgress from '../components/ProjectPlanProgress'
 import ProjectStages from '../components/ProjectStages'
+import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
@@ -50,8 +51,15 @@ const ProjectPlanContainer = (props) => {
       </TwoColsLayout.Sidebar>
 
       <TwoColsLayout.Content>
-        <ProjectPlanProgress phases={phases} project={project} />
-        <ProjectStages {...props} isManageUser={isManageUser}/>
+        {phases.length > 0 ? (
+          [
+            <ProjectPlanProgress phases={phases} project={project} key="progress" />,
+            <ProjectStages {...props} isManageUser={isManageUser} key="stages"/>
+          ]
+        ) : (
+          <ProjectPlanEmpty />
+        )}
+
       </TwoColsLayout.Content>
     </TwoColsLayout>
   )
@@ -78,6 +86,7 @@ const mapDispatchToProps = {
   addProductAttachment,
   updateProductAttachment,
   removeProductAttachment,
+  deleteProjectPhase,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectPlanContainer)

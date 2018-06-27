@@ -33,6 +33,7 @@ import {
   // products
   UPDATE_PRODUCT_SUCCESS,
   UPDATE_PHASE_FAILURE,
+  DELETE_PROJECT_PHASE_SUCCESS,
 } from '../config/constants'
 /* eslint-enable no-unused-vars */
 
@@ -52,6 +53,12 @@ export default function(state = {}, action) {
 
     //delay time for reload stage list of project after creating state
     setTimeout(() => { Alert.success(`Added New Stage To Project '${name}'`) }, 2000)
+
+    return state
+  }
+
+  case DELETE_PROJECT_PHASE_SUCCESS: {
+    Alert.success('Project phase deleted.')
 
     return state
   }

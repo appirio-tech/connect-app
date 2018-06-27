@@ -14,7 +14,7 @@ import {
   filterProjectNotifications,
 } from '../../../routes/notifications/helpers/notifications'
 import { toggleNotificationRead, toggleBundledNotificationRead } from '../../../routes/notifications/actions'
-import { updateProduct, fireProductDirty, fireProductDirtyUndo } from '../../actions/project'
+import { updateProduct, fireProductDirty, fireProductDirtyUndo, deleteProjectPhase } from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
 import MediaQuery from 'react-responsive'
@@ -70,6 +70,7 @@ class DashboardContainer extends React.Component {
       addProductAttachment,
       updateProductAttachment,
       removeProductAttachment,
+      deleteProjectPhase,
     } = this.props
 
     // system notifications
@@ -130,6 +131,7 @@ class DashboardContainer extends React.Component {
               addProductAttachment={addProductAttachment}
               updateProductAttachment={updateProductAttachment}
               removeProductAttachment={removeProductAttachment}
+              deleteProjectPhase={deleteProjectPhase}
             />
           }
 
@@ -160,6 +162,7 @@ const mapDispatchToProps = {
   addProductAttachment,
   updateProductAttachment,
   removeProductAttachment,
+  deleteProjectPhase,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardContainer)

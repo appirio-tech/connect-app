@@ -220,3 +220,8 @@ export function getDirectProjectData(directProjectId) {
       return resp.data.result.content
     })
 }
+
+export function deleteProjectPhase(projectId, phaseId) {
+  return axios.delete(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}`)
+    .then(() => ({ projectId, phaseId }))
+}

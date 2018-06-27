@@ -63,6 +63,7 @@ const ProjectStages = ({
   updateProductAttachment,
   removeProductAttachment,
   isManageUser,
+  deleteProjectPhase,
 }) => (
   <Section>
     <PhaseCardListHeader />
@@ -83,6 +84,7 @@ const ProjectStages = ({
         addProductAttachment={addProductAttachment}
         updateProductAttachment={updateProductAttachment}
         removeProductAttachment={removeProductAttachment}
+        deleteProjectPhase={deleteProjectPhase}
       />
     ))}
     <PhaseCardListFooter projectId={project.id} {...formatPhaseCardListFooterProps(phases, project.status)} isManageUser={isManageUser}/>
@@ -105,6 +107,7 @@ ProjectStages.propTypes = {
   addProductAttachment: PT.func.isRequired,
   updateProductAttachment: PT.func.isRequired,
   removeProductAttachment: PT.func.isRequired,
+  deleteProjectPhase: PT.func.isRequired,
 }
 
 export default ProjectStages

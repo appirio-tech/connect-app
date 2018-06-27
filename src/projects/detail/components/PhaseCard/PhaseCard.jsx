@@ -19,7 +19,9 @@ import {
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
 import ProjectTypeIcon from '../../../../components/ProjectTypeIcon'
+import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import EditStageForm from './EditStageForm'
+import DeletePhase from './DeletePhase'
 
 import './PhaseCard.scss'
 
@@ -34,7 +36,7 @@ class PhaseCard extends React.Component {
       isEditting: false
     }
   }
-  
+
   componentWillReceiveProps(nextProps) {
     // update phase finished successfully
     if(nextProps.isUpdating === false && this.props.isUpdating === true) {
@@ -61,7 +63,7 @@ class PhaseCard extends React.Component {
   }
 
   render() {
-    const { attr, projectStatus, isManageUser } = this.props
+    const { attr, projectStatus, isManageUser, deleteProjectPhase, isUpdating } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
     const status = attr && attr.status ? attr.status : PHASE_STATUS_DRAFT
@@ -159,7 +161,23 @@ class PhaseCard extends React.Component {
           {this.props.children}
         </div>)}
         {(<div styleName={'sm-separator ' + ((!isManageUser || !this.state.isEditting) ? 'hide ': '')} >
-          <EditStageForm phase={attr.phase} phaseIndex={attr.phaseIndex} cancel={this.toggleEditView} />
+          {!isUpdating && (
+            <EditStageForm
+              phase={attr.phase}
+              phaseIndex={attr.phaseIndex}
+              cancel={this.toggleEditView}
+            />
+          )}
+          {!isUpdating && (
+            <DeletePhase
+              onDeleteClick={() => {
+                if (confirm(`Are you sure you want to delete phase '${attr.phase.name}'?`)) {
+                  deleteProjectPhase()
+                }
+              }}
+            />
+          )}
+          {isUpdating && <LoadingIndicator />}
         </div>)}
 
       </div>
