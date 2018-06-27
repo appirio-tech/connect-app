@@ -12,7 +12,7 @@
       background: $tc-white;
       margin: 0 20px 20px 20px;
       border-radius: 6px;
-      border: 1px solid $tc-gray-20;
+      border: 1px solid $tc-gray-05;
 
       @media screen and (max-width: $screen-md - 1px) {
         border: 0;
@@ -47,10 +47,10 @@
     /* .flex-area .flex-row */
     .row {
       margin: 0;
-      border-bottom: 1px solid $tc-gray-10;
+      border-bottom: 1px solid $tc-gray-05;
 
       &.header:first-child {
-        border-color: $tc-gray-20;
+        border-color: $tc-gray-05;
       }
     }
 
