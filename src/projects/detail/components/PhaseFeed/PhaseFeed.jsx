@@ -6,17 +6,21 @@
 import React from 'react'
 import _ from 'lodash'
 
-import ScrollableFeed from './ScrollableFeed'
-import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import ScrollableFeed from '../ScrollableFeed'
+import spinnerWhileLoading from '../../../../components/LoadingSpinner'
+
+import './PhaseFeed.scss'
 
 const PhaseFeedView = (props) => (
-  <ScrollableFeed
-    {...{
-      ..._.omit(props, 'feed'),
-      ...props.feed,
-      id: (props.feed ? props.feed.id.toString() : '0'),
-    }}
-  />
+  <div styleName="container">
+    <ScrollableFeed
+      {...{
+        ..._.omit(props, 'feed'),
+        ...props.feed,
+        id: (props.feed ? props.feed.id.toString() : '0'),
+      }}
+    />
+  </div>
 )
 
 const enhance = spinnerWhileLoading(props => !props.isLoading)

@@ -9,7 +9,7 @@
   color: #fff;
   height: $base-unit*8;
   line-height: $base-unit*8;
-  @include roboto-bold;
+  @include roboto;
   font-size: 15px;
   .hide-sm {
     display: inline-block;
@@ -58,6 +58,7 @@
     }
 
     .spent {
+      text-align: right;
       padding-right: 25px;
       @media screen and (max-width: $screen-md - 1px) {
         margin-left: auto;
@@ -66,7 +67,7 @@
 
     .status {
       text-align: right;
-      min-width: 89px;
+      min-width: 90px;
     }
   }
 

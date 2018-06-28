@@ -11,7 +11,7 @@ import { formatNumberWithCommas } from '../../../helpers/format'
 import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
 
 import PhaseCard from './PhaseCard'
-import GenericMenu from '../../../components/GenericMenu'
+import ProjectStageTabs from './ProjectStageTabs'
 import EditProjectForm from './EditProjectForm'
 import PhaseFeed from './PhaseFeed'
 import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
@@ -149,19 +149,6 @@ class ProjectStage extends React.Component{
       onSaveMessage,
     } = this.props
 
-    const tabs = [
-      {
-        onClick: () => onTabClick('posts'),
-        label: 'Posts',
-        isActive: activeTab === 'posts'
-      },
-      {
-        onClick: () => onTabClick('specification'),
-        label: 'Specification',
-        isActive: activeTab === 'specification'
-      }
-    ]
-
     // NOTE even though in store we keep products as an array,
     // so far we always have only one product per phase, so will display only one
     const productTemplate = _.find(productTemplates, { id: _.get(phase, 'products[0].templateId') })
@@ -178,7 +165,7 @@ class ProjectStage extends React.Component{
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
       >
         <div>
-          <GenericMenu navLinks={tabs} />
+          <ProjectStageTabs activeTab={activeTab} onTabClick={onTabClick} />
 
           {activeTab === 'posts' &&
             <PhaseFeed

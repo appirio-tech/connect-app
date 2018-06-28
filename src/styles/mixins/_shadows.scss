@@ -7,5 +7,5 @@
 }
 
 @mixin modal-shadow {
-  box-shadow: 0 5px 35px 5px rgba(21, 21, 22, 0.10000000149011612), 0 10px 14px 0 rgba(21, 21, 22, 0.30000001192092896);
+  box-shadow: 0 5px 35px 5px rgba($tc-black, 0.10000000149011612), 0 10px 14px 0 rgba($tc-black, 0.30000001192092896);
 }

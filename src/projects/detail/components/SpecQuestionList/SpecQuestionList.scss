@@ -83,12 +83,14 @@
         }
 
         textarea {
-          min-height: 45px;
+          min-height: 40px;
           max-width: 100%;
           text-align: left;
           text-indent: 0;
           margin-bottom: 0;
-          line-height: 24.5px;
+          padding-top: 7px;
+          padding-bottom: 7px;
+          line-height: 24px;
         }
 
         .radio-group-input,

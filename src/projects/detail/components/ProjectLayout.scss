@@ -8,8 +8,9 @@
 }
 
 .secondary-toolbar {
+  box-shadow: 0 4px 3px -3px $tc-gray-20, 0 1px 0 0 $tc-gray-20, 0 -1px 0 0 $tc-gray-05;
   position: relative;
-  z-index: 1;
+  z-index: 5;
 
   @media  screen and (min-width: $screen-md) {
     position: fixed;

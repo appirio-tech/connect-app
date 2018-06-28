@@ -11,14 +11,12 @@
 }
 
 .title {
-  flex: 0 500px;
+  flex: 1 500px;
 }
 
 .price {
   flex: 0 140px;
-  /* 18px minimum padding between price status column
-     + 10px to slightly align center the price header */
-  padding-right: 18px + 10px;
+  padding-right: 5 * $base-unit;
   text-align: right;
 
   @media screen and (max-width: $screen-md - 1px) {
@@ -27,6 +25,10 @@
 }
 
 .status {
+  flex: 0 55px;
+  min-width: 55px;
+  text-align: center;
+
   @media screen and (max-width: $screen-md - 1px) {
     display: none;
   }

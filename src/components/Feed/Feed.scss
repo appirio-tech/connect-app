@@ -2,7 +2,6 @@
 @import '../../styles/includes';
 
 .feed-container {
-  @include stand-alone-item-shadow;
   background-color: $tc-gray-neutral-light;
   border-radius: $card-border-radius;
 

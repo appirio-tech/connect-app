@@ -418,27 +418,29 @@ class FeedView extends React.Component {
               />
             </MediaQuery>
             {feeds.map((feed) => (
-              <ScrollableFeed
-                {...{
-                  key: feed.id.toString(),
-                  ...feed,
-                  id: feed.id.toString(),
-                  allowComments: feed.allowComments && !!currentMemberRole,
-                  currentUser,
-                  allMembers,
-                  onNewCommentChange: this.onNewCommentChange.bind(this, feed.id),
-                  onAddNewComment: this.onAddNewComment.bind(this, feed.id),
-                  onLoadMoreComments: this.onShowAllComments.bind(this, feed.id),
-                  onEditMessage: this.onEditMessage.bind(this, feed.id),
-                  onSaveMessageChange: this.onSaveMessageChange.bind(this, feed.id),
-                  onSaveMessage: this.onSaveMessage.bind(this, feed.id),
-                  onDeleteMessage: this.onDeleteMessage.bind(this, feed.id),
-                  onEditTopic: this.onEditTopic.bind(this, feed.id),
-                  onTopicChange: this.onTopicChange.bind(this, feed.id),
-                  onSaveTopic: this.onSaveTopic.bind(this, feed.id),
-                  onDeleteTopic: this.onDeleteTopic.bind(this, feed.id),
-                }}
-              />
+              <div styleName="feed-card">
+                <ScrollableFeed
+                  {...{
+                    key: feed.id.toString(),
+                    ...feed,
+                    id: feed.id.toString(),
+                    allowComments: feed.allowComments && !!currentMemberRole,
+                    currentUser,
+                    allMembers,
+                    onNewCommentChange: this.onNewCommentChange.bind(this, feed.id),
+                    onAddNewComment: this.onAddNewComment.bind(this, feed.id),
+                    onLoadMoreComments: this.onShowAllComments.bind(this, feed.id),
+                    onEditMessage: this.onEditMessage.bind(this, feed.id),
+                    onSaveMessageChange: this.onSaveMessageChange.bind(this, feed.id),
+                    onSaveMessage: this.onSaveMessage.bind(this, feed.id),
+                    onDeleteMessage: this.onDeleteMessage.bind(this, feed.id),
+                    onEditTopic: this.onEditTopic.bind(this, feed.id),
+                    onTopicChange: this.onTopicChange.bind(this, feed.id),
+                    onSaveTopic: this.onSaveTopic.bind(this, feed.id),
+                    onDeleteTopic: this.onDeleteTopic.bind(this, feed.id),
+                  }}
+                />
+              </div>
             ))}
           </div>
         </Section>

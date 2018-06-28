@@ -6,7 +6,7 @@
   border-radius: 0 0 $card-border-radius $card-border-radius;
 
   :global(.rich-editor) :global(.tc-textarea) :global(.public-DraftEditor-content) {
-    min-height: 40px
+    min-height: 40px;
   }
 
   @media screen and (max-width: $screen-md - 1px) {
@@ -82,7 +82,7 @@
 
   &::before {
     content: '';
-    border-top: 1px solid $tc-gray-20;
+    border-top: 1px solid $tc-gray-10;
     display: block;
     left: 0;
     position: absolute;
