@@ -8,4 +8,8 @@
 .feed-card {
   @include stand-alone-item-shadow;
   border-radius: $card-border-radius;
+
+  & + & {
+    margin-top: 2 * $base-unit;
+  }
 }
