@@ -122,11 +122,13 @@
       .public-DraftEditor-content,
       textarea {
         @include roboto;
-        min-height: 75px;
+        min-height: 2px + 40px + 25px; /* border + height of one line field + one more line */
         color: $tc-gray-80;
         line-height: $base-unit*5;
         font-size: $tc-label-md;
         border-color: $tc-gray-30; /* to match input border colors */
+        padding-top: (40px - 25px) / 2;    /* one line input height minus line-height */
+        padding-bottom: (40px - 25px) / 2; /* one line input height minus line-height */
 
         &:hover {
           border-color: $tc-gray-50;
