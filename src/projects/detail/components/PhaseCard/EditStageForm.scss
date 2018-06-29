@@ -1,7 +1,7 @@
 @import '../../../../styles/includes';
 @import '~tc-ui/src/styles/tc-includes';
 .container {
-  background: #FAFAFB;
+  background: $tc-gray-neutral-light;
   padding: 10px;
   border-radius: 6px;
   @include roboto;
@@ -25,12 +25,12 @@
   height: inherit;
   position: relative;
   line-height: inherit;
-  flex: 0 300px; 
+  flex: 0 300px;
 
   :global .dropdown-wrap {
     width: 100%;
     margin-left: 0px;
-  } 
+  }
 
   label {
     margin: 0px 10px 10px;
@@ -39,29 +39,29 @@
     line-height: 30px;
     white-space: nowrap;
   }
-  
+
   .input {
       &::-webkit-input-placeholder {
         text-transform: initial;
-        color:#A3A3AD;
+        color:$tc-gray-30;
         font-size: 15px;
         font-weight: 400;
       }
       &:-moz-placeholder {
         text-transform: initial;
-        color:#A3A3AD;
+        color:$tc-gray-30;
         font-size: 15px;
         font-weight: 400;
       }
       &::-moz-placeholder {
         text-transform: initial;
-        color:#A3A3AD;
+        color:$tc-gray-30;
         font-size: 15px;
         font-weight: 400;
       }
       &:-ms-input-placeholder {
         text-transform: initial;
-        color:#A3A3AD;
+        color:$tc-gray-30;
         font-size: 15px;
         font-weight: 400;
       }
@@ -88,7 +88,7 @@
     align-items: center;
     margin-top: 20px;
     margin-bottom: 20px;
-    
+
     button {
       margin: 0 5px 0 5px;
       &.disable {

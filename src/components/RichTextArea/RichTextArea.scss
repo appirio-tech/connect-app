@@ -126,7 +126,7 @@
         color: $tc-gray-80;
         line-height: $base-unit*5;
         font-size: $tc-label-md;
-        border-color: #aaaaab; /* to match input border colors */
+        border-color: $tc-gray-30; /* to match input border colors */
 
         &:hover {
           border-color: $tc-gray-50;

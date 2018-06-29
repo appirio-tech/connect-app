@@ -3,10 +3,10 @@
 
 :global {
   .side-filter {
-    background: #FFFFFF;
+    background: $tc-white;
     border-radius: 4px;
     padding: 10px;
-  
+
     .additional-content {
       border-top: 1px solid $tc-gray-10;
       margin-top: 10px;
@@ -15,4 +15,3 @@
     }
   }
 }
-  

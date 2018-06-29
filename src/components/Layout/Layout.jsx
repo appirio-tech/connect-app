@@ -8,7 +8,7 @@ import Maintenance from '../Maintenance/Maintenance'
 require('./Layout.scss')
 
 // Alert styles
-import '../../styles/vendors/s-alert-default.css'
+import '../../styles/vendors/s-alert-default.scss'
 import 'react-s-alert/dist/s-alert-css-effects/stackslide.css'
 
 const Layout = (props) => {

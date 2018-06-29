@@ -1,7 +1,7 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 .feed {
-  background-color: #fff;
+  background-color: $tc-white;
   padding: 3 * $base-unit 4 * $base-unit 1 * $base-unit;
 
   & + & {

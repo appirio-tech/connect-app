@@ -7,7 +7,7 @@
   display: flex;
   justify-content: center;
   height: 50px;
-  background-color: #fafafb;
+  background-color: $tc-gray-neutral-light;
   position: relative;
   .list {
     display: flex;
@@ -24,12 +24,12 @@
         width: 8px;
         height: 8px;
         border-radius: 100%;
-        background-color: #FF5B52;
+        background-color: $tc-red-70;
       }
     }
     a,
     span {
-      color: #959596;
+      color: $tc-gray-40;
       font-size: 13px;
       text-align: center;
       display: inline-block;
@@ -47,9 +47,9 @@
         background-color: transparent;
       }
       &.active {
-        color: #151516;
+        color: $tc-black;
         &:after {
-          background-color: #0681FF;
+          background-color: $tc-dark-blue-100;
         }
       }
     }

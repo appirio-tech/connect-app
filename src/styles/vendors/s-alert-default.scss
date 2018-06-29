@@ -1,4 +1,7 @@
-/* Common, default styles for the notification box */
+/* Common, default styles for the notification box
+
+   NOTE, default styles from vendor are customized at the end of this file
+*/
 
 .s-alert-box,
 .s-alert-box * {
@@ -70,12 +73,12 @@
     height: 84%;
     top: 50%;
     left: 50%;
-    background: #fff;
+    background: $tc-white;
 }
 
 .s-alert-close:hover::before,
 .s-alert-close:hover::after {
-    background: #fff;
+    background: $tc-white;
 }
 
 .s-alert-close::before {
@@ -131,59 +134,6 @@
     bottom: auto;
 }
 
-/* conditions */
-
-.s-alert-info {
-    background: #CFE6FF 100%;
-    color: #47474F;
-}
-.s-alert-info .s-alert-close::before,
-.s-alert-info .s-alert-close::after {
-    background: #59A7FF;
-}
-.s-alert-info .s-alert-close:hover::before,
-.s-alert-info .s-alert-close:hover::after {
-    background: #1A85FF;
-}
-
-.s-alert-success {
-    background: #CFEFB2;
-    color: #47474F;
-}
-.s-alert-success .s-alert-close::before,
-.s-alert-success .s-alert-close::after {
-    background: #96D957;
-} 
-.s-alert-success .s-alert-close:hover::before,
-.s-alert-success .s-alert-close:hover::after {
-    background: #60C700;
-} 
-.s-alert-warning {
-    background: #FFF7CC;
-    color: #47474F;
-}
-.s-alert-warning .s-alert-close::before,
-.s-alert-warning .s-alert-close::after {
-    background: #FCE217;
-} 
-.s-alert-warning .s-alert-close:hover::before,
-.s-alert-warning .s-alert-close:hover::after {
-    background: #FB7D22;
-} 
-.s-alert-error {
-    background: #FFD4D1;
-    color: #47474F;
-}
-.s-alert-error .s-alert-close::before,
-.s-alert-error .s-alert-close::after{
-    background: #FF5B52;
-} 
-
-.s-alert-error .s-alert-close:hover::before,
-.s-alert-error .s-alert-close:hover::after {
-    background: #F22F24;
-}
-
 [class^="s-alert-effect-"].s-alert-hide,
 [class*=" s-alert-effect-"].s-alert-hide {
     -webkit-animation-direction: reverse;
@@ -194,4 +144,46 @@
 .s-alert-box-height {
     visibility: hidden;
     position: fixed;
+}
+
+/* customize default styles */
+
+.s-alert-box {
+  @include roboto-bold;
+  background-color: $tc-gray-90;
+  border-radius: 6px;
+  box-shadow: 0 2px 7px 1px rgba($tc-black, 0.30000001192092896);
+  color: $tc-white;
+  font-size: 13px;
+  max-width: 100%;
+  padding: 4 * $base-unit;
+  text-transform: uppercase;
+  width: 320px;
+
+  .s-alert-close {
+    right: 4 * $base-unit;
+    top: 4 * $base-unit;
+  }
+
+  .s-alert-close::before,
+  .s-alert-close::after {
+    background-color: $tc-white;
+    width: 2px;
+  }
+
+  &:hover {
+    .s-alert-close::before,
+    .s-alert-close::after {
+      background-color: $tc-white;
+    }
+  }
+}
+
+.s-alert-box-inner {
+  padding-right: 6 * $base-unit;
+}
+
+.s-alert-warning,
+.s-alert-error {
+    background: $tc-red-70;
 }
