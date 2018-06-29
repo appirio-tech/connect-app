@@ -12,7 +12,6 @@ import Section from '../components/Section'
 import ProjectStage from '../components/ProjectStage'
 import PhaseCardListHeader from '../components/PhaseCardListHeader'
 import PhaseCardListFooter from '../components/PhaseCardListFooter'
-import { PROJECT_STATUS_COMPLETED, PROJECT_STATUS_CANCELLED} from '../../../config/constants'
 
 /**
  * Format PhaseCardListFooter props
@@ -21,7 +20,7 @@ import { PROJECT_STATUS_COMPLETED, PROJECT_STATUS_CANCELLED} from '../../../conf
  *
  * @returns {Object} PhaseCardListFooter props
  */
-function formatPhaseCardListFooterProps(phases, projectStatus) {
+function formatPhaseCardListFooterProps(phases) {
   const startDates = _.compact(phases.map((phase) =>
     phase.startDate ? moment(phase.startDate) : null
   ))
@@ -39,13 +38,10 @@ function formatPhaseCardListFooterProps(phases, projectStatus) {
   const duration = `${_.sum(phases.map((phase) => _.get(phase, 'duration', 0))) + phases.length} days`
   const price = `$${formatNumberWithCommas(totalPrice)}`
 
-  const isProjectLive = projectStatus !== PROJECT_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED
-
   return {
     duration,
     startEndDates,
-    price,
-    isProjectLive
+    price
   }
 }
 
@@ -87,7 +83,7 @@ const ProjectStages = ({
         deleteProjectPhase={deleteProjectPhase}
       />
     ))}
-    <PhaseCardListFooter projectId={project.id} {...formatPhaseCardListFooterProps(phases, project.status)} isManageUser={isManageUser}/>
+    <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases)}/>
   </Section>
 )
 

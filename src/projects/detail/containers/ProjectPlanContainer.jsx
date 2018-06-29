@@ -17,8 +17,11 @@ import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
-import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT } from '../../../config/constants'
+import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT, PROJECT_STATUS_COMPLETED, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
 import Sticky from 'react-stickynode'
+import { Link } from 'react-router-dom'
+
+import './ProjectPlanContainer.scss'
 
 const ProjectPlanContainer = (props) => {
   const {
@@ -34,6 +37,7 @@ const ProjectPlanContainer = (props) => {
   const visiblePhases = phases.filter((phase) => (
     isManageUser || phase.status !== PHASE_STATUS_DRAFT
   ))
+  const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
 
   const leftArea = (
     <ProjectInfoContainer
@@ -72,7 +76,9 @@ const ProjectPlanContainer = (props) => {
         ) : (
           <ProjectPlanEmpty />
         )}
-
+        {isProjectLive && isManageUser && (<div styleName="add-button-container">
+          <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
+        </div>)}
       </TwoColsLayout.Content>
     </TwoColsLayout>
   )
