@@ -5,8 +5,17 @@
   background-color: $tc-white;
   border-radius: 0 0 $card-border-radius $card-border-radius;
 
-  :global(.rich-editor) :global(.tc-textarea) :global(.public-DraftEditor-content) {
-    min-height: 40px;
+  :global {
+    .rich-editor .tc-textarea .public-DraftEditor-content {
+      padding-bottom: (40px - 25px) / 2; /* input height minus line-height */
+      padding-top: (40px - 25px) / 2;    /* input height minus line-height */
+      min-height: 0;
+    }
+
+    .rich-editor .tc-textarea .public-DraftEditorPlaceholder-root {
+      padding-top: (40px - 25px) / 2; /* input height minus line-height */
+      line-height: 25px;
+    }
   }
 
   @media screen and (max-width: $screen-md - 1px) {
