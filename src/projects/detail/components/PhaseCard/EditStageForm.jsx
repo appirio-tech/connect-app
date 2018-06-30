@@ -114,35 +114,35 @@ class EditStageForm extends React.Component {
     //!date,duration //date changed
     //date,!duration //duration changed
     const phasesToBeUpdated = []
-    var overLapping = false
+    let overLapping = false
     for(let i =0; i < phases.length; i++) {
-      if(i == 0) {//first phase
-        if(i == refPhaseIndex) {//passing updatedPhase in this case
+      if(i === 0) {//first phase
+        if(i === refPhaseIndex) {//passing updatedPhase in this case
           overLapping = this.isPhaseOverlapping(null, updatedPhase, phases[i+1])
         } else {//checking if next phase is currently updated phase, for dynamically removing warning
           let next = phases[i+1]
-          if(i+1 == refPhaseIndex)
+          if(i+1 === refPhaseIndex)
             next = updatedPhase
           overLapping = this.isPhaseOverlapping(null, phases[i], next)
         }
-      } else if(i == phases.length - 1) { //last phase
-        if(i == refPhaseIndex) {//passing updatedPhase in this case
+      } else if(i === phases.length - 1) { //last phase
+        if(i === refPhaseIndex) {//passing updatedPhase in this case
           overLapping = this.isPhaseOverlapping(phases[i-1], updatedPhase, null)
         } else {//checking if next phase is currently updated phase, for dynamically removing warning
           let prev = phases[i-1]
-          if(i-1 == refPhaseIndex)
+          if(i-1 === refPhaseIndex)
             prev = updatedPhase
           overLapping = this.isPhaseOverlapping(prev, phases[i], null)
         }
       }  else {//middle phases
-        if(i == refPhaseIndex) {//passing updatedPhase in this case
+        if(i === refPhaseIndex) {//passing updatedPhase in this case
           overLapping = this.isPhaseOverlapping(phases[i-1], updatedPhase, phases[i+1])
         } else {
           let prev = phases[i-1]
           let next = phases[i+1]
-          if(i == refPhaseIndex + 1) //for dynamically removing warning
+          if(i === refPhaseIndex + 1) //for dynamically removing warning
             prev = updatedPhase
-          else if (i == refPhaseIndex - 1) //for dynamically removing warning
+          else if (i === refPhaseIndex - 1) //for dynamically removing warning
             next = updatedPhase
           overLapping = this.isPhaseOverlapping(prev, phases[i], next)
         }
