@@ -64,7 +64,7 @@ const TeamManagement = (props) => {
     <div className="team-management">
       <MobileExpandable title={`PROJECT TEAM (${members.length})`}>
         <Panel className={cn({'modal-active': modalActive})}>
-          {(currentMember || currentUser.isAdmin) && <Panel.AddBtn onClick={() => onToggleAddTeamMember(true)}>Add Team Member</Panel.AddBtn>}
+          {(currentMember && (currentMember.isCopilot || currentMember.isManager || currentUser.isAdmin)) && <Panel.AddBtn onClick={() => onToggleAddTeamMember(true)}>Add Team Member</Panel.AddBtn>}
 
           {modalActive && <div className="modal-overlay" />}
           <Panel.Title>
