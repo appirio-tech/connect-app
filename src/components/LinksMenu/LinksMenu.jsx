@@ -108,6 +108,11 @@ const LinksMenu = ({
                           <BtnRemove className="btn-edit"/>
                         </button>
                       </div>}
+                      {!!link.count &&
+                        <div className="link-count">
+                          {link.count}
+                        </div>
+                      }
                     </div>
                   </li>
                 )

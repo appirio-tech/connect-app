@@ -23,6 +23,22 @@
         padding-left:20px;
         width: 110px;
       }
+
+      .link-count {
+        @include roboto-medium;
+        background-color: $tc-red-70;
+        border-radius: 8px;
+        color: $tc-white;
+        font-size: 11px;
+        height: 16px;
+        line-height: 16px;
+        margin-left: auto;
+        margin-right: 4 * $base-unit;
+        margin-top: 2px;
+        text-align: center;
+        width: 16px;
+      }
+
       .buttons{
         display: none;
         margin-right: 5px;

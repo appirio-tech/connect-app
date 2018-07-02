@@ -118,6 +118,7 @@ class ProjectInfoContainer extends React.Component {
       title: `#${feed.title}`,
       address: `/projects/${project.id}#feed-${feed.id}`,
       noNewPage: true,
+      count: _.filter(feed.posts, { read: false }).length,
     }))
 
     return (
