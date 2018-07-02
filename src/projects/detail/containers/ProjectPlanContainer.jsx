@@ -42,6 +42,7 @@ const ProjectPlanContainer = (props) => {
   const leftArea = (
     <ProjectInfoContainer
       currentMemberRole={currentMemberRole}
+      phases={phases}
       project={project}
       isSuperUser={isSuperUser}
     />
@@ -91,6 +92,7 @@ ProjectPlanContainer.propTypes = {
   isManageUser: PT.bool.isRequired,
   project: PT.object.isRequired,
   productTemplates: PT.array.isRequired,
+  phases: PT.array.isRequired,
 }
 
 const mapStateToProps = ({ projectState }) => ({
