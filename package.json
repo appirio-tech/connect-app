@@ -102,6 +102,7 @@
     "linkify-it": "^2.0.3",
     "lodash": "^4.16.4",
     "moment": "^2.14.1",
+    "moment-range": "^4.0.1",
     "prop-types": "^15.6.0",
     "query-string": "^4.3.4",
     "rc-slider": "^8.3.5",
