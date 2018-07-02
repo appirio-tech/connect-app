@@ -18,6 +18,7 @@ import update from 'react-addons-update'
 import NewPost from '../../../components/Feed/NewPost'
 
 import { loadDashboardFeeds, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
+import { toggleNotificationRead } from '../../../routes/notifications/actions'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
 import { filterReadNotifications, filterNotificationsByProjectId, filterTopicAndPostChangedNotifications } from '../../../routes/notifications/helpers/notifications'
@@ -516,6 +517,7 @@ const mapDispatchToProps = {
   saveFeedComment,
   deleteFeedComment,
   getFeedComment,
+  toggleNotificationRead,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedContainer)
