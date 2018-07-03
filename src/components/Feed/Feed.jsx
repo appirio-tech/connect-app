@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import FeedComments from './FeedComments'
 import CommentEditToggle from '../ActionCard/CommentEditToggle'
@@ -53,6 +54,8 @@ class Feed extends React.Component {
       const title = this.props.newTitle === null || this.props.newTitle === undefined ? this.props.title : this.props.newTitle
       const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
 
+      const lastPostDate = comments.length > 0 ? comments[comments.length - 1].date : topicMessage.date
+
       topicHeader = (
         <header styleName="feed-header">
           {editTopicMode ? (
@@ -74,15 +77,21 @@ class Feed extends React.Component {
             </div>
           ) : (
             <div styleName="header-view">
-              <div styleName="title">{title}</div>
-              {self && (
-                <CommentEditToggle
-                  forTopic
-                  hideDelete={comments.length > 0}
-                  onEdit={this.onEditTopic}
-                  onDelete={onDeleteTopic}
-                />
-              )}
+              <div styleName="header-main">
+                <div styleName="title">{title}</div>
+                {self && (
+                  <CommentEditToggle
+                    forTopic
+                    hideDelete={comments.length > 0}
+                    onEdit={this.onEditTopic}
+                    onDelete={onDeleteTopic}
+                  />
+                )}
+              </div>
+              <div styleName="header-details">
+                <span>{moment(lastPostDate).format('MMM D YYYY')}</span>
+                <span>{comments.length} post{comments.length !== 1 ? 's' : ''}</span>
+              </div>
             </div>
           )}
         </header>
