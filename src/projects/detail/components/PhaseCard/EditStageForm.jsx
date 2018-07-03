@@ -33,6 +33,7 @@ class EditStageForm extends React.Component {
     this.enableButton = this.enableButton.bind(this)
     this.disableButton = this.disableButton.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.onCancel = this.onCancel.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -68,6 +69,14 @@ class EditStageForm extends React.Component {
     // We check if this.refs.form exists because this may be called before the
     // first render, in which case it will be undefined.
     return (this.refs.form && this.refs.form.isChanged()) || this.state.isFeaturesDirty
+  }
+
+  onCancel() {
+    this.refs.form.reset()
+    this.setState({
+      showPhaseOverlapWarning: false
+    })
+    this.props.cancel()
   }
 
   /**
@@ -209,7 +218,7 @@ class EditStageForm extends React.Component {
   }
 
   render() {
-    const { phase, cancel, isUpdating } = this.props
+    const { phase, isUpdating } = this.props
     const { isEdittable, showPhaseOverlapWarning } = this.state
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment(startDate).format('YYYY-MM-DD')
@@ -245,7 +254,7 @@ class EditStageForm extends React.Component {
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress" type="number" name="progress" value={phase.progress} disabled={this.state.disableActiveStatusFields} minValue={0} />
               </div>
               <div styleName="group-bottom">
-                <button onClick={cancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
+                <button onClick={this.onCancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
                 <button className="tc-btn tc-btn-primary tc-btn-sm"
                   type="submit" disabled={(!this.isChanged() || isUpdating) || !this.state.canSubmit}
                 >Update Phase</button>
