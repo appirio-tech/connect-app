@@ -66,7 +66,8 @@ class PhaseCard extends React.Component {
     const { attr, projectStatus, isManageUser, deleteProjectPhase, isUpdating } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
-    const status = attr && attr.status ? attr.status : PHASE_STATUS_DRAFT
+    let status = attr && attr.status ? attr.status : PHASE_STATUS_DRAFT
+    status = _.find(PHASE_STATUS, s => s.value === status) ? status : PHASE_STATUS_DRAFT
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
     const phaseEditable = isManageUser && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
