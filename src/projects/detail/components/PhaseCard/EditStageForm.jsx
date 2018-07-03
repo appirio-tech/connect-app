@@ -1,7 +1,8 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
-import moment from 'moment'
+import Moment from 'moment'
+import { extendMoment } from 'moment-range'
 
 import styles from './EditStageForm.scss'
 import { connect } from 'react-redux'
@@ -15,7 +16,7 @@ import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingInd
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
 import { PHASE_STATUS_COMPLETED, PHASE_STATUS, PHASE_STATUS_ACTIVE } from '../../../../config/constants'
 
-
+const moment = extendMoment(Moment)
 const phaseStatuses = PHASE_STATUS.map(ps => ({ title: ps.name, value: ps.value }))
 
 class EditStageForm extends React.Component {
@@ -108,66 +109,41 @@ class EditStageForm extends React.Component {
   checkOverlappingPhases(phases, refPhase, refPhaseIndex, updatedPhase) {
     // if startDate or duration is not set in the current update, we don't need to do anything
     if (!updatedPhase.startDate || !updatedPhase.duration) return false
-
     //Possible mutations
     //!date,!duration //both changed
     //!date,duration //date changed
     //date,!duration //duration changed
     const phasesToBeUpdated = []
     let overLapping = false
+    const updatedPhaseStartDate = updatedPhase ? moment(new Date(updatedPhase.startDate)) : null
+    const updatedPhaseEndDate = updatedPhase ? moment(new Date(updatedPhase.startDate)).add(updatedPhase.duration - 1, 'days') : null
+    const updatedPhaseRange = moment().range(updatedPhaseStartDate, updatedPhaseEndDate)
     for(let i =0; i < phases.length; i++) {
-      if(i === 0) {//first phase
-        if(i === refPhaseIndex) {//passing updatedPhase in this case
-          overLapping = this.isPhaseOverlapping(null, updatedPhase, phases[i+1])
-        } else {//checking if next phase is currently updated phase, for dynamically removing warning
-          let next = phases[i+1]
-          if(i+1 === refPhaseIndex)
-            next = updatedPhase
-          overLapping = this.isPhaseOverlapping(null, phases[i], next)
-        }
-      } else if(i === phases.length - 1) { //last phase
-        if(i === refPhaseIndex) {//passing updatedPhase in this case
-          overLapping = this.isPhaseOverlapping(phases[i-1], updatedPhase, null)
-        } else {//checking if next phase is currently updated phase, for dynamically removing warning
-          let prev = phases[i-1]
-          if(i-1 === refPhaseIndex)
-            prev = updatedPhase
-          overLapping = this.isPhaseOverlapping(prev, phases[i], null)
-        }
-      }  else {//middle phases
-        if(i === refPhaseIndex) {//passing updatedPhase in this case
-          overLapping = this.isPhaseOverlapping(phases[i-1], updatedPhase, phases[i+1])
-        } else {
-          let prev = phases[i-1]
-          let next = phases[i+1]
-          if(i === refPhaseIndex + 1) //for dynamically removing warning
-            prev = updatedPhase
-          else if (i === refPhaseIndex - 1) //for dynamically removing warning
-            next = updatedPhase
-          overLapping = this.isPhaseOverlapping(prev, phases[i], next)
+      overLapping = false
+      if(i !== refPhaseIndex) {
+        const currentStartDate = moment(new Date(phases[i].startDate))
+        const currentEndDate = moment(new Date(phases[i].startDate)).add(phases[i].duration - 1, 'days')
+        const currentPhaseRange = moment().range(currentStartDate, currentEndDate)
+        if(currentPhaseRange.contains(updatedPhaseStartDate)) {
+          overLapping = true
+        } else if(currentPhaseRange.contains(updatedPhaseEndDate)) {
+          overLapping = true
+        } else if(updatedPhaseRange.contains(currentStartDate) && updatedPhaseRange.contains(currentEndDate)) {
+          overLapping = true
         }
       }
       //pushing the phase if its overlapping with any
       if(overLapping) {
-        phasesToBeUpdated.push({ id: phases[i].id, startDate: moment(new Date(phases[i].startDate)).utc(), name: phases[i].name})
+        phasesToBeUpdated.push({
+          id: phases[i].id, 
+          startDate: moment(new Date(phases[i].startDate)).utc(), 
+          conflictingPhaseName: phases[i].name,
+          conflictingPhaseIndex: i,
+          updatedPhase: refPhase.name
+        })
       }
     }
     return phasesToBeUpdated
-  }
-
-  isPhaseOverlapping(prevPhase, currentPhase, nextPhase) {
-    const prevPhaseEndDate = prevPhase ? moment(new Date(prevPhase.startDate)).add(prevPhase.duration - 1, 'days') : null
-    const currentStartDate = moment(new Date(currentPhase.startDate))
-    const currentEndDate = moment(new Date(currentPhase.startDate)).add(currentPhase.duration - 1, 'days')
-    const nextPhaseStartDate = nextPhase ? moment(new Date(nextPhase.startDate)) : null
-    //debugger
-    //check startDate of currentPhase with previous's endDate
-    if(prevPhase && !(currentStartDate > prevPhaseEndDate))
-      return true
-    //check endDate of currentPhase with next's startDate
-    if(nextPhase && !(currentEndDate < nextPhaseStartDate))
-      return true
-    return false
   }
 
   syncPhases(phases, refPhase, refPhaseIndex, updatedPhase) {
