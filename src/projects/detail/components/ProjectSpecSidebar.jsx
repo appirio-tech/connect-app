@@ -151,7 +151,7 @@ class ProjectSpecSidebar extends Component {
 
     return (
       <div className={cn('projectSpecSidebar', { 'has-review-btn': showReviewBtn })}>
-        <h4 className="titles gray-font">Specifications</h4>
+        <h4 className="titles gray-font">Sections</h4>
         <div className="list-group">
           <SidebarNav items={navItems} />
         </div>

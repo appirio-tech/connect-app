@@ -134,7 +134,7 @@ class FeedMobile extends React.Component {
             step={NEW_POST_STEP.COMMENT}
             statusTitle="NEW STATUS"
             commentTitle="WRITE POST"
-            statusPlaceholder="Share the latest project updates with the team"
+            statusPlaceholder="Start a new discussion"
             commentPlaceholder="Write your post about the status here"
             submitText="Post"
             nextStepText="Add a post"
