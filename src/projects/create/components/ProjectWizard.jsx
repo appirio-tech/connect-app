@@ -423,7 +423,6 @@ class ProjectWizard extends Component {
           userRoles={ userRoles }
         />
         <SelectProjectType
-          header={'Create a new project'}
           onProjectTypeChange={ this.updateProjectType }
           projectTemplates={ projectTemplates }
           projectTypes={ projectTypes }

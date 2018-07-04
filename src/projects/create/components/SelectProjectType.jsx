@@ -12,7 +12,6 @@ import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
 import './SelectProjectType.scss'
 
 const SelectProjectType = ({
-  header,
   onProjectTypeChange,
   projectTypes,
   projectTemplates,
@@ -46,7 +45,7 @@ const SelectProjectType = ({
         <ConnectLogoMono className="icon-connect-logo-mono"/>
       </div>
       <div className="SelectProjectType">
-        <h1>{header}</h1>
+        <h1>Create a new project</h1>
         <div className="cards">{cards}</div>
         <div className="footer">
         Looking for something else? <a href={`https://${DOMAIN}/contact?utm_source=Connect&utm_medium=Referral&utm_campaign=FooterContact`}>Get in touch with us &rarr;</a>
@@ -57,7 +56,6 @@ const SelectProjectType = ({
 }
 
 SelectProjectType.propTypes = {
-  header: PT.string.isRequired,
   onProjectTypeChange: PT.func.isRequired,
   projectTypes: PT.array.isRequired,
   projectTemplates: PT.array.isRequired,

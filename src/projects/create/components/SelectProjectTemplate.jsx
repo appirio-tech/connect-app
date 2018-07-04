@@ -5,7 +5,6 @@ import ProductCard from './ProductCard'
 import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 import { getProjectTypeByKey, getProjectTemplatesByCategory } from '../../../helpers/templates'
 
-import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
 import { DOMAIN } from '../../../config/constants'
 
 import './SelectProjectTemplate.scss'
@@ -53,15 +52,11 @@ const SelectProjectTemplate = ({
   )
 }
 
-SelectProjectTemplate.defaultProps = {
-  selectButtonTitle: ''
-}
-
 SelectProjectTemplate.propTypes = {
   onProjectTemplateChange: PT.func.isRequired,
   projectTemplates: PT.array.isRequired,
-  header: PT.string,
-  selectButtonTitle: PT.string
+  projectTypeKey: PT.string.isRequired,
+  projectTypes: PT.array.isRequired,
 }
 
 export default SelectProjectTemplate
