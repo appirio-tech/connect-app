@@ -98,10 +98,6 @@
       padding-right: 4 * $base_unit;
       padding-top: 4 * $base_unit;
 
-      @media screen and (max-width: $screen-md - 1px) {
-        margin-bottom: 4 * $base_unit;
-      }
-
       .project-delete-icon {
         margin-top: 4px;
         margin-left: $base_unit;

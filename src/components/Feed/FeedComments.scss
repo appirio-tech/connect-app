@@ -17,10 +17,6 @@
       line-height: 25px;
     }
   }
-
-  @media screen and (max-width: $screen-md - 1px) {
-    background-color: transparent;
-  }
 }
 
 .comments {
@@ -156,4 +152,17 @@
 .add-comment {
   background-color: $tc-gray-neutral-light;
   border-radius: 0 0 $card-border-radius $card-border-radius;
+}
+
+.no-comments {
+  @include roboto;
+  color: $tc-gray-40;
+  font-size: 15px;
+  line-height: 40px;
+}
+
+.mobile-actions {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 2 * $base-unit;
 }
