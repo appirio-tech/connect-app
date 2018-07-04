@@ -419,10 +419,9 @@ class FeedView extends React.Component {
               />
             </MediaQuery>
             {feeds.map((feed) => (
-              <div styleName="feed-card">
+              <div styleName="feed-card" key={feed.id.toString()}>
                 <ScrollableFeed
                   {...{
-                    key: feed.id.toString(),
                     ...feed,
                     id: feed.id.toString(),
                     allowComments: feed.allowComments && !!currentMemberRole,
