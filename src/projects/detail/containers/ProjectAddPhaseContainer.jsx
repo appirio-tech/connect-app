@@ -62,7 +62,7 @@ const CreateView = (props) => {
       >
         <div />
         <SelectItemType
-          header={'Add New Stage'}
+          header={'Add A New Phase'}
           onProjectTypeChange={ props.onProjectTypeChange }
           userRoles={ props.userRoles }
           projectTemplates={ props.projectTemplates }
