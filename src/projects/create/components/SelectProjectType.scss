@@ -8,16 +8,16 @@
     @extend .wizardWrapper;
   }
 
-  .headerSelectItemType {
+  .headerSelectProjectType {
     @extend .wizardHeader;
   }
 
-  .SelectItemType {
+  .SelectProjectType {
     @extend .wizardCardContainer;
 
     .cards {
       margin: 0 auto;
-      max-width: 1000px;
+      max-width: 900px;
 
       @media screen and (max-width: $screen-md - 1px) {
         max-width: 600px;
