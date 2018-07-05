@@ -465,6 +465,12 @@ $screen-one-column: 720px;
       font-size: 13px;
       padding: 10px 0;
       text-align: center;
+      display: inline;
+
+      .tc-btn-all-projects {
+        color: $tc-dark-blue;
+        
+      }
 
       @media screen and (max-width: $screen-md - 1px) {
         margin-bottom: -$base-unit;

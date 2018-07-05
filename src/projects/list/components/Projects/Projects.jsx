@@ -202,6 +202,7 @@ class Projects extends Component {
         {...this.props }
         // onPageChange={this.onPageChange}
         // sortHandler={this.sortHandler}
+        applyFilters={this.applySearchFilter}
         onPageChange={this.onPageChange}
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}

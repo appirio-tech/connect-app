@@ -13,7 +13,7 @@ import './GridView.scss'
 
 const GridView = props => {
   const { columns, sortHandler, currentSortField, ListComponent, resultSet, onPageChange, projectsStatus,
-    totalCount, pageSize, currentPageNum, infiniteScroll, infiniteAutoload, isLoading, setInfiniteAutoload } = props
+    totalCount, pageSize, currentPageNum, infiniteScroll, infiniteAutoload, isLoading, setInfiniteAutoload, applyFilters } = props
   const paginationProps = { totalCount, pageSize, currentPageNum, onPageChange }
   const headerProps = { columns, sortHandler, currentSortField }
 
@@ -90,7 +90,11 @@ const GridView = props => {
   if (totalCount === 0) {
     return (
       <section className="content gridview-content">
-        <div key="end" className="gridview-no-project">No results found based on current search criteria. <br /> Please modify your search criteria and/or search across all projects by selecting the "All Projects" filter.</div>
+        <div key="end" className="gridview-no-project">No results found based on current search criteria. <br /> Please modify your search criteria and/or search across all projects by selecting the "
+        <a href="javascript:" onClick={() => { applyFilters({status: null }) }} className="tc-btn-all-projects" >
+          All Projects
+        </a>
+        " filter.</div>
       </section>
     )
   }
@@ -114,7 +118,8 @@ GridView.propTypes = {
   currentPageNum: PropTypes.number.isRequired,
   infiniteAutoload: PropTypes.bool,
   infiniteScroll: PropTypes.bool,
-  setInfiniteAutoload: PropTypes.func
+  setInfiniteAutoload: PropTypes.func,
+  applyFilters: PropTypes.func
 }
 
 GridView.defaultProps = {
