@@ -458,7 +458,8 @@ $screen-one-column: 720px;
       }
     }
 
-    .cardview-no-more {
+    .cardview-no-more,
+    .cardview-no-project {
       @include roboto;
       color: $tc-gray-40;
       font-size: 13px;

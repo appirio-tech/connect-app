@@ -87,6 +87,14 @@ const GridView = props => {
     )
   }
 
+  if (totalCount === 0) {
+    return (
+      <section className="content gridview-content">
+        <div key="end" className="gridview-no-project">No results found based on current search criteria. <br /> Please modify your search criteria and/or search across all projects by selecting the "All Projects" filter.</div>
+      </section>
+    )
+  }
+
   return (
     <section className="content gridview-content">
       {infiniteScroll ? renderGridWithInfiniteScroll() : renderGridWithPagination()}

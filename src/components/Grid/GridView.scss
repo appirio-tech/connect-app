@@ -227,7 +227,8 @@
     }
   }
 
-  .gridview-no-more {
+  .gridview-no-more,
+  .gridview-no-project {
     @include roboto;
     color: $tc-gray-40;
     font-size: 13px;
