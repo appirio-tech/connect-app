@@ -3,7 +3,7 @@ import PT from 'prop-types'
 import ReactDOM from 'react-dom'
 import uncontrollable from 'uncontrollable'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
-import { AUTOCOMPLETE_TRIGGER_LENGTH } from '../../config/constants'
+import { AUTOCOMPLETE_TRIGGER_LENGTH, TC_CDN_URL } from '../../config/constants'
 import UserIcon from  '../../assets/icons/username-icon.svg'
 
 
@@ -47,7 +47,7 @@ class AutoCompleteInput extends React.Component {
           className="dropdown-cell"
           key={i}
         >
-          <Avatar size={30} avatarUrl={member.photoURL} userName={member.firstName ? (member.firstName + ' ' + member.lastName) : 'Connect user'} />
+          <Avatar size={30} avatarUrl={member.photoURL ? `${TC_CDN_URL}/avatar/${encodeURIComponent(member.photoURL)}?size=${30}` : member.photoURL} userName={member.firstName ? (member.firstName + ' ' + member.lastName) : 'Connect user'} />
           <div className="handle">{member.handle}</div>
         </div>
       )
@@ -65,7 +65,7 @@ class AutoCompleteInput extends React.Component {
 
         <div className="input-icon">
           {selectedNewMember
-            ? <Avatar size={30} avatarUrl={selectedNewMember.photoURL} userName={selectedNewMember.firstName ? (selectedNewMember.firstName + ' ' + selectedNewMember.lastName) : 'Connect user'} />
+            ? <Avatar size={30} avatarUrl={selectedNewMember.photoURL ? `${TC_CDN_URL}/avatar/${encodeURIComponent(selectedNewMember.photoURL)}?size=${30}` : selectedNewMember.photoURL} userName={selectedNewMember.firstName ? (selectedNewMember.firstName + ' ' + selectedNewMember.lastName) : 'Connect user'} />
             : <UserIcon/>
           }
         </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { DOMAIN } from '../../config/constants'
+import { DOMAIN, TC_CDN_URL } from '../../config/constants'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import './UserWithName.scss'
 
@@ -8,7 +8,7 @@ const UserWithName = ({ handle, firstName, lastName, photoURL, photoSize, theme,
   const url = handle ? `//www.${DOMAIN}/members/${handle}/` : null
   const avatar = (
     <Avatar
-      avatarUrl={photoURL}
+      avatarUrl={photoURL ? `${TC_CDN_URL}/avatar/${encodeURIComponent(photoURL)}?size=${photoSize}` : photoURL}
       userName={firstName + ' ' + lastName}
       size={photoSize}
     />

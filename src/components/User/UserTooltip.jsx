@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { DOMAIN } from '../../../config/constants'
+import { TC_CDN_URL } from '../../config/constants'
 
 require('./UserTooltip.scss')
 
@@ -22,7 +23,7 @@ const UserTooltip = ({ usr, id, previewAvatar, size }) => {
         {
           previewAvatar ? (<div className={`stack-avatar-${id}`}>
             <Avatar
-              avatarUrl={_.get(usr, 'photoURL')}
+              avatarUrl={_.get(usr, 'photoURL') ? `${TC_CDN_URL}/avatar/${encodeURIComponent(_.get(usr, 'photoURL'))}?size=${size}` : _.get(usr, 'photoURL')}
               userName={userFullName}
               size={size}
             />
@@ -35,7 +36,7 @@ const UserTooltip = ({ usr, id, previewAvatar, size }) => {
           <div className="tt-col-avatar">
             <a href={`//www.${DOMAIN}/members/${userHandle}/`} target="_blank" rel="noopener noreferrer" className="tt-user-avatar">
               <Avatar
-                avatarUrl={_.get(usr, 'photoURL')}
+                avatarUrl={_.get(usr, 'photoURL') ? `${TC_CDN_URL}/avatar/${encodeURIComponent(_.get(usr, 'photoURL'))}?size=${size}` : _.get(usr, 'photoURL')}
                 userName={userFullName}
               />
             </a>
