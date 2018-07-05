@@ -3,8 +3,8 @@ import moment from 'moment'
 import React from 'react'
 import PT from 'prop-types'
 import TextTruncate from 'react-text-truncate'
-import { getProjectTemplateByKey } from '../../../../helpers/templates'
-import ProjectTypeIcon from '../../../../components/ProjectTypeIcon'
+import { getProjectTemplateByKey } from '../../../helpers/templates'
+import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 import './ProjectCardHeader.scss'
 
 function ProjectCardHeader({ project, onClick, projectTemplates }) {
