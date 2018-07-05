@@ -38,7 +38,7 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed) {
   const budget = phase.budget || 0
   const price = `$${formatNumberWithCommas(budget)}`
   const icon = _.get(productTemplate, 'icon')
-  const title = _.get(productTemplate, 'name')
+  const title = phase.name
   const startDate = phase.startDate && moment(phase.startDate)
   const endDate = phase.endDate && moment(phase.endDate)
 
