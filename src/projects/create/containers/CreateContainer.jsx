@@ -76,7 +76,7 @@ class CreateContainer extends React.Component {
   componentWillReceiveProps(nextProps) {
     const projectId = _.get(this.props, 'project.id', null)
     const nextProjectId = _.get(nextProps, 'project.id', null)
-    if (!nextProps.processing && !nextProps.error && !projectId && nextProjectId) {
+    if (!nextProps.processing && !nextProps.error && nextProjectId && projectId !== nextProjectId) {
       // update state
       this.setState({
         creatingProject: false,
@@ -85,7 +85,7 @@ class CreateContainer extends React.Component {
         // remove incomplete project, and navigate to project dashboard
         console.log('removing incomplete project')
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
-        this.props.history.push('/projects/' + nextProjectId)
+        setTimeout(() => this.props.history.push('/projects/' + nextProjectId), 1000)
       })
 
     } else if (this.state.creatingProject !== nextProps.processing) {
@@ -202,7 +202,6 @@ class CreateContainer extends React.Component {
         project.templateId = projectTemplate.id
         project.type = projectTemplate.category
         this.props.createProjectAction(project)
-        this.closeWizard()
       } else {
         // redirect to registration/login page
         const retUrl = window.location.origin + '/new-project-callback'
