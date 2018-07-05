@@ -42,7 +42,7 @@ import IconOutlineWorkProject from '../assets/icons/tech-32px-outline-work-proje
 
 const ProjectTypeIcon = ({ type }) => {
   // if type is defined as a relative path to the icon, convert it to icon "id"
-  const typeAsPath = type.match(/(?:\.\.\/)+assets\/icons\/([^.]+)\.svg/)
+  const typeAsPath = type && type.match(/(?:\.\.\/)+assets\/icons\/([^.]+)\.svg/)
   if (typeAsPath) {
     type = typeAsPath[1]
   }

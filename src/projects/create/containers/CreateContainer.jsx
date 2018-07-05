@@ -7,11 +7,11 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject } from '../../actions/project'
-import { loadProjectTemplates } from '../../../actions/templates'
+import { loadProjectTemplates, loadProjectCategories } from '../../../actions/templates'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
-import { getProjectTemplateByKey, getProjectTemplateByAlias } from '../../../helpers/templates'
+import { getProjectTemplateByKey, getProjectTemplateByAlias, getProjectTypeByKey } from '../../../helpers/templates'
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
@@ -38,7 +38,9 @@ const errorHandler = showCoderBotIfError(props => props.error && props.error.typ
 const spinner = spinnerWhileLoading(props =>
   !props.processing &&
   !props.templates.isProjectTemplatesLoading &&
-  props.templates.projectTemplates !== null
+  props.templates.projectTemplates !== null &&
+  !props.templates.isProjectCategoriesLoading &&
+  props.templates.projectCategories !== null
 )
 
 const enhance = compose(errorHandler, spinner)
@@ -98,7 +100,7 @@ class CreateContainer extends React.Component {
 
   componentWillMount() {
     const { processing, userRoles, match, history,
-      templates, loadProjectTemplates } = this.props
+      templates, loadProjectTemplates, loadProjectCategories } = this.props
     // if we are on the project page validate project param
     if (match.path === '/new-project/:project?/:status?') {
       const project = match.params.project
@@ -138,6 +140,11 @@ class CreateContainer extends React.Component {
     // if templates are not loaded yet - then load them
     if (templates.projectTemplates === null && !templates.isProjectTemplatesLoading) {
       loadProjectTemplates()
+    }
+
+    // if categories are not loaded yet - then load them
+    if (templates.projectCategories === null && !templates.isProjectCategoriesLoading) {
+      loadProjectCategories()
     }
   }
 
@@ -224,7 +231,7 @@ class CreateContainer extends React.Component {
   }
 
   render() {
-    const { templates: { projectTemplates }} = this.props
+    const { templates: { projectTemplates, projectCategories: projectTypes }} = this.props
 
     return (
       <EnhancedCreateView
@@ -234,25 +241,32 @@ class CreateContainer extends React.Component {
         showModal
         closeModal={ this.closeWizard }
         onStepChange={ (wizardStep, updatedProject) => {
+          const projectTypeKey = _.get(updatedProject, 'type', null)
+          const projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
+          const typeAlias = _.get(projectType, 'aliases[0]')
+
           const projectTemplateKey = _.get(updatedProject, 'details.products[0]', null)
           const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
-          const alias = _.get(projectTemplate, 'aliases[0]')
+          const templateAlias = _.get(projectTemplate, 'aliases[0]')
 
-          switch (wizardStep) {
-          case ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF: {
-            const aliasParam = alias ? `/${alias}` : ''
-            this.props.history.push(NEW_PROJECT_PATH + aliasParam + '/incomplete' + window.location.search)
-            break
+          if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
+            let productUrl = templateAlias ? ('/' + templateAlias) : ''
+            productUrl = !templateAlias && typeAlias ? ('/' + typeAlias) : productUrl
+            this.props.history.push(NEW_PROJECT_PATH + productUrl + '/incomplete' + window.location.search)
           }
-          case ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE:
+
+          if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
             this.props.history.push(NEW_PROJECT_PATH + '/' + window.location.search)
-            break
-          case ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS:
-            if (alias) {
-              this.props.history.push(NEW_PROJECT_PATH + '/' + alias + window.location.search)
-            }
-            break
           }
+
+          if (typeAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TEMPLATE) {
+            this.props.history.push(NEW_PROJECT_PATH + '/' + typeAlias + window.location.search)
+          }
+
+          if (typeAlias && templateAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
+            this.props.history.push(NEW_PROJECT_PATH + '/' + templateAlias + window.location.search)
+          }
+
           this.setState({
             wizardStep
           })
@@ -278,6 +292,7 @@ class CreateContainer extends React.Component {
         }
         }
         projectTemplates={this.props.templates.projectTemplates}
+        projectTypes={this.props.templates.projectCategories}
       />
     )
   }
@@ -305,6 +320,7 @@ const actionCreators = {
   fireProjectDirtyUndo,
   clearLoadedProject,
   loadProjectTemplates,
+  loadProjectCategories,
 }
 
 export default withRouter(connect(mapStateToProps, actionCreators)(CreateContainer))
