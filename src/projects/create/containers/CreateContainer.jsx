@@ -85,7 +85,8 @@ class CreateContainer extends React.Component {
         // remove incomplete project, and navigate to project dashboard
         console.log('removing incomplete project')
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
-        this.props.history.push('/projects/' + nextProjectId)
+        window.location = `/projects/${nextProjectId}`
+        
       })
 
     } else if (this.state.creatingProject !== nextProps.processing) {
@@ -220,9 +221,7 @@ class CreateContainer extends React.Component {
     if (returnUrl) {
       window.location = returnUrl
     } else {
-      if (isLoggedIn) {
-        this.props.history.push('/projects')
-      } else {
+      if (!isLoggedIn) {
         this.props.history.push('/')
         // FIXME ideally we should push on router
         // window.location = window.location.origin
