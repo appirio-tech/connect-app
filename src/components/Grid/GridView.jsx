@@ -6,7 +6,7 @@ import PaginationBar from './PaginationBar'
 import Placeholder from './Placeholder'
 import InfiniteScroll from 'react-infinite-scroller'
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator'
-import NewProjectCard from '../../projects/list/components/Projects/NewProjectCard'
+import NewProjectCard from '../../projects/components/projectsCard/NewProjectCard'
 import { PROJECTS_LIST_PER_PAGE } from '../../config/constants'
 import './GridView.scss'
 
