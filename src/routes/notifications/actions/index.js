@@ -2,7 +2,9 @@
  * Notification related actions
  */
 import {
-  GET_NOTIFICATIONS,
+  GET_NOTIFICATIONS_PENDING,
+  GET_NOTIFICATIONS_SUCCESS,
+  GET_NOTIFICATIONS_FAILURE,
   VISIT_NOTIFICATIONS,
   TOGGLE_NOTIFICATION_SEEN,
   SET_NOTIFICATIONS_FILTER_BY,
@@ -18,12 +20,17 @@ import Alert from 'react-s-alert'
 import _ from 'lodash'
 
 export const getNotifications = () => (dispatch) => {
+  dispatch({ type: GET_NOTIFICATIONS_PENDING })
   notificationsService.getNotifications().then(notifications => {
     dispatch({
-      type: GET_NOTIFICATIONS,
+      type: GET_NOTIFICATIONS_SUCCESS,
       payload: notifications
     })
   }).catch(err => {
+    dispatch({
+      type: GET_NOTIFICATIONS_FAILURE,
+      payload: err
+    })
     Alert.error(`Failed to load notifications. ${err.message}`)
   })
 }
