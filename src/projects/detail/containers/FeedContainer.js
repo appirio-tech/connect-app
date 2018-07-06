@@ -379,7 +379,13 @@ class FeedView extends React.Component {
   }
 
   onScroll() {
-    this.setState({ scrolled : window.scrollY>0 })
+    const { scrolled: currentlyScrolled } = this.state
+    const scrolled = window.scrollY > 0
+
+    // update state only if the values is changes to avoid unnecessary redraws
+    if (currentlyScrolled !== scrolled) {
+      this.setState({ scrolled })
+    }
   }
 
   render () {
