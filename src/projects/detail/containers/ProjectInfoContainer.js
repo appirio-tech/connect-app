@@ -82,7 +82,7 @@ class ProjectInfoContainer extends React.Component {
 
   render() {
     const { duration } = this.state
-    const { project, currentMemberRole, isSuperUser, phases } = this.props
+    const { project, currentMemberRole, isSuperUser } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -118,7 +118,6 @@ class ProjectInfoContainer extends React.Component {
         <div className="sideAreaWrapper">
           <ProjectInfo
             project={project}
-            phases={phases}
             currentMemberRole={currentMemberRole}
             duration={duration}
             canDeleteProject={canDeleteProject}
@@ -149,9 +148,7 @@ class ProjectInfoContainer extends React.Component {
 
 ProjectInfoContainer.PropTypes = {
   currentMemberRole: PropTypes.string,
-  phases: PropTypes.array,
-  project: PropTypes.object.isRequired,
-  isSuperUser: PropTypes.bool,
+  project: PropTypes.object.isRequired
 }
 
 const mapDispatchToProps = { updateProject, deleteProject }
