@@ -37,9 +37,9 @@ function formatProjectProgressProps(project, phases) {
     // calculates days spent and day based progress for the phase
     if (phase.startDate && phase.duration) {
       const startDate = moment(phase.startDate)
-      const duration = now.diff(startDate, 'days')
+      const duration = now.diff(startDate, 'days') + 1
       if(duration >= 0) {
-        if(duration <= phase.duration) {
+        if(duration < phase.duration || duration === phase.duration) {
           progress = (duration / phase.duration) * 100
           actualDuration += duration
         } else {
@@ -55,11 +55,15 @@ function formatProjectProgressProps(project, phases) {
     // override project progress if status is delivered
     if (phase.status === PHASE_STATUS_COMPLETED) {
       progress = 100
+      //this line could be added if we want the progress bar to consider complete duration of phase,
+      // incase phase is marked completed before actual endDate
+      //actualDuration += phase.duration
     }
     totalProgress += progress
   })
-
-  const projectedDuration = _.sumBy(phases, 'duration') + phases.length
+  const projectedDuration = _.sumBy(phases, (phase) => {
+    return phase.duration && phase.duration > 1 ? phase.duration : 1
+  })
 
   const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
   
