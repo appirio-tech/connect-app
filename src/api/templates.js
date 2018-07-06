@@ -59,14 +59,12 @@ export function getProductTemplateByKey(productKey) {
   }
 
   return axios.get(`${TC_API_URL}/v4/productTemplates/`, { params })
-  // we only get first product of result in case provide productKey ortherwise we get all the product
+  // we only get first product of result in case provide productKey otherwise we get all the products
     .then(resp => _.get(resp.data, (productKey ? 'result.content[0]' : 'result.content'), {}))
 }
 
 /**
  * Get the list of project categories
- *
- * TODO $PROJECT_PLAN$ so far this method is mocked and has to be updated with real one
  *
  * @return {Promise} list of project categories
  */

@@ -421,7 +421,8 @@ class FeedView extends React.Component {
                 hasError={error}
                 heading="NEW STATUS POST"
                 onNewPostChange={this.onNewPostChange}
-                titlePlaceholder="Share the latest project updates with the team"
+                titlePlaceholder="Start a new discussion"
+                contentPlaceholder="Add your first post"
               />
             </MediaQuery>
             {feeds.map((feed) => (
@@ -461,8 +462,8 @@ class FeedView extends React.Component {
           <NewPostMobile
             statusTitle="NEW STATUS"
             commentTitle="WRITE POST"
-            statusPlaceholder="Share the latest project updates with the team"
-            commentPlaceholder="Write your post about the status here"
+            statusPlaceholder="Start a new discussion"
+            commentPlaceholder="Add your first post"
             submitText="Post"
             nextStepText="Add post"
             onClose={this.toggleNewPostMobile}

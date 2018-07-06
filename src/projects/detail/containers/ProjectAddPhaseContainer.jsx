@@ -20,7 +20,7 @@ import { loadProjectDashboard } from '../../../projects/actions/projectDashboard
 
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import Wizard from '../../../components/Wizard'
-import SelectItemType from '../../create/components/SelectItemType'
+import SelectProductTemplate from '../../create/components/SelectProductTemplate'
 import {
   CREATE_PROJECT_FAILURE,
 } from '../../../config/constants'
@@ -61,15 +61,11 @@ const CreateView = (props) => {
         shouldRenderBackButton={ (step) => step > 1 }
       >
         <div />
-        <SelectItemType
-          header={'Add New Stage'}
-          onProjectTypeChange={ props.onProjectTypeChange }
-          userRoles={ props.userRoles }
-          projectTemplates={ props.projectTemplates }
-          selectButtonTitle={'Select Product'}
+        <SelectProductTemplate
+          onProductTemplateChange={ props.onProductTemplateChange }
+          productTemplates={ props.productTemplates }
         />
       </Wizard>
-
     </div>
   )
 }
@@ -79,7 +75,7 @@ class ProjectAddPhaseContainer extends React.Component {
   constructor(props) {
     super(props)
     this.closeWizard = this.closeWizard.bind(this)
-    this.updateProjectType = this.updateProjectType.bind(this)
+    this.updateProductTemplate = this.updateProductTemplate.bind(this)
     this.state = {
       isChosenProduct: false,
       shouldReloadPhases: false
@@ -117,7 +113,7 @@ class ProjectAddPhaseContainer extends React.Component {
     }
   }
 
-  updateProjectType(projectTemplateKey) {
+  updateProductTemplate(projectTemplateKey) {
     const props = this.props
     const productTemplate = getProductTemplateByKey(props.allProductTemplates, projectTemplateKey)
     if (productTemplate) {
@@ -134,8 +130,8 @@ class ProjectAddPhaseContainer extends React.Component {
         {...this.props}
         onCancel={this.closeWizard}
         showModal
-        projectTemplates={props.allProductTemplates}
-        onProjectTypeChange={this.updateProjectType}
+        productTemplates={props.allProductTemplates}
+        onProductTemplateChange={this.updateProductTemplate}
       />
     )
   }

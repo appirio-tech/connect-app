@@ -48,10 +48,13 @@ class EditStageForm extends React.Component {
     const { phase, phaseIndex, updatePhaseAction } = this.props
 
     const updatedStartDate = moment(new Date(model.startDate))
-    const endDate = moment(updatedStartDate).add(model.duration - 1, 'days').utc()
+    const duration = model.duration ? model.duration : 1
+    const endDate = duration >  1 ? moment(updatedStartDate).add(duration - 1, 'days').utc() : 
+      moment(updatedStartDate).add(duration, 'days').utc()
     const updateParam = _.assign({}, model, {
       startDate: updatedStartDate.utc(),
-      endDate: endDate || ''
+      endDate: endDate || '',
+      duration
     })
     this.setState({isUpdating: true})
     updatePhaseAction(phase.projectId, phase.id, updateParam, phaseIndex)
@@ -238,20 +241,23 @@ class EditStageForm extends React.Component {
               { showPhaseOverlapWarning && <div className="error-message">
                 Warning: You are about to manually change the start/end date of this phase, Please ensure the start and end dates of all subsequent phases (where applicable) are updated in line with this change.
               </div> }
-              <div styleName="label-layer">
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Start Date" type="date" name="startDate" value={startDate} />
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Duration" type="number" name="duration" value={phase.duration} minValue={1}/>
+              <div styleName="title-label-layer">
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Title" type="text" name="name" value={phase.name} maxLength={48} />
               </div>
               <div styleName="label-layer">
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Spent" type="number" name="spentBudget" value={phase.spentBudget} disabled={this.state.disableActiveStatusFields} minValue={0}/>
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Budget" type="number" name="budget" value={phase.budget} minValue={0}/>
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Start Date" type="date" name="startDate" value={startDate} />
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Duration (days)" type="number" name="duration" value={phase.duration} minValue={1}/>
+              </div>
+              <div styleName="label-layer">
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Paid to date (US$)" type="number" name="spentBudget" value={phase.spentBudget} disabled={this.state.disableActiveStatusFields} minValue={0}/>
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Price (US$)" type="number" name="budget" value={phase.budget} minValue={0}/>
               </div>
               <div styleName="label-layer">
                 <div styleName="input-row">
                   <label className="tc-label">Status</label>
                   <SelectDropdown name="status" value={phase.status} theme="default" options={phaseStatuses} />
                 </div>
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress" type="number" name="progress" value={phase.progress} disabled={this.state.disableActiveStatusFields} minValue={0} />
+                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress (%)" type="number" name="progress" value={phase.progress} disabled={this.state.disableActiveStatusFields} minValue={0} />
               </div>
               <div styleName="group-bottom">
                 <button onClick={this.onCancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>

@@ -361,7 +361,7 @@ export const PROJECT_STATUS = [
 ]
 
 export const PHASE_STATUS = [
-  {color: 'gray', name: 'Unplanned', fullName: 'Phase is in draft', value: PHASE_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
+  {color: 'gray', name: 'Draft', fullName: 'Phase is in draft', value: PHASE_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
   // {color: 'gray', name: 'In review', fullName: 'Phase is in review', value: PHASE_STATUS_IN_REVIEW, order: 3, dropDownOrder: 2 },
   {color: 'gray', name: 'Planned', fullName: 'Phase is reviewed', value: PHASE_STATUS_REVIEWED, order: 4, dropDownOrder: 3 },
   {color: 'green', name: 'In Progress', fullName: 'Phase is active', value: PHASE_STATUS_ACTIVE, order: 1, dropDownOrder: 4 },

@@ -7,37 +7,40 @@ import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
 import { DOMAIN } from '../../../config/constants'
 
-import './SelectItemType.scss'
+import './SelectProductTemplate.scss'
 
-function SelectItemType(props) {
+const SelectProductTemplate = ({
+  onProductTemplateChange,
+  productTemplates,
+}) => {
   const cards = []
 
-  props.projectTemplates.forEach((item) => {
+  productTemplates.forEach((productTemplate) => {
     // don't render disabled items for selection
     // don't render hidden items as well, hidden items can be reached via direct link though
-    if (item.disabled || item.hidden) return
+    if (productTemplate.disabled || productTemplate.hidden) return
 
-    const icon = <ProjectTypeIcon type={item.icon} />
+    const icon = <ProjectTypeIcon type={productTemplate.icon} />
 
     cards.push(
       <ProjectTypeCard
         icon={icon}
-        info={item.info || item.details}
-        key={item.id}
-        onClick={() => props.onProjectTypeChange(item.key || item.productKey)}
-        type={item.name}
-        buttonText={props.selectButtonTitle}
+        info={productTemplate.info || productTemplate.details}
+        key={productTemplate.id}
+        onClick={() => onProductTemplateChange(productTemplate.key || productTemplate.productKey)}
+        type={productTemplate.name}
+        buttonText="Select Product"
       />
     )
   })
 
   return (
     <div>
-      <div className="header headerSelectItemType">
+      <div className="header headerSelectProductTemplate">
         <ConnectLogoMono className="icon-connect-logo-mono"/>
       </div>
-      <div className="SelectItemType">
-        <h1>{props.header}</h1>
+      <div className="SelectProductTemplate">
+        <h1>Add A New Phase</h1>
         <div className="cards">{cards}</div>
         <div className="footer">
           Looking for something else? <a href={`https://${DOMAIN}/contact?utm_source=Connect&utm_medium=Referral&utm_campaign=FooterContact`}>Get in touch with us &rarr;</a>
@@ -47,17 +50,9 @@ function SelectItemType(props) {
   )
 }
 
-SelectItemType.defaultProps = {
-  header: '',
-  selectButtonTitle: ''
+SelectProductTemplate.propTypes = {
+  onProductTemplateChange: PT.func.isRequired,
+  productTemplates: PT.array.isRequired,
 }
 
-SelectItemType.propTypes = {
-  onProjectTypeChange: PT.func.isRequired,
-  userRoles: PT.arrayOf(PT.string),
-  projectTemplates: PT.array.isRequired,
-  header: PT.string,
-  selectButtonTitle: PT.string
-}
-
-export default SelectItemType
+export default SelectProductTemplate
