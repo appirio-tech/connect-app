@@ -16,7 +16,6 @@ const LinksMenu = ({
   canAdd,
   canDelete,
   canEdit,
-  className,
   isAddingNewLink,
   limit,
   links,
@@ -53,7 +52,7 @@ const LinksMenu = ({
         />
       }
 
-      <div className={cn('panel-links', { [className]: !!className })}>
+      <div className="panel-links">
         <ul>
           {
             links.slice(0, limit).map((link, idx) => {
@@ -129,7 +128,6 @@ LinksMenu.propTypes = {
   canAdd: PropTypes.bool,
   canDelete: PropTypes.bool,
   canEdit: PropTypes.bool,
-  className: PropTypes.string,
   limit: PropTypes.number,
   links: PropTypes.array.isRequired,
   moreText: PropTypes.string,

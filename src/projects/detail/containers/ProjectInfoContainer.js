@@ -130,8 +130,6 @@ class ProjectInfoContainer extends React.Component {
           <LinksMenu
             links={attachments}
             title="Latest files"
-            moreText="view all files"
-            className="panel-links-files"
           />
           <LinksMenu
             links={project.bookmarks || []}
