@@ -1,0 +1,36 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.prompt {
+  :global {
+    .icon-refresh {
+      position: absolute;
+      top: 4px;
+    }
+
+    .tc-btn {
+
+      margin-left: - 3 * $base-unit;
+    }
+  }
+}
+
+:global(.tc-btn).button {
+  border-radius: 20px;
+}
+
+.icon {
+  display: inline-block;
+  height: 20px;
+  margin-right: 2 * $base-unit;
+  vertical-align: middle;
+  width: 20px;
+
+  > path {
+    transition: fill 250ms ease-in;
+    fill: $tc-dark-blue-30;
+
+    .button:hover & {
+      fill: $tc-white;
+    }
+  }
+}

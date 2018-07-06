@@ -13,23 +13,20 @@ import {
   CODER_BOT_USER_LNAME,
 } from '../../../config/constants'
 import { connect } from 'react-redux'
-import Sticky from 'react-stickynode'
 import update from 'react-addons-update'
 import NewPost from '../../../components/Feed/NewPost'
 
 import { loadDashboardFeeds, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import { toggleNotificationRead } from '../../../routes/notifications/actions'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import PostsRefreshPrompt from '../components/PostsRefreshPrompt'
 
-import { filterReadNotifications, filterNotificationsByProjectId, filterTopicAndPostChangedNotifications } from '../../../routes/notifications/helpers/notifications'
-import { REFRESH_UNREAD_UPDATE_INTERVAL } from '../../../config/constants'
 import MediaQuery from 'react-responsive'
 import ChatButton from '../../../components/ChatButton/ChatButton'
 import NewPostMobile from '../../../components/Feed/NewPostMobile'
 import ScrollableFeed from '../../../components/Feed/ScrollableFeed'
 import Section from '../components/Section'
 import SectionTitle from '../components/SectionTitle'
-import Refresh from '../../../assets/icons/icon-refresh.svg'
 
 import { scrollToHash } from '../../../components/ScrollToAnchors'
 import { isSystemUser } from '../../../helpers/tcHelpers'
@@ -58,42 +55,21 @@ class FeedView extends React.Component {
     this.onEditTopic = this.onEditTopic.bind(this)
     this.onTopicChange = this.onTopicChange.bind(this)
     this.onRefreshFeeds = this.onRefreshFeeds.bind(this)
-    this.onScroll = this.onScroll.bind(this)
     this.toggleNewPostMobile = this.toggleNewPostMobile.bind(this)
     this.state = {
       feeds : [],
       showAll: [],
       newPost: {},
-      unreadUpdate: [],
-      scrolled: false,
       isNewPostMobileOpen: false
     }
   }
 
   componentDidMount() {
     window.addEventListener('beforeunload', this.onLeave)
-
-    // after reload, mark all feed update notifications read
-    this.setState({ unreadUpdate : []})
-    const notReadNotifications = filterReadNotifications(this.props.notifications.notifications)
-    const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
-    _.map(_.map(unreadTopicAndPostChangedNotifications, 'id' ), (notificationId) => {
-      this.props.toggleNotificationRead(notificationId)
-    })
-
-    this.refreshUnreadUpdate = setInterval(() => {
-      const notReadNotifications = filterReadNotifications(this.props.notifications.notifications)
-      const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
-      this.setState({ unreadUpdate: _.map(unreadTopicAndPostChangedNotifications, 'id' ) })
-      if (!this.isChanged() && !this.state.scrolled && this.state.unreadUpdate.length > 0) {
-        this.onRefreshFeeds()
-      }
-    }, REFRESH_UNREAD_UPDATE_INTERVAL)
   }
 
   componentWillMount() {
     this.init(this.props)
-    window.addEventListener('scroll', this.onScroll)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -102,8 +78,6 @@ class FeedView extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('beforeunload', this.onLeave)
-    window.removeEventListener('scroll', this.onScroll)
-    clearInterval(this.refreshUnreadUpdate)
   }
 
   // Notify user if they navigate away while the form is modified.
@@ -220,7 +194,6 @@ class FeedView extends React.Component {
     }
     this.setState({
       newPost: resetNewPost ? {} : this.state.newPost,
-      scrolled: window.scrollY>0,
       feeds: feeds.map((feed) => {
         // finds the same feed from previous props, if exists
         let prevFeed
@@ -378,31 +351,22 @@ class FeedView extends React.Component {
     this.props.loadDashboardFeeds(this.props.project.id)
   }
 
-  onScroll() {
-    const { scrolled: currentlyScrolled } = this.state
-    const scrolled = window.scrollY > 0
-
-    // update state only if the values is changes to avoid unnecessary redraws
-    if (currentlyScrolled !== scrolled) {
-      this.setState({ scrolled })
-    }
-  }
-
   render () {
-    const {currentUser, currentMemberRole, isCreatingFeed, error, allMembers } = this.props
-    const { feeds, unreadUpdate, scrolled, isNewPostMobileOpen } = this.state
+    const {currentUser, currentMemberRole, isCreatingFeed, error, allMembers,
+      toggleNotificationRead, notifications, project } = this.props
+    const { feeds, isNewPostMobileOpen } = this.state
+    const isChanged = this.isChanged()
     const onLeaveMessage = this.onLeave() || ''
 
     return (
       <div>
-        { unreadUpdate.length > 0 && !this.isChanged() && scrolled &&
-          <Sticky top={80} innerZ={999}>
-            <div className="prompt">
-              <Refresh className="icon-refresh" width="20" style={{position: 'absolute', top: '4px'}}/>
-              <button className="tc-btn tc-btn-primary tc-btn-md" style={{borderRadius: '20px', marginLeft: '-15px'}} onClick={this.onRefreshFeeds}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reload page to view updates</button>
-            </div>
-          </Sticky>
-        }
+        <PostsRefreshPrompt
+          preventShowing={isChanged}
+          toggleNotificationRead={toggleNotificationRead}
+          refreshFeeds={this.onRefreshFeeds}
+          notifications={notifications}
+          projectId={project.id}
+        />
 
         <Prompt
           when={!!onLeaveMessage}
