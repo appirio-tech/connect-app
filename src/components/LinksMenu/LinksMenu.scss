@@ -82,7 +82,6 @@
 
       a {
         @include roboto;
-        display: inline-block;
         border: 1px solid $tc-gray-05;
         border-radius: 40px;
         color: $tc-dark-blue-110;
@@ -111,10 +110,6 @@
      font-size: 200%;
      color: $tc-dark-blue-110;
      line-height: $base-unit*4;
-    }
-
-    &.panel-links-nodots li:before {
-      display: none;
     }
   }
 
