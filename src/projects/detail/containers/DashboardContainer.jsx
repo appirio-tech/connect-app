@@ -84,6 +84,7 @@ class DashboardContainer extends React.Component {
     const leftArea = (
       <ProjectInfoContainer
         currentMemberRole={currentMemberRole}
+        phases={phases}
         project={project}
         isSuperUser={isSuperUser}
       />
