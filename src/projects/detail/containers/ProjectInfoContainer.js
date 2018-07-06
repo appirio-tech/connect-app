@@ -26,8 +26,7 @@ class ProjectInfoContainer extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
-    return !_.isEqual(nextProps.project, this.props.project) ||
-      !_.isEqual(nextProps.feeds, this.props.feeds)
+    return !_.isEqual(nextProps.project, this.props.project)
   }
 
   setDuration({duration, status}) {
@@ -83,7 +82,7 @@ class ProjectInfoContainer extends React.Component {
 
   render() {
     const { duration } = this.state
-    const { project, currentMemberRole, isSuperUser, phases, feeds } = this.props
+    const { project, currentMemberRole, isSuperUser, phases } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -114,12 +113,6 @@ class ProjectInfoContainer extends React.Component {
         address: attachment.downloadUrl,
       }))
 
-    const channels = feeds.map((feed) => ({
-      title: `#${feed.title}`,
-      address: `/projects/${project.id}#feed-${feed.id}`,
-      noNewPage: true,
-    }))
-
     return (
       <div>
         <div className="sideAreaWrapper">
@@ -135,16 +128,10 @@ class ProjectInfoContainer extends React.Component {
             isSuperUser={isSuperUser}
           />
           <LinksMenu
-            links={channels}
-            title="Channels"
-            moreText="view all"
-            noDots
-          />
-          <LinksMenu
             links={attachments}
             title="Latest files"
             moreText="view all files"
-            noDots
+            className="panel-links-files"
           />
           <LinksMenu
             links={project.bookmarks || []}
