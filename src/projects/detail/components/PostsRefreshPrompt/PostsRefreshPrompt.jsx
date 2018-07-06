@@ -8,7 +8,6 @@
  */
 import React from 'react'
 import PT from 'prop-types'
-import _ from 'lodash'
 
 import Sticky from 'react-stickynode'
 
