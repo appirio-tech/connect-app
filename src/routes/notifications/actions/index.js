@@ -24,7 +24,7 @@ export const getNotifications = () => (dispatch) => {
       payload: notifications
     })
   }).catch(err => {
-    Alert.error(`Failed to load notifications. ${err.message}`)
+    console.error(`Failed to load notifications. ${err.message}`)
   })
 }
 
