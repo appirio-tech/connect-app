@@ -16,6 +16,7 @@
   min-height: calc(100vh - 110px);
   padding-bottom: 10 * $base-unit;
   position: relative;
+  z-index: 1;
 
   @media screen and (max-width: $screen-md - 1px) {
     background-color: transparent;
