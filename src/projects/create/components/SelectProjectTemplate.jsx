@@ -55,7 +55,7 @@ const SelectProjectTemplate = ({
 SelectProjectTemplate.propTypes = {
   onProjectTemplateChange: PT.func.isRequired,
   projectTemplates: PT.array.isRequired,
-  projectTypeKey: PT.string.isRequired,
+  projectTypeKey: PT.string,
   projectTypes: PT.array.isRequired,
 }
 
