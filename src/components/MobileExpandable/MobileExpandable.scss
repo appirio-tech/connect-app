@@ -40,7 +40,7 @@
   }
 
   :global {
-    input[name="address"] + .error-message {
+    input[name="address"]:focus + .error-message {
       display: none;
     }
   }
