@@ -1,14 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { DOMAIN, TC_CDN_URL } from '../../config/constants'
+import { DOMAIN } from '../../config/constants'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
+import { getAvatarResized } from '../../helpers/tcHelpers'
 import './UserWithName.scss'
 
 const UserWithName = ({ handle, firstName, lastName, photoURL, photoSize, theme, isLink }) => {
   const url = handle ? `//www.${DOMAIN}/members/${handle}/` : null
   const avatar = (
     <Avatar
-      avatarUrl={photoURL ? `${TC_CDN_URL}/avatar/${encodeURIComponent(photoURL)}?size=${photoSize}` : photoURL}
+      avatarUrl={getAvatarResized(photoURL, photoSize)}
       userName={firstName + ' ' + lastName}
       size={photoSize}
     />

@@ -19,7 +19,7 @@ import './RichTextArea.scss'
 import 'draft-js-mention-plugin/lib/plugin.css'
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'
 import _ from 'lodash'
-import { TC_CDN_URL } from '../../config/constants'
+import { getAvatarResized } from '../../helpers/tcHelpers'
 
 const linkPlugin = createLinkPlugin()
 const blockDndPlugin = createBlockDndPlugin()
@@ -302,7 +302,7 @@ class RichTextArea extends React.Component {
         <div className="modal-row">
           {avatarUrl &&
             <div className="portrait">
-              <Avatar avatarUrl={avatarUrl ? `${TC_CDN_URL}/avatar/${encodeURIComponent(avatarUrl)}?size=${30}` : avatarUrl} userName={authorName} />
+              <Avatar avatarUrl={getAvatarResized(avatarUrl, 30)} userName={authorName} />
             </div>
           }
           <div className={cn('object', {comment: disableTitle}, 'commentEdit')}>
