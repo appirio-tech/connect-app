@@ -232,16 +232,13 @@ class CreateContainer extends React.Component {
   }
 
   render() {
-    if (this.state.createdProject) {
-      return null
-    }
     const { templates: { projectTemplates, projectCategories: projectTypes }} = this.props
 
     return (
       <EnhancedCreateView
         {...this.props}
         createProject={ this.createProject }
-        processing={ this.state.creatingProject }
+        processing={ this.state.creatingProject || this.state.createdProject }
         showModal
         closeModal={ this.closeWizard }
         onStepChange={ (wizardStep, updatedProject) => {
