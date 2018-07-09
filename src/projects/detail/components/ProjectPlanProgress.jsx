@@ -31,7 +31,7 @@ function formatProjectProgressProps(project, phases) {
 
   let totalProgress = 0
 
-  // phases where start date is set
+  // phases where start date is set and are not draft
   const filteredPhases = _.filter(phases, (phase) => (phase.startDate && phase.status !== PHASE_STATUS_DRAFT))
   filteredPhases.map((phase) => {
     let progress = 0
@@ -62,7 +62,7 @@ function formatProjectProgressProps(project, phases) {
     }
     totalProgress += progress
   })
-  const projectedDuration = _.sumBy(phases, (phase) => {
+  const projectedDuration = _.sumBy(filteredPhases, (phase) => {
     return phase.duration && phase.duration > 1 ? phase.duration : 1
   })
 
@@ -73,7 +73,7 @@ function formatProjectProgressProps(project, phases) {
     phase.status === PHASE_STATUS_ACTIVE || phase.status === PHASE_STATUS_COMPLETED)
   )
   const spentAmount = _.sumBy(activeOrCompletedPhases, 'spentBudget') || 0
-  const labelSpent = `Spent $${formatNumberWithCommas(spentAmount)}`
+  const labelSpent = spentAmount > 0 ? `Spent $${formatNumberWithCommas(spentAmount)}` : ''
   const progressPercent = phases.length > 0 ? Math.round(totalProgress/filteredPhases.length) : 0
   const labelStatus = `${progressPercent}% done`
 
