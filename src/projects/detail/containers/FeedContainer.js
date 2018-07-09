@@ -25,6 +25,7 @@ import MediaQuery from 'react-responsive'
 import ChatButton from '../../../components/ChatButton/ChatButton'
 import NewPostMobile from '../../../components/Feed/NewPostMobile'
 import ScrollableFeed from '../../../components/Feed/ScrollableFeed'
+import FullscreenFeedContainer from '../containers/FullscreenFeedContainer'
 import Section from '../components/Section'
 import SectionTitle from '../components/SectionTitle'
 
@@ -56,11 +57,14 @@ class FeedView extends React.Component {
     this.onTopicChange = this.onTopicChange.bind(this)
     this.onRefreshFeeds = this.onRefreshFeeds.bind(this)
     this.toggleNewPostMobile = this.toggleNewPostMobile.bind(this)
+    this.enterFullscreen = this.enterFullscreen.bind(this)
+    this.exitFullscreen = this.exitFullscreen.bind(this)
     this.state = {
       feeds : [],
       showAll: [],
       newPost: {},
-      isNewPostMobileOpen: false
+      isNewPostMobileOpen: false,
+      fullscreenFeedId: null,
     }
   }
 
@@ -351,15 +355,60 @@ class FeedView extends React.Component {
     this.props.loadDashboardFeeds(this.props.project.id)
   }
 
+  enterFullscreen(feedId) {
+    this.setState({ fullscreenFeedId: feedId })
+  }
+
+  exitFullscreen() {
+    this.setState({ fullscreenFeedId: null })
+  }
+
   render () {
     const {currentUser, currentMemberRole, isCreatingFeed, error, allMembers,
-      toggleNotificationRead, notifications, project } = this.props
-    const { feeds, isNewPostMobileOpen } = this.state
+      toggleNotificationRead, notifications, project, isSuperUser } = this.props
+    const { feeds, isNewPostMobileOpen, fullscreenFeedId } = this.state
     const isChanged = this.isChanged()
     const onLeaveMessage = this.onLeave() || ''
+    const fullscreenFeed = fullscreenFeedId && _.find(feeds, { id: fullscreenFeedId })
 
     return (
       <div>
+        {fullscreenFeed && (
+          <FullscreenFeedContainer
+            currentMemberRole={currentMemberRole}
+            isSuperUser={isSuperUser}
+            feeds={feeds}
+            onCloseClick={this.exitFullscreen}
+            activeFeedId={fullscreenFeedId}
+            onChannelClick={(feed) => {
+              this.enterFullscreen(feed.id)
+            }}
+          >
+            <ScrollableFeed
+              {...{
+                ...fullscreenFeed,
+                id: fullscreenFeedId.toString(),
+                allowComments: fullscreenFeed.allowComments && !!currentMemberRole,
+                currentUser,
+                allMembers,
+                onNewCommentChange: this.onNewCommentChange.bind(this, fullscreenFeedId),
+                onAddNewComment: this.onAddNewComment.bind(this, fullscreenFeedId),
+                onLoadMoreComments: this.onShowAllComments.bind(this, fullscreenFeedId),
+                onEditMessage: this.onEditMessage.bind(this, fullscreenFeedId),
+                onSaveMessageChange: this.onSaveMessageChange.bind(this, fullscreenFeedId),
+                onSaveMessage: this.onSaveMessage.bind(this, fullscreenFeedId),
+                onDeleteMessage: this.onDeleteMessage.bind(this, fullscreenFeedId),
+                onEditTopic: this.onEditTopic.bind(this, fullscreenFeedId),
+                onTopicChange: this.onTopicChange.bind(this, fullscreenFeedId),
+                onSaveTopic: this.onSaveTopic.bind(this, fullscreenFeedId),
+                onDeleteTopic: this.onDeleteTopic.bind(this, fullscreenFeedId),
+                onExitFullscreenClick: this.exitFullscreen,
+                isFullScreen: true,
+              }}
+            />
+          </FullscreenFeedContainer>
+        )}
+
         <PostsRefreshPrompt
           preventShowing={isChanged}
           toggleNotificationRead={toggleNotificationRead}
@@ -367,6 +416,7 @@ class FeedView extends React.Component {
           notifications={notifications}
           projectId={project.id}
         />
+
 
         <Prompt
           when={!!onLeaveMessage}
@@ -409,6 +459,7 @@ class FeedView extends React.Component {
                     onTopicChange: this.onTopicChange.bind(this, feed.id),
                     onSaveTopic: this.onSaveTopic.bind(this, feed.id),
                     onDeleteTopic: this.onDeleteTopic.bind(this, feed.id),
+                    onEnterFullscreenClick: this.enterFullscreen.bind(this, feed.id),
                   }}
                 />
               </div>

@@ -4,6 +4,7 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { AppContainer } from 'react-hot-loader'
 import { BrowserRouter } from 'react-router-dom'
+import { GatewayProvider } from 'react-gateway'
 import store  from './config/store'
 import Routes from './routes'
 import { SEGMENT_KEY } from './config/constants'
@@ -22,9 +23,11 @@ const renderApp = (Component) => {
   render(
     <AppContainer>
       <Provider store={store}>
-        <BrowserRouter>
-          <Component />
-        </BrowserRouter>
+        <GatewayProvider>
+          <BrowserRouter>
+            <Component />
+          </BrowserRouter>
+        </GatewayProvider>
       </Provider>
     </AppContainer>,
     mountNode

@@ -4,6 +4,7 @@
 .container {
   background-color: $tc-white;
   border-radius: 0 0 $card-border-radius $card-border-radius;
+  margin-top: -1px;
 
   :global {
     .rich-editor .tc-textarea .public-DraftEditor-content {
@@ -16,6 +17,11 @@
       padding-top: (40px - 25px) / 2; /* input height minus line-height */
       line-height: 25px;
     }
+  }
+
+  &.is-fullscreen {
+    border-radius: 0;
+    padding-bottom: 62px;
   }
 }
 
@@ -152,6 +158,27 @@
 .add-comment {
   background-color: $tc-gray-neutral-light;
   border-radius: 0 0 $card-border-radius $card-border-radius;
+
+  .is-fullscreen & {
+    border-top: 1px solid $tc-gray-10;
+    bottom: 0;
+    position: fixed;
+    right: 0;
+    /* minus sidebar width and minus sidebar border width */
+    width: calc(100% - 360px - 1px);
+    z-index: 5;
+
+    /* if there is not enough space for sidebar to be 360
+       than it becomes 1/3 of the width */
+    @media screen and (min-width: $screen-md) and (max-width: 360px * 3) {
+      /* two third of the width minus 1px of the width of the sidebar */
+      width: calc(100% / 3 * 2 - 1px);
+    }
+
+    @media screen and (max-width: $screen-md - 1px) {
+      width: 100%;
+    }
+  }
 }
 
 .no-comments {
@@ -165,4 +192,45 @@
   display: flex;
   justify-content: space-between;
   padding-bottom: 2 * $base-unit;
+
+  .is-fullscreen & {
+    align-items: center;
+    background-color: $tc-gray-neutral-light;
+    border-top: 1px solid $tc-gray-10;
+    bottom: 0;
+    left: 0;
+    padding-bottom: 0;
+    position: fixed;
+    height: 62px;
+    width: 100%;
+    z-index: 5;
+  }
+}
+
+.sticky-container {
+  display: none;
+
+  .is-fullscreen & {
+    display: block;
+    position: fixed;
+    right: 0;
+    /* primary toolbar height - 1px for header border */
+    margin-top: 60px - 1px;
+    /* minus sidebar width and minus sidebar border width */
+    width: calc(100% - 360px - 1px);
+    z-index: 6;
+
+    /* if there is not enough space for sidebar to be 360
+       than it becomes 1/3 of the width */
+    @media screen and (min-width: $screen-md) and (max-width: 360px * 3) {
+      /* two third of the width minus 1px of the width of the sidebar */
+      width: calc(100% / 3 * 2 - 1px);
+    }
+
+    @media screen and (max-width: $screen-md - 1px) {
+      /* -1px for header border */
+      margin-top: -1px;
+      width: 100%;
+    }
+  }
 }
