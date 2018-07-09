@@ -2,7 +2,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import './ProjectCard.scss'
-import BoldAdd from '../../../../assets/icons/ui-16px-1_bold-add.svg'
+import BoldAdd from '../../../assets/icons/ui-16px-1_bold-add.svg'
 
 
 function NewProjectCard() {

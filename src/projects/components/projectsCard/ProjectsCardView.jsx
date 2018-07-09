@@ -5,10 +5,10 @@ import InfiniteScroll from 'react-infinite-scroller'
 import ProjectCard from './ProjectCard'
 import NewProjectCard from './NewProjectCard'
 import cn from 'classnames'
-import { PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
-import { setDuration } from '../../../../helpers/projectHelper'
+import { PROJECTS_LIST_PER_PAGE } from '../../../config/constants'
+import { setDuration } from '../../../helpers/projectHelper'
 
-require('./ProjectsGridView.scss')
+require('../../list/components/Projects/ProjectsGridView.scss')
 
 
 const ProjectsCardView = props => {

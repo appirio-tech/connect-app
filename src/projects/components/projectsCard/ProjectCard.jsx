@@ -1,10 +1,10 @@
 import React from 'react'
 import PT from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import { getProjectRoleForCurrentUser } from '../../../../helpers/projectHelper'
+import { getProjectRoleForCurrentUser } from '../../../helpers/projectHelper'
 import ProjectCardHeader from './ProjectCardHeader'
 import ProjectCardBody from './ProjectCardBody'
-import ProjectManagerAvatars from './ProjectManagerAvatars'
+import ProjectManagerAvatars from '../../list/components/Projects/ProjectManagerAvatars'
 import './ProjectCard.scss'
 
 function ProjectCard({ project, duration, disabled, currentUser, history, onChangeStatus, projectTemplates }) {
