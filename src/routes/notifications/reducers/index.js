@@ -2,7 +2,9 @@
  * Notifications related reducers
  */
 import {
-  GET_NOTIFICATIONS,
+  GET_NOTIFICATIONS_PENDING,
+  GET_NOTIFICATIONS_SUCCESS,
+  GET_NOTIFICATIONS_FAILURE,
   VISIT_NOTIFICATIONS,
   TOGGLE_NOTIFICATION_SEEN,
   SET_NOTIFICATIONS_FILTER_BY,
@@ -48,8 +50,12 @@ const getSources = (notifications) => {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-  case GET_NOTIFICATIONS:
-    return { ...state, initialized: true, notifications: action.payload, sources: getSources(action.payload) }
+  case GET_NOTIFICATIONS_PENDING:
+    return { ...state, isLoading: true }
+  case GET_NOTIFICATIONS_SUCCESS:
+    return { ...state, initialized: true, isLoading: false, notifications: action.payload, sources: getSources(action.payload) }
+  case GET_NOTIFICATIONS_FAILURE:
+    return { ...state, isLoading: false }
 
   case VISIT_NOTIFICATIONS:
     return {...state, lastVisited: _.maxBy(_.map(state.notifications, n => new Date(n.date)))}
