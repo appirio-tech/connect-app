@@ -64,15 +64,13 @@ class FeedComments extends React.Component {
     const desktopBlocks = []
     const mobileBlocks = []
 
-    if (hasMoreComments) {
-      desktopBlocks.push(
-        <div styleName="load-more" key="load-more">
-          <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
-            {isLoadingComments ? 'Loading...' : 'load earlier posts'}
-          </a>
-        </div>
-      )
-    }
+    const loadMoreTemplate = (
+      <div styleName="load-more" key="load-more">
+        <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
+          {isLoadingComments ? 'Loading...' : 'load earlier posts'}
+        </a>
+      </div>
+    )
 
     let bundleCreatedAt = false
     let isBundleEdited = false
@@ -89,7 +87,7 @@ class FeedComments extends React.Component {
 
       const timeDiffComment = bundleCreatedAt && createdAt.diff(bundleCreatedAt)
       const shouldBundle = isSameDay && isSameAuthor && !isFirstUnread && timeDiffComment && timeDiffComment <= POSTS_BUNDLE_TIME_DIFF
-      
+
       if (shouldBundle) {
         isBundleEdited = isBundleEdited || item.edited
         item.noInfo = true
@@ -133,6 +131,11 @@ class FeedComments extends React.Component {
         <div styleName="unread-splitter" key="unread-splitter">
           <span styleName="unread">New posts</span>
         </div>
+      }
+
+      if (idx === 0 && hasMoreComments) {
+        desktopBlocks.push(loadMoreTemplate)
+        mobileBlocks.push(loadMoreTemplate)
       }
 
       desktopBlocks.push(
@@ -194,13 +197,6 @@ class FeedComments extends React.Component {
             </div>
           ) : (
             <div>
-              {hasMoreComments &&
-                <div styleName="load-more" key="load-more">
-                  <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
-                    {isLoadingComments ? 'Loading...' : 'load earlier posts'}
-                  </a>
-                </div>
-              }
               {mobileBlocks}
             </div>
           ))}
