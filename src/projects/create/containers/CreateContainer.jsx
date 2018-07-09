@@ -63,7 +63,8 @@ class CreateContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      creatingProject : false,
+      creatingProject: false,
+      createdProject: false,
       isProjectDirty: false,
       wizardStep: 0,
       updatedProject: {}
@@ -80,12 +81,13 @@ class CreateContainer extends React.Component {
       // update state
       this.setState({
         creatingProject: false,
+        createdProject: true,
         isProjectDirty: false
       }, () => {
         // remove incomplete project, and navigate to project dashboard
         console.log('removing incomplete project')
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
-        setTimeout(() => this.props.history.push('/projects/' + nextProjectId), 1000)
+        this.props.history.push('/projects/' + nextProjectId)
       })
 
     } else if (this.state.creatingProject !== nextProps.processing) {
@@ -230,6 +232,9 @@ class CreateContainer extends React.Component {
   }
 
   render() {
+    if (this.state.createdProject) {
+      return null
+    }
     const { templates: { projectTemplates, projectCategories: projectTypes }} = this.props
 
     return (
