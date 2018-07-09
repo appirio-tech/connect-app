@@ -61,7 +61,14 @@ class ProjectInfo extends Component {
                 project={project}
                 currentMemberRole={currentMemberRole}
                 duration={duration}
-                descLinesCount={matches ? 4 : Infinity}
+                descLinesCount={
+                  /* has to be not too big value here,
+                     because the plugin will make this number of iterations
+                     see https://github.com/ShinyChang/React-Text-Truncate/blob/master/src/TextTruncate.js#L133
+                     too big value may cause browser tab to freeze
+                   */
+                  matches ? 4 : 1000
+                }
                 onChangeStatus={onChangeStatus}
                 isSuperUser={isSuperUser}
                 showLink
