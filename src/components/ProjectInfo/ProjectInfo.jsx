@@ -4,7 +4,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import Panel from '../Panel/Panel'
 import DeleteProjectModal from './DeleteProjectModal'
-import ProjectCardBody from '../../projects/list/components/Projects/ProjectCardBody'
+import ProjectCardBody from '../../projects/components/projectsCard/ProjectCardBody'
 import ProjectDirectLinks from '../../projects/list/components/Projects/ProjectDirectLinks'
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import ProjectProgress from '../../projects/detail/components/ProjectProgress'
@@ -81,7 +81,14 @@ class ProjectInfo extends Component {
                 project={project}
                 currentMemberRole={currentMemberRole}
                 duration={duration}
-                descLinesCount={matches ? 4 : Infinity}
+                descLinesCount={
+                  /* has to be not too big value here,
+                     because the plugin will make this number of iterations
+                     see https://github.com/ShinyChang/React-Text-Truncate/blob/master/src/TextTruncate.js#L133
+                     too big value may cause browser tab to freeze
+                   */
+                  matches ? 4 : 1000
+                }
                 onChangeStatus={onChangeStatus}
                 isSuperUser={isSuperUser}
                 showLink

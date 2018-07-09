@@ -45,7 +45,7 @@ export function getProjectCreationTemplateField(
  */
 export function getProjectTemplateByAlias(projectTemplates, alias) {
   return _.find(projectTemplates, (projectTemplate) =>
-    projectTemplate.aliases[0] === alias
+    projectTemplate.aliases.indexOf(alias) !== -1
   ) || null
 }
 

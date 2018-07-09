@@ -7,7 +7,9 @@ export const LOAD_USER_SUCCESS     = 'LOAD_USER_SUCCESS'
 export const LOAD_USER_FAILURE     = 'LOAD_USER_FAILURE'
 
 // Notifications
-export const GET_NOTIFICATIONS = 'GET_NOTIFICATIONS'
+export const GET_NOTIFICATIONS_PENDING = 'GET_NOTIFICATIONS_PENDING'
+export const GET_NOTIFICATIONS_SUCCESS = 'GET_NOTIFICATIONS_SUCCESS'
+export const GET_NOTIFICATIONS_FAILURE = 'GET_NOTIFICATIONS_FAILURE'
 export const VISIT_NOTIFICATIONS = 'VISIT_NOTIFICATIONS'
 export const SET_NOTIFICATIONS_FILTER_BY = 'SET_NOTIFICATIONS_FILTER_BY'
 export const MARK_ALL_NOTIFICATIONS_READ = 'MARK_ALL_NOTIFICATIONS_READ'
@@ -432,6 +434,8 @@ export const TC_API_URL = `https://api.${DOMAIN}`
 export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?formData.projectId=`
 export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
 export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
+
+export const TC_CDN_URL = process.env.NODE_ENV === 'development' ? 'https://d1aahxkjiobka8.cloudfront.net' : 'https://d2nl5eqipnb33q.cloudfront.net'
 
 export const PROJECT_NAME_MAX_LENGTH = 255
 export const PROJECT_REF_CODE_MAX_LENGTH = 32

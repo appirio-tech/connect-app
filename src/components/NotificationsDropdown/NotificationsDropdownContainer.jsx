@@ -19,6 +19,7 @@ import NotificationsMobilePage from  './NotificationsMobilePage'
 import NotificationsReadAll from './NotificationsReadAll'
 import ScrollLock from 'react-scroll-lock-component'
 import MediaQuery from 'react-responsive'
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
 import { NOTIFICATIONS_DROPDOWN_PER_SOURCE, NOTIFICATIONS_NEW_PER_SOURCE, REFRESH_NOTIFICATIONS_INTERVAL, SCREEN_BREAKPOINT_MD } from '../../config/constants'
 import './NotificationsDropdown.scss'
 
@@ -49,13 +50,16 @@ class NotificationsDropdownContainer extends React.Component {
   }
 
   render() {
-    if (!this.props.initialized) {
-      return <NotificationsDropdown hasUnread={false} />
-    }
-
-    const {lastVisited, sources, notifications, markAllNotificationsRead, toggleNotificationRead, toggleNotificationSeen,
+    const {initialized, isLoading, lastVisited, sources, notifications, markAllNotificationsRead, toggleNotificationRead, toggleNotificationSeen,
       pending, toggleBundledNotificationRead, visitNotifications, oldSourceIds, viewOlderNotifications, isDropdownMobileOpen,
       toggleNotificationsDropdownMobile } = this.props
+    if (!initialized && isLoading) {
+      return (
+        <NotificationsDropdown hasUnread={false}>
+          <LoadingIndicator />
+        </NotificationsDropdown>
+      )
+    }
     const getPathname = link => link.split(/[?#]/)[0].replace(/\/?$/, '')
 
     // mark notifications with url match current page's url as seen
@@ -88,8 +92,7 @@ class NotificationsDropdownContainer extends React.Component {
       }
     }
     const hasNew = hasUnread && lastVisited < _.maxBy(_.map(notifications, n => new Date(n.date)))
-
-    const notificationsEmpty = (
+    let notificationsEmpty = (
       <NotificationsEmpty>
         <p className="notifications-empty-note">
           Maybe you need to check your <Link to="/settings/notifications" className="tc-link">notification settings</Link> to
@@ -100,6 +103,15 @@ class NotificationsDropdownContainer extends React.Component {
         </div>
       </NotificationsEmpty>
     )
+    if (!isLoading && !initialized) {
+      notificationsEmpty = (
+        <NotificationsEmpty message="Fail to load notifications">
+          <p className="notifications-empty-note">
+            Maybe the notification server is not working or your device is offline.
+          </p>
+        </NotificationsEmpty>
+      )
+    }
 
     // this function checks that notification is not seen yet,
     // before marking it as seen

@@ -6,7 +6,7 @@ import Walkthrough from '../Walkthrough/Walkthrough'
 import CoderBot from '../../../../components/CoderBot/CoderBot'
 import ProjectListNavHeader from './ProjectListNavHeader'
 import ProjectsGridView from './ProjectsGridView'
-import ProjectsCardView from './ProjectsCardView'
+import ProjectsCardView from '../../../components/projectsCard/ProjectsCardView'
 import { loadProjects, setInfiniteAutoload, setProjectsListView } from '../../../actions/loadProjects'
 import { loadProjectTemplates } from '../../../../actions/templates'
 import { sortProjects } from '../../../actions/sortProjects'
@@ -202,6 +202,7 @@ class Projects extends Component {
         {...this.props }
         // onPageChange={this.onPageChange}
         // sortHandler={this.sortHandler}
+        applyFilters={this.applySearchFilter}
         onPageChange={this.onPageChange}
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}

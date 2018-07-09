@@ -12,6 +12,7 @@ import Section from '../components/Section'
 import ProjectStage from '../components/ProjectStage'
 import PhaseCardListHeader from '../components/PhaseCardListHeader'
 import PhaseCardListFooter from '../components/PhaseCardListFooter'
+import { PHASE_STATUS_DRAFT } from '../../../config/constants'
 
 /**
  * Format PhaseCardListFooter props
@@ -21,10 +22,11 @@ import PhaseCardListFooter from '../components/PhaseCardListFooter'
  * @returns {Object} PhaseCardListFooter props
  */
 function formatPhaseCardListFooterProps(phases) {
-  const startDates = _.compact(phases.map((phase) =>
+  const filteredPhases = _.filter(phases, (phase) => (phase.status !== PHASE_STATUS_DRAFT))
+  const startDates = _.compact(filteredPhases.map((phase) =>
     phase.startDate ? moment(phase.startDate) : null
   ))
-  const endDates = _.compact(phases.map((phase) =>
+  const endDates = _.compact(filteredPhases.map((phase) =>
     phase.endDate ? moment(phase.endDate) : null
   ))
   const minStartDate = startDates.length > 0 ? moment.min(startDates) : null
@@ -33,9 +35,10 @@ function formatPhaseCardListFooterProps(phases) {
   let startEndDates = minStartDate ? `${minStartDate.format('MMM D')}` : ''
   startEndDates += minStartDate && maxEndDate ? `–${maxEndDate.format('MMM D')}` : ''
 
-  const totalPrice = _.sum(phases.map((phase) => _.get(phase, 'budget', 0)))
+  const totalPrice = _.sumBy(filteredPhases, 'budget')
 
-  const duration = `${_.sum(phases.map((phase) => _.get(phase, 'duration', 0))) + phases.length} days`
+  const projectedDuration = _.sumBy(filteredPhases, (phase) => {return phase.duration && phase.duration > 1 ? phase.duration : 1})
+  const duration = `${projectedDuration} days`
   const price = `$${formatNumberWithCommas(totalPrice)}`
 
   return {
