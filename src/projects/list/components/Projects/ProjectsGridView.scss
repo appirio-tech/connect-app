@@ -458,12 +458,19 @@ $screen-one-column: 720px;
       }
     }
 
-    .cardview-no-more {
+    .cardview-no-more,
+    .cardview-no-project {
       @include roboto;
       color: $tc-gray-40;
       font-size: 13px;
       padding: 10px 0;
       text-align: center;
+      display: inline;
+
+      .tc-btn-all-projects {
+        color: $tc-dark-blue;
+        
+      }
 
       @media screen and (max-width: $screen-md - 1px) {
         margin-bottom: -$base-unit;

@@ -16,30 +16,14 @@
       padding-bottom: 0;
     }
 
-    .delete-project-modal {
-      margin-bottom: 2 * $base-unit;
-    }
-
-    .project-status {
-      margin-bottom: 10px;
-      padding-left: 4 * $base_unit;
-      padding-right: 4 * $base_unit;
-    }
-
-    .project-status-header {
-      @include roboto-bold;
+    .project-overview-header {
+      @include roboto-medium;
       color: $tc-black;
-      font-size: 11px;
+      font-size: 15px;
       line-height: 20px;
-      text-transform: uppercase;
     }
 
-    .project-status-info {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .project-status-time {
+    .project-overview-time {
       @include roboto;
       color: $tc-gray-50;
       font-size: 10px;
@@ -47,23 +31,6 @@
       line-height: 15px;
       margin-top: $base_unit;
       text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .project-status-ref {
-      @include roboto-medium;
-      background-color: $tc-gray-05;
-      border-radius: 4px;
-      color: $tc-gray-50;
-      font-size: 13px;
-      height: 20px;
-      line-height: 20px;
-      padding: 0 2 * $base-unit;
-      white-space: nowrap;
-    }
-
-    .project-status-progress {
-      margin: 2 * $base-unit 0;
     }
 
     .project-card-body {

@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import  { Link } from 'react-router-dom'
 import './LinksMenu.scss'
 import Panel from '../Panel/Panel'
 import AddLink from './AddLink'
@@ -12,11 +11,11 @@ import cn from 'classnames'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
 import BtnEdit from '../../assets/icons/icon-edit.svg'
 
+
 const LinksMenu = ({
   canAdd,
   canDelete,
   canEdit,
-  noDots,
   isAddingNewLink,
   limit,
   links,
@@ -53,7 +52,7 @@ const LinksMenu = ({
         />
       }
 
-      <div className={cn('panel-links', { 'panel-links-nodots': noDots })}>
+      <div className="panel-links">
         <ul>
           {
             links.slice(0, limit).map((link, idx) => {
@@ -93,10 +92,7 @@ const LinksMenu = ({
               } else {
                 return (
                   <li key={idx}>
-                    {link.noNewPage
-                      ? <Link to={link.address}>{link.title}</Link>
-                      : <a href={link.address} target="_blank" rel="noopener noreferrer">{link.title}</a>
-                    }
+                    <a href={link.address} target="_blank" rel="noopener noreferrer">{link.title}</a>
                     <div className="button-group">
                       {canEdit && <div className="buttons link-buttons">
                         <button onClick={ handleEditClick } type="button">
@@ -132,7 +128,6 @@ LinksMenu.propTypes = {
   canAdd: PropTypes.bool,
   canDelete: PropTypes.bool,
   canEdit: PropTypes.bool,
-  noDots: PropTypes.bool,
   limit: PropTypes.number,
   links: PropTypes.array.isRequired,
   moreText: PropTypes.string,

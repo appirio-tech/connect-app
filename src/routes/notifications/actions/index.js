@@ -31,7 +31,7 @@ export const getNotifications = () => (dispatch) => {
       type: GET_NOTIFICATIONS_FAILURE,
       payload: err
     })
-    Alert.error(`Failed to load notifications. ${err.message}`)
+    console.error(`Failed to load notifications. ${err.message}`)
   })
 }
 

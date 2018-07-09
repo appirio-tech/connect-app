@@ -195,7 +195,8 @@ const ProjectsGridView = props => {
     infiniteAutoload,
     infiniteScroll: true,
     setInfiniteAutoload,
-    projectsStatus
+    projectsStatus,
+    applyFilters
   }
 
   return (

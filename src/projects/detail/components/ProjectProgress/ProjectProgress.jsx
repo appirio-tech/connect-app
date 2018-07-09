@@ -4,7 +4,7 @@ import './ProjectProgress.scss'
 
 const ProjectProgress = (props) => {
   return (
-    <div styleName={'project-progress '
+    <div styleName={'project-progress ' 
       + (props.theme ? props.theme : '')
       + (props.isCompleted ? ' completed' : '')
       + (props.inProgress ? ' in-progress' : '')
@@ -15,7 +15,7 @@ const ProjectProgress = (props) => {
       <div styleName="label-layer">
         <span>{props.labelDayStatus}</span>
         <div styleName="group-right">
-          {!!props.labelSpent && <span styleName="spent">{props.labelSpent}</span>}
+          <span styleName="spent">{props.labelSpent}</span>
           <span styleName="status hide-sm">{props.labelStatus}</span>
         </div>
       </div>

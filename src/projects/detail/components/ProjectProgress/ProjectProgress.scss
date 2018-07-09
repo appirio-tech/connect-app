@@ -44,15 +44,17 @@
     padding-right: $base-unit*3;
     z-index: 10;
     overflow: hidden;
-    white-space: nowrap;
-
     @media screen and (max-width: $screen-md - 1px) {
       padding-right: $base-unit*3.8;
     }
 
     .group-right {
+      min-width: 240px;
       display: flex;
       justify-content: flex-end;
+      @media screen and (max-width: $screen-md - 1px) {
+        min-width: 100px;
+      }
     }
 
     .spent {
