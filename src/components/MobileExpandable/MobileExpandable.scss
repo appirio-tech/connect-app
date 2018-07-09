@@ -38,4 +38,10 @@
   .open & {
     display: block;
   }
+
+  :global {
+    input[name="address"] + .error-message {
+      display: none;
+    }
+  }
 }
