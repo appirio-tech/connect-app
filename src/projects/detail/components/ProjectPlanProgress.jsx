@@ -14,6 +14,7 @@ import ProjectProgress from './ProjectProgress'
 import {
   PHASE_STATUS_ACTIVE,
   PHASE_STATUS_COMPLETED,
+  PHASE_STATUS_DRAFT,
 } from '../../../config/constants'
 
 /**
@@ -31,7 +32,7 @@ function formatProjectProgressProps(project, phases) {
   let totalProgress = 0
 
   // phases where start date is set
-  const filteredPhases = _.filter(phases, (phase) => (phase.startDate))
+  const filteredPhases = _.filter(phases, (phase) => (phase.startDate && phase.status !== PHASE_STATUS_DRAFT))
   filteredPhases.map((phase) => {
     let progress = 0
     // calculates days spent and day based progress for the phase
@@ -73,7 +74,7 @@ function formatProjectProgressProps(project, phases) {
   )
   const spentAmount = _.sumBy(activeOrCompletedPhases, 'spentBudget') || 0
   const labelSpent = `Spent $${formatNumberWithCommas(spentAmount)}`
-  const progressPercent = phases.length > 0 ? Math.round(totalProgress/phases.length) : 0
+  const progressPercent = phases.length > 0 ? Math.round(totalProgress/filteredPhases.length) : 0
   const labelStatus = `${progressPercent}% done`
 
   return {
