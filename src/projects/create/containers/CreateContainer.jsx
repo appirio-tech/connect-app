@@ -63,7 +63,8 @@ class CreateContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      creatingProject : false,
+      creatingProject: false,
+      createdProject: false,
       isProjectDirty: false,
       wizardStep: 0,
       updatedProject: {}
@@ -76,10 +77,11 @@ class CreateContainer extends React.Component {
   componentWillReceiveProps(nextProps) {
     const projectId = _.get(this.props, 'project.id', null)
     const nextProjectId = _.get(nextProps, 'project.id', null)
-    if (!nextProps.processing && !nextProps.error && !projectId && nextProjectId) {
+    if (!nextProps.processing && !nextProps.error && nextProjectId && projectId !== nextProjectId) {
       // update state
       this.setState({
         creatingProject: false,
+        createdProject: true,
         isProjectDirty: false
       }, () => {
         // remove incomplete project, and navigate to project dashboard
@@ -202,7 +204,6 @@ class CreateContainer extends React.Component {
         project.templateId = projectTemplate.id
         project.type = projectTemplate.category
         this.props.createProjectAction(project)
-        this.closeWizard()
       } else {
         // redirect to registration/login page
         const retUrl = window.location.origin + '/new-project-callback'
@@ -237,7 +238,7 @@ class CreateContainer extends React.Component {
       <EnhancedCreateView
         {...this.props}
         createProject={ this.createProject }
-        processing={ this.state.creatingProject }
+        processing={ this.state.creatingProject || this.state.createdProject }
         showModal
         closeModal={ this.closeWizard }
         onStepChange={ (wizardStep, updatedProject) => {
