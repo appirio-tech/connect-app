@@ -1,7 +1,7 @@
 /**
  * Container component for notifications list with filter
  */
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
@@ -20,16 +20,9 @@ import { requiresAuthentication } from '../../../components/AuthenticatedCompone
 import { REFRESH_NOTIFICATIONS_INTERVAL, NOTIFICATIONS_NEW_PER_SOURCE } from '../../../config/constants'
 import './NotificationsContainer.scss'
 
-class NotificationsContainer extends React.Component {
+class NotificationsContainerView extends React.Component {
   componentDidMount() {
     document.title = 'Notifications - TopCoder'
-    this.props.getNotifications()
-    this.autoRefreshNotifications = setInterval(() => this.props.getNotifications(), REFRESH_NOTIFICATIONS_INTERVAL)
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.autoRefreshNotifications)
-    this.props.hideOlderNotifications()
   }
 
   render() {
@@ -118,6 +111,35 @@ class NotificationsContainer extends React.Component {
   }
 }
 
+const enhance = spinnerWhileLoading(props => !props.isLoading)
+const NotificationsContainerWithLoader = enhance(NotificationsContainerView)
+const NotificationsContainerWithLoaderAndAuth = requiresAuthentication(NotificationsContainerWithLoader)
+
+class NotificationsContainer extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  componentWillMount() {
+    this.props.getNotifications()
+    this.autoRefreshNotifications = setInterval(() => this.props.getNotifications(), REFRESH_NOTIFICATIONS_INTERVAL)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.autoRefreshNotifications)
+    this.props.hideOlderNotifications()
+  }
+
+  render() {
+    
+    return (
+      <NotificationsContainerWithLoaderAndAuth
+        {...this.props}
+      />
+    )
+  }
+}
+
 NotificationsContainer.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   initialized: PropTypes.bool.isRequired,
@@ -128,9 +150,7 @@ NotificationsContainer.propTypes = {
   pending: PropTypes.bool
 }
 
-const enhance = spinnerWhileLoading(props => !props.isLoading)
-const NotificationsContainerWithLoader = enhance(NotificationsContainer)
-const NotificationsContainerWithLoaderAndAuth = requiresAuthentication(NotificationsContainerWithLoader)
+
 
 const mapStateToProps = ({ notifications }) => notifications
 
