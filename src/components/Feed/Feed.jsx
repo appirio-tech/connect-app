@@ -127,7 +127,7 @@ class Feed extends React.Component {
                   </div>
                 </div>
                 <div styleName="header-actions">
-                  {self && (
+                  {self && !isFullScreen && (
                     <CommentEditToggle
                       forTopic
                       hideDelete={comments.length > 0}
