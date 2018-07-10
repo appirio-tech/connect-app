@@ -37,6 +37,9 @@ const ProjectPlanContainer = (props) => {
   const visiblePhases = phases.filter((phase) => (
     isManageUser || phase.status !== PHASE_STATUS_DRAFT
   ))
+  const nonDraftPhases = phases.filter((phase) => (
+    phase.status !== PHASE_STATUS_DRAFT
+  ))
   const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
 
   const leftArea = (
@@ -63,7 +66,7 @@ const ProjectPlanContainer = (props) => {
       <TwoColsLayout.Content>
         {visiblePhases.length > 0 ? (
           [
-            <ProjectPlanProgress phases={visiblePhases} project={project} key="progress" />,
+            nonDraftPhases.length > 0 && <ProjectPlanProgress phases={visiblePhases} project={project} key="progress" />,
             <ProjectStages
               {...{
                 ...props,
