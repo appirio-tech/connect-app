@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import { getNotifications, visitNotifications, toggleNotificationSeen, markAllNotificationsRead,
   toggleNotificationRead, toggleBundledNotificationRead, viewOlderNotifications,
-  toggleNotificationsDropdownMobile, hideOlderNotifications } from '../../routes/notifications/actions'
+  toggleNotificationsDropdownMobile, toggleNotificationsDropdownWeb, hideOlderNotifications } from '../../routes/notifications/actions'
 import { splitNotificationsBySources, filterReadNotifications, limitQuantityInSources } from '../../routes/notifications/helpers/notifications'
 import NotificationsSection from '../NotificationsSection/NotificationsSection'
 import NotificationsEmpty from '../NotificationsEmpty/NotificationsEmpty'
@@ -34,6 +34,7 @@ class NotificationsDropdownContainer extends React.Component {
     clearInterval(this.autoRefreshNotifications)
     // hide notifications dropdown for mobile, when this component is unmounted
     this.props.toggleNotificationsDropdownMobile(false)
+    this.props.toggleNotificationsDropdownWeb(false)
     this.props.hideOlderNotifications()
   }
 
@@ -45,14 +46,15 @@ class NotificationsDropdownContainer extends React.Component {
       // hide notifications dropdown for mobile,
       // when this component persist but URL changed
       this.props.toggleNotificationsDropdownMobile(false)
+      this.props.toggleNotificationsDropdownWeb(false)
       this.props.hideOlderNotifications()
     }
   }
 
   render() {
     const {initialized, isLoading, lastVisited, sources, notifications, markAllNotificationsRead, toggleNotificationRead, toggleNotificationSeen,
-      pending, toggleBundledNotificationRead, visitNotifications, oldSourceIds, viewOlderNotifications, isDropdownMobileOpen,
-      toggleNotificationsDropdownMobile } = this.props
+      pending, toggleBundledNotificationRead, visitNotifications, oldSourceIds, viewOlderNotifications, isDropdownMobileOpen, isDropdownWebOpen,
+      toggleNotificationsDropdownMobile, toggleNotificationsDropdownWeb } = this.props
     if (!initialized && isLoading) {
       return (
         <NotificationsDropdown hasUnread={false}>
@@ -137,43 +139,58 @@ class NotificationsDropdownContainer extends React.Component {
             const projectSources = notificationsBySources.length > 1 && globalSource ? notificationsBySources.slice(1) : notificationsBySources
 
             return (
-              <NotificationsDropdown hasUnread={hasUnread} hasNew={hasNew} onToggle={visitNotifications}>
-                <NotificationsDropdownHeader onMarkAllClick={() => !pending && markAllNotificationsRead()} hasUnread={hasUnread}/>
-                {!hasUnread ? (
-                  <div className="notifications-dropdown-body">
-                    {notificationsEmpty}
-                  </div>
-                ) : ([
-                  <ScrollLock key="body">
+              <NotificationsDropdown 
+                hasUnread={hasUnread} 
+                hasNew={hasNew} 
+                onToggle={() => {
+                  toggleNotificationsDropdownWeb()
+                  visitNotifications()
+                }}
+              >
+                {isDropdownWebOpen && <div>
+                  <NotificationsDropdownHeader onMarkAllClick={() => !pending && markAllNotificationsRead()} hasUnread={hasUnread}/>
+                  {!hasUnread ? (
                     <div className="notifications-dropdown-body">
-                      {globalSource && globalSource.notifications.length &&
+                      {notificationsEmpty}
+                    </div>
+                  ) : ([
+                    <ScrollLock key="body">
+                      <div className="notifications-dropdown-body">
+                        {globalSource && globalSource.notifications.length &&
                         <NotificationsSection
                           {...globalSource}
                           isGlobal
                           isSimple
                           onReadToggleClick={toggleNotificationReadWithDelay}
-                          onLinkClick={markNotificationSeen}
+                          onLinkClick={(notificationId) => {
+                            toggleNotificationsDropdownWeb()
+                            markNotificationSeen(notificationId)
+                          }}
                         />
+                        }
+                        {projectSources.filter(source => source.notifications.length > 0).map(source => (
+                          <NotificationsSection
+                            {...source}
+                            key={source.id}
+                            isSimple
+                            onReadToggleClick={toggleNotificationReadWithDelay}
+                            onLinkClick={(notificationId) => {
+                              toggleNotificationsDropdownWeb()
+                              markNotificationSeen(notificationId)
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </ScrollLock>,
+                    <NotificationsReadAll key="footer" to="/notifications">
+                      {
+                        hiddenByLimitCount > 0 ?
+                          `View ${hiddenByLimitCount} older notification${hiddenByLimitCount > 1 ? 's' : ''}` :
+                          'View all notifications'
                       }
-                      {projectSources.filter(source => source.notifications.length > 0).map(source => (
-                        <NotificationsSection
-                          {...source}
-                          key={source.id}
-                          isSimple
-                          onReadToggleClick={toggleNotificationReadWithDelay}
-                          onLinkClick={markNotificationSeen}
-                        />
-                      ))}
-                    </div>
-                  </ScrollLock>,
-                  <NotificationsReadAll key="footer" to="/notifications">
-                    {
-                      hiddenByLimitCount > 0 ?
-                        `View ${hiddenByLimitCount} older notification${hiddenByLimitCount > 1 ? 's' : ''}` :
-                        'View all notifications'
-                    }
-                  </NotificationsReadAll>
-                ])}
+                    </NotificationsReadAll>
+                  ])}
+                </div>}
               </NotificationsDropdown>
             )
           } else {
@@ -246,7 +263,8 @@ const mapDispatchToProps = {
   toggleBundledNotificationRead,
   viewOlderNotifications,
   hideOlderNotifications,
-  toggleNotificationsDropdownMobile
+  toggleNotificationsDropdownMobile,
+  toggleNotificationsDropdownWeb
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsDropdownContainer)
