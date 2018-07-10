@@ -97,8 +97,6 @@ class Feed extends React.Component {
       const title = this.props.newTitle === null || this.props.newTitle === undefined ? this.props.title : this.props.newTitle
       const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
 
-      const lastPostDate = comments.length > 0 ? comments[comments.length - 1].date : topicMessage.date
-
       topicHeader = (
         <header styleName="feed-header" ref="header">
           {editTopicMode ? (
@@ -124,7 +122,7 @@ class Feed extends React.Component {
                 <div styleName="header-info">
                   <div styleName="title">{title}</div>
                   <div styleName="header-details">
-                    <span>{moment(lastPostDate).format('MMM D YYYY')}</span>
+                    <span>{moment(topicMessage.date).format('MMM D YYYY')}</span>
                     <span>{comments.length} post{comments.length !== 1 ? 's' : ''}</span>
                   </div>
                 </div>
