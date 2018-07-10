@@ -5,7 +5,6 @@ import ProjectTypeCard from './ProjectTypeCard'
 import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 
 import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
-import { DOMAIN } from '../../../config/constants'
 
 import './SelectProductTemplate.scss'
 
