@@ -16,7 +16,7 @@ import {
   filterNotificationsByProjectId,
   filterTopicAndPostChangedNotifications,
 } from '../../../../routes/notifications/helpers/notifications'
-import { REFRESH_UNREAD_UPDATE_INTERVAL } from '../../../../config/constants'
+import { REFRESH_UNREAD_UPDATE_INTERVAL, SCROLL_TO_MARGIN } from '../../../../config/constants'
 
 import Refresh from '../../../../assets/icons/icon-refresh.svg'
 
@@ -32,6 +32,7 @@ class PostsRefreshPrompt extends React.Component {
     }
 
     this.onScroll = this.onScroll.bind(this)
+    this.checkForUnreadPosts = this.checkForUnreadPosts.bind(this)
 
     this.refreshUnreadUpdate = null
   }
@@ -46,8 +47,7 @@ class PostsRefreshPrompt extends React.Component {
   }
 
   componentDidMount() {
-    const { toggleNotificationRead, refreshFeeds, preventShowing } = this.props
-    const { scrolled, unreadUpdate } = this.state
+    const { toggleNotificationRead } = this.props
 
     this.setState({
       unreadUpdate: [],
@@ -59,13 +59,7 @@ class PostsRefreshPrompt extends React.Component {
       toggleNotificationRead(notification.id)
     })
 
-    this.refreshUnreadUpdate = setInterval(() => {
-      this.setState({ unreadUpdate: this.getUnreadTopicAndPostChangedNotifications() })
-
-      if (!preventShowing && !scrolled && unreadUpdate.length > 0) {
-        refreshFeeds()
-      }
-    }, REFRESH_UNREAD_UPDATE_INTERVAL)
+    this.refreshUnreadUpdate = setInterval(this.checkForUnreadPosts, REFRESH_UNREAD_UPDATE_INTERVAL)
   }
 
   getUnreadTopicAndPostChangedNotifications() {
@@ -87,6 +81,18 @@ class PostsRefreshPrompt extends React.Component {
     }
   }
 
+  checkForUnreadPosts() {
+    const unreadUpdate = this.getUnreadTopicAndPostChangedNotifications()
+    const { refreshFeeds, preventShowing } = this.props
+    const { scrolled } = this.state
+
+    this.setState({ unreadUpdate: this.getUnreadTopicAndPostChangedNotifications() })
+
+    if (!preventShowing && !scrolled && unreadUpdate.length > 0) {
+      refreshFeeds()
+    }
+  }
+
   render() {
     const { preventShowing, refreshFeeds } = this.props
     const { unreadUpdate, scrolled } = this.state
@@ -95,8 +101,8 @@ class PostsRefreshPrompt extends React.Component {
 
     return (
       isShown ? (
-        <Sticky top={80} innerZ={999}>
-          <div className="prompt">
+        <Sticky top={SCROLL_TO_MARGIN} innerZ={999}>
+          <div styleName="prompt">
             <button
               className={`tc-btn tc-btn-primary tc-btn-md ${styles.button}`}
               onClick={refreshFeeds}

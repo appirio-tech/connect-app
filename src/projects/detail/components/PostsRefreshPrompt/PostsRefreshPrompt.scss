@@ -1,21 +1,16 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 .prompt {
-  :global {
-    .icon-refresh {
-      position: absolute;
-      top: 4px;
-    }
+  text-align: center;
+  z-index: 999;
+  left: 0;
+  right: 0;
+  margin: auto;
+  position: absolute;
 
-    .tc-btn {
-
-      margin-left: - 3 * $base-unit;
-    }
+  :global(.tc-btn).button {
+    border-radius: 20px;
   }
-}
-
-:global(.tc-btn).button {
-  border-radius: 20px;
 }
 
 .icon {
