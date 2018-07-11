@@ -436,6 +436,7 @@ class FeedView extends React.Component {
                 heading="NEW STATUS POST"
                 onNewPostChange={this.onNewPostChange}
                 titlePlaceholder="Start a new discussion"
+                expandedTitlePlaceholder="Add your discussion title"
                 contentPlaceholder="Add your first post"
               />
             </MediaQuery>
