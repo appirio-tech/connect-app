@@ -254,7 +254,7 @@ class RichTextArea extends React.Component {
   render() {
     const {MentionSuggestions} = this.mentionPlugin
     const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating,
-      isGettingComment, disableTitle, disableContent} = this.props
+      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder} = this.props
     const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading} = this.state
     let canSubmit = (disableTitle || titleValue.trim())
         && (disableContent || editorState.getCurrentContent().hasText())
@@ -311,7 +311,7 @@ class RichTextArea extends React.Component {
               className={cn('new-post-title', {'hide-title': disableTitle})}
               type="text"
               onChange={this.onTitleChange}
-              placeholder={titlePlaceholder || 'Title of the post'}
+              placeholder={editorExpanded ? expandedTitlePlaceholder : titlePlaceholder || 'Title of the post'}
             />
             <div className="draftjs-editor tc-textarea">
               {!disableContent && !isGettingComment &&
@@ -415,6 +415,7 @@ class RichTextArea extends React.Component {
 }
 
 RichTextArea.propTypes = {
+  expandedTitlePlaceholder: PropTypes.string,
   onPost: PropTypes.func.isRequired,
   onPostChange: PropTypes.func.isRequired,
   cancelEdit: PropTypes.func,
