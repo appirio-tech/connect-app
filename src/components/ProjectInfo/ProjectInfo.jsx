@@ -9,7 +9,7 @@ import ProjectDirectLinks from '../../projects/list/components/Projects/ProjectD
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import ProjectProgress from '../../projects/detail/components/ProjectProgress'
 import MediaQuery from 'react-responsive'
-import { SCREEN_BREAKPOINT_MD } from '../../config/constants'
+import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT } from '../../config/constants'
 
 import { formatProjectProgressProps, formatOldProjectProgressProps } from '../../helpers/projectHelper'
 
@@ -49,6 +49,10 @@ class ProjectInfo extends Component {
       'labelSpent'
     )
 
+    const nonDraftPhases = phases
+      ? phases.filter((phase) => phase.status !== PHASE_STATUS_DRAFT)
+      : []
+
     return (
       <div className="project-info">
         <div className="project-info-header">
@@ -60,9 +64,11 @@ class ProjectInfo extends Component {
           }
         </div>
         <div className="project-status">
-          <div className="project-status-progress">
-            <ProjectProgress {...projectProgressProps} />
-          </div>
+          {nonDraftPhases.length > 0 &&
+            <div className="project-status-progress">
+              <ProjectProgress {...projectProgressProps} />
+            </div>
+          }
           <div className="project-status-info">
             <div className="project-status-time">Created {moment(project.updatedAt).format('MMM DD, YYYY')}</div>
             {!!code && <div className="project-status-ref">{code}</div>}
