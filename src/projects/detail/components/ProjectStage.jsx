@@ -39,20 +39,25 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed) {
   const price = `$${formatNumberWithCommas(budget)}`
   const icon = _.get(productTemplate, 'icon')
   const title = phase.name
-  const startDate = phase.startDate && moment(phase.startDate)
-  const endDate = phase.endDate && moment(phase.endDate)
+  const startDate = phase.startDate && moment.utc(phase.startDate)
+  const endDate = phase.endDate && moment.utc(phase.endDate)
 
   const plannedDuration = phase.duration ? phase.duration : 0
   const duration = `${plannedDuration} days`
   let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
-  startEndDates += startDate && endDate ? `–${endDate.format('MMM D')}` : ''
+  // appends end date to the start date only if end date is greater than start date
+  startEndDates += startDate && endDate && endDate.diff(startDate, 'days') > 0 ? `-${endDate.format('MMM D')}` : ''
+  // extracts the start date's month string plus white space
+  const monthStr = startEndDates.substr(0, 4)
+  // replaces the second occurance of the month part i.e. removes the end date's month part
+  startEndDates = startEndDates.lastIndexOf(monthStr) !== 0 ? startEndDates.replace(`-${monthStr}`, '-') : startEndDates
 
   // calculate progress of phase
   let progressInPercent = phase.progress
   if (!progressInPercent) {
     let actualDuration = 0
     let now = new Date()
-    now = now && moment(now)
+    now = now && moment.utc(now)
     const durationFromNow = now.diff(startDate, 'days') + 1
     if (durationFromNow <= plannedDuration) {
       if (durationFromNow > 0) {

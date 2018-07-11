@@ -5,7 +5,6 @@ import ProjectTypeCard from './ProjectTypeCard'
 import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 
 import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
-import { DOMAIN } from '../../../config/constants'
 
 import './SelectProductTemplate.scss'
 
@@ -42,9 +41,6 @@ const SelectProductTemplate = ({
       <div className="SelectProductTemplate">
         <h1>Add A New Phase</h1>
         <div className="cards">{cards}</div>
-        <div className="footer">
-          Looking for something else? <a href={`https://${DOMAIN}/contact?utm_source=Connect&utm_medium=Referral&utm_campaign=FooterContact`}>Get in touch with us &rarr;</a>
-        </div>
       </div>
     </div>
   )

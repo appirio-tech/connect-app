@@ -46,13 +46,11 @@ class EditStageForm extends React.Component {
 
   submitValue(model) {
     const { phase, phaseIndex, updatePhaseAction } = this.props
-
-    const updatedStartDate = moment(new Date(model.startDate))
+    const updatedStartDate = moment.utc(new Date(model.startDate))
     const duration = model.duration ? model.duration : 1
-    const endDate = duration >  1 ? moment(updatedStartDate).add(duration - 1, 'days').utc() : 
-      moment(updatedStartDate).add(duration, 'days').utc()
+    const endDate = moment.utc(updatedStartDate).add(duration - 1, 'days')
     const updateParam = _.assign({}, model, {
-      startDate: updatedStartDate.utc(),
+      startDate: updatedStartDate,
       endDate: endDate || '',
       duration
     })
@@ -92,8 +90,8 @@ class EditStageForm extends React.Component {
     const { phases, phase, phaseIndex } = this.props
     let showPhaseOverlapWarning = false
     // if start date's day or duration is updated for a phase, we need to update other phases dates accordingly
-    const phaseDay = moment(new Date(phase.startDate)).format('DD')
-    const changedDay = moment(new Date(change.startDate)).format('DD')
+    const phaseDay = moment.utc(new Date(phase.startDate)).format('DD')
+    const changedDay = moment.utc(new Date(change.startDate)).format('DD')
     if (phaseDay !== changedDay || phase.duration !== change.duration) {
       // console.log('Need to sync phases')
       const reqChanges = this.checkOverlappingPhases(phases, phase, phaseIndex, change)
@@ -148,7 +146,7 @@ class EditStageForm extends React.Component {
       if(overLapping) {
         phasesToBeUpdated.push({
           id: phases[i].id, 
-          startDate: moment(new Date(phases[i].startDate)).utc(), 
+          startDate: moment(new Date(phases[i].startDate)), 
           conflictingPhaseName: phases[i].name,
           conflictingPhaseIndex: i,
           updatedPhase: refPhase.name
@@ -158,73 +156,11 @@ class EditStageForm extends React.Component {
     return phasesToBeUpdated
   }
 
-  syncPhases(phases, refPhase, refPhaseIndex, updatedPhase) {
-    // if startDate or duration is not set in the current update, we don't need to do anything
-    if (!updatedPhase.startDate || !updatedPhase.duration) return
-    const updatedStartDate = moment(new Date(updatedPhase.startDate))
-    // if startDate was not set before the current update, we use updated startDate as previous startDate
-    let refPhaseStartDate = refPhase.startDate ? moment(new Date(refPhase.startDate)) : moment(updatedStartDate)
-    // if endDate was not set before the current update, we use updated endDate as previous endDate
-    let refPhaseEndDate = refPhase.endDate ? moment(new Date(refPhase.endDate)) : moment(new Date(updatedPhase.startDate)).add(updatedPhase.duration - 1, 'days')
-    // delta in startDate, it would be 0 when startDate was not set before the current update
-    const deltaStart = updatedStartDate.diff(refPhaseStartDate, 'days')
-    // delta in duration, it would be 0 when duration was not set before the current update
-    const deltaDuration = updatedPhase.duration - (refPhase.duration ? refPhase.duration : updatedPhase.duration)
-    const phasesToBeUpdated = []
-    // handles phases before the refPhase
-    if (deltaStart <= 0) {
-      let delta = deltaStart
-      for (let i = refPhaseIndex - 1; i >= 0 ; i--) {
-        const phase = phases[i]
-        if (!phase.startDate || !phase.duration) break
-        const startDate = moment(new Date(phase.startDate))
-        const endDate = moment(new Date(phase.startDate)).add(phase.duration - 1, 'days')
-        const bufferDays = refPhaseStartDate.diff(endDate, 'days') - 1
-        const offset = Math.abs(delta) - bufferDays
-        if (offset > 0) { // change in refPhase is has decreased start date
-          startDate.subtract(offset, 'days')
-          phasesToBeUpdated.push({ id: phase.id, startDate: startDate.utc()})
-        } else { // change in refPhase is has increased start date
-          // break the loop, as we won't have any cascading effect now on
-          break
-        }
-        // updates refPhaseStartDate to be start date of the current phase
-        refPhaseStartDate = moment(new Date(phase.startDate))
-        delta = Math.abs(offset)
-      }
-    }
-  
-    // handles phases after the refPhase
-    if (deltaStart + deltaDuration >= 0) {
-      let delta = deltaStart + deltaDuration
-      for (let i = refPhaseIndex + 1; i < phases.length ; i++) {
-        const phase = phases[i]
-        if (!phase.startDate || !phase.duration) break
-        const startDate = moment(new Date(phase.startDate))
-        const endDate = moment(new Date(phase.startDate)).add(phase.duration - 1, 'days')
-        const bufferDays = startDate.diff(refPhaseEndDate, 'days') - 1
-        const offset = delta - bufferDays
-        // change in refPhase is has caused end date of the refPhase to be pushed forward
-        if (offset > 0) {
-          startDate.add(offset, 'days')
-          phasesToBeUpdated.push({ id: phase.id, startDate: startDate.utc()})
-        } else { // change in refPhase is has not caused the end date of the refPhase to be pushed forward
-          // break the loop, as we won't have any cascading effect now on
-          break
-        }
-        // updates refPhaseEndDate to be end date of the current phase
-        refPhaseEndDate = endDate//moment(startDate).add(phase.duration, 'days')
-        delta = offset
-      }
-    }
-    return phasesToBeUpdated
-  }
-
   render() {
     const { phase, isUpdating } = this.props
     const { isEdittable, showPhaseOverlapWarning } = this.state
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
-    startDate = moment(startDate).format('YYYY-MM-DD')
+    startDate = moment.utc(startDate).format('YYYY-MM-DD')
     return (
       <div styleName="container">
         {this.state.isUpdating && (<LoadingIndicator />)}
