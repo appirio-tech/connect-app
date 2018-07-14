@@ -1,0 +1,112 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// project-progress specific styles
+.milestone-post {
+  position: relative;
+  border-radius: 4px;
+  color: #151516;
+  height: auto;
+  line-height: $base-unit*10;
+  @include roboto;
+  font-weight: 400;
+  font-size: 15px;
+
+  .label-counter {
+    color: #1A85FF;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: right;
+  }
+
+  .label-layer {
+    display: flex;
+    justify-content: space-between;
+    height: inherit;
+    position: relative;
+    line-height: inherit;
+    overflow: hidden;
+
+    .label-title {
+      color: #404041;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 30px;
+      text-align: right;
+      margin: auto 10px auto 0;
+      white-space: nowrap;
+      min-width: 40px;
+      padding-right: 10px;
+
+      &.pos_18_60 {
+        margin-right: 18px;
+        padding-left: 60px;
+      }
+      &.pos_28_5 {
+        margin-right: 28px;
+        padding-left: 5px;
+      }
+      &.pos_20_-15 {
+        margin-right: 20px;
+        padding-left: -15px;
+      }
+    }
+
+    input {
+      text-transform: initial;
+      margin-bottom: 0;
+      &::-webkit-input-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
+      }
+      &:-moz-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
+      }
+      &::-moz-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
+      }
+      &:-ms-input-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
+      }
+    }
+
+    .group-right {
+      width: 405px;
+      display: flex;
+      line-height: 50px;
+      justify-content: space-between;
+      text-align: right;
+      color: #808080;
+      @include viewSm {
+        min-width: 100px;
+
+        &.hide-sm{
+          display: none;
+        }
+      }
+    }
+  }
+  .milestone-text {
+    color: #808080;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 50px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

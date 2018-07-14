@@ -14,6 +14,7 @@ import PhaseCard from './PhaseCard'
 import ProjectStageTabs from './ProjectStageTabs'
 import EditProjectForm from './EditProjectForm'
 import PhaseFeed from './PhaseFeed'
+import ProductTimelineContainer from '../containers/ProductTimelineContainer'
 import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
@@ -172,6 +173,10 @@ class ProjectStage extends React.Component{
         <div>
           <ProjectStageTabs activeTab={activeTab} onTabClick={onTabClick} />
 
+          {activeTab === 'timeline' &&
+            <ProductTimelineContainer productId={product.id} />
+          }
+
           {activeTab === 'posts' &&
             <PhaseFeed
               user={currentUser}
@@ -211,7 +216,7 @@ class ProjectStage extends React.Component{
 }
 
 ProjectStage.defaultProps = {
-  activeTab: 'posts',
+  activeTab: 'timeline',
   currentMemberRole: null,
 }
 

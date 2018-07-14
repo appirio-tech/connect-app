@@ -1,0 +1,50 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// project-progress specific styles
+.milestone-post-specification {
+  // position: relative;
+  border-radius: 4px;
+  background-color: #FAFAFB;
+  color: #151516;
+  height: auto;
+  min-height: $base-unit*10;
+  line-height: $base-unit*10;
+  @include roboto;
+  font-weight: 400;
+  font-size: 15px;
+  padding: 5px 20px 20px 20px;
+
+  &.in-progress {
+    height: auto;
+    /* &:before {
+      content: '';
+      width: 4px;
+      background-color: #fff;
+      position: absolute;
+      left: -20px;
+      top: -25px;
+      bottom: 0;
+    } */
+  }
+  .invoice-wrap {
+    margin-top: 10px;
+  }
+
+  .label-title {
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .group-bottom {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+
+    button {
+      margin: 0 5px 0 5px;
+    }
+  }
+}

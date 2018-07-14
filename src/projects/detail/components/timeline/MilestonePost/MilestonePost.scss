@@ -1,0 +1,159 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// project-progress specific styles
+.milestone-post {
+  position: relative;
+  color: #151516;
+  height: auto;
+  min-height: $base-unit*10;
+  line-height: $base-unit*10;
+  @include roboto;
+  font-weight: 400;
+  font-size: 15px;
+  .hide-sm {
+    display: inline-block;
+  }
+  .small-separator {
+    margin-top: 10px
+  }
+  .dot {
+    position: absolute;
+    background-color: #ffffff;
+    border: 2px solid #aaaaab;
+    border-radius: 100%;
+    width: 8px;
+    height: 8px;
+    left: -22px;
+    top: calc(50% - 4px);
+    z-index: 11;
+  }
+  /* mobile view specific style */
+  @include viewSm {
+    height: auto;
+    border-radius: 0;
+    .hide-sm {
+      display: none;
+    }
+  }
+  .label-layer {
+    background-color: #FAFAFB;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    height: inherit;
+    position: relative;
+    line-height: inherit;
+    padding-left: $base-unit*3;
+    padding-right: $base-unit*3;
+    z-index: 10;
+    overflow: hidden;
+    @include viewSm {
+      padding-right: $base-unit*7;
+    }
+    .label-title {
+      padding-left: 36px;
+      position: relative;
+      background-size: 30px;
+      white-space: nowrap;
+      &.span-first {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        @include viewSm {
+          margin-right: auto;
+          flex-grow: 1;
+          width: 0;
+        }
+      }
+      &.specification {
+        background: url('../../../../../assets/icons/timeline-document.svg') 0 50% no-repeat;
+      }
+      &.download {
+        padding-left: 0;
+      }
+      &.file {
+        background: url('../../../../../assets/icons/timeline-zip.svg') 0 50% no-repeat;
+      }
+      &.span-two {
+        padding-left: 20px;
+        margin-left: 20px;
+        margin-right: 0;
+        background: url('../../../../../assets/icons/ui-pencil.svg') 0 50% no-repeat;
+        opacity: 0.5;
+        &:hover {
+          opacity: 1;
+        }
+      }
+      &.span-three {
+        padding-left: 20px;
+        margin-left: 15px;
+        background: url('../../../../../assets/icons/ui-x-mark.svg') 0 50% no-repeat;
+        opacity: 0.5;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+    .group-right {
+      display: flex;
+      line-height: 50px;
+      justify-content: space-between;
+      text-align: right;
+      color: #808080;
+      @include viewSm {
+        min-width: 100px;
+
+        &.hide-sm{
+          display: none;
+        }
+      }
+      .download_icon {
+        padding-right: 30px;
+        position: relative;
+        background: url('../../../../../assets/icons/download-icon.svg') 0 50% no-repeat;
+        background-size: 20px;
+      }
+      &.only-text {
+        margin-right: auto;
+      }
+      &.file {
+        margin-left: auto;
+        margin-right: 0px;
+      }
+    }
+  }
+  .milestone-text {
+    color: #808080;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 50px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 300px;
+    margin-right: auto;
+    @include viewMd {
+      max-width: 200px;
+    }
+    margin: auto 10px;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  /* in-progress state */
+  &.in-progress {
+    .dot {
+      background-color: #ffffff;
+      border: 2px solid #0681ff;
+    }
+  }
+
+  /* completed state */
+  &.completed {
+    .dot {
+      background-color: #0681ff;
+      border: 2px solid #0681ff;
+    }
+  }
+}

@@ -1,0 +1,109 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// project-progress specific styles
+.milestone-post {
+  position: relative;
+  border-radius: 4px;
+  color: #151516;
+  height: auto;
+  line-height: $base-unit*10;
+  @include roboto;
+  font-weight: 400;
+  font-size: 15px;
+  .hide-sm {
+    display: inline-block;
+  }
+  /* mobile view specific style */
+  @include viewSm {
+    height: auto;
+    min-height: $base-unit*10;
+    line-height: $base-unit*8;
+    border-radius: 0;
+    .hide-sm {
+      display: none;
+    }
+  }
+
+  .label-counter {
+    color: #1A85FF;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: right;
+  }
+
+  .label-layer {
+    display: flex;
+    height: inherit;
+    position: relative;
+    line-height: inherit;
+    z-index: 10;
+    overflow: hidden;
+    @include viewSm {
+      padding-right: $base-unit*7;
+    }
+
+    .label-title {
+      color: #404041;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 30px;
+      text-align: left;
+      margin: auto 10px auto 0;
+      white-space: nowrap;
+      min-width: 40px;
+      &.pos_22_56 {
+        margin-right: 22px;
+        padding-left: 56px;
+      }
+    }
+
+    input {
+      width: 30%;
+      margin: auto 20px auto 0;
+      text-transform: initial;
+      &::-webkit-input-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+      }
+      &:-moz-placeholder {
+          text-transform: initial;
+          color:#A3A3AD;
+      }
+      &::-moz-placeholder {
+          text-transform: initial;
+          color:#A3A3AD;
+      }
+      &:-ms-input-placeholder {
+          text-transform: initial;
+          color:#A3A3AD;
+      }
+    }
+
+    .group-right {
+      display: flex;
+      line-height: 50px;
+      text-align: right;
+      color: #808080;
+      @include viewSm {
+        min-width: 100px;
+
+        &.hide-sm{
+          display: none;
+        }
+      }
+    }
+  }
+  .milestone-text {
+    color: #808080;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 50px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

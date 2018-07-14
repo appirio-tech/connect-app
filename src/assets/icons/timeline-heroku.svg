@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-timeline-heroku</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icon-timeline-heroku" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group">
+            <circle id="Oval" fill="#6762A6" cx="15" cy="15" r="15"></circle>
+            <path d="M17.7805365,25 L17.7805365,14.0624186 C17.7805365,14.0624186 18.4919698,11.4450039 9.01736262,15.1331713 C9,15.1799635 9,5.01909888 9,5.01909888 L12.0957548,5 L12.0957548,11.5102005 C12.0957548,11.5102005 20.7636948,8.09627572 20.7636948,14.0993142 L20.7636948,25 L17.7806233,25 L17.7805365,25 Z M19.5445785,8.94009897 L16.2609602,8.94009897 C17.4429204,7.49500825 18.5128917,5.01901207 18.5128917,5.01901207 L21.9081517,5.01901207 C21.9081517,5.01901207 21.3268513,6.632607 19.5446653,8.94009897 L19.5445785,8.94009897 Z M9.05625488,24.9810747 L9.05625488,18.7524091 L12.170935,21.8670023 L9.05625488,24.9810747 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>
