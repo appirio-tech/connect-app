@@ -1,3 +1,3 @@
 
-import Specification from './Specification'
-export default Specification
+import MilestoneTypePhaseSpecification from './MilestoneTypePhaseSpecification'
+export default MilestoneTypePhaseSpecification

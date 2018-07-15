@@ -78,6 +78,7 @@ class MilestonePost extends React.Component {
   }
 
   render() {
+    const { isActive } = this.props
     const props = this.props
     const labelMilestoneStyle = {}
     if (props.milestoneType === 'only-text') {
@@ -123,10 +124,12 @@ class MilestonePost extends React.Component {
             <span  download={this.state.milestonePostFile} styleName="download_icon hide-sm" />
           </div>)}
 
-          {props.milestoneType !== 'download' && (<div>
-            <span onClick={this.toggleEditLink} styleName={ 'label-title span-two' } />
-            <span onClick={props.deletePost} styleName={ 'label-title span-three' } />
-          </div>)}
+          {props.milestoneType !== 'download' && isActive && (
+            <div>
+              <span onClick={this.toggleEditLink} styleName={ 'label-title span-two' } />
+              <span onClick={props.deletePost} styleName={ 'label-title span-three' } />
+            </div>)
+          }
 
         </div>)}
 

@@ -15,7 +15,6 @@ class MilestoneTypePhaseSpecification extends React.Component {
     super(props)
 
     this.state = {
-      milestonePostLink: '',
       isEditing: false
     }
 
@@ -23,11 +22,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
     this.closeEditForm = this.closeEditForm.bind(this)
     this.openEditForm = this.openEditForm.bind(this)
     this.removeUrl = this.removeUrl.bind(this)
-
-
-    this.isNoContent = this.isNoContent.bind(this)
-    this.onComplete = this.onComplete.bind(this)
-    this.isEmpty = this.isEmpty.bind(this)
+    this.completeMilestone = this.completeMilestone.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -71,29 +66,17 @@ class MilestoneTypePhaseSpecification extends React.Component {
     }
   }
 
-  /**link is empty */
-  isEmpty() {
-    return this.state.milestonePostLink === ''
-  }
-  /**is no section in ui */
-  isNoContent() {
-    return this.state.milestonePostLink === '' && !this.state.isEditing
-  }
-  /**finish specification form */
-  onComplete() {
-    this.closeEditForm()
-    this.props.finish()
+  completeMilestone() {
+    const { milestone, completeMilestone } = this.props
+
+    completeMilestone(milestone.id)
   }
 
   render() {
-    const props = this.props
     const { milestone, theme } = this.props
+
     const specificationUrl = _.get(milestone, 'details.content.specificationUrl')
-
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
-    const isCompleted = milestone.status === MILESTONE_STATUS.ACTIVE
-
-    console.warn('milestone', milestone, specificationUrl)
 
     return (
       <div
@@ -101,8 +84,6 @@ class MilestoneTypePhaseSpecification extends React.Component {
           [theme]: !!theme,
         })}
       >
-
-
         {!specificationUrl && !this.state.isEditing && (
           <div styleName="top-space button-add-layer">
             <button
@@ -121,6 +102,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
             deletePost={this.removeUrl}
             updatePost={this.updatedUrl}
             isUpdating={milestone.isUpdating}
+            isActive={isActive}
           />
         )}
 
@@ -140,7 +122,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
           <div styleName="top-space button-layer">
             <button
               className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-              onClick={this.onComplete}
+              onClick={this.completeMilestone}
             >
               Mark as completed
             </button>
@@ -152,14 +134,12 @@ class MilestoneTypePhaseSpecification extends React.Component {
 }
 
 MilestoneTypePhaseSpecification.defaultProps = {
-  finish: () => {},
+  theme: null,
 }
 
 MilestoneTypePhaseSpecification.propTypes = {
-  isCompleted: PT.bool,
-  inProgress: PT.bool,
-  finish: PT.func,
-  buttonFinishTitle: PT.string
+  theme: PT.string,
+  milestone: PT.object.isRequired,
 }
 
 export default MilestoneTypePhaseSpecification

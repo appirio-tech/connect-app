@@ -81,14 +81,15 @@ class TimelinePost extends React.Component {
   }
 
   render() {
-    const { editableData, isUpdating, milestone, updateMilestone } = this.props
+    const { editableData, isUpdating, milestone, updateMilestone, completeMilestone } = this.props
     const { isEditing } = this.state
 
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+    const isPlanned = milestone.status === MILESTONE_STATUS.PLANNED
     const startDate = moment(milestone.startDate)
     const month = startDate.format('MMM')
-    const date = startDate.format('d')
+    const date = startDate.format('D')
     const title = milestone.type
     const description = milestone.description
 
@@ -105,12 +106,12 @@ class TimelinePost extends React.Component {
         <div
           styleName={cn('col-timeline-post-con', {
             completed: isCompleted,
-            'in-progress': isActive
+            'in-progress': isActive,
           })}
         >
           <i styleName={'status-ring'} />
 
-          {isActive && (
+          {!isPlanned && (
             <span styleName="dot" />
           )}
 
@@ -144,10 +145,11 @@ class TimelinePost extends React.Component {
 
           {isUpdating && <LoadingIndicator />}
 
-          {!isEditing && milestone.type === 'phase-specification' && (
+          {!isEditing && !isUpdating && milestone.type === 'phase-specification' && (
             <MilestoneTypePhaseSpecification
               milestone={milestone}
               updateMilestone={updateMilestone}
+              completeMilestone={completeMilestone}
             />
           )}
 

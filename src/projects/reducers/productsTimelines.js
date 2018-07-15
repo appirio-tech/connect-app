@@ -9,6 +9,11 @@ import {
   UPDATE_PRODUCT_MILESTONE_PENDING,
   UPDATE_PRODUCT_MILESTONE_SUCCESS,
   UPDATE_PRODUCT_MILESTONE_FAILURE,
+  COMPLETE_PRODUCT_MILESTONE_PENDING,
+  COMPLETE_PRODUCT_MILESTONE_SUCCESS,
+  COMPLETE_PRODUCT_MILESTONE_FAILURE,
+
+  MILESTONE_STATUS,
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -35,7 +40,7 @@ const initialState = {
   */
 }
 
-function updateMilestone(state, productId, milestoneId, updateMilestone, shouldReplace) {
+function updateMilestone(state, productId, milestoneId, updateMilestone, shouldReplace = false) {
   const milestoneIdx = _.findIndex(state[productId].timeline.milestones, { id: milestoneId })
 
   const updatedMilestone = shouldReplace
@@ -93,6 +98,34 @@ export const productsTimelines = (state=initialState, action) => {
     return updateMilestone(state, meta.productId, meta.milestoneId, payload, true)
 
   case UPDATE_PRODUCT_MILESTONE_FAILURE:
+    return updateMilestone(state, meta.productId, meta.milestoneId, {
+      isUpdating: { $set: false },
+      error: { $set: false }
+    })
+
+  case COMPLETE_PRODUCT_MILESTONE_PENDING:
+    return updateMilestone(state, meta.productId, meta.milestoneId, {
+      isUpdating: { $set: true },
+      error: { $set: false }
+    })
+
+  case COMPLETE_PRODUCT_MILESTONE_SUCCESS: {
+    let updatedState = updateMilestone(state, meta.productId, meta.milestoneId, {
+      status: { $set: MILESTONE_STATUS.COMPLETED },
+      isUpdating: { $set: false },
+      error: { $set: false }
+    })
+
+    if (meta.nextMilestoneId) {
+      updatedState = updateMilestone(updatedState, meta.productId, meta.nextMilestoneId, {
+        status: { $set: MILESTONE_STATUS.ACTIVE },
+      })
+    }
+
+    return updatedState
+  }
+
+  case COMPLETE_PRODUCT_MILESTONE_FAILURE:
     return updateMilestone(state, meta.productId, meta.milestoneId, {
       isUpdating: { $set: false },
       error: { $set: false }

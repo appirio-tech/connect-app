@@ -1,6 +1,7 @@
 /**
  * Products timelines actions
  */
+import _ from 'lodash'
 import {
   getTimelinesByReference,
   getTimelineMilestones,
@@ -9,6 +10,8 @@ import {
 import {
   LOAD_PRODUCT_TIMELINE_WITH_MILESTONES,
   UPDATE_PRODUCT_MILESTONE,
+  COMPLETE_PRODUCT_MILESTONE,
+  MILESTONE_STATUS,
 } from '../../config/constants'
 
 /**
@@ -63,6 +66,34 @@ export function updateProductMilestone(productId, timelineId, milestoneId, updat
       meta: {
         productId,
         milestoneId,
+      }
+    })
+  }
+}
+
+export function completeProductMilestone(productId, timelineId, milestoneId) {
+  return (dispatch, getState) => {
+    const timeline = getState().productsTimelines[productId]
+    const milestoneIdx = _.findIndex(timeline.timeline.milestones, { id: milestoneId })
+
+    const requests = [
+      updateMilestone(timelineId, milestoneId, { status: MILESTONE_STATUS.COMPLETED })
+    ]
+
+    const nextMilestone = timeline.timeline.milestones[milestoneIdx + 1]
+    if (nextMilestone) {
+      requests.push(
+        updateMilestone(timelineId, nextMilestone.id, { status: MILESTONE_STATUS.ACTIVE })
+      )
+    }
+
+    return dispatch({
+      type: COMPLETE_PRODUCT_MILESTONE,
+      payload: Promise.all(requests),
+      meta: {
+        productId,
+        milestoneId,
+        nextMilestoneId: nextMilestone ? nextMilestone.id : null,
       }
     })
   }

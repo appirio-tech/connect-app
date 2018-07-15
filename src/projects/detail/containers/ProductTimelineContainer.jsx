@@ -9,6 +9,7 @@ import Timeline from '../components/timeline/Timeline'
 import {
   loadProductTimelineWithMilestones,
   updateProductMilestone,
+  completeProductMilestone,
 } from '../../actions/productsTimelines'
 
 class ProductTimelineContainer extends React.Component {
@@ -41,6 +42,7 @@ ProductTimelineContainer.propTypes = {
   timeline: PT.object.isRequired,
   loadProductTimelineWithMilestones: PT.func.isRequired,
   updateProductMilestone: PT.func.isRequired,
+  completeProductMilestone: PT.func.isRequired,
 }
 
 const mapStateToProps = ({ productsTimelines }, props) => ({
@@ -51,6 +53,7 @@ const mapStateToProps = ({ productsTimelines }, props) => ({
 const mapDispatchToProps = {
   loadProductTimelineWithMilestones,
   updateProductMilestone,
+  completeProductMilestone,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductTimelineContainer)

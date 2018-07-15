@@ -15,26 +15,53 @@ function mockResponse(data, timeout = 1000) {
   })
 }
 
-function mockMilestone(timelineId, milestoneId) {
-  return {
-    id: typeof milestoneId !== 'undefined' ? milestoneId : ++mockMilestone.id,
-    description: 'Please review and answer all the questions on the specification document before we can proceed',
-    startDate: moment().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
-    endDate: moment().add('5', 'days').format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
-    duration: 15,
-    status: 'active',
-    type: 'phase-specification',
-    details: {},
-    timelineId,
-    order: 1,
-    plannedText: 'dummy plannedText',
-    activeText: 'dummy activeText',
-    blockedText: 'dummy blockedText',
-    completedText: 'dummy completedText',
+function mockMilestone(timelineId, milestoneId, type, status) {
+  const startDate = mockMilestone.startDate
+  const endDate = mockMilestone.startDate.clone().add('5', 'days')
+
+  mockMilestone.startDate = endDate.clone().add('1', 'days')
+
+  if (!milestoneId) {
+    milestoneId = ++mockMilestone.id
+    let timeline = mockMilestone.timelines[timelineId]
+
+    if (!timeline) {
+      timeline = {}
+      mockMilestone.timelines[timelineId] = timeline
+    }
+
+    const milestone = {
+      id: milestoneId,
+      description: 'Please review and answer all the questions on the specification document before we can proceed',
+      startDate: startDate.format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+      endDate: endDate.format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+      duration: 15,
+      status,
+      type,
+      details:  status === 'completed' ? {
+        content: {
+          specificationUrl: 'ass'
+        },
+      } : {},
+      timelineId,
+      order: 1,
+      plannedText: 'dummy plannedText',
+      activeText: 'dummy activeText',
+      blockedText: 'dummy blockedText',
+      completedText: 'dummy completedText',
+    }
+
+    timeline[milestoneId] = milestone
   }
+
+  console.warn('mockMilestone.timelines', mockMilestone.timelines)
+
+  return mockMilestone.timelines[timelineId][milestoneId]
 }
 
+mockMilestone.timelines = {}
 mockMilestone.id = 0
+mockMilestone.startDate = moment()
 
 /**
  * Get timeline by reference
@@ -61,7 +88,8 @@ export function getTimelinesByReference(reference, referenceId) {
 
 export function getTimelineMilestones(timelineId) {
   return mockResponse([
-    mockMilestone(timelineId)
+    mockMilestone(timelineId, null, 'phase-specification', 'active'),
+    mockMilestone(timelineId, null, 'community-work', 'planned'),
   ])
 
   return axios.get(`${TC_API_URL}/v4/timelines/${timelineId}/milestones`)
@@ -70,7 +98,7 @@ export function getTimelineMilestones(timelineId) {
 
 export function updateMilestone(timelineId, milestoneId, updatedProps) {
   return mockResponse({
-    ...mockMilestone(timelineId, milestoneId),
+    ...mockMilestone(timelineId, milestoneId, updatedProps.type, updatedProps.status),
     ...updatedProps
   })
 
