@@ -1,4 +1,7 @@
 import React from 'react'
+import PT from 'prop-types'
+import moment from 'moment'
+import cn from 'classnames'
 
 import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
 import ProjectProgress from '../../ProjectProgress'
@@ -9,9 +12,10 @@ import SubmissionSelection from '../SubmissionSelection'
 import SubmissionEditLink from '../SubmissionEditLink'
 import SubmissionEditText from '../SubmissionEditText'
 import WinnerSelection from '../WinnerSelection'
-import Specification from '../Specification'
+import MilestoneTypePhaseSpecification from '../milestones/MilestoneTypePhaseSpecification'
 
-import PT from 'prop-types'
+import { MILESTONE_STATUS } from '../../../../../config/constants'
+
 import './TimelinePost.scss'
 
 class TimelinePost extends React.Component {
@@ -25,19 +29,15 @@ class TimelinePost extends React.Component {
     this.closeEditForm = this.closeEditForm.bind(this)
     this.updateMilestoneWithData = this.updateMilestoneWithData.bind(this)
 
-    const { postContent } = this.props
     this.state = {
       activeMenu: '',
       isHoverHeader: false,
       isEditing: false,
-      title: postContent.title,
-      postMsg: postContent.postMsg
     }
   }
 
   componentDidMount() {
-    const { postContent } = this.props
-    const contentList = postContent.content || []
+    const contentList = []
     this.setState(contentList)
     !!this.props.navLinks && this.props.navLinks.map((item) => {
       item.isActive && this.setState({ activeMenu: item.id })
@@ -81,32 +81,50 @@ class TimelinePost extends React.Component {
   }
 
   render() {
-    const { postContent, editableData, isUpdating } = this.props
+    const { editableData, isUpdating, milestone, updateMilestone } = this.props
+    const { isEditing } = this.state
+
+    const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
+    const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+    const startDate = moment(milestone.startDate)
+    const month = startDate.format('MMM')
+    const date = startDate.format('d')
+    const title = milestone.type
+    const description = milestone.description
+
     let contentList = []
-    contentList = this.state.contentList ? this.state.contentList : postContent.content || []
+    contentList = this.state.contentList ? this.state.contentList : []
     const trueValue = true
     return (
       <div styleName={'timeline-post '}>
         {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing) ? 'hover ': '')} />)}
         <div styleName="col-date">
-          <div styleName="month">{postContent.month}</div>
-          <div styleName="day">{postContent.date}</div>
+          <div styleName="month">{month}</div>
+          <div styleName="day">{date}</div>
         </div>
-        <div styleName={'col-timeline-post-con '
-          + (postContent.isCompleted ? 'completed ' : '')
-          + (postContent.inProgress ? 'in-progress ' : '')
-        }
+        <div
+          styleName={cn('col-timeline-post-con', {
+            completed: isCompleted,
+            'in-progress': isActive
+          })}
         >
           <i styleName={'status-ring'} />
-          {!this.state.isEditing && (<dir onMouseEnter={this.hoverHeader} onMouseLeave={this.unHoverHeader} styleName="post-title-container">
-            <h4 styleName="post-title" dangerouslySetInnerHTML={{ __html: this.state.title }} />
-            {this.state.isHoverHeader && (
-              <div onClick={this.toggleEditLink} styleName={ 'post-edit' } >
-                <span styleName="tooltiptext">Edit milestone properties</span>
-              </div>)}
-          </dir>)}
 
-          {this.state.isEditing && !isUpdating && (
+          {isActive && (
+            <span styleName="dot" />
+          )}
+
+          {!isEditing && (
+            <dir onMouseEnter={this.hoverHeader} onMouseLeave={this.unHoverHeader} styleName="post-title-container">
+              <h4 styleName="post-title" dangerouslySetInnerHTML={{ __html: title }} />
+              {this.state.isHoverHeader && !isUpdating && (
+                <div onClick={this.toggleEditLink} styleName={ 'post-edit' } >
+                  <span styleName="tooltiptext">Edit milestone properties</span>
+                </div>)}
+            </dir>)
+          }
+
+          {isEditing && !isUpdating && (
             <SubmissionEditLink
               callbackCancel={this.closeEditForm}
               callbackOK={this.updateMilestoneWithData}
@@ -117,14 +135,27 @@ class TimelinePost extends React.Component {
             />
           )}
 
+          {!isEditing && (
+            <div
+              styleName="post-con"
+              dangerouslySetInnerHTML={{ __html: description }}
+            />)
+          }
+
           {isUpdating && <LoadingIndicator />}
 
-          {(<div styleName={'post-con ' + (this.state.isEditing ? 'isHide' : '')} dangerouslySetInnerHTML={{ __html: this.state.postMsg }} />)}
+          {!isEditing && milestone.type === 'phase-specification' && (
+            <MilestoneTypePhaseSpecification
+              milestone={milestone}
+              updateMilestone={updateMilestone}
+            />
+          )}
+
           {
             !!contentList && contentList.map((content, i) => {
 
               return (
-                <div styleName={(this.state.isEditing ? 'isHide' : '')} key={i}>
+                <div styleName={(isEditing ? 'isHide' : '')} key={i}>
 
                   {/* milestone progressbar type content  */}
                   {!!content && !!content.type && content.type === 'progressBar' &&
@@ -142,12 +173,7 @@ class TimelinePost extends React.Component {
                     </div>)
                   }
 
-                  {/* Specification type content  */}
-                  {!!content && !!content.type && content.type === 'specification' &&
-                    (<div styleName="invoice-wrap">
-                      <Specification isCompleted={content.isCompleted} inProgress={content.inProgress} finish={this.props.finish} buttonFinishTitle={content.buttonFinishTitle}/>
-                    </div>)
-                  }
+
 
                   {/* Specification cell type content  */}
                   {!!content && !!content.type && content.type === 'specification-cell' &&
@@ -230,7 +256,6 @@ TimelinePost.defaultProps = {
 
 TimelinePost.propTypes = {
   postContent: PT.shape({
-    postId: PT.string,
     isCompleted: PT.boolean,
     month: PT.string,
     date: PT.string,

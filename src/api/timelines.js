@@ -22,7 +22,7 @@ function mockMilestone(timelineId, milestoneId) {
     startDate: moment().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
     endDate: moment().add('5', 'days').format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
     duration: 15,
-    status: 'planned',
+    status: 'active',
     type: 'phase-specification',
     details: {},
     timelineId,

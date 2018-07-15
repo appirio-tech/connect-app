@@ -561,3 +561,10 @@ export const POST_TIME_FORMAT = 'h:mm a'
 
 // max time difference between consecutive posts to bundle posts by same user
 export const POSTS_BUNDLE_TIME_DIFF = 1000 * 60 * 10 // 10 min difference
+
+export const MILESTONE_STATUS = {
+  PLANNED: 'planned',
+  ACTIVE: 'active',
+  BLOCKED: 'blocked',
+  COMPLETED: 'completed',
+}

@@ -33,6 +33,17 @@
     top: 7px;
     z-index: 3;
   }
+  .dot {
+    bottom: 22px;
+    position: absolute;
+    background-color: #ffffff;
+    border: 2px solid #0681FF;
+    border-radius: 100%;
+    width: 8px;
+    height: 8px;
+    left: 14px;
+    z-index: 3;
+  }
   .col-date {
     background-color: #fafafb;
     flex: 0 70px;

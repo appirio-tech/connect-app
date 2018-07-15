@@ -1,5 +1,6 @@
-@import '../../../../../styles/includes';
+@import '../../../../../../styles/includes';
 @import '~tc-ui/src/styles/tc-includes';
+
 // project-progress specific styles
 .milestone-post {
   position: relative;
@@ -11,38 +12,10 @@
   font-weight: 400;
   font-size: 15px;
 
-  &.in-progress {
-    &:before{
-      content: '';
-      width: 4px;
-      background-color: #fff;
-      position: absolute;
-      left: -20px;
-      top: 20px;
-      bottom: 0;
-    }
-  }
-
-  &.in-progress-hide {
-    &:before{
-      top: -38px;
-    }
-  }
-
   .hide-sm {
     display: inline-block;
   }
-  .dot {
-    position: absolute;
-    background-color: #ffffff;
-    border: 2px solid #aaaaab;
-    border-radius: 100%;
-    width: 8px;
-    height: 8px;
-    left: -22px;
-    top: 20px;
-    z-index: 3;
-  }
+
   /* mobile view specific style */
   @include viewSm {
     height: auto;
@@ -51,9 +24,11 @@
       display: none;
     }
   }
+
   .top-space {
     margin-top: 5px;
   }
+
   .button-add-layer {
     display: flex;
     button {
@@ -61,6 +36,7 @@
     }
 
   }
+
   .button-layer {
     background-color: #CEE6FF;
     border-radius: 4px;
@@ -71,6 +47,7 @@
       margin: auto;
     }
   }
+
   .label-layer {
     background-color: #FAFAFB;
     border-radius: 4px;
@@ -118,6 +95,7 @@
       background-size: '30px';
     }
   }
+
   .milestone-text {
     color: #808080;
     font-size: 13px;
@@ -131,22 +109,6 @@
     margin: auto 10px;
     &:hover {
       text-decoration: underline;
-    }
-  }
-
-  /* in-progress state */
-  &.in-progress {
-    .dot {
-      background-color: #ffffff;
-      border: 2px solid #0681ff;
-    }
-  }
-
-  /* completed state */
-  &.completed {
-    .dot {
-      background-color: #0681ff;
-      border: 2px solid #0681ff;
     }
   }
 }

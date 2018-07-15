@@ -49,15 +49,15 @@ class SubmissionEditLink extends React.Component {
     const { values } = this.state
     const props = this.props
     const okButtonTitle = props.okButtonTitle
-    const isHaveTitle = defaultValues.hasOwnProperty('title')
-    const isHaveDate = defaultValues.hasOwnProperty('startDate') || defaultValues.hasOwnProperty('endDate')
-    const isHaveUrl = props.isHaveUrl ? props.isHaveUrl : false
+    const isHaveTitle = defaultValues && defaultValues.hasOwnProperty('title')
+    const isHaveDate = defaultValues && defaultValues.hasOwnProperty('startDate') || defaultValues && defaultValues.hasOwnProperty('endDate')
+    const isHaveUrl = defaultValues && defaultValues.hasOwnProperty('url')
     const isHaveType = props.isHaveType ? props.isHaveType : false
     const isHaveSubmissionId = props.isHaveSubmissionId ? props.isHaveSubmissionId : false
-    const isHavePlannedText = defaultValues.hasOwnProperty('plannedText')
-    const isHaveActiveText = defaultValues.hasOwnProperty('activeText')
-    const isHaveBlockedText = defaultValues.hasOwnProperty('blockedText')
-    const isHaveCompletedText = defaultValues.hasOwnProperty('completedText')
+    const isHavePlannedText = defaultValues && defaultValues.hasOwnProperty('plannedText')
+    const isHaveActiveText = defaultValues && defaultValues.hasOwnProperty('activeText')
+    const isHaveBlockedText = defaultValues && defaultValues.hasOwnProperty('blockedText')
+    const isHaveCompletedText = defaultValues && defaultValues.hasOwnProperty('completedText')
 
     let titleExtraStyleTitle = ''
     let titleExtraStyleURL = ''
@@ -95,7 +95,12 @@ class SubmissionEditLink extends React.Component {
         {
           isHaveUrl && (
             <div styleName="invoice-wrap">
-              <MilestonePostEditLink titleExtraStyle={titleExtraStyleURL} valueDefault={this.state.URL} title={'URL'} onChange={this.changeURL}/>
+              <MilestonePostEditLink
+                titleExtraStyle={titleExtraStyleURL}
+                valueDefault={values.url}
+                title={'URL'}
+                onChange={this.handlers.url}
+              />
             </div>
           )
         }
