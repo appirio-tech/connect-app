@@ -13,6 +13,7 @@ import SubmissionEditLink from '../SubmissionEditLink'
 import SubmissionEditText from '../SubmissionEditText'
 import WinnerSelection from '../WinnerSelection'
 import MilestoneTypePhaseSpecification from '../milestones/MilestoneTypePhaseSpecification'
+import MilestoneTypeProgress from '../milestones/MilestoneTypeProgress'
 
 import { MILESTONE_STATUS } from '../../../../../config/constants'
 
@@ -147,6 +148,14 @@ class TimelinePost extends React.Component {
 
           {!isEditing && !isUpdating && milestone.type === 'phase-specification' && (
             <MilestoneTypePhaseSpecification
+              milestone={milestone}
+              updateMilestone={updateMilestone}
+              completeMilestone={completeMilestone}
+            />
+          )}
+
+          {!isEditing && !isUpdating && milestone.type === 'community-work' && (
+            <MilestoneTypeProgress
               milestone={milestone}
               updateMilestone={updateMilestone}
               completeMilestone={completeMilestone}

@@ -110,16 +110,10 @@ export const productsTimelines = (state=initialState, action) => {
     })
 
   case COMPLETE_PRODUCT_MILESTONE_SUCCESS: {
-    let updatedState = updateMilestone(state, meta.productId, meta.milestoneId, {
-      status: { $set: MILESTONE_STATUS.COMPLETED },
-      isUpdating: { $set: false },
-      error: { $set: false }
-    })
+    let updatedState = updateMilestone(state, meta.productId, meta.milestoneId, payload[0], true)
 
     if (meta.nextMilestoneId) {
-      updatedState = updateMilestone(updatedState, meta.productId, meta.nextMilestoneId, {
-        status: { $set: MILESTONE_STATUS.ACTIVE },
-      })
+      updatedState = updateMilestone(updatedState, meta.productId, meta.nextMilestoneId, payload[1], true)
     }
 
     return updatedState

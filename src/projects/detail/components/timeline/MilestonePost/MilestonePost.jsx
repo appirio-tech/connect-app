@@ -17,7 +17,8 @@ class MilestonePost extends React.Component {
     this.updateMilestonePostTitleLink = this.updateMilestonePostTitleLink.bind(this)
     this.updateMilestonePostTitleLinkType = this.updateMilestonePostTitleLinkType.bind(this)
     this.downloadFile = this.downloadFile.bind(this)
-
+    this.updatePost = this.updatePost.bind(this)
+    this.deletePost = this.deletePost.bind(this)
 
     this.state = {
       isEditing: false,
@@ -77,6 +78,18 @@ class MilestonePost extends React.Component {
     alert('ff')
   }
 
+  updatePost(values) {
+    const { updatePost, itemId } = this.props
+
+    updatePost(values, itemId)
+  }
+
+  deletePost() {
+    const { deletePost, itemId } = this.props
+
+    deletePost(itemId)
+  }
+
   render() {
     const { isActive } = this.props
     const props = this.props
@@ -105,20 +118,28 @@ class MilestonePost extends React.Component {
             {this.getLabel()}
           </a>)}
 
-          {props.milestoneType === 'specification' && (<div styleName="group-right only-text hide-sm">
-            <a href={props.milestonePostLink} styleName="milestone-text hide-sm">
-              {props.milestonePostLink}
-            </a>
-          </div>)}
+          {props.milestoneType === 'specification' && (
+            <div styleName="group-right only-text hide-sm">
+              <a href={props.milestonePostLink} styleName="milestone-text hide-sm">
+                {props.milestonePostLink}
+              </a>
+            </div>)
+          }
 
-          {props.milestoneType === 'only-text' && (<div styleName="group-right only-text hide-sm">
-            <a href={this.state.milestonePostLink} styleName="milestone-text hide-sm" dangerouslySetInnerHTML={{ __html: this.state.milestonePostLink }} />
-          </div>)}
+          {props.milestoneType === 'only-text' && (
+            <div styleName="group-right only-text hide-sm">
+              <a href={props.milestonePostLink} styleName="milestone-text hide-sm">
+                {props.milestonePostLink}
+              </a>
+            </div>
+          )}
 
-          {props.milestoneType === 'file' && (<div styleName="group-right file hide-sm">
-            <a href={this.state.milestonePostFile}  download={this.state.milestonePostFile} styleName="milestone-text hide-sm" dangerouslySetInnerHTML={{ __html: props.milestonePostFileInfo }} />
-            <span styleName="download_icon hide-sm" />
-          </div>)}
+          {props.milestoneType === 'file' && (
+            <div styleName="group-right file hide-sm">
+              <a href={this.state.milestonePostFile}  download={this.state.milestonePostFile} styleName="milestone-text hide-sm" dangerouslySetInnerHTML={{ __html: props.milestonePostFileInfo }} />
+              <span styleName="download_icon hide-sm" />
+            </div>)
+          }
 
           {props.milestoneType === 'download' && (<div styleName="group-right file hide-sm">
             <span  download={this.state.milestonePostFile} styleName="download_icon hide-sm" />
@@ -127,7 +148,7 @@ class MilestonePost extends React.Component {
           {props.milestoneType !== 'download' && isActive && (
             <div>
               <span onClick={this.toggleEditLink} styleName={ 'label-title span-two' } />
-              <span onClick={props.deletePost} styleName={ 'label-title span-three' } />
+              <span onClick={this.deletePost} styleName={ 'label-title span-three' } />
             </div>)
           }
 
@@ -137,15 +158,23 @@ class MilestonePost extends React.Component {
           <SubmissionEditLink
             callbackCancel={this.closeEditForm}
             defaultValues={{ url: props.milestonePostLink }}
-            callbackOK={props.updatePost}
+            callbackOK={this.updatePost}
             label={'Edit specification document link'}
             okButtonTitle={'Save changes'}
           />
         </div>)}
 
-        {this.state.isEditing && props.milestoneType === 'only-text' && (<div styleName="small-separator">
-          <SubmissionEditLink callbackCancel={this.closeEditForm} callbackOK={this.updateMilestonePostTitleLink} label={'Edit link'} isHaveTitle={trueValue} isHaveUrl={trueValue} inProgress={false} okButtonTitle={'Save changes'} maxTitle={64}/>
-        </div>)}
+        {this.state.isEditing && props.milestoneType === 'only-text' && (
+          <div styleName="small-separator">
+            <SubmissionEditLink
+              callbackCancel={this.closeEditForm}
+              defaultValues={{ url: props.milestonePostLink }}
+              callbackOK={this.updatePost}
+              label={'Edit link'}
+              okButtonTitle={'Save changes'}
+            />
+          </div>
+        )}
 
         {this.state.isEditing && props.milestoneType === 'file' && (<div styleName="small-separator">
           <SubmissionEditLink callbackCancel={this.closeEditForm} callbackOK={this.updateMilestonePostTitleLinkType} label={'Edit link'} isHaveType={trueValue} isHaveTitle={trueValue} isHaveUrl={trueValue} inProgress={false} okButtonTitle={'Save changes'} maxTitle={64}/>

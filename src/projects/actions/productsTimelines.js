@@ -2,6 +2,7 @@
  * Products timelines actions
  */
 import _ from 'lodash'
+import moment from 'moment'
 import {
   getTimelinesByReference,
   getTimelineMilestones,
@@ -77,13 +78,22 @@ export function completeProductMilestone(productId, timelineId, milestoneId) {
     const milestoneIdx = _.findIndex(timeline.timeline.milestones, { id: milestoneId })
 
     const requests = [
-      updateMilestone(timelineId, milestoneId, { status: MILESTONE_STATUS.COMPLETED })
+      updateMilestone(timelineId, milestoneId, {
+        status: MILESTONE_STATUS.COMPLETED,
+      })
     ]
 
     const nextMilestone = timeline.timeline.milestones[milestoneIdx + 1]
     if (nextMilestone) {
+      const startDate = moment()
+      const endDate = moment(nextMilestone.endDate)
+
       requests.push(
-        updateMilestone(timelineId, nextMilestone.id, { status: MILESTONE_STATUS.ACTIVE })
+        updateMilestone(timelineId, nextMilestone.id, {
+          startDate: startDate.format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+          duration: endDate.diff(startDate, 'days'),
+          status: MILESTONE_STATUS.ACTIVE,
+        })
       )
     }
 
