@@ -1,109 +1,81 @@
 @import '../../../../../styles/includes';
 @import '~tc-ui/src/styles/tc-includes';
-// project-progress specific styles
+
 .milestone-post {
-  position: relative;
-  border-radius: 4px;
-  color: #151516;
-  height: auto;
-  line-height: $base-unit*10;
   @include roboto;
-  font-weight: 400;
+
+  display: table-row;
   font-size: 15px;
-  .hide-sm {
-    display: inline-block;
-  }
-  /* mobile view specific style */
-  @include viewSm {
-    height: auto;
-    min-height: $base-unit*10;
-    line-height: $base-unit*8;
-    border-radius: 0;
-    .hide-sm {
-      display: none;
-    }
+
+  .col-left {
+    display: table-cell;
+    text-align: right;
+    vertical-align: top;
   }
 
-  .label-counter {
-    color: #1A85FF;
-    font-size: 11px;
-    font-weight: 500;
-    line-height: 20px;
-    text-align: right;
+  .col-right {
+    display: table-cell;
+    text-align: left;
+    width: 100%;
   }
 
   .label-layer {
-    display: flex;
-    height: inherit;
-    position: relative;
-    line-height: inherit;
-    z-index: 10;
-    overflow: hidden;
-    @include viewSm {
-      padding-right: $base-unit*7;
-    }
-
-    .label-title {
-      color: #404041;
-      font-size: 15px;
-      font-weight: 400;
-      line-height: 30px;
-      text-align: left;
-      margin: auto 10px auto 0;
-      white-space: nowrap;
-      min-width: 40px;
-      &.pos_22_56 {
-        margin-right: 22px;
-        padding-left: 56px;
-      }
-    }
-
-    input {
-      width: 30%;
-      margin: auto 20px auto 0;
-      text-transform: initial;
-      &::-webkit-input-placeholder {
-        text-transform: initial;
-        color:#A3A3AD;
-      }
-      &:-moz-placeholder {
-          text-transform: initial;
-          color:#A3A3AD;
-      }
-      &::-moz-placeholder {
-          text-transform: initial;
-          color:#A3A3AD;
-      }
-      &:-ms-input-placeholder {
-          text-transform: initial;
-          color:#A3A3AD;
-      }
-    }
-
-    .group-right {
-      display: flex;
-      line-height: 50px;
-      text-align: right;
-      color: #808080;
-      @include viewSm {
-        min-width: 100px;
-
-        &.hide-sm{
-          display: none;
-        }
-      }
+    &::after {
+      clear: both;
+      content: '';
+      display: block;
+      height: 0;
+      width: 100%;
     }
   }
-  .milestone-text {
-    color: #808080;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 50px;
+
+  .label-title {
+    color: $tc-gray-80;
+    font-size: 15px;
+    line-height: 30px;
+    min-width: 40px;
+    padding: $base-unit 2 * $base-unit $base-unit 0;
+    text-align: right;
     white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    &:hover {
-      text-decoration: underline;
+    width: 100%;
+
+    &:last-child {
+      display: none;
+      margin-top: 2 * $base-unit;
+    }
+  }
+
+  .col-right .label-title {
+    float: left;
+    padding-left: 4 * $base-unit;
+    width: auto;
+  }
+
+  /* use this selector to overwrite the global style for sure */
+  input:not([type="checkbox"]) {
+    float: left;
+    text-transform: initial;
+    width: 170px;
+
+    &::placeholder {
+      color: $tc-gray-30;
+      font-size: 15px;
+      text-transform: initial;
+    }
+  }
+
+  /* when two inputs don't fit one line, make them two lines */
+  @media screen and (max-width: 1090px) {
+    .label-title:last-child {
+      display: block;
+    }
+
+    .col-right .label-title {
+      display: none;
+    }
+
+    input:not([type="checkbox"]) {
+      clear: both;
     }
   }
 }

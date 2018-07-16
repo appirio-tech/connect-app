@@ -2,6 +2,7 @@
 @import '~tc-ui/src/styles/tc-includes';
 // project-progress specific styles
 .milestone-post {
+  display: table-row;
   position: relative;
   border-radius: 4px;
   color: #151516;
@@ -11,6 +12,16 @@
   font-weight: 400;
   font-size: 15px;
 
+  .col-left {
+    display: table-cell;
+    text-align: right;
+  }
+
+  .col-right {
+    display: table-cell;
+    width: 100%;
+  }
+
   .label-counter {
     color: #1A85FF;
     font-size: 11px;
@@ -19,71 +30,62 @@
     text-align: right;
   }
 
-  .label-layer {
-    display: flex;
-    justify-content: space-between;
-    height: inherit;
-    position: relative;
-    line-height: inherit;
-    overflow: hidden;
+  .label-title {
+    color: #404041;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 30px;
+    text-align: right;
+    white-space: nowrap;
+    min-width: 40px;
+    padding-right: 10px;
+    min-width: 100px;
+    width: 100%;
+  }
 
-    .label-title {
-      color: #404041;
+  textarea {
+    text-transform: initial;
+    margin-bottom: 10px;
+    height: 100px;
+    resize: none;
+    &::-webkit-input-placeholder {
+      text-transform: initial;
+      color:#A3A3AD;
       font-size: 15px;
       font-weight: 400;
-      line-height: 30px;
-      text-align: right;
-      margin: 5px 10px auto 0;
-      white-space: nowrap;
-      min-width: 40px;
-      padding-right: 10px;
-      min-width: 100px;
     }
-
-    textarea {
+    &:-moz-placeholder {
       text-transform: initial;
-      margin-bottom: 0;
-      height: 100px;
-      resize: none;
-      &::-webkit-input-placeholder {
-        text-transform: initial;
-        color:#A3A3AD;
-        font-size: 15px;
-        font-weight: 400;
-      }
-      &:-moz-placeholder {
-        text-transform: initial;
-        color:#A3A3AD;
-        font-size: 15px;
-        font-weight: 400;
-      }
-      &::-moz-placeholder {
-        text-transform: initial;
-        color:#A3A3AD;
-        font-size: 15px;
-        font-weight: 400;
-      }
-      &:-ms-input-placeholder {
-        text-transform: initial;
-        color:#A3A3AD;
-        font-size: 15px;
-        font-weight: 400;
-      }
+      color:#A3A3AD;
+      font-size: 15px;
+      font-weight: 400;
     }
+    &::-moz-placeholder {
+      text-transform: initial;
+      color:#A3A3AD;
+      font-size: 15px;
+      font-weight: 400;
+    }
+    &:-ms-input-placeholder {
+      text-transform: initial;
+      color:#A3A3AD;
+      font-size: 15px;
+      font-weight: 400;
+    }
+  }
 
-    .group-right {
-      width: 405px;
-      display: flex;
-      line-height: 50px;
-      justify-content: space-between;
-      text-align: right;
-      color: #808080;
-      @include viewSm {
-        min-width: 100px;
+  .group-right {
+    width: 405px;
+    display: flex;
+    line-height: 50px;
+    justify-content: space-between;
+    text-align: right;
+    color: #808080;
+    @include viewSm {
+      min-width: 100px;
 
-        &.hide-sm{
-          display: none;
-        }
+      &.hide-sm{
+        display: none;
       }
     }
   }

@@ -79,103 +79,74 @@ class SubmissionEditLink extends React.Component {
 
       <div styleName={'milestone-post-specification ' + (props.inProgress ? 'in-progress ' : '')}>
         <div styleName="label-title">{props.label}</div>
-        {
-          isHaveTitle && (
-            <div>
-              <MilestonePostEditLink
-                titleExtraStyle={titleExtraStyleTitle}
-                valueDefault={values.title}
-                title={'Title'}
-                maxTitle={props.maxTitle}
-                onChange={this.handlers.title}
-              />
-            </div>
-          )
-        }
-        {
-          isHaveUrl && (
-            <div styleName="invoice-wrap">
-              <MilestonePostEditLink
-                titleExtraStyle={titleExtraStyleURL}
-                valueDefault={values.url}
-                title={'URL'}
-                onChange={this.handlers.url}
-              />
-            </div>
-          )
-        }
-        {
-          isHaveDate && (
-            <div styleName="invoice-wrap">
-              <MilestonePostEditDate
-                titleExtraStyle={titleExtraStyleStart}
-                startDateValueDefault={values.startDate}
-                endDateValueDefault={values.endDate}
-                onStartDateChange={this.handlers.startDate}
-                onEndDateChange={this.handlers.endDate}
-              />
-            </div>
-          )
-        }
-        {
-          isHaveType && (
-            <div styleName="invoice-wrap">
-              <MilestonePostEditLinkDropDown titleExtraStyle={titleExtraStyleType} title={'Type'} value={this.state.type} onChange={this.changeType}/>
-            </div>
-          )
-        }
-        {
-          isHaveSubmissionId && (
-            <div styleName="invoice-wrap">
-              <MilestonePostEditLink titleExtraStyle={titleExtraStyleSumissionId} title={'Submission ID'}/>
-            </div>
-          )
-        }
-        {
-          isHavePlannedText &&  (
-            <div styleName="invoice-wrap">
-              <MilestonePostEditLink
-                title={'Planned text'}
-                titleExtraStyle={titleExtraStylePlannedText}
-                onChange={this.handlers.plannedText}
-                valueDefault={values.plannedText}
-              />
-            </div>
-          )
-        }
-        {
-          isHaveActiveText && (
-            <div styleName="invoice-wrap">
-              <MilestonePostEditTextArea
-                title={'Active text'}
-                onChange={this.handlers.activeText}
-                valueDefault={values.activeText}
-              />
-            </div>
-          )
-        }
-        {
-          isHaveBlockedText && (
-            <div styleName="invoice-wrap">
-              <MilestonePostEditTextArea
-                title={'Blocked text'}
-                onChange={this.handlers.blockedText}
-                valueDefault={values.blockedText}
-              />
-            </div>
-          )
-        }
-        {
-          isHaveCompletedText && (
-            <div styleName="invoice-wrap">
-              <MilestonePostEditTextArea
-                title={'Completed text'}
-                onChange={this.handlers.completedText}
-                valueDefault={values.completedText}
-              />
-            </div>
-          )
-        }
+        <div styleName="rows">
+          {isHaveTitle && (
+            <MilestonePostEditLink
+              valueDefault={values.title}
+              title={'Title'}
+              maxTitle={props.maxTitle}
+              onChange={this.handlers.title}
+            />
+          )}
+
+          {isHaveUrl && (
+            <MilestonePostEditLink
+              valueDefault={values.url}
+              title={'URL'}
+              onChange={this.handlers.url}
+            />
+          )}
+
+          {isHaveDate && (
+            <MilestonePostEditDate
+              startDateValueDefault={values.startDate}
+              endDateValueDefault={values.endDate}
+              onStartDateChange={this.handlers.startDate}
+              onEndDateChange={this.handlers.endDate}
+            />
+          )}
+
+          {isHaveType && (
+            <MilestonePostEditLinkDropDown titleExtraStyle={titleExtraStyleType} title={'Type'} value={this.state.type} onChange={this.changeType}/>
+          )}
+
+          {isHaveSubmissionId && (
+            <MilestonePostEditLink titleExtraStyle={titleExtraStyleSumissionId} title={'Submission ID'}/>
+          )}
+
+          {isHavePlannedText &&  (
+            <MilestonePostEditLink
+              title={'Planned text'}
+              onChange={this.handlers.plannedText}
+              valueDefault={values.plannedText}
+            />
+          )}
+
+          {isHaveActiveText && (
+            <MilestonePostEditTextArea
+              title={'Active text'}
+              onChange={this.handlers.activeText}
+              valueDefault={values.activeText}
+            />
+          )}
+
+          {isHaveBlockedText && (
+            <MilestonePostEditTextArea
+              title={'Blocked text'}
+              onChange={this.handlers.blockedText}
+              valueDefault={values.blockedText}
+            />
+          )}
+
+          {isHaveCompletedText && (
+            <MilestonePostEditTextArea
+              title={'Completed text'}
+              onChange={this.handlers.completedText}
+              valueDefault={values.completedText}
+            />
+          )}
+        </div>
+
         <div styleName="group-bottom">
           <button onClick={props.callbackCancel} className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
           <button onClick={this.okBtnClicked} className="tc-btn tc-btn-primary"><strong>{okButtonTitle}</strong></button>

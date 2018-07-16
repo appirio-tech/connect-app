@@ -1,8 +1,7 @@
 import React from 'react'
 import PT from 'prop-types'
+
 import './MilestonePostEditTextArea.scss'
-
-
 
 class MilestonePostEditTextArea extends React.Component {
 
@@ -32,8 +31,10 @@ class MilestonePostEditTextArea extends React.Component {
       + (props.theme ? props.theme : '')
       }
       >
-        <div styleName="label-layer">
+        <div styleName="col-left">
           <div styleName="label-title">{title}</div>
+        </div>
+        <div styleName="col-right">
           <textarea type="text" onChange={this.onValueChange} value={this.state.value}  placeholder={props.title} rows="5"/>
         </div>
       </div>

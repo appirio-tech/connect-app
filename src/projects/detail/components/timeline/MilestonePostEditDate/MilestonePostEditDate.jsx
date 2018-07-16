@@ -1,6 +1,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import moment from 'moment'
+import cn from 'classnames'
 
 import './MilestonePostEditDate.scss'
 
@@ -10,8 +11,8 @@ class MilestonePostEditDate extends React.Component {
     super(props)
 
     this.state = {
-      startDate: moment.utc(this.props.startDateValueDefault).format('YYYY-MM-DD'),
-      endDate: moment.utc(this.props.endDateValueDefault).format('YYYY-MM-DD'),
+      startDate: moment(this.props.startDateValueDefault).format('YYYY-MM-DD'),
+      endDate: moment(this.props.endDateValueDefault).format('YYYY-MM-DD'),
     }
 
     this.onStartDateChange = this.onStartDateChange.bind(this)
@@ -33,19 +34,20 @@ class MilestonePostEditDate extends React.Component {
   }
 
   render() {
-    const props = this.props
-    const { startDate, endDate } = this.state
+    const { startDate, endDate, theme } = this.state
 
     return (
-      <div styleName={'milestone-post '
-      + (props.theme ? props.theme : '')
-      }
-      >
-        <div styleName="label-layer">
-          <div styleName={'label-title ' + props.titleExtraStyle}>{'Start'}</div>
-          <input type="date" onChange={this.onStartDateChange} value={startDate}  placeholder={'Date'}/>
-          <div styleName="label-title">{'End'}</div>
-          <input type="date" onChange={this.onEndDateChange} value={endDate}  placeholder={'Date'}/>
+      <div styleName={cn('milestone-post', theme)}>
+        <div styleName="col-left">
+          <div styleName="label-title">Start</div>
+          <div styleName="label-title">End</div>{/* this is shown on narrow screens */}
+        </div>
+        <div styleName="col-right">
+          <div styleName="label-layer">
+            <input type="date" onChange={this.onStartDateChange} value={startDate}  placeholder="Date" />
+            <div styleName="label-title">End</div>{/* this is hidden on narrow screens */}
+            <input type="date" onChange={this.onEndDateChange} value={endDate}  placeholder="Date" />
+          </div>
         </div>
       </div>
     )
@@ -56,14 +58,12 @@ MilestonePostEditDate.defaultProps = {
   endDateValueDefault: '',
   startDateValueDefault: '',
   theme: '',
-  titleExtraStyle: '',
 }
 
 MilestonePostEditDate.propTypes = {
   endDateValueDefault: PT.string,
   startDateValueDefault: PT.string,
   theme: PT.string,
-  titleExtraStyle: PT.string,
 }
 
 export default MilestonePostEditDate
