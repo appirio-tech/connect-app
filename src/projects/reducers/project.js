@@ -95,22 +95,6 @@ function getProductInPhases(phases, phaseId, productId) {
   return product
 }
 
-/**
- * Update phase from server result
- *
- * @param {Array}  phases          phases list in store
- * @param {Object} phase           phase
- * @param {Number} phaseIndex      index of phase to update
- *
- * @return {Array}  phases
- */
-function updateSomeBasicInfoIntoPhase(phases, phase, phaseIndex) {
-  if (phase && phaseIndex >= 0) {
-    _.assign(phases[phaseIndex], phase)
-  }
-  return _.cloneDeep(phases || [])
-}
-
 export const projectState = function (state=initialState, action) {
 
   switch (action.type) {
@@ -129,11 +113,25 @@ export const projectState = function (state=initialState, action) {
       lastUpdated: new Date()
     })
 
-  case UPDATE_PHASE_SUCCESS:
+  case UPDATE_PHASE_SUCCESS: {
+    // as we additionally loaded products to the phase object we have to keep them
+    // note that we keep them as they are without creation a new copy
+    const phase = {
+      ...action.payload,
+      products: state.phases[action.payload.phaseIndex].products
+    }
+    const phaseNonDirty = {
+      // for non-dirty version we make sure that dont' have the same objects with phase
+      ..._.cloneDeep(action.payload),
+      products: state.phasesNonDirty[action.payload.phaseIndex].products
+    }
+
     return update(state, {
-      processing: { $set: false},
-      phases: { $set: updateSomeBasicInfoIntoPhase(state.phases, action.payload, action.payload.phaseIndex || 0)}
+      processing: { $set: false },
+      phases: { $splice: [[action.payload.phaseIndex, 1, phase]] },
+      phasesNonDirty: { $splice: [[action.payload.phaseIndex, 1, phaseNonDirty]] },
     })
+  }
 
   case LOAD_PROJECT_TEMPLATE_SUCCESS:
     return {...state,
