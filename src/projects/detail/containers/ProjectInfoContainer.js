@@ -28,6 +28,7 @@ class ProjectInfoContainer extends React.Component {
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
     return !_.isEqual(nextProps.project, this.props.project) ||
       !_.isEqual(nextProps.feeds, this.props.feeds) ||
+      !_.isEqual(nextProps.phases, this.props.phases) ||
       nextProps.activeChannelId !== this.props.activeChannelId
   }
 
