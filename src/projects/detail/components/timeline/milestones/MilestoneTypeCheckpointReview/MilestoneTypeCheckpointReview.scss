@@ -1,4 +1,4 @@
-@import '../../../../../styles/includes';
+@import '../../../../../../styles/includes';
 @import '~tc-ui/src/styles/tc-includes';
 // project-progress specific styles
 .milestone-post-specification {
@@ -25,8 +25,8 @@
     width: 8px;
     height: 8px;
     left: -22px;
-    top: 22px;
-    z-index: 11;
+    top: 20px;
+    z-index: 2;
   }
   /* mobile view specific style */
   @include viewSm {
@@ -165,11 +165,11 @@
   }
   .add-specification-wrap {
     margin-top: 10px;
-    &.seperation-sm {
+    &.separation-sm {
       margin-top: 5px;
     }
   }
-  .seperation-sm {
+  .separation-sm {
     margin-top: 5px;
   }
   .hide-progress-bar {
@@ -198,23 +198,9 @@
     padding-top: 10px;
     padding-bottom: 10px;
     position: relative;
-    .tc-btn {
+
+    button {
       margin: 0px 5px;
-      &.disable {
-        border: 1px solid #ccc;
-        background-color: #ddd;
-        background: #ddd;
-        color: #888;
-        box-shadow: none;
-        opacity: 0.8;
-        &:hover {
-          border: 1px solid #ccc;
-          background-color: #ddd;
-          background: #ddd;
-          color: #888;
-          opacity: 0.8;
-        }
-      }
     }
   }
   .hide {

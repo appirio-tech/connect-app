@@ -54,14 +54,12 @@ function mockMilestone(timelineId, milestoneId, type, status) {
     timeline[milestoneId] = milestone
   }
 
-  console.warn('mockMilestone.timelines', mockMilestone.timelines)
-
   return mockMilestone.timelines[timelineId][milestoneId]
 }
 
 mockMilestone.timelines = {}
 mockMilestone.id = 0
-mockMilestone.startDate = moment().subtract(10, 'days')
+mockMilestone.startDate = moment().subtract(16, 'days')
 
 /**
  * Get timeline by reference
@@ -89,7 +87,8 @@ export function getTimelinesByReference(reference, referenceId) {
 export function getTimelineMilestones(timelineId) {
   return mockResponse([
     mockMilestone(timelineId, null, 'phase-specification', 'completed'),
-    mockMilestone(timelineId, null, 'community-work', 'active'),
+    mockMilestone(timelineId, null, 'community-work', 'completed'),
+    mockMilestone(timelineId, null, 'checkpoint-review', 'active'),
   ])
 
   return axios.get(`${TC_API_URL}/v4/timelines/${timelineId}/milestones`)

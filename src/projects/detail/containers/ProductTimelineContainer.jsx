@@ -39,7 +39,7 @@ class ProductTimelineContainer extends React.Component {
 
 ProductTimelineContainer.propTypes = {
   isLoading: PT.bool,
-  timeline: PT.object.isRequired,
+  timeline: PT.object,
   loadProductTimelineWithMilestones: PT.func.isRequired,
   updateProductMilestone: PT.func.isRequired,
   completeProductMilestone: PT.func.isRequired,

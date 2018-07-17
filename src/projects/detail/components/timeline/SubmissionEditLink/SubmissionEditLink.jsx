@@ -59,19 +59,11 @@ class SubmissionEditLink extends React.Component {
     const isHaveBlockedText = defaultValues && defaultValues.hasOwnProperty('blockedText')
     const isHaveCompletedText = defaultValues && defaultValues.hasOwnProperty('completedText')
 
-    let titleExtraStyleTitle = ''
-    let titleExtraStyleURL = ''
     let titleExtraStyleType = ''
-    let titleExtraStyleStart = ''
-    let titleExtraStylePlannedText = ''
     let titleExtraStyleSumissionId = ''
 
     if (isHaveSubmissionId || isHavePlannedText || isHaveActiveText || isHaveCompletedText) {
-      titleExtraStyleTitle = 'pos_18_60'
-      titleExtraStyleURL = 'pos_18_60'
       titleExtraStyleType = 'pos_22_56'
-      titleExtraStyleStart = 'pos_22_56'
-      titleExtraStylePlannedText = 'pos_28_5'
       titleExtraStyleSumissionId = 'pos_20_-15'
     }
 

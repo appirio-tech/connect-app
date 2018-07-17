@@ -8,12 +8,12 @@ import ProjectProgress from '../../ProjectProgress'
 import MilestonePost from '../MilestonePost'
 import MilestonePostMessage from '../MilestonePostMessage'
 import MilestonePostSpecification from '../MilestonePostSpecification'
-import SubmissionSelection from '../SubmissionSelection'
 import SubmissionEditLink from '../SubmissionEditLink'
 import SubmissionEditText from '../SubmissionEditText'
 import WinnerSelection from '../WinnerSelection'
 import MilestoneTypePhaseSpecification from '../milestones/MilestoneTypePhaseSpecification'
 import MilestoneTypeProgress from '../milestones/MilestoneTypeProgress'
+import MilestoneTypeCheckpointReview from '../milestones/MilestoneTypeCheckpointReview'
 
 import { MILESTONE_STATUS } from '../../../../../config/constants'
 
@@ -112,9 +112,9 @@ class TimelinePost extends React.Component {
         >
           <i styleName={'status-ring'} />
 
-          {!isPlanned && (
+          {/* !isPlanned && (
             <span styleName="dot" />
-          )}
+          ) */}
 
           {!isEditing && (
             <dir onMouseEnter={this.hoverHeader} onMouseLeave={this.unHoverHeader} styleName="post-title-container">
@@ -154,8 +154,16 @@ class TimelinePost extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && milestone.type === 'community-work' && (
+          {!isEditing && !isUpdating && (milestone.type === 'community-work' || milestone.type === 'community-review') && (
             <MilestoneTypeProgress
+              milestone={milestone}
+              updateMilestone={updateMilestone}
+              completeMilestone={completeMilestone}
+            />
+          )}
+
+          {!isEditing && !isUpdating && milestone.type === 'checkpoint-review' && (
+            <MilestoneTypeCheckpointReview
               milestone={milestone}
               updateMilestone={updateMilestone}
               completeMilestone={completeMilestone}
@@ -211,16 +219,6 @@ class TimelinePost extends React.Component {
                   {!!content && !!content.type && content.type === 'add-a-link' &&
                     (<div styleName="add-specification-wrap seperation-sm">
                       <MilestonePostSpecification label={content.label} milestonePostLink={content.mileStoneLink} isCompleted={content.isCompleted} inProgress={content.inProgress} />
-                    </div>)
-                  }
-
-                  {/* milestone submission-selection type content  */}
-                  {!!content && !!content.type && content.type === 'submission-selection' &&
-                    (<div styleName="add-specification-wrap">
-                      <SubmissionSelection finish={this.props.finish} label={content.label} postContent={content}
-                        isCompleted={content.isCompleted} inProgress={content.inProgress}
-                        selectedHeading={content.selectedHeading} rejectedHeading={content.rejectedHeading}
-                      />
                     </div>)
                   }
 

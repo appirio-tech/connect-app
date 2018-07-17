@@ -3,27 +3,8 @@
 
 // project-progress specific styles
 .milestone-post {
-  position: relative;
-  color: #151516;
-  height: auto;
-  min-height: $base-unit*10;
-  line-height: $base-unit*10;
   @include roboto;
-  font-weight: 400;
   font-size: 15px;
-
-  .hide-sm {
-    display: inline-block;
-  }
-
-  /* mobile view specific style */
-  @include viewSm {
-    height: auto;
-    border-radius: 0;
-    .hide-sm {
-      display: none;
-    }
-  }
 
   .top-space {
     margin-top: 5px;

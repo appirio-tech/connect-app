@@ -10,10 +10,12 @@
   .col-left {
     display: table-cell;
     text-align: right;
+    vertical-align: top;
   }
 
   .col-right {
     display: table-cell;
+    vertical-align: top;
     width: 100%;
   }
 
@@ -36,7 +38,12 @@
     text-align: right;
     white-space: nowrap;
     padding-right: 2 * $base-unit;
+    padding-top: $base-unit;
     width: 100%;
+  }
+
+  &.has-counter .label-title {
+    padding-top: 5 * $base-unit;
   }
 
   /* use this selector to overwrite the global style for sure */

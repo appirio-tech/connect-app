@@ -126,6 +126,7 @@ class MilestoneTypeProgress extends React.Component {
             <ProjectProgress
               labelDayStatus={progressText}
               progressPercent={progressPercent}
+              theme="light"
             />
           </div>
         )}

@@ -1,9 +1,10 @@
 import React from 'react'
 import PT from 'prop-types'
-import './MilestonePost.scss'
+import cn from 'classnames'
+
 import SubmissionEditLink from '../SubmissionEditLink'
 
-
+import './MilestonePost.scss'
 
 class MilestonePost extends React.Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class MilestonePost extends React.Component {
     this.downloadFile = this.downloadFile.bind(this)
     this.updatePost = this.updatePost.bind(this)
     this.deletePost = this.deletePost.bind(this)
+    this.onSelectChange = this.onSelectChange.bind(this)
 
     this.state = {
       isEditing: false,
@@ -52,7 +54,7 @@ class MilestonePost extends React.Component {
     if (props.milestoneType === 'specification') {
       return 'Specification'
     }
-    return this.state.label
+    return this.props.milestonePostTitle
   }
 
   closeEditForm() {
@@ -90,6 +92,13 @@ class MilestonePost extends React.Component {
     deletePost(itemId)
   }
 
+  onSelectChange(evt) {
+    const { onSelectChange, itemId } = this.props
+    const isSelected = evt.target.checked
+
+    onSelectChange(isSelected, itemId)
+  }
+
   render() {
     const { isActive } = this.props
     const props = this.props
@@ -110,49 +119,91 @@ class MilestonePost extends React.Component {
             <span styleName="dot" >{ props.inProgress}</span>
           )
         }
-        {!this.state.isEditing && (<div styleName="label-layer">
-          {props.milestoneType !== 'download' && (<span className={'flex-child'} styleName={'label-title span-first ' + ((props.milestoneType === 'file') ? 'file ' : '') + ((props.milestoneType === 'download') ? 'download ' : '') + ((props.milestoneType === 'specification') ? 'specification ' : '') } style={ labelMilestoneStyle }>
-            {this.getLabel()}
-          </span>)}
-          {props.milestoneType === 'download' && (<a href={this.state.milestonePostLink} download={this.state.milestonePostLink} className={'flex-child'} styleName={'label-title span-first download'}>
-            {this.getLabel()}
-          </a>)}
+        {!this.state.isEditing && (
+          <div styleName="label-layer">
+            {props.milestoneType !== 'download' && (
+              <span
+                className={'flex-child'}
+                styleName={cn('label-title', 'span-first', props.milestoneType) }
+                style={ labelMilestoneStyle }
+              >
+                {this.getLabel()}
+              </span>
+            )}
 
-          {props.milestoneType === 'specification' && (
-            <div styleName="group-right only-text hide-sm">
-              <a href={props.milestonePostLink} styleName="milestone-text hide-sm">
-                {props.milestonePostLink}
+            {props.milestoneType === 'download' && (
+              <a
+                href={this.state.milestonePostLink}
+                download={this.state.milestonePostLink}
+                className={'flex-child'}
+                styleName={'label-title span-first download'}
+              >
+                {this.getLabel()}
               </a>
-            </div>)
-          }
+            )}
 
-          {props.milestoneType === 'only-text' && (
-            <div styleName="group-right only-text hide-sm">
-              <a href={props.milestonePostLink} styleName="milestone-text hide-sm">
-                {props.milestonePostLink}
-              </a>
-            </div>
-          )}
+            {props.milestoneType === 'marvelapp' && (
+              <div styleName="group-right only-text hide-sm">
+                <a href={props.milestonePostLink} styleName="milestone-text hide-sm">
+                  {props.milestonePostLink}
+                </a>
+              </div>)
+            }
 
-          {props.milestoneType === 'file' && (
-            <div styleName="group-right file hide-sm">
-              <a href={this.state.milestonePostFile}  download={this.state.milestonePostFile} styleName="milestone-text hide-sm" dangerouslySetInnerHTML={{ __html: props.milestonePostFileInfo }} />
-              <span styleName="download_icon hide-sm" />
-            </div>)
-          }
+            {props.milestoneType === 'specification' && (
+              <div styleName="group-right only-text hide-sm">
+                <a href={props.milestonePostLink} styleName="milestone-text hide-sm">
+                  {props.milestonePostLink}
+                </a>
+              </div>)
+            }
 
-          {props.milestoneType === 'download' && (<div styleName="group-right file hide-sm">
-            <span  download={this.state.milestonePostFile} styleName="download_icon hide-sm" />
-          </div>)}
+            {props.milestoneType === 'only-text' && (
+              <div styleName="group-right only-text hide-sm">
+                <a href={props.milestonePostLink} styleName="milestone-text hide-sm">
+                  {props.milestonePostLink}
+                </a>
+              </div>
+            )}
 
-          {props.milestoneType !== 'download' && isActive && (
-            <div>
-              <span onClick={this.toggleEditLink} styleName={ 'label-title span-two' } />
-              <span onClick={this.deletePost} styleName={ 'label-title span-three' } />
-            </div>)
-          }
+            {props.milestoneType === 'file' && (
+              <div styleName="group-right file hide-sm">
+                <a href={this.state.milestonePostFile}  download={this.state.milestonePostFile} styleName="milestone-text hide-sm" dangerouslySetInnerHTML={{ __html: props.milestonePostFileInfo }} />
+                <span styleName="download_icon hide-sm" />
+              </div>)
+            }
 
-        </div>)}
+            {props.milestoneType === 'download' && (<div styleName="group-right file hide-sm">
+              <span download={this.state.milestonePostFile} styleName="download_icon hide-sm" />
+            </div>)}
+
+            {!!props.updatePost && (
+              <span onClick={this.toggleEditLink} styleName="label-title span-two" />
+            )}
+            {!!props.deletePost && (
+              <span onClick={this.deletePost} styleName="label-title span-three" />
+            )}
+
+            {!!props.onSelectChange && (
+              <div styleName="col-wrapper">
+                <label styleName="checkbox-ctrl">
+                  <input
+                    type="checkbox"
+                    styleName="checkbox"
+                    onChange={this.onSelectChange}
+                  />
+                  <span styleName="checkbox-text" />
+                </label>
+              </div>
+            )}
+
+            {!props.onSelectChange && props.isSelected && (
+              <div styleName="col-wrapper">
+                <span styleName="item-checked" />
+              </div>
+            )}
+          </div>
+        )}
 
         {this.state.isEditing && props.milestoneType === 'specification' && (<div styleName="small-separator">
           <SubmissionEditLink
@@ -163,6 +214,21 @@ class MilestonePost extends React.Component {
             okButtonTitle={'Save changes'}
           />
         </div>)}
+
+        {this.state.isEditing && props.milestoneType === 'marvelapp' && (
+          <div styleName="small-separator">
+            <SubmissionEditLink
+              callbackCancel={this.closeEditForm}
+              defaultValues={{
+                url: props.milestonePostLink,
+                title: props.milestonePostTitle
+              }}
+              callbackOK={this.updatePost}
+              label={'Edit design link'}
+              okButtonTitle={'Save changes'}
+            />
+          </div>
+        )}
 
         {this.state.isEditing && props.milestoneType === 'only-text' && (
           <div styleName="small-separator">
@@ -191,7 +257,6 @@ MilestonePost.defaultProps = {
   milestonePostLink: '',
   label: '',
   isHideDot: false,
-  deletePost: () => {}
 }
 
 MilestonePost.propTypes = {

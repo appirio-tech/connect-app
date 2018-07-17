@@ -50,14 +50,14 @@ class Timeline extends React.Component {
     updateProductMilestone(productId, timeline.id, milestoneId, values)
   }
 
-  completeMilestone(milestoneId) {
+  completeMilestone(milestoneId, updatedProps = {}) {
     const {
       productId,
       completeProductMilestone,
       timeline,
     } = this.props
 
-    completeProductMilestone(productId, timeline.id, milestoneId)
+    completeProductMilestone(productId, timeline.id, milestoneId, updatedProps)
   }
 
   render() {

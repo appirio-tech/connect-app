@@ -31,7 +31,7 @@ class MilestonePostEditLink extends React.Component {
     const maxLength = maxTitle ? maxTitle : -1
 
     return (
-      <div styleName={cn('milestone-post', theme)}>
+      <div styleName={cn('milestone-post', theme, { 'has-counter': !!maxTitle })}>
         <div styleName="col-left">
           <div styleName="label-title">{title}</div>
         </div>

@@ -45,7 +45,6 @@
     line-height: inherit;
     padding-left: $base-unit*3;
     padding-right: $base-unit*3;
-    z-index: 10;
     overflow: hidden;
     @include viewSm {
       padding-right: $base-unit*7;
@@ -73,6 +72,9 @@
       }
       &.file {
         background: url('../../../../../assets/icons/timeline-zip.svg') 0 50% no-repeat;
+      }
+      &.marvelapp {
+        background: url('../../../../../assets/icons/timeline-marvelapp.svg') 0 50% no-repeat;
       }
       &.span-two {
         padding-left: 20px;
@@ -154,6 +156,57 @@
     .dot {
       background-color: #0681ff;
       border: 2px solid #0681ff;
+    }
+  }
+
+  .col-wrapper {
+    align-content: center;
+    display: flex;
+  }
+
+  .item-checked{
+    display: inline-block;
+    background: url('../../../../../assets/icons/ui-check-gray.svg') 0 0 no-repeat;
+    background-size: 16px;
+    height: 16px;
+    margin-top: 17px;
+    width: 16px;
+  }
+}
+
+
+// checkbox-ctrl styles
+.checkbox-ctrl {
+  margin-top: 15px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  cursor: pointer;
+
+  .checkbox-text {
+    position: relative;
+    padding-left: 20px;
+    &:before {
+      position: absolute;
+      left: 0;
+      top: 0;
+      content: '';
+      background-color: #ffffff;
+      border: 1px solid #c0c0c0;
+      border-radius: 3px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+  .checkbox {
+    display: none;
+    &:checked + .checkbox-text {
+      &:before {
+        background: #0681FF url('../../../../../assets/icons/ui-check.svg') 50% 3px no-repeat;
+        background-size: 11px;
+        border-radius: 3px;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
     }
   }
 }

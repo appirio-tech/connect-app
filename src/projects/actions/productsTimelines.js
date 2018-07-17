@@ -72,13 +72,14 @@ export function updateProductMilestone(productId, timelineId, milestoneId, updat
   }
 }
 
-export function completeProductMilestone(productId, timelineId, milestoneId) {
+export function completeProductMilestone(productId, timelineId, milestoneId, updatedProps = {}) {
   return (dispatch, getState) => {
     const timeline = getState().productsTimelines[productId]
     const milestoneIdx = _.findIndex(timeline.timeline.milestones, { id: milestoneId })
 
     const requests = [
       updateMilestone(timelineId, milestoneId, {
+        ...updatedProps, // optional props to update
         status: MILESTONE_STATUS.COMPLETED,
       })
     ]
