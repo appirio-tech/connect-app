@@ -279,6 +279,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
     const endDate = moment(milestone.endDate)
     const startDate = moment(milestone.startDate)
     const daysLeft = endDate.diff(moment(), 'days')
+    const hoursLeft = endDate.diff(moment(), 'hours')
     const totalDays = endDate.diff(startDate, 'days')
 
     const progressText = daysLeft > 0
@@ -363,7 +364,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
               </div>
             )}
 
-            {!isInReview && !this.state.isAddingNewLink && (
+            {!isInReview && !isAddingNewLink && (
               <div styleName="separation-sm">
                 <MilestonePostSpecification
                   label={'Add a design link'}
@@ -436,7 +437,11 @@ class MilestoneTypeCheckpointReview extends React.Component {
                   onClick={this.showCompleteReviewConfirmation}
                   disabled={!isInReview}
                 >
-                  Complete review (48h remaining)
+                  Complete review ({
+                    daysLeft >= 0
+                      ? `${hoursLeft}h remaining`
+                      : `${-daysLeft}h delay`
+                  })
                 </button>
                 <button
                   className={'tc-btn tc-btn-warning'}
