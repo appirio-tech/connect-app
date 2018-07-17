@@ -254,7 +254,7 @@ class RichTextArea extends React.Component {
   render() {
     const {MentionSuggestions} = this.mentionPlugin
     const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating,
-      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder} = this.props
+      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic } = this.props
     const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading} = this.state
     let canSubmit = (disableTitle || titleValue.trim())
         && (disableContent || editorState.getCurrentContent().hasText())
@@ -265,6 +265,7 @@ class RichTextArea extends React.Component {
     const blockType = RichUtils.getCurrentBlockType(editorState)
     const currentEntity = getCurrentEntity(editorState)
     const disableForCodeBlock = blockType === 'code-block'
+    const editButtonText = editingTopic ? 'Update title' : 'Update post' 
 
     const Entry = (props) => {
       const {
@@ -395,7 +396,7 @@ class RichTextArea extends React.Component {
                     }
                     { editMode &&
                   <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
-                    { isCreating ? 'Saving...' : 'Update title' }
+                    { isCreating ? 'Saving...' : editButtonText }
                   </button>
                     }
                     { !editMode &&
@@ -434,6 +435,7 @@ RichTextArea.propTypes = {
   title: PropTypes.string,
   content: PropTypes.string,
   allMembers: PropTypes.object,
+  editingTopic: PropTypes.bool
 }
 
 export default RichTextArea

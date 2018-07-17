@@ -114,6 +114,7 @@ class Feed extends React.Component {
                 hasError={error}
                 cancelEdit={this.cancelEditTopic}
                 disableContent
+                editingTopic = {editTopicMode}
               />
             </div>
           ) : (
