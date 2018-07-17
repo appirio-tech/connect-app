@@ -80,6 +80,7 @@ class Comment extends React.Component {
             authorName={authorName}
             cancelEdit={this.cancelEdit}
             allMembers={allMembers}
+            editingTopic = {false}
           />
         </div>
       )
