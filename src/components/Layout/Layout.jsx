@@ -8,8 +8,8 @@ import Maintenance from '../Maintenance/Maintenance'
 require('./Layout.scss')
 
 // Alert styles
-import '../../styles/vendors/s-alert-default.css'
-import 'react-s-alert/dist/s-alert-css-effects/slide.css'
+import '../../styles/vendors/s-alert-default.scss'
+import 'react-s-alert/dist/s-alert-css-effects/stackslide.css'
 
 const Layout = (props) => {
   const { isLoadingUser, maintenanceMode } = props
@@ -22,7 +22,7 @@ const Layout = (props) => {
     return (
       <div>
         { props.topbar }
-        <Alert stack={{limit: 3, spacing: 30}} position="top" html timeout={4000} offset={0} />
+        <Alert stack={{limit: 3, spacing: 30}} position="bottom-left" html timeout={4000} offset={50} effect="stackslide" />
         <div className={cn('main-wrapper')} data-route={window.location.pathname.replace(/\//g, '__')} id="wrapper-main">
           { props.content }
         </div>

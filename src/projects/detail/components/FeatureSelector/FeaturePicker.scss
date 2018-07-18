@@ -4,7 +4,7 @@
   // Used to calculate the available height for the left-side column
   $header-height: 60px;
   $footer-height: 0;
-  
+
   button {
     &.clean {
       background-color: transparent;
@@ -18,22 +18,22 @@
       font-weight: inherit;
       text-transform: inherit;
     }
-  
+
     &:active,
     &:focus {
       outline: none;
     }
   }
-  
+
   .define-features {
     background-color: $tc-white;
     text-align: left;
     height: 100%;
-  
+
     .close {
       background-color: initial;
     }
-  
+
     > h2 {
       font-size: $tc-heading-md;
       background-color: $tc-gray-neutral-light;
@@ -41,21 +41,21 @@
       padding: 3 * $base_unit;
       height: $header-height;
       // border-bottom: 1px solid $tc-gray-10;
-  
+
       .selected-feature-count {
         color: $tc-gray-30;
       }
     }
-  
+
     h5 {
       color: $tc-black;
     }
-  
+
     > main {
       width: 100%;
       border-top: 1px solid $tc-gray-20;
       height: 100%;
-  
+
       .features {
         min-width: 320px;
         width: 320px;
@@ -66,30 +66,30 @@
         // Main container, scroll according to the content displayed inside.
         overflow-y: scroll;
         height: calc(100% - #{$header-height});
-  
+
         .feature-categories-list {
           width: 100%;
           padding: 4 * $base-unit 0;
-  
+
           .add-custom-feature {
             text-align: center;
             margin-top: 2 * $base-unit;
             border-top: 1px solid $tc-gray-30;
             padding-top: 2 * $base-unit;
-  
+
             .custom-feature-btn-desc {
               @include roboto;
               @include tc-label-md;
               color: $tc-gray-50;
               padding: 2 * $base-unit 4 * $base-unit;
             }
-  
+
             button {
               margin: 4 * $base-unit 0px;
             }
           }
         }
-  
+
         .features-overlay {
           background-color: $tc-gray-neutral-dark;
           position: absolute;
@@ -100,20 +100,20 @@
           height: 100%;
         }
       }
-  
+
       .features-content {
         max-width: 660px;
         width: 100%;
         position: relative;
       }
-  
+
       .feature-form-instructions {
         padding: 8 * $base-unit;
-  
+
         h3 {
           @include tc-heading;
         }
-  
+
         p {
           @include tc-label-md;
           color: $tc-gray-50;
@@ -121,5 +121,53 @@
       }
     }
   }
+
+  .feature-selection-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 21;/* +1 of the z-index of the topbar */
+  }
+
+  .feature-selection-dialog {
+    top: 0px;
+    left: 0px;
+    height: 100%;
+  }
+
+  .feature-selection-dialog-close {
+    @include roboto;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    width: 185px;
+    height: 20px;
+    line-height: 20px;
+    text-align: right;
+    color: $tc-gray-60;
+    transition: all 200ms ease-in-out;
+
+    .x-mark-icon {
+      display: inline-block;
+      margin: 0 0 0 5px;
+      transition: all 200ms ease-in-out;
+
+      & > svg {
+        padding-top: 3px;
+        transition: all 200ms ease-in-out;
+      }
+    }
+
+    &:hover {
+      color: $tc-black;
+      cursor: pointer;
+
+      .x-mark-icon > svg {
+        fill: $tc-black;
+      }
+    }
+  }
 }
-  

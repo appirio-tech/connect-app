@@ -1,0 +1,126 @@
+@import '../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+// project-progress style
+.project-progress {
+  position: relative;
+  background-color: rgba($tc-dark-blue-100, 0.3);
+  border-radius: 6px;
+  color: $tc-white;
+  height: $base-unit*8;
+  line-height: $base-unit*8;
+  @include roboto;
+  font-size: 15px;
+  .hide-sm {
+    display: inline-block;
+  }
+  @media screen and (max-width: $screen-md - 1px) {
+    height: $base-unit*8;
+    line-height: $base-unit*8;
+    border-radius: 0;
+    .hide-sm {
+      display: none;
+    }
+  }
+  .filled {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background-color: $tc-dark-blue-100;
+    border-radius: 6px 0 0 6px;
+    @media screen and (max-width: $screen-md - 1px) {
+      border-radius: 0;
+    }
+  }
+  .label-layer {
+    display: flex;
+    justify-content: space-between;
+    height: inherit;
+    position: relative;
+    line-height: inherit;
+    padding-left: $base-unit*3;
+    padding-right: $base-unit*3;
+    z-index: 10;
+    overflow: hidden;
+    @media screen and (max-width: $screen-md - 1px) {
+      padding-right: $base-unit*3.8;
+    }
+
+    .group-right {
+      min-width: 240px;
+      display: flex;
+      justify-content: flex-end;
+      @media screen and (max-width: $screen-md - 1px) {
+        min-width: 100px;
+      }
+    }
+
+    .spent {
+      text-align: right;
+      padding-right: 25px;
+      @media screen and (max-width: $screen-md - 1px) {
+        margin-left: auto;
+      }
+    }
+
+    .status {
+      text-align: right;
+      min-width: 90px;
+    }
+  }
+
+  .dot {
+    display: none;
+    position: absolute;
+    background-color: $tc-white;
+    border: 2px solid $tc-gray-30;
+    border-radius: 100%;
+    width: 8px;
+    height: 8px;
+    left: -22px;
+    z-index: 11;
+    top: calc(50% - 4px);
+  }
+
+  /* in-progress state */
+
+  &.in-progress {
+    .dot {
+      display: block;
+      background-color: $tc-white;
+      border: 2px solid $tc-dark-blue-100;
+    }
+  }
+
+  /* completed state */
+
+  &.completed {
+    .dot {
+      display: block;
+      background-color: $tc-dark-blue-100;
+      border: 2px solid $tc-dark-blue-100;
+    }
+  }
+
+  &.default-theme {
+    overflow: hidden;
+  }
+
+  /* light theme */
+
+  &.light {
+    .fill {
+      background-color: $tc-dark-blue-30;
+    }
+  }
+}
+
+.light {
+  background-color: rgba($tc-dark-blue-30, 0.3);
+  color: $tc-black;
+  .filled {
+    background-color: $tc-dark-blue-30;
+  }
+}

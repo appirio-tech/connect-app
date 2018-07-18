@@ -11,7 +11,7 @@
     @media screen and (max-width: $screen-sm - 1px) {
       padding: 20px 26px;
     }
-  
+
     .text-img{
       background-size: 100% 100%;
       position: relative;
@@ -21,12 +21,12 @@
       @media screen and (max-width: $screen-sm - 1px) {
         display: none;
       }
-      @media screen and (min-width: $screen-md - 1px) {    
+      @media screen and (min-width: $screen-md - 1px) {
         width: 60%;
         left: 40%;
       }
     }
-  
+
     h3{
       word-break: break-all;
       color: $tc-gray-70;
@@ -66,7 +66,7 @@
         }
       }
     }
-  
+
     .bubble{
       position: relative;
       padding:0 10%;
@@ -102,7 +102,7 @@
           }
           .new-project-button {
             @include roboto;
-            color: #4285f4;
+            color: $tc-dark-blue-70;
             margin-top: 30px;
             display: flex;
             align-items: center;
@@ -126,7 +126,7 @@
               -ms-flex-align: center;
               align-items: center;
               svg {
-                fill: #fff;
+                fill: $tc-white;
                 width: 10px;
                 height: 10px;
               }
@@ -237,4 +237,3 @@
     }
   }
 }
-  

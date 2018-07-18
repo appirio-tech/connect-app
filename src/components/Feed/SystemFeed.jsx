@@ -6,6 +6,8 @@ import Panel from '../Panel/Panel'
 import UserTooltip from '../User/UserTooltip'
 import RemoveNotification from '../../assets/icons/x-mark-blue.svg'
 
+import './SystemFeed.scss'
+
 class SystemFeed extends React.Component {
   constructor(props) {
     super(props)
@@ -49,7 +51,7 @@ class SystemFeed extends React.Component {
       )
     }
     return (
-      <div className="project-feed">
+      <div className="system-feed">
         { messages.map(renderMessages) }
       </div>
     )

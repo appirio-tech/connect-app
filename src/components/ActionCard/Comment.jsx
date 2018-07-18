@@ -1,12 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
-import Panel from '../Panel/Panel'
 import UserTooltip from '../User/UserTooltip'
 import RichTextArea from '../RichTextArea/RichTextArea'
 import { Link } from 'react-router-dom'
 import CommentEditToggle from './CommentEditToggle'
 import _ from 'lodash'
+import moment from 'moment'
+import { POST_TIME_FORMAT } from '../../config/constants.js'
+
+import './Comment.scss'
 
 class Comment extends React.Component {
 
@@ -21,11 +24,11 @@ class Comment extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({editMode: this.props.message && this.props.message.editMode})
+    this.setState({editMode: this.props.message && this.props.message.editMode || this.props.isSaving})
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({editMode: nextProps.message && nextProps.message.editMode})
+    this.setState({editMode: nextProps.message && nextProps.message.editMode || nextProps.isSaving})
   }
 
   onSave({content}) {
@@ -51,64 +54,75 @@ class Comment extends React.Component {
   }
 
   render() {
-    const {message, author, date, edited, children, active, self, isSaving, hasError, readonly, allMembers} = this.props
+    const {message, author, date, edited, children, noInfo, self, isSaving, hasError, readonly, allMembers} = this.props
     const messageAnchor = `comment-${message.id}`
     const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#${messageAnchor}`
     const authorName = author ? (author.firstName + ' ' + author.lastName) : 'Connect user'
     const avatarUrl = _.get(author, 'photoURL', null)
+    const isDeleting = message && message.isDeletingComment
 
     if (this.state.editMode) {
       const content = message.newContent === null || message.newContent === undefined ? message.rawContent : message.newContent
       return (
-        <RichTextArea
-          disableTitle
-          editMode
-          messageId={message.id}
-          isGettingComment={message.isGettingComment}
-          content={content}
-          oldContent={message.rawContent}
-          onPost={this.onSave}
-          onPostChange={this.onChange}
-          isCreating={isSaving}
-          hasError={hasError}
-          avatarUrl={avatarUrl}
-          authorName={authorName}
-          cancelEdit={this.cancelEdit}
-          allMembers={allMembers}
-        />
+        <div styleName="comment-editor">
+          <RichTextArea
+            disableTitle
+            editMode
+            messageId={message.id}
+            isGettingComment={message.isGettingComment}
+            content={content}
+            oldContent={message.rawContent}
+            onPost={this.onSave}
+            onPostChange={this.onChange}
+            isCreating={isSaving}
+            hasError={hasError}
+            avatarUrl={avatarUrl}
+            authorName={authorName}
+            cancelEdit={this.cancelEdit}
+            allMembers={allMembers}
+            editingTopic = {false}
+          />
+        </div>
       )
     }
 
     return (
-      <Panel.Body active={active} className="comment-panel-body">
-        <div className="portrait" id={messageAnchor}>
-          <UserTooltip usr={author} previewAvatar size={35} />
+      <div styleName={cn('container', { self, 'is-deleting': isDeleting })} id={messageAnchor}>
+        <div styleName="avatar">
+          {!noInfo && author && <UserTooltip usr={author} id={`${messageAnchor}-${author.userId}`} previewAvatar size={40} />}
         </div>
-        <div className={cn('object comment', {self})}>
-          <div className="card-profile">
-            <div className="card-author">
-              {authorName}
+        <div styleName="body">
+          {!noInfo &&
+            <div styleName="header">
+              <div styleName="info">
+                <span styleName="author">
+                  {authorName}
+                </span>
+                <span styleName="time">
+                  <Link to={messageLink}>{moment(date).format(POST_TIME_FORMAT)}</Link>
+                </span>
+                {edited && <span styleName="edited">edited</span>}
+              </div>
             </div>
-            <div className="card-time">
-              <Link to={messageLink}>{date}</Link> {edited && '• Edited'}
-            </div>
-            {self && !readonly &&
+          }
+          {self && !readonly &&
+            <aside styleName="controls">
               <CommentEditToggle
                 onEdit={this.edit}
                 onDelete={this.delete}
               />
-            }
-          </div>
-          <div className="comment-body draftjs-post">
+            </aside>
+          }
+          <div styleName="text" className="draftjs-post">
             {children}
           </div>
-          {message && message.isDeletingComment &&
-            <div className="deleting-layer">
+          {isDeleting &&
+            <div styleName="deleting-layer">
               <div>Deleting post ...</div>
             </div>
           }
         </div>
-      </Panel.Body>
+      </div>
     )
   }
 }
@@ -166,7 +180,12 @@ Comment.propTypes = {
    * The readonly flag
    */
   readonly: PropTypes.bool,
-  allMembers: PropTypes.object.isRequired
+  allMembers: PropTypes.object.isRequired,
+
+  /**
+   * If true only comment text is shown without additional info
+   */
+  noInfo: PropTypes.bool,
 }
 
 export default Comment

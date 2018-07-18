@@ -1,0 +1,35 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  @include roboto;
+  align-items: center;
+  color: $tc-gray-80;
+  display: flex;
+  font-size: 11px;
+  justify-content: space-between;
+  padding-right: 50px;
+}
+
+.title {
+  flex: 1 500px;
+}
+
+.price {
+  flex: 0 140px;
+  padding-right: 5 * $base-unit;
+  text-align: right;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    display: none;
+  }
+}
+
+.status {
+  flex: 0 55px;
+  min-width: 55px;
+  text-align: center;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    display: none;
+  }
+}

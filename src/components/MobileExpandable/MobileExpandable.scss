@@ -17,6 +17,7 @@
   @include roboto;
   color: $tc-gray-70;
   font-size: 15px;
+  text-transform: uppercase;
 }
 
 .arrow {
@@ -36,5 +37,11 @@
 
   .open & {
     display: block;
+  }
+
+  :global {
+    input[name="address"]:focus + .error-message {
+      display: none;
+    }
   }
 }

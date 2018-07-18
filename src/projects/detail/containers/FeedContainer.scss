@@ -1,0 +1,15 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import '../../../styles/includes';
+
+.chat-button-space {
+  height: 14 * $base-unit;
+}
+
+.feed-card {
+  @include stand-alone-item-shadow;
+  border-radius: $card-border-radius;
+
+  & + & {
+    margin-top: 2 * $base-unit;
+  }
+}

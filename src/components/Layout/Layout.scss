@@ -22,6 +22,9 @@
     &[data-route*='new-project'] {
       background-color: $tc-gray-neutral-light;
     }
+    &[data-route*='add-phase'] {
+      background-color: $tc-gray-neutral-light;
+    }
   }
 
   .content-area {

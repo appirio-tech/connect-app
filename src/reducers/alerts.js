@@ -3,6 +3,7 @@ import Alert from 'react-s-alert'
 /* eslint-disable no-unused-vars */
 import {
   // Project
+  CREATE_PROJECT_STAGE_SUCCESS,
   CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE,
   UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
@@ -24,7 +25,15 @@ import {
   DELETE_PROJECT_FEED_COMMENT_FAILURE,
   GET_PROJECT_FEED_COMMENT_FAILURE,
   // Project status
-  PROJECT_STATUS_IN_REVIEW
+  PROJECT_STATUS_IN_REVIEW,
+  // phase comments
+  CREATE_PHASE_FEED_COMMENT_FAILURE,
+  SAVE_PHASE_FEED_COMMENT_FAILURE,
+  DELETE_PHASE_FEED_COMMENT_FAILURE,
+  // products
+  UPDATE_PRODUCT_SUCCESS,
+  UPDATE_PHASE_FAILURE,
+  DELETE_PROJECT_PHASE_SUCCESS,
 } from '../config/constants'
 /* eslint-enable no-unused-vars */
 
@@ -35,6 +44,21 @@ export default function(state = {}, action) {
 
     //temporary workaround
     setTimeout(() => { Alert.success(`Project '${name}' created`) }, 0)
+
+    return state
+  }
+
+  case CREATE_PROJECT_STAGE_SUCCESS: {
+    const name = _.truncate(action.payload.name, 20)
+
+    //delay time for reload stage list of project after creating state
+    setTimeout(() => { Alert.success(`Added New Stage To Project '${name}'`) }, 2000)
+
+    return state
+  }
+
+  case DELETE_PROJECT_PHASE_SUCCESS: {
+    Alert.success('Project phase deleted.')
 
     return state
   }
@@ -60,6 +84,10 @@ export default function(state = {}, action) {
       project: action.payload
     })
   }
+
+  case UPDATE_PRODUCT_SUCCESS:
+    Alert.success('Product updated')
+    return state
 
   case REMOVE_PROJECT_MEMBER_SUCCESS:
     // show notification message if user leaving a project
@@ -87,6 +115,10 @@ export default function(state = {}, action) {
   case CREATE_PROJECT_FEED_FAILURE:
   case SAVE_PROJECT_FEED_FAILURE:
   case DELETE_PROJECT_FEED_FAILURE:
+  case CREATE_PHASE_FEED_COMMENT_FAILURE:
+  case SAVE_PHASE_FEED_COMMENT_FAILURE:
+  case DELETE_PHASE_FEED_COMMENT_FAILURE:
+  case UPDATE_PHASE_FAILURE:
     if (action.payload && action.payload.response) {
       const rdata = action.payload.response.data
       if (rdata && rdata.result && rdata.result.content && rdata.result.content.message) {

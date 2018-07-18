@@ -30,7 +30,7 @@ const getIcon = icon => {
 }
 
 // { isRequired, represents the overall questions section's compulsion, is also available}
-const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog }) => {
+const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog, showHidden }) => {
 
   const renderQ = (q, index) => {
     // let child = null
@@ -177,7 +177,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
 
   return (
     <SpecQuestionList>
-      {questions.map(renderQ)}
+      {questions.filter((question) => showHidden || !question.hidden).map(renderQ)}
     </SpecQuestionList>
   )
 }
@@ -203,7 +203,11 @@ SpecQuestions.propTypes = {
   /**
    * Array of questions to be rendered. This comes from the spec template for the product
    */
-  questions: PropTypes.arrayOf(PropTypes.object).isRequired
+  questions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  /**
+   * If true, then `hidden` property of questions will be ignored and hidden questions will be rendered
+   */
+  showHidden: PropTypes.bool,
 }
 
 export default SpecQuestions

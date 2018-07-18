@@ -36,6 +36,10 @@
       }
     }
 
+    button {
+      white-space: nowrap;
+    }
+
     .header {
       @include tc-body;
       @include roboto-bold;

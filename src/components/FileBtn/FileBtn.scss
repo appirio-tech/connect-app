@@ -6,7 +6,7 @@
     display: inline-block;
     overflow: hidden;
     position: relative;
-  
+
     > .file {
       cursor: pointer;
       opacity: 0;
@@ -15,7 +15,7 @@
       top: 0;
       font-size: 100px;
     }
-  
+
     /* here we reproduce styles for tc-btn-default from tc-ui package */
     > .file.loading:enabled + .tc-btn-default,
     > .file:focus:enabled + .tc-btn-default {
@@ -23,16 +23,15 @@
       border-color: $tc-dark-blue-70;
       box-shadow: 0 0 2px 1px $tc-dark-blue-30;
     }
-  
+
     > .file:active:enabled + .tc-btn-default,
     > .file:hover:enabled + .tc-btn-default {
-      background-image: linear-gradient(0deg, #F5F5F5 0%, #FFFFFF 49%, #FFFFFF 100%);
+      background-image: linear-gradient(0deg, $tc-gray-neutral-light 0%, $tc-white 49%, $tc-white 100%);
       border-color: $tc-gray-40;
     }
-  
+
     > .file:active:enabled + .tc-btn-default {
       box-shadow: inset 0 1px 2px 0 rgba($tc-black, 0.20);
     }
   }
 }
-  

@@ -1,8 +1,13 @@
+@import '~tc-ui/src/styles/tc-styles';
+
 // TODO: move to tc-includes
 
-$tc-body-large     		: 20px;
+$tc-body-large     		  : 20px;
 $tc-heading            	: 20px;
 $tc-heading-extra-small	: 14px;
+
+// standard card border radius
+$card-border-radius     : 6px;
 
 
 $gray-base    : $tc-black !default;

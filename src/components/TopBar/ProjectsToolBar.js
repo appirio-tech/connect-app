@@ -17,6 +17,7 @@ import MobileMenuToggle from '../MobileMenu/MobileMenuToggle'
 import SearchFilter from '../../assets/icons/ui-filters.svg'
 import SearchIcon from '../../assets/icons/ui-16px-1_zoom.svg'
 import { projectSuggestions, loadProjects, setInfiniteAutoload } from '../../projects/actions/loadProjects'
+import { loadProjectCategories } from '../../actions/templates'
 
 
 class ProjectsToolBar extends Component {
@@ -37,6 +38,14 @@ class ProjectsToolBar extends Component {
     this.toggleMobileMenu = this.toggleMobileMenu.bind(this)
     this.toggleMobileSearch = this.toggleMobileSearch.bind(this)
     this.onLeave = this.onLeave.bind(this)
+  }
+
+  componentWillMount() {
+    const { projectCategories, isProjectCategoriesLoading, loadProjectCategories } = this.props
+
+    if (!isProjectCategoriesLoading && !projectCategories) {
+      loadProjectCategories()
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -146,13 +155,14 @@ class ProjectsToolBar extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { user, criteria, creatingProject, projectCreationError, searchTermTag } = this.props
+    const { user, criteria, creatingProject, projectCreationError, searchTermTag, projectCategories } = this.props
     const { errorCreatingProject, isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
     return nextProps.user.handle !== user.handle
     || JSON.stringify(nextProps.criteria) !== JSON.stringify(criteria)
     || nextProps.creatingProject !== creatingProject
     || nextProps.projectCreationError !== projectCreationError
     || nextProps.searchTermTag !== searchTermTag
+    || !!nextProps.projectCategories && !projectCategories
     || nextState.errorCreatingProject !== errorCreatingProject
     || nextState.isFilterVisible !== isFilterVisible
     || nextState.isMobileMenuOpen !== isMobileMenuOpen
@@ -160,7 +170,7 @@ class ProjectsToolBar extends Component {
   }
 
   render() {
-    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser, user, mobileMenu, location } = this.props
+    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser, user, mobileMenu, location, projectCategories } = this.props
     const { isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
     const isLoggedIn = !!(userRoles && userRoles.length)
 
@@ -218,11 +228,13 @@ class ProjectsToolBar extends Component {
                   className={cn('tc-btn tc-btn-sm mobile-search-toggle', {active: isMobileSearchVisible})}
                   onClick={ this.toggleMobileSearch }
                 ><SearchIcon /></a>
+                { !!projectCategories &&
                 <a
                   href="javascript:"
                   className={cn('tc-btn tc-btn-sm', {active: isFilterVisible})}
                   onClick={ this.toggleFilter }
                 ><SearchFilter className="icon-search-filter" /><span className="filter-text">Filters</span> { noOfFilters > 0 && <span className="filter-indicator">{ noOfFilters }</span> }</a>
+                }
               </div>
             </div>
           }
@@ -247,11 +259,12 @@ class ProjectsToolBar extends Component {
             />
           </div>
         }
-        { isFilterVisible && isLoggedIn &&
+        { !!projectCategories && isFilterVisible && isLoggedIn &&
           <div className="secondary-toolbar">
             <Filters
               applyFilters={ this.applyFilters }
               criteria={ criteria }
+              projectCategories={ projectCategories }
             />
           </div>
         }
@@ -275,7 +288,7 @@ ProjectsToolBar.defaultProps = {
 
 // export default ProjectsToolBar
 
-const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, projectState, loadUser }) => {
+const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, projectState, loadUser, templates }) => {
   return {
     projects               : projectSearchSuggestions.projects,
     previousSearchTerm     : searchTerm.previousSearchTerm,
@@ -286,10 +299,12 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
     updateExisting         : projectState.updateExisting,
     criteria               : projectSearch.criteria,
     userRoles              : _.get(loadUser, 'user.roles', []),
-    user                   : loadUser.user
+    user                   : loadUser.user,
+    projectCategories           : templates.projectCategories,
+    isProjectCategoriesLoading  : templates.isProjectCategoriesLoading,
   }
 }
 
-const actionsToBind = { projectSuggestions, loadProjects, setInfiniteAutoload }
+const actionsToBind = { projectSuggestions, loadProjects, setInfiniteAutoload, loadProjectCategories }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(ProjectsToolBar))

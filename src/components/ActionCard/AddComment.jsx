@@ -21,7 +21,7 @@ export default class AddComment extends React.Component {
   }
 
   onChange(title, content) {
-    this.props.onChange(content)
+    this.props.onChange && this.props.onChange(content)
   }
 
   render() {
@@ -46,7 +46,7 @@ export default class AddComment extends React.Component {
 
 AddComment.propTypes = {
   onAdd: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   className: PropTypes.string,
   content: PropTypes.string,
   avatarUrl: PropTypes.string,

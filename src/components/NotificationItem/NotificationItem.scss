@@ -36,7 +36,7 @@
 
     .icon {
       align-items: center;
-      // border-left: 2px solid #55a5ff;
+      // border-left: 2px solid $tc-dark-blue-70;
       display: flex;
       flex: 0 0 44px;
       justify-content: center;
@@ -58,7 +58,7 @@
         }
 
         > strong {
-          color: #000;
+          color: $tc-black;
           font-weight: bold;
         }
       }

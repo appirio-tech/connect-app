@@ -19,6 +19,7 @@ import './RichTextArea.scss'
 import 'draft-js-mention-plugin/lib/plugin.css'
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'
 import _ from 'lodash'
+import { getAvatarResized } from '../../helpers/tcHelpers'
 
 const linkPlugin = createLinkPlugin()
 const blockDndPlugin = createBlockDndPlugin()
@@ -227,7 +228,7 @@ class RichTextArea extends React.Component {
 
     const content = this.state.currentMDContent
 
-    if ((this.props.disableTitle || title) && content) {
+    if ((this.props.disableTitle || title) && (this.props.disableContent || content)) {
       this.props.onPost({title, content})
     }
   }
@@ -252,17 +253,19 @@ class RichTextArea extends React.Component {
   }
   render() {
     const {MentionSuggestions} = this.mentionPlugin
-    const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating, isGettingComment, disableTitle} = this.props
+    const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating,
+      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic } = this.props
     const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading} = this.state
     let canSubmit = (disableTitle || titleValue.trim())
-        && editorState.getCurrentContent().hasText()
+        && (disableContent || editorState.getCurrentContent().hasText())
     if (editMode && canSubmit) {
-      canSubmit = (!disableTitle && titleValue !== this.props.oldTitle) || oldMDContent !== currentMDContent
+      canSubmit = (!disableTitle && titleValue !== this.props.oldTitle) || (!disableContent && oldMDContent !== currentMDContent)
     }
     const currentStyle = editorState.getCurrentInlineStyle()
     const blockType = RichUtils.getCurrentBlockType(editorState)
     const currentEntity = getCurrentEntity(editorState)
     const disableForCodeBlock = blockType === 'code-block'
+    const editButtonText = editingTopic ? 'Update title' : 'Update post' 
 
     const Entry = (props) => {
       const {
@@ -298,19 +301,21 @@ class RichTextArea extends React.Component {
         }
         <a href="javascript:" className="btn-close" />
         <div className="modal-row">
-          <div className="portrait">
-            <Avatar avatarUrl={avatarUrl} userName={authorName} />
-          </div>
+          {avatarUrl &&
+            <div className="portrait">
+              <Avatar avatarUrl={getAvatarResized(avatarUrl, 30)} userName={authorName} />
+            </div>
+          }
           <div className={cn('object', {comment: disableTitle}, 'commentEdit')}>
             <input
               ref="title" value={titleValue}
               className={cn('new-post-title', {'hide-title': disableTitle})}
               type="text"
               onChange={this.onTitleChange}
-              placeholder={titlePlaceholder || 'Title of the post'}
+              placeholder={editorExpanded ? expandedTitlePlaceholder : titlePlaceholder || 'Title of the post'}
             />
             <div className="draftjs-editor tc-textarea">
-              {!isGettingComment &&
+              {!disableContent && !isGettingComment &&
                 <div>
                   <Editor
                     ref="editor"
@@ -330,72 +335,76 @@ class RichTextArea extends React.Component {
                 </div>
               }
               <div className="textarea-footer">
-                <div className="textarea-buttons">
-                  {styles.map((item) => (
-                    <button
-                      key={item.style}
-                      disabled={disableForCodeBlock}
-                      onMouseDown={(e) => {
-                        this.toggleInlineStyle(item.style)
-                        e.preventDefault()
-                      }}
-                    >
-                      {
-                        EditorIcons.render(item.className, currentStyle.has(item.style))
+                <div className="textarea-footer-inner">
+                  {!disableContent &&
+                    <div className="textarea-buttons">
+                      {styles.map((item) => (
+                        <button
+                          key={item.style}
+                          disabled={disableForCodeBlock}
+                          onMouseDown={(e) => {
+                            this.toggleInlineStyle(item.style)
+                            e.preventDefault()
+                          }}
+                        >
+                          {
+                            EditorIcons.render(item.className, currentStyle.has(item.style))
+                          }
+                        </button>
+                      ))}
+                      <div className="separator"/>
+                      {blocks.map((item) => (
+                        <button
+                          disabled={item.style !== 'code-block' && disableForCodeBlock}
+                          key={item.style}
+                          onMouseDown={(e) => {
+                            this.toggleBlockType(item.style)
+                            e.preventDefault()
+                          }}
+                        >
+                          {
+                            EditorIcons.render(item.className, item.style === blockType)
+                          }
+                        </button>
+                      ))}
+                      <AddLinkButton
+                        type={'link'}
+                        getEditorState={this.getEditorState}
+                        setEditorState={this.setEditorState}
+                        disabled={disableForCodeBlock}
+                        active={currentEntity && 'LINK' === currentEntity.getType()}
+                      />
+                      { allowImages && <div className="separator"/> }
+                      { allowImages &&
+                        <AddLinkButton
+                          type={'image'}
+                          getEditorState={this.getEditorState}
+                          setEditorState={this.setEditorState}
+                          disabled={disableForCodeBlock}
+                        />
                       }
-                    </button>
-                  ))}
-                  <div className="separator"/>
-                  {blocks.map((item) => (
-                    <button
-                      disabled={item.style !== 'code-block' && disableForCodeBlock}
-                      key={item.style}
-                      onMouseDown={(e) => {
-                        this.toggleBlockType(item.style)
-                        e.preventDefault()
-                      }}
-                    >
-                      {
-                        EditorIcons.render(item.className, item.style === blockType)
-                      }
-                    </button>
-                  ))}
-                  <AddLinkButton
-                    type={'link'}
-                    getEditorState={this.getEditorState}
-                    setEditorState={this.setEditorState}
-                    disabled={disableForCodeBlock}
-                    active={currentEntity && 'LINK' === currentEntity.getType()}
-                  />
-                  <div className="separator"/>
-                  { allowImages &&
-                    <AddLinkButton
-                      type={'image'}
-                      getEditorState={this.getEditorState}
-                      setEditorState={this.setEditorState}
-                      disabled={disableForCodeBlock}
-                    />
+                    </div>
                   }
-                </div>
-                <div className="tc-btns">
-                  {!editMode &&
-                    <button className="tc-btn tc-btn-link tc-btn-sm btn-close-creat">Cancel</button>
-                  }
-                  {editMode && !isCreating &&
-                  <button className="tc-btn tc-btn-link tc-btn-sm" onClick={this.cancelEdit}>
-                    Cancel
+                  <div className="tc-btns">
+                    {!editMode &&
+                      <button className="tc-btn tc-btn-default tc-btn-sm btn-close-creat">Cancel</button>
+                    }
+                    {editMode && !isCreating &&
+                    <button className="tc-btn tc-btn-default tc-btn-sm" onClick={this.cancelEdit}>
+                      Cancel
+                    </button>
+                    }
+                    { editMode &&
+                  <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
+                    { isCreating ? 'Saving...' : editButtonText }
                   </button>
-                  }
-                  { editMode &&
-                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
-                  { isCreating ? 'Saving...' : 'Save changes' }
-                </button>
-                  }
-                  { !editMode &&
-                <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
-                  { isCreating ? 'Posting...' : 'Post' }
-                </button>
-                  }
+                    }
+                    { !editMode &&
+                  <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
+                    { isCreating ? 'Posting...' : 'Post' }
+                  </button>
+                    }
+                  </div>
                 </div>
               </div>
             </div>
@@ -407,11 +416,13 @@ class RichTextArea extends React.Component {
 }
 
 RichTextArea.propTypes = {
+  expandedTitlePlaceholder: PropTypes.string,
   onPost: PropTypes.func.isRequired,
   onPostChange: PropTypes.func.isRequired,
   cancelEdit: PropTypes.func,
   isCreating: PropTypes.bool,
   disableTitle: PropTypes.bool,
+  disableContent: PropTypes.bool,
   editMode:PropTypes.bool,
   hasError: PropTypes.bool,
   avatarUrl: PropTypes.string,
@@ -423,7 +434,8 @@ RichTextArea.propTypes = {
   oldContent: PropTypes.string,
   title: PropTypes.string,
   content: PropTypes.string,
-  allMembers: PropTypes.object
+  allMembers: PropTypes.object,
+  editingTopic: PropTypes.bool
 }
 
 export default RichTextArea

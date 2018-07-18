@@ -1,0 +1,11 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  @include tc-label-sm;
+  color: $tc-gray-50;
+  margin: 4 * $base_unit 0;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    padding: 0 4 * $base_unit;
+  }
+}

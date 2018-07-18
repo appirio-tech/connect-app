@@ -1,0 +1,11 @@
+@mixin stand-alone-item-shadow {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.20000000298023224);
+}
+
+@mixin group-list-item-shadow {
+  box-shadow: 0 1px 1px 0 $tc-gray-70;
+}
+
+@mixin modal-shadow {
+  box-shadow: 0 5px 35px 5px rgba($tc-black, 0.10000000149011612), 0 10px 14px 0 rgba($tc-black, 0.30000001192092896);
+}

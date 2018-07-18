@@ -61,6 +61,37 @@ export function getProjectById(projectId) {
 }
 
 /**
+ * Get project phases
+ *
+ * @param {String} projectId project id
+ *
+ * @return {Promise} resolves to project phases
+ */
+export function getProjectPhases(projectId, existingPhases) {
+  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases`)
+    .then(resp => {
+      const res = _.get(resp.data, 'result.content', {})
+      return {phases: res, existingPhases: existingPhases || []}
+    })
+}
+
+/**
+ * Get project phase products
+ *
+ * @param {String} projectId project id
+ * @param {String} phaseId   phase id
+ *
+ * @return {Promise} resolves to project phase products
+ */
+export function getPhaseProducts(projectId, phaseId) {
+  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}/products`)
+    .then(resp => {
+      const res = _.get(resp.data, 'result.content', {})
+      return res
+    })
+}
+
+/**
  * Update project using patch
  * @param  {integer} projectId    project Id
  * @param  {object} updatedProps updated project properties
@@ -74,6 +105,40 @@ export function updateProject(projectId, updatedProps, updateExisting) {
     })
 }
 
+/**
+ * Update phase using patch
+ * @param  {integer} projectId    project Id
+ * @param  {integer} phaseId    phase Id
+ * @param  {object} updatedProps updated phase properties
+ * @param  {integer} phaseIndex index of phase in phase list redux store
+ * @return {promise}              updated phase
+ */
+export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
+  return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}`, { param: updatedProps })
+    .then(resp => {
+      return _.extend(_.get(resp.data, 'result.content'), {phaseIndex})
+    })
+}
+
+/**
+ * Update product using patch
+ *
+ * @param  {Number} projectId    project Id
+ * @param  {Number} phaseId      phase Id
+ * @param  {Number} productId    product Id
+ * @param  {Object} updatedProps updated project properties
+ *
+ * @return {Promise}             updated product
+ */
+export function updateProduct(projectId, phaseId, productId, updatedProps) {
+  return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}/products/${productId}`, {
+    param: updatedProps,
+  })
+    .then(resp => {
+      return _.get(resp.data, 'result.content')
+    })
+}
+
 
 export function createProject(projectProps) {
   // Phase out discussions
@@ -82,6 +147,37 @@ export function createProject(projectProps) {
   projectProps.details.hideDiscussions = true
 
   return axios.post(`${PROJECTS_API_URL}/v4/projects/`, { param: projectProps })
+    .then( resp => {
+      return _.get(resp.data, 'result.content', {})
+    })
+}
+
+/**
+ * Create new phase for project
+ *
+ * @param {String} projectId project id
+ * @param {Object} phase     new phase
+ *
+ * @return {Promise} resolves to new phase
+ */
+export function createProjectPhase(projectId, phase) {
+  return axios.post(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases`, { param: phase })
+    .then( resp => {
+      return _.get(resp.data, 'result.content', {})
+    })
+}
+
+/**
+ * Create new product for project's phase
+ *
+ * @param {String} projectId project id
+ * @param {String} phaseId   phase id
+ * @param {Object} product   new product
+ *
+ * @return {Promise} resolves to new product
+ */
+export function createPhaseProduct(projectId, phaseId, product) {
+  return axios.post(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}/products`, { param: product })
     .then( resp => {
       return _.get(resp.data, 'result.content', {})
     })
@@ -123,4 +219,9 @@ export function getDirectProjectData(directProjectId) {
     .then(resp => {
       return resp.data.result.content
     })
+}
+
+export function deleteProjectPhase(projectId, phaseId) {
+  return axios.delete(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}`)
+    .then(() => ({ projectId, phaseId }))
 }

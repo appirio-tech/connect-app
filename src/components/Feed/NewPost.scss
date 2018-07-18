@@ -1,0 +1,51 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .new-post-composer {
+    margin-bottom: 10px;
+
+    .btn-close {
+      display: none;
+    }
+
+    &.modal {
+      padding-bottom: 0;
+      padding-top: 2 * $base-unit;
+    }
+
+    &.modal .modal-row {
+      padding-bottom: 0px;
+
+      &:hover {
+        background-color: transparent;
+      }
+
+      .new-post-title {
+        font-size: 20px;
+        margin-bottom: 2 * $base-unit;
+      }
+    }
+
+    .draftjs-editor {
+      display: none;
+    }
+
+    &.expanded {
+      .btn-close {
+        display: block;
+      }
+
+      input {
+        margin-bottom: 2 * $base-unit;
+      }
+
+      .draftjs-editor {
+        display: block;
+      }
+    }
+
+    &.expanded.modal {
+      background-color: $tc-gray-neutral-light;
+    }
+  }
+}
