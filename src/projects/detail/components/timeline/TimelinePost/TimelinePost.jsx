@@ -123,7 +123,7 @@ class TimelinePost extends React.Component {
     const startDate = moment(milestone.startDate)
     const month = startDate.format('MMM')
     const date = startDate.format('D')
-    const title = milestone.type
+    const title = milestone.name
     const description = milestone.description
 
     let contentList = []
@@ -190,8 +190,9 @@ class TimelinePost extends React.Component {
           {!isEditing && !isUpdating && (milestone.type === 'community-work' || milestone.type === 'community-review') && (
             <MilestoneTypeProgress
               milestone={milestone}
-              updateMilestone={updateMilestone}
+              updateMilestoneContent={this.updateMilestoneContent}
               completeMilestone={completeMilestone}
+              currentUser={currentUser}
             />
           )}
 

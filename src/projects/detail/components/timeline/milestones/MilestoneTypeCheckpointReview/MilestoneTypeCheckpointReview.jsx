@@ -302,8 +302,6 @@ class MilestoneTypeCheckpointReview extends React.Component {
                     milestonePostLink={link.url}
                     milestonePostTitle={link.title}
                     milestoneType={link.type}
-                    isUpdating={milestone.isUpdating}
-                    isActive={isActive}
                     {...!isInReview ? {
                       deletePost: this.removeUrl,
                       updatePost: this.updatedUrl,

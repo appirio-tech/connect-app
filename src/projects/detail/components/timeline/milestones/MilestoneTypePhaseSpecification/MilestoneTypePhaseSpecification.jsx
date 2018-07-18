@@ -15,7 +15,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
     super(props)
 
     this.state = {
-      isAdding: false
+      isAddingLink: false
     }
 
     this.updatedUrl = this.updatedUrl.bind(this)
@@ -27,10 +27,10 @@ class MilestoneTypePhaseSpecification extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { milestone } = this.props
-    const { isAdding } = this.state
+    const { isAddingLink } = this.state
 
     if (
-      isAdding && milestone.isUpdating &&
+      isAddingLink && milestone.isUpdating &&
       !nextProps.milestone.isUpdating && !nextProps.error
     ) {
       this.closeEditForm()
@@ -39,12 +39,12 @@ class MilestoneTypePhaseSpecification extends React.Component {
 
   /**add link to this */
   openEditForm() {
-    this.setState({isAdding: true})
+    this.setState({isAddingLink: true})
   }
 
   /**close edit ui */
   closeEditForm() {
-    this.setState({ isAdding: false })
+    this.setState({ isAddingLink: false })
   }
 
   /**update link */
@@ -70,7 +70,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
 
   render() {
     const { milestone, theme, currentUser } = this.props
-    const { isAdding } = this.state
+    const { isAddingLink } = this.state
 
     const specificationUrl = _.get(milestone, 'details.content.specificationUrl')
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
@@ -94,7 +94,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
               </div>
             )}
 
-            {isAdding && (
+            {isAddingLink && (
               <div styleName="top-space">
                 <SubmissionEditLink
                   callbackCancel={this.closeEditForm}
@@ -106,7 +106,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
               </div>
             )}
 
-            {!specificationUrl && !isAdding && (
+            {!specificationUrl && !isAddingLink && (
               <div styleName="top-space button-add-layer">
                 <button
                   className="tc-btn tc-btn-default tc-btn-sm action-btn"
@@ -136,10 +136,12 @@ class MilestoneTypePhaseSpecification extends React.Component {
         {isCompleted && (
           <div>
             {!!specificationUrl && (
-              <MilestonePost
-                milestonePostLink={specificationUrl}
-                milestoneType="specification"
-              />
+              <div styleName="top-space">
+                <MilestonePost
+                  milestonePostLink={specificationUrl}
+                  milestoneType="specification"
+                />
+              </div>
             )}
           </div>
         )}

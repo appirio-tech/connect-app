@@ -32,6 +32,7 @@ function mockMilestone(timelineId, milestoneId, type, status) {
 
     const milestone = {
       id: milestoneId,
+      name: type.split('-').join(' '),
       description: 'Please review and answer all the questions on the specification document before we can proceed',
       startDate: startDate.format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
       endDate: endDate.format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
@@ -40,7 +41,11 @@ function mockMilestone(timelineId, milestoneId, type, status) {
       type,
       details:  status === 'completed' ? {
         content: {
-          specificationUrl: 'ass'
+          specificationUrl: 'http://drive.google.com',
+          links: [
+            { title: 'link 1', url: 'http://google.com', type: 'only-text' },
+            { title: 'link 2', url: 'http://twitter.com', type: 'only-text' }
+          ]
         },
       } : {},
       timelineId,
@@ -59,7 +64,7 @@ function mockMilestone(timelineId, milestoneId, type, status) {
 
 mockMilestone.timelines = {}
 mockMilestone.id = 0
-mockMilestone.startDate = moment().subtract(16, 'days')
+mockMilestone.startDate = moment().subtract(14, 'days')
 
 /**
  * Get timeline by reference
@@ -86,8 +91,9 @@ export function getTimelinesByReference(reference, referenceId) {
 
 export function getTimelineMilestones(timelineId) {
   return mockResponse([
-    mockMilestone(timelineId, null, 'phase-specification', 'active'),
-    mockMilestone(timelineId, null, 'community-work', 'planned'),
+    mockMilestone(timelineId, null, 'phase-specification', 'completed'),
+    mockMilestone(timelineId, null, 'community-work', 'completed'),
+    mockMilestone(timelineId, null, 'community-review', 'active'),
     mockMilestone(timelineId, null, 'checkpoint-review', 'planned'),
   ])
 
