@@ -31,6 +31,8 @@ class TimelinePost extends React.Component {
     this.closeEditForm = this.closeEditForm.bind(this)
     this.updateMilestoneWithData = this.updateMilestoneWithData.bind(this)
     this.updateMilestoneContent = this.updateMilestoneContent.bind(this)
+    this.completeMilestone = this.completeMilestone.bind(this)
+    this.extendMilestone = this.extendMilestone.bind(this)
 
     this.state = {
       activeMenu: '',
@@ -99,6 +101,18 @@ class TimelinePost extends React.Component {
     updateMilestone(milestone.id, updatedMilestone)
   }
 
+  completeMilestone(updatedProps) {
+    const { completeMilestone, milestone } = this.props
+
+    completeMilestone(milestone.id, updatedProps)
+  }
+
+  extendMilestone(extendDuration, updatedProps) {
+    const { extendMilestone, milestone } = this.props
+
+    extendMilestone(milestone.id, extendDuration, updatedProps)
+  }
+
   getDescription() {
     const { milestone } = this.props
 
@@ -110,8 +124,6 @@ class TimelinePost extends React.Component {
       editableData,
       isUpdating,
       milestone,
-      updateMilestone,
-      completeMilestone,
       extendMilestone,
       currentUser,
     } = this.props
@@ -119,12 +131,10 @@ class TimelinePost extends React.Component {
 
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
-    const isPlanned = milestone.status === MILESTONE_STATUS.PLANNED
     const startDate = moment(milestone.startDate)
     const month = startDate.format('MMM')
     const date = startDate.format('D')
     const title = milestone.name
-    const description = milestone.description
 
     let contentList = []
     contentList = this.state.contentList ? this.state.contentList : []
@@ -182,7 +192,7 @@ class TimelinePost extends React.Component {
             <MilestoneTypePhaseSpecification
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
-              completeMilestone={completeMilestone}
+              completeMilestone={this.completeMilestone}
               currentUser={currentUser}
             />
           )}
@@ -191,7 +201,7 @@ class TimelinePost extends React.Component {
             <MilestoneTypeProgress
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
-              completeMilestone={completeMilestone}
+              completeMilestone={this.completeMilestone}
               currentUser={currentUser}
             />
           )}
@@ -200,8 +210,9 @@ class TimelinePost extends React.Component {
             <MilestoneTypeCheckpointReview
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
-              extendMilestone={extendMilestone}
-              completeMilestone={completeMilestone}
+              extendMilestone={this.extendMilestone}
+              completeMilestone={this.completeMilestone}
+              currentUser={currentUser}
             />
           )}
 

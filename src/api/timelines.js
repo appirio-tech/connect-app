@@ -39,13 +39,14 @@ function mockMilestone(timelineId, milestoneId, type, status) {
       duration: 15,
       status,
       type,
-      details:  status === 'completed' ? {
+      details: status === 'active' ? {
         content: {
           specificationUrl: 'http://drive.google.com',
           links: [
             { title: 'link 1', url: 'http://google.com', type: 'only-text' },
             { title: 'link 2', url: 'http://twitter.com', type: 'only-text' }
-          ]
+          ],
+          isInReview: true,
         },
       } : {},
       timelineId,
@@ -64,7 +65,7 @@ function mockMilestone(timelineId, milestoneId, type, status) {
 
 mockMilestone.timelines = {}
 mockMilestone.id = 0
-mockMilestone.startDate = moment().subtract(14, 'days')
+mockMilestone.startDate = moment().subtract(17, 'days')
 
 /**
  * Get timeline by reference
@@ -93,8 +94,8 @@ export function getTimelineMilestones(timelineId) {
   return mockResponse([
     mockMilestone(timelineId, null, 'phase-specification', 'completed'),
     mockMilestone(timelineId, null, 'community-work', 'completed'),
-    mockMilestone(timelineId, null, 'community-review', 'active'),
-    mockMilestone(timelineId, null, 'checkpoint-review', 'planned'),
+    mockMilestone(timelineId, null, 'community-review', 'completed'),
+    mockMilestone(timelineId, null, 'checkpoint-review', 'active'),
   ])
 
   return axios.get(`${TC_API_URL}/v4/timelines/${timelineId}/milestones`)

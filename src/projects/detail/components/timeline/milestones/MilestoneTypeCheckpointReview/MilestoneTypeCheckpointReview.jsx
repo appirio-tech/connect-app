@@ -65,10 +65,16 @@ class MilestoneTypeCheckpointReview extends React.Component {
   completeReview() {
     const { milestone, completeMilestone } = this.props
     const { selectedLinks } = this.state
+    const minSelectedDesigns = this.getMinSelectedDesigns()
     const links = _.get(milestone, 'details.content.links', [])
 
+    if (selectedLinks.length < minSelectedDesigns) {
+      this.setState({ isSelectWarningVisible: true })
+      return
+    }
+
     // when we change status to completed, we also save which links were selected
-    completeMilestone(milestone.id, {
+    completeMilestone({
       details: {
         ...milestone.details,
         content: {
@@ -152,7 +158,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
     const content = _.get(milestone, 'details.content')
     const extensionRequest = _.get(milestone, 'details.content.extensionRequest')
 
-    extendMilestone(milestone.id, extensionRequest.duration, {
+    extendMilestone(extensionRequest.duration, {
       details: {
         ...milestone.details,
         content: {
@@ -233,8 +239,20 @@ class MilestoneTypeCheckpointReview extends React.Component {
   }
 
   render() {
-    const { milestone, theme } = this.props
-    const { selectedLinks, isAddingNewLink, isSelectWarningVisible, isRejectedExpanded } = this.state
+    const {
+      milestone,
+      theme,
+      currentUser,
+    } = this.props
+    const {
+      selectedLinks,
+      isAddingNewLink,
+      isSelectWarningVisible,
+      isRejectedExpanded,
+      isShowExtensionRequestMessage,
+      isShowCompleteConfirmMessage,
+      isShowExtensionConfirmMessage,
+    } = this.state
 
     const links = _.get(milestone, 'details.content.links', [])
     const isInReview = _.get(milestone, 'details.content.isInReview', false)
@@ -265,6 +283,9 @@ class MilestoneTypeCheckpointReview extends React.Component {
           'in-progress': isActive
         })}
       >
+        {/*
+          Active status
+         */}
         {isActive && (
           <div>
             <span styleName="dot" />
@@ -277,13 +298,15 @@ class MilestoneTypeCheckpointReview extends React.Component {
                   theme="light"
                   readyForReview
                 >
-                  <button
-                    onClick={this.moveToReviewingState}
-                    className="tc-btn tc-btn-primary"
-                    disabled={links.length === 0}
-                  >
-                    Ready for review
-                  </button>
+                  {!currentUser.isCustomer && (
+                    <button
+                      onClick={this.moveToReviewingState}
+                      className="tc-btn tc-btn-primary"
+                      disabled={links.length === 0}
+                    >
+                      Ready for review
+                    </button>
+                  )}
                 </ProjectProgress>
               </div>)
             }
@@ -294,7 +317,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
               </header>)
             }
 
-            {links.map((link, index) => (
+            {(isInReview || !currentUser.isCustomer) && links.map((link, index) => (
               <div styleName="content-link-wrap separation-sm" key={index}>
                 <div styleName="add-specification-wrap separation-sm">
                   <MilestonePost
@@ -330,7 +353,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
               </div>
             )}
 
-            {!isInReview && !isAddingNewLink && (
+            {!currentUser.isCustomer && !isInReview && !isAddingNewLink && (
               <div styleName="separation-sm">
                 <MilestonePostSpecification
                   label={'Add a design link'}
@@ -340,7 +363,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
               </div>
             )}
 
-            {this.state.isShowExtensionRequestMessage && (
+            {isShowExtensionRequestMessage && (
               <div styleName="separation-sm">
                 <MilestonePostMessage
                   label={'Milestone extension request'}
@@ -373,7 +396,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
               </div>
             )}
 
-            {this.state.isShowCompleteConfirmMessage && (
+            {isShowCompleteConfirmMessage && (
               <div styleName="separation-sm">
                 <MilestonePostMessage
                   label={'Complete milestone review'}
@@ -396,23 +419,25 @@ class MilestoneTypeCheckpointReview extends React.Component {
 
             {
               !isCompleted &&
-              !this.state.isShowExtensionRequestMessage &&
-              !this.state.isShowExtensionConfirmMessage &&
-              !this.state.isShowCompleteConfirmMessage &&
+              !isShowExtensionRequestMessage &&
+              !isShowExtensionConfirmMessage &&
+              !isShowCompleteConfirmMessage &&
             (
               <div styleName="action-bar hide-progress-bar" className="flex center">
-                <button
-                  className={'tc-btn tc-btn-primary'}
-                  onClick={this.showCompleteReviewConfirmation}
-                  disabled={!isInReview}
-                >
-                  Complete review ({
-                    daysLeft >= 0
-                      ? `${hoursLeft}h remaining`
-                      : `${-daysLeft}h delay`
-                  })
-                </button>
-                {!extensionRequest && (
+                {(!currentUser.isCustomer || isInReview) && (
+                  <button
+                    className={'tc-btn tc-btn-primary'}
+                    onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.completeReview}
+                    disabled={!isInReview}
+                  >
+                    Complete review ({
+                      daysLeft >= 0
+                        ? `${hoursLeft}h remaining`
+                        : `${-daysLeft}h delay`
+                    })
+                  </button>
+                )}
+                {!currentUser.isCustomer && !extensionRequest && (
                   <button
                     className={'tc-btn tc-btn-warning'}
                     onClick={this.showExtensionRequestMessage}
@@ -422,10 +447,12 @@ class MilestoneTypeCheckpointReview extends React.Component {
                 )}
               </div>
             )}
-
           </div>
         )}
 
+        {/*
+          Completed status
+         */}
         {isCompleted && (
           <div>
             <header styleName={'milestone-heading selected-theme'}>
@@ -446,7 +473,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
             ))}
 
             <header
-              styleName={'milestone-heading rejected-theme sepeartion-md  no-line ' + (this.state.isRejectedExpanded ? 'open' : 'close')}
+              styleName={'milestone-heading rejected-theme sepeartion-md  no-line ' + (isRejectedExpanded ? 'open' : 'close')}
               onClick={this.toggleRejectedSection}
             >
               Rejected designs

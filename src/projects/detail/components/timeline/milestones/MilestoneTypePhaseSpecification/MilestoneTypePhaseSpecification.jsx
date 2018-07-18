@@ -22,7 +22,6 @@ class MilestoneTypePhaseSpecification extends React.Component {
     this.closeEditForm = this.closeEditForm.bind(this)
     this.openEditForm = this.openEditForm.bind(this)
     this.removeUrl = this.removeUrl.bind(this)
-    this.completeMilestone = this.completeMilestone.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -62,14 +61,8 @@ class MilestoneTypePhaseSpecification extends React.Component {
     }
   }
 
-  completeMilestone() {
-    const { milestone, completeMilestone } = this.props
-
-    completeMilestone(milestone.id)
-  }
-
   render() {
-    const { milestone, theme, currentUser } = this.props
+    const { milestone, theme, currentUser, completeMilestone } = this.props
     const { isAddingLink } = this.state
 
     const specificationUrl = _.get(milestone, 'details.content.specificationUrl')
@@ -121,7 +114,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
               <div styleName="top-space button-layer">
                 <button
                   className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-                  onClick={this.completeMilestone}
+                  onClick={completeMilestone}
                 >
                   Mark as completed
                 </button>
