@@ -152,7 +152,12 @@ class MilestonePost extends React.Component {
 
             {props.milestoneType === 'specification' && (
               <div styleName="group-right only-text hide-sm">
-                <a href={props.milestonePostLink} styleName="milestone-text hide-sm">
+                <a
+                  href={props.milestonePostLink}
+                  styleName="milestone-text hide-sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {props.milestonePostLink}
                 </a>
               </div>)

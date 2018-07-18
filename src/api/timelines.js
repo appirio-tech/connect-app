@@ -45,10 +45,10 @@ function mockMilestone(timelineId, milestoneId, type, status) {
       } : {},
       timelineId,
       order: 1,
-      plannedText: 'dummy plannedText',
-      activeText: 'dummy activeText',
+      plannedText: 'Before we can launch the actual work, we have to complete the phase technical details. Your copilot will reach out shortly to discuss the phase specification with you. Please monitor your phase communication thread for updates.',
+      activeText: 'Please review and answer all the questions on the specification document before we can proceed.',
       blockedText: 'dummy blockedText',
-      completedText: 'dummy completedText',
+      completedText: 'Great job! We\'re ready to roll. Work on this project phase would begin shortly.',
     }
 
     timeline[milestoneId] = milestone
@@ -86,9 +86,9 @@ export function getTimelinesByReference(reference, referenceId) {
 
 export function getTimelineMilestones(timelineId) {
   return mockResponse([
-    mockMilestone(timelineId, null, 'phase-specification', 'completed'),
-    mockMilestone(timelineId, null, 'community-work', 'completed'),
-    mockMilestone(timelineId, null, 'checkpoint-review', 'active'),
+    mockMilestone(timelineId, null, 'phase-specification', 'active'),
+    mockMilestone(timelineId, null, 'community-work', 'planned'),
+    mockMilestone(timelineId, null, 'checkpoint-review', 'planned'),
   ])
 
   return axios.get(`${TC_API_URL}/v4/timelines/${timelineId}/milestones`)

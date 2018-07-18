@@ -15,7 +15,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
     super(props)
 
     this.state = {
-      isEditing: false
+      isAdding: false
     }
 
     this.updatedUrl = this.updatedUrl.bind(this)
@@ -27,10 +27,10 @@ class MilestoneTypePhaseSpecification extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { milestone } = this.props
-    const { isEditing } = this.state
+    const { isAdding } = this.state
 
     if (
-      isEditing && milestone.isUpdating &&
+      isAdding && milestone.isUpdating &&
       !nextProps.milestone.isUpdating && !nextProps.error
     ) {
       this.closeEditForm()
@@ -39,24 +39,20 @@ class MilestoneTypePhaseSpecification extends React.Component {
 
   /**add link to this */
   openEditForm() {
-    this.setState({isEditing: true})
+    this.setState({isAdding: true})
   }
 
   /**close edit ui */
   closeEditForm() {
-    this.setState({ isEditing: false })
+    this.setState({ isAdding: false })
   }
 
   /**update link */
   updatedUrl(values) {
-    const { milestone, updateMilestone } = this.props
+    const { updateMilestoneContent } = this.props
 
-    updateMilestone(milestone.id, {
-      details: {
-        content: {
-          specificationUrl: values.url,
-        }
-      }
+    updateMilestoneContent({
+      specificationUrl: values.url,
     })
   }
 
@@ -73,61 +69,81 @@ class MilestoneTypePhaseSpecification extends React.Component {
   }
 
   render() {
-    const { milestone, theme } = this.props
+    const { milestone, theme, currentUser } = this.props
+    const { isAdding } = this.state
 
     const specificationUrl = _.get(milestone, 'details.content.specificationUrl')
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
+    const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
 
     return (
-      <div
-        styleName={cn('milestone-post', {
-          [theme]: !!theme,
-        })}
-      >
-        {!specificationUrl && !this.state.isEditing && (
-          <div styleName="top-space button-add-layer">
-            <button
-              className="tc-btn tc-btn-default tc-btn-sm action-btn"
-              onClick={this.openEditForm}
-            >
-              {'Add specification document link'}
-            </button>
-          </div>)
-        }
+      <div styleName={cn('milestone-post', theme)}>
+        {/*
+          Active state
+         */}
+        {isActive && (
+          <div>
+            {!!specificationUrl && (
+              <div styleName="top-space">
+                <MilestonePost
+                  milestonePostLink={specificationUrl}
+                  milestoneType={'specification'}
+                  deletePost={this.removeUrl}
+                  updatePost={this.updatedUrl}
+                />
+              </div>
+            )}
 
-        {!!specificationUrl && (
-          <MilestonePost
-            milestonePostLink={specificationUrl}
-            milestoneType={'specification'}
-            deletePost={this.removeUrl}
-            updatePost={this.updatedUrl}
-            isUpdating={milestone.isUpdating}
-            isActive={isActive}
-          />
+            {isAdding && (
+              <div styleName="top-space">
+                <SubmissionEditLink
+                  callbackCancel={this.closeEditForm}
+                  defaultValues={{ url: specificationUrl }}
+                  callbackOK={this.updatedUrl}
+                  label="Specification document link"
+                  okButtonTitle="Add link"
+                />
+              </div>
+            )}
+
+            {!specificationUrl && !isAdding && (
+              <div styleName="top-space button-add-layer">
+                <button
+                  className="tc-btn tc-btn-default tc-btn-sm action-btn"
+                  onClick={this.openEditForm}
+                >
+                  Add specification document link
+                </button>
+              </div>
+            )}
+
+            {!currentUser.isCustomer && !!specificationUrl && (
+              <div styleName="top-space button-layer">
+                <button
+                  className="tc-btn tc-btn-primary tc-btn-sm action-btn"
+                  onClick={this.completeMilestone}
+                >
+                  Mark as completed
+                </button>
+              </div>)
+            }
+          </div>
         )}
 
-        {this.state.isEditing && (
-          <div styleName="top-space">
-            <SubmissionEditLink
-              callbackCancel={this.closeEditForm}
-              defaultValues={{ url: specificationUrl }}
-              callbackOK={this.updatedUrl}
-              label={'Specification document link'}
-              okButtonTitle={!specificationUrl ? 'Add link' : 'Save changes'}
-            />
-          </div>)
-        }
+        {/*
+          Completed state
+         */}
+        {isCompleted && (
+          <div>
+            {!!specificationUrl && (
+              <MilestonePost
+                milestonePostLink={specificationUrl}
+                milestoneType="specification"
+              />
+            )}
+          </div>
+        )}
 
-        {!!specificationUrl && isActive && (
-          <div styleName="top-space button-layer">
-            <button
-              className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-              onClick={this.completeMilestone}
-            >
-              Mark as completed
-            </button>
-          </div>)
-        }
       </div>
     )
   }

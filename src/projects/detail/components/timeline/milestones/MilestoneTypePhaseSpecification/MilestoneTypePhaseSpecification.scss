@@ -1,114 +1,24 @@
 @import '../../../../../../styles/includes';
 @import '~tc-ui/src/styles/tc-includes';
 
-// project-progress specific styles
 .milestone-post {
-  position: relative;
-  color: #151516;
-  height: auto;
-  min-height: $base-unit*10;
-  line-height: $base-unit*10;
   @include roboto;
-  font-weight: 400;
   font-size: 15px;
 
-  .hide-sm {
-    display: inline-block;
-  }
-
-  /* mobile view specific style */
-  @include viewSm {
-    height: auto;
-    border-radius: 0;
-    .hide-sm {
-      display: none;
-    }
-  }
-
   .top-space {
-    margin-top: 5px;
+    margin-top: $base-unit;
   }
 
   .button-add-layer {
     display: flex;
-    button {
-      margin: auto;
-    }
-
+    justify-content: center;
   }
 
   .button-layer {
-    background-color: #CEE6FF;
-    border-radius: 4px;
-    padding: 10px;
-    display: flex;
-
-    button {
-      margin: auto;
-    }
-  }
-
-  .label-layer {
-    background-color: #FAFAFB;
+    background-color: $tc-dark-blue-30;
     border-radius: 4px;
     display: flex;
-    height: inherit;
-    position: relative;
-    line-height: inherit;
-    padding-left: $base-unit*3;
-    z-index: 10;
-    overflow: hidden;
-    @include viewSm {
-      padding-right: $base-unit*7;
-    }
-    .span-one {
-      margin-left: 0;
-      background: url('../../../../../assets/icons/timeline-document.svg') 0 50% no-repeat;
-    }
-    .span-two {
-      margin-left: auto;
-      margin-right: 0;
-      background: url('../../../../../assets/icons/ui-pencil.svg') 0 50% no-repeat;
-    }
-    .span-three {
-      margin-left: 0;
-      margin-right: 0;
-      background: url('../../../../../assets/icons/ui-x-mark.svg') 0 50% no-repeat;
-    }
-    .group-right {
-      display: flex;
-      line-height: 50px;
-      justify-content: space-between;
-      text-align: right;
-      color: #808080;
-      @include viewSm {
-        min-width: 100px;
-
-        &.hide-sm{
-          display: none;
-        }
-      }
-    }
-    .label-specification {
-      padding-left: 36px;
-      position: relative;
-      background-size: '30px';
-    }
-  }
-
-  .milestone-text {
-    color: #808080;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 50px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    width: 100%;
-    text-align: left;
-    margin: auto 10px;
-    &:hover {
-      text-decoration: underline;
-    }
+    justify-content: center;
+    padding: 2 * $base-unit;
   }
 }

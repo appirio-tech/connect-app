@@ -73,6 +73,7 @@ class Timeline extends React.Component {
 
   render() {
     const {
+      currentUser,
       timeline,
     } = this.props
 
@@ -88,6 +89,7 @@ class Timeline extends React.Component {
           <TimelinePost
             key={milestone.id}
             {...formatTimelinePostProps(milestone)}
+            currentUser={currentUser}
             milestone={milestone}
             updateMilestone={this.updateMilestone}
             completeMilestone={this.completeMilestone}

@@ -124,8 +124,6 @@ export function extendProductMilestone(productId, timelineId, milestoneId, exten
     const endDate = moment(milestone.endDate)
     endDate.add(extendDuration, 'days')
 
-    console.warn('extendDuration', extendDuration)
-
     const requests = [
       updateMilestone(timelineId, milestoneId, {
         ...updatedProps, // optional props to update

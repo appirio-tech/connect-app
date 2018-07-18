@@ -99,8 +99,22 @@ class TimelinePost extends React.Component {
     updateMilestone(milestone.id, updatedMilestone)
   }
 
+  getDescription() {
+    const { milestone } = this.props
+
+    return milestone[`${milestone.status}Text`]
+  }
+
   render() {
-    const { editableData, isUpdating, milestone, updateMilestone, completeMilestone, extendMilestone } = this.props
+    const {
+      editableData,
+      isUpdating,
+      milestone,
+      updateMilestone,
+      completeMilestone,
+      extendMilestone,
+      currentUser,
+    } = this.props
     const { isEditing } = this.state
 
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
@@ -158,7 +172,7 @@ class TimelinePost extends React.Component {
           {!isEditing && (
             <div
               styleName="post-con"
-              dangerouslySetInnerHTML={{ __html: description }}
+              dangerouslySetInnerHTML={{ __html: this.getDescription() }}
             />)
           }
 
@@ -167,8 +181,9 @@ class TimelinePost extends React.Component {
           {!isEditing && !isUpdating && milestone.type === 'phase-specification' && (
             <MilestoneTypePhaseSpecification
               milestone={milestone}
-              updateMilestone={updateMilestone}
+              updateMilestoneContent={this.updateMilestoneContent}
               completeMilestone={completeMilestone}
+              currentUser={currentUser}
             />
           )}
 
