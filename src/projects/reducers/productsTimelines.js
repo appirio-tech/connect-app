@@ -12,6 +12,9 @@ import {
   COMPLETE_PRODUCT_MILESTONE_PENDING,
   COMPLETE_PRODUCT_MILESTONE_SUCCESS,
   COMPLETE_PRODUCT_MILESTONE_FAILURE,
+  EXTEND_PRODUCT_MILESTONE_PENDING,
+  EXTEND_PRODUCT_MILESTONE_SUCCESS,
+  EXTEND_PRODUCT_MILESTONE_FAILURE,
 
   MILESTONE_STATUS,
 } from '../../config/constants'
@@ -104,12 +107,14 @@ export const productsTimelines = (state=initialState, action) => {
     })
 
   case COMPLETE_PRODUCT_MILESTONE_PENDING:
+  case EXTEND_PRODUCT_MILESTONE_PENDING:
     return updateMilestone(state, meta.productId, meta.milestoneId, {
       isUpdating: { $set: true },
       error: { $set: false }
     })
 
-  case COMPLETE_PRODUCT_MILESTONE_SUCCESS: {
+  case COMPLETE_PRODUCT_MILESTONE_SUCCESS:
+  case EXTEND_PRODUCT_MILESTONE_SUCCESS: {
     let updatedState = updateMilestone(state, meta.productId, meta.milestoneId, payload[0], true)
 
     if (meta.nextMilestoneId) {
@@ -120,6 +125,7 @@ export const productsTimelines = (state=initialState, action) => {
   }
 
   case COMPLETE_PRODUCT_MILESTONE_FAILURE:
+  case EXTEND_PRODUCT_MILESTONE_FAILURE:
     return updateMilestone(state, meta.productId, meta.milestoneId, {
       isUpdating: { $set: false },
       error: { $set: false }

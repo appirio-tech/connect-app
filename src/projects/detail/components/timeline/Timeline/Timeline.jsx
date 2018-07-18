@@ -38,6 +38,7 @@ class Timeline extends React.Component {
 
     this.updateMilestone = this.updateMilestone.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
+    this.extendMilestone = this.extendMilestone.bind(this)
   }
 
   updateMilestone(milestoneId, values) {
@@ -60,6 +61,16 @@ class Timeline extends React.Component {
     completeProductMilestone(productId, timeline.id, milestoneId, updatedProps)
   }
 
+  extendMilestone(milestoneId, extendDuration, updatedProps = {}) {
+    const {
+      productId,
+      extendProductMilestone,
+      timeline,
+    } = this.props
+
+    extendProductMilestone(productId, timeline.id, milestoneId, extendDuration, updatedProps)
+  }
+
   render() {
     const {
       timeline,
@@ -80,6 +91,7 @@ class Timeline extends React.Component {
             milestone={milestone}
             updateMilestone={this.updateMilestone}
             completeMilestone={this.completeMilestone}
+            extendMilestone={this.extendMilestone}
           />
         ))}
       </div>

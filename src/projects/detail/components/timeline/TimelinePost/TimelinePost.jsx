@@ -1,5 +1,6 @@
 import React from 'react'
 import PT from 'prop-types'
+import _ from 'lodash'
 import moment from 'moment'
 import cn from 'classnames'
 
@@ -29,6 +30,7 @@ class TimelinePost extends React.Component {
     this.toggleEditLink = this.toggleEditLink.bind(this)
     this.closeEditForm = this.closeEditForm.bind(this)
     this.updateMilestoneWithData = this.updateMilestoneWithData.bind(this)
+    this.updateMilestoneContent = this.updateMilestoneContent.bind(this)
 
     this.state = {
       activeMenu: '',
@@ -81,8 +83,24 @@ class TimelinePost extends React.Component {
     updateMilestone(milestoneId, values)
   }
 
+  updateMilestoneContent(contentProps) {
+    const { updateMilestone, milestone } = this.props
+
+    const updatedMilestone = {
+      details: {
+        ...milestone.details,
+        content: {
+          ..._.get(milestone, 'details.content', {}),
+          ...contentProps,
+        },
+      }
+    }
+
+    updateMilestone(milestone.id, updatedMilestone)
+  }
+
   render() {
-    const { editableData, isUpdating, milestone, updateMilestone, completeMilestone } = this.props
+    const { editableData, isUpdating, milestone, updateMilestone, completeMilestone, extendMilestone } = this.props
     const { isEditing } = this.state
 
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
@@ -165,7 +183,8 @@ class TimelinePost extends React.Component {
           {!isEditing && !isUpdating && milestone.type === 'checkpoint-review' && (
             <MilestoneTypeCheckpointReview
               milestone={milestone}
-              updateMilestone={updateMilestone}
+              updateMilestoneContent={this.updateMilestoneContent}
+              extendMilestone={extendMilestone}
               completeMilestone={completeMilestone}
             />
           )}

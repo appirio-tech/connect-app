@@ -23,7 +23,7 @@
     height: 8px;
     left: -22px;
     top: calc(50% - 4px);
-    z-index: 11;
+    z-index: 2;
   }
   /* mobile view specific style */
   @include viewSm {
@@ -54,7 +54,7 @@
     line-height: inherit;
     padding-left: $base-unit*3;
     padding-right: $base-unit*3;
-    z-index: 10;
+    z-index: 1;
     padding: 5px 20px 15px 20px;
     @include viewSm {
       padding-right: $base-unit*7;

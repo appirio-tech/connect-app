@@ -12,6 +12,7 @@ import {
   LOAD_PRODUCT_TIMELINE_WITH_MILESTONES,
   UPDATE_PRODUCT_MILESTONE,
   COMPLETE_PRODUCT_MILESTONE,
+  EXTEND_PRODUCT_MILESTONE,
   MILESTONE_STATUS,
 } from '../../config/constants'
 
@@ -81,6 +82,8 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
       updateMilestone(timelineId, milestoneId, {
         ...updatedProps, // optional props to update
         status: MILESTONE_STATUS.COMPLETED,
+        endDate: moment().utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+        completionDate: moment().utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
       })
     ]
 
@@ -91,7 +94,7 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
 
       requests.push(
         updateMilestone(timelineId, nextMilestone.id, {
-          startDate: startDate.format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+          startDate: startDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
           duration: endDate.diff(startDate, 'days'),
           status: MILESTONE_STATUS.ACTIVE,
         })
@@ -100,6 +103,53 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
 
     return dispatch({
       type: COMPLETE_PRODUCT_MILESTONE,
+      payload: Promise.all(requests),
+      meta: {
+        productId,
+        milestoneId,
+        nextMilestoneId: nextMilestone ? nextMilestone.id : null,
+      }
+    })
+  }
+}
+
+export function extendProductMilestone(productId, timelineId, milestoneId, extendDuration, updatedProps = {}) {
+  return (dispatch, getState) => {
+    const timeline = getState().productsTimelines[productId]
+    const milestoneIdx = _.findIndex(timeline.timeline.milestones, { id: milestoneId })
+
+    // move current milestone endDate
+    const milestone = timeline.timeline.milestones[milestoneIdx]
+    const startDate = moment(milestone.startDate)
+    const endDate = moment(milestone.endDate)
+    endDate.add(extendDuration, 'days')
+
+    console.warn('extendDuration', extendDuration)
+
+    const requests = [
+      updateMilestone(timelineId, milestoneId, {
+        ...updatedProps, // optional props to update
+        endDate: endDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+        duration: endDate.diff(startDate, 'days'),
+      })
+    ]
+
+    // move next milestone startDate
+    const nextMilestone = timeline.timeline.milestones[milestoneIdx + 1]
+    if (nextMilestone) {
+      const startDate = endDate.clone().add(1, 'days')
+      const endDate = moment(nextMilestone.endDate)
+
+      requests.push(
+        updateMilestone(timelineId, nextMilestone.id, {
+          startDate: startDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+          duration: endDate.diff(startDate, 'days'),
+        })
+      )
+    }
+
+    return dispatch({
+      type: EXTEND_PRODUCT_MILESTONE,
       payload: Promise.all(requests),
       meta: {
         productId,
