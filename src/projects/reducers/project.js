@@ -209,7 +209,7 @@ export const projectState = function (state=initialState, action) {
       return p
     })
     // updates projects' attachments which are not coupled with any product/phase
-    let projectAttachments = []
+    const projectAttachments = []
     state.project.attachments.forEach(a => {
       if (!a.category || a.category.indexOf('product') !== 0) {
         projectAttachments.push(a)
