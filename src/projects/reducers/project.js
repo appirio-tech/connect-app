@@ -201,7 +201,6 @@ export const projectState = function (state=initialState, action) {
           state.project.attachments.forEach(a => {
             if (a.category === `product#${prd.id}`) {
               attachments.push(a)
-              // TODO remove `a` from project's attachments
             }
           })
         }
@@ -209,7 +208,16 @@ export const projectState = function (state=initialState, action) {
       })
       return p
     })
+    // updates projects' attachments which are not coupled with any product/phase
+    let projectAttachments = []
+    state.project.attachments.forEach(a => {
+      if (!a.category || a.category.indexOf('product') !== 0) {
+        projectAttachments.push(a)
+      }
+    })
     return update(state, {
+      project: { attachments : { $set : projectAttachments } },
+      projectNonDirty: { attachments: { $set: projectAttachments } },
       phases: { $set:phases },
       phasesNonDirty: { $set: action.payload },
       isLoadingPhases: { $set: false}
