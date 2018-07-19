@@ -121,7 +121,7 @@ export function getTopicsWithComments(reference, referenceId, tag, removeCoderBo
       if (removeCoderBotTopics) {
         //remove coderBot posts
         const rTopics = _.remove(topics, i =>
-          [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(i.userId) > -1
+          i.title.indexOf('Your project has been created, and we') === -1 && [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(i.userId) > -1
         )
         totalCount -= rTopics.length
       }
