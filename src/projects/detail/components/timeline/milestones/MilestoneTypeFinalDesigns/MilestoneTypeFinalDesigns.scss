@@ -1,0 +1,144 @@
+@import '../../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// project-progress specific styles
+.milestone-post-specification {
+  @include roboto;
+  font-size: 15px;
+
+  .dot {
+    position: absolute;
+    background-color: #ffffff;
+    border: 2px solid #aaaaab;
+    border-radius: 100%;
+    width: 8px;
+    height: 8px;
+    left: -22px;
+    top: 20px;
+    z-index: 2;
+  }
+
+  /* in-progress state */
+  &.in-progress {
+    .dot {
+      background-color: #ffffff;
+      border: 2px solid #0681ff;
+    }
+  }
+  /* completed state */
+  &.completed {
+    .dot {
+      background-color: #0681ff;
+      border: 2px solid #0681ff;
+    }
+  }
+  /* milestone heading */
+  .milestone-heading {
+    background-color: #CEE6FF;
+    border-radius: 4px 4px 0 0;
+    padding: 0 15px;
+    font-weight: 500;
+    height: 50px;
+    line-height: 50px;
+    position: relative;
+
+    &.no-line:before{
+      content: '';
+      width: 4px;
+      background-color: #fff;
+      position: absolute;
+      left: -20px;
+      top: -25px;
+      bottom: 0;
+    }
+
+    &.sepeartion-md{
+      margin-top: 5px;
+    }
+
+    &.selected-theme {
+      background-color: #ebebeb;
+      color: #151516;
+    }
+    &.rejected-theme {
+      background-color: #ebebeb;
+      color: #808080;
+    }
+    &.open {
+      cursor: pointer;
+
+        &:after {
+          content: '';
+          background: url('../../../assets/icons/arrow-minimal-right.svg') 0 50% no-repeat;
+          transform: rotate(90deg);
+          width: 16px;
+          height: 16px;
+          position: absolute;
+          top: 18px;
+          right: 12px;
+        }
+    }
+    &.close {
+      cursor: pointer;
+      border-radius: 4px;
+
+      &:after{
+        content: '';
+        background: url('../../../assets/icons/arrow-minimal-right.svg') 0 50% no-repeat;
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        top: 18px;
+        right: 12px;
+      }
+    }
+  }
+  .content-link-wrap {
+    display: block;
+    &.open {
+      display: block;
+    }
+    &.close {
+      display: none;
+    }
+  }
+  .add-specification-wrap {
+    margin-top: 10px;
+    &.separation-sm {
+      margin-top: 5px;
+    }
+  }
+  .separation-sm {
+    margin-top: 5px;
+  }
+  .hide-progress-bar {
+    :before {
+      content: '';
+      width: 4px;
+      background-color: #fff;
+      position: absolute;
+      left: -20px;
+      top: -25px;
+      bottom: 0;
+    }
+  }
+  .message-bar {
+    background-color: #fff8ca;
+    border-radius: 25px;
+    text-align: center;
+    font-size: 13px;
+    font-style: italic;
+    height: 25px;
+    line-height: 25px;
+    margin-top: 10px;
+    position: relative;
+  }
+  .action-bar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: relative;
+
+    button {
+      margin: 0px 5px;
+    }
+  }
+}

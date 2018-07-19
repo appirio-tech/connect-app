@@ -126,7 +126,7 @@
       height: 30px;
       background-color: #ebebeb;
       border-radius: 50%;
-      &.timeline-marvelapp {
+      &.marvelapp {
         background: url(../../../../../assets/icons/timeline-marvelapp.svg);
         background-size: 30px;
       }
@@ -195,7 +195,6 @@
   height: 30px;
   line-height: 30px;
   margin: 0 5px;
-  cursor: pointer;
   .checkbox-text {
     position: relative;
     width: 30px;
@@ -206,11 +205,15 @@
     line-height: 28px;
     border-radius: 35px;
     color: #0681FF;
+    cursor: pointer;
     font-size: 15px;
     font-weight: 500;
     text-align: center;
 
-    &.active{
+    &.active {
+      border: 1px solid transparent;
+      color: #554E48;
+      cursor: default;
       &.pos1{
         background-color: #FFD84D;
         box-shadow: inset 0 1px 3px 0 #C99014;
@@ -224,6 +227,7 @@
         box-shadow: inset 0 1px 3px 0 #854E29;
       }
     }
+
     &.inactive{
       background: transparent;
       box-shadow: none;

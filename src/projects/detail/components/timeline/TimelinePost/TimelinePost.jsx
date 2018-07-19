@@ -15,6 +15,7 @@ import WinnerSelection from '../WinnerSelection'
 import MilestoneTypePhaseSpecification from '../milestones/MilestoneTypePhaseSpecification'
 import MilestoneTypeProgress from '../milestones/MilestoneTypeProgress'
 import MilestoneTypeCheckpointReview from '../milestones/MilestoneTypeCheckpointReview'
+import MilestoneTypeFinalDesigns from '../milestones/MilestoneTypeFinalDesigns'
 
 import { MILESTONE_STATUS } from '../../../../../config/constants'
 
@@ -124,7 +125,6 @@ class TimelinePost extends React.Component {
       editableData,
       isUpdating,
       milestone,
-      extendMilestone,
       currentUser,
     } = this.props
     const { isEditing } = this.state
@@ -208,6 +208,16 @@ class TimelinePost extends React.Component {
 
           {!isEditing && !isUpdating && milestone.type === 'checkpoint-review' && (
             <MilestoneTypeCheckpointReview
+              milestone={milestone}
+              updateMilestoneContent={this.updateMilestoneContent}
+              extendMilestone={this.extendMilestone}
+              completeMilestone={this.completeMilestone}
+              currentUser={currentUser}
+            />
+          )}
+
+          {!isEditing && !isUpdating && milestone.type === 'final-designs' && (
+            <MilestoneTypeFinalDesigns
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
               extendMilestone={this.extendMilestone}

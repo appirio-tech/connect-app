@@ -9,34 +9,37 @@ import SubmissionEditLink from '../../SubmissionEditLink'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
 import MilestonePost from '../../MilestonePost'
+import WinnerSelectionBar from '../../WinnerSelectionBar'
 
 import {
   MILESTONE_STATUS,
-  MIN_CHECKPOINT_REVIEW_DESIGNS,
+  MIN_WINNER_DESIGNS,
 } from '../../../../../../config/constants'
 
-import './MilestoneTypeCheckpointReview.scss'
+import './MilestoneTypeFinalDesigns.scss'
 
-class MilestoneTypeCheckpointReview extends React.Component {
+class MilestoneTypeFinalDesigns extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
       selectedLinks: [],
+      places: [-1, -1, -1],
       isInReview: false,
       isAddingNewLink: false,
       isShowExtensionRequestMessage: false,
       isShowExtensionConfirmMessage: false,
       isShowCompleteConfirmMessage: false,
+      isShowCustomerCompleteConfirmMessage: false,
     }
 
     this.updatedUrl = this.updatedUrl.bind(this)
     this.removeUrl = this.removeUrl.bind(this)
-    this.updateSelected = this.updateSelected.bind(this)
     this.showCompleteReviewConfirmation = this.showCompleteReviewConfirmation.bind(this)
     this.hideCompleteReviewConfirmation = this.hideCompleteReviewConfirmation.bind(this)
+    this.showCustomerCompleteReviewConfirmation = this.showCustomerCompleteReviewConfirmation.bind(this)
+    this.hideCustomerCompleteReviewConfirmation = this.hideCustomerCompleteReviewConfirmation.bind(this)
     this.completeReview = this.completeReview.bind(this)
-    this.toggleRejectedSection = this.toggleRejectedSection.bind(this)
     this.addDesignLink = this.addDesignLink.bind(this)
     this.cancelAddingLink = this.cancelAddingLink.bind(this)
     this.showExtensionRequestMessage = this.showExtensionRequestMessage.bind(this)
@@ -45,13 +48,15 @@ class MilestoneTypeCheckpointReview extends React.Component {
     this.approveExtension = this.approveExtension.bind(this)
     this.declineExtension = this.declineExtension.bind(this)
     this.moveToReviewingState = this.moveToReviewingState.bind(this)
+    this.onBonusChange = this.onBonusChange.bind(this)
+    this.onPlaceChange = this.onPlaceChange.bind(this)
   }
 
   showCompleteReviewConfirmation() {
-    const { selectedLinks } = this.state
+    const { places } = this.state
     const minSelectedDesigns = this.getMinSelectedDesigns()
 
-    if (selectedLinks.length < minSelectedDesigns) {
+    if (places.filter((place) => place > -1).length < minSelectedDesigns) {
       this.setState({ isSelectWarningVisible: true })
     } else {
       this.setState({ isShowCompleteConfirmMessage: true })
@@ -62,13 +67,28 @@ class MilestoneTypeCheckpointReview extends React.Component {
     this.setState({ isShowCompleteConfirmMessage: false })
   }
 
+  showCustomerCompleteReviewConfirmation() {
+    const { places } = this.state
+    const minSelectedDesigns = this.getMinSelectedDesigns()
+
+    if (places.filter((place) => place > -1).length < minSelectedDesigns) {
+      this.setState({ isSelectWarningVisible: true })
+    } else {
+      this.setState({ isShowCustomerCompleteConfirmMessage: true })
+    }
+  }
+
+  hideCustomerCompleteReviewConfirmation() {
+    this.setState({ isShowCustomerCompleteConfirmMessage: false })
+  }
+
   completeReview() {
     const { milestone, completeMilestone } = this.props
-    const { selectedLinks } = this.state
+    const { places, selectedLinks } = this.state
     const minSelectedDesigns = this.getMinSelectedDesigns()
     const links = _.get(milestone, 'details.content.links', [])
 
-    if (selectedLinks.length < minSelectedDesigns) {
+    if (places.filter((place) => place > -1).length < minSelectedDesigns) {
       this.setState({ isSelectWarningVisible: true })
       return
     }
@@ -81,8 +101,16 @@ class MilestoneTypeCheckpointReview extends React.Component {
           ..._.get(milestone, 'details.content', {}),
           links: links.map((link, index) => ({
             ...link,
-            isSelected: _.includes(selectedLinks, index)
-          }))
+            isSelected: _.includes(selectedLinks, index),
+            selectedPlace: places.indexOf(index) + 1,
+          })).sort((link1, link2) => (
+            !!link1.selectedPlace && !link2.selectedPlace && -1 ||
+            !link1.selectedPlace && !!link2.selectedPlace && 1 ||
+            !!link1.selectedPlace && !!link2.selectedPlace && (link1.selectedPlace - link2.selectedPlace) ||
+            !!link1.isSelected && !link2.isSelected && -1 ||
+            !link1.isSelected && !!link2.isSelected && 1 ||
+            0
+          ))
         }
       }
     })
@@ -92,16 +120,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
     const { milestone } = this.props
     const links = _.get(milestone, 'details.content.links', [])
 
-    return Math.min(links.length, MIN_CHECKPOINT_REVIEW_DESIGNS)
-  }
-
-  /**
-   * toggles open closed states of rejected section
-   */
-  toggleRejectedSection() {
-    this.setState({
-      isRejectedExpanded: !this.state.isRejectedExpanded
-    })
+    return Math.min(links.length, MIN_WINNER_DESIGNS)
   }
 
   /**
@@ -214,21 +233,13 @@ class MilestoneTypeCheckpointReview extends React.Component {
     })
   }
 
-  updateSelected(isSelected, linkIndex) {
-    const { selectedLinks, isSelectWarningVisible } = this.state
-    const minSelectedDesigns = this.getMinSelectedDesigns()
+  onBonusChange(linkIndex, isSelected) {
+    const { selectedLinks } = this.state
 
     if (isSelected) {
       this.setState({
         selectedLinks: [...selectedLinks, linkIndex],
       })
-
-      // remove warning if selected enough
-      if (isSelectWarningVisible && selectedLinks.length + 1 >= minSelectedDesigns) {
-        this.setState({
-          isSelectWarningVisible: false
-        })
-      }
     } else {
       this.setState({
         selectedLinks: _.filter(selectedLinks, (selectedLinkIndex) =>
@@ -236,6 +247,24 @@ class MilestoneTypeCheckpointReview extends React.Component {
         )
       })
     }
+  }
+
+  onPlaceChange(linkIndex, place, isSelected) {
+    const { places } = this.state
+    let newPlaces = [...places]
+
+    if (isSelected) {
+      // remove link from the place if have some
+      newPlaces = newPlaces.map((index) => linkIndex === index ? -1 : index)
+      // put to the new place
+      newPlaces.splice(place - 1, 1, linkIndex)
+    } else {
+      newPlaces.splice(place - 1, 1, -1)
+    }
+
+    this.setState({
+      places: newPlaces,
+    })
   }
 
   render() {
@@ -248,10 +277,11 @@ class MilestoneTypeCheckpointReview extends React.Component {
       selectedLinks,
       isAddingNewLink,
       isSelectWarningVisible,
-      isRejectedExpanded,
+      isShowCustomerCompleteConfirmMessage,
       isShowExtensionRequestMessage,
       isShowCompleteConfirmMessage,
       isShowExtensionConfirmMessage,
+      places,
     } = this.state
 
     const links = _.get(milestone, 'details.content.links', [])
@@ -313,11 +343,11 @@ class MilestoneTypeCheckpointReview extends React.Component {
 
             {isInReview && (
               <header styleName="milestone-heading">
-                Select the top {minCheckedDesigns} design variants for our next round
+                Select the top {minCheckedDesigns} winning designs
               </header>)
             }
 
-            {(isInReview || !currentUser.isCustomer) && links.map((link, index) => (
+            {!isInReview && !currentUser.isCustomer && links.map((link, index) => (
               <div styleName="content-link-wrap separation-sm" key={index}>
                 <div styleName="add-specification-wrap separation-sm">
                   <MilestonePost
@@ -325,13 +355,26 @@ class MilestoneTypeCheckpointReview extends React.Component {
                     milestonePostLink={link.url}
                     milestonePostTitle={link.title}
                     milestoneType={link.type}
-                    {...!isInReview ? {
-                      deletePost: this.removeUrl,
-                      updatePost: this.updatedUrl,
-                    } : {
-                      isSelected: _.includes(selectedLinks, index),
-                      onSelectChange: this.updateSelected,
-                    }}
+                    deletePost={this.removeUrl}
+                    updatePost={this.updatedUrl}
+                  />
+                </div>
+              </div>
+            ))}
+
+            {isInReview && links.map((link, index) => (
+              <div styleName="content-link-wrap separation-sm" key={index}>
+                <div styleName="add-specification-wrap separation-sm">
+                  <WinnerSelectionBar
+                    label={link.title}
+                    link={link.url}
+                    type={link.type}
+                    index={index}
+                    onPlaceChange={this.onPlaceChange}
+                    onBonusChange={this.onBonusChange}
+                    isSelectedBonus={_.includes(selectedLinks, index)}
+                    selectedPlace={places.indexOf(index) + 1}
+                    placesChosen={places}
                   />
                 </div>
               </div>
@@ -411,9 +454,24 @@ class MilestoneTypeCheckpointReview extends React.Component {
               </div>
             )}
 
+            {isShowCustomerCompleteConfirmMessage && (
+              <div styleName="separation-sm">
+                <MilestonePostMessage
+                  label="Design phase competition"
+                  backgroundColor={'#CEE6FF'}
+                  message="This selection is final and cannot be undone. Once you confirm your selection we will close the design phase and can proceed to the next one. Clicking on the Confirm selection button would make the source files available for download."
+                  isShowSelection={false}
+                  buttons={[
+                    { title: 'Cancel', onClick: this.hideCustomerCompleteReviewConfirmation, type: 'default' },
+                    { title: 'Complete selection', onClick: this.completeReview, type: 'primary' },
+                  ]}
+                />
+              </div>
+            )}
+
             {isSelectWarningVisible && (
               <div styleName="message-bar hide-progress-bar" className="flex center">
-                <i>Please select all {minCheckedDesigns} designs to complete the review</i>
+                <i>Please select all {minCheckedDesigns} places to complete the review</i>
               </div>
             )}
 
@@ -422,12 +480,13 @@ class MilestoneTypeCheckpointReview extends React.Component {
               !isShowExtensionRequestMessage &&
               !isShowExtensionConfirmMessage &&
               !isShowCompleteConfirmMessage &&
+              !isShowCustomerCompleteConfirmMessage &&
             (
               <div styleName="action-bar hide-progress-bar" className="flex center">
                 {(!currentUser.isCustomer || isInReview) && (
                   <button
                     className={'tc-btn tc-btn-primary'}
-                    onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.completeReview}
+                    onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.showCustomerCompleteReviewConfirmation}
                     disabled={!isInReview}
                   >
                     Complete review ({
@@ -456,37 +515,19 @@ class MilestoneTypeCheckpointReview extends React.Component {
         {isCompleted && (
           <div>
             <header styleName={'milestone-heading selected-theme separation-sm'}>
-              Selected designs
+              Final designs
             </header>
-            {_.filter(links, { isSelected: true }).map((link, index) => (
-              <div styleName="content-link-wrap separation-sm" key={index}>
-                <div styleName="add-specification-wrap separation-sm">
-                  <MilestonePost
-                    itemId={index}
-                    milestonePostLink={link.url}
-                    milestonePostTitle={link.title}
-                    milestoneType={link.type}
-                    isSelected={link.isSelected}
-                  />
-                </div>
-              </div>
-            ))}
 
-            <header
-              styleName={'milestone-heading rejected-theme sepeartion-md  no-line ' + (isRejectedExpanded ? 'open' : 'close')}
-              onClick={this.toggleRejectedSection}
-            >
-              Rejected designs
-            </header>
-            {isRejectedExpanded && _.reject(links, { isSelected: true }).map((link, index) => (
+            {links.filter((link) => (link.selectedPlace || link.isSelected)).map((link, index) => (
               <div styleName="content-link-wrap separation-sm" key={index}>
                 <div styleName="add-specification-wrap separation-sm">
-                  <MilestonePost
-                    itemId={index}
-                    milestonePostLink={link.url}
-                    milestonePostTitle={link.title}
-                    milestoneType={link.type}
-                    isSelected={link.isSelected}
+                  <WinnerSelectionBar
+                    label={link.title}
+                    link={link.url}
+                    type={link.type}
+                    isSelectedBonus={link.isSelected}
+                    selectedPlace={link.selectedPlace}
+                    placesChosen={places}
                   />
                 </div>
               </div>
@@ -498,10 +539,10 @@ class MilestoneTypeCheckpointReview extends React.Component {
   }
 }
 
-MilestoneTypeCheckpointReview.defaultProps = {
+MilestoneTypeFinalDesigns.defaultProps = {
 }
 
-MilestoneTypeCheckpointReview.propTypes = {
+MilestoneTypeFinalDesigns.propTypes = {
   progressPercent: PT.string,
   labelDayStatus: PT.string,
   labelSpent: PT.string,
@@ -510,4 +551,4 @@ MilestoneTypeCheckpointReview.propTypes = {
   inProgress: PT.bool,
 }
 
-export default MilestoneTypeCheckpointReview
+export default MilestoneTypeFinalDesigns
