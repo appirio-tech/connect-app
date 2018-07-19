@@ -46,6 +46,7 @@ const ProjectPlanContainer = (props) => {
     <ProjectInfoContainer
       currentMemberRole={currentMemberRole}
       project={project}
+      phases={phases}
       isSuperUser={isSuperUser}
     />
   )
