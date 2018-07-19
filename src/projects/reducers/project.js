@@ -191,12 +191,30 @@ export const projectState = function (state=initialState, action) {
       isLoadingPhases: true
     })
 
-  case LOAD_PROJECT_PHASES_SUCCESS:
+  case LOAD_PROJECT_PHASES_SUCCESS: {
+    // loops through the phases to update the attachments field in the products of each phase
+    // NOTE it might not be needed after we get a proper implementation for supporting product attachments
+    const phases = _.map(action.payload, p => {
+      p.products = _.map(p.products, prd => {
+        const attachments = []
+        if (state.project.attachments && state.project.attachments.length) {
+          state.project.attachments.forEach(a => {
+            if (a.category === `product#${prd.id}`) {
+              attachments.push(a)
+              // TODO remove `a` from project's attachments
+            }
+          })
+        }
+        return { ...prd, attachments }
+      })
+      return p
+    })
     return update(state, {
-      phases: { $set: action.payload },
+      phases: { $set:phases },
       phasesNonDirty: { $set: action.payload },
       isLoadingPhases: { $set: false}
     })
+  }
 
   // Create & Edit project
   case CREATE_PROJECT_STAGE_PENDING:
