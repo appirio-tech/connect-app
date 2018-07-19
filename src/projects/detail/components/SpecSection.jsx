@@ -159,10 +159,16 @@ const SpecSection = props => {
     case 'files': {
       const projectLatest = isProjectDirty ? dirtyProject : project
       const files = _.get(projectLatest, props.fieldName, [])
+      // NOTE using category to differentiate between project and product attachments is a workaround to give ability
+      // to upload attachments for products. We need to come up with a better way to handle this.
+      // defaults to appDefinition to be backward compatible
+      let category = _.get(props, 'category', 'appDefinition')
+      category = 'product' === category ? `${category}#${projectLatest.id}` : category
       return (
         <FileListContainer
           project={projectLatest}
           files={files}
+          category={category}
           addAttachment={addAttachment}
           updateAttachment={updateAttachment}
           removeAttachment={removeAttachment}
