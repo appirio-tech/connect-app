@@ -39,16 +39,20 @@ function mockMilestone(timelineId, milestoneId, type, status) {
       duration: 15,
       status,
       type,
-      details: status === 'active' ? {
+      details: status === 'completed' ? {
         content: {
           specificationUrl: 'http://drive.google.com',
           links: [
-            { title: 'link 1', url: 'http://google.com/1', type: 'marvelapp' },
-            { title: 'link 2', url: 'http://twitter.com/2', type: 'marvelapp' },
-            { title: 'link 3', url: 'http://google.com/3', type: 'marvelapp' },
-            { title: 'link 4', url: 'http://twitter.com/4', type: 'marvelapp' },
-            { title: 'link 5', url: 'http://google.com/5', type: 'marvelapp' },
+            { title: 'link 1', url: 'http://google.com/1', type: 'marvelapp', selectedPlace: 1 },
+            { title: 'link 2', url: 'http://twitter.com/2', type: 'marvelapp', selectedPlace: 2 },
+            { title: 'link 3', url: 'http://google.com/3', type: 'marvelapp', selectedPlace: 3 },
+            { title: 'link 4', url: 'http://twitter.com/4', type: 'marvelapp', isSelected: true },
+            { title: 'link 5', url: 'http://google.com/5', type: 'marvelapp', isSelected: true },
             { title: 'link 6', url: 'http://twitter.com/6', type: 'marvelapp' }
+          ],
+          finalFixRequests: [
+            { value: 'request 1' },
+            { value: 'request 2' },
           ],
           isInReview: true,
         },
@@ -59,6 +63,7 @@ function mockMilestone(timelineId, milestoneId, type, status) {
       activeText: 'Please review and answer all the questions on the specification document before we can proceed.',
       blockedText: 'dummy blockedText',
       completedText: 'Great job! We\'re ready to roll. Work on this project phase would begin shortly.',
+      hidden: type === 'final-fixes' && status !== 'completed',
     }
 
     timeline[milestoneId] = milestone
@@ -69,7 +74,7 @@ function mockMilestone(timelineId, milestoneId, type, status) {
 
 mockMilestone.timelines = {}
 mockMilestone.id = 0
-mockMilestone.startDate = moment().subtract(24, 'days')
+mockMilestone.startDate = moment().subtract(33, 'days')
 
 /**
  * Get timeline by reference
@@ -100,7 +105,9 @@ export function getTimelineMilestones(timelineId) {
     mockMilestone(timelineId, null, 'community-work', 'completed'),
     mockMilestone(timelineId, null, 'community-review', 'completed'),
     mockMilestone(timelineId, null, 'checkpoint-review', 'completed'),
-    mockMilestone(timelineId, null, 'final-designs', 'active'),
+    mockMilestone(timelineId, null, 'final-designs', 'completed'),
+    mockMilestone(timelineId, null, 'final-fixes', 'completed'),
+    mockMilestone(timelineId, null, 'delivery', 'completed'),
   ])
 
   return axios.get(`${TC_API_URL}/v4/timelines/${timelineId}/milestones`)

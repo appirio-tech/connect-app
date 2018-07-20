@@ -15,8 +15,9 @@ import {
   EXTEND_PRODUCT_MILESTONE_PENDING,
   EXTEND_PRODUCT_MILESTONE_SUCCESS,
   EXTEND_PRODUCT_MILESTONE_FAILURE,
-
-  MILESTONE_STATUS,
+  SUBMIT_FINAL_FIXES_REQUEST_PENDING,
+  SUBMIT_FINAL_FIXES_REQUEST_SUCCESS,
+  SUBMIT_FINAL_FIXES_REQUEST_FAILURE,
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -108,13 +109,15 @@ export const productsTimelines = (state=initialState, action) => {
 
   case COMPLETE_PRODUCT_MILESTONE_PENDING:
   case EXTEND_PRODUCT_MILESTONE_PENDING:
+  case SUBMIT_FINAL_FIXES_REQUEST_PENDING:
     return updateMilestone(state, meta.productId, meta.milestoneId, {
       isUpdating: { $set: true },
       error: { $set: false }
     })
 
   case COMPLETE_PRODUCT_MILESTONE_SUCCESS:
-  case EXTEND_PRODUCT_MILESTONE_SUCCESS: {
+  case EXTEND_PRODUCT_MILESTONE_SUCCESS:
+  case SUBMIT_FINAL_FIXES_REQUEST_SUCCESS: {
     let updatedState = updateMilestone(state, meta.productId, meta.milestoneId, payload[0], true)
 
     if (meta.nextMilestoneId) {
@@ -126,6 +129,7 @@ export const productsTimelines = (state=initialState, action) => {
 
   case COMPLETE_PRODUCT_MILESTONE_FAILURE:
   case EXTEND_PRODUCT_MILESTONE_FAILURE:
+  case SUBMIT_FINAL_FIXES_REQUEST_FAILURE:
     return updateMilestone(state, meta.productId, meta.milestoneId, {
       isUpdating: { $set: false },
       error: { $set: false }

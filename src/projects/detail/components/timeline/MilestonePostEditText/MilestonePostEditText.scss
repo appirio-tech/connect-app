@@ -2,15 +2,9 @@
 @import '~tc-ui/src/styles/tc-includes';
 // project-progress specific styles
 .milestone-post {
-  position: relative;
-  border-radius: 4px;
-  color: #151516;
-  height: auto;
-  min-height: $base-unit*10;
-  line-height: $base-unit*10;
   @include roboto;
-  font-weight: 400;
   font-size: 15px;
+
   .hide-sm {
     display: inline-block;
   }
@@ -39,7 +33,7 @@
     height: inherit;
     position: relative;
     line-height: inherit;
-    z-index: 10;
+    z-index: 2;
     overflow: hidden;
     @include viewSm {
       padding-right: $base-unit*7;

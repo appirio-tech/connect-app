@@ -13,6 +13,7 @@ import {
   UPDATE_PRODUCT_MILESTONE,
   COMPLETE_PRODUCT_MILESTONE,
   EXTEND_PRODUCT_MILESTONE,
+  SUBMIT_FINAL_FIXES_REQUEST,
   MILESTONE_STATUS,
 } from '../../config/constants'
 
@@ -148,6 +149,62 @@ export function extendProductMilestone(productId, timelineId, milestoneId, exten
 
     return dispatch({
       type: EXTEND_PRODUCT_MILESTONE,
+      payload: Promise.all(requests),
+      meta: {
+        productId,
+        milestoneId,
+        nextMilestoneId: nextMilestone ? nextMilestone.id : null,
+      }
+    })
+  }
+}
+
+export function submitFinalFixesRequest(productId, timelineId, milestoneId, finalFixRequests) {
+  return (dispatch, getState) => {
+    const timeline = getState().productsTimelines[productId]
+    const milestoneIdx = _.findIndex(timeline.timeline.milestones, { id: milestoneId })
+    const milestone = timeline.timeline.milestones[milestoneIdx]
+
+    const finalFixesMilestone = timeline.timeline.milestones[milestoneIdx - 1]
+
+    if (!finalFixesMilestone || finalFixesMilestone.type !== 'final-fixes') {
+      throw new Error('Cannot find final-fixes milestone.')
+    }
+
+    const requests = [
+      // mark that final fixes submitted in the current milestone
+      updateMilestone(timelineId, milestoneId, {
+        details: {
+          ...milestone.details,
+          content: {
+            ..._.get(milestone, 'details.content', {}),
+            isFinalFixesSubmitted: true,
+          }
+        }
+      }),
+
+      // show final fixes milestone
+      updateMilestone(timelineId, finalFixesMilestone.id, {
+        status: MILESTONE_STATUS.COMPLETED,
+        hidden: false,
+        startDate: milestone.startDate,
+        endDate: milestone.startDate,
+        completionDate: milestone.startDate,
+        details: {
+          ...finalFixesMilestone.details,
+          content: {
+            ..._.get(finalFixesMilestone, 'details.content', {}),
+            finalFixRequests,
+          }
+        }
+      })
+    ]
+
+    // to update using reducer in redux store
+    const nextMilestone = finalFixesMilestone
+
+    return dispatch({
+      type: SUBMIT_FINAL_FIXES_REQUEST,
       payload: Promise.all(requests),
       meta: {
         productId,

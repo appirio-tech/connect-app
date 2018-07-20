@@ -11,6 +11,7 @@ import {
   updateProductMilestone,
   completeProductMilestone,
   extendProductMilestone,
+  submitFinalFixesRequest,
 } from '../../actions/productsTimelines'
 
 import {
@@ -92,6 +93,7 @@ const mapDispatchToProps = {
   updateProductMilestone,
   completeProductMilestone,
   extendProductMilestone,
+  submitFinalFixesRequest,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductTimelineContainer)

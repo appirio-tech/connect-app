@@ -1,36 +1,9 @@
 import React from 'react'
 import PT from 'prop-types'
-import moment from 'moment'
+import _ from 'lodash'
 
 import TimelineHeader from '../TimelineHeader'
 import TimelinePost from '../TimelinePost'
-
-function formatTimelinePostProps(milestone) {
-  const startDate = moment(milestone.startDate)
-
-  return {
-    milestoneId: milestone.id,
-    isUpdating: milestone.isUpdating,
-    error: milestone.error,
-
-    finish: () => {},
-    postContent: {
-      month: startDate.format('MMM'),
-      date: startDate.format('d'),
-      title: milestone.type,
-      postMsg: milestone.description,
-    },
-    editableData: {
-      title: milestone.type,
-      startDate: milestone.startDate,
-      endDate: milestone.endDate,
-      plannedText: milestone.plannedText,
-      activeText: milestone.activeText,
-      blockedText: milestone.blockedText,
-      completedText: milestone.completedText,
-    }
-  }
-}
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -39,6 +12,7 @@ class Timeline extends React.Component {
     this.updateMilestone = this.updateMilestone.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
     this.extendMilestone = this.extendMilestone.bind(this)
+    this.submitFinalFixesRequest = this.submitFinalFixesRequest.bind(this)
   }
 
   updateMilestone(milestoneId, values) {
@@ -71,6 +45,16 @@ class Timeline extends React.Component {
     extendProductMilestone(productId, timeline.id, milestoneId, extendDuration, updatedProps)
   }
 
+  submitFinalFixesRequest(milestoneId, finalFixRequests) {
+    const {
+      productId,
+      submitFinalFixesRequest,
+      timeline,
+    } = this.props
+
+    submitFinalFixesRequest(productId, timeline.id, milestoneId, finalFixRequests)
+  }
+
   render() {
     const {
       currentUser,
@@ -85,15 +69,15 @@ class Timeline extends React.Component {
             postMsg: timeline.description,
           }}
         />
-        {timeline.milestones.map((milestone) => (
+        {_.reject(timeline.milestones, { hidden: true }).map((milestone) => (
           <TimelinePost
             key={milestone.id}
-            {...formatTimelinePostProps(milestone)}
             currentUser={currentUser}
             milestone={milestone}
             updateMilestone={this.updateMilestone}
             completeMilestone={this.completeMilestone}
             extendMilestone={this.extendMilestone}
+            submitFinalFixesRequest={this.submitFinalFixesRequest}
           />
         ))}
       </div>

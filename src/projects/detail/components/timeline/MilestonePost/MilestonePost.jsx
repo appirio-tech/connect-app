@@ -100,7 +100,6 @@ class MilestonePost extends React.Component {
   }
 
   render() {
-    const { isActive } = this.props
     const props = this.props
     const labelMilestoneStyle = {}
     if (props.milestoneType === 'only-text') {
@@ -132,14 +131,16 @@ class MilestonePost extends React.Component {
             )}
 
             {props.milestoneType === 'download' && (
-              <a
-                href={this.state.milestonePostLink}
-                download={this.state.milestonePostLink}
-                className={'flex-child'}
-                styleName={'label-title span-first download'}
-              >
-                {this.getLabel()}
-              </a>
+              <div styleName="group-right only-text hide-sm">
+                <a
+                  href={this.state.milestonePostLink}
+                  download={this.state.milestonePostLink}
+                  className={'flex-child'}
+                  styleName={'label-title span-first download'}
+                >
+                  {props.milestonePostLink}
+                </a>
+              </div>
             )}
 
             {props.milestoneType === 'marvelapp' && (
@@ -183,9 +184,11 @@ class MilestonePost extends React.Component {
               </div>)
             }
 
-            {props.milestoneType === 'download' && (<div styleName="group-right file hide-sm">
-              <span download={this.state.milestonePostFile} styleName="download_icon hide-sm" />
-            </div>)}
+            {!props.updatePost && !props.deletePost && props.milestoneType === 'download' && (
+              <div styleName="group-right file hide-sm">
+                <a href={this.state.milestonePostLink} download={this.state.milestonePostLink} styleName="download_icon hide-sm" />
+              </div>
+            )}
 
             {!!props.updatePost && (
               <span onClick={this.toggleEditLink} styleName="label-title span-two" />
