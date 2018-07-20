@@ -7,10 +7,9 @@ import MilestonePostEditLinkDropDown from '../MilestonePostEditLinkDropDown'
 import MilestonePostEditDate from '../MilestonePostEditDate'
 import MilestonePostEditTextArea from '../MilestonePostEditTextArea'
 
-import './SubmissionEditLink.scss'
+import './Form.scss'
 
-/**use for create custom form */
-class SubmissionEditLink extends React.Component {
+class Form extends React.Component {
   constructor(props) {
     super(props)
 
@@ -148,7 +147,7 @@ class SubmissionEditLink extends React.Component {
   }
 }
 
-SubmissionEditLink.defaultProps = {
+Form.defaultProps = {
   okButtonTitle: 'Ok',
   callbackCancel: () => {},
   callbackOK: () => {},
@@ -158,7 +157,7 @@ SubmissionEditLink.defaultProps = {
   maxTitle: 0
 }
 
-SubmissionEditLink.propTypes = {
+Form.propTypes = {
   okButtonTitle: PT.string,
   callbackCancel: PT.func,
   callbackOK: PT.func,
@@ -168,4 +167,4 @@ SubmissionEditLink.propTypes = {
   maxTitle: PT.number
 }
 
-export default SubmissionEditLink
+export default Form

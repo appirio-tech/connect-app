@@ -2,11 +2,8 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 .milestone-post {
-  @include roboto;
-  font-size: 15px;
-
   .top-space {
-    margin-top: $base-unit;
+    padding-top: $base-unit;
   }
 
   .button-add-layer {

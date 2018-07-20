@@ -2,11 +2,11 @@ import React from 'react'
 import PT from 'prop-types'
 import cn from 'classnames'
 
-import SubmissionEditLink from '../SubmissionEditLink'
+import Form from '../Form'
 
-import './MilestonePost.scss'
+import './LinkRow.scss'
 
-class MilestonePost extends React.Component {
+class LinkRow extends React.Component {
   constructor(props) {
     super(props)
 
@@ -219,7 +219,7 @@ class MilestonePost extends React.Component {
         )}
 
         {this.state.isEditing && props.milestoneType === 'specification' && (<div styleName="small-separator">
-          <SubmissionEditLink
+          <Form
             callbackCancel={this.closeEditForm}
             defaultValues={{ url: props.milestonePostLink }}
             callbackOK={this.updatePost}
@@ -230,7 +230,7 @@ class MilestonePost extends React.Component {
 
         {this.state.isEditing && props.milestoneType === 'marvelapp' && (
           <div styleName="small-separator">
-            <SubmissionEditLink
+            <Form
               callbackCancel={this.closeEditForm}
               defaultValues={{
                 url: props.milestonePostLink,
@@ -245,7 +245,7 @@ class MilestonePost extends React.Component {
 
         {this.state.isEditing && props.milestoneType === 'only-text' && (
           <div styleName="small-separator">
-            <SubmissionEditLink
+            <Form
               callbackCancel={this.closeEditForm}
               defaultValues={{ url: props.milestonePostLink }}
               callbackOK={this.updatePost}
@@ -256,7 +256,7 @@ class MilestonePost extends React.Component {
         )}
 
         {this.state.isEditing && props.milestoneType === 'file' && (<div styleName="small-separator">
-          <SubmissionEditLink callbackCancel={this.closeEditForm} callbackOK={this.updateMilestonePostTitleLinkType} label={'Edit link'} isHaveType={trueValue} isHaveTitle={trueValue} isHaveUrl={trueValue} inProgress={false} okButtonTitle={'Save changes'} maxTitle={64}/>
+          <Form callbackCancel={this.closeEditForm} callbackOK={this.updateMilestonePostTitleLinkType} label={'Edit link'} isHaveType={trueValue} isHaveTitle={trueValue} isHaveUrl={trueValue} inProgress={false} okButtonTitle={'Save changes'} maxTitle={64}/>
         </div>)}
 
       </div>
@@ -264,7 +264,7 @@ class MilestonePost extends React.Component {
   }
 }
 
-MilestonePost.defaultProps = {
+LinkRow.defaultProps = {
   milestoneType: 'only-text',
   image: require('../../../../../assets/icons/timeline-invoice.svg'),
   milestonePostLink: '',
@@ -272,7 +272,7 @@ MilestonePost.defaultProps = {
   isHideDot: false,
 }
 
-MilestonePost.propTypes = {
+LinkRow.propTypes = {
   label: PT.string,
   isCompleted: PT.bool,
   inProgress: PT.bool,
@@ -283,4 +283,4 @@ MilestonePost.propTypes = {
   deletePost: PT.func
 }
 
-export default MilestonePost
+export default LinkRow

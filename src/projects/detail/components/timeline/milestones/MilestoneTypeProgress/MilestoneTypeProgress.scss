@@ -2,11 +2,8 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 .milestone-post {
-  @include roboto;
-  font-size: 15px;
-
   .top-space {
-    margin-top: $base-unit;
+    padding-top: $base-unit;
   }
 
   .button-add-layer {
@@ -15,9 +12,9 @@
   }
 
   .button-layer {
-    display: flex;
     background-color: $tc-dark-blue-30;
     border-radius: 4px;
+    display: flex;
     justify-content: center;
     padding: 2 * $base-unit;
   }

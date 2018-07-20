@@ -3,7 +3,7 @@ import PT from 'prop-types'
 import _ from 'lodash'
 
 import TimelineHeader from '../TimelineHeader'
-import TimelinePost from '../TimelinePost'
+import Milestone from '../Milestone'
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -70,7 +70,7 @@ class Timeline extends React.Component {
           }}
         />
         {_.reject(timeline.milestones, { hidden: true }).map((milestone) => (
-          <TimelinePost
+          <Milestone
             key={milestone.id}
             currentUser={currentUser}
             milestone={milestone}

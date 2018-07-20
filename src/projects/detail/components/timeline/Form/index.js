@@ -1,3 +1,3 @@
 
-import SubmissionEditLink from './SubmissionEditLink'
-export default SubmissionEditLink
+import Form from './Form'
+export default Form

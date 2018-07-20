@@ -3,8 +3,9 @@ import PT from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
 
-import SubmissionEditLink from '../../SubmissionEditLink'
-import MilestonePost from '../../MilestonePost'
+import DotIndicator from '../../DotIndicator'
+import Form from '../../Form'
+import LinkRow from '../../LinkRow'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
 
@@ -22,6 +23,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
     this.closeEditForm = this.closeEditForm.bind(this)
     this.openEditForm = this.openEditForm.bind(this)
     this.removeUrl = this.removeUrl.bind(this)
+    this.completeMilestone = this.completeMilestone.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -61,6 +63,12 @@ class MilestoneTypePhaseSpecification extends React.Component {
     }
   }
 
+  completeMilestone() {
+    const { completeMilestone } = this.props
+
+    completeMilestone()
+  }
+
   render() {
     const { milestone, theme, currentUser, completeMilestone } = this.props
     const { isAddingLink } = this.state
@@ -76,9 +84,10 @@ class MilestoneTypePhaseSpecification extends React.Component {
          */}
         {isActive && (
           <div>
+
             {!!specificationUrl && (
               <div styleName="top-space">
-                <MilestonePost
+                <LinkRow
                   milestonePostLink={specificationUrl}
                   milestoneType={'specification'}
                   deletePost={this.removeUrl}
@@ -88,38 +97,49 @@ class MilestoneTypePhaseSpecification extends React.Component {
             )}
 
             {isAddingLink && (
-              <div styleName="top-space">
-                <SubmissionEditLink
-                  callbackCancel={this.closeEditForm}
-                  defaultValues={{ url: specificationUrl }}
-                  callbackOK={this.updatedUrl}
-                  label="Specification document link"
-                  okButtonTitle="Add link"
-                />
-              </div>
+              <DotIndicator>
+                <div styleName="top-space">
+                  <Form
+                    callbackCancel={this.closeEditForm}
+                    defaultValues={{ url: specificationUrl }}
+                    callbackOK={this.updatedUrl}
+                    label="Specification document link"
+                    okButtonTitle="Add link"
+                  />
+                </div>
+              </DotIndicator>
             )}
 
             {!specificationUrl && !isAddingLink && (
-              <div styleName="top-space button-add-layer">
-                <button
-                  className="tc-btn tc-btn-default tc-btn-sm action-btn"
-                  onClick={this.openEditForm}
-                >
-                  Add specification document link
-                </button>
+              <div styleName="top-space">
+                <DotIndicator>
+                  <div styleName="button-add-layer">
+                    <button
+                      className="tc-btn tc-btn-default tc-btn-sm action-btn"
+                      onClick={this.openEditForm}
+                    >
+                      Add specification document link
+                    </button>
+                  </div>
+                </DotIndicator>
               </div>
             )}
 
+
             {!currentUser.isCustomer && !!specificationUrl && (
-              <div styleName="top-space button-layer">
-                <button
-                  className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-                  onClick={completeMilestone}
-                >
-                  Mark as completed
-                </button>
-              </div>)
-            }
+              <div styleName="top-space">
+                <DotIndicator>
+                  <div styleName="button-layer">
+                    <button
+                      className="tc-btn tc-btn-primary tc-btn-sm action-btn"
+                      onClick={this.completeMilestone}
+                    >
+                      Mark as completed
+                    </button>
+                  </div>
+                </DotIndicator>
+              </div>
+            )}
           </div>
         )}
 
@@ -130,7 +150,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
           <div>
             {!!specificationUrl && (
               <div styleName="top-space">
-                <MilestonePost
+                <LinkRow
                   milestonePostLink={specificationUrl}
                   milestoneType="specification"
                 />

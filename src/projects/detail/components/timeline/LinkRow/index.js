@@ -1,3 +1,2 @@
-
-import MilestonePost from './MilestonePost'
-export default MilestonePost
+import LinkRow from './LinkRow'
+export default LinkRow

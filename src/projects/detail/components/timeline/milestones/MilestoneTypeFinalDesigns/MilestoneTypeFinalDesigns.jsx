@@ -5,10 +5,10 @@ import moment from 'moment'
 import cn from 'classnames'
 
 import MilestonePostSpecification from '../../MilestonePostSpecification'
-import SubmissionEditLink from '../../SubmissionEditLink'
+import Form from '../../Form'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
-import MilestonePost from '../../MilestonePost'
+import LinkRow from '../../LinkRow'
 import WinnerSelectionBar from '../../WinnerSelectionBar'
 
 import {
@@ -350,7 +350,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
             {!isInReview && !currentUser.isCustomer && links.map((link, index) => (
               <div styleName="content-link-wrap separation-sm" key={index}>
                 <div styleName="add-specification-wrap separation-sm">
-                  <MilestonePost
+                  <LinkRow
                     itemId={index}
                     milestonePostLink={link.url}
                     milestonePostTitle={link.title}
@@ -382,7 +382,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
 
             {isAddingNewLink && (
               <div styleName="separation-sm">
-                <SubmissionEditLink
+                <Form
                   label="New design link"
                   maxTitle={64}
                   defaultValues={{

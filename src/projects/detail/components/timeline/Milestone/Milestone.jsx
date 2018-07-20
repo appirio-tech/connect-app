@@ -5,19 +5,20 @@ import moment from 'moment'
 import cn from 'classnames'
 
 import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
-import SubmissionEditLink from '../SubmissionEditLink'
+import Form from '../Form'
 import MilestoneTypePhaseSpecification from '../milestones/MilestoneTypePhaseSpecification'
 import MilestoneTypeProgress from '../milestones/MilestoneTypeProgress'
 import MilestoneTypeCheckpointReview from '../milestones/MilestoneTypeCheckpointReview'
 import MilestoneTypeFinalDesigns from '../milestones/MilestoneTypeFinalDesigns'
 import MilestoneTypeDelivery from '../milestones/MilestoneTypeDelivery'
 import MilestoneTypeFinalFixes from '../milestones/MilestoneTypeFinalFixes'
+import DotIndicator from '../DotIndicator'
 
 import { MILESTONE_STATUS } from '../../../../../config/constants'
 
-import './TimelinePost.scss'
+import './Milestone.scss'
 
-class TimelinePost extends React.Component {
+class Milestone extends React.Component {
   constructor(props) {
     super(props)
 
@@ -162,13 +163,13 @@ class TimelinePost extends React.Component {
         >
           <i styleName={'status-ring'} />
 
-          {/* !isPlanned && (
-            <span styleName="dot" />
-          ) */}
-
           {!isEditing && (
-            <dir onMouseEnter={this.hoverHeader} onMouseLeave={this.unHoverHeader} styleName="post-title-container">
-              <h4 styleName="post-title" dangerouslySetInnerHTML={{ __html: title }} />
+            <dir
+              onMouseEnter={this.hoverHeader}
+              onMouseLeave={this.unHoverHeader}
+              styleName="post-title-container"
+            >
+              <h4 styleName="post-title">{title}</h4>
               {this.state.isHoverHeader && !isUpdating && (
                 <div onClick={this.toggleEditLink} styleName={ 'post-edit' } >
                   <span styleName="tooltiptext">Edit milestone properties</span>
@@ -177,7 +178,7 @@ class TimelinePost extends React.Component {
           }
 
           {isEditing && !isUpdating && (
-            <SubmissionEditLink
+            <Form
               callbackCancel={this.closeEditForm}
               callbackOK={this.updateMilestoneWithData}
               label={'Milestone Properties'}
@@ -193,7 +194,7 @@ class TimelinePost extends React.Component {
             />)
           }
 
-          {isUpdating && <LoadingIndicator />}
+          {isUpdating && <DotIndicator><LoadingIndicator /></DotIndicator>}
 
           {!isEditing && !isUpdating && milestone.type === 'phase-specification' && (
             <MilestoneTypePhaseSpecification
@@ -258,11 +259,11 @@ class TimelinePost extends React.Component {
   }
 }
 
-TimelinePost.defaultProps = {
+Milestone.defaultProps = {
   finish: () => {},
 }
 
-TimelinePost.propTypes = {
+Milestone.propTypes = {
   postContent: PT.shape({
     isCompleted: PT.boolean,
     month: PT.string,
@@ -274,4 +275,4 @@ TimelinePost.propTypes = {
   })
 }
 
-export default TimelinePost
+export default Milestone

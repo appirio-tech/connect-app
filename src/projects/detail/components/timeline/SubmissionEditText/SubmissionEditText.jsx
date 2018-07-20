@@ -3,7 +3,7 @@ import PT from 'prop-types'
 import './SubmissionEditText.scss'
 import MilestonePostEditText from '../MilestonePostEditText'
 import MilestonePostMessage from '../MilestonePostMessage'
-import MilestonePost from '../MilestonePost'
+import LinkRow from '../LinkRow'
 
 import Modal from 'react-modal'
 
@@ -142,7 +142,7 @@ class SubmissionEditText extends React.Component {
         )}
 
         {props.isCompleted && (<div styleName="invoice-wrap">
-          <MilestonePost label={'All design source files (567MB .zip)'} milestonePostFile={'https://docs.google.com/affdisdfg?5234fasdf&asdfasdf&asdf3vasddfaasdfadfasddsfjlk43jkldsfjas'} isCompleted={props.isCompleted} inProgress={props.inProgress} milestoneType={'download'}/>
+          <LinkRow label={'All design source files (567MB .zip)'} milestonePostFile={'https://docs.google.com/affdisdfg?5234fasdf&asdfasdf&asdf3vasddfaasdfadfasddsfjlk43jkldsfjas'} isCompleted={props.isCompleted} inProgress={props.inProgress} milestoneType={'download'}/>
         </div>)}
 
         <Modal

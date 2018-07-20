@@ -5,8 +5,8 @@ import cn from 'classnames'
 import moment from 'moment'
 
 import ProjectProgress from '../../../ProjectProgress'
-import SubmissionEditLink from '../../SubmissionEditLink'
-import MilestonePost from '../../MilestonePost'
+import Form from '../../Form'
+import LinkRow from '../../LinkRow'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import MilestonePostEditText from '../../MilestonePostEditText'
 
@@ -267,7 +267,7 @@ class MilestoneTypeDelivery extends React.Component {
                   <div>
                     {links.map((link, index) => (
                       <div styleName="top-space" key={index}>
-                        <MilestonePost
+                        <LinkRow
                           itemId={index}
                           milestonePostLink={link.url}
                           milestoneType={link.type}
@@ -279,7 +279,7 @@ class MilestoneTypeDelivery extends React.Component {
 
                     {isAddingLink && (
                       <div styleName="top-space">
-                        <SubmissionEditLink
+                        <Form
                           callbackCancel={this.closeEditForm}
                           defaultValues={{ url: '' }}
                           callbackOK={this.updatedUrl}
@@ -325,7 +325,7 @@ class MilestoneTypeDelivery extends React.Component {
           <div>
             {links.map((link, index) => (
               <div styleName="top-space" key={index}>
-                <MilestonePost
+                <LinkRow
                   milestonePostLink={link.url}
                   milestoneType={link.type}
                 />

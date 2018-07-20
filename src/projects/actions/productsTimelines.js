@@ -136,13 +136,13 @@ export function extendProductMilestone(productId, timelineId, milestoneId, exten
     // move next milestone startDate
     const nextMilestone = timeline.timeline.milestones[milestoneIdx + 1]
     if (nextMilestone) {
-      const startDate = endDate.clone().add(1, 'days')
-      const endDate = moment(nextMilestone.endDate)
+      const nextStartDate = endDate.clone().add(1, 'days')
+      const nextEndDate = moment(nextMilestone.endDate)
 
       requests.push(
         updateMilestone(timelineId, nextMilestone.id, {
-          startDate: startDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
-          duration: endDate.diff(startDate, 'days'),
+          startDate: nextStartDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+          duration: nextEndDate.diff(nextStartDate, 'days'),
         })
       )
     }

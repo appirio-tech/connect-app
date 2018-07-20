@@ -4,9 +4,10 @@ import _ from 'lodash'
 import cn from 'classnames'
 import moment from 'moment'
 
+import DotIndicator from '../../DotIndicator'
 import ProjectProgress from '../../../ProjectProgress'
-import SubmissionEditLink from '../../SubmissionEditLink'
-import MilestonePost from '../../MilestonePost'
+import Form from '../../Form'
+import LinkRow from '../../LinkRow'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
 
@@ -24,6 +25,7 @@ class MilestoneTypeProgress extends React.Component {
     this.closeEditForm = this.closeEditForm.bind(this)
     this.openEditForm = this.openEditForm.bind(this)
     this.removeUrl = this.removeUrl.bind(this)
+    this.completeMilestone = this.completeMilestone.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -82,8 +84,14 @@ class MilestoneTypeProgress extends React.Component {
     })
   }
 
+  completeMilestone() {
+    const { completeMilestone } = this.props
+
+    completeMilestone()
+  }
+
   render() {
-    const { milestone, theme, currentUser, completeMilestone } = this.props
+    const { milestone, theme, currentUser } = this.props
     const { isAddingLink } = this.state
 
     const links = _.get(milestone, 'details.content.links', [])
@@ -111,18 +119,20 @@ class MilestoneTypeProgress extends React.Component {
         {isActive && (
           <div>
             <div styleName="top-space">
-              <ProjectProgress
-                labelDayStatus={progressText}
-                progressPercent={progressPercent}
-                theme={daysLeft < 0 ? 'warning' : 'light'}
-              />
+              <DotIndicator hideDot={!currentUser.isCustomer}>
+                <ProjectProgress
+                  labelDayStatus={progressText}
+                  progressPercent={progressPercent}
+                  theme={daysLeft < 0 ? 'warning' : 'light'}
+                />
+              </DotIndicator>
             </div>
 
             {!currentUser.isCustomer && (
               <div>
                 {links.map((link, index) => (
                   <div styleName="top-space" key={index}>
-                    <MilestonePost
+                    <LinkRow
                       itemId={index}
                       milestonePostLink={link.url}
                       milestoneType={link.type}
@@ -134,7 +144,7 @@ class MilestoneTypeProgress extends React.Component {
 
                 {isAddingLink && (
                   <div styleName="top-space">
-                    <SubmissionEditLink
+                    <Form
                       callbackCancel={this.closeEditForm}
                       defaultValues={{ url: '' }}
                       callbackOK={this.updatedUrl}
@@ -155,13 +165,17 @@ class MilestoneTypeProgress extends React.Component {
                   </div>
                 )}
 
-                <div styleName="top-space button-layer">
-                  <button
-                    className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-                    onClick={completeMilestone}
-                  >
-                    Mark as completed
-                  </button>
+                <div styleName="top-space">
+                  <DotIndicator>
+                    <div styleName="top-space button-layer">
+                      <button
+                        className="tc-btn tc-btn-primary tc-btn-sm action-btn"
+                        onClick={this.completeMilestone}
+                      >
+                        Mark as completed
+                      </button>
+                    </div>
+                  </DotIndicator>
                 </div>
               </div>
             )}
@@ -175,7 +189,7 @@ class MilestoneTypeProgress extends React.Component {
           <div>
             {links.map((link, index) => (
               <div styleName="top-space" key={index}>
-                <MilestonePost
+                <LinkRow
                   milestonePostLink={link.url}
                   milestoneType={link.type}
                 />

@@ -3,7 +3,6 @@ import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL, PROJECTS_API_URL } from '../config/constants'
 
 export function getMembersById (userIds) {
-  return Promise.resolve([])
   const _userIdArr = _.map(userIds, _id => `userId:${_id}`)
   // only requesting certain member attributes
   const fields = 'userId,handle,photoURL,firstName,lastName,details,email'
