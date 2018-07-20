@@ -12,6 +12,7 @@ import Section from '../components/Section'
 import ProjectStage from '../components/ProjectStage'
 import PhaseCardListHeader from '../components/PhaseCardListHeader'
 import PhaseCardListFooter from '../components/PhaseCardListFooter'
+import ProjectStageMessages from '../components/ProjectStageMessages'
 import { PHASE_STATUS_DRAFT } from '../../../config/constants'
 
 /**
@@ -66,6 +67,7 @@ const ProjectStages = ({
 }) => (
   <Section>
     <PhaseCardListHeader />
+    <ProjectStageMessages phases={phases} />
     {phases.map((phase, index) => (
       <ProjectStage
         key={phase.id}
