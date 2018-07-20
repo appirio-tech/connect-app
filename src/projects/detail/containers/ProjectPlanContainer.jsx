@@ -41,7 +41,7 @@ const ProjectPlanContainer = (props) => {
   ))
   const nonDraftPhases = phases.filter((phase) => (
     phase.status !== PHASE_STATUS_DRAFT
-  )) : []
+  ))
   const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
 
   const leftArea = (
