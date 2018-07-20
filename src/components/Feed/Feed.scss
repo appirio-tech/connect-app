@@ -56,11 +56,17 @@
   justify-content: center;
   padding: 4 * $base-unit 4 * $base-unit 3 * $base-unit 4 * $base-unit;
 
-  :global(.drop-down) :global(.down-layer) {
-    left: auto;
-    right: - 2 * $base-unit;
-    top: 2 * $base-unit;
-    z-index: 4;
+  :global {
+    .Dropdown {
+      z-index: 4;
+    }
+
+    .drop-down .down-layer {
+      left: auto;
+      right: - 2 * $base-unit;
+      top: 2 * $base-unit;
+      z-index: 4;
+    }
   }
 }
 
@@ -112,6 +118,7 @@
   :global {
     .dropdown-wrap.drop-down {
       display: block;
+      margin-left: 3 * $base-unit;
     }
 
     .dropdownContainer {
