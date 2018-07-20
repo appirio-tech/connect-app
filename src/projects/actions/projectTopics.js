@@ -52,7 +52,7 @@ const getProjectTopicsWithMember = (dispatch, projectId, tag) => {
   return new Promise((resolve, reject) => {
     return dispatch({
       type: LOAD_PROJECT_FEEDS,
-      payload: getTopicsWithComments('project', projectId, tag),
+      payload: getTopicsWithComments('project', projectId, tag, false),
       meta: { tag, projectId }
     })
       .then(({ value }) => {
