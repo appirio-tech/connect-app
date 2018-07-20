@@ -467,7 +467,7 @@ class FeedView extends React.Component {
             ))}
           </div>
         </Section>
-        { !isNewPostMobileOpen &&
+        { !isNewPostMobileOpen && !fullscreenFeed &&
           <MediaQuery maxWidth={SCREEN_BREAKPOINT_MD - 1}>
             <div styleName="chat-button-space">
               <ChatButton onClick={this.toggleNewPostMobile} />
