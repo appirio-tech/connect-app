@@ -19,7 +19,7 @@ function formatCommentDate(date) {
 
   // if another year
   if (!date.isSame(today, 'year')) {
-    formated += `, ${formated.format('YYYY')}`
+    formated += `, ${date.format('YYYY')}`
 
     // if today
   } else if (date.isSame(today, 'day')) {

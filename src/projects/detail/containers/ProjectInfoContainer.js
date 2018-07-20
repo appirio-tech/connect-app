@@ -111,7 +111,20 @@ class ProjectInfoContainer extends React.Component {
       devices = _.get(project, 'details.devices', [])
     }
 
-    const attachments = _.sortBy(project.attachments, attachment => -new Date(attachment.updatedAt).getTime())
+    let attachments = project.attachments
+    // merges the product attachments to show in the links menu
+    if (phases && phases.length > 0) {
+      phases.forEach(phase => {
+        if (phase.products && phase.products.length > 0) {
+          phase.products.forEach(product => {
+            if (product.attachments && product.attachments.length > 0) {
+              attachments = attachments.concat(product.attachments)
+            }
+          })
+        }
+      })
+    }
+    attachments = _.sortBy(attachments, attachment => -new Date(attachment.updatedAt).getTime())
       .map(attachment => ({
         title: attachment.title,
         address: attachment.downloadUrl,
