@@ -72,6 +72,7 @@ const SpecSection = props => {
     validate,
     sectionNumber,
     showHidden,
+    isCreation,
     addAttachment,
     updateAttachment,
     removeAttachment,
@@ -158,10 +159,16 @@ const SpecSection = props => {
     case 'files': {
       const projectLatest = isProjectDirty ? dirtyProject : project
       const files = _.get(projectLatest, props.fieldName, [])
+      // NOTE using category to differentiate between project and product attachments is a workaround to give ability
+      // to upload attachments for products. We need to come up with a better way to handle this.
+      // defaults to appDefinition to be backward compatible
+      let category = _.get(props, 'category', 'appDefinition')
+      category = 'product' === category ? `${category}#${projectLatest.id}` : category
       return (
         <FileListContainer
           project={projectLatest}
           files={files}
+          category={category}
           addAttachment={addAttachment}
           updateAttachment={updateAttachment}
           removeAttachment={removeAttachment}
@@ -238,7 +245,12 @@ const SpecSection = props => {
         <p className="gray-text">
           {description}
         </p>
-        {subSections.filter((subSection) => showHidden || !subSection.hidden).map(renderSubSection)}
+        {subSections.filter((subSection) => (
+          // hide section marked with hiddenOnCreation during creation process
+          (!isCreation || !subSection.hiddenOnCreation) &&
+          // hide hidden section, unless we not force to show them
+          (showHidden || !subSection.hidden)
+        )).map(renderSubSection)}
       </div>
     </div>
   )
@@ -248,6 +260,7 @@ SpecSection.propTypes = {
   project: PropTypes.object.isRequired,
   sectionNumber: PropTypes.number.isRequired,
   showHidden: PropTypes.bool,
+  isCreation: PropTypes.bool,
   addAttachment: PropTypes.func.isRequired,
   updateAttachment: PropTypes.func.isRequired,
   removeAttachment: PropTypes.func.isRequired,

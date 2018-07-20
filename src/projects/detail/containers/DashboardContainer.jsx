@@ -85,6 +85,7 @@ class DashboardContainer extends React.Component {
       <ProjectInfoContainer
         currentMemberRole={currentMemberRole}
         project={project}
+        phases={phases}
         isSuperUser={isSuperUser}
       />
     )

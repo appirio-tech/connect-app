@@ -2,9 +2,9 @@ import {
   addProjectAttachment as addProjectAttachmentAPI,
   removeProjectAttachment as removeProjectAttachmentAPI,
   updateProjectAttachment as updateProjectAttachmentAPI,
-  addProductAttachment as addProductAttachmentAPI,
-  removeProductAttachment as removeProductAttachmentAPI,
-  updateProductAttachment as updateProductAttachmentAPI,
+  // addProductAttachment as addProductAttachmentAPI,
+  // removeProductAttachment as removeProductAttachmentAPI,
+  // updateProductAttachment as updateProductAttachmentAPI,
 } from '../../api/projectAttachments'
 
 import {
@@ -47,7 +47,7 @@ export function addProductAttachment(projectId, phaseId, productId, attachment) 
   return (dispatch) => {
     return dispatch({
       type: ADD_PRODUCT_ATTACHMENT,
-      payload: addProductAttachmentAPI(projectId, phaseId, productId, attachment)
+      payload: addProjectAttachmentAPI(projectId, attachment)
         .then((uploadedAttachment) => ({
           phaseId,
           productId,
@@ -61,7 +61,7 @@ export function updateProductAttachment(projectId, phaseId, productId, attachmen
   return (dispatch) => {
     return dispatch({
       type: UPDATE_PRODUCT_ATTACHMENT,
-      payload: updateProductAttachmentAPI(projectId, phaseId, productId, attachmentId, attachment)
+      payload: updateProjectAttachmentAPI(projectId, attachmentId, attachment)
         .then((uploadedAttachment) => ({
           phaseId,
           productId,
@@ -75,7 +75,7 @@ export function removeProductAttachment(projectId, phaseId, productId, attachmen
   return (dispatch) => {
     return dispatch({
       type: REMOVE_PRODUCT_ATTACHMENT,
-      payload: removeProductAttachmentAPI(projectId, phaseId, productId, attachmentId)
+      payload: removeProjectAttachmentAPI(projectId, attachmentId)
         .then((removedAttachmentId) => ({
           phaseId,
           productId,

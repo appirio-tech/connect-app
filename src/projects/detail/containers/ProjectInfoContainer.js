@@ -82,7 +82,7 @@ class ProjectInfoContainer extends React.Component {
 
   render() {
     const { duration } = this.state
-    const { project, currentMemberRole, isSuperUser } = this.props
+    const { project, phases, currentMemberRole, isSuperUser } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -107,7 +107,20 @@ class ProjectInfoContainer extends React.Component {
       devices = _.get(project, 'details.devices', [])
     }
 
-    const attachments = _.sortBy(project.attachments, attachment => -new Date(attachment.updatedAt).getTime())
+    let attachments = project.attachments
+    // merges the product attachments to show in the links menu
+    if (phases && phases.length > 0) {
+      phases.forEach(phase => {
+        if (phase.products && phase.products.length > 0) {
+          phase.products.forEach(product => {
+            if (product.attachments && product.attachments.length > 0) {
+              attachments = attachments.concat(product.attachments)
+            }
+          })
+        }
+      })
+    }
+    attachments = _.sortBy(attachments, attachment => -new Date(attachment.updatedAt).getTime())
       .map(attachment => ({
         title: attachment.title,
         address: attachment.downloadUrl,
@@ -148,7 +161,8 @@ class ProjectInfoContainer extends React.Component {
 
 ProjectInfoContainer.PropTypes = {
   currentMemberRole: PropTypes.string,
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
+  phases: PropTypes.arrayOf(PropTypes.object)
 }
 
 const mapDispatchToProps = { updateProject, deleteProject }
