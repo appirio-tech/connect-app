@@ -5,6 +5,7 @@ import cn from 'classnames'
 import moment from 'moment'
 
 import ProjectProgress from '../../../ProjectProgress'
+import DotIndicator from '../../DotIndicator'
 import Form from '../../Form'
 import LinkRow from '../../LinkRow'
 import MilestonePostMessage from '../../MilestonePostMessage'
@@ -115,11 +116,18 @@ class MilestoneTypeDelivery extends React.Component {
   }
 
   acceptDesign() {
-    const { updateMilestoneContent } = this.props
+    const { completeMilestone, milestone } = this.props
+    const content = _.get(milestone, 'details.content')
 
-    updateMilestoneContent({
-      isAccepted: true,
-      isDeclined: false,
+    completeMilestone({
+      details: {
+        ...milestone.details,
+        content: {
+          ...content,
+          isAccepted: true,
+          isDeclined: false,
+        }
+      }
     })
   }
 
@@ -204,112 +212,131 @@ class MilestoneTypeDelivery extends React.Component {
               (currentUser.isCustomer || currentUser.isAdmin) &&
               !isFinalFixesSubmitted &&
             (
-              <div styleName="top-space">
-                <MilestonePostMessage
-                  label="Design acceptance"
-                  backgroundColor={'#FFF4F4'}
-                  message="Do you need any refinement on winner’s design before we deliver you the final source files? Some refinement or final fixes outside the projet scope may cost you additional payment"
-                  isShowSelection={false}
-                  buttons={[
-                    { title: 'Request fixes', onClick: this.showFinalFixesRequestForm, type: 'default' },
-                    { title: 'Accept design', onClick: this.acceptDesign, type: 'primary' },
-                  ]}
-                />
-              </div>
+              <DotIndicator>
+                <div styleName="top-space">
+                  <MilestonePostMessage
+                    label="Design acceptance"
+                    backgroundColor={'#FFF4F4'}
+                    message="Do you need any refinement on winner’s design before we deliver you the final source files? Some refinement or final fixes outside the projet scope may cost you additional payment"
+                    isShowSelection={false}
+                    buttons={[
+                      { title: 'Request fixes', onClick: this.showFinalFixesRequestForm, type: 'default' },
+                      { title: 'Accept design', onClick: this.acceptDesign, type: 'primary' },
+                    ]}
+                  />
+                </div>
+              </DotIndicator>
             )}
 
             {isShowFinalFixesRequestForm && !isFinalFixesSubmitted && (
-              <div styleName="top-space">
+              <div>
                 {finalFixRequests.map((finalFixRequest, index) => (
+                  <div styleName="top-space" key={index}>
+                    <MilestonePostEditText
+                      index={index}
+                      value={finalFixRequest.value}
+                      onRemove={this.onFinalFixRemove}
+                      isAutoExpand
+                    />
+                  </div>
+                ))}
+                <div styleName="top-space">
                   <MilestonePostEditText
-                    key={index}
-                    index={index}
-                    value={finalFixRequest.value}
-                    onRemove={this.onFinalFixRemove}
+                    onAdd={this.onFinalFixAdd}
                     isAutoExpand
                   />
-                ))}
-                <MilestonePostEditText
-                  onAdd={this.onFinalFixAdd}
-                  isAutoExpand
-                />
-                <div styleName="top-space button-add-layer">
-                  <button
-                    className="tc-btn tc-btn-default tc-btn-sm action-btn"
-                    onClick={this.hideFinalFixesRequestForm}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-                    onClick={this.submitFinalFixesRequest}
-                    disabled={finalFixRequests.length === 0}
-                  >
-                    Submit request
-                  </button>
                 </div>
+                <DotIndicator>
+                  <div styleName="top-space button-add-layer">
+                    <button
+                      className="tc-btn tc-btn-default tc-btn-sm action-btn"
+                      onClick={this.hideFinalFixesRequestForm}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="tc-btn tc-btn-primary tc-btn-sm action-btn"
+                      onClick={this.submitFinalFixesRequest}
+                      disabled={finalFixRequests.length === 0}
+                    >
+                      Submit request
+                    </button>
+                  </div>
+                </DotIndicator>
               </div>
             )}
 
             {(isFinalFixesSubmitted || isAccepted) && (
               <div>
                 {!isInReview && (
-                  <div styleName="top-space">
-                    <ProjectProgress
-                      labelDayStatus={progressText}
-                      progressPercent={progressPercent}
-                      theme={daysLeft < 0 ? 'warning' : 'light'}
-                    />
-                  </div>
+                  <DotIndicator>
+                    <div styleName="top-space">
+                      <ProjectProgress
+                        labelDayStatus={progressText}
+                        progressPercent={progressPercent}
+                        theme={daysLeft < 0 ? 'warning' : 'light'}
+                      />
+                    </div>
+                  </DotIndicator>
                 )}
 
                 {!currentUser.isCustomer && !isInReview && (
                   <div>
                     {links.map((link, index) => (
-                      <div styleName="top-space" key={index}>
-                        <LinkRow
-                          itemId={index}
-                          milestonePostLink={link.url}
-                          milestoneType={link.type}
-                          deletePost={this.removeUrl}
-                          updatePost={this.updatedUrl}
-                        />
-                      </div>
+                      <DotIndicator hideLine key={index}>
+                        <div styleName="top-space">
+                          <LinkRow
+                            itemId={index}
+                            milestonePostLink={link.url}
+                            milestoneType={link.type}
+                            deletePost={this.removeUrl}
+                            updatePost={this.updatedUrl}
+                          />
+                        </div>
+                      </DotIndicator>
                     ))}
 
                     {isAddingLink && (
-                      <div styleName="top-space">
-                        <Form
-                          callbackCancel={this.closeEditForm}
-                          defaultValues={{ url: '' }}
-                          callbackOK={this.updatedUrl}
-                          label="Adding a link"
-                          okButtonTitle="Add link"
-                        />
-                      </div>
+                      <DotIndicator hideLine>
+                        <div styleName="top-space">
+                          <Form
+                            callbackCancel={this.closeEditForm}
+                            defaultValues={{ url: '' }}
+                            callbackOK={this.updatedUrl}
+                            label="Adding a link"
+                            okButtonTitle="Add link"
+                          />
+                        </div>
+                      </DotIndicator>
                     )}
 
                     {!isAddingLink && (
-                      <div styleName="top-space button-add-layer">
-                        <button
-                          className="tc-btn tc-btn-default tc-btn-sm action-btn"
-                          onClick={this.openEditForm}
-                        >
-                          Add a link
-                        </button>
-                      </div>
+                      <DotIndicator hideLine>
+                        <div styleName="top-space button-add-layer">
+                          <button
+                            className="tc-btn tc-btn-default tc-btn-sm action-btn"
+                            onClick={this.openEditForm}
+                          >
+                            Add a link
+                          </button>
+                        </div>
+                      </DotIndicator>
                     )}
 
                     {!currentUser.isCustomer && (
-                      <div styleName="top-space button-layer">
-                        <button
-                          className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-                          onClick={this.completeMilestone}
-                          disabled={links.length === 0}
-                        >
-                          Mark as completed
-                        </button>
-                      </div>
+                      <DotIndicator hideLine>
+                        <div styleName="top-space">
+                          <div styleName="button-layer">
+                            <button
+                              className="tc-btn tc-btn-primary tc-btn-sm action-btn"
+                              onClick={this.completeMilestone}
+                              disabled={links.length === 0}
+                            >
+                              Mark as completed
+                            </button>
+                          </div>
+                        </div>
+                      </DotIndicator>
                     )}
                   </div>
                 )}

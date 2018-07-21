@@ -105,9 +105,9 @@ export function getTimelineMilestones(timelineId) {
     mockMilestone(timelineId, null, 'community-work', 'completed'),
     mockMilestone(timelineId, null, 'community-review', 'completed'),
     mockMilestone(timelineId, null, 'checkpoint-review', 'completed'),
-    mockMilestone(timelineId, null, 'final-designs', 'active'),
+    mockMilestone(timelineId, null, 'final-designs', 'completed'),
     mockMilestone(timelineId, null, 'final-fixes', 'planned'),
-    mockMilestone(timelineId, null, 'delivery', 'planned'),
+    mockMilestone(timelineId, null, 'delivery', 'completed'),
   ])
 
   return axios.get(`${TC_API_URL}/v4/timelines/${timelineId}/milestones`)

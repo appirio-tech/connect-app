@@ -53,14 +53,18 @@ class MilestoneTypeFinalDesigns extends React.Component {
     this.onPlaceChange = this.onPlaceChange.bind(this)
   }
 
-  showCompleteReviewConfirmation() {
+  isCanBeCompleted() {
     const { places } = this.state
     const minSelectedDesigns = this.getMinSelectedDesigns()
 
-    if (places.filter((place) => place > -1).length < minSelectedDesigns) {
-      this.setState({ isSelectWarningVisible: true })
-    } else {
+    return places.filter((place) => place > -1).length >= minSelectedDesigns
+  }
+
+  showCompleteReviewConfirmation() {
+    if (this.isCanBeCompleted()) {
       this.setState({ isShowCompleteConfirmMessage: true })
+    } else {
+      this.setState({ isSelectWarningVisible: true })
     }
   }
 
@@ -69,13 +73,10 @@ class MilestoneTypeFinalDesigns extends React.Component {
   }
 
   showCustomerCompleteReviewConfirmation() {
-    const { places } = this.state
-    const minSelectedDesigns = this.getMinSelectedDesigns()
-
-    if (places.filter((place) => place > -1).length < minSelectedDesigns) {
-      this.setState({ isSelectWarningVisible: true })
-    } else {
+    if (this.isCanBeCompleted()) {
       this.setState({ isShowCustomerCompleteConfirmMessage: true })
+    } else {
+      this.setState({ isSelectWarningVisible: true })
     }
   }
 
@@ -86,10 +87,9 @@ class MilestoneTypeFinalDesigns extends React.Component {
   completeReview() {
     const { milestone, completeMilestone } = this.props
     const { places, selectedLinks } = this.state
-    const minSelectedDesigns = this.getMinSelectedDesigns()
     const links = _.get(milestone, 'details.content.links', [])
 
-    if (places.filter((place) => place > -1).length < minSelectedDesigns) {
+    if (!this.isCanBeCompleted()) {
       this.setState({ isSelectWarningVisible: true })
       return
     }
@@ -240,7 +240,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
   }
 
   onPlaceChange(linkIndex, place, isSelected) {
-    const { places } = this.state
+    const { places, isSelectWarningVisible } = this.state
     let newPlaces = [...places]
 
     if (isSelected) {
@@ -254,6 +254,13 @@ class MilestoneTypeFinalDesigns extends React.Component {
 
     this.setState({
       places: newPlaces,
+    }, () => {
+      // hide warning if don't need anymore
+      if (isSelectWarningVisible && this.isCanBeCompleted()) {
+        this.setState({
+          isSelectWarningVisible: false,
+        })
+      }
     })
   }
 

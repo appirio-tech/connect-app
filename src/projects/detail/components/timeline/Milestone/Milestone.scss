@@ -130,6 +130,11 @@
       }
     }
   }
+
+  &:last-child .col-timeline-post-con::before {
+    display: none;
+  }
+
   .post-title-container {
     padding: 0;
     margin: 0;
