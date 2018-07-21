@@ -30,6 +30,7 @@ import {
   PHASE_STATUS_ACTIVE,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
+  PROJECT_FEED_TYPE_PRIMARY,
 } from '../../../config/constants'
 
 const SYSTEM_USER = {
@@ -70,6 +71,7 @@ class DashboardContainer extends React.Component {
       updateProductAttachment,
       removeProductAttachment,
       deleteProjectPhase,
+      feeds,
     } = this.props
 
     // system notifications
@@ -84,9 +86,11 @@ class DashboardContainer extends React.Component {
     const leftArea = (
       <ProjectInfoContainer
         currentMemberRole={currentMemberRole}
+        phases={phases}
         project={project}
         phases={phases}
         isSuperUser={isSuperUser}
+        feeds={feeds}
       />
     )
 
@@ -143,11 +147,12 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState }) => ({
+const mapStateToProps = ({ notifications, projectState, projectTopics }) => ({
   notifications,
   productTemplates: projectState.allProductTemplates,
   isProcessing: projectState.processing,
   phases: projectState.phases,
+  feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
 })
 
 const mapDispatchToProps = {

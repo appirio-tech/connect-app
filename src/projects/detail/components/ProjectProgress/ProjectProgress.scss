@@ -45,18 +45,16 @@
     padding-right: $base-unit*3;
     z-index: 2;
     overflow: hidden;
+    white-space: nowrap;
+
     @media screen and (max-width: $screen-md - 1px) {
       padding-right: $base-unit*3.8;
     }
 
     .group-right {
       align-items: center;
-      min-width: 240px;
       display: flex;
       justify-content: flex-end;
-      @media screen and (max-width: $screen-md - 1px) {
-        min-width: 100px;
-      }
     }
 
     .spent {
@@ -82,7 +80,7 @@
     width: 8px;
     height: 8px;
     left: -22px;
-    z-index: 11;
+    z-index: 3;
     top: calc(50% - 4px);
   }
 

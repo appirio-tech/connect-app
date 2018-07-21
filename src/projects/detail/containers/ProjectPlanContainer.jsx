@@ -17,7 +17,8 @@ import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
-import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT, PROJECT_STATUS_COMPLETED, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
+import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT, PROJECT_STATUS_COMPLETED,
+  PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY } from '../../../config/constants'
 import Sticky from 'react-stickynode'
 import { Link } from 'react-router-dom'
 
@@ -29,7 +30,8 @@ const ProjectPlanContainer = (props) => {
     isSuperUser,
     isManageUser,
     currentMemberRole,
-    phases
+    phases,
+    feeds,
   } = props
 
   // manager user sees all phases
@@ -45,9 +47,11 @@ const ProjectPlanContainer = (props) => {
   const leftArea = (
     <ProjectInfoContainer
       currentMemberRole={currentMemberRole}
+      phases={phases}
       project={project}
       phases={phases}
       isSuperUser={isSuperUser}
+      feeds={feeds}
     />
   )
   return (
@@ -95,11 +99,13 @@ ProjectPlanContainer.propTypes = {
   isManageUser: PT.bool.isRequired,
   project: PT.object.isRequired,
   productTemplates: PT.array.isRequired,
+  phases: PT.array.isRequired,
 }
 
-const mapStateToProps = ({ projectState }) => ({
+const mapStateToProps = ({ projectState, projectTopics }) => ({
   productTemplates: projectState.allProductTemplates,
-  phases: projectState.phases
+  phases: projectState.phases,
+  feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
 })
 
 const mapDispatchToProps = {

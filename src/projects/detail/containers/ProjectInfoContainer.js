@@ -26,7 +26,10 @@ class ProjectInfoContainer extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
-    return !_.isEqual(nextProps.project, this.props.project)
+    return !_.isEqual(nextProps.project, this.props.project) ||
+      !_.isEqual(nextProps.feeds, this.props.feeds) ||
+      !_.isEqual(nextProps.phases, this.props.phases) ||
+      nextProps.activeChannelId !== this.props.activeChannelId
   }
 
   setDuration({duration, status}) {
@@ -82,7 +85,8 @@ class ProjectInfoContainer extends React.Component {
 
   render() {
     const { duration } = this.state
-    const { project, phases, currentMemberRole, isSuperUser } = this.props
+    const { project, currentMemberRole, isSuperUser, phases, feeds,
+      hideInfo, hideLinks, hideMembers, onChannelClick, activeChannelId } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -126,33 +130,56 @@ class ProjectInfoContainer extends React.Component {
         address: attachment.downloadUrl,
       }))
 
+    const channels = feeds.map((feed) => ({
+      title: `#${feed.title}`,
+      address: `/projects/${project.id}#feed-${feed.id}`,
+      noNewPage: true,
+      onClick: onChannelClick ? () => onChannelClick(feed) : null,
+      isActive: feed.id === activeChannelId,
+    }))
+
     return (
       <div>
         <div className="sideAreaWrapper">
-          <ProjectInfo
-            project={project}
-            currentMemberRole={currentMemberRole}
-            duration={duration}
-            canDeleteProject={canDeleteProject}
-            onDeleteProject={this.onDeleteProject}
-            onChangeStatus={this.onChangeStatus}
-            directLinks={directLinks}
-            isSuperUser={isSuperUser}
+          {!hideInfo &&
+            <ProjectInfo
+              project={project}
+              phases={phases}
+              currentMemberRole={currentMemberRole}
+              duration={duration}
+              canDeleteProject={canDeleteProject}
+              onDeleteProject={this.onDeleteProject}
+              onChangeStatus={this.onChangeStatus}
+              directLinks={directLinks}
+              isSuperUser={isSuperUser}
+            />
+          }
+          <LinksMenu
+            links={channels}
+            title="Channels"
+            moreText="view all"
+            noDots
           />
           <LinksMenu
             links={attachments}
             title="Latest files"
+            moreText="view all files"
+            noDots
           />
-          <LinksMenu
-            links={project.bookmarks || []}
-            canDelete={canManageLinks}
-            canEdit={canManageLinks}
-            canAdd={canManageLinks}
-            onAddNewLink={this.onAddNewLink}
-            onDelete={this.onDeleteLink}
-            onEdit={this.onEditLink}
-          />
-          <TeamManagementContainer projectId={project.id} members={project.members} />
+          {!hideLinks &&
+            <LinksMenu
+              links={project.bookmarks || []}
+              canDelete={canManageLinks}
+              canEdit={canManageLinks}
+              canAdd={canManageLinks}
+              onAddNewLink={this.onAddNewLink}
+              onDelete={this.onDeleteLink}
+              onEdit={this.onEditLink}
+            />
+          }
+          {!hideMembers &&
+            <TeamManagementContainer projectId={project.id} members={project.members} />
+          }
         </div>
       </div>
     )
@@ -161,8 +188,9 @@ class ProjectInfoContainer extends React.Component {
 
 ProjectInfoContainer.PropTypes = {
   currentMemberRole: PropTypes.string,
+  phases: PropTypes.array,
   project: PropTypes.object.isRequired,
-  phases: PropTypes.arrayOf(PropTypes.object)
+  isSuperUser: PropTypes.bool,
 }
 
 const mapDispatchToProps = { updateProject, deleteProject }
