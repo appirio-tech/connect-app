@@ -4,6 +4,8 @@ import _ from 'lodash'
 import moment from 'moment'
 import cn from 'classnames'
 
+import DotIndicator from '../../DotIndicator'
+import ActionsRow from '../../ActionsRow'
 import MilestonePostSpecification from '../../MilestonePostSpecification'
 import Form from '../../Form'
 import MilestonePostMessage from '../../MilestonePostMessage'
@@ -153,22 +155,15 @@ class MilestoneTypeFinalDesigns extends React.Component {
     updateMilestoneContent({
       extensionRequest: {
         duration: extensionDuration,
-        isDeclined: false,
-        isApproved: false,
       }
     })
   }
 
   declineExtension() {
-    const { updateMilestoneContent, milestone } = this.props
-    const extensionRequest = _.get(milestone, 'details.content.extensionRequest')
+    const { updateMilestoneContent } = this.props
 
     updateMilestoneContent({
-      extensionRequest: {
-        ...extensionRequest,
-        isDeclined: true,
-        isApproved: false,
-      }
+      extensionRequest: null,
     })
   }
 
@@ -182,11 +177,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
         ...milestone.details,
         content: {
           ...content,
-          extensionRequest: {
-            ...extensionRequest,
-            isApproved: true,
-            isDeclined: false,
-          }
+          extensionRequest: null,
         }
       }
     })
@@ -307,172 +298,190 @@ class MilestoneTypeFinalDesigns extends React.Component {
       : 100
 
     return (
-      <div
-        styleName={cn('milestone-post-specification', theme, {
-          completed: isCompleted,
-          'in-progress': isActive
-        })}
-      >
+      <div styleName={cn('milestone-post', theme)}>
         {/*
           Active status
          */}
         {isActive && (
           <div>
-            {/* <span styleName="dot" /> */}
-
             {!isInReview &&  (
-              <div styleName="separation-sm">
-                <ProjectProgress
-                  labelDayStatus={progressText}
-                  progressPercent={progressPercent}
-                  theme="light"
-                  readyForReview
-                >
-                  {!currentUser.isCustomer && (
-                    <button
-                      onClick={this.moveToReviewingState}
-                      className="tc-btn tc-btn-primary"
-                      disabled={links.length === 0}
+              <div>
+                <div styleName="top-space">
+                  <DotIndicator>
+                    <ProjectProgress
+                      labelDayStatus={progressText}
+                      progressPercent={progressPercent}
+                      theme="light"
+                      readyForReview
                     >
-                      Ready for review
-                    </button>
-                  )}
-                </ProjectProgress>
-              </div>)
-            }
+                      {!currentUser.isCustomer && (
+                        <button
+                          onClick={this.moveToReviewingState}
+                          className="tc-btn tc-btn-primary"
+                          disabled={links.length === 0}
+                        >
+                          Ready for review
+                        </button>
+                      )}
+                    </ProjectProgress>
+                  </DotIndicator>
+                </div>
+
+                {!currentUser.isCustomer && links.map((link, index) => (
+                  <DotIndicator hideLine key={index}>
+                    <div styleName="top-space">
+                      <LinkRow
+                        itemId={index}
+                        milestonePostLink={link.url}
+                        milestonePostTitle={link.title}
+                        milestoneType={link.type}
+                        deletePost={this.removeUrl}
+                        updatePost={this.updatedUrl}
+                      />
+                    </div>
+                  </DotIndicator>
+                ))}
+
+                {isAddingNewLink && (
+                  <DotIndicator hideLine>
+                    <div styleName="top-space">
+                      <Form
+                        label="New design link"
+                        maxTitle={64}
+                        defaultValues={{
+                          title: `Design ${links.length + 1}`,
+                          url: '',
+                        }}
+                        okButtonTitle={'Add link'}
+                        callbackCancel={this.cancelAddingLink}
+                        callbackOK={this.updatedUrl}
+                      />
+                    </div>
+                  </DotIndicator>
+                )}
+
+                {!currentUser.isCustomer && !isAddingNewLink && (
+                  <DotIndicator hideLine>
+                    <div styleName="top-space">
+                      <ActionsRow
+                        type="secondary"
+                        fakeName={`Design ${links.length + 1}`}
+                        buttons={[{
+                          title: 'Add a design link',
+                          onClick: this.addDesignLink,
+                        }]}
+                      />
+                    </div>
+                  </DotIndicator>
+                )}
+              </div>
+            )}
 
             {isInReview && (
-              <header styleName="milestone-heading">
-                Select the top {minCheckedDesigns} winning designs
-              </header>)
-            }
+              <div>
+                <DotIndicator>
+                  <div styleName="top-space">
+                    <header styleName="milestone-heading">
+                      Select the top {minCheckedDesigns} winning designs
+                    </header>
+                  </div>
+                </DotIndicator>
 
-            {!isInReview && !currentUser.isCustomer && links.map((link, index) => (
-              <div styleName="content-link-wrap separation-sm" key={index}>
-                <div styleName="add-specification-wrap separation-sm">
-                  <LinkRow
-                    itemId={index}
-                    milestonePostLink={link.url}
-                    milestonePostTitle={link.title}
-                    milestoneType={link.type}
-                    deletePost={this.removeUrl}
-                    updatePost={this.updatedUrl}
-                  />
-                </div>
-              </div>
-            ))}
-
-            {isInReview && links.map((link, index) => (
-              <div styleName="content-link-wrap separation-sm" key={index}>
-                <div styleName="add-specification-wrap separation-sm">
-                  <WinnerSelectionBar
-                    label={link.title}
-                    link={link.url}
-                    type={link.type}
-                    index={index}
-                    onPlaceChange={this.onPlaceChange}
-                    onBonusChange={this.onBonusChange}
-                    isSelectedBonus={_.includes(selectedLinks, index)}
-                    selectedPlace={places.indexOf(index) + 1}
-                    placesChosen={places}
-                  />
-                </div>
-              </div>
-            ))}
-
-            {isAddingNewLink && (
-              <div styleName="separation-sm">
-                <Form
-                  label="New design link"
-                  maxTitle={64}
-                  defaultValues={{
-                    title: `Design ${links.length + 1}`,
-                    url: '',
-                  }}
-                  okButtonTitle={'Add link'}
-                  callbackCancel={this.cancelAddingLink}
-                  callbackOK={this.updatedUrl}
-                />
-              </div>
-            )}
-
-            {!currentUser.isCustomer && !isInReview && !isAddingNewLink && (
-              <div styleName="separation-sm">
-                <MilestonePostSpecification
-                  label={'Add a design link'}
-                  fakeName={`Design ${links.length + 1}`}
-                  onClick={this.addDesignLink}
-                />
-              </div>
-            )}
-
-            {isShowExtensionRequestMessage && (
-              <div styleName="separation-sm">
-                <MilestonePostMessage
-                  label={'Milestone extension request'}
-                  backgroundColor={'#FFF4F4'}
-                  message={'Be careful, requesting extensions will change the project overall milestone. Proceed with caution and only if there are not enough submissions to satisfy our delivery policy.'}
-                  isShowSelection
-                  buttons={[
-                    { title: 'Cancel', onClick: this.hideExtensionRequestMessage, type: 'default' },
-                    { title: 'Request extension', onClick: this.requestExtension, type: 'warning' },
-                  ]}
-                />
-              </div>
-            )}
-
-            {
-              !!extensionRequest &&
-              !extensionRequest.isApproved &&
-              !extensionRequest.isDeclined &&
-            (
-              <div styleName="separation-sm">
-                <MilestonePostMessage
-                  label={'Milestone extension requested'}
-                  backgroundColor={'#CEE6FF'}
-                  message={`Due to unusually high load on our network we had less than the minimum number or design submissions. In order to provide you with the appropriate number of design options we’ll have to extend the milestone with ${extensionRequest.duration * 24}h. This time would be enough to increase the capacity and make sure your project is successful.<br /><br />Please make a decision in the next 24h. After that we will automatically extend the project to make sure we deliver success to you.`}
-                  buttons={[
-                    { title: 'Decline extension', onClick: this.declineExtension, type: 'warning' },
-                    { title: 'Approve extension', onClick: this.approveExtension, type: 'primary' },
-                  ]}
-                />
-              </div>
-            )}
-
-            {isShowCompleteConfirmMessage && (
-              <div styleName="separation-sm">
-                <MilestonePostMessage
-                  label={'Complete milestone review'}
-                  backgroundColor={'#FFF4F4'}
-                  message={'Warning! Complete the review only if you have the permission from the customer. We do not want to close the review early without the ability to get feedback from our customers and let them select the winning 5 designs for next round.'}
-                  isShowSelection={false}
-                  buttons={[
-                    { title: 'Cancel', onClick: this.hideCompleteReviewConfirmation, type: 'default' },
-                    { title: 'Complete review', onClick: this.completeReview, type: 'warning' },
-                  ]}
-                />
-              </div>
-            )}
-
-            {isShowCustomerCompleteConfirmMessage && (
-              <div styleName="separation-sm">
-                <MilestonePostMessage
-                  label="Design phase competition"
-                  backgroundColor={'#CEE6FF'}
-                  message="This selection is final and cannot be undone. Once you confirm your selection we will close the design phase and can proceed to the next one. Clicking on the Confirm selection button would make the source files available for download."
-                  isShowSelection={false}
-                  buttons={[
-                    { title: 'Cancel', onClick: this.hideCustomerCompleteReviewConfirmation, type: 'default' },
-                    { title: 'Complete selection', onClick: this.completeReview, type: 'primary' },
-                  ]}
-                />
+                {links.map((link, index) => (
+                  <DotIndicator hideLine key={index}>
+                    <div styleName="top-space">
+                      <WinnerSelectionBar
+                        label={link.title}
+                        link={link.url}
+                        type={link.type}
+                        index={index}
+                        onPlaceChange={this.onPlaceChange}
+                        onBonusChange={this.onBonusChange}
+                        isSelectedBonus={_.includes(selectedLinks, index)}
+                        selectedPlace={places.indexOf(index) + 1}
+                        placesChosen={places}
+                      />
+                    </div>
+                  </DotIndicator>
+                ))}
               </div>
             )}
 
             {isSelectWarningVisible && (
-              <div styleName="message-bar hide-progress-bar" className="flex center">
-                <i>Please select all {minCheckedDesigns} places to complete the review</i>
-              </div>
+              <DotIndicator hideLine>
+                <div styleName="top-space">
+                  <div styleName="message-bar" className="flex center">
+                    <i>Please select all {minCheckedDesigns} places to complete the review</i>
+                  </div>
+                </div>
+              </DotIndicator>
+            )}
+
+            {isShowExtensionRequestMessage && (
+              <DotIndicator hideLine>
+                <div styleName="top-space">
+                  <MilestonePostMessage
+                    label={'Milestone extension request'}
+                    backgroundColor={'#FFF4F4'}
+                    message={'Be careful, requesting extensions will change the project overall milestone. Proceed with caution and only if there are not enough submissions to satisfy our delivery policy.'}
+                    isShowSelection
+                    buttons={[
+                      { title: 'Cancel', onClick: this.hideExtensionRequestMessage, type: 'default' },
+                      { title: 'Request extension', onClick: this.requestExtension, type: 'warning' },
+                    ]}
+                  />
+                </div>
+              </DotIndicator>
+            )}
+
+            {!!extensionRequest && (
+              <DotIndicator hideLine>
+                <div styleName="top-space">
+                  <MilestonePostMessage
+                    label={'Milestone extension requested'}
+                    backgroundColor={'#CEE6FF'}
+                    message={`Due to unusually high load on our network we had less than the minimum number or design submissions. In order to provide you with the appropriate number of design options we’ll have to extend the milestone with ${extensionRequest.duration * 24}h. This time would be enough to increase the capacity and make sure your project is successful.<br /><br />Please make a decision in the next 24h. After that we will automatically extend the project to make sure we deliver success to you.`}
+                    buttons={[
+                      { title: 'Decline extension', onClick: this.declineExtension, type: 'warning' },
+                      { title: 'Approve extension', onClick: this.approveExtension, type: 'primary' },
+                    ]}
+                  />
+                </div>
+              </DotIndicator>
+            )}
+
+            {isShowCompleteConfirmMessage && (
+              <DotIndicator hideLine>
+                <div styleName="top-space">
+                  <MilestonePostMessage
+                    label={'Complete milestone review'}
+                    backgroundColor={'#FFF4F4'}
+                    message={'Warning! Complete the review only if you have the permission from the customer. We do not want to close the review early without the ability to get feedback from our customers and let them select the winning 5 designs for next round.'}
+                    isShowSelection={false}
+                    buttons={[
+                      { title: 'Cancel', onClick: this.hideCompleteReviewConfirmation, type: 'default' },
+                      { title: 'Complete review', onClick: this.completeReview, type: 'warning' },
+                    ]}
+                  />
+                </div>
+              </DotIndicator>
+            )}
+
+            {isShowCustomerCompleteConfirmMessage && (
+              <DotIndicator hideLine>
+                <div styleName="top-space">
+                  <MilestonePostMessage
+                    label="Design phase competition"
+                    backgroundColor={'#CEE6FF'}
+                    message="This selection is final and cannot be undone. Once you confirm your selection we will close the design phase and can proceed to the next one. Clicking on the Confirm selection button would make the source files available for download."
+                    isShowSelection={false}
+                    buttons={[
+                      { title: 'Cancel', onClick: this.hideCustomerCompleteReviewConfirmation, type: 'default' },
+                      { title: 'Complete selection', onClick: this.completeReview, type: 'primary' },
+                    ]}
+                  />
+                </div>
+              </DotIndicator>
             )}
 
             {
@@ -481,30 +490,34 @@ class MilestoneTypeFinalDesigns extends React.Component {
               !isShowExtensionConfirmMessage &&
               !isShowCompleteConfirmMessage &&
               !isShowCustomerCompleteConfirmMessage &&
+              (!currentUser.isCustomer || isInReview) &&
+              !extensionRequest &&
             (
-              <div styleName="action-bar hide-progress-bar" className="flex center">
-                {(!currentUser.isCustomer || isInReview) && (
-                  <button
-                    className={'tc-btn tc-btn-primary'}
-                    onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.showCustomerCompleteReviewConfirmation}
-                    disabled={!isInReview}
-                  >
-                    Complete review ({
-                      daysLeft >= 0
-                        ? `${hoursLeft}h remaining`
-                        : `${-daysLeft}h delay`
-                    })
-                  </button>
-                )}
-                {!currentUser.isCustomer && !extensionRequest && (
-                  <button
-                    className={'tc-btn tc-btn-warning'}
-                    onClick={this.showExtensionRequestMessage}
-                  >
-                    Request Extension
-                  </button>
-                )}
-              </div>
+              <DotIndicator hideLine>
+                <div styleName="action-bar" className="flex center">
+                  {(!currentUser.isCustomer || isInReview) && (
+                    <button
+                      className={'tc-btn tc-btn-primary'}
+                      onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.showCustomerCompleteReviewConfirmation}
+                      disabled={!isInReview}
+                    >
+                      Complete review ({
+                        daysLeft >= 0
+                          ? `${hoursLeft}h remaining`
+                          : `${-daysLeft}h delay`
+                      })
+                    </button>
+                  )}
+                  {!currentUser.isCustomer && !extensionRequest && (
+                    <button
+                      className={'tc-btn tc-btn-warning'}
+                      onClick={this.showExtensionRequestMessage}
+                    >
+                      Request Extension
+                    </button>
+                  )}
+                </div>
+              </DotIndicator>
             )}
           </div>
         )}
@@ -514,22 +527,22 @@ class MilestoneTypeFinalDesigns extends React.Component {
          */}
         {isCompleted && (
           <div>
-            <header styleName={'milestone-heading selected-theme separation-sm'}>
-              Final designs
-            </header>
+            <div styleName="top-space">
+              <header styleName={'milestone-heading selected-theme'}>
+                Final designs
+              </header>
+            </div>
 
             {links.filter((link) => (link.selectedPlace || link.isSelected)).map((link, index) => (
-              <div styleName="content-link-wrap separation-sm" key={index}>
-                <div styleName="add-specification-wrap separation-sm">
-                  <WinnerSelectionBar
-                    label={link.title}
-                    link={link.url}
-                    type={link.type}
-                    isSelectedBonus={link.isSelected}
-                    selectedPlace={link.selectedPlace}
-                    placesChosen={places}
-                  />
-                </div>
+              <div styleName="top-space" key={index}>
+                <WinnerSelectionBar
+                  label={link.title}
+                  link={link.url}
+                  type={link.type}
+                  isSelectedBonus={link.isSelected}
+                  selectedPlace={link.selectedPlace}
+                  placesChosen={places}
+                />
               </div>
             ))}
           </div>

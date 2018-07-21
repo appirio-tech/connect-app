@@ -104,8 +104,8 @@ export function getTimelineMilestones(timelineId) {
     mockMilestone(timelineId, null, 'phase-specification', 'completed'),
     mockMilestone(timelineId, null, 'community-work', 'completed'),
     mockMilestone(timelineId, null, 'community-review', 'completed'),
-    mockMilestone(timelineId, null, 'checkpoint-review', 'active'),
-    mockMilestone(timelineId, null, 'final-designs', 'planned'),
+    mockMilestone(timelineId, null, 'checkpoint-review', 'completed'),
+    mockMilestone(timelineId, null, 'final-designs', 'active'),
     mockMilestone(timelineId, null, 'final-fixes', 'planned'),
     mockMilestone(timelineId, null, 'delivery', 'planned'),
   ])

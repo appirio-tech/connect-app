@@ -1,0 +1,50 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 2 * $base-unit;
+  position: relative;
+
+  &.default {
+    background-color: transparent;
+  }
+
+  &.primary {
+    background-color: $tc-dark-blue-30;
+    border-radius: 4px;
+  }
+
+  &.secondary {
+    background-color: $tc-gray-neutral-light;
+    border-radius: 4px;
+  }
+}
+
+.fake-name {
+  @include roboto;
+  align-items: center;
+  color: $tc-gray-05;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 15px;
+  left: 2 * $base-unit;
+  line-height: 30px;
+  position: absolute;
+
+  &::before {
+    background-color: $tc-gray-neutral-dark;
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: 30px;
+    margin-right: 2 * $base-unit;
+    width: 30px;
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

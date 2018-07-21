@@ -1,37 +1,11 @@
 @import '../../../../../../styles/includes';
 @import '~tc-ui/src/styles/tc-includes';
-// project-progress specific styles
-.milestone-post-specification {
-  @include roboto;
-  font-size: 15px;
 
-  .dot {
-    position: absolute;
-    background-color: #ffffff;
-    border: 2px solid #aaaaab;
-    border-radius: 100%;
-    width: 8px;
-    height: 8px;
-    left: -22px;
-    top: 20px;
-    z-index: 2;
+.milestone-post {
+  .top-space {
+    padding-top: $base-unit;
   }
 
-  /* in-progress state */
-  &.in-progress {
-    .dot {
-      background-color: #ffffff;
-      border: 2px solid #0681ff;
-    }
-  }
-  /* completed state */
-  &.completed {
-    .dot {
-      background-color: #0681ff;
-      border: 2px solid #0681ff;
-    }
-  }
-  /* milestone heading */
   .milestone-heading {
     background-color: #CEE6FF;
     border-radius: 4px 4px 0 0;
@@ -52,7 +26,7 @@
     }
 
     &.sepeartion-md{
-      margin-top: 5px;
+      padding-top: $base-unit;
     }
 
     &.selected-theme {
@@ -129,7 +103,6 @@
     font-style: italic;
     height: 25px;
     line-height: 25px;
-    margin-top: 10px;
     position: relative;
   }
   .action-bar {

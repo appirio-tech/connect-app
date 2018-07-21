@@ -17,6 +17,16 @@ import {
   MILESTONE_STATUS,
 } from '../../config/constants'
 
+function getNextNotHiddenMilestone(milestones, currentMilestoneIndex) {
+  let index = currentMilestoneIndex + 1
+
+  while (milestones[index] && milestones[index].hidden) {
+    index++
+  }
+
+  return milestones[index]
+}
+
 /**
  * Populate timeline with the `milestones` property
  *
@@ -88,7 +98,7 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
       })
     ]
 
-    const nextMilestone = timeline.timeline.milestones[milestoneIdx + 1]
+    const nextMilestone = getNextNotHiddenMilestone(timeline.timeline.milestones, milestoneIdx)
     if (nextMilestone) {
       const startDate = moment()
       const endDate = moment(nextMilestone.endDate)
@@ -134,7 +144,7 @@ export function extendProductMilestone(productId, timelineId, milestoneId, exten
     ]
 
     // move next milestone startDate
-    const nextMilestone = timeline.timeline.milestones[milestoneIdx + 1]
+    const nextMilestone = getNextNotHiddenMilestone(timeline.timeline.milestones, milestoneIdx)
     if (nextMilestone) {
       const nextStartDate = endDate.clone().add(1, 'days')
       const nextEndDate = moment(nextMilestone.endDate)
