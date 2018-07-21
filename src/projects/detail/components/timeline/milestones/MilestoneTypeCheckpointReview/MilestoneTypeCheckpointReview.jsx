@@ -26,6 +26,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
       selectedLinks: [],
       isInReview: false,
       isAddingNewLink: false,
+      isSelectWarningVisible: false,
       isShowExtensionRequestMessage: false,
       isShowExtensionConfirmMessage: false,
       isShowCompleteConfirmMessage: false,
@@ -120,7 +121,10 @@ class MilestoneTypeCheckpointReview extends React.Component {
   }
 
   showExtensionRequestMessage() {
-    this.setState({ isShowExtensionRequestMessage: true })
+    this.setState({
+      isShowExtensionRequestMessage: true,
+      isSelectWarningVisible: false,
+    })
   }
 
   hideExtensionRequestMessage() {
@@ -135,22 +139,15 @@ class MilestoneTypeCheckpointReview extends React.Component {
     updateMilestoneContent({
       extensionRequest: {
         duration: extensionDuration,
-        isDeclined: false,
-        isApproved: false,
       }
     })
   }
 
   declineExtension() {
-    const { updateMilestoneContent, milestone } = this.props
-    const extensionRequest = _.get(milestone, 'details.content.extensionRequest')
+    const { updateMilestoneContent } = this.props
 
     updateMilestoneContent({
-      extensionRequest: {
-        ...extensionRequest,
-        isDeclined: true,
-        isApproved: false,
-      }
+      extensionRequest: null,
     })
   }
 
@@ -164,11 +161,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
         ...milestone.details,
         content: {
           ...content,
-          extensionRequest: {
-            ...extensionRequest,
-            isApproved: true,
-            isDeclined: false,
-          }
+          extensionRequest: null,
         }
       }
     })
@@ -377,6 +370,16 @@ class MilestoneTypeCheckpointReview extends React.Component {
               </div>
             )}
 
+            {isSelectWarningVisible && (
+              <DotIndicator hideLine>
+                <div styleName="top-space">
+                  <div styleName="message-bar" className="flex center">
+                    <i>Please select all {minCheckedDesigns} designs to complete the review</i>
+                  </div>
+                </div>
+              </DotIndicator>
+            )}
+
             {isShowExtensionRequestMessage && (
               <DotIndicator hideLine>
                 <div styleName="top-space">
@@ -394,11 +397,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
               </DotIndicator>
             )}
 
-            {
-              !!extensionRequest &&
-              !extensionRequest.isApproved &&
-              !extensionRequest.isDeclined &&
-            (
+            {!!extensionRequest && (
               <DotIndicator hideLine>
                 <div styleName="top-space">
                   <MilestonePostMessage
@@ -431,23 +430,13 @@ class MilestoneTypeCheckpointReview extends React.Component {
               </DotIndicator>
             )}
 
-            {isSelectWarningVisible && (
-              <DotIndicator hideLine>
-                <div styleName="top-space">
-                  <div styleName="message-bar" className="flex center">
-                    <i>Please select all {minCheckedDesigns} designs to complete the review</i>
-                  </div>
-                </div>
-              </DotIndicator>
-            )}
-
             {
               !isCompleted &&
               !isShowExtensionRequestMessage &&
               !isShowExtensionConfirmMessage &&
               !isShowCompleteConfirmMessage &&
               (!currentUser.isCustomer || isInReview) &&
-              (!extensionRequest || extensionRequest.isApproved || extensionRequest.isDeclined) &&
+              !extensionRequest &&
             (
               <DotIndicator hideLine>
                 <div styleName="action-bar" className="flex center">
