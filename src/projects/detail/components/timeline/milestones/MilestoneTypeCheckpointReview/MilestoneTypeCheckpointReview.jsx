@@ -5,7 +5,7 @@ import moment from 'moment'
 import cn from 'classnames'
 
 import DotIndicator from '../../DotIndicator'
-import MilestonePostSpecification from '../../MilestonePostSpecification'
+import ActionsRow from '../../ActionsRow'
 import Form from '../../Form'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
@@ -333,10 +333,13 @@ class MilestoneTypeCheckpointReview extends React.Component {
 
                     {!isAddingNewLink && (
                       <div styleName="top-space">
-                        <MilestonePostSpecification
-                          label="Add a design link"
+                        <ActionsRow
+                          type="secondary"
                           fakeName={`Design ${links.length + 1}`}
-                          onClick={this.addDesignLink}
+                          buttons={[{
+                            title: 'Add a design link',
+                            onClick: this.addDesignLink,
+                          }]}
                         />
                       </div>
                     )}

@@ -6,7 +6,6 @@ import cn from 'classnames'
 
 import DotIndicator from '../../DotIndicator'
 import ActionsRow from '../../ActionsRow'
-import MilestonePostSpecification from '../../MilestonePostSpecification'
 import Form from '../../Form'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
