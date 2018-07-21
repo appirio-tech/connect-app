@@ -17,17 +17,16 @@ const page404 = compose(
   withProps({code:404})
 )
 const showCoderBotIfError = (hasError) => {
-  function generatePage403(message) {
-    const updatedMessage = `${message} If things don’t work or you’re sure it is Coder’s fault, send us a note at support@topcoder.com and we’ll fix it for you.`
-    return compose(
-      withProps({code:403, message: updatedMessage})
-    )
-  }
+
   let component = page404
+
   return branch(
     (props) => {
-      if (props.error.code === 403) {
-        component = generatePage403(props.error.msg)
+      if (props.error.code === 403 && props.error.msg.includes('Copilot')) {
+        const messageGenerator = `${props.error.msg.replace('Copilot: ', '')} If things don’t work or you’re sure it is Coder’s fault, send us a note at <a href="support@topcoder.com">support@topcoder.com</a> and we’ll fix it for you.`
+        component = compose(
+          withProps({code:403, message: messageGenerator})
+        )
       }
       return hasError(props)
     },
