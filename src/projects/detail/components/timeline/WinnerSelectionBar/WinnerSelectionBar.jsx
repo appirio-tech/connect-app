@@ -52,6 +52,7 @@ class WinnerSelectionBar extends React.Component {
       onBonusChange,
       type,
       selectedPlace,
+      maxPlace,
     } = this.props
     const props = this.props
 
@@ -72,18 +73,12 @@ class WinnerSelectionBar extends React.Component {
 
           {!!onPlaceChange && (!isSelected3TopWin || !!selectedPlace) && (
             <div styleName="position">
-              <label styleName={'checkbox-ctrl'} >
-                <input type="checkbox" styleName="checkbox" name="pos1" onChange={this.toggleSelected1st} checked={selectedPlace === 1} />
-                <span styleName={'checkbox-text pos1 ' + (placesChosen[0] > -1 ? 'inactive' : '' ) }>1</span>
-              </label>
-              <label styleName={'checkbox-ctrl'} >
-                <input type="checkbox" styleName="checkbox" name="pos2" onChange={this.toggleSelected2nd} checked={selectedPlace === 2} />
-                <span styleName={'checkbox-text pos2 ' + (placesChosen[1] > -1 ? 'inactive' : '' ) }>2</span>
-              </label>
-              <label styleName={'checkbox-ctrl'} >
-                <input type="checkbox" styleName="checkbox" name="pos3" onChange={this.toggleSelected3rd} checked={selectedPlace === 3} />
-                <span styleName={'checkbox-text pos3 ' + (placesChosen[2] > -1 ? 'inactive' : '' ) }>3</span>
-              </label>
+              {[1, 2, 3].filter((place) => place <= maxPlace).map((place) => (
+                <label styleName={'checkbox-ctrl'} >
+                  <input type="checkbox" styleName="checkbox" onChange={this[`toggleSelected${place}st`]} checked={selectedPlace === place} />
+                  <span styleName={`checkbox-text pos${place} ` + (placesChosen[place - 1] > -1 ? 'inactive' : '' ) }>{place}</span>
+                </label>
+              ))}
             </div>
           )}
 

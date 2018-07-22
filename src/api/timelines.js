@@ -124,7 +124,7 @@ export function getTimelineById(id) {
     mockMilestone(timelineId, null, 'community-review', 'completed'),
     mockMilestone(timelineId, null, 'checkpoint-review', 'completed'),
     mockMilestone(timelineId, null, 'final-designs', 'completed'),
-    mockMilestone(timelineId, null, 'final-fixes', 'planned'),
+    mockMilestone(timelineId, null, 'final-fix', 'planned'),
     mockMilestone(timelineId, null, 'delivery', 'completed'),
   ]
 

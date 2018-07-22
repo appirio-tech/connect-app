@@ -406,6 +406,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
                         isSelectedBonus={_.includes(selectedLinks, index)}
                         selectedPlace={places.indexOf(index) + 1}
                         placesChosen={places}
+                        maxPlace={links.length}
                       />
                     </div>
                   </DotIndicator>
@@ -422,6 +423,43 @@ class MilestoneTypeFinalDesigns extends React.Component {
                 </div>
               </DotIndicator>
             )}
+
+            {
+              !isCompleted &&
+              !isShowExtensionRequestMessage &&
+              !isShowExtensionConfirmMessage &&
+              !isShowCompleteConfirmMessage &&
+              !isShowCustomerCompleteConfirmMessage &&
+              (!currentUser.isCustomer || isInReview) &&
+            (
+              <DotIndicator hideLine>
+                <div styleName="action-bar" className="flex center">
+                  {(!currentUser.isCustomer || isInReview) && (
+                    <button
+                      className={'tc-btn tc-btn-primary'}
+                      onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.showCustomerCompleteReviewConfirmation}
+                      disabled={!isInReview}
+                    >
+                      Complete review ({
+                        daysLeft >= 0
+                          ? `${hoursLeft}h remaining`
+                          : `${-daysLeft}h delay`
+                      })
+                    </button>
+                  )}
+                  {!currentUser.isCustomer && !extensionRequest && (
+                    <button
+                      className={'tc-btn tc-btn-warning'}
+                      onClick={this.showExtensionRequestMessage}
+                    >
+                      Request Extension
+                    </button>
+                  )}
+                </div>
+              </DotIndicator>
+            )}
+          </div>
+        )}
 
             {isShowExtensionRequestMessage && (
               <DotIndicator hideLine>
@@ -489,44 +527,6 @@ class MilestoneTypeFinalDesigns extends React.Component {
                 </div>
               </DotIndicator>
             )}
-
-            {
-              !isCompleted &&
-              !isShowExtensionRequestMessage &&
-              !isShowExtensionConfirmMessage &&
-              !isShowCompleteConfirmMessage &&
-              !isShowCustomerCompleteConfirmMessage &&
-              (!currentUser.isCustomer || isInReview) &&
-              !extensionRequest &&
-            (
-              <DotIndicator hideLine>
-                <div styleName="action-bar" className="flex center">
-                  {(!currentUser.isCustomer || isInReview) && (
-                    <button
-                      className={'tc-btn tc-btn-primary'}
-                      onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.showCustomerCompleteReviewConfirmation}
-                      disabled={!isInReview}
-                    >
-                      Complete review ({
-                        daysLeft >= 0
-                          ? `${hoursLeft}h remaining`
-                          : `${-daysLeft}h delay`
-                      })
-                    </button>
-                  )}
-                  {!currentUser.isCustomer && !extensionRequest && (
-                    <button
-                      className={'tc-btn tc-btn-warning'}
-                      onClick={this.showExtensionRequestMessage}
-                    >
-                      Request Extension
-                    </button>
-                  )}
-                </div>
-              </DotIndicator>
-            )}
-          </div>
-        )}
 
         {/*
           Completed status

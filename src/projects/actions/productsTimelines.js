@@ -204,8 +204,8 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
 
     const finalFixesMilestone = timeline.timeline.milestones[milestoneIdx - 1]
 
-    if (!finalFixesMilestone || finalFixesMilestone.type !== 'final-fixes') {
-      throw new Error('Cannot find final-fixes milestone.')
+    if (!finalFixesMilestone || finalFixesMilestone.type !== 'final-fix') {
+      throw new Error('Cannot find final-fix milestone.')
     }
 
     const requests = [

@@ -5,28 +5,6 @@
   @include roboto;
   font-size: 15px;
 
-  .hide-sm {
-    display: inline-block;
-  }
-  &:before {
-    content: '';
-    width: 4px;
-    background-color: #fff;
-    position: absolute;
-    left: -20px;
-    top: -25px;
-    bottom: 0;
-  }
-  /* mobile view specific style */
-  @include viewSm {
-    height: auto;
-    min-height: $base-unit*10;
-    line-height: $base-unit*8;
-    border-radius: 0;
-    .hide-sm {
-      display: none;
-    }
-  }
   .label-layer {
     display: flex;
     justify-content: space-between;

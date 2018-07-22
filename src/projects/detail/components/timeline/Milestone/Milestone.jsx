@@ -236,7 +236,7 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && milestone.type === 'final-fixes' && (
+          {!isEditing && !isUpdating && milestone.type === 'final-fix' && (
             <MilestoneTypeFinalFixes
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}

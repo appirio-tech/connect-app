@@ -249,6 +249,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
     } = this.state
 
     const links = _.get(milestone, 'details.content.links', [])
+    const rejectedLinks = _.reject(links, { isSelected: true })
     const isInReview = _.get(milestone, 'details.content.isInReview', false)
     const extensionRequest = _.get(milestone, 'details.content.extensionRequest')
 
@@ -492,25 +493,29 @@ class MilestoneTypeCheckpointReview extends React.Component {
               </div>
             ))}
 
-            <div styleName="top-space">
-              <header
-                styleName={'milestone-heading rejected-theme no-line ' + (isRejectedExpanded ? 'open' : 'close')}
-                onClick={this.toggleRejectedSection}
-              >
-                Rejected designs
-              </header>
-            </div>
-            {isRejectedExpanded && _.reject(links, { isSelected: true }).map((link, index) => (
-              <div styleName="top-space" key={index}>
-                <LinkRow
-                  itemId={index}
-                  milestonePostLink={link.url}
-                  milestonePostTitle={link.title}
-                  milestoneType={link.type}
-                  isSelected={link.isSelected}
-                />
+            {rejectedLinks.length > 0 && (
+              <div>
+                <div styleName="top-space">
+                  <header
+                    styleName={'milestone-heading rejected-theme no-line ' + (isRejectedExpanded ? 'open' : 'close')}
+                    onClick={this.toggleRejectedSection}
+                  >
+                    Rejected designs
+                  </header>
+                </div>
+                {isRejectedExpanded && rejectedLinks.map((link, index) => (
+                  <div styleName="top-space" key={index}>
+                    <LinkRow
+                      itemId={index}
+                      milestonePostLink={link.url}
+                      milestonePostTitle={link.title}
+                      milestoneType={link.type}
+                      isSelected={link.isSelected}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
         )}
       </div>
