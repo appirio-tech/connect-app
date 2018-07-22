@@ -13,11 +13,37 @@ import { getProjectById, createProject as createProjectAPI,
   createProjectPhase,
   createPhaseProduct,
 } from '../../api/projects'
-import { getProductTemplate, getProjectTemplate, getProductTemplateByKey } from '../../api/templates'
-import { LOAD_PROJECT, CREATE_PROJECT, CREATE_PROJECT_STAGE, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
-  LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES,
-  LOAD_PROJECT_TEMPLATE, LOAD_PROJECT_PRODUCT_TEMPLATES, LOAD_ALL_PRODUCT_TEMPLATES, UPDATE_PRODUCT,
-  PROJECT_STATUS_DRAFT, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO, UPDATE_PHASE, DELETE_PROJECT_PHASE,
+import {
+  getProductTemplate,
+  getProjectTemplate,
+  getProductTemplateByKey,
+} from '../../api/templates'
+import {
+  getMilestoneTemplates,
+  createTimeline,
+  createMilestone,
+} from '../../api/timelines'
+import {
+  LOAD_PROJECT,
+  CREATE_PROJECT,
+  CREATE_PROJECT_STAGE,
+  CLEAR_LOADED_PROJECT,
+  UPDATE_PROJECT,
+  LOAD_DIRECT_PROJECT,
+  DELETE_PROJECT,
+  PROJECT_DIRTY,
+  PROJECT_DIRTY_UNDO,
+  LOAD_PROJECT_PHASES,
+  LOAD_PROJECT_TEMPLATE,
+  LOAD_PROJECT_PRODUCT_TEMPLATES,
+  LOAD_ALL_PRODUCT_TEMPLATES,
+  UPDATE_PRODUCT,
+  PROJECT_STATUS_DRAFT,
+  PRODUCT_DIRTY,
+  PRODUCT_DIRTY_UNDO,
+  UPDATE_PHASE,
+  DELETE_PROJECT_PHASE,
+  MILESTONE_STATUS,
 } from '../../config/constants'
 
 export function loadProject(projectId) {
@@ -112,7 +138,7 @@ export function loadProjectProductTemplates(projectTemplate) {
           alreadyLoadedProductTemplates.push(alreadyLoadedProductTemplate)
         } else {
           notLoadedProductTemplatesIds.push(product.id)
-        } 
+        }
       })
     }
 
@@ -126,8 +152,6 @@ export function loadProjectProductTemplates(projectTemplate) {
     })
   }
 }
-
-
 
 /**
  * Load all product templates
@@ -179,11 +203,117 @@ export function createProject(newProject) {
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT,
-      payload: Promise.resolve(createProjectAPI(newProject))
-      //Commenting as now project service is taking care of creating default stages for a project
-      //.then((project) => createProjectPhaseAndProduct(project, projectTemplate))
+      payload: createProjectAPI(newProject)
+        .then((project) => createProductsTimelineAndMilestone(project, dispatch))
     })
   }
+}
+
+/**
+ * Helper method to get the list of all products of the project
+ *
+ * @param {Object} project project
+ *
+ * @returns {Promise<[]>} list of products
+ */
+function getAllProjectProducts(project) {
+  return getProjectPhases(project.id)
+    .then((projectPhases) =>
+      Promise.all(projectPhases.phases.map((phase) =>
+        getPhaseProducts(project.id, phase.id))
+      )
+    )
+    .then((phasesProducts) => _.flatten(phasesProducts))
+}
+
+/**
+ * Create milestone using template and additional properties
+ *
+ * @param {Number} timelineId timeline id
+ * @param {Object} milestoneTemplate milestone template
+ * @param {Object} options additional properties not defined in template
+ *
+ * @returns {Promise} milestone
+ */
+function createMilestoneByTemplate(timelineId, milestoneTemplate, options) {
+  const milestone = _.pick(milestoneTemplate, [
+    'name',
+    'description',
+    'duration',
+    'type',
+    'order',
+    'plannedText',
+    'activeText',
+    'completedText',
+    'blockedText'
+  ])
+
+  milestone.startDate = options.startDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ')
+  milestone.endDate = options.endDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ')
+  milestone.status = options.status
+
+  return createMilestone(timelineId, milestone)
+}
+
+/**
+ * Create timeline and milestones for a product
+ *
+ * @param {Object} product product
+ *
+ * @return {Promise} product
+ */
+function createTimelineAndMilestoneForProduct(product) {
+  return getMilestoneTemplates(product.templateId).then((milestoneTemplates) => {
+    const milestoneDates = []
+
+    // calculate start/end dates for milestones
+    const endDate = moment().subtract(1, 'days')
+    milestoneTemplates.map((milestoneTemplate) => {
+      const startDate = endDate.clone().add(1, 'days')
+      endDate.add(milestoneTemplate.duration, 'days')
+
+      milestoneDates.push({
+        startDate,
+        endDate,
+      })
+    })
+
+    // calculate start/end dates for timeline
+    const timelineStartDate = milestoneDates.length ? milestoneDates[0].startDate : moment()
+    const timelineEndDate = milestoneDates.length ? milestoneDates[milestoneDates.length - 1].endDate : moment()
+
+    return createTimeline({
+      name: `Welcome to the ${product.name} phase`,
+      description: 'This is the first stage in our project. We’re going to show you the detailed plan in your timeline, with all the milestones.',
+      startDate: timelineStartDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+      endDate: timelineEndDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+      /* TODO $TIMELINE_MILESTONE$ here 'product'/productId has to be used when supported by server */
+      reference: 'phase',
+      referenceId: product.phaseId,
+    }).then((timeline) => {
+      return Promise.all(milestoneTemplates.map((milestoneTemplate, index) =>
+        createMilestoneByTemplate(timeline.id, milestoneTemplate, {
+          ...milestoneDates[index],
+          status: index === 0 ? MILESTONE_STATUS.ACTIVE : MILESTONE_STATUS.PLANNED
+        })
+      )).then(() => product)
+    })
+  })
+}
+
+/**
+ * Create timeline and milestones for all products of a project
+ *
+ * @param {Object} project project
+ *
+ * @returns {Promise} project
+ */
+function createProductsTimelineAndMilestone(project) {
+  return getAllProjectProducts(project)
+    .then((products) =>
+      Promise.all(products.map(createTimelineAndMilestoneForProduct))
+    )
+    .then(() => project)
 }
 
 export function createProduct(project, productTemplate) {
@@ -221,6 +351,7 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
       templateId: projectTemplate.id,
       type: projectTemplate.key || projectTemplate.productKey,
     })
+      .then(createTimelineAndMilestoneForProduct)
       .then(() => project)
   })
 }

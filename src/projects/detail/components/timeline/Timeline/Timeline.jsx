@@ -17,42 +17,42 @@ class Timeline extends React.Component {
 
   updateMilestone(milestoneId, values) {
     const {
-      productId,
+      product,
       updateProductMilestone,
       timeline,
     } = this.props
 
-    updateProductMilestone(productId, timeline.id, milestoneId, values)
+    updateProductMilestone(product.id, timeline.id, milestoneId, values)
   }
 
   completeMilestone(milestoneId, updatedProps = {}) {
     const {
-      productId,
+      product,
       completeProductMilestone,
       timeline,
     } = this.props
 
-    completeProductMilestone(productId, timeline.id, milestoneId, updatedProps)
+    completeProductMilestone(product.id, timeline.id, milestoneId, updatedProps)
   }
 
   extendMilestone(milestoneId, extendDuration, updatedProps = {}) {
     const {
-      productId,
+      product,
       extendProductMilestone,
       timeline,
     } = this.props
 
-    extendProductMilestone(productId, timeline.id, milestoneId, extendDuration, updatedProps)
+    extendProductMilestone(product.id, timeline.id, milestoneId, extendDuration, updatedProps)
   }
 
   submitFinalFixesRequest(milestoneId, finalFixRequests) {
     const {
-      productId,
+      product,
       submitFinalFixesRequest,
       timeline,
     } = this.props
 
-    submitFinalFixesRequest(productId, timeline.id, milestoneId, finalFixRequests)
+    submitFinalFixesRequest(product.id, timeline.id, milestoneId, finalFixRequests)
   }
 
   render() {

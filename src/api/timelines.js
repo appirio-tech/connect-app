@@ -1,10 +1,13 @@
 /**
- * Project and product templates API service
+ * Timelines and milestones API
  */
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL } from '../config/constants'
 
+/* TODO $TIMELINE_MILESTONE$ remove all mock code in this file */
+
+/*
 import moment from 'moment'
 
 function mockResponse(data, timeout = 1000) {
@@ -74,17 +77,17 @@ function mockMilestone(timelineId, milestoneId, type, status) {
 
 mockMilestone.timelines = {}
 mockMilestone.id = 0
-mockMilestone.startDate = moment().subtract(3, 'days')
+mockMilestone.startDate = moment().subtract(3, 'days') */
 
 /**
  * Get timeline by reference
  *
- * @return {Promise} list of project templates
+ * @return {Promise<[]>} list of timelines
  */
 export function getTimelinesByReference(reference, referenceId) {
   const filterQuery = encodeURIComponent(`reference=${reference}&referenceId=${referenceId}`)
 
-  return mockResponse([{
+  /* return mockResponse([{
     id: (getTimelinesByReference.id = (getTimelinesByReference.id || 0) + 1),
     name: 'Welcome to the design phase',
     description: 'This is the first stage in our project. We’re going to show you the detailed plan in your timeline, with all the milestones. During the execution the milestones will change to reflect the progress, collect your feedback, and deliver the final product. Check the <a href="https://www.youtube.com/channel/UCFv29ANLT2FQmtvS9DRixNA" target="_blank" rel="noopener noreferrer">YouTube video</a> and our <a href="https://help.topcoder.com/hc/en-us/articles/225540188-Topcoder-Connect-FAQs" target="_blank" rel="noopener noreferrer">help article</a> for more information. If you still have questions, please ask them in the stage message channel and we’ll be happy to assist you.',
@@ -92,15 +95,30 @@ export function getTimelinesByReference(reference, referenceId) {
     endDate: moment().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
     reference,
     referenceId,
-  }])
+  }]) */
 
   return axios.get(`${TC_API_URL}/v4/timelines?filter=${filterQuery}`)
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
 
+/**
+ * Get timeline by id
+ *
+ * @return {Promise} one timeline
+ */
+export function getTimelineById(id) {
 
-export function getTimelineMilestones(timelineId) {
-  return mockResponse([
+  /* const timeline = {
+    id: (getTimelinesByReference.id = (getTimelinesByReference.id || 0) + 1),
+    name: 'Welcome to the design phase',
+    description: 'This is the first stage in our project. We’re going to show you the detailed plan in your timeline, with all the milestones. During the execution the milestones will change to reflect the progress, collect your feedback, and deliver the final product. Check the <a href="https://www.youtube.com/channel/UCFv29ANLT2FQmtvS9DRixNA" target="_blank" rel="noopener noreferrer">YouTube video</a> and our <a href="https://help.topcoder.com/hc/en-us/articles/225540188-Topcoder-Connect-FAQs" target="_blank" rel="noopener noreferrer">help article</a> for more information. If you still have questions, please ask them in the stage message channel and we’ll be happy to assist you.',
+    startDate: moment().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+    endDate: moment().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+    reference,
+    referenceId,
+  }
+
+  timeline.milestones = [
     mockMilestone(timelineId, null, 'phase-specification', 'completed'),
     mockMilestone(timelineId, null, 'community-work', 'completed'),
     mockMilestone(timelineId, null, 'community-review', 'completed'),
@@ -108,20 +126,79 @@ export function getTimelineMilestones(timelineId) {
     mockMilestone(timelineId, null, 'final-designs', 'completed'),
     mockMilestone(timelineId, null, 'final-fixes', 'planned'),
     mockMilestone(timelineId, null, 'delivery', 'completed'),
-  ])
+  ]
 
-  return axios.get(`${TC_API_URL}/v4/timelines/${timelineId}/milestones`)
+  return mockResponse(timeline)
+  */
+
+  return axios.get(`${TC_API_URL}/v4/timelines/${id}`)
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
 
+/**
+ * Update milestone
+ *
+ * @param {Number} timelineId   timeline id
+ * @param {Number} milestoneId  milestone id
+ * @param {Object} updatedProps properties to update
+ *
+ * @returns {Promise} milestone
+ */
 export function updateMilestone(timelineId, milestoneId, updatedProps) {
-  return mockResponse({
+  /* return mockResponse({
     ...mockMilestone(timelineId, milestoneId, updatedProps.type, updatedProps.status),
     ...updatedProps
-  })
+  }) */
+
+  /* TODO $TIMELINE_MILESTONE$ as long as API doesn't let us change these values
+     we don't update them on the server.
+     When server is fixed this has to be removed */
+  delete updatedProps.endDate
+  delete updatedProps.completionDate
 
   return axios.patch(`${TC_API_URL}/v4/timelines/${timelineId}/milestones/${milestoneId}`, {
     param: updatedProps,
   })
     .then(resp => _.get(resp.data, 'result.content'))
+}
+
+/**
+ * Get milestone templates by product template id
+ *
+ * @param {Number} productTemplateId product template id
+ *
+ * @returns {Promise<[]>} list of milestone templates
+ */
+export function getMilestoneTemplates(productTemplateId) {
+  return axios.get(`${TC_API_URL}/v4/productTemplates/${productTemplateId}/milestones`)
+    .then(resp => _.get(resp.data, 'result.content', {}))
+}
+
+/**
+ * Create timeline
+ *
+ * @param {Object} timeline timeline
+ *
+ * @returns {Promise} timeline
+ */
+export function createTimeline(timeline) {
+  return axios.post(`${TC_API_URL}/v4/timelines`, {
+    param: timeline
+  })
+    .then(resp => _.get(resp.data, 'result.content', {}))
+}
+
+/**
+ * Create milestone in timeline
+ *
+ * @param {Number} timelineId timeline id
+ * @param {Object} milestone milestone
+ *
+ * @returns {Promise} milestone
+ */
+export function createMilestone(timelineId, milestone) {
+  return axios.post(`${TC_API_URL}/v4/timelines/${timelineId}/milestones`, {
+    param: milestone
+  })
+    .then(resp => _.get(resp.data, 'result.content', {}))
 }

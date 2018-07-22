@@ -75,14 +75,20 @@ export const productsTimelines = (state=initialState, action) => {
       }
     })
 
-  case LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_SUCCESS:
+  case LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_SUCCESS: {
+    const timeline = payload
+
+    // sort milestones by order as server doesn't do it
+    timeline.milestones = _.sortBy(timeline.milestones, 'order')
+
     return update(state, {
       [meta.productId]: {
         isLoading: { $set: false },
-        timeline: { $set: payload },
+        timeline: { $set: timeline },
         error: { $set: false },
       }
     })
+  }
 
   case LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE:
     return update(state, {

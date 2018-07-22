@@ -27,11 +27,11 @@ class ProductTimelineContainer extends React.Component {
       isLoading,
       timeline,
       loadProductTimelineWithMilestones,
-      productId,
+      product,
     } = this.props
 
     if (!isLoading && !timeline) {
-      loadProductTimelineWithMilestones(productId)
+      loadProductTimelineWithMilestones(product.id, product.phaseId)
     }
   }
 
@@ -76,8 +76,8 @@ const mapStateToProps = ({ productsTimelines, loadUser }, props) => {
   ]
 
   return {
-    timeline: _.get(productsTimelines[props.productId], 'timeline'),
-    isLoading: _.get(productsTimelines[props.productId], 'isLoading', false),
+    timeline: _.get(productsTimelines[props.product.id], 'timeline'),
+    isLoading: _.get(productsTimelines[props.product.id], 'isLoading', false),
     currentUser: {
       userId: parseInt(loadUser.user.id, 10),
       isCopilot: _.includes(loadUser.user.roles, ROLE_CONNECT_COPILOT),

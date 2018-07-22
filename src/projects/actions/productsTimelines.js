@@ -5,7 +5,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import {
   getTimelinesByReference,
-  getTimelineMilestones,
+  getTimelineById,
   updateMilestone,
 } from '../../api/timelines'
 import {
@@ -17,6 +17,14 @@ import {
   MILESTONE_STATUS,
 } from '../../config/constants'
 
+/**
+ * Get the next milestone in the list, which is not hidden
+ *
+ * @param {Array}  milestones            list of milestones
+ * @param {Number} currentMilestoneIndex index of the current milestone
+ *
+ * @returns {Object} milestone
+ */
 function getNextNotHiddenMilestone(milestones, currentMilestoneIndex) {
   let index = currentMilestoneIndex + 1
 
@@ -28,33 +36,24 @@ function getNextNotHiddenMilestone(milestones, currentMilestoneIndex) {
 }
 
 /**
- * Populate timeline with the `milestones` property
- *
- * @param {Object} timeline timeline
- *
- * @returns {Promise} timeline object with `milestones`
- */
-function populateProductTimelineWithMilestones(timeline) {
-  return getTimelineMilestones(timeline.id)
-    .then((milestones) => {
-      timeline.milestones = milestones
-
-      return timeline
-    })
-}
-
-/**
  * Loads product timeline with milestones
  *
- * @param {String} productId
+ * @param {String} productId product id
+ * @param {String} phaseId   phase id (TODO $TIMELINE_MILESTONE$, remove when use 'product' as reference instead of 'phase')
  */
-export function loadProductTimelineWithMilestones(productId) {
+export function loadProductTimelineWithMilestones(productId, phaseId) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_PRODUCT_TIMELINE_WITH_MILESTONES,
-      payload: getTimelinesByReference('product', productId)
-        .then((timelines) => timelines[0])
-        .then(populateProductTimelineWithMilestones),
+      // TODO $TIMELINE_MILESTONE$ here 'product' has to be used as a reference instead of phase
+      // when supported by server
+      payload: getTimelinesByReference('phase', phaseId)
+        // if product doesn't have timeline, return null
+        .then((timelines) => timelines[0] || null)
+        // TODO $TIMELINE_MILESTONE$  as getTimelinesByReference returns timelines not with all milestones
+        // requests timelines again using endpoint which return all milestones
+        // the next line has to be remove when fixed https://github.com/topcoder-platform/tc-project-service/issues/116
+        .then((timeline) => timeline ? getTimelineById(timeline.id) : null),
       meta: {
         productId
       }
@@ -68,8 +67,6 @@ export function loadProductTimelineWithMilestones(productId) {
  * @param {Number} timelineId   timeline id
  * @param {Number} milestoneId  milestone id
  * @param {Object} updatedProps params need to update
- *
- * @return {Promise} updated milestone
  */
 export function updateProductMilestone(productId, timelineId, milestoneId, updatedProps) {
   return (dispatch) => {
@@ -84,6 +81,16 @@ export function updateProductMilestone(productId, timelineId, milestoneId, updat
   }
 }
 
+/**
+ * Mark the current milestone as 'completed', and the next milestone as 'active'.
+ * Also adjust staring time and duration of the next milestone.
+ * Optionally updates some properties of the completed milestone.
+ *
+ * @param {Number} productId    product id
+ * @param {Number} timelineId   timeline id
+ * @param {Number} milestoneId  milestone id
+ * @param {Object} updatedProps (optional) milestone properties to update
+ */
 export function completeProductMilestone(productId, timelineId, milestoneId, updatedProps = {}) {
   return (dispatch, getState) => {
     const timeline = getState().productsTimelines[productId]
@@ -124,6 +131,16 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
   }
 }
 
+/**
+ * Extends the milestone
+ * Also adjust staring time and duration of the next milestone.
+ *
+ * @param {Number} productId      product id
+ * @param {Number} timelineId     timeline id
+ * @param {Number} milestoneId    milestone id
+ * @param {Number} extendDuration duration to extend in days
+ * @param {Object} updatedProps   (optional) milestone properties to update
+ */
 export function extendProductMilestone(productId, timelineId, milestoneId, extendDuration, updatedProps = {}) {
   return (dispatch, getState) => {
     const timeline = getState().productsTimelines[productId]
@@ -169,6 +186,16 @@ export function extendProductMilestone(productId, timelineId, milestoneId, exten
   }
 }
 
+/**
+ * Make visible final fixes milestone and adds the list of final fix requests.
+ * Also adjust start/end time of final-fix milestone.
+ * Marks that current milestone has submitted some final fixes.
+ *
+ * @param {Number} productId        product id
+ * @param {Number} timelineId       timeline id
+ * @param {Number} milestoneId      milestone id
+ * @param {Array}  finalFixRequests list of final fixe requests
+ */
 export function submitFinalFixesRequest(productId, timelineId, milestoneId, finalFixRequests) {
   return (dispatch, getState) => {
     const timeline = getState().productsTimelines[productId]

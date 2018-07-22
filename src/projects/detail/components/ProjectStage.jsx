@@ -174,7 +174,7 @@ class ProjectStage extends React.Component{
           <ProjectStageTabs activeTab={activeTab} onTabClick={onTabClick} />
 
           {activeTab === 'timeline' &&
-            <ProductTimelineContainer productId={product.id} />
+            <ProductTimelineContainer product={product} />
           }
 
           {activeTab === 'posts' &&

@@ -1,5 +1,4 @@
 import React from 'react'
-import PT from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
 

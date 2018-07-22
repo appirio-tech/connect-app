@@ -70,7 +70,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
   }
 
   render() {
-    const { milestone, theme, currentUser, completeMilestone } = this.props
+    const { milestone, theme, currentUser } = this.props
     const { isAddingLink } = this.state
 
     const specificationUrl = _.get(milestone, 'details.content.specificationUrl')

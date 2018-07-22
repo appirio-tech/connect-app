@@ -131,7 +131,7 @@
     }
   }
 
-  &:last-child .col-timeline-post-con::before {
+  &:last-child .col-timeline-post-con.completed::before {
     display: none;
   }
 
