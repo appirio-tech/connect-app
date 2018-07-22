@@ -150,7 +150,7 @@ class Milestone extends React.Component {
     }
 
     return (
-      <div styleName={'timeline-post '}>
+      <div styleName="timeline-post">
         {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing) ? 'hover ': '')} />)}
         <div styleName="col-date">
           <div styleName="month">{month}</div>
@@ -160,6 +160,7 @@ class Milestone extends React.Component {
           styleName={cn('col-timeline-post-con', {
             completed: isCompleted,
             'in-progress': isActive,
+            'is-editing': isEditing,
           })}
         >
           <i styleName={'status-ring'} />

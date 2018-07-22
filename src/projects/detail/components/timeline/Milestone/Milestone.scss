@@ -131,7 +131,8 @@
     }
   }
 
-  &:last-child .col-timeline-post-con.completed::before {
+  &:last-child .col-timeline-post-con.completed::before,
+  .col-timeline-post-con:not(.completed).is-editing::before {
     display: none;
   }
 
