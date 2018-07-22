@@ -49,10 +49,10 @@ class Milestone extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isUpdating } = this.props
+    const { milestone } = this.props
     const { isEditing } = this.state
 
-    if (isEditing && isUpdating && !nextProps.isUpdating && !nextProps.error) {
+    if (isEditing && milestone.isUpdating && !nextProps.milestone.isUpdating && !nextProps.error) {
       this.closeEditForm()
     }
   }
@@ -80,8 +80,9 @@ class Milestone extends React.Component {
   }
 
   updateMilestoneWithData(values) {
-    const { milestoneId, updateMilestone } = this.props
-    updateMilestone(milestoneId, values)
+    const { milestone, updateMilestone } = this.props
+
+    updateMilestone(milestone.id, values)
   }
 
   updateMilestoneContent(contentProps) {
@@ -139,7 +140,7 @@ class Milestone extends React.Component {
     const title = milestone.name
     const isUpdating = milestone.isUpdating
     const editableData = {
-      title: milestone.type,
+      name: milestone.name,
       startDate: milestone.startDate,
       endDate: milestone.endDate,
       plannedText: milestone.plannedText,

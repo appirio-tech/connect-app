@@ -48,7 +48,7 @@ class Form extends React.Component {
     const { values } = this.state
     const props = this.props
     const okButtonTitle = props.okButtonTitle
-    const isHaveTitle = defaultValues && defaultValues.hasOwnProperty('title')
+    const isHaveTitle = defaultValues && defaultValues.hasOwnProperty('name')
     const isHaveDate = defaultValues && defaultValues.hasOwnProperty('startDate') || defaultValues && defaultValues.hasOwnProperty('endDate')
     const isHaveUrl = defaultValues && defaultValues.hasOwnProperty('url')
     const isHaveType = props.isHaveType ? props.isHaveType : false
@@ -73,10 +73,10 @@ class Form extends React.Component {
         <div styleName="rows">
           {isHaveTitle && (
             <MilestonePostEditLink
-              valueDefault={values.title}
+              valueDefault={values.name}
               title={'Title'}
               maxTitle={props.maxTitle}
-              onChange={this.handlers.title}
+              onChange={this.handlers.name}
             />
           )}
 

@@ -245,11 +245,12 @@ function createMilestoneByTemplate(timelineId, milestoneTemplate, options) {
     'plannedText',
     'activeText',
     'completedText',
-    'blockedText'
+    'blockedText',
+    'hidden'
   ])
 
-  milestone.startDate = options.startDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ')
-  milestone.endDate = options.endDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ')
+  milestone.startDate = options.startDate.utc().format('YYYY-MM-DDTHH:mm:ssZ')
+  milestone.endDate = options.endDate.utc().format('YYYY-MM-DDTHH:mm:ssZ')
   milestone.status = options.status
 
   return createMilestone(timelineId, milestone)
@@ -285,18 +286,41 @@ function createTimelineAndMilestoneForProduct(product) {
     return createTimeline({
       name: `Welcome to the ${product.name} phase`,
       description: 'This is the first stage in our project. We’re going to show you the detailed plan in your timeline, with all the milestones.',
-      startDate: timelineStartDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
-      endDate: timelineEndDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+      startDate: timelineStartDate.utc().format('YYYY-MM-DDTHH:mm:ssZ'),
+      endDate: timelineEndDate.utc().format('YYYY-MM-DDTHH:mm:ssZ'),
       /* TODO $TIMELINE_MILESTONE$ here 'product'/productId has to be used when supported by server */
       reference: 'phase',
       referenceId: product.phaseId,
     }).then((timeline) => {
+      let concurrentPromise
+
+      milestoneTemplates.forEach((milestoneTemplate, index) => {
+        const request = createMilestoneByTemplate(timeline.id, milestoneTemplate, {
+          ...milestoneDates[index],
+          status: index === 0 ? MILESTONE_STATUS.ACTIVE : MILESTONE_STATUS.PLANNED
+        })
+
+        if (concurrentPromise) {
+          concurrentPromise.then(request)
+        } else {
+          concurrentPromise = request
+        }
+      })
+
+      return concurrentPromise.then(() => product)
+
+      /*
+       TODO $TIMELINE_MILESTONE$ as server has issue with concurrent requests
+       https://github.com/topcoder-platform/tc-project-service/issues/118
+       we have to comments this code and run requests one by one instead,
+       this code can be removed or uncommented depend on the changes on the server
+
       return Promise.all(milestoneTemplates.map((milestoneTemplate, index) =>
         createMilestoneByTemplate(timeline.id, milestoneTemplate, {
           ...milestoneDates[index],
           status: index === 0 ? MILESTONE_STATUS.ACTIVE : MILESTONE_STATUS.PLANNED
         })
-      )).then(() => product)
+      )).then(() => product) */
     })
   })
 }
