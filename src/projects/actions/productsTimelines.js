@@ -39,15 +39,12 @@ function getNextNotHiddenMilestone(milestones, currentMilestoneIndex) {
  * Loads product timeline with milestones
  *
  * @param {String} productId product id
- * @param {String} phaseId   phase id (TODO $TIMELINE_MILESTONE$, remove when use 'product' as reference instead of 'phase')
  */
-export function loadProductTimelineWithMilestones(productId, phaseId) {
+export function loadProductTimelineWithMilestones(productId) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_PRODUCT_TIMELINE_WITH_MILESTONES,
-      // TODO $TIMELINE_MILESTONE$ here 'product' has to be used as a reference instead of phase
-      // when supported by server
-      payload: getTimelinesByReference('phase', phaseId)
+      payload: getTimelinesByReference('product', productId)
         // if product doesn't have timeline, return null
         .then((timelines) => timelines[0] || null)
         // TODO $TIMELINE_MILESTONE$  as getTimelinesByReference returns timelines not with all milestones

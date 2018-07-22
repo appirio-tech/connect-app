@@ -288,26 +288,22 @@ function createTimelineAndMilestoneForProduct(product) {
       description: 'This is the first stage in our project. We’re going to show you the detailed plan in your timeline, with all the milestones.',
       startDate: timelineStartDate.utc().format('YYYY-MM-DDTHH:mm:ssZ'),
       endDate: timelineEndDate.utc().format('YYYY-MM-DDTHH:mm:ssZ'),
-      /* TODO $TIMELINE_MILESTONE$ here 'product'/productId has to be used when supported by server */
-      reference: 'phase',
-      referenceId: product.phaseId,
+      reference: 'product',
+      referenceId: product.id,
     }).then((timeline) => {
-      let concurrentPromise
+      // recursively create milestones one by one
+      function createNextMilestone(index = 0) {
+        if (index >= milestoneTemplates.length) {
+          return
+        }
 
-      milestoneTemplates.forEach((milestoneTemplate, index) => {
-        const request = createMilestoneByTemplate(timeline.id, milestoneTemplate, {
+        return createMilestoneByTemplate(timeline.id, milestoneTemplates[index], {
           ...milestoneDates[index],
           status: index === 0 ? MILESTONE_STATUS.ACTIVE : MILESTONE_STATUS.PLANNED
-        })
+        }).then(() => createNextMilestone(index + 1))
+      }
 
-        if (concurrentPromise) {
-          concurrentPromise.then(request)
-        } else {
-          concurrentPromise = request
-        }
-      })
-
-      return concurrentPromise.then(() => product)
+      return createNextMilestone()
 
       /*
        TODO $TIMELINE_MILESTONE$ as server has issue with concurrent requests

@@ -31,7 +31,7 @@ class ProductTimelineContainer extends React.Component {
     } = this.props
 
     if (!isLoading && !timeline) {
-      loadProductTimelineWithMilestones(product.id, product.phaseId)
+      loadProductTimelineWithMilestones(product.id)
     }
   }
 
