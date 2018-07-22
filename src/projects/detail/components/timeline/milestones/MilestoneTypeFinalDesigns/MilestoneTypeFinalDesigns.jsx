@@ -458,8 +458,6 @@ class MilestoneTypeFinalDesigns extends React.Component {
                 </div>
               </DotIndicator>
             )}
-          </div>
-        )}
 
             {isShowExtensionRequestMessage && (
               <DotIndicator hideLine>
@@ -527,6 +525,8 @@ class MilestoneTypeFinalDesigns extends React.Component {
                 </div>
               </DotIndicator>
             )}
+          </div>
+        )}
 
         {/*
           Completed status
