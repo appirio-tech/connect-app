@@ -123,7 +123,7 @@ class LinkRow extends React.Component {
             {props.milestoneType !== 'download' && (
               <span
                 className={'flex-child'}
-                styleName={cn('label-title', 'span-first', props.milestoneType) }
+                styleName={cn('label-title', 'span-first') }
                 style={ labelMilestoneStyle }
               >
                 {this.getLabel()}
@@ -220,25 +220,61 @@ class LinkRow extends React.Component {
 
         {this.state.isEditing && props.milestoneType === 'specification' && (<div styleName="small-separator">
           <Form
-            callbackCancel={this.closeEditForm}
-            defaultValues={{ url: props.milestonePostLink }}
-            callbackOK={this.updatePost}
-            label={'Edit specification document link'}
-            okButtonTitle={'Save changes'}
+            fields={[{
+              label: 'Url',
+              placeholder: 'Url',
+              name: 'url',
+              value: props.milestonePostLink,
+              type: 'text',
+              validations: {
+                isRelaxedUrl: true,
+                isRequired: true
+              },
+              validationError: 'URL is required',
+              validationErrors: {
+                isRelaxedUrl: 'Please enter a valid URL'
+              }
+            }]}
+            onCancelClick={this.closeEditForm}
+            onSubmit={this.updatePost}
+            submitButtonTitle="Save changes"
+            title="Edit specification document link"
           />
         </div>)}
 
         {this.state.isEditing && props.milestoneType === 'marvelapp' && (
           <div styleName="small-separator">
             <Form
-              callbackCancel={this.closeEditForm}
-              defaultValues={{
-                url: props.milestonePostLink,
-                title: props.milestonePostTitle
-              }}
-              callbackOK={this.updatePost}
-              label={'Edit design link'}
-              okButtonTitle={'Save changes'}
+              fields={[{
+                label: 'Title',
+                placeholder: 'Title',
+                name: 'title',
+                maxLength: 64,
+                value: props.milestonePostTitle,
+                type: 'text',
+                validations: {
+                  isRequired: true
+                },
+                validationError: 'Title is required',
+              }, {
+                label: 'URL',
+                placeholder: 'URL',
+                name: 'url',
+                value: props.milestonePostLink,
+                type: 'text',
+                validations: {
+                  isRelaxedUrl: true,
+                  isRequired: true
+                },
+                validationError: 'URL is required',
+                validationErrors: {
+                  isRelaxedUrl: 'Please enter a valid URL'
+                }
+              }]}
+              onCancelClick={this.closeEditForm}
+              onSubmit={this.updatePost}
+              submitButtonTitle="Save changes"
+              title="Edit design link"
             />
           </div>
         )}
@@ -246,11 +282,48 @@ class LinkRow extends React.Component {
         {this.state.isEditing && props.milestoneType === 'only-text' && (
           <div styleName="small-separator">
             <Form
-              callbackCancel={this.closeEditForm}
-              defaultValues={{ url: props.milestonePostLink }}
-              callbackOK={this.updatePost}
-              label={'Edit link'}
-              okButtonTitle={'Save changes'}
+              fields={[{
+                label: 'Title',
+                placeholder: 'Title',
+                name: 'title',
+                value: '',
+                type: 'text',
+                validations: {
+                  isRequired: true
+                },
+                validationError: 'Title is required',
+              }, {
+                label: 'URL',
+                placeholder: 'URL',
+                name: 'url',
+                value: '',
+                type: 'text',
+                validations: {
+                  isRelaxedUrl: true,
+                  isRequired: true
+                },
+                validationError: 'URL is required',
+                validationErrors: {
+                  isRelaxedUrl: 'Please enter a valid URL'
+                }
+              }, {
+                label: 'Type',
+                placeholder: 'Type',
+                name: 'type',
+                value: '',
+                type: 'select',
+                options: [{
+                  title: 'Any', value: ''
+                }, {
+                  title: 'ZIP file', value: 'zip'
+                }, {
+                  title: 'PNG file', value: 'png'
+                }]
+              }]}
+              onCancelClick={this.closeEditForm}
+              onSubmit={this.updatedUrl}
+              submitButtonTitle="Add link"
+              title="Adding a link"
             />
           </div>
         )}

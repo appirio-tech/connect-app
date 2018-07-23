@@ -1,144 +1,35 @@
 @import '../../../../../styles/includes';
 @import '~tc-ui/src/styles/tc-includes';
-// project-progress specific styles
+
 .milestone-post {
-  position: relative;
-  border-radius: 4px;
-  color: #151516;
-  height: auto;
-  line-height: $base-unit*10;
-  @include roboto;
-  font-weight: 400;
-  font-size: 15px;
-  .hide-sm {
-    display: inline-block;
-  }
-  /* mobile view specific style */
-  @include viewSm {
-    height: auto;
-    min-height: $base-unit*10;
-    line-height: $base-unit*8;
-    border-radius: 0;
-    .hide-sm {
-      display: none;
+  display: table-row;
+
+  :global {
+    .SelectDropdown {
+      margin: 0;
     }
   }
 
-  .label-counter {
-    color: #1A85FF;
-    font-size: 11px;
-    font-weight: 500;
-    line-height: 20px;
+  .col-left {
+    display: table-cell;
     text-align: right;
+    vertical-align: top;
   }
 
-  .label-layer {
-    display: flex;
-    height: inherit;
-    position: relative;
-    line-height: inherit;
-    z-index: 10;
-    // overflow: hidden;
-    @include viewSm {
-      padding-right: $base-unit*7;
-    }
-
-    .label-title {
-      color: #404041;
-      font-size: 15px;
-      font-weight: 400;
-      line-height: 30px;
-      text-align: left;
-      margin: auto 10px auto 0;
-      white-space: nowrap;
-      min-width: 40px;
-      &.pos_22_56 {
-        margin-right: 22px;
-        padding-left: 56px;
-      }
-    }
-
-    .dropdow-list {
-      ul {
-        position: absolute;
-        top: 40px;
-        left: 50px;
-        height: 166px;
-        width: 30%;
-        overflow-y: scroll;
-        li {
-          background: white;
-          display: block;
-          text-decoration: none;
-          border: 1px solid #bbb;
-          padding: 0 10px;
-          white-space: nowrap;
-          margin-top: -1px;
-          height: 40px;
-          line-height: 40px;
-        }
-      }
-      &.pos_22_56 {
-        ul {
-          left: 110px;
-        }
-      }
-    }
-
-    input {
-      text-transform: initial;
-      width: 30%;
-      margin: auto -40px auto 0;
-      &::-webkit-input-placeholder {
-        text-transform: initial;
-        color:#A3A3AD;
-      }
-      &:-moz-placeholder {
-          text-transform: initial;
-          color:#A3A3AD;
-      }
-      &::-moz-placeholder {
-          text-transform: initial;
-          color:#A3A3AD;
-      }
-      &:-ms-input-placeholder {
-          text-transform: initial;
-          color:#A3A3AD;
-      }
-    }
-
-    span {
-      padding-left: 36px;
-      position: relative;
-      background: url('../../../assets/icons/arrow-6px-carret-down-normal.svg') 0px 50% / 15px no-repeat;
-    }
-
-    .group-right {
-      width: 405px;
-      display: flex;
-      line-height: 50px;
-      justify-content: space-between;
-      text-align: right;
-      color: #808080;
-      @include viewSm {
-        min-width: 100px;
-
-        &.hide-sm{
-          display: none;
-        }
-      }
-    }
+  .col-right {
+    display: table-cell;
+    text-align: left;
+    width: 100%;
   }
-  .milestone-text {
-    color: #808080;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 50px;
+
+  .label-title {
+    color: $tc-gray-80;
+    font-size: 15px;
+    line-height: 30px;
+    min-width: 40px;
+    padding: $base-unit 2 * $base-unit $base-unit 0;
+    text-align: right;
     white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    &:hover {
-      text-decoration: underline;
-    }
+    width: 100%;
   }
 }

@@ -56,8 +56,6 @@ class MilestoneTypeProgress extends React.Component {
 
     const links = [..._.get(milestone, 'details.content.links', [])]
 
-    values.type = 'only-text'
-
     if (typeof linkIndex === 'number') {
       links.splice(linkIndex, 1, values)
     } else {
@@ -135,7 +133,7 @@ class MilestoneTypeProgress extends React.Component {
                     <LinkRow
                       itemId={index}
                       milestonePostLink={link.url}
-                      milestoneType={link.type}
+                      milestoneType={'only-text'}
                       deletePost={this.removeUrl}
                       updatePost={this.updatedUrl}
                     />
@@ -145,11 +143,48 @@ class MilestoneTypeProgress extends React.Component {
                 {isAddingLink && (
                   <div styleName="top-space">
                     <Form
-                      callbackCancel={this.closeEditForm}
-                      defaultValues={{ url: '' }}
-                      callbackOK={this.updatedUrl}
-                      label="Adding a link"
-                      okButtonTitle="Add link"
+                      fields={[{
+                        label: 'Title',
+                        placeholder: 'Title',
+                        name: 'title',
+                        value: '',
+                        type: 'text',
+                        validations: {
+                          isRequired: true
+                        },
+                        validationError: 'Title is required',
+                      }, {
+                        label: 'URL',
+                        placeholder: 'URL',
+                        name: 'url',
+                        value: '',
+                        type: 'text',
+                        validations: {
+                          isRelaxedUrl: true,
+                          isRequired: true
+                        },
+                        validationError: 'URL is required',
+                        validationErrors: {
+                          isRelaxedUrl: 'Please enter a valid URL'
+                        }
+                      }, {
+                        label: 'Type',
+                        placeholder: 'Type',
+                        name: 'type',
+                        value: '',
+                        type: 'select',
+                        options: [{
+                          title: 'Any', value: ''
+                        }, {
+                          title: 'ZIP file', value: 'zip'
+                        }, {
+                          title: 'PNG file', value: 'png'
+                        }]
+                      }]}
+                      onCancelClick={this.closeEditForm}
+                      onSubmit={this.updatedUrl}
+                      submitButtonTitle="Add link"
+                      title="Adding a link"
                     />
                   </div>
                 )}

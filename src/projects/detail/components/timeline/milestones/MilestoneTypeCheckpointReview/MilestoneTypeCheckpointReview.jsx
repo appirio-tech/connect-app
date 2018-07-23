@@ -319,15 +319,36 @@ class MilestoneTypeCheckpointReview extends React.Component {
                     {isAddingNewLink && (
                       <div styleName="top-space">
                         <Form
-                          label="New design link"
-                          maxTitle={64}
-                          defaultValues={{
-                            title: `Design ${links.length + 1}`,
-                            url: '',
-                          }}
-                          okButtonTitle="Add link"
-                          callbackCancel={this.cancelAddingLink}
-                          callbackOK={this.updatedUrl}
+                          fields={[{
+                            label: 'Title',
+                            placeholder: 'Title',
+                            name: 'title',
+                            maxLength: 64,
+                            value: `Design ${links.length + 1}`,
+                            type: 'text',
+                            validations: {
+                              isRequired: true
+                            },
+                            validationError: 'Title is required',
+                          }, {
+                            label: 'URL',
+                            placeholder: 'URL',
+                            name: 'url',
+                            value: '',
+                            type: 'text',
+                            validations: {
+                              isRelaxedUrl: true,
+                              isRequired: true
+                            },
+                            validationError: 'URL is required',
+                            validationErrors: {
+                              isRelaxedUrl: 'Please enter a valid URL'
+                            }
+                          }]}
+                          onCancelClick={this.cancelAddingLink}
+                          onSubmit={this.updatedUrl}
+                          submitButtonTitle="Add link"
+                          title="New design link"
                         />
                       </div>
                     )}

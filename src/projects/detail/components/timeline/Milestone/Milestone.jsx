@@ -139,15 +139,6 @@ class Milestone extends React.Component {
     const date = startDate.format('D')
     const title = milestone.name
     const isUpdating = milestone.isUpdating
-    const editableData = {
-      name: milestone.name,
-      startDate: milestone.startDate,
-      endDate: milestone.endDate,
-      plannedText: milestone.plannedText,
-      activeText: milestone.activeText,
-      blockedText: milestone.blockedText,
-      completedText: milestone.completedText,
-    }
 
     return (
       <div styleName="timeline-post">
@@ -181,11 +172,88 @@ class Milestone extends React.Component {
 
           {isEditing && !isUpdating && (
             <Form
-              callbackCancel={this.closeEditForm}
-              callbackOK={this.updateMilestoneWithData}
-              label={'Milestone Properties'}
-              defaultValues={editableData}
-              okButtonTitle={'Update milestone'}
+              fields={[{
+                label: 'Name',
+                placeholder: 'Name',
+                name: 'name',
+                value: milestone.name,
+                type: 'text',
+                validations: {
+                  isRequired: true
+                },
+                validationError: 'Name is required',
+              }, {
+                type: 'date',
+                name: 'dates',
+                startDate: {
+                  label: 'Start',
+                  placeholder: 'Start date',
+                  name: 'startDate',
+                  value: moment(milestone.startDate).format('YYYY-MM-DD'),
+                  validations: {
+                    isRequired: true
+                  },
+                  validationError: 'Start date is required',
+                },
+                endDate: {
+                  label: 'End',
+                  placeholder: 'End date',
+                  name: 'endDate',
+                  value: moment(milestone.endDate).format('YYYY-MM-DD'),
+                  validations: {
+                    isRequired: true
+                  },
+                  validationError: 'End date is required',
+                }
+              }, {
+                label: 'Planned text',
+                placeholder: 'Planned text',
+                name: 'plannedText',
+                value: milestone.plannedText,
+                type: 'textarea',
+                autoResize: true,
+                validations: {
+                  isRequired: true
+                },
+                validationError: 'Planned text is required',
+              }, {
+                label: 'Active text',
+                placeholder: 'Active text',
+                name: 'activeText',
+                value: milestone.activeText,
+                type: 'textarea',
+                autoResize: true,
+                validations: {
+                  isRequired: true
+                },
+                validationError: 'Active text is required',
+              }, {
+                label: 'Blocked text',
+                placeholder: 'Blocked text',
+                name: 'blockedText',
+                value: milestone.blockedText,
+                type: 'textarea',
+                autoResize: true,
+                validations: {
+                  isRequired: true
+                },
+                validationError: 'Blocked text is required',
+              }, {
+                label: 'Completed text',
+                placeholder: 'Completed text',
+                name: 'completedText',
+                value: milestone.completedText,
+                type: 'textarea',
+                autoResize: true,
+                validations: {
+                  isRequired: true
+                },
+                validationError: 'Completed text is required',
+              }]}
+              onCancelClick={this.closeEditForm}
+              onSubmit={this.updateMilestoneWithData}
+              submitButtonTitle="Update milestone"
+              title="Milestone Properties"
             />
           )}
 

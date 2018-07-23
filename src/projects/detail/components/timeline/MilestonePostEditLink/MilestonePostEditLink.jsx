@@ -1,53 +1,53 @@
 import React from 'react'
 import PT from 'prop-types'
+import _ from 'lodash'
 import cn from 'classnames'
+
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
 
 import './MilestonePostEditLink.scss'
 
 class MilestonePostEditLink extends React.Component {
-
   constructor(props) {
     super(props)
 
     this.state = {
-      value: props.valueDefault,
+      value: props.value,
     }
 
     this.onValueChange = this.onValueChange.bind(this)
   }
 
-  onValueChange(event) {
+  onValueChange(name, value) {
     const { onChange } = this.props
-    const value = event.target.value
 
     this.setState({ value })
-    onChange(value)
+    onChange && onChange(name, value)
   }
 
   render() {
-    const { theme, title, maxTitle } = this.props
+    const { theme, label, maxLength } = this.props
     const { value } = this.state
 
-    const maxLength = maxTitle ? maxTitle : -1
+    const hasMaxLength = maxLength > -1
+    const inputProps = _.omit(this.props, 'label')
+    inputProps.onChange = this.onValueChange
 
     return (
-      <div styleName={cn('milestone-post', theme, { 'has-counter': !!maxTitle })}>
+      <div styleName={cn('milestone-post', theme, { 'has-counter': !!hasMaxLength })}>
         <div styleName="col-left">
-          <div styleName="label-title">{title}</div>
+          <label styleName="label-title">{label}</label>
         </div>
         <div styleName="col-right">
-          <div styleName="label-layer">
-            {!!maxTitle && (
-              <div styleName="label-counter">{`${value.length}/${maxTitle}`}</div>
-            )}
-            <input
-              type="url"
-              onChange={this.onValueChange}
-              value={value}
-              placeholder={title}
-              maxLength={maxLength}
-            />
-          </div>
+          {hasMaxLength&& (
+            <div styleName="label-counter">{`${value.length}/${maxLength}`}</div>
+          )}
+          {inputProps.type === 'textarea' ? (
+            <TCFormFields.Textarea {...inputProps} />
+          ) : (
+            <TCFormFields.TextInput {...inputProps} />
+          )}
         </div>
       </div>
     )
@@ -55,16 +55,15 @@ class MilestonePostEditLink extends React.Component {
 }
 
 MilestonePostEditLink.defaultProps = {
-  maxTitle: 0,
+  maxLength: -1,
   theme: '',
-  valueDefault: '',
 }
 
 MilestonePostEditLink.propTypes = {
-  maxTitle: PT.number,
-  onChange: PT.func.isRequired,
+  maxLength: PT.number,
+  onChange: PT.func,
   theme: PT.string,
-  valueDefault: PT.string,
+  value: PT.string,
 }
 
 export default MilestonePostEditLink

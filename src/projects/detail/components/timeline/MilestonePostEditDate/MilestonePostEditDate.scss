@@ -2,10 +2,34 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 .milestone-post {
-  @include roboto;
-
   display: table-row;
-  font-size: 15px;
+
+  :global {
+    .tc-label {
+      display: none;
+    }
+
+    input:not([type="checkbox"]).tc-file-field__inputs.error {
+      margin-bottom: 12 * $base-unit;
+    }
+
+    input:not([type="checkbox"]).tc-file-field__inputs.error:focus {
+      /* have to use !important because it is defined initially like that */
+      border-color: $tc-dark-blue-70 !important;
+      margin-bottom: 2 * $base-unit;
+    }
+
+    .tc-file-field__inputs.error + p {
+      position: absolute;
+      margin-bottom: 2 * $base-unit;
+      margin-top: - 10 * $base-unit;
+      min-width: 100%;
+    }
+
+    .tc-file-field__inputs.error:focus + p {
+      display: none;
+    }
+  }
 
   .col-left {
     display: table-cell;
@@ -17,9 +41,7 @@
     display: table-cell;
     text-align: left;
     width: 100%;
-  }
 
-  .label-layer {
     &::after {
       clear: both;
       content: '';
@@ -27,6 +49,12 @@
       height: 0;
       width: 100%;
     }
+  }
+
+  .field-wrapper {
+    float: left;
+    position: relative;
+    width: 170px;
   }
 
   .label-title {
@@ -38,11 +66,6 @@
     text-align: right;
     white-space: nowrap;
     width: 100%;
-
-    &:last-child {
-      display: none;
-      margin-top: 2 * $base-unit;
-    }
   }
 
   .col-right .label-title {
@@ -53,9 +76,7 @@
 
   /* use this selector to overwrite the global style for sure */
   input:not([type="checkbox"]) {
-    float: left;
     text-transform: initial;
-    width: 170px;
 
     &::placeholder {
       color: $tc-gray-30;
@@ -66,16 +87,18 @@
 
   /* when two inputs don't fit one line, make them two lines */
   @media screen and (max-width: 1090px) {
-    .label-title:last-child {
-      display: block;
-    }
-
     .col-right .label-title {
-      display: none;
+      clear: left;
+      transform: translateX(-100%);
+      width: auto;
     }
 
-    input:not([type="checkbox"]) {
+    .field-wrapper {
       clear: both;
+
+      &:last-child {
+        margin-top: - 8 * $base-unit;
+      }
     }
   }
 }

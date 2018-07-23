@@ -100,11 +100,25 @@ class MilestoneTypePhaseSpecification extends React.Component {
               <DotIndicator>
                 <div styleName="top-space">
                   <Form
-                    callbackCancel={this.closeEditForm}
-                    defaultValues={{ url: specificationUrl }}
-                    callbackOK={this.updatedUrl}
-                    label="Specification document link"
-                    okButtonTitle="Add link"
+                    fields={[{
+                      label: 'URL',
+                      placeholder: 'URL',
+                      name: 'url',
+                      value: specificationUrl,
+                      type: 'text',
+                      validations: {
+                        isRelaxedUrl: true,
+                        isRequired: true
+                      },
+                      validationError: 'URL is required',
+                      validationErrors: {
+                        isRelaxedUrl: 'Please enter a valid URL'
+                      }
+                    }]}
+                    onCancelClick={this.closeEditForm}
+                    onSubmit={this.updatedUrl}
+                    submitButtonTitle="Add link"
+                    title="Specification document link"
                   />
                 </div>
               </DotIndicator>
