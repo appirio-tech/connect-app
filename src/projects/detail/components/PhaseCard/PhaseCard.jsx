@@ -22,6 +22,7 @@ import ProjectTypeIcon from '../../../../components/ProjectTypeIcon'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import EditStageForm from './EditStageForm'
 import DeletePhase from './DeletePhase'
+import MobileDetect from 'mobile-detect'
 
 import './PhaseCard.scss'
 
@@ -47,12 +48,24 @@ class PhaseCard extends React.Component {
         isEditting: false
       })
     }
+    const paramPhaseId = parseInt(this.props.match.params.phaseId, 10)
+    if (this.props.attr.phase.id === paramPhaseId) {
+      this.setState({
+        isExpanded: true
+      })
+      this.props.history.push(`/projects/${this.props.match.params.projectId}/phase/${this.props.attr.phase.id}`)
+    }
   }
 
   toggleCardView() {
-    this.setState({
-      isExpanded: !this.state.isExpanded
-    })
+    const md = new MobileDetect(window.navigator.userAgent)
+    if(md.mobile()) {
+      window.open(`/projects/${this.props.match.params.projectId}/phase/${this.props.attr.phase.id}`, '_system')
+    } else {
+      this.setState({
+        isExpanded: !this.state.isExpanded
+      })
+    }
   }
 
   toggleEditView(e) {
@@ -75,90 +88,93 @@ class PhaseCard extends React.Component {
 
     return (
       <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')}>
-        <div styleName="static-view" onClick={!this.state.isEditting && this.toggleCardView}>
-          <div styleName="col">
-            <div styleName="project-details">
-              <div styleName="project-ico">
-                <ProjectTypeIcon type={attr.icon} />
+        {
+          this.paramPhaseId?null:(
+            <div styleName="static-view" onClick={!this.state.isEditting && this.toggleCardView }>
+              <div styleName="col">
+                <div styleName="project-details">
+                  <div styleName="project-ico">
+                    <ProjectTypeIcon type={attr.icon} />
+                  </div>
+                  <div styleName="project-title-container">
+                    <h4 styleName="project-title">{attr.title}</h4>
+                    {phaseEditable && !this.state.isEditting && (<a styleName="edit-btn" onClick={this.toggleEditView} />
+                    )}
+                  </div>
+                  <div styleName="meta-list">
+                    <span styleName="meta">{attr.duration}</span>
+                    <span styleName="meta">{attr.startEndDates}</span>
+                    {attr.posts && <span styleName="meta">{attr.posts}</span>}
+                  </div>
+                </div>
               </div>
-              <div styleName="project-title-container">
-                <h4 styleName="project-title">{attr.title}</h4>
-                {phaseEditable && !this.state.isEditting && (<a styleName="edit-btn" onClick={this.toggleEditView} />
-                )}
+
+              <div styleName="col hide-md">
+                <div styleName="price-details">
+                  <h5>{attr.price}</h5>
+                  <div styleName="meta-list">{attr.paidStatus}</div>
+                </div>
               </div>
-              <div styleName="meta-list">
-                <span styleName="meta">{attr.duration}</span>
-                <span styleName="meta">{attr.startEndDates}</span>
-                {attr.posts && <span styleName="meta">{attr.posts}</span>}
+              {status && status !== PHASE_STATUS_ACTIVE &&
+                (<div styleName="col show-md">
+                  <div styleName="price-details">
+                    <h5>{attr.price}</h5>
+                    <div styleName="meta-list">
+                      {status && (<span>{statusDetails.name}</span>)}
+                    </div>
+                  </div>
+                </div>)
+              }
+
+              {status && status === PHASE_STATUS_ACTIVE &&
+                (<div styleName="col show-md">
+                  <div styleName="price-details">
+                    <h5>{attr.price}</h5>
+                    <div styleName="meta-list">
+                      {!progressInPercent && status && (<span>{statusDetails.name}</span>)}
+                      {progressInPercent !== 0 && (<span>{progressInPercent}% done</span>)}
+                    </div>
+                  </div>
+                </div>)
+              }
+
+              <div styleName="col hide-md">
+                {status && status !== PHASE_STATUS_ACTIVE &&
+                  (<div styleName="status-details">
+                    <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
+                      {statusDetails.name}
+                    </div>
+                  </div>)
+                }
+
+                {status && status === PHASE_STATUS_ACTIVE &&
+                  (<div styleName="status-details">
+                    <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
+                      <ProjectProgress
+                        title=""
+                        viewType={ProjectProgress.ViewTypes.CIRCLE}
+                        percent={progressInPercent}
+                        thickness={7}
+                      >
+                        <span className="progress-text">{progressInPercent}% <span className="unit">completed</span></span>
+                      </ProjectProgress>
+
+                    </div>
+                  </div>)
+                }
               </div>
+
+              {!this.state.isEditting && (<a styleName="toggle-arrow" />
+              )}
+
+              {status && status === PHASE_STATUS_ACTIVE &&
+                (
+                  <div styleName="progressbar"><div styleName="fill" style={{ width: progressInPercent + '%' }} /></div>
+                )
+              }
             </div>
-          </div>
-
-          <div styleName="col hide-md">
-            <div styleName="price-details">
-              <h5>{attr.price}</h5>
-              <div styleName="meta-list">{attr.paidStatus}</div>
-            </div>
-          </div>
-
-          {status && status !== PHASE_STATUS_ACTIVE &&
-            (<div styleName="col show-md">
-              <div styleName="price-details">
-                <h5>{attr.price}</h5>
-                <div styleName="meta-list">
-                  {status && (<span>{statusDetails.name}</span>)}
-                </div>
-              </div>
-            </div>)
-          }
-
-          {status && status === PHASE_STATUS_ACTIVE &&
-            (<div styleName="col show-md">
-              <div styleName="price-details">
-                <h5>{attr.price}</h5>
-                <div styleName="meta-list">
-                  {!progressInPercent && status && (<span>{statusDetails.name}</span>)}
-                  {progressInPercent !== 0 && (<span>{progressInPercent}% done</span>)}
-                </div>
-              </div>
-            </div>)
-          }
-
-          <div styleName="col hide-md">
-            {status && status !== PHASE_STATUS_ACTIVE &&
-              (<div styleName="status-details">
-                <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
-                  {statusDetails.name}
-                </div>
-              </div>)
-            }
-
-            {status && status === PHASE_STATUS_ACTIVE &&
-              (<div styleName="status-details">
-                <div styleName={'status ' + (status ? status.toLowerCase() : '')}>
-                  <ProjectProgress
-                    title=""
-                    viewType={ProjectProgress.ViewTypes.CIRCLE}
-                    percent={progressInPercent}
-                    thickness={7}
-                  >
-                    <span className="progress-text">{progressInPercent}% <span className="unit">completed</span></span>
-                  </ProjectProgress>
-
-                </div>
-              </div>)
-            }
-          </div>
-
-          {!this.state.isEditting && (<a styleName="toggle-arrow" />
-          )}
-
-          {status && status === PHASE_STATUS_ACTIVE &&
-            (
-              <div styleName="progressbar"><div styleName="fill" style={{ width: progressInPercent + '%' }} /></div>
-            )
-          }
-        </div>
+          )
+        }
         {!this.state.isEditting && (<div styleName="expandable-view">
           {this.props.children}
         </div>)}
