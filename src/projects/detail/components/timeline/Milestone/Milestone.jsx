@@ -1,3 +1,12 @@
+/**
+ * Milestone component
+ *
+ * Renders one milestone in timeline. Inside it renders:
+ * - milestone title
+ * - milestone description
+ * - milestone edit form (if open)
+ * - component depend on the milestone type
+ */
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
@@ -329,20 +338,13 @@ class Milestone extends React.Component {
   }
 }
 
-Milestone.defaultProps = {
-  finish: () => {},
-}
-
 Milestone.propTypes = {
-  postContent: PT.shape({
-    isCompleted: PT.boolean,
-    month: PT.string,
-    date: PT.string,
-    title: PT.string,
-    postMsg: PT.string,
-    finish: PT.func,
-    content: PT.array
-  })
+  completeMilestone: PT.func.isRequired,
+  currentUser: PT.object.isRequired,
+  extendMilestone: PT.func.isRequired,
+  milestone: PT.object.isRequired,
+  submitFinalFixesRequest: PT.func.isRequired,
+  updateMilestone: PT.func.isRequired,
 }
 
 export default Milestone

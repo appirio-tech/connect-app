@@ -1,3 +1,6 @@
+/**
+ * Milestone type 'checkpoint-review`
+ */
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
@@ -460,15 +463,16 @@ class MilestoneTypeCheckpointReview extends React.Component {
 }
 
 MilestoneTypeCheckpointReview.defaultProps = {
+  theme: null,
 }
 
 MilestoneTypeCheckpointReview.propTypes = {
-  progressPercent: PT.string,
-  labelDayStatus: PT.string,
-  labelSpent: PT.string,
-  labelStatus: PT.string,
-  isCompleted: PT.bool,
-  inProgress: PT.bool,
+  completeMilestone: PT.func.isRequired,
+  currentUser: PT.object.isRequired,
+  extendMilestone: PT.func.isRequired,
+  milestone: PT.object.isRequired,
+  theme: PT.string,
+  updateMilestoneContent: PT.func.isRequired,
 }
 
 export default MilestoneTypeCheckpointReview

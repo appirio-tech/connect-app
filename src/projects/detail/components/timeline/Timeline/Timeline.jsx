@@ -1,3 +1,6 @@
+/**
+ * Timeline component
+ */
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'

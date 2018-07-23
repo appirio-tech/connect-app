@@ -1,3 +1,15 @@
+/**
+ * Shows section with action buttons
+ *
+ * Has special case when `fakeName` is defined it shows a fake name left to button.
+ * It's intended to be used together with `type=secondary`.
+ *
+ * `type` can be one of:
+ *  - 'default'    - no special style
+ *  - 'primary'    - blue background for primary button actions
+ *  - 'secondary'  - gray background
+ *
+ */
 import React from 'react'
 import PT from 'prop-types'
 import cn from 'classnames'
@@ -41,7 +53,7 @@ ActionsRow.propTypes = {
   type: PT.oneOf([
     'default',
     'primary',
-    'secondary'
+    'secondary',
   ])
 }
 

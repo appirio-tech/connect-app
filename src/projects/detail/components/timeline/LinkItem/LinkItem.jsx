@@ -1,3 +1,8 @@
+/**
+ * Link item which can display static link or link with edit/delete buttons
+ *
+ *
+ */
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
@@ -163,23 +168,41 @@ class LinkItem extends React.Component {
   }
 }
 
-LinkItem.defaultProps = {
-  milestoneType: 'only-text',
-  image: require('../../../../../assets/icons/timeline-invoice.svg'),
-  milestonePostLink: '',
-  label: '',
-  isHideDot: false,
-}
-
 LinkItem.propTypes = {
-  label: PT.string,
-  isCompleted: PT.bool,
-  inProgress: PT.bool,
-  milestoneType: PT.string,
-  image: PT.string,
-  milestonePostLink: PT.string,
-  isHideDot: PT.bool,
-  deleteLink: PT.func
+  /** fields which will be rendered by LinkItemForm, see POSSIBLE_FIELDS for all possibilities */
+  fields: PT.arrayOf(PT.shape({
+    name: PT.string.isRequired,
+    value: PT.string,
+  })),
+
+  /** link object */
+  link: PT.shape({
+    title: PT.string,
+    type: PT.oneOf(_.map(MILESTONE_LINK_SUPPORTED_TYPES, 'value')),
+    url: PT.string.isRequired,
+    isSelected: PT.bool,
+  }),
+
+  /** this will passed to updateLink/deleteLink handlers */
+  itemId: PT.number,
+
+  /** title of edit link form */
+  formUpdateTitle: PT.string,
+
+  /** main button text of the edit link form */
+  formUpdateButtonTitle: PT.string,
+
+  /** delete link handler */
+  deleteLink: PT.func,
+
+  /** update link handler */
+  updateLink: PT.func,
+
+  /** indicates if link is updating by one of the handlers */
+  isUpdating: PT.bool,
+
+  /** select/deselect link callback */
+  onSelectChange: PT.func,
 }
 
 export default LinkItem

@@ -1,4 +1,5 @@
 import React from 'react'
+import PT from 'prop-types'
 import _ from 'lodash'
 
 import Form from '../Form'
@@ -6,6 +7,9 @@ import { MILESTONE_LINK_SUPPORTED_TYPES } from '../../../../../config/constants'
 
 import './LinkItemForm.scss'
 
+/**
+ * Default configuration of possible link properties
+ */
 const POSSIBLE_FIELDS = [{
   label: 'Title',
   placeholder: 'Title',
@@ -72,10 +76,24 @@ const LinkItemForm = ({
   )
 }
 
-LinkItemForm.defaultProps = {
-}
-
 LinkItemForm.propTypes = {
+  /** fields which will be rendered by LinkItemForm, see POSSIBLE_FIELDS for all possibilities */
+  fields: PT.arrayOf(PT.shape({
+    name: PT.string.isRequired,
+    value: PT.string,
+  })),
+
+  /** cancel button click callback */
+  onCancelClick: PT.func.isRequired,
+
+  /** form submit callback */
+  onSubmit: PT.func.isRequired,
+
+  /** submit button title */
+  submitButtonTitle: PT.string.isRequired,
+
+  /** form title */
+  title: PT.string.isRequired,
 }
 
 export default LinkItemForm

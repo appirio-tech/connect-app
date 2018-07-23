@@ -1,3 +1,6 @@
+/**
+ * Milestone type 'delivery`
+ */
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
@@ -301,8 +304,11 @@ MilestoneTypeDelivery.defaultProps = {
 }
 
 MilestoneTypeDelivery.propTypes = {
-  theme: PT.string,
+  completeMilestone: PT.func.isRequired,
+  currentUser: PT.object.isRequired,
   milestone: PT.object.isRequired,
+  theme: PT.string,
+  updateMilestoneContent: PT.func.isRequired,
 }
 
 export default MilestoneTypeDelivery

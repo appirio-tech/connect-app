@@ -1,3 +1,11 @@
+/**
+ * Form which may content arbitrary set of fields
+ * with the next types:
+ * - text (can be autoResize)
+ * - textarea
+ * - date (pair of dates)
+ * - dropdown
+ */
 import React from 'react'
 import PT from 'prop-types'
 

@@ -1,3 +1,6 @@
+/**
+ * TimelineHeader component
+ */
 import React from 'react'
 import PT from 'prop-types'
 import './TimelineHeader.scss'

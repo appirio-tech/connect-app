@@ -1,3 +1,6 @@
+/**
+ * Milestone type 'final-designs`
+ */
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
@@ -517,15 +520,16 @@ class MilestoneTypeFinalDesigns extends React.Component {
 }
 
 MilestoneTypeFinalDesigns.defaultProps = {
+  theme: null,
 }
 
 MilestoneTypeFinalDesigns.propTypes = {
-  progressPercent: PT.string,
-  labelDayStatus: PT.string,
-  labelSpent: PT.string,
-  labelStatus: PT.string,
-  isCompleted: PT.bool,
-  inProgress: PT.bool,
+  completeMilestone: PT.func.isRequired,
+  currentUser: PT.object.isRequired,
+  extendMilestone: PT.func.isRequired,
+  milestone: PT.object.isRequired,
+  theme: PT.string,
+  updateMilestoneContent: PT.func.isRequired,
 }
 
 export default MilestoneTypeFinalDesigns

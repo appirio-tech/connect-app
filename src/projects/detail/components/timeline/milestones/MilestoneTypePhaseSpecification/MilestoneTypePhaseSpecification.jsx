@@ -1,3 +1,6 @@
+/**
+ * Milestone type 'phase-specification`
+ */
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
@@ -130,11 +133,11 @@ MilestoneTypePhaseSpecification.defaultProps = {
 }
 
 MilestoneTypePhaseSpecification.propTypes = {
-  theme: PT.string,
-  milestone: PT.object.isRequired,
-  currentUser: PT.object.isRequired,
-  updateMilestoneContent: PT.func.isRequired,
   completeMilestone: PT.func.isRequired,
+  currentUser: PT.object.isRequired,
+  milestone: PT.object.isRequired,
+  theme: PT.string,
+  updateMilestoneContent: PT.func.isRequired,
 }
 
 export default MilestoneTypePhaseSpecification

@@ -1,3 +1,8 @@
+/**
+ * Date form field type
+ *
+ * Shows a pair of dates.
+ */
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
@@ -36,7 +41,18 @@ FormFieldDate.defaultProps = {
 }
 
 FormFieldDate.propTypes = {
+  endDate: PT.shape({
+    label: PT.string.isRequired,
+    name: PT.string.isRequired,
+    value: PT.string,
+  }),
+  startDate: PT.shape({
+    label: PT.string.isRequired,
+    name: PT.string.isRequired,
+    value: PT.string,
+  }),
   theme: PT.string,
+
 }
 
 export default FormFieldDate

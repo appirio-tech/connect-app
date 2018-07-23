@@ -1,3 +1,6 @@
+/**
+ * Milestone type 'community-work` and `community-review`
+ */
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
@@ -147,8 +150,11 @@ MilestoneTypeProgress.defaultProps = {
 }
 
 MilestoneTypeProgress.propTypes = {
-  theme: PT.string,
+  completeMilestone: PT.func.isRequired,
+  currentUser: PT.object.isRequired,
   milestone: PT.object.isRequired,
+  theme: PT.string,
+  updateMilestoneContent: PT.func.isRequired,
 }
 
 export default MilestoneTypeProgress

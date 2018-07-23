@@ -1,3 +1,11 @@
+/**
+ * Text/Textarea form field type
+ *
+ * Props:
+ * - hasMaxLength - if defines shows char counter
+ * - autoResize - if true than 'text` type field will be
+ *                automatically resized depend on the text length
+ */
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
@@ -55,12 +63,17 @@ class FormFieldText extends React.Component {
 }
 
 FormFieldText.defaultProps = {
+  autoResize: false,
   maxLength: -1,
+  onChange: null,
   theme: '',
+  value: '',
 }
 
 FormFieldText.propTypes = {
+  autoResize: PT.bool,
   maxLength: PT.number,
+  name: PT.string.isRequired,
   onChange: PT.func,
   theme: PT.string,
   value: PT.string,
