@@ -7,9 +7,9 @@ import LinkItemForm from '../LinkItemForm'
 
 import { MILESTONE_LINK_SUPPORTED_TYPES } from '../../../../../config/constants'
 
-import './LinkRow.scss'
+import './LinkItem.scss'
 
-class LinkRow extends React.Component {
+class LinkItem extends React.Component {
   constructor(props) {
     super(props)
 
@@ -65,7 +65,6 @@ class LinkRow extends React.Component {
     const {
       fields,
       link,
-      isSelected,
       formUpdateButtonTitle,
       formUpdateTitle,
       deleteLink,
@@ -164,7 +163,7 @@ class LinkRow extends React.Component {
   }
 }
 
-LinkRow.defaultProps = {
+LinkItem.defaultProps = {
   milestoneType: 'only-text',
   image: require('../../../../../assets/icons/timeline-invoice.svg'),
   milestonePostLink: '',
@@ -172,7 +171,7 @@ LinkRow.defaultProps = {
   isHideDot: false,
 }
 
-LinkRow.propTypes = {
+LinkItem.propTypes = {
   label: PT.string,
   isCompleted: PT.bool,
   inProgress: PT.bool,
@@ -183,4 +182,4 @@ LinkRow.propTypes = {
   deleteLink: PT.func
 }
 
-export default LinkRow
+export default LinkItem

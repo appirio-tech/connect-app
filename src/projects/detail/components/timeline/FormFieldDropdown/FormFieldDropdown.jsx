@@ -4,9 +4,9 @@ import cn from 'classnames'
 
 import SelectDropdown from '../../../../../components/SelectDropdown/SelectDropdown'
 
-import './MilestonePostEditLinkDropDown.scss'
+import './FormFieldDropdown.scss'
 
-const MilestonePostEditLinkDropDown = ({ name, value, options, label, theme }) => (
+const FormFieldDropdown = ({ name, value, options, label, theme }) => (
   <div styleName={cn('milestone-post', theme)}>
     <div styleName="col-left">
       <div styleName="label-title">{label}</div>
@@ -22,12 +22,12 @@ const MilestonePostEditLinkDropDown = ({ name, value, options, label, theme }) =
   </div>
 )
 
-MilestonePostEditLinkDropDown.defaultProps = {
+FormFieldDropdown.defaultProps = {
   theme: '',
 }
 
-MilestonePostEditLinkDropDown.propTypes = {
+FormFieldDropdown.propTypes = {
   theme: PT.string,
 }
 
-export default MilestonePostEditLinkDropDown
+export default FormFieldDropdown

@@ -6,7 +6,6 @@ import moment from 'moment'
 
 import DotIndicator from '../../DotIndicator'
 import ProjectProgress from '../../../ProjectProgress'
-import LinkRow from '../../LinkRow'
 import LinkList from '../../LinkList'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'

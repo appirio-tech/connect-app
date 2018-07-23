@@ -6,9 +6,9 @@ import cn from 'classnames'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
 
-import './MilestonePostEditLink.scss'
+import './FormFieldText.scss'
 
-class MilestonePostEditLink extends React.Component {
+class FormFieldText extends React.Component {
   constructor(props) {
     super(props)
 
@@ -54,16 +54,16 @@ class MilestonePostEditLink extends React.Component {
   }
 }
 
-MilestonePostEditLink.defaultProps = {
+FormFieldText.defaultProps = {
   maxLength: -1,
   theme: '',
 }
 
-MilestonePostEditLink.propTypes = {
+FormFieldText.propTypes = {
   maxLength: PT.number,
   onChange: PT.func,
   theme: PT.string,
   value: PT.string,
 }
 
-export default MilestonePostEditLink
+export default FormFieldText

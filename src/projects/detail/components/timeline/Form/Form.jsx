@@ -3,9 +3,9 @@ import PT from 'prop-types'
 
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
-import MilestonePostEditLink from '../MilestonePostEditLink'
-import MilestonePostEditLinkDropDown from '../MilestonePostEditLinkDropDown'
-import MilestonePostEditDate from '../MilestonePostEditDate'
+import FormFieldText from '../FormFieldText'
+import FormFieldDropdown from '../FormFieldDropdown'
+import FormFieldDate from '../FormFieldDate'
 
 import './Form.scss'
 
@@ -60,15 +60,15 @@ class Form extends React.Component {
             case 'text':
             case 'textarea':
               return (
-                <MilestonePostEditLink {...field} key={field.name} />
+                <FormFieldText {...field} key={field.name} />
               )
             case 'date':
               return (
-                <MilestonePostEditDate {...field} key={field.name} />
+                <FormFieldDate {...field} key={field.name} />
               )
             case 'select':
               return (
-                <MilestonePostEditLinkDropDown {...field} key={field.name} />
+                <FormFieldDropdown {...field} key={field.name} />
               )
             default:
               return null

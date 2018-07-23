@@ -1,3 +1,0 @@
-
-import MilestonePostEditLinkDropDown from './MilestonePostEditLinkDropDown'
-export default MilestonePostEditLinkDropDown

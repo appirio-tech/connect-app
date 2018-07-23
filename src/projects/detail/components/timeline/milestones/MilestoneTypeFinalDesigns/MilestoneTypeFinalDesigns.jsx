@@ -25,7 +25,6 @@ class MilestoneTypeFinalDesigns extends React.Component {
       selectedLinks: [],
       places: [-1, -1, -1],
       isInReview: false,
-      isAddingNewLink: false,
       isShowExtensionRequestMessage: false,
       isShowExtensionConfirmMessage: false,
       isShowCompleteConfirmMessage: false,
@@ -39,8 +38,6 @@ class MilestoneTypeFinalDesigns extends React.Component {
     this.showCustomerCompleteReviewConfirmation = this.showCustomerCompleteReviewConfirmation.bind(this)
     this.hideCustomerCompleteReviewConfirmation = this.hideCustomerCompleteReviewConfirmation.bind(this)
     this.completeReview = this.completeReview.bind(this)
-    this.addDesignLink = this.addDesignLink.bind(this)
-    this.cancelAddingLink = this.cancelAddingLink.bind(this)
     this.showExtensionRequestMessage = this.showExtensionRequestMessage.bind(this)
     this.hideExtensionRequestMessage = this.hideExtensionRequestMessage.bind(this)
     this.requestExtension = this.requestExtension.bind(this)
@@ -120,20 +117,6 @@ class MilestoneTypeFinalDesigns extends React.Component {
     const links = _.get(milestone, 'details.content.links', [])
 
     return Math.min(links.length, MIN_WINNER_DESIGNS)
-  }
-
-  /**
-   * add design link
-   */
-  addDesignLink() {
-    this.setState({ isAddingNewLink: true })
-  }
-
-  /**
-   * cancel adding link
-   */
-  cancelAddingLink() {
-    this.setState({ isAddingNewLink: false })
   }
 
   showExtensionRequestMessage() {
@@ -270,7 +253,6 @@ class MilestoneTypeFinalDesigns extends React.Component {
     } = this.props
     const {
       selectedLinks,
-      isAddingNewLink,
       isSelectWarningVisible,
       isShowCustomerCompleteConfirmMessage,
       isShowExtensionRequestMessage,

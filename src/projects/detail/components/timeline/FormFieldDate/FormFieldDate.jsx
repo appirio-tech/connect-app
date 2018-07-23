@@ -6,9 +6,9 @@ import cn from 'classnames'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
 
-import styles from './MilestonePostEditDate.scss'
+import styles from './FormFieldDate.scss'
 
-const MilestonePostEditDate = ({ startDate, endDate, theme }) => {
+const FormFieldDate = ({ startDate, endDate, theme }) => {
   const startDateProps = _.omit(startDate, 'label')
   startDateProps.type = 'date'
   startDateProps.wrapperClass = styles['field-wrapper']
@@ -31,12 +31,12 @@ const MilestonePostEditDate = ({ startDate, endDate, theme }) => {
   )
 }
 
-MilestonePostEditDate.defaultProps = {
+FormFieldDate.defaultProps = {
   theme: '',
 }
 
-MilestonePostEditDate.propTypes = {
+FormFieldDate.propTypes = {
   theme: PT.string,
 }
 
-export default MilestonePostEditDate
+export default FormFieldDate
