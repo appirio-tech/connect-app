@@ -11,7 +11,7 @@ import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 const TCFormFields = FormsyForm.Fields
 // import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
-import { updatePhase as updatePhaseAction, syncPhases as syncPhasesAction } from '../../../actions/project'
+import { updatePhase as updatePhaseAction } from '../../../actions/project'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
 import { PHASE_STATUS_COMPLETED, PHASE_STATUS, PHASE_STATUS_ACTIVE } from '../../../../config/constants'
@@ -224,6 +224,6 @@ const mapStateToProps = ({projectState}) => ({
   phases: projectState.phases
 })
 
-const actionCreators = {updatePhaseAction, syncPhasesAction}
+const actionCreators = {updatePhaseAction}
 
 export default withRouter(connect(mapStateToProps, actionCreators)(EditStageForm))

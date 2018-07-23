@@ -86,8 +86,9 @@ export function formatProjectProgressProps(project, phases) {
   let totalProgress = 0
 
   // phases where start date is set and are not draft
-  const filteredPhases = _.filter(phases, (phase) => (phase.startDate && phase.status !== PHASE_STATUS_DRAFT))
-  filteredPhases.map((phase) => {
+  const nonDraftPhases = _.filter(phases, (phase) => (phase.startDate && phase.status !== PHASE_STATUS_DRAFT))
+  const activeAndCompletedPhases = _.filter(phases, (phase) => (phase.startDate && (phase.status === PHASE_STATUS_ACTIVE || phase.status === PHASE_STATUS_COMPLETED)))
+  activeAndCompletedPhases.map((phase) => {
     let progress = 0
     // calculates days spent and day based progress for the phase
     if (phase.startDate && phase.duration) {
@@ -116,19 +117,15 @@ export function formatProjectProgressProps(project, phases) {
     }
     totalProgress += progress
   })
-  const projectedDuration = _.sumBy(filteredPhases, (phase) => {
+  const projectedDuration = _.sumBy(nonDraftPhases, (phase) => {
     return phase.duration && phase.duration > 1 ? phase.duration : 1
   })
 
   const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
 
-
-  const activeOrCompletedPhases = _.filter(phases, (phase) => (
-    phase.status === PHASE_STATUS_ACTIVE || phase.status === PHASE_STATUS_COMPLETED)
-  )
-  const spentAmount = _.sumBy(activeOrCompletedPhases, 'spentBudget') || 0
+  const spentAmount = _.sumBy(activeAndCompletedPhases, 'spentBudget') || 0
   const labelSpent = spentAmount > 0 ? `Spent $${formatNumberWithCommas(spentAmount)}` : ''
-  const progressPercent = phases.length > 0 ? Math.round(totalProgress/filteredPhases.length) : 0
+  const progressPercent = phases.length > 0 ? Math.round(totalProgress/activeAndCompletedPhases.length) : 0
   const labelStatus = `${progressPercent}% done`
 
   return {
