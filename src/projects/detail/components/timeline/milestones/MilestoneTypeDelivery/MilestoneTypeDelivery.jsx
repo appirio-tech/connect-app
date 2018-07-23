@@ -6,8 +6,7 @@ import moment from 'moment'
 
 import ProjectProgress from '../../../ProjectProgress'
 import DotIndicator from '../../DotIndicator'
-import Form from '../../Form'
-import LinkRow from '../../LinkRow'
+import LinkList from '../../LinkList'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import MilestonePostEditText from '../../MilestonePostEditText'
 
@@ -20,16 +19,12 @@ class MilestoneTypeDelivery extends React.Component {
     super(props)
 
     this.state = {
-      isAddingLink: false,
       isShowFinalFixesRequestForm: false,
       finalFixRequests: [],
     }
 
     this.updatedUrl = this.updatedUrl.bind(this)
-    this.closeEditForm = this.closeEditForm.bind(this)
-    this.openEditForm = this.openEditForm.bind(this)
     this.removeUrl = this.removeUrl.bind(this)
-    this.moveToReviewingState = this.moveToReviewingState.bind(this)
     this.showFinalFixesRequestForm = this.showFinalFixesRequestForm.bind(this)
     this.hideFinalFixesRequestForm = this.hideFinalFixesRequestForm.bind(this)
     this.acceptDesign = this.acceptDesign.bind(this)
@@ -37,14 +32,6 @@ class MilestoneTypeDelivery extends React.Component {
     this.onFinalFixRemove = this.onFinalFixRemove.bind(this)
     this.submitFinalFixesRequest = this.submitFinalFixesRequest.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
-  }
-
-  moveToReviewingState() {
-    const { updateMilestoneContent } = this.props
-
-    updateMilestoneContent({
-      isInReview: true,
-    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -59,23 +46,14 @@ class MilestoneTypeDelivery extends React.Component {
     }
   }
 
-  /**add link to this */
-  openEditForm() {
-    this.setState({isAddingLink: true})
-  }
-
-  /**close edit ui */
-  closeEditForm() {
-    this.setState({ isAddingLink: false })
-  }
-
   /**update link */
   updatedUrl(values, linkIndex) {
     const { milestone, updateMilestoneContent } = this.props
 
     const links = [..._.get(milestone, 'details.content.links', [])]
 
-    values.type = 'download'
+    values.type = 'zip'
+    values.isDownloadable = true
 
     if (typeof linkIndex === 'number') {
       links.splice(linkIndex, 1, values)
@@ -116,18 +94,11 @@ class MilestoneTypeDelivery extends React.Component {
   }
 
   acceptDesign() {
-    const { completeMilestone, milestone } = this.props
-    const content = _.get(milestone, 'details.content')
+    const { updateMilestoneContent } = this.props
 
-    completeMilestone({
-      details: {
-        ...milestone.details,
-        content: {
-          ...content,
-          isAccepted: true,
-          isDeclined: false,
-        }
-      }
+    updateMilestoneContent({
+      isAccepted: true,
+      isDeclined: false,
     })
   }
 
@@ -167,10 +138,9 @@ class MilestoneTypeDelivery extends React.Component {
 
   render() {
     const { milestone, theme, currentUser } = this.props
-    const { isAddingLink, isShowFinalFixesRequestForm, finalFixRequests } = this.state
+    const { isShowFinalFixesRequestForm, finalFixRequests } = this.state
 
     const links = _.get(milestone, 'details.content.links', [])
-    const isInReview = _.get(milestone, 'details.content.isInReview', false)
     const isAccepted = _.get(milestone, 'details.content.isAccepted', false)
     const isDeclined = _.get(milestone, 'details.content.isDeclined', false)
     const isFinalFixesSubmitted = _.get(milestone, 'details.content.isFinalFixesSubmitted', false)
@@ -268,77 +238,45 @@ class MilestoneTypeDelivery extends React.Component {
 
             {(isFinalFixesSubmitted || isAccepted) && (
               <div>
-                {!isInReview && (
-                  <DotIndicator>
+                <DotIndicator>
+                  <div styleName="top-space">
+                    <ProjectProgress
+                      labelDayStatus={progressText}
+                      progressPercent={progressPercent}
+                      theme={daysLeft < 0 ? 'warning' : 'light'}
+                    />
+                  </div>
+                </DotIndicator>
+
+                {!currentUser.isCustomer && (
+                  <DotIndicator hideLine>
+                    <LinkList
+                      links={links}
+                      onAddLink={this.updatedUrl}
+                      onRemoveLink={this.removeUrl}
+                      onUpdateLink={this.updatedUrl}
+                      fields={[{ name: 'url'}]}
+                      addButtonTitle="Add link"
+                      formAddTitle="Adding a link"
+                      formAddButtonTitle="Add a link"
+                      formUpdateTitle="Editing a link"
+                      formUpdateButtonTitle="Save changes"
+                      isUpdating={milestone.isUpdating}
+                      canAddLink
+                    />
+
                     <div styleName="top-space">
-                      <ProjectProgress
-                        labelDayStatus={progressText}
-                        progressPercent={progressPercent}
-                        theme={daysLeft < 0 ? 'warning' : 'light'}
-                      />
+                      <div styleName="button-layer">
+                        <button
+                          className="tc-btn tc-btn-primary tc-btn-sm action-btn"
+                          onClick={this.completeMilestone}
+                          disabled={links.length === 0}
+                        >
+                          Mark as completed
+                        </button>
+                      </div>
                     </div>
                   </DotIndicator>
-                )}
-
-                {!currentUser.isCustomer && !isInReview && (
-                  <div>
-                    {links.map((link, index) => (
-                      <DotIndicator hideLine key={index}>
-                        <div styleName="top-space">
-                          <LinkRow
-                            itemId={index}
-                            milestonePostLink={link.url}
-                            milestoneType={link.type}
-                            deletePost={this.removeUrl}
-                            updatePost={this.updatedUrl}
-                          />
-                        </div>
-                      </DotIndicator>
-                    ))}
-
-                    {isAddingLink && (
-                      <DotIndicator hideLine>
-                        <div styleName="top-space">
-                          <Form
-                            callbackCancel={this.closeEditForm}
-                            defaultValues={{ url: '' }}
-                            callbackOK={this.updatedUrl}
-                            label="Adding a link"
-                            okButtonTitle="Add link"
-                          />
-                        </div>
-                      </DotIndicator>
-                    )}
-
-                    {!isAddingLink && (
-                      <DotIndicator hideLine>
-                        <div styleName="top-space button-add-layer">
-                          <button
-                            className="tc-btn tc-btn-default tc-btn-sm action-btn"
-                            onClick={this.openEditForm}
-                          >
-                            Add a link
-                          </button>
-                        </div>
-                      </DotIndicator>
-                    )}
-
-                    {!currentUser.isCustomer && (
-                      <DotIndicator hideLine>
-                        <div styleName="top-space">
-                          <div styleName="button-layer">
-                            <button
-                              className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-                              onClick={this.completeMilestone}
-                              disabled={links.length === 0}
-                            >
-                              Mark as completed
-                            </button>
-                          </div>
-                        </div>
-                      </DotIndicator>
-                    )}
-                  </div>
                 )}
               </div>
             )}
@@ -350,14 +288,7 @@ class MilestoneTypeDelivery extends React.Component {
          */}
         {isCompleted && (
           <div>
-            {links.map((link, index) => (
-              <div styleName="top-space" key={index}>
-                <LinkRow
-                  milestonePostLink={link.url}
-                  milestoneType={link.type}
-                />
-              </div>
-            ))}
+            <LinkList links={links} />
           </div>
         )}
       </div>

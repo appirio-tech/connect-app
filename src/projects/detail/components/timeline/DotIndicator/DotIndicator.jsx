@@ -7,12 +7,14 @@ import './DotIndicator.scss'
 const DotIndicator = ({
   hideDot,
   hideLine,
+  isDone,
   children,
 }) => (
   <div
     styleName={cn('container', {
       'hide-dot': hideDot,
       'hide-line': hideLine,
+      'is-done': isDone,
     })}
   >
     {children}

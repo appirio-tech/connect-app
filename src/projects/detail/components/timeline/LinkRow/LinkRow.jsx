@@ -1,8 +1,11 @@
 import React from 'react'
 import PT from 'prop-types'
+import _ from 'lodash'
 import cn from 'classnames'
 
-import Form from '../Form'
+import LinkItemForm from '../LinkItemForm'
+
+import { MILESTONE_LINK_SUPPORTED_TYPES } from '../../../../../config/constants'
 
 import './LinkRow.scss'
 
@@ -10,86 +13,45 @@ class LinkRow extends React.Component {
   constructor(props) {
     super(props)
 
-    this.toggleEditLink = this.toggleEditLink.bind(this)
-    this.deleteLink = this.deleteLink.bind(this)
-    this.getLabel = this.getLabel.bind(this)
-    this.closeEditForm = this.closeEditForm.bind(this)
-    this.updateMilestonePostLink = this.updateMilestonePostLink.bind(this)
-    this.updateMilestonePostTitleLink = this.updateMilestonePostTitleLink.bind(this)
-    this.updateMilestonePostTitleLinkType = this.updateMilestonePostTitleLinkType.bind(this)
-    this.downloadFile = this.downloadFile.bind(this)
-    this.updatePost = this.updatePost.bind(this)
-    this.deletePost = this.deletePost.bind(this)
-    this.onSelectChange = this.onSelectChange.bind(this)
-
     this.state = {
       isEditing: false,
-      milestonePostLink: props.milestonePostLink,
-      label: props.label
     }
+
+    this.closeEditForm = this.closeEditForm.bind(this)
+    this.openEditForm = this.openEditForm.bind(this)
+    this.closeEditForm = this.closeEditForm.bind(this)
+    this.updateLink = this.updateLink.bind(this)
+    this.deleteLink = this.deleteLink.bind(this)
+    this.onSelectChange = this.onSelectChange.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
     const { isUpdating } = this.props
     const { isEditing } = this.state
 
-    if (
-      isEditing && isUpdating &&
-      !nextProps.isUpdating && !nextProps.error
-    ) {
+    if (isEditing && isUpdating && !nextProps.isUpdating) {
       this.closeEditForm()
     }
   }
 
-  toggleEditLink() {
-    this.setState({isEditing: !this.state.isEditing})
+  updateLink(values) {
+    const { updateLink, itemId } = this.props
+
+    updateLink(values, itemId)
   }
 
   deleteLink() {
+    const { deleteLink, itemId } = this.props
 
+    deleteLink(itemId)
   }
 
-  getLabel() {
-    const props = this.props
-    if (props.milestoneType === 'specification') {
-      return 'Specification'
-    }
-    return this.props.milestonePostTitle
+  openEditForm() {
+    this.setState({ isEditing: true })
   }
 
   closeEditForm() {
-    this.setState({isEditing: false})
-  }
-
-  updateMilestonePostLink(value) {
-    this.closeEditForm()
-    this.setState({milestonePostLink: value.URL})
-  }
-
-  updateMilestonePostTitleLink(value) {
-    this.closeEditForm()
-    this.setState({milestonePostLink: value.URL, label: value.title})
-  }
-
-  updateMilestonePostTitleLinkType(value) {
-    this.closeEditForm()
-    this.setState({milestonePostLink: value.URL, label: `${value.title} (${value.type})`})
-  }
-
-  downloadFile() {
-    alert('ff')
-  }
-
-  updatePost(values) {
-    const { updatePost, itemId } = this.props
-
-    updatePost(values, itemId)
-  }
-
-  deletePost() {
-    const { deletePost, itemId } = this.props
-
-    deletePost(itemId)
+    this.setState({ isEditing: false })
   }
 
   onSelectChange(evt) {
@@ -100,104 +62,74 @@ class LinkRow extends React.Component {
   }
 
   render() {
-    const props = this.props
-    const labelMilestoneStyle = {}
-    if (props.milestoneType === 'only-text') {
-      labelMilestoneStyle['background'] = 'url('+ props.image +') 0 50% no-repeat'
-    }
-    const trueValue = true
+    const {
+      fields,
+      link,
+      isSelected,
+      formUpdateButtonTitle,
+      formUpdateTitle,
+      deleteLink,
+      updateLink,
+      onSelectChange,
+      theme,
+    } = this.props
+    const { isEditing } = this.state
+
+    const fieldsWithValues = fields ? fields.map((field) => ({
+      ...field,
+      value: this.props.link[field.name]
+    })) : []
+
+    const supportedTypes = _.map(MILESTONE_LINK_SUPPORTED_TYPES, 'value')
+    // fallback to no-type if type is not supported to avoid errors due to lack of styles
+    const type = _.includes(supportedTypes, link.type) ? link.type : ''
+
     return (
-      <div styleName={'milestone-post '
-      + (props.theme ? props.theme : '')
-      + (props.isCompleted ? 'completed' : '')
-      + (props.inProgress ? 'in-progress' : '')
-      }
-      >
-        {
-          props.inProgress !== null && props.inProgress !== undefined && !props.isHideDot && (
-            <span styleName="dot" >{ props.inProgress}</span>
-          )
-        }
-        {!this.state.isEditing && (
+      <div styleName={cn('container', theme)}>
+        {!isEditing && (
           <div styleName="label-layer">
-            {props.milestoneType !== 'download' && (
-              <span
-                className={'flex-child'}
-                styleName={cn('label-title', 'span-first') }
-                style={ labelMilestoneStyle }
-              >
-                {this.getLabel()}
-              </span>
-            )}
+            <span styleName={cn('title', type)}>
+              {link.title || ''}
+            </span>
 
-            {props.milestoneType === 'download' && (
-              <div styleName="group-right only-text hide-sm">
+            <div styleName="link-wrapper">
+              {link.isDownloadable ? (
                 <a
-                  href={this.state.milestonePostLink}
-                  download={this.state.milestonePostLink}
-                  className={'flex-child'}
-                  styleName={'label-title span-first download'}
+                  href={link.url}
+                  download={link.url}
+                  styleName="milestone-text"
                 >
-                  {props.milestonePostLink}
+                  {link.url}
                 </a>
-              </div>
-            )}
-
-            {props.milestoneType === 'marvelapp' && (
-              <div styleName="group-right only-text hide-sm">
-                <a href={props.milestonePostLink} styleName="milestone-text hide-sm">
-                  {props.milestonePostLink}
-                </a>
-              </div>)
-            }
-
-            {props.milestoneType === 'specification' && (
-              <div styleName="group-right only-text hide-sm">
+              ) : (
                 <a
-                  href={props.milestonePostLink}
-                  styleName="milestone-text hide-sm"
+                  href={link.url}
+                  styleName="milestone-text"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {props.milestonePostLink}
+                  {link.url}
                 </a>
-              </div>)
-            }
+              )}
+            </div>
 
-            {props.milestoneType === 'only-text' && (
-              <div styleName="group-right only-text hide-sm">
-                <a
-                  href={props.milestonePostLink}
-                  styleName="milestone-text hide-sm"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {props.milestonePostLink}
-                </a>
-              </div>
+            {!!updateLink && (
+              <span onClick={this.openEditForm} styleName="button edit" />
             )}
 
-            {props.milestoneType === 'file' && (
-              <div styleName="group-right file hide-sm">
-                <a href={this.state.milestonePostFile}  download={this.state.milestonePostFile} styleName="milestone-text hide-sm" dangerouslySetInnerHTML={{ __html: props.milestonePostFileInfo }} />
-                <span styleName="download_icon hide-sm" />
-              </div>)
-            }
-
-            {!props.updatePost && !props.deletePost && props.milestoneType === 'download' && (
-              <div styleName="group-right file hide-sm">
-                <a href={this.state.milestonePostLink} download={this.state.milestonePostLink} styleName="download_icon hide-sm" />
-              </div>
+            {!!deleteLink && (
+              <span onClick={this.deleteLink} styleName="button delete" />
             )}
 
-            {!!props.updatePost && (
-              <span onClick={this.toggleEditLink} styleName="label-title span-two" />
-            )}
-            {!!props.deletePost && (
-              <span onClick={this.deletePost} styleName="label-title span-three" />
+            {!!link.isDownloadable && !updateLink && !deleteLink && !onSelectChange && (
+              <a
+                href={link.url}
+                download={link.url}
+                styleName="button download"
+              />
             )}
 
-            {!!props.onSelectChange && (
+            {!!onSelectChange && (
               <div styleName="col-wrapper">
                 <label styleName="checkbox-ctrl">
                   <input
@@ -210,7 +142,7 @@ class LinkRow extends React.Component {
               </div>
             )}
 
-            {!props.onSelectChange && props.isSelected && (
+            {!onSelectChange && link.isSelected && (
               <div styleName="col-wrapper">
                 <span styleName="item-checked" />
               </div>
@@ -218,120 +150,15 @@ class LinkRow extends React.Component {
           </div>
         )}
 
-        {this.state.isEditing && props.milestoneType === 'specification' && (<div styleName="small-separator">
-          <Form
-            fields={[{
-              label: 'Url',
-              placeholder: 'Url',
-              name: 'url',
-              value: props.milestonePostLink,
-              type: 'text',
-              validations: {
-                isRelaxedUrl: true,
-                isRequired: true
-              },
-              validationError: 'URL is required',
-              validationErrors: {
-                isRelaxedUrl: 'Please enter a valid URL'
-              }
-            }]}
+        {isEditing && (
+          <LinkItemForm
+            fields={fieldsWithValues}
             onCancelClick={this.closeEditForm}
-            onSubmit={this.updatePost}
-            submitButtonTitle="Save changes"
-            title="Edit specification document link"
+            onSubmit={this.updateLink}
+            submitButtonTitle={formUpdateButtonTitle}
+            title={formUpdateTitle}
           />
-        </div>)}
-
-        {this.state.isEditing && props.milestoneType === 'marvelapp' && (
-          <div styleName="small-separator">
-            <Form
-              fields={[{
-                label: 'Title',
-                placeholder: 'Title',
-                name: 'title',
-                maxLength: 64,
-                value: props.milestonePostTitle,
-                type: 'text',
-                validations: {
-                  isRequired: true
-                },
-                validationError: 'Title is required',
-              }, {
-                label: 'URL',
-                placeholder: 'URL',
-                name: 'url',
-                value: props.milestonePostLink,
-                type: 'text',
-                validations: {
-                  isRelaxedUrl: true,
-                  isRequired: true
-                },
-                validationError: 'URL is required',
-                validationErrors: {
-                  isRelaxedUrl: 'Please enter a valid URL'
-                }
-              }]}
-              onCancelClick={this.closeEditForm}
-              onSubmit={this.updatePost}
-              submitButtonTitle="Save changes"
-              title="Edit design link"
-            />
-          </div>
         )}
-
-        {this.state.isEditing && props.milestoneType === 'only-text' && (
-          <div styleName="small-separator">
-            <Form
-              fields={[{
-                label: 'Title',
-                placeholder: 'Title',
-                name: 'title',
-                value: '',
-                type: 'text',
-                validations: {
-                  isRequired: true
-                },
-                validationError: 'Title is required',
-              }, {
-                label: 'URL',
-                placeholder: 'URL',
-                name: 'url',
-                value: '',
-                type: 'text',
-                validations: {
-                  isRelaxedUrl: true,
-                  isRequired: true
-                },
-                validationError: 'URL is required',
-                validationErrors: {
-                  isRelaxedUrl: 'Please enter a valid URL'
-                }
-              }, {
-                label: 'Type',
-                placeholder: 'Type',
-                name: 'type',
-                value: '',
-                type: 'select',
-                options: [{
-                  title: 'Any', value: ''
-                }, {
-                  title: 'ZIP file', value: 'zip'
-                }, {
-                  title: 'PNG file', value: 'png'
-                }]
-              }]}
-              onCancelClick={this.closeEditForm}
-              onSubmit={this.updatedUrl}
-              submitButtonTitle="Add link"
-              title="Adding a link"
-            />
-          </div>
-        )}
-
-        {this.state.isEditing && props.milestoneType === 'file' && (<div styleName="small-separator">
-          <Form callbackCancel={this.closeEditForm} callbackOK={this.updateMilestonePostTitleLinkType} label={'Edit link'} isHaveType={trueValue} isHaveTitle={trueValue} isHaveUrl={trueValue} inProgress={false} okButtonTitle={'Save changes'} maxTitle={64}/>
-        </div>)}
-
       </div>
     )
   }
@@ -353,7 +180,7 @@ LinkRow.propTypes = {
   image: PT.string,
   milestonePostLink: PT.string,
   isHideDot: PT.bool,
-  deletePost: PT.func
+  deleteLink: PT.func
 }
 
 export default LinkRow

@@ -268,10 +268,11 @@ function createTimelineAndMilestoneForProduct(product) {
     const milestoneDates = []
 
     // calculate start/end dates for milestones
-    const endDate = moment().subtract(1, 'days')
+    const tmpDate = moment().subtract(1, 'days')
     milestoneTemplates.map((milestoneTemplate) => {
-      const startDate = endDate.clone().add(1, 'days')
-      endDate.add(milestoneTemplate.duration, 'days')
+      const startDate = tmpDate.clone().add(1, 'days')
+      tmpDate.add(milestoneTemplate.duration, 'days')
+      const endDate = tmpDate.clone()
 
       milestoneDates.push({
         startDate,
@@ -282,6 +283,11 @@ function createTimelineAndMilestoneForProduct(product) {
     // calculate start/end dates for timeline
     const timelineStartDate = milestoneDates.length ? milestoneDates[0].startDate : moment()
     const timelineEndDate = milestoneDates.length ? milestoneDates[milestoneDates.length - 1].endDate : moment()
+    // make sure timeline includes days since the beginning
+    timelineStartDate.hour(0)
+    timelineStartDate.minute(0)
+    timelineStartDate.second(0)
+    timelineStartDate.millisecond(0)
 
     return createTimeline({
       name: `Welcome to the ${product.name} phase`,

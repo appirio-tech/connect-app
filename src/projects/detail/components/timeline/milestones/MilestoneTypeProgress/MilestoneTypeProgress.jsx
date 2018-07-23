@@ -6,8 +6,8 @@ import moment from 'moment'
 
 import DotIndicator from '../../DotIndicator'
 import ProjectProgress from '../../../ProjectProgress'
-import Form from '../../Form'
 import LinkRow from '../../LinkRow'
+import LinkList from '../../LinkList'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
 
@@ -17,40 +17,11 @@ class MilestoneTypeProgress extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      isAddingLink: false
-    }
-
     this.updatedUrl = this.updatedUrl.bind(this)
-    this.closeEditForm = this.closeEditForm.bind(this)
-    this.openEditForm = this.openEditForm.bind(this)
     this.removeUrl = this.removeUrl.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { milestone } = this.props
-    const { isAddingLink } = this.state
-
-    if (
-      isAddingLink && milestone.isUpdating &&
-      !nextProps.milestone.isUpdating && !nextProps.error
-    ) {
-      this.closeEditForm()
-    }
-  }
-
-  /**add link to this */
-  openEditForm() {
-    this.setState({isAddingLink: true})
-  }
-
-  /**close edit ui */
-  closeEditForm() {
-    this.setState({ isAddingLink: false })
-  }
-
-  /**update link */
   updatedUrl(values, linkIndex) {
     const { milestone, updateMilestoneContent } = this.props
 
@@ -90,7 +61,6 @@ class MilestoneTypeProgress extends React.Component {
 
   render() {
     const { milestone, theme, currentUser } = this.props
-    const { isAddingLink } = this.state
 
     const links = _.get(milestone, 'details.content.links', [])
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
@@ -128,77 +98,20 @@ class MilestoneTypeProgress extends React.Component {
 
             {!currentUser.isCustomer && (
               <div>
-                {links.map((link, index) => (
-                  <div styleName="top-space" key={index}>
-                    <LinkRow
-                      itemId={index}
-                      milestonePostLink={link.url}
-                      milestoneType={'only-text'}
-                      deletePost={this.removeUrl}
-                      updatePost={this.updatedUrl}
-                    />
-                  </div>
-                ))}
-
-                {isAddingLink && (
-                  <div styleName="top-space">
-                    <Form
-                      fields={[{
-                        label: 'Title',
-                        placeholder: 'Title',
-                        name: 'title',
-                        value: '',
-                        type: 'text',
-                        validations: {
-                          isRequired: true
-                        },
-                        validationError: 'Title is required',
-                      }, {
-                        label: 'URL',
-                        placeholder: 'URL',
-                        name: 'url',
-                        value: '',
-                        type: 'text',
-                        validations: {
-                          isRelaxedUrl: true,
-                          isRequired: true
-                        },
-                        validationError: 'URL is required',
-                        validationErrors: {
-                          isRelaxedUrl: 'Please enter a valid URL'
-                        }
-                      }, {
-                        label: 'Type',
-                        placeholder: 'Type',
-                        name: 'type',
-                        value: '',
-                        type: 'select',
-                        options: [{
-                          title: 'Any', value: ''
-                        }, {
-                          title: 'ZIP file', value: 'zip'
-                        }, {
-                          title: 'PNG file', value: 'png'
-                        }]
-                      }]}
-                      onCancelClick={this.closeEditForm}
-                      onSubmit={this.updatedUrl}
-                      submitButtonTitle="Add link"
-                      title="Adding a link"
-                    />
-                  </div>
-                )}
-
-                {!isAddingLink && (
-                  <div styleName="top-space button-add-layer">
-                    <button
-                      className="tc-btn tc-btn-default tc-btn-sm action-btn"
-                      onClick={this.openEditForm}
-                    >
-                      Add a link
-                    </button>
-                  </div>
-                )}
+                <LinkList
+                  links={links}
+                  onAddLink={this.updatedUrl}
+                  onRemoveLink={this.removeUrl}
+                  onUpdateLink={this.updatedUrl}
+                  fields={[{ name: 'title'}, { name: 'url'}, { name: 'type' }]}
+                  addButtonTitle="Add link"
+                  formAddTitle="Adding a link"
+                  formAddButtonTitle="Add a link"
+                  formUpdateTitle="Editing a link"
+                  formUpdateButtonTitle="Save changes"
+                  isUpdating={milestone.isUpdating}
+                  canAddLink
+                />
 
                 <div styleName="top-space">
                   <DotIndicator>
@@ -222,14 +135,7 @@ class MilestoneTypeProgress extends React.Component {
          */}
         {isCompleted && (
           <div>
-            {links.map((link, index) => (
-              <div styleName="top-space" key={index}>
-                <LinkRow
-                  milestonePostLink={link.url}
-                  milestoneType={link.type}
-                />
-              </div>
-            ))}
+            <LinkList links={links} />
           </div>
         )}
       </div>

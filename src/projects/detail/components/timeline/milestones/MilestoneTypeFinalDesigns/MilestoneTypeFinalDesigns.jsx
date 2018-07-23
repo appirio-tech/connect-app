@@ -5,11 +5,9 @@ import moment from 'moment'
 import cn from 'classnames'
 
 import DotIndicator from '../../DotIndicator'
-import ActionsRow from '../../ActionsRow'
-import Form from '../../Form'
+import LinkList from '../../LinkList'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
-import LinkRow from '../../LinkRow'
 import WinnerSelectionBar from '../../WinnerSelectionBar'
 
 import {
@@ -333,72 +331,29 @@ class MilestoneTypeFinalDesigns extends React.Component {
                   </DotIndicator>
                 </div>
 
-                {!currentUser.isCustomer && links.map((link, index) => (
-                  <DotIndicator hideLine key={index}>
-                    <div styleName="top-space">
-                      <LinkRow
-                        itemId={index}
-                        milestonePostLink={link.url}
-                        milestonePostTitle={link.title}
-                        milestoneType={link.type}
-                        deletePost={this.removeUrl}
-                        updatePost={this.updatedUrl}
-                      />
-                    </div>
-                  </DotIndicator>
-                ))}
-
-                {isAddingNewLink && (
+                {!currentUser.isCustomer && (
                   <DotIndicator hideLine>
-                    <div styleName="top-space">
-                      <Form
-                        fields={[{
-                          label: 'Title',
-                          placeholder: 'Title',
-                          name: 'title',
-                          maxLength: 64,
-                          value: `Design ${links.length + 1}`,
-                          type: 'text',
-                          validations: {
-                            isRequired: true
-                          },
-                          validationError: 'Title is required',
-                        }, {
-                          label: 'URL',
-                          placeholder: 'URL',
-                          name: 'url',
-                          value: '',
-                          type: 'text',
-                          validations: {
-                            isRelaxedUrl: true,
-                            isRequired: true
-                          },
-                          validationError: 'URL is required',
-                          validationErrors: {
-                            isRelaxedUrl: 'Please enter a valid URL'
-                          }
-                        }]}
-                        onCancelClick={this.cancelAddingLink}
-                        onSubmit={this.updatedUrl}
-                        submitButtonTitle="Add link"
-                        title="New design link"
-                      />
-                    </div>
-                  </DotIndicator>
-                )}
-
-                {!currentUser.isCustomer && !isAddingNewLink && (
-                  <DotIndicator hideLine>
-                    <div styleName="top-space">
-                      <ActionsRow
-                        type="secondary"
-                        fakeName={`Design ${links.length + 1}`}
-                        buttons={[{
-                          title: 'Add a design link',
-                          onClick: this.addDesignLink,
-                        }]}
-                      />
-                    </div>
+                    <LinkList
+                      links={links}
+                      onAddLink={this.updatedUrl}
+                      onRemoveLink={this.removeUrl}
+                      onUpdateLink={this.updatedUrl}
+                      fields={[{
+                        name: 'title',
+                        value: `Design ${links.length + 1}`,
+                        maxLength: 64,
+                      }, {
+                        name: 'url'
+                      }]}
+                      addButtonTitle="Add a design link"
+                      formAddTitle="Adding a link"
+                      formAddButtonTitle="Add a link"
+                      formUpdateTitle="Editing a link"
+                      formUpdateButtonTitle="Save changes"
+                      isUpdating={milestone.isUpdating}
+                      fakeName={`Design ${links.length + 1}`}
+                      canAddLink
+                    />
                   </DotIndicator>
                 )}
               </div>

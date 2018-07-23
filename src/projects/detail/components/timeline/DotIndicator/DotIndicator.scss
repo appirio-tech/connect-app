@@ -12,7 +12,8 @@
   top: 50%;
   width: 2px;
 
-  .hide-dot & {
+  .hide-dot &,
+  .is-done & {
     display: none;
   }
 
@@ -36,5 +37,9 @@
   .hide-line &,
   .hide-dot & {
     display: none;
+  }
+
+  .is-done & {
+    background-color: $tc-dark-blue-100;
   }
 }

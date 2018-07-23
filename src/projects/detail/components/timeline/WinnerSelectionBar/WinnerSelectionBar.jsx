@@ -10,31 +10,24 @@ class WinnerSelectionBar extends React.Component {
   constructor(props) {
     super(props)
 
-    this.toggleSelected1st = this.toggleSelected1st.bind(this)
-    this.toggleSelected2nd = this.toggleSelected2nd.bind(this)
-    this.toggleSelected3rd = this.toggleSelected3rd.bind(this)
+    // create toggle handlers in constructor to avoid recreating functions during render
+    this.handlers = [0, 1, 2].map((placeIndex) =>
+      this.toggleSelected.bind(this, placeIndex + 1)
+    )
     this.onBonusChange = this.onBonusChange.bind(this)
   }
 
-  toggleSelected1st(evt) {
+  toggleSelected(place, evt) {
     const isChecked = evt.target.checked
     const { onPlaceChange, index } = this.props
 
-    onPlaceChange(index, 1, isChecked)
-  }
+    onPlaceChange(index, place, isChecked)
 
-  toggleSelected2nd(evt) {
-    const isChecked = evt.target.checked
-    const { onPlaceChange, index } = this.props
-
-    onPlaceChange(index, 2, isChecked)
-  }
-
-  toggleSelected3rd(evt) {
-    const isChecked = evt.target.checked
-    const { onPlaceChange, index } = this.props
-
-    onPlaceChange(index, 3, isChecked)
+    const { onBonusChange, isSelectedBonus } =  this.props
+    // if we select place and bonus was previously selected, then unselect bonus
+    if (isChecked && isSelectedBonus) {
+      onBonusChange(index, false)
+    }
   }
 
   onBonusChange(evt) {
@@ -74,8 +67,8 @@ class WinnerSelectionBar extends React.Component {
           {!!onPlaceChange && (!isSelected3TopWin || !!selectedPlace) && (
             <div styleName="position">
               {[1, 2, 3].filter((place) => place <= maxPlace).map((place) => (
-                <label styleName={'checkbox-ctrl'} >
-                  <input type="checkbox" styleName="checkbox" onChange={this[`toggleSelected${place}st`]} checked={selectedPlace === place} />
+                <label styleName={'checkbox-ctrl'} key={place}>
+                  <input type="checkbox" styleName="checkbox" onChange={this.handlers[place -1]} checked={selectedPlace === place} />
                   <span styleName={`checkbox-text pos${place} ` + (placesChosen[place - 1] > -1 ? 'inactive' : '' ) }>{place}</span>
                 </label>
               ))}

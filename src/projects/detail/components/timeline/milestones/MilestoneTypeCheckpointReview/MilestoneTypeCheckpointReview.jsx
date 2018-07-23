@@ -5,11 +5,9 @@ import moment from 'moment'
 import cn from 'classnames'
 
 import DotIndicator from '../../DotIndicator'
-import ActionsRow from '../../ActionsRow'
-import Form from '../../Form'
+import LinkList from '../../LinkList'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
-import LinkRow from '../../LinkRow'
 
 import {
   MILESTONE_STATUS,
@@ -25,7 +23,6 @@ class MilestoneTypeCheckpointReview extends React.Component {
     this.state = {
       selectedLinks: [],
       isInReview: false,
-      isAddingNewLink: false,
       isSelectWarningVisible: false,
       isShowExtensionRequestMessage: false,
       isShowExtensionConfirmMessage: false,
@@ -39,8 +36,6 @@ class MilestoneTypeCheckpointReview extends React.Component {
     this.hideCompleteReviewConfirmation = this.hideCompleteReviewConfirmation.bind(this)
     this.completeReview = this.completeReview.bind(this)
     this.toggleRejectedSection = this.toggleRejectedSection.bind(this)
-    this.addDesignLink = this.addDesignLink.bind(this)
-    this.cancelAddingLink = this.cancelAddingLink.bind(this)
     this.showExtensionRequestMessage = this.showExtensionRequestMessage.bind(this)
     this.hideExtensionRequestMessage = this.hideExtensionRequestMessage.bind(this)
     this.requestExtension = this.requestExtension.bind(this)
@@ -104,20 +99,6 @@ class MilestoneTypeCheckpointReview extends React.Component {
     this.setState({
       isRejectedExpanded: !this.state.isRejectedExpanded
     })
-  }
-
-  /**
-   * add design link
-   */
-  addDesignLink() {
-    this.setState({ isAddingNewLink: true })
-  }
-
-  /**
-   * cancel adding link
-   */
-  cancelAddingLink() {
-    this.setState({ isAddingNewLink: false })
   }
 
   showExtensionRequestMessage() {
@@ -240,7 +221,6 @@ class MilestoneTypeCheckpointReview extends React.Component {
     } = this.props
     const {
       selectedLinks,
-      isAddingNewLink,
       isSelectWarningVisible,
       isRejectedExpanded,
       isShowExtensionRequestMessage,
@@ -303,68 +283,27 @@ class MilestoneTypeCheckpointReview extends React.Component {
 
                 {!currentUser.isCustomer && (
                   <DotIndicator hideLine>
-                    {links.map((link, index) => (
-                      <div styleName="top-space" key={index}>
-                        <LinkRow
-                          itemId={index}
-                          milestonePostLink={link.url}
-                          milestonePostTitle={link.title}
-                          milestoneType={link.type}
-                          deletePost={this.removeUrl}
-                          updatePost={this.updatedUrl}
-                        />
-                      </div>
-                    ))}
-
-                    {isAddingNewLink && (
-                      <div styleName="top-space">
-                        <Form
-                          fields={[{
-                            label: 'Title',
-                            placeholder: 'Title',
-                            name: 'title',
-                            maxLength: 64,
-                            value: `Design ${links.length + 1}`,
-                            type: 'text',
-                            validations: {
-                              isRequired: true
-                            },
-                            validationError: 'Title is required',
-                          }, {
-                            label: 'URL',
-                            placeholder: 'URL',
-                            name: 'url',
-                            value: '',
-                            type: 'text',
-                            validations: {
-                              isRelaxedUrl: true,
-                              isRequired: true
-                            },
-                            validationError: 'URL is required',
-                            validationErrors: {
-                              isRelaxedUrl: 'Please enter a valid URL'
-                            }
-                          }]}
-                          onCancelClick={this.cancelAddingLink}
-                          onSubmit={this.updatedUrl}
-                          submitButtonTitle="Add link"
-                          title="New design link"
-                        />
-                      </div>
-                    )}
-
-                    {!isAddingNewLink && (
-                      <div styleName="top-space">
-                        <ActionsRow
-                          type="secondary"
-                          fakeName={`Design ${links.length + 1}`}
-                          buttons={[{
-                            title: 'Add a design link',
-                            onClick: this.addDesignLink,
-                          }]}
-                        />
-                      </div>
-                    )}
+                    <LinkList
+                      links={links}
+                      onAddLink={this.updatedUrl}
+                      onRemoveLink={this.removeUrl}
+                      onUpdateLink={this.updatedUrl}
+                      fields={[{
+                        name: 'title',
+                        value: `Design ${links.length + 1}`,
+                        maxLength: 64,
+                      }, {
+                        name: 'url'
+                      }]}
+                      addButtonTitle="Add a design link"
+                      formAddTitle="Adding a link"
+                      formAddButtonTitle="Add a link"
+                      formUpdateTitle="Editing a link"
+                      formUpdateButtonTitle="Save changes"
+                      isUpdating={milestone.isUpdating}
+                      fakeName={`Design ${links.length + 1}`}
+                      canAddLink
+                    />
                   </DotIndicator>
                 )}
               </div>
@@ -379,18 +318,13 @@ class MilestoneTypeCheckpointReview extends React.Component {
                 </DotIndicator>
 
                 <DotIndicator hideLine>
-                  {links.map((link, index) => (
-                    <div styleName="top-space" key={index}>
-                      <LinkRow
-                        itemId={index}
-                        milestonePostLink={link.url}
-                        milestonePostTitle={link.title}
-                        milestoneType={link.type}
-                        isSelected={_.includes(selectedLinks, index)}
-                        onSelectChange={this.updateSelected}
-                      />
-                    </div>
-                  ))}
+                  <LinkList
+                    links={links.map((link, index) => ({
+                      ...link,
+                      isSelected: _.includes(selectedLinks, index),
+                    }))}
+                    onSelectChange={this.updateSelected}
+                  />
                 </DotIndicator>
               </div>
             )}
@@ -461,7 +395,6 @@ class MilestoneTypeCheckpointReview extends React.Component {
               !isShowExtensionConfirmMessage &&
               !isShowCompleteConfirmMessage &&
               (!currentUser.isCustomer || isInReview) &&
-              !extensionRequest &&
             (
               <DotIndicator hideLine>
                 <div styleName="action-bar" className="flex center">
@@ -502,17 +435,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
                 Selected designs
               </header>
             </div>
-            {_.filter(links, { isSelected: true }).map((link, index) => (
-              <div styleName="top-space" key={index}>
-                <LinkRow
-                  itemId={index}
-                  milestonePostLink={link.url}
-                  milestonePostTitle={link.title}
-                  milestoneType={link.type}
-                  isSelected={link.isSelected}
-                />
-              </div>
-            ))}
+            <LinkList links={_.filter(links, { isSelected: true })} />
 
             {rejectedLinks.length > 0 && (
               <div>
@@ -524,17 +447,9 @@ class MilestoneTypeCheckpointReview extends React.Component {
                     Rejected designs
                   </header>
                 </div>
-                {isRejectedExpanded && rejectedLinks.map((link, index) => (
-                  <div styleName="top-space" key={index}>
-                    <LinkRow
-                      itemId={index}
-                      milestonePostLink={link.url}
-                      milestonePostTitle={link.title}
-                      milestoneType={link.type}
-                      isSelected={link.isSelected}
-                    />
-                  </div>
-                ))}
+                {isRejectedExpanded && (
+                  <LinkList links={rejectedLinks} />
+                )}
               </div>
             )}
           </div>

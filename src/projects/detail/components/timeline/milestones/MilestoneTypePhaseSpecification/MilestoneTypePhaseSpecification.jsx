@@ -4,8 +4,7 @@ import _ from 'lodash'
 import cn from 'classnames'
 
 import DotIndicator from '../../DotIndicator'
-import Form from '../../Form'
-import LinkRow from '../../LinkRow'
+import LinkList from '../../LinkList'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
 
@@ -15,52 +14,43 @@ class MilestoneTypePhaseSpecification extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      isAddingLink: false
-    }
-
     this.updatedUrl = this.updatedUrl.bind(this)
-    this.closeEditForm = this.closeEditForm.bind(this)
-    this.openEditForm = this.openEditForm.bind(this)
     this.removeUrl = this.removeUrl.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { milestone } = this.props
-    const { isAddingLink } = this.state
+  updatedUrl(values, linkIndex) {
+    const { milestone, updateMilestoneContent } = this.props
 
-    if (
-      isAddingLink && milestone.isUpdating &&
-      !nextProps.milestone.isUpdating && !nextProps.error
-    ) {
-      this.closeEditForm()
+    const links = [..._.get(milestone, 'details.content.links', [])]
+
+    values.title = 'Specification'
+    values.type = 'document'
+
+    if (typeof linkIndex === 'number') {
+      links.splice(linkIndex, 1, values)
+    } else {
+      links.push(values)
     }
-  }
-
-  /**add link to this */
-  openEditForm() {
-    this.setState({isAddingLink: true})
-  }
-
-  /**close edit ui */
-  closeEditForm() {
-    this.setState({ isAddingLink: false })
-  }
-
-  /**update link */
-  updatedUrl(values) {
-    const { updateMilestoneContent } = this.props
 
     updateMilestoneContent({
-      specificationUrl: values.url,
+      links
     })
   }
 
-  removeUrl() {
-    if (window.confirm('Are you sure you want to remove specification URL?')) {
-      this.updatedUrl({ url: '' })
+  removeUrl(linkIndex) {
+    if (!window.confirm('Are you sure you want to remove specification link?')) {
+      return
     }
+
+    const { milestone, updateMilestoneContent } = this.props
+    const links = [..._.get(milestone, 'details.content.links', [])]
+
+    links.splice(linkIndex, 1)
+
+    updateMilestoneContent({
+      links
+    })
   }
 
   completeMilestone() {
@@ -71,11 +61,12 @@ class MilestoneTypePhaseSpecification extends React.Component {
 
   render() {
     const { milestone, theme, currentUser } = this.props
-    const { isAddingLink } = this.state
 
-    const specificationUrl = _.get(milestone, 'details.content.specificationUrl')
+    const links = _.get(milestone, 'details.content.links', [])
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+    // can add only one specification link
+    const canAddLink = links.length < 1
 
     return (
       <div styleName={cn('milestone-post', theme)}>
@@ -85,62 +76,24 @@ class MilestoneTypePhaseSpecification extends React.Component {
         {isActive && (
           <div>
 
-            {!!specificationUrl && (
-              <div styleName="top-space">
-                <LinkRow
-                  milestonePostLink={specificationUrl}
-                  milestoneType={'specification'}
-                  deletePost={this.removeUrl}
-                  updatePost={this.updatedUrl}
-                />
-              </div>
-            )}
+            <DotIndicator isDone={links.length > 0}>
+              <LinkList
+                links={links}
+                onAddLink={this.updatedUrl}
+                onRemoveLink={this.removeUrl}
+                onUpdateLink={this.updatedUrl}
+                fields={[{ name: 'url' }]}
+                addButtonTitle="Add specification document link"
+                formAddTitle="Specification document link"
+                formAddButtonTitle="Adding a link"
+                formUpdateTitle="Editing a link"
+                formUpdateButtonTitle="Save changes"
+                isUpdating={milestone.isUpdating}
+                canAddLink={canAddLink}
+              />
+            </DotIndicator>
 
-            {isAddingLink && (
-              <DotIndicator>
-                <div styleName="top-space">
-                  <Form
-                    fields={[{
-                      label: 'URL',
-                      placeholder: 'URL',
-                      name: 'url',
-                      value: specificationUrl,
-                      type: 'text',
-                      validations: {
-                        isRelaxedUrl: true,
-                        isRequired: true
-                      },
-                      validationError: 'URL is required',
-                      validationErrors: {
-                        isRelaxedUrl: 'Please enter a valid URL'
-                      }
-                    }]}
-                    onCancelClick={this.closeEditForm}
-                    onSubmit={this.updatedUrl}
-                    submitButtonTitle="Add link"
-                    title="Specification document link"
-                  />
-                </div>
-              </DotIndicator>
-            )}
-
-            {!specificationUrl && !isAddingLink && (
-              <div styleName="top-space">
-                <DotIndicator>
-                  <div styleName="button-add-layer">
-                    <button
-                      className="tc-btn tc-btn-default tc-btn-sm action-btn"
-                      onClick={this.openEditForm}
-                    >
-                      Add specification document link
-                    </button>
-                  </div>
-                </DotIndicator>
-              </div>
-            )}
-
-
-            {!currentUser.isCustomer && !!specificationUrl && (
+            {!currentUser.isCustomer && links.length > 0 && (
               <div styleName="top-space">
                 <DotIndicator>
                   <div styleName="button-layer">
@@ -162,17 +115,11 @@ class MilestoneTypePhaseSpecification extends React.Component {
          */}
         {isCompleted && (
           <div>
-            {!!specificationUrl && (
-              <div styleName="top-space">
-                <LinkRow
-                  milestonePostLink={specificationUrl}
-                  milestoneType="specification"
-                />
-              </div>
-            )}
+            <DotIndicator isDone>
+              <LinkList links={links} />
+            </DotIndicator>
           </div>
         )}
-
       </div>
     )
   }
@@ -185,6 +132,9 @@ MilestoneTypePhaseSpecification.defaultProps = {
 MilestoneTypePhaseSpecification.propTypes = {
   theme: PT.string,
   milestone: PT.object.isRequired,
+  currentUser: PT.object.isRequired,
+  updateMilestoneContent: PT.func.isRequired,
+  completeMilestone: PT.func.isRequired,
 }
 
 export default MilestoneTypePhaseSpecification
