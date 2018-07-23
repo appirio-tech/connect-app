@@ -102,7 +102,7 @@ class LinkList extends React.Component {
 
 LinkList.propTypes = {
   /** title of the button to open add form */
-  addButtonTitle: PT.string.isRequired,
+  addButtonTitle: PT.string,
 
   /** if true then button to add link is shown */
   canAddLink: PT.bool,
