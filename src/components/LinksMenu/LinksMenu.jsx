@@ -31,6 +31,7 @@ const LinksMenu = ({
   onEditIntent,
   title,
   moreText,
+  withHash,
 }) => {
   const renderLink = (link) => {
     if (link.onClick) {
@@ -75,7 +76,12 @@ const LinksMenu = ({
           />
         }
 
-        <div className={cn('panel-links', { 'panel-links-nodots': noDots })}>
+        <div
+          className={cn('panel-links', {
+            'panel-links-nodots': noDots,
+            'panel-links-with-hash': withHash
+          })}
+        >
           <ul>
             {
               links.slice(0, limit).map((link, idx) => {

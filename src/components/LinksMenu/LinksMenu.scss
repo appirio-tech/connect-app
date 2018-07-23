@@ -129,6 +129,20 @@
     &.panel-links-nodots li:before {
       display: none;
     }
+
+    &.panel-links-with-hash li a {
+      display: block;
+      padding-left: 15px;
+      position: relative;
+
+      &::before {
+        @include roboto;
+        content: '#';
+        display: block;
+        left: 0;
+        position: absolute;
+      }
+    }
   }
 
   .add-link-mobile {
