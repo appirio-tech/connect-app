@@ -177,7 +177,7 @@ class EditStageForm extends React.Component {
       <div styleName="container">
         <Prompt
           when={this.state.phaseIsdirty}
-          message="Are you sure you want to leave?"
+          message="You have unsaved changes. Are you sure you want to leave? "
         />
         {this.state.isUpdating && (<LoadingIndicator />)}
         {!this.state.isUpdating && (<div>
