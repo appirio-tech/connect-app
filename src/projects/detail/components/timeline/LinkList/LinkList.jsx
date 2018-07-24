@@ -3,7 +3,7 @@ import PT from 'prop-types'
 
 import ActionsRow from '../ActionsRow'
 import LinkItemForm from '../LinkItemForm'
-import LinkRow from '../LinkRow'
+import LinkItem from '../LinkItem'
 
 import './LinkList.scss'
 
@@ -59,7 +59,7 @@ class LinkList extends React.Component {
       <div>
         {links.map((link, index) => (
           <div styleName="top-space" key={index}>
-            <LinkRow
+            <LinkItem
               fields={fields}
               link={link}
               itemId={index}
