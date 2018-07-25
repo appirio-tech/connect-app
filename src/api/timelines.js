@@ -187,18 +187,3 @@ export function createTimeline(timeline) {
   })
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
-
-/**
- * Create milestone in timeline
- *
- * @param {Number} timelineId timeline id
- * @param {Object} milestone milestone
- *
- * @returns {Promise} milestone
- */
-export function createMilestone(timelineId, milestone) {
-  return axios.post(`${TC_API_URL}/v4/timelines/${timelineId}/milestones`, {
-    param: milestone
-  })
-    .then(resp => _.get(resp.data, 'result.content', {}))
-}
