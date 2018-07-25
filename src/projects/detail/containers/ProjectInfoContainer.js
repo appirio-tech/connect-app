@@ -131,7 +131,7 @@ class ProjectInfoContainer extends React.Component {
       }))
 
     const channels = feeds.map((feed) => ({
-      title: `#${feed.title}`,
+      title: `${feed.title}`,
       address: `/projects/${project.id}#feed-${feed.id}`,
       noNewPage: true,
       onClick: onChannelClick ? () => onChannelClick(feed) : null,
@@ -159,6 +159,7 @@ class ProjectInfoContainer extends React.Component {
             title="Channels"
             moreText="view all"
             noDots
+            withHash
           />
           <LinksMenu
             links={attachments}
