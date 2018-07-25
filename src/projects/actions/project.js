@@ -42,7 +42,6 @@ import {
   PRODUCT_DIRTY_UNDO,
   UPDATE_PHASE,
   DELETE_PROJECT_PHASE,
-  MILESTONE_STATUS,
 } from '../../config/constants'
 
 export function loadProject(projectId) {
