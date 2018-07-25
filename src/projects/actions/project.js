@@ -249,8 +249,8 @@ function createMilestoneByTemplate(timelineId, milestoneTemplate, options) {
     'hidden'
   ])
 
-  milestone.startDate = options.startDate.utc().format('YYYY-MM-DDTHH:mm:ssZ')
-  milestone.endDate = options.endDate.utc().format('YYYY-MM-DDTHH:mm:ssZ')
+  milestone.startDate = options.startDate.utc().format('YYYY-MM-DD')
+  milestone.endDate = options.endDate.utc().format('YYYY-MM-DD')
   milestone.status = options.status
 
   return createMilestone(timelineId, milestone)
@@ -292,8 +292,8 @@ function createTimelineAndMilestoneForProduct(product) {
     return createTimeline({
       name: `Welcome to the ${product.name} phase`,
       description: 'This is the first stage in our project. We’re going to show you the detailed plan in your timeline, with all the milestones.',
-      startDate: timelineStartDate.utc().format('YYYY-MM-DDTHH:mm:ssZ'),
-      endDate: timelineEndDate.utc().format('YYYY-MM-DDTHH:mm:ssZ'),
+      startDate: timelineStartDate.utc().format('YYYY-MM-DD'),
+      endDate: timelineEndDate.utc().format('YYYY-MM-DD'),
       reference: 'product',
       referenceId: product.id,
     }).then((timeline) => {
