@@ -113,6 +113,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
           </div>
         )}
 
+
         {/*
           Completed state
          */}
