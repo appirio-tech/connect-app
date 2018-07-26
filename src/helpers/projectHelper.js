@@ -144,9 +144,9 @@ export function formatProjectProgressProps(project, phases) {
  * @return {Object} ProjectProgress props
  */
 export function formatOldProjectProgressProps(project) {
-  const actualDuration = _.get(project, 'duration.actualDuration', 0);
-  const projectedDuration = _.get(project, 'duration.projectedDuration', 0);
-  const actualCost = _.get(project, 'budget.actualCost', 0);
+  const actualDuration = _.get(project, 'duration.actualDuration', 0)
+  const projectedDuration = _.get(project, 'duration.projectedDuration', 0)
+  const actualCost = _.get(project, 'budget.actualCost', 0)
 
   const progressPercent = projectedDuration !== 0 ? Math.round(actualDuration/projectedDuration) : 0
   const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
