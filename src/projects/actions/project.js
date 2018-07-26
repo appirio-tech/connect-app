@@ -21,7 +21,6 @@ import {
 import {
   getMilestoneTemplates,
   createTimeline,
-  createMilestone,
 } from '../../api/timelines'
 import {
   LOAD_PROJECT,
@@ -43,7 +42,6 @@ import {
   PRODUCT_DIRTY_UNDO,
   UPDATE_PHASE,
   DELETE_PROJECT_PHASE,
-  MILESTONE_STATUS,
 } from '../../config/constants'
 
 export function loadProject(projectId) {
@@ -227,36 +225,6 @@ function getAllProjectProducts(project) {
 }
 
 /**
- * Create milestone using template and additional properties
- *
- * @param {Number} timelineId timeline id
- * @param {Object} milestoneTemplate milestone template
- * @param {Object} options additional properties not defined in template
- *
- * @returns {Promise} milestone
- */
-function createMilestoneByTemplate(timelineId, milestoneTemplate, options) {
-  const milestone = _.pick(milestoneTemplate, [
-    'name',
-    'description',
-    'duration',
-    'type',
-    'order',
-    'plannedText',
-    'activeText',
-    'completedText',
-    'blockedText',
-    'hidden'
-  ])
-
-  milestone.startDate = options.startDate.utc().format('YYYY-MM-DDTHH:mm:ssZ')
-  milestone.endDate = options.endDate.utc().format('YYYY-MM-DDTHH:mm:ssZ')
-  milestone.status = options.status
-
-  return createMilestone(timelineId, milestone)
-}
-
-/**
  * Create timeline and milestones for a product
  *
  * @param {Object} product product
@@ -296,33 +264,7 @@ function createTimelineAndMilestoneForProduct(product) {
       endDate: timelineEndDate.utc().format('YYYY-MM-DDTHH:mm:ssZ'),
       reference: 'product',
       referenceId: product.id,
-    }).then((timeline) => {
-      // recursively create milestones one by one
-      function createNextMilestone(index = 0) {
-        if (index >= milestoneTemplates.length) {
-          return
-        }
-
-        return createMilestoneByTemplate(timeline.id, milestoneTemplates[index], {
-          ...milestoneDates[index],
-          status: index === 0 ? MILESTONE_STATUS.ACTIVE : MILESTONE_STATUS.PLANNED
-        }).then(() => createNextMilestone(index + 1))
-      }
-
-      return createNextMilestone()
-
-      /*
-       TODO $TIMELINE_MILESTONE$ as server has issue with concurrent requests
-       https://github.com/topcoder-platform/tc-project-service/issues/118
-       we have to comments this code and run requests one by one instead,
-       this code can be removed or uncommented depend on the changes on the server
-
-      return Promise.all(milestoneTemplates.map((milestoneTemplate, index) =>
-        createMilestoneByTemplate(timeline.id, milestoneTemplate, {
-          ...milestoneDates[index],
-          status: index === 0 ? MILESTONE_STATUS.ACTIVE : MILESTONE_STATUS.PLANNED
-        })
-      )).then(() => product) */
+      templateId: product.templateId,
     })
   })
 }
