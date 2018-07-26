@@ -175,7 +175,7 @@ export function getMilestoneTemplates(productTemplateId) {
 }
 
 /**
- * Create timeline
+ * Create timeline and milestones
  *
  * @param {Object} timeline timeline
  *
