@@ -79,7 +79,7 @@ class Feed extends React.Component {
               {self && (
                 <CommentEditToggle
                   forTopic
-                  hideDelete={comments.length > 0}
+                  hideDelete={comments.length < 1}
                   onEdit={this.onEditTopic}
                   onDelete={onDeleteTopic}
                 />
