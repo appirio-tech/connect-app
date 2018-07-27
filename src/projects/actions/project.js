@@ -251,17 +251,12 @@ function createTimelineAndMilestoneForProduct(product) {
     // calculate start/end dates for timeline
     const timelineStartDate = milestoneDates.length ? milestoneDates[0].startDate : moment()
     const timelineEndDate = milestoneDates.length ? milestoneDates[milestoneDates.length - 1].endDate : moment()
-    // make sure timeline includes days since the beginning
-    timelineStartDate.hour(0)
-    timelineStartDate.minute(0)
-    timelineStartDate.second(0)
-    timelineStartDate.millisecond(0)
 
     return createTimeline({
       name: `Welcome to the ${product.name} phase`,
       description: 'This is the first stage in our project. We’re going to show you the detailed plan in your timeline, with all the milestones.',
-      startDate: timelineStartDate.utc().format('YYYY-MM-DDTHH:mm:ssZ'),
-      endDate: timelineEndDate.utc().format('YYYY-MM-DDTHH:mm:ssZ'),
+      startDate: timelineStartDate.utc().format('YYYY-MM-DD'),
+      endDate: timelineEndDate.utc().format('YYYY-MM-DD'),
       reference: 'product',
       referenceId: product.id,
       templateId: product.templateId,
