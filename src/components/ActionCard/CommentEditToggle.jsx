@@ -51,11 +51,11 @@ export default class CommentEditToggle extends React.Component {
                 onItemClick={this.onEdit}
                 currentSelection=""
               />
-              {! this.props.hideDelete &&
-            <DropdownItem key={2} item={deleteOptions}
-              onItemClick={this.showDelete}
-              currentSelection=""
-            />}
+              {! this.props.hideDelete && 
+              <DropdownItem key={2} item={deleteOptions}
+                onItemClick={this.showDelete}
+                currentSelection=""
+              /> }
             </ul>
           </div>
         </Dropdown>
