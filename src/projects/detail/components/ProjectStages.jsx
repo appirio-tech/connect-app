@@ -5,6 +5,7 @@ import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
 import moment from 'moment'
+import { withRouter } from 'react-router-dom'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
 
@@ -12,7 +13,6 @@ import Section from '../components/Section'
 import ProjectStage from '../components/ProjectStage'
 import PhaseCardListHeader from '../components/PhaseCardListHeader'
 import PhaseCardListFooter from '../components/PhaseCardListFooter'
-import ProjectStageMessages from '../components/ProjectStageMessages'
 import { PHASE_STATUS_DRAFT } from '../../../config/constants'
 
 /**
@@ -64,31 +64,58 @@ const ProjectStages = ({
   removeProductAttachment,
   isManageUser,
   deleteProjectPhase,
+  phaseId,
 }) => (
   <Section>
-    <PhaseCardListHeader />
-    <ProjectStageMessages phases={phases} />
-    {phases.map((phase, index) => (
-      <ProjectStage
-        key={phase.id}
-        productTemplates={productTemplates}
-        currentMemberRole={currentMemberRole}
-        isProcessing={isProcessing}
-        isSuperUser={isSuperUser}
-        isManageUser={isManageUser}
-        project={project}
-        phase={phase}
-        phaseIndex={index}
-        updateProduct={updateProduct}
-        fireProductDirty={fireProductDirty}
-        fireProductDirtyUndo={fireProductDirtyUndo}
-        addProductAttachment={addProductAttachment}
-        updateProductAttachment={updateProductAttachment}
-        removeProductAttachment={removeProductAttachment}
-        deleteProjectPhase={deleteProjectPhase}
-      />
-    ))}
-    <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases)}/>
+    {
+      phaseId?(
+        phases.map((phase, index) => (
+          phase.id === phaseId?(
+            <ProjectStage
+              key={phase.id}
+              productTemplates={productTemplates}
+              currentMemberRole={currentMemberRole}
+              isProcessing={isProcessing}
+              isSuperUser={isSuperUser}
+              isManageUser={isManageUser}
+              project={project}
+              phase={phase}
+              phaseIndex={index}
+              updateProduct={updateProduct}
+              fireProductDirty={fireProductDirty}
+              fireProductDirtyUndo={fireProductDirtyUndo}
+              addProductAttachment={addProductAttachment}
+              updateProductAttachment={updateProductAttachment}
+              removeProductAttachment={removeProductAttachment}
+              deleteProjectPhase={deleteProjectPhase}
+            />
+          ):null
+        ))
+      ):(
+        <PhaseCardListHeader />,
+        phases.map((phase, index) => (
+          <ProjectStage
+            key={phase.id}
+            productTemplates={productTemplates}
+            currentMemberRole={currentMemberRole}
+            isProcessing={isProcessing}
+            isSuperUser={isSuperUser}
+            isManageUser={isManageUser}
+            project={project}
+            phase={phase}
+            phaseIndex={index}
+            updateProduct={updateProduct}
+            fireProductDirty={fireProductDirty}
+            fireProductDirtyUndo={fireProductDirtyUndo}
+            addProductAttachment={addProductAttachment}
+            updateProductAttachment={updateProductAttachment}
+            removeProductAttachment={removeProductAttachment}
+            deleteProjectPhase={deleteProjectPhase}
+          />
+        ))
+      )
+    }
+    {!phaseId && <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases)}/>}
   </Section>
 )
 
@@ -111,4 +138,4 @@ ProjectStages.propTypes = {
   deleteProjectPhase: PT.func.isRequired,
 }
 
-export default ProjectStages
+export default withRouter(ProjectStages)
