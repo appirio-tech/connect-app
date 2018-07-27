@@ -1,13 +1,17 @@
 import React, { Component } from 'react'
 import PT from 'prop-types'
+import _ from 'lodash'
 import moment from 'moment'
 import Panel from '../Panel/Panel'
 import DeleteProjectModal from './DeleteProjectModal'
 import ProjectCardBody from '../../projects/components/projectsCard/ProjectCardBody'
 import ProjectDirectLinks from '../../projects/list/components/Projects/ProjectDirectLinks'
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
+import ProjectProgress from '../../projects/detail/components/ProjectProgress'
 import MediaQuery from 'react-responsive'
-import { SCREEN_BREAKPOINT_MD } from '../../config/constants'
+import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_ACTIVE } from '../../config/constants'
+
+import { formatProjectProgressProps, formatOldProjectProgressProps } from '../../helpers/projectHelper'
 
 import './ProjectInfo.scss'
 
@@ -32,30 +36,49 @@ class ProjectInfo extends Component {
   }
 
   render() {
-    const { project, currentMemberRole, duration, canDeleteProject, onChangeStatus, directLinks, isSuperUser } = this.props
+    const { project, currentMemberRole, duration, canDeleteProject,
+      onChangeStatus, directLinks, isSuperUser, phases } = this.props
     const { showDeleteConfirm } = this.state
+
+    const code = _.get(project, 'details.utm.code', '')
+
+    const projectProgressProps = _.omit(
+      !phases
+        ? formatOldProjectProgressProps(project)
+        : formatProjectProgressProps(project, phases),
+      'labelSpent'
+    )
+
+    const activePhases = phases ? phases.filter((phase) => phase.status === PHASE_STATUS_ACTIVE) : []
+
     return (
       <div className="project-info">
         <div className="project-info-header">
-          <div className="project-overview">
-            <div className="project-overview-header">Project overview</div>
-            <div className="project-overview-time">Created {moment(project.updatedAt).format('MMM DD, YYYY')}</div>
-          </div>
+          <div className="project-status-header">project status</div>
           {canDeleteProject && !showDeleteConfirm &&
             <div className="project-delete-icon">
               <Panel.DeleteBtn onClick={this.toggleProjectDelete} />
             </div>
           }
         </div>
+        <div className="project-status">
+          {activePhases.length > 0 &&
+            <div className="project-status-progress">
+              <ProjectProgress {...projectProgressProps} />
+            </div>
+          }
+          <div className="project-status-info">
+            <div className="project-status-time">Created {moment(project.updatedAt).format('MMM DD, YYYY')}</div>
+            {!!code && <div className="project-status-ref">{code}</div>}
+          </div>
+        </div>
         <MobileExpandable title="DESCRIPTION" defaultOpen>
-          <Panel>
-            {showDeleteConfirm &&
-              <DeleteProjectModal
-                onCancel={this.toggleProjectDelete}
-                onConfirm={this.onConfirmDelete}
-              />
-            }
-          </Panel>
+          {showDeleteConfirm &&
+            <DeleteProjectModal
+              onCancel={this.toggleProjectDelete}
+              onConfirm={this.onConfirmDelete}
+            />
+          }
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => (
               <ProjectCardBody

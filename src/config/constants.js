@@ -232,6 +232,9 @@ export const UPDATE_PRODUCT_FAILURE   = 'UPDATE_PRODUCT_FAILURE'
 export const PROJECT_DIRTY            = 'PROJECT_DIRTY'
 export const PROJECT_DIRTY_UNDO       = 'PROJECT_DIRTY_UNDO'
 
+export const PHASE_DIRTY            = 'PHASE_DIRTY'
+export const PHASE_DIRTY_UNDO       = 'PHASE_DIRTY_UNDO'
+
 export const PRODUCT_DIRTY            = 'PRODUCT_DIRTY'
 export const PRODUCT_DIRTY_UNDO       = 'PRODUCT_DIRTY_UNDO'
 
@@ -522,7 +525,8 @@ export const NOTIFICATIONS_NEW_PER_SOURCE = 10
 
 export const NOTIFICATIONS_LIMIT = 1000
 
-export const SCROLL_TO_MARGIN = 70 // px - 60px of toolbar height + 10px to make some margin
+// 60px of primary toolbar height + 50px of secondary toolbar height + 10px to make some margin
+export const SCROLL_TO_MARGIN = 60 + 50 + 10
 export const SCROLL_TO_DURATION = 500 // ms
 
 // Settings

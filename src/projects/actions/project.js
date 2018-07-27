@@ -18,6 +18,7 @@ import { LOAD_PROJECT, CREATE_PROJECT, CREATE_PROJECT_STAGE, CLEAR_LOADED_PROJEC
   LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES,
   LOAD_PROJECT_TEMPLATE, LOAD_PROJECT_PRODUCT_TEMPLATES, LOAD_ALL_PRODUCT_TEMPLATES, UPDATE_PRODUCT,
   PROJECT_STATUS_DRAFT, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO, UPDATE_PHASE, DELETE_PROJECT_PHASE,
+  PHASE_DIRTY_UNDO, PHASE_DIRTY
 } from '../../config/constants'
 
 export function loadProject(projectId) {
@@ -310,6 +311,18 @@ export function fireProjectDirty(dirtyProject) {
   }
 }
 
+export function firePhaseDirty(dirtyPhase, phaseId) {
+  return (dispatch) => {
+    return dispatch({
+      type: PHASE_DIRTY,
+      payload: {
+        dirtyPhase,
+        phaseId }
+
+    })
+  }
+}
+
 export function fireProductDirty(phaseId, productId, values) {
   return (dispatch) => {
     return dispatch({
@@ -327,6 +340,14 @@ export function fireProjectDirtyUndo() {
   return (dispatch) => {
     return dispatch({
       type: PROJECT_DIRTY_UNDO
+    })
+  }
+}
+
+export function firePhaseDirtyUndo() {
+  return (dispatch) => {
+    return dispatch({
+      type: PHASE_DIRTY_UNDO
     })
   }
 }

@@ -61,6 +61,7 @@ class EditProjectForm extends Component {
     this.submit = this.submit.bind(this)
     this.onLeave = this.onLeave.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.makeDeliveredPhaseReadOnly = this.makeDeliveredPhaseReadOnly.bind(this)
   }
 
   componentWillMount() {
@@ -205,6 +206,10 @@ class EditProjectForm extends Component {
     }
   }
 
+  makeDeliveredPhaseReadOnly(projectStatus) {
+    return projectStatus === 'completed'
+  }
+
 
   render() {
     const { isEdittable, sections, showHidden } = this.props
@@ -233,7 +238,8 @@ class EditProjectForm extends Component {
           />
           <div className="section-footer section-footer-spec">
             <button className="tc-btn tc-btn-primary tc-btn-md"
-              type="submit" disabled={(!this.isChanged() || this.state.isSaving) || anySectionInvalid || !this.state.canSubmit}
+              type="submit" 
+              disabled={(!this.isChanged() || this.state.isSaving) || anySectionInvalid || !this.state.canSubmit || this.makeDeliveredPhaseReadOnly(project.status)}
             >Save Changes</button>
           </div>
         </div>
@@ -248,7 +254,7 @@ class EditProjectForm extends Component {
         />
         <Formsy.Form
           ref="form"
-          disabled={!isEdittable}
+          disabled={!isEdittable || this.makeDeliveredPhaseReadOnly(project.status)}
           onInvalid={this.disableButton}
           onValid={this.enableButton}
           onValidSubmit={this.submit}
