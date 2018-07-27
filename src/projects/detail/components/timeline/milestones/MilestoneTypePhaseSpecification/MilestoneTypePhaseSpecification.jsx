@@ -88,7 +88,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
                 fields={[{ name: 'url' }]}
                 addButtonTitle="Add specification document link"
                 formAddTitle="Specification document link"
-                formAddButtonTitle="Adding a link"
+                formAddButtonTitle="Add link"
                 formUpdateTitle="Editing a link"
                 formUpdateButtonTitle="Save changes"
                 isUpdating={milestone.isUpdating}
