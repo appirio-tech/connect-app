@@ -7,6 +7,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 
 import { updateProduct, fireProductDirty, fireProductDirtyUndo, deleteProjectPhase } from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
@@ -54,6 +55,7 @@ const ProjectPlanContainer = (props) => {
       feeds={feeds}
     />
   )
+  const phaseId = parseInt(props.match.params.phaseId, 10)
   return (
     <TwoColsLayout>
       {phaseId &&
