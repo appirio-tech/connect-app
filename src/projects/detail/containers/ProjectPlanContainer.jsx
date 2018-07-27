@@ -18,7 +18,7 @@ import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT, PROJECT_STATUS_COMPLETED,
-  PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY } from '../../../config/constants'
+  PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_ACTIVE } from '../../../config/constants'
 import Sticky from 'react-stickynode'
 import { Link } from 'react-router-dom'
 
@@ -39,9 +39,9 @@ const ProjectPlanContainer = (props) => {
   const visiblePhases = phases.filter((phase) => (
     isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
   ))
-  const nonDraftPhases = phases.filter((phase) => (
-    phase.status !== PHASE_STATUS_DRAFT
-  ))
+
+  const activePhases = phases ? phases.filter((phase) => phase.status === PHASE_STATUS_ACTIVE) : []
+
   const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
 
   const leftArea = (
@@ -71,7 +71,7 @@ const ProjectPlanContainer = (props) => {
       <TwoColsLayout.Content>
         {visiblePhases.length > 0 ? (
           [
-            nonDraftPhases.length > 0 && <ProjectPlanProgress phases={visiblePhases} project={project} key="progress" />,
+            activePhases.length > 0 && <ProjectPlanProgress phases={visiblePhases} project={project} key="progress" />,
             <ProjectStages
               {...{
                 ...props,

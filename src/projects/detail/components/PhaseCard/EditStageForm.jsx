@@ -244,6 +244,7 @@ const actionCreators = {
   updatePhaseAction, 
   syncPhasesAction,
   firePhaseDirty,
-  firePhaseDirtyUndo }
+  firePhaseDirtyUndo 
+}
 
 export default withRouter(connect(mapStateToProps, actionCreators)(EditStageForm))
