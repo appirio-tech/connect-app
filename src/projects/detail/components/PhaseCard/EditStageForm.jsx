@@ -55,7 +55,7 @@ class EditStageForm extends React.Component {
     const { phase, phaseIndex, updatePhaseAction } = this.props
     const updatedStartDate = moment.utc(new Date(model.startDate))
     const duration = model.duration ? model.duration : 1
-    const endDate = model.status == PHASE_STATUS_COMPLETED ? moment.utc(new Date()) : moment.utc(updatedStartDate).add(duration - 1, 'days')
+    const endDate = model.status === PHASE_STATUS_COMPLETED ? moment.utc(new Date()) : moment.utc(updatedStartDate).add(duration - 1, 'days')
     const updateParam = _.assign({}, model, {
       startDate: updatedStartDate,
       endDate: endDate || '',
