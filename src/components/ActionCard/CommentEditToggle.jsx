@@ -38,8 +38,7 @@ export default class CommentEditToggle extends React.Component {
   render() {
     const {showDeleteConfirm } = this.state
     const editOptions = {label:this.props.forTopic ? 'Edit Title' : 'Edit post', val:'1'}
-    const deleteOptions = {label:this.props.forTopic ? 'Delete thread' : 'Delete post', val:'2'}
-    const deleteTitleOption = {label: 'Delete title', val:'3'}
+    const deleteOptions = {label:this.props.forTopic ? 'Delete Title' : 'Delete post', val:'2'}
     return (
       <div className="dropdownContainer">
         <Dropdown pointerShadow className="drop-down edit-toggle-container">
@@ -52,15 +51,10 @@ export default class CommentEditToggle extends React.Component {
                 onItemClick={this.onEdit}
                 currentSelection=""
               />
-              {! this.props.hideDelete ?
-                <DropdownItem key={2} item={deleteOptions}
-                  onItemClick={this.showDelete}
-                  currentSelection=""
-                /> : 
-                <DropdownItem key={3} item={deleteTitleOption}
-                  onItemClick={this.showDelete}
-                  currentSelection=""
-                />}
+              <DropdownItem key={2} item={deleteOptions}
+                onItemClick={this.showDelete}
+                currentSelection=""
+              /> 
             </ul>
           </div>
         </Dropdown>
