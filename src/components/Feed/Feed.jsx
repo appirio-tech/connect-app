@@ -131,7 +131,7 @@ class Feed extends React.Component {
                   {self && !isFullScreen && (
                     <CommentEditToggle
                       forTopic
-                      hideDelete={comments.length < 2}
+                      hideDelete={comments.length > 1}
                       onEdit={this.onEditTopic}
                       onDelete={onDeleteTopic}
                     />
