@@ -23,7 +23,7 @@ const showCoderBotIfError = (hasError) => {
   return branch(
     (props) => {
       if (props.error.code === 403 && props.error.msg.includes('Copilot')) {
-        const messageGenerator = `${props.error.msg.replace('Copilot: ', '')} If things don’t work or you’re sure it is Coder’s fault, send us a note at <a href="support@topcoder.com">support@topcoder.com</a> and we’ll fix it for you.`
+        const messageGenerator = `${props.error.msg.replace('Copilot: ', '')}. If things don’t work or you’re sure it is Coder’s fault, send us a note at <a href="support@topcoder.com">support@topcoder.com</a> and we’ll fix it for you.`
         component = compose(
           withProps({code:403, message: messageGenerator})
         )
