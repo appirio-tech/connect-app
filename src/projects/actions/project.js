@@ -279,11 +279,20 @@ function createProductsTimelineAndMilestone(project) {
     .then(() => project)
 }
 
-export function createProduct(project, productTemplate) {
+export function createProduct(project, productTemplate, phases) {
+  let startDate = new Date();
+  let endDate = moment().add(17, 'days').toDate();
+  if(phases){
+    if(phases.length > 0){
+        const phase = _.maxBy(phases,'endDate');
+        startDate = moment(phase.endDate).add(1, 'days').toDate();
+        endDate = moment(startDate).add(17, 'days').toDate();
+    }
+  }
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT_STAGE,
-      payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, null, null)
+      payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, startDate, endDate)
     })
   }
 }
