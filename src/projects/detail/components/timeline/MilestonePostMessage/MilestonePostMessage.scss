@@ -47,11 +47,13 @@
     @include viewSm {
       padding-right: $base-unit*7;
     }
-    .label-title {
+
+    :global(.label-title) {
       font-weight: 500;
       text-align: center;
     }
-    .group-content {
+
+    :global(.group-content) {
       line-height: 50px;
       justify-content: space-between;
       text-align: left;
