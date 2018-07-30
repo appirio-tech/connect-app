@@ -580,10 +580,12 @@ export const POSTS_BUNDLE_TIME_DIFF = 1000 * 60 * 10 // 10 min difference
 
 // possible statuses of milestones
 export const MILESTONE_STATUS = {
-  PLANNED: 'planned',
+  UNPLANNED: 'in_review',
+  PLANNED: 'reviewed',
   ACTIVE: 'active',
-  BLOCKED: 'blocked',
+  BLOCKED: 'paused',
   COMPLETED: 'completed',
+  CANCELLED: 'cancelled'
 }
 
 // minimum designs to select during checkpoint type milestone
