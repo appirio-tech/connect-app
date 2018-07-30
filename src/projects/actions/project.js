@@ -353,18 +353,18 @@ export function updateProject(projectId, updatedProps, updateExisting = false) {
  */
 export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
   return (dispatch, getState) => {
-    let state = getState();
-    let productId = state.projectState.phases[phaseIndex].products[0].id;
-    let timeline = state.productsTimelines[productId] && state.productsTimelines[productId].timeline;
+    const state = getState()
+    const productId = state.projectState.phases[phaseIndex].products[0].id
+    const timeline = state.productsTimelines[productId] && state.productsTimelines[productId].timeline
 
     return dispatch({
       type: UPDATE_PHASE,
       payload: updatePhaseAPI(projectId, phaseId, updatedProps, phaseIndex).then()
-    }).then(()=>{
+    }).then(() => {
       if (timeline && updatedProps.status && updatedProps.status===PHASE_STATUS_ACTIVE ){
-        return dispatch(updateProductMilestone(productId,timeline.id, timeline.milestones[0].id,{status:MILESTONE_STATUS.ACTIVE}))
+        return dispatch(updateProductMilestone(productId, timeline.id, timeline.milestones[0].id, {status:MILESTONE_STATUS.ACTIVE}))
       }
-      return true;
+      return true
     })
   }
 }
