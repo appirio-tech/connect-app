@@ -284,7 +284,7 @@ export function createProduct(project, productTemplate, phases) {
   let endDate = moment().add(17, 'days').toDate();
   if(phases){
     if(phases.length > 0){
-        const phase = _.maxBy(phases,'endDate');
+        const phase = _.maxBy(phases,'startDate');
         startDate = moment(phase.endDate).add(1, 'days').toDate();
         endDate = moment(startDate).add(17, 'days').toDate();
     }

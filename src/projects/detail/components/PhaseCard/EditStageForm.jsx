@@ -15,6 +15,8 @@ import { updatePhase as updatePhaseAction } from '../../../actions/project'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
 import { PHASE_STATUS_COMPLETED, PHASE_STATUS, PHASE_STATUS_ACTIVE } from '../../../../config/constants'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
+import { TOOLTIP_DEFAULT_DELAY } from '../../../../config/constants'
 
 const moment = extendMoment(Moment)
 const phaseStatuses = PHASE_STATUS.map(ps => ({ title: ps.name, value: ps.value }))
@@ -161,6 +163,7 @@ class EditStageForm extends React.Component {
     const { isEdittable, showPhaseOverlapWarning } = this.state
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment.utc(startDate).format('YYYY-MM-DD')
+    const durationDisabled = this.props.productsTimelines[phase.products[0].id].timeline && !this.props.productsTimelines[phase.products[0].id].error;
     return (
       <div styleName="container">
         {this.state.isUpdating && (<LoadingIndicator />)}
@@ -182,7 +185,20 @@ class EditStageForm extends React.Component {
               </div>
               <div styleName="label-layer">
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Start Date" type="date" name="startDate" value={startDate} />
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Duration (days)" type="number" name="duration" value={phase.duration} minValue={1}/>
+                {durationDisabled ? (
+                  <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+                    <div className="tooltip-target"> 
+                      <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={durationDisabled} label="Duration (days)" type="number" name="duration" value={phase.duration} minValue={1}>
+                      </TCFormFields.TextInput>
+                    </div>
+                    <div className="tooltip-body">
+                        Phase duration is controlled by duration of individual milestones
+                    </div>
+                  </Tooltip>) : (
+                    <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={durationDisabled} label="Duration (days)" type="number" name="duration" value={phase.duration} minValue={1}>
+                    </TCFormFields.TextInput>
+                  ) 
+                }
               </div>
               <div styleName="label-layer">
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Paid to date (US$)" type="number" name="spentBudget" value={phase.spentBudget} disabled={this.state.disableActiveStatusFields} minValue={0}/>
@@ -219,9 +235,10 @@ EditStageForm.propTypes = {
   phaseIndex: PT.number
 }
 
-const mapStateToProps = ({projectState}) => ({
+const mapStateToProps = ({projectState,productsTimelines}) => ({
   isUpdating: projectState.processing,
-  phases: projectState.phases
+  phases: projectState.phases,
+  productsTimelines: productsTimelines
 })
 
 const actionCreators = {updatePhaseAction}
