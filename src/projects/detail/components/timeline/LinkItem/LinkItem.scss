@@ -13,24 +13,32 @@
     background-size: 30px;
     font-size: 15px;
     overflow: hidden;
-    padding-left: 36px;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin-right:10px;
 
     &.document {
       background-image: url('../../../../../assets/icons/timeline-document.svg');
+      margin-left: -36px;
+      padding-left: 36px;
     }
 
     &.zip {
       background-image: url('../../../../../assets/icons/timeline-zip.svg');
+      margin-left: -36px;
+      padding-left: 36px;
     }
 
     &.marvelapp {
       background-image: url('../../../../../assets/icons/timeline-marvelapp.svg');
+      margin-left: -36px;
+      padding-left: 36px;
     }
 
     &.invoice {
       background-image: url('../../../../../assets/icons/timeline-invoice.svg');
+      margin-left: -36px;
+      padding-left: 36px;
     }
   }
 
@@ -46,6 +54,7 @@
     display:flex;
     height:auto;
     flex-wrap:wrap;
+    padding-left:36px;
 
   }
 
@@ -103,7 +112,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    margin: auto 10px;
+    margin: auto 0px;
 
     &:hover {
       text-decoration: underline;
