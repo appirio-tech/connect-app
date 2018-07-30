@@ -35,8 +35,23 @@
   }
 
   .link-wrapper {
-    flex: 1;
-    max-width:600px;
+    height:auto;
+    max-width:500px;
+    word-break:break-all;
+    overflow:hidden;
+  }
+
+  .link-item-text-group {
+    flex:1;
+    display:flex;
+    height:auto;
+    flex-wrap:wrap;
+
+  }
+
+  .link-item-button-group {
+    flex:0 0 auto;
+    display:flex;
   }
 
   .button {
