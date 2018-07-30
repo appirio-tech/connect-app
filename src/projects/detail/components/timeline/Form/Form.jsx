@@ -14,7 +14,7 @@ const Formsy = FormsyForm.Formsy
 import FormFieldText from '../FormFieldText'
 import FormFieldDropdown from '../FormFieldDropdown'
 import FormFieldDate from '../FormFieldDate'
-
+import FormFieldNumber from '../FormFieldNumber'
 import './Form.scss'
 
 class Form extends React.Component {
@@ -77,6 +77,10 @@ class Form extends React.Component {
             case 'select':
               return (
                 <FormFieldDropdown {...field} key={field.name} />
+              )
+            case 'number':
+              return (
+                <FormFieldNumber {...field} key={field.name} />
               )
             default:
               return null

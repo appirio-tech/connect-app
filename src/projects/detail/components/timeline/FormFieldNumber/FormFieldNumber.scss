@@ -1,0 +1,85 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+.container {
+  background: $tc-gray-neutral-light;
+  padding: 10px;
+  border-radius: 6px;
+  @include roboto;
+}
+
+.form {
+  :global .error-message {
+    color: $tc-orange-70;
+    border: 1px solid $tc-orange-30;
+  }
+}
+.milestone-post {
+  display: table-row;
+
+  :global {
+    .tc-label {
+      display: none;
+    }
+
+    .tc-file-field__inputs.error + p {
+      margin-bottom: 2 * $base-unit;
+    }
+
+    input:not([type="checkbox"]).tc-file-field__inputs.error:focus {
+      /* have to use !important because it is defined initially like that */
+      border-color: $tc-dark-blue-70 !important;
+    }
+
+    .tc-file-field__inputs.error:focus + p {
+      display: none;
+    }
+  }
+
+  .col-left {
+    display: table-cell;
+    text-align: right;
+    vertical-align: top;
+  }
+
+  .col-right {
+    display: table-cell;
+    vertical-align: top;
+    width: 100%;
+  }
+
+  .label-counter {
+    @include roboto-medium;
+    color: $tc-dark-blue-100;
+    font-size: 11px;
+    line-height: 20px;
+    text-align: right;
+  }
+
+  .label-title {
+    color: $tc-gray-80;
+    font-size: 15px;
+    line-height: 30px;
+    text-align: right;
+    white-space: nowrap;
+    padding-right: 2 * $base-unit;
+    padding-top: $base-unit;
+    width: 100%;
+  }
+
+  &.has-counter .label-title {
+    padding-top: 5 * $base-unit;
+  }
+
+  /* use this selector to overwrite the global style for sure */
+  input:not([type="checkbox"]) {
+    text-transform: initial;
+
+    &::placeholder {
+      color: $tc-gray-30;
+      font-size: 15px;
+      text-transform: initial;
+    }
+  }
+}
+
+
