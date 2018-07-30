@@ -64,6 +64,8 @@ class Timeline extends React.Component {
       timeline,
     } = this.props
 
+    //Ordering milestones wrt startDate before rendering
+    const orderedMilestones = timeline.milestones ? _.orderBy(timeline.milestones, ['startDate']) : []
     return (
       <div>
         <TimelineHeader
@@ -72,7 +74,7 @@ class Timeline extends React.Component {
             postMsg: timeline.description,
           }}
         />
-        {_.reject(timeline.milestones, { hidden: true }).map((milestone) => (
+        {_.reject(orderedMilestones, { hidden: true }).map((milestone) => (
           <Milestone
             key={milestone.id}
             currentUser={currentUser}
