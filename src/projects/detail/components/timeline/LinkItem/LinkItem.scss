@@ -36,6 +36,7 @@
 
   .link-wrapper {
     flex: 1;
+    max-width:600px;
   }
 
   .button {
@@ -75,6 +76,7 @@
     padding-left: 3 * $base-unit;
     padding-right: 3 * $base-unit;
     position: relative;
+    flex-wrap:wrap;
   }
 
   .milestone-text {
