@@ -45,7 +45,10 @@ import {
   MILESTONE_STATUS,
   PHASE_STATUS_ACTIVE
 } from '../../config/constants'
-import { updateProductMilestone } from './productsTimelines'
+import {
+  updateProductMilestone,
+  updateProductTimeline
+} from './productsTimelines'
 
 export function loadProject(projectId) {
   return (dispatch) => {
@@ -361,8 +364,29 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
       type: UPDATE_PHASE,
       payload: updatePhaseAPI(projectId, phaseId, updatedProps, phaseIndex).then()
     }).then(() => {
+      if (timeline && updatedProps.startDate.diff(timeline.startDate)) {
+        dispatch(
+          updateProductTimeline(
+            productId,
+            timeline.id,
+            {
+              name: timeline.name,
+              startDate: updatedProps.startDate.format(),
+              reference: timeline.reference,
+              referenceId: timeline.referenceId,
+            }
+          )
+        )
+      }
       if (timeline && updatedProps.status && updatedProps.status===PHASE_STATUS_ACTIVE ){
-        return dispatch(updateProductMilestone(productId, timeline.id, timeline.milestones[0].id, {status:MILESTONE_STATUS.ACTIVE}))
+        dispatch(
+          updateProductMilestone(
+            productId,
+            timeline.id,
+            timeline.milestones[0].id,
+            {status:MILESTONE_STATUS.ACTIVE}
+          )
+        )
       }
       return true
     })

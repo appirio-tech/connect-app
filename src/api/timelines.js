@@ -187,3 +187,18 @@ export function createTimeline(timeline) {
   })
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
+
+/**
+ * Update timeline
+ *
+ * @param {Number} timelineId   timeline id
+ * @param {Object} updatedProps properties to update
+ *
+ * @returns {Promise} timeline
+ */
+export function updateTimeline(timelineId, updatedProps) {
+  return axios.patch(`${TC_API_URL}/v4/timelines/${timelineId}`, {
+    param: updatedProps,
+  })
+    .then(resp => _.get(resp.data, 'result.content'))
+}
