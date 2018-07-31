@@ -172,7 +172,7 @@ class Milestone extends React.Component {
               styleName="post-title-container"
             >
               <h4 styleName="post-title">{title}</h4>
-              {this.state.isHoverHeader && !isUpdating && (
+              {!currentUser.isCustomer && !isCompleted && this.state.isHoverHeader && !isUpdating && (
                 <div onClick={this.toggleEditLink} styleName={ 'post-edit' } >
                   <span styleName="tooltiptext">Edit milestone properties</span>
                 </div>)}
