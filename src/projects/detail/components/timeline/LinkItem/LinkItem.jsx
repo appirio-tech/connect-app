@@ -92,65 +92,68 @@ class LinkItem extends React.Component {
       <div styleName={cn('container', theme)}>
         {!isEditing && (
           <div styleName="label-layer">
-            <span styleName={cn('title', type)}>
-              {link.title || ''}
-            </span>
+            <div styleName="link-item-text-group">
+              <span styleName={cn('title', type)}>
+                {link.title || ''}
+              </span>
 
-            <div styleName="link-wrapper">
-              {link.isDownloadable ? (
+              <div styleName="link-wrapper">
+                {link.isDownloadable ? (
+                  <a
+                    href={link.url}
+                    download={link.url}
+                    styleName="milestone-text"
+                  >
+                    {link.url}
+                  </a>
+                ) : (
+                  <a
+                    href={link.url}
+                    styleName="milestone-text"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {link.url}
+                  </a>
+                )}
+              </div>
+            </div>
+            <div styleName="link-item-button-group">
+              {!!updateLink && (
+                <span onClick={this.openEditForm} styleName="button edit" />
+              )}
+
+              {!!deleteLink && (
+                <span onClick={this.deleteLink} styleName="button delete" />
+              )}    
+
+              {!!link.isDownloadable && !updateLink && !deleteLink && !onSelectChange && (
                 <a
                   href={link.url}
                   download={link.url}
-                  styleName="milestone-text"
-                >
-                  {link.url}
-                </a>
-              ) : (
-                <a
-                  href={link.url}
-                  styleName="milestone-text"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {link.url}
-                </a>
+                  styleName="button download"
+                />
+              )}
+
+              {!!onSelectChange && (
+                <div styleName="col-wrapper">
+                  <label styleName="checkbox-ctrl">
+                    <input
+                      type="checkbox"
+                      styleName="checkbox"
+                      onChange={this.onSelectChange}
+                    />
+                    <span styleName="checkbox-text" />
+                  </label>
+                </div>
+              )}
+
+              {!onSelectChange && link.isSelected && (
+                <div styleName="col-wrapper">
+                  <span styleName="item-checked" />
+                </div>
               )}
             </div>
-
-            {!!updateLink && (
-              <span onClick={this.openEditForm} styleName="button edit" />
-            )}
-
-            {!!deleteLink && (
-              <span onClick={this.deleteLink} styleName="button delete" />
-            )}
-
-            {!!link.isDownloadable && !updateLink && !deleteLink && !onSelectChange && (
-              <a
-                href={link.url}
-                download={link.url}
-                styleName="button download"
-              />
-            )}
-
-            {!!onSelectChange && (
-              <div styleName="col-wrapper">
-                <label styleName="checkbox-ctrl">
-                  <input
-                    type="checkbox"
-                    styleName="checkbox"
-                    onChange={this.onSelectChange}
-                  />
-                  <span styleName="checkbox-text" />
-                </label>
-              </div>
-            )}
-
-            {!onSelectChange && link.isSelected && (
-              <div styleName="col-wrapper">
-                <span styleName="item-checked" />
-              </div>
-            )}
           </div>
         )}
 
