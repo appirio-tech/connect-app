@@ -39,6 +39,7 @@ class EditStageForm extends React.Component {
     this.disableButton = this.disableButton.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.onCancel = this.onCancel.bind(this)
+    this.onLeave = this.onLeave.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -49,8 +50,13 @@ class EditStageForm extends React.Component {
     })
   }
 
+  componentDidMount() {
+    window.addEventListener('beforeunload', this.onLeave)
+  }
+
   componentWillUnmount() {
     this.props.firePhaseDirtyUndo()
+    window.removeEventListener('beforeunload', this.onLeave)
   }
 
   submitValue(model) {
@@ -78,7 +84,14 @@ class EditStageForm extends React.Component {
   isChanged() {
     // We check if this.refs.form exists because this may be called before the
     // first render, in which case it will be undefined.
-    return (this.refs.form && this.refs.form.isChanged()) || this.state.isFeaturesDirty
+    return (this.refs.form && this.refs.form.isChanged())
+  }
+
+  // Notify user if they navigate away while the form is modified.
+  onLeave(e = {}) {
+    if (this.isChanged()) {
+      return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
+    }
   }
 
   onCancel() {
@@ -124,7 +137,7 @@ class EditStageForm extends React.Component {
       this.setState({
         phaseIsdirty: true
       })
-      this.props.firePhaseDirty(unflatten(change), this.props.phase.id)
+      // this.props.firePhaseDirty(unflatten(change), this.props.phase.id)
     } else {
       // this.props.firePhaseDirtyUndo()
     }
@@ -176,6 +189,7 @@ class EditStageForm extends React.Component {
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment.utc(startDate).format('YYYY-MM-DD')
     const durationDisabled = this.props.productsTimelines[phase.products[0].id].timeline && !this.props.productsTimelines[phase.products[0].id].error
+    console.log(this.isChanged());
     return (
       <div styleName="container">
         <Prompt
