@@ -234,36 +234,15 @@ function getAllProjectProducts(project) {
  *
  * @return {Promise} product
  */
-function createTimelineAndMilestoneForProduct(product) {
-  return getMilestoneTemplates(product.templateId).then((milestoneTemplates) => {
-    const milestoneDates = []
-
-    // calculate start/end dates for milestones
-    const tmpDate = moment().subtract(1, 'days')
-    milestoneTemplates.map((milestoneTemplate) => {
-      const startDate = tmpDate.clone().add(1, 'days')
-      tmpDate.add(milestoneTemplate.duration, 'days')
-      const endDate = tmpDate.clone()
-
-      milestoneDates.push({
-        startDate,
-        endDate,
-      })
-    })
-
-    // calculate start/end dates for timeline
-    const timelineStartDate = milestoneDates.length ? milestoneDates[0].startDate : moment()
-    const timelineEndDate = milestoneDates.length ? milestoneDates[milestoneDates.length - 1].endDate : moment()
-
-    return createTimeline({
-      name: `Welcome to the ${product.name} phase`,
-      description: 'This is the first stage in our project. We’re going to show you the detailed plan in your timeline, with all the milestones.',
-      startDate: timelineStartDate.utc().format('YYYY-MM-DD'),
-      endDate: timelineEndDate.utc().format('YYYY-MM-DD'),
-      reference: 'product',
-      referenceId: product.id,
-      templateId: product.templateId,
-    })
+function createTimelineAndMilestoneForProduct(product, phase) {
+  return createTimeline({
+    name: `Welcome to the ${product.name} phase`,
+    description: 'This is the first stage in our project. We’re going to show you the detailed plan in your timeline, with all the milestones.',
+    startDate: phase ? moment(phase.startDate).format('YYYY-MM-DD') : null,
+    endDate: null,
+    reference: 'product',
+    referenceId: product.id,
+    templateId: product.templateId,
   })
 }
 
@@ -282,11 +261,20 @@ function createProductsTimelineAndMilestone(project) {
     .then(() => project)
 }
 
-export function createProduct(project, productTemplate) {
+export function createProduct(project, productTemplate, phases) {
+  let startDate = new Date();
+  let endDate = moment().add(17, 'days').toDate();
+  if(phases){
+    if(phases.length > 0){
+        const phase = _.maxBy(phases,'startDate');
+        startDate = moment(phase.endDate).add(1, 'days').toDate();
+        endDate = moment(startDate).add(17, 'days').toDate();
+    }
+  }
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT_STAGE,
-      payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, null, null)
+      payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, startDate, endDate)
     })
   }
 }
@@ -317,7 +305,7 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
       templateId: projectTemplate.id,
       type: projectTemplate.key || projectTemplate.productKey,
     })
-      .then(createTimelineAndMilestoneForProduct)
+      .then((product) => createTimelineAndMilestoneForProduct(product, phase))
       .then(() => project)
   })
 }

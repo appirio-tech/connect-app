@@ -40,6 +40,9 @@
     white-space: nowrap;
   }
 
+  input:not([type="checkbox"]):disabled {
+    width:163px;
+  }
   .input {
       &::-webkit-input-placeholder {
         text-transform: initial;
@@ -97,6 +100,9 @@
     position: relative;
     line-height: inherit;
     flex: 0 620px;
+    label {
+      flex: 0 225px;
+    }
   }
 }
 

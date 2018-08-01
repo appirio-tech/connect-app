@@ -140,7 +140,7 @@ class Milestone extends React.Component {
       currentUser,
     } = this.props
     const { isEditing } = this.state
-
+    
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
     const startDate = moment(milestone.startDate)
@@ -192,28 +192,15 @@ class Milestone extends React.Component {
                 },
                 validationError: 'Name is required',
               }, {
-                type: 'date',
-                name: 'dates',
-                startDate: {
-                  label: 'Start',
-                  placeholder: 'Start date',
-                  name: 'startDate',
-                  value: moment(milestone.startDate).format('YYYY-MM-DD'),
-                  validations: {
-                    isRequired: true
-                  },
-                  validationError: 'Start date is required',
+                type: 'number',
+                placeholder: 'Duration',
+                label: 'Duration',
+                name: 'duration',
+                value: String(milestone.duration || 0),
+                validations: {
+                  isRequired: true
                 },
-                endDate: {
-                  label: 'End',
-                  placeholder: 'End date',
-                  name: 'endDate',
-                  value: moment(milestone.endDate).format('YYYY-MM-DD'),
-                  validations: {
-                    isRequired: true
-                  },
-                  validationError: 'End date is required',
-                }
+                validationError: 'Duration is required'
               }, {
                 label: 'Planned text',
                 placeholder: 'Planned text',
