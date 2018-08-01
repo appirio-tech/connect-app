@@ -30,7 +30,7 @@
     bottom: 0;
     width: 0;
     background-color: $tc-dark-blue-100;
-    border-radius: 6px 0 0 6px;
+    border-radius: 6px;
     @media screen and (max-width: $screen-md - 1px) {
       border-radius: 0;
     }

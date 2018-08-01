@@ -3,15 +3,17 @@ import PT from 'prop-types'
 import _ from 'lodash'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
+import { unflatten } from 'flat'
 
 import styles from './EditStageForm.scss'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Prompt } from 'react-router-dom'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 const TCFormFields = FormsyForm.Fields
 // import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
-import { updatePhase as updatePhaseAction } from '../../../actions/project'
+import { updatePhase as updatePhaseAction, syncPhases as syncPhasesAction, firePhaseDirty,
+  firePhaseDirtyUndo } from '../../../actions/project'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
 import { PHASE_STATUS_COMPLETED, PHASE_STATUS, PHASE_STATUS_ACTIVE } from '../../../../config/constants'
@@ -29,7 +31,8 @@ class EditStageForm extends React.Component {
       isUpdating: false,
       isEdittable: _.get(props, 'phase.status') !== PHASE_STATUS_COMPLETED,
       disableActiveStatusFields: _.get(props, 'phase.status') !== PHASE_STATUS_ACTIVE,
-      showPhaseOverlapWarning: false
+      showPhaseOverlapWarning: false,
+      phaseIsdirty: false
     }
     this.submitValue = this.submitValue.bind(this)
     this.enableButton = this.enableButton.bind(this)
@@ -42,15 +45,19 @@ class EditStageForm extends React.Component {
     this.setState({
       isUpdating: nextProps.isUpdating,
       isEdittable: nextProps.phase.status !== PHASE_STATUS_COMPLETED,
-      disableActiveStatusFields: nextProps.phase.status !== PHASE_STATUS_ACTIVE
+      disableActiveStatusFields: nextProps.phase.status !== PHASE_STATUS_ACTIVE,
     })
+  }
+
+  componentWillUnmount() {
+    this.props.firePhaseDirtyUndo()
   }
 
   submitValue(model) {
     const { phase, phaseIndex, updatePhaseAction } = this.props
     const updatedStartDate = moment.utc(new Date(model.startDate))
     const duration = model.duration ? model.duration : 1
-    const endDate = moment.utc(updatedStartDate).add(duration - 1, 'days')
+    const endDate = model.status === PHASE_STATUS_COMPLETED ? moment.utc(new Date()) : moment.utc(updatedStartDate).add(duration - 1, 'days')
     const updateParam = _.assign({}, model, {
       startDate: updatedStartDate,
       endDate: endDate || '',
@@ -76,8 +83,10 @@ class EditStageForm extends React.Component {
 
   onCancel() {
     this.refs.form.reset()
+    this.props.firePhaseDirtyUndo()
     this.setState({
-      showPhaseOverlapWarning: false
+      showPhaseOverlapWarning: false,
+      phaseIsdirty: false
     })
     this.props.cancel()
   }
@@ -112,9 +121,12 @@ class EditStageForm extends React.Component {
     })
     if (this.isChanged()) {
       // TODO fire dirty event for phase
-      // this.props.fireProjectDirty(unflatten(change))
+      this.setState({
+        phaseIsdirty: true
+      })
+      this.props.firePhaseDirty(unflatten(change), this.props.phase.id)
     } else {
-      // this.props.fireProjectDirtyUndo()
+      // this.props.firePhaseDirtyUndo()
     }
   }
 
@@ -166,6 +178,10 @@ class EditStageForm extends React.Component {
     const durationDisabled = this.props.productsTimelines[phase.products[0].id].timeline && !this.props.productsTimelines[phase.products[0].id].error
     return (
       <div styleName="container">
+        <Prompt
+          when={this.state.phaseIsdirty}
+          message="You have unsaved changes. Are you sure you want to leave? "
+        />
         {this.state.isUpdating && (<LoadingIndicator />)}
         {!this.state.isUpdating && (<div>
           <Formsy.Form
@@ -239,6 +255,11 @@ const mapStateToProps = ({projectState, productsTimelines}) => ({
   productsTimelines
 })
 
-const actionCreators = {updatePhaseAction}
+const actionCreators = {
+  updatePhaseAction, 
+  syncPhasesAction,
+  firePhaseDirty,
+  firePhaseDirtyUndo 
+}
 
 export default withRouter(connect(mapStateToProps, actionCreators)(EditStageForm))

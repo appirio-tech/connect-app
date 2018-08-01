@@ -232,6 +232,9 @@ export const UPDATE_PRODUCT_FAILURE   = 'UPDATE_PRODUCT_FAILURE'
 export const PROJECT_DIRTY            = 'PROJECT_DIRTY'
 export const PROJECT_DIRTY_UNDO       = 'PROJECT_DIRTY_UNDO'
 
+export const PHASE_DIRTY            = 'PHASE_DIRTY'
+export const PHASE_DIRTY_UNDO       = 'PHASE_DIRTY_UNDO'
+
 export const PRODUCT_DIRTY            = 'PRODUCT_DIRTY'
 export const PRODUCT_DIRTY_UNDO       = 'PRODUCT_DIRTY_UNDO'
 

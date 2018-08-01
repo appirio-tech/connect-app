@@ -16,12 +16,24 @@ import CoderBot from '../../components/CoderBot/CoderBot'
 const page404 = compose(
   withProps({code:404})
 )
-const showCoderBotIfError = (hasError) =>
-  branch(
-    hasError,
-    renderComponent(page404(CoderBot)), // FIXME pass in props code=400
+const showCoderBotIfError = (hasError) => {
+
+  let component = page404
+
+  return branch(
+    (props) => {
+      if (props.error.code === 403 && props.error.msg.includes('Copilot')) {
+        const messageGenerator = `${props.error.msg.replace('Copilot: ', '')}. If things don’t work or you’re sure it is Coder’s fault, send us a note at <a href="support@topcoder.com">support@topcoder.com</a> and we’ll fix it for you.`
+        component = compose(
+          withProps({code:403, message: messageGenerator})
+        )
+      }
+      return hasError(props)
+    },
+    comp => renderComponent(component(CoderBot))(comp), // FIXME pass in props code=400
     t => t
   )
+}
 const errorHandler = showCoderBotIfError(props => props.error && props.error.type === LOAD_PROJECT_FAILURE)
 
 // This handles showing a spinner while the state is being loaded async

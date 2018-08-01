@@ -427,6 +427,18 @@ export function fireProjectDirty(dirtyProject) {
   }
 }
 
+export function firePhaseDirty(dirtyPhase, phaseId) {
+  return (dispatch) => {
+    return dispatch({
+      type: PHASE_DIRTY,
+      payload: {
+        dirtyPhase,
+        phaseId }
+
+    })
+  }
+}
+
 export function fireProductDirty(phaseId, productId, values) {
   return (dispatch) => {
     return dispatch({
@@ -444,6 +456,14 @@ export function fireProjectDirtyUndo() {
   return (dispatch) => {
     return dispatch({
       type: PROJECT_DIRTY_UNDO
+    })
+  }
+}
+
+export function firePhaseDirtyUndo() {
+  return (dispatch) => {
+    return dispatch({
+      type: PHASE_DIRTY_UNDO
     })
   }
 }
