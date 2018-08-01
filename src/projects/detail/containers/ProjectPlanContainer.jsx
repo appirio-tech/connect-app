@@ -58,7 +58,7 @@ const ProjectPlanContainer = (props) => {
   const phaseId = parseInt(props.match.params.phaseId, 10)
   return (
     <TwoColsLayout>
-      {phaseId &&
+      {!!phaseId &&
         <TwoColsLayout.Content>
           {visiblePhases.length > 0 ? (
             [
