@@ -9,6 +9,9 @@ import {
   UPDATE_PRODUCT_MILESTONE_PENDING,
   UPDATE_PRODUCT_MILESTONE_SUCCESS,
   UPDATE_PRODUCT_MILESTONE_FAILURE,
+  UPDATE_PRODUCT_TIMELINE_PENDING,
+  UPDATE_PRODUCT_TIMELINE_SUCCESS,
+  UPDATE_PRODUCT_TIMELINE_FAILURE,
   COMPLETE_PRODUCT_MILESTONE_PENDING,
   COMPLETE_PRODUCT_MILESTONE_SUCCESS,
   COMPLETE_PRODUCT_MILESTONE_FAILURE,
@@ -56,6 +59,28 @@ function updateMilestone(state, productId, milestoneId, updateMilestone, shouldR
       timeline: {
         milestones: { $splice: [[ milestoneIdx, 1, updatedMilestone ]] }
       }
+    }
+  })
+}
+
+/**
+ * Update state's productsTimeline property
+ *
+ * @param {Object} state The state
+ * @param {Number} productId The product id
+ * @param {Object} updateTimeline The product timeline update
+ * @param {Boolean} shouldReplace The product timeline replacement flag
+ *
+ * @returns {Object} The state
+ */
+function updateTimline(state, productId, updateTimeline, shouldReplace = false) {
+  const updatedTimeline = shouldReplace
+    ? updateTimeline
+    : update(state[productId].timeline, updateTimeline)
+
+  return update(state, {
+    [productId]: {
+      timeline: {$set: updatedTimeline}
     }
   })
 }
@@ -109,6 +134,21 @@ export const productsTimelines = (state=initialState, action) => {
 
   case UPDATE_PRODUCT_MILESTONE_FAILURE:
     return updateMilestone(state, meta.productId, meta.milestoneId, {
+      isUpdating: { $set: false },
+      error: { $set: false }
+    })
+
+  case UPDATE_PRODUCT_TIMELINE_PENDING:
+    return updateTimline(state, meta.productId, {
+      isUpdating: { $set: true },
+      error: { $set: false }
+    })
+
+  case UPDATE_PRODUCT_TIMELINE_SUCCESS:
+    return updateTimline(state, meta.productId, payload, true)
+
+  case UPDATE_PRODUCT_TIMELINE_FAILURE:
+    return updateTimline(state, meta.productId, {
       isUpdating: { $set: false },
       error: { $set: false }
     })

@@ -7,6 +7,7 @@ import {
   getTimelinesByReference,
   getTimelineById,
   updateMilestone,
+  updateTimeline,
 } from '../../api/timelines'
 import {
   LOAD_PRODUCT_TIMELINE_WITH_MILESTONES,
@@ -15,6 +16,7 @@ import {
   EXTEND_PRODUCT_MILESTONE,
   SUBMIT_FINAL_FIXES_REQUEST,
   MILESTONE_STATUS,
+  UPDATE_PRODUCT_TIMELINE,
 } from '../../config/constants'
 
 /**
@@ -73,6 +75,25 @@ export function updateProductMilestone(productId, timelineId, milestoneId, updat
       meta: {
         productId,
         milestoneId,
+      }
+    })
+  }
+}
+
+/**
+ * Update product timeline
+ *
+ * @param {Number} timelineId   timeline id
+ * @param {Object} updatedProps params need to update
+ */
+export function updateProductTimeline(productId, timelineId, updatedProps) {
+  return (dispatch) => {
+    return dispatch({
+      type: UPDATE_PRODUCT_TIMELINE,
+      payload: updateTimeline(timelineId, updatedProps),
+      meta: {
+        productId,
+        timelineId,
       }
     })
   }
