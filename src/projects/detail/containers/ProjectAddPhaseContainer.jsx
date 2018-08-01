@@ -117,7 +117,7 @@ class ProjectAddPhaseContainer extends React.Component {
     const props = this.props
     const productTemplate = getProductTemplateByKey(props.allProductTemplates, projectTemplateKey)
     if (productTemplate) {
-      props.createProduct(props.project, productTemplate)
+      props.createProduct(props.project, productTemplate, props.phases)
       this.setState({isChosenProduct: true, shouldReloadPhases: true})
     }
   }

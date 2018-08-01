@@ -1,0 +1,120 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// project-progress specific styles
+.milestone-post {
+  position: relative;
+  border-radius: 4px;
+  color: #151516;
+  height: auto;
+  min-height: $base-unit*10;
+  line-height: $base-unit*10;
+  @include roboto;
+  font-weight: 400;
+  font-size: 15px;
+  .hide-sm {
+    display: inline-block;
+  }
+  .dot {
+    position: absolute;
+    background-color: #ffffff;
+    border: 2px solid #aaaaab;
+    border-radius: 100%;
+    width: 8px;
+    height: 8px;
+    left: -22px;
+    top: calc(50% - 4px);
+    z-index: 2;
+  }
+  /* mobile view specific style */
+  @include viewSm {
+    height: auto;
+    min-height: $base-unit*10;
+    line-height: $base-unit*8;
+    border-radius: 0;
+    .hide-sm {
+      display: none;
+    }
+  }
+
+  .label-layer {
+    height: inherit;
+    position: relative;
+    line-height: inherit;
+    padding-left: $base-unit*3;
+    padding-right: $base-unit*3;
+    z-index: 1;
+    padding: 5px 20px 15px 20px;
+    @include viewSm {
+      padding-right: $base-unit*7;
+    }
+    .label-title {
+      font-weight: 500;
+      text-align: center;
+    }
+    .group-content {
+      line-height: 50px;
+      justify-content: space-between;
+      text-align: left;
+      color: #404041;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 20px;
+      @include viewSm {
+        min-width: 100px;
+
+        &.hide-sm{
+          display: none;
+        }
+      }
+    }
+
+    .group-selection {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      font-size: 15px;
+      font-weight: 400;
+      margin-top: 15px;
+      .label {
+        display: flex;
+        input {
+          width: 20px;
+          margin: auto 5px auto 20px;
+          box-shadow:none;
+        }
+      }
+    }
+
+    .group-button {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin-top: 15px;
+      button {
+        margin: 0 6px 0 6px;
+        font-size: 13px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  /* in-progress state */
+  &.in-progress {
+    .dot {
+      background-color: #ffffff;
+      border: 2px solid #0681ff;
+    }
+  }
+
+  /* completed state */
+  &.completed {
+    .dot {
+      background-color: #0681ff;
+      border: 2px solid #0681ff;
+    }
+  }
+}

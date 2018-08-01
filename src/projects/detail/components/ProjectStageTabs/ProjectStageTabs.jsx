@@ -10,6 +10,11 @@ const ProjectStageTabs = ({
 }) => {
   const tabs = [
     {
+      onClick: () => onTabClick('timeline'),
+      label: 'Timeline',
+      isActive: activeTab === 'timeline'
+    },
+    {
       onClick: () => onTabClick('posts'),
       label: 'Posts',
       isActive: activeTab === 'posts'

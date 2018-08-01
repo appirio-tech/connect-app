@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-timeline-invoice</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icon-timeline-invoice" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M25,3 L5,3 C4.448,3 4,3.448 4,4 L4,26 C4,26.552 4.448,27 5,27 L25,27 C25.552,27 26,26.552 26,26 L26,4 C26,3.448 25.552,3 25,3 Z M15.243,14.03 C16.739,14.404 19,14.969 19,17.5 C19,19.258 17.692,20.704 16,20.949 L16,23 L14,23 L14,20.949 C12.308,20.704 11,19.258 11,17.5 L13,17.5 C13,18.327 13.673,19 14.5,19 L15.5,19 C16.327,19 17,18.327 17,17.5 C17,16.658 16.495,16.404 14.757,15.97 C13.261,15.596 11,15.031 11,12.5 C11,10.742 12.308,9.296 14,9.051 L14,7 L16,7 L16,9.051 C17.692,9.296 19,10.742 19,12.5 L17,12.5 C17,11.673 16.327,11 15.5,11 L14.5,11 C13.673,11 13,11.673 13,12.5 C13,13.342 13.505,13.596 15.243,14.03 Z" id="Shape" fill="#51B200" fill-rule="nonzero"></path>
+    </g>
+</svg>

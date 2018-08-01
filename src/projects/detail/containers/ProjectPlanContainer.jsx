@@ -37,7 +37,7 @@ const ProjectPlanContainer = (props) => {
 
   // manager user sees all phases
   // customer user doesn't see unplanned (draft) phases
-  const visiblePhases = phases.filter((phase) => (
+  const visiblePhases = phases && phases.filter((phase) => (
     isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
   ))
 

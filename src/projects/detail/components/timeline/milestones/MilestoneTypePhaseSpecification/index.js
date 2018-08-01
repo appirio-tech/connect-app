@@ -1,0 +1,2 @@
+import MilestoneTypePhaseSpecification from './MilestoneTypePhaseSpecification'
+export default MilestoneTypePhaseSpecification

@@ -17,6 +17,7 @@ const ProjectProgress = (props) => {
         <div styleName="group-right">
           {!!props.labelSpent && <span styleName="spent">{props.labelSpent}</span>}
           <span styleName="status hide-sm">{props.labelStatus}</span>
+          {props.children}
         </div>
       </div>
     </div>

@@ -9,6 +9,7 @@
   color: $tc-white;
   height: $base-unit*8;
   line-height: $base-unit*8;
+  overflow: hidden;
   @include roboto;
   font-size: 15px;
   .hide-sm {
@@ -51,6 +52,7 @@
     }
 
     .group-right {
+      align-items: center;
       display: flex;
       justify-content: flex-end;
     }
@@ -101,24 +103,24 @@
       border: 2px solid $tc-dark-blue-100;
     }
   }
-
-  &.default-theme {
-    overflow: hidden;
-  }
-
-  /* light theme */
-
-  &.light {
-    .fill {
-      background-color: $tc-dark-blue-30;
-    }
-  }
 }
+
+/* light theme */
 
 .light {
   background-color: rgba($tc-dark-blue-30, 0.3);
   color: $tc-black;
   .filled {
     background-color: $tc-dark-blue-30;
+  }
+}
+
+/* warning theme */
+
+.warning {
+  background-color: rgba($tc-red-30, 0.3);
+  color: $tc-black;
+  .filled {
+    background-color: $tc-red-30;
   }
 }

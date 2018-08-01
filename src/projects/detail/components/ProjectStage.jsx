@@ -14,6 +14,7 @@ import PhaseCard from './PhaseCard'
 import ProjectStageTabs from './ProjectStageTabs'
 import EditProjectForm from './EditProjectForm'
 import PhaseFeed from './PhaseFeed'
+import ProductTimelineContainer from '../containers/ProductTimelineContainer'
 import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
@@ -29,7 +30,7 @@ const EnhancedEditProjectForm = enhance(EditProjectForm)
  *
  * @returns {Object} PhaseCard attr property
  */
-function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed) {
+function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline) {
   // NOTE so far one phase always has 1 product
   // but as in the future this may be changed, we work with products as an array
   const product = _.get(phase, 'products[0]')
@@ -52,22 +53,30 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed) {
   // replaces the second occurance of the month part i.e. removes the end date's month part
   startEndDates = startEndDates.lastIndexOf(monthStr) !== 0 ? startEndDates.replace(`-${monthStr}`, '-') : startEndDates
 
+  let now = new Date()
+  now = now && moment.utc(now)
+
   // calculate progress of phase
-  let progressInPercent = phase.progress
-  if (!progressInPercent) {
-    let actualDuration = 0
-    let now = new Date()
-    now = now && moment.utc(now)
-    const durationFromNow = now.diff(startDate, 'days') + 1
-    if (durationFromNow <= plannedDuration) {
-      if (durationFromNow > 0) {
-        actualDuration = durationFromNow
+  let tlPlannedDuration = 0
+  let tlCurrentDuration = 0
+  if (timeline) {
+    const tlStartDate = timeline.startDate && moment.utc(timeline.startDate)
+    const tlEndDate = timeline.endDate && moment.utc(timeline.endDate)
+    tlPlannedDuration = tlStartDate && tlEndDate && tlEndDate.diff(tlStartDate, 'days') > 0 ? tlEndDate.diff(tlStartDate, 'days') : 0
+    _.forEach(timeline.milestones, milestone => {
+      if (!milestone.hidden) {
+        const range = moment.range(milestone.startDate, milestone.endDate)
+        if (milestone.completionDate) {
+          tlCurrentDuration += milestone.duration
+        } else if (range.contains(now)) {
+          tlCurrentDuration += now.diff(milestone.startDate, 'days')
+        }
       }
-    } else {
-      actualDuration = plannedDuration
-    }
-    progressInPercent = (actualDuration  && plannedDuration) ? Math.round((actualDuration / plannedDuration) * 100) : 0
+    })
   }
+
+  const tlProgressInPercent = Math.round((tlCurrentDuration / tlPlannedDuration) * 100)
+  const progressInPercent = tlProgressInPercent || phase.progress
 
   const actualPrice = phase.spentBudget
   let paidStatus = 'Quoted'
@@ -152,6 +161,7 @@ class ProjectStage extends React.Component{
       onDeleteMessage,
       allMembers,
       onSaveMessage,
+      timeline,
     } = this.props
 
     // NOTE even though in store we keep products as an array,
@@ -164,13 +174,17 @@ class ProjectStage extends React.Component{
 
     return (
       <PhaseCard
-        attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed)}
+        attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline)}
         projectStatus={project.status}
         isManageUser={isManageUser}
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
       >
         <div>
           <ProjectStageTabs activeTab={activeTab} onTabClick={onTabClick} />
+
+          {activeTab === 'timeline' &&
+            <ProductTimelineContainer product={product} />
+          }
 
           {activeTab === 'posts' &&
             <PhaseFeed
@@ -211,7 +225,7 @@ class ProjectStage extends React.Component{
 }
 
 ProjectStage.defaultProps = {
-  activeTab: 'posts',
+  activeTab: 'timeline',
   currentMemberRole: null,
 }
 

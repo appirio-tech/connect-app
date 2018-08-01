@@ -1,0 +1,121 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// project-progress specific styles
+.milestone-post {
+  @include roboto;
+  font-size: 15px;
+
+  .label-layer {
+    display: flex;
+    justify-content: space-between;
+    height: inherit;
+    position: relative;
+    line-height: inherit;
+    z-index: 2;
+    overflow: hidden;
+    @include viewSm {
+      padding-right: $base-unit*7;
+    }
+
+    .content {
+      width: 100%;
+      background-color: #FAFAFB;
+      border-radius: 4px;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 25px;
+      text-align: left;
+      padding: 10px 10px;
+      word-break: break-all;
+    }
+
+    .input-text {
+      margin: auto;
+      resize:none;
+      height: 44px;
+      text-transform: initial;
+      &::-webkit-input-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
+      }
+      &:-moz-placeholder {
+          text-transform: initial;
+          color:#A3A3AD;
+          font-size: 15px;
+          font-weight: 400;
+      }
+      &::-moz-placeholder {
+          text-transform: initial;
+          color:#A3A3AD;
+          font-size: 15px;
+          font-weight: 400;
+      }
+      &:-ms-input-placeholder {
+          text-transform: initial;
+          color:#A3A3AD;
+          font-size: 15px;
+          font-weight: 400;
+      }
+      &.element:-o-input-placeholder {
+        text-transform: initial;
+        color:#A3A3AD;
+        font-size: 15px;
+        font-weight: 400;
+      }
+    }
+
+    .group-right {
+      width: 405px;
+      display: flex;
+      line-height: 50px;
+      justify-content: space-between;
+      text-align: right;
+      color: #808080;
+      @include viewSm {
+        min-width: 100px;
+
+        &.hide-sm{
+          display: none;
+        }
+      }
+    }
+
+    button {
+      width: 20px;
+      height: 20px;
+      color: white;
+      border-radius: 50%;
+      margin: auto auto auto 10px;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 0;
+      &.button-add {
+        background-color: #C0C0C0;
+        padding: 0 0 3px 0px;
+        &:hover {
+          background-color: #0681ff;
+        }
+      }
+      &.button-remove {
+        background-color: #EA1900;
+        padding: 0 0 3px 0px;
+        font-size: 20px;
+      }
+    }
+
+  }
+  .milestone-text {
+    color: #808080;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 50px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
