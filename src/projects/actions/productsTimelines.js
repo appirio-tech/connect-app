@@ -110,40 +110,23 @@ export function updateProductTimeline(productId, timelineId, updatedProps) {
  * @param {Object} updatedProps (optional) milestone properties to update
  */
 export function completeProductMilestone(productId, timelineId, milestoneId, updatedProps = {}) {
-  return (dispatch, getState) => {
-    const timeline = getState().productsTimelines[productId]
-    const milestoneIdx = _.findIndex(timeline.timeline.milestones, { id: milestoneId })
+  return (dispatch) => {
 
     const requests = [
       updateMilestone(timelineId, milestoneId, {
         ...updatedProps, // optional props to update
         status: MILESTONE_STATUS.COMPLETED,
-        endDate: moment().utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
-        completionDate: moment().utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+        endDate: moment().utc().format('YYYY-MM-DD'),
+        completionDate: moment().utc().format('YYYY-MM-DD'),
       })
     ]
-
-    const nextMilestone = getNextNotHiddenMilestone(timeline.timeline.milestones, milestoneIdx)
-    if (nextMilestone) {
-      const startDate = moment()
-      const endDate = moment(nextMilestone.endDate)
-
-      requests.push(
-        updateMilestone(timelineId, nextMilestone.id, {
-          startDate: startDate.utc().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
-          duration: endDate.diff(startDate, 'days'),
-          status: MILESTONE_STATUS.ACTIVE,
-        })
-      )
-    }
 
     return dispatch({
       type: COMPLETE_PRODUCT_MILESTONE,
       payload: Promise.all(requests),
       meta: {
         productId,
-        milestoneId,
-        nextMilestoneId: nextMilestone ? nextMilestone.id : null,
+        milestoneId
       }
     })
   }
@@ -242,7 +225,6 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
       updateMilestone(timelineId, finalFixesMilestone.id, {
         status: MILESTONE_STATUS.COMPLETED,
         hidden: false,
-        startDate: milestone.startDate,
         endDate: milestone.startDate,
         completionDate: milestone.startDate,
         details: {

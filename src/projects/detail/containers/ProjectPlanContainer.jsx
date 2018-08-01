@@ -36,10 +36,10 @@ const ProjectPlanContainer = (props) => {
 
   // manager user sees all phases
   // customer user doesn't see unplanned (draft) phases
-  const visiblePhases = phases.filter((phase) => (
+  const visiblePhases = phases && phases.filter((phase) => (
     isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
   ))
-  const nonDraftPhases = phases.filter((phase) => (
+  const nonDraftPhases = phases && phases.filter((phase) => (
     phase.status !== PHASE_STATUS_DRAFT
   ))
   const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
@@ -69,7 +69,7 @@ const ProjectPlanContainer = (props) => {
       </TwoColsLayout.Sidebar>
 
       <TwoColsLayout.Content>
-        {visiblePhases.length > 0 ? (
+        {visiblePhases && visiblePhases.length > 0 ? (
           [
             nonDraftPhases.length > 0 && <ProjectPlanProgress phases={visiblePhases} project={project} key="progress" />,
             <ProjectStages
