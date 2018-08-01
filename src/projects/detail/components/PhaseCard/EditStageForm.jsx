@@ -3,7 +3,7 @@ import PT from 'prop-types'
 import _ from 'lodash'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
-import { unflatten } from 'flat'
+// import { unflatten } from 'flat'
 
 import styles from './EditStageForm.scss'
 import { connect } from 'react-redux'
@@ -189,7 +189,6 @@ class EditStageForm extends React.Component {
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment.utc(startDate).format('YYYY-MM-DD')
     const durationDisabled = this.props.productsTimelines[phase.products[0].id].timeline && !this.props.productsTimelines[phase.products[0].id].error
-    console.log(this.isChanged());
     return (
       <div styleName="container">
         <Prompt
