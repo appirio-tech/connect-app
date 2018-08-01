@@ -19,7 +19,6 @@ import {
   getProductTemplateByKey,
 } from '../../api/templates'
 import {
-  getMilestoneTemplates,
   createTimeline,
 } from '../../api/timelines'
 import {
@@ -262,13 +261,13 @@ function createProductsTimelineAndMilestone(project) {
 }
 
 export function createProduct(project, productTemplate, phases) {
-  let startDate = new Date();
-  let endDate = moment().add(17, 'days').toDate();
+  let startDate = new Date()
+  let endDate = moment().add(17, 'days').toDate()
   if(phases){
     if(phases.length > 0){
-        const phase = _.maxBy(phases,'startDate');
-        startDate = moment(phase.endDate).add(1, 'days').toDate();
-        endDate = moment(startDate).add(17, 'days').toDate();
+      const phase = _.maxBy(phases, 'startDate')
+      startDate = moment(phase.endDate).add(1, 'days').toDate()
+      endDate = moment(startDate).add(17, 'days').toDate()
     }
   }
   return (dispatch) => {

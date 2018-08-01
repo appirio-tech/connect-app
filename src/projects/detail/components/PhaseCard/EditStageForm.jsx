@@ -163,7 +163,7 @@ class EditStageForm extends React.Component {
     const { isEdittable, showPhaseOverlapWarning } = this.state
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment.utc(startDate).format('YYYY-MM-DD')
-    const durationDisabled = this.props.productsTimelines[phase.products[0].id].timeline && !this.props.productsTimelines[phase.products[0].id].error;
+    const durationDisabled = this.props.productsTimelines[phase.products[0].id].timeline && !this.props.productsTimelines[phase.products[0].id].error
     return (
       <div styleName="container">
         {this.state.isUpdating && (<LoadingIndicator />)}
@@ -188,16 +188,14 @@ class EditStageForm extends React.Component {
                 {durationDisabled ? (
                   <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
                     <div className="tooltip-target"> 
-                      <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={durationDisabled} label="Duration (days)" type="number" name="duration" value={phase.duration} minValue={1}>
-                      </TCFormFields.TextInput>
+                      <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={durationDisabled} label="Duration (days)" type="number" name="duration" value={phase.duration} minValue={1} />
                     </div>
                     <div className="tooltip-body">
                         Phase duration is controlled by duration of individual milestones
                     </div>
                   </Tooltip>) : (
-                    <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={durationDisabled} label="Duration (days)" type="number" name="duration" value={phase.duration} minValue={1}>
-                    </TCFormFields.TextInput>
-                  ) 
+                  <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={durationDisabled} label="Duration (days)" type="number" name="duration" value={phase.duration} minValue={1} />
+                ) 
                 }
               </div>
               <div styleName="label-layer">
@@ -235,10 +233,10 @@ EditStageForm.propTypes = {
   phaseIndex: PT.number
 }
 
-const mapStateToProps = ({projectState,productsTimelines}) => ({
+const mapStateToProps = ({projectState, productsTimelines}) => ({
   isUpdating: projectState.processing,
   phases: projectState.phases,
-  productsTimelines: productsTimelines
+  productsTimelines
 })
 
 const actionCreators = {updatePhaseAction}
