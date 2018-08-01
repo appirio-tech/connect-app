@@ -42,7 +42,9 @@ import {
   UPDATE_PHASE,
   DELETE_PROJECT_PHASE,
   MILESTONE_STATUS,
-  PHASE_STATUS_ACTIVE
+  PHASE_STATUS_ACTIVE,
+  PHASE_DIRTY,
+  PHASE_DIRTY_UNDO
 } from '../../config/constants'
 import {
   updateProductMilestone,
