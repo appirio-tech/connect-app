@@ -237,7 +237,7 @@ function createTimelineAndMilestoneForProduct(product, phase) {
   return createTimeline({
     name: `Welcome to the ${product.name} phase`,
     description: 'This is the first stage in our project. We’re going to show you the detailed plan in your timeline, with all the milestones.',
-    startDate: phase ? moment(phase.startDate).format('YYYY-MM-DD') : null,
+    startDate: phase ? moment(phase.startDate).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
     endDate: null,
     reference: 'product',
     referenceId: product.id,
