@@ -182,6 +182,27 @@ class MilestoneTypeDelivery extends React.Component {
               !isAccepted &&
               !isDeclined &&
               !isShowFinalFixesRequestForm &&
+              (currentUser.isCopilot || currentUser.isManager) &&
+              !currentUser.isAdmin &&
+              !isFinalFixesSubmitted &&
+              (
+                <DotIndicator>
+                  <div styleName="top-space">
+                    <MilestonePostMessage
+                      label="Design acceptance"
+                      backgroundColor={'#CEE6FF'}
+                      message="The customer has yet to respond to the final deliverable acceptance. Please communicate with them if there’s a problem and they need help to make the final decision. Once they respond you’ll see a link to upload the final deliverables here."
+                      isShowSelection={false}
+                      buttons={[]}
+                    />
+                  </div>
+                </DotIndicator>
+              )
+            }
+            {
+              !isAccepted &&
+              !isDeclined &&
+              !isShowFinalFixesRequestForm &&
               (currentUser.isCustomer || currentUser.isAdmin) &&
               !isFinalFixesSubmitted &&
             (
