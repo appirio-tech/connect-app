@@ -58,61 +58,40 @@ const ProjectPlanContainer = (props) => {
   const phaseId = parseInt(props.match.params.phaseId, 10)
   return (
     <TwoColsLayout>
-      {!!phaseId &&
-        <TwoColsLayout.Content>
-          {visiblePhases.length > 0 ? (
-            [
-              <ProjectStages
-                {...{
-                  ...props,
-                  phases: visiblePhases,
-                  phaseId,
-                }}
-                isManageUser={isManageUser}
-                key="stages"
-              />
-            ]
-          ) : (
-            <ProjectPlanEmpty />
-          )}
-        </TwoColsLayout.Content>
-      }
-      { !phaseId &&
-        <TwoColsLayout.Sidebar>
-          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
-            {(matches) => {
-              if (matches) {
-                return <Sticky top={110}>{leftArea}</Sticky>
-              } else {
-                return leftArea
-              }
-            }}
-          </MediaQuery>
-        </TwoColsLayout.Sidebar>
-      }
-      { !phaseId &&
-        <TwoColsLayout.Content>
-          {visiblePhases.length > 0 ? (
-            [
-              activePhases.length > 0 && <ProjectPlanProgress phases={visiblePhases} project={project} key="progress" />,
-              <ProjectStages
-                {...{
-                  ...props,
-                  phases: visiblePhases,
-                  phaseId,
-                }}
-                isManageUser={isManageUser}
-                key="stages"
-              />
-            ]
-          ) : (
-            <ProjectPlanEmpty />
-          )}
-          {isProjectLive && isManageUser && (<div styleName="add-button-container">
-            <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
-          </div>)}
-        </TwoColsLayout.Content>
-      }
+      <TwoColsLayout.Sidebar>
+        <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+          {(matches) => {
+            if (matches) {
+              return <Sticky top={110}>{leftArea}</Sticky>
+            } else {
+              return leftArea
+            }
+          }}
+        </MediaQuery>
+      </TwoColsLayout.Sidebar>
+
+      <TwoColsLayout.Content>
+        {visiblePhases && visiblePhases.length > 0 ? (
+          [
+            activePhases.length > 0 && <ProjectPlanProgress phases={visiblePhases} project={project} key="progress" />,
+            <ProjectStages
+              {...{
+                ...props,
+                phases: visiblePhases,
+                phaseId,
+              }}
+              isManageUser={isManageUser}
+              key="stages"
+            />
+          ]
+        ) : (
+          <ProjectPlanEmpty />
+        )}
+        {isProjectLive && isManageUser && (<div styleName="add-button-container">
+          <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
+        </div>)}
+      </TwoColsLayout.Content>
+      
     </TwoColsLayout>
   )
 }
