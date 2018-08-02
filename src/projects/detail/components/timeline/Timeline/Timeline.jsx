@@ -66,8 +66,8 @@ class Timeline extends React.Component {
       timeline,
     } = this.props
 
-    //Ordering milestones wrt startDate before rendering
-    const orderedMilestones = timeline.milestones ? _.orderBy(timeline.milestones, ['startDate']) : []
+    //Ordering milestones wrt "order" before rendering
+    const orderedMilestones = timeline.milestones ? _.orderBy(timeline.milestones, ['order']) : []
     return (
       <div>
         <TimelineHeader
