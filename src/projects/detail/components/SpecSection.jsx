@@ -163,6 +163,10 @@ const SpecSection = props => {
       // to upload attachments for products. We need to come up with a better way to handle this.
       // defaults to appDefinition to be backward compatible
       let category = _.get(props, 'category', 'appDefinition')
+      // NOTE temporary patch for handling wrong category for v2 projects' attachments
+      // it is happening because we are merging project and product templates for v2 projects and we don't have files
+      // field in project templates but we have it for product templates which in turn has category set as `product`
+      category = projectLatest.version && projectLatest.version === 'v2' ? 'appDefinition' : category
       category = 'product' === category ? `${category}#${projectLatest.id}` : category
       return (
         <FileListContainer
