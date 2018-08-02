@@ -67,32 +67,10 @@ const ProjectStages = ({
   phaseId,
 }) => (
   <Section>
-    {
-      phaseId?(
-        phases.map((phase, index) => (
-          phase.id === phaseId?(
-            <ProjectStage
-              key={phase.id}
-              productTemplates={productTemplates}
-              currentMemberRole={currentMemberRole}
-              isProcessing={isProcessing}
-              isSuperUser={isSuperUser}
-              isManageUser={isManageUser}
-              project={project}
-              phase={phase}
-              phaseIndex={index}
-              updateProduct={updateProduct}
-              fireProductDirty={fireProductDirty}
-              fireProductDirtyUndo={fireProductDirtyUndo}
-              addProductAttachment={addProductAttachment}
-              updateProductAttachment={updateProductAttachment}
-              removeProductAttachment={removeProductAttachment}
-              deleteProjectPhase={deleteProjectPhase}
-            />
-          ):null
-        ))
-      ):(
-        <PhaseCardListHeader />,
+    
+      
+      <PhaseCardListHeader />
+      {
         phases.map((phase, index) => (
           <ProjectStage
             key={phase.id}
@@ -113,9 +91,9 @@ const ProjectStages = ({
             deleteProjectPhase={deleteProjectPhase}
           />
         ))
-      )
-    }
-    {!phaseId && <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases)}/>}
+      }
+      <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases)}/>
+       
   </Section>
 )
 

@@ -59,9 +59,11 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline
   // calculate progress of phase
   let tlPlannedDuration = 0
   let tlCurrentDuration = 0
+  let allMilestonesComplete = false;
   if (timeline) {
     const tlStartDate = timeline.startDate && moment.utc(timeline.startDate)
     const tlEndDate = timeline.endDate && moment.utc(timeline.endDate)
+    allMilestonesComplete = true
     tlPlannedDuration = tlStartDate && tlEndDate && tlEndDate.diff(tlStartDate, 'days') > 0 ? tlEndDate.diff(tlStartDate, 'days') : 0
     _.forEach(timeline.milestones, milestone => {
       if (!milestone.hidden) {
@@ -70,12 +72,14 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline
           tlCurrentDuration += milestone.duration
         } else if (range.contains(now)) {
           tlCurrentDuration += now.diff(milestone.startDate, 'days')
+          allMilestonesComplete = false;
         }
       }
     })
   }
 
-  const tlProgressInPercent = Math.round((tlCurrentDuration / tlPlannedDuration) * 100)
+  let tlProgressInPercent = tlPlannedDuration>0 ? Math.round((tlCurrentDuration / tlPlannedDuration) * 100) : null;
+  if (allMilestonesComplete) tlProgressInPercent = 100;
   const progressInPercent = tlProgressInPercent || phase.progress
 
   const actualPrice = phase.spentBudget
