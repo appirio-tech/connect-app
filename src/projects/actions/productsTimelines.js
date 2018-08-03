@@ -225,9 +225,12 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
       throw new Error('Cannot find final-fix milestone.')
     }
 
-    const requests = [
-      // mark that final fixes submitted in the current milestone
-      updateMilestone(timelineId, milestoneId, {
+    // to update using reducer in redux store
+    const nextMilestone = finalFixesMilestone
+
+    return dispatch({
+      type: SUBMIT_FINAL_FIXES_REQUEST,
+      payload: updateMilestone(timelineId, milestoneId, {
         details: {
           ...milestone.details,
           content: {
@@ -235,30 +238,24 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
             isFinalFixesSubmitted: true,
           }
         }
-      }),
-
-      // show final fixes milestone
-      updateMilestone(timelineId, finalFixesMilestone.id, {
-        status: MILESTONE_STATUS.COMPLETED,
-        hidden: false,
-        endDate: milestone.startDate,
-        completionDate: milestone.startDate,
-        details: {
-          ...finalFixesMilestone.details,
-          content: {
-            ..._.get(finalFixesMilestone, 'details.content', {}),
-            finalFixRequests,
+      }).then((deliveryMilestone) => {
+        // show final fixes milestone
+        return updateMilestone(timelineId, finalFixesMilestone.id, {
+          status: MILESTONE_STATUS.COMPLETED,
+          hidden: false,
+          endDate: milestone.startDate,
+          completionDate: milestone.startDate,
+          details: {
+            ...finalFixesMilestone.details,
+            content: {
+              ..._.get(finalFixesMilestone, 'details.content', {}),
+              finalFixRequests,
+            }
           }
-        }
-      })
-    ]
-
-    // to update using reducer in redux store
-    const nextMilestone = finalFixesMilestone
-
-    return dispatch({
-      type: SUBMIT_FINAL_FIXES_REQUEST,
-      payload: Promise.all(requests),
+        }).then((finalFixMilestone) => {
+          return [deliveryMilestone, finalFixMilestone]
+        })
+      }),
       meta: {
         productId,
         milestoneId,
