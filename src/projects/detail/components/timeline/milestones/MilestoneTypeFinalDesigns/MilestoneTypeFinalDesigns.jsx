@@ -457,9 +457,10 @@ class MilestoneTypeFinalDesigns extends React.Component {
               <DotIndicator hideLine>
                 <div styleName="top-space">
                   <MilestonePostMessage
-                    label={'Complete milestone review'}
-                    backgroundColor={'#FFF4F4'}
-                    message={'Warning! Complete the review only if you have the permission from the customer. We do not want to close the review early without the ability to get feedback from our customers and let them select the winning 5 designs for next round.'}
+                    label={'Design Phase Competition'}
+                    backgroundColor={'#FAFAFB'}
+                    classStyle={'design-phase-competition'}
+                    message={'This selection is final and cannot be undone. Once you confirm your selection we will close the design phase and can proceed to the next one. Clicking on the Confirm selection button would make the source files available for download.'}
                     isShowSelection={false}
                     buttons={[
                       { title: 'Cancel', onClick: this.hideCompleteReviewConfirmation, type: 'default' },

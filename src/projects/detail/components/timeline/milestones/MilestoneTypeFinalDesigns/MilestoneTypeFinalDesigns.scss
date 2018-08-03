@@ -115,3 +115,29 @@
     }
   }
 }
+
+:global {
+
+  .design-phase-competition {
+    background-color: #fafafb !important;
+
+    .label-title {
+      margin-top: 20px;
+      color: #151516;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 30px;
+      text-align: center;
+    }
+
+    .group-content {
+      color: #404041;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 20px;
+      width: 522px;
+      text-align: left;
+      margin-top: 10px;
+    }
+  }
+}

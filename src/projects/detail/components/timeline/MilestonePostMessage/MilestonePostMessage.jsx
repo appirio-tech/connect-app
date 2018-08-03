@@ -42,10 +42,11 @@ class MilestonePostMessage extends React.Component {
       + (props.isCompleted ? 'completed ' : '')
       + (props.inProgress ? 'in-progress ' : '')
       }
+      className={props.classStyle ? props.classStyle : ''}
       >
         <div styleName="label-layer">
-          <div styleName="label-title">{props.label}</div>
-          <div styleName="group-content" dangerouslySetInnerHTML={{ __html: props.message }} />
+          <div className="label-title">{props.label}</div>
+          <div className="group-content" dangerouslySetInnerHTML={{ __html: props.message }} />
           {
             props.isShowSelection && (
               <div styleName="group-selection">
