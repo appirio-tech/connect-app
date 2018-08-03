@@ -48,7 +48,7 @@ const initialState = {
 }
 
 function updateMilestone(state, productId, milestoneId, dirtyMilestone, shouldReplace = false) {
-  if (!state[productId].timeline) return state;
+  if (!state[productId].timeline) return state
   const milestoneIdx = _.findIndex(state[productId].timeline.milestones, { id: milestoneId })
 
   const updatedMilestone = shouldReplace

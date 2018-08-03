@@ -133,18 +133,18 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
         productId,
         milestoneId
       }
-    }).then(()=>{
+    }).then(() => {
       if (timeline){
         const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
-        const isLastMilestone = _.slice(timeline.milestones,milestoneIdx+1).filter(m=>!m.hidden).length==0;
+        const isLastMilestone = _.slice(timeline.milestones, milestoneIdx+1).filter(m => !m.hidden).length===0
         if (isLastMilestone){
-          const phaseIndex = _.findIndex(state.projectState.phases,p=>p.products[0].id==productId);
+          const phaseIndex = _.findIndex(state.projectState.phases, p => p.products[0].id===productId)
           const phase = state.projectState.phases[phaseIndex]
           dispatch(updatePhase(state.projectState.project.id, phase.id, {status: PHASE_STATUS_COMPLETED}, phaseIndex))
         }
       }
-      return true;
-    });
+      return true
+    })
   }
 }
 

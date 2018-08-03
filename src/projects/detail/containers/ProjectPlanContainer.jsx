@@ -55,7 +55,7 @@ const ProjectPlanContainer = (props) => {
       feeds={feeds}
     />
   )
-  const phaseId = parseInt(props.match.params.phaseId, 10)
+  
   return (
     <TwoColsLayout>
       <TwoColsLayout.Sidebar>
@@ -77,8 +77,7 @@ const ProjectPlanContainer = (props) => {
             <ProjectStages
               {...{
                 ...props,
-                phases: visiblePhases,
-                phaseId,
+                phases: visiblePhases
               }}
               isManageUser={isManageUser}
               key="stages"

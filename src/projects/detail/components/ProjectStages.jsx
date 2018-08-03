@@ -64,35 +64,34 @@ const ProjectStages = ({
   removeProductAttachment,
   isManageUser,
   deleteProjectPhase,
-  phaseId,
 }) => (
   <Section>
     
       
-      <PhaseCardListHeader />
-      {
-        phases.map((phase, index) => (
-          <ProjectStage
-            key={phase.id}
-            productTemplates={productTemplates}
-            currentMemberRole={currentMemberRole}
-            isProcessing={isProcessing}
-            isSuperUser={isSuperUser}
-            isManageUser={isManageUser}
-            project={project}
-            phase={phase}
-            phaseIndex={index}
-            updateProduct={updateProduct}
-            fireProductDirty={fireProductDirty}
-            fireProductDirtyUndo={fireProductDirtyUndo}
-            addProductAttachment={addProductAttachment}
-            updateProductAttachment={updateProductAttachment}
-            removeProductAttachment={removeProductAttachment}
-            deleteProjectPhase={deleteProjectPhase}
-          />
-        ))
-      }
-      <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases)}/>
+    <PhaseCardListHeader />
+    {
+      phases.map((phase, index) => (
+        <ProjectStage
+          key={phase.id}
+          productTemplates={productTemplates}
+          currentMemberRole={currentMemberRole}
+          isProcessing={isProcessing}
+          isSuperUser={isSuperUser}
+          isManageUser={isManageUser}
+          project={project}
+          phase={phase}
+          phaseIndex={index}
+          updateProduct={updateProduct}
+          fireProductDirty={fireProductDirty}
+          fireProductDirtyUndo={fireProductDirtyUndo}
+          addProductAttachment={addProductAttachment}
+          updateProductAttachment={updateProductAttachment}
+          removeProductAttachment={removeProductAttachment}
+          deleteProjectPhase={deleteProjectPhase}
+        />
+      ))
+    }
+    <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases)}/>
        
   </Section>
 )
