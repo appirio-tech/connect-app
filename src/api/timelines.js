@@ -39,8 +39,9 @@ export function getTimelineById(id) {
  */
 export function updateMilestone(timelineId, milestoneId, updatedProps) {
 
+  /* TODO $TIMELINE_MILESTONE$ the next line has to be removed
+    when the next issue is resolved server side https://github.com/topcoder-platform/tc-project-service/issues/117 */
   delete updatedProps.endDate
-  delete updatedProps.completionDate
 
   return axios.patch(`${TC_API_URL}/v4/timelines/${timelineId}/milestones/${milestoneId}`, {
     param: updatedProps,

@@ -118,8 +118,10 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
       updateMilestone(timelineId, milestoneId, {
         ...updatedProps, // optional props to update
         status: MILESTONE_STATUS.COMPLETED,
-        endDate: moment().utc().format('YYYY-MM-DD'),
-        completionDate: moment().utc().format('YYYY-MM-DD'),
+        // as dates are stored in th DB including time, we explicitly include time and timezone
+        // to make things clear
+        endDate: moment().utc().format('YYYY-MM-DDT00:00:00.000Z'),
+        completionDate: moment().utc().format('YYYY-MM-DDT00:00:00.000Z'),
       })
     ]
 
