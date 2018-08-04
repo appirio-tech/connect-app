@@ -40,6 +40,18 @@
       margin-left: -36px;
       padding-left: 36px;
     }
+
+    &.github {
+      background-image: url('../../../../../assets/icons/timeline-github.svg');
+      margin-left: -36px;
+      padding-left: 36px;
+    }
+
+    &.heroku {
+      background-image: url('../../../../../assets/icons/timeline-heroku.svg');
+      margin-left: -36px;
+      padding-left: 36px;
+    }
   }
 
   .link-wrapper {
