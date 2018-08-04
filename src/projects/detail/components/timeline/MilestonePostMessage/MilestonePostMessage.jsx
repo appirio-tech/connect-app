@@ -1,5 +1,6 @@
 import React from 'react'
 import PT from 'prop-types'
+import cn from 'classnames'
 
 import './MilestonePostMessage.scss'
 
@@ -32,16 +33,12 @@ class MilestonePostMessage extends React.Component {
     const { selectionValue } = this.state
     const props = this.props
 
-    const milestonePostStyle = {
-      backgroundColor: `${props.backgroundColor}`
-    }
-
     return (
-      <div style={milestonePostStyle} styleName={'milestone-post '
-      + (props.theme ? props.theme : '')
-      + (props.isCompleted ? 'completed ' : '')
-      + (props.inProgress ? 'in-progress ' : '')
-      }
+      <div
+        styleName={cn('milestone-post', props.theme, {
+          completed: props.isCompleted,
+          'in-progress': props.inProgress,
+        })}
       >
         <div styleName="label-layer">
           <div styleName="label-title">{props.label}</div>
@@ -92,7 +89,7 @@ MilestonePostMessage.defaultProps = {
   cancelCallback: () => {},
   okCallback: () => {},
   warningCallBack: () => {},
-  theme: '',
+  theme: 'primary',
   button1Title: '',
   button2Title: '',
   button3Title: '',

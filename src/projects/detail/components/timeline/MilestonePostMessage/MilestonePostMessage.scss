@@ -11,6 +11,15 @@
   @include roboto;
   font-weight: 400;
   font-size: 15px;
+
+  &.warning {
+    background-color: $tc-red-10;
+  }
+
+  &.primary {
+    background-color: $tc-dark-blue-30;
+  }
+
   .hide-sm {
     display: inline-block;
   }
