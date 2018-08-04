@@ -13,7 +13,7 @@
 
   @include roboto;
   a {
-    color: #0681FF;
+    color: $tc-dark-blue-100;
   }
   .background {
     height: 30px;
@@ -22,12 +22,12 @@
     left: 0px;
     right: 0;
     &.hover {
-      background: #F4F9FF
+      background: $tc-dark-blue-10
     };
   }
   .status-ring {
-    background-color: #FFFFFF;
-    border: 3px solid #AAAAAB;
+    background-color: $tc-white;
+    border: 3px solid $tc-gray-30;
     border-radius: 100%;
     width: 16px;
     height: 16px;
@@ -37,14 +37,14 @@
     z-index: 3;
   }
   .col-date {
-    background-color: #fafafb;
+    background-color: $tc-gray-neutral-light;
     flex: 0 70px;
     padding: 10px 20px 10px 10px;
     margin: -10px 0;
     width: 70px;
 
     .month {
-      color: #404041;
+      color: $tc-gray-80;
       font-size: 10px;
       font-weight: 400;
       letter-spacing: 0.4px;
@@ -53,7 +53,7 @@
       text-transform: uppercase;
     }
     .day {
-      color: #19191A;
+      color: $tc-black;
       font-size: 15px;
       font-weight: 500;
       line-height: 20px;
@@ -71,7 +71,7 @@
       &:before {
         content: '';
         position: absolute;
-        background-color: #cee6ff;
+        background-color: $tc-dark-blue-30;
         width: 2px;
         width: 2px;
         left: 17px;
@@ -80,16 +80,16 @@
         z-index: 2;
       }
       .status-ring {
-        background: #0681FF url('../../../../../assets/icons/ui-check-small.svg') 50% 50% no-repeat;
+        background: $tc-dark-blue-100 url('../../../../../assets/icons/ui-check-small.svg') 50% 50% no-repeat;
         background-size: 16px;
-        border: 3px solid #0681FF;
+        border: 3px solid $tc-dark-blue-100;
       }
     }
     &.in-progress {
       &:before {
         content: '';
         position: absolute;
-        background-color: #0681ff;
+        background-color: $tc-dark-blue-100;
         width: 2px;
         width: 2px;
         left: 17px;
@@ -97,17 +97,17 @@
         bottom: 0;
       }
       .status-ring {
-        background: #ffffff;
+        background: $tc-white;
         background-size: 16px;
-        border: 3px solid #0681FF;
+        border: 3px solid $tc-dark-blue-100;
       }
     }
 
     .dot {
       bottom: 22px;
       position: absolute;
-      background-color: #ffffff;
-      border: 2px solid #0681FF;
+      background-color: $tc-white;
+      border: 2px solid $tc-dark-blue-100;
       border-radius: 100%;
       width: 8px;
       height: 8px;
@@ -116,7 +116,7 @@
     }
 
     &.completed .dot {
-      background-color: #0681FF;
+      background-color: $tc-dark-blue-100;
     }
 
     .file-wrap,
@@ -146,7 +146,7 @@
     &:before {
       content: '';
       position: absolute;
-      background-color: #0681ff;
+      background-color: $tc-dark-blue-100;
       width: 2px;
       left: -19px;
       top: 15px;
@@ -154,7 +154,7 @@
     } */
 
     .post-title {
-      color: #151516;
+      color: $tc-black;
       font-size: 15px;
       font-weight: 500;
       line-height: 30px;
@@ -203,7 +203,7 @@
     }
   }
   .post-con {
-    color: #6B6B6B;
+    color: $tc-gray-60;
     font-size: 13px;
     font-weight: 400;
     line-height: 20px;
@@ -213,7 +213,7 @@
     &:before {
       content: '';
       position: absolute;
-      background-color: #0681ff;
+      background-color: $tc-dark-blue-100;
       width: 2px;
       left: -19px;
       top: 0;
