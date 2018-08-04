@@ -140,7 +140,7 @@ class Milestone extends React.Component {
       currentUser,
     } = this.props
     const { isEditing } = this.state
-    
+
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
     const startDate = moment(milestone.startDate)
@@ -151,7 +151,7 @@ class Milestone extends React.Component {
 
     return (
       <div styleName="timeline-post">
-        {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing) ? 'hover ': '')} />)}
+        {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing && !isCompleted) ? 'hover ': '')} />)}
         <div styleName="col-date">
           <div styleName="month">{month}</div>
           <div styleName="day">{date}</div>
