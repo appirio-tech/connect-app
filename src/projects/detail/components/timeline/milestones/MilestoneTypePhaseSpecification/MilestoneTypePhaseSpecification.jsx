@@ -79,7 +79,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
         {isActive && (
           <div>
 
-            <DotIndicator isDone={links.length > 0}>
+            <DotIndicator hideDot>
               <LinkList
                 links={links}
                 onAddLink={this.updatedUrl}
@@ -96,7 +96,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
               />
             </DotIndicator>
 
-            {!currentUser.isCustomer && links.length > 0 && (
+            {!currentUser.isCustomer && (
               <div styleName="top-space">
                 <DotIndicator>
                   <div styleName="button-layer">
@@ -116,9 +116,9 @@ class MilestoneTypePhaseSpecification extends React.Component {
         {/*
           Completed state
          */}
-        {isCompleted && (
+        {isCompleted && links.length > 0 && (
           <div>
-            <DotIndicator isDone>
+            <DotIndicator hideDot>
               <LinkList links={links} />
             </DotIndicator>
           </div>
