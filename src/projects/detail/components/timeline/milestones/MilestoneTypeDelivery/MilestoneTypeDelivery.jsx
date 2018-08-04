@@ -210,7 +210,7 @@ class MilestoneTypeDelivery extends React.Component {
                 <div styleName="top-space">
                   <MilestonePostMessage
                     label="Design acceptance"
-                    backgroundColor={'#FFF4F4'}
+                    backgroundColor={'#CEE6FF'}
                     message="Do you need any refinement on winner’s design before we deliver you the final source files? Some refinement or final fixes outside the projet scope may cost you additional payment"
                     isShowSelection={false}
                     buttons={[
