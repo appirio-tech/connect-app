@@ -6,7 +6,6 @@ import _ from 'lodash'
 import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
 import MediaQuery from 'react-responsive'
 
 import {
@@ -53,18 +52,9 @@ class PhaseCard extends React.Component {
         isEditting: false
       })
     }
-    const paramPhaseId = parseInt(this.props.match.params.phaseId, 10)
-    if (this.props.attr.phase.id === paramPhaseId) {
-      this.setState({
-        isExpanded: true,
-        isDetailView: true
-      })
-      
-    }
   }
 
   toggleCardView() {
-    this.props.history.push(`/projects/${this.props.match.params.projectId}/phase/${this.props.attr.phase.id}`)
     this.setState({
       isDetailView: true,
       isExpanded: !this.state.isExpanded
@@ -80,7 +70,6 @@ class PhaseCard extends React.Component {
   }
 
   onClose(){
-    this.props.history.push(`/projects/${this.props.match.params.projectId}/plan`)
     this.setState({
       isDetailView: false,
       isExpanded: false
@@ -227,10 +216,10 @@ class PhaseCard extends React.Component {
             ))
             }
           </MediaQuery>
-          
+
         }
-        
-        
+
+
 
       </div>
     )
@@ -265,4 +254,4 @@ const mapStateToProps = ({loadUser, projectState}) => {
 
 const actionCreators = {}
 
-export default withRouter(connect(mapStateToProps, actionCreators)(PhaseCard))
+export default connect(mapStateToProps, actionCreators)(PhaseCard)
