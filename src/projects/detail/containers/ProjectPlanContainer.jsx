@@ -7,7 +7,6 @@
 import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
 
 import { updateProduct, fireProductDirty, fireProductDirtyUndo, deleteProjectPhase } from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
@@ -55,7 +54,7 @@ const ProjectPlanContainer = (props) => {
       feeds={feeds}
     />
   )
-  
+
   return (
     <TwoColsLayout>
       <TwoColsLayout.Sidebar>
@@ -90,7 +89,7 @@ const ProjectPlanContainer = (props) => {
           <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
         </div>)}
       </TwoColsLayout.Content>
-      
+
     </TwoColsLayout>
   )
 }
@@ -121,4 +120,4 @@ const mapDispatchToProps = {
   deleteProjectPhase,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProjectPlanContainer))
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectPlanContainer)
