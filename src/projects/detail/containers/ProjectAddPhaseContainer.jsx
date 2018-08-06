@@ -26,7 +26,7 @@ import {
 } from '../../../config/constants'
 
 import '../../../projects/create/components/ProjectWizard.scss'
-import './ProjectAddPhaseContainer.scss'
+import styles from './ProjectAddPhaseContainer.scss'
 
 const page404 = compose(
   withProps({code:500})
@@ -51,7 +51,7 @@ const enhance = compose(errorHandler, spinner)
 
 const CreateView = (props) => {
   return (
-    <div>
+    <div className={styles.container}>
       <Wizard
         {...props}
         showModal
