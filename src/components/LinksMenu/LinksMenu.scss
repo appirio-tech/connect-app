@@ -130,17 +130,25 @@
       display: none;
     }
 
-    &.panel-links-with-hash li a {
-      display: block;
-      padding-left: 15px;
-      position: relative;
+    &.panel-links-with-hash li {
+      .button-group {
+        display: none;
+      }
 
-      &::before {
-        @include roboto;
-        content: '#';
+      a {
         display: block;
-        left: 0;
-        position: absolute;
+        max-width: 100%;
+        padding-left: 3 * $base-unit;
+        padding-right: 3 * $base-unit;
+        position: relative;
+
+        &::before {
+          @include roboto;
+          content: '#';
+          display: block;
+          left: 0;
+          position: absolute;
+        }
       }
     }
   }
