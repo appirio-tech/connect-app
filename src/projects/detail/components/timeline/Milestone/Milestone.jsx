@@ -310,15 +310,26 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && milestone.type === 'delivery' && (
-            <MilestoneTypeDelivery
-              milestone={milestone}
-              updateMilestoneContent={this.updateMilestoneContent}
-              completeMilestone={this.completeMilestone}
-              submitFinalFixesRequest={this.submitFinalFixesRequest}
-              currentUser={currentUser}
-            />
-          )}
+          {
+            !isEditing &&
+            !isUpdating &&
+            (
+              milestone.type === 'delivery-dev' ||
+              milestone.type === 'delivery-design' ||
+              // TODO this is a temporary fallback for already created milestones in DEV backend
+              // this is just to keep already created milestones working and can be removed when we don't touch such projects anymore
+              milestone.type === 'delivery'
+            ) &&
+            (
+              <MilestoneTypeDelivery
+                milestone={milestone}
+                updateMilestoneContent={this.updateMilestoneContent}
+                completeMilestone={this.completeMilestone}
+                submitFinalFixesRequest={this.submitFinalFixesRequest}
+                currentUser={currentUser}
+              />
+            )
+          }
         </div>
       </div>
     )

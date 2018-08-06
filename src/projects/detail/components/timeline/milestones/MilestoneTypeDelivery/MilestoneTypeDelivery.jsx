@@ -17,6 +17,29 @@ import { MILESTONE_STATUS } from '../../../../../../config/constants'
 
 import './MilestoneTypeDelivery.scss'
 
+/*
+  Acceptance dialogue messages based on the milestone type
+*/
+const acceptDialogue = {
+  'delivery-dev': {
+    title: 'Code acceptance',
+    text: 'Do you need any refinement on winner’s code before we deliver you the final source files? Some refinement or final fixes outside the project scope may cost you additional payment',
+    button: 'Accept code',
+  },
+  'delivery-design': {
+    title: 'Design acceptance',
+    text: 'Do you need any refinement on winner’s design before we deliver you the final source files? Some refinement or final fixes outside the project scope may cost you additional payment',
+    button: 'Accept design',
+  },
+  // TODO this is a temporary fallback for already created milestones in DEV backend
+  // this is just to keep already created milestones working and can be removed when we don't touch such projects anymore
+  delivery: {
+    title: 'Work acceptance',
+    text: 'Do you need any refinement on winner’s work before we deliver you the final source files? Some refinement or final fixes outside the project scope may cost you additional payment',
+    button: 'Accept work',
+  },
+}
+
 class MilestoneTypeDelivery extends React.Component {
   constructor(props) {
     super(props)
@@ -227,13 +250,13 @@ class MilestoneTypeDelivery extends React.Component {
               <DotIndicator>
                 <div styleName="top-space">
                   <MilestonePostMessage
-                    label="Design acceptance"
+                    label={acceptDialogue[milestone.type].title}
                     theme="primary"
-                    message="Do you need any refinement on winner’s design before we deliver you the final source files? Some refinement or final fixes outside the projet scope may cost you additional payment"
+                    message={acceptDialogue[milestone.type].text}
                     isShowSelection={false}
                     buttons={[
                       { title: 'Request fixes', onClick: this.showFinalFixesRequestForm, type: 'default' },
-                      { title: 'Accept design', onClick: this.acceptDesign, type: 'primary' },
+                      { title: acceptDialogue[milestone.type].button, onClick: this.acceptDesign, type: 'primary' },
                     ]}
                   />
                 </div>
