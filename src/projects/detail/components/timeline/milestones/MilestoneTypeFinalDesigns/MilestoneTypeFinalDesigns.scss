@@ -7,7 +7,7 @@
   }
 
   .milestone-heading {
-    background-color: #CEE6FF;
+    background-color: $tc-dark-blue-30;
     border-radius: 4px 4px 0 0;
     padding: 0 15px;
     font-weight: 500;
@@ -30,12 +30,12 @@
     }
 
     &.selected-theme {
-      background-color: #ebebeb;
-      color: #151516;
+      background-color: $tc-gray-neutral-dark;
+      color: $tc-black;
     }
     &.rejected-theme {
-      background-color: #ebebeb;
-      color: #808080;
+      background-color: $tc-gray-neutral-dark;
+      color: $tc-gray-50;
     }
     &.open {
       cursor: pointer;
@@ -96,7 +96,7 @@
     }
   }
   .message-bar {
-    background-color: #fff8ca;
+    background-color: $tc-yellow-30;
     border-radius: 25px;
     text-align: center;
     font-size: 13px;

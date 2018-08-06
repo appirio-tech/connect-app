@@ -38,10 +38,6 @@ export function getTimelineById(id) {
  * @returns {Promise} milestone
  */
 export function updateMilestone(timelineId, milestoneId, updatedProps) {
-
-  delete updatedProps.endDate
-  delete updatedProps.completionDate
-
   return axios.patch(`${TC_API_URL}/v4/timelines/${timelineId}/milestones/${milestoneId}`, {
     param: updatedProps,
   })

@@ -151,7 +151,7 @@ class Milestone extends React.Component {
 
     return (
       <div styleName="timeline-post">
-        {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing) ? 'hover ': '')} />)}
+        {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing && !isCompleted) ? 'hover ': '')} />)}
         <div styleName="col-date">
           <div styleName="month">{month}</div>
           <div styleName="day">{date}</div>

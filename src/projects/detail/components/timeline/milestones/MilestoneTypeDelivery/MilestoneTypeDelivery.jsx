@@ -46,7 +46,8 @@ class MilestoneTypeDelivery extends React.Component {
 
     this.state = {
       isShowFinalFixesRequestForm: false,
-      finalFixRequests: [],
+      // initially we have one final fix field with empty value
+      finalFixRequests: [{ value: '' }],
     }
 
     this.updatedUrl = this.updatedUrl.bind(this)
@@ -56,6 +57,7 @@ class MilestoneTypeDelivery extends React.Component {
     this.acceptDesign = this.acceptDesign.bind(this)
     this.onFinalFixAdd = this.onFinalFixAdd.bind(this)
     this.onFinalFixRemove = this.onFinalFixRemove.bind(this)
+    this.onFinalFixChange = this.onFinalFixChange.bind(this)
     this.submitFinalFixesRequest = this.submitFinalFixesRequest.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
   }
@@ -128,13 +130,24 @@ class MilestoneTypeDelivery extends React.Component {
     })
   }
 
-  onFinalFixAdd(value) {
+  onFinalFixAdd() {
     const { finalFixRequests } = this.state
 
     this.setState({
       finalFixRequests: [...finalFixRequests, {
-        value,
+        value: '',
       }]
+    })
+  }
+
+  onFinalFixChange(index, value) {
+    const { finalFixRequests } = this.state
+
+    const newFinalFixRequests = [...finalFixRequests]
+    newFinalFixRequests.splice(index, 1, { value })
+
+    this.setState({
+      finalFixRequests: newFinalFixRequests
     })
   }
 
@@ -153,7 +166,10 @@ class MilestoneTypeDelivery extends React.Component {
     const { submitFinalFixesRequest } = this.props
     const { finalFixRequests } = this.state
 
-    submitFinalFixesRequest(finalFixRequests)
+    submitFinalFixesRequest(
+      // submit only non-empty requests
+      finalFixRequests.filter((finalFixRequest) => !!finalFixRequest.value)
+    )
   }
 
   completeMilestone() {
@@ -177,6 +193,8 @@ class MilestoneTypeDelivery extends React.Component {
     const startDate = moment(milestone.startDate)
     const daysLeft = endDate.diff(moment(), 'days')
     const totalDays = endDate.diff(startDate, 'days')
+
+    const canSubmitFinalFixes = _.some(finalFixRequests, (finalFixRequest) => !!finalFixRequest.value)
 
     let progressText
 
@@ -213,7 +231,7 @@ class MilestoneTypeDelivery extends React.Component {
                   <div styleName="top-space">
                     <MilestonePostMessage
                       label="Design acceptance"
-                      backgroundColor={'#CEE6FF'}
+                      theme="primary"
                       message="The customer has yet to respond to the final deliverable acceptance. Please communicate with them if there’s a problem and they need help to make the final decision. Once they respond you’ll see a link to upload the final deliverables here."
                       isShowSelection={false}
                       buttons={[]}
@@ -233,7 +251,7 @@ class MilestoneTypeDelivery extends React.Component {
                 <div styleName="top-space">
                   <MilestonePostMessage
                     label={acceptDialogue[milestone.type].title}
-                    backgroundColor={'#FFF4F4'}
+                    theme="primary"
                     message={acceptDialogue[milestone.type].text}
                     isShowSelection={false}
                     buttons={[
@@ -252,17 +270,13 @@ class MilestoneTypeDelivery extends React.Component {
                     <MilestonePostEditText
                       index={index}
                       value={finalFixRequest.value}
-                      onRemove={this.onFinalFixRemove}
+                      onRemove={index < finalFixRequests.length - 1 ? this.onFinalFixRemove : null}
+                      onAdd={index === finalFixRequests.length - 1 ? this.onFinalFixAdd : null}
+                      onChange={this.onFinalFixChange}
                       isAutoExpand
                     />
                   </div>
                 ))}
-                <div styleName="top-space">
-                  <MilestonePostEditText
-                    onAdd={this.onFinalFixAdd}
-                    isAutoExpand
-                  />
-                </div>
                 <DotIndicator>
                   <div styleName="top-space button-add-layer">
                     <button
@@ -274,7 +288,7 @@ class MilestoneTypeDelivery extends React.Component {
                     <button
                       className="tc-btn tc-btn-primary tc-btn-sm action-btn"
                       onClick={this.submitFinalFixesRequest}
-                      disabled={finalFixRequests.length === 0}
+                      disabled={!canSubmitFinalFixes}
                     >
                       Submit request
                     </button>

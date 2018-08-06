@@ -5,6 +5,11 @@
   background-color: $tc-white;
   border-radius: 6px;
   box-shadow: 0 1px 1px 0 $tc-gray-10;
+  /* for now I don't see any obstacles to make it "overflow: hidden"
+     which will make sure the block always has round corners, otherwise
+     we will need to make sure all inner blocks with defined background has the same
+     border-radius as this container */
+  overflow: hidden;
 
   @media screen and (max-width: $screen-md - 1px) {
     border-radius: 0;
@@ -46,7 +51,6 @@
     padding-right: 50px;
     padding-bottom: 15px;
     padding-top: 15px;
-    border-radius: inherit;
     cursor: pointer;
     background-color: $tc-gray-neutral-light;
     @media screen and (max-width: $screen-md - 1px) {

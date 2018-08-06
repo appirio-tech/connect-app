@@ -608,5 +608,7 @@ export const MILESTONE_LINK_SUPPORTED_TYPES = [
   { title: 'Document', value: 'document' },
   { title: 'Zipped file', value: 'zip' },
   { title: 'Marvel link', value: 'marvelapp' },
+  { title: 'GitHub link', value: 'github' },
+  { title: 'Heroku link', value: 'heroku' },
   { title: 'Invoice', value: 'invoice' }
 ]

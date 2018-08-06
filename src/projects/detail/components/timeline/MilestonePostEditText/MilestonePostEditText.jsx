@@ -1,3 +1,8 @@
+/**
+ * MilestonePostEditText component
+ *
+ * It's controllable component and it requires to have onChange and value properties
+ */
 import React from 'react'
 import PT from 'prop-types'
 import cn from 'classnames'
@@ -8,7 +13,6 @@ class   MilestonePostEditText extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: props.value || '',
       autoHeight: props.autoHeight
     }
     this.onValueChange = this.onValueChange.bind(this)
@@ -18,20 +22,20 @@ class   MilestonePostEditText extends React.Component {
 
   /**get update value from input text */
   onValueChange (event) {
+    const { index, onChange } = this.props
+
     event.stopPropagation()
     const value = event.target.value
-    this.setState({value})
-    const props = this.props
-    props.update(value, props.index, event.target.scrollHeight)
+
     this.setState({autoHeight: event.target.scrollHeight})
+
+    onChange(index, value)
   }
 
   onAdd() {
     const { onAdd } = this.props
-    const { value } = this.state
 
-    this.setState({ value: '' })
-    onAdd(value)
+    onAdd()
   }
 
   onRemove() {
@@ -41,7 +45,7 @@ class   MilestonePostEditText extends React.Component {
   }
 
   render() {
-    const { onAdd, onRemove, theme } = this.props
+    const { onAdd, onRemove, theme, value } = this.props
     const props = this.props
     const autoHeightTextAreaStyle = {}
     if (this.state.autoHeight > 0 && props.isAutoExpand) {
@@ -51,20 +55,20 @@ class   MilestonePostEditText extends React.Component {
       <div styleName={cn('milestone-post', theme)}>
         <div styleName="label-layer">
           {(!!onRemove || !!onAdd) && !props.isAutoExpand && (
-            <input styleName="input-text" type="text" onChange={this.onValueChange} value={this.state.value}  placeholder={'Type your request...'} />
+            <input styleName="input-text" type="text" onChange={this.onValueChange} value={value}  placeholder={'Type your request...'} />
           )}
           {(!!onRemove || !!onAdd) && props.isAutoExpand && (
-            <textarea rows="1" styleName="input-text" type="text" onChange={this.onValueChange} value={this.state.value}  placeholder={'Type your request...'} style={autoHeightTextAreaStyle}/>
+            <textarea rows="1" styleName="input-text" type="text" onChange={this.onValueChange} value={value}  placeholder={'Type your request...'} style={autoHeightTextAreaStyle}/>
           )}
 
           {!!onAdd && (
-            <button onClick={this.onAdd} disabled={this.state.value.trim().length < 1} styleName="button-add">{'+'}</button>
+            <button onClick={this.onAdd} disabled={value.trim().length < 1} styleName="button-add">{'+'}</button>
           )}
           {!!onRemove && (
             <button onClick={this.onRemove} styleName="button-remove">{'-'}</button>
           )}
           {!onAdd && !onRemove && (
-            <div styleName="content">{this.state.value}</div>
+            <div styleName="content">{value}</div>
           )}
         </div>
       </div>

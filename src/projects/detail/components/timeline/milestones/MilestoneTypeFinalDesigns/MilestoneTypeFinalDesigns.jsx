@@ -425,7 +425,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
                 <div styleName="top-space">
                   <MilestonePostMessage
                     label={'Milestone extension request'}
-                    backgroundColor={'#FFF4F4'}
+                    theme="warning"
                     message={'Be careful, requesting extensions will change the project overall milestone. Proceed with caution and only if there are not enough submissions to satisfy our delivery policy.'}
                     isShowSelection
                     buttons={[
@@ -442,7 +442,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
                 <div styleName="top-space">
                   <MilestonePostMessage
                     label={'Milestone extension requested'}
-                    backgroundColor={'#CEE6FF'}
+                    theme="primary"
                     message={`Due to unusually high load on our network we had less than the minimum number or design submissions. In order to provide you with the appropriate number of design options we’ll have to extend the milestone with ${extensionRequest.duration * 24}h. This time would be enough to increase the capacity and make sure your project is successful.<br /><br />Please make a decision in the next 24h. After that we will automatically extend the project to make sure we deliver success to you.`}
                     buttons={[
                       { title: 'Decline extension', onClick: this.declineExtension, type: 'warning' },
@@ -458,7 +458,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
                 <div styleName="top-space">
                   <MilestonePostMessage
                     label={'Complete milestone review'}
-                    backgroundColor={'#FFF4F4'}
+                    theme="warning"
                     message={'Warning! Complete the review only if you have the permission from the customer. We do not want to close the review early without the ability to get feedback from our customers and let them select the winning 5 designs for next round.'}
                     isShowSelection={false}
                     buttons={[
@@ -475,7 +475,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
                 <div styleName="top-space">
                   <MilestonePostMessage
                     label="Design phase competition"
-                    backgroundColor={'#CEE6FF'}
+                    theme="primary"
                     message="This selection is final and cannot be undone. Once you confirm your selection we will close the design phase and can proceed to the next one. Clicking on the Confirm selection button would make the source files available for download."
                     isShowSelection={false}
                     buttons={[

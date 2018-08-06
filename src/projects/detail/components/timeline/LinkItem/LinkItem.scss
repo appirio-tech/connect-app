@@ -40,6 +40,18 @@
       margin-left: -36px;
       padding-left: 36px;
     }
+
+    &.github {
+      background-image: url('../../../../../assets/icons/timeline-github.svg');
+      margin-left: -36px;
+      padding-left: 36px;
+    }
+
+    &.heroku {
+      background-image: url('../../../../../assets/icons/timeline-heroku.svg');
+      margin-left: -36px;
+      padding-left: 36px;
+    }
   }
 
   .link-wrapper {
@@ -153,8 +165,8 @@
         left: 0;
         top: 0;
         content: '';
-        background-color: #ffffff;
-        border: 1px solid #c0c0c0;
+        background-color: $tc-white;
+        border: 1px solid $tc-gray-20;
         border-radius: 3px;
         width: 20px;
         height: 20px;
@@ -164,7 +176,7 @@
       display: none;
       &:checked + .checkbox-text {
         &:before {
-          background: #0681FF url('../../../../../assets/icons/ui-check.svg') 50% 3px no-repeat;
+          background: $tc-dark-blue-100 url('../../../../../assets/icons/ui-check.svg') 50% 3px no-repeat;
           background-size: 11px;
           border-radius: 3px;
           box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);

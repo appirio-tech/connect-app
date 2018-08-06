@@ -78,34 +78,35 @@ class MilestoneTypePhaseSpecification extends React.Component {
          */}
         {isActive && (
           <div>
+            {!currentUser.isCustomer && (
+              <div>
+                <DotIndicator hideDot>
+                  <LinkList
+                    links={links}
+                    onAddLink={this.updatedUrl}
+                    onRemoveLink={this.removeUrl}
+                    onUpdateLink={this.updatedUrl}
+                    fields={[{ name: 'url' }]}
+                    addButtonTitle="Add specification document link"
+                    formAddTitle="Specification document link"
+                    formAddButtonTitle="Add link"
+                    formUpdateTitle="Editing a link"
+                    formUpdateButtonTitle="Save changes"
+                    isUpdating={milestone.isUpdating}
+                    canAddLink={canAddLink}
+                  />
+                </DotIndicator>
 
-            <DotIndicator isDone={links.length > 0}>
-              <LinkList
-                links={links}
-                onAddLink={this.updatedUrl}
-                onRemoveLink={this.removeUrl}
-                onUpdateLink={this.updatedUrl}
-                fields={[{ name: 'url' }]}
-                addButtonTitle="Add specification document link"
-                formAddTitle="Specification document link"
-                formAddButtonTitle="Add link"
-                formUpdateTitle="Editing a link"
-                formUpdateButtonTitle="Save changes"
-                isUpdating={milestone.isUpdating}
-                canAddLink={canAddLink}
-              />
-            </DotIndicator>
-
-            {!currentUser.isCustomer && links.length > 0 && (
-              <div styleName="top-space">
                 <DotIndicator>
-                  <div styleName="button-layer">
-                    <button
-                      className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-                      onClick={this.completeMilestone}
-                    >
-                      Mark as completed
-                    </button>
+                  <div styleName="top-space">
+                    <div styleName="button-layer">
+                      <button
+                        className="tc-btn tc-btn-primary tc-btn-sm action-btn"
+                        onClick={this.completeMilestone}
+                      >
+                        Mark as completed
+                      </button>
+                    </div>
                   </div>
                 </DotIndicator>
               </div>
@@ -116,9 +117,9 @@ class MilestoneTypePhaseSpecification extends React.Component {
         {/*
           Completed state
          */}
-        {isCompleted && (
+        {isCompleted && links.length > 0 && (
           <div>
-            <DotIndicator isDone>
+            <DotIndicator hideDot>
               <LinkList links={links} />
             </DotIndicator>
           </div>
