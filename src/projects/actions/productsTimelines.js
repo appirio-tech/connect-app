@@ -2,7 +2,6 @@
  * Products timelines actions
  */
 import _ from 'lodash'
-import moment from 'moment'
 import {
   getTimelinesByReference,
   getTimelineById,
