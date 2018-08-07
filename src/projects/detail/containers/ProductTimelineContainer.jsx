@@ -38,8 +38,12 @@ class ProductTimelineContainer extends React.Component {
   render() {
     const { isLoading, timeline } = this.props
 
+    // show loader for the whole timeline even if updating only one milestone
+    // here is why https://github.com/appirio-tech/connect-app/issues/2291#issuecomment-410968047
+    const isSomeMilestoneUpdating = !!timeline && _.some(timeline.milestones, 'isUpdating')
+
     return (
-      (isLoading || !timeline)
+      (isLoading || isSomeMilestoneUpdating || !timeline)
         ? <LoadingIndicator />
         : <Timeline {...this.props} />
     )
