@@ -32,12 +32,10 @@ class Timeline extends React.Component {
     const {
       product,
       completeProductMilestone,
-      loadProductTimelineWithMilestones,
       timeline,
     } = this.props
 
     completeProductMilestone(product.id, timeline.id, milestoneId, updatedProps)
-    loadProductTimelineWithMilestones(product.id)
   }
 
   extendMilestone(milestoneId, extendDuration, updatedProps = {}) {
