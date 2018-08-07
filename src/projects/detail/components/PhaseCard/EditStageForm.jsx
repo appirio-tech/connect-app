@@ -26,7 +26,7 @@ const phaseStatuses = PHASE_STATUS.map(ps => ({ title: ps.name, value: ps.value 
 class EditStageForm extends React.Component {
   constructor(props) {
     super(props)
-    
+
     this.state = {
       isUpdating: false,
       isEdittable: _.get(props, 'phase.status') !== PHASE_STATUS_COMPLETED,
@@ -172,8 +172,8 @@ class EditStageForm extends React.Component {
       //pushing the phase if its overlapping with any
       if(overLapping) {
         phasesToBeUpdated.push({
-          id: phases[i].id, 
-          startDate: moment(new Date(phases[i].startDate)), 
+          id: phases[i].id,
+          startDate: moment(new Date(phases[i].startDate)),
           conflictingPhaseName: phases[i].name,
           conflictingPhaseIndex: i,
           updatedPhase: refPhase.name
@@ -184,11 +184,15 @@ class EditStageForm extends React.Component {
   }
 
   render() {
-    const { phase, isUpdating } = this.props
+    const { phase, isUpdating, hasTimeline } = this.props
     const { isEdittable, showPhaseOverlapWarning } = this.state
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment.utc(startDate).format('YYYY-MM-DD')
     const durationDisabled = this.props.productsTimelines[phase.products[0].id].timeline && !this.props.productsTimelines[phase.products[0].id].error
+
+    // don't allow to selected completed status if product has timeline
+    const availablePhaseStatuses = phaseStatuses.filter((status) => !hasTimeline || status.value !== PHASE_STATUS_COMPLETED )
+
     return (
       <div styleName="container">
         <Prompt
@@ -216,7 +220,7 @@ class EditStageForm extends React.Component {
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Start Date" type="date" name="startDate" value={startDate} />
                 {durationDisabled ? (
                   <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
-                    <div className="tooltip-target"> 
+                    <div className="tooltip-target">
                       <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={durationDisabled} label="Duration (days)" type="number" name="duration" value={phase.duration} minValue={1} />
                     </div>
                     <div className="tooltip-body">
@@ -224,7 +228,7 @@ class EditStageForm extends React.Component {
                     </div>
                   </Tooltip>) : (
                   <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={durationDisabled} label="Duration (days)" type="number" name="duration" value={phase.duration} minValue={1} />
-                ) 
+                )
                 }
               </div>
               <div styleName="label-layer">
@@ -234,7 +238,7 @@ class EditStageForm extends React.Component {
               <div styleName="label-layer">
                 <div styleName="input-row">
                   <label className="tc-label">Status</label>
-                  <SelectDropdown name="status" value={phase.status} theme="default" options={phaseStatuses} />
+                  <SelectDropdown name="status" value={phase.status} theme="default" options={availablePhaseStatuses} />
                 </div>
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress (%)" type="number" name="progress" value={phase.progress} disabled={this.state.disableActiveStatusFields} minValue={0} />
               </div>
@@ -269,10 +273,10 @@ const mapStateToProps = ({projectState, productsTimelines}) => ({
 })
 
 const actionCreators = {
-  updatePhaseAction, 
+  updatePhaseAction,
   syncPhasesAction,
   firePhaseDirty,
-  firePhaseDirtyUndo 
+  firePhaseDirtyUndo
 }
 
 export default withRouter(connect(mapStateToProps, actionCreators)(EditStageForm))

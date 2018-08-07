@@ -77,7 +77,7 @@ class PhaseCard extends React.Component {
   }
 
   render() {
-    const { attr, projectStatus, isManageUser, deleteProjectPhase, isUpdating } = this.props
+    const { attr, projectStatus, isManageUser, deleteProjectPhase, isUpdating, timeline } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
     let status = attr && attr.status ? attr.status : PHASE_STATUS_DRAFT
@@ -186,6 +186,7 @@ class PhaseCard extends React.Component {
                       phase={attr.phase}
                       phaseIndex={attr.phaseIndex}
                       cancel={this.toggleEditView}
+                      hasTimeline={!!timeline}
                     />
                   )}
                   {canDelete && !isUpdating && (

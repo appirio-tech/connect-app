@@ -183,6 +183,7 @@ class ProjectStage extends React.Component{
         projectStatus={project.status}
         isManageUser={isManageUser}
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
+        timeline={timeline}
       >
         <div>
           <ProjectStageTabs
