@@ -13,19 +13,32 @@ class SelectDropdown extends Component {
   }
 
   componentWillMount() {
-    let selectedOption = _.find(this.props.options, (o) => o.value === this.props.value)
+    this.updateSelectedOptionValue(this.props.value)
+  }
+
+  updateSelectedOptionValue(value) {
+    const { options } = this.props
+
+    let selectedOption = _.find(options, (o) => o.value === value)
     if (!selectedOption) {
-      selectedOption = this.props.options[0]
+      selectedOption = options[0]
     }
     this.setState({
       selectedOption
     }/*, function() {
       // FIXME intentionally commented because it was causing multiple renders when used in mobility testing template
       // Need to further analyze
-      // It does not seem to add any value either in both of its usage (it is used in App Screens section 
+      // It does not seem to add any value either in both of its usage (it is used in App Screens section
       // for design projects and in mobility testing projects)
       this.props.setValue(this.state.selectedOption.value)
     }*/)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // if we changed value by props, then update selected value
+    if (this.props.value !== nextProps.value) {
+      this.updateSelectedOptionValue(nextProps.value)
+    }
   }
 
   handleClick(option) {
