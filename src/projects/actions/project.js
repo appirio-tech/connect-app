@@ -365,17 +365,25 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
               referenceId: timeline.referenceId,
             }
           )
-        )
-      }
-      if (timeline && updatedProps.status && updatedProps.status===PHASE_STATUS_ACTIVE ){
-        dispatch(
-          updateProductMilestone(
-            productId,
-            timeline.id,
-            timeline.milestones[0].id,
-            {status:MILESTONE_STATUS.ACTIVE}
-          )
-        )
+        ).then(() => {
+          // update product milestone strictly after updating timeline
+          // otherwise it could happened like this:
+          // - send request to update timeline
+          // - send request to update milestone
+          // - get updated milestone
+          // - get updated timeline (without updated milestone)
+          // so otherwise we can end up with the timeline without updated milestone
+          if (timeline && updatedProps.status && updatedProps.status===PHASE_STATUS_ACTIVE ){
+            dispatch(
+              updateProductMilestone(
+                productId,
+                timeline.id,
+                timeline.milestones[0].id,
+                {status:MILESTONE_STATUS.ACTIVE}
+              )
+            )
+          }
+        })
       }
       return true
     })
