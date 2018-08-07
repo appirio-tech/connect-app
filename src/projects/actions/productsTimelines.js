@@ -83,7 +83,7 @@ export function updateProductMilestone(productId, timelineId, milestoneId, updat
       const isLastMilestone = checkIfLastMilestone(timeline.timeline, milestoneIdx)
       // if milestone duration was updated and it's not the last milestone
       // we have to refresh timeline as other milestone dates were updated by the server
-      if (isDurationUpdated && isLastMilestone) {
+      if (isDurationUpdated && !isLastMilestone) {
         dispatch(loadProductTimelineWithMilestones(productId))
       }
     })
@@ -191,7 +191,7 @@ export function extendProductMilestone(productId, timelineId, milestoneId, exten
       const isLastMilestone = checkIfLastMilestone(timeline.timeline, milestoneIdx)
       // if it's not the last milestone
       // we have to refresh timeline as other milestone dates were updated by the server
-      if (isLastMilestone) {
+      if (!isLastMilestone) {
         dispatch(loadProductTimelineWithMilestones(productId))
       }
     })
