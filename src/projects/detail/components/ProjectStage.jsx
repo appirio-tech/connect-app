@@ -185,7 +185,12 @@ class ProjectStage extends React.Component{
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
       >
         <div>
-          <ProjectStageTabs activeTab={activeTab} onTabClick={onTabClick} />
+          <ProjectStageTabs
+            activeTab={activeTab}
+            onTabClick={onTabClick}
+            isSuperUser={isSuperUser}
+            isManageUser={isManageUser}
+          />
 
           {activeTab === 'timeline' &&
             <ProductTimelineContainer product={product} />

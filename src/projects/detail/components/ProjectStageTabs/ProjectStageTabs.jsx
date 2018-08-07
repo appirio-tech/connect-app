@@ -6,6 +6,8 @@ import './ProjectStageTabs.scss'
 
 const ProjectStageTabs = ({
   activeTab,
+  isManageUser,
+  isSuperUser,
   onTabClick,
 }) => {
   const tabs = [
@@ -18,13 +20,17 @@ const ProjectStageTabs = ({
       onClick: () => onTabClick('posts'),
       label: 'Posts',
       isActive: activeTab === 'posts'
-    }/* , // hide it for now, see https://github.com/appirio-tech/connect-app/issues/2276
-    {
+    },
+  ]
+
+  // show specification tab for everybody expect of customers
+  if (isManageUser || isSuperUser) {
+    tabs.push({
       onClick: () => onTabClick('specification'),
       label: 'Specification',
       isActive: activeTab === 'specification'
-    } */
-  ]
+    })
+  }
 
   return (
     <div styleName="container">
