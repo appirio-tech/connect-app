@@ -353,6 +353,28 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
       type: UPDATE_PHASE,
       payload: updatePhaseAPI(projectId, phaseId, updatedProps, phaseIndex).then()
     }).then(() => {
+      // this will be done after updating timeline (if timeline update is required)
+      // or immediately if timeline update is not required
+      // update product milestone strictly after updating timeline
+      // otherwise it could happened like this:
+      // - send request to update timeline
+      // - send request to update milestone
+      // - get updated milestone
+      // - get updated timeline (without updated milestone)
+      // so otherwise we can end up with the timeline without updated milestone
+      const optionallyUpdateFirstMilestone = () => {
+        if (timeline && updatedProps.status && updatedProps.status===PHASE_STATUS_ACTIVE ){
+          dispatch(
+            updateProductMilestone(
+              productId,
+              timeline.id,
+              timeline.milestones[0].id,
+              {status:MILESTONE_STATUS.ACTIVE}
+            )
+          )
+        }
+      }
+
       if (timeline && updatedProps.startDate.diff(timeline.startDate)) {
         dispatch(
           updateProductTimeline(
@@ -365,25 +387,9 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
               referenceId: timeline.referenceId,
             }
           )
-        ).then(() => {
-          // update product milestone strictly after updating timeline
-          // otherwise it could happened like this:
-          // - send request to update timeline
-          // - send request to update milestone
-          // - get updated milestone
-          // - get updated timeline (without updated milestone)
-          // so otherwise we can end up with the timeline without updated milestone
-          if (timeline && updatedProps.status && updatedProps.status===PHASE_STATUS_ACTIVE ){
-            dispatch(
-              updateProductMilestone(
-                productId,
-                timeline.id,
-                timeline.milestones[0].id,
-                {status:MILESTONE_STATUS.ACTIVE}
-              )
-            )
-          }
-        })
+        ).then(optionallyUpdateFirstMilestone)
+      } else {
+        optionallyUpdateFirstMilestone()
       }
       return true
     })
