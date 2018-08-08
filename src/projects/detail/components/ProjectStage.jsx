@@ -176,6 +176,10 @@ class ProjectStage extends React.Component{
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
 
+    const hasTimeline = !!timeline
+    const defaultActiveTab = hasTimeline ? 'timeline' : 'posts'
+    const currentActiveTab = activeTab ? activeTab : defaultActiveTab
+
     return (
       <PhaseCard
         attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline)}
@@ -186,17 +190,18 @@ class ProjectStage extends React.Component{
       >
         <div>
           <ProjectStageTabs
-            activeTab={activeTab}
+            activeTab={currentActiveTab}
             onTabClick={onTabClick}
             isSuperUser={isSuperUser}
             isManageUser={isManageUser}
+            hasTimeline={hasTimeline}
           />
 
-          {activeTab === 'timeline' &&
+          {currentActiveTab === 'timeline' &&
             <ProductTimelineContainer product={product} />
           }
 
-          {activeTab === 'posts' &&
+          {currentActiveTab === 'posts' &&
             <PhaseFeed
               user={currentUser}
               currentUser={currentUser}
@@ -210,7 +215,7 @@ class ProjectStage extends React.Component{
             />
           }
 
-          {activeTab === 'specification' &&
+          {currentActiveTab === 'specification' &&
             <div className="two-col-content content">
               <EnhancedEditProjectForm
                 project={product}
@@ -235,7 +240,7 @@ class ProjectStage extends React.Component{
 }
 
 ProjectStage.defaultProps = {
-  activeTab: 'timeline',
+  activeTab: '',
   currentMemberRole: null,
 }
 

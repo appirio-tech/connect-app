@@ -103,20 +103,35 @@ export const productsTimelines = (state=initialState, action) => {
   switch (type) {
 
   case LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_PENDING:
-    return update(state, {
-      [meta.productId]: {
-        $set: {
-          isLoading: true,
-          error: false,
-        }
-      }
-    })
+    // if already have previously loaded timeline, just update some props
+    return state[meta.productId] ? (
+      update(state, {
+        [meta.productId]: {
+          isLoading: { $set: true },
+          error: { $set: false },
+        },
+      })
+
+    // if don't have already loaded timeline, create an object for it
+    ) : (
+      update(state, {
+        [meta.productId]: {
+          $set: {
+            isLoading: true,
+            error: false,
+          },
+        },
+      })
+    )
 
   case LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_SUCCESS: {
     const timeline = payload
 
-    // sort milestones by order as server doesn't do it
-    timeline.milestones = _.sortBy(timeline.milestones, 'order')
+    // if there is timeline for the product
+    if (timeline) {
+      // sort milestones by order as server doesn't do it
+      timeline.milestones = _.sortBy(timeline.milestones, 'order')
+    }
 
     return update(state, {
       [meta.productId]: {

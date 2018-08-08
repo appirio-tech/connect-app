@@ -6,22 +6,26 @@ import './ProjectStageTabs.scss'
 
 const ProjectStageTabs = ({
   activeTab,
+  hasTimeline,
   isManageUser,
   isSuperUser,
   onTabClick,
 }) => {
-  const tabs = [
-    {
+  const tabs = []
+
+  if (hasTimeline) {
+    tabs.push({
       onClick: () => onTabClick('timeline'),
       label: 'Timeline',
       isActive: activeTab === 'timeline'
-    },
-    {
-      onClick: () => onTabClick('posts'),
-      label: 'Posts',
-      isActive: activeTab === 'posts'
-    },
-  ]
+    })
+  }
+
+  tabs.push({
+    onClick: () => onTabClick('posts'),
+    label: 'Posts',
+    isActive: activeTab === 'posts'
+  })
 
   // show specification tab for everybody expect of customers
   if (isManageUser || isSuperUser) {

@@ -188,7 +188,7 @@ class EditStageForm extends React.Component {
     const { isEdittable, showPhaseOverlapWarning } = this.state
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment.utc(startDate).format('YYYY-MM-DD')
-    const durationDisabled = this.props.productsTimelines[phase.products[0].id].timeline && !this.props.productsTimelines[phase.products[0].id].error
+    const durationDisabled = hasTimeline
 
     // don't allow to selected completed status if product has timeline
     const availablePhaseStatuses = phaseStatuses.filter((status) => !hasTimeline || status.value !== PHASE_STATUS_COMPLETED )
