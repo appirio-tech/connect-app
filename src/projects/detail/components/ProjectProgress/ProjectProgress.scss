@@ -54,6 +54,7 @@
       align-items: center;
       display: flex;
       justify-content: flex-end;
+      white-space: nowrap;
     }
 
     .days {
@@ -65,7 +66,6 @@
     .spent {
       text-align: right;
       padding-right: 25px;
-      white-space: nowrap;
       @media screen and (max-width: $screen-md - 1px) {
         margin-left: auto;
       }
@@ -74,7 +74,6 @@
     .status {
       text-align: right;
       min-width: 90px;
-      white-space: nowrap;
     }
   }
 

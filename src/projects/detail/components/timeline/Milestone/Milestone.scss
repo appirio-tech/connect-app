@@ -66,6 +66,7 @@
     padding-left: 36px;
     padding-right: 20px;
     flex: 1;
+    min-width: 0;
 
     &.completed {
       &:before {
