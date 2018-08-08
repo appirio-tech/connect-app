@@ -271,7 +271,7 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && (milestone.type === 'community-work' || milestone.type === 'community-review') && (
+          {!isEditing && !isUpdating && (milestone.type === 'community-work' || milestone.type === 'community-review' || milestone.type === 'generic-work') && (
             <MilestoneTypeProgress
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
