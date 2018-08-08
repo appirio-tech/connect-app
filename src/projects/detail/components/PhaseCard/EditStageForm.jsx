@@ -191,7 +191,10 @@ class EditStageForm extends React.Component {
     const durationDisabled = hasTimeline
 
     // don't allow to selected completed status if product has timeline
-    const availablePhaseStatuses = phaseStatuses.filter((status) => !hasTimeline || status.value !== PHASE_STATUS_COMPLETED )
+    const activePhaseStatuses = phaseStatuses.map((status) => ({
+      ...status,
+      disabled: hasTimeline && status.value === PHASE_STATUS_COMPLETED
+    }))
 
     return (
       <div styleName="container">
@@ -238,7 +241,7 @@ class EditStageForm extends React.Component {
               <div styleName="label-layer">
                 <div styleName="input-row">
                   <label className="tc-label">Status</label>
-                  <SelectDropdown name="status" value={phase.status} theme="default" options={availablePhaseStatuses} />
+                  <SelectDropdown name="status" value={phase.status} theme="default" options={activePhaseStatuses} />
                 </div>
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress (%)" type="number" name="progress" value={phase.progress} disabled={this.state.disableActiveStatusFields} minValue={0} />
               </div>

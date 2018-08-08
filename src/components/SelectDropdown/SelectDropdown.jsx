@@ -1,10 +1,11 @@
-require('./SelectDropdown.scss')
-
 import _ from 'lodash'
 import React, { Component } from 'react'
+import cn from 'classnames'
 import PropTypes from 'prop-types'
 import { HOC as hoc } from 'formsy-react'
 import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
+
+import './SelectDropdown.scss'
 
 class SelectDropdown extends Component {
   constructor(props) {
@@ -57,8 +58,18 @@ class SelectDropdown extends Component {
 
     const renderOption = (option, optIdx) => {
       const handleOptionClick = this.handleClick.bind(this, option)
+      const preventDefault = (evt) => {
+        evt.preventDefault()
+        // stop propagation to prevent dropdown from closing when clicking disabled item
+        evt.stopPropagation()
+      }
       return (
-        <li key={ optIdx } className="dropdown-menu-list-item" onClick={ handleOptionClick }>
+        <li
+          key={ optIdx }
+          className="dropdown-menu-list-item"
+          styleName={cn({ disabled: option.disabled })}
+          onClick={ option.disabled ? preventDefault : handleOptionClick }
+        >
           <a href="javascript:;">{ option.title }</a>
         </li>
       )
