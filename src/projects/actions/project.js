@@ -21,6 +21,7 @@ import {
 import {
   createTimeline,
 } from '../../api/timelines'
+import { loadProductTimelineWithMilestones } from './productsTimelines'
 import {
   LOAD_PROJECT,
   CREATE_PROJECT,
@@ -279,6 +280,11 @@ export function createProduct(project, productTemplate, phases) {
     return dispatch({
       type: CREATE_PROJECT_STAGE,
       payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, startDate, endDate)
+        // after we created a new phase, we have to load timeline for its product
+        .then(({ product, project }) => {
+          return dispatch(loadProductTimelineWithMilestones(product.id))
+            .then(() => project)
+        })
     })
   }
 }
@@ -308,9 +314,14 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
       name: projectTemplate.name,
       templateId: projectTemplate.id,
       type: projectTemplate.key || projectTemplate.productKey,
+    }).then((product) => {
+      // we also wait until timeline is created as we will load it for the phase after creation
+      return createTimelineAndMilestoneForProduct(product, phase).then(() => ({
+        project,
+        phase,
+        product,
+      }))
     })
-      .then((product) => createTimelineAndMilestoneForProduct(product, phase))
-      .then(() => project)
   })
 }
 
@@ -410,7 +421,10 @@ export function createProjectWithStatus(newProject, status, projectTemplate) {
     return dispatch({
       type: CREATE_PROJECT,
       payload: createProjectWithStatusAPI(newProject, status)
-        .then((project) => createProjectPhaseAndProduct(project, projectTemplate, status))
+        .then((project) => {
+          return createProjectPhaseAndProduct(project, projectTemplate, status)
+            .then(() => project)
+        })
     })
   }
 }
