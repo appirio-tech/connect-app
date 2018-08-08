@@ -10,8 +10,12 @@ const MilestoneDescription = ({ description }) => (
   <div styleName="container" dangerouslySetInnerHTML={{ __html: description }} />
 )
 
+MilestoneDescription.defaultProps = {
+  description: '',
+}
+
 MilestoneDescription.propTypes = {
-  description: PT.string.isRequired,
+  description: PT.string,
 }
 
 export default MilestoneDescription
