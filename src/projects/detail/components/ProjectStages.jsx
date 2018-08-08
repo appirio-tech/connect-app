@@ -8,6 +8,7 @@ import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
+import { getPhaseActualData } from '../../../helpers/projectHelper'
 
 import Section from '../components/Section'
 import ProjectStage from '../components/ProjectStage'
@@ -18,16 +19,24 @@ import { PHASE_STATUS_DRAFT } from '../../../config/constants'
 /**
  * Format PhaseCardListFooter props
  *
- * @param {Array} phases phases
+ * @param {Array}  phases            phases
+ * @param {Object} productsTimelines products timelines
  *
  * @returns {Object} PhaseCardListFooter props
  */
-function formatPhaseCardListFooterProps(phases) {
+function formatPhaseCardListFooterProps(phases, productsTimelines) {
   const filteredPhases = _.filter(phases, (phase) => (phase.status !== PHASE_STATUS_DRAFT))
-  const startDates = _.compact(filteredPhases.map((phase) =>
+
+  const phasesActualData = filteredPhases.map((phase) => {
+    const product = _.get(phase, 'products[0]')
+    const timeline = _.get(productsTimelines, `[${product.id}].timeline`)
+    return getPhaseActualData(phase, timeline)
+  })
+
+  const startDates = _.compact(phasesActualData.map((phase) =>
     phase.startDate ? moment(phase.startDate) : null
   ))
-  const endDates = _.compact(filteredPhases.map((phase) =>
+  const endDates = _.compact(phasesActualData.map((phase) =>
     phase.endDate ? moment(phase.endDate) : null
   ))
   const minStartDate = startDates.length > 0 ? moment.min(startDates) : null
@@ -38,7 +47,7 @@ function formatPhaseCardListFooterProps(phases) {
 
   const totalPrice = _.sumBy(filteredPhases, 'budget')
 
-  const projectedDuration = _.sumBy(filteredPhases, (phase) => {return phase.duration && phase.duration > 1 ? phase.duration : 1})
+  const projectedDuration = _.sumBy(phasesActualData, (phase) => {return phase.duration && phase.duration > 1 ? phase.duration : 1})
   const duration = `${projectedDuration} days`
   const price = `$${formatNumberWithCommas(totalPrice)}`
 
@@ -53,6 +62,7 @@ const ProjectStages = ({
   project,
   phases,
   productTemplates,
+  productsTimelines,
   currentMemberRole,
   isProcessing,
   isSuperUser,
@@ -66,8 +76,7 @@ const ProjectStages = ({
   deleteProjectPhase,
 }) => (
   <Section>
-    
-      
+
     <PhaseCardListHeader />
     {
       phases.map((phase, index) => (
@@ -91,8 +100,8 @@ const ProjectStages = ({
         />
       ))
     }
-    <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases)}/>
-       
+    <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases, productsTimelines)}/>
+
   </Section>
 )
 
@@ -103,6 +112,7 @@ ProjectStages.defaultProps = {
 ProjectStages.propTypes = {
   project: PT.object.isRequired,
   productTemplates: PT.array.isRequired,
+  productsTimelines: PT.object,
   currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,

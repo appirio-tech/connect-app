@@ -160,3 +160,38 @@ export function formatOldProjectProgressProps(project) {
     progressPercent,
   }
 }
+
+/**
+ * Gets actual data of the phase depend if phase has timeline or no
+ *
+ * @param {Object} phase    phase
+ * @param {Object} timeline timeline
+ *
+ * @returns {{ startDate: moment.Moment, endDate: moment.Moment, duration: Number }} actual data
+ */
+export function getPhaseActualData(phase, timeline) {
+  let startDate
+  let endDate
+  let duration
+
+  // if phase's product doesn't have timeline get data from phase
+  if (!timeline || timeline.milestones.length < 1) {
+    startDate = phase.startDate && moment.utc(phase.startDate)
+    endDate = phase.endDate && moment.utc(phase.endDate)
+    duration = phase.duration ? phase.duration : 0
+
+  // if phase's product has timeline get data from timeline
+  } else {
+    startDate = moment.utc(timeline.milestones[0].startDate)
+    const lastMilestone = timeline.milestones[timeline.milestones.length - 1]
+    endDate = moment.utc(lastMilestone.completionDate || lastMilestone.endDate)
+    // add one day here to include edge days, also makes sense if start/finish the same day
+    duration = endDate.diff(startDate, 'days') + 1
+  }
+
+  return {
+    startDate,
+    endDate,
+    duration,
+  }
+}

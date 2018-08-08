@@ -8,6 +8,7 @@ import moment from 'moment'
 import uncontrollable from 'uncontrollable'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
+import { getPhaseActualData } from '../../../helpers/projectHelper'
 import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
 
 import PhaseCard from './PhaseCard'
@@ -41,24 +42,7 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline
   const icon = _.get(productTemplate, 'icon')
   const title = phase.name
 
-  let startDate
-  let endDate
-  let plannedDuration
-
-  // if phase's product doesn't have timeline get data from phase
-  if (!timeline || timeline.milestones.length < 1) {
-    startDate = phase.startDate && moment.utc(phase.startDate)
-    endDate = phase.endDate && moment.utc(phase.endDate)
-    plannedDuration = phase.duration ? phase.duration : 0
-
-  // if phase's product has timeline get data from timeline
-  } else {
-    startDate = moment.utc(timeline.milestones[0].startDate)
-    const lastMilestone = timeline.milestones[timeline.milestones.length - 1]
-    endDate = moment.utc(lastMilestone.completionDate || lastMilestone.endDate)
-    // add one day here to include edge days, also makes sense if start/finish the same day
-    plannedDuration = endDate.diff(startDate, 'days') + 1
-  }
+  const { startDate, endDate, duration: plannedDuration } = getPhaseActualData(phase, timeline)
 
   const duration = `${plannedDuration} day${plannedDuration !== 1 ? 's' : ''}`
   let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
