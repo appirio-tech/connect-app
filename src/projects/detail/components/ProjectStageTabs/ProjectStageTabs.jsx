@@ -6,25 +6,35 @@ import './ProjectStageTabs.scss'
 
 const ProjectStageTabs = ({
   activeTab,
+  hasTimeline,
+  isManageUser,
+  isSuperUser,
   onTabClick,
 }) => {
-  const tabs = [
-    {
+  const tabs = []
+
+  if (hasTimeline) {
+    tabs.push({
       onClick: () => onTabClick('timeline'),
       label: 'Timeline',
       isActive: activeTab === 'timeline'
-    },
-    {
-      onClick: () => onTabClick('posts'),
-      label: 'Posts',
-      isActive: activeTab === 'posts'
-    }/* , // hide it for now, see https://github.com/appirio-tech/connect-app/issues/2276
-    {
+    })
+  }
+
+  tabs.push({
+    onClick: () => onTabClick('posts'),
+    label: 'Posts',
+    isActive: activeTab === 'posts'
+  })
+
+  // show specification tab for everybody expect of customers
+  if (isManageUser || isSuperUser) {
+    tabs.push({
       onClick: () => onTabClick('specification'),
       label: 'Specification',
       isActive: activeTab === 'specification'
-    } */
-  ]
+    })
+  }
 
   return (
     <div styleName="container">

@@ -60,6 +60,7 @@ const ProjectDetailView = (props) => {
       isManageUser: props.isManageUser,
       isProcessing: props.isProcessing,
       allProductTemplates: props.allProductTemplates,
+      productsTimelines: props.productsTimelines,
     })
   })
   return <div>{children}</div>
@@ -122,7 +123,7 @@ class ProjectDetail extends Component {
   }
 }
 
-const mapStateToProps = ({projectState, projectDashboard, loadUser}) => {
+const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines}) => {
   return {
     currentUserId: parseInt(loadUser.user.id),
     isLoading: projectDashboard.isLoading,
@@ -131,6 +132,7 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser}) => {
     project: projectState.project,
     projectTemplate: projectState.projectTemplate,
     productTemplates: projectState.productTemplates,
+    productsTimelines,
     allProductTemplates: projectState.allProductTemplates,
     currentUserRoles: loadUser.user.roles
   }

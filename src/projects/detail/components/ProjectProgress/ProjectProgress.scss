@@ -45,7 +45,6 @@
     padding-right: $base-unit*3;
     z-index: 2;
     overflow: hidden;
-    white-space: nowrap;
 
     @media screen and (max-width: $screen-md - 1px) {
       padding-right: $base-unit*3.8;
@@ -55,6 +54,13 @@
       align-items: center;
       display: flex;
       justify-content: flex-end;
+      white-space: nowrap;
+    }
+
+    .days {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .spent {

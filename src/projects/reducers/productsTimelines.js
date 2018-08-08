@@ -47,6 +47,17 @@ const initialState = {
   */
 }
 
+/**
+ * Update a particular milestone in the state
+ *
+ * @param {Object}  state          state
+ * @param {Number}  productId      product id
+ * @param {Number}  milestoneId    milestone Id
+ * @param {Object}  dirtyMilestone milestone update rule or new milestone if shouldReplace is set
+ * @param {Boolean} shouldReplace  replaces milestone instead of update if true
+ *
+ * @returns {Object} state
+ */
 function updateMilestone(state, productId, milestoneId, dirtyMilestone, shouldReplace = false) {
   if (!state[productId].timeline) return state
   const milestoneIdx = _.findIndex(state[productId].timeline.milestones, { id: milestoneId })
@@ -74,7 +85,7 @@ function updateMilestone(state, productId, milestoneId, dirtyMilestone, shouldRe
  *
  * @returns {Object} The state
  */
-function updateTimline(state, productId, updateTimeline, shouldReplace = false) {
+function updateTimeline(state, productId, updateTimeline, shouldReplace = false) {
   const updatedTimeline = shouldReplace
     ? updateTimeline
     : update(state[productId].timeline, updateTimeline)
@@ -92,20 +103,35 @@ export const productsTimelines = (state=initialState, action) => {
   switch (type) {
 
   case LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_PENDING:
-    return update(state, {
-      [meta.productId]: {
-        $set: {
-          isLoading: true,
-          error: false,
-        }
-      }
-    })
+    // if already have previously loaded timeline, just update some props
+    return state[meta.productId] ? (
+      update(state, {
+        [meta.productId]: {
+          isLoading: { $set: true },
+          error: { $set: false },
+        },
+      })
+
+    // if don't have already loaded timeline, create an object for it
+    ) : (
+      update(state, {
+        [meta.productId]: {
+          $set: {
+            isLoading: true,
+            error: false,
+          },
+        },
+      })
+    )
 
   case LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_SUCCESS: {
     const timeline = payload
 
-    // sort milestones by order as server doesn't do it
-    timeline.milestones = _.sortBy(timeline.milestones, 'order')
+    // if there is timeline for the product
+    if (timeline) {
+      // sort milestones by order as server doesn't do it
+      timeline.milestones = _.sortBy(timeline.milestones, 'order')
+    }
 
     return update(state, {
       [meta.productId]: {
@@ -140,16 +166,16 @@ export const productsTimelines = (state=initialState, action) => {
     })
 
   case UPDATE_PRODUCT_TIMELINE_PENDING:
-    return updateTimline(state, meta.productId, {
+    return updateTimeline(state, meta.productId, {
       isUpdating: { $set: true },
       error: { $set: false }
     })
 
   case UPDATE_PRODUCT_TIMELINE_SUCCESS:
-    return updateTimline(state, meta.productId, payload, true)
+    return updateTimeline(state, meta.productId, payload, true)
 
   case UPDATE_PRODUCT_TIMELINE_FAILURE:
-    return updateTimline(state, meta.productId, {
+    return updateTimeline(state, meta.productId, {
       isUpdating: { $set: false },
       error: { $set: false }
     })

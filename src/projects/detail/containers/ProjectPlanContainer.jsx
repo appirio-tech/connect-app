@@ -78,7 +78,6 @@ const ProjectPlanContainer = (props) => {
                 ...props,
                 phases: visiblePhases
               }}
-              isManageUser={isManageUser}
               key="stages"
             />
           ]

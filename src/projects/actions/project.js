@@ -21,6 +21,7 @@ import {
 import {
   createTimeline,
 } from '../../api/timelines'
+import { loadProductTimelineWithMilestones } from './productsTimelines'
 import {
   LOAD_PROJECT,
   CREATE_PROJECT,
@@ -279,6 +280,11 @@ export function createProduct(project, productTemplate, phases) {
     return dispatch({
       type: CREATE_PROJECT_STAGE,
       payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, startDate, endDate)
+        // after we created a new phase, we have to load timeline for its product
+        .then(({ product, project }) => {
+          return dispatch(loadProductTimelineWithMilestones(product.id))
+            .then(() => project)
+        })
     })
   }
 }
@@ -308,9 +314,14 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
       name: projectTemplate.name,
       templateId: projectTemplate.id,
       type: projectTemplate.key || projectTemplate.productKey,
+    }).then((product) => {
+      // we also wait until timeline is created as we will load it for the phase after creation
+      return createTimelineAndMilestoneForProduct(product, phase).then(() => ({
+        project,
+        phase,
+        product,
+      }))
     })
-      .then((product) => createTimelineAndMilestoneForProduct(product, phase))
-      .then(() => project)
   })
 }
 
@@ -353,6 +364,28 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
       type: UPDATE_PHASE,
       payload: updatePhaseAPI(projectId, phaseId, updatedProps, phaseIndex).then()
     }).then(() => {
+      // this will be done after updating timeline (if timeline update is required)
+      // or immediately if timeline update is not required
+      // update product milestone strictly after updating timeline
+      // otherwise it could happened like this:
+      // - send request to update timeline
+      // - send request to update milestone
+      // - get updated milestone
+      // - get updated timeline (without updated milestone)
+      // so otherwise we can end up with the timeline without updated milestone
+      const optionallyUpdateFirstMilestone = () => {
+        if (timeline && updatedProps.status && updatedProps.status===PHASE_STATUS_ACTIVE ){
+          dispatch(
+            updateProductMilestone(
+              productId,
+              timeline.id,
+              timeline.milestones[0].id,
+              {status:MILESTONE_STATUS.ACTIVE}
+            )
+          )
+        }
+      }
+
       if (timeline && updatedProps.startDate.diff(timeline.startDate)) {
         dispatch(
           updateProductTimeline(
@@ -365,17 +398,9 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
               referenceId: timeline.referenceId,
             }
           )
-        )
-      }
-      if (timeline && updatedProps.status && updatedProps.status===PHASE_STATUS_ACTIVE ){
-        dispatch(
-          updateProductMilestone(
-            productId,
-            timeline.id,
-            timeline.milestones[0].id,
-            {status:MILESTONE_STATUS.ACTIVE}
-          )
-        )
+        ).then(optionallyUpdateFirstMilestone)
+      } else {
+        optionallyUpdateFirstMilestone()
       }
       return true
     })
@@ -396,7 +421,10 @@ export function createProjectWithStatus(newProject, status, projectTemplate) {
     return dispatch({
       type: CREATE_PROJECT,
       payload: createProjectWithStatusAPI(newProject, status)
-        .then((project) => createProjectPhaseAndProduct(project, projectTemplate, status))
+        .then((project) => {
+          return createProjectPhaseAndProduct(project, projectTemplate, status)
+            .then(() => project)
+        })
     })
   }
 }

@@ -13,10 +13,10 @@ const ProjectProgress = (props) => {
       <span styleName="dot" />
       <div styleName="filled" style={{ width: props.progressPercent + '%' }} />
       <div styleName="label-layer">
-        <span>{props.labelDayStatus}</span>
+        <div styleName="days">{props.labelDayStatus}</div>
         <div styleName="group-right">
           {!!props.labelSpent && <span styleName="spent">{props.labelSpent}</span>}
-          <span styleName="status hide-sm">{props.labelStatus}</span>
+          {(!!props.labelStatus || !!props.labelSpent) && <span styleName="status hide-sm">{props.labelStatus}</span>}
           {props.children}
         </div>
       </div>
