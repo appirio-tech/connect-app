@@ -12,6 +12,7 @@ import LinkList from '../../LinkList'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
 import WinnerSelectionBar from '../../WinnerSelectionBar'
+import MilestoneDescription from '../../MilestoneDescription'
 
 import {
   MILESTONE_STATUS,
@@ -248,6 +249,12 @@ class MilestoneTypeFinalDesigns extends React.Component {
     })
   }
 
+  getDescription() {
+    const { milestone } = this.props
+
+    return milestone[`${milestone.status}Text`]
+  }
+
   render() {
     const {
       milestone,
@@ -288,6 +295,10 @@ class MilestoneTypeFinalDesigns extends React.Component {
 
     return (
       <div styleName={cn('milestone-post', theme)}>
+        <DotIndicator hideDot>
+          <MilestoneDescription description={this.getDescription()} />
+        </DotIndicator>
+
         {/*
           Active status
          */}

@@ -128,12 +128,6 @@ class Milestone extends React.Component {
     submitFinalFixesRequest(milestone.id, finalFixRequests)
   }
 
-  getDescription() {
-    const { milestone } = this.props
-
-    return milestone[`${milestone.status}Text`]
-  }
-
   render() {
     const {
       milestone,
@@ -252,13 +246,6 @@ class Milestone extends React.Component {
               title="Milestone Properties"
             />
           )}
-
-          {!isEditing && (
-            <div
-              styleName="post-con"
-              dangerouslySetInnerHTML={{ __html: this.getDescription() }}
-            />)
-          }
 
           {isUpdating && <DotIndicator><LoadingIndicator /></DotIndicator>}
 

@@ -3,6 +3,8 @@
  *
  * - hideDot - don't show the dot on the line
  * - hideLine - hides line together with dot
+ * - hideFirstLine - same like before, but should only be used
+ *                   to hide the beginning of the milestone line
  * - isDone - dot become filled with blue
  */
 import React from 'react'
@@ -13,6 +15,7 @@ import './DotIndicator.scss'
 
 const DotIndicator = ({
   hideDot,
+  hideFirstLine,
   hideLine,
   isDone,
   children,
@@ -21,6 +24,7 @@ const DotIndicator = ({
     styleName={cn('container', {
       'hide-dot': hideDot,
       'hide-line': hideLine,
+      'hide-first-line': hideFirstLine,
       'is-done': isDone,
     })}
   >
@@ -32,6 +36,7 @@ const DotIndicator = ({
 
 DotIndicator.defaultTypes = {
   hideDot: false,
+  hideFirstLine: false,
   hideLine: false,
   isDone: false,
 }
@@ -39,6 +44,7 @@ DotIndicator.defaultTypes = {
 DotIndicator.propTypes = {
   children: PT.node.isRequired,
   hideDot: PT.bool,
+  hideFirstLine: PT.bool,
   hideLine: PT.bool,
   isDone: PT.bool,
 }
