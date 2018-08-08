@@ -3,6 +3,7 @@
 .container {
   display: flex;
   padding: $base-unit 4 * $base-unit;
+  overflow-x: auto;
 
   &.self:not(.is-deleting):hover {
     background-color: $tc-gray-neutral-light;
