@@ -357,13 +357,17 @@ export function updateProject(projectId, updatedProps, updateExisting = false) {
 export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
   return (dispatch, getState) => {
     const state = getState()
-    const productId = state.projectState.phases[phaseIndex].products[0].id
+    const phase = state.projectState.phases[phaseIndex]
+    const phaseStatusChanged = phase.status !== updatedProps.status
+    const productId = phase.products[0].id
     const timeline = state.productsTimelines[productId] && state.productsTimelines[productId].timeline
 
     return dispatch({
       type: UPDATE_PHASE,
       payload: updatePhaseAPI(projectId, phaseId, updatedProps, phaseIndex).then()
     }).then(() => {
+      // finds active milestone, if exists in timeline
+      const activeMilestone = timeline ? _.find(timeline.milestones, m => m.status === PHASE_STATUS_ACTIVE) : null
       // this will be done after updating timeline (if timeline update is required)
       // or immediately if timeline update is not required
       // update product milestone strictly after updating timeline
@@ -374,7 +378,13 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
       // - get updated timeline (without updated milestone)
       // so otherwise we can end up with the timeline without updated milestone
       const optionallyUpdateFirstMilestone = () => {
-        if (timeline && updatedProps.status && updatedProps.status===PHASE_STATUS_ACTIVE ){
+        // update first product milestone only if
+        // - there is a milestone, obviously
+        // - phase's status is changed
+        // - phase's status is changed to active
+        // - there is not active milestone alreay (this can happen when phase is made active more than once
+        // e.g. Active => Paused => Active)
+        if (timeline && phaseStatusChanged && !activeMilestone && updatedProps.status === PHASE_STATUS_ACTIVE ) {
           dispatch(
             updateProductMilestone(
               productId,
