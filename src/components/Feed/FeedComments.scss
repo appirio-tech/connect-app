@@ -4,6 +4,7 @@
 .container {
   background-color: $tc-white;
   border-radius: 0 0 $card-border-radius $card-border-radius;
+  overflow-x: auto;
 
   :global {
     .rich-editor .tc-textarea .public-DraftEditor-content {
