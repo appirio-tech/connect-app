@@ -40,19 +40,34 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline
   const price = `$${formatNumberWithCommas(budget)}`
   const icon = _.get(productTemplate, 'icon')
   const title = phase.name
-  const startDate = phase.startDate && moment.utc(phase.startDate)
-  const endDate = phase.endDate && moment.utc(phase.endDate)
 
-  const plannedDuration = phase.duration ? phase.duration : 0
-  const duration = `${plannedDuration} days`
+  let startDate
+  let endDate
+  let plannedDuration
+
+  // if phase's product doesn't have timeline get data from phase
+  if (!timeline || timeline.milestones.length < 1) {
+    startDate = phase.startDate && moment.utc(phase.startDate)
+    endDate = phase.endDate && moment.utc(phase.endDate)
+    plannedDuration = phase.duration ? phase.duration : 0
+
+  // if phase's product has timeline get data from timeline
+  } else {
+    startDate = moment.utc(timeline.milestones[0].startDate)
+    const lastMilestone = timeline.milestones[timeline.milestones.length - 1]
+    endDate = moment.utc(lastMilestone.completionDate || lastMilestone.endDate)
+    // add one day here to include edge days, also makes sense if start/finish the same day
+    plannedDuration = endDate.diff(startDate, 'days') + 1
+  }
+
+  const duration = `${plannedDuration} day${plannedDuration !== 1 ? 's' : ''}`
   let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
   // appends end date to the start date only if end date is greater than start date
   startEndDates += startDate && endDate && endDate.diff(startDate, 'days') > 0 ? `-${endDate.format('MMM D')}` : ''
   // extracts the start date's month string plus white space
   const monthStr = startEndDates.substr(0, 4)
-  // replaces the second occurance of the month part i.e. removes the end date's month part
+  // replaces the second occurrence of the month part i.e. removes the end date's month part
   startEndDates = startEndDates.lastIndexOf(monthStr) !== 0 ? startEndDates.replace(`-${monthStr}`, '-') : startEndDates
-
   let now = new Date()
   now = now && moment.utc(now)
 
