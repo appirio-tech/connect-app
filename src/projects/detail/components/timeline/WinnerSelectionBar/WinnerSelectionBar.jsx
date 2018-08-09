@@ -52,7 +52,13 @@ class WinnerSelectionBar extends React.Component {
     const isSelected3TopWin = _.every(placesChosen, (place) => place > -1)
 
     return (
-      <div styleName={cn('winner-bar', { selected: !!selectedPlace || isSelectedBonus })}>
+      <div
+        styleName={cn(
+          'winner-bar', {
+            selected: !!onPlaceChange && !!selectedPlace || !!onBonusChange && isSelectedBonus
+          }
+        )}
+      >
         <div
           styleName="add-specification-layer addlink-bar"
           className="flex space-between middle"

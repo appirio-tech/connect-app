@@ -115,6 +115,12 @@
     flex-wrap:wrap;
   }
 
+  &.is-selected {
+    .label-layer {
+      background-color: $tc-dark-blue-10;
+    }
+  }
+
   .milestone-text {
     color: $tc-gray-50;
     font-size: 13px;
