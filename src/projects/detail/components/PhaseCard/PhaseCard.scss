@@ -5,11 +5,6 @@
   background-color: $tc-white;
   border-radius: 6px;
   box-shadow: 0 1px 1px 0 $tc-gray-10;
-  /* for now I don't see any obstacles to make it "overflow: hidden"
-     which will make sure the block always has round corners, otherwise
-     we will need to make sure all inner blocks with defined background has the same
-     border-radius as this container */
-  overflow: hidden;
 
   @media screen and (max-width: $screen-md - 1px) {
     border-radius: 0;
@@ -43,6 +38,7 @@
 
   .static-view {
     @include roboto;
+    border-radius: 6px;
     min-height: 80px;
     display: flex;
     align-items: center;
@@ -54,6 +50,7 @@
     cursor: pointer;
     background-color: $tc-gray-neutral-light;
     @media screen and (max-width: $screen-md - 1px) {
+      border-radius: 0;
       padding-left: 4 * $base-unit;
       padding-right: 4 * $base-unit;
     }
@@ -316,7 +313,7 @@
 
 .header {
   align-items: center;
-  background-color: $tc-gray-neutral-light;;
+  background-color: $tc-gray-neutral-light;
   display: flex;
   height: 50px;
   padding: 0 $base-unit * 3;
@@ -342,7 +339,6 @@
 }
 
 .body {
-  background-color: $tc-gray-neutral-dark;
-  height: calc(100vh - 50px); /* window height - header height */
+  background-color: $tc-white;
   position: relative;
 }

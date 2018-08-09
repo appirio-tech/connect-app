@@ -5,7 +5,6 @@
   display: flex;
   position: relative;
   padding: 10px 0;
-  background: #fff;
 
   :global(.loading-indicator) {
     height: auto;
@@ -61,6 +60,16 @@
       position: relative;
     }
   }
+  &:last-child {
+    .col-date {
+      border-radius: 0 0 0 6px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        border-radius: 0;
+      }
+    }
+  }
+
   .col-timeline-post-con {
     position: relative;
     padding-left: 36px;
