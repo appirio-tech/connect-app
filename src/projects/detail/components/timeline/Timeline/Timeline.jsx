@@ -90,10 +90,17 @@ class Timeline extends React.Component {
   }
 }
 
+Timeline.defaultProps = {
+  isLoading: false,
+}
+
 Timeline.propType = {
-  name: PT.string.isRequired,
-  description: PT.string,
-  milestones: PT.array.isRequired,
+  isLoading: PT.bool,
+  product: PT.object.isRequired,
+  timeline: PT.object.isRequired,
+  updateProductMilestone: PT.func.isRequired,
+  completeProductMilestone: PT.func.isRequired,
+  extendProductMilestone: PT.func.isRequired,
 }
 
 export default Timeline
