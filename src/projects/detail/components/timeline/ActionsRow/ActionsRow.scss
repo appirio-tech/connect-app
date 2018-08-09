@@ -1,8 +1,7 @@
 @import '~tc-ui/src/styles/tc-includes';
+@import '../../../../../styles/includes';
 
 .container {
-  display: flex;
-  justify-content: center;
   padding: 2 * $base-unit;
   position: relative;
 
@@ -40,6 +39,10 @@
     height: 30px;
     margin-right: 2 * $base-unit;
     width: 30px;
+  }
+
+  @media screen and (max-width: $screen-rg - 1px) {
+    display: none;
   }
 }
 

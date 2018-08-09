@@ -10,6 +10,7 @@ import moment from 'moment'
 import DotIndicator from '../../DotIndicator'
 import ProjectProgress from '../../../ProjectProgress'
 import LinkList from '../../LinkList'
+import MilestoneDescription from '../../MilestoneDescription'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
 
@@ -61,6 +62,12 @@ class MilestoneTypeProgress extends React.Component {
     completeMilestone()
   }
 
+  getDescription() {
+    const { milestone } = this.props
+
+    return milestone[`${milestone.status}Text`]
+  }
+
   render() {
     const { milestone, theme, currentUser } = this.props
 
@@ -83,6 +90,10 @@ class MilestoneTypeProgress extends React.Component {
 
     return (
       <div styleName={cn('milestone-post', theme)}>
+        <DotIndicator hideDot>
+          <MilestoneDescription description={this.getDescription()} />
+        </DotIndicator>
+
         {/*
           Active status
          */}

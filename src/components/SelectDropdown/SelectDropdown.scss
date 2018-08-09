@@ -6,10 +6,21 @@
     padding: 0px;
     min-width: 100px;
     margin-left: calc(2 * #{$base_unit});
-  
+
     .Dropdown {
       top: 20px;
     }
   }
 }
-  
+
+// use long selector to override style
+:global(.dropdown-wrap.default .Dropdown ul.dropdown-menu-list) li.disabled {
+  &:hover {
+    background-color: transparent;
+  }
+
+  > a {
+    color: $tc-gray-30;
+    cursor: default;
+  }
+}

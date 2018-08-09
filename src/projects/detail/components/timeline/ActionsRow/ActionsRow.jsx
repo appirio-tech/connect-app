@@ -24,7 +24,7 @@ const ActionsRow = ({
   <div styleName={cn('container', type)}>
     {!!fakeName && <div styleName="fake-name">{fakeName}</div>}
 
-    <div>
+    <div styleName="buttons">
       {buttons.map((button) => (
         <button
           key={button.title}

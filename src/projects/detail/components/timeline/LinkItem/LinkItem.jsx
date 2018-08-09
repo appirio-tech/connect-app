@@ -89,7 +89,14 @@ class LinkItem extends React.Component {
     const type = _.includes(supportedTypes, link.type) ? link.type : ''
 
     return (
-      <div styleName={cn('container', theme)}>
+      <div
+        styleName={cn(
+          'container',
+          theme, {
+            'is-selected': !!onSelectChange && link.isSelected
+          }
+        )}
+      >
         {!isEditing && (
           <div styleName="label-layer">
             <div styleName="link-item-text-group">
@@ -125,7 +132,7 @@ class LinkItem extends React.Component {
 
               {!!deleteLink && (
                 <span onClick={this.deleteLink} styleName="button delete" />
-              )}    
+              )}
 
               {!!link.isDownloadable && !updateLink && !deleteLink && !onSelectChange && (
                 <a

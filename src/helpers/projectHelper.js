@@ -167,18 +167,20 @@ export function formatOldProjectProgressProps(project) {
  * @param {Object} phase    phase
  * @param {Object} timeline timeline
  *
- * @returns {{ startDate: moment.Moment, endDate: moment.Moment, duration: Number }} actual data
+ * @returns {{ startDate: moment.Moment, endDate: moment.Moment, duration: Number, progress: Number }} actual data
  */
 export function getPhaseActualData(phase, timeline) {
   let startDate
   let endDate
   let duration
+  let progress
 
   // if phase's product doesn't have timeline get data from phase
   if (!timeline || timeline.milestones.length < 1) {
     startDate = phase.startDate && moment.utc(phase.startDate)
     endDate = phase.endDate && moment.utc(phase.endDate)
     duration = phase.duration ? phase.duration : 0
+    progress = phase.progress ? phase.progress : 0
 
   // if phase's product has timeline get data from timeline
   } else {
@@ -187,11 +189,41 @@ export function getPhaseActualData(phase, timeline) {
     endDate = moment.utc(lastMilestone.completionDate || lastMilestone.endDate)
     // add one day here to include edge days, also makes sense if start/finish the same day
     duration = endDate.diff(startDate, 'days') + 1
+
+    // calculate progress of phase
+    const now = moment().utc()
+    let tlPlannedDuration = 0
+    let tlCurrentDuration = 0
+    let allMilestonesComplete = true
+
+    _.forEach(timeline.milestones, milestone => {
+      if (!milestone.hidden) {
+        tlPlannedDuration+=milestone.duration
+        const range = moment.range(milestone.startDate, milestone.endDate)
+        if (milestone.completionDate) {
+          tlCurrentDuration += milestone.duration
+        } else if (range.contains(now)) {
+          tlCurrentDuration += now.diff(milestone.startDate, 'days')
+          allMilestonesComplete = false
+        } else {
+          allMilestonesComplete = false
+        }
+      }
+    })
+
+    let tlProgressInPercent = tlPlannedDuration > 0
+      ? Math.round((tlCurrentDuration / tlPlannedDuration) * 100)
+      : null
+    if (allMilestonesComplete) {
+      tlProgressInPercent = 100
+    }
+    progress = tlProgressInPercent
   }
 
   return {
     startDate,
     endDate,
     duration,
+    progress,
   }
 }

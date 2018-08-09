@@ -11,6 +11,7 @@ import DotIndicator from '../../DotIndicator'
 import LinkList from '../../LinkList'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
+import MilestoneDescription from '../../MilestoneDescription'
 
 import {
   MILESTONE_STATUS,
@@ -216,6 +217,12 @@ class MilestoneTypeCheckpointReview extends React.Component {
     }
   }
 
+  getDescription() {
+    const { milestone } = this.props
+
+    return milestone[`${milestone.status}Text`]
+  }
+
   render() {
     const {
       milestone,
@@ -256,6 +263,10 @@ class MilestoneTypeCheckpointReview extends React.Component {
 
     return (
       <div styleName={cn('milestone-post', theme)}>
+        <DotIndicator hideDot>
+          <MilestoneDescription description={this.getDescription()} />
+        </DotIndicator>
+
         {/*
           Active status
          */}

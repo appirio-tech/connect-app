@@ -20,6 +20,10 @@
   .hide-line & {
     top: 0;
   }
+
+  .hide-first-line & {
+    top: -7px;
+  }
 }
 
 .dot {
@@ -35,6 +39,7 @@
   z-index: 3;
 
   .hide-line &,
+  .hide-first-line &,
   .hide-dot & {
     display: none;
   }

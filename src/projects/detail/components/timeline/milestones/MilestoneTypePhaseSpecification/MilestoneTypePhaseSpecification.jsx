@@ -8,6 +8,7 @@ import cn from 'classnames'
 
 import DotIndicator from '../../DotIndicator'
 import LinkList from '../../LinkList'
+import MilestoneDescription from '../../MilestoneDescription'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
 
@@ -62,6 +63,12 @@ class MilestoneTypePhaseSpecification extends React.Component {
     completeMilestone()
   }
 
+  getDescription() {
+    const { milestone } = this.props
+
+    return milestone[`${milestone.status}Text`]
+  }
+
   render() {
     const { milestone, theme, currentUser } = this.props
 
@@ -73,6 +80,10 @@ class MilestoneTypePhaseSpecification extends React.Component {
 
     return (
       <div styleName={cn('milestone-post', theme)}>
+        <DotIndicator hideFirstLine={currentUser.isCustomer} hideDot>
+          <MilestoneDescription description={this.getDescription()} />
+        </DotIndicator>
+
         {/*
           Active state
          */}
