@@ -203,14 +203,16 @@ class PhaseCard extends React.Component {
               </div>
             ):(
               <MobilePage>
-                <div styleName="header">
-                  <div styleName="close-wrapper"><BackIcon onClick={this.onClose} /></div>
-                  <div styleName="title">{attr.title}</div>
-                  <div styleName="plug"/>
-                </div>
-                <div styleName="body">
-                  <div styleName="expandable-view">
-                    {this.props.children}
+                <div styleName="mobile-phase">
+                  <div styleName="header">
+                    <div styleName="close-wrapper"><BackIcon onClick={this.onClose} /></div>
+                    <div styleName="title">{attr.title}</div>
+                    <div styleName="plug"/>
+                  </div>
+                  <div styleName="body">
+                    <div styleName="expandable-view">
+                      {this.props.children}
+                    </div>
                   </div>
                 </div>
               </MobilePage>

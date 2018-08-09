@@ -317,6 +317,8 @@
   display: flex;
   height: 50px;
   padding: 0 $base-unit * 3;
+  position: relative;
+  z-index: 1;
 }
 
 .title {
@@ -341,4 +343,21 @@
 .body {
   background-color: $tc-white;
   position: relative;
+}
+
+.mobile-phase {
+  background-color: $tc-white;
+  min-height: 100vh;
+  position: relative;
+
+  &::before {
+    background-color: $tc-gray-neutral-light;
+    bottom: 0;
+    content: '';
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 70px;
+  }
 }
