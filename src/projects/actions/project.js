@@ -7,7 +7,6 @@ import { getProjectById, createProject as createProjectAPI,
   deleteProjectPhase as deleteProjectPhaseAPI,
   getDirectProjectData,
   getProjectPhases,
-  getPhaseProducts,
   updateProduct as updateProductAPI,
   updatePhase as updatePhaseAPI,
   createProjectPhase,
@@ -62,40 +61,48 @@ export function loadProject(projectId) {
 }
 
 /**
- * Populate each phase with `products` property containing all phase products
+ * Get project phases together with products
  *
- * @param {Array} phases list of phases
+ * @param {String} projectId project id
  *
- * @return {Promise} modified array of phases with `products` property
+ * @returns {Promise<[]>} resolves to the list of phases
  */
-function populatePhasesProducts(result) {
-  const phases = result.phases
-  const existingPhases = result.existingPhases
-  const unLoadedPhases = _.differenceWith(phases, existingPhases, (a, b) => a.id === b.id)
-  return Promise.all(unLoadedPhases.map((phase) => getPhaseProducts(phase.projectId, phase.id)))
-    .then((unLoadedPhasesProducts) => {
-      unLoadedPhases.forEach((phase, phaseIndex) => {
-        phase.products = unLoadedPhasesProducts[phaseIndex]
-      })
-      return _.concat(existingPhases, unLoadedPhases)
-    })
+function getProjectPhasesWithProducts(projectId) {
+  return getProjectPhases(projectId, {
+    // explicitly define the list of fields, to get products included in response
+    fields: [
+      'products',
+      'budget',
+      'createdAt',
+      'createdBy',
+      'details',
+      'duration',
+      'endDate',
+      'id',
+      'name',
+      'progress',
+      'projectId',
+      'spentBudget',
+      'startDate',
+      'status',
+      'updatedAt',
+      'updatedBy',
+    ].join(',')
+  })
 }
 
 /**
  * Load project phases with populated products
  *
  * @param {String} projectId        project id
- * @param {String} project        project info
- * @param {String} existingPhases        loaded phases of project in redux
  *
  * @return {Promise} LOAD_PROJECT_PHASES action with payload as array of phases
  */
-export function loadProjectPhasesWithProducts(projectId, project, existingPhases) {
+export function loadProjectPhasesWithProducts(projectId) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_PROJECT_PHASES,
-      payload: getProjectPhases(projectId, existingPhases)
-        .then(populatePhasesProducts)
+      payload: getProjectPhasesWithProducts(projectId)
     })
   }
 }
@@ -223,13 +230,8 @@ export function createProject(newProject) {
  * @returns {Promise<[]>} list of products
  */
 function getAllProjectProducts(project) {
-  return getProjectPhases(project.id)
-    .then((projectPhases) =>
-      Promise.all(projectPhases.phases.map((phase) =>
-        getPhaseProducts(project.id, phase.id))
-      )
-    )
-    .then((phasesProducts) => _.flatten(phasesProducts))
+  return getProjectPhasesWithProducts(project.id)
+    .then((phases) => _.flatten(_.map(phases, 'products')))
 }
 
 /**

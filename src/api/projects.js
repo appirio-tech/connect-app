@@ -63,16 +63,20 @@ export function getProjectById(projectId) {
 /**
  * Get project phases
  *
- * @param {String} projectId project id
+ * @param {String}             projectId project id
+ * @param {{ fields: String }} query     request query params
  *
  * @return {Promise} resolves to project phases
  */
-export function getProjectPhases(projectId, existingPhases) {
-  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases`)
-    .then(resp => {
-      const res = _.get(resp.data, 'result.content', {})
-      return {phases: res, existingPhases: existingPhases || []}
-    })
+export function getProjectPhases(projectId, query = {}) {
+  // TODO fix when server is fixed https://github.com/topcoder-platform/tc-project-service/issues/160
+  // we should encode each param by encodeURIComponent, but server for now doesn't accept it
+  // const params = _.mapValues(query, (param) => encodeURIComponent(param))
+  // for now we have to skip encoding to make it work
+  const params = query
+
+  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases`, { params })
+    .then(resp => _.get(resp.data, 'result.content', {}))
 }
 
 /**

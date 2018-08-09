@@ -36,7 +36,7 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
         // for new projects load phases, products, project template and product templates
         if (project.version === 'v3') {
           promises.push(
-            dispatch(loadProjectPhasesWithProducts(projectId, project))
+            dispatch(loadProjectPhasesWithProducts(projectId))
               .then(({ value: phases }) =>
                 // load timelines for phase products here together with all dashboard data
                 // as we need to know timeline data not only inside timeline container
