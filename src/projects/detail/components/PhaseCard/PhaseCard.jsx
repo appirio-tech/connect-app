@@ -186,7 +186,7 @@ class PhaseCard extends React.Component {
                       phase={attr.phase}
                       phaseIndex={attr.phaseIndex}
                       cancel={this.toggleEditView}
-                      hasTimeline={!!timeline}
+                      timeline={timeline}
                     />
                   )}
                   {canDelete && !isUpdating && (

@@ -4,7 +4,6 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
-import moment from 'moment'
 import uncontrollable from 'uncontrollable'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
@@ -42,7 +41,12 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline
   const icon = _.get(productTemplate, 'icon')
   const title = phase.name
 
-  const { startDate, endDate, duration: plannedDuration } = getPhaseActualData(phase, timeline)
+  const {
+    startDate,
+    endDate,
+    duration: plannedDuration,
+    progress: progressInPercent,
+  } = getPhaseActualData(phase, timeline)
 
   const duration = `${plannedDuration} day${plannedDuration !== 1 ? 's' : ''}`
   let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
@@ -52,35 +56,6 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline
   const monthStr = startEndDates.substr(0, 4)
   // replaces the second occurrence of the month part i.e. removes the end date's month part
   startEndDates = startEndDates.lastIndexOf(monthStr) !== 0 ? startEndDates.replace(`-${monthStr}`, '-') : startEndDates
-  let now = new Date()
-  now = now && moment.utc(now)
-
-  // calculate progress of phase
-  let tlPlannedDuration = 0
-  let tlCurrentDuration = 0
-  let allMilestonesComplete = false
-  if (timeline) {
-    allMilestonesComplete = true
-    tlPlannedDuration = 0
-    _.forEach(timeline.milestones, milestone => {
-      if (!milestone.hidden) {
-        tlPlannedDuration+=milestone.duration
-        const range = moment.range(milestone.startDate, milestone.endDate)
-        if (milestone.completionDate) {
-          tlCurrentDuration += milestone.duration
-        } else if (range.contains(now)) {
-          tlCurrentDuration += now.diff(milestone.startDate, 'days')
-          allMilestonesComplete = false
-        } else {
-          allMilestonesComplete = false
-        }
-      }
-    })
-  }
-
-  let tlProgressInPercent = tlPlannedDuration>0 ? Math.round((tlCurrentDuration / tlPlannedDuration) * 100) : null
-  if (allMilestonesComplete) tlProgressInPercent = 100
-  const progressInPercent = tlProgressInPercent || phase.progress
 
   const actualPrice = phase.spentBudget
   let paidStatus = 'Quoted'
