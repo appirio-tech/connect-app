@@ -23,7 +23,7 @@ import {
   completeProductMilestone,
   extendProductMilestone,
   submitFinalFixesRequest,
-} from '../../actions/productsTimelines'
+} from '../../actions/productsTimelines';
 
 import {
   ROLE_CONNECT_COPILOT,
