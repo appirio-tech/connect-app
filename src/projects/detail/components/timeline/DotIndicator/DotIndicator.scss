@@ -12,7 +12,7 @@
   top: 50%;
   width: 2px;
 
-  .hide-dot &,
+  .hide-dot:not(.hide-line):not(.hide-first-line) &,
   .is-done & {
     display: none;
   }
