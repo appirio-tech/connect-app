@@ -22,7 +22,11 @@ import { TOOLTIP_DEFAULT_DELAY } from '../../../../config/constants'
 import { getPhaseActualData } from '../../../../helpers/projectHelper'
 
 const moment = extendMoment(Moment)
-const phaseStatuses = PHASE_STATUS.map(ps => ({ title: ps.name, value: ps.value }))
+const phaseStatuses = PHASE_STATUS.map(ps => ({
+  title: ps.name,
+  value: ps.value,
+  confirm: ps.value === PHASE_STATUS_ACTIVE ? 'Once a phase is marked as active it can\'t be changed to any other status' : false,
+}))
 
 class EditStageForm extends React.Component {
   constructor(props) {
@@ -242,10 +246,37 @@ class EditStageForm extends React.Component {
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Price (US$)" type="number" name="budget" value={phase.budget} minValue={0}/>
               </div>
               <div styleName="label-layer">
-                <div styleName="input-row">
-                  <label className="tc-label">Status</label>
-                  <SelectDropdown name="status" value={phase.status} theme="default" options={activePhaseStatuses} />
-                </div>
+                {hasTimeline && phase.status === PHASE_STATUS_ACTIVE ? (
+                  <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+                    <div className="tooltip-target">
+                      <div styleName="input-row">
+                        <label className="tc-label">Status</label>
+                        <SelectDropdown
+                          name="status"
+                          value={phase.status}
+                          theme="default"
+                          options={activePhaseStatuses}
+                          disabled={hasTimeline && phase.status === PHASE_STATUS_ACTIVE}
+                        />
+                      </div>
+                    </div>
+                    <div className="tooltip-body">
+                      Phase status is controlled by statuses of individual milestones
+                    </div>
+                  </Tooltip>
+                ) : (
+                  <div styleName="input-row">
+                    <label className="tc-label">Status</label>
+                    <SelectDropdown
+                      name="status"
+                      value={phase.status}
+                      theme="default"
+                      options={activePhaseStatuses}
+                      disabled={hasTimeline && phase.status === PHASE_STATUS_ACTIVE}
+                    />
+                  </div>
+                )}
+
                 {hasTimeline ? (
                   <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
                     <div className="tooltip-target">

@@ -36,13 +36,16 @@
     margin: 0px 10px 10px;
     flex: 0 250px;
     text-align: right;
-    line-height: 30px;
+    height: 40px;
+    line-height: 40px;
     white-space: nowrap;
   }
 
-  input:not([type="checkbox"]):disabled {
+  input:not([type="checkbox"]):disabled,
+  :global(.SelectDropdown:not(.dropdown-wrap)) {
     width:163px;
   }
+
   .input {
       &::-webkit-input-placeholder {
         text-transform: initial;

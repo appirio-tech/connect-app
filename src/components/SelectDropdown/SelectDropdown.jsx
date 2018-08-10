@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import cn from 'classnames'
-import PropTypes from 'prop-types'
+import PT from 'prop-types'
 import { HOC as hoc } from 'formsy-react'
 import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 
@@ -43,16 +43,21 @@ class SelectDropdown extends Component {
   }
 
   handleClick(option) {
-    this.setState({ selectedOption : option }, function() {
-      if (this.props.onSelect && typeof this.props.onSelect === 'function')  {
-        this.props.onSelect(this.state.selectedOption)
-      }
-    })
-    this.props.setValue(option.value)
+    if (
+      !option.confirm ||
+      option.confirm && window.confirm(option.confirm)
+    ) {
+      this.setState({ selectedOption : option }, function() {
+        if (this.props.onSelect && typeof this.props.onSelect === 'function')  {
+          this.props.onSelect(this.state.selectedOption)
+        }
+      })
+      this.props.setValue(option.value)
+    }
   }
 
   render() {
-    const { options, theme } = this.props
+    const { options, theme, disabled } = this.props
     const { selectedOption } = this.state
     const selectedValue = selectedOption.title
 
@@ -75,21 +80,32 @@ class SelectDropdown extends Component {
       )
     }
     return (
-      <Dropdown theme={ theme } className="SelectDropdown" noPointer>
-        <div className="dropdown-menu-header"><span className="tc-link">{ selectedValue }</span></div>
-        <ul className="dropdown-menu-list">
-          { options.map(renderOption) }
-        </ul>
-      </Dropdown>
+      disabled ? (
+        <div className="SelectDropdown" styleName="dropdown-disabled">
+          <div className="dropdown-menu-header"><span className="tc-link">{ selectedValue }</span></div>
+        </div>
+      ) : (
+        <Dropdown theme={ theme } className="SelectDropdown" noPointer>
+          <div className="dropdown-menu-header"><span className="tc-link">{ selectedValue }</span></div>
+          <ul className="dropdown-menu-list">
+            { options.map(renderOption) }
+          </ul>
+        </Dropdown>
+      )
     )
   }
 }
 
 SelectDropdown.propTypes = {
-  onSelect       : PropTypes.func,
-  options        : PropTypes.arrayOf(PropTypes.object).isRequired,
-  theme          : PropTypes.string,
-  selectedOption : PropTypes.object
+  onSelect       : PT.func,
+  options        : PT.arrayOf(PT.shape({
+    title: PT.string.isRequired,
+    value: PT.string.isRequired,
+    disabled: PT.bool,
+    confirm: PT.oneOfType([PT.string, PT.bool]),
+  })).isRequired,
+  theme          : PT.string,
+  selectedOption : PT.object
 }
 
 export default hoc(SelectDropdown)
