@@ -20,11 +20,9 @@ class LinkList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isUpdating } = this.props
     const { isAddingLink } = this.state
-
-    if (isAddingLink && isUpdating && !nextProps.isUpdating) {
-      this.closeEditForm()
+    if (isAddingLink && !nextProps.isUpdating) {
+      this.closeAddForm()
     }
   }
 

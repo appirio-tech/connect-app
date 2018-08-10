@@ -21,6 +21,7 @@ import MilestoneTypeCheckpointReview from '../milestones/MilestoneTypeCheckpoint
 import MilestoneTypeFinalDesigns from '../milestones/MilestoneTypeFinalDesigns'
 import MilestoneTypeDelivery from '../milestones/MilestoneTypeDelivery'
 import MilestoneTypeFinalFixes from '../milestones/MilestoneTypeFinalFixes'
+import MilestoneTypeAddLinks from '../milestones/MilestoneTypeAddLinks'
 import DotIndicator from '../DotIndicator'
 
 import { MILESTONE_STATUS } from '../../../../../config/constants'
@@ -269,6 +270,16 @@ class Milestone extends React.Component {
 
           {!isEditing && !isUpdating && milestone.type === 'checkpoint-review' && (
             <MilestoneTypeCheckpointReview
+              milestone={milestone}
+              updateMilestoneContent={this.updateMilestoneContent}
+              extendMilestone={this.extendMilestone}
+              completeMilestone={this.completeMilestone}
+              currentUser={currentUser}
+            />
+          )}
+
+          {!isEditing && !isUpdating && milestone.type === 'add-links' && (
+            <MilestoneTypeAddLinks
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
               extendMilestone={this.extendMilestone}
