@@ -104,7 +104,7 @@ class ProjectAddPhaseContainer extends React.Component {
     if (!props.processing && !props.error && project && this.state.isChosenProduct) {
       if (this.state.shouldReloadPhases) {
         // reload the project
-        props.loadProjectPhasesWithProducts(project.id, project, props.phases)
+        props.loadProjectPhasesWithProducts(project.id)
         this.setState({shouldReloadPhases: false})
       } else if (!props.isLoadingPhases) {
         // back to plan

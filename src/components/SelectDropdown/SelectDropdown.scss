@@ -6,6 +6,7 @@
     padding: 0px;
     min-width: 100px;
     margin-left: calc(2 * #{$base_unit});
+    margin-bottom: 2 * $base_unit;
 
     .Dropdown {
       top: 20px;
@@ -22,5 +23,20 @@
   > a {
     color: $tc-gray-30;
     cursor: default;
+  }
+}
+
+.dropdown-disabled {
+  margin-left: 0;
+  width: 100%;
+
+  :global(.tc-link) {
+    &,
+    &:hover,
+    &:active,
+    &:focus {
+      cursor: default;
+      color: $tc-gray-60;
+    }
   }
 }

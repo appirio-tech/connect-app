@@ -16,7 +16,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-right:10px;
-    min-width: 130px;
 
     &.document {
       background-image: url('../../../../../assets/icons/timeline-document.svg');
@@ -56,10 +55,15 @@
   }
 
   .link-wrapper {
+    flex: 1;
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 500px;
+
+    @media screen and (max-width: $screen-sm - 1px) {
+      display: none;
+    }
   }
 
   .link-item-text-group {
@@ -122,7 +126,7 @@
     }
   }
 
-  .milestone-text {
+  .link {
     color: $tc-gray-50;
     font-size: 13px;
     font-weight: 400;
