@@ -100,23 +100,28 @@ class LinkItem extends React.Component {
         {!isEditing && (
           <div styleName="label-layer">
             <div styleName="link-item-text-group">
-              <span styleName={cn('title', type)}>
+              <a
+                href={link.url}
+                styleName={cn('title', type)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {link.title || ''}
-              </span>
+              </a>
 
               <div styleName="link-wrapper">
                 {link.isDownloadable ? (
                   <a
                     href={link.url}
                     download={link.url}
-                    styleName="milestone-text"
+                    styleName="link"
                   >
                     {link.url}
                   </a>
                 ) : (
                   <a
                     href={link.url}
-                    styleName="milestone-text"
+                    styleName="link"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
