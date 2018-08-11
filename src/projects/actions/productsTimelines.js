@@ -21,6 +21,25 @@ import {
 } from '../../config/constants'
 
 /**
+ * Get the next milestone in the list, which is not hidden
+ *
+ * @param {Array}  milestones            list of milestones
+ * @param {Number} currentMilestoneIndex index of the current milestone
+ *
+ * @returns {Object} milestone
+ */
+function getNextNotHiddenMilestone(milestones, currentMilestoneIndex) {
+  let index = currentMilestoneIndex + 1
+
+  while (milestones[index] && milestones[index].hidden) {
+    index++
+  }
+
+  return milestones[index]
+}
+
+
+/**
  * Check if the milestone is last non-hidden milestone in the timeline or no
  *
  * @param {Object} timeline     timeline
@@ -121,6 +140,11 @@ export function updateProductTimeline(productId, timelineId, updatedProps) {
  */
 export function completeProductMilestone(productId, timelineId, milestoneId, updatedProps = {}) {
   return (dispatch, getState) => {
+    const state = getState()
+    const timeline = state.productsTimelines[productId].timeline
+    const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
+    const milestone = timeline.milestones[milestoneIdx]
+    const nextMilestone = getNextNotHiddenMilestone(timeline.milestones, milestoneIdx)
 
     const requests = [
       updateMilestone(timelineId, milestoneId, {
@@ -129,8 +153,20 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
       })
     ]
 
-    const state = getState()
-    const timeline = state.productsTimelines[productId].timeline
+    // if there is a next milestone, copy `details.content` field from the current milestone
+    // to the `details.prevMilestoneContent` of the next milestone
+    if (nextMilestone) {
+      requests.push(
+        updateMilestone(timelineId, nextMilestone.id, {
+          details: {
+            ...nextMilestone.details,
+            // NOTE, `updatedProps` may contain updated `details.content` for current milestone
+            // so we check it first
+            prevMilestoneContent: _.get(updatedProps, 'details.content', milestone.details.content),
+          }
+        })
+      )
+    }
 
     return dispatch({
       type: COMPLETE_PRODUCT_MILESTONE,
