@@ -1,5 +1,9 @@
 @import '~tc-ui/src/styles/tc-includes';
 
+.container {
+  width: 100%;
+}
+
 :global {
   .SelectDropdown {
     border: none;

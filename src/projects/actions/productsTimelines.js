@@ -21,6 +21,25 @@ import {
 } from '../../config/constants'
 
 /**
+ * Get the next milestone in the list, which is not hidden
+ *
+ * @param {Array}  milestones            list of milestones
+ * @param {Number} currentMilestoneIndex index of the current milestone
+ *
+ * @returns {Object} milestone
+ */
+function getNextNotHiddenMilestone(milestones, currentMilestoneIndex) {
+  let index = currentMilestoneIndex + 1
+
+  while (milestones[index] && milestones[index].hidden) {
+    index++
+  }
+
+  return milestones[index]
+}
+
+
+/**
  * Check if the milestone is last non-hidden milestone in the timeline or no
  *
  * @param {Object} timeline     timeline
@@ -121,16 +140,30 @@ export function updateProductTimeline(productId, timelineId, updatedProps) {
  */
 export function completeProductMilestone(productId, timelineId, milestoneId, updatedProps = {}) {
   return (dispatch, getState) => {
+    const state = getState()
+    const timeline = state.productsTimelines[productId].timeline
+    const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
+    const nextMilestone = getNextNotHiddenMilestone(timeline.milestones, milestoneIdx)
 
     const requests = [
       updateMilestone(timelineId, milestoneId, {
         ...updatedProps, // optional props to update
         status: MILESTONE_STATUS.COMPLETED,
+      }).then((completedMilestone) => {
+        // TODO $TIMELINE_MILESTONE$ updating of the next milestone could be done in parallel
+        // but due to the backend issue https://github.com/topcoder-platform/tc-project-service/issues/162
+        // we do in sequentially for now
+        if (nextMilestone) {
+          // NOTE we wait until the next milestone is also updated before fire COMPLETE_PRODUCT_MILESTONE
+          return updateMilestone(timelineId, nextMilestone.id, {
+            details: {
+              ...nextMilestone.details,
+              prevMilestoneContent: completedMilestone.details.content,
+            }
+          })
+        }
       })
     ]
-
-    const state = getState()
-    const timeline = state.productsTimelines[productId].timeline
 
     return dispatch({
       type: COMPLETE_PRODUCT_MILESTONE,
