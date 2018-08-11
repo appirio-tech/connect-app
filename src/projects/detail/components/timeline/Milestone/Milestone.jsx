@@ -18,6 +18,7 @@ import Form from '../Form'
 import MilestoneTypePhaseSpecification from '../milestones/MilestoneTypePhaseSpecification'
 import MilestoneTypeProgress from '../milestones/MilestoneTypeProgress'
 import MilestoneTypeCheckpointReview from '../milestones/MilestoneTypeCheckpointReview'
+import MilestoneTypeCheckpointReviewOnly from '../milestones/MilestoneTypeCheckpointReviewOnly'
 import MilestoneTypeFinalDesigns from '../milestones/MilestoneTypeFinalDesigns'
 import MilestoneTypeDelivery from '../milestones/MilestoneTypeDelivery'
 import MilestoneTypeFinalFixes from '../milestones/MilestoneTypeFinalFixes'
@@ -268,8 +269,30 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && milestone.type === 'checkpoint-review' && (
+          {
+            !isEditing &&
+            !isUpdating &&
+            milestone.type === 'checkpoint-review' &&
+            // old type 'checkpoint-review' which let user add links
+            _.get(milestone, 'details.prevMilestoneContent.links[0].type') !== 'marvelapp' &&
+          (
             <MilestoneTypeCheckpointReview
+              milestone={milestone}
+              updateMilestoneContent={this.updateMilestoneContent}
+              extendMilestone={this.extendMilestone}
+              completeMilestone={this.completeMilestone}
+              currentUser={currentUser}
+            />
+          )}
+
+          {
+            !isEditing &&
+            !isUpdating &&
+            milestone.type === 'checkpoint-review' &&
+            // new type 'checkpoint-review' which gets list of links from previous milestone
+            _.get(milestone, 'details.prevMilestoneContent.links[0].type') === 'marvelapp' &&
+          (
+            <MilestoneTypeCheckpointReviewOnly
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
               extendMilestone={this.extendMilestone}
