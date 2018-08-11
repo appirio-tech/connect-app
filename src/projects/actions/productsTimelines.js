@@ -143,30 +143,27 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
     const state = getState()
     const timeline = state.productsTimelines[productId].timeline
     const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
-    const milestone = timeline.milestones[milestoneIdx]
     const nextMilestone = getNextNotHiddenMilestone(timeline.milestones, milestoneIdx)
 
     const requests = [
       updateMilestone(timelineId, milestoneId, {
         ...updatedProps, // optional props to update
         status: MILESTONE_STATUS.COMPLETED,
+      }).then((completedMilestone) => {
+        // TODO $TIMELINE_MILESTONE$ updating of the next milestone could be done in parallel
+        // but due to the backend issue https://github.com/topcoder-platform/tc-project-service/issues/162
+        // we do in sequentially for now
+        if (nextMilestone) {
+          // NOTE we wait until the next milestone is also updated before fire COMPLETE_PRODUCT_MILESTONE
+          return updateMilestone(timelineId, nextMilestone.id, {
+            details: {
+              ...nextMilestone.details,
+              prevMilestoneContent: completedMilestone.details.content,
+            }
+          })
+        }
       })
     ]
-
-    // if there is a next milestone, copy `details.content` field from the current milestone
-    // to the `details.prevMilestoneContent` of the next milestone
-    if (nextMilestone) {
-      requests.push(
-        updateMilestone(timelineId, nextMilestone.id, {
-          details: {
-            ...nextMilestone.details,
-            // NOTE, `updatedProps` may contain updated `details.content` for current milestone
-            // so we check it first
-            prevMilestoneContent: _.get(updatedProps, 'details.content', milestone.details.content),
-          }
-        })
-      )
-    }
 
     return dispatch({
       type: COMPLETE_PRODUCT_MILESTONE,
