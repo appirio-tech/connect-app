@@ -20,6 +20,7 @@ import MilestoneTypeProgress from '../milestones/MilestoneTypeProgress'
 import MilestoneTypeCheckpointReview from '../milestones/MilestoneTypeCheckpointReview'
 import MilestoneTypeCheckpointReviewOnly from '../milestones/MilestoneTypeCheckpointReviewOnly'
 import MilestoneTypeFinalDesigns from '../milestones/MilestoneTypeFinalDesigns'
+import MilestoneTypeFinalDesignsSelectionOnly from '../milestones/MilestoneTypeFinalDesignsSelectionOnly'
 import MilestoneTypeDelivery from '../milestones/MilestoneTypeDelivery'
 import MilestoneTypeFinalFixes from '../milestones/MilestoneTypeFinalFixes'
 import MilestoneTypeAddLinks from '../milestones/MilestoneTypeAddLinks'
@@ -311,8 +312,24 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && milestone.type === 'final-designs' && (
+          {!isEditing && !isUpdating && milestone.type === 'final-designs'  &&
+            // old type 'final-designs' which let user add links
+            _.get(milestone, 'details.prevMilestoneContent.links[0].type') !== 'marvelapp' &&
+          (
             <MilestoneTypeFinalDesigns
+              milestone={milestone}
+              updateMilestoneContent={this.updateMilestoneContent}
+              extendMilestone={this.extendMilestone}
+              completeMilestone={this.completeMilestone}
+              currentUser={currentUser}
+            />
+          )}
+
+          {!isEditing && !isUpdating && milestone.type === 'final-designs'  &&
+            // new type 'final-designs' which gets list of links from previous milestone
+            _.get(milestone, 'details.prevMilestoneContent.links[0].type') === 'marvelapp' &&
+          (
+            <MilestoneTypeFinalDesignsSelectionOnly
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
               extendMilestone={this.extendMilestone}
