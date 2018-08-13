@@ -282,11 +282,6 @@ export function createProduct(project, productTemplate, phases) {
     return dispatch({
       type: CREATE_PROJECT_STAGE,
       payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, startDate, endDate)
-        // after we created a new phase, we have to load timeline for its product
-        .then(({ product, project }) => {
-          return dispatch(loadProductTimelineWithMilestones(product.id))
-            .then(() => project)
-        })
     })
   }
 }
@@ -318,10 +313,11 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
       type: projectTemplate.key || projectTemplate.productKey,
     }).then((product) => {
       // we also wait until timeline is created as we will load it for the phase after creation
-      return createTimelineAndMilestoneForProduct(product, phase).then(() => ({
+      return createTimelineAndMilestoneForProduct(product, phase).then((timeline) => ({
         project,
         phase,
         product,
+        timeline,
       }))
     })
   })

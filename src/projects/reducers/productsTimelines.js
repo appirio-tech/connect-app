@@ -21,6 +21,7 @@ import {
   SUBMIT_FINAL_FIXES_REQUEST_PENDING,
   SUBMIT_FINAL_FIXES_REQUEST_SUCCESS,
   SUBMIT_FINAL_FIXES_REQUEST_FAILURE,
+  CREATE_PROJECT_STAGE_SUCCESS,
 } from '../../config/constants'
 import update from 'react-addons-update'
 
@@ -139,6 +140,28 @@ export const productsTimelines = (state=initialState, action) => {
         timeline: { $set: timeline },
         error: { $set: false },
       }
+    })
+  }
+
+  // when we create a product we also create a timeline and have to add it to the store
+  case CREATE_PROJECT_STAGE_SUCCESS: {
+    const timeline = payload.timeline
+    const productId = payload.product.id
+
+    // if there is timeline for the product
+    if (timeline) {
+      // sort milestones by order as server doesn't do it
+      timeline.milestones = _.sortBy(timeline.milestones, 'order')
+    }
+
+    return update(state, {
+      [productId]: {
+        $set: {
+          isLoading: false,
+          timeline,
+          error: false,
+        },
+      },
     })
   }
 
