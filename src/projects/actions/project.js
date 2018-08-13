@@ -20,7 +20,7 @@ import {
 import {
   createTimeline,
 } from '../../api/timelines'
-import { loadProductTimelineWithMilestones } from './productsTimelines'
+// import { loadProductTimelineWithMilestones } from './productsTimelines'
 import {
   LOAD_PROJECT,
   CREATE_PROJECT,
@@ -270,7 +270,7 @@ function createProductsTimelineAndMilestone(project) {
 
 export function createProduct(project, productTemplate, phases, timelines) {
   let startDate = moment().hours(0).minutes(0).seconds(0)
-    .milliseconds(0);
+    .milliseconds(0)
   if(phases && phases.length > 0) {
     const phase = _.maxBy(phases, 'startDate')
     const productId = _.get(phase, 'products[0].id', -1)
@@ -296,8 +296,6 @@ export function createProduct(project, productTemplate, phases, timelines) {
     return dispatch({
       type: CREATE_PROJECT_STAGE,
       payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, startDate, endDate)
-        // after we created a new phase, we have to load timeline for its product
-        // .then(({ product, project }) => )
     })
   }
 }
