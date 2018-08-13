@@ -268,25 +268,36 @@ function createProductsTimelineAndMilestone(project) {
     .then(() => project)
 }
 
-export function createProduct(project, productTemplate, phases) {
-  let startDate = new Date()
-  let endDate = moment().add(17, 'days').toDate()
-  if(phases){
-    if(phases.length > 0){
-      const phase = _.maxBy(phases, 'startDate')
-      startDate = moment(phase.endDate).add(1, 'days').toDate()
-      endDate = moment(startDate).add(17, 'days').toDate()
+export function createProduct(project, productTemplate, phases, timelines) {
+  let startDate = moment().hours(0).minutes(0).seconds(0)
+    .milliseconds(0);
+  if(phases && phases.length > 0) {
+    const phase = _.maxBy(phases, 'startDate')
+    const productId = _.get(phase, 'products[0].id', -1)
+    const timelineState = timelines && timelines[productId] ? timelines[productId] : null
+    if (timelineState && timelineState.timeline) {
+      // finds the last milestone of the timeline in the phase
+      const lastMilestone = _.maxBy(timelineState.timeline.milestones, 'order')
+      // calculates the start date for the new phase by adding 1 day to the end date of the milestone
+      // we don't use end date field of milestone because it might not reflect the correct end date
+      startDate = moment(lastMilestone.startDate).hours(0).minutes(0).seconds(0)
+        .milliseconds(0).add(lastMilestone.duration - 1, 'days').add(1, 'days')
+    } else {
+      // if there is no timeline for the phase, calculates the next phase's start date by adding 1 day to the
+      // end date of last phase, we don't use end date field of milestone because it might not reflect the
+      // correct end date
+      startDate = moment(phase.startDate).hours(0).minutes(0).seconds(0)
+        .milliseconds(0).add(phase.duration - 1, 'days').add(1, 'days')
     }
   }
+  // assumes 10 days as default duration, ideally we could store it at template level
+  const endDate = moment(startDate).add((10 - 1), 'days')
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT_STAGE,
       payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, startDate, endDate)
         // after we created a new phase, we have to load timeline for its product
-        .then(({ product, project }) => {
-          return dispatch(loadProductTimelineWithMilestones(product.id))
-            .then(() => project)
-        })
+        // .then(({ product, project }) => )
     })
   }
 }
@@ -300,17 +311,18 @@ export function createProduct(project, productTemplate, phases) {
  *
  * @return {Promise} project
  */
-export function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT_STATUS_DRAFT, startDate = new Date(), endDate = moment().add(17, 'days').format()) {
+export function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT_STATUS_DRAFT, startDate, endDate) {
   const param = {
     status,
     name: projectTemplate.name
   }
   if (startDate) {
-    param['startDate'] = startDate
+    param['startDate'] = startDate.format('YYYY-MM-DD')
   }
   if (endDate) {
-    param['endDate'] = endDate
+    param['endDate'] = endDate.format('YYYY-MM-DD')
   }
+  console.log(param, 'param')
   return createProjectPhase(project.id, param).then((phase) => {
     return createPhaseProduct(project.id, phase.id, {
       name: projectTemplate.name,
@@ -318,10 +330,11 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
       type: projectTemplate.key || projectTemplate.productKey,
     }).then((product) => {
       // we also wait until timeline is created as we will load it for the phase after creation
-      return createTimelineAndMilestoneForProduct(product, phase).then(() => ({
+      return createTimelineAndMilestoneForProduct(product, phase).then((timeline) => ({
         project,
         phase,
         product,
+        timeline,
       }))
     })
   })

@@ -117,7 +117,7 @@ class ProjectAddPhaseContainer extends React.Component {
     const props = this.props
     const productTemplate = getProductTemplateByKey(props.allProductTemplates, projectTemplateKey)
     if (productTemplate) {
-      props.createProduct(props.project, productTemplate, props.phases)
+      props.createProduct(props.project, productTemplate, props.phases, props.timelines)
       this.setState({isChosenProduct: true, shouldReloadPhases: true})
     }
   }
@@ -149,7 +149,7 @@ ProjectAddPhaseContainer.defaultProps = {
   allProductTemplates: []
 }
 
-const mapStateToProps = ({projectState, loadUser, templates }) => ({
+const mapStateToProps = ({projectState, loadUser, templates, productsTimelines }) => ({
   userRoles: _.get(loadUser, 'user.roles', []),
   processing: projectState.processing,
   error: projectState.error,
@@ -157,6 +157,7 @@ const mapStateToProps = ({projectState, loadUser, templates }) => ({
   isLoadingPhases: projectState.isLoadingPhases,
   phases: projectState.phases,
   templates,
+  timelines: productsTimelines,
 })
 
 const actionCreators = {createProduct, loadProjectPhasesWithProducts, loadProjectDashboard}

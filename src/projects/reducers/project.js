@@ -113,6 +113,25 @@ export const projectState = function (state=initialState, action) {
       lastUpdated: new Date()
     })
 
+  case CREATE_PROJECT_STAGE_SUCCESS: {
+    // as we additionally loaded products to the phase object we have to keep them
+    // note that we keep them as they are without creation a new copy
+    const phase = {
+      ...action.payload.phase,
+      products: [action.payload.product]
+    }
+    const phaseNonDirty = {
+      // for non-dirty version we make sure that dont' have the same objects with phase
+      ..._.cloneDeep(action.payload.phase),
+      products: [_.cloneDeep(action.payload.product)]
+    }
+    return update(state, {
+      processing: { $set: false },
+      phases: { $push: [phase] },
+      phasesNonDirty: { $push: [phaseNonDirty] }
+    })
+  }
+
   case UPDATE_PHASE_SUCCESS: {
     // as we additionally loaded products to the phase object we have to keep them
     // note that we keep them as they are without creation a new copy
@@ -237,7 +256,6 @@ export const projectState = function (state=initialState, action) {
       error: false
     })
 
-  case CREATE_PROJECT_STAGE_SUCCESS:
   case CREATE_PROJECT_SUCCESS:
   case UPDATE_PROJECT_SUCCESS: {
     // after loading project initially, we also load direct project
