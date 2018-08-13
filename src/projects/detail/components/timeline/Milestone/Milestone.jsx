@@ -42,6 +42,7 @@ class Milestone extends React.Component {
     this.updateMilestoneWithData = this.updateMilestoneWithData.bind(this)
     this.updateMilestoneContent = this.updateMilestoneContent.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
+    this.completeFinalFixesMilestone = this.completeFinalFixesMilestone.bind(this)
     this.extendMilestone = this.extendMilestone.bind(this)
     this.submitFinalFixesRequest = this.submitFinalFixesRequest.bind(this)
 
@@ -117,6 +118,11 @@ class Milestone extends React.Component {
     const { completeMilestone, milestone } = this.props
 
     completeMilestone(milestone.id, updatedProps)
+  }
+  completeFinalFixesMilestone(updatedProps) {
+    const { completeFinalFixesMilestone, milestone } = this.props
+
+    completeFinalFixesMilestone(milestone.id, updatedProps)
   }
 
   extendMilestone(extendDuration, updatedProps) {
@@ -342,7 +348,7 @@ class Milestone extends React.Component {
             <MilestoneTypeFinalFixes
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
-              completeMilestone={this.completeMilestone}
+              completeFinalFixesMilestone={this.completeFinalFixesMilestone}
               submitFinalFixesRequest={this.submitFinalFixesRequest}
               currentUser={currentUser}
             />

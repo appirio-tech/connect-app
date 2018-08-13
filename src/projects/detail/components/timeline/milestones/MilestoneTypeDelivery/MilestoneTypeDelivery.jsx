@@ -5,9 +5,7 @@ import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
-import moment from 'moment'
 
-import ProjectProgress from '../../../ProjectProgress'
 import DotIndicator from '../../DotIndicator'
 import LinkList from '../../LinkList'
 import MilestonePostMessage from '../../MilestonePostMessage'
@@ -188,36 +186,14 @@ class MilestoneTypeDelivery extends React.Component {
   render() {
     const { milestone, theme, currentUser } = this.props
     const { isShowFinalFixesRequestForm, finalFixRequests } = this.state
-
-    const links = _.get(milestone, 'details.content.links', [])
+    const links = _.get(milestone, 'details.prevMilestoneContent.links', [])
     const isAccepted = _.get(milestone, 'details.content.isAccepted', false)
     const isDeclined = _.get(milestone, 'details.content.isDeclined', false)
     const isFinalFixesSubmitted = _.get(milestone, 'details.content.isFinalFixesSubmitted', false)
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
 
-    const endDate = moment(milestone.endDate)
-    const startDate = moment(milestone.startDate)
-    const daysLeft = endDate.diff(moment(), 'days')
-    const totalDays = endDate.diff(startDate, 'days')
-
     const canSubmitFinalFixes = _.some(finalFixRequests, (finalFixRequest) => !!finalFixRequest.value)
-
-    let progressText
-
-    if (isFinalFixesSubmitted) {
-      progressText = daysLeft > 0
-        ? `${daysLeft} days until final fixes completed`
-        : `${-daysLeft} days final fixes are delayed`
-    } else {
-      progressText = daysLeft > 0
-        ? `${daysLeft} days until delivery archive is ready`
-        : `${-daysLeft} days delivery archive is delayed`
-    }
-
-    const progressPercent = daysLeft > 0
-      ? (totalDays - daysLeft) / totalDays * 100
-      : 100
 
     return (
       <div styleName={cn('milestone-post', theme)}>
@@ -305,51 +281,6 @@ class MilestoneTypeDelivery extends React.Component {
                     </button>
                   </div>
                 </DotIndicator>
-              </div>
-            )}
-
-            {(isFinalFixesSubmitted || isAccepted) && (
-              <div>
-                <DotIndicator>
-                  <div styleName="top-space">
-                    <ProjectProgress
-                      labelDayStatus={progressText}
-                      progressPercent={progressPercent}
-                      theme={daysLeft < 0 ? 'warning' : 'light'}
-                    />
-                  </div>
-                </DotIndicator>
-
-                {!currentUser.isCustomer && (
-                  <DotIndicator hideLine>
-                    <LinkList
-                      links={links}
-                      onAddLink={this.updatedUrl}
-                      onRemoveLink={this.removeUrl}
-                      onUpdateLink={this.updatedUrl}
-                      fields={[{ name: 'url'}]}
-                      addButtonTitle="Add link"
-                      formAddTitle="Adding a link"
-                      formAddButtonTitle="Add a link"
-                      formUpdateTitle="Editing a link"
-                      formUpdateButtonTitle="Save changes"
-                      isUpdating={milestone.isUpdating}
-                      canAddLink
-                    />
-
-                    <div styleName="top-space">
-                      <div styleName="button-layer">
-                        <button
-                          className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-                          onClick={this.completeMilestone}
-                          disabled={links.length === 0}
-                        >
-                          Mark as completed
-                        </button>
-                      </div>
-                    </div>
-                  </DotIndicator>
-                )}
               </div>
             )}
           </div>

@@ -14,6 +14,7 @@ class Timeline extends React.Component {
 
     this.updateMilestone = this.updateMilestone.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
+    this.completeFinalFixesMilestone = this.completeFinalFixesMilestone.bind(this)
     this.extendMilestone = this.extendMilestone.bind(this)
     this.submitFinalFixesRequest = this.submitFinalFixesRequest.bind(this)
   }
@@ -36,6 +37,16 @@ class Timeline extends React.Component {
     } = this.props
 
     completeProductMilestone(product.id, timeline.id, milestoneId, updatedProps)
+  }
+
+  completeFinalFixesMilestone(milestoneId, updatedProps = {}) {
+    const {
+      product,
+      completeFinalFixesMilestone,
+      timeline,
+    } = this.props
+
+    completeFinalFixesMilestone(product.id, timeline.id, milestoneId, updatedProps)
   }
 
   extendMilestone(milestoneId, extendDuration, updatedProps = {}) {
@@ -83,6 +94,7 @@ class Timeline extends React.Component {
             completeMilestone={this.completeMilestone}
             extendMilestone={this.extendMilestone}
             submitFinalFixesRequest={this.submitFinalFixesRequest}
+            completeFinalFixesMilestone={this.completeFinalFixesMilestone}
           />
         ))}
       </div>

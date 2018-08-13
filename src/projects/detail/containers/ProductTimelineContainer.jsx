@@ -21,6 +21,7 @@ import Timeline from '../components/timeline/Timeline'
 import {
   updateProductMilestone,
   completeProductMilestone,
+  completeFinalFixesMilestone,
   extendProductMilestone,
   submitFinalFixesRequest,
 } from '../../actions/productsTimelines'
@@ -140,6 +141,7 @@ const mapStateToProps = ({ productsTimelines, loadUser }, props) => {
 const mapDispatchToProps = {
   updateProductMilestone,
   completeProductMilestone,
+  completeFinalFixesMilestone,
   extendProductMilestone,
   submitFinalFixesRequest,
 }

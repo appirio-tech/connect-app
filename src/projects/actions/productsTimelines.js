@@ -259,17 +259,18 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
     return dispatch({
       type: SUBMIT_FINAL_FIXES_REQUEST,
       payload: updateMilestone(timelineId, milestoneId, {
+        status: MILESTONE_STATUS.PLANNED,
         details: {
           ...milestone.details,
           content: {
             ..._.get(milestone, 'details.content', {}),
-            isFinalFixesSubmitted: true,
+            isFinalFixesSubmitted: true
           }
         }
       }).then((deliveryMilestone) => {
         // show final fixes milestone
         return updateMilestone(timelineId, finalFixesMilestone.id, {
-          status: MILESTONE_STATUS.COMPLETED,
+          status: MILESTONE_STATUS.ACTIVE,
           hidden: false,
           details: {
             ...finalFixesMilestone.details,
@@ -287,6 +288,57 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
         milestoneId,
         nextMilestoneId: nextMilestone ? nextMilestone.id : null,
       }
+    })
+  }
+}
+
+/**
+ * Mark the final-fix milestone as 'completed', and the next milestone(delivery) also 'completed'.
+ *
+ * @param {Number} productId    product id
+ * @param {Number} timelineId   timeline id
+ * @param {Number} milestoneId  milestone id
+ * @param {Object} updatedProps (optional) milestone properties to update
+ */
+export function completeFinalFixesMilestone(productId, timelineId, milestoneId, updatedProps = {}) {
+  return (dispatch, getState) => {
+    const state = getState()
+    const timeline = state.productsTimelines[productId].timeline
+    const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
+    const nextMilestone = getNextNotHiddenMilestone(timeline.milestones, milestoneIdx)
+
+    const requests = [
+      updateMilestone(timelineId, milestoneId, {
+        ...updatedProps, // optional props to update
+        status: MILESTONE_STATUS.COMPLETED,
+      }).then((completedMilestone) => {
+        if (nextMilestone) {
+          // NOTE we wait until the delivery milestone is also updated before fire COMPLETE_PRODUCT_MILESTONE
+          return updateMilestone(timelineId, nextMilestone.id, {
+            details: {
+              ...nextMilestone.details,
+              prevMilestoneContent: completedMilestone.details.content,
+            },
+            status: MILESTONE_STATUS.COMPLETED,
+          })
+        }
+      })
+    ]
+
+    return dispatch({
+      type: COMPLETE_PRODUCT_MILESTONE,
+      payload: Promise.all(requests),
+      meta: {
+        productId,
+        milestoneId
+      }
+    }).then(() => {
+      if (timeline){
+        // if it's not the last milestone
+        // we have to refresh timeline as other milestone dates were updated by the server
+        dispatch(loadProductTimelineWithMilestones(productId))
+      }
+      return true
     })
   }
 }
