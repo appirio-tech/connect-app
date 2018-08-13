@@ -116,7 +116,7 @@
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-    margin-bottom: 20px;
+    padding-bottom: 20px;
 
     button {
       margin: 0 5px 0 5px;
@@ -124,4 +124,23 @@
           opacity: 0.5;
       }
     }
+}
+
+.message {
+  background-color: $tc-red-10;
+  padding: 4 * $base-unit 4 * $base-unit 0 4 * $base-unit;
+  text-align: center;
+
+  .message-title {
+    @include roboto-bold;
+    color: $tc-red-100;
+    font-size: 15px;
+  }
+
+  .message-text {
+    @include roboto;
+    font-size: 13px;
+    line-height: 20px;
+    margin-top: 2 * $base-unit;
+  }
 }

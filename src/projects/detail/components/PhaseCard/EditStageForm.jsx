@@ -25,7 +25,6 @@ const moment = extendMoment(Moment)
 const phaseStatuses = PHASE_STATUS.map(ps => ({
   title: ps.name,
   value: ps.value,
-  confirm: ps.value === PHASE_STATUS_ACTIVE ? 'Once a phase is marked as active it can\'t be changed to any other status' : false,
 }))
 
 class EditStageForm extends React.Component {
@@ -37,7 +36,10 @@ class EditStageForm extends React.Component {
       isEdittable: _.get(props, 'phase.status') !== PHASE_STATUS_COMPLETED,
       disableActiveStatusFields: _.get(props, 'phase.status') !== PHASE_STATUS_ACTIVE,
       showPhaseOverlapWarning: false,
-      phaseIsdirty: false
+      phaseIsdirty: false,
+      showActivatingWarning: false,
+      // we have to control phase status separately, so we can restore its when we need
+      selectedPhaseStatus: _.get(props, 'phase.status')
     }
     this.submitValue = this.submitValue.bind(this)
     this.enableButton = this.enableButton.bind(this)
@@ -45,6 +47,37 @@ class EditStageForm extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.onCancel = this.onCancel.bind(this)
     this.onLeave = this.onLeave.bind(this)
+    this.showActivatingWarning = this.showActivatingWarning.bind(this)
+    this.cancelActivatingPhase = this.cancelActivatingPhase.bind(this)
+    this.onFormSubmit = this.onFormSubmit.bind(this)
+    this.updateSelectedPhaseStatus = this.updateSelectedPhaseStatus.bind(this)
+  }
+
+  showActivatingWarning() {
+    this.setState({
+      showActivatingWarning: true,
+    })
+  }
+
+  cancelActivatingPhase() {
+    const phaseStatus = _.get(this.props, 'phase.status')
+    this.setState({
+      showActivatingWarning: false,
+      // to restore phase status first we change selected value to nothing
+      // and after will again put initial value, this will force SelectDropdown to change
+      // to initial value
+      selectedPhaseStatus: '',
+    }, () => {
+      this.setState({
+        selectedPhaseStatus: phaseStatus,
+      })
+    })
+  }
+
+  updateSelectedPhaseStatus(selectedOption) {
+    this.setState({
+      selectedPhaseStatus: selectedOption.value,
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,6 +86,13 @@ class EditStageForm extends React.Component {
       isEdittable: nextProps.phase.status !== PHASE_STATUS_COMPLETED,
       disableActiveStatusFields: nextProps.phase.status !== PHASE_STATUS_ACTIVE,
     })
+
+    // update selected phase status if it was updated at the props
+    const prevPhaseStatus = _.get(this.props, 'phase.status')
+    const nextPhaseStatus = _.get(nextProps, 'phase.status')
+    if (nextPhaseStatus && prevPhaseStatus !== nextPhaseStatus) {
+      this.setState({ selectedPhaseStatus: nextPhaseStatus })
+    }
   }
 
   componentDidMount() {
@@ -76,6 +116,21 @@ class EditStageForm extends React.Component {
     })
     this.setState({isUpdating: true})
     updatePhaseAction(phase.projectId, phase.id, updateParam, phaseIndex)
+  }
+
+  onFormSubmit(model) {
+    const { phase } = this.props
+    const { showActivatingWarning } = this.state
+
+    if (
+      !showActivatingWarning &&
+      phase.status !== PHASE_STATUS_ACTIVE &&
+      model.status === PHASE_STATUS_ACTIVE
+    ) {
+      this.showActivatingWarning()
+    } else {
+      this.submitValue(model)
+    }
   }
 
   enableButton() {
@@ -190,7 +245,7 @@ class EditStageForm extends React.Component {
 
   render() {
     const { phase, isUpdating, timeline } = this.props
-    const { isEdittable, showPhaseOverlapWarning } = this.state
+    const { isEdittable, showPhaseOverlapWarning, showActivatingWarning, selectedPhaseStatus } = this.state
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment.utc(startDate).format('YYYY-MM-DD')
     const hasTimeline = !!timeline
@@ -216,7 +271,7 @@ class EditStageForm extends React.Component {
             disabled={!isEdittable}
             onInvalid={this.disableButton}
             onValid={this.enableButton}
-            onValidSubmit={this.submitValue}
+            onValidSubmit={this.onFormSubmit}
             onChange={ this.handleChange }
           >
             <div styleName="form">
@@ -253,7 +308,7 @@ class EditStageForm extends React.Component {
                         <label className="tc-label">Status</label>
                         <SelectDropdown
                           name="status"
-                          value={phase.status}
+                          value={selectedPhaseStatus}
                           theme="default"
                           options={activePhaseStatuses}
                           disabled={hasTimeline && phase.status === PHASE_STATUS_ACTIVE}
@@ -269,7 +324,7 @@ class EditStageForm extends React.Component {
                     <label className="tc-label">Status</label>
                     <SelectDropdown
                       name="status"
-                      value={phase.status}
+                      value={selectedPhaseStatus}
                       theme="default"
                       options={activePhaseStatuses}
                       disabled={hasTimeline && phase.status === PHASE_STATUS_ACTIVE}
@@ -290,12 +345,34 @@ class EditStageForm extends React.Component {
                   <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={this.state.disableActiveStatusFields || hasTimeline} label="Progress (%)" type="number" name="progress" value={progress} minValue={0} />
                 )}
               </div>
-              <div styleName="group-bottom">
-                <button onClick={this.onCancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
-                <button className="tc-btn tc-btn-primary tc-btn-sm"
-                  type="submit" disabled={(!this.isChanged() || isUpdating) || !this.state.canSubmit}
-                >Update Phase</button>
-              </div>
+              {!showActivatingWarning ? (
+                <div styleName="group-bottom">
+                  <button onClick={this.onCancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
+                  <button className="tc-btn tc-btn-primary tc-btn-sm"
+                    type="submit" disabled={(!this.isChanged() || isUpdating) || !this.state.canSubmit}
+                  >Update Phase</button>
+                </div>
+              ) : (
+                <div styleName="message">
+                  <h4 styleName="message-title">You are about to activate the phase</h4>
+                  <p styleName="message-text">This action will permanently change the status of your phase to Active and cannot be undone.</p>
+                  <div styleName="group-bottom">
+                    <button
+                      className="tc-btn tc-btn-default tc-btn-sm"
+                      type="button"
+                      onClick={this.cancelActivatingPhase}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="tc-btn tc-btn-warning tc-btn-sm"
+                      type="submit"
+                    >
+                      OK
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </Formsy.Form>
         </div>)}
