@@ -113,6 +113,19 @@
         text-decoration: underline;
       }
     }
+    .sublable {
+      @include roboto;
+      color: $tc-gray-30;
+      display: none;
+      font-size: 10px;
+      line-height: 15px;
+      margin-top: -7px;
+      position: absolute;
+
+      @media screen and (max-width: $screen-sm - 1px) {
+        display: block;
+      }
+    }
     .link {
       color: $tc-gray-50;
       font-size: 13px;
@@ -137,6 +150,12 @@
         line-height: 25px;
         margin: auto 0;
         white-space: nowrap;
+
+        @media screen and (max-width: $screen-sm - 1px) {
+          span {
+            display: none;
+          }
+        }
       }
       .switch-button {
         padding-bottom: 3%;
