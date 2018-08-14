@@ -144,9 +144,10 @@ class Milestone extends React.Component {
     } = this.props
     const { isEditing } = this.state
 
+    const isPlanned = milestone.status === MILESTONE_STATUS.PLANNED
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
-    const startDate = milestone.actualStartDate ? moment.utc(milestone.actualStartDate) : moment.utc(milestone.startDate)
+    const startDate = !isPlanned && milestone.actualStartDate ? moment.utc(milestone.actualStartDate) : moment.utc(milestone.startDate)
     const month = startDate.format('MMM')
     const date = startDate.format('D')
     const title = milestone.name
