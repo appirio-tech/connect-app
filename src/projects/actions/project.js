@@ -20,7 +20,6 @@ import {
 import {
   createTimeline,
 } from '../../api/timelines'
-import { loadProductTimelineWithMilestones } from './productsTimelines'
 import {
   LOAD_PROJECT,
   CREATE_PROJECT,
