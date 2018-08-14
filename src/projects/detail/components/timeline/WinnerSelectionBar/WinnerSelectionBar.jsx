@@ -68,10 +68,7 @@ class WinnerSelectionBar extends React.Component {
           <div styleName="group-right">
             <a href={props.link} target="_blank" styleName="label" rel="noopener noreferrer">
               {props.label}
-              {(
-                !!onBonusChange && isSelected3TopWin && !selectedPlace ||
-                !onBonusChange && isSelectedBonus
-              ) && <span styleName="sublable">Purchase for $100</span>}
+              {!!onBonusChange && isSelected3TopWin && !selectedPlace && <span styleName="sublable">Purchase for $100</span>}
             </a>
             <a href={props.link} target="_blank" styleName="link" rel="noopener noreferrer">{props.link}</a>
           </div>
