@@ -65,8 +65,8 @@ class WinnerSelectionBar extends React.Component {
         >
           <figure styleName={cn('thumb', type)} />
 
-          <div className="group-right">
-            <span styleName="label">{props.label}</span>
+          <div styleName="group-right">
+            <a href={props.link} target="_blank" styleName="label" rel="noopener noreferrer">{props.label}</a>
             <a href={props.link} target="_blank" styleName="link" rel="noopener noreferrer">{props.link}</a>
           </div>
 
