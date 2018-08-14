@@ -184,9 +184,12 @@ export function getPhaseActualData(phase, timeline) {
 
   // if phase's product has timeline get data from timeline
   } else {
-    startDate = moment.utc(timeline.milestones[0].startDate)
+    const firstMilestone = timeline.milestones[0]
+    startDate = moment.utc(firstMilestone.startDate)
+    startDate = firstMilestone.actualStartDate ? moment.utc(firstMilestone.actualStartDate) : startDate
     const lastMilestone = timeline.milestones[timeline.milestones.length - 1]
-    endDate = moment.utc(lastMilestone.completionDate || lastMilestone.endDate)
+    endDate = moment.utc(lastMilestone.startDate).add(lastMilestone.duration - 1, 'days')
+    endDate = lastMilestone.completionDate ? moment.utc(lastMilestone.completionDate) : endDate
     // add one day here to include edge days, also makes sense if start/finish the same day
     duration = endDate.diff(startDate, 'days') + 1
 
