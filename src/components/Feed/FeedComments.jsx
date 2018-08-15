@@ -301,7 +301,7 @@ class FeedComments extends React.Component {
           hasError={item.error}
           allMembers={allMembers}
           noInfo={item.noInfo}
-          canDelete={comments.length>1}
+          canDelete={idx !== 0}
         >
           <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
         </Comment>
