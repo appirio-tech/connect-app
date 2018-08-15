@@ -11,6 +11,7 @@ import {
   SCREEN_BREAKPOINT_MD,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
+  CONNECT_USER,
 } from '../../../config/constants'
 import { connect } from 'react-redux'
 import update from 'react-addons-update'
@@ -127,6 +128,7 @@ class FeedView extends React.Component {
     const _toComment = (p) => {
       const date = p.updatedDate?p.updatedDate:p.date
       const edited = date !== p.date
+      const commentAuthor = allMembers[p.userId] ? allMembers[p.userId] : { ...CONNECT_USER, userId: p.userId }
       const comment = {
         id: p.id,
         content: p.body,
@@ -139,7 +141,7 @@ class FeedView extends React.Component {
         date,
         createdAt: p.date,
         edited,
-        author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
+        author: isSystemUser(p.userId) ? SYSTEM_USER : commentAuthor
       }
       const prevComment = prevFeed ? _.find(prevFeed.posts, t => p.id === t.id) : null
       if (prevComment && prevComment.isSavingComment && !comment.isSavingComment && !comment.error) {

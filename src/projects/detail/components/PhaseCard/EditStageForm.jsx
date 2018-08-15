@@ -12,8 +12,7 @@ import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 const TCFormFields = FormsyForm.Fields
 // import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
-import { updatePhase as updatePhaseAction, syncPhases as syncPhasesAction, firePhaseDirty,
-  firePhaseDirtyUndo } from '../../../actions/project'
+import { updatePhase as updatePhaseAction, firePhaseDirty, firePhaseDirtyUndo } from '../../../actions/project'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
 import { PHASE_STATUS_COMPLETED, PHASE_STATUS, PHASE_STATUS_ACTIVE } from '../../../../config/constants'
@@ -399,7 +398,6 @@ const mapStateToProps = ({projectState, productsTimelines}) => ({
 
 const actionCreators = {
   updatePhaseAction,
-  syncPhasesAction,
   firePhaseDirty,
   firePhaseDirtyUndo
 }

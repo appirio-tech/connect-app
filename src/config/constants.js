@@ -483,6 +483,13 @@ export const CODER_BOT_USERID = 'CoderBot'
 export const TC_SYSTEM_USERID = parseInt(process.env.TC_SYSTEM_USERID || '0', 10)
 export const CODER_BOT_USER_FNAME = 'Coder'
 export const CODER_BOT_USER_LNAME = 'the Bot'
+export const CONNECT_USER_HANDLE = 'connectuser'
+export const CONNECT_USER_FNAME = 'Connect'
+export const CONNECT_USER_LNAME = 'User'
+export const CONNECT_USER = {
+  firstName: CONNECT_USER_FNAME,
+  lastName: CONNECT_USER_LNAME,
+}
 
 export const PROJECT_MAX_COLORS = 5
 
