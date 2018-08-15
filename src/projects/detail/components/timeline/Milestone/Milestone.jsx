@@ -282,7 +282,7 @@ class Milestone extends React.Component {
             !isUpdating &&
             milestone.type === 'checkpoint-review' &&
             // old type 'checkpoint-review' which let user add links
-            _.get(milestone, 'details.prevMilestoneContent.links[0].type') !== 'marvelapp' &&
+            _.get(milestone, 'details.prevMilestoneType') !== 'add-links' &&
           (
             <MilestoneTypeCheckpointReview
               milestone={milestone}
@@ -297,8 +297,8 @@ class Milestone extends React.Component {
             !isEditing &&
             !isUpdating &&
             milestone.type === 'checkpoint-review' &&
-            // new type 'checkpoint-review' which gets list of links from previous milestone
-            _.get(milestone, 'details.prevMilestoneContent.links[0].type') === 'marvelapp' &&
+            // new type 'checkpoint-review' which gets list of links from previous `add-links` milestone
+            _.get(milestone, 'details.prevMilestoneType') === 'add-links' &&
           (
             <MilestoneTypeCheckpointReviewOnly
               milestone={milestone}
@@ -321,7 +321,7 @@ class Milestone extends React.Component {
 
           {!isEditing && !isUpdating && milestone.type === 'final-designs'  &&
             // old type 'final-designs' which let user add links
-            _.get(milestone, 'details.prevMilestoneContent.links[0].type') !== 'marvelapp' &&
+            _.get(milestone, 'details.prevMilestoneType') !== 'add-links' &&
           (
             <MilestoneTypeFinalDesigns
               milestone={milestone}
@@ -333,8 +333,8 @@ class Milestone extends React.Component {
           )}
 
           {!isEditing && !isUpdating && milestone.type === 'final-designs'  &&
-            // new type 'final-designs' which gets list of links from previous milestone
-            _.get(milestone, 'details.prevMilestoneContent.links[0].type') === 'marvelapp' &&
+            // new type 'final-designs' which gets list of links from previous `add-links` milestone
+            _.get(milestone, 'details.prevMilestoneType') === 'add-links' &&
           (
             <MilestoneTypeFinalDesignsSelectionOnly
               milestone={milestone}
