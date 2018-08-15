@@ -110,33 +110,37 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
     }
 
     // calculate progress of phase
-    const timelineNow = moment().utc()
-    let tlPlannedDuration = 0
-    let tlCurrentDuration = 0
-    let allMilestonesComplete = true
     const timeline = productsTimelines[phase.products[0].id].timeline
-    _.forEach(timeline.milestones, milestone => {
-      if (!milestone.hidden) {
-        tlPlannedDuration+=milestone.duration
-        const range = moment.range(milestone.startDate, milestone.endDate)
-        if (milestone.completionDate) {
-          tlCurrentDuration += milestone.duration
-        } else if (range.contains(timelineNow)) {
-          tlCurrentDuration += timelineNow.diff(milestone.startDate, 'days')
-          allMilestonesComplete = false
-        } else {
-          allMilestonesComplete = false
+    if (timeline && timeline.milestones.length > 0) {
+      const timelineNow = moment().utc()
+      let tlPlannedDuration = 0
+      let tlCurrentDuration = 0
+      let allMilestonesComplete = true
+      _.forEach(timeline.milestones, milestone => {
+        if (!milestone.hidden) {
+          tlPlannedDuration+=milestone.duration
+          const range = moment.range(milestone.startDate, milestone.endDate)
+          if (milestone.completionDate) {
+            tlCurrentDuration += milestone.duration
+          } else if (range.contains(timelineNow)) {
+            tlCurrentDuration += timelineNow.diff(milestone.startDate, 'days')
+            allMilestonesComplete = false
+          } else {
+            allMilestonesComplete = false
+          }
         }
-      }
-    })
+      })
 
-    let tlProgressInPercent = tlPlannedDuration > 0
-      ? Math.round((tlCurrentDuration / tlPlannedDuration) * 100)
-      : null
-    if (allMilestonesComplete) {
-      tlProgressInPercent = 100
+      let tlProgressInPercent = tlPlannedDuration > 0
+        ? Math.round((tlCurrentDuration / tlPlannedDuration) * 100)
+        : null
+      if (allMilestonesComplete) {
+        tlProgressInPercent = 100
+      }
+      progress = tlProgressInPercent
+    } else {
+      progress = phase.progress ? phase.progress : 0
     }
-    progress = tlProgressInPercent
 
     // override project progress if status is delivered
     if (phase.status === PHASE_STATUS_COMPLETED) {
@@ -167,7 +171,7 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
 }
 
 /**
- * 
+ *
  * gets duration of project based on milestones durations
  *
  * @param {Object} nonDraftPhases all non draft phases
