@@ -29,6 +29,7 @@ class ProjectInfoContainer extends React.Component {
     return !_.isEqual(nextProps.project, this.props.project) ||
       !_.isEqual(nextProps.feeds, this.props.feeds) ||
       !_.isEqual(nextProps.phases, this.props.phases) ||
+      !_.isEqual(nextProps.productsTimelines, this.props.productsTimelines) ||
       nextProps.activeChannelId !== this.props.activeChannelId
   }
 
