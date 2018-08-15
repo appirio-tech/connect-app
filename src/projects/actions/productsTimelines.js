@@ -173,6 +173,7 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
             details: {
               ...nextMilestone.details,
               prevMilestoneContent: completedMilestone.details.content,
+              prevMilestoneType: completedMilestone.type,
             }
           // always return completedMilestone for COMPLETE_PRODUCT_MILESTONE
           }).then(() => completedMilestone)
@@ -336,9 +337,14 @@ export function completeFinalFixesMilestone(productId, timelineId, milestoneId, 
             details: {
               ...nextMilestone.details,
               prevMilestoneContent: completedMilestone.details.content,
+              prevMilestoneType: completedMilestone.type,
             },
             status: MILESTONE_STATUS.COMPLETED,
-          })
+            // always return completedMilestone for COMPLETE_PRODUCT_MILESTONE
+          }).then(() => completedMilestone)
+        } else {
+          // always return completedMilestone for COMPLETE_PRODUCT_MILESTONE
+          return completedMilestone
         }
       })
     ]
@@ -352,7 +358,6 @@ export function completeFinalFixesMilestone(productId, timelineId, milestoneId, 
       }
     }).then(() => {
       if (timeline) {
-
         const phaseIndex = _.findIndex(state.projectState.phases, p => p.products[0].id === productId)
         const phase = state.projectState.phases[phaseIndex]
         dispatch(updatePhase(state.projectState.project.id, phase.id, {status: PHASE_STATUS_COMPLETED}, phaseIndex))
