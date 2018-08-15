@@ -65,8 +65,11 @@ class WinnerSelectionBar extends React.Component {
         >
           <figure styleName={cn('thumb', type)} />
 
-          <div className="group-right">
-            <span styleName="label">{props.label}</span>
+          <div styleName="group-right">
+            <a href={props.link} target="_blank" styleName="label" rel="noopener noreferrer">
+              {props.label}
+              {!!onBonusChange && isSelected3TopWin && !selectedPlace && <span styleName="sublable">Purchase for $100</span>}
+            </a>
             <a href={props.link} target="_blank" styleName="link" rel="noopener noreferrer">{props.link}</a>
           </div>
 
@@ -83,7 +86,7 @@ class WinnerSelectionBar extends React.Component {
 
           {!!onBonusChange && isSelected3TopWin && !selectedPlace && (
             <div styleName="position">
-              <div styleName="purchase-for">purchase for $100</div>
+              <div styleName="purchase-for"><span>purchase for $100</span></div>
               <div styleName="switch-button">
                 <SwitchButton onChange={this.onBonusChange} />
               </div>
