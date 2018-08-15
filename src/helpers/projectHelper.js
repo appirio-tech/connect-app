@@ -114,7 +114,7 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
     let tlPlannedDuration = 0
     let tlCurrentDuration = 0
     let allMilestonesComplete = true
-    const timeline = productsTimelines[phase.products[0].id].timeline;
+    const timeline = productsTimelines[phase.products[0].id].timeline
     _.forEach(timeline.milestones, milestone => {
       if (!milestone.hidden) {
         tlPlannedDuration+=milestone.duration
