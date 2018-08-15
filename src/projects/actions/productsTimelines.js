@@ -62,11 +62,25 @@ export function loadProductTimelineWithMilestones(productId) {
       type: LOAD_PRODUCT_TIMELINE_WITH_MILESTONES,
       payload: getTimelinesByReference('product', productId)
         // if product doesn't have timeline, return null
-        .then((timelines) => timelines[0] || null)
-        // TODO $TIMELINE_MILESTONE$  as getTimelinesByReference returns timelines not with all milestones
-        // requests timelines again using endpoint which return all milestones
-        // the next line has to be remove when fixed https://github.com/topcoder-platform/tc-project-service/issues/116
-        .then((timeline) => timeline ? getTimelineById(timeline.id) : null),
+        .then((timelines) => timelines[0] || null),
+      meta: {
+        productId
+      }
+    })
+  }
+}
+
+/**
+ * Loads product timeline, by timeline id, with milestones
+ *
+ * @param {String} timelineId timeline id
+ * @param {String} productId product id
+ */
+export function loadProductTimelineWithMilestonesById(timelineId, productId) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_PRODUCT_TIMELINE_WITH_MILESTONES,
+      payload: getTimelineById(timelineId),
       meta: {
         productId
       }
@@ -173,17 +187,17 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
         milestoneId
       }
     }).then(() => {
-      if (timeline){
+      if (timeline) {
         const milestoneIdx = _.findIndex(timeline.milestones, { id: milestoneId })
         const isLastMilestone = checkIfLastMilestone(timeline, milestoneIdx)
         if (isLastMilestone){
-          const phaseIndex = _.findIndex(state.projectState.phases, p => p.products[0].id===productId)
+          const phaseIndex = _.findIndex(state.projectState.phases, p => p.products[0].id === productId)
           const phase = state.projectState.phases[phaseIndex]
           dispatch(updatePhase(state.projectState.project.id, phase.id, {status: PHASE_STATUS_COMPLETED}, phaseIndex))
         } else {
           // if it's not the last milestone
           // we have to refresh timeline as other milestone dates were updated by the server
-          dispatch(loadProductTimelineWithMilestones(productId))
+          dispatch(loadProductTimelineWithMilestonesById(timeline.id, productId))
         }
       }
       return true
@@ -333,10 +347,13 @@ export function completeFinalFixesMilestone(productId, timelineId, milestoneId, 
         milestoneId
       }
     }).then(() => {
-      if (timeline){
-        // if it's not the last milestone
+      if (timeline) {
+
+        const phaseIndex = _.findIndex(state.projectState.phases, p => p.products[0].id === productId)
+        const phase = state.projectState.phases[phaseIndex]
+        dispatch(updatePhase(state.projectState.project.id, phase.id, {status: PHASE_STATUS_COMPLETED}, phaseIndex))
         // we have to refresh timeline as other milestone dates were updated by the server
-        dispatch(loadProductTimelineWithMilestones(productId))
+        dispatch(loadProductTimelineWithMilestonesById(timeline.id, productId))
       }
       return true
     })
