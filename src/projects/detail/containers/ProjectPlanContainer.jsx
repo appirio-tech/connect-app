@@ -32,6 +32,7 @@ const ProjectPlanContainer = (props) => {
     currentMemberRole,
     phases,
     feeds,
+    productsTimelines
   } = props
 
   // manager user sees all phases
@@ -52,6 +53,7 @@ const ProjectPlanContainer = (props) => {
       phases={phases}
       isSuperUser={isSuperUser}
       feeds={feeds}
+      productsTimelines={productsTimelines}
     />
   )
 
@@ -72,7 +74,7 @@ const ProjectPlanContainer = (props) => {
       <TwoColsLayout.Content>
         {visiblePhases && visiblePhases.length > 0 ? (
           [
-            activePhases.length > 0 && <ProjectPlanProgress phases={visiblePhases} project={project} key="progress" />,
+            activePhases.length > 0 && <ProjectPlanProgress phases={visiblePhases} project={project} productsTimelines={productsTimelines} key="progress" />,
             <ProjectStages
               {...{
                 ...props,
@@ -101,6 +103,7 @@ ProjectPlanContainer.propTypes = {
   project: PT.object.isRequired,
   productTemplates: PT.array.isRequired,
   phases: PT.array.isRequired,
+  productsTimelines: PT.object.isRequired,
 }
 
 const mapStateToProps = ({ projectState, projectTopics }) => ({

@@ -78,7 +78,7 @@ export const setDuration = ({duration, status}) => {
  *
  * @return {Object} ProjectProgress props
  */
-export function formatProjectProgressProps(project, phases) {
+export function formatProjectProgressProps(project, phases, productsTimelines) {
   let actualDuration = 0
   let now = new Date()
   now = now && moment(now)
@@ -108,6 +108,36 @@ export function formatProjectProgressProps(project, phases) {
     if (phase.progress) {
       progress = phase.progress
     }
+
+    // calculate progress of phase
+    const timelineNow = moment().utc()
+    let tlPlannedDuration = 0
+    let tlCurrentDuration = 0
+    let allMilestonesComplete = true
+    const timeline = productsTimelines[phase.products[0].id].timeline;
+    _.forEach(timeline.milestones, milestone => {
+      if (!milestone.hidden) {
+        tlPlannedDuration+=milestone.duration
+        const range = moment.range(milestone.startDate, milestone.endDate)
+        if (milestone.completionDate) {
+          tlCurrentDuration += milestone.duration
+        } else if (range.contains(timelineNow)) {
+          tlCurrentDuration += timelineNow.diff(milestone.startDate, 'days')
+          allMilestonesComplete = false
+        } else {
+          allMilestonesComplete = false
+        }
+      }
+    })
+
+    let tlProgressInPercent = tlPlannedDuration > 0
+      ? Math.round((tlCurrentDuration / tlPlannedDuration) * 100)
+      : null
+    if (allMilestonesComplete) {
+      tlProgressInPercent = 100
+    }
+    progress = tlProgressInPercent
+
     // override project progress if status is delivered
     if (phase.status === PHASE_STATUS_COMPLETED) {
       progress = 100
@@ -117,9 +147,9 @@ export function formatProjectProgressProps(project, phases) {
     }
     totalProgress += progress
   })
-  const projectedDuration = _.sumBy(nonDraftPhases, (phase) => {
-    return phase.duration && phase.duration > 1 ? phase.duration : 1
-  })
+
+  // calculate projected Duration of all non draft phases
+  const projectedDuration = projectPlannedDuration(nonDraftPhases, productsTimelines)
 
   const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
 
@@ -134,6 +164,35 @@ export function formatProjectProgressProps(project, phases) {
     labelStatus,
     progressPercent,
   }
+}
+
+/**
+ * 
+ * gets duration of project based on milestones durations
+ *
+ * @param {Object} nonDraftPhases all non draft phases
+ * @param {Object} productsTimelines all products timelines
+ *
+ * @return {duration} planned duration of project
+ */
+export function projectPlannedDuration(nonDraftPhases, productsTimelines) {
+  const phasesActualData = nonDraftPhases.map((phase) => {
+    const product = _.get(phase, 'products[0]')
+    const timeline = _.get(productsTimelines, `[${product.id}].timeline`)
+    return getPhaseActualData(phase, timeline)
+  })
+
+  const startDates = _.compact(phasesActualData.map((phase) =>
+    phase.startDate ? moment(phase.startDate) : null
+  ))
+  const endDates = _.compact(phasesActualData.map((phase) =>
+    phase.endDate ? moment(phase.endDate) : null
+  ))
+  const minStartDate = startDates.length > 0 ? moment.min(startDates) : null
+  const maxEndDate = endDates.length > 0 ? moment.max(endDates) : null
+
+  const projectedDuration = maxEndDate ? maxEndDate.diff(minStartDate, 'days') + 1 : 0
+  return projectedDuration
 }
 
 /**

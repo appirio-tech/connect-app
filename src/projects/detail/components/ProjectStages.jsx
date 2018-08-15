@@ -47,7 +47,7 @@ function formatPhaseCardListFooterProps(phases, productsTimelines) {
 
   const totalPrice = _.sumBy(filteredPhases, 'budget')
 
-  const projectedDuration = _.sumBy(phasesActualData, (phase) => {return phase.duration && phase.duration > 1 ? phase.duration : 1})
+  const projectedDuration = maxEndDate ? maxEndDate.diff(minStartDate, 'days') + 1 : 0
   const duration = `${projectedDuration} days`
   const price = `$${formatNumberWithCommas(totalPrice)}`
 

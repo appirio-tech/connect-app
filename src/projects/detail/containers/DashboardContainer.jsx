@@ -72,8 +72,9 @@ class DashboardContainer extends React.Component {
       removeProductAttachment,
       deleteProjectPhase,
       feeds,
+      productsTimelines
     } = this.props
-
+    
     // system notifications
     const notReadNotifications = filterReadNotifications(notifications.notifications)
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
@@ -91,6 +92,7 @@ class DashboardContainer extends React.Component {
         phases={phases}
         isSuperUser={isSuperUser}
         feeds={feeds}
+        productsTimelines={productsTimelines}
       />
     )
 

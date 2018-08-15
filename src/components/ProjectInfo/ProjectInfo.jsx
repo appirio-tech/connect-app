@@ -37,7 +37,7 @@ class ProjectInfo extends Component {
 
   render() {
     const { project, currentMemberRole, duration, canDeleteProject,
-      onChangeStatus, directLinks, isSuperUser, phases } = this.props
+      onChangeStatus, directLinks, isSuperUser, phases, productsTimelines } = this.props
     const { showDeleteConfirm } = this.state
 
     const code = _.get(project, 'details.utm.code', '')
@@ -45,7 +45,7 @@ class ProjectInfo extends Component {
     const projectProgressProps = _.omit(
       !phases
         ? formatOldProjectProgressProps(project)
-        : formatProjectProgressProps(project, phases),
+        : formatProjectProgressProps(project, phases, productsTimelines),
       'labelSpent'
     )
 
@@ -111,7 +111,8 @@ class ProjectInfo extends Component {
 ProjectInfo.propTypes = {
   project: PT.object.isRequired,
   currentMemberRole: PT.string,
-  duration: PT.object.isRequired
+  duration: PT.object.isRequired,
+  productsTimelines: PT.object.isRequired
 }
 
 export default ProjectInfo
