@@ -58,7 +58,6 @@ class MilestoneTypeDelivery extends React.Component {
     this.onFinalFixRemove = this.onFinalFixRemove.bind(this)
     this.onFinalFixChange = this.onFinalFixChange.bind(this)
     this.submitFinalFixesRequest = this.submitFinalFixesRequest.bind(this)
-    this.completeMilestone = this.completeMilestone.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -121,11 +120,19 @@ class MilestoneTypeDelivery extends React.Component {
   }
 
   acceptDesign() {
-    const { updateMilestoneContent } = this.props
+    const { completeMilestone, milestone } = this.props
 
-    updateMilestoneContent({
-      isAccepted: true,
-      isDeclined: false,
+    const content = _.get(milestone, 'details.content', {})
+
+    completeMilestone({
+      details: {
+        ...milestone.details,
+        content: {
+          ...content,
+          isAccepted: true,
+          isDeclined: false,
+        }
+      }
     })
   }
 
@@ -169,12 +176,6 @@ class MilestoneTypeDelivery extends React.Component {
       // submit only non-empty requests
       finalFixRequests.filter((finalFixRequest) => !!finalFixRequest.value)
     )
-  }
-
-  completeMilestone() {
-    const { completeMilestone } = this.props
-
-    completeMilestone()
   }
 
   getDescription() {

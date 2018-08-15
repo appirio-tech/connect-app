@@ -409,7 +409,7 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
         }
       }
 
-      if (timeline && updatedProps.startDate.diff(timeline.startDate)) {
+      if (timeline && updatedProps.startDate && updatedProps.startDate.diff(timeline.startDate)) {
         dispatch(
           updateProductTimeline(
             productId,

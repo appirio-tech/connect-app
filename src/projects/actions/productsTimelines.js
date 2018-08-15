@@ -174,7 +174,11 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
               ...nextMilestone.details,
               prevMilestoneContent: completedMilestone.details.content,
             }
-          })
+          // always return completedMilestone for COMPLETE_PRODUCT_MILESTONE
+          }).then(() => completedMilestone)
+        } else {
+          // always return completedMilestone for COMPLETE_PRODUCT_MILESTONE
+          return completedMilestone
         }
       })
     ]
