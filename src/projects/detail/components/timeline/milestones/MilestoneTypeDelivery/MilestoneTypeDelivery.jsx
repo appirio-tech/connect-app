@@ -58,6 +58,7 @@ class MilestoneTypeDelivery extends React.Component {
     this.onFinalFixRemove = this.onFinalFixRemove.bind(this)
     this.onFinalFixChange = this.onFinalFixChange.bind(this)
     this.submitFinalFixesRequest = this.submitFinalFixesRequest.bind(this)
+    this.completeMilestone = this.completeMilestone.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -120,19 +121,11 @@ class MilestoneTypeDelivery extends React.Component {
   }
 
   acceptDesign() {
-    const { completeMilestone, milestone } = this.props
+    const { updateMilestoneContent } = this.props
 
-    const content = _.get(milestone, 'details.content', {})
-
-    completeMilestone({
-      details: {
-        ...milestone.details,
-        content: {
-          ...content,
-          isAccepted: true,
-          isDeclined: false,
-        }
-      }
+    updateMilestoneContent({
+      isAccepted: true,
+      isDeclined: false
     })
   }
 
@@ -178,6 +171,12 @@ class MilestoneTypeDelivery extends React.Component {
     )
   }
 
+  completeMilestone() {
+    const { completeMilestone } = this.props
+
+    completeMilestone()
+  }
+
   getDescription() {
     const { milestone } = this.props
 
@@ -185,17 +184,28 @@ class MilestoneTypeDelivery extends React.Component {
   }
 
   render() {
-    const { milestone, theme, currentUser } = this.props
+    const { milestone, theme, currentUser, previousMilestone } = this.props
     const { isShowFinalFixesRequestForm, finalFixRequests } = this.state
-    const links = _.get(milestone, 'details.prevMilestoneContent.links', [])
     const isAccepted = _.get(milestone, 'details.content.isAccepted', false)
     const isDeclined = _.get(milestone, 'details.content.isDeclined', false)
     const isFinalFixesSubmitted = _.get(milestone, 'details.content.isFinalFixesSubmitted', false)
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+    //console.log(" ", milestone.details.content, " : ", isAccepted, " : ", milestone.name)
 
     const canSubmitFinalFixes = _.some(finalFixRequests, (finalFixRequest) => !!finalFixRequest.value)
 
+    const isFinalFixPresent = previousMilestone === 'final-fix'
+    let links = ''
+    const deliveryButtons = [{ title: acceptDialogue[milestone.type].button, onClick: this.acceptDesign, type: 'primary' }]
+    if(isFinalFixPresent) {
+      deliveryButtons.push({ title: 'Request fixes', onClick: this.showFinalFixesRequestForm, type: 'default' })
+    }
+    if(isFinalFixesSubmitted) {
+      links = _.get(milestone, 'details.prevMilestoneContent.links', [])
+    } else {
+      links = _.get(milestone, 'details.content.links', [])
+    }
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -242,10 +252,7 @@ class MilestoneTypeDelivery extends React.Component {
                     theme="primary"
                     message={acceptDialogue[milestone.type].text}
                     isShowSelection={false}
-                    buttons={[
-                      { title: 'Request fixes', onClick: this.showFinalFixesRequestForm, type: 'default' },
-                      { title: acceptDialogue[milestone.type].button, onClick: this.acceptDesign, type: 'primary' },
-                    ]}
+                    buttons={deliveryButtons}
                   />
                 </div>
               </DotIndicator>
@@ -284,6 +291,42 @@ class MilestoneTypeDelivery extends React.Component {
                 </DotIndicator>
               </div>
             )}
+
+            {(isAccepted) && (	
+              <div>	
+                {!currentUser.isCustomer && (	
+                  <DotIndicator>	
+                    <LinkList	
+                      links={links}	
+                      onAddLink={this.updatedUrl}	
+                      onRemoveLink={this.removeUrl}	
+                      onUpdateLink={this.updatedUrl}	
+                      fields={[{ name: 'url'}]}	
+                      addButtonTitle="Add link"	
+                      formAddTitle="Adding a link"	
+                      formAddButtonTitle="Add a link"	
+                      formUpdateTitle="Editing a link"	
+                      formUpdateButtonTitle="Save changes"	
+                      isUpdating={milestone.isUpdating}	
+                      canAddLink	
+                    />	
+                    <div styleName="top-space">	
+                      <div styleName="button-layer">	
+                        <button	
+                          className="tc-btn tc-btn-primary tc-btn-sm action-btn"	
+                          onClick={this.completeMilestone}	
+                          disabled={links.length === 0}	
+                        >	
+                          Mark as completed	
+                        </button>	
+                      </div>	
+                    </div>	
+                  </DotIndicator>	
+                )}	
+              </div>	
+            )}
+
+
           </div>
         )}
 

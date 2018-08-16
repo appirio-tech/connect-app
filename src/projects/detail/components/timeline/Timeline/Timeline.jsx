@@ -95,6 +95,9 @@ class Timeline extends React.Component {
             extendMilestone={this.extendMilestone}
             submitFinalFixesRequest={this.submitFinalFixesRequest}
             completeFinalFixesMilestone={this.completeFinalFixesMilestone}
+            //$TODO convert the below logic more optimized way
+            previousMilestone={_.find(orderedMilestones, m => m.order === milestone.order-1) &&
+               _.find(orderedMilestones, m => m.order === milestone.order-1).type}
           />
         ))}
       </div>

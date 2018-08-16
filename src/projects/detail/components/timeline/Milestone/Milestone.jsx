@@ -141,6 +141,7 @@ class Milestone extends React.Component {
     const {
       milestone,
       currentUser,
+      previousMilestone,
     } = this.props
     const { isEditing } = this.state
 
@@ -372,6 +373,7 @@ class Milestone extends React.Component {
                 completeMilestone={this.completeMilestone}
                 submitFinalFixesRequest={this.submitFinalFixesRequest}
                 currentUser={currentUser}
+                previousMilestone={previousMilestone}
               />
             )
           }
