@@ -456,7 +456,7 @@ export const PROJECT_MAX_COLORS = 5
 export const AUTOCOMPLETE_TRIGGER_LENGTH = 3
 
 // Toggle this flag to enable/disable maintenance mode
-export const MAINTENANCE_MODE = process.env[`${process.env.ENV}_MAINTENANCE_MODE`]
+export const MAINTENANCE_MODE = process.env.MAINTENANCE_MODE
 
 export const LS_INCOMPLETE_PROJECT = 'incompleteProject'
 
