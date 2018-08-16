@@ -170,10 +170,11 @@ class MilestoneTypeAddLinks extends React.Component {
 
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+    const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
 
-    const endDate = moment(milestone.endDate)
-    const startDate = moment(milestone.startDate)
-    const daysLeft = endDate.diff(moment(), 'days')
+    const startDate = moment(milestone.actualStartDate || milestone.startDate)
+    const endDate = moment(milestone.startDate).add(milestone.duration - 1, 'days')
+    const daysLeft = endDate.diff(today, 'days')
     const totalDays = endDate.diff(startDate, 'days')
 
     const progressText = daysLeft >= 0
