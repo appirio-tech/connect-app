@@ -38,6 +38,7 @@
 
   .static-view {
     @include roboto;
+    border-radius: 6px;
     min-height: 80px;
     display: flex;
     align-items: center;
@@ -46,10 +47,10 @@
     padding-right: 50px;
     padding-bottom: 15px;
     padding-top: 15px;
-    border-radius: inherit;
     cursor: pointer;
     background-color: $tc-gray-neutral-light;
     @media screen and (max-width: $screen-md - 1px) {
+      border-radius: 0;
       padding-left: 4 * $base-unit;
       padding-right: 4 * $base-unit;
     }
@@ -306,5 +307,57 @@
         background-color: $tc-dark-blue-100;
       }
     }
+  }
+}
+
+
+.header {
+  align-items: center;
+  background-color: $tc-gray-neutral-light;
+  display: flex;
+  height: 50px;
+  padding: 0 $base-unit * 3;
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  @include roboto;
+  color: $tc-black;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 30px;
+  margin-left:30px;
+}
+
+.close-wrapper {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.plug {
+  width: 16px; /* same width as close button to align center title */
+}
+
+.body {
+  background-color: $tc-white;
+  position: relative;
+}
+
+.mobile-phase {
+  background-color: $tc-white;
+  min-height: 100vh;
+  position: relative;
+
+  &::before {
+    background-color: $tc-gray-neutral-light;
+    bottom: 0;
+    content: '';
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 70px;
   }
 }

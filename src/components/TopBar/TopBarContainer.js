@@ -142,7 +142,7 @@ class TopBarContainer extends React.Component {
     ToolBar = toolbar && typeof toolbar.type  === 'function' ? toolbar.type : ToolBar
     return (
       <div className="TopBarContainer">
-        <div className="tc-header tc-header__connect">
+        <div className="tc-header tc-header__connect" id="TopToolbar">
           <div className="top-bar">
             {
               ToolBar &&

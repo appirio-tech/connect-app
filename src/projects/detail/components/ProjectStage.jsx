@@ -4,16 +4,17 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
-import moment from 'moment'
 import uncontrollable from 'uncontrollable'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
+import { getPhaseActualData } from '../../../helpers/projectHelper'
 import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
 
 import PhaseCard from './PhaseCard'
 import ProjectStageTabs from './ProjectStageTabs'
 import EditProjectForm from './EditProjectForm'
 import PhaseFeed from './PhaseFeed'
+import ProductTimelineContainer from '../containers/ProductTimelineContainer'
 import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
@@ -29,7 +30,7 @@ const EnhancedEditProjectForm = enhance(EditProjectForm)
  *
  * @returns {Object} PhaseCard attr property
  */
-function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed) {
+function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline) {
   // NOTE so far one phase always has 1 product
   // but as in the future this may be changed, we work with products as an array
   const product = _.get(phase, 'products[0]')
@@ -39,35 +40,22 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed) {
   const price = `$${formatNumberWithCommas(budget)}`
   const icon = _.get(productTemplate, 'icon')
   const title = phase.name
-  const startDate = phase.startDate && moment.utc(phase.startDate)
-  const endDate = phase.endDate && moment.utc(phase.endDate)
 
-  const plannedDuration = phase.duration ? phase.duration : 0
-  const duration = `${plannedDuration} days`
+  const {
+    startDate,
+    endDate,
+    duration: plannedDuration,
+    progress: progressInPercent,
+  } = getPhaseActualData(phase, timeline)
+
+  const duration = `${plannedDuration} day${plannedDuration !== 1 ? 's' : ''}`
   let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
   // appends end date to the start date only if end date is greater than start date
   startEndDates += startDate && endDate && endDate.diff(startDate, 'days') > 0 ? `-${endDate.format('MMM D')}` : ''
   // extracts the start date's month string plus white space
   const monthStr = startEndDates.substr(0, 4)
-  // replaces the second occurance of the month part i.e. removes the end date's month part
+  // replaces the second occurrence of the month part i.e. removes the end date's month part
   startEndDates = startEndDates.lastIndexOf(monthStr) !== 0 ? startEndDates.replace(`-${monthStr}`, '-') : startEndDates
-
-  // calculate progress of phase
-  let progressInPercent = phase.progress
-  if (!progressInPercent) {
-    let actualDuration = 0
-    let now = new Date()
-    now = now && moment.utc(now)
-    const durationFromNow = now.diff(startDate, 'days') + 1
-    if (durationFromNow <= plannedDuration) {
-      if (durationFromNow > 0) {
-        actualDuration = durationFromNow
-      }
-    } else {
-      actualDuration = plannedDuration
-    }
-    progressInPercent = (actualDuration  && plannedDuration) ? Math.round((actualDuration / plannedDuration) * 100) : 0
-  }
 
   const actualPrice = phase.spentBudget
   let paidStatus = 'Quoted'
@@ -152,6 +140,7 @@ class ProjectStage extends React.Component{
       onDeleteMessage,
       allMembers,
       onSaveMessage,
+      timeline,
     } = this.props
 
     // NOTE even though in store we keep products as an array,
@@ -162,17 +151,32 @@ class ProjectStage extends React.Component{
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
 
+    const hasTimeline = !!timeline
+    const defaultActiveTab = hasTimeline ? 'timeline' : 'posts'
+    const currentActiveTab = activeTab ? activeTab : defaultActiveTab
+
     return (
       <PhaseCard
-        attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed)}
+        attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline)}
         projectStatus={project.status}
         isManageUser={isManageUser}
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
+        timeline={timeline}
       >
         <div>
-          <ProjectStageTabs activeTab={activeTab} onTabClick={onTabClick} />
+          <ProjectStageTabs
+            activeTab={currentActiveTab}
+            onTabClick={onTabClick}
+            isSuperUser={isSuperUser}
+            isManageUser={isManageUser}
+            hasTimeline={hasTimeline}
+          />
 
-          {activeTab === 'posts' &&
+          {currentActiveTab === 'timeline' &&
+            <ProductTimelineContainer product={product} />
+          }
+
+          {currentActiveTab === 'posts' &&
             <PhaseFeed
               user={currentUser}
               currentUser={currentUser}
@@ -186,7 +190,7 @@ class ProjectStage extends React.Component{
             />
           }
 
-          {activeTab === 'specification' &&
+          {currentActiveTab === 'specification' &&
             <div className="two-col-content content">
               <EnhancedEditProjectForm
                 project={product}
@@ -211,7 +215,7 @@ class ProjectStage extends React.Component{
 }
 
 ProjectStage.defaultProps = {
-  activeTab: 'posts',
+  activeTab: '',
   currentMemberRole: null,
 }
 

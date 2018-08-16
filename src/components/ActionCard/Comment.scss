@@ -3,16 +3,24 @@
 .container {
   display: flex;
   padding: $base-unit 4 * $base-unit;
-  overflow-x: auto;
 
   &.self:not(.is-deleting):hover {
     background-color: $tc-gray-neutral-light;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      background-color: transparent;
+    }
   }
 
   :global(.drop-down) :global(.down-layer) {
     left: auto;
     right: - 2 * $base-unit;
     top: 2 * $base-unit;
+  }
+
+  @media screen and (max-width: $screen-md - 1px) {
+    padding-left: 3 * $base-unit;
+    padding-right: 3 * $base-unit;
   }
 }
 
@@ -24,6 +32,7 @@
   flex: 1;
   margin-left: 2 * $base-unit;
   position: relative;
+  min-width: 0;
 }
 
 .header {
@@ -64,6 +73,10 @@
 
   .container.self:not(.is-deleting):hover & {
     display: block;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      display: none;
+    }
   }
 }
 
@@ -72,6 +85,7 @@
   color: $tc-black;
   font-size: 13px;
   line-height: 20px;
+  overflow-x: auto;
 }
 
 .comment-editor {

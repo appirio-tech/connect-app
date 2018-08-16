@@ -2,6 +2,7 @@ import _ from 'lodash'
 import { loadMembers } from '../../actions/members'
 import { loadProject, loadDirectProjectData, loadProjectPhasesWithProducts,
   loadProjectTemplate, loadProjectProductTemplates, loadAllProductTemplates, loadProjectProductTemplatesByKey } from './project'
+import { loadProductTimelineWithMilestones } from './productsTimelines'
 import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
 
 /**
@@ -34,7 +35,14 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
 
         // for new projects load phases, products, project template and product templates
         if (project.version === 'v3') {
-          promises.push(dispatch(loadProjectPhasesWithProducts(projectId, project)))
+          promises.push(
+            dispatch(loadProjectPhasesWithProducts(projectId))
+              .then(({ value: phases }) =>
+                // load timelines for phase products here together with all dashboard data
+                // as we need to know timeline data not only inside timeline container
+                loadTimelinesForPhasesProducts(phases, dispatch)
+              )
+          )
 
           promises.push(
             dispatch(loadProjectTemplate(project.templateId))
@@ -59,6 +67,26 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
       })
       .catch(err => reject(err))
   })
+}
+
+/**
+ * Load timelines for phase's products
+ *
+ * @param {Array}   phases    list of phases
+ * @param {Function} dispatch dispatch function
+ */
+function loadTimelinesForPhasesProducts(phases, dispatch) {
+  const products = []
+
+  phases.forEach((phase) => {
+    phase.products.forEach((product) => {
+      products.push(product)
+    })
+  })
+
+  return Promise.all(
+    products.map((product) => dispatch(loadProductTimelineWithMilestones(product.id)))
+  )
 }
 
 export function loadProjectDashboard(projectId, isOnlyLoadProjectInfo = false) {

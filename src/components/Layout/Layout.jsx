@@ -3,6 +3,7 @@ import Footer from '../Footer/Footer'
 import { MAINTENANCE_MODE } from '../../config/constants'
 import Alert from 'react-s-alert'
 import cn from 'classnames'
+import { GatewayDest } from 'react-gateway'
 import Maintenance from '../Maintenance/Maintenance'
 
 require('./Layout.scss')
@@ -27,6 +28,7 @@ const Layout = (props) => {
           { props.content }
         </div>
         <Footer />
+        <GatewayDest name="fullscreen-page" className="mobile-page-gateway" />
       </div>
     )
   }

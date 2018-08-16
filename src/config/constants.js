@@ -232,6 +232,9 @@ export const UPDATE_PRODUCT_FAILURE   = 'UPDATE_PRODUCT_FAILURE'
 export const PROJECT_DIRTY            = 'PROJECT_DIRTY'
 export const PROJECT_DIRTY_UNDO       = 'PROJECT_DIRTY_UNDO'
 
+export const PHASE_DIRTY            = 'PHASE_DIRTY'
+export const PHASE_DIRTY_UNDO       = 'PHASE_DIRTY_UNDO'
+
 export const PRODUCT_DIRTY            = 'PRODUCT_DIRTY'
 export const PRODUCT_DIRTY_UNDO       = 'PRODUCT_DIRTY_UNDO'
 
@@ -239,6 +242,36 @@ export const LOAD_PROJECT_PHASES             = 'LOAD_PROJECT_PHASES'
 export const LOAD_PROJECT_PHASES_PENDING     = 'LOAD_PROJECT_PHASES_PENDING'
 export const LOAD_PROJECT_PHASES_FAILURE     = 'LOAD_PROJECT_PHASES_FAILURE'
 export const LOAD_PROJECT_PHASES_SUCCESS     = 'LOAD_PROJECT_PHASES_SUCCESS'
+
+export const LOAD_PRODUCT_TIMELINE_WITH_MILESTONES             = 'LOAD_PRODUCT_TIMELINE_WITH_MILESTONES'
+export const LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_PENDING     = 'LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_PENDING'
+export const LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE     = 'LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE'
+export const LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_SUCCESS     = 'LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_SUCCESS'
+
+export const UPDATE_PRODUCT_TIMELINE          = 'UPDATE_PRODUCT_TIMELINE'
+export const UPDATE_PRODUCT_TIMELINE_PENDING  = 'UPDATE_PRODUCT_TIMELINE_PENDING'
+export const UPDATE_PRODUCT_TIMELINE_FAILURE  = 'UPDATE_PRODUCT_TIMELINE_FAILURE'
+export const UPDATE_PRODUCT_TIMELINE_SUCCESS  = 'UPDATE_PRODUCT_TIMELINE_SUCCESS'
+
+export const UPDATE_PRODUCT_MILESTONE             = 'UPDATE_PRODUCT_MILESTONE'
+export const UPDATE_PRODUCT_MILESTONE_PENDING     = 'UPDATE_PRODUCT_MILESTONE_PENDING'
+export const UPDATE_PRODUCT_MILESTONE_FAILURE     = 'UPDATE_PRODUCT_MILESTONE_FAILURE'
+export const UPDATE_PRODUCT_MILESTONE_SUCCESS     = 'UPDATE_PRODUCT_MILESTONE_SUCCESS'
+
+export const COMPLETE_PRODUCT_MILESTONE             = 'COMPLETE_PRODUCT_MILESTONE'
+export const COMPLETE_PRODUCT_MILESTONE_PENDING     = 'COMPLETE_PRODUCT_MILESTONE_PENDING'
+export const COMPLETE_PRODUCT_MILESTONE_FAILURE     = 'COMPLETE_PRODUCT_MILESTONE_FAILURE'
+export const COMPLETE_PRODUCT_MILESTONE_SUCCESS     = 'COMPLETE_PRODUCT_MILESTONE_SUCCESS'
+
+export const SUBMIT_FINAL_FIXES_REQUEST             = 'SUBMIT_FINAL_FIXES_REQUEST'
+export const SUBMIT_FINAL_FIXES_REQUEST_PENDING     = 'SUBMIT_FINAL_FIXES_REQUEST_PENDING'
+export const SUBMIT_FINAL_FIXES_REQUEST_FAILURE     = 'SUBMIT_FINAL_FIXES_REQUEST_FAILURE'
+export const SUBMIT_FINAL_FIXES_REQUEST_SUCCESS     = 'SUBMIT_FINAL_FIXES_REQUEST_SUCCESS'
+
+export const EXTEND_PRODUCT_MILESTONE             = 'EXTEND_PRODUCT_MILESTONE'
+export const EXTEND_PRODUCT_MILESTONE_PENDING     = 'EXTEND_PRODUCT_MILESTONE_PENDING'
+export const EXTEND_PRODUCT_MILESTONE_FAILURE     = 'EXTEND_PRODUCT_MILESTONE_FAILURE'
+export const EXTEND_PRODUCT_MILESTONE_SUCCESS     = 'EXTEND_PRODUCT_MILESTONE_SUCCESS'
 
 export const LOAD_MEMBERS             = 'LOAD_MEMBERS'
 export const LOAD_MEMBERS_PENDING     = 'LOAD_MEMBERS_PENDING'
@@ -450,6 +483,13 @@ export const CODER_BOT_USERID = 'CoderBot'
 export const TC_SYSTEM_USERID = parseInt(process.env.TC_SYSTEM_USERID || '0', 10)
 export const CODER_BOT_USER_FNAME = 'Coder'
 export const CODER_BOT_USER_LNAME = 'the Bot'
+export const CONNECT_USER_HANDLE = 'connectuser'
+export const CONNECT_USER_FNAME = 'Connect'
+export const CONNECT_USER_LNAME = 'User'
+export const CONNECT_USER = {
+  firstName: CONNECT_USER_FNAME,
+  lastName: CONNECT_USER_LNAME,
+}
 
 export const PROJECT_MAX_COLORS = 5
 
@@ -522,7 +562,8 @@ export const NOTIFICATIONS_NEW_PER_SOURCE = 10
 
 export const NOTIFICATIONS_LIMIT = 1000
 
-export const SCROLL_TO_MARGIN = 70 // px - 60px of toolbar height + 10px to make some margin
+// 60px of primary toolbar height + 50px of secondary toolbar height + 10px to make some margin
+export const SCROLL_TO_MARGIN = 60 + 50 + 10
 export const SCROLL_TO_DURATION = 500 // ms
 
 // Settings
@@ -551,3 +592,30 @@ export const POST_TIME_FORMAT = 'h:mm a'
 
 // max time difference between consecutive posts to bundle posts by same user
 export const POSTS_BUNDLE_TIME_DIFF = 1000 * 60 * 10 // 10 min difference
+
+// possible statuses of milestones
+export const MILESTONE_STATUS = {
+  UNPLANNED: 'in_review',
+  PLANNED: 'reviewed',
+  ACTIVE: 'active',
+  BLOCKED: 'paused',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled'
+}
+
+// minimum designs to select during checkpoint type milestone
+export const MIN_CHECKPOINT_REVIEW_DESIGNS = 5
+
+// minimum winner designs to select during final-designs milestone
+export const MIN_WINNER_DESIGNS = 3
+
+// list of link types which are supported by milestones
+export const MILESTONE_LINK_SUPPORTED_TYPES = [
+  { title: 'Any', value: '' },
+  { title: 'Document', value: 'document' },
+  { title: 'Zipped file', value: 'zip' },
+  { title: 'Marvel link', value: 'marvelapp' },
+  { title: 'GitHub link', value: 'github' },
+  { title: 'Heroku link', value: 'heroku' },
+  { title: 'Invoice', value: 'invoice' }
+]

@@ -22,6 +22,10 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
 
   const progress = _.get(process, 'percent', 0)
 
+  const projectDetailsURL = project.version === 'v3'
+    ? `/projects/${project.id}/scope`
+    : `/projects/${project.id}/specification`
+
   return (
     <div className="project-card-body">
       <TextTruncate
@@ -29,7 +33,7 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
         line={descLinesCount}
         truncateText="..."
         text={project.description}
-        textTruncateChild={showLink ? <Link className="read-more-link" to={showLinkURL || `/projects/${project.id}/specification`}>read more</Link> : <span className="read-more-link">read more</span>}
+        textTruncateChild={showLink ? <Link className="read-more-link" to={showLinkURL || projectDetailsURL}>read more</Link> : <span className="read-more-link">read more</span>}
       />
       <div className="project-status">
         {(project.status !== PROJECT_STATUS_ACTIVE || progress === 0) &&

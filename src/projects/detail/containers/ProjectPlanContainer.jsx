@@ -17,7 +17,8 @@ import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
-import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT, PROJECT_STATUS_COMPLETED, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
+import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT, PROJECT_STATUS_COMPLETED,
+  PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_ACTIVE } from '../../../config/constants'
 import Sticky from 'react-stickynode'
 import { Link } from 'react-router-dom'
 
@@ -29,27 +30,33 @@ const ProjectPlanContainer = (props) => {
     isSuperUser,
     isManageUser,
     currentMemberRole,
-    phases
+    phases,
+    feeds,
+    productsTimelines
   } = props
 
   // manager user sees all phases
   // customer user doesn't see unplanned (draft) phases
-  const visiblePhases = phases.filter((phase) => (
+  const visiblePhases = phases && phases.filter((phase) => (
     isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
   ))
-  const nonDraftPhases = phases.filter((phase) => (
-    phase.status !== PHASE_STATUS_DRAFT
-  ))
+
+  const activePhases = phases ? phases.filter((phase) => phase.status === PHASE_STATUS_ACTIVE) : []
+
   const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
 
   const leftArea = (
     <ProjectInfoContainer
       currentMemberRole={currentMemberRole}
+      phases={phases}
       project={project}
       phases={phases}
       isSuperUser={isSuperUser}
+      feeds={feeds}
+      productsTimelines={productsTimelines}
     />
   )
+
   return (
     <TwoColsLayout>
       <TwoColsLayout.Sidebar>
@@ -65,15 +72,14 @@ const ProjectPlanContainer = (props) => {
       </TwoColsLayout.Sidebar>
 
       <TwoColsLayout.Content>
-        {visiblePhases.length > 0 ? (
+        {visiblePhases && visiblePhases.length > 0 ? (
           [
-            nonDraftPhases.length > 0 && <ProjectPlanProgress phases={visiblePhases} project={project} key="progress" />,
+            activePhases.length > 0 && <ProjectPlanProgress phases={visiblePhases} project={project} productsTimelines={productsTimelines} key="progress" />,
             <ProjectStages
               {...{
                 ...props,
-                phases: visiblePhases,
+                phases: visiblePhases
               }}
-              isManageUser={isManageUser}
               key="stages"
             />
           ]
@@ -84,6 +90,7 @@ const ProjectPlanContainer = (props) => {
           <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
         </div>)}
       </TwoColsLayout.Content>
+
     </TwoColsLayout>
   )
 }
@@ -95,11 +102,14 @@ ProjectPlanContainer.propTypes = {
   isManageUser: PT.bool.isRequired,
   project: PT.object.isRequired,
   productTemplates: PT.array.isRequired,
+  phases: PT.array.isRequired,
+  productsTimelines: PT.object.isRequired,
 }
 
-const mapStateToProps = ({ projectState }) => ({
+const mapStateToProps = ({ projectState, projectTopics }) => ({
   productTemplates: projectState.allProductTemplates,
-  phases: projectState.phases
+  phases: projectState.phases,
+  feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
 })
 
 const mapDispatchToProps = {

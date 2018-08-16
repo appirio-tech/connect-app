@@ -6,7 +6,7 @@
 import React from 'react'
 import _ from 'lodash'
 
-import ScrollableFeed from '../ScrollableFeed'
+import ScrollableFeed from '../../../../components/Feed/ScrollableFeed'
 import spinnerWhileLoading from '../../../../components/LoadingSpinner'
 
 import './PhaseFeed.scss'

@@ -3,52 +3,111 @@ import PT from 'prop-types'
 import _ from 'lodash'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
+// import { unflatten } from 'flat'
 
 import styles from './EditStageForm.scss'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Prompt } from 'react-router-dom'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 const TCFormFields = FormsyForm.Fields
 // import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
-import { updatePhase as updatePhaseAction, syncPhases as syncPhasesAction } from '../../../actions/project'
+import { updatePhase as updatePhaseAction, firePhaseDirty, firePhaseDirtyUndo } from '../../../actions/project'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
 import { PHASE_STATUS_COMPLETED, PHASE_STATUS, PHASE_STATUS_ACTIVE } from '../../../../config/constants'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
+import { TOOLTIP_DEFAULT_DELAY } from '../../../../config/constants'
+import { getPhaseActualData } from '../../../../helpers/projectHelper'
 
 const moment = extendMoment(Moment)
-const phaseStatuses = PHASE_STATUS.map(ps => ({ title: ps.name, value: ps.value }))
+const phaseStatuses = PHASE_STATUS.map(ps => ({
+  title: ps.name,
+  value: ps.value,
+}))
 
 class EditStageForm extends React.Component {
   constructor(props) {
     super(props)
-    
+
     this.state = {
       isUpdating: false,
       isEdittable: _.get(props, 'phase.status') !== PHASE_STATUS_COMPLETED,
       disableActiveStatusFields: _.get(props, 'phase.status') !== PHASE_STATUS_ACTIVE,
-      showPhaseOverlapWarning: false
+      showPhaseOverlapWarning: false,
+      phaseIsdirty: false,
+      showActivatingWarning: false,
+      // we have to control phase status separately, so we can restore its when we need
+      selectedPhaseStatus: _.get(props, 'phase.status')
     }
     this.submitValue = this.submitValue.bind(this)
     this.enableButton = this.enableButton.bind(this)
     this.disableButton = this.disableButton.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.onCancel = this.onCancel.bind(this)
+    this.onLeave = this.onLeave.bind(this)
+    this.showActivatingWarning = this.showActivatingWarning.bind(this)
+    this.cancelActivatingPhase = this.cancelActivatingPhase.bind(this)
+    this.onFormSubmit = this.onFormSubmit.bind(this)
+    this.updateSelectedPhaseStatus = this.updateSelectedPhaseStatus.bind(this)
+  }
+
+  showActivatingWarning() {
+    this.setState({
+      showActivatingWarning: true,
+    })
+  }
+
+  cancelActivatingPhase() {
+    const phaseStatus = _.get(this.props, 'phase.status')
+    this.setState({
+      showActivatingWarning: false,
+      // to restore phase status first we change selected value to nothing
+      // and after will again put initial value, this will force SelectDropdown to change
+      // to initial value
+      selectedPhaseStatus: '',
+    }, () => {
+      this.setState({
+        selectedPhaseStatus: phaseStatus,
+      })
+    })
+  }
+
+  updateSelectedPhaseStatus(selectedOption) {
+    this.setState({
+      selectedPhaseStatus: selectedOption.value,
+    })
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       isUpdating: nextProps.isUpdating,
       isEdittable: nextProps.phase.status !== PHASE_STATUS_COMPLETED,
-      disableActiveStatusFields: nextProps.phase.status !== PHASE_STATUS_ACTIVE
+      disableActiveStatusFields: nextProps.phase.status !== PHASE_STATUS_ACTIVE,
     })
+
+    // update selected phase status if it was updated at the props
+    const prevPhaseStatus = _.get(this.props, 'phase.status')
+    const nextPhaseStatus = _.get(nextProps, 'phase.status')
+    if (nextPhaseStatus && prevPhaseStatus !== nextPhaseStatus) {
+      this.setState({ selectedPhaseStatus: nextPhaseStatus })
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('beforeunload', this.onLeave)
+  }
+
+  componentWillUnmount() {
+    this.props.firePhaseDirtyUndo()
+    window.removeEventListener('beforeunload', this.onLeave)
   }
 
   submitValue(model) {
     const { phase, phaseIndex, updatePhaseAction } = this.props
     const updatedStartDate = moment.utc(new Date(model.startDate))
     const duration = model.duration ? model.duration : 1
-    const endDate = moment.utc(updatedStartDate).add(duration - 1, 'days')
+    const endDate = model.status === PHASE_STATUS_COMPLETED ? moment.utc(new Date()) : moment.utc(updatedStartDate).add(duration - 1, 'days')
     const updateParam = _.assign({}, model, {
       startDate: updatedStartDate,
       endDate: endDate || '',
@@ -56,6 +115,21 @@ class EditStageForm extends React.Component {
     })
     this.setState({isUpdating: true})
     updatePhaseAction(phase.projectId, phase.id, updateParam, phaseIndex)
+  }
+
+  onFormSubmit(model) {
+    const { phase } = this.props
+    const { showActivatingWarning } = this.state
+
+    if (
+      !showActivatingWarning &&
+      phase.status !== PHASE_STATUS_ACTIVE &&
+      model.status === PHASE_STATUS_ACTIVE
+    ) {
+      this.showActivatingWarning()
+    } else {
+      this.submitValue(model)
+    }
   }
 
   enableButton() {
@@ -69,13 +143,22 @@ class EditStageForm extends React.Component {
   isChanged() {
     // We check if this.refs.form exists because this may be called before the
     // first render, in which case it will be undefined.
-    return (this.refs.form && this.refs.form.isChanged()) || this.state.isFeaturesDirty
+    return (this.refs.form && this.refs.form.isChanged())
+  }
+
+  // Notify user if they navigate away while the form is modified.
+  onLeave(e = {}) {
+    if (this.isChanged()) {
+      return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
+    }
   }
 
   onCancel() {
     this.refs.form.reset()
+    this.props.firePhaseDirtyUndo()
     this.setState({
-      showPhaseOverlapWarning: false
+      showPhaseOverlapWarning: false,
+      phaseIsdirty: false
     })
     this.props.cancel()
   }
@@ -110,9 +193,12 @@ class EditStageForm extends React.Component {
     })
     if (this.isChanged()) {
       // TODO fire dirty event for phase
-      // this.props.fireProjectDirty(unflatten(change))
+      this.setState({
+        phaseIsdirty: true
+      })
+      // this.props.firePhaseDirty(unflatten(change), this.props.phase.id)
     } else {
-      // this.props.fireProjectDirtyUndo()
+      // this.props.firePhaseDirtyUndo()
     }
   }
 
@@ -145,8 +231,8 @@ class EditStageForm extends React.Component {
       //pushing the phase if its overlapping with any
       if(overLapping) {
         phasesToBeUpdated.push({
-          id: phases[i].id, 
-          startDate: moment(new Date(phases[i].startDate)), 
+          id: phases[i].id,
+          startDate: moment(new Date(phases[i].startDate)),
           conflictingPhaseName: phases[i].name,
           conflictingPhaseIndex: i,
           updatedPhase: refPhase.name
@@ -157,12 +243,26 @@ class EditStageForm extends React.Component {
   }
 
   render() {
-    const { phase, isUpdating } = this.props
-    const { isEdittable, showPhaseOverlapWarning } = this.state
+    const { phase, isUpdating, timeline } = this.props
+    const { isEdittable, showPhaseOverlapWarning, showActivatingWarning, selectedPhaseStatus } = this.state
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment.utc(startDate).format('YYYY-MM-DD')
+    const hasTimeline = !!timeline
+
+    // don't allow to selected completed status if product has timeline
+    const activePhaseStatuses = phaseStatuses.map((status) => ({
+      ...status,
+      disabled: hasTimeline && status.value === PHASE_STATUS_COMPLETED
+    }))
+
+    const { progress, duration } = getPhaseActualData(phase, timeline)
+
     return (
       <div styleName="container">
+        <Prompt
+          when={this.state.phaseIsdirty}
+          message="You have unsaved changes. Are you sure you want to leave? "
+        />
         {this.state.isUpdating && (<LoadingIndicator />)}
         {!this.state.isUpdating && (<div>
           <Formsy.Form
@@ -170,7 +270,7 @@ class EditStageForm extends React.Component {
             disabled={!isEdittable}
             onInvalid={this.disableButton}
             onValid={this.enableButton}
-            onValidSubmit={this.submitValue}
+            onValidSubmit={this.onFormSubmit}
             onChange={ this.handleChange }
           >
             <div styleName="form">
@@ -182,25 +282,96 @@ class EditStageForm extends React.Component {
               </div>
               <div styleName="label-layer">
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Start Date" type="date" name="startDate" value={startDate} />
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Duration (days)" type="number" name="duration" value={phase.duration} minValue={1}/>
+                {hasTimeline ? (
+                  <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+                    <div className="tooltip-target">
+                      <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={hasTimeline} label="Duration (days)" type="number" name="duration" value={duration} minValue={1} />
+                    </div>
+                    <div className="tooltip-body">
+                      Phase duration is controlled by duration of individual milestones
+                    </div>
+                  </Tooltip>
+                ) : (
+                  <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={hasTimeline} label="Duration (days)" type="number" name="duration" value={duration} minValue={1} />
+                )}
               </div>
               <div styleName="label-layer">
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Paid to date (US$)" type="number" name="spentBudget" value={phase.spentBudget} disabled={this.state.disableActiveStatusFields} minValue={0}/>
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Price (US$)" type="number" name="budget" value={phase.budget} minValue={0}/>
               </div>
               <div styleName="label-layer">
-                <div styleName="input-row">
-                  <label className="tc-label">Status</label>
-                  <SelectDropdown name="status" value={phase.status} theme="default" options={phaseStatuses} />
+                {hasTimeline && phase.status === PHASE_STATUS_ACTIVE ? (
+                  <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+                    <div className="tooltip-target">
+                      <div styleName="input-row">
+                        <label className="tc-label">Status</label>
+                        <SelectDropdown
+                          name="status"
+                          value={selectedPhaseStatus}
+                          theme="default"
+                          options={activePhaseStatuses}
+                          disabled={hasTimeline && phase.status === PHASE_STATUS_ACTIVE}
+                        />
+                      </div>
+                    </div>
+                    <div className="tooltip-body">
+                      Phase status is controlled by statuses of individual milestones
+                    </div>
+                  </Tooltip>
+                ) : (
+                  <div styleName="input-row">
+                    <label className="tc-label">Status</label>
+                    <SelectDropdown
+                      name="status"
+                      value={selectedPhaseStatus}
+                      theme="default"
+                      options={activePhaseStatuses}
+                      disabled={hasTimeline && phase.status === PHASE_STATUS_ACTIVE}
+                    />
+                  </div>
+                )}
+
+                {hasTimeline ? (
+                  <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+                    <div className="tooltip-target">
+                      <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={this.state.disableActiveStatusFields || hasTimeline} label="Progress (%)" type="number" name="progress" value={progress} minValue={0} />
+                    </div>
+                    <div className="tooltip-body">
+                      Phase progress is controlled by progress of individual milestones
+                    </div>
+                  </Tooltip>
+                ) : (
+                  <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={this.state.disableActiveStatusFields || hasTimeline} label="Progress (%)" type="number" name="progress" value={progress} minValue={0} />
+                )}
+              </div>
+              {!showActivatingWarning ? (
+                <div styleName="group-bottom">
+                  <button onClick={this.onCancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
+                  <button className="tc-btn tc-btn-primary tc-btn-sm"
+                    type="submit" disabled={(!this.isChanged() || isUpdating) || !this.state.canSubmit}
+                  >Update Phase</button>
                 </div>
-                <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Progress (%)" type="number" name="progress" value={phase.progress} disabled={this.state.disableActiveStatusFields} minValue={0} />
-              </div>
-              <div styleName="group-bottom">
-                <button onClick={this.onCancel} type="button" className="tc-btn tc-btn-default"><strong>{'Cancel'}</strong></button>
-                <button className="tc-btn tc-btn-primary tc-btn-sm"
-                  type="submit" disabled={(!this.isChanged() || isUpdating) || !this.state.canSubmit}
-                >Update Phase</button>
-              </div>
+              ) : (
+                <div styleName="message">
+                  <h4 styleName="message-title">You are about to activate the phase</h4>
+                  <p styleName="message-text">This action will permanently change the status of your phase to Active and cannot be undone.</p>
+                  <div styleName="group-bottom">
+                    <button
+                      className="tc-btn tc-btn-default tc-btn-sm"
+                      type="button"
+                      onClick={this.cancelActivatingPhase}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="tc-btn tc-btn-warning tc-btn-sm"
+                      type="submit"
+                    >
+                      OK
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </Formsy.Form>
         </div>)}
@@ -219,11 +390,16 @@ EditStageForm.propTypes = {
   phaseIndex: PT.number
 }
 
-const mapStateToProps = ({projectState}) => ({
+const mapStateToProps = ({projectState, productsTimelines}) => ({
   isUpdating: projectState.processing,
-  phases: projectState.phases
+  phases: projectState.phases,
+  productsTimelines
 })
 
-const actionCreators = {updatePhaseAction, syncPhasesAction}
+const actionCreators = {
+  updatePhaseAction,
+  firePhaseDirty,
+  firePhaseDirtyUndo
+}
 
 export default withRouter(connect(mapStateToProps, actionCreators)(EditStageForm))

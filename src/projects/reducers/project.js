@@ -15,7 +15,7 @@ import {
   GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS, LOAD_PROJECT_PHASES_PENDING,
   LOAD_PROJECT_TEMPLATE_SUCCESS, LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS, LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
   UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_SUCCESS, UPDATE_PHASE_SUCCESS, UPDATE_PHASE_PENDING, UPDATE_PHASE_FAILURE,
-  DELETE_PROJECT_PHASE_PENDING, DELETE_PROJECT_PHASE_SUCCESS, DELETE_PROJECT_PHASE_FAILURE,
+  DELETE_PROJECT_PHASE_PENDING, DELETE_PROJECT_PHASE_SUCCESS, DELETE_PROJECT_PHASE_FAILURE, PHASE_DIRTY_UNDO, PHASE_DIRTY
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -112,6 +112,25 @@ export const projectState = function (state=initialState, action) {
       projectNonDirty: _.cloneDeep(action.payload),
       lastUpdated: new Date()
     })
+
+  case CREATE_PROJECT_STAGE_SUCCESS: {
+    // as we additionally loaded products to the phase object we have to keep them
+    // note that we keep them as they are without creation a new copy
+    const phase = {
+      ...action.payload.phase,
+      products: [action.payload.product]
+    }
+    const phaseNonDirty = {
+      // for non-dirty version we make sure that dont' have the same objects with phase
+      ..._.cloneDeep(action.payload.phase),
+      products: [_.cloneDeep(action.payload.product)]
+    }
+    return update(state, {
+      processing: { $set: false },
+      phases: { $push: [phase] },
+      phasesNonDirty: { $push: [phaseNonDirty] }
+    })
+  }
 
   case UPDATE_PHASE_SUCCESS: {
     // as we additionally loaded products to the phase object we have to keep them
@@ -237,7 +256,6 @@ export const projectState = function (state=initialState, action) {
       error: false
     })
 
-  case CREATE_PROJECT_STAGE_SUCCESS:
   case CREATE_PROJECT_SUCCESS:
   case UPDATE_PROJECT_SUCCESS: {
     // after loading project initially, we also load direct project
@@ -437,6 +455,22 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
+  case PHASE_DIRTY: {
+    const phaseIndex = state.phases.findIndex(phase => phase.id === action.payload.phaseId)
+    const phasesUpdated = [
+      ...state.phases.slice(0, phaseIndex),
+      {
+        ...state.phases[phaseIndex],
+        ...action.payload.dirtyPhase,
+        isDirty : true
+      },
+      ...state.phases.slice(phaseIndex + 1),
+    ]
+    return Object.assign({}, state, {
+      phases: _.mergeWith([], phasesUpdated)
+    })
+  }
+
   case PRODUCT_DIRTY:
     return {
       ...state,
@@ -451,6 +485,12 @@ export const projectState = function (state=initialState, action) {
   case PROJECT_DIRTY_UNDO: {
     return Object.assign({}, state, {
       project: _.cloneDeep(state.projectNonDirty)
+    })
+  }
+
+  case PHASE_DIRTY_UNDO: {
+    return Object.assign({}, state, {
+      phases: _.cloneDeep(state.phasesNonDirty)
     })
   }
 

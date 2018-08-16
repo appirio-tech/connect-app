@@ -7,18 +7,49 @@ import { getProjectById, createProject as createProjectAPI,
   deleteProjectPhase as deleteProjectPhaseAPI,
   getDirectProjectData,
   getProjectPhases,
-  getPhaseProducts,
   updateProduct as updateProductAPI,
   updatePhase as updatePhaseAPI,
   createProjectPhase,
   createPhaseProduct,
 } from '../../api/projects'
-import { getProductTemplate, getProjectTemplate, getProductTemplateByKey } from '../../api/templates'
-import { LOAD_PROJECT, CREATE_PROJECT, CREATE_PROJECT_STAGE, CLEAR_LOADED_PROJECT, UPDATE_PROJECT,
-  LOAD_DIRECT_PROJECT, DELETE_PROJECT, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES,
-  LOAD_PROJECT_TEMPLATE, LOAD_PROJECT_PRODUCT_TEMPLATES, LOAD_ALL_PRODUCT_TEMPLATES, UPDATE_PRODUCT,
-  PROJECT_STATUS_DRAFT, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO, UPDATE_PHASE, DELETE_PROJECT_PHASE,
+import {
+  getProductTemplate,
+  getProjectTemplate,
+  getProductTemplateByKey,
+} from '../../api/templates'
+import {
+  createTimeline,
+} from '../../api/timelines'
+// import { loadProductTimelineWithMilestones } from './productsTimelines'
+import {
+  LOAD_PROJECT,
+  CREATE_PROJECT,
+  CREATE_PROJECT_STAGE,
+  CLEAR_LOADED_PROJECT,
+  UPDATE_PROJECT,
+  LOAD_DIRECT_PROJECT,
+  DELETE_PROJECT,
+  PROJECT_DIRTY,
+  PROJECT_DIRTY_UNDO,
+  LOAD_PROJECT_PHASES,
+  LOAD_PROJECT_TEMPLATE,
+  LOAD_PROJECT_PRODUCT_TEMPLATES,
+  LOAD_ALL_PRODUCT_TEMPLATES,
+  UPDATE_PRODUCT,
+  PROJECT_STATUS_DRAFT,
+  PRODUCT_DIRTY,
+  PRODUCT_DIRTY_UNDO,
+  UPDATE_PHASE,
+  DELETE_PROJECT_PHASE,
+  MILESTONE_STATUS,
+  PHASE_STATUS_ACTIVE,
+  PHASE_DIRTY,
+  PHASE_DIRTY_UNDO
 } from '../../config/constants'
+import {
+  updateProductMilestone,
+  updateProductTimeline
+} from './productsTimelines'
 
 export function loadProject(projectId) {
   return (dispatch) => {
@@ -30,40 +61,48 @@ export function loadProject(projectId) {
 }
 
 /**
- * Populate each phase with `products` property containing all phase products
+ * Get project phases together with products
  *
- * @param {Array} phases list of phases
+ * @param {String} projectId project id
  *
- * @return {Promise} modified array of phases with `products` property
+ * @returns {Promise<[]>} resolves to the list of phases
  */
-function populatePhasesProducts(result) {
-  const phases = result.phases
-  const existingPhases = result.existingPhases
-  const unLoadedPhases = _.differenceWith(phases, existingPhases, (a, b) => a.id === b.id)
-  return Promise.all(unLoadedPhases.map((phase) => getPhaseProducts(phase.projectId, phase.id)))
-    .then((unLoadedPhasesProducts) => {
-      unLoadedPhases.forEach((phase, phaseIndex) => {
-        phase.products = unLoadedPhasesProducts[phaseIndex]
-      })
-      return _.concat(existingPhases, unLoadedPhases)
-    })
+function getProjectPhasesWithProducts(projectId) {
+  return getProjectPhases(projectId, {
+    // explicitly define the list of fields, to get products included in response
+    fields: [
+      'products',
+      'budget',
+      'createdAt',
+      'createdBy',
+      'details',
+      'duration',
+      'endDate',
+      'id',
+      'name',
+      'progress',
+      'projectId',
+      'spentBudget',
+      'startDate',
+      'status',
+      'updatedAt',
+      'updatedBy',
+    ].join(',')
+  })
 }
 
 /**
  * Load project phases with populated products
  *
  * @param {String} projectId        project id
- * @param {String} project        project info
- * @param {String} existingPhases        loaded phases of project in redux
  *
  * @return {Promise} LOAD_PROJECT_PHASES action with payload as array of phases
  */
-export function loadProjectPhasesWithProducts(projectId, project, existingPhases) {
+export function loadProjectPhasesWithProducts(projectId) {
   return (dispatch) => {
     return dispatch({
       type: LOAD_PROJECT_PHASES,
-      payload: getProjectPhases(projectId, existingPhases)
-        .then(populatePhasesProducts)
+      payload: getProjectPhasesWithProducts(projectId)
     })
   }
 }
@@ -112,7 +151,7 @@ export function loadProjectProductTemplates(projectTemplate) {
           alreadyLoadedProductTemplates.push(alreadyLoadedProductTemplate)
         } else {
           notLoadedProductTemplatesIds.push(product.id)
-        } 
+        }
       })
     }
 
@@ -126,8 +165,6 @@ export function loadProjectProductTemplates(projectTemplate) {
     })
   }
 }
-
-
 
 /**
  * Load all product templates
@@ -179,18 +216,86 @@ export function createProject(newProject) {
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT,
-      payload: Promise.resolve(createProjectAPI(newProject))
-      //Commenting as now project service is taking care of creating default stages for a project
-      //.then((project) => createProjectPhaseAndProduct(project, projectTemplate))
+      payload: createProjectAPI(newProject)
+        .then((project) => createProductsTimelineAndMilestone(project, dispatch))
     })
   }
 }
 
-export function createProduct(project, productTemplate) {
+/**
+ * Helper method to get the list of all products of the project
+ *
+ * @param {Object} project project
+ *
+ * @returns {Promise<[]>} list of products
+ */
+function getAllProjectProducts(project) {
+  return getProjectPhasesWithProducts(project.id)
+    .then((phases) => _.flatten(_.map(phases, 'products')))
+}
+
+/**
+ * Create timeline and milestones for a product
+ *
+ * @param {Object} product product
+ *
+ * @return {Promise} product
+ */
+function createTimelineAndMilestoneForProduct(product, phase) {
+  return createTimeline({
+    name: `Welcome to the ${product.name} phase`,
+    description: 'This is the first stage in our project. We’re going to show you the detailed plan in your timeline, with all the milestones.',
+    startDate: phase ? moment(phase.startDate).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
+    endDate: null,
+    reference: 'product',
+    referenceId: product.id,
+    templateId: product.templateId,
+  })
+}
+
+/**
+ * Create timeline and milestones for all products of a project
+ *
+ * @param {Object} project project
+ *
+ * @returns {Promise} project
+ */
+function createProductsTimelineAndMilestone(project) {
+  return getAllProjectProducts(project)
+    .then((products) =>
+      Promise.all(products.map(createTimelineAndMilestoneForProduct))
+    )
+    .then(() => project)
+}
+
+export function createProduct(project, productTemplate, phases, timelines) {
+  let startDate = moment().hours(0).minutes(0).seconds(0)
+    .milliseconds(0)
+  if(phases && phases.length > 0) {
+    const phase = _.maxBy(phases, 'startDate')
+    const productId = _.get(phase, 'products[0].id', -1)
+    const timelineState = timelines && timelines[productId] ? timelines[productId] : null
+    if (timelineState && timelineState.timeline) {
+      // finds the last milestone of the timeline in the phase
+      const lastMilestone = _.maxBy(timelineState.timeline.milestones, 'order')
+      // calculates the start date for the new phase by adding 1 day to the end date of the milestone
+      // we don't use end date field of milestone because it might not reflect the correct end date
+      startDate = moment(lastMilestone.startDate).hours(0).minutes(0).seconds(0)
+        .milliseconds(0).add(lastMilestone.duration - 1, 'days').add(1, 'days')
+    } else {
+      // if there is no timeline for the phase, calculates the next phase's start date by adding 1 day to the
+      // end date of last phase, we don't use end date field of milestone because it might not reflect the
+      // correct end date
+      startDate = moment(phase.startDate).hours(0).minutes(0).seconds(0)
+        .milliseconds(0).add(phase.duration - 1, 'days').add(1, 'days')
+    }
+  }
+  // assumes 10 days as default duration, ideally we could store it at template level
+  const endDate = moment(startDate).add((10 - 1), 'days')
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT_STAGE,
-      payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, null, null)
+      payload: createProjectPhaseAndProduct(project, productTemplate, PROJECT_STATUS_DRAFT, startDate, endDate)
     })
   }
 }
@@ -204,24 +309,32 @@ export function createProduct(project, productTemplate) {
  *
  * @return {Promise} project
  */
-export function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT_STATUS_DRAFT, startDate = new Date(), endDate = moment().add(17, 'days').format()) {
+export function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT_STATUS_DRAFT, startDate, endDate) {
   const param = {
     status,
     name: projectTemplate.name
   }
   if (startDate) {
-    param['startDate'] = startDate
+    param['startDate'] = startDate.format('YYYY-MM-DD')
   }
   if (endDate) {
-    param['endDate'] = endDate
+    param['endDate'] = endDate.format('YYYY-MM-DD')
   }
+  console.log(param, 'param')
   return createProjectPhase(project.id, param).then((phase) => {
     return createPhaseProduct(project.id, phase.id, {
       name: projectTemplate.name,
       templateId: projectTemplate.id,
       type: projectTemplate.key || projectTemplate.productKey,
+    }).then((product) => {
+      // we also wait until timeline is created as we will load it for the phase after creation
+      return createTimelineAndMilestoneForProduct(product, phase).then((timeline) => ({
+        project,
+        phase,
+        product,
+        timeline,
+      }))
     })
-      .then(() => project)
   })
 }
 
@@ -255,10 +368,66 @@ export function updateProject(projectId, updatedProps, updateExisting = false) {
  * @return {Promise} phase
  */
 export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState()
+    const phase = state.projectState.phases[phaseIndex]
+    const phaseStatusChanged = phase.status !== updatedProps.status
+    const productId = phase.products[0].id
+    const timeline = state.productsTimelines[productId] && state.productsTimelines[productId].timeline
+    const startDateChanged =updatedProps.startDate && updatedProps.startDate.diff(timeline.startDate)
+    const phaseActivated = phaseStatusChanged && updatedProps.status === PHASE_STATUS_ACTIVE
+
     return dispatch({
       type: UPDATE_PHASE,
-      payload: updatePhaseAPI(projectId, phaseId, updatedProps, phaseIndex)
+      payload: updatePhaseAPI(projectId, phaseId, updatedProps, phaseIndex).then()
+    }).then(() => {
+      // finds active milestone, if exists in timeline
+      const activeMilestone = timeline ? _.find(timeline.milestones, m => m.status === PHASE_STATUS_ACTIVE) : null
+      // this will be done after updating timeline (if timeline update is required)
+      // or immediately if timeline update is not required
+      // update product milestone strictly after updating timeline
+      // otherwise it could happened like this:
+      // - send request to update timeline
+      // - send request to update milestone
+      // - get updated milestone
+      // - get updated timeline (without updated milestone)
+      // so otherwise we can end up with the timeline without updated milestone
+      const optionallyUpdateFirstMilestone = () => {
+        // update first product milestone only if
+        // - there is a milestone, obviously
+        // - phase's status is changed
+        // - phase's status is changed to active
+        // - there is not active milestone alreay (this can happen when phase is made active more than once
+        // e.g. Active => Paused => Active)
+        if (timeline && !activeMilestone && phaseActivated ) {
+          dispatch(
+            updateProductMilestone(
+              productId,
+              timeline.id,
+              timeline.milestones[0].id,
+              {status:MILESTONE_STATUS.ACTIVE}
+            )
+          )
+        }
+      }
+
+      if (timeline && (startDateChanged || phaseActivated)) {
+        dispatch(
+          updateProductTimeline(
+            productId,
+            timeline.id,
+            {
+              name: timeline.name,
+              startDate: updatedProps.startDate.format(),
+              reference: timeline.reference,
+              referenceId: timeline.referenceId,
+            }
+          )
+        ).then(optionallyUpdateFirstMilestone)
+      } else {
+        optionallyUpdateFirstMilestone()
+      }
+      return true
     })
   }
 }
@@ -277,7 +446,10 @@ export function createProjectWithStatus(newProject, status, projectTemplate) {
     return dispatch({
       type: CREATE_PROJECT,
       payload: createProjectWithStatusAPI(newProject, status)
-        .then((project) => createProjectPhaseAndProduct(project, projectTemplate, status))
+        .then((project) => {
+          return createProjectPhaseAndProduct(project, projectTemplate, status)
+            .then(() => project)
+        })
     })
   }
 }
@@ -310,6 +482,18 @@ export function fireProjectDirty(dirtyProject) {
   }
 }
 
+export function firePhaseDirty(dirtyPhase, phaseId) {
+  return (dispatch) => {
+    return dispatch({
+      type: PHASE_DIRTY,
+      payload: {
+        dirtyPhase,
+        phaseId }
+
+    })
+  }
+}
+
 export function fireProductDirty(phaseId, productId, values) {
   return (dispatch) => {
     return dispatch({
@@ -327,6 +511,14 @@ export function fireProjectDirtyUndo() {
   return (dispatch) => {
     return dispatch({
       type: PROJECT_DIRTY_UNDO
+    })
+  }
+}
+
+export function firePhaseDirtyUndo() {
+  return (dispatch) => {
+    return dispatch({
+      type: PHASE_DIRTY_UNDO
     })
   }
 }

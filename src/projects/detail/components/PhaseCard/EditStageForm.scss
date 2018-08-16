@@ -36,8 +36,14 @@
     margin: 0px 10px 10px;
     flex: 0 250px;
     text-align: right;
-    line-height: 30px;
+    height: 40px;
+    line-height: 40px;
     white-space: nowrap;
+  }
+
+  input:not([type="checkbox"]):disabled,
+  :global(.SelectDropdown:not(.dropdown-wrap)) {
+    width:163px;
   }
 
   .input {
@@ -97,6 +103,9 @@
     position: relative;
     line-height: inherit;
     flex: 0 620px;
+    label {
+      flex: 0 225px;
+    }
   }
 }
 
@@ -107,7 +116,7 @@
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-    margin-bottom: 20px;
+    padding-bottom: 20px;
 
     button {
       margin: 0 5px 0 5px;
@@ -115,4 +124,23 @@
           opacity: 0.5;
       }
     }
+}
+
+.message {
+  background-color: $tc-red-10;
+  padding: 4 * $base-unit 4 * $base-unit 0 4 * $base-unit;
+  text-align: center;
+
+  .message-title {
+    @include roboto-bold;
+    color: $tc-red-100;
+    font-size: 15px;
+  }
+
+  .message-text {
+    @include roboto;
+    font-size: 13px;
+    line-height: 20px;
+    margin-top: 2 * $base-unit;
+  }
 }

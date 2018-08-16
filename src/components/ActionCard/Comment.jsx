@@ -54,7 +54,7 @@ class Comment extends React.Component {
   }
 
   render() {
-    const {message, author, date, edited, children, noInfo, self, isSaving, hasError, readonly, allMembers} = this.props
+    const {message, author, date, edited, children, noInfo, self, isSaving, hasError, readonly, allMembers, canDelete} = this.props
     const messageAnchor = `comment-${message.id}`
     const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#${messageAnchor}`
     const authorName = author ? (author.firstName + ' ' + author.lastName) : 'Connect user'
@@ -108,6 +108,7 @@ class Comment extends React.Component {
           {self && !readonly &&
             <aside styleName="controls">
               <CommentEditToggle
+                hideDelete={canDelete===false}
                 onEdit={this.edit}
                 onDelete={this.delete}
               />
@@ -186,6 +187,10 @@ Comment.propTypes = {
    * If true only comment text is shown without additional info
    */
   noInfo: PropTypes.bool,
+  /**
+   * The can delete flag
+   */
+  canDelete: PropTypes.bool,
 }
 
 export default Comment
