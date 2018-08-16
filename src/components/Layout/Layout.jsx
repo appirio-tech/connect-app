@@ -16,7 +16,7 @@ const Layout = (props) => {
 
   if (isLoadingUser) {
     return (<div />)
-  } else if (MAINTENANCE_MODE || maintenanceMode) {
+  } else if (MAINTENANCE_MODE === true || maintenanceMode) {
     return <Maintenance />
   } else {
     return (
