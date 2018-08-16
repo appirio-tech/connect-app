@@ -320,7 +320,7 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
   if (endDate) {
     param['endDate'] = endDate.format('YYYY-MM-DD')
   }
-  console.log(param, 'param')
+
   return createProjectPhase(project.id, param).then((phase) => {
     return createPhaseProduct(project.id, phase.id, {
       name: projectTemplate.name,
@@ -421,7 +421,7 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
             timeline.id,
             {
               name: timeline.name,
-              startDate: updatedProps.startDate.format(),
+              startDate: updatedProps.startDate.format('YYYY-MM-DD'),
               reference: timeline.reference,
               referenceId: timeline.referenceId,
             }
