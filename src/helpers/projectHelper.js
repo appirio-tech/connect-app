@@ -111,7 +111,7 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
 
     // calculate progress of phase
     const timeline = productsTimelines[phase.products[0].id].timeline
-    if (timeline && timeline.milestones.length > 0) {
+    if (timeline && timeline.milestones && timeline.milestones.length > 0) {
       const timelineNow = moment().utc()
       let tlPlannedDuration = 0
       let tlCurrentDuration = 0
@@ -239,7 +239,7 @@ export function getPhaseActualData(phase, timeline) {
   let progress
 
   // if phase's product doesn't have timeline get data from phase
-  if (!timeline || timeline.milestones.length < 1) {
+  if (!timeline ||  !timeline.milestones || timeline.milestones.length < 1) {
     startDate = phase.startDate && moment.utc(phase.startDate)
     endDate = phase.endDate && moment.utc(phase.endDate)
     duration = phase.duration ? phase.duration : 0
