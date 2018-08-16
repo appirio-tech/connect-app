@@ -1,6 +1,6 @@
 import React from 'react'
 import Footer from '../Footer/Footer'
-// import { MAINTENANCE_MODE } from '../../config/constants'
+import { MAINTENANCE_MODE } from '../../config/constants'
 import Alert from 'react-s-alert'
 import cn from 'classnames'
 import Maintenance from '../Maintenance/Maintenance'
@@ -16,7 +16,7 @@ const Layout = (props) => {
 
   if (isLoadingUser) {
     return (<div />)
-  } else if (maintenanceMode) {
+  } else if (MAINTENANCE_MODE || maintenanceMode) {
     return <Maintenance />
   } else {
     return (
