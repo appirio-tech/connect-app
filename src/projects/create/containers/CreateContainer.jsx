@@ -72,6 +72,7 @@ class CreateContainer extends React.Component {
     this.createProject = this.createProject.bind(this)
     this.onLeave = this.onLeave.bind(this)
     this.closeWizard = this.closeWizard.bind(this)
+    this.prepareProjectForCreation = this.prepareProjectForCreation.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -164,7 +165,13 @@ class CreateContainer extends React.Component {
   // stores the incomplete project in local storage
   onLeave(e) {// eslint-disable-line no-unused-vars
     const { wizardStep, isProjectDirty } = this.state
+    const { templates: { projectTemplates }} = this.props
+
     if (wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS && isProjectDirty) {// Project Details step
+
+      const projectTemplateKey = _.get(this.state.updatedProject, 'details.products[0]')
+      const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
+      this.prepareProjectForCreation(this.state.updatedProject, projectTemplate)
       console.log('saving incomplete project', this.state.updatedProject)
       window.localStorage.setItem(LS_INCOMPLETE_PROJECT, JSON.stringify(this.state.updatedProject))
     }
@@ -177,6 +184,32 @@ class CreateContainer extends React.Component {
   }
 
   /**
+   * Helper method to add additional details required to create project
+   * 
+   * @param {Object} project project data captured from user
+   * @param {Object} projectTemplate project template to be used
+   */
+  prepareProjectForCreation(project, projectTemplate) {
+    const gaClickId  = Cookies.get(GA_CLICK_ID)
+    const gaClientId = Cookies.get(GA_CLIENT_ID)
+    if(gaClientId || gaClickId) {
+      const googleAnalytics = {}
+      if (gaClickId !== 'null') {
+        googleAnalytics[GA_CLICK_ID]  = gaClickId
+      }
+      if (gaClientId !== 'null') {
+        googleAnalytics[GA_CLIENT_ID] = gaClientId
+      }
+      _.set(project, 'details.utm.google', googleAnalytics)
+    }
+    if (projectTemplate) {
+      project.version = 'v3'
+      project.templateId = projectTemplate.id
+      project.type = projectTemplate.category
+    }
+  }
+
+  /**
    * Creates new project if user is already logged in, otherwise, redirects user for registration/login.
    */
   createProject(project) {
@@ -185,24 +218,7 @@ class CreateContainer extends React.Component {
 
     this.setState({ creatingProject: true }, () => {
       if (this.props.userRoles && this.props.userRoles.length > 0) {
-        // if user is logged in and has a valid role, create project
-        // uses dirtyProject from the state as it has the latest changes from the user
-        // this.props.createProjectAction(project)
-        const gaClickId  = Cookies.get(GA_CLICK_ID)
-        const gaClientId = Cookies.get(GA_CLIENT_ID)
-        if(gaClientId || gaClickId) {
-          const googleAnalytics = {}
-          if (gaClickId !== 'null') {
-            googleAnalytics[GA_CLICK_ID]  = gaClickId
-          }
-          if (gaClientId !== 'null') {
-            googleAnalytics[GA_CLIENT_ID] = gaClientId
-          }
-          _.set(project, 'details.utm.google', googleAnalytics)
-        }
-        project.version = 'v3'
-        project.templateId = projectTemplate.id
-        project.type = projectTemplate.category
+        this.prepareProjectForCreation(project, projectTemplate)
         this.props.createProjectAction(project)
       } else {
         // redirect to registration/login page
