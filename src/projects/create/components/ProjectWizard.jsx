@@ -4,8 +4,7 @@ import qs from 'query-string'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import { getProjectCreationTemplateField, getProjectTemplateByAlias,
-  getProjectTemplateByKey, getProjectTemplatesByCategory, getProjectTypeByAlias } from '../../../helpers/templates'
+import { getProjectCreationTemplateField, getProjectTemplateByAlias, getProjectTemplatesByCategory, getProjectTypeByAlias } from '../../../helpers/templates'
 import Wizard from '../../../components/Wizard'
 import SelectProjectTemplate from './SelectProjectTemplate'
 import SelectProjectType from './SelectProjectType'
@@ -53,14 +52,15 @@ class ProjectWizard extends Component {
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     if (incompleteProjectStr) {
       const incompleteProject = JSON.parse(incompleteProjectStr)
-      const incompleteProjectTemplateKey = _.get(incompleteProject, 'details.products[0]')
+      const incompleteProjectTemplateId = _.get(incompleteProject, 'templateId')
+      const incompleteProjectTemplate = _.find(projectTemplates, pt => pt.id === incompleteProjectTemplateId)
       let wizardStep = WZ_STEP_INCOMP_PROJ_CONF
       let updateQuery = {}
-      if (incompleteProjectTemplateKey && params && params.project) {
-        const project = getProjectTemplateByAlias(projectTemplates, params.project)
-        if (project) {
+      if (incompleteProjectTemplate && params && params.project) {
+        const projectTemplate = getProjectTemplateByAlias(projectTemplates, params.project)
+        if (projectTemplate) {
           // load project details page directly
-          if (project.key === incompleteProjectTemplateKey) {
+          if (projectTemplate.key === incompleteProjectTemplate.key) {
             wizardStep = WZ_STEP_FILL_PROJ_DETAILS
             updateQuery = {$merge : incompleteProject}
           } else {
@@ -111,15 +111,15 @@ class ProjectWizard extends Component {
     const { onStepChange } = nextProps
     const params = nextProps.match.params
     const type = _.get(nextProps.project, 'type', null)
-    const projectTemplateKey = _.get(nextProps.project, 'details.products[0]', null)
+    const projectTemplateId = _.get(nextProps.project, 'templateId', null)
     // redirect user to project details form, if we already have type and project available
-    let wizardStep = type && projectTemplateKey ? WZ_STEP_FILL_PROJ_DETAILS : null
+    let wizardStep = type && projectTemplateId ? WZ_STEP_FILL_PROJ_DETAILS : null
     const updateQuery = {}
     if (params && params.project) { // if there exists project path param
       wizardStep = this.loadProjectFromURL(params, updateQuery)
     } else { // if there is not project path param, it should be first step of the wizard
       updateQuery['type'] = { $set : null }
-      updateQuery['details'] = { products : { $set: [] } }
+      updateQuery['details'] = { $set : {} }
       wizardStep = WZ_STEP_SELECT_PROJ_TYPE
     }
     // if wizard step deduced above and stored in state are not the same, update the state
@@ -166,7 +166,8 @@ class ProjectWizard extends Component {
       // show details step
       if (projectTemplate) {
         updateQuery['type'] = { $set : projectTemplate.category }
-        updateQuery['details'] = { products : { $set: [projectTemplate.key] } }
+        updateQuery['templateId'] = { $set : projectTemplate.id }
+        updateQuery['details'] = {}
 
         const refCode = _.get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
         if (refCode) {
@@ -211,11 +212,11 @@ class ProjectWizard extends Component {
     window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
     // following code assumes that componentDidMount has already updated state with correct project
     const projectType = _.get(this.state.project, 'type')
-    const projectTemplateKey = _.get(this.state.project, 'details.products[0]')
+    const projectTemplateId = _.get(this.state.project, 'templateId')
     let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
     let project = null
-    if (projectTemplateKey) {
-      project = { type: projectType, details: { products: [projectTemplateKey] } }
+    if (projectTemplateId) {
+      project = { type: projectType, templateId: projectTemplateId }
       wizardStep = WZ_STEP_FILL_PROJ_DETAILS
     }
     const refCode = this.getRefCodeFromURL()
@@ -243,18 +244,13 @@ class ProjectWizard extends Component {
     })
   }
 
-  updateProjectTemplate(projectTemplateKey) {
+  updateProjectTemplate(projectTemplate) {
     window.scrollTo(0, 0)
-    const { onStepChange, onProjectUpdate, projectTemplates } = this.props
+    const { onStepChange, onProjectUpdate } = this.props
     const updateQuery = {}
-    if (projectTemplateKey) {
-      const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
-
-      const detailsQuery = { products : [projectTemplateKey] }
-      this.restoreCommonDetails(projectTemplate, updateQuery, detailsQuery)
-
+    if (projectTemplate) {
       updateQuery.type = { $set : projectTemplate.category }
-      updateQuery.details = { $set : detailsQuery }
+      updateQuery.templateId = { $set: projectTemplate.id }
     }
     this.setState({
       project: update(this.state.project, updateQuery),
@@ -275,8 +271,9 @@ class ProjectWizard extends Component {
     if (projectType) {
       updateQuery.type = { $set : projectType }
 
+      // sets the appropriate project template if project category has only one project template
       if (visibleProjectTemplates.length === 1) {
-        updateQuery.details = { $set : { products : [visibleProjectTemplates[0].key]} }
+        updateQuery.templateId = { $set : visibleProjectTemplates[0].id }
       }
     }
 
@@ -392,8 +389,8 @@ class ProjectWizard extends Component {
     const type = wizardStep === WZ_STEP_SELECT_PROJ_TEMPLATE ? this.state.project.type : null
     this.setState({
       // resets project sub type or product
-      project: update(this.state.project, { type: { $set : type }, details: { products: {$set : [] }}}),
-      dirtyProject: update(this.state.project, { type: { $set : type }, details: { products: {$set : [] }}}),
+      project: update(this.state.project, { type: { $set : type }, details: {}}),
+      dirtyProject: update(this.state.project, { type: { $set : type }, details: {}}),
       wizardStep
     }, () => {
       typeof onStepChange === 'function' && onStepChange(wizardStep, this.state.dirtyProject)
