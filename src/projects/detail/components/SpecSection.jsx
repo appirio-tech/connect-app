@@ -25,6 +25,9 @@ import IconTcSpecTypeSansSerif from  '../../../assets/icons/icon-tc-spec-type-sa
 import IconTcSpecIconTypeColorHome from  '../../../assets/icons/icon-tc-spec-icon-type-color-home.svg'
 import IconTcSpecIconTypeOutlineHome from  '../../../assets/icons/icon-tc-spec-icon-type-outline-home.svg'
 import IconTcSpecIconTypeGlyphHome from  '../../../assets/icons/icon-tc-spec-icon-type-glyph-home.svg'
+import IconDontKnow from '../../../assets/icons/icon-dont-know.svg'
+import IconTestStructured from '../../../assets/icons/icon-test-structured.svg'
+import IconTestUnstructured from '../../../assets/icons/icon-test-unstructured.svg'
 
 // map string values to icon components for "tiled-radio-group" field type
 // this map contains TWO types of map, dashed and CamelCased
@@ -48,6 +51,12 @@ const tiledRadioGroupIcons = {
   'icon-tc-spec-icon-type-outline-home': IconTcSpecIconTypeOutlineHome,
   IconTcSpecIconTypeGlyphHome,
   'icon-tc-spec-icon-type-glyph-home': IconTcSpecIconTypeGlyphHome,
+  IconDontKnow,
+  'icon-dont-know': IconDontKnow,
+  IconTestStructured,
+  'icon-test-structured': IconTestStructured,
+  IconTestUnstructured,
+  'icon-test-unstructured': IconTestUnstructured,
 }
 
 const SpecSection = props => {
@@ -63,6 +72,7 @@ const SpecSection = props => {
     validate,
     sectionNumber,
     showHidden,
+    isCreation,
     addAttachment,
     updateAttachment,
     removeAttachment,
@@ -149,10 +159,20 @@ const SpecSection = props => {
     case 'files': {
       const projectLatest = isProjectDirty ? dirtyProject : project
       const files = _.get(projectLatest, props.fieldName, [])
+      // NOTE using category to differentiate between project and product attachments is a workaround to give ability
+      // to upload attachments for products. We need to come up with a better way to handle this.
+      // defaults to appDefinition to be backward compatible
+      let category = _.get(props, 'category', 'appDefinition')
+      // NOTE temporary patch for handling wrong category for v2 projects' attachments
+      // it is happening because we are merging project and product templates for v2 projects and we don't have files
+      // field in project templates but we have it for product templates which in turn has category set as `product`
+      category = projectLatest.version && projectLatest.version === 'v2' ? 'appDefinition' : category
+      category = 'product' === category ? `${category}#${projectLatest.id}` : category
       return (
         <FileListContainer
           project={projectLatest}
           files={files}
+          category={category}
           addAttachment={addAttachment}
           updateAttachment={updateAttachment}
           removeAttachment={removeAttachment}
@@ -229,7 +249,12 @@ const SpecSection = props => {
         <p className="gray-text">
           {description}
         </p>
-        {subSections.filter((subSection) => showHidden || !subSection.hidden).map(renderSubSection)}
+        {subSections.filter((subSection) => (
+          // hide section marked with hiddenOnCreation during creation process
+          (!isCreation || !subSection.hiddenOnCreation) &&
+          // hide hidden section, unless we not force to show them
+          (showHidden || !subSection.hidden)
+        )).map(renderSubSection)}
       </div>
     </div>
   )
@@ -239,6 +264,7 @@ SpecSection.propTypes = {
   project: PropTypes.object.isRequired,
   sectionNumber: PropTypes.number.isRequired,
   showHidden: PropTypes.bool,
+  isCreation: PropTypes.bool,
   addAttachment: PropTypes.func.isRequired,
   updateAttachment: PropTypes.func.isRequired,
   removeAttachment: PropTypes.func.isRequired,

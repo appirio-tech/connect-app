@@ -2,13 +2,13 @@
 
 :global {
   .main-wrapper {
-    min-height: calc(100vh - 40px); // minus footer height
+    min-height: calc(100vh - 60px); // minus height
     padding-top: 60px;
     overflow: hidden;
 
     @media screen and (max-width: $screen-md - 1px) {
       padding-top: 0;
-      min-height: calc(100vh - 100px); // minus header and footer height
+      min-height: calc(100vh - 50px); // minus mobile header height
     }
 
     &.with-filters {
@@ -25,50 +25,5 @@
     &[data-route*='add-phase'] {
       background-color: $tc-gray-neutral-light;
     }
-  }
-
-  .content-area {
-  }
-}
-
-:global {
-  .s-alert-box {
-    @include roboto-bold;
-    background-color: $tc-gray-90;
-    border-radius: 6px;
-    box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.30000001192092896);
-    color: $tc-white;
-    font-size: 13px;
-    max-width: 100%;
-    padding: 4 * $base-unit;
-    text-transform: uppercase;
-    width: 320px;
-
-    .s-alert-close {
-      right: 4 * $base-unit;
-      top: 4 * $base-unit;
-    }
-
-    .s-alert-close::before,
-    .s-alert-close::after {
-      background-color: $tc-white;
-      width: 2px;
-    }
-
-    &:hover {
-      .s-alert-close::before,
-      .s-alert-close::after {
-        background-color: $tc-white;
-      }
-    }
-  }
-
-  .s-alert-box-inner {
-    padding-right: 6 * $base-unit;
-  }
-
-  .s-alert-warning,
-  .s-alert-error {
-      background: $tc-red-70;
   }
 }

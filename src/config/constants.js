@@ -7,7 +7,9 @@ export const LOAD_USER_SUCCESS     = 'LOAD_USER_SUCCESS'
 export const LOAD_USER_FAILURE     = 'LOAD_USER_FAILURE'
 
 // Notifications
-export const GET_NOTIFICATIONS = 'GET_NOTIFICATIONS'
+export const GET_NOTIFICATIONS_PENDING = 'GET_NOTIFICATIONS_PENDING'
+export const GET_NOTIFICATIONS_SUCCESS = 'GET_NOTIFICATIONS_SUCCESS'
+export const GET_NOTIFICATIONS_FAILURE = 'GET_NOTIFICATIONS_FAILURE'
 export const VISIT_NOTIFICATIONS = 'VISIT_NOTIFICATIONS'
 export const SET_NOTIFICATIONS_FILTER_BY = 'SET_NOTIFICATIONS_FILTER_BY'
 export const MARK_ALL_NOTIFICATIONS_READ = 'MARK_ALL_NOTIFICATIONS_READ'
@@ -17,6 +19,7 @@ export const VIEW_OLDER_NOTIFICATIONS_SUCCESS = 'VIEW_OLDER_NOTIFICATIONS_SUCCES
 export const HIDE_OLDER_NOTIFICATIONS_SUCCESS = 'HIDE_OLDER_NOTIFICATIONS_SUCCESS'
 export const NOTIFICATIONS_PENDING = 'NOTIFICATIONS_PENDING'
 export const TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE = 'TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE'
+export const TOGGLE_NOTIFICATIONS_DROPDOWN_WEB = 'TOGGLE_NOTIFICATIONS_DROPDOWN_WEB'
 
 // Settings
 export const CHECK_EMAIL_AVAILABILITY_PENDING = 'CHECK_EMAIL_AVAILABILITY_PENDING'
@@ -211,6 +214,16 @@ export const UPDATE_PROJECT_PENDING   = 'UPDATE_PROJECT_PENDING'
 export const UPDATE_PROJECT_SUCCESS   = 'UPDATE_PROJECT_SUCCESS'
 export const UPDATE_PROJECT_FAILURE   = 'UPDATE_PROJECT_FAILURE'
 
+export const UPDATE_PHASE             = 'UPDATE_PHASE'
+export const UPDATE_PHASE_PENDING     = 'UPDATE_PHASE_PENDING'
+export const UPDATE_PHASE_FAILURE     = 'UPDATE_PHASE_FAILURE'
+export const UPDATE_PHASE_SUCCESS     = 'UPDATE_PHASE_SUCCESS'
+
+export const DELETE_PROJECT_PHASE             = 'DELETE_PROJECT_PHASE'
+export const DELETE_PROJECT_PHASE_PENDING     = 'DELETE_PROJECT_PHASE_PENDING'
+export const DELETE_PROJECT_PHASE_FAILURE     = 'DELETE_PROJECT_PHASE_FAILURE'
+export const DELETE_PROJECT_PHASE_SUCCESS     = 'DELETE_PROJECT_PHASE_SUCCESS'
+
 export const UPDATE_PRODUCT           = 'UPDATE_PRODUCT'
 export const UPDATE_PRODUCT_PENDING   = 'UPDATE_PRODUCT_PENDING'
 export const UPDATE_PRODUCT_SUCCESS   = 'UPDATE_PRODUCT_SUCCESS'
@@ -219,6 +232,9 @@ export const UPDATE_PRODUCT_FAILURE   = 'UPDATE_PRODUCT_FAILURE'
 export const PROJECT_DIRTY            = 'PROJECT_DIRTY'
 export const PROJECT_DIRTY_UNDO       = 'PROJECT_DIRTY_UNDO'
 
+export const PHASE_DIRTY            = 'PHASE_DIRTY'
+export const PHASE_DIRTY_UNDO       = 'PHASE_DIRTY_UNDO'
+
 export const PRODUCT_DIRTY            = 'PRODUCT_DIRTY'
 export const PRODUCT_DIRTY_UNDO       = 'PRODUCT_DIRTY_UNDO'
 
@@ -226,6 +242,36 @@ export const LOAD_PROJECT_PHASES             = 'LOAD_PROJECT_PHASES'
 export const LOAD_PROJECT_PHASES_PENDING     = 'LOAD_PROJECT_PHASES_PENDING'
 export const LOAD_PROJECT_PHASES_FAILURE     = 'LOAD_PROJECT_PHASES_FAILURE'
 export const LOAD_PROJECT_PHASES_SUCCESS     = 'LOAD_PROJECT_PHASES_SUCCESS'
+
+export const LOAD_PRODUCT_TIMELINE_WITH_MILESTONES             = 'LOAD_PRODUCT_TIMELINE_WITH_MILESTONES'
+export const LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_PENDING     = 'LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_PENDING'
+export const LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE     = 'LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE'
+export const LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_SUCCESS     = 'LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_SUCCESS'
+
+export const UPDATE_PRODUCT_TIMELINE          = 'UPDATE_PRODUCT_TIMELINE'
+export const UPDATE_PRODUCT_TIMELINE_PENDING  = 'UPDATE_PRODUCT_TIMELINE_PENDING'
+export const UPDATE_PRODUCT_TIMELINE_FAILURE  = 'UPDATE_PRODUCT_TIMELINE_FAILURE'
+export const UPDATE_PRODUCT_TIMELINE_SUCCESS  = 'UPDATE_PRODUCT_TIMELINE_SUCCESS'
+
+export const UPDATE_PRODUCT_MILESTONE             = 'UPDATE_PRODUCT_MILESTONE'
+export const UPDATE_PRODUCT_MILESTONE_PENDING     = 'UPDATE_PRODUCT_MILESTONE_PENDING'
+export const UPDATE_PRODUCT_MILESTONE_FAILURE     = 'UPDATE_PRODUCT_MILESTONE_FAILURE'
+export const UPDATE_PRODUCT_MILESTONE_SUCCESS     = 'UPDATE_PRODUCT_MILESTONE_SUCCESS'
+
+export const COMPLETE_PRODUCT_MILESTONE             = 'COMPLETE_PRODUCT_MILESTONE'
+export const COMPLETE_PRODUCT_MILESTONE_PENDING     = 'COMPLETE_PRODUCT_MILESTONE_PENDING'
+export const COMPLETE_PRODUCT_MILESTONE_FAILURE     = 'COMPLETE_PRODUCT_MILESTONE_FAILURE'
+export const COMPLETE_PRODUCT_MILESTONE_SUCCESS     = 'COMPLETE_PRODUCT_MILESTONE_SUCCESS'
+
+export const SUBMIT_FINAL_FIXES_REQUEST             = 'SUBMIT_FINAL_FIXES_REQUEST'
+export const SUBMIT_FINAL_FIXES_REQUEST_PENDING     = 'SUBMIT_FINAL_FIXES_REQUEST_PENDING'
+export const SUBMIT_FINAL_FIXES_REQUEST_FAILURE     = 'SUBMIT_FINAL_FIXES_REQUEST_FAILURE'
+export const SUBMIT_FINAL_FIXES_REQUEST_SUCCESS     = 'SUBMIT_FINAL_FIXES_REQUEST_SUCCESS'
+
+export const EXTEND_PRODUCT_MILESTONE             = 'EXTEND_PRODUCT_MILESTONE'
+export const EXTEND_PRODUCT_MILESTONE_PENDING     = 'EXTEND_PRODUCT_MILESTONE_PENDING'
+export const EXTEND_PRODUCT_MILESTONE_FAILURE     = 'EXTEND_PRODUCT_MILESTONE_FAILURE'
+export const EXTEND_PRODUCT_MILESTONE_SUCCESS     = 'EXTEND_PRODUCT_MILESTONE_SUCCESS'
 
 export const LOAD_MEMBERS             = 'LOAD_MEMBERS'
 export const LOAD_MEMBERS_PENDING     = 'LOAD_MEMBERS_PENDING'
@@ -331,6 +377,15 @@ export const PROJECT_STATUS_COMPLETED = 'completed'
 export const PROJECT_STATUS_CANCELLED = 'cancelled'
 export const PROJECT_STATUS_PAUSED = 'paused'
 
+
+export const PHASE_STATUS_DRAFT = 'draft'
+export const PHASE_STATUS_IN_REVIEW = 'in_review'
+export const PHASE_STATUS_REVIEWED = 'reviewed'
+export const PHASE_STATUS_ACTIVE = 'active'
+export const PHASE_STATUS_COMPLETED = 'completed'
+export const PHASE_STATUS_CANCELLED = 'cancelled'
+export const PHASE_STATUS_PAUSED = 'paused'
+
 export const PROJECT_STATUS = [
   {color: 'gray', name: 'Draft', fullName: 'Project is in draft', value: PROJECT_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
   {color: 'gray', name: 'In review', fullName: 'Project is in review', value: PROJECT_STATUS_IN_REVIEW, order: 3, dropDownOrder: 2 },
@@ -339,6 +394,16 @@ export const PROJECT_STATUS = [
   {color: 'black', name: 'Completed', fullName: 'Project is completed', value: PROJECT_STATUS_COMPLETED, order: 5, dropDownOrder: 5 },
   {color: 'black', name: 'Cancelled', fullName: 'Project is canceled', value: PROJECT_STATUS_CANCELLED, order: 6, dropDownOrder: 6 },
   {color: 'red', name: 'Paused', fullName: 'Project is paused', value: PROJECT_STATUS_PAUSED, order: 7, dropDownOrder: 7 }
+]
+
+export const PHASE_STATUS = [
+  {color: 'gray', name: 'Draft', fullName: 'Phase is in draft', value: PHASE_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
+  // {color: 'gray', name: 'In review', fullName: 'Phase is in review', value: PHASE_STATUS_IN_REVIEW, order: 3, dropDownOrder: 2 },
+  {color: 'gray', name: 'Planned', fullName: 'Phase is reviewed', value: PHASE_STATUS_REVIEWED, order: 4, dropDownOrder: 3 },
+  {color: 'green', name: 'In Progress', fullName: 'Phase is active', value: PHASE_STATUS_ACTIVE, order: 1, dropDownOrder: 4 },
+  {color: 'black', name: 'Delivered', fullName: 'Phase is completed', value: PHASE_STATUS_COMPLETED, order: 5, dropDownOrder: 5 },
+  // {color: 'black', name: 'Cancelled', fullName: 'Phase is canceled', value: PHASE_STATUS_CANCELLED, order: 6, dropDownOrder: 6 },
+  // {color: 'red', name: 'Paused', fullName: 'Phase is paused', value: PHASE_STATUS_PAUSED, order: 7, dropDownOrder: 7 }
 ]
 
 // this defines default criteria to filter projects for projects list
@@ -404,6 +469,8 @@ export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?
 export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
 export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
 
+export const TC_CDN_URL = process.env.NODE_ENV === 'development' ? 'https://d1aahxkjiobka8.cloudfront.net' : 'https://d2nl5eqipnb33q.cloudfront.net'
+
 export const PROJECT_NAME_MAX_LENGTH = 255
 export const PROJECT_REF_CODE_MAX_LENGTH = 32
 
@@ -416,13 +483,20 @@ export const CODER_BOT_USERID = 'CoderBot'
 export const TC_SYSTEM_USERID = parseInt(process.env.TC_SYSTEM_USERID || '0', 10)
 export const CODER_BOT_USER_FNAME = 'Coder'
 export const CODER_BOT_USER_LNAME = 'the Bot'
+export const CONNECT_USER_HANDLE = 'connectuser'
+export const CONNECT_USER_FNAME = 'Connect'
+export const CONNECT_USER_LNAME = 'User'
+export const CONNECT_USER = {
+  firstName: CONNECT_USER_FNAME,
+  lastName: CONNECT_USER_LNAME,
+}
 
 export const PROJECT_MAX_COLORS = 5
 
 export const AUTOCOMPLETE_TRIGGER_LENGTH = 3
 
 // Toggle this flag to enable/disable maintenance mode
-export const MAINTENANCE_MODE = false
+export const MAINTENANCE_MODE = process.env.MAINTENANCE_MODE
 
 export const LS_INCOMPLETE_PROJECT = 'incompleteProject'
 
@@ -488,7 +562,8 @@ export const NOTIFICATIONS_NEW_PER_SOURCE = 10
 
 export const NOTIFICATIONS_LIMIT = 1000
 
-export const SCROLL_TO_MARGIN = 70 // px - 60px of toolbar height + 10px to make some margin
+// 60px of primary toolbar height + 50px of secondary toolbar height + 10px to make some margin
+export const SCROLL_TO_MARGIN = 60 + 50 + 10
 export const SCROLL_TO_DURATION = 500 // ms
 
 // Settings
@@ -510,4 +585,37 @@ export const NOTIFICATION_SETTINGS_PERIODS = [
   { text: 'Hourly', value: 'hourly' },
   { text: 'Daily', value: 'daily' },
   { text: 'Weekly', value: 'weekly' },
+]
+
+// date time formats
+export const POST_TIME_FORMAT = 'h:mm a'
+
+// max time difference between consecutive posts to bundle posts by same user
+export const POSTS_BUNDLE_TIME_DIFF = 1000 * 60 * 10 // 10 min difference
+
+// possible statuses of milestones
+export const MILESTONE_STATUS = {
+  UNPLANNED: 'in_review',
+  PLANNED: 'reviewed',
+  ACTIVE: 'active',
+  BLOCKED: 'paused',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled'
+}
+
+// minimum designs to select during checkpoint type milestone
+export const MIN_CHECKPOINT_REVIEW_DESIGNS = 5
+
+// minimum winner designs to select during final-designs milestone
+export const MIN_WINNER_DESIGNS = 3
+
+// list of link types which are supported by milestones
+export const MILESTONE_LINK_SUPPORTED_TYPES = [
+  { title: 'Any', value: '' },
+  { title: 'Document', value: 'document' },
+  { title: 'Zipped file', value: 'zip' },
+  { title: 'Marvel link', value: 'marvelapp' },
+  { title: 'GitHub link', value: 'github' },
+  { title: 'Heroku link', value: 'heroku' },
+  { title: 'Invoice', value: 'invoice' }
 ]

@@ -32,6 +32,19 @@ import {
   DELETE_PHASE_FEED_COMMENT_FAILURE,
   // products
   UPDATE_PRODUCT_SUCCESS,
+  UPDATE_PHASE_FAILURE,
+  DELETE_PROJECT_PHASE_SUCCESS,
+  // timelines
+  UPDATE_PRODUCT_TIMELINE_FAILURE,
+  LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE,
+  // milestones
+  UPDATE_PRODUCT_MILESTONE_FAILURE,
+  COMPLETE_PRODUCT_MILESTONE_FAILURE,
+  COMPLETE_PRODUCT_MILESTONE_SUCCESS,
+  EXTEND_PRODUCT_MILESTONE_FAILURE,
+  EXTEND_PRODUCT_MILESTONE_SUCCESS,
+  SUBMIT_FINAL_FIXES_REQUEST_FAILURE,
+  SUBMIT_FINAL_FIXES_REQUEST_SUCCESS,
 } from '../config/constants'
 /* eslint-enable no-unused-vars */
 
@@ -55,8 +68,26 @@ export default function(state = {}, action) {
     return state
   }
 
+  case DELETE_PROJECT_PHASE_SUCCESS: {
+    Alert.success('Project phase deleted.')
+
+    return state
+  }
+
   case DELETE_PROJECT_SUCCESS:
     Alert.success('Project deleted.')
+    return state
+
+  case COMPLETE_PRODUCT_MILESTONE_SUCCESS:
+    Alert.success('Milestone is completed.')
+    return state
+
+  case EXTEND_PRODUCT_MILESTONE_SUCCESS:
+    Alert.success('Milestone is extended.')
+    return state
+
+  case SUBMIT_FINAL_FIXES_REQUEST_SUCCESS:
+    Alert.success('Final fixes are submitted.')
     return state
 
   case LOAD_PROJECT_SUCCESS:
@@ -110,6 +141,13 @@ export default function(state = {}, action) {
   case CREATE_PHASE_FEED_COMMENT_FAILURE:
   case SAVE_PHASE_FEED_COMMENT_FAILURE:
   case DELETE_PHASE_FEED_COMMENT_FAILURE:
+  case UPDATE_PHASE_FAILURE:
+  case LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE:
+  case UPDATE_PRODUCT_TIMELINE_FAILURE:
+  case UPDATE_PRODUCT_MILESTONE_FAILURE:
+  case COMPLETE_PRODUCT_MILESTONE_FAILURE:
+  case EXTEND_PRODUCT_MILESTONE_FAILURE:
+  case SUBMIT_FINAL_FIXES_REQUEST_FAILURE:
     if (action.payload && action.payload.response) {
       const rdata = action.payload.response.data
       if (rdata && rdata.result && rdata.result.content && rdata.result.content.message) {

@@ -14,7 +14,7 @@ import {
   filterProjectNotifications,
 } from '../../../routes/notifications/helpers/notifications'
 import { toggleNotificationRead, toggleBundledNotificationRead } from '../../../routes/notifications/actions'
-import { updateProduct, fireProductDirty, fireProductDirtyUndo } from '../../actions/project'
+import { updateProduct, fireProductDirty, fireProductDirtyUndo, deleteProjectPhase } from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
 import MediaQuery from 'react-responsive'
@@ -27,10 +27,10 @@ import SystemFeed from '../../../components/Feed/SystemFeed'
 import WorkInProgress from '../components/WorkInProgress'
 
 import {
-  PROJECT_STATUS_ACTIVE,
-  PROJECT_STATUS_DRAFT,
+  PHASE_STATUS_ACTIVE,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
+  PROJECT_FEED_TYPE_PRIMARY,
 } from '../../../config/constants'
 
 const SYSTEM_USER = {
@@ -60,6 +60,7 @@ class DashboardContainer extends React.Component {
       phases,
       currentMemberRole,
       isSuperUser,
+      isManageUser,
       notifications,
       productTemplates,
       isProcessing,
@@ -69,25 +70,29 @@ class DashboardContainer extends React.Component {
       addProductAttachment,
       updateProductAttachment,
       removeProductAttachment,
+      deleteProjectPhase,
+      feeds,
+      productsTimelines
     } = this.props
-
+    
     // system notifications
     const notReadNotifications = filterReadNotifications(notifications.notifications)
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
     const sortedUnreadProjectUpdates = _.orderBy(unreadProjectUpdate, ['date'], ['desc'])
 
-    // work in progress phase
-    // find active phase otherwise fallback to some draft phase
-    const activePhase = phases && phases.length > 0 && (
-      _.find(phases, { status: PROJECT_STATUS_ACTIVE }) ||
-      _.find(phases, { status: PROJECT_STATUS_DRAFT })
-    )
+    // work in progress phases
+    // find active phases
+    const activePhases = _.orderBy(_.filter(phases, phase => phase.status === PHASE_STATUS_ACTIVE), ['endDate'])
 
     const leftArea = (
       <ProjectInfoContainer
         currentMemberRole={currentMemberRole}
+        phases={phases}
         project={project}
+        phases={phases}
         isSuperUser={isSuperUser}
+        feeds={feeds}
+        productsTimelines={productsTimelines}
       />
     )
 
@@ -97,7 +102,7 @@ class DashboardContainer extends React.Component {
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
               if (matches) {
-                return <Sticky top={60}>{leftArea}</Sticky>
+                return <Sticky top={110}>{leftArea}</Sticky>
               } else {
                 return leftArea
               }
@@ -114,20 +119,22 @@ class DashboardContainer extends React.Component {
             />
           }
 
-          {activePhase &&
+          {activePhases.length > 0 &&
             <WorkInProgress
               productTemplates={productTemplates}
               currentMemberRole={currentMemberRole}
               isProcessing={isProcessing}
               isSuperUser={isSuperUser}
+              isManageUser={isManageUser}
               project={project}
-              phase={activePhase}
+              activePhases={activePhases}
               updateProduct={updateProduct}
               fireProductDirty={fireProductDirty}
               fireProductDirtyUndo={fireProductDirtyUndo}
               addProductAttachment={addProductAttachment}
               updateProductAttachment={updateProductAttachment}
               removeProductAttachment={removeProductAttachment}
+              deleteProjectPhase={deleteProjectPhase}
             />
           }
 
@@ -142,11 +149,12 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState }) => ({
+const mapStateToProps = ({ notifications, projectState, projectTopics }) => ({
   notifications,
-  productTemplates: projectState.productTemplates,
+  productTemplates: projectState.allProductTemplates,
   isProcessing: projectState.processing,
   phases: projectState.phases,
+  feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
 })
 
 const mapDispatchToProps = {
@@ -158,6 +166,7 @@ const mapDispatchToProps = {
   addProductAttachment,
   updateProductAttachment,
   removeProductAttachment,
+  deleteProjectPhase,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardContainer)

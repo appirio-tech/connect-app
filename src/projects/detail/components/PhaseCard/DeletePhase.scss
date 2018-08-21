@@ -1,0 +1,24 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  border-top: 1px dashed $tc-gray-10;
+  margin-top: 2 * $base-unit;
+  padding-top: 2 * $base-unit;
+}
+
+.content {
+  background-color: $tc-red-10;
+  border-radius: 4px;
+  padding: 3 * $base-unit;
+}
+
+.message {
+  @include roboto;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.controls {
+  padding: 20px 0 5px;
+  text-align: center;
+}

@@ -1,0 +1,40 @@
+// Project wizard main page
+
+@import 'layout';
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .ProjectWizard {
+    @extend .wizardWrapper;
+  }
+
+  .headerSelectProjectType {
+    @extend .wizardHeader;
+  }
+
+  .SelectProjectType {
+    @extend .wizardCardContainer;
+
+    .cards {
+      margin: 0 auto;
+      max-width: 900px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        max-width: 600px;
+      }
+    }
+
+    > h1 {
+      @extend .wizardHeadline;
+      margin-bottom: 30px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        font-size: 20px;
+        margin-left: 10px;
+        margin-bottom: 0;
+        padding-top: 10px;
+        text-align: left;
+      }
+    }
+  }
+}

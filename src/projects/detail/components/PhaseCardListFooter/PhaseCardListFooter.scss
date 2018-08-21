@@ -1,7 +1,7 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 .container {
-  @include roboto-bold;
+  @include roboto;
   align-items: center;
   background-color: $tc-gray-80;
   border-radius: 0 0 6px 6px;
@@ -19,14 +19,9 @@
   }
 }
 
-.add-button-contaner {
-  text-align: center;
-  margin-top: 10px;
-}
-
 .main {
   display: flex;
-  flex: 0 500px;
+  flex: 1 500px;
 }
 
 .total {
@@ -46,7 +41,8 @@
 }
 
 .status {
-  flex: 1 0 40px;
+  flex: 0 55px;
+  min-width: 55px;
 
   @media screen and (max-width: $screen-md - 1px) {
     display: none;

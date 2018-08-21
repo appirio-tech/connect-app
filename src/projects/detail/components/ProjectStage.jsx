@@ -4,16 +4,17 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
-import moment from 'moment'
 import uncontrollable from 'uncontrollable'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
+import { getPhaseActualData } from '../../../helpers/projectHelper'
 import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
 
 import PhaseCard from './PhaseCard'
-import GenericMenu from '../../../components/GenericMenu'
+import ProjectStageTabs from './ProjectStageTabs'
 import EditProjectForm from './EditProjectForm'
 import PhaseFeed from './PhaseFeed'
+import ProductTimelineContainer from '../containers/ProductTimelineContainer'
 import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 
@@ -29,25 +30,34 @@ const EnhancedEditProjectForm = enhance(EditProjectForm)
  *
  * @returns {Object} PhaseCard attr property
  */
-function formatPhaseCardAttr(phase, productTemplates, feed) {
+function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline) {
   // NOTE so far one phase always has 1 product
   // but as in the future this may be changed, we work with products as an array
   const product = _.get(phase, 'products[0]')
   const { status } = phase
   const productTemplate = _.find(productTemplates, { id: product.templateId })
-  const budget = product.budget || 0
+  const budget = phase.budget || 0
   const price = `$${formatNumberWithCommas(budget)}`
   const icon = _.get(productTemplate, 'icon')
-  const title = _.get(productTemplate, 'name')
-  const startDate = phase.startDate && moment(phase.startDate)
-  const endDate = phase.endDate && moment(phase.endDate)
-  const duration = startDate && endDate
-    ? moment.duration(endDate.diff(startDate)).days() + ' days'
-    : '0 days'
-  let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
-  startEndDates += startDate && endDate ? `–${endDate.format('MMM D')}` : ''
+  const title = phase.name
 
-  const actualPrice = product.actualPrice
+  const {
+    startDate,
+    endDate,
+    duration: plannedDuration,
+    progress: progressInPercent,
+  } = getPhaseActualData(phase, timeline)
+
+  const duration = `${plannedDuration} day${plannedDuration !== 1 ? 's' : ''}`
+  let startEndDates = startDate ? `${startDate.format('MMM D')}` : ''
+  // appends end date to the start date only if end date is greater than start date
+  startEndDates += startDate && endDate && endDate.diff(startDate, 'days') > 0 ? `-${endDate.format('MMM D')}` : ''
+  // extracts the start date's month string plus white space
+  const monthStr = startEndDates.substr(0, 4)
+  // replaces the second occurrence of the month part i.e. removes the end date's month part
+  startEndDates = startEndDates.lastIndexOf(monthStr) !== 0 ? startEndDates.replace(`-${monthStr}`, '-') : startEndDates
+
+  const actualPrice = phase.spentBudget
   let paidStatus = 'Quoted'
   if (actualPrice && actualPrice === budget) {
     paidStatus = 'Paid in full'
@@ -68,6 +78,9 @@ function formatPhaseCardAttr(phase, productTemplates, feed) {
     paidStatus,
     status,
     posts,
+    phaseIndex,
+    phase,
+    progressInPercent
   }
 }
 
@@ -105,15 +118,18 @@ class ProjectStage extends React.Component{
     const {
       activeTab,
       phase,
+      phaseIndex,
       project,
       productTemplates,
       currentMemberRole,
       isProcessing,
       isSuperUser,
+      isManageUser,
       updateProduct,
       fireProductDirty,
       fireProductDirtyUndo,
       onTabClick,
+      deleteProjectPhase,
 
       // comes from phaseFeedHOC
       currentUser,
@@ -124,23 +140,8 @@ class ProjectStage extends React.Component{
       onDeleteMessage,
       allMembers,
       onSaveMessage,
+      timeline,
     } = this.props
-
-    const tabs = [
-      {
-        onClick: () => onTabClick('timeline'),
-        label: 'Timeline',
-        isActive: activeTab === 'timeline'
-      }, {
-        onClick: () => onTabClick('posts'),
-        label: 'Posts',
-        isActive: activeTab === 'posts'
-      }, {
-        onClick: () => onTabClick('specification'),
-        label: 'Specification',
-        isActive: activeTab === 'specification'
-      }
-    ]
 
     // NOTE even though in store we keep products as an array,
     // so far we always have only one product per phase, so will display only one
@@ -150,16 +151,32 @@ class ProjectStage extends React.Component{
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
 
-    return (
-      <PhaseCard attr={formatPhaseCardAttr(phase, productTemplates, feed)}>
-        <div>
-          <GenericMenu navLinks={tabs} />
+    const hasTimeline = !!timeline
+    const defaultActiveTab = hasTimeline ? 'timeline' : 'posts'
+    const currentActiveTab = activeTab ? activeTab : defaultActiveTab
 
-          {activeTab === 'timeline' &&
-            <div>Timeline</div>
+    return (
+      <PhaseCard
+        attr={formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline)}
+        projectStatus={project.status}
+        isManageUser={isManageUser}
+        deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
+        timeline={timeline}
+      >
+        <div>
+          <ProjectStageTabs
+            activeTab={currentActiveTab}
+            onTabClick={onTabClick}
+            isSuperUser={isSuperUser}
+            isManageUser={isManageUser}
+            hasTimeline={hasTimeline}
+          />
+
+          {currentActiveTab === 'timeline' &&
+            <ProductTimelineContainer product={product} />
           }
 
-          {activeTab === 'posts' &&
+          {currentActiveTab === 'posts' &&
             <PhaseFeed
               user={currentUser}
               currentUser={currentUser}
@@ -173,7 +190,7 @@ class ProjectStage extends React.Component{
             />
           }
 
-          {activeTab === 'specification' &&
+          {currentActiveTab === 'specification' &&
             <div className="two-col-content content">
               <EnhancedEditProjectForm
                 project={product}
@@ -198,7 +215,7 @@ class ProjectStage extends React.Component{
 }
 
 ProjectStage.defaultProps = {
-  activeTab: 'timeline',
+  activeTab: '',
   currentMemberRole: null,
 }
 
@@ -215,6 +232,7 @@ ProjectStage.propTypes = {
   addProductAttachment: PT.func.isRequired,
   updateProductAttachment: PT.func.isRequired,
   removeProductAttachment: PT.func.isRequired,
+  deleteProjectPhase: PT.func.isRequired,
 }
 
 const ProjectStageUncontrollable = uncontrollable(ProjectStage, {

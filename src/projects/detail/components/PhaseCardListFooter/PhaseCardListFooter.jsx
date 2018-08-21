@@ -3,15 +3,13 @@
  */
 import React from 'react'
 import PT from 'prop-types'
-import { Link } from 'react-router-dom'
 
 import './PhaseCardListFooter.scss'
 
 const PhaseCardListFooter = ({
   duration,
   price,
-  startEndDates,
-  projectId
+  startEndDates
 }) => (
   <div>
     <div styleName="container">
@@ -24,9 +22,6 @@ const PhaseCardListFooter = ({
       </div>
       <div styleName="price">{price}</div>
       <div styleName="status" />
-    </div>
-    <div styleName="add-button-contaner">
-      <Link to={`/projects/${projectId}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Stage</Link>
     </div>
   </div>
 )
@@ -41,8 +36,7 @@ PhaseCardListFooter.defaultProps = {
 PhaseCardListFooter.propTypes = {
   duration: PT.string,
   price: PT.string,
-  startEndDates: PT.string,
-  projectId: PT.number
+  startEndDates: PT.string
 }
 
 export default PhaseCardListFooter

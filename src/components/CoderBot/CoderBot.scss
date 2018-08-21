@@ -7,7 +7,7 @@
       background: $tc-gray-neutral-dark;
     }
   }
-  
+
   .page-error {
     border-radius:4px;
     position: relative;
@@ -18,7 +18,7 @@
       min-height: 780px;
     }
     margin: 20px auto 0;
-    background: #ffffff;
+    background: $tc-white;
     .icon-coder-broken {
       margin: 6% 20%;
       float: left;
@@ -95,4 +95,3 @@
     }
   }
 }
-  

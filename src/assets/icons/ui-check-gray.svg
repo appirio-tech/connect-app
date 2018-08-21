@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>ui-check</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M14.3,3.3 L5,12.6 L1.7,9.3 C1.3,8.9 0.7,8.9 0.3,9.3 C-0.1,9.7 -0.1,10.3 0.3,10.7 L4.3,14.7 C4.5,14.9 4.7,15 5,15 C5.3,15 5.5,14.9 5.7,14.7 L15.7,4.7 C16.1,4.3 16.1,3.7 15.7,3.3 C15.3,2.9 14.7,2.9 14.3,3.3 Z" id="path-1"></path>
+    </defs>
+    <g id="ui-check" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons/check">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="Mask" fill="#808080" fill-rule="nonzero" xlink:href="#path-1"></use>
+            <g id="color/tc-gray/50" mask="url(#mask-2)" fill="#808080" fill-rule="evenodd">
+                <rect id="fill/tc-gray/50" x="0" y="0" width="16" height="16"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

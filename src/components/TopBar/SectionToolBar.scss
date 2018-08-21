@@ -4,7 +4,7 @@
 :global {
   .tc-header.tc-header__connect .top-bar{
     height: 60px;
-    background-color: #262628;
+    background-color: $tc-gray-90;
     position: relative;
     display: flex;
 
@@ -68,7 +68,7 @@
       }
 
       &:hover {
-        background-color: #55a5ff;
+        background-color: $tc-dark-blue-70;
 
         .icon-x-mark {
           fill: $tc-white;

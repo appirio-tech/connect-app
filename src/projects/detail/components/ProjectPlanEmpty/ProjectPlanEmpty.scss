@@ -1,0 +1,22 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import '../../../../styles/includes';
+
+.container {
+  @include stand-alone-item-shadow;
+  background-color: $tc-white;
+  border-radius: $card-border-radius;
+  margin-top: 4 * $base-unit;
+  padding: 10 * $base-unit;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    border-radius: 0;
+  }
+
+  p {
+    @include roboto;
+    font-size: 15px;
+    margin-top: 3 * $base-unit;
+    line-height: 25px;
+  }
+}
+

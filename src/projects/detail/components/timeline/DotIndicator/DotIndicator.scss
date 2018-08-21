@@ -1,0 +1,50 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  position: relative;
+}
+
+.line {
+  background-color: $tc-white;
+  bottom: 0;
+  left: -19px;
+  position: absolute;
+  top: 50%;
+  width: 2px;
+
+  .hide-dot:not(.hide-line):not(.hide-first-line) &,
+  .is-done & {
+    display: none;
+  }
+
+  .hide-line & {
+    top: 0;
+  }
+
+  .hide-first-line & {
+    top: -7px;
+  }
+}
+
+.dot {
+  background-color: $tc-white;
+  border-radius: 100%;
+  border: 2px solid $tc-dark-blue-100;
+  height: 8px;
+  left: -22px;
+  margin-top: -4px;
+  top: 50%;
+  position: absolute;
+  width: 8px;
+  z-index: 3;
+
+  .hide-line &,
+  .hide-first-line &,
+  .hide-dot & {
+    display: none;
+  }
+
+  .is-done & {
+    background-color: $tc-dark-blue-100;
+  }
+}

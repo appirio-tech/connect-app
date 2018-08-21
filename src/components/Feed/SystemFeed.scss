@@ -40,7 +40,7 @@
         }
 
         strong {
-          color: #000;
+          color: $tc-black;
           font-weight: bold;
         }
       }
@@ -52,7 +52,7 @@
 
         &::before {
           content: " \B7 ";
-          color: #000;
+          color: $tc-black;
           font-size: 20px;
           position: absolute;
           left: -7px;

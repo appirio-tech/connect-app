@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-timeline-document</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icon-timeline-document" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M7,4 L7,15 L4,15 C3.448,15 3,15.448 3,16 L3,24 C3,25.657 4.343,27 6,27 L7,27 L24,27 C25.657,27 27,25.657 27,24 L27,4 C27,3.448 26.552,3 26,3 L8,3 C7.448,3 7,3.448 7,4 Z M11,8 L17,8 L17,14 L11,14 L11,8 Z M6,25 C5.448,25 5,24.551 5,24 L5,17 L7,17 L7,24 C7,24.551 6.552,25 6,25 Z M23,22 L11,22 L11,20 L23,20 L23,22 Z M23,18 L11,18 L11,16 L23,16 L23,18 Z M23,14 L19,14 L19,12 L23,12 L23,14 Z M23,10 L19,10 L19,8 L23,8 L23,10 Z" id="Shape" fill="#404041" fill-rule="nonzero"></path>
+    </g>
+</svg>

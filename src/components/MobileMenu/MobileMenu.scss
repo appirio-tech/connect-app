@@ -8,14 +8,14 @@
 
 .container {
   background-color: $tc-black;
-  color: #fff;
+  color: $tc-white;
   min-height: 100vh;
   padding-bottom: 50px;
   position: relative;
 }
 
 .header {
-  background-color: #151516;
+  background-color: $tc-black;
   display: flex;
   justify-content: space-between;
   padding: $base-unit * 2 $base-unit * 2 $base-unit * 2 $base-unit * 3;
@@ -42,7 +42,7 @@
 
   &::before {
     content: '';
-    border-top: 1px solid #404041;
+    border-top: 1px solid $tc-gray-80;
     display: block;
     margin: 0 $base-unit * 4 $base-unit * 2;
   }
@@ -60,7 +60,7 @@
 
     > a {
       @include roboto;
-      color: #AAAAAB;
+      color: $tc-gray-30;
       display: block;
       font-size: 15px;
       line-height: $base-unit * 10;

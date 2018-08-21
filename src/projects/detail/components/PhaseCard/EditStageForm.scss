@@ -1,0 +1,146 @@
+@import '../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+.container {
+  background: $tc-gray-neutral-light;
+  padding: 10px;
+  border-radius: 6px;
+  @include roboto;
+}
+
+.form {
+  :global .error-message {
+    color: $tc-orange-70;
+    border: 1px solid $tc-orange-30;
+  }
+}
+
+.input-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-around;
+  align-items: center;
+  height: inherit;
+  position: relative;
+  line-height: inherit;
+  flex: 0 300px;
+
+  :global .dropdown-wrap {
+    width: 100%;
+    margin-left: 0px;
+  }
+
+  label {
+    margin: 0px 10px 10px;
+    flex: 0 250px;
+    text-align: right;
+    height: 40px;
+    line-height: 40px;
+    white-space: nowrap;
+  }
+
+  input:not([type="checkbox"]):disabled,
+  :global(.SelectDropdown:not(.dropdown-wrap)) {
+    width:163px;
+  }
+
+  .input {
+      &::-webkit-input-placeholder {
+        text-transform: initial;
+        color:$tc-gray-30;
+        font-size: 15px;
+        font-weight: 400;
+      }
+      &:-moz-placeholder {
+        text-transform: initial;
+        color:$tc-gray-30;
+        font-size: 15px;
+        font-weight: 400;
+      }
+      &::-moz-placeholder {
+        text-transform: initial;
+        color:$tc-gray-30;
+        font-size: 15px;
+        font-weight: 400;
+      }
+      &:-ms-input-placeholder {
+        text-transform: initial;
+        color:$tc-gray-30;
+        font-size: 15px;
+        font-weight: 400;
+      }
+  }
+}
+
+.label-layer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-around;
+    height: inherit;
+    position: relative;
+    line-height: inherit;
+}
+
+.title-label-layer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: flex-start;
+  .input-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-around;
+    align-items: center;
+    height: inherit;
+    position: relative;
+    line-height: inherit;
+    flex: 0 620px;
+    label {
+      flex: 0 225px;
+    }
+  }
+}
+
+.group-bottom {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    padding-bottom: 20px;
+
+    button {
+      margin: 0 5px 0 5px;
+      &.disable {
+          opacity: 0.5;
+      }
+    }
+}
+
+.message {
+  background-color: $tc-red-10;
+  padding: 4 * $base-unit 4 * $base-unit 0 4 * $base-unit;
+  text-align: center;
+
+  .message-title {
+    @include roboto-bold;
+    color: $tc-red-100;
+    font-size: 15px;
+  }
+
+  .message-text {
+    @include roboto;
+    font-size: 13px;
+    line-height: 20px;
+    margin-top: 2 * $base-unit;
+  }
+}

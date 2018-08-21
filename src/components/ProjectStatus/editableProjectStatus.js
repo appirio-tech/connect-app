@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
-import ProjectStatus from './ProjectStatus'
 import cn from 'classnames'
 import _ from 'lodash'
 import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
@@ -13,7 +12,7 @@ import {
 import CarretDownNormal9px from '../../assets/icons/arrow-9px-carret-down-normal.svg'
 
 
-const hocStatusDropdown = (CompositeComponent) => {
+const hocStatusDropdown = (CompositeComponent, statusList) => {
   class StatusDropdown extends Component {
     shouldDropdownUp() {
       if (this.refs.dropdown) {
@@ -28,7 +27,7 @@ const hocStatusDropdown = (CompositeComponent) => {
 
     render() {
       const { canEdit, isOpen, handleClick, onItemSelect, showText, withoutLabel, unifiedHeader, status } = this.props
-      const selected = PROJECT_STATUS.filter((opt) => opt.value === status)[0] || PROJECT_STATUS[0]
+      const selected = statusList.filter((opt) => opt.value === status)[0] || PROJECT_STATUS[0]
       if (!selected) {
         return null
       }
@@ -55,7 +54,7 @@ const hocStatusDropdown = (CompositeComponent) => {
               <div className="status-header">Project Status</div>
               <ul>
                 {
-                  PROJECT_STATUS.sort((a, b) => a.dropDownOrder > b.dropDownOrder).map((item) =>
+                  statusList.sort((a, b) => a.dropDownOrder > b.dropDownOrder).map((item) =>
                     (<li key={item.value}>
                       <a
                         href="javascript:"
@@ -64,7 +63,7 @@ const hocStatusDropdown = (CompositeComponent) => {
                           onItemSelect(item.value, e)
                         }}
                       >
-                        <ProjectStatus status={item} showText />
+                        <CompositeComponent status={item} showText />
                       </a>
                     </li>)
                   )
@@ -128,11 +127,13 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
   render() {
     const { showStatusChangeDialog, newStatus, statusChangeReason } = this.state
     const { canEdit } = this.props
-    const ProjectStatusDropdown = canEdit ? enhanceDropdown(hocStatusDropdown(CompositeComponent)) : hocStatusDropdown(CompositeComponent)
+    const StatusDropdown = canEdit
+      ? enhanceDropdown(hocStatusDropdown(CompositeComponent, PROJECT_STATUS))
+      : hocStatusDropdown(CompositeComponent, PROJECT_STATUS)
     return (
       <div className={cn('EditableProjectStatus', {'modal-active': showStatusChangeDialog})}>
         <div className="modal-overlay" onClick={ this.hideStatusChangeDialog }/>
-        <ProjectStatusDropdown {...this.props } onItemSelect={ this.showStatusChangeDialog } />
+        <StatusDropdown {...this.props } onItemSelect={ this.showStatusChangeDialog } />
         { showStatusChangeDialog &&
           <ProjectStatusChangeConfirmation
             newStatus={ newStatus }

@@ -1,0 +1,2 @@
+import MilestoneTypeFinalDesignsSelectionOnly from './MilestoneTypeFinalDesignsSelectionOnly'
+export default MilestoneTypeFinalDesignsSelectionOnly

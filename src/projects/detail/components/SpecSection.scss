@@ -704,12 +704,15 @@
     }
 
     textarea {
-      min-height: 45px;
+      min-height: 40px;
       max-width: 100%;
       text-align: left;
       text-indent: 0;
       resize: none;
       overflow: hidden;
+      padding-top: 7px;
+      padding-bottom: 7px;
+      line-height: 24px;
     }
   }
 

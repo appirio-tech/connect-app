@@ -94,6 +94,7 @@ class ProjectBasicDetailsForm extends Component {
               // TODO we shoudl not update the props (section is coming from props)
               // further, it is not used for this component as we are not rendering spec screen section here
               validate={() => {}}//dummy
+              isCreation
             />
           </div>
           <div className="section-footer section-footer-spec">

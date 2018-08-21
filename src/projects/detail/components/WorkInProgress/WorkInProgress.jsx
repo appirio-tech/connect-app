@@ -11,12 +11,18 @@ import ProjectStage from '../ProjectStage'
 
 import './WorkInProgress.scss'
 
-const WorkInProgress = (props) => (
+const WorkInProgress = ({ activePhases, ...props }) => (
   <Section>
     <SectionTitle title="Work in progress">
       <Link to={`/projects/${props.project.id}/plan`} styleName="view-all">View all</Link>
     </SectionTitle>
-    <ProjectStage {...props} />
+    {activePhases.map((activePhase) => (
+      <ProjectStage
+        {...props}
+        key={activePhase.id}
+        phase={activePhase}
+      />
+    ))}
   </Section>
 )
 
@@ -25,6 +31,7 @@ WorkInProgress.propTypes = {
   currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
+  isManageUser: PT.bool.isRequired,
   updateProduct: PT.func.isRequired,
   fireProductDirty: PT.func.isRequired,
   fireProductDirtyUndo: PT.func.isRequired,

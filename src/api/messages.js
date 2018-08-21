@@ -20,7 +20,7 @@ export function getTopics(criteria) {
     params.filter = filterStr.join('&')
   }
 
-  return axios.get(`${apiBaseUrl}/topics/list`, { params })
+  return axios.get(`${apiBaseUrl}/topics/list/db`, { params })
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
@@ -30,7 +30,7 @@ export function getTopics(criteria) {
 }
 
 export function getTopic(topicId) {
-  return axios.get(`${apiBaseUrl}/topics/${topicId}/read`)
+  return axios.get(`${apiBaseUrl}/topics/${topicId}/read/db`)
     .then( resp => {
       return {
         totalCount: _.get(resp.data, 'result.metadata.totalCount', 0),
@@ -114,15 +114,17 @@ export function deleteTopicPost(topicId, postId) {
     })
 }
 
-export function getTopicsWithComments(reference, referenceId, tag) {
+export function getTopicsWithComments(reference, referenceId, tag, removeCoderBotTopics = true) {
   return getTopics({ reference, referenceId, tag })
     .then(({topics, totalCount}) => {
       const additionalPosts = []
-      //remove coderBot posts
-      const rTopics = _.remove(topics, i =>
-        [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(i.userId) > -1
-      )
-      totalCount -= rTopics.length
+      if (removeCoderBotTopics) {
+        //remove coderBot posts
+        const rTopics = _.remove(topics, i =>
+          [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(i.userId) > -1
+        )
+        totalCount -= rTopics.length
+      }
       // if a topic has more than 20 posts then to display the latest posts,
       // we'll have to first retrieve them from the server
       _.forEach(topics, (t) => {

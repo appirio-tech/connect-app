@@ -1,0 +1,24 @@
+@import '../../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+.milestone-post {
+  @include roboto;
+  font-size: 15px;
+
+  .top-space {
+    padding-top: $base-unit;
+  }
+
+  .button-add-layer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .button-layer {
+    background-color: $tc-dark-blue-30;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    padding: 2 * $base-unit;
+  }
+}

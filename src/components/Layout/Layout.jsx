@@ -3,20 +3,21 @@ import Footer from '../Footer/Footer'
 import { MAINTENANCE_MODE } from '../../config/constants'
 import Alert from 'react-s-alert'
 import cn from 'classnames'
+import { GatewayDest } from 'react-gateway'
 import Maintenance from '../Maintenance/Maintenance'
 
 require('./Layout.scss')
 
 // Alert styles
-import '../../styles/vendors/s-alert-default.css'
+import '../../styles/vendors/s-alert-default.scss'
 import 'react-s-alert/dist/s-alert-css-effects/stackslide.css'
 
 const Layout = (props) => {
-  const { isLoadingUser } = props
+  const { isLoadingUser, maintenanceMode } = props
 
   if (isLoadingUser) {
     return (<div />)
-  } else if (MAINTENANCE_MODE) {
+  } else if (MAINTENANCE_MODE === 'true' || maintenanceMode) {
     return <Maintenance />
   } else {
     return (
@@ -27,6 +28,7 @@ const Layout = (props) => {
           { props.content }
         </div>
         <Footer />
+        <GatewayDest name="fullscreen-page" className="mobile-page-gateway" />
       </div>
     )
   }

@@ -116,6 +116,9 @@
       .bar-column.project-name.mobile {
         display: flex;
         align-items: center;
+        flex-shrink: 1;
+        overflow: hidden;
+        padding: 0 2 * $base-unit;
 
         span {
           font-size: 15px;

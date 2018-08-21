@@ -8,7 +8,7 @@ import { renderComponent, branch, compose, withProps } from 'recompose'
 import { loadProjectDashboard } from '../actions/projectDashboard'
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
-  ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN
+  ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER
 } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
@@ -16,12 +16,24 @@ import CoderBot from '../../components/CoderBot/CoderBot'
 const page404 = compose(
   withProps({code:404})
 )
-const showCoderBotIfError = (hasError) =>
-  branch(
-    hasError,
-    renderComponent(page404(CoderBot)), // FIXME pass in props code=400
+const showCoderBotIfError = (hasError) => {
+
+  let component = page404
+
+  return branch(
+    (props) => {
+      if (props.error.code === 403 && props.error.msg.includes('Copilot')) {
+        const messageGenerator = `${props.error.msg.replace('Copilot: ', '')}. If things don’t work or you’re sure it is Coder’s fault, send us a note at <a href="support@topcoder.com">support@topcoder.com</a> and we’ll fix it for you.`
+        component = compose(
+          withProps({code:403, message: messageGenerator})
+        )
+      }
+      return hasError(props)
+    },
+    comp => renderComponent(component(CoderBot))(comp), // FIXME pass in props code=400
     t => t
   )
+}
 const errorHandler = showCoderBotIfError(props => props.error && props.error.type === LOAD_PROJECT_FAILURE)
 
 // This handles showing a spinner while the state is being loaded async
@@ -45,8 +57,10 @@ const ProjectDetailView = (props) => {
       project: props.project,
       currentMemberRole: currentMemberRole || '',
       isSuperUser: props.isSuperUser,
+      isManageUser: props.isManageUser,
       isProcessing: props.isProcessing,
-      allProductTemplates: props.allProductTemplates
+      allProductTemplates: props.allProductTemplates,
+      productsTimelines: props.productsTimelines,
     })
   })
   return <div>{children}</div>
@@ -94,19 +108,22 @@ class ProjectDetail extends Component {
 
   render() {
     const currentMemberRole = this.getProjectRoleForCurrentUser(this.props)
-    const powerRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-    const isSuperUser = this.props.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
+    const adminRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
+    const isSuperUser = this.props.currentUserRoles.some((role) => adminRoles.indexOf(role) !== -1)
+    const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
+    const isManageUser = this.props.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
     return (
       <EnhancedProjectDetailView
         {...this.props}
         currentMemberRole={currentMemberRole}
         isSuperUser={isSuperUser}
+        isManageUser={isManageUser}
       />
     )
   }
 }
 
-const mapStateToProps = ({projectState, projectDashboard, loadUser}) => {
+const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines}) => {
   return {
     currentUserId: parseInt(loadUser.user.id),
     isLoading: projectDashboard.isLoading,
@@ -115,6 +132,7 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser}) => {
     project: projectState.project,
     projectTemplate: projectState.projectTemplate,
     productTemplates: projectState.productTemplates,
+    productsTimelines,
     allProductTemplates: projectState.allProductTemplates,
     currentUserRoles: loadUser.user.roles
   }

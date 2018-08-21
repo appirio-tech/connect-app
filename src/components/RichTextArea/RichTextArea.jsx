@@ -19,6 +19,7 @@ import './RichTextArea.scss'
 import 'draft-js-mention-plugin/lib/plugin.css'
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'
 import _ from 'lodash'
+import { getAvatarResized } from '../../helpers/tcHelpers'
 
 const linkPlugin = createLinkPlugin()
 const blockDndPlugin = createBlockDndPlugin()
@@ -253,7 +254,7 @@ class RichTextArea extends React.Component {
   render() {
     const {MentionSuggestions} = this.mentionPlugin
     const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating,
-      isGettingComment, disableTitle, disableContent} = this.props
+      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic } = this.props
     const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading} = this.state
     let canSubmit = (disableTitle || titleValue.trim())
         && (disableContent || editorState.getCurrentContent().hasText())
@@ -264,6 +265,7 @@ class RichTextArea extends React.Component {
     const blockType = RichUtils.getCurrentBlockType(editorState)
     const currentEntity = getCurrentEntity(editorState)
     const disableForCodeBlock = blockType === 'code-block'
+    const editButtonText = editingTopic ? 'Update title' : 'Update post' 
 
     const Entry = (props) => {
       const {
@@ -301,7 +303,7 @@ class RichTextArea extends React.Component {
         <div className="modal-row">
           {avatarUrl &&
             <div className="portrait">
-              <Avatar avatarUrl={avatarUrl} userName={authorName} />
+              <Avatar avatarUrl={getAvatarResized(avatarUrl, 30)} userName={authorName} />
             </div>
           }
           <div className={cn('object', {comment: disableTitle}, 'commentEdit')}>
@@ -310,7 +312,7 @@ class RichTextArea extends React.Component {
               className={cn('new-post-title', {'hide-title': disableTitle})}
               type="text"
               onChange={this.onTitleChange}
-              placeholder={titlePlaceholder || 'Title of the post'}
+              placeholder={editorExpanded ? expandedTitlePlaceholder : titlePlaceholder || 'Title of the post'}
             />
             <div className="draftjs-editor tc-textarea">
               {!disableContent && !isGettingComment &&
@@ -394,7 +396,7 @@ class RichTextArea extends React.Component {
                     }
                     { editMode &&
                   <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
-                    { isCreating ? 'Saving...' : 'Save changes' }
+                    { isCreating ? 'Saving...' : editButtonText }
                   </button>
                     }
                     { !editMode &&
@@ -414,6 +416,7 @@ class RichTextArea extends React.Component {
 }
 
 RichTextArea.propTypes = {
+  expandedTitlePlaceholder: PropTypes.string,
   onPost: PropTypes.func.isRequired,
   onPostChange: PropTypes.func.isRequired,
   cancelEdit: PropTypes.func,
@@ -432,6 +435,7 @@ RichTextArea.propTypes = {
   title: PropTypes.string,
   content: PropTypes.string,
   allMembers: PropTypes.object,
+  editingTopic: PropTypes.bool
 }
 
 export default RichTextArea

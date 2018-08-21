@@ -1,0 +1,64 @@
+// Project template page
+
+@import 'layout';
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .headerSelectProjectTemplate {
+    @extend .wizardHeader;
+  }
+
+  .SelectProjectTemplate {
+    @extend .wizardCardContainer;
+
+    h1 {
+      @extend .wizardHeadline;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        font-size: 20px;
+        line-height: 30px;
+        margin-bottom: 0;
+        margin-top: 10px;
+        padding: 5px 40px 0;
+      }
+
+      + h2 {
+        font-size: 15px;
+        line-height: 20px;
+        @include tc-heading;
+        @include roboto-bold;
+        color: $tc-gray-80;
+        margin-bottom: 13px;
+        margin-top: 0px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          @include roboto-medium;
+          font-size: 15px;
+          margin-top: 4 * $base-unit;
+        }
+      }
+    }
+
+    .header {
+      display: block;
+    }
+  }
+
+  @media screen and (max-width: 1100px) {
+    .SelectProjectTemplate {
+      max-width: 750px;
+    }
+  }
+
+  @media screen and (max-width: 850px) {
+    .SelectProjectTemplate {
+      max-width: 500px;
+    }
+  }
+
+  @media screen and (max-width: $screen-md - 1px) {
+    .SelectProjectTemplate {
+      max-width: 100%;
+    }
+  }
+}

@@ -10,7 +10,7 @@ import './PhaseCardListHeader.scss'
 const PhaseCardListHeader = () => (
   <div styleName="container">
     <div styleName="title">
-      <SectionTitle title="Stages" />
+      <SectionTitle title="Phases" />
     </div>
     <div styleName="price">Price</div>
     <div styleName="status">Status</div>

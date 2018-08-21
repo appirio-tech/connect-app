@@ -2,7 +2,9 @@
  * Notification related actions
  */
 import {
-  GET_NOTIFICATIONS,
+  GET_NOTIFICATIONS_PENDING,
+  GET_NOTIFICATIONS_SUCCESS,
+  GET_NOTIFICATIONS_FAILURE,
   VISIT_NOTIFICATIONS,
   TOGGLE_NOTIFICATION_SEEN,
   SET_NOTIFICATIONS_FILTER_BY,
@@ -11,20 +13,26 @@ import {
   VIEW_OLDER_NOTIFICATIONS_SUCCESS,
   HIDE_OLDER_NOTIFICATIONS_SUCCESS,
   NOTIFICATIONS_PENDING,
-  TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE
+  TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE,
+  TOGGLE_NOTIFICATIONS_DROPDOWN_WEB
 } from '../../../config/constants'
 import notificationsService from '../services/notifications.js'
 import Alert from 'react-s-alert'
 import _ from 'lodash'
 
 export const getNotifications = () => (dispatch) => {
+  dispatch({ type: GET_NOTIFICATIONS_PENDING })
   notificationsService.getNotifications().then(notifications => {
     dispatch({
-      type: GET_NOTIFICATIONS,
+      type: GET_NOTIFICATIONS_SUCCESS,
       payload: notifications
     })
   }).catch(err => {
-    Alert.error(`Failed to load notifications. ${err.message}`)
+    dispatch({
+      type: GET_NOTIFICATIONS_FAILURE,
+      payload: err
+    })
+    console.error(`Failed to load notifications. ${err.message}`)
   })
 }
 
@@ -119,5 +127,10 @@ export const hideOlderNotifications = () => (dispatch) => dispatch({
 
 export const toggleNotificationsDropdownMobile = (isOpen) => (dispatch) => dispatch({
   type: TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE,
+  payload: isOpen
+})
+
+export const toggleNotificationsDropdownWeb = (isOpen) => (dispatch) => dispatch({
+  type: TOGGLE_NOTIFICATIONS_DROPDOWN_WEB,
   payload: isOpen
 })

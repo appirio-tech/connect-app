@@ -2,42 +2,149 @@
 @import '../../styles/includes';
 
 .feed-container {
-  @include stand-alone-item-shadow;
   background-color: $tc-gray-neutral-light;
   border-radius: $card-border-radius;
 
   & + & {
     margin-top: 2 * $base-unit;
   }
+
+  &.is-fullscreen {
+    background-color: $tc-white;
+    border-radius: 0;
+    box-sizing: border-box;
+    /* minus primary toolbar height and minus feed header height */
+    min-height: calc(100vh - 60px);
+
+    @media screen and (max-width: $screen-md - 1px) {
+      min-height: 100vh;
+    }
+  }
 }
 
 .feed-header {
   background-color: $tc-gray-neutral-light;
-  border-radius: $card-border-radius;
+  border-radius: $card-border-radius $card-border-radius 0 0;
+
+  .is-fullscreen & {
+    border-radius: 0;
+    position: fixed;
+    right: 0;
+    top: 60px;
+    /* minus sidebar width and minus sidebar border width */
+    width: calc(100% - 360px - 1px);
+    z-index: 5;
+
+    /* if there is not enough space for sidebar to be 360
+       than it becomes 1/3 of the width */
+    @media screen and (min-width: $screen-md) and (max-width: 360px * 3) {
+      /* two third of the width minus 1px of the width of the sidebar */
+      width: calc(100% / 3 * 2 - 1px);
+    }
+
+    @media screen and (max-width: $screen-md - 1px) {
+      top: 0;
+      width: 100%;
+    }
+  }
 }
 
 .header-view {
-  align-items: center;
-  box-shadow: 0 1px 2px 0 $tc-gray-20, 0 1px 0 0 $tc-gray-20;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid $tc-gray-10;
+  justify-content: center;
+  padding: 4 * $base-unit 4 * $base-unit 3 * $base-unit 4 * $base-unit;
+
+  :global {
+    .Dropdown {
+      z-index: 4;
+    }
+
+    .drop-down .down-layer {
+      left: auto;
+      right: - 2 * $base-unit;
+      top: 2 * $base-unit;
+      z-index: 4;
+    }
+  }
+}
+
+.header-view-inner {
   display: flex;
   justify-content: space-between;
-  min-height: 60px;
-  padding: 0 4 * $base-unit;
-
-  :global(.drop-down) :global(.down-layer) {
-    left: auto;
-    right: - 2 * $base-unit;
-    top: 2 * $base-unit;
-    z-index: 4;
-  }
 }
 
 .title {
   @include roboto;
   color: $tc-black;
   font-size: 20px;
+  margin-bottom: $base-unit;
+  padding-right: 4 * $base-unit;
 }
 
 .header-edit {
   min-height: 60px;
+}
+
+.header-info {
+  display: flex;
+  flex: 1 0;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.header-details {
+  @include roboto;
+  color: $tc-gray-50;
+  font-size: 11px;
+  line-height: 13px;
+  margin-bottom: $base-unit;
+  margin-top: $base-unit;
+  white-space: nowrap;
+
+  > span + span::before {
+    content: " • ";
+    display: inline;
+    margin: 0 2px;
+  }
+}
+
+.header-actions {
+  align-items: flex-start;
+  display: flex;
+  justify-content: flex-end;
+
+  :global {
+    .dropdown-wrap.drop-down {
+      display: block;
+      margin-left: 3 * $base-unit;
+    }
+
+    .dropdownContainer {
+      margin-top: 5px;
+    }
+  }
+}
+
+.fullscreen {
+  border: 0;
+  background-color: transparent;
+  display: block;
+  margin: 3px 0 0 3 * $base-unit;
+  padding: 0;
+
+  > svg {
+    > g {
+      fill: $tc-gray-50;
+    }
+  }
+
+  &.fullscreen-exit {
+    > svg {
+      /* as size of svg is 24x24 but we expect button to be 16x16 */
+      display: block;
+      margin: -4px;
+    }
+  }
 }

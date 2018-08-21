@@ -63,16 +63,16 @@ export function getProjectById(projectId) {
 /**
  * Get project phases
  *
- * @param {String} projectId project id
+ * @param {String}             projectId project id
+ * @param {{ fields: String }} query     request query params
  *
  * @return {Promise} resolves to project phases
  */
-export function getProjectPhases(projectId, existingPhases) {
-  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases`)
-    .then(resp => {
-      const res = _.get(resp.data, 'result.content', {})
-      return {phases: res, existingPhases: existingPhases || []}
-    })
+export function getProjectPhases(projectId, query = {}) {
+  const params = _.mapValues(query, (param) => encodeURIComponent(param))
+
+  return axios.get(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases`, { params })
+    .then(resp => _.get(resp.data, 'result.content', {}))
 }
 
 /**
@@ -102,6 +102,21 @@ export function updateProject(projectId, updatedProps, updateExisting) {
   return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/`, { param: updatedProps })
     .then(resp => {
       return _.extend(_.get(resp.data, 'result.content'), { updateExisting })
+    })
+}
+
+/**
+ * Update phase using patch
+ * @param  {integer} projectId    project Id
+ * @param  {integer} phaseId    phase Id
+ * @param  {object} updatedProps updated phase properties
+ * @param  {integer} phaseIndex index of phase in phase list redux store
+ * @return {promise}              updated phase
+ */
+export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
+  return axios.patch(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}`, { param: updatedProps })
+    .then(resp => {
+      return _.extend(_.get(resp.data, 'result.content'), {phaseIndex})
     })
 }
 
@@ -204,4 +219,9 @@ export function getDirectProjectData(directProjectId) {
     .then(resp => {
       return resp.data.result.content
     })
+}
+
+export function deleteProjectPhase(projectId, phaseId) {
+  return axios.delete(`${PROJECTS_API_URL}/v4/projects/${projectId}/phases/${phaseId}`)
+    .then(() => ({ projectId, phaseId }))
 }

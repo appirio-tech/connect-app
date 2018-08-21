@@ -5,7 +5,7 @@ import Select from '../../components/Select/Select'
 
 const Filters = ({ criteria, applyFilters, projectCategories }) => {
   const types = _.map(projectCategories, category => {
-    return { value: category.categoryId, label: category.categoryName }
+    return { value: category.key, label: category.displayName }
   })
 
   // TODO add segments list
@@ -62,8 +62,8 @@ Filters.propTypes = {
   criteria: PropTypes.object.isRequired,
   applyFilters: PropTypes.func.isRequired,
   projectCategories: PropTypes.arrayOf(PropTypes.shape({
-    typeId: PropTypes.string.isRequired,
-    typeName: PropTypes.string.isRequired,
+    key: PropTypes.string.isRequired,
+    displayName: PropTypes.string.isRequired,
   }))
 }
 

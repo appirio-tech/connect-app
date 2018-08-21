@@ -7,11 +7,11 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject } from '../../actions/project'
-import { loadProjectTemplates } from '../../../actions/templates'
+import { loadProjectTemplates, loadProjectCategories } from '../../../actions/templates'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
-import { getProjectTemplateByKey, getProjectTemplateByAlias } from '../../../helpers/templates'
+import { getProjectTemplateByKey, getProjectTemplateByAlias, getProjectTypeByKey } from '../../../helpers/templates'
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
@@ -38,7 +38,9 @@ const errorHandler = showCoderBotIfError(props => props.error && props.error.typ
 const spinner = spinnerWhileLoading(props =>
   !props.processing &&
   !props.templates.isProjectTemplatesLoading &&
-  props.templates.projectTemplates !== null
+  props.templates.projectTemplates !== null &&
+  !props.templates.isProjectCategoriesLoading &&
+  props.templates.projectCategories !== null
 )
 
 const enhance = compose(errorHandler, spinner)
@@ -61,7 +63,8 @@ class CreateContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      creatingProject : false,
+      creatingProject: false,
+      createdProject: false,
       isProjectDirty: false,
       wizardStep: 0,
       updatedProject: {}
@@ -69,15 +72,17 @@ class CreateContainer extends React.Component {
     this.createProject = this.createProject.bind(this)
     this.onLeave = this.onLeave.bind(this)
     this.closeWizard = this.closeWizard.bind(this)
+    this.prepareProjectForCreation = this.prepareProjectForCreation.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
     const projectId = _.get(this.props, 'project.id', null)
     const nextProjectId = _.get(nextProps, 'project.id', null)
-    if (!nextProps.processing && !nextProps.error && !projectId && nextProjectId) {
+    if (!nextProps.processing && !nextProps.error && nextProjectId && projectId !== nextProjectId) {
       // update state
       this.setState({
         creatingProject: false,
+        createdProject: true,
         isProjectDirty: false
       }, () => {
         // remove incomplete project, and navigate to project dashboard
@@ -98,7 +103,7 @@ class CreateContainer extends React.Component {
 
   componentWillMount() {
     const { processing, userRoles, match, history,
-      templates, loadProjectTemplates } = this.props
+      templates, loadProjectTemplates, loadProjectCategories } = this.props
     // if we are on the project page validate project param
     if (match.path === '/new-project/:project?/:status?') {
       const project = match.params.project
@@ -139,6 +144,11 @@ class CreateContainer extends React.Component {
     if (templates.projectTemplates === null && !templates.isProjectTemplatesLoading) {
       loadProjectTemplates()
     }
+
+    // if categories are not loaded yet - then load them
+    if (templates.projectCategories === null && !templates.isProjectCategoriesLoading) {
+      loadProjectCategories()
+    }
   }
 
   componentDidMount() {
@@ -155,7 +165,13 @@ class CreateContainer extends React.Component {
   // stores the incomplete project in local storage
   onLeave(e) {// eslint-disable-line no-unused-vars
     const { wizardStep, isProjectDirty } = this.state
+    const { templates: { projectTemplates }} = this.props
+
     if (wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS && isProjectDirty) {// Project Details step
+
+      const projectTemplateKey = _.get(this.state.updatedProject, 'details.products[0]')
+      const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
+      this.prepareProjectForCreation(this.state.updatedProject, projectTemplate)
       console.log('saving incomplete project', this.state.updatedProject)
       window.localStorage.setItem(LS_INCOMPLETE_PROJECT, JSON.stringify(this.state.updatedProject))
     }
@@ -168,6 +184,32 @@ class CreateContainer extends React.Component {
   }
 
   /**
+   * Helper method to add additional details required to create project
+   * 
+   * @param {Object} project project data captured from user
+   * @param {Object} projectTemplate project template to be used
+   */
+  prepareProjectForCreation(project, projectTemplate) {
+    const gaClickId  = Cookies.get(GA_CLICK_ID)
+    const gaClientId = Cookies.get(GA_CLIENT_ID)
+    if(gaClientId || gaClickId) {
+      const googleAnalytics = {}
+      if (gaClickId !== 'null') {
+        googleAnalytics[GA_CLICK_ID]  = gaClickId
+      }
+      if (gaClientId !== 'null') {
+        googleAnalytics[GA_CLIENT_ID] = gaClientId
+      }
+      _.set(project, 'details.utm.google', googleAnalytics)
+    }
+    if (projectTemplate) {
+      project.version = 'v3'
+      project.templateId = projectTemplate.id
+      project.type = projectTemplate.category
+    }
+  }
+
+  /**
    * Creates new project if user is already logged in, otherwise, redirects user for registration/login.
    */
   createProject(project) {
@@ -176,26 +218,8 @@ class CreateContainer extends React.Component {
 
     this.setState({ creatingProject: true }, () => {
       if (this.props.userRoles && this.props.userRoles.length > 0) {
-        // if user is logged in and has a valid role, create project
-        // uses dirtyProject from the state as it has the latest changes from the user
-        // this.props.createProjectAction(project)
-        const gaClickId  = Cookies.get(GA_CLICK_ID)
-        const gaClientId = Cookies.get(GA_CLIENT_ID)
-        if(gaClientId || gaClickId) {
-          const googleAnalytics = {}
-          if (gaClickId !== 'null') {
-            googleAnalytics[GA_CLICK_ID]  = gaClickId
-          }
-          if (gaClientId !== 'null') {
-            googleAnalytics[GA_CLIENT_ID] = gaClientId
-          }
-          _.set(project, 'details.utm.google', googleAnalytics)
-        }
-        project.version = 'v3'
-        project.templateId = projectTemplate.id
-        project.type = projectTemplate.category
-        this.props.createProjectAction(project, projectTemplate)
-        this.closeWizard()
+        this.prepareProjectForCreation(project, projectTemplate)
+        this.props.createProjectAction(project)
       } else {
         // redirect to registration/login page
         const retUrl = window.location.origin + '/new-project-callback'
@@ -224,35 +248,42 @@ class CreateContainer extends React.Component {
   }
 
   render() {
-    const { templates: { projectTemplates }} = this.props
+    const { templates: { projectTemplates, projectCategories: projectTypes }} = this.props
 
     return (
       <EnhancedCreateView
         {...this.props}
         createProject={ this.createProject }
-        processing={ this.state.creatingProject }
+        processing={ this.state.creatingProject || this.state.createdProject }
         showModal
         closeModal={ this.closeWizard }
         onStepChange={ (wizardStep, updatedProject) => {
+          const projectTypeKey = _.get(updatedProject, 'type', null)
+          const projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
+          const typeAlias = _.get(projectType, 'aliases[0]')
+
           const projectTemplateKey = _.get(updatedProject, 'details.products[0]', null)
           const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
-          const alias = _.get(projectTemplate, 'aliases[0]')
+          const templateAlias = _.get(projectTemplate, 'aliases[0]')
 
-          switch (wizardStep) {
-          case ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF: {
-            const aliasParam = alias ? `/${alias}` : ''
-            this.props.history.push(NEW_PROJECT_PATH + aliasParam + '/incomplete' + window.location.search)
-            break
+          if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
+            let productUrl = templateAlias ? ('/' + templateAlias) : ''
+            productUrl = !templateAlias && typeAlias ? ('/' + typeAlias) : productUrl
+            this.props.history.push(NEW_PROJECT_PATH + productUrl + '/incomplete' + window.location.search)
           }
-          case ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE:
+
+          if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
             this.props.history.push(NEW_PROJECT_PATH + '/' + window.location.search)
-            break
-          case ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS:
-            if (alias) {
-              this.props.history.push(NEW_PROJECT_PATH + '/' + alias + window.location.search)
-            }
-            break
           }
+
+          if (typeAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TEMPLATE) {
+            this.props.history.push(NEW_PROJECT_PATH + '/' + typeAlias + window.location.search)
+          }
+
+          if (typeAlias && templateAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
+            this.props.history.push(NEW_PROJECT_PATH + '/' + templateAlias + window.location.search)
+          }
+
           this.setState({
             wizardStep
           })
@@ -278,6 +309,7 @@ class CreateContainer extends React.Component {
         }
         }
         projectTemplates={this.props.templates.projectTemplates}
+        projectTypes={this.props.templates.projectCategories}
       />
     )
   }
@@ -305,6 +337,7 @@ const actionCreators = {
   fireProjectDirtyUndo,
   clearLoadedProject,
   loadProjectTemplates,
+  loadProjectCategories,
 }
 
 export default withRouter(connect(mapStateToProps, actionCreators)(CreateContainer))

@@ -6,6 +6,8 @@ import RichTextArea from '../RichTextArea/RichTextArea'
 import { Link } from 'react-router-dom'
 import CommentEditToggle from './CommentEditToggle'
 import _ from 'lodash'
+import moment from 'moment'
+import { POST_TIME_FORMAT } from '../../config/constants.js'
 
 import './Comment.scss'
 
@@ -52,7 +54,7 @@ class Comment extends React.Component {
   }
 
   render() {
-    const {message, author, date, edited, children, noInfo, self, isSaving, hasError, readonly, allMembers} = this.props
+    const {message, author, date, edited, children, noInfo, self, isSaving, hasError, readonly, allMembers, canDelete} = this.props
     const messageAnchor = `comment-${message.id}`
     const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#${messageAnchor}`
     const authorName = author ? (author.firstName + ' ' + author.lastName) : 'Connect user'
@@ -78,6 +80,7 @@ class Comment extends React.Component {
             authorName={authorName}
             cancelEdit={this.cancelEdit}
             allMembers={allMembers}
+            editingTopic = {false}
           />
         </div>
       )
@@ -86,7 +89,7 @@ class Comment extends React.Component {
     return (
       <div styleName={cn('container', { self, 'is-deleting': isDeleting })} id={messageAnchor}>
         <div styleName="avatar">
-          {!noInfo && <UserTooltip usr={author} id={`${messageAnchor}-${author.userId}`} previewAvatar size={40} />}
+          {!noInfo && author && <UserTooltip usr={author} id={`${messageAnchor}-${author.userId}`} previewAvatar size={40} />}
         </div>
         <div styleName="body">
           {!noInfo &&
@@ -96,7 +99,7 @@ class Comment extends React.Component {
                   {authorName}
                 </span>
                 <span styleName="time">
-                  <Link to={messageLink}>{date}</Link>
+                  <Link to={messageLink}>{moment(date).format(POST_TIME_FORMAT)}</Link>
                 </span>
                 {edited && <span styleName="edited">edited</span>}
               </div>
@@ -105,12 +108,13 @@ class Comment extends React.Component {
           {self && !readonly &&
             <aside styleName="controls">
               <CommentEditToggle
+                hideDelete={canDelete===false}
                 onEdit={this.edit}
                 onDelete={this.delete}
               />
             </aside>
           }
-          <div styleName="text">
+          <div styleName="text" className="draftjs-post">
             {children}
           </div>
           {isDeleting &&
@@ -183,6 +187,10 @@ Comment.propTypes = {
    * If true only comment text is shown without additional info
    */
   noInfo: PropTypes.bool,
+  /**
+   * The can delete flag
+   */
+  canDelete: PropTypes.bool,
 }
 
 export default Comment

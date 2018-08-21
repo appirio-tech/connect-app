@@ -34,7 +34,7 @@ class FillProjectDetails extends Component  {
   }
 
   createMarkup(projectTemplate) {
-    return {__html: _.get(projectTemplate, 'formTitle', `Let's setup your ${ projectTemplate.name } project`) }
+    return {__html: _.get(projectTemplate, 'scope.formTitle', `Let's setup your ${ projectTemplate.name } project`) }
   }
 
   render() {

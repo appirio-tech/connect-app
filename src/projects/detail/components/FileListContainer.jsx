@@ -36,6 +36,7 @@ class FileListContainer extends Component {
   render() {
     const {
       files,
+      category,
       allMembers,
       attachmentsStorePath,
       canManageAttachments,
@@ -56,7 +57,7 @@ class FileListContainer extends Component {
     return (
       <div>
         <FileList files={files} onDelete={removeAttachment} onSave={updateAttachment} canModify={canManageAttachments}/>
-        <AddFiles successHandler={this.processUploadedFiles} storePath={attachmentsStorePath} category={'appDefinition'} />
+        <AddFiles successHandler={this.processUploadedFiles} storePath={attachmentsStorePath} category={category} />
       </div>
     )
   }

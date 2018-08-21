@@ -1,0 +1,21 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import '../../../../styles/includes';
+
+.container {
+  background-color: $tc-red-10;
+  border-radius: $card-border-radius;
+  @include stand-alone-item-shadow;
+  margin-bottom: $base-unit;
+  padding: 4 * $base-unit;
+}
+
+.message {
+  @include roboto;
+  font-size: 15px;
+  text-align: center;
+}
+
+.controls {
+  margin-top: 2 * $base-unit;
+  text-align: center;
+}

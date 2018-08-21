@@ -9,5 +9,5 @@
   * @return {String} formated number
   */
 export function formatNumberWithCommas(value) {
-  return value.toString().replace(/\B(?=(?=\d*\.)(\d{3})+(?!\d))/g, ',')
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }

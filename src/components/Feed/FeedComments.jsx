@@ -1,13 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import _ from 'lodash'
 import AddComment from '../ActionCard/AddComment'
 import Comment from '../ActionCard/Comment'
 import cn from 'classnames'
 import {markdownToHTML} from '../../helpers/markdownToState'
 import MediaQuery from 'react-responsive'
-import CommentMobile from '../ActionCard/CommentMobile'
-import { SCREEN_BREAKPOINT_MD } from '../../config/constants'
+import NewPostMobile, { NEW_POST_STEP } from './NewPostMobile'
+import { SCREEN_BREAKPOINT_MD, POSTS_BUNDLE_TIME_DIFF } from '../../config/constants'
 
 import './FeedComments.scss'
 
@@ -18,7 +19,7 @@ function formatCommentDate(date) {
 
   // if another year
   if (!date.isSame(today, 'year')) {
-    formated += `, ${formated.format('YYYY')}`
+    formated += `, ${date.format('YYYY')}`
 
     // if today
   } else if (date.isSame(today, 'day')) {
@@ -35,24 +36,150 @@ function formatCommentDate(date) {
 class FeedComments extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { showAll: false }
+
+    this.state = {
+      showAll: false,
+      isNewCommentMobileOpen: false,
+      stickyRowNext: null,
+      stickyRowPrev: null,
+      headerHeight: null,
+    }
+
+    this.toggleNewCommentMobile = this.toggleNewCommentMobile.bind(this)
+    this.setStickyRowRef = this.setStickyRowRef.bind(this)
+    this.updateStickyRow = this.updateStickyRow.bind(this)
+
+    this.stickyRowRefs = {}
   }
 
   onSaveMessageChange(messageId, content, editMode) {
     this.props.onSaveMessageChange && this.props.onSaveMessageChange(messageId, content, editMode)
   }
 
+  toggleNewCommentMobile() {
+    this.setState({ isNewCommentMobileOpen: !this.state.isNewCommentMobileOpen })
+  }
+
+  setStickyRowRef(ref, key) {
+    const { isFullScreen } = this.props
+
+    if (isFullScreen) {
+      if (ref) {
+        this.stickyRowRefs[key] = ref
+      } else {
+        delete this.stickyRowRefs[key]
+      }
+    }
+  }
+
+  updateStickyRow() {
+    const containerOffset = this.refs.container.offsetTop
+    const scrollY = window.scrollY
+    // space between previous and next date during scrolling in px
+    const margin = 4
+
+    const rows = _.keys(this.stickyRowRefs)
+      .map((key) => {
+        const ref = this.stickyRowRefs[key]
+
+        return ({
+          key,
+          ref,
+          offsetTop: ref.offsetTop,
+          height: ref.clientHeight,
+          relativeTop: ref.offsetTop - containerOffset - scrollY,
+        })
+      })
+      .sort((row1, row2) => row1.offsetTop - row2.offsetTop)
+
+    const isRowNext = (row) => row.relativeTop > - row.height / 2 && row.relativeTop <= row.height / 2 + margin
+    const isRowPrev = (row) => row.relativeTop <= - row.height / 2
+
+    let stickyRowNext = null
+
+    rows.forEach((row, rowIndex) => {
+      const nextRow = rowIndex + 1 < rows.length ? rows[rowIndex + 1] : null
+
+      if (isRowNext(row) && (!nextRow || !isRowNext(nextRow))) {
+        stickyRowNext = {
+          key: row.key,
+          row,
+          style: {
+            transform: `translateY(${row.relativeTop + row.height / 2}px)`,
+            opacity: Math.max((row.height / 2 - row.relativeTop + margin) / (row.height + margin), 0)
+          }
+        }
+      }
+    })
+
+    let stickyRowPrev = null
+
+    rows.forEach((row, rowIndex) => {
+      const nextRow = rowIndex + 1 < rows.length ? rows[rowIndex + 1] : null
+
+      if (isRowPrev(row) && (!nextRow || !isRowPrev(nextRow))) {
+        stickyRowPrev = {
+          key: row.key,
+          row,
+          style: stickyRowNext ? {
+            transform: `translateY(${stickyRowNext.row.relativeTop - row.height / 2 - margin}px)`,
+            opacity: Math.max((stickyRowNext.row.relativeTop + row.height / 2 - margin) / (row.height + margin), 0)
+          } : {}
+        }
+      }
+    })
+
+    this.setState({
+      stickyRowPrev,
+      stickyRowNext,
+    })
+  }
+
+  componentDidMount() {
+    const { isFullScreen } = this.props
+
+    if (isFullScreen) {
+      window.addEventListener('scroll', this.updateStickyRow)
+      window.addEventListener('resize', this.updateStickyRow)
+      this.updateStickyRow()
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.updateStickyRow)
+    window.removeEventListener('resize', this.updateStickyRow)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { isFullScreen, headerHeight } = this.props
+
+    if (isFullScreen && headerHeight !== nextProps.headerHeight) {
+      this.updateStickyRow()
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!_.isEqual(prevProps.comments, this.props.comments)) {
+      this.updateStickyRow()
+    }
+  }
+
   render() {
     const {
       comments, currentUser, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
-      onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage, allMembers
+      onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage, allMembers,
+      totalComments, isFullScreen, headerHeight,
     } = this.props
+    const { isNewCommentMobileOpen, stickyRowNext, stickyRowPrev } = this.state
     let authorName = currentUser.firstName
     if (authorName && currentUser.lastName) {
       authorName += ' ' + currentUser.lastName
     }
     const handleLoadMoreClick = () => {
-      this.setState({showAll: true})
+      this.setState({showAll: true}, () => {
+        this.updateStickyRow()
+      })
+
       // TODO - handle the case when a topic has more than 20 comments
       // since those will have to retrieved from the server
       if (!isLoadingComments) {
@@ -60,47 +187,110 @@ class FeedComments extends React.Component {
       }
     }
 
-    const desktopBlocks = []
+    // show more posts buttons for mobile devices
+    const moreCommentsCount = totalComments - comments.length
+    const showMoreMobile = moreCommentsCount > 0 ? (
+      <button
+        className="tc-btn tc-btn-link tc-btn-sm"
+        onClick={handleLoadMoreClick}
+      >
+        View {moreCommentsCount} more {totalComments > 1 ? 'posts' : 'post'}
+      </button>
+    ) : (
+      <div styleName="no-comments">No posts yet</div>
+    )
 
-    if (hasMoreComments) {
-      desktopBlocks.push(
-        <div styleName="load-more" key="load-more">
-          <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
-            {isLoadingComments ? 'Loading...' : 'load earlier posts'}
-          </a>
-        </div>
-      )
-    }
+    // commentsRows is the list of comments, and various splitters between them
+    // like dates, new posts splitters and so on
+    // we are building this list below
+    const commentRows = []
+    // match row keys to their indexes in commentRows for quick search
+    const rowKeyToIndex = {}
 
-    comments && comments.forEach((item, idx) => {
+    let bundleCreatedAt = false
+    let isBundleEdited = false
+    let bundleIndex = -1
+
+    // to be able to mark the head comment in a bundle as edited if any of the comments in the bundle is edited
+    comments && _.forEach(comments, (item, idx) => {
       const createdAt = moment(item.createdAt)
       const prevComment = comments[idx - 1]
-      const isSameAuthor = prevComment && prevComment.author.userId === item.author.userId
-      const isSameDay = prevComment && moment(prevComment.createdAt).isSame(createdAt, 'day')
+      const prevCreatedAt = prevComment && moment(prevComment.createdAt)
+      const isSameDay = prevCreatedAt && prevCreatedAt.isSame(createdAt, 'day')
+      const isSameAuthor = _.get(prevComment, 'author.userId') === item.author.userId
+      const isFirstUnread = prevComment && !prevComment.unread && item.unread
+
+      const timeDiffComment = bundleCreatedAt && createdAt.diff(bundleCreatedAt)
+      const shouldBundle = isSameDay && isSameAuthor && !isFirstUnread && timeDiffComment && timeDiffComment <= POSTS_BUNDLE_TIME_DIFF
+
+      if (shouldBundle) {
+        isBundleEdited = isBundleEdited || item.edited
+        item.noInfo = true
+      } else {
+        const bundleStart = comments[bundleIndex]
+        if (bundleStart) {
+          bundleStart.edited = isBundleEdited
+        }
+        bundleIndex = idx
+        isBundleEdited = item.edited
+        bundleCreatedAt = createdAt
+        item.noInfo = false
+      }
+
+      if (idx === (comments.length - 1)) {
+        const bundleStart = comments[bundleIndex]
+        if (bundleStart) {
+          bundleStart.edited = isBundleEdited
+        }
+      }
+    })
+
+    // building commentRows list
+    comments && _.forEach(comments, (item, idx) => {
+      const createdAt = moment(item.createdAt)
+      const prevComment = comments[idx - 1]
+      const prevCreatedAt = prevComment && moment(prevComment.createdAt)
+      const isSameDay = prevCreatedAt && prevCreatedAt.isSame(createdAt, 'day')
       const isFirstUnread = prevComment && !prevComment.unread && item.unread
 
       if (!isSameDay) {
-        desktopBlocks.push(
+        const rowKey = `date-splitter-${createdAt.valueOf()}`
+        rowKeyToIndex[rowKey] = commentRows.length
+
+        commentRows.push(
           <div
-            key={`date-splitter-${createdAt.valueOf()}`}
+            key={rowKey}
             styleName={cn('date-splitter', { 'unread-splitter': isFirstUnread })}
+            ref={(ref) => this.setStickyRowRef(ref, rowKey)}
           >
             <span styleName="date">{formatCommentDate(createdAt)}</span>
             <span styleName="unread">New posts</span>
           </div>
         )
       } else if (isFirstUnread) {
-        <div styleName="unread-splitter" key="unread-splitter">
-          <span styleName="unread">New posts</span>
-        </div>
+        const rowKey = `date-splitter-${createdAt.valueOf()}`
+        rowKeyToIndex[rowKey] = commentRows.length
+
+        commentRows.push(
+          <div
+            styleName="unread-splitter"
+            key={rowKey}
+            ref={(ref) => this.setStickyRowRef(ref, rowKey)}
+          >
+            <span styleName="unread">New posts</span>
+          </div>
+        )
       }
 
-      desktopBlocks.push(
+      const rowKey = `comment-${item.id}`
+      rowKeyToIndex[rowKey] = commentRows.length
+
+      commentRows.push(
         <Comment
-          key={idx}
+          key={rowKey}
           message={item}
           author={item.author}
-          date={moment(item.date).fromNow()}
+          date={item.createdAt}
           edited={item.edited}
           active={item.unread}
           self={item.author && item.author.userId === currentUser.userId}
@@ -110,20 +300,64 @@ class FeedComments extends React.Component {
           isSaving={item.isSavingComment}
           hasError={item.error}
           allMembers={allMembers}
-          noInfo={isSameAuthor}
+          noInfo={item.noInfo}
+          canDelete={idx !== 0}
         >
           <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
         </Comment>
       )
     })
 
+    let stickyRowNextComponent = null
+    if (stickyRowNext) {
+      const rowIndex = rowKeyToIndex[stickyRowNext.key]
+
+      if (!_.isUndefined(rowIndex)) {
+        const rowElement = commentRows[rowIndex]
+
+        if (!_.isUndefined(rowElement)) {
+          stickyRowNextComponent = React.cloneElement(rowElement, {
+            style: stickyRowNext.style,
+          })
+        }
+      }
+    }
+
+    let stickyRowPrevComponent = null
+    if (stickyRowPrev) {
+      const rowIndex = rowKeyToIndex[stickyRowPrev.key]
+
+      if (!_.isUndefined(rowIndex)) {
+        const rowElement = commentRows[rowIndex]
+
+        if (!_.isUndefined(rowElement)) {
+          stickyRowPrevComponent = React.cloneElement(rowElement, {
+            style: stickyRowPrev.style,
+          })
+        }
+      }
+    }
+
     return (
-      <div styleName="container">
+      <div styleName={cn('container', { 'is-fullscreen': isFullScreen })} ref="container">
+        <div styleName="sticky-container" style={{ top: headerHeight ? headerHeight : 0 }}>
+          {stickyRowNextComponent}
+        </div>
+        <div styleName="sticky-container" style={{ top: headerHeight ? headerHeight : 0 }}>
+          {stickyRowPrevComponent}
+        </div>
         <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
           {(matches) => (matches ? (
             <div>
               <div styleName="comments">
-                {desktopBlocks}
+                {hasMoreComments &&
+                  <div styleName="load-more" key="load-more">
+                    <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
+                      {isLoadingComments ? 'Loading...' : 'load earlier posts'}
+                    </a>
+                  </div>
+                }
+                {commentRows}
               </div>
               {allowComments &&
                 <div styleName="add-comment" key="add-comment">
@@ -142,23 +376,36 @@ class FeedComments extends React.Component {
             </div>
           ) : (
             <div>
-              {hasMoreComments &&
-                <div styleName="load-more" key="load-more">
-                  <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
-                    {isLoadingComments ? 'Loading...' : 'load earlier posts'}
-                  </a>
-                </div>
+              <div styleName="comments">
+                {commentRows}
+              </div>
+              <div styleName="mobile-actions">
+                <div>{!!hasMoreComments && showMoreMobile}</div>
+                {allowComments &&
+                  <button
+                    className="tc-btn tc-btn-link tc-btn-sm"
+                    onClick={this.toggleNewCommentMobile}
+                  >
+                    Write a post
+                  </button>
+                }
+              </div>
+              {isNewCommentMobileOpen &&
+                <NewPostMobile
+                  step={NEW_POST_STEP.COMMENT}
+                  statusTitle="NEW STATUS"
+                  commentTitle="WRITE POST"
+                  statusPlaceholder="Share the latest project updates with the team"
+                  commentPlaceholder="Write your post about the status here"
+                  submitText="Post"
+                  nextStepText="Add a post"
+                  onClose={this.toggleNewCommentMobile}
+                  onPost={({ content }) => onAddNewComment(content)}
+                  isCreating={isAddingComment}
+                  hasError={error}
+                  onNewPostChange={this.onNewCommentChange}
+                />
               }
-              {comments.map((item, idx) => (
-                <CommentMobile
-                  key={idx}
-                  messageId={item.id.toString()}
-                  author={item.author}
-                  date={item.date}
-                >
-                  <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
-                </CommentMobile>
-              ))}
             </div>
           ))}
         </MediaQuery>

@@ -11,24 +11,24 @@ import {
   SCREEN_BREAKPOINT_MD,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
+  CONNECT_USER,
 } from '../../../config/constants'
 import { connect } from 'react-redux'
-import Sticky from 'react-stickynode'
 import update from 'react-addons-update'
 import NewPost from '../../../components/Feed/NewPost'
 
 import { loadDashboardFeeds, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
+import { toggleNotificationRead } from '../../../routes/notifications/actions'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import PostsRefreshPrompt from '../components/PostsRefreshPrompt'
 
-import { filterReadNotifications, filterNotificationsByProjectId, filterTopicAndPostChangedNotifications } from '../../../routes/notifications/helpers/notifications'
-import { REFRESH_UNREAD_UPDATE_INTERVAL } from '../../../config/constants'
 import MediaQuery from 'react-responsive'
 import ChatButton from '../../../components/ChatButton/ChatButton'
 import NewPostMobile from '../../../components/Feed/NewPostMobile'
-import ScrollableFeed from '../components/ScrollableFeed'
+import ScrollableFeed from '../../../components/Feed/ScrollableFeed'
+import FullscreenFeedContainer from '../containers/FullscreenFeedContainer'
 import Section from '../components/Section'
 import SectionTitle from '../components/SectionTitle'
-import Refresh from '../../../assets/icons/icon-refresh.svg'
 
 import { scrollToHash } from '../../../components/ScrollToAnchors'
 import { isSystemUser } from '../../../helpers/tcHelpers'
@@ -57,42 +57,24 @@ class FeedView extends React.Component {
     this.onEditTopic = this.onEditTopic.bind(this)
     this.onTopicChange = this.onTopicChange.bind(this)
     this.onRefreshFeeds = this.onRefreshFeeds.bind(this)
-    this.onScroll = this.onScroll.bind(this)
     this.toggleNewPostMobile = this.toggleNewPostMobile.bind(this)
+    this.enterFullscreen = this.enterFullscreen.bind(this)
+    this.exitFullscreen = this.exitFullscreen.bind(this)
     this.state = {
       feeds : [],
       showAll: [],
       newPost: {},
-      unreadUpdate: [],
-      scrolled: false,
-      isNewPostMobileOpen: false
+      isNewPostMobileOpen: false,
+      fullscreenFeedId: null,
     }
   }
 
   componentDidMount() {
     window.addEventListener('beforeunload', this.onLeave)
-
-    // after reload, mark all feed update notifications read
-    this.setState({ unreadUpdate : []})
-    const notReadNotifications = filterReadNotifications(this.props.notifications.notifications)
-    const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
-    _.map(_.map(unreadTopicAndPostChangedNotifications, 'id' ), (notificationId) => {
-      this.props.toggleNotificationRead(notificationId)
-    })
-
-    this.refreshUnreadUpdate = setInterval(() => {
-      const notReadNotifications = filterReadNotifications(this.props.notifications.notifications)
-      const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, this.props.project.id))
-      this.setState({ unreadUpdate: _.map(unreadTopicAndPostChangedNotifications, 'id' ) })
-      if (!this.isChanged() && !this.state.scrolled && this.state.unreadUpdate.length > 0) {
-        this.onRefreshFeeds()
-      }
-    }, REFRESH_UNREAD_UPDATE_INTERVAL)
   }
 
   componentWillMount() {
     this.init(this.props)
-    window.addEventListener('scroll', this.onScroll)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -101,8 +83,6 @@ class FeedView extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('beforeunload', this.onLeave)
-    window.removeEventListener('scroll', this.onScroll)
-    clearInterval(this.refreshUnreadUpdate)
   }
 
   // Notify user if they navigate away while the form is modified.
@@ -148,6 +128,7 @@ class FeedView extends React.Component {
     const _toComment = (p) => {
       const date = p.updatedDate?p.updatedDate:p.date
       const edited = date !== p.date
+      const commentAuthor = allMembers[p.userId] ? allMembers[p.userId] : { ...CONNECT_USER, userId: p.userId }
       const comment = {
         id: p.id,
         content: p.body,
@@ -160,7 +141,7 @@ class FeedView extends React.Component {
         date,
         createdAt: p.date,
         edited,
-        author: isSystemUser(p.userId) ? SYSTEM_USER : allMembers[p.userId]
+        author: isSystemUser(p.userId) ? SYSTEM_USER : commentAuthor
       }
       const prevComment = prevFeed ? _.find(prevFeed.posts, t => p.id === t.id) : null
       if (prevComment && prevComment.isSavingComment && !comment.isSavingComment && !comment.error) {
@@ -219,7 +200,6 @@ class FeedView extends React.Component {
     }
     this.setState({
       newPost: resetNewPost ? {} : this.state.newPost,
-      scrolled: window.scrollY>0,
       feeds: feeds.map((feed) => {
         // finds the same feed from previous props, if exists
         let prevFeed
@@ -377,25 +357,68 @@ class FeedView extends React.Component {
     this.props.loadDashboardFeeds(this.props.project.id)
   }
 
-  onScroll() {
-    this.setState({ scrolled : window.scrollY>0 })
+  enterFullscreen(feedId) {
+    this.setState({ fullscreenFeedId: feedId })
+  }
+
+  exitFullscreen() {
+    this.setState({ fullscreenFeedId: null })
   }
 
   render () {
-    const {currentUser, currentMemberRole, isCreatingFeed, error, allMembers } = this.props
-    const { feeds, unreadUpdate, scrolled, isNewPostMobileOpen } = this.state
+    const {currentUser, currentMemberRole, isCreatingFeed, error, allMembers,
+      toggleNotificationRead, notifications, project, isSuperUser } = this.props
+    const { feeds, isNewPostMobileOpen, fullscreenFeedId } = this.state
+    const isChanged = this.isChanged()
     const onLeaveMessage = this.onLeave() || ''
+    const fullscreenFeed = fullscreenFeedId && _.find(feeds, { id: fullscreenFeedId })
 
     return (
       <div>
-        { unreadUpdate.length > 0 && !this.isChanged() && scrolled &&
-          <Sticky top={80} innerZ={999}>
-            <div className="prompt">
-              <Refresh className="icon-refresh" width="20" style={{position: 'absolute', top: '4px'}}/>
-              <button className="tc-btn tc-btn-primary tc-btn-md" style={{borderRadius: '20px', marginLeft: '-15px'}} onClick={this.onRefreshFeeds}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reload page to view updates</button>
-            </div>
-          </Sticky>
-        }
+        {fullscreenFeed && (
+          <FullscreenFeedContainer
+            currentMemberRole={currentMemberRole}
+            isSuperUser={isSuperUser}
+            feeds={feeds}
+            onCloseClick={this.exitFullscreen}
+            activeFeedId={fullscreenFeedId}
+            onChannelClick={(feed) => {
+              this.enterFullscreen(feed.id)
+            }}
+          >
+            <ScrollableFeed
+              {...{
+                ...fullscreenFeed,
+                id: fullscreenFeedId.toString(),
+                allowComments: fullscreenFeed.allowComments && !!currentMemberRole,
+                currentUser,
+                allMembers,
+                onNewCommentChange: this.onNewCommentChange.bind(this, fullscreenFeedId),
+                onAddNewComment: this.onAddNewComment.bind(this, fullscreenFeedId),
+                onLoadMoreComments: this.onShowAllComments.bind(this, fullscreenFeedId),
+                onEditMessage: this.onEditMessage.bind(this, fullscreenFeedId),
+                onSaveMessageChange: this.onSaveMessageChange.bind(this, fullscreenFeedId),
+                onSaveMessage: this.onSaveMessage.bind(this, fullscreenFeedId),
+                onDeleteMessage: this.onDeleteMessage.bind(this, fullscreenFeedId),
+                onEditTopic: this.onEditTopic.bind(this, fullscreenFeedId),
+                onTopicChange: this.onTopicChange.bind(this, fullscreenFeedId),
+                onSaveTopic: this.onSaveTopic.bind(this, fullscreenFeedId),
+                onDeleteTopic: this.onDeleteTopic.bind(this, fullscreenFeedId),
+                onExitFullscreenClick: this.exitFullscreen,
+                isFullScreen: true,
+              }}
+            />
+          </FullscreenFeedContainer>
+        )}
+
+        <PostsRefreshPrompt
+          preventShowing={isChanged}
+          toggleNotificationRead={toggleNotificationRead}
+          refreshFeeds={this.onRefreshFeeds}
+          notifications={notifications}
+          projectId={project.id}
+        />
+
 
         <Prompt
           when={!!onLeaveMessage}
@@ -414,35 +437,39 @@ class FeedView extends React.Component {
                 hasError={error}
                 heading="NEW STATUS POST"
                 onNewPostChange={this.onNewPostChange}
-                titlePlaceholder="Share the latest project updates with the team"
+                titlePlaceholder="Start a new discussion"
+                expandedTitlePlaceholder="Add your discussion title"
+                contentPlaceholder="Add your first post"
               />
             </MediaQuery>
             {feeds.map((feed) => (
-              <ScrollableFeed
-                {...{
-                  key: feed.id.toString(),
-                  ...feed,
-                  id: feed.id.toString(),
-                  allowComments: feed.allowComments && !!currentMemberRole,
-                  currentUser,
-                  allMembers,
-                  onNewCommentChange: this.onNewCommentChange.bind(this, feed.id),
-                  onAddNewComment: this.onAddNewComment.bind(this, feed.id),
-                  onLoadMoreComments: this.onShowAllComments.bind(this, feed.id),
-                  onEditMessage: this.onEditMessage.bind(this, feed.id),
-                  onSaveMessageChange: this.onSaveMessageChange.bind(this, feed.id),
-                  onSaveMessage: this.onSaveMessage.bind(this, feed.id),
-                  onDeleteMessage: this.onDeleteMessage.bind(this, feed.id),
-                  onEditTopic: this.onEditTopic.bind(this, feed.id),
-                  onTopicChange: this.onTopicChange.bind(this, feed.id),
-                  onSaveTopic: this.onSaveTopic.bind(this, feed.id),
-                  onDeleteTopic: this.onDeleteTopic.bind(this, feed.id),
-                }}
-              />
+              <div styleName="feed-card" key={feed.id.toString()}>
+                <ScrollableFeed
+                  {...{
+                    ...feed,
+                    id: feed.id.toString(),
+                    allowComments: feed.allowComments && !!currentMemberRole,
+                    currentUser,
+                    allMembers,
+                    onNewCommentChange: this.onNewCommentChange.bind(this, feed.id),
+                    onAddNewComment: this.onAddNewComment.bind(this, feed.id),
+                    onLoadMoreComments: this.onShowAllComments.bind(this, feed.id),
+                    onEditMessage: this.onEditMessage.bind(this, feed.id),
+                    onSaveMessageChange: this.onSaveMessageChange.bind(this, feed.id),
+                    onSaveMessage: this.onSaveMessage.bind(this, feed.id),
+                    onDeleteMessage: this.onDeleteMessage.bind(this, feed.id),
+                    onEditTopic: this.onEditTopic.bind(this, feed.id),
+                    onTopicChange: this.onTopicChange.bind(this, feed.id),
+                    onSaveTopic: this.onSaveTopic.bind(this, feed.id),
+                    onDeleteTopic: this.onDeleteTopic.bind(this, feed.id),
+                    onEnterFullscreenClick: this.enterFullscreen.bind(this, feed.id),
+                  }}
+                />
+              </div>
             ))}
           </div>
         </Section>
-        { !isNewPostMobileOpen &&
+        { !isNewPostMobileOpen && !fullscreenFeed &&
           <MediaQuery maxWidth={SCREEN_BREAKPOINT_MD - 1}>
             <div styleName="chat-button-space">
               <ChatButton onClick={this.toggleNewPostMobile} />
@@ -453,8 +480,8 @@ class FeedView extends React.Component {
           <NewPostMobile
             statusTitle="NEW STATUS"
             commentTitle="WRITE POST"
-            statusPlaceholder="Share the latest project updates with the team"
-            commentPlaceholder="Write your post about the status here"
+            statusPlaceholder="Start a new discussion"
+            commentPlaceholder="Add your first post"
             submitText="Post"
             nextStepText="Add post"
             onClose={this.toggleNewPostMobile}
@@ -514,6 +541,7 @@ const mapDispatchToProps = {
   saveFeedComment,
   deleteFeedComment,
   getFeedComment,
+  toggleNotificationRead,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedContainer)
