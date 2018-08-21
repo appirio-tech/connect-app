@@ -284,7 +284,7 @@ export function createProduct(project, productTemplate, phases, timelines) {
         startDate = moment(lastMilestone.startDate).hours(0).minutes(0).seconds(0)
           .milliseconds(0).add(lastMilestone.duration - 1, 'days').add(1, 'days')
       }
-    } else if (phase.startDate) {
+    } else if (phase && phase.startDate) {
       // if there is no timeline for the phase, calculates the next phase's start date by adding 1 day to the
       // end date of last phase, we don't use end date field of milestone because it might not reflect the
       // correct end date
