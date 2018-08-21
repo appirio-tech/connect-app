@@ -28,7 +28,7 @@ const SelectProductTemplate = ({
         key={productTemplate.id}
         onClick={() => onProductTemplateChange(productTemplate.key || productTemplate.productKey)}
         type={productTemplate.name}
-        buttonText="Select Product"
+        buttonText="Add phase to project"
       />
     )
   })
