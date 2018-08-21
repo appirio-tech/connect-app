@@ -23,6 +23,10 @@ import './NotificationsContainer.scss'
 class NotificationsContainerView extends React.Component {
   componentDidMount() {
     document.title = 'Notifications - TopCoder'
+
+    if (!this.props.initialized) {
+      this.props.getNotifications()
+    }
   }
 
   render() {
