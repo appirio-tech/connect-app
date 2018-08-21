@@ -280,14 +280,18 @@ export function createProduct(project, productTemplate, phases, timelines) {
       const lastMilestone = _.maxBy(timelineState.timeline.milestones, 'order')
       // calculates the start date for the new phase by adding 1 day to the end date of the milestone
       // we don't use end date field of milestone because it might not reflect the correct end date
-      startDate = moment(lastMilestone.startDate).hours(0).minutes(0).seconds(0)
-        .milliseconds(0).add(lastMilestone.duration - 1, 'days').add(1, 'days')
-    } else {
+      if (lastMilestone && lastMilestone.startDate) {
+        startDate = moment(lastMilestone.startDate).hours(0).minutes(0).seconds(0)
+          .milliseconds(0).add(lastMilestone.duration - 1, 'days').add(1, 'days')
+      }
+    } else if (phase.startDate) {
       // if there is no timeline for the phase, calculates the next phase's start date by adding 1 day to the
       // end date of last phase, we don't use end date field of milestone because it might not reflect the
       // correct end date
       startDate = moment(phase.startDate).hours(0).minutes(0).seconds(0)
         .milliseconds(0).add(phase.duration - 1, 'days').add(1, 'days')
+    } else {
+      // do nothing, use today as start date
     }
   }
   // assumes 10 days as default duration, ideally we could store it at template level
