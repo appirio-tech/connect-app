@@ -443,15 +443,15 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
     }).then(() => {
       const project = state.projectState.project
 
-      // if one phase moved to REVIEWED status, make project REVIEWED too
+      // if one phase moved to REVIEWED status, make project IN_REVIEW too
       if (
-        _.includes([PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW], project.status) && 
+        _.includes([PROJECT_STATUS_DRAFT], project.status) && 
         phase.status !== PHASE_STATUS_REVIEWED &&
         updatedProps.status === PHASE_STATUS_REVIEWED
       ) {
         dispatch(
           updateProject(projectId, {
-            status: PROJECT_STATUS_REVIEWED
+            status: PROJECT_STATUS_IN_REVIEW
           }, true)
         )
       }
