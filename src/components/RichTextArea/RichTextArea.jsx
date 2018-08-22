@@ -102,7 +102,8 @@ class RichTextArea extends React.Component {
       this.clearState()
     } else if ((nextProps.isGettingComment !== this.props.isGettingComment && !nextProps.isGettingComment)
       || (nextProps.messageId !== this.props.messageId)) {
-      const editorState = EditorState.push(this.state.editorState, nextProps.content ? markdownToState(nextProps.content) : EditorState.createEmpty().getCurrentContent())
+      const contentState = EditorState.getCurrentContent()
+      const editorState = EditorState.push(this.state.editorState, contentState, nextProps.content ? markdownToState(nextProps.content) : EditorState.createEmpty().getCurrentContent())
       this.setState({
         editorExpanded: nextProps.editMode,
         titleValue: nextProps.title || '',
@@ -114,10 +115,11 @@ class RichTextArea extends React.Component {
   }
 
   clearState() {
+    const contentState = EditorState.getCurrentContent()
     this.setState({
       editorExpanded: this.props.editMode,
       titleValue: '',
-      editorState: EditorState.push(this.state.editorState, EditorState.createEmpty().getCurrentContent()),
+      editorState: EditorState.push(this.state.editorState, contentState, EditorState.createEmpty().getCurrentContent()),
       currentMDContent: null,
       oldMDContent: null
     })
@@ -196,6 +198,7 @@ class RichTextArea extends React.Component {
   }
 
   onEditorChange(editorState) {
+    console.log(editorState)
     this.setState({
       editorState
     })
@@ -265,7 +268,7 @@ class RichTextArea extends React.Component {
     const blockType = RichUtils.getCurrentBlockType(editorState)
     const currentEntity = getCurrentEntity(editorState)
     const disableForCodeBlock = blockType === 'code-block'
-    const editButtonText = editingTopic ? 'Update title' : 'Update post' 
+    const editButtonText = editingTopic ? 'Update title' : 'Update post'
 
     const Entry = (props) => {
       const {
@@ -325,6 +328,7 @@ class RichTextArea extends React.Component {
                     handleKeyCommand={this.handleKeyCommand}
                     plugins={this.plugins}
                     setUploadState={this.setUploadState}
+                    spellCheck
                   />
                   <MentionSuggestions
                     onSearchChange={this.onSearchChange.bind(this)}
