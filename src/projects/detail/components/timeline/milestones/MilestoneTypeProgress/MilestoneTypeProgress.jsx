@@ -29,7 +29,12 @@ class MilestoneTypeProgress extends React.Component {
     const { milestone, updateMilestoneContent } = this.props
 
     const links = [..._.get(milestone, 'details.content.links', [])]
-
+    const duplicateLinks = _.filter(links, (link) => {
+      return link.title === values.title.trim();
+    })
+    if(duplicateLinks.length){
+      return;
+    }
     if (typeof linkIndex === 'number') {
       links.splice(linkIndex, 1, values)
     } else {
