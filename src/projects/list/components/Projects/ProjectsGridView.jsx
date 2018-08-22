@@ -37,10 +37,12 @@ const ProjectsGridView = props => {
       renderText: item => {
         const url = `/projects/${item.id}`
         const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
+        let idLocale = item.id.toLocaleString(navigator.language, { minimumFractionDigits: 0 });
+        idLocale = _.replace(idLocale,',','')
         return (
           <Link to={url} className="spacing">
             { recentlyCreated  && <span className="blue-border" /> }
-            { item.id.toLocaleString(navigator.language, { minimumFractionDigits: 0 }) }
+            { idLocale }
           </Link>
         )
       }
