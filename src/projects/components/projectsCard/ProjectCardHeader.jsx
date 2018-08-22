@@ -10,8 +10,11 @@ import './ProjectCardHeader.scss'
 function ProjectCardHeader({ project, onClick, projectTemplates }) {
   if (!project) return null
 
+  const projectTemplateId = project.templateId
   const projectTemplateKey = _.get(project, 'details.products[0]')
-  const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
+  const projectTemplate = projectTemplateId
+    ? _.find(projectTemplates, pt => pt.id === projectTemplateId)
+    : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
   // icon for the product, use default generic work project icon for categories which no longer exist now
   const productIcon = _.get(projectTemplate, 'icon', 'tech-32px-outline-work-project')
   return (
