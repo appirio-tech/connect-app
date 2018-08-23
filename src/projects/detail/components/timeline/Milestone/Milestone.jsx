@@ -3,7 +3,6 @@
  *
  * Renders one milestone in timeline. Inside it renders:
  * - milestone title
- * - milestone description
  * - milestone edit form (if open)
  * - component depend on the milestone type
  */
@@ -264,6 +263,7 @@ class Milestone extends React.Component {
             <MilestoneTypePhaseSpecification
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
+              extendMilestone={this.extendMilestone}
               completeMilestone={this.completeMilestone}
               currentUser={currentUser}
             />
@@ -273,6 +273,7 @@ class Milestone extends React.Component {
             <MilestoneTypeProgress
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
+              extendMilestone={this.extendMilestone}
               completeMilestone={this.completeMilestone}
               currentUser={currentUser}
             />
@@ -350,6 +351,7 @@ class Milestone extends React.Component {
             <MilestoneTypeFinalFixes
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
+              extendMilestone={this.extendMilestone}
               completeFinalFixesMilestone={this.completeFinalFixesMilestone}
               submitFinalFixesRequest={this.submitFinalFixesRequest}
               currentUser={currentUser}
@@ -370,6 +372,7 @@ class Milestone extends React.Component {
               <MilestoneTypeDelivery
                 milestone={milestone}
                 updateMilestoneContent={this.updateMilestoneContent}
+                extendMilestone={this.extendMilestone}
                 completeMilestone={this.completeMilestone}
                 submitFinalFixesRequest={this.submitFinalFixesRequest}
                 currentUser={currentUser}

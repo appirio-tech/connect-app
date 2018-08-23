@@ -44,7 +44,11 @@ import {
   MILESTONE_STATUS,
   PHASE_STATUS_ACTIVE,
   PHASE_DIRTY,
-  PHASE_DIRTY_UNDO
+  PHASE_DIRTY_UNDO,
+  PROJECT_STATUS_IN_REVIEW,
+  PHASE_STATUS_REVIEWED,
+  PROJECT_STATUS_REVIEWED,
+  PROJECT_STATUS_ACTIVE
 } from '../../config/constants'
 import {
   updateProductMilestone,
@@ -434,7 +438,36 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
       } else {
         optionallyUpdateFirstMilestone()
       }
-      return true
+
+    // update project caused by phase updates
+    }).then(() => {
+      const project = state.projectState.project
+
+      // if one phase moved to REVIEWED status, make project IN_REVIEW too
+      if (
+        _.includes([PROJECT_STATUS_DRAFT], project.status) && 
+        phase.status !== PHASE_STATUS_REVIEWED &&
+        updatedProps.status === PHASE_STATUS_REVIEWED
+      ) {
+        dispatch(
+          updateProject(projectId, {
+            status: PROJECT_STATUS_IN_REVIEW
+          }, true)
+        )
+      }
+
+      // if one phase moved to ACTIVE status, make project ACTIVE too
+      if (
+        _.includes([PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_REVIEWED], project.status) && 
+        phase.status !== PHASE_STATUS_ACTIVE &&
+        updatedProps.status === PHASE_STATUS_ACTIVE
+      ) {
+        dispatch(
+          updateProject(projectId, {
+            status: PROJECT_STATUS_ACTIVE
+          }, true)
+        )
+      }
     })
   }
 }

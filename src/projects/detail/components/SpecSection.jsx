@@ -196,7 +196,7 @@ const SpecSection = props => {
     }
     case 'project-name': {
       const refCodeFieldName = 'details.utm.code'
-      const refCode = _.get(project, refCodeFieldName, undefined)
+      const refCode = _.get(project, refCodeFieldName, '')
       const queryParamRefCode = qs.parse(window.location.search).refCode
       return (
         <div className="project-name-section">
@@ -204,7 +204,7 @@ const SpecSection = props => {
             <TCFormFields.TextInput
               name="name"
               placeholder="Project Name"
-              value={_.get(project, 'name', undefined)}
+              value={_.get(project, 'name', '')}
               wrapperClass="project-name"
               maxLength={ PROJECT_NAME_MAX_LENGTH }
               required={props.required}
@@ -265,9 +265,9 @@ SpecSection.propTypes = {
   sectionNumber: PropTypes.number.isRequired,
   showHidden: PropTypes.bool,
   isCreation: PropTypes.bool,
-  addAttachment: PropTypes.func.isRequired,
-  updateAttachment: PropTypes.func.isRequired,
-  removeAttachment: PropTypes.func.isRequired,
+  addAttachment: PropTypes.func,
+  updateAttachment: PropTypes.func,
+  removeAttachment: PropTypes.func,
 }
 
 export default scrollToAnchors(SpecSection)

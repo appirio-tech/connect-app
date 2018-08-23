@@ -171,6 +171,7 @@ export const projectState = function (state=initialState, action) {
   case CLEAR_LOADED_PROJECT:
   case GET_PROJECTS_SUCCESS:
     return Object.assign({}, state, {
+      isLoading: true, // this is excpected to be default value when there is not project loaded
       project: {},
       projectNonDirty: {},
       phases: null,
