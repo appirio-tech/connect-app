@@ -115,9 +115,10 @@
       border: 1px solid $tc-gray-10;
       border-radius: 4px;
       white-space: inherit;
+      overflow-x: auto;
 
       code {
-        white-space: pre-wrap;
+        white-space: pre;
       }
     }
 
