@@ -87,9 +87,17 @@ function updateMilestone(state, productId, milestoneId, dirtyMilestone, shouldRe
  * @returns {Object} The state
  */
 function updateTimeline(state, productId, updateTimeline, shouldReplace = false) {
+  const milestones = _.get(state,`[${productId}].timeline.milestones`)
+
   const updatedTimeline = shouldReplace
     ? updateTimeline
     : update(state[productId].timeline, updateTimeline)
+
+  // restore milestones inside timeline after replacing timeline
+  // if udpated timeline doesn't have milestones
+  if (shouldReplace && milestones && !updateTimeline.milestones) {
+    updatedTimeline.milestones = milestones
+  }
 
   return update(state, {
     [productId]: {
