@@ -180,6 +180,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
       selectedLinks,
       isSelectWarningVisible,
       isRejectedExpanded,
+      isShowCompleteConfirmMessage,
       extensionRequestDialog,
       extensionRequestButton,
       extensionRequestConfirmation,

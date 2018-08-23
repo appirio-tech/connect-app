@@ -87,7 +87,7 @@ function updateMilestone(state, productId, milestoneId, dirtyMilestone, shouldRe
  * @returns {Object} The state
  */
 function updateTimeline(state, productId, updateTimeline, shouldReplace = false) {
-  const milestones = _.get(state,`[${productId}].timeline.milestones`)
+  const milestones = _.get(state, `[${productId}].timeline.milestones`)
 
   const updatedTimeline = shouldReplace
     ? updateTimeline
