@@ -5,6 +5,7 @@ import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
 import uncontrollable from 'uncontrollable'
+import scrollToComponent from 'react-scroll-to-component'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
@@ -114,6 +115,12 @@ class ProjectStage extends React.Component{
     addProductAttachment(project.id, phase.id, product.id, attachment)
   }
 
+  componentDidMount() {
+    if (this.props.isExpanded) {
+      scrollToComponent(this.PhaseCard, { offset: 0, align: 'middle', duration: 500, ease: 'inCirc' })
+    }
+  }
+
   render() {
     const {
       activeTab,
@@ -141,6 +148,8 @@ class ProjectStage extends React.Component{
       allMembers,
       onSaveMessage,
       timeline,
+      isExpanded,
+      postId,
     } = this.props
 
     // NOTE even though in store we keep products as an array,
@@ -153,7 +162,7 @@ class ProjectStage extends React.Component{
 
     const hasTimeline = !!timeline
     const defaultActiveTab = hasTimeline ? 'timeline' : 'posts'
-    const currentActiveTab = activeTab ? activeTab : defaultActiveTab
+    const currentActiveTab = isExpanded ? 'posts' : (activeTab ? activeTab : defaultActiveTab)
 
     return (
       <PhaseCard
@@ -162,6 +171,8 @@ class ProjectStage extends React.Component{
         isManageUser={isManageUser}
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
         timeline={timeline}
+        isExpanded={isExpanded}
+        ref={(section) => { this.PhaseCard = section; }}
       >
         <div>
           <ProjectStageTabs
@@ -187,6 +198,7 @@ class ProjectStage extends React.Component{
               onDeleteMessage={onDeleteMessage}
               allMembers={allMembers}
               onSaveMessage={onSaveMessage}
+              postId={postId}
             />
           }
 

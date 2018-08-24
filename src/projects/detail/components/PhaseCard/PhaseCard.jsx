@@ -36,7 +36,7 @@ class PhaseCard extends React.Component {
     this.onClose = this.onClose.bind(this)
 
     this.state = {
-      isExpanded: '',
+      isExpanded: props.isExpanded,
       isEditting: false,
       isDetailView: false
     }
@@ -245,8 +245,6 @@ PhaseCard.propTypes = {
     title: PT.string.isRequired,
   })
 }
-
-
 
 const mapStateToProps = ({loadUser, projectState}) => {
   return {

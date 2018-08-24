@@ -61,6 +61,7 @@ const ProjectDetailView = (props) => {
       isProcessing: props.isProcessing,
       allProductTemplates: props.allProductTemplates,
       productsTimelines: props.productsTimelines,
+      ...props.match.params,
     })
   })
   return <div>{children}</div>

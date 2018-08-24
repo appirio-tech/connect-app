@@ -164,11 +164,24 @@ class FeedComments extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const { postId, hasMoreComments, isLoadingComments, onLoadMoreComments } = this.props
+    if (postId && hasMoreComments) {
+      this.setState({showAll: true}, () => {
+        this.updateStickyRow()
+      })
+
+      if (!isLoadingComments) {
+        onLoadMoreComments()
+      }
+    }    
+  }
+
   render() {
     const {
       comments, currentUser, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
       onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage, allMembers,
-      totalComments, isFullScreen, headerHeight,
+      totalComments, isFullScreen, headerHeight, postId
     } = this.props
     const { isNewCommentMobileOpen, stickyRowNext, stickyRowPrev } = this.state
     let authorName = currentUser.firstName
@@ -285,6 +298,7 @@ class FeedComments extends React.Component {
       const rowKey = `comment-${item.id}`
       rowKeyToIndex[rowKey] = commentRows.length
 
+      const selected = item.id === parseInt(postId)
       commentRows.push(
         <Comment
           key={rowKey}
@@ -302,6 +316,7 @@ class FeedComments extends React.Component {
           allMembers={allMembers}
           noInfo={item.noInfo}
           canDelete={idx !== 0}
+          selected={selected}
         >
           <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
         </Comment>

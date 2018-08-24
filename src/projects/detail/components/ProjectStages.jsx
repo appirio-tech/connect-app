@@ -74,36 +74,40 @@ const ProjectStages = ({
   removeProductAttachment,
   isManageUser,
   deleteProjectPhase,
+  phaseId,
+  postId,
 }) => (
-  <Section>
+    <Section>
 
-    <PhaseCardListHeader />
-    {
-      phases.map((phase, index) => (
-        <ProjectStage
-          key={phase.id}
-          productTemplates={productTemplates}
-          currentMemberRole={currentMemberRole}
-          isProcessing={isProcessing}
-          isSuperUser={isSuperUser}
-          isManageUser={isManageUser}
-          project={project}
-          phase={phase}
-          phaseIndex={index}
-          updateProduct={updateProduct}
-          fireProductDirty={fireProductDirty}
-          fireProductDirtyUndo={fireProductDirtyUndo}
-          addProductAttachment={addProductAttachment}
-          updateProductAttachment={updateProductAttachment}
-          removeProductAttachment={removeProductAttachment}
-          deleteProjectPhase={deleteProjectPhase}
-        />
-      ))
-    }
-    <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases, productsTimelines)}/>
+      <PhaseCardListHeader />
+      {
+        phases.map((phase, index) => (
+          <ProjectStage
+            key={phase.id}
+            productTemplates={productTemplates}
+            currentMemberRole={currentMemberRole}
+            isProcessing={isProcessing}
+            isSuperUser={isSuperUser}
+            isManageUser={isManageUser}
+            project={project}
+            phase={phase}
+            phaseIndex={index}
+            updateProduct={updateProduct}
+            fireProductDirty={fireProductDirty}
+            fireProductDirtyUndo={fireProductDirtyUndo}
+            addProductAttachment={addProductAttachment}
+            updateProductAttachment={updateProductAttachment}
+            removeProductAttachment={removeProductAttachment}
+            deleteProjectPhase={deleteProjectPhase}
+            isExpanded={phase.id === parseInt(phaseId)}
+            postId={phase.id === parseInt(phaseId) ? postId : undefined}
+          />
+        ))
+      }
+      <PhaseCardListFooter {...formatPhaseCardListFooterProps(phases, productsTimelines)} />
 
-  </Section>
-)
+    </Section>
+  )
 
 ProjectStages.defaultProps = {
   currentMemberRole: null,

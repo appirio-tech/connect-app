@@ -14,7 +14,7 @@ import RedirectComponent from './components/RedirectComponent'
 import CreateContainer from './projects/create/containers/CreateContainer'
 import LoadingIndicator from './components/LoadingIndicator/LoadingIndicator'
 import {ACCOUNTS_APP_LOGIN_URL, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from './config/constants'
-import { getTopic } from './api/messages'
+import { getTopic, getPost } from './api/messages'
 import { getFreshToken } from 'tc-accounts'
 import { scrollToHash } from './components/ScrollToAnchors.jsx'
 
@@ -59,7 +59,8 @@ const LoginRedirect = withProps({
 class RedirectToProject extends React.Component {
   componentWillMount() {
     const { match, history } = this.props
-    const feedId = match.params.feedId
+    const feedId = match.params.feedId || match.params.topicId
+    const postId = match.params.postId
     getFreshToken().then(() => {
       getTopic(feedId).then(resp => {
         if (resp.topic) {
@@ -71,6 +72,17 @@ class RedirectToProject extends React.Component {
             history.replace({
               pathname: `/projects/${projectId}/discussions/${topic.id}`
             })
+          } else if (topic.tag.startsWith('phase')) {
+            const phaseId = parseInt(topic.tag.substr(topic.tag.indexOf('#') + 1))
+            if (postId) {
+              history.replace({
+                pathname: `/projects/${projectId}/plan/phases/${phaseId}/posts/${postId}`
+              })
+            } else {
+              history.replace({
+                pathname: `/projects/${projectId}/plan/phases/${phaseId}/topics`
+              })
+            }
           } else {
             history.replace('/projects')
           }
@@ -134,6 +146,8 @@ class Routes extends React.Component {
         <Route path="/terms" render={renderApp(topBarWithProjectsToolBar, <ConnectTerms/>)} />
         <Route path="/login" render={renderApp(topBarWithProjectsToolBar, <LoginRedirect/>)} />
         <Route path="/discussions/:feedId" component={ RedirectToProject } />
+        <Route path="/topics/:topicId/posts/:postId" component={ RedirectToProject } />
+        <Route path="/topics/:topicId" component={ RedirectToProject } />
 
         {/* Handle /projects/* routes */}
         {projectRoutes}
