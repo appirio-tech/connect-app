@@ -17,9 +17,7 @@ import Form from '../Form'
 import MilestoneTypePhaseSpecification from '../milestones/MilestoneTypePhaseSpecification'
 import MilestoneTypeProgress from '../milestones/MilestoneTypeProgress'
 import MilestoneTypeCheckpointReview from '../milestones/MilestoneTypeCheckpointReview'
-import MilestoneTypeCheckpointReviewOnly from '../milestones/MilestoneTypeCheckpointReviewOnly'
 import MilestoneTypeFinalDesigns from '../milestones/MilestoneTypeFinalDesigns'
-import MilestoneTypeFinalDesignsSelectionOnly from '../milestones/MilestoneTypeFinalDesignsSelectionOnly'
 import MilestoneTypeDelivery from '../milestones/MilestoneTypeDelivery'
 import MilestoneTypeFinalFixes from '../milestones/MilestoneTypeFinalFixes'
 import MilestoneTypeAddLinks from '../milestones/MilestoneTypeAddLinks'
@@ -279,30 +277,8 @@ class Milestone extends React.Component {
             />
           )}
 
-          {
-            !isEditing &&
-            !isUpdating &&
-            milestone.type === 'checkpoint-review' &&
-            // old type 'checkpoint-review' which let user add links
-            _.get(milestone, 'details.prevMilestoneType') !== 'add-links' &&
-          (
+          {!isEditing && !isUpdating && milestone.type === 'checkpoint-review' && (
             <MilestoneTypeCheckpointReview
-              milestone={milestone}
-              updateMilestoneContent={this.updateMilestoneContent}
-              extendMilestone={this.extendMilestone}
-              completeMilestone={this.completeMilestone}
-              currentUser={currentUser}
-            />
-          )}
-
-          {
-            !isEditing &&
-            !isUpdating &&
-            milestone.type === 'checkpoint-review' &&
-            // new type 'checkpoint-review' which gets list of links from previous `add-links` milestone
-            _.get(milestone, 'details.prevMilestoneType') === 'add-links' &&
-          (
-            <MilestoneTypeCheckpointReviewOnly
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
               extendMilestone={this.extendMilestone}
@@ -321,24 +297,8 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && milestone.type === 'final-designs'  &&
-            // old type 'final-designs' which let user add links
-            _.get(milestone, 'details.prevMilestoneType') !== 'add-links' &&
-          (
+          {!isEditing && !isUpdating && milestone.type === 'final-designs'  && (
             <MilestoneTypeFinalDesigns
-              milestone={milestone}
-              updateMilestoneContent={this.updateMilestoneContent}
-              extendMilestone={this.extendMilestone}
-              completeMilestone={this.completeMilestone}
-              currentUser={currentUser}
-            />
-          )}
-
-          {!isEditing && !isUpdating && milestone.type === 'final-designs'  &&
-            // new type 'final-designs' which gets list of links from previous `add-links` milestone
-            _.get(milestone, 'details.prevMilestoneType') === 'add-links' &&
-          (
-            <MilestoneTypeFinalDesignsSelectionOnly
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
               extendMilestone={this.extendMilestone}

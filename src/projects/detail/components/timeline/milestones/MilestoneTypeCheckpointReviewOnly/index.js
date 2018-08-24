@@ -1,2 +1,0 @@
-import MilestoneTypeCheckpointReviewOnly from './MilestoneTypeCheckpointReviewOnly'
-export default MilestoneTypeCheckpointReviewOnly
