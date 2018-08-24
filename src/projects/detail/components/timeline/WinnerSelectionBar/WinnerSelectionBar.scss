@@ -192,7 +192,9 @@
         left: 2 * $base-unit;
         position: absolute;
         right: 2 * $base-unit;
+        padding-left: 0;
         top: 50px;
+        justify-content: flex-start;
       }
     }
   }
@@ -217,7 +219,9 @@
   width: 30px;
   height: 30px;
   line-height: 30px;
-  margin: 0 5px;
+  & + & {
+    margin-left: 2 * $base-unit;
+  }
   .checkbox-text {
     position: relative;
     width: 30px;
