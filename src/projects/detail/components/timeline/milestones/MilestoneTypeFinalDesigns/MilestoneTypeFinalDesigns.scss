@@ -114,4 +114,25 @@
       margin: 0px 5px;
     }
   }
+
+  .wide-on-mobile {
+    @media screen and (max-width: 480px - 1px) {
+      background-color: $tc-white;
+      margin-left: - (70px + 36px);
+      padding: $base-unit 0 2 * $base-unit 4 * $base-unit;
+      position: relative;
+      z-index: 4;
+
+      &::before {
+        background-color: $tc-white;
+        bottom: 0;
+        content: '';
+        display: block;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 4 * $base-unit;
+      }
+    }
+  }
 }

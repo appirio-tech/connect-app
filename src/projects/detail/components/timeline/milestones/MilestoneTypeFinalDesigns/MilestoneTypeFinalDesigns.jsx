@@ -18,6 +18,7 @@ import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
 import {
   MILESTONE_STATUS,
   MIN_WINNER_DESIGNS,
+  DEFAULT_ADDITIONAL_DESIGN_COST,
 } from '../../../../../../config/constants'
 
 import './MilestoneTypeFinalDesigns.scss'
@@ -26,9 +27,13 @@ class MilestoneTypeFinalDesigns extends React.Component {
   constructor(props) {
     super(props)
 
+    const requiredWinnersCount = _.get(props, 'milestone.details.metadata.requiredWinnersCount', MIN_WINNER_DESIGNS)
+
     this.state = {
+      requiredWinnersCount,
+      additionalDesignCost: _.get(props, 'milestone.details.metadata.additionalDesignCost', DEFAULT_ADDITIONAL_DESIGN_COST),
       selectedLinks: [],
-      places: [-1, -1, -1],
+      places: _.fill(Array(requiredWinnersCount), -1), // produces array like [-1, -1, -1, ... , -1]
       isLinksProvided: _.get(props.milestone, 'details.prevMilestoneType') === 'add-links',
       isShowCompleteConfirmMessage: false,
       isShowCustomerCompleteConfirmMessage: false,
@@ -225,6 +230,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
       extensionRequestConfirmation,
     } = this.props
     const {
+      additionalDesignCost,
       isLinksProvided,
       selectedLinks,
       isSelectWarningVisible,
@@ -322,7 +328,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
             )}
 
             {isInReview && (
-              <div>
+              <div styleName="wide-on-mobile">
                 <DotIndicator>
                   <div styleName="top-space">
                     <header styleName="milestone-heading">
@@ -344,7 +350,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
                         isSelectedBonus={_.includes(selectedLinks, index)}
                         selectedPlace={places.indexOf(index) + 1}
                         placesChosen={places}
-                        maxPlace={links.length}
+                        additionalDesignCost={additionalDesignCost}
                       />
                     </div>
                   </DotIndicator>
@@ -445,7 +451,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
           Completed status
          */}
         {isCompleted && (
-          <div>
+          <div styleName="wide-on-mobile">
             <div styleName="top-space">
               <header styleName={'milestone-heading selected-theme'}>
                 Final designs
@@ -461,6 +467,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
                   isSelectedBonus={link.isSelected}
                   selectedPlace={link.selectedPlace}
                   placesChosen={places}
+                  additionalDesignCost={additionalDesignCost}
                 />
               </div>
             ))}
