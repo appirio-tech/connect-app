@@ -10,7 +10,6 @@ const ProjectStageTabs = ({
   isManageUser,
   isSuperUser,
   onTabClick,
-  hasReadPosts,
 }) => {
   const tabs = []
 
@@ -25,8 +24,7 @@ const ProjectStageTabs = ({
   tabs.push({
     onClick: () => onTabClick('posts'),
     label: 'Posts',
-    isActive: activeTab === 'posts',
-    hasNotifications: hasReadPosts,
+    isActive: activeTab === 'posts'
   })
 
   // show specification tab for everybody expect of customers

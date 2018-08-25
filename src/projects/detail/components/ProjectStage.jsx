@@ -9,7 +9,6 @@ import uncontrollable from 'uncontrollable'
 import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
 import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
-import { filterNotificationsByPosts, filterReadNotifications } from '../../../routes/notifications/helpers/notifications'
 
 import PhaseCard from './PhaseCard'
 import ProjectStageTabs from './ProjectStageTabs'
@@ -18,7 +17,6 @@ import PhaseFeed from './PhaseFeed'
 import ProductTimelineContainer from '../containers/ProductTimelineContainer'
 import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import NotificationsReader from '../../../components/NotificationsReader'
 
 const enhance = spinnerWhileLoading(props => !props.processing)
 const EnhancedEditProjectForm = enhance(EditProjectForm)
@@ -82,7 +80,7 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline
     posts,
     phaseIndex,
     phase,
-    progressInPercent,
+    progressInPercent
   }
 }
 
@@ -143,7 +141,6 @@ class ProjectStage extends React.Component{
       allMembers,
       onSaveMessage,
       timeline,
-      notifications,
     } = this.props
 
     // NOTE even though in store we keep products as an array,
@@ -157,9 +154,6 @@ class ProjectStage extends React.Component{
     const hasTimeline = !!timeline
     const defaultActiveTab = hasTimeline ? 'timeline' : 'posts'
     const currentActiveTab = activeTab ? activeTab : defaultActiveTab
-    const postNotifications = filterNotificationsByPosts(notifications, _.get(feed, 'posts', []))
-    const unreadPostNotifications = filterReadNotifications(postNotifications)
-    const hasReadPosts = unreadPostNotifications.length > 0
 
     return (
       <PhaseCard
@@ -168,7 +162,6 @@ class ProjectStage extends React.Component{
         isManageUser={isManageUser}
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
         timeline={timeline}
-        hasReadPosts={hasReadPosts}
       >
         <div>
           <ProjectStageTabs
@@ -177,17 +170,14 @@ class ProjectStage extends React.Component{
             isSuperUser={isSuperUser}
             isManageUser={isManageUser}
             hasTimeline={hasTimeline}
-            hasReadPosts={hasReadPosts}
           />
 
           {currentActiveTab === 'timeline' &&
             <ProductTimelineContainer product={product} />
           }
 
-          {currentActiveTab === 'posts' && [
-            <NotificationsReader unreadNotifications={unreadPostNotifications} key="NotificationsReader" />,
+          {currentActiveTab === 'posts' &&
             <PhaseFeed
-              key="PhaseFeed"
               user={currentUser}
               currentUser={currentUser}
               feed={feed}
@@ -198,7 +188,7 @@ class ProjectStage extends React.Component{
               allMembers={allMembers}
               onSaveMessage={onSaveMessage}
             />
-          ]}
+          }
 
           {currentActiveTab === 'specification' &&
             <div className="two-col-content content">

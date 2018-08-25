@@ -168,7 +168,7 @@ const phaseFeedHOC = (Component) => {
     }
   }
 
-  const mapStateToProps = ({ phasesTopics, loadUser, members, productsTimelines, notifications }, props) => {
+  const mapStateToProps = ({ phasesTopics, loadUser, members, productsTimelines }, props) => {
     const product = _.get(props.phase, 'products[0]')
     return {
       topic: _.get(phasesTopics[props.phase.id], 'topic'),
@@ -177,7 +177,6 @@ const phaseFeedHOC = (Component) => {
       currentUser: loadUser.user,
       allMembers: members.members,
       timeline: _.get(productsTimelines[product.id], 'timeline'),
-      notifications: _.get(notifications, 'notifications', [])
     }
   }
 
