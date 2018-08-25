@@ -24,7 +24,14 @@ if (process.env.NODE_ENV === 'development') {
 const store = createStore(reducers, compose(
   applyMiddleware(...middleware),
   window.devToolsExtension ? window.devToolsExtension() : f => f
-)
-)
+))
+
+if (module.hot) {
+  // Enable Webpack hot module replacement for reducers
+  module.hot.accept('../reducers', () => {
+    const nextRootReducer = require('../reducers/index').default;
+    store.replaceReducer(nextRootReducer);
+  });
+}
 
 export default store
