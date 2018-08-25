@@ -18,7 +18,7 @@ const GridView = props => {
   const headerProps = { columns, sortHandler, currentSortField }
 
   const renderItem = (item, index) => {
-    return item.isPlaceholder ? <Placeholder columns={columns} /> : <ListComponent columns={columns} item={item} key={index}/>
+    return item.isPlaceholder ? <Placeholder columns={columns} key={`placeholder-${index}`} /> : <ListComponent columns={columns} item={item} key={item.id}/>
   }
 
   const handleLoadMore = () => {

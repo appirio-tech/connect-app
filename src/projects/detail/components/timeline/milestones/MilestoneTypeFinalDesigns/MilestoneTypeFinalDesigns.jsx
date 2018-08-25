@@ -13,6 +13,7 @@ import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
 import WinnerSelectionBar from '../../WinnerSelectionBar'
 import MilestoneDescription from '../../MilestoneDescription'
+import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
 
 import {
   MILESTONE_STATUS,
@@ -29,8 +30,6 @@ class MilestoneTypeFinalDesigns extends React.Component {
       selectedLinks: [],
       places: [-1, -1, -1],
       isInReview: false,
-      isShowExtensionRequestMessage: false,
-      isShowExtensionConfirmMessage: false,
       isShowCompleteConfirmMessage: false,
       isShowCustomerCompleteConfirmMessage: false,
     }
@@ -42,11 +41,6 @@ class MilestoneTypeFinalDesigns extends React.Component {
     this.showCustomerCompleteReviewConfirmation = this.showCustomerCompleteReviewConfirmation.bind(this)
     this.hideCustomerCompleteReviewConfirmation = this.hideCustomerCompleteReviewConfirmation.bind(this)
     this.completeReview = this.completeReview.bind(this)
-    this.showExtensionRequestMessage = this.showExtensionRequestMessage.bind(this)
-    this.hideExtensionRequestMessage = this.hideExtensionRequestMessage.bind(this)
-    this.requestExtension = this.requestExtension.bind(this)
-    this.approveExtension = this.approveExtension.bind(this)
-    this.declineExtension = this.declineExtension.bind(this)
     this.moveToReviewingState = this.moveToReviewingState.bind(this)
     this.onBonusChange = this.onBonusChange.bind(this)
     this.onPlaceChange = this.onPlaceChange.bind(this)
@@ -121,50 +115,6 @@ class MilestoneTypeFinalDesigns extends React.Component {
     const links = _.get(milestone, 'details.content.links', [])
 
     return Math.min(links.length, MIN_WINNER_DESIGNS)
-  }
-
-  showExtensionRequestMessage() {
-    this.setState({ isShowExtensionRequestMessage: true })
-  }
-
-  hideExtensionRequestMessage() {
-    this.setState({ isShowExtensionRequestMessage: false })
-  }
-
-  requestExtension(value) {
-    const { updateMilestoneContent } = this.props
-
-    const extensionDuration = parseInt(value, 10)
-
-    updateMilestoneContent({
-      extensionRequest: {
-        duration: extensionDuration,
-      }
-    })
-  }
-
-  declineExtension() {
-    const { updateMilestoneContent } = this.props
-
-    updateMilestoneContent({
-      extensionRequest: null,
-    })
-  }
-
-  approveExtension() {
-    const { extendMilestone, milestone } = this.props
-    const content = _.get(milestone, 'details.content')
-    const extensionRequest = _.get(milestone, 'details.content.extensionRequest')
-
-    extendMilestone(extensionRequest.duration, {
-      details: {
-        ...milestone.details,
-        content: {
-          ...content,
-          extensionRequest: null,
-        }
-      }
-    })
   }
 
   updatedUrl(values, linkIndex) {
@@ -260,20 +210,20 @@ class MilestoneTypeFinalDesigns extends React.Component {
       milestone,
       theme,
       currentUser,
+      extensionRequestDialog,
+      extensionRequestButton,
+      extensionRequestConfirmation,
     } = this.props
     const {
       selectedLinks,
       isSelectWarningVisible,
       isShowCustomerCompleteConfirmMessage,
-      isShowExtensionRequestMessage,
       isShowCompleteConfirmMessage,
-      isShowExtensionConfirmMessage,
       places,
     } = this.state
 
     const links = _.get(milestone, 'details.content.links', [])
     const isInReview = _.get(milestone, 'details.content.isInReview', false)
-    const extensionRequest = _.get(milestone, 'details.content.extensionRequest')
 
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
@@ -397,10 +347,26 @@ class MilestoneTypeFinalDesigns extends React.Component {
               </DotIndicator>
             )}
 
+            {!!extensionRequestDialog && (
+              <DotIndicator hideLine>
+                <div styleName="top-space">
+                  {extensionRequestDialog}
+                </div>
+              </DotIndicator>
+            )}
+
+            {!!extensionRequestConfirmation && (
+              <DotIndicator hideLine>
+                <div styleName="top-space">
+                  {extensionRequestConfirmation}
+                </div>
+              </DotIndicator>
+            )}
+
             {
               !isCompleted &&
-              !isShowExtensionRequestMessage &&
-              !isShowExtensionConfirmMessage &&
+              !extensionRequestConfirmation &&
+              !extensionRequestDialog &&
               !isShowCompleteConfirmMessage &&
               !isShowCustomerCompleteConfirmMessage &&
               (!currentUser.isCustomer || isInReview) &&
@@ -420,47 +386,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
                       })
                     </button>
                   )}
-                  {!currentUser.isCustomer && !extensionRequest && (
-                    <button
-                      className={'tc-btn tc-btn-warning'}
-                      onClick={this.showExtensionRequestMessage}
-                    >
-                      Request Extension
-                    </button>
-                  )}
-                </div>
-              </DotIndicator>
-            )}
-
-            {isShowExtensionRequestMessage && (
-              <DotIndicator hideLine>
-                <div styleName="top-space">
-                  <MilestonePostMessage
-                    label={'Milestone extension request'}
-                    theme="warning"
-                    message={'Be careful, requesting extensions will change the project overall milestone. Proceed with caution and only if there are not enough submissions to satisfy our delivery policy.'}
-                    isShowSelection
-                    buttons={[
-                      { title: 'Cancel', onClick: this.hideExtensionRequestMessage, type: 'default' },
-                      { title: 'Request extension', onClick: this.requestExtension, type: 'warning' },
-                    ]}
-                  />
-                </div>
-              </DotIndicator>
-            )}
-
-            {!!extensionRequest && (
-              <DotIndicator hideLine>
-                <div styleName="top-space">
-                  <MilestonePostMessage
-                    label={'Milestone extension requested'}
-                    theme="primary"
-                    message={`Due to unusually high load on our network we had less than the minimum number or design submissions. In order to provide you with the appropriate number of design options we’ll have to extend the milestone with ${extensionRequest.duration * 24}h. This time would be enough to increase the capacity and make sure your project is successful.<br /><br />Please make a decision in the next 24h. After that we will automatically extend the project to make sure we deliver success to you.`}
-                    buttons={[
-                      { title: 'Decline extension', onClick: this.declineExtension, type: 'warning' },
-                      { title: 'Approve extension', onClick: this.approveExtension, type: 'primary' },
-                    ]}
-                  />
+                  {!currentUser.isCustomer && extensionRequestButton}
                 </div>
               </DotIndicator>
             )}
@@ -538,10 +464,12 @@ MilestoneTypeFinalDesigns.defaultProps = {
 MilestoneTypeFinalDesigns.propTypes = {
   completeMilestone: PT.func.isRequired,
   currentUser: PT.object.isRequired,
-  extendMilestone: PT.func.isRequired,
   milestone: PT.object.isRequired,
   theme: PT.string,
   updateMilestoneContent: PT.func.isRequired,
+  extensionRequestDialog: PT.node,
+  extensionRequestButton: PT.node,
+  extensionRequestConfirmation: PT.node,
 }
 
-export default MilestoneTypeFinalDesigns
+export default withMilestoneExtensionRequest(MilestoneTypeFinalDesigns)

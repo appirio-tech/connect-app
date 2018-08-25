@@ -20,5 +20,9 @@
     display: flex;
     justify-content: center;
     padding: 2 * $base-unit;
+
+    > button + button {
+      margin-left: 2 * $base-unit;
+    }
   }
 }
