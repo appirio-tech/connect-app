@@ -7,6 +7,7 @@ import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
 import MediaQuery from 'react-responsive'
+import cn from 'classnames'
 
 import {
   PHASE_STATUS,
@@ -77,7 +78,15 @@ class PhaseCard extends React.Component {
   }
 
   render() {
-    const { attr, projectStatus, isManageUser, deleteProjectPhase, isUpdating, timeline } = this.props
+    const {
+      attr,
+      projectStatus,
+      isManageUser,
+      deleteProjectPhase,
+      isUpdating,
+      timeline,
+      hasReadPosts,
+    } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
     let status = attr && attr.status ? attr.status : PHASE_STATUS_DRAFT
@@ -87,13 +96,15 @@ class PhaseCard extends React.Component {
     const phaseEditable = isManageUser && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
     const canDelete = status !== PHASE_STATUS_ACTIVE && status !== PHASE_STATUS_COMPLETED
 
+    const hasUnseen = hasReadPosts
+
     return (
       <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')}>
         {
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => (matches || !this.state.isDetailView ? (
               <div>
-                <div styleName="static-view" onClick={!this.state.isEditting && this.toggleCardView }>
+                <div styleName={cn('static-view', { 'has-unseen': hasUnseen && !this.state.isExpanded })} onClick={!this.state.isEditting && this.toggleCardView }>
                   <div styleName="col">
                     <div styleName="project-details">
                       <div styleName="project-ico">
@@ -243,6 +254,7 @@ PhaseCard.propTypes = {
     startEndDates: PT.string.isRequired,
     status: PT.string.isRequired,
     title: PT.string.isRequired,
+    hasReadPosts: PT.bool,
   })
 }
 
