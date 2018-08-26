@@ -12,6 +12,7 @@ import cn from 'classnames'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
 import BtnEdit from '../../assets/icons/icon-edit.svg'
 import _ from "lodash";
+import Modal from "../Modal/Modal";
 
 const FileLinksMenu = ({
                      canAdd,
@@ -73,6 +74,10 @@ const FileLinksMenu = ({
     })
   }
 
+  const onClose = () => {
+    onAddingNewLink(false)
+  }
+
   return (
     <MobileExpandable title={`${title} (${links.length})`}>
       <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0)}, 'panel-links-container')}>
@@ -84,11 +89,17 @@ const FileLinksMenu = ({
         </Panel.Title>}
 
         {(isAddingNewLink || linkToDelete >= 0) && <div className="modal-overlay"/>}
+
         {isAddingNewLink &&
-        <AddFiles successHandler={processUploadedFiles.bind(this)}
-                  storePath={attachmentsStorePath}
-                  category={category}
-        />
+          <Modal onClose={onClose}>
+            <Modal.Title>
+              UPLOAD A FILE
+            </Modal.Title>
+            <AddFiles successHandler={processUploadedFiles.bind(this)}
+                      storePath={attachmentsStorePath}
+                      category={category}
+            />
+          </Modal>
         }
 
         <div
