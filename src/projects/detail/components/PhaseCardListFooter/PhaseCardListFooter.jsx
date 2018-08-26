@@ -20,7 +20,7 @@ const PhaseCardListFooter = ({
           <span styleName="meta meta-dark">{startEndDates}</span>
         </div>
       </div>
-      <div styleName="price">{price}</div>
+      {parseInt(price, 10) > 0 &&  <div styleName="price">price</div> }
       <div styleName="status" />
     </div>
   </div>

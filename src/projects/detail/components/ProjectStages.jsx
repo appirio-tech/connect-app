@@ -58,6 +58,18 @@ function formatPhaseCardListFooterProps(phases, productsTimelines) {
   }
 }
 
+function formatPhaseCardListHeaderProps(phases) {
+  const filteredPhases = _.filter(phases, (phase) => (phase.status !== PHASE_STATUS_DRAFT))
+
+  const price = _.sumBy(filteredPhases, 'budget')
+
+  const hasPrice = parseInt(price, 10) > 0
+
+  return {
+    hasPrice
+  }
+}
+
 const ProjectStages = ({
   project,
   phases,
@@ -77,7 +89,7 @@ const ProjectStages = ({
 }) => (
   <Section>
 
-    <PhaseCardListHeader />
+    <PhaseCardListHeader {...formatPhaseCardListHeaderProps(phases)}/>
     {
       phases.map((phase, index) => (
         <ProjectStage
