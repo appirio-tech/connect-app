@@ -15,7 +15,6 @@ import PT from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 
-import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import Timeline from '../components/timeline/Timeline'
 
 import {
@@ -90,9 +89,11 @@ class ProductTimelineContainer extends React.Component {
     return (
       // show loader for the whole timeline even if updating only one milestone
       // here is why https://github.com/appirio-tech/connect-app/issues/2291#issuecomment-410968047
-      (isLoading || isSomeMilestoneUpdating || !timeline)
-        ? <LoadingIndicator />
-        : <Timeline {...this.props} />
+
+	  // https://github.com/appirio-tech/connect-app/issues/2422
+	  // Simpy return Timeline component here.
+	  // Move out loading indicator to Timeline so the height can be maintained in there.
+      <Timeline {...this.props} />
     )
   }
 }
