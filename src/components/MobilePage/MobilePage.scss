@@ -3,6 +3,7 @@
 :global {
   body.hidden-content #wrapper-main {
     height: 1px;
+    min-height: 0;
     overflow: hidden;
   }
 
