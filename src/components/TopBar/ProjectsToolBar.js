@@ -49,7 +49,7 @@ class ProjectsToolBar extends Component {
 
     // update query string if there is a search
     if (criteria && criteria.keyword) {
-      this.updateQueryParams(criteria);
+      this.updateQueryParams(criteria)
     }
   }
 
