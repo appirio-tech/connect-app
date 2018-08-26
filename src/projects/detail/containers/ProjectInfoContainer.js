@@ -8,8 +8,10 @@ import FileLinksMenu from '../../../components/LinksMenu/FileLinksMenu'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
 import { setDuration } from '../../../helpers/projectHelper'
-import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
-  DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
+import {
+  PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
+  DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_ATTACHMENTS_FOLDER
+} from '../../../config/constants'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 
@@ -92,11 +94,8 @@ class ProjectInfoContainer extends React.Component {
   }
 
   onAddAttachment(attachment) {
-    addProjectAttachment(attachment);
-    const { updateProject, project } = this.props
-    updateProject(project.id, {
-      attachments: update(project.attachments || [], { $push: [attachment] })
-    })
+    const { project } = this.props;
+    addProjectAttachment(project.id, attachment);
   }
 
   render() {
@@ -154,6 +153,8 @@ class ProjectInfoContainer extends React.Component {
       isActive: feed.id === activeChannelId,
     }))
 
+    const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
+
     return (
       <div>
         <div className="sideAreaWrapper">
@@ -186,6 +187,7 @@ class ProjectInfoContainer extends React.Component {
             onAddAttachment={this.onAddAttachment}
             moreText="view all files"
             noDots
+            attachmentsStorePath={attachmentsStorePath}
           />
           {!hideLinks &&
             <LinksMenu

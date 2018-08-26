@@ -60,6 +60,7 @@ const FileLinksMenu = ({
   }
 
   const processUploadedFiles = (fpFiles, category) => {
+    onAddingNewLink(false)
     fpFiles = _.isArray(fpFiles) ? fpFiles : [fpFiles]
     _.forEach(fpFiles, f => {
       const attachment = {
@@ -201,6 +202,7 @@ FileLinksMenu.propTypes = {
   noDots: PropTypes.bool,
   limit: PropTypes.number,
   links: PropTypes.array.isRequired,
+  attachmentsStorePath: PropTypes.string.isRequired,
   moreText: PropTypes.string,
   onAddingNewLink: PropTypes.func,
   onAddNewLink: PropTypes.func,
