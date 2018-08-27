@@ -1,4 +1,4 @@
-#### For folks working on this code base, we're organizing coding style and general guidelines [here](https://github.com/appirio-tech/connect-app/wiki/Community-Work-Read-Me-First!).
+#### For folks working on this code base, we're organizing coding style and general guidelines [here](https://github.com/appirio-tech/connect-app/wiki/Community-Work-Read-Me-First!). 
 
 # TC Deployment Notes
 _[TC Deployment Notes should always be kept up to date **on the default branch**. Update these notes when changes to this information occur]_
