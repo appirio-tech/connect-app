@@ -131,6 +131,22 @@ export const splitNotificationsBySources = (sources, notifications) => {
 }
 
 /**
+ * Filter notifications by posts
+ *
+ * So only notifications related to provided posts will stay
+ *
+ * @param  {Array} notifications list of notifications
+ * @param  {Array} posts         list of posts
+ *
+ * @return {Array}               list of filtered notifications
+ */
+export const filterNotificationsByPosts = (notifications, posts) => {
+  const postIds = _.map(posts, 'id')
+
+  return notifications.filter((notification) => _.includes(postIds, _.get(notification, 'contents.postId')))
+}
+
+/**
  * Filter notifications to only not read yet
  *
  * @param  {Array}  notifications list of notifications
