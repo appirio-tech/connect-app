@@ -15,6 +15,10 @@
   .SelectProductTemplate {
     @extend .wizardCardContainer;
 
+    .label {
+      color: black;
+    }
+
     .cards {
       margin: 0 auto;
       max-width: 900px;
