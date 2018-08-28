@@ -53,7 +53,7 @@
     "ignore-styles": "^1.2.0",
     "jsdom": "^7.2.2",
     "mocha": "^2.4.5",
-    "mocha-jsdom": "^1.1.0",
+    "mocha-jsdom": "~1.1.0",
     "nock": "^8.0.0",
     "node-forge": "^0.7.1",
     "node-sass": "^4.7.2",
