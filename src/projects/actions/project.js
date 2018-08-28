@@ -382,7 +382,8 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
     const phaseStatusChanged = phase.status !== updatedProps.status
     const productId = phase.products[0].id
     const timeline = state.productsTimelines[productId] && state.productsTimelines[productId].timeline
-    const startDateChanged =updatedProps.startDate && updatedProps.startDate.diff(timeline.startDate)
+    const phaseStartDate = timeline ? timeline.startDate : phase.startDate
+    const startDateChanged = updatedProps.startDate ? updatedProps.startDate.diff(phaseStartDate) : null
     const phaseActivated = phaseStatusChanged && updatedProps.status === PHASE_STATUS_ACTIVE
     if (phaseActivated) {
       updatedProps.startDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
