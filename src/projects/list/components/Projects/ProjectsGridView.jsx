@@ -51,8 +51,11 @@ const ProjectsGridView = props => {
       sortable: false,
       renderText: item => {
         const url = `/projects/${item.id}`
+        const projectTemplateId = item.templateId
         const projectTemplateKey = _.get(item, 'details.products[0]')
-        const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
+        const projectTemplate = projectTemplateId
+          ? _.find(projectTemplates, pt => pt.id === projectTemplateId)
+          : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
         // icon for the product, use default generic work project icon for categories which no longer exist now
         const productIcon = _.get(projectTemplate, 'icon', 'tech-32px-outline-work-project')
         return (
