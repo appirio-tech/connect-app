@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { loadMembers } from '../../actions/members'
 import { loadProject, loadDirectProjectData, loadProjectPhasesWithProducts,
-  loadProjectTemplate, loadProjectProductTemplates, loadAllProductTemplates, loadProjectProductTemplatesByKey } from './project'
+  loadProjectTemplate, loadProjectProductTemplates, loadAllProductTemplates, loadProjectProductTemplatesByKey, loadProjectCategories } from './project'
 import { loadProductTimelineWithMilestones } from './productsTimelines'
 import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
 
@@ -58,7 +58,7 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
         if (!isOnlyLoadProjectInfo) {
           promises.push(dispatch(loadAllProductTemplates()))
         }
-
+        promises.push(dispatch(loadProjectCategories()))
         return resolve(dispatch({
           type: LOAD_ADDITIONAL_PROJECT_DATA,
           payload: Promise.all(promises)
