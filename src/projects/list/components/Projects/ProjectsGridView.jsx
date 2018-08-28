@@ -40,7 +40,7 @@ const ProjectsGridView = props => {
         return (
           <Link to={url} className="spacing">
             { recentlyCreated  && <span className="blue-border" /> }
-            { item.id.toLocaleString(navigator.language, { minimumFractionDigits: 0 }) }
+            { item.id }
           </Link>
         )
       }
