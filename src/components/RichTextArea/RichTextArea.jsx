@@ -102,8 +102,7 @@ class RichTextArea extends React.Component {
       this.clearState()
     } else if ((nextProps.isGettingComment !== this.props.isGettingComment && !nextProps.isGettingComment)
       || (nextProps.messageId !== this.props.messageId)) {
-      const contentState = EditorState.getCurrentContent()
-      const editorState = EditorState.push(this.state.editorState, contentState, nextProps.content ? markdownToState(nextProps.content) : EditorState.createEmpty().getCurrentContent())
+      const editorState = EditorState.push(this.state.editorState, nextProps.content ? markdownToState(nextProps.content) : EditorState.createEmpty().getCurrentContent())
       this.setState({
         editorExpanded: nextProps.editMode,
         titleValue: nextProps.title || '',
@@ -115,11 +114,10 @@ class RichTextArea extends React.Component {
   }
 
   clearState() {
-    const contentState = EditorState.getCurrentContent()
     this.setState({
       editorExpanded: this.props.editMode,
       titleValue: '',
-      editorState: EditorState.push(this.state.editorState, contentState, EditorState.createEmpty().getCurrentContent()),
+      editorState: EditorState.push(this.state.editorState, EditorState.createEmpty().getCurrentContent()),
       currentMDContent: null,
       oldMDContent: null
     })
