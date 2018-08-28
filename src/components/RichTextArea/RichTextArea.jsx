@@ -196,7 +196,6 @@ class RichTextArea extends React.Component {
   }
 
   onEditorChange(editorState) {
-    console.log(editorState)
     this.setState({
       editorState
     })
