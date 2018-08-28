@@ -12,11 +12,9 @@ function ProjectCardHeader({ project, onClick, projectTemplates }) {
 
   const projectTemplateId = project.templateId
   const projectTemplateKey = _.get(project, 'details.products[0]')
-  let projectTemplate = projectTemplateId
+  const projectTemplate = projectTemplateId
     ? _.find(projectTemplates, pt => pt.id === projectTemplateId)
     : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
-  // Ok still we are unable to find the project template, hence use project type to find that
-  projectTemplate = !projectTemplate ? projectTemplates.filter(x => x.category === project.type)[0] : projectTemplate
   // icon for the product, use default generic work project icon for categories which no longer exist now
   const productIcon = _.get(projectTemplate, 'icon', 'tech-32px-outline-work-project')
   return (
