@@ -24,7 +24,7 @@ const ProjectStageTabs = ({
 
   tabs.push({
     onClick: () => onTabClick('posts'),
-    label: 'Posts',
+    label: 'discussions',
     isActive: activeTab === 'posts',
     hasNotifications: hasReadPosts,
   })

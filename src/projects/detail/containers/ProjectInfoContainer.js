@@ -131,7 +131,7 @@ class ProjectInfoContainer extends React.Component {
         address: attachment.downloadUrl,
       }))
 
-    const channels = feeds.map((feed) => ({
+    const discussions = feeds.map((feed) => ({
       title: `${feed.title}`,
       address: `/projects/${project.id}#feed-${feed.id}`,
       noNewPage: true,
@@ -157,8 +157,8 @@ class ProjectInfoContainer extends React.Component {
             />
           }
           <LinksMenu
-            links={channels}
-            title="Channels"
+            links={discussions}
+            title="Discussions"
             moreText="view all"
             noDots
             withHash
