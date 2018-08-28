@@ -282,18 +282,16 @@ class EditStageForm extends React.Component {
               </div>
               <div styleName="label-layer">
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Start Date" type="date" name="startDate" value={startDate} />
-                {hasTimeline ? (
-                  <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
-                    <div className="tooltip-target">
-                      <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={hasTimeline} label="Duration (days)" type="number" name="duration" value={duration} minValue={1} />
-                    </div>
-                    <div className="tooltip-body">
-                      Phase duration is controlled by duration of individual milestones
-                    </div>
-                  </Tooltip>
-                ) : (
-                  <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={hasTimeline} label="Duration (days)" type="number" name="duration" value={duration} minValue={1} />
-                )}
+                <TCFormFields.TextInput
+                  wrapperClass={`${styles['input-row']}`}
+                  label="Duration (days)"
+                  type="number"
+                  name="duration"
+                  value={duration}
+                  minValue={1}
+                  readonly={hasTimeline}
+                  readonlyValueTooltip="Phase duration is controlled by duration of individual milestones"
+                />
               </div>
               <div styleName="label-layer">
                 <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} label="Paid to date (US$)" type="number" name="spentBudget" value={phase.spentBudget} disabled={this.state.disableActiveStatusFields} minValue={0}/>
@@ -331,18 +329,17 @@ class EditStageForm extends React.Component {
                   </div>
                 )}
 
-                {hasTimeline ? (
-                  <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
-                    <div className="tooltip-target">
-                      <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={this.state.disableActiveStatusFields || hasTimeline} label="Progress (%)" type="number" name="progress" value={progress} minValue={0} />
-                    </div>
-                    <div className="tooltip-body">
-                      Phase progress is controlled by progress of individual milestones
-                    </div>
-                  </Tooltip>
-                ) : (
-                  <TCFormFields.TextInput wrapperClass={`${styles['input-row']}`} disabled={this.state.disableActiveStatusFields || hasTimeline} label="Progress (%)" type="number" name="progress" value={progress} minValue={0} />
-                )}
+                <TCFormFields.TextInput
+                  wrapperClass={`${styles['input-row']}`}
+                  disabled={this.state.disableActiveStatusFields}
+                  label="Progress (%)"
+                  type="number"
+                  name="progress"
+                  value={progress}
+                  minValue={0}
+                  readonly={hasTimeline}
+                  readonlyValueTooltip="Phase progress is controlled by progress of individual milestones"
+                />
               </div>
               {!showActivatingWarning ? (
                 <div styleName="group-bottom">
