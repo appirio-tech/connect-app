@@ -178,7 +178,11 @@ class ProjectStage extends React.Component{
     
     const hasTimeline = !!timeline
     const defaultActiveTab = hasTimeline ? 'timeline' : 'posts'
-    const currentActiveTab = this.state.isExpanded ? 'posts' : (activeTab ? activeTab : defaultActiveTab)
+
+    let currentActiveTab =activeTab ? activeTab : defaultActiveTab
+    if (this.state.isExpanded) {
+      currentActiveTab = 'posts'
+    }
 
     return (
       <PhaseCard

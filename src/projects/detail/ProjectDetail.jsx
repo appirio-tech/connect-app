@@ -54,7 +54,7 @@ const ProjectDetailView = (props) => {
   }
   const regex = /#(feed-([0-9]+)|comment-([0-9]+))/
   const match = props.location.hash.match(regex)
-  let ids = match ? { feedId: match[2], commentId: match[3] } : {}
+  const ids = match ? { feedId: match[2], commentId: match[3] } : {}
   const children = React.Children.map(props.children, (child) => {
     return React.cloneElement(child, {
       project: props.project,

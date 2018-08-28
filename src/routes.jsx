@@ -14,7 +14,7 @@ import RedirectComponent from './components/RedirectComponent'
 import CreateContainer from './projects/create/containers/CreateContainer'
 import LoadingIndicator from './components/LoadingIndicator/LoadingIndicator'
 import {ACCOUNTS_APP_LOGIN_URL, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from './config/constants'
-import { getTopic, getPost } from './api/messages'
+import { getTopic } from './api/messages'
 import { getFreshToken } from 'tc-accounts'
 import { scrollToHash } from './components/ScrollToAnchors.jsx'
 

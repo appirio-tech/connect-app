@@ -44,7 +44,7 @@ class PhaseCard extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // update phase finished successfully
-    let nextState = {}
+    const nextState = {}
     if(nextProps.isUpdating === false && this.props.isUpdating === true) {
       // NOTE: following condition would be true for all stages after user updates only one of them
       // and we don't have phase id with update phase action reducer so we can't determine which card is updated
