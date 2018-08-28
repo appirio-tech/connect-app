@@ -5,7 +5,6 @@ import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
 import uncontrollable from 'uncontrollable'
-import scrollToComponent from 'react-scroll-to-component'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
@@ -18,6 +17,7 @@ import PhaseFeed from './PhaseFeed'
 import ProductTimelineContainer from '../containers/ProductTimelineContainer'
 import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import { scrollToHash } from '../../../components/ScrollToAnchors'
 
 const enhance = spinnerWhileLoading(props => !props.processing)
 const EnhancedEditProjectForm = enhance(EditProjectForm)
@@ -92,6 +92,10 @@ class ProjectStage extends React.Component{
     this.removeProductAttachment = this.removeProductAttachment.bind(this)
     this.updateProductAttachment = this.updateProductAttachment.bind(this)
     this.addProductAttachment = this.addProductAttachment.bind(this)
+
+    this.state = {
+      isExpanded: false
+    }
   }
 
   removeProductAttachment(attachmentId) {
@@ -115,10 +119,21 @@ class ProjectStage extends React.Component{
     addProductAttachment(project.id, phase.id, product.id, attachment)
   }
 
-  componentDidMount() {
-    if (this.props.isExpanded) {
-      scrollToComponent(this.PhaseCard, { offset: 0, align: 'middle', duration: 500, ease: 'inCirc' })
+  componentDidUpdate() {
+    if (this.state.isExpanded) {
+      const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
+      if (scrollTo) {
+        scrollToHash(scrollTo)
+      }
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { feedId, commentId } = this.props
+    const { feed } = nextProps
+    this.setState({
+      isExpanded: feed && (feed.id === parseInt(feedId) || feed.postIds.includes(parseInt(commentId)))
+    })
   }
 
   render() {
@@ -148,21 +163,22 @@ class ProjectStage extends React.Component{
       allMembers,
       onSaveMessage,
       timeline,
-      isExpanded,
-      postId,
+      commentId,
     } = this.props
 
+    
     // NOTE even though in store we keep products as an array,
     // so far we always have only one product per phase, so will display only one
     const productTemplate = _.find(productTemplates, { id: _.get(phase, 'products[0].templateId') })
     const product = _.get(phase, 'products[0]')
     const sections = _.get(productTemplate, 'template.questions', [])
-
+    const projectPhaseAnchor = feed ? `feed-${feed.id}` : ''
+    
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
-
+    
     const hasTimeline = !!timeline
     const defaultActiveTab = hasTimeline ? 'timeline' : 'posts'
-    const currentActiveTab = isExpanded ? 'posts' : (activeTab ? activeTab : defaultActiveTab)
+    const currentActiveTab = this.state.isExpanded ? 'posts' : (activeTab ? activeTab : defaultActiveTab)
 
     return (
       <PhaseCard
@@ -171,10 +187,9 @@ class ProjectStage extends React.Component{
         isManageUser={isManageUser}
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
         timeline={timeline}
-        isExpanded={isExpanded}
-        ref={(section) => { this.PhaseCard = section; }}
+        isExpanded={this.state.isExpanded}
       >
-        <div>
+        <div id={projectPhaseAnchor}>
           <ProjectStageTabs
             activeTab={currentActiveTab}
             onTabClick={onTabClick}
@@ -198,7 +213,7 @@ class ProjectStage extends React.Component{
               onDeleteMessage={onDeleteMessage}
               allMembers={allMembers}
               onSaveMessage={onSaveMessage}
-              postId={postId}
+              commentId={this.state.isExpanded ? commentId : undefined}
             />
           }
 

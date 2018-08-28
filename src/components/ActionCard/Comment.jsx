@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
-import scrollToComponent from 'react-scroll-to-component'
 import UserTooltip from '../User/UserTooltip'
 import RichTextArea from '../RichTextArea/RichTextArea'
 import { Link } from 'react-router-dom'
@@ -54,12 +53,6 @@ class Comment extends React.Component {
     this.props.onChange(null, false)
   }
 
-  componentDidMount() {
-    if (this.props.selected) {
-      scrollToComponent(this.commentHead, { offset: 0, align: 'middle', duration: 500, ease: 'inCirc' })
-    }
-  }
-
   render() {
     const {message, author, date, edited, children, noInfo, self, isSaving, hasError, readonly, allMembers, canDelete} = this.props
     const messageAnchor = `comment-${message.id}`
@@ -94,7 +87,7 @@ class Comment extends React.Component {
     }
 
     return (
-      <div styleName={cn('container', { self, 'is-deleting': isDeleting })} id={messageAnchor} ref={(section) => { this.commentHead = section; }}>
+      <div styleName={cn('container', { self, 'is-deleting': isDeleting })} id={messageAnchor}>
         <div styleName="avatar">
           {!noInfo && author && <UserTooltip usr={author} id={`${messageAnchor}-${author.userId}`} previewAvatar size={40} />}
         </div>

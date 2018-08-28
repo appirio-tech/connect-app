@@ -59,8 +59,7 @@ const LoginRedirect = withProps({
 class RedirectToProject extends React.Component {
   componentWillMount() {
     const { match, history } = this.props
-    const feedId = match.params.feedId || match.params.topicId
-    const postId = match.params.postId
+    const feedId = match.params.feedId
     getFreshToken().then(() => {
       getTopic(feedId).then(resp => {
         if (resp.topic) {
@@ -72,17 +71,6 @@ class RedirectToProject extends React.Component {
             history.replace({
               pathname: `/projects/${projectId}/discussions/${topic.id}`
             })
-          } else if (topic.tag.startsWith('phase')) {
-            const phaseId = parseInt(topic.tag.substr(topic.tag.indexOf('#') + 1))
-            if (postId) {
-              history.replace({
-                pathname: `/projects/${projectId}/plan/phases/${phaseId}/posts/${postId}`
-              })
-            } else {
-              history.replace({
-                pathname: `/projects/${projectId}/plan/phases/${phaseId}/topics`
-              })
-            }
           } else {
             history.replace('/projects')
           }
@@ -146,8 +134,6 @@ class Routes extends React.Component {
         <Route path="/terms" render={renderApp(topBarWithProjectsToolBar, <ConnectTerms/>)} />
         <Route path="/login" render={renderApp(topBarWithProjectsToolBar, <LoginRedirect/>)} />
         <Route path="/discussions/:feedId" component={ RedirectToProject } />
-        <Route path="/topics/:topicId/posts/:postId" component={ RedirectToProject } />
-        <Route path="/topics/:topicId" component={ RedirectToProject } />
 
         {/* Handle /projects/* routes */}
         {projectRoutes}

@@ -74,8 +74,8 @@ const ProjectStages = ({
   removeProductAttachment,
   isManageUser,
   deleteProjectPhase,
-  phaseId,
-  postId,
+  feedId,
+  commentId,
 }) => (
     <Section>
 
@@ -99,8 +99,8 @@ const ProjectStages = ({
             updateProductAttachment={updateProductAttachment}
             removeProductAttachment={removeProductAttachment}
             deleteProjectPhase={deleteProjectPhase}
-            isExpanded={phase.id === parseInt(phaseId)}
-            postId={phase.id === parseInt(phaseId) ? postId : undefined}
+            feedId={feedId}
+            commentId={commentId}
           />
         ))
       }
