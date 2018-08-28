@@ -115,12 +115,15 @@ class PhaseCard extends React.Component {
                     </div>
                   </div>
 
-                  <div styleName="col hide-md">
-                    <div styleName="price-details">
-                      <h5>{attr.price}</h5>
-                      <div styleName="meta-list">{attr.paidStatus}</div>
-                    </div>
-                  </div>
+                  { parseInt(attr.price, 10) > 0 && 
+                    (<div styleName="col hide-md">
+                      <div styleName="price-details">
+                        <h5>{attr.price}</h5>
+                        <div styleName="meta-list">{attr.paidStatus}</div>
+                      </div>
+                    </div>)
+                  }
+
                   {status && status !== PHASE_STATUS_ACTIVE &&
                         (<div styleName="col show-md">
                           <div styleName="price-details">
