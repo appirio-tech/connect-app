@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { loadProjectDashboard } from '../actions/projectDashboard'
+import { clearLoadedProject } from '../actions/project'
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
   ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER
@@ -77,6 +78,10 @@ class ProjectDetail extends Component {
     this.props.loadProjectDashboard(projectId)
   }
 
+  componentWillUnmount() {
+    this.props.clearLoadedProject()
+  }
+
   componentWillReceiveProps({isProcessing, isLoading, error, project, match}) {
     // handle just deleted projects
     if (! (error || isLoading || isProcessing) && _.isEmpty(project))
@@ -138,7 +143,7 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
   }
 }
 
-const mapDispatchToProps = { loadProjectDashboard }
+const mapDispatchToProps = { loadProjectDashboard, clearLoadedProject }
 
 ProjectDetail.propTypes = {
   project: PropTypes.object,
