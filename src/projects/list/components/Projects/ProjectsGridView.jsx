@@ -53,7 +53,6 @@ const ProjectsGridView = props => {
         const url = `/projects/${item.id}`
         const projectTemplateId = item.templateId
         const projectTemplateKey = _.get(item, 'details.products[0]')
-        // const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
         const projectTemplate = projectTemplateId
           ? _.find(projectTemplates, pt => pt.id === projectTemplateId)
           : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
