@@ -265,7 +265,7 @@ class RichTextArea extends React.Component {
     const blockType = RichUtils.getCurrentBlockType(editorState)
     const currentEntity = getCurrentEntity(editorState)
     const disableForCodeBlock = blockType === 'code-block'
-    const editButtonText = editingTopic ? 'Update title' : 'Update post' 
+    const editButtonText = editingTopic ? 'Update title' : 'Update post'
 
     const Entry = (props) => {
       const {
@@ -325,6 +325,7 @@ class RichTextArea extends React.Component {
                     handleKeyCommand={this.handleKeyCommand}
                     plugins={this.plugins}
                     setUploadState={this.setUploadState}
+                    spellCheck
                   />
                   <MentionSuggestions
                     onSearchChange={this.onSearchChange.bind(this)}
