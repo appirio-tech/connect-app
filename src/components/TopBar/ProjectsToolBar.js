@@ -41,10 +41,15 @@ class ProjectsToolBar extends Component {
   }
 
   componentWillMount() {
-    const { projectCategories, isProjectCategoriesLoading, loadProjectCategories } = this.props
+    const { projectCategories, isProjectCategoriesLoading, loadProjectCategories, criteria } = this.props
 
     if (!isProjectCategoriesLoading && !projectCategories) {
       loadProjectCategories()
+    }
+
+    // update query string if there is a search
+    if (criteria && criteria.keyword) {
+      this.updateQueryParams(criteria)
     }
   }
 
@@ -89,6 +94,16 @@ class ProjectsToolBar extends Component {
     if (isProjectDirty && !creatingProject) {
       return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
     }
+  }
+
+  // update query string to match criteria
+  updateQueryParams(criteria) {
+    // remove any null values
+    criteria = _.pickBy(criteria, _.identity)
+    this.props.history.push({
+      pathname: '/projects',
+      search: '?' + querystring.stringify(_.assign({}, criteria))
+    })
   }
 
   /*eslint-disable no-unused-vars */
