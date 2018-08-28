@@ -18,6 +18,7 @@ import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
 import {
   MILESTONE_STATUS,
   MIN_WINNER_DESIGNS,
+  DEFAULT_ADDITIONAL_DESIGN_COST,
 } from '../../../../../../config/constants'
 
 import './MilestoneTypeFinalDesigns.scss'
@@ -26,10 +27,14 @@ class MilestoneTypeFinalDesigns extends React.Component {
   constructor(props) {
     super(props)
 
+    const requiredWinnersCount = _.get(props, 'milestone.details.metadata.requiredWinnersCount', MIN_WINNER_DESIGNS)
+
     this.state = {
+      requiredWinnersCount,
+      additionalDesignCost: _.get(props, 'milestone.details.metadata.additionalDesignCost', DEFAULT_ADDITIONAL_DESIGN_COST),
       selectedLinks: [],
-      places: [-1, -1, -1],
-      isInReview: false,
+      places: _.fill(Array(requiredWinnersCount), -1), // produces array like [-1, -1, -1, ... , -1]
+      isLinksProvided: _.get(props.milestone, 'details.prevMilestoneType') === 'add-links',
       isShowCompleteConfirmMessage: false,
       isShowCustomerCompleteConfirmMessage: false,
     }
@@ -44,6 +49,17 @@ class MilestoneTypeFinalDesigns extends React.Component {
     this.moveToReviewingState = this.moveToReviewingState.bind(this)
     this.onBonusChange = this.onBonusChange.bind(this)
     this.onPlaceChange = this.onPlaceChange.bind(this)
+  }
+
+  getLinksForReview() {
+    const { milestone } = this.props
+    const { isLinksProvided } = this.state
+
+    if (isLinksProvided) {
+      return _.get(milestone, 'details.prevMilestoneContent.links', [])
+    }
+
+    return _.get(milestone, 'details.content.links', [])
   }
 
   isCanBeCompleted() {
@@ -80,7 +96,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
   completeReview() {
     const { milestone, completeMilestone } = this.props
     const { places, selectedLinks } = this.state
-    const links = _.get(milestone, 'details.content.links', [])
+    const links = this.getLinksForReview()
 
     if (!this.isCanBeCompleted()) {
       this.setState({ isSelectWarningVisible: true })
@@ -111,8 +127,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
   }
 
   getMinSelectedDesigns() {
-    const { milestone } = this.props
-    const links = _.get(milestone, 'details.content.links', [])
+    const links = this.getLinksForReview()
 
     return Math.min(links.length, MIN_WINNER_DESIGNS)
   }
@@ -215,6 +230,8 @@ class MilestoneTypeFinalDesigns extends React.Component {
       extensionRequestConfirmation,
     } = this.props
     const {
+      additionalDesignCost,
+      isLinksProvided,
       selectedLinks,
       isSelectWarningVisible,
       isShowCustomerCompleteConfirmMessage,
@@ -222,11 +239,15 @@ class MilestoneTypeFinalDesigns extends React.Component {
       places,
     } = this.state
 
-    const links = _.get(milestone, 'details.content.links', [])
-    const isInReview = _.get(milestone, 'details.content.isInReview', false)
-
+    // if links are provided we directly go to review
+    const isInReview = isLinksProvided || _.get(milestone, 'details.content.isInReview', false)
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+
+    const links = isCompleted
+      ? _.get(milestone, 'details.content.links', [])
+      : this.getLinksForReview()
+
     const minCheckedDesigns = this.getMinSelectedDesigns()
     const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
 
@@ -257,8 +278,8 @@ class MilestoneTypeFinalDesigns extends React.Component {
           <div>
             {!isInReview &&  (
               <div>
-                <div styleName="top-space">
-                  <DotIndicator>
+                <DotIndicator>
+                  <div styleName="top-space">
                     <ProjectProgress
                       labelDayStatus={progressText}
                       progressPercent={progressPercent}
@@ -275,8 +296,8 @@ class MilestoneTypeFinalDesigns extends React.Component {
                         </button>
                       )}
                     </ProjectProgress>
-                  </DotIndicator>
-                </div>
+                  </div>
+                </DotIndicator>
 
                 {!currentUser.isCustomer && (
                   <DotIndicator hideLine>
@@ -307,7 +328,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
             )}
 
             {isInReview && (
-              <div>
+              <div styleName="wide-on-mobile">
                 <DotIndicator>
                   <div styleName="top-space">
                     <header styleName="milestone-heading">
@@ -329,7 +350,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
                         isSelectedBonus={_.includes(selectedLinks, index)}
                         selectedPlace={places.indexOf(index) + 1}
                         placesChosen={places}
-                        maxPlace={links.length}
+                        additionalDesignCost={additionalDesignCost}
                       />
                     </div>
                   </DotIndicator>
@@ -365,7 +386,6 @@ class MilestoneTypeFinalDesigns extends React.Component {
 
             {
               !isCompleted &&
-              !extensionRequestConfirmation &&
               !extensionRequestDialog &&
               !isShowCompleteConfirmMessage &&
               !isShowCustomerCompleteConfirmMessage &&
@@ -431,7 +451,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
           Completed status
          */}
         {isCompleted && (
-          <div>
+          <div styleName="wide-on-mobile">
             <div styleName="top-space">
               <header styleName={'milestone-heading selected-theme'}>
                 Final designs
@@ -447,6 +467,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
                   isSelectedBonus={link.isSelected}
                   selectedPlace={link.selectedPlace}
                   placesChosen={places}
+                  additionalDesignCost={additionalDesignCost}
                 />
               </div>
             ))}

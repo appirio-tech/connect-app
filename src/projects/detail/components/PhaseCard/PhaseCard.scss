@@ -327,8 +327,8 @@
   align-items: center;
   background-color: $tc-gray-neutral-light;
   display: flex;
-  height: 50px;
-  padding: 0 $base-unit * 3;
+  min-height: 50px;
+  padding: 2 * $base-unit $base-unit * 3;
   position: relative;
   z-index: 1;
 }
@@ -338,7 +338,7 @@
   color: $tc-black;
   font-size: 15px;
   font-weight: 400;
-  line-height: 30px;
+  line-height: 20px;
   margin-left:30px;
 }
 

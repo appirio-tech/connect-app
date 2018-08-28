@@ -21,6 +21,9 @@ export const NEW_POST_STEP = {
   COMMENT: 'COMMENT'
 }
 
+// we need it to calulate body height based on the actual mobile browser viewport height
+const HEADER_HEIGHT = 50
+
 class NewPostMobile extends React.Component {
   constructor(props) {
     super(props)
@@ -28,11 +31,26 @@ class NewPostMobile extends React.Component {
     this.state = {
       step: props.step,
       statusValue: '',
-      commentValue: ''
+      commentValue: '',
+      browserActualViewportHeigth: document.documentElement.clientHeight
     }
 
     this.setStep = this.setStep.bind(this)
     this.onValueChange = this.onValueChange.bind(this)
+    this.updateBrowserHeight = this.updateBrowserHeight.bind(this)
+  }
+
+  componentWillMount() {
+    window.addEventListener('resize', this.updateBrowserHeight)
+    this.updateBrowserHeight()
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateBrowserHeight)
+  }
+
+  updateBrowserHeight() {
+    this.setState({ browserActualViewportHeigth: document.documentElement.clientHeight })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -64,7 +82,7 @@ class NewPostMobile extends React.Component {
       statusTitle, commentTitle, commentPlaceholder, submitText, onPost, onClose,
       isCreating, nextStepText, statusPlaceholder
     } = this.props
-    const { step, statusValue, commentValue } = this.state
+    const { step, statusValue, commentValue, browserActualViewportHeigth } = this.state
 
     let value
     let title
@@ -98,7 +116,7 @@ class NewPostMobile extends React.Component {
           <div styleName="title">{title}</div>
           <div styleName="plug"/>
         </div>
-        <div styleName="body">
+        <div styleName="body" style={{ height: browserActualViewportHeigth - HEADER_HEIGHT }}>
           <textarea
             ref="value"
             value={value}

@@ -60,9 +60,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
 
-    @media screen and (max-width: $screen-sm - 1px) {
-      display: none;
+  &.has-title {
+    .link-wrapper {
+      @media screen and (max-width: $screen-sm - 1px) {
+        display: none;
+      }
     }
   }
 

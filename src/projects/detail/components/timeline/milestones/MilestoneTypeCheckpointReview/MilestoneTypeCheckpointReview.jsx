@@ -27,7 +27,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
 
     this.state = {
       selectedLinks: [],
-      isInReview: false,
+      isLinksProvided: _.get(props.milestone, 'details.prevMilestoneType') === 'add-links',
       isSelectWarningVisible: false,
       isShowCompleteConfirmMessage: false,
     }
@@ -40,6 +40,17 @@ class MilestoneTypeCheckpointReview extends React.Component {
     this.completeReview = this.completeReview.bind(this)
     this.toggleRejectedSection = this.toggleRejectedSection.bind(this)
     this.moveToReviewingState = this.moveToReviewingState.bind(this)
+  }
+
+  getLinksForReview() {
+    const { milestone } = this.props
+    const { isLinksProvided } = this.state
+
+    if (isLinksProvided) {
+      return _.get(milestone, 'details.prevMilestoneContent.links', [])
+    }
+
+    return _.get(milestone, 'details.content.links', [])
   }
 
   showCompleteReviewConfirmation() {
@@ -61,7 +72,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
     const { milestone, completeMilestone } = this.props
     const { selectedLinks } = this.state
     const minSelectedDesigns = this.getMinSelectedDesigns()
-    const links = _.get(milestone, 'details.content.links', [])
+    const links = this.getLinksForReview()
 
     if (selectedLinks.length < minSelectedDesigns) {
       this.setState({ isSelectWarningVisible: true })
@@ -84,8 +95,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
   }
 
   getMinSelectedDesigns() {
-    const { milestone } = this.props
-    const links = _.get(milestone, 'details.content.links', [])
+    const links = this.getLinksForReview()
 
     return Math.min(links.length, MIN_CHECKPOINT_REVIEW_DESIGNS)
   }
@@ -175,23 +185,28 @@ class MilestoneTypeCheckpointReview extends React.Component {
       milestone,
       theme,
       currentUser,
+      extensionRequestDialog,
+      extensionRequestButton,
+      extensionRequestConfirmation,
     } = this.props
     const {
+      isLinksProvided,
       selectedLinks,
       isSelectWarningVisible,
       isRejectedExpanded,
       isShowCompleteConfirmMessage,
-      extensionRequestDialog,
-      extensionRequestButton,
-      extensionRequestConfirmation,
     } = this.state
 
-    const links = _.get(milestone, 'details.content.links', [])
-    const rejectedLinks = _.reject(links, { isSelected: true })
-    const isInReview = _.get(milestone, 'details.content.isInReview', false)
-
+    // if links are provided we directly go to review
+    const isInReview = isLinksProvided || _.get(milestone, 'details.content.isInReview', false)
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+
+    const links = isCompleted
+      ? _.get(milestone, 'details.content.links', [])
+      : this.getLinksForReview()
+    const rejectedLinks = _.reject(links, { isSelected: true })
+
     const minCheckedDesigns = this.getMinSelectedDesigns()
     const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
 
@@ -222,8 +237,8 @@ class MilestoneTypeCheckpointReview extends React.Component {
           <div>
             {!isInReview &&  (
               <div>
-                <div styleName="top-space">
-                  <DotIndicator>
+                <DotIndicator>
+                  <div styleName="top-space">
                     <ProjectProgress
                       labelDayStatus={progressText}
                       progressPercent={progressPercent}
@@ -240,8 +255,8 @@ class MilestoneTypeCheckpointReview extends React.Component {
                         </button>
                       )}
                     </ProjectProgress>
-                  </DotIndicator>
-                </div>
+                  </div>
+                </DotIndicator>
 
                 {!currentUser.isCustomer && (
                   <DotIndicator hideLine>

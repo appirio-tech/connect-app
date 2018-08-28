@@ -106,12 +106,37 @@
     position: relative;
   }
   .action-bar {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: $base-unit;
+    padding-bottom: $base-unit;
     position: relative;
 
     button {
-      margin: 0px 5px;
+      margin: $base-unit;
+    }
+  }
+
+  .wide-on-mobile {
+    @media screen and (max-width: 480px - 1px) {
+      background-color: $tc-white;
+      margin-left: - (70px + 36px);
+      padding: $base-unit 0 2 * $base-unit 4 * $base-unit;
+      position: relative;
+      z-index: 4;
+
+      &::before {
+        background-color: $tc-white;
+        bottom: 0;
+        content: '';
+        display: block;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 4 * $base-unit;
+        z-index: 4;
+      }
     }
   }
 }

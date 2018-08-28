@@ -3,7 +3,7 @@
 .form {
   background-color: $tc-gray-neutral-light;
   border-radius: 4px;
-  padding: 4 * $base-unit 4 * $base-unit 4 * $base-unit;
+  padding: 4 * $base-unit 4 * $base-unit 3 * $base-unit;
 
   .title {
     @include roboto-medium;
@@ -21,13 +21,13 @@
   .actions {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: wrap-reverse;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 3 * $base-unit;
 
     button {
-      margin: 0 $base-unit 0 $base-unit;
+      margin: $base-unit;
     }
   }
 }
