@@ -8,7 +8,7 @@ import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
 import { setDuration } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
-  DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED } from '../../../config/constants'
+  DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY } from '../../../config/constants'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 
 class ProjectInfoContainer extends React.Component {
@@ -133,7 +133,7 @@ class ProjectInfoContainer extends React.Component {
 
     const discussions = feeds.map((feed) => ({
       title: `${feed.title}`,
-      address: `/projects/${project.id}#feed-${feed.id}`,
+      address: feed.tag === PROJECT_FEED_TYPE_PRIMARY ? `/projects/${project.id}#feed-${feed.id}` : `/projects/${project.id}/plan#phase-${feed.phaseId}`,
       noNewPage: true,
       onClick: onChannelClick ? () => onChannelClick(feed) : null,
       isActive: feed.id === activeChannelId,

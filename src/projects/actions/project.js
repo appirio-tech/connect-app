@@ -48,12 +48,55 @@ import {
   PROJECT_STATUS_IN_REVIEW,
   PHASE_STATUS_REVIEWED,
   PROJECT_STATUS_REVIEWED,
-  PROJECT_STATUS_ACTIVE
+  PROJECT_STATUS_ACTIVE,
+  EXPAND_PROJECT_PHASE,
+  COLLAPSE_PROJECT_PHASE,
+  COLLAPSE_ALL_PROJECT_PHASES,
 } from '../../config/constants'
 import {
   updateProductMilestone,
   updateProductTimeline
 } from './productsTimelines'
+
+/**
+ * Expand phase and optionaly expand particular tab
+ *
+ * @param {Number} phaseId phase id
+ * @param {String} tab     (optional) tab id
+ */
+export function expandProjectPhase(phaseId, tab) {
+  return (dispatch) => {
+    return dispatch({
+      type: EXPAND_PROJECT_PHASE,
+      payload: { phaseId, tab }
+    })
+  }
+}
+
+/**
+ * Collapse phase
+ *
+ * @param {Number} phaseId phase id
+ */
+export function collapseProjectPhase(phaseId) {
+  return (dispatch) => {
+    return dispatch({
+      type: COLLAPSE_PROJECT_PHASE,
+      payload: { phaseId }
+    })
+  }
+}
+
+/**
+ * Collapse all phases and reset tabs to default
+ */
+export function collapseAllProjectPhases() {
+  return (dispatch) => {
+    return dispatch({
+      type: COLLAPSE_ALL_PROJECT_PHASES,
+    })
+  }
+}
 
 export function loadProject(projectId) {
   return (dispatch) => {
@@ -446,7 +489,7 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
 
       // if one phase moved to REVIEWED status, make project IN_REVIEW too
       if (
-        _.includes([PROJECT_STATUS_DRAFT], project.status) && 
+        _.includes([PROJECT_STATUS_DRAFT], project.status) &&
         phase.status !== PHASE_STATUS_REVIEWED &&
         updatedProps.status === PHASE_STATUS_REVIEWED
       ) {
@@ -459,7 +502,7 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
 
       // if one phase moved to ACTIVE status, make project ACTIVE too
       if (
-        _.includes([PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_REVIEWED], project.status) && 
+        _.includes([PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_REVIEWED], project.status) &&
         phase.status !== PHASE_STATUS_ACTIVE &&
         updatedProps.status === PHASE_STATUS_ACTIVE
       ) {
