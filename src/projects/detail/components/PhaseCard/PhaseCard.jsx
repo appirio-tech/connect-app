@@ -188,26 +188,28 @@ class PhaseCard extends React.Component {
                 {!this.state.isEditting && (<div styleName="expandable-view">
                   {this.props.children}
                 </div>)}
-                {(<div styleName={'sm-separator ' + ((!isManageUser || !this.state.isEditting) ? 'hide ': '')} >
-                  {!isUpdating && (
-                    <EditStageForm
-                      phase={attr.phase}
-                      phaseIndex={attr.phaseIndex}
-                      cancel={this.toggleEditView}
-                      timeline={timeline}
-                    />
-                  )}
-                  {canDelete && !isUpdating && (
-                    <DeletePhase
-                      onDeleteClick={() => {
-                        if (confirm(`Are you sure you want to delete phase '${attr.phase.name}'?`)) {
-                          deleteProjectPhase()
-                        }
-                      }}
-                    />
-                  )}
-                  {isUpdating && <LoadingIndicator />}
-                </div>)}
+                {isManageUser && this.state.isEditting && (
+                  <div styleName="sm-separator">
+                    {!isUpdating && (
+                      <EditStageForm
+                        phase={attr.phase}
+                        phaseIndex={attr.phaseIndex}
+                        cancel={this.toggleEditView}
+                        timeline={timeline}
+                      />
+                    )}
+                    {canDelete && !isUpdating && (
+                      <DeletePhase
+                        onDeleteClick={() => {
+                          if (confirm(`Are you sure you want to delete phase '${attr.phase.name}'?`)) {
+                            deleteProjectPhase()
+                          }
+                        }}
+                      />
+                    )}
+                    {isUpdating && <LoadingIndicator />}
+                  </div>
+                )}
               </div>
             ):(
               <MobilePage>
