@@ -77,10 +77,18 @@ class ProjectPlanContainer extends React.Component {
     const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
     // get list of phase topic in same order as phases
     const topics = _.compact(
-      visiblePhases.map((phase) => ({
-        ..._.get(phasesTopics, `[${phase.id}].topic`),
-        phaseId: phase.id,
-      }))
+      visiblePhases.map((phase) => {
+        const topic = _.get(phasesTopics, `[${phase.id}].topic`)
+
+        if (!topic) {
+          return null
+        }
+
+        return ({
+          ...topic,
+          phaseId: phase.id,
+        })
+      })
     )
 
     const leftArea = (
