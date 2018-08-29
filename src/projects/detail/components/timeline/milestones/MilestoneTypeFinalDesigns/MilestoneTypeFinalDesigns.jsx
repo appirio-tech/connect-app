@@ -399,11 +399,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
                       onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.showCustomerCompleteReviewConfirmation}
                       disabled={!isInReview}
                     >
-                      Complete review ({
-                        daysLeft >= 0
-                          ? `${hoursLeft}h remaining`
-                          : `${-daysLeft}h delay`
-                      })
+                      Complete review ({hoursLeft}h)
                     </button>
                   )}
                   {!currentUser.isCustomer && extensionRequestButton}

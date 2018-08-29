@@ -376,11 +376,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
                       onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.completeReview}
                       disabled={this.shouldDisableCompleteReviewButton(links, selectedLinks) && !isInReview}
                     >
-                      Complete review ({
-                        daysLeft >= 0
-                          ? `${hoursLeft}h remaining`
-                          : `${-hoursLeft}h delay`
-                      })
+                      Complete review ({hoursLeft}h)
                     </button>
                   )}
                   {!currentUser.isCustomer && extensionRequestButton}
