@@ -452,7 +452,7 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
       ) {
         dispatch(
           updateProject(projectId, {
-            status: PROJECT_STATUS_IN_REVIEW
+            status: PHASE_STATUS_REVIEWED
           }, true)
         )
       }
