@@ -4,7 +4,6 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
-import uncontrollable from 'uncontrollable'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
@@ -93,6 +92,7 @@ class ProjectStage extends React.Component{
     this.removeProductAttachment = this.removeProductAttachment.bind(this)
     this.updateProductAttachment = this.updateProductAttachment.bind(this)
     this.addProductAttachment = this.addProductAttachment.bind(this)
+    this.onTabClick = this.onTabClick.bind(this)
   }
 
   removeProductAttachment(attachmentId) {
@@ -116,9 +116,14 @@ class ProjectStage extends React.Component{
     addProductAttachment(project.id, phase.id, product.id, attachment)
   }
 
+  onTabClick(tab) {
+    const { expandProjectPhase, phase } = this.props
+
+    expandProjectPhase(phase.id, tab)
+  }
+
   render() {
     const {
-      activeTab,
       phase,
       phaseIndex,
       project,
@@ -130,8 +135,10 @@ class ProjectStage extends React.Component{
       updateProduct,
       fireProductDirty,
       fireProductDirtyUndo,
-      onTabClick,
       deleteProjectPhase,
+      phaseState,
+      collapseProjectPhase,
+      expandProjectPhase,
 
       // comes from phaseFeedHOC
       currentUser,
@@ -156,7 +163,7 @@ class ProjectStage extends React.Component{
 
     const hasTimeline = !!timeline
     const defaultActiveTab = hasTimeline ? 'timeline' : 'posts'
-    const currentActiveTab = activeTab ? activeTab : defaultActiveTab
+    const currentActiveTab = _.get(phaseState, 'tab', defaultActiveTab)
     const postNotifications = filterNotificationsByPosts(notifications, _.get(feed, 'posts', []))
     const unreadPostNotifications = filterReadNotifications(postNotifications)
     const hasReadPosts = unreadPostNotifications.length > 0
@@ -169,11 +176,15 @@ class ProjectStage extends React.Component{
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
         timeline={timeline}
         hasReadPosts={hasReadPosts}
+        phaseId={phase.id}
+        isExpanded={_.get(phaseState, 'isExpanded')}
+        collapseProjectPhase={collapseProjectPhase}
+        expandProjectPhase={expandProjectPhase}
       >
         <div>
           <ProjectStageTabs
             activeTab={currentActiveTab}
-            onTabClick={onTabClick}
+            onTabClick={this.onTabClick}
             isSuperUser={isSuperUser}
             isManageUser={isManageUser}
             hasTimeline={hasTimeline}
@@ -225,13 +236,10 @@ class ProjectStage extends React.Component{
 }
 
 ProjectStage.defaultProps = {
-  activeTab: '',
   currentMemberRole: null,
 }
 
 ProjectStage.propTypes = {
-  activeTab: PT.string,
-  onTabClick: PT.func.isRequired,
   project: PT.object.isRequired,
   currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,
@@ -245,8 +253,4 @@ ProjectStage.propTypes = {
   deleteProjectPhase: PT.func.isRequired,
 }
 
-const ProjectStageUncontrollable = uncontrollable(ProjectStage, {
-  activeTab: 'onTabClick',
-})
-
-export default phaseFeedHOC(ProjectStageUncontrollable)
+export default phaseFeedHOC(ProjectStage)

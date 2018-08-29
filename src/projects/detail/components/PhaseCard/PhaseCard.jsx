@@ -37,9 +37,7 @@ class PhaseCard extends React.Component {
     this.onClose = this.onClose.bind(this)
 
     this.state = {
-      isExpanded: '',
       isEditting: false,
-      isDetailView: false
     }
   }
 
@@ -56,11 +54,11 @@ class PhaseCard extends React.Component {
   }
 
   toggleCardView() {
-    this.setState({
-      isDetailView: true,
-      isExpanded: !this.state.isExpanded
-
-    })
+    if (this.props.isExpanded) {
+      this.props.collapseProjectPhase(this.props.phaseId)
+    } else {
+      this.props.expandProjectPhase(this.props.phaseId)
+    }
   }
 
   toggleEditView(e) {
@@ -71,10 +69,7 @@ class PhaseCard extends React.Component {
   }
 
   onClose(){
-    this.setState({
-      isDetailView: false,
-      isExpanded: false
-    })
+    this.props.collapseProjectPhase(this.props.phaseId)
   }
 
   render() {
@@ -86,6 +81,8 @@ class PhaseCard extends React.Component {
       isUpdating,
       timeline,
       hasReadPosts,
+      phaseId,
+      isExpanded,
     } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
@@ -99,12 +96,12 @@ class PhaseCard extends React.Component {
     const hasUnseen = hasReadPosts
 
     return (
-      <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')}>
+      <div styleName={'phase-card ' + (isExpanded ? ' expanded ' : ' ')} id={`phase-${phaseId}`}>
         {
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
-            {(matches) => (matches || !this.state.isDetailView ? (
+            {(matches) => (matches || !isExpanded ? (
               <div>
-                <div styleName={cn('static-view', { 'has-unseen': hasUnseen && !this.state.isExpanded })} onClick={!this.state.isEditting && this.toggleCardView }>
+                <div styleName={cn('static-view', { 'has-unseen': hasUnseen && !isExpanded })} onClick={!this.state.isEditting && this.toggleCardView }>
                   <div styleName="col">
                     <div styleName="project-details">
                       <div styleName="project-ico">
@@ -191,26 +188,28 @@ class PhaseCard extends React.Component {
                 {!this.state.isEditting && (<div styleName="expandable-view">
                   {this.props.children}
                 </div>)}
-                {(<div styleName={'sm-separator ' + ((!isManageUser || !this.state.isEditting) ? 'hide ': '')} >
-                  {!isUpdating && (
-                    <EditStageForm
-                      phase={attr.phase}
-                      phaseIndex={attr.phaseIndex}
-                      cancel={this.toggleEditView}
-                      timeline={timeline}
-                    />
-                  )}
-                  {canDelete && !isUpdating && (
-                    <DeletePhase
-                      onDeleteClick={() => {
-                        if (confirm(`Are you sure you want to delete phase '${attr.phase.name}'?`)) {
-                          deleteProjectPhase()
-                        }
-                      }}
-                    />
-                  )}
-                  {isUpdating && <LoadingIndicator />}
-                </div>)}
+                {isManageUser && this.state.isEditting && (
+                  <div styleName="sm-separator">
+                    {!isUpdating && (
+                      <EditStageForm
+                        phase={attr.phase}
+                        phaseIndex={attr.phaseIndex}
+                        cancel={this.toggleEditView}
+                        timeline={timeline}
+                      />
+                    )}
+                    {canDelete && !isUpdating && (
+                      <DeletePhase
+                        onDeleteClick={() => {
+                          if (confirm(`Are you sure you want to delete phase '${attr.phase.name}'?`)) {
+                            deleteProjectPhase()
+                          }
+                        }}
+                      />
+                    )}
+                    {isUpdating && <LoadingIndicator />}
+                  </div>
+                )}
               </div>
             ):(
               <MobilePage>
@@ -248,14 +247,15 @@ PhaseCard.propTypes = {
   attr: PT.shape({
     duration: PT.string.isRequired,
     icon: PT.string.isRequired,
-    isExpanded: PT.bool,
     paidStatus: PT.string.isRequired,
     posts: PT.string,
     startEndDates: PT.string.isRequired,
     status: PT.string.isRequired,
     title: PT.string.isRequired,
     hasReadPosts: PT.bool,
-  })
+  }),
+  phaseId: PT.number.isRequired,
+  isExpanded: PT.bool,
 }
 
 

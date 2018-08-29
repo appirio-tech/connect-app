@@ -11,7 +11,7 @@ import ProjectStage from '../ProjectStage'
 
 import './WorkInProgress.scss'
 
-const WorkInProgress = ({ activePhases, ...props }) => (
+const WorkInProgress = ({ activePhases, phasesStates, ...props }) => (
   <Section>
     <SectionTitle title="Work in progress">
       <Link to={`/projects/${props.project.id}/plan`} styleName="view-all">View all</Link>
@@ -19,6 +19,7 @@ const WorkInProgress = ({ activePhases, ...props }) => (
     {activePhases.map((activePhase) => (
       <ProjectStage
         {...props}
+        phaseState={phasesStates[activePhase.id]}
         key={activePhase.id}
         phase={activePhase}
       />
