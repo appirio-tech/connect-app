@@ -40,6 +40,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
     this.completeReview = this.completeReview.bind(this)
     this.toggleRejectedSection = this.toggleRejectedSection.bind(this)
     this.moveToReviewingState = this.moveToReviewingState.bind(this)
+    this.shouldDisableCompleteReviewButton = this.shouldDisableCompleteReviewButton.bind(this)
   }
 
   getLinksForReview() {
@@ -178,6 +179,18 @@ class MilestoneTypeCheckpointReview extends React.Component {
     const { milestone } = this.props
 
     return milestone[`${milestone.status}Text`]
+  }
+
+  shouldDisableCompleteReviewButton(links, selectedLinks) {
+    const linksLength = links.length
+    const selectedLinksLength = selectedLinks.length
+    if (linksLength < 5 && selectedLinksLength === linksLength) {
+      return false
+    } else if (linksLength >= 5 && selectedLinksLength >= 5) {
+      return false
+    } else {
+      return true
+    }
   }
 
   render() {
@@ -361,7 +374,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
                     <button
                       className={'tc-btn tc-btn-primary'}
                       onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.completeReview}
-                      disabled={!isInReview}
+                      disabled={this.shouldDisableCompleteReviewButton(links, selectedLinks) && !isInReview}
                     >
                       Complete review ({
                         daysLeft >= 0
