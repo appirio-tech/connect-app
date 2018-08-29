@@ -206,7 +206,11 @@
     display: flex;
     align-items: center;
     position: relative;
-    justify-content: space-between;
+    justify-content: flex-start;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      justify-content: space-between;
+    }
   }
   .edit-btn {
     width: 40px;
@@ -215,7 +219,11 @@
     background-size: 15px;
     cursor: pointer;
     transition: 0.25s;
-    margin: auto auto auto 0;
+    flex: 0 0 40px;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      margin-right: -30px;
+    }
   }
   .toggle-arrow {
     position: absolute;
