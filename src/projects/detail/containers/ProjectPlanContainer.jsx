@@ -34,7 +34,7 @@ const ProjectPlanContainer = (props) => {
     feeds,
     productsTimelines
   } = props
-
+  
   // manager user sees all phases
   // customer user doesn't see unplanned (draft) phases
   const visiblePhases = phases && phases.filter((phase) => (

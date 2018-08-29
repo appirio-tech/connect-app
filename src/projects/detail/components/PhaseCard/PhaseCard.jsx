@@ -36,7 +36,7 @@ class PhaseCard extends React.Component {
     this.onClose = this.onClose.bind(this)
 
     this.state = {
-      isExpanded: '',
+      isExpanded: props.isExpanded,
       isEditting: false,
       isDetailView: false
     }
@@ -44,14 +44,17 @@ class PhaseCard extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // update phase finished successfully
+    const nextState = {}
     if(nextProps.isUpdating === false && this.props.isUpdating === true) {
       // NOTE: following condition would be true for all stages after user updates only one of them
       // and we don't have phase id with update phase action reducer so we can't determine which card is updated
       // so we close all the edit forms for now
-      this.setState({
-        isEditting: false
-      })
+      nextState.isEditting = false
     }
+    if (nextProps.isExpanded !== this.props.isExpanded) {
+      nextState.isExpanded = nextProps.isExpanded
+    }
+    this.setState(nextState)
   }
 
   toggleCardView() {
@@ -248,8 +251,6 @@ PhaseCard.propTypes = {
     title: PT.string.isRequired,
   })
 }
-
-
 
 const mapStateToProps = ({loadUser, projectState}) => {
   return {
