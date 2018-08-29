@@ -13,6 +13,7 @@ import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
 
+import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 import './MilestoneTypePhaseSpecification.scss'
 
 class MilestoneTypePhaseSpecification extends React.Component {
@@ -64,12 +65,6 @@ class MilestoneTypePhaseSpecification extends React.Component {
     completeMilestone()
   }
 
-  getDescription() {
-    const { milestone } = this.props
-
-    return milestone[`${milestone.status}Text`]
-  }
-
   render() {
     const {
       milestone,
@@ -89,7 +84,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideFirstLine={currentUser.isCustomer} hideDot>
-          <MilestoneDescription description={this.getDescription()} />
+          <MilestoneDescription description={getMilestoneStatusText(milestone)} />
         </DotIndicator>
 
         {/*

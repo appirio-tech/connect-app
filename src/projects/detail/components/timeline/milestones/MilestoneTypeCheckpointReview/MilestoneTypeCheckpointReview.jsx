@@ -13,6 +13,7 @@ import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
 import MilestoneDescription from '../../MilestoneDescription'
 import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
+import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 
 import {
   MILESTONE_STATUS,
@@ -175,12 +176,6 @@ class MilestoneTypeCheckpointReview extends React.Component {
     }
   }
 
-  getDescription() {
-    const { milestone } = this.props
-
-    return milestone[`${milestone.status}Text`]
-  }
-
   shouldDisableCompleteReviewButton(links, selectedLinks) {
     const linksLength = links.length
     const selectedLinksLength = selectedLinks.length
@@ -240,7 +235,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
-          <MilestoneDescription description={this.getDescription()} />
+          <MilestoneDescription description={getMilestoneStatusText(milestone)} />
         </DotIndicator>
 
         {/*

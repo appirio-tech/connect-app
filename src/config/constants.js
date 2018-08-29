@@ -607,6 +607,13 @@ export const MILESTONE_STATUS = {
   CANCELLED: 'cancelled'
 }
 
+export const MILESTONE_STATUS_TEXT = [
+  {status: 'reviewed', textValue: 'plannedText' },
+  {status: 'active', textValue: 'activeText' },
+  {status: 'paused', textValue: 'blockedText' },
+  {status: 'completed', textValue: 'completedText' }
+]
+
 // minimum designs to select during checkpoint type milestone
 export const MIN_CHECKPOINT_REVIEW_DESIGNS = 5
 
