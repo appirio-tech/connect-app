@@ -15,6 +15,7 @@ import LinkList from '../../LinkList'
 import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
 
 import { MILESTONE_STATUS  } from '../../../../../../config/constants'
+import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 
 import './MilestoneTypeFinalFixes.scss'
 
@@ -62,12 +63,6 @@ class MilestoneTypeFinalFixes extends React.Component {
     })
   }
 
-  getDescription() {
-    const { milestone } = this.props
-
-    return milestone[`${milestone.status}Text`]
-  }
-
   completeMilestone() {
     const { completeFinalFixesMilestone } = this.props
 
@@ -104,7 +99,7 @@ class MilestoneTypeFinalFixes extends React.Component {
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
-          <MilestoneDescription description={this.getDescription()} />
+          <MilestoneDescription description={getMilestoneStatusText(milestone)} />
         </DotIndicator>
 
         {isActive && (

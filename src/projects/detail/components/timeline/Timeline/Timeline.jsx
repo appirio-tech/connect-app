@@ -5,7 +5,6 @@ import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
 
-import TimelineHeader from '../TimelineHeader'
 import Milestone from '../Milestone'
 
 class Timeline extends React.Component {
@@ -79,12 +78,6 @@ class Timeline extends React.Component {
     const orderedMilestones = timeline.milestones ? _.orderBy(timeline.milestones, ['order']) : []
     return (
       <div>
-        <TimelineHeader
-          postContent={{
-            title: timeline.name,
-            postMsg: timeline.description,
-          }}
-        />
         {_.reject(orderedMilestones, { hidden: true }).map((milestone) => (
           <Milestone
             key={milestone.id}
