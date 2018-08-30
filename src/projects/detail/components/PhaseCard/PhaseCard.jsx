@@ -8,6 +8,7 @@ import PT from 'prop-types'
 import { connect } from 'react-redux'
 import MediaQuery from 'react-responsive'
 import cn from 'classnames'
+import TextTruncate from 'react-text-truncate'
 
 import {
   PHASE_STATUS,
@@ -108,7 +109,14 @@ class PhaseCard extends React.Component {
                         <ProjectTypeIcon type={attr.icon} />
                       </div>
                       <div styleName="project-title-container">
-                        <h4 styleName="project-title">{attr.title}</h4>
+                        <h4 styleName="project-title">
+                          <TextTruncate
+                            containerClassName="project-description"
+                            line={!matches ? 2 : 5}
+                            truncateText="..."
+                            text={attr.title}
+                          />
+                        </h4>
                         {phaseEditable && !this.state.isEditting && (<a styleName="edit-btn" onClick={this.toggleEditView} />
                         )}
                       </div>
