@@ -6,7 +6,7 @@
   background-color: $tc-gray-neutral-light;
   border-radius: 4px;
   color: $tc-black;
-  height: $base-unit*10;
+  min-height: $base-unit*10;
   line-height: $base-unit*10;
   @include roboto;
   font-weight: 400;
@@ -71,14 +71,16 @@
       background-color: $tc-dark-blue-100;
       border: 2px solid $tc-dark-blue-100;
     }
-  } // add-specification-layer
-  .add-specification-layer {
+  }
+
+  .addlink-bar {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
     background-color: transparent;
     padding-left: 50px;
     padding-right: 10px;
-  }
-  .addlink-bar {
-    min-height: 50px;
+    height: 50px;
     position: relative;
     border-radius: 4px;
     flex-wrap: nowrap;
@@ -138,6 +140,7 @@
       }
     }
     .position {
+      align-items: center;
       display: flex;
       min-width: 185px;
       justify-content: flex-end;
@@ -167,6 +170,41 @@
       }
     }
   }
+
+  &.many-places:not(.view-only) {
+    .link {
+      display: none;
+    }
+
+    @media screen and (max-width: $screen-rg - 1px) {
+      .addlink-bar {
+        height: 100px;
+        padding-bottom: 50px;
+      }
+
+      .link {
+        display: block;
+      }
+
+      .position {
+        border-top: 1px solid $tc-gray-neutral-dark;
+        height: 50px;
+        left: 2 * $base-unit;
+        position: absolute;
+        right: 2 * $base-unit;
+        padding-left: 0;
+        top: 50px;
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  &.view-only {
+    .position {
+      min-width: 80px;
+    }
+  }
+
   .item-checked {
     display: inline-block;
     background: url('../../../../../assets/icons/ui-check-gray.svg') 0 0 no-repeat;
@@ -181,7 +219,9 @@
   width: 30px;
   height: 30px;
   line-height: 30px;
-  margin: 0 5px;
+  & + & {
+    margin-left: 2 * $base-unit;
+  }
   .checkbox-text {
     position: relative;
     width: 30px;
@@ -213,6 +253,10 @@
         background-color: $tc-bronze-100;
         box-shadow: inset 0 1px 3px 0 $tc-bronze-110;
       }
+      &.pos-rest {
+        background-color: $tc-dark-blue-70;
+        color: $tc-white;
+      }
     }
 
     &.inactive{
@@ -240,6 +284,11 @@
       &.pos3 {
         background-color: $tc-bronze-100;
         box-shadow: inset 0 1px 3px 0 $tc-bronze-110;
+      }
+
+      &.pos-rest {
+        background-color: $tc-dark-blue-70;
+        color: $tc-white;
       }
     }
   }

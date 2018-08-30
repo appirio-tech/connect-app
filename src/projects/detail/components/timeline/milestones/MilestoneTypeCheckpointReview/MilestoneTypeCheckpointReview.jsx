@@ -12,6 +12,8 @@ import LinkList from '../../LinkList'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
 import MilestoneDescription from '../../MilestoneDescription'
+import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
+import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 
 import {
   MILESTONE_STATUS,
@@ -26,10 +28,8 @@ class MilestoneTypeCheckpointReview extends React.Component {
 
     this.state = {
       selectedLinks: [],
-      isInReview: false,
+      isLinksProvided: _.get(props.milestone, 'details.prevMilestoneType') === 'add-links',
       isSelectWarningVisible: false,
-      isShowExtensionRequestMessage: false,
-      isShowExtensionConfirmMessage: false,
       isShowCompleteConfirmMessage: false,
     }
 
@@ -40,12 +40,19 @@ class MilestoneTypeCheckpointReview extends React.Component {
     this.hideCompleteReviewConfirmation = this.hideCompleteReviewConfirmation.bind(this)
     this.completeReview = this.completeReview.bind(this)
     this.toggleRejectedSection = this.toggleRejectedSection.bind(this)
-    this.showExtensionRequestMessage = this.showExtensionRequestMessage.bind(this)
-    this.hideExtensionRequestMessage = this.hideExtensionRequestMessage.bind(this)
-    this.requestExtension = this.requestExtension.bind(this)
-    this.approveExtension = this.approveExtension.bind(this)
-    this.declineExtension = this.declineExtension.bind(this)
     this.moveToReviewingState = this.moveToReviewingState.bind(this)
+    this.shouldDisableCompleteReviewButton = this.shouldDisableCompleteReviewButton.bind(this)
+  }
+
+  getLinksForReview() {
+    const { milestone } = this.props
+    const { isLinksProvided } = this.state
+
+    if (isLinksProvided) {
+      return _.get(milestone, 'details.prevMilestoneContent.links', [])
+    }
+
+    return _.get(milestone, 'details.content.links', [])
   }
 
   showCompleteReviewConfirmation() {
@@ -67,7 +74,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
     const { milestone, completeMilestone } = this.props
     const { selectedLinks } = this.state
     const minSelectedDesigns = this.getMinSelectedDesigns()
-    const links = _.get(milestone, 'details.content.links', [])
+    const links = this.getLinksForReview()
 
     if (selectedLinks.length < minSelectedDesigns) {
       this.setState({ isSelectWarningVisible: true })
@@ -90,8 +97,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
   }
 
   getMinSelectedDesigns() {
-    const { milestone } = this.props
-    const links = _.get(milestone, 'details.content.links', [])
+    const links = this.getLinksForReview()
 
     return Math.min(links.length, MIN_CHECKPOINT_REVIEW_DESIGNS)
   }
@@ -102,53 +108,6 @@ class MilestoneTypeCheckpointReview extends React.Component {
   toggleRejectedSection() {
     this.setState({
       isRejectedExpanded: !this.state.isRejectedExpanded
-    })
-  }
-
-  showExtensionRequestMessage() {
-    this.setState({
-      isShowExtensionRequestMessage: true,
-      isSelectWarningVisible: false,
-    })
-  }
-
-  hideExtensionRequestMessage() {
-    this.setState({ isShowExtensionRequestMessage: false })
-  }
-
-  requestExtension(value) {
-    const { updateMilestoneContent } = this.props
-
-    const extensionDuration = parseInt(value, 10)
-
-    updateMilestoneContent({
-      extensionRequest: {
-        duration: extensionDuration,
-      }
-    })
-  }
-
-  declineExtension() {
-    const { updateMilestoneContent } = this.props
-
-    updateMilestoneContent({
-      extensionRequest: null,
-    })
-  }
-
-  approveExtension() {
-    const { extendMilestone, milestone } = this.props
-    const content = _.get(milestone, 'details.content')
-    const extensionRequest = _.get(milestone, 'details.content.extensionRequest')
-
-    extendMilestone(extensionRequest.duration, {
-      details: {
-        ...milestone.details,
-        content: {
-          ...content,
-          extensionRequest: null,
-        }
-      }
     })
   }
 
@@ -217,10 +176,16 @@ class MilestoneTypeCheckpointReview extends React.Component {
     }
   }
 
-  getDescription() {
-    const { milestone } = this.props
-
-    return milestone[`${milestone.status}Text`]
+  shouldDisableCompleteReviewButton(links, selectedLinks) {
+    const linksLength = links.length
+    const selectedLinksLength = selectedLinks.length
+    if (linksLength < 5 && selectedLinksLength === linksLength) {
+      return false
+    } else if (linksLength >= 5 && selectedLinksLength >= 5) {
+      return false
+    } else {
+      return true
+    }
   }
 
   render() {
@@ -228,23 +193,28 @@ class MilestoneTypeCheckpointReview extends React.Component {
       milestone,
       theme,
       currentUser,
+      extensionRequestDialog,
+      extensionRequestButton,
+      extensionRequestConfirmation,
     } = this.props
     const {
+      isLinksProvided,
       selectedLinks,
       isSelectWarningVisible,
       isRejectedExpanded,
-      isShowExtensionRequestMessage,
       isShowCompleteConfirmMessage,
-      isShowExtensionConfirmMessage,
     } = this.state
 
-    const links = _.get(milestone, 'details.content.links', [])
-    const rejectedLinks = _.reject(links, { isSelected: true })
-    const isInReview = _.get(milestone, 'details.content.isInReview', false)
-    const extensionRequest = _.get(milestone, 'details.content.extensionRequest')
-
+    // if links are provided we directly go to review
+    const isInReview = isLinksProvided || _.get(milestone, 'details.content.isInReview', false)
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+
+    const links = isCompleted
+      ? _.get(milestone, 'details.content.links', [])
+      : this.getLinksForReview()
+    const rejectedLinks = _.reject(links, { isSelected: true })
+
     const minCheckedDesigns = this.getMinSelectedDesigns()
     const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
 
@@ -265,7 +235,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
-          <MilestoneDescription description={this.getDescription()} />
+          <MilestoneDescription description={getMilestoneStatusText(milestone)} />
         </DotIndicator>
 
         {/*
@@ -275,8 +245,8 @@ class MilestoneTypeCheckpointReview extends React.Component {
           <div>
             {!isInReview &&  (
               <div>
-                <div styleName="top-space">
-                  <DotIndicator>
+                <DotIndicator>
+                  <div styleName="top-space">
                     <ProjectProgress
                       labelDayStatus={progressText}
                       progressPercent={progressPercent}
@@ -293,8 +263,8 @@ class MilestoneTypeCheckpointReview extends React.Component {
                         </button>
                       )}
                     </ProjectProgress>
-                  </DotIndicator>
-                </div>
+                  </div>
+                </DotIndicator>
 
                 {!currentUser.isCustomer && (
                   <DotIndicator hideLine>
@@ -354,35 +324,18 @@ class MilestoneTypeCheckpointReview extends React.Component {
               </DotIndicator>
             )}
 
-            {isShowExtensionRequestMessage && (
+            {!!extensionRequestDialog && (
               <DotIndicator hideLine>
                 <div styleName="top-space">
-                  <MilestonePostMessage
-                    label={'Milestone extension request'}
-                    theme="warning"
-                    message={'Be careful, requesting extensions will change the project overall milestone. Proceed with caution and only if there are not enough submissions to satisfy our delivery policy.'}
-                    isShowSelection
-                    buttons={[
-                      { title: 'Cancel', onClick: this.hideExtensionRequestMessage, type: 'default' },
-                      { title: 'Request extension', onClick: this.requestExtension, type: 'warning' },
-                    ]}
-                  />
+                  {extensionRequestDialog}
                 </div>
               </DotIndicator>
             )}
 
-            {!!extensionRequest && (
+            {!!extensionRequestConfirmation && (
               <DotIndicator hideLine>
                 <div styleName="top-space">
-                  <MilestonePostMessage
-                    label={'Milestone extension requested'}
-                    theme="primary"
-                    message={`Due to unusually high load on our network we had less than the minimum number or design submissions. In order to provide you with the appropriate number of design options we’ll have to extend the milestone with ${extensionRequest.duration * 24}h. This time would be enough to increase the capacity and make sure your project is successful.<br /><br />Please make a decision in the next 24h. After that we will automatically extend the project to make sure we deliver success to you.`}
-                    buttons={[
-                      { title: 'Decline extension', onClick: this.declineExtension, type: 'warning' },
-                      { title: 'Approve extension', onClick: this.approveExtension, type: 'primary' },
-                    ]}
-                  />
+                  {extensionRequestConfirmation}
                 </div>
               </DotIndicator>
             )}
@@ -406,8 +359,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
 
             {
               !isCompleted &&
-              !isShowExtensionRequestMessage &&
-              !isShowExtensionConfirmMessage &&
+              !extensionRequestDialog &&
               !isShowCompleteConfirmMessage &&
               (!currentUser.isCustomer || isInReview) &&
             (
@@ -417,23 +369,12 @@ class MilestoneTypeCheckpointReview extends React.Component {
                     <button
                       className={'tc-btn tc-btn-primary'}
                       onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.completeReview}
-                      disabled={!isInReview}
+                      disabled={this.shouldDisableCompleteReviewButton(links, selectedLinks) && !isInReview}
                     >
-                      Complete review ({
-                        daysLeft >= 0
-                          ? `${hoursLeft}h remaining`
-                          : `${-hoursLeft}h delay`
-                      })
+                      Complete review ({hoursLeft}h)
                     </button>
                   )}
-                  {!currentUser.isCustomer && !extensionRequest && (
-                    <button
-                      className={'tc-btn tc-btn-warning'}
-                      onClick={this.showExtensionRequestMessage}
-                    >
-                      Request Extension
-                    </button>
-                  )}
+                  {!currentUser.isCustomer && extensionRequestButton}
                 </div>
               </DotIndicator>
             )}
@@ -481,10 +422,12 @@ MilestoneTypeCheckpointReview.defaultProps = {
 MilestoneTypeCheckpointReview.propTypes = {
   completeMilestone: PT.func.isRequired,
   currentUser: PT.object.isRequired,
-  extendMilestone: PT.func.isRequired,
   milestone: PT.object.isRequired,
   theme: PT.string,
   updateMilestoneContent: PT.func.isRequired,
+  extensionRequestDialog: PT.node,
+  extensionRequestButton: PT.node,
+  extensionRequestConfirmation: PT.node,
 }
 
-export default MilestoneTypeCheckpointReview
+export default withMilestoneExtensionRequest(MilestoneTypeCheckpointReview)

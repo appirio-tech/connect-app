@@ -426,7 +426,7 @@ class FeedView extends React.Component {
         />
 
         <Section>
-          <SectionTitle title="Posts" />
+          <SectionTitle title="Discussions" />
           <div>
             <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
               <NewPost

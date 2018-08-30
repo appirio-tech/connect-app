@@ -11,8 +11,10 @@ import DotIndicator from '../../DotIndicator'
 import ProjectProgress from '../../../ProjectProgress'
 import LinkList from '../../LinkList'
 import MilestoneDescription from '../../MilestoneDescription'
+import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
+import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 
 import './MilestoneTypeProgress.scss'
 
@@ -62,14 +64,15 @@ class MilestoneTypeProgress extends React.Component {
     completeMilestone()
   }
 
-  getDescription() {
-    const { milestone } = this.props
-
-    return milestone[`${milestone.status}Text`]
-  }
-
   render() {
-    const { milestone, theme, currentUser } = this.props
+    const {
+      milestone,
+      theme,
+      currentUser,
+      extensionRequestDialog,
+      extensionRequestButton,
+      extensionRequestConfirmation,
+    } = this.props
 
     const links = _.get(milestone, 'details.content.links', [])
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
@@ -92,7 +95,7 @@ class MilestoneTypeProgress extends React.Component {
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
-          <MilestoneDescription description={this.getDescription()} />
+          <MilestoneDescription description={getMilestoneStatusText(milestone)} />
         </DotIndicator>
 
         {/*
@@ -101,7 +104,7 @@ class MilestoneTypeProgress extends React.Component {
         {isActive && (
           <div>
             <div styleName="top-space">
-              <DotIndicator hideDot={!currentUser.isCustomer}>
+              <DotIndicator hideDot={!currentUser.isCustomer || extensionRequestConfirmation}>
                 <ProjectProgress
                   labelDayStatus={progressText}
                   progressPercent={progressPercent}
@@ -111,35 +114,55 @@ class MilestoneTypeProgress extends React.Component {
             </div>
 
             {!currentUser.isCustomer && (
-              <div>
-                <LinkList
-                  links={links}
-                  onAddLink={this.updatedUrl}
-                  onRemoveLink={this.removeUrl}
-                  onUpdateLink={this.updatedUrl}
-                  fields={[{ name: 'title'}, { name: 'url'}, { name: 'type' }]}
-                  addButtonTitle="Add link"
-                  formAddTitle="Adding a link"
-                  formAddButtonTitle="Add a link"
-                  formUpdateTitle="Editing a link"
-                  formUpdateButtonTitle="Save changes"
-                  isUpdating={milestone.isUpdating}
-                  canAddLink
-                />
+              <LinkList
+                links={links}
+                onAddLink={this.updatedUrl}
+                onRemoveLink={this.removeUrl}
+                onUpdateLink={this.updatedUrl}
+                fields={[{ name: 'title'}, { name: 'url'}, { name: 'type' }]}
+                addButtonTitle="Add link"
+                formAddTitle="Adding a link"
+                formAddButtonTitle="Add a link"
+                formUpdateTitle="Editing a link"
+                formUpdateButtonTitle="Save changes"
+                isUpdating={milestone.isUpdating}
+                canAddLink
+              />
+            )}
 
+            {!!extensionRequestDialog && (
+              <DotIndicator>
                 <div styleName="top-space">
-                  <DotIndicator>
-                    <div styleName="top-space button-layer">
-                      <button
-                        className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-                        onClick={this.completeMilestone}
-                      >
-                        Mark as completed
-                      </button>
-                    </div>
-                  </DotIndicator>
+                  {extensionRequestDialog}
                 </div>
-              </div>
+              </DotIndicator>
+            )}
+
+            {!!extensionRequestConfirmation && (
+              <DotIndicator hideDot={!currentUser.isCustomer}>
+                <div styleName="top-space">
+                  {extensionRequestConfirmation}
+                </div>
+              </DotIndicator>
+            )}
+
+            {
+              !currentUser.isCustomer &&
+              !extensionRequestDialog &&
+            (
+              <DotIndicator>
+                <div styleName="top-space">
+                  <div styleName="top-space button-layer">
+                    <button
+                      className="tc-btn tc-btn-primary tc-btn-sm action-btn"
+                      onClick={this.completeMilestone}
+                    >
+                      Mark as completed
+                    </button>
+                    {!currentUser.isCustomer && extensionRequestButton}
+                  </div>
+                </div>
+              </DotIndicator>
             )}
           </div>
         )}
@@ -167,6 +190,9 @@ MilestoneTypeProgress.propTypes = {
   milestone: PT.object.isRequired,
   theme: PT.string,
   updateMilestoneContent: PT.func.isRequired,
+  extensionRequestDialog: PT.node,
+  extensionRequestButton: PT.node,
+  extensionRequestConfirmation: PT.node,
 }
 
-export default MilestoneTypeProgress
+export default withMilestoneExtensionRequest(MilestoneTypeProgress)

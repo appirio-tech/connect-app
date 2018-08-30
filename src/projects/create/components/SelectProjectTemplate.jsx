@@ -31,7 +31,7 @@ const SelectProjectTemplate = ({
         icon={icon}
         info={projectTemplate.info}
         key={projectTemplate.id}
-        onClick={() => onProjectTemplateChange(projectTemplate.key)}
+        onClick={() => onProjectTemplateChange(projectTemplate)}
         type={projectTemplate.name}
       />
     )

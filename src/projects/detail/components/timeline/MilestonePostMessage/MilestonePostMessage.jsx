@@ -47,18 +47,20 @@ class MilestonePostMessage extends React.Component {
             props.isShowSelection && (
               <div styleName="group-selection">
                 <div>{'Extension to request:'}</div>
-                <label styleName="label">
-                  <input type="radio" name="pos1" value="1" onChange={this.onSelectionChange} />
-                  <div>1 day</div>
-                </label>
-                <label styleName="label">
-                  <input type="radio" name="pos1" value="2" onChange={this.onSelectionChange} />
-                  <div>2 days</div>
-                </label>
-                <label styleName="label">
-                  <input type="radio" name="pos1" value="3" onChange={this.onSelectionChange} />
-                  <div>3 days</div>
-                </label>
+                <div styleName="label-group">
+                  <label styleName="label">
+                    <input type="radio" name="pos1" value="1" onChange={this.onSelectionChange} />
+                    <div>1 day</div>
+                  </label>
+                  <label styleName="label">
+                    <input type="radio" name="pos1" value="2" onChange={this.onSelectionChange} />
+                    <div>2 days</div>
+                  </label>
+                  <label styleName="label">
+                    <input type="radio" name="pos1" value="3" onChange={this.onSelectionChange} />
+                    <div>3 days</div>
+                  </label>
+                </div>
               </div>
             )
           }

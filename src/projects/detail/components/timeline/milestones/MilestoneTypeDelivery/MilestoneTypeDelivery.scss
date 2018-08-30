@@ -12,6 +12,11 @@
   .button-add-layer {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap-reverse;
+
+    button {
+      margin: $base-unit;
+    }
   }
 
   .button-layer {

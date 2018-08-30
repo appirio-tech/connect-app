@@ -11,7 +11,7 @@ import { loadProjectTemplates, loadProjectCategories } from '../../../actions/te
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
-import { getProjectTemplateByKey, getProjectTemplateByAlias, getProjectTypeByKey } from '../../../helpers/templates'
+import { getProjectTemplateByAlias, getProjectTypeByKey } from '../../../helpers/templates'
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
@@ -169,8 +169,8 @@ class CreateContainer extends React.Component {
 
     if (wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS && isProjectDirty) {// Project Details step
 
-      const projectTemplateKey = _.get(this.state.updatedProject, 'details.products[0]')
-      const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
+      const projectTemplateId = _.get(this.state.updatedProject, 'templateId')
+      const projectTemplate = _.find(projectTemplates, pt => pt.id === projectTemplateId)
       this.prepareProjectForCreation(this.state.updatedProject, projectTemplate)
       console.log('saving incomplete project', this.state.updatedProject)
       window.localStorage.setItem(LS_INCOMPLETE_PROJECT, JSON.stringify(this.state.updatedProject))
@@ -214,7 +214,7 @@ class CreateContainer extends React.Component {
    */
   createProject(project) {
     const { templates: { projectTemplates }} = this.props
-    const projectTemplate = getProjectTemplateByKey(projectTemplates, _.get(project, 'details.products[0]'))
+    const projectTemplate = _.find(projectTemplates, _.get(project, 'templateId'))
 
     this.setState({ creatingProject: true }, () => {
       if (this.props.userRoles && this.props.userRoles.length > 0) {
@@ -262,8 +262,8 @@ class CreateContainer extends React.Component {
           const projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
           const typeAlias = _.get(projectType, 'aliases[0]')
 
-          const projectTemplateKey = _.get(updatedProject, 'details.products[0]', null)
-          const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
+          const projectTemplateId = _.get(updatedProject, 'templateId', null)
+          const projectTemplate = _.find(projectTemplates, pt => pt.id === projectTemplateId)
           const templateAlias = _.get(projectTemplate, 'aliases[0]')
 
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
@@ -291,8 +291,8 @@ class CreateContainer extends React.Component {
         }
         onProjectUpdate={ (updatedProject, dirty=true) => {
           // const projectType = _.get(this.state.updatedProject, 'type', null)
-          const prevProduct = _.get(this.state.updatedProject, 'details.products[0]', null)
-          const product = _.get(updatedProject, 'details.products[0]', null)
+          const prevProduct = _.get(this.state.updatedProject, 'templateId', null)
+          const product = _.get(updatedProject, 'templateId', null)
           // compares updated product with previous product to know if user has updated the product
           if (prevProduct !== product) {
             if (product) {
