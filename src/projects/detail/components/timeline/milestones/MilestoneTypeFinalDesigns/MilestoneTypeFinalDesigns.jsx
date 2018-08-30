@@ -350,90 +350,90 @@ class MilestoneTypeFinalDesigns extends React.Component {
                     </div>
                   </DotIndicator>
                 ))}
+
+                {isSelectWarningVisible && (
+                  <DotIndicator hideLine>
+                    <div styleName="top-space">
+                      <div styleName="message-bar" className="flex center">
+                        <i>Please select all {minCheckedDesigns} places to complete the review</i>
+                      </div>
+                    </div>
+                  </DotIndicator>
+                )}
+
+                {!!extensionRequestDialog && (
+                  <DotIndicator hideLine>
+                    <div styleName="top-space">
+                      {extensionRequestDialog}
+                    </div>
+                  </DotIndicator>
+                )}
+
+                {!!extensionRequestConfirmation && (
+                  <DotIndicator hideLine>
+                    <div styleName="top-space">
+                      {extensionRequestConfirmation}
+                    </div>
+                  </DotIndicator>
+                )}
+
+                {
+                  !isCompleted &&
+                  !extensionRequestDialog &&
+                  !isShowCompleteConfirmMessage &&
+                  !isShowCustomerCompleteConfirmMessage &&
+                  (!currentUser.isCustomer || isInReview) &&
+                (
+                  <DotIndicator hideLine>
+                    <div styleName="action-bar" className="flex center">
+                      {(!currentUser.isCustomer || isInReview) && (
+                        <button
+                          className={'tc-btn tc-btn-primary'}
+                          onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.showCustomerCompleteReviewConfirmation}
+                          disabled={!isInReview}
+                        >
+                          Complete review ({hoursLeft}h)
+                        </button>
+                      )}
+                      {!currentUser.isCustomer && extensionRequestButton}
+                    </div>
+                  </DotIndicator>
+                )}
+
+                {isShowCompleteConfirmMessage && (
+                  <DotIndicator hideLine>
+                    <div styleName="top-space">
+                      <MilestonePostMessage
+                        label={'Complete milestone review'}
+                        theme="warning"
+                        message={'Warning! Complete the review only if you have the permission from the customer. We do not want to close the review early without the ability to get feedback from our customers and let them select the winning 5 designs for next round.'}
+                        isShowSelection={false}
+                        buttons={[
+                          { title: 'Cancel', onClick: this.hideCompleteReviewConfirmation, type: 'default' },
+                          { title: 'Complete review', onClick: this.completeReview, type: 'warning' },
+                        ]}
+                      />
+                    </div>
+                  </DotIndicator>
+                )}
+
+                {isShowCustomerCompleteConfirmMessage && (
+                  <DotIndicator hideLine>
+                    <div styleName="top-space">
+                      <MilestonePostMessage
+                        label="Design phase competition"
+                        theme="primary"
+                        message="This selection is final and cannot be undone. Once you confirm your selection we will close the design phase and can proceed to the next one. Clicking on the Confirm selection button would make the source files available for download."
+                        isShowSelection={false}
+                        buttons={[
+                          { title: 'Cancel', onClick: this.hideCustomerCompleteReviewConfirmation, type: 'default' },
+                          { title: 'Complete selection', onClick: this.completeReview, type: 'primary' },
+                        ]}
+                      />
+                    </div>
+                  </DotIndicator>
+                )}
               </div>
-            )}
-
-            {isSelectWarningVisible && (
-              <DotIndicator hideLine>
-                <div styleName="top-space">
-                  <div styleName="message-bar" className="flex center">
-                    <i>Please select all {minCheckedDesigns} places to complete the review</i>
-                  </div>
-                </div>
-              </DotIndicator>
-            )}
-
-            {!!extensionRequestDialog && (
-              <DotIndicator hideLine>
-                <div styleName="top-space">
-                  {extensionRequestDialog}
-                </div>
-              </DotIndicator>
-            )}
-
-            {!!extensionRequestConfirmation && (
-              <DotIndicator hideLine>
-                <div styleName="top-space">
-                  {extensionRequestConfirmation}
-                </div>
-              </DotIndicator>
-            )}
-
-            {
-              !isCompleted &&
-              !extensionRequestDialog &&
-              !isShowCompleteConfirmMessage &&
-              !isShowCustomerCompleteConfirmMessage &&
-              (!currentUser.isCustomer || isInReview) &&
-            (
-              <DotIndicator hideLine>
-                <div styleName="action-bar" className="flex center">
-                  {(!currentUser.isCustomer || isInReview) && (
-                    <button
-                      className={'tc-btn tc-btn-primary'}
-                      onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.showCustomerCompleteReviewConfirmation}
-                      disabled={!isInReview}
-                    >
-                      Complete review ({hoursLeft}h)
-                    </button>
-                  )}
-                  {!currentUser.isCustomer && extensionRequestButton}
-                </div>
-              </DotIndicator>
-            )}
-
-            {isShowCompleteConfirmMessage && (
-              <DotIndicator hideLine>
-                <div styleName="top-space">
-                  <MilestonePostMessage
-                    label={'Complete milestone review'}
-                    theme="warning"
-                    message={'Warning! Complete the review only if you have the permission from the customer. We do not want to close the review early without the ability to get feedback from our customers and let them select the winning 5 designs for next round.'}
-                    isShowSelection={false}
-                    buttons={[
-                      { title: 'Cancel', onClick: this.hideCompleteReviewConfirmation, type: 'default' },
-                      { title: 'Complete review', onClick: this.completeReview, type: 'warning' },
-                    ]}
-                  />
-                </div>
-              </DotIndicator>
-            )}
-
-            {isShowCustomerCompleteConfirmMessage && (
-              <DotIndicator hideLine>
-                <div styleName="top-space">
-                  <MilestonePostMessage
-                    label="Design phase competition"
-                    theme="primary"
-                    message="This selection is final and cannot be undone. Once you confirm your selection we will close the design phase and can proceed to the next one. Clicking on the Confirm selection button would make the source files available for download."
-                    isShowSelection={false}
-                    buttons={[
-                      { title: 'Cancel', onClick: this.hideCustomerCompleteReviewConfirmation, type: 'default' },
-                      { title: 'Complete selection', onClick: this.completeReview, type: 'primary' },
-                    ]}
-                  />
-                </div>
-              </DotIndicator>
             )}
           </div>
         )}
