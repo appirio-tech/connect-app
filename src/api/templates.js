@@ -15,7 +15,7 @@ import { TC_API_URL } from '../config/constants'
  * @return {Promise} list of project templates
  */
 export function getProjectTemplates() {
-  return axios.get(`${TC_API_URL}/v4/projectTemplates`)
+  return axios.get(`${TC_API_URL}/v4/projects/metadata/projectTemplates`)
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
 
@@ -27,7 +27,7 @@ export function getProjectTemplates() {
  * @return {Promise} project template
  */
 export function getProjectTemplate(projectTemplateId) {
-  return axios.get(`${TC_API_URL}/v4/projectTemplates/${projectTemplateId}`)
+  return axios.get(`${TC_API_URL}/v4/projects/metadata/projectTemplates/${projectTemplateId}`)
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
 
@@ -39,7 +39,7 @@ export function getProjectTemplate(projectTemplateId) {
  * @return {Promise} product template
  */
 export function getProductTemplate(productTemplateId) {
-  return axios.get(`${TC_API_URL}/v4/productTemplates/${productTemplateId}`)
+  return axios.get(`${TC_API_URL}/v4/projects/metadata/productTemplates/${productTemplateId}`)
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
 
@@ -58,7 +58,7 @@ export function getProductTemplateByKey(productKey) {
     params['filter'] = `productKey=${productKey}`
   }
 
-  return axios.get(`${TC_API_URL}/v4/productTemplates/`, { params })
+  return axios.get(`${TC_API_URL}/v4/projects/metadata/productTemplates/`, { params })
   // we only get first product of result in case provide productKey otherwise we get all the products
     .then(resp => _.get(resp.data, (productKey ? 'result.content[0]' : 'result.content'), {}))
 }
@@ -69,6 +69,6 @@ export function getProductTemplateByKey(productKey) {
  * @return {Promise} list of project categories
  */
 export function getProjectCategories() {
-  return axios.get(`${TC_API_URL}/v4/projectTypes`)
+  return axios.get(`${TC_API_URL}/v4/projects/metadata/projectTypes`)
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
