@@ -421,6 +421,7 @@ export function updateProject(projectId, updatedProps, updateExisting = false) {
 export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
   return (dispatch, getState) => {
     const state = getState()
+    phaseIndex = phaseIndex ? phaseIndex : _.findIndex(state.projectState.phases, { id: phaseId })
     const phase = state.projectState.phases[phaseIndex]
     const phaseStatusChanged = phase.status !== updatedProps.status
     const productId = phase.products[0].id
