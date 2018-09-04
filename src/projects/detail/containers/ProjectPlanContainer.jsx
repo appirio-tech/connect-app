@@ -49,6 +49,18 @@ class ProjectPlanContainer extends React.Component {
     scrollToHash(`phase-${phaseId}`)
   }
 
+  componentDidMount() {
+    const { expandProjectPhase } = this.props
+    const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
+    const phaseId = scrollTo && scrollTo.startsWith('phase-') ? parseInt(scrollTo.replace('phase-', ''), 10) : null
+    if (phaseId) {
+      let tab = scrollTo.replace(`phase-${phaseId}-`, '')
+      tab = tab === scrollTo ? 'timeline' : tab
+      expandProjectPhase(phaseId, tab)
+      scrollToHash(`phase-${phaseId}`)
+    }
+  }
+
   componentWillUnmount() {
     const { collapseAllProjectPhases } = this.props
 
