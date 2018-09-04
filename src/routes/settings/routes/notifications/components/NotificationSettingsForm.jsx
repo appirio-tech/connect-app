@@ -71,6 +71,40 @@ const topics = [
       'notifications.connect.project.member.copilotJoined',
       'notifications.connect.project.member.assignedAsOwner'
     ]
+  }, {
+    title: 'Project plan changes',
+    enabledMethods:['web'],
+    types: [
+      'notifications.connect.project.planReady',
+      'notifications.connect.project.planModified'
+    ]
+  }, {
+    title: 'Project phase updates',
+    enabledMethods:['web'],
+    types: [
+      'notifications.connect.project.phase.transition.active',
+      'notifications.connect.project.phase.transition.completed',
+      'notifications.connect.project.phase.update.payment',
+      'notifications.connect.project.phase.update.progress',
+      'notifications.connect.project.phase.update.scope'
+    ]
+  }, {
+    title: 'Project progress upates',
+    enabledMethods:['web'],
+    types: [
+      'notifications.connect.project.phase.update.progress',
+      'notifications.connect.project.progressModified'
+    ]
+  }, {
+    title: 'Project phase timeline changes',
+    enabledMethods:['web'],
+    types: [
+      'notifications.connect.project.phase.timelineModified',
+      'notifications.connect.project.phase.milestone.transition.active',
+      'notifications.connect.project.phase.milestone.transition.completed',
+      // should we include wait.customer to be controlled via settings?
+      'notifications.connect.project.phase.milestone.waiting.customer'
+    ]
   }
 ]
 
