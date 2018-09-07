@@ -440,15 +440,15 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.phase.update.payment',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
-      text: 'Budget/Payment for <strong>{{phaseName}}</strong> is updated',
+      text: 'Payments for <strong>{{phaseName}}</strong> updated',
       shouldBundle: true,
-      bundledText: 'Budget/Payments updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
+      bundledText: 'Payments updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PHASE
     }, {
-      text: 'Budget/Payment for <strong>{{phaseName}}</strong>',
+      text: 'Payments for <strong>{{phaseName}}</strong> updated',
       shouldBundle: true,
-      bundledText: 'Budget/Payments updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
+      bundledText: 'Payments updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
       goTo: GOTO.PHASE
     }]
@@ -457,13 +457,13 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.phase.update.progress',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
-      text: 'Phase <strong>{{phaseName}}</strong> is completed',
+      text: 'Phase <strong>{{phaseName}}</strong> is progressed',
       shouldBundle: true,
       bundledText: 'Progress updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PHASE
     }, {
-      text: 'Phase <strong>{{phaseName}}</strong> is completed',
+      text: 'Phase <strong>{{phaseName}}</strong> is progressed',
       shouldBundle: true,
       bundledText: 'Progress updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
