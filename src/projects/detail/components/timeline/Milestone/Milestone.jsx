@@ -74,19 +74,19 @@ class Milestone extends React.Component {
   }
 
   hoverHeader() {
-    this.setState({isHoverHeader: true})
+    this.setState({ isHoverHeader: true })
   }
 
   unHoverHeader() {
-    this.setState({isHoverHeader: false})
+    this.setState({ isHoverHeader: false })
   }
 
   toggleEditLink() {
-    this.setState({isEditing: true})
+    this.setState({ isEditing: true })
   }
 
   closeEditForm() {
-    this.setState({isEditing: false})
+    this.setState({ isEditing: false })
   }
 
   updateMilestoneWithData(values) {
@@ -153,9 +153,9 @@ class Milestone extends React.Component {
 
     return (
       <div styleName="timeline-post">
-        {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing && !isCompleted) ? 'hover ': '')} />)}
+        {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing && !isCompleted) ? 'hover ' : '')} />)}
         <div styleName="col-date">
-          <div styleName={(isCompleted ? 'completed' : 'planned' )}>
+          <div styleName={(isCompleted ? 'completed' : 'planned')}>
             <div styleName="month">{month}</div>
             <div styleName="day">{date}</div>
           </div>
@@ -165,6 +165,7 @@ class Milestone extends React.Component {
             completed: isCompleted,
             'in-progress': isActive,
             'is-editing': isEditing,
+            'hide-extension': currentUser.isCustomer
           })}
         >
           <i styleName={'status-ring'} />
@@ -177,7 +178,7 @@ class Milestone extends React.Component {
             >
               <h4 styleName="post-title">{title}</h4>
               {!currentUser.isCustomer && !isCompleted && this.state.isHoverHeader && !isUpdating && (
-                <div onClick={this.toggleEditLink} styleName={ 'post-edit' } >
+                <div onClick={this.toggleEditLink} styleName={'post-edit'} >
                   <span styleName="tooltiptext">Edit milestone properties</span>
                 </div>)}
             </dir>)
@@ -299,7 +300,7 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && milestone.type === 'final-designs'  && (
+          {!isEditing && !isUpdating && milestone.type === 'final-designs' && (
             <MilestoneTypeFinalDesigns
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}

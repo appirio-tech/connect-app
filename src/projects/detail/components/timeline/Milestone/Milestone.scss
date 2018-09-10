@@ -144,7 +144,7 @@
       &.seperation-sm{
         margin-top: 5px;
       }
-    }
+    }    
   }
 
   &:last-child .col-timeline-post-con.completed::before,
@@ -211,6 +211,14 @@
   &:last-child {
     .col-timeline-post-con.completed::before {
       bottom: 23px;
+    }
+
+    .col-timeline-post-con {
+      &.hide-extension{
+        &:before {
+          display:none;
+        }
+      }
     }
   }
 
