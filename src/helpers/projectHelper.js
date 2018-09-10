@@ -161,7 +161,7 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
   const spentAmount = _.sumBy(activeAndCompletedPhases, 'spentBudget') || 0
   const labelSpent = spentAmount > 0 ? `Spent $${formatNumberWithCommas(spentAmount)}` : ''
   const progressPercent = phases.length > 0 ? Math.round(totalProgress/activeAndCompletedPhases.length) : 0
-  const labelStatus = `${progressPercent}% done ${totalProgress} ${activeAndCompletedPhases.length}`
+  const labelStatus = `${progressPercent}% done`
 
   return {
     labelDayStatus,
