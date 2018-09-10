@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject } from '../../actions/project'
-import { loadProjectTemplates, loadProjectCategories } from '../../../actions/templates'
+import { loadProjectsMetadata } from '../../../actions/templates'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
@@ -37,9 +37,8 @@ const errorHandler = showCoderBotIfError(props => props.error && props.error.typ
 // This handles showing a spinner while the state is being loaded async
 const spinner = spinnerWhileLoading(props =>
   !props.processing &&
-  !props.templates.isProjectTemplatesLoading &&
+  !props.templates.isLoading &&
   props.templates.projectTemplates !== null &&
-  !props.templates.isProjectCategoriesLoading &&
   props.templates.projectCategories !== null
 )
 
@@ -103,7 +102,7 @@ class CreateContainer extends React.Component {
 
   componentWillMount() {
     const { processing, userRoles, match, history,
-      templates, loadProjectTemplates, loadProjectCategories } = this.props
+      templates } = this.props
     // if we are on the project page validate project param
     if (match.path === '/new-project/:project?/:status?') {
       const project = match.params.project
@@ -140,14 +139,9 @@ class CreateContainer extends React.Component {
       this.props.clearLoadedProject()
     }
 
-    // if templates are not loaded yet - then load them
-    if (templates.projectTemplates === null && !templates.isProjectTemplatesLoading) {
-      loadProjectTemplates()
-    }
-
-    // if categories are not loaded yet - then load them
-    if (templates.projectCategories === null && !templates.isProjectCategoriesLoading) {
-      loadProjectCategories()
+    // if metadata is not loaded yet - then load it
+    if (!templates.projectTemplates && !templates.isLoading) {
+      this.props.loadProjectsMetadata()
     }
   }
 
@@ -336,8 +330,7 @@ const actionCreators = {
   fireProjectDirty,
   fireProjectDirtyUndo,
   clearLoadedProject,
-  loadProjectTemplates,
-  loadProjectCategories,
+  loadProjectsMetadata,
 }
 
 export default withRouter(connect(mapStateToProps, actionCreators)(CreateContainer))

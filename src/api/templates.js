@@ -5,17 +5,13 @@ import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL } from '../config/constants'
 
-// import projectTemplates from './templates-json/project-templates.json'
-// import projectCategories from './templates-json/project-categories.json'
-// import productTemplates from './templates-json/product-templates.json'
-
 /**
- * Get the list of project templates
+ * Get projects metadata (projectTemplates, productTemplates and projectTypes)
  *
- * @return {Promise} list of project templates
+ * @return {Promise} projects metadata (projectTemplates, productTemplates and projectTypes)
  */
-export function getProjectTemplates() {
-  return axios.get(`${TC_API_URL}/v4/projects/metadata/projectTemplates`)
+export function getProjectsMetadata() {
+  return axios.get(`${TC_API_URL}/v4/projects/metadata`)
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
 
@@ -61,14 +57,4 @@ export function getProductTemplateByKey(productKey) {
   return axios.get(`${TC_API_URL}/v4/projects/metadata/productTemplates/`, { params })
   // we only get first product of result in case provide productKey otherwise we get all the products
     .then(resp => _.get(resp.data, (productKey ? 'result.content[0]' : 'result.content'), {}))
-}
-
-/**
- * Get the list of project categories
- *
- * @return {Promise} list of project categories
- */
-export function getProjectCategories() {
-  return axios.get(`${TC_API_URL}/v4/projects/metadata/projectTypes`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
 }
