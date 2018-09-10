@@ -149,7 +149,9 @@ class MilestoneTypeCheckpointReview extends React.Component {
 
     updateMilestoneContent({
       isInReview: true,
-    })
+    }, {
+        waitingForCustomer: true,
+      })
   }
 
   updateSelected(isSelected, linkIndex) {
@@ -243,7 +245,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
          */}
         {isActive && (
           <div>
-            {!isInReview &&  (
+            {!isInReview && (
               <div>
                 <DotIndicator>
                   <div styleName="top-space">
@@ -362,22 +364,22 @@ class MilestoneTypeCheckpointReview extends React.Component {
               !extensionRequestDialog &&
               !isShowCompleteConfirmMessage &&
               (!currentUser.isCustomer || isInReview) &&
-            (
-              <DotIndicator hideLine>
-                <div styleName="action-bar" className="flex center">
-                  {(!currentUser.isCustomer || isInReview) && (
-                    <button
-                      className={'tc-btn tc-btn-primary'}
-                      onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.completeReview}
-                      disabled={this.shouldDisableCompleteReviewButton(links, selectedLinks) && !isInReview}
-                    >
-                      Complete review ({hoursLeft}h)
+              (
+                <DotIndicator hideLine>
+                  <div styleName="action-bar" className="flex center">
+                    {(!currentUser.isCustomer || isInReview) && (
+                      <button
+                        className={'tc-btn tc-btn-primary'}
+                        onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.completeReview}
+                        disabled={this.shouldDisableCompleteReviewButton(links, selectedLinks) && !isInReview}
+                      >
+                        Complete review ({hoursLeft}h)
                     </button>
-                  )}
-                  {!currentUser.isCustomer && extensionRequestButton}
-                </div>
-              </DotIndicator>
-            )}
+                    )}
+                    {!currentUser.isCustomer && extensionRequestButton}
+                  </div>
+                </DotIndicator>
+              )}
           </div>
         )}
 
