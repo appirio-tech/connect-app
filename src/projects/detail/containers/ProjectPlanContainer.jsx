@@ -120,7 +120,6 @@ class ProjectPlanContainer extends React.Component {
         <TwoColsLayout.Content>
           {visiblePhases && visiblePhases.length > 0 ? (
             [
-              activePhases.length > 0 && <ProjectPlanProgress phases={visiblePhases} project={project} productsTimelines={productsTimelines} key="progress" />,
               <ProjectStages
                 {...{
                   ...this.props,
