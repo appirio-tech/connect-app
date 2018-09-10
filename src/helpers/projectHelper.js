@@ -6,6 +6,7 @@ import {
   PROJECT_ROLE_OWNER,
   PHASE_STATUS_ACTIVE,
   PHASE_STATUS_COMPLETED,
+  PHASE_STATUS_REVIEWED,
   PHASE_STATUS_DRAFT,
 } from '../config/constants'
 
@@ -87,7 +88,7 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
 
   // phases where start date is set and are not draft
   const nonDraftPhases = _.filter(phases, (phase) => (phase.startDate && phase.status !== PHASE_STATUS_DRAFT))
-  const activeAndCompletedPhases = _.filter(phases, (phase) => (phase.startDate && (phase.status === PHASE_STATUS_ACTIVE || phase.status === PHASE_STATUS_COMPLETED)))
+  const activeAndCompletedPhases = _.filter(phases, (phase) => (phase.startDate && (phase.status === PHASE_STATUS_ACTIVE || phase.status === PHASE_STATUS_COMPLETED || phase.status === PHASE_STATUS_REVIEWED)))
   activeAndCompletedPhases.map((phase) => {
     let progress = 0
     // calculates days spent and day based progress for the phase
@@ -144,7 +145,7 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
 
     // override project progress if status is delivered
     if (phase.status === PHASE_STATUS_COMPLETED) {
-      progress = 100
+      progress = 99
       //this line could be added if we want the progress bar to consider complete duration of phase,
       // incase phase is marked completed before actual endDate
       //actualDuration += phase.duration
@@ -160,7 +161,7 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
   const spentAmount = _.sumBy(activeAndCompletedPhases, 'spentBudget') || 0
   const labelSpent = spentAmount > 0 ? `Spent $${formatNumberWithCommas(spentAmount)}` : ''
   const progressPercent = phases.length > 0 ? Math.round(totalProgress/activeAndCompletedPhases.length) : 0
-  const labelStatus = `${progressPercent}% done`
+  const labelStatus = `${progressPercent}% done ${totalProgress} ${activeAndCompletedPhases.length}`
 
   return {
     labelDayStatus,
