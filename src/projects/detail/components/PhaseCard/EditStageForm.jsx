@@ -256,6 +256,12 @@ class EditStageForm extends React.Component {
       disabled: hasTimeline && status.value === PHASE_STATUS_COMPLETED
     }))
 
+    for (let i = 0; i < activePhaseStatuses.length; i++) {
+      if (activePhaseStatuses[i].disabled) {
+        activePhaseStatuses[i].toolTipMessage = 'Phase delivery status is controlled by the statuses of individual milestones'
+      }
+    }
+
     const { progress, duration } = getPhaseActualData(phase, timeline)
 
     return (
