@@ -112,9 +112,9 @@ class NewPostMobile extends React.Component {
     return (
       <MobilePage>
         <div styleName="header">
-          <div styleName="close-wrapper"><XMartIcon onClick={onClose} /></div>
+          <div styleName="plug" />
           <div styleName="title">{title}</div>
-          <div styleName="plug"/>
+          <div styleName="close-wrapper"><XMartIcon onClick={onClose} /></div>
         </div>
         <div styleName="body" style={{ height: browserActualViewportHeigth - HEADER_HEIGHT }}>
           <textarea
