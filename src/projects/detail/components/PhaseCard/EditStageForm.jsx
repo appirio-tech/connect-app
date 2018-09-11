@@ -258,7 +258,7 @@ class EditStageForm extends React.Component {
 
     for (let i = 0; i < activePhaseStatuses.length; i++) {
       if (activePhaseStatuses[i].disabled) {
-        activePhaseStatuses[i].toolTipMessage = 'Phase delivery status is controlled by the statuses of individual milestones'
+        activePhaseStatuses[i].toolTipMessage = 'Once activated, phase delivery is controlled by the milestones.'
       }
     }
 
