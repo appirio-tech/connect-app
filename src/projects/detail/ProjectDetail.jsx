@@ -128,7 +128,7 @@ class ProjectDetail extends Component {
   }
 }
 
-const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines}) => {
+const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines, templates}) => {
   return {
     currentUserId: parseInt(loadUser.user.id),
     isLoading: projectDashboard.isLoading,
@@ -138,7 +138,7 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
     projectTemplate: projectState.projectTemplate,
     productTemplates: projectState.productTemplates,
     productsTimelines,
-    allProductTemplates: projectState.allProductTemplates,
+    allProductTemplates: templates.productTemplates,
     currentUserRoles: loadUser.user.roles
   }
 }

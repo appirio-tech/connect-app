@@ -153,8 +153,8 @@ ProjectPlanContainer.propTypes = {
   productsTimelines: PT.object.isRequired,
 }
 
-const mapStateToProps = ({ projectState, projectTopics, phasesTopics }) => ({
-  productTemplates: projectState.allProductTemplates,
+const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates }) => ({
+  productTemplates: templates.productTemplates,
   phases: projectState.phases,
   feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
   phasesTopics,

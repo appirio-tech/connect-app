@@ -34,7 +34,6 @@ import {
   LOAD_PROJECT_PHASES,
   LOAD_PROJECT_TEMPLATE,
   LOAD_PROJECT_PRODUCT_TEMPLATES,
-  LOAD_ALL_PRODUCT_TEMPLATES,
   UPDATE_PRODUCT,
   PROJECT_STATUS_DRAFT,
   PRODUCT_DIRTY,
@@ -209,25 +208,6 @@ export function loadProjectProductTemplates(projectTemplate) {
           ...alreadyLoadedProductTemplates,
           ...loadedProductTemplates,
         ])
-    })
-  }
-}
-
-/**
- * Load all product templates
- *
- * NOTE
- *   This function loads all product templates which are not in the store yet
- *
- * @param {Object} projectTemplate project template of the project
- *
- * @return {Promise} LOAD_ALL_PRODUCT_TEMPLATES action with payload as array of product templates
- */
-export function loadAllProductTemplates() {
-  return (dispatch) => {
-    return dispatch({
-      type: LOAD_ALL_PRODUCT_TEMPLATES,
-      payload: Promise.resolve(getProductTemplateByKey())
     })
   }
 }

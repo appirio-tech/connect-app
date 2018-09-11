@@ -1,7 +1,8 @@
 import _ from 'lodash'
 import { loadMembers } from '../../actions/members'
 import { loadProject, loadDirectProjectData, loadProjectPhasesWithProducts,
-  loadProjectTemplate, loadProjectProductTemplates, loadAllProductTemplates, loadProjectProductTemplatesByKey } from './project'
+  loadProjectTemplate, loadProjectProductTemplates, loadProjectProductTemplatesByKey } from './project'
+import { loadProjectsMetadata } from '../../actions/templates'
 import { loadProductTimelineWithMilestones } from './productsTimelines'
 import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
 
@@ -15,6 +16,7 @@ import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../conf
  * @return {Promise} LOAD_ADDITIONAL_PROJECT_DATA action
  */
 const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) => {
+  const { productTemplates } = getState().templates
   return new Promise((resolve, reject) => {
     return dispatch(loadProject(projectId))
       .then(({ value: project }) => {
@@ -55,8 +57,8 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
         } else {
           promises.push(dispatch(loadProjectProductTemplatesByKey(_.get(project, 'details.products[0]'))))
         }
-        if (!isOnlyLoadProjectInfo) {
-          promises.push(dispatch(loadAllProductTemplates()))
+        if (!productTemplates) {
+          promises.push(dispatch(loadProjectsMetadata()))
         }
 
         return resolve(dispatch({
