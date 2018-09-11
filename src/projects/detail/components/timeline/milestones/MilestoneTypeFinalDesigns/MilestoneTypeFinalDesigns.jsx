@@ -128,9 +128,10 @@ class MilestoneTypeFinalDesigns extends React.Component {
   }
 
   getMinSelectedDesigns() {
+    const { requiredWinnersCount } = this.state
     const links = this.getLinksForReview()
 
-    return Math.min(links.length, MIN_WINNER_DESIGNS)
+    return Math.min(links.length, requiredWinnersCount)
   }
 
   updatedUrl(values, linkIndex) {
