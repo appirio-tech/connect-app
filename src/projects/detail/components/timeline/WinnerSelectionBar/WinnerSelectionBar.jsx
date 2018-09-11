@@ -11,7 +11,7 @@ class WinnerSelectionBar extends React.Component {
     super(props)
 
     // create toggle handlers in constructor to avoid recreating functions during render
-    this.handlers = [0, 1, 2].map((placeIndex) =>
+    this.handlers = props.placesChosen.map((placeChosen, placeIndex) =>
       this.toggleSelected.bind(this, placeIndex + 1)
     )
     this.onBonusChange = this.onBonusChange.bind(this)
@@ -39,54 +39,59 @@ class WinnerSelectionBar extends React.Component {
 
   render() {
     const {
+      additionalDesignCost,
       placesChosen,
       isSelectedBonus,
       onPlaceChange,
       onBonusChange,
       type,
       selectedPlace,
-      maxPlace,
     } = this.props
     const props = this.props
 
-    const isSelected3TopWin = _.every(placesChosen, (place) => place > -1)
+    const isAllWinnersSelected = _.every(placesChosen, (place) => place > -1)
+    const selectedPlaceClassName = selectedPlace <= 3 ? `pos${selectedPlace}` : 'pos-rest'
 
     return (
       <div
         styleName={cn(
           'winner-bar', {
-            selected: !!onPlaceChange && !!selectedPlace || !!onBonusChange && isSelectedBonus
+            selected: !!onPlaceChange && !!selectedPlace || !!onBonusChange && isSelectedBonus,
+            'many-places': placesChosen.length > 3,
+            'view-only': !onPlaceChange && !onBonusChange,
           }
         )}
       >
-        <div
-          styleName="add-specification-layer addlink-bar"
-          className="flex space-between middle"
-        >
+        <div styleName="addlink-bar">
           <figure styleName={cn('thumb', type)} />
 
           <div styleName="group-right">
             <a href={props.link} target="_blank" styleName="label" rel="noopener noreferrer">
               {props.label}
-              {!!onBonusChange && isSelected3TopWin && !selectedPlace && <span styleName="sublable">Purchase for $100</span>}
+              {!!onBonusChange && isAllWinnersSelected && !selectedPlace && <span styleName="sublable">Purchase for ${additionalDesignCost}</span>}
             </a>
             <a href={props.link} target="_blank" styleName="link" rel="noopener noreferrer">{props.link}</a>
           </div>
 
-          {!!onPlaceChange && (!isSelected3TopWin || !!selectedPlace) && (
+          {!!onPlaceChange && (!isAllWinnersSelected || !!selectedPlace) && (
             <div styleName="position">
-              {[1, 2, 3].filter((place) => place <= maxPlace).map((place) => (
-                <label styleName={'checkbox-ctrl'} key={place}>
-                  <input type="checkbox" styleName="checkbox" onChange={this.handlers[place -1]} checked={selectedPlace === place} />
-                  <span styleName={`checkbox-text pos${place} ` + (placesChosen[place - 1] > -1 ? 'inactive' : '' ) }>{place}</span>
-                </label>
-              ))}
+              {placesChosen.map((placeChosen, placeIndex) => {
+                const place = placeIndex + 1
+                const posClassName = place <= 3 ? `pos${place}` : 'pos-rest'
+
+                return (
+                  <label styleName={'checkbox-ctrl'} key={place}>
+                    <input type="checkbox" styleName="checkbox" onChange={this.handlers[placeIndex]} checked={selectedPlace === place} />
+                    <span styleName={`checkbox-text ${posClassName} ` + (placeChosen > -1 ? 'inactive' : '' ) }>{place}</span>
+                  </label>
+                )
+              })}
             </div>
           )}
 
-          {!!onBonusChange && isSelected3TopWin && !selectedPlace && (
+          {!!onBonusChange && isAllWinnersSelected && !selectedPlace && (
             <div styleName="position">
-              <div styleName="purchase-for"><span>purchase for $100</span></div>
+              <div styleName="purchase-for"><span>purchase for ${additionalDesignCost}</span></div>
               <div styleName="switch-button">
                 <SwitchButton onChange={this.onBonusChange} />
               </div>
@@ -95,14 +100,14 @@ class WinnerSelectionBar extends React.Component {
 
           {!onBonusChange && isSelectedBonus && (
             <div styleName="position">
-              <div styleName="purchase-for">+ $100</div>
+              <div styleName="purchase-for">+ ${additionalDesignCost}</div>
             </div>
           )}
 
           {!onPlaceChange && !!selectedPlace && (
             <div styleName="position">
               <label styleName={'checkbox-ctrl'} >
-                <span styleName={`checkbox-text active pos${selectedPlace}`}>{selectedPlace}</span>
+                <span styleName={`checkbox-text active ${selectedPlaceClassName}`}>{selectedPlace}</span>
               </label>
             </div>
           )}

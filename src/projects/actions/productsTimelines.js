@@ -113,11 +113,13 @@ export function updateProductMilestone(productId, timelineId, milestoneId, updat
         milestoneId,
       }
     }).then(() => {
-      const isLastMilestone = checkIfLastMilestone(timeline.timeline, milestoneIdx)
-      // if milestone duration was updated and it's not the last milestone
-      // we have to refresh timeline as other milestone dates were updated by the server
-      if (isDurationUpdated && !isLastMilestone) {
-        dispatch(loadProductTimelineWithMilestones(productId))
+      if (timeline) {
+        const isLastMilestone = checkIfLastMilestone(timeline.timeline, milestoneIdx)
+        // if milestone duration was updated and it's not the last milestone
+        // we have to refresh timeline as other milestone dates were updated by the server
+        if (isDurationUpdated && !isLastMilestone) {
+          dispatch(loadProductTimelineWithMilestonesById(timeline.timeline.id, productId))
+        }
       }
     })
   }
@@ -240,11 +242,13 @@ export function extendProductMilestone(productId, timelineId, milestoneId, exten
         milestoneId,
       }
     }).then(() => {
-      const isLastMilestone = checkIfLastMilestone(timeline.timeline, milestoneIdx)
-      // if it's not the last milestone
-      // we have to refresh timeline as other milestone dates were updated by the server
-      if (!isLastMilestone) {
-        dispatch(loadProductTimelineWithMilestones(productId))
+      if (timeline) {
+        const isLastMilestone = checkIfLastMilestone(timeline.timeline, milestoneIdx)
+        // if it's not the last milestone
+        // we have to refresh timeline as other milestone dates were updated by the server
+        if (!isLastMilestone) {
+          dispatch(loadProductTimelineWithMilestonesById(timeline.timeline.id, productId))
+        }
       }
     })
   }

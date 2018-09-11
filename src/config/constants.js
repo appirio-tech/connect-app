@@ -186,6 +186,10 @@ export const DELETE_PHASE_FEED_COMMENT_PENDING  = 'DELETE_PHASE_FEED_COMMENT_PEN
 export const DELETE_PHASE_FEED_COMMENT_SUCCESS  = 'DELETE_PHASE_FEED_COMMENT_SUCCESS'
 export const DELETE_PHASE_FEED_COMMENT_FAILURE  = 'DELETE_PHASE_FEED_COMMENT_FAILURE'
 
+export const EXPAND_PROJECT_PHASE = 'EXPAND_PROJECT_PHASE'
+export const COLLAPSE_PROJECT_PHASE = 'COLLAPSE_PROJECT_PHASE'
+export const COLLAPSE_ALL_PROJECT_PHASES = 'COLLAPSE_ALL_PROJECT_PHASES'
+
 // Project Sort
 export const PROJECT_SORT             = 'PROJECT_SORT'
 export const PROJECT_SORT_FAILURE     = 'PROJECT_SORT_FAILURE'
@@ -603,11 +607,21 @@ export const MILESTONE_STATUS = {
   CANCELLED: 'cancelled'
 }
 
+export const MILESTONE_STATUS_TEXT = [
+  {status: 'reviewed', textValue: 'plannedText' },
+  {status: 'active', textValue: 'activeText' },
+  {status: 'paused', textValue: 'blockedText' },
+  {status: 'completed', textValue: 'completedText' }
+]
+
 // minimum designs to select during checkpoint type milestone
 export const MIN_CHECKPOINT_REVIEW_DESIGNS = 5
 
 // minimum winner designs to select during final-designs milestone
 export const MIN_WINNER_DESIGNS = 3
+
+// default additional desgin cost to select during final-designs milestone
+export const DEFAULT_ADDITIONAL_DESIGN_COST = 100
 
 // list of link types which are supported by milestones
 export const MILESTONE_LINK_SUPPORTED_TYPES = [

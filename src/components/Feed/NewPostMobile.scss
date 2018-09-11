@@ -28,14 +28,14 @@
 }
 
 .body {
+  display: flex;
+  flex-direction: column;
   background-color: $tc-gray-neutral-dark;
   height: calc(100vh - 50px); /* window height - header height */
   position: relative;
 }
 
 .submit-wrapper {
-  padding-bottom: 4 * $base-unit;
-
   > button:global(.tc-btn.tc-btn-md) {
     border-radius: 0;
     height: 47px;
@@ -52,7 +52,7 @@
   display: block;
   font-size: 15px;
   line-height: 25px;
-  height: calc(100vh - 50px - 47px - 20px);
+  flex: 1;
   margin: 0;
   padding: 4 * $base-unit;
   resize: none;

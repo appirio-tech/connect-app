@@ -49,15 +49,12 @@
     height: inherit;
     position: relative;
     line-height: inherit;
-    padding-left: $base-unit*3;
-    padding-right: $base-unit*3;
     z-index: 1;
-    padding: 5px 20px 15px 20px;
-    @include viewSm {
-      padding-right: $base-unit*7;
-    }
+    padding: 2 * $base-unit 3 * $base-unit 3 * $base-unit 3 * $base-unit;
     .label-title {
       font-weight: 500;
+      line-height: 20px;
+      padding: 2 * $base-unit 0;
       text-align: center;
     }
     .group-content {
@@ -86,6 +83,18 @@
       font-size: 15px;
       font-weight: 400;
       margin-top: 15px;
+
+      .label-group {
+        align-items: center;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+
+        @media screen and (max-width: 480px - 1px) {
+          flex-wrap: wrap;
+        }
+      }
+
       .label {
         display: flex;
         input {
@@ -93,18 +102,22 @@
           margin: auto 5px auto 20px;
           box-shadow:none;
         }
+
+        @media screen and (max-width: 480px - 1px) {
+          width: 100%;
+        }
       }
     }
 
     .group-button {
       display: flex;
       flex-direction: row;
-      flex-wrap: wrap;
+      flex-wrap: wrap-reverse;
       justify-content: center;
       align-items: center;
-      margin-top: 15px;
+      margin-top: 2 * $base-unit;
       button {
-        margin: 0 6px 0 6px;
+        margin: $base-unit;
         font-size: 13px;
         font-weight: 500;
       }

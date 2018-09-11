@@ -64,6 +64,6 @@ combinedConfig.module.rules.forEach(rule => {
   Enable source maps.
   This also let us see original file names in browser console.
  */
-combinedConfig.devtool = 'eval'
+combinedConfig.devtool = 'cheap-module-eval-source-map'
 
 module.exports = combinedConfig

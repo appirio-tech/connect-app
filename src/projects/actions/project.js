@@ -44,12 +44,59 @@ import {
   MILESTONE_STATUS,
   PHASE_STATUS_ACTIVE,
   PHASE_DIRTY,
-  PHASE_DIRTY_UNDO
+  PHASE_DIRTY_UNDO,
+  PROJECT_STATUS_IN_REVIEW,
+  PHASE_STATUS_REVIEWED,
+  PROJECT_STATUS_REVIEWED,
+  PROJECT_STATUS_ACTIVE,
+  EXPAND_PROJECT_PHASE,
+  COLLAPSE_PROJECT_PHASE,
+  COLLAPSE_ALL_PROJECT_PHASES,
 } from '../../config/constants'
 import {
   updateProductMilestone,
   updateProductTimeline
 } from './productsTimelines'
+
+/**
+ * Expand phase and optionaly expand particular tab
+ *
+ * @param {Number} phaseId phase id
+ * @param {String} tab     (optional) tab id
+ */
+export function expandProjectPhase(phaseId, tab) {
+  return (dispatch) => {
+    return dispatch({
+      type: EXPAND_PROJECT_PHASE,
+      payload: { phaseId, tab }
+    })
+  }
+}
+
+/**
+ * Collapse phase
+ *
+ * @param {Number} phaseId phase id
+ */
+export function collapseProjectPhase(phaseId) {
+  return (dispatch) => {
+    return dispatch({
+      type: COLLAPSE_PROJECT_PHASE,
+      payload: { phaseId }
+    })
+  }
+}
+
+/**
+ * Collapse all phases and reset tabs to default
+ */
+export function collapseAllProjectPhases() {
+  return (dispatch) => {
+    return dispatch({
+      type: COLLAPSE_ALL_PROJECT_PHASES,
+    })
+  }
+}
 
 export function loadProject(projectId) {
   return (dispatch) => {
@@ -374,11 +421,13 @@ export function updateProject(projectId, updatedProps, updateExisting = false) {
 export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
   return (dispatch, getState) => {
     const state = getState()
+    phaseIndex = phaseIndex ? phaseIndex : _.findIndex(state.projectState.phases, { id: phaseId })
     const phase = state.projectState.phases[phaseIndex]
     const phaseStatusChanged = phase.status !== updatedProps.status
     const productId = phase.products[0].id
     const timeline = state.productsTimelines[productId] && state.productsTimelines[productId].timeline
-    const startDateChanged =updatedProps.startDate && updatedProps.startDate.diff(timeline.startDate)
+    const phaseStartDate = timeline ? timeline.startDate : phase.startDate
+    const startDateChanged = updatedProps.startDate ? updatedProps.startDate.diff(phaseStartDate) : null
     const phaseActivated = phaseStatusChanged && updatedProps.status === PHASE_STATUS_ACTIVE
     if (phaseActivated) {
       updatedProps.startDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
@@ -434,7 +483,36 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
       } else {
         optionallyUpdateFirstMilestone()
       }
-      return true
+
+    // update project caused by phase updates
+    }).then(() => {
+      const project = state.projectState.project
+
+      // if one phase moved to REVIEWED status, make project IN_REVIEW too
+      if (
+        _.includes([PROJECT_STATUS_DRAFT], project.status) &&
+        phase.status !== PHASE_STATUS_REVIEWED &&
+        updatedProps.status === PHASE_STATUS_REVIEWED
+      ) {
+        dispatch(
+          updateProject(projectId, {
+            status: PHASE_STATUS_REVIEWED
+          }, true)
+        )
+      }
+
+      // if one phase moved to ACTIVE status, make project ACTIVE too
+      if (
+        _.includes([PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_REVIEWED], project.status) &&
+        phase.status !== PHASE_STATUS_ACTIVE &&
+        updatedProps.status === PHASE_STATUS_ACTIVE
+      ) {
+        dispatch(
+          updateProject(projectId, {
+            status: PROJECT_STATUS_ACTIVE
+          }, true)
+        )
+      }
     })
   }
 }

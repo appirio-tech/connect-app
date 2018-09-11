@@ -54,6 +54,18 @@
       padding-left: 4 * $base-unit;
       padding-right: 4 * $base-unit;
     }
+
+    &.has-unseen::after {
+      background-color: $tc-red-70;
+      border-radius: 50%;
+      content: '';
+      display: block;
+      height: 8px;
+      position: absolute;
+      right: 2 * $base-unit;
+      top: 2 * $base-unit;
+      width: 8px;
+    }
   }
   .col {
     &:nth-child(1) {
@@ -194,7 +206,11 @@
     display: flex;
     align-items: center;
     position: relative;
-    justify-content: space-between;
+    justify-content: flex-start;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      justify-content: space-between;
+    }
   }
   .edit-btn {
     width: 40px;
@@ -203,7 +219,11 @@
     background-size: 15px;
     cursor: pointer;
     transition: 0.25s;
-    margin: auto auto auto 0;
+    flex: 0 0 40px;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      margin-right: -30px;
+    }
   }
   .toggle-arrow {
     position: absolute;
@@ -315,8 +335,8 @@
   align-items: center;
   background-color: $tc-gray-neutral-light;
   display: flex;
-  height: 50px;
-  padding: 0 $base-unit * 3;
+  min-height: 50px;
+  padding: 2 * $base-unit $base-unit * 3;
   position: relative;
   z-index: 1;
 }
@@ -326,7 +346,7 @@
   color: $tc-black;
   font-size: 15px;
   font-weight: 400;
-  line-height: 30px;
+  line-height: 20px;
   margin-left:30px;
 }
 

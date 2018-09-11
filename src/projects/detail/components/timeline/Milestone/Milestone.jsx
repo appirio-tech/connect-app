@@ -3,7 +3,6 @@
  *
  * Renders one milestone in timeline. Inside it renders:
  * - milestone title
- * - milestone description
  * - milestone edit form (if open)
  * - component depend on the milestone type
  */
@@ -18,9 +17,7 @@ import Form from '../Form'
 import MilestoneTypePhaseSpecification from '../milestones/MilestoneTypePhaseSpecification'
 import MilestoneTypeProgress from '../milestones/MilestoneTypeProgress'
 import MilestoneTypeCheckpointReview from '../milestones/MilestoneTypeCheckpointReview'
-import MilestoneTypeCheckpointReviewOnly from '../milestones/MilestoneTypeCheckpointReviewOnly'
 import MilestoneTypeFinalDesigns from '../milestones/MilestoneTypeFinalDesigns'
-import MilestoneTypeFinalDesignsSelectionOnly from '../milestones/MilestoneTypeFinalDesignsSelectionOnly'
 import MilestoneTypeDelivery from '../milestones/MilestoneTypeDelivery'
 import MilestoneTypeFinalFixes from '../milestones/MilestoneTypeFinalFixes'
 import MilestoneTypeAddLinks from '../milestones/MilestoneTypeAddLinks'
@@ -158,8 +155,10 @@ class Milestone extends React.Component {
       <div styleName="timeline-post">
         {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing && !isCompleted) ? 'hover ': '')} />)}
         <div styleName="col-date">
-          <div styleName="month">{month}</div>
-          <div styleName="day">{date}</div>
+          <div styleName={(isCompleted ? 'completed' : 'planned' )}>
+            <div styleName="month">{month}</div>
+            <div styleName="day">{date}</div>
+          </div>
         </div>
         <div
           styleName={cn('col-timeline-post-con', {
@@ -264,6 +263,7 @@ class Milestone extends React.Component {
             <MilestoneTypePhaseSpecification
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
+              extendMilestone={this.extendMilestone}
               completeMilestone={this.completeMilestone}
               currentUser={currentUser}
             />
@@ -273,35 +273,14 @@ class Milestone extends React.Component {
             <MilestoneTypeProgress
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
-              completeMilestone={this.completeMilestone}
-              currentUser={currentUser}
-            />
-          )}
-
-          {
-            !isEditing &&
-            !isUpdating &&
-            milestone.type === 'checkpoint-review' &&
-            // old type 'checkpoint-review' which let user add links
-            _.get(milestone, 'details.prevMilestoneType') !== 'add-links' &&
-          (
-            <MilestoneTypeCheckpointReview
-              milestone={milestone}
-              updateMilestoneContent={this.updateMilestoneContent}
               extendMilestone={this.extendMilestone}
               completeMilestone={this.completeMilestone}
               currentUser={currentUser}
             />
           )}
 
-          {
-            !isEditing &&
-            !isUpdating &&
-            milestone.type === 'checkpoint-review' &&
-            // new type 'checkpoint-review' which gets list of links from previous `add-links` milestone
-            _.get(milestone, 'details.prevMilestoneType') === 'add-links' &&
-          (
-            <MilestoneTypeCheckpointReviewOnly
+          {!isEditing && !isUpdating && milestone.type === 'checkpoint-review' && (
+            <MilestoneTypeCheckpointReview
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
               extendMilestone={this.extendMilestone}
@@ -320,24 +299,8 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && milestone.type === 'final-designs'  &&
-            // old type 'final-designs' which let user add links
-            _.get(milestone, 'details.prevMilestoneType') !== 'add-links' &&
-          (
+          {!isEditing && !isUpdating && milestone.type === 'final-designs'  && (
             <MilestoneTypeFinalDesigns
-              milestone={milestone}
-              updateMilestoneContent={this.updateMilestoneContent}
-              extendMilestone={this.extendMilestone}
-              completeMilestone={this.completeMilestone}
-              currentUser={currentUser}
-            />
-          )}
-
-          {!isEditing && !isUpdating && milestone.type === 'final-designs'  &&
-            // new type 'final-designs' which gets list of links from previous `add-links` milestone
-            _.get(milestone, 'details.prevMilestoneType') === 'add-links' &&
-          (
-            <MilestoneTypeFinalDesignsSelectionOnly
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
               extendMilestone={this.extendMilestone}
@@ -350,6 +313,7 @@ class Milestone extends React.Component {
             <MilestoneTypeFinalFixes
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}
+              extendMilestone={this.extendMilestone}
               completeFinalFixesMilestone={this.completeFinalFixesMilestone}
               submitFinalFixesRequest={this.submitFinalFixesRequest}
               currentUser={currentUser}
@@ -370,6 +334,7 @@ class Milestone extends React.Component {
               <MilestoneTypeDelivery
                 milestone={milestone}
                 updateMilestoneContent={this.updateMilestoneContent}
+                extendMilestone={this.extendMilestone}
                 completeMilestone={this.completeMilestone}
                 submitFinalFixesRequest={this.submitFinalFixesRequest}
                 currentUser={currentUser}

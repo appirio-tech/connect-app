@@ -12,7 +12,10 @@ import MilestonePostEditText from '../../MilestonePostEditText'
 import DotIndicator from '../../DotIndicator'
 import MilestoneDescription from '../../MilestoneDescription'
 import LinkList from '../../LinkList'
+import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
+
 import { MILESTONE_STATUS  } from '../../../../../../config/constants'
+import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 
 import './MilestoneTypeFinalFixes.scss'
 
@@ -60,11 +63,6 @@ class MilestoneTypeFinalFixes extends React.Component {
     })
   }
 
-  getDescription() {
-    const { milestone } = this.props
-
-    return milestone[`${milestone.status}Text`]
-  }
   completeMilestone() {
     const { completeFinalFixesMilestone } = this.props
 
@@ -72,7 +70,14 @@ class MilestoneTypeFinalFixes extends React.Component {
   }
 
   render() {
-    const { milestone, theme, currentUser } = this.props
+    const {
+      milestone,
+      theme,
+      currentUser,
+      extensionRequestDialog,
+      extensionRequestButton,
+      extensionRequestConfirmation,
+    } = this.props
     const finalFixRequests = _.get(milestone, 'details.content.finalFixRequests', [])
     const links = _.get(milestone, 'details.content.links', [])
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
@@ -90,11 +95,11 @@ class MilestoneTypeFinalFixes extends React.Component {
     const progressPercent = daysLeft > 0
       ? (totalDays - daysLeft) / totalDays * 100
       : 100
-    
+
     return (
       <div styleName={cn('milestone-post', theme)}>
-        <DotIndicator hideFirstLine={currentUser.isCustomer} hideDot>
-          <MilestoneDescription description={this.getDescription()} />
+        <DotIndicator hideDot>
+          <MilestoneDescription description={getMilestoneStatusText(milestone)} />
         </DotIndicator>
 
         {isActive && (
@@ -113,9 +118,8 @@ class MilestoneTypeFinalFixes extends React.Component {
 
         {finalFixRequests.map((finalFixRequest, index) => (
           <DotIndicator hideLine key={index}>
-            <div styleName="top-space" key={index}>
+            <div styleName="top-space">
               <MilestonePostEditText
-                key={index}
                 value={finalFixRequest.value}
               />
             </div>
@@ -138,7 +142,31 @@ class MilestoneTypeFinalFixes extends React.Component {
               isUpdating={milestone.isUpdating}
               canAddLink
             />
+          </DotIndicator>
+        )}
 
+        {isActive && !!extensionRequestDialog && (
+          <DotIndicator hideLine>
+            <div styleName="top-space">
+              {extensionRequestDialog}
+            </div>
+          </DotIndicator>
+        )}
+
+        {isActive && !!extensionRequestConfirmation && (
+          <DotIndicator hideLine>
+            <div styleName="top-space">
+              {extensionRequestConfirmation}
+            </div>
+          </DotIndicator>
+        )}
+
+        {
+          isActive &&
+          !extensionRequestDialog &&
+          !currentUser.isCustomer &&
+        (
+          <DotIndicator hideLine>
             <div styleName="top-space">
               <div styleName="button-layer">
                 <button
@@ -148,6 +176,7 @@ class MilestoneTypeFinalFixes extends React.Component {
                 >
                   Mark as completed
                 </button>
+                {extensionRequestButton}
               </div>
             </div>
           </DotIndicator>
@@ -162,8 +191,13 @@ MilestoneTypeFinalFixes.defaultProps = {
 }
 
 MilestoneTypeFinalFixes.propTypes = {
+  completeFinalFixesMilestone: PT.func.isRequired,
   theme: PT.string,
   milestone: PT.object.isRequired,
+  updateMilestoneContent: PT.func.isRequired,
+  extensionRequestDialog: PT.node,
+  extensionRequestButton: PT.node,
+  extensionRequestConfirmation: PT.node,
 }
 
-export default MilestoneTypeFinalFixes
+export default withMilestoneExtensionRequest(MilestoneTypeFinalFixes)
