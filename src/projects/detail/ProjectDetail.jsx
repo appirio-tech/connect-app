@@ -13,6 +13,7 @@ import {
 } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
+import { getProjectProductTemplates, getProjectTemplateById } from '../../helpers/templates'
 
 const page404 = compose(
   withProps({code:404})
@@ -129,14 +130,25 @@ class ProjectDetail extends Component {
 }
 
 const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines, templates}) => {
+  const templateId = (projectState.project || {}).templateId
+  const { projectTemplates, productTemplates } = templates
+
   return {
     currentUserId: parseInt(loadUser.user.id),
     isLoading: projectDashboard.isLoading,
     isProcessing: projectState.processing,
     error: projectState.error,
     project: projectState.project,
-    projectTemplate: projectState.projectTemplate,
-    productTemplates: projectState.productTemplates,
+    projectTemplate: (templateId && projectTemplates) ? (
+      getProjectTemplateById(projectTemplates, templateId)
+    ) : null,
+    productTemplates: (projectTemplates && productTemplates) ? (
+      getProjectProductTemplates(
+        productTemplates,
+        projectTemplates,
+        projectState.project
+      )
+    ) : [],
     productsTimelines,
     allProductTemplates: templates.productTemplates,
     currentUserRoles: loadUser.user.roles

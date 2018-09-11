@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import { loadMembers } from '../../actions/members'
-import { loadProject, loadDirectProjectData, loadProjectPhasesWithProducts,
-  loadProjectTemplate, loadProjectProductTemplates, loadProjectProductTemplatesByKey } from './project'
+import { loadProject, loadDirectProjectData, loadProjectPhasesWithProducts } from './project'
 import { loadProjectsMetadata } from '../../actions/templates'
 import { loadProductTimelineWithMilestones } from './productsTimelines'
 import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
@@ -45,18 +44,8 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
                 loadTimelinesForPhasesProducts(phases, dispatch)
               )
           )
-
-          promises.push(
-            dispatch(loadProjectTemplate(project.templateId))
-              .then(({ value: projectTemplate }) =>
-                dispatch(loadProjectProductTemplates(projectTemplate))
-              )
-          )
-
-        // for old project load only one product template
-        } else {
-          promises.push(dispatch(loadProjectProductTemplatesByKey(_.get(project, 'details.products[0]'))))
         }
+
         if (!productTemplates) {
           promises.push(dispatch(loadProjectsMetadata()))
         }
