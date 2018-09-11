@@ -19,6 +19,7 @@ import { PHASE_STATUS_COMPLETED, PHASE_STATUS, PHASE_STATUS_ACTIVE } from '../..
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import { TOOLTIP_DEFAULT_DELAY } from '../../../../config/constants'
 import { getPhaseActualData } from '../../../../helpers/projectHelper'
+import DeletePhase from './DeletePhase'
 
 const moment = extendMoment(Moment)
 const phaseStatuses = PHASE_STATUS.map(ps => ({
@@ -243,12 +244,12 @@ class EditStageForm extends React.Component {
   }
 
   render() {
-    const { phase, isUpdating, timeline } = this.props
+    const { phase, isUpdating, timeline, deleteProjectPhase } = this.props
     const { isEdittable, showPhaseOverlapWarning, showActivatingWarning, selectedPhaseStatus } = this.state
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment.utc(startDate).format('YYYY-MM-DD')
     const hasTimeline = !!timeline
-
+    const canDelete = phase.status !== PHASE_STATUS_ACTIVE && phase.status !== PHASE_STATUS_COMPLETED
     // don't allow to selected completed status if product has timeline
     const activePhaseStatuses = phaseStatuses.map((status) => ({
       ...status,
@@ -372,17 +373,28 @@ class EditStageForm extends React.Component {
             </div>
           </Formsy.Form>
         </div>)}
+        {canDelete && !showActivatingWarning && !isUpdating && (
+          <DeletePhase
+            onDeleteClick={() => {
+              if (confirm(`Are you sure you want to delete phase '${phase.name}'?`)) {
+                deleteProjectPhase()
+              }
+            }}
+          />
+        )}
       </div>
     )
   }
 }
 
 EditStageForm.defaultProps = {
-  cancel: () => {}
+  cancel: () => {},
+  deleteProjectPhase: () => {}
 }
 
 EditStageForm.propTypes = {
   cancel: PT.func,
+  deleteProjectPhase: PT.func,
   phase: PT.object,
   phaseIndex: PT.number
 }
