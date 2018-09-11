@@ -16,6 +16,7 @@ import {
   getProductTemplate,
   getProjectTemplate,
   getProductTemplateByKey,
+  getProjectCategories,
 } from '../../api/templates'
 import {
   createTimeline,
@@ -31,6 +32,7 @@ import {
   DELETE_PROJECT,
   PROJECT_DIRTY,
   PROJECT_DIRTY_UNDO,
+  LOAD_PROJECT_CATEGORIES,
   LOAD_PROJECT_PHASES,
   LOAD_PROJECT_TEMPLATE,
   LOAD_PROJECT_PRODUCT_TEMPLATES,
@@ -166,6 +168,20 @@ export function loadProjectTemplate(id) {
     return dispatch({
       type: LOAD_PROJECT_TEMPLATE,
       payload: getProjectTemplate(id)
+    })
+  }
+}
+
+/**
+ * Load project categories
+ *
+ * @return {Promise} LOAD_PROJECT_CATEGORIES action with payload as project categories object
+ */
+export function loadProjectCategories() {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_PROJECT_CATEGORIES,
+      payload: Promise.resolve(getProjectCategories())
     })
   }
 }
