@@ -66,6 +66,7 @@ class FeedView extends React.Component {
       newPost: {},
       isNewPostMobileOpen: false,
       fullscreenFeedId: null,
+      shouldNotRender: false
     }
   }
 
@@ -79,6 +80,14 @@ class FeedView extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.init(nextProps, this.props)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if(nextState.shouldNotRender) {
+      nextState.shouldNotRender = false
+      return false
+    }
+    return true
   }
 
   componentWillUnmount() {
@@ -224,6 +233,7 @@ class FeedView extends React.Component {
 
   onNewPostChange(title, content) {
     this.setState({
+      shouldNotRender: true,
       newPost: {title, content}
     })
   }
@@ -240,6 +250,7 @@ class FeedView extends React.Component {
 
   onNewCommentChange(feedId, content) {
     this.setState({
+      shouldNotRender: true,
       feeds: this.state.feeds.map((item) => {
         if (item.id === feedId) {
           return {...item, newComment: content}
