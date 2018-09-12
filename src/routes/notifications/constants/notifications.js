@@ -406,13 +406,13 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.phase.transition.active',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
-      text: 'Phase <strong>{{phaseName}}</strong> is activated',
+      text: 'Phase <strong>{{updatedPhase.name}}</strong> is activated',
       shouldBundle: true,
       bundledText: '{{bundledCount}} phases are activated. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PHASE
     }, {
-      text: 'Phase <strong>{{phaseName}}</strong> is activated',
+      text: 'Phase <strong>{{updatedPhase.name}}</strong> is activated',
       shouldBundle: true,
       bundledText: '{{bundledCount}} phases are activated. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
@@ -423,13 +423,13 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.phase.transition.completed',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
-      text: 'Phase <strong>{{phaseName}}</strong> is completed',
+      text: 'Phase <strong>{{updatedPhase.name}}</strong> is completed',
       shouldBundle: true,
       bundledText: '{{bundledCount}} phases are completed. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PHASE
     }, {
-      text: 'Phase <strong>{{phaseName}}</strong> is completed',
+      text: 'Phase <strong>{{updatedPhase.name}}</strong> is completed',
       shouldBundle: true,
       bundledText: '{{bundledCount}} phases are completed. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
@@ -440,13 +440,13 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.phase.update.payment',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
-      text: 'Payments for <strong>{{phaseName}}</strong> updated',
+      text: 'Payments for <strong>{{updatedPhase.name}}</strong> updated',
       shouldBundle: true,
       bundledText: 'Payments updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PHASE
     }, {
-      text: 'Payments for <strong>{{phaseName}}</strong> updated',
+      text: 'Payments for <strong>{{updatedPhase.name}}</strong> updated',
       shouldBundle: true,
       bundledText: 'Payments updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
@@ -457,13 +457,13 @@ export const NOTIFICATIONS = [
     eventType: 'notifications.connect.project.phase.update.progress',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
-      text: 'Phase <strong>{{phaseName}}</strong> is progressed',
+      text: 'Phase <strong>{{updatedPhase.name}}</strong> is progressed',
       shouldBundle: true,
       bundledText: 'Progress updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PHASE
     }, {
-      text: 'Phase <strong>{{phaseName}}</strong> is progressed',
+      text: 'Phase <strong>{{updatedPhase.name}}</strong> is progressed',
       shouldBundle: true,
       bundledText: 'Progress updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
