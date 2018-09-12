@@ -6,6 +6,7 @@ import {
   PROJECT_ROLE_OWNER,
   PHASE_STATUS_ACTIVE,
   PHASE_STATUS_COMPLETED,
+  PHASE_STATUS_REVIEWED,
   PHASE_STATUS_DRAFT,
 } from '../config/constants'
 
@@ -87,8 +88,8 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
 
   // phases where start date is set and are not draft
   const nonDraftPhases = _.filter(phases, (phase) => (phase.startDate && phase.status !== PHASE_STATUS_DRAFT))
-  const activeAndCompletedPhases = _.filter(phases, (phase) => (phase.startDate && (phase.status === PHASE_STATUS_ACTIVE || phase.status === PHASE_STATUS_COMPLETED)))
-  activeAndCompletedPhases.map((phase) => {
+  const activeAndCompletedAndReviewedPhases = _.filter(phases, (phase) => (phase.startDate && (phase.status === PHASE_STATUS_ACTIVE || phase.status === PHASE_STATUS_COMPLETED || phase.status === PHASE_STATUS_REVIEWED)))
+  activeAndCompletedAndReviewedPhases.map((phase) => {
     let progress = 0
     // calculates days spent and day based progress for the phase
     if (phase.startDate && phase.duration) {
@@ -157,9 +158,9 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
 
   const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
 
-  const spentAmount = _.sumBy(activeAndCompletedPhases, 'spentBudget') || 0
+  const spentAmount = _.sumBy(activeAndCompletedAndReviewedPhases, 'spentBudget') || 0
   const labelSpent = spentAmount > 0 ? `Spent $${formatNumberWithCommas(spentAmount)}` : ''
-  const progressPercent = phases.length > 0 ? Math.round(totalProgress/activeAndCompletedPhases.length) : 0
+  const progressPercent = phases.length > 0 ? Math.round(totalProgress/activeAndCompletedAndReviewedPhases.length) : 0
   const labelStatus = `${progressPercent}% done`
 
   return {
