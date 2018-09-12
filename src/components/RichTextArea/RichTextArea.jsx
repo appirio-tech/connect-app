@@ -303,7 +303,7 @@ class RichTextArea extends React.Component {
         <div className="modal-row">
           {avatarUrl &&
             <div className="portrait">
-              <Avatar avatarUrl={getAvatarResized(avatarUrl, 30)} userName={authorName} />
+              <Avatar size={40} avatarUrl={getAvatarResized(avatarUrl, 30)} userName={authorName} />
             </div>
           }
           <div className={cn('object', {comment: disableTitle}, 'commentEdit')}>
