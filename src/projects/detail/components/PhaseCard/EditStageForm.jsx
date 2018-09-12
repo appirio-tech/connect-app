@@ -15,7 +15,7 @@ const TCFormFields = FormsyForm.Fields
 import { updatePhase as updatePhaseAction, firePhaseDirty, firePhaseDirtyUndo } from '../../../actions/project'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
-import { PHASE_STATUS_COMPLETED, PHASE_STATUS, PHASE_STATUS_ACTIVE } from '../../../../config/constants'
+import { PHASE_STATUS_COMPLETED, PHASE_STATUS, PHASE_STATUS_ACTIVE, PHASE_STATUS_DRAFT } from '../../../../config/constants'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import { TOOLTIP_DEFAULT_DELAY } from '../../../../config/constants'
 import { getPhaseActualData } from '../../../../helpers/projectHelper'
@@ -335,7 +335,7 @@ class EditStageForm extends React.Component {
                   label="Progress (%)"
                   type="number"
                   name="progress"
-                  value={progress}
+                  value={phase.status === PHASE_STATUS_DRAFT ? 0 : progress}
                   minValue={0}
                   readonly={hasTimeline}
                   readonlyValueTooltip="Phase progress is controlled by progress of individual milestones"
