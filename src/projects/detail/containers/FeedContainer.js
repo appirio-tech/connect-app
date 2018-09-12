@@ -66,6 +66,7 @@ class FeedView extends React.Component {
       newPost: {},
       isNewPostMobileOpen: false,
       fullscreenFeedId: null,
+      shouldNotRender: false
     }
   }
 
@@ -77,48 +78,16 @@ class FeedView extends React.Component {
     this.init(this.props)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.currentUser !== nextProps.currentUser) {
-      return true;
-    }
-    if (this.props.isLoading !== nextProps.isLoading) {
-      return true;
-    }
-    if (this.props.isCreatingFeed !== nextProps.isCreatingFeed) {
-      return true;
-    }
-    if (this.props.error !== nextProps.error) {
-      return true;
-    }
-    if (this.props.allMembers !== nextProps.allMembers) {
-      return true;
-    }
-    if (this.props.notifications !== nextProps.notifications) {
-      return true;
-    }
-    if (this.props.currentMemberRole !== nextProps.currentMemberRole) {
-      return true
-    }
-    if (this.props.project !== nextProps.project) {
-      return true
-    }
-    if (this.state.feeds.length !== nextState.feeds.length) {
-      return true;
-    }
-    if (this.state.showAll !== nextState.showAll) {
-      return true;
-    }
-    if (this.state.isNewPostMobileOpen !== nextState.isNewPostMobileOpen) {
-      return true;
-    }
-    if (this.state.fullscreenFeedId !== nextState.fullscreenFeedId) {
-      return true;
-    }
-    return false;
-  }
-
   componentWillReceiveProps(nextProps) {
     this.init(nextProps, this.props)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if(nextState.shouldNotRender) {
+      nextState.shouldNotRender = false
+      return false
+    }
+    return true
   }
 
   componentWillUnmount() {
@@ -264,6 +233,7 @@ class FeedView extends React.Component {
 
   onNewPostChange(title, content) {
     this.setState({
+      shouldNotRender: true,
       newPost: {title, content}
     })
   }
@@ -280,6 +250,7 @@ class FeedView extends React.Component {
 
   onNewCommentChange(feedId, content) {
     this.setState({
+      shouldNotRender: true,
       feeds: this.state.feeds.map((item) => {
         if (item.id === feedId) {
           return {...item, newComment: content}
