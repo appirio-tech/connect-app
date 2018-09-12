@@ -31,7 +31,7 @@ const topics = [
     ]
   }, {
     title: 'Project status changes',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.created',
       'notifications.connect.project.updated',
@@ -44,25 +44,25 @@ const topics = [
     ]
   }, {
     title: 'Project specification changes',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.specificationModified'
     ]
   }, {
     title: 'File uploads',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.fileUploaded'
     ]
   }, {
     title: 'New project links',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.linkCreated'
     ]
   }, {
     title: 'Team changes',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.member.joined',
       'notifications.connect.project.member.left',
@@ -73,14 +73,14 @@ const topics = [
     ]
   }, {
     title: 'Project plan changes',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.planReady',
       'notifications.connect.project.planModified'
     ]
   }, {
     title: 'Project phase updates',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.phase.transition.active',
       'notifications.connect.project.phase.transition.completed',
@@ -90,14 +90,14 @@ const topics = [
     ]
   }, {
     title: 'Project progress upates',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.phase.update.progress',
       'notifications.connect.project.progressModified'
     ]
   }, {
     title: 'Project phase timeline changes',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.phase.timelineModified',
       'notifications.connect.project.phase.milestone.transition.active',
