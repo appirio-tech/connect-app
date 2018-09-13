@@ -252,7 +252,8 @@ class EditStageForm extends React.Component {
     // don't allow to selected completed status if product has timeline
     const activePhaseStatuses = phaseStatuses.map((status) => ({
       ...status,
-      disabled: hasTimeline && status.value === PHASE_STATUS_COMPLETED
+      disabled: hasTimeline && status.value === PHASE_STATUS_COMPLETED,
+      toolTipMessage: (hasTimeline && status.value === PHASE_STATUS_COMPLETED) ? 'Once activated, phase delivery is controlled by the milestones.': null,
     }))
 
     const { progress, duration } = getPhaseActualData(phase, timeline)
