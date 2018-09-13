@@ -285,6 +285,13 @@ class FeedComments extends React.Component {
       const rowKey = `comment-${item.id}`
       rowKeyToIndex[rowKey] = commentRows.length
 
+      // remove user link in comment
+      let itemContentHtml = markdownToHTML(item.content)
+      let href = itemContentHtml.match(/href="([^"]*["$])/)
+      while (href && href[0] && href[1] && href[1].startsWith('/users/')) {
+        itemContentHtml = itemContentHtml.replace(href[0], '')
+        href = itemContentHtml.match(/href="([^"]*["$])/)
+      }
       commentRows.push(
         <Comment
           key={rowKey}
@@ -303,7 +310,7 @@ class FeedComments extends React.Component {
           noInfo={item.noInfo}
           canDelete={idx !== 0}
         >
-          <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
+          <div dangerouslySetInnerHTML={{__html: itemContentHtml}} />
         </Comment>
       )
     })
