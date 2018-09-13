@@ -89,7 +89,7 @@ const topics = [
       'notifications.connect.project.phase.update.scope'
     ]
   }, {
-    title: 'Project progress upates',
+    title: 'Project progress updates',
     enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.phase.update.progress',
