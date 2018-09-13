@@ -15,8 +15,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding-right:18px;
-    min-width: 116px;
+    padding-right: 4 * $base-unit;
+    min-width: 119px;
 
     &.document {
       background-image: url('../../../../../assets/icons/timeline-document.svg');
