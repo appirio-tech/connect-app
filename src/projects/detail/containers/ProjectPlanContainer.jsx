@@ -116,15 +116,12 @@ class ProjectPlanContainer extends React.Component {
 
         <TwoColsLayout.Content>
           {visiblePhases && visiblePhases.length > 0 ? (
-            [
-              <ProjectStages
-                {...{
-                  ...this.props,
-                  phases: visiblePhases
-                }}
-                key="stages"
-              />
-            ]
+            <ProjectStages
+              {...{
+                ...this.props,
+                phases: visiblePhases
+              }}
+            />
           ) : (
             <ProjectPlanEmpty />
           )}
