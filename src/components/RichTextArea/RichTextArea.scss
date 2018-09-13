@@ -28,6 +28,13 @@
       .portrait + .object {
         margin-left: 2 * $base-unit;
       }
+
+      .portrait {
+        .Avatar {
+          width: 40px;
+          height: 40px;
+        }
+      }
     }
 
     /* additionally rewrite style with heavier selector */
