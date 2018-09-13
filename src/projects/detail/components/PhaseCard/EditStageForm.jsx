@@ -389,13 +389,12 @@ class EditStageForm extends React.Component {
 }
 
 EditStageForm.defaultProps = {
-  cancel: () => {},
-  deleteProjectPhase: () => {}
+  cancel: () => {}
 }
 
 EditStageForm.propTypes = {
   cancel: PT.func,
-  deleteProjectPhase: PT.func,
+  deleteProjectPhase: PT.func.isRequired,
   phase: PT.object,
   phaseIndex: PT.number
 }
