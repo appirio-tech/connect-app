@@ -106,7 +106,7 @@
       text-align: left;
       display: inline-block;
       min-width: 88px;
-      padding-right: 28px;
+      padding-right: 6 * $base-unit;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
