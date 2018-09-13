@@ -15,7 +15,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    margin-right:10px;
+    padding-right: 4 * $base-unit;
+    min-width: 119px;
 
     &.document {
       background-image: url('../../../../../assets/icons/timeline-document.svg');
@@ -26,31 +27,32 @@
     &.zip {
       background-image: url('../../../../../assets/icons/timeline-zip.svg');
       margin-left: -36px;
-      padding-left: 36px;
+      padding-left: 40px;
     }
 
     &.marvelapp {
       background-image: url('../../../../../assets/icons/timeline-marvelapp.svg');
       margin-left: -36px;
-      padding-left: 36px;
+      padding-left: 40px;
+      margin-right: 10px; 
     }
 
     &.invoice {
       background-image: url('../../../../../assets/icons/timeline-invoice.svg');
       margin-left: -36px;
-      padding-left: 36px;
+      padding-left: 40px;
     }
 
     &.github {
       background-image: url('../../../../../assets/icons/timeline-github.svg');
       margin-left: -36px;
-      padding-left: 36px;
+      padding-left: 40px;
     }
 
     &.heroku {
       background-image: url('../../../../../assets/icons/timeline-heroku.svg');
       margin-left: -36px;
-      padding-left: 36px;
+      padding-left: 40px;
     }
   }
 
@@ -118,8 +120,8 @@
     justify-content: space-between;
     line-height: inherit;
     overflow: hidden;
-    padding-left: 3 * $base-unit;
-    padding-right: 3 * $base-unit;
+    padding-left: 2 * $base-unit;
+    padding-right: 2 * $base-unit;
     position: relative;
     flex-wrap:wrap;
   }
