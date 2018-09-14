@@ -205,6 +205,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
 
     this.setState({
       places: newPlaces,
+      selectedLinks: []
     }, () => {
       // hide warning if don't need anymore
       if (isSelectWarningVisible && this.isCanBeCompleted()) {

@@ -285,6 +285,14 @@ class FeedComments extends React.Component {
       const rowKey = `comment-${item.id}`
       rowKeyToIndex[rowKey] = commentRows.length
 
+      // remove user link in comment
+      let itemContent = item.content
+      let mardowLink = itemContent.match(/(?:__|[*#])|\[(.*?)\]\(.*?\)/)
+      while (mardowLink && mardowLink[0] && _.includes(mardowLink[0], '/users/')) {
+        itemContent = itemContent.replace(mardowLink[0], mardowLink[1])
+        mardowLink = itemContent.match(/(?:__|[*#])|\[(.*?)\]\(.*?\)/)
+      }
+      
       commentRows.push(
         <Comment
           key={rowKey}
@@ -303,7 +311,7 @@ class FeedComments extends React.Component {
           noInfo={item.noInfo}
           canDelete={idx !== 0}
         >
-          <div dangerouslySetInnerHTML={{__html: markdownToHTML(item.content)}} />
+          <div dangerouslySetInnerHTML={{__html: markdownToHTML(itemContent)}} />
         </Comment>
       )
     })
