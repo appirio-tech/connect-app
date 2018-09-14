@@ -18,7 +18,7 @@
 
     .modal-row {
       display: flex;
-      padding: 0 2 * $base-unit;
+      padding: 0 4 * $base-unit;
 
       .object {
         flex-grow: 1;
@@ -27,6 +27,13 @@
 
       .portrait + .object {
         margin-left: 2 * $base-unit;
+      }
+
+      .portrait {
+        .Avatar {
+          width: 40px;
+          height: 40px;
+        }
       }
     }
 
