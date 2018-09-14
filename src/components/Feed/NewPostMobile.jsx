@@ -13,7 +13,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import MobilePage from '../MobilePage/MobilePage'
 
-import XMartIcon from '../../assets/icons/x-mark-white.svg'
+import XMartIcon from '../../assets/icons/x-mark.svg'
 import './NewPostMobile.scss'
 
 export const NEW_POST_STEP = {
