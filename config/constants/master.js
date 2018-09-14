@@ -38,7 +38,7 @@ module.exports = {
   FILE_PICKER_SUBMISSION_CONTAINER_NAME: 'submission-staging-prod',
 
   SALESFORCE_PROJECT_LEAD_LINK: 'https://topcoder.my.salesforce.com/apex/ConnectLead?connectProjectId=',
-  CONNECT_SEGMENT_KEY: 'ajP6cQ5SN2EMUWoWTOLROVnAHsOlsDCn',
+  CONNECT_SEGMENT_KEY: process.env.PROD_SEGMENT_KEY,
   PREDIX_PROGRAM_ID         : 3448,
   IBM_COGNITIVE_PROGRAM_ID  : 3449,
   HEAP_ANALYTICS_APP_ID     : '638908330',
