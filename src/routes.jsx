@@ -44,11 +44,11 @@ const onRouteChange = (pathname) => {
     } else if (/^\/$/.test(pathname)) {
       window.analytics.page('Connect Home')
     } else if (/^\/new-project\/$/.test(pathname)) {
-      window.analytics.page('New Project : Select Product')
+      window.analytics.page('New Project : Select Project Category')
     } else if (/^\/new-project\/incomplete$/.test(pathname)) {
       window.analytics.page('New Project : Incomplete Project')
-    } else if (/^\/new-project\/[a-zA-Z0-9_]+$/.test(pathname)) {
-      window.analytics.page('New Project : Project Details')
+    } else if (/^\/new-project\/[a-zA-Z0-9_-]+$/.test(pathname)) {
+      window.analytics.page('New Project : Project Template/Details')
     }
   }
 }
