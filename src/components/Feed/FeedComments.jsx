@@ -289,7 +289,7 @@ class FeedComments extends React.Component {
       let itemContent = item.content
       let mardowLink = itemContent.match(/(?:__|[*#])|\[(.*?)\]\(.*?\)/)
       while (mardowLink && mardowLink[0] && _.includes(mardowLink[0], '/users/')) {
-        itemContent = itemContent.replace(mardowLink[0], mardowLink[1])
+        itemContent = itemContent.replace(mardowLink[0], `**${mardowLink[1]}**`)
         mardowLink = itemContent.match(/(?:__|[*#])|\[(.*?)\]\(.*?\)/)
       }
       

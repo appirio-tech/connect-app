@@ -35,6 +35,16 @@
   min-width: 0;
 }
 
+.text {
+  div {
+    p {
+      a {
+        color:$tc-dark-blue-110;
+      }
+    }
+  }
+}
+
 .header {
   display: flex;
   justify-content: space-between;
