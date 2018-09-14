@@ -201,9 +201,46 @@ class MilestoneTypeDelivery extends React.Component {
     } else {
       links = _.get(milestone, 'details.content.links', [])
     }
+
+    const shouldhaveSecondDot = 
+    isActive && 
+    (!isAccepted &&
+      !isDeclined &&
+      !isShowFinalFixesRequestForm &&
+      (currentUser.isCopilot || currentUser.isManager) &&
+      !currentUser.isAdmin &&
+      !isFinalFixesSubmitted)
+
+    const shouldHaveThirdDot = 
+      isActive &&
+      (!isAccepted &&
+        !isDeclined &&
+        !isShowFinalFixesRequestForm &&
+        (currentUser.isCustomer || currentUser.isAdmin) &&
+        !isFinalFixesSubmitted)
+
+    const shouldHaveFourthDot = 
+      isActive &&
+      (isShowFinalFixesRequestForm &&
+        !isFinalFixesSubmitted)
+
+    const shouldHaveFifthDot = 
+      isActive &&
+      (isAccepted &&
+        !currentUser.isCustomer)
+
+    const shouldHaveSixthDot = isCompleted
+
+    const shouldShowFirstLineDot = 
+    shouldhaveSecondDot ||
+    shouldHaveThirdDot ||
+    shouldHaveFourthDot ||
+    shouldHaveFifthDot ||
+    shouldHaveSixthDot
+
     return (
       <div styleName={cn('milestone-post', theme)}>
-        <DotIndicator hideDot>
+        <DotIndicator hideFirstLine={!shouldShowFirstLineDot} hideDot>
           <MilestoneDescription description={getMilestoneStatusText(milestone)} />
         </DotIndicator>
 
@@ -329,9 +366,11 @@ class MilestoneTypeDelivery extends React.Component {
           Completed status
          */}
         {isCompleted && (
-          <div>
-            <LinkList links={links} />
-          </div>
+          <DotIndicator>
+            <div>
+              <LinkList links={links} />
+            </div>
+          </DotIndicator>
         )}
       </div>
     )
