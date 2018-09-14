@@ -366,11 +366,9 @@ class MilestoneTypeDelivery extends React.Component {
           Completed status
          */}
         {isCompleted && (
-          <DotIndicator>
-            <div>
-              <LinkList links={links} />
-            </div>
-          </DotIndicator>
+          <div>
+            <LinkList links={links} />
+          </div>
         )}
       </div>
     )
