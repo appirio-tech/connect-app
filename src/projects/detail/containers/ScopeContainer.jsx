@@ -5,6 +5,7 @@
  */
 import React from 'react'
 import { connect } from 'react-redux'
+import { getProjectTemplateById } from '../../../helpers/templates'
 
 import ScopeAndSpecificationContainer from './ScopeAndSpecificationContainer'
 
@@ -21,8 +22,10 @@ const ScopeContainer = (props) => {
   )
 }
 
-const mapStateToProps = ({ projectState }) => ({
-  projectTemplate: projectState.projectTemplate,
+const mapStateToProps = ({ projectState : { project }, templates: { projectTemplates } }) => ({
+  projectTemplate: project && project.templateId && projectTemplates ? (
+    getProjectTemplateById(projectTemplates, project.templateId)
+  ) : null
 })
 
 const mapDispatchToProps = {}
