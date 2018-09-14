@@ -37,7 +37,7 @@ module.exports = {
   FILE_PICKER_SUBMISSION_CONTAINER_NAME: 'submission-staging-qa',
 
   SALESFORCE_PROJECT_LEAD_LINK: 'https://c.cs18.visual.force.com/apex/ConnectLead?connectProjectId=',
-  CONNECT_SEGMENT_KEY: '',
+  CONNECT_SEGMENT_KEY: process.env.QA_SEGMENT_KEY,
   PREDIX_PROGRAM_ID         : 3448,
   IBM_COGNITIVE_PROGRAM_ID  : 3449,
   HEAP_ANALYTICS_APP_ID     : '4153837120',
