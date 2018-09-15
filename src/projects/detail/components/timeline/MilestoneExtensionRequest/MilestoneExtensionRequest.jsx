@@ -41,15 +41,25 @@ export const withMilestoneExtensionRequest = (Component) => {
     }
   
     requestExtension(value) {
-      const { updateMilestoneContent } = this.props
+      const { updateMilestoneContent, currentUser } = this.props
   
       const extensionDuration = parseInt(value, 10)
-  
-      updateMilestoneContent({
-        extensionRequest: {
-          duration: extensionDuration,
-        }
-      })
+
+      if( !currentUser.isCustomer) {
+        updateMilestoneContent({
+          extensionRequest: {
+            duration: extensionDuration,
+          }
+        }, {
+          waitingForCustomer: true,
+        })
+      } else {
+        updateMilestoneContent({
+          extensionRequest: {
+            duration: extensionDuration,
+          }
+        })
+      }
     }
   
     declineExtension() {
@@ -130,6 +140,7 @@ export const withMilestoneExtensionRequest = (Component) => {
   }
 
   MilestoneExtensionRequest.propTypes = {
+    currentUser: PT.object.isRequired,
     extendMilestone: PT.func.isRequired,
     milestone: PT.object.isRequired,
     updateMilestoneContent: PT.func.isRequired,

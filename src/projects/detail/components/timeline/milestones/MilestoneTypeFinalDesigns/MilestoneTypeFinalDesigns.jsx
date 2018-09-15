@@ -135,6 +135,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
 
   updatedUrl(values, linkIndex) {
     const { milestone, updateMilestoneContent } = this.props
+    const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
 
     const links = [..._.get(milestone, 'details.content.links', [])]
 
@@ -148,7 +149,9 @@ class MilestoneTypeFinalDesigns extends React.Component {
 
     updateMilestoneContent({
       links
-    })
+    }, (isActive ? {
+        waitingForCustomer: true,
+      } : {}))
   }
 
   removeUrl(linkIndex) {
@@ -171,6 +174,8 @@ class MilestoneTypeFinalDesigns extends React.Component {
 
     updateMilestoneContent({
       isInReview: true,
+    }, {
+      waitingForCustomer: true,
     })
   }
 

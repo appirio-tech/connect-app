@@ -95,7 +95,7 @@ class Milestone extends React.Component {
     updateMilestone(milestone.id, values)
   }
 
-  updateMilestoneContent(contentProps) {
+  updateMilestoneContent(contentProps, metaDataProps) {
     const { updateMilestone, milestone } = this.props
 
     const updatedMilestone = {
@@ -105,6 +105,10 @@ class Milestone extends React.Component {
           ..._.get(milestone, 'details.content', {}),
           ...contentProps,
         },
+        metadata: {
+          ..._.get(milestone, 'details.metadata', {}),
+          ...metaDataProps
+        }
       }
     }
 
@@ -114,12 +118,28 @@ class Milestone extends React.Component {
   completeMilestone(updatedProps) {
     const { completeMilestone, milestone } = this.props
 
-    completeMilestone(milestone.id, updatedProps)
+    const updatedMilestone = {
+      ...updatedProps,
+      details: {
+        metadata: {
+          waitingForCustomer: false
+        }
+      }
+    }
+    completeMilestone(milestone.id, updatedMilestone)
   }
   completeFinalFixesMilestone(updatedProps) {
     const { completeFinalFixesMilestone, milestone } = this.props
 
-    completeFinalFixesMilestone(milestone.id, updatedProps)
+    const updatedMilestone = {
+      ...updatedProps,
+      details: {
+        metadata: {
+          waitingForCustomer: false
+        }
+      }
+    }
+    completeFinalFixesMilestone(milestone.id, updatedMilestone)
   }
 
   extendMilestone(extendDuration, updatedProps) {
