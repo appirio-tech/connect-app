@@ -171,7 +171,9 @@ class MilestoneTypeFinalDesigns extends React.Component {
 
     updateMilestoneContent({
       isInReview: true,
-    })
+    }, {
+        waitingForCustomer: true,
+      })
   }
 
   onBonusChange(linkIndex, isSelected) {
@@ -272,7 +274,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
          */}
         {isActive && (
           <div>
-            {!isInReview &&  (
+            {!isInReview && (
               <div>
                 <DotIndicator>
                   <div styleName="top-space">
@@ -384,22 +386,22 @@ class MilestoneTypeFinalDesigns extends React.Component {
                   !isShowCompleteConfirmMessage &&
                   !isShowCustomerCompleteConfirmMessage &&
                   (!currentUser.isCustomer || isInReview) &&
-                (
-                  <DotIndicator hideLine>
-                    <div styleName="action-bar" className="flex center">
-                      {(!currentUser.isCustomer || isInReview) && (
-                        <button
-                          className={'tc-btn tc-btn-primary'}
-                          onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.showCustomerCompleteReviewConfirmation}
-                          disabled={!isInReview}
-                        >
-                          Complete review ({hoursLeft}h)
+                  (
+                    <DotIndicator hideLine>
+                      <div styleName="action-bar" className="flex center">
+                        {(!currentUser.isCustomer || isInReview) && (
+                          <button
+                            className={'tc-btn tc-btn-primary'}
+                            onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.showCustomerCompleteReviewConfirmation}
+                            disabled={!isInReview}
+                          >
+                            Complete review ({hoursLeft}h)
                         </button>
-                      )}
-                      {!currentUser.isCustomer && extensionRequestButton}
-                    </div>
-                  </DotIndicator>
-                )}
+                        )}
+                        {!currentUser.isCustomer && extensionRequestButton}
+                      </div>
+                    </DotIndicator>
+                  )}
 
                 {isShowCompleteConfirmMessage && (
                   <DotIndicator hideLine>
