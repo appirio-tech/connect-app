@@ -287,12 +287,12 @@ class FeedComments extends React.Component {
 
       // remove user link in comment
       let itemContent = item.content
-      let mardowLink = itemContent.match(/(?:__|[*#])|\[(.*?)\]\(.*?\)/)
+      let mardowLink = itemContent.match(/\[(.*?)\]\(.*?\)/)
       while (mardowLink && mardowLink[0] && _.includes(mardowLink[0], '/users/')) {
         itemContent = itemContent.replace(mardowLink[0], `**${mardowLink[1]}**`)
-        mardowLink = itemContent.match(/(?:__|[*#])|\[(.*?)\]\(.*?\)/)
+        mardowLink = itemContent.match(/\[(.*?)\]\(.*?\)/)
       }
-      
+
       commentRows.push(
         <Comment
           key={rowKey}
