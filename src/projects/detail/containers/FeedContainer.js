@@ -49,7 +49,6 @@ class FeedView extends React.Component {
     this.onNewCommentChange = this.onNewCommentChange.bind(this)
     this.onShowAllComments = this.onShowAllComments.bind(this)
     this.onAddNewComment = this.onAddNewComment.bind(this)
-    this.onLeave = this.onLeave.bind(this)
     this.isChanged = this.isChanged.bind(this)
     this.onNewPostChange = this.onNewPostChange.bind(this)
     this.onEditMessage = this.onEditMessage.bind(this)
@@ -69,27 +68,12 @@ class FeedView extends React.Component {
     }
   }
 
-  componentDidMount() {
-    window.addEventListener('beforeunload', this.onLeave)
-  }
-
   componentWillMount() {
     this.init(this.props)
   }
 
   componentWillReceiveProps(nextProps) {
     this.init(nextProps, this.props)
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.onLeave)
-  }
-
-  // Notify user if they navigate away while the form is modified.
-  onLeave(e = {}) {
-    if (this.isChanged()) {
-      return e.returnValue = 'You haven\'t posted your message. If you leave this page, your message will not be saved. Are you sure you want to leave?'
-    }
   }
 
   toggleNewPostMobile() {
@@ -328,21 +312,24 @@ class FeedView extends React.Component {
     if (!comment.rawContent) {
       this.props.getFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, comment.id)
     }
-    this.onTopicChange(feedId, comment.id, null, null, true)
+    // this.onTopicChange(feedId, comment.id, null, null, true)
   }
 
   onTopicChange(feedId, messageId, title, content, editTopicMode) {
-    this.setState({
-      feeds: this.state.feeds.map((item) => {
-        if (item.id === feedId) {
-          item.newTitle = title
-          item.editTopicMode = editTopicMode
-          item.topicMessage = {...item.topicMessage, newContent: content}
-          return {...item}
-        }
-        return item
-      })
-    })
+    const isChanged = !_.find(this.state.feeds, { id: feedId, title: title });
+
+    this.props.onFeedChanged(isChanged);
+    // this.setState({
+    //   feeds: this.state.feeds.map((item) => {
+    //     if (item.id === feedId) {
+    //       item.newTitle = title
+    //       item.editTopicMode = editTopicMode
+    //       item.topicMessage = {...item.topicMessage, newContent: content}
+    //       return {...item}
+    //     }
+    //     return item
+    //   })
+    // })
   }
 
   onSaveTopic(feedId, postId, title, content) {
@@ -370,7 +357,6 @@ class FeedView extends React.Component {
       toggleNotificationRead, notifications, project, isSuperUser } = this.props
     const { feeds, isNewPostMobileOpen, fullscreenFeedId } = this.state
     const isChanged = this.isChanged()
-    const onLeaveMessage = this.onLeave() || ''
     const fullscreenFeed = fullscreenFeedId && _.find(feeds, { id: fullscreenFeedId })
 
     return (
@@ -417,12 +403,6 @@ class FeedView extends React.Component {
           refreshFeeds={this.onRefreshFeeds}
           notifications={notifications}
           projectId={project.id}
-        />
-
-
-        <Prompt
-          when={!!onLeaveMessage}
-          message={onLeaveMessage}
         />
 
         <Section>
@@ -503,14 +483,58 @@ const EnhancedFeedView = enhance(FeedView)
 class FeedContainer extends React.Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      isChanged: false
+    }
+
+    this.onLeave = this.onLeave.bind(this)
+    this.onFeedChanged = this.onFeedChanged.bind(this)
+  }
+
+  componentDidMount() {
+    window.addEventListener('beforeunload', this.onLeave)
   }
 
   componentWillMount() {
     this.props.loadDashboardFeeds(this.props.project.id)
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.onLeave)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.isChanged || (this.state.isChanged !== nextState.isChanged)) {
+      return false
+    }
+    return true
+  }
+
+  // Notify user if they navigate away while the form is modified.
+  onLeave(e = {}) {
+    if (this.state.isChanged) {
+      return e.returnValue = 'You haven\'t posted your message. If you leave this page, your message will not be saved. Are you sure you want to leave?'
+    }
+  }
+
+  onFeedChanged(value) {
+    this.setState({
+      isChanged: value
+    })
+  }
+
   render() {
-    return <EnhancedFeedView {...this.props} />
+    return (
+      <div>
+        <EnhancedFeedView {...this.props} onFeedChanged={this.onFeedChanged} />
+
+        <Prompt
+          when={!!this.onLeave}
+          message={this.onLeave}
+        />
+      </div>
+    )
   }
 }
 
