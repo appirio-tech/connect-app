@@ -10,7 +10,6 @@ import { getProjectById, createProject as createProjectAPI,
   updateProduct as updateProductAPI,
   updatePhase as updatePhaseAPI,
   createProjectPhase,
-  createPhaseProduct,
 } from '../../api/projects'
 import {
   createTimeline,
@@ -258,7 +257,8 @@ export function createProduct(project, productTemplate, phases, timelines) {
 export function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT_STATUS_DRAFT, startDate, endDate) {
   const param = {
     status,
-    name: projectTemplate.name
+    name: projectTemplate.name,
+    productTemplateId: projectTemplate.id
   }
   if (startDate) {
     param['startDate'] = startDate.format('YYYY-MM-DD')
@@ -268,19 +268,13 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
   }
 
   return createProjectPhase(project.id, param).then((phase) => {
-    return createPhaseProduct(project.id, phase.id, {
-      name: projectTemplate.name,
-      templateId: projectTemplate.id,
-      type: projectTemplate.key || projectTemplate.productKey,
-    }).then((product) => {
-      // we also wait until timeline is created as we will load it for the phase after creation
-      return createTimelineAndMilestoneForProduct(product, phase).then((timeline) => ({
-        project,
-        phase,
-        product,
-        timeline,
-      }))
-    })
+    // we also wait until timeline is created as we will load it for the phase after creation
+    return createTimelineAndMilestoneForProduct(phase.products[0], phase).then((timeline) => ({
+      project,
+      phase,
+      product:phase.products[0],
+      timeline,
+    }))
   })
 }
 
