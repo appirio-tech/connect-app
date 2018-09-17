@@ -10,7 +10,6 @@ import { getProjectById, createProject as createProjectAPI,
   updateProduct as updateProductAPI,
   updatePhase as updatePhaseAPI,
   createProjectPhase,
-  createPhaseProduct,
 } from '../../api/projects'
 import {
   createTimeline,
@@ -269,13 +268,13 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
   }
 
   return createProjectPhase(project.id, param).then((phase) => {
-      // we also wait until timeline is created as we will load it for the phase after creation
-      return createTimelineAndMilestoneForProduct(phase.products[0], phase).then((timeline) => ({
-        project,
-        phase,
-        product:phase.products[0],
-        timeline,
-      }))
+    // we also wait until timeline is created as we will load it for the phase after creation
+    return createTimelineAndMilestoneForProduct(phase.products[0], phase).then((timeline) => ({
+      project,
+      phase,
+      product:phase.products[0],
+      timeline,
+    }))
   })
 }
 
