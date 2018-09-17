@@ -122,15 +122,14 @@ class MilestoneTypeDelivery extends React.Component {
   }
 
   acceptDesign() {
-    const { milestone, updateMilestoneContent } = this.props
-    const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
+    const { updateMilestoneContent } = this.props
 
     updateMilestoneContent({
       isAccepted: true,
       isDeclined: false
-    }, (isActive ? {
-        waitingForCustomer: true,
-      } : {}))
+    }, {
+      waitingForCustomer: false,
+    })
   }
 
   onFinalFixAdd() {
@@ -166,19 +165,16 @@ class MilestoneTypeDelivery extends React.Component {
   }
 
   submitFinalFixesRequest() {
-    const { milestone, updateMilestoneContent, submitFinalFixesRequest } = this.props
+    const { updateMilestoneContent, submitFinalFixesRequest } = this.props
     const { finalFixRequests } = this.state
-    const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
 
     submitFinalFixesRequest(
       // submit only non-empty requests
       finalFixRequests.filter((finalFixRequest) => !!finalFixRequest.value)
     )
-    if (isActive) {
-      updateMilestoneContent({}, {
-        waitingForCustomer: true,
-      })
-    }
+    updateMilestoneContent({}, {
+      waitingForCustomer: false,
+    })
   }
 
   completeMilestone() {

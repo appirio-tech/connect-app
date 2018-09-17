@@ -115,30 +115,30 @@ class Milestone extends React.Component {
     updateMilestone(milestone.id, updatedMilestone)
   }
 
-  completeMilestone(updatedProps) {
+  completeMilestone(updatedProps = {}) {
     const { completeMilestone, milestone } = this.props
 
-    const details = _.get(updatedProps, 'details.metadata', {})
-    _.set(updatedProps, 'details.metadata', {
+    const details = _.get(updatedProps, 'details', {})
+    updatedProps.details = {
       ...details,
       metadata: {
         ..._.get(details, 'metadata', {}),
         waitingForCustomer: false
       }
-    })
+    }
     completeMilestone(milestone.id, updatedProps)
   }
-  completeFinalFixesMilestone(updatedProps) {
+  completeFinalFixesMilestone(updatedProps = {}) {
     const { completeFinalFixesMilestone, milestone } = this.props
 
-    const details = _.get(updatedProps, 'details.metadata', {})
-    _.set(updatedProps, 'details.metadata', {
+    const details = _.get(updatedProps, 'details', {})
+    updatedProps.details = {
       ...details,
       metadata: {
         ..._.get(details, 'metadata', {}),
         waitingForCustomer: false
       }
-    })
+    }
     completeFinalFixesMilestone(milestone.id, updatedProps)
   }
 

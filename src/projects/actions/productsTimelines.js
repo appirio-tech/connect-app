@@ -171,12 +171,22 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
         // we do in sequentially for now
         if (nextMilestone) {
           // NOTE we wait until the next milestone is also updated before fire COMPLETE_PRODUCT_MILESTONE
-          return updateMilestone(timelineId, nextMilestone.id, {
-            details: {
-              ...nextMilestone.details,
-              prevMilestoneContent: completedMilestone.details.content,
-              prevMilestoneType: completedMilestone.type,
+          const details = {
+            ...nextMilestone.details,
+            prevMilestoneContent: completedMilestone.details.content,
+            prevMilestoneType: completedMilestone.type,
+          }
+          if ( ((nextMilestone.type === 'checkpoint-review' || nextMilestone.type === 'final-designs') // case # 2
+            && completedMilestone.type === 'add-links' ) ||
+            ((nextMilestone.type === 'delivery-design' || nextMilestone.type === 'delivery-dev') // case # 4
+              && completedMilestone.type !== 'final-fix' ) ) {
+            details.metadata = {
+              ..._.get(nextMilestone.details, 'metadata', {}),
+              waitingForCustomer: true
             }
+          }
+          return updateMilestone(timelineId, nextMilestone.id, {
+            details
           // always return completedMilestone for COMPLETE_PRODUCT_MILESTONE
           }).then(() => completedMilestone)
         } else {
