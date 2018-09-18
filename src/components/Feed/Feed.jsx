@@ -39,7 +39,7 @@ class Feed extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // this.setState({editTopicMode: nextProps.editTopicMode})
+    this.setState({editTopicMode: nextProps.editTopicMode})
   }
 
   componentDidUpdate(nextProps) {

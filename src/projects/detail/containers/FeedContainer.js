@@ -223,14 +223,9 @@ class FeedView extends React.Component {
   }
 
   onNewCommentChange(feedId, content) {
-    this.setState({
-      feeds: this.state.feeds.map((item) => {
-        if (item.id === feedId) {
-          return {...item, newComment: content}
-        }
-        return item
-      })
-    })
+    const isChanged = content.length ? true : false;
+
+    this.props.onFeedChanged(isChanged);
   }
 
   onShowAllComments(feedId) {
@@ -268,29 +263,23 @@ class FeedView extends React.Component {
       content
     }
     this.props.addFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, newComment)
+
+    this.props.onFeedChanged(false);
   }
 
   onSaveMessageChange(feedId, messageId, content, editMode) {
-    this.setState({
-      feeds: this.state.feeds.map((item) => {
-        if (item.id === feedId) {
-          const messageIndex = _.findIndex(item.comments, message => message.id === messageId)
-          const message = item.comments[messageIndex]
-          message.newContent = content
-          message.editMode = editMode
-          item.comments[messageIndex] = {...message}
-          item.comments = _.map(item.comments, message => message)
-          return {...item}
-        }
-        return item
-      })
-    })
+    const feed = _.find(this.state.feeds, { id: feedId })
+    const isChanged = feed && !_.find(feed.comments, { id: messageId, content: content })
+
+    this.props.onFeedChanged(isChanged);
   }
 
   onSaveMessage(feedId, message, content) {
     const newMessage = {...message}
     newMessage.content = content
     this.props.saveFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, newMessage)
+
+    this.props.onFeedChanged(false);
   }
 
   onDeleteMessage(feedId, postId) {
@@ -312,28 +301,18 @@ class FeedView extends React.Component {
     if (!comment.rawContent) {
       this.props.getFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, comment.id)
     }
-    // this.onTopicChange(feedId, comment.id, null, null, true)
   }
 
   onTopicChange(feedId, messageId, title, content, editTopicMode) {
     const isChanged = !_.find(this.state.feeds, { id: feedId, title: title });
 
     this.props.onFeedChanged(isChanged);
-    // this.setState({
-    //   feeds: this.state.feeds.map((item) => {
-    //     if (item.id === feedId) {
-    //       item.newTitle = title
-    //       item.editTopicMode = editTopicMode
-    //       item.topicMessage = {...item.topicMessage, newContent: content}
-    //       return {...item}
-    //     }
-    //     return item
-    //   })
-    // })
   }
 
   onSaveTopic(feedId, postId, title, content) {
     this.props.saveProjectTopic(feedId, PROJECT_FEED_TYPE_PRIMARY, {postId, title, content})
+
+    this.props.onFeedChanged(false);
   }
 
   onDeleteTopic(feedId) {
@@ -504,10 +483,10 @@ class FeedContainer extends React.Component {
     window.removeEventListener('beforeunload', this.onLeave)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.isChanged || (this.state.isChanged !== nextState.isChanged)) {
+  shouldComponentUpdate(nextProps, nextState) {console.log('should update ' + _.isEqual(this.props.feeds, nextProps.feeds));
+    if (_.isEqual(this.props.feeds, nextProps.feeds)) {
       return false
-    }
+    }console.log(nextProps)
     return true
   }
 
