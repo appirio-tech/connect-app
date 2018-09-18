@@ -170,11 +170,11 @@ class MilestoneTypeDelivery extends React.Component {
 
     submitFinalFixesRequest(
       // submit only non-empty requests
-      finalFixRequests.filter((finalFixRequest) => !!finalFixRequest.value)
+      finalFixRequests.filter((finalFixRequest) => !!finalFixRequest.value),
+      {
+        waitingForCustomer: false,
+      }
     )
-    updateMilestoneContent({}, {
-      waitingForCustomer: false,
-    })
   }
 
   completeMilestone() {

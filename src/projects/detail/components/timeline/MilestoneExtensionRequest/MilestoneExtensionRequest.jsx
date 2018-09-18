@@ -77,15 +77,13 @@ export const withMilestoneExtensionRequest = (Component) => {
       const content = _.get(milestone, 'details.content')
       const extensionRequest = _.get(milestone, 'details.content.extensionRequest')
 
-      const details = milestone.details || {}
-      details.metadata = {
-        ..._.get(details, 'metadata', {}),
-        waitingForCustomer: false
-      }
-
       extendMilestone(extensionRequest.duration, {
         details: {
-          ...details,
+          ...milestone.details,
+          metadata: {
+            ..._.get(milestone, 'details.metadata', {}),
+            waitingForCustomer: false
+          },
           content: {
             ...content,
             extensionRequest: null,
