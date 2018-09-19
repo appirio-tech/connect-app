@@ -171,6 +171,8 @@ class MilestoneTypeFinalDesigns extends React.Component {
 
     updateMilestoneContent({
       isInReview: true,
+    }, {
+      waitingForCustomer: true,
     })
   }
 

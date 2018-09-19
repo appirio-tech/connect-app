@@ -171,12 +171,22 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
         // we do in sequentially for now
         if (nextMilestone) {
           // NOTE we wait until the next milestone is also updated before fire COMPLETE_PRODUCT_MILESTONE
-          return updateMilestone(timelineId, nextMilestone.id, {
-            details: {
-              ...nextMilestone.details,
-              prevMilestoneContent: completedMilestone.details.content,
-              prevMilestoneType: completedMilestone.type,
+          const details = {
+            ...nextMilestone.details,
+            prevMilestoneContent: completedMilestone.details.content,
+            prevMilestoneType: completedMilestone.type,
+          }
+          if ( ((nextMilestone.type === 'checkpoint-review' || nextMilestone.type === 'final-designs') // case # 2
+            && completedMilestone.type === 'add-links' ) ||
+            ((nextMilestone.type === 'delivery-design' || nextMilestone.type === 'delivery-dev') // case # 4
+              && completedMilestone.type !== 'final-fix' ) ) {
+            details.metadata = {
+              ..._.get(nextMilestone.details, 'metadata', {}),
+              waitingForCustomer: true
             }
+          }
+          return updateMilestone(timelineId, nextMilestone.id, {
+            details
           // always return completedMilestone for COMPLETE_PRODUCT_MILESTONE
           }).then(() => completedMilestone)
         } else {
@@ -263,8 +273,9 @@ export function extendProductMilestone(productId, timelineId, milestoneId, exten
  * @param {Number} timelineId       timeline id
  * @param {Number} milestoneId      milestone id
  * @param {Array}  finalFixRequests list of final fixe requests
+ * @param {Object} metaDataProps    (optional) milestone metaData properties to update
  */
-export function submitFinalFixesRequest(productId, timelineId, milestoneId, finalFixRequests) {
+export function submitFinalFixesRequest(productId, timelineId, milestoneId, finalFixRequests, metaDataProps = {}) {
   return (dispatch, getState) => {
     const timeline = getState().productsTimelines[productId]
     const milestoneIdx = _.findIndex(timeline.timeline.milestones, { id: milestoneId })
@@ -285,6 +296,10 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
         status: MILESTONE_STATUS.PLANNED,
         details: {
           ...milestone.details,
+          metadata: {
+            ..._.get(milestone, 'details.metadata', {}),
+            ...metaDataProps
+          },
           content: {
             ..._.get(milestone, 'details.content', {}),
             isFinalFixesSubmitted: true
@@ -297,6 +312,7 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
           hidden: false,
           details: {
             ...finalFixesMilestone.details,
+
             content: {
               ..._.get(finalFixesMilestone, 'details.content', {}),
               finalFixRequests,

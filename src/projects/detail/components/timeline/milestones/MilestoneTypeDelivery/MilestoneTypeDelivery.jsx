@@ -127,6 +127,8 @@ class MilestoneTypeDelivery extends React.Component {
     updateMilestoneContent({
       isAccepted: true,
       isDeclined: false
+    }, {
+      waitingForCustomer: false,
     })
   }
 
@@ -163,12 +165,15 @@ class MilestoneTypeDelivery extends React.Component {
   }
 
   submitFinalFixesRequest() {
-    const { submitFinalFixesRequest } = this.props
+    const { updateMilestoneContent, submitFinalFixesRequest } = this.props
     const { finalFixRequests } = this.state
 
     submitFinalFixesRequest(
       // submit only non-empty requests
-      finalFixRequests.filter((finalFixRequest) => !!finalFixRequest.value)
+      finalFixRequests.filter((finalFixRequest) => !!finalFixRequest.value),
+      {
+        waitingForCustomer: false,
+      }
     )
   }
 
