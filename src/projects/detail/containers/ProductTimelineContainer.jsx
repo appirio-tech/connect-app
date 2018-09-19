@@ -15,7 +15,6 @@ import PT from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 
-import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator'
 import Timeline from '../components/timeline/Timeline'
 
 import {
@@ -33,66 +32,20 @@ import {
   ROLE_ADMINISTRATOR,
 } from '../../../config/constants'
 
-/**
- * Checks if timeline has any milestone which is being updated
- *
- * @param {Object} timeline timeline
- *
- * @returns {Boolean} true if some milestone is being updated
- */
-function getIsSomeMilestoneUpdating(timeline) {
-  return !!timeline && _.some(timeline.milestones, 'isUpdating')
-}
-
 class ProductTimelineContainer extends React.Component {
   constructor(props) {
     super(props)
-
-    // this will remember the current scroll position before timeline started showing loader
-    this.scrollPosition
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { isLoading, timeline } = this.props
-    const isSomeMilestoneUpdating = getIsSomeMilestoneUpdating(timeline)
-    const nextIsSomeMilestoneUpdating = getIsSomeMilestoneUpdating(nextProps.timeline)
-
-    // remember scroll position before showing loader
-    if (
-      !isLoading && nextProps.isLoading ||
-      !isSomeMilestoneUpdating && nextIsSomeMilestoneUpdating
-    ) {
-      this.scrollPosition = window.scrollY
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    const { isLoading, timeline } = this.props
-    const isSomeMilestoneUpdating = getIsSomeMilestoneUpdating(timeline)
-    const prevIsSomeMilestoneUpdating = getIsSomeMilestoneUpdating(prevProps.timeline)
-
-    // restore scroll position after hiding loader
-    if (
-      !!this.scrollPosition &&
-      (
-        !isLoading && prevProps.isLoading ||
-        !isSomeMilestoneUpdating && prevIsSomeMilestoneUpdating
-      )
-    ) {
-      window.scrollTo(0, this.scrollPosition)
-    }
   }
 
   render() {
-    const { isLoading, timeline } = this.props
-    const isSomeMilestoneUpdating = getIsSomeMilestoneUpdating(timeline)
-
     return (
       // show loader for the whole timeline even if updating only one milestone
       // here is why https://github.com/appirio-tech/connect-app/issues/2291#issuecomment-410968047
-      (isLoading || isSomeMilestoneUpdating || !timeline)
-        ? <LoadingIndicator />
-        : <Timeline {...this.props} />
+
+      // https://github.com/appirio-tech/connect-app/issues/2422
+      // Simpy return Timeline component here.
+      // Move out loading indicator to Timeline so the height can be maintained in there.
+      <Timeline {...this.props} />
     )
   }
 }

@@ -25,22 +25,30 @@ const onRouteChange = (pathname) => {
   TCEmitter.emit(EVENT_ROUTE_CHANGE, pathname)
 
   if (window.analytics) {
-    if (/^projects\/$/.test(pathname)) {
+    if (/^\/projects\/$/.test(pathname)) {
       window.analytics.page('Project Listings')
-    } else if (/^projects\/\d+\/?$/.test(pathname)) {
+    } else if (/^\/projects\/\d+\/?$/.test(pathname)) {
       window.analytics.page('Project Dashboard')
-    } else if (/^projects\/\d+\/discussions\/?$/.test(pathname)) {
+    } else if (/^\/projects\/\d+\/discussions\/?$/.test(pathname)) {
       window.analytics.page('Project Discussions')
-    } else if (/^projects\/\d+\/specification\/?$/.test(pathname)) {
+    } else if (/^\/projects\/\d+\/specification\/?$/.test(pathname)) {
       window.analytics.page('Project Specification')
+    } else if (/^\/projects\/\d+\/scope\/?$/.test(pathname)) {
+      window.analytics.page('Project Scope')
+    } else if (/^\/projects\/\d+\/plan\/?$/.test(pathname)) {
+      window.analytics.page('Project Plan')
+    } else if (/^\/settings\/notifications\/?$/.test(pathname)) {
+      window.analytics.page('Notification Settings')
+    } else if (/^\/notifications\/?$/.test(pathname)) {
+      window.analytics.page('Notification Listings')
     } else if (/^\/$/.test(pathname)) {
       window.analytics.page('Connect Home')
-    } else if (/^new-project\/$/.test(pathname)) {
-      window.analytics.page('New Project : Select Product')
-    } else if (/^new-project\/incomplete$/.test(pathname)) {
+    } else if (/^\/new-project\/$/.test(pathname)) {
+      window.analytics.page('New Project : Select Project Category')
+    } else if (/^\/new-project\/incomplete$/.test(pathname)) {
       window.analytics.page('New Project : Incomplete Project')
-    } else if (/^new-project\/[a-zA-Z0-9_]+$/.test(pathname)) {
-      window.analytics.page('New Project : Project Details')
+    } else if (/^\/new-project\/[a-zA-Z0-9_-]+$/.test(pathname)) {
+      window.analytics.page('New Project : Project Template/Details')
     }
   }
 }
