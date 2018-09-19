@@ -31,7 +31,7 @@ const topics = [
     ]
   }, {
     title: 'Project status changes',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.created',
       'notifications.connect.project.updated',
@@ -44,25 +44,25 @@ const topics = [
     ]
   }, {
     title: 'Project specification changes',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.specificationModified'
     ]
   }, {
     title: 'File uploads',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.fileUploaded'
     ]
   }, {
     title: 'New project links',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.linkCreated'
     ]
   }, {
     title: 'Team changes',
-    enabledMethods:['web'],
+    enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.member.joined',
       'notifications.connect.project.member.left',
@@ -70,6 +70,40 @@ const topics = [
       'notifications.connect.project.member.managerJoined',
       'notifications.connect.project.member.copilotJoined',
       'notifications.connect.project.member.assignedAsOwner'
+    ]
+  }, {
+    title: 'Project plan changes',
+    enabledMethods:['web', 'email'],
+    types: [
+      'notifications.connect.project.planReady',
+      'notifications.connect.project.planModified'
+    ]
+  }, {
+    title: 'Project phase updates',
+    enabledMethods:['web', 'email'],
+    types: [
+      'notifications.connect.project.phase.transition.active',
+      'notifications.connect.project.phase.transition.completed',
+      'notifications.connect.project.phase.update.payment',
+      'notifications.connect.project.phase.update.progress',
+      'notifications.connect.project.phase.update.scope'
+    ]
+  }, {
+    title: 'Project progress updates',
+    enabledMethods:['web', 'email'],
+    types: [
+      'notifications.connect.project.phase.update.progress',
+      'notifications.connect.project.progressModified'
+    ]
+  }, {
+    title: 'Project phase timeline changes',
+    enabledMethods:['web', 'email'],
+    types: [
+      'notifications.connect.project.phase.timelineModified',
+      'notifications.connect.project.phase.milestone.transition.active',
+      'notifications.connect.project.phase.milestone.transition.completed',
+      // should we include wait.customer to be controlled via settings?
+      'notifications.connect.project.phase.milestone.waiting.customer'
     ]
   }
 ]
@@ -90,6 +124,9 @@ const initSettings = (notInitedSettings) => {
   const settings = {...notInitedSettings}
   const notifications = {...settings.notifications}
   const allTypes = _.flatten(_.map(topics, 'types'))
+  const messagingNotifications = topics[0]
+  // notification types for messaging events
+  const messagingTypes = messagingNotifications.types
 
   allTypes.forEach((type) => {
     if (!notifications[type]) {
@@ -98,7 +135,7 @@ const initSettings = (notInitedSettings) => {
 
     // check each of serviceId method separately as some can have
     // values and some don't have
-    ['web', 'email'].forEach((serviceId) => {
+    ['web', 'email', 'emailBundling'].forEach((serviceId) => {
       if (!notifications[type][serviceId]) {
         notifications[type][serviceId] = {}
       }
@@ -106,6 +143,11 @@ const initSettings = (notInitedSettings) => {
         notifications[type][serviceId].enabled = 'yes'
       }
     })
+
+    // for all messaging events, defaults emailBundling to off
+    if (_.includes(messagingTypes, type)) {
+      notifications[type]['emailBundling'].enabled = 'no'
+    }
   })
 
   settings.notifications = notifications
@@ -183,6 +225,9 @@ class NotificationSettingsForm extends React.Component {
               <th><span className="th-with-icon">
                 <IconSettingsEmail />
                 <span>Email</span></span></th>
+              <th><span className="th-with-icon">
+                <IconSettingsEmail />
+                <span>Email Bundling</span></span></th>
             </tr>
           </thead>
           <tbody>
@@ -192,6 +237,8 @@ class NotificationSettingsForm extends React.Component {
               const topicFirstType = topic.types[0]
               const emailStatus = topic.enabledMethods.indexOf('email') < 0 ? 'disabled' : null
               const emailTooltip = topic.enabledMethods.indexOf('email') < 0 ? 'Emails are not yet supported for this event type' : null
+              const emailEnabled = notifications[topicFirstType].email.enabled === 'yes'
+              const emailBundlingEnabled = notifications[topicFirstType].emailBundling.enabled === 'yes'
               return (
                 <tr key={index}>
                   <th>{topic.title}</th>
@@ -200,7 +247,7 @@ class NotificationSettingsForm extends React.Component {
                     { !!emailTooltip &&
                       <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
                         <div className="tooltip-target">
-                          <SwitchButton onChange={() => this.handleChange(index, 'email')} defaultChecked={notifications[topicFirstType].email.enabled === 'yes' && emailStatus===null} disabled={emailStatus}/>
+                          <SwitchButton onChange={() => this.handleChange(index, 'email')} defaultChecked={emailEnabled && emailStatus===null} disabled={emailStatus}/>
                         </div>
                         <div className="tooltip-body">
                           {emailTooltip}
@@ -208,20 +255,21 @@ class NotificationSettingsForm extends React.Component {
                       </Tooltip>
                     }
                     {
-                      !emailTooltip && <SwitchButton onChange={() => this.handleChange(index, 'email')} defaultChecked={notifications[topicFirstType].email.enabled === 'yes' && emailStatus===null} disabled={emailStatus}/>
+                      !emailTooltip && <SwitchButton onChange={() => this.handleChange(index, 'email')} defaultChecked={emailEnabled && emailStatus===null} disabled={emailStatus}/>
                     }
                   </td>
+                  <td><SwitchButton onChange={() => this.handleChange(index, 'emailBundling')} defaultChecked={emailBundlingEnabled} /></td>
                 </tr>
               )
             })}
             <tr>
-              <td colSpan="3">
+              <td colSpan="4">
                 <div className="bundle-emails">
                   <div className="th">Bundle emails (beta):</div>
                   <BtnGroup
                     items={NOTIFICATION_SETTINGS_PERIODS}
                     onChange={this.handleBundleEmailChange}
-                    defaultValue={_.get(this.props.values, 'settings.services.email.bundlePeriod') || 'immediately'}
+                    defaultValue={_.get(this.props.values, 'settings.services.email.bundlePeriod') || 'daily'}
                   />
                 </div>
               </td>

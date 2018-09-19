@@ -559,7 +559,7 @@ export const SCREEN_BREAKPOINT_SM = 640
 export const SCREEN_BREAKPOINT_XS = 320
 
 export const NOTIFICATION_SETTINGS_PERIODS = [
-  { text: 'Send as they happen', value: 'immediately' },
+  // { text: 'Send as they happen', value: 'immediately' },
   { text: 'Every 10m.', value: 'every10minutes' },
   { text: 'Hourly', value: 'hourly' },
   { text: 'Daily', value: 'daily' },
