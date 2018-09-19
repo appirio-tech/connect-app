@@ -74,7 +74,7 @@ class ProjectToolBar extends React.Component {
           </div>}
           <div className="bar-column project-name mobile"><span>{project.name}</span></div>
           <div className="bar-column">
-            <NewProjectNavLink compact returnUrl={window.location.href} />
+            <NewProjectNavLink compact />
             {userMenu}
             {/* pass location, to make sure that component is re-rendered when location is changed
                 it's necessary to hide notification dropdown on mobile when users uses browser history back/forward buttons */}

@@ -21,6 +21,9 @@
   align-items: center;
   display: flex;
   justify-content: flex-end;
+  > svg {
+      fill: #FAFAFB;
+  }
 }
 
 .plug {

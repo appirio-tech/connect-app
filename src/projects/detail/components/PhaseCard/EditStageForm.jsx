@@ -15,10 +15,11 @@ const TCFormFields = FormsyForm.Fields
 import { updatePhase as updatePhaseAction, firePhaseDirty, firePhaseDirtyUndo } from '../../../actions/project'
 import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingIndicator'
 import SelectDropdown from '../../../../components/SelectDropdown/SelectDropdown'
-import { PHASE_STATUS_COMPLETED, PHASE_STATUS, PHASE_STATUS_ACTIVE } from '../../../../config/constants'
+import { PHASE_STATUS_COMPLETED, PHASE_STATUS, PHASE_STATUS_ACTIVE, PHASE_STATUS_DRAFT } from '../../../../config/constants'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import { TOOLTIP_DEFAULT_DELAY } from '../../../../config/constants'
 import { getPhaseActualData } from '../../../../helpers/projectHelper'
+import DeletePhase from './DeletePhase'
 
 const moment = extendMoment(Moment)
 const phaseStatuses = PHASE_STATUS.map(ps => ({
@@ -243,16 +244,17 @@ class EditStageForm extends React.Component {
   }
 
   render() {
-    const { phase, isUpdating, timeline } = this.props
+    const { phase, isUpdating, timeline, deleteProjectPhase } = this.props
     const { isEdittable, showPhaseOverlapWarning, showActivatingWarning, selectedPhaseStatus } = this.state
     let startDate = phase.startDate ? new Date(phase.startDate) : new Date()
     startDate = moment.utc(startDate).format('YYYY-MM-DD')
     const hasTimeline = !!timeline
-
+    const canDelete = phase.status !== PHASE_STATUS_ACTIVE && phase.status !== PHASE_STATUS_COMPLETED
     // don't allow to selected completed status if product has timeline
     const activePhaseStatuses = phaseStatuses.map((status) => ({
       ...status,
-      disabled: hasTimeline && status.value === PHASE_STATUS_COMPLETED
+      disabled: hasTimeline && status.value === PHASE_STATUS_COMPLETED,
+      toolTipMessage: (hasTimeline && status.value === PHASE_STATUS_COMPLETED) ? 'Once activated, phase delivery is controlled by the milestones.': null,
     }))
 
     const { progress, duration } = getPhaseActualData(phase, timeline)
@@ -335,7 +337,7 @@ class EditStageForm extends React.Component {
                   label="Progress (%)"
                   type="number"
                   name="progress"
-                  value={progress}
+                  value={phase.status === PHASE_STATUS_DRAFT ? 0 : progress}
                   minValue={0}
                   readonly={hasTimeline}
                   readonlyValueTooltip="Phase progress is controlled by progress of individual milestones"
@@ -372,6 +374,15 @@ class EditStageForm extends React.Component {
             </div>
           </Formsy.Form>
         </div>)}
+        {canDelete && !showActivatingWarning && !isUpdating && (
+          <DeletePhase
+            onDeleteClick={() => {
+              if (confirm(`Are you sure you want to delete phase '${phase.name}'?`)) {
+                deleteProjectPhase()
+              }
+            }}
+          />
+        )}
       </div>
     )
   }
@@ -383,6 +394,7 @@ EditStageForm.defaultProps = {
 
 EditStageForm.propTypes = {
   cancel: PT.func,
+  deleteProjectPhase: PT.func.isRequired,
   phase: PT.object,
   phaseIndex: PT.number
 }

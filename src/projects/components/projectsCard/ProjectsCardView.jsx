@@ -68,7 +68,7 @@ const ProjectsCardView = props => {
       <div className="projects card-view">
         <div key="end" className="cardview-no-project">No results found based on current search criteria. <br /> Please modify your search criteria and/or search across all projects by selecting the "
           <a href="javascript:" onClick={() => { applyFilters({status: null }) }} className="tc-btn-all-projects" >
-            All Projects
+              All Projects
           </a>
           " filter.
         </div>

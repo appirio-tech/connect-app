@@ -339,35 +339,10 @@ export const UPDATE_PRODUCT_ATTACHMENT_FAILURE = 'UPDATE_PRODUCT_ATTACHMENT_FAIL
 
 // Templates
 
-// load all templates to `templates.projectTemplate` in store
-export const LOAD_PROJECT_TEMPLATES             = 'LOAD_PROJECT_TEMPLATES'
-export const LOAD_PROJECT_TEMPLATES_PENDING     = 'LOAD_PROJECT_TEMPLATES_PENDING'
-export const LOAD_PROJECT_TEMPLATES_SUCCESS     = 'LOAD_PROJECT_TEMPLATES_SUCCESS'
-export const LOAD_PROJECT_TEMPLATES_FAILURE     = 'LOAD_PROJECT_TEMPLATES_FAILURE'
-
-// load project template for particular project to `projectState.projectTemplate` in store
-export const LOAD_PROJECT_TEMPLATE             = 'LOAD_PROJECT_TEMPLATE'
-export const LOAD_PROJECT_TEMPLATE_PENDING     = 'LOAD_PROJECT_TEMPLATE_PENDING'
-export const LOAD_PROJECT_TEMPLATE_SUCCESS     = 'LOAD_PROJECT_TEMPLATE_SUCCESS'
-export const LOAD_PROJECT_TEMPLATE_FAILURE     = 'LOAD_PROJECT_TEMPLATE_FAILURE'
-
-// load product templates for particular project to `projectState.productTemplate` in store
-export const LOAD_PROJECT_PRODUCT_TEMPLATES             = 'LOAD_PROJECT_PRODUCT_TEMPLATES'
-export const LOAD_PROJECT_PRODUCT_TEMPLATES_PENDING     = 'LOAD_PROJECT_PRODUCT_TEMPLATES_PENDING'
-export const LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS     = 'LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS'
-export const LOAD_PROJECT_PRODUCT_TEMPLATES_FAILURE     = 'LOAD_PROJECT_PRODUCT_TEMPLATES_FAILURE'
-
-// load all product templates to `projectState.allProductTemplate` in store
-export const LOAD_ALL_PRODUCT_TEMPLATES             = 'LOAD_ALL_PRODUCT_TEMPLATES'
-export const LOAD_ALL_PRODUCT_TEMPLATES_PENDING     = 'LOAD_ALL_PRODUCT_TEMPLATES_PENDING'
-export const LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS     = 'LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS'
-export const LOAD_ALL_PRODUCT_TEMPLATES_FAILURE     = 'LOAD_ALL_PRODUCT_TEMPLATES_FAILURE'
-
-// load all project types to `template.projectCategories` in store
-export const LOAD_PROJECT_CATEGORIES             = 'LOAD_PROJECT_CATEGORIES'
-export const LOAD_PROJECT_CATEGORIES_PENDING     = 'LOAD_PROJECT_CATEGORIES_PENDING'
-export const LOAD_PROJECT_CATEGORIES_SUCCESS     = 'LOAD_PROJECT_CATEGORIES_SUCCESS'
-export const LOAD_PROJECT_CATEGORIES_FAILURE     = 'LOAD_PROJECT_CATEGORIES_FAILURE'
+export const LOAD_PROJECTS_METADATA = 'LOAD_PROJECTS_METADATA'
+export const LOAD_PROJECTS_METADATA_PENDING = 'LOAD_PROJECTS_METADATA_PENDING'
+export const LOAD_PROJECTS_METADATA_SUCCESS = 'LOAD_PROJECTS_METADATA_SUCCESS'
+export const LOAD_PROJECTS_METADATA_FAILURE = 'LOAD_PROJECTS_METADATA_FAILURE'
 
 export const THREAD_MESSAGES_PAGE_SIZE = 3
 /*
@@ -584,7 +559,7 @@ export const SCREEN_BREAKPOINT_SM = 640
 export const SCREEN_BREAKPOINT_XS = 320
 
 export const NOTIFICATION_SETTINGS_PERIODS = [
-  { text: 'Send as they happen', value: 'immediately' },
+  // { text: 'Send as they happen', value: 'immediately' },
   { text: 'Every 10m.', value: 'every10minutes' },
   { text: 'Hourly', value: 'hourly' },
   { text: 'Daily', value: 'daily' },

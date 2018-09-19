@@ -4,6 +4,9 @@ import cn from 'classnames'
 import PT from 'prop-types'
 import { HOC as hoc } from 'formsy-react'
 import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
+import { TOOLTIP_DEFAULT_DELAY } from '../../../config/constants'
+
 import Modal from 'react-modal'
 
 import './SelectDropdown.scss'
@@ -98,7 +101,7 @@ class SelectDropdown extends Component {
         // stop propagation to prevent dropdown from closing when clicking disabled item
         evt.stopPropagation()
       }
-      return (
+      const selectItem = (
         <li
           key={ optIdx }
           className="dropdown-menu-list-item"
@@ -108,6 +111,16 @@ class SelectDropdown extends Component {
           <a href="javascript:;">{ option.title }</a>
         </li>
       )
+      return option.toolTipMessage ? (
+        <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+          <div className="tooltip-target">
+            {selectItem}
+          </div>
+          <div className="tooltip-body">
+            {option.toolTipMessage}
+          </div>
+        </Tooltip>
+      ) : selectItem
     }
     return (
       <div styleName="container">

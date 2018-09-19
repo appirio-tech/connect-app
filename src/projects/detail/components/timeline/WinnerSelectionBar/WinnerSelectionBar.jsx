@@ -22,12 +22,6 @@ class WinnerSelectionBar extends React.Component {
     const { onPlaceChange, index } = this.props
 
     onPlaceChange(index, place, isChecked)
-
-    const { onBonusChange, isSelectedBonus } =  this.props
-    // if we select place and bonus was previously selected, then unselect bonus
-    if (isChecked && isSelectedBonus) {
-      onBonusChange(index, false)
-    }
   }
 
   onBonusChange(evt) {

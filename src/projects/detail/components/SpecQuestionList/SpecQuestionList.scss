@@ -168,7 +168,7 @@
 
         .SliderRadioGroup {
           height: auto;
-          margin: 10px auto;
+          margin: 10px auto 28px auto;
           padding-bottom: 20px;
 
           .rc-slider-rail {
@@ -185,7 +185,7 @@
 
           /* use important to override inline styles which comes from rc-slider */
           .rc-slider-dot {
-            bottom: 8px;
+            bottom: -10px;
             left: auto !important;
             position: relative;
             z-index: 1;
