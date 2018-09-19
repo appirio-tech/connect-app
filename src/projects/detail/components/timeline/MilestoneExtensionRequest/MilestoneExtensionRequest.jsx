@@ -1,6 +1,6 @@
 /**
  * MilestoneExtensionRequest HOC
- * 
+ *
  * Provides the next props for component:
  * - extensionRequestDialog - dialog to requests extension
  * - extensionRequestButton - button to open request extension dialog
@@ -35,43 +35,35 @@ export const withMilestoneExtensionRequest = (Component) => {
         isSelectWarningVisible: false,
       })
     }
-  
+
     hideExtensionRequestMessage() {
       this.setState({ isShowExtensionRequestMessage: false })
     }
-  
+
     requestExtension(value) {
-      const { updateMilestoneContent, currentUser } = this.props
-  
+      const { updateMilestoneContent } = this.props
+
       const extensionDuration = parseInt(value, 10)
 
-      if( !currentUser.isCustomer) {
-        updateMilestoneContent({
-          extensionRequest: {
-            duration: extensionDuration,
-          }
-        }, {
-          waitingForCustomer: true,
-        })
-      } else {
-        updateMilestoneContent({
-          extensionRequest: {
-            duration: extensionDuration,
-          }
-        })
-      }
+      updateMilestoneContent({
+        extensionRequest: {
+          duration: extensionDuration,
+        }
+      }, {
+        waitingForCustomer: true,
+      })
     }
-  
+
     declineExtension() {
       const { updateMilestoneContent } = this.props
-  
+
       updateMilestoneContent({
         extensionRequest: null,
       }, {
         waitingForCustomer: false,
       })
     }
-  
+
     approveExtension() {
       const { extendMilestone, milestone } = this.props
       const content = _.get(milestone, 'details.content')
@@ -133,20 +125,19 @@ export const withMilestoneExtensionRequest = (Component) => {
       ) : null
 
       return (
-        <Component 
+        <Component
           {...{
             ...this.props,
             extensionRequestDialog,
             extensionRequestButton,
             extensionRequestConfirmation,
-          }} 
+          }}
         />
       )
     }
   }
 
   MilestoneExtensionRequest.propTypes = {
-    currentUser: PT.object.isRequired,
     extendMilestone: PT.func.isRequired,
     milestone: PT.object.isRequired,
     updateMilestoneContent: PT.func.isRequired,
