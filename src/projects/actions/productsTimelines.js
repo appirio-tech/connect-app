@@ -273,9 +273,8 @@ export function extendProductMilestone(productId, timelineId, milestoneId, exten
  * @param {Number} timelineId       timeline id
  * @param {Number} milestoneId      milestone id
  * @param {Array}  finalFixRequests list of final fixe requests
- * @param {Object} metaDataProps    (optional) milestone metaData properties to update
  */
-export function submitFinalFixesRequest(productId, timelineId, milestoneId, finalFixRequests, metaDataProps = {}) {
+export function submitFinalFixesRequest(productId, timelineId, milestoneId, finalFixRequests) {
   return (dispatch, getState) => {
     const timeline = getState().productsTimelines[productId]
     const milestoneIdx = _.findIndex(timeline.timeline.milestones, { id: milestoneId })
@@ -298,7 +297,7 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
           ...milestone.details,
           metadata: {
             ..._.get(milestone, 'details.metadata', {}),
-            ...metaDataProps
+            waitingForCustomer: false,
           },
           content: {
             ..._.get(milestone, 'details.content', {}),

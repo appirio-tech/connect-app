@@ -165,15 +165,12 @@ class MilestoneTypeDelivery extends React.Component {
   }
 
   submitFinalFixesRequest() {
-    const { updateMilestoneContent, submitFinalFixesRequest } = this.props
+    const { submitFinalFixesRequest } = this.props
     const { finalFixRequests } = this.state
 
     submitFinalFixesRequest(
       // submit only non-empty requests
-      finalFixRequests.filter((finalFixRequest) => !!finalFixRequest.value),
-      {
-        waitingForCustomer: false,
-      }
+      finalFixRequests.filter((finalFixRequest) => !!finalFixRequest.value)
     )
   }
 
@@ -207,8 +204,8 @@ class MilestoneTypeDelivery extends React.Component {
       links = _.get(milestone, 'details.content.links', [])
     }
 
-    const shouldhaveSecondDot = 
-    isActive && 
+    const shouldhaveSecondDot =
+    isActive &&
     (!isAccepted &&
       !isDeclined &&
       !isShowFinalFixesRequestForm &&
@@ -216,7 +213,7 @@ class MilestoneTypeDelivery extends React.Component {
       !currentUser.isAdmin &&
       !isFinalFixesSubmitted)
 
-    const shouldHaveThirdDot = 
+    const shouldHaveThirdDot =
       isActive &&
       (!isAccepted &&
         !isDeclined &&
@@ -224,19 +221,19 @@ class MilestoneTypeDelivery extends React.Component {
         (currentUser.isCustomer || currentUser.isAdmin) &&
         !isFinalFixesSubmitted)
 
-    const shouldHaveFourthDot = 
+    const shouldHaveFourthDot =
       isActive &&
       (isShowFinalFixesRequestForm &&
         !isFinalFixesSubmitted)
 
-    const shouldHaveFifthDot = 
+    const shouldHaveFifthDot =
       isActive &&
       (isAccepted &&
         !currentUser.isCustomer)
 
     const shouldHaveSixthDot = isCompleted
 
-    const shouldShowFirstLineDot = 
+    const shouldShowFirstLineDot =
     shouldhaveSecondDot ||
     shouldHaveThirdDot ||
     shouldHaveFourthDot ||
@@ -329,38 +326,38 @@ class MilestoneTypeDelivery extends React.Component {
               </div>
             )}
 
-            {(isAccepted) && (	
-              <div>	
-                {!currentUser.isCustomer && (	
-                  <DotIndicator>	
-                    <LinkList	
-                      links={links}	
-                      onAddLink={this.updatedUrl}	
-                      onRemoveLink={this.removeUrl}	
-                      onUpdateLink={this.updatedUrl}	
-                      fields={[{ name: 'url'}]}	
-                      addButtonTitle="Add link"	
-                      formAddTitle="Adding a link"	
-                      formAddButtonTitle="Add a link"	
-                      formUpdateTitle="Editing a link"	
-                      formUpdateButtonTitle="Save changes"	
-                      isUpdating={milestone.isUpdating}	
-                      canAddLink	
-                    />	
-                    <div styleName="top-space">	
-                      <div styleName="button-layer">	
-                        <button	
-                          className="tc-btn tc-btn-primary tc-btn-sm action-btn"	
-                          onClick={this.completeMilestone}	
-                          disabled={links.length === 0}	
-                        >	
-                          Mark as completed	
-                        </button>	
-                      </div>	
-                    </div>	
-                  </DotIndicator>	
-                )}	
-              </div>	
+            {(isAccepted) && (
+              <div>
+                {!currentUser.isCustomer && (
+                  <DotIndicator>
+                    <LinkList
+                      links={links}
+                      onAddLink={this.updatedUrl}
+                      onRemoveLink={this.removeUrl}
+                      onUpdateLink={this.updatedUrl}
+                      fields={[{ name: 'url'}]}
+                      addButtonTitle="Add link"
+                      formAddTitle="Adding a link"
+                      formAddButtonTitle="Add a link"
+                      formUpdateTitle="Editing a link"
+                      formUpdateButtonTitle="Save changes"
+                      isUpdating={milestone.isUpdating}
+                      canAddLink
+                    />
+                    <div styleName="top-space">
+                      <div styleName="button-layer">
+                        <button
+                          className="tc-btn tc-btn-primary tc-btn-sm action-btn"
+                          onClick={this.completeMilestone}
+                          disabled={links.length === 0}
+                        >
+                          Mark as completed
+                        </button>
+                      </div>
+                    </div>
+                  </DotIndicator>
+                )}
+              </div>
             )}
 
 
