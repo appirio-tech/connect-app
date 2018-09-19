@@ -10,14 +10,7 @@ import { getProjectById, createProject as createProjectAPI,
   updateProduct as updateProductAPI,
   updatePhase as updatePhaseAPI,
   createProjectPhase,
-  createPhaseProduct,
 } from '../../api/projects'
-import {
-  getProductTemplate,
-  getProjectTemplate,
-  getProductTemplateByKey,
-  getProjectCategories,
-} from '../../api/templates'
 import {
   createTimeline,
 } from '../../api/timelines'
@@ -32,11 +25,7 @@ import {
   DELETE_PROJECT,
   PROJECT_DIRTY,
   PROJECT_DIRTY_UNDO,
-  LOAD_PROJECT_CATEGORIES,
   LOAD_PROJECT_PHASES,
-  LOAD_PROJECT_TEMPLATE,
-  LOAD_PROJECT_PRODUCT_TEMPLATES,
-  LOAD_ALL_PRODUCT_TEMPLATES,
   UPDATE_PRODUCT,
   PROJECT_STATUS_DRAFT,
   PRODUCT_DIRTY,
@@ -156,117 +145,6 @@ export function loadProjectPhasesWithProducts(projectId) {
   }
 }
 
-/**
- * Load project template
- *
- * @param {String} id  template id
- *
- * @return {Promise} LOAD_PROJECT_TEMPLATE action with payload as project template object
- */
-export function loadProjectTemplate(id) {
-  return (dispatch) => {
-    return dispatch({
-      type: LOAD_PROJECT_TEMPLATE,
-      payload: getProjectTemplate(id)
-    })
-  }
-}
-
-/**
- * Load project categories
- *
- * @return {Promise} LOAD_PROJECT_CATEGORIES action with payload as project categories object
- */
-export function loadProjectCategories() {
-  return (dispatch) => {
-    return dispatch({
-      type: LOAD_PROJECT_CATEGORIES,
-      payload: Promise.resolve(getProjectCategories())
-    })
-  }
-}
-
-/**
- * Load product templates for a project
- *
- * NOTE
- *   This function checks which product templates are already loaded and only loads which are not in the store yet
- *   Loaded but unnecessary product templates will be removed
- *
- * @param {Object} projectTemplate project template of the project
- *
- * @return {Promise} LOAD_PROJECT_PRODUCT_TEMPLATES action with payload as array of product templates
- */
-export function loadProjectProductTemplates(projectTemplate) {
-  return (dispatch, getState) => {
-    const productTemplates = getState().projectState.productTemplates
-
-    const alreadyLoadedProductTemplates = []
-    const notLoadedProductTemplatesIds = []
-
-    // check which product templates we have already loaded, and which we have to load
-    for(const phaseName in projectTemplate.phases) {
-      const phase = projectTemplate.phases[phaseName]
-      phase.products.forEach((product) => {
-        const alreadyLoadedProductTemplate = _.find(productTemplates, { id: product.id })
-
-        if (alreadyLoadedProductTemplate) {
-          alreadyLoadedProductTemplates.push(alreadyLoadedProductTemplate)
-        } else {
-          notLoadedProductTemplatesIds.push(product.id)
-        }
-      })
-    }
-
-    return dispatch({
-      type: LOAD_PROJECT_PRODUCT_TEMPLATES,
-      payload: Promise.all(notLoadedProductTemplatesIds.map((id) => getProductTemplate(id)))
-        .then((loadedProductTemplates) => [
-          ...alreadyLoadedProductTemplates,
-          ...loadedProductTemplates,
-        ])
-    })
-  }
-}
-
-/**
- * Load all product templates
- *
- * NOTE
- *   This function loads all product templates which are not in the store yet
- *
- * @param {Object} projectTemplate project template of the project
- *
- * @return {Promise} LOAD_ALL_PRODUCT_TEMPLATES action with payload as array of product templates
- */
-export function loadAllProductTemplates() {
-  return (dispatch) => {
-    return dispatch({
-      type: LOAD_ALL_PRODUCT_TEMPLATES,
-      payload: Promise.resolve(getProductTemplateByKey())
-    })
-  }
-}
-
-/**
- * Load product template by product key
- *
- * NOTE
- *   This is only need for old projects and it always has only one product template
- *
- * @param {String} productKey product key
- *
- * @return {Promise} LOAD_PROJECT_PRODUCT_TEMPLATES action with payload as array with one product template
- */
-export function loadProjectProductTemplatesByKey(productKey) {
-  return (dispatch) => {
-    return dispatch({
-      type: LOAD_PROJECT_PRODUCT_TEMPLATES,
-      payload: Promise.all([getProductTemplateByKey(productKey)])
-    })
-  }
-}
-
 export function clearLoadedProject() {
   return dispatch => {
     return dispatch({
@@ -379,7 +257,8 @@ export function createProduct(project, productTemplate, phases, timelines) {
 export function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT_STATUS_DRAFT, startDate, endDate) {
   const param = {
     status,
-    name: projectTemplate.name
+    name: projectTemplate.name,
+    productTemplateId: projectTemplate.id
   }
   if (startDate) {
     param['startDate'] = startDate.format('YYYY-MM-DD')
@@ -389,19 +268,13 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
   }
 
   return createProjectPhase(project.id, param).then((phase) => {
-    return createPhaseProduct(project.id, phase.id, {
-      name: projectTemplate.name,
-      templateId: projectTemplate.id,
-      type: projectTemplate.key || projectTemplate.productKey,
-    }).then((product) => {
-      // we also wait until timeline is created as we will load it for the phase after creation
-      return createTimelineAndMilestoneForProduct(product, phase).then((timeline) => ({
-        project,
-        phase,
-        product,
-        timeline,
-      }))
-    })
+    // we also wait until timeline is created as we will load it for the phase after creation
+    return createTimelineAndMilestoneForProduct(phase.products[0], phase).then((timeline) => ({
+      project,
+      phase,
+      product:phase.products[0],
+      timeline,
+    }))
   })
 }
 

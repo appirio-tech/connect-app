@@ -17,7 +17,7 @@ import MobileMenuToggle from '../MobileMenu/MobileMenuToggle'
 import SearchFilter from '../../assets/icons/ui-filters.svg'
 import SearchIcon from '../../assets/icons/ui-16px-1_zoom.svg'
 import { projectSuggestions, loadProjects, setInfiniteAutoload } from '../../projects/actions/loadProjects'
-import { loadProjectCategories } from '../../actions/templates'
+import { loadProjectsMetadata } from '../../actions/templates'
 
 
 class ProjectsToolBar extends Component {
@@ -41,10 +41,10 @@ class ProjectsToolBar extends Component {
   }
 
   componentWillMount() {
-    const { projectCategories, isProjectCategoriesLoading, loadProjectCategories, criteria } = this.props
+    const { projectCategories, isProjectCategoriesLoading, loadProjectsMetadata, criteria } = this.props
 
     if (!isProjectCategoriesLoading && !projectCategories) {
-      loadProjectCategories()
+      loadProjectsMetadata()
     }
 
     // update query string if there is a search
@@ -172,7 +172,7 @@ class ProjectsToolBar extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { user, criteria, creatingProject, projectCreationError, searchTermTag, projectCategories } = this.props
     const { errorCreatingProject, isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
-    return nextProps.user.handle !== user.handle
+    return (nextProps.user || {}).handle !== (user || {}).handle
     || JSON.stringify(nextProps.criteria) !== JSON.stringify(criteria)
     || nextProps.creatingProject !== creatingProject
     || nextProps.projectCreationError !== projectCreationError
@@ -315,11 +315,11 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
     criteria               : projectSearch.criteria,
     userRoles              : _.get(loadUser, 'user.roles', []),
     user                   : loadUser.user,
-    projectCategories           : templates.projectCategories,
-    isProjectCategoriesLoading  : templates.isProjectCategoriesLoading,
+    projectCategories      : templates.projectCategories,
+    isProjectCategoriesLoading  : templates.isLoading,
   }
 }
 
-const actionsToBind = { projectSuggestions, loadProjects, setInfiniteAutoload, loadProjectCategories }
+const actionsToBind = { projectSuggestions, loadProjects, setInfiniteAutoload, loadProjectsMetadata }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(ProjectsToolBar))

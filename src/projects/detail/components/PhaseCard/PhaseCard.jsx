@@ -26,7 +26,6 @@ import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingInd
 import MobilePage from '../../../../components/MobilePage/MobilePage'
 import BackIcon from '../../../../assets/icons/arrow-left.svg'
 import EditStageForm from './EditStageForm'
-import DeletePhase from './DeletePhase'
 
 import './PhaseCard.scss'
 
@@ -97,7 +96,7 @@ class PhaseCard extends React.Component {
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
     const phaseEditable = isManageUser && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
-    const canDelete = status !== PHASE_STATUS_ACTIVE && status !== PHASE_STATUS_COMPLETED
+    
 
     const hasUnseen = hasReadPosts
 
@@ -212,15 +211,7 @@ class PhaseCard extends React.Component {
                         phaseIndex={attr.phaseIndex}
                         cancel={this.toggleEditView}
                         timeline={timeline}
-                      />
-                    )}
-                    {canDelete && !isUpdating && (
-                      <DeletePhase
-                        onDeleteClick={() => {
-                          if (confirm(`Are you sure you want to delete phase '${attr.phase.name}'?`)) {
-                            deleteProjectPhase()
-                          }
-                        }}
+                        deleteProjectPhase={deleteProjectPhase}
                       />
                     )}
                     {isUpdating && <LoadingIndicator />}

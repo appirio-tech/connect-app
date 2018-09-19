@@ -5,14 +5,11 @@ import './NewProjectNavLink.scss'
 import BoldAdd from '../../assets/icons/ui-16px-1_bold-add.svg'
 
 
-const NewProjectNavLink = ({ compact=false, returnUrl }) => {
+const NewProjectNavLink = ({ compact=false }) => {
   if (compact) {
     return (
       <Link
-        to={{
-          pathname: '/new-project',
-          search: returnUrl ? '?returnUrl=' + returnUrl : ''
-        }} className="new-project-link"
+        to="/new-project" className="new-project-link"
       >
         <div className="new-project-icon">
           <BoldAdd className="icon-bold-add" />
@@ -23,10 +20,7 @@ const NewProjectNavLink = ({ compact=false, returnUrl }) => {
     return (
       <div className="new-project-link">
         <Link
-          to={{
-            pathname: '/new-project',
-            search: returnUrl ? '?returnUrl=' + returnUrl : ''
-          }} className="tc-btn tc-btn-sm tc-btn-primary"
+          to="/new-project" className="tc-btn tc-btn-sm tc-btn-primary"
         >+ New Project</Link>
       </div>
     )

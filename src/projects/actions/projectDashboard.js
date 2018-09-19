@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { loadMembers } from '../../actions/members'
-import { loadProject, loadDirectProjectData, loadProjectPhasesWithProducts,
-  loadProjectTemplate, loadProjectProductTemplates, loadAllProductTemplates, loadProjectProductTemplatesByKey, loadProjectCategories } from './project'
+import { loadProject, loadDirectProjectData, loadProjectPhasesWithProducts } from './project'
+import { loadProjectsMetadata } from '../../actions/templates'
 import { loadProductTimelineWithMilestones } from './productsTimelines'
 import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
 
@@ -15,6 +15,7 @@ import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../conf
  * @return {Promise} LOAD_ADDITIONAL_PROJECT_DATA action
  */
 const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) => {
+  const { productTemplates } = getState().templates
   return new Promise((resolve, reject) => {
     return dispatch(loadProject(projectId))
       .then(({ value: project }) => {
@@ -43,22 +44,12 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
                 loadTimelinesForPhasesProducts(phases, dispatch)
               )
           )
-
-          promises.push(
-            dispatch(loadProjectTemplate(project.templateId))
-              .then(({ value: projectTemplate }) =>
-                dispatch(loadProjectProductTemplates(projectTemplate))
-              )
-          )
-
-        // for old project load only one product template
-        } else {
-          promises.push(dispatch(loadProjectProductTemplatesByKey(_.get(project, 'details.products[0]'))))
         }
-        if (!isOnlyLoadProjectInfo) {
-          promises.push(dispatch(loadAllProductTemplates()))
+
+        if (!productTemplates) {
+          promises.push(dispatch(loadProjectsMetadata()))
         }
-        promises.push(dispatch(loadProjectCategories()))
+
         return resolve(dispatch({
           type: LOAD_ADDITIONAL_PROJECT_DATA,
           payload: Promise.all(promises)
