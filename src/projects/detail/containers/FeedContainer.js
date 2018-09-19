@@ -49,13 +49,11 @@ class FeedView extends React.Component {
     this.onNewCommentChange = this.onNewCommentChange.bind(this)
     this.onShowAllComments = this.onShowAllComments.bind(this)
     this.onAddNewComment = this.onAddNewComment.bind(this)
-    this.isChanged = this.isChanged.bind(this)
     this.onNewPostChange = this.onNewPostChange.bind(this)
     this.onEditMessage = this.onEditMessage.bind(this)
     this.onSaveMessageChange = this.onSaveMessageChange.bind(this)
     this.onEditTopic = this.onEditTopic.bind(this)
     this.onTopicChange = this.onTopicChange.bind(this)
-    this.onRefreshFeeds = this.onRefreshFeeds.bind(this)
     this.toggleNewPostMobile = this.toggleNewPostMobile.bind(this)
     this.enterFullscreen = this.enterFullscreen.bind(this)
     this.exitFullscreen = this.exitFullscreen.bind(this)
@@ -80,19 +78,7 @@ class FeedView extends React.Component {
     this.setState({ isNewPostMobileOpen: !this.state.isNewPostMobileOpen })
   }
 
-  isChanged() {
-    const { newPost } = this.state
-    const hasComment = !_.isUndefined(_.find(this.state.feeds, (feed) => (feed.isSavingTopic || feed.isDeletingTopic || feed.isAddingComment)
-      || (feed.newComment && feed.newComment.length)
-      || (feed.newTitle && feed.newTitle.length && feed.newTitle !== feed.title)
-      || (feed.topicMessage && feed.topicMessage.newContent && feed.topicMessage.newContent.length && feed.topicMessage.rawContent && feed.topicMessage.newContent !== feed.topicMessage.rawContent)
-      || !_.isUndefined(_.find(feed.comments, (message) => message.isSavingComment || message.isDeletingComment || (message.newContent && message.newContent.length && message.rawContent && message.newContent !== message.rawContent)))
-    ))
-    const hasThread = (newPost.title && !!newPost.title.trim().length) || ( newPost.content && !!newPost.content.trim().length)
-    return hasThread || hasComment
-  }
-
-  mapFeed(feed, showAll = false, resetNewComment = false, prevProps) {
+  mapFeed(feed, showAll = false, resetNewComment = false) {
     const { allMembers, project, currentMemberRole } = this.props
     const item = _.pick(feed, ['id', 'date', 'read', 'tag', 'title', 'totalPosts', 'userId', 'reference', 'referenceId', 'postIds', 'isSavingTopic', 'isDeletingTopic', 'isAddingComment', 'isLoadingComments', 'error'])
     // Github issue##623, allow comments on all posts (including system posts)
@@ -105,10 +91,11 @@ class FeedView extends React.Component {
     item.unread = !feed.read && !!currentMemberRole
     item.totalComments = feed.totalPosts
     item.comments = []
-    let prevFeed = null
-    if (prevProps) {
-      prevFeed = _.find(prevProps.feeds, t => feed.id === t.id)
-    }
+    // CODE NOT NEEDED ANYMORE
+    // let prevFeed = null
+    // if (prevProps) {
+    //   prevFeed = _.find(prevProps.feeds, t => feed.id === t.id)
+    // }
     const _toComment = (p) => {
       const date = p.updatedDate?p.updatedDate:p.date
       const edited = date !== p.date
@@ -127,26 +114,28 @@ class FeedView extends React.Component {
         edited,
         author: isSystemUser(p.userId) ? SYSTEM_USER : commentAuthor
       }
-      const prevComment = prevFeed ? _.find(prevFeed.posts, t => p.id === t.id) : null
-      if (prevComment && prevComment.isSavingComment && !comment.isSavingComment && !comment.error) {
-        comment.editMode = false
-      } else {
-        const feedFromState = _.find(this.state.feeds, t => feed.id === t.id)
-        const commentFromState = feedFromState ? _.find(feedFromState.comments, t => comment.id === t.id) : null
-        comment.newContent = commentFromState ? commentFromState.newContent : null
-        comment.editMode = commentFromState && commentFromState.editMode
-      }
+      // CODE NOT NEEDED ANYMORE
+      // const prevComment = prevFeed ? _.find(prevFeed.posts, t => p.id === t.id) : null
+      // if (prevComment && prevComment.isSavingComment && !comment.isSavingComment && !comment.error) {
+      //   comment.editMode = false
+      // } else {
+      //   const feedFromState = _.find(this.state.feeds, t => feed.id === t.id)
+      //   const commentFromState = feedFromState ? _.find(feedFromState.comments, t => comment.id === t.id) : null
+      //   comment.newContent = commentFromState ? commentFromState.newContent : null
+      //   comment.editMode = commentFromState && commentFromState.editMode
+      // }
       return comment
     }
     item.topicMessage = _toComment(feed.posts[0])
-    if (prevFeed && prevFeed.isSavingTopic && !feed.isSavingTopic && !feed.error) {
-      item.editTopicMode = false
-    } else {
-      const feedFromState = _.find(this.state.feeds, t => feed.id === t.id)
-      item.newTitle = feedFromState ? feedFromState.newTitle : null
-      item.topicMessage.newContent = feedFromState ? feedFromState.topicMessage.newContent : null
-      item.editTopicMode = feedFromState && feedFromState.editTopicMode
-    }
+    // CODE NOT NEEDED ANYMORE
+    // if (prevFeed && prevFeed.isSavingTopic && !feed.isSavingTopic && !feed.error) {
+    //   item.editTopicMode = false
+    // } else {
+    //   const feedFromState = _.find(this.state.feeds, t => feed.id === t.id)
+    //   item.newTitle = feedFromState ? feedFromState.newTitle : null
+    //   item.topicMessage.newContent = feedFromState ? feedFromState.topicMessage.newContent : null
+    //   item.editTopicMode = feedFromState && feedFromState.editTopicMode
+    // }
 
     const validPost = (post) => {
       return post.type === 'post' && (post.body && post.body.trim().length || !isSystemUser(post.userId))
@@ -192,7 +181,7 @@ class FeedView extends React.Component {
         }
         // reset new comment if we were adding comment and there is no error in doing so
         const resetNewComment = prevFeed && prevFeed.isAddingComment && !feed.isAddingComment && !feed.error
-        return this.mapFeed(feed, this.state.showAll.indexOf(feed.id) > -1, resetNewComment, prevProps)
+        return this.mapFeed(feed, this.state.showAll.indexOf(feed.id) > -1, resetNewComment)
       }).filter(item => item)
     }, () => {
       if (prevProps) {
@@ -207,9 +196,9 @@ class FeedView extends React.Component {
   }
 
   onNewPostChange(title, content) {
-    this.setState({
-      newPost: {title, content}
-    })
+    const isChanged = (title && title.trim().length) || (content && content.trim().length)
+
+    this.props.onFeedChanged(isChanged)
   }
 
   onNewPost({title, content}) {
@@ -223,9 +212,9 @@ class FeedView extends React.Component {
   }
 
   onNewCommentChange(feedId, content) {
-    const isChanged = content.length ? true : false;
+    const isChanged = content && content.trim().length
 
-    this.props.onFeedChanged(isChanged);
+    this.props.onFeedChanged(isChanged)
   }
 
   onShowAllComments(feedId) {
@@ -264,14 +253,14 @@ class FeedView extends React.Component {
     }
     this.props.addFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, newComment)
 
-    this.props.onFeedChanged(false);
+    this.props.onFeedChanged(false)
   }
 
-  onSaveMessageChange(feedId, messageId, content, editMode) {
+  onSaveMessageChange(feedId, messageId, content) {
     const feed = _.find(this.state.feeds, { id: feedId })
-    const isChanged = feed && !_.find(feed.comments, { id: messageId, content: content })
+    const isChanged = feed && !_.find(feed.comments, { id: messageId, content })
 
-    this.props.onFeedChanged(isChanged);
+    this.props.onFeedChanged(isChanged)
   }
 
   onSaveMessage(feedId, message, content) {
@@ -279,7 +268,7 @@ class FeedView extends React.Component {
     newMessage.content = content
     this.props.saveFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, newMessage)
 
-    this.props.onFeedChanged(false);
+    this.props.onFeedChanged(false)
   }
 
   onDeleteMessage(feedId, postId) {
@@ -292,7 +281,6 @@ class FeedView extends React.Component {
     if (!comment.rawContent) {
       this.props.getFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, postId)
     }
-    this.onSaveMessageChange(feedId, postId, null, true)
   }
 
   onEditTopic(feedId) {
@@ -303,24 +291,20 @@ class FeedView extends React.Component {
     }
   }
 
-  onTopicChange(feedId, messageId, title, content, editTopicMode) {
-    const isChanged = !_.find(this.state.feeds, { id: feedId, title: title });
+  onTopicChange(feedId, messageId, title) {
+    const isChanged = !_.find(this.state.feeds, { id: feedId, title })
 
-    this.props.onFeedChanged(isChanged);
+    this.props.onFeedChanged(isChanged)
   }
 
   onSaveTopic(feedId, postId, title, content) {
     this.props.saveProjectTopic(feedId, PROJECT_FEED_TYPE_PRIMARY, {postId, title, content})
 
-    this.props.onFeedChanged(false);
+    this.props.onFeedChanged(false)
   }
 
   onDeleteTopic(feedId) {
     this.props.deleteProjectTopic(feedId, PROJECT_FEED_TYPE_PRIMARY)
-  }
-
-  onRefreshFeeds() {
-    this.props.loadDashboardFeeds(this.props.project.id)
   }
 
   enterFullscreen(feedId) {
@@ -332,10 +316,8 @@ class FeedView extends React.Component {
   }
 
   render () {
-    const {currentUser, currentMemberRole, isCreatingFeed, error, allMembers,
-      toggleNotificationRead, notifications, project, isSuperUser } = this.props
+    const {currentUser, currentMemberRole, isCreatingFeed, error, allMembers, isSuperUser } = this.props
     const { feeds, isNewPostMobileOpen, fullscreenFeedId } = this.state
-    const isChanged = this.isChanged()
     const fullscreenFeed = fullscreenFeedId && _.find(feeds, { id: fullscreenFeedId })
 
     return (
@@ -375,14 +357,6 @@ class FeedView extends React.Component {
             />
           </FullscreenFeedContainer>
         )}
-
-        <PostsRefreshPrompt
-          preventShowing={isChanged}
-          toggleNotificationRead={toggleNotificationRead}
-          refreshFeeds={this.onRefreshFeeds}
-          notifications={notifications}
-          projectId={project.id}
-        />
 
         <Section>
           <SectionTitle title="Discussions" />
@@ -468,6 +442,8 @@ class FeedContainer extends React.Component {
     }
 
     this.onLeave = this.onLeave.bind(this)
+    this.onRefreshFeeds = this.onRefreshFeeds.bind(this)
+    this.isChanged = this.isChanged.bind(this)
     this.onFeedChanged = this.onFeedChanged.bind(this)
   }
 
@@ -483,30 +459,56 @@ class FeedContainer extends React.Component {
     window.removeEventListener('beforeunload', this.onLeave)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {console.log('should update ' + _.isEqual(this.props.feeds, nextProps.feeds));
-    if (_.isEqual(this.props.feeds, nextProps.feeds)) {
+  shouldComponentUpdate(nextProps, nextState) {
+    if (_.isEqual(this.props, nextProps) && this.state.isChanged !== nextState.isChanged) {
       return false
-    }console.log(nextProps)
+    }
     return true
+  }
+
+  isChanged() {
+    let isChanged = !_.isUndefined(_.find(this.props.feeds, (feed) => (feed.isSavingTopic || feed.isDeletingTopic || feed.isAddingComment)
+      || !_.isUndefined(_.find(feed.comments, (message) => message.isSavingComment || message.isDeletingComment))
+    ))
+    isChanged = isChanged || this.state.isChanged
+
+    return isChanged
   }
 
   // Notify user if they navigate away while the form is modified.
   onLeave(e = {}) {
-    if (this.state.isChanged) {
+    if (this.isChanged()) {
       return e.returnValue = 'You haven\'t posted your message. If you leave this page, your message will not be saved. Are you sure you want to leave?'
     }
   }
 
+  onRefreshFeeds() {
+    this.props.loadDashboardFeeds(this.props.project.id)
+  }
+
   onFeedChanged(value) {
-    this.setState({
-      isChanged: value
-    })
+    if (this.state.isChanged !== value) {
+      this.setState({
+        isChanged: value
+      })
+    }
   }
 
   render() {
+    const { toggleNotificationRead, notifications, project } = this.props
+    const isChanged = this.isChanged()
+
     return (
       <div>
         <EnhancedFeedView {...this.props} onFeedChanged={this.onFeedChanged} />
+
+        <PostsRefreshPrompt
+          preventShowing={isChanged}
+          toggleNotificationRead={toggleNotificationRead}
+          refreshFeeds={this.onRefreshFeeds}
+          notifications={notifications}
+          projectId={project.id}
+        />
 
         <Prompt
           when={!!this.onLeave}

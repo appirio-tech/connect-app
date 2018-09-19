@@ -38,10 +38,6 @@ class Feed extends React.Component {
     window.removeEventListener('resize', this.updateHeaderHeight)
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({editTopicMode: nextProps.editTopicMode})
-  }
-
   componentDidUpdate(nextProps) {
     if (nextProps.id !== this.props.id) {
       this.updateHeaderHeight()
@@ -49,20 +45,20 @@ class Feed extends React.Component {
   }
 
   onEditTopic() {
-    this.setState({editTopicMode: true})
-    this.props.onEditTopic()
+    this.setState({ editTopicMode: true })
   }
 
   cancelEditTopic() {
-    this.setState({editTopicMode: false})
-    this.props.onTopicChange(this.props.topicMessage.id, null, null, false)
+    this.setState({ editTopicMode: false })
+    this.props.onTopicChange(this.props.topicMessage.id, this.props.title, null)
   }
 
   onTopicChange(title, content) {
-    this.props.onTopicChange(this.props.topicMessage.id, title, content, true)
+    this.props.onTopicChange(this.props.topicMessage.id, title, content)
   }
 
   onSaveTopic({title, content}) {
+    this.setState({ editTopicMode: false })
     this.props.onSaveTopic(this.props.topicMessage.id, title, content)
   }
 
@@ -99,7 +95,7 @@ class Feed extends React.Component {
 
       topicHeader = (
         <header styleName="feed-header" ref="header">
-          {editTopicMode ? (
+          {(editTopicMode || isSavingTopic) ? (
             <div styleName="header-edit">
               <RichTextArea
                 editMode
