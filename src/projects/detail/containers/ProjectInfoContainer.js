@@ -56,7 +56,6 @@ class ProjectInfoContainer extends React.Component {
     }
 
     // load phases feeds if they are not loaded yet
-    console.warn('mount pahses', phases)
     phases.forEach((phase) => {
       if (!phasesTopics[phase.id]) {
         loadPhaseFeed(project.id, phase.id)
@@ -159,9 +158,6 @@ class ProjectInfoContainer extends React.Component {
       isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
     ))
 
-    console.warn('visiblePhases', visiblePhases)
-    console.warn('phasesTopics', phasesTopics)
-
     const phaseFeeds = _.compact(
       visiblePhases.map((phase) => {
         const topic = _.get(phasesTopics, `[${phase.id}].topic`)
@@ -176,8 +172,6 @@ class ProjectInfoContainer extends React.Component {
         })
       })
     )
-
-    console.warn('phaseFeeds', phaseFeeds)
 
     const discussions = [...feeds, ...phaseFeeds].map((feed) => ({
       title: `${feed.title}`,
