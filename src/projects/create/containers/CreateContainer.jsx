@@ -12,6 +12,9 @@ import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
 import { getProjectTemplateByAlias, getProjectTypeByKey } from '../../../helpers/templates'
+import { Wizard } from 'appirio-tech-react-components'
+import { ViewTypes } from 'appirio-tech-react-components/components/Wizard/Wizard'
+import './CreateContainer.scss'
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
@@ -19,7 +22,8 @@ import {
   ACCOUNTS_APP_REGISTER_URL,
   NEW_PROJECT_PATH,
   GA_CLIENT_ID,
-  GA_CLICK_ID
+  GA_CLICK_ID,
+  CONNECT_MAIN_PAGE_URL
 } from '../../../config/constants'
 
 const page404 = compose(
@@ -51,7 +55,7 @@ const CreateView = (props) => {
     return <div><CoderBot code={ 200 } message="Creating your project..." /></div>
   }
   return (
-    <div>
+    <div styleName="create-container">
       <ProjectWizard {...props}/>
     </div>
   )
@@ -72,6 +76,11 @@ class CreateContainer extends React.Component {
     this.onLeave = this.onLeave.bind(this)
     this.closeWizard = this.closeWizard.bind(this)
     this.prepareProjectForCreation = this.prepareProjectForCreation.bind(this)
+    this.createContainerView = this.createContainerView.bind(this)
+
+    if (!props.userRoles || props.userRoles.length <= 0) {
+      window.location = CONNECT_MAIN_PAGE_URL
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -80,14 +89,16 @@ class CreateContainer extends React.Component {
     if (!nextProps.processing && !nextProps.error && nextProjectId && projectId !== nextProjectId) {
       // update state
       this.setState({
+        processing: false,
         creatingProject: false,
         createdProject: true,
+        projectId: nextProjectId,
         isProjectDirty: false
       }, () => {
-        // remove incomplete project, and navigate to project dashboard
-        console.log('removing incomplete project')
+        // go to submitted state
+        console.log('go to submitted state')
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
-        this.props.history.push('/projects/' + nextProjectId)
+        this.props.history.push('/new-project/submitted/' + nextProjectId)
       })
 
     } else if (this.state.creatingProject !== nextProps.processing) {
@@ -241,14 +252,16 @@ class CreateContainer extends React.Component {
     }
   }
 
-  render() {
+  createContainerView() {
     const { templates: { projectTemplates, projectCategories: projectTypes }} = this.props
 
     return (
       <EnhancedCreateView
         {...this.props}
         createProject={ this.createProject }
-        processing={ this.state.creatingProject || this.state.createdProject }
+        processing={ this.state.creatingProject}
+        createdProject={ this.state.createdProject }
+        projectId={ this.state.projectId }
         showModal
         closeModal={ this.closeWizard }
         onStepChange={ (wizardStep, updatedProject) => {
@@ -276,6 +289,10 @@ class CreateContainer extends React.Component {
 
           if (typeAlias && templateAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
             this.props.history.push(NEW_PROJECT_PATH + '/' + templateAlias + window.location.search)
+          }
+
+          if (typeAlias && templateAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_PROJECT_SUBMITTED) {
+            this.props.history.push(NEW_PROJECT_PATH + '/' + 'submitted' + window.location.search)
           }
 
           this.setState({
@@ -307,6 +324,26 @@ class CreateContainer extends React.Component {
       />
     )
   }
+
+  render() {
+    const { wizardStep } = this.state
+    console.log('wizardStep', wizardStep)
+    let type = 'unknonw'
+    if (wizardStep <= ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
+      type = ViewTypes.selectSolution
+    } else if (wizardStep <= ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
+      type = ViewTypes.definedScope 
+    } else if (wizardStep === ProjectWizard.Steps.WZ_STEP_PROJECT_SUBMITTED) {
+      type = ViewTypes.projectSubmitted
+    }
+    return (
+      <Wizard wrapperClass="WizardCreateProject" type={type} vm={{userHandle: this.props.userHandle}} >
+        { this.createContainerView() }
+      </Wizard>
+    )
+  }
+    
+    
 }
 
 CreateContainer.propTypes = {
@@ -318,6 +355,7 @@ CreateContainer.defaultProps = {
 }
 
 const mapStateToProps = ({projectState, loadUser, templates }) => ({
+  userHandle: _.get(loadUser, 'user.handle', []),
   userRoles: _.get(loadUser, 'user.roles', []),
   processing: projectState.processing,
   error: projectState.error,
