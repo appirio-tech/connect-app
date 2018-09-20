@@ -180,7 +180,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
   isProcessing: projectState.processing,
   phases: projectState.phases,
   feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
-  isFeedsLoadins: projectTopics.isLoading,
+  isFeedsLoading: projectTopics.isLoading,
   phasesStates: projectState.phasesStates,
   phasesTopics,
 })
