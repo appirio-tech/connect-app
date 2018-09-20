@@ -529,6 +529,7 @@ export const PROJECT_ICON_MAP = {
 //Project sort options
 export const SORT_OPTIONS = [
   { val: 'updatedAt desc', field: 'updatedAt' },
+  { val: 'lastActivityAt desc', field: 'lastActivityAt' },
   { val: 'createdAt', field: 'createdAt' },
   { val: 'createdAt desc', field: 'createdAt' }
 ]

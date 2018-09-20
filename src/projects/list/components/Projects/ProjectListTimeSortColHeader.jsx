@@ -9,6 +9,7 @@ import IconCheckDark from '../../../../assets/icons/check-dark.svg'
 
 const options = [
   { val: 'updatedAt desc', label: 'Last Updated' },
+  { val: 'lastActivityAt desc', label: 'Last Activity' },
   { val: 'createdAt', label: 'Oldest First' },
   { val: 'createdAt desc', label: 'Newest First' }
 ]
