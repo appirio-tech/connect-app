@@ -19,6 +19,7 @@ if (process.env.NODE_ENV === 'development') {
   const createLogger = require('redux-logger')
   const logger = createLogger()
   middleware.push(logger)
+  middleware.unshift(require('redux-immutable-state-invariant').default())
 }
 
 const store = createStore(reducers, compose(
