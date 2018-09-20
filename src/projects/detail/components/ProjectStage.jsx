@@ -143,7 +143,7 @@ class ProjectStage extends React.Component{
     if (!_.get(phaseState, 'isExpanded') && feed && (feed.id === parseInt(feedId) || feed.postIds.includes(parseInt(commentId)))){
       expandProjectPhase(phase.id, 'posts')
     }
-    
+
   }
 
   render() {
@@ -182,8 +182,8 @@ class ProjectStage extends React.Component{
     const productTemplate = _.find(productTemplates, { id: _.get(phase, 'products[0].templateId') })
     const product = _.get(phase, 'products[0]')
     const sections = _.get(productTemplate, 'template.questions', [])
-    const projectPhaseAnchor = feed ? `feed-${feed.id}` : ''
-    
+    const projectPhaseAnchor = `phase-${phase.id}-posts`
+
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
 
     const hasTimeline = !!timeline
