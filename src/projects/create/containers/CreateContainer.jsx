@@ -11,10 +11,12 @@ import { loadProjectsMetadata } from '../../../actions/templates'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
-import { getProjectTemplateByAlias, getProjectTypeByKey } from '../../../helpers/templates'
+import { getProjectTemplateByAlias, getProjectTypeByKey, getProjectTypeByAlias } from '../../../helpers/templates'
 import { Wizard } from 'appirio-tech-react-components'
 import { ViewTypes } from 'appirio-tech-react-components/components/Wizard/Wizard'
 import './CreateContainer.scss'
+import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
+
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
@@ -70,7 +72,8 @@ class CreateContainer extends React.Component {
       createdProject: false,
       isProjectDirty: false,
       wizardStep: 0,
-      updatedProject: {}
+      updatedProject: {},
+      projectType: {},
     }
     this.createProject = this.createProject.bind(this)
     this.onLeave = this.onLeave.bind(this)
@@ -86,6 +89,19 @@ class CreateContainer extends React.Component {
   componentWillReceiveProps(nextProps) {
     const projectId = _.get(this.props, 'project.id', null)
     const nextProjectId = _.get(nextProps, 'project.id', null)
+    const { templates: { projectTemplates, projectCategories }, match: { params }} = nextProps
+    const projectTypes = projectTemplates.concat(projectCategories)
+    if (params && params.project && projectTypes) {
+      const projectTypeKey = params.project
+      let projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
+      if (!projectType) {
+        projectType = getProjectTypeByAlias(projectTypes, projectTypeKey)
+      }
+      if (projectType) {
+        this.setState({ projectType })
+      }
+    }
+
     if (!nextProps.processing && !nextProps.error && nextProjectId && projectId !== nextProjectId) {
       // update state
       this.setState({
@@ -253,7 +269,7 @@ class CreateContainer extends React.Component {
   }
 
   createContainerView() {
-    const { templates: { projectTemplates, projectCategories: projectTypes }} = this.props
+    const { templates: { projectTemplates, projectCategories: projectTypes }, match: { params }} = this.props
 
     return (
       <EnhancedCreateView
@@ -266,7 +282,11 @@ class CreateContainer extends React.Component {
         closeModal={ this.closeWizard }
         onStepChange={ (wizardStep, updatedProject) => {
           const projectTypeKey = _.get(updatedProject, 'type', null)
-          const projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
+          let projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
+          if (!projectType) {
+            projectType = getProjectTypeByAlias(projectTypes, projectTypeKey)
+          }
+
           const typeAlias = _.get(projectType, 'aliases[0]')
 
           const projectTemplateId = _.get(updatedProject, 'templateId', null)
@@ -296,7 +316,7 @@ class CreateContainer extends React.Component {
           }
 
           this.setState({
-            wizardStep
+            wizardStep,
           })
         }
         }
@@ -326,8 +346,7 @@ class CreateContainer extends React.Component {
   }
 
   render() {
-    const { wizardStep } = this.state
-    console.log('wizardStep', wizardStep)
+    const { wizardStep, projectType } = this.state
     let type = 'unknonw'
     if (wizardStep <= ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
       type = ViewTypes.selectSolution
@@ -336,8 +355,13 @@ class CreateContainer extends React.Component {
     } else if (wizardStep === ProjectWizard.Steps.WZ_STEP_PROJECT_SUBMITTED) {
       type = ViewTypes.projectSubmitted
     }
+
+    if (projectType && projectType.icon) {
+      projectType.iconUI = <ProjectTypeIcon type={projectType.icon} />
+    }
+
     return (
-      <Wizard wrapperClass="WizardCreateProject" type={type} vm={{userHandle: this.props.userHandle}} >
+      <Wizard wrapperClass="WizardCreateProject" type={type} vm={{userHandle: this.props.userHandle, projectType: projectType || {}}} >
         { this.createContainerView() }
       </Wizard>
     )
