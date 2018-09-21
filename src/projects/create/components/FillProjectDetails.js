@@ -77,12 +77,6 @@ class FillProjectDetails extends Component  {
                   </div>
                 )}
               </div>
-              <div className="right-area">
-                <Sticky top={20}>
-                  <ProjectOutline project={ dirtyProject } projectTemplates={ projectTemplates } />
-                  <div className="right-area-footer">In 24 hours our project managers will contact you for more information and a detailed quote that accurately reflects your project needs.</div>
-                </Sticky>
-              </div>
             </div>
           </section>
         </div>
