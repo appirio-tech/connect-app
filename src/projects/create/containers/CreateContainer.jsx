@@ -269,7 +269,7 @@ class CreateContainer extends React.Component {
   }
 
   createContainerView() {
-    const { templates: { projectTemplates, projectCategories: projectTypes }, match: { params }} = this.props
+    const { templates: { projectTemplates, projectCategories: projectTypes }} = this.props
 
     return (
       <EnhancedCreateView
