@@ -534,6 +534,13 @@ export const SORT_OPTIONS = [
   { val: 'createdAt desc', field: 'createdAt' }
 ]
 
+// map project date field to corresponding user field
+export const DATE_TO_USER_FIELD_MAP = {
+  createdAt: 'createdBy',
+  updatedAt: 'updatedBy',
+  lastActivityAt: 'lastActivityUserId',
+}
+
 // Notifications
 export const REFRESH_NOTIFICATIONS_INTERVAL = 1000 * 60 * 1 // 1 minute interval
 export const REFRESH_UNREAD_UPDATE_INTERVAL = 1000 * 10 * 1 // 10 second interval
