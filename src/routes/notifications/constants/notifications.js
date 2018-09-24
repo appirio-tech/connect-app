@@ -386,7 +386,7 @@ export const NOTIFICATIONS = [
     }]
   },
   {
-    eventType: 'notifications.connect.project.planModified',
+    eventType: 'notifications.connect.project.plan.updated',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Project plan is modified',

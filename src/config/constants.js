@@ -530,9 +530,17 @@ export const PROJECT_ICON_MAP = {
 //Project sort options
 export const SORT_OPTIONS = [
   { val: 'updatedAt desc', field: 'updatedAt' },
+  { val: 'lastActivityAt desc', field: 'lastActivityAt' },
   { val: 'createdAt', field: 'createdAt' },
   { val: 'createdAt desc', field: 'createdAt' }
 ]
+
+// map project date field to corresponding user field
+export const DATE_TO_USER_FIELD_MAP = {
+  createdAt: 'createdBy',
+  updatedAt: 'updatedBy',
+  lastActivityAt: 'lastActivityUserId',
+}
 
 // Notifications
 export const REFRESH_NOTIFICATIONS_INTERVAL = 1000 * 60 * 1 // 1 minute interval
