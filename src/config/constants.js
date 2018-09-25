@@ -528,7 +528,7 @@ export const PROJECT_ICON_MAP = {
 /*eslint-enable */
 //Project sort options
 export const SORT_OPTIONS = [
-  { val: 'updatedAt desc', field: 'updatedAt' },
+  //{ val: 'updatedAt desc', field: 'updatedAt' },
   { val: 'lastActivityAt desc', field: 'lastActivityAt' },
   { val: 'createdAt', field: 'createdAt' },
   { val: 'createdAt desc', field: 'createdAt' }
@@ -537,7 +537,7 @@ export const SORT_OPTIONS = [
 // map project date field to corresponding user field
 export const DATE_TO_USER_FIELD_MAP = {
   createdAt: 'createdBy',
-  updatedAt: 'updatedBy',
+  //updatedAt: 'updatedBy',
   lastActivityAt: 'lastActivityUserId',
 }
 
