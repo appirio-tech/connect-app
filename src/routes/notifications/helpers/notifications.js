@@ -257,10 +257,6 @@ const getNotificationRule = (notification) => {
     return match
   })
 
-  if (!notificationRule) {
-    throw new Error(`Cannot find notification rule for eventType '${notification.eventType}' version '${notification.version}'.`)
-  }
-
   return notificationRule
 }
 
@@ -359,7 +355,7 @@ const bundleNotifications = (notificationsWithRules) => {
  * @return {Array}               notification list
  */
 export const prepareNotifications = (rawNotifications) => {
-  const notificationsWithRules = rawNotifications.map((rawNotification) => ({
+  const notificationsWithRules = _.compact(rawNotifications.map((rawNotification) => ({
     id: `${rawNotification.id}`,
     sourceId: rawNotification.contents.projectId ? `${rawNotification.contents.projectId}` : 'global',
     sourceName: rawNotification.contents.projectId ? (rawNotification.contents.projectName || 'project') : 'Global',
@@ -372,6 +368,12 @@ export const prepareNotifications = (rawNotifications) => {
   })).map((notification) => {
     const notificationRule = getNotificationRule(notification)
 
+    // if rule for notification is not found, skip such notification
+    if (!notificationRule) {
+      console.warn(`Cannot find notification rule for eventType '${notification.eventType}' version '${notification.version}'.`)
+      return null
+    }
+
     // populate notification data
     notification.type = notificationRule.type
     if (notificationRule.goTo){
@@ -383,7 +385,7 @@ export const prepareNotifications = (rawNotifications) => {
       notification,
       notificationRule
     }
-  })
+  }))
 
   const bundledNotificationsWithRules = bundleNotifications(notificationsWithRules)
 
