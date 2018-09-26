@@ -231,10 +231,7 @@ class NotificationSettingsForm extends React.Component {
               const emailTooltip = topic.enabledMethods.indexOf('email') < 0 ? 'Emails are not yet supported for this event type' : null
               const emailEnabled = notifications[topicFirstType].email.enabled === 'yes'
               const emailBundlePeriod = notifications[topicFirstType].email.bundlePeriod
-              const selectedOption = {
-                value: emailEnabled ? emailBundlePeriod : 'off'
-              }
-              console.warn('selectedOption', selectedOption)
+              const selectedOption = emailEnabled ? emailBundlePeriod : 'off'
               return [
                 <tr key={index}>
                   <th>
@@ -260,7 +257,7 @@ class NotificationSettingsForm extends React.Component {
                         <div className="tooltip-target">
                           <SelectDropdown
                             name="status"
-                            selectedOption={selectedOption}
+                            value={selectedOption}
                             theme="default"
                             options={NOTIFICATION_SETTINGS_PERIODS.map(val => ({ value: val.value, title: val.text}))}
                             onSelect={(selected) => this.handleEmailConfigurationChange(selected, index)}
@@ -275,7 +272,7 @@ class NotificationSettingsForm extends React.Component {
                       !emailTooltip &&
                       <SelectDropdown
                         name="status"
-                        selectedOption={selectedOption}
+                        value={selectedOption}
                         theme="default"
                         options={NOTIFICATION_SETTINGS_PERIODS.map(val => ({ value: val.value, title: val.text}))}
                         onSelect={(selected) => this.handleEmailConfigurationChange(selected, index)}
