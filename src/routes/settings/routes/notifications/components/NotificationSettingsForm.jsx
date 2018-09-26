@@ -149,11 +149,14 @@ const initSettings = (notInitedSettings) => {
       if (_.isUndefined(notifications[type][serviceId].enabled)) {
         notifications[type][serviceId].enabled = 'yes'
       }
+      if (_.isUndefined(notifications[type][serviceId].bundlePeriod)) {
+        notifications[type][serviceId].bundlePeriod = 'daily'
+      }
     })
 
     // for all messaging events, defaults emailBundling to off
     if (_.includes(messagingTypes, type)) {
-      notifications[type]['emailBundling'].enabled = 'no'
+      notifications[type]['email'].bundlePeriod = null
     }
   })
 
