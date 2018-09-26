@@ -20,7 +20,7 @@ import SelectDropdown from '../../../../../components/SelectDropdown/SelectDropd
 const topics = [
   {
     title: 'New posts and replies',
-    description: 'Get a notification any time somebody posts on your project. This will make sure you can stay up-to-date with what\'s happening on your project',
+    description: 'Get a notification any time somebody posts on your project. This will make sure you can stay up-to-date with what’s happening on your project',
     enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.topic.created',
@@ -31,7 +31,7 @@ const topics = [
     ]
   }, {
     title: 'Project status',
-    description: 'Receive a notification any time your project status changed',
+    description: 'Receive a notification any time your porject status changes',
     enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.created',
@@ -58,15 +58,15 @@ const topics = [
       'notifications.connect.project.fileUploaded'
     ]
   }, {
-    title: 'New project links',
+    title: 'New project link',
     description: 'Receive a notification any time a new link is added to your project',
     enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.linkCreated'
     ]
   }, {
-    title: 'Project Team',
-    description: 'Receive a notification any time a person is added to your project plan',
+    title: 'Project team',
+    description: 'Receive a notification any time a person joins or leaves the team',
     enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.member.joined',
