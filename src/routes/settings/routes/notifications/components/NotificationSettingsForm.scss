@@ -12,10 +12,9 @@
       .description_desktop, .description_mobile {
         @include roboto;
         text-align: left;
-        color: $tc-gray-60;
+        color: $tc-gray-50;
         font-size: 12px;
-        font-weight: normal;
-        line-height: 14px;
+        line-height: 20px;
       }
 
       .description_desktop {
@@ -138,18 +137,12 @@
       }
 
       .th-with-icon {
-        display: inline-block;
-        height: 0;
-
-        > img,
-        > span {
-          display: inline-block;
-          vertical-align: middle;
-        }
+        align-items: center;
+        display: flex;
+        justify-content: center;
 
         > span {
           margin-left: 10px;
-          margin-bottom: 10px;
         }
 
         @media screen and (max-width: 430px - 1px) {
@@ -205,7 +198,7 @@
     width: 20px;
     height: 20px;
     line-height: 20px;
-    cursor: pointer;
+    cursor: default;
 
     .checkbox-text {
       position: relative;
@@ -216,8 +209,7 @@
         top: 0;
         content: '';
         background-color: $tc-white;
-        border: 1px solid $tc-gray-neutral-light;
-        border-radius: 3px;
+        border: 0;
         width: 20px;
         height: 20px;
       }
