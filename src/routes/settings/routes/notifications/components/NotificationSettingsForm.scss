@@ -4,11 +4,35 @@
 :global {
   .notification-settings-form {
     > .table {
-      margin-top: 22px;
+      border-collapse: collapse;
+      border-radius: 2 * $corner-radius;
+      overflow: hidden;
       width: 100%;
 
-      td {
-        padding: 0;
+      .description_desktop, .description_mobile {
+        @include roboto;
+        text-align: left;
+        color: $tc-gray-60;
+        font-size: 12px;
+        font-weight: normal;
+        line-height: 14px;
+      }
+
+      .description_desktop {
+        padding-top: 5px;
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
+      }
+
+      .description_mobile {
+        @media screen and (min-width: $screen-md) {
+          display: none;
+        }
+      }
+
+      td, th {
+        padding: 15px;
         text-align: left;
         vertical-align: top;
       }
@@ -16,66 +40,89 @@
       tr > th,
       tr .th {
         @include roboto;
-        color: $tc-gray-80;
-        font-size: 15px;
+        color: $tc-black;
+        font-size: 13px;
         line-height: 25px;
         text-align: left;
-        padding: 0;
-        vertical-align: top;
       }
 
       tbody > tr {
-        border-top: 1px dashed $tc-gray-30;
+        &:nth-child(2n) {
+          border-bottom: 1px solid $tc-gray-05;
+          > td {
+            text-align: left;
+            padding-top: 0;
+          }
+        }
+        &:nth-child(2n + 1) {
+          > td {
+            vertical-align: middle;
+          }
+          @media screen and (min-width: $screen-md) {
+            border-bottom: 1px solid $tc-gray-05;
+          }
+        }
 
         > th {
-          padding: 20px 0;
+          font-size: 14px;
+          font-weight: bold;
+          vertical-align: middle;
         }
 
         > td {
-          padding: 22.5px 0;
+          text-align: center;
 
           @media screen and (max-width: $screen-md - 1px) {
             text-align: center;
+          }
 
-            & > .SwitchButton > label {
-              margin: 0 auto;
-            }
+          > * {
+            margin: 0 auto;
           }
         }
       }
 
       thead > tr {
-        border-bottom: 1px solid $tc-gray-50;
+        background: $tc-gray-neutral-dark;
 
         > th {
-          padding-bottom: 11px;
+
+          .title {
+            @media screen and (max-width: $screen-md - 1px) {
+              display: none;
+            }
+          }
         }
 
         > th:last-child {
-          width: 170px;
+          width: 200px;
+          text-align: center;
 
           @media screen and (max-width: $screen-md - 1px) {
             text-align: center;
-            width: auto;
+            width: 35%;
           }
         }
 
         > th:nth-child(2) {
           width: 170px;
+          text-align: center;
 
           @media screen and (max-width: $screen-md - 1px) {
+            min-width: 70px;
+            width: 20%;
             text-align: center;
-            width: auto;
           }
         }
 
         > th:first-child {
-          font-size: 20px;
+          color: $tc-black;
+          font-size: 16px;
+          font-weight: bold;
+          @media screen and (max-width: $screen-md - 1px) {
+            font-size: 14px;
+          }
         }
-      }
-
-      tbody > tr:last-child {
-        border-bottom: 1px solid $tc-gray-50;
       }
 
       .fixed-value {
@@ -142,6 +189,48 @@
       margin-bottom: 3 * $base-unit;
       margin-top: 6 * $base-unit;
       text-align: center;
+    }
+
+    .SelectDropdown {
+      margin: 0;
+      .tc-link {
+        @include roboto;
+        font-size: $tc-body-sm;
+      }
+    }
+  }
+
+  // checkbox-ctrl styles
+  .checkbox-ctrl {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    cursor: pointer;
+
+    .checkbox-text {
+      position: relative;
+      padding-left: 20px;
+      &:before {
+        position: absolute;
+        left: 0;
+        top: 0;
+        content: '';
+        background-color: $tc-white;
+        border: 1px solid $tc-gray-neutral-light;
+        border-radius: 3px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+    .checkbox {
+      display: none;
+      &:checked + .checkbox-text {
+        &:before {
+          background: url('../../../../../assets/icons/check-blue.svg') 50% no-repeat;
+          background-size: 11px;
+          border-radius: 3px;
+        }
+      }
     }
   }
 }
