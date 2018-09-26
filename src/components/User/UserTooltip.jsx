@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
-import { DOMAIN } from '../../../config/constants'
+import { DOMAIN } from '../../config/constants'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 
 require('./UserTooltip.scss')
