@@ -7,7 +7,7 @@
     "build": "npm rebuild node-sass; ./node_modules/.bin/webpack --bail --progress  --colors --env=production",
     "lint": "eslint --format table --ext .js,.jsx .",
     "lint:fix": "eslint --fix --format table --ext .js,.jsx .",
-    "test": "cross-env NODE_ENV=test mocha  --colors --reporter nyan --compilers js:babel-core/register --require ignore-styles --recursive \"./src/**/*.spec.js\"",
+    "test": "cross-env NODE_ENV=test mocha  --colors --reporter nyan --compilers js:babel-core/register --require ignore-styles --require src/helpers/testHelper.js --recursive \"./src/**/*.spec.js\"",
     "test:watch": "watch-run -i -p 'src/**/*' npm run test"
   },
   "optional": {

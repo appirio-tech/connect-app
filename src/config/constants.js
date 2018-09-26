@@ -1,3 +1,4 @@
+import { getCookie } from '../helpers/cookie'
 /*
  * ACTIONS
  */
@@ -549,6 +550,8 @@ export const NOTIFICATIONS_NEW_PER_SOURCE = 10
 
 export const NOTIFICATIONS_LIMIT = 1000
 
+export const SUPER_TEST_COOKIE_TAG = 'super-test'
+
 // 60px of primary toolbar height + 50px of secondary toolbar height + 10px to make some margin
 export const SCROLL_TO_MARGIN = 60 + 50 + 10
 export const SCROLL_TO_DURATION = 500 // ms
@@ -567,12 +570,17 @@ export const SCREEN_BREAKPOINT_SM = 640
 export const SCREEN_BREAKPOINT_XS = 320
 
 export const NOTIFICATION_SETTINGS_PERIODS = [
-  // { text: 'Send as they happen', value: 'immediately' },
-  { text: 'Every 10m.', value: 'every10minutes' },
-  { text: 'Hourly', value: 'hourly' },
+  { text: 'Off', value: 'off' },
+  { text: 'Immediately', value: 'immediately' },
+  // { text: 'Hourly', value: 'hourly' },
   { text: 'Daily', value: 'daily' },
-  { text: 'Weekly', value: 'weekly' },
+  // { text: 'Weekly', value: 'weekly' },
+  { text: 'Every other day', value: 'everyOtherDay' },
 ]
+
+if (getCookie(SUPER_TEST_COOKIE_TAG) !== undefined) {
+  NOTIFICATION_SETTINGS_PERIODS.push({ text: 'Every 10 minutes', value: 'every10minutes' })
+}
 
 // date time formats
 export const POST_TIME_FORMAT = 'h:mm a'

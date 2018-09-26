@@ -24,7 +24,7 @@ const SettingsPanel = (props) => (
 SettingsPanel.propTypes = {
   isWide: PropTypes.bool,
   title: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string,
   link: PropTypes.shape({
     to: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired

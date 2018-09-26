@@ -22,13 +22,6 @@
 
     @media screen and (max-width: $screen-md - 1px) {
       padding: 0;
-
-      /* add pseudo element to center title */
-      &::before {
-        content: '';
-        display: block;
-        width: 39px; /* close button width with padding */
-      }
     }
 
     > .section {
@@ -69,15 +62,10 @@
 
       &:hover {
         background-color: $tc-dark-blue-70;
-
-        .icon-x-mark {
-          fill: $tc-white;
-          margin: -6px;
-        }
       }
 
       .icon-x-mark {
-        fill: $tc-black;
+        fill: $tc-white;
         margin: -6px;
 
         @media screen and (max-width: $screen-md - 1px) {
@@ -108,7 +96,7 @@
       display: flex;
 
       @media screen and (max-width: $screen-md - 1px) {
-        display: none;
+        padding-left: 15px;
       }
 
       .icon-connect-logo-mono {
