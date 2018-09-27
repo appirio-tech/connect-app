@@ -123,11 +123,9 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
             tlCurrentDuration += milestone.duration
           } else {
             allMilestonesComplete = false
-            return false
           }
         }
       })
-
       let tlProgressInPercent = tlPlannedDuration > 0
         ? Math.round((tlCurrentDuration / tlPlannedDuration) * 100)
         : null
@@ -265,7 +263,6 @@ export function getPhaseActualData(phase, timeline) {
           tlCurrentDuration += milestone.duration
         } else {
           allMilestonesComplete = false
-          return false
         }
       }
     })
