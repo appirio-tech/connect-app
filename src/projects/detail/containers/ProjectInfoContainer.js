@@ -56,7 +56,8 @@ class ProjectInfoContainer extends React.Component {
     }
 
     // load phases feeds if they are not loaded yet
-    phases.forEach((phase) => {
+    // note: old projects doesn't have phases, so we check if there are any phases at all first
+    phases && phases.forEach((phase) => {
       if (!phasesTopics[phase.id]) {
         loadPhaseFeed(project.id, phase.id)
       }
@@ -154,9 +155,10 @@ class ProjectInfoContainer extends React.Component {
       }))
 
     // get list of phase topic in same order as phases
+    // note: for old projects which doesn't have phases we return an empty array
     const visiblePhases = phases && phases.filter((phase) => (
       isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
-    ))
+    )) || []
 
     const phaseFeeds = _.compact(
       visiblePhases.map((phase) => {
