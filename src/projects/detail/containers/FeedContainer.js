@@ -196,9 +196,9 @@ class FeedView extends React.Component {
   }
 
   onNewPostChange(title, content) {
-    const isChanged = (title && title.trim().length) || (content && content.trim().length)
+    const isChanged = !!((title && title.trim().length) || (content && content.trim().length))
 
-    this.props.onFeedChanged(isChanged)
+    this.props.newPostChanges(isChanged)
   }
 
   onNewPost({title, content}) {
@@ -212,9 +212,9 @@ class FeedView extends React.Component {
   }
 
   onNewCommentChange(feedId, content) {
-    const isChanged = content && content.trim().length
+    const isChanged = !!(content && content.trim().length)
 
-    this.props.onFeedChanged(isChanged)
+    this.props.newCommentChanges(feedId, isChanged)
   }
 
   onShowAllComments(feedId) {
@@ -253,14 +253,14 @@ class FeedView extends React.Component {
     }
     this.props.addFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, newComment)
 
-    this.props.onFeedChanged(false)
+    this.props.newCommentChanges(feedId, false)
   }
 
   onSaveMessageChange(feedId, messageId, content) {
     const feed = _.find(this.state.feeds, { id: feedId })
     const isChanged = feed && !_.find(feed.comments, { id: messageId, content })
 
-    this.props.onFeedChanged(isChanged)
+    this.props.messageChanges(messageId, isChanged)
   }
 
   onSaveMessage(feedId, message, content) {
@@ -268,7 +268,7 @@ class FeedView extends React.Component {
     newMessage.content = content
     this.props.saveFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, newMessage)
 
-    this.props.onFeedChanged(false)
+    this.props.messageChanges(message.id, false)
   }
 
   onDeleteMessage(feedId, postId) {
@@ -294,13 +294,13 @@ class FeedView extends React.Component {
   onTopicChange(feedId, messageId, title) {
     const isChanged = !_.find(this.state.feeds, { id: feedId, title })
 
-    this.props.onFeedChanged(isChanged)
+    this.props.topicChanges(feedId, isChanged)
   }
 
   onSaveTopic(feedId, postId, title, content) {
     this.props.saveProjectTopic(feedId, PROJECT_FEED_TYPE_PRIMARY, {postId, title, content})
 
-    this.props.onFeedChanged(false)
+    this.props.topicChanges(feedId, false)
   }
 
   onDeleteTopic(feedId) {
@@ -438,13 +438,27 @@ class FeedContainer extends React.Component {
     super(props)
 
     this.state = {
-      isChanged: false
+      isNewPostChanged: false,
+      isNewCommentChanged: {
+        feedIds: new Set(),
+        isChanged: false
+      },
+      isMessageChanged: {
+        messageIds: new Set(),
+        isChanged: false
+      },
+      isTopicChanged: {
+        feedIds: new Set(),
+        isChanged: false
+      }
     }
 
     this.onLeave = this.onLeave.bind(this)
     this.onRefreshFeeds = this.onRefreshFeeds.bind(this)
-    this.isChanged = this.isChanged.bind(this)
-    this.onFeedChanged = this.onFeedChanged.bind(this)
+    this.newPostChanges = this.newPostChanges.bind(this)
+    this.newCommentChanges = this.newCommentChanges.bind(this)
+    this.messageChanges = this.messageChanges.bind(this)
+    this.topicChanges = this.topicChanges.bind(this)
   }
 
   componentDidMount() {
@@ -459,18 +473,24 @@ class FeedContainer extends React.Component {
     window.removeEventListener('beforeunload', this.onLeave)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (_.isEqual(this.props, nextProps) && this.state.isChanged !== nextState.isChanged) {
-      return false
+  shouldComponentUpdate(nextProps) {
+    if (!_.isEqual(this.props, nextProps)) {
+      return true
     }
-    return true
+    return false
   }
+
+  getChangedState() {
+    const { isNewPostChanged, isNewCommentChanged, isMessageChanged, isTopicChanged } = this.state
+    return isNewPostChanged || isNewCommentChanged.isChanged || isMessageChanged.isChanged || isTopicChanged.isChanged
+  }
+
 
   isChanged() {
     let isChanged = !_.isUndefined(_.find(this.props.feeds, (feed) => (feed.isSavingTopic || feed.isDeletingTopic || feed.isAddingComment)
       || !_.isUndefined(_.find(feed.comments, (message) => message.isSavingComment || message.isDeletingComment))
     ))
-    isChanged = isChanged || this.state.isChanged
+    isChanged = isChanged || this.getChangedState()
 
     return isChanged
   }
@@ -486,12 +506,56 @@ class FeedContainer extends React.Component {
     this.props.loadDashboardFeeds(this.props.project.id)
   }
 
-  onFeedChanged(value) {
-    if (this.state.isChanged !== value) {
-      this.setState({
-        isChanged: value
-      })
-    }
+  newPostChanges(value) {
+    this.setState({ isNewPostChanged: value })
+  }
+
+  newCommentChanges(feedId, value) {
+    this.setState((prevState) => {
+      const feedIds = prevState.isNewCommentChanged.feedIds
+      if (value) {
+        feedIds.add(feedId)
+      } else {
+        feedIds.delete(feedId)
+      }
+      const isChanged = feedIds.size > 0
+
+      return {
+        isNewCommentChanged: { feedIds, isChanged }
+      }
+    })
+  }
+
+  messageChanges(messageId, value) {
+    this.setState((prevState) => {
+      const messageIds = prevState.isMessageChanged.messageIds
+      if (value) {
+        messageIds.add(messageId)
+      } else {
+        messageIds.delete(messageId)
+      }
+      const isChanged = messageIds.size > 0
+
+      return {
+        isMessageChanged: { messageIds, isChanged }
+      }
+    })
+  }
+
+  topicChanges(feedId, value) {
+    this.setState((prevState) => {
+      const feedIds = prevState.isTopicChanged.feedIds
+      if (value) {
+        feedIds.add(feedId)
+      } else {
+        feedIds.delete(feedId)
+      }
+      const isChanged = feedIds.size > 0
+
+      return {
+        isTopicChanged: { feedIds, isChanged }
+      }
+    })
   }
 
   render() {
@@ -500,7 +564,13 @@ class FeedContainer extends React.Component {
 
     return (
       <div>
-        <EnhancedFeedView {...this.props} onFeedChanged={this.onFeedChanged} />
+        <EnhancedFeedView
+          {...this.props}
+          newPostChanges={this.newPostChanges}
+          newCommentChanges={this.newCommentChanges}
+          messageChanges={this.messageChanges}
+          topicChanges={this.topicChanges}
+        />
 
         <PostsRefreshPrompt
           preventShowing={isChanged}
