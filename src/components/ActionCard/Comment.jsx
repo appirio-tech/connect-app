@@ -19,7 +19,7 @@ class Comment extends React.Component {
     this.onSave = this.onSave.bind(this)
     this.onChange = this.onChange.bind(this)
     this.edit = this.edit.bind(this)
-    this.delete = this.delete.bind(this)
+    this.onDelete = this.onDelete.bind(this)
     this.cancelEdit = this.cancelEdit.bind(this)
   }
 
@@ -27,30 +27,26 @@ class Comment extends React.Component {
     this.setState({editMode: this.props.message && this.props.message.editMode || this.props.isSaving})
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({editMode: nextProps.message && nextProps.message.editMode || nextProps.isSaving})
-  }
-
   onSave({content}) {
+    this.setState({editMode: false})
     this.props.onSave(this.props.message, content)
   }
 
   onChange(title, content) {
-    this.props.onChange(content, true)
+    this.props.onChange(content)
   }
 
   edit() {
     this.setState({editMode: true})
-    this.props.onChange(null, true)
   }
 
-  delete() {
+  onDelete() {
     this.props.onDelete(this.props.message.id)
   }
 
   cancelEdit() {
     this.setState({editMode: false})
-    this.props.onChange(null, false)
+    this.props.onChange(this.props.message.content)
   }
 
   render() {
@@ -61,7 +57,7 @@ class Comment extends React.Component {
     const avatarUrl = _.get(author, 'photoURL', null)
     const isDeleting = message && message.isDeletingComment
 
-    if (this.state.editMode) {
+    if (this.state.editMode || isSaving) {
       const content = message.newContent === null || message.newContent === undefined ? message.rawContent : message.newContent
       return (
         <div styleName="comment-editor">
@@ -110,7 +106,7 @@ class Comment extends React.Component {
               <CommentEditToggle
                 hideDelete={canDelete===false}
                 onEdit={this.edit}
-                onDelete={this.delete}
+                onDelete={this.onDelete}
               />
             </aside>
           }
