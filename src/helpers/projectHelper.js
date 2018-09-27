@@ -113,21 +113,17 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
     // calculate progress of phase
     const timeline = productsTimelines[phase.products[0].id].timeline
     if (timeline && timeline.milestones && timeline.milestones.length > 0) {
-      const timelineNow = moment().utc()
       let tlPlannedDuration = 0
       let tlCurrentDuration = 0
       let allMilestonesComplete = true
       _.forEach(timeline.milestones, milestone => {
         if (!milestone.hidden) {
           tlPlannedDuration+=milestone.duration
-          const range = moment.range(milestone.startDate, milestone.endDate)
           if (milestone.completionDate) {
             tlCurrentDuration += milestone.duration
-          } else if (range.contains(timelineNow)) {
-            tlCurrentDuration += timelineNow.diff(milestone.startDate, 'days')
-            allMilestonesComplete = false
           } else {
             allMilestonesComplete = false
+            return false
           }
         }
       })
@@ -258,7 +254,6 @@ export function getPhaseActualData(phase, timeline) {
     duration = endDate.diff(startDate, 'days') + 1
 
     // calculate progress of phase
-    const now = moment().utc()
     let tlPlannedDuration = 0
     let tlCurrentDuration = 0
     let allMilestonesComplete = true
@@ -266,14 +261,11 @@ export function getPhaseActualData(phase, timeline) {
     _.forEach(timeline.milestones, milestone => {
       if (!milestone.hidden) {
         tlPlannedDuration+=milestone.duration
-        const range = moment.range(milestone.startDate, milestone.endDate)
         if (milestone.completionDate) {
           tlCurrentDuration += milestone.duration
-        } else if (range.contains(now)) {
-          tlCurrentDuration += now.diff(milestone.startDate, 'days')
-          allMilestonesComplete = false
         } else {
           allMilestonesComplete = false
+          return false
         }
       }
     })
