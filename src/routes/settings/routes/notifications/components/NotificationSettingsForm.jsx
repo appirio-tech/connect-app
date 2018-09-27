@@ -147,17 +147,17 @@ const initSettings = (notInitedSettings) => {
         notifications[type][serviceId] = {}
       }
 
-      // for all messaging events, email notifications are off by default
-      if (serviceId === 'email' && _.includes(messagingTypes, type) && _.isUndefined(notifications[type][serviceId].enabled)) {
-        notifications[type][serviceId].enabled = 'no'
-        notifications[type][serviceId].bundlePeriod = ''
+      if (_.isUndefined(notifications[type][serviceId].enabled)) {
+        notifications[type][serviceId].enabled = 'yes'
+      }
 
-      // for the rest of events, notifications are enabled by default and bundle period is set to 'daily'
-      } {
-        if (_.isUndefined(notifications[type][serviceId].enabled)) {
-          notifications[type][serviceId].enabled = 'yes'
-        }
-        if (_.isUndefined(notifications[type][serviceId].bundlePeriod)) {
+      if (_.isUndefined(notifications[type][serviceId].bundlePeriod)) {
+        // for messageing related email notifications, by default bundle period is set to 'immediately'
+        if (serviceId === 'email' && _.includes(messagingTypes, type)) {
+          notifications[type][serviceId].bundlePeriod = 'immediately'
+
+        // for the rest of notifications by default bundle period is set to 'daily'
+        } else {
           notifications[type][serviceId].bundlePeriod = 'daily'
         }
       }
