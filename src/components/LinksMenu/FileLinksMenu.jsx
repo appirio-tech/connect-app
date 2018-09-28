@@ -11,33 +11,32 @@ import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import cn from 'classnames'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
 import BtnEdit from '../../assets/icons/icon-edit.svg'
-import _ from "lodash";
-import Modal from "../Modal/Modal";
+import _ from 'lodash'
+import Modal from '../Modal/Modal'
 
 const FileLinksMenu = ({
-                     canAdd,
-                     canDelete,
-                     canEdit,
-                     noDots,
-                     isAddingNewLink,
-                     limit,
-                     links,
-                     linkToDelete,
-                     linkToEdit,
-                     onAddingNewLink,
-                     onAddNewLink,
-                     onChangeLimit,
-                     onDelete,
-                     onDeleteIntent,
-                     onEdit,
-                     onEditIntent,
-                     title,
-                     moreText,
-                     withHash,
-                     attachmentsStorePath,
-                     category,
-                     onAddAttachment,
-                   }) => {
+  canAdd,
+  canDelete,
+  canEdit,
+  noDots,
+  isAddingNewLink,
+  limit,
+  links,
+  linkToDelete,
+  linkToEdit,
+  onAddingNewLink,
+  onChangeLimit,
+  onDelete,
+  onDeleteIntent,
+  onEdit,
+  onEditIntent,
+  title,
+  moreText,
+  withHash,
+  attachmentsStorePath,
+  category,
+  onAddAttachment,
+}) => {
   const renderLink = (link) => {
     if (link.onClick) {
       return (
@@ -97,8 +96,8 @@ const FileLinksMenu = ({
               UPLOAD A FILE
             </Modal.Title>
             <AddFiles successHandler={processUploadedFiles.bind(this)}
-                      storePath={attachmentsStorePath}
-                      category={category}
+              storePath={attachmentsStorePath}
+              category={category}
             />
           </Modal>
         }
