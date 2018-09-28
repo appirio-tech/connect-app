@@ -11,7 +11,7 @@ import { loadDashboardFeeds } from '../../actions/projectTopics'
 import { loadPhaseFeed } from '../../actions/phasesTopics'
 import { setDuration } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
-  DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_ATTACHMENTS_FOLDER
+  DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_ATTACHMENTS_FOLDER,
   PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_DRAFT } from '../../../config/constants'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
@@ -115,7 +115,7 @@ class ProjectInfoContainer extends React.Component {
 
   onAddAttachment(attachment) {
     const { project } = this.props;
-    addProjectAttachment(project.id, attachment);
+    this.props.addProjectAttachment(project.id, attachment);
   }
 
   render() {
@@ -263,6 +263,6 @@ ProjectInfoContainer.PropTypes = {
   productsTimelines : PropTypes.object.isRequired,
 }
 
-const mapDispatchToProps = { updateProject, deleteProject, loadDashboardFeeds, loadPhaseFeed }
+const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, loadDashboardFeeds, loadPhaseFeed }
 
 export default connect(null, mapDispatchToProps)(ProjectInfoContainer)
