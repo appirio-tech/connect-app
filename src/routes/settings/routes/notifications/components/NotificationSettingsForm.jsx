@@ -146,18 +146,22 @@ const initSettings = (notInitedSettings) => {
       if (!notifications[type][serviceId]) {
         notifications[type][serviceId] = {}
       }
+
       if (_.isUndefined(notifications[type][serviceId].enabled)) {
         notifications[type][serviceId].enabled = 'yes'
       }
+
       if (_.isUndefined(notifications[type][serviceId].bundlePeriod)) {
-        notifications[type][serviceId].bundlePeriod = 'daily'
+        // for messageing related email notifications, by default bundle period is set to 'immediately'
+        if (serviceId === 'email' && _.includes(messagingTypes, type)) {
+          notifications[type][serviceId].bundlePeriod = 'immediately'
+
+        // for the rest of notifications by default bundle period is set to 'daily'
+        } else {
+          notifications[type][serviceId].bundlePeriod = 'daily'
+        }
       }
     })
-
-    // for all messaging events, defaults emailBundling to off
-    if (_.includes(messagingTypes, type)) {
-      notifications[type]['email'].bundlePeriod = null
-    }
   })
 
   settings.notifications = notifications
@@ -182,7 +186,7 @@ class NotificationSettingsForm extends React.Component {
     // update values for all types of the topic
     topics[topicIndex].types.forEach((type) => {
       notifications[type].email.enabled = selectedOption.value === 'off' ? 'no' : 'yes'
-      notifications[type].email.bundlePeriod = selectedOption.value === 'off' ? null : selectedOption.value
+      notifications[type].email.bundlePeriod = selectedOption.value === 'off' ? '' : selectedOption.value
     })
 
     this.setState({
