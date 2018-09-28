@@ -88,21 +88,24 @@
   }
   .message-bar {
     background-color: $tc-yellow-30;
-    border-radius: 25px;
+    border-radius: 10px;
     text-align: center;
     font-size: 13px;
     font-style: italic;
-    height: 25px;
-    line-height: 25px;
+    line-height: 15px;
+    padding: $base-unit;
     position: relative;
   }
   .action-bar {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: $base-unit;
+    padding-bottom: $base-unit;
     position: relative;
 
     button {
-      margin: 0px 5px;
+      margin: $base-unit;
     }
   }
 }

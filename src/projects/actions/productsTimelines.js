@@ -113,11 +113,13 @@ export function updateProductMilestone(productId, timelineId, milestoneId, updat
         milestoneId,
       }
     }).then(() => {
-      const isLastMilestone = checkIfLastMilestone(timeline.timeline, milestoneIdx)
-      // if milestone duration was updated and it's not the last milestone
-      // we have to refresh timeline as other milestone dates were updated by the server
-      if (isDurationUpdated && !isLastMilestone) {
-        dispatch(loadProductTimelineWithMilestones(productId))
+      if (timeline) {
+        const isLastMilestone = checkIfLastMilestone(timeline.timeline, milestoneIdx)
+        // if milestone duration was updated and it's not the last milestone
+        // we have to refresh timeline as other milestone dates were updated by the server
+        if (isDurationUpdated && !isLastMilestone) {
+          dispatch(loadProductTimelineWithMilestonesById(timeline.timeline.id, productId))
+        }
       }
     })
   }
@@ -169,12 +171,22 @@ export function completeProductMilestone(productId, timelineId, milestoneId, upd
         // we do in sequentially for now
         if (nextMilestone) {
           // NOTE we wait until the next milestone is also updated before fire COMPLETE_PRODUCT_MILESTONE
-          return updateMilestone(timelineId, nextMilestone.id, {
-            details: {
-              ...nextMilestone.details,
-              prevMilestoneContent: completedMilestone.details.content,
-              prevMilestoneType: completedMilestone.type,
+          const details = {
+            ...nextMilestone.details,
+            prevMilestoneContent: completedMilestone.details.content,
+            prevMilestoneType: completedMilestone.type,
+          }
+          if ( ((nextMilestone.type === 'checkpoint-review' || nextMilestone.type === 'final-designs') // case # 2
+            && completedMilestone.type === 'add-links' ) ||
+            ((nextMilestone.type === 'delivery-design' || nextMilestone.type === 'delivery-dev') // case # 4
+              && completedMilestone.type !== 'final-fix' ) ) {
+            details.metadata = {
+              ..._.get(nextMilestone.details, 'metadata', {}),
+              waitingForCustomer: true
             }
+          }
+          return updateMilestone(timelineId, nextMilestone.id, {
+            details
           // always return completedMilestone for COMPLETE_PRODUCT_MILESTONE
           }).then(() => completedMilestone)
         } else {
@@ -240,11 +252,13 @@ export function extendProductMilestone(productId, timelineId, milestoneId, exten
         milestoneId,
       }
     }).then(() => {
-      const isLastMilestone = checkIfLastMilestone(timeline.timeline, milestoneIdx)
-      // if it's not the last milestone
-      // we have to refresh timeline as other milestone dates were updated by the server
-      if (!isLastMilestone) {
-        dispatch(loadProductTimelineWithMilestones(productId))
+      if (timeline) {
+        const isLastMilestone = checkIfLastMilestone(timeline.timeline, milestoneIdx)
+        // if it's not the last milestone
+        // we have to refresh timeline as other milestone dates were updated by the server
+        if (!isLastMilestone) {
+          dispatch(loadProductTimelineWithMilestonesById(timeline.timeline.id, productId))
+        }
       }
     })
   }
@@ -281,6 +295,10 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
         status: MILESTONE_STATUS.PLANNED,
         details: {
           ...milestone.details,
+          metadata: {
+            ..._.get(milestone, 'details.metadata', {}),
+            waitingForCustomer: false,
+          },
           content: {
             ..._.get(milestone, 'details.content', {}),
             isFinalFixesSubmitted: true
@@ -293,6 +311,7 @@ export function submitFinalFixesRequest(productId, timelineId, milestoneId, fina
           hidden: false,
           details: {
             ...finalFixesMilestone.details,
+
             content: {
               ..._.get(finalFixesMilestone, 'details.content', {}),
               finalFixRequests,

@@ -42,9 +42,9 @@ class ProductTimelineContainer extends React.Component {
       // show loader for the whole timeline even if updating only one milestone
       // here is why https://github.com/appirio-tech/connect-app/issues/2291#issuecomment-410968047
 
-	  // https://github.com/appirio-tech/connect-app/issues/2422
-	  // Simpy return Timeline component here.
-	  // Move out loading indicator to Timeline so the height can be maintained in there.
+      // https://github.com/appirio-tech/connect-app/issues/2422
+      // Simpy return Timeline component here.
+      // Move out loading indicator to Timeline so the height can be maintained in there.
       <Timeline {...this.props} />
     )
   }

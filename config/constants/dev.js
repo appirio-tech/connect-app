@@ -38,7 +38,7 @@ module.exports = {
 
   SALESFORCE_PROJECT_LEAD_LINK: 'https://c.cs18.visual.force.com/apex/ConnectLead?connectProjectId=',
 
-  CONNECT_SEGMENT_KEY: 'QBtLgV8vCiuRX1lDikbMjcoe9aCHkF6n',
+  CONNECT_SEGMENT_KEY: process.env.DEV_SEGMENT_KEY,
   PREDIX_PROGRAM_ID         : 3448,
   IBM_COGNITIVE_PROGRAM_ID  : 3449,
   HEAP_ANALYTICS_APP_ID     : '4153837120',

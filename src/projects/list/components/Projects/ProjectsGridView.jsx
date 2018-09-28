@@ -6,7 +6,7 @@ import moment from 'moment'
 import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 import GridView from '../../../../components/Grid/GridView'
 import UserTooltip from '../../../../components/User/UserTooltip'
-import { PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED } from '../../../../config/constants'
+import { PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED, DATE_TO_USER_FIELD_MAP } from '../../../../config/constants'
 import { getProjectTemplateByKey } from '../../../../helpers/templates'
 import TextTruncate from 'react-text-truncate'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
@@ -98,7 +98,7 @@ const ProjectsGridView = props => {
       classes: 'item-status-date',
       renderText: item => {
         const sortMetric = _.find(SORT_OPTIONS, o => currentSortField === o.val) || SORT_OPTIONS[0]
-        const lastAction = item[sortMetric.field] === 'createdAt' ? 'createdBy' : 'updatedBy'
+        const lastAction = DATE_TO_USER_FIELD_MAP[sortMetric.field]
         const lastEditor = members[item[lastAction]]
         const time = moment(item[sortMetric.field])
         return (

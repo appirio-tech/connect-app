@@ -93,7 +93,8 @@ class LinkItem extends React.Component {
         styleName={cn(
           'container',
           theme, {
-            'is-selected': !!onSelectChange && link.isSelected
+            'is-selected': !!onSelectChange && link.isSelected,
+            'has-title': !!link.title,
           }
         )}
       >

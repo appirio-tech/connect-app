@@ -13,9 +13,11 @@ import {
 const GOTO = {
   PROJECT_DASHBOARD: '/projects/{{projectId}}',
   PROJECT_SPECIFICATION: '/projects/{{projectId}}/specification',
+  PROJECT_PLAN: '/projects/{{projectId}}/plan',
   TOPIC: '/projects/{{projectId}}/#feed-{{topicId}}',
   POST: '/projects/{{projectId}}/#comment-{{postId}}',
-  FILE_LIST: '/projects/{{projectId}}/specification#appDefinition-files'
+  FILE_LIST: '/projects/{{projectId}}/specification#appDefinition-files',
+  PHASE: '/projects/{{projectId}}/plan#phase-{{phaseId}}'
 }
 
 // each notification can be displayed differently depend on WHO see them
@@ -345,7 +347,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: 'notifications.connect.project.specificationModified',
+    eventType: 'connect.action.project.product.update.spec',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userHandle}}</strong> updated the project specification',
@@ -356,7 +358,7 @@ export const NOTIFICATIONS = [
     }]
   }, {
     version: 2,
-    eventType: 'notifications.connect.project.specificationModified',
+    eventType: 'connect.action.project.product.update.spec',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userFullName}}</strong> updated the project specification',
@@ -364,6 +366,206 @@ export const NOTIFICATIONS = [
       bundledText: 'Project specification has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.PROJECT_SPECIFICATION
+    }]
+  },
+  {
+    eventType: 'connect.action.project.plan.ready',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: 'Project plan is ready',
+      shouldBundle: true,
+      bundledText: 'Project plan is ready for your project. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PROJECT_PLAN
+    }, {
+      text: 'Project plan is ready for <strong>{{projectName}}</strong>',
+      shouldBundle: true,
+      bundledText: 'Project plan is ready. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PROJECT_PLAN
+    }]
+  },
+  {
+    eventType: 'connect.action.project.plan.updated',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: 'Project plan is modified',
+      shouldBundle: true,
+      bundledText: 'Project plan is modified {{bundledCount}} times for your project. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PROJECT_PLAN
+    }, {
+      text: 'Project plan is modified for <strong>{{projectName}}</strong>',
+      shouldBundle: true,
+      bundledText: 'Project plan is modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PROJECT_PLAN
+    }]
+  },
+  {
+    eventType: 'notifications.connect.project.phase.transition.active',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: 'Phase <strong>{{updatedPhase.name}}</strong> is activated',
+      shouldBundle: true,
+      bundledText: '{{bundledCount}} phases are activated. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PHASE
+    }, {
+      text: 'Phase <strong>{{updatedPhase.name}}</strong> is activated',
+      shouldBundle: true,
+      bundledText: '{{bundledCount}} phases are activated. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PHASE
+    }]
+  },
+  {
+    eventType: 'notifications.connect.project.phase.transition.completed',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: 'Phase <strong>{{updatedPhase.name}}</strong> is completed',
+      shouldBundle: true,
+      bundledText: '{{bundledCount}} phases are completed. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PHASE
+    }, {
+      text: 'Phase <strong>{{updatedPhase.name}}</strong> is completed',
+      shouldBundle: true,
+      bundledText: '{{bundledCount}} phases are completed. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PHASE
+    }]
+  },
+  {
+    eventType: 'notifications.connect.project.phase.update.payment',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: 'Payments for <strong>{{updatedPhase.name}}</strong> updated',
+      shouldBundle: true,
+      bundledText: 'Payments updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PHASE
+    }, {
+      text: 'Payments for <strong>{{updatedPhase.name}}</strong> updated',
+      shouldBundle: true,
+      bundledText: 'Payments updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PHASE
+    }]
+  },
+  {
+    eventType: 'notifications.connect.project.phase.update.progress',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: 'Phase <strong>{{updatedPhase.name}}</strong> is progressed',
+      shouldBundle: true,
+      bundledText: 'Progress updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PHASE
+    }, {
+      text: 'Phase <strong>{{updatedPhase.name}}</strong> is progressed',
+      shouldBundle: true,
+      bundledText: 'Progress updated for {{bundledCount}} phases. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PHASE
+    }]
+  },
+  {
+    eventType: 'notifications.connect.project.phase.update.scope',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: '<strong>{{userHandle}}</strong> updated the phase specification',
+      shouldBundle: true,
+      bundledText: 'Phase specification has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PHASE
+    }, {
+      text: '<strong>{{userHandle}}</strong> updated the phase specification',
+      shouldBundle: true,
+      bundledText: 'Phase specification has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PHASE
+    }]
+  },
+  {
+    eventType: 'connect.action.project.updated.progress',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: '<strong>{{userHandle}}</strong> updated the project progress',
+      shouldBundle: true,
+      bundledText: 'Project progress has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PROJECT_PLAN
+    }, {
+      text: '<strong>{{userHandle}}</strong> updated the project progress',
+      shouldBundle: true,
+      bundledText: 'Project progress has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PROJECT_PLAN
+    }]
+  },
+  {
+    eventType: 'connect.action.timeline.adjusted',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: '<strong>{{userHandle}}</strong> updated the phase timeline',
+      shouldBundle: true,
+      bundledText: 'Phase timeline has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PHASE
+    }, {
+      text: '<strong>{{userHandle}}</strong> updated the phase timeline',
+      shouldBundle: true,
+      bundledText: 'Phase timeline has been modified {{bundledCount}} times. Last modified by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PHASE
+    }]
+  },
+  {
+    eventType: 'connect.action.timeline.milestone.transition.active',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: 'Milestone is activated in the phase',
+      shouldBundle: true,
+      bundledText: 'Milestones activated {{bundledCount}} times. Last activated by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PHASE
+    }, {
+      text: '<strong>{{userHandle}}</strong> activated a milestone in the phase',
+      shouldBundle: true,
+      bundledText: 'Milestones activated {{bundledCount}} times. Last activated by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PHASE
+    }]
+  },
+  {
+    eventType: 'connect.action.timeline.milestone.transition.completed',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: 'Milestone is completed in the phase',
+      shouldBundle: true,
+      bundledText: 'Milestones completed {{bundledCount}} times. Last completed by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PHASE
+    }, {
+      text: '<strong>{{userHandle}}</strong> completed a milestone in the phase',
+      shouldBundle: true,
+      bundledText: 'Milestones completed {{bundledCount}} times. Last completed by: <strong>{{userHandle}}</strong>',
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PHASE
+    }]
+  },
+  {
+    eventType: 'connect.action.timeline.milestone.waiting.customer',
+    type: NOTIFICATION_TYPE.UPDATES,
+    rules: [{
+      text: 'We are waiting for your input in the project {{projectName}}',
+      projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER],
+      goTo: GOTO.PHASE
+    }, {
+      text: 'Waiting for customer on a milestone in the project {{projectName}}',
+      projectRoles: [PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PHASE
     }]
   }
 ]

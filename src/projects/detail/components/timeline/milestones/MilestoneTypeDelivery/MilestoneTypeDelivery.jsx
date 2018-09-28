@@ -11,6 +11,7 @@ import LinkList from '../../LinkList'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import MilestonePostEditText from '../../MilestonePostEditText'
 import MilestoneDescription from '../../MilestoneDescription'
+import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
 
@@ -126,6 +127,8 @@ class MilestoneTypeDelivery extends React.Component {
     updateMilestoneContent({
       isAccepted: true,
       isDeclined: false
+    }, {
+      waitingForCustomer: false,
     })
   }
 
@@ -177,12 +180,6 @@ class MilestoneTypeDelivery extends React.Component {
     completeMilestone()
   }
 
-  getDescription() {
-    const { milestone } = this.props
-
-    return milestone[`${milestone.status}Text`]
-  }
-
   render() {
     const { milestone, theme, currentUser, previousMilestone } = this.props
     const { isShowFinalFixesRequestForm, finalFixRequests } = this.state
@@ -206,10 +203,47 @@ class MilestoneTypeDelivery extends React.Component {
     } else {
       links = _.get(milestone, 'details.content.links', [])
     }
+
+    const shouldhaveSecondDot =
+    isActive &&
+    (!isAccepted &&
+      !isDeclined &&
+      !isShowFinalFixesRequestForm &&
+      (currentUser.isCopilot || currentUser.isManager) &&
+      !currentUser.isAdmin &&
+      !isFinalFixesSubmitted)
+
+    const shouldHaveThirdDot =
+      isActive &&
+      (!isAccepted &&
+        !isDeclined &&
+        !isShowFinalFixesRequestForm &&
+        (currentUser.isCustomer || currentUser.isAdmin) &&
+        !isFinalFixesSubmitted)
+
+    const shouldHaveFourthDot =
+      isActive &&
+      (isShowFinalFixesRequestForm &&
+        !isFinalFixesSubmitted)
+
+    const shouldHaveFifthDot =
+      isActive &&
+      (isAccepted &&
+        !currentUser.isCustomer)
+
+    const shouldHaveSixthDot = isCompleted
+
+    const shouldShowFirstLineDot =
+    shouldhaveSecondDot ||
+    shouldHaveThirdDot ||
+    shouldHaveFourthDot ||
+    shouldHaveFifthDot ||
+    shouldHaveSixthDot
+
     return (
       <div styleName={cn('milestone-post', theme)}>
-        <DotIndicator hideDot>
-          <MilestoneDescription description={this.getDescription()} />
+        <DotIndicator hideFirstLine={!shouldShowFirstLineDot} hideDot>
+          <MilestoneDescription description={getMilestoneStatusText(milestone)} />
         </DotIndicator>
 
         {/*
@@ -292,38 +326,38 @@ class MilestoneTypeDelivery extends React.Component {
               </div>
             )}
 
-            {(isAccepted) && (	
-              <div>	
-                {!currentUser.isCustomer && (	
-                  <DotIndicator>	
-                    <LinkList	
-                      links={links}	
-                      onAddLink={this.updatedUrl}	
-                      onRemoveLink={this.removeUrl}	
-                      onUpdateLink={this.updatedUrl}	
-                      fields={[{ name: 'url'}]}	
-                      addButtonTitle="Add link"	
-                      formAddTitle="Adding a link"	
-                      formAddButtonTitle="Add a link"	
-                      formUpdateTitle="Editing a link"	
-                      formUpdateButtonTitle="Save changes"	
-                      isUpdating={milestone.isUpdating}	
-                      canAddLink	
-                    />	
-                    <div styleName="top-space">	
-                      <div styleName="button-layer">	
-                        <button	
-                          className="tc-btn tc-btn-primary tc-btn-sm action-btn"	
-                          onClick={this.completeMilestone}	
-                          disabled={links.length === 0}	
-                        >	
-                          Mark as completed	
-                        </button>	
-                      </div>	
-                    </div>	
-                  </DotIndicator>	
-                )}	
-              </div>	
+            {(isAccepted) && (
+              <div>
+                {!currentUser.isCustomer && (
+                  <DotIndicator>
+                    <LinkList
+                      links={links}
+                      onAddLink={this.updatedUrl}
+                      onRemoveLink={this.removeUrl}
+                      onUpdateLink={this.updatedUrl}
+                      fields={[{ name: 'url'}]}
+                      addButtonTitle="Add link"
+                      formAddTitle="Adding a link"
+                      formAddButtonTitle="Add a link"
+                      formUpdateTitle="Editing a link"
+                      formUpdateButtonTitle="Save changes"
+                      isUpdating={milestone.isUpdating}
+                      canAddLink
+                    />
+                    <div styleName="top-space">
+                      <div styleName="button-layer">
+                        <button
+                          className="tc-btn tc-btn-primary tc-btn-sm action-btn"
+                          onClick={this.completeMilestone}
+                          disabled={links.length === 0}
+                        >
+                          Mark as completed
+                        </button>
+                      </div>
+                    </div>
+                  </DotIndicator>
+                )}
+              </div>
             )}
 
 

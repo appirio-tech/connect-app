@@ -14,7 +14,15 @@ import {
   filterProjectNotifications,
 } from '../../../routes/notifications/helpers/notifications'
 import { toggleNotificationRead, toggleBundledNotificationRead } from '../../../routes/notifications/actions'
-import { updateProduct, fireProductDirty, fireProductDirtyUndo, deleteProjectPhase } from '../../actions/project'
+import {
+  updateProduct,
+  fireProductDirty,
+  fireProductDirtyUndo,
+  deleteProjectPhase,
+  expandProjectPhase,
+  collapseProjectPhase,
+  collapseAllProjectPhases,
+} from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
 import MediaQuery from 'react-responsive'
@@ -54,6 +62,12 @@ class DashboardContainer extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    const { collapseAllProjectPhases } = this.props
+
+    collapseAllProjectPhases()
+  }
+
   render() {
     const {
       project,
@@ -72,9 +86,14 @@ class DashboardContainer extends React.Component {
       removeProductAttachment,
       deleteProjectPhase,
       feeds,
-      productsTimelines
+      isFeedsLoading,
+      productsTimelines,
+      phasesStates,
+      phasesTopics,
+      expandProjectPhase,
+      collapseProjectPhase,
     } = this.props
-    
+
     // system notifications
     const notReadNotifications = filterReadNotifications(notifications.notifications)
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
@@ -91,8 +110,11 @@ class DashboardContainer extends React.Component {
         project={project}
         phases={phases}
         isSuperUser={isSuperUser}
+        isManageUser={isManageUser}
         feeds={feeds}
+        isFeedsLoading={isFeedsLoading}
         productsTimelines={productsTimelines}
+        phasesTopics={phasesTopics}
       />
     )
 
@@ -135,6 +157,9 @@ class DashboardContainer extends React.Component {
               updateProductAttachment={updateProductAttachment}
               removeProductAttachment={removeProductAttachment}
               deleteProjectPhase={deleteProjectPhase}
+              phasesStates={phasesStates}
+              expandProjectPhase={expandProjectPhase}
+              collapseProjectPhase={collapseProjectPhase}
             />
           }
 
@@ -149,12 +174,15 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState, projectTopics }) => ({
+const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics }) => ({
   notifications,
-  productTemplates: projectState.allProductTemplates,
+  productTemplates: templates.productTemplates,
   isProcessing: projectState.processing,
   phases: projectState.phases,
   feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
+  isFeedsLoading: projectTopics.isLoading,
+  phasesStates: projectState.phasesStates,
+  phasesTopics,
 })
 
 const mapDispatchToProps = {
@@ -167,6 +195,9 @@ const mapDispatchToProps = {
   updateProductAttachment,
   removeProductAttachment,
   deleteProjectPhase,
+  expandProjectPhase,
+  collapseProjectPhase,
+  collapseAllProjectPhases,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardContainer)

@@ -13,10 +13,10 @@ class Timeline extends React.Component {
   constructor(props) {
     super(props)
 
-	this.state = {
+    this.state = {
       height: 0,
-    };
-    this.updateHeight = this.updateHeight.bind(this);
+    }
+    this.updateHeight = this.updateHeight.bind(this)
 
     this.updateMilestone = this.updateMilestone.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
@@ -25,18 +25,18 @@ class Timeline extends React.Component {
     this.submitFinalFixesRequest = this.submitFinalFixesRequest.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.updateHeight();
+  componentWillReceiveProps() {
+    this.updateHeight()
   }
 
   componentDidUpdate() {
-    this.updateHeight();
+    this.updateHeight()
   }
 
   updateHeight() {
-	if (this.div && this.div.clientHeight > 0 && this.state.height == 0) {
+    if (this.div && this.div.clientHeight > 0 && this.state.height === 0) {
       this.setState({ height: this.div.clientHeight })
-	}
+    }
   }
 
   updateMilestone(milestoneId, values) {
@@ -93,17 +93,17 @@ class Timeline extends React.Component {
     const {
       currentUser,
       timeline,
-	  isLoading,
+      isLoading,
     } = this.props
 
     if (isLoading || _.some(timeline.milestones, 'isUpdating')) {
-	  const divHeight = `${this.state.height}px`
-	  return (<div style={{ height: divHeight, minHeight: divHeight }}><LoadingIndicator /></div>)
-	} else {
+      const divHeight = `${this.state.height}px`
+      return (<div style={{ height: divHeight, minHeight: divHeight }}><LoadingIndicator /></div>)
+    } else {
       //Ordering milestones wrt "order" before rendering
       const orderedMilestones = timeline.milestones ? _.orderBy(timeline.milestones, ['order']) : []
       return (
-        <div ref={ div => { this.div = div; } }>
+        <div ref={ div => { this.div = div } }>
           <TimelineHeader
             postContent={{
               title: timeline.name,
@@ -127,7 +127,7 @@ class Timeline extends React.Component {
           ))}
         </div>
       )
-	}
+    }
   }
 }
 

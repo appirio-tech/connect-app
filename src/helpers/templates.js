@@ -50,6 +50,18 @@ export function getProjectTemplateByAlias(projectTemplates, alias) {
 }
 
 /**
+ * Finds project template by its id
+ *
+ * @param {Array}  projectTemplates   list of project templates
+ * @param {String} templateId  project template id to search by
+ *
+ * @return {Object} project template or null
+ */
+export function getProjectTemplateById(projectTemplates, templateId) {
+  return projectTemplates.find(template => template.id === templateId)
+}
+
+/**
  * Finds project template by its key
  *
  * @param {Array}  projectTemplates   list of project templates
@@ -59,6 +71,43 @@ export function getProjectTemplateByAlias(projectTemplates, alias) {
  */
 export function getProjectTemplateByKey(projectTemplates, projectTemplateKey) {
   return _.find(projectTemplates, { key: projectTemplateKey }) || null
+}
+
+/**
+ * Find project's product templates
+ * 
+ * @param {Array} productTemplates list of product templates
+ * @param {Array} projectTemplates list of project templates
+ * @param {Object} project the project
+ * 
+ * @return {Array} project's product templates
+ */
+export function getProjectProductTemplates(productTemplates, projectTemplates, project) {
+  if (!project || !project.version) {
+    return []
+  }
+
+  //  old projects only have a single product template
+  if (project.version !== 'v3') {
+    const productKey = _.get(project, 'details.products[0]')
+    return [
+      _.find(productTemplates, { productKey })
+    ]
+  }
+
+  const projectTemplate = getProjectTemplateById(projectTemplates, project.templateId)
+  const { phases } = projectTemplate
+  const projectProductTemplates = []
+
+  Object.keys(phases).forEach((phaseName) => {
+    const phase = phases[phaseName]
+    phase.products.forEach((product) => {
+      const productTemplate = _.find(productTemplates, { id: product.id })
+      projectProductTemplates.push(productTemplate)
+    })
+  })
+
+  return projectProductTemplates
 }
 
 /**

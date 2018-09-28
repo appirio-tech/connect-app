@@ -73,6 +73,7 @@ function formatPhaseCardListHeaderProps(phases) {
 const ProjectStages = ({
   project,
   phases,
+  phasesStates,
   productTemplates,
   productsTimelines,
   currentMemberRole,
@@ -86,6 +87,10 @@ const ProjectStages = ({
   removeProductAttachment,
   isManageUser,
   deleteProjectPhase,
+  expandProjectPhase,
+  collapseProjectPhase,
+  feedId,
+  commentId,
 }) => (
   <Section>
 
@@ -94,6 +99,7 @@ const ProjectStages = ({
       phases.map((phase, index) => (
         <ProjectStage
           key={phase.id}
+          phaseState={phasesStates[phase.id]}
           productTemplates={productTemplates}
           currentMemberRole={currentMemberRole}
           isProcessing={isProcessing}
@@ -109,6 +115,10 @@ const ProjectStages = ({
           updateProductAttachment={updateProductAttachment}
           removeProductAttachment={removeProductAttachment}
           deleteProjectPhase={deleteProjectPhase}
+          expandProjectPhase={expandProjectPhase}
+          collapseProjectPhase={collapseProjectPhase}
+          feedId={feedId}
+          commentId={commentId}
         />
       ))
     }

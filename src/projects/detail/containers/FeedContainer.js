@@ -426,7 +426,7 @@ class FeedView extends React.Component {
         />
 
         <Section>
-          <SectionTitle title="Posts" />
+          <SectionTitle title="Discussions" />
           <div>
             <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
               <NewPost
@@ -506,7 +506,13 @@ class FeedContainer extends React.Component {
   }
 
   componentWillMount() {
-    this.props.loadDashboardFeeds(this.props.project.id)
+    // As we implemented links to the topics on the Dashboard and Plan tabs sidebars
+    // we want to navigate between topics on the different tabs
+    // to make navigation smooth, we don't reload feeds on the dashboard tab
+    // every time we switch to the dashboard tab
+    // TODO this is an experimental way, we have to think if this is good
+    //      or we have reload feeds some way still keeping navigation smooth
+    // this.props.loadDashboardFeeds(this.props.project.id)
   }
 
   render() {

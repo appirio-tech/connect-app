@@ -37,8 +37,6 @@ const getPhaseTopicWithMember = (dispatch, projectId, phaseId, tag) => {
   return new Promise((resolve, reject) => {
     return dispatch({
       type: LOAD_PHASE_FEED,
-      // TODO $PROJECT_PLAN$ remove getting topics for project 5021
-      // and uncomment calling for getting topics for phase
       payload: getTopicsWithComments('project', `${projectId}`, `phase#${phaseId}`, false),
       meta: { tag, phaseId }
     })

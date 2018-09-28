@@ -9,6 +9,7 @@ import uncontrollable from 'uncontrollable'
 import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
 import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
+import { filterNotificationsByPosts, filterReadNotifications } from '../../../routes/notifications/helpers/notifications'
 
 import PhaseCard from './PhaseCard'
 import ProjectStageTabs from './ProjectStageTabs'
@@ -17,6 +18,8 @@ import PhaseFeed from './PhaseFeed'
 import ProductTimelineContainer from '../containers/ProductTimelineContainer'
 import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import NotificationsReader from '../../../components/NotificationsReader'
+import { scrollToHash } from '../../../components/ScrollToAnchors'
 
 const enhance = spinnerWhileLoading(props => !props.processing)
 const EnhancedEditProjectForm = enhance(EditProjectForm)
@@ -91,6 +94,10 @@ class ProjectStage extends React.Component{
     this.removeProductAttachment = this.removeProductAttachment.bind(this)
     this.updateProductAttachment = this.updateProductAttachment.bind(this)
     this.addProductAttachment = this.addProductAttachment.bind(this)
+    this.onTabClick = this.onTabClick.bind(this)
+    this.state = {
+      isExpanded: false
+    }
   }
 
   removeProductAttachment(attachmentId) {
@@ -114,9 +121,33 @@ class ProjectStage extends React.Component{
     addProductAttachment(project.id, phase.id, product.id, attachment)
   }
 
+  onTabClick(tab) {
+    const { expandProjectPhase, phase } = this.props
+
+    expandProjectPhase(phase.id, tab)
+  }
+
+  componentDidUpdate() {
+    const { phaseState } = this.props
+    if (_.get(phaseState, 'isExpanded')) {
+      const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
+      if (scrollTo) {
+        scrollToHash(scrollTo)
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { feedId, commentId, phase, phaseState, expandProjectPhase } = this.props
+    const { feed } = nextProps
+    if (!_.get(phaseState, 'isExpanded') && feed && (feed.id === parseInt(feedId) || feed.postIds.includes(parseInt(commentId)))){
+      expandProjectPhase(phase.id, 'posts')
+    }
+
+  }
+
   render() {
     const {
-      activeTab,
       phase,
       phaseIndex,
       project,
@@ -128,8 +159,10 @@ class ProjectStage extends React.Component{
       updateProduct,
       fireProductDirty,
       fireProductDirtyUndo,
-      onTabClick,
       deleteProjectPhase,
+      phaseState,
+      collapseProjectPhase,
+      expandProjectPhase,
 
       // comes from phaseFeedHOC
       currentUser,
@@ -141,6 +174,7 @@ class ProjectStage extends React.Component{
       allMembers,
       onSaveMessage,
       timeline,
+      notifications,
     } = this.props
 
     // NOTE even though in store we keep products as an array,
@@ -148,12 +182,16 @@ class ProjectStage extends React.Component{
     const productTemplate = _.find(productTemplates, { id: _.get(phase, 'products[0].templateId') })
     const product = _.get(phase, 'products[0]')
     const sections = _.get(productTemplate, 'template.questions', [])
+    const projectPhaseAnchor = `phase-${phase.id}-posts`
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
 
     const hasTimeline = !!timeline
     const defaultActiveTab = hasTimeline ? 'timeline' : 'posts'
-    const currentActiveTab = activeTab ? activeTab : defaultActiveTab
+    const currentActiveTab = _.get(phaseState, 'tab', defaultActiveTab)
+    const postNotifications = filterNotificationsByPosts(notifications, _.get(feed, 'posts', []))
+    const unreadPostNotifications = filterReadNotifications(postNotifications)
+    const hasReadPosts = unreadPostNotifications.length > 0
 
     return (
       <PhaseCard
@@ -162,21 +200,28 @@ class ProjectStage extends React.Component{
         isManageUser={isManageUser}
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
         timeline={timeline}
+        hasReadPosts={hasReadPosts}
+        phaseId={phase.id}
+        isExpanded={_.get(phaseState, 'isExpanded')}
+        collapseProjectPhase={collapseProjectPhase}
+        expandProjectPhase={expandProjectPhase}
       >
-        <div>
+        <div id={projectPhaseAnchor}>
           <ProjectStageTabs
             activeTab={currentActiveTab}
-            onTabClick={onTabClick}
+            onTabClick={this.onTabClick}
             isSuperUser={isSuperUser}
             isManageUser={isManageUser}
             hasTimeline={hasTimeline}
+            hasReadPosts={hasReadPosts}
           />
 
           {currentActiveTab === 'timeline' &&
             <ProductTimelineContainer product={product} />
           }
 
-          {currentActiveTab === 'posts' &&
+          {currentActiveTab === 'posts' && [
+            <NotificationsReader unreadNotifications={unreadPostNotifications} key="NotificationsReader" />,
             <PhaseFeed
               user={currentUser}
               currentUser={currentUser}
@@ -188,7 +233,7 @@ class ProjectStage extends React.Component{
               allMembers={allMembers}
               onSaveMessage={onSaveMessage}
             />
-          }
+          ]}
 
           {currentActiveTab === 'specification' &&
             <div className="two-col-content content">

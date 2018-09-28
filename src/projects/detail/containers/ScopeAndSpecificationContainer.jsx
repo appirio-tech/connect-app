@@ -18,6 +18,7 @@ import { SCREEN_BREAKPOINT_MD, PROJECT_ATTACHMENTS_FOLDER } from '../../../confi
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import { getProjectProductTemplates } from '../../../helpers/templates'
 
 // This handles showing a spinner while the state is being loaded async
 const enhance = spinnerWhileLoading(props => !props.processing)
@@ -123,12 +124,20 @@ SpecificationContainer.propTypes = {
   ])
 }
 
-const mapStateToProps = ({projectState, loadUser}) => {
+const mapStateToProps = ({projectState, loadUser, templates}) => {
+  const { projectTemplates, productTemplates } = templates
+
   return {
     processing: projectState.processing,
     error: projectState.error,
     currentUserId: parseInt(loadUser.user.id),
-    productTemplates: projectState.productTemplates,
+    productTemplates: (productTemplates && projectTemplates) ? (
+      getProjectProductTemplates(
+        productTemplates,
+        projectTemplates,
+        projectState.project
+      )
+    ) : []
   }
 }
 

@@ -6,12 +6,14 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { loadProjectDashboard } from '../actions/projectDashboard'
+import { clearLoadedProject } from '../actions/project'
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
   ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER
 } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
+import { getProjectProductTemplates, getProjectTemplateById } from '../../helpers/templates'
 
 const page404 = compose(
   withProps({code:404})
@@ -52,6 +54,9 @@ const ProjectDetailView = (props) => {
   if (!currentMemberRole && props.currentUserRoles && props.currentUserRoles.length > 0) {
     currentMemberRole = props.currentUserRoles[0]
   }
+  const regex = /#(feed-([0-9]+)|comment-([0-9]+))/
+  const match = props.location.hash.match(regex)
+  const ids = match ? { feedId: match[2], commentId: match[3] } : {}
   const children = React.Children.map(props.children, (child) => {
     return React.cloneElement(child, {
       project: props.project,
@@ -61,6 +66,7 @@ const ProjectDetailView = (props) => {
       isProcessing: props.isProcessing,
       allProductTemplates: props.allProductTemplates,
       productsTimelines: props.productsTimelines,
+      ...ids
     })
   })
   return <div>{children}</div>
@@ -77,6 +83,10 @@ class ProjectDetail extends Component {
     this.props.loadProjectDashboard(projectId)
   }
 
+  componentWillUnmount() {
+    this.props.clearLoadedProject()
+  }
+
   componentWillReceiveProps({isProcessing, isLoading, error, project, match}) {
     // handle just deleted projects
     if (! (error || isLoading || isProcessing) && _.isEmpty(project))
@@ -89,8 +99,6 @@ class ProjectDetail extends Component {
     if (this.props.match.params.projectId !== match.params.projectId) {
       this.props.loadProjectDashboard(match.params.projectId)
     }
-
-
   }
 
   getProjectRoleForCurrentUser({currentUserId, project}) {
@@ -123,22 +131,33 @@ class ProjectDetail extends Component {
   }
 }
 
-const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines}) => {
+const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTimelines, templates}) => {
+  const templateId = (projectState.project || {}).templateId
+  const { projectTemplates, productTemplates } = templates
+
   return {
     currentUserId: parseInt(loadUser.user.id),
     isLoading: projectDashboard.isLoading,
     isProcessing: projectState.processing,
     error: projectState.error,
     project: projectState.project,
-    projectTemplate: projectState.projectTemplate,
-    productTemplates: projectState.productTemplates,
+    projectTemplate: (templateId && projectTemplates) ? (
+      getProjectTemplateById(projectTemplates, templateId)
+    ) : null,
+    productTemplates: (projectTemplates && productTemplates) ? (
+      getProjectProductTemplates(
+        productTemplates,
+        projectTemplates,
+        projectState.project
+      )
+    ) : [],
     productsTimelines,
-    allProductTemplates: projectState.allProductTemplates,
+    allProductTemplates: templates.productTemplates,
     currentUserRoles: loadUser.user.roles
   }
 }
 
-const mapDispatchToProps = { loadProjectDashboard }
+const mapDispatchToProps = { loadProjectDashboard, clearLoadedProject }
 
 ProjectDetail.propTypes = {
   project: PropTypes.object,

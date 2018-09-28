@@ -8,91 +8,135 @@ import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
 
-import { updateProduct, fireProductDirty, fireProductDirtyUndo, deleteProjectPhase } from '../../actions/project'
+import {
+  updateProduct,
+  fireProductDirty,
+  fireProductDirtyUndo,
+  deleteProjectPhase,
+  expandProjectPhase,
+  collapseProjectPhase,
+  collapseAllProjectPhases,
+} from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
 import TwoColsLayout from '../components/TwoColsLayout'
-import ProjectPlanProgress from '../components/ProjectPlanProgress'
 import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT, PROJECT_STATUS_COMPLETED,
-  PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_ACTIVE } from '../../../config/constants'
+  PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY } from '../../../config/constants'
 import Sticky from 'react-stickynode'
 import { Link } from 'react-router-dom'
 
 import './ProjectPlanContainer.scss'
 
-const ProjectPlanContainer = (props) => {
-  const {
-    project,
-    isSuperUser,
-    isManageUser,
-    currentMemberRole,
-    phases,
-    feeds,
-    productsTimelines
-  } = props
+class ProjectPlanContainer extends React.Component {
+  constructor(props) {
+    super(props)
 
-  // manager user sees all phases
-  // customer user doesn't see unplanned (draft) phases
-  const visiblePhases = phases && phases.filter((phase) => (
-    isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
-  ))
+    this.onChannelClick = this.onChannelClick.bind(this)
+  }
 
-  const activePhases = phases ? phases.filter((phase) => phase.status === PHASE_STATUS_ACTIVE) : []
+  onChannelClick(topic) {
+    const { expandProjectPhase } = this.props
+    const phaseId = parseInt(topic.tag.replace('phase#', ''), 10)
 
-  const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
+    if (!phaseId) {
+      return
+    }
 
-  const leftArea = (
-    <ProjectInfoContainer
-      currentMemberRole={currentMemberRole}
-      phases={phases}
-      project={project}
-      phases={phases}
-      isSuperUser={isSuperUser}
-      feeds={feeds}
-      productsTimelines={productsTimelines}
-    />
-  )
+    // we just open Posts tab, while smooth scrolling will be caused by URL hash update
+    expandProjectPhase(phaseId, 'posts')
+  }
 
-  return (
-    <TwoColsLayout>
-      <TwoColsLayout.Sidebar>
-        <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
-          {(matches) => {
-            if (matches) {
-              return <Sticky top={110}>{leftArea}</Sticky>
-            } else {
-              return leftArea
-            }
-          }}
-        </MediaQuery>
-      </TwoColsLayout.Sidebar>
+  componentDidMount() {
+    const { expandProjectPhase } = this.props
+    const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
+    const phaseId = scrollTo && scrollTo.startsWith('phase-') ? parseInt(scrollTo.replace('phase-', ''), 10) : null
+    if (phaseId) {
+      let tab = scrollTo.replace(`phase-${phaseId}-`, '')
+      tab = tab === scrollTo ? 'timeline' : tab
+      // we just open tab, while smooth scrolling has to be caused by URL hash
+      expandProjectPhase(phaseId, tab)
+    }
+  }
 
-      <TwoColsLayout.Content>
-        {visiblePhases && visiblePhases.length > 0 ? (
-          [
-            activePhases.length > 0 && <ProjectPlanProgress phases={visiblePhases} project={project} productsTimelines={productsTimelines} key="progress" />,
+  componentWillUnmount() {
+    const { collapseAllProjectPhases } = this.props
+
+    collapseAllProjectPhases()
+  }
+
+  render() {
+    const {
+      project,
+      isSuperUser,
+      isManageUser,
+      currentMemberRole,
+      feeds,
+      isFeedsLoading,
+      phases,
+      productsTimelines,
+      phasesTopics,
+    } = this.props
+
+    // manager user sees all phases
+    // customer user doesn't see unplanned (draft) phases
+    const visiblePhases = phases && phases.filter((phase) => (
+      isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
+    ))
+
+    const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
+
+    const leftArea = (
+      <ProjectInfoContainer
+        currentMemberRole={currentMemberRole}
+        phases={phases}
+        project={project}
+        isSuperUser={isSuperUser}
+        isManageUser={isManageUser}
+        feeds={feeds}
+        isFeedsLoading={isFeedsLoading}
+        productsTimelines={productsTimelines}
+        phasesTopics={phasesTopics}
+        onChannelClick={this.onChannelClick}
+      />
+    )
+
+    return (
+      <TwoColsLayout>
+        <TwoColsLayout.Sidebar>
+          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+            {(matches) => {
+              if (matches) {
+                return <Sticky top={110}>{leftArea}</Sticky>
+              } else {
+                return leftArea
+              }
+            }}
+          </MediaQuery>
+        </TwoColsLayout.Sidebar>
+
+        <TwoColsLayout.Content>
+          {visiblePhases && visiblePhases.length > 0 ? (
             <ProjectStages
               {...{
-                ...props,
+                ...this.props,
                 phases: visiblePhases
               }}
-              key="stages"
             />
-          ]
-        ) : (
-          <ProjectPlanEmpty />
-        )}
-        {isProjectLive && isManageUser && (<div styleName="add-button-container">
-          <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
-        </div>)}
-      </TwoColsLayout.Content>
+          ) : (
+            <ProjectPlanEmpty />
+          )}
+          {isProjectLive && isManageUser && (<div styleName="add-button-container">
+            <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
+          </div>)}
+        </TwoColsLayout.Content>
 
-    </TwoColsLayout>
-  )
+      </TwoColsLayout>
+    )
+  }
 }
 
 ProjectPlanContainer.propTypes = {
@@ -106,10 +150,13 @@ ProjectPlanContainer.propTypes = {
   productsTimelines: PT.object.isRequired,
 }
 
-const mapStateToProps = ({ projectState, projectTopics }) => ({
-  productTemplates: projectState.allProductTemplates,
+const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates }) => ({
+  productTemplates: templates.productTemplates,
   phases: projectState.phases,
   feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
+  isFeedsLoading: projectTopics.isLoading,
+  phasesTopics,
+  phasesStates: projectState.phasesStates,
 })
 
 const mapDispatchToProps = {
@@ -120,6 +167,9 @@ const mapDispatchToProps = {
   updateProductAttachment,
   removeProductAttachment,
   deleteProjectPhase,
+  expandProjectPhase,
+  collapseProjectPhase,
+  collapseAllProjectPhases,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectPlanContainer)

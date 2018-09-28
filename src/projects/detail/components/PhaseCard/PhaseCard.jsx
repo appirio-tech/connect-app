@@ -7,6 +7,8 @@ import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
 import MediaQuery from 'react-responsive'
+import cn from 'classnames'
+import TextTruncate from 'react-text-truncate'
 
 import {
   PHASE_STATUS,
@@ -24,7 +26,6 @@ import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingInd
 import MobilePage from '../../../../components/MobilePage/MobilePage'
 import BackIcon from '../../../../assets/icons/arrow-left.svg'
 import EditStageForm from './EditStageForm'
-import DeletePhase from './DeletePhase'
 
 import './PhaseCard.scss'
 
@@ -36,7 +37,7 @@ class PhaseCard extends React.Component {
     this.onClose = this.onClose.bind(this)
 
     this.state = {
-      isExpanded: '',
+      isExpanded: props.isExpanded,
       isEditting: false,
       isDetailView: false
     }
@@ -44,22 +45,25 @@ class PhaseCard extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // update phase finished successfully
+    const nextState = {}
     if(nextProps.isUpdating === false && this.props.isUpdating === true) {
       // NOTE: following condition would be true for all stages after user updates only one of them
       // and we don't have phase id with update phase action reducer so we can't determine which card is updated
       // so we close all the edit forms for now
-      this.setState({
-        isEditting: false
-      })
+      nextState.isEditting = false
     }
+    if (nextProps.isExpanded !== this.props.isExpanded) {
+      nextState.isExpanded = nextProps.isExpanded
+    }
+    this.setState(nextState)
   }
 
   toggleCardView() {
-    this.setState({
-      isDetailView: true,
-      isExpanded: !this.state.isExpanded
-
-    })
+    if (this.state.isExpanded) {
+      this.props.collapseProjectPhase(this.props.phaseId)
+    } else {
+      this.props.expandProjectPhase(this.props.phaseId)
+    }
   }
 
   toggleEditView(e) {
@@ -70,14 +74,21 @@ class PhaseCard extends React.Component {
   }
 
   onClose(){
-    this.setState({
-      isDetailView: false,
-      isExpanded: false
-    })
+    this.props.collapseProjectPhase(this.props.phaseId)
   }
 
   render() {
-    const { attr, projectStatus, isManageUser, deleteProjectPhase, isUpdating, timeline } = this.props
+    const {
+      attr,
+      projectStatus,
+      isManageUser,
+      deleteProjectPhase,
+      isUpdating,
+      timeline,
+      hasReadPosts,
+      phaseId,
+      isExpanded,
+    } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
     let status = attr && attr.status ? attr.status : PHASE_STATUS_DRAFT
@@ -85,22 +96,31 @@ class PhaseCard extends React.Component {
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
     const phaseEditable = isManageUser && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
-    const canDelete = status !== PHASE_STATUS_ACTIVE && status !== PHASE_STATUS_COMPLETED
+    
+
+    const hasUnseen = hasReadPosts
 
     return (
-      <div styleName={'phase-card ' + (this.state.isExpanded ? ' expanded ' : ' ')}>
+      <div styleName={'phase-card ' + (isExpanded ? ' expanded ' : ' ')} id={`phase-${phaseId}`}>
         {
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
-            {(matches) => (matches || !this.state.isDetailView ? (
+            {(matches) => (matches || !isExpanded ? (
               <div>
-                <div styleName="static-view" onClick={!this.state.isEditting && this.toggleCardView }>
+                <div styleName={cn('static-view', { 'has-unseen': hasUnseen && !isExpanded })} onClick={!this.state.isEditting && this.toggleCardView }>
                   <div styleName="col">
                     <div styleName="project-details">
                       <div styleName="project-ico">
                         <ProjectTypeIcon type={attr.icon} />
                       </div>
                       <div styleName="project-title-container">
-                        <h4 styleName="project-title">{attr.title}</h4>
+                        <h4 styleName="project-title">
+                          <TextTruncate
+                            containerClassName="project-description"
+                            line={!matches ? 2 : 5}
+                            truncateText="..."
+                            text={attr.title}
+                          />
+                        </h4>
                         {phaseEditable && !this.state.isEditting && (<a styleName="edit-btn" onClick={this.toggleEditView} />
                         )}
                       </div>
@@ -183,26 +203,20 @@ class PhaseCard extends React.Component {
                 {!this.state.isEditting && (<div styleName="expandable-view">
                   {this.props.children}
                 </div>)}
-                {(<div styleName={'sm-separator ' + ((!isManageUser || !this.state.isEditting) ? 'hide ': '')} >
-                  {!isUpdating && (
-                    <EditStageForm
-                      phase={attr.phase}
-                      phaseIndex={attr.phaseIndex}
-                      cancel={this.toggleEditView}
-                      timeline={timeline}
-                    />
-                  )}
-                  {canDelete && !isUpdating && (
-                    <DeletePhase
-                      onDeleteClick={() => {
-                        if (confirm(`Are you sure you want to delete phase '${attr.phase.name}'?`)) {
-                          deleteProjectPhase()
-                        }
-                      }}
-                    />
-                  )}
-                  {isUpdating && <LoadingIndicator />}
-                </div>)}
+                {isManageUser && this.state.isEditting && (
+                  <div styleName="sm-separator">
+                    {!isUpdating && (
+                      <EditStageForm
+                        phase={attr.phase}
+                        phaseIndex={attr.phaseIndex}
+                        cancel={this.toggleEditView}
+                        timeline={timeline}
+                        deleteProjectPhase={deleteProjectPhase}
+                      />
+                    )}
+                    {isUpdating && <LoadingIndicator />}
+                  </div>
+                )}
               </div>
             ):(
               <MobilePage>
@@ -240,13 +254,15 @@ PhaseCard.propTypes = {
   attr: PT.shape({
     duration: PT.string.isRequired,
     icon: PT.string.isRequired,
-    isExpanded: PT.bool,
     paidStatus: PT.string.isRequired,
     posts: PT.string,
     startEndDates: PT.string.isRequired,
     status: PT.string.isRequired,
     title: PT.string.isRequired,
-  })
+    hasReadPosts: PT.bool,
+  }),
+  phaseId: PT.number.isRequired,
+  isExpanded: PT.bool,
 }
 
 

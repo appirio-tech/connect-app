@@ -6,6 +6,7 @@ import {
   PROJECT_ROLE_OWNER,
   PHASE_STATUS_ACTIVE,
   PHASE_STATUS_COMPLETED,
+  PHASE_STATUS_REVIEWED,
   PHASE_STATUS_DRAFT,
 } from '../config/constants'
 
@@ -87,8 +88,8 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
 
   // phases where start date is set and are not draft
   const nonDraftPhases = _.filter(phases, (phase) => (phase.startDate && phase.status !== PHASE_STATUS_DRAFT))
-  const activeAndCompletedPhases = _.filter(phases, (phase) => (phase.startDate && (phase.status === PHASE_STATUS_ACTIVE || phase.status === PHASE_STATUS_COMPLETED)))
-  activeAndCompletedPhases.map((phase) => {
+  const activeAndCompletedAndReviewedPhases = _.filter(phases, (phase) => (phase.startDate && (phase.status === PHASE_STATUS_ACTIVE || phase.status === PHASE_STATUS_COMPLETED || phase.status === PHASE_STATUS_REVIEWED)))
+  activeAndCompletedAndReviewedPhases.map((phase) => {
     let progress = 0
     // calculates days spent and day based progress for the phase
     if (phase.startDate && phase.duration) {
@@ -112,25 +113,19 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
     // calculate progress of phase
     const timeline = productsTimelines[phase.products[0].id].timeline
     if (timeline && timeline.milestones && timeline.milestones.length > 0) {
-      const timelineNow = moment().utc()
       let tlPlannedDuration = 0
       let tlCurrentDuration = 0
       let allMilestonesComplete = true
       _.forEach(timeline.milestones, milestone => {
         if (!milestone.hidden) {
           tlPlannedDuration+=milestone.duration
-          const range = moment.range(milestone.startDate, milestone.endDate)
           if (milestone.completionDate) {
             tlCurrentDuration += milestone.duration
-          } else if (range.contains(timelineNow)) {
-            tlCurrentDuration += timelineNow.diff(milestone.startDate, 'days')
-            allMilestonesComplete = false
           } else {
             allMilestonesComplete = false
           }
         }
       })
-
       let tlProgressInPercent = tlPlannedDuration > 0
         ? Math.round((tlCurrentDuration / tlPlannedDuration) * 100)
         : null
@@ -157,9 +152,9 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
 
   const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
 
-  const spentAmount = _.sumBy(activeAndCompletedPhases, 'spentBudget') || 0
+  const spentAmount = _.sumBy(activeAndCompletedAndReviewedPhases, 'spentBudget') || 0
   const labelSpent = spentAmount > 0 ? `Spent $${formatNumberWithCommas(spentAmount)}` : ''
-  const progressPercent = phases.length > 0 ? Math.round(totalProgress/activeAndCompletedPhases.length) : 0
+  const progressPercent = phases.length > 0 ? Math.round(totalProgress/activeAndCompletedAndReviewedPhases.length) : 0
   const labelStatus = `${progressPercent}% done`
 
   return {
@@ -257,7 +252,6 @@ export function getPhaseActualData(phase, timeline) {
     duration = endDate.diff(startDate, 'days') + 1
 
     // calculate progress of phase
-    const now = moment().utc()
     let tlPlannedDuration = 0
     let tlCurrentDuration = 0
     let allMilestonesComplete = true
@@ -265,12 +259,8 @@ export function getPhaseActualData(phase, timeline) {
     _.forEach(timeline.milestones, milestone => {
       if (!milestone.hidden) {
         tlPlannedDuration+=milestone.duration
-        const range = moment.range(milestone.startDate, milestone.endDate)
         if (milestone.completionDate) {
           tlCurrentDuration += milestone.duration
-        } else if (range.contains(now)) {
-          tlCurrentDuration += now.diff(milestone.startDate, 'days')
-          allMilestonesComplete = false
         } else {
           allMilestonesComplete = false
         }

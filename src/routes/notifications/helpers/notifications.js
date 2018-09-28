@@ -131,6 +131,22 @@ export const splitNotificationsBySources = (sources, notifications) => {
 }
 
 /**
+ * Filter notifications by posts
+ *
+ * So only notifications related to provided posts will stay
+ *
+ * @param  {Array} notifications list of notifications
+ * @param  {Array} posts         list of posts
+ *
+ * @return {Array}               list of filtered notifications
+ */
+export const filterNotificationsByPosts = (notifications, posts) => {
+  const postIds = _.map(posts, 'id')
+
+  return notifications.filter((notification) => _.includes(postIds, _.get(notification, 'contents.postId')))
+}
+
+/**
  * Filter notifications to only not read yet
  *
  * @param  {Array}  notifications list of notifications
@@ -241,10 +257,6 @@ const getNotificationRule = (notification) => {
     return match
   })
 
-  if (!notificationRule) {
-    throw new Error(`Cannot find notification rule for eventType '${notification.eventType}' version '${notification.version}'.`)
-  }
-
   return notificationRule
 }
 
@@ -343,7 +355,7 @@ const bundleNotifications = (notificationsWithRules) => {
  * @return {Array}               notification list
  */
 export const prepareNotifications = (rawNotifications) => {
-  const notificationsWithRules = rawNotifications.map((rawNotification) => ({
+  const notificationsWithRules = _.compact(rawNotifications.map((rawNotification) => ({
     id: `${rawNotification.id}`,
     sourceId: rawNotification.contents.projectId ? `${rawNotification.contents.projectId}` : 'global',
     sourceName: rawNotification.contents.projectId ? (rawNotification.contents.projectName || 'project') : 'Global',
@@ -356,6 +368,12 @@ export const prepareNotifications = (rawNotifications) => {
   })).map((notification) => {
     const notificationRule = getNotificationRule(notification)
 
+    // if rule for notification is not found, skip such notification
+    if (!notificationRule) {
+      console.warn(`Cannot find notification rule for eventType '${notification.eventType}' version '${notification.version}'.`)
+      return null
+    }
+
     // populate notification data
     notification.type = notificationRule.type
     if (notificationRule.goTo){
@@ -367,7 +385,7 @@ export const prepareNotifications = (rawNotifications) => {
       notification,
       notificationRule
     }
-  })
+  }))
 
   const bundledNotificationsWithRules = bundleNotifications(notificationsWithRules)
 

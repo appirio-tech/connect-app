@@ -8,7 +8,7 @@ import ProjectListNavHeader from './ProjectListNavHeader'
 import ProjectsGridView from './ProjectsGridView'
 import ProjectsCardView from '../../../components/projectsCard/ProjectsCardView'
 import { loadProjects, setInfiniteAutoload, setProjectsListView } from '../../../actions/loadProjects'
-import { loadProjectTemplates } from '../../../../actions/templates'
+import { loadProjectsMetadata } from '../../../../actions/templates'
 import { sortProjects } from '../../../actions/sortProjects'
 import _ from 'lodash'
 import querystring from 'query-string'
@@ -84,7 +84,7 @@ class Projects extends Component {
     document.title = 'Projects - Topcoder'
     // this.searchTermFromQuery = this.props.location.query.q || ''
     const {criteria, loadProjects, location, projects, refresh,
-      projectTemplates, isProjectTemplatesLoading, loadProjectTemplates} = props
+      projectTemplates, isProjectTemplatesLoading, loadProjectsMetadata} = props
     // check for criteria specified in URL.
     const queryParams = querystring.parse(location.search)
     this.setState({status : null})
@@ -120,7 +120,7 @@ class Projects extends Component {
 
     // load project templates if not yet
     if (!isProjectTemplatesLoading && !projectTemplates) {
-      loadProjectTemplates()
+      loadProjectsMetadata()
     }
   }
 
@@ -270,10 +270,10 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
     gridView    : isPowerUser,
     refresh     : projectSearch.refresh,
     projectTemplates: templates.projectTemplates,
-    isProjectTemplatesLoading: templates.isProjectTemplatesLoading,
+    isProjectTemplatesLoading: templates.isLoading,
   }
 }
 
-const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject, setProjectsListView, sortProjects, loadProjectTemplates }
+const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject, setProjectsListView, sortProjects, loadProjectsMetadata }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(Projects))

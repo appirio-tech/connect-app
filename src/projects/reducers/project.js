@@ -12,10 +12,10 @@ import {
   ADD_PROJECT_MEMBER_PENDING, ADD_PROJECT_MEMBER_SUCCESS, ADD_PROJECT_MEMBER_FAILURE,
   UPDATE_PROJECT_MEMBER_PENDING, UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_PENDING, REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
-  GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS, LOAD_PROJECT_PHASES_PENDING,
-  LOAD_PROJECT_TEMPLATE_SUCCESS, LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS, LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
+  GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS, LOAD_PROJECT_PHASES_PENDING, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
   UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_SUCCESS, UPDATE_PHASE_SUCCESS, UPDATE_PHASE_PENDING, UPDATE_PHASE_FAILURE,
-  DELETE_PROJECT_PHASE_PENDING, DELETE_PROJECT_PHASE_SUCCESS, DELETE_PROJECT_PHASE_FAILURE, PHASE_DIRTY_UNDO, PHASE_DIRTY
+  DELETE_PROJECT_PHASE_PENDING, DELETE_PROJECT_PHASE_SUCCESS, DELETE_PROJECT_PHASE_FAILURE, PHASE_DIRTY_UNDO, PHASE_DIRTY,
+  EXPAND_PROJECT_PHASE, COLLAPSE_PROJECT_PHASE, COLLAPSE_ALL_PROJECT_PHASES,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -29,12 +29,10 @@ const initialState = {
   project: {},
   projectNonDirty: {},
   updateExisting: false,
-  projectTemplate: null,
-  productTemplates: [],
-  allProductTemplates: [],
   phases: null,
   phasesNonDirty: null,
-  isLoadingPhases: false
+  isLoadingPhases: false,
+  phasesStates: {} // controls opened phases and tabs of the phases
 }
 
 // NOTE: We should always update projectNonDirty state whenever we update the project state
@@ -98,6 +96,49 @@ function getProductInPhases(phases, phaseId, productId) {
 export const projectState = function (state=initialState, action) {
 
   switch (action.type) {
+  case EXPAND_PROJECT_PHASE: {
+    const { phaseId, tab } = action.payload
+    const currentPhaseTab = state.phasesStates[phaseId] || {}
+    const updatedPhaseTab = {
+      ...currentPhaseTab,
+      isExpanded: true
+    }
+    if (tab) {
+      updatedPhaseTab.tab = tab
+    }
+
+    return {
+      ...state,
+      phasesStates: {
+        ...state.phasesStates,
+        [phaseId]: updatedPhaseTab
+      }
+    }
+  }
+
+  case COLLAPSE_PROJECT_PHASE: {
+    const { phaseId } = action.payload
+    const currentPhaseTab = state.phasesStates[phaseId] || {}
+    const updatedPhaseTab = {
+      ...currentPhaseTab,
+      isExpanded: false
+    }
+
+    return {
+      ...state,
+      phasesStates: {
+        ...state.phasesStates,
+        [phaseId]: updatedPhaseTab
+      }
+    }
+  }
+
+  case COLLAPSE_ALL_PROJECT_PHASES:
+    return {
+      ...state,
+      phasesStates: {},
+    }
+
   case LOAD_PROJECT_PENDING:
     return Object.assign({}, state, {
       isLoading: true,
@@ -152,25 +193,10 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
-  case LOAD_PROJECT_TEMPLATE_SUCCESS:
-    return {...state,
-      projectTemplate: action.payload,
-    }
-
-  case LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS:
-    return {...state,
-      // replace all loaded product templates so we keep only the one for current project
-      productTemplates: action.payload,
-    }
-
-  case LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS:
-    return {...state,
-      allProductTemplates: action.payload,
-    }
-
   case CLEAR_LOADED_PROJECT:
   case GET_PROJECTS_SUCCESS:
     return Object.assign({}, state, {
+      isLoading: true, // this is excpected to be default value when there is not project loaded
       project: {},
       projectNonDirty: {},
       phases: null,

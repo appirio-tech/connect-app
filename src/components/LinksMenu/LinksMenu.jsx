@@ -41,7 +41,9 @@ const LinksMenu = ({
           onClick={(evt) => {
             // we only prevent default on click,
             // as we handle clicks with <li>
-            evt.preventDefault()
+            if (!link.allowDefaultOnClick) {
+              evt.preventDefault()
+            }
           }}
         >
           {link.title}

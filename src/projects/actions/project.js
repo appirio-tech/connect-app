@@ -10,13 +10,7 @@ import { getProjectById, createProject as createProjectAPI,
   updateProduct as updateProductAPI,
   updatePhase as updatePhaseAPI,
   createProjectPhase,
-  createPhaseProduct,
 } from '../../api/projects'
-import {
-  getProductTemplate,
-  getProjectTemplate,
-  getProductTemplateByKey,
-} from '../../api/templates'
 import {
   createTimeline,
 } from '../../api/timelines'
@@ -32,9 +26,6 @@ import {
   PROJECT_DIRTY,
   PROJECT_DIRTY_UNDO,
   LOAD_PROJECT_PHASES,
-  LOAD_PROJECT_TEMPLATE,
-  LOAD_PROJECT_PRODUCT_TEMPLATES,
-  LOAD_ALL_PRODUCT_TEMPLATES,
   UPDATE_PRODUCT,
   PROJECT_STATUS_DRAFT,
   PRODUCT_DIRTY,
@@ -44,12 +35,59 @@ import {
   MILESTONE_STATUS,
   PHASE_STATUS_ACTIVE,
   PHASE_DIRTY,
-  PHASE_DIRTY_UNDO
+  PHASE_DIRTY_UNDO,
+  PROJECT_STATUS_IN_REVIEW,
+  PHASE_STATUS_REVIEWED,
+  PROJECT_STATUS_REVIEWED,
+  PROJECT_STATUS_ACTIVE,
+  EXPAND_PROJECT_PHASE,
+  COLLAPSE_PROJECT_PHASE,
+  COLLAPSE_ALL_PROJECT_PHASES,
 } from '../../config/constants'
 import {
   updateProductMilestone,
   updateProductTimeline
 } from './productsTimelines'
+
+/**
+ * Expand phase and optionaly expand particular tab
+ *
+ * @param {Number} phaseId phase id
+ * @param {String} tab     (optional) tab id
+ */
+export function expandProjectPhase(phaseId, tab) {
+  return (dispatch) => {
+    return dispatch({
+      type: EXPAND_PROJECT_PHASE,
+      payload: { phaseId, tab }
+    })
+  }
+}
+
+/**
+ * Collapse phase
+ *
+ * @param {Number} phaseId phase id
+ */
+export function collapseProjectPhase(phaseId) {
+  return (dispatch) => {
+    return dispatch({
+      type: COLLAPSE_PROJECT_PHASE,
+      payload: { phaseId }
+    })
+  }
+}
+
+/**
+ * Collapse all phases and reset tabs to default
+ */
+export function collapseAllProjectPhases() {
+  return (dispatch) => {
+    return dispatch({
+      type: COLLAPSE_ALL_PROJECT_PHASES,
+    })
+  }
+}
 
 export function loadProject(projectId) {
   return (dispatch) => {
@@ -103,103 +141,6 @@ export function loadProjectPhasesWithProducts(projectId) {
     return dispatch({
       type: LOAD_PROJECT_PHASES,
       payload: getProjectPhasesWithProducts(projectId)
-    })
-  }
-}
-
-/**
- * Load project template
- *
- * @param {String} id  template id
- *
- * @return {Promise} LOAD_PROJECT_TEMPLATE action with payload as project template object
- */
-export function loadProjectTemplate(id) {
-  return (dispatch) => {
-    return dispatch({
-      type: LOAD_PROJECT_TEMPLATE,
-      payload: getProjectTemplate(id)
-    })
-  }
-}
-
-/**
- * Load product templates for a project
- *
- * NOTE
- *   This function checks which product templates are already loaded and only loads which are not in the store yet
- *   Loaded but unnecessary product templates will be removed
- *
- * @param {Object} projectTemplate project template of the project
- *
- * @return {Promise} LOAD_PROJECT_PRODUCT_TEMPLATES action with payload as array of product templates
- */
-export function loadProjectProductTemplates(projectTemplate) {
-  return (dispatch, getState) => {
-    const productTemplates = getState().projectState.productTemplates
-
-    const alreadyLoadedProductTemplates = []
-    const notLoadedProductTemplatesIds = []
-
-    // check which product templates we have already loaded, and which we have to load
-    for(const phaseName in projectTemplate.phases) {
-      const phase = projectTemplate.phases[phaseName]
-      phase.products.forEach((product) => {
-        const alreadyLoadedProductTemplate = _.find(productTemplates, { id: product.id })
-
-        if (alreadyLoadedProductTemplate) {
-          alreadyLoadedProductTemplates.push(alreadyLoadedProductTemplate)
-        } else {
-          notLoadedProductTemplatesIds.push(product.id)
-        }
-      })
-    }
-
-    return dispatch({
-      type: LOAD_PROJECT_PRODUCT_TEMPLATES,
-      payload: Promise.all(notLoadedProductTemplatesIds.map((id) => getProductTemplate(id)))
-        .then((loadedProductTemplates) => [
-          ...alreadyLoadedProductTemplates,
-          ...loadedProductTemplates,
-        ])
-    })
-  }
-}
-
-/**
- * Load all product templates
- *
- * NOTE
- *   This function loads all product templates which are not in the store yet
- *
- * @param {Object} projectTemplate project template of the project
- *
- * @return {Promise} LOAD_ALL_PRODUCT_TEMPLATES action with payload as array of product templates
- */
-export function loadAllProductTemplates() {
-  return (dispatch) => {
-    return dispatch({
-      type: LOAD_ALL_PRODUCT_TEMPLATES,
-      payload: Promise.resolve(getProductTemplateByKey())
-    })
-  }
-}
-
-/**
- * Load product template by product key
- *
- * NOTE
- *   This is only need for old projects and it always has only one product template
- *
- * @param {String} productKey product key
- *
- * @return {Promise} LOAD_PROJECT_PRODUCT_TEMPLATES action with payload as array with one product template
- */
-export function loadProjectProductTemplatesByKey(productKey) {
-  return (dispatch) => {
-    return dispatch({
-      type: LOAD_PROJECT_PRODUCT_TEMPLATES,
-      payload: Promise.all([getProductTemplateByKey(productKey)])
     })
   }
 }
@@ -316,7 +257,8 @@ export function createProduct(project, productTemplate, phases, timelines) {
 export function createProjectPhaseAndProduct(project, projectTemplate, status = PROJECT_STATUS_DRAFT, startDate, endDate) {
   const param = {
     status,
-    name: projectTemplate.name
+    name: projectTemplate.name,
+    productTemplateId: projectTemplate.id
   }
   if (startDate) {
     param['startDate'] = startDate.format('YYYY-MM-DD')
@@ -326,19 +268,13 @@ export function createProjectPhaseAndProduct(project, projectTemplate, status = 
   }
 
   return createProjectPhase(project.id, param).then((phase) => {
-    return createPhaseProduct(project.id, phase.id, {
-      name: projectTemplate.name,
-      templateId: projectTemplate.id,
-      type: projectTemplate.key || projectTemplate.productKey,
-    }).then((product) => {
-      // we also wait until timeline is created as we will load it for the phase after creation
-      return createTimelineAndMilestoneForProduct(product, phase).then((timeline) => ({
-        project,
-        phase,
-        product,
-        timeline,
-      }))
-    })
+    // we also wait until timeline is created as we will load it for the phase after creation
+    return createTimelineAndMilestoneForProduct(phase.products[0], phase).then((timeline) => ({
+      project,
+      phase,
+      product:phase.products[0],
+      timeline,
+    }))
   })
 }
 
@@ -374,11 +310,13 @@ export function updateProject(projectId, updatedProps, updateExisting = false) {
 export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
   return (dispatch, getState) => {
     const state = getState()
+    phaseIndex = phaseIndex ? phaseIndex : _.findIndex(state.projectState.phases, { id: phaseId })
     const phase = state.projectState.phases[phaseIndex]
     const phaseStatusChanged = phase.status !== updatedProps.status
     const productId = phase.products[0].id
     const timeline = state.productsTimelines[productId] && state.productsTimelines[productId].timeline
-    const startDateChanged =updatedProps.startDate && updatedProps.startDate.diff(timeline.startDate)
+    const phaseStartDate = timeline ? timeline.startDate : phase.startDate
+    const startDateChanged = updatedProps.startDate ? updatedProps.startDate.diff(phaseStartDate) : null
     const phaseActivated = phaseStatusChanged && updatedProps.status === PHASE_STATUS_ACTIVE
     if (phaseActivated) {
       updatedProps.startDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
@@ -434,7 +372,36 @@ export function updatePhase(projectId, phaseId, updatedProps, phaseIndex) {
       } else {
         optionallyUpdateFirstMilestone()
       }
-      return true
+
+    // update project caused by phase updates
+    }).then(() => {
+      const project = state.projectState.project
+
+      // if one phase moved to REVIEWED status, make project IN_REVIEW too
+      if (
+        _.includes([PROJECT_STATUS_DRAFT], project.status) &&
+        phase.status !== PHASE_STATUS_REVIEWED &&
+        updatedProps.status === PHASE_STATUS_REVIEWED
+      ) {
+        dispatch(
+          updateProject(projectId, {
+            status: PHASE_STATUS_REVIEWED
+          }, true)
+        )
+      }
+
+      // if one phase moved to ACTIVE status, make project ACTIVE too
+      if (
+        _.includes([PROJECT_STATUS_DRAFT, PROJECT_STATUS_IN_REVIEW, PROJECT_STATUS_REVIEWED], project.status) &&
+        phase.status !== PHASE_STATUS_ACTIVE &&
+        updatedProps.status === PHASE_STATUS_ACTIVE
+      ) {
+        dispatch(
+          updateProject(projectId, {
+            status: PROJECT_STATUS_ACTIVE
+          }, true)
+        )
+      }
     })
   }
 }

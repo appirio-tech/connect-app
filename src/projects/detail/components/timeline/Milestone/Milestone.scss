@@ -43,7 +43,6 @@
     width: 70px;
 
     .month {
-      color: $tc-gray-80;
       font-size: 10px;
       font-weight: 400;
       letter-spacing: 0.4px;
@@ -52,12 +51,19 @@
       text-transform: uppercase;
     }
     .day {
-      color: $tc-black;
       font-size: 15px;
       font-weight: 500;
       line-height: 20px;
       text-align: right;
       position: relative;
+    }
+
+    .planned {
+      color: $tc-gray-30;
+    }
+
+    .completed {
+      color: $tc-black;
     }
   }
   &:last-child {

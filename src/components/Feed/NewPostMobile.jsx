@@ -13,13 +13,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import MobilePage from '../MobilePage/MobilePage'
 
-import XMartIcon from '../../assets/icons/x-mark-white.svg'
+import XMartIcon from '../../assets/icons/x-mark.svg'
 import './NewPostMobile.scss'
 
 export const NEW_POST_STEP = {
   STATUS: 'STATUS',
   COMMENT: 'COMMENT'
 }
+
+// we need it to calulate body height based on the actual mobile browser viewport height
+const HEADER_HEIGHT = 50
 
 class NewPostMobile extends React.Component {
   constructor(props) {
@@ -28,11 +31,26 @@ class NewPostMobile extends React.Component {
     this.state = {
       step: props.step,
       statusValue: '',
-      commentValue: ''
+      commentValue: '',
+      browserActualViewportHeigth: document.documentElement.clientHeight
     }
 
     this.setStep = this.setStep.bind(this)
     this.onValueChange = this.onValueChange.bind(this)
+    this.updateBrowserHeight = this.updateBrowserHeight.bind(this)
+  }
+
+  componentWillMount() {
+    window.addEventListener('resize', this.updateBrowserHeight)
+    this.updateBrowserHeight()
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateBrowserHeight)
+  }
+
+  updateBrowserHeight() {
+    this.setState({ browserActualViewportHeigth: document.documentElement.clientHeight })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -64,7 +82,7 @@ class NewPostMobile extends React.Component {
       statusTitle, commentTitle, commentPlaceholder, submitText, onPost, onClose,
       isCreating, nextStepText, statusPlaceholder
     } = this.props
-    const { step, statusValue, commentValue } = this.state
+    const { step, statusValue, commentValue, browserActualViewportHeigth } = this.state
 
     let value
     let title
@@ -94,11 +112,11 @@ class NewPostMobile extends React.Component {
     return (
       <MobilePage>
         <div styleName="header">
-          <div styleName="close-wrapper"><XMartIcon onClick={onClose} /></div>
+          <div styleName="plug" />
           <div styleName="title">{title}</div>
-          <div styleName="plug"/>
+          <div styleName="close-wrapper"><XMartIcon onClick={onClose} /></div>
         </div>
-        <div styleName="body">
+        <div styleName="body" style={{ height: browserActualViewportHeigth - HEADER_HEIGHT }}>
           <textarea
             ref="value"
             value={value}

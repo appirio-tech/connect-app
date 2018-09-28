@@ -13,10 +13,13 @@ import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
 import WinnerSelectionBar from '../../WinnerSelectionBar'
 import MilestoneDescription from '../../MilestoneDescription'
+import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
+import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 
 import {
   MILESTONE_STATUS,
   MIN_WINNER_DESIGNS,
+  DEFAULT_ADDITIONAL_DESIGN_COST,
 } from '../../../../../../config/constants'
 
 import './MilestoneTypeFinalDesigns.scss'
@@ -25,12 +28,14 @@ class MilestoneTypeFinalDesigns extends React.Component {
   constructor(props) {
     super(props)
 
+    const requiredWinnersCount = _.get(props, 'milestone.details.metadata.requiredWinnersCount', MIN_WINNER_DESIGNS)
+
     this.state = {
+      requiredWinnersCount,
+      additionalDesignCost: _.get(props, 'milestone.details.metadata.additionalDesignCost', DEFAULT_ADDITIONAL_DESIGN_COST),
       selectedLinks: [],
-      places: [-1, -1, -1],
-      isInReview: false,
-      isShowExtensionRequestMessage: false,
-      isShowExtensionConfirmMessage: false,
+      places: _.fill(Array(requiredWinnersCount), -1), // produces array like [-1, -1, -1, ... , -1]
+      isLinksProvided: _.get(props.milestone, 'details.prevMilestoneType') === 'add-links',
       isShowCompleteConfirmMessage: false,
       isShowCustomerCompleteConfirmMessage: false,
     }
@@ -42,14 +47,20 @@ class MilestoneTypeFinalDesigns extends React.Component {
     this.showCustomerCompleteReviewConfirmation = this.showCustomerCompleteReviewConfirmation.bind(this)
     this.hideCustomerCompleteReviewConfirmation = this.hideCustomerCompleteReviewConfirmation.bind(this)
     this.completeReview = this.completeReview.bind(this)
-    this.showExtensionRequestMessage = this.showExtensionRequestMessage.bind(this)
-    this.hideExtensionRequestMessage = this.hideExtensionRequestMessage.bind(this)
-    this.requestExtension = this.requestExtension.bind(this)
-    this.approveExtension = this.approveExtension.bind(this)
-    this.declineExtension = this.declineExtension.bind(this)
     this.moveToReviewingState = this.moveToReviewingState.bind(this)
     this.onBonusChange = this.onBonusChange.bind(this)
     this.onPlaceChange = this.onPlaceChange.bind(this)
+  }
+
+  getLinksForReview() {
+    const { milestone } = this.props
+    const { isLinksProvided } = this.state
+
+    if (isLinksProvided) {
+      return _.get(milestone, 'details.prevMilestoneContent.links', [])
+    }
+
+    return _.get(milestone, 'details.content.links', [])
   }
 
   isCanBeCompleted() {
@@ -86,7 +97,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
   completeReview() {
     const { milestone, completeMilestone } = this.props
     const { places, selectedLinks } = this.state
-    const links = _.get(milestone, 'details.content.links', [])
+    const links = this.getLinksForReview()
 
     if (!this.isCanBeCompleted()) {
       this.setState({ isSelectWarningVisible: true })
@@ -117,54 +128,10 @@ class MilestoneTypeFinalDesigns extends React.Component {
   }
 
   getMinSelectedDesigns() {
-    const { milestone } = this.props
-    const links = _.get(milestone, 'details.content.links', [])
+    const { requiredWinnersCount } = this.state
+    const links = this.getLinksForReview()
 
-    return Math.min(links.length, MIN_WINNER_DESIGNS)
-  }
-
-  showExtensionRequestMessage() {
-    this.setState({ isShowExtensionRequestMessage: true })
-  }
-
-  hideExtensionRequestMessage() {
-    this.setState({ isShowExtensionRequestMessage: false })
-  }
-
-  requestExtension(value) {
-    const { updateMilestoneContent } = this.props
-
-    const extensionDuration = parseInt(value, 10)
-
-    updateMilestoneContent({
-      extensionRequest: {
-        duration: extensionDuration,
-      }
-    })
-  }
-
-  declineExtension() {
-    const { updateMilestoneContent } = this.props
-
-    updateMilestoneContent({
-      extensionRequest: null,
-    })
-  }
-
-  approveExtension() {
-    const { extendMilestone, milestone } = this.props
-    const content = _.get(milestone, 'details.content')
-    const extensionRequest = _.get(milestone, 'details.content.extensionRequest')
-
-    extendMilestone(extensionRequest.duration, {
-      details: {
-        ...milestone.details,
-        content: {
-          ...content,
-          extensionRequest: null,
-        }
-      }
-    })
+    return Math.min(links.length, requiredWinnersCount)
   }
 
   updatedUrl(values, linkIndex) {
@@ -205,6 +172,8 @@ class MilestoneTypeFinalDesigns extends React.Component {
 
     updateMilestoneContent({
       isInReview: true,
+    }, {
+      waitingForCustomer: true,
     })
   }
 
@@ -239,6 +208,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
 
     this.setState({
       places: newPlaces,
+      selectedLinks: []
     }, () => {
       // hide warning if don't need anymore
       if (isSelectWarningVisible && this.isCanBeCompleted()) {
@@ -249,34 +219,34 @@ class MilestoneTypeFinalDesigns extends React.Component {
     })
   }
 
-  getDescription() {
-    const { milestone } = this.props
-
-    return milestone[`${milestone.status}Text`]
-  }
-
   render() {
     const {
       milestone,
       theme,
       currentUser,
+      extensionRequestDialog,
+      extensionRequestButton,
+      extensionRequestConfirmation,
     } = this.props
     const {
+      additionalDesignCost,
+      isLinksProvided,
       selectedLinks,
       isSelectWarningVisible,
       isShowCustomerCompleteConfirmMessage,
-      isShowExtensionRequestMessage,
       isShowCompleteConfirmMessage,
-      isShowExtensionConfirmMessage,
       places,
     } = this.state
 
-    const links = _.get(milestone, 'details.content.links', [])
-    const isInReview = _.get(milestone, 'details.content.isInReview', false)
-    const extensionRequest = _.get(milestone, 'details.content.extensionRequest')
-
+    // if links are provided we directly go to review
+    const isInReview = isLinksProvided || _.get(milestone, 'details.content.isInReview', false)
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+
+    const links = isCompleted
+      ? _.get(milestone, 'details.content.links', [])
+      : this.getLinksForReview()
+
     const minCheckedDesigns = this.getMinSelectedDesigns()
     const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
 
@@ -297,7 +267,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
-          <MilestoneDescription description={this.getDescription()} />
+          <MilestoneDescription description={getMilestoneStatusText(milestone)} />
         </DotIndicator>
 
         {/*
@@ -307,8 +277,8 @@ class MilestoneTypeFinalDesigns extends React.Component {
           <div>
             {!isInReview &&  (
               <div>
-                <div styleName="top-space">
-                  <DotIndicator>
+                <DotIndicator>
+                  <div styleName="top-space">
                     <ProjectProgress
                       labelDayStatus={progressText}
                       progressPercent={progressPercent}
@@ -325,8 +295,8 @@ class MilestoneTypeFinalDesigns extends React.Component {
                         </button>
                       )}
                     </ProjectProgress>
-                  </DotIndicator>
-                </div>
+                  </div>
+                </DotIndicator>
 
                 {!currentUser.isCustomer && (
                   <DotIndicator hideLine>
@@ -357,7 +327,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
             )}
 
             {isInReview && (
-              <div>
+              <div styleName="wide-on-mobile">
                 <DotIndicator>
                   <div styleName="top-space">
                     <header styleName="milestone-heading">
@@ -379,124 +349,95 @@ class MilestoneTypeFinalDesigns extends React.Component {
                         isSelectedBonus={_.includes(selectedLinks, index)}
                         selectedPlace={places.indexOf(index) + 1}
                         placesChosen={places}
-                        maxPlace={links.length}
+                        additionalDesignCost={additionalDesignCost}
                       />
                     </div>
                   </DotIndicator>
                 ))}
+
+                {isSelectWarningVisible && (
+                  <DotIndicator hideLine>
+                    <div styleName="top-space">
+                      <div styleName="message-bar" className="flex center">
+                        <i>Please select all {minCheckedDesigns} places to complete the review</i>
+                      </div>
+                    </div>
+                  </DotIndicator>
+                )}
+
+                {!!extensionRequestDialog && (
+                  <DotIndicator hideLine>
+                    <div styleName="top-space">
+                      {extensionRequestDialog}
+                    </div>
+                  </DotIndicator>
+                )}
+
+                {!!extensionRequestConfirmation && (
+                  <DotIndicator hideLine>
+                    <div styleName="top-space">
+                      {extensionRequestConfirmation}
+                    </div>
+                  </DotIndicator>
+                )}
+
+                {
+                  !isCompleted &&
+                  !extensionRequestDialog &&
+                  !isShowCompleteConfirmMessage &&
+                  !isShowCustomerCompleteConfirmMessage &&
+                  (!currentUser.isCustomer || isInReview) &&
+                (
+                  <DotIndicator hideLine>
+                    <div styleName="action-bar" className="flex center">
+                      {(!currentUser.isCustomer || isInReview) && (
+                        <button
+                          className={'tc-btn tc-btn-primary'}
+                          onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.showCustomerCompleteReviewConfirmation}
+                          disabled={!isInReview}
+                        >
+                          Complete review ({hoursLeft}h)
+                        </button>
+                      )}
+                      {!currentUser.isCustomer && extensionRequestButton}
+                    </div>
+                  </DotIndicator>
+                )}
+
+                {isShowCompleteConfirmMessage && (
+                  <DotIndicator hideLine>
+                    <div styleName="top-space">
+                      <MilestonePostMessage
+                        label={'Complete milestone review'}
+                        theme="warning"
+                        message={'Warning! Complete the review only if you have the permission from the customer. We do not want to close the review early without the ability to get feedback from our customers and let them select the winning 5 designs for next round.'}
+                        isShowSelection={false}
+                        buttons={[
+                          { title: 'Cancel', onClick: this.hideCompleteReviewConfirmation, type: 'default' },
+                          { title: 'Complete review', onClick: this.completeReview, type: 'warning' },
+                        ]}
+                      />
+                    </div>
+                  </DotIndicator>
+                )}
+
+                {isShowCustomerCompleteConfirmMessage && (
+                  <DotIndicator hideLine>
+                    <div styleName="top-space">
+                      <MilestonePostMessage
+                        label="Design phase competition"
+                        theme="primary"
+                        message="This selection is final and cannot be undone. Once you confirm your selection we will close the design phase and can proceed to the next one. Clicking on the Confirm selection button would make the source files available for download."
+                        isShowSelection={false}
+                        buttons={[
+                          { title: 'Cancel', onClick: this.hideCustomerCompleteReviewConfirmation, type: 'default' },
+                          { title: 'Complete selection', onClick: this.completeReview, type: 'primary' },
+                        ]}
+                      />
+                    </div>
+                  </DotIndicator>
+                )}
               </div>
-            )}
-
-            {isSelectWarningVisible && (
-              <DotIndicator hideLine>
-                <div styleName="top-space">
-                  <div styleName="message-bar" className="flex center">
-                    <i>Please select all {minCheckedDesigns} places to complete the review</i>
-                  </div>
-                </div>
-              </DotIndicator>
-            )}
-
-            {
-              !isCompleted &&
-              !isShowExtensionRequestMessage &&
-              !isShowExtensionConfirmMessage &&
-              !isShowCompleteConfirmMessage &&
-              !isShowCustomerCompleteConfirmMessage &&
-              (!currentUser.isCustomer || isInReview) &&
-            (
-              <DotIndicator hideLine>
-                <div styleName="action-bar" className="flex center">
-                  {(!currentUser.isCustomer || isInReview) && (
-                    <button
-                      className={'tc-btn tc-btn-primary'}
-                      onClick={!currentUser.isCustomer ? this.showCompleteReviewConfirmation : this.showCustomerCompleteReviewConfirmation}
-                      disabled={!isInReview}
-                    >
-                      Complete review ({
-                        daysLeft >= 0
-                          ? `${hoursLeft}h remaining`
-                          : `${-daysLeft}h delay`
-                      })
-                    </button>
-                  )}
-                  {!currentUser.isCustomer && !extensionRequest && (
-                    <button
-                      className={'tc-btn tc-btn-warning'}
-                      onClick={this.showExtensionRequestMessage}
-                    >
-                      Request Extension
-                    </button>
-                  )}
-                </div>
-              </DotIndicator>
-            )}
-
-            {isShowExtensionRequestMessage && (
-              <DotIndicator hideLine>
-                <div styleName="top-space">
-                  <MilestonePostMessage
-                    label={'Milestone extension request'}
-                    theme="warning"
-                    message={'Be careful, requesting extensions will change the project overall milestone. Proceed with caution and only if there are not enough submissions to satisfy our delivery policy.'}
-                    isShowSelection
-                    buttons={[
-                      { title: 'Cancel', onClick: this.hideExtensionRequestMessage, type: 'default' },
-                      { title: 'Request extension', onClick: this.requestExtension, type: 'warning' },
-                    ]}
-                  />
-                </div>
-              </DotIndicator>
-            )}
-
-            {!!extensionRequest && (
-              <DotIndicator hideLine>
-                <div styleName="top-space">
-                  <MilestonePostMessage
-                    label={'Milestone extension requested'}
-                    theme="primary"
-                    message={`Due to unusually high load on our network we had less than the minimum number or design submissions. In order to provide you with the appropriate number of design options we’ll have to extend the milestone with ${extensionRequest.duration * 24}h. This time would be enough to increase the capacity and make sure your project is successful.<br /><br />Please make a decision in the next 24h. After that we will automatically extend the project to make sure we deliver success to you.`}
-                    buttons={[
-                      { title: 'Decline extension', onClick: this.declineExtension, type: 'warning' },
-                      { title: 'Approve extension', onClick: this.approveExtension, type: 'primary' },
-                    ]}
-                  />
-                </div>
-              </DotIndicator>
-            )}
-
-            {isShowCompleteConfirmMessage && (
-              <DotIndicator hideLine>
-                <div styleName="top-space">
-                  <MilestonePostMessage
-                    label={'Complete milestone review'}
-                    theme="warning"
-                    message={'Warning! Complete the review only if you have the permission from the customer. We do not want to close the review early without the ability to get feedback from our customers and let them select the winning 5 designs for next round.'}
-                    isShowSelection={false}
-                    buttons={[
-                      { title: 'Cancel', onClick: this.hideCompleteReviewConfirmation, type: 'default' },
-                      { title: 'Complete review', onClick: this.completeReview, type: 'warning' },
-                    ]}
-                  />
-                </div>
-              </DotIndicator>
-            )}
-
-            {isShowCustomerCompleteConfirmMessage && (
-              <DotIndicator hideLine>
-                <div styleName="top-space">
-                  <MilestonePostMessage
-                    label="Design phase competition"
-                    theme="primary"
-                    message="This selection is final and cannot be undone. Once you confirm your selection we will close the design phase and can proceed to the next one. Clicking on the Confirm selection button would make the source files available for download."
-                    isShowSelection={false}
-                    buttons={[
-                      { title: 'Cancel', onClick: this.hideCustomerCompleteReviewConfirmation, type: 'default' },
-                      { title: 'Complete selection', onClick: this.completeReview, type: 'primary' },
-                    ]}
-                  />
-                </div>
-              </DotIndicator>
             )}
           </div>
         )}
@@ -505,7 +446,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
           Completed status
          */}
         {isCompleted && (
-          <div>
+          <div styleName="wide-on-mobile">
             <div styleName="top-space">
               <header styleName={'milestone-heading selected-theme'}>
                 Final designs
@@ -521,6 +462,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
                   isSelectedBonus={link.isSelected}
                   selectedPlace={link.selectedPlace}
                   placesChosen={places}
+                  additionalDesignCost={additionalDesignCost}
                 />
               </div>
             ))}
@@ -538,10 +480,12 @@ MilestoneTypeFinalDesigns.defaultProps = {
 MilestoneTypeFinalDesigns.propTypes = {
   completeMilestone: PT.func.isRequired,
   currentUser: PT.object.isRequired,
-  extendMilestone: PT.func.isRequired,
   milestone: PT.object.isRequired,
   theme: PT.string,
   updateMilestoneContent: PT.func.isRequired,
+  extensionRequestDialog: PT.node,
+  extensionRequestButton: PT.node,
+  extensionRequestConfirmation: PT.node,
 }
 
-export default MilestoneTypeFinalDesigns
+export default withMilestoneExtensionRequest(MilestoneTypeFinalDesigns)
