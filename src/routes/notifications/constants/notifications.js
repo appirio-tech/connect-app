@@ -347,7 +347,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: 'notifications.connect.project.specificationModified',
+    eventType: 'connect.action.project.product.update.spec',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userHandle}}</strong> updated the project specification',
@@ -358,7 +358,7 @@ export const NOTIFICATIONS = [
     }]
   }, {
     version: 2,
-    eventType: 'notifications.connect.project.specificationModified',
+    eventType: 'connect.action.project.product.update.spec',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userFullName}}</strong> updated the project specification',
@@ -369,7 +369,7 @@ export const NOTIFICATIONS = [
     }]
   },
   {
-    eventType: 'notifications.connect.project.planReady',
+    eventType: 'connect.action.project.plan.ready',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Project plan is ready',
@@ -386,7 +386,7 @@ export const NOTIFICATIONS = [
     }]
   },
   {
-    eventType: 'notifications.connect.project.plan.updated',
+    eventType: 'connect.action.project.plan.updated',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Project plan is modified',
@@ -488,7 +488,7 @@ export const NOTIFICATIONS = [
     }]
   },
   {
-    eventType: 'notifications.connect.project.progressModified',
+    eventType: 'connect.action.project.updated.progress',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userHandle}}</strong> updated the project progress',
@@ -505,7 +505,7 @@ export const NOTIFICATIONS = [
     }]
   },
   {
-    eventType: 'notifications.connect.project.phase.timelineModified',
+    eventType: 'connect.action.timeline.adjusted',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userHandle}}</strong> updated the phase timeline',
@@ -522,7 +522,7 @@ export const NOTIFICATIONS = [
     }]
   },
   {
-    eventType: 'notifications.connect.project.phase.milestone.transition.active',
+    eventType: 'connect.action.timeline.milestone.transition.active',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Milestone is activated in the phase',
@@ -539,7 +539,7 @@ export const NOTIFICATIONS = [
     }]
   },
   {
-    eventType: 'notifications.connect.project.phase.milestone.transition.completed',
+    eventType: 'connect.action.timeline.milestone.transition.completed',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Milestone is completed in the phase',
@@ -556,7 +556,7 @@ export const NOTIFICATIONS = [
     }]
   },
   {
-    eventType: 'notifications.connect.project.phase.milestone.waiting.customer',
+    eventType: 'connect.action.timeline.milestone.waiting.customer',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'We are waiting for your input in the project {{projectName}}',
