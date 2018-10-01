@@ -18,7 +18,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const registerUrl = ACCOUNTS_APP_REGISTER_URL;
+    const registerUrl = ACCOUNTS_APP_REGISTER_URL
     const learnMoreUrl = 'https://www.' + DOMAIN +'/about-topcoder/connect/'
     return (
       <div className="content content-home">
