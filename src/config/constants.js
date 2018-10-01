@@ -1,3 +1,4 @@
+import { getCookie } from '../helpers/cookie'
 /*
  * ACTIONS
  */
@@ -339,35 +340,10 @@ export const UPDATE_PRODUCT_ATTACHMENT_FAILURE = 'UPDATE_PRODUCT_ATTACHMENT_FAIL
 
 // Templates
 
-// load all templates to `templates.projectTemplate` in store
-export const LOAD_PROJECT_TEMPLATES             = 'LOAD_PROJECT_TEMPLATES'
-export const LOAD_PROJECT_TEMPLATES_PENDING     = 'LOAD_PROJECT_TEMPLATES_PENDING'
-export const LOAD_PROJECT_TEMPLATES_SUCCESS     = 'LOAD_PROJECT_TEMPLATES_SUCCESS'
-export const LOAD_PROJECT_TEMPLATES_FAILURE     = 'LOAD_PROJECT_TEMPLATES_FAILURE'
-
-// load project template for particular project to `projectState.projectTemplate` in store
-export const LOAD_PROJECT_TEMPLATE             = 'LOAD_PROJECT_TEMPLATE'
-export const LOAD_PROJECT_TEMPLATE_PENDING     = 'LOAD_PROJECT_TEMPLATE_PENDING'
-export const LOAD_PROJECT_TEMPLATE_SUCCESS     = 'LOAD_PROJECT_TEMPLATE_SUCCESS'
-export const LOAD_PROJECT_TEMPLATE_FAILURE     = 'LOAD_PROJECT_TEMPLATE_FAILURE'
-
-// load product templates for particular project to `projectState.productTemplate` in store
-export const LOAD_PROJECT_PRODUCT_TEMPLATES             = 'LOAD_PROJECT_PRODUCT_TEMPLATES'
-export const LOAD_PROJECT_PRODUCT_TEMPLATES_PENDING     = 'LOAD_PROJECT_PRODUCT_TEMPLATES_PENDING'
-export const LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS     = 'LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS'
-export const LOAD_PROJECT_PRODUCT_TEMPLATES_FAILURE     = 'LOAD_PROJECT_PRODUCT_TEMPLATES_FAILURE'
-
-// load all product templates to `projectState.allProductTemplate` in store
-export const LOAD_ALL_PRODUCT_TEMPLATES             = 'LOAD_ALL_PRODUCT_TEMPLATES'
-export const LOAD_ALL_PRODUCT_TEMPLATES_PENDING     = 'LOAD_ALL_PRODUCT_TEMPLATES_PENDING'
-export const LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS     = 'LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS'
-export const LOAD_ALL_PRODUCT_TEMPLATES_FAILURE     = 'LOAD_ALL_PRODUCT_TEMPLATES_FAILURE'
-
-// load all project types to `template.projectCategories` in store
-export const LOAD_PROJECT_CATEGORIES             = 'LOAD_PROJECT_CATEGORIES'
-export const LOAD_PROJECT_CATEGORIES_PENDING     = 'LOAD_PROJECT_CATEGORIES_PENDING'
-export const LOAD_PROJECT_CATEGORIES_SUCCESS     = 'LOAD_PROJECT_CATEGORIES_SUCCESS'
-export const LOAD_PROJECT_CATEGORIES_FAILURE     = 'LOAD_PROJECT_CATEGORIES_FAILURE'
+export const LOAD_PROJECTS_METADATA = 'LOAD_PROJECTS_METADATA'
+export const LOAD_PROJECTS_METADATA_PENDING = 'LOAD_PROJECTS_METADATA_PENDING'
+export const LOAD_PROJECTS_METADATA_SUCCESS = 'LOAD_PROJECTS_METADATA_SUCCESS'
+export const LOAD_PROJECTS_METADATA_FAILURE = 'LOAD_PROJECTS_METADATA_FAILURE'
 
 export const THREAD_MESSAGES_PAGE_SIZE = 3
 /*
@@ -464,6 +440,7 @@ export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
  */
 export const DOMAIN = process.env.domain || 'topcoder.com'
 export const CONNECT_DOMAIN = `connect.${DOMAIN}`
+export const CONNECT_MAIN_PAGE_URL = `http://connect.${DOMAIN}`
 export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
 export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || `https://accounts.${DOMAIN}/#!/connect`
 export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL || `https://accounts.${DOMAIN}/#!/connect/registration`
@@ -553,10 +530,18 @@ export const PROJECT_ICON_MAP = {
 /*eslint-enable */
 //Project sort options
 export const SORT_OPTIONS = [
-  { val: 'updatedAt desc', field: 'updatedAt' },
+  //{ val: 'updatedAt desc', field: 'updatedAt' },
+  { val: 'lastActivityAt desc', field: 'lastActivityAt' },
   { val: 'createdAt', field: 'createdAt' },
   { val: 'createdAt desc', field: 'createdAt' }
 ]
+
+// map project date field to corresponding user field
+export const DATE_TO_USER_FIELD_MAP = {
+  createdAt: 'createdBy',
+  //updatedAt: 'updatedBy',
+  lastActivityAt: 'lastActivityUserId',
+}
 
 // Notifications
 export const REFRESH_NOTIFICATIONS_INTERVAL = 1000 * 60 * 1 // 1 minute interval
@@ -565,6 +550,8 @@ export const NOTIFICATIONS_DROPDOWN_PER_SOURCE = 5
 export const NOTIFICATIONS_NEW_PER_SOURCE = 10
 
 export const NOTIFICATIONS_LIMIT = 1000
+
+export const SUPER_TEST_COOKIE_TAG = 'super-test'
 
 // 60px of primary toolbar height + 50px of secondary toolbar height + 10px to make some margin
 export const SCROLL_TO_MARGIN = 60 + 50 + 10
@@ -584,12 +571,17 @@ export const SCREEN_BREAKPOINT_SM = 640
 export const SCREEN_BREAKPOINT_XS = 320
 
 export const NOTIFICATION_SETTINGS_PERIODS = [
-  { text: 'Send as they happen', value: 'immediately' },
-  { text: 'Every 10m.', value: 'every10minutes' },
-  { text: 'Hourly', value: 'hourly' },
+  { text: 'Off', value: 'off' },
+  { text: 'Immediately', value: 'immediately' },
+  // { text: 'Hourly', value: 'hourly' },
   { text: 'Daily', value: 'daily' },
-  { text: 'Weekly', value: 'weekly' },
+  // { text: 'Weekly', value: 'weekly' },
+  { text: 'Every other day', value: 'everyOtherDay' },
 ]
+
+if (getCookie(SUPER_TEST_COOKIE_TAG) !== undefined) {
+  NOTIFICATION_SETTINGS_PERIODS.push({ text: 'Every 10 minutes', value: 'every10minutes' })
+}
 
 // date time formats
 export const POST_TIME_FORMAT = 'h:mm a'

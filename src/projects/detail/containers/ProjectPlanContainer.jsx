@@ -6,7 +6,6 @@
  */
 import React from 'react'
 import PT from 'prop-types'
-import _ from 'lodash'
 import { connect } from 'react-redux'
 
 import {
@@ -21,16 +20,14 @@ import {
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
 import TwoColsLayout from '../components/TwoColsLayout'
-import ProjectPlanProgress from '../components/ProjectPlanProgress'
 import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT, PROJECT_STATUS_COMPLETED,
-  PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_ACTIVE } from '../../../config/constants'
+  PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY } from '../../../config/constants'
 import Sticky from 'react-stickynode'
 import { Link } from 'react-router-dom'
-import { scrollToHash } from '../../../components/ScrollToAnchors'
 
 import './ProjectPlanContainer.scss'
 
@@ -45,8 +42,24 @@ class ProjectPlanContainer extends React.Component {
     const { expandProjectPhase } = this.props
     const phaseId = parseInt(topic.tag.replace('phase#', ''), 10)
 
+    if (!phaseId) {
+      return
+    }
+
+    // we just open Posts tab, while smooth scrolling will be caused by URL hash update
     expandProjectPhase(phaseId, 'posts')
-    scrollToHash(`phase-${phaseId}`)
+  }
+
+  componentDidMount() {
+    const { expandProjectPhase } = this.props
+    const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
+    const phaseId = scrollTo && scrollTo.startsWith('phase-') ? parseInt(scrollTo.replace('phase-', ''), 10) : null
+    if (phaseId) {
+      let tab = scrollTo.replace(`phase-${phaseId}-`, '')
+      tab = tab === scrollTo ? 'timeline' : tab
+      // we just open tab, while smooth scrolling has to be caused by URL hash
+      expandProjectPhase(phaseId, tab)
+    }
   }
 
   componentWillUnmount() {
@@ -61,6 +74,8 @@ class ProjectPlanContainer extends React.Component {
       isSuperUser,
       isManageUser,
       currentMemberRole,
+      feeds,
+      isFeedsLoading,
       phases,
       productsTimelines,
       phasesTopics,
@@ -72,24 +87,7 @@ class ProjectPlanContainer extends React.Component {
       isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
     ))
 
-    const activePhases = phases ? phases.filter((phase) => phase.status === PHASE_STATUS_ACTIVE) : []
-
     const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
-    // get list of phase topic in same order as phases
-    const topics = _.compact(
-      visiblePhases.map((phase) => {
-        const topic = _.get(phasesTopics, `[${phase.id}].topic`)
-
-        if (!topic) {
-          return null
-        }
-
-        return ({
-          ...topic,
-          phaseId: phase.id,
-        })
-      })
-    )
 
     const leftArea = (
       <ProjectInfoContainer
@@ -97,8 +95,11 @@ class ProjectPlanContainer extends React.Component {
         phases={phases}
         project={project}
         isSuperUser={isSuperUser}
-        feeds={topics}
+        isManageUser={isManageUser}
+        feeds={feeds}
+        isFeedsLoading={isFeedsLoading}
         productsTimelines={productsTimelines}
+        phasesTopics={phasesTopics}
         onChannelClick={this.onChannelClick}
       />
     )
@@ -119,16 +120,12 @@ class ProjectPlanContainer extends React.Component {
 
         <TwoColsLayout.Content>
           {visiblePhases && visiblePhases.length > 0 ? (
-            [
-              activePhases.length > 0 && <ProjectPlanProgress phases={visiblePhases} project={project} productsTimelines={productsTimelines} key="progress" />,
-              <ProjectStages
-                {...{
-                  ...this.props,
-                  phases: visiblePhases
-                }}
-                key="stages"
-              />
-            ]
+            <ProjectStages
+              {...{
+                ...this.props,
+                phases: visiblePhases
+              }}
+            />
           ) : (
             <ProjectPlanEmpty />
           )}
@@ -153,10 +150,11 @@ ProjectPlanContainer.propTypes = {
   productsTimelines: PT.object.isRequired,
 }
 
-const mapStateToProps = ({ projectState, projectTopics, phasesTopics }) => ({
-  productTemplates: projectState.allProductTemplates,
+const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates }) => ({
+  productTemplates: templates.productTemplates,
   phases: projectState.phases,
   feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
+  isFeedsLoading: projectTopics.isLoading,
   phasesTopics,
   phasesStates: projectState.phasesStates,
 })

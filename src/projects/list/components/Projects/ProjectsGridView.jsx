@@ -6,7 +6,7 @@ import moment from 'moment'
 import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 import GridView from '../../../../components/Grid/GridView'
 import UserTooltip from '../../../../components/User/UserTooltip'
-import { PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED } from '../../../../config/constants'
+import { PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED, DATE_TO_USER_FIELD_MAP } from '../../../../config/constants'
 import { getProjectTemplateByKey } from '../../../../helpers/templates'
 import TextTruncate from 'react-text-truncate'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
@@ -40,7 +40,7 @@ const ProjectsGridView = props => {
         return (
           <Link to={url} className="spacing">
             { recentlyCreated  && <span className="blue-border" /> }
-            { item.id.toLocaleString(navigator.language, { minimumFractionDigits: 0 }) }
+            { item.id }
           </Link>
         )
       }
@@ -51,8 +51,11 @@ const ProjectsGridView = props => {
       sortable: false,
       renderText: item => {
         const url = `/projects/${item.id}`
+        const projectTemplateId = item.templateId
         const projectTemplateKey = _.get(item, 'details.products[0]')
-        const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
+        const projectTemplate = projectTemplateId
+          ? _.find(projectTemplates, pt => pt.id === projectTemplateId)
+          : getProjectTemplateByKey(projectTemplates, projectTemplateKey)
         // icon for the product, use default generic work project icon for categories which no longer exist now
         const productIcon = _.get(projectTemplate, 'icon', 'tech-32px-outline-work-project')
         return (
@@ -95,7 +98,7 @@ const ProjectsGridView = props => {
       classes: 'item-status-date',
       renderText: item => {
         const sortMetric = _.find(SORT_OPTIONS, o => currentSortField === o.val) || SORT_OPTIONS[0]
-        const lastAction = item[sortMetric.field] === 'createdAt' ? 'createdBy' : 'updatedBy'
+        const lastAction = DATE_TO_USER_FIELD_MAP[sortMetric.field]
         const lastEditor = members[item[lastAction]]
         const time = moment(item[sortMetric.field])
         return (

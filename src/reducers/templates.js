@@ -1,40 +1,32 @@
 import {
-  LOAD_PROJECT_TEMPLATES_PENDING,
-  LOAD_PROJECT_TEMPLATES_SUCCESS,
-  LOAD_PROJECT_CATEGORIES_PENDING,
-  LOAD_PROJECT_CATEGORIES_SUCCESS,
+  LOAD_PROJECTS_METADATA_PENDING,
+  LOAD_PROJECTS_METADATA_SUCCESS,
 } from '../config/constants'
 
 export const initialState = {
   projectTemplates: null,
-  isProjectTemplatesLoading: false,
   projectCategories: null,
-  isProjectCategoriesLoading: false,
+  productTemplates: null,
+  isLoading: false,
 }
 
 export default function(state = initialState, action) {
   switch (action.type) {
-  case LOAD_PROJECT_TEMPLATES_PENDING:
-    return {...state,
-      isProjectTemplatesLoading: true,
+  case LOAD_PROJECTS_METADATA_PENDING:
+    return {
+      ...state,
+      isLoading: true,
     }
-
-  case LOAD_PROJECT_TEMPLATES_SUCCESS:
-    return {...state,
-      projectTemplates: action.payload,
-      isProjectTemplatesLoading: false,
+  case LOAD_PROJECTS_METADATA_SUCCESS: {
+    const { projectTemplates, productTemplates, projectTypes } = action.payload
+    return {
+      ...state,
+      projectTemplates,
+      productTemplates,
+      projectCategories: projectTypes,
+      isLoading: false,
     }
-  case LOAD_PROJECT_CATEGORIES_PENDING:
-    return {...state,
-      isProjectCategoriesLoading: true,
-    }
-
-  case LOAD_PROJECT_CATEGORIES_SUCCESS:
-    return {...state,
-      projectCategories: action.payload,
-      isProjectCategoriesLoading: false,
-    }
-
+  }
   default: return state
   }
 }

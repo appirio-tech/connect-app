@@ -149,6 +149,8 @@ class MilestoneTypeCheckpointReview extends React.Component {
 
     updateMilestoneContent({
       isInReview: true,
+    }, {
+      waitingForCustomer: true,
     })
   }
 

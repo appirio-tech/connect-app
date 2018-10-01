@@ -26,7 +26,6 @@ import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingInd
 import MobilePage from '../../../../components/MobilePage/MobilePage'
 import BackIcon from '../../../../assets/icons/arrow-left.svg'
 import EditStageForm from './EditStageForm'
-import DeletePhase from './DeletePhase'
 
 import './PhaseCard.scss'
 
@@ -38,24 +37,29 @@ class PhaseCard extends React.Component {
     this.onClose = this.onClose.bind(this)
 
     this.state = {
+      isExpanded: props.isExpanded,
       isEditting: false,
+      isDetailView: false
     }
   }
 
   componentWillReceiveProps(nextProps) {
     // update phase finished successfully
+    const nextState = {}
     if(nextProps.isUpdating === false && this.props.isUpdating === true) {
       // NOTE: following condition would be true for all stages after user updates only one of them
       // and we don't have phase id with update phase action reducer so we can't determine which card is updated
       // so we close all the edit forms for now
-      this.setState({
-        isEditting: false
-      })
+      nextState.isEditting = false
     }
+    if (nextProps.isExpanded !== this.props.isExpanded) {
+      nextState.isExpanded = nextProps.isExpanded
+    }
+    this.setState(nextState)
   }
 
   toggleCardView() {
-    if (this.props.isExpanded) {
+    if (this.state.isExpanded) {
       this.props.collapseProjectPhase(this.props.phaseId)
     } else {
       this.props.expandProjectPhase(this.props.phaseId)
@@ -92,7 +96,7 @@ class PhaseCard extends React.Component {
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
     const phaseEditable = isManageUser && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
-    const canDelete = status !== PHASE_STATUS_ACTIVE && status !== PHASE_STATUS_COMPLETED
+    
 
     const hasUnseen = hasReadPosts
 
@@ -128,12 +132,15 @@ class PhaseCard extends React.Component {
                     </div>
                   </div>
 
-                  <div styleName="col hide-md">
-                    <div styleName="price-details">
-                      <h5>{attr.price}</h5>
-                      <div styleName="meta-list">{attr.paidStatus}</div>
-                    </div>
-                  </div>
+                  { parseInt(attr.price, 10) > 0 && 
+                    (<div styleName="col hide-md">
+                      <div styleName="price-details">
+                        <h5>{attr.price}</h5>
+                        <div styleName="meta-list">{attr.paidStatus}</div>
+                      </div>
+                    </div>)
+                  }
+
                   {status && status !== PHASE_STATUS_ACTIVE &&
                         (<div styleName="col show-md">
                           <div styleName="price-details">
@@ -204,15 +211,7 @@ class PhaseCard extends React.Component {
                         phaseIndex={attr.phaseIndex}
                         cancel={this.toggleEditView}
                         timeline={timeline}
-                      />
-                    )}
-                    {canDelete && !isUpdating && (
-                      <DeletePhase
-                        onDeleteClick={() => {
-                          if (confirm(`Are you sure you want to delete phase '${attr.phase.name}'?`)) {
-                            deleteProjectPhase()
-                          }
-                        }}
+                        deleteProjectPhase={deleteProjectPhase}
                       />
                     )}
                     {isUpdating && <LoadingIndicator />}

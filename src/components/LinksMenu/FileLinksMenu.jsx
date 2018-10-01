@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import  { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import './LinksMenu.scss'
 import Panel from '../Panel/Panel'
-import AddLink from './AddLink'
+import AddFiles from '../FileList/AddFiles'
 import DeleteLinkModal from './DeleteLinkModal'
 import EditLinkModal from './EditLinkModal'
 import uncontrollable from 'uncontrollable'
@@ -11,8 +11,10 @@ import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import cn from 'classnames'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
 import BtnEdit from '../../assets/icons/icon-edit.svg'
+import _ from 'lodash'
+import Modal from '../Modal/Modal'
 
-const LinksMenu = ({
+const FileLinksMenu = ({
   canAdd,
   canDelete,
   canEdit,
@@ -23,7 +25,6 @@ const LinksMenu = ({
   linkToDelete,
   linkToEdit,
   onAddingNewLink,
-  onAddNewLink,
   onChangeLimit,
   onDelete,
   onDeleteIntent,
@@ -32,6 +33,9 @@ const LinksMenu = ({
   title,
   moreText,
   withHash,
+  attachmentsStorePath,
+  category,
+  onAddAttachment,
 }) => {
   const renderLink = (link) => {
     if (link.onClick) {
@@ -41,9 +45,7 @@ const LinksMenu = ({
           onClick={(evt) => {
             // we only prevent default on click,
             // as we handle clicks with <li>
-            if (!link.allowDefaultOnClick) {
-              evt.preventDefault()
-            }
+            evt.preventDefault()
           }}
         >
           {link.title}
@@ -56,26 +58,48 @@ const LinksMenu = ({
     }
   }
 
+  const processUploadedFiles = (fpFiles, category) => {
+    onAddingNewLink(false)
+    fpFiles = _.isArray(fpFiles) ? fpFiles : [fpFiles]
+    _.forEach(fpFiles, f => {
+      const attachment = {
+        title: f.filename,
+        description: '',
+        category,
+        size: f.size,
+        filePath: f.key,
+        contentType: f.mimetype || 'application/unknown'
+      }
+      onAddAttachment(attachment)
+    })
+  }
+
+  const onClose = () => {
+    onAddingNewLink(false)
+  }
+
   return (
     <MobileExpandable title={`${title} (${links.length})`}>
-      <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0) }, 'panel-links-container')}>
-        {canAdd && !isAddingNewLink && onAddingNewLink && <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Create New Link</Panel.AddBtn>}
+      <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0)}, 'panel-links-container')}>
+        {canAdd && !isAddingNewLink && onAddingNewLink &&
+        <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Upload File</Panel.AddBtn>}
+
         {!isAddingNewLink && <Panel.Title>
           {title} ({links.length})
         </Panel.Title>}
-        { (isAddingNewLink || linkToDelete >= 0) && <div className="modal-overlay" />}
+
+        {(isAddingNewLink || linkToDelete >= 0) && <div className="modal-overlay"/>}
+
         {isAddingNewLink &&
-          <AddLink
-            onAdd={(link) => {
-              if (link.address.indexOf('http') !== 0)
-                link.address = `http://${link.address}`
-              onAddNewLink(link)
-              onAddingNewLink(false)
-            }}
-            onClose={() => {
-              onAddingNewLink(false)
-            }}
-          />
+          <Modal onClose={onClose}>
+            <Modal.Title>
+              UPLOAD A FILE
+            </Modal.Title>
+            <AddFiles successHandler={processUploadedFiles.bind(this)}
+              storePath={attachmentsStorePath}
+              category={category}
+            />
+          </Modal>
         }
 
         <div
@@ -102,21 +126,21 @@ const LinksMenu = ({
                 const handleEditClick = () => onEditIntent(idx)
                 if (linkToDelete === idx) {
                   return (
-                    <li className="delete-confirmation-modal" key={ 'delete-confirmation-' + idx }>
+                    <li className="delete-confirmation-modal" key={'delete-confirmation-' + idx}>
                       <DeleteLinkModal
-                        link={ link }
-                        onCancel={ onDeleteCancel }
-                        onConfirm={ onDeleteConfirm }
+                        link={link}
+                        onCancel={onDeleteCancel}
+                        onConfirm={onDeleteConfirm}
                       />
                     </li>
                   )
                 } else if (linkToEdit === idx) {
                   return (
-                    <li className="delete-confirmation-modal" key={ 'delete-confirmation-' + idx }>
+                    <li className="delete-confirmation-modal" key={'delete-confirmation-' + idx}>
                       <EditLinkModal
-                        link={ link }
-                        onCancel={ onEditCancel }
-                        onConfirm={ onEditConfirm }
+                        link={link}
+                        onCancel={onEditCancel}
+                        onConfirm={onEditConfirm}
                       />
                     </li>
                   )
@@ -124,7 +148,8 @@ const LinksMenu = ({
                   return (
                     <li
                       key={idx}
-                      onClick={link.onClick ? link.onClick : () => {}}
+                      onClick={link.onClick ? link.onClick : () => {
+                      }}
                       className={cn({
                         clickable: !!link.onClick,
                         'is-active': link.isActive
@@ -133,19 +158,19 @@ const LinksMenu = ({
                       {renderLink(link)}
                       <div className="button-group">
                         {canEdit && <div className="buttons link-buttons">
-                          <button onClick={ handleEditClick } type="button">
+                          <button onClick={handleEditClick} type="button">
                             <BtnEdit className="btn-remove"/>
                           </button>
                         </div>}
                         {canDelete && <div className="buttons link-buttons">
-                          <button onClick={ handleDeleteClick } type="button">
+                          <button onClick={handleDeleteClick} type="button">
                             <BtnRemove className="btn-edit"/>
                           </button>
                         </div>}
                         {!!link.count &&
-                          <div className="link-count">
-                            {link.count}
-                          </div>
+                        <div className="link-count">
+                          {link.count}
+                        </div>
                         }
                       </div>
                     </li>
@@ -160,7 +185,8 @@ const LinksMenu = ({
         </div>
         {canAdd && !isAddingNewLink && (
           <div className="add-link-mobile">
-            <button className="tc-btn tc-btn-secondary tc-btn-md" onClick={() => onAddingNewLink(true)}>Add New Link</button>
+            <button className="tc-btn tc-btn-secondary tc-btn-md" onClick={() => onAddingNewLink(true)}>Add New Link
+            </button>
           </div>
         )}
       </Panel>
@@ -168,13 +194,14 @@ const LinksMenu = ({
   )
 }
 
-LinksMenu.propTypes = {
+FileLinksMenu.propTypes = {
   canAdd: PropTypes.bool,
   canDelete: PropTypes.bool,
   canEdit: PropTypes.bool,
   noDots: PropTypes.bool,
   limit: PropTypes.number,
   links: PropTypes.array.isRequired,
+  attachmentsStorePath: PropTypes.string.isRequired,
   moreText: PropTypes.string,
   onAddingNewLink: PropTypes.func,
   onAddNewLink: PropTypes.func,
@@ -183,15 +210,16 @@ LinksMenu.propTypes = {
   title: PropTypes.string,
 }
 
-LinksMenu.defaultProps = {
+FileLinksMenu.defaultProps = {
   limit: 5,
   moreText: 'load more',
   title: 'Links',
 }
 
-export default uncontrollable(LinksMenu, {
+export default uncontrollable(FileLinksMenu, {
   linkToDelete: 'onDeleteIntent',
   linkToEdit: 'onEditIntent',
   isAddingNewLink: 'onAddingNewLink',
+  isAddingNewFile: 'isAddingNewFile',
   limit: 'onChangeLimit'
 })

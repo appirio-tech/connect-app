@@ -7,11 +7,16 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject } from '../../actions/project'
-import { loadProjectTemplates, loadProjectCategories } from '../../../actions/templates'
+import { loadProjectsMetadata } from '../../../actions/templates'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
-import { getProjectTemplateByAlias, getProjectTypeByKey } from '../../../helpers/templates'
+import { getProjectTemplateByAlias, getProjectTypeByKey, getProjectTypeByAlias } from '../../../helpers/templates'
+import { Wizard } from 'appirio-tech-react-components'
+import { ViewTypes } from 'appirio-tech-react-components/components/Wizard/Wizard'
+import './CreateContainer.scss'
+import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
+
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
@@ -19,7 +24,8 @@ import {
   ACCOUNTS_APP_REGISTER_URL,
   NEW_PROJECT_PATH,
   GA_CLIENT_ID,
-  GA_CLICK_ID
+  GA_CLICK_ID,
+  CONNECT_MAIN_PAGE_URL
 } from '../../../config/constants'
 
 const page404 = compose(
@@ -37,9 +43,8 @@ const errorHandler = showCoderBotIfError(props => props.error && props.error.typ
 // This handles showing a spinner while the state is being loaded async
 const spinner = spinnerWhileLoading(props =>
   !props.processing &&
-  !props.templates.isProjectTemplatesLoading &&
+  !props.templates.isLoading &&
   props.templates.projectTemplates !== null &&
-  !props.templates.isProjectCategoriesLoading &&
   props.templates.projectCategories !== null
 )
 
@@ -52,7 +57,7 @@ const CreateView = (props) => {
     return <div><CoderBot code={ 200 } message="Creating your project..." /></div>
   }
   return (
-    <div>
+    <div styleName="create-container">
       <ProjectWizard {...props}/>
     </div>
   )
@@ -67,28 +72,49 @@ class CreateContainer extends React.Component {
       createdProject: false,
       isProjectDirty: false,
       wizardStep: 0,
-      updatedProject: {}
+      updatedProject: {},
+      projectType: {},
     }
     this.createProject = this.createProject.bind(this)
     this.onLeave = this.onLeave.bind(this)
     this.closeWizard = this.closeWizard.bind(this)
     this.prepareProjectForCreation = this.prepareProjectForCreation.bind(this)
+    this.createContainerView = this.createContainerView.bind(this)
+
+    if (!props.userRoles || props.userRoles.length <= 0) {
+      window.location = CONNECT_MAIN_PAGE_URL
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     const projectId = _.get(this.props, 'project.id', null)
     const nextProjectId = _.get(nextProps, 'project.id', null)
+    const { templates: { projectTemplates, projectCategories }, match: { params }} = nextProps
+    const projectTypes = projectTemplates.concat(projectCategories)
+    if (params && params.project && projectTypes) {
+      const projectTypeKey = params.project
+      let projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
+      if (!projectType) {
+        projectType = getProjectTypeByAlias(projectTypes, projectTypeKey)
+      }
+      if (projectType) {
+        this.setState({ projectType })
+      }
+    }
+
     if (!nextProps.processing && !nextProps.error && nextProjectId && projectId !== nextProjectId) {
       // update state
       this.setState({
+        processing: false,
         creatingProject: false,
         createdProject: true,
+        projectId: nextProjectId,
         isProjectDirty: false
       }, () => {
-        // remove incomplete project, and navigate to project dashboard
-        console.log('removing incomplete project')
+        // go to submitted state
+        console.log('go to submitted state')
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
-        this.props.history.push('/projects/' + nextProjectId)
+        this.props.history.push('/new-project/submitted/' + nextProjectId)
       })
 
     } else if (this.state.creatingProject !== nextProps.processing) {
@@ -103,7 +129,7 @@ class CreateContainer extends React.Component {
 
   componentWillMount() {
     const { processing, userRoles, match, history,
-      templates, loadProjectTemplates, loadProjectCategories } = this.props
+      templates } = this.props
     // if we are on the project page validate project param
     if (match.path === '/new-project/:project?/:status?') {
       const project = match.params.project
@@ -140,14 +166,9 @@ class CreateContainer extends React.Component {
       this.props.clearLoadedProject()
     }
 
-    // if templates are not loaded yet - then load them
-    if (templates.projectTemplates === null && !templates.isProjectTemplatesLoading) {
-      loadProjectTemplates()
-    }
-
-    // if categories are not loaded yet - then load them
-    if (templates.projectCategories === null && !templates.isProjectCategoriesLoading) {
-      loadProjectCategories()
+    // if metadata is not loaded yet - then load it
+    if (!templates.projectTemplates && !templates.isLoading) {
+      this.props.loadProjectsMetadata()
     }
   }
 
@@ -247,19 +268,25 @@ class CreateContainer extends React.Component {
     }
   }
 
-  render() {
+  createContainerView() {
     const { templates: { projectTemplates, projectCategories: projectTypes }} = this.props
 
     return (
       <EnhancedCreateView
         {...this.props}
         createProject={ this.createProject }
-        processing={ this.state.creatingProject || this.state.createdProject }
+        processing={ this.state.creatingProject}
+        createdProject={ this.state.createdProject }
+        projectId={ this.state.projectId }
         showModal
         closeModal={ this.closeWizard }
         onStepChange={ (wizardStep, updatedProject) => {
           const projectTypeKey = _.get(updatedProject, 'type', null)
-          const projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
+          let projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
+          if (!projectType) {
+            projectType = getProjectTypeByAlias(projectTypes, projectTypeKey)
+          }
+
           const typeAlias = _.get(projectType, 'aliases[0]')
 
           const projectTemplateId = _.get(updatedProject, 'templateId', null)
@@ -284,8 +311,12 @@ class CreateContainer extends React.Component {
             this.props.history.push(NEW_PROJECT_PATH + '/' + templateAlias + window.location.search)
           }
 
+          if (typeAlias && templateAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_PROJECT_SUBMITTED) {
+            this.props.history.push(NEW_PROJECT_PATH + '/' + 'submitted' + window.location.search)
+          }
+
           this.setState({
-            wizardStep
+            wizardStep,
           })
         }
         }
@@ -313,6 +344,30 @@ class CreateContainer extends React.Component {
       />
     )
   }
+
+  render() {
+    const { wizardStep, projectType } = this.state
+    let type = 'unknown'
+    if (wizardStep <= ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
+      type = ViewTypes.selectSolution
+    } else if (wizardStep <= ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
+      type = ViewTypes.definedScope 
+    } else if (wizardStep === ProjectWizard.Steps.WZ_STEP_PROJECT_SUBMITTED) {
+      type = ViewTypes.projectSubmitted
+    }
+
+    if (projectType && projectType.icon) {
+      projectType.iconUI = <ProjectTypeIcon type={projectType.icon} />
+    }
+
+    return (
+      <Wizard wrapperClass="WizardCreateProject" type={type} vm={{userHandle: this.props.userHandle, projectType: projectType || {}}} >
+        { this.createContainerView() }
+      </Wizard>
+    )
+  }
+    
+    
 }
 
 CreateContainer.propTypes = {
@@ -324,6 +379,7 @@ CreateContainer.defaultProps = {
 }
 
 const mapStateToProps = ({projectState, loadUser, templates }) => ({
+  userHandle: _.get(loadUser, 'user.handle', []),
   userRoles: _.get(loadUser, 'user.roles', []),
   processing: projectState.processing,
   error: projectState.error,
@@ -336,8 +392,7 @@ const actionCreators = {
   fireProjectDirty,
   fireProjectDirtyUndo,
   clearLoadedProject,
-  loadProjectTemplates,
-  loadProjectCategories,
+  loadProjectsMetadata,
 }
 
 export default withRouter(connect(mapStateToProps, actionCreators)(CreateContainer))

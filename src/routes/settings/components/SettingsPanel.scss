@@ -16,16 +16,16 @@
       border-radius: 6px;
       margin: 0 auto;
       max-width: 720px;
-      padding: 50px 60px 40px;
+      padding: 35px 20px 20px 20px;
 
       @media screen and (max-width: $screen-md - 1px) {
-        padding: 4 * $base-unit;
+        padding: 20px 0;
       }
 
       > .title {
         @include roboto-light;
-        color: $tc-gray-50;
-        font-size: 28px;
+        color: $tc-heading-lg;
+        font-size: 32px;
         line-height: 30px;
         text-align: center;
 
@@ -36,7 +36,7 @@
 
       > .text {
         @include roboto;
-        color: $tc-gray-50;
+        color: $tc-gray-90;
         font-size: 15px;
         line-height: 25px;
         margin-top: 20px;
@@ -48,7 +48,10 @@
 
       > .content {
         border-top: 1px solid $tc-gray-50;
-        margin-top: 30px;
+        margin-top: 25px;
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-top: 0;
+        }
       }
     }
 
@@ -58,7 +61,6 @@
 
         > .content {
           border-top: 0;
-          margin-top: 0;
         }
       }
     }

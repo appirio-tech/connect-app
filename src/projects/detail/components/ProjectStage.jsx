@@ -4,6 +4,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
+import uncontrollable from 'uncontrollable'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
@@ -18,6 +19,7 @@ import ProductTimelineContainer from '../containers/ProductTimelineContainer'
 import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import NotificationsReader from '../../../components/NotificationsReader'
+import { scrollToHash } from '../../../components/ScrollToAnchors'
 
 const enhance = spinnerWhileLoading(props => !props.processing)
 const EnhancedEditProjectForm = enhance(EditProjectForm)
@@ -81,7 +83,7 @@ function formatPhaseCardAttr(phase, phaseIndex, productTemplates, feed, timeline
     posts,
     phaseIndex,
     phase,
-    progressInPercent,
+    progressInPercent
   }
 }
 
@@ -93,6 +95,9 @@ class ProjectStage extends React.Component{
     this.updateProductAttachment = this.updateProductAttachment.bind(this)
     this.addProductAttachment = this.addProductAttachment.bind(this)
     this.onTabClick = this.onTabClick.bind(this)
+    this.state = {
+      isExpanded: false
+    }
   }
 
   removeProductAttachment(attachmentId) {
@@ -120,6 +125,25 @@ class ProjectStage extends React.Component{
     const { expandProjectPhase, phase } = this.props
 
     expandProjectPhase(phase.id, tab)
+  }
+
+  componentDidUpdate() {
+    const { phaseState } = this.props
+    if (_.get(phaseState, 'isExpanded')) {
+      const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
+      if (scrollTo) {
+        scrollToHash(scrollTo)
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { feedId, commentId, phase, phaseState, expandProjectPhase } = this.props
+    const { feed } = nextProps
+    if (!_.get(phaseState, 'isExpanded') && feed && (feed.id === parseInt(feedId) || feed.postIds.includes(parseInt(commentId)))){
+      expandProjectPhase(phase.id, 'posts')
+    }
+
   }
 
   render() {
@@ -158,6 +182,7 @@ class ProjectStage extends React.Component{
     const productTemplate = _.find(productTemplates, { id: _.get(phase, 'products[0].templateId') })
     const product = _.get(phase, 'products[0]')
     const sections = _.get(productTemplate, 'template.questions', [])
+    const projectPhaseAnchor = `phase-${phase.id}-posts`
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
 
@@ -181,7 +206,7 @@ class ProjectStage extends React.Component{
         collapseProjectPhase={collapseProjectPhase}
         expandProjectPhase={expandProjectPhase}
       >
-        <div>
+        <div id={projectPhaseAnchor}>
           <ProjectStageTabs
             activeTab={currentActiveTab}
             onTabClick={this.onTabClick}
@@ -198,7 +223,6 @@ class ProjectStage extends React.Component{
           {currentActiveTab === 'posts' && [
             <NotificationsReader unreadNotifications={unreadPostNotifications} key="NotificationsReader" />,
             <PhaseFeed
-              key="PhaseFeed"
               user={currentUser}
               currentUser={currentUser}
               feed={feed}
@@ -236,10 +260,13 @@ class ProjectStage extends React.Component{
 }
 
 ProjectStage.defaultProps = {
+  activeTab: '',
   currentMemberRole: null,
 }
 
 ProjectStage.propTypes = {
+  activeTab: PT.string,
+  onTabClick: PT.func.isRequired,
   project: PT.object.isRequired,
   currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,
@@ -253,4 +280,8 @@ ProjectStage.propTypes = {
   deleteProjectPhase: PT.func.isRequired,
 }
 
-export default phaseFeedHOC(ProjectStage)
+const ProjectStageUncontrollable = uncontrollable(ProjectStage, {
+  activeTab: 'onTabClick',
+})
+
+export default phaseFeedHOC(ProjectStageUncontrollable)

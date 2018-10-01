@@ -7,8 +7,6 @@ import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 
 import { DOMAIN } from '../../../config/constants'
 
-import ConnectLogoMono from '../../../assets/icons/connect-logo-mono.svg'
-
 import './SelectProjectType.scss'
 
 const SelectProjectType = ({
@@ -41,9 +39,6 @@ const SelectProjectType = ({
 
   return (
     <div>
-      <div className="header headerSelectProjectType">
-        <ConnectLogoMono className="icon-connect-logo-mono"/>
-      </div>
       <div className="SelectProjectType">
         <h1>Create a new project</h1>
         <div className="cards">{cards}</div>

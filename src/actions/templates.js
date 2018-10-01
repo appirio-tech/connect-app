@@ -1,23 +1,14 @@
 /**
  * Project and product templates actions
  */
-import { LOAD_PROJECT_TEMPLATES, LOAD_PROJECT_CATEGORIES } from '../config/constants'
-import { getProjectTemplates, getProjectCategories } from '../api/templates'
+import { LOAD_PROJECTS_METADATA } from '../config/constants'
+import { getProjectsMetadata } from '../api/templates'
 
-export function loadProjectTemplates() {
+export function loadProjectsMetadata() {
   return (dispatch) => {
     return dispatch({
-      type: LOAD_PROJECT_TEMPLATES,
-      payload: getProjectTemplates()
-    })
-  }
-}
-
-export function loadProjectCategories() {
-  return (dispatch) => {
-    return dispatch({
-      type: LOAD_PROJECT_CATEGORIES,
-      payload: getProjectCategories()
+      type: LOAD_PROJECTS_METADATA,
+      payload: getProjectsMetadata()
     })
   }
 }

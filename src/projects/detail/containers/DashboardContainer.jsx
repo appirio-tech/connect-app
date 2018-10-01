@@ -86,8 +86,10 @@ class DashboardContainer extends React.Component {
       removeProductAttachment,
       deleteProjectPhase,
       feeds,
+      isFeedsLoading,
       productsTimelines,
       phasesStates,
+      phasesTopics,
       expandProjectPhase,
       collapseProjectPhase,
     } = this.props
@@ -108,8 +110,11 @@ class DashboardContainer extends React.Component {
         project={project}
         phases={phases}
         isSuperUser={isSuperUser}
+        isManageUser={isManageUser}
         feeds={feeds}
+        isFeedsLoading={isFeedsLoading}
         productsTimelines={productsTimelines}
+        phasesTopics={phasesTopics}
       />
     )
 
@@ -169,13 +174,15 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState, projectTopics }) => ({
+const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics }) => ({
   notifications,
-  productTemplates: projectState.allProductTemplates,
+  productTemplates: templates.productTemplates,
   isProcessing: projectState.processing,
   phases: projectState.phases,
   feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
+  isFeedsLoading: projectTopics.isLoading,
   phasesStates: projectState.phasesStates,
+  phasesTopics,
 })
 
 const mapDispatchToProps = {
