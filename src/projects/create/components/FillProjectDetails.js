@@ -1,11 +1,9 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import PT from 'prop-types'
-import Sticky from 'react-stickynode'
 
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
-import ProjectOutline from '../components/ProjectOutline'
 import ModalControl from '../../../components/ModalControl'
 import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
 
@@ -28,7 +26,6 @@ class FillProjectDetails extends Component  {
     return !(
       _.isEqual(nextProps.project, this.props.project)
      && _.isEqual(nextState.project, this.state.project)
-     && _.isEqual(nextProps.dirtyProject, this.props.dirtyProject)
      && _.isEqual(nextProps.error, this.props.error)
     )
   }
@@ -38,7 +35,7 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, dirtyProject, processing, submitBtnText, onBackClick, projectTemplates } = this.props
+    const { project, processing, submitBtnText, onBackClick, projectTemplates } = this.props
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
@@ -76,12 +73,6 @@ class FillProjectDetails extends Component  {
                     <span>{formDisclaimer}</span>
                   </div>
                 )}
-              </div>
-              <div className="right-area">
-                <Sticky top={20}>
-                  <ProjectOutline project={ dirtyProject } projectTemplates={ projectTemplates } />
-                  <div className="right-area-footer">In 24 hours our project managers will contact you for more information and a detailed quote that accurately reflects your project needs.</div>
-                </Sticky>
               </div>
             </div>
           </section>
