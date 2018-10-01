@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import './Home.scss'
 import homeImgSrc from '../../assets/images/hero-tc-landing.png'
-import { DOMAIN } from '../../config/constants'
+import { DOMAIN, ACCOUNTS_APP_REGISTER_URL } from '../../config/constants'
 
 class Home extends React.Component {
   constructor(props) {
@@ -18,6 +18,7 @@ class Home extends React.Component {
   }
 
   render() {
+    const registerUrl = ACCOUNTS_APP_REGISTER_URL;
     const learnMoreUrl = 'https://www.' + DOMAIN +'/about-topcoder/connect/'
     return (
       <div className="content content-home">
@@ -31,6 +32,7 @@ class Home extends React.Component {
             <p>Companies and agencies, from the world’s largest to the Valley’s newest, use crowdsourcing to deliver high-quality assets, faster.</p>
             <p>Connect guides you through the entire crowdsourcing process, from entering requirements to receiving final deliverables, and it facilitates collaboration between your project team and Topcoder community members working on your project.</p>
             <div className="button-bar">
+              <a href={ registerUrl } className="tc-btn tc-btn-primary">Start a project</a>
               <a href={ learnMoreUrl } className="tc-link">Learn more about Connect</a>
             </div>
           </div>

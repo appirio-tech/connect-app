@@ -347,7 +347,7 @@ class CreateContainer extends React.Component {
 
   render() {
     const { wizardStep, projectType } = this.state
-    let type = 'unknonw'
+    let type = 'unknown'
     if (wizardStep <= ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
       type = ViewTypes.selectSolution
     } else if (wizardStep <= ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {

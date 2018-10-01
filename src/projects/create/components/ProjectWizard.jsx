@@ -426,9 +426,9 @@ class ProjectWizard extends Component {
   }
 
   render() {
-    const { processing, showModal, userRoles, projectTemplates, projectTypes, projectId } = this.props
+    const { processing, showModal, userRoles, projectTemplates, projectTypes, projectId, match } = this.props
     const { project, dirtyProject, wizardStep } = this.state
-    const params = this.props.match.params
+    const params = match.params
 
     return (
       <Wizard
