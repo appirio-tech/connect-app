@@ -6,8 +6,17 @@
       align-items: center;
       display: flex;
 
+      &.ProjectWizard-step-5 {
+        align-items: flex-start;
+      }
+
       &.ProjectWizard-step-1 {
         align-items: flex-start;
+      }
+
+      &.ProjectWizard-step-0 {
+        align-items: flex-start;
+        padding-top: 30px;
       }
     }
 
