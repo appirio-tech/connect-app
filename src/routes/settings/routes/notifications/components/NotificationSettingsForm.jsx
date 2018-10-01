@@ -48,7 +48,7 @@ const topics = [
     description: 'Receive a notification any time your project scope is updated',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.specificationModified'
+      'connect.action.project.product.update.spec'
     ]
   }, {
     title: 'File uploads',
@@ -81,8 +81,8 @@ const topics = [
     description: 'Receive a notification when a phase is added to your project plan',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.planReady',
-      'notifications.connect.project.planModified'
+      'connect.action.project.plan.ready',
+      'connect.action.project.plan.updated'
     ]
   }, {
     title: 'Project phase updates',
@@ -93,24 +93,11 @@ const topics = [
       'notifications.connect.project.phase.transition.completed',
       'notifications.connect.project.phase.update.payment',
       'notifications.connect.project.phase.update.progress',
-      'notifications.connect.project.phase.update.scope'
-    ]
-  }, {
-    title: 'Project progress updates',
-    enabledMethods:['web', 'email'],
-    types: [
-      'notifications.connect.project.phase.update.progress',
-      'notifications.connect.project.progressModified'
-    ]
-  }, {
-    title: 'Project phase timeline changes',
-    enabledMethods:['web', 'email'],
-    types: [
-      'notifications.connect.project.phase.timelineModified',
-      'notifications.connect.project.phase.milestone.transition.active',
-      'notifications.connect.project.phase.milestone.transition.completed',
+      'notifications.connect.project.phase.update.scope',
+      'connect.action.timeline.milestone.transition.active',
+      'connect.action.timeline.milestone.transition.completed',
       // should we include wait.customer to be controlled via settings?
-      'notifications.connect.project.phase.milestone.waiting.customer'
+      'connect.action.timeline.milestone.waiting.customer'
     ]
   }
 ]
