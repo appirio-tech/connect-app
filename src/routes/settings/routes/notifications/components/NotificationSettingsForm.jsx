@@ -31,7 +31,7 @@ const topics = [
     ]
   }, {
     title: 'Project status',
-    description: 'Receive a notification any time your porject status changes',
+    description: 'Receive a notification any time your project status changes',
     enabledMethods:['web', 'email'],
     types: [
       'notifications.connect.project.created',
