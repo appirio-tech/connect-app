@@ -48,6 +48,9 @@ import {
   updateProductMilestone,
   updateProductTimeline
 } from './productsTimelines'
+import {
+  getPhaseActualData,
+} from '../../helpers/projectHelper'
 
 /**
  * Expand phase and optionaly expand particular tab
@@ -210,33 +213,22 @@ function createProductsTimelineAndMilestone(project) {
 }
 
 export function createProduct(project, productTemplate, phases, timelines) {
-  let startDate = moment().hours(0).minutes(0).seconds(0)
-    .milliseconds(0)
-  if(phases && phases.length > 0) {
-    const phase = _.maxBy(phases, 'startDate')
+  // get endDates + 1 day for all the phases if there are any phases
+  const phaseEndDatesPlusOne = (phases || []).map((phase) => {
     const productId = _.get(phase, 'products[0].id', -1)
-    const timelineState = timelines && timelines[productId] ? timelines[productId] : null
-    if (timelineState && timelineState.timeline) {
-      // finds the last milestone of the timeline in the phase
-      const lastMilestone = _.maxBy(timelineState.timeline.milestones, 'order')
-      // calculates the start date for the new phase by adding 1 day to the end date of the milestone
-      // we don't use end date field of milestone because it might not reflect the correct end date
-      if (lastMilestone && lastMilestone.startDate) {
-        startDate = moment(lastMilestone.startDate).hours(0).minutes(0).seconds(0)
-          .milliseconds(0).add(lastMilestone.duration - 1, 'days').add(1, 'days')
-      }
-    } else if (phase && phase.startDate) {
-      // if there is no timeline for the phase, calculates the next phase's start date by adding 1 day to the
-      // end date of last phase, we don't use end date field of milestone because it might not reflect the
-      // correct end date
-      startDate = moment(phase.startDate).hours(0).minutes(0).seconds(0)
-        .milliseconds(0).add(phase.duration - 1, 'days').add(1, 'days')
-    } else {
-      // do nothing, use today as start date
-    }
-  }
+    const timeline = _.get(timelines, `${productId}.timeline`, null)
+
+    const phaseActualData = getPhaseActualData(phase, timeline)
+
+    return phaseActualData.endDate.add(1, 'day')
+  })
+
+  const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
+  const startDate = _.max([...phaseEndDatesPlusOne, today])
+
   // assumes 10 days as default duration, ideally we could store it at template level
   const endDate = moment(startDate).add((10 - 1), 'days')
+
   return (dispatch) => {
     return dispatch({
       type: CREATE_PROJECT_STAGE,
