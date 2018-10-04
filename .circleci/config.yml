@@ -71,7 +71,7 @@ workflows:
             - test
           filters:
             branches:
-              only: ['dev', 'feature/plan-timeline-events-settings', 'feature/loginFlow']
+              only: ['dev']
       - deployTest02:
           requires:
             - test
