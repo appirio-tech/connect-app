@@ -1,6 +1,6 @@
 #### For folks working on this code base, we're organizing coding style and general guidelines [here](https://github.com/appirio-tech/connect-app/wiki/Community-Work-Read-Me-First!). 
 
-# TC Deployment Notes
+## TC Deployment Notes
 _[TC Deployment Notes should always be kept up to date **on the default branch**. Update these notes when changes to this information occur]_
 
 **General Deployment:** This software is deployed to AWS S3 by CircleCI. It's ultimately delivered through AWS Cloudfront, which is fed from the S3 bucket. There are no EC2 systems involved in the delivery (althought Connect is fed from various micro-services).
