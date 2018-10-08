@@ -13,7 +13,7 @@ import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
 const Formsy = FormsyForm.Formsy
 import './ChangeEmailForm.scss'
-import IconCheck from '../../assets/icons/check.svg'
+import IconCheck from '../../../../../assets/icons/check.svg'
 
 
 class ChangeEmailForm extends React.Component {

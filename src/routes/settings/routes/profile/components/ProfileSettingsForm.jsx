@@ -10,7 +10,7 @@ import TextInputWithCounter from '../../../../../components/TextInputWithCounter
 import ProfileSeetingsAvatar from './ProfileSeetingsAvatar'
 import { MAX_USERNAME_LENGTH } from '../../../../../config/constants'
 import './ProfileSettingsForm.scss'
-import IconImage from '../../assets/icons/users-16px_single-01.svg'
+import IconImage from '../../../../../assets/icons/users-16px_single-01.svg'
 
 
 
