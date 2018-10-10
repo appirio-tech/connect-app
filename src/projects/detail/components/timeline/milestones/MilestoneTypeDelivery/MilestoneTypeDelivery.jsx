@@ -338,7 +338,7 @@ class MilestoneTypeDelivery extends React.Component {
                       fields={[{ name: 'url'}]}
                       addButtonTitle="Add link"
                       formAddTitle="Adding a link"
-                      formAddButtonTitle="Add a link"
+                      formAddButtonTitle="Add link"
                       formUpdateTitle="Editing a link"
                       formUpdateButtonTitle="Save changes"
                       isUpdating={milestone.isUpdating}

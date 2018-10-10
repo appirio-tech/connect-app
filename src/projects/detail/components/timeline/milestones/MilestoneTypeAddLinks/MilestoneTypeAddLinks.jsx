@@ -166,7 +166,7 @@ class MilestoneTypeAddLinks extends React.Component {
                     }]}
                     addButtonTitle="Add a design link"
                     formAddTitle="Adding a link"
-                    formAddButtonTitle="Add a link"
+                    formAddButtonTitle="Add a design link"
                     formUpdateTitle="Editing a link"
                     formUpdateButtonTitle="Save changes"
                     isUpdating={isLinkAdded}
@@ -215,21 +215,21 @@ class MilestoneTypeAddLinks extends React.Component {
               !extensionRequestDialog &&
               !isShowCompleteConfirmMessage &&
               !currentUser.isCustomer &&
-            (
-              <DotIndicator hideLine>
-                <div styleName="action-bar" className="flex center">
-                  {(!currentUser.isCustomer) && (
-                    <button
-                      className={'tc-btn tc-btn-primary'}
-                      onClick={!currentUser.isCustomer ? this.showCompleteAddLinksConfirmation : this.complete}
-                    >
-                      Complete
+              (
+                <DotIndicator hideLine>
+                  <div styleName="action-bar" className="flex center">
+                    {(!currentUser.isCustomer) && (
+                      <button
+                        className={'tc-btn tc-btn-primary'}
+                        onClick={!currentUser.isCustomer ? this.showCompleteAddLinksConfirmation : this.complete}
+                      >
+                        Complete
                     </button>
-                  )}
-                  {!currentUser.isCustomer && extensionRequestButton}
-                </div>
-              </DotIndicator>
-            )}
+                    )}
+                    {!currentUser.isCustomer && extensionRequestButton}
+                  </div>
+                </DotIndicator>
+              )}
           </div>
         )}
 
