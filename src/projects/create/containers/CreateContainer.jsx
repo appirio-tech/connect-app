@@ -90,8 +90,10 @@ class CreateContainer extends React.Component {
     const projectId = _.get(this.props, 'project.id', null)
     const nextProjectId = _.get(nextProps, 'project.id', null)
     const { templates: { projectTemplates, projectCategories }, match: { params }} = nextProps
-    const projectTypes = projectTemplates.concat(projectCategories)
-    if (params && params.project && projectTypes) {
+
+    // if templates are already loaded and project type is defined in URL
+    if (projectTemplates && projectCategories && params && params.project) {
+      const projectTypes = projectTemplates.concat(projectCategories)
       const projectTypeKey = params.project
       let projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
       if (!projectType) {
@@ -206,7 +208,7 @@ class CreateContainer extends React.Component {
 
   /**
    * Helper method to add additional details required to create project
-   * 
+   *
    * @param {Object} project project data captured from user
    * @param {Object} projectTemplate project template to be used
    */
@@ -351,7 +353,7 @@ class CreateContainer extends React.Component {
     if (wizardStep <= ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
       type = ViewTypes.selectSolution
     } else if (wizardStep <= ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
-      type = ViewTypes.definedScope 
+      type = ViewTypes.definedScope
     } else if (wizardStep === ProjectWizard.Steps.WZ_STEP_PROJECT_SUBMITTED) {
       type = ViewTypes.projectSubmitted
     }
@@ -366,8 +368,8 @@ class CreateContainer extends React.Component {
       </Wizard>
     )
   }
-    
-    
+
+
 }
 
 CreateContainer.propTypes = {
