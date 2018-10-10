@@ -62,6 +62,20 @@ class DashboardContainer extends React.Component {
     }
   }
 
+  componentDidMount() {
+    // if the user is a customer and its not a direct link to a particular phase
+    // then by default expand all phases which are active
+    const { isCustomerUser, expandProjectPhase } = this.props
+
+    if (isCustomerUser) {
+      _.forEach(this.props.phases, phase => {
+        if (phase.status === PHASE_STATUS_ACTIVE) {
+          expandProjectPhase(phase.id)
+        }
+      })
+    }
+  }
+
   componentWillUnmount() {
     const { collapseAllProjectPhases } = this.props
 
