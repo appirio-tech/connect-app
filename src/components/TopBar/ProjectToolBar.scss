@@ -25,12 +25,14 @@
 
       .bar-column:first-child {
         display: flex;
+        flex-shrink: 0;
         // width: calc(100% - 560px);
       }
 
       .bar-column:last-child {
         // width: 560px;
         display: flex;
+        flex-shrink: 0;
       }
 
       .logo-wrapper {
