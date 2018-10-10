@@ -233,7 +233,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
     const progressPercent = daysLeft > 0
       ? (totalDays - daysLeft) / totalDays * 100
       : 100
-
+    const waitingForCustomer = _.get(milestone, 'details.metadata.waitingForCustomer', true)
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -376,7 +376,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
                       Complete review ({hoursLeft}h)
                     </button>
                   )}
-                  {!currentUser.isCustomer && extensionRequestButton}
+                    {!currentUser.isCustomer && !waitingForCustomer && extensionRequestButton}
                 </div>
               </DotIndicator>
             )}
