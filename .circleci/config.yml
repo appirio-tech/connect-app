@@ -32,17 +32,6 @@ jobs:
       - attach_workspace:
           at: ./workspace
       - run: ./deploy.sh DEV no-cache
-
-  # deploy to test01
-  deployTest01:
-    docker:
-      - image: cibuilds/aws
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ./workspace
-      - run: ./deploy.sh TEST01 no-cache
-
   # deploy to test02
   deployTest02:
     docker:
@@ -83,12 +72,6 @@ workflows:
           filters:
             branches:
               only: ['dev']
-      - deployTest01:
-          requires:
-            - test
-          filters:
-            branches:
-              only: ['cf13']
       - deployTest02:
           requires:
             - test
