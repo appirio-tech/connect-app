@@ -12,7 +12,7 @@ import NotificationsBell from './NotificationsBell'
 const NotificationsDropdown = (props) => {
   return (
     <div className="notifications-dropdown">
-      <Dropdown theme="UserDropdownMenu" pointerShadow noAutoclose>
+      <Dropdown theme="UserDropdownMenu" pointerShadow noAutoclose onToggle={props.onToggle}>
         <div className="dropdown-menu-header">
           <NotificationsBell
             hasUnread={props.hasUnread}
