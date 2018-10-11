@@ -5,7 +5,6 @@ import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
 
-import TimelineHeader from '../TimelineHeader'
 import Milestone from '../Milestone'
 import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
 
