@@ -11,6 +11,7 @@ import LinkList from '../../LinkList'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import MilestonePostEditText from '../../MilestonePostEditText'
 import MilestoneDescription from '../../MilestoneDescription'
+import MilestoneDelayNotification from '../../MilestoneDelayNotification'
 import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
@@ -251,6 +252,8 @@ class MilestoneTypeDelivery extends React.Component {
          */}
         {isActive && (
           <div>
+            <MilestoneDelayNotification milestone={milestone} hideDot/>
+
             {
               !isAccepted &&
               !isDeclined &&
