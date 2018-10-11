@@ -104,12 +104,6 @@ class Timeline extends React.Component {
       const orderedMilestones = timeline.milestones ? _.orderBy(timeline.milestones, ['order']) : []
       return (
         <div ref={ div => { this.div = div } }>
-          <TimelineHeader
-            postContent={{
-              title: timeline.name,
-              postMsg: timeline.description,
-            }}
-          />
           {_.reject(orderedMilestones, { hidden: true }).map((milestone) => (
             <Milestone
               key={milestone.id}
