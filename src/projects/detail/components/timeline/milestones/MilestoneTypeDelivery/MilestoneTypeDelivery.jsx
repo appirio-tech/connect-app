@@ -369,7 +369,14 @@ class MilestoneTypeDelivery extends React.Component {
          */}
         {isCompleted && (
           <div>
-            <LinkList links={links} />
+            <LinkList
+              links={links}
+              onUpdateLink={this.updatedUrl}
+              fields={[{ name: 'url'}]}
+              formUpdateTitle="Editing a link"
+              formUpdateButtonTitle="Save changes"
+              isUpdating={milestone.isUpdating}
+            />
           </div>
         )}
       </div>
