@@ -26,7 +26,7 @@ import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT, PROJECT_STATUS_COMPLETED,
   PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY } from '../../../config/constants'
-import Sticky from 'react-stickynode'
+import Sticky from '../../../components/Sticky'
 import { Link } from 'react-router-dom'
 
 import './ProjectPlanContainer.scss'
