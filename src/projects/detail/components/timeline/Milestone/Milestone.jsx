@@ -22,6 +22,8 @@ import MilestoneTypeDelivery from '../milestones/MilestoneTypeDelivery'
 import MilestoneTypeFinalFixes from '../milestones/MilestoneTypeFinalFixes'
 import MilestoneTypeAddLinks from '../milestones/MilestoneTypeAddLinks'
 import DotIndicator from '../DotIndicator'
+import MobilePage from '../../../../../components/MobilePage/MobilePage'
+import MediaQuery from 'react-responsive'
 
 import { MILESTONE_STATUS, SCREEN_BREAKPOINT_MD } from '../../../../../config/constants'
 
