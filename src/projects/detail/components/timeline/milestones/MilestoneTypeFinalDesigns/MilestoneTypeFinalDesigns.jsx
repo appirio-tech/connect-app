@@ -4,7 +4,6 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
-import moment from 'moment'
 import cn from 'classnames'
 
 import DotIndicator from '../../DotIndicator'
@@ -14,7 +13,7 @@ import ProjectProgress from '../../../ProjectProgress'
 import WinnerSelectionBar from '../../WinnerSelectionBar'
 import MilestoneDescription from '../../MilestoneDescription'
 import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
-import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
+import { getMilestoneStatusText, getDaysLeft, getTotalDays, getProgressPercent, getHoursLeft } from '../../../../../../helpers/milestoneHelper'
 
 import {
   MILESTONE_STATUS,
@@ -248,21 +247,16 @@ class MilestoneTypeFinalDesigns extends React.Component {
       : this.getLinksForReview()
 
     const minCheckedDesigns = this.getMinSelectedDesigns()
-    const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
 
-    const startDate = moment(milestone.actualStartDate || milestone.startDate)
-    const endDate = moment(milestone.startDate).add(milestone.duration - 1, 'days')
-    const daysLeft = endDate.diff(today, 'days')
-    const totalDays = endDate.diff(startDate, 'days')
-    const hoursLeft = endDate.diff(moment(), 'hours')
+    const daysLeft = getDaysLeft(milestone)
+    const totalDays = getTotalDays(milestone)
+    const hoursLeft = getHoursLeft(milestone)
 
     const progressText = daysLeft >= 0
       ? `${daysLeft} days until designs are completed`
-      : `${daysLeft} days designs are delayed`
+      : `${-daysLeft} days designs are delayed`
 
-    const progressPercent = daysLeft > 0
-      ? (totalDays - daysLeft) / totalDays * 100
-      : 100
+    const progressPercent = getProgressPercent(totalDays, daysLeft)
 
     const waitingForCustomer = _.get(milestone, 'details.metadata.waitingForCustomer', true)
     return (
@@ -276,55 +270,52 @@ class MilestoneTypeFinalDesigns extends React.Component {
          */}
         {isActive && (
           <div>
-            {!isInReview &&  (
-              <div>
-                <DotIndicator>
-                  <div styleName="top-space">
-                    <ProjectProgress
-                      labelDayStatus={progressText}
-                      progressPercent={progressPercent}
-                      theme="light"
-                      readyForReview
-                    >
-                      {!currentUser.isCustomer && (
-                        <button
-                          onClick={this.moveToReviewingState}
-                          className="tc-btn tc-btn-primary"
-                          disabled={links.length === 0}
-                        >
-                          Ready for review
-                        </button>
-                      )}
-                    </ProjectProgress>
-                  </div>
-                </DotIndicator>
-
-                {!currentUser.isCustomer && (
-                  <DotIndicator hideLine>
-                    <LinkList
-                      links={links}
-                      onAddLink={this.updatedUrl}
-                      onRemoveLink={this.removeUrl}
-                      onUpdateLink={this.updatedUrl}
-                      fields={[{
-                        name: 'title',
-                        value: `Design ${links.length + 1}`,
-                        maxLength: 64,
-                      }, {
-                        name: 'url'
-                      }]}
-                      addButtonTitle="Add a design link"
-                      formAddTitle="Adding a link"
-                      formAddButtonTitle="Add a link"
-                      formUpdateTitle="Editing a link"
-                      formUpdateButtonTitle="Save changes"
-                      isUpdating={milestone.isUpdating}
-                      fakeName={`Design ${links.length + 1}`}
-                      canAddLink
-                    />
-                  </DotIndicator>
-                )}
-              </div>
+            {(daysLeft < 0 || !isInReview) && (
+              <DotIndicator hideDot={isInReview}>
+                <div styleName="top-space">
+                  <ProjectProgress
+                    labelDayStatus={progressText}
+                    progressPercent={progressPercent}
+                    theme={daysLeft < 0 ? 'warning' : 'light'}
+                    readyForReview
+                  >
+                    {!isInReview && !currentUser.isCustomer && (
+                      <button
+                        onClick={this.moveToReviewingState}
+                        className="tc-btn tc-btn-primary"
+                        disabled={links.length === 0}
+                      >
+                        Ready for review
+                      </button>
+                    )}
+                  </ProjectProgress>
+                </div>
+              </DotIndicator>
+            )}
+            {!isInReview && !currentUser.isCustomer && (
+              <DotIndicator hideLine>
+                <LinkList
+                  links={links}
+                  onAddLink={this.updatedUrl}
+                  onRemoveLink={this.removeUrl}
+                  onUpdateLink={this.updatedUrl}
+                  fields={[{
+                    name: 'title',
+                    value: `Design ${links.length + 1}`,
+                    maxLength: 64,
+                  }, {
+                    name: 'url'
+                  }]}
+                  addButtonTitle="Add a design link"
+                  formAddTitle="Adding a link"
+                  formAddButtonTitle="Add a link"
+                  formUpdateTitle="Editing a link"
+                  formUpdateButtonTitle="Save changes"
+                  isUpdating={milestone.isUpdating}
+                  fakeName={`Design ${links.length + 1}`}
+                  canAddLink
+                />
+              </DotIndicator>
             )}
 
             {isInReview && (
