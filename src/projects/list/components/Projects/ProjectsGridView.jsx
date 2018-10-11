@@ -39,8 +39,8 @@ const ProjectsGridView = props => {
         const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
           <Link to={url} className="spacing">
-            { recentlyCreated  && <span className="blue-border" /> }
-            { item.id }
+            {recentlyCreated && <span className="blue-border" />}
+            {item.id}
           </Link>
         )
       }
@@ -78,14 +78,14 @@ const ProjectsGridView = props => {
           <div className="spacing project-container">
             <div className="project-title">
               <Link to={url} className="link-title">{item.name}</Link>
-              { code && <span className="item-ref-code txt-gray-md" onClick={ () => { applyFilters({ keyword: code })} } dangerouslySetInnerHTML={{ __html: code }} />}
+              {code && <span className="item-ref-code txt-gray-md" onClick={() => { applyFilters({ keyword: code }) }} dangerouslySetInnerHTML={{ __html: code }} />}
             </div>
             <Link to={url}>
               <TextTruncate
                 containerClassName="project-description"
                 line={2}
                 truncateText="..."
-                text={ item.description }
+                text={item.description}
               />
             </Link>
           </div>
@@ -93,7 +93,7 @@ const ProjectsGridView = props => {
       }
     }, {
       id: 'updatedAt',
-      headerLabel: <ProjectListTimeSortColHeader currentSortField={currentSortField} sortHandler={sortHandler}/>,
+      headerLabel: <ProjectListTimeSortColHeader currentSortField={currentSortField} sortHandler={sortHandler} />,
       sortable: false,
       classes: 'item-status-date',
       renderText: item => {
@@ -124,7 +124,7 @@ const ProjectsGridView = props => {
         return (
           <div className="spacing">
             <div className="user-block">
-              <UserTooltip usr={m} id={item.id}/>
+              <UserTooltip usr={m} id={item.id} size={35} />
 
             </div>
           </div>
@@ -144,7 +144,7 @@ const ProjectsGridView = props => {
         const m = _.filter(item.members, m => m.role === 'manager')
         return (
           <div className="spacing">
-            <ProjectManagerAvatars managers={m}/>
+            <ProjectManagerAvatars managers={m} />
           </div>
         )
       }
@@ -180,7 +180,7 @@ const ProjectsGridView = props => {
       return _.assign({}, m, {
         photoURL: ''
       },
-      members[m.userId.toString()])
+        members[m.userId.toString()])
     })
   })
 
