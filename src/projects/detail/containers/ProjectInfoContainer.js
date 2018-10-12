@@ -61,7 +61,7 @@ class ProjectInfoContainer extends React.Component {
 
     // load phases feeds if they are not loaded yet
     // note: old projects doesn't have phases, so we check if there are any phases at all first
-    phases && phases.forEach((phase) => {
+    phases && phasesTopics && phases.forEach((phase) => {
       if (!phasesTopics[phase.id]) {
         loadPhaseFeed(project.id, phase.id)
       }
