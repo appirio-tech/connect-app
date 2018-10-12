@@ -23,9 +23,15 @@ class MilestoneTypeFinalFixes extends React.Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      showExtensionRequestSection: true
+    }
+
     this.updatedUrl = this.updatedUrl.bind(this)
     this.removeUrl = this.removeUrl.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
+    this.onFormAddOpen = this.onFormAddOpen.bind(this)
+    this.onFormAddCancel = this.onFormAddCancel.bind(this)
   }
 
   /**update link */
@@ -46,6 +52,14 @@ class MilestoneTypeFinalFixes extends React.Component {
     updateMilestoneContent({
       links
     })
+  }
+
+  onFormAddOpen() {
+    this.setState({showExtensionRequestSection: false });
+  }
+
+  onFormAddCancel() {
+    this.setState({showExtensionRequestSection: true });
   }
 
   removeUrl(linkIndex) {
@@ -95,7 +109,7 @@ class MilestoneTypeFinalFixes extends React.Component {
     const progressPercent = daysLeft > 0
       ? (totalDays - daysLeft) / totalDays * 100
       : 100
-
+    const { showExtensionRequestSection } = this.state
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -140,6 +154,8 @@ class MilestoneTypeFinalFixes extends React.Component {
               formUpdateTitle="Editing a deliverable"
               formUpdateButtonTitle="Save changes"
               isUpdating={milestone.isUpdating}
+              onFormAddOpen={this.onFormAddOpen}
+              onFormAddCancel={this.onFormAddCancel}
               canAddLink
             />
           </DotIndicator>
@@ -164,7 +180,7 @@ class MilestoneTypeFinalFixes extends React.Component {
         {
           isActive &&
           !extensionRequestDialog &&
-          !currentUser.isCustomer &&
+          !currentUser.isCustomer && showExtensionRequestSection &&
         (
           <DotIndicator hideLine>
             <div styleName="top-space">

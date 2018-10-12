@@ -29,6 +29,7 @@ class MilestoneTypeAddLinks extends React.Component {
       addedLinks: [],
       isShowCompleteConfirmMessage: false,
       isLinkAdded: true,
+      showExtensionRequestSection: true
     }
 
     this.addUrl = this.addUrl.bind(this)
@@ -37,6 +38,16 @@ class MilestoneTypeAddLinks extends React.Component {
     this.hideCompleteAddLinksConfirmation = this.hideCompleteAddLinksConfirmation.bind(this)
     this.complete = this.complete.bind(this)
     this.toggleRejectedSection = this.toggleRejectedSection.bind(this)
+    this.onFormAddOpen = this.onFormAddOpen.bind(this)
+    this.onFormAddCancel = this.onFormAddCancel.bind(this)
+  }
+
+  onFormAddOpen() {
+    this.setState({ showExtensionRequestSection: false });
+  }
+
+  onFormAddCancel() {
+    this.setState({ showExtensionRequestSection: true });
   }
 
   showCompleteAddLinksConfirmation() {
@@ -126,7 +137,7 @@ class MilestoneTypeAddLinks extends React.Component {
     const progressPercent = daysLeft > 0
       ? (totalDays - daysLeft) / totalDays * 100
       : 100
-
+    const { showExtensionRequestSection } = this.state
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -171,6 +182,8 @@ class MilestoneTypeAddLinks extends React.Component {
                     formUpdateButtonTitle="Save changes"
                     isUpdating={isLinkAdded}
                     fakeName={`Design ${addedLinks.length + 1}`}
+                    onFormAddOpen={this.onFormAddOpen}
+                    onFormAddCancel={this.onFormAddCancel}
                     canAddLink
                   />
                 </DotIndicator>
@@ -214,7 +227,7 @@ class MilestoneTypeAddLinks extends React.Component {
               !isCompleted &&
               !extensionRequestDialog &&
               !isShowCompleteConfirmMessage &&
-              !currentUser.isCustomer &&
+              !currentUser.isCustomer && showExtensionRequestSection &&
             (
               <DotIndicator hideLine>
                 <div styleName="action-bar" className="flex center">
