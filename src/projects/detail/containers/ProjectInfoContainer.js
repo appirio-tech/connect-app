@@ -122,7 +122,7 @@ class ProjectInfoContainer extends React.Component {
     const { duration } = this.state
     const { project, currentMemberRole, isSuperUser, phases, feeds,
       hideInfo, hideLinks, hideMembers, onChannelClick, activeChannelId, productsTimelines,
-      isManageUser, phasesTopics } = this.props
+      isManageUser, phasesTopics, isProjectPlan } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -191,7 +191,8 @@ class ProjectInfoContainer extends React.Component {
       title: `${feed.title}`,
       address: feed.tag === PROJECT_FEED_TYPE_PRIMARY ? `/projects/${project.id}#feed-${feed.id}` : `/projects/${project.id}/plan#phase-${feed.phaseId}-posts`,
       noNewPage: true,
-      onClick: feed.tag !== PROJECT_FEED_TYPE_PRIMARY && onChannelClick ? () => onChannelClick(feed) : null,
+      //if PRIMARY discussion is to be loaded for project-plan page we won't attach the callback, for smoother transition to dashboard page
+      onClick: !(isProjectPlan && feed.tag === PROJECT_FEED_TYPE_PRIMARY) && onChannelClick ? () => onChannelClick(feed) : null,
       allowDefaultOnClick: true,
       isActive: feed.id === activeChannelId,
     }))
@@ -261,6 +262,7 @@ ProjectInfoContainer.PropTypes = {
   isSuperUser: PropTypes.bool,
   isManageUser: PropTypes.bool,
   productsTimelines : PropTypes.object.isRequired,
+  isProjectPlan: PropTypes.bool,
 }
 
 const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, loadDashboardFeeds, loadPhaseFeed }
