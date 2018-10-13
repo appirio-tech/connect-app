@@ -91,17 +91,30 @@
       font-size: 15px;
       font-weight: 500;
       line-height: 0;
+      border: 0;
       &.button-add {
         background-color: $tc-gray-20;
-        padding: 0 0 3px 0px;
+        padding-left: 6px;
         &:hover {
           background-color: $tc-dark-blue-100;
+        }
+
+        svg {
+          fill: $tc-white;
+          width: 9px;
         }
       }
       &.button-remove {
         background-color: $tc-red-110;
-        padding: 0 0 3px 0px;
+        padding-left: 2px;
         font-size: 20px;
+
+        svg {
+          fill: $tc-white;
+          path {
+            fill: $tc-white;
+          }
+        }
       }
     }
 
