@@ -376,7 +376,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
                       Complete review ({hoursLeft}h)
                     </button>
                   )}
-                    {!currentUser.isCustomer && !waitingForCustomer && extensionRequestButton}
+                  {!currentUser.isCustomer && !waitingForCustomer && extensionRequestButton}
                 </div>
               </DotIndicator>
             )}
