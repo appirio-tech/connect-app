@@ -101,6 +101,7 @@ class ProjectPlanContainer extends React.Component {
     ))
 
     const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
+    const isProjectPlan = true
 
     const leftArea = (
       <ProjectInfoContainer
@@ -114,6 +115,7 @@ class ProjectPlanContainer extends React.Component {
         productsTimelines={productsTimelines}
         phasesTopics={phasesTopics}
         onChannelClick={this.onChannelClick}
+        isProjectPlan={isProjectPlan}
       />
     )
 
