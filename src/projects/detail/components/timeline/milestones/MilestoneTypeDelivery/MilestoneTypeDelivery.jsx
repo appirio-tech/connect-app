@@ -369,14 +369,18 @@ class MilestoneTypeDelivery extends React.Component {
          */}
         {isCompleted && (
           <div>
-            <LinkList
-              links={links}
-              onUpdateLink={(currentUser.isCopilot || currentUser.isManager) && this.updatedUrl}
-              fields={(currentUser.isCopilot || currentUser.isManager) && [{ name: 'url'}]}
-              formUpdateTitle={(currentUser.isCopilot || currentUser.isManager) && "Editing a link"}
-              formUpdateButtonTitle={(currentUser.isCopilot || currentUser.isManager) && "Save changes"}
-              isUpdating={(currentUser.isCopilot || currentUser.isManager) && milestone.isUpdating}
-            />
+            {currentUser.isCustomer ? (
+              <LinkList links={links}/>
+            ) : (
+              <LinkList
+                links={links}
+                onUpdateLink={this.updatedUrl}
+                fields={[{ name: 'url'}]}
+                formUpdateTitle="Editing a link"
+                formUpdateButtonTitle="Save changes"
+                isUpdating={milestone.isUpdating}
+              />
+            )}
           </div>
         )}
       </div>
