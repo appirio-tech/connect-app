@@ -7,27 +7,20 @@
   @include roboto;
 }
 
+:global .Tooltip {
+  .tooltip-container {
+    .tooltip-content-container {
+      padding: 15px!important;
+    }
+  }
+}
+
 .form {
   :global .error-message {
     color: $tc-orange-70;
     border: 1px solid $tc-orange-30;
   }
 }
-
-
-
-// :global(.Tooltip) {
-//   width: 50%;
-//   float: left;
-  
-//   .input-row {
-//     width: 100%;
-//   }
-//   &:nth-child(1) {
-//     width: auto;
-//     float: none;
-//   }
-// }
 
 .label-layer:nth-child(4) > :global(.Tooltip) {
   width: 50%;
