@@ -198,7 +198,9 @@ class MilestoneTypeDelivery extends React.Component {
     if(isFinalFixPresent) {
       deliveryButtons.push({ title: 'Request fixes', onClick: this.showFinalFixesRequestForm, type: 'default' })
     }
-    if(isFinalFixesSubmitted) {
+    if (isCompleted) {
+      links = _.get(milestone, 'details.content.links', [])
+    } else if(isFinalFixesSubmitted) {
       links = _.get(milestone, 'details.prevMilestoneContent.links', [])
     } else {
       links = _.get(milestone, 'details.content.links', [])
