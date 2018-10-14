@@ -9,6 +9,7 @@ import cn from 'classnames'
 import DotIndicator from '../../DotIndicator'
 import LinkList from '../../LinkList'
 import MilestoneDescription from '../../MilestoneDescription'
+import MilestoneDelayNotification from '../../MilestoneDelayNotification'
 import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
@@ -92,6 +93,8 @@ class MilestoneTypePhaseSpecification extends React.Component {
          */}
         {isActive && (
           <div>
+            <MilestoneDelayNotification milestone={milestone} hideDot={!currentUser.isCustomer || extensionRequestConfirmation}/>
+
             {!currentUser.isCustomer && (
               <DotIndicator hideDot>
                 <LinkList
