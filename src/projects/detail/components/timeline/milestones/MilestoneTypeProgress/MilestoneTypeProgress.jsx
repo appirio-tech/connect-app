@@ -158,7 +158,7 @@ class MilestoneTypeProgress extends React.Component {
                         onClick={this.completeMilestone}
                       >
                         Mark as completed
-                    </button>
+                      </button>
                       {!currentUser.isCustomer && extensionRequestButton}
                     </div>
                   </div>

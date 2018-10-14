@@ -164,9 +164,9 @@ class MilestoneTypeAddLinks extends React.Component {
                     }, {
                       name: 'url'
                     }]}
-                    addButtonTitle="Add a design link"
-                    formAddTitle="Adding a link"
-                    formAddButtonTitle="Add a design link"
+                    addButtonTitle="Add design link"
+                    formAddTitle="Add design link"
+                    formAddButtonTitle="Add link"
                     formUpdateTitle="Editing a link"
                     formUpdateButtonTitle="Save changes"
                     isUpdating={isLinkAdded}
@@ -224,7 +224,7 @@ class MilestoneTypeAddLinks extends React.Component {
                         onClick={!currentUser.isCustomer ? this.showCompleteAddLinksConfirmation : this.complete}
                       >
                         Complete
-                    </button>
+                      </button>
                     )}
                     {!currentUser.isCustomer && extensionRequestButton}
                   </div>
