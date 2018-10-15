@@ -201,6 +201,15 @@ class MilestoneTypeDelivery extends React.Component {
     }
     if(isFinalFixesSubmitted) {
       links = _.get(milestone, 'details.prevMilestoneContent.links', [])
+      if(isCompleted) {
+        // if it's completed
+        // check if there is new updated/edited delivery link
+        const currentLinks = _.get(milestone, 'details.content.links', [])
+        // use the previous link (final fix) if there is none
+        if (currentLinks.length > 0) {
+          links = currentLinks
+        }
+      }
     } else {
       links = _.get(milestone, 'details.content.links', [])
     }
@@ -372,7 +381,18 @@ class MilestoneTypeDelivery extends React.Component {
          */}
         {isCompleted && (
           <div>
-            <LinkList links={links} />
+            {currentUser.isCustomer ? (
+              <LinkList links={links}/>
+            ) : (
+              <LinkList
+                links={links}
+                onUpdateLink={this.updatedUrl}
+                fields={[{ name: 'url'}]}
+                formUpdateTitle="Editing a link"
+                formUpdateButtonTitle="Save changes"
+                isUpdating={milestone.isUpdating}
+              />
+            )}
           </div>
         )}
       </div>
