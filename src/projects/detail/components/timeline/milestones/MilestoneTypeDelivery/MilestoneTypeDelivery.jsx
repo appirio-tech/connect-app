@@ -206,7 +206,7 @@ class MilestoneTypeDelivery extends React.Component {
         const currentLinks = _.get(milestone, 'details.content.links', [])
         // use the previous link (final fix) if there is none
         if (currentLinks.length > 0) {
-          links = currentLinks;
+          links = currentLinks
         }
       }
     } else {
