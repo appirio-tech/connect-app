@@ -113,10 +113,10 @@ class MilestoneTypeProgress extends React.Component {
                 onAddLink={this.updatedUrl}
                 onRemoveLink={this.removeUrl}
                 onUpdateLink={this.updatedUrl}
-                fields={[{ name: 'title'}, { name: 'url'}, { name: 'type' }]}
+                fields={[{ name: 'title' }, { name: 'url' }, { name: 'type' }]}
                 addButtonTitle="Add link"
                 formAddTitle="Adding a link"
-                formAddButtonTitle="Add a link"
+                formAddButtonTitle="Add link"
                 formUpdateTitle="Editing a link"
                 formUpdateButtonTitle="Save changes"
                 isUpdating={milestone.isUpdating}
@@ -143,21 +143,21 @@ class MilestoneTypeProgress extends React.Component {
             {
               !currentUser.isCustomer &&
               !extensionRequestDialog &&
-            (
-              <DotIndicator>
-                <div styleName="top-space">
-                  <div styleName="top-space button-layer">
-                    <button
-                      className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-                      onClick={this.completeMilestone}
-                    >
-                      Mark as completed
-                    </button>
-                    {!currentUser.isCustomer && extensionRequestButton}
+              (
+                <DotIndicator>
+                  <div styleName="top-space">
+                    <div styleName="top-space button-layer">
+                      <button
+                        className="tc-btn tc-btn-primary tc-btn-sm action-btn"
+                        onClick={this.completeMilestone}
+                      >
+                        Mark as completed
+                      </button>
+                      {!currentUser.isCustomer && extensionRequestButton}
+                    </div>
                   </div>
-                </div>
-              </DotIndicator>
-            )}
+                </DotIndicator>
+              )}
           </div>
         )}
 

@@ -305,9 +305,9 @@ class MilestoneTypeFinalDesigns extends React.Component {
                   }, {
                     name: 'url'
                   }]}
-                  addButtonTitle="Add a design link"
-                  formAddTitle="Adding a link"
-                  formAddButtonTitle="Add a link"
+                  addButtonTitle="Add design link"
+                  formAddTitle="Add design link"
+                  formAddButtonTitle="Add link"
                   formUpdateTitle="Editing a link"
                   formUpdateButtonTitle="Save changes"
                   isUpdating={milestone.isUpdating}

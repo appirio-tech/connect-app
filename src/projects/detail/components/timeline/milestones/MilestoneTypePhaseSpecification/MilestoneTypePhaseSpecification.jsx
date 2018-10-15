@@ -103,8 +103,8 @@ class MilestoneTypePhaseSpecification extends React.Component {
                   onRemoveLink={this.removeUrl}
                   onUpdateLink={this.updatedUrl}
                   fields={[{ name: 'url' }]}
-                  addButtonTitle="Add specification"
-                  formAddTitle="Specification document link"
+                  addButtonTitle="Add specification link"
+                  formAddTitle="Add specification link"
                   formAddButtonTitle="Add link"
                   formUpdateTitle="Editing a link"
                   formUpdateButtonTitle="Save changes"
