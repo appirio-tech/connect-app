@@ -11,12 +11,12 @@ import './SelectProductTemplate.scss'
 const SelectProductTemplate = ({
   onProductTemplateChange,
   productTemplates,
-  projectCategories,
+  productCategories,
 }) => {
   const cards = {}
   const categoryNames = {}
-  if (projectCategories) {
-    projectCategories.forEach((category) => {
+  if (productCategories) {
+    productCategories.forEach((category) => {
       categoryNames[category.key] = category.displayName
     })
   }
@@ -62,7 +62,7 @@ const SelectProductTemplate = ({
 SelectProductTemplate.propTypes = {
   onProductTemplateChange: PT.func.isRequired,
   productTemplates: PT.array.isRequired,
-  projectCategories: PT.array.isRequired,
+  productCategories: PT.array.isRequired,
 }
 
 export default SelectProductTemplate
