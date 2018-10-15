@@ -218,7 +218,7 @@ const SpecSection = props => {
               <TCFormFields.TextInput
                 name={refCodeFieldName}
                 placeholder="REF code"
-                value={ refCode }
+                value={ _.unescape(refCode) }
                 wrapperClass="project-refcode"
                 maxLength={ PROJECT_REF_CODE_MAX_LENGTH }
                 theme="paper-form-dotted"
