@@ -28,7 +28,7 @@ import { addProductAttachment, updateProductAttachment, removeProductAttachment 
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import FeedContainer from './FeedContainer'
-import Sticky from 'react-stickynode'
+import Sticky from '../../../components/Sticky'
 import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import TwoColsLayout from '../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
