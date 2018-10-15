@@ -257,7 +257,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
       : `${-daysLeft} days designs are delayed`
 
     const progressPercent = getProgressPercent(totalDays, daysLeft)
-
+    const waitingForCustomer = _.get(milestone, 'details.metadata.waitingForCustomer', true)
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -390,7 +390,7 @@ class MilestoneTypeFinalDesigns extends React.Component {
                           Complete review ({hoursLeft}h)
                         </button>
                       )}
-                      {!currentUser.isCustomer && extensionRequestButton}
+                      {!currentUser.isCustomer && !waitingForCustomer && extensionRequestButton}
                     </div>
                   </DotIndicator>
                 )}
