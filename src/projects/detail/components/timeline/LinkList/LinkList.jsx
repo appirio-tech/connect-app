@@ -29,12 +29,12 @@ class LinkList extends React.Component {
 
   openAddForm() {
     this.setState({ isAddingLink: true })
-    this.props.onFormAddOpen();
+    this.props.onFormAddOpen && this.props.onFormAddOpen()
   }
 
   closeAddForm() {
     this.setState({ isAddingLink: false })
-    this.props.onFormAddCancel();
+    this.props.onFormAddCancel && this.props.onFormAddCancel()
   }
 
   render() {

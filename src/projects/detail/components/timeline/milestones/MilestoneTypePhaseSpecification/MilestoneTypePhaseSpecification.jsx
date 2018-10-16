@@ -52,11 +52,11 @@ class MilestoneTypePhaseSpecification extends React.Component {
   }
 
   onFormAddOpen() {
-    this.setState({ showExtensionRequestSection: false });
+    this.setState({ showExtensionRequestSection: false })
   }
 
   onFormAddCancel() {
-    this.setState({ showExtensionRequestSection: true });
+    this.setState({ showExtensionRequestSection: true })
   }
 
   removeUrl(linkIndex) {
