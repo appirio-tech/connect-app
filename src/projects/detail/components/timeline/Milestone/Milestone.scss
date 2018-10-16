@@ -165,6 +165,12 @@
       line-height: 30px;
       text-align: left;
     }
+
+    .desktop-edit-section {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 
   .mobile-edit-section {
