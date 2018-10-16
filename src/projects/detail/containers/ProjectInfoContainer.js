@@ -195,7 +195,7 @@ class ProjectInfoContainer extends React.Component {
       //if PRIMARY discussion is to be loaded for project-plan page we won't attach the callback, for smoother transition to dashboard page
       onClick: !(isProjectPlan && feed.tag === PROJECT_FEED_TYPE_PRIMARY) && onChannelClick ? () => onChannelClick(feed) : null,
       allowDefaultOnClick: true,
-      isActive: feed.id === activeChannelId
+      isActive: feed.id === activeChannelId,
     }))
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
