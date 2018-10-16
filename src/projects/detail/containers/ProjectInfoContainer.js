@@ -183,6 +183,7 @@ class ProjectInfoContainer extends React.Component {
         return ({
           ...topic,
           phaseId: phase.id,
+          phaseName: phase.name,
         })
       })
     )
@@ -195,6 +196,7 @@ class ProjectInfoContainer extends React.Component {
       onClick: !(isProjectPlan && feed.tag === PROJECT_FEED_TYPE_PRIMARY) && onChannelClick ? () => onChannelClick(feed) : null,
       allowDefaultOnClick: true,
       isActive: feed.id === activeChannelId,
+      phaseName: feed.phaseName
     }))
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
