@@ -178,7 +178,77 @@ class Milestone extends React.Component {
     const date = startDate.format('D')
     const title = milestone.name
     const isUpdating = milestone.isUpdating
-
+    const editForm = (<Form
+                        fields={[{
+                          label: 'Name',
+                          placeholder: 'Name',
+                          name: 'name',
+                          value: milestone.name,
+                          type: 'text',
+                          validations: {
+                            isRequired: true
+                          },
+                          validationError: 'Name is required',
+                        }, {
+                          type: 'number',
+                          placeholder: 'Duration',
+                          label: 'Duration',
+                          name: 'duration',
+                          value: String(milestone.duration || 0),
+                          validations: {
+                            isRequired: true
+                          },
+                          validationError: 'Duration is required'
+                        }, {
+                          label: 'Planned text',
+                          placeholder: 'Planned text',
+                          name: 'plannedText',
+                          value: milestone.plannedText,
+                          type: 'textarea',
+                          autoResize: true,
+                          validations: {
+                            isRequired: true
+                          },
+                          validationError: 'Planned text is required',
+                        }, {
+                          label: 'Active text',
+                          placeholder: 'Active text',
+                          name: 'activeText',
+                          value: milestone.activeText,
+                          type: 'textarea',
+                          autoResize: true,
+                          validations: {
+                            isRequired: true
+                          },
+                          validationError: 'Active text is required',
+                        }, {
+                          label: 'Blocked text',
+                          placeholder: 'Blocked text',
+                          name: 'blockedText',
+                          value: milestone.blockedText,
+                          type: 'textarea',
+                          autoResize: true,
+                          validations: {
+                            isRequired: true
+                          },
+                          validationError: 'Blocked text is required',
+                        }, {
+                          label: 'Completed text',
+                          placeholder: 'Completed text',
+                          name: 'completedText',
+                          value: milestone.completedText,
+                          type: 'textarea',
+                          autoResize: true,
+                          validations: {
+                            isRequired: true
+                          },
+                          validationError: 'Completed text is required',
+                        }]}
+                        onCancelClick={this.closeEditForm}
+                        onSubmit={this.updateMilestoneWithData}
+                        submitButtonTitle="Update milestone"
+                        title="Milestone Properties"
+                      />)
     return (
       <div styleName="timeline-post">
         {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing && !isCompleted) ? 'hover ' : '')} />)}
@@ -207,7 +277,7 @@ class Milestone extends React.Component {
               {
                 <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
                   {(matches) => (matches ? (
-                    <div>
+                    <div styleName={'desktop-edit-section'}>
                       {!currentUser.isCustomer && !isCompleted && this.state.isHoverHeader && !isUpdating &&
                       (<div onClick={this.toggleEditLink} styleName={'post-edit'} >
                         <span styleName="tooltiptext">Edit milestone properties</span>
@@ -215,11 +285,11 @@ class Milestone extends React.Component {
                       }
                     </div>
                   ) : (
-                        <div>
+                        <div styleName={'mobile-edit-section'}>
                           {
                             !currentUser.isCustomer && !isCompleted && !isUpdating &&
-                            (<div onClick={this.toggleMobileEditLink} styleName={'post-edit'} >
-                              <span styleName="tooltiptext">Edit milestone properties</span>
+                            (<div onClick={this.toggleMobileEditLink} styleName={'post-edit-mobile'} >  
+                              
                             </div>)
                           }
                         </div>
@@ -231,152 +301,14 @@ class Milestone extends React.Component {
           }
 
           {isEditing && !isUpdating && (
-            <Form
-              fields={[{
-                label: 'Name',
-                placeholder: 'Name',
-                name: 'name',
-                value: milestone.name,
-                type: 'text',
-                validations: {
-                  isRequired: true
-                },
-                validationError: 'Name is required',
-              }, {
-                type: 'number',
-                placeholder: 'Duration',
-                label: 'Duration',
-                name: 'duration',
-                value: String(milestone.duration || 0),
-                validations: {
-                  isRequired: true
-                },
-                validationError: 'Duration is required'
-              }, {
-                label: 'Planned text',
-                placeholder: 'Planned text',
-                name: 'plannedText',
-                value: milestone.plannedText,
-                type: 'textarea',
-                autoResize: true,
-                validations: {
-                  isRequired: true
-                },
-                validationError: 'Planned text is required',
-              }, {
-                label: 'Active text',
-                placeholder: 'Active text',
-                name: 'activeText',
-                value: milestone.activeText,
-                type: 'textarea',
-                autoResize: true,
-                validations: {
-                  isRequired: true
-                },
-                validationError: 'Active text is required',
-              }, {
-                label: 'Blocked text',
-                placeholder: 'Blocked text',
-                name: 'blockedText',
-                value: milestone.blockedText,
-                type: 'textarea',
-                autoResize: true,
-                validations: {
-                  isRequired: true
-                },
-                validationError: 'Blocked text is required',
-              }, {
-                label: 'Completed text',
-                placeholder: 'Completed text',
-                name: 'completedText',
-                value: milestone.completedText,
-                type: 'textarea',
-                autoResize: true,
-                validations: {
-                  isRequired: true
-                },
-                validationError: 'Completed text is required',
-              }]}
-              onCancelClick={this.closeEditForm}
-              onSubmit={this.updateMilestoneWithData}
-              submitButtonTitle="Update milestone"
-              title="Milestone Properties"
-            />
+            <div>
+              { editForm }
+            </div>
           )}
 
           {isMobileEditing && !isUpdating && (
             <MobilePage>
-              <Form
-                fields={[{
-                  label: 'Name',
-                  placeholder: 'Name',
-                  name: 'name',
-                  value: milestone.name,
-                  type: 'text',
-                  validations: {
-                    isRequired: true
-                  },
-                  validationError: 'Name is required',
-                }, {
-                  type: 'number',
-                  placeholder: 'Duration',
-                  label: 'Duration',
-                  name: 'duration',
-                  value: String(milestone.duration || 0),
-                  validations: {
-                    isRequired: true
-                  },
-                  validationError: 'Duration is required'
-                }, {
-                  label: 'Planned text',
-                  placeholder: 'Planned text',
-                  name: 'plannedText',
-                  value: milestone.plannedText,
-                  type: 'textarea',
-                  autoResize: true,
-                  validations: {
-                    isRequired: true
-                  },
-                  validationError: 'Planned text is required',
-                }, {
-                  label: 'Active text',
-                  placeholder: 'Active text',
-                  name: 'activeText',
-                  value: milestone.activeText,
-                  type: 'textarea',
-                  autoResize: true,
-                  validations: {
-                    isRequired: true
-                  },
-                  validationError: 'Active text is required',
-                }, {
-                  label: 'Blocked text',
-                  placeholder: 'Blocked text',
-                  name: 'blockedText',
-                  value: milestone.blockedText,
-                  type: 'textarea',
-                  autoResize: true,
-                  validations: {
-                    isRequired: true
-                  },
-                  validationError: 'Blocked text is required',
-                }, {
-                  label: 'Completed text',
-                  placeholder: 'Completed text',
-                  name: 'completedText',
-                  value: milestone.completedText,
-                  type: 'textarea',
-                  autoResize: true,
-                  validations: {
-                    isRequired: true
-                  },
-                  validationError: 'Completed text is required',
-                }]}
-                onCancelClick={this.closeEditForm}
-                onSubmit={this.updateMilestoneWithData}
-                submitButtonTitle="Update milestone"
-                title="Milestone Properties"
-              />
+              { editForm }
             </MobilePage>
           )}
 
