@@ -77,7 +77,7 @@ const ProjectsGridView = props => {
         return (
           <div className="spacing project-container">
             <div className="project-title">
-              <Link to={url} className="link-title">{item.name}</Link>
+              <Link to={url} className="link-title">{_.unescape(item.name)}</Link>
               {code && <span className="item-ref-code txt-gray-md" onClick={() => { applyFilters({ keyword: code }) }} dangerouslySetInnerHTML={{ __html: code }} />}
             </div>
             <Link to={url}>
@@ -85,7 +85,7 @@ const ProjectsGridView = props => {
                 containerClassName="project-description"
                 line={2}
                 truncateText="..."
-                text={item.description}
+                text={_.unescape(item.description)}
               />
             </Link>
           </div>

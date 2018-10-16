@@ -9,7 +9,7 @@
 import React from 'react'
 import PT from 'prop-types'
 
-import Sticky from 'react-stickynode'
+import Sticky from '../../../../components/Sticky'
 
 import {
   filterReadNotifications,

@@ -63,6 +63,7 @@ const ProjectDetailView = (props) => {
       currentMemberRole: currentMemberRole || '',
       isSuperUser: props.isSuperUser,
       isManageUser: props.isManageUser,
+      isCustomerUser: props.isCustomerUser,
       isProcessing: props.isProcessing,
       allProductTemplates: props.allProductTemplates,
       productsTimelines: props.productsTimelines,
@@ -120,12 +121,14 @@ class ProjectDetail extends Component {
     const isSuperUser = this.props.currentUserRoles.some((role) => adminRoles.indexOf(role) !== -1)
     const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
     const isManageUser = this.props.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
+    const isCustomerUser = !(isManageUser || isSuperUser)
     return (
       <EnhancedProjectDetailView
         {...this.props}
         currentMemberRole={currentMemberRole}
         isSuperUser={isSuperUser}
         isManageUser={isManageUser}
+        isCustomerUser={isCustomerUser}
       />
     )
   }

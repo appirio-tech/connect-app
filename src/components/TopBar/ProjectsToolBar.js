@@ -41,9 +41,9 @@ class ProjectsToolBar extends Component {
   }
 
   componentWillMount() {
-    const { projectCategories, isProjectCategoriesLoading, loadProjectsMetadata, criteria } = this.props
+    const { projectTypes, isProjectTypesLoading, loadProjectsMetadata, criteria } = this.props
 
-    if (!isProjectCategoriesLoading && !projectCategories) {
+    if (!isProjectTypesLoading && !projectTypes) {
       loadProjectsMetadata()
     }
 
@@ -170,14 +170,14 @@ class ProjectsToolBar extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { user, criteria, creatingProject, projectCreationError, searchTermTag, projectCategories } = this.props
+    const { user, criteria, creatingProject, projectCreationError, searchTermTag, projectTypes } = this.props
     const { errorCreatingProject, isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
     return (nextProps.user || {}).handle !== (user || {}).handle
     || JSON.stringify(nextProps.criteria) !== JSON.stringify(criteria)
     || nextProps.creatingProject !== creatingProject
     || nextProps.projectCreationError !== projectCreationError
     || nextProps.searchTermTag !== searchTermTag
-    || !!nextProps.projectCategories && !projectCategories
+    || !!nextProps.projectTypes && !projectTypes
     || nextState.errorCreatingProject !== errorCreatingProject
     || nextState.isFilterVisible !== isFilterVisible
     || nextState.isMobileMenuOpen !== isMobileMenuOpen
@@ -185,7 +185,7 @@ class ProjectsToolBar extends Component {
   }
 
   render() {
-    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser, user, mobileMenu, location, projectCategories } = this.props
+    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser, user, mobileMenu, location, projectTypes } = this.props
     const { isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
     const isLoggedIn = !!(userRoles && userRoles.length)
 
@@ -243,7 +243,7 @@ class ProjectsToolBar extends Component {
                   className={cn('tc-btn tc-btn-sm mobile-search-toggle', {active: isMobileSearchVisible})}
                   onClick={ this.toggleMobileSearch }
                 ><SearchIcon /></a>
-                { !!projectCategories &&
+                { !!projectTypes &&
                 <a
                   href="javascript:"
                   className={cn('tc-btn tc-btn-sm', {active: isFilterVisible})}
@@ -274,12 +274,12 @@ class ProjectsToolBar extends Component {
             />
           </div>
         }
-        { !!projectCategories && isFilterVisible && isLoggedIn &&
+        { !!projectTypes && isFilterVisible && isLoggedIn &&
           <div className="secondary-toolbar">
             <Filters
               applyFilters={ this.applyFilters }
               criteria={ criteria }
-              projectCategories={ projectCategories }
+              projectTypes={ projectTypes }
             />
           </div>
         }
@@ -315,8 +315,8 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
     criteria               : projectSearch.criteria,
     userRoles              : _.get(loadUser, 'user.roles', []),
     user                   : loadUser.user,
-    projectCategories      : templates.projectCategories,
-    isProjectCategoriesLoading  : templates.isLoading,
+    projectTypes      : templates.projectTypes,
+    isProjectTypesLoading  : templates.isLoading,
   }
 }
 
