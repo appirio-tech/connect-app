@@ -46,11 +46,11 @@ const LinksMenu = ({
             }
           }}
         >
-          {link.phaseName ? link.phaseName : link.title}
+          {link.title}
         </a>
       )
     } else if (link.noNewPage) {
-      return <Link to={link.address}>{link.phaseName ? link.phaseName : link.title}</Link>
+      return <Link to={link.address}>{link.title}</Link>
     } else {
       return <a href={link.address} target="_blank" rel="noopener noreferrer">{link.title}</a>
     }
