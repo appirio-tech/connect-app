@@ -7,10 +7,11 @@ import cn from 'classnames'
 import Sticky from 'react-stickynode'
 import MediaQuery from 'react-responsive'
 import SidebarNav from './SidebarNav'
-import VisualDesignProjectEstimateSection from './VisualDesignProjectEstimateSection'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER, SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import { updateProject } from '../../actions/project'
-import { findProduct } from '../../../config/projectWizard'
+import { isProjectHasEstimation } from '../../../helpers/projectHelper'
+import ReviewProjectButton from './ReviewProjectButton'
+import ProjectEstimationSection from './ProjectEstimationSection'
 import './ProjectSpecSidebar.scss'
 
 const calcProgress = (project, subSection) => {
@@ -118,36 +119,7 @@ class ProjectSpecSidebar extends Component {
     const showReviewBtn = project.status === 'draft' &&
       _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
 
-    // NOTE: May be beneficial to refactor all of these logics into a higher-order
-    // component that returns different project estimate components for different
-    // types of projects in the future. But let's keep it this way for now because
-    // project estimate is only available for one kind of projects
-    const getProjectEstimateSection = () => {
-      const { products } = project.details
-
-      return (
-        <div className="list-group">
-          <VisualDesignProjectEstimateSection products={products} project={project} />
-        </div>
-      )
-    }
-
-    const submitButton = (
-      <button className="tc-btn tc-btn-primary tc-btn-md"
-        onClick={this.onSubmitForReview}
-        disabled={!canSubmitForReview || project.isDirty}
-      >Submit for Review</button>
-    )
-
-    // check if project has estimation the same way as VisualDesignProjectEstimateSection does
-    // probably this can be done in more elegant way
-    const { products } = project.details
-    const productId = products ? products[0] : null
-    const product = findProduct(productId)
-    // TODO $PROJECT_PLAN$
-    // hide estimations until we get real data from server
-    // see https://github.com/appirio-tech/connect-app/issues/2016#issuecomment-400552992
-    const hasEstimation = false && product && typeof product.basePriceEstimate !== 'undefined'
+    const hasEstimation = isProjectHasEstimation(project)
 
     return (
       <div className={cn('projectSpecSidebar', { 'has-review-btn': showReviewBtn })}>
@@ -156,7 +128,7 @@ class ProjectSpecSidebar extends Component {
           <SidebarNav items={navItems} />
         </div>
 
-        {hasEstimation && getProjectEstimateSection()}
+        {hasEstimation && <ProjectEstimationSection project={project} />}
 
         { showReviewBtn &&
         <div>
@@ -168,26 +140,11 @@ class ProjectSpecSidebar extends Component {
               you a good estimate.
             </p>
           </div>
-          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
-            {(matches) => {
-              if (matches) {
-                return (
-                  <div className="btn-boxs">
-                    {submitButton}
-                  </div>
-                )
-              } else {
-                return (
-                  <Sticky top={0}>
-                    <div className={cn('btn-boxs', { 'has-estimation': hasEstimation })}>
-                      {getProjectEstimateSection()}
-                      {submitButton}
-                    </div>
-                  </Sticky>
-                )
-              }
-            }}
-          </MediaQuery>
+          <ReviewProjectButton 
+            project={project} 
+            disabled={!canSubmitForReview || project.isDirty} 
+            onClick={this.onSubmitForReview}
+          />
         </div>
         }
         {!showReviewBtn && hasEstimation &&
@@ -195,7 +152,7 @@ class ProjectSpecSidebar extends Component {
             <div className="sticky-estimation-only">
               <Sticky top={0}>
                 <div className="btn-boxs">
-                  {getProjectEstimateSection()}
+                  <ProjectEstimationSection project={project} />
                 </div>
               </Sticky>
             </div>

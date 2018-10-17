@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import moment from 'moment'
+import { findProduct } from '../config/projectWizard'
 
 import {
   PROJECT_ROLE_CUSTOMER,
@@ -282,4 +283,29 @@ export function getPhaseActualData(phase, timeline) {
     duration,
     progress,
   }
+}
+
+/**
+ * Checks if project has estimations
+ * 
+ * TODO $PROJECT_PLAN$
+ *   returns NO HAVE estimations until we get real data from server
+ *   see https://github.com/appirio-tech/connect-app/issues/2016#issuecomment-400552992
+ * 
+ * NOTE This function has been created during refactoring of the old code and hasn't beed really tested.
+ * 
+ * @param {Object} project 
+ * 
+ * @returns {Boolean} true if project has estimation data
+ */
+export function isProjectHasEstimation(project) {
+  // check if project has estimation the same way as VisualDesignProjectEstimateSection does
+  // probably this can be done in more elegant way
+  const { products } = project.details
+  const productId = products ? products[0] : null
+  const product = findProduct(productId)
+  
+  const hasEstimation = product && typeof product.basePriceEstimate !== 'undefined'
+
+  return hasEstimation && false
 }
