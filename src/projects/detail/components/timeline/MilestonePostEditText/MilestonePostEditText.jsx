@@ -9,7 +9,7 @@ import cn from 'classnames'
 
 import './MilestonePostEditText.scss'
 import BoldAdd from '../../../../../assets/icons/ui-16px-1_bold-add.svg'
-import BoldRemove from '../../../../../assets/icons/small-delete.svg'
+import BoldRemove from '../../../../../assets/icons/ui-16px-1_bold-delete.svg'
 
 class   MilestonePostEditText extends React.Component {
   constructor(props) {

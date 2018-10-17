@@ -83,8 +83,8 @@
     }
 
     button {
-      width: 20px;
-      height: 20px;
+      width: 16px;
+      height: 16px;
       color: white;
       border-radius: 50%;
       margin: auto auto auto 10px;
@@ -94,23 +94,26 @@
       border: 0;
       &.button-add {
         background-color: $tc-gray-20;
-        padding-left: 6px;
+        padding-left: 4px;
         &:hover {
           background-color: $tc-dark-blue-100;
         }
 
         svg {
           fill: $tc-white;
-          width: 9px;
+          width: 8px;
+          height: 8px;
         }
       }
       &.button-remove {
         background-color: $tc-red-110;
-        padding-left: 2px;
+        padding-left: 3px;
         font-size: 20px;
 
         svg {
           fill: $tc-white;
+          width: 11px;
+          height: 8px;
           path {
             fill: $tc-white;
           }
