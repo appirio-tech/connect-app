@@ -48,7 +48,7 @@ const topics = [
     description: 'Receive a notification any time your project scope is updated',
     enabledMethods:['web', 'email'],
     types: [
-      'connect.action.project.product.update.spec'
+      'connect.action.project.updated.spec'
     ]
   }, {
     title: 'File uploads',
@@ -94,6 +94,7 @@ const topics = [
       'notifications.connect.project.phase.update.payment',
       'notifications.connect.project.phase.update.progress',
       'notifications.connect.project.phase.update.scope',
+      'connect.action.project.product.update.spec',
       'connect.action.timeline.milestone.transition.active',
       'connect.action.timeline.milestone.transition.completed',
       // should we include wait.customer to be controlled via settings?

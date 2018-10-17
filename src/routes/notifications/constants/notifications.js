@@ -347,7 +347,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: 'connect.action.project.product.update.spec',
+    eventType: 'connect.action.project.updated.spec',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userHandle}}</strong> updated the project specification',
@@ -358,7 +358,7 @@ export const NOTIFICATIONS = [
     }]
   }, {
     version: 2,
-    eventType: 'connect.action.project.product.update.spec',
+    eventType: 'connect.action.project.updated.spec',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userFullName}}</strong> updated the project specification',
@@ -471,7 +471,8 @@ export const NOTIFICATIONS = [
     }]
   },
   {
-    eventType: 'notifications.connect.project.phase.update.scope',
+    // using product spec modified event instead of phase scope modified
+    eventType: 'connect.action.project.product.update.spec',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userHandle}}</strong> updated the phase specification',
