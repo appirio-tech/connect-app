@@ -180,7 +180,7 @@ const ProjectsGridView = props => {
       return _.assign({}, m, {
         photoURL: ''
       },
-        members[m.userId.toString()])
+      members[m.userId.toString()])
     })
   })
 
