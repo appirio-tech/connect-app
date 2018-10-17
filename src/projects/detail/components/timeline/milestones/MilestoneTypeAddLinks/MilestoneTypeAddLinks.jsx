@@ -28,6 +28,7 @@ class MilestoneTypeAddLinks extends React.Component {
       addedLinks: [],
       isShowCompleteConfirmMessage: false,
       isLinkAdded: true,
+      showExtensionRequestSection: true
     }
 
     this.addUrl = this.addUrl.bind(this)
@@ -36,6 +37,16 @@ class MilestoneTypeAddLinks extends React.Component {
     this.hideCompleteAddLinksConfirmation = this.hideCompleteAddLinksConfirmation.bind(this)
     this.complete = this.complete.bind(this)
     this.toggleRejectedSection = this.toggleRejectedSection.bind(this)
+    this.onFormAddOpen = this.onFormAddOpen.bind(this)
+    this.onFormAddCancel = this.onFormAddCancel.bind(this)
+  }
+
+  onFormAddOpen() {
+    this.setState({ showExtensionRequestSection: false })
+  }
+
+  onFormAddCancel() {
+    this.setState({ showExtensionRequestSection: true })
   }
 
   showCompleteAddLinksConfirmation() {
@@ -120,7 +131,7 @@ class MilestoneTypeAddLinks extends React.Component {
       : `${-daysLeft} days designs are delayed`
 
     const progressPercent = getProgressPercent(totalDays, daysLeft)
-
+    const { showExtensionRequestSection } = this.state
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -165,6 +176,8 @@ class MilestoneTypeAddLinks extends React.Component {
                     formUpdateButtonTitle="Save changes"
                     isUpdating={isLinkAdded}
                     fakeName={`Design ${addedLinks.length + 1}`}
+                    onFormAddOpen={this.onFormAddOpen}
+                    onFormAddCancel={this.onFormAddCancel}
                     canAddLink
                   />
                 </DotIndicator>
@@ -208,22 +221,22 @@ class MilestoneTypeAddLinks extends React.Component {
               !isCompleted &&
               !extensionRequestDialog &&
               !isShowCompleteConfirmMessage &&
-              !currentUser.isCustomer &&
-              (
-                <DotIndicator hideLine>
-                  <div styleName="action-bar" className="flex center">
-                    {(!currentUser.isCustomer) && (
-                      <button
-                        className={'tc-btn tc-btn-primary'}
-                        onClick={!currentUser.isCustomer ? this.showCompleteAddLinksConfirmation : this.complete}
-                      >
-                        Complete
-                      </button>
-                    )}
-                    {!currentUser.isCustomer && extensionRequestButton}
-                  </div>
-                </DotIndicator>
-              )}
+              !currentUser.isCustomer && showExtensionRequestSection &&
+            (
+              <DotIndicator hideLine>
+                <div styleName="action-bar" className="flex center">
+                  {(!currentUser.isCustomer) && (
+                    <button
+                      className={'tc-btn tc-btn-primary'}
+                      onClick={!currentUser.isCustomer ? this.showCompleteAddLinksConfirmation : this.complete}
+                    >
+                      Complete
+                    </button>
+                  )}
+                  {!currentUser.isCustomer && extensionRequestButton}
+                </div>
+              </DotIndicator>
+            )}
           </div>
         )}
 
