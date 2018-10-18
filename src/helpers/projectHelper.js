@@ -84,7 +84,11 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
   // duration in days
   const plannedDuration = getProjectPlannedDuration(phases, productsTimelines)
   const actualDuration = getProjectActualDuration(phases, productsTimelines)
-  const labelDayStatus = `Day ${actualDuration} of ${plannedDuration}`
+  const delay = actualDuration - plannedDuration
+  const labelDayStatus = delay > 0 
+    ? `Delayed by ${delay} day${delay === 1 ? '' : 's'}`
+    : `Day ${actualDuration} of ${plannedDuration}`
+  const theme = delay > 0 ? 'warning' : null
   
   // these phases contribute to the whole progress of the project
   // we need them to calculate the total progress percentage
@@ -109,7 +113,7 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
     labelSpent,
     labelStatus,
     progressPercent,
-    theme: actualDuration > plannedDuration ? 'warning' : null,
+    theme,
   }
 }
 
