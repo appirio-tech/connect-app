@@ -13,6 +13,7 @@ import IconSettingsEmail from '../../../../../assets/icons/email.svg'
 import './NotificationSettingsForm.scss'
 import _ from 'lodash'
 import SelectDropdown from '../../../../../components/SelectDropdown/SelectDropdown'
+import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 
 
 // list of the notification groups and related event types
@@ -167,6 +168,7 @@ class NotificationSettingsForm extends React.Component {
     }
 
     this.handleEmailConfigurationChange = this.handleEmailConfigurationChange.bind(this)
+    this.handleWebConfigurationChange = this.handleWebConfigurationChange.bind(this)
   }
 
   handleEmailConfigurationChange(selectedOption, topicIndex) {
@@ -191,7 +193,24 @@ class NotificationSettingsForm extends React.Component {
     e.nativeEvent.stopImmediatePropagation()
   }
 
+  handleWebConfigurationChange(topicIndex) {
+    const notifications = {...this.state.settings.notifications}
+
+    // update values for all types of the topic
+    topics[topicIndex].types.forEach((type) => {
+      notifications[type].web.enabled = notifications[type].web.enabled === 'yes' ? 'no' : 'yes'
+    })
+
+    this.setState({
+      settings: {
+        ...this.state.settings,
+        notifications,
+      }
+    })
+  }
+
   render() {
+    const { isCustomer } = this.props
     const areSettingsProvided = !!this.props.values.settings
     const settings = this.state.settings
     const notifications = settings.notifications
@@ -236,16 +255,25 @@ class NotificationSettingsForm extends React.Component {
                     </div>
                   </th>
                   <td>
-                    <label className="checkbox-ctrl">
-                      <input
-                        defaultChecked={notifications[topicFirstType].web.enabled === 'yes'}
-                        type="checkbox"
-                        readOnly
-                        className="checkbox"
-                        onClick={(e) => this.stopPropagation(e)}
+                    {isCustomer ? (
+                      <label className="checkbox-ctrl">
+                        <input
+                          defaultChecked={notifications[topicFirstType].web.enabled === 'yes'}
+                          type="checkbox"
+                          readOnly
+                          className="checkbox"
+                          onClick={(e) => this.stopPropagation(e)}
+                        />
+                        <span className="checkbox-text" />
+                      </label>
+                    ) : (
+                      <SwitchButton                       
+                        onChange={() => this.handleWebConfigurationChange(index)}
+                        name={`web[${index}]`}
+                        checked={notifications[topicFirstType].web.enabled === 'yes'}
                       />
-                      <span className="checkbox-text" />
-                    </label></td>
+                    )}
+                  </td>
                   <td>
                     { !!emailTooltip &&
                       <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
