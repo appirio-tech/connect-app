@@ -312,12 +312,20 @@ class Milestone extends React.Component {
 
           {isMobileEditing && !isUpdating && (
             <MobilePage>
-              <div styleName="header">
-                <div styleName="plug" />
-                <div styleName="title">{milestone.name}</div>
-                <div styleName="close-wrapper"><XMartIcon onClick={this.closeEditForm} /></div>
+              <header styleName="edit-milestone-header">
+
+              <div styleName="header-view">
+              <div styleName="header-view-inner">
+                <div styleName="header-info">
+                  <div styleName="title">{milestone.name}</div>
+                </div>
+                <div styleName="header-actions">
+                  <button styleName="fullscreen fullscreen-exit" onClick={this.closeEditForm}><XMartIcon /></button>
+                </div>
               </div>
-              <div styleName="body" style={{ height: browserActualViewportHeigth - HEADER_HEIGHT }}>
+            </div>
+              </header>
+              <div styleName="body">
                 {editForm}
               </div>
             </MobilePage>

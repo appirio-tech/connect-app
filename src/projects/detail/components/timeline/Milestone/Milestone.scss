@@ -237,33 +237,65 @@
 
 }
 //edit milestone specific css
-.header {
-  align-items: center;
-  background-color: $tc-black;
-  display: flex;
-  justify-content: space-between;
-  height: 50px;
-  padding: 0 $base-unit * 3;
+.edit-milestone-header {
+  background-color: $tc-gray-neutral-light;
 }
 
-.plug {
-  width: 16px; /* same width as close button to align center title */
+.header-view {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid $tc-gray-10;
+  justify-content: center;
+  padding: 4 * $base-unit 4 * $base-unit 3 * $base-unit 4 * $base-unit;
+  height: 50px;
+}
+
+.header-view-inner {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-actions {
+  align-items: flex-start;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -6px;
+}
+
+.fullscreen {
+  border: 0;
+  background-color: transparent;
+  display: block;
+  margin: 3px 0 0 3 * $base-unit;
+  padding: 0;
+
+  > svg {
+    > g {
+      fill: $tc-gray-50;
+    }
+  }
+
+  &.fullscreen-exit {
+    > svg {
+      /* as size of svg is 24x24 but we expect button to be 16x16 */
+      display: block;
+      margin: -4px;
+    }
+  }
+}
+
+.header-info {
+  display: flex;
+  flex: 1 0;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .title {
   @include roboto;
-  color: $tc-gray-10;
+  color: $tc-black;
   font-size: 15px;
   text-transform: capitalize;
-}
-
-.close-wrapper {
-  align-items: center;
-  display: flex;
-  justify-content: flex-end;
-  > svg {
-      fill: #FAFAFB;
-  }
 }
 
 .body {
@@ -272,4 +304,8 @@
   background-color: $tc-gray-neutral-dark;
   height: calc(100vh - 50px); /* window height - header height */
   position: relative;
+
+  form {
+    flex: 1;
+  }
 }
