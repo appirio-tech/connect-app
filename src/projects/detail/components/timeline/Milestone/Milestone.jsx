@@ -29,7 +29,6 @@ import XMartIcon from '../../../../../assets/icons/x-mark.svg'
 import { MILESTONE_STATUS, SCREEN_BREAKPOINT_MD } from '../../../../../config/constants'
 
 import './Milestone.scss'
-const HEADER_HEIGHT = 50
 class Milestone extends React.Component {
   constructor(props) {
     super(props)
@@ -38,7 +37,7 @@ class Milestone extends React.Component {
     this.hoverHeader = this.hoverHeader.bind(this)
     this.unHoverHeader = this.unHoverHeader.bind(this)
     this.toggleEditLink = this.toggleEditLink.bind(this)
-    this.toggleMobileEditLink = this.toggleMobileEditLink.bind(this);
+    this.toggleMobileEditLink = this.toggleMobileEditLink.bind(this)
     this.closeEditForm = this.closeEditForm.bind(this)
     this.updateMilestoneWithData = this.updateMilestoneWithData.bind(this)
     this.updateMilestoneContent = this.updateMilestoneContent.bind(this)
@@ -170,7 +169,7 @@ class Milestone extends React.Component {
       currentUser,
       previousMilestone,
     } = this.props
-    const { isEditing, isMobileEditing, browserActualViewportHeigth } = this.state
+    const { isEditing, isMobileEditing } = this.state
 
     const isPlanned = milestone.status === MILESTONE_STATUS.PLANNED
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
@@ -289,15 +288,13 @@ class Milestone extends React.Component {
                       }
                     </div>
                   ) : (
-                      <div styleName={'mobile-edit-section'}>
-                        {
-                          !currentUser.isCustomer && !isCompleted && !isUpdating &&
-                          (<div onClick={this.toggleMobileEditLink} styleName={'post-edit-mobile'} >
-
-                          </div>)
-                        }
-                      </div>
-                    ))
+                    <div styleName={'mobile-edit-section'}>
+                      {
+                        !currentUser.isCustomer && !isCompleted && !isUpdating &&
+                          (<div onClick={this.toggleMobileEditLink} styleName={'post-edit-mobile'}  />)
+                      }
+                    </div>
+                  ))
                   }
                 </MediaQuery>
               }
@@ -314,16 +311,16 @@ class Milestone extends React.Component {
             <MobilePage>
               <header styleName="edit-milestone-header">
 
-              <div styleName="header-view">
-              <div styleName="header-view-inner">
-                <div styleName="header-info">
-                  <div styleName="title">{milestone.name}</div>
+                <div styleName="header-view">
+                  <div styleName="header-view-inner">
+                    <div styleName="header-info">
+                      <div styleName="title">{milestone.name}</div>
+                    </div>
+                    <div styleName="header-actions">
+                      <button styleName="fullscreen fullscreen-exit" onClick={this.closeEditForm}><XMartIcon /></button>
+                    </div>
+                  </div>
                 </div>
-                <div styleName="header-actions">
-                  <button styleName="fullscreen fullscreen-exit" onClick={this.closeEditForm}><XMartIcon /></button>
-                </div>
-              </div>
-            </div>
               </header>
               <div styleName="body">
                 {editForm}
