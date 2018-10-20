@@ -94,7 +94,11 @@
       border: 0;
       &.button-add {
         background-color: $tc-gray-20;
-        padding-left: 4px;
+        padding: 0;
+        flex: 0 0 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         &:hover {
           background-color: $tc-dark-blue-100;
         }
@@ -102,18 +106,19 @@
         svg {
           fill: $tc-white;
           width: 8px;
-          height: 8px;
         }
       }
       &.button-remove {
         background-color: $tc-red-110;
-        padding-left: 3px;
         font-size: 20px;
-
+        padding: 0;
+        flex: 0 0 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         svg {
           fill: $tc-white;
-          width: 11px;
-          height: 8px;
+          width: 8px;
           path {
             fill: $tc-white;
           }
