@@ -64,10 +64,10 @@ class   MilestonePostEditText extends React.Component {
           )}
 
           {!!onAdd && (
-            <button onClick={this.onAdd} disabled={value.trim().length < 1} styleName="button-add"><BoldAdd></BoldAdd></button>
+            <button onClick={this.onAdd} disabled={value.trim().length < 1} styleName="button-add"><BoldAdd /></button>
           )}
           {!!onRemove && (
-            <button onClick={this.onRemove} styleName="button-remove"><BoldRemove></BoldRemove></button>
+            <button onClick={this.onRemove} styleName="button-remove"><BoldRemove /></button>
           )}
           {!onAdd && !onRemove && (
             <div styleName="content">{value}</div>
