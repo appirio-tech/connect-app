@@ -3,6 +3,7 @@
  */
 import _ from 'lodash'
 import { NOTIFICATION_RULES } from '../constants/notifications'
+import { EVENT_TYPE } from '../../../../config/constants'
 import Handlebars from 'handlebars'
 
 /**
@@ -176,10 +177,10 @@ export const filterNotificationsByProjectId = (notifications, projectId) => _.fi
  * @return {Array}                notifications list filtered of notifications
  */
 export const filterTopicAndPostChangedNotifications = (notifications) => _.filter(notifications, (notification) => {
-  return notification.eventType === 'notifications.connect.project.topic.created' ||
-         notification.eventType === 'notifications.connect.project.post.created' ||
-         notification.eventType === 'notifications.connect.project.post.edited' ||
-         notification.eventType === 'notifications.connect.project.post.mention'
+  return notification.eventType === EVENT_TYPE.TOPIC.CREATED ||
+         notification.eventType === EVENT_TYPE.POST.CREATED ||
+         notification.eventType === EVENT_TYPE.POST.UPDATED ||
+         notification.eventType === EVENT_TYPE.POST.MENTION
 })
 
 /**
@@ -190,15 +191,15 @@ export const filterTopicAndPostChangedNotifications = (notifications) => _.filte
  * @return {Array}                notifications list filtered of notifications
  */
 export const filterProjectNotifications = (notifications) => _.filter(notifications, (notification) => {
-  return notification.eventType === 'notifications.connect.project.created' ||
-         notification.eventType === 'notifications.connect.project.approved' ||
-         notification.eventType === 'notifications.connect.project.paused' ||
-         notification.eventType === 'notifications.connect.project.completed' ||
-         notification.eventType === 'notifications.connect.project.specificationModified' ||
-         notification.eventType === 'notifications.connect.project.submittedForReview' ||
-         notification.eventType === 'notifications.connect.project.fileUploaded' ||
-         notification.eventType === 'notifications.connect.project.canceled' ||
-         notification.eventType === 'notifications.connect.project.linkCreated'
+  return notification.eventType === EVENT_TYPE.PROJECT.CREATED ||
+         notification.eventType === EVENT_TYPE.PROJECT.APPROVED ||
+         notification.eventType === EVENT_TYPE.PROJECT.PAUSED ||
+         notification.eventType === EVENT_TYPE.PROJECT.COMPLETED ||
+         notification.eventType === EVENT_TYPE.PROJECT.SPECIFICATION_MODIFIED ||
+         notification.eventType === EVENT_TYPE.PROJECT.SUBMITTED_FOR_REVIEW ||
+         notification.eventType === EVENT_TYPE.PROJECT.FILE_UPLOADED ||
+         notification.eventType === EVENT_TYPE.PROJECT.CANCELED ||
+         notification.eventType === EVENT_TYPE.PROJECT.LINK_CREATED
 })
 
 /**

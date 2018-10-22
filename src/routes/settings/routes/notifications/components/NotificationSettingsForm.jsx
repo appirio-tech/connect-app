@@ -7,7 +7,7 @@ import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 import { NOTIFICATION_SETTINGS_PERIODS } from '../../../../../config/constants'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
-import { TOOLTIP_DEFAULT_DELAY } from '../../../../../config/constants'
+import { TOOLTIP_DEFAULT_DELAY, EVENT_TYPE } from '../../../../../config/constants'
 import IconSettingsWeb from '../../../../../assets/icons/bell.svg'
 import IconSettingsEmail from '../../../../../assets/icons/email.svg'
 import './NotificationSettingsForm.scss'
@@ -23,82 +23,81 @@ const topics = [
     description: 'Get a notification any time somebody posts on your project. This will make sure you can stay up-to-date with what’s happening on your project',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.topic.created',
-      'notifications.connect.project.topic.deleted',
-      'notifications.connect.project.post.created',
-      'notifications.connect.project.post.edited',
-      'notifications.connect.project.post.deleted'
+      EVENT_TYPE.TOPIC.CREATED,
+      EVENT_TYPE.TOPIC.DELETED,
+      EVENT_TYPE.POST.CREATED,
+      EVENT_TYPE.POST.UPDATED,
+      EVENT_TYPE.POST.DELETED,
     ]
   }, {
     title: 'Project status',
     description: 'Receive a notification any time your project status changes',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.created',
-      'notifications.connect.project.updated',
-      'notifications.connect.project.canceled',
-      'notifications.connect.project.approved',
-      'notifications.connect.project.paused',
-      'notifications.connect.project.completed',
-      'notifications.connect.project.submittedForReview',
-      'notifications.connect.project.active'
+      EVENT_TYPE.PROJECT.CREATED,
+      EVENT_TYPE.PROJECT.CANCELED,
+      EVENT_TYPE.PROJECT.APPROVED,
+      EVENT_TYPE.PROJECT.PAUSED,
+      EVENT_TYPE.PROJECT.COMPLETED,
+      EVENT_TYPE.PROJECT.SUBMITTED_FOR_REVIEW,
+      EVENT_TYPE.PROJECT.ACTIVE,
     ]
   }, {
     title: 'Project scope',
     description: 'Receive a notification any time your project scope is updated',
     enabledMethods:['web', 'email'],
     types: [
-      'connect.action.project.updated.spec'
+      EVENT_TYPE.PROJECT.SPECIFICATION_MODIFIED,
     ]
   }, {
     title: 'File uploads',
     description: 'Receive a notification any time a new file is uploaded to your project',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.fileUploaded'
+      EVENT_TYPE.PROJECT.FILE_UPLOADED,
     ]
   }, {
     title: 'New project link',
     description: 'Receive a notification any time a new link is added to your project',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.linkCreated'
+      EVENT_TYPE.PROJECT.LINK_CREATED,
     ]
   }, {
     title: 'Project team',
     description: 'Receive a notification any time a person joins or leaves the team',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.member.joined',
-      'notifications.connect.project.member.left',
-      'notifications.connect.project.member.removed',
-      'notifications.connect.project.member.managerJoined',
-      'notifications.connect.project.member.copilotJoined',
-      'notifications.connect.project.member.assignedAsOwner'
+      EVENT_TYPE.MEMBER.JOINED,
+      EVENT_TYPE.MEMBER.LEFT,
+      EVENT_TYPE.MEMBER.REMOVED,
+      EVENT_TYPE.MEMBER.MANAGER_JOINED,
+      EVENT_TYPE.MEMBER.COPILOT_JOINED,
+      EVENT_TYPE.MEMBER.ASSIGNED_AS_OWNER,
     ]
   }, {
     title: 'Project plan',
     description: 'Receive a notification when a phase is added to your project plan',
     enabledMethods:['web', 'email'],
     types: [
-      'connect.action.project.plan.ready',
-      'connect.action.project.plan.updated'
+      EVENT_TYPE.PROJECT_PLAN.READY,
+      EVENT_TYPE.PROJECT_PLAN.MODIFIED,
     ]
   }, {
     title: 'Project phase updates',
     description: 'Receive a notification for any activity on your project phase',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.phase.transition.active',
-      'notifications.connect.project.phase.transition.completed',
-      'notifications.connect.project.phase.update.payment',
-      'notifications.connect.project.phase.update.progress',
-      'notifications.connect.project.phase.update.scope',
-      'connect.action.project.product.update.spec',
-      'connect.action.timeline.milestone.transition.active',
-      'connect.action.timeline.milestone.transition.completed',
+      EVENT_TYPE.PROJECT_PLAN.PHASE_ACTIVATED,
+      EVENT_TYPE.PROJECT_PLAN.PHASE_COMPLETED,
+      EVENT_TYPE.PROJECT_PLAN.PHASE_PAYMENT_UPDATED,
+      EVENT_TYPE.PROJECT_PLAN.PHASE_PROGRESS_UPDATED,
+      EVENT_TYPE.PROJECT_PLAN.PHASE_SCOPE_UPDATED,
+      EVENT_TYPE.PROJECT_PLAN.PHASE_PRODUCT_SPEC_UPDATED,
+      EVENT_TYPE.PROJECT_PLAN.MILESTONE_ACTIVATED,
+      EVENT_TYPE.PROJECT_PLAN.MILESTONE_COMPLETED,
       // should we include wait.customer to be controlled via settings?
-      'connect.action.timeline.milestone.waiting.customer'
+      EVENT_TYPE.PROJECT_PLAN.WAITING_FOR_CUSTOMER_INPUT,
     ]
   }
 ]
