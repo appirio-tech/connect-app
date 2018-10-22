@@ -106,6 +106,7 @@
         svg {
           fill: $tc-white;
           width: 8px;
+          transform: translate3d(0, 0, 0);
         }
       }
       &.button-remove {
