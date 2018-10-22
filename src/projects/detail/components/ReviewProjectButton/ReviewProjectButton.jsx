@@ -40,9 +40,7 @@ const ReviewProjectButton = ({ project, disabled, onClick }) => {
             return (
               <Sticky top={0}>
                 <div className={cn('btn-boxs', { 'has-estimation': hasEstimation })}>
-                  <div className="list-group">
-                    <ProjectEstimationSection project={project} />
-                  </div>
+                  {hasEstimation && <ProjectEstimationSection project={project} />}
                   {submitButton}
                 </div>
               </Sticky>
