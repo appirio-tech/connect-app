@@ -12,7 +12,7 @@ import Sticky from 'react-stickynode'
 import MediaQuery from 'react-responsive'
 import ProjectEstimationSection from '../ProjectEstimationSection'
 import { SCREEN_BREAKPOINT_MD } from '../../../../config/constants'
-import { isProjectHasEstimation } from '../../../../helpers/projectHelper'
+import { isProjectEstimationPresent } from '../../../../helpers/projectHelper'
 
 import './ReviewProjectButton.scss'
 
@@ -24,7 +24,7 @@ const ReviewProjectButton = ({ project, disabled, onClick }) => {
     >Submit for Review</button>
   )
 
-  const hasEstimation = isProjectHasEstimation(project)
+  const hasEstimation = isProjectEstimationPresent(project)
 
   return (
     <div styleName="container">

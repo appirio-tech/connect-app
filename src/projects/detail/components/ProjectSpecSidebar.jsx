@@ -9,7 +9,7 @@ import MediaQuery from 'react-responsive'
 import SidebarNav from './SidebarNav'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER, SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import { updateProject } from '../../actions/project'
-import { isProjectHasEstimation } from '../../../helpers/projectHelper'
+import { isProjectEstimationPresent } from '../../../helpers/projectHelper'
 import ReviewProjectButton from './ReviewProjectButton'
 import ProjectEstimationSection from './ProjectEstimationSection'
 import './ProjectSpecSidebar.scss'
@@ -119,7 +119,7 @@ class ProjectSpecSidebar extends Component {
     const showReviewBtn = project.status === 'draft' &&
       _.indexOf([PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER], currentMemberRole) > -1
 
-    const hasEstimation = isProjectHasEstimation(project)
+    const hasEstimation = isProjectEstimationPresent(project)
 
     return (
       <div className={cn('projectSpecSidebar', { 'has-review-btn': showReviewBtn })}>

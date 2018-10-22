@@ -298,7 +298,7 @@ export function getPhaseActualData(phase, timeline) {
  * 
  * @returns {Boolean} true if project has estimation data
  */
-export function isProjectHasEstimation(project) {
+export function isProjectEstimationPresent(project) {
   // check if project has estimation the same way as VisualDesignProjectEstimateSection does
   // probably this can be done in more elegant way
   const { products } = project.details
