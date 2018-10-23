@@ -3,7 +3,7 @@
  */
 import _ from 'lodash'
 import { NOTIFICATION_RULES } from '../constants/notifications'
-import { EVENT_TYPE } from '../../../../config/constants'
+import { EVENT_TYPE } from '../../../config/constants'
 import Handlebars from 'handlebars'
 
 /**
