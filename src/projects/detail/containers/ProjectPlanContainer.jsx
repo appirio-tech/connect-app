@@ -79,6 +79,7 @@ class ProjectPlanContainer extends React.Component {
       phases,
       productsTimelines,
       phasesTopics,
+      isProcessing,
     } = this.props
 
     // manager user sees all phases
@@ -103,6 +104,7 @@ class ProjectPlanContainer extends React.Component {
         phasesTopics={phasesTopics}
         onChannelClick={this.onChannelClick}
         isProjectPlan={isProjectPlan}
+        isProjectProcessing={isProcessing}
       />
     )
 
