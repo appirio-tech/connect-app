@@ -25,9 +25,13 @@ class ProfileSettingsForm extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    this.setState({
-      settings: {...newProps.values.settings}
-    })
+    // after the form was saved, update values in the form using data which came from the server
+    // to make sure we see the actual data
+    if (this.props.values.pending && !newProps.values.pending) {
+      this.setState({
+        settings: {...newProps.values.settings}
+      })
+    }
   }
 
   onFieldUpdate(name, value) {
