@@ -3,9 +3,11 @@
 
 :global {
   .profile-settings-avatar {
-    padding-bottom: 27px;
+    display: flex;
+    justify-content: center;
     text-align: center;
-  
+    align-items: center;
+
     > .label {
       @include roboto;
       color: $tc-gray-70;
@@ -13,19 +15,31 @@
       line-height: 20px;
       text-align: center;
     }
-  
+
     > .photo {
+      -webkit-box-sizing: content-box;
       box-sizing: content-box;
-      border: 2px solid $tc-gray-50;
+      background: #D5D5D5;
       border-radius: 50%;
-      height: 120px;
-      margin-top: 10px;
-      width: 120px;
+      height: 80px;
+      width: 80px;
     }
-  
+
     > .controls {
-      margin-top: 15px;
+      margin-left: 20px;
+
+      > .file-btn {
+        > button {
+          @include roboto-medium;
+          background-color: #0681FF;
+          border-radius: 4px;
+          height: 30px;
+          border: none;
+          color: $tc-white;
+          font-size: 13px;
+          line-height: 30px;
+        }
+      }
     }
   }
 }
-  

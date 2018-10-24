@@ -4,7 +4,7 @@
 :global {
   .tc-header.tc-header__connect .top-bar{
     height: 60px;
-    background-color: $tc-gray-90;
+    background-color: #262628;
     position: relative;
     display: flex;
 
@@ -30,9 +30,9 @@
     }
 
     .title {
-      @include roboto-light;
+      @include roboto;
       font-size: 20px;
-      color: $tc-gray-10;
+      color: #EDEDF2;
       text-align: center;
     }
 
@@ -65,11 +65,11 @@
       }
 
       .icon-x-mark {
-        fill: $tc-white;
+        fill: #262628;
         margin: -6px;
 
         @media screen and (max-width: $screen-md - 1px) {
-          fill: $tc-white;
+          fill: #262628;
         }
       }
     }

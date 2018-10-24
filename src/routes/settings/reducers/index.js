@@ -16,7 +16,22 @@ import {
   GET_NOTIFICATION_SETTINGS_FAILURE,
   SAVE_NOTIFICATION_SETTINGS_PENDING,
   SAVE_NOTIFICATION_SETTINGS_SUCCESS,
-  SAVE_NOTIFICATION_SETTINGS_FAILURE
+  SAVE_NOTIFICATION_SETTINGS_FAILURE,
+  GET_PROFILE_SETTINGS_PENDING,
+  GET_PROFILE_SETTINGS_SUCCESS,
+  SAVE_PROFILE_SETTINGS_PENDING,
+  GET_PROFILE_SETTINGS_FAILURE,
+  SAVE_PROFILE_SETTINGS_SUCCESS,
+  SAVE_PROFILE_SETTINGS_FAILURE,
+  SAVE_PROFILE_PHOTO_PENDING,
+  SAVE_PROFILE_PHOTO_SUCCESS,
+  SAVE_PROFILE_PHOTO_FAILURE,
+  GET_SYSTEM_SETTINGS_PENDING,
+  GET_SYSTEM_SETTINGS_SUCCESS,
+  GET_SYSTEM_SETTINGS_FAILURE,
+  RESET_PASSWORD_PENDING,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAILURE
 } from '../../../config/constants'
 
 // TODO initial state with mocked data for demo should be removed
@@ -29,16 +44,25 @@ const initialState = {
     bundleEmail: '24h'
   },
   system: {
-    email: 'p.monahan@incrediblereality.com'
+    isLoading: true,
+    checkingEmail: null,
+    checkedEmail: null,
+    isEmailAvailable: undefined,
+    checkingEmailError: null,
+    emailSubmitted: false,
+    isEmailChanging: false,
+    isPasswordChanging: false,
+    passwordSubmitted: false,
+    isResetingPassword: false,
+    passwordResetSubmitted: false,
+
+    settings: {}
   },
   profile: {
-    username: 'pat_monahan',
-    photoSrc: 'https://topcoder-dev-media.s3.amazonaws.com/member/profile/cp-superstar-1473358622637.png',
-    firstname: 'Patrik',
-    lastname: 'Monahan',
-    company: 'Acme Corp.',
-    mobilephone1: '+1 (555) 555-3240',
-    mobilephone2: '+1 (555) 555-3240'
+    isLoading: true,
+    isUploadingPhoto: false,
+    pending: false,
+    settings: {},
   }
 }
 
@@ -83,13 +107,36 @@ export default (state = initialState, action) => {
       }
     }
 
+  case GET_SYSTEM_SETTINGS_PENDING:
+    return {...state,
+      system: {...state.system,
+        isLoading: true
+      }
+    }
+
+  case GET_SYSTEM_SETTINGS_SUCCESS:
+    return {...state,
+      system: {...state.system,
+        isLoading: false,
+        settings: action.payload.data
+      }
+    }
+
+  case GET_SYSTEM_SETTINGS_FAILURE:
+    return {...state,
+      system: {...state.system,
+        isLoading: false,
+      }
+    }
+
   case CHECK_EMAIL_AVAILABILITY_PENDING:
     return {...state,
       system: {...state.system,
         checkingEmail: action.payload.email,
         checkedEmail: null,
         isEmailAvailable: undefined,
-        checkingEmailError: null
+        checkingEmailError: null,
+        emailSubmitted: false,
       }
     }
 
@@ -99,7 +146,8 @@ export default (state = initialState, action) => {
       system: state.system.checkingEmail === action.payload.email ? {...state.system,
         checkingEmail: null,
         checkedEmail: action.payload.email,
-        isEmailAvailable: action.payload.isEmailAvailable
+        isEmailAvailable: action.payload.isEmailAvailable,
+        checkingEmailError: null
       } : state.system
     }
 
@@ -116,7 +164,10 @@ export default (state = initialState, action) => {
   case CHANGE_EMAIL_PENDING:
     return {...state,
       system: {...state.system,
-        isEmailChanging: true
+        isEmailChanging: true,
+        emailSubmitted: false,
+        checkedEmail: null,
+        isEmailAvailable: undefined,
       }
     }
 
@@ -124,29 +175,133 @@ export default (state = initialState, action) => {
     return {...state,
       system: {...state.system,
         isEmailChanging: false,
-        email: action.payload.email
+        emailSubmitted: true,
+        settings: action.payload.data
       }
     }
 
   case CHANGE_EMAIL_FAILURE:
     return {...state,
       system: {...state.system,
-        isEmailChanging: false
+        isEmailChanging: false,
+        emailSubmitted: false,
       }
     }
 
   case CHANGE_PASSWORD_PENDING:
     return {...state,
       system: {...state.system,
-        isPasswordChanging: true
+        isPasswordChanging: true,
+        passwordSubmitted: false,
       }
     }
 
   case CHANGE_PASSWORD_SUCCESS:
+    return {...state,
+      system: {...state.system,
+        passwordSubmitted: true,
+        isPasswordChanging: false
+      }
+    }
+
   case CHANGE_PASSWORD_FAILURE:
     return {...state,
       system: {...state.system,
+        passwordSubmitted: true,
         isPasswordChanging: false
+      }
+    }
+
+  case RESET_PASSWORD_PENDING:
+    return {...state,
+      system: {...state.system,
+        isResetingPassword: true,
+        passwordResetSubmitted: false,
+      }
+    }
+
+  case RESET_PASSWORD_SUCCESS:
+    return {...state,
+      system: {...state.system,
+        isResetingPassword: false,
+        passwordResetSubmitted: true,
+      }
+    }
+
+  case RESET_PASSWORD_FAILURE:
+    return {...state,
+      system: {...state.system,
+        isResetingPassword: false,
+        passwordResetSubmitted: false,
+      }
+    }
+
+  case GET_PROFILE_SETTINGS_PENDING:
+    return {...state,
+      profile: {...state.profile,
+        isLoading: true
+      }
+    }
+
+  case GET_PROFILE_SETTINGS_SUCCESS:
+    return {...state,
+      profile: {...state.profile,
+        isLoading: false,
+        settings: action.payload.data,
+      }
+    }
+
+  case GET_PROFILE_SETTINGS_FAILURE:
+    return {...state,
+      profile: {...state.profile,
+        isLoading: false,
+      }
+    }
+
+  case SAVE_PROFILE_SETTINGS_PENDING:
+    return {...state,
+      profile: {...state.profile,
+        pending: true,
+      }
+    }
+
+  case SAVE_PROFILE_SETTINGS_SUCCESS:
+    return {...state,
+      profile: {...state.profile,
+        pending: false,
+        settings: action.payload.data
+      }
+    }
+
+  case SAVE_PROFILE_SETTINGS_FAILURE:
+    return {...state,
+      profile: {...state.profile,
+        pending: false,
+      }
+    }
+
+  case SAVE_PROFILE_PHOTO_PENDING:
+    return {...state,
+      profile: {...state.profile,
+        pending: true,
+        isUploadingPhoto: true
+      }
+    }
+
+  case SAVE_PROFILE_PHOTO_SUCCESS:
+    return {...state,
+      profile: {...state.profile,
+        pending: false,
+        isUploadingPhoto: false,
+        settings: action.payload.data,
+      }
+    }
+
+  case SAVE_PROFILE_PHOTO_FAILURE:
+    return {...state,
+      profile: {...state.profile,
+        pending: false,
+        isUploadingPhoto: false
       }
     }
 

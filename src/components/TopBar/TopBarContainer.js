@@ -34,6 +34,7 @@ class TopBarContainer extends React.Component {
     return (nextProps.user || {}).handle !== (this.props.user || {}).handle
     || nextProps.toolbar !== this.props.toolbar
     || this.props.location.pathname !== nextProps.location.pathname
+    || this.props.profile.photoUrl !== nextProps.profile.photoUrl
   }
 
   renderLogo(comp){
@@ -58,10 +59,10 @@ class TopBarContainer extends React.Component {
         <div />
       )
     }
-    const { user, toolbar, userRoles, isPowerUser } = this.props
+    const { user, profile, toolbar, userRoles, isPowerUser } = this.props
 
     const userHandle  = _.get(user, 'handle')
-    const userImage = _.get(user, 'profile.photoURL')
+    const userImage = _.get(profile, 'photoUrl')
     const userFirstName = _.get(user, 'profile.firstName')
     const userLastName = _.get(user, 'profile.lastName')
     let userName = userFirstName
@@ -73,7 +74,6 @@ class TopBarContainer extends React.Component {
     const isHomePage = this.props.match.path === '/'
     const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.host}/`
     const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
-    const profileUrl = `https://${DOMAIN}/settings/profile/`
     const isLoggedIn = !!(userRoles && userRoles.length)
 
     const logoutClick = (evt) => {
@@ -85,7 +85,11 @@ class TopBarContainer extends React.Component {
 
     const userMenuItems = [
       [
-        { label: 'Profile Settings', link: profileUrl, absolute: true, id: 0},
+        { label: 'My profile', link: '/settings/profile' },
+        { label: 'Account and security', link: '/settings/system' },
+        { label: 'Notification settings', link: '/settings/notifications' },
+      ],
+      [
         { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true, id: 0 }
       ],
       [
@@ -98,6 +102,9 @@ class TopBarContainer extends React.Component {
         style: 'big',
         items: [
           { label: 'All projects', link: isPowerUser ? '/projects?sort=updatedAt%20desc' : '/projects' },
+          { label: 'My profile', link: '/settings/profile' },
+          { label: 'Account and security', link: '/settings/system' },
+          { label: 'Notification settings', link: '/settings/notifications' },
           { label: 'Getting Started', link: 'https://www.topcoder.com/about-topcoder/connect/', absolute: true },
           { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true },
         ]
@@ -160,7 +167,7 @@ class TopBarContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ loadUser }) => {
+const mapStateToProps = ({ loadUser, settings }) => {
   let isPowerUser = false
   const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   if (loadUser.user) {
@@ -169,7 +176,8 @@ const mapStateToProps = ({ loadUser }) => {
   return {
     userRoles              : _.get(loadUser, 'user.roles', []),
     user                   : loadUser.user,
-    isPowerUser
+    isPowerUser,
+    profile: settings.profile.settings,
   }
 }
 

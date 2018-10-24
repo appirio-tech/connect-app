@@ -11,8 +11,8 @@ const App = (props) => {
   )
 }
 
-export const renderApp = (topbar, content) => () => (
-  <App {...{topbar, content}} />
+export const renderApp = (topbar, content, hideFooter=false) => () => (
+  <App {...{topbar, content, hideFooter}} />
 )
 
 export default App

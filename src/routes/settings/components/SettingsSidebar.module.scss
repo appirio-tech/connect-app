@@ -1,0 +1,128 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  flex-grow: 1;
+  display: flex;
+  position: relative;
+  max-width: 360px;
+  min-width: 200px;
+  min-height: 90vh;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    max-width: none;
+    min-height: 0;
+    min-width: 0;
+    width: 100%;
+    height: 50px;
+  }
+}
+
+.sidebar {
+  height: 100%;
+  width: 100%;
+  background: $tc-white;
+  margin-right: 10px;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    display: none;
+  }
+}
+
+.topbar::-webkit-scrollbar {display:none;}
+
+.topbar {
+  background-color: #FAFAFB;
+  box-shadow: 0 1px 0 0 rgba(195, 195, 200, 0.699999988079071), 0 1px 0 0 #DCDCE0;
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+  overflow: auto;
+
+  @media screen and (min-width: $screen-md - 1px) {
+    display: none;
+  }
+
+  > a {
+    flex: 0 0 160px;
+    position: relative;
+
+    > .option-mobile {
+      @include roboto-bold;
+      color: #959596;
+      font-size: 13px;
+      text-align: center;
+      text-transform: uppercase;
+      line-height: 50px;
+    }
+
+    > .selected {
+      color: #444444;
+    }
+  }
+
+  .option-highlight {
+    position: absolute;
+    height: 2px;
+    width: 20px;
+    bottom: 7px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    background: #006DEA;
+  }
+}
+
+.title {
+  @include roboto-bold;
+  color: #151516;
+  font-size: 11px;
+  margin: 20px 0px 5px 20px;
+}
+
+.options {
+  @include roboto;
+  height: 30px;
+  padding-left: 20px;
+  color: #151516;
+  font-size: 13px;
+  line-height: 30px;
+}
+
+.selected-option {
+  @include roboto-bold;
+  background-color: #CEE6FF;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  position: absolute;
+  bottom: 30px;
+  padding: 0px 20px 0px 20px;
+}
+
+.menu {
+  font-size: 7px;
+  color: #404041;
+  display: flex;
+  align-items: center;
+
+  > a {
+    @include roboto;
+    color: #404041 !important;
+    font-size: 11px;
+    line-height: 30px;
+    margin: 0px 3px 0px 3px;
+  }
+}
+
+.copyright-notice {
+  margin-left: auto;
+  @include roboto-medium;
+  color: #AAAAAB;
+  font-size: 11px;
+  line-height: 30px;
+  text-align: right;
+}

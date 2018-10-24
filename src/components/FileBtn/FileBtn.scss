@@ -19,14 +19,14 @@
     /* here we reproduce styles for tc-btn-default from tc-ui package */
     > .file.loading:enabled + .tc-btn-default,
     > .file:focus:enabled + .tc-btn-default {
-      background: $tc-white;
-      border-color: $tc-dark-blue-70;
+      border-color: $tc-dark-blue-90;
       box-shadow: 0 0 2px 1px $tc-dark-blue-30;
     }
 
     > .file:active:enabled + .tc-btn-default,
     > .file:hover:enabled + .tc-btn-default {
-      background-image: linear-gradient(0deg, $tc-gray-neutral-light 0%, $tc-white 49%, $tc-white 100%);
+      // background-image: linear-gradient(0deg, $tc-gray-neutral-light 0%, $tc-white 49%, $tc-white 100%);
+      border-color: $tc-dark-blue-90;
       border-color: $tc-gray-40;
     }
 

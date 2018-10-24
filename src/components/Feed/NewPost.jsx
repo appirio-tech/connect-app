@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import './draftjs.scss'
 import RichTextArea from '../RichTextArea/RichTextArea'
+import { getUserTrait } from '../../helpers/tcHelpers'
 
 import './NewPost.scss'
 
@@ -10,6 +11,33 @@ class NewPost extends React.Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      currentUserPhotoUrl: null
+    }
+  }
+
+  componentWillMount() {
+    const userHandle = this.props.currentUser.handle
+    this.fetchUserTrait(userHandle)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const handle = this.props.currentUser.handle
+    const newHandle = nextProps.currentUser.handle
+    if (handle === newHandle) {
+      return
+    }
+    this.fetchUserTrait(newHandle)
+  }
+
+  fetchUserTrait(handle) {
+    getUserTrait(handle).then(resp => {
+      if (this.props.currentUser.handle === handle) {
+        this.setState({currentUserPhotoUrl: resp.photoUrl})
+      }
+    }).catch(() => {
+      this.setState({currentUserPhotoUrl: null})
+    })
   }
 
   render() {
@@ -35,7 +63,7 @@ class NewPost extends React.Component {
         onPostChange={this.props.onNewPostChange}
         isCreating={isCreating}
         hasError={hasError}
-        avatarUrl={currentUser.photoURL}
+        avatarUrl={this.state.currentUserPhotoUrl}
         authorName={authorName}
         allMembers={allMembers}
       />

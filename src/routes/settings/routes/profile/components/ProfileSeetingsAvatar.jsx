@@ -4,49 +4,37 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FileBtn from '../../../../../components/FileBtn/FileBtn'
-import Alert from 'react-s-alert'
 import './ProfileSeetingsAvatar.scss'
+import { clearUserTraits } from '../../../../../helpers/tcHelpers'
 
 class ProfileSeetingsAvatar extends React.Component {
   constructor(props) {
     super(props)
-
-    this.state = {
-      photoSrc: props.defaultPhotoSrc
-    }
-
     this.onFileChange = this.onFileChange.bind(this)
   }
 
   onFileChange(evt) {
+    const { uploadPhoto } = this.props
     if (evt.target.files && evt.target.files.length > 0) {
       const file = evt.target.files[0]
-
-      // for browsers which don't restrict file type by accept param
-      if (!file.type.match(/image\/*/)) {
-        Alert.error('Please, choose an image of type jpeg or png.')
-        return
-      }
-
-      const reader = new FileReader()
-
-      reader.onload = (e) => {
-        this.setState({ photoSrc: e.target.result })
-      }
-
-      reader.readAsDataURL(file)
+      uploadPhoto(file)
+      clearUserTraits()
     }
   }
 
   render() {
-    const { photoSrc } = this.state
-
+    const { photoUrl, isUploading } = this.props
+    const label = isUploading ? 'Uploading, please wait' : 'Upload a new photo'
     return (
       <div className="profile-settings-avatar">
-        <div className="label">Your Avatar</div>
-        <img className="photo" src={photoSrc} />
+        <img className="photo" src={photoUrl} />
         <div className="controls">
-          <FileBtn onChange={this.onFileChange} accept="image/*"/>
+          <FileBtn
+            label={label}
+            onChange={this.onFileChange}
+            accept="image/*"
+            disabled={isUploading}
+          />
         </div>
       </div>
     )
@@ -54,7 +42,9 @@ class ProfileSeetingsAvatar extends React.Component {
 }
 
 ProfileSeetingsAvatar.propTypes = {
-  defaultPhotoSrc: PropTypes.string
+  photoUrl: PropTypes.string,
+  isUploading: PropTypes.bool,
+  uploadPhoto: PropTypes.func
 }
 
 export default ProfileSeetingsAvatar

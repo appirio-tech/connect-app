@@ -3,30 +3,36 @@
 
 :global {
   .settings-panel {
-    margin: 20px auto 0;
-    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
 
     @media screen and (max-width: $screen-md - 1px) {
       margin: 0;
       padding: 0;
+      flex-direction: column;
     }
 
     > .inner {
       background-color: $tc-white;
       border-radius: 6px;
-      margin: 0 auto;
-      max-width: 720px;
-      padding: 35px 20px 20px 20px;
+      max-width: 760px;
+      padding: 35px 0px 20px 0px;
+      flex-grow: 1;
+      margin: auto;
+      margin-top: 20px;
+      margin-bottom: 20px;
 
       @media screen and (max-width: $screen-md - 1px) {
-        padding: 20px 0;
+        padding: 0;
+        margin: 0;
+        max-width: none;
       }
 
       > .title {
         @include roboto-light;
-        color: $tc-heading-lg;
-        font-size: 32px;
-        line-height: 30px;
+        color: #151516;
+        font-size: 28px;
+        line-height: 35px;
         text-align: center;
 
         @media screen and (max-width: $screen-md - 1px) {
@@ -47,7 +53,6 @@
       }
 
       > .content {
-        border-top: 1px solid $tc-gray-50;
         margin-top: 25px;
         @media screen and (max-width: $screen-md - 1px) {
           margin-top: 0;
