@@ -102,7 +102,7 @@ const updateSystemSettings = (handle, profile) => {
 }
 
 const checkEmailValidity = (email) => {
-  return axios.get(`https://api.topcoder.com/v3/users/validateEmail?email=${email}`)
+  return axios.get(`${TC_API_URL}/v3/users/validateEmail?email=${email}`)
     .then(resp => resp.data)
 }
 
@@ -113,7 +113,7 @@ const updatePassword = (credential, userId) => {
 const resetPassword = (email) => {
   const prefix = RESET_PASSWORD_URL
   const url =
-    `https://api.topcoder.com/v3/users/resetToken?email=${email}&resetPasswordUrlPrefix=${prefix}`
+    `${TC_API_URL}/v3/users/resetToken?email=${email}&resetPasswordUrlPrefix=${prefix}`
   return axios.get(url)
 }
 
