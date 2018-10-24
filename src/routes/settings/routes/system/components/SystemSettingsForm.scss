@@ -1,0 +1,121 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.system-settings-container {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 30px;
+}
+
+.username {
+  display: flex;
+  flex-wrap: wrap;
+  padding-right: 20px;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px 20px 0px 10px;
+    widows: 100%;
+  }
+
+  .label {
+    @include roboto-medium;
+    flex: 1 0 120px;
+    min-width: 180px;
+    max-width: 200px;
+    text-align: right;
+    padding-right: 15px;
+    color: $tc-gray-80;
+    font-size: 15px;
+    line-height: 18px;
+    padding-top: 10px;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      flex: none;
+      margin-bottom: 10px;
+      margin-left: 10px;
+      text-align: left;
+    }
+  }
+
+  .input-container {
+    flex-grow: 1;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      width: 100%;
+    }
+
+    :global {
+      .input-field {
+        flex-grow: 1;
+        max-width: 450px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          width: 100%;
+          max-width: none;
+        }
+
+        > label {
+          display: none;
+        }
+
+        > input {
+          margin-bottom: 0px;
+          background-color: $tc-gray-neutral-light;
+          border: 1px solid $tc-gray-neutral-dark;
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+
+  .username-hint {
+    @include roboto;
+    color: $tc-gray-50;
+    font-size: 13px;
+    max-width: 450px;
+    line-height: 20px;
+    text-align: right;
+    margin-top: 5px;
+
+    > a,
+    > a:hover,
+    > a:active,
+    > a:visited {
+      color: $tc-dark-blue-110;
+    }
+
+    @media screen and (max-width: $screen-md - 1px) {
+      width: 100%;
+      max-width: none;
+    }
+  }
+}
+
+.section-heading {
+  @include roboto-bold;
+  background-color: $tc-gray-neutral-dark;
+  border-radius: 4px 4px 0 0;
+  height: 50px;
+  color: $tc-black;
+  font-size: 15px;
+  text-align: left;
+  line-height: 50px;
+  padding-left: 20px;
+  margin: 0px 20px 40px 20px;
+
+  &:not(:first-child) {
+    margin-top: 60px;
+    margin-bottom: 18px;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      margin-top: 20px;
+    }
+  }
+
+  @media screen and (max-width: $screen-md - 1px) {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 18px;
+  }
+}

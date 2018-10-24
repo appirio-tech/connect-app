@@ -162,20 +162,45 @@ class NotificationSettingsForm extends React.Component {
   constructor(props) {
     super(props)
 
+    const initialSettings = initSettings(props.values.settings)
+
     this.state = {
-      settings: initSettings(props.values.settings)
+      initialSettings,
+      settings: initialSettings,
+      dirty: false,
     }
 
     this.handleEmailConfigurationChange = this.handleEmailConfigurationChange.bind(this)
     this.handleWebConfigurationChange = this.handleWebConfigurationChange.bind(this)
+    this.onChange = this.onChange.bind(this)
+  }
+
+  componentWillReceiveProps(newProps) {
+    // after setting were updated on the server
+    // reinit form with udpdated values
+    if (this.props.values.pending && !newProps.values.pending) {
+      const initialSettings = initSettings(this.props.values.settings)
+
+      this.setState({
+        initialSettings,
+        settings: initialSettings,
+        dirty: false,
+      })
+    }
   }
 
   handleEmailConfigurationChange(selectedOption, topicIndex) {
     const notifications = {...this.state.settings.notifications}
     // update values for all types of the topic
     topics[topicIndex].types.forEach((type) => {
-      notifications[type].email.enabled = selectedOption.value === 'off' ? 'no' : 'yes'
-      notifications[type].email.bundlePeriod = selectedOption.value === 'off' ? '' : selectedOption.value
+      notifications[type] = {
+        ...notifications[type],
+        email: {
+          ...notifications[type].email,
+          enabled: selectedOption.value === 'off' ? 'no' : 'yes',
+          bundlePeriod: selectedOption.value === 'off' ? '' : selectedOption.value
+        }
+      }
     })
 
     this.setState({
@@ -183,7 +208,7 @@ class NotificationSettingsForm extends React.Component {
         ...this.state.settings,
         notifications,
       }
-    })
+    }, this.onChange)
   }
 
   stopPropagation(e) {
@@ -197,7 +222,13 @@ class NotificationSettingsForm extends React.Component {
 
     // update values for all types of the topic
     topics[topicIndex].types.forEach((type) => {
-      notifications[type].web.enabled = notifications[type].web.enabled === 'yes' ? 'no' : 'yes'
+      notifications[type] = {
+        ...notifications[type],
+        web: {
+          ...notifications[type].web,
+          enabled: notifications[type].web.enabled === 'yes' ? 'no' : 'yes'
+        }
+      }
     })
 
     this.setState({
@@ -205,7 +236,19 @@ class NotificationSettingsForm extends React.Component {
         ...this.state.settings,
         notifications,
       }
-    })
+    }, this.onChange)
+  }
+
+  isChanged() {
+    return !_.isEqual(this.state.initialSettings, this.state.settings)
+  }
+
+  onChange() {
+    const isChanged = this.isChanged()
+
+    if (this.state.dirty !== isChanged) {
+      this.setState({ dirty: isChanged })
+    }
   }
 
   render() {
@@ -313,7 +356,7 @@ class NotificationSettingsForm extends React.Component {
         </table>
 
         <div className="controls">
-          <button type="submit" className="tc-btn tc-btn-primary" disabled={this.props.values.pending}>Save settings</button>
+          <button type="submit" className="tc-btn tc-btn-primary" disabled={this.props.values.pending || !this.state.dirty}>Save settings</button>
         </div>
       </Formsy.Form>
     )

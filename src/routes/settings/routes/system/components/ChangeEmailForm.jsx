@@ -13,21 +13,23 @@ import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
 const Formsy = FormsyForm.Formsy
 import './ChangeEmailForm.scss'
-import IconCheck from '../../../../../assets/icons/check.svg'
-
+import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
 
 class ChangeEmailForm extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      isFocused: false,
       isValid: true,
-      currentEmail: this.props.email
+      currentEmail: this.props.settings.email
     }
 
     this.onValid = this.onValid.bind(this)
     this.onInvalid = this.onInvalid.bind(this)
     this.onChange = this.onChange.bind(this)
+    this.cancel = this.cancel.bind(this)
+    this.submit = this.submit.bind(this)
 
     // debounced checkEmailAvailability function to prevent polluting server with requests
     this.debouncedAvailabilityCheck = _.debounce(this.checkEmailAvailability, EMAIL_AVAILABILITY_CHECK_DEBOUNCE)
@@ -51,13 +53,24 @@ class ChangeEmailForm extends React.Component {
     }
   }
 
+  cancel() {
+    this.formRef && this.formRef.updateInputsWithError({})
+    this.emailRef.setValue(this.props.settings.email)
+    this.debouncedAvailabilityCheck.cancel()
+    this.setState({isFocused: false})
+  }
+
+  submit() {
+    this.props.onSubmit(this.state.currentEmail)
+  }
+
   checkEmailAvailability() {
     this.props.checkEmailAvailability(this.state.currentEmail)
   }
 
   onValid() {
     // if we haven't changed email, then don't check it
-    if (this.state.currentEmail !== this.props.email) {
+    if (this.state.currentEmail !== this.props.settings.email) {
       this.debouncedAvailabilityCheck()
     } else {
       // cancel availability check if current email hasn't been changed
@@ -73,52 +86,90 @@ class ChangeEmailForm extends React.Component {
   }
 
   onChange(data) {
-    this.setState({ currentEmail: data.email })
+    if (data.email === this.props.settings.email) {
+      this.setState({currentEmail: data.email, isFocused: false})
+    } else {
+      this.setState({ currentEmail: data.email, isFocused: true })
+    }
     // clear all server validation errors when email is changed
     this.formRef && this.formRef.updateInputsWithError({})
   }
 
   render() {
-    const { email: initialEmail, onSubmit, checkingEmail, checkedEmail, isEmailAvailable, isEmailChanging } = this.props
-    const { currentEmail, isValid } = this.state
+    const { settings, checkingEmail, checkedEmail, isEmailAvailable, isEmailChanging, emailSubmitted } = this.props
+    const { currentEmail, isValid, isFocused } = this.state
     const currentEmailAvailable = checkedEmail === currentEmail && isEmailAvailable
     const isCheckingCurrentEmail = checkingEmail === currentEmail
-    const isEmailChanged = initialEmail !== currentEmail
+    const isEmailChanged = settings.email !== currentEmail
     const isDisabledSubmit = !isValid || !currentEmailAvailable || !isEmailChanged || isEmailChanging
+    const hideActions = !isFocused || isEmailChanging || emailSubmitted
+    let formStyle = ''
+
+    if (isFocused) {
+      formStyle = 'focused-form'
+      if (emailSubmitted) {
+        formStyle = 'submitted-form'
+      }
+    }
 
     return (
       <Formsy.Form
-        className="change-email-form"
+        className={`change-email-form ${formStyle}`}
         onValid={this.onValid}
         onInvalid={this.onInvalid}
         onChange={this.onChange}
-        onValidSubmit={onSubmit}
+        onValidSubmit={this.submit}
         ref={(ref) => this.formRef = ref}
       >
-        <div className="field">
-          <TCFormFields.TextInput
-            type="email"
-            name="email"
-            label="Email"
-            value={initialEmail}
-            validations={{
-              isEmail: true,
-              isRequired: true
-            }}
-            validationError="Enter email, please"
-            validationErrors={{
-              isEmail: 'Provide a correct email, please'
-            }}
-            disabled={isEmailChanging}
-          />
-          <div className="field-status">
-            {isCheckingCurrentEmail && <LoadingIndicator isSmall />}
-            {isEmailChanged && currentEmailAvailable && <IconCheck className="icon-check"/>}
+        <div className="email-container">
+          <div className="label">
+            Email
+          </div>
+          <div className="field">
+            <TCFormFields.TextInput
+              type="email"
+              name="email"
+              value={settings.email}
+              validations={{
+                isEmail: true,
+                isRequired: true
+              }}
+              validationError="Enter email"
+              validationErrors={{
+                isEmail: 'Provide a correct email'
+              }}
+              disabled={isEmailChanging}
+              ref={(ref) => this.emailRef = ref}
+            />
+            { isFocused && isCheckingCurrentEmail && (
+              <div className="field-status">
+                Verifying email
+                <LoadingIndicator isSmall />
+              </div>
+            )}
+            { isFocused && isEmailChanged && currentEmailAvailable && (
+              <div className="field-status success-status">
+                Email is available
+              </div>
+            )}
+            { isFocused && emailSubmitted && (
+              <div className="field-status red-status">
+                We sent you a verification email, please check your mailbox
+              </div>
+            )}
           </div>
         </div>
-        <div className="controls">
-          <button type="submit" className="tc-btn tc-btn-default" disabled={isDisabledSubmit}>Change Email</button>
-        </div>
+        { !hideActions &&
+          <div className="controls">
+            <button onClick={this.cancel} className="tc-btn tc-btn-default">Cancel</button>
+            <button type="submit" className="tc-btn tc-btn-primary" disabled={isDisabledSubmit}>Change Email</button>
+          </div>
+        }
+        { isEmailChanging &&
+          <div className="controls">
+            <button className="tc-btn tc-btn-primary">Saving...</button>
+          </div>
+        }
       </Formsy.Form>
     )
   }

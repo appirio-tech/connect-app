@@ -30,7 +30,7 @@ import ProjectInfoContainer from './ProjectInfoContainer'
 import FeedContainer from './FeedContainer'
 import Sticky from '../../../components/Sticky'
 import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
-import TwoColsLayout from '../components/TwoColsLayout'
+import TwoColsLayout from '../../../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
 import WorkInProgress from '../components/WorkInProgress'
 

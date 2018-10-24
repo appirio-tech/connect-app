@@ -20,7 +20,7 @@ import {
 } from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
-import TwoColsLayout from '../components/TwoColsLayout'
+import TwoColsLayout from '../../../components/TwoColsLayout'
 import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'

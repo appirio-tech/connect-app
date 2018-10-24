@@ -8,18 +8,20 @@ import './FileBtn.scss'
 
 const FileBtn = (props) => {
   const fileProps = _.pick(props, 'accept', 'onChange')
-
+  const { disabled } = props
   return (
     <div className="file-btn">
-      <input className="file" type="file" {...fileProps} />
-      <button className="tc-btn tc-btn-default" tabIndex="-1">Update</button>
+      <input className="file" type="file" {...fileProps} disabled={disabled} />
+      <button className="tc-btn tc-btn-default" tabIndex="-1" disabled={disabled}>{props.label}</button>
     </div>
   )
 }
 
 FileBtn.propTypes = {
+  label: PropTypes.string.isRequired,
   accept: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  disabled: PropTypes.bool
 }
 
 export default FileBtn
