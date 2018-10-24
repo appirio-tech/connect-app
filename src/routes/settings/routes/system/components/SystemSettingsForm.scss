@@ -61,8 +61,8 @@
 
         > input {
           margin-bottom: 0px;
-          background-color: #FAFAFB;
-          border: 1px solid #EBEBEB;
+          background-color: $tc-gray-neutral-light;
+          border: 1px solid $tc-gray-neutral-dark;
           border-radius: 4px;
         }
       }
@@ -94,10 +94,10 @@
 
 .section-heading {
   @include roboto-bold;
-  background-color: #EBEBEB;
+  background-color: $tc-gray-neutral-dark;
   border-radius: 4px 4px 0 0;
   height: 50px;
-  color: #151516;
+  color: $tc-black;
   font-size: 15px;
   text-align: left;
   line-height: 50px;

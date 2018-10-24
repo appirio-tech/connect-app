@@ -19,7 +19,7 @@
 
 .title {
   @include roboto-light;
-  color: #151516;
+  color: $tc-black;
   font-size: 28px;
   line-height: 35px;
   text-align: center;

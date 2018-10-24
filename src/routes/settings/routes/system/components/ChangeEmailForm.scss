@@ -3,11 +3,11 @@
 
 :global {
   .focused-form {
-    background: #F4F9FF;
+    background: $tc-dark-blue-10;
   }
 
   .submitted-form {
-    background: #fdf6e8;
+    background: #FEF7E1;
   }
 
   .change-email-form {
@@ -98,7 +98,7 @@
         }
 
         .red-status {
-          color: #EA1900;
+          color: $tc-red-110;
           font-style: italic;
         }
       }

@@ -106,10 +106,10 @@
 
     .section-heading {
       @include roboto-bold;
-      background-color: #EBEBEB;
+      background-color: $tc-gray-neutral-dark;
       border-radius: 4px 4px 0 0;
       height: 50px;
-      color: #151516;
+      color: $tc-black;
       font-size: 15px;
       text-align: left;
       line-height: 50px;
