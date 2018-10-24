@@ -50,8 +50,7 @@ class Milestone extends React.Component {
       activeMenu: '',
       isHoverHeader: false,
       isEditing: false,
-      isMobileEditing: false,
-      browserActualViewportHeigth: document.documentElement.clientHeight
+      isMobileEditing: false
     }
   }
 
