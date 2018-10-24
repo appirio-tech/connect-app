@@ -78,6 +78,13 @@
     text-align: right;
     margin-top: 5px;
 
+    > a,
+    > a:hover,
+    > a:active,
+    > a:visited {
+      color: $tc-dark-blue-110;
+    }
+
     @media screen and (max-width: $screen-md - 1px) {
       width: 100%;
       max-width: none;
