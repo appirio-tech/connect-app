@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ChangeEmailForm from '../components/ChangeEmailForm'
 import ChangePasswordForm from '../components/ChangePasswordForm'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
-import './SystemSettingsForm.module.scss'
+import './SystemSettingsForm.scss'
 
 const Formsy = FormsyForm.Formsy
 const TCFormFields = FormsyForm.Fields

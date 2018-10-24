@@ -166,7 +166,7 @@ class ChangePasswordForm extends React.Component {
     const { isResetingPassword, passwordResetSubmitted, onReset } = this.props
     const showActions = !isResetingPassword && !passwordResetSubmitted
     const title = (passwordResetSubmitted)
-      ? 'We sent you password rese instructions' : 'Reset your password'
+      ? 'We sent you password reset instructions' : 'Reset your password'
     return (
       <div className="reset-container">
         <div className="reset-heading">
