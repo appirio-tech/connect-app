@@ -15,20 +15,13 @@ class ProfileSettingsForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      settings: {...this.props.values.settings},
-      valid: false
+      valid: false,
+      dirty: false,
     }
-    this.onFieldUpdate = this.onFieldUpdate.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
     this.onValid = this.onValid.bind(this)
     this.onInvalid = this.onInvalid.bind(this)
-  }
-
-  onFieldUpdate(name, value) {
-    const settings = {...this.state.settings,
-      [name]: value
-    }
-    this.setState({ settings })
+    this.onChange = this.onChange.bind(this)
   }
 
   getField(label, name, isRequired=false) {
@@ -46,8 +39,7 @@ class ProfileSettingsForm extends Component {
           type="text"
           name={name}
           validations={validations}
-          onChange={this.onFieldUpdate}
-          value={this.state.settings[name] || ''}
+          value={this.props.values.settings[name] || ''}
           validationError={`Please enter ${label}`}
           required={isRequired}
         />
@@ -55,8 +47,16 @@ class ProfileSettingsForm extends Component {
     )
   }
 
-  onSubmit() {
-    this.props.saveSettings(this.state.settings)
+  onSubmit(data) {
+    // we have to use inital data as a base for updated data
+    // as form could update not all fields, thus they won't be included in `data`
+    // for example user avatar is not included in `data` thus will be removed if don't use 
+    // this.props.values.settings as a base
+    const updatedDate = {
+      ...this.props.values.settings,
+      ...data,
+    }
+    this.props.saveSettings(updatedDate)
   }
 
   onValid() {
@@ -67,6 +67,12 @@ class ProfileSettingsForm extends Component {
     this.setState({valid: false})
   }
 
+  onChange(currentValues, isChanged) {
+    if (this.state.dirty !== isChanged) {
+      this.setState({ dirty: isChanged })
+    }
+  }
+
   render() {
     return (
       <Formsy.Form
@@ -74,13 +80,14 @@ class ProfileSettingsForm extends Component {
         onInvalid={this.onInvalid}
         onValid={this.onValid}
         onValidSubmit={this.onSubmit}
+        onChange={this.onChange}
       >
         <div className="section-heading">Personal information</div>
         <div className="field">
           <div className="label">Avatar</div>
           <ProfileSeetingsAvatar
             isUploading={this.props.values.isUploadingPhoto}
-            photoUrl={this.state.settings.photoUrl}
+            photoUrl={this.props.values.settings.photoUrl}
             uploadPhoto={this.props.uploadPhoto}
           />
         </div>
@@ -94,7 +101,7 @@ class ProfileSettingsForm extends Component {
             wrapperClass="input-field"
             type="text"
             name="companySize"
-            value={this.state.settings.companySize}
+            value={this.props.values.settings.companySize}
             onChange={this.onFieldUpdate}
             options={companySizeRadioOptions.map((label) => ({option: label, label, value: label}))}
             required
@@ -111,11 +118,11 @@ class ProfileSettingsForm extends Component {
               type="text"
               name="state"
               onChange={this.onFieldUpdate}
-              value={this.state.settings.state || ''}
+              value={this.props.values.settings.state || ''}
             />
             <div className="zip label">ZIP</div>
             <TCFormFields.TextInput wrapperClass="input-field zip-input"
-              type="text" maxLength={5} name="zip" value={this.state.settings.zip || ''}
+              type="text" maxLength={5} name="zip" value={this.props.values.settings.zip || ''}
               onChange={this.onFieldUpdate}
             />
           </div>
@@ -125,7 +132,7 @@ class ProfileSettingsForm extends Component {
           <button
             type="submit"
             className="tc-btn tc-btn-primary"
-            disabled={this.props.values.pending || !this.state.valid}
+            disabled={this.props.values.pending || !this.state.valid || !this.state.dirty}
           >
             Save settings
           </button>
