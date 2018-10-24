@@ -11,7 +11,7 @@ const FileBtn = (props) => {
   const { disabled } = props
   return (
     <div className="file-btn">
-      <input className="file" type="file" {...fileProps} />
+      <input className="file" type="file" {...fileProps} disabled={disabled} />
       <button className="tc-btn tc-btn-default" tabIndex="-1" disabled={disabled}>{props.label}</button>
     </div>
   )

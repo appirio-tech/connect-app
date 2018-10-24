@@ -14,6 +14,10 @@
       right: 0;
       top: 0;
       font-size: 100px;
+
+      &[disabled] {
+        cursor: default;
+      }
     }
 
     /* here we reproduce styles for tc-btn-default from tc-ui package */
