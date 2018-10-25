@@ -28,7 +28,7 @@ const UserTooltip = ({ usr, id, previewAvatar, size }) => {
               size={size}
             />
           </div>) :
-            <span className="project-customer">{ userFullName }</span>
+            <span className="project-customer">{userFullName}</span>
         }
       </div>
       <div className="tooltip-body">
@@ -36,20 +36,20 @@ const UserTooltip = ({ usr, id, previewAvatar, size }) => {
           <div className="tt-col-avatar">
             <a href={`//www.${DOMAIN}/members/${userHandle}/`} target="_blank" rel="noopener noreferrer" className="tt-user-avatar">
               <Avatar
-                avatarUrl={getAvatarResized(_.get(usr, 'photoURL', size))}
+                avatarUrl={getAvatarResized(_.get(usr, 'photoURL'), size)}
                 userName={userFullName}
               />
             </a>
           </div>
           <div className="tt-col-user-data">
             <div className="user-name-container">
-              <span>{ userFullName }</span>
+              <span>{userFullName}</span>
             </div>
             <div className={`user-handle-container ${userEmail ? 'with-email' : ''}`}>
-              <span>{ userHandle }</span>
+              <span>{userHandle}</span>
             </div>
             <div className="user-email-container">
-              <a href={`mailto:${userEmail}`}>{ userEmail }</a>
+              <a href={`mailto:${userEmail}`}>{userEmail}</a>
             </div>
           </div>
         </div>

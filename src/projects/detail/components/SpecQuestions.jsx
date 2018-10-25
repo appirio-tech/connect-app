@@ -38,7 +38,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
     const elemProps = {
       name: q.fieldName,
       label: q.label,
-      value: _.get(project, q.fieldName, ''),
+      value: _.unescape(_.get(project, q.fieldName, '')),
       required: q.required,
       validations: q.required ? 'isRequired' : null,
       validationError: q.validationError,

@@ -83,25 +83,47 @@
     }
 
     button {
-      width: 20px;
-      height: 20px;
+      width: 16px;
+      height: 16px;
       color: white;
       border-radius: 50%;
       margin: auto auto auto 10px;
       font-size: 15px;
       font-weight: 500;
       line-height: 0;
+      border: 0;
       &.button-add {
         background-color: $tc-gray-20;
-        padding: 0 0 3px 0px;
+        padding: 0;
+        flex: 0 0 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         &:hover {
           background-color: $tc-dark-blue-100;
+        }
+
+        svg {
+          fill: $tc-white;
+          width: 8px;
+          transform: translate3d(0, 0, 0);
         }
       }
       &.button-remove {
         background-color: $tc-red-110;
-        padding: 0 0 3px 0px;
         font-size: 20px;
+        padding: 0;
+        flex: 0 0 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        svg {
+          fill: $tc-white;
+          width: 8px;
+          path {
+            fill: $tc-white;
+          }
+        }
       }
     }
 
