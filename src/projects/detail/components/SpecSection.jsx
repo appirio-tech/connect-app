@@ -240,12 +240,13 @@ const SpecSection = props => {
   return (
     <div className="right-area-item" id={id}>
       <div className="boxes">
+        {!project.version === 'v3' &&
         <div className="section-header big-titles">
           <h2 id={id}>
             {title}
           </h2>
           <span className="section-number">{ sectionNumber }</span>
-        </div>
+        </div>}
         <p className="gray-text">
           {description}
         </p>

@@ -129,6 +129,7 @@ class DashboardContainer extends React.Component {
         isFeedsLoading={isFeedsLoading}
         productsTimelines={productsTimelines}
         phasesTopics={phasesTopics}
+        isProjectProcessing={isProcessing}
       />
     )
 

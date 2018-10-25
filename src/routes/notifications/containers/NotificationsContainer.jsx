@@ -8,7 +8,8 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Sticky from '../../../components/Sticky'
 import { getNotifications, setNotificationsFilterBy, markAllNotificationsRead,
-  toggleNotificationRead, viewOlderNotifications, toggleBundledNotificationRead, hideOlderNotifications } from '../actions'
+  toggleNotificationRead, viewOlderNotifications, toggleBundledNotificationRead, 
+  hideOlderNotifications, toggleNotificationSeen } from '../actions'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
 import NotificationsSection from '../../../components/NotificationsSection/NotificationsSection'
 import NotificationsSectionTitle from '../../../components/NotificationsSectionTitle/NotificationsSectionTitle'
@@ -66,6 +67,16 @@ class NotificationsContainerView extends React.Component {
       }
     }
 
+    // this function checks that notification is not seen yet,
+    // before marking it as seen
+    const markNotificationSeen = (notificationId) => {
+      const notification = _.find(notifications, { id: notificationId })
+
+      if (notification && !notification.seen) {
+        toggleNotificationSeen(notificationId)
+      }
+    }
+
     return (
       <div className="notifications-container">
         <div className="content">
@@ -76,6 +87,9 @@ class NotificationsContainerView extends React.Component {
               onMarkAllClick={() => !pending && markAllNotificationsRead('global', notifications)}
               onReadToggleClick={toggleNotificationOrBundleRead}
               onViewOlderClick={() => viewOlderNotifications(globalSource.id)}
+              onLinkClick={(notificationId) => {
+                markNotificationSeen(notificationId)
+              }}
             />
           }
           {projectSources.length > 0 && <NotificationsSectionTitle title="Project" isGlobal />}
@@ -86,6 +100,9 @@ class NotificationsContainerView extends React.Component {
               onMarkAllClick={() => !pending && markAllNotificationsRead(source.id, notifications)}
               onReadToggleClick={toggleNotificationOrBundleRead}
               onViewOlderClick={() => viewOlderNotifications(source.id)}
+              onLinkClick={(notificationId) => {
+                markNotificationSeen(notificationId)
+              }}
             />
           ))}
           {globalSource || projectSources.length > 0 ?
@@ -165,7 +182,8 @@ const mapDispatchToProps = {
   toggleNotificationRead,
   viewOlderNotifications,
   hideOlderNotifications,
-  toggleBundledNotificationRead
+  toggleBundledNotificationRead,
+  toggleNotificationSeen,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsContainerWithLoaderAndAuth)
