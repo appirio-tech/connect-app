@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
+import { ReactTypeformEmbed } from 'react-typeform-embed';
 import PT from 'prop-types'
 
 import './FillProjectDetails.scss'
@@ -58,15 +59,9 @@ class FillProjectDetails extends Component  {
             <div className="container">
               <div className="left-area">
                 <div className="left-area-content">
-                  <ProjectBasicDetailsForm
-                    project={project}
-                    sections={sections}
-                    isEditable
-                    submitHandler={this.props.onCreateProject}
-                    saving={processing}
-                    onProjectChange={this.props.onProjectChange}
-                    submitBtnText={ submitBtnText }
-                  />
+                  <ReactTypeformEmbed url='https://davidmessinger.typeform.com/to/j1qyfr'
+                  data-hide-headers='true' data-hide-footer='true' style='width: 100%; height: 500px;' />
+
                 </div>
                 {formDisclaimer && (
                   <div className="left-area-footer">

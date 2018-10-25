@@ -64,6 +64,7 @@
           display: flex;
           padding: 0;
           margin: 0 auto;
+          min-height: 350px;
 
           /* .left-area */
           .left-area {
@@ -76,6 +77,7 @@
               background: $tc-white;
               box-shadow: 0px 1px 3px 0px $tc-gray-30;
               padding: 50px;
+              min-height: 350px;
 
               @media screen and (max-width: $screen-md - 1px) {
                 background-color: $tc-white;
