@@ -2,10 +2,6 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
-  // TODO: move to includes
-  $tc-rgba-10: rgba($tc-gray-80, 0.38);
-  $tc-rgba-20: rgba($tc-black, 0.17);
-
   .ProjectsToolBar {
     margin: 0 auto;
     width: 100%;
@@ -241,7 +237,7 @@
 
         &.active {
           background: $tc-gray-80;
-          box-shadow: inset 0px 1px 3px 0px $tc-rgba-10;
+          box-shadow: inset 0px 1px 3px 0px $tc-gray-80;
 
           svg.icon-search-filter g {
             fill: $tc-white;
