@@ -5,7 +5,6 @@
   // TODO: move to includes
   $tc-rgba-10: rgba($tc-gray-80, 0.38);
   $tc-rgba-20: rgba($tc-black, 0.17);
-  $tc-body-large: 20px;
 
   .ProjectsToolBar {
     margin: 0 auto;
@@ -297,7 +296,7 @@
       }
 
       h2 {
-        font-size: $tc-body-large;
+        font-size: $tc-body-lg;
         color: $tc-black;
         white-space: nowrap;
 

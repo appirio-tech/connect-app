@@ -3,7 +3,6 @@
 // TODO where do we add these
 
 :global {
-  $tc-heading-extra-small: 14px;
   $tc-body-small: 14px;
   $tc-body-extra-small: 12px;
 
@@ -191,7 +190,6 @@
         position: absolute;
         top: $base-unit*3;
         right: $base-unit*3;
-        background-size: $tc-heading-extra-small;
         overflow: hidden;
       }
 
