@@ -25,7 +25,7 @@
     max-width: 200px;
     text-align: right;
     padding-right: 15px;
-    color: #47474F;
+    color: $tc-gray-80;
     font-size: 15px;
     line-height: 18px;
     padding-top: 10px;
@@ -71,7 +71,7 @@
 
   .username-hint {
     @include roboto;
-    color: #888894;
+    color: $tc-gray-50;
     font-size: 13px;
     max-width: 450px;
     line-height: 20px;

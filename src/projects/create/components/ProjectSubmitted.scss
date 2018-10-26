@@ -9,7 +9,7 @@
       width: 90%;
 
       .title {
-        color: #1E1E1F;
+        color: $tc-gray-100;
         font-size: 32px;
         font-weight: 300;
         line-height: 35px;
@@ -21,7 +21,7 @@
       }
 
       .sub-title {
-        color: #85807C;
+        color: $tc-gray-50;
         font-size: 12px;
         font-weight: 400;
         line-height: 20px;
@@ -43,7 +43,7 @@
       }
 
       .project-link-container {
-        background-color: #F1F0F0;
+        background-color: $tc-gray-neutral-light;
         border-radius: 6px;
         height: 60px;
         width: 100%;

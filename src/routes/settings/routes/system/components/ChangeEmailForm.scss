@@ -7,7 +7,7 @@
   }
 
   .submitted-form {
-    background: #FEF7E1;
+    background: $tc-yellow-70;
   }
 
   .change-email-form {
@@ -36,7 +36,7 @@
         max-width: 200px;
         text-align: right;
         padding-right: 15px;
-        color: #47474F;
+        color: $tc-gray-80;
         font-size: 15px;
         line-height: 18px;
         padding-top: 15px;
@@ -78,7 +78,7 @@
           align-items: center;
           font-size: 13px;
           line-height: 20px;
-          color: #47474F;
+          color: $tc-gray-80;
 
           > .loading-indicator {
             margin-left: 10px;
@@ -94,7 +94,7 @@
         }
 
         .success-status {
-          color: #51B200;
+          color: $tc-green-110;
         }
 
         .red-status {
