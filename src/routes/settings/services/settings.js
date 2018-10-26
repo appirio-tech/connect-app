@@ -97,7 +97,10 @@ const getSystemSettings = (handle) => {
 }
 
 const updateSystemSettings = (handle, profile) => {
-  return axios.put(`${TC_API_URL}/v3/members/${handle}`, { param: profile })
+  // `achievements` and `ratingSummary` are read-only and cannot be updated in member profile
+  const updatedProfile = _.omit(profile, 'achievements', 'ratingSummary')
+
+  return axios.put(`${TC_API_URL}/v3/members/${handle}`, { param: updatedProfile })
     .then(resp => resp.data)
 }
 
