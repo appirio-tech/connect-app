@@ -91,7 +91,7 @@ class ProjectInfo extends Component {
           }
           <div className="project-status-info">
             <div className="project-status-time">Created {moment(project.createdAt).format('MMM DD, YYYY')}</div>
-            {!!code && <div className="project-status-ref">{code}</div>}
+            {!!code && <div className="project-status-ref">{_.unescape(code)}</div>}
           </div>
         </div>
         {showDeleteConfirm &&
