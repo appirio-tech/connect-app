@@ -32,6 +32,7 @@ class TopBarContainer extends React.Component {
 
   shouldComponentUpdate(nextProps) {
     return (nextProps.user || {}).handle !== (this.props.user || {}).handle
+    || (nextProps.user || {}).photoURL !== (this.props.user || {}).photoURL
     || nextProps.toolbar !== this.props.toolbar
     || this.props.location.pathname !== nextProps.location.pathname
   }

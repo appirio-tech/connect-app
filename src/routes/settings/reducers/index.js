@@ -34,8 +34,8 @@ import {
   RESET_PASSWORD_FAILURE
 } from '../../../config/constants'
 
-// TODO initial state with mocked data for demo should be removed
-// once service and actions are implemented
+import { applyProfileSettingsToTraits } from '../helpers/settings'
+
 const initialState = {
   notifications: {
     settings: null,
@@ -62,7 +62,7 @@ const initialState = {
     isLoading: true,
     isUploadingPhoto: false,
     pending: false,
-    settings: {},
+    traits: [],
   }
 }
 
@@ -247,7 +247,7 @@ export default (state = initialState, action) => {
     return {...state,
       profile: {...state.profile,
         isLoading: false,
-        settings: action.payload.data,
+        traits: action.payload.data,
       }
     }
 
@@ -269,7 +269,7 @@ export default (state = initialState, action) => {
     return {...state,
       profile: {...state.profile,
         pending: false,
-        settings: action.payload.data
+        traits: action.payload.data
       }
     }
 
@@ -288,14 +288,19 @@ export default (state = initialState, action) => {
       }
     }
 
-  case SAVE_PROFILE_PHOTO_SUCCESS:
+  case SAVE_PROFILE_PHOTO_SUCCESS: {
+    const updatedTraits = applyProfileSettingsToTraits(state.profile.traits, {
+      photoUrl: action.payload.photoUrl,
+    })
+
     return {...state,
       profile: {...state.profile,
         pending: false,
         isUploadingPhoto: false,
-        settings: action.payload.data,
+        traits: updatedTraits,
       }
     }
+  }
 
   case SAVE_PROFILE_PHOTO_FAILURE:
     return {...state,

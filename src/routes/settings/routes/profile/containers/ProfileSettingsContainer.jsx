@@ -9,6 +9,7 @@ import SettingsPanel from '../../../components/SettingsPanel'
 import spinnerWhileLoading from '../../../../../components/LoadingSpinner'
 import { requiresAuthentication } from '../../../../../components/AuthenticatedComponent'
 import { getProfileSettings, saveProfileSettings, uploadProfilePhoto } from '../../../actions/index'
+import { formatProfileSettings } from '../../../helpers/settings'
 
 const enhance = spinnerWhileLoading(props => !props.values.isLoading)
 const ProfileSettingsFormEnhanced = enhance(ProfileSettingsForm)
@@ -42,13 +43,16 @@ ProfileSettingsContainer.propTypes = {
 const ProfileSettingsContainerWithAuth = requiresAuthentication(ProfileSettingsContainer)
 
 const mapStateToProps = ({ settings }) => ({
-  profileSettings: settings.profile
+  profileSettings: { 
+    ...settings.profile,
+    settings: formatProfileSettings(settings.profile.traits)
+  }
 })
 
-const mapDisptachToProps = {
+const mapDispatchToProps = {
   getProfileSettings,
   saveProfileSettings,
   uploadProfilePhoto,
 }
 
-export default connect(mapStateToProps, mapDisptachToProps)(ProfileSettingsContainerWithAuth)
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileSettingsContainerWithAuth)
