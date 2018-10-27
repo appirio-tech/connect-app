@@ -167,7 +167,7 @@ class ChangeEmailForm extends React.Component {
         }
         { isEmailChanging &&
           <div className="controls">
-            <button className="tc-btn tc-btn-primary">Saving...</button>
+            <button className="tc-btn tc-btn-primary" disabled>Saving...</button>
           </div>
         }
       </Formsy.Form>
