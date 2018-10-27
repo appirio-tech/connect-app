@@ -27,7 +27,7 @@ const Layout = (props) => {
         <div className={cn('main-wrapper')} data-route={window.location.pathname.replace(/\//g, '__')} id="wrapper-main">
           { props.content }
         </div>
-        { !props.hideFooter && <Footer />}
+        <Footer />
         <GatewayDest name="fullscreen-page" className="mobile-page-gateway" />
       </div>
     )

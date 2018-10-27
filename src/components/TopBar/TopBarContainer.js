@@ -34,7 +34,6 @@ class TopBarContainer extends React.Component {
     return (nextProps.user || {}).handle !== (this.props.user || {}).handle
     || nextProps.toolbar !== this.props.toolbar
     || this.props.location.pathname !== nextProps.location.pathname
-    || this.props.profile.photoUrl !== nextProps.profile.photoUrl
   }
 
   renderLogo(comp){
@@ -59,10 +58,10 @@ class TopBarContainer extends React.Component {
         <div />
       )
     }
-    const { user, profile, toolbar, userRoles, isPowerUser } = this.props
+    const { user, toolbar, userRoles, isPowerUser } = this.props
 
     const userHandle  = _.get(user, 'handle')
-    const userImage = _.get(profile, 'photoUrl')
+    const userImage = _.get(user, 'profile.photoURL')
     const userFirstName = _.get(user, 'profile.firstName')
     const userLastName = _.get(user, 'profile.lastName')
     let userName = userFirstName
@@ -167,7 +166,7 @@ class TopBarContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ loadUser, settings }) => {
+const mapStateToProps = ({ loadUser }) => {
   let isPowerUser = false
   const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   if (loadUser.user) {
@@ -176,8 +175,7 @@ const mapStateToProps = ({ loadUser, settings }) => {
   return {
     userRoles              : _.get(loadUser, 'user.roles', []),
     user                   : loadUser.user,
-    isPowerUser,
-    profile: settings.profile.settings,
+    isPowerUser
   }
 }
 

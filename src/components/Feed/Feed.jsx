@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import FeedComments from './FeedComments'
 import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
-import { getUserTrait } from '../../helpers/tcHelpers'
 
 import XMarkIcon from '../../assets/icons/x-mark.svg'
 import FullscreenIcon from '../../assets/icons/ui-fullscreen.svg'
@@ -18,7 +17,6 @@ class Feed extends React.Component {
     this.state = {
       editTopicMode: false,
       headerHeight: null, // keeps header height for fullscreen mode
-      avatarUrl: null,
     }
     this.onEditTopic = this.onEditTopic.bind(this)
     this.cancelEditTopic = this.cancelEditTopic.bind(this)
@@ -40,35 +38,14 @@ class Feed extends React.Component {
     window.removeEventListener('resize', this.updateHeaderHeight)
   }
 
-  componentWillMount() {
-    const userHandle = this.props.currentUser.handle
-    this.fetchUserTrait(userHandle)
-  }
-
   componentWillReceiveProps(nextProps) {
     this.setState({editTopicMode: nextProps.editTopicMode})
-    const handle = this.props.currentUser.handle
-    const newHandle = nextProps.currentUser.handle
-    if (handle === newHandle) {
-      return
-    }
-    this.fetchUserTrait(newHandle)
   }
 
   componentDidUpdate(nextProps) {
     if (nextProps.id !== this.props.id) {
       this.updateHeaderHeight()
     }
-  }
-
-  fetchUserTrait(handle) {
-    getUserTrait(handle).then(resp => {
-      if (this.props.currentUser.handle === handle) {
-        this.setState({avatarUrl: resp.photoUrl})
-      }
-    }).catch(() => {
-      this.setState({avatarUrl: null})
-    })
   }
 
   onEditTopic() {
@@ -108,7 +85,7 @@ class Feed extends React.Component {
       onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, allMembers,
       onEnterFullscreenClick, onExitFullscreenClick, isFullScreen, commentId
     } = this.props
-    const { editTopicMode, headerHeight, avatarUrl } = this.state
+    const { editTopicMode, headerHeight } = this.state
     let authorName = user ? user.firstName : 'Unknown'
     if (authorName && user && user.lastName) {
       authorName += ' ' + user.lastName
@@ -185,7 +162,7 @@ class Feed extends React.Component {
           onAddNewComment={onAddNewComment}
           isLoadingComments={isLoadingComments}
           currentUser={currentUser}
-          avatarUrl={avatarUrl}
+          avatarUrl={currentUser.photoURL}
           comments={comments}
           isAddingComment={isAddingComment}
           onEditMessage={onEditMessage}

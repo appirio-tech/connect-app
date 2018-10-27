@@ -7,9 +7,6 @@ import {
   TC_SYSTEM_USERID,
   TC_CDN_URL
 } from '../config/constants'
-import systemSettings from '../routes/settings/services/settings'
-
-let userTraitsCache = {}
 
 /**
  * Check if a user is a special system user
@@ -36,25 +33,4 @@ export const getAvatarResized = (avatarUrl, size) => {
   }
 
   return avatarUrl
-}
-
-export function clearUserTraits() {
-  userTraitsCache = {}
-}
-
-export function getUserTrait(handle) {
-  return new Promise((resolve, reject) => {
-    if (!handle) {
-      reject()
-    }
-    if (userTraitsCache[handle]) {
-      return resolve(userTraitsCache[handle])
-    }
-    systemSettings.getProfileSettings(handle).then((resp) => {
-      userTraitsCache[handle] = resp
-      resolve(resp)
-    }).catch(() => {
-      reject()
-    })
-  })
 }

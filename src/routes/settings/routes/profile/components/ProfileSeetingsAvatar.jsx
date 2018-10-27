@@ -5,7 +5,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import FileBtn from '../../../../../components/FileBtn/FileBtn'
 import './ProfileSeetingsAvatar.scss'
-import { clearUserTraits } from '../../../../../helpers/tcHelpers'
 
 class ProfileSeetingsAvatar extends React.Component {
   constructor(props) {
@@ -18,7 +17,6 @@ class ProfileSeetingsAvatar extends React.Component {
     if (evt.target.files && evt.target.files.length > 0) {
       const file = evt.target.files[0]
       uploadPhoto(file)
-      clearUserTraits()
     }
   }
 
