@@ -1,6 +1,7 @@
 /**
  * Settings related reducers
  */
+import _ from 'lodash'
 import {
   CHECK_EMAIL_AVAILABILITY_PENDING,
   CHECK_EMAIL_AVAILABILITY_SUCCESS,
@@ -31,11 +32,11 @@ import {
   GET_SYSTEM_SETTINGS_FAILURE,
   RESET_PASSWORD_PENDING,
   RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_FAILURE
+  RESET_PASSWORD_FAILURE,
+  CLEAR_PROFILE_SETTINGS_PHOTO,
 } from '../../../config/constants'
+import { applyProfileSettingsToTraits } from '../helpers/settings'
 
-// TODO initial state with mocked data for demo should be removed
-// once service and actions are implemented
 const initialState = {
   notifications: {
     settings: null,
@@ -53,7 +54,7 @@ const initialState = {
     isEmailChanging: false,
     isPasswordChanging: false,
     passwordSubmitted: false,
-    isResetingPassword: false,
+    isResettingPassword: false,
     passwordResetSubmitted: false,
 
     settings: {}
@@ -62,7 +63,7 @@ const initialState = {
     isLoading: true,
     isUploadingPhoto: false,
     pending: false,
-    settings: {},
+    traits: [],
   }
 }
 
@@ -215,7 +216,7 @@ export default (state = initialState, action) => {
   case RESET_PASSWORD_PENDING:
     return {...state,
       system: {...state.system,
-        isResetingPassword: true,
+        isResettingPassword: true,
         passwordResetSubmitted: false,
       }
     }
@@ -223,7 +224,7 @@ export default (state = initialState, action) => {
   case RESET_PASSWORD_SUCCESS:
     return {...state,
       system: {...state.system,
-        isResetingPassword: false,
+        isResettingPassword: false,
         passwordResetSubmitted: true,
       }
     }
@@ -231,7 +232,7 @@ export default (state = initialState, action) => {
   case RESET_PASSWORD_FAILURE:
     return {...state,
       system: {...state.system,
-        isResetingPassword: false,
+        isResettingPassword: false,
         passwordResetSubmitted: false,
       }
     }
@@ -247,7 +248,7 @@ export default (state = initialState, action) => {
     return {...state,
       profile: {...state.profile,
         isLoading: false,
-        settings: action.payload.data,
+        traits: action.payload.data,
       }
     }
 
@@ -269,7 +270,7 @@ export default (state = initialState, action) => {
     return {...state,
       profile: {...state.profile,
         pending: false,
-        settings: action.payload.data
+        traits: action.payload.data
       }
     }
 
@@ -288,14 +289,20 @@ export default (state = initialState, action) => {
       }
     }
 
-  case SAVE_PROFILE_PHOTO_SUCCESS:
+  case CLEAR_PROFILE_SETTINGS_PHOTO:
+  case SAVE_PROFILE_PHOTO_SUCCESS: {
+    const updatedTraits = applyProfileSettingsToTraits(state.profile.traits, {
+      photoUrl: _.get(action, 'payload.photoUrl', null),
+    })
+
     return {...state,
       profile: {...state.profile,
         pending: false,
         isUploadingPhoto: false,
-        settings: action.payload.data,
+        traits: updatedTraits,
       }
     }
+  }
 
   case SAVE_PROFILE_PHOTO_FAILURE:
     return {...state,

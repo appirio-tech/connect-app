@@ -32,17 +32,24 @@ import {
   RESET_PASSWORD_PENDING,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILURE,
+  CLEAR_PROFILE_SETTINGS_PHOTO,
 } from '../../../config/constants'
-import settingsSerivce from '../services/settings'
+import settingsService from '../services/settings'
+import * as memberService from '../../../api/users'
+import { uploadFileToS3 } from '../../../api/s3'
+import { applyProfileSettingsToTraits } from '../helpers/settings'
 import Alert from 'react-s-alert'
+
 
 export const getSystemSettings = () => (dispatch, getState) => {
   dispatch({
     type: GET_SYSTEM_SETTINGS_PENDING
   })
+
   const state = getState()
   const handle = _.get(state, 'loadUser.user.handle')
-  settingsSerivce.getSystemSettings(handle)
+
+  memberService.getUserProfile(handle)
     .then(data => {
       dispatch({
         type: GET_SYSTEM_SETTINGS_SUCCESS,
@@ -56,9 +63,10 @@ export const checkEmailAvailability = (email) => (dispatch) => {
     type: CHECK_EMAIL_AVAILABILITY_PENDING,
     payload: { email }
   })
-  settingsSerivce.checkEmailValidity(email)
+
+  memberService.checkEmailValidity(email)
     .then(data => {
-      const isEmailAvailable = _.get(data, 'result.content.valid')
+      const isEmailAvailable = _.get(data, 'valid')
       dispatch({
         type: CHECK_EMAIL_AVAILABILITY_SUCCESS,
         payload: {email, isEmailAvailable}
@@ -76,18 +84,20 @@ export const changeEmail = (email) => (dispatch, getState) => {
   dispatch({
     type: CHANGE_EMAIL_PENDING
   })
+
   const state = getState()
   const handle = _.get(state, 'loadUser.user.handle')
   const profile = _.get(state, 'settings.system.settings')
-  const newProfile = {...profile,
-    email,
-  }
-  settingsSerivce.updateSystemSettings(handle, newProfile)
+  // `achievements` and `ratingSummary` are read-only and cannot be updated in member profile
+  const newProfile = _.omit(profile, 'achievements', 'ratingSummary')
+  // as we used `omit` above we have a new object and can directly update it
+  newProfile.email = email
+
+  memberService.updateUserProfile(handle, newProfile)
     .then(data => {
-      const profile = _.get(data, 'result.content')
       dispatch({
         type: CHANGE_EMAIL_SUCCESS,
-        payload: { data: profile }
+        payload: { data }
       })
     })
     .catch(err => {
@@ -102,9 +112,11 @@ export const changePassword = (credential) => (dispatch, getState) => {
   dispatch({
     type: CHANGE_PASSWORD_PENDING
   })
+
   const state = getState()
   const userId = _.get(state, 'settings.system.settings.userId')
-  settingsSerivce.updatePassword(credential, userId)
+
+  memberService.updatePassword(userId, credential)
     .then(() => {
       Alert.success('Password changed successfully')
       dispatch({
@@ -124,9 +136,11 @@ export const resetPassword = () => (dispatch, getState) => {
   dispatch({
     type: RESET_PASSWORD_PENDING
   })
+
   const state = getState()
   const email = _.get(state, 'settings.system.settings.email')
-  settingsSerivce.resetPassword(email)
+
+  memberService.resetPassword(email)
     .then(() => {
       dispatch({
         type: RESET_PASSWORD_SUCCESS
@@ -146,7 +160,7 @@ export const getNotificationSettings = () => (dispatch) => {
     type: GET_NOTIFICATION_SETTINGS_PENDING
   })
 
-  settingsSerivce.getNotificationSettings().then(data => {
+  settingsService.getNotificationSettings().then(data => {
     dispatch({
       type: GET_NOTIFICATION_SETTINGS_SUCCESS,
       payload: { data }
@@ -164,7 +178,7 @@ export const saveNotificationSettings = (data) => (dispatch) => {
     type: SAVE_NOTIFICATION_SETTINGS_PENDING
   })
 
-  settingsSerivce.saveNotificationSettings(data).then(() => {
+  settingsService.saveNotificationSettings(data).then(() => {
     Alert.success('Settings successfully saved.')
     dispatch({
       type: SAVE_NOTIFICATION_SETTINGS_SUCCESS,
@@ -183,29 +197,41 @@ export const saveProfileSettings = (settings) => (dispatch, getState) => {
   dispatch({
     type: SAVE_PROFILE_SETTINGS_PENDING
   })
+
   const state = getState()
   const handle = _.get(state, 'loadUser.user.handle')
-  settingsSerivce.saveProfileSettings(handle, settings).then(data => {
-    Alert.success('Settings successfully saved.')
-    dispatch({
-      type: SAVE_PROFILE_SETTINGS_SUCCESS,
-      payload: { data }
+  const traits = _.get(state, 'settings.profile.traits')
+  const updatedTraits = applyProfileSettingsToTraits(traits, settings)
+
+  memberService.updateMemberTraits(handle, updatedTraits)
+    // TODO, now we don't update store with the data from server as backend returns wrong
+    // data when we update see https://github.com/appirio-tech/ap-member-microservice/issues/165.
+    // So we update the store with the data we sent to the server.
+    .then(() => _.cloneDeep(updatedTraits))
+    .then((data) => {
+      Alert.success('Settings successfully saved.')
+      dispatch({
+        type: SAVE_PROFILE_SETTINGS_SUCCESS,
+        payload: { data }
+      })
     })
-  }).catch((err) => {
-    Alert.error(`Failed to save settings. ${err.message}`)
-    dispatch({
-      type: SAVE_PROFILE_SETTINGS_FAILURE
+    .catch((err) => {
+      Alert.error(`Failed to save settings. ${err.message}`)
+      dispatch({
+        type: SAVE_PROFILE_SETTINGS_FAILURE
+      })
     })
-  })
 }
 
 export const getProfileSettings = () => (dispatch, getState) => {
   dispatch({
     type: GET_PROFILE_SETTINGS_PENDING
   })
+
   const state = getState()
   const handle = _.get(state, 'loadUser.user.handle')
-  settingsSerivce.getProfileSettings(handle).then(data => {
+
+  memberService.getMemberTraits(handle).then(data => {
     dispatch({
       type: GET_PROFILE_SETTINGS_SUCCESS,
       payload: { data }
@@ -222,20 +248,27 @@ export const uploadProfilePhoto = (file) => (dispatch, getState) => {
   dispatch({
     type: SAVE_PROFILE_PHOTO_PENDING
   })
+
   const state = getState()
   const handle = _.get(state, 'loadUser.user.handle')
-  settingsSerivce.uploadProfilePhoto(handle, file)
-    .then(photoUrl => {
-      const settings = _.get(state, 'settings.profile.settings')
-      const newSettings = {...settings,
-        photoUrl
-      }
-      return settingsSerivce.saveProfileSettings(handle, newSettings)
-    }).then(data => {
+
+  memberService.getPreSignedUrl(handle, file)
+    .then(({ preSignedURL, token }) => {
+      return uploadFileToS3(preSignedURL, file)
+        .then(() => memberService.updateMemberPhoto(handle, {
+          contentType: file.type,
+          token,
+        }))
+    }).then(photoUrl => {
       Alert.success('Profile photo uploaded successfully')
+      // clear photo first, otherwise old photo will be there until new one fully loaded
+      // which can take time and give impression that new photo hasn't been loaded
+      dispatch({
+        type: CLEAR_PROFILE_SETTINGS_PHOTO,
+      })
       dispatch({
         type: SAVE_PROFILE_PHOTO_SUCCESS,
-        payload: { data }
+        payload: { photoUrl }
       })
     }).catch(err => {
       Alert.error(`Failed to upload photo. ${err.message}`)

@@ -48,7 +48,7 @@ class ProfileSettingsForm extends Component {
   }
 
   onSubmit(data) {
-    // we have to use inital data as a base for updated data
+    // we have to use initial data as a base for updated data
     // as form could update not all fields, thus they won't be included in `data`
     // for example user avatar is not included in `data` thus will be removed if don't use 
     // this.props.values.settings as a base

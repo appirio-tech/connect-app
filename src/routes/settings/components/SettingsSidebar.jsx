@@ -10,7 +10,7 @@ const settings = [{
   path: '/settings/profile'
 }, {
   name: 'Account and security',
-  path: '/settings/system'
+  path: '/settings/account'
 }, {
   name: 'Notifications',
   path: '/settings/notifications'

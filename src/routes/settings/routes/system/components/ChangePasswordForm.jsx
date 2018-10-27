@@ -132,7 +132,6 @@ class ChangePasswordForm extends React.Component {
     const { isPasswordChanging } = this.props
     const { isValid, isFocused } = this.state
     const isDisabledSubmit = !isValid || isPasswordChanging
-    const showActions = isFocused && !isPasswordChanging
     return (
       <Formsy.Form
         className="change-password-form"
@@ -149,22 +148,18 @@ class ChangePasswordForm extends React.Component {
         }, 'Password should be 8-64 characters, use A-Z, a-z, 0-9, ! ? . = _')}
         {this.getPasswordField('verifyPassword', 'Verify new password', null, 'Passwords do not match')}
 
-        { showActions && <div className="controls">
-          <button onClick={this.onCancel} className="tc-btn tc-btn-default" >Cancel</button>
-          <button type="submit" className="tc-btn tc-btn-primary" disabled={isDisabledSubmit}>Change Password</button>
-        </div>
-        }
-        { isPasswordChanging && <div className="controls">
-          <button className="tc-btn tc-btn-primary" disabled>Saving changes...</button>
-        </div>
+        { isFocused && 
+          <div className="controls">
+            {!isPasswordChanging && <button onClick={this.onCancel} className="tc-btn tc-btn-default">Cancel</button>}
+            <button type="submit" className="tc-btn tc-btn-primary" disabled={isDisabledSubmit}>{isPasswordChanging ? 'Saving changes...' : 'Change Password'}</button>
+          </div>
         }
       </Formsy.Form>
     )
   }
 
   resetPasswordForm() {
-    const { isResetingPassword, passwordResetSubmitted, onReset } = this.props
-    const showActions = !isResetingPassword && !passwordResetSubmitted
+    const { isResettingPassword, passwordResetSubmitted, onReset } = this.props
     const title = (passwordResetSubmitted)
       ? 'We sent you password reset instructions' : 'Reset your password'
     return (
@@ -183,14 +178,11 @@ class ChangePasswordForm extends React.Component {
             Please follow the instruction in the email
           </span>}
         </div>
-        { showActions && <div className="controls">
-          <button onClick={this.onCancel} className="tc-btn tc-btn-default" >Cancel</button>
-          <button onClick={onReset} className="tc-btn tc-btn-primary">Reset Password</button>
-        </div>
-        }
-        { isResetingPassword && <div className="controls">
-          <button className="tc-btn tc-btn-primary" disabled>Reseting your password...</button>
-        </div>
+        { !passwordResetSubmitted && 
+          <div className="controls">
+            {!isResettingPassword && <button onClick={this.onCancel} className="tc-btn tc-btn-default">Cancel</button>}
+            <button onClick={onReset} className="tc-btn tc-btn-primary" disabled={isResettingPassword}>{isResettingPassword ? 'Resetting your password...' : 'Reset Password'}</button>
+          </div>
         }
       </div>
     )
@@ -200,7 +192,7 @@ class ChangePasswordForm extends React.Component {
     const { isFocused, showReset } = this.state
     const formClass = (isFocused) ? 'focused-container' : ''
     return (
-      <div className={`conttainer ${formClass}`}>
+      <div className={formClass}>
         {!showReset && this.passwordForm()}
         {showReset && this.resetPasswordForm()}
       </div>
@@ -212,7 +204,7 @@ ChangePasswordForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onReset: PropTypes.func.isRequired,
   passwordSubmitted: PropTypes.bool,
-  isResetingPassword: PropTypes.bool,
+  isResettingPassword: PropTypes.bool,
   isPasswordChanging: PropTypes.bool
 }
 
