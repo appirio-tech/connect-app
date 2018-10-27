@@ -4,9 +4,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FileBtn from '../../../../../components/FileBtn/FileBtn'
-import './ProfileSeetingsAvatar.scss'
+import './ProfileSettingsAvatar.scss'
 
-class ProfileSeetingsAvatar extends React.Component {
+class ProfileSettingsAvatar extends React.Component {
   constructor(props) {
     super(props)
     this.onFileChange = this.onFileChange.bind(this)
@@ -39,10 +39,10 @@ class ProfileSeetingsAvatar extends React.Component {
   }
 }
 
-ProfileSeetingsAvatar.propTypes = {
+ProfileSettingsAvatar.propTypes = {
   photoUrl: PropTypes.string,
   isUploading: PropTypes.bool,
   uploadPhoto: PropTypes.func
 }
 
-export default ProfileSeetingsAvatar
+export default ProfileSettingsAvatar

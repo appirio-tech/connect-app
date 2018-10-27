@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
 const Formsy = FormsyForm.Formsy
-import ProfileSeetingsAvatar from './ProfileSeetingsAvatar'
+import ProfileSettingsAvatar from './ProfileSettingsAvatar'
 import './ProfileSettingsForm.scss'
 
 const companySizeRadioOptions = ['1-15', '16-50', '51-500', '500+']
@@ -85,7 +85,7 @@ class ProfileSettingsForm extends Component {
         <div className="section-heading">Personal information</div>
         <div className="field">
           <div className="label">Avatar</div>
-          <ProfileSeetingsAvatar
+          <ProfileSettingsAvatar
             isUploading={this.props.values.isUploadingPhoto}
             photoUrl={this.props.values.settings.photoUrl}
             uploadPhoto={this.props.uploadPhoto}
