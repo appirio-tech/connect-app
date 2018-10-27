@@ -32,6 +32,7 @@ import {
   RESET_PASSWORD_PENDING,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILURE,
+  CLEAR_PROFILE_SETTINGS_PHOTO,
 } from '../../../config/constants'
 import settingsService from '../services/settings'
 import * as memberService from '../../../api/users'
@@ -252,6 +253,11 @@ export const uploadProfilePhoto = (file) => (dispatch, getState) => {
         }))
     }).then(photoUrl => {
       Alert.success('Profile photo uploaded successfully')
+      // clear photo first, otherwise old photo will be there until new one fully loaded
+      // which can take time and give impression that new photo hasn't been loaded
+      dispatch({
+        type: CLEAR_PROFILE_SETTINGS_PHOTO,
+      })
       dispatch({
         type: SAVE_PROFILE_PHOTO_SUCCESS,
         payload: { photoUrl }

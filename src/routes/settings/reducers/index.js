@@ -1,6 +1,7 @@
 /**
  * Settings related reducers
  */
+import _ from 'lodash'
 import {
   CHECK_EMAIL_AVAILABILITY_PENDING,
   CHECK_EMAIL_AVAILABILITY_SUCCESS,
@@ -31,9 +32,9 @@ import {
   GET_SYSTEM_SETTINGS_FAILURE,
   RESET_PASSWORD_PENDING,
   RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_FAILURE
+  RESET_PASSWORD_FAILURE,
+  CLEAR_PROFILE_SETTINGS_PHOTO,
 } from '../../../config/constants'
-
 import { applyProfileSettingsToTraits } from '../helpers/settings'
 
 const initialState = {
@@ -288,9 +289,10 @@ export default (state = initialState, action) => {
       }
     }
 
+  case CLEAR_PROFILE_SETTINGS_PHOTO:
   case SAVE_PROFILE_PHOTO_SUCCESS: {
     const updatedTraits = applyProfileSettingsToTraits(state.profile.traits, {
-      photoUrl: action.payload.photoUrl,
+      photoUrl: _.get(action, 'payload.photoUrl', null),
     })
 
     return {...state,

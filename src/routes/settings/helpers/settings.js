@@ -64,15 +64,15 @@ export const applyProfileSettingsToTraits = (traits, profileSettings) => {
     // to the `basic_info` we put just photoUrl, firstName and lastName
     if (trait.traitId === 'basic_info') {
       const updatedTrait = {...trait}
-      const [firstName, lastName] = _.get(profileSettings, 'firstNLastName', '').split(/\s+/)
+      const [firstName, lastName] = profileSettings.firstNLastName ? profileSettings.firstNLastName.split(/\s+/) : []
       const photoURL = profileSettings.photoUrl
 
       // update only if new values are defined
-      const updatedProps = _.pickBy({
+      const updatedProps = _.omitBy({
         photoURL,
         firstName,
         lastName,
-      }, _.identity)
+      }, _.isUndefined)
       
       updatedTrait.traits = {
         ...trait.traits,
