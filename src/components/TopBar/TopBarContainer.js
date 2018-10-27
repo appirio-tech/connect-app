@@ -61,9 +61,9 @@ class TopBarContainer extends React.Component {
     const { user, toolbar, userRoles, isPowerUser } = this.props
 
     const userHandle  = _.get(user, 'handle')
-    const userImage = _.get(user, 'profile.photoURL')
-    const userFirstName = _.get(user, 'profile.firstName')
-    const userLastName = _.get(user, 'profile.lastName')
+    const userImage = _.get(user, 'photoURL')
+    const userFirstName = _.get(user, 'firstName')
+    const userLastName = _.get(user, 'lastName')
     let userName = userFirstName
     if (userName && userLastName) {
       userName += ' ' + userLastName
