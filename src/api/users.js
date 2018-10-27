@@ -1,15 +1,34 @@
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL } from '../config/constants'
+import { RESET_PASSWORD_URL } from '../../config/constants'
 
 /**
  * Get a user based on it's handle/username
  * 
- * @param  {integer} handle unique identifier of the user
- * @return {object}           user returned by api
+ * @param {String} handle user handle
+ * 
+ * @returns {Promise<Object>} user profile data
  */
 export function getUserProfile(handle) {
   return axios.get(`${TC_API_URL}/v3/members/${handle}/`)
+    .then(resp => {
+      return _.get(resp.data, 'result.content', {})
+    })
+}
+
+/**
+ * Update user profile
+ * 
+ * @param {String} handle         user handle
+ * @param {Object} updatedProfile updated user data
+ * 
+ * @returns {Promise<Object>} user profile data
+ */
+export function updateUserProfile(handle, updatedProfile) {
+  return axios.put(`${TC_API_URL}/v3/members/${handle}/`, { 
+    param: updatedProfile 
+  })
     .then(resp => {
       return _.get(resp.data, 'result.content', {})
     })
@@ -20,7 +39,7 @@ export function getUserProfile(handle) {
  * 
  * @param {String} handle member handle
  * 
- * @returns {Object}      member traits
+ * @returns {Promise<Array>} member traits
  */
 export const getMemberTraits = (handle) => {
   return axios.get(`${TC_API_URL}/v3/members/${handle}/traits`)
@@ -33,7 +52,7 @@ export const getMemberTraits = (handle) => {
  * @param {String} handle        member handle
  * @param {Array}  updatedTraits list of updated traits
  * 
- * @returns {Promise<Array>}     member traits
+ * @returns {Promise<Array>} member traits
  */
 export const updateMemberTraits = (handle, updatedTraits) => {
   return axios.put(`${TC_API_URL}/v3/members/${handle}/traits`, {
@@ -73,5 +92,44 @@ export const getPreSignedUrl = (handle, file) => {
       contentType: file.type 
     } 
   })
+    .then(resp => _.get(resp.data, 'result.content', {}))
+}
+
+/**
+ * Check if email is available to be used for a user
+ * 
+ * @param {String} email email to validate
+ * 
+ * @returns {Promise<Object>} response body
+ */
+export const checkEmailValidity = (email) => {
+  return axios.get(`${TC_API_URL}/v3/users/validateEmail?email=${email}`)
+    .then(resp => _.get(resp.data, 'result.content', {}))
+}
+
+/**
+ * Update user password
+ * 
+ * @param {Number} userId     user id
+ * @param {Object} credential user credentials old and new one
+ * 
+ * @returns {Promise<Object>} response body
+ */
+export const updatePassword = (userId, credential) => {
+  return axios.patch(`${TC_API_URL}/v3/users/${userId}`, { 
+    param: { credential } 
+  })
+    .then(resp => _.get(resp.data, 'result.content', {}))
+}
+
+/**
+ * Send reset password email to the user
+ * 
+ * @param {String} email user email
+ * 
+ * @returns {Promise<Object>} response body
+ */
+export const resetPassword = (email) => {
+  return axios.get(`${TC_API_URL}/v3/users/resetToken?email=${encodeURIComponent(email)}&resetPasswordUrlPrefix=${encodeURIComponent(RESET_PASSWORD_URL)}`)
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
