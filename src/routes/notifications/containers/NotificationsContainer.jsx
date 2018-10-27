@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import Sticky from 'react-stickynode'
+import Sticky from '../../../components/Sticky'
 import { getNotifications, setNotificationsFilterBy, markAllNotificationsRead,
   toggleNotificationRead, viewOlderNotifications, toggleBundledNotificationRead, 
   hideOlderNotifications, toggleNotificationSeen } from '../actions'

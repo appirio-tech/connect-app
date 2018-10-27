@@ -28,7 +28,7 @@ import { addProductAttachment, updateProductAttachment, removeProductAttachment 
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import FeedContainer from './FeedContainer'
-import Sticky from 'react-stickynode'
+import Sticky from '../../../components/Sticky'
 import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
@@ -59,6 +59,20 @@ class DashboardContainer extends React.Component {
       this.props.toggleBundledNotificationRead(notification.id, notification.bundledIds)
     } else {
       this.props.toggleNotificationRead(notification.id)
+    }
+  }
+
+  componentDidMount() {
+    // if the user is a customer and its not a direct link to a particular phase
+    // then by default expand all phases which are active
+    const { isCustomerUser, expandProjectPhase } = this.props
+
+    if (isCustomerUser) {
+      _.forEach(this.props.phases, phase => {
+        if (phase.status === PHASE_STATUS_ACTIVE) {
+          expandProjectPhase(phase.id)
+        }
+      })
     }
   }
 

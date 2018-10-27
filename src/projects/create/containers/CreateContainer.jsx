@@ -45,7 +45,7 @@ const spinner = spinnerWhileLoading(props =>
   !props.processing &&
   !props.templates.isLoading &&
   props.templates.projectTemplates !== null &&
-  props.templates.projectCategories !== null
+  props.templates.projectTypes !== null
 )
 
 const enhance = compose(errorHandler, spinner)
@@ -89,15 +89,15 @@ class CreateContainer extends React.Component {
   componentWillReceiveProps(nextProps) {
     const projectId = _.get(this.props, 'project.id', null)
     const nextProjectId = _.get(nextProps, 'project.id', null)
-    const { templates: { projectTemplates, projectCategories }, match: { params }} = nextProps
+    const { templates: { projectTemplates, projectTypes }, match: { params }} = nextProps
 
     // if templates are already loaded and project type is defined in URL
-    if (projectTemplates && projectCategories && params && params.project) {
-      const projectTypes = projectTemplates.concat(projectCategories)
+    if (projectTemplates && projectTypes && params && params.project) {
+      const allProjectTypes = projectTemplates.concat(projectTypes)
       const projectTypeKey = params.project
-      let projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
+      let projectType = getProjectTypeByKey(allProjectTypes, projectTypeKey)
       if (!projectType) {
-        projectType = getProjectTypeByAlias(projectTypes, projectTypeKey)
+        projectType = getProjectTypeByAlias(allProjectTypes, projectTypeKey)
       }
       if (projectType) {
         this.setState({ projectType })
@@ -271,7 +271,7 @@ class CreateContainer extends React.Component {
   }
 
   createContainerView() {
-    const { templates: { projectTemplates, projectCategories: projectTypes }} = this.props
+    const { templates: { projectTemplates, projectTypes }} = this.props
 
     return (
       <EnhancedCreateView
@@ -342,7 +342,7 @@ class CreateContainer extends React.Component {
         }
         }
         projectTemplates={this.props.templates.projectTemplates}
-        projectTypes={this.props.templates.projectCategories}
+        projectTypes={this.props.templates.projectTypes}
       />
     )
   }

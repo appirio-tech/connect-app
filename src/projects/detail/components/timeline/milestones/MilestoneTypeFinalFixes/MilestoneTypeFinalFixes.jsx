@@ -5,7 +5,6 @@ import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
-import moment from 'moment'
 
 import ProjectProgress from '../../../ProjectProgress'
 import MilestonePostEditText from '../../MilestonePostEditText'
@@ -15,7 +14,7 @@ import LinkList from '../../LinkList'
 import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
 
 import { MILESTONE_STATUS  } from '../../../../../../config/constants'
-import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
+import { getMilestoneStatusText, getDaysLeft, getTotalDays, getProgressPercent } from '../../../../../../helpers/milestoneHelper'
 
 import './MilestoneTypeFinalFixes.scss'
 
@@ -23,9 +22,15 @@ class MilestoneTypeFinalFixes extends React.Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      showExtensionRequestSection: true
+    }
+
     this.updatedUrl = this.updatedUrl.bind(this)
     this.removeUrl = this.removeUrl.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
+    this.onFormAddOpen = this.onFormAddOpen.bind(this)
+    this.onFormAddCancel = this.onFormAddCancel.bind(this)
   }
 
   /**update link */
@@ -46,6 +51,14 @@ class MilestoneTypeFinalFixes extends React.Component {
     updateMilestoneContent({
       links
     })
+  }
+
+  onFormAddOpen() {
+    this.setState({showExtensionRequestSection: false })
+  }
+
+  onFormAddCancel() {
+    this.setState({showExtensionRequestSection: true })
   }
 
   removeUrl(linkIndex) {
@@ -81,21 +94,16 @@ class MilestoneTypeFinalFixes extends React.Component {
     const finalFixRequests = _.get(milestone, 'details.content.finalFixRequests', [])
     const links = _.get(milestone, 'details.content.links', [])
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
-    const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
 
-    const startDate = moment(milestone.actualStartDate || milestone.startDate)
-    const endDate = moment(milestone.startDate).add(milestone.duration - 1, 'days')
-    const daysLeft = endDate.diff(today, 'days')
-    const totalDays = endDate.diff(startDate, 'days')
+    const daysLeft = getDaysLeft(milestone)
+    const totalDays = getTotalDays(milestone)
 
     const progressText = daysLeft > 0
       ? `${daysLeft} days until final fixes completed`
       : `${-daysLeft} days final fixes are delayed`
 
-    const progressPercent = daysLeft > 0
-      ? (totalDays - daysLeft) / totalDays * 100
-      : 100
-
+    const progressPercent = getProgressPercent(totalDays, daysLeft)
+    const { showExtensionRequestSection } = this.state
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -140,6 +148,8 @@ class MilestoneTypeFinalFixes extends React.Component {
               formUpdateTitle="Editing a deliverable"
               formUpdateButtonTitle="Save changes"
               isUpdating={milestone.isUpdating}
+              onFormAddOpen={this.onFormAddOpen}
+              onFormAddCancel={this.onFormAddCancel}
               canAddLink
             />
           </DotIndicator>
@@ -164,7 +174,7 @@ class MilestoneTypeFinalFixes extends React.Component {
         {
           isActive &&
           !extensionRequestDialog &&
-          !currentUser.isCustomer &&
+          !currentUser.isCustomer && showExtensionRequestSection &&
         (
           <DotIndicator hideLine>
             <div styleName="top-space">
