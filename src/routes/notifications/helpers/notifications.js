@@ -60,6 +60,46 @@ const handlebarsFallbackHelper = (value, fallbackValue) => {
 Handlebars.registerHelper('showMore', handlebarsShowMoreHelper)
 Handlebars.registerHelper('fallback', handlebarsFallbackHelper)
 
+export const renderGoTo = (goToHandlebars, contents) => (
+  Handlebars.compile(goToHandlebars)(contents)
+)
+
+/**
+ * Filter notifications by criteria
+ * 
+ * @param {Array}  notifications notifications list
+ * @param {Object} criteria      criteria to filter notifications
+ * 
+ * @returns {Array} notifiations which meet the criteria
+ */
+export const filterNotificationsByCriteria = (notifications, criteria) => {
+  return notifications.filter((notification) => isNotificationMeetCriteria(notification, criteria))
+}
+
+export const isSubEqual = (object, criteria) => {
+  let isEqual = true
+
+  _.forOwn(criteria, (value, key) => {
+    if (_.isObject(value)) {
+      isEqual = isSubEqual(object[key], value)
+    } else {
+      isEqual = value === object[key]
+    }
+    
+    return isEqual
+  })
+
+  return isEqual
+}
+
+export const isNotificationMeetCriteria = (notification, criteria) => {
+  if (_.isArray(criteria)) {
+    return _.some(criteria, isSubEqual.bind(null, notification))
+  }
+
+  return isSubEqual(notification, criteria)
+}
+
 /**
  * Get notification filters by sources
  *
@@ -378,8 +418,7 @@ export const prepareNotifications = (rawNotifications) => {
     // populate notification data
     notification.type = notificationRule.type
     if (notificationRule.goTo){
-      const renderGoTo = Handlebars.compile(notificationRule.goTo)
-      notification.goto = renderGoTo(notification.contents)
+      notification.goto = renderGoTo(notificationRule.goTo, notification.contents)
     }
 
     return {

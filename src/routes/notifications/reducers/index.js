@@ -14,7 +14,10 @@ import {
   HIDE_OLDER_NOTIFICATIONS_SUCCESS,
   NOTIFICATIONS_PENDING,
   TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE,
-  TOGGLE_NOTIFICATIONS_DROPDOWN_WEB
+  TOGGLE_NOTIFICATIONS_DROPDOWN_WEB,
+  MARK_NOTIFICATIONS_READ,
+  START_READING_NOTIFICATIONS,
+  STOP_READING_NOTIFICATIONS,
 } from '../../../config/constants'
 import _ from 'lodash'
 
@@ -31,7 +34,8 @@ const initialState = {
   pending: false,
   // indicates if notifications dropdown opened for mobile devices
   isDropdownMobileOpen: false,
-  isDropdownWebOpen: false
+  isDropdownWebOpen: false,
+  readers: {},
 }
 
 // get sources from notifications
@@ -107,6 +111,35 @@ export default (state = initialState, action) => {
     }
     newState.sources = getSources(newState.notifications)
     return newState
+  }
+
+  case MARK_NOTIFICATIONS_READ: {
+    const newState = {
+      ...state,
+      pending: false,
+      notifications: state.notifications.map(n => (
+        _.includes(action.payload, n.id) ? { ...n, isRead: true } : n
+      ))
+    }
+    newState.sources = getSources(newState.notifications)
+    return newState
+  }
+
+  case START_READING_NOTIFICATIONS: {
+    return {
+      ...state,
+      readers: {
+        ...state.readers,
+        [action.payload.uid]: action.payload.criteria
+      }
+    }
+  }
+
+  case STOP_READING_NOTIFICATIONS: {
+    return {
+      ...state,
+      readers: _.omit(state.readers, action.payload.uid)
+    }
   }
 
   case VIEW_OLDER_NOTIFICATIONS_SUCCESS:
