@@ -23,7 +23,7 @@
 
           .project-name {
              @include roboto-medium;
-            font-size: $tc-heading-sm;
+            font-size: $tc-heading-xs;
             line-height: $base-unit * 4;
             color: $tc-black;
             word-break: break-all;
