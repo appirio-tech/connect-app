@@ -102,7 +102,7 @@ class ChangeEmailForm extends React.Component {
     const isCheckingCurrentEmail = checkingEmail === currentEmail
     const isEmailChanged = settings.email !== currentEmail
     const isDisabledSubmit = !isValid || !currentEmailAvailable || !isEmailChanged || isEmailChanging
-    const hideActions = !isFocused || isEmailChanging || emailSubmitted
+    const hideActions = !isFocused || emailSubmitted
     let formStyle = ''
 
     if (isFocused) {
@@ -147,7 +147,7 @@ class ChangeEmailForm extends React.Component {
                 <LoadingIndicator isSmall />
               </div>
             )}
-            { isFocused && isEmailChanged && currentEmailAvailable && (
+            { (isFocused && isEmailChanged && currentEmailAvailable || isEmailChanging) && (
               <div className="field-status success-status">
                 Email is available
               </div>
@@ -161,13 +161,8 @@ class ChangeEmailForm extends React.Component {
         </div>
         { !hideActions &&
           <div className="controls">
-            <button onClick={this.cancel} className="tc-btn tc-btn-default">Cancel</button>
-            <button type="submit" className="tc-btn tc-btn-primary" disabled={isDisabledSubmit}>Change Email</button>
-          </div>
-        }
-        { isEmailChanging &&
-          <div className="controls">
-            <button className="tc-btn tc-btn-primary" disabled>Saving...</button>
+            {!isEmailChanging && <button onClick={this.cancel} className="tc-btn tc-btn-default">Cancel</button>}
+            <button type="submit" className="tc-btn tc-btn-primary" disabled={isDisabledSubmit}>{isEmailChanging ? 'Saving...' : 'Change Email'}</button>
           </div>
         }
       </Formsy.Form>

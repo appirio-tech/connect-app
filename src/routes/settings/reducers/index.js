@@ -54,7 +54,7 @@ const initialState = {
     isEmailChanging: false,
     isPasswordChanging: false,
     passwordSubmitted: false,
-    isResetingPassword: false,
+    isResettingPassword: false,
     passwordResetSubmitted: false,
 
     settings: {}
@@ -216,7 +216,7 @@ export default (state = initialState, action) => {
   case RESET_PASSWORD_PENDING:
     return {...state,
       system: {...state.system,
-        isResetingPassword: true,
+        isResettingPassword: true,
         passwordResetSubmitted: false,
       }
     }
@@ -224,7 +224,7 @@ export default (state = initialState, action) => {
   case RESET_PASSWORD_SUCCESS:
     return {...state,
       system: {...state.system,
-        isResetingPassword: false,
+        isResettingPassword: false,
         passwordResetSubmitted: true,
       }
     }
@@ -232,7 +232,7 @@ export default (state = initialState, action) => {
   case RESET_PASSWORD_FAILURE:
     return {...state,
       system: {...state.system,
-        isResetingPassword: false,
+        isResettingPassword: false,
         passwordResetSubmitted: false,
       }
     }
