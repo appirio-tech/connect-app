@@ -115,7 +115,7 @@ const NotificationsContainerView = (props) => {
       <aside className="filters">
         <Sticky top={90}>
           <SideFilter
-            filterSections={getNotificationsFilters(sources)}
+            filterSections={getNotificationsFilters(allNotificationsBySources)}
             selectedFilter={filterBy}
             onFilterItemClick={setNotificationsFilterBy}
           >
@@ -148,12 +148,12 @@ class NotificationsContainer extends Component {
   render() {
     const { notifications, ...restProps } = this.props
     const preRenderedNotifications = preRenderNotifications(notifications)
-    
+
     return (
       <NotificationsContainerView
         {...{
           ...restProps, 
-          notifications: preRenderedNotifications
+          notifications: preRenderedNotifications,
         }}
       />
     )

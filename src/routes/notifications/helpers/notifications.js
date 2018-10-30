@@ -158,11 +158,14 @@ const compareSourcesByLastNotificationDate = (s1, s2) => {
  * @return {Array}                list of sources with related notifications
  */
 export const splitNotificationsBySources = (sources, notifications) => {
-  const notificationsBySources = []
-
-  sources.filter(source => source.total > 0).forEach(source => {
-    source.notifications = _.filter(notifications, n => n.sourceId === source.id)
-    notificationsBySources.push(source)
+  const notificationsBySources = sources.map(source => {
+    const sourceNotifications = _.filter(notifications, { sourceId: source.id })
+    
+    return ({
+      ...source,
+      notifications: sourceNotifications,
+      total: sourceNotifications.length,
+    })
   })
 
   // source that has the most recent notification should be on top
