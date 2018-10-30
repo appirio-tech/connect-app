@@ -85,6 +85,10 @@ class FeedView extends React.Component {
     window.removeEventListener('beforeunload', this.onLeave)
   }
 
+  shouldComponentUpdate(nextProps) {
+    console.warn('shouldComponentUpdate')
+  }
+
   // Notify user if they navigate away while the form is modified.
   onLeave(e = {}) {
     if (this.isChanged()) {
@@ -366,6 +370,7 @@ class FeedView extends React.Component {
   }
 
   render () {
+    console.warn('FeedContainer render')
     const {currentUser, currentMemberRole, isCreatingFeed, error, allMembers,
       toggleNotificationRead, notifications, project, isSuperUser } = this.props
     const { feeds, isNewPostMobileOpen, fullscreenFeedId } = this.state

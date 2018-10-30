@@ -435,11 +435,18 @@ export const prepareNotifications = (rawNotifications) => {
   return notifications
 }
 
+/**
+ * Bundle notifications and renders notifications texts
+ * 
+ * @param {Array} notifications notifications list
+ * 
+ * @returns {Array} notifications list with rendered texts
+ */
 export const preRenderNotifications = (notifications) => {
   // we will only render notification which has rules
   const notificationsWithRules = _.compact(
     notifications.map((notification) => notification.rule ? {
-      notification,
+      notification: _.omit(notification, 'rule'),
       notificationRule: notification.rule,
     } : null)
   )

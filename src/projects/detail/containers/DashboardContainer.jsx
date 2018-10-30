@@ -12,6 +12,7 @@ import {
   filterReadNotifications,
   filterNotificationsByProjectId,
   filterProjectNotifications,
+  preRenderNotifications,
 } from '../../../routes/notifications/helpers/notifications'
 import { toggleNotificationRead, toggleBundledNotificationRead } from '../../../routes/notifications/actions'
 import {
@@ -111,7 +112,7 @@ class DashboardContainer extends React.Component {
     } = this.props
 
     // system notifications
-    const notReadNotifications = filterReadNotifications(notifications.notifications)
+    const notReadNotifications = filterReadNotifications(notifications)
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
     const sortedUnreadProjectUpdates = _.orderBy(unreadProjectUpdate, ['date'], ['desc'])
 
@@ -205,7 +206,7 @@ class DashboardContainer extends React.Component {
 }
 
 const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics }) => ({
-  notifications,
+  notifications: preRenderNotifications(notifications.notifications),
   productTemplates: templates.productTemplates,
   isProcessing: projectState.processing,
   phases: projectState.phases,
