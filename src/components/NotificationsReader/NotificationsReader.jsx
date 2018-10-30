@@ -7,25 +7,13 @@
 import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
-import { startReadingNotifications, stopReadingNotifications } from '../../routes/notifications/actions'
+import { markNotificationsReadByCriteria } from '../../routes/notifications/actions'
 
 class NotificationsReader extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.notificationsReaderUid = null
-  }
-
   componentWillMount() {
-    const { id, criteria, startReadingNotifications } = this.props
+    const { criteria } = this.props
 
-    this.notificationsReaderUid = startReadingNotifications(criteria, id)
-  }
-
-  componentWillUnmount() {
-    const { stopReadingNotifications } = this.props
-
-    stopReadingNotifications(this.notificationsReaderUid)
+    markNotificationsReadByCriteria(criteria)
   }
 
   render() {
@@ -43,8 +31,7 @@ NotificationsReader.propTypes = {
 const mapStateToProps = () => ({})
 
 const mapDispatchToProps = {
-  startReadingNotifications,
-  stopReadingNotifications,
+  markNotificationsReadByCriteria,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsReader)

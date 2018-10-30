@@ -16,8 +16,6 @@ import {
   TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE,
   TOGGLE_NOTIFICATIONS_DROPDOWN_WEB,
   MARK_NOTIFICATIONS_READ,
-  START_READING_NOTIFICATIONS,
-  STOP_READING_NOTIFICATIONS,
 } from '../../../config/constants'
 import _ from 'lodash'
 
@@ -118,23 +116,6 @@ export default (state = initialState, action) => {
       ))
     }
     return newState
-  }
-
-  case START_READING_NOTIFICATIONS: {
-    return {
-      ...state,
-      readers: {
-        ...state.readers,
-        [action.payload.uid]: action.payload.criteria
-      }
-    }
-  }
-
-  case STOP_READING_NOTIFICATIONS: {
-    return {
-      ...state,
-      readers: _.omit(state.readers, action.payload.uid)
-    }
   }
 
   case VIEW_OLDER_NOTIFICATIONS_SUCCESS:
