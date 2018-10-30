@@ -1,17 +1,8 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
-  //TODO  Additional variables - need to find a home for these
-  // FIXME: remove non-standard variables! Deep nesting, non-standard line-height;
+  // FIXME: Deep nesting, non-standard line-height;
   // FIXME: non-standard units (use $base-unit and $corner-radius)
-  $gray-color: $tc-gray-50;
-  $title-color: $tc-gray-80;
-  $hr-color-base: $tc-black;
-  $hr-color-darker: lighten($hr-color-base, 13.5%);
-  $hr-color-dark: lighten($hr-color-base, 20%);
-  $hr-color: lighten($hr-color-base, 33.5%);
-  $hr-color-light: lighten($hr-color-base, 46.7%);
-  $hr-color-lighter: lighten($hr-color-base, 93.5%);
 
   .projectSpecSidebar {
     padding: 20px 0;
@@ -79,7 +70,7 @@
         display: block;
         height: 1px;
         border: 0;
-        border-top: 1px solid $hr-color-lighter;
+        border-top: 1px solid $tc-gray-30;
         margin: 1em 0;
         padding: 0;
 
@@ -92,7 +83,7 @@
         @include roboto;
         font-size: 13px;
         line-height: 25px;
-        color: $gray-color;
+        color: $tc-gray-50;
       }
     }
 
