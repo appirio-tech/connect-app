@@ -140,7 +140,8 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userHandle}}</strong> left a project',
       shouldBundle: true,
       bundledText: '{{bundledCount}} team members left your project',
-      projectRoles: [PROJECT_ROLE_MANAGER]
+      projectRoles: [PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PROJECT_DASHBOARD
     }]
   }, {
     version: 2,
@@ -150,7 +151,8 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userFullName}}</strong> left a project',
       shouldBundle: true,
       bundledText: '{{bundledCount}} team members left your project',
-      projectRoles: [PROJECT_ROLE_MANAGER]
+      projectRoles: [PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
 
@@ -161,7 +163,8 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userHandle}}</strong> was removed from project',
       shouldBundle: true,
       bundledText: '{{bundledCount}} team members were removed from your project',
-      projectRoles: [PROJECT_ROLE_MANAGER]
+      projectRoles: [PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'You were removed from a project',
       toUserHandle: true
@@ -174,7 +177,8 @@ export const NOTIFICATIONS = [
       text: '<strong>{{userFullName}}</strong> was removed from project',
       shouldBundle: true,
       bundledText: '{{bundledCount}} team members were removed from your project',
-      projectRoles: [PROJECT_ROLE_MANAGER]
+      projectRoles: [PROJECT_ROLE_MANAGER],
+      goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'You were removed from a project',
       toUserHandle: true
