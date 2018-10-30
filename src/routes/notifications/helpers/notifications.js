@@ -393,10 +393,10 @@ const bundleNotifications = (notificationsWithRules) => {
  *
  * @param  {Array} rawNotifications notifications list
  *
- * @return {Array}               notification list
+ * @return {Array} notification list
  */
 export const prepareNotifications = (rawNotifications) => {
-  const notificationsWithRules = _.compact(rawNotifications.map((rawNotification) => ({
+  const notifications = rawNotifications.map((rawNotification) => ({
     id: `${rawNotification.id}`,
     sourceId: rawNotification.contents.projectId ? `${rawNotification.contents.projectId}` : 'global',
     sourceName: rawNotification.contents.projectId ? (rawNotification.contents.projectName || 'project') : 'Global',
@@ -406,26 +406,40 @@ export const prepareNotifications = (rawNotifications) => {
     seen: rawNotification.seen,
     contents: rawNotification.contents,
     version: rawNotification.version
-  })).map((notification) => {
+  }))
+  
+  // populate notifications with additional properties
+  // - type
+  // - goto
+  // - rule
+  notifications.forEach((notification) => {
     const notificationRule = getNotificationRule(notification)
 
-    // if rule for notification is not found, skip such notification
+    // if rule for notification is not found show a warning for now as such notification cannot be displayed
     if (!notificationRule) {
       console.warn(`Cannot find notification rule for eventType '${notification.eventType}' version '${notification.version}'.`)
-      return null
+    } else {
+      // populate notification data
+      notification.type = notificationRule.type
+      if (notificationRule.goTo) {
+        notification.goto = renderGoTo(notificationRule.goTo, notification.contents)
+      }
+  
+      notification.rule = notificationRule
     }
+  })
 
-    // populate notification data
-    notification.type = notificationRule.type
-    if (notificationRule.goTo){
-      notification.goto = renderGoTo(notificationRule.goTo, notification.contents)
-    }
+  return notifications
+}
 
-    return {
+export const preRenderNotifications = (notifications) => {
+  // we will only render notification which has rules
+  const notificationsWithRules = _.compact(
+    notifications.map((notification) => notification.rule ? {
       notification,
-      notificationRule
-    }
-  }))
+      notificationRule: notification.rule,
+    } : null)
+  )
 
   const bundledNotificationsWithRules = bundleNotifications(notificationsWithRules)
 
@@ -441,15 +455,15 @@ export const prepareNotifications = (rawNotifications) => {
     notification.text = renderText(notification.contents)
   })
 
-  const notifications = _.map(bundledNotificationsWithRules, 'notification')
-
+  const preRenderedNotifications = _.map(bundledNotificationsWithRules, 'notification')
+  
   // sort notifications by date (newer first)
-  notifications.sort((n1, n2) => {
+  preRenderedNotifications.sort((n1, n2) => {
     const date1 = new Date(n1.date).getTime()
     const date2 = new Date(n2.date).getTime()
 
     return date2 - date1
   })
-
-  return notifications
+  
+  return preRenderedNotifications
 }
