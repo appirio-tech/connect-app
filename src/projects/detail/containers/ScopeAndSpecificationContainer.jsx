@@ -14,10 +14,15 @@ import MediaQuery from 'react-responsive'
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
 import EditProjectForm from '../components/EditProjectForm'
 import TwoColsLayout from '../components/TwoColsLayout'
-import { SCREEN_BREAKPOINT_MD, PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
+import { 
+  SCREEN_BREAKPOINT_MD, 
+  PROJECT_ATTACHMENTS_FOLDER, 
+  EVENT_TYPE,
+} from '../../../config/constants'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import NotificationsReader from '../../../components/NotificationsReader'
 import { getProjectProductTemplates } from '../../../helpers/templates'
 
 // This handles showing a spinner while the state is being loaded async
@@ -79,6 +84,12 @@ class SpecificationContainer extends Component {
 
     return (
       <TwoColsLayout>
+        <NotificationsReader 
+          id="scope"
+          criteria={[
+            { eventType: EVENT_TYPE.PROJECT.SPECIFICATION_MODIFIED, contents: { projectId: project.id } },
+          ]}
+        />
         <TwoColsLayout.Sidebar>
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {

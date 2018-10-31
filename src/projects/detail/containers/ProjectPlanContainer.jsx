@@ -25,8 +25,16 @@ import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
-import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT, PROJECT_STATUS_COMPLETED, PHASE_STATUS_ACTIVE,
-  PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY } from '../../../config/constants'
+import NotificationsReader from '../../../components/NotificationsReader'
+import { 
+  SCREEN_BREAKPOINT_MD, 
+  PHASE_STATUS_DRAFT, 
+  PROJECT_STATUS_COMPLETED, 
+  PHASE_STATUS_ACTIVE,
+  PROJECT_STATUS_CANCELLED, 
+  PROJECT_FEED_TYPE_PRIMARY,
+  EVENT_TYPE,
+} from '../../../config/constants'
 import Sticky from '../../../components/Sticky'
 import { Link } from 'react-router-dom'
 
@@ -123,6 +131,14 @@ class ProjectPlanContainer extends React.Component {
 
     return (
       <TwoColsLayout>
+        <NotificationsReader 
+          id="project-plan"
+          criteria={[
+            { eventType: EVENT_TYPE.PROJECT_PLAN.READY, contents: { projectId: project.id } },
+            { eventType: EVENT_TYPE.PROJECT_PLAN.MODIFIED, contents: { projectId: project.id } },
+            { eventType: EVENT_TYPE.PROJECT_PLAN.PROGRESS_UPDATED, contents: { projectId: project.id } },
+          ]}
+        />
         <TwoColsLayout.Sidebar>
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
