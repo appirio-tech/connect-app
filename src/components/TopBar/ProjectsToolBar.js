@@ -173,6 +173,7 @@ class ProjectsToolBar extends Component {
     const { user, criteria, creatingProject, projectCreationError, searchTermTag, projectTypes } = this.props
     const { errorCreatingProject, isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
     return (nextProps.user || {}).handle !== (user || {}).handle
+    || (nextProps.user || {}).photoURL !== (this.props.user || {}).photoURL
     || JSON.stringify(nextProps.criteria) !== JSON.stringify(criteria)
     || nextProps.creatingProject !== creatingProject
     || nextProps.projectCreationError !== projectCreationError

@@ -13,7 +13,7 @@ import MediaQuery from 'react-responsive'
 
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
 import EditProjectForm from '../components/EditProjectForm'
-import TwoColsLayout from '../components/TwoColsLayout'
+import TwoColsLayout from '../../../components/TwoColsLayout'
 import { 
   SCREEN_BREAKPOINT_MD, 
   PROJECT_ATTACHMENTS_FOLDER, 
