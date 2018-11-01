@@ -12,6 +12,7 @@ import {
   filterReadNotifications,
   filterNotificationsByProjectId,
   filterProjectNotifications,
+  preRenderNotifications,
 } from '../../../routes/notifications/helpers/notifications'
 import { toggleNotificationRead, toggleBundledNotificationRead } from '../../../routes/notifications/actions'
 import {
@@ -33,12 +34,14 @@ import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
 import WorkInProgress from '../components/WorkInProgress'
+import NotificationsReader from '../../../components/NotificationsReader'
 
 import {
   PHASE_STATUS_ACTIVE,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
   PROJECT_FEED_TYPE_PRIMARY,
+  EVENT_TYPE,
 } from '../../../config/constants'
 
 const SYSTEM_USER = {
@@ -109,7 +112,7 @@ class DashboardContainer extends React.Component {
     } = this.props
 
     // system notifications
-    const notReadNotifications = filterReadNotifications(notifications.notifications)
+    const notReadNotifications = filterReadNotifications(notifications)
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
     const sortedUnreadProjectUpdates = _.orderBy(unreadProjectUpdate, ['date'], ['desc'])
 
@@ -135,6 +138,19 @@ class DashboardContainer extends React.Component {
 
     return (
       <TwoColsLayout>
+        <NotificationsReader 
+          id="dashboard"
+          criteria={[
+            { eventType: EVENT_TYPE.PROJECT.ACTIVE, contents: { projectId: project.id } }, 
+            { eventType: EVENT_TYPE.MEMBER.JOINED, contents: { projectId: project.id } }, 
+            { eventType: EVENT_TYPE.MEMBER.LEFT, contents: { projectId: project.id } }, 
+            { eventType: EVENT_TYPE.MEMBER.REMOVED, contents: { projectId: project.id } }, 
+            { eventType: EVENT_TYPE.MEMBER.ASSIGNED_AS_OWNER, contents: { projectId: project.id } }, 
+            { eventType: EVENT_TYPE.MEMBER.COPILOT_JOINED, contents: { projectId: project.id } }, 
+            { eventType: EVENT_TYPE.MEMBER.MANAGER_JOINED, contents: { projectId: project.id } }, 
+          ]}
+        />
+
         <TwoColsLayout.Sidebar>
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
@@ -190,7 +206,7 @@ class DashboardContainer extends React.Component {
 }
 
 const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics }) => ({
-  notifications,
+  notifications: preRenderNotifications(notifications.notifications),
   productTemplates: templates.productTemplates,
   isProcessing: projectState.processing,
   phases: projectState.phases,

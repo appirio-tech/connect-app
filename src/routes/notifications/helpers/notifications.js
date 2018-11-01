@@ -60,6 +60,46 @@ const handlebarsFallbackHelper = (value, fallbackValue) => {
 Handlebars.registerHelper('showMore', handlebarsShowMoreHelper)
 Handlebars.registerHelper('fallback', handlebarsFallbackHelper)
 
+export const renderGoTo = (goToHandlebars, contents) => (
+  Handlebars.compile(goToHandlebars)(contents)
+)
+
+/**
+ * Filter notifications by criteria
+ * 
+ * @param {Array}  notifications notifications list
+ * @param {Object} criteria      criteria to filter notifications
+ * 
+ * @returns {Array} notifiations which meet the criteria
+ */
+export const filterNotificationsByCriteria = (notifications, criteria) => {
+  return notifications.filter((notification) => isNotificationMeetCriteria(notification, criteria))
+}
+
+export const isSubEqual = (object, criteria) => {
+  let isEqual = true
+
+  _.forOwn(criteria, (value, key) => {
+    if (_.isObject(value)) {
+      isEqual = isSubEqual(object[key], value)
+    } else {
+      isEqual = value === object[key]
+    }
+    
+    return isEqual
+  })
+
+  return isEqual
+}
+
+export const isNotificationMeetCriteria = (notification, criteria) => {
+  if (_.isArray(criteria)) {
+    return _.some(criteria, isSubEqual.bind(null, notification))
+  }
+
+  return isSubEqual(notification, criteria)
+}
+
 /**
  * Get notification filters by sources
  *
@@ -118,11 +158,14 @@ const compareSourcesByLastNotificationDate = (s1, s2) => {
  * @return {Array}                list of sources with related notifications
  */
 export const splitNotificationsBySources = (sources, notifications) => {
-  const notificationsBySources = []
-
-  sources.filter(source => source.total > 0).forEach(source => {
-    source.notifications = _.filter(notifications, n => n.sourceId === source.id)
-    notificationsBySources.push(source)
+  const notificationsBySources = sources.map(source => {
+    const sourceNotifications = _.filter(notifications, { sourceId: source.id })
+    
+    return ({
+      ...source,
+      notifications: sourceNotifications,
+      total: sourceNotifications.length,
+    })
   })
 
   // source that has the most recent notification should be on top
@@ -353,10 +396,10 @@ const bundleNotifications = (notificationsWithRules) => {
  *
  * @param  {Array} rawNotifications notifications list
  *
- * @return {Array}               notification list
+ * @return {Array} notification list
  */
 export const prepareNotifications = (rawNotifications) => {
-  const notificationsWithRules = _.compact(rawNotifications.map((rawNotification) => ({
+  const notifications = rawNotifications.map((rawNotification) => ({
     id: `${rawNotification.id}`,
     sourceId: rawNotification.contents.projectId ? `${rawNotification.contents.projectId}` : 'global',
     sourceName: rawNotification.contents.projectId ? (rawNotification.contents.projectName || 'project') : 'Global',
@@ -366,27 +409,47 @@ export const prepareNotifications = (rawNotifications) => {
     seen: rawNotification.seen,
     contents: rawNotification.contents,
     version: rawNotification.version
-  })).map((notification) => {
+  }))
+  
+  // populate notifications with additional properties
+  // - type
+  // - goto
+  // - rule
+  notifications.forEach((notification) => {
     const notificationRule = getNotificationRule(notification)
 
-    // if rule for notification is not found, skip such notification
+    // if rule for notification is not found show a warning for now as such notification cannot be displayed
     if (!notificationRule) {
       console.warn(`Cannot find notification rule for eventType '${notification.eventType}' version '${notification.version}'.`)
-      return null
+    } else {
+      // populate notification data
+      notification.type = notificationRule.type
+      if (notificationRule.goTo) {
+        notification.goto = renderGoTo(notificationRule.goTo, notification.contents)
+      }
+  
+      notification.rule = notificationRule
     }
+  })
 
-    // populate notification data
-    notification.type = notificationRule.type
-    if (notificationRule.goTo){
-      const renderGoTo = Handlebars.compile(notificationRule.goTo)
-      notification.goto = renderGoTo(notification.contents)
-    }
+  return notifications
+}
 
-    return {
-      notification,
-      notificationRule
-    }
-  }))
+/**
+ * Bundle notifications and renders notifications texts
+ * 
+ * @param {Array} notifications notifications list
+ * 
+ * @returns {Array} notifications list with rendered texts
+ */
+export const preRenderNotifications = (notifications) => {
+  // we will only render notification which has rules
+  const notificationsWithRules = _.compact(
+    notifications.map((notification) => notification.rule ? {
+      notification: _.omit(notification, 'rule'),
+      notificationRule: notification.rule,
+    } : null)
+  )
 
   const bundledNotificationsWithRules = bundleNotifications(notificationsWithRules)
 
@@ -402,15 +465,15 @@ export const prepareNotifications = (rawNotifications) => {
     notification.text = renderText(notification.contents)
   })
 
-  const notifications = _.map(bundledNotificationsWithRules, 'notification')
-
+  const preRenderedNotifications = _.map(bundledNotificationsWithRules, 'notification')
+  
   // sort notifications by date (newer first)
-  notifications.sort((n1, n2) => {
+  preRenderedNotifications.sort((n1, n2) => {
     const date1 = new Date(n1.date).getTime()
     const date2 = new Date(n2.date).getTime()
 
     return date2 - date1
   })
-
-  return notifications
+  
+  return preRenderedNotifications
 }

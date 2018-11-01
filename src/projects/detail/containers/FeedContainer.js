@@ -389,7 +389,7 @@ class FeedView extends React.Component {
             <ScrollableFeed
               {...{
                 ...fullscreenFeed,
-                id: fullscreenFeedId.toString(),
+                id: fullscreenFeedId,
                 allowComments: fullscreenFeed.allowComments && !!currentMemberRole,
                 currentUser,
                 allMembers,
@@ -443,11 +443,12 @@ class FeedView extends React.Component {
               />
             </MediaQuery>
             {feeds.map((feed) => (
-              <div styleName="feed-card" key={feed.id.toString()}>
+              <div styleName="feed-card" key={feed.id}>
                 <ScrollableFeed
                   {...{
                     ...feed,
-                    id: feed.id.toString(),
+                    id: feed.id.toString(), // convert it to string for `ScrollElement`
+                    topicId: feed.id,       // add topic id as a number, for `Feed`
                     allowComments: feed.allowComments && !!currentMemberRole,
                     currentUser,
                     allMembers,
