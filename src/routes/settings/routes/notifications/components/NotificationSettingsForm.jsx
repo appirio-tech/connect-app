@@ -140,7 +140,7 @@ const initSettings = (notInitedSettings) => {
       }
 
       if (_.isUndefined(notifications[type][serviceId].bundlePeriod)) {
-        // for messageing related email notifications, by default bundle period is set to 'immediately'
+        // for messaging related email notifications, by default bundle period is set to 'immediately'
         if (serviceId === 'email' && _.includes(messagingTypes, type)) {
           notifications[type][serviceId].bundlePeriod = 'immediately'
 
@@ -177,10 +177,9 @@ class NotificationSettingsForm extends React.Component {
 
   componentWillReceiveProps(newProps) {
     // after setting were updated on the server
-    // reinit form with udpdated values
+    // reinit form with updated values
     if (this.props.values.pending && !newProps.values.pending) {
-      const initialSettings = initSettings(this.props.values.settings)
-
+      const initialSettings = initSettings(newProps.values.settings)
       this.setState({
         initialSettings,
         settings: initialSettings,
