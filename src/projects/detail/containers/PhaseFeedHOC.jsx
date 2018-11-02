@@ -55,7 +55,7 @@ const phaseFeedHOC = (Component) => {
      * which is accepted by Feed component
      */
     prepareFeed() {
-      const { topic, error, allMembers, currentMemberRole, phase } = this.props
+      const { topic, allMembers, currentMemberRole, phase } = this.props
       const { showAll } = this.state
 
       if (!topic) {
@@ -64,7 +64,6 @@ const phaseFeedHOC = (Component) => {
 
       const feed = {
         ...topic,
-        error,
         // Github issue##623, allow comments on all posts (including system posts)
         allowComments: true,
         user: isSystemUser(topic.userId) ? SYSTEM_USER : allMembers[topic.userId],
@@ -171,10 +170,10 @@ const phaseFeedHOC = (Component) => {
 
   const mapStateToProps = ({ phasesTopics, loadUser, members, productsTimelines, notifications }, props) => {
     const product = _.get(props.phase, 'products[0]')
-    const phaseTopicState = phasesTopics[props.phase.id] || {}
-
     return {
-      ...phaseTopicState,
+      topic: _.get(phasesTopics[props.phase.id], 'topic'),
+      isLoading: _.get(phasesTopics[props.phase.id], 'isLoading', false),
+      isAddingComment: _.get(phasesTopics[props.phase.id], 'isAddingComment', false),
       currentUser: loadUser.user,
       allMembers: members.members,
       timeline: _.get(productsTimelines[product.id], 'timeline'),

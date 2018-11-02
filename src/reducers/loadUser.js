@@ -1,9 +1,5 @@
-import _ from 'lodash'
 import {
-  LOAD_USER_SUCCESS, 
-  LOAD_USER_FAILURE,
-  SAVE_PROFILE_PHOTO_SUCCESS,
-  SAVE_PROFILE_SETTINGS_SUCCESS,
+  LOAD_USER_SUCCESS, LOAD_USER_FAILURE
 } from '../config/constants'
 
 export const initialState = {
@@ -27,36 +23,6 @@ export default function(state = initialState, action) {
       isLoading : false,
       isLoggedIn: false
     })
-
-  // update user photo when it's updated in settings
-  case SAVE_PROFILE_PHOTO_SUCCESS:
-    return {
-      ...state,
-      user: {
-        ...state.user,
-        photoURL: action.payload.photoUrl
-      }
-    }
-
-  // update user first and last name when it's updated in settings
-  case SAVE_PROFILE_SETTINGS_SUCCESS: {
-    const basicTrait = _.find(action.payload.data, { traitId: 'basic_info' })
-
-    if (basicTrait) {
-      const traitData = _.get(basicTrait, 'traits.data[0]')
-
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          firstName: traitData.firstName,
-          lastName: traitData.lastName,
-        }
-      }
-    }
-
-    return state
-  }
 
   default:
     return state

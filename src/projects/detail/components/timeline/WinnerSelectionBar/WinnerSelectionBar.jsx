@@ -72,18 +72,11 @@ class WinnerSelectionBar extends React.Component {
               {placesChosen.map((placeChosen, placeIndex) => {
                 const place = placeIndex + 1
                 const posClassName = place <= 3 ? `pos${place}` : 'pos-rest'
-                const posInactive = !!(selectedPlace !== place && (placeChosen > -1 || selectedPlace))
 
                 return (
                   <label styleName={'checkbox-ctrl'} key={place}>
-                    <input
-                      type="checkbox"
-                      styleName="checkbox"
-                      disabled={posInactive}
-                      onChange={this.handlers[placeIndex]}
-                      checked={selectedPlace === place}
-                    />
-                    <span styleName={`checkbox-text ${posClassName} ` + (posInactive ? 'inactive' : '' ) }>{place}</span>
+                    <input type="checkbox" styleName="checkbox" onChange={this.handlers[placeIndex]} checked={selectedPlace === place} />
+                    <span styleName={`checkbox-text ${posClassName} ` + (placeChosen > -1 ? 'inactive' : '' ) }>{place}</span>
                   </label>
                 )
               })}

@@ -377,6 +377,7 @@ $screen-one-column: 720px;
     border-radius: 13px;
     display: inline-block;
     margin-top: 3px;
+
   }
 
   .txt-gray-sm {
@@ -450,7 +451,7 @@ $screen-one-column: 720px;
         }
       }
     }
-
+      
     .project-card-new {
       @media screen and (max-width: $screen-one-column - 1px) {
         margin-top: 2 * $base-unit;
@@ -468,6 +469,7 @@ $screen-one-column: 720px;
 
       .tc-btn-all-projects {
         color: $tc-dark-blue;
+        
       }
 
       @media screen and (max-width: $screen-md - 1px) {
@@ -499,11 +501,11 @@ $screen-one-column: 720px;
       }
 
       .icon-carret-down-active g g {
-        color: $tc-dark-blue-100 !important;
+        color:  rgb(6, 129, 255) !important;
       }
 
       .icon-carret-down-active {
-        color: $tc-dark-blue-100;
+        color: $tc-dark-blue-90;
         outline: 0;
         z-index: 3;
         font-size: 0;

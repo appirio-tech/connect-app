@@ -4,9 +4,6 @@
  * webpack merge.
  */
 
-const path = require('path')
-const dirname = path.resolve(__dirname, '../..')
-
 module.exports = function (config) {
   /*
     Exclude some folders from babel-loader
@@ -18,10 +15,9 @@ module.exports = function (config) {
   ]
 
   /*
-    Use Connect App preset file for babel config
-    It may contain some modifications of babel config which comes from `topcoder-react-utils`
-  */
-  jsxRule.options.presets = [path.resolve(dirname, './config/babel/webpack.js')]
+    Add babel-plugin-lodash to exclude full lodash lib and include only necessary methods
+   */
+  jsxRule.options.plugins = (jsxRule.options.plugins || []).concat(['lodash'])
 
   /*
     Include packages `appirio-tech-react-components` and `tc-ui`

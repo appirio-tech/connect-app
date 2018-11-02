@@ -49,6 +49,8 @@ export function loadUserSuccess(dispatch, token) {
   if (currentUser) {
     getUserProfile(currentUser.handle).then((profile) => {
       currentUser = _.assign(currentUser, profile)
+      // keeping profile for backward compatibility
+      currentUser.profile = profile
       // determine user role
       let userRole
       if (_.indexOf(currentUser.roles, ROLE_ADMINISTRATOR) > -1) {

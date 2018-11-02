@@ -8,8 +8,6 @@ import PT from 'prop-types'
 import cn from 'classnames'
 
 import './MilestonePostEditText.scss'
-import BoldAdd from '../../../../../assets/icons/ui-16px-1_bold-add.svg'
-import BoldRemove from '../../../../../assets/icons/ui-16px-1_bold-delete.svg'
 
 class   MilestonePostEditText extends React.Component {
   constructor(props) {
@@ -64,10 +62,10 @@ class   MilestonePostEditText extends React.Component {
           )}
 
           {!!onAdd && (
-            <button onClick={this.onAdd} disabled={value.trim().length < 1} styleName="button-add"><BoldAdd /></button>
+            <button onClick={this.onAdd} disabled={value.trim().length < 1} styleName="button-add">{'+'}</button>
           )}
           {!!onRemove && (
-            <button onClick={this.onRemove} styleName="button-remove"><BoldRemove /></button>
+            <button onClick={this.onRemove} styleName="button-remove">{'-'}</button>
           )}
           {!onAdd && !onRemove && (
             <div styleName="content">{value}</div>

@@ -23,10 +23,6 @@
       .object {
         flex-grow: 1;
         margin-left: 0;
-        /* this is necessary to prevent draft editor textarea to go beyond flex container
-           when we put very long line without spaces,
-           see issue https://github.com/appirio-tech/connect-app/issues/2661 */
-        overflow: hidden;
       }
 
       .portrait + .object {

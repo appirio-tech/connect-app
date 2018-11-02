@@ -16,23 +16,6 @@
       padding-bottom: 0;
     }
 
-    .project-info-review {
-      > p {
-        @include roboto;
-        color: $tc-gray-80;
-        font-size: 13px;
-        line-height: 20px;
-        padding: 0 4 * $base-unit;
-
-        > a,
-        > a:hover,
-        > a:visited,
-        > a:active {
-          color: $tc-dark-blue-110;
-        }
-      }
-    }
-
     .delete-project-modal {
       margin-bottom: 2 * $base-unit;
     }

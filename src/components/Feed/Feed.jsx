@@ -5,9 +5,6 @@ import PropTypes from 'prop-types'
 import FeedComments from './FeedComments'
 import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
-import NotificationsReader from '../../components/NotificationsReader'
-
-import { EVENT_TYPE } from '../../config/constants'
 
 import XMarkIcon from '../../assets/icons/x-mark.svg'
 import FullscreenIcon from '../../assets/icons/ui-fullscreen.svg'
@@ -102,10 +99,6 @@ class Feed extends React.Component {
 
       topicHeader = (
         <header styleName="feed-header" ref="header">
-          <NotificationsReader 
-            id={`topic-${id}`}
-            criteria={{ eventType: EVENT_TYPE.TOPIC.CREATED, contents: { topicId: id } }}
-          />
           {editTopicMode ? (
             <div styleName="header-edit">
               <RichTextArea
@@ -180,7 +173,6 @@ class Feed extends React.Component {
           isFullScreen={isFullScreen}
           headerHeight={headerHeight}
           commentId={commentId}
-          error={error}
         />
         {children}
         {isDeletingTopic &&

@@ -1,37 +1,82 @@
 // this is to include tc styles in the output library
 @import '~tc-ui/src/styles/tc-includes';
 
-.main {
-  background-color: $tc-white;
-  border-radius: 6px;
-  max-width: 760px;
-  padding: 35px 0px 20px 0px;
-  flex-grow: 1;
-  margin: auto;
-  margin-top: 20px;
+:global {
+  .settings-panel {
+    margin: 20px auto 0;
+    padding: 0 20px;
 
-  @media screen and (max-width: $screen-md - 1px) {
-    padding: 0;
-    margin: 0;
-    max-width: none;
-  }
-}
+    @media screen and (max-width: $screen-md - 1px) {
+      margin: 0;
+      padding: 0;
+    }
 
-.title {
-  @include roboto-light;
-  color: $tc-black;
-  font-size: 28px;
-  line-height: 35px;
-  text-align: center;
+    > .inner {
+      background-color: $tc-white;
+      border-radius: 6px;
+      margin: 0 auto;
+      max-width: 720px;
+      padding: 35px 20px 20px 20px;
 
-  @media screen and (max-width: $screen-md - 1px) {
-    display: none;
-  }
-}
+      @media screen and (max-width: $screen-md - 1px) {
+        padding: 20px 0;
+      }
 
-.content {
-  margin-top: 25px;
-  @media screen and (max-width: $screen-md - 1px) {
-    margin-top: 0;
+      > .title {
+        @include roboto-light;
+        color: $tc-heading-lg;
+        font-size: 32px;
+        line-height: 30px;
+        text-align: center;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          display: none;
+        }
+      }
+
+      > .text {
+        @include roboto;
+        color: $tc-gray-90;
+        font-size: 15px;
+        line-height: 25px;
+        margin-top: 20px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-top: 0;
+        }
+      }
+
+      > .content {
+        border-top: 1px solid $tc-gray-50;
+        margin-top: 25px;
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-top: 0;
+        }
+      }
+    }
+
+    &.wide {
+      > .inner {
+        max-width: 960px;
+
+        > .content {
+          border-top: 0;
+        }
+      }
+    }
+
+    a {
+      @include roboto;
+    }
+    // Link colors
+    a:link,
+    a:visited {
+      color: $tc-dark-blue;
+    }
+
+    a:hover,
+    a:active {
+      color: $tc-dark-blue-70;
+    }
   }
 }

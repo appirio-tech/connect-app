@@ -8,10 +8,7 @@ import uncontrollable from 'uncontrollable'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
-import { 
-  PROJECT_ATTACHMENTS_FOLDER,
-  EVENT_TYPE, 
-} from '../../../config/constants'
+import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
 import { filterNotificationsByPosts, filterReadNotifications } from '../../../routes/notifications/helpers/notifications'
 
 import PhaseCard from './PhaseCard'
@@ -19,9 +16,9 @@ import ProjectStageTabs from './ProjectStageTabs'
 import EditProjectForm from './EditProjectForm'
 import PhaseFeed from './PhaseFeed'
 import ProductTimelineContainer from '../containers/ProductTimelineContainer'
-import NotificationsReader from '../../../components/NotificationsReader'
 import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import NotificationsReader from '../../../components/NotificationsReader'
 import { scrollToHash } from '../../../components/ScrollToAnchors'
 
 const enhance = spinnerWhileLoading(props => !props.processing)
@@ -223,7 +220,8 @@ class ProjectStage extends React.Component{
             <ProductTimelineContainer product={product} />
           }
 
-          {currentActiveTab === 'posts' && (
+          {currentActiveTab === 'posts' && [
+            <NotificationsReader unreadNotifications={unreadPostNotifications} key="NotificationsReader" />,
             <PhaseFeed
               user={currentUser}
               currentUser={currentUser}
@@ -235,16 +233,10 @@ class ProjectStage extends React.Component{
               allMembers={allMembers}
               onSaveMessage={onSaveMessage}
             />
-          )}
+          ]}
 
           {currentActiveTab === 'specification' &&
             <div className="two-col-content content">
-              <NotificationsReader 
-                id={`phase-${phase.id}-specification`}
-                criteria={[
-                  { eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_PRODUCT_SPEC_UPDATED, contents: { phaseId: phase.id } },
-                ]}
-              />
               <EnhancedEditProjectForm
                 project={product}
                 sections={sections}

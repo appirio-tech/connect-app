@@ -18,10 +18,9 @@ const Footer = () => {
   const isProjectDetails = /projects\/\d+/.test(window.location.pathname)
   const isCreateProject = window.location.pathname.startsWith(NEW_PROJECT_PATH)
   const isNotificationsPage = window.location.pathname.startsWith('/notifications')
-  const isSettingsPage = window.location.pathname.startsWith('/settings/')
 
   // TODO this looks like a bad way of doing it, I think it should be re-factored
-  const shouldHideOnDesktop = isProjectDetails || isCreateProject || isNotificationsPage || isSettingsPage
+  const shouldHideOnDesktop = isProjectDetails || isCreateProject || isNotificationsPage
   // on mobile show footer only when user is logged-out, so only root page is available
   const shouldHideOnMobile =  window.location.pathname !== '/'
 

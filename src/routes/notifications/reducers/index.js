@@ -14,8 +14,7 @@ import {
   HIDE_OLDER_NOTIFICATIONS_SUCCESS,
   NOTIFICATIONS_PENDING,
   TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE,
-  TOGGLE_NOTIFICATIONS_DROPDOWN_WEB,
-  MARK_NOTIFICATIONS_READ,
+  TOGGLE_NOTIFICATIONS_DROPDOWN_WEB
 } from '../../../config/constants'
 import _ from 'lodash'
 
@@ -24,7 +23,7 @@ const initialState = {
   isLoading: false,
   initialized: false,
   filterBy: '',
-  sources: [{ id: 'global', title: 'Global' }],
+  sources: [{ id: 'global', title: 'Global', total: 0 }],
   notifications: [],
   // ids of sources that will also show old notifications
   oldSourceIds: [],
@@ -32,22 +31,22 @@ const initialState = {
   pending: false,
   // indicates if notifications dropdown opened for mobile devices
   isDropdownMobileOpen: false,
-  isDropdownWebOpen: false,
-  readers: {},
+  isDropdownWebOpen: false
 }
 
 // get sources from notifications
 const getSources = (notifications) => {
-  const sources = [
-    ...initialState.sources,
-    ..._.uniqBy(
-      notifications.map((notification) => ({ 
-        id: notification.sourceId, 
-        title: notification.sourceName 
-      })),
-      'id'
-    )
-  ]
+  const sources = [{ id: 'global', title: 'Global', total: 0 }]
+  _.each(notifications, notification => {
+    if (!notification.isRead) {
+      const source = _.find(sources, s => s.id === notification.sourceId)
+      if (source) {
+        source.total++
+      } else {
+        sources.push({ id: notification.sourceId, title: notification.sourceName, total: 1 })
+      }
+    }
+  })
   return sources
 }
 
@@ -72,6 +71,7 @@ export default (state = initialState, action) => {
         ids.indexOf(n.id) >= 0 ? { ...n, seen: true } : n
       ))
     }
+    newState.sources = getSources(newState.notifications)
     return newState
   }
 
@@ -93,6 +93,7 @@ export default (state = initialState, action) => {
         !action.payload || n.sourceId === action.payload ? { ...n, isRead: true } : n
       ))
     }
+    newState.sources = getSources(newState.notifications)
     return newState
   }
 
@@ -104,17 +105,7 @@ export default (state = initialState, action) => {
         n.id === action.payload ? { ...n, isRead: true } : n
       ))
     }
-    return newState
-  }
-
-  case MARK_NOTIFICATIONS_READ: {
-    const newState = {
-      ...state,
-      pending: false,
-      notifications: state.notifications.map(n => (
-        _.includes(action.payload, n.id) ? { ...n, isRead: true } : n
-      ))
-    }
+    newState.sources = getSources(newState.notifications)
     return newState
   }
 

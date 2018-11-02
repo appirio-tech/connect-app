@@ -1,98 +1,98 @@
-@import '~tc-ui/src/styles/tc-includes';
+@import '~tc-ui/src/styles/tc-styles';
 
 :global {
   .feature-picker-feature-list {
     // background-color: $tc-gray-10;
     width: 100%;
-
+  
     h3 {
       @include ellipsis;
       @include tc-label-md;
       font-weight: 700;
       display: block;
-
+  
       margin: 0 (4 * $base-unit);
       color: $tc-gray-80;
       line-height: 8 * $base-unit;
     }
-
+  
     img {
       width: 20px;
       height: 20px;
       min-width: 20px;
       margin-left: 15px;
     }
-
+  
     .feature-list-feature {
       padding : 0 (4 * $base-unit) 0 (8 * $base-unit);
       transition: 50ms ease-in all;
-
+  
       &:hover {
         background-color: $tc-gray-neutral-light;
         cursor: pointer;
       }
-
+  
       .selected-feature-icon {
         visibility: hidden;
       }
-
+  
       // The feature list styles
       .feature-title {
         @include tc-label-md;
-
+  
         color: $tc-gray-60;
         padding: 10px 0;
       }
-
+  
       &.active-feature {
         background-color: $tc-white;
-
+  
         .feature-title {
           color: $tc-orange;
         }
-
+  
         .selected-feature-icon {
           visibility: visible;
         }
       }
     }
-
-
-
-
+  
+  
+  
+  
     button.clean {
       padding: 15px 15px 15px 0;
     }
-
+  
     li {
       cursor: pointer;
       line-height: 8 * $base-unit;
-
+  
       &.active {
-
+  
         button {
           background-color: $tc-gray-neutral-dark;
-
+  
           p {
             font-weight: 400;
           }
         }
       }
-
+  
       p {
         @include ellipsis;
-
+  
         color: $tc-black;
         margin-left: 15px;
       }
-
+  
       button {
         width: 100%;
         text-align: left;
-
+  
         &:hover {
           background-color: $tc-gray-neutral-dark;
-
+  
           p {
             font-weight: 400;
           }
@@ -101,3 +101,4 @@
     }
   }
 }
+  

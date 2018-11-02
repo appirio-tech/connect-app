@@ -2,6 +2,8 @@
 
 :global {
   //TODO  Additional variables - need to find a home for these
+  $gray-color: $tc-gray-50;
+  $title-color: $tc-gray-80;
   $sideBarWidth: 280px;
   $sideBarMaxWidth: 360px;
 
@@ -280,7 +282,7 @@
       .titles {
         @include roboto-medium;
         font-size: 15px;
-        color: $tc-gray-50;
+        color: $gray-color;
         line-height: 20px;
         margin-bottom: 2px;
       }
@@ -328,7 +330,7 @@
           .txt {
             @include roboto;
             font-size: 15px;
-            color: $tc-gray-50;
+            color: $gray-color;
             letter-spacing: 0px;
             line-height: 20px;
           }
@@ -411,7 +413,7 @@
         .file-name {
           @include roboto-bold;
           font-size: 15px;
-          color: $tc-gray-80;
+          color: $title-color;
           letter-spacing: 0px;
           line-height: 20px;
           padding-left: 7px;
@@ -420,7 +422,7 @@
         .upload-status {
           @include roboto;
           font-size: 15px;
-          color: $tc-gray-50;
+          color: $gray-color;
           // letter-spacing: 0px;
           line-height: 20px;
           float: right;
@@ -456,7 +458,7 @@
 
       .file-list-bottom {
         .txt {
-          color: $tc-gray-80;
+          color: $title-color;
           @include roboto-bold;
         }
         padding: 20px 0;
@@ -473,7 +475,7 @@
       text-align: left;
       @include roboto-bold;
       font-size: 15px;
-      color: $tc-gray-80;
+      color: $title-color;
       line-height: 25px;
     }
 
@@ -522,7 +524,7 @@
           line-height: 18px;
           padding: 10px 0;
           @include roboto-bold;
-          color: $tc-gray-80;
+          color: $title-color;
         }
       }
 
@@ -836,7 +838,7 @@
       .titles {
         @include roboto-medium;
         font-size: 15px;
-        color: $tc-gray-50;
+        color: $gray-color;
         line-height: 20px;
         margin-bottom: 2px;
       }
@@ -884,7 +886,7 @@
           .txt {
             @include roboto;
             font-size: 15px;
-            color: $tc-gray-50;
+            color: $gray-color;
             letter-spacing: 0px;
             line-height: 20px;
           }
@@ -967,7 +969,7 @@
         .file-name {
           @include roboto-bold;
           font-size: 15px;
-          color: $tc-gray-80;
+          color: $title-color;
           letter-spacing: 0px;
           line-height: 20px;
           padding-left: 7px;
@@ -976,7 +978,7 @@
         .upload-status {
           @include roboto;
           font-size: 15px;
-          color: $tc-gray-50;
+          color: $gray-color;
           // letter-spacing: 0px;
           line-height: 20px;
           float: right;
@@ -1012,7 +1014,7 @@
 
       .file-list-bottom {
         .txt {
-          color: $tc-gray-80;
+          color: $title-color;
           @include roboto-bold;
         }
         padding: 20px 0;
@@ -1029,7 +1031,7 @@
       text-align: left;
       @include roboto-bold;
       font-size: 15px;
-      color: $tc-gray-80;
+      color: $title-color;
       line-height: 25px;
     }
 
@@ -1078,7 +1080,7 @@
           line-height: 18px;
           padding: 10px 0;
           @include roboto-bold;
-          color: $tc-gray-80;
+          color: $title-color;
         }
       }
 

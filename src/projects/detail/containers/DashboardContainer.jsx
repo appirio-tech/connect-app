@@ -12,7 +12,6 @@ import {
   filterReadNotifications,
   filterNotificationsByProjectId,
   filterProjectNotifications,
-  preRenderNotifications,
 } from '../../../routes/notifications/helpers/notifications'
 import { toggleNotificationRead, toggleBundledNotificationRead } from '../../../routes/notifications/actions'
 import {
@@ -29,19 +28,17 @@ import { addProductAttachment, updateProductAttachment, removeProductAttachment 
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import FeedContainer from './FeedContainer'
-import Sticky from '../../../components/Sticky'
+import Sticky from 'react-stickynode'
 import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
-import TwoColsLayout from '../../../components/TwoColsLayout'
+import TwoColsLayout from '../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
 import WorkInProgress from '../components/WorkInProgress'
-import NotificationsReader from '../../../components/NotificationsReader'
 
 import {
   PHASE_STATUS_ACTIVE,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
   PROJECT_FEED_TYPE_PRIMARY,
-  EVENT_TYPE,
 } from '../../../config/constants'
 
 const SYSTEM_USER = {
@@ -62,20 +59,6 @@ class DashboardContainer extends React.Component {
       this.props.toggleBundledNotificationRead(notification.id, notification.bundledIds)
     } else {
       this.props.toggleNotificationRead(notification.id)
-    }
-  }
-
-  componentDidMount() {
-    // if the user is a customer and its not a direct link to a particular phase
-    // then by default expand all phases which are active
-    const { isCustomerUser, expandProjectPhase } = this.props
-
-    if (isCustomerUser) {
-      _.forEach(this.props.phases, phase => {
-        if (phase.status === PHASE_STATUS_ACTIVE) {
-          expandProjectPhase(phase.id)
-        }
-      })
     }
   }
 
@@ -112,7 +95,7 @@ class DashboardContainer extends React.Component {
     } = this.props
 
     // system notifications
-    const notReadNotifications = filterReadNotifications(notifications)
+    const notReadNotifications = filterReadNotifications(notifications.notifications)
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
     const sortedUnreadProjectUpdates = _.orderBy(unreadProjectUpdate, ['date'], ['desc'])
 
@@ -132,25 +115,11 @@ class DashboardContainer extends React.Component {
         isFeedsLoading={isFeedsLoading}
         productsTimelines={productsTimelines}
         phasesTopics={phasesTopics}
-        isProjectProcessing={isProcessing}
       />
     )
 
     return (
       <TwoColsLayout>
-        <NotificationsReader 
-          id="dashboard"
-          criteria={[
-            { eventType: EVENT_TYPE.PROJECT.ACTIVE, contents: { projectId: project.id } }, 
-            { eventType: EVENT_TYPE.MEMBER.JOINED, contents: { projectId: project.id } }, 
-            { eventType: EVENT_TYPE.MEMBER.LEFT, contents: { projectId: project.id } }, 
-            { eventType: EVENT_TYPE.MEMBER.REMOVED, contents: { projectId: project.id } }, 
-            { eventType: EVENT_TYPE.MEMBER.ASSIGNED_AS_OWNER, contents: { projectId: project.id } }, 
-            { eventType: EVENT_TYPE.MEMBER.COPILOT_JOINED, contents: { projectId: project.id } }, 
-            { eventType: EVENT_TYPE.MEMBER.MANAGER_JOINED, contents: { projectId: project.id } }, 
-          ]}
-        />
-
         <TwoColsLayout.Sidebar>
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
@@ -206,7 +175,7 @@ class DashboardContainer extends React.Component {
 }
 
 const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics }) => ({
-  notifications: preRenderNotifications(notifications.notifications),
+  notifications,
   productTemplates: templates.productTemplates,
   isProcessing: projectState.processing,
   phases: projectState.phases,

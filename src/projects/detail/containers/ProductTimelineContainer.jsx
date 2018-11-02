@@ -43,7 +43,7 @@ class ProductTimelineContainer extends React.Component {
       // here is why https://github.com/appirio-tech/connect-app/issues/2291#issuecomment-410968047
 
       // https://github.com/appirio-tech/connect-app/issues/2422
-      // Simply return Timeline component here.
+      // Simpy return Timeline component here.
       // Move out loading indicator to Timeline so the height can be maintained in there.
       <Timeline {...this.props} />
     )
@@ -81,7 +81,6 @@ const mapStateToProps = ({ productsTimelines, loadUser }, props) => {
   return {
     timeline: _.get(productsTimelines[props.product.id], 'timeline'),
     isLoading: _.get(productsTimelines[props.product.id], 'isLoading', false),
-    phaseId: props.product.phaseId,
     currentUser: {
       userId: parseInt(loadUser.user.id, 10),
       isCopilot: _.includes(loadUser.user.roles, ROLE_CONNECT_COPILOT),

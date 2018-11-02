@@ -21,12 +21,8 @@ export const HIDE_OLDER_NOTIFICATIONS_SUCCESS = 'HIDE_OLDER_NOTIFICATIONS_SUCCES
 export const NOTIFICATIONS_PENDING = 'NOTIFICATIONS_PENDING'
 export const TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE = 'TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE'
 export const TOGGLE_NOTIFICATIONS_DROPDOWN_WEB = 'TOGGLE_NOTIFICATIONS_DROPDOWN_WEB'
-export const MARK_NOTIFICATIONS_READ = 'MARK_NOTIFICATIONS_READ'
 
 // Settings
-export const GET_SYSTEM_SETTINGS_PENDING = 'GET_SYSTEM_SETTINGS_PENDING'
-export const GET_SYSTEM_SETTINGS_SUCCESS = 'GET_SYSTEM_SETTINGS_SUCCESS'
-export const GET_SYSTEM_SETTINGS_FAILURE = 'GET_SYSTEM_SETTINGS_FAILURE'
 export const CHECK_EMAIL_AVAILABILITY_PENDING = 'CHECK_EMAIL_AVAILABILITY_PENDING'
 export const CHECK_EMAIL_AVAILABILITY_SUCCESS = 'CHECK_EMAIL_AVAILABILITY_SUCCESS'
 export const CHECK_EMAIL_AVAILABILITY_FAILURE = 'CHECK_EMAIL_AVAILABILITY_FAILURE'
@@ -39,27 +35,12 @@ export const CHANGE_PASSWORD_PENDING = 'CHANGE_PASSWORD_PENDING'
 export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS'
 export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE'
 
-export const RESET_PASSWORD_PENDING = 'RESET_PASSWORD_PENDING'
-export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS'
-export const RESET_PASSWORD_FAILURE = 'RESET_PASSWORD_FAILURE'
-
 export const GET_NOTIFICATION_SETTINGS_PENDING = 'GET_NOTIFICATION_SETTINGS_PENDING'
 export const GET_NOTIFICATION_SETTINGS_SUCCESS = 'GET_NOTIFICATION_SETTINGS_SUCCESS'
 export const GET_NOTIFICATION_SETTINGS_FAILURE = 'GET_NOTIFICATION_SETTINGS_FAILURE'
 export const SAVE_NOTIFICATION_SETTINGS_PENDING = 'SAVE_NOTIFICATION_SETTINGS_PENDING'
 export const SAVE_NOTIFICATION_SETTINGS_SUCCESS = 'SAVE_NOTIFICATION_SETTINGS_SUCCESS'
 export const SAVE_NOTIFICATION_SETTINGS_FAILURE = 'SAVE_NOTIFICATION_SETTINGS_FAILURE'
-
-export const GET_PROFILE_SETTINGS_PENDING = 'GET_PROFILE_SETTINGS_PENDING'
-export const GET_PROFILE_SETTINGS_SUCCESS = 'GET_PROFILE_SETTINGS_SUCCESS'
-export const GET_PROFILE_SETTINGS_FAILURE = 'GET_PROFILE_SETTINGS_FAILURE'
-export const SAVE_PROFILE_SETTINGS_PENDING = 'SAVE_PROFILE_SETTINGS_PENDING'
-export const SAVE_PROFILE_SETTINGS_SUCCESS = 'SAVE_PROFILE_SETTINGS_SUCCESS'
-export const SAVE_PROFILE_SETTINGS_FAILURE = 'SAVE_PROFILE_SETTINGS_FAILURE'
-export const CLEAR_PROFILE_SETTINGS_PHOTO = 'CLEAR_PROFILE_SETTINGS_PHOTO'
-export const SAVE_PROFILE_PHOTO_SUCCESS = 'SAVE_PROFILE_PHOTO_SUCCESS'
-export const SAVE_PROFILE_PHOTO_FAILURE = 'SAVE_PROFILE_PHOTO_FAILURE'
-export const SAVE_PROFILE_PHOTO_PENDING = 'SAVE_PROFILE_PHOTO_PENDING'
 
 // Search Term
 export const SET_SEARCH_TERM   = 'SET_SEARCH_TERM'
@@ -644,52 +625,3 @@ export const MILESTONE_LINK_SUPPORTED_TYPES = [
   { title: 'Heroku link', value: 'heroku' },
   { title: 'Invoice', value: 'invoice' }
 ]
-
-// Notifications event types
-export const EVENT_TYPE = {
-  POST: {
-    UPDATED: 'notifications.connect.project.post.edited',
-    CREATED: 'notifications.connect.project.post.created',
-    DELETED: 'notifications.connect.project.post.deleted',
-    MENTION: 'notifications.connect.project.post.mention',
-  },
-  MEMBER: {
-    JOINED: 'notifications.connect.project.member.joined',
-    LEFT: 'notifications.connect.project.member.left',
-    REMOVED: 'notifications.connect.project.member.removed',
-    MANAGER_JOINED: 'notifications.connect.project.member.managerJoined',
-    COPILOT_JOINED: 'notifications.connect.project.member.copilotJoined',
-    ASSIGNED_AS_OWNER: 'notifications.connect.project.member.assignedAsOwner',
-  },
-  PROJECT: {
-    ACTIVE: 'notifications.connect.project.active',
-    APPROVED: 'notifications.connect.project.approved',
-    CANCELED: 'notifications.connect.project.canceled',
-    COMPLETED: 'notifications.connect.project.completed',
-    CREATED: 'notifications.connect.project.created',
-    FILE_UPLOADED: 'notifications.connect.project.fileUploaded',
-    LINK_CREATED: 'notifications.connect.project.linkCreated',
-    PAUSED: 'notifications.connect.project.paused',
-    SUBMITTED_FOR_REVIEW: 'notifications.connect.project.submittedForReview',
-    SPECIFICATION_MODIFIED: 'connect.action.project.updated.spec',
-  },
-  PROJECT_PLAN: {
-    READY: 'connect.action.project.plan.ready',
-    MODIFIED: 'connect.action.project.plan.updated',
-    PROGRESS_UPDATED: 'connect.action.project.updated.progress',
-    PHASE_ACTIVATED: 'notifications.connect.project.phase.transition.active',
-    PHASE_COMPLETED: 'notifications.connect.project.phase.transition.completed',
-    PHASE_PAYMENT_UPDATED: 'notifications.connect.project.phase.update.payment',
-    PHASE_PROGRESS_UPDATED: 'notifications.connect.project.phase.update.progress',
-    PHASE_SCOPE_UPDATED: 'notifications.connect.project.phase.update.scope',
-    PHASE_PRODUCT_SPEC_UPDATED: 'connect.action.project.product.update.spec',
-    MILESTONE_ACTIVATED: 'connect.action.timeline.milestone.transition.active',
-    MILESTONE_COMPLETED: 'connect.action.timeline.milestone.transition.completed',
-    WAITING_FOR_CUSTOMER_INPUT: 'connect.action.timeline.milestone.waiting.customer',
-    TIMELINE_ADJUSTED: 'connect.action.timeline.adjusted',
-  },
-  TOPIC: {
-    CREATED: 'notifications.connect.project.topic.created',
-    DELETED: 'notifications.connect.project.topic.deleted',
-  },
-}

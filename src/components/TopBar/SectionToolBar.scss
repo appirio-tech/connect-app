@@ -4,7 +4,7 @@
 :global {
   .tc-header.tc-header__connect .top-bar{
     height: 60px;
-    background-color: $tc-gray-100;
+    background-color: $tc-gray-90;
     position: relative;
     display: flex;
 
@@ -30,7 +30,7 @@
     }
 
     .title {
-      @include roboto;
+      @include roboto-light;
       font-size: 20px;
       color: $tc-gray-10;
       text-align: center;
@@ -65,11 +65,11 @@
       }
 
       .icon-x-mark {
-        fill: $tc-gray-100;
+        fill: $tc-white;
         margin: -6px;
 
         @media screen and (max-width: $screen-md - 1px) {
-          fill: $tc-gray-100;
+          fill: $tc-white;
         }
       }
     }
@@ -102,6 +102,7 @@
       .icon-connect-logo-mono {
         height: auto;
         width: 53px;
+        margin-top: 13px;
 
         path {
           fill: $tc-gray-10;

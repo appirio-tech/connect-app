@@ -29,7 +29,7 @@ function ProjectCardHeader({ project, onClick, projectTemplates }) {
               containerClassName="project-name"
               line={2}
               truncateText="..."
-              text={_.unescape(project.name)}
+              text={project.name}
             />
           </div>
           <div className="project-date">{moment(project.updatedAt).format('MMM DD, YYYY')}</div>

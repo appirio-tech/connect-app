@@ -4,6 +4,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
+import moment from 'moment'
 import cn from 'classnames'
 
 import DotIndicator from '../../DotIndicator'
@@ -12,7 +13,7 @@ import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
 import MilestoneDescription from '../../MilestoneDescription'
 import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
-import { getMilestoneStatusText, getDaysLeft, getTotalDays, getProgressPercent, getHoursLeft } from '../../../../../../helpers/milestoneHelper'
+import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 
 import {
   MILESTONE_STATUS,
@@ -217,17 +218,22 @@ class MilestoneTypeCheckpointReview extends React.Component {
     const rejectedLinks = _.reject(links, { isSelected: true })
 
     const minCheckedDesigns = this.getMinSelectedDesigns()
+    const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
 
-    const daysLeft = getDaysLeft(milestone)
-    const totalDays = getTotalDays(milestone)
-    const hoursLeft = getHoursLeft(milestone)
+    const startDate = moment(milestone.actualStartDate || milestone.startDate)
+    const endDate = moment(milestone.startDate).add(milestone.duration - 1, 'days')
+    const daysLeft = endDate.diff(today, 'days')
+    const totalDays = endDate.diff(startDate, 'days')
+    const hoursLeft = endDate.diff(moment(), 'hours')
 
     const progressText = daysLeft >= 0
       ? `${daysLeft} days until designs are completed`
-      : `${-daysLeft} days designs are delayed`
+      : `${daysLeft} days designs are delayed`
 
-    const progressPercent = getProgressPercent(totalDays, daysLeft)
-    const waitingForCustomer = _.get(milestone, 'details.metadata.waitingForCustomer', true)
+    const progressPercent = daysLeft > 0
+      ? (totalDays - daysLeft) / totalDays * 100
+      : 100
+
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -239,57 +245,59 @@ class MilestoneTypeCheckpointReview extends React.Component {
          */}
         {isActive && (
           <div>
-            {(daysLeft < 0 || !isInReview) && (
-              <DotIndicator hideDot={isInReview}>
-                <div styleName="top-space">
-                  <ProjectProgress
-                    labelDayStatus={progressText}
-                    progressPercent={progressPercent}
-                    theme={daysLeft < 0 ? 'warning' : 'light'}
-                    readyForReview
-                  >
-                    {!currentUser.isCustomer && !isInReview && (
-                      <button
-                        onClick={this.moveToReviewingState}
-                        className="tc-btn tc-btn-primary"
-                        disabled={links.length === 0}
-                      >
-                        Ready for review
-                      </button>
-                    )}
-                  </ProjectProgress>
-                </div>
-              </DotIndicator>
-            )}
+            {!isInReview &&  (
+              <div>
+                <DotIndicator>
+                  <div styleName="top-space">
+                    <ProjectProgress
+                      labelDayStatus={progressText}
+                      progressPercent={progressPercent}
+                      theme="light"
+                      readyForReview
+                    >
+                      {!currentUser.isCustomer && (
+                        <button
+                          onClick={this.moveToReviewingState}
+                          className="tc-btn tc-btn-primary"
+                          disabled={links.length === 0}
+                        >
+                          Ready for review
+                        </button>
+                      )}
+                    </ProjectProgress>
+                  </div>
+                </DotIndicator>
 
-            {!isInReview && !currentUser.isCustomer && (
-              <DotIndicator hideLine>
-                <LinkList
-                  links={links}
-                  onAddLink={this.updatedUrl}
-                  onRemoveLink={this.removeUrl}
-                  onUpdateLink={this.updatedUrl}
-                  fields={[{
-                    name: 'title',
-                    value: `Design ${links.length + 1}`,
-                    maxLength: 64,
-                  }, {
-                    name: 'url'
-                  }]}
-                  addButtonTitle="Add design link"
-                  formAddTitle="Add design link"
-                  formAddButtonTitle="Add link"
-                  formUpdateTitle="Editing a link"
-                  formUpdateButtonTitle="Save changes"
-                  isUpdating={milestone.isUpdating}
-                  fakeName={`Design ${links.length + 1}`}
-                  canAddLink
-                />
-              </DotIndicator>
+                {!currentUser.isCustomer && (
+                  <DotIndicator hideLine>
+                    <LinkList
+                      links={links}
+                      onAddLink={this.updatedUrl}
+                      onRemoveLink={this.removeUrl}
+                      onUpdateLink={this.updatedUrl}
+                      fields={[{
+                        name: 'title',
+                        value: `Design ${links.length + 1}`,
+                        maxLength: 64,
+                      }, {
+                        name: 'url'
+                      }]}
+                      addButtonTitle="Add a design link"
+                      formAddTitle="Adding a link"
+                      formAddButtonTitle="Add a link"
+                      formUpdateTitle="Editing a link"
+                      formUpdateButtonTitle="Save changes"
+                      isUpdating={milestone.isUpdating}
+                      fakeName={`Design ${links.length + 1}`}
+                      canAddLink
+                    />
+                  </DotIndicator>
+                )}
+              </div>
             )}
 
             {isInReview && (
-              <div styleName="top-space">
+              <div>
                 <DotIndicator>
                   <header styleName="milestone-heading">
                     Select the top {minCheckedDesigns} design variants for our next round
@@ -368,7 +376,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
                       Complete review ({hoursLeft}h)
                     </button>
                   )}
-                  {!currentUser.isCustomer && !waitingForCustomer && extensionRequestButton}
+                  {!currentUser.isCustomer && extensionRequestButton}
                 </div>
               </DotIndicator>
             )}

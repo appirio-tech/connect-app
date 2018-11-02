@@ -1,6 +1,9 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
+  // FIXME: bad names for variables;
+  $gray-color: $tc-gray-50;
+  $title-color: $tc-gray-80;
   // FIXME: repeated mixin use! Use global
   @mixin flexBox {
     display: flex;
@@ -43,7 +46,7 @@
       @include flexWidth(2);
       border-radius: 4px;
       .title {
-        color: $tc-gray-80;
+        color: $title-color;
         @include roboto;
       }
       .right-area-item {
@@ -58,7 +61,7 @@
         .big-titles {
           @include roboto-light;
           font-size: 28px;
-          color: $tc-gray-50;
+          color: $gray-color;
           line-height: 30px;
           margin-bottom: 20px;
         }

@@ -4,6 +4,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
+import moment from 'moment'
 import cn from 'classnames'
 
 import DotIndicator from '../../DotIndicator'
@@ -12,7 +13,7 @@ import MilestonePostMessage from '../../MilestonePostMessage'
 import ProjectProgress from '../../../ProjectProgress'
 import MilestoneDescription from '../../MilestoneDescription'
 import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
-import { getMilestoneStatusText, getDaysLeft, getTotalDays, getProgressPercent} from '../../../../../../helpers/milestoneHelper'
+import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 
 import {
   MILESTONE_STATUS
@@ -27,8 +28,7 @@ class MilestoneTypeAddLinks extends React.Component {
     this.state = {
       addedLinks: [],
       isShowCompleteConfirmMessage: false,
-      isLinkUpdating: false,
-      showExtensionRequestSection: true
+      isLinkAdded: true,
     }
 
     this.addUrl = this.addUrl.bind(this)
@@ -37,16 +37,6 @@ class MilestoneTypeAddLinks extends React.Component {
     this.hideCompleteAddLinksConfirmation = this.hideCompleteAddLinksConfirmation.bind(this)
     this.complete = this.complete.bind(this)
     this.toggleRejectedSection = this.toggleRejectedSection.bind(this)
-    this.onFormAddOpen = this.onFormAddOpen.bind(this)
-    this.onFormAddCancel = this.onFormAddCancel.bind(this)
-  }
-
-  onFormAddOpen() {
-    this.setState({ showExtensionRequestSection: false })
-  }
-
-  onFormAddCancel() {
-    this.setState({ showExtensionRequestSection: true })
   }
 
   showCompleteAddLinksConfirmation() {
@@ -87,15 +77,9 @@ class MilestoneTypeAddLinks extends React.Component {
     const { addedLinks } = this.state
     values.type = 'marvelapp'
 
-    // here we simulate uploading process for LinkList component
-    // as that component is uncontrollable and relies on the `isUpdating` property
     this.setState({
-      isLinkUpdating: true,
-    }, () => {
-      this.setState({
-        addedLinks: [...addedLinks, values],
-        isLinkUpdating: false,
-      })
+      addedLinks: [...addedLinks, values],
+      isLinkAdded: false
     })
   }
 
@@ -107,6 +91,7 @@ class MilestoneTypeAddLinks extends React.Component {
     addedLinks.splice(linkIndex, 1)
     this.setState({
       addedLinks,
+      isLinkAdded: false
     })
   }
 
@@ -122,21 +107,26 @@ class MilestoneTypeAddLinks extends React.Component {
     const {
       addedLinks,
       isShowCompleteConfirmMessage,
-      isLinkUpdating,
+      isLinkAdded,
     } = this.state
 
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+    const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
 
-    const daysLeft = getDaysLeft(milestone)
-    const totalDays = getTotalDays(milestone)
+    const startDate = moment(milestone.actualStartDate || milestone.startDate)
+    const endDate = moment(milestone.startDate).add(milestone.duration - 1, 'days')
+    const daysLeft = endDate.diff(today, 'days')
+    const totalDays = endDate.diff(startDate, 'days')
 
     const progressText = daysLeft >= 0
       ? `${daysLeft} days until designs are completed`
-      : `${-daysLeft} days designs are delayed`
+      : `${daysLeft} days designs are delayed`
 
-    const progressPercent = getProgressPercent(totalDays, daysLeft)
-    const { showExtensionRequestSection } = this.state
+    const progressPercent = daysLeft > 0
+      ? (totalDays - daysLeft) / totalDays * 100
+      : 100
+
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -154,7 +144,7 @@ class MilestoneTypeAddLinks extends React.Component {
                   <ProjectProgress
                     labelDayStatus={progressText}
                     progressPercent={progressPercent}
-                    theme={daysLeft < 0 ? 'warning' : 'light'}
+                    theme="light"
                     readyForReview
                   />
                 </div>
@@ -174,15 +164,13 @@ class MilestoneTypeAddLinks extends React.Component {
                     }, {
                       name: 'url'
                     }]}
-                    addButtonTitle="Add design link"
-                    formAddTitle="Add design link"
-                    formAddButtonTitle="Add link"
+                    addButtonTitle="Add a design link"
+                    formAddTitle="Adding a link"
+                    formAddButtonTitle="Add a link"
                     formUpdateTitle="Editing a link"
                     formUpdateButtonTitle="Save changes"
-                    isUpdating={isLinkUpdating}
+                    isUpdating={isLinkAdded}
                     fakeName={`Design ${addedLinks.length + 1}`}
-                    onFormAddOpen={this.onFormAddOpen}
-                    onFormAddCancel={this.onFormAddCancel}
                     canAddLink
                   />
                 </DotIndicator>
@@ -226,7 +214,7 @@ class MilestoneTypeAddLinks extends React.Component {
               !isCompleted &&
               !extensionRequestDialog &&
               !isShowCompleteConfirmMessage &&
-              !currentUser.isCustomer && showExtensionRequestSection &&
+              !currentUser.isCustomer &&
             (
               <DotIndicator hideLine>
                 <div styleName="action-bar" className="flex center">

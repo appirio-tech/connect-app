@@ -7,7 +7,7 @@
   
     .project-heading {
       @include roboto-medium;
-      font-size: $tc-heading-sm;
+      font-size: $tc-heading;
       color: $tc-black;
       line-height: $base-unit*6;
       .text-muted {

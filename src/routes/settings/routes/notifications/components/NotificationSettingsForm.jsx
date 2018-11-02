@@ -7,13 +7,12 @@ import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 import { NOTIFICATION_SETTINGS_PERIODS } from '../../../../../config/constants'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
-import { TOOLTIP_DEFAULT_DELAY, EVENT_TYPE } from '../../../../../config/constants'
+import { TOOLTIP_DEFAULT_DELAY } from '../../../../../config/constants'
 import IconSettingsWeb from '../../../../../assets/icons/bell.svg'
 import IconSettingsEmail from '../../../../../assets/icons/email.svg'
 import './NotificationSettingsForm.scss'
 import _ from 'lodash'
 import SelectDropdown from '../../../../../components/SelectDropdown/SelectDropdown'
-import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 
 
 // list of the notification groups and related event types
@@ -24,81 +23,81 @@ const topics = [
     description: 'Get a notification any time somebody posts on your project. This will make sure you can stay up-to-date with what’s happening on your project',
     enabledMethods:['web', 'email'],
     types: [
-      EVENT_TYPE.TOPIC.CREATED,
-      EVENT_TYPE.TOPIC.DELETED,
-      EVENT_TYPE.POST.CREATED,
-      EVENT_TYPE.POST.UPDATED,
-      EVENT_TYPE.POST.DELETED,
+      'notifications.connect.project.topic.created',
+      'notifications.connect.project.topic.deleted',
+      'notifications.connect.project.post.created',
+      'notifications.connect.project.post.edited',
+      'notifications.connect.project.post.deleted'
     ]
   }, {
     title: 'Project status',
-    description: 'Receive a notification any time your project status changes',
+    description: 'Receive a notification any time your porject status changes',
     enabledMethods:['web', 'email'],
     types: [
-      EVENT_TYPE.PROJECT.CREATED,
-      EVENT_TYPE.PROJECT.CANCELED,
-      EVENT_TYPE.PROJECT.APPROVED,
-      EVENT_TYPE.PROJECT.PAUSED,
-      EVENT_TYPE.PROJECT.COMPLETED,
-      EVENT_TYPE.PROJECT.SUBMITTED_FOR_REVIEW,
-      EVENT_TYPE.PROJECT.ACTIVE,
+      'notifications.connect.project.created',
+      'notifications.connect.project.updated',
+      'notifications.connect.project.canceled',
+      'notifications.connect.project.approved',
+      'notifications.connect.project.paused',
+      'notifications.connect.project.completed',
+      'notifications.connect.project.submittedForReview',
+      'notifications.connect.project.active'
     ]
   }, {
     title: 'Project scope',
     description: 'Receive a notification any time your project scope is updated',
     enabledMethods:['web', 'email'],
     types: [
-      EVENT_TYPE.PROJECT.SPECIFICATION_MODIFIED,
+      'connect.action.project.product.update.spec'
     ]
   }, {
     title: 'File uploads',
     description: 'Receive a notification any time a new file is uploaded to your project',
     enabledMethods:['web', 'email'],
     types: [
-      EVENT_TYPE.PROJECT.FILE_UPLOADED,
+      'notifications.connect.project.fileUploaded'
     ]
   }, {
     title: 'New project link',
     description: 'Receive a notification any time a new link is added to your project',
     enabledMethods:['web', 'email'],
     types: [
-      EVENT_TYPE.PROJECT.LINK_CREATED,
+      'notifications.connect.project.linkCreated'
     ]
   }, {
     title: 'Project team',
     description: 'Receive a notification any time a person joins or leaves the team',
     enabledMethods:['web', 'email'],
     types: [
-      EVENT_TYPE.MEMBER.JOINED,
-      EVENT_TYPE.MEMBER.LEFT,
-      EVENT_TYPE.MEMBER.REMOVED,
-      EVENT_TYPE.MEMBER.MANAGER_JOINED,
-      EVENT_TYPE.MEMBER.COPILOT_JOINED,
-      EVENT_TYPE.MEMBER.ASSIGNED_AS_OWNER,
+      'notifications.connect.project.member.joined',
+      'notifications.connect.project.member.left',
+      'notifications.connect.project.member.removed',
+      'notifications.connect.project.member.managerJoined',
+      'notifications.connect.project.member.copilotJoined',
+      'notifications.connect.project.member.assignedAsOwner'
     ]
   }, {
     title: 'Project plan',
     description: 'Receive a notification when a phase is added to your project plan',
     enabledMethods:['web', 'email'],
     types: [
-      EVENT_TYPE.PROJECT_PLAN.READY,
-      EVENT_TYPE.PROJECT_PLAN.MODIFIED,
+      'connect.action.project.plan.ready',
+      'connect.action.project.plan.updated'
     ]
   }, {
     title: 'Project phase updates',
     description: 'Receive a notification for any activity on your project phase',
     enabledMethods:['web', 'email'],
     types: [
-      EVENT_TYPE.PROJECT_PLAN.PHASE_ACTIVATED,
-      EVENT_TYPE.PROJECT_PLAN.PHASE_COMPLETED,
-      EVENT_TYPE.PROJECT_PLAN.PHASE_PAYMENT_UPDATED,
-      EVENT_TYPE.PROJECT_PLAN.PHASE_PROGRESS_UPDATED,
-      EVENT_TYPE.PROJECT_PLAN.PHASE_SCOPE_UPDATED,
-      EVENT_TYPE.PROJECT_PLAN.PHASE_PRODUCT_SPEC_UPDATED,
-      EVENT_TYPE.PROJECT_PLAN.MILESTONE_ACTIVATED,
-      EVENT_TYPE.PROJECT_PLAN.MILESTONE_COMPLETED,
+      'notifications.connect.project.phase.transition.active',
+      'notifications.connect.project.phase.transition.completed',
+      'notifications.connect.project.phase.update.payment',
+      'notifications.connect.project.phase.update.progress',
+      'notifications.connect.project.phase.update.scope',
+      'connect.action.timeline.milestone.transition.active',
+      'connect.action.timeline.milestone.transition.completed',
       // should we include wait.customer to be controlled via settings?
-      EVENT_TYPE.PROJECT_PLAN.WAITING_FOR_CUSTOMER_INPUT,
+      'connect.action.timeline.milestone.waiting.customer'
     ]
   }
 ]
@@ -140,7 +139,7 @@ const initSettings = (notInitedSettings) => {
       }
 
       if (_.isUndefined(notifications[type][serviceId].bundlePeriod)) {
-        // for messaging related email notifications, by default bundle period is set to 'immediately'
+        // for messageing related email notifications, by default bundle period is set to 'immediately'
         if (serviceId === 'email' && _.includes(messagingTypes, type)) {
           notifications[type][serviceId].bundlePeriod = 'immediately'
 
@@ -162,44 +161,19 @@ class NotificationSettingsForm extends React.Component {
   constructor(props) {
     super(props)
 
-    const initialSettings = initSettings(props.values.settings)
-
     this.state = {
-      initialSettings,
-      settings: initialSettings,
-      dirty: false,
+      settings: initSettings(props.values.settings)
     }
 
     this.handleEmailConfigurationChange = this.handleEmailConfigurationChange.bind(this)
-    this.handleWebConfigurationChange = this.handleWebConfigurationChange.bind(this)
-    this.onChange = this.onChange.bind(this)
-  }
-
-  componentWillReceiveProps(newProps) {
-    // after setting were updated on the server
-    // reinit form with updated values
-    if (this.props.values.pending && !newProps.values.pending) {
-      const initialSettings = initSettings(newProps.values.settings)
-      this.setState({
-        initialSettings,
-        settings: initialSettings,
-        dirty: false,
-      })
-    }
   }
 
   handleEmailConfigurationChange(selectedOption, topicIndex) {
     const notifications = {...this.state.settings.notifications}
     // update values for all types of the topic
     topics[topicIndex].types.forEach((type) => {
-      notifications[type] = {
-        ...notifications[type],
-        email: {
-          ...notifications[type].email,
-          enabled: selectedOption.value === 'off' ? 'no' : 'yes',
-          bundlePeriod: selectedOption.value === 'off' ? '' : selectedOption.value
-        }
-      }
+      notifications[type].email.enabled = selectedOption.value === 'off' ? 'no' : 'yes'
+      notifications[type].email.bundlePeriod = selectedOption.value === 'off' ? '' : selectedOption.value
     })
 
     this.setState({
@@ -207,7 +181,7 @@ class NotificationSettingsForm extends React.Component {
         ...this.state.settings,
         notifications,
       }
-    }, this.onChange)
+    })
   }
 
   stopPropagation(e) {
@@ -216,42 +190,7 @@ class NotificationSettingsForm extends React.Component {
     e.nativeEvent.stopImmediatePropagation()
   }
 
-  handleWebConfigurationChange(topicIndex) {
-    const notifications = {...this.state.settings.notifications}
-
-    // update values for all types of the topic
-    topics[topicIndex].types.forEach((type) => {
-      notifications[type] = {
-        ...notifications[type],
-        web: {
-          ...notifications[type].web,
-          enabled: notifications[type].web.enabled === 'yes' ? 'no' : 'yes'
-        }
-      }
-    })
-
-    this.setState({
-      settings: {
-        ...this.state.settings,
-        notifications,
-      }
-    }, this.onChange)
-  }
-
-  isChanged() {
-    return !_.isEqual(this.state.initialSettings, this.state.settings)
-  }
-
-  onChange() {
-    const isChanged = this.isChanged()
-
-    if (this.state.dirty !== isChanged) {
-      this.setState({ dirty: isChanged })
-    }
-  }
-
   render() {
-    const { isCustomer } = this.props
     const areSettingsProvided = !!this.props.values.settings
     const settings = this.state.settings
     const notifications = settings.notifications
@@ -296,25 +235,16 @@ class NotificationSettingsForm extends React.Component {
                     </div>
                   </th>
                   <td>
-                    {isCustomer ? (
-                      <label className="checkbox-ctrl">
-                        <input
-                          defaultChecked={notifications[topicFirstType].web.enabled === 'yes'}
-                          type="checkbox"
-                          readOnly
-                          className="checkbox"
-                          onClick={(e) => this.stopPropagation(e)}
-                        />
-                        <span className="checkbox-text" />
-                      </label>
-                    ) : (
-                      <SwitchButton                       
-                        onChange={() => this.handleWebConfigurationChange(index)}
-                        name={`web[${index}]`}
-                        checked={notifications[topicFirstType].web.enabled === 'yes'}
+                    <label className="checkbox-ctrl">
+                      <input
+                        defaultChecked={notifications[topicFirstType].web.enabled === 'yes'}
+                        type="checkbox"
+                        readOnly
+                        className="checkbox"
+                        onClick={(e) => this.stopPropagation(e)}
                       />
-                    )}
-                  </td>
+                      <span className="checkbox-text" />
+                    </label></td>
                   <td>
                     { !!emailTooltip &&
                       <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
@@ -355,7 +285,7 @@ class NotificationSettingsForm extends React.Component {
         </table>
 
         <div className="controls">
-          <button type="submit" className="tc-btn tc-btn-primary" disabled={this.props.values.pending || !this.state.dirty}>Save settings</button>
+          <button type="submit" className="tc-btn tc-btn-primary" disabled={this.props.values.pending}>Save settings</button>
         </div>
       </Formsy.Form>
     )
