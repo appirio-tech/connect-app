@@ -12,8 +12,7 @@ import _ from 'lodash'
  * @returns {Object} data formated for profile settings page form
  */
 export const formatProfileSettings = (traits) => {
-  // TODO Revert to 'connect_info' again
-  const connectTrait = _.find(traits, ['traitId', 'customer_info'])
+  const connectTrait = _.find(traits, ['traitId', 'connect_info'])
   let data = {}
 
   if (connectTrait) {
@@ -46,9 +45,8 @@ export const formatProfileSettings = (traits) => {
  */
 export const applyProfileSettingsToTraits = (traits, profileSettings) => {
   const updatedTraits = traits.map((trait) => {
-    // we put all the info from profile settings to `customer_info` trait as it is, skipping `photoUrl`
-    // TODO Revert to 'connect_info' again
-    if (trait.traitId === 'customer_info') {
+    // we put all the info from profile settings to `connect_info` trait as it is, skipping `photoUrl`
+    if (trait.traitId === 'connect_info') {
       const updatedTrait = {...trait}
       const updatedProps = _.omit(profileSettings, 'photoUrl')
       
