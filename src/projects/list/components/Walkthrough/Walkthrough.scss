@@ -114,7 +114,7 @@
             .new-project-icon {
               width: 30px;
               height: 30px;
-              background-color: rgb(66, 133, 244);
+              background-color: $tc-dark-blue-70;
               border-radius: 100%;
               display: -webkit-box;
               display: -ms-flexbox;
@@ -142,7 +142,7 @@
         h3{
           @include roboto-medium;
           line-height:35px;
-          font-size: $tc-heading;
+          font-size: $tc-heading-sm;
           color: $tc-black;
           text-align:left;
           padding-bottom: 10px;

@@ -7,6 +7,8 @@ import { render } from 'react-dom'
 import { SEGMENT_KEY } from './config/constants'
 import App from './App'
 
+import 'styles/main.scss'
+
 const mountNode = document.getElementById('root')
 
 /* eslint-disable */

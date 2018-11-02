@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import moment from 'moment'
+import { findProduct } from '../config/projectWizard'
 
 import {
   PROJECT_ROLE_CUSTOMER,
@@ -74,84 +75,35 @@ export const setDuration = ({duration, status}) => {
 /**
  * Format ProjectProgress props
  *
- * @param {Object} project project object
- * @param {Array}  phases  project phases
+ * @param {Object} project           project object
+ * @param {Array}  phases            project phases
+ * @param {Object} productsTimelines all products timelines
  *
  * @return {Object} ProjectProgress props
  */
 export function formatProjectProgressProps(project, phases, productsTimelines) {
-  let actualDuration = 0
-  let now = new Date()
-  now = now && moment(now)
+  // duration in days
+  const plannedDuration = getProjectPlannedDuration(phases, productsTimelines)
+  const actualDuration = getProjectActualDuration(phases, productsTimelines)
+  const delay = actualDuration - plannedDuration
+  const labelDayStatus = delay > 0 
+    ? `Delayed by ${delay} day${delay === 1 ? '' : 's'}`
+    : `Day ${actualDuration} of ${plannedDuration}`
+  const theme = delay > 0 ? 'warning' : null
+  
+  // these phases contribute to the whole progress of the project
+  // we need them to calculate the total progress percentage
+  const activeAndCompletedAndReviewedPhases = _.filter(phases, 
+    (phase) => _.includes([PHASE_STATUS_ACTIVE, PHASE_STATUS_COMPLETED, PHASE_STATUS_REVIEWED], phase.status)
+  )
 
-  let totalProgress = 0
-
-  // phases where start date is set and are not draft
-  const nonDraftPhases = _.filter(phases, (phase) => (phase.startDate && phase.status !== PHASE_STATUS_DRAFT))
-  const activeAndCompletedAndReviewedPhases = _.filter(phases, (phase) => (phase.startDate && (phase.status === PHASE_STATUS_ACTIVE || phase.status === PHASE_STATUS_COMPLETED || phase.status === PHASE_STATUS_REVIEWED)))
-  activeAndCompletedAndReviewedPhases.map((phase) => {
-    let progress = 0
-    // calculates days spent and day based progress for the phase
-    if (phase.startDate && phase.duration) {
-      const startDate = moment(phase.startDate)
-      const duration = now.diff(startDate, 'days') + 1
-      if(duration >= 0) {
-        if(duration < phase.duration || duration === phase.duration) {
-          progress = (duration / phase.duration) * 100
-          actualDuration += duration
-        } else {
-          progress = 100
-          actualDuration += phase.duration
-        }
-      }
-    }
-    // override the progress use custom progress set by manager
-    if (phase.progress) {
-      progress = phase.progress
-    }
-
-    // calculate progress of phase
-    const timeline = productsTimelines[phase.products[0].id].timeline
-    if (timeline && timeline.milestones && timeline.milestones.length > 0) {
-      let tlPlannedDuration = 0
-      let tlCurrentDuration = 0
-      let allMilestonesComplete = true
-      _.forEach(timeline.milestones, milestone => {
-        if (!milestone.hidden) {
-          tlPlannedDuration+=milestone.duration
-          if (milestone.completionDate) {
-            tlCurrentDuration += milestone.duration
-          } else {
-            allMilestonesComplete = false
-          }
-        }
-      })
-      let tlProgressInPercent = tlPlannedDuration > 0
-        ? Math.round((tlCurrentDuration / tlPlannedDuration) * 100)
-        : null
-      if (allMilestonesComplete) {
-        tlProgressInPercent = 100
-      }
-      progress = tlProgressInPercent
-    } else {
-      progress = phase.progress ? phase.progress : 0
-    }
-
-    // override project progress if status is delivered
-    if (phase.status === PHASE_STATUS_COMPLETED) {
-      progress = 100
-      //this line could be added if we want the progress bar to consider complete duration of phase,
-      // incase phase is marked completed before actual endDate
-      //actualDuration += phase.duration
-    }
-    totalProgress += progress
+  const phasesProgresses = activeAndCompletedAndReviewedPhases.map((phase) => {
+    const product = _.get(phase, 'products[0]')
+    const timeline = _.get(productsTimelines, `[${product.id}].timeline`)
+    return getPhaseActualData(phase, timeline).progress
   })
-
-  // calculate projected Duration of all non draft phases
-  const projectedDuration = projectPlannedDuration(nonDraftPhases, productsTimelines)
-
-  const labelDayStatus = `Day ${actualDuration} of ${projectedDuration}`
-
+  
+  const totalProgress = _.sum(phasesProgresses)
   const spentAmount = _.sumBy(activeAndCompletedAndReviewedPhases, 'spentBudget') || 0
   const labelSpent = spentAmount > 0 ? `Spent $${formatNumberWithCommas(spentAmount)}` : ''
   const progressPercent = phases.length > 0 ? Math.round(totalProgress/activeAndCompletedAndReviewedPhases.length) : 0
@@ -162,23 +114,62 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
     labelSpent,
     labelStatus,
     progressPercent,
+    theme,
   }
 }
 
 /**
+ * Gets planned duration of project based on phases/milestones durations (if have)
  *
- * gets duration of project based on milestones durations
- *
- * @param {Object} nonDraftPhases all non draft phases
+ * @param {Object} phases            all project phases
  * @param {Object} productsTimelines all products timelines
  *
  * @return {duration} planned duration of project
  */
-export function projectPlannedDuration(nonDraftPhases, productsTimelines) {
+export function getProjectPlannedDuration(phases, productsTimelines) {
+  const nonDraftPhases = _.reject(phases, { status: PHASE_STATUS_DRAFT })
   const phasesActualData = nonDraftPhases.map((phase) => {
     const product = _.get(phase, 'products[0]')
     const timeline = _.get(productsTimelines, `[${product.id}].timeline`)
     return getPhaseActualData(phase, timeline)
+  })
+
+  const startDates = _.compact(phasesActualData.map((phase) =>
+    phase.startDate ? moment(phase.startDate) : null
+  ))
+  const endDates = _.compact(phasesActualData.map((phase) =>
+    phase.endDate ? moment(phase.endDate) : null
+  ))
+  const minStartDate = startDates.length > 0 ? moment.min(startDates) : null
+  const maxEndDate = endDates.length > 0 ? moment.max(endDates) : null
+
+  const projectedDuration = maxEndDate ? maxEndDate.diff(minStartDate, 'days') + 1 : 0
+  return projectedDuration
+}
+
+/**
+ * Gets actual (current) duration of project based on phases/milestones durations (if have)
+ *
+ * @param {Object} phases            all project phases
+ * @param {Object} productsTimelines all products timelines
+ *
+ * @return {duration} planned duration of project
+ */
+export function getProjectActualDuration(phases, productsTimelines) {
+  const activeAndCompletedPhases = _.filter(phases, 
+    (phase) => _.includes([PHASE_STATUS_ACTIVE, PHASE_STATUS_COMPLETED], phase.status)
+  )
+  const today = moment()
+  const phasesActualData = activeAndCompletedPhases.map((phase) => {
+    const product = _.get(phase, 'products[0]')
+    const timeline = _.get(productsTimelines, `[${product.id}].timeline`)
+    const { startDate, endDate } = getPhaseActualData(phase, timeline)
+
+    return { 
+      startDate,
+      // for all active phases use today as endDate
+      endDate: phase.status === PHASE_STATUS_ACTIVE ? today : endDate,
+    }
   })
 
   const startDates = _.compact(phasesActualData.map((phase) =>
@@ -282,4 +273,29 @@ export function getPhaseActualData(phase, timeline) {
     duration,
     progress,
   }
+}
+
+/**
+ * Checks if project has estimations
+ * 
+ * TODO $PROJECT_PLAN$
+ *   returns NO HAVE estimations until we get real data from server
+ *   see https://github.com/appirio-tech/connect-app/issues/2016#issuecomment-400552992
+ * 
+ * NOTE This function has been created during refactoring of the old code and hasn't beed really tested.
+ * 
+ * @param {Object} project 
+ * 
+ * @returns {Boolean} true if project has estimation data
+ */
+export function isProjectEstimationPresent(project) {
+  // check if project has estimation the same way as VisualDesignProjectEstimateSection does
+  // probably this can be done in more elegant way
+  const { products } = project.details
+  const productId = products ? products[0] : null
+  const product = findProduct(productId)
+  
+  const hasEstimation = product && typeof product.basePriceEstimate !== 'undefined'
+
+  return hasEstimation && false
 }

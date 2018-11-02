@@ -25,12 +25,14 @@
 
       .bar-column:first-child {
         display: flex;
+        flex-shrink: 0;
         // width: calc(100% - 560px);
       }
 
       .bar-column:last-child {
         // width: 560px;
         display: flex;
+        flex-shrink: 0;
       }
 
       .logo-wrapper {
@@ -50,6 +52,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: flex;
+        margin-right: 4 * $base-unit;
 
         a {
           display: flex;
@@ -97,6 +100,10 @@
       .bar-column.project-name {
         display: flex;
         align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+        flex-shrink: 1;
+        overflow: hidden;
 
         span {
           @include tc-heading;
@@ -105,7 +112,6 @@
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
-          max-width: 500px;
         }
 
         @media screen and (max-width: $screen-md - 1px) {

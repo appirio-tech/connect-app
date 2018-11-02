@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './CoderBot.scss'
 import CoderBroken from '../../assets/icons/coder-broken.svg'
+import CoderHappy from '../../assets/icons/coder-welcome.svg'
 
 
 
@@ -26,14 +27,17 @@ const getMessage = code => {
   }
 }
 
-const CoderBot = ({code, message}) => {
+const CoderBot = ({code, message, heading, children}) => {
   return (
     <section className="content content-error">
       <div className="container">
         <div className="page-error">
-          <h3>{ getHeading(code) }</h3>
-          <p dangerouslySetInnerHTML={ {__html : message || getMessage(code) } } />
-          <CoderBroken className="icon-coder-broken" />
+          <h3>{ heading || getHeading(code) }</h3>
+          <div className="content">
+            <p dangerouslySetInnerHTML={ {__html : message || getMessage(code) } } />
+            <div>{children}</div>
+          </div>
+          {code !== 200 ? <CoderBroken className="icon-coder-broken" /> : <CoderHappy className="icon-coder-broken" />}
           <span>{code !== 200 && code}</span>
         </div>
       </div>

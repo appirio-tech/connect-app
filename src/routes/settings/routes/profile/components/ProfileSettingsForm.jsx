@@ -1,72 +1,151 @@
 /**
  * Profile settings form
  */
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
 const Formsy = FormsyForm.Formsy
-import TextInputWithCounter from '../../../../../components/TextInputWithCounter/TextInputWithCounter'
-import ProfileSeetingsAvatar from './ProfileSeetingsAvatar'
-import { MAX_USERNAME_LENGTH } from '../../../../../config/constants'
+import ProfileSettingsAvatar from './ProfileSettingsAvatar'
 import './ProfileSettingsForm.scss'
-import IconImage from '../../assets/icons/users-16px_single-01.svg'
 
+const companySizeRadioOptions = ['1-15', '16-50', '51-500', '500+']
 
+class ProfileSettingsForm extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      valid: false,
+      dirty: false,
+    }
+    this.onSubmit = this.onSubmit.bind(this)
+    this.onValid = this.onValid.bind(this)
+    this.onInvalid = this.onInvalid.bind(this)
+    this.onChange = this.onChange.bind(this)
+  }
 
-const ProfileSettingsForm = (props) => {
-  const { username, photoSrc, firstname, lastname, company, mobilephone1, mobilephone2 } = props
-
-  return (
-    <Formsy.Form
-      className="profile-settings-form"
-      onValidSubmit={props.onSubmit}
-    >
-      <ProfileSeetingsAvatar defaultPhotoSrc={photoSrc}/>
-
+  getField(label, name, isRequired=false) {
+    let validations = null
+    if (name === 'businessPhone') {
+      validations = {
+        matchRegexp: /^([+]?\d{1,2}[.-\s]?)?(\d{3}[.-]?){2}\d{4}$/
+      }
+    }
+    return (
       <div className="field">
-        <div className="username">
-          <div className="username-icon"><IconImage className="icon-image" /></div>
-          <TextInputWithCounter type="text" name="username" label="Username" value={username} maxLength={`${MAX_USERNAME_LENGTH}`} />
+        <div className="label">{label}</div>
+        <TCFormFields.TextInput
+          wrapperClass="input-field"
+          type="text"
+          name={name}
+          validations={validations}
+          value={this.props.values.settings[name] || ''}
+          validationError={`Please enter ${label}`}
+          required={isRequired}
+        />
+      </div>
+    )
+  }
+
+  onSubmit(data) {
+    // we have to use initial data as a base for updated data
+    // as form could update not all fields, thus they won't be included in `data`
+    // for example user avatar is not included in `data` thus will be removed if don't use 
+    // this.props.values.settings as a base
+    const updatedDate = {
+      ...this.props.values.settings,
+      ...data,
+    }
+    this.props.saveSettings(updatedDate)
+  }
+
+  onValid() {
+    this.setState({valid: true})
+  }
+
+  onInvalid() {
+    this.setState({valid: false})
+  }
+
+  onChange(currentValues, isChanged) {
+    if (this.state.dirty !== isChanged) {
+      this.setState({ dirty: isChanged })
+    }
+  }
+
+  render() {
+    return (
+      <Formsy.Form
+        className="profile-settings-form"
+        onInvalid={this.onInvalid}
+        onValid={this.onValid}
+        onValidSubmit={this.onSubmit}
+        onChange={this.onChange}
+      >
+        <div className="section-heading">Personal information</div>
+        <div className="field">
+          <div className="label">Avatar</div>
+          <ProfileSettingsAvatar
+            isUploading={this.props.values.isUploadingPhoto}
+            photoUrl={this.props.values.settings.photoUrl}
+            uploadPhoto={this.props.uploadPhoto}
+          />
         </div>
-      </div>
-
-      <div className="field">
-        <TCFormFields.TextInput type="text" name="firstname" label="First name" value={firstname} />
-      </div>
-
-      <div className="field">
-        <TCFormFields.TextInput type="text" name="lastname" label="Last name" value={lastname} />
-      </div>
-
-      <div className="field">
-        <TCFormFields.TextInput type="text" name="company" label="Company" value={company} />
-      </div>
-
-      <div className="field">
-        <TCFormFields.TextInput type="phone" name="mobilephone1" label="Mobile phone" value={mobilephone1} />
-      </div>
-
-      <div className="field">
-        <TCFormFields.TextInput type="phone" name="mobilephone2" label="Mobile phone" value={mobilephone2} />
-      </div>
-
-      <div className="controls">
-        <button type="submit" className="tc-btn tc-btn-primary">Save settings</button>
-      </div>
-    </Formsy.Form>
-  )
+        {this.getField('First and last name', 'firstNLastName', true)}
+        {this.getField('Title', 'title', true)}
+        {this.getField('Business phone', 'businessPhone', true)}
+        {this.getField('Company name', 'companyName', true)}
+        <div className="field">
+          <div className="label">Company size</div>
+          <TCFormFields.RadioGroup
+            wrapperClass="input-field"
+            type="text"
+            name="companySize"
+            value={this.props.values.settings.companySize}
+            onChange={this.onFieldUpdate}
+            options={companySizeRadioOptions.map((label) => ({option: label, label, value: label}))}
+            required
+          />
+        </div>
+        <div className="section-heading">Business address</div>
+        {this.getField('Address', 'address')}
+        {this.getField('City', 'city')}
+        <div className="field">
+          <div className="label">State</div>
+          <div className="zip-container">
+            <TCFormFields.TextInput
+              wrapperClass="input-field"
+              type="text"
+              name="state"
+              onChange={this.onFieldUpdate}
+              value={this.props.values.settings.state || ''}
+            />
+            <div className="zip label">ZIP</div>
+            <TCFormFields.TextInput wrapperClass="input-field zip-input"
+              type="text" maxLength={5} name="zip" value={this.props.values.settings.zip || ''}
+              onChange={this.onFieldUpdate}
+            />
+          </div>
+        </div>
+        {this.getField('Country', 'country')}
+        <div className="controls">
+          <button
+            type="submit"
+            className="tc-btn tc-btn-primary"
+            disabled={this.props.values.pending || !this.state.valid || !this.state.dirty}
+          >
+            Save settings
+          </button>
+        </div>
+      </Formsy.Form>
+    )
+  }
 }
 
 ProfileSettingsForm.propTypes = {
-  username: PropTypes.string,
-  photoSrc: PropTypes.string,
-  firstname: PropTypes.string,
-  lastname: PropTypes.string,
-  company: PropTypes.string,
-  mobilephone1: PropTypes.string,
-  mobilephone2: PropTypes.string,
-  onSubmit: PropTypes.func
+  values: PropTypes.object.isRequired,
+  saveSettings: PropTypes.func.isRequired,
+  uploadPhoto: PropTypes.func.isRequired
 }
 
 export default ProfileSettingsForm
