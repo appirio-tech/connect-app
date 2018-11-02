@@ -180,6 +180,7 @@ class Feed extends React.Component {
           isFullScreen={isFullScreen}
           headerHeight={headerHeight}
           commentId={commentId}
+          error={error}
         />
         {children}
         {isDeletingTopic &&
