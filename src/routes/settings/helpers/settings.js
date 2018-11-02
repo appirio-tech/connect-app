@@ -2,6 +2,37 @@
  * Setting related helper methods
  */
 import _ from 'lodash'
+import { ENV } from '../../../../config/constants'
+
+// blank traits object which we can use if trait doesn't exist to create a new one
+export const blankTraits = {
+  'connect_info': { // eslint-disable-line quote-props 
+    traitId: 'connect_info',
+    categoryName: 'Connect User Information',
+    traits: {
+      data: [{}],
+    },
+  },
+  'basic_info': { // eslint-disable-line quote-props 
+    traitId: 'basic_info',
+    categoryName: 'Basic Info',
+    traits: {
+      data: [{}],
+    },
+  },
+  // to use for fallback on PROD for now
+  'customer_info': { // eslint-disable-line quote-props 
+    traitId: 'customer_info',
+    categoryName: 'Customer Information',
+    traits: {
+      data: [{}],
+    },
+  },
+}
+
+// as now DEV environment supports only `connect_info` and PROD environment supports only `customer_info`
+// choose depend on ENV
+export const customerTraitId = ENV === 'DEV' ? 'connect_info' : 'customer_info'
 
 /**
  * Format row member traits data to the format which can be rendered by the form 
@@ -12,8 +43,8 @@ import _ from 'lodash'
  * @returns {Object} data formated for profile settings page form
  */
 export const formatProfileSettings = (traits) => {
-  // TODO Revert to 'connect_info' again
-  const connectTrait = _.find(traits, ['traitId', 'customer_info'])
+  // TODO Revert to 'connect_info' again when PROD supports it
+  const connectTrait = _.find(traits, ['traitId', customerTraitId])
   let data = {}
 
   if (connectTrait) {
@@ -45,10 +76,20 @@ export const formatProfileSettings = (traits) => {
  * @returns {Array<Object>} updated member traits data 
  */
 export const applyProfileSettingsToTraits = (traits, profileSettings) => {
-  const updatedTraits = traits.map((trait) => {
-    // we put all the info from profile settings to `customer_info` trait as it is, skipping `photoUrl`
-    // TODO Revert to 'connect_info' again
-    if (trait.traitId === 'customer_info') {
+  const existentTraits = [...traits]
+
+  //  make sure traits exists so we can update them
+  if (!_.find(existentTraits, { traitId: 'basic_info'})) {
+    existentTraits.push(blankTraits['basic_info'])
+  }
+  if (!_.find(existentTraits, { traitId: customerTraitId})) {
+    existentTraits.push(blankTraits[customerTraitId])
+  }
+
+  const updatedTraits = existentTraits.map((trait) => {
+    // we put all the info from profile settings to `connect_info` trait as it is, skipping `photoUrl`
+    // TODO Revert to 'connect_info' again when PROD supports it
+    if (trait.traitId === customerTraitId) {
       const updatedTrait = {...trait}
       const updatedProps = _.omit(profileSettings, 'photoUrl')
       
@@ -58,6 +99,11 @@ export const applyProfileSettingsToTraits = (traits, profileSettings) => {
           ..._.get(trait, 'traits.data[0]'),
           ...updatedProps
         }]
+      }
+
+      // define categoryName to handle possible data inconsistency
+      if (!updatedTrait.categoryName) {
+        updatedTrait.categoryName = blankTraits[customerTraitId].categoryName
       }
       
       return updatedTrait
@@ -82,6 +128,11 @@ export const applyProfileSettingsToTraits = (traits, profileSettings) => {
           ..._.get(trait, 'traits.data[0]'),
           ...updatedProps
         }]
+      }
+
+      // define categoryName to handle possible data inconsistency
+      if (!updatedTrait.categoryName) {
+        updatedTrait.categoryName = blankTraits['basic_info'].categoryName
       }
       
       return updatedTrait

@@ -107,7 +107,8 @@ class ProfileSettingsForm extends Component {
             required
           />
         </div>
-        <div className="section-heading">Business address</div>
+        {/* TODO as for now PROD doesn't supports `connect_info` we don't have a places where to save this data for now */}
+        {/* <div className="section-heading">Business address</div>
         {this.getField('Address', 'address')}
         {this.getField('City', 'city')}
         <div className="field">
@@ -127,7 +128,7 @@ class ProfileSettingsForm extends Component {
             />
           </div>
         </div>
-        {this.getField('Country', 'country')}
+        {this.getField('Country', 'country')}*/}
         <div className="controls">
           <button
             type="submit"
