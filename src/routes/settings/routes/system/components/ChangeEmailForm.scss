@@ -55,6 +55,11 @@
         min-width: 350px;
         position: relative;
 
+        input[disabled],
+        input[disabled]:hover {
+          border: 1px solid $tc-gray-neutral-dark;
+        }
+
         @media screen and (max-width: $screen-md - 1px) {
           max-width: none;
           min-width: 0;
@@ -116,6 +121,28 @@
 
       > button[disabled] {
         filter: none;
+      }
+    }
+
+    .email-hint {
+      @include roboto;
+      color: $tc-gray-50;
+      font-size: 13px;
+      max-width: 450px;
+      line-height: 20px;
+      text-align: right;
+      margin-top: 5px;
+  
+      > a,
+      > a:hover,
+      > a:active,
+      > a:visited {
+        color: $tc-dark-blue-110;
+      }
+  
+      @media screen and (max-width: $screen-md - 1px) {
+        width: 100%;
+        max-width: none;
       }
     }
   }

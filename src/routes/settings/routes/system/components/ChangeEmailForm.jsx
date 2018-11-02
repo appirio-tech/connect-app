@@ -140,7 +140,13 @@ class ChangeEmailForm extends React.Component {
               }}
               disabled={isEmailChanging}
               ref={(ref) => this.emailRef = ref}
+              /* disable email field for now, as backend doesn't support returnUrl yet
+                 and verification link which is sent to email leads to Community app, instead of Connect app for now */
+              disabled
             />
+            <div className="email-hint">
+              To change the email please <a href="mailto:support@topcoder.com">get in touch with support</a>
+            </div>
             { isFocused && isCheckingCurrentEmail && (
               <div className="field-status">
                 Verifying email

@@ -64,6 +64,10 @@
           background-color: $tc-gray-neutral-light;
           border: 1px solid $tc-gray-neutral-dark;
           border-radius: 4px;
+
+          &[disabled]:hover {
+            border: 1px solid $tc-gray-neutral-dark;
+          }
         }
       }
     }
