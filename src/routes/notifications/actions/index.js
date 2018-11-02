@@ -14,14 +14,9 @@ import {
   HIDE_OLDER_NOTIFICATIONS_SUCCESS,
   NOTIFICATIONS_PENDING,
   TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE,
-  TOGGLE_NOTIFICATIONS_DROPDOWN_WEB,
-  MARK_NOTIFICATIONS_READ,
+  TOGGLE_NOTIFICATIONS_DROPDOWN_WEB
 } from '../../../config/constants'
 import notificationsService from '../services/notifications.js'
-import { 
-  filterNotificationsByCriteria, 
-  filterReadNotifications 
-} from '../helpers/notifications'
 import Alert from 'react-s-alert'
 import _ from 'lodash'
 
@@ -139,28 +134,3 @@ export const toggleNotificationsDropdownWeb = (isOpen) => (dispatch) => dispatch
   type: TOGGLE_NOTIFICATIONS_DROPDOWN_WEB,
   payload: isOpen
 })
-
-export const markNotificationsReadByCriteria = (criteria) => (dispatch, getState) => {
-  const notifications = getState().notifications.notifications
-  const notificationsToRead = filterReadNotifications(filterNotificationsByCriteria(notifications, criteria))
-
-  if (notificationsToRead.length > 0) {
-    const notificationIds = _.map(notificationsToRead, 'id')
-    markNotificationsRead(notificationIds)(dispatch, getState)
-  }
-}
-
-export const markNotificationsRead = (notificationIds) => (dispatch) => {
-  dispatch({
-    type: NOTIFICATIONS_PENDING
-  })
-
-  notificationsService.markNotificationsRead(notificationIds.join('-')).then(() => {
-    dispatch({
-      type: MARK_NOTIFICATIONS_READ,
-      payload: notificationIds
-    })
-  }).catch(err => {
-    Alert.error(`Failed to mark notification read. ${err.message}`)
-  })
-}

@@ -7,11 +7,10 @@
 import {
   NOTIFICATION_TYPE,
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR,
-  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER,
-  EVENT_TYPE,
+  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER
 } from '../../../config/constants'
 
-export const GOTO = {
+const GOTO = {
   PROJECT_DASHBOARD: '/projects/{{projectId}}',
   PROJECT_SPECIFICATION: '/projects/{{projectId}}/specification',
   PROJECT_PLAN: '/projects/{{projectId}}/plan',
@@ -27,7 +26,7 @@ export const GOTO = {
 export const NOTIFICATIONS = [
   // Outside project
   {
-    eventType: EVENT_TYPE.PROJECT.CREATED,
+    eventType: 'notifications.connect.project.created',
     type: NOTIFICATION_TYPE.NEW_PROJECT,
     rules: [{
       text: 'Your Project was created successfully',
@@ -37,7 +36,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.PROJECT.ACTIVE,
+    eventType: 'notifications.connect.project.active',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Your project is now active',
@@ -51,12 +50,11 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.PROJECT.SUBMITTED_FOR_REVIEW,
+    eventType: 'notifications.connect.project.submittedForReview',
     type: NOTIFICATION_TYPE.REVIEW_PENDING,
     rules: [{
       text: 'Your project is now in review',
-      projectRoles: [PROJECT_ROLE_OWNER],
-      goTo: GOTO.PROJECT_DASHBOARD
+      projectRoles: [PROJECT_ROLE_OWNER]
     }, {
       text: 'Project is available for review',
       topcoderRoles: [ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR],
@@ -65,12 +63,11 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.PROJECT.APPROVED,
+    eventType: 'notifications.connect.project.approved',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Your project was approved, work will soon start',
-      projectRoles: [PROJECT_ROLE_OWNER],
-      goTo: GOTO.PROJECT_DASHBOARD
+      projectRoles: [PROJECT_ROLE_OWNER]
     }, {
       text: 'Project is available for pickup',
       topcoderRoles: [ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR],
@@ -83,7 +80,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.PROJECT.PAUSED,
+    eventType: 'notifications.connect.project.paused',
     type: NOTIFICATION_TYPE.REVIEW_PENDING,
     rules: [{
       text: 'Your project was paused',
@@ -97,7 +94,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.PROJECT.COMPLETED,
+    eventType: 'notifications.connect.project.completed',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Your project completed successfully!',
@@ -111,7 +108,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.PROJECT.CANCELED,
+    eventType: 'notifications.connect.project.canceled',
     type: NOTIFICATION_TYPE.WARNING,
     rules: [{
       text: 'Your project was canceled. If you think that was a mistake...',
@@ -122,7 +119,7 @@ export const NOTIFICATIONS = [
 
   // User management
   {
-    eventType: EVENT_TYPE.MEMBER.JOINED,
+    eventType: 'notifications.connect.project.member.joined',
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
       text: 'A new team member joined your project',
@@ -134,51 +131,47 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.MEMBER.LEFT,
+    eventType: 'notifications.connect.project.member.left',
     type: NOTIFICATION_TYPE.WARNING,
     rules: [{
       text: '<strong>{{userHandle}}</strong> left a project',
       shouldBundle: true,
       bundledText: '{{bundledCount}} team members left your project',
-      projectRoles: [PROJECT_ROLE_MANAGER],
-      goTo: GOTO.PROJECT_DASHBOARD
+      projectRoles: [PROJECT_ROLE_MANAGER]
     }]
   }, {
     version: 2,
-    eventType: EVENT_TYPE.MEMBER.LEFT,
+    eventType: 'notifications.connect.project.member.left',
     type: NOTIFICATION_TYPE.WARNING,
     rules: [{
       text: '<strong>{{userFullName}}</strong> left a project',
       shouldBundle: true,
       bundledText: '{{bundledCount}} team members left your project',
-      projectRoles: [PROJECT_ROLE_MANAGER],
-      goTo: GOTO.PROJECT_DASHBOARD
+      projectRoles: [PROJECT_ROLE_MANAGER]
     }]
   },
 
   {
-    eventType: EVENT_TYPE.MEMBER.REMOVED,
+    eventType: 'notifications.connect.project.member.removed',
     type: NOTIFICATION_TYPE.WARNING,
     rules: [{
       text: '<strong>{{userHandle}}</strong> was removed from project',
       shouldBundle: true,
       bundledText: '{{bundledCount}} team members were removed from your project',
-      projectRoles: [PROJECT_ROLE_MANAGER],
-      goTo: GOTO.PROJECT_DASHBOARD
+      projectRoles: [PROJECT_ROLE_MANAGER]
     }, {
       text: 'You were removed from a project',
       toUserHandle: true
     }]
   }, {
     version: 2,
-    eventType: EVENT_TYPE.MEMBER.REMOVED,
+    eventType: 'notifications.connect.project.member.removed',
     type: NOTIFICATION_TYPE.WARNING,
     rules: [{
       text: '<strong>{{userFullName}}</strong> was removed from project',
       shouldBundle: true,
       bundledText: '{{bundledCount}} team members were removed from your project',
-      projectRoles: [PROJECT_ROLE_MANAGER],
-      goTo: GOTO.PROJECT_DASHBOARD
+      projectRoles: [PROJECT_ROLE_MANAGER]
     }, {
       text: 'You were removed from a project',
       toUserHandle: true
@@ -186,7 +179,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.MEMBER.ASSIGNED_AS_OWNER,
+    eventType: 'notifications.connect.project.member.assignedAsOwner',
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
       text: 'You are now the owner of project',
@@ -199,7 +192,7 @@ export const NOTIFICATIONS = [
     }]
   }, {
     version: 2,
-    eventType: EVENT_TYPE.MEMBER.ASSIGNED_AS_OWNER,
+    eventType: 'notifications.connect.project.member.assignedAsOwner',
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
       text: 'You are now the owner of project',
@@ -213,7 +206,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.MEMBER.COPILOT_JOINED,
+    eventType: 'notifications.connect.project.member.copilotJoined',
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
       text: 'A copilot joined your project team',
@@ -225,7 +218,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.MEMBER.MANAGER_JOINED,
+    eventType: 'notifications.connect.project.member.managerJoined',
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
       text: 'A manager joined your project team',
@@ -237,7 +230,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.TOPIC.CREATED,
+    eventType: 'notifications.connect.project.topic.created',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userHandle}}</strong> created a new post ',
@@ -246,7 +239,7 @@ export const NOTIFICATIONS = [
     }]
   }, {
     version: 2,
-    eventType: EVENT_TYPE.TOPIC.CREATED,
+    eventType: 'notifications.connect.project.topic.created',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userFullName}}</strong> created a new post ',
@@ -256,7 +249,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.POST.CREATED,
+    eventType: 'notifications.connect.project.post.created',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userHandle}}</strong> responded to your post',
@@ -273,7 +266,7 @@ export const NOTIFICATIONS = [
     }]
   }, {
     version: 2,
-    eventType: EVENT_TYPE.POST.CREATED,
+    eventType: 'notifications.connect.project.post.created',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userFullName}}</strong> responded to your post',
@@ -288,11 +281,9 @@ export const NOTIFICATIONS = [
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.POST
     }]
-  }, 
-  
-  {
+  }, {
     version: 2,
-    eventType: EVENT_TYPE.POST.UPDATED,
+    eventType: 'notifications.connect.project.post.edited',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userFullName}}</strong> edited post',
@@ -302,11 +293,9 @@ export const NOTIFICATIONS = [
       toTopicStarter: true,
       goTo: GOTO.POST
     }]
-  }, 
-  
-  {
+  }, {
     version: 2,
-    eventType: EVENT_TYPE.POST.MENTION,
+    eventType: 'notifications.connect.project.post.mention',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userFullName}}</strong> mentioned you in a post',
@@ -316,7 +305,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.PROJECT.LINK_CREATED,
+    eventType: 'notifications.connect.project.linkCreated',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userHandle}}</strong> added a link to your project',
@@ -325,7 +314,7 @@ export const NOTIFICATIONS = [
     }]
   }, {
     version: 2,
-    eventType: EVENT_TYPE.PROJECT.LINK_CREATED,
+    eventType: 'notifications.connect.project.linkCreated',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userFullName}}</strong> added a link to your project',
@@ -335,7 +324,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.PROJECT.FILE_UPLOADED,
+    eventType: 'notifications.connect.project.fileUploaded',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userHandle}}</strong> added a new file',
@@ -346,7 +335,7 @@ export const NOTIFICATIONS = [
     }]
   }, {
     version: 2,
-    eventType: EVENT_TYPE.PROJECT.FILE_UPLOADED,
+    eventType: 'notifications.connect.project.fileUploaded',
     type: NOTIFICATION_TYPE.NEW_POSTS,
     rules: [{
       text: '<strong>{{userFullName}}</strong> added a new file',
@@ -358,7 +347,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.PROJECT.SPECIFICATION_MODIFIED,
+    eventType: 'connect.action.project.product.update.spec',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userHandle}}</strong> updated the project specification',
@@ -369,7 +358,7 @@ export const NOTIFICATIONS = [
     }]
   }, {
     version: 2,
-    eventType: EVENT_TYPE.PROJECT.SPECIFICATION_MODIFIED,
+    eventType: 'connect.action.project.product.update.spec',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userFullName}}</strong> updated the project specification',
@@ -379,9 +368,8 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PROJECT_SPECIFICATION
     }]
   },
-  
   {
-    eventType: EVENT_TYPE.PROJECT_PLAN.READY,
+    eventType: 'connect.action.project.plan.ready',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Project plan is ready',
@@ -397,9 +385,8 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PROJECT_PLAN
     }]
   },
-
   {
-    eventType: EVENT_TYPE.PROJECT_PLAN.MODIFIED,
+    eventType: 'connect.action.project.plan.updated',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Project plan is modified',
@@ -415,9 +402,8 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PROJECT_PLAN
     }]
   },
-
   {
-    eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_ACTIVATED,
+    eventType: 'notifications.connect.project.phase.transition.active',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Phase <strong>{{updatedPhase.name}}</strong> is activated',
@@ -433,9 +419,8 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PHASE
     }]
   },
-
   {
-    eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_COMPLETED,
+    eventType: 'notifications.connect.project.phase.transition.completed',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Phase <strong>{{updatedPhase.name}}</strong> is completed',
@@ -451,9 +436,8 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PHASE
     }]
   },
-
   {
-    eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_PAYMENT_UPDATED,
+    eventType: 'notifications.connect.project.phase.update.payment',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Payments for <strong>{{updatedPhase.name}}</strong> updated',
@@ -469,9 +453,8 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PHASE
     }]
   },
-  
   {
-    eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_PROGRESS_UPDATED,
+    eventType: 'notifications.connect.project.phase.update.progress',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Phase <strong>{{updatedPhase.name}}</strong> is progressed',
@@ -487,10 +470,8 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PHASE
     }]
   },
-
   {
-    // using product spec modified event instead of phase scope modified
-    eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_PRODUCT_SPEC_UPDATED,
+    eventType: 'notifications.connect.project.phase.update.scope',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userHandle}}</strong> updated the phase specification',
@@ -506,9 +487,8 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PHASE
     }]
   },
-
   {
-    eventType: EVENT_TYPE.PROJECT_PLAN.PROGRESS_UPDATED,
+    eventType: 'connect.action.project.updated.progress',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userHandle}}</strong> updated the project progress',
@@ -524,9 +504,8 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PROJECT_PLAN
     }]
   },
-  
   {
-    eventType: EVENT_TYPE.PROJECT_PLAN.TIMELINE_ADJUSTED,
+    eventType: 'connect.action.timeline.adjusted',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: '<strong>{{userHandle}}</strong> updated the phase timeline',
@@ -542,9 +521,8 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PHASE
     }]
   },
-
   {
-    eventType: EVENT_TYPE.PROJECT_PLAN.MILESTONE_ACTIVATED,
+    eventType: 'connect.action.timeline.milestone.transition.active',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Milestone is activated in the phase',
@@ -560,9 +538,8 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PHASE
     }]
   },
-
   {
-    eventType: EVENT_TYPE.PROJECT_PLAN.MILESTONE_COMPLETED,
+    eventType: 'connect.action.timeline.milestone.transition.completed',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'Milestone is completed in the phase',
@@ -578,9 +555,8 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PHASE
     }]
   },
-
   {
-    eventType: EVENT_TYPE.PROJECT_PLAN.WAITING_FOR_CUSTOMER_INPUT,
+    eventType: 'connect.action.timeline.milestone.waiting.customer',
     type: NOTIFICATION_TYPE.UPDATES,
     rules: [{
       text: 'We are waiting for your input in the project {{projectName}}',

@@ -5,6 +5,7 @@ import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
 import cn from 'classnames'
+import moment from 'moment'
 
 import DotIndicator from '../../DotIndicator'
 import ProjectProgress from '../../../ProjectProgress'
@@ -13,7 +14,7 @@ import MilestoneDescription from '../../MilestoneDescription'
 import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
-import { getMilestoneStatusText, getDaysLeft, getProgressPercent, getTotalDays } from '../../../../../../helpers/milestoneHelper'
+import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 
 import './MilestoneTypeProgress.scss'
 
@@ -21,23 +22,9 @@ class MilestoneTypeProgress extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      showExtensionRequestSection: true,
-    }
-
     this.updatedUrl = this.updatedUrl.bind(this)
     this.removeUrl = this.removeUrl.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
-    this.onFormAddOpen = this.onFormAddOpen.bind(this)
-    this.onFormAddCancel = this.onFormAddCancel.bind(this)
-  }
-
-  onFormAddOpen() {
-    this.setState({ showExtensionRequestSection: false })
-  }
-
-  onFormAddCancel() {
-    this.setState({ showExtensionRequestSection: true })
   }
 
   updatedUrl(values, linkIndex) {
@@ -90,16 +77,21 @@ class MilestoneTypeProgress extends React.Component {
     const links = _.get(milestone, 'details.content.links', [])
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
+    const today = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
 
-    const daysLeft = getDaysLeft(milestone)
-    const totalDays = getTotalDays(milestone)
+    const startDate = moment(milestone.actualStartDate || milestone.startDate)
+    const endDate = moment(milestone.startDate).add(milestone.duration - 1, 'days')
+    const daysLeft = endDate.diff(today, 'days')
+    const totalDays = endDate.diff(startDate, 'days')
 
-    const progressText = daysLeft >= 0
+    const progressText = daysLeft > 0
       ? `${daysLeft} days until the job is completed`
       : `${-daysLeft} days job is delayed`
 
-    const progressPercent = getProgressPercent(totalDays, daysLeft)
-    const { showExtensionRequestSection } = this.state
+    const progressPercent = daysLeft > 0
+      ? (totalDays - daysLeft) / totalDays * 100
+      : 100
+
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -122,24 +114,20 @@ class MilestoneTypeProgress extends React.Component {
             </div>
 
             {!currentUser.isCustomer && (
-              <DotIndicator hideDot={showExtensionRequestSection}>
-                <LinkList
-                  links={links}
-                  onAddLink={this.updatedUrl}
-                  onRemoveLink={this.removeUrl}
-                  onUpdateLink={this.updatedUrl}
-                  fields={[{ name: 'title' }, { name: 'url' }, { name: 'type' }]}
-                  addButtonTitle="Add link"
-                  formAddTitle="Adding a link"
-                  formAddButtonTitle="Add link"
-                  formUpdateTitle="Editing a link"
-                  formUpdateButtonTitle="Save changes"
-                  isUpdating={milestone.isUpdating}
-                  onFormAddOpen={this.onFormAddOpen}
-                  onFormAddCancel={this.onFormAddCancel}
-                  canAddLink
-                />
-              </DotIndicator>
+              <LinkList
+                links={links}
+                onAddLink={this.updatedUrl}
+                onRemoveLink={this.removeUrl}
+                onUpdateLink={this.updatedUrl}
+                fields={[{ name: 'title'}, { name: 'url'}, { name: 'type' }]}
+                addButtonTitle="Add link"
+                formAddTitle="Adding a link"
+                formAddButtonTitle="Add a link"
+                formUpdateTitle="Editing a link"
+                formUpdateButtonTitle="Save changes"
+                isUpdating={milestone.isUpdating}
+                canAddLink
+              />
             )}
 
             {!!extensionRequestDialog && (
@@ -160,22 +148,22 @@ class MilestoneTypeProgress extends React.Component {
 
             {
               !currentUser.isCustomer &&
-              !extensionRequestDialog && showExtensionRequestSection &&
-              (
-                <DotIndicator>
-                  <div styleName="top-space">
-                    <div styleName="top-space button-layer">
-                      <button
-                        className="tc-btn tc-btn-primary tc-btn-sm action-btn"
-                        onClick={this.completeMilestone}
-                      >
-                        Mark as completed
-                      </button>
-                      {!currentUser.isCustomer && extensionRequestButton}
-                    </div>
+              !extensionRequestDialog &&
+            (
+              <DotIndicator>
+                <div styleName="top-space">
+                  <div styleName="top-space button-layer">
+                    <button
+                      className="tc-btn tc-btn-primary tc-btn-sm action-btn"
+                      onClick={this.completeMilestone}
+                    >
+                      Mark as completed
+                    </button>
+                    {!currentUser.isCustomer && extensionRequestButton}
                   </div>
-                </DotIndicator>
-              )}
+                </div>
+              </DotIndicator>
+            )}
           </div>
         )}
 

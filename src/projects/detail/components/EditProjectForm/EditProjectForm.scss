@@ -2,6 +2,8 @@
 
 :global {
   //TODO  Additional variables - need to find a home for these
+  $gray-color: $tc-gray-50;
+  $title-color: $tc-gray-80;
   $sideBarWidth: 280px;
   $sideBarMaxWidth: 360px;
 
@@ -186,14 +188,14 @@
 
         .optional {
           background: $tc-gray-10;
-          color: $tc-gray-50;
+          color: $gray-color;
         }
       }
 
       .gray-text {
         @include roboto;
         font-size: 15px;
-        color: $tc-gray-50;
+        color: $gray-color;
         line-height: 25px;
 
         strong {

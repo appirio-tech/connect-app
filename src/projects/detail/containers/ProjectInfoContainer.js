@@ -30,7 +30,6 @@ class ProjectInfoContainer extends React.Component {
     this.onEditLink = this.onEditLink.bind(this)
     this.onAddFile = this.onAddFile.bind(this)
     this.onAddAttachment = this.onAddAttachment.bind(this)
-    this.onSubmitForReview = this.onSubmitForReview.bind(this)
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
@@ -40,7 +39,6 @@ class ProjectInfoContainer extends React.Component {
       !_.isEqual(nextProps.productsTimelines, this.props.productsTimelines) ||
       !_.isEqual(nextProps.phasesTopics, this.props.phasesTopics) ||
       !_.isEqual(nextProps.isFeedsLoading, this.props.isFeedsLoading) ||
-      !_.isEqual(nextProps.isProjectProcessing, this.props.isProjectProcessing) ||
       nextProps.activeChannelId !== this.props.activeChannelId
   }
 
@@ -120,16 +118,11 @@ class ProjectInfoContainer extends React.Component {
     this.props.addProjectAttachment(project.id, attachment)
   }
 
-  onSubmitForReview() {
-    const { updateProject, project } = this.props
-    updateProject(project.id, { status: 'in_review'})
-  }
-
   render() {
     const { duration } = this.state
     const { project, currentMemberRole, isSuperUser, phases, feeds,
       hideInfo, hideLinks, hideMembers, onChannelClick, activeChannelId, productsTimelines,
-      isManageUser, phasesTopics, isProjectPlan, isProjectProcessing } = this.props
+      isManageUser, phasesTopics, isProjectPlan } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -190,13 +183,12 @@ class ProjectInfoContainer extends React.Component {
         return ({
           ...topic,
           phaseId: phase.id,
-          phaseName: phase.name,
         })
       })
     )
 
     const discussions = [...feeds, ...phaseFeeds].map((feed) => ({
-      title: feed.phaseName ? `${feed.phaseName}` : `${feed.title}`,
+      title: `${feed.title}`,
       address: feed.tag === PROJECT_FEED_TYPE_PRIMARY ? `/projects/${project.id}#feed-${feed.id}` : `/projects/${project.id}/plan#phase-${feed.phaseId}-posts`,
       noNewPage: true,
       //if PRIMARY discussion is to be loaded for project-plan page we won't attach the callback, for smoother transition to dashboard page
@@ -222,8 +214,6 @@ class ProjectInfoContainer extends React.Component {
               directLinks={directLinks}
               isSuperUser={isSuperUser}
               productsTimelines = {productsTimelines}
-              onSubmitForReview={this.onSubmitForReview}
-              isProjectProcessing={isProjectProcessing}
             />
           }
           <LinksMenu
@@ -273,7 +263,6 @@ ProjectInfoContainer.PropTypes = {
   isManageUser: PropTypes.bool,
   productsTimelines : PropTypes.object.isRequired,
   isProjectPlan: PropTypes.bool,
-  isProjectProcessing: PropTypes.bool,
 }
 
 const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, loadDashboardFeeds, loadPhaseFeed }

@@ -4,6 +4,11 @@
 
 body {
   @include roboto;
+  font-size: $tc-body-md;
+  line-height: 5 * $base-unit;
+  // Better typography
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
   // Prevenet jumping of elements, force scrollbar always-on
   overflow-y: scroll;

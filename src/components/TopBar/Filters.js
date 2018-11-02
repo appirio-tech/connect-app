@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import Select from '../../components/Select/Select'
 
-const Filters = ({ criteria, applyFilters, projectTypes }) => {
-  const types = _.map(projectTypes, type => {
-    return { value: type.key, label: type.displayName }
+const Filters = ({ criteria, applyFilters, projectCategories }) => {
+  const types = _.map(projectCategories, category => {
+    return { value: category.key, label: category.displayName }
   })
 
   // TODO add segments list
@@ -61,7 +61,7 @@ const Filters = ({ criteria, applyFilters, projectTypes }) => {
 Filters.propTypes = {
   criteria: PropTypes.object.isRequired,
   applyFilters: PropTypes.func.isRequired,
-  projectTypes: PropTypes.arrayOf(PropTypes.shape({
+  projectCategories: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string.isRequired,
     displayName: PropTypes.string.isRequired,
   }))

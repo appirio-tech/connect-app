@@ -29,12 +29,10 @@ class LinkList extends React.Component {
 
   openAddForm() {
     this.setState({ isAddingLink: true })
-    this.props.onFormAddOpen && this.props.onFormAddOpen()
   }
 
   closeAddForm() {
     this.setState({ isAddingLink: false })
-    this.props.onFormAddCancel && this.props.onFormAddCancel()
   }
 
   render() {
@@ -146,12 +144,6 @@ LinkList.propTypes = {
 
   /** select/deselect link callback */
   onSelectChange: PT.func,
-
-  /** add form open handler */
-  onFormAddOpen: PT.func,
-
-  /** add form cancel handler */
-  onFormAddCancel: PT.func,
 }
 
 export default LinkList

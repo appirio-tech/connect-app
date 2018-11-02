@@ -19,7 +19,7 @@ const ProjectManagerAvatars = ({ managers, maxShownNum = 3 }) => {
       {uniqManagers.map((user, i) => {
         return (
           <div className={`stack-avatar stack-avatar-${i}`} key={i}>
-            <UserTooltip usr={user} id={i} size={35} previewAvatar />
+            <UserTooltip usr={user} id={i} previewAvatar />
           </div>
         )
       })}

@@ -33,6 +33,12 @@
       }
     }
     background-size: 307px 300px;
+    a{
+      color: $tc-dark-blue;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
     h3{
       color: $tc-gray-70;
       @include roboto-medium;
@@ -50,11 +56,9 @@
         font-size: 30px;
       }
     }
-    .content {
-      min-height: 120px;
-    }
     p{
       text-align: left;
+      min-height: 120px;
       padding: 0 168px;
       @include roboto;
       font-size: $tc-label-lg;
@@ -66,13 +70,6 @@
       }
       @media screen and (max-width: $screen-md - 1px) {
         padding: 0 28px;
-      }
-
-      a{
-        color: $tc-dark-blue;
-        &:hover {
-          text-decoration: underline;
-        }
       }
     }
     span{

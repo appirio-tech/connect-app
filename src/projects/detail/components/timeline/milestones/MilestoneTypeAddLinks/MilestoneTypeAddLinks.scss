@@ -20,7 +20,7 @@
     &.no-line:before{
       content: '';
       width: 4px;
-      background-color: $tc-white;
+      background-color: #fff;
       position: absolute;
       left: -20px;
       top: -25px;
@@ -79,7 +79,7 @@
     :before {
       content: '';
       width: 4px;
-      background-color: $tc-white;
+      background-color: #fff;
       position: absolute;
       left: -20px;
       top: -25px;

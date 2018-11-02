@@ -1,8 +1,17 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
-  // FIXME: Deep nesting, non-standard line-height;
+  //TODO  Additional variables - need to find a home for these
+  // FIXME: remove non-standard variables! Deep nesting, non-standard line-height;
   // FIXME: non-standard units (use $base-unit and $corner-radius)
+  $gray-color: $tc-gray-50;
+  $title-color: $tc-gray-80;
+  $hr-color-base: $tc-black;
+  $hr-color-darker: lighten($hr-color-base, 13.5%);
+  $hr-color-dark: lighten($hr-color-base, 20%);
+  $hr-color: lighten($hr-color-base, 33.5%);
+  $hr-color-light: lighten($hr-color-base, 46.7%);
+  $hr-color-lighter: lighten($hr-color-base, 93.5%);
 
   .projectSpecSidebar {
     padding: 20px 0;
@@ -70,7 +79,7 @@
         display: block;
         height: 1px;
         border: 0;
-        border-top: 1px solid $tc-gray-30;
+        border-top: 1px solid $hr-color-lighter;
         margin: 1em 0;
         padding: 0;
 
@@ -83,7 +92,7 @@
         @include roboto;
         font-size: 13px;
         line-height: 25px;
-        color: $tc-gray-50;
+        color: $gray-color;
       }
     }
 
@@ -115,6 +124,69 @@
           .boxs {
             padding: 0 20px;
           }
+        }
+      }
+    }
+
+    /* styles related to animations when .btn-boxs sticks using Sticky module */
+    @media screen and (max-width: $screen-md - 1px) {
+      /* restyle estimations component */
+      .btn-boxs {
+        .list-group {
+          display: block;
+        }
+
+        .visual-design-project-estimate-section {
+          flex-direction: column-reverse;
+          left: 4 * $base-unit;
+          margin: 0;
+          opacity: 0;
+          position: absolute;
+          transition: opacity 0.5s ease;
+          width: auto;
+
+          h4,
+          .label {
+            display: none;
+          }
+
+          .estimate {
+            margin-top: 0;
+            text-align: left;
+
+            &:not(:last-child) {
+              color: $tc-gray-50;
+              font-size: 13px;
+              margin-top: 2px;
+            }
+          }
+        }
+      }
+
+      .btn-boxs button {
+        display: block;
+        left: 50%;
+        position: relative;
+        transform: translateX(-50%);
+        transition: all 0.5s ease;
+      }
+
+      .sticky-outer-wrapper.active {
+        .sticky-inner-wrapper {
+          z-index: 10;
+        }
+
+        .btn-boxs {
+          box-shadow: 0px 1px 3px 0px rgba($tc-black, 0.2);
+        }
+
+        .btn-boxs.has-estimation button {
+          left: 100%;
+          transform: translateX(-100%);
+        }
+
+        .visual-design-project-estimate-section {
+          opacity: 1;
         }
       }
     }

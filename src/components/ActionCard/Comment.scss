@@ -35,10 +35,13 @@
   min-width: 0;
 }
 
-.text { 
-  a,
-  a:hover {
-    color:$tc-dark-blue-110;
+.text {
+  div {
+    p {
+      a {
+        color:$tc-dark-blue-110;
+      }
+    }
   }
 }
 

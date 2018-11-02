@@ -22,13 +22,11 @@ import MilestoneTypeDelivery from '../milestones/MilestoneTypeDelivery'
 import MilestoneTypeFinalFixes from '../milestones/MilestoneTypeFinalFixes'
 import MilestoneTypeAddLinks from '../milestones/MilestoneTypeAddLinks'
 import DotIndicator from '../DotIndicator'
-import MobilePage from '../../../../../components/MobilePage/MobilePage'
-import MediaQuery from 'react-responsive'
-import XMartIcon from '../../../../../assets/icons/x-mark.svg'
 
-import { MILESTONE_STATUS, SCREEN_BREAKPOINT_MD } from '../../../../../config/constants'
+import { MILESTONE_STATUS } from '../../../../../config/constants'
 
 import './Milestone.scss'
+
 class Milestone extends React.Component {
   constructor(props) {
     super(props)
@@ -37,7 +35,6 @@ class Milestone extends React.Component {
     this.hoverHeader = this.hoverHeader.bind(this)
     this.unHoverHeader = this.unHoverHeader.bind(this)
     this.toggleEditLink = this.toggleEditLink.bind(this)
-    this.toggleMobileEditLink = this.toggleMobileEditLink.bind(this)
     this.closeEditForm = this.closeEditForm.bind(this)
     this.updateMilestoneWithData = this.updateMilestoneWithData.bind(this)
     this.updateMilestoneContent = this.updateMilestoneContent.bind(this)
@@ -50,7 +47,6 @@ class Milestone extends React.Component {
       activeMenu: '',
       isHoverHeader: false,
       isEditing: false,
-      isMobileEditing: false
     }
   }
 
@@ -64,9 +60,9 @@ class Milestone extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { milestone } = this.props
-    const { isEditing, isMobileEditing } = this.state
+    const { isEditing } = this.state
 
-    if ((isEditing || isMobileEditing) && milestone.isUpdating && !nextProps.milestone.isUpdating && !nextProps.error) {
+    if (isEditing && milestone.isUpdating && !nextProps.milestone.isUpdating && !nextProps.error) {
       this.closeEditForm()
     }
   }
@@ -78,23 +74,19 @@ class Milestone extends React.Component {
   }
 
   hoverHeader() {
-    this.setState({ isHoverHeader: true })
+    this.setState({isHoverHeader: true})
   }
 
   unHoverHeader() {
-    this.setState({ isHoverHeader: false })
+    this.setState({isHoverHeader: false})
   }
 
   toggleEditLink() {
-    this.setState({ isEditing: true })
+    this.setState({isEditing: true})
   }
 
   closeEditForm() {
-    this.setState({ isEditing: false, isMobileEditing: false })
-  }
-
-  toggleMobileEditLink() {
-    this.setState({ isMobileEditing: true })
+    this.setState({isEditing: false})
   }
 
   updateMilestoneWithData(values) {
@@ -168,7 +160,7 @@ class Milestone extends React.Component {
       currentUser,
       previousMilestone,
     } = this.props
-    const { isEditing, isMobileEditing } = this.state
+    const { isEditing } = this.state
 
     const isPlanned = milestone.status === MILESTONE_STATUS.PLANNED
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
@@ -178,84 +170,12 @@ class Milestone extends React.Component {
     const date = startDate.format('D')
     const title = milestone.name
     const isUpdating = milestone.isUpdating
-    const editForm = (
-      <Form
-        fields={[{
-          label: 'Name',
-          placeholder: 'Name',
-          name: 'name',
-          value: milestone.name,
-          type: 'text',
-          validations: {
-            isRequired: true
-          },
-          validationError: 'Name is required',
-        }, {
-          type: 'number',
-          placeholder: 'Duration',
-          label: 'Duration',
-          name: 'duration',
-          value: String(milestone.duration || 0),
-          validations: {
-            isRequired: true
-          },
-          validationError: 'Duration is required'
-        }, {
-          label: 'Planned text',
-          placeholder: 'Planned text',
-          name: 'plannedText',
-          value: milestone.plannedText,
-          type: 'textarea',
-          autoResize: true,
-          validations: {
-            isRequired: true
-          },
-          validationError: 'Planned text is required',
-        }, {
-          label: 'Active text',
-          placeholder: 'Active text',
-          name: 'activeText',
-          value: milestone.activeText,
-          type: 'textarea',
-          autoResize: true,
-          validations: {
-            isRequired: true
-          },
-          validationError: 'Active text is required',
-        }, {
-          label: 'Blocked text',
-          placeholder: 'Blocked text',
-          name: 'blockedText',
-          value: milestone.blockedText,
-          type: 'textarea',
-          autoResize: true,
-          validations: {
-            isRequired: true
-          },
-          validationError: 'Blocked text is required',
-        }, {
-          label: 'Completed text',
-          placeholder: 'Completed text',
-          name: 'completedText',
-          value: milestone.completedText,
-          type: 'textarea',
-          autoResize: true,
-          validations: {
-            isRequired: true
-          },
-          validationError: 'Completed text is required',
-        }]}
-        onCancelClick={this.closeEditForm}
-        onSubmit={this.updateMilestoneWithData}
-        submitButtonTitle="Update milestone"
-        title="Milestone Properties"
-      />
-    )
+
     return (
       <div styleName="timeline-post">
-        {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing && !isCompleted) ? 'hover ' : '')} />)}
+        {(<div styleName={'background ' + ((this.state.isHoverHeader && !this.state.isEditing && !isCompleted) ? 'hover ': '')} />)}
         <div styleName="col-date">
-          <div styleName={(isCompleted || isActive ? 'completed' : 'planned')}>
+          <div styleName={(isCompleted || isActive ? 'completed' : 'planned' )}>
             <div styleName="month">{month}</div>
             <div styleName="day">{date}</div>
           </div>
@@ -276,55 +196,85 @@ class Milestone extends React.Component {
               styleName="post-title-container"
             >
               <h4 styleName="post-title">{title}</h4>
-              {
-                <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
-                  {(matches) => (matches ? (
-                    <div styleName={'desktop-edit-section'}>
-                      {!currentUser.isCustomer && !isCompleted && this.state.isHoverHeader && !isUpdating &&
-                        (<div onClick={this.toggleEditLink} styleName={'post-edit'} >
-                          <span styleName="tooltiptext">Edit milestone properties</span>
-                        </div>)
-                      }
-                    </div>
-                  ) : (
-                    <div styleName={'mobile-edit-section'}>
-                      {
-                        !currentUser.isCustomer && !isCompleted && !isUpdating &&
-                          (<div onClick={this.toggleMobileEditLink} styleName={'post-edit-mobile'}  />)
-                      }
-                    </div>
-                  ))
-                  }
-                </MediaQuery>
-              }
+              {!currentUser.isCustomer && !isCompleted && this.state.isHoverHeader && !isUpdating && (
+                <div onClick={this.toggleEditLink} styleName={ 'post-edit' } >
+                  <span styleName="tooltiptext">Edit milestone properties</span>
+                </div>)}
             </dir>)
           }
 
           {isEditing && !isUpdating && (
-            <div>
-              {editForm}
-            </div>
-          )}
-
-          {isMobileEditing && !isUpdating && (
-            <MobilePage>
-              <header styleName="edit-milestone-header">
-
-                <div styleName="header-view">
-                  <div styleName="header-view-inner">
-                    <div styleName="header-info">
-                      <div styleName="title">{milestone.name}</div>
-                    </div>
-                    <div styleName="header-actions">
-                      <button styleName="fullscreen fullscreen-exit" onClick={this.closeEditForm}><XMartIcon /></button>
-                    </div>
-                  </div>
-                </div>
-              </header>
-              <div styleName="body">
-                {editForm}
-              </div>
-            </MobilePage>
+            <Form
+              fields={[{
+                label: 'Name',
+                placeholder: 'Name',
+                name: 'name',
+                value: milestone.name,
+                type: 'text',
+                validations: {
+                  isRequired: true
+                },
+                validationError: 'Name is required',
+              }, {
+                type: 'number',
+                placeholder: 'Duration',
+                label: 'Duration',
+                name: 'duration',
+                value: String(milestone.duration || 0),
+                validations: {
+                  isRequired: true
+                },
+                validationError: 'Duration is required'
+              }, {
+                label: 'Planned text',
+                placeholder: 'Planned text',
+                name: 'plannedText',
+                value: milestone.plannedText,
+                type: 'textarea',
+                autoResize: true,
+                validations: {
+                  isRequired: true
+                },
+                validationError: 'Planned text is required',
+              }, {
+                label: 'Active text',
+                placeholder: 'Active text',
+                name: 'activeText',
+                value: milestone.activeText,
+                type: 'textarea',
+                autoResize: true,
+                validations: {
+                  isRequired: true
+                },
+                validationError: 'Active text is required',
+              }, {
+                label: 'Blocked text',
+                placeholder: 'Blocked text',
+                name: 'blockedText',
+                value: milestone.blockedText,
+                type: 'textarea',
+                autoResize: true,
+                validations: {
+                  isRequired: true
+                },
+                validationError: 'Blocked text is required',
+              }, {
+                label: 'Completed text',
+                placeholder: 'Completed text',
+                name: 'completedText',
+                value: milestone.completedText,
+                type: 'textarea',
+                autoResize: true,
+                validations: {
+                  isRequired: true
+                },
+                validationError: 'Completed text is required',
+              }]}
+              onCancelClick={this.closeEditForm}
+              onSubmit={this.updateMilestoneWithData}
+              submitButtonTitle="Update milestone"
+              title="Milestone Properties"
+            />
           )}
 
           {isUpdating && <DotIndicator><LoadingIndicator /></DotIndicator>}
@@ -369,7 +319,7 @@ class Milestone extends React.Component {
             />
           )}
 
-          {!isEditing && !isUpdating && milestone.type === 'final-designs' && (
+          {!isEditing && !isUpdating && milestone.type === 'final-designs'  && (
             <MilestoneTypeFinalDesigns
               milestone={milestone}
               updateMilestoneContent={this.updateMilestoneContent}

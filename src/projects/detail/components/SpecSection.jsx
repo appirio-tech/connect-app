@@ -152,7 +152,7 @@ const SpecSection = props => {
           <TCFormFields.Textarea
             autoResize
             name={props.fieldName}
-            value={_.unescape(_.get(project, props.fieldName)) || ''}
+            value={_.get(project, props.fieldName) || ''}
           />
         </div>
       )
@@ -204,7 +204,7 @@ const SpecSection = props => {
             <TCFormFields.TextInput
               name="name"
               placeholder="Project Name"
-              value={_.unescape(_.get(project, 'name', ''))}
+              value={_.get(project, 'name', '')}
               wrapperClass="project-name"
               maxLength={ PROJECT_NAME_MAX_LENGTH }
               required={props.required}
@@ -218,7 +218,7 @@ const SpecSection = props => {
               <TCFormFields.TextInput
                 name={refCodeFieldName}
                 placeholder="REF code"
-                value={ _.unescape(refCode) }
+                value={ refCode }
                 wrapperClass="project-refcode"
                 maxLength={ PROJECT_REF_CODE_MAX_LENGTH }
                 theme="paper-form-dotted"
@@ -240,13 +240,12 @@ const SpecSection = props => {
   return (
     <div className="right-area-item" id={id}>
       <div className="boxes">
-        {!project.version === 'v3' &&
         <div className="section-header big-titles">
           <h2 id={id}>
             {title}
           </h2>
           <span className="section-number">{ sectionNumber }</span>
-        </div>}
+        </div>
         <p className="gray-text">
           {description}
         </p>

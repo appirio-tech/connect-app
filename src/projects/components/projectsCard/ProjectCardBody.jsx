@@ -32,7 +32,7 @@ function ProjectCardBody({ project, duration, currentMemberRole, descLinesCount 
         containerClassName="project-description"
         line={descLinesCount}
         truncateText="..."
-        text={_.unescape(project.description)}
+        text={project.description}
         textTruncateChild={showLink ? <Link className="read-more-link" to={showLinkURL || projectDetailsURL}>read more</Link> : <span className="read-more-link">read more</span>}
       />
       <div className="project-status">

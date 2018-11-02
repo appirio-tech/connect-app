@@ -46,7 +46,5 @@ module.exports = {
   TC_NOTIFICATION_URL: 'https://api.topcoder-dev.com/v5/notifications',
   CONNECT_MESSAGE_API_URL: 'https://api.topcoder-dev.com/v5',
   TC_SYSTEM_USERID: process.env.DEV_TC_SYSTEM_USERID,
-  MAINTENANCE_MODE: process.env.DEV_MAINTENANCE_MODE,
-
-  RESET_PASSWORD_URL: 'https://accounts.topcoder-dev.com/connect/reset-password'
+  MAINTENANCE_MODE: process.env.DEV_MAINTENANCE_MODE
 }

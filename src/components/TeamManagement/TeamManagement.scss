@@ -1,6 +1,12 @@
 @import "~tc-ui/src/styles/tc-includes";
+// @import "../../styles/variables";
+// TODO where do we add these
 
 :global {
+  $tc-heading-extra-small: 14px;
+  $tc-body-small: 14px;
+  $tc-body-extra-small: 12px;
+
   @mixin icon($url) {
     background: url("../../assets/images/#{$url}") no-repeat;
   }
@@ -185,6 +191,7 @@
         position: absolute;
         top: $base-unit*3;
         right: $base-unit*3;
+        background-size: $tc-heading-extra-small;
         overflow: hidden;
       }
 
@@ -324,7 +331,7 @@
           margin: $base-unit*2 auto;
           @include roboto;
           color: $tc-gray-70;
-          font-size: 14px;
+          font-size: $tc-body-small;
           font-style: italic;
           border: 1px solid $tc-red-30;
           background: $tc-red-10;
@@ -369,7 +376,7 @@
           padding: 5px 0;
           text-align: center;
           @include roboto-medium;
-          font-size: $tc-label-sm;
+          font-size: $tc-body-extra-small;
           line-height: 18px;
           box-shadow: none;
           background-color: $tc-white;

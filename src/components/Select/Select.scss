@@ -54,15 +54,15 @@
   }
   
   .Select-item-icon {
-    color:$tc-gray-40;
-    border-right-color: $tc-gray-10;
+    color:rgb(153, 153, 153);
+    border-right-color: rgb(220, 220, 224);
     padding: 0 5px 1px;
     
     &:active,
     &:focus,
     &:hover {
         background-color: transparent;
-        color: $tc-red-110;
+        color: rgb(208, 2, 27);
     }
   }
   

@@ -10,8 +10,6 @@
     height: auto;
   }
 
-
-
   @include roboto;
   a {
     color: $tc-dark-blue-100;
@@ -167,143 +165,53 @@
       line-height: 30px;
       text-align: left;
     }
-
-    .desktop-edit-section {
-      flex: 1;
-      display: flex;
-      justify-content: flex-end;
-    }
   }
 
-  .mobile-edit-section {
-    flex: 1;
-    .post-edit-mobile {
-      height: 100%;
-      padding-left: 20px;
-      margin-left: auto;
-      margin-right: 0;
-      background: url('../../../../../assets/icons/ui-pencil.svg') 100% 50% no-repeat;
-      opacity: 0.5;
-    }
-  }
-
-
-    .post-edit {
-      padding-left: 20px;
-      margin-left: auto;
-      margin-right: 0;
-      background: url('../../../../../assets/icons/ui-pencil.svg') 0 50% no-repeat;
-      opacity: 0.5;
-      &:hover {
-        opacity: 1;
-        .tooltiptext {
-          visibility: visible;
-        }
-      }
-      
+  .post-edit {
+    padding-left: 20px;
+    margin-left: auto;
+    margin-right: 0;
+    background: url('../../../../../assets/icons/ui-pencil.svg') 0 50% no-repeat;
+    opacity: 0.5;
+    &:hover {
+      opacity: 1;
       .tooltiptext {
-        visibility: hidden;
-        background-color: black;
-        color: $tc-white;
-        text-align: center;
-        padding: 3px 10px;
-        position: absolute;
-        z-index: 100;
-        bottom: 100%;
-        right: 0%;
-        margin-left: 60px;
-        font-size: 13px;
-        font-weight: 400;
-        line-height: 25px;
-        
-        &:after {
-          content: "";
-          position: absolute;
-          top: 100%;
-          left: 50%;
-          margin-left: 50px;
-          border-width: 5px;
-          border-style: solid;
-          border-color: black transparent transparent transparent;
-        }
+        visibility: visible;
       }
     }
-    
+
+    .tooltiptext {
+      visibility: hidden;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      padding: 3px 10px;
+      position: absolute;
+      z-index: 100;
+      bottom: 100%;
+      right: 0%;
+      margin-left: 60px;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 25px;
+
+      &:after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: 50px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: black transparent transparent transparent;
+      }
+    }
+  }
+
   &:last-child {
     .col-timeline-post-con.completed::before {
       bottom: 23px;
     }
   }
 
-}
-//edit milestone specific css
-.edit-milestone-header {
-  background-color: $tc-gray-neutral-light;
-}
-
-.header-view {
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid $tc-gray-10;
-  justify-content: center;
-  padding: 4 * $base-unit 4 * $base-unit 3 * $base-unit 4 * $base-unit;
-}
-
-.header-view-inner {
-  display: flex;
-  justify-content: space-between;
-}
-
-.header-actions {
-  align-items: flex-start;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.fullscreen {
-  border: 0;
-  background-color: transparent;
-  display: block;
-  margin: 0 0 0 3 * $base-unit;
-  padding: 0;
-
-  > svg {
-    > g {
-      fill: $tc-gray-50;
-    }
-  }
-
-  &.fullscreen-exit {
-    > svg {
-      /* as size of svg is 24x24 but we expect button to be 16x16 */
-      display: block;
-      margin: -4px;
-    }
-  }
-}
-
-.header-info {
-  display: flex;
-  flex: 1 0;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.title {
-  @include roboto;
-  color: $tc-black;
-  font-size: 15px;
-  text-transform: capitalize;
-}
-
-.body {
-  display: flex;
-  flex-direction: column;
-  background-color: $tc-gray-neutral-dark;
-  height: calc(100vh - 50px); /* window height - header height */
-  position: relative;
-
-  form {
-    flex: 1;
-  }
 }

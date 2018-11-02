@@ -3,7 +3,7 @@ import PT from 'prop-types'
 import _ from 'lodash'
 import moment from 'moment'
 
-import Sticky from '../../../../components/Sticky'
+import Sticky from 'react-stickynode'
 import { SCROLL_TO_MARGIN } from '../../../../config/constants'
 
 import './ProjectStageMessages.scss'
