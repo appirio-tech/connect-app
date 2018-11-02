@@ -27,7 +27,7 @@ class MilestoneTypeAddLinks extends React.Component {
     this.state = {
       addedLinks: [],
       isShowCompleteConfirmMessage: false,
-      isLinkAdded: true,
+      isLinkUpdating: false,
       showExtensionRequestSection: true
     }
 
@@ -87,9 +87,15 @@ class MilestoneTypeAddLinks extends React.Component {
     const { addedLinks } = this.state
     values.type = 'marvelapp'
 
+    // here we simulate uploading process for LinkList component
+    // as that component is uncontrollable and relies on the `isUpdating` property
     this.setState({
-      addedLinks: [...addedLinks, values],
-      isLinkAdded: false
+      isLinkUpdating: true,
+    }, () => {
+      this.setState({
+        addedLinks: [...addedLinks, values],
+        isLinkUpdating: false,
+      })
     })
   }
 
@@ -101,7 +107,6 @@ class MilestoneTypeAddLinks extends React.Component {
     addedLinks.splice(linkIndex, 1)
     this.setState({
       addedLinks,
-      isLinkAdded: false
     })
   }
 
@@ -117,7 +122,7 @@ class MilestoneTypeAddLinks extends React.Component {
     const {
       addedLinks,
       isShowCompleteConfirmMessage,
-      isLinkAdded,
+      isLinkUpdating,
     } = this.state
 
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
@@ -174,7 +179,7 @@ class MilestoneTypeAddLinks extends React.Component {
                     formAddButtonTitle="Add link"
                     formUpdateTitle="Editing a link"
                     formUpdateButtonTitle="Save changes"
-                    isUpdating={isLinkAdded}
+                    isUpdating={isLinkUpdating}
                     fakeName={`Design ${addedLinks.length + 1}`}
                     onFormAddOpen={this.onFormAddOpen}
                     onFormAddCancel={this.onFormAddCancel}
