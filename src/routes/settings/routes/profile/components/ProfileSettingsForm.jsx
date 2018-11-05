@@ -124,8 +124,7 @@ class ProfileSettingsForm extends Component {
             required
           />
         </div>        
-        {/* TODO as for now PROD doesn't supports `connect_info` we don't have a places where to save this data for now */}
-        {/* <div className="section-heading">Business address</div>
+        <div className="section-heading">Business address</div>
         {this.getField('Address', 'address')}
         {this.getField('City', 'city')}
         <div className="field">
@@ -144,7 +143,7 @@ class ProfileSettingsForm extends Component {
               onChange={this.onFieldUpdate}
             />
           </div>
-        </div>*/}
+        </div>
         <div className="field">
           <div className="label">Country</div>
           <div className="input-field">
