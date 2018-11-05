@@ -115,12 +115,14 @@ export const applyProfileSettingsToTraits = (traits, profileSettings) => {
       const updatedTrait = {...trait}
       const [firstName, lastName] = profileSettings.firstNLastName ? profileSettings.firstNLastName.split(/\s+/) : []
       const photoURL = profileSettings.photoUrl
+      const country = profileSettings.country
 
       // update only if new values are defined
       const updatedProps = _.omitBy({
         photoURL,
         firstName,
         lastName,
+        country,
       }, _.isUndefined)
       
       updatedTrait.traits = {
