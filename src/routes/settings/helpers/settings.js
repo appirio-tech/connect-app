@@ -58,7 +58,6 @@ export const formatProfileSettings = (traits) => {
     if (traitData && traitData.length > 0) {
       data.photoUrl = traitData[0].photoURL
       data.firstNLastName = `${traitData[0].firstName} ${traitData[0].lastName}`
-      data.country = traitData[0].country
     }
   }
 
@@ -114,8 +113,10 @@ export const applyProfileSettingsToTraits = (traits, profileSettings) => {
       // get first and last name, if don't have should return `undefined`
       const [, firstName, lastName] = profileSettings.firstNLastName ? profileSettings.firstNLastName.match(/([^\s]+)\s*(.*)/) : []
       const photoURL = profileSettings.photoUrl
-      const country = profileSettings.country
 
+      // define country similar to connect_info if not present for basic_info
+      const country = _.get(trait, 'traits.data[0].country', profileSettings.country)
+      
       // update only if new values are defined
       const updatedProps = _.omitBy({
         photoURL,
