@@ -72,6 +72,15 @@
         > input {
           margin-bottom: 0px;
         }
+
+        :global(.dropdown-wrap) {
+          margin-left: 0;
+          margin-bottom: 0;
+        }
+         :global(.Dropdown) {
+          overflow-y: scroll;
+          height: 120px;
+        }
       }
 
       .zip-container {

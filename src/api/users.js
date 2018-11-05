@@ -62,6 +62,21 @@ export const updateMemberTraits = (handle, updatedTraits) => {
 }
 
 /**
+ * Create member traits
+ * 
+ * @param {String} handle member handle
+ * @param {Array}  traits list of traits to create
+ * 
+ * @returns {Promise<Array>} member traits
+ */
+export const createMemberTraits = (handle, traits) => {
+  return axios.post(`${TC_API_URL}/v3/members/${handle}/traits`, {
+    param: traits
+  })
+    .then(resp => _.get(resp.data, 'result.content', {}))
+}
+
+/**
  * Update member photo
  * 
  * @param {String} handle           member handle
