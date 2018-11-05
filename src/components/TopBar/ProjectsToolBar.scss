@@ -2,11 +2,6 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
-  // TODO: move to includes
-  $tc-rgba-10: rgba($tc-gray-80, 0.38);
-  $tc-rgba-20: rgba($tc-black, 0.17);
-  $tc-body-large: 20px;
-
   .ProjectsToolBar {
     margin: 0 auto;
     width: 100%;
@@ -19,6 +14,7 @@
       min-height: 60px;
       height: 60px;
       justify-content: space-between;
+      user-select: none;
       @media screen and (max-width: $screen-md - 1px) {
         height: auto;
         min-height: 50px;
@@ -241,7 +237,7 @@
 
         &.active {
           background: $tc-gray-80;
-          box-shadow: inset 0px 1px 3px 0px $tc-rgba-10;
+          box-shadow: inset 0px 1px 3px 0px $tc-gray-80;
 
           svg.icon-search-filter g {
             fill: $tc-white;
@@ -296,7 +292,7 @@
       }
 
       h2 {
-        font-size: $tc-body-large;
+        font-size: $tc-body-lg;
         color: $tc-black;
         white-space: nowrap;
 

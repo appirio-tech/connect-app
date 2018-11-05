@@ -5,14 +5,14 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
+import EnhancedDropdown from './EnhancedDropdown'
 import NotificationsBell from './NotificationsBell'
 
 
 const NotificationsDropdown = (props) => {
   return (
     <div className="notifications-dropdown">
-      <Dropdown theme="UserDropdownMenu" pointerShadow noAutoclose>
+      <EnhancedDropdown theme="UserDropdownMenu" pointerShadow noAutoclose onToggle={props.onToggle}>
         <div className="dropdown-menu-header">
           <NotificationsBell
             hasUnread={props.hasUnread}
@@ -25,7 +25,7 @@ const NotificationsDropdown = (props) => {
             {props.children}
           </div>
         </div>
-      </Dropdown>
+      </EnhancedDropdown>
     </div>
   )
 }

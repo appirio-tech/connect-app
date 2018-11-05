@@ -9,6 +9,7 @@ import cn from 'classnames'
 import DotIndicator from '../../DotIndicator'
 import LinkList from '../../LinkList'
 import MilestoneDescription from '../../MilestoneDescription'
+import MilestoneDelayNotification from '../../MilestoneDelayNotification'
 import { withMilestoneExtensionRequest } from '../../MilestoneExtensionRequest'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
@@ -20,9 +21,15 @@ class MilestoneTypePhaseSpecification extends React.Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      showExtensionRequestSection: true,
+    }
+
     this.updatedUrl = this.updatedUrl.bind(this)
     this.removeUrl = this.removeUrl.bind(this)
     this.completeMilestone = this.completeMilestone.bind(this)
+    this.onFormAddOpen = this.onFormAddOpen.bind(this)
+    this.onFormAddCancel = this.onFormAddCancel.bind(this)
   }
 
   updatedUrl(values, linkIndex) {
@@ -42,6 +49,14 @@ class MilestoneTypePhaseSpecification extends React.Component {
     updateMilestoneContent({
       links
     })
+  }
+
+  onFormAddOpen() {
+    this.setState({ showExtensionRequestSection: false })
+  }
+
+  onFormAddCancel() {
+    this.setState({ showExtensionRequestSection: true })
   }
 
   removeUrl(linkIndex) {
@@ -80,7 +95,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
     const isCompleted = milestone.status === MILESTONE_STATUS.COMPLETED
     // can add only one specification link
     const canAddLink = links.length < 1
-
+    const { showExtensionRequestSection } = this.state
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideFirstLine={currentUser.isCustomer} hideDot>
@@ -92,21 +107,25 @@ class MilestoneTypePhaseSpecification extends React.Component {
          */}
         {isActive && (
           <div>
+            <MilestoneDelayNotification milestone={milestone} hideDot={!currentUser.isCustomer || extensionRequestConfirmation}/>
+
             {!currentUser.isCustomer && (
-              <DotIndicator hideDot>
+              <DotIndicator hideDot={showExtensionRequestSection}>
                 <LinkList
                   links={links}
                   onAddLink={this.updatedUrl}
                   onRemoveLink={this.removeUrl}
                   onUpdateLink={this.updatedUrl}
                   fields={[{ name: 'url' }]}
-                  addButtonTitle="Add specification"
-                  formAddTitle="Specification document link"
+                  addButtonTitle="Add specification link"
+                  formAddTitle="Add specification link"
                   formAddButtonTitle="Add link"
                   formUpdateTitle="Editing a link"
                   formUpdateButtonTitle="Save changes"
                   isUpdating={milestone.isUpdating}
                   canAddLink={canAddLink}
+                  onFormAddOpen={this.onFormAddOpen}
+                  onFormAddCancel={this.onFormAddCancel}
                 />
               </DotIndicator>
             )}
@@ -129,7 +148,7 @@ class MilestoneTypePhaseSpecification extends React.Component {
 
             {
               !currentUser.isCustomer &&
-              !extensionRequestDialog &&
+              !extensionRequestDialog && showExtensionRequestSection &&
             (
               <DotIndicator>
                 <div styleName="top-space">

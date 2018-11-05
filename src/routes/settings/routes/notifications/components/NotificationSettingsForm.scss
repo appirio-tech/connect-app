@@ -3,6 +3,12 @@
 
 :global {
   .notification-settings-form {
+    padding: 0px 20px;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      padding: 0px;
+    }
+
     > .table {
       border-collapse: collapse;
       border-radius: 2 * $corner-radius;
@@ -257,5 +263,9 @@
         color: $tc-black;;
       }
     }
+  }
+
+  .SwitchButton {
+    justify-content: center;
   }
 }

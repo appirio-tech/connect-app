@@ -3,45 +3,132 @@
 
 :global {
   .profile-settings-form {
-    margin: 18px auto 0;
-    width: 452px;
-  
+    padding: 0px 20px;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      padding: 0px;
+    }
+
     > .field {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px 20px 0px 10px;
+      }
+
       &:not(:first-child) {
         margin-top: 32px;
-      }
-    }
-  
-    .username {
-      position: relative;
-  
-      > .username-icon {
-        bottom: 13px;
-        content: '';
-        display: block;
-        left: 12px;
-        pointer-events: none;
-        position: absolute;
-        z-index: 1;
-  
-        > svg {
-          display: block;
-        }
-  
-        > svg > path {
-          fill: $tc-gray-30;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-top: 20px;
         }
       }
-  
-      input {
-        padding-left: 36px;
+
+      .label {
+        @include roboto-medium;
+        flex: 1 0 120px;
+        min-width: 180px;
+        max-width: 200px;
+        text-align: right;
+        padding-right: 15px;
+        color: $tc-gray-80;
+        font-size: 15px;
+        line-height: 18px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          flex: none;
+          margin-bottom: 10px;
+          margin-left: 10px;
+          text-align: left;
+        }
+      }
+
+      > .radio-group-input {
+        display: flex;
+        justify-content: center;
+
+        > .radio-group-options {
+          flex-wrap: wrap;
+        }
+      }
+
+      .input-field {
+        flex-grow: 1;
+        max-width: 450px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          width: 100%;
+          max-width: none;
+        }
+
+        > label {
+          display: none;
+        }
+
+        > input {
+          margin-bottom: 0px;
+        }
+      }
+
+      .zip-container {
+        display: flex;
+        max-width: 450px;
+        flex-grow: 1;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      .zip {
+        max-width: 30px;
+        min-width: 30px;
+        margin-left: 40px;
+        margin-right: 15px;
+        text-align: center;
+        line-height: 40px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          margin: 30px 0px 15px 5px;
+          line-height: 0px;
+        }
+      }
+
+      .zip-input {
+        max-width: 80px;
       }
     }
-  
+
+    .section-heading {
+      @include roboto-bold;
+      background-color: $tc-gray-neutral-dark;
+      border-radius: 4px 4px 0 0;
+      height: 50px;
+      color: $tc-black;
+      font-size: 15px;
+      text-align: left;
+      line-height: 50px;
+      padding-left: 20px;
+      margin-bottom: 40px;
+
+      &:not(:first-child) {
+        margin-top: 60px;
+
+        @media screen and (max-width: $screen-md - 1px) {
+          margin-top: 20px;
+        }
+      }
+    }
+
     > .controls {
-      margin-top: 30px;
+      margin-top: 20px;
+      margin-bottom: 20px;
       text-align: center;
     }
   }
 }
-  
