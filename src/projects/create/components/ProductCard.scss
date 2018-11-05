@@ -32,7 +32,7 @@
     }
 
     h3 {
-      @include tc-heading;
+      @include tc-heading-small;
       @include roboto-bold;
       font-size: 15px;
       line-height: 20px;

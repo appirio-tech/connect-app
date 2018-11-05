@@ -37,7 +37,7 @@ import {
 import settingsService from '../services/settings'
 import * as memberService from '../../../api/users'
 import { uploadFileToS3 } from '../../../api/s3'
-import { applyProfileSettingsToTraits } from '../helpers/settings'
+import { applyProfileSettingsToTraits, customerTraitId } from '../helpers/settings'
 import Alert from 'react-s-alert'
 
 
@@ -201,9 +201,34 @@ export const saveProfileSettings = (settings) => (dispatch, getState) => {
   const state = getState()
   const handle = _.get(state, 'loadUser.user.handle')
   const traits = _.get(state, 'settings.profile.traits')
+  const existentTraitIds = _.map(
+    // some traits could have categoryName as null
+    // for such traits we have to use POST method instead of PUT or we will get
+    // error 404 for such traits
+    traits.filter((trait) => trait.categoryName), 
+    'traitId'
+  )
   const updatedTraits = applyProfileSettingsToTraits(traits, settings)
 
-  memberService.updateMemberTraits(handle, updatedTraits)
+  // we will only update on server traits which can be updated on the settings page
+  const traitsForServer = updatedTraits.filter((trait) => 
+    // TODO Revert to 'connect_info' again when PROD supports it
+    _.includes(['basic_info', customerTraitId], trait.traitId)
+  )
+
+  const traitsToUpdate = traitsForServer.filter((trait) =>
+    _.includes(existentTraitIds, trait.traitId)
+  )
+  const traitsToCreate= traitsForServer.filter((trait) =>
+    !_.includes(existentTraitIds, trait.traitId)
+  )
+
+  Promise.all(_.compact([
+    // update existent traits
+    traitsToUpdate.length > 0 && memberService.updateMemberTraits(handle, traitsToUpdate),
+    // create non-existent traits
+    traitsToCreate.length > 0 && memberService.createMemberTraits(handle, traitsToCreate),
+  ]))
     // TODO, now we don't update store with the data from server as backend returns wrong
     // data when we update see https://github.com/appirio-tech/ap-member-microservice/issues/165.
     // So we update the store with the data we sent to the server.
@@ -216,7 +241,8 @@ export const saveProfileSettings = (settings) => (dispatch, getState) => {
       })
     })
     .catch((err) => {
-      Alert.error(`Failed to save settings. ${err.message}`)
+      const errorMsg = _.get(err, 'response.data.result.content', err.message)
+      Alert.error(`Failed to save settings. ${errorMsg}`)
       dispatch({
         type: SAVE_PROFILE_SETTINGS_FAILURE
       })

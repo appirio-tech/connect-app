@@ -25,7 +25,7 @@
       + h2 {
         font-size: 15px;
         line-height: 20px;
-        @include tc-heading;
+        @include tc-heading-small;
         @include roboto-bold;
         color: $tc-gray-80;
         margin-bottom: 13px;
