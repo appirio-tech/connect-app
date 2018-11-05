@@ -30,9 +30,8 @@ export const blankTraits = {
   },
 }
 
-// as now DEV environment supports only `connect_info` and PROD environment supports only `customer_info`
-// choose depend on ENV
-export const customerTraitId = ENV === 'DEV' ? 'connect_info' : 'customer_info'
+// as now both DEV and PROD environments support `connect_info` trait we always use it
+export const customerTraitId = 'connect_info'
 
 /**
  * Format row member traits data to the format which can be rendered by the form 
