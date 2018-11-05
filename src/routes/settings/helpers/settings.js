@@ -60,6 +60,7 @@ export const formatProfileSettings = (traits) => {
     if (traitData && traitData.length > 0) {
       data.photoUrl = traitData[0].photoURL
       data.firstNLastName = `${traitData[0].firstName} ${traitData[0].lastName}`
+      data.country = traitData[0].country
     }
   }
 
