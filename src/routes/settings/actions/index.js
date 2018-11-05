@@ -206,7 +206,8 @@ export const saveProfileSettings = (settings) => (dispatch, getState) => {
     // for such traits we have to use POST method instead of PUT or we will get
     // error 404 for such traits
     traits.filter((trait) => trait.categoryName), 
-  'traitId')
+    'traitId'
+  )
   const updatedTraits = applyProfileSettingsToTraits(traits, settings)
 
   // we will only update on server traits which can be updated on the settings page
