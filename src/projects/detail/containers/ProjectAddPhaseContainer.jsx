@@ -64,7 +64,7 @@ const CreateView = (props) => {
         <SelectProductTemplate
           onProductTemplateChange={ props.onProductTemplateChange }
           productTemplates={ props.productTemplates }
-          projectCategories={ props.projectCategories }
+          productCategories={ props.productCategories }
         />
       </Wizard>
     </div>
@@ -142,14 +142,14 @@ ProjectAddPhaseContainer.propTypes = {
   userRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
   addingState: PropTypes.bool,
   allProductTemplates: PropTypes.array,
-  projectCategories: PropTypes.array
+  productCategories: PropTypes.array
 }
 
 ProjectAddPhaseContainer.defaultProps = {
   userRoles: [],
   addingState: false,
   allProductTemplates: [],
-  projectCategories: []
+  productCategories: []
 }
 
 const mapStateToProps = ({projectState, loadUser, templates, productsTimelines }) => ({
@@ -161,7 +161,7 @@ const mapStateToProps = ({projectState, loadUser, templates, productsTimelines }
   phases: projectState.phases,
   templates,
   timelines: productsTimelines,
-  projectCategories:  templates.projectCategories,
+  productCategories:  templates.productCategories,
 })
 
 const actionCreators = {createProduct, loadProjectPhasesWithProducts, loadProjectDashboard}

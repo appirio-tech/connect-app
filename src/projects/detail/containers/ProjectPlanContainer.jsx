@@ -7,6 +7,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 
 import {
   updateProduct,
@@ -19,14 +20,22 @@ import {
 } from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
-import TwoColsLayout from '../components/TwoColsLayout'
+import TwoColsLayout from '../../../components/TwoColsLayout'
 import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
-import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT, PROJECT_STATUS_COMPLETED,
-  PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY } from '../../../config/constants'
-import Sticky from 'react-stickynode'
+import NotificationsReader from '../../../components/NotificationsReader'
+import { 
+  SCREEN_BREAKPOINT_MD, 
+  PHASE_STATUS_DRAFT, 
+  PROJECT_STATUS_COMPLETED, 
+  PHASE_STATUS_ACTIVE,
+  PROJECT_STATUS_CANCELLED, 
+  PROJECT_FEED_TYPE_PRIMARY,
+  EVENT_TYPE,
+} from '../../../config/constants'
+import Sticky from '../../../components/Sticky'
 import { Link } from 'react-router-dom'
 
 import './ProjectPlanContainer.scss'
@@ -53,12 +62,24 @@ class ProjectPlanContainer extends React.Component {
   componentDidMount() {
     const { expandProjectPhase } = this.props
     const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
-    const phaseId = scrollTo && scrollTo.startsWith('phase-') ? parseInt(scrollTo.replace('phase-', ''), 10) : null
-    if (phaseId) {
-      let tab = scrollTo.replace(`phase-${phaseId}-`, '')
-      tab = tab === scrollTo ? 'timeline' : tab
-      // we just open tab, while smooth scrolling has to be caused by URL hash
-      expandProjectPhase(phaseId, tab)
+    if (scrollTo) {
+      const phaseId = scrollTo.startsWith('phase-') ? parseInt(scrollTo.replace('phase-', ''), 10) : null
+      if (phaseId) {
+        let tab = scrollTo.replace(`phase-${phaseId}-`, '')
+        tab = tab === scrollTo ? 'timeline' : tab
+        // we just open tab, while smooth scrolling has to be caused by URL hash
+        expandProjectPhase(phaseId, tab)
+      }
+    } else {
+      // if the user is a customer and its not a direct link to a particular phase
+      // then by default expand all phases which are active
+      if (this.props.isCustomerUser) {
+        _.forEach(this.props.phases, phase => {
+          if (phase.status === PHASE_STATUS_ACTIVE) {
+            expandProjectPhase(phase.id)
+          }
+        })
+      }
     }
   }
 
@@ -79,6 +100,7 @@ class ProjectPlanContainer extends React.Component {
       phases,
       productsTimelines,
       phasesTopics,
+      isProcessing,
     } = this.props
 
     // manager user sees all phases
@@ -103,11 +125,20 @@ class ProjectPlanContainer extends React.Component {
         phasesTopics={phasesTopics}
         onChannelClick={this.onChannelClick}
         isProjectPlan={isProjectPlan}
+        isProjectProcessing={isProcessing}
       />
     )
 
     return (
       <TwoColsLayout>
+        <NotificationsReader 
+          id="project-plan"
+          criteria={[
+            { eventType: EVENT_TYPE.PROJECT_PLAN.READY, contents: { projectId: project.id } },
+            { eventType: EVENT_TYPE.PROJECT_PLAN.MODIFIED, contents: { projectId: project.id } },
+            { eventType: EVENT_TYPE.PROJECT_PLAN.PROGRESS_UPDATED, contents: { projectId: project.id } },
+          ]}
+        />
         <TwoColsLayout.Sidebar>
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {

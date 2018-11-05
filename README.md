@@ -1,6 +1,32 @@
-#### For folks working on this code base, we're organizing coding style and general guidelines [here](https://github.com/appirio-tech/connect-app/wiki/Community-Work-Read-Me-First!). 
+# Topcoder Connect App
 
-# TC Deployment Notes
+Topcoder Connect is client facing application of Topcoder. Customers use Topcoder Connect to input requirements of their projects, then managers and
+copilots take it from there.
+
+## Requirements
+
+- Node.js 8+
+- Npm 5+
+
+## Run locally for development
+
+Prior to running the application locally you should add into your `/etc/hosts` the line `127.0.0.1 local.topcoder-dev.com`.
+
+- `$ npm install` - Installs all dependencies.
+- `$ npm start` - Run application in development mode against Topcoder development environment using [dev](https://github.com/appirio-tech/connect-app/blob/dev/config/constants/dev.js) config. In this case the frontend is build in memory by webpack server and uses dev tools like redux-logger.
+
+Open browser with URL http://local.topcoder-dev.com:3000.
+
+## NPM commands
+
+- `$ npm start` - Run application in development mode against Topcoder development environment. In this case the frontend is build in memory by webpack server and uses dev tools like redux-logger.
+- `$ npm build` - Create build for production in `/dest` folder. In this case built app is configured to run against Topcoder production environment using [prod](https://github.com/appirio-tech/connect-app/blob/dev/config/constants/master.js) config. Files are being minimized and `gzipped`.
+- `$ npm run lint` - Check js code linting.
+- `$ npm run lint:fix` - Check js code linting and trying to fix errors automatically.
+- `$ npm run test` - Performs tests running. **Note** we don't really have tests, so we only keep this command run successfully.
+- `$ npm run test:watch` - Performs tests on files changes.
+
+## TC Deployment Notes
 _[TC Deployment Notes should always be kept up to date **on the default branch**. Update these notes when changes to this information occur]_
 
 **General Deployment:** This software is deployed to AWS S3 by CircleCI. It's ultimately delivered through AWS Cloudfront, which is fed from the S3 bucket. There are no EC2 systems involved in the delivery (althought Connect is fed from various micro-services).
@@ -18,46 +44,11 @@ _[TC Deployment Notes should always be kept up to date **on the default branch**
 * The _circle.yml_ file controls the build - see this file if you need to confirm if your commit will deploy anything
 * Circle-ci builds can be easily cancelled - please do so if you accidentally trigger an undesired build
 
-# Customer-App
-
-This repository houses new Customer pages, using React, Redux, and Webpack.
-
-## Installation
-
-We use node 8.9.x and npm 6.x, so you may need to download a new version of node. The easiest way is to download [nvm](https://github.com/creationix/nvm). We have a `.nvmrc` file in the root of the project, so you can just run `nvm use` to switch to the correct version of node.
-
-Install dependencies by running the following in the root of the project:
- - `npm i`
- - **Note:** You must use npm 6.x. Type `npm -v` to ensure you have the correct version.
-
-## NPM Commands
-- To run locally, run `npm start` and head to `http://localhost:3000/new_project`
-- Run tests with `npm test` or use `npm run test:watch` to rerun tests after files change
-- To make sure your code passes linting: `npm run lint`
-- To create the build: `npm run build`
-
-## Login
-
-During login, if your see `Invalid URL: http://localhost:3000` error in browser console, just browse http://localhost:3000 and it will show up.
-
-Or, you can add into your `/etc/hosts` the line `127.0.0.1 local.topcoder-dev.com`. And access the app with http://local.topcoder-dev.com:3000. It will prevent you from getting `Invalid URL: http://localhost:3000` and you will be redirected successfully after login.
-
 ## Contributing
 
 ### Pull Requests
 
 To contribute to the repository, please create a feature branch off of the dev branch. Once you're finished working on the feature, make a pull request to merge it into dev. Please make sure that every pull request has passed the build checks, which appear just before the "Merge pull request" button in github.
-
-### Updating npm-shrinkwrap.json
-
-General workflow to update `npm-shrinkwrap.json` would be:
-
-- `npm install --no-optional` -  with old npm-shrinkwrap (--no-optional to skip fsevents)
-- update `package.json` if you need to remove/update/add any packages
-- remove `npm-shrinkwrap.json`
-- `npm install --no-optional` with new `package.json`
-- `npm shrinkwrap` - to convert `package-lock.json` to `npm-shrinkwrap.json`
-- the new `npm-shrinkwrap.json` will have just the minimal diff
 
 ### Code Style
 
@@ -107,12 +98,12 @@ SCSS Files
     }
   }
 SVG Icons
-  - This repository uses plugin babel-plugin-inline-react-svg 
+  - This repository uses plugin babel-plugin-inline-react-svg
   - The plugin is used to inline-embed svg icons inside the markup
-  
+
   Steps to adding new icons
-  - Insert the svg file in the ~/src/assets/images/ directory 
-  - Add a new icon component file in directory ~/src/components/Icons/Icon-Name.jsx and reference it on the global 
+  - Insert the svg file in the ~/src/assets/images/ directory
+  - Add a new icon component file in directory ~/src/components/Icons/Icon-Name.jsx and reference it on the global
     icon component in the ~/src/components/icons/ directory
   - Wrap the svg icon inside an object for caching to optimize on perfomance.
   ```

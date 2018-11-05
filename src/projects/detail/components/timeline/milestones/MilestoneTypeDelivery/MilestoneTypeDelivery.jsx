@@ -11,6 +11,7 @@ import LinkList from '../../LinkList'
 import MilestonePostMessage from '../../MilestonePostMessage'
 import MilestonePostEditText from '../../MilestonePostEditText'
 import MilestoneDescription from '../../MilestoneDescription'
+import MilestoneDelayNotification from '../../MilestoneDelayNotification'
 import { getMilestoneStatusText } from '../../../../../../helpers/milestoneHelper'
 
 import { MILESTONE_STATUS } from '../../../../../../config/constants'
@@ -200,6 +201,15 @@ class MilestoneTypeDelivery extends React.Component {
     }
     if(isFinalFixesSubmitted) {
       links = _.get(milestone, 'details.prevMilestoneContent.links', [])
+      if(isCompleted) {
+        // if it's completed
+        // check if there is new updated/edited delivery link
+        const currentLinks = _.get(milestone, 'details.content.links', [])
+        // use the previous link (final fix) if there is none
+        if (currentLinks.length > 0) {
+          links = currentLinks
+        }
+      }
     } else {
       links = _.get(milestone, 'details.content.links', [])
     }
@@ -251,6 +261,8 @@ class MilestoneTypeDelivery extends React.Component {
          */}
         {isActive && (
           <div>
+            <MilestoneDelayNotification milestone={milestone} hideDot/>
+
             {
               !isAccepted &&
               !isDeclined &&
@@ -338,7 +350,7 @@ class MilestoneTypeDelivery extends React.Component {
                       fields={[{ name: 'url'}]}
                       addButtonTitle="Add link"
                       formAddTitle="Adding a link"
-                      formAddButtonTitle="Add a link"
+                      formAddButtonTitle="Add link"
                       formUpdateTitle="Editing a link"
                       formUpdateButtonTitle="Save changes"
                       isUpdating={milestone.isUpdating}
@@ -369,7 +381,18 @@ class MilestoneTypeDelivery extends React.Component {
          */}
         {isCompleted && (
           <div>
-            <LinkList links={links} />
+            {currentUser.isCustomer ? (
+              <LinkList links={links}/>
+            ) : (
+              <LinkList
+                links={links}
+                onUpdateLink={this.updatedUrl}
+                fields={[{ name: 'url'}]}
+                formUpdateTitle="Editing a link"
+                formUpdateButtonTitle="Save changes"
+                isUpdating={milestone.isUpdating}
+              />
+            )}
           </div>
         )}
       </div>

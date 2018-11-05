@@ -7,7 +7,11 @@ import { Link } from 'react-router-dom'
 import CommentEditToggle from './CommentEditToggle'
 import _ from 'lodash'
 import moment from 'moment'
-import { POST_TIME_FORMAT } from '../../config/constants.js'
+import NotificationsReader from '../../components/NotificationsReader'
+import { 
+  POST_TIME_FORMAT,
+  EVENT_TYPE, 
+} from '../../config/constants.js'
 
 import './Comment.scss'
 
@@ -88,6 +92,14 @@ class Comment extends React.Component {
 
     return (
       <div styleName={cn('container', { self, 'is-deleting': isDeleting })} id={messageAnchor}>
+        <NotificationsReader 
+          id={messageAnchor}
+          criteria={[
+            { eventType: EVENT_TYPE.POST.CREATED, contents: { postId: message.id } }, 
+            { eventType: EVENT_TYPE.POST.UPDATED, contents: { postId: message.id } }, 
+            { eventType: EVENT_TYPE.POST.MENTION, contents: { postId: message.id } },
+          ]}
+        />
         <div styleName="avatar">
           {!noInfo && author && <UserTooltip usr={author} id={`${messageAnchor}-${author.userId}`} previewAvatar size={40} />}
         </div>

@@ -9,7 +9,7 @@
 import React from 'react'
 import PT from 'prop-types'
 
-import Sticky from 'react-stickynode'
+import Sticky from '../../../../components/Sticky'
 
 import {
   filterReadNotifications,
@@ -47,16 +47,9 @@ class PostsRefreshPrompt extends React.Component {
   }
 
   componentDidMount() {
-    const { toggleNotificationRead } = this.props
-
     this.setState({
       unreadUpdate: [],
       scrolled: window.scrollY > 0,
-    })
-
-    // after reload, mark all feed update notifications read
-    this.getUnreadTopicAndPostChangedNotifications().forEach((notification) => {
-      toggleNotificationRead(notification.id)
     })
 
     this.refreshUnreadUpdate = setInterval(this.checkForUnreadPosts, REFRESH_UNREAD_UPDATE_INTERVAL)
