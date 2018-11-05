@@ -42,6 +42,11 @@ class ProfileSettingsForm extends Component {
       validations = {
         matchRegexp: /^([+]?\d{1,2}[.-\s]?)?(\d{3}[.-]?){2}\d{4}$/
       }
+    } else if (name === 'firstNLastName') {
+      validations = {
+        // should have first and last name
+        matchRegexp: /(.+)\s+(.+)/
+      }
     }
     return (
       <div className="field">

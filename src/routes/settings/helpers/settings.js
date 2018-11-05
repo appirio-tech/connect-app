@@ -111,7 +111,8 @@ export const applyProfileSettingsToTraits = (traits, profileSettings) => {
     // to the `basic_info` we put just photoUrl, firstName and lastName
     if (trait.traitId === 'basic_info') {
       const updatedTrait = {...trait}
-      const [firstName, lastName] = profileSettings.firstNLastName ? profileSettings.firstNLastName.split(/\s+/) : []
+      // get first and last name, if don't have should return `undefined`
+      const [, firstName, lastName] = profileSettings.firstNLastName ? profileSettings.firstNLastName.match(/([^\s]+)\s*(.*)/) : []
       const photoURL = profileSettings.photoUrl
       const country = profileSettings.country
 
