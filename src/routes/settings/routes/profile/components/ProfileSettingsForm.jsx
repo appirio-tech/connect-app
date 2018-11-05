@@ -40,7 +40,7 @@ class ProfileSettingsForm extends Component {
     let validations = null
     if (name === 'businessPhone') {
       validations = {
-        matchRegexp: /^([+]\d{1,3}[\.\-\s]?)(\d{2,4}[\.\-\s]?){2,3}$/
+        matchRegexp: /^(\+\d{1,3}[.\-\s]?)(\d{2,4}[.\-\s]?){3}$/
       }
     } else if (name === 'firstNLastName') {
       validations = {
