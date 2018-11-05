@@ -235,7 +235,8 @@ export const saveProfileSettings = (settings) => (dispatch, getState) => {
       })
     })
     .catch((err) => {
-      Alert.error(`Failed to save settings. ${err.message}`)
+      const errorMsg = _.get(err, 'response.data.result.content', err.message)
+      Alert.error(`Failed to save settings. ${errorMsg}`)
       dispatch({
         type: SAVE_PROFILE_SETTINGS_FAILURE
       })
