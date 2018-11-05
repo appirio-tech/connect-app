@@ -2,7 +2,6 @@
  * Setting related helper methods
  */
 import _ from 'lodash'
-import { ENV } from '../../../../config/constants'
 
 // blank traits object which we can use if trait doesn't exist to create a new one
 export const blankTraits = {
