@@ -201,7 +201,12 @@ export const saveProfileSettings = (settings) => (dispatch, getState) => {
   const state = getState()
   const handle = _.get(state, 'loadUser.user.handle')
   const traits = _.get(state, 'settings.profile.traits')
-  const existentTraitIds = _.map(traits, 'traitId')
+  const existentTraitIds = _.map(
+    // some traits could have categoryName as null
+    // for such traits we have to use POST method instead of PUT or we will get
+    // error 404 for such traits
+    traits.filter((trait) => trait.categoryName), 
+  'traitId')
   const updatedTraits = applyProfileSettingsToTraits(traits, settings)
 
   // we will only update on server traits which can be updated on the settings page
