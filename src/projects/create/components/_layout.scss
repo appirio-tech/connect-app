@@ -46,7 +46,7 @@ $minimumPageWidth: 984px;
   }
 
   .wizardHeadline {
-    @include tc-heading;
+    @include tc-heading-small;
     width: 100%;
     text-align: center;
     margin: 0 0 50px;

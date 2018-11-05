@@ -21,7 +21,7 @@
       }
 
       .projects-title-mobile {
-        @include tc-heading;
+        @include tc-heading-small;
         color: $tc-gray-10;
         font-size: 15px;
         line-height: 50px;
