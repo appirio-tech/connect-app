@@ -16,7 +16,7 @@ import {
   filterNotificationsByProjectId,
   filterTopicAndPostChangedNotifications,
 } from '../../../../routes/notifications/helpers/notifications'
-import { REFRESH_UNREAD_UPDATE_INTERVAL, SCROLL_TO_MARGIN } from '../../../../config/constants'
+import { SCROLL_TO_MARGIN } from '../../../../config/constants'
 
 import Refresh from '../../../../assets/icons/icon-refresh.svg'
 
