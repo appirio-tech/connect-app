@@ -16,7 +16,7 @@ import {
   filterNotificationsByProjectId,
   filterTopicAndPostChangedNotifications,
 } from '../../../../routes/notifications/helpers/notifications'
-import { REFRESH_UNREAD_UPDATE_INTERVAL, SCROLL_TO_MARGIN } from '../../../../config/constants'
+import { SCROLL_TO_MARGIN } from '../../../../config/constants'
 
 import Refresh from '../../../../assets/icons/icon-refresh.svg'
 
@@ -43,7 +43,7 @@ class PostsRefreshPrompt extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.onScroll)
-    clearInterval(this.refreshUnreadUpdate)
+    // clearInterval(this.refreshUnreadUpdate)
   }
 
   componentDidMount() {
@@ -52,7 +52,7 @@ class PostsRefreshPrompt extends React.Component {
       scrolled: window.scrollY > 0,
     })
 
-    this.refreshUnreadUpdate = setInterval(this.checkForUnreadPosts, REFRESH_UNREAD_UPDATE_INTERVAL)
+    // this.refreshUnreadUpdate = setInterval(this.checkForUnreadPosts, REFRESH_UNREAD_UPDATE_INTERVAL)
   }
 
   getUnreadTopicAndPostChangedNotifications() {
