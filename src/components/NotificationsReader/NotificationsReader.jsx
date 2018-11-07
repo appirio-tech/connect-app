@@ -11,7 +11,7 @@ import { markNotificationsReadByCriteria } from '../../routes/notifications/acti
 
 class NotificationsReader extends React.Component {
   componentWillMount() {
-    const { criteria } = this.props
+    const { criteria, markNotificationsReadByCriteria } = this.props
 
     markNotificationsReadByCriteria(criteria)
   }
