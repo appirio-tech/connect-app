@@ -8,6 +8,7 @@
  */
 import React from 'react'
 import PT from 'prop-types'
+import _ from 'lodash'
 
 import Sticky from '../../../../components/Sticky'
 
@@ -22,46 +23,47 @@ import Refresh from '../../../../assets/icons/icon-refresh.svg'
 
 import styles from './PostsRefreshPrompt.scss'
 
+/**
+ * Check if there are any new unread notifications related to topics or posts
+ * 
+ * @param {Array}  notifications     current notifications
+ * @param {Array}  nextNotifications updated notifications
+ * @param {Number} projectId         project id
+ * 
+ * @returns {Boolean} true if there are new unread notifications related to topics or posts
+ */
+const getIsNewTopicAndPostNotificationsArrived = (notifications, nextNotifications, projectId) => {
+  const newNotifications = _.differenceBy(nextNotifications, notifications, 'id')
+
+  const notReadNotifications = filterReadNotifications(newNotifications)
+  const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, projectId))
+
+  return unreadTopicAndPostChangedNotifications.length > 0
+}
+
 class PostsRefreshPrompt extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      unreadUpdate: [],
+      hasToRefresh: false,
       scrolled: false,
     }
 
     this.onScroll = this.onScroll.bind(this)
-    this.checkForUnreadPosts = this.checkForUnreadPosts.bind(this)
-
-    this.refreshUnreadUpdate = null
-  }
-
-  componentWillMount() {
-    window.addEventListener('scroll', this.onScroll)
+    this.refreshFeeds = this.refreshFeeds.bind(this)
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.onScroll)
-    // clearInterval(this.refreshUnreadUpdate)
   }
 
   componentDidMount() {
     this.setState({
-      unreadUpdate: [],
+      hasToRefresh: false,
       scrolled: window.scrollY > 0,
     })
-
-    // this.refreshUnreadUpdate = setInterval(this.checkForUnreadPosts, REFRESH_UNREAD_UPDATE_INTERVAL)
-  }
-
-  getUnreadTopicAndPostChangedNotifications() {
-    const { notifications, projectId } = this.props
-
-    const notReadNotifications = filterReadNotifications(notifications.notifications)
-    const unreadTopicAndPostChangedNotifications = filterTopicAndPostChangedNotifications(filterNotificationsByProjectId(notReadNotifications, projectId))
-
-    return unreadTopicAndPostChangedNotifications
+    window.addEventListener('scroll', this.onScroll)
   }
 
   onScroll() {
@@ -74,31 +76,45 @@ class PostsRefreshPrompt extends React.Component {
     }
   }
 
-  checkForUnreadPosts() {
-    const unreadUpdate = this.getUnreadTopicAndPostChangedNotifications()
-    const { refreshFeeds, preventShowing } = this.props
-    const { scrolled } = this.state
+  componentWillReceiveProps(nextProps) {
+    const { notifications: { notifications } } = this.props
+    const { notifications: { notifications: nextNotifications }, projectId, preventShowing } = nextProps
+    const { scrolled, hasToRefresh } = this.state
 
-    this.setState({ unreadUpdate: this.getUnreadTopicAndPostChangedNotifications() })
-
-    if (!preventShowing && !scrolled && unreadUpdate.length > 0) {
-      refreshFeeds()
+    const isNewTopicAndPostNotificationsArrived = getIsNewTopicAndPostNotificationsArrived(notifications, nextNotifications, projectId)
+    
+    // if there are new notification regarding topics or post, we have to refresh the feed
+    // we run this only once, so if we already have to refresh the feed, than do nothing
+    if (!hasToRefresh && isNewTopicAndPostNotificationsArrived) {
+      this.setState({ hasToRefresh: true }, () => {
+        // if not scrolled we refresh feed automatically without showing a button for manual refresh
+        if (!preventShowing && !scrolled) {
+          this.refreshFeeds()
+        }
+      })      
     }
   }
 
-  render() {
-    const { preventShowing, refreshFeeds } = this.props
-    const { unreadUpdate, scrolled } = this.state
+  refreshFeeds() {
+    const { refreshFeeds } = this.props
 
-    const isShown = unreadUpdate.length > 0 && !preventShowing && scrolled
+    refreshFeeds && refreshFeeds()
+    this.setState({ hasToRefresh: false })
+  }
+
+  render() {
+    const { preventShowing } = this.props
+    const { hasToRefresh } = this.state
+
+    const isShown = hasToRefresh && !preventShowing
 
     return (
       isShown ? (
-        <Sticky top={SCROLL_TO_MARGIN} innerZ={999}>
+        <Sticky top={SCROLL_TO_MARGIN} innerZ={10}>
           <div styleName="prompt">
             <button
               className={`tc-btn tc-btn-primary tc-btn-md ${styles.button}`}
-              onClick={refreshFeeds}
+              onClick={this.refreshFeeds}
             >
               <Refresh styleName="icon" />
               Reload page to view updates

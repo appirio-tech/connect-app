@@ -564,7 +564,6 @@ export const DATE_TO_USER_FIELD_MAP = {
 
 // Notifications
 export const REFRESH_NOTIFICATIONS_INTERVAL = 1000 * 60 * 1 // 1 minute interval
-export const REFRESH_UNREAD_UPDATE_INTERVAL = 1000 * 10 * 1 // 10 second interval
 export const NOTIFICATIONS_DROPDOWN_PER_SOURCE = 5
 export const NOTIFICATIONS_NEW_PER_SOURCE = 10
 
