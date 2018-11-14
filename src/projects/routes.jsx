@@ -21,20 +21,15 @@ import { requiresAuthentication } from '../components/AuthenticatedComponent'
 const ProjectLayoutWithAuth = requiresAuthentication(ProjectLayout)
 const FileDownloadWithAuth = requiresAuthentication(FileDownload)
 
-// NOTE:
-// we cannot move up ProjectDetail component
-// we have to keep it like it's done below because
-// Dashboard, SpecificationContainer and ProjectMessages have to be immediate children
-// of ProjectDetail component because ProjectDetail updates children props by React.Children method
 const ProjectDetailWithAuth = withProps({ main:
   <Switch>
-    <Route exact path="/projects/:projectId" render={() => <ProjectDetail><Dashboard /></ProjectDetail>} />
-    <Route path="/projects/:projectId/status/:statusId" render={() => <ProjectDetail><Dashboard /></ProjectDetail>} />
-    <Route path="/projects/:projectId/specification" render={() => <ProjectDetail><SpecificationContainer /></ProjectDetail>} />
-    <Route path="/projects/:projectId/scope" render={() => <ProjectDetail><Scope /></ProjectDetail>} />
-    <Route path="/projects/:projectId/plan" render={() => <ProjectDetail><ProjectPlan /></ProjectDetail>} />
-    <Route path="/projects/:projectId/add-phase" render={() => <ProjectDetail><ProjectAddPhaseContainer /></ProjectDetail>} />
-    <Route path="/projects/:projectId/discussions/:discussionId?" render={() => <ProjectDetail><ProjectMessages /></ProjectDetail>} />
+    <Route exact path="/projects/:projectId" render={() => <ProjectDetail component={Dashboard} />} />
+    <Route path="/projects/:projectId/status/:statusId" render={() => <ProjectDetail component={Dashboard} />} />
+    <Route path="/projects/:projectId/specification" render={() => <ProjectDetail component={SpecificationContainer} />} />
+    <Route path="/projects/:projectId/scope" render={() => <ProjectDetail component={Scope} />} />
+    <Route path="/projects/:projectId/plan" render={() => <ProjectDetail component={ProjectPlan} />} />
+    <Route path="/projects/:projectId/add-phase" render={() => <ProjectDetail component={ProjectAddPhaseContainer} />} />
+    <Route path="/projects/:projectId/discussions/:discussionId?" render={() => <ProjectDetail component={ProjectMessages} />} />
     <Route render={() => <CoderBot code={404}/>} />
   </Switch>
 })(ProjectLayoutWithAuth)
