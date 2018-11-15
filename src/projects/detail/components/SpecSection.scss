@@ -653,6 +653,36 @@
         }
       }
     }
+
+    .textinput-codes {
+      position: relative;
+      width: 100px;
+      height: 100%;
+      margin-left: 10px;
+
+      @media screen and (max-width: $screen-sm - 1px) {
+        margin-left: 0;
+        margin-top: 4 * $base-unit;
+        width: 100%;
+      }
+
+      .codes-desc {
+        @include roboto;
+        font-size: 12px;
+        line-height: 20px;
+        color: $tc-gray-50;
+        position: absolute;
+        bottom: -20px;
+        font-style: italic;
+      }
+
+      .project-codes {
+        input {
+          background-color: $tc-gray-neutral-light;
+          border-bottom: 1px solid $tc-gray-40;
+        }
+      }
+    }
   }
 
   .section-features-module {
