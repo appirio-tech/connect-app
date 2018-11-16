@@ -473,6 +473,8 @@ export const TC_CDN_URL = process.env.NODE_ENV === 'development' ? 'https://d1aa
 
 export const PROJECT_NAME_MAX_LENGTH = 255
 export const PROJECT_REF_CODE_MAX_LENGTH = 32
+export const BUSINESS_UNIT_MAX_LENGTH = 20
+export const COST_CENTRE_MAX_LENGTH = 20
 
 export const PROJECT_FEED_TYPE_PRIMARY  = 'PRIMARY'
 export const PROJECT_FEED_TYPE_MESSAGES = 'MESSAGES'
