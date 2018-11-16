@@ -9,7 +9,7 @@ import _ from 'lodash'
 import SpecQuestions from './SpecQuestions'
 import FileListContainer from './FileListContainer'
 import SpecScreens from './SpecScreens'
-import { PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
+import { PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH, BUSINESS_UNIT_MAX_LENGTH, COST_CENTRE_MAX_LENGTH } from '../../../config/constants'
 import { scrollToAnchors } from '../../../components/ScrollToAnchors'
 
 import './SpecSection.scss'
@@ -229,6 +229,80 @@ const SpecSection = props => {
               </div>
             </div>
           }
+        </div>
+      )
+    }
+    case 'project-name-advanced': {
+      const refCodeFieldName = 'details.utm.code'
+      const refCode = _.get(project, refCodeFieldName, '')
+      const queryParamRefCode = qs.parse(window.location.search).refCode
+      const businessUnitFieldName = 'details.businessUnit'
+      const businessUnit = _.get(project, businessUnitFieldName, '')
+      const costCentreFieldName = 'details.costCentre'
+      const costCentre = _.get(project, costCentreFieldName, '')
+      return (
+        <div className="project-name-section">
+          <div className="editable-project-name">
+            <TCFormFields.TextInput
+              name="name"
+              placeholder="Project Name"
+              value={_.unescape(_.get(project, 'name', ''))}
+              wrapperClass="project-name"
+              maxLength={ PROJECT_NAME_MAX_LENGTH }
+              required={props.required}
+              validations={props.required ? 'isRequired' : null}
+              validationError={props.validationError}
+              theme="paper-form-dotted"
+            />
+          </div>
+          { !queryParamRefCode &&
+            <div className="textinput-refcode">
+              <TCFormFields.TextInput
+                name={refCodeFieldName}
+                placeholder="REF code"
+                value={ _.unescape(refCode) }
+                wrapperClass="project-refcode"
+                maxLength={ PROJECT_REF_CODE_MAX_LENGTH }
+                theme="paper-form-dotted"
+                disabled={ queryParamRefCode && queryParamRefCode.length > 0 }
+              />
+              <div className="refcode-desc">
+                Optional
+              </div>
+            </div>
+          }
+          <div className="textinput-codes">
+            <TCFormFields.TextInput
+              name={businessUnitFieldName}
+              placeholder="BU"
+              value={businessUnit}
+              maxLength={ BUSINESS_UNIT_MAX_LENGTH }
+              required
+              validations= "isRequired"
+              validationError="Mandatory field"
+              theme="paper-form-dotted"
+              wrapperClass="project-codes"
+            />
+            <div className="codes-desc">
+              required
+            </div>
+          </div>
+          <div className="textinput-codes">
+            <TCFormFields.TextInput
+              name={costCentreFieldName}
+              placeholder="Cost-Centre"
+              value={costCentre}
+              maxLength={ COST_CENTRE_MAX_LENGTH }
+              required
+              validations= "isRequired"
+              validationError="Mandatory field"
+              theme="paper-form-dotted"
+              wrapperClass="project-codes"
+            />
+            <div className="codes-desc">
+              required
+            </div>
+          </div>
         </div>
       )
     }
