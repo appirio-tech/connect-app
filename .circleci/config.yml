@@ -71,7 +71,7 @@ workflows:
             - test
           filters:
             branches:
-              only: ['dev', 'feature/new_project_intake_forms']
+              only: ['dev']
       - deployTest02:
           requires:
             - test
