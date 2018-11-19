@@ -71,7 +71,7 @@ workflows:
             - test
           filters:
             branches:
-              only: ['dev', 'hotfix/correcting_aboslute_urls_ref']
+              only: ['dev']
       - deployTest02:
           requires:
             - test
