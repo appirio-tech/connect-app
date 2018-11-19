@@ -208,12 +208,14 @@ class ProjectsToolBar extends Component {
       {
         text: 'Getting Started',
         link: 'https://www.topcoder.com/about-topcoder/connect/',
-        target: '_blank'
+        target: '_blank',
+        absolute: true
       },
       {
         text: 'Help',
         link: 'https://help.topcoder.com/hc/en-us/articles/225540188-Topcoder-Connect-FAQs',
-        target: '_blank'
+        target: '_blank',
+        absolute: true
       }
     ]
     const menuBar = isLoggedIn && !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />
