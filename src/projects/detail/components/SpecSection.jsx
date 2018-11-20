@@ -290,7 +290,7 @@ const SpecSection = props => {
           <div className="textinput-codes">
             <TCFormFields.TextInput
               name={costCentreFieldName}
-              placeholder="Cost-Centre"
+              placeholder="Cost Centre"
               value={costCentre}
               maxLength={ COST_CENTRE_MAX_LENGTH }
               required
