@@ -54,7 +54,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: ./workspace
-      - run: ./deploy.sh PROD
+      - deploy:
+        name: Running MasterScript
+        command: |
+          git clone --branch master https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
+          cp ./../buildscript/master_deply_v4.2.sh .
+          ./master_deply_v4.2.sh -d CFRONT -e PROD -s connectapp
 
   deployDiscourseFree:
     docker:
