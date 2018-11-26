@@ -1,7 +1,7 @@
 # Topcoder Connect App
 
 Topcoder Connect is client facing application of Topcoder. Customers use Topcoder Connect to input requirements of their projects, then managers and
-copilots take it from there.
+copilots take it from there. 
 
 ## Requirements
 
