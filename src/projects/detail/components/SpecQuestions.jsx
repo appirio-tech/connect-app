@@ -38,11 +38,15 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
     const elemProps = {
       name: q.fieldName,
       label: q.label,
-      value: _.unescape(_.get(project, q.fieldName, '')),
+      value: _.get(project, q.fieldName, ''),
       required: q.required,
       validations: q.required ? 'isRequired' : null,
       validationError: q.validationError,
       validationErrors: q.validationErrors
+    }
+    // escape value of the question only when it is of string type
+    if (typeof elemProps.value === 'string') {
+      elemProps.value = _.unescape(elemProps.value)
     }
     if (q.fieldName === 'details.appDefinition.numberScreens') {
       const p = dirtyProject ? dirtyProject : project
