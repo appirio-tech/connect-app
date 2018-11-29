@@ -35,8 +35,8 @@ jobs:
           name: Running MasterScript
           command: |
             git clone --branch master https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
-            cp ./../buildscript/master_deply_v4.2.sh .
-            ./master_deply_v4.2.sh -d CFRONT -e DEV -s connectapp
+            cp ./../buildscript/master_deploy.sh .
+            ./master_deploy.sh -d CFRONT -e DEV -s connectapp
   # deploy to test02
   deployTest02:
     docker:
@@ -58,8 +58,8 @@ jobs:
           name: Running MasterScript
           command: |
             git clone --branch master https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
-            cp ./../buildscript/master_deply_v4.2.sh .
-            ./master_deply_v4.2.sh -d CFRONT -e PROD -s connectapp
+            cp ./../buildscript/master_deploy.sh .
+            ./master_deploy.sh -d CFRONT -e PROD -s connectapp
 
   deployDiscourseFree:
     docker:
