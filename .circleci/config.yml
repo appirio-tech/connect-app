@@ -81,7 +81,7 @@ workflows:
             - test
           filters:
             branches:
-              only: ['dev', 'dev-msinteg']
+              only: ['dev', 'dev-msinteg', 'feature/project_intake_dependent_questions_v2']
       - deployTest02:
           requires:
             - test
