@@ -40,7 +40,7 @@ class FillProjectDetails extends Component  {
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
 
-    const sections = projectTemplate.scope.sections
+    const template = projectTemplate.scope
     return (
       <div className="FillProjectDetailsWrapper">
         <div className="header headerFillProjectDetails" />
@@ -60,7 +60,7 @@ class FillProjectDetails extends Component  {
                 <div className="left-area-content">
                   <ProjectBasicDetailsForm
                     project={project}
-                    sections={sections}
+                    template={template}
                     isEditable
                     submitHandler={this.props.onCreateProject}
                     saving={processing}

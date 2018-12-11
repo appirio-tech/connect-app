@@ -181,7 +181,12 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
 
   return (
     <SpecQuestionList>
-      {questions.filter((question) => showHidden || !question.hidden).map(renderQ)}
+      {questions.filter((question) =>
+        // hide if we are in a wizard mode and question is hidden for now
+        (!_.get(question, '__wizard.hidden')) &&
+        // hide hidden questions, unless we not force to show them
+        (showHidden || !question.hidden)
+      ).map(renderQ)}
     </SpecQuestionList>
   )
 }

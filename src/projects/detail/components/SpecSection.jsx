@@ -132,6 +132,7 @@ const SpecSection = props => {
       )
     }
     case 'questions':
+    case 'questions-with-cascade':
       return (
         <SpecQuestions
           showFeaturesDialog={showFeaturesDialog}
@@ -325,6 +326,8 @@ const SpecSection = props => {
           {description}
         </p>
         {subSections.filter((subSection) => (
+          // hide if we are in a wizard mode and subSection is hidden for now
+          (!_.get(subSection, '__wizard.hidden')) &&
           // hide section marked with hiddenOnCreation during creation process
           (!isCreation || !subSection.hiddenOnCreation) &&
           // hide hidden section, unless we not force to show them
