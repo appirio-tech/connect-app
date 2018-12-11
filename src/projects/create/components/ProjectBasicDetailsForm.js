@@ -2,17 +2,19 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
-import update from 'react-addons-update'
 const Formsy = FormsyForm.Formsy
+import update from 'react-addons-update'
+import { evaluate } from '../../../helpers/dependentQuestionsHelper'
 import './ProjectBasicDetailsForm.scss'
 
 import SpecSection from '../../detail/components/SpecSection'
 
 /**
  * Add auxillary `__wizard` property for sections, subSections and questions
- * which has `wizard` property set to `true`.
+ * if they have `wizard` property set to `true`.
  *
  * @param {Object} template raw template
+ * @param {Object} project raw template
  *
  * @returns {Object} template with initialized `__wizard` property
  */
@@ -40,13 +42,25 @@ const initWizard = (template) => {
 
     section.subSections.forEach((subSection) => {
       // initialize questions wizard
-      if (subSection.wizard) {
+      if (subSection.wizard && subSection.questions) {
         subSection.questions.forEach((question, index) => {
           question.__wizard = {
             hidden: index !== 0
           }
         })
       }
+
+      // init conditional questions
+      subSection.questions && subSection.questions.forEach((question) => {
+        if (question.condition) {
+          if (!question.__wizard) {
+            question.__wizard = {}
+          }
+          // for now use empty data to initially evaluate questions
+          // possible we will need to update it and use flatten project object instead
+          question.__wizard.hiddenByCondition = !evaluate(question.condition, {})
+        }
+      })
     })
   })
 
@@ -118,6 +132,110 @@ const isWizardFinished = (template) => {
   return getNextStep(template).nextSectionIndex === -1
 }
 
+/**
+ * Update question in template without template mutation
+ *
+ * @param {Object} template        template
+ * @param {Number} sectionIndex    section index
+ * @param {Number} subSectionIndex subSection index
+ * @param {Number} questionIndex   question index
+ * @param {Object} updateRule      rule acceptable by update function
+ *
+ * @returns {Object} updated template
+ */
+const updateQuestion = (template, sectionIndex, subSectionIndex, questionIndex, updateRule) => {
+  const section = template.sections[sectionIndex]
+  const subSection = section.subSections[subSectionIndex]
+  const question = subSection.questions[questionIndex]
+
+  const updatedQuestion = update(question, updateRule)
+
+  return updateSubSection(template, sectionIndex, subSectionIndex, {
+    questions: {
+      $splice: [[questionIndex, 1, updatedQuestion]]
+    }
+  })
+}
+
+/**
+ * Update sebSection in template without template mutation
+ *
+ * @param {Object} template        template
+ * @param {Number} sectionIndex    section index
+ * @param {Number} subSectionIndex subSection index
+ * @param {Object} updateRule      rule acceptable by update function
+ *
+ * @returns {Object} updated template
+ */
+const updateSubSection = (template, sectionIndex, subSectionIndex, updateRule) => {
+  const section = template.sections[sectionIndex]
+  const subSection = section.subSections[subSectionIndex]
+
+  const updatedSubSection = update(subSection, updateRule)
+
+  return updateSection(template, sectionIndex, {
+    subSections: {
+      $splice: [[subSectionIndex, 1, updatedSubSection]]
+    }
+  })
+}
+
+/**
+ * Update section in template without template mutation
+ *
+ * @param {Object} template        template
+ * @param {Number} sectionIndex    section index
+ * @param {Object} updateRule      rule acceptable by update function
+ *
+ * @returns {Object} updated template
+ */
+const updateSection = (template, sectionIndex, updateRule) => {
+  const section = template.sections[sectionIndex]
+
+  const updatedSection = update(section, updateRule)
+
+  const updatedTemplate = update(template, {
+    sections: {
+      $splice: [[sectionIndex, 1, updatedSection]]
+    }
+  })
+
+  return updatedTemplate
+}
+
+/**
+ * Update questions in template using question conditions and data
+ *
+ * @param {Object} template        template
+ * @param {Object} projectFormData data to evaluate question conditions
+ *
+ * @returns {Object} updated template
+ */
+const updateQuestionsByConditions = (template, projectFormData) => {
+  let updatedTemplate = template
+
+  template.sections.forEach((section, sectionIndex) => {
+    section.subSections.forEach((subSection, subSectionIndex) => {
+      subSection.questions && subSection.questions.forEach((question, questionIndex) => {
+        if (question.condition) {
+          const hiddenByCondition = !evaluate(question.condition, projectFormData)
+
+          // only update if the condition result has changed
+          if (hiddenByCondition !== question.__wizard.hiddenByCondition) {
+            updatedTemplate = updateQuestion(updatedTemplate, sectionIndex, subSectionIndex, questionIndex, {
+              __wizard: {
+                hiddenByCondition: { $set: hiddenByCondition }
+              }
+            })
+          }
+        }
+      })
+    })
+  })
+
+  return updatedTemplate
+}
+
 class ProjectBasicDetailsForm extends Component {
 
   constructor(props) {
@@ -128,11 +246,12 @@ class ProjectBasicDetailsForm extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.showNextStep = this.showNextStep.bind(this)
 
-    const template = initWizard(props.template)
+    const template = initWizard(props.template, props.project)
 
     this.state = {
       template,
-      isWizardFinished: isWizardFinished(template)
+      isWizardFinished: isWizardFinished(template),
+      projectFormData : {},
     }
   }
 
@@ -199,6 +318,15 @@ class ProjectBasicDetailsForm extends Component {
   handleChange(change) {
     // removed check for isChanged argument to fire the PROJECT_DIRTY event for every change in the form
     // this.props.fireProjectDirty(change)
+
+    const updatedProjectFormData = update(this.state.projectFormData, { $merge: change })
+    const updatedTemplate = updateQuestionsByConditions(this.state.template, updatedProjectFormData)
+
+    this.setState({
+      projectFormData: updatedProjectFormData,
+      template: updatedTemplate,
+    })
+
     this.props.onProjectChange(change)
   }
 
@@ -207,72 +335,40 @@ class ProjectBasicDetailsForm extends Component {
     evt.preventDefault()
 
     const { template } = this.state
+    let updatedTemplate = template
+    let nextQuestion
 
-    const {
-      nextSectionIndex,
-      nextSubSectionIndex,
-      nextQuestionIndex,
-    } = getNextStep(template)
+    do {
+      const {
+        nextSectionIndex,
+        nextSubSectionIndex,
+        nextQuestionIndex,
+      } = getNextStep(updatedTemplate)
 
-    if (nextSectionIndex !== -1) {
-      const nextSection = this.state.template.sections[nextSectionIndex]
-      const nextSubSection = nextSection.subSections[nextSubSectionIndex]
-      const nextQuestion = nextQuestionIndex !== -1 ? nextSubSection.questions[nextQuestionIndex] : null
+      nextQuestion = nextQuestionIndex !== -1
+        ? updatedTemplate.sections[nextSectionIndex].subSections[nextSubSectionIndex].questions[nextQuestionIndex]
+        : null
 
-      let updatedSubSection
-
-      // if we have next question to show, then UN-mark it as hidden
-      if (nextQuestion) {
-        const updatedQuestion = update(nextQuestion, {
-          __wizard: {
-            $set: {
-              ...nextQuestion.__wizard,
-              hidden: false
-            }
-          }
-        })
-
-        updatedSubSection = update(nextSubSection, {
-          questions: {
-            $splice: [[nextQuestionIndex, 1, updatedQuestion]]
-          }
-        })
-
-      // otherwise UN-mark subSection as hidden
-      } else {
-        updatedSubSection = update(nextSubSection, {
-          __wizard: {
-            $set: {
-              ...nextSubSection.__wizard,
-              hidden: false
-            }
-          }
-        })
+      const updateRule = {
+        __wizard: {
+          hidden: { $set: false }
+        }
       }
 
-      const updatedSection = update(nextSection, {
-        subSections: {
-          $splice: [[nextSubSectionIndex, 1, updatedSubSection]]
-        }
-      })
+      if (nextQuestionIndex !== -1) {
+        updatedTemplate = updateQuestion(updatedTemplate, nextSectionIndex, nextSubSectionIndex, nextQuestionIndex, updateRule)
+      } else if (nextSubSectionIndex !== -1) {
+        updatedTemplate = updateSubSection(updatedTemplate, nextSectionIndex, nextSubSectionIndex, updateRule)
+      } else if (nextSectionIndex !== -1) {
+        updatedTemplate = updateSection(updatedTemplate, nextSectionIndex, updateRule)
+      }
 
-      const updatedTemplate = update(this.state.template, {
-        sections: {
-          $splice: [[nextSectionIndex, 1, updatedSection]]
-        }
-      })
+    } while (nextQuestion && _.get(nextQuestion, '__wizard.hiddenByCondition'))
 
-      this.setState({
-        template: updatedTemplate,
-        isWizardFinished: isWizardFinished(updatedTemplate)
-      })
-    } else {
-      // in theory this should never happen as we shouldn't show `Next` button
-      // if there are no further steps to show
-      this.setState({
-        isWizardFinished: true
-      })
-    }
+    this.setState({
+      template: updatedTemplate,
+      isWizardFinished: isWizardFinished(updatedTemplate)
+    })
   }
 
   render() {
