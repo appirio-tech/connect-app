@@ -129,7 +129,6 @@
     "react-select": "^0.9.1",
     "react-stickynode": "^1.2.1",
     "react-text-truncate": "^0.8.3",
-    "react-transition-group": "^2.5.1",
     "recompose": "^0.26.0",
     "redux": "^3.7.1",
     "redux-promise-middleware": "4.2.1",

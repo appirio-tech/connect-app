@@ -10,7 +10,6 @@ import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
 import SpecFeatureQuestion from './SpecFeatureQuestion'
 import ColorSelector from './../../../components/ColorSelector/ColorSelector'
 import SelectDropdown from './../../../components/SelectDropdown/SelectDropdown'
-import { TransitionGroup, Transition } from 'react-transition-group'
 
 // HOC for TextareaInput
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
@@ -28,17 +27,6 @@ const getIcon = icon => {
   default:
     return <SpecQuestionIcons.Placeholder />
   }
-}
-
-const defaultStyle = {
-  transition: 'all 300ms ease-in-out',
-}
-
-const transitionStyles = {
-  entering: { backgroundColor: '#effae5' },
-  entered:  { backgroundColor: 'rgba(239, 250, 229, 0)' },
-  exiting: { backgroundColor: '#fff4f4' },
-  exited:  { backgroundColor: 'rgba(255, 244, 244, 0)' },
 }
 
 // { isRequired, represents the overall questions section's compulsion, is also available}
@@ -178,38 +166,29 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       ChildElem = <noscript />
     }
     return (
-      <Transition timeout={300} key={q.fieldName}>
-        {state => (
-          <SpecQuestionList.Item
-            title={q.title}
-            icon={getIcon(q.icon)}
-            description={q.description}
-            required={q.required || (q.validations && q.validations.indexOf('isRequired') !== -1)}
-            hideDescription={elemProps.hideDescription}
-            style={{
-              ...defaultStyle,
-              ...transitionStyles[state]
-            }}
-          >
-            <ChildElem {...elemProps} />
-          </SpecQuestionList.Item>
-        )}
-      </Transition>
+      <SpecQuestionList.Item
+        key={q.fieldName}
+        title={q.title}
+        icon={getIcon(q.icon)}
+        description={q.description}
+        required={q.required || (q.validations && q.validations.indexOf('isRequired') !== -1)}
+        hideDescription={elemProps.hideDescription}
+      >
+        <ChildElem {...elemProps} />
+      </SpecQuestionList.Item>
     )
   }
 
   return (
     <SpecQuestionList>
-      <TransitionGroup>
-        {questions.filter((question) =>
-          // hide if we are in a wizard mode and question is hidden for now
-          (!_.get(question, '__wizard.hidden')) &&
-          // hide if question is hidden by condition
-          (!_.get(question, '__wizard.hiddenByCondition')) &&
-          // hide hidden questions, unless we not force to show them
-          (showHidden || !question.hidden)
-        ).map(renderQ)}
-      </TransitionGroup>
+      {questions.filter((question) =>
+        // hide if we are in a wizard mode and question is hidden for now
+        (!_.get(question, '__wizard.hidden')) &&
+        // hide if question is hidden by condition
+        (!_.get(question, '__wizard.hiddenByCondition')) &&
+        // hide hidden questions, unless we not force to show them
+        (showHidden || !question.hidden)
+      ).map(renderQ)}
     </SpecQuestionList>
   )
 }
