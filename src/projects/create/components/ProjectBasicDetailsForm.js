@@ -21,48 +21,47 @@ import SpecSection from '../../detail/components/SpecSection'
 const initWizard = (template) => {
   const wizardTemplate = _.cloneDeep(template)
 
-  // initialize sections wizard
+  // only if template has `wizard: false` we will initialize wizards and conditional questions
   if (wizardTemplate.wizard) {
+    // initialize sections wizard
     wizardTemplate.sections.forEach((section, index) => {
       section.__wizard = {
         hidden: index !== 0
       }
-    })
-  }
 
-  wizardTemplate.sections.forEach(section => {
-    // initialize subSections wizard
-    if (section.wizard) {
-      section.subSections.forEach((subSection, index) => {
-        subSection.__wizard = {
-          hidden: index !== 0
-        }
-      })
-    }
-
-    section.subSections.forEach((subSection) => {
-      // initialize questions wizard
-      if (subSection.wizard && subSection.questions) {
-        subSection.questions.forEach((question, index) => {
-          question.__wizard = {
+      // initialize subSections wizard
+      if (section.wizard) {
+        section.subSections.forEach((subSection, index) => {
+          subSection.__wizard = {
             hidden: index !== 0
+          }
+
+          // initialize questions wizard
+          if (subSection.wizard && subSection.questions) {
+            subSection.questions.forEach((question, index) => {
+              question.__wizard = {
+                hidden: index !== 0
+              }
+            })
           }
         })
       }
 
-      // init conditional questions
-      subSection.questions && subSection.questions.forEach((question) => {
-        if (question.condition) {
-          if (!question.__wizard) {
-            question.__wizard = {}
+      // init conditional questions for all subSections/questions
+      section.subSections.forEach((subSection) => {
+        subSection.questions && subSection.questions.forEach((question) => {
+          if (question.condition) {
+            if (!question.__wizard) {
+              question.__wizard = {}
+            }
+            // for now use empty data to initially evaluate questions
+            // possible we will need to update it and use flatten project object instead
+            question.__wizard.hiddenByCondition = !evaluate(question.condition, {})
           }
-          // for now use empty data to initially evaluate questions
-          // possible we will need to update it and use flatten project object instead
-          question.__wizard.hiddenByCondition = !evaluate(question.condition, {})
-        }
+        })
       })
     })
-  })
+  }
 
   return wizardTemplate
 }
@@ -391,6 +390,24 @@ class ProjectBasicDetailsForm extends Component {
               isCreation
             />
           </div>
+        </div>
+      )
+    }
+
+    return (
+      <div>
+        <Formsy.Form
+          ref="form"
+          disabled={!isEditable}
+          onInvalid={this.disableButton}
+          onValid={this.enableButton}
+          onValidSubmit={this.submit}
+          onChange={ this.handleChange }
+        >
+          {template.sections.filter(section => (
+            // hide if we are in a wizard mode and section is hidden for now
+            !_.get(section, '__wizard.hidden')
+          )).map(renderSection)}
           <div className="section-footer section-footer-spec">
             {!isWizardFinished ? (
               <button
@@ -407,21 +424,6 @@ class ProjectBasicDetailsForm extends Component {
               >{ submitBtnText }</button>
             )}
           </div>
-        </div>
-      )
-    }
-
-    return (
-      <div>
-        <Formsy.Form
-          ref="form"
-          disabled={!isEditable}
-          onInvalid={this.disableButton}
-          onValid={this.enableButton}
-          onValidSubmit={this.submit}
-          onChange={ this.handleChange }
-        >
-          {template.sections.map(renderSection)}
         </Formsy.Form>
       </div>
     )
