@@ -167,7 +167,7 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
     }
     return (
       <SpecQuestionList.Item
-        key={index}
+        key={q.fieldName}
         title={q.title}
         icon={getIcon(q.icon)}
         description={q.description}
