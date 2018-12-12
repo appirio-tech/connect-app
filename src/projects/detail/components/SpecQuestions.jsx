@@ -32,7 +32,7 @@ const getIcon = icon => {
 // { isRequired, represents the overall questions section's compulsion, is also available}
 const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog, showHidden }) => {
 
-  const renderQ = (q, index) => {
+  const renderQ = (q) => {
     // let child = null
     // const value =
     const elemProps = {
