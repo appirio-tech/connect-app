@@ -26,6 +26,8 @@ const SectionToolBar = (props) => {
       {menu ? [
         <div key="left" className="section">
           {logo}
+        </div>,
+        <div key="center" className="section">
           {title}
         </div>,
         <div key="right" className="section">

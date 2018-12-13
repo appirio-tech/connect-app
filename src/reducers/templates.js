@@ -5,8 +5,9 @@ import {
 
 export const initialState = {
   projectTemplates: null,
-  projectCategories: null,
+  projectTypes: null,
   productTemplates: null,
+  productCategories: null,
   isLoading: false,
 }
 
@@ -18,12 +19,13 @@ export default function(state = initialState, action) {
       isLoading: true,
     }
   case LOAD_PROJECTS_METADATA_SUCCESS: {
-    const { projectTemplates, productTemplates, projectTypes } = action.payload
+    const { projectTemplates, projectTypes, productTemplates, productCategories } = action.payload
     return {
       ...state,
       projectTemplates,
+      projectTypes,
       productTemplates,
-      projectCategories: projectTypes,
+      productCategories,
       isLoading: false,
     }
   }

@@ -2,8 +2,6 @@
 
 :global {
   //TODO  Additional variables - need to find a home for these
-  $gray-color: $tc-gray-50;
-  $title-color: $tc-gray-80;
   $sideBarWidth: 280px;
   $sideBarMaxWidth: 360px;
 
@@ -282,7 +280,7 @@
       .titles {
         @include roboto-medium;
         font-size: 15px;
-        color: $gray-color;
+        color: $tc-gray-50;
         line-height: 20px;
         margin-bottom: 2px;
       }
@@ -330,7 +328,7 @@
           .txt {
             @include roboto;
             font-size: 15px;
-            color: $gray-color;
+            color: $tc-gray-50;
             letter-spacing: 0px;
             line-height: 20px;
           }
@@ -413,7 +411,7 @@
         .file-name {
           @include roboto-bold;
           font-size: 15px;
-          color: $title-color;
+          color: $tc-gray-80;
           letter-spacing: 0px;
           line-height: 20px;
           padding-left: 7px;
@@ -422,7 +420,7 @@
         .upload-status {
           @include roboto;
           font-size: 15px;
-          color: $gray-color;
+          color: $tc-gray-50;
           // letter-spacing: 0px;
           line-height: 20px;
           float: right;
@@ -458,7 +456,7 @@
 
       .file-list-bottom {
         .txt {
-          color: $title-color;
+          color: $tc-gray-80;
           @include roboto-bold;
         }
         padding: 20px 0;
@@ -475,7 +473,7 @@
       text-align: left;
       @include roboto-bold;
       font-size: 15px;
-      color: $title-color;
+      color: $tc-gray-80;
       line-height: 25px;
     }
 
@@ -524,7 +522,7 @@
           line-height: 18px;
           padding: 10px 0;
           @include roboto-bold;
-          color: $title-color;
+          color: $tc-gray-80;
         }
       }
 
@@ -649,6 +647,36 @@
       }
 
       .project-refcode {
+        input {
+          background-color: $tc-gray-neutral-light;
+          border-bottom: 1px solid $tc-gray-40;
+        }
+      }
+    }
+
+    .textinput-codes {
+      position: relative;
+      width: 100px;
+      height: 100%;
+      margin-left: 10px;
+
+      @media screen and (max-width: $screen-sm - 1px) {
+        margin-left: 0;
+        margin-top: 4 * $base-unit;
+        width: 100%;
+      }
+
+      .codes-desc {
+        @include roboto;
+        font-size: 12px;
+        line-height: 20px;
+        color: $tc-gray-50;
+        position: absolute;
+        bottom: -20px;
+        font-style: italic;
+      }
+
+      .project-codes {
         input {
           background-color: $tc-gray-neutral-light;
           border-bottom: 1px solid $tc-gray-40;
@@ -838,7 +866,7 @@
       .titles {
         @include roboto-medium;
         font-size: 15px;
-        color: $gray-color;
+        color: $tc-gray-50;
         line-height: 20px;
         margin-bottom: 2px;
       }
@@ -886,7 +914,7 @@
           .txt {
             @include roboto;
             font-size: 15px;
-            color: $gray-color;
+            color: $tc-gray-50;
             letter-spacing: 0px;
             line-height: 20px;
           }
@@ -969,7 +997,7 @@
         .file-name {
           @include roboto-bold;
           font-size: 15px;
-          color: $title-color;
+          color: $tc-gray-80;
           letter-spacing: 0px;
           line-height: 20px;
           padding-left: 7px;
@@ -978,7 +1006,7 @@
         .upload-status {
           @include roboto;
           font-size: 15px;
-          color: $gray-color;
+          color: $tc-gray-50;
           // letter-spacing: 0px;
           line-height: 20px;
           float: right;
@@ -1014,7 +1042,7 @@
 
       .file-list-bottom {
         .txt {
-          color: $title-color;
+          color: $tc-gray-80;
           @include roboto-bold;
         }
         padding: 20px 0;
@@ -1031,7 +1059,7 @@
       text-align: left;
       @include roboto-bold;
       font-size: 15px;
-      color: $title-color;
+      color: $tc-gray-80;
       line-height: 25px;
     }
 
@@ -1080,7 +1108,7 @@
           line-height: 18px;
           padding: 10px 0;
           @include roboto-bold;
-          color: $title-color;
+          color: $tc-gray-80;
         }
       }
 

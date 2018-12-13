@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import Sticky from 'react-stickynode'
+import Sticky from '../../../components/Sticky'
 import MediaQuery from 'react-responsive'
 
 import MobilePage from '../../../components/MobilePage/MobilePage'
-import TwoColsLayout from '../components/TwoColsLayout'
+import TwoColsLayout from '../../../components/TwoColsLayout'
 import ProjectInfoContainer from './ProjectInfoContainer'
 
 import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'

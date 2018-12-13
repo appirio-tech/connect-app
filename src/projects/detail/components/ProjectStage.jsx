@@ -8,7 +8,10 @@ import uncontrollable from 'uncontrollable'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
-import { PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
+import { 
+  PROJECT_ATTACHMENTS_FOLDER,
+  EVENT_TYPE, 
+} from '../../../config/constants'
 import { filterNotificationsByPosts, filterReadNotifications } from '../../../routes/notifications/helpers/notifications'
 
 import PhaseCard from './PhaseCard'
@@ -16,9 +19,9 @@ import ProjectStageTabs from './ProjectStageTabs'
 import EditProjectForm from './EditProjectForm'
 import PhaseFeed from './PhaseFeed'
 import ProductTimelineContainer from '../containers/ProductTimelineContainer'
+import NotificationsReader from '../../../components/NotificationsReader'
 import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import NotificationsReader from '../../../components/NotificationsReader'
 import { scrollToHash } from '../../../components/ScrollToAnchors'
 
 const enhance = spinnerWhileLoading(props => !props.processing)
@@ -143,7 +146,7 @@ class ProjectStage extends React.Component{
     if (!_.get(phaseState, 'isExpanded') && feed && (feed.id === parseInt(feedId) || feed.postIds.includes(parseInt(commentId)))){
       expandProjectPhase(phase.id, 'posts')
     }
-    
+
   }
 
   render() {
@@ -182,8 +185,8 @@ class ProjectStage extends React.Component{
     const productTemplate = _.find(productTemplates, { id: _.get(phase, 'products[0].templateId') })
     const product = _.get(phase, 'products[0]')
     const sections = _.get(productTemplate, 'template.questions', [])
-    const projectPhaseAnchor = feed ? `feed-${feed.id}` : ''
-    
+    const projectPhaseAnchor = `phase-${phase.id}-posts`
+
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
 
     const hasTimeline = !!timeline
@@ -220,8 +223,7 @@ class ProjectStage extends React.Component{
             <ProductTimelineContainer product={product} />
           }
 
-          {currentActiveTab === 'posts' && [
-            <NotificationsReader unreadNotifications={unreadPostNotifications} key="NotificationsReader" />,
+          {currentActiveTab === 'posts' && (
             <PhaseFeed
               user={currentUser}
               currentUser={currentUser}
@@ -233,10 +235,16 @@ class ProjectStage extends React.Component{
               allMembers={allMembers}
               onSaveMessage={onSaveMessage}
             />
-          ]}
+          )}
 
           {currentActiveTab === 'specification' &&
             <div className="two-col-content content">
+              <NotificationsReader 
+                id={`phase-${phase.id}-specification`}
+                criteria={[
+                  { eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_PRODUCT_SPEC_UPDATED, contents: { phaseId: phase.id } },
+                ]}
+              />
               <EnhancedEditProjectForm
                 project={product}
                 sections={sections}

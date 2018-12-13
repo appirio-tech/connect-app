@@ -4,12 +4,17 @@ import { connect } from 'react-redux'
 import update from 'react-addons-update'
 import _ from 'lodash'
 import LinksMenu from '../../../components/LinksMenu/LinksMenu'
+import FileLinksMenu from '../../../components/LinksMenu/FileLinksMenu'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
+import { loadDashboardFeeds } from '../../actions/projectTopics'
+import { loadPhaseFeed } from '../../actions/phasesTopics'
 import { setDuration } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
-  DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY } from '../../../config/constants'
+  DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_ATTACHMENTS_FOLDER,
+  PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_DRAFT } from '../../../config/constants'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
+import { addProjectAttachment } from '../../actions/projectAttachment'
 
 class ProjectInfoContainer extends React.Component {
 
@@ -23,6 +28,9 @@ class ProjectInfoContainer extends React.Component {
     this.onAddNewLink = this.onAddNewLink.bind(this)
     this.onDeleteLink = this.onDeleteLink.bind(this)
     this.onEditLink = this.onEditLink.bind(this)
+    this.onAddFile = this.onAddFile.bind(this)
+    this.onAddAttachment = this.onAddAttachment.bind(this)
+    this.onSubmitForReview = this.onSubmitForReview.bind(this)
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
@@ -30,6 +38,9 @@ class ProjectInfoContainer extends React.Component {
       !_.isEqual(nextProps.feeds, this.props.feeds) ||
       !_.isEqual(nextProps.phases, this.props.phases) ||
       !_.isEqual(nextProps.productsTimelines, this.props.productsTimelines) ||
+      !_.isEqual(nextProps.phasesTopics, this.props.phasesTopics) ||
+      !_.isEqual(nextProps.isFeedsLoading, this.props.isFeedsLoading) ||
+      !_.isEqual(nextProps.isProjectProcessing, this.props.isProjectProcessing) ||
       nextProps.activeChannelId !== this.props.activeChannelId
   }
 
@@ -39,7 +50,24 @@ class ProjectInfoContainer extends React.Component {
   }
 
   componentWillMount() {
-    this.setDuration(this.props.project)
+    const { project, isFeedsLoading, feeds, loadDashboardFeeds,
+      phases, phasesTopics, loadPhaseFeed } = this.props
+
+    this.setDuration(project)
+
+    // load feeds from dashboard if they are not currently loading or loaded yet
+    // also it will load feeds, if we already loaded them, but it was 0 feeds before
+    if (!isFeedsLoading && feeds.length < 1) {
+      loadDashboardFeeds(project.id)
+    }
+
+    // load phases feeds if they are not loaded yet
+    // note: old projects doesn't have phases, so we check if there are any phases at all first
+    phases && phasesTopics && phases.forEach((phase) => {
+      if (!phasesTopics[phase.id]) {
+        loadPhaseFeed(project.id, phase.id)
+      }
+    })
   }
 
   componentWillReceiveProps({project}) {
@@ -84,10 +112,24 @@ class ProjectInfoContainer extends React.Component {
     deleteProject(project.id)
   }
 
+  onAddFile() {
+  }
+
+  onAddAttachment(attachment) {
+    const { project } = this.props
+    this.props.addProjectAttachment(project.id, attachment)
+  }
+
+  onSubmitForReview() {
+    const { updateProject, project } = this.props
+    updateProject(project.id, { status: 'in_review'})
+  }
+
   render() {
     const { duration } = this.state
     const { project, currentMemberRole, isSuperUser, phases, feeds,
-      hideInfo, hideLinks, hideMembers, onChannelClick, activeChannelId, productsTimelines } = this.props
+      hideInfo, hideLinks, hideMembers, onChannelClick, activeChannelId, productsTimelines,
+      isManageUser, phasesTopics, isProjectPlan, isProjectProcessing } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -131,13 +173,39 @@ class ProjectInfoContainer extends React.Component {
         address: attachment.downloadUrl,
       }))
 
-    const discussions = feeds.map((feed) => ({
-      title: `${feed.title}`,
-      address: feed.tag === PROJECT_FEED_TYPE_PRIMARY ? `/projects/${project.id}#feed-${feed.id}` : `/projects/${project.id}/plan#phase-${feed.phaseId}`,
+    // get list of phase topic in same order as phases
+    // note: for old projects which doesn't have phases we return an empty array
+    const visiblePhases = phases && phases.filter((phase) => (
+      isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
+    )) || []
+
+    const phaseFeeds = _.compact(
+      visiblePhases.map((phase) => {
+        const topic = _.get(phasesTopics, `[${phase.id}].topic`)
+
+        if (!topic) {
+          return null
+        }
+
+        return ({
+          ...topic,
+          phaseId: phase.id,
+          phaseName: phase.name,
+        })
+      })
+    )
+
+    const discussions = [...feeds, ...phaseFeeds].map((feed) => ({
+      title: feed.phaseName ? `${feed.phaseName}` : `${feed.title}`,
+      address: feed.tag === PROJECT_FEED_TYPE_PRIMARY ? `/projects/${project.id}#feed-${feed.id}` : `/projects/${project.id}/plan#phase-${feed.phaseId}-posts`,
       noNewPage: true,
-      onClick: onChannelClick ? () => onChannelClick(feed) : null,
+      //if PRIMARY discussion is to be loaded for project-plan page we won't attach the callback, for smoother transition to dashboard page
+      onClick: !(isProjectPlan && feed.tag === PROJECT_FEED_TYPE_PRIMARY) && onChannelClick ? () => onChannelClick(feed) : null,
+      allowDefaultOnClick: true,
       isActive: feed.id === activeChannelId,
     }))
+
+    const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
 
     return (
       <div>
@@ -154,6 +222,8 @@ class ProjectInfoContainer extends React.Component {
               directLinks={directLinks}
               isSuperUser={isSuperUser}
               productsTimelines = {productsTimelines}
+              onSubmitForReview={this.onSubmitForReview}
+              isProjectProcessing={isProjectProcessing}
             />
           }
           <LinksMenu
@@ -163,11 +233,15 @@ class ProjectInfoContainer extends React.Component {
             noDots
             withHash
           />
-          <LinksMenu
+          <FileLinksMenu
             links={attachments}
             title="Latest files"
+            canAdd
+            onAddNewLink={this.onAddFile}
+            onAddAttachment={this.onAddAttachment}
             moreText="view all files"
             noDots
+            attachmentsStorePath={attachmentsStorePath}
           />
           {!hideLinks &&
             <LinksMenu
@@ -192,11 +266,16 @@ class ProjectInfoContainer extends React.Component {
 ProjectInfoContainer.PropTypes = {
   currentMemberRole: PropTypes.string,
   phases: PropTypes.array,
+  feeds: PropTypes.array,
+  phasesTopics: PropTypes.array,
   project: PropTypes.object.isRequired,
   isSuperUser: PropTypes.bool,
+  isManageUser: PropTypes.bool,
   productsTimelines : PropTypes.object.isRequired,
+  isProjectPlan: PropTypes.bool,
+  isProjectProcessing: PropTypes.bool,
 }
 
-const mapDispatchToProps = { updateProject, deleteProject }
+const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, loadDashboardFeeds, loadPhaseFeed }
 
 export default connect(null, mapDispatchToProps)(ProjectInfoContainer)

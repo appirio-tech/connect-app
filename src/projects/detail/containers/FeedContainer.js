@@ -389,7 +389,7 @@ class FeedView extends React.Component {
             <ScrollableFeed
               {...{
                 ...fullscreenFeed,
-                id: fullscreenFeedId.toString(),
+                id: fullscreenFeedId,
                 allowComments: fullscreenFeed.allowComments && !!currentMemberRole,
                 currentUser,
                 allMembers,
@@ -443,11 +443,12 @@ class FeedView extends React.Component {
               />
             </MediaQuery>
             {feeds.map((feed) => (
-              <div styleName="feed-card" key={feed.id.toString()}>
+              <div styleName="feed-card" key={feed.id}>
                 <ScrollableFeed
                   {...{
                     ...feed,
-                    id: feed.id.toString(),
+                    id: feed.id.toString(), // convert it to string for `ScrollElement`
+                    topicId: feed.id,       // add topic id as a number, for `Feed`
                     allowComments: feed.allowComments && !!currentMemberRole,
                     currentUser,
                     allMembers,
@@ -506,7 +507,13 @@ class FeedContainer extends React.Component {
   }
 
   componentWillMount() {
-    this.props.loadDashboardFeeds(this.props.project.id)
+    // As we implemented links to the topics on the Dashboard and Plan tabs sidebars
+    // we want to navigate between topics on the different tabs
+    // to make navigation smooth, we don't reload feeds on the dashboard tab
+    // every time we switch to the dashboard tab
+    // TODO this is an experimental way, we have to think if this is good
+    //      or we have reload feeds some way still keeping navigation smooth
+    // this.props.loadDashboardFeeds(this.props.project.id)
   }
 
   render() {

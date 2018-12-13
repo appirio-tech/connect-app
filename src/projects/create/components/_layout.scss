@@ -12,8 +12,8 @@ $minimumPageWidth: 984px;
 :global {
   .wizardWrapper {
     min-height: 100vh;
+    height: 100%;
     background-color: $tc-gray-neutral-light;
-    margin-top: -60px; // Counteract the push from the main wrapper, top of vewport
 
     @media screen and (max-width: $screen-md - 1px) {
       margin-top: 0;
@@ -46,7 +46,7 @@ $minimumPageWidth: 984px;
   }
 
   .wizardHeadline {
-    @include tc-heading;
+    @include tc-heading-small;
     width: 100%;
     text-align: center;
     margin: 0 0 50px;

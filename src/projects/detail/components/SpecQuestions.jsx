@@ -44,6 +44,10 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       validationError: q.validationError,
       validationErrors: q.validationErrors
     }
+    // escape value of the question only when it is of string type
+    if (typeof elemProps.value === 'string') {
+      elemProps.value = _.unescape(elemProps.value)
+    }
     if (q.fieldName === 'details.appDefinition.numberScreens') {
       const p = dirtyProject ? dirtyProject : project
       const screens = _.get(p, 'details.appScreens.screens', [])

@@ -1,3 +1,4 @@
+import { getCookie } from '../helpers/cookie'
 /*
  * ACTIONS
  */
@@ -20,8 +21,12 @@ export const HIDE_OLDER_NOTIFICATIONS_SUCCESS = 'HIDE_OLDER_NOTIFICATIONS_SUCCES
 export const NOTIFICATIONS_PENDING = 'NOTIFICATIONS_PENDING'
 export const TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE = 'TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE'
 export const TOGGLE_NOTIFICATIONS_DROPDOWN_WEB = 'TOGGLE_NOTIFICATIONS_DROPDOWN_WEB'
+export const MARK_NOTIFICATIONS_READ = 'MARK_NOTIFICATIONS_READ'
 
 // Settings
+export const GET_SYSTEM_SETTINGS_PENDING = 'GET_SYSTEM_SETTINGS_PENDING'
+export const GET_SYSTEM_SETTINGS_SUCCESS = 'GET_SYSTEM_SETTINGS_SUCCESS'
+export const GET_SYSTEM_SETTINGS_FAILURE = 'GET_SYSTEM_SETTINGS_FAILURE'
 export const CHECK_EMAIL_AVAILABILITY_PENDING = 'CHECK_EMAIL_AVAILABILITY_PENDING'
 export const CHECK_EMAIL_AVAILABILITY_SUCCESS = 'CHECK_EMAIL_AVAILABILITY_SUCCESS'
 export const CHECK_EMAIL_AVAILABILITY_FAILURE = 'CHECK_EMAIL_AVAILABILITY_FAILURE'
@@ -34,12 +39,27 @@ export const CHANGE_PASSWORD_PENDING = 'CHANGE_PASSWORD_PENDING'
 export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS'
 export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE'
 
+export const RESET_PASSWORD_PENDING = 'RESET_PASSWORD_PENDING'
+export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS'
+export const RESET_PASSWORD_FAILURE = 'RESET_PASSWORD_FAILURE'
+
 export const GET_NOTIFICATION_SETTINGS_PENDING = 'GET_NOTIFICATION_SETTINGS_PENDING'
 export const GET_NOTIFICATION_SETTINGS_SUCCESS = 'GET_NOTIFICATION_SETTINGS_SUCCESS'
 export const GET_NOTIFICATION_SETTINGS_FAILURE = 'GET_NOTIFICATION_SETTINGS_FAILURE'
 export const SAVE_NOTIFICATION_SETTINGS_PENDING = 'SAVE_NOTIFICATION_SETTINGS_PENDING'
 export const SAVE_NOTIFICATION_SETTINGS_SUCCESS = 'SAVE_NOTIFICATION_SETTINGS_SUCCESS'
 export const SAVE_NOTIFICATION_SETTINGS_FAILURE = 'SAVE_NOTIFICATION_SETTINGS_FAILURE'
+
+export const GET_PROFILE_SETTINGS_PENDING = 'GET_PROFILE_SETTINGS_PENDING'
+export const GET_PROFILE_SETTINGS_SUCCESS = 'GET_PROFILE_SETTINGS_SUCCESS'
+export const GET_PROFILE_SETTINGS_FAILURE = 'GET_PROFILE_SETTINGS_FAILURE'
+export const SAVE_PROFILE_SETTINGS_PENDING = 'SAVE_PROFILE_SETTINGS_PENDING'
+export const SAVE_PROFILE_SETTINGS_SUCCESS = 'SAVE_PROFILE_SETTINGS_SUCCESS'
+export const SAVE_PROFILE_SETTINGS_FAILURE = 'SAVE_PROFILE_SETTINGS_FAILURE'
+export const CLEAR_PROFILE_SETTINGS_PHOTO = 'CLEAR_PROFILE_SETTINGS_PHOTO'
+export const SAVE_PROFILE_PHOTO_SUCCESS = 'SAVE_PROFILE_PHOTO_SUCCESS'
+export const SAVE_PROFILE_PHOTO_FAILURE = 'SAVE_PROFILE_PHOTO_FAILURE'
+export const SAVE_PROFILE_PHOTO_PENDING = 'SAVE_PROFILE_PHOTO_PENDING'
 
 // Search Term
 export const SET_SEARCH_TERM   = 'SET_SEARCH_TERM'
@@ -439,6 +459,7 @@ export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
  */
 export const DOMAIN = process.env.domain || 'topcoder.com'
 export const CONNECT_DOMAIN = `connect.${DOMAIN}`
+export const CONNECT_MAIN_PAGE_URL = `http://connect.${DOMAIN}`
 export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
 export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || `https://accounts.${DOMAIN}/#!/connect`
 export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL || `https://accounts.${DOMAIN}/#!/connect/registration`
@@ -452,6 +473,8 @@ export const TC_CDN_URL = process.env.NODE_ENV === 'development' ? 'https://d1aa
 
 export const PROJECT_NAME_MAX_LENGTH = 255
 export const PROJECT_REF_CODE_MAX_LENGTH = 32
+export const BUSINESS_UNIT_MAX_LENGTH = 20
+export const COST_CENTRE_MAX_LENGTH = 20
 
 export const PROJECT_FEED_TYPE_PRIMARY  = 'PRIMARY'
 export const PROJECT_FEED_TYPE_MESSAGES = 'MESSAGES'
@@ -528,18 +551,27 @@ export const PROJECT_ICON_MAP = {
 /*eslint-enable */
 //Project sort options
 export const SORT_OPTIONS = [
-  { val: 'updatedAt desc', field: 'updatedAt' },
+  //{ val: 'updatedAt desc', field: 'updatedAt' },
+  { val: 'lastActivityAt desc', field: 'lastActivityAt' },
   { val: 'createdAt', field: 'createdAt' },
   { val: 'createdAt desc', field: 'createdAt' }
 ]
 
+// map project date field to corresponding user field
+export const DATE_TO_USER_FIELD_MAP = {
+  createdAt: 'createdBy',
+  //updatedAt: 'updatedBy',
+  lastActivityAt: 'lastActivityUserId',
+}
+
 // Notifications
 export const REFRESH_NOTIFICATIONS_INTERVAL = 1000 * 60 * 1 // 1 minute interval
-export const REFRESH_UNREAD_UPDATE_INTERVAL = 1000 * 10 * 1 // 10 second interval
 export const NOTIFICATIONS_DROPDOWN_PER_SOURCE = 5
 export const NOTIFICATIONS_NEW_PER_SOURCE = 10
 
 export const NOTIFICATIONS_LIMIT = 1000
+
+export const SUPER_TEST_COOKIE_TAG = 'super-test'
 
 // 60px of primary toolbar height + 50px of secondary toolbar height + 10px to make some margin
 export const SCROLL_TO_MARGIN = 60 + 50 + 10
@@ -559,12 +591,17 @@ export const SCREEN_BREAKPOINT_SM = 640
 export const SCREEN_BREAKPOINT_XS = 320
 
 export const NOTIFICATION_SETTINGS_PERIODS = [
-  // { text: 'Send as they happen', value: 'immediately' },
-  { text: 'Every 10m.', value: 'every10minutes' },
-  { text: 'Hourly', value: 'hourly' },
+  { text: 'Off', value: 'off' },
+  { text: 'Immediately', value: 'immediately' },
+  // { text: 'Hourly', value: 'hourly' },
   { text: 'Daily', value: 'daily' },
-  { text: 'Weekly', value: 'weekly' },
+  // { text: 'Weekly', value: 'weekly' },
+  { text: 'Every other day', value: 'everyOtherDay' },
 ]
+
+if (getCookie(SUPER_TEST_COOKIE_TAG) !== undefined) {
+  NOTIFICATION_SETTINGS_PERIODS.push({ text: 'Every 10 minutes', value: 'every10minutes' })
+}
 
 // date time formats
 export const POST_TIME_FORMAT = 'h:mm a'
@@ -608,3 +645,52 @@ export const MILESTONE_LINK_SUPPORTED_TYPES = [
   { title: 'Heroku link', value: 'heroku' },
   { title: 'Invoice', value: 'invoice' }
 ]
+
+// Notifications event types
+export const EVENT_TYPE = {
+  POST: {
+    UPDATED: 'notifications.connect.project.post.edited',
+    CREATED: 'notifications.connect.project.post.created',
+    DELETED: 'notifications.connect.project.post.deleted',
+    MENTION: 'notifications.connect.project.post.mention',
+  },
+  MEMBER: {
+    JOINED: 'notifications.connect.project.member.joined',
+    LEFT: 'notifications.connect.project.member.left',
+    REMOVED: 'notifications.connect.project.member.removed',
+    MANAGER_JOINED: 'notifications.connect.project.member.managerJoined',
+    COPILOT_JOINED: 'notifications.connect.project.member.copilotJoined',
+    ASSIGNED_AS_OWNER: 'notifications.connect.project.member.assignedAsOwner',
+  },
+  PROJECT: {
+    ACTIVE: 'notifications.connect.project.active',
+    APPROVED: 'notifications.connect.project.approved',
+    CANCELED: 'notifications.connect.project.canceled',
+    COMPLETED: 'notifications.connect.project.completed',
+    CREATED: 'notifications.connect.project.created',
+    FILE_UPLOADED: 'notifications.connect.project.fileUploaded',
+    LINK_CREATED: 'notifications.connect.project.linkCreated',
+    PAUSED: 'notifications.connect.project.paused',
+    SUBMITTED_FOR_REVIEW: 'notifications.connect.project.submittedForReview',
+    SPECIFICATION_MODIFIED: 'connect.action.project.updated.spec',
+  },
+  PROJECT_PLAN: {
+    READY: 'connect.action.project.plan.ready',
+    MODIFIED: 'connect.action.project.plan.updated',
+    PROGRESS_UPDATED: 'connect.action.project.updated.progress',
+    PHASE_ACTIVATED: 'notifications.connect.project.phase.transition.active',
+    PHASE_COMPLETED: 'notifications.connect.project.phase.transition.completed',
+    PHASE_PAYMENT_UPDATED: 'notifications.connect.project.phase.update.payment',
+    PHASE_PROGRESS_UPDATED: 'notifications.connect.project.phase.update.progress',
+    PHASE_SCOPE_UPDATED: 'notifications.connect.project.phase.update.scope',
+    PHASE_PRODUCT_SPEC_UPDATED: 'connect.action.project.product.update.spec',
+    MILESTONE_ACTIVATED: 'connect.action.timeline.milestone.transition.active',
+    MILESTONE_COMPLETED: 'connect.action.timeline.milestone.transition.completed',
+    WAITING_FOR_CUSTOMER_INPUT: 'connect.action.timeline.milestone.waiting.customer',
+    TIMELINE_ADJUSTED: 'connect.action.timeline.adjusted',
+  },
+  TOPIC: {
+    CREATED: 'notifications.connect.project.topic.created',
+    DELETED: 'notifications.connect.project.topic.deleted',
+  },
+}

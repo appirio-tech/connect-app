@@ -31,7 +31,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: ./workspace
-      - run: ./deploy.sh DEV no-cache
+      - deploy:
+          name: Running MasterScript
+          command: |
+            git clone --branch v1.1 https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
+            cp ./../buildscript/master_deploy.sh .
+            ./master_deploy.sh -d CFRONT -e DEV -s connectapp -c false
   # deploy to test02
   deployTest02:
     docker:
@@ -49,7 +54,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: ./workspace
-      - run: ./deploy.sh PROD
+      - deploy:
+          name: Running MasterScript
+          command: |
+            git clone --branch v1.1 https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
+            cp ./../buildscript/master_deploy.sh .
+            ./master_deploy.sh -d CFRONT -e PROD -s connectapp
 
   deployDiscourseFree:
     docker:
@@ -71,7 +81,7 @@ workflows:
             - test
           filters:
             branches:
-              only: ['dev', 'feature/plan-timeline-events-settings']
+              only: ['dev', 'dev-msinteg']
       - deployTest02:
           requires:
             - test

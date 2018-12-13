@@ -6,14 +6,14 @@ import PropTypes from 'prop-types'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 import { NOTIFICATION_SETTINGS_PERIODS } from '../../../../../config/constants'
-import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
-import { TOOLTIP_DEFAULT_DELAY } from '../../../../../config/constants'
-import BtnGroup from '../../../../../components/BtnGroup/BtnGroup'
-import IconSettingsWeb from '../../../../../assets/icons/settings-icon-web.svg'
-import IconSettingsEmail from '../../../../../assets/icons/settings-icon-mail.svg'
+import { TOOLTIP_DEFAULT_DELAY, EVENT_TYPE } from '../../../../../config/constants'
+import IconSettingsWeb from '../../../../../assets/icons/bell.svg'
+import IconSettingsEmail from '../../../../../assets/icons/email.svg'
 import './NotificationSettingsForm.scss'
 import _ from 'lodash'
+import SelectDropdown from '../../../../../components/SelectDropdown/SelectDropdown'
+import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 
 
 // list of the notification groups and related event types
@@ -21,89 +21,84 @@ import _ from 'lodash'
 const topics = [
   {
     title: 'New posts and replies',
+    description: 'Get a notification any time somebody posts on your project. This will make sure you can stay up-to-date with what’s happening on your project',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.topic.created',
-      'notifications.connect.project.topic.deleted',
-      'notifications.connect.project.post.created',
-      'notifications.connect.project.post.edited',
-      'notifications.connect.project.post.deleted'
+      EVENT_TYPE.TOPIC.CREATED,
+      EVENT_TYPE.TOPIC.DELETED,
+      EVENT_TYPE.POST.CREATED,
+      EVENT_TYPE.POST.UPDATED,
+      EVENT_TYPE.POST.DELETED,
     ]
   }, {
-    title: 'Project status changes',
+    title: 'Project status',
+    description: 'Receive a notification any time your project status changes',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.created',
-      'notifications.connect.project.updated',
-      'notifications.connect.project.canceled',
-      'notifications.connect.project.approved',
-      'notifications.connect.project.paused',
-      'notifications.connect.project.completed',
-      'notifications.connect.project.submittedForReview',
-      'notifications.connect.project.active'
+      EVENT_TYPE.PROJECT.CREATED,
+      EVENT_TYPE.PROJECT.CANCELED,
+      EVENT_TYPE.PROJECT.APPROVED,
+      EVENT_TYPE.PROJECT.PAUSED,
+      EVENT_TYPE.PROJECT.COMPLETED,
+      EVENT_TYPE.PROJECT.SUBMITTED_FOR_REVIEW,
+      EVENT_TYPE.PROJECT.ACTIVE,
     ]
   }, {
-    title: 'Project specification changes',
+    title: 'Project scope',
+    description: 'Receive a notification any time your project scope is updated',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.specificationModified'
+      EVENT_TYPE.PROJECT.SPECIFICATION_MODIFIED,
     ]
   }, {
     title: 'File uploads',
+    description: 'Receive a notification any time a new file is uploaded to your project',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.fileUploaded'
+      EVENT_TYPE.PROJECT.FILE_UPLOADED,
     ]
   }, {
-    title: 'New project links',
+    title: 'New project link',
+    description: 'Receive a notification any time a new link is added to your project',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.linkCreated'
+      EVENT_TYPE.PROJECT.LINK_CREATED,
     ]
   }, {
-    title: 'Team changes',
+    title: 'Project team',
+    description: 'Receive a notification any time a person joins or leaves the team',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.member.joined',
-      'notifications.connect.project.member.left',
-      'notifications.connect.project.member.removed',
-      'notifications.connect.project.member.managerJoined',
-      'notifications.connect.project.member.copilotJoined',
-      'notifications.connect.project.member.assignedAsOwner'
+      EVENT_TYPE.MEMBER.JOINED,
+      EVENT_TYPE.MEMBER.LEFT,
+      EVENT_TYPE.MEMBER.REMOVED,
+      EVENT_TYPE.MEMBER.MANAGER_JOINED,
+      EVENT_TYPE.MEMBER.COPILOT_JOINED,
+      EVENT_TYPE.MEMBER.ASSIGNED_AS_OWNER,
     ]
   }, {
-    title: 'Project plan changes',
+    title: 'Project plan',
+    description: 'Receive a notification when a phase is added to your project plan',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.planReady',
-      'notifications.connect.project.planModified'
+      EVENT_TYPE.PROJECT_PLAN.READY,
+      EVENT_TYPE.PROJECT_PLAN.MODIFIED,
     ]
   }, {
     title: 'Project phase updates',
+    description: 'Receive a notification for any activity on your project phase',
     enabledMethods:['web', 'email'],
     types: [
-      'notifications.connect.project.phase.transition.active',
-      'notifications.connect.project.phase.transition.completed',
-      'notifications.connect.project.phase.update.payment',
-      'notifications.connect.project.phase.update.progress',
-      'notifications.connect.project.phase.update.scope'
-    ]
-  }, {
-    title: 'Project progress updates',
-    enabledMethods:['web', 'email'],
-    types: [
-      'notifications.connect.project.phase.update.progress',
-      'notifications.connect.project.progressModified'
-    ]
-  }, {
-    title: 'Project phase timeline changes',
-    enabledMethods:['web', 'email'],
-    types: [
-      'notifications.connect.project.phase.timelineModified',
-      'notifications.connect.project.phase.milestone.transition.active',
-      'notifications.connect.project.phase.milestone.transition.completed',
+      EVENT_TYPE.PROJECT_PLAN.PHASE_ACTIVATED,
+      EVENT_TYPE.PROJECT_PLAN.PHASE_COMPLETED,
+      EVENT_TYPE.PROJECT_PLAN.PHASE_PAYMENT_UPDATED,
+      EVENT_TYPE.PROJECT_PLAN.PHASE_PROGRESS_UPDATED,
+      EVENT_TYPE.PROJECT_PLAN.PHASE_SCOPE_UPDATED,
+      EVENT_TYPE.PROJECT_PLAN.PHASE_PRODUCT_SPEC_UPDATED,
+      EVENT_TYPE.PROJECT_PLAN.MILESTONE_ACTIVATED,
+      EVENT_TYPE.PROJECT_PLAN.MILESTONE_COMPLETED,
       // should we include wait.customer to be controlled via settings?
-      'notifications.connect.project.phase.milestone.waiting.customer'
+      EVENT_TYPE.PROJECT_PLAN.WAITING_FOR_CUSTOMER_INPUT,
     ]
   }
 ]
@@ -139,15 +134,22 @@ const initSettings = (notInitedSettings) => {
       if (!notifications[type][serviceId]) {
         notifications[type][serviceId] = {}
       }
+
       if (_.isUndefined(notifications[type][serviceId].enabled)) {
         notifications[type][serviceId].enabled = 'yes'
       }
-    })
 
-    // for all messaging events, defaults emailBundling to off
-    if (_.includes(messagingTypes, type)) {
-      notifications[type]['emailBundling'].enabled = 'no'
-    }
+      if (_.isUndefined(notifications[type][serviceId].bundlePeriod)) {
+        // for messaging related email notifications, by default bundle period is set to 'immediately'
+        if (serviceId === 'email' && _.includes(messagingTypes, type)) {
+          notifications[type][serviceId].bundlePeriod = 'immediately'
+
+        // for the rest of notifications by default bundle period is set to 'daily'
+        } else {
+          notifications[type][serviceId].bundlePeriod = 'daily'
+        }
+      }
+    })
   })
 
   settings.notifications = notifications
@@ -160,20 +162,44 @@ class NotificationSettingsForm extends React.Component {
   constructor(props) {
     super(props)
 
+    const initialSettings = initSettings(props.values.settings)
+
     this.state = {
-      settings: initSettings(props.values.settings)
+      initialSettings,
+      settings: initialSettings,
+      dirty: false,
     }
 
-    this.handleChange = this.handleChange.bind(this)
-    this.handleBundleEmailChange = this.handleBundleEmailChange.bind(this)
+    this.handleEmailConfigurationChange = this.handleEmailConfigurationChange.bind(this)
+    this.handleWebConfigurationChange = this.handleWebConfigurationChange.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
 
-  handleChange(topicIndex, serviceId) {
-    const notifications = {...this.state.settings.notifications}
+  componentWillReceiveProps(newProps) {
+    // after setting were updated on the server
+    // reinit form with updated values
+    if (this.props.values.pending && !newProps.values.pending) {
+      const initialSettings = initSettings(newProps.values.settings)
+      this.setState({
+        initialSettings,
+        settings: initialSettings,
+        dirty: false,
+      })
+    }
+  }
 
+  handleEmailConfigurationChange(selectedOption, topicIndex) {
+    const notifications = {...this.state.settings.notifications}
     // update values for all types of the topic
     topics[topicIndex].types.forEach((type) => {
-      notifications[type][serviceId].enabled = notifications[type][serviceId].enabled === 'yes' ? 'no' : 'yes'
+      notifications[type] = {
+        ...notifications[type],
+        email: {
+          ...notifications[type].email,
+          enabled: selectedOption.value === 'off' ? 'no' : 'yes',
+          bundlePeriod: selectedOption.value === 'off' ? '' : selectedOption.value
+        }
+      }
     })
 
     this.setState({
@@ -181,26 +207,51 @@ class NotificationSettingsForm extends React.Component {
         ...this.state.settings,
         notifications,
       }
-    })
+    }, this.onChange)
   }
 
-  handleBundleEmailChange(bundlePeriod) {
-    this.setState({
-      settings: {
-        ...this.state.settings,
-        services: {
-          ...this.state.settings.services,
-          email: {
-            ...this.state.settings.services.email,
-            // this will be send to backend which uses null instead of 'immediately'
-            bundlePeriod: bundlePeriod === 'immediately' ? null : bundlePeriod,
-          }
+  stopPropagation(e) {
+    e.preventDefault()
+    e.stopPropagation()
+    e.nativeEvent.stopImmediatePropagation()
+  }
+
+  handleWebConfigurationChange(topicIndex) {
+    const notifications = {...this.state.settings.notifications}
+
+    // update values for all types of the topic
+    topics[topicIndex].types.forEach((type) => {
+      notifications[type] = {
+        ...notifications[type],
+        web: {
+          ...notifications[type].web,
+          enabled: notifications[type].web.enabled === 'yes' ? 'no' : 'yes'
         }
       }
     })
+
+    this.setState({
+      settings: {
+        ...this.state.settings,
+        notifications,
+      }
+    }, this.onChange)
+  }
+
+  isChanged() {
+    return !_.isEqual(this.state.initialSettings, this.state.settings)
+  }
+
+  onChange() {
+    const isChanged = this.isChanged()
+
+    if (this.state.dirty !== isChanged) {
+      this.setState({ dirty: isChanged })
+    }
   }
 
   render() {
+    const { isCustomer } = this.props
     const areSettingsProvided = !!this.props.values.settings
     const settings = this.state.settings
     const notifications = settings.notifications
@@ -218,16 +269,13 @@ class NotificationSettingsForm extends React.Component {
         <table className="table">
           <thead>
             <tr>
-              <th>Notifications</th>
+              <th>Project notifications</th>
               <th><span className="th-with-icon">
                 <IconSettingsWeb className="icon-settings-web"/>
-                <span>Web</span></span></th>
+                <span className="title">Website</span></span></th>
               <th><span className="th-with-icon">
                 <IconSettingsEmail />
-                <span>Email</span></span></th>
-              <th><span className="th-with-icon">
-                <IconSettingsEmail />
-                <span>Email Bundling</span></span></th>
+                <span className="title">As Email</span></span></th>
             </tr>
           </thead>
           <tbody>
@@ -235,19 +283,49 @@ class NotificationSettingsForm extends React.Component {
               // we toggle settings for all the types in one topic all together
               // so we can use values from the first type to get current value for the whole topic
               const topicFirstType = topic.types[0]
-              const emailStatus = topic.enabledMethods.indexOf('email') < 0 ? 'disabled' : null
               const emailTooltip = topic.enabledMethods.indexOf('email') < 0 ? 'Emails are not yet supported for this event type' : null
               const emailEnabled = notifications[topicFirstType].email.enabled === 'yes'
-              const emailBundlingEnabled = notifications[topicFirstType].emailBundling.enabled === 'yes'
-              return (
+              const emailBundlePeriod = notifications[topicFirstType].email.bundlePeriod
+              const selectedOption = emailEnabled ? emailBundlePeriod : 'off'
+              return [
                 <tr key={index}>
-                  <th>{topic.title}</th>
-                  <td><SwitchButton onChange={() => this.handleChange(index, 'web')} defaultChecked={notifications[topicFirstType].web.enabled === 'yes'} /></td>
+                  <th>
+                    {topic.title}
+                    <div className="description_desktop">
+                      {topic.description}
+                    </div>
+                  </th>
+                  <td>
+                    {isCustomer ? (
+                      <label className="checkbox-ctrl">
+                        <input
+                          defaultChecked={notifications[topicFirstType].web.enabled === 'yes'}
+                          type="checkbox"
+                          readOnly
+                          className="checkbox"
+                          onClick={(e) => this.stopPropagation(e)}
+                        />
+                        <span className="checkbox-text" />
+                      </label>
+                    ) : (
+                      <SwitchButton                       
+                        onChange={() => this.handleWebConfigurationChange(index)}
+                        name={`web[${index}]`}
+                        checked={notifications[topicFirstType].web.enabled === 'yes'}
+                      />
+                    )}
+                  </td>
                   <td>
                     { !!emailTooltip &&
                       <Tooltip theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
                         <div className="tooltip-target">
-                          <SwitchButton onChange={() => this.handleChange(index, 'email')} defaultChecked={emailEnabled && emailStatus===null} disabled={emailStatus}/>
+                          <SelectDropdown
+                            name="status"
+                            value={selectedOption}
+                            theme="default"
+                            options={NOTIFICATION_SETTINGS_PERIODS.map(val => ({ value: val.value, title: val.text}))}
+                            onSelect={(selected) => this.handleEmailConfigurationChange(selected, index)}
+                          />
                         </div>
                         <div className="tooltip-body">
                           {emailTooltip}
@@ -255,30 +333,29 @@ class NotificationSettingsForm extends React.Component {
                       </Tooltip>
                     }
                     {
-                      !emailTooltip && <SwitchButton onChange={() => this.handleChange(index, 'email')} defaultChecked={emailEnabled && emailStatus===null} disabled={emailStatus}/>
+                      !emailTooltip &&
+                      <SelectDropdown
+                        name="status"
+                        value={selectedOption}
+                        theme="default"
+                        options={NOTIFICATION_SETTINGS_PERIODS.map(val => ({ value: val.value, title: val.text}))}
+                        onSelect={(selected) => this.handleEmailConfigurationChange(selected, index)}
+                      />
                     }
                   </td>
-                  <td><SwitchButton onChange={() => this.handleChange(index, 'emailBundling')} defaultChecked={emailBundlingEnabled} /></td>
+                </tr>,
+                <tr className="description_mobile">
+                  <td colSpan="3">
+                    {topic.description}
+                  </td>
                 </tr>
-              )
+              ]
             })}
-            <tr>
-              <td colSpan="4">
-                <div className="bundle-emails">
-                  <div className="th">Bundle emails (beta):</div>
-                  <BtnGroup
-                    items={NOTIFICATION_SETTINGS_PERIODS}
-                    onChange={this.handleBundleEmailChange}
-                    defaultValue={_.get(this.props.values, 'settings.services.email.bundlePeriod') || 'daily'}
-                  />
-                </div>
-              </td>
-            </tr>
           </tbody>
         </table>
 
         <div className="controls">
-          <button type="submit" className="tc-btn tc-btn-primary" disabled={this.props.values.pending}>Save settings</button>
+          <button type="submit" className="tc-btn tc-btn-primary" disabled={this.props.values.pending || !this.state.dirty}>Save settings</button>
         </div>
       </Formsy.Form>
     )

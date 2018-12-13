@@ -5,9 +5,11 @@ import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
 
-import TimelineHeader from '../TimelineHeader'
 import Milestone from '../Milestone'
 import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
+import NotificationsReader from '../../../../../components/NotificationsReader'
+
+import { EVENT_TYPE } from '../../../../../config/constants'
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -94,6 +96,7 @@ class Timeline extends React.Component {
       currentUser,
       timeline,
       isLoading,
+      phaseId,
     } = this.props
 
     if (isLoading || _.some(timeline.milestones, 'isUpdating')) {
@@ -104,11 +107,15 @@ class Timeline extends React.Component {
       const orderedMilestones = timeline.milestones ? _.orderBy(timeline.milestones, ['order']) : []
       return (
         <div ref={ div => { this.div = div } }>
-          <TimelineHeader
-            postContent={{
-              title: timeline.name,
-              postMsg: timeline.description,
-            }}
+          <NotificationsReader 
+            key="notifications-reader"
+            id={`phase-${phaseId}-timeline-${timeline.id}`}
+            criteria={[
+              { eventType: EVENT_TYPE.PROJECT_PLAN.TIMELINE_ADJUSTED, contents: { timeline: { id: timeline.id } } },
+              { eventType: EVENT_TYPE.PROJECT_PLAN.MILESTONE_ACTIVATED, contents: { timeline: { id: timeline.id } } },
+              { eventType: EVENT_TYPE.PROJECT_PLAN.MILESTONE_COMPLETED, contents: { timeline: { id: timeline.id } } },
+              { eventType: EVENT_TYPE.PROJECT_PLAN.WAITING_FOR_CUSTOMER_INPUT, contents: { timeline: { id: timeline.id } } },
+            ]}
           />
           {_.reject(orderedMilestones, { hidden: true }).map((milestone) => (
             <Milestone

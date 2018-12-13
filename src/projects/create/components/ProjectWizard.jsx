@@ -10,6 +10,8 @@ import SelectProjectTemplate from './SelectProjectTemplate'
 import SelectProjectType from './SelectProjectType'
 import IncompleteProjectConfirmation from './IncompleteProjectConfirmation'
 import FillProjectDetails from './FillProjectDetails'
+import ProjectSubmitted from './ProjectSubmitted'
+
 import update from 'react-addons-update'
 import { LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
 import './ProjectWizard.scss'
@@ -19,6 +21,7 @@ const WZ_STEP_SELECT_PROJ_TYPE = 1
 const WZ_STEP_SELECT_PROJ_TEMPLATE = 2
 const WZ_STEP_FILL_PROJ_DETAILS = 3
 const WZ_STEP_ERROR_CREATING_PROJ = 4
+const WZ_STEP_PROJECT_SUBMITTED = 5
 
 class ProjectWizard extends Component {
 
@@ -46,12 +49,24 @@ class ProjectWizard extends Component {
   }
 
   componentDidMount() {
-    const { onStepChange, projectTemplates } = this.props
+    const { onStepChange, projectTemplates, createdProject } = this.props
     const params = this.props.match.params
 
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
-    if (incompleteProjectStr) {
+    
+    if ((params && params.project === 'submitted') || createdProject) {
+      const wizardStep = WZ_STEP_PROJECT_SUBMITTED
+      const updateQuery = {}
+      this.setState({
+        project: update(this.state.project, updateQuery),
+        dirtyProject: update(this.state.dirtyProject, updateQuery),
+        wizardStep,
+        isProjectDirty: false
+      }, () => {
+        typeof onStepChange === 'function' && onStepChange(this.state.wizardStep, this.state.project)
+      })
+    } else if (incompleteProjectStr) {
       const incompleteProject = JSON.parse(incompleteProjectStr)
       const incompleteProjectTemplateId = _.get(incompleteProject, 'templateId')
       const incompleteProjectTemplate = _.find(projectTemplates, pt => pt.id === incompleteProjectTemplateId)
@@ -59,6 +74,7 @@ class ProjectWizard extends Component {
       let updateQuery = {}
       if (incompleteProjectTemplate && params && params.project) {
         const projectTemplate = getProjectTemplateByAlias(projectTemplates, params.project)
+        
         if (projectTemplate) {
           // load project details page directly
           if (projectTemplate.key === incompleteProjectTemplate.key) {
@@ -71,6 +87,7 @@ class ProjectWizard extends Component {
           }
         }
       }
+      
       this.setState({
         project: update(this.state.project, updateQuery),
         dirtyProject: update(this.state.dirtyProject, updateQuery),
@@ -109,7 +126,7 @@ class ProjectWizard extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { onStepChange } = nextProps
+    const { onStepChange, createdProject } = nextProps
     const params = nextProps.match.params
     const type = _.get(nextProps.project, 'type', null)
     const projectTemplateId = _.get(nextProps.project, 'templateId', null)
@@ -122,6 +139,9 @@ class ProjectWizard extends Component {
       updateQuery['type'] = { $set : null }
       updateQuery['details'] = { $set : {} }
       wizardStep = WZ_STEP_SELECT_PROJ_TYPE
+    }
+    if (createdProject) {
+      wizardStep = WZ_STEP_PROJECT_SUBMITTED
     }
     // if wizard step deduced above and stored in state are not the same, update the state
     if (wizardStep && this.state.wizardStep !== wizardStep) {
@@ -155,8 +175,11 @@ class ProjectWizard extends Component {
     if (!urlAlias) return
 
     const projectType = getProjectTypeByAlias(projectTypes, urlAlias)
-    // first try the path param to be a project type
-    if (projectType) {
+    // first try the path param to be a final step
+    if (projectType === 'submitted') {
+      return WZ_STEP_PROJECT_SUBMITTED
+    } if (projectType) {
+      // try the path param to be a project type
       updateQuery['type'] = { $set : projectType.key }
       return WZ_STEP_SELECT_PROJ_TEMPLATE
     } else {
@@ -403,8 +426,9 @@ class ProjectWizard extends Component {
   }
 
   render() {
-    const { processing, showModal, userRoles, projectTemplates, projectTypes } = this.props
+    const { processing, showModal, userRoles, projectTemplates, projectTypes, projectId, match } = this.props
     const { project, dirtyProject, wizardStep } = this.state
+    const params = match.params
 
     return (
       <Wizard
@@ -413,7 +437,7 @@ class ProjectWizard extends Component {
         onCancel={this.handleWizardCancel}
         onStepChange={ this.handleStepChange }
         step={wizardStep}
-        shouldRenderBackButton={ (step) => step > 1 }
+        shouldRenderBackButton={ (step) => step > 1 && step !== 5 }
       >
         <IncompleteProjectConfirmation
           loadIncompleteProject={ this.loadIncompleteProject }
@@ -442,6 +466,14 @@ class ProjectWizard extends Component {
           submitBtnText="Continue"
           userRoles={ userRoles }
           onBackClick={() => this.handleStepChange(wizardStep - 1)}
+        />
+        <div />
+        <ProjectSubmitted
+          project={ project }
+          projectTemplates={ projectTemplates }
+          dirtyProject={ dirtyProject }
+          params={ params }
+          projectId={ projectId }
         />
       </Wizard>
     )
@@ -497,7 +529,8 @@ ProjectWizard.Steps = {
   WZ_STEP_SELECT_PROJ_TYPE,
   WZ_STEP_SELECT_PROJ_TEMPLATE,
   WZ_STEP_FILL_PROJ_DETAILS,
-  WZ_STEP_ERROR_CREATING_PROJ
+  WZ_STEP_ERROR_CREATING_PROJ,
+  WZ_STEP_PROJECT_SUBMITTED
 }
 
 export default withRouter(ProjectWizard)
