@@ -30,7 +30,16 @@ const getIcon = icon => {
 }
 
 // { isRequired, represents the overall questions section's compulsion, is also available}
-const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFeaturesDialog, showHidden }) => {
+const SpecQuestions = ({
+  questions,
+  project,
+  dirtyProject,
+  resetFeatures,
+  showFeaturesDialog,
+  showHidden,
+  startEditReadOnly,
+  stopEditReadOnly,
+}) => {
 
   const renderQ = (q) => {
     // let child = null
@@ -42,7 +51,13 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
       required: q.required,
       validations: q.required ? 'isRequired' : null,
       validationError: q.validationError,
-      validationErrors: q.validationErrors
+      validationErrors: q.validationErrors,
+      disabled: _.get(q, '__wizard.readOnly')
+    }
+    if (q.options && elemProps.disabled) {
+      q.options.forEach(option => {
+        option.disabled = true
+      })
     }
     // escape value of the question only when it is of string type
     if (typeof elemProps.value === 'string') {
@@ -173,6 +188,9 @@ const SpecQuestions = ({questions, project, dirtyProject, resetFeatures, showFea
         description={q.description}
         required={q.required || (q.validations && q.validations.indexOf('isRequired') !== -1)}
         hideDescription={elemProps.hideDescription}
+        __wizard={q.__wizard}
+        startEditReadOnly={startEditReadOnly}
+        stopEditReadOnly={stopEditReadOnly}
       >
         <ChildElem {...elemProps} />
       </SpecQuestionList.Item>

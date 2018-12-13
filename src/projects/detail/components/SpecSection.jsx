@@ -28,6 +28,7 @@ import IconTcSpecIconTypeGlyphHome from  '../../../assets/icons/icon-tc-spec-ico
 import IconDontKnow from '../../../assets/icons/icon-dont-know.svg'
 import IconTestStructured from '../../../assets/icons/icon-test-structured.svg'
 import IconTestUnstructured from '../../../assets/icons/icon-test-unstructured.svg'
+import IconUIPencil from '../../../assets/icons/ui-pencil.svg'
 
 // map string values to icon components for "tiled-radio-group" field type
 // this map contains TWO types of map, dashed and CamelCased
@@ -78,6 +79,8 @@ const SpecSection = props => {
     removeAttachment,
     attachmentsStorePath,
     canManageAttachments,
+    startEditReadOnly,
+    stopEditReadOnly,
   } = props
 
   // make a copy to avoid modifying redux store
@@ -98,6 +101,15 @@ const SpecSection = props => {
 
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
+      {!subSection.questions && _.get(subSection, '__wizard.readOnly') && (
+        <button
+          type="button"
+          className="spec-section-edit-button"
+          onClick={() => startEditReadOnly(_.get(subSection, '__wizard.step'))}
+        >
+          <IconUIPencil />
+        </button>
+      )}
       {
         !subSection.hideTitle &&
         <div className="sub-title">
@@ -110,6 +122,17 @@ const SpecSection = props => {
       <div className="content-boxs">
         {renderChild(subSection)}
       </div>
+      {!subSection.questions && _.get(subSection, '__wizard.editReadOnly') && (
+        <div className="spec-section-actions">
+          <button
+            type="button"
+            className="tc-btn tc-btn-primary tc-btn-md"
+            onClick={() => stopEditReadOnly(_.get(subSection, '__wizard.step'))}
+          >
+            Update
+          </button>
+        </div>
+      )}
     </div>
   )
 
@@ -142,6 +165,8 @@ const SpecSection = props => {
           dirtyProject={dirtyProject}
           isRequired={props.required}
           showHidden={showHidden}
+          startEditReadOnly={startEditReadOnly}
+          stopEditReadOnly={stopEditReadOnly}
         />
       )
     case 'notes':
@@ -154,6 +179,7 @@ const SpecSection = props => {
             autoResize
             name={props.fieldName}
             value={_.unescape(_.get(project, props.fieldName)) || ''}
+            disabled={_.get(props, '__wizard.readOnly')}
           />
         </div>
       )
@@ -212,6 +238,7 @@ const SpecSection = props => {
               validations={props.required ? 'isRequired' : null}
               validationError={props.validationError}
               theme="paper-form-dotted"
+              readonly={_.get(props, '__wizard.readOnly')}
             />
           </div>
           { !queryParamRefCode &&
@@ -224,6 +251,7 @@ const SpecSection = props => {
                 maxLength={ PROJECT_REF_CODE_MAX_LENGTH }
                 theme="paper-form-dotted"
                 disabled={ queryParamRefCode && queryParamRefCode.length > 0 }
+                readonly={_.get(props, '__wizard.readOnly')}
               />
               <div className="refcode-desc">
                 Optional
@@ -254,6 +282,7 @@ const SpecSection = props => {
               validations={props.required ? 'isRequired' : null}
               validationError={props.validationError}
               theme="paper-form-dotted"
+              readonly={_.get(props, '__wizard.readOnly')}
             />
           </div>
           { !queryParamRefCode &&
@@ -266,6 +295,7 @@ const SpecSection = props => {
                 maxLength={ PROJECT_REF_CODE_MAX_LENGTH }
                 theme="paper-form-dotted"
                 disabled={ queryParamRefCode && queryParamRefCode.length > 0 }
+                readonly={_.get(props, '__wizard.readOnly')}
               />
               <div className="refcode-desc">
                 Optional
@@ -283,6 +313,7 @@ const SpecSection = props => {
               validationError="Mandatory field"
               theme="paper-form-dotted"
               wrapperClass="project-codes"
+              readonly={_.get(props, '__wizard.readOnly')}
             />
             <div className="codes-desc">
               required
@@ -299,6 +330,7 @@ const SpecSection = props => {
               validationError="Mandatory field"
               theme="paper-form-dotted"
               wrapperClass="project-codes"
+              readonly={_.get(props, '__wizard.readOnly')}
             />
             <div className="codes-desc">
               required
