@@ -15,7 +15,7 @@ import {
   GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS, LOAD_PROJECT_PHASES_PENDING, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
   UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_SUCCESS, UPDATE_PHASE_SUCCESS, UPDATE_PHASE_PENDING, UPDATE_PHASE_FAILURE,
   DELETE_PROJECT_PHASE_PENDING, DELETE_PROJECT_PHASE_SUCCESS, DELETE_PROJECT_PHASE_FAILURE, PHASE_DIRTY_UNDO, PHASE_DIRTY,
-  EXPAND_PROJECT_PHASE, COLLAPSE_PROJECT_PHASE, COLLAPSE_ALL_PROJECT_PHASES,
+  EXPAND_PROJECT_PHASE, COLLAPSE_PROJECT_PHASE, COLLAPSE_ALL_PROJECT_PHASES, INVITE_CUSTOMER_SUCCESS, REMOVE_CUSTOMER_INVITE_SUCCESS, INVITE_TOPCODER_MEMBER_SUCCESS, REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS, INVITE_TOPCODER_MEMBER_PENDING, REMOVE_CUSTOMER_INVITE_PENDING, REMOVE_TOPCODER_MEMBER_INVITE_PENDING, REMOVE_TOPCODER_MEMBER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_FAILURE, INVITE_CUSTOMER_FAILURE, INVITE_TOPCODER_MEMBER_FAILURE, INVITE_CUSTOMER_PENDING,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -24,6 +24,7 @@ const initialState = {
   isLoading: true,
   processing: false,
   processingMembers: false,
+  processingInvites: false,
   processingAttachments: false,
   error: false,
   project: {},
@@ -428,6 +429,14 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
+  case REMOVE_CUSTOMER_INVITE_PENDING:
+  case REMOVE_TOPCODER_MEMBER_INVITE_PENDING:
+  case INVITE_CUSTOMER_PENDING:
+  case INVITE_TOPCODER_MEMBER_PENDING:
+    return Object.assign({}, state, {
+      processingInvites: true
+    })
+
   case ADD_PROJECT_MEMBER_PENDING:
   case REMOVE_PROJECT_MEMBER_PENDING:
   case UPDATE_PROJECT_MEMBER_PENDING:
@@ -441,6 +450,60 @@ export const projectState = function (state=initialState, action) {
       project: { members: { $push: [action.payload] } },
       projectNonDirty: { members: { $push: [action.payload] } }
     })
+
+  case INVITE_CUSTOMER_SUCCESS: {
+    const newState = Object.assign({}, state)
+    newState.project.projectTeamInvites = newState.project.projectTeamInvites || []
+    action.payload.forEach(email => {
+      newState.project.projectTeamInvites.push({
+        email,
+        time: Date.now()
+      })
+    })
+    newState.processingInvites = false
+    return newState
+  }
+
+  case INVITE_TOPCODER_MEMBER_SUCCESS: {
+    const newState = Object.assign({}, state)
+    newState.project.topcoderTeamInvites = newState.project.topcoderTeamInvites || []
+    action.payload.forEach(item => {
+      newState.project.topcoderTeamInvites.push({
+        item,
+        time: Date.now()
+      })
+    })
+    newState.processingInvites = false
+    return newState
+  }
+
+  case REMOVE_CUSTOMER_INVITE_SUCCESS: {
+    const newState = Object.assign({}, state)
+    newState.project.projectTeamInvites = newState.project.projectTeamInvites || []
+    const idx = newState.project.projectTeamInvites.findIndex(item => {
+      if (item.email === action.payload)
+        return true
+    })
+    if (idx !== -1) {
+      newState.project.projectTeamInvites.splice(idx, 1)
+    }
+    newState.processingInvites = false
+    return newState
+  }
+
+  case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS: {
+    const newState = Object.assign({}, state)
+    newState.project.topcoderTeamInvites = newState.project.topcoderTeamInvites || []
+    const idx = newState.project.topcoderTeamInvites.findIndex(item => {
+      if (item.item === action.payload)
+        return true
+    })
+    if (idx !== -1) {
+      newState.project.topcoderTeamInvites.splice(idx, 1)
+    }
+    newState.processingInvites = false
+    return newState
+  }
 
   case UPDATE_PROJECT_MEMBER_SUCCESS: {
     // get index
@@ -535,6 +598,10 @@ export const projectState = function (state=initialState, action) {
   case UPDATE_PHASE_FAILURE:
   case UPDATE_PRODUCT_FAILURE:
   case ADD_PROJECT_MEMBER_FAILURE:
+  case INVITE_CUSTOMER_FAILURE:
+  case INVITE_TOPCODER_MEMBER_FAILURE:
+  case REMOVE_TOPCODER_MEMBER_INVITE_FAILURE:
+  case REMOVE_CUSTOMER_INVITE_FAILURE:
   case REMOVE_PROJECT_MEMBER_FAILURE:
   case UPDATE_PROJECT_MEMBER_FAILURE:
   case UPDATE_PROJECT_ATTACHMENT_FAILURE:
@@ -549,6 +616,7 @@ export const projectState = function (state=initialState, action) {
       processing: false,
       processingMembers: false,
       processingAttachments: false,
+      processingInvites: false,
       error: parseErrorObj(action)
     })
 

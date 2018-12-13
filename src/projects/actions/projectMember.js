@@ -6,7 +6,11 @@ import { addProjectMember as addMember,
 import { loadMembers } from '../../actions/members'
 
 import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
-  LOAD_MEMBER_SUGGESTIONS
+  LOAD_MEMBER_SUGGESTIONS,
+  REMOVE_CUSTOMER_INVITE,
+  INVITE_TOPCODER_MEMBER,
+  REMOVE_TOPCODER_MEMBER_INVITE,
+  INVITE_CUSTOMER
 } from '../../config/constants'
 
 
@@ -56,6 +60,62 @@ export function removeProjectMember(projectId, memberId, isUserLeaving) {
       type: REMOVE_PROJECT_MEMBER,
       payload: removeMember(projectId, memberId),
       meta: { isUserLeaving }
+    })
+  }
+}
+
+export function inviteTopcoderMembers(projectId, items) {
+  const mock = new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(items)
+    }, 2000)
+  })
+  return (dispatch) => {
+    dispatch({
+      type: INVITE_TOPCODER_MEMBER,
+      payload: mock
+    })
+  }
+}
+
+export function deleteTopcoderMemberInvite(projectId, item) {
+  const mock = new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(item)
+    }, 2000)
+  })
+  return (dispatch) => {
+    dispatch({
+      type: REMOVE_TOPCODER_MEMBER_INVITE,
+      payload: mock
+    })
+  }
+}
+
+export function inviteProjectMembers(projectId, emailIds) {
+  const mock = new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(emailIds)
+    }, 2000)
+  })
+  return (dispatch) => {
+    dispatch({
+      type: INVITE_CUSTOMER,
+      payload: mock
+    })
+  }
+}
+
+export function deleteProjectInvite(projectId, emailId) {
+  const mock = new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(emailId)
+    }, 2000)
+  })
+  return (dispatch) => {
+    dispatch({
+      type: REMOVE_CUSTOMER_INVITE,
+      payload: mock
     })
   }
 }

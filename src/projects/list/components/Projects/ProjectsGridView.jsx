@@ -135,6 +135,22 @@ const ProjectsGridView = props => {
         // </div>
         // Hiding the user segment for the momemnt
       }
+    },
+    {
+      id: 'joinBtn',
+      headerLabel: '',
+      classes: 'item-join',
+      sortable: false,
+      renderText: item => {
+        const url = `/projects/${item.id}`
+        return (
+          <Link to={url} className="spacing">
+            <div className="join-btn" style={{margin: '5px'}}>
+              Join project
+            </div>
+          </Link>
+        )
+      }
     }, {
       id: 'managers',
       headerLabel: 'Managers',
