@@ -83,7 +83,7 @@ export const isSubEqual = (object, criteria) => {
     if (_.isObject(value)) {
       isEqual = isSubEqual(object[key], value)
     } else {
-      isEqual = value === object[key]
+      isEqual = !!object && value === object[key]
     }
     
     return isEqual
