@@ -54,7 +54,7 @@ class ProjectWizard extends Component {
 
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
-    
+
     if ((params && params.project === 'submitted') || createdProject) {
       const wizardStep = WZ_STEP_PROJECT_SUBMITTED
       const updateQuery = {}
@@ -74,7 +74,7 @@ class ProjectWizard extends Component {
       let updateQuery = {}
       if (incompleteProjectTemplate && params && params.project) {
         const projectTemplate = getProjectTemplateByAlias(projectTemplates, params.project)
-        
+
         if (projectTemplate) {
           // load project details page directly
           if (projectTemplate.key === incompleteProjectTemplate.key) {
@@ -87,7 +87,7 @@ class ProjectWizard extends Component {
           }
         }
       }
-      
+
       this.setState({
         project: update(this.state.project, updateQuery),
         dirtyProject: update(this.state.dirtyProject, updateQuery),
