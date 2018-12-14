@@ -111,7 +111,7 @@ class Timeline extends React.Component {
             key="notifications-reader"
             id={`phase-${phaseId}-timeline-${timeline.id}`}
             criteria={[
-              { eventType: EVENT_TYPE.PROJECT_PLAN.TIMELINE_ADJUSTED, contents: { timeline: { id: timeline.id } } },
+              { eventType: EVENT_TYPE.PROJECT_PLAN.TIMELINE_ADJUSTED, contents: { updatedTimeline: { id: timeline.id } } },
               { eventType: EVENT_TYPE.PROJECT_PLAN.MILESTONE_ACTIVATED, contents: { timeline: { id: timeline.id } } },
               { eventType: EVENT_TYPE.PROJECT_PLAN.MILESTONE_COMPLETED, contents: { timeline: { id: timeline.id } } },
               { eventType: EVENT_TYPE.PROJECT_PLAN.WAITING_FOR_CUSTOMER_INPUT, contents: { timeline: { id: timeline.id } } },
