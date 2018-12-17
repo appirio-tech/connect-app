@@ -57,6 +57,10 @@ const isSameStepAnyLevel = (parentStep, step) => {
   return isParent
 }
 
+const isWizardModeEnabled = (template) => (
+  _.get(template, 'wizard.enabled') || template.wizard === true
+)
+
 /**
  * Add auxillary `__wizard` property for sections, subSections and questions
  * if they have `wizard` property set to `true`.
@@ -105,7 +109,7 @@ const initWizard = (template, project, incompleteWizard) => {
 
   // only if template has `wizard: false` we will initialize wizards and conditional questions
   // by our logic only if all parents have wizard enabled, a child can have wizard enabled
-  if (_.get(wizardTemplate, 'wizard.enabled') || wizardTemplate.wizard === true) {
+  if (isWizardModeEnabled(wizardTemplate)) {
     // initialize wizard for the whole template
     wizardTemplate.__wizard = {
       // there will be the list of all fields which have dependencies in the template
@@ -207,11 +211,10 @@ const initWizard = (template, project, incompleteWizard) => {
     if (lastWizardStep) {
       prevWizardStep = getPrevStepToShow(wizardTemplate, lastWizardStep)
     }
+    console.warn('wizardTemplate', wizardTemplate)
+
+    currentWizardStep = lastWizardStep || currentWizardStep
   }
-
-  console.warn('wizardTemplate', wizardTemplate)
-
-  currentWizardStep = lastWizardStep || currentWizardStep
 
   return {
     template: wizardTemplate,
@@ -759,6 +762,9 @@ class ProjectBasicDetailsForm extends Component {
     this.cancelEditReadOnly = this.cancelEditReadOnly.bind(this)
     this.confirmEditReadOnly = this.confirmEditReadOnly.bind(this)
 
+    this.isWizardMode = isWizardModeEnabled(props.template)
+    this.previousStepVisibility = _.get(props.template, 'wizard.previousStepVisibility', PREVIOUS_STEP_VISIBILITY.WRITE)
+
     const incompleteWizardStr = window.localStorage.getItem(LS_INCOMPLETE_WIZARD)
     let incompleteWizard = {}
     if (incompleteWizardStr) {
@@ -881,7 +887,7 @@ class ProjectBasicDetailsForm extends Component {
       isSaving: false,
       canSubmit: false
     }) */
-    if (!_.isEqual(nextProps.dirtyProject, this.props.dirtyProject)) {
+    if (this.isWizardMode && !_.isEqual(nextProps.dirtyProject, this.props.dirtyProject)) {
       const { updatedTemplate, updatedProject } = updateQuestionsByConditions(this.state.template, this.state.project, nextProps.dirtyProject)
 
       this.setState({
@@ -890,6 +896,8 @@ class ProjectBasicDetailsForm extends Component {
       })
     }
     if (!_.isEqual(this.props.template, nextProps.template)) {
+      this.previousStepVisibility = _.get(nextProps.template, 'wizard.previousStepVisibility', PREVIOUS_STEP_VISIBILITY.WRITE)
+      this.isWizardMode = isWizardModeEnabled(nextProps.template)
       this.setState({
         template: initWizard(nextProps.template)
       })
@@ -1029,12 +1037,14 @@ class ProjectBasicDetailsForm extends Component {
             !_.get(section, '__wizard.hidden')
           )).map(renderSection)}
           <div className="section-footer section-footer-spec">
-            <button
-              className="tc-btn tc-btn-default tc-btn-md"
-              type="button"
-              onClick={this.showPrevStep}
-              disabled={!prevWizardStep}
-            >Back</button>
+            {this.isWizardMode && this.previousStepVisibility === PREVIOUS_STEP_VISIBILITY.NONE && (
+              <button
+                className="tc-btn tc-btn-default tc-btn-md"
+                type="button"
+                onClick={this.showPrevStep}
+                disabled={!prevWizardStep}
+              >Back</button>
+            )}
             {nextWizardStep ? (
               <button
                 className="tc-btn tc-btn-primary tc-btn-md"
