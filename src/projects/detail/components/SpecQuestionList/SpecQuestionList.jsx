@@ -28,7 +28,6 @@ const SpecQuestionListItem = ({
   hideDescription,
   __wizard,
   startEditReadOnly,
-  stopEditReadOnly,
 }) => (
   <div className="spec-question-list-item">
     {icon && <div className="icon-col">{icon}</div>}
@@ -45,17 +44,6 @@ const SpecQuestionListItem = ({
       <h5>{title}{required ? <span>*</span> : null}</h5>
       {children && <div className="child-component">{children}</div>}
       {!hideDescription && <p className={cn({bigger: !icon})}>{description}</p>}
-      {_.get(__wizard, 'editReadOnly') && (
-        <div className="spec-section-actions">
-          <button
-            type="button"
-            className="tc-btn tc-btn-primary tc-btn-md"
-            onClick={() => stopEditReadOnly(_.get(__wizard, 'step'))}
-          >
-            Update
-          </button>
-        </div>
-      )}
     </div>
   </div>
 )

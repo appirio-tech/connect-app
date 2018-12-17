@@ -13,7 +13,7 @@ import FillProjectDetails from './FillProjectDetails'
 import ProjectSubmitted from './ProjectSubmitted'
 
 import update from 'react-addons-update'
-import { LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
+import { LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH, LS_INCOMPLETE_WIZARD } from '../../../config/constants'
 import './ProjectWizard.scss'
 
 const WZ_STEP_INCOMP_PROJ_CONF = 0
@@ -234,6 +234,7 @@ class ProjectWizard extends Component {
     const { onStepChange } = this.props
     // remove incomplete project from local storage
     window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
+    window.localStorage.removeItem(LS_INCOMPLETE_WIZARD)
     // following code assumes that componentDidMount has already updated state with correct project
     const projectType = _.get(this.state.project, 'type')
     const projectTemplateId = _.get(this.state.project, 'templateId')
@@ -395,7 +396,7 @@ class ProjectWizard extends Component {
   }
 
   handleOnCreateProject() {
-    this.props.createProject(this.state.dirtyProject)
+    this.props.createProject(_.omit(this.state.dirtyProject, '__wizard'))
   }
 
   handleStepChange(wizardStep) {

@@ -122,17 +122,6 @@ const SpecSection = props => {
       <div className="content-boxs">
         {renderChild(subSection)}
       </div>
-      {!subSection.questions && _.get(subSection, '__wizard.editReadOnly') && (
-        <div className="spec-section-actions">
-          <button
-            type="button"
-            className="tc-btn tc-btn-primary tc-btn-md"
-            onClick={() => stopEditReadOnly(_.get(subSection, '__wizard.step'))}
-          >
-            Update
-          </button>
-        </div>
-      )}
     </div>
   )
 

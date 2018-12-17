@@ -5,6 +5,8 @@ import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 import update from 'react-addons-update'
 import { evaluate, getFieldNamesFromExpression } from '../../../helpers/dependentQuestionsHelper'
+import { flatten } from 'flat'
+import { LS_INCOMPLETE_WIZARD } from '../../../config/constants'
 import Modal from 'react-modal'
 import './ProjectBasicDetailsForm.scss'
 
@@ -22,21 +24,61 @@ const LEVEL = {
   QUESTION: 'question'
 }
 
+const STEP_DIR = {
+  NEXT: +1,
+  PREV: -1,
+  SAME: 0,
+}
+
+const shouldStepBeHidden = (previousStepVisibility, currentStep, lastWizardStep) => {
+  if (!lastWizardStep) {
+    const level = getStepLevel(currentStep)
+    return currentStep[`${level}Index`] !== 0
+  } else if (previousStepVisibility === PREVIOUS_STEP_VISIBILITY.NONE) {
+    return !isSameStepAnyLevel(currentStep, lastWizardStep)
+  } else if (previousStepVisibility === PREVIOUS_STEP_VISIBILITY.READ_ONLY) {
+    return getDirForSteps(currentStep, lastWizardStep) === STEP_DIR.PREV
+  } else {
+    return true
+  }
+}
+
+const isSameStepAnyLevel = (parentStep, step) => {
+  let isParent = parentStep.sectionIndex !== -1 && parentStep.sectionIndex === step.sectionIndex
+
+  if (parentStep.subSectionIndex !== -1) {
+    isParent = isParent && parentStep.subSectionIndex === step.subSectionIndex
+  }
+
+  if (parentStep.questionIndex !== -1) {
+    isParent = isParent && parentStep.questionIndex === step.questionIndex
+  }
+
+  return isParent
+}
+
 /**
  * Add auxillary `__wizard` property for sections, subSections and questions
  * if they have `wizard` property set to `true`.
  *
- * @param {Object} template raw template
+ * @param {Object} template         raw template
+ * @param {Object} project          project data (non-flat)
+ * @param {Object} incompleteWizard incomplete wizard props
  *
  * @returns {Object} template with initialized `__wizard` property
  */
-const initWizard = (template) => {
-  const wizardTemplate = _.cloneDeep(template)
-  const currentWizardStep = {
+const initWizard = (template, project, incompleteWizard) => {
+  const flatProjectData = flatten(_.omit(project, '__wizard'))
+  let wizardTemplate = _.cloneDeep(template)
+  // try to get the step where we left the wizard
+  const lastWizardStep = incompleteWizard && incompleteWizard.currentWizardStep
+  // current step will define the first of the wizard in case we have to start the wizard from the beginning
+  let currentWizardStep = {
     sectionIndex: -1,
     subSectionIndex: -1,
     questionIndex: -1,
   }
+  let prevWizardStep = null
 
   // default props values
   const defaultWizardProps = {
@@ -72,48 +114,50 @@ const initWizard = (template) => {
 
     normalizeWizardProps(wizardTemplate)
     currentWizardStep.sectionIndex = 0
+    const previousStepVisibility = wizardTemplate.wizard.previousStepVisibility
 
     // initialize sections wizard
     wizardTemplate.sections.forEach((section, sectionIndex) => {
       normalizeWizardProps(section)
+      const step = {
+        sectionIndex,
+        subSectionIndex: -1,
+        questionIndex: -1
+      }
       section.__wizard = {
         isStep: true,
-        hidden: sectionIndex !== 0,
-        step: {
-          sectionIndex,
-          subSectionIndex: -1,
-          questionIndex: -1
-        }
+        hidden: shouldStepBeHidden(previousStepVisibility, step, lastWizardStep),
+        step,
       }
 
       // init __wizard and conditional questions for all subSections
       section.subSections.forEach((subSection, subSectionIndex) => {
+        const step = {
+          sectionIndex,
+          subSectionIndex,
+          questionIndex: -1
+        }
         if (!subSection.__wizard) {
           subSection.__wizard = {
-            step: {
-              sectionIndex,
-              subSectionIndex,
-              questionIndex: -1
-            }
+            step,
           }
         }
 
         // init __wizard and conditional questions for all questions
         subSection.questions && subSection.questions.forEach((question, questionIndex) => {
+          const step = {
+            sectionIndex,
+            subSectionIndex,
+            questionIndex
+          }
           if (!question.__wizard) {
             question.__wizard = {
-              step: {
-                sectionIndex,
-                subSectionIndex,
-                questionIndex
-              }
+              step,
             }
           }
 
           if (question.condition) {
-            // for now use empty data to initially evaluate questions
-            // possible we will need to update it and use flatten project object instead
-            question.__wizard.hiddenByCondition = !evaluate(question.condition, {})
+            question.__wizard.hiddenByCondition = !evaluate(question.condition, flatProjectData)
             wizardTemplate.__wizard.dependantFields = _.uniq([
               ...wizardTemplate.__wizard.dependantFields,
               ...getFieldNamesFromExpression(question.condition)
@@ -129,10 +173,10 @@ const initWizard = (template) => {
           currentWizardStep.subSectionIndex = 0
         }
 
-        section.subSections.forEach((subSection, subSectionIndex) => {
+        section.subSections.forEach((subSection) => {
           normalizeWizardProps(subSection)
           subSection.__wizard.isStep = true
-          subSection.__wizard.hidden = subSectionIndex !== 0
+          subSection.__wizard.hidden = shouldStepBeHidden(previousStepVisibility, subSection.__wizard.step, lastWizardStep)
 
           // initialize questions wizard
           if ((_.get(subSection, 'wizard.enabled') || subSection.wizard === true) && subSection.questions) {
@@ -141,55 +185,81 @@ const initWizard = (template) => {
               currentWizardStep.questionIndex = 0
             }
 
-            subSection.questions.forEach((question, questionIndex) => {
-              subSection.__wizard.isStep = true
-              question.__wizard.hidden = questionIndex !== 0
+            subSection.questions.forEach((question) => {
+              question.__wizard.isStep = true
+              question.__wizard.hidden = shouldStepBeHidden(previousStepVisibility, question.__wizard.step, lastWizardStep)
             })
           }
         })
       }
     })
+
+    // finalizing all the steps before lastWizardStep in readOnly mode
+    if (lastWizardStep && previousStepVisibility === PREVIOUS_STEP_VISIBILITY.READ_ONLY) {
+      let tempStep = currentWizardStep
+
+      while (tempStep && getDirForSteps(tempStep, lastWizardStep) === STEP_DIR.NEXT) {
+        wizardTemplate = finalizeStep(wizardTemplate, tempStep)
+        tempStep = getNextStepToShow(wizardTemplate, tempStep)
+      }
+    }
+
+    if (lastWizardStep) {
+      prevWizardStep = getPrevStepToShow(wizardTemplate, lastWizardStep)
+    }
   }
+
+  console.warn('wizardTemplate', wizardTemplate)
+
+  currentWizardStep = lastWizardStep || currentWizardStep
 
   return {
     template: wizardTemplate,
-    currentWizardStep
+    currentWizardStep,
+    prevWizardStep,
   }
 }
 
-/**
- * Returns next sections, subSection or question which has to be shown on the next wizard step
- *
- * @param {Object} template template with initialized `__wizard` property
- *
- * @returns {{ nextSectionIndex: Number, nextSubSectionIndex: Number, nextQuestionIndex: Number }}
- */
-const getNextStep = (template, currentStep) => {
-  // get the next sibling of the current step if possible
-  let nextStep = getNextSiblingStep(template, currentStep)
+const sign = (x) => ((x > 0) - (x < 0)) || +x
+
+const getDirForSteps = (step1, step2) => {
+  const questionSign = sign(step2.questionIndex - step1.questionIndex)
+  const subSectionSign = sign(step2.subSectionIndex - step1.subSectionIndex)
+  const sectionSign = sign(step2.sectionIndex - step1.sectionIndex)
+
+  const dir = sectionSign || subSectionSign || questionSign
+
+  return dir
+}
+
+const getStepByDir = (template, currentStep, dir) => {
+  // get the sibling of the current step if possible
+  let dirStep = getSiblingStepByDir(template, currentStep, dir)
 
   // if there is no sibling
   // checking siblings of parent levels
   let tempStep = currentStep
-  while (!nextStep && (tempStep = getParentStep(tempStep))) {
+  while (!dirStep && (tempStep = getParentStep(tempStep))) {
     const parentStepObject = getStepObject(template, tempStep)
 
     if (_.get(parentStepObject, '__wizard.isStep')) {
-      nextStep = getNextSiblingStep(template, tempStep)
+      dirStep = getSiblingStepByDir(template, tempStep, dir)
     }
   }
 
-  // no matter where we get next step: between the sibling of the current step
+  // no matter where we got step: between the sibling of the current step
   // or between siblings of the parent levels
-  // try to find the most inner step inside the possible next step
-  if (nextStep) {
-    let tempStep = nextStep
+  // try to find the most inner step inside the possible step
+  if (dirStep) {
+    let tempStep = dirStep
 
     while (_.get(getStepObject(template, tempStep), 'wizard.enabled')) {
       const childrenSteps = getStepChildren(template, tempStep)
 
-      if (childrenSteps[0]) {
-        tempStep = childrenSteps[0]
+      const childStepIndex = dir === STEP_DIR.NEXT ? 0 : childrenSteps.length - 1
+
+      if (childrenSteps[childStepIndex]) {
+        tempStep = childrenSteps[childStepIndex]
       }
     }
 
@@ -199,64 +269,66 @@ const getNextStep = (template, currentStep) => {
   return null
 }
 
-const getNextStepToShow = (template, currentStep) => {
+const getStepToShowByDir = (template, currentStep, dir) => {
   let tempStep = currentStep
   let tempStepObject
 
   do {
-    tempStep = getNextStep(template, tempStep)
+    tempStep = getStepByDir(template, tempStep, dir)
     tempStepObject = tempStep && getStepObject(template, tempStep)
   } while (tempStepObject && _.get(tempStepObject, '__wizard.hiddenByCondition'))
 
   return tempStep
 }
 
-const getNextSiblingStep = (template, step) => {
+const getNextStepToShow = (template, currentStep) => (
+  getStepToShowByDir(template, currentStep, STEP_DIR.NEXT)
+)
+
+const getPrevStepToShow = (template, currentStep) => (
+  getStepToShowByDir(template, currentStep, STEP_DIR.PREV)
+)
+
+const getSiblingStepByDir = (template, step, dir) => {
   const level = getStepLevel(step)
-  let nextSiblingStep = null
+  let siblingStep = null
 
   switch(level) {
   case LEVEL.QUESTION:
-    nextSiblingStep = {
+    siblingStep = {
       ...step,
-      questionIndex: step.questionIndex + 1
+      questionIndex: step.questionIndex + dir
     }
     break
   case LEVEL.SUB_SECTION:
-    nextSiblingStep = {
+    siblingStep = {
       ...step,
-      subSectionIndex: step.subSectionIndex + 1
+      subSectionIndex: step.subSectionIndex + dir
     }
     break
   case LEVEL.SECTION:
-    nextSiblingStep = {
+    siblingStep = {
       ...step,
-      sectionIndex: step.sectionIndex + 1
+      sectionIndex: step.sectionIndex + dir
     }
     break
-  default: nextSiblingStep = null
+  default: siblingStep = null
   }
 
-  if (nextSiblingStep && getStepObject(template, nextSiblingStep, level)) {
-    return nextSiblingStep
+  if (siblingStep && getStepObject(template, siblingStep, level)) {
+    return siblingStep
   } else {
     return null
   }
 }
 
-/**
- * Checks if the wizard is finished
- *
- * @param {Object} template    template with initialized `__wizard` property
- * @param {Object} currentStep current step
- *
- * @returns {Boolean} true if wizard is finished
- */
-const isWizardFinished = (template, currentStep) => {
-  const nextStep = getNextStepToShow(template, currentStep)
+const getNextSiblingStep = (template, step) => (
+  getSiblingStepByDir(template, step, STEP_DIR.NEXT)
+)
 
-  return !nextStep
-}
+const getPrevSiblingStep = (template, step) => (
+  getSiblingStepByDir(template, step, STEP_DIR.PREV)
+)
 
 /**
  * Update question in template without template mutation
@@ -486,7 +558,7 @@ const updateQuestionsByConditions = (template, projectFormData) => {
   return updatedTemplate
 }
 
-const finalizeStep = (template, step) => {
+const finalizeStep = (template, step, value = true) => {
   let updatedTemplate = template
 
   const stepObject = getStepObject(updatedTemplate, step)
@@ -500,12 +572,12 @@ const finalizeStep = (template, step) => {
   const updateRules = {
     [PREVIOUS_STEP_VISIBILITY.READ_ONLY]: {
       __wizard: {
-        readOnly: { $set: true }
+        readOnly: { $set: value }
       }
     },
     [PREVIOUS_STEP_VISIBILITY.NONE]: {
       __wizard: {
-        hidden: { $set: true }
+        hidden: { $set: value }
       }
     },
   }
@@ -515,14 +587,103 @@ const finalizeStep = (template, step) => {
   if (updateRule) {
     updatedTemplate = updateStepObject(updatedTemplate, step, updateRule)
 
-    // if children of this step are in wizard, apply the same rule to them
-    if (!_.get(stepObject, 'wizard.enabled')) {
+    // if the children of current step are not in wizard mode and we are making step read-only
+    // we also have make such children read-only
+    if (previousStepVisibility === PREVIOUS_STEP_VISIBILITY.READ_ONLY && !_.get(stepObject, 'wizard.enabled')) {
       const stepChildren = getStepChildren(updatedTemplate, step)
 
       stepChildren.forEach((stepChild) => {
         updatedTemplate = updateStepObject(updatedTemplate, stepChild, updateRule)
       })
     }
+  }
+
+  return updatedTemplate
+}
+
+const showStepByDir = (template, currentStep, dir) => {
+  let updatedTemplate = template
+  let tempStep
+
+  // if we are moving to the next step, we have to finalize previous one
+  if (dir === STEP_DIR.NEXT) {
+    // finalize step on it's level all parent levels of the step
+    // as long as step is the last on the current level
+    tempStep = currentStep
+    do {
+      updatedTemplate = finalizeStep(updatedTemplate, tempStep)
+
+      // if step is the last on the current level, we also finalize parent level step
+      if (!getNextSiblingStep(updatedTemplate, tempStep, dir)) {
+        tempStep = getParentStep(tempStep)
+      } else {
+        tempStep = null
+      }
+    } while (tempStep)
+
+  // if we are moving to the previous step, we just have to hide current step
+  } else {
+    tempStep = currentStep
+
+    do {
+      updatedTemplate = updateStepObject(updatedTemplate, tempStep, {
+        __wizard: {
+          hidden: { $set: true }
+        }
+      })
+
+      // if step is the first on the current level, we also hide parent level step
+      if (!getPrevSiblingStep(updatedTemplate, tempStep, dir)) {
+        tempStep = getParentStep(tempStep)
+      } else {
+        tempStep = null
+      }
+    } while (tempStep)
+  }
+
+  const nextStep = getStepToShowByDir(updatedTemplate, currentStep, dir)
+
+  if (!nextStep) {
+    console.warn('showNextStep method is called when there is no next step, probably something is wrong.')
+  }
+
+  // make visible current step and all it's parents
+  tempStep = nextStep
+  do {
+    updatedTemplate = updateStepObject(updatedTemplate, tempStep, {
+      __wizard: {
+        hidden: { $set: false }
+      }
+    })
+    tempStep = getParentStep(tempStep)
+  } while (tempStep)
+
+  if (dir === STEP_DIR.PREV && _.get(updatedTemplate, 'wizard.previousStepVisibility') === PREVIOUS_STEP_VISIBILITY.READ_ONLY) {
+    updatedTemplate = finalizeStep(updatedTemplate, nextStep, false)
+  }
+
+  return {
+    updatedTemplate,
+    nextStep,
+  }
+}
+
+const rewindToStep = (template, currentStep, destinationStep) => {
+  const dir = getDirForSteps(currentStep, destinationStep)
+  let tempStep = currentStep
+  let tempDir = dir
+  let updatedTemplate = template
+
+  if (dir === STEP_DIR.SAME) {
+    return updatedTemplate
+  }
+
+  while (tempDir === dir) {
+    const nextStepData = showStepByDir(updatedTemplate, tempStep, dir)
+
+    updatedTemplate = nextStepData.updatedTemplate
+    tempStep = nextStepData.nextStep
+    tempDir = getDirForSteps(tempStep, destinationStep)
   }
 
   return updatedTemplate
@@ -537,19 +698,29 @@ class ProjectBasicDetailsForm extends Component {
     this.submit = this.submit.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.showNextStep = this.showNextStep.bind(this)
+    this.showPrevStep = this.showPrevStep.bind(this)
     this.startEditReadOnly = this.startEditReadOnly.bind(this)
     this.stopEditReadOnly = this.stopEditReadOnly.bind(this)
     this.cancelEditReadOnly = this.cancelEditReadOnly.bind(this)
     this.confirmEditReadOnly = this.confirmEditReadOnly.bind(this)
 
-    const { template, currentWizardStep } = initWizard(props.template, props.project)
+    const incompleteWizardStr = window.localStorage.getItem(LS_INCOMPLETE_WIZARD)
+    let incompleteWizard = {}
+    if (incompleteWizardStr) {
+      try {
+        incompleteWizard = JSON.parse(incompleteWizardStr)
+      } catch (e) {
+        console.error('Cannot parse incomplete Wizard state.')
+      }
+    }
+    const { template, currentWizardStep, prevWizardStep } = initWizard(props.template, props.project, incompleteWizard)
 
     this.state = {
       template,
-      isWizardFinished: isWizardFinished(template, currentWizardStep),
+      nextWizardStep: getNextStepToShow(template, currentWizardStep),
       projectFormData : {},
       showStartEditConfirmation: null,
-      isEditingReadOnly: false,
+      prevWizardStep,
     }
 
     // we don't use for rendering, only for internal needs, so we don't need it in state
@@ -584,22 +755,27 @@ class ProjectBasicDetailsForm extends Component {
 
   _startEditReadOnly(step) {
     const { template } = this.state
+    let updatedTemplate = template
 
-    const updatedTemplate = updateStepObject(template, step, {
-      __wizard: {
-        readOnly: {
-          $set: false
-        },
-        editReadOnly: {
-          $set: true
-        }
-      }
-    })
+    // find a real step
+    let tempStep = step
+    let tempStepObject = getStepObject(updatedTemplate, tempStep)
+    while (tempStep && !_.get(tempStepObject, '__wizard.isStep')) {
+      tempStep = getParentStep(tempStep)
+      tempStepObject = getStepObject(updatedTemplate, tempStep)
+    }
+    step = tempStep
+
+    updatedTemplate = rewindToStep(updatedTemplate, this.currentWizardStep, step)
+    this.currentWizardStep = step
 
     this.setState({
       template: updatedTemplate,
-      isEditingReadOnly: true,
     })
+
+    window.localStorage.setItem(LS_INCOMPLETE_WIZARD, JSON.stringify({
+      currentWizardStep: this.currentWizardStep
+    }))
   }
 
   stopEditReadOnly(step) {
@@ -618,7 +794,6 @@ class ProjectBasicDetailsForm extends Component {
 
     this.setState({
       template: updatedTemplate,
-      isEditingReadOnly: false,
     })
   }
 
@@ -629,7 +804,8 @@ class ProjectBasicDetailsForm extends Component {
      && _.isEqual(nextState.canSubmit, this.state.canSubmit)
      && _.isEqual(nextState.template, this.state.template)
      && _.isEqual(nextState.isSaving, this.state.isSaving)
-     && _.isEqual(nextState.isWizardFinished, this.state.isWizardFinished)
+     && _.isEqual(nextState.nextWizardStep, this.state.nextWizardStep)
+     && _.isEqual(nextState.prevWizardStep, this.state.prevWizardStep)
      && _.isEqual(nextState.showStartEditConfirmation, this.state.showStartEditConfirmation)
     )
   }
@@ -698,63 +874,45 @@ class ProjectBasicDetailsForm extends Component {
     this.props.onProjectChange(change)
   }
 
-  showNextStep(evt) {
+  showStepByDir(evt, dir) {
     // prevent default to avoid form being submitted
     evt.preventDefault()
 
     const { template } = this.state
-    let updatedTemplate = template
-    let tempStep
-
-    // finalize step on it's level all parent levels of the step
-    // as long as step is the last on the current level
-    tempStep = this.currentWizardStep
-    do {
-      updatedTemplate = finalizeStep(updatedTemplate, tempStep)
-
-      // if step is the last on the current level, we also finalize parent level step
-      if (!getNextSiblingStep(updatedTemplate, tempStep)) {
-        tempStep = getParentStep(tempStep)
-      } else {
-        tempStep = null
-      }
-    } while (tempStep)
-
-    const nextStep = getNextStepToShow(updatedTemplate, this.currentWizardStep)
-
-    if (!nextStep) {
-      console.warn('showNextStep method is called when there is no next step, probably something is wrong.')
-    }
-
-    // make visible current step and all it's parents
-    tempStep = nextStep
-    do {
-      updatedTemplate = updateStepObject(updatedTemplate, tempStep, {
-        __wizard: {
-          hidden: { $set: false }
-        }
-      })
-      tempStep = getParentStep(tempStep)
-    } while (tempStep)
-
-    this.currentWizardStep = nextStep
+    const { updatedTemplate, nextStep } = showStepByDir(template, this.currentWizardStep, dir)
 
     this.setState({
       template: updatedTemplate,
-      isWizardFinished: isWizardFinished(updatedTemplate, this.currentWizardStep)
+      nextWizardStep: getNextStepToShow(updatedTemplate, nextStep),
+      prevWizardStep: dir === STEP_DIR.NEXT ? this.currentWizardStep : getPrevStepToShow(updatedTemplate, nextStep),
     })
+
+    this.currentWizardStep = nextStep
+
+    window.localStorage.setItem(LS_INCOMPLETE_WIZARD, JSON.stringify({
+      currentWizardStep: this.currentWizardStep
+    }))
   }
 
+  showNextStep(evt) {
+    this.showStepByDir(evt, STEP_DIR.NEXT)
+  }
+
+  showPrevStep(evt) {
+    this.showStepByDir(evt, STEP_DIR.PREV)
+  }
 
   render() {
     const { isEditable, submitBtnText } = this.props
     const { project,
       canSubmit,
       template,
-      isWizardFinished,
+      nextWizardStep,
+      prevWizardStep,
       showStartEditConfirmation,
-      isEditingReadOnly,
     } = this.state
+
+    // const isPreviousStepVisibilityNone = _.get(template, 'wizard.previousStepVisibility') === PREVIOUS_STEP_VISIBILITY.NONE
 
     const renderSection = (section, idx) => {
       return (
@@ -766,7 +924,7 @@ class ProjectBasicDetailsForm extends Component {
               sectionNumber={idx + 1}
               showFeaturesDialog={ () => {} }//dummy
               resetFeatures={ () => {} }//dummy
-              // TODO we shoudl not update the props (section is coming from props)
+              // TODO we should not update the props (section is coming from props)
               // further, it is not used for this component as we are not rendering spec screen section here
               validate={() => {}}//dummy
               isCreation
@@ -814,18 +972,24 @@ class ProjectBasicDetailsForm extends Component {
             !_.get(section, '__wizard.hidden')
           )).map(renderSection)}
           <div className="section-footer section-footer-spec">
-            {!isWizardFinished ? (
+            <button
+              className="tc-btn tc-btn-default tc-btn-md"
+              type="button"
+              onClick={this.showPrevStep}
+              disabled={!prevWizardStep}
+            >Back</button>
+            {nextWizardStep ? (
               <button
-                className="tc-btn tc-btn-primary tc-btn-md test"
+                className="tc-btn tc-btn-primary tc-btn-md"
                 type="button"
-                disabled={!canSubmit || isEditingReadOnly}
+                disabled={!canSubmit}
                 onClick={this.showNextStep}
               >Next</button>
             ) : (
               <button
                 className="tc-btn tc-btn-primary tc-btn-md"
                 type="submit"
-                disabled={(this.state.isSaving) || !canSubmit || isEditingReadOnly}
+                disabled={(this.state.isSaving) || !canSubmit}
               >{ submitBtnText }</button>
             )}
           </div>

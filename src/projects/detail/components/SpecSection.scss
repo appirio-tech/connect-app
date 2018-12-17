@@ -222,6 +222,10 @@
     // &:last-child {
     //   margin-bottom: 0;
     // }
+
+    > button + button {
+      margin-left: 2 * $base-unit;
+    }
   }
 
   /* .section-file-interface */
