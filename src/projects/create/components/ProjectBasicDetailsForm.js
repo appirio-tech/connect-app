@@ -5,7 +5,7 @@ import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 import update from 'react-addons-update'
 import { evaluate, getFieldNamesFromExpression } from '../../../helpers/dependentQuestionsHelper'
-import { flatten } from 'flat'
+import { flatten, unflatten } from 'flat'
 import { LS_INCOMPLETE_WIZARD } from '../../../config/constants'
 import Modal from 'react-modal'
 import './ProjectBasicDetailsForm.scss'
@@ -68,7 +68,7 @@ const isSameStepAnyLevel = (parentStep, step) => {
  * @returns {Object} template with initialized `__wizard` property
  */
 const initWizard = (template, project, incompleteWizard) => {
-  const flatProjectData = flatten(_.omit(project, '__wizard'))
+  const flatProjectData = flatten(project, { safe: true })
   let wizardTemplate = _.cloneDeep(template)
   // try to get the step where we left the wizard
   const lastWizardStep = incompleteWizard && incompleteWizard.currentWizardStep
@@ -529,33 +529,88 @@ const getStepChildren = (template, step) => {
  * Update questions in template using question conditions and data
  *
  * @param {Object} template        template
- * @param {Object} projectFormData data to evaluate question conditions
+ * @param {Object} project data to evaluate question conditions
  *
  * @returns {Object} updated template
  */
-const updateQuestionsByConditions = (template, projectFormData) => {
+const updateQuestionsByConditions = (template, project, dirtyProject) => {
   let updatedTemplate = template
+  let hasHiddenQuestion = false
 
-  template.sections.forEach((section, sectionIndex) => {
-    section.subSections.forEach((subSection, subSectionIndex) => {
-      subSection.questions && subSection.questions.forEach((question, questionIndex) => {
-        if (question.condition) {
-          const hiddenByCondition = !evaluate(question.condition, projectFormData)
+  let flatProjectData = flatten(removeValuesOfHiddenQuestions(updatedTemplate, dirtyProject), { safe: true })
+  let { questionToUpdate, hiddenByCondition } = getQuestionWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData)
+  while (questionToUpdate) {
+    updatedTemplate = updateStepObject(updatedTemplate, questionToUpdate, {
+      __wizard: {
+        hiddenByCondition: { $set: hiddenByCondition }
+      }
+    })
 
-          // only update if the condition result has changed
-          if (hiddenByCondition !== question.__wizard.hiddenByCondition) {
-            updatedTemplate = updateQuestion(updatedTemplate, sectionIndex, subSectionIndex, questionIndex, {
-              __wizard: {
-                hiddenByCondition: { $set: hiddenByCondition }
-              }
-            })
-          }
+    flatProjectData = flatten(removeValuesOfHiddenQuestions(updatedTemplate, dirtyProject), { safe: true })
+    const nextQuestionToUpdate = getQuestionWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData)
+    questionToUpdate = nextQuestionToUpdate.questionToUpdate
+    hiddenByCondition = nextQuestionToUpdate.hiddenByCondition
+
+    hasHiddenQuestion = hasHiddenQuestion || hiddenByCondition
+  }
+
+  const updatedProject = hasHiddenQuestion ? dirtyProject : project
+
+  return {
+    updatedTemplate,
+    updatedProject,
+  }
+}
+
+const removeValuesOfHiddenQuestions = (template, project) => {
+  let updatedProject = project
+
+  _.forEach(template.sections, (section) => {
+    _.forEach(section.subSections, (subSection) => {
+      subSection.questions && _.forEach(subSection.questions, (question) => {
+        if (question.__wizard.hiddenByCondition && _.get(project, question.fieldName)) {
+          updatedProject = update(updatedProject, unflatten({
+            [question.fieldName]: { $set: '' }
+          }))
         }
       })
     })
   })
 
-  return updatedTemplate
+  return updatedProject
+}
+
+const getQuestionWhichMustBeUpdatedByCondition = (template, flatProjectData) => {
+  let questionToUpdate = null
+  let hiddenByCondition
+
+  _.forEach(template.sections, (section, sectionIndex) => {
+    _.forEach(section.subSections, (subSection, subSectionIndex) => {
+      subSection.questions && _.forEach(subSection.questions, (question, questionIndex) => {
+        if (question.condition) {
+          hiddenByCondition = !evaluate(question.condition, flatProjectData)
+
+          // only update if the condition result has changed
+          if (hiddenByCondition !== question.__wizard.hiddenByCondition) {
+            questionToUpdate = {
+              sectionIndex, subSectionIndex, questionIndex
+            }
+          }
+        }
+
+        return !questionToUpdate
+      })
+
+      return !questionToUpdate
+    })
+
+    return !questionToUpdate
+  })
+
+  return {
+    questionToUpdate,
+    hiddenByCondition,
+  }
 }
 
 const finalizeStep = (template, step, value = true) => {
@@ -718,7 +773,6 @@ class ProjectBasicDetailsForm extends Component {
     this.state = {
       template,
       nextWizardStep: getNextStepToShow(template, currentWizardStep),
-      projectFormData : {},
       showStartEditConfirmation: null,
       prevWizardStep,
     }
@@ -800,6 +854,7 @@ class ProjectBasicDetailsForm extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     return !(
       _.isEqual(nextProps.project, this.props.project)
+     && _.isEqual(nextProps.dirty, this.props.dirty)
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextState.canSubmit, this.state.canSubmit)
      && _.isEqual(nextState.template, this.state.template)
@@ -819,13 +874,21 @@ class ProjectBasicDetailsForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     // we receipt property updates from PROJECT_DIRTY REDUX state
-    if (nextProps.project.isDirty) return
+    /* if (nextProps.project.isDirty) return
     const updatedProject = Object.assign({}, nextProps.project)
     this.setState({
       project: updatedProject,
       isSaving: false,
       canSubmit: false
-    })
+    }) */
+    if (!_.isEqual(nextProps.dirtyProject, this.props.dirtyProject)) {
+      const { updatedTemplate, updatedProject } = updateQuestionsByConditions(this.state.template, this.state.project, nextProps.dirtyProject)
+
+      this.setState({
+        template: updatedTemplate,
+        project: updatedProject,
+      })
+    }
     if (!_.isEqual(this.props.template, nextProps.template)) {
       this.setState({
         template: initWizard(nextProps.template)
@@ -863,14 +926,6 @@ class ProjectBasicDetailsForm extends Component {
     // removed check for isChanged argument to fire the PROJECT_DIRTY event for every change in the form
     // this.props.fireProjectDirty(change)
 
-    const updatedProjectFormData = update(this.state.projectFormData, { $merge: change })
-    const updatedTemplate = updateQuestionsByConditions(this.state.template, updatedProjectFormData)
-
-    this.setState({
-      projectFormData: updatedProjectFormData,
-      template: updatedTemplate,
-    })
-
     this.props.onProjectChange(change)
   }
 
@@ -885,6 +940,7 @@ class ProjectBasicDetailsForm extends Component {
       template: updatedTemplate,
       nextWizardStep: getNextStepToShow(updatedTemplate, nextStep),
       prevWizardStep: dir === STEP_DIR.NEXT ? this.currentWizardStep : getPrevStepToShow(updatedTemplate, nextStep),
+      project: this.props.dirtyProject,
     })
 
     this.currentWizardStep = nextStep
@@ -904,7 +960,8 @@ class ProjectBasicDetailsForm extends Component {
 
   render() {
     const { isEditable, submitBtnText } = this.props
-    const { project,
+    const {
+      project,
       canSubmit,
       template,
       nextWizardStep,

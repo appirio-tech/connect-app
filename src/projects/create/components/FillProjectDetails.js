@@ -25,6 +25,7 @@ class FillProjectDetails extends Component  {
   shouldComponentUpdate(nextProps, nextState) {
     return !(
       _.isEqual(nextProps.project, this.props.project)
+     && _.isEqual(nextProps.dirtyProject, this.props.dirtyProject)
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextProps.error, this.props.error)
     )
@@ -35,7 +36,7 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, processing, submitBtnText, onBackClick, projectTemplates } = this.props
+    const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject } = this.props
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
@@ -60,6 +61,7 @@ class FillProjectDetails extends Component  {
                 <div className="left-area-content">
                   <ProjectBasicDetailsForm
                     project={project}
+                    dirtyProject={dirtyProject}
                     template={template}
                     isEditable
                     submitHandler={this.props.onCreateProject}
