@@ -38,7 +38,6 @@ const SpecQuestions = ({
   showFeaturesDialog,
   showHidden,
   startEditReadOnly,
-  stopEditReadOnly,
 }) => {
 
   const renderQ = (q) => {
@@ -190,7 +189,6 @@ const SpecQuestions = ({
         hideDescription={elemProps.hideDescription}
         __wizard={q.__wizard}
         startEditReadOnly={startEditReadOnly}
-        stopEditReadOnly={stopEditReadOnly}
       >
         <ChildElem {...elemProps} />
       </SpecQuestionList.Item>

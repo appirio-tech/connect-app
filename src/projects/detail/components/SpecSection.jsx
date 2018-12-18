@@ -80,7 +80,6 @@ const SpecSection = props => {
     attachmentsStorePath,
     canManageAttachments,
     startEditReadOnly,
-    stopEditReadOnly,
   } = props
 
   // make a copy to avoid modifying redux store
@@ -155,7 +154,6 @@ const SpecSection = props => {
           isRequired={props.required}
           showHidden={showHidden}
           startEditReadOnly={startEditReadOnly}
-          stopEditReadOnly={stopEditReadOnly}
         />
       )
     case 'notes':
