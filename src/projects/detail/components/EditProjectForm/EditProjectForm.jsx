@@ -18,6 +18,9 @@ import { HOC as hoc } from 'formsy-react'
 import {
   initWizard,
   updateQuestionsByConditions,
+  makeStepEditable,
+  makeStepReadonly,
+  isStepHasDependencies,
 } from '../../../../helpers/wizardHelper'
 
 import './EditProjectForm.scss'
@@ -66,6 +69,10 @@ class EditProjectForm extends Component {
     this.onLeave = this.onLeave.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.makeDeliveredPhaseReadOnly = this.makeDeliveredPhaseReadOnly.bind(this)
+    this.startEditReadOnly = this.startEditReadOnly.bind(this)
+    this.cancelEditReadOnly = this.cancelEditReadOnly.bind(this)
+    this.confirmEditReadOnly = this.confirmEditReadOnly.bind(this)
+    this.stopEditReadOnly = this.stopEditReadOnly.bind(this)
 
     const {
       template,
@@ -75,6 +82,7 @@ class EditProjectForm extends Component {
     this.state = {
       template,
       hasDependantFields,
+      showStartEditConfirmation: false,
     }
   }
 
@@ -132,6 +140,53 @@ class EditProjectForm extends Component {
 
   componentDidMount() {
     window.addEventListener('beforeunload', this.onLeave)
+  }
+
+  startEditReadOnly(step) {
+    const { template } = this.state
+
+    if (isStepHasDependencies(template, step)) {
+      this.setState({
+        showStartEditConfirmation: step,
+      })
+    } else {
+      this._startEditReadOnly(step)
+    }
+  }
+
+  cancelEditReadOnly() {
+    this.setState({
+      showStartEditConfirmation: null,
+    })
+  }
+
+  confirmEditReadOnly() {
+    this._startEditReadOnly(this.state.showStartEditConfirmation)
+    this.setState({
+      showStartEditConfirmation: null,
+    })
+  }
+
+  _startEditReadOnly(step) {
+    const { template } = this.state
+    let updatedTemplate = template
+
+    updatedTemplate = makeStepEditable(template, step)
+
+    this.setState({
+      template: updatedTemplate,
+    })
+  }
+
+  stopEditReadOnly(step) {
+    const { template } = this.state
+    let updatedTemplate = template
+
+    updatedTemplate = makeStepReadonly(template, step)
+
+    this.setState({
+      template: updatedTemplate,
+    })
   }
 
   autoResize() {
@@ -237,7 +292,7 @@ class EditProjectForm extends Component {
 
   render() {
     const { isEdittable, showHidden } = this.props
-    const { project, dirtyProject, template } = this.state
+    const { project, dirtyProject, template, showStartEditConfirmation } = this.state
     const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
       const anySectionInvalid = _.some(template.sections, (s) => s.isInvalid)
@@ -259,6 +314,8 @@ class EditProjectForm extends Component {
             removeAttachment={this.props.removeAttachment}
             attachmentsStorePath={this.props.attachmentsStorePath}
             canManageAttachments={this.props.canManageAttachments}
+            startEditReadOnly={this.startEditReadOnly}
+            stopEditReadOnly={this.stopEditReadOnly}
           />
           <div className="section-footer section-footer-spec">
             <button className="tc-btn tc-btn-primary tc-btn-md"
@@ -272,6 +329,26 @@ class EditProjectForm extends Component {
 
     return (
       <div className="editProjectForm">
+        <Modal
+          isOpen={!!showStartEditConfirmation}
+          className="delete-post-dialog"
+          overlayClassName="delete-post-dialog-overlay"
+          onRequestClose={this.cancelEditReadOnly}
+          contentLabel=""
+        >
+          <div className="modal-title">
+            Confirmation
+          </div>
+
+          <div className="modal-body">
+            You are about to change the response to question which may result in loss of data, do you want to continue?
+          </div>
+
+          <div className="button-area flex center action-area">
+            <button className="tc-btn tc-btn-default tc-btn-sm action-btn btn-cancel" onClick={this.cancelEditReadOnly}>Cancel</button>
+            <button className="tc-btn tc-btn-warning tc-btn-sm action-btn " onClick={this.confirmEditReadOnly}>Continue</button>
+          </div>
+        </Modal>
         <Prompt
           when={!!onLeaveMessage}
           message={onLeaveMessage}

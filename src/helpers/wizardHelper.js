@@ -147,6 +147,11 @@ export const initWizard = (template, project, incompleteWizard, isReadOptimizedM
         ...getFieldNamesFromExpression(stepObject.condition)
       ])
     }
+
+    // in read optimized mode we display all the questions as readOnly if they are not hidden by conditions
+    if (isReadOptimizedMode && !stepObject.__wizard.hiddenByCondition) {
+      stepObject.__wizard.readOnly = true
+    }
   })
 
   // initialize wizard mode
@@ -734,4 +739,30 @@ export const findRealStep = (template, step) => {
   }
 
   return tempStep
+}
+
+export const makeStepEditable = (template, step) => {
+  let updatedTemplate = template
+
+  updatedTemplate = updateStepObject(updatedTemplate, step, {
+    __wizard: {
+      readOnly: { $set: false },
+      editReadOnly: { $set: true }
+    }
+  })
+
+  return updatedTemplate
+}
+
+export const makeStepReadonly = (template, step) => {
+  let updatedTemplate = template
+
+  updatedTemplate = updateStepObject(updatedTemplate, step, {
+    __wizard: {
+      readOnly: { $set: true },
+      editReadOnly: { $set: false }
+    }
+  })
+
+  return updatedTemplate
 }
