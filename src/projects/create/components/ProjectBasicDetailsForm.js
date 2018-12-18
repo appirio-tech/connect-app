@@ -140,12 +140,18 @@ class ProjectBasicDetailsForm extends Component {
       canSubmit: false
     }) */
     if (this.state.hasDependantFields && !_.isEqual(nextProps.dirtyProject, this.props.dirtyProject)) {
-      const { updatedTemplate, updatedProject } = updateQuestionsByConditions(this.state.template, this.state.project, nextProps.dirtyProject)
+      const {
+        updatedTemplate,
+        hidedSomeQuestions,
+        updatedSomeQuestions,
+      } = updateQuestionsByConditions(this.state.template, nextProps.dirtyProject)
 
-      this.setState({
-        template: updatedTemplate,
-        project: updatedProject,
-      })
+      if (updatedSomeQuestions) {
+        this.setState({
+          template: updatedTemplate,
+          project: hidedSomeQuestions ? nextProps.dirtyProject : this.state.project,
+        })
+      }
     }
   }
 

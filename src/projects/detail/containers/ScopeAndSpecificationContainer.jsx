@@ -14,9 +14,9 @@ import MediaQuery from 'react-responsive'
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
 import EditProjectForm from '../components/EditProjectForm'
 import TwoColsLayout from '../../../components/TwoColsLayout'
-import { 
-  SCREEN_BREAKPOINT_MD, 
-  PROJECT_ATTACHMENTS_FOLDER, 
+import {
+  SCREEN_BREAKPOINT_MD,
+  PROJECT_ATTACHMENTS_FOLDER,
   EVENT_TYPE,
 } from '../../../config/constants'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
@@ -73,18 +73,18 @@ class SpecificationContainer extends Component {
   }
 
   render() {
-    const { project, currentMemberRole, isSuperUser, processing, sections } = this.props
+    const { project, currentMemberRole, isSuperUser, processing, template } = this.props
     const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
 
     const leftArea = (
-      <ProjectSpecSidebar project={project} sections={sections} currentMemberRole={currentMemberRole} />
+      <ProjectSpecSidebar project={project} sections={template.sections} currentMemberRole={currentMemberRole} />
     )
 
     return (
       <TwoColsLayout>
-        <NotificationsReader 
+        <NotificationsReader
           id="scope"
           criteria={[
             { eventType: EVENT_TYPE.PROJECT.SPECIFICATION_MODIFIED, contents: { projectId: project.id } },
@@ -105,7 +105,7 @@ class SpecificationContainer extends Component {
         <TwoColsLayout.Content>
           <EnhancedEditProjectForm
             project={project}
-            sections={sections}
+            template={template}
             isEdittable={editPriv}
             submitHandler={this.saveProject}
             saving={processing}

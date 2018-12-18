@@ -109,9 +109,9 @@ export const forEachStep = (template, iteratee, iterateSublevelCondition) => {
  *
  * @returns {Object} template with initialized `__wizard` property
  */
-export const initWizard = (template, project, incompleteWizard) => {
+export const initWizard = (template, project, incompleteWizard, isReadOptimizedMode) => {
   let wizardTemplate = _.cloneDeep(template)
-  const isWizardMode = isWizardModeEnabled(wizardTemplate)
+  const isWizardMode = isWizardModeEnabled(wizardTemplate) && !isReadOptimizedMode
   const previousStepVisibility = getPreviousStepVisibility(wizardTemplate)
   const flatProjectData = flatten(project, { safe: true })
   // try to get the step where we left the wizard
@@ -157,13 +157,13 @@ export const initWizard = (template, project, incompleteWizard) => {
       stepObject.__wizard.isStep = true
       stepObject.__wizard.hidden = shouldStepBeHidden(previousStepVisibility, step, lastWizardStep)
 
-      // if we reach subSection, then we will start from it
-      if (currentWizardStep.subSectionIndex === -1 && getStepLevel(step) === LEVEL.SUB_SECTION) {
+      // if we reach subSection inside first section, then we will start from it
+      if (step.sectionIndex === 0 && currentWizardStep.subSectionIndex === -1 && getStepLevel(step) === LEVEL.SUB_SECTION) {
         currentWizardStep.subSectionIndex = 0
       }
 
-      // if we reach question, then we will start from it
-      if (currentWizardStep.questionIndex === -1 && getStepLevel(step) === LEVEL.QUESTION) {
+      // if we reach question inside first subSection of the first section, then we will start from it
+      if (step.sectionIndex === 0 && step.subSectionIndex === 0 && currentWizardStep.questionIndex === -1 && getStepLevel(step) === LEVEL.QUESTION) {
         currentWizardStep.questionIndex = 0
       }
     }, (stepObject) => (_.get(stepObject, 'wizard.enabled') || stepObject.wizard === true))
@@ -511,12 +511,14 @@ const getStepChildren = (template, step) => {
  *
  * @returns {Object} updated template
  */
-export const updateQuestionsByConditions = (template, project, dirtyProject) => {
+export const updateQuestionsByConditions = (template, project) => {
   let updatedTemplate = template
-  let hasHiddenQuestion = false
+  let hidedSomeQuestions = false
+  let updatedSomeQuestions = false
 
-  let flatProjectData = flatten(removeValuesOfHiddenQuestions(updatedTemplate, dirtyProject), { safe: true })
+  let flatProjectData = flatten(removeValuesOfHiddenQuestions(updatedTemplate, project), { safe: true })
   let { questionToUpdate, hiddenByCondition } = getQuestionWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData)
+  updatedSomeQuestions = !!questionToUpdate
   while (questionToUpdate) {
     updatedTemplate = updateStepObject(updatedTemplate, questionToUpdate, {
       __wizard: {
@@ -524,19 +526,18 @@ export const updateQuestionsByConditions = (template, project, dirtyProject) => 
       }
     })
 
-    flatProjectData = flatten(removeValuesOfHiddenQuestions(updatedTemplate, dirtyProject), { safe: true })
+    flatProjectData = flatten(removeValuesOfHiddenQuestions(updatedTemplate, project), { safe: true })
     const nextQuestionToUpdate = getQuestionWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData)
     questionToUpdate = nextQuestionToUpdate.questionToUpdate
     hiddenByCondition = nextQuestionToUpdate.hiddenByCondition
 
-    hasHiddenQuestion = hasHiddenQuestion || hiddenByCondition
+    hidedSomeQuestions = hidedSomeQuestions || hiddenByCondition
   }
-
-  const updatedProject = hasHiddenQuestion ? dirtyProject : project
 
   return {
     updatedTemplate,
-    updatedProject,
+    hidedSomeQuestions,
+    updatedSomeQuestions,
   }
 }
 

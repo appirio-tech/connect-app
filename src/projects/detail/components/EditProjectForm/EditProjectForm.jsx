@@ -15,6 +15,10 @@ const Formsy = FormsyForm.Formsy
 import XMarkIcon from  '../../../../assets/icons/icon-x-mark.svg'
 import SpecSection from '../SpecSection'
 import { HOC as hoc } from 'formsy-react'
+import {
+  initWizard,
+  updateQuestionsByConditions,
+} from '../../../../helpers/wizardHelper'
 
 import './EditProjectForm.scss'
 
@@ -62,6 +66,16 @@ class EditProjectForm extends Component {
     this.onLeave = this.onLeave.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.makeDeliveredPhaseReadOnly = this.makeDeliveredPhaseReadOnly.bind(this)
+
+    const {
+      template,
+      hasDependantFields,
+    } = initWizard(props.template, props.project, null, true)
+
+    this.state = {
+      template,
+      hasDependantFields,
+    }
   }
 
   componentWillMount() {
@@ -83,27 +97,37 @@ class EditProjectForm extends Component {
         dirtyProject: Object.assign({}, nextProps.project),
         isProjectDirty: true
       })
-      return
-    }
-    let updatedProject = Object.assign({}, nextProps.project)
-    if (this.state.isFeaturesDirty && !this.state.isSaving) {
-      updatedProject = update(updatedProject, {
-        details: {
-          appDefinition: {
-            features: {
-              $set: this.state.project.details.appDefinition.features
+    } else {
+      let updatedProject = Object.assign({}, nextProps.project)
+      if (this.state.isFeaturesDirty && !this.state.isSaving) {
+        updatedProject = update(updatedProject, {
+          details: {
+            appDefinition: {
+              features: {
+                $set: this.state.project.details.appDefinition.features
+              }
             }
           }
-        }
+        })
+      }
+      this.setState({
+        project: updatedProject,
+        isFeaturesDirty: false, // Since we just saved, features are not dirty anymore.
+        isProjectDirty: false,
+        canSubmit: false,
+        isSaving: false
       })
     }
-    this.setState({
-      project: updatedProject,
-      isFeaturesDirty: false, // Since we just saved, features are not dirty anymore.
-      isProjectDirty: false,
-      canSubmit: false,
-      isSaving: false
-    })
+
+    if (this.state.hasDependantFields && !_.isEqual(this.props.project, nextProps.project)) {
+      const { updatedTemplate, updatedSomeQuestions } = updateQuestionsByConditions(this.state.template, nextProps.project)
+
+      if (updatedSomeQuestions) {
+        this.setState({
+          template: updatedTemplate,
+        })
+      }
+    }
   }
 
   componentDidMount() {
@@ -212,11 +236,11 @@ class EditProjectForm extends Component {
 
 
   render() {
-    const { isEdittable, sections, showHidden } = this.props
-    const { project, dirtyProject } = this.state
+    const { isEdittable, showHidden } = this.props
+    const { project, dirtyProject, template } = this.state
     const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
-      const anySectionInvalid = _.some(this.props.sections, (s) => s.isInvalid)
+      const anySectionInvalid = _.some(template.sections, (s) => s.isInvalid)
       return (
         <div key={idx}>
           <SpecSection
@@ -238,7 +262,7 @@ class EditProjectForm extends Component {
           />
           <div className="section-footer section-footer-spec">
             <button className="tc-btn tc-btn-primary tc-btn-md"
-              type="submit" 
+              type="submit"
               disabled={(!this.isChanged() || this.state.isSaving) || anySectionInvalid || !this.state.canSubmit || this.makeDeliveredPhaseReadOnly(project.status)}
             >Save Changes</button>
           </div>
@@ -260,7 +284,7 @@ class EditProjectForm extends Component {
           onValidSubmit={this.submit}
           onChange={ this.handleChange }
         >
-          {sections.map(renderSection)}
+          {template.sections.map(renderSection)}
           <FeaturePickerFormField
             name="details.appDefinition.features"
             project={ project }
@@ -280,7 +304,7 @@ class EditProjectForm extends Component {
 EditProjectForm.propTypes = {
   project: PropTypes.object.isRequired,
   saving: PropTypes.bool.isRequired,
-  sections: PropTypes.arrayOf(PropTypes.object).isRequired,
+  template: PropTypes.object.isRequired,
   isEdittable: PropTypes.bool.isRequired,
   submitHandler: PropTypes.func.isRequired,
   fireProjectDirty: PropTypes.func.isRequired,
