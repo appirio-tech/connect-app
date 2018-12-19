@@ -210,7 +210,7 @@ class ProjectInfoContainer extends React.Component {
     const projectTemplate = _.find(projectTemplates, pt => pt.id === templateId)
     const subSectionsTemplate = projectTemplate.scope.sections[0].subSections
     //Allowing upload of files only if files subSection is present in template
-    const shouldUploadFiles = _.find(subSectionsTemplate, st => st.id === 'files') ? true : false
+    const shouldUploadFiles = _.some(subSectionsTemplate, st => st.id === 'files')
 
     return (
       <div>
