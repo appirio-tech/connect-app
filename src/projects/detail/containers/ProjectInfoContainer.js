@@ -129,7 +129,7 @@ class ProjectInfoContainer extends React.Component {
     const { duration } = this.state
     const { project, currentMemberRole, isSuperUser, phases, feeds,
       hideInfo, hideLinks, hideMembers, onChannelClick, activeChannelId, productsTimelines,
-      isManageUser, phasesTopics, isProjectPlan, isProjectProcessing } = this.props
+      isManageUser, phasesTopics, isProjectPlan, isProjectProcessing, projectTemplates } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -206,6 +206,11 @@ class ProjectInfoContainer extends React.Component {
     }))
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
+    const templateId = _.get(project, 'templateId')
+    const projectTemplate = _.find(projectTemplates, pt => pt.id === templateId)
+    const subSectionsTemplate = projectTemplate.scope.sections[0].subSections
+    //Allowing upload of files only if files subSection is present in template
+    const shouldUploadFiles = _.some(subSectionsTemplate, st => st.id === 'files')
 
     return (
       <div>
@@ -236,7 +241,7 @@ class ProjectInfoContainer extends React.Component {
           <FileLinksMenu
             links={attachments}
             title="Latest files"
-            canAdd
+            canAdd={shouldUploadFiles}
             onAddNewLink={this.onAddFile}
             onAddAttachment={this.onAddAttachment}
             moreText="view all files"
@@ -275,7 +280,10 @@ ProjectInfoContainer.PropTypes = {
   isProjectPlan: PropTypes.bool,
   isProjectProcessing: PropTypes.bool,
 }
+const mapStateToProps = ({templates }) => ({
+  projectTemplates : templates.projectTemplates,
+})
 
 const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, loadDashboardFeeds, loadPhaseFeed }
 
-export default connect(null, mapDispatchToProps)(ProjectInfoContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfoContainer)
