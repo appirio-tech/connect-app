@@ -54,10 +54,19 @@ const SpecQuestions = ({
       validationErrors: q.validationErrors,
       disabled: _.get(q, '__wizard.readOnly')
     }
-    if (q.options && elemProps.disabled) {
-      q.options.forEach(option => {
-        option.disabled = true
+    if (q.options) {
+      // don't show options which are hidden by conditions
+      q.options = q.options.filter((option) => !_.get(option, '__wizard.hiddenByCondition'))
+      // disable options if they are disabled by conditions
+      q.options.forEach((option) => {
+        option.disabled = _.get(option, '__wizard.disabledByCondition', false)
       })
+      // if the whole element disable, disable all options
+      if (elemProps.disabled) {
+        q.options.forEach(option => {
+          option.disabled = true
+        })
+      }
     }
     // escape value of the question only when it is of string type
     if (typeof elemProps.value === 'string') {

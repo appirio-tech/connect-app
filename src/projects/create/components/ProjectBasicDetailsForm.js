@@ -10,7 +10,7 @@ import {
   isStepHasDependencies,
   findRealStep,
   rewindToStep,
-  updateQuestionsByConditions,
+  updateStepsByConditions,
   showStepByDir,
   STEP_DIR,
   PREVIOUS_STEP_VISIBILITY,
@@ -142,14 +142,14 @@ class ProjectBasicDetailsForm extends Component {
     if (this.state.hasDependantFields && !_.isEqual(nextProps.dirtyProject, this.props.dirtyProject)) {
       const {
         updatedTemplate,
-        hidedSomeQuestions,
-        updatedSomeQuestions,
-      } = updateQuestionsByConditions(this.state.template, nextProps.dirtyProject)
+        hidedSomeSteps,
+        updatedSomeSteps,
+      } = updateStepsByConditions(this.state.template, nextProps.dirtyProject)
 
-      if (updatedSomeQuestions) {
+      if (updatedSomeSteps) {
         this.setState({
           template: updatedTemplate,
-          project: hidedSomeQuestions ? nextProps.dirtyProject : this.state.project,
+          project: hidedSomeSteps ? nextProps.dirtyProject : this.state.project,
         })
       }
     }

@@ -17,7 +17,7 @@ import SpecSection from '../SpecSection'
 import { HOC as hoc } from 'formsy-react'
 import {
   initWizard,
-  updateQuestionsByConditions,
+  updateStepsByConditions,
   makeStepEditable,
   makeStepReadonly,
   isStepHasDependencies,
@@ -128,9 +128,9 @@ class EditProjectForm extends Component {
     }
 
     if (this.state.hasDependantFields && !_.isEqual(this.props.project, nextProps.project)) {
-      const { updatedTemplate, updatedSomeQuestions } = updateQuestionsByConditions(this.state.template, nextProps.project)
+      const { updatedTemplate, updatedSomeSteps } = updateStepsByConditions(this.state.template, nextProps.project)
 
-      if (updatedSomeQuestions) {
+      if (updatedSomeSteps) {
         this.setState({
           template: updatedTemplate,
         })

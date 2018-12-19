@@ -15,7 +15,8 @@ export const PREVIOUS_STEP_VISIBILITY = {
 export const LEVEL = {
   SECTION: 'section',
   SUB_SECTION: 'subSection',
-  QUESTION: 'question'
+  QUESTION: 'question',
+  OPTION: 'option'
 }
 
 export const STEP_DIR = {
@@ -48,6 +49,10 @@ const isSameStepAnyLevel = (parentStep, step) => {
     isParent = isParent && parentStep.questionIndex === step.questionIndex
   }
 
+  if (parentStep.optionIndex !== -1) {
+    isParent = isParent && parentStep.optionIndex === step.optionIndex
+  }
+
   return isParent
 }
 
@@ -60,42 +65,70 @@ export const getPreviousStepVisibility = (template) => (
 )
 
 export const forEachStep = (template, iteratee, iterateSublevelCondition) => {
+  let iterateeResult
+
+  // iterate SECTIONS
   _.forEach(template.sections, (section, sectionIndex) => {
     const sectionStep = {
       sectionIndex,
       subSectionIndex: -1,
-      questionIndex: -1
+      questionIndex: -1,
+      optionIndex: -1,
     }
-    const sectionResult = iteratee(section, sectionStep)
+    iterateeResult = iteratee(section, sectionStep)
 
-    if (sectionResult !== false
+    // iterate SUB_SECTIONS
+    if (iterateeResult !== false
       && (!_.isFunction(iterateSublevelCondition) || iterateSublevelCondition(section, sectionStep))
     ) {
       _.forEach(section.subSections, (subSection, subSectionIndex) => {
         const subSectionStep = {
           sectionIndex,
           subSectionIndex,
-          questionIndex: -1
+          questionIndex: -1,
+          optionIndex: -1,
         }
-        const subSectionResult = iteratee(subSection, subSectionStep)
+        iterateeResult = iteratee(subSection, subSectionStep)
 
-        if (subSectionResult !== false
+        // iterate QUESTIONS
+        if (iterateeResult !== false
           && (!_.isFunction(iterateSublevelCondition) || iterateSublevelCondition(subSection, subSectionStep))
         ) {
           subSection.questions && _.forEach(subSection.questions, (question, questionIndex) => {
-            return iteratee(question, {
+            const questionStep = {
               sectionIndex,
               subSectionIndex,
-              questionIndex
-            })
+              questionIndex,
+              optionIndex: -1,
+            }
+            iterateeResult = iteratee(question, questionStep)
+
+            // iterate OPTIONS
+            if (iterateeResult !== false
+              && (!_.isFunction(iterateSublevelCondition) || iterateSublevelCondition(question, questionStep))
+            ) {
+              question.options && _.forEach(question.options, (option, optionIndex) => {
+                const optionsStep = {
+                  sectionIndex,
+                  subSectionIndex,
+                  questionIndex,
+                  optionIndex
+                }
+                iterateeResult = iteratee(option, optionsStep)
+
+                return iterateeResult
+              })
+            }
+
+            return iterateeResult
           })
         }
 
-        return subSectionResult
+        return iterateeResult
       })
     }
 
-    return sectionResult
+    return iterateeResult
   })
 }
 
@@ -121,6 +154,7 @@ export const initWizard = (template, project, incompleteWizard, isReadOptimizedM
     sectionIndex: -1,
     subSectionIndex: -1,
     questionIndex: -1,
+    optionIndex: -1,
   }
   let prevWizardStep = null
 
@@ -145,6 +179,17 @@ export const initWizard = (template, project, incompleteWizard, isReadOptimizedM
       wizardTemplate.__wizard.dependantFields = _.uniq([
         ...wizardTemplate.__wizard.dependantFields,
         ...getFieldNamesFromExpression(stepObject.condition)
+      ])
+    }
+
+    // if step has disable condition, evaluate it
+    if (stepObject.disableCondition) {
+      stepObject.__wizard.disabledByCondition = evaluate(stepObject.disableCondition, flatProjectData)
+
+      // add all found variables from disableCondition to the list of dependant fields of the template
+      wizardTemplate.__wizard.dependantFields = _.uniq([
+        ...wizardTemplate.__wizard.dependantFields,
+        ...getFieldNamesFromExpression(stepObject.disableCondition)
       ])
     }
 
@@ -206,11 +251,12 @@ export const initWizard = (template, project, incompleteWizard, isReadOptimizedM
 const sign = (x) => ((x > 0) - (x < 0)) || +x
 
 const getDirForSteps = (step1, step2) => {
+  const optionSign = sign(step2.optionIndex - step1.optionIndex)
   const questionSign = sign(step2.questionIndex - step1.questionIndex)
   const subSectionSign = sign(step2.subSectionIndex - step1.subSectionIndex)
   const sectionSign = sign(step2.sectionIndex - step1.sectionIndex)
 
-  const dir = sectionSign || subSectionSign || questionSign
+  const dir = sectionSign || subSectionSign || questionSign || optionSign
 
   return dir
 }
@@ -277,6 +323,12 @@ const getSiblingStepByDir = (template, step, dir) => {
   let siblingStep = null
 
   switch(level) {
+  case LEVEL.OPTION:
+    siblingStep = {
+      ...step,
+      optionIndex: step.optionIndex + dir
+    }
+    break
   case LEVEL.QUESTION:
     siblingStep = {
       ...step,
@@ -312,6 +364,21 @@ const getNextSiblingStep = (template, step) => (
 const getPrevSiblingStep = (template, step) => (
   getSiblingStepByDir(template, step, STEP_DIR.PREV)
 )
+
+const updateOption = (template, sectionIndex, subSectionIndex, questionIndex, optionIndex, updateRule) => {
+  const section = template.sections[sectionIndex]
+  const subSection = section.subSections[subSectionIndex]
+  const question = subSection.questions[questionIndex]
+  const option = question.options[optionIndex]
+
+  const updatedOption = update(option, updateRule)
+
+  return updateQuestion(template, sectionIndex, subSectionIndex, questionIndex, {
+    options: {
+      $splice: [[optionIndex, 1, updatedOption]]
+    }
+  })
+}
 
 /**
  * Update question in template without template mutation
@@ -385,10 +452,13 @@ const updateSection = (template, sectionIndex, updateRule) => {
 }
 
 const updateStepObject = (template, step, updateRule, level) => {
-  const { sectionIndex, subSectionIndex, questionIndex } = step
+  const { sectionIndex, subSectionIndex, questionIndex, optionIndex } = step
   let updatedTemplate = template
 
   switch (level) {
+  case LEVEL.OPTION:
+    updatedTemplate = updateOption(template, sectionIndex, subSectionIndex, questionIndex, optionIndex, updateRule)
+    break
   case LEVEL.QUESTION:
     updatedTemplate = updateQuestion(template, sectionIndex, subSectionIndex, questionIndex, updateRule)
     break
@@ -399,7 +469,9 @@ const updateStepObject = (template, step, updateRule, level) => {
     updatedTemplate = updateSection(template, sectionIndex, updateRule)
     break
   default:
-    if (questionIndex !== -1) {
+    if (optionIndex !== -1) {
+      updatedTemplate = updateOption(template, sectionIndex, subSectionIndex, questionIndex, optionIndex, updateRule)
+    } else if (questionIndex !== -1) {
       updatedTemplate = updateQuestion(template, sectionIndex, subSectionIndex, questionIndex, updateRule)
     } else if (subSectionIndex !== -1) {
       updatedTemplate = updateSubSection(template, sectionIndex, subSectionIndex, updateRule)
@@ -412,27 +484,30 @@ const updateStepObject = (template, step, updateRule, level) => {
 }
 
 export const getStepObject = (template, step, level) => {
-  const { section, subSection, question } = getStepAllLevelsObjects(template, step)
+  const { section, subSection, question, option } = getStepAllLevelsObjects(template, step)
 
   switch (level) {
+  case LEVEL.OPTION: return option
   case LEVEL.QUESTION: return question
   case LEVEL.SUB_SECTION: return subSection
   case LEVEL.SECTION: return section
   default:
-    return question || subSection || section
+    return option || question || subSection || section
   }
 }
 
 const getStepAllLevelsObjects = (template, step) => {
-  const { sectionIndex, subSectionIndex, questionIndex } = step
+  const { sectionIndex, subSectionIndex, questionIndex, optionIndex } = step
   const section = sectionIndex !== -1 ? template.sections[sectionIndex] : null
   const subSection = section && subSectionIndex !== -1 ? section.subSections[subSectionIndex] : null
-  const question = section && subSection && subSection.questions && questionIndex !== -1 ? subSection.questions[questionIndex] : null
+  const question = subSection && subSection.questions && questionIndex !== -1 ? subSection.questions[questionIndex] : null
+  const option = question && question.options && optionIndex !== -1 ? question.options[optionIndex] : null
 
   return {
     section,
     subSection,
     question,
+    option,
   }
 }
 
@@ -441,9 +516,10 @@ const isStepLevel = (step, level) => {
     return false
   }
 
-  const { sectionIndex, subSectionIndex, questionIndex } = step
+  const { sectionIndex, subSectionIndex, questionIndex, optionIndex } = step
 
   switch (level) {
+  case LEVEL.OPTION: return optionIndex !== -1 && questionIndex !== -1 && subSectionIndex !== -1 && sectionIndex !== -1
   case LEVEL.QUESTION: return questionIndex !== -1 && subSectionIndex !== -1 && sectionIndex !== -1
   case LEVEL.SUB_SECTION: return subSectionIndex !== -1 && sectionIndex !== -1
   case LEVEL.SECTION: return sectionIndex !== -1
@@ -451,28 +527,20 @@ const isStepLevel = (step, level) => {
   }
 }
 
-const isStepSection = (step) => (
-  isStepLevel(step, LEVEL.SECTION)
-)
-
-const isStepSubSection = (step) => (
-  isStepLevel(step, LEVEL.SUB_SECTION)
-)
-
-const isStepQuestion = (step) => (
-  isStepLevel(step, LEVEL.QUESTION)
-)
-
 const getStepLevel = (step) => {
-  if (isStepQuestion(step)) {
+  if (isStepLevel(step, LEVEL.OPTION)) {
+    return LEVEL.OPTION
+  }
+
+  if (isStepLevel(step, LEVEL.QUESTION)) {
     return LEVEL.QUESTION
   }
 
-  if (isStepSubSection(step)) {
+  if (isStepLevel(step, LEVEL.SUB_SECTION)) {
     return LEVEL.SUB_SECTION
   }
 
-  if (isStepSection(step)) {
+  if (isStepLevel(step, LEVEL.SECTION)) {
     return LEVEL.SECTION
   }
 
@@ -480,7 +548,12 @@ const getStepLevel = (step) => {
 }
 
 const getParentStep = (step) => {
-  if (step.questionIndex !== -1) {
+  if (step.optionIndex !== -1) {
+    return {
+      ...step,
+      optionIndex: -1
+    }
+  } else if (step.questionIndex !== -1) {
     return {
       ...step,
       questionIndex: -1
@@ -503,7 +576,7 @@ const getParentStep = (step) => {
 const getStepChildren = (template, step) => {
   const stepObject = getStepObject(template, step)
 
-  return (stepObject.questions || stepObject.subSections || stepObject.sections || []).map((stepObject) => (
+  return (stepObject.options || stepObject.questions || stepObject.subSections || stepObject.sections || []).map((stepObject) => (
     _.get(stepObject, '__wizard.step')
   ))
 }
@@ -516,33 +589,51 @@ const getStepChildren = (template, step) => {
  *
  * @returns {Object} updated template
  */
-export const updateQuestionsByConditions = (template, project) => {
+export const updateStepsByConditions = (template, project) => {
   let updatedTemplate = template
-  let hidedSomeQuestions = false
-  let updatedSomeQuestions = false
+  let hidedSomeSteps = false
+  let updatedSomeSteps = false
 
   let flatProjectData = flatten(removeValuesOfHiddenQuestions(updatedTemplate, project), { safe: true })
-  let { questionToUpdate, hiddenByCondition } = getQuestionWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData)
-  updatedSomeQuestions = !!questionToUpdate
-  while (questionToUpdate) {
-    updatedTemplate = updateStepObject(updatedTemplate, questionToUpdate, {
-      __wizard: {
-        hiddenByCondition: { $set: hiddenByCondition }
-      }
-    })
+  let { stepToUpdate, hiddenByCondition, disabledByCondition } = getStepWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData)
+  updatedSomeSteps = !!stepToUpdate
+  while (stepToUpdate) {
+    const updateRule = {
+      __wizard: {}
+    }
+
+    if (!_.isUndefined(hiddenByCondition)) {
+      updateRule.__wizard.hiddenByCondition = { $set: hiddenByCondition }
+    }
+
+    if (!_.isUndefined(disabledByCondition)) {
+      updateRule.__wizard.disabledByCondition = { $set: disabledByCondition }
+    }
+
+    updatedTemplate = updateStepObject(updatedTemplate, stepToUpdate, updateRule)
 
     flatProjectData = flatten(removeValuesOfHiddenQuestions(updatedTemplate, project), { safe: true })
-    const nextQuestionToUpdate = getQuestionWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData)
-    questionToUpdate = nextQuestionToUpdate.questionToUpdate
-    hiddenByCondition = nextQuestionToUpdate.hiddenByCondition
+    const prevStep = stepToUpdate
+    !({ stepToUpdate, hiddenByCondition, disabledByCondition } = getStepWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData))
+    // as conditions in template or some errors in code could potentially lead to infinite loop at this point
+    // we check that we are not trying to update the same step again
+    // and in case of a loop we stop doing anything without any changes, as it's better than hang user's browser
+    if (stepToUpdate && getDirForSteps(prevStep, stepToUpdate) === STEP_DIR.SAME) {
+      console.error(`Infinite loop during updating step by condition ${JSON.stringify(stepToUpdate)}.`, updatedTemplate)
+      return {
+        template,
+        hidedSomeSteps: false,
+        updatedSomeSteps: false,
+      }
+    }
 
-    hidedSomeQuestions = hidedSomeQuestions || hiddenByCondition
+    hidedSomeSteps = hidedSomeSteps || hiddenByCondition
   }
 
   return {
     updatedTemplate,
-    hidedSomeQuestions,
-    updatedSomeQuestions,
+    hidedSomeSteps,
+    updatedSomeSteps,
   }
 }
 
@@ -564,36 +655,37 @@ const removeValuesOfHiddenQuestions = (template, project) => {
   return updatedProject
 }
 
-const getQuestionWhichMustBeUpdatedByCondition = (template, flatProjectData) => {
-  let questionToUpdate = null
+const getStepWhichMustBeUpdatedByCondition = (template, flatProjectData) => {
+  let stepToUpdate = null
   let hiddenByCondition
+  let disabledByCondition
 
-  _.forEach(template.sections, (section, sectionIndex) => {
-    _.forEach(section.subSections, (subSection, subSectionIndex) => {
-      subSection.questions && _.forEach(subSection.questions, (question, questionIndex) => {
-        if (question.condition) {
-          hiddenByCondition = !evaluate(question.condition, flatProjectData)
+  forEachStep(template, (stepObject, step) => {
+    if (stepObject.condition) {
+      hiddenByCondition = !evaluate(stepObject.condition, flatProjectData)
 
-          // only update if the condition result has changed
-          if (hiddenByCondition !== question.__wizard.hiddenByCondition) {
-            questionToUpdate = {
-              sectionIndex, subSectionIndex, questionIndex
-            }
-          }
-        }
+      // only update if the condition result has changed
+      if (hiddenByCondition !== stepObject.__wizard.hiddenByCondition) {
+        stepToUpdate = step
+      }
+    }
 
-        return !questionToUpdate
-      })
+    if (stepObject.disableCondition) {
+      disabledByCondition = evaluate(stepObject.disableCondition, flatProjectData)
 
-      return !questionToUpdate
-    })
+      // only update if the condition result has changed
+      if (disabledByCondition !== stepObject.__wizard.disabledByCondition) {
+        stepToUpdate = step
+      }
+    }
 
-    return !questionToUpdate
+    return !stepToUpdate
   })
 
   return {
-    questionToUpdate,
-    hiddenByCondition,
+    stepToUpdate,
+    hiddenByCondition: stepToUpdate ? hiddenByCondition : undefined,
+    disabledByCondition: stepToUpdate ? disabledByCondition : undefined,
   }
 }
 
