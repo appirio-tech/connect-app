@@ -40,6 +40,7 @@ const SpecQuestions = ({
   startEditReadOnly,
   stopEditReadOnly,
 }) => {
+  const currentProjectData = dirtyProject ? dirtyProject : project
 
   const renderQ = (q) => {
     // let child = null
@@ -59,13 +60,20 @@ const SpecQuestions = ({
       q.options = q.options.filter((option) => !_.get(option, '__wizard.hiddenByCondition'))
       // disable options if they are disabled by conditions
       q.options.forEach((option) => {
-        option.disabled = _.get(option, '__wizard.disabledByCondition', false)
-      })
-      // if the whole element disable, disable all options
-      if (elemProps.disabled) {
-        q.options.forEach(option => {
+        if (_.get(option, '__wizard.disabledByCondition', false)) {
           option.disabled = true
-        })
+        }
+      })
+
+      if (elemProps.disabled) {
+        const fieldValue = _.get(currentProjectData, q.fieldName)
+        if (q.type === 'radio-group') {
+          q.options = _.filter(q.options, { value: fieldValue})
+        } else if (q.type === 'checkbox-group') {
+          q.options = _.filter(q.options, (option) => (
+            _.includes(fieldValue, option.value)
+          ))
+        }
       }
     }
     // escape value of the question only when it is of string type
@@ -73,8 +81,7 @@ const SpecQuestions = ({
       elemProps.value = _.unescape(elemProps.value)
     }
     if (q.fieldName === 'details.appDefinition.numberScreens') {
-      const p = dirtyProject ? dirtyProject : project
-      const screens = _.get(p, 'details.appScreens.screens', [])
+      const screens = _.get(currentProjectData, 'details.appScreens.screens', [])
       const definedScreens = screens.length
       _.each(q.options, (option) => {
         let maxValue = 0
@@ -201,7 +208,9 @@ const SpecQuestions = ({
         startEditReadOnly={startEditReadOnly}
         stopEditReadOnly={stopEditReadOnly}
       >
-        <ChildElem {...elemProps} />
+        <div className="disabled-items-as-read-only">
+          <ChildElem {...elemProps} />
+        </div>
       </SpecQuestionList.Item>
     )
   }
