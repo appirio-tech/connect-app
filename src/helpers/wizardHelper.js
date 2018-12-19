@@ -656,37 +656,35 @@ const removeValuesOfHiddenQuestions = (template, project) => {
 }
 
 const getStepWhichMustBeUpdatedByCondition = (template, flatProjectData) => {
-  let stepToUpdate = null
-  let hiddenByCondition
-  let disabledByCondition
+  const result = {
+    stepToUpdate: null
+  }
 
   forEachStep(template, (stepObject, step) => {
     if (stepObject.condition) {
-      hiddenByCondition = !evaluate(stepObject.condition, flatProjectData)
+      const hiddenByCondition = !evaluate(stepObject.condition, flatProjectData)
 
       // only update if the condition result has changed
       if (hiddenByCondition !== stepObject.__wizard.hiddenByCondition) {
-        stepToUpdate = step
+        result.stepToUpdate = step
+        result.hiddenByCondition = hiddenByCondition
       }
     }
 
     if (stepObject.disableCondition) {
-      disabledByCondition = evaluate(stepObject.disableCondition, flatProjectData)
+      const disabledByCondition = evaluate(stepObject.disableCondition, flatProjectData)
 
       // only update if the condition result has changed
       if (disabledByCondition !== stepObject.__wizard.disabledByCondition) {
-        stepToUpdate = step
+        result.stepToUpdate = step
+        result.disabledByCondition = disabledByCondition
       }
     }
 
-    return !stepToUpdate
+    return !result.stepToUpdate
   })
 
-  return {
-    stepToUpdate,
-    hiddenByCondition: stepToUpdate ? hiddenByCondition : undefined,
-    disabledByCondition: stepToUpdate ? disabledByCondition : undefined,
-  }
+  return result
 }
 
 const finalizeStep = (template, step, value = true) => {
