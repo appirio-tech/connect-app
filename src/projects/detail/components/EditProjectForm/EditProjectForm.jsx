@@ -21,6 +21,8 @@ import {
   makeStepEditable,
   makeStepReadonly,
   isStepHasDependencies,
+  pushStepDataSnapshot,
+  popStepDataSnapshot,
 } from '../../../../helpers/wizardHelper'
 
 import './EditProjectForm.scss'
@@ -70,9 +72,10 @@ class EditProjectForm extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.makeDeliveredPhaseReadOnly = this.makeDeliveredPhaseReadOnly.bind(this)
     this.startEditReadOnly = this.startEditReadOnly.bind(this)
-    this.cancelEditReadOnly = this.cancelEditReadOnly.bind(this)
+    this.declineEditReadOnly = this.declineEditReadOnly.bind(this)
     this.confirmEditReadOnly = this.confirmEditReadOnly.bind(this)
     this.stopEditReadOnly = this.stopEditReadOnly.bind(this)
+    this.cancelEditReadOnly = this.cancelEditReadOnly.bind(this)
 
     const {
       template,
@@ -84,6 +87,10 @@ class EditProjectForm extends Component {
       hasDependantFields,
       showStartEditConfirmation: false,
     }
+
+    // we will keep there form values before starting editing read-only values
+    // and we will use this data to restore previous values if user press Cancel
+    this.dataSnapshots = []
   }
 
   componentWillMount() {
@@ -154,7 +161,7 @@ class EditProjectForm extends Component {
     }
   }
 
-  cancelEditReadOnly() {
+  declineEditReadOnly() {
     this.setState({
       showStartEditConfirmation: null,
     })
@@ -171,6 +178,7 @@ class EditProjectForm extends Component {
     const { template } = this.state
     let updatedTemplate = template
 
+    pushStepDataSnapshot(this.dataSnapshots, step, template, this.refs.form.getCurrentValues())
     updatedTemplate = makeStepEditable(template, step)
 
     this.setState({
@@ -182,6 +190,26 @@ class EditProjectForm extends Component {
     const { template } = this.state
     let updatedTemplate = template
 
+    // remove saved snapshot
+    popStepDataSnapshot(this.dataSnapshots, step)
+
+    updatedTemplate = makeStepReadonly(template, step)
+
+    this.setState({
+      template: updatedTemplate,
+    })
+  }
+
+  cancelEditReadOnly(step) {
+    const { template } = this.state
+    let updatedTemplate = template
+
+    const savedSnapshot = popStepDataSnapshot(this.dataSnapshots, step)
+
+    this.refs.form.resetModel({
+      ...this.refs.form.getCurrentValues(),
+      ...savedSnapshot
+    })
     updatedTemplate = makeStepReadonly(template, step)
 
     this.setState({
@@ -316,6 +344,7 @@ class EditProjectForm extends Component {
             canManageAttachments={this.props.canManageAttachments}
             startEditReadOnly={this.startEditReadOnly}
             stopEditReadOnly={this.stopEditReadOnly}
+            cancelEditReadOnly={this.cancelEditReadOnly}
           />
           <div className="section-footer section-footer-spec">
             <button className="tc-btn tc-btn-primary tc-btn-md"
@@ -333,7 +362,7 @@ class EditProjectForm extends Component {
           isOpen={!!showStartEditConfirmation}
           className="delete-post-dialog"
           overlayClassName="delete-post-dialog-overlay"
-          onRequestClose={this.cancelEditReadOnly}
+          onRequestClose={this.declineEditReadOnly}
           contentLabel=""
         >
           <div className="modal-title">
@@ -345,7 +374,7 @@ class EditProjectForm extends Component {
           </div>
 
           <div className="button-area flex center action-area">
-            <button className="tc-btn tc-btn-default tc-btn-sm action-btn btn-cancel" onClick={this.cancelEditReadOnly}>Cancel</button>
+            <button className="tc-btn tc-btn-default tc-btn-sm action-btn btn-cancel" onClick={this.declineEditReadOnly}>Cancel</button>
             <button className="tc-btn tc-btn-warning tc-btn-sm action-btn " onClick={this.confirmEditReadOnly}>Continue</button>
           </div>
         </Modal>

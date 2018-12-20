@@ -81,6 +81,7 @@ const SpecSection = props => {
     canManageAttachments,
     startEditReadOnly,
     stopEditReadOnly,
+    cancelEditReadOnly,
   } = props
 
   // make a copy to avoid modifying redux store
@@ -126,10 +127,17 @@ const SpecSection = props => {
         <div className="spec-section-actions">
           <button
             type="button"
+            className="tc-btn tc-btn-default tc-btn-md"
+            onClick={() => cancelEditReadOnly(_.get(subSection, '__wizard.step'))}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
             className="tc-btn tc-btn-primary tc-btn-md"
             onClick={() => stopEditReadOnly(_.get(subSection, '__wizard.step'))}
           >
-            Ok
+            Update
           </button>
         </div>
       )}
@@ -167,6 +175,8 @@ const SpecSection = props => {
           showHidden={showHidden}
           startEditReadOnly={startEditReadOnly}
           stopEditReadOnly={stopEditReadOnly}
+          cancelEditReadOnly={cancelEditReadOnly}
+          isProjectDirty={isProjectDirty}
         />
       )
     case 'notes':

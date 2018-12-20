@@ -39,8 +39,10 @@ const SpecQuestions = ({
   showHidden,
   startEditReadOnly,
   stopEditReadOnly,
+  cancelEditReadOnly,
+  isProjectDirty,
 }) => {
-  const currentProjectData = dirtyProject ? dirtyProject : project
+  const currentProjectData = isProjectDirty ? dirtyProject : project
 
   const renderQ = (q) => {
     // let child = null
@@ -81,7 +83,8 @@ const SpecQuestions = ({
       elemProps.value = _.unescape(elemProps.value)
     }
     if (q.fieldName === 'details.appDefinition.numberScreens') {
-      const screens = _.get(currentProjectData, 'details.appScreens.screens', [])
+      const p = dirtyProject ? dirtyProject : project
+      const screens = _.get(p, 'details.appScreens.screens', [])
       const definedScreens = screens.length
       _.each(q.options, (option) => {
         let maxValue = 0
@@ -207,6 +210,7 @@ const SpecQuestions = ({
         __wizard={q.__wizard}
         startEditReadOnly={startEditReadOnly}
         stopEditReadOnly={stopEditReadOnly}
+        cancelEditReadOnly={cancelEditReadOnly}
       >
         <div className="disabled-items-as-read-only">
           <ChildElem {...elemProps} />

@@ -29,6 +29,7 @@ const SpecQuestionListItem = ({
   __wizard,
   startEditReadOnly,
   stopEditReadOnly,
+  cancelEditReadOnly,
 }) => (
   <div className="spec-question-list-item">
     {icon && <div className="icon-col">{icon}</div>}
@@ -49,10 +50,17 @@ const SpecQuestionListItem = ({
         <div className="spec-section-actions">
           <button
             type="button"
+            className="tc-btn tc-btn-default tc-btn-md"
+            onClick={() => cancelEditReadOnly(_.get(__wizard, 'step'))}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
             className="tc-btn tc-btn-primary tc-btn-md"
             onClick={() => stopEditReadOnly(_.get(__wizard, 'step'))}
           >
-            Ok
+            Update
           </button>
         </div>
       )}

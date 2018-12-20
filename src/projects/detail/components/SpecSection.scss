@@ -27,6 +27,10 @@
     display: flex;
     justify-content: center;
     padding-top: 2 * $base-unit;
+
+    button + button {
+      margin-left: 2 * $base-unit;
+    }
   }
 
   .tc-file-field__inputs {

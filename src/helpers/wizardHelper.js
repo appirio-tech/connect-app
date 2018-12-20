@@ -856,3 +856,72 @@ export const makeStepReadonly = (template, step) => {
 
   return updatedTemplate
 }
+
+const getNextSiblingOrAncestorStep = (template, step) => {
+  const sibling = getNextSiblingStep(template, step)
+
+  if (sibling) {
+    return sibling
+  }
+
+  const children = getStepChildren(template, step)
+
+  if (children.length > 0) {
+    return children[0]
+  }
+
+  return null
+}
+
+const saveStepDataToSnapshot = (snapshot, template, step, flatData) => {
+  const stepObject = getStepObject(template, step)
+  snapshot[stepObject.fieldName] = flatData[stepObject.fieldName]
+
+
+  // as some types of subSections has multiple values we have to save them too
+  const refCodeFieldName = 'details.utm.code'
+  const businessUnitFieldName = 'details.businessUnit'
+  const costCentreFieldName = 'details.costCentre'
+
+  switch(stepObject.type) {
+  case 'project-name':
+    snapshot[refCodeFieldName] = flatData[refCodeFieldName]
+    break
+  case 'project-name-advanced':
+    snapshot[refCodeFieldName] = flatData[refCodeFieldName]
+    snapshot[businessUnitFieldName] = flatData[businessUnitFieldName]
+    snapshot[costCentreFieldName] = flatData[costCentreFieldName]
+    break
+  default:break
+  }
+}
+
+export const pushStepDataSnapshot = (snapshotsStorage, step, template, flatData) => {
+  const snapshot = {}
+
+  saveStepDataToSnapshot(snapshot, template, step, flatData)
+
+  const children = getStepChildren(template, step)
+  if (children.length > 0 && !isStepLevel(children[0], LEVEL.OPTION)) {
+    let tempStep = children[0]
+
+    do {
+      saveStepDataToSnapshot(snapshot, template, tempStep, flatData)
+
+      tempStep = getNextSiblingOrAncestorStep(template, tempStep)
+    } while (tempStep)
+  }
+
+  snapshotsStorage.push({
+    step,
+    snapshot,
+  })
+}
+
+export const popStepDataSnapshot = (snapshotsStorage, step) => {
+  const savedDataIndex = snapshotsStorage.findIndex((item) => _.isEqual(item.step, step))
+  const savedData = savedDataIndex !== -1 ? snapshotsStorage[savedDataIndex] : null
+  snapshotsStorage.splice(savedDataIndex, 1)
+
+  return savedData ? savedData.snapshot : null
+}
