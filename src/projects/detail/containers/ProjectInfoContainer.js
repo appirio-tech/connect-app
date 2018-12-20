@@ -207,7 +207,7 @@ class ProjectInfoContainer extends React.Component {
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
     let enableFileUpload = true
-    if(project.version != 'v2') {
+    if(project.version !== 'v2') {
       const templateId = _.get(project, 'templateId')
       const projectTemplate = _.find(projectTemplates, template => template.id === templateId)
       enableFileUpload = _.some(projectTemplate.scope.sections, section => {
