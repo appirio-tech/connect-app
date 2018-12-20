@@ -290,4 +290,4 @@ const mapStateToProps = ({templates }) => ({
 
 const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, loadDashboardFeeds, loadPhaseFeed }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfoContainer)
+export default connect(null, mapDispatchToProps)(ProjectInfoContainer)
