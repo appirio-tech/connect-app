@@ -59,7 +59,10 @@
         }
 
         .spec-section-title-aside {
+          color: $tc-gray-80;
           margin-left: 4 * $base-unit;
+          font-size: $tc-body-md;
+          -webkit-text-fill-color: $tc-gray-50;
         }
 
         span {
