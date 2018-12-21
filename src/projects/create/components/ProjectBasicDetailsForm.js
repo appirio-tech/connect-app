@@ -12,6 +12,8 @@ import {
   rewindToStep,
   updateStepsByConditions,
   showStepByDir,
+  pushStepDataSnapshot,
+  popStepDataSnapshot,
   STEP_DIR,
   PREVIOUS_STEP_VISIBILITY,
 } from '../../../helpers/wizardHelper'
@@ -32,8 +34,10 @@ class ProjectBasicDetailsForm extends Component {
     this.showNextStep = this.showNextStep.bind(this)
     this.showPrevStep = this.showPrevStep.bind(this)
     this.startEditReadOnly = this.startEditReadOnly.bind(this)
+    this.declineEditReadOnly = this.declineEditReadOnly.bind(this)
     this.cancelEditReadOnly = this.cancelEditReadOnly.bind(this)
     this.confirmEditReadOnly = this.confirmEditReadOnly.bind(this)
+    this.updateEditReadOnly = this.updateEditReadOnly.bind(this)
 
     const incompleteWizardStr = window.localStorage.getItem(LS_INCOMPLETE_WIZARD)
     let incompleteWizard = {}
@@ -61,10 +65,15 @@ class ProjectBasicDetailsForm extends Component {
       isWizardMode,
       previousStepVisibility,
       hasDependantFields,
+      editingReadonlyStep: null
     }
 
     // we don't use for rendering, only for internal needs, so we don't need it in state
     this.currentWizardStep = currentWizardStep
+
+    // we will keep there form values before starting editing read-only values
+    // and we will use this data to restore previous values if user press Cancel
+    this.dataSnapshots = []
   }
 
   startEditReadOnly(step) {
@@ -79,7 +88,7 @@ class ProjectBasicDetailsForm extends Component {
     }
   }
 
-  cancelEditReadOnly() {
+  declineEditReadOnly() {
     this.setState({
       showStartEditConfirmation: null,
     })
@@ -97,16 +106,41 @@ class ProjectBasicDetailsForm extends Component {
     let updatedTemplate = template
 
     step = findRealStep(template, step)
+    pushStepDataSnapshot(this.dataSnapshots, step, template, this.refs.form.getCurrentValues())
     updatedTemplate = rewindToStep(updatedTemplate, this.currentWizardStep, step)
-    this.currentWizardStep = step
 
     this.setState({
       template: updatedTemplate,
+      editingReadonlyStep: step
     })
+  }
 
-    window.localStorage.setItem(LS_INCOMPLETE_WIZARD, JSON.stringify({
-      currentWizardStep: this.currentWizardStep
-    }))
+  cancelEditReadOnly() {
+    const { template, editingReadonlyStep } = this.state
+    let updatedTemplate = template
+
+    const savedSnapshot = popStepDataSnapshot(this.dataSnapshots, editingReadonlyStep)
+
+    const previousFormState = {
+      ...this.refs.form.getCurrentValues(),
+      ...savedSnapshot
+    }
+    updatedTemplate = rewindToStep(updatedTemplate, editingReadonlyStep, this.currentWizardStep)
+
+    this.setState({
+      template: updatedTemplate,
+      editingReadonlyStep: null
+    }, () => {
+      this.refs.form.resetModel(previousFormState)
+    })
+  }
+
+  updateEditReadOnly() {
+    const { editingReadonlyStep } = this.state
+
+    this.currentWizardStep = editingReadonlyStep
+
+    this.showNextStep()
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -190,7 +224,7 @@ class ProjectBasicDetailsForm extends Component {
 
   showStepByDir(evt, dir) {
     // prevent default to avoid form being submitted
-    evt.preventDefault()
+    evt && evt.preventDefault()
 
     const { template } = this.state
     const { updatedTemplate, nextStep } = showStepByDir(template, this.currentWizardStep, dir)
@@ -200,6 +234,7 @@ class ProjectBasicDetailsForm extends Component {
       nextWizardStep: getNextStepToShow(updatedTemplate, nextStep),
       prevWizardStep: dir === STEP_DIR.NEXT ? this.currentWizardStep : getPrevStepToShow(updatedTemplate, nextStep),
       project: this.props.dirtyProject,
+      editingReadonlyStep: null
     })
 
     this.currentWizardStep = nextStep
@@ -228,6 +263,7 @@ class ProjectBasicDetailsForm extends Component {
       showStartEditConfirmation,
       isWizardMode,
       previousStepVisibility,
+      editingReadonlyStep,
     } = this.state
 
     const renderSection = (section, idx) => {
@@ -257,7 +293,7 @@ class ProjectBasicDetailsForm extends Component {
           isOpen={!!showStartEditConfirmation}
           className="delete-post-dialog"
           overlayClassName="delete-post-dialog-overlay"
-          onRequestClose={this.cancelEditReadOnly}
+          onRequestClose={this.declineEditReadOnly}
           contentLabel=""
         >
           <div className="modal-title">
@@ -269,7 +305,7 @@ class ProjectBasicDetailsForm extends Component {
           </div>
 
           <div className="button-area flex center action-area">
-            <button className="tc-btn tc-btn-default tc-btn-sm action-btn btn-cancel" onClick={this.cancelEditReadOnly}>Cancel</button>
+            <button className="tc-btn tc-btn-default tc-btn-sm action-btn btn-cancel" onClick={this.declineEditReadOnly}>Cancel</button>
             <button className="tc-btn tc-btn-warning tc-btn-sm action-btn " onClick={this.confirmEditReadOnly}>Continue</button>
           </div>
         </Modal>
@@ -295,13 +331,20 @@ class ProjectBasicDetailsForm extends Component {
                 disabled={!prevWizardStep}
               >Back</button>
             )}
+            {editingReadonlyStep && (
+              <button
+                className="tc-btn tc-btn-default tc-btn-md"
+                type="button"
+                onClick={this.cancelEditReadOnly}
+              >Cancel</button>
+            )}
             {nextWizardStep ? (
               <button
                 className="tc-btn tc-btn-primary tc-btn-md"
                 type="button"
                 disabled={!canSubmit}
-                onClick={this.showNextStep}
-              >Next</button>
+                onClick={editingReadonlyStep ? this.updateEditReadOnly : this.showNextStep}
+              >{editingReadonlyStep ? 'Update' : 'Next'}</button>
             ) : (
               <button
                 className="tc-btn tc-btn-primary tc-btn-md"
