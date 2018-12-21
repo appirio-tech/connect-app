@@ -45,6 +45,7 @@ const SpecQuestions = ({
   const currentProjectData = isProjectDirty ? dirtyProject : project
 
   const renderQ = (q) => {
+    const isReadOnly = _.get(q, '__wizard.readOnly')
     // let child = null
     // const value =
     const elemProps = {
@@ -55,7 +56,7 @@ const SpecQuestions = ({
       validations: q.required ? 'isRequired' : null,
       validationError: q.validationError,
       validationErrors: q.validationErrors,
-      disabled: _.get(q, '__wizard.readOnly')
+      disabled: isReadOnly
     }
     if (q.options) {
       // don't show options which are hidden by conditions
@@ -199,12 +200,39 @@ const SpecQuestions = ({
     default:
       ChildElem = <noscript />
     }
+    let titleAside = null
+    let textValue = null
+    let shouldHideFormField = false
+
+    // if field is readOnly we will hide some real form fields and show their values as text
+    // for easier reading
+    if (isReadOnly) {
+      switch(q.type) {
+      case 'radio-group': {
+        const option = _.find(q.options, {value: _.get(currentProjectData, q.fieldName)})
+        titleAside = _.get(option, 'label')
+        shouldHideFormField = true
+        break
+      }
+      case 'checkbox-group': {
+        const values = _.get(currentProjectData, q.fieldName)
+        const options = _.filter(q.options, (option) => (
+          _.includes(values, option.value)
+        ))
+        textValue = _.map(options, 'label').join(', ')
+        shouldHideFormField = true
+        break
+      }
+      }
+    }
+
     return (
       <SpecQuestionList.Item
         key={q.fieldName}
         title={q.title}
+        titleAside={titleAside}
         icon={getIcon(q.icon)}
-        description={q.description}
+        description={!isReadOnly ? q.description : null}
         required={q.required || (q.validations && q.validations.indexOf('isRequired') !== -1)}
         hideDescription={elemProps.hideDescription}
         __wizard={q.__wizard}
@@ -212,9 +240,10 @@ const SpecQuestions = ({
         stopEditReadOnly={stopEditReadOnly}
         cancelEditReadOnly={cancelEditReadOnly}
       >
-        <div className="disabled-items-as-read-only">
+        <div style={shouldHideFormField ? {display: 'none'} : {}}>
           <ChildElem {...elemProps} />
         </div>
+        {textValue && <div className="spec-section-readonly-text-value">{textValue}</div>}
       </SpecQuestionList.Item>
     )
   }

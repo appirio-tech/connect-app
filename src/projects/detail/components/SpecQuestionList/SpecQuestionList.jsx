@@ -22,6 +22,7 @@ SpecQuestionList.propTypes = {
 const SpecQuestionListItem = ({
   icon,
   title,
+  titleAside,
   description,
   children,
   required,
@@ -43,7 +44,10 @@ const SpecQuestionListItem = ({
           <IconUIPencil />
         </button>
       )}
-      <h5>{title}{required ? <span>*</span> : null}</h5>
+      <h5>
+        <div>{title}{required ? <span>*</span> : null}</div>
+        {!!titleAside && <div className="spec-section-title-aside">{titleAside}</div>}
+      </h5>
       {children && <div className="child-component">{children}</div>}
       {!hideDescription && <p className={cn({bigger: !icon})}>{description}</p>}
       {_.get(__wizard, 'editReadOnly') && (

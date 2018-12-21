@@ -147,6 +147,7 @@ const SpecSection = props => {
   const onValidate = (isInvalid) => validate(isInvalid)
 
   const renderChild = props => {
+    const isReadOnly = _.get(props, '__wizard.readOnly')
     const {type} = props
     switch(type) {
     case 'tabs': {
@@ -182,9 +183,11 @@ const SpecSection = props => {
     case 'notes':
       return (
         <div>
-          <div className="textarea-title">
-            {props.description}
-          </div>
+          {!isReadOnly && (
+            <div className="textarea-title">
+              {props.description}
+            </div>
+          )}
           <TCFormFields.Textarea
             autoResize
             name={props.fieldName}
@@ -263,9 +266,11 @@ const SpecSection = props => {
                 disabled={ queryParamRefCode && queryParamRefCode.length > 0 }
                 readonly={_.get(props, '__wizard.readOnly')}
               />
-              <div className="refcode-desc">
-                Optional
-              </div>
+              {!isReadOnly && (
+                <div className="refcode-desc">
+                  Optional
+                </div>
+              )}
             </div>
           }
         </div>
@@ -307,9 +312,11 @@ const SpecSection = props => {
                 disabled={ queryParamRefCode && queryParamRefCode.length > 0 }
                 readonly={_.get(props, '__wizard.readOnly')}
               />
-              <div className="refcode-desc">
-                Optional
-              </div>
+              {!isReadOnly && (
+                <div className="refcode-desc">
+                  Optional
+                </div>
+              )}
             </div>
           }
           <div className="textinput-codes">
@@ -325,9 +332,11 @@ const SpecSection = props => {
               wrapperClass="project-codes"
               readonly={_.get(props, '__wizard.readOnly')}
             />
-            <div className="codes-desc">
-              required
-            </div>
+            {!isReadOnly && (
+              <div className="codes-desc">
+                required
+              </div>
+            )}
           </div>
           <div className="textinput-codes">
             <TCFormFields.TextInput
@@ -342,9 +351,11 @@ const SpecSection = props => {
               wrapperClass="project-codes"
               readonly={_.get(props, '__wizard.readOnly')}
             />
-            <div className="codes-desc">
-              required
-            </div>
+            {!isReadOnly && (
+              <div className="codes-desc">
+                required
+              </div>
+            )}
           </div>
         </div>
       )

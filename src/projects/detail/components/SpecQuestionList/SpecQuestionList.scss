@@ -45,14 +45,21 @@
       width: 100%;
 
       > h5 {
+        align-items: top;
         @include roboto-medium;
         font-size: 15px;
+        display: flex;
+        justify-content: space-between;
         line-height: 25px;
         color: $tc-gray-70;
         margin-bottom: 0;
 
         @media screen and (max-width: $screen-md - 1px) {
           margin-bottom: 2 * $base-unit;
+        }
+
+        .spec-section-title-aside {
+          margin-left: 4 * $base-unit;
         }
 
         span {
