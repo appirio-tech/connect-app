@@ -120,7 +120,6 @@ class ProjectBasicDetailsForm extends Component {
     let updatedTemplate = template
 
     const savedSnapshot = popStepDataSnapshot(this.dataSnapshots, editingReadonlyStep)
-
     const previousFormState = {
       ...this.refs.form.getCurrentValues(),
       ...savedSnapshot
@@ -128,9 +127,11 @@ class ProjectBasicDetailsForm extends Component {
     updatedTemplate = rewindToStep(updatedTemplate, editingReadonlyStep, this.currentWizardStep)
 
     this.setState({
+      // first we show back form fields as it were before
       template: updatedTemplate,
       editingReadonlyStep: null
     }, () => {
+      // only after we showed all the fields back we can restore their values
       this.refs.form.resetModel(previousFormState)
     })
   }
@@ -138,6 +139,8 @@ class ProjectBasicDetailsForm extends Component {
   updateEditReadOnly() {
     const { editingReadonlyStep } = this.state
 
+    // removed saved snapshot
+    popStepDataSnapshot(this.dataSnapshots, editingReadonlyStep)
     this.currentWizardStep = editingReadonlyStep
 
     this.showNextStep()
@@ -218,7 +221,6 @@ class ProjectBasicDetailsForm extends Component {
   handleChange(change) {
     // removed check for isChanged argument to fire the PROJECT_DIRTY event for every change in the form
     // this.props.fireProjectDirty(change)
-
     this.props.onProjectChange(change)
   }
 
@@ -253,7 +255,7 @@ class ProjectBasicDetailsForm extends Component {
   }
 
   render() {
-    const { isEditable, submitBtnText } = this.props
+    const { isEditable, submitBtnText, dirtyProject } = this.props
     const {
       project,
       canSubmit,
@@ -273,6 +275,10 @@ class ProjectBasicDetailsForm extends Component {
             <SpecSection
               {...section}
               project={project}
+              dirtyProject={dirtyProject}
+              // when creating a project we can treat project as dirty,
+              // as we didn't have project at all and now creating something
+              isProjectDirty
               sectionNumber={idx + 1}
               showFeaturesDialog={ () => {} }//dummy
               resetFeatures={ () => {} }//dummy

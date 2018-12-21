@@ -875,8 +875,13 @@ const getNextSiblingOrAncestorStep = (template, step) => {
 
 const saveStepDataToSnapshot = (snapshot, template, step, flatData) => {
   const stepObject = getStepObject(template, step)
-  snapshot[stepObject.fieldName] = flatData[stepObject.fieldName]
 
+  // is some step is not a field, don't save anything
+  if (!stepObject.fieldName) {
+    return
+  }
+
+  snapshot[stepObject.fieldName] = flatData[stepObject.fieldName]
 
   // as some types of subSections has multiple values we have to save them too
   const refCodeFieldName = 'details.utm.code'
