@@ -10,7 +10,7 @@ import {
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import { addProjectMember, updateProjectMember, removeProjectMember,
-  loadMemberSuggestions
+  loadMemberSuggestions, loadMemberProfileForSuggestions
 } from '../../actions/projectMember'
 
 
@@ -19,6 +19,7 @@ class TeamManagementContainer extends Component {
   constructor(props) {
     super(props)
     this.onKeywordChange = this.onKeywordChange.bind(this)
+    this.onKeywordPaste = this.onKeywordPaste.bind(this)
     this.onSelectNewMember = this.onSelectNewMember.bind(this)
     this.onAddNewMember = this.onAddNewMember.bind(this)
     this.onToggleAddTeamMember = this.onToggleAddTeamMember.bind(this)
@@ -112,6 +113,13 @@ class TeamManagementContainer extends Component {
     if (keyword.length >= AUTOCOMPLETE_TRIGGER_LENGTH)
       this.props.loadMemberSuggestions(keyword)
     this.setState({ keyword, selectedNewMember: null })
+  }
+
+  onKeywordPaste(keyword) {
+    if (keyword && keyword.length > AUTOCOMPLETE_TRIGGER_LENGTH) {
+      this.props.loadMemberProfileForSuggestions(keyword)
+      this.setState({ keyword, selectedNewMember: null })
+    }
   }
 
   onSelectNewMember(selectedNewMember) {
@@ -208,6 +216,7 @@ class TeamManagementContainer extends Component {
           currentUser={this.props.currentUser}
           members={projectMembers}
           onKeywordChange={this.onKeywordChange}
+          onKeywordPaste={this.onKeywordPaste}
           onSelectNewMember={this.onSelectNewMember}
           onAddNewMember={this.onAddNewMember}
           onToggleNewMemberConfirm={ this.onToggleNewMemberConfirm }
@@ -242,7 +251,8 @@ const mapDispatchToProps = {
   addProjectMember,
   removeProjectMember,
   updateProjectMember,
-  loadMemberSuggestions
+  loadMemberSuggestions,
+  loadMemberProfileForSuggestions,
 }
 
 TeamManagementContainer.propTypes = {
