@@ -3,6 +3,7 @@ import { addProjectMember as addMember,
   updateProjectMember as updateMember,
   loadMemberSuggestions as loadMemberSuggestionsAPI
 } from '../../api/projectMembers'
+import { getUserProfile } from '../../api/users'
 import { loadMembers } from '../../actions/members'
 
 import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
@@ -15,6 +16,20 @@ export function loadMemberSuggestions(value) {
     return dispatch({
       type: LOAD_MEMBER_SUGGESTIONS,
       payload: loadMemberSuggestionsAPI(value)
+    })
+  }
+}
+
+export function loadMemberProfileForSuggestions(value) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_MEMBER_SUGGESTIONS,
+      payload: getUserProfile(value).then((member) => {
+        if (member) {
+          return [member]
+        }
+        return []
+      }).catch(() => loadMemberSuggestionsAPI(value))
     })
   }
 }

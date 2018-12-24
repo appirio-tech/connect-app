@@ -81,6 +81,7 @@ AddTeamMember.propTypes = {
   selectedNewMember: PropTypes.object,
   onToggleAddTeamMember: PropTypes.func.isRequired,
   onKeywordChange: PropTypes.func.isRequired,
+  onKeywordPaste: PropTypes.func.isRequired,
   onAddNewMember: PropTypes.func.isRequired
 }
 
