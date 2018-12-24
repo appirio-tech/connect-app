@@ -120,10 +120,6 @@ class ProjectBasicDetailsForm extends Component {
     let updatedTemplate = template
 
     const savedSnapshot = popStepDataSnapshot(this.dataSnapshots, editingReadonlyStep)
-    const previousFormState = {
-      ...this.refs.form.getCurrentValues(),
-      ...savedSnapshot
-    }
     updatedTemplate = rewindToStep(updatedTemplate, editingReadonlyStep, this.currentWizardStep)
 
     this.setState({
@@ -132,7 +128,13 @@ class ProjectBasicDetailsForm extends Component {
       editingReadonlyStep: null
     }, () => {
       // only after we showed all the fields back we can restore their values
-      this.refs.form.resetModel(previousFormState)
+      this.refs.form.inputs.forEach(component => {
+        const name = component.props.name
+
+        if (!_.isUndefined(savedSnapshot[name])) {
+          component.setValue(savedSnapshot[name])
+        }
+      })
     })
   }
 
@@ -192,12 +194,6 @@ class ProjectBasicDetailsForm extends Component {
     }
   }
 
-  isChanged() {
-    // We check if this.refs.form exists because this may be called before the
-    // first render, in which case it will be undefined.
-    return (this.refs.form && this.refs.form.isChanged())
-  }
-
   enableButton() {
     this.setState( { canSubmit: true })
   }
@@ -207,7 +203,6 @@ class ProjectBasicDetailsForm extends Component {
   }
 
   submit(model) {
-    console.log('submit', this.isChanged())
     this.setState({isSaving: true })
     this.props.submitHandler(model)
   }
@@ -216,11 +211,8 @@ class ProjectBasicDetailsForm extends Component {
    * Handles the change event of the form.
    *
    * @param change changed form model in flattened form
-   * @param isChanged flag that indicates if form actually changed from initial model values
    */
   handleChange(change) {
-    // removed check for isChanged argument to fire the PROJECT_DIRTY event for every change in the form
-    // this.props.fireProjectDirty(change)
     this.props.onProjectChange(change)
   }
 
@@ -267,6 +259,8 @@ class ProjectBasicDetailsForm extends Component {
       previousStepVisibility,
       editingReadonlyStep,
     } = this.state
+
+    console.log('project', project)
 
     const renderSection = (section, idx) => {
       return (

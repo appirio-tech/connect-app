@@ -87,6 +87,9 @@ const SpecSection = props => {
   // make a copy to avoid modifying redux store
   const subSections = _.cloneDeep(props.subSections || [])
 
+  // these types of subSections cannot be displayed as readOnly and are always writable
+  const alwaysWritable = ['tabs', 'files', 'questions']
+
   // replace string icon values in the "tiled-radio-group" questions with icon components
   subSections.forEach((subSection) => {
     (subSection.questions || []).forEach(question => {
@@ -102,7 +105,7 @@ const SpecSection = props => {
 
   const renderSubSection = (subSection, idx) => (
     <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
-      {!subSection.questions && _.get(subSection, '__wizard.readOnly') && (
+      {_.get(subSection, '__wizard.readOnly') && !_.includes(alwaysWritable, subSection.type) && (
         <button
           type="button"
           className="spec-section-edit-button"
@@ -164,7 +167,6 @@ const SpecSection = props => {
       )
     }
     case 'questions':
-    case 'questions-with-cascade':
       return (
         <SpecQuestions
           showFeaturesDialog={showFeaturesDialog}

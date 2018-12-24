@@ -135,11 +135,16 @@ class EditProjectForm extends Component {
     }
 
     if (this.state.hasDependantFields && !_.isEqual(this.props.project, nextProps.project)) {
-      const { updatedTemplate, updatedSomeSteps } = updateStepsByConditions(this.state.template, nextProps.project)
+      const {
+        updatedTemplate,
+        updatedSomeSteps,
+        hidedSomeSteps
+      } = updateStepsByConditions(this.state.template, nextProps.project)
 
       if (updatedSomeSteps) {
         this.setState({
           template: updatedTemplate,
+          project: hidedSomeSteps ? nextProps.project : this.state.project,
         })
       }
     }
@@ -205,15 +210,20 @@ class EditProjectForm extends Component {
     let updatedTemplate = template
 
     const savedSnapshot = popStepDataSnapshot(this.dataSnapshots, step)
-
-    this.refs.form.resetModel({
-      ...this.refs.form.getCurrentValues(),
-      ...savedSnapshot
-    })
     updatedTemplate = makeStepReadonly(template, step)
 
     this.setState({
+      // first we show back form fields as it were before
       template: updatedTemplate,
+    }, () => {
+      // only after we showed all the fields back we can restore their values
+      this.refs.form.inputs.forEach(component => {
+        const name = component.props.name
+
+        if (!_.isUndefined(savedSnapshot[name])) {
+          component.setValue(savedSnapshot[name])
+        }
+      })
     })
   }
 
@@ -249,9 +259,7 @@ class EditProjectForm extends Component {
   }
 
   isChanged() {
-    // We check if this.refs.form exists because this may be called before the
-    // first render, in which case it will be undefined.
-    return (this.refs.form && this.refs.form.isChanged()) || this.state.isFeaturesDirty
+    return !!this.props.project.isDirty
   }
 
   enableButton() {
@@ -306,11 +314,7 @@ class EditProjectForm extends Component {
    * @param isChanged flag that indicates if form actually changed from initial model values
    */
   handleChange(change) {
-    if (this.isChanged()) {
-      this.props.fireProjectDirty(unflatten(change))
-    } else {
-      this.props.fireProjectDirtyUndo()
-    }
+    this.props.fireProjectDirty(unflatten(change))
   }
 
   makeDeliveredPhaseReadOnly(projectStatus) {
@@ -321,6 +325,7 @@ class EditProjectForm extends Component {
   render() {
     const { isEdittable, showHidden } = this.props
     const { project, dirtyProject, template, showStartEditConfirmation } = this.state
+    console.log('project', project)
     const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
       const anySectionInvalid = _.some(template.sections, (s) => s.isInvalid)

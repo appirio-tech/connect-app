@@ -611,7 +611,9 @@ export const updateStepsByConditions = (template, project) => {
     }
 
     updatedTemplate = updateStepObject(updatedTemplate, stepToUpdate, updateRule)
+    hidedSomeSteps = hidedSomeSteps || hiddenByCondition
 
+    // now get the next step
     flatProjectData = flatten(removeValuesOfHiddenQuestions(updatedTemplate, project), { safe: true })
     const prevStep = stepToUpdate
     !({ stepToUpdate, hiddenByCondition, disabledByCondition } = getStepWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData))
@@ -626,8 +628,6 @@ export const updateStepsByConditions = (template, project) => {
         updatedSomeSteps: false,
       }
     }
-
-    hidedSomeSteps = hidedSomeSteps || hiddenByCondition
   }
 
   return {

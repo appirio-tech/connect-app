@@ -73,7 +73,7 @@ class SpecificationContainer extends Component {
   }
 
   render() {
-    const { project, currentMemberRole, isSuperUser, processing, template } = this.props
+    const { project, projectNonDirty, currentMemberRole, isSuperUser, processing, template } = this.props
     const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
@@ -101,10 +101,10 @@ class SpecificationContainer extends Component {
             }}
           </MediaQuery>
         </TwoColsLayout.Sidebar>
-
         <TwoColsLayout.Content>
           <EnhancedEditProjectForm
             project={project}
+            projectNonDirty={projectNonDirty}
             template={template}
             isEdittable={editPriv}
             submitHandler={this.saveProject}
