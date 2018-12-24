@@ -20,6 +20,7 @@ const ProjectEstimationSection = ({ project, templates }) => {
   if (project.version === 'v2') {
     const { products } = project.details
     const productId = products ? products[0] : null
+    console.log(productId)
     // TODO find template id
   } else {
     const templateId = project.templateId
