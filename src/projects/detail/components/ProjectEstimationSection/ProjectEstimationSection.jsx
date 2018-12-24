@@ -1,8 +1,8 @@
 /**
  * Project estimations
- * 
+ *
  * This components should display project estimation values for all types of projects
- * 
+ *
  * NOTE This component has been created during refactoring of the old code and hasn't beed really tested.
  */
 import React from 'react'
@@ -48,7 +48,7 @@ const ProjectEstimationSection = ({ project, templates }) => {
 
 ProjectEstimationSection.propTypes = {
   project: PropTypes.object.isRequired,
-  templates: PropTypes.object.isRequired,
+  templates: PropTypes.array.isRequired,
 }
 
 export default ProjectEstimationSection

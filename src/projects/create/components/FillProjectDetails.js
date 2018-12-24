@@ -95,7 +95,7 @@ FillProjectDetails.propTypes = {
   projectTemplates: PT.array.isRequired,
   userRoles: PT.arrayOf(PT.string),
   processing: PT.bool,
-  templates: PT.object.isRequired,
+  templates: PT.array.isRequired,
   error: PT.oneOfType([
     PT.bool,
     PT.object
