@@ -29,9 +29,7 @@ export function loadMemberProfileForSuggestions(value) {
           return [member]
         }
         return []
-      }).catch((error) => {
-        return loadMemberSuggestionsAPI(value)
-      })
+      }).catch(() => loadMemberSuggestionsAPI(value))
     })
   }
 }
