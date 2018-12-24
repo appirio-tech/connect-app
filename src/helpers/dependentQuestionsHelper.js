@@ -88,7 +88,7 @@ function applyOp(op, b, a) {
   case '<':
     return a < b
   case 'contains':
-    return a.indexOf(b) > -1
+    return (a || []).indexOf(b) > -1
   }
   return 0
 }

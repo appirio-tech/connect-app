@@ -395,8 +395,11 @@ class ProjectWizard extends Component {
     })
   }
 
-  handleOnCreateProject() {
-    this.props.createProject(_.omit(this.state.dirtyProject, '__wizard'))
+  handleOnCreateProject(model) {
+    // add templateId and type to the saved project form
+    _.set(model, 'templateId', _.get(this.state.dirtyProject, 'templateId'))
+    _.set(model, 'type', _.get(this.state.dirtyProject, 'type'))
+    this.props.createProject(model)
   }
 
   handleStepChange(wizardStep) {

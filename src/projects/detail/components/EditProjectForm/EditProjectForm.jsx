@@ -23,6 +23,7 @@ import {
   isStepHasDependencies,
   pushStepDataSnapshot,
   popStepDataSnapshot,
+  removeValuesOfHiddenSteps,
 } from '../../../../helpers/wizardHelper'
 
 import './EditProjectForm.scss'
@@ -304,7 +305,8 @@ class EditProjectForm extends Component {
     //   model.details.appDefinition.features = this.state.project.details.appDefinition.features
     // }
     this.setState({isSaving: true })
-    this.props.submitHandler(model)
+    const modelWithoutHiddenValues = removeValuesOfHiddenSteps(this.state.template, model)
+    this.props.submitHandler(modelWithoutHiddenValues)
   }
 
   /**
@@ -325,7 +327,6 @@ class EditProjectForm extends Component {
   render() {
     const { isEdittable, showHidden } = this.props
     const { project, dirtyProject, template, showStartEditConfirmation } = this.state
-    console.log('project', project)
     const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
       const anySectionInvalid = _.some(template.sections, (s) => s.isInvalid)

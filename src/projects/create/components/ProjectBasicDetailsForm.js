@@ -14,6 +14,7 @@ import {
   showStepByDir,
   pushStepDataSnapshot,
   popStepDataSnapshot,
+  removeValuesOfHiddenSteps,
   STEP_DIR,
   PREVIOUS_STEP_VISIBILITY,
 } from '../../../helpers/wizardHelper'
@@ -138,7 +139,10 @@ class ProjectBasicDetailsForm extends Component {
     })
   }
 
-  updateEditReadOnly() {
+  updateEditReadOnly(evt) {
+    // prevent default to avoid form being submitted
+    evt && evt.preventDefault()
+
     const { editingReadonlyStep } = this.state
 
     // removed saved snapshot
@@ -170,14 +174,6 @@ class ProjectBasicDetailsForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // we receipt property updates from PROJECT_DIRTY REDUX state
-    /* if (nextProps.project.isDirty) return
-    const updatedProject = Object.assign({}, nextProps.project)
-    this.setState({
-      project: updatedProject,
-      isSaving: false,
-      canSubmit: false
-    }) */
     if (this.state.hasDependantFields && !_.isEqual(nextProps.dirtyProject, this.props.dirtyProject)) {
       const {
         updatedTemplate,
@@ -204,7 +200,8 @@ class ProjectBasicDetailsForm extends Component {
 
   submit(model) {
     this.setState({isSaving: true })
-    this.props.submitHandler(model)
+    const modelWithoutHiddenValues = removeValuesOfHiddenSteps(this.state.template, model)
+    this.props.submitHandler(modelWithoutHiddenValues)
   }
 
   /**
@@ -259,8 +256,6 @@ class ProjectBasicDetailsForm extends Component {
       previousStepVisibility,
       editingReadonlyStep,
     } = this.state
-
-    console.log('project', project)
 
     const renderSection = (section, idx) => {
       return (
@@ -338,7 +333,7 @@ class ProjectBasicDetailsForm extends Component {
                 onClick={this.cancelEditReadOnly}
               >Cancel</button>
             )}
-            {nextWizardStep ? (
+            {(nextWizardStep || editingReadonlyStep) ? (
               <button
                 className="tc-btn tc-btn-primary tc-btn-md"
                 type="button"

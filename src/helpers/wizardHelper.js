@@ -146,7 +146,6 @@ export const initWizard = (template, project, incompleteWizard, isReadOptimizedM
   let wizardTemplate = _.cloneDeep(template)
   const isWizardMode = isWizardModeEnabled(wizardTemplate) && !isReadOptimizedMode
   const previousStepVisibility = getPreviousStepVisibility(wizardTemplate)
-  const flatProjectData = flatten(project, { safe: true })
   // try to get the step where we left the wizard
   const lastWizardStep = incompleteWizard && incompleteWizard.currentWizardStep
   // current step will define the first of the wizard in case we have to start the wizard from the beginning
@@ -171,29 +170,20 @@ export const initWizard = (template, project, incompleteWizard, isReadOptimizedM
       step
     }
 
-    // if step has condition, evaluate it
+    // add all found variables from condition to the list of dependant fields of the template
     if (stepObject.condition) {
-      stepObject.__wizard.hiddenByCondition = !evaluate(stepObject.condition, flatProjectData)
-
-      // add all found variables from condition to the list of dependant fields of the template
       wizardTemplate.__wizard.dependantFields = _.uniq([
         ...wizardTemplate.__wizard.dependantFields,
         ...getFieldNamesFromExpression(stepObject.condition)
       ])
     }
+  })
 
-    // if step has disable condition, evaluate it
-    if (stepObject.disableCondition) {
-      stepObject.__wizard.disabledByCondition = evaluate(stepObject.disableCondition, flatProjectData)
+  const updateResult = updateStepsByConditions(wizardTemplate, project)
+  wizardTemplate = updateResult.updatedTemplate
 
-      // add all found variables from disableCondition to the list of dependant fields of the template
-      wizardTemplate.__wizard.dependantFields = _.uniq([
-        ...wizardTemplate.__wizard.dependantFields,
-        ...getFieldNamesFromExpression(stepObject.disableCondition)
-      ])
-    }
-
-    // in read optimized mode we display all the questions as readOnly if they are not hidden by conditions
+  // in read optimized mode we display all the questions as readOnly if they are not hidden by conditions
+  forEachStep(wizardTemplate, (stepObject) => {
     if (isReadOptimizedMode && !stepObject.__wizard.hiddenByCondition) {
       stepObject.__wizard.readOnly = true
     }
@@ -235,8 +225,6 @@ export const initWizard = (template, project, incompleteWizard, isReadOptimizedM
 
     currentWizardStep = lastWizardStep || currentWizardStep
   }
-
-  console.warn('wizardTemplate', wizardTemplate)
 
   return {
     template: wizardTemplate,
@@ -594,7 +582,7 @@ export const updateStepsByConditions = (template, project) => {
   let hidedSomeSteps = false
   let updatedSomeSteps = false
 
-  let flatProjectData = flatten(removeValuesOfHiddenQuestions(updatedTemplate, project), { safe: true })
+  let flatProjectData = flatten(removeValuesOfHiddenSteps(updatedTemplate, project), { safe: true })
   let { stepToUpdate, hiddenByCondition, disabledByCondition } = getStepWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData)
   updatedSomeSteps = !!stepToUpdate
   while (stepToUpdate) {
@@ -614,7 +602,7 @@ export const updateStepsByConditions = (template, project) => {
     hidedSomeSteps = hidedSomeSteps || hiddenByCondition
 
     // now get the next step
-    flatProjectData = flatten(removeValuesOfHiddenQuestions(updatedTemplate, project), { safe: true })
+    flatProjectData = flatten(removeValuesOfHiddenSteps(updatedTemplate, project), { safe: true })
     const prevStep = stepToUpdate
     !({ stepToUpdate, hiddenByCondition, disabledByCondition } = getStepWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData))
     // as conditions in template or some errors in code could potentially lead to infinite loop at this point
@@ -637,19 +625,42 @@ export const updateStepsByConditions = (template, project) => {
   }
 }
 
-const removeValuesOfHiddenQuestions = (template, project) => {
+export const removeValuesOfHiddenSteps = (template, project) => {
   let updatedProject = project
 
-  _.forEach(template.sections, (section) => {
-    _.forEach(section.subSections, (subSection) => {
-      subSection.questions && _.forEach(subSection.questions, (question) => {
-        if (question.__wizard.hiddenByCondition && _.get(project, question.fieldName)) {
-          updatedProject = update(updatedProject, unflatten({
-            [question.fieldName]: { $set: '' }
-          }))
+  forEachStep(template, (stepObject, step) => {
+    const level = getStepLevel(step)
+
+    switch(level) {
+    // if some question is hidden, we remove it's value from the project data
+    case LEVEL.QUESTION:
+      if (stepObject.__wizard.hiddenByCondition && _.get(updatedProject, stepObject.fieldName)) {
+        updatedProject = update(updatedProject, unflatten({
+          [stepObject.fieldName]: { $set: undefined }
+        }))
+      }
+      break
+
+    // if some option is hidden, we remove it's value from the list of values of the parent question
+    case LEVEL.OPTION: {
+      if (stepObject.__wizard.hiddenByCondition) {
+        const questionStep = {...step, optionIndex: -1}
+        const questionStepObject = getStepObject(template, questionStep)
+        const questionValue = _.get(updatedProject, questionStepObject.fieldName)
+
+        if (questionValue && _.isArray(questionValue)) {
+          const optionValueIndex = questionValue.indexOf(stepObject.value)
+
+          if (optionValueIndex > - 1) {
+            updatedProject = update(updatedProject, unflatten({
+              [questionStepObject.fieldName]: { $splice: [[optionValueIndex, 1]] }
+            }))
+          }
         }
-      })
-    })
+      }
+      break
+    }
+    }
   })
 
   return updatedProject

@@ -468,10 +468,17 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
-  case PROJECT_DIRTY: {// payload contains only changed values from the project form
+  case PROJECT_DIRTY: {
     const updatedProject = _.mergeWith({}, _.omit(state.project, 'isDirty'), action.payload,
-      // customizer to override screens array with changed values
+      // customizer to override arrays with changed values
       (objValue, srcValue, key) => {
+        // when we update some array values, we have to replace them completely, rather than merge
+        if (_.isArray(objValue) && _.isArray(srcValue)) {
+          return srcValue
+        }
+        // most likely these cases are particular cases of the upper rule for arrays,
+        // but just in case keep them here for now, until we are sure we can safely remove
+        // this particular cases
         if (key === 'screens' || key === 'features' || key === 'capabilities') {
           return srcValue// srcValue contains the changed values from action payload
         }
