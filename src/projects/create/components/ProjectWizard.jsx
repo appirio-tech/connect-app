@@ -458,6 +458,7 @@ class ProjectWizard extends Component {
         />
         <FillProjectDetails
           project={ project }
+          templates={projectTemplates}
           projectTemplates={ projectTemplates }
           dirtyProject={ dirtyProject }
           processing={ processing}

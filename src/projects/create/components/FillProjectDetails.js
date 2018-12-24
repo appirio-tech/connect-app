@@ -4,6 +4,7 @@ import PT from 'prop-types'
 
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
+import ProjectEstimationSection from '../../detail/components/ProjectEstimationSection'
 import ModalControl from '../../../components/ModalControl'
 import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
 
@@ -36,7 +37,7 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject } = this.props
+    const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject, templates } = this.props
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
@@ -69,6 +70,7 @@ class FillProjectDetails extends Component  {
                     onProjectChange={this.props.onProjectChange}
                     submitBtnText={ submitBtnText }
                   />
+                  <ProjectEstimationSection project={dirtyProject} templates={templates} />
                 </div>
                 {formDisclaimer && (
                   <div className="left-area-footer">
@@ -93,6 +95,7 @@ FillProjectDetails.propTypes = {
   projectTemplates: PT.array.isRequired,
   userRoles: PT.arrayOf(PT.string),
   processing: PT.bool,
+  templates: PT.object.isRequired,
   error: PT.oneOfType([
     PT.bool,
     PT.object
