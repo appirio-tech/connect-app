@@ -33,7 +33,8 @@ class AutoCompleteInput extends React.Component {
 
   render() {
     const {
-      isPopupVisible, searchMembers, keyword, onKeywordChange, onSelectNewMember, onToggleSearchPopup, selectedNewMember
+      isPopupVisible, searchMembers, keyword, onKeywordChange, onSelectNewMember, onToggleSearchPopup,
+      selectedNewMember, onKeywordPaste
     } = this.props
 
     const renderMember = (member, i) => {
@@ -54,6 +55,11 @@ class AutoCompleteInput extends React.Component {
       )
     }
     const _onKeywordChange = e => onKeywordChange(e.target.value)
+    const _onKeywordPaste = e => {
+      e.stopPropagation()
+      e.preventDefault()
+      return onKeywordPaste(e.clipboardData.getData('Text'))
+    }
     const _onToggleSearchPopup = () => onToggleSearchPopup(true)
     return (
       <div className="input-icon-group tc-file-field__inputs">
@@ -77,6 +83,7 @@ class AutoCompleteInput extends React.Component {
           className="tc-file-field__inputs"
           type="text"
           placeholder="username"
+          onPaste={_onKeywordPaste}
           onChange={_onKeywordChange}
           onClick={_onToggleSearchPopup}
           onKeyUp={_onToggleSearchPopup}
