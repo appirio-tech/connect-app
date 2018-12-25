@@ -105,19 +105,9 @@ const allowedOps = ['+', '-', '*', '/', '==', '!=', '&&', '||', '>', '<', 'conta
 // operators that work only with one param
 const oneParamOps = ['!']
 
-// create a list of symbols which we will use to split tokens
-const opsSplitters = allowedOps
-  // we can split by all allowed operators expect text operators as they can be parts of variable names
-  .filter((op) => ['contains', 'hasLength'].indexOf(op) === -1)
-  // before use operators in RegExp, we have to escape special characters
-  .map((op) => op.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'))
-
-// also we will split by parenthesis
-opsSplitters.push('\\(')
-opsSplitters.push('\\)')
-// also we will split by spaces to isolate text operators
-opsSplitters.push('\\s+')
-
+// will split expression into tokens mainly using spaces
+// additionally we let "(", ")", "!" to be used without spaces around
+const opsSplitters = ['\\s+', '\\(', '\\)', '!']
 const splitRegexp = new RegExp('(' + opsSplitters.join('|') + ')')
 
 /**
