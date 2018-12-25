@@ -41,19 +41,20 @@ class Stack {
   }
 }
 
-
-
 /**
  * ex - 4 * 5 - 2
  * @param op2 peeked from ops
  * @param op1 found in the expression
+ *
+ * TODO implementation could be more precise and can be based on JS operator precedence values
+ *      see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
  *
  * @returns true if 'op2' has higher or same precedence as 'op1', otherwise returns false
  */
 function hasPrecedence(op1, op2) {
   if (op2 === '(' || op2 === ')')
     return false
-  if ((op1 === '*' || op1 === '/') && (op2 === '+' || op2 === '-' || op2 === '==' || op2 === '>' || op2 === '<' || op2 === 'contains'))
+  if ((op1 === '*' || op1 === '/' || op1 === '!') && (op2 === '+' || op2 === '-' || op2 === '==' || op2 === '>' || op2 === '<' || op2 === 'contains' || op2 === 'hasLength'))
     return false
   else
     return true
@@ -79,6 +80,8 @@ function applyOp(op, b, a) {
     return a / b
   case '==':
     return a === b
+  case '!=':
+    return a !== b
   case '&&':
     return a && b
   case '||':
@@ -87,14 +90,35 @@ function applyOp(op, b, a) {
     return a > b
   case '<':
     return a < b
+  case '!':
+    return !b
   case 'contains':
     return (a || []).indexOf(b) > -1
+  case 'hasLength':
+    return (a || []).length === b
   }
   return 0
 }
 
 // list of operations allowed by the parser
-const allowedOps = ['+', '-', '*', '/', '==', '&&', '||', '>', '<', 'contains']
+const allowedOps = ['+', '-', '*', '/', '==', '!=', '&&', '||', '>', '<', 'contains', 'hasLength', '!']
+// operators that work only with one param
+const oneParamOps = ['!']
+
+// create a list of symbols which we will use to split tokens
+const opsSplitters = allowedOps
+  // we can split by all allowed operators expect text operators as they can be parts of variable names
+  .filter((op) => ['contains', 'hasLength'].indexOf(op) === -1)
+  // before use operators in RegExp, we have to escape special characters
+  .map((op) => op.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'))
+
+// also we will split by parenthesis
+opsSplitters.push('\\(')
+opsSplitters.push('\\)')
+// also we will split by spaces to isolate text operators
+opsSplitters.push('\\s+')
+
+const splitRegexp = new RegExp('(' + opsSplitters.join('|') + ')')
 
 /**
  * Javascript parser to parse the logical/arithmetic opertaion provided
@@ -107,7 +131,12 @@ const allowedOps = ['+', '-', '*', '/', '==', '&&', '||', '>', '<', 'contains']
  *
  */
 export function evaluate(expression, data) {
-  const tokens = expression.split(' ')
+  const tokens = expression
+    .split(splitRegexp)
+    // remove unnecessary spaces around tokens
+    .map((token) => token.trim())
+    // remove empty tokens
+    .filter((token) => token !== '')
 
   // Stack for operands: 'values'
   const values = new Stack()
@@ -116,32 +145,42 @@ export function evaluate(expression, data) {
   const ops = new Stack()
 
   for (let i = 0; i < tokens.length; i++) {
-    // ignore mistakenly added whitespace in the expression
-    if (tokens[i] === ' ')
-      continue
-
-    if (tokens[i] === '(')
+    if (tokens[i] === '(') {
       ops.push(tokens[i])
-    // Closing brace encountered, solve expression since the last opening brace
-    else if (tokens[i] === ')') {
-      while (ops.peek() !== '(')
-        values.push(applyOp(ops.pop(), values.pop(), values.pop()))
+
+      // Closing brace encountered, solve expression since the last opening brace
+    } else if (tokens[i] === ')') {
+      while (ops.peek() !== '(') {
+        const op = ops.pop()
+        if (oneParamOps.indexOf(op) !== -1) {
+          values.push(applyOp(op, values.pop()))
+        } else {
+          values.push(applyOp(op, values.pop(), values.pop()))
+        }
+      }
       ops.pop()//removing opening brace
-    }
-    // Current token is an operator.
-    else if (allowedOps.indexOf(tokens[i]) > -1) {
+
+      // Current token is an operator.
+    } else if (allowedOps.indexOf(tokens[i]) > -1) {
       /**
        * While top of 'ops' has same or greater precedence to current token,
        * Apply operator on top of 'ops' to top two elements in values stack
        */
-      while (!ops.empty() && hasPrecedence(tokens[i], ops.peek()))
-        values.push(applyOp(ops.pop(), values.pop(), values.pop()))
+      while (!ops.empty() && hasPrecedence(tokens[i], ops.peek())) {
+        const op = ops.pop()
+        if (oneParamOps.indexOf(op) !== -1) {
+          values.push(applyOp(op, values.pop()))
+        } else {
+          values.push(applyOp(op, values.pop(), values.pop()))
+        }
+      }
 
       // Push current token to ops
       ops.push(tokens[i])
+
     } else {
       //console.log(tokens[i])
-      if(tokens[i] in data) {
+      if (tokens[i] in data) {
         //console.log("val : ",data[tokens[i]])
         values.push(_.get(data, tokens[i]))
       } else {
@@ -149,19 +188,26 @@ export function evaluate(expression, data) {
         values.push(true);
         else if(tokens[i] == "false")
         values.push(false); */
-        if(!isNaN(tokens[i]))
+        if (!isNaN(tokens[i])) {
           values.push(parseInt(tokens[i]))
-        else
+        } else {
           //removing single quotes around the text values
           values.push(tokens[i].replace(/'/g, ''))
+        }
       }
     }
   }
   //debugger
   // Parsed expression tokens are pushed to values/ops respectively,
   // Running while loop to evaluate the expression
-  while (!ops.empty())
-    values.push(applyOp(ops.pop(), values.pop(), values.pop()))
+  while (!ops.empty()) {
+    const op = ops.pop()
+    if (oneParamOps.indexOf(op) !== -1) {
+      values.push(applyOp(op, values.pop()))
+    } else {
+      values.push(applyOp(op, values.pop(), values.pop()))
+    }
+  }
   // Top contains result, return it
   return values.pop()
 }
