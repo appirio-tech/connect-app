@@ -257,7 +257,11 @@ const SpecSection = props => {
               readonly={isReadOnly}
             />
           </div>
-          { !queryParamRefCode &&
+          { isReadOnly && (
+              <div className="refcode-read-optimized">{`(Ref Code: ${refCode})`}</div>
+            )
+          }
+          { !queryParamRefCode && !isReadOnly && (
             <div className="textinput-refcode">
               <TCFormFields.TextInput
                 name={refCodeFieldName}
@@ -269,12 +273,11 @@ const SpecSection = props => {
                 disabled={ queryParamRefCode && queryParamRefCode.length > 0 }
                 readonly={isReadOnly}
               />
-              {!isReadOnly && (
                 <div className="refcode-desc">
                   Optional
                 </div>
-              )}
             </div>
+            )
           }
         </div>
       )
