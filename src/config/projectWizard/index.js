@@ -531,13 +531,15 @@ export function getProductEstimate(projectTemplate, productConfig) {
               // right now we are supporting only radio-group and tiled-radio-group type of questions
               if(['checkbox-group'].indexOf(q.type) !== -1 && q.affectsQuickQuote) {
                 const answer = _.get(productConfig, q.fieldName)
-                answer.forEach((a) => {
-                  const qOption = _.find(q.options, (o) => o.value === a)
-                  console.log(qOption)
-                  price += _.get(qOption, 'quoteUp', 0)
-                  minTime += _.get(qOption, 'minTimeUp', 0)
-                  maxTime += _.get(qOption, 'maxTimeUp', 0)
-                })
+                if (answer) {
+                  answer.forEach((a) => {
+                    const qOption = _.find(q.options, (o) => o.value === a)
+                    console.log(qOption)
+                    price += _.get(qOption, 'quoteUp', 0)
+                    minTime += _.get(qOption, 'minTimeUp', 0)
+                    maxTime += _.get(qOption, 'maxTimeUp', 0)
+                  })
+                }
               }
             })
           }
