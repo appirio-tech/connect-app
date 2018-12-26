@@ -200,7 +200,7 @@ const SpecQuestions = ({
     default:
       ChildElem = <noscript />
     }
-    let titleAside = null
+    // let titleAside = null
     let textValue = null
     let shouldHideFormField = false
 
@@ -238,7 +238,7 @@ const SpecQuestions = ({
       <SpecQuestionList.Item
         key={q.fieldName}
         title={q.title}
-        titleAside={titleAside}
+        // titleAside={titleAside}
         icon={getIcon(q.icon)}
         description={!isReadOnly ? q.description : null}
         required={q.required || (q.validations && q.validations.indexOf('isRequired') !== -1)}
