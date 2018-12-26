@@ -197,6 +197,10 @@ const SpecQuestions = ({
         included: false
       })
       break
+    // TODO this is a dummy implementation of rendering add-ons list which should be replaced with real implementation
+    case 'add-ons':
+      ChildElem = () => <div>Add-ons list. Category: {q.category}, Subcategories: {q.subCategories.join(', ')}</div>
+      break
     default:
       ChildElem = <noscript />
     }
