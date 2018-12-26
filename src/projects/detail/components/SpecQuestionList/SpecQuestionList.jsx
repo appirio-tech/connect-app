@@ -31,8 +31,9 @@ const SpecQuestionListItem = ({
   startEditReadOnly,
   stopEditReadOnly,
   cancelEditReadOnly,
+  readOptimized,
 }) => (
-  <div className="spec-question-list-item">
+  <div className={ cn('spec-question-list-item', { 'read-optimized' : readOptimized }) }>
     {icon && <div className="icon-col">{icon}</div>}
     <div className="content-col">
       {_.get(__wizard, 'readOnly') && (

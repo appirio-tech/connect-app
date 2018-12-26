@@ -158,7 +158,7 @@ const SpecQuestions = ({
       break
     case 'checkbox-group':
       ChildElem = TCFormFields.CheckboxGroup
-      _.assign(elemProps, {options: q.options})
+      _.assign(elemProps, {options: q.options, layout: q.layout })
       // child = <TCFormFields.CheckboxGroup name={q.fieldName} label={q.label} value={value} options={q.options} />
       break
     case 'checkbox':
@@ -210,7 +210,15 @@ const SpecQuestions = ({
       switch(q.type) {
       case 'radio-group': {
         const option = _.find(q.options, {value: _.get(currentProjectData, q.fieldName)})
-        titleAside = _.get(option, 'label')
+        // titleAside = _.get(option, 'label')
+        textValue = _.get(option, 'label')
+        shouldHideFormField = true
+        break
+      }
+      case 'tiled-radio-group' : {
+        const option = _.find(q.options, {value: _.get(currentProjectData, q.fieldName)})
+        // titleAside = _.get(option, 'title')
+        textValue = _.get(option, 'title')
         shouldHideFormField = true
         break
       }
@@ -239,6 +247,7 @@ const SpecQuestions = ({
         startEditReadOnly={startEditReadOnly}
         stopEditReadOnly={stopEditReadOnly}
         cancelEditReadOnly={cancelEditReadOnly}
+        readOptimized={shouldHideFormField}
       >
         <div style={shouldHideFormField ? {display: 'none'} : {}}>
           <ChildElem {...elemProps} />

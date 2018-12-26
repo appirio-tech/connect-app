@@ -618,6 +618,10 @@
     align-items: flex-start;
     margin-bottom: 20px;
 
+    &.read-optimized {
+      margin-bottom: 0px;
+    }
+
     @media screen and (max-width: $screen-sm - 1px) {
       flex-direction: column;
       margin-bottom: 11 * $base-unit;

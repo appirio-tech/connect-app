@@ -6,6 +6,7 @@ import Tab from 'appirio-tech-react-components/components/Tabs/Tab'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
 import _ from 'lodash'
+import cn from 'classnames'
 import SpecQuestions from './SpecQuestions'
 import FileListContainer from './FileListContainer'
 import SpecScreens from './SpecScreens'
@@ -116,7 +117,7 @@ const SpecSection = props => {
       )}
       {
         !subSection.hideTitle &&
-        <div className="sub-title">
+        <div className={ cn('sub-title', { 'read-optimized' : _.get(subSection, '__wizard.readOnly')} ) }>
           <h4 className="title">
             {typeof subSection.title === 'function' ? subSection.title(project): subSection.title }
             <span>{((typeof subSection.required === 'function') ? subSection.required(project, subSections) : subSection.required) ? '*' : ''}</span>
@@ -241,7 +242,7 @@ const SpecSection = props => {
       const refCode = _.get(project, refCodeFieldName, '')
       const queryParamRefCode = qs.parse(window.location.search).refCode
       return (
-        <div className="project-name-section">
+        <div className={cn('project-name-section', { 'read-optimized' : isReadOnly} )}>
           <div className="editable-project-name">
             <TCFormFields.TextInput
               name="name"
@@ -253,7 +254,7 @@ const SpecSection = props => {
               validations={props.required ? 'isRequired' : null}
               validationError={props.validationError}
               theme="paper-form-dotted"
-              readonly={_.get(props, '__wizard.readOnly')}
+              readonly={isReadOnly}
             />
           </div>
           { !queryParamRefCode &&
@@ -266,7 +267,7 @@ const SpecSection = props => {
                 maxLength={ PROJECT_REF_CODE_MAX_LENGTH }
                 theme="paper-form-dotted"
                 disabled={ queryParamRefCode && queryParamRefCode.length > 0 }
-                readonly={_.get(props, '__wizard.readOnly')}
+                readonly={isReadOnly}
               />
               {!isReadOnly && (
                 <div className="refcode-desc">
