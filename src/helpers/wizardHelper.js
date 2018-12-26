@@ -461,6 +461,10 @@ const updateStepObject = (template, step, updateRule, level) => {
       updatedTemplate = updateOption(template, sectionIndex, subSectionIndex, questionIndex, optionIndex, updateRule)
     } else if (questionIndex !== -1) {
       updatedTemplate = updateQuestion(template, sectionIndex, subSectionIndex, questionIndex, updateRule)
+      // if we are updating first question of a sub section, update the sub section as well
+      if (questionIndex === 0) {
+        updatedTemplate = updateSubSection(updatedTemplate, sectionIndex, subSectionIndex, updateRule)
+      }
     } else if (subSectionIndex !== -1) {
       updatedTemplate = updateSubSection(template, sectionIndex, subSectionIndex, updateRule)
     } else if (sectionIndex !== -1) {
