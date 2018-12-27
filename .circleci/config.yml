@@ -81,7 +81,7 @@ workflows:
             - test
           filters:
             branches:
-              only: ['dev', 'dev-msinteg', 'feature/project_intake_dependent_questions_v2']
+              only: ['dev', 'dev-msinteg', 'feature/project_intake_dependent_questions_v2', 'feature/create-project-select-add-ons']
       - deployTest02:
           requires:
             - test
