@@ -248,6 +248,15 @@ const SpecQuestions = ({
         shouldHideFormField = true
         break
       }
+      case 'add-ons': {
+        const values = _.get(currentProjectData, q.fieldName)
+        const options = _.filter(elemProps.options, (option) => (
+          _.find(values, { id: _.get(option, 'value.id') })
+        ))
+        textValue = _.map(options, 'label').join(', ')
+        shouldHideFormField = true
+        break
+      }
       }
     }
 

@@ -73,7 +73,7 @@ class SpecificationContainer extends Component {
   }
 
   render() {
-    const { project, projectNonDirty, currentMemberRole, isSuperUser, processing, template } = this.props
+    const { project, projectNonDirty, currentMemberRole, isSuperUser, processing, template, allProductTemplates } = this.props
     const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
@@ -116,6 +116,7 @@ class SpecificationContainer extends Component {
             removeAttachment={this.removeProjectAttachment}
             attachmentsStorePath={attachmentsStorePath}
             canManageAttachments={!!currentMemberRole}
+            productTemplates={allProductTemplates}
             showHidden
           />
         </TwoColsLayout.Content>
@@ -129,6 +130,7 @@ SpecificationContainer.propTypes = {
   currentMemberRole: PropTypes.string,
   processing: PropTypes.bool,
   productTemplates: PropTypes.array.isRequired,
+  allProductTemplates: PropTypes.array.isRequired,
   error: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object
@@ -148,7 +150,8 @@ const mapStateToProps = ({projectState, loadUser, templates}) => {
         projectTemplates,
         projectState.project
       )
-    ) : []
+    ) : [],
+    allProductTemplates: productTemplates,
   }
 }
 

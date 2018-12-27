@@ -325,7 +325,7 @@ class EditProjectForm extends Component {
 
 
   render() {
-    const { isEdittable, showHidden } = this.props
+    const { isEdittable, showHidden, productTemplates } = this.props
     const { project, dirtyProject, template, showStartEditConfirmation } = this.state
     const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
@@ -351,6 +351,7 @@ class EditProjectForm extends Component {
             startEditReadOnly={this.startEditReadOnly}
             stopEditReadOnly={this.stopEditReadOnly}
             cancelEditReadOnly={this.cancelEditReadOnly}
+            productTemplates={productTemplates}
           />
           <div className="section-footer section-footer-spec">
             <button className="tc-btn tc-btn-primary tc-btn-md"
@@ -425,6 +426,7 @@ EditProjectForm.propTypes = {
   addAttachment: PropTypes.func.isRequired,
   updateAttachment: PropTypes.func.isRequired,
   removeAttachment: PropTypes.func.isRequired,
+  productTemplates: PropTypes.array.isRequired
 }
 
 export default EditProjectForm
