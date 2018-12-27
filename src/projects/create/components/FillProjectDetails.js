@@ -37,7 +37,7 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject, templates } = this.props
+    const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject, templates, productTemplates } = this.props
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
@@ -69,6 +69,7 @@ class FillProjectDetails extends Component  {
                     saving={processing}
                     onProjectChange={this.props.onProjectChange}
                     submitBtnText={ submitBtnText }
+                    productTemplates={productTemplates}
                   />
                   <ProjectEstimationSection project={dirtyProject} templates={templates} />
                 </div>
@@ -93,6 +94,7 @@ FillProjectDetails.propTypes = {
   onChangeProjectType: PT.func.isRequired,
   project: PT.object.isRequired,
   projectTemplates: PT.array.isRequired,
+  productTemplates: PT.array.isRequired,
   userRoles: PT.arrayOf(PT.string),
   processing: PT.bool,
   templates: PT.array.isRequired,

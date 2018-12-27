@@ -83,6 +83,7 @@ const SpecSection = props => {
     startEditReadOnly,
     stopEditReadOnly,
     cancelEditReadOnly,
+    productTemplates,
   } = props
 
   // make a copy to avoid modifying redux store
@@ -181,6 +182,7 @@ const SpecSection = props => {
           stopEditReadOnly={stopEditReadOnly}
           cancelEditReadOnly={cancelEditReadOnly}
           isProjectDirty={isProjectDirty}
+          productTemplates={productTemplates}
         />
       )
     case 'notes':
@@ -397,6 +399,7 @@ const SpecSection = props => {
 
 SpecSection.propTypes = {
   project: PropTypes.object.isRequired,
+  productTemplates: PropTypes.array.isRequired,
   sectionNumber: PropTypes.number.isRequired,
   showHidden: PropTypes.bool,
   isCreation: PropTypes.bool,

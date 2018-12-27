@@ -430,7 +430,7 @@ class ProjectWizard extends Component {
   }
 
   render() {
-    const { processing, showModal, userRoles, projectTemplates, projectTypes, projectId, match } = this.props
+    const { processing, showModal, userRoles, projectTemplates, projectTypes, projectId, match, templates } = this.props
     const { project, dirtyProject, wizardStep } = this.state
     const params = match.params
 
@@ -463,6 +463,7 @@ class ProjectWizard extends Component {
           project={ project }
           templates={projectTemplates}
           projectTemplates={ projectTemplates }
+          productTemplates={templates.productTemplates}
           dirtyProject={ dirtyProject }
           processing={ processing}
           onCreateProject={ this.handleOnCreateProject }
@@ -522,6 +523,10 @@ ProjectWizard.propTypes = {
    * Project types list.
    */
   projectTypes: PropTypes.array.isRequired,
+  /**
+   * templates
+   */
+  templates: PropTypes.object.isRequired,
 }
 
 ProjectWizard.defaultProps = {
