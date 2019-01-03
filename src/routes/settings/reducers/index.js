@@ -148,7 +148,7 @@ export default (state = initialState, action) => {
         checkingEmail: null,
         checkedEmail: action.payload.email,
         isEmailAvailable: action.payload.isEmailAvailable,
-        checkingEmailError: null
+        checkingEmailError: action.payload.isEmailAvailable ? null : action.payload.reason
       } : state.system
     }
 
