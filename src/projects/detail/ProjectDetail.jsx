@@ -7,13 +7,23 @@ import _ from 'lodash'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { loadProjectDashboard } from '../actions/projectDashboard'
 import { clearLoadedProject } from '../actions/project'
+import { acceptOrRefuseInvite } from '../actions/projectMember'
+
 import {
   LOAD_PROJECT_FAILURE, PROJECT_ROLE_CUSTOMER, PROJECT_ROLE_OWNER,
-  ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER
+  ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER,
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED
 } from '../../config/constants'
 import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
 import { getProjectProductTemplates, getProjectTemplateById } from '../../helpers/templates'
+import Dialog from '../../components/TeamManagement/Dialog'
+
+
+const JOIN_INVITE_TITLE = 'You\'re invited to join this project'
+
+const JOIN_INVITE_MESSAGE = `Once you join the team you will be able to see the project details,
+  collaborate on project specification and monitor the progress of all deliverables`
 
 const page404 = compose(
   withProps({code:404})
@@ -115,6 +125,21 @@ class ProjectDetail extends Component {
     return role
   }
 
+  onUserInviteAction(isJoining) {
+    this.props.acceptOrRefuseInvite(this.props.match.params.projectId, {
+      userId: this.props.currentUserId,
+      email: this.props.currentUserEmail,
+      status: isJoining ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
+    }).then(()=>{
+      if(!isJoining) {
+        this.props.history.push('/projects/')
+      }else{
+        this.props.loadProjectDashboard(this.props.match.params.projectId);
+      }
+    })
+    
+  }
+
   render() {
     const currentMemberRole = this.getProjectRoleForCurrentUser(this.props)
     const adminRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
@@ -122,15 +147,25 @@ class ProjectDetail extends Component {
     const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
     const isManageUser = this.props.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
     const isCustomerUser = !(isManageUser || isSuperUser)
+    const showUserInvited = this.props.showUserInvited;
     return (
-      <EnhancedProjectDetailView
-        {...this.props}
-        currentMemberRole={currentMemberRole}
-        isSuperUser={isSuperUser}
-        isManageUser={isManageUser}
-        isCustomerUser={isCustomerUser}
-      />
-    )
+      !showUserInvited?
+        <EnhancedProjectDetailView
+          {...this.props}
+          currentMemberRole={currentMemberRole}
+          isSuperUser={isSuperUser}
+          isManageUser={isManageUser}
+          isCustomerUser={isCustomerUser}
+        />:
+        <Dialog
+          onCancel={() => this.onUserInviteAction(false)}
+          onConfirm={() => this.onUserInviteAction(true)}
+          title={JOIN_INVITE_TITLE}
+          content={JOIN_INVITE_MESSAGE}
+          buttonText="Join project"
+          buttonColor="blue"
+        />
+      )
   }
 }
 
@@ -140,6 +175,7 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
 
   return {
     currentUserId: parseInt(loadUser.user.id),
+    currentUserEmail: loadUser.user.email,
     isLoading: projectDashboard.isLoading,
     isProcessing: projectState.processing,
     error: projectState.error,
@@ -156,11 +192,12 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
     ) : [],
     productsTimelines,
     allProductTemplates: templates.productTemplates,
-    currentUserRoles: loadUser.user.roles
+    currentUserRoles: loadUser.user.roles,
+    showUserInvited: projectState.showUserInvited
   }
 }
 
-const mapDispatchToProps = { loadProjectDashboard, clearLoadedProject }
+const mapDispatchToProps = { loadProjectDashboard, clearLoadedProject, acceptOrRefuseInvite }
 
 ProjectDetail.propTypes = {
   project: PropTypes.object,

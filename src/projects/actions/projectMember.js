@@ -3,14 +3,21 @@ import { addProjectMember as addMember,
   updateProjectMember as updateMember,
   loadMemberSuggestions as loadMemberSuggestionsAPI
 } from '../../api/projectMembers'
-import { loadMembers } from '../../actions/members'
+import { createProjectMemberInvite as createProjectMemberInvite,
+  updateProjectMemberInvite as updateProjectMemberInvite
+} from '../../api/projectMemberInvites'
+import { loadProjectDashboard } from './projectDashboard'
+import { loadMembers, loadMembersByHandle } from '../../actions/members'
 
 import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   LOAD_MEMBER_SUGGESTIONS,
   REMOVE_CUSTOMER_INVITE,
   INVITE_TOPCODER_MEMBER,
   REMOVE_TOPCODER_MEMBER_INVITE,
-  INVITE_CUSTOMER
+  INVITE_CUSTOMER,
+  ACCEPT_OR_REFUSE_INVITE,
+  PROJECT_ROLE_CUSTOMER,
+  PROJECT_MEMBER_INVITE_STATUS_CANCELED
 } from '../../config/constants'
 
 
@@ -64,58 +71,91 @@ export function removeProjectMember(projectId, memberId, isUserLeaving) {
   }
 }
 
-export function inviteTopcoderMembers(projectId, items) {
-  const mock = new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(items)
-    }, 2000)
+function inviteMembersWithData(dispatch, projectId, emailIds, handles, role) {
+  return new Promise((resolve, reject) => {
+    return dispatch(loadMembersByHandle(handles))
+      .then(({ value }) => {
+        let req = {};
+        if(value && value.length > 0) {
+          req.userIds = value.map(member => member.userId);
+        } else if(emailIds && emailIds.length > 0) {
+          req.emails = emailIds;
+        }
+        req.role = role;
+        createProjectMemberInvite(projectId, req)
+        .then((res) => resolve(res))
+        .catch(err => reject(err))
+      })
   })
+}
+
+export function inviteTopcoderMembers(projectId, items) {
   return (dispatch) => {
-    dispatch({
+    return dispatch({
       type: INVITE_TOPCODER_MEMBER,
-      payload: mock
+      payload: inviteMembersWithData(dispatch, projectId, items.emails, items.handles, items.role)
     })
   }
 }
 
-export function deleteTopcoderMemberInvite(projectId, item) {
-  const mock = new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(item)
-    }, 2000)
+function deleteTopcoderMemberInviteWithData(projectId, invite) {
+  return new Promise((resolve, reject) => {
+    let req = {};
+    if(invite.item.email) {
+      req.email = invite.item.email;
+    } else {
+      req.userId = invite.item.userId;
+    }
+    req.status = PROJECT_MEMBER_INVITE_STATUS_CANCELED;
+    updateProjectMemberInvite(projectId, req)
+    .then((res) => resolve(res))
+    .catch(err => reject(err))
   })
+}
+
+export function deleteTopcoderMemberInvite(projectId, invite) {
   return (dispatch) => {
     dispatch({
       type: REMOVE_TOPCODER_MEMBER_INVITE,
-      payload: mock
+      payload: deleteTopcoderMemberInviteWithData(projectId, invite)
+    })
+  }
+}
+
+export function deleteProjectInvite(projectId, invite) {
+  return (dispatch) => {
+    dispatch({
+      type: REMOVE_CUSTOMER_INVITE,
+      payload: deleteTopcoderMemberInviteWithData(projectId, invite)
     })
   }
 }
 
 export function inviteProjectMembers(projectId, emailIds) {
-  const mock = new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(emailIds)
-    }, 2000)
-  })
   return (dispatch) => {
-    dispatch({
+    return dispatch({
       type: INVITE_CUSTOMER,
-      payload: mock
+      payload: inviteMembersWithData(dispatch, projectId, emailIds, null, PROJECT_ROLE_CUSTOMER)
     })
   }
 }
 
-export function deleteProjectInvite(projectId, emailId) {
-  const mock = new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(emailId)
-    }, 2000)
+
+function acceptOrRefuseInviteWithData(dispatch, projectId, item) {
+  return new Promise((resolve, reject) => {
+    return updateProjectMemberInvite(projectId, item)
+      .then(() => {
+        return dispatch(loadProjectDashboard(projectId))
+      })
+      .catch(err => reject(err))
   })
+}
+
+export function acceptOrRefuseInvite(projectId, item) {
   return (dispatch) => {
-    dispatch({
-      type: REMOVE_CUSTOMER_INVITE,
-      payload: mock
+    return dispatch({
+      type: ACCEPT_OR_REFUSE_INVITE,
+      payload: acceptOrRefuseInviteWithData(dispatch, projectId, item)
     })
   }
 }

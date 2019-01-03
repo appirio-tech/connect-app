@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import moment from 'moment'
-import { getProjectById, createProject as createProjectAPI,
+import { getProjectById,
+  createProject as createProjectAPI,
   createProjectWithStatus as createProjectWithStatusAPI,
   updateProject as updateProjectAPI,
   deleteProject as deleteProjectAPI,
@@ -12,11 +13,15 @@ import { getProjectById, createProject as createProjectAPI,
   createProjectPhase,
 } from '../../api/projects'
 import {
+  getProjectInviteById,
+} from '../../api/projectMemberInvites'
+import {
   createTimeline,
 } from '../../api/timelines'
 // import { loadProductTimelineWithMilestones } from './productsTimelines'
 import {
   LOAD_PROJECT,
+  LOAD_PROJECT_MEMBER_INVITES,
   CREATE_PROJECT,
   CREATE_PROJECT_STAGE,
   CLEAR_LOADED_PROJECT,
@@ -99,6 +104,31 @@ export function loadProject(projectId) {
       payload: getProjectById(projectId)
     })
   }
+
+  /*return (dispatch) => {
+    return dispatch({
+      type: LOAD_PROJECT,
+      payload: getProjectInviteById(projectId)
+        .then((project) => getProjectById(projectId, dispatch))
+    })
+  }*/
+}
+
+export function loadProjectInvite(projectId) {
+  return (dispatch) => {
+    return dispatch({
+      type: LOAD_PROJECT_MEMBER_INVITES,
+      payload: getProjectInviteById(projectId)
+    })
+  }
+
+  /*return (dispatch) => {
+    return dispatch({
+      type: LOAD_PROJECT,
+      payload: getProjectInviteById(projectId)
+        .then((project) => getProjectById(projectId, dispatch))
+    })
+  }*/
 }
 
 /**

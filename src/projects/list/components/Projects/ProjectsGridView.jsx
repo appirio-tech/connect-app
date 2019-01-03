@@ -20,7 +20,7 @@ import './ProjectsGridView.scss'
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
 const ProjectsGridView = props => {
-  const { projects, members, totalCount, criteria, pageNum, sortHandler, onPageChange,
+  const { projects, members, totalCount, criteria, pageNum, sortHandler, currentUser, onPageChange,
     error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus,
     applyFilters, projectTemplates } = props
 
@@ -143,6 +143,12 @@ const ProjectsGridView = props => {
       sortable: false,
       renderText: item => {
         const url = `/projects/${item.id}`
+        // check whether is the project's member
+        const isMember = _.some(item.members, m => (m.userId === currentUser.userId && m.deletedAt === null))
+        if(isMember) return
+        // check whether has pending invition
+        const isInvited = _.some(item.invites, m => ((m.userId === currentUser.userId || m.email === currentUser.email ) && !m.deletedAt && m.status === 'pending'))
+        if(!isInvited) return
         return (
           <Link to={url} className="spacing">
             <div className="join-btn" style={{margin: '5px'}}>

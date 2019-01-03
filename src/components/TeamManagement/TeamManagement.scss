@@ -293,6 +293,15 @@
           }
         }
 
+        .dropdown-wrap {
+          width: stretch;
+          margin: $base-unit*4 0;
+        }
+
+        .role-drop-down {
+          margin: 0 $base-unit*2;
+        }
+
         .input-container {
           display: flex;
           border-radius: 0 0 $base-unit*2 $base-unit*2;
@@ -314,7 +323,7 @@
           }
 
           input {
-            width: -webkit-fill-available;
+            width: stretch;
             margin: $base-unit*4 $base-unit*2;
           }
 

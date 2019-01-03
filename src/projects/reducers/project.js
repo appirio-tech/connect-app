@@ -1,5 +1,5 @@
 import {
-  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
+  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_MEMBER_INVITES_PENDING, LOAD_PROJECT_MEMBER_INVITES_FAILURE, LOAD_PROJECT_MEMBER_INVITES_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
   CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CREATE_PROJECT_STAGE_PENDING, CREATE_PROJECT_STAGE_SUCCESS, CREATE_PROJECT_STAGE_FAILURE, CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT_PENDING, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   DELETE_PROJECT_PENDING, DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
@@ -15,7 +15,11 @@ import {
   GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS, LOAD_PROJECT_PHASES_PENDING, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
   UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_SUCCESS, UPDATE_PHASE_SUCCESS, UPDATE_PHASE_PENDING, UPDATE_PHASE_FAILURE,
   DELETE_PROJECT_PHASE_PENDING, DELETE_PROJECT_PHASE_SUCCESS, DELETE_PROJECT_PHASE_FAILURE, PHASE_DIRTY_UNDO, PHASE_DIRTY,
-  EXPAND_PROJECT_PHASE, COLLAPSE_PROJECT_PHASE, COLLAPSE_ALL_PROJECT_PHASES, INVITE_CUSTOMER_SUCCESS, REMOVE_CUSTOMER_INVITE_SUCCESS, INVITE_TOPCODER_MEMBER_SUCCESS, REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS, INVITE_TOPCODER_MEMBER_PENDING, REMOVE_CUSTOMER_INVITE_PENDING, REMOVE_TOPCODER_MEMBER_INVITE_PENDING, REMOVE_TOPCODER_MEMBER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_FAILURE, INVITE_CUSTOMER_FAILURE, INVITE_TOPCODER_MEMBER_FAILURE, INVITE_CUSTOMER_PENDING,
+  EXPAND_PROJECT_PHASE, COLLAPSE_PROJECT_PHASE, COLLAPSE_ALL_PROJECT_PHASES, INVITE_CUSTOMER_SUCCESS, REMOVE_CUSTOMER_INVITE_SUCCESS,
+  INVITE_TOPCODER_MEMBER_SUCCESS, REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS, INVITE_TOPCODER_MEMBER_PENDING, REMOVE_CUSTOMER_INVITE_PENDING,
+  REMOVE_TOPCODER_MEMBER_INVITE_PENDING, REMOVE_TOPCODER_MEMBER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_FAILURE,
+  INVITE_CUSTOMER_FAILURE, INVITE_TOPCODER_MEMBER_FAILURE, INVITE_CUSTOMER_PENDING,
+  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING,
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -33,6 +37,7 @@ const initialState = {
   phases: null,
   phasesNonDirty: null,
   isLoadingPhases: false,
+  showUserInvited: false,
   phasesStates: {} // controls opened phases and tabs of the phases
 }
 
@@ -154,6 +159,29 @@ export const projectState = function (state=initialState, action) {
       projectNonDirty: _.cloneDeep(action.payload),
       lastUpdated: new Date()
     })
+
+  case LOAD_PROJECT_MEMBER_INVITES_SUCCESS: {
+    return Object.assign({}, state, {
+      showUserInvited: true
+    })
+  }
+
+  case LOAD_PROJECT_MEMBER_INVITES_PENDING:
+    return Object.assign({}, state, {
+      isLoading: true,
+      showUserInvited: false
+    })
+
+  case ACCEPT_OR_REFUSE_INVITE_PENDING:
+    return Object.assign({}, state, {
+      showUserInvited: true
+    })
+
+  case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
+    return Object.assign({}, state, {
+      showUserInvited: false
+    })
+  }
 
   case CREATE_PROJECT_STAGE_SUCCESS: {
     // as we additionally loaded products to the phase object we have to keep them
@@ -453,54 +481,28 @@ export const projectState = function (state=initialState, action) {
 
   case INVITE_CUSTOMER_SUCCESS: {
     const newState = Object.assign({}, state)
-    newState.project.projectTeamInvites = newState.project.projectTeamInvites || []
-    action.payload.forEach(email => {
-      newState.project.projectTeamInvites.push({
-        email,
-        time: Date.now()
-      })
-    })
+    newState.project.invites.push(...action.payload);
     newState.processingInvites = false
     return newState
   }
 
   case INVITE_TOPCODER_MEMBER_SUCCESS: {
     const newState = Object.assign({}, state)
-    newState.project.topcoderTeamInvites = newState.project.topcoderTeamInvites || []
-    action.payload.forEach(item => {
-      newState.project.topcoderTeamInvites.push({
-        item,
-        time: Date.now()
-      })
-    })
+    newState.project.invites.push(...action.payload);
     newState.processingInvites = false
     return newState
   }
 
   case REMOVE_CUSTOMER_INVITE_SUCCESS: {
     const newState = Object.assign({}, state)
-    newState.project.projectTeamInvites = newState.project.projectTeamInvites || []
-    const idx = newState.project.projectTeamInvites.findIndex(item => {
-      if (item.email === action.payload)
-        return true
-    })
-    if (idx !== -1) {
-      newState.project.projectTeamInvites.splice(idx, 1)
-    }
+    _.remove(newState.project.invites,i=>action.payload.id==i.id);
     newState.processingInvites = false
     return newState
   }
 
   case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS: {
     const newState = Object.assign({}, state)
-    newState.project.topcoderTeamInvites = newState.project.topcoderTeamInvites || []
-    const idx = newState.project.topcoderTeamInvites.findIndex(item => {
-      if (item.item === action.payload)
-        return true
-    })
-    if (idx !== -1) {
-      newState.project.topcoderTeamInvites.splice(idx, 1)
-    }
+    _.remove(newState.project.invites,i=>action.payload.id==i.id);
     newState.processingInvites = false
     return newState
   }
@@ -611,6 +613,8 @@ export const projectState = function (state=initialState, action) {
   case ADD_PRODUCT_ATTACHMENT_FAILURE:
   case REMOVE_PRODUCT_ATTACHMENT_FAILURE:
   case DELETE_PROJECT_PHASE_FAILURE:
+  case LOAD_PROJECT_MEMBER_INVITES_FAILURE:
+  case ACCEPT_OR_REFUSE_INVITE_FAILURE:
     return Object.assign({}, state, {
       isLoading: false,
       processing: false,

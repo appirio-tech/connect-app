@@ -46,9 +46,12 @@ class Dialog extends React.Component {
     })
   }
 
+  // SEND INVITES
   sendInvites() {
     let emails = this.state.inviteText.split(/[,;]/g)
     emails = emails.map(email => email.trim())
+    //emails = emails.filter((email) => /(.+)@(.+){2,}\.(.+){2,}/.test(email))
+
     this.props.sendInvite(emails)
     this.setState({clearText: true})
   }
@@ -113,7 +116,7 @@ class Dialog extends React.Component {
             }))}
             {(invites.map((invite) => {
               const remove = () => {
-                removeInvite(invite.email)
+                removeInvite(invite)
               }
               i++
               return (
@@ -130,13 +133,13 @@ class Dialog extends React.Component {
                       {invite.email}
                     </span>
                     <span className="email-date">
-                      Invited {moment(invite.time).format('MMM D, YY')}
+                      Invited {moment(invite.createdAt).format('MMM D, YY')}
                     </span>
                   </div>
                   {showRemove && <div className="member-remove" onClick={remove}>
                     Remove
                     <span className="email-date">
-                      Invited {moment(invite.time).format('MMM D, YY')}
+                      Invited {moment(invite.createdAt).format('MMM D, YY')}
                     </span>
                   </div>}
                 </div>

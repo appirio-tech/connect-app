@@ -23,10 +23,6 @@ const userShape = PropTypes.shape({
 const REMOVE_INVITATION_TITLE = 'You\'re about to remove an invitation'
 const REMOVE_TITLE = 'You\'re about to delete a member from the team'
 const LEAVE_TITLE = 'You\'re about to leave the project'
-const JOIN_INVITE_TITLE = 'You\'re invited to join this project'
-
-const JOIN_INVITE_MESSAGE = `Once you join the team you will be able to see the project details,
-  collaborate on project specification and monitor the progress of all deliverables`
 
 const LEAVE_MESSAGE = `Once you leave, somebody on your team has to add you for you to be
   for you to be able to see the project. Do you stil want to leave?`
@@ -59,9 +55,9 @@ class TeamManagement extends React.Component {
     const {
       currentUser, members, deletingMember, isAddingTeamMember, onMemberDeleteConfirm, onMemberDelete, isShowJoin,
       showNewMemberConfirmation, onJoin, onJoinConfirm, onShowProjectDialog, isShowProjectDialog,
-      projectTeamInvites, onProjectInviteDeleteConfirm, onProjectInviteSend, deletingInvite,
+      projectTeamInvites, onProjectInviteDeleteConfirm, onProjectInviteSend, deletingInvite, changeRole,
       onDeleteInvite, isShowTopcoderDialog, onShowTopcoderDialog, processingInvites, processingMembers,
-      onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, showUserInvited, onUserInviteAction
+      onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites
     } = this.props
     const currentMember = members.filter((member) => member.userId === currentUser.userId)[0]
     const modalActive = isAddingTeamMember || deletingMember || isShowJoin || showNewMemberConfirmation || deletingInvite
@@ -189,6 +185,7 @@ class TeamManagement extends React.Component {
               addUsers={onTopcoderInviteSend}
               invites={topcoderTeamInvites}
               removeInvite={removeInvite}
+              changeRole={changeRole}
             />
           )
         })())}
@@ -221,37 +218,24 @@ class TeamManagement extends React.Component {
           const onClickCancel = () => onDeleteInvite(null)
           const onClickConfirm = () => {
             if (deletingInvite.type === 'project') {
-              onProjectInviteDeleteConfirm(deletingInvite.item)
+              onProjectInviteDeleteConfirm(deletingInvite)
             } else {
-              onTopcoderInviteDeleteConfirm(deletingInvite.item)
+              onTopcoderInviteDeleteConfirm(deletingInvite)
             }
           }
+          const identifier = deletingInvite.item.email?deletingInvite.item.email:deletingInvite.item.member.handle;
           return (
             <Dialog
               disabled={processingInvites}
               onCancel={onClickCancel}
               onConfirm={onClickConfirm}
               title={REMOVE_INVITATION_TITLE}
-              content={REMOVE_INVITE_MESSAGE.replace('USEREMAIL', deletingInvite.item)}
+              content={REMOVE_INVITE_MESSAGE.replace('USEREMAIL', identifier)}
               buttonText="Remove invitation"
               buttonColor="red"
             />
           )
         })())}
-        {showUserInvited && (() => {
-          const onClickCancel = () => onUserInviteAction(false)
-          const onClickConfirm = () => onUserInviteAction(true)
-          return (
-            <Dialog
-              onCancel={onClickCancel}
-              onConfirm={onClickConfirm}
-              title={JOIN_INVITE_TITLE}
-              content={JOIN_INVITE_MESSAGE}
-              buttonText="Join project"
-              buttonColor="blue"
-            />
-          )
-        })()}
       </div>
     )
   }
@@ -360,6 +344,11 @@ TeamManagement.propTypes = {
   onTopcoderInviteSend: PropTypes.func,
 
   /**
+   * Callback to send member role
+   */
+  changeRole: PropTypes.func,
+
+  /**
    * Callback to delete email invitation
    */
   onProjectInviteDeleteConfirm: PropTypes.func,
@@ -388,16 +377,6 @@ TeamManagement.propTypes = {
    * Flag indicates if invite API is running
    */
   processingInvites: PropTypes.bool.isRequired,
-
-  /**
-   * Flag indicates if user invited dialog must be shown
-   */
-  showUserInvited: PropTypes.bool,
-
-  /**
-   * Callback to set the accept or reject status of invite
-   */
-  onUserInviteAction: PropTypes.func,
 }
 
 export default uncontrollable(TeamManagement, {
