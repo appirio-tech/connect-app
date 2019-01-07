@@ -128,7 +128,7 @@ class Dialog extends React.Component {
               const lastName = _.get(member, 'lastName', '')
               let userFullName = `${firstName} ${lastName}`
               userFullName = userFullName.trim().length > 0 ? userFullName : 'Connect user'
-              const role = _.find(this.roles,r=>r.value == member.role).title;
+              const role = _.find(this.roles, r => r.value === member.role).title
               return (
                 <div
                   key={i}
@@ -159,7 +159,7 @@ class Dialog extends React.Component {
                     if (!isMember || (!currentUser.isAdmin && !currentUser.isManager)) {
                       return (
                         <div className="member-type-wrapper">
-                          <div className={`member-type`}>
+                          <div className="member-type">
                             {role}
                           </div>
                         </div>
@@ -191,7 +191,7 @@ class Dialog extends React.Component {
               const remove = () => {
                 removeInvite(invite)
               }
-              const username = invite.member?invite.member.handle: invite.userId;
+              const username = invite.member ? invite.member.handle : invite.userId
               i++
               return (
                 <div

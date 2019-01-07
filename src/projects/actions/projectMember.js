@@ -75,16 +75,16 @@ function inviteMembersWithData(dispatch, projectId, emailIds, handles, role) {
   return new Promise((resolve, reject) => {
     return dispatch(loadMembersByHandle(handles))
       .then(({ value }) => {
-        let req = {};
+        const req = {}
         if(value && value.length > 0) {
-          req.userIds = value.map(member => member.userId);
+          req.userIds = value.map(member => member.userId)
         } else if(emailIds && emailIds.length > 0) {
-          req.emails = emailIds;
+          req.emails = emailIds
         }
-        req.role = role;
+        req.role = role
         createProjectMemberInvite(projectId, req)
-        .then((res) => resolve(res))
-        .catch(err => reject(err))
+          .then((res) => resolve(res))
+          .catch(err => reject(err))
       })
   })
 }
@@ -100,16 +100,16 @@ export function inviteTopcoderMembers(projectId, items) {
 
 function deleteTopcoderMemberInviteWithData(projectId, invite) {
   return new Promise((resolve, reject) => {
-    let req = {};
+    const req = {}
     if(invite.item.email) {
-      req.email = invite.item.email;
+      req.email = invite.item.email
     } else {
-      req.userId = invite.item.userId;
+      req.userId = invite.item.userId
     }
-    req.status = PROJECT_MEMBER_INVITE_STATUS_CANCELED;
+    req.status = PROJECT_MEMBER_INVITE_STATUS_CANCELED
     updateProjectMemberInvite(projectId, req)
-    .then((res) => resolve(res))
-    .catch(err => reject(err))
+      .then((res) => resolve(res))
+      .catch(err => reject(err))
   })
 }
 

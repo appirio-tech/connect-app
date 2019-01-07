@@ -130,11 +130,11 @@ class ProjectDetail extends Component {
       userId: this.props.currentUserId,
       email: this.props.currentUserEmail,
       status: isJoining ? PROJECT_MEMBER_INVITE_STATUS_ACCEPTED : PROJECT_MEMBER_INVITE_STATUS_REFUSED
-    }).then(()=>{
+    }).then(() => {
       if(!isJoining) {
         this.props.history.push('/projects/')
-      }else{
-        this.props.loadProjectDashboard(this.props.match.params.projectId);
+      } else {
+        this.props.loadProjectDashboard(this.props.match.params.projectId)
       }
     })
     
@@ -147,7 +147,7 @@ class ProjectDetail extends Component {
     const powerRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER]
     const isManageUser = this.props.currentUserRoles.some((role) => powerRoles.indexOf(role) !== -1)
     const isCustomerUser = !(isManageUser || isSuperUser)
-    const showUserInvited = this.props.showUserInvited;
+    const showUserInvited = this.props.showUserInvited
     return (
       !showUserInvited?
         <EnhancedProjectDetailView
@@ -165,7 +165,7 @@ class ProjectDetail extends Component {
           buttonText="Join project"
           buttonColor="blue"
         />
-      )
+    )
   }
 }
 

@@ -6,7 +6,6 @@ import _ from 'lodash'
 import {
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN,
   PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER,
-  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import { addProjectMember, updateProjectMember, removeProjectMember,
@@ -105,16 +104,16 @@ class TeamManagementContainer extends Component {
   }
 
   annotateInvites(invites, members){
-    return _.map(invites,i=>{
-      i.member = _.find(members,m=>m.userId==i.userId);
-      return i;
-    });
+    return _.map(invites, i => {
+      i.member = _.find(members, m => m.userId === i.userId)
+      return i
+    })
   }
 
   render() {
     const projectMembers = this.anontateMemberProps()
-    const projectTeamInvites = this.annotateInvites(this.props.projectTeamInvites,this.props.allMembers)
-    const topcoderTeamInvites = this.annotateInvites(this.props.topcoderTeamInvites,this.props.allMembers)
+    const projectTeamInvites = this.annotateInvites(this.props.projectTeamInvites, this.props.allMembers)
+    const topcoderTeamInvites = this.annotateInvites(this.props.topcoderTeamInvites, this.props.allMembers)
     return (
       <div>
         <TeamManagement
@@ -154,8 +153,8 @@ const mapStateToProps = ({ loadUser, members, projectState }) => {
     allMembers: _.values(members.members),
     processingInvites: projectState.processingInvites,
     processingMembers: projectState.processingMembers,
-    topcoderTeamInvites: _.filter(projectState.project.invites, i=>i.role!='customer'),
-    projectTeamInvites: _.filter(projectState.project.invites, i=>i.role=='customer')
+    topcoderTeamInvites: _.filter(projectState.project.invites, i => i.role !== 'customer'),
+    projectTeamInvites: _.filter(projectState.project.invites, i => i.role === 'customer')
   }
 }
 

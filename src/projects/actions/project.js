@@ -484,8 +484,8 @@ export function firePhaseDirty(dirtyPhase, phaseId) {
       type: PHASE_DIRTY,
       payload: {
         dirtyPhase,
-        phaseId }
-
+        phaseId
+      }
     })
   }
 }

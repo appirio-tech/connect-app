@@ -481,28 +481,28 @@ export const projectState = function (state=initialState, action) {
 
   case INVITE_CUSTOMER_SUCCESS: {
     const newState = Object.assign({}, state)
-    newState.project.invites.push(...action.payload);
+    newState.project.invites.push(...action.payload)
     newState.processingInvites = false
     return newState
   }
 
   case INVITE_TOPCODER_MEMBER_SUCCESS: {
     const newState = Object.assign({}, state)
-    newState.project.invites.push(...action.payload);
+    newState.project.invites.push(...action.payload)
     newState.processingInvites = false
     return newState
   }
 
   case REMOVE_CUSTOMER_INVITE_SUCCESS: {
     const newState = Object.assign({}, state)
-    _.remove(newState.project.invites,i=>action.payload.id==i.id);
+    _.remove(newState.project.invites, i => action.payload.id === i.id)
     newState.processingInvites = false
     return newState
   }
 
   case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS: {
     const newState = Object.assign({}, state)
-    _.remove(newState.project.invites,i=>action.payload.id==i.id);
+    _.remove(newState.project.invites, i => action.payload.id === i.id)
     newState.processingInvites = false
     return newState
   }

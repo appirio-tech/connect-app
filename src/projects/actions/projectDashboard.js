@@ -19,7 +19,7 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
   return dispatch(loadProject(projectId))
     .then(({ value: project }) => {
       let userIds = _.map(project.members, 'userId')
-      userIds = _.union(userIds,_.map(project.invites, 'userId'));
+      userIds = _.union(userIds, _.map(project.invites, 'userId'))
 
       // this is to remove any nulls from the list (dev had some bad data)
       _.remove(userIds, i => !i)
