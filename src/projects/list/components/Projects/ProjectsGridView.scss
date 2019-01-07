@@ -30,13 +30,19 @@ $screen-one-column: 720px;
       }
 
       .item-customer {
-        flex: 2 2 187px;
-        min-width: 187px;
+        flex: 2 2 150px;
+        min-width: 150px;
       }
 
       .item-manager {
         flex: 2 2 100px;
         min-width: 100px;
+      }
+
+      .item-join {
+        max-width: 125px;
+        width: 125px;
+        padding-right: 10px;
       }
 
       .item-status {
