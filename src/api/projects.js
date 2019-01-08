@@ -44,7 +44,7 @@ export function getProjectSuggestions() {
 
 
 /**
- * Get a project basd on it's id
+ * Get a project based on it's id
  * @param  {integer} projectId unique identifier of the project
  * @return {object}           project returned by api
  */
