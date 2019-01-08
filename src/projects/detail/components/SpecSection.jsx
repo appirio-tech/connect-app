@@ -117,6 +117,15 @@ const SpecSection = props => {
 
   const renderChild = props => {
     const {type} = props
+
+    let additionalClass = ''
+    if (props.layout) {
+      const spacing = _.get(props.layout, 'spacing', '')
+      if (spacing) {
+        additionalClass += (spacing + ' ')
+      }
+    }
+
     switch(type) {
     case 'tabs': {
       const tabs = _.get(props, 'tabs')
@@ -126,7 +135,7 @@ const SpecSection = props => {
         </Tab>
       )
       return (
-        <Tabs defaultActiveKey={1}>
+        <Tabs additionalClass={additionalClass} defaultActiveKey={1}>
           {tabs.map(renderTab)}
         </Tabs>
       )
@@ -134,9 +143,11 @@ const SpecSection = props => {
     case 'questions':
       return (
         <SpecQuestions
+          additionalClass={additionalClass}
           showFeaturesDialog={showFeaturesDialog}
           resetFeatures={resetFeatures}
           questions={props.questions}
+          layout={props.layout}
           project={project}
           dirtyProject={dirtyProject}
           isRequired={props.required}
@@ -145,7 +156,7 @@ const SpecSection = props => {
       )
     case 'notes':
       return (
-        <div>
+        <div className={additionalClass}>
           <div className="textarea-title">
             {props.description}
           </div>
@@ -170,6 +181,7 @@ const SpecSection = props => {
       category = 'product' === category ? `${category}#${projectLatest.id}` : category
       return (
         <FileListContainer
+          additionalClass={additionalClass}
           project={projectLatest}
           files={files}
           category={category}
@@ -185,6 +197,7 @@ const SpecSection = props => {
       const screens = _.get(project, props.fieldName, [])
       return (
         <SpecScreens
+          additionalClass={additionalClass}
           name={props.fieldName}
           screens={screens}
           questions={props.questions}
@@ -199,7 +212,7 @@ const SpecSection = props => {
       const refCode = _.get(project, refCodeFieldName, '')
       const queryParamRefCode = qs.parse(window.location.search).refCode
       return (
-        <div className="project-name-section">
+        <div className={'project-name-section ' + additionalClass}>
           <div className="editable-project-name">
             <TCFormFields.TextInput
               name="name"
@@ -241,7 +254,7 @@ const SpecSection = props => {
       const costCentreFieldName = 'details.costCentre'
       const costCentre = _.get(project, costCentreFieldName, '')
       return (
-        <div className="project-name-section">
+        <div className={'project-name-section ' + additionalClass}>
           <div className="editable-project-name">
             <TCFormFields.TextInput
               name="name"
