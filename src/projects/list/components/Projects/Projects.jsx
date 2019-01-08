@@ -255,7 +255,8 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
       userId: loadUser.user.userId,
       firstName: loadUser.user.firstName,
       lastName: loadUser.user.lastName,
-      roles: loadUser.user.roles
+      roles: loadUser.user.roles,
+      email: loadUser.user.email
     },
     isLoading   : projectSearch.isLoading,
     error       : projectSearch.error,
