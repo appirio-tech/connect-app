@@ -6,12 +6,12 @@ require('./SpecQuestionList.scss')
 
 const SpecQuestionList = ({ children, layout, additionalClass }) => {
   let layoutClass = ''
-  if (layout) {
-    const direction = _.get(layout, 'direction', '')
-    if (direction) {
-      layoutClass += ('direction-' + direction + ' ')
-    }
+  const direction = _.get(layout, 'direction', '')
+
+  if (direction) {
+    layoutClass += direction
   }
+
   return (
     <div className={'spec-question-list ' + layoutClass + ' ' + additionalClass}>
       { children }
