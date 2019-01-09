@@ -2,11 +2,11 @@
 
 :global {
   .spec-question-list {
-    &.direction-horizontal {
+    &.horizontal {
       display: flex;
       flex-direction: row;
     }
-    &.direction-horizontal.space .spec-question-list-item {
+    &.horizontal.codes .spec-question-list-item {
       margin-right: 10px;
     }
   }
@@ -36,7 +36,7 @@
         border-bottom: 1px solid #959596;
         color: #404041;
         margin: 0;
-      
+
         @include placeholder {
           @include roboto;
           color: $tc-gray-30;

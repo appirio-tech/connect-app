@@ -119,11 +119,10 @@ const SpecSection = props => {
     const {type} = props
 
     let additionalClass = ''
-    if (props.layout) {
-      const spacing = _.get(props.layout, 'spacing', '')
-      if (spacing) {
-        additionalClass += (spacing + ' ')
-      }
+    const spacing = _.get(props.layout, 'spacing', '')
+
+    if (spacing) {
+      additionalClass += spacing
     }
 
     switch(type) {

@@ -72,10 +72,7 @@ const SpecQuestions = ({questions, layout, additionalClass, project, dirtyProjec
     }
 
     let additionalItemClass = ''
-    let spacing = _.get(q, 'spacing', '')
-    if (spacing) {
-      spacing = ('spacing-' + spacing + ' ')
-    }
+    const spacing = _.get(q, 'spacing', '')
 
     let ChildElem = ''
     switch (q.type) {
@@ -89,7 +86,7 @@ const SpecQuestions = ({questions, layout, additionalClass, project, dirtyProjec
       break
     case 'textinput':
       ChildElem = TCFormFields.TextInput
-      elemProps.wrapperClass = ('row ' + spacing)
+      elemProps.wrapperClass = 'row ' + spacing
       if (spacing.includes('spacing-gray-input')) {
         elemProps.placeholder = q.title
       }
