@@ -5,15 +5,10 @@ import _ from 'lodash'
 require('./SpecQuestionList.scss')
 
 const SpecQuestionList = ({ children, layout, additionalClass }) => {
-  let layoutClass = ''
-  const direction = _.get(layout, 'direction', '')
-
-  if (direction) {
-    layoutClass += direction
-  }
+  const directionClass = _.get(layout, 'direction', '')
 
   return (
-    <div className={'spec-question-list ' + layoutClass + ' ' + additionalClass}>
+    <div className={'spec-question-list ' + directionClass + ' ' + additionalClass}>
       { children }
     </div>
   )
