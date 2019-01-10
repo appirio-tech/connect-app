@@ -1,5 +1,6 @@
 import React from 'react'
 import PT from 'prop-types'
+import _ from 'lodash'
 import { withRouter, Link } from 'react-router-dom'
 import { getProjectRoleForCurrentUser } from '../../../helpers/projectHelper'
 import ProjectCardHeader from './ProjectCardHeader'
@@ -12,9 +13,9 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
   if (!project) return null
   const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
   // check whether is the project's member
-  const isMember = project.members.some(m => (m.userId === currentUser.userId && m.deletedAt === null))
+  const isMember = _.some(project.members, m => (m.userId === currentUser.userId && m.deletedAt === null))
   // check whether has pending invition
-  const isInvited = project.invites.some(m => ((m.userId === currentUser.userId || m.email === currentUser.email) && !m.deletedAt && m.status === 'pending'))
+  const isInvited = _.some(project.invites, m => ((m.userId === currentUser.userId || m.email === currentUser.email) && !m.deletedAt && m.status === 'pending'))
   return (
     <div
       className={className}
