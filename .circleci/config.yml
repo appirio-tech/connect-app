@@ -4,6 +4,11 @@ jobs:
     docker:
       - image: circleci/node:8.9.4-browsers
     steps:
+      - run:
+          name: checking out tc-deploy for environment
+          command: |
+            git clone --branch dev https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
+            cp ./../buildscript/buildenv.sh .
       - checkout
       - restore_cache:
           key: test-node-modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "package-lock.json" }}
@@ -12,9 +17,15 @@ jobs:
           key: test-node-modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
-      - run: npm run lint
-      - run: npm run test
-      - run: npm run build
+      - run:
+          name: checking out tc-deploy for environment
+          command: |
+            ./buildenv.sh -e DEV -b dev-connectapp-buildvar
+            ./buildenv.sh -e PROD -b prod-connectapp-buildvar
+            source buildenvvar
+            npm run lint
+            npm run test
+            npm run build
       - persist_to_workspace:
           root: .
           paths:
@@ -31,9 +42,12 @@ jobs:
       - deploy:
           name: Running MasterScript
           command: |
-            git clone --branch v1.1 https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
+            git clone --branch dev https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
             cp ./../buildscript/master_deploy.sh .
-            ./master_deploy.sh -d CFRONT -e DEV -s connectapp -c false
+            cp ./../buildscript/buildenv.sh .
+            ./buildenv.sh -e DEV -b dev-connectapp-deployvar
+            source buildenvvar
+            ./master_deploy.sh -d CFRONT -e DEV -c false
   # deploy to test02
   deployTest02:
     docker:
@@ -78,7 +92,7 @@ workflows:
             - test
           filters:
             branches:
-              only: ['dev', 'dev-msinteg']
+              only: ['dev', 'dev-msinteg-v2']
       - deployTest02:
           requires:
             - test
