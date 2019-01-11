@@ -78,7 +78,8 @@ function inviteMembersWithData(dispatch, projectId, emailIds, handles, role) {
         const req = {}
         if(value && value.length > 0) {
           req.userIds = value.map(member => member.userId)
-        } else if(emailIds && emailIds.length > 0) {
+        }
+        if(emailIds && emailIds.length > 0) {
           req.emails = emailIds
         }
         req.role = role
@@ -131,11 +132,11 @@ export function deleteProjectInvite(projectId, invite) {
   }
 }
 
-export function inviteProjectMembers(projectId, emailIds) {
+export function inviteProjectMembers(projectId, emailIds, handles) {
   return (dispatch) => {
     return dispatch({
       type: INVITE_CUSTOMER,
-      payload: inviteMembersWithData(dispatch, projectId, emailIds, null, PROJECT_ROLE_CUSTOMER)
+      payload: inviteMembersWithData(dispatch, projectId, emailIds, handles, PROJECT_ROLE_CUSTOMER)
     })
   }
 }

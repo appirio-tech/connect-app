@@ -32,27 +32,27 @@ class Dialog extends React.Component {
 
   onInviteChange(evt) {
     const text = evt.target.value
-    const emails = text.split(/[,;]/g)
-    const isInvalid = emails.some(email => {
-      email = email.trim()
-      if (email === '') {
-        return false
-      }
-      return !/(.+)@(.+){2,}\.(.+){2,}/.test(email)
+    const invites = text.split(/[,;]/g)
+    const isValid = invites.every(invite => {
+      invite = invite.trim()
+      return  invite.length > 1 && (/(.+)@(.+){2,}\.(.+){2,}/.test(invite) || invite.startsWith('@'))
     })
     this.setState({
-      validInviteText: !isInvalid && text.length > 0,
+      validInviteText: isValid && text.trim().length > 0,
       inviteText: evt.target.value
     })
   }
 
   // SEND INVITES
   sendInvites() {
-    let emails = this.state.inviteText.split(/[,;]/g)
-    emails = emails.map(email => email.trim())
+    let invites = this.state.inviteText.split(/[,;]/g)
+    invites = invites.map(invite => invite.trim())
     //emails = emails.filter((email) => /(.+)@(.+){2,}\.(.+){2,}/.test(email))
+    let handles = invites.filter((invite) => (invite.startsWith('@') && invite.length > 1))
+    handles = handles.map(handle => handle.replace(/^@/, ''))
+    const emails = invites.filter((invite) => (!invite.startsWith('@') && invite.length > 1))
 
-    this.props.sendInvite(emails)
+    this.props.sendInvite(emails, handles)
     this.setState({clearText: true})
   }
 
@@ -119,6 +119,7 @@ class Dialog extends React.Component {
                 removeInvite(invite)
               }
               i++
+              const username = invite.member ? invite.member.handle : invite.userId
               return (
                 <div
                   key={i}
@@ -130,7 +131,7 @@ class Dialog extends React.Component {
                   />
                   <div className="member-name member-email">
                     <span>
-                      {invite.email}
+                      {invite.email || username}
                     </span>
                     <span className="email-date">
                       Invited {moment(invite.createdAt).format('MMM D, YY')}
