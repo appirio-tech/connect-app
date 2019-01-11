@@ -98,7 +98,7 @@ class Dialog extends React.Component {
 
   render() {
     const {members, currentUser, isMember, removeMember, onCancel, removeInvite, invites = []} = this.props
-    const showRemove = (isMember && currentUser.isManager)
+    const showRemove = currentUser.isAdmin || (isMember && currentUser.isManager)
     let i = 0
     return (
       <Modal
