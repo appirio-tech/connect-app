@@ -128,7 +128,8 @@ export default function(state = {}, action) {
     return state
 
   case INVITE_TOPCODER_MEMBER_SUCCESS:
-    Alert.success('You\'ve successfully invited members.')
+  case INVITE_CUSTOMER_SUCCESS:
+    Alert.success('You\'ve successfully invited member(s).')
     return state
 
   case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS:
