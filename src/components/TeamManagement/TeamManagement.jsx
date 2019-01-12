@@ -27,8 +27,7 @@ const LEAVE_TITLE = 'You\'re about to leave the project'
 const LEAVE_MESSAGE = `Once you leave, somebody on your team has to add you for you to be
   for you to be able to see the project. Do you stil want to leave?`
 
-const JOIN_MESSAGE = `You are about to join the project.
-  Once you join you'll be responsible for carring over all the orders from Darth Vandar.
+const JOIN_MESSAGE = `You are about to join the project. Once you join you will be responsible for project delivery.
   Are you sure you want to join?`
 
 const REMOVE_USER_MESSAGE = `You are about to remove <span style="font-weight: 600;">USERNAME</span> from your team.
