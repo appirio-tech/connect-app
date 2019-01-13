@@ -322,6 +322,16 @@
             text-transform: uppercase;
           }
 
+          .inviteTextInput {
+            @include roboto-medium;
+            margin-top: $base-unit*2;
+            width: 100%;
+            text-align: center;
+            font-size: $tc-label-xs;
+            color: $tc-gray-50;
+            text-transform: uppercase;
+          }
+
           input {
             width: stretch;
             margin: $base-unit*4 $base-unit*2;

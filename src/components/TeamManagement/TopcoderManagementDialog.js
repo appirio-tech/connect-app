@@ -8,8 +8,8 @@ import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
-
-
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
 
 
 class Dialog extends React.Component {
@@ -21,12 +21,14 @@ class Dialog extends React.Component {
       validUserText: false,
       managerType: {},
       clearText: false,
+      members: {},
+      showAlreadyMemberError: false
     }
 
     this.onUserRoleChange = this.onUserRoleChange.bind(this)
-    this.onInviteChange = this.onInviteChange.bind(this)
     this.handleRoles = this.handleRoles.bind(this)
     this.addUsers = this.addUsers.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
 
   componentWillMount(){
@@ -40,8 +42,10 @@ class Dialog extends React.Component {
       title: 'Copilot',
       value: 'copilot',
     }]
+    this.setState({
+      members: this.props.members
+    })
   }
-
 
   componentWillReceiveProps(nextProps) {
     if (this.state.clearText && nextProps.processingInvites !== this.props.processingInvites &&
@@ -50,6 +54,7 @@ class Dialog extends React.Component {
         userText: '',
         validUserText: false,
         clearText: false,
+        members: this.props.members
       })
     }
   }
@@ -59,22 +64,6 @@ class Dialog extends React.Component {
     managerType[memberId] = type
     this.props.changeRole(id, {role: this.roles.find((role) => role.title === type).value})
     this.setState({managerType})
-  }
-
-  onInviteChange(evt) {
-    const text = evt.target.value
-    const users = text.split(/[,;]/g)
-    const isInvalid = users.some(user => {
-      user = user.trim()
-      if (user === '') {
-        return false
-      }
-      return !(user.startsWith('@') && user.length > 1)
-    })
-    this.setState({
-      validUserText: !isInvalid && text.trim().length > 0,
-      userText: evt.target.value
-    })
   }
 
   handleRoles(value) {
@@ -94,6 +83,27 @@ class Dialog extends React.Component {
       role: this.state.userRole
     })
     this.setState({clearText: true})
+  }
+
+  onChange(currentValues) {
+    const text = currentValues.handlesText
+    let handles = text.split(/[,;]/g)
+    const isInvalid = handles.some(user => {
+      user = user.trim()
+      if (user === '') {
+        return false
+      }
+      return !(user.startsWith('@') && user.length > 1)
+    })
+    const validText = !isInvalid && text.trim().length > 0
+    handles = handles.filter((handle) => (handle.trim().startsWith('@') && handle.length > 1))
+    handles = handles.map(handle => handle.trim().replace(/^@/, ''))
+    const present = _.some(this.state.members, m => handles.indexOf(m.handle) > -1)
+    this.setState({
+      validUserText: !present && validText,
+      showAlreadyMemberError: present,
+      userText: text
+    })
   }
 
   render() {
@@ -221,17 +231,19 @@ class Dialog extends React.Component {
             }))}
           </div>
 
-          {showRemove && <div className="input-container">
+          {showRemove && <Formsy.Form className="input-container" onValidSubmit={this.addUsers} onChange={this.onChange} >
             <div className="hint">invite more people</div>
-            <input
+            <TCFormFields.TextInput
+              name="handlesText"
+              wrapperClass="inviteTextInput"
               type="text"
               value={this.state.userText}
-              onInput={this.onInviteChange}
               placeholder="Enter one or more user @handles separated by ';' or comma ','"
-              className="tc-file-field__inputs"
               disabled={!isMember || this.state.clearText}
             />
-
+            { this.state.showAlreadyMemberError && <div className="error-message">
+                Project Member(s) can't be invited again. Please remove them from list.
+            </div> }
             <Dropdown className="role-drop-down default">
               <div className="dropdown-menu-header">
                 {(() => {
@@ -254,17 +266,15 @@ class Dialog extends React.Component {
                 </ul>
               </div>
             </Dropdown>
-
-
             <button
               className="tc-btn tc-btn-primary tc-btn-md"
-              onClick={this.addUsers}
+              type="submit"
               disabled={!this.state.validUserText || this.state.clearText}
             >
               Send Invite
             </button>
-          </div>}
-
+          </Formsy.Form>
+          }
           {!showRemove && <div className="dialog-placeholder" />}
         </div>
       </Modal>

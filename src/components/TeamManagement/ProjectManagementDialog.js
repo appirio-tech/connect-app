@@ -6,6 +6,8 @@ import Modal from 'react-modal'
 import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized } from '../../helpers/tcHelpers'
+import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+const TCFormFields = FormsyForm.Fields
 
 class Dialog extends React.Component {
   constructor(props) {
@@ -14,9 +16,19 @@ class Dialog extends React.Component {
       inviteText: '',
       validInviteText: false,
       clearText: false,
+      showAlreadyMemberError: false,
+      invitedMembers: {},
+      members: {}
     }
-    this.onInviteChange = this.onInviteChange.bind(this)
+    this.onChange = this.onChange.bind(this)
     this.sendInvites = this.sendInvites.bind(this)
+  }
+
+  componentWillMount(){
+    this.setState({
+      invitedMembers: this.props.invites,
+      members: this.props.members
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,16 +42,19 @@ class Dialog extends React.Component {
     }
   }
 
-  onInviteChange(evt) {
-    const text = evt.target.value
+  onChange(currentValues) {
+    const text = currentValues.emails
     const invites = text.split(/[,;]/g)
     const isValid = invites.every(invite => {
       invite = invite.trim()
       return  invite.length > 1 && (/(.+)@(.+){2,}\.(.+){2,}/.test(invite) || invite.startsWith('@'))
     })
+    let present = _.some(this.state.invitedMembers, invited => invites.indexOf(invited.email) > -1)
+    present = present || _.some(this.state.members, member => invites.indexOf(member.email) > -1)
     this.setState({
-      validInviteText: isValid && text.trim().length > 0,
-      inviteText: evt.target.value
+      validInviteText: !present && isValid && text.trim().length > 0,
+      inviteText: currentValues.emails,
+      showAlreadyMemberError: present
     })
   }
 
@@ -148,24 +163,27 @@ class Dialog extends React.Component {
             }))}
           </div>
 
-          <div className="input-container">
+          <Formsy.Form className="input-container" onValidSubmit={this.sendInvites} onChange={this.onChange} >
             <div className="hint">invite more people</div>
-            <input
+            <TCFormFields.TextInput
+              name="emails"
+              wrapperClass="inviteTextInput"
               type="text"
               value={this.state.inviteText}
-              onInput={this.onInviteChange}
               placeholder="Enter one or more emails separated by ';' or comma ','"
-              className="tc-file-field__inputs"
               disabled={!isMember || this.state.clearText}
             />
+            { this.state.showAlreadyMemberError && <div className="error-message">
+                Project Member(s) can't be invited again. Please remove them from list.
+            </div> }
             <button
               className="tc-btn tc-btn-primary tc-btn-md"
-              onClick={this.sendInvites}
+              type="submit"
               disabled={!this.state.validInviteText || this.state.clearText}
             >
               Send Invite
             </button>
-          </div>
+          </Formsy.Form>
         </div>
 
       </Modal>
