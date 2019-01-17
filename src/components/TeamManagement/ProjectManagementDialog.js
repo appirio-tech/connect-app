@@ -171,7 +171,7 @@ class Dialog extends React.Component {
               type="text"
               value={this.state.inviteText}
               placeholder="Enter one or more emails separated by ';' or comma ','"
-              disabled={!isMember || this.state.clearText}
+              disabled={(!currentUser.isAdmin && !isMember) || this.state.clearText}
             />
             { this.state.showAlreadyMemberError && <div className="error-message">
                 Project Member(s) can't be invited again. Please remove them from list.
