@@ -34,8 +34,8 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - dist            
-            
+            - dist
+
   # Just tests commited code.
   deployDev:
     docker:
@@ -88,7 +88,7 @@ jobs:
       - attach_workspace:
           at: ./workspace
       - run: ./deploy.sh DISCOURSE
-   
+
 
 workflows:
   version: 2
@@ -100,7 +100,7 @@ workflows:
             - test
           filters:
             branches:
-              only: ['dev', 'feature/metadata-management']
+              only: ['dev', 'dev-msinteg']
       - deployTest02:
           requires:
             - test

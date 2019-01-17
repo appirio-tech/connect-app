@@ -13,7 +13,7 @@ import FillProjectDetails from './FillProjectDetails'
 import ProjectSubmitted from './ProjectSubmitted'
 
 import update from 'react-addons-update'
-import { LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
+import { LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH, LS_INCOMPLETE_WIZARD } from '../../../config/constants'
 import './ProjectWizard.scss'
 
 const WZ_STEP_INCOMP_PROJ_CONF = 0
@@ -54,7 +54,7 @@ class ProjectWizard extends Component {
 
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
-    
+
     if ((params && params.project === 'submitted') || createdProject) {
       const wizardStep = WZ_STEP_PROJECT_SUBMITTED
       const updateQuery = {}
@@ -74,7 +74,7 @@ class ProjectWizard extends Component {
       let updateQuery = {}
       if (incompleteProjectTemplate && params && params.project) {
         const projectTemplate = getProjectTemplateByAlias(projectTemplates, params.project)
-        
+
         if (projectTemplate) {
           // load project details page directly
           if (projectTemplate.key === incompleteProjectTemplate.key) {
@@ -87,7 +87,7 @@ class ProjectWizard extends Component {
           }
         }
       }
-      
+
       this.setState({
         project: update(this.state.project, updateQuery),
         dirtyProject: update(this.state.dirtyProject, updateQuery),
@@ -234,6 +234,7 @@ class ProjectWizard extends Component {
     const { onStepChange } = this.props
     // remove incomplete project from local storage
     window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
+    window.localStorage.removeItem(LS_INCOMPLETE_WIZARD)
     // following code assumes that componentDidMount has already updated state with correct project
     const projectType = _.get(this.state.project, 'type')
     const projectTemplateId = _.get(this.state.project, 'templateId')
@@ -394,8 +395,11 @@ class ProjectWizard extends Component {
     })
   }
 
-  handleOnCreateProject() {
-    this.props.createProject(this.state.dirtyProject)
+  handleOnCreateProject(model) {
+    // add templateId and type to the saved project form
+    _.set(model, 'templateId', _.get(this.state.dirtyProject, 'templateId'))
+    _.set(model, 'type', _.get(this.state.dirtyProject, 'type'))
+    this.props.createProject(model)
   }
 
   handleStepChange(wizardStep) {
@@ -426,7 +430,7 @@ class ProjectWizard extends Component {
   }
 
   render() {
-    const { processing, showModal, userRoles, projectTemplates, projectTypes, projectId, match } = this.props
+    const { processing, showModal, userRoles, projectTemplates, projectTypes, projectId, match, templates } = this.props
     const { project, dirtyProject, wizardStep } = this.state
     const params = match.params
 
@@ -457,7 +461,9 @@ class ProjectWizard extends Component {
         />
         <FillProjectDetails
           project={ project }
+          templates={projectTemplates}
           projectTemplates={ projectTemplates }
+          productTemplates={templates.productTemplates}
           dirtyProject={ dirtyProject }
           processing={ processing}
           onCreateProject={ this.handleOnCreateProject }
@@ -517,6 +523,10 @@ ProjectWizard.propTypes = {
    * Project types list.
    */
   projectTypes: PropTypes.array.isRequired,
+  /**
+   * templates
+   */
+  templates: PropTypes.object.isRequired,
 }
 
 ProjectWizard.defaultProps = {

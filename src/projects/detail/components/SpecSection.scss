@@ -5,6 +5,43 @@
   $sideBarWidth: 280px;
   $sideBarMaxWidth: 360px;
 
+  .spec-section-edit-button {
+    align-items: center;
+    border: 0;
+    display: flex;
+    height: 20px;
+    justify-content: center;
+    margin-left: -25px;
+    margin-top: 3px;
+    opacity: 0.5;
+    padding: 0;
+    position: absolute;
+    width: 20px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  // here we repeat styles for disabled textarea and inputs from tc-ui
+  .spec-section-readonly-text-value {
+    color: $tc-gray-80;
+    font-size: $tc-body-md;
+    line-height: 24px;
+    // margin-top: 3 * $base-unit;
+    -webkit-text-fill-color: $tc-gray-50;
+  }
+
+  .spec-section-actions {
+    display: flex;
+    justify-content: center;
+    padding-top: 2 * $base-unit;
+
+    button + button {
+      margin-left: 2 * $base-unit;
+    }
+  }
+
   .tc-file-field__inputs {
     height: 45px;
   }
@@ -198,6 +235,10 @@
     // &:last-child {
     //   margin-bottom: 0;
     // }
+
+    > button + button {
+      margin-left: 2 * $base-unit;
+    }
   }
 
   /* .section-file-interface */
@@ -577,6 +618,21 @@
     align-items: flex-start;
     margin-bottom: 20px;
 
+    &.read-optimized {
+      margin-bottom: 0px;
+
+      .editable-project-name {
+        flex: 0;
+      }
+
+      .refcode-read-optimized {
+        @include roboto;
+        color: $tc-gray-50;
+        font-style: italic;
+        margin-left: 10px;
+      }
+    }
+
     @media screen and (max-width: $screen-sm - 1px) {
       flex-direction: column;
       margin-bottom: 11 * $base-unit;
@@ -729,6 +785,16 @@
       color: $tc-gray-70;
       line-height: 20px;
       padding-bottom: 10px;
+    }
+
+    .message-title {
+      @include roboto;
+      font-size: 15px;
+      color: $tc-orange-70;
+      line-height: 20px;
+      padding-bottom: 10px;
+      text-align: center;
+      font-style: italic;
     }
 
     textarea {

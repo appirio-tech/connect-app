@@ -604,6 +604,7 @@ export const AUTOCOMPLETE_TRIGGER_LENGTH = 3
 export const MAINTENANCE_MODE = process.env.MAINTENANCE_MODE
 
 export const LS_INCOMPLETE_PROJECT = 'incompleteProject'
+export const LS_INCOMPLETE_WIZARD = 'incompleteWizard'
 
 
 export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL

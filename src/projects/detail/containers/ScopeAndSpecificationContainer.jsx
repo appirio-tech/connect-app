@@ -14,9 +14,9 @@ import MediaQuery from 'react-responsive'
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
 import EditProjectForm from '../components/EditProjectForm'
 import TwoColsLayout from '../../../components/TwoColsLayout'
-import { 
-  SCREEN_BREAKPOINT_MD, 
-  PROJECT_ATTACHMENTS_FOLDER, 
+import {
+  SCREEN_BREAKPOINT_MD,
+  PROJECT_ATTACHMENTS_FOLDER,
   EVENT_TYPE,
 } from '../../../config/constants'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
@@ -73,18 +73,18 @@ class SpecificationContainer extends Component {
   }
 
   render() {
-    const { project, currentMemberRole, isSuperUser, processing, sections } = this.props
+    const { project, projectNonDirty, currentMemberRole, isSuperUser, processing, template, allProductTemplates } = this.props
     const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
 
     const leftArea = (
-      <ProjectSpecSidebar project={project} sections={sections} currentMemberRole={currentMemberRole} />
+      <ProjectSpecSidebar project={project} sections={template.sections} currentMemberRole={currentMemberRole} />
     )
 
     return (
       <TwoColsLayout>
-        <NotificationsReader 
+        <NotificationsReader
           id="scope"
           criteria={[
             { eventType: EVENT_TYPE.PROJECT.SPECIFICATION_MODIFIED, contents: { projectId: project.id } },
@@ -101,11 +101,11 @@ class SpecificationContainer extends Component {
             }}
           </MediaQuery>
         </TwoColsLayout.Sidebar>
-
         <TwoColsLayout.Content>
           <EnhancedEditProjectForm
             project={project}
-            sections={sections}
+            projectNonDirty={projectNonDirty}
+            template={template}
             isEdittable={editPriv}
             submitHandler={this.saveProject}
             saving={processing}
@@ -116,6 +116,7 @@ class SpecificationContainer extends Component {
             removeAttachment={this.removeProjectAttachment}
             attachmentsStorePath={attachmentsStorePath}
             canManageAttachments={!!currentMemberRole}
+            productTemplates={allProductTemplates}
             showHidden
           />
         </TwoColsLayout.Content>
@@ -129,6 +130,7 @@ SpecificationContainer.propTypes = {
   currentMemberRole: PropTypes.string,
   processing: PropTypes.bool,
   productTemplates: PropTypes.array.isRequired,
+  allProductTemplates: PropTypes.array.isRequired,
   error: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object
@@ -148,7 +150,8 @@ const mapStateToProps = ({projectState, loadUser, templates}) => {
         projectTemplates,
         projectState.project
       )
-    ) : []
+    ) : [],
+    allProductTemplates: productTemplates,
   }
 }
 
