@@ -4,6 +4,7 @@ import seeAttachedWrapperField from './SeeAttachedWrapperField'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
 import _ from 'lodash'
+import AddonOptions from './AddonOptions/AddonOptions'
 
 import SpecQuestionList from './SpecQuestionList/SpecQuestionList'
 import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
@@ -29,10 +30,37 @@ const getIcon = icon => {
   }
 }
 
+const filterAddonQuestions = (productTemplates, question) =>
+  productTemplates.filter(
+    d =>
+      d.category === question.category &&
+      question.subCategories.includes(d.subCategory)
+  )
+const formatAddonOptions = options => options.map(o => ({
+  label: o.name,
+  value: { id: o.id },
+}))
+
 // { isRequired, represents the overall questions section's compulsion, is also available}
-const SpecQuestions = ({questions, layout, additionalClass, project, dirtyProject, resetFeatures, showFeaturesDialog, showHidden }) => {
+const SpecQuestions = ({
+  questions,
+  layout,
+  additionalClass,
+  project,
+  dirtyProject,
+  resetFeatures,
+  showFeaturesDialog,
+  showHidden,
+  startEditReadOnly,
+  stopEditReadOnly,
+  cancelEditReadOnly,
+  isProjectDirty,
+  productTemplates,
+}) => {
+  const currentProjectData = isProjectDirty ? dirtyProject : project
 
   const renderQ = (q, index) => {
+    const isReadOnly = _.get(q, '__wizard.readOnly')
     // let child = null
     // const value =
     const elemProps = {
@@ -42,7 +70,29 @@ const SpecQuestions = ({questions, layout, additionalClass, project, dirtyProjec
       required: q.required,
       validations: q.required ? 'isRequired' : null,
       validationError: q.validationError,
-      validationErrors: q.validationErrors
+      validationErrors: q.validationErrors,
+      disabled: isReadOnly
+    }
+    if (q.options) {
+      // don't show options which are hidden by conditions
+      q.options = q.options.filter((option) => !_.get(option, '__wizard.hiddenByCondition'))
+      // disable options if they are disabled by conditions
+      q.options.forEach((option) => {
+        if (_.get(option, '__wizard.disabledByCondition', false)) {
+          option.disabled = true
+        }
+      })
+
+      if (elemProps.disabled) {
+        const fieldValue = _.get(currentProjectData, q.fieldName)
+        if (q.type === 'radio-group') {
+          q.options = _.filter(q.options, { value: fieldValue})
+        } else if (q.type === 'checkbox-group') {
+          q.options = _.filter(q.options, (option) => (
+            _.includes(fieldValue, option.value)
+          ))
+        }
+      }
     }
     // escape value of the question only when it is of string type
     if (typeof elemProps.value === 'string') {
@@ -130,7 +180,7 @@ const SpecQuestions = ({questions, layout, additionalClass, project, dirtyProjec
       break
     case 'checkbox-group':
       ChildElem = TCFormFields.CheckboxGroup
-      _.assign(elemProps, {options: q.options})
+      _.assign(elemProps, {options: q.options, layout: q.layout })
       // child = <TCFormFields.CheckboxGroup name={q.fieldName} label={q.label} value={value} options={q.options} />
       break
     case 'checkbox':
@@ -169,28 +219,91 @@ const SpecQuestions = ({questions, layout, additionalClass, project, dirtyProjec
         included: false
       })
       break
+    case 'add-ons':
+      ChildElem = AddonOptions
+      _.assign(elemProps, { options: formatAddonOptions(filterAddonQuestions(productTemplates, q)) })
+      break
     default:
       ChildElem = <noscript />
     }
+    // let titleAside = null
+    let textValue = null
+    let shouldHideFormField = false
+
+    // if field is readOnly we will hide some real form fields and show their values as text
+    // for easier reading
+    if (isReadOnly) {
+      switch(q.type) {
+      case 'radio-group': {
+        const option = _.find(q.options, {value: _.get(currentProjectData, q.fieldName)})
+        // titleAside = _.get(option, 'label')
+        textValue = _.get(option, 'label')
+        shouldHideFormField = true
+        break
+      }
+      case 'tiled-radio-group' : {
+        const option = _.find(q.options, {value: _.get(currentProjectData, q.fieldName)})
+        // titleAside = _.get(option, 'title')
+        textValue = _.get(option, 'title')
+        shouldHideFormField = true
+        break
+      }
+      case 'checkbox-group': {
+        const values = _.get(currentProjectData, q.fieldName)
+        const options = _.filter(q.options, (option) => (
+          _.includes(values, option.value)
+        ))
+        textValue = _.map(options, 'label').join(', ')
+        shouldHideFormField = true
+        break
+      }
+      case 'add-ons': {
+        const values = _.get(currentProjectData, q.fieldName)
+        const options = _.filter(elemProps.options, (option) => (
+          _.find(values, { id: _.get(option, 'value.id') })
+        ))
+        textValue = _.map(options, 'label').join(', ')
+        shouldHideFormField = true
+        break
+      }
+      }
+    }
+
     return (
       <SpecQuestionList.Item
         additionalClass = {additionalItemClass}
         key={index}
         title={q.title}
         type={q.type}
+        // titleAside={titleAside}
         icon={getIcon(q.icon)}
-        description={q.description}
+        description={!isReadOnly ? q.description : null}
         required={q.required || (q.validations && q.validations.indexOf('isRequired') !== -1)}
         hideDescription={elemProps.hideDescription}
+        __wizard={q.__wizard}
+        startEditReadOnly={startEditReadOnly}
+        stopEditReadOnly={stopEditReadOnly}
+        cancelEditReadOnly={cancelEditReadOnly}
+        readOptimized={shouldHideFormField}
       >
-        <ChildElem {...elemProps} />
+        <div style={shouldHideFormField ? {display: 'none'} : {}}>
+          <ChildElem {...elemProps} />
+        </div>
+        {textValue && <div className="spec-section-readonly-text-value">{textValue}</div>}
       </SpecQuestionList.Item>
     )
   }
 
   return (
     <SpecQuestionList layout={layout} additionalClass={additionalClass}>
-      {questions.filter((question) => showHidden || !question.hidden).map(renderQ)}
+      {questions.filter((question) =>
+        // hide if we are in a wizard mode and question is hidden for now
+        (!_.get(question, '__wizard.hidden')) &&
+        // hide if question is hidden by condition
+        (!_.get(question, '__wizard.hiddenByCondition')) &&
+        // hide hidden questions, unless we not force to show them
+        (showHidden || !question.hidden)
+      ).map(renderQ)}
     </SpecQuestionList>
   )
 }
@@ -229,7 +342,12 @@ SpecQuestions.propTypes = {
   /**
    * additional class
    */
-  additionalClass: PropTypes.string
+  additionalClass: PropTypes.string,
+
+  /**
+   * contains the productTypes required for rendering add-on type questions
+   */
+  productTemplates: PropTypes.array.isRequired,
 }
 
 SpecQuestions.defaultProps = {

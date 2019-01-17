@@ -73,6 +73,7 @@ function formatPhaseCardListHeaderProps(phases) {
 const ProjectStages = ({
   project,
   phases,
+  phasesNonDirty,
   phasesStates,
   productTemplates,
   productsTimelines,
@@ -107,6 +108,7 @@ const ProjectStages = ({
           isManageUser={isManageUser}
           project={project}
           phase={phase}
+          phaseNonDirty={phasesNonDirty[index]}
           phaseIndex={index}
           updateProduct={updateProduct}
           fireProductDirty={fireProductDirty}

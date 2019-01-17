@@ -71,6 +71,7 @@ const ProjectDetailView = (props) => {
   const { component: Component } = props
   const componentProps = {
     project: props.project,
+    projectNonDirty: props.projectNonDirty,
     currentMemberRole: currentMemberRole || '',
     isSuperUser: props.isSuperUser,
     isManageUser: props.isManageUser,
@@ -180,6 +181,7 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
     isProcessing: projectState.processing,
     error: projectState.error,
     project: projectState.project,
+    projectNonDirty: projectState.projectNonDirty,
     projectTemplate: (templateId && projectTemplates) ? (
       getProjectTemplateById(projectTemplates, templateId)
     ) : null,

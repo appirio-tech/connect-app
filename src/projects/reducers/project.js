@@ -533,16 +533,50 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
-  case PROJECT_DIRTY: {// payload contains only changed values from the project form
-    return Object.assign({}, state, {
-      project: _.mergeWith({}, state.project, action.payload, { isDirty : true },
-        // customizer to override screens array with changed values
-        (objValue, srcValue, key) => {
-          if (key === 'screens' || key === 'features' || key === 'capabilities') {
-            return srcValue// srcValue contains the changed values from action payload
-          }
+  case PROJECT_DIRTY: {
+    const updatedProject = _.mergeWith({}, _.omit(state.project, 'isDirty'), action.payload,
+      // customizer to override arrays with changed values
+      (objValue, srcValue, key) => {
+        // when we update some array values, we have to replace them completely, rather than merge
+        if (_.isArray(objValue) && _.isArray(srcValue)) {
+          return srcValue
         }
-      )
+        // most likely these cases are particular cases of the upper rule for arrays,
+        // but just in case keep them here for now, until we are sure we can safely remove
+        // this particular cases
+        if (key === 'screens' || key === 'features' || key === 'capabilities') {
+          return srcValue// srcValue contains the changed values from action payload
+        }
+      }
+    )
+    // dont' compare this properties as they could be not added to `projectNonDirty`
+    // or mutated somewhere in the app
+    const skipProperties = ['members']
+    const clearUpdatedProject = _.omit(updatedProject, skipProperties)
+    const clearUpdatedNonDirtyProject = _.omit(state.projectNonDirty, skipProperties)
+    if (!_.isEqual(clearUpdatedProject, clearUpdatedNonDirtyProject)) {
+      updatedProject.isDirty = true
+    }
+
+    // keep this code for debugging
+    // as there are could be some parts of the application which could add additional properties
+    // to the `project` by Redux Store mutation
+    // this code could help to find such places during debugging if `isDirty` becomes `true` unexpectedly
+    /* if (updatedProject.isDirty) {
+      function difference(object, base) {
+        function changes(object, base) {
+          return _.transform(object, function(result, value, key) {
+            if (!_.isEqual(value, base[key])) {
+              result[key] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
+            }
+          });
+        }
+        return changes(object, base);
+      }
+      console.log('diff', difference(clearUpdatedProject, clearUpdatedNonDirtyProject))
+    } */
+    return Object.assign({}, state, {
+      project: updatedProject
     })
   }
 
@@ -563,6 +597,8 @@ export const projectState = function (state=initialState, action) {
   }
 
   case PRODUCT_DIRTY:
+
+
     return {
       ...state,
       phases: updateProductInPhases(state.phases, action.payload.phaseId, action.payload.productId, {

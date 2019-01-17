@@ -4,6 +4,7 @@ import PT from 'prop-types'
 
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
+import ProjectEstimationSection from '../../detail/components/ProjectEstimationSection'
 import ModalControl from '../../../components/ModalControl'
 import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
 
@@ -25,6 +26,7 @@ class FillProjectDetails extends Component  {
   shouldComponentUpdate(nextProps, nextState) {
     return !(
       _.isEqual(nextProps.project, this.props.project)
+     && _.isEqual(nextProps.dirtyProject, this.props.dirtyProject)
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextProps.error, this.props.error)
     )
@@ -35,12 +37,12 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, processing, submitBtnText, onBackClick, projectTemplates } = this.props
+    const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject, templates, productTemplates } = this.props
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
 
-    const sections = projectTemplate.scope.sections
+    const template = projectTemplate.scope
     return (
       <div className="FillProjectDetailsWrapper">
         <div className="header headerFillProjectDetails" />
@@ -60,13 +62,16 @@ class FillProjectDetails extends Component  {
                 <div className="left-area-content">
                   <ProjectBasicDetailsForm
                     project={project}
-                    sections={sections}
+                    dirtyProject={dirtyProject}
+                    template={template}
                     isEditable
                     submitHandler={this.props.onCreateProject}
                     saving={processing}
                     onProjectChange={this.props.onProjectChange}
                     submitBtnText={ submitBtnText }
+                    productTemplates={productTemplates}
                   />
+                  <ProjectEstimationSection project={dirtyProject} templates={templates} />
                 </div>
                 {formDisclaimer && (
                   <div className="left-area-footer">
@@ -89,8 +94,10 @@ FillProjectDetails.propTypes = {
   onChangeProjectType: PT.func.isRequired,
   project: PT.object.isRequired,
   projectTemplates: PT.array.isRequired,
+  productTemplates: PT.array.isRequired,
   userRoles: PT.arrayOf(PT.string),
   processing: PT.bool,
+  templates: PT.array.isRequired,
   error: PT.oneOfType([
     PT.bool,
     PT.object

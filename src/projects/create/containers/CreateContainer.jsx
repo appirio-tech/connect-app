@@ -20,6 +20,7 @@ import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
+  LS_INCOMPLETE_WIZARD,
   PROJECT_STATUS_IN_REVIEW,
   ACCOUNTS_APP_REGISTER_URL,
   NEW_PROJECT_PATH,
@@ -116,6 +117,7 @@ class CreateContainer extends React.Component {
         // go to submitted state
         console.log('go to submitted state')
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
+        window.localStorage.removeItem(LS_INCOMPLETE_WIZARD)
         this.props.history.push('/new-project/submitted/' + nextProjectId)
       })
 
