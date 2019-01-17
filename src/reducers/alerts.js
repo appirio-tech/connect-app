@@ -144,6 +144,17 @@ export default function(state = {}, action) {
 
   case INVITE_TOPCODER_MEMBER_FAILURE:
   case INVITE_CUSTOMER_FAILURE:
+    if (action.payload && action.payload.response) {
+      const rdata = action.payload.response.data
+      const rStatus = action.payload.response.status
+      if (rdata && rStatus === '403' && rdata.result && rdata.result.content && rdata.result.content.message) {
+        Alert.error(`${action.metadata.invites} cannot be added with a ${action.metadata.role} role to the project`)
+        return state
+      } else if (rdata && rdata.result && rdata.result.content && rdata.result.content.message) {
+        Alert.error(rdata.result.content.message)
+        return state
+      }
+    }
     Alert.error('You are unable to invite members successfully.')
     return state
 

@@ -94,7 +94,11 @@ export function inviteTopcoderMembers(projectId, items) {
   return (dispatch) => {
     return dispatch({
       type: INVITE_TOPCODER_MEMBER,
-      payload: inviteMembersWithData(dispatch, projectId, items.emails, items.handles, items.role)
+      payload: inviteMembersWithData(dispatch, projectId, items.emails, items.handles, items.role),
+      metadata: {
+        invites: items.handles ? items.handles : items.emails, 
+        role: items.role
+      }
     })
   }
 }
