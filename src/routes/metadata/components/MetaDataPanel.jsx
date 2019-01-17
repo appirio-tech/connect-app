@@ -305,8 +305,8 @@ class MetaDataPanel extends React.Component {
     const metadata = this.getMetadata(props)
     if (metadataType === 'productTemplate') {
       const prodCatOptions = this.getProductCategoryOptions(templates.productCategories)
-      const categoryValue = metadata.category ? metadata.category : prodCatOptions[0].value
-      const subCategoryValue = metadata.subCategory ? metadata.subCategory : prodCatOptions[0].value
+      const categoryValue = metadata && metadata.category ? metadata.category : prodCatOptions[0].value
+      const subCategoryValue = metadata && metadata.subCategory ? metadata.subCategory : prodCatOptions[0].value
       fields = fields.concat([
         { key: 'id', type: 'number' },
         { key: 'name', type: 'text' },
@@ -322,7 +322,7 @@ class MetaDataPanel extends React.Component {
       ])
     } else if (metadataType === 'projectTemplate') {
       const projectTypeOptions = this.getProductCategoryOptions(templates.projectTypes)
-      const value = metadata.category ? metadata.category : projectTypeOptions[0].value
+      const value = metadata && metadata.category ? metadata.category : projectTypeOptions[0].value
       fields = fields.concat([
         { key: 'id', type: 'number' },
         { key: 'name', type: 'text' },
@@ -505,6 +505,7 @@ class MetaDataPanel extends React.Component {
           removeAttachment={ () => {} }
           attachmentsStorePath={'dummy'}
           canManageAttachments
+          productTemplates={this.props.templates.productTemplates}
         />
         <div className="section-footer section-footer-spec">
           <button className="tc-btn tc-btn-primary tc-btn-md" type="submit">Save Changes</button>
