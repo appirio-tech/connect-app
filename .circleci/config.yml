@@ -100,7 +100,7 @@ workflows:
             - test
           filters:
             branches:
-              only: ['dev', 'dev-msinteg']
+              only: ['dev', 'feature/metadata-management']
       - deployTest02:
           requires:
             - test

@@ -8,6 +8,7 @@ import CoderBot from './components/CoderBot/CoderBot'
 import projectRoutes from './projects/routes.jsx'
 import notificationsRoutes from './routes/notifications/routes.jsx'
 import settingsRoutes from './routes/settings/routes.jsx'
+import metaDataRoutes from './routes/metadata/routes.jsx'
 import TopBarContainer from './components/TopBar/TopBarContainer'
 import ProjectsToolBar from './components/TopBar/ProjectsToolBar'
 import RedirectComponent from './components/RedirectComponent'
@@ -148,6 +149,7 @@ class Routes extends React.Component {
         {/* {reportsListRoutes} */}
         {notificationsRoutes}
         {settingsRoutes}
+        {metaDataRoutes}
 
         <Route path="/error" render={renderApp(topBarWithProjectsToolBar, <CoderBot code={500}/>)} />
         <Route path="/404" render={renderApp(topBarWithProjectsToolBar, <CoderBot code={404}/>)} />

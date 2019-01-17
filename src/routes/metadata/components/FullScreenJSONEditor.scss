@@ -1,0 +1,8 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.full-screen-json-editor {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background-color: $tc-gray-neutral-light;
+}
