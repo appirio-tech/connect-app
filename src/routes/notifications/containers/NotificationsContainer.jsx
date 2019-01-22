@@ -22,6 +22,7 @@ import {
   filterReadNotifications, 
   limitQuantityInSources,
   preRenderNotifications, 
+  isNotificationSourceCleared
 } from '../helpers/notifications'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
 import { NOTIFICATIONS_NEW_PER_SOURCE } from '../../../config/constants'
@@ -43,6 +44,7 @@ const NotificationsContainerView = (props) => {
   )
   let globalSource = notificationsBySources.length > 0 && notificationsBySources[0].id === 'global' ? notificationsBySources[0] : null
   let projectSources = globalSource ? notificationsBySources.slice(1) : notificationsBySources
+  const filterSections = getNotificationsFilters(allNotificationsBySources)
   if (filterBy) {
     if (filterBy === 'global') {
       projectSources = []
@@ -50,6 +52,13 @@ const NotificationsContainerView = (props) => {
       globalSource = null
       projectSources = _.filter(projectSources, { id: filterBy })
     }
+  }
+
+  const showAllNotifications = () => {
+    setNotificationsFilterBy('')
+  }
+  if (filterBy && isNotificationSourceCleared(filterSections, filterBy)) {
+    showAllNotifications()
   }
 
   const toggleNotificationOrBundleRead = (notificationId) => {
@@ -115,7 +124,7 @@ const NotificationsContainerView = (props) => {
       <aside className="filters">
         <Sticky top={90}>
           <SideFilter
-            filterSections={getNotificationsFilters(allNotificationsBySources)}
+            filterSections={filterSections}
             selectedFilter={filterBy}
             onFilterItemClick={setNotificationsFilterBy}
           >

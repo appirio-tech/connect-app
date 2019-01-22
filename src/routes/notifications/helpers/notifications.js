@@ -85,7 +85,7 @@ export const isSubEqual = (object, criteria) => {
     } else {
       isEqual = !!object && value === object[key]
     }
-    
+
     return isEqual
   })
 
@@ -119,7 +119,7 @@ export const getNotificationsFilters = (sources) => {
   const sortedSources = [...sources].sort(compareSourcesByLastNotificationDate)
 
   sortedSources.forEach(source => {
-    if (source.id !== 'global') {
+    if (source.id !== 'global' && source.total !== 0) {
       filtersBySource.push({
         title: source.title,
         value: source.id,
@@ -133,6 +133,19 @@ export const getNotificationsFilters = (sources) => {
   }
 
   return filterSections
+}
+
+/**
+ * Check if the notification source has no unread notifications
+ *
+ * @param {Array} notifications  list of notifications by source
+ * @param {String} sourceId      id of the targeted source
+ *
+ * @returns {Boolean} flag notifying if the source has no unread notifications
+ */
+export const isNotificationSourceCleared = (notifications, sourceId) => {
+  const notificationSection = _.flatten(notifications).find(n => n.value === sourceId)
+  return !notificationSection || notificationSection.quantity === 0
 }
 
 /**
@@ -160,7 +173,7 @@ const compareSourcesByLastNotificationDate = (s1, s2) => {
 export const splitNotificationsBySources = (sources, notifications) => {
   const notificationsBySources = sources.map(source => {
     const sourceNotifications = _.filter(notifications, { sourceId: source.id })
-    
+
     return ({
       ...source,
       notifications: sourceNotifications,
