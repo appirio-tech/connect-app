@@ -103,6 +103,7 @@ class SelectDropdown extends Component {
       }
       const selectItem = (
         <li
+          tabIndex="-1"
           key={ optIdx }
           className="dropdown-menu-list-item"
           styleName={cn({ disabled: option.disabled })}
@@ -129,7 +130,7 @@ class SelectDropdown extends Component {
             <div className="dropdown-menu-header"><span className="tc-link">{ selectedValue }</span></div>
           </div>
         ) : (
-          <Dropdown theme={ theme } className="SelectDropdown" noPointer>
+          <Dropdown handleKeyboardNavigation theme={ theme } className="SelectDropdown" noPointer>
             <div className="dropdown-menu-header"><span className="tc-link">{ selectedValue }</span></div>
             <ul className="dropdown-menu-list">
               { options.map(renderOption) }
