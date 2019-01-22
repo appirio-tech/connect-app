@@ -18,7 +18,10 @@ import {
   STEP_DIR,
   PREVIOUS_STEP_VISIBILITY,
 } from '../../../helpers/wizardHelper'
-import { LS_INCOMPLETE_WIZARD } from '../../../config/constants'
+import {
+  LS_INCOMPLETE_WIZARD,
+  LS_INCOMPLETE_PROJECT,
+} from '../../../config/constants'
 import Modal from 'react-modal'
 import './ProjectBasicDetailsForm.scss'
 
@@ -40,9 +43,13 @@ class ProjectBasicDetailsForm extends Component {
     this.confirmEditReadOnly = this.confirmEditReadOnly.bind(this)
     this.updateEditReadOnly = this.updateEditReadOnly.bind(this)
 
+    const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     const incompleteWizardStr = window.localStorage.getItem(LS_INCOMPLETE_WIZARD)
     let incompleteWizard = {}
-    if (incompleteWizardStr) {
+    // only restore wizard state if there is incomplete project
+    // sometimes it happens that we have incomplete wizard but don't have incomplete project
+    // we should ignore incomplete wizard in such cases
+    if (incompleteProjectStr && incompleteWizardStr) {
       try {
         incompleteWizard = JSON.parse(incompleteWizardStr)
       } catch (e) {
