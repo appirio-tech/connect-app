@@ -9,6 +9,7 @@ import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+import { INVITE_CUSTOMER_FAILURE } from '../../config/constants'
 const TCFormFields = FormsyForm.Fields
 
 
@@ -51,7 +52,7 @@ class Dialog extends React.Component {
     if (this.state.clearText && nextProps.processingInvites !== this.props.processingInvites &&
       !nextProps.processingInvites) {
       this.setState((prevState) => ({
-        userText: nextProps.error ? (nextProps.error.code === 403 ? prevState.userText : '') : '',
+        userText: nextProps.error ? (nextProps.error.type === INVITE_CUSTOMER_FAILURE ? prevState.userText : '') : '',
         validUserText: false,
         clearText: false,
         members: this.props.members
