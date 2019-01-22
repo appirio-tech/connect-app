@@ -1,14 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import {
   filterReadNotifications,
   filterNotificationsByProjectId,
-  filterProjectNotifications,
-  preRenderNotifications,
 } from '../../../../routes/notifications/helpers/notifications'
 import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 import GridView from '../../../../components/Grid/GridView'
@@ -44,12 +41,9 @@ const ProjectsGridView = props => {
       renderText: item => {
         const url = `/projects/${item.id}`
         const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
-        // project notifications
-        const notReadNotifications = filterReadNotifications(notifications)
-        const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, item.id))
         return (
           <Link to={url} className="spacing">
-            {(recentlyCreated || unreadProjectUpdate.length > 0) && <span className="blue-border" />}
+            {recentlyCreated && <span className="blue-border" />}
             {item.id}
           </Link>
         )
@@ -84,8 +78,12 @@ const ProjectsGridView = props => {
       renderText: item => {
         const url = `/projects/${item.id}`
         const code = _.get(item, 'details.utm.code', '')
+        // project notifications
+        const notReadNotifications = filterReadNotifications(notifications)
+        const unreadProjectUpdate = filterNotificationsByProjectId(notReadNotifications, item.id)
         return (
           <div className="spacing project-container">
+            {unreadProjectUpdate.length > 0 && <span className="blue-border" />}
             <div className="project-title">
               <Link to={url} className="link-title">{_.unescape(item.name)}</Link>
               {code && <span className="item-ref-code txt-gray-md" onClick={() => { applyFilters({ keyword: code }) }} dangerouslySetInnerHTML={{ __html: code }} />}
@@ -256,11 +254,6 @@ ProjectsGridView.propTypes = {
   pageNum: PropTypes.number.isRequired,
   criteria: PropTypes.object.isRequired,
   projectTemplates: PropTypes.array.isRequired,
-  notifications: PropTypes.array,
 }
 
-const mapStateToProps = ({ notifications }) => ({
-  notifications: preRenderNotifications(notifications.notifications),
-})
-
-export default connect(mapStateToProps)(ProjectsGridView)
+export default ProjectsGridView
