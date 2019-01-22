@@ -38,6 +38,8 @@ class Dialog extends React.Component {
         inviteText: '',
         validInviteText: false,
         clearText: false,
+        invitedMembers: this.props.invites,
+        members: this.props.members
       })
     }
   }
