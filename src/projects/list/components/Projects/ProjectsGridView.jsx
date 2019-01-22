@@ -1,8 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
+import {
+  filterReadNotifications,
+  filterNotificationsByProjectId,
+  filterProjectNotifications,
+  preRenderNotifications,
+} from '../../../../routes/notifications/helpers/notifications'
 import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 import GridView from '../../../../components/Grid/GridView'
 import UserTooltip from '../../../../components/User/UserTooltip'
@@ -22,7 +29,7 @@ const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 const ProjectsGridView = props => {
   const { projects, members, totalCount, criteria, pageNum, sortHandler, currentUser, onPageChange,
     error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus,
-    applyFilters, projectTemplates } = props
+    applyFilters, projectTemplates, notifications } = props
 
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
@@ -37,9 +44,12 @@ const ProjectsGridView = props => {
       renderText: item => {
         const url = `/projects/${item.id}`
         const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
+        // project notifications
+        const notReadNotifications = filterReadNotifications(notifications)
+        const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, item.id))
         return (
           <Link to={url} className="spacing">
-            {recentlyCreated && <span className="blue-border" />}
+            {(recentlyCreated || unreadProjectUpdate.length > 0) && <span className="blue-border" />}
             {item.id}
           </Link>
         )
@@ -246,6 +256,11 @@ ProjectsGridView.propTypes = {
   pageNum: PropTypes.number.isRequired,
   criteria: PropTypes.object.isRequired,
   projectTemplates: PropTypes.array.isRequired,
+  notifications: PropTypes.array,
 }
 
-export default ProjectsGridView
+const mapStateToProps = ({ notifications }) => ({
+  notifications: preRenderNotifications(notifications.notifications),
+})
+
+export default connect(mapStateToProps)(ProjectsGridView)
