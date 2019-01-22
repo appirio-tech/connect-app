@@ -54,11 +54,8 @@ const NotificationsContainerView = (props) => {
     }
   }
 
-  const showAllNotifications = () => {
-    setNotificationsFilterBy('')
-  }
   if (filterBy && isNotificationSourceCleared(filterSections, filterBy)) {
-    showAllNotifications()
+    setNotificationsFilterBy('')
   }
 
   const toggleNotificationOrBundleRead = (notificationId) => {
