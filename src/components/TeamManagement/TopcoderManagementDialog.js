@@ -50,12 +50,12 @@ class Dialog extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.state.clearText && nextProps.processingInvites !== this.props.processingInvites &&
       !nextProps.processingInvites) {
-      this.setState({
-        userText: nextProps.error ? undefined : '',
+      this.setState((prevState) => ({
+        userText: nextProps.error ? (nextProps.error.code === 403 ? prevState.userText : '') : '',
         validUserText: false,
         clearText: false,
         members: this.props.members
-      })
+      }))
     }
   }
 
@@ -284,6 +284,7 @@ class Dialog extends React.Component {
 
 Dialog.propTypes = {
   processingInvites: PT.bool.isRequired,
+  error: PT.oneOfType([PT.object, PT.bool]),
   currentUser: PT.object.isRequired,
   members: PT.arrayOf(PT.object).isRequired,
   isMember: PT.bool.isRequired,

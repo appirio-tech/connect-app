@@ -121,6 +121,7 @@ class TeamManagementContainer extends Component {
           onUserInviteAction={this.onUserInviteAction}
           processingMembers={this.props.processingMembers}
           processingInvites={this.props.processingInvites}
+          error={this.props.error}
           currentUser={this.props.currentUser}
           members={projectMembers}
           projectTeamInvites={projectTeamInvites}
@@ -153,6 +154,7 @@ const mapStateToProps = ({ loadUser, members, projectState }) => {
     allMembers: _.values(members.members),
     processingInvites: projectState.processingInvites,
     processingMembers: projectState.processingMembers,
+    error: projectState.error,
     topcoderTeamInvites: _.filter(projectState.project.invites, i => i.role !== 'customer'),
     projectTeamInvites: _.filter(projectState.project.invites, i => i.role === 'customer')
   }
@@ -182,6 +184,7 @@ TeamManagementContainer.propTypes = {
   projectId: PropTypes.number.isRequired,
   processingMembers: PropTypes.bool.isRequired,
   processingInvites: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   projectTeamInvites: PropTypes.arrayOf(PropTypes.object),
   topcoderTeamInvites: PropTypes.arrayOf(PropTypes.object),
 }
