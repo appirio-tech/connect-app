@@ -35,7 +35,7 @@ class Dialog extends React.Component {
     if (this.state.clearText && nextProps.processingInvites !== this.props.processingInvites &&
       !nextProps.processingInvites) {
       this.setState({
-        inviteText: '',
+        inviteText: nextProps.error ? undefined : '',
         validInviteText: false,
         clearText: false,
       })
