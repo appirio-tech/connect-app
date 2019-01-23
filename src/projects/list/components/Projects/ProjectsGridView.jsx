@@ -40,10 +40,8 @@ const ProjectsGridView = props => {
       sortable: false,
       renderText: item => {
         const url = `/projects/${item.id}`
-        const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
           <Link to={url} className="spacing">
-            {recentlyCreated && <span className="blue-border" />}
             {item.id}
           </Link>
         )
@@ -81,9 +79,10 @@ const ProjectsGridView = props => {
         // project notifications
         const notReadNotifications = filterReadNotifications(notifications)
         const unreadProjectUpdate = filterNotificationsByProjectId(notReadNotifications, item.id)
+        const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
           <div className="spacing project-container">
-            {unreadProjectUpdate.length > 0 && <span className="blue-border" />}
+            {(recentlyCreated || unreadProjectUpdate.length > 0) && <span className="blue-border" />}
             <div className="project-title">
               <Link to={url} className="link-title">{_.unescape(item.name)}</Link>
               {code && <span className="item-ref-code txt-gray-md" onClick={() => { applyFilters({ keyword: code }) }} dangerouslySetInnerHTML={{ __html: code }} />}
