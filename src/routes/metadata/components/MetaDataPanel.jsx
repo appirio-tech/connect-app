@@ -466,7 +466,12 @@ class MetaDataPanel extends React.Component {
     })
   }
 
-  onJSONEdit({ jsObject }) {
+  onJSONEdit({ jsObject, error }) {
+    if (error) {
+      debugger
+      return
+    }
+
     const { metadataType } = this.state
     if (metadataType === 'productTemplate') {
       const updateQuery = { template : { $set : jsObject } }
