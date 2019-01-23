@@ -104,6 +104,8 @@ class TemplateForm extends Component {
           isReadOnly = true
         }
       }
+    } else if (isCheckbox) {
+      value = false
     }
 
     return (
