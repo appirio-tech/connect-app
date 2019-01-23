@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { branch, renderComponent, compose, withProps, renderNothing } from 'recompose'
 import { withRouter } from 'react-router-dom'
+import { preRenderNotifications } from '../../../../routes/notifications/helpers/notifications'
 import Walkthrough from '../Walkthrough/Walkthrough'
 import CoderBot from '../../../../components/CoderBot/CoderBot'
 import ProjectListNavHeader from './ProjectListNavHeader'
@@ -240,7 +241,7 @@ class Projects extends Component {
   }
 }
 
-const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templates }) => {
+const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templates, notifications }) => {
   let isPowerUser = false
   const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   if (loadUser.user) {
@@ -272,6 +273,7 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
     refresh     : projectSearch.refresh,
     projectTemplates: templates.projectTemplates,
     isProjectTemplatesLoading: templates.isLoading,
+    notifications: preRenderNotifications(notifications.notifications),
   }
 }
 
