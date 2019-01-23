@@ -117,7 +117,7 @@ export const toggleNotificationSeen = (notificationId) => (dispatch) => {
       payload: notificationId
     })
   }).catch(err => {
-    Alert.error(`Failed to mark notification seen. ${err.message}`)
+    console.error(`Failed to mark notification seen. ${err.message}`)
   })
 }
 
