@@ -10,6 +10,7 @@ import {
   SET_NOTIFICATIONS_FILTER_BY,
   MARK_ALL_NOTIFICATIONS_READ,
   TOGGLE_NOTIFICATION_READ,
+  TOGGLE_NOTIFICATION_UNREAD,
   VIEW_OLDER_NOTIFICATIONS_SUCCESS,
   HIDE_OLDER_NOTIFICATIONS_SUCCESS,
   NOTIFICATIONS_PENDING,
@@ -78,16 +79,17 @@ export const markAllNotificationsRead = (sourceId, notifications = []) => (dispa
 
 export const toggleNotificationRead = (notificationId) => (dispatch) => {
   dispatch({
-    type: NOTIFICATIONS_PENDING
+    type: TOGGLE_NOTIFICATION_READ,
+    payload: notificationId
   })
-
   notificationsService.markNotificationsRead(notificationId).then(() => {
-    dispatch({
-      type: TOGGLE_NOTIFICATION_READ,
-      payload: notificationId
-    })
+    // No-op
   }).catch(err => {
     Alert.error(`Failed to mark notification read. ${err.message}`)
+    dispatch({
+       type: TOGGLE_NOTIFICATION_UNREAD,
+       payload: notificationId
+    })
   })
 }
 
