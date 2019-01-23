@@ -468,7 +468,6 @@ class MetaDataPanel extends React.Component {
 
   onJSONEdit({ jsObject, error }) {
     if (error) {
-      debugger
       return
     }
 
@@ -560,7 +559,7 @@ class MetaDataPanel extends React.Component {
             />
           )
         }
-        { needTemplatePreview && 
+        { needTemplatePreview &&
           <div className="content">
             {
               //render preview for intake form
