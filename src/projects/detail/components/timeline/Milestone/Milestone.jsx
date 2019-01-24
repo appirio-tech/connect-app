@@ -45,12 +45,14 @@ class Milestone extends React.Component {
     this.completeFinalFixesMilestone = this.completeFinalFixesMilestone.bind(this)
     this.extendMilestone = this.extendMilestone.bind(this)
     this.submitFinalFixesRequest = this.submitFinalFixesRequest.bind(this)
+    this.milestoneEditorChanged = this.milestoneEditorChanged.bind(this)
 
     this.state = {
       activeMenu: '',
       isHoverHeader: false,
       isEditing: false,
-      isMobileEditing: false
+      isMobileEditing: false,
+      disableSubmit: true
     }
   }
 
@@ -90,7 +92,7 @@ class Milestone extends React.Component {
   }
 
   closeEditForm() {
-    this.setState({ isEditing: false, isMobileEditing: false })
+    this.setState({ isEditing: false, isMobileEditing: false, disableSubmit: true })
   }
 
   toggleMobileEditLink() {
@@ -101,6 +103,33 @@ class Milestone extends React.Component {
     const { milestone, updateMilestone } = this.props
 
     updateMilestone(milestone.id, values)
+  }
+
+  milestoneEditorChanged(values) {
+    if (!this.props.milestone) {
+      if (this.state.disableSubmit) {
+        this.setState({ disableSubmit: false })
+      }
+      return
+    }
+    for (const key in values) {
+      if (values.hasOwnProperty(key)) {
+        const element = values[key]
+        let compareElement = this.props.milestone[key]
+        if (!(compareElement instanceof String)) {
+          compareElement = compareElement.toString()
+        }
+        if (element !== compareElement) {
+          if (this.state.disableSubmit) {
+            this.setState({ disableSubmit: false })
+          }
+          return
+        }
+      }
+    }
+    if (!this.state.disableSubmit) {
+      this.setState({ disableSubmit: true })
+    }
   }
 
   updateMilestoneContent(contentProps, metaDataProps) {
@@ -247,8 +276,10 @@ class Milestone extends React.Component {
         }]}
         onCancelClick={this.closeEditForm}
         onSubmit={this.updateMilestoneWithData}
+        onChange={this.milestoneEditorChanged}
         submitButtonTitle="Update milestone"
         title="Milestone Properties"
+        disableSubmitButton={this.state.disableSubmit}
       />
     )
     return (
