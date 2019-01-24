@@ -10,7 +10,6 @@ import {
   SET_NOTIFICATIONS_FILTER_BY,
   MARK_ALL_NOTIFICATIONS_READ,
   TOGGLE_NOTIFICATION_READ,
-  TOGGLE_NOTIFICATION_UNREAD,
   VIEW_OLDER_NOTIFICATIONS_SUCCESS,
   HIDE_OLDER_NOTIFICATIONS_SUCCESS,
   NOTIFICATIONS_PENDING,
@@ -102,18 +101,7 @@ export default (state = initialState, action) => {
       ...state,
       pending: false,
       notifications: state.notifications.map(n => (
-        n.id === action.payload ? { ...n, isRead: true } : n
-      ))
-    }
-    return newState
-  }
-
-  case TOGGLE_NOTIFICATION_UNREAD: {
-    const newState = {
-      ...state,
-      pending: false,
-      notifications: state.notifications.map(n => (
-        n.id === action.payload ? { ...n, isRead: false } : n
+        n.id === action.payload ? { ...n, isRead: action.isRead } : n
       ))
     }
     return newState
