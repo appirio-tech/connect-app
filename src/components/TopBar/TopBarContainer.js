@@ -110,8 +110,8 @@ class TopBarContainer extends React.Component {
         ]
       }, {
         items: [
-          { label: 'About', link: 'https://www.topcoder.com/about-topcoder/', absolute: true },
-          { label: 'Contacts', link: 'https://www.topcoder.com/about-topcoder/contact/', absolute: true },
+          { label: 'About', link: 'https://www.topcoder.com/about/', absolute: true },
+          { label: 'Contact us', link: 'https://www.topcoder.com/contact/', absolute: true },
           { label: 'Privacy', link: 'https://www.topcoder.com/community/how-it-works/privacy-policy/', absolute: true },
           { label: 'Terms', link: 'https://connect.topcoder.com/terms', absolute: true },
         ]
