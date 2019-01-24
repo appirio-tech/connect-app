@@ -102,7 +102,8 @@ export const toggleBundledNotificationRead = (bundledNotificationId, bundledIds)
   notificationsService.markNotificationsRead(bundledIds.join('-')).then(() => {
     dispatch({
       type: TOGGLE_NOTIFICATION_READ,
-      payload: bundledNotificationId
+      payload: bundledNotificationId,
+      isRead: true
     })
   }).catch(err => {
     Alert.error(`Failed to mark notification read. ${err.message}`)
