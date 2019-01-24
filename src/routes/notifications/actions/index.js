@@ -25,6 +25,14 @@ import {
 import Alert from 'react-s-alert'
 import _ from 'lodash'
 
+const handleDispatchNotificationRead = (dispatch, payload, isRead) => {
+  dispatch({
+    type: TOGGLE_NOTIFICATION_READ,
+    payload: payload,
+    isRead: isRead
+  })
+}
+
 export const getNotifications = () => (dispatch) => {
   dispatch({ type: GET_NOTIFICATIONS_PENDING })
   notificationsService.getNotifications().then(notifications => {
@@ -77,20 +85,12 @@ export const markAllNotificationsRead = (sourceId, notifications = []) => (dispa
 }
 
 export const toggleNotificationRead = (notificationId) => (dispatch) => {
-  dispatch({
-    type: TOGGLE_NOTIFICATION_READ,
-    payload: notificationId,
-    isRead: true
-  })
+  handleDispatchNotificationRead(dispatch, notificationId, true);
   notificationsService.markNotificationsRead(notificationId).then(() => {
     // No-op
   }).catch(err => {
     Alert.error(`Failed to mark notification read. ${err.message}`)
-    dispatch({
-       type: TOGGLE_NOTIFICATION_READ,
-       payload: notificationId,
-       isRead: false
-    })
+    handleDispatchNotificationRead(dispatch, notificationId, false);
   })
 }
 
@@ -98,15 +98,12 @@ export const toggleBundledNotificationRead = (bundledNotificationId, bundledIds)
   dispatch({
     type: NOTIFICATIONS_PENDING
   })
-
+  handleDispatchNotificationRead(dispatch, bundledNotificationId, true);
   notificationsService.markNotificationsRead(bundledIds.join('-')).then(() => {
-    dispatch({
-      type: TOGGLE_NOTIFICATION_READ,
-      payload: bundledNotificationId,
-      isRead: true
-    })
+    // No-op
   }).catch(err => {
     Alert.error(`Failed to mark notification read. ${err.message}`)
+    handleDispatchNotificationRead(dispatch, bundledNotificationId, false);
   })
 }
 
