@@ -92,7 +92,7 @@ class Milestone extends React.Component {
   }
 
   closeEditForm() {
-    this.setState({ isEditing: false, isMobileEditing: false })
+    this.setState({ isEditing: false, isMobileEditing: false, disableSubmit: true })
   }
 
   toggleMobileEditLink() {
@@ -107,7 +107,10 @@ class Milestone extends React.Component {
 
   milestoneEditorChanged(values) {
     if (!this.props.milestone) {
-      return this.setState({ disableSubmit: false })
+      if (this.state.disableSubmit) {
+        this.setState({ disableSubmit: false })
+      }
+      return
     }
     for (const key in values) {
       if (values.hasOwnProperty(key)) {
@@ -116,13 +119,17 @@ class Milestone extends React.Component {
         if (!(compareElement instanceof String)) {
           compareElement = compareElement.toString()
         }
-        
         if (element !== compareElement) {
-          return this.setState({ disableSubmit: false })
+          if (this.state.disableSubmit) {
+            this.setState({ disableSubmit: false })
+          }
+          return
         }
       }
     }
-    return this.setState({ disableSubmit: true })
+    if (!this.state.disableSubmit) {
+      this.setState({ disableSubmit: true })
+    }
   }
 
   updateMilestoneContent(contentProps, metaDataProps) {
