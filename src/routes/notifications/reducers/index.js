@@ -108,7 +108,7 @@ export default (state = initialState, action) => {
       ...state,
       pending: false,
       ...getNotificationsAndFilterBy(state.notifications.map(n => (
-        !action.payload || n.sourceId === action.payload ? { ...n, isRead: true } : n
+        !action.payload || n.sourceId === action.payload ? { ...n, isRead: action.isRead } : n
       )), state.filterBy)
     }
     return newState
@@ -130,7 +130,7 @@ export default (state = initialState, action) => {
       ...state,
       pending: false,
       ...getNotificationsAndFilterBy(state.notifications.map(n => (
-        _.includes(action.payload, n.id) ? { ...n, isRead: true } : n
+        _.includes(action.payload, n.id) ? { ...n, isRead: action.isRead } : n
       )), state.filterBy)
     }
     return newState

@@ -9,13 +9,13 @@ import {
   TOGGLE_NOTIFICATION_SEEN,
   SET_NOTIFICATIONS_FILTER_BY,
   MARK_ALL_NOTIFICATIONS_READ,
+  MARK_NOTIFICATIONS_READ,
   TOGGLE_NOTIFICATION_READ,
   VIEW_OLDER_NOTIFICATIONS_SUCCESS,
   HIDE_OLDER_NOTIFICATIONS_SUCCESS,
   NOTIFICATIONS_PENDING,
   TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE,
   TOGGLE_NOTIFICATIONS_DROPDOWN_WEB,
-  MARK_NOTIFICATIONS_READ,
 } from '../../../config/constants'
 import notificationsService from '../services/notifications.js'
 import {
@@ -25,12 +25,24 @@ import {
 import Alert from 'react-s-alert'
 import _ from 'lodash'
 
-const handleDispatchNotificationRead = (dispatch, payload, isRead) => {
+const handleDispatchNotificationReadByType = (dispatch, payload, isRead, type) => {
   dispatch({
-    type: TOGGLE_NOTIFICATION_READ,
+    type: type,
     payload: payload,
     isRead: isRead
   })
+}
+
+const handleDispatchNotificationRead = (dispatch, payload, isRead) => {
+  handleDispatchNotificationReadByType(dispatch, payload, isRead, TOGGLE_NOTIFICATION_READ)
+}
+
+const handleDispatchMarkAllNotificationsRead = (dispatch, payload, isRead) => {
+  handleDispatchNotificationReadByType(dispatch, payload, isRead, MARK_ALL_NOTIFICATIONS_READ)
+}
+
+const handleDispatchMarkNotificationsRead = (dispatch, payload, isRead) => {
+  handleDispatchNotificationReadByType(dispatch, payload, isRead, MARK_NOTIFICATIONS_READ)
 }
 
 export const getNotifications = () => (dispatch) => {
@@ -73,14 +85,12 @@ export const markAllNotificationsRead = (sourceId, notifications = []) => (dispa
   dispatch({
     type: NOTIFICATIONS_PENDING
   })
-
+  handleDispatchMarkAllNotificationsRead(dispatch, sourceId, true);
   notificationsService.markNotificationsRead(ids).then(() => {
-    dispatch({
-      type: MARK_ALL_NOTIFICATIONS_READ,
-      payload: sourceId
-    })
+    // No-op
   }).catch(err => {
     Alert.error(`Failed to mark notifications read. ${err.message}`)
+    handleDispatchMarkAllNotificationsRead(dispatch, sourceId, false);
   })
 }
 
@@ -156,13 +166,11 @@ export const markNotificationsRead = (notificationIds) => (dispatch) => {
   dispatch({
     type: NOTIFICATIONS_PENDING
   })
-
+  handleDispatchMarkNotificationsRead(dispatch, notificationIds, true);
   notificationsService.markNotificationsRead(notificationIds.join('-')).then(() => {
-    dispatch({
-      type: MARK_NOTIFICATIONS_READ,
-      payload: notificationIds
-    })
+    // No-op
   }).catch(err => {
     Alert.error(`Failed to mark notification read. ${err.message}`)
+    handleDispatchMarkNotificationsRead(dispatch, notificationIds, false);
   })
 }
