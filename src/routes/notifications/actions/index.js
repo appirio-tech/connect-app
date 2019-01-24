@@ -25,7 +25,7 @@ import {
 import Alert from 'react-s-alert'
 import _ from 'lodash'
 
-const handleDispatchNotificationReadByType = (dispatch, payload, isRead, type) => {
+const handleDispatchNotificationReadByType = (type, dispatch, payload, isRead) => {
   dispatch({
     type: type,
     payload: payload,
@@ -33,17 +33,9 @@ const handleDispatchNotificationReadByType = (dispatch, payload, isRead, type) =
   })
 }
 
-const handleDispatchNotificationRead = (dispatch, payload, isRead) => {
-  handleDispatchNotificationReadByType(dispatch, payload, isRead, TOGGLE_NOTIFICATION_READ)
-}
-
-const handleDispatchMarkAllNotificationsRead = (dispatch, payload, isRead) => {
-  handleDispatchNotificationReadByType(dispatch, payload, isRead, MARK_ALL_NOTIFICATIONS_READ)
-}
-
-const handleDispatchMarkNotificationsRead = (dispatch, payload, isRead) => {
-  handleDispatchNotificationReadByType(dispatch, payload, isRead, MARK_NOTIFICATIONS_READ)
-}
+const handleDispatchNotificationRead = handleDispatchNotificationReadByType.bind(this, TOGGLE_NOTIFICATION_READ)
+const handleDispatchMarkAllNotificationsRead = handleDispatchNotificationReadByType.bind(this, MARK_ALL_NOTIFICATIONS_READ)
+const handleDispatchMarkNotificationsRead = handleDispatchNotificationReadByType.bind(this, MARK_NOTIFICATIONS_READ)
 
 export const getNotifications = () => (dispatch) => {
   dispatch({ type: GET_NOTIFICATIONS_PENDING })
