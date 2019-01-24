@@ -92,6 +92,7 @@ class TemplateForm extends Component {
     const options = isDropdown ? field['options'] : []
     let value = field['value']
     let isReadOnly = false
+    let isHidden = false
     if (values && values[label]) {
       value = field['type'] === 'object' ? JSON.stringify(values[label]) : values[label]
       if (values.hasOwnProperty('id') && label === 'id') {
@@ -108,8 +109,12 @@ class TemplateForm extends Component {
       value = false
     }
 
+    if (label === 'id') {
+      isHidden = true
+    }
+
     return (
-      <div className="field" key={label}>
+      !isHidden && <div className="field" key={label}>
         <div className="label">{`${!isCheckbox ? label : ''}`}</div>
         {
           isTextBox && (
