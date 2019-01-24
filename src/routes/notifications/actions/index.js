@@ -18,9 +18,9 @@ import {
   MARK_NOTIFICATIONS_READ,
 } from '../../../config/constants'
 import notificationsService from '../services/notifications.js'
-import { 
-  filterNotificationsByCriteria, 
-  filterReadNotifications 
+import {
+  filterNotificationsByCriteria,
+  filterReadNotifications
 } from '../helpers/notifications'
 import Alert from 'react-s-alert'
 import _ from 'lodash'
@@ -119,8 +119,9 @@ export const toggleNotificationSeen = (notificationId) => (dispatch) => {
       type: TOGGLE_NOTIFICATION_SEEN,
       payload: notificationId
     })
-  }).catch(err => {
-    Alert.error(`Failed to mark notification seen. ${err.message}`)
+  }).catch(() => {
+    // ignored
+    // any network error will still be logged by the browser/client
   })
 }
 

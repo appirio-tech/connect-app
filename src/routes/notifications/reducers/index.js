@@ -51,6 +51,24 @@ const getSources = (notifications) => {
   return sources
 }
 
+// check if no unread notifications available in the filtered section
+const isNotificationSectionCleared = (notifications, filterBy) => {
+  if (filterBy && notifications.filter(n => !n.isRead).map(n => n.sourceId).indexOf(filterBy) >= 0) {
+    return false
+  }
+
+  return true
+}
+
+// get notifications and updated filterBy based on the unread notifications in current filter
+const getNotificationsAndFilterBy = (notifications, filterBy) => {
+  if (isNotificationSectionCleared(notifications, filterBy)) {
+    return { notifications, filterBy: '' }
+  }
+
+  return { notifications }
+}
+
 export default (state = initialState, action) => {
   switch (action.type) {
   case GET_NOTIFICATIONS_PENDING:
@@ -89,9 +107,9 @@ export default (state = initialState, action) => {
     const newState = {
       ...state,
       pending: false,
-      notifications: state.notifications.map(n => (
+      ...getNotificationsAndFilterBy(state.notifications.map(n => (
         !action.payload || n.sourceId === action.payload ? { ...n, isRead: true } : n
-      ))
+      )), state.filterBy)
     }
     return newState
   }
@@ -100,9 +118,9 @@ export default (state = initialState, action) => {
     const newState = {
       ...state,
       pending: false,
-      notifications: state.notifications.map(n => (
+      ...getNotificationsAndFilterBy(state.notifications.map(n => (
         n.id === action.payload ? { ...n, isRead: action.isRead } : n
-      ))
+      )), state.filterBy)
     }
     return newState
   }
@@ -111,9 +129,9 @@ export default (state = initialState, action) => {
     const newState = {
       ...state,
       pending: false,
-      notifications: state.notifications.map(n => (
+      ...getNotificationsAndFilterBy(state.notifications.map(n => (
         _.includes(action.payload, n.id) ? { ...n, isRead: true } : n
-      ))
+      )), state.filterBy)
     }
     return newState
   }
