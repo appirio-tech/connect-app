@@ -107,6 +107,14 @@ class ProjectDetail extends Component {
       document.title = `${project.name} - Topcoder`
     }
 
+    // if project version not v3 , URL /scope redirect to /specification
+    if(project 
+      && project.version 
+      && project.version !== 'v3' 
+      &&  this.props.history.location.pathname.indexOf('/scope') !== -1 ){
+      this.props.history.push(this.props.history.location.pathname.replace('/scope', '/specification'))
+    }
+
     // load project if URL changed
     if (this.props.match.params.projectId !== match.params.projectId) {
       this.props.loadProjectDashboard(match.params.projectId)

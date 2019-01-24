@@ -13,7 +13,7 @@ import {
 
 export const GOTO = {
   PROJECT_DASHBOARD: '/projects/{{projectId}}',
-  PROJECT_SPECIFICATION: '/projects/{{projectId}}/specification',
+  PROJECT_SPECIFICATION: '/projects/{{projectId}}/scope',
   PROJECT_PLAN: '/projects/{{projectId}}/plan',
   TOPIC: '/projects/{{projectId}}/#feed-{{topicId}}',
   POST: '/projects/{{projectId}}/#comment-{{postId}}',
