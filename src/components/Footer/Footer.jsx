@@ -10,8 +10,8 @@ require('./Footer.scss')
 const Footer = () => {
   const currentYear = moment().format('YYYY')
   const otherNavigationItems = [
-    {img: '', text: 'About', link: 'https://www.topcoder.com/about-topcoder/', target: '_blank'},
-    {img: '', text: 'Contact us', link: 'https://www.topcoder.com/about-topcoder/contact/', target: '_blank'},
+    {img: '', text: 'About', link: 'https://www.topcoder.com/about/', target: '_blank'},
+    {img: '', text: 'Contact us', link: 'https://www.topcoder.com/contact/', target: '_blank'},
     {img: '', text: 'Privacy', link: 'https://www.topcoder.com/community/how-it-works/privacy-policy/', target: '_blank'},
     {img: '', text: 'Terms', link: 'https://connect.topcoder.com/terms', target: '_blank'}
   ]
