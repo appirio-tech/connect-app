@@ -119,8 +119,8 @@ const NotificationsDropdownContainerView = (props) => {
             <NotificationsDropdown 
               hasUnread={hasUnread} 
               hasNew={hasNew} 
-              onToggle={(isOpen) => {
-                toggleNotificationsDropdownWeb(isOpen)
+              onToggle={() => {
+                toggleNotificationsDropdownWeb()
                 visitNotifications()
               }}
             >

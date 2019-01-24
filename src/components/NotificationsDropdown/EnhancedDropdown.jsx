@@ -30,7 +30,7 @@ class EnhancedDropdown extends Dropdown{
 
     if (!isDropdown) {
       this.setState({ isOpen: false }, () => {
-        this.props.onToggle(false)
+        this.props.onToggle()
         this.refreshEventHandlers()
       })
     }
