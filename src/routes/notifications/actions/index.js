@@ -116,7 +116,7 @@ export const toggleNotificationSeen = (notificationId) => (dispatch) => {
       type: TOGGLE_NOTIFICATION_SEEN,
       payload: notificationId
     })
-  }).catch(err => {
+  }).catch(() => {
     // ignored
     // any network error will still be logged by the browser/client
   })
