@@ -33,7 +33,7 @@ export default function(state = initialState, action) {
   case LOAD_USER_SUCCESS: {
     const user = action.user
     const _members = [{
-      userId: user.id,
+      userId: user.userId,
       handle: user.handle,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -42,7 +42,6 @@ export default function(state = initialState, action) {
     }]
     const userMap = _.keyBy(_members, 'userId')
     return Object.assign({}, state, {
-      isLoading: false,
       members: update(state.members, {$merge: userMap})
     })
   }
