@@ -51,8 +51,8 @@ class Dialog extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.state.clearText && nextProps.processingInvites !== this.props.processingInvites &&
       !nextProps.processingInvites) {
-      this.setState((prevState) => ({
-        userText: nextProps.error ? (nextProps.error.type === INVITE_CUSTOMER_FAILURE ? prevState.userText : '') : '',
+      this.setState((prevState) => ({ 
+        userText: nextProps.error && nextProps.error.type === INVITE_TOPCODER_MEMBER_FAILURE ? prevState.inviteText : '',
         validUserText: false,
         clearText: false,
         members: this.props.members
