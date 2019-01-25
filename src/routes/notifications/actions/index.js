@@ -78,9 +78,7 @@ export const markAllNotificationsRead = (sourceId, notifications = []) => (dispa
     type: NOTIFICATIONS_PENDING
   })
   handleDispatchMarkAllNotificationsRead(dispatch, sourceId, true);
-  notificationsService.markNotificationsRead(ids).then(() => {
-    // No-op
-  }).catch(err => {
+  notificationsService.markNotificationsRead(ids).catch(err => {
     Alert.error(`Failed to mark notifications read. ${err.message}`)
     handleDispatchMarkAllNotificationsRead(dispatch, sourceId, false);
   })
@@ -88,9 +86,7 @@ export const markAllNotificationsRead = (sourceId, notifications = []) => (dispa
 
 export const toggleNotificationRead = (notificationId) => (dispatch) => {
   handleDispatchNotificationRead(dispatch, notificationId, true);
-  notificationsService.markNotificationsRead(notificationId).then(() => {
-    // No-op
-  }).catch(err => {
+  notificationsService.markNotificationsRead(notificationId).catch(err => {
     Alert.error(`Failed to mark notification read. ${err.message}`)
     handleDispatchNotificationRead(dispatch, notificationId, false);
   })
@@ -101,9 +97,7 @@ export const toggleBundledNotificationRead = (bundledNotificationId, bundledIds)
     type: NOTIFICATIONS_PENDING
   })
   handleDispatchNotificationRead(dispatch, bundledNotificationId, true);
-  notificationsService.markNotificationsRead(bundledIds.join('-')).then(() => {
-    // No-op
-  }).catch(err => {
+  notificationsService.markNotificationsRead(bundledIds.join('-')).catch(err => {
     Alert.error(`Failed to mark notification read. ${err.message}`)
     handleDispatchNotificationRead(dispatch, bundledNotificationId, false);
   })
@@ -159,9 +153,7 @@ export const markNotificationsRead = (notificationIds) => (dispatch) => {
     type: NOTIFICATIONS_PENDING
   })
   handleDispatchMarkNotificationsRead(dispatch, notificationIds, true);
-  notificationsService.markNotificationsRead(notificationIds.join('-')).then(() => {
-    // No-op
-  }).catch(err => {
+  notificationsService.markNotificationsRead(notificationIds.join('-')).catch(err => {
     Alert.error(`Failed to mark notification read. ${err.message}`)
     handleDispatchMarkNotificationsRead(dispatch, notificationIds, false);
   })
