@@ -9,7 +9,7 @@ import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
-import { INVITE_CUSTOMER_FAILURE } from '../../config/constants'
+import { INVITE_TOPCODER_MEMBER_FAILURE } from '../../config/constants'
 const TCFormFields = FormsyForm.Fields
 
 
