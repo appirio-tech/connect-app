@@ -52,7 +52,7 @@ class Dialog extends React.Component {
     })
     let present = _.some(this.state.invitedMembers, invited => invites.indexOf(invited.email) > -1)
     present = present || _.some(this.state.invitedMembers, invited => {
-      if(!invited.member) {
+      if (!invited.member) {
         return false;
       }
       return handles.indexOf(invited.member.handle) > -1;
@@ -177,7 +177,7 @@ class Dialog extends React.Component {
               wrapperClass="inviteTextInput"
               type="text"
               value={this.state.inviteText}
-              placeholder="Enter one or more emails separated by ';' or comma ','"
+              placeholder="Enter one or more emails or user handles separated by ';' or comma ','"
               disabled={(!currentUser.isAdmin && !isMember) || this.state.clearText}
             />
             { this.state.showAlreadyMemberError && <div className="error-message">
