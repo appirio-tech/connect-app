@@ -53,9 +53,9 @@ class Dialog extends React.Component {
     let present = _.some(this.state.invitedMembers, invited => invites.indexOf(invited.email) > -1)
     present = present || _.some(this.state.invitedMembers, invited => {
       if (!invited.member) {
-        return false;
+        return false
       }
-      return handles.indexOf(invited.member.handle) > -1;
+      return handles.indexOf(invited.member.handle) > -1
     })
     present = present || _.some(this.state.members, member => handles.indexOf(member.handle) > -1)
     this.setState({
