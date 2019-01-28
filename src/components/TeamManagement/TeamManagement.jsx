@@ -254,11 +254,6 @@ TeamManagement.propTypes = {
   }).isRequired,
 
   /**
-   * The error message
-   */
-  error: PropTypes.string,
-
-  /**
    * The list of all project members
    */
   members: PropTypes.arrayOf(userShape).isRequired,
