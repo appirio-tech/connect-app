@@ -7,7 +7,7 @@ import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
-import { INVITE_CUSTOMER_FAILURE } from '../../config/constants';
+import { INVITE_CUSTOMER_FAILURE } from '../../config/constants'
 const TCFormFields = FormsyForm.Fields
 
 class Dialog extends React.Component {
@@ -35,7 +35,7 @@ class Dialog extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.state.clearText && nextProps.processingInvites !== this.props.processingInvites &&
       !nextProps.processingInvites) {
-      this.setState((prevState) =>({
+      this.setState((prevState) => ({
         inviteText: nextProps.error && nextProps.error.type === INVITE_CUSTOMER_FAILURE ? prevState.inviteText : '',
         validInviteText: false,
         clearText: false,
