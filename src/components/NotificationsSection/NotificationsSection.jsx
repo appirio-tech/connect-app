@@ -52,7 +52,7 @@ NotificationsSection.propTypes = {
   isSimple: PropTypes.bool,
   isGlobal: PropTypes.bool,
   title: PropTypes.string.isRequired,
-  transitionState: PropTypes.string.isRequired,
+  transitionState: PropTypes.string,
   onMarkAllClick: PropTypes.func,
   onLinkClick: PropTypes.func.isRequired,
   onReadToggleClick: PropTypes.func.isRequired,
