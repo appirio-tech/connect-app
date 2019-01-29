@@ -46,12 +46,19 @@ class Dialog extends React.Component {
   onChange(currentValues) {
     const text = currentValues.emails
     const invites = text.split(/[,;]/g)
+    const handles = invites.filter((invite) => invite.startsWith('@')).map((invite) => invite.substring(1))
     const isValid = invites.every(invite => {
       invite = invite.trim()
       return  invite.length > 1 && (/(.+)@(.+){2,}\.(.+){2,}/.test(invite) || invite.startsWith('@'))
     })
     let present = _.some(this.state.invitedMembers, invited => invites.indexOf(invited.email) > -1)
-    present = present || _.some(this.state.members, member => invites.indexOf(member.email) > -1)
+    present = present || _.some(this.state.invitedMembers, invited => {
+      if (!invited.member) {
+        return false
+      }
+      return handles.indexOf(invited.member.handle) > -1
+    })
+    present = present || _.some(this.state.members, member => handles.indexOf(member.handle) > -1)
     this.setState({
       validInviteText: !present && isValid && text.trim().length > 0,
       inviteText: currentValues.emails,
@@ -171,7 +178,7 @@ class Dialog extends React.Component {
               wrapperClass="inviteTextInput"
               type="text"
               value={this.state.inviteText}
-              placeholder="Enter one or more emails separated by ';' or comma ','"
+              placeholder="Enter one or more emails or user handles separated by ';' or comma ','"
               disabled={(!currentUser.isAdmin && !isMember) || this.state.clearText}
             />
             { this.state.showAlreadyMemberError && <div className="error-message">
