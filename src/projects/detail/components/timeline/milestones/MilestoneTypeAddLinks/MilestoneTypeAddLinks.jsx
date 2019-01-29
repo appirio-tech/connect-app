@@ -27,7 +27,8 @@ class MilestoneTypeAddLinks extends React.Component {
     this.state = {
       addedLinks: [],
       isShowCompleteConfirmMessage: false,
-      isLinkAdded: true,
+      isLinkUpdating: false,
+      showExtensionRequestSection: true
     }
 
     this.addUrl = this.addUrl.bind(this)
@@ -36,6 +37,16 @@ class MilestoneTypeAddLinks extends React.Component {
     this.hideCompleteAddLinksConfirmation = this.hideCompleteAddLinksConfirmation.bind(this)
     this.complete = this.complete.bind(this)
     this.toggleRejectedSection = this.toggleRejectedSection.bind(this)
+    this.onFormAddOpen = this.onFormAddOpen.bind(this)
+    this.onFormAddCancel = this.onFormAddCancel.bind(this)
+  }
+
+  onFormAddOpen() {
+    this.setState({ showExtensionRequestSection: false })
+  }
+
+  onFormAddCancel() {
+    this.setState({ showExtensionRequestSection: true })
   }
 
   showCompleteAddLinksConfirmation() {
@@ -76,9 +87,15 @@ class MilestoneTypeAddLinks extends React.Component {
     const { addedLinks } = this.state
     values.type = 'marvelapp'
 
+    // here we simulate uploading process for LinkList component
+    // as that component is uncontrollable and relies on the `isUpdating` property
     this.setState({
-      addedLinks: [...addedLinks, values],
-      isLinkAdded: false
+      isLinkUpdating: true,
+    }, () => {
+      this.setState({
+        addedLinks: [...addedLinks, values],
+        isLinkUpdating: false,
+      })
     })
   }
 
@@ -90,7 +107,6 @@ class MilestoneTypeAddLinks extends React.Component {
     addedLinks.splice(linkIndex, 1)
     this.setState({
       addedLinks,
-      isLinkAdded: false
     })
   }
 
@@ -106,7 +122,7 @@ class MilestoneTypeAddLinks extends React.Component {
     const {
       addedLinks,
       isShowCompleteConfirmMessage,
-      isLinkAdded,
+      isLinkUpdating,
     } = this.state
 
     const isActive = milestone.status === MILESTONE_STATUS.ACTIVE
@@ -120,7 +136,7 @@ class MilestoneTypeAddLinks extends React.Component {
       : `${-daysLeft} days designs are delayed`
 
     const progressPercent = getProgressPercent(totalDays, daysLeft)
-
+    const { showExtensionRequestSection } = this.state
     return (
       <div styleName={cn('milestone-post', theme)}>
         <DotIndicator hideDot>
@@ -163,8 +179,10 @@ class MilestoneTypeAddLinks extends React.Component {
                     formAddButtonTitle="Add link"
                     formUpdateTitle="Editing a link"
                     formUpdateButtonTitle="Save changes"
-                    isUpdating={isLinkAdded}
+                    isUpdating={isLinkUpdating}
                     fakeName={`Design ${addedLinks.length + 1}`}
+                    onFormAddOpen={this.onFormAddOpen}
+                    onFormAddCancel={this.onFormAddCancel}
                     canAddLink
                   />
                 </DotIndicator>
@@ -208,22 +226,22 @@ class MilestoneTypeAddLinks extends React.Component {
               !isCompleted &&
               !extensionRequestDialog &&
               !isShowCompleteConfirmMessage &&
-              !currentUser.isCustomer &&
-              (
-                <DotIndicator hideLine>
-                  <div styleName="action-bar" className="flex center">
-                    {(!currentUser.isCustomer) && (
-                      <button
-                        className={'tc-btn tc-btn-primary'}
-                        onClick={!currentUser.isCustomer ? this.showCompleteAddLinksConfirmation : this.complete}
-                      >
-                        Complete
-                      </button>
-                    )}
-                    {!currentUser.isCustomer && extensionRequestButton}
-                  </div>
-                </DotIndicator>
-              )}
+              !currentUser.isCustomer && showExtensionRequestSection &&
+            (
+              <DotIndicator hideLine>
+                <div styleName="action-bar" className="flex center">
+                  {(!currentUser.isCustomer) && (
+                    <button
+                      className={'tc-btn tc-btn-primary'}
+                      onClick={!currentUser.isCustomer ? this.showCompleteAddLinksConfirmation : this.complete}
+                    >
+                      Complete
+                    </button>
+                  )}
+                  {!currentUser.isCustomer && extensionRequestButton}
+                </div>
+              </DotIndicator>
+            )}
           </div>
         )}
 

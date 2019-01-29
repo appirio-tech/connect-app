@@ -10,13 +10,13 @@ import { getProjectTemplateById } from '../../../helpers/templates'
 import ScopeAndSpecificationContainer from './ScopeAndSpecificationContainer'
 
 const ScopeContainer = (props) => {
-  const sections = props.projectTemplate.scope.sections
+  const template = props.projectTemplate.scope
 
   return (
     <ScopeAndSpecificationContainer
       {...{
         ...props,
-        sections
+        template
       }}
     />
   )

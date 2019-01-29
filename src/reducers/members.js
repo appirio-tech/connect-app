@@ -4,6 +4,7 @@ import { LOAD_MEMBERS_PENDING, LOAD_MEMBERS_SUCCESS, LOAD_MEMBERS_FAILURE,
   LOAD_MEMBER_SUGGESTIONS_SUCCESS,
   CONNECT_USER,
   CONNECT_USER_HANDLE,
+  LOAD_USER_SUCCESS
 } from '../config/constants'
 
 
@@ -26,6 +27,21 @@ export default function(state = initialState, action) {
     // merge the 2 data sets
     return Object.assign({}, state, {
       isLoading: false,
+      members: update(state.members, {$merge: userMap})
+    })
+  }
+  case LOAD_USER_SUCCESS: {
+    const user = action.user
+    const _members = [{
+      userId: user.userId,
+      handle: user.handle,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      photoURL: user.photoURL
+    }]
+    const userMap = _.keyBy(_members, 'userId')
+    return Object.assign({}, state, {
       members: update(state.members, {$merge: userMap})
     })
   }

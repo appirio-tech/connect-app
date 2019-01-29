@@ -42,6 +42,7 @@ class FileListContainer extends Component {
       canManageAttachments,
       removeAttachment,
       updateAttachment,
+      additionalClass,
     } = this.props
 
     files.forEach(file => {
@@ -55,7 +56,7 @@ class FileListContainer extends Component {
     })
 
     return (
-      <div>
+      <div className={additionalClass}>
         <FileList files={files} onDelete={removeAttachment} onSave={updateAttachment} canModify={canManageAttachments}/>
         <AddFiles successHandler={this.processUploadedFiles} storePath={attachmentsStorePath} category={category} />
       </div>
@@ -77,6 +78,11 @@ FileListContainer.propTypes = {
   addAttachment: PropTypes.func.isRequired,
   updateAttachment: PropTypes.func.isRequired,
   removeAttachment: PropTypes.func.isRequired,
+  additionalClass: PropTypes.string
+}
+
+FileListContainer.defaultProps = {
+  additionalClass: '',
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FileListContainer)

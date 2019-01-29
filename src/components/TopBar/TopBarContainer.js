@@ -32,6 +32,7 @@ class TopBarContainer extends React.Component {
 
   shouldComponentUpdate(nextProps) {
     return (nextProps.user || {}).handle !== (this.props.user || {}).handle
+    || (nextProps.user || {}).photoURL !== (this.props.user || {}).photoURL
     || nextProps.toolbar !== this.props.toolbar
     || this.props.location.pathname !== nextProps.location.pathname
   }
@@ -61,9 +62,9 @@ class TopBarContainer extends React.Component {
     const { user, toolbar, userRoles, isPowerUser } = this.props
 
     const userHandle  = _.get(user, 'handle')
-    const userImage = _.get(user, 'profile.photoURL')
-    const userFirstName = _.get(user, 'profile.firstName')
-    const userLastName = _.get(user, 'profile.lastName')
+    const userImage = _.get(user, 'photoURL')
+    const userFirstName = _.get(user, 'firstName')
+    const userLastName = _.get(user, 'lastName')
     let userName = userFirstName
     if (userName && userLastName) {
       userName += ' ' + userLastName
@@ -73,7 +74,6 @@ class TopBarContainer extends React.Component {
     const isHomePage = this.props.match.path === '/'
     const loginUrl = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.protocol}//${window.location.host}/`
     const registerUrl = !isHomePage ? ACCOUNTS_APP_REGISTER_URL : null
-    const profileUrl = `https://${DOMAIN}/settings/profile/`
     const isLoggedIn = !!(userRoles && userRoles.length)
 
     const logoutClick = (evt) => {
@@ -85,7 +85,11 @@ class TopBarContainer extends React.Component {
 
     const userMenuItems = [
       [
-        { label: 'Profile Settings', link: profileUrl, absolute: true, id: 0},
+        { label: 'My profile', link: '/settings/profile' },
+        { label: 'Account and security', link: '/settings/account' },
+        { label: 'Notification settings', link: '/settings/notifications' },
+      ],
+      [
         { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true, id: 0 }
       ],
       [
@@ -98,13 +102,15 @@ class TopBarContainer extends React.Component {
         style: 'big',
         items: [
           { label: 'All projects', link: isPowerUser ? '/projects?sort=updatedAt%20desc' : '/projects' },
-          { label: 'Getting Started', link: 'https://www.topcoder.com/about-topcoder/connect/', absolute: true },
+          { label: 'My profile', link: '/settings/profile' },
+          { label: 'Account and security', link: '/settings/account' },
+          { label: 'Notification settings', link: '/settings/notifications' },
           { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true },
         ]
       }, {
         items: [
-          { label: 'About', link: 'https://www.topcoder.com/about-topcoder/', absolute: true },
-          { label: 'Contacts', link: 'https://www.topcoder.com/about-topcoder/contact/', absolute: true },
+          { label: 'About', link: 'https://www.topcoder.com/about/', absolute: true },
+          { label: 'Contact us', link: 'https://www.topcoder.com/contact/', absolute: true },
           { label: 'Privacy', link: 'https://www.topcoder.com/community/how-it-works/privacy-policy/', absolute: true },
           { label: 'Terms', link: 'https://connect.topcoder.com/terms', absolute: true },
         ]

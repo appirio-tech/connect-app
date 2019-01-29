@@ -20,13 +20,21 @@ import {
 } from '../../actions/project'
 import { addProductAttachment, updateProductAttachment, removeProductAttachment } from '../../actions/projectAttachment'
 
-import TwoColsLayout from '../components/TwoColsLayout'
+import TwoColsLayout from '../../../components/TwoColsLayout'
 import ProjectStages from '../components/ProjectStages'
 import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
-import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_DRAFT, PROJECT_STATUS_COMPLETED, PHASE_STATUS_ACTIVE,
-  PROJECT_STATUS_CANCELLED, PROJECT_FEED_TYPE_PRIMARY } from '../../../config/constants'
+import NotificationsReader from '../../../components/NotificationsReader'
+import {
+  SCREEN_BREAKPOINT_MD,
+  PHASE_STATUS_DRAFT,
+  PROJECT_STATUS_COMPLETED,
+  PHASE_STATUS_ACTIVE,
+  PROJECT_STATUS_CANCELLED,
+  PROJECT_FEED_TYPE_PRIMARY,
+  EVENT_TYPE,
+} from '../../../config/constants'
 import Sticky from '../../../components/Sticky'
 import { Link } from 'react-router-dom'
 
@@ -90,14 +98,20 @@ class ProjectPlanContainer extends React.Component {
       feeds,
       isFeedsLoading,
       phases,
+      phasesNonDirty,
       productsTimelines,
       phasesTopics,
+      isProcessing,
     } = this.props
 
     // manager user sees all phases
     // customer user doesn't see unplanned (draft) phases
     const visiblePhases = phases && phases.filter((phase) => (
       isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
+    ))
+    const visiblePhasesIds = _.map(visiblePhases, 'id')
+    const visiblePhasesNonDirty = phasesNonDirty && phasesNonDirty.filter((phaseNonDirty) => (
+      _.includes(visiblePhasesIds, phaseNonDirty.id)
     ))
 
     const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
@@ -116,11 +130,20 @@ class ProjectPlanContainer extends React.Component {
         phasesTopics={phasesTopics}
         onChannelClick={this.onChannelClick}
         isProjectPlan={isProjectPlan}
+        isProjectProcessing={isProcessing}
       />
     )
 
     return (
       <TwoColsLayout>
+        <NotificationsReader
+          id="project-plan"
+          criteria={[
+            { eventType: EVENT_TYPE.PROJECT_PLAN.READY, contents: { projectId: project.id } },
+            { eventType: EVENT_TYPE.PROJECT_PLAN.MODIFIED, contents: { projectId: project.id } },
+            { eventType: EVENT_TYPE.PROJECT_PLAN.PROGRESS_UPDATED, contents: { projectId: project.id } },
+          ]}
+        />
         <TwoColsLayout.Sidebar>
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
@@ -138,7 +161,8 @@ class ProjectPlanContainer extends React.Component {
             <ProjectStages
               {...{
                 ...this.props,
-                phases: visiblePhases
+                phases: visiblePhases,
+                phasesNonDirty: visiblePhasesNonDirty,
               }}
             />
           ) : (
@@ -168,6 +192,7 @@ ProjectPlanContainer.propTypes = {
 const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates }) => ({
   productTemplates: templates.productTemplates,
   phases: projectState.phases,
+  phasesNonDirty: projectState.phasesNonDirty,
   feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
   isFeedsLoading: projectTopics.isLoading,
   phasesTopics,

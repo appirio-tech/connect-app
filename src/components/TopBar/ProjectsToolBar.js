@@ -173,6 +173,7 @@ class ProjectsToolBar extends Component {
     const { user, criteria, creatingProject, projectCreationError, searchTermTag, projectTypes } = this.props
     const { errorCreatingProject, isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
     return (nextProps.user || {}).handle !== (user || {}).handle
+    || (nextProps.user || {}).photoURL !== (this.props.user || {}).photoURL
     || JSON.stringify(nextProps.criteria) !== JSON.stringify(criteria)
     || nextProps.creatingProject !== creatingProject
     || nextProps.projectCreationError !== projectCreationError
@@ -207,12 +208,14 @@ class ProjectsToolBar extends Component {
       {
         text: 'Getting Started',
         link: 'https://www.topcoder.com/about-topcoder/connect/',
-        target: '_blank'
+        target: '_blank',
+        absolute: true
       },
       {
         text: 'Help',
         link: 'https://help.topcoder.com/hc/en-us/articles/225540188-Topcoder-Connect-FAQs',
-        target: '_blank'
+        target: '_blank',
+        absolute: true
       }
     ]
     const menuBar = isLoggedIn && !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />

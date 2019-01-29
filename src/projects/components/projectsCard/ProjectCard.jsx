@@ -1,6 +1,7 @@
 import React from 'react'
 import PT from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import _ from 'lodash'
+import { withRouter, Link } from 'react-router-dom'
 import { getProjectRoleForCurrentUser } from '../../../helpers/projectHelper'
 import ProjectCardHeader from './ProjectCardHeader'
 import ProjectCardBody from './ProjectCardBody'
@@ -11,6 +12,10 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
   const className = `ProjectCard ${ disabled ? 'disabled' : 'enabled'}`
   if (!project) return null
   const currentMemberRole = getProjectRoleForCurrentUser({ project, currentUserId: currentUser.userId})
+  // check whether is the project's member
+  const isMember = _.some(project.members, m => (m.userId === currentUser.userId && m.deletedAt === null))
+  // check whether has pending invition
+  const isInvited = _.some(project.invites, m => ((m.userId === currentUser.userId || m.email === currentUser.email) && !m.deletedAt && m.status === 'pending'))
   return (
     <div
       className={className}
@@ -34,6 +39,15 @@ function ProjectCard({ project, duration, disabled, currentUser, history, onChan
       </div>
       <div className="card-footer">
         <ProjectManagerAvatars managers={project.members} maxShownNum={10} />
+        <div>
+          {(!isMember && isInvited) &&
+            <Link to={`/projects/${project.id}`} className="spacing">
+              <div className="join-btn" style={{margin: '5px'}}>
+                Join project
+              </div>
+            </Link>
+          }
+        </div>
       </div>
     </div>
   )
