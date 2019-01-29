@@ -5,6 +5,8 @@ import { evaluate } from './dependentQuestionsHelper'
 chai.should()
 
 const testData = {
+  text: 'string',
+  textEmpty: '',
   a: 1,
   b: 2,
   c: 1,
@@ -50,6 +52,48 @@ describe('Evaluate', () => {
       const result = evaluate(expression, testData)
 
       result.should.equal(true)
+    })
+
+    it('!textEmpty => true', () => {
+      const expression = '!textEmpty'
+      const result = evaluate(expression, testData)
+
+      result.should.equal(true)
+    })
+
+    it('!text => false', () => {
+      const expression = '!text'
+      const result = evaluate(expression, testData)
+
+      result.should.equal(false)
+    })
+
+    it('== (true)', () => {
+      const expression = 'f == f'
+      const result = evaluate(expression, testData)
+
+      result.should.equal(true)
+    })
+
+    it('== (false)', () => {
+      const expression = 'f == t'
+      const result = evaluate(expression, testData)
+
+      result.should.equal(false)
+    })
+
+    it('!= (true)', () => {
+      const expression = 'f != t'
+      const result = evaluate(expression, testData)
+
+      result.should.equal(true)
+    })
+
+    it('!= (false)', () => {
+      const expression = 'f != f'
+      const result = evaluate(expression, testData)
+
+      result.should.equal(false)
     })
   })
 

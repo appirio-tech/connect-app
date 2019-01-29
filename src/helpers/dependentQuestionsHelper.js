@@ -107,7 +107,8 @@ const oneParamOps = ['!']
 
 // will split expression into tokens mainly using spaces
 // additionally we let "(", ")", "!" to be used without spaces around
-const opsSplitters = ['\\s+', '\\(', '\\)', '!']
+// for "!" we check that next symbol is not "=", to avoid splitting "!="
+const opsSplitters = ['\\s+', '\\(', '\\)', '!(?!=)']
 const splitRegexp = new RegExp('(' + opsSplitters.join('|') + ')')
 
 /**
