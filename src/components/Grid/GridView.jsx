@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 import ListHeader from './ListHeader'
 import ListItem from './ListItem'
 import PaginationBar from './PaginationBar'
@@ -7,13 +8,14 @@ import Placeholder from './Placeholder'
 import InfiniteScroll from 'react-infinite-scroller'
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator'
 import NewProjectCard from '../../projects/components/projectsCard/NewProjectCard'
+import { PROJECT_CATALOG_URL } from '../../config/constants'
 import './GridView.scss'
 
 
 const GridView = props => {
   const { columns, sortHandler, currentSortField, ListComponent, resultSet, onPageChange, noMoreResultsMessage,
     totalCount, pageSize, currentPageNum, infiniteScroll, infiniteAutoload, isLoading, setInfiniteAutoload,
-    applyFilters, entityNamePlural,
+    applyFilters, entityNamePlural, orgConfig,
     // entityName
   } = props
   const paginationProps = { totalCount, pageSize, currentPageNum, onPageChange }
@@ -61,6 +63,8 @@ const GridView = props => {
         placeholders.push({ isPlaceholder: true })
       }
     }
+    const orgConfigs = _.filter(orgConfig, (o) => { return o.configName === PROJECT_CATALOG_URL })
+
     return (
       <div>
         <div className="container">
@@ -86,7 +90,10 @@ const GridView = props => {
             </div>
         }
         { !isLoading && !hasMore && <div key="end" className="gridview-no-more">{noMoreResultsMsg}</div>}
-        <div className="project-card project-card-new"><NewProjectCard /></div>
+        <div className="project-card project-card-new">
+          {(orgConfigs.length === 0 || orgConfigs.length > 1) && <NewProjectCard />}
+          {orgConfigs.length === 1 && <NewProjectCard link={orgConfigs[0].configValue} />}
+        </div>
       </div>
     )
   }
@@ -125,7 +132,8 @@ GridView.propTypes = {
   infiniteAutoload: PropTypes.bool,
   infiniteScroll: PropTypes.bool,
   setInfiniteAutoload: PropTypes.func,
-  applyFilters: PropTypes.func
+  applyFilters: PropTypes.func,
+  orgConfig: PropTypes.arrayOf(PropTypes.object)
 }
 
 GridView.defaultProps = {
