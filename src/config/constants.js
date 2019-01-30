@@ -7,6 +7,10 @@ import { getCookie } from '../helpers/cookie'
 export const LOAD_USER_SUCCESS     = 'LOAD_USER_SUCCESS'
 export const LOAD_USER_FAILURE     = 'LOAD_USER_FAILURE'
 
+// Load organization configs
+export const LOAD_ORG_CONFIG_SUCCESS     = 'LOAD_ORG_CONFIG_SUCCESS'
+export const LOAD_ORG_CONFIG_FAILURE     = 'LOAD_ORG_CONFIG_FAILURE'
+
 // Notifications
 export const GET_NOTIFICATIONS_PENDING = 'GET_NOTIFICATIONS_PENDING'
 export const GET_NOTIFICATIONS_SUCCESS = 'GET_NOTIFICATIONS_SUCCESS'
@@ -738,6 +742,9 @@ export const MIN_WINNER_DESIGNS = 3
 
 // default additional desgin cost to select during final-designs milestone
 export const DEFAULT_ADDITIONAL_DESIGN_COST = 100
+
+// project_catalog_url organization configuration name
+export const PROJECT_CATALOG_URL = 'project_catalog_url'
 
 // list of link types which are supported by milestones
 export const MILESTONE_LINK_SUPPORTED_TYPES = [
