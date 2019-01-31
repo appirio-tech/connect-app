@@ -78,7 +78,7 @@ const formatDate = (date) => {
 const NotificationItem = (props) => {
   const { id, onLinkClick } = props
   const notificationItem = (
-    <div className="notification-item">
+    <div className={cn('notification-item', props.goto ? '' : props.transitionState)}>
       <div className="icon">
         <NotificationIcons type={props.type} className={'icon-notification' + props.type }/>
       </div>
@@ -102,7 +102,7 @@ const NotificationItem = (props) => {
 
   return (
     props.goto
-      ? <Link className={cn('notification-item-link', {unseen: !props.seen})} to={props.goto} onClick={() => onLinkClick(id)}>{notificationItem}</Link>
+      ? <Link className={cn('notification-item-link', {unseen: !props.seen}, props.transitionState)} to={props.goto} onClick={() => onLinkClick(id)}>{notificationItem}</Link>
       : notificationItem
   )
 }
@@ -115,6 +115,7 @@ NotificationItem.propTypes = {
   goTo: PropTypes.string,
   date: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
+  transitionState: PropTypes.string.isRequired,
   seen: PropTypes.bool,
   onReadToggleClick: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
