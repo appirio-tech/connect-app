@@ -7,11 +7,11 @@ import Modal from 'react-modal'
 import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized } from '../../helpers/tcHelpers'
-import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 import { INVITE_TOPCODER_MEMBER_FAILURE } from '../../config/constants'
+import SelectDropdown from '../SelectDropdown/SelectDropdown'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 const TCFormFields = FormsyForm.Fields
-
 
 class Dialog extends React.Component {
   constructor(props) {
@@ -33,6 +33,8 @@ class Dialog extends React.Component {
   }
 
   componentWillMount(){
+    const { currentUser } = this.props
+
     this.roles = [{
       title: 'Manager',
       value: 'manager',
@@ -42,6 +44,8 @@ class Dialog extends React.Component {
     }, {
       title: 'Copilot',
       value: 'copilot',
+      disabled: !currentUser.isCopilotManager,
+      toolTipMessage: !currentUser.isCopilotManager ? 'Only Connect Copilot Managers can invite copilots.' : null,
     }]
     this.setState({
       members: this.props.members
@@ -51,7 +55,7 @@ class Dialog extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.state.clearText && nextProps.processingInvites !== this.props.processingInvites &&
       !nextProps.processingInvites) {
-      this.setState((prevState) => ({ 
+      this.setState((prevState) => ({
         userText: nextProps.error && nextProps.error.type === INVITE_TOPCODER_MEMBER_FAILURE ? prevState.userText : '',
         validUserText: false,
         clearText: false,
@@ -67,9 +71,9 @@ class Dialog extends React.Component {
     this.setState({managerType})
   }
 
-  handleRoles(value) {
+  handleRoles(option) {
     this.setState({
-      userRole: value
+      userRole: option.value
     })
   }
 
@@ -109,6 +113,7 @@ class Dialog extends React.Component {
 
   render() {
     const {members, currentUser, isMember, removeMember, onCancel, removeInvite, invites = []} = this.props
+    console.log('currentUser', currentUser)
     const showRemove = currentUser.isAdmin || (isMember && currentUser.isManager)
     let i = 0
     return (
@@ -183,15 +188,32 @@ class Dialog extends React.Component {
                     }
                     return (
                       <div className="member-role-container">
-                        {types.map((type, i) =>
-                          (
-                            <div key={i} onClick={onClick.bind(this, type)}
-                              className={`member-role ${(type === currentType) ? 'active' : ''}`}
-                            >
-                              {type}
-                            </div>
+                        {types.map((type) => {
+                          const isCopilotDisabled = type === 'Copilot' && type !== currentType// && !currentUser.isCopilotManager
+
+                          return (
+                            isCopilotDisabled ? (
+                              <Tooltip theme="light" key={type}>
+                                <div className="tooltip-target">
+                                  <div className="member-role disabled">
+                                    {type}
+                                  </div>
+                                </div>
+                                <div className="tooltip-body">
+                                  {'Only Connect Copilot Managers can change member role to copilots.'}
+                                </div>
+                              </Tooltip>
+                            ) : (
+                              <div
+                                key={type}
+                                onClick={() => onClick(type)}
+                                className={cn('member-role', { active: type === currentType })}
+                              >
+                                {type}
+                              </div>
+                            )
                           )
-                        )}
+                        })}
                       </div>
                     )
                   })()}
@@ -245,28 +267,13 @@ class Dialog extends React.Component {
             { this.state.showAlreadyMemberError && <div className="error-message">
                 Project Member(s) can't be invited again. Please remove them from list.
             </div> }
-            <Dropdown className="role-drop-down default">
-              <div className="dropdown-menu-header">
-                {(() => {
-                  return (<span className="tc-link">{this.roles.filter((role) => this.state.userRole === role.value)[0].title}</span>)
-                })()}
-              </div>
-              <div className="dropdown-menu-list down-layer">
-                <ul>
-                  {
-                    this.roles.map((item) => {
-                      const activeClass = cn({
-                        active: item.value === this.state.userRole
-                      })
-
-                      return (<li key={item.value} className={activeClass} onClick={() => this.handleRoles(item.value)}>
-                        <a href="javascript:;">{item.title}</a>
-                      </li>)
-                    })
-                  }
-                </ul>
-              </div>
-            </Dropdown>
+            <SelectDropdown
+              name="role"
+              value={this.state.userRole}
+              theme="role-drop-down default"
+              options={this.roles}
+              onSelect={this.handleRoles}
+            />
             <button
               className="tc-btn tc-btn-primary tc-btn-md"
               type="submit"
