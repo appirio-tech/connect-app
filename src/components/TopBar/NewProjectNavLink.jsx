@@ -5,11 +5,11 @@ import './NewProjectNavLink.scss'
 import BoldAdd from '../../assets/icons/ui-16px-1_bold-add.svg'
 
 
-const NewProjectNavLink = ({ compact=false }) => {
+const NewProjectNavLink = ({ compact=false, link='/new-project' }) => {
   if (compact) {
     return (
       <Link
-        to="/new-project" className="new-project-link"
+        to={link} className="new-project-link"
       >
         <div className="new-project-icon">
           <BoldAdd className="icon-bold-add" />
@@ -20,7 +20,7 @@ const NewProjectNavLink = ({ compact=false }) => {
     return (
       <div className="new-project-link">
         <Link
-          to="/new-project" className="tc-btn tc-btn-sm tc-btn-primary"
+          to={link} className="tc-btn tc-btn-sm tc-btn-primary"
         >+ New Project</Link>
       </div>
     )
@@ -28,7 +28,8 @@ const NewProjectNavLink = ({ compact=false }) => {
 }
 
 NewProjectNavLink.propTypes = {
-  compact: PropTypes.bool
+  compact: PropTypes.bool,
+  link: PropTypes.string
 }
 
 export default NewProjectNavLink
