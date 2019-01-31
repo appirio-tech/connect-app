@@ -17,7 +17,7 @@
  *             }
  *             If some index is not applicable it has be defined as -1.
  *   - `stepObject`: it's an actual section, subSection, question or option object
- *   - `read step`: is a step which has to be shown as one single step in wizard
+ *   - `real step`: is a step which has to be shown as one single step in wizard
  */
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -72,6 +72,8 @@ const shouldStepBeHidden = (previousStepVisibility, currentStep, lastWizardStep)
     return !isSameStepAnyLevel(currentStep, lastWizardStep)
   } else if (previousStepVisibility === PREVIOUS_STEP_VISIBILITY.READ_ONLY) {
     return getDirForSteps(currentStep, lastWizardStep) === STEP_DIR.PREV
+  } else if (previousStepVisibility === PREVIOUS_STEP_VISIBILITY.WRITE) {
+    return false
   } else {
     return true
   }
