@@ -466,7 +466,11 @@ class MetaDataPanel extends React.Component {
     })
   }
 
-  onJSONEdit({ jsObject }) {
+  onJSONEdit({ jsObject, error }) {
+    if (error) {
+      return
+    }
+
     const { metadataType } = this.state
     if (metadataType === 'productTemplate') {
       const updateQuery = { template : { $set : jsObject } }
@@ -555,7 +559,7 @@ class MetaDataPanel extends React.Component {
             />
           )
         }
-        { needTemplatePreview && 
+        { needTemplatePreview &&
           <div className="content">
             {
               //render preview for intake form

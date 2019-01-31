@@ -56,7 +56,7 @@ class TeamManagement extends React.Component {
       showNewMemberConfirmation, onJoin, onJoinConfirm, onShowProjectDialog, isShowProjectDialog,
       projectTeamInvites, onProjectInviteDeleteConfirm, onProjectInviteSend, deletingInvite, changeRole,
       onDeleteInvite, isShowTopcoderDialog, onShowTopcoderDialog, processingInvites, processingMembers,
-      onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites
+      onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, error
     } = this.props
     const currentMember = members.filter((member) => member.userId === currentUser.userId)[0]
     const modalActive = isAddingTeamMember || deletingMember || isShowJoin || showNewMemberConfirmation || deletingInvite
@@ -154,6 +154,7 @@ class TeamManagement extends React.Component {
           return (
             <ProjectDialog
               processingInvites={processingInvites}
+              error={error}
               currentUser={currentUser}
               members={members}
               isMember={!!currentMember}
@@ -176,6 +177,7 @@ class TeamManagement extends React.Component {
           return (
             <TopcoderDialog
               processingInvites={processingInvites}
+              error={error}
               currentUser={currentUser}
               members={members}
               isMember={!!currentMember}
@@ -250,11 +252,6 @@ TeamManagement.propTypes = {
     isManager: PropTypes.bool,
     isCopilot: PropTypes.bool
   }).isRequired,
-
-  /**
-   * The error message
-   */
-  error: PropTypes.string,
 
   /**
    * The list of all project members
@@ -376,6 +373,11 @@ TeamManagement.propTypes = {
    * Flag indicates if invite API is running
    */
   processingInvites: PropTypes.bool.isRequired,
+
+  /**
+   * The current error
+   */
+  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool])
 }
 
 export default uncontrollable(TeamManagement, {

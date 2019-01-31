@@ -90,6 +90,7 @@ const NotificationItem = (props) => {
         <button
           onClick={(evt) => {
             evt.preventDefault()
+            evt.stopPropagation()
             props.onReadToggleClick(props.id)
           }}
         >
