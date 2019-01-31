@@ -22,7 +22,7 @@ const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 const ProjectsGridView = props => {
   const { projects, members, totalCount, criteria, pageNum, sortHandler, currentUser, onPageChange,
     error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus,
-    applyFilters, projectTemplates, orgConfig } = props
+    applyFilters, projectTemplates, newProjectLink } = props
 
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
@@ -224,7 +224,7 @@ const ProjectsGridView = props => {
     entityName: 'project',
     entityNamePlural: 'projects',
     noMoreResultsMessage: `No more ${projectsStatus} projects`,
-    orgConfig
+    newProjectLink
   }
 
 
@@ -239,7 +239,7 @@ const ProjectsGridView = props => {
 ProjectsGridView.propTypes = {
   currentUser: PropTypes.object.isRequired,
   projects: PropTypes.arrayOf(PropTypes.object).isRequired,
-  orgConfig: PropTypes.arrayOf(PropTypes.object).isRequired,
+  newProjectLink: PropTypes.string.isRequired,
   totalCount: PropTypes.number.isRequired,
   members: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,

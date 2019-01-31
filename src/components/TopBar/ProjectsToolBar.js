@@ -18,8 +18,7 @@ import SearchFilter from '../../assets/icons/ui-filters.svg'
 import SearchIcon from '../../assets/icons/ui-16px-1_zoom.svg'
 import { projectSuggestions, loadProjects, setInfiniteAutoload } from '../../projects/actions/loadProjects'
 import { loadProjectsMetadata } from '../../actions/templates'
-import { PROJECT_CATALOG_URL } from '../../config/constants'
-
+import { getNewProjectLink } from '../../helpers/projectHelper'
 
 class ProjectsToolBar extends Component {
 
@@ -221,8 +220,6 @@ class ProjectsToolBar extends Component {
     ]
     const menuBar = isLoggedIn && !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />
 
-    const orgConfigs = _.filter(orgConfig, (o) => { return o.configName === PROJECT_CATALOG_URL })
-
     return (
       <div className="ProjectsToolBar">
         <Prompt
@@ -260,8 +257,7 @@ class ProjectsToolBar extends Component {
             </div>
           }
           <div className="actions">
-            { isLoggedIn && (orgConfigs.length === 0 || orgConfigs.length > 1) && <NewProjectNavLink compact /> }
-            { isLoggedIn && orgConfigs.length === 1 && <NewProjectNavLink compact link={orgConfigs[0].configValue} />}
+            <NewProjectNavLink compact link={getNewProjectLink(orgConfig)} />
             { userMenu }
             {/* pass location, to make sure that component is re-rendered when location is changed
                 it's necessary to hide notification dropdown on mobile when users uses browser history back/forward buttons */}
