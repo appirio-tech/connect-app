@@ -33,7 +33,7 @@ export function loadUser() {
 
     return getFreshToken()
       .then((token) => {
-        loadUserSuccess(dispatch, token)
+        return loadUserSuccess(dispatch, token)
       })
       .catch((err) => {
         console.log(err)
