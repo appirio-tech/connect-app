@@ -14,6 +14,7 @@ import { sortProjects } from '../../../actions/sortProjects'
 import _ from 'lodash'
 import querystring from 'query-string'
 import { updateProject } from '../../../actions/project'
+import { getNewProjectLink } from '../../../../helpers/projectHelper'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED, PROJECT_STATUS_ACTIVE,
   PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
@@ -180,7 +181,7 @@ class Projects extends Component {
   }
 
   render() {
-    const { isPowerUser, isLoading, totalCount, criteria, currentUser, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history } = this.props
+    const { isPowerUser, isLoading, totalCount, criteria, currentUser, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history, orgConfig } = this.props
     // show walk through if user is customer and no projects were returned
     // for default filters
     const showWalkThrough = !isLoading && totalCount === 0 &&
@@ -196,6 +197,7 @@ class Projects extends Component {
         applyFilters={this.applySearchFilter}
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
+        newProjectLink={getNewProjectLink(orgConfig)}
       />
     )
     const cardView = (
@@ -207,6 +209,7 @@ class Projects extends Component {
         onPageChange={this.onPageChange}
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
+        newProjectLink={getNewProjectLink(orgConfig)}
       />
     )
     let projectsView
