@@ -483,6 +483,7 @@ export const projectState = function (state=initialState, action) {
     const newState = Object.assign({}, state)
     newState.project.invites.push(...action.payload)
     newState.processingInvites = false
+    newState.error = false
     return newState
   }
 
@@ -490,6 +491,7 @@ export const projectState = function (state=initialState, action) {
     const newState = Object.assign({}, state)
     newState.project.invites.push(...action.payload)
     newState.processingInvites = false
+    newState.error = false
     return newState
   }
 

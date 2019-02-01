@@ -3,6 +3,10 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
+import {
+  filterReadNotifications,
+  filterNotificationsByProjectId,
+} from '../../../../routes/notifications/helpers/notifications'
 import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 import GridView from '../../../../components/Grid/GridView'
 import UserTooltip from '../../../../components/User/UserTooltip'
@@ -22,7 +26,7 @@ const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 const ProjectsGridView = props => {
   const { projects, members, totalCount, criteria, pageNum, sortHandler, currentUser, onPageChange,
     error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus,
-    applyFilters, projectTemplates, newProjectLink } = props
+    applyFilters, projectTemplates, notifications, newProjectLink } = props
 
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
@@ -36,10 +40,8 @@ const ProjectsGridView = props => {
       sortable: false,
       renderText: item => {
         const url = `/projects/${item.id}`
-        const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
           <Link to={url} className="spacing">
-            {recentlyCreated && <span className="blue-border" />}
             {item.id}
           </Link>
         )
@@ -74,8 +76,13 @@ const ProjectsGridView = props => {
       renderText: item => {
         const url = `/projects/${item.id}`
         const code = _.get(item, 'details.utm.code', '')
+        // project notifications
+        const notReadNotifications = filterReadNotifications(notifications)
+        const unreadProjectUpdate = filterNotificationsByProjectId(notReadNotifications, item.id)
+        const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
           <div className="spacing project-container">
+            {(recentlyCreated || unreadProjectUpdate.length > 0) && <span className="blue-border" />}
             <div className="project-title">
               <Link to={url} className="link-title">{_.unescape(item.name)}</Link>
               {code && <span className="item-ref-code txt-gray-md" onClick={() => { applyFilters({ keyword: code }) }} dangerouslySetInnerHTML={{ __html: code }} />}

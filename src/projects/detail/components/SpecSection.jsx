@@ -411,6 +411,8 @@ const SpecSection = props => {
         {subSections.filter((subSection) => (
           // hide if we are in a wizard mode and subSection is hidden for now
           (!_.get(subSection, '__wizard.hidden')) &&
+          // hide if subSection is hidden by condition
+          (!_.get(subSection, '__wizard.hiddenByCondition')) &&
           // hide section marked with hiddenOnCreation during creation process
           (!isCreation || !subSection.hiddenOnCreation) &&
           // hide hidden section, unless we not force to show them

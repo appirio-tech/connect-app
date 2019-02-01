@@ -9,6 +9,7 @@ import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 import Dropdown from 'appirio-tech-react-components/components/Dropdown/Dropdown'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+import { INVITE_TOPCODER_MEMBER_FAILURE } from '../../config/constants'
 const TCFormFields = FormsyForm.Fields
 
 
@@ -50,12 +51,12 @@ class Dialog extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.state.clearText && nextProps.processingInvites !== this.props.processingInvites &&
       !nextProps.processingInvites) {
-      this.setState({
-        userText: '',
+      this.setState((prevState) => ({ 
+        userText: nextProps.error && nextProps.error.type === INVITE_TOPCODER_MEMBER_FAILURE ? prevState.userText : '',
         validUserText: false,
         clearText: false,
         members: this.props.members
-      })
+      }))
     }
   }
 
@@ -284,6 +285,7 @@ class Dialog extends React.Component {
 
 Dialog.propTypes = {
   processingInvites: PT.bool.isRequired,
+  error: PT.oneOfType([PT.object, PT.bool]),
   currentUser: PT.object.isRequired,
   members: PT.arrayOf(PT.object).isRequired,
   isMember: PT.bool.isRequired,

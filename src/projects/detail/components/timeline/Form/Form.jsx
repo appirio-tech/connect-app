@@ -28,6 +28,8 @@ class Form extends React.Component {
     this.setFormValid = this.setFormValid.bind(this)
     this.setFormInvalid = this.setFormInvalid.bind(this)
     this.submitForm = this.submitForm.bind(this)
+    this.changeForm = this.changeForm.bind(this)
+
   }
 
   setFormValid() {
@@ -44,13 +46,19 @@ class Form extends React.Component {
     onSubmit(values)
   }
 
+  changeForm(values) {
+    const { onChange } = this.props
+
+    if (onChange) onChange(values)
+  }
+
   render() {
     const {
       cancelButtonTitle,
       fields,
       onCancelClick,
       submitButtonTitle,
-      title,
+      title
     } = this.props
     const { isValid } = this.state
 
@@ -60,6 +68,7 @@ class Form extends React.Component {
         onInvalid={this.setFormInvalid}
         onValid={this.setFormValid}
         onValidSubmit={this.submitForm}
+        onChange={this.changeForm}
       >
         <div styleName="title">{title}</div>
         <div styleName="rows">
@@ -98,7 +107,7 @@ class Form extends React.Component {
           </button>
           <button
             type="submit"
-            disabled={!isValid}
+            disabled={!isValid || this.props.disableSubmitButton}
             className="tc-btn tc-btn-primary"
           >
             {submitButtonTitle}
@@ -112,6 +121,7 @@ class Form extends React.Component {
 Form.defaultProps = {
   cancelButtonTitle: 'Cancel',
   submitButtonTitle: 'Submit',
+  disableSubmitButton: false
 }
 
 Form.propTypes = {
@@ -122,8 +132,10 @@ Form.propTypes = {
   })).isRequired,
   onCancelClick: PT.func.isRequired,
   onSubmit: PT.func.isRequired,
+  onChange: PT.func,
   submitButtonTitle: PT.string,
   title: PT.string.isRequired,
+  disableSubmitButton: PT.bool
 }
 
 export default Form

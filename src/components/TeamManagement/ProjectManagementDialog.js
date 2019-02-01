@@ -7,6 +7,7 @@ import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+import { INVITE_CUSTOMER_FAILURE } from '../../config/constants'
 const TCFormFields = FormsyForm.Fields
 
 class Dialog extends React.Component {
@@ -34,23 +35,30 @@ class Dialog extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.state.clearText && nextProps.processingInvites !== this.props.processingInvites &&
       !nextProps.processingInvites) {
-      this.setState({
-        inviteText: '',
+      this.setState((prevState) => ({
+        inviteText: nextProps.error && nextProps.error.type === INVITE_CUSTOMER_FAILURE ? prevState.inviteText : '',
         validInviteText: false,
         clearText: false,
-      })
+      }))
     }
   }
 
   onChange(currentValues) {
     const text = currentValues.emails
     const invites = text.split(/[,;]/g)
+    const handles = invites.filter((invite) => invite.startsWith('@')).map((invite) => invite.substring(1))
     const isValid = invites.every(invite => {
       invite = invite.trim()
       return  invite.length > 1 && (/(.+)@(.+){2,}\.(.+){2,}/.test(invite) || invite.startsWith('@'))
     })
     let present = _.some(this.state.invitedMembers, invited => invites.indexOf(invited.email) > -1)
-    present = present || _.some(this.state.members, member => invites.indexOf(member.email) > -1)
+    present = present || _.some(this.state.invitedMembers, invited => {
+      if (!invited.member) {
+        return false
+      }
+      return handles.indexOf(invited.member.handle) > -1
+    })
+    present = present || _.some(this.state.members, member => handles.indexOf(member.handle) > -1)
     this.setState({
       validInviteText: !present && isValid && text.trim().length > 0,
       inviteText: currentValues.emails,
@@ -170,7 +178,7 @@ class Dialog extends React.Component {
               wrapperClass="inviteTextInput"
               type="text"
               value={this.state.inviteText}
-              placeholder="Enter one or more emails separated by ';' or comma ','"
+              placeholder="Enter one or more emails or user handles separated by ';' or comma ','"
               disabled={(!currentUser.isAdmin && !isMember) || this.state.clearText}
             />
             { this.state.showAlreadyMemberError && <div className="error-message">
@@ -193,6 +201,7 @@ class Dialog extends React.Component {
 
 Dialog.propTypes = {
   processingInvites: PT.bool.isRequired,
+  error: PT.oneOfType([PT.object, PT.bool]),
   currentUser: PT.object.isRequired,
   members: PT.arrayOf(PT.object).isRequired,
   isMember: PT.bool.isRequired,
