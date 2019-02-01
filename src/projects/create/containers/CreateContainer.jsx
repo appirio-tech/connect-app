@@ -24,6 +24,7 @@ import {
   LS_INCOMPLETE_WIZARD,
   PROJECT_STATUS_IN_REVIEW,
   ACCOUNTS_APP_REGISTER_URL,
+  NEW_PROJECT_PATH,
   GA_CLIENT_ID,
   GA_CLICK_ID,
   CONNECT_MAIN_PAGE_URL,
@@ -305,12 +306,7 @@ class CreateContainer extends React.Component {
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
             let productUrl = templateAlias ? ('/' + templateAlias) : ''
             productUrl = !templateAlias && typeAlias ? ('/' + typeAlias) : productUrl
-            link = getNewProjectLink(orgConfig)
-            if(/^https?:\/\//.test(link)) {
-              window.location = link
-            } else {
-              this.props.history.push(link + productUrl + '/incomplete' + window.location.search)
-            }
+            this.props.history.push(NEW_PROJECT_PATH + productUrl + '/incomplete' + window.location.search)
           }
 
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
@@ -323,30 +319,15 @@ class CreateContainer extends React.Component {
           }
 
           if (typeAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TEMPLATE) {
-            link = getNewProjectLink(orgConfig)
-            if(/^https?:\/\//.test(link)) {
-              window.location = link
-            } else {
-              this.props.history.push(link + '/' + typeAlias + window.location.search)
-            }
+            this.props.history.push(NEW_PROJECT_PATH + '/' + typeAlias + window.location.search)
           }
 
           if (typeAlias && templateAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
-            const link = getNewProjectLink(orgConfig)
-            if(/^https?:\/\//.test(link)) {
-              window.location = link
-            } else {
-              this.props.history.push(link + '/' + templateAlias + window.location.search)
-            }
+            this.props.history.push(NEW_PROJECT_PATH + '/' + templateAlias + window.location.search)
           }
 
           if (typeAlias && templateAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_PROJECT_SUBMITTED) {
-            link = getNewProjectLink(orgConfig)
-            if(/^https?:\/\//.test(link)) {
-              window.location = link
-            } else {
-              this.props.history.push(link + '/' + 'submitted' + window.location.search)
-            }
+            this.props.history.push(NEW_PROJECT_PATH + '/' + 'submitted' + window.location.search)
           }
 
           this.setState({
