@@ -44,8 +44,8 @@ class Dialog extends React.Component {
     }, {
       title: 'Copilot',
       value: 'copilot',
-      disabled: !currentUser.isCopilotManager,
-      toolTipMessage: !currentUser.isCopilotManager ? 'Only Connect Copilot Managers can invite copilots.' : null,
+      disabled: !(currentUser.isCopilotManager || currentUser.isAdmin),
+      toolTipMessage: !(currentUser.isCopilotManager || currentUser.isAdmin) ? 'Only Connect Copilot Managers can invite copilots.' : null,
     }]
     this.setState({
       members: this.props.members
@@ -189,7 +189,10 @@ class Dialog extends React.Component {
                     return (
                       <div className="member-role-container">
                         {types.map((type) => {
-                          const isCopilotDisabled = type === 'Copilot' && type !== currentType// && !currentUser.isCopilotManager
+                          const isCopilotDisabled =
+                            type === 'Copilot' &&
+                            type !== currentType &&
+                            !(currentUser.isCopilotManager || currentUser.isAdmin)
 
                           return (
                             isCopilotDisabled ? (
