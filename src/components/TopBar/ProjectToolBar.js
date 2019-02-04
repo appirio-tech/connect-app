@@ -6,8 +6,7 @@ import PT from 'prop-types'
 import { NavLink, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
-import { PROJECT_CATALOG_URL } from '../../config/constants'
-
+import { getNewProjectLink } from '../../helpers/projectHelper'
 import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
 import MobileMenu from '../MobileMenu/MobileMenu'
@@ -57,7 +56,6 @@ class ProjectToolBar extends React.Component {
   render() {
     const { renderLogoSection, userMenu, project, user, mobileMenu, location, orgConfig } = this.props
     const { isTooltipVisible, isMobileMenuOpen } = this.state
-    const orgConfigs = _.filter(orgConfig, (o) => { return o.configName === PROJECT_CATALOG_URL })
 
     return (
       <div className="ProjectToolBar">
@@ -76,8 +74,7 @@ class ProjectToolBar extends React.Component {
           </div>}
           {project && project.name && <div className="bar-column project-name mobile"><span>{_.unescape(project.name)}</span></div>}
           <div className="bar-column">
-            {(orgConfigs.length === 0 || orgConfigs.length > 1) && <NewProjectNavLink compact />}
-            {orgConfigs.length === 1 && <NewProjectNavLink compact link={orgConfigs[0].configValue} />}
+            <NewProjectNavLink compact link={getNewProjectLink(orgConfig)} />
             {userMenu}
             {/* pass location, to make sure that component is re-rendered when location is changed
                 it's necessary to hide notification dropdown on mobile when users uses browser history back/forward buttons */}

@@ -5,7 +5,7 @@ import InfiniteScroll from 'react-infinite-scroller'
 import ProjectCard from './ProjectCard'
 import NewProjectCard from './NewProjectCard'
 import cn from 'classnames'
-import { PROJECTS_LIST_PER_PAGE, PROJECT_CATALOG_URL } from '../../../config/constants'
+import { PROJECTS_LIST_PER_PAGE } from '../../../config/constants'
 import { setDuration } from '../../../helpers/projectHelper'
 
 require('../../list/components/Projects/ProjectsGridView.scss')
@@ -14,7 +14,7 @@ require('../../list/components/Projects/ProjectsGridView.scss')
 const ProjectsCardView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
-  const { projects, members, currentUser, onPageChange, pageNum, totalCount, infiniteAutoload, orgConfig,
+  const { projects, members, currentUser, onPageChange, pageNum, totalCount, infiniteAutoload, newProjectLink,
     setInfiniteAutoload, isLoading, onChangeStatus, projectsStatus, projectTemplates, applyFilters } = props
   // const currentSortField = _.get(criteria, 'sort', '')
 
@@ -77,8 +77,6 @@ const ProjectsCardView = props => {
     )
   }
 
-  const orgConfigs = _.filter(orgConfig, (o) => { return o.configName === PROJECT_CATALOG_URL })
-
   return (
     <div className="projects card-view">
       <InfiniteScroll
@@ -91,8 +89,7 @@ const ProjectsCardView = props => {
         { [...projects, ...placeholders].map(renderProject)}
         {moreProject(true)}
         <div className="project-card project-card-new">
-          { (orgConfigs.length === 0 || orgConfigs.length > 1) && <NewProjectCard /> }
-          { orgConfigs.length === 1 && <NewProjectCard link={orgConfigs[0].configValue} />}
+          <NewProjectCard link={newProjectLink} />
         </div>
       </InfiniteScroll>
       {moreProject(false)}
@@ -104,7 +101,7 @@ const ProjectsCardView = props => {
 ProjectsCardView.propTypes = {
   currentUser: PropTypes.object.isRequired,
   projects: PropTypes.arrayOf(PropTypes.object).isRequired,
-  orgConfig: PropTypes.arrayOf(PropTypes.object).isRequired,
+  newProjectLink: PropTypes.string.isRequired,
   totalCount: PropTypes.number.isRequired,
   members: PropTypes.object.isRequired,
   // isLoading: PropTypes.bool.isRequired,
