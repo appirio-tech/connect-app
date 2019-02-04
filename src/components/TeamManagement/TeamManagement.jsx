@@ -250,7 +250,8 @@ TeamManagement.propTypes = {
   currentUser: PropTypes.shape({
     userId: PropTypes.number.isRequired,
     isManager: PropTypes.bool,
-    isCopilot: PropTypes.bool
+    isCopilot: PropTypes.bool,
+    isCopilotManager: PropTypes.bool,
   }).isRequired,
 
   /**

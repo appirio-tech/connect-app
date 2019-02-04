@@ -554,6 +554,7 @@ export const ROLE_CONNECT_COPILOT = 'Connect Copilot'
 export const ROLE_CONNECT_MANAGER = 'Connect Manager'
 export const ROLE_CONNECT_ADMIN = 'Connect Admin'
 export const ROLE_ADMINISTRATOR = 'administrator'
+export const ROLE_CONNECT_COPILOT_MANAGER = 'Connect Copilot Manager'
 
 // FIXME .. remove defaults
 export const FILE_PICKER_API_KEY = process.env.FILE_PICKER_API_KEY || 'AzFINuQoqTmqw0QEoaw9az'

@@ -244,6 +244,11 @@
               background: $tc-dark-blue;
               color: $tc-white;
             }
+
+            .member-role.disabled:not(.active) {
+              cursor: default;
+              color: $tc-gray-20;
+            }
           }
 
           .member-type-wrapper {
