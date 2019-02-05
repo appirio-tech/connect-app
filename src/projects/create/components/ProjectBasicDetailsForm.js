@@ -205,9 +205,12 @@ class ProjectBasicDetailsForm extends Component {
     this.setState({ canSubmit: false })
   }
 
-  submit(model) {
+  submit(/* model */) {
+    // we cannot use `model` provided by Formzy because in the `previousStepVisibility==none` mode
+    // some parts of the form are hidden, so Formzy thinks we don't have them
+    // instead we use this.props.dirtyProject which contains the current project data
     this.setState({isSaving: true })
-    const modelWithoutHiddenValues = removeValuesOfHiddenSteps(this.state.template, model)
+    const modelWithoutHiddenValues = removeValuesOfHiddenSteps(this.state.template, this.props.dirtyProject)
     this.props.submitHandler(modelWithoutHiddenValues)
   }
 
