@@ -224,7 +224,7 @@ const SpecQuestions = ({
       _.assign(elemProps, { options: formatAddonOptions(filterAddonQuestions(productTemplates, q)) })
       break
     default:
-      ChildElem = <noscript />
+      ChildElem = () => <noscript />
     }
     // let titleAside = null
     let textValue = null
