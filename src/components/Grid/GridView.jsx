@@ -87,9 +87,9 @@ const GridView = props => {
             </div>
         }
         { !isLoading && !hasMore && <div key="end" className="gridview-no-more">{noMoreResultsMsg}</div>}
-        <div className="project-card project-card-new">
+        {!!newProjectLink && <div className="project-card project-card-new">
           <NewProjectCard link={newProjectLink} />
-        </div>
+        </div>}
       </div>
     )
   }
