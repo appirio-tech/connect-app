@@ -243,7 +243,7 @@ class ProjectInfoContainer extends React.Component {
           />
           <FileLinksMenu
             links={attachments}
-            title="Latest files"
+            title="Files"
             canAdd={enableFileUpload}
             onAddNewLink={this.onAddFile}
             onAddAttachment={this.onAddAttachment}
