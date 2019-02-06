@@ -227,7 +227,7 @@ const SpecQuestions = ({
       ChildElem = () => (
         <div style={{ borderWidth: 1, borderStyle: 'dashed', borderColor: '#f00' }}>
           <h5 style={{ color: '#f00' }}>Unsupported question type `{q.type}`</h5>
-          <pre style={{ fontFamily: 'monospace' }}>{JSON.stringify(q, null, 2)}</pre>
+          <pre style={{ fontFamily: 'monospace' }}>{JSON.stringify(_.omit(q, '__wizard'), null, 2)}</pre>
         </div>
       )
     }
