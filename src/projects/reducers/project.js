@@ -19,7 +19,8 @@ import {
   INVITE_TOPCODER_MEMBER_SUCCESS, REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS, INVITE_TOPCODER_MEMBER_PENDING, REMOVE_CUSTOMER_INVITE_PENDING,
   REMOVE_TOPCODER_MEMBER_INVITE_PENDING, REMOVE_TOPCODER_MEMBER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_FAILURE,
   INVITE_CUSTOMER_FAILURE, INVITE_TOPCODER_MEMBER_FAILURE, INVITE_CUSTOMER_PENDING,
-  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING,
+  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, 
+  UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -30,6 +31,8 @@ const initialState = {
   processingMembers: false,
   processingInvites: false,
   processingAttachments: false,
+  attachmentsAwaitingPermission: null,
+  attachmentPermissions: null,
   error: false,
   project: {},
   projectNonDirty: {},
@@ -375,8 +378,28 @@ export const projectState = function (state=initialState, action) {
     return update(state, {
       processingAttachments: { $set : false },
       project: { attachments: { $push: [action.payload] } },
-      projectNonDirty: { attachments: { $push: [action.payload] } }
+      projectNonDirty: { attachments: { $push: [action.payload] } },
+      attachmentsAwaitingPermission: { $set: null }
     })
+
+  case UPLOAD_PROJECT_ATTACHMENT_FILES:
+    return {
+      ...state,
+      attachmentsAwaitingPermission: action.payload,
+      attachmentPermissions: null
+    }
+    
+  case DISCARD_PROJECT_ATTACHMENT:
+    return {
+      ...state,
+      attachmentsAwaitingPermission: null
+    }
+
+  case CHANGE_ATTACHMENT_PERMISSION:
+    return {
+      ...state,
+      attachmentPermissions: action.payload
+    }
 
   case UPDATE_PROJECT_ATTACHMENT_SUCCESS: {
     // get index

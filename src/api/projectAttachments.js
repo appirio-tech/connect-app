@@ -13,6 +13,13 @@ export function addProjectAttachment(projectId, fileData) {
 }
 
 export function updateProjectAttachment(projectId, attachmentId, attachment) {
+  if (attachment && (!attachment.userIds || attachment.userIds.length === 0)) {
+    attachment = {
+      ...attachment,
+      userIds: null
+    }
+  }
+  
   return axios.patch(
     `${PROJECTS_API_URL}/v4/projects/${projectId}/attachments/${attachmentId}`,
     { param: attachment })

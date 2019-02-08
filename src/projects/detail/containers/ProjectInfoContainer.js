@@ -14,7 +14,7 @@ import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_ATTACHMENTS_FOLDER,
   PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_DRAFT } from '../../../config/constants'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
-import { addProjectAttachment } from '../../actions/projectAttachment'
+import { addProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission } from '../../actions/projectAttachment'
 
 class ProjectInfoContainer extends React.Component {
 
@@ -29,7 +29,7 @@ class ProjectInfoContainer extends React.Component {
     this.onDeleteLink = this.onDeleteLink.bind(this)
     this.onEditLink = this.onEditLink.bind(this)
     this.onAddFile = this.onAddFile.bind(this)
-    this.onAddAttachment = this.onAddAttachment.bind(this)
+    this.onUploadAttachment = this.onUploadAttachment.bind(this)
     this.onSubmitForReview = this.onSubmitForReview.bind(this)
   }
 
@@ -41,6 +41,8 @@ class ProjectInfoContainer extends React.Component {
       !_.isEqual(nextProps.phasesTopics, this.props.phasesTopics) ||
       !_.isEqual(nextProps.isFeedsLoading, this.props.isFeedsLoading) ||
       !_.isEqual(nextProps.isProjectProcessing, this.props.isProjectProcessing) ||
+      !_.isEqual(nextProps.attachmentsAwaitingPermission, this.props.attachmentsAwaitingPermission) ||
+      !_.isEqual(nextProps.attachmentPermissions, this.props.attachmentPermissions) ||
       nextProps.activeChannelId !== this.props.activeChannelId
   }
 
@@ -115,9 +117,9 @@ class ProjectInfoContainer extends React.Component {
   onAddFile() {
   }
 
-  onAddAttachment(attachment) {
+  onUploadAttachment(attachment) {
     const { project } = this.props
-    this.props.addProjectAttachment(project.id, attachment)
+    this.props.uploadProjectAttachments(project.id, attachment)
   }
 
   onSubmitForReview() {
@@ -129,7 +131,9 @@ class ProjectInfoContainer extends React.Component {
     const { duration } = this.state
     const { project, currentMemberRole, isSuperUser, phases, feeds,
       hideInfo, hideLinks, hideMembers, onChannelClick, activeChannelId, productsTimelines,
-      isManageUser, phasesTopics, isProjectPlan, isProjectProcessing, projectTemplates } = this.props
+      isManageUser, phasesTopics, isProjectPlan, isProjectProcessing, projectTemplates,
+      attachmentsAwaitingPermission, addProjectAttachment, discardAttachments, attachmentPermissions,
+      changeAttachmentPermission, projectMembers, loggedInUser } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -246,7 +250,14 @@ class ProjectInfoContainer extends React.Component {
             title="Latest files"
             canAdd={enableFileUpload}
             onAddNewLink={this.onAddFile}
-            onAddAttachment={this.onAddAttachment}
+            onAddAttachment={addProjectAttachment}
+            onUploadAttachment={this.onUploadAttachment}
+            discardAttachments={discardAttachments}
+            onChangePermissions={changeAttachmentPermission}
+            selectedUsers={attachmentPermissions}
+            projectMembers={projectMembers}
+            pendingAttachments={attachmentsAwaitingPermission}
+            loggedInUser={loggedInUser}
             moreText="view all files"
             noDots
             attachmentsStorePath={attachmentsStorePath}
@@ -284,10 +295,17 @@ ProjectInfoContainer.PropTypes = {
   isProjectProcessing: PropTypes.bool,
 }
 
-const mapStateToProps = ({templates }) => ({
-  projectTemplates : templates.projectTemplates,
-})
+const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
+  return ({
+    projectTemplates : templates.projectTemplates,
+    attachmentsAwaitingPermission: projectState.attachmentsAwaitingPermission,
+    attachmentPermissions: projectState.attachmentPermissions,
+    projectMembers: members.members,
+    loggedInUser: loadUser.user
+  })
+}
 
-const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, loadDashboardFeeds, loadPhaseFeed }
+const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment,
+  discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfoContainer)
