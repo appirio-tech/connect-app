@@ -98,6 +98,13 @@ describe('Evaluate', () => {
   })
 
   describe('logical operators', () => {
+    
+    it('test plain conditions', () => {
+      const expression = '(someArrayWithText contains \'a\' || someArrayWithText contains \'d\')'
+      const result = evaluate(expression, testData)
+
+      result.should.equal(true)
+    })
 
     it('contains \'a\' && hasLength (true)', () => {
       const expression = '(someArrayWithText contains \'a\') && (someArrayWithText hasLength 3)'
