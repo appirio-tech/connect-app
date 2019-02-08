@@ -97,6 +97,37 @@ describe('Evaluate', () => {
     })
   })
 
+  describe('logical operators', () => {
+
+    it('contains \'a\' && hasLength (true)', () => {
+      const expression = '(someArrayWithText contains \'a\') && (someArrayWithText hasLength 3)'
+      const result = evaluate(expression, testData)
+
+      result.should.equal(true)
+    })
+
+    it('contains \'a\' && hasLength (true) && contains \'b\'', () => {
+      const expression = 'someArrayWithText contains \'a\' && someArrayWithText hasLength 3 && someArrayWithText contains \'b\''
+      const result = evaluate(expression, testData)
+
+      result.should.equal(true)
+    })
+
+    it('contains \'a\' && hasLength (false)', () => {
+      const expression = '(someArrayWithText contains \'a\') && (someArrayWithText hasLength 2)'
+      const result = evaluate(expression, testData)
+
+      result.should.equal(false)
+    })
+
+    it('contains \'a\' && hasLength (false) && contains \'b\'', () => {
+      const expression = '((someArrayWithText contains \'a\') && (someArrayWithText hasLength 1) && (someArrayWithText contains \'b\'))'
+      const result = evaluate(expression, testData)
+
+      result.should.equal(false)
+    })
+  })
+
   describe('expression format', () => {
     it('no spaces near parenthesis', () => {
       const expression = 'someArray contains (a + b) * 2'
