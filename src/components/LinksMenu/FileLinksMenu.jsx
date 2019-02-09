@@ -84,12 +84,12 @@ const FileLinksMenu = ({
     onUploadAttachment(attachments)
   }
 
-  const onAddingAttachmentPermissions = (userIds) => {
+  const onAddingAttachmentPermissions = (allowedUsers) => {
     const { attachments, projectId } = pendingAttachments
     _.forEach(attachments, f => {
       const attachment = {
         ...f,
-        userIds
+        allowedUsers
       }
       onAddAttachment(projectId, attachment)
     })

@@ -13,10 +13,10 @@ export function addProjectAttachment(projectId, fileData) {
 }
 
 export function updateProjectAttachment(projectId, attachmentId, attachment) {
-  if (attachment && (!attachment.userIds || attachment.userIds.length === 0)) {
+  if (attachment && (!attachment.allowedUsers || attachment.allowedUsers.length === 0)) {
     attachment = {
       ...attachment,
-      userIds: null
+      allowedUsers: null
     }
   }
   
