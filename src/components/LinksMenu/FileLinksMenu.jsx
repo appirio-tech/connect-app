@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom'
 import './LinksMenu.scss'
 import Panel from '../Panel/Panel'
 import AddFiles from '../FileList/AddFiles'
+import AddFilePermission from '../FileList/AddFilePermissions'
 import DeleteLinkModal from './DeleteLinkModal'
 import EditLinkModal from './EditLinkModal'
 import uncontrollable from 'uncontrollable'
@@ -35,7 +36,14 @@ const FileLinksMenu = ({
   withHash,
   attachmentsStorePath,
   category,
+  selectedUsers,
   onAddAttachment,
+  onUploadAttachment,
+  discardAttachments,
+  onChangePermissions,
+  pendingAttachments,
+  projectMembers,
+  loggedInUser,
 }) => {
   const renderLink = (link) => {
     if (link.onClick) {
@@ -59,6 +67,7 @@ const FileLinksMenu = ({
   }
 
   const processUploadedFiles = (fpFiles, category) => {
+    const attachments = []
     onAddingNewLink(false)
     fpFiles = _.isArray(fpFiles) ? fpFiles : [fpFiles]
     _.forEach(fpFiles, f => {
@@ -70,7 +79,19 @@ const FileLinksMenu = ({
         filePath: f.key,
         contentType: f.mimetype || 'application/unknown'
       }
-      onAddAttachment(attachment)
+      attachments.push(attachment)
+    })
+    onUploadAttachment(attachments)
+  }
+
+  const onAddingAttachmentPermissions = (userIds) => {
+    const { attachments, projectId } = pendingAttachments
+    _.forEach(attachments, f => {
+      const attachment = {
+        ...f,
+        userIds
+      }
+      onAddAttachment(projectId, attachment)
     })
   }
 
@@ -90,11 +111,26 @@ const FileLinksMenu = ({
 
         {(isAddingNewLink || linkToDelete >= 0) && <div className="modal-overlay"/>}
 
+        {
+          pendingAttachments &&
+          <AddFilePermission onCancel={discardAttachments}
+            onSubmit={onAddingAttachmentPermissions}
+            onChange={onChangePermissions}
+            selectedUsers={selectedUsers}
+            projectMembers={projectMembers}
+            loggedInUser={loggedInUser}
+          />
+        }
+
         {isAddingNewLink &&
           <Modal onClose={onClose}>
             <Modal.Title>
               UPLOAD A FILE
             </Modal.Title>
+            {
+              pendingAttachments &&
+              <AddFilePermission />
+            }
             <AddFiles successHandler={processUploadedFiles.bind(this)}
               storePath={attachmentsStorePath}
               category={category}
@@ -201,6 +237,12 @@ FileLinksMenu.propTypes = {
   noDots: PropTypes.bool,
   limit: PropTypes.number,
   links: PropTypes.array.isRequired,
+  selectedUsers: PropTypes.string,
+  projectMembers: PropTypes.object,
+  pendingAttachments: PropTypes.object,
+  onUploadAttachment: PropTypes.func,
+  discardAttachments: PropTypes.func,
+  onChangePermissions: PropTypes.func,
   attachmentsStorePath: PropTypes.string.isRequired,
   moreText: PropTypes.string,
   onAddingNewLink: PropTypes.func,
@@ -208,6 +250,7 @@ FileLinksMenu.propTypes = {
   onChangeLimit: PropTypes.func,
   onDelete: PropTypes.func,
   title: PropTypes.string,
+  loggedInUser: PropTypes.object.isRequired,
 }
 
 FileLinksMenu.defaultProps = {
