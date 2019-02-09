@@ -80,10 +80,7 @@ const precedence = {
 function hasPrecedence(currentOp, opStackTop) {
   if (opStackTop === '(' || opStackTop === ')')
     return false
-  if (precedence[opStackTop] >= precedence[currentOp])
-    return true
-  else
-    return false
+  return precedence[opStackTop] >= precedence[currentOp]
 }
 /**
  * A utility method to apply an operation 'op' on operands
