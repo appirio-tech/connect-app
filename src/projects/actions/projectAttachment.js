@@ -37,11 +37,11 @@ export function addProjectAttachment(projectId, attachment) {
   }
 }
 
-export function changeAttachmentPermission(userIds) {
+export function changeAttachmentPermission(allowedUsers) {
   return dispatch => {
     return dispatch({
       type: CHANGE_ATTACHMENT_PERMISSION,
-      payload: userIds
+      payload: allowedUsers
     })
   }
 }

@@ -20,7 +20,7 @@ export default class FileListItem extends React.Component {
     this.state = {
       title: props.title,
       description: props.description,
-      userIds: props.userIds,
+      allowedUsers: props.allowedUsers,
       isEditing: false
     }
     this.handleSave = this.handleSave.bind(this)
@@ -37,11 +37,11 @@ export default class FileListItem extends React.Component {
   }
 
   startEdit() {
-    const {title, description, userIds} = this.props
+    const {title, description, allowedUsers} = this.props
     this.setState({
       title,
       description,
-      userIds,
+      allowedUsers,
       isEditing: true
     })
   }
@@ -52,7 +52,7 @@ export default class FileListItem extends React.Component {
     if (!_.isEmpty(errors)) {
       this.setState({ errors })
     } else {
-      this.props.onSave(this.props.id, {title, description: this.refs.desc.value, userIds: this.state.userIds}, e)
+      this.props.onSave(this.props.id, {title, description: this.refs.desc.value, allowedUsers: this.state.allowedUsers}, e)
       this.setState({isEditing: false})
     }
   }
@@ -80,14 +80,14 @@ export default class FileListItem extends React.Component {
 
   onUserIdChange(selectedHandles = '') {
     this.setState({
-      userIds: this.handlesToUserIds(selectedHandles.split(','))
+      allowedUsers: this.handlesToUserIds(selectedHandles.split(','))
     })
   }
 
-  userIdsToHandles(userIds) {
+  userIdsToHandles(allowedUsers) {
     const { projectMembers } = this.props
-    userIds = userIds || []
-    return userIds.map(userId => _.get(projectMembers[userId], 'handle'))
+    allowedUsers = allowedUsers || []
+    return allowedUsers.map(userId => _.get(projectMembers[userId], 'handle'))
   }
 
   handlesToUserIds(handles) {
@@ -99,7 +99,7 @@ export default class FileListItem extends React.Component {
 
   renderEditing() {
     const { title, description, projectMembers, loggedInUser } = this.props
-    const { errors, userIds } = this.state
+    const { errors, allowedUsers } = this.state
     const onExitEdit = () => this.setState({isEditing: false, errors: {} })
     return (
       <div>
@@ -116,7 +116,7 @@ export default class FileListItem extends React.Component {
         <UserAutoComplete onUpdate={this.onUserIdChange} 
           projectMembers={projectMembers}
           loggedInUser={loggedInUser}
-          selectedUsers={this.userIdsToHandles(userIds).join(',')}  
+          selectedUsers={this.userIdsToHandles(allowedUsers).join(',')}  
         />
       </div>
     )
@@ -186,7 +186,7 @@ FileListItem.propTypes = {
   createdByUser: PropTypes.object.isRequired,
   projectMembers: PropTypes.object.isRequired,
   loggedInUser: PropTypes.object.isRequired,
-  userIds: PropTypes.array,
+  allowedUsers: PropTypes.array,
 
   /**
    * Callback fired when a save button is clicked

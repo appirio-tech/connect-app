@@ -38,12 +38,12 @@ class FileListContainer extends Component {
     this.props.uploadProjectAttachments(project.id, attachment)
   }
 
-  onAddingAttachmentPermissions(userIds) {
+  onAddingAttachmentPermissions(allowedUsers) {
     const { attachments } = this.props.pendingAttachments
     _.forEach(attachments, f => {
       const attachment = {
         ...f,
-        userIds
+        allowedUsers
       }
       this.props.addAttachment(attachment)
     })
