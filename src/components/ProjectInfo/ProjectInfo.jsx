@@ -10,7 +10,7 @@ import ProjectDirectLinks from '../../projects/list/components/Projects/ProjectD
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import ProjectProgress from '../../projects/detail/components/ProjectProgress'
 import MediaQuery from 'react-responsive'
-import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_ACTIVE, PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
+import { SCREEN_BREAKPOINT_MD, PROJECT_STATUS_ACTIVE, PHASE_STATUS_ACTIVE, PHASE_STATUS_REVIEWED, PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 import ReviewProjectButton from '../../projects/detail/components/ReviewProjectButton'
 
 import { formatProjectProgressProps, formatOldProjectProgressProps } from '../../helpers/projectHelper'
@@ -52,6 +52,9 @@ class ProjectInfo extends Component {
     )
 
     const activePhases = phases ? phases.filter((phase) => phase.status === PHASE_STATUS_ACTIVE) : []
+    const hasReviewedPhases = !!_.find(phases, (phase) => phase.status === PHASE_STATUS_REVIEWED)
+    const projectCanBeActive = (project.status !== PROJECT_STATUS_ACTIVE && hasReviewedPhases) || project.status === PROJECT_STATUS_ACTIVE
+    
 
     // prepare review button
     const showReviewBtn = project.status === 'draft' &&
@@ -108,6 +111,7 @@ class ProjectInfo extends Component {
               {(matches) => (
                 <ProjectCardBody
                   project={project}
+                  projectCanBeActive={projectCanBeActive}
                   currentMemberRole={currentMemberRole}
                   duration={duration}
                   descLinesCount={
