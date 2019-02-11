@@ -92,6 +92,15 @@ class TeamManagement extends React.Component {
                 <UserTooltip usr={member} id={i} key={i} previewAvatar size={40} />
               )
             })}
+            {projectTeamInvites.map((member, i) => {
+              const wrapMember = {
+                ...member,
+                ...member.member
+              }
+              return (
+                <UserTooltip usr={wrapMember} id={i} key={i} previewAvatar size={40} invitedLabel teamInvites />
+              )
+            })}
             { (canShowInvite) &&
               <div className="join-btn" onClick={() => onShowProjectDialog(true)}>
                 <AddIcon />
@@ -116,6 +125,18 @@ class TeamManagement extends React.Component {
               }
               return (
                 <UserTooltip usr={member} id={i} key={i} previewAvatar size={40} />
+              )
+            })}
+            {topcoderTeamInvites.map((member, i) => {
+              if (member.isCustomer) {
+                return
+              }
+              const wrapMember = {
+                ...member,
+                ...member.member
+              }
+              return (
+                <UserTooltip usr={wrapMember} id={i} key={i} previewAvatar size={40} invitedLabel />
               )
             })}
             { (canJoinAsCopilot || canJoinAsManager) &&
