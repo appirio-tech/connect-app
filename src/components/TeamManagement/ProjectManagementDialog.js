@@ -142,7 +142,11 @@ class Dialog extends React.Component {
                 removeInvite(invite)
               }
               i++
-              const username = invite.member ? invite.member.handle : invite.userId
+              const handle = invite.member ? invite.member.handle : null
+              const firstName = _.get(invite.member, 'firstName', '')
+              const lastName = _.get(invite.member, 'lastName', '')
+              let userFullName = `${firstName} ${lastName}`
+              userFullName = userFullName.trim().length > 0 ? userFullName : null
               return (
                 <div
                   key={i}
@@ -150,14 +154,14 @@ class Dialog extends React.Component {
                 >
                   <Avatar
                     userName={invite.email}
+                    avatarUrl={invite.email ? '' : getAvatarResized(_.get(invite.member || {}, 'photoURL'), 40)}
                     size={40}
                   />
-                  <div className="member-name member-email">
+                  <div className="member-name">
+                    {!invite.email && <span className="span-name">{userFullName}</span>}
                     <span>
-                      {invite.email || username}
-                    </span>
-                    <span className="email-date">
-                      Invited {moment(invite.createdAt).format('MMM D, YY')}
+                      {!invite.email && <span className="member-handle">@{handle}</span>}
+                      {invite.email && <span className="member-email">{invite.email}</span>}
                     </span>
                   </div>
                   {showRemove && <div className="member-remove" onClick={remove}>
