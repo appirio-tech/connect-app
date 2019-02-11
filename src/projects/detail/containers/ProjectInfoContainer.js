@@ -315,11 +315,13 @@ ProjectInfoContainer.PropTypes = {
 }
 
 const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
+  const project = projectState.project
+  const projectMembers = _.filter(members.members, m => _.some(project.members, pm => pm.userId === m.userId))
   return ({
     projectTemplates : templates.projectTemplates,
     attachmentsAwaitingPermission: projectState.attachmentsAwaitingPermission,
     attachmentPermissions: projectState.attachmentPermissions,
-    projectMembers: members.members,
+    projectMembers:  _.keyBy(projectMembers, 'userId'),
     loggedInUser: loadUser.user
   })
 }
