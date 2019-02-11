@@ -7,6 +7,7 @@ import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
+import { INVITE_CUSTOMER_FAILURE } from '../../config/constants'
 const TCFormFields = FormsyForm.Fields
 
 class Dialog extends React.Component {
@@ -34,23 +35,30 @@ class Dialog extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.state.clearText && nextProps.processingInvites !== this.props.processingInvites &&
       !nextProps.processingInvites) {
-      this.setState({
-        inviteText: '',
+      this.setState((prevState) => ({
+        inviteText: nextProps.error && nextProps.error.type === INVITE_CUSTOMER_FAILURE ? prevState.inviteText : '',
         validInviteText: false,
         clearText: false,
-      })
+      }))
     }
   }
 
   onChange(currentValues) {
     const text = currentValues.emails
     const invites = text.split(/[,;]/g)
+    const handles = invites.filter((invite) => invite.startsWith('@')).map((invite) => invite.substring(1))
     const isValid = invites.every(invite => {
       invite = invite.trim()
       return  invite.length > 1 && (/(.+)@(.+){2,}\.(.+){2,}/.test(invite) || invite.startsWith('@'))
     })
     let present = _.some(this.state.invitedMembers, invited => invites.indexOf(invited.email) > -1)
-    present = present || _.some(this.state.members, member => invites.indexOf(member.email) > -1)
+    present = present || _.some(this.state.invitedMembers, invited => {
+      if (!invited.member) {
+        return false
+      }
+      return handles.indexOf(invited.member.handle) > -1
+    })
+    present = present || _.some(this.state.members, member => handles.indexOf(member.handle) > -1)
     this.setState({
       validInviteText: !present && isValid && text.trim().length > 0,
       inviteText: currentValues.emails,
@@ -134,7 +142,11 @@ class Dialog extends React.Component {
                 removeInvite(invite)
               }
               i++
-              const username = invite.member ? invite.member.handle : invite.userId
+              const handle = invite.member ? invite.member.handle : null
+              const firstName = _.get(invite.member, 'firstName', '')
+              const lastName = _.get(invite.member, 'lastName', '')
+              let userFullName = `${firstName} ${lastName}`
+              userFullName = userFullName.trim().length > 0 ? userFullName : null
               return (
                 <div
                   key={i}
@@ -142,14 +154,14 @@ class Dialog extends React.Component {
                 >
                   <Avatar
                     userName={invite.email}
+                    avatarUrl={invite.email ? '' : getAvatarResized(_.get(invite.member || {}, 'photoURL'), 40)}
                     size={40}
                   />
-                  <div className="member-name member-email">
+                  <div className="member-name">
+                    {!invite.email && <span className="span-name">{userFullName}</span>}
                     <span>
-                      {invite.email || username}
-                    </span>
-                    <span className="email-date">
-                      Invited {moment(invite.createdAt).format('MMM D, YY')}
+                      {!invite.email && <span className="member-handle">@{handle}</span>}
+                      {invite.email && <span className="member-email">{invite.email}</span>}
                     </span>
                   </div>
                   {showRemove && <div className="member-remove" onClick={remove}>
@@ -170,7 +182,7 @@ class Dialog extends React.Component {
               wrapperClass="inviteTextInput"
               type="text"
               value={this.state.inviteText}
-              placeholder="Enter one or more emails separated by ';' or comma ','"
+              placeholder="Enter one or more emails or user handles separated by ';' or comma ','"
               disabled={(!currentUser.isAdmin && !isMember) || this.state.clearText}
             />
             { this.state.showAlreadyMemberError && <div className="error-message">
@@ -193,6 +205,7 @@ class Dialog extends React.Component {
 
 Dialog.propTypes = {
   processingInvites: PT.bool.isRequired,
+  error: PT.oneOfType([PT.object, PT.bool]),
   currentUser: PT.object.isRequired,
   members: PT.arrayOf(PT.object).isRequired,
   isMember: PT.bool.isRequired,

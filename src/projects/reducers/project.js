@@ -19,7 +19,8 @@ import {
   INVITE_TOPCODER_MEMBER_SUCCESS, REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS, INVITE_TOPCODER_MEMBER_PENDING, REMOVE_CUSTOMER_INVITE_PENDING,
   REMOVE_TOPCODER_MEMBER_INVITE_PENDING, REMOVE_TOPCODER_MEMBER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_FAILURE,
   INVITE_CUSTOMER_FAILURE, INVITE_TOPCODER_MEMBER_FAILURE, INVITE_CUSTOMER_PENDING,
-  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING,
+  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, 
+  UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -30,6 +31,8 @@ const initialState = {
   processingMembers: false,
   processingInvites: false,
   processingAttachments: false,
+  attachmentsAwaitingPermission: null,
+  attachmentPermissions: null,
   error: false,
   project: {},
   projectNonDirty: {},
@@ -375,8 +378,28 @@ export const projectState = function (state=initialState, action) {
     return update(state, {
       processingAttachments: { $set : false },
       project: { attachments: { $push: [action.payload] } },
-      projectNonDirty: { attachments: { $push: [action.payload] } }
+      projectNonDirty: { attachments: { $push: [action.payload] } },
+      attachmentsAwaitingPermission: { $set: null }
     })
+
+  case UPLOAD_PROJECT_ATTACHMENT_FILES:
+    return {
+      ...state,
+      attachmentsAwaitingPermission: action.payload,
+      attachmentPermissions: null
+    }
+    
+  case DISCARD_PROJECT_ATTACHMENT:
+    return {
+      ...state,
+      attachmentsAwaitingPermission: null
+    }
+
+  case CHANGE_ATTACHMENT_PERMISSION:
+    return {
+      ...state,
+      attachmentPermissions: action.payload
+    }
 
   case UPDATE_PROJECT_ATTACHMENT_SUCCESS: {
     // get index
@@ -483,6 +506,7 @@ export const projectState = function (state=initialState, action) {
     const newState = Object.assign({}, state)
     newState.project.invites.push(...action.payload)
     newState.processingInvites = false
+    newState.error = false
     return newState
   }
 
@@ -490,6 +514,7 @@ export const projectState = function (state=initialState, action) {
     const newState = Object.assign({}, state)
     newState.project.invites.push(...action.payload)
     newState.processingInvites = false
+    newState.error = false
     return newState
   }
 
@@ -533,16 +558,50 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
-  case PROJECT_DIRTY: {// payload contains only changed values from the project form
-    return Object.assign({}, state, {
-      project: _.mergeWith({}, state.project, action.payload, { isDirty : true },
-        // customizer to override screens array with changed values
-        (objValue, srcValue, key) => {
-          if (key === 'screens' || key === 'features' || key === 'capabilities') {
-            return srcValue// srcValue contains the changed values from action payload
-          }
+  case PROJECT_DIRTY: {
+    const updatedProject = _.mergeWith({}, _.omit(state.project, 'isDirty'), action.payload,
+      // customizer to override arrays with changed values
+      (objValue, srcValue, key) => {
+        // when we update some array values, we have to replace them completely, rather than merge
+        if (_.isArray(objValue) && _.isArray(srcValue)) {
+          return srcValue
         }
-      )
+        // most likely these cases are particular cases of the upper rule for arrays,
+        // but just in case keep them here for now, until we are sure we can safely remove
+        // this particular cases
+        if (key === 'screens' || key === 'features' || key === 'capabilities') {
+          return srcValue// srcValue contains the changed values from action payload
+        }
+      }
+    )
+    // dont' compare this properties as they could be not added to `projectNonDirty`
+    // or mutated somewhere in the app
+    const skipProperties = ['members']
+    const clearUpdatedProject = _.omit(updatedProject, skipProperties)
+    const clearUpdatedNonDirtyProject = _.omit(state.projectNonDirty, skipProperties)
+    if (!_.isEqual(clearUpdatedProject, clearUpdatedNonDirtyProject)) {
+      updatedProject.isDirty = true
+    }
+
+    // keep this code for debugging
+    // as there are could be some parts of the application which could add additional properties
+    // to the `project` by Redux Store mutation
+    // this code could help to find such places during debugging if `isDirty` becomes `true` unexpectedly
+    /* if (updatedProject.isDirty) {
+      function difference(object, base) {
+        function changes(object, base) {
+          return _.transform(object, function(result, value, key) {
+            if (!_.isEqual(value, base[key])) {
+              result[key] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
+            }
+          });
+        }
+        return changes(object, base);
+      }
+      console.log('diff', difference(clearUpdatedProject, clearUpdatedNonDirtyProject))
+    } */
+    return Object.assign({}, state, {
+      project: updatedProject
     })
   }
 
@@ -563,6 +622,8 @@ export const projectState = function (state=initialState, action) {
   }
 
   case PRODUCT_DIRTY:
+
+
     return {
       ...state,
       phases: updateProductInPhases(state.phases, action.payload.phaseId, action.payload.productId, {

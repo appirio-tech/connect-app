@@ -8,11 +8,13 @@ import CoderBot from './components/CoderBot/CoderBot'
 import projectRoutes from './projects/routes.jsx'
 import notificationsRoutes from './routes/notifications/routes.jsx'
 import settingsRoutes from './routes/settings/routes.jsx'
+import metaDataRoutes from './routes/metadata/routes.jsx'
 import TopBarContainer from './components/TopBar/TopBarContainer'
 import ProjectsToolBar from './components/TopBar/ProjectsToolBar'
 import RedirectComponent from './components/RedirectComponent'
 import CreateContainer from './projects/create/containers/CreateContainer'
 import LoadingIndicator from './components/LoadingIndicator/LoadingIndicator'
+import OrganizationPage from './components/SpecialPage/OrganizationPage'
 import {ACCOUNTS_APP_LOGIN_URL, PROJECT_FEED_TYPE_PRIMARY, PROJECT_FEED_TYPE_MESSAGES } from './config/constants'
 import { getTopic } from './api/messages'
 import { getFreshToken } from 'tc-accounts'
@@ -43,6 +45,8 @@ const onRouteChange = (pathname) => {
       window.analytics.page('Notification Listings')
     } else if (/^\/$/.test(pathname)) {
       window.analytics.page('Connect Home')
+    } else if (/^\/organization\/new-project\/$/.test(pathname)) {
+      window.analytics.page('New Organization Project')
     } else if (/^\/new-project\/$/.test(pathname)) {
       window.analytics.page('New Project : Select Project Category')
     } else if (/^\/new-project\/incomplete$/.test(pathname)) {
@@ -137,6 +141,7 @@ class Routes extends React.Component {
     return (
       <Switch>
         <Route exact path="/" render={renderApp(topBarWithProjectsToolBar, <Home/>)} />
+        <Route path="/organization/new-project" render={renderApp(null, <OrganizationPage/>)} />
         <Route path="/new-project/:project?/:status?" render={renderApp(null, <CreateContainer/>)} />
         <Route path="/new-project-callback" render={renderApp(null, <CreateContainer/>)} />
         <Route path="/terms" render={renderApp(topBarWithProjectsToolBar, <ConnectTerms/>)} />
@@ -148,6 +153,7 @@ class Routes extends React.Component {
         {/* {reportsListRoutes} */}
         {notificationsRoutes}
         {settingsRoutes}
+        {metaDataRoutes}
 
         <Route path="/error" render={renderApp(topBarWithProjectsToolBar, <CoderBot code={500}/>)} />
         <Route path="/404" render={renderApp(topBarWithProjectsToolBar, <CoderBot code={404}/>)} />

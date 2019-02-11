@@ -127,6 +127,17 @@ export default function(state = {}, action) {
     }
     return state
 
+  case ADD_PROJECT_ATTACHMENT_SUCCESS:
+    Alert.success('Added attachment to the project successfully')
+    return state
+  
+  case UPDATE_PROJECT_ATTACHMENT_SUCCESS:
+    Alert.success('Updated attachment succcessfully')
+    return state
+  case REMOVE_PROJECT_ATTACHMENT_SUCCESS:
+    Alert.success('Removed attachment successfully')
+    return state
+
   case INVITE_TOPCODER_MEMBER_SUCCESS:
   case INVITE_CUSTOMER_SUCCESS:
     Alert.success('You\'ve successfully invited member(s).')

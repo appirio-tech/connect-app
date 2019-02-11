@@ -32,6 +32,10 @@ $screen-one-column: 720px;
       .item-customer {
         flex: 2 2 150px;
         min-width: 150px;
+        
+        .spacing {
+          width: 100%;
+        }
       }
 
       .item-manager {

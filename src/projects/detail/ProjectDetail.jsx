@@ -71,6 +71,7 @@ const ProjectDetailView = (props) => {
   const { component: Component } = props
   const componentProps = {
     project: props.project,
+    projectNonDirty: props.projectNonDirty,
     currentMemberRole: currentMemberRole || '',
     isSuperUser: props.isSuperUser,
     isManageUser: props.isManageUser,
@@ -104,6 +105,14 @@ class ProjectDetail extends Component {
       this.props.history.push('/projects/')
     if (project && project.name) {
       document.title = `${project.name} - Topcoder`
+    }
+
+    // if project version not v3 , URL /scope redirect to /specification
+    if(project 
+      && project.version 
+      && project.version !== 'v3' 
+      &&  this.props.history.location.pathname.indexOf('/scope') !== -1 ){
+      this.props.history.push(this.props.history.location.pathname.replace('/scope', '/specification'))
     }
 
     // load project if URL changed
@@ -180,6 +189,7 @@ const mapStateToProps = ({projectState, projectDashboard, loadUser, productsTime
     isProcessing: projectState.processing,
     error: projectState.error,
     project: projectState.project,
+    projectNonDirty: projectState.projectNonDirty,
     projectTemplate: (templateId && projectTemplates) ? (
       getProjectTemplateById(projectTemplates, templateId)
     ) : null,
