@@ -14,7 +14,9 @@ import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_ATTACHMENTS_FOLDER,
   PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_DRAFT } from '../../../config/constants'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
-import { addProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission } from '../../actions/projectAttachment'
+import { 
+  addProjectAttachment, updateProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission
+} from '../../actions/projectAttachment'
 
 class ProjectInfoContainer extends React.Component {
 
@@ -28,6 +30,7 @@ class ProjectInfoContainer extends React.Component {
     this.onAddNewLink = this.onAddNewLink.bind(this)
     this.onDeleteLink = this.onDeleteLink.bind(this)
     this.onEditLink = this.onEditLink.bind(this)
+    this.onEditAttachment = this.onEditAttachment.bind(this)
     this.onAddFile = this.onAddFile.bind(this)
     this.onUploadAttachment = this.onUploadAttachment.bind(this)
     this.onSubmitForReview = this.onSubmitForReview.bind(this)
@@ -109,6 +112,19 @@ class ProjectInfoContainer extends React.Component {
     })
   }
 
+  onEditAttachment(idx, title, allowedUsers) {
+    const { project, updateProjectAttachment } = this.props
+    const updatedAttachment = {
+      title,
+      allowedUsers
+    }
+    const attachment = project.attachments[idx]
+    updateProjectAttachment(project.id,
+      attachment.id,
+      updatedAttachment
+    )
+  }
+
   onDeleteProject() {
     const { deleteProject, project } = this.props
     deleteProject(project.id)
@@ -175,6 +191,8 @@ class ProjectInfoContainer extends React.Component {
       .map(attachment => ({
         title: attachment.title,
         address: attachment.downloadUrl,
+        allowedUsers: attachment.allowedUsers,
+        createdBy : attachment.createdBy
       }))
 
     // get list of phase topic in same order as phases
@@ -249,6 +267,7 @@ class ProjectInfoContainer extends React.Component {
             links={attachments}
             title="Files"
             canAdd={enableFileUpload}
+            onEdit={this.onEditAttachment}
             onAddNewLink={this.onAddFile}
             onAddAttachment={addProjectAttachment}
             onUploadAttachment={this.onUploadAttachment}
@@ -305,7 +324,7 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
   })
 }
 
-const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment,
+const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
   discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfoContainer)

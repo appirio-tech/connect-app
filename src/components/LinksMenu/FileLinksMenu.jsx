@@ -6,7 +6,7 @@ import Panel from '../Panel/Panel'
 import AddFiles from '../FileList/AddFiles'
 import AddFilePermission from '../FileList/AddFilePermissions'
 import DeleteLinkModal from './DeleteLinkModal'
-import EditLinkModal from './EditLinkModal'
+import EditFileAttachment from './EditFileAttachment'
 import uncontrollable from 'uncontrollable'
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import cn from 'classnames'
@@ -18,7 +18,6 @@ import Modal from '../Modal/Modal'
 const FileLinksMenu = ({
   canAdd,
   canDelete,
-  canEdit,
   noDots,
   isAddingNewLink,
   limit,
@@ -154,12 +153,13 @@ const FileLinksMenu = ({
                 const onDeleteCancel = () => onDeleteIntent(-1)
                 const handleDeleteClick = () => onDeleteIntent(idx)
 
-                const onEditConfirm = (title, address) => {
-                  onEdit(idx, title, address)
+                const onEditConfirm = (title, allowedUsers) => {
+                  onEdit(idx, title, allowedUsers)
                   onEditIntent(-1)
                 }
                 const onEditCancel = () => onEditIntent(-1)
                 const handleEditClick = () => onEditIntent(idx)
+                const canEdit = `${link.createdBy}` === `${loggedInUser.userId}`
                 if (linkToDelete === idx) {
                   return (
                     <li className="delete-confirmation-modal" key={'delete-confirmation-' + idx}>
@@ -173,8 +173,10 @@ const FileLinksMenu = ({
                 } else if (linkToEdit === idx) {
                   return (
                     <li className="delete-confirmation-modal" key={'delete-confirmation-' + idx}>
-                      <EditLinkModal
-                        link={link}
+                      <EditFileAttachment
+                        attachment={link}
+                        projectMembers={projectMembers}
+                        loggedInUser={loggedInUser}
                         onCancel={onEditCancel}
                         onConfirm={onEditConfirm}
                       />
