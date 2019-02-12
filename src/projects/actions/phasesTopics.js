@@ -52,9 +52,8 @@ const getPhaseTopicWithoutMembers = (dispatch, projectId, phaseId, tag) => {
       type: LOAD_PHASE_FEED,
       payload: getTopicsWithComments('project', `${projectId}`, `phase#${phaseId}`, false),
       meta: { tag, phaseId }
-    })
-    .then((resp) => resolve(resp))
-    .catch(err => reject(err))
+    }).then((resp) => resolve(resp))
+      .catch(err => reject(err))
   })
 }
 
