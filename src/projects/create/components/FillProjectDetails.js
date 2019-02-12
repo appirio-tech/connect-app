@@ -71,7 +71,7 @@ class FillProjectDetails extends Component  {
                     submitBtnText={ submitBtnText }
                     productTemplates={productTemplates}
                   />
-                  <ProjectEstimationSection project={dirtyProject} templates={templates} />
+                  {/* <ProjectEstimationSection project={dirtyProject} templates={templates} /> */}
                 </div>
                 {formDisclaimer && (
                   <div className="left-area-footer">
