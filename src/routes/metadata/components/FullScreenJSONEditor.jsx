@@ -21,6 +21,8 @@ const FullScreenJSONEditor = ({
         height="100%"
         width="100%"
         onChange={onJSONEdit}
+        // onKeyPressUpdate={false}
+        waitAfterKeyPress={3000}
       />
     </div>
   </MobilePage>

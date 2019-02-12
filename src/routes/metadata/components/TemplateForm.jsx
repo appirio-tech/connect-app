@@ -178,6 +178,8 @@ class TemplateForm extends Component {
                 height="250px"
                 // width='0px'
                 onChange={ (params) => { this.onJSONEdit(field, params) } }
+                // onKeyPressUpdate={false}
+                waitAfterKeyPress={3000}
               />
             </div>
           )

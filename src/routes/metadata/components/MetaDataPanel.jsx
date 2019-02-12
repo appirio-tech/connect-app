@@ -594,6 +594,8 @@ class MetaDataPanel extends React.Component {
                 height="450px"
                 // width='340px'
                 onChange={this.onJSONEdit}
+                // onKeyPressUpdate={false}
+                waitAfterKeyPress={3000}
               />
               {/* <ReactJson
                 src={template}
