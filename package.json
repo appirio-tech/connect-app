@@ -107,7 +107,7 @@
     "moment-range": "^4.0.1",
     "prop-types": "^15.6.0",
     "query-string": "^4.3.4",
-    "rc-slider": "^8.3.5",
+    "rc-slider": "8.6.4",
     "react": "^15.6.1",
     "react-addons-css-transition-group": "^15.6.0",
     "react-addons-pure-render-mixin": "^15.6.0",
