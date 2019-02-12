@@ -119,7 +119,7 @@ export const getNotificationsFilters = (sources) => {
   const sortedSources = [...sources].sort(compareSourcesByLastNotificationDate)
 
   sortedSources.forEach(source => {
-    if (source.id !== 'global') {
+    if (source.id !== 'global' && source.total !== 0) {
       filtersBySource.push({
         title: source.title,
         value: source.id,

@@ -1,0 +1,78 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+/* cards are arranged in one column when width is less than 720, as one card minimum width is 360 */
+$screen-one-column: 720px;
+
+:global {
+    .project-templates-grid-view {
+
+        .project-templates-actions {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            margin: 10px 20px;
+        }
+        .flex-data {
+            .flex-row {
+                .item-id {
+                    flex: none;
+                    min-width: 80px;
+                    width: 80px;
+                }
+                .item-key {
+                    flex: 6 1 160px;
+                    min-width: 160px;
+                    width: 160px;
+                    padding-left: 20px;
+                    padding-right: 20px;
+                }
+        
+                .item-icon {
+                    flex: none;
+                    min-width: 52px;
+                    width: 52px;
+                }
+        
+                .item-project-templates {
+                    flex: 6 1 505px;
+                    min-width: 505px;
+                    overflow: hidden;
+                }
+        
+                .item-status-date {
+                    flex: 1 3 142px;
+                    min-width: 142px;
+                }
+        
+                .item-disable-status,
+                .item-hidden-status {
+                    flex: none;
+                    min-width: 70px;
+                    padding-right: 20px;
+                    // width: 40px;
+                    position: relative;
+        
+                    .modal-active {
+                        position: absolute;
+                        top: 0;
+                        right: 100%;
+                        width: 280px;
+                        z-index: 10;
+            
+                        .status-header {
+                            justify-content: flex-end;
+                            position: relative;
+                            top: 28px;
+                            right: -30px;
+                        }
+            
+                        .modal {
+                            box-shadow: 0 0 4px 0 $tc-gray-20;
+                            top: 25px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

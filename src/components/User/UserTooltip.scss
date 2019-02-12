@@ -3,9 +3,25 @@
   .Tooltip {
     &.customer-data {
       .tooltip-target {
+        position: relative;
         .Avatar {
           height: 30px;
           width: 30px;
+        }
+
+        .direct-arrow {
+          position:absolute;
+          right: 0;
+          bottom: 0;
+          text-align: center;
+          background-color: #404041;
+          border-radius: 80%;
+          width: 14px;
+          height: 14px;
+          padding: 3px;
+          path {
+            fill: white;
+          }
         }
       }
 
@@ -105,6 +121,7 @@
               display: flex;
               flex-wrap: wrap;
               align-content: flex-start;
+              position: relative;
             }
 
             .user-name-container {
@@ -147,6 +164,16 @@
                   text-decoration: none;
                 }
               }
+
+              &.text-dark {
+                padding-left: 0px;
+                a {
+                  font-size: 15px;
+                  font-weight: 600;
+                  color: $tc-black;
+                  line-height: 20px;
+                }
+              }
             }
           }
 
@@ -186,6 +213,22 @@
           .user-avatar {
             width: 40px;
             height: 40px;
+          }
+
+          .invited-label {
+            @include roboto-medium;
+            background-color: $tc-gray-05;
+            border-radius: 4px;
+            color: $tc-gray-50;
+            font-size: 13px;
+            height: 20px;
+            line-height: 20px;
+            padding: 0 2 * $base-unit;
+            white-space: nowrap;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 1000;
           }
         }
       }

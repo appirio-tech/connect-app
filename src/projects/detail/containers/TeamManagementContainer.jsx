@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import {
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN,
-  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER,
+  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER, ROLE_CONNECT_COPILOT_MANAGER,
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import { addProjectMember, updateProjectMember, removeProjectMember,
@@ -121,6 +121,7 @@ class TeamManagementContainer extends Component {
           onUserInviteAction={this.onUserInviteAction}
           processingMembers={this.props.processingMembers}
           processingInvites={this.props.processingInvites}
+          error={this.props.error}
           currentUser={this.props.currentUser}
           members={projectMembers}
           projectTeamInvites={projectTeamInvites}
@@ -148,11 +149,13 @@ const mapStateToProps = ({ loadUser, members, projectState }) => {
       isCopilot: _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT) > -1,
       isAdmin: _.intersection(loadUser.user.roles, adminRoles).length > 0,
       isManager: loadUser.user.roles.some((role) => managerRoles.indexOf(role) !== -1),
-      isCustomer: !loadUser.user.roles.some((role) => powerUserRoles.indexOf(role) !== -1)
+      isCustomer: !loadUser.user.roles.some((role) => powerUserRoles.indexOf(role) !== -1),
+      isCopilotManager: _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT_MANAGER) > -1,
     },
     allMembers: _.values(members.members),
     processingInvites: projectState.processingInvites,
     processingMembers: projectState.processingMembers,
+    error: projectState.error,
     topcoderTeamInvites: _.filter(projectState.project.invites, i => i.role !== 'customer'),
     projectTeamInvites: _.filter(projectState.project.invites, i => i.role === 'customer')
   }
@@ -182,6 +185,7 @@ TeamManagementContainer.propTypes = {
   projectId: PropTypes.number.isRequired,
   processingMembers: PropTypes.bool.isRequired,
   processingInvites: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   projectTeamInvites: PropTypes.arrayOf(PropTypes.object),
   topcoderTeamInvites: PropTypes.arrayOf(PropTypes.object),
 }

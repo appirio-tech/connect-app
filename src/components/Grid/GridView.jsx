@@ -7,15 +7,19 @@ import Placeholder from './Placeholder'
 import InfiniteScroll from 'react-infinite-scroller'
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator'
 import NewProjectCard from '../../projects/components/projectsCard/NewProjectCard'
-import { PROJECTS_LIST_PER_PAGE } from '../../config/constants'
 import './GridView.scss'
 
 
 const GridView = props => {
-  const { columns, sortHandler, currentSortField, ListComponent, resultSet, onPageChange, projectsStatus,
-    totalCount, pageSize, currentPageNum, infiniteScroll, infiniteAutoload, isLoading, setInfiniteAutoload, applyFilters } = props
+  const { columns, sortHandler, currentSortField, ListComponent, resultSet, onPageChange, noMoreResultsMessage,
+    totalCount, pageSize, currentPageNum, infiniteScroll, infiniteAutoload, isLoading, setInfiniteAutoload,
+    applyFilters, entityNamePlural, newProjectLink,
+    // entityName
+  } = props
   const paginationProps = { totalCount, pageSize, currentPageNum, onPageChange }
   const headerProps = { columns, sortHandler, currentSortField }
+  let noMoreResultsMsg = noMoreResultsMessage
+  noMoreResultsMsg = noMoreResultsMsg ? noMoreResultsMsg : `No more ${entityNamePlural}`
 
   const renderItem = (item, index) => {
     return item.isPlaceholder ? <Placeholder columns={columns} key={`placeholder-${index}`} /> : <ListComponent columns={columns} item={item} key={item.id}/>
@@ -50,13 +54,14 @@ const GridView = props => {
   )
 
   const renderGridWithInfiniteScroll = () => {
-    const hasMore = currentPageNum * PROJECTS_LIST_PER_PAGE < totalCount
+    const hasMore = currentPageNum * pageSize < totalCount
     const placeholders = []
     if (isLoading & hasMore) {
-      for (let i = 0; i < PROJECTS_LIST_PER_PAGE; i++) {
+      for (let i = 0; i < pageSize; i++) {
         placeholders.push({ isPlaceholder: true })
       }
     }
+
     return (
       <div>
         <div className="container">
@@ -78,11 +83,13 @@ const GridView = props => {
         { false && isLoading && <LoadingIndicator /> }
         { !isLoading && !infiniteAutoload && hasMore &&
             <div className="gridview-load-more">
-              <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore} key="loadMore">Load more projects</button>
+              <button type="button" className="tc-btn tc-btn-primary" onClick={handleLoadMore} key="loadMore">Load more {entityNamePlural}</button>
             </div>
         }
-        { !isLoading && !hasMore && <div key="end" className="gridview-no-more">No more {projectsStatus} projects</div>}
-        <div className="project-card project-card-new"><NewProjectCard /></div>
+        { !isLoading && !hasMore && <div key="end" className="gridview-no-more">{noMoreResultsMsg}</div>}
+        {!!newProjectLink && <div className="project-card project-card-new">
+          <NewProjectCard link={newProjectLink} />
+        </div>}
       </div>
     )
   }
@@ -121,7 +128,8 @@ GridView.propTypes = {
   infiniteAutoload: PropTypes.bool,
   infiniteScroll: PropTypes.bool,
   setInfiniteAutoload: PropTypes.func,
-  applyFilters: PropTypes.func
+  applyFilters: PropTypes.func,
+  newProjectLink: PropTypes.string
 }
 
 GridView.defaultProps = {

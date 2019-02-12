@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { branch, renderComponent, compose, withProps, renderNothing } from 'recompose'
 import { withRouter } from 'react-router-dom'
+import { preRenderNotifications } from '../../../../routes/notifications/helpers/notifications'
 import Walkthrough from '../Walkthrough/Walkthrough'
 import CoderBot from '../../../../components/CoderBot/CoderBot'
 import ProjectListNavHeader from './ProjectListNavHeader'
@@ -13,6 +14,7 @@ import { sortProjects } from '../../../actions/sortProjects'
 import _ from 'lodash'
 import querystring from 'query-string'
 import { updateProject } from '../../../actions/project'
+import { getNewProjectLink } from '../../../../helpers/projectHelper'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED, PROJECT_STATUS_ACTIVE,
   PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
@@ -179,7 +181,7 @@ class Projects extends Component {
   }
 
   render() {
-    const { isPowerUser, isLoading, totalCount, criteria, currentUser, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history } = this.props
+    const { isPowerUser, isLoading, totalCount, criteria, currentUser, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history, orgConfig } = this.props
     // show walk through if user is customer and no projects were returned
     // for default filters
     const showWalkThrough = !isLoading && totalCount === 0 &&
@@ -195,6 +197,7 @@ class Projects extends Component {
         applyFilters={this.applySearchFilter}
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
+        newProjectLink={getNewProjectLink(orgConfig)}
       />
     )
     const cardView = (
@@ -206,6 +209,7 @@ class Projects extends Component {
         onPageChange={this.onPageChange}
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
+        newProjectLink={getNewProjectLink(orgConfig)}
       />
     )
     let projectsView
@@ -240,7 +244,7 @@ class Projects extends Component {
   }
 }
 
-const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templates }) => {
+const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templates, notifications }) => {
   let isPowerUser = false
   const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   if (loadUser.user) {
@@ -258,6 +262,7 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
       roles: loadUser.user.roles,
       email: loadUser.user.email
     },
+    orgConfig   : loadUser.orgConfig,
     isLoading   : projectSearch.isLoading,
     error       : projectSearch.error,
     projects    : projectSearch.projects,
@@ -272,6 +277,7 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
     refresh     : projectSearch.refresh,
     projectTemplates: templates.projectTemplates,
     isProjectTemplatesLoading: templates.isLoading,
+    notifications: preRenderNotifications(notifications.notifications),
   }
 }
 

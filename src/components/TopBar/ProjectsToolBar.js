@@ -18,7 +18,7 @@ import SearchFilter from '../../assets/icons/ui-filters.svg'
 import SearchIcon from '../../assets/icons/ui-16px-1_zoom.svg'
 import { projectSuggestions, loadProjects, setInfiniteAutoload } from '../../projects/actions/loadProjects'
 import { loadProjectsMetadata } from '../../actions/templates'
-
+import { getNewProjectLink } from '../../helpers/projectHelper'
 
 class ProjectsToolBar extends Component {
 
@@ -186,7 +186,7 @@ class ProjectsToolBar extends Component {
   }
 
   render() {
-    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser, user, mobileMenu, location, projectTypes } = this.props
+    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser, user, mobileMenu, location, projectTypes, orgConfig } = this.props
     const { isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
     const isLoggedIn = !!(userRoles && userRoles.length)
 
@@ -257,7 +257,7 @@ class ProjectsToolBar extends Component {
             </div>
           }
           <div className="actions">
-            { isLoggedIn && <NewProjectNavLink compact /> }
+            <NewProjectNavLink compact link={getNewProjectLink(orgConfig)} />
             { userMenu }
             {/* pass location, to make sure that component is re-rendered when location is changed
                 it's necessary to hide notification dropdown on mobile when users uses browser history back/forward buttons */}
@@ -318,6 +318,7 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
     criteria               : projectSearch.criteria,
     userRoles              : _.get(loadUser, 'user.roles', []),
     user                   : loadUser.user,
+    orgConfig              : loadUser.orgConfig,
     projectTypes      : templates.projectTypes,
     isProjectTypesLoading  : templates.isLoading,
   }

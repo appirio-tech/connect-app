@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
-import { TC_API_URL } from '../config/constants'
-import { RESET_PASSWORD_URL } from '../../config/constants'
+import { TC_API_URL, RESET_PASSWORD_URL } from '../config/constants'
 
 /**
  * Get a user based on it's handle/username
