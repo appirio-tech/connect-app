@@ -153,7 +153,7 @@ class Dialog extends React.Component {
                   className={`project-member-layout ${(i%2 !== 0) ? 'dark' : ''}`}
                 >
                   <Avatar
-                    userName={invite.email}
+                    userName={invite.email || userFullName}
                     avatarUrl={invite.email ? '' : getAvatarResized(_.get(invite.member || {}, 'photoURL'), 40)}
                     size={40}
                   />
