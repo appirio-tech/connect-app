@@ -92,13 +92,19 @@ class TeamManagement extends React.Component {
                 <UserTooltip usr={member} id={i} key={i} previewAvatar size={40} />
               )
             })}
-            {projectTeamInvites.map((member, i) => {
-              const wrapMember = {
-                ...member,
-                ...member.member
-              }
+            {projectTeamInvites.map((invite, i) => {
+              const member = invite.email ? { email: invite.email } : invite.member
+
               return (
-                <UserTooltip usr={wrapMember} id={i} key={i} previewAvatar size={40} invitedLabel teamInvites />
+                <UserTooltip
+                  usr={member}
+                  id={i}
+                  key={i}
+                  previewAvatar
+                  size={40}
+                  invitedLabel
+                  showEmailOnly={!!invite.email}
+                />
               )
             })}
             { (canShowInvite) &&
@@ -127,16 +133,19 @@ class TeamManagement extends React.Component {
                 <UserTooltip usr={member} id={i} key={i} previewAvatar size={40} />
               )
             })}
-            {topcoderTeamInvites.map((member, i) => {
-              if (member.isCustomer) {
+            {topcoderTeamInvites.map((invite, i) => {
+              if (invite.isCustomer) {
                 return
               }
-              const wrapMember = {
-                ...member,
-                ...member.member
-              }
               return (
-                <UserTooltip usr={wrapMember} id={i} key={i} previewAvatar size={40} invitedLabel />
+                <UserTooltip
+                  usr={invite.member}
+                  id={i}
+                  key={i}
+                  previewAvatar
+                  size={40}
+                  invitedLabel
+                />
               )
             })}
             { (canJoinAsCopilot || canJoinAsManager) &&
