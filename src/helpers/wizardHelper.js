@@ -872,7 +872,7 @@ export const removeValuesOfHiddenSteps = (template, project) => {
     switch(level) {
     // if some question is hidden, we remove it's value from the project data
     case LEVEL.QUESTION:
-      if (stepObject.__wizard.hiddenByCondition && _.get(updatedProject, stepObject.fieldName)) {
+      if (_.get(stepObject, '__wizard.hiddenByCondition') && _.get(updatedProject, stepObject.fieldName)) {
         updatedProject = update(updatedProject, unflatten({
           [stepObject.fieldName]: { $set: undefined }
         }))
@@ -881,7 +881,7 @@ export const removeValuesOfHiddenSteps = (template, project) => {
 
     // if some option is hidden, we remove it's value from the list of values of the parent question
     case LEVEL.OPTION: {
-      if (stepObject.__wizard.hiddenByCondition) {
+      if (_.get(stepObject, 'stepObject.__wizard.hiddenByCondition')) {
         const questionStep = {...step, optionIndex: -1}
         const questionStepObject = getStepObject(template, questionStep)
         const questionValue = _.get(updatedProject, questionStepObject.fieldName)

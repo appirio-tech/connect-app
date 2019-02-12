@@ -10,7 +10,7 @@ import ProjectDirectLinks from '../../projects/list/components/Projects/ProjectD
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import ProjectProgress from '../../projects/detail/components/ProjectProgress'
 import MediaQuery from 'react-responsive'
-import { SCREEN_BREAKPOINT_MD, PHASE_STATUS_ACTIVE, PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
+import { SCREEN_BREAKPOINT_MD, PROJECT_STATUS_ACTIVE, PHASE_STATUS_ACTIVE, PHASE_STATUS_REVIEWED, PROJECT_ROLE_OWNER, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 import ReviewProjectButton from '../../projects/detail/components/ReviewProjectButton'
 
 import { formatProjectProgressProps, formatOldProjectProgressProps } from '../../helpers/projectHelper'
@@ -52,6 +52,9 @@ class ProjectInfo extends Component {
     )
 
     const activePhases = phases ? phases.filter((phase) => phase.status === PHASE_STATUS_ACTIVE) : []
+    const hasReviewedOrActivePhases = !!_.find(phases, (phase) => _.includes([PHASE_STATUS_REVIEWED, PHASE_STATUS_ACTIVE], phase.status))
+    const projectCanBeActive = (project.status !== PROJECT_STATUS_ACTIVE && hasReviewedOrActivePhases) || project.status === PROJECT_STATUS_ACTIVE
+
 
     // prepare review button
     const showReviewBtn = project.status === 'draft' &&
@@ -60,10 +63,10 @@ class ProjectInfo extends Component {
     const reviewButtonSection = (
       <div className="project-info-review">
         <p>
-          Your project "{_.unescape(project.name)}" has been drafted. 
-          If you have your requirements documented, just verify it against our checklist and then upload it on the <Link to={`/projects/${project.id}/scope`}>Scope</Link> section. 
-          Once you've finalized your scope, select the "Submit for Review" button. 
-          Topcoder will then review your drafted project and will assign a manager to get your delivery in-progress! 
+          Your project "{_.unescape(project.name)}" has been drafted.
+          If you have your requirements documented, just verify it against our checklist and then upload it on the <Link to={`/projects/${project.id}/scope`}>Scope</Link> section.
+          Once you've finalized your scope, select the "Submit for Review" button.
+          Topcoder will then review your drafted project and will assign a manager to get your delivery in-progress!
           Get stuck or need help? Email us at <a href="mailto:support@topcoder.com">support@topcoder.com</a>.
         </p>
         <ReviewProjectButton project={project} onClick={onSubmitForReview} disabled={isProjectProcessing} />
@@ -108,6 +111,7 @@ class ProjectInfo extends Component {
               {(matches) => (
                 <ProjectCardBody
                   project={project}
+                  projectCanBeActive={projectCanBeActive}
                   currentMemberRole={currentMemberRole}
                   duration={duration}
                   descLinesCount={

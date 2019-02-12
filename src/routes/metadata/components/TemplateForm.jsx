@@ -5,8 +5,8 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'react-modal'
-import JSONInput from 'react-json-editor-ajrm'
-import locale    from 'react-json-editor-ajrm/locale/en'
+// import JSONInput from 'react-json-editor-ajrm'
+// import locale    from 'react-json-editor-ajrm/locale/en'
 import SelectDropdown from '../../../components/SelectDropdown/SelectDropdown'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
@@ -170,7 +170,7 @@ class TemplateForm extends Component {
         {
           isJSON && (
             <div className="json_editor_wrapper">
-              <JSONInput
+              {/* <JSONInput
                 id={ `${label}JSON` }
                 placeholder ={ value }
                 theme="dark_vscode_tribute"
@@ -178,6 +178,8 @@ class TemplateForm extends Component {
                 height="250px"
                 // width='0px'
                 onChange={ (params) => { this.onJSONEdit(field, params) } }
+                // onKeyPressUpdate={false}
+                waitAfterKeyPress={3000} */}
               />
             </div>
           )

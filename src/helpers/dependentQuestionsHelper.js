@@ -40,24 +40,47 @@ class Stack {
     return false
   }
 }
+/*eslint quote-props: ["error", "always"]*/
+const precedence = {
+  '(' : 8,
+  ')' : 8,
+
+  '!' : 7,
+
+  '^' : 6,
+
+  '*' : 5,
+  '/' : 5,
+
+  '+' : 4,
+  '-' : 4,
+
+  'contains' : 3,
+  'hasLength' : 3,
+  '>' : 3,
+  '<' : 3,
+
+  '==' : 2,
+  '!=' : 2,
+
+  '&&' : 1,
+  '||' : 1,
+}
 
 /**
  * ex - 4 * 5 - 2
- * @param op2 peeked from ops
- * @param op1 found in the expression
+ * @param opStackTop peeked from ops
+ * @param currentOp found in the expression
  *
  * TODO implementation could be more precise and can be based on JS operator precedence values
  *      see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
  *
- * @returns true if 'op2' has higher or same precedence as 'op1', otherwise returns false
+ * @returns true if 'opStackTop' has higher or same precedence as 'currentOp', otherwise returns false
  */
-function hasPrecedence(op1, op2) {
-  if (op2 === '(' || op2 === ')')
+function hasPrecedence(currentOp, opStackTop) {
+  if (opStackTop === '(' || opStackTop === ')')
     return false
-  if ((op1 === '*' || op1 === '/' || op1 === '!') && (op2 === '+' || op2 === '-' || op2 === '==' || op2 === '>' || op2 === '<' || op2 === 'contains' || op2 === 'hasLength'))
-    return false
-  else
-    return true
+  return precedence[opStackTop] >= precedence[currentOp]
 }
 /**
  * A utility method to apply an operation 'op' on operands

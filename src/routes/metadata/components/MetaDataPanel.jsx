@@ -3,8 +3,8 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import JSONInput from 'react-json-editor-ajrm'
-import locale    from 'react-json-editor-ajrm/locale/en'
+// import JSONInput from 'react-json-editor-ajrm'
+// import locale    from 'react-json-editor-ajrm/locale/en'
 import _ from 'lodash'
 import update from 'react-addons-update'
 import Sticky from '../../../components/Sticky'
@@ -586,7 +586,7 @@ class MetaDataPanel extends React.Component {
           { (metadata || isNew) && (['projectTemplate', 'productTemplate'].indexOf(metadataType) !== -1)  && (
             <div className="json_editor_wrapper">
               <button type="button" className="tc-btn tc-btn-primary tc-btn-sm maximize-btn" onClick={this.enterFullScreen}>Maximize</button>
-              <JSONInput
+              {/* <JSONInput
                 id="templateJSON"
                 placeholder ={ template }
                 theme="dark_vscode_tribute"
@@ -594,7 +594,9 @@ class MetaDataPanel extends React.Component {
                 height="450px"
                 // width='340px'
                 onChange={this.onJSONEdit}
-              />
+                // onKeyPressUpdate={false}
+                waitAfterKeyPress={3000}
+              /> */}
               {/* <ReactJson
                 src={template}
                 theme="rjv-default"
