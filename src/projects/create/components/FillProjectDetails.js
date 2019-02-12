@@ -37,7 +37,7 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject, /* templates,*/ productTemplates } = this.props
+    const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject, productTemplates } = this.props
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
