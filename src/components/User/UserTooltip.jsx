@@ -9,7 +9,7 @@ import IconDirectArrow from '../../assets/icons/icon-direct-arrow.svg'
 
 require('./UserTooltip.scss')
 
-const UserTooltip = ({ usr, id, previewAvatar, size, invitedLabel, teamInvites }) => {
+const UserTooltip = ({ usr, id, previewAvatar, size, invitedLabel, showEmailOnly }) => {
   const theme = `customer-data size-${size}`
   const tooltipMargin = previewAvatar ? -(100 + (id * 20)) : 0
   const userHandle = _.get(usr, 'handle')
@@ -18,10 +18,11 @@ const UserTooltip = ({ usr, id, previewAvatar, size, invitedLabel, teamInvites }
   const lastName = _.get(usr, 'lastName', '')
   let userFullName = `${firstName} ${lastName}`
   userFullName = userFullName.trim().length > 0 ? userFullName : 'Connect user'
-  const avatar = 
+  const avatar =
     (
-      <Avatar avatarUrl={userEmail ? '' : getAvatarResized(_.get(usr || {}, 'photoURL'), 40)} 
-        userName={userEmail}
+      <Avatar
+        avatarUrl={showEmailOnly ? '' : getAvatarResized(_.get(usr || {}, 'photoURL'), 40)}
+        userName={showEmailOnly ? userEmail : userFullName}
       />
     )
   return (
@@ -30,8 +31,8 @@ const UserTooltip = ({ usr, id, previewAvatar, size, invitedLabel, teamInvites }
         {
           previewAvatar ? (<div className={`stack-avatar-${id}`}>
             <Avatar
-              avatarUrl={userEmail ? '' : getAvatarResized(_.get(usr || {}, 'photoURL'), 40)}
-              userName={userEmail}
+              avatarUrl={showEmailOnly ? '' : getAvatarResized(_.get(usr || {}, 'photoURL'), 40)}
+              userName={showEmailOnly ? userEmail : userFullName}
               size={size}
             />
             {invitedLabel && <IconDirectArrow className="direct-arrow"/>}
@@ -42,7 +43,7 @@ const UserTooltip = ({ usr, id, previewAvatar, size, invitedLabel, teamInvites }
       <div className="tooltip-body">
         <div className="top-container">
           <div className="tt-col-avatar">
-            { !userEmail ? (
+            { !showEmailOnly ? (
               <a href={`//www.${DOMAIN}/members/${userHandle}/`} target="_blank" rel="noopener noreferrer" className="tt-user-avatar">
                 {avatar}
               </a>
@@ -53,13 +54,13 @@ const UserTooltip = ({ usr, id, previewAvatar, size, invitedLabel, teamInvites }
             )}
           </div>
           <div className="tt-col-user-data">
-            {!userEmail && <div className="user-name-container">
+            {!showEmailOnly && <div className="user-name-container">
               <span>{userFullName}</span>
             </div>}
-            {!userEmail && <div className="user-handle-container">
+            {!showEmailOnly && <div className="user-handle-container">
               <span>{userHandle}</span>
             </div>}
-            {userEmail && <div className={`user-email-container ${teamInvites ? 'text-dark' : ''}`}>
+            {userEmail && <div className={`user-email-container ${showEmailOnly ? 'text-dark' : ''}`}>
               <a href={`mailto:${userEmail}`}>{userEmail}</a>
             </div>}
             {invitedLabel && <div className="invited-label">invited</div>}
@@ -82,7 +83,8 @@ UserTooltip.propTypes = {
 
 UserTooltip.defaultProps = {
   size: 30,
-  previewAvatar: false
+  previewAvatar: false,
+  showEmailOnly: false,
 }
 
 export default UserTooltip
