@@ -9,20 +9,18 @@ import Up from '../../assets/icons/arrow-up-big.svg'
 const HeaderItem = ({item, onItemClick, currentSortField}) => {
   const _onClick = () => onItemClick(item.id)
   const divClasses = `flex-item-title ${item.classes}`
+  const desc = currentSortField.indexOf(`${item.id} desc`) > -1
   const sortClasses = cn('sort-txt', {
-    'icon-down': currentSortField.indexOf(`${item.id} desc`) > -1,
-    'icon-up': currentSortField.indexOf(item.id) > -1
+    'icon-down': desc,
+    'icon-up': !desc
   })
   return (
     <div className={divClasses}>
       <div className="spacing">
         { item.sortable ?
           <a href="javascript:" className={sortClasses} onClick={_onClick}>
-            if (sortClasses === 'icon-up') {
-              <Up className={sortClasses}/>
-            } else {
-              <Down className={sortClasses}/>
-            }
+            { !desc && <Up className={sortClasses}/> }
+            { !!desc && <Down className={sortClasses}/> }
             {item.headerLabel}
           </a>
           : item.headerLabel

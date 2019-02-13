@@ -1,0 +1,79 @@
+// this is to include tc styles in the output library
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .template-form-container {
+    display: block;
+    position: relative;
+  }
+
+  .template-form {
+    // padding: 0 20px;
+
+    .checkbox {
+      margin-bottom: 10px;
+    }
+
+    > .controls {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+  }
+
+  .delete-template-dialog {
+    padding: 50px 40px 50px 40px;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background: white;
+    box-shadow: 0 2px 9px 0 rgba($tc-gray-90, 0.15);
+    border-radius: 6px;
+  }
+
+  .delete-template-dialog-overlay {
+    background: rgba($tc-gray-90, 0.6);
+    z-index: 20;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .modal-title {
+    font-family: inherit;
+    font-size: 20px;
+    color: $tc-gray-80;
+    line-height: 30px;
+  }
+
+  .modal-body {
+    font-family: inherit;
+    margin-top: 20px;
+    font-size: 15px;
+    color: $tc-gray-60;
+    line-height: 25px;
+  }
+
+  .dropdown-field {
+    :global(.dropdown-wrap) {
+      margin-left: 0;
+      margin-bottom: 10px;
+      margin-top: 5px;
+    }
+  }
+
+  .textarea-field {
+    :global(.tc-textarea) {
+      max-width: 100%;
+      width: 100%;
+      margin: 0 0 10px 0
+    }
+  }
+}

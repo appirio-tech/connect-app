@@ -1,5 +1,5 @@
 import {
-  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
+  LOAD_PROJECT_PENDING, LOAD_PROJECT_SUCCESS, LOAD_PROJECT_MEMBER_INVITES_PENDING, LOAD_PROJECT_MEMBER_INVITES_FAILURE, LOAD_PROJECT_MEMBER_INVITES_SUCCESS, LOAD_PROJECT_FAILURE, LOAD_DIRECT_PROJECT_SUCCESS,
   CREATE_PROJECT_PENDING, CREATE_PROJECT_SUCCESS, CREATE_PROJECT_FAILURE, CREATE_PROJECT_STAGE_PENDING, CREATE_PROJECT_STAGE_SUCCESS, CREATE_PROJECT_STAGE_FAILURE, CLEAR_LOADED_PROJECT,
   UPDATE_PROJECT_PENDING, UPDATE_PROJECT_SUCCESS, UPDATE_PROJECT_FAILURE,
   DELETE_PROJECT_PENDING, DELETE_PROJECT_SUCCESS, DELETE_PROJECT_FAILURE,
@@ -15,7 +15,12 @@ import {
   GET_PROJECTS_SUCCESS, PROJECT_DIRTY, PROJECT_DIRTY_UNDO, LOAD_PROJECT_PHASES_SUCCESS, LOAD_PROJECT_PHASES_PENDING, PRODUCT_DIRTY, PRODUCT_DIRTY_UNDO,
   UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_SUCCESS, UPDATE_PHASE_SUCCESS, UPDATE_PHASE_PENDING, UPDATE_PHASE_FAILURE,
   DELETE_PROJECT_PHASE_PENDING, DELETE_PROJECT_PHASE_SUCCESS, DELETE_PROJECT_PHASE_FAILURE, PHASE_DIRTY_UNDO, PHASE_DIRTY,
-  EXPAND_PROJECT_PHASE, COLLAPSE_PROJECT_PHASE, COLLAPSE_ALL_PROJECT_PHASES,
+  EXPAND_PROJECT_PHASE, COLLAPSE_PROJECT_PHASE, COLLAPSE_ALL_PROJECT_PHASES, INVITE_CUSTOMER_SUCCESS, REMOVE_CUSTOMER_INVITE_SUCCESS,
+  INVITE_TOPCODER_MEMBER_SUCCESS, REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS, INVITE_TOPCODER_MEMBER_PENDING, REMOVE_CUSTOMER_INVITE_PENDING,
+  REMOVE_TOPCODER_MEMBER_INVITE_PENDING, REMOVE_TOPCODER_MEMBER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_FAILURE,
+  INVITE_CUSTOMER_FAILURE, INVITE_TOPCODER_MEMBER_FAILURE, INVITE_CUSTOMER_PENDING,
+  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, 
+  UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION
 } from '../../config/constants'
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -24,7 +29,10 @@ const initialState = {
   isLoading: true,
   processing: false,
   processingMembers: false,
+  processingInvites: false,
   processingAttachments: false,
+  attachmentsAwaitingPermission: null,
+  attachmentPermissions: null,
   error: false,
   project: {},
   projectNonDirty: {},
@@ -32,6 +40,7 @@ const initialState = {
   phases: null,
   phasesNonDirty: null,
   isLoadingPhases: false,
+  showUserInvited: false,
   phasesStates: {} // controls opened phases and tabs of the phases
 }
 
@@ -153,6 +162,29 @@ export const projectState = function (state=initialState, action) {
       projectNonDirty: _.cloneDeep(action.payload),
       lastUpdated: new Date()
     })
+
+  case LOAD_PROJECT_MEMBER_INVITES_SUCCESS: {
+    return Object.assign({}, state, {
+      showUserInvited: true
+    })
+  }
+
+  case LOAD_PROJECT_MEMBER_INVITES_PENDING:
+    return Object.assign({}, state, {
+      isLoading: true,
+      showUserInvited: false
+    })
+
+  case ACCEPT_OR_REFUSE_INVITE_PENDING:
+    return Object.assign({}, state, {
+      showUserInvited: true
+    })
+
+  case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
+    return Object.assign({}, state, {
+      showUserInvited: false
+    })
+  }
 
   case CREATE_PROJECT_STAGE_SUCCESS: {
     // as we additionally loaded products to the phase object we have to keep them
@@ -346,8 +378,28 @@ export const projectState = function (state=initialState, action) {
     return update(state, {
       processingAttachments: { $set : false },
       project: { attachments: { $push: [action.payload] } },
-      projectNonDirty: { attachments: { $push: [action.payload] } }
+      projectNonDirty: { attachments: { $push: [action.payload] } },
+      attachmentsAwaitingPermission: { $set: null }
     })
+
+  case UPLOAD_PROJECT_ATTACHMENT_FILES:
+    return {
+      ...state,
+      attachmentsAwaitingPermission: action.payload,
+      attachmentPermissions: null
+    }
+    
+  case DISCARD_PROJECT_ATTACHMENT:
+    return {
+      ...state,
+      attachmentsAwaitingPermission: null
+    }
+
+  case CHANGE_ATTACHMENT_PERMISSION:
+    return {
+      ...state,
+      attachmentPermissions: action.payload
+    }
 
   case UPDATE_PROJECT_ATTACHMENT_SUCCESS: {
     // get index
@@ -428,6 +480,14 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
+  case REMOVE_CUSTOMER_INVITE_PENDING:
+  case REMOVE_TOPCODER_MEMBER_INVITE_PENDING:
+  case INVITE_CUSTOMER_PENDING:
+  case INVITE_TOPCODER_MEMBER_PENDING:
+    return Object.assign({}, state, {
+      processingInvites: true
+    })
+
   case ADD_PROJECT_MEMBER_PENDING:
   case REMOVE_PROJECT_MEMBER_PENDING:
   case UPDATE_PROJECT_MEMBER_PENDING:
@@ -441,6 +501,36 @@ export const projectState = function (state=initialState, action) {
       project: { members: { $push: [action.payload] } },
       projectNonDirty: { members: { $push: [action.payload] } }
     })
+
+  case INVITE_CUSTOMER_SUCCESS: {
+    const newState = Object.assign({}, state)
+    newState.project.invites.push(...action.payload)
+    newState.processingInvites = false
+    newState.error = false
+    return newState
+  }
+
+  case INVITE_TOPCODER_MEMBER_SUCCESS: {
+    const newState = Object.assign({}, state)
+    newState.project.invites.push(...action.payload)
+    newState.processingInvites = false
+    newState.error = false
+    return newState
+  }
+
+  case REMOVE_CUSTOMER_INVITE_SUCCESS: {
+    const newState = Object.assign({}, state)
+    _.remove(newState.project.invites, i => action.payload.id === i.id)
+    newState.processingInvites = false
+    return newState
+  }
+
+  case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS: {
+    const newState = Object.assign({}, state)
+    _.remove(newState.project.invites, i => action.payload.id === i.id)
+    newState.processingInvites = false
+    return newState
+  }
 
   case UPDATE_PROJECT_MEMBER_SUCCESS: {
     // get index
@@ -468,16 +558,50 @@ export const projectState = function (state=initialState, action) {
     })
   }
 
-  case PROJECT_DIRTY: {// payload contains only changed values from the project form
-    return Object.assign({}, state, {
-      project: _.mergeWith({}, state.project, action.payload, { isDirty : true },
-        // customizer to override screens array with changed values
-        (objValue, srcValue, key) => {
-          if (key === 'screens' || key === 'features' || key === 'capabilities') {
-            return srcValue// srcValue contains the changed values from action payload
-          }
+  case PROJECT_DIRTY: {
+    const updatedProject = _.mergeWith({}, _.omit(state.project, 'isDirty'), action.payload,
+      // customizer to override arrays with changed values
+      (objValue, srcValue, key) => {
+        // when we update some array values, we have to replace them completely, rather than merge
+        if (_.isArray(objValue) && _.isArray(srcValue)) {
+          return srcValue
         }
-      )
+        // most likely these cases are particular cases of the upper rule for arrays,
+        // but just in case keep them here for now, until we are sure we can safely remove
+        // this particular cases
+        if (key === 'screens' || key === 'features' || key === 'capabilities') {
+          return srcValue// srcValue contains the changed values from action payload
+        }
+      }
+    )
+    // dont' compare this properties as they could be not added to `projectNonDirty`
+    // or mutated somewhere in the app
+    const skipProperties = ['members']
+    const clearUpdatedProject = _.omit(updatedProject, skipProperties)
+    const clearUpdatedNonDirtyProject = _.omit(state.projectNonDirty, skipProperties)
+    if (!_.isEqual(clearUpdatedProject, clearUpdatedNonDirtyProject)) {
+      updatedProject.isDirty = true
+    }
+
+    // keep this code for debugging
+    // as there are could be some parts of the application which could add additional properties
+    // to the `project` by Redux Store mutation
+    // this code could help to find such places during debugging if `isDirty` becomes `true` unexpectedly
+    /* if (updatedProject.isDirty) {
+      function difference(object, base) {
+        function changes(object, base) {
+          return _.transform(object, function(result, value, key) {
+            if (!_.isEqual(value, base[key])) {
+              result[key] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
+            }
+          });
+        }
+        return changes(object, base);
+      }
+      console.log('diff', difference(clearUpdatedProject, clearUpdatedNonDirtyProject))
+    } */
+    return Object.assign({}, state, {
+      project: updatedProject
     })
   }
 
@@ -498,6 +622,8 @@ export const projectState = function (state=initialState, action) {
   }
 
   case PRODUCT_DIRTY:
+
+
     return {
       ...state,
       phases: updateProductInPhases(state.phases, action.payload.phaseId, action.payload.productId, {
@@ -535,6 +661,10 @@ export const projectState = function (state=initialState, action) {
   case UPDATE_PHASE_FAILURE:
   case UPDATE_PRODUCT_FAILURE:
   case ADD_PROJECT_MEMBER_FAILURE:
+  case INVITE_CUSTOMER_FAILURE:
+  case INVITE_TOPCODER_MEMBER_FAILURE:
+  case REMOVE_TOPCODER_MEMBER_INVITE_FAILURE:
+  case REMOVE_CUSTOMER_INVITE_FAILURE:
   case REMOVE_PROJECT_MEMBER_FAILURE:
   case UPDATE_PROJECT_MEMBER_FAILURE:
   case UPDATE_PROJECT_ATTACHMENT_FAILURE:
@@ -544,11 +674,14 @@ export const projectState = function (state=initialState, action) {
   case ADD_PRODUCT_ATTACHMENT_FAILURE:
   case REMOVE_PRODUCT_ATTACHMENT_FAILURE:
   case DELETE_PROJECT_PHASE_FAILURE:
+  case LOAD_PROJECT_MEMBER_INVITES_FAILURE:
+  case ACCEPT_OR_REFUSE_INVITE_FAILURE:
     return Object.assign({}, state, {
       isLoading: false,
       processing: false,
       processingMembers: false,
       processingAttachments: false,
+      processingInvites: false,
       error: parseErrorObj(action)
     })
 

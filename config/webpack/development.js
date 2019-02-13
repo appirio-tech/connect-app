@@ -42,9 +42,12 @@ combinedConfig.plugins.splice(hotReloadPluginIndex, 1)
 /*
   Remove 'webpack-hot-middleware/client?reload=true' as we use webpack-dev-server, not middleware
  */
-combinedConfig.entry.main = combinedConfig.entry.main.filter((entry) => (
-  entry !== 'webpack-hot-middleware/client?reload=true'
-))
+// NOTE: looks like after some minor dependency version update, combined config doesn't keep `main` property anymore
+if (combinedConfig.entry.main) {
+  combinedConfig.entry.main = combinedConfig.entry.main.filter((entry) => (
+    entry !== 'webpack-hot-middleware/client?reload=true'
+  ))
+}
 
 /*
   Remove ExtractTextPlugin, because we want hot reload when editing styles

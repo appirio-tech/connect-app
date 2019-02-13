@@ -10,6 +10,7 @@ import TrashIcon from  '../../assets/icons/icon-trash.svg'
 import CloseIcon from  '../../assets/icons/icon-close.svg'
 import EditIcon from  '../../assets/icons/icon-edit.svg'
 import SaveIcon from  '../../assets/icons/icon-save.svg'
+import UserAutoComplete from '../UserAutoComplete/UserAutoComplete'
 
 
 export default class FileListItem extends React.Component {
@@ -19,6 +20,7 @@ export default class FileListItem extends React.Component {
     this.state = {
       title: props.title,
       description: props.description,
+      allowedUsers: props.allowedUsers,
       isEditing: false
     }
     this.handleSave = this.handleSave.bind(this)
@@ -27,6 +29,7 @@ export default class FileListItem extends React.Component {
     this.validateForm = this.validateForm.bind(this)
     this.validateTitle = this.validateTitle.bind(this)
     this.onTitleChange = this.onTitleChange.bind(this)
+    this.onUserIdChange = this.onUserIdChange.bind(this)
   }
 
   onDelete() {
@@ -34,10 +37,11 @@ export default class FileListItem extends React.Component {
   }
 
   startEdit() {
-    const {title, description} = this.props
+    const {title, description, allowedUsers} = this.props
     this.setState({
       title,
       description,
+      allowedUsers,
       isEditing: true
     })
   }
@@ -48,7 +52,7 @@ export default class FileListItem extends React.Component {
     if (!_.isEmpty(errors)) {
       this.setState({ errors })
     } else {
-      this.props.onSave(this.props.id, {title, description: this.refs.desc.value}, e)
+      this.props.onSave(this.props.id, {title, description: this.refs.desc.value, allowedUsers: this.state.allowedUsers}, e)
       this.setState({isEditing: false})
     }
   }
@@ -74,9 +78,28 @@ export default class FileListItem extends React.Component {
     this.setState({ errors })
   }
 
+  onUserIdChange(selectedHandles = '') {
+    this.setState({
+      allowedUsers: this.handlesToUserIds(selectedHandles.split(','))
+    })
+  }
+
+  userIdsToHandles(allowedUsers) {
+    const { projectMembers } = this.props
+    allowedUsers = allowedUsers || []
+    return allowedUsers.map(userId => _.get(projectMembers[userId], 'handle'))
+  }
+
+  handlesToUserIds(handles) {
+    const { projectMembers } = this.props
+    const projectMembersByHandle = _.mapKeys(projectMembers, value => value.handle)
+    handles = handles || []
+    return handles.filter(handle => handle).map(handle => _.get(projectMembersByHandle[handle], 'userId'))
+  }
+
   renderEditing() {
-    const {title, description} = this.props
-    const { errors } = this.state
+    const { title, description, projectMembers, loggedInUser } = this.props
+    const { errors, allowedUsers } = this.state
     const onExitEdit = () => this.setState({isEditing: false, errors: {} })
     return (
       <div>
@@ -90,6 +113,11 @@ export default class FileListItem extends React.Component {
         { (errors && errors.title) && <div className="error-message">{ errors.title }</div> }
         <textarea defaultValue={description} ref="desc" maxLength={250} className="tc-textarea" />
         { (errors && errors.desc) && <div className="error-message">{ errors.desc }</div> }
+        <UserAutoComplete onUpdate={this.onUserIdChange} 
+          projectMembers={projectMembers}
+          loggedInUser={loggedInUser}
+          selectedUsers={this.userIdsToHandles(allowedUsers).join(',')}  
+        />
       </div>
     )
   }
@@ -156,6 +184,9 @@ FileListItem.propTypes = {
   createdAt: PropTypes.string.isRequired,
   updatedByUser: PropTypes.object,
   createdByUser: PropTypes.object.isRequired,
+  projectMembers: PropTypes.object.isRequired,
+  loggedInUser: PropTypes.object.isRequired,
+  allowedUsers: PropTypes.array,
 
   /**
    * Callback fired when a save button is clicked

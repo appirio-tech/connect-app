@@ -5,45 +5,34 @@ import { withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import {
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN,
-  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER,
-  AUTOCOMPLETE_TRIGGER_LENGTH
+  PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER, ROLE_CONNECT_COPILOT_MANAGER,
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import { addProjectMember, updateProjectMember, removeProjectMember,
-  loadMemberSuggestions, loadMemberProfileForSuggestions
+  loadMemberSuggestions, inviteProjectMembers, deleteProjectInvite,
+  inviteTopcoderMembers, deleteTopcoderMemberInvite, acceptOrRefuseInvite
 } from '../../actions/projectMember'
-
 
 class TeamManagementContainer extends Component {
 
   constructor(props) {
     super(props)
-    this.onKeywordChange = this.onKeywordChange.bind(this)
-    this.onKeywordPaste = this.onKeywordPaste.bind(this)
-    this.onSelectNewMember = this.onSelectNewMember.bind(this)
-    this.onAddNewMember = this.onAddNewMember.bind(this)
-    this.onToggleAddTeamMember = this.onToggleAddTeamMember.bind(this)
+    this.onProjectInviteSend = this.onProjectInviteSend.bind(this)
+    this.onProjectInviteDelete = this.onProjectInviteDelete.bind(this)
+    this.onTopcoderInviteDelete = this.onTopcoderInviteDelete.bind(this)
+    this.onTopcoderInviteSend = this.onTopcoderInviteSend.bind(this)
     this.onMemberDeleteConfirm = this.onMemberDeleteConfirm.bind(this)
     this.onJoinConfirm = this.onJoinConfirm.bind(this)
-    this.onChangeOwnerConfirm = this.onChangeOwnerConfirm.bind(this)
-    this.onFilterTypeChange = this.onFilterTypeChange.bind(this)
-    this.onToggleNewMemberConfirm = this.onToggleNewMemberConfirm.bind(this)
+    this.changeRole = this.changeRole.bind(this)
   }
 
   componentWillMount() {
     this.setState({
       isUserLeaving: false,
-      searchMembers: [],
-      keyword: '',
-      isAddingTeamMember: false,
-      filterType: PROJECT_ROLE_CUSTOMER
     })
   }
 
   componentWillReceiveProps(nextProps) {
-    const { keyword, isAddingTeamMember } = this.state
-    if (isAddingTeamMember && keyword.length)
-      this.updateSearchMembers(nextProps)
     if (this.state.isUserLeaving &&
       _.findIndex(nextProps.members,
         m => m.userId === this.props.currentUser.userId) === -1
@@ -51,111 +40,6 @@ class TeamManagementContainer extends Component {
       // navigate to project listing
       this.props.history.push('/projects/')
     }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    // Trigger a resize event to make sure all <Sticky> nodes update their sizes
-    // whenever isAddingTeamMember is toggled.
-    if (prevState.isAddingTeamMember !== this.state.isAddingTeamMember) {
-      // We use requestAnimationFrame because this function may be executed before
-      // the DOM elements are actually drawn.
-      // Source: http://stackoverflow.com/a/28748160
-      requestAnimationFrame(() => {
-        const event = document.createEvent('HTMLEvents')
-        event.initEvent('resize', true, false)
-        window.dispatchEvent(event)
-      })
-    }
-  }
-
-  updateSearchMembers({allMembers, members}) {
-    const {keyword, selectedNewMember } = this.state
-    if (!keyword || !keyword.trim().length) {
-      return []
-    }
-    const searchMembers = allMembers.filter((user) => {
-      if (members.some((member) => member.userId === user.userId)) {
-        // return false
-      }
-      // if (currentUser.isCustomer && !user.isCustomer) {
-      //   return false
-      // }
-      // if (currentUser.isCopilot && user.isManager) {
-      //   return false
-      // }
-      // if (currentUser.isManager || currentUser.isCopilot) {
-      //   if (filterType === 'member' && !user.isCustomer) {
-      //     return false
-      //   }
-      //   if (filterType === 'copilot' && user.isCustomer) {
-      //     return false
-      //   }
-      // }
-      if (selectedNewMember && selectedNewMember.userId === user.userId) {
-        return false
-      }
-      return user.handle.toLowerCase().indexOf(keyword.toLowerCase()) !== -1
-    })
-    this.setState({
-      searchMembers,
-      error: this.getError({keyword, searchMembers, selectedNewMember})
-    })
-  }
-
-  getError({keyword, searchMembers, selectedNewMember}) {
-    if (!selectedNewMember && keyword && keyword.trim().length && !searchMembers.length) {
-      return 'This username doesn’t exist on Topcoder.'
-    }
-    return null
-  }
-
-  onKeywordChange(keyword) {
-    if (keyword.length >= AUTOCOMPLETE_TRIGGER_LENGTH)
-      this.props.loadMemberSuggestions(keyword)
-    this.setState({ keyword, selectedNewMember: null })
-  }
-
-  onKeywordPaste(keyword) {
-    if (keyword && keyword.length > AUTOCOMPLETE_TRIGGER_LENGTH) {
-      this.props.loadMemberProfileForSuggestions(keyword)
-      this.setState({ keyword, selectedNewMember: null })
-    }
-  }
-
-  onSelectNewMember(selectedNewMember) {
-    const keyword = selectedNewMember ? selectedNewMember.handle : ''
-    const { members } = this.props
-    let error = null
-    if (selectedNewMember && members.some((member) => member.userId === selectedNewMember.userId)) {
-      error = keyword + ' is already part of your team.'
-    }
-    this.setState({ selectedNewMember, keyword,
-      error
-    })
-  }
-
-  onAddNewMember() {
-    const { filterType, selectedNewMember } = this.state
-    const userId = selectedNewMember.userId
-    this.props.addProjectMember(
-      this.props.projectId, {
-        userId,
-        role: _.isEmpty(filterType) ? PROJECT_ROLE_CUSTOMER: filterType
-      }
-    )
-    this.setState({
-      keyword: '',
-      searchMembers: [],
-      selectedNewMember: null
-    })
-  }
-
-  onToggleAddTeamMember(isAddingTeamMember) {
-    this.setState({ isAddingTeamMember, error : null, searchMembers: [] })
-  }
-
-  onToggleNewMemberConfirm(showNewMemberConfirmation) {
-    this.setState({ showNewMemberConfirmation, isAddingTeamMember : false })
   }
 
   onMemberDeleteConfirm(member) {
@@ -174,12 +58,24 @@ class TeamManagementContainer extends Component {
     )
   }
 
-  onFilterTypeChange(filterType) {
-    this.setState({ filterType })
+  onTopcoderInviteDelete(invite) {
+    this.props.deleteTopcoderMemberInvite(this.props.projectId, invite)
   }
 
-  onChangeOwnerConfirm(member) {
-    this.props.updateProjectMember(this.props.projectId, member.id, { role: member.role, isPrimary: true })
+  onTopcoderInviteSend(items) {
+    this.props.inviteTopcoderMembers(this.props.projectId, items)
+  }
+
+  onProjectInviteDelete(invite) {
+    this.props.deleteProjectInvite(this.props.projectId, invite)
+  }
+
+  onProjectInviteSend(emails, handles) {
+    this.props.inviteProjectMembers(this.props.projectId, emails, handles)
+  }
+
+  changeRole(memberId, item) {
+    this.props.updateProjectMember(this.props.projectId, memberId, item)
   }
 
   anontateMemberProps() {
@@ -207,31 +103,43 @@ class TeamManagementContainer extends Component {
     })
   }
 
+  annotateInvites(invites, members){
+    return _.map(invites, i => {
+      i.member = _.find(members, m => m.userId === i.userId)
+      return i
+    })
+  }
+
   render() {
     const projectMembers = this.anontateMemberProps()
+    const projectTeamInvites = this.annotateInvites(this.props.projectTeamInvites, this.props.allMembers)
+    const topcoderTeamInvites = this.annotateInvites(this.props.topcoderTeamInvites, this.props.allMembers)
     return (
       <div>
         <TeamManagement
           {...this.state}
+          onUserInviteAction={this.onUserInviteAction}
+          processingMembers={this.props.processingMembers}
+          processingInvites={this.props.processingInvites}
+          error={this.props.error}
           currentUser={this.props.currentUser}
           members={projectMembers}
-          onKeywordChange={this.onKeywordChange}
-          onKeywordPaste={this.onKeywordPaste}
-          onSelectNewMember={this.onSelectNewMember}
-          onAddNewMember={this.onAddNewMember}
-          onToggleNewMemberConfirm={ this.onToggleNewMemberConfirm }
-          onToggleAddTeamMember={this.onToggleAddTeamMember}
+          projectTeamInvites={projectTeamInvites}
+          topcoderTeamInvites={topcoderTeamInvites}
           onMemberDeleteConfirm={this.onMemberDeleteConfirm}
           onJoinConfirm={this.onJoinConfirm}
-          onChangeOwnerConfirm={this.onChangeOwnerConfirm}
-          onFilterTypeChange={this.onFilterTypeChange}
+          onProjectInviteDeleteConfirm={this.onProjectInviteDelete}
+          onProjectInviteSend={this.onProjectInviteSend}
+          onTopcoderInviteDeleteConfirm={this.onTopcoderInviteDelete}
+          onTopcoderInviteSend={this.onTopcoderInviteSend}
+          changeRole={this.changeRole}
         />
       </div>
     )
   }
 }
 
-const mapStateToProps = ({ loadUser, members }) => {
+const mapStateToProps = ({ loadUser, members, projectState }) => {
   const adminRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   const powerUserRoles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   const managerRoles = [ ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN, ROLE_CONNECT_MANAGER ]
@@ -241,9 +149,15 @@ const mapStateToProps = ({ loadUser, members }) => {
       isCopilot: _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT) > -1,
       isAdmin: _.intersection(loadUser.user.roles, adminRoles).length > 0,
       isManager: loadUser.user.roles.some((role) => managerRoles.indexOf(role) !== -1),
-      isCustomer: !loadUser.user.roles.some((role) => powerUserRoles.indexOf(role) !== -1)
+      isCustomer: !loadUser.user.roles.some((role) => powerUserRoles.indexOf(role) !== -1),
+      isCopilotManager: _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT_MANAGER) > -1,
     },
-    allMembers: _.values(members.members)
+    allMembers: _.values(members.members),
+    processingInvites: projectState.processingInvites,
+    processingMembers: projectState.processingMembers,
+    error: projectState.error,
+    topcoderTeamInvites: _.filter(projectState.project.invites, i => i.role !== 'customer'),
+    projectTeamInvites: _.filter(projectState.project.invites, i => i.role === 'customer')
   }
 }
 
@@ -252,7 +166,11 @@ const mapDispatchToProps = {
   removeProjectMember,
   updateProjectMember,
   loadMemberSuggestions,
-  loadMemberProfileForSuggestions,
+  inviteProjectMembers,
+  deleteProjectInvite,
+  inviteTopcoderMembers,
+  deleteTopcoderMemberInvite,
+  acceptOrRefuseInvite,
 }
 
 TeamManagementContainer.propTypes = {
@@ -264,7 +182,12 @@ TeamManagementContainer.propTypes = {
     isCopilot: PropTypes.bool
   }).isRequired,
   allMembers: PropTypes.arrayOf(PropTypes.object).isRequired,
-  projectId: PropTypes.number.isRequired
+  projectId: PropTypes.number.isRequired,
+  processingMembers: PropTypes.bool.isRequired,
+  processingInvites: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  projectTeamInvites: PropTypes.arrayOf(PropTypes.object),
+  topcoderTeamInvites: PropTypes.arrayOf(PropTypes.object),
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TeamManagementContainer))
