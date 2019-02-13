@@ -274,6 +274,7 @@ class ProjectBasicDetailsForm extends Component {
             <SpecSection
               {...section}
               project={project}
+              projectTemplate={template}
               dirtyProject={dirtyProject}
               productTemplates={productTemplates}
               // when creating a project we can treat project as dirty,

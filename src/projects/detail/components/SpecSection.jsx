@@ -64,6 +64,7 @@ const tiledRadioGroupIcons = {
 const SpecSection = props => {
   const {
     project,
+    projectTemplate,
     dirtyProject,
     isProjectDirty,
     resetFeatures,
@@ -185,6 +186,7 @@ const SpecSection = props => {
           questions={props.questions}
           layout={props.layout}
           project={project}
+          projectTemplate={projectTemplate}
           dirtyProject={dirtyProject}
           isRequired={props.required}
           showHidden={showHidden}
@@ -425,6 +427,7 @@ const SpecSection = props => {
 
 SpecSection.propTypes = {
   project: PropTypes.object.isRequired,
+  projectTemplate: PropTypes.object.isRequired,
   productTemplates: PropTypes.array.isRequired,
   sectionNumber: PropTypes.number.isRequired,
   showHidden: PropTypes.bool,

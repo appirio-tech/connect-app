@@ -11,6 +11,7 @@ import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
 import SpecFeatureQuestion from './SpecFeatureQuestion'
 import ColorSelector from './../../../components/ColorSelector/ColorSelector'
 import SelectDropdown from './../../../components/SelectDropdown/SelectDropdown'
+import ProjectEstimation from '../../create/components/ProjectEstimation'
 
 // HOC for TextareaInput
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
@@ -47,6 +48,7 @@ const SpecQuestions = ({
   layout,
   additionalClass,
   project,
+  projectTemplate,
   dirtyProject,
   resetFeatures,
   showFeaturesDialog,
@@ -60,6 +62,7 @@ const SpecQuestions = ({
   const currentProjectData = isProjectDirty ? dirtyProject : project
 
   const renderQ = (q, index) => {
+    let hideTitle = false
     const isReadOnly = _.get(q, '__wizard.readOnly')
     // let child = null
     // const value =
@@ -223,6 +226,11 @@ const SpecQuestions = ({
       ChildElem = AddonOptions
       _.assign(elemProps, { options: formatAddonOptions(filterAddonQuestions(productTemplates, q)) })
       break
+    case 'estimation':
+      ChildElem = ProjectEstimation
+      _.assign(elemProps, {question: q, project: currentProjectData, projectTemplate})
+      hideTitle = true
+      break
     default:
       ChildElem = () => (
         <div style={{ borderWidth: 1, borderStyle: 'dashed', borderColor: '#f00' }}>
@@ -290,6 +298,7 @@ const SpecQuestions = ({
         stopEditReadOnly={stopEditReadOnly}
         cancelEditReadOnly={cancelEditReadOnly}
         readOptimized={shouldHideFormField}
+        hideTitle={hideTitle}
       >
         <div style={shouldHideFormField ? {display: 'none'} : {}}>
           <ChildElem {...elemProps} />
@@ -318,6 +327,12 @@ SpecQuestions.propTypes = {
    * Original project object for which questions are to be rendered
    */
   project: PropTypes.object.isRequired,
+
+  /**
+   * Original Project template
+   */
+  projectTemplate: PropTypes.object.isRequired,
+
   /**
    * Dirty project with all unsaved changes
    */

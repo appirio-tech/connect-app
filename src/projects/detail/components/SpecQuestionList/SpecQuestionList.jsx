@@ -49,6 +49,7 @@ const SpecQuestionListItem = ({
   stopEditReadOnly,
   cancelEditReadOnly,
   readOptimized,
+  hideTitle,
 }) => {
   let shouldShowTitle = true
   let shouldShowRequire = false
@@ -69,10 +70,10 @@ const SpecQuestionListItem = ({
             <IconUIPencil />
           </button>
         )}
-        <h5>
+        {!hideTitle && <h5>
           { shouldShowTitle && (<div>{title}{required ? <span>*</span> : null}</div>) }
           {!!titleAside && <div className="spec-section-title-aside">{titleAside}</div>}
-        </h5>
+        </h5>}
         {children && <div className="child-component">{children}</div>}
         {!hideDescription && <p className={cn({bigger: !icon})}>{description}</p>}
         {shouldShowRequire && (<div className="require-desc">{required ? 'Required' : 'Optional'}</div>) }
@@ -105,7 +106,8 @@ SpecQuestionListItem.propTypes = {
   description: PropTypes.any,
   children: PropTypes.any,
   type: PropTypes.string,
-  additionalClass: PropTypes.string
+  additionalClass: PropTypes.string,
+  hideTitle: PropTypes.bool,
 }
 
 SpecQuestionListItem.defaultProps = {
