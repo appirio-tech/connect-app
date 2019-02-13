@@ -7,11 +7,9 @@ import Modal from 'react-modal'
 import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized } from '../../helpers/tcHelpers'
-import FormsyForm from 'appirio-tech-react-components/components/Formsy'
-import { INVITE_TOPCODER_MEMBER_FAILURE } from '../../config/constants'
 import SelectDropdown from '../SelectDropdown/SelectDropdown'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
-const TCFormFields = FormsyForm.Fields
+import AutocompleteInput from './AutocompleteInput'
 
 class Dialog extends React.Component {
   constructor(props) {
@@ -52,18 +50,6 @@ class Dialog extends React.Component {
     })
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.state.clearText && nextProps.processingInvites !== this.props.processingInvites &&
-      !nextProps.processingInvites) {
-      this.setState((prevState) => ({
-        userText: nextProps.error && nextProps.error.type === INVITE_TOPCODER_MEMBER_FAILURE ? prevState.userText : '',
-        validUserText: false,
-        clearText: false,
-        members: this.props.members
-      }))
-    }
-  }
-
   onUserRoleChange(memberId, id, type) {
     const managerType = Object.assign({}, this.state.managerType)
     managerType[memberId] = type
@@ -78,43 +64,38 @@ class Dialog extends React.Component {
   }
 
   addUsers() {
-    let handles = this.state.userText.split(/[,;]/g)
-    handles = handles.map(handle => handle.trim())
-    handles = handles.filter((handle) => (handle.startsWith('@') && handle.length > 1))
-    handles = handles.map(handle => handle.replace(/^@/, ''))
-
-    this.props.addUsers({
-      handles,
-      role: this.state.userRole
-    })
-    this.setState({clearText: true})
+    this.props.addUsers(this.state.userRole )
   }
 
-  onChange(currentValues) {
-    const text = currentValues.handlesText
-    let handles = text.split(/[,;]/g)
-    const isInvalid = handles.some(user => {
-      user = user.trim()
-      if (user === '') {
+  onChange(selectedMembers) {
+    // If a member invited with email exists in selectedMembers
+    let present = _.some(this.props.invites, invited => _.findIndex(selectedMembers,
+      selectedMember => selectedMember.isEmail && selectedMember.handle === invited.email) > -1)
+    // If a member invited with handle exists in selectedMembers
+    present = present || _.some(this.props.invites, invited => {
+      if (!invited.member) {
         return false
       }
-      return !(user.startsWith('@') && user.length > 1)
+      return _.findIndex(selectedMembers,
+        selectedMember => !selectedMember.isEmail && selectedMember.handle === invited.member.handle) > -1
     })
-    const validText = !isInvalid && text.trim().length > 0
-    handles = handles.filter((handle) => (handle.trim().startsWith('@') && handle.length > 1))
-    handles = handles.map(handle => handle.trim().replace(/^@/, ''))
-    const present = _.some(this.state.members, m => handles.indexOf(m.handle) > -1)
+    present = present || _.some(this.state.members, m => _.findIndex(selectedMembers,
+      selectedMember => selectedMember.handle === m.handle) > -1)
     this.setState({
-      validUserText: !present && validText,
+      validUserText: !present,
       showAlreadyMemberError: present,
-      userText: text
     })
+    this.props.onSelectedMembersUpdate(selectedMembers)
   }
 
   render() {
-    const {members, currentUser, isMember, removeMember, onCancel, removeInvite, invites = []} = this.props
+    const {
+      members, currentUser, isMember, removeMember, onCancel, removeInvite, invites = [],
+      selectedMembers, processingInvites
+    } = this.props
     const showRemove = currentUser.isAdmin || (isMember && currentUser.isManager)
     let i = 0
+    const allMembers = [...members, ...invites.map(i => i.member)]
     return (
       <Modal
         isOpen
@@ -256,34 +237,36 @@ class Dialog extends React.Component {
             }))}
           </div>
 
-          {showRemove && <Formsy.Form className="input-container" onValidSubmit={this.addUsers} onChange={this.onChange} >
+          {showRemove && <div className="input-container" >
             <div className="hint">invite more people</div>
-            <TCFormFields.TextInput
-              name="handlesText"
-              wrapperClass="inviteTextInput"
-              type="text"
-              value={this.state.userText}
-              placeholder="Enter one or more user @handles separated by ';' or comma ','"
-              disabled={(!currentUser.isAdmin && !isMember) || this.state.clearText}
+            <AutocompleteInput
+              onUpdate={this.onChange}
+              currentUser={currentUser}
+              selectedMembers={selectedMembers}
+              disabled={processingInvites || (!currentUser.isAdmin && !isMember)}
+              allMembers={allMembers}
             />
             { this.state.showAlreadyMemberError && <div className="error-message">
                 Project Member(s) can't be invited again. Please remove them from list.
             </div> }
-            <SelectDropdown
-              name="role"
-              value={this.state.userRole}
-              theme="role-drop-down default"
-              options={this.roles}
-              onSelect={this.handleRoles}
-            />
+            <Formsy.Form>
+              <SelectDropdown
+                name="role"
+                value={this.state.userRole}
+                theme="role-drop-down default"
+                options={this.roles}
+                onSelect={this.handleRoles}
+              />
+            </Formsy.Form>
             <button
               className="tc-btn tc-btn-primary tc-btn-md"
               type="submit"
-              disabled={!this.state.validUserText || this.state.clearText}
+              disabled={processingInvites || !this.state.validUserText || this.state.clearText}
+              onClick={this.addUsers}
             >
               Send Invite
             </button>
-          </Formsy.Form>
+          </div>
           }
           {!showRemove && <div className="dialog-placeholder" />}
         </div>
@@ -292,8 +275,12 @@ class Dialog extends React.Component {
   }
 }
 
+Dialog.defaultProps = {
+  invites: [],
+  members: []
+}
+
 Dialog.propTypes = {
-  processingInvites: PT.bool.isRequired,
   error: PT.oneOfType([PT.object, PT.bool]),
   currentUser: PT.object.isRequired,
   members: PT.arrayOf(PT.object).isRequired,
@@ -304,6 +291,9 @@ Dialog.propTypes = {
   invites: PT.arrayOf(PT.object),
   addUsers: PT.func.isRequired,
   removeInvite: PT.func.isRequired,
+  onSelectedMembersUpdate: PT.func.isRequired,
+  selectedMembers: PT.arrayOf(PT.object),
+  processingInvites: PT.bool.isRequired,
 }
 
 export default Dialog

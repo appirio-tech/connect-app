@@ -56,7 +56,8 @@ class TeamManagement extends React.Component {
       showNewMemberConfirmation, onJoin, onJoinConfirm, onShowProjectDialog, isShowProjectDialog,
       projectTeamInvites, onProjectInviteDeleteConfirm, onProjectInviteSend, deletingInvite, changeRole,
       onDeleteInvite, isShowTopcoderDialog, onShowTopcoderDialog, processingInvites, processingMembers,
-      onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, error
+      onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, error,
+      onSelectedMembersUpdate, selectedMembers
     } = this.props
     const currentMember = members.filter((member) => member.userId === currentUser.userId)[0]
     const modalActive = isAddingTeamMember || deletingMember || isShowJoin || showNewMemberConfirmation || deletingInvite
@@ -153,7 +154,6 @@ class TeamManagement extends React.Component {
           }
           return (
             <ProjectDialog
-              processingInvites={processingInvites}
               error={error}
               currentUser={currentUser}
               members={members}
@@ -163,6 +163,9 @@ class TeamManagement extends React.Component {
               invites={projectTeamInvites}
               sendInvite={onProjectInviteSend}
               removeInvite={removeInvite}
+              onSelectedMembersUpdate={onSelectedMembersUpdate}
+              selectedMembers={selectedMembers}
+              processingInvites={processingInvites}
             />
           )
         })())}
@@ -176,7 +179,6 @@ class TeamManagement extends React.Component {
           }
           return (
             <TopcoderDialog
-              processingInvites={processingInvites}
               error={error}
               currentUser={currentUser}
               members={members}
@@ -187,6 +189,9 @@ class TeamManagement extends React.Component {
               invites={topcoderTeamInvites}
               removeInvite={removeInvite}
               changeRole={changeRole}
+              onSelectedMembersUpdate={onSelectedMembersUpdate}
+              selectedMembers={selectedMembers}
+              processingInvites={processingInvites}
             />
           )
         })())}
@@ -339,6 +344,16 @@ TeamManagement.propTypes = {
    * Callback to send topcoder invitations
    */
   onTopcoderInviteSend: PropTypes.func,
+
+  /**
+   * Callback fired when selected members are updated
+   */
+  onSelectedMembersUpdate: PropTypes.func,
+
+  /**
+   * List of members added to auto complete input
+   */
+  selectedMembers: PropTypes.arrayOf(PropTypes.object),
 
   /**
    * Callback to send member role
