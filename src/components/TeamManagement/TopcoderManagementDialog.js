@@ -207,7 +207,10 @@ class Dialog extends React.Component {
               const remove = () => {
                 removeInvite(invite)
               }
-              const username = invite.member ? invite.member.handle : invite.userId
+              const firstName = _.get(invite.member, 'firstName', '')
+              const lastName = _.get(invite.member, 'lastName', '')
+              let userFullName = `${firstName} ${lastName}`
+              userFullName = userFullName.trim().length > 0 ? userFullName : 'Connect user'
               i++
               return (
                 <div
@@ -215,15 +218,14 @@ class Dialog extends React.Component {
                   className={`project-member-layout ${(i%2 !== 0) ? 'dark' : ''}`}
                 >
                   <Avatar
-                    userName={username}
+                    userName={userFullName}
+                    avatarUrl={getAvatarResized(_.get(invite.member, 'photoURL'), 40)}
                     size={40}
                   />
-                  <div className="member-name member-email">
-                    <span>
-                      {username}
-                    </span>
-                    <span className="email-date">
-                      Invited {moment(invite.time).format('MMM D, YY')}
+                  <div className="member-name">
+                    <span className="span-name">{userFullName}</span>
+                    <span className="member-handle">
+                      @{invite.member.handle || 'ConnectUser'}
                     </span>
                   </div>
                   {showRemove && <div className="member-remove" onClick={remove}>
