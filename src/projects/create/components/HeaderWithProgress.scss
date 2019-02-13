@@ -1,0 +1,52 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.HeaderWithProgress {
+  display: block;
+  width: calc(100% - 130px);
+  margin: -50px auto 30px;
+  @media screen and (max-width: $screen-md - 1px) {
+    margin: auto;
+    padding: 15px 0;
+  }
+}
+
+.title-estimate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+  @media screen and (max-width: $screen-md - 1px) {
+    line-height: 25px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 400;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      display: none;
+    }
+  }
+}
+
+.progress-bar {
+  width: 100%;
+  position: relative;
+  height: 5px;
+  border-radius: 6px;
+  background: $tc-gray-10;
+  margin-top: 10px;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    margin-top: 15px;
+  }
+}
+
+.progress {
+  background: $tc-gray-100;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+}

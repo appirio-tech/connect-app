@@ -240,6 +240,8 @@ class ProjectBasicDetailsForm extends Component {
 
     this.currentWizardStep = nextStep
 
+    this.props.onStepChange(this.currentWizardStep);
+
     window.localStorage.setItem(LS_INCOMPLETE_WIZARD, JSON.stringify({
       currentWizardStep: this.currentWizardStep
     }))
@@ -372,7 +374,8 @@ ProjectBasicDetailsForm.propTypes = {
   template: PropTypes.object.isRequired,
   isEditable: PropTypes.bool.isRequired,
   productTemplates: PropTypes.array.isRequired,
-  submitHandler: PropTypes.func.isRequired
+  submitHandler: PropTypes.func.isRequired,
+  onStepChange: PropTypes.func.isRequired,
 }
 
 export default ProjectBasicDetailsForm

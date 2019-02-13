@@ -7,12 +7,14 @@ import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
 // import ProjectEstimationSection from '../../detail/components/ProjectEstimationSection'
 import ModalControl from '../../../components/ModalControl'
 import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
+import HeaderWithProgress from './HeaderWithProgress'
 
 class FillProjectDetails extends Component  {
   constructor(props) {
     super(props)
     this.createMarkup = this.createMarkup.bind(this)
-    this.state = { project: {} }
+    this.handleStepChange = this.handleStepChange.bind(this)
+    this.state = { project: {}, currentWizardStep: null }
   }
 
   componentWillMount() {
@@ -21,6 +23,10 @@ class FillProjectDetails extends Component  {
 
   componentWillReceiveProps(nextProps) {
     this.setState({ project: nextProps.project })
+  }
+
+  handleStepChange(currentWizardStep) {
+    this.setState({currentWizardStep});
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -38,11 +44,13 @@ class FillProjectDetails extends Component  {
 
   render() {
     const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject, /* templates,*/ productTemplates } = this.props
+    const { currentWizardStep } = this.state;
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
 
     const template = projectTemplate.scope
+
     return (
       <div className="FillProjectDetailsWrapper">
         <div className="header headerFillProjectDetails" />
@@ -54,7 +62,9 @@ class FillProjectDetails extends Component  {
               label="back"
               onClick={onBackClick}
             />
-            <h1 dangerouslySetInnerHTML = {this.createMarkup(projectTemplate)}  />
+            {!template.wizard.enabled ? (
+              <h1 dangerouslySetInnerHTML = {this.createMarkup(projectTemplate)}  />
+            ) : <HeaderWithProgress progress={0.53} template={template} step={currentWizardStep} project={dirtyProject} />}
           </div>
           <section className="two-col-content content">
             <div className="container">
@@ -70,6 +80,7 @@ class FillProjectDetails extends Component  {
                     onProjectChange={this.props.onProjectChange}
                     submitBtnText={ submitBtnText }
                     productTemplates={productTemplates}
+                    onStepChange={this.handleStepChange}
                   />
                   {/* <ProjectEstimationSection project={dirtyProject} templates={templates} /> */}
                 </div>
@@ -101,7 +112,7 @@ FillProjectDetails.propTypes = {
   error: PT.oneOfType([
     PT.bool,
     PT.object
-  ])
+  ]),
 }
 
 export default FillProjectDetails
