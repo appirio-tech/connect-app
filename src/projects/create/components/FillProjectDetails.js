@@ -26,7 +26,7 @@ class FillProjectDetails extends Component  {
   }
 
   handleStepChange(currentWizardStep) {
-    this.setState({currentWizardStep});
+    this.setState({currentWizardStep})
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -44,7 +44,7 @@ class FillProjectDetails extends Component  {
 
   render() {
     const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject, /* templates,*/ productTemplates } = this.props
-    const { currentWizardStep } = this.state;
+    const { currentWizardStep } = this.state
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')

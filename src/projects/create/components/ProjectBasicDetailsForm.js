@@ -240,7 +240,7 @@ class ProjectBasicDetailsForm extends Component {
 
     this.currentWizardStep = nextStep
 
-    this.props.onStepChange(this.currentWizardStep);
+    this.props.onStepChange(this.currentWizardStep)
 
     window.localStorage.setItem(LS_INCOMPLETE_WIZARD, JSON.stringify({
       currentWizardStep: this.currentWizardStep
