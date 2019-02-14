@@ -5,7 +5,9 @@ import _ from 'lodash'
 
 import IconUIPencil from '../../../../assets/icons/ui-pencil.svg'
 
-require('./SpecQuestionList.scss')
+import HelpModal from '../../../create/components/HelpModal'
+
+import './SpecQuestionList.scss'
 
 const SpecQuestionList = ({ children, layout, additionalClass }) => {
   const directionClass = _.get(layout, 'direction', '')
@@ -50,6 +52,7 @@ const SpecQuestionListItem = ({
   cancelEditReadOnly,
   readOptimized,
   hideTitle,
+  help,
 }) => {
   let shouldShowTitle = true
   let shouldShowRequire = false
@@ -73,6 +76,7 @@ const SpecQuestionListItem = ({
         {!hideTitle && <h5>
           { shouldShowTitle && (<div>{title}{required ? <span>*</span> : null}</div>) }
           {!!titleAside && <div className="spec-section-title-aside">{titleAside}</div>}
+          { help && (<HelpModal {...help} />) }
         </h5>}
         {children && <div className="child-component">{children}</div>}
         {!hideDescription && <p className={cn({bigger: !icon})}>{description}</p>}

@@ -305,6 +305,7 @@ const SpecQuestions = ({
         cancelEditReadOnly={cancelEditReadOnly}
         readOptimized={shouldHideFormField}
         hideTitle={hideTitle}
+        help={q.help}
       >
         <div style={shouldHideFormField ? {display: 'none'} : {}}>
           <ChildElem {...elemProps} />
