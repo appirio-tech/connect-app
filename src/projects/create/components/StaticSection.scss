@@ -1,0 +1,41 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.static-section {
+  & :global(.project-main-details) {
+    margin-bottom: 6*$base-unit;
+    & h2 {
+      text-align: center;
+      font-size: $tc-heading-sm;
+      margin-bottom: 2*$base-unit;
+      font-weight: 700;
+      line-height: $tc-heading-lg;
+    }
+    & p {
+      line-height: 25px;
+      font-size: $tc-body-md;
+      font-weight: 400;
+      color: $tc-gray-90;
+    }
+  }
+
+  & :global(.project-summary-footer) {
+    font-size: $tc-body-sm;
+    font-weight: 400;
+    color: $tc-gray-30;
+    line-height: $tc-body-lg;
+    & p {
+      color: $tc-gray-70;
+      &:first-child {
+        color: $tc-black;
+        margin-bottom: $tc-body-lg;
+        text-align: center;
+      }
+    }
+    & a {
+      color: $tc-dark-blue-110;
+      &:hover {
+        color: $tc-dark-blue-110;
+      }
+    }
+  }
+}

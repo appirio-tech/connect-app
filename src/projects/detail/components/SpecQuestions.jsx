@@ -12,6 +12,7 @@ import SpecFeatureQuestion from './SpecFeatureQuestion'
 import ColorSelector from './../../../components/ColorSelector/ColorSelector'
 import SelectDropdown from './../../../components/SelectDropdown/SelectDropdown'
 import ProjectEstimation from '../../create/components/ProjectEstimation'
+import StaticSection from '../../create/components/StaticSection'
 
 // HOC for TextareaInput
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
@@ -229,6 +230,11 @@ const SpecQuestions = ({
     case 'estimation':
       ChildElem = ProjectEstimation
       _.assign(elemProps, {question: q, project: currentProjectData, projectTemplate})
+      hideTitle = true
+      break
+    case 'static':
+      ChildElem = StaticSection
+      _.assign(elemProps, { currentProjectData, content: q.content })
       hideTitle = true
       break
     default:
