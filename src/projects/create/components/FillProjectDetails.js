@@ -62,9 +62,11 @@ class FillProjectDetails extends Component  {
               label="back"
               onClick={onBackClick}
             />
-            {!template.wizard.enabled ? (
+            {!_.get(template, 'wizard.enabled') ? (
               <h1 dangerouslySetInnerHTML = {this.createMarkup(projectTemplate)}  />
-            ) : <HeaderWithProgress progress={0.53} template={template} step={currentWizardStep} project={dirtyProject} />}
+            ) : (
+              <HeaderWithProgress progress={0.53} template={template} step={currentWizardStep} project={dirtyProject} />
+            )}
           </div>
           <section className="two-col-content content">
             <div className="container">
