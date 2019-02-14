@@ -2,7 +2,7 @@ import React from 'react'
 import PT from 'prop-types'
 import { flatten } from 'flat'
 
-import { removeValuesOfHiddenSteps } from '../../../helpers/wizardHelper'
+import { removeValuesOfHiddenNodes } from '../../../helpers/wizardHelper'
 import { getProductEstimate } from '../../../config/projectWizard'
 
 import './HeaderWithProgress.scss'
@@ -10,7 +10,7 @@ import './HeaderWithProgress.scss'
 const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
 function HeaderWithProgress({project, template, step, progress}) {
-  const flatProject = flatten(removeValuesOfHiddenSteps(template, project), { safe: true })
+  const flatProject = flatten(removeValuesOfHiddenNodes(template, project), { safe: true })
   const { priceEstimate } = getProductEstimate({scope: template}, flatProject)
 
   const currentStep = template.sections[(step || {}).sectionIndex || 0]

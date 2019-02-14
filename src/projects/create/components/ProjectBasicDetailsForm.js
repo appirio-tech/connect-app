@@ -7,10 +7,10 @@ import {
   initWizard,
   getNextStepToShow,
   getPrevStepToShow,
-  updateStepsByConditions,
+  updateNodesByConditions,
   showStepByDir,
-  removeValuesOfHiddenSteps,
-  STEP_DIR,
+  removeValuesOfHiddenNodes,
+  NODE_DIR,
   PREVIOUS_STEP_VISIBILITY,
 } from '../../../helpers/wizardHelper'
 import {
@@ -92,14 +92,14 @@ class ProjectBasicDetailsForm extends Component {
     if (this.state.hasDependantFields && !_.isEqual(nextProps.dirtyProject, this.props.dirtyProject)) {
       const {
         updatedTemplate,
-        hidedSomeSteps,
-        updatedSomeSteps,
-      } = updateStepsByConditions(this.state.template, nextProps.dirtyProject)
+        hidedSomeNodes,
+        updatedSomeNodes,
+      } = updateNodesByConditions(this.state.template, nextProps.dirtyProject)
 
-      if (updatedSomeSteps) {
+      if (updatedSomeNodes) {
         this.setState({
           template: updatedTemplate,
-          project: hidedSomeSteps ? nextProps.dirtyProject : this.state.project,
+          project: hidedSomeNodes ? nextProps.dirtyProject : this.state.project,
         })
       }
     }
@@ -118,7 +118,7 @@ class ProjectBasicDetailsForm extends Component {
     // some parts of the form are hidden, so Formzy thinks we don't have them
     // instead we use this.props.dirtyProject which contains the current project data
     this.setState({isSaving: true })
-    const modelWithoutHiddenValues = removeValuesOfHiddenSteps(this.state.template, this.props.dirtyProject)
+    const modelWithoutHiddenValues = removeValuesOfHiddenNodes(this.state.template, this.props.dirtyProject)
     this.props.submitHandler(modelWithoutHiddenValues)
   }
 
@@ -141,7 +141,7 @@ class ProjectBasicDetailsForm extends Component {
     this.setState({
       template: updatedTemplate,
       nextWizardStep: getNextStepToShow(updatedTemplate, nextStep),
-      prevWizardStep: dir === STEP_DIR.NEXT ? this.currentWizardStep : getPrevStepToShow(updatedTemplate, nextStep),
+      prevWizardStep: dir === NODE_DIR.NEXT ? this.currentWizardStep : getPrevStepToShow(updatedTemplate, nextStep),
       project: this.props.dirtyProject
     })
 
@@ -155,11 +155,11 @@ class ProjectBasicDetailsForm extends Component {
   }
 
   showNextStep(evt) {
-    this.showStepByDir(evt, STEP_DIR.NEXT)
+    this.showStepByDir(evt, NODE_DIR.NEXT)
   }
 
   showPrevStep(evt) {
-    this.showStepByDir(evt, STEP_DIR.PREV)
+    this.showStepByDir(evt, NODE_DIR.PREV)
   }
 
   render() {
