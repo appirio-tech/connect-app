@@ -1,5 +1,8 @@
 import _ from 'lodash'
 import typeToSpecification from '../projectSpecification/typeToSpecification'
+import { evaluate } from '../../helpers/dependentQuestionsHelper'
+import { removeValuesOfHiddenSteps } from '../../helpers/wizardHelper'
+import { flatten, unflatten } from 'flat'
 
 const products = {
   App: {
@@ -505,10 +508,33 @@ export function getProductEstimate(projectTemplate, productConfig) {
   let price = 0
   let minTime = 0
   let maxTime = 0
+  let flatProjectData = flatten(removeValuesOfHiddenSteps(projectTemplate, productConfig), { safe: true })
+  let priceConfig = {}
   if (projectTemplate) {
-    price = _.get(projectTemplate, 'scope.basePriceEstimate', 0)
+    priceConfig = _.get(projectTemplate, 'scope.priceConfig')
+    const preparedConditions = _.get(projectTemplate, 'scope.preparedConditions', {})
+    const priceKey = _.findKey(priceConfig, (price, condition) => {
+      // console.log(condition, " : " + price)
+      let updatedCondition = condition
+      _.forOwn(preparedConditions, (cond, placeholder) => {
+        updatedCondition = _.replace(updatedCondition, placeholder, cond)
+      })
+      const result = evaluate(updatedCondition, flatProjectData)
+      // console.log(result)
+      if (result) {
+        console.log(condition, " : " + price)
+        console.log(flatProjectData)
+      }
+      return result
+    })
+    if (!priceKey) {
+      price = _.get(projectTemplate, 'scope.basePriceEstimate', 0)
+    } else {
+      price = priceConfig[priceKey]
+    }
     minTime = _.get(projectTemplate, 'scope.baseTimeEstimateMin', 0)
     maxTime = _.get(projectTemplate, 'scope.baseTimeEstimateMax', 0)
+    // picks price from the first config for which condition holds true
   }
   const sections = projectTemplate.scope.sections
   if (sections) {
