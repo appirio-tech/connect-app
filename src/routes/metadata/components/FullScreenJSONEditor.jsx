@@ -22,9 +22,9 @@ const FullScreenJSONEditor = ({
         ace={ace}
         onChange={onJSONEdit}
         allowedModes={ ['code', 'tree', 'view']}
-        mode='code'
+        mode="code"
         theme="ace/theme/github"
-        statusBar={true}
+        statusBar
       />
     </div>
   </MobilePage>
