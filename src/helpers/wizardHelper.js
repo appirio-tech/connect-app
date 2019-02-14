@@ -29,7 +29,6 @@ import { flatten, unflatten } from 'flat'
  */
 export const PREVIOUS_STEP_VISIBILITY = {
   NONE: 'none',
-  READ_ONLY: 'readOnly',
   WRITE: 'write',
 }
 
@@ -70,8 +69,6 @@ const shouldStepBeHidden = (previousStepVisibility, currentStep, lastWizardStep)
     return currentStep[`${level}Index`] !== 0
   } else if (previousStepVisibility === PREVIOUS_STEP_VISIBILITY.NONE) {
     return !isSameStepAnyLevel(currentStep, lastWizardStep)
-  } else if (previousStepVisibility === PREVIOUS_STEP_VISIBILITY.READ_ONLY) {
-    return getDirForSteps(currentStep, lastWizardStep) === STEP_DIR.PREV
   } else if (previousStepVisibility === PREVIOUS_STEP_VISIBILITY.WRITE) {
     return false
   } else {
@@ -213,13 +210,12 @@ export const forEachStep = (template, iteratee, iterateSublevelCondition) => {
  * @param {Object}  template            raw template
  * @param {Object}  project             project data (non-flat)
  * @param {Object}  incompleteWizard    incomplete wizard props
- * @param {Boolean} isReadOptimizedMode if true wizard is inited in read optimized mode
  *
  * @returns {Object} initialized template
  */
-export const initWizard = (template, project, incompleteWizard, isReadOptimizedMode) => {
+export const initWizard = (template, project, incompleteWizard) => {
   let wizardTemplate = _.cloneDeep(template)
-  const isWizardMode = isWizardModeEnabled(wizardTemplate) && !isReadOptimizedMode
+  const isWizardMode = isWizardModeEnabled(wizardTemplate)
   const previousStepVisibility = getPreviousStepVisibility(wizardTemplate)
   // try to get the step where we left the wizard
   const lastWizardStep = incompleteWizard && incompleteWizard.currentWizardStep
@@ -257,13 +253,6 @@ export const initWizard = (template, project, incompleteWizard, isReadOptimizedM
   const updateResult = updateStepsByConditions(wizardTemplate, project)
   wizardTemplate = updateResult.updatedTemplate
 
-  // in read optimized mode we display all the questions as readOnly if they are not hidden by conditions
-  forEachStep(wizardTemplate, (stepObject) => {
-    if (isReadOptimizedMode && !stepObject.__wizard.hiddenByCondition) {
-      stepObject.__wizard.readOnly = true
-    }
-  })
-
   // initialize wizard mode
   if (isWizardMode) {
     currentWizardStep.sectionIndex = 0
@@ -282,17 +271,6 @@ export const initWizard = (template, project, incompleteWizard, isReadOptimizedM
         currentWizardStep.questionIndex = 0
       }
     }, (stepObject) => (_.get(stepObject, 'wizard.enabled') || stepObject.wizard === true))
-
-    // if we are restoring previously unfinished wizard, we have finalize all steps before the current one
-    // in readOnly mode
-    if (lastWizardStep && previousStepVisibility === PREVIOUS_STEP_VISIBILITY.READ_ONLY) {
-      let tempStep = currentWizardStep
-
-      while (tempStep && getDirForSteps(tempStep, lastWizardStep) === STEP_DIR.NEXT) {
-        wizardTemplate = finalizeStep(wizardTemplate, tempStep)
-        tempStep = getNextStepToShow(wizardTemplate, tempStep)
-      }
-    }
 
     if (lastWizardStep) {
       prevWizardStep = getPrevStepToShow(wizardTemplate, lastWizardStep)
@@ -947,7 +925,7 @@ const getStepWhichMustBeUpdatedByCondition = (template, flatProjectData) => {
 /**
  * Finalize/unfinalize step
  *
- * When we've done with step we want to finalize it as per previousStepVisibility hide or make it read-only.
+ * When we've done with step we want to finalize it as per previousStepVisibility value.
  * This method does it. It also can the reverse operation if `value` is defined as `false`
  *
  * @param {Object}  template template
@@ -960,14 +938,8 @@ const finalizeStep = (template, step, value = true) => {
   let updatedTemplate = template
 
   const previousStepVisibility = getPreviousStepVisibility(template)
-  const stepObject = getStepObject(updatedTemplate, step)
 
   const updateRules = {
-    [PREVIOUS_STEP_VISIBILITY.READ_ONLY]: {
-      __wizard: {
-        readOnly: { $set: value }
-      }
-    },
     [PREVIOUS_STEP_VISIBILITY.NONE]: {
       __wizard: {
         hidden: { $set: value }
@@ -979,16 +951,6 @@ const finalizeStep = (template, step, value = true) => {
 
   if (updateRule) {
     updatedTemplate = updateStepObject(updatedTemplate, step, updateRule)
-
-    // if the children of current step are not in wizard mode and we are making step read-only
-    // we also have make such children read-only
-    if (previousStepVisibility === PREVIOUS_STEP_VISIBILITY.READ_ONLY && !_.get(stepObject, 'wizard.enabled')) {
-      const stepChildren = getStepChildren(updatedTemplate, step)
-
-      stepChildren.forEach((stepChild) => {
-        updatedTemplate = updateStepObject(updatedTemplate, stepChild, updateRule)
-      })
-    }
   }
 
   return updatedTemplate
@@ -1060,10 +1022,6 @@ export const showStepByDir = (template, currentStep, dir) => {
     tempStep = getParentStep(tempStep)
   } while (tempStep)
 
-  if (dir === STEP_DIR.PREV && _.get(updatedTemplate, 'wizard.previousStepVisibility') === PREVIOUS_STEP_VISIBILITY.READ_ONLY) {
-    updatedTemplate = finalizeStep(updatedTemplate, nextStep, false)
-  }
-
   return {
     updatedTemplate,
     nextStep,
@@ -1132,157 +1090,4 @@ export const findRealStep = (template, step) => {
   }
 
   return tempStep
-}
-
-/**
- * Update template so the `step` is showed as editable (non read-only)
- *
- * @param {Object} template template
- * @param {Object} step     step
- *
- * @returns {Object} updated template
- */
-export const makeStepEditable = (template, step) => {
-  let updatedTemplate = template
-
-  updatedTemplate = updateStepObject(updatedTemplate, step, {
-    __wizard: {
-      readOnly: { $set: false },
-      editReadOnly: { $set: true }
-    }
-  })
-
-  return updatedTemplate
-}
-
-
-/**
- * Update template so the `step` is showed as read-only
- *
- * @param {Object} template template
- * @param {Object} step     step
- *
- * @returns {Object} updated template
- */
-export const makeStepReadonly = (template, step) => {
-  let updatedTemplate = template
-
-  updatedTemplate = updateStepObject(updatedTemplate, step, {
-    __wizard: {
-      readOnly: { $set: true },
-      editReadOnly: { $set: false }
-    }
-  })
-
-  return updatedTemplate
-}
-
-/**
- * Finds next either sibling or ancestor step
- *
- * @param {Object} template template
- * @param {Object} step     step
- *
- * @returns {Object} step
- */
-const getNextSiblingOrAncestorStep = (template, step) => {
-  const sibling = getNextSiblingStep(template, step)
-
-  if (sibling) {
-    return sibling
-  }
-
-  const children = getStepChildren(template, step)
-
-  if (children.length > 0) {
-    return children[0]
-  }
-
-  return null
-}
-
-/**
- * Adds data which manged by the step to the snapshot
- *
- * @param {Object} snapshot snapshot
- * @param {Object} template template
- * @param {Object} step      tep
- * @param {Object} flatData flat data
- */
-const saveStepDataToSnapshot = (snapshot, template, step, flatData) => {
-  const stepObject = getStepObject(template, step)
-
-  // is some step is not a field, don't save anything
-  if (!stepObject.fieldName) {
-    return
-  }
-
-  snapshot[stepObject.fieldName] = flatData[stepObject.fieldName]
-
-  // as some types of subSections has multiple values we have to save them too
-  const refCodeFieldName = 'details.utm.code'
-  const businessUnitFieldName = 'details.businessUnit'
-  const costCentreFieldName = 'details.costCentre'
-
-  switch(stepObject.type) {
-  case 'project-name':
-    snapshot[refCodeFieldName] = flatData[refCodeFieldName]
-    break
-  case 'project-name-advanced':
-    snapshot[refCodeFieldName] = flatData[refCodeFieldName]
-    snapshot[businessUnitFieldName] = flatData[businessUnitFieldName]
-    snapshot[costCentreFieldName] = flatData[costCentreFieldName]
-    break
-  default:break
-  }
-}
-
-/**
- * Adds snapshot of data of the provided "real step"
- *
- * @param {Array}  snapshotsStorage array to store snapshots
- * @param {Object} step             step
- * @param {Object} template         template
- * @param {Object} flatData         flat data
- */
-export const pushStepDataSnapshot = (snapshotsStorage, step, template, flatData) => {
-  const snapshot = {}
-
-  saveStepDataToSnapshot(snapshot, template, step, flatData)
-
-  const children = getStepChildren(template, step)
-  if (children.length > 0 && !isStepLevel(children[0], LEVEL.OPTION)) {
-    let tempStep = children[0]
-
-    do {
-      saveStepDataToSnapshot(snapshot, template, tempStep, flatData)
-
-      tempStep = getNextSiblingOrAncestorStep(template, tempStep)
-    } while (tempStep)
-  }
-
-  snapshotsStorage.push({
-    step,
-    snapshot,
-  })
-}
-
-/**
- * Pop snapshot of data of the provided "real step"
- *
- * It removes data form `snapshotsStorage` and returns it
- *
- * @param {Array}  snapshotsStorage array to store snapshots
- * @param {Object} step             step
- * @param {Object} template         template
- * @param {Object} flatData         flat data
- *
- * @returns {Object} snapshot
- */
-export const popStepDataSnapshot = (snapshotsStorage, step) => {
-  const savedDataIndex = snapshotsStorage.findIndex((item) => _.isEqual(item.step, step))
-  const savedData = savedDataIndex !== -1 ? snapshotsStorage[savedDataIndex] : null
-  snapshotsStorage.splice(savedDataIndex, 1)
-
-  return savedData ? savedData.snapshot : null
 }

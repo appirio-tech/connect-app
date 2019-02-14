@@ -7,13 +7,8 @@ import {
   initWizard,
   getNextStepToShow,
   getPrevStepToShow,
-  isStepHasDependencies,
-  findRealStep,
-  rewindToStep,
   updateStepsByConditions,
   showStepByDir,
-  pushStepDataSnapshot,
-  popStepDataSnapshot,
   removeValuesOfHiddenSteps,
   STEP_DIR,
   PREVIOUS_STEP_VISIBILITY,
@@ -22,7 +17,6 @@ import {
   LS_INCOMPLETE_WIZARD,
   LS_INCOMPLETE_PROJECT,
 } from '../../../config/constants'
-import Modal from 'react-modal'
 import './ProjectBasicDetailsForm.scss'
 
 import SpecSection from '../../detail/components/SpecSection'
@@ -37,11 +31,6 @@ class ProjectBasicDetailsForm extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.showNextStep = this.showNextStep.bind(this)
     this.showPrevStep = this.showPrevStep.bind(this)
-    this.startEditReadOnly = this.startEditReadOnly.bind(this)
-    this.declineEditReadOnly = this.declineEditReadOnly.bind(this)
-    this.cancelEditReadOnly = this.cancelEditReadOnly.bind(this)
-    this.confirmEditReadOnly = this.confirmEditReadOnly.bind(this)
-    this.updateEditReadOnly = this.updateEditReadOnly.bind(this)
 
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
     const incompleteWizardStr = window.localStorage.getItem(LS_INCOMPLETE_WIZARD)
@@ -68,95 +57,14 @@ class ProjectBasicDetailsForm extends Component {
     this.state = {
       template,
       nextWizardStep: getNextStepToShow(template, currentWizardStep),
-      showStartEditConfirmation: null,
       prevWizardStep,
       isWizardMode,
       previousStepVisibility,
-      hasDependantFields,
-      editingReadonlyStep: null
+      hasDependantFields
     }
 
     // we don't use for rendering, only for internal needs, so we don't need it in state
     this.currentWizardStep = currentWizardStep
-
-    // we will keep there form values before starting editing read-only values
-    // and we will use this data to restore previous values if user press Cancel
-    this.dataSnapshots = []
-  }
-
-  startEditReadOnly(step) {
-    const { template } = this.state
-
-    if (isStepHasDependencies(template, step)) {
-      this.setState({
-        showStartEditConfirmation: step,
-      })
-    } else {
-      this._startEditReadOnly(step)
-    }
-  }
-
-  declineEditReadOnly() {
-    this.setState({
-      showStartEditConfirmation: null,
-    })
-  }
-
-  confirmEditReadOnly() {
-    this._startEditReadOnly(this.state.showStartEditConfirmation)
-    this.setState({
-      showStartEditConfirmation: null,
-    })
-  }
-
-  _startEditReadOnly(step) {
-    const { template } = this.state
-    let updatedTemplate = template
-
-    step = findRealStep(template, step)
-    pushStepDataSnapshot(this.dataSnapshots, step, template, this.refs.form.getCurrentValues())
-    updatedTemplate = rewindToStep(updatedTemplate, this.currentWizardStep, step)
-
-    this.setState({
-      template: updatedTemplate,
-      editingReadonlyStep: step
-    })
-  }
-
-  cancelEditReadOnly() {
-    const { template, editingReadonlyStep } = this.state
-    let updatedTemplate = template
-
-    const savedSnapshot = popStepDataSnapshot(this.dataSnapshots, editingReadonlyStep)
-    updatedTemplate = rewindToStep(updatedTemplate, editingReadonlyStep, this.currentWizardStep)
-
-    this.setState({
-      // first we show back form fields as it were before
-      template: updatedTemplate,
-      editingReadonlyStep: null
-    }, () => {
-      // only after we showed all the fields back we can restore their values
-      this.refs.form.inputs.forEach(component => {
-        const name = component.props.name
-
-        if (!_.isUndefined(savedSnapshot[name])) {
-          component.setValue(savedSnapshot[name])
-        }
-      })
-    })
-  }
-
-  updateEditReadOnly(evt) {
-    // prevent default to avoid form being submitted
-    evt && evt.preventDefault()
-
-    const { editingReadonlyStep } = this.state
-
-    // removed saved snapshot
-    popStepDataSnapshot(this.dataSnapshots, editingReadonlyStep)
-    this.currentWizardStep = editingReadonlyStep
-
-    this.showNextStep()
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -234,8 +142,7 @@ class ProjectBasicDetailsForm extends Component {
       template: updatedTemplate,
       nextWizardStep: getNextStepToShow(updatedTemplate, nextStep),
       prevWizardStep: dir === STEP_DIR.NEXT ? this.currentWizardStep : getPrevStepToShow(updatedTemplate, nextStep),
-      project: this.props.dirtyProject,
-      editingReadonlyStep: null
+      project: this.props.dirtyProject
     })
 
     this.currentWizardStep = nextStep
@@ -263,10 +170,8 @@ class ProjectBasicDetailsForm extends Component {
       template,
       nextWizardStep,
       prevWizardStep,
-      showStartEditConfirmation,
       isWizardMode,
       previousStepVisibility,
-      editingReadonlyStep,
     } = this.state
 
     const renderSection = (section, idx) => {
@@ -290,7 +195,6 @@ class ProjectBasicDetailsForm extends Component {
               // further, it is not used for this component as we are not rendering spec screen section here
               validate={() => {}}//dummy
               isCreation
-              startEditReadOnly={this.startEditReadOnly}
             />
           </div>
         </div>
@@ -299,27 +203,6 @@ class ProjectBasicDetailsForm extends Component {
 
     return (
       <div>
-        <Modal
-          isOpen={!!showStartEditConfirmation}
-          className="delete-post-dialog"
-          overlayClassName="delete-post-dialog-overlay"
-          onRequestClose={this.declineEditReadOnly}
-          contentLabel=""
-        >
-          <div className="modal-title">
-            Confirmation
-          </div>
-
-          <div className="modal-body">
-            You are about to change the response to question which may result in loss of data, do you want to continue?
-          </div>
-
-          <div className="button-area flex center action-area">
-            <button className="tc-btn tc-btn-default tc-btn-sm action-btn btn-cancel" onClick={this.declineEditReadOnly}>Cancel</button>
-            <button className="tc-btn tc-btn-warning tc-btn-sm action-btn " onClick={this.confirmEditReadOnly}>Continue</button>
-          </div>
-        </Modal>
-
         <Formsy.Form
           ref="form"
           disabled={!isEditable}
@@ -341,20 +224,13 @@ class ProjectBasicDetailsForm extends Component {
                 disabled={!prevWizardStep}
               >Back</button>
             )}
-            {editingReadonlyStep && (
-              <button
-                className="tc-btn tc-btn-default tc-btn-md"
-                type="button"
-                onClick={this.cancelEditReadOnly}
-              >Cancel</button>
-            )}
-            {(nextWizardStep || editingReadonlyStep) ? (
+            {nextWizardStep ? (
               <button
                 className="tc-btn tc-btn-primary tc-btn-md"
                 type="button"
                 disabled={!canSubmit}
-                onClick={editingReadonlyStep ? this.updateEditReadOnly : this.showNextStep}
-              >{editingReadonlyStep ? 'Update' : 'Next'}</button>
+                onClick={this.showNextStep}
+              >Next</button>
             ) : (
               <button
                 className="tc-btn tc-btn-primary tc-btn-md"
