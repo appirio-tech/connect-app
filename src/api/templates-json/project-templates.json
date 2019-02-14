@@ -5044,7 +5044,7 @@
               "questions": [
                 {
                   "type": "static",
-                  "content": "<div class=\"project-main-details\"><h2>{{name}}</h2><p>{{description}}</p></div>"
+                  "content": "<div class=\"project-main-details\"><h2>{name}</h2><p>{description}</p></div>"
                 },
                 {
                   "icon": "question",
@@ -5410,8 +5410,7 @@
                     "content": "<h2>Section One Title Goes Here</h2><p>Build agency-level designed consumer-grade applications for any platform and device. Chose what suits your project best, and fine-tune it to really match your organization’s needs. We provide security, enterprise-level code quality, robust design, and an option for dedicated project manager. Unmatched speed thanks to a 1.3M network of the world’s best designers, developers and data scientists.</p><p>Build agency-level designed consumer-grade applications for any platform and device. Chose what suits your project best, and fine-tune it to really match your organization’s needs. We provide security, enterprise-level code quality, robust design, and an option for dedicated project manager. Unmatched speed thanks to a 1.3M network of the world’s best designers, developers and data scientists.</p>"
                   },
                   "condition": "(details.appDefinition.mainWork contains 'design')",
-                  "category": "generic",
-                  "subCategories": ["copydesign"]
+                  "category": "generic"
                 },
                 {
                   "icon": "question",
@@ -5426,8 +5425,7 @@
                     "content": "<h2>Section One Title Goes Here</h2><p>Build agency-level designed consumer-grade applications for any platform and device. Chose what suits your project best, and fine-tune it to really match your organization’s needs. We provide security, enterprise-level code quality, robust design, and an option for dedicated project manager. Unmatched speed thanks to a 1.3M network of the world’s best designers, developers and data scientists.</p><p>Build agency-level designed consumer-grade applications for any platform and device. Chose what suits your project best, and fine-tune it to really match your organization’s needs. We provide security, enterprise-level code quality, robust design, and an option for dedicated project manager. Unmatched speed thanks to a 1.3M network of the world’s best designers, developers and data scientists.</p>"
                   },
                   "condition": "(details.appDefinition.mainWork contains 'development')",
-                  "category": "generic",
-                  "subCategories": ["test-product-category"]
+                  "category": "generic"
                 },
                 {
                   "icon": "question",
@@ -5442,8 +5440,7 @@
                     "content": "<h2>Section One Title Goes Here</h2><p>Build agency-level designed consumer-grade applications for any platform and device. Chose what suits your project best, and fine-tune it to really match your organization’s needs. We provide security, enterprise-level code quality, robust design, and an option for dedicated project manager. Unmatched speed thanks to a 1.3M network of the world’s best designers, developers and data scientists.</p><p>Build agency-level designed consumer-grade applications for any platform and device. Chose what suits your project best, and fine-tune it to really match your organization’s needs. We provide security, enterprise-level code quality, robust design, and an option for dedicated project manager. Unmatched speed thanks to a 1.3M network of the world’s best designers, developers and data scientists.</p>"
                   },
                   "condition": "(details.appDefinition.mainWork contains 'qa')",
-                  "category": "generic",
-                  "subCategories": ["test-product-category"]
+                  "category": "generic"
                 },
                 {
                   "icon": "question",
