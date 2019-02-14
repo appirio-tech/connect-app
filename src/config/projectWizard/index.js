@@ -2,7 +2,7 @@ import _ from 'lodash'
 import typeToSpecification from '../projectSpecification/typeToSpecification'
 import { evaluate } from '../../helpers/dependentQuestionsHelper'
 import { removeValuesOfHiddenSteps } from '../../helpers/wizardHelper'
-import { flatten, unflatten } from 'flat'
+import { flatten } from 'flat'
 
 const products = {
   App: {
@@ -508,7 +508,7 @@ export function getProductEstimate(projectTemplate, productConfig) {
   let price = 0
   let minTime = 0
   let maxTime = 0
-  let flatProjectData = flatten(removeValuesOfHiddenSteps(projectTemplate, productConfig), { safe: true })
+  const flatProjectData = flatten(removeValuesOfHiddenSteps(projectTemplate, productConfig), { safe: true })
   let priceConfig = {}
   if (projectTemplate) {
     priceConfig = _.get(projectTemplate, 'scope.priceConfig')
@@ -522,7 +522,7 @@ export function getProductEstimate(projectTemplate, productConfig) {
       const result = evaluate(updatedCondition, flatProjectData)
       // console.log(result)
       if (result) {
-        console.log(condition, " : " + price)
+        console.log(condition, ' : ' + price)
         console.log(flatProjectData)
       }
       return result
