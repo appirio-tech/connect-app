@@ -15,10 +15,6 @@
     padding: 0;
     margin-bottom: 30px;
 
-    &.read-optimized {
-      margin-bottom: 10px;
-    }
-
     @media screen and (max-width: $screen-md - 1px) {
       margin-top: 9 * $base-unit;
     }
