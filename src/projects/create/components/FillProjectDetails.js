@@ -43,7 +43,7 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject, /* templates,*/ productTemplates } = this.props
+    const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject, /* templates,*/ productTemplates, productCategories } = this.props
     const { currentWizardStep } = this.state
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
@@ -83,6 +83,7 @@ class FillProjectDetails extends Component  {
                     submitBtnText={ submitBtnText }
                     productTemplates={productTemplates}
                     onStepChange={this.handleStepChange}
+                    productCategories={productCategories}
                   />
                   {/* <ProjectEstimationSection project={dirtyProject} templates={templates} /> */}
                 </div>
@@ -108,6 +109,7 @@ FillProjectDetails.propTypes = {
   project: PT.object.isRequired,
   projectTemplates: PT.array.isRequired,
   productTemplates: PT.array.isRequired,
+  productCategories: PT.array.isRequired,
   userRoles: PT.arrayOf(PT.string),
   processing: PT.bool,
   templates: PT.array.isRequired,

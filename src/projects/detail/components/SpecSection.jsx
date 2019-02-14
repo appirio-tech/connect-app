@@ -85,6 +85,7 @@ const SpecSection = props => {
     stopEditReadOnly,
     cancelEditReadOnly,
     productTemplates,
+    productCategories,
   } = props
 
   // make a copy to avoid modifying redux store
@@ -195,6 +196,7 @@ const SpecSection = props => {
           cancelEditReadOnly={cancelEditReadOnly}
           isProjectDirty={isProjectDirty}
           productTemplates={productTemplates}
+          productCategories={productCategories}
         />
       )
     case 'notes':
@@ -435,6 +437,7 @@ SpecSection.propTypes = {
   addAttachment: PropTypes.func,
   updateAttachment: PropTypes.func,
   removeAttachment: PropTypes.func,
+  productCategories: PropTypes.array.isRequired,
 }
 
 export default scrollToAnchors(SpecSection)

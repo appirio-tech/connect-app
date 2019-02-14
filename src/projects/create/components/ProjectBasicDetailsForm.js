@@ -256,7 +256,7 @@ class ProjectBasicDetailsForm extends Component {
   }
 
   render() {
-    const { isEditable, submitBtnText, dirtyProject, productTemplates } = this.props
+    const { isEditable, submitBtnText, dirtyProject, productTemplates, productCategories } = this.props
     const {
       project,
       canSubmit,
@@ -279,6 +279,7 @@ class ProjectBasicDetailsForm extends Component {
               projectTemplate={template}
               dirtyProject={dirtyProject}
               productTemplates={productTemplates}
+              productCategories={productCategories}
               // when creating a project we can treat project as dirty,
               // as we didn't have project at all and now creating something
               isProjectDirty
@@ -376,6 +377,7 @@ ProjectBasicDetailsForm.propTypes = {
   productTemplates: PropTypes.array.isRequired,
   submitHandler: PropTypes.func.isRequired,
   onStepChange: PropTypes.func.isRequired,
+  productCategories: PropTypes.array.isRequired,
 }
 
 export default ProjectBasicDetailsForm

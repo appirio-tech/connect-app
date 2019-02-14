@@ -464,6 +464,7 @@ class ProjectWizard extends Component {
           templates={projectTemplates}
           projectTemplates={ projectTemplates }
           productTemplates={templates.productTemplates}
+          productCategories={templates.productCategories}
           dirtyProject={ dirtyProject }
           processing={ processing}
           onCreateProject={ this.handleOnCreateProject }

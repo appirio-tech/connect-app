@@ -32,16 +32,27 @@ const getIcon = icon => {
   }
 }
 
-const filterAddonQuestions = (productTemplates, question) =>
-  productTemplates.filter(
-    d =>
-      d.category === question.category &&
-      question.subCategories.includes(d.subCategory)
-  )
+const filterAddonQuestions = (productTemplates, question) => (
+  productTemplates.filter(d => d.category === question.category)
+)
+
 const formatAddonOptions = options => options.map(o => ({
   label: o.name,
   value: { id: o.id },
+  subCategory: o.subCategory,
 }))
+
+const groupAddonOptions = (options, categories) => {
+  const grouped = options.reduce((p, c) => (
+    p[c.subCategory] = (p[c.subCategory] || []).concat(c), p
+  ), {})
+
+  return Object.keys(grouped).map(subCategory => ({
+    key: subCategory,
+    title: (categories[subCategory] || {}).displayName,
+    options: grouped[subCategory],
+  }))
+}
 
 // { isRequired, represents the overall questions section's compulsion, is also available}
 const SpecQuestions = ({
@@ -59,7 +70,9 @@ const SpecQuestions = ({
   cancelEditReadOnly,
   isProjectDirty,
   productTemplates,
+  productCategories,
 }) => {
+  let productCategoriesMap
   const currentProjectData = isProjectDirty ? dirtyProject : project
 
   const renderQ = (q, index) => {
@@ -225,7 +238,17 @@ const SpecQuestions = ({
       break
     case 'add-ons':
       ChildElem = AddonOptions
-      _.assign(elemProps, { options: formatAddonOptions(filterAddonQuestions(productTemplates, q)) })
+      productCategoriesMap = productCategoriesMap || (productCategories.reduce((p, c) => (p[c.key] = c, p), {}))
+
+      _.assign(elemProps, {
+        title: q.title,
+        hideDescription: true,
+        description: q.description, options: groupAddonOptions(
+          formatAddonOptions(filterAddonQuestions(productTemplates, q))
+          , productCategoriesMap)
+      })
+
+      hideTitle = true
       break
     case 'estimation':
       ChildElem = ProjectEstimation
@@ -375,6 +398,11 @@ SpecQuestions.propTypes = {
    * contains the productTypes required for rendering add-on type questions
    */
   productTemplates: PropTypes.array.isRequired,
+
+  /**
+   * list of product categories
+   */
+  productCategories: PropTypes.array.isRequired,
 }
 
 SpecQuestions.defaultProps = {
