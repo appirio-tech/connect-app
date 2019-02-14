@@ -534,7 +534,6 @@ export function getProductEstimate(projectTemplate, productConfig) {
                 if (answer) {
                   answer.forEach((a) => {
                     const qOption = _.find(q.options, (o) => o.value === a)
-                    console.log(qOption)
                     price += _.get(qOption, 'quoteUp', 0)
                     minTime += _.get(qOption, 'minTimeUp', 0)
                     maxTime += _.get(qOption, 'maxTimeUp', 0)
