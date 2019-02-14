@@ -73,7 +73,6 @@ const SpecQuestions = ({
   const currentProjectData = isProjectDirty ? dirtyProject : project
 
   const renderQ = (q, index) => {
-    let hideTitle = false
     const isReadOnly = _.get(q, '__wizard.readOnly')
     // let child = null
     // const value =
@@ -238,6 +237,7 @@ const SpecQuestions = ({
 
       _.assign(elemProps, {
         title: q.title,
+        hideTitle: true,
         hideDescription: true,
         description: q.description,
         options: groupAddonOptions(
@@ -245,18 +245,23 @@ const SpecQuestions = ({
           _.keyBy(productCategories, 'key')
         )
       })
-
-      hideTitle = true
       break
     case 'estimation':
       ChildElem = ProjectEstimation
-      _.assign(elemProps, {question: q, project: currentProjectData, projectTemplate})
-      hideTitle = true
+      _.assign(elemProps, {
+        question: q,
+        project: currentProjectData,
+        projectTemplate,
+        hideTitle: true
+      })
       break
     case 'static':
       ChildElem = StaticSection
-      _.assign(elemProps, { currentProjectData, content: q.content })
-      hideTitle = true
+      _.assign(elemProps, {
+        currentProjectData,
+        content: q.content,
+        hideTitle: true
+      })
       break
     default:
       ChildElem = () => (
@@ -325,7 +330,7 @@ const SpecQuestions = ({
         stopEditReadOnly={stopEditReadOnly}
         cancelEditReadOnly={cancelEditReadOnly}
         readOptimized={shouldHideFormField}
-        hideTitle={hideTitle}
+        hideTitle={elemProps.hideTitle}
         help={q.help}
       >
         <div style={shouldHideFormField ? {display: 'none'} : {}}>
