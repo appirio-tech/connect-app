@@ -33,7 +33,7 @@ const getIcon = icon => {
 }
 
 const filterAddonQuestions = (productTemplates, question) => (
-  productTemplates.filter(d => d.category === question.category)
+  _.filter(productTemplates, { category: question.category })
 )
 
 const formatAddonOptions = options => options.map(o => ({
@@ -43,9 +43,7 @@ const formatAddonOptions = options => options.map(o => ({
 }))
 
 const groupAddonOptions = (options, categories) => {
-  const grouped = options.reduce((p, c) => (
-    p[c.subCategory] = (p[c.subCategory] || []).concat(c), p
-  ), {})
+  const grouped = _.groupBy(options, 'subCategory')
 
   return Object.keys(grouped).map(subCategory => ({
     key: subCategory,
@@ -72,7 +70,6 @@ const SpecQuestions = ({
   productTemplates,
   productCategories,
 }) => {
-  let productCategoriesMap
   const currentProjectData = isProjectDirty ? dirtyProject : project
 
   const renderQ = (q, index) => {
@@ -238,14 +235,15 @@ const SpecQuestions = ({
       break
     case 'add-ons':
       ChildElem = AddonOptions
-      productCategoriesMap = productCategoriesMap || (productCategories.reduce((p, c) => (p[c.key] = c, p), {}))
 
       _.assign(elemProps, {
         title: q.title,
         hideDescription: true,
-        description: q.description, options: groupAddonOptions(
-          formatAddonOptions(filterAddonQuestions(productTemplates, q))
-          , productCategoriesMap)
+        description: q.description,
+        options: groupAddonOptions(
+          formatAddonOptions(filterAddonQuestions(productTemplates, q)),
+          _.keyBy(productCategories, 'key')
+        )
       })
 
       hideTitle = true
