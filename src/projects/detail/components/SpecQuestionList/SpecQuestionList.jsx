@@ -106,7 +106,7 @@ const SpecQuestionListItem = ({
 
 SpecQuestionListItem.propTypes = {
   icon: PropTypes.any,
-  title: PropTypes.any.isRequired,
+  title: PropTypes.any,
   description: PropTypes.any,
   children: PropTypes.any,
   type: PropTypes.string,
