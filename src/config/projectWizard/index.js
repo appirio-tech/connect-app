@@ -529,11 +529,13 @@ export function getProductEstimate(projectTemplate, productConfig) {
     })
     if (!priceKey) {
       price = _.get(projectTemplate, 'scope.basePriceEstimate', 0)
+      minTime = _.get(projectTemplate, 'scope.baseTimeEstimateMin', 0)
+      maxTime = _.get(projectTemplate, 'scope.baseTimeEstimateMax', 0)
     } else {
-      price = priceConfig[priceKey]
+      price = priceConfig[priceKey].price
+      minTime = priceConfig[priceKey].minTime
+      maxTime = priceConfig[priceKey].maxTime
     }
-    minTime = _.get(projectTemplate, 'scope.baseTimeEstimateMin', 0)
-    maxTime = _.get(projectTemplate, 'scope.baseTimeEstimateMax', 0)
     // picks price from the first config for which condition holds true
   }
   const sections = projectTemplate.scope.sections
@@ -573,7 +575,8 @@ export function getProductEstimate(projectTemplate, productConfig) {
       }
     })
   }
-  return { priceEstimate: price, minTime, maxTime, durationEstimate: `${minTime}-${maxTime} days`}
+  const durationEstimate = minTime !== maxTime ? `${minTime}-${maxTime}` : `${minTime}`
+  return { priceEstimate: price, minTime, maxTime, durationEstimate: `${durationEstimate} days`}
 }
 
 /**
