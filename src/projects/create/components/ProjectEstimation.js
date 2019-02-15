@@ -13,8 +13,9 @@ const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',
 
 function ProjectEstimation({ question, project, template }) {
   const isSelected = (item) => evaluate(item.enableCondition, flatten(project, { safe: true }))
+  const totalDuration = _.sumBy(question.deliverables, 'duration')
   const phasesEnabled = question.deliverables.filter(isSelected)
-  const totalDuration = _.sumBy(phasesEnabled, 'duration')
+  const enabledDuration = _.sumBy(phasesEnabled, 'duration')
 
   const { priceEstimate } = getProductEstimate({scope: template}, project)
 
@@ -23,7 +24,7 @@ function ProjectEstimation({ question, project, template }) {
       <div styleName="title">
         <h5>{question.title}</h5>
         <span>{phasesEnabled.length ? (
-          phasesEnabled.length + ' phases, ' + totalDuration + ' weeks'
+          phasesEnabled.length + ' phases, ' + enabledDuration + ' weeks'
         ) : (
           'No phase selected'
         )}</span>
