@@ -18,6 +18,7 @@ import {
   getVisibilityForRendering,
   STEP_VISIBILITY,
 } from '../../../helpers/wizardHelper'
+import Accordion from './Accordion/Accordion'
 
 // HOC for TextareaInput
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
@@ -56,6 +57,13 @@ const groupAddonOptions = (options, categories) => {
     options: grouped[subCategory],
   }))
 }
+
+const buildAddonsOptions = (q, productTemplates, productCategories) => (
+  groupAddonOptions(
+    formatAddonOptions(filterAddonQuestions(productTemplates, q)),
+    _.keyBy(productCategories, 'key')
+  )
+)
 
 // { isRequired, represents the overall questions section's compulsion, is also available}
 const SpecQuestions = ({
@@ -239,10 +247,7 @@ const SpecQuestions = ({
         hideTitle: true,
         hideDescription: true,
         description: q.description,
-        options: groupAddonOptions(
-          formatAddonOptions(filterAddonQuestions(productTemplates, q)),
-          _.keyBy(productCategories, 'key')
-        )
+        options: buildAddonsOptions(q, productTemplates, productCategories)
       })
       break
     case 'estimation':
@@ -303,7 +308,20 @@ const SpecQuestions = ({
         (!_.get(question, '__wizard.hiddenByCondition')) &&
         // hide hidden questions, unless we not force to show them
         (showHidden || !question.hidden)
-      ).map(renderQ)}
+      ).map((q, index) => (
+        _.includes(['checkbox-group', 'radio-group', 'add-ons'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
+          <Accordion
+            key={index}
+            title={q.summaryTitle || q.title}
+            type={q.type}
+            options={q.options || buildAddonsOptions(q, productTemplates, productCategories)}
+          >
+            {renderQ(q, index)}
+          </Accordion>
+        ) : (
+          renderQ(q, index)
+        )
+      ))}
     </SpecQuestionList>
   )
 }
