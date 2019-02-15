@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import PT from 'prop-types'
+import cn from 'classnames'
 
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
@@ -71,7 +72,7 @@ class FillProjectDetails extends Component  {
     }
 
     return (
-      <div className="FillProjectDetailsWrapper">
+      <div className={cn('FillProjectDetailsWrapper', template.theme)}>
         {!!header && <div className="header headerFillProjectDetails" />}
         <div className="FillProjectDetails">
           <div className="header">

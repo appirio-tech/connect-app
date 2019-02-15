@@ -214,7 +214,6 @@ class ProjectBasicDetailsForm extends Component {
           onValidSubmit={this.submit}
           onChange={ this.handleChange }
         >
-          {console.log('template', template)}
           {template.sections.map(section => ({
             ...section,
             visibilityForRendering: getVisibilityForRendering(template, section, currentWizardStep)
@@ -224,6 +223,7 @@ class ProjectBasicDetailsForm extends Component {
             // hide if section is hidden by condition
             (!_.get(section, '__wizard.hiddenByCondition'))
           )).map(renderSection)}
+
           <div className="section-footer section-footer-spec">
             {isWizardMode && (
               <button
@@ -248,6 +248,7 @@ class ProjectBasicDetailsForm extends Component {
               >{submitButtonText}</button>
             )}
           </div>
+
           {!!currentSection.footer && (
             <StaticSection content={currentSection.footer.content} currentProjectData={dirtyProject} />
           )}

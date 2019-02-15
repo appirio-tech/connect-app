@@ -141,8 +141,7 @@ const SpecQuestions = ({
       })
     }
 
-    let additionalItemClass = ''
-    const spacing = _.get(q, 'spacing', '')
+    let additionalItemClass = q.theme || ''
 
     let ChildElem = ''
     switch (q.type) {
@@ -154,15 +153,17 @@ const SpecQuestions = ({
       elemProps.hideDescription = true
       // child = <SeeAttachedTextareaInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
-    case 'textinput':
+    case 'textinput': {
+      const spacing = q.spacing || ''
       ChildElem = TCFormFields.TextInput
       elemProps.wrapperClass = 'row ' + spacing
       if (spacing.includes('spacing-gray-input')) {
         elemProps.placeholder = q.title
       }
-      additionalItemClass += ' spacing'
+      additionalItemClass += ` ${spacing}`
       // child = <TCFormFields.TextInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
+    }
     case 'numberinput':
       ChildElem = TCFormFields.TextInput
       elemProps.wrapperClass = 'row'
