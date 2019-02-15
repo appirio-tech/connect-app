@@ -22,35 +22,34 @@ const PortalSubSection = ({
   productTemplates,
   productCategories,
 }) => (
-    <div>
-      {content.map(({ sectionIndex }) => {
-        if (sectionIndex && sectionIndex !== -1 && template.sections[sectionIndex]) {
-          const section = template.sections[sectionIndex]
-          return (
-            <SpecSection
-              key={`portal-` + (section.id || `section-${sectionIndex}`)}
-              {...section}
-              project={project}
-              template={template}
-              currentWizardStep={currentWizardStep}
-              dirtyProject={dirtyProject}
-              productTemplates={productTemplates}
-              productCategories={productCategories}
-              isProjectDirty
-              sectionNumber={sectionIndex + 1}
-              showFeaturesDialog={ () => {} }//dummy
-              resetFeatures={ () => {} }//dummy
-              validate={() => {}}//dummy
-              isCreation
-            />
-          )
-        } else {
-          console.error('Section to render in portal cannot be found.')
-        }
+  <div>
+    {content.map(({ sectionIndex }) => {
+      if (sectionIndex && sectionIndex !== -1 && template.sections[sectionIndex]) {
+        const section = template.sections[sectionIndex]
+        return (
+          <SpecSection
+            key={'portal-' + (section.id || `section-${sectionIndex}`)}
+            {...section}
+            project={project}
+            template={template}
+            currentWizardStep={currentWizardStep}
+            dirtyProject={dirtyProject}
+            productTemplates={productTemplates}
+            productCategories={productCategories}
+            isProjectDirty
+            sectionNumber={sectionIndex + 1}
+            showFeaturesDialog={ () => {} }//dummy
+            resetFeatures={ () => {} }//dummy
+            validate={() => {}}//dummy
+            isCreation
+          />
+        )
+      } else {
+        console.error('Section to render in portal cannot be found.')
+      }
 
-        return <noscript />
-      })
-    }
+      return <noscript />
+    })}
   </div>
 )
 

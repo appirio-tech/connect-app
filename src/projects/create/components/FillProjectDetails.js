@@ -60,12 +60,13 @@ class FillProjectDetails extends Component  {
       const currentSection = currentWizardStep && template.sections[currentWizardStep.sectionIndex]
 
       if (!currentSection || currentSection && !currentSection.hideFormHeader) {
-        header =
+        header = (
           <HeaderWithProgress
             template={template}
             currentWizardStep={currentWizardStep}
             project={dirtyProject}
           />
+        )
       }
     }
 
