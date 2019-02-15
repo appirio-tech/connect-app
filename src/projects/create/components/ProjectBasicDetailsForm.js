@@ -21,6 +21,7 @@ import {
 import './ProjectBasicDetailsForm.scss'
 
 import SpecSection from '../../detail/components/SpecSection'
+import StaticSection from './StaticSection'
 
 class ProjectBasicDetailsForm extends Component {
 
@@ -171,11 +172,13 @@ class ProjectBasicDetailsForm extends Component {
       currentWizardStep,
     } = this.state
 
-    console.log('currentWizardStep', currentWizardStep)
+    const currentSection = currentWizardStep && template.sections[currentWizardStep.sectionIndex]
+    const nextButtonText = currentSection && currentSection.nextButtonText ? currentSection.nextButtonText : 'Next'
+    const submitButtonText = currentSection && currentSection.nextButtonText ? currentSection.nextButtonText : submitBtnText
 
     const renderSection = (section, idx) => {
       return (
-        <div key={idx} className="ProjectBasicDetailsForm">
+        <div key={section.id || `section-${idx}`} className="ProjectBasicDetailsForm">
           <div className="sections">
             <SpecSection
               {...section}
@@ -236,15 +239,18 @@ class ProjectBasicDetailsForm extends Component {
                 type="button"
                 disabled={!canSubmit}
                 onClick={this.showNextStep}
-              >Next</button>
+              >{nextButtonText}</button>
             ) : (
               <button
                 className="tc-btn tc-btn-primary tc-btn-md"
                 type="submit"
                 disabled={(this.state.isSaving) || !canSubmit}
-              >{ submitBtnText }</button>
+              >{submitButtonText}</button>
             )}
           </div>
+          {!!currentSection.footer && (
+            <StaticSection content={currentSection.footer.content} currentProjectData={dirtyProject} />
+          )}
         </Formsy.Form>
       </div>
     )

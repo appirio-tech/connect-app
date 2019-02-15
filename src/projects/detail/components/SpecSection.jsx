@@ -12,6 +12,7 @@ import FileListContainer from './FileListContainer'
 import SpecScreens from './SpecScreens'
 import { PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH, BUSINESS_UNIT_MAX_LENGTH, COST_CENTRE_MAX_LENGTH } from '../../../config/constants'
 import { scrollToAnchors } from '../../../components/ScrollToAnchors'
+import PortalSubSection from './PortalSubSection'
 
 import {
   getVisibilityForRendering,
@@ -340,8 +341,28 @@ const SpecSection = props => {
         </div>
       )
     }
+
+    case 'portal':
+      return (
+        <PortalSubSection
+          content={props.content}
+          {...{
+            template,
+            project,
+            dirtyProject,
+            currentWizardStep,
+            productTemplates,
+            productCategories
+          }}
+        />
+      )
     default:
-      return <noscript />
+      return (
+        <div style={{ borderWidth: 1, borderStyle: 'dashed', borderColor: '#f00' }}>
+          <h5 style={{ color: '#f00' }}>Unsupported subSection type `{type}`</h5>
+          <pre style={{ fontFamily: 'monospace' }}>{JSON.stringify(_.omit(props, '__wizard'), null, 2)}</pre>
+        </div>
+      )
     }
   }
 

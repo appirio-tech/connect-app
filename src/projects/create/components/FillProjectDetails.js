@@ -52,9 +52,26 @@ class FillProjectDetails extends Component  {
 
     const template = projectTemplate.scope
 
+    let header = null
+
+    if (!_.get(template, 'wizard.enabled')) {
+      header = <h1 dangerouslySetInnerHTML = {this.createMarkup(projectTemplate)} />
+    } else {
+      const currentSection = currentWizardStep && template.sections[currentWizardStep.sectionIndex]
+
+      if (!currentSection || currentSection && !currentSection.hideFormHeader) {
+        header =
+          <HeaderWithProgress
+            template={template}
+            currentWizardStep={currentWizardStep}
+            project={dirtyProject}
+          />
+      }
+    }
+
     return (
       <div className="FillProjectDetailsWrapper">
-        <div className="header headerFillProjectDetails" />
+        {!!header && <div className="header headerFillProjectDetails" />}
         <div className="FillProjectDetails">
           <div className="header">
             <ModalControl
@@ -63,11 +80,7 @@ class FillProjectDetails extends Component  {
               label="back"
               onClick={onBackClick}
             />
-            {!_.get(template, 'wizard.enabled') ? (
-              <h1 dangerouslySetInnerHTML = {this.createMarkup(projectTemplate)}  />
-            ) : (
-              <HeaderWithProgress template={template} currentWizardStep={currentWizardStep} project={dirtyProject} />
-            )}
+            {header}
           </div>
           <section className="two-col-content content">
             <div className="container">
