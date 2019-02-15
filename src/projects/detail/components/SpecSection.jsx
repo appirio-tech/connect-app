@@ -13,6 +13,11 @@ import SpecScreens from './SpecScreens'
 import { PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH, BUSINESS_UNIT_MAX_LENGTH, COST_CENTRE_MAX_LENGTH } from '../../../config/constants'
 import { scrollToAnchors } from '../../../components/ScrollToAnchors'
 
+import {
+  getVisibilityForRendering,
+  STEP_VISIBILITY,
+} from '../../../helpers/wizardHelper'
+
 import './SpecSection.scss'
 
 // icons for "tiled-radio-group" field type
@@ -63,7 +68,8 @@ const tiledRadioGroupIcons = {
 const SpecSection = props => {
   const {
     project,
-    projectTemplate,
+    template,
+    currentWizardStep,
     dirtyProject,
     isProjectDirty,
     resetFeatures,
@@ -84,8 +90,7 @@ const SpecSection = props => {
     productCategories,
   } = props
 
-  // make a copy to avoid modifying redux store
-  const subSections = _.cloneDeep(props.subSections || [])
+  const subSections = props.subSections
 
   // replace string icon values in the "tiled-radio-group" questions with icon components
   subSections.forEach((subSection) => {
@@ -152,7 +157,8 @@ const SpecSection = props => {
           questions={props.questions}
           layout={props.layout}
           project={project}
-          projectTemplate={projectTemplate}
+          template={template}
+          currentWizardStep={currentWizardStep}
           dirtyProject={dirtyProject}
           isRequired={props.required}
           showHidden={showHidden}
@@ -352,9 +358,12 @@ const SpecSection = props => {
         <p className="gray-text">
           {description}
         </p>
-        {subSections.filter((subSection) => (
+        {subSections.map(subSection => ({
+          ...subSection,
+          visibilityForRendering: getVisibilityForRendering(template, subSection, currentWizardStep)
+        })).filter((subSection) => (
           // hide if we are in a wizard mode and subSection is hidden for now
-          (!_.get(subSection, '__wizard.hidden')) &&
+          (subSection.visibilityForRendering !== STEP_VISIBILITY.NONE) &&
           // hide if subSection is hidden by condition
           (!_.get(subSection, '__wizard.hiddenByCondition')) &&
           // hide section marked with hiddenOnCreation during creation process
@@ -369,7 +378,7 @@ const SpecSection = props => {
 
 SpecSection.propTypes = {
   project: PropTypes.object.isRequired,
-  projectTemplate: PropTypes.object.isRequired,
+  template: PropTypes.object.isRequired,
   productTemplates: PropTypes.array.isRequired,
   sectionNumber: PropTypes.number.isRequired,
   showHidden: PropTypes.bool,

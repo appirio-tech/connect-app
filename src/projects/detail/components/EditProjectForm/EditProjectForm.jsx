@@ -62,6 +62,12 @@ class EditProjectForm extends Component {
     this.onLeave = this.onLeave.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.makeDeliveredPhaseReadOnly = this.makeDeliveredPhaseReadOnly.bind(this)
+
+    this.state = {
+      // for now just make a copy of template so ancestor components don't modify the store
+      // later we will init template using initWizard, which will create a copy
+      template: _.cloneDeep(this.props.template)
+    }
   }
 
   componentWillMount() {
@@ -212,7 +218,8 @@ class EditProjectForm extends Component {
 
 
   render() {
-    const { isEdittable, template, showHidden, productTemplates } = this.props
+    const { isEdittable, showHidden, productTemplates } = this.props
+    const { template } = this.state
     const { project, dirtyProject } = this.state
     const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
@@ -224,7 +231,7 @@ class EditProjectForm extends Component {
             project={project}
             dirtyProject={dirtyProject}
             isProjectDirty={this.state.isProjectDirty}
-            projectTemplate={template}
+            template={template}
             productTemplates={productTemplates}
             sectionNumber={idx + 1}
             resetFeatures={this.onFeaturesSaveAttachedClick}

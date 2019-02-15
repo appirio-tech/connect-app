@@ -14,6 +14,11 @@ import SelectDropdown from './../../../components/SelectDropdown/SelectDropdown'
 import ProjectEstimation from '../../create/components/ProjectEstimation'
 import StaticSection from '../../create/components/StaticSection'
 
+import {
+  getVisibilityForRendering,
+  STEP_VISIBILITY,
+} from '../../../helpers/wizardHelper'
+
 // HOC for TextareaInput
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
 
@@ -58,7 +63,8 @@ const SpecQuestions = ({
   layout,
   additionalClass,
   project,
-  projectTemplate,
+  template,
+  currentWizardStep,
   dirtyProject,
   resetFeatures,
   showFeaturesDialog,
@@ -146,7 +152,7 @@ const SpecQuestions = ({
       if (spacing.includes('spacing-gray-input')) {
         elemProps.placeholder = q.title
       }
-      additionalItemClass = spacing
+      additionalItemClass += ' spacing'
       // child = <TCFormFields.TextInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     case 'numberinput':
@@ -244,7 +250,8 @@ const SpecQuestions = ({
       _.assign(elemProps, {
         question: q,
         project: currentProjectData,
-        projectTemplate,
+        template,
+        currentWizardStep,
         hideTitle: true
       })
       break
@@ -286,9 +293,12 @@ const SpecQuestions = ({
 
   return (
     <SpecQuestionList layout={layout} additionalClass={additionalClass}>
-      {questions.filter((question) =>
+      {questions.map(question => ({
+        ...question,
+        visibilityForRendering: getVisibilityForRendering(template, question, currentWizardStep)
+      })).filter((question) =>
         // hide if we are in a wizard mode and question is hidden for now
-        (!_.get(question, '__wizard.hidden')) &&
+        (question.visibilityForRendering !== STEP_VISIBILITY.NONE) &&
         // hide if question is hidden by condition
         (!_.get(question, '__wizard.hiddenByCondition')) &&
         // hide hidden questions, unless we not force to show them
@@ -307,7 +317,7 @@ SpecQuestions.propTypes = {
   /**
    * Original Project template
    */
-  projectTemplate: PropTypes.object.isRequired,
+  template: PropTypes.object.isRequired,
 
   /**
    * Dirty project with all unsaved changes

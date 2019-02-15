@@ -8,10 +8,11 @@ import {
   getNextStepToShow,
   getPrevStepToShow,
   updateNodesByConditions,
-  showStepByDir,
+  getStepToShowByDir,
   removeValuesOfHiddenNodes,
+  getVisibilityForRendering,
   NODE_DIR,
-  PREVIOUS_STEP_VISIBILITY,
+  STEP_VISIBILITY,
 } from '../../../helpers/wizardHelper'
 import {
   LS_INCOMPLETE_WIZARD,
@@ -50,7 +51,6 @@ class ProjectBasicDetailsForm extends Component {
       currentWizardStep,
       prevWizardStep,
       isWizardMode,
-      previousStepVisibility,
       hasDependantFields,
     } = initWizard(props.template, props.project, incompleteWizard)
 
@@ -59,12 +59,11 @@ class ProjectBasicDetailsForm extends Component {
       nextWizardStep: getNextStepToShow(template, currentWizardStep),
       prevWizardStep,
       isWizardMode,
-      previousStepVisibility,
-      hasDependantFields
+      hasDependantFields,
+      currentWizardStep
     }
 
-    // we don't use for rendering, only for internal needs, so we don't need it in state
-    this.currentWizardStep = currentWizardStep
+    this.props.onStepChange(currentWizardStep)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -74,10 +73,10 @@ class ProjectBasicDetailsForm extends Component {
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextState.canSubmit, this.state.canSubmit)
      && _.isEqual(nextState.template, this.state.template)
+     && _.isEqual(nextState.currentWizardStep, this.state.currentWizardStep)
      && _.isEqual(nextState.isSaving, this.state.isSaving)
      && _.isEqual(nextState.nextWizardStep, this.state.nextWizardStep)
      && _.isEqual(nextState.prevWizardStep, this.state.prevWizardStep)
-     && _.isEqual(nextState.showStartEditConfirmation, this.state.showStartEditConfirmation)
     )
   }
 
@@ -135,22 +134,20 @@ class ProjectBasicDetailsForm extends Component {
     // prevent default to avoid form being submitted
     evt && evt.preventDefault()
 
-    const { template } = this.state
-    const { updatedTemplate, nextStep } = showStepByDir(template, this.currentWizardStep, dir)
+    const { currentWizardStep, template } = this.state
+    const nextStep = getStepToShowByDir(template, currentWizardStep, dir)
 
     this.setState({
-      template: updatedTemplate,
-      nextWizardStep: getNextStepToShow(updatedTemplate, nextStep),
-      prevWizardStep: dir === NODE_DIR.NEXT ? this.currentWizardStep : getPrevStepToShow(updatedTemplate, nextStep),
-      project: this.props.dirtyProject
+      nextWizardStep: getNextStepToShow(template, nextStep),
+      prevWizardStep: dir === NODE_DIR.NEXT ? currentWizardStep : getPrevStepToShow(template, nextStep),
+      project: this.props.dirtyProject,
+      currentWizardStep: nextStep
     })
 
-    this.currentWizardStep = nextStep
-
-    this.props.onStepChange(this.currentWizardStep)
+    this.props.onStepChange(nextStep)
 
     window.localStorage.setItem(LS_INCOMPLETE_WIZARD, JSON.stringify({
-      currentWizardStep: this.currentWizardStep
+      currentWizardStep: nextStep
     }))
   }
 
@@ -171,8 +168,10 @@ class ProjectBasicDetailsForm extends Component {
       nextWizardStep,
       prevWizardStep,
       isWizardMode,
-      previousStepVisibility,
+      currentWizardStep,
     } = this.state
+
+    console.log('currentWizardStep', currentWizardStep)
 
     const renderSection = (section, idx) => {
       return (
@@ -181,7 +180,8 @@ class ProjectBasicDetailsForm extends Component {
             <SpecSection
               {...section}
               project={project}
-              projectTemplate={template}
+              template={template}
+              currentWizardStep={currentWizardStep}
               dirtyProject={dirtyProject}
               productTemplates={productTemplates}
               productCategories={productCategories}
@@ -211,12 +211,18 @@ class ProjectBasicDetailsForm extends Component {
           onValidSubmit={this.submit}
           onChange={ this.handleChange }
         >
-          {template.sections.filter(section => (
+          {console.log('template', template)}
+          {template.sections.map(section => ({
+            ...section,
+            visibilityForRendering: getVisibilityForRendering(template, section, currentWizardStep)
+          })).filter(section => (
             // hide if we are in a wizard mode and section is hidden for now
-            !_.get(section, '__wizard.hidden')
+            section.visibilityForRendering !== STEP_VISIBILITY.NONE &&
+            // hide if section is hidden by condition
+            (!_.get(section, '__wizard.hiddenByCondition'))
           )).map(renderSection)}
           <div className="section-footer section-footer-spec">
-            {isWizardMode && previousStepVisibility === PREVIOUS_STEP_VISIBILITY.NONE && (
+            {isWizardMode && (
               <button
                 className="tc-btn tc-btn-default tc-btn-md"
                 type="button"

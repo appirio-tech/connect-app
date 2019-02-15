@@ -35,6 +35,7 @@ class FillProjectDetails extends Component  {
      && _.isEqual(nextProps.dirtyProject, this.props.dirtyProject)
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextProps.error, this.props.error)
+     && _.isEqual(nextState.currentWizardStep, this.state.currentWizardStep)
     )
   }
 
@@ -65,7 +66,7 @@ class FillProjectDetails extends Component  {
             {!_.get(template, 'wizard.enabled') ? (
               <h1 dangerouslySetInnerHTML = {this.createMarkup(projectTemplate)}  />
             ) : (
-              <HeaderWithProgress progress={0.53} template={template} step={currentWizardStep} project={dirtyProject} />
+              <HeaderWithProgress template={template} currentWizardStep={currentWizardStep} project={dirtyProject} />
             )}
           </div>
           <section className="two-col-content content">

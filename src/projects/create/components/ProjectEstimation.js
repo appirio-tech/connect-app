@@ -11,12 +11,12 @@ import './ProjectEstimation.scss'
 
 const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
-function ProjectEstimation({ question, project, projectTemplate }) {
+function ProjectEstimation({ question, project, template }) {
   const isSelected = (item) => evaluate(item.enableCondition, flatten(project, { safe: true }))
   const phasesEnabled = question.deliverables.filter(isSelected)
   const totalDuration = _.sumBy(phasesEnabled, 'duration')
 
-  const { priceEstimate } = getProductEstimate({scope: projectTemplate}, project)
+  const { priceEstimate } = getProductEstimate({scope: template}, project)
 
   return (
     <div styleName="ProjectEstimation">
@@ -53,7 +53,7 @@ ProjectEstimation.defaultProps = {
 ProjectEstimation.propTypes = {
   project: PT.object.isRequired,
   question: PT.object.isRequired,
-  projectTemplate: PT.object.isRequired,
+  template: PT.object.isRequired,
 }
 
 export default ProjectEstimation
