@@ -283,9 +283,13 @@ class EditProjectForm extends Component {
     }
 
     return (
-      <div className={cn('editProjectForm', {
-        [`form-theme-${template.theme}`]: template.theme
-      })}>
+      <div
+        className={cn(
+          'editProjectForm', {
+            [`form-theme-${template.theme}`]: template.theme
+          }
+        )}
+      >
         <Prompt
           when={!!onLeaveMessage}
           message={onLeaveMessage}

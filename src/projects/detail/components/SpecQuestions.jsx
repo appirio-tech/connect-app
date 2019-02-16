@@ -321,7 +321,9 @@ const SpecQuestions = ({
         // hide if question is hidden by condition
         (!_.get(question, '__wizard.hiddenByCondition')) &&
         // hide hidden questions, unless we not force to show them
-        (showHidden || !question.hidden)
+        (showHidden || !question.hidden) &&
+        // hide question in edit mode if configured
+        (isCreation || !question.hiddenOnEdit)
       ).map((q, index) => (
         _.includes(['checkbox-group', 'radio-group', 'add-ons'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
           <Accordion
