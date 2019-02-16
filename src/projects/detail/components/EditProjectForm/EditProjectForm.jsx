@@ -15,8 +15,14 @@ const Formsy = FormsyForm.Formsy
 import XMarkIcon from  '../../../../assets/icons/icon-x-mark.svg'
 import SpecSection from '../SpecSection'
 import { HOC as hoc } from 'formsy-react'
-import { STEP_VISIBILITY, STEP_STATE } from '../../../../helpers/wizardHelper'
 import cn from 'classnames'
+import {
+  initWizard,
+  removeValuesOfHiddenNodes,
+  updateNodesByConditions,
+  STEP_VISIBILITY,
+  STEP_STATE,
+} from '../../../../helpers/wizardHelper'
 
 import './EditProjectForm.scss'
 
@@ -65,10 +71,15 @@ class EditProjectForm extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.makeDeliveredPhaseReadOnly = this.makeDeliveredPhaseReadOnly.bind(this)
 
+    // init wizard to support dependant questions
+    const {
+      template,
+      hasDependantFields,
+    } = initWizard(props.template, props.project, null, true)
+
     this.state = {
-      // for now just make a copy of template so ancestor components don't modify the store
-      // later we will init template using initWizard, which will create a copy
-      template: _.cloneDeep(this.props.template)
+      template,
+      hasDependantFields,
     }
   }
 
@@ -91,27 +102,42 @@ class EditProjectForm extends Component {
         dirtyProject: Object.assign({}, nextProps.project),
         isProjectDirty: true
       })
-      return
-    }
-    let updatedProject = Object.assign({}, nextProps.project)
-    if (this.state.isFeaturesDirty && !this.state.isSaving) {
-      updatedProject = update(updatedProject, {
-        details: {
-          appDefinition: {
-            features: {
-              $set: this.state.project.details.appDefinition.features
+    } else {
+      let updatedProject = Object.assign({}, nextProps.project)
+      if (this.state.isFeaturesDirty && !this.state.isSaving) {
+        updatedProject = update(updatedProject, {
+          details: {
+            appDefinition: {
+              features: {
+                $set: this.state.project.details.appDefinition.features
+              }
             }
           }
-        }
+        })
+      }
+      this.setState({
+        project: updatedProject,
+        isFeaturesDirty: false, // Since we just saved, features are not dirty anymore.
+        isProjectDirty: false,
+        canSubmit: false,
+        isSaving: false
       })
     }
-    this.setState({
-      project: updatedProject,
-      isFeaturesDirty: false, // Since we just saved, features are not dirty anymore.
-      isProjectDirty: false,
-      canSubmit: false,
-      isSaving: false
-    })
+
+    if (this.state.hasDependantFields && !_.isEqual(this.props.project, nextProps.project)) {
+      const {
+        updatedTemplate,
+        updatedSomeSteps,
+        hidedSomeSteps
+      } = updateNodesByConditions(this.state.template, nextProps.project)
+
+      if (updatedSomeSteps) {
+        this.setState({
+          template: updatedTemplate,
+          project: hidedSomeSteps ? nextProps.project : this.state.project,
+        })
+      }
+    }
   }
 
   componentDidMount() {
@@ -193,11 +219,9 @@ class EditProjectForm extends Component {
   }
 
   submit(model) {
-    // if (this.state.isFeaturesDirty) {
-    //   model.details.appDefinition.features = this.state.project.details.appDefinition.features
-    // }
     this.setState({isSaving: true })
-    this.props.submitHandler(model)
+    const modelWithoutHiddenValues = removeValuesOfHiddenNodes(this.state.template, model)
+    this.props.submitHandler(modelWithoutHiddenValues)
   }
 
   /**
