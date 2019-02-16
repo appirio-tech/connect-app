@@ -54,7 +54,7 @@ const SpecQuestionListItem = ({
     shouldShowRequire = true
   }
   return (
-    <div className={ cn('spec-question-list-item', { [`${additionalClass}`] : true }) }>
+    <div className={ cn('spec-question-list-item', additionalClass) }>
       {icon && <div className="icon-col">{icon}</div>}
       <div className="content-col">
         {!hideTitle && <h5>

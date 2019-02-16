@@ -2,18 +2,19 @@ import React from 'react'
 import PT from 'prop-types'
 import { flatten } from 'flat'
 
-import { removeValuesOfHiddenNodes } from '../../../helpers/wizardHelper'
+import { removeValuesOfHiddenNodes, getWizardProgress } from '../../../helpers/wizardHelper'
 import { getProductEstimate } from '../../../config/projectWizard'
 
 import './HeaderWithProgress.scss'
 
 const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
-function HeaderWithProgress({project, template, step, progress}) {
+function HeaderWithProgress({project, template, currentWizardStep}) {
   const flatProject = flatten(removeValuesOfHiddenNodes(template, project), { safe: true })
   const { priceEstimate } = getProductEstimate({scope: template}, flatProject)
+  const progress = currentWizardStep ? getWizardProgress(template, currentWizardStep) : 0
 
-  const currentStep = template.sections[(step || {}).sectionIndex || 0]
+  const currentStep = template.sections[(currentWizardStep || {}).sectionIndex || 0]
 
   return (
     <div styleName="HeaderWithProgress">
@@ -28,16 +29,10 @@ function HeaderWithProgress({project, template, step, progress}) {
   )
 }
 
-HeaderWithProgress.defaultProps = {
-  progress: 0,
-  step: {sectionIndex: 0},
-}
-
 HeaderWithProgress.propTypes = {
   project: PT.object.isRequired,
   template: PT.object.isRequired,
-  progress: PT.number.isRequired,
-  step: PT.object,
+  currentWizardStep: PT.object,
 }
 
 export default HeaderWithProgress

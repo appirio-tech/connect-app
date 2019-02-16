@@ -15,6 +15,12 @@ import SelectDropdown from './../../../components/SelectDropdown/SelectDropdown'
 import ProjectEstimation from '../../create/components/ProjectEstimation'
 import StaticSection from '../../create/components/StaticSection'
 
+import {
+  getVisibilityForRendering,
+  STEP_VISIBILITY,
+} from '../../../helpers/wizardHelper'
+import Accordion from './Accordion/Accordion'
+
 // HOC for TextareaInput
 const SeeAttachedTextareaInput = seeAttachedWrapperField(TCFormFields.Textarea)
 
@@ -53,13 +59,21 @@ const groupAddonOptions = (options, categories) => {
   }))
 }
 
+const buildAddonsOptions = (q, productTemplates, productCategories) => (
+  groupAddonOptions(
+    formatAddonOptions(filterAddonQuestions(productTemplates, q)),
+    _.keyBy(productCategories, 'key')
+  )
+)
+
 // { isRequired, represents the overall questions section's compulsion, is also available}
 const SpecQuestions = ({
   questions,
   layout,
   additionalClass,
   project,
-  projectTemplate,
+  template,
+  currentWizardStep,
   dirtyProject,
   resetFeatures,
   showFeaturesDialog,
@@ -128,8 +142,7 @@ const SpecQuestions = ({
       })
     }
 
-    let additionalItemClass = ''
-    const spacing = _.get(q, 'spacing', '')
+    let additionalItemClass = q.theme || ''
 
     let ChildElem = ''
     switch (q.type) {
@@ -141,15 +154,17 @@ const SpecQuestions = ({
       elemProps.hideDescription = true
       // child = <SeeAttachedTextareaInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
-    case 'textinput':
+    case 'textinput': {
+      const spacing = q.spacing || ''
       ChildElem = TCFormFields.TextInput
       elemProps.wrapperClass = 'row ' + spacing
       if (spacing.includes('spacing-gray-input')) {
         elemProps.placeholder = q.title
       }
-      additionalItemClass = spacing
+      additionalItemClass += ` ${spacing}`
       // child = <TCFormFields.TextInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
+    }
     case 'numberinput':
       ChildElem = TCFormFields.TextInput
       elemProps.wrapperClass = 'row'
@@ -234,10 +249,7 @@ const SpecQuestions = ({
         hideTitle: true,
         hideDescription: true,
         description: q.description,
-        options: groupAddonOptions(
-          formatAddonOptions(filterAddonQuestions(productTemplates, q)),
-          _.keyBy(productCategories, 'key')
-        ),
+        options: buildAddonsOptions(q, productTemplates, productCategories),
         wrapperClass: q.theme
       })
       break
@@ -246,7 +258,8 @@ const SpecQuestions = ({
       _.assign(elemProps, {
         question: q,
         project: currentProjectData,
-        projectTemplate,
+        template,
+        currentWizardStep,
         hideTitle: true
       })
       break
@@ -288,14 +301,30 @@ const SpecQuestions = ({
 
   return (
     <SpecQuestionList layout={layout} additionalClass={additionalClass}>
-      {questions.filter((question) =>
+      {questions.map(question => ({
+        ...question,
+        visibilityForRendering: getVisibilityForRendering(template, question, currentWizardStep)
+      })).filter((question) =>
         // hide if we are in a wizard mode and question is hidden for now
-        (!_.get(question, '__wizard.hidden')) &&
+        (question.visibilityForRendering !== STEP_VISIBILITY.NONE) &&
         // hide if question is hidden by condition
         (!_.get(question, '__wizard.hiddenByCondition')) &&
         // hide hidden questions, unless we not force to show them
         (showHidden || !question.hidden)
-      ).map(renderQ)}
+      ).map((q, index) => (
+        _.includes(['checkbox-group', 'radio-group', 'add-ons'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
+          <Accordion
+            key={index}
+            title={q.summaryTitle || q.title}
+            type={q.type}
+            options={q.options || buildAddonsOptions(q, productTemplates, productCategories)}
+          >
+            {renderQ(q, index)}
+          </Accordion>
+        ) : (
+          renderQ(q, index)
+        )
+      ))}
     </SpecQuestionList>
   )
 }
@@ -309,7 +338,7 @@ SpecQuestions.propTypes = {
   /**
    * Original Project template
    */
-  projectTemplate: PropTypes.object.isRequired,
+  template: PropTypes.object.isRequired,
 
   /**
    * Dirty project with all unsaved changes
