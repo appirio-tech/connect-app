@@ -13,6 +13,12 @@
     }
   }
 
+  /* :global(.child-component .light .checkbox-group-options .checkbox-group-item:last-child),
+  :global(.child-component .light .radio-group-options .radio:last-child), */
+  :global(.radio-group-input.row.light) {
+    margin-bottom: 0;
+  }
+
   /* hide main title for 'add-ons' */
   :global(.spec-question-list-item .content-col .child-component) h3 {
     display: none;

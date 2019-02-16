@@ -45,6 +45,19 @@ export const LEVEL = {
 }
 
 /**
+ * Defines possible wizard state values
+ *
+ * - `prev` - all passed steps
+ * - `current`
+ * - `next` - all next steps
+ */
+export const STEP_STATE = {
+  PREV: 'prev',
+  CURRENT: 'current',
+  NEXT: 'next'
+}
+
+/**
  * Define relation between nodes
  * - the node is next to another one
  * - the node previous to another one
@@ -79,6 +92,43 @@ const getPreviousStepVisibility = (template, node) => {
 }
 
 /**
+ * Get node state in wizard.
+ * Other words if this is any previous node, current node or any next node in wizard workflow.
+ *
+ * @param {Object} nodeObject        node object
+ * @param {Object} currentWizardStep current wizard step
+ *
+ * @returns {String} node state
+ */
+export const geStepState = (nodeObject, currentWizardStep) => {
+  const node = _.get(nodeObject, '__wizard.node')
+
+  // this means that we are not in a wizard mode, because it was not initialized for this node
+  if (!node) {
+    return null
+  }
+
+  if (
+    isSameOrParentNode(currentWizardStep, node) ||
+    isSameOrParentNode(node, currentWizardStep)
+  ) {
+    return STEP_STATE.CURRENT
+  }
+
+  if (isPreviousStep(node, currentWizardStep)) {
+    return STEP_STATE.PREV
+  }
+
+  if (isNextStep(node, currentWizardStep)) {
+    return STEP_STATE.NEXT
+  }
+
+  // this should never happen
+  console.error('Cannot determine node state, something went wrong.')
+  return null
+}
+
+/**
  *
  * @param {Object} template          template
  * @param {Object} nodeObject        node object
@@ -94,24 +144,19 @@ export const getVisibilityForRendering = (template, nodeObject, currentWizardSte
     return DEFAULT_STEP_VISIBILITY
   }
 
-  if (
-    isSameOrParentNode(currentWizardStep, node) ||
-    isSameOrParentNode(node, currentWizardStep)
-  ) {
-    return CURRENT_STEP_VISIBILITY
+  const stepState = geStepState(nodeObject, currentWizardStep)
+  let stepVisibility = DEFAULT_STEP_VISIBILITY
+
+  switch(stepState) {
+  case STEP_STATE.PREV: stepVisibility = getPreviousStepVisibility(template, node)
+    break
+  case STEP_STATE.CURRENT: stepVisibility = CURRENT_STEP_VISIBILITY
+    break
+  case STEP_STATE.NEXT: stepVisibility = NEXT_STEP_VISIBILITY
+    break
   }
 
-  if (isPreviousStep(node, currentWizardStep)) {
-    return getPreviousStepVisibility(template, node)
-  }
-
-  if (isNextStep(node, currentWizardStep)) {
-    return NEXT_STEP_VISIBILITY
-  }
-
-  // this should never happen, but in case it does, log error and return default visibility so the script keep working
-  console.error('Cannot determine step visibility for rendering, something went wrong.')
-  return DEFAULT_STEP_VISIBILITY
+  return stepVisibility
 }
 
 /**

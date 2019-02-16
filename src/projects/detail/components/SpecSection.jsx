@@ -16,6 +16,7 @@ import PortalSubSection from './PortalSubSection'
 
 import {
   getVisibilityForRendering,
+  geStepState,
   STEP_VISIBILITY,
 } from '../../../helpers/wizardHelper'
 
@@ -107,7 +108,16 @@ const SpecSection = props => {
   })
 
   const renderSubSection = (subSection, idx) => (
-    <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
+    <div
+      key={idx}
+      className={cn(
+        'section-features-module',
+        `subSection-type-${subSection.type}`, {
+        [`subSection-state-${subSection.stepState}`]: !!subSection.stepState,
+        [`subSection-visibility-${subSection.visibilityForRendering}`]: !!subSection.visibilityForRendering
+      })}
+      id={[id, subSection.id].join('-')}
+    >
       {
         !subSection.hideTitle &&
         <div className="sub-title">
@@ -376,12 +386,13 @@ const SpecSection = props => {
           </h2>
           <span className="section-number">{ sectionNumber }</span>
         </div>}
-        <p className="gray-text">
+        {!!description && <p className="gray-text">
           {description}
-        </p>
+        </p>}
         {subSections.map(subSection => ({
           ...subSection,
-          visibilityForRendering: getVisibilityForRendering(template, subSection, currentWizardStep)
+          visibilityForRendering: getVisibilityForRendering(template, subSection, currentWizardStep),
+          stepState: geStepState(subSection, currentWizardStep)
         })).filter((subSection) => (
           // hide if we are in a wizard mode and subSection is hidden for now
           (subSection.visibilityForRendering !== STEP_VISIBILITY.NONE) &&

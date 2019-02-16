@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import cn from 'classnames'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const Formsy = FormsyForm.Formsy
 import {
@@ -13,6 +14,7 @@ import {
   getVisibilityForRendering,
   NODE_DIR,
   STEP_VISIBILITY,
+  geStepState,
 } from '../../../helpers/wizardHelper'
 import {
   LS_INCOMPLETE_WIZARD,
@@ -178,7 +180,14 @@ class ProjectBasicDetailsForm extends Component {
 
     const renderSection = (section, idx) => {
       return (
-        <div key={section.id || `section-${idx}`} className="ProjectBasicDetailsForm">
+        <div
+          key={section.id || `section-${idx}`}
+          className={cn(
+            'ProjectBasicDetailsForm', {
+            [`section-state-${section.stepState}`]: !!section.stepState,
+            [`section-visibility-${section.visibilityForRendering}`]: !!section.visibilityForRendering
+          })}
+        >
           <div className="sections">
             <SpecSection
               {...section}
@@ -216,7 +225,8 @@ class ProjectBasicDetailsForm extends Component {
         >
           {template.sections.map(section => ({
             ...section,
-            visibilityForRendering: getVisibilityForRendering(template, section, currentWizardStep)
+            visibilityForRendering: getVisibilityForRendering(template, section, currentWizardStep),
+            stepState: geStepState(section, currentWizardStep)
           })).filter(section => (
             // hide if we are in a wizard mode and section is hidden for now
             section.visibilityForRendering !== STEP_VISIBILITY.NONE &&

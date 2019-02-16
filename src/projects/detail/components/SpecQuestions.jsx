@@ -17,6 +17,7 @@ import StaticSection from '../../create/components/StaticSection'
 
 import {
   getVisibilityForRendering,
+  geStepState,
   STEP_VISIBILITY,
 } from '../../../helpers/wizardHelper'
 import Accordion from './Accordion/Accordion'
@@ -282,8 +283,13 @@ const SpecQuestions = ({
 
     return (
       <SpecQuestionList.Item
-        additionalClass = {additionalItemClass}
-        key={index}
+        additionalClass = {cn(
+          additionalItemClass,
+          `question-type-${q.type}`, {
+          [`question-state-${q.stepState}`]: !!q.stepState,
+          [`question-visibility-${q.visibilityForRendering}`]: !!q.visibilityForRendering
+        })}
+        key={q.fieldName || `question-${index}`}
         title={q.title}
         type={q.type}
         // titleAside={titleAside}
@@ -303,7 +309,8 @@ const SpecQuestions = ({
     <SpecQuestionList layout={layout} additionalClass={additionalClass}>
       {questions.map(question => ({
         ...question,
-        visibilityForRendering: getVisibilityForRendering(template, question, currentWizardStep)
+        visibilityForRendering: getVisibilityForRendering(template, question, currentWizardStep),
+        stepState: geStepState(question, currentWizardStep)
       })).filter((question) =>
         // hide if we are in a wizard mode and question is hidden for now
         (question.visibilityForRendering !== STEP_VISIBILITY.NONE) &&

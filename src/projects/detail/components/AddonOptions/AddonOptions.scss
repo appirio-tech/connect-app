@@ -17,8 +17,9 @@
 }
 
 .addon-title {
+  @include roboto-bold;
   color: $tc-gray-100;
-  font-size: 20px;
+  font-size: $tc-heading-sm;
   line-height: 34px;
   text-align: center;
 }
@@ -28,8 +29,8 @@
 }
 
 .subcategory-title {
+  @include roboto;
   color: $tc-gray-100;
-  font-size: 20px;
-  font-weight: 400;
+  font-size: $tc-heading-sm;
   line-height: 25px;
 }

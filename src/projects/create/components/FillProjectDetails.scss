@@ -95,6 +95,10 @@
                 background: none;
                 height: 40px;
 
+                :global(.FillProjectDetailsWrapper.light) & {
+                  margin-top: 10 * $base-unit;
+                }
+
                 @media screen and (max-width: $screen-md - 1px) {
                   margin-bottom: 10 * $base-unit;
                   margin-top: 10 * $base-unit;

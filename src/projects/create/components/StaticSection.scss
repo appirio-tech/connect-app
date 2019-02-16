@@ -19,10 +19,12 @@
   }
 
   & :global(.project-summary-footer) {
+    @include roboto;
     font-size: $tc-body-sm;
-    font-weight: 400;
     color: $tc-gray-30;
     line-height: $tc-body-lg;
+    margin-top: 10 * $base-unit;
+
     & p {
       color: $tc-gray-70;
       &:first-child {
@@ -31,6 +33,7 @@
         text-align: center;
       }
     }
+
     & a {
       color: $tc-dark-blue-110;
       &:hover {
