@@ -1199,4 +1199,50 @@
       }
     }
   }
+
+  /* light theme for radio group, checkbox group and addon options */
+  .spec-question-list-item .content-col .child-component .light {
+    .radio-group-options {
+      flex-direction: column;
+    }
+
+    .radio label,
+    .tc-checkbox-label {
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .radio-group-options .radio,
+    .checkbox-group-options .checkbox-group-item {
+      margin: 0 0 10px 0;
+      background-color: $tc-gray-neutral-light;
+      padding: 10px;
+      border-radius: 4px;
+      display: block;
+
+      &:first-child {
+        margin-top: 10px;
+      }
+    }
+
+    .radio-group-options .radio.selected,
+    .checkbox-group-item.selected {
+      background-color: $tc-dark-blue-10;
+    }
+
+    .radio-group-options .radio-option-price,
+    .checkbox-option-price {
+      float: right;
+      font-size: 15px;
+      color: $tc-gray-100;
+    }
+
+    .radio-option-description,
+    .checkbox-option-description {
+      color: $tc-gray-70;
+      font-size: 13px;
+      margin-top: 10px;
+      line-height: 20px;
+    }
+  }
 }

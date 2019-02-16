@@ -27,7 +27,7 @@ class AddonOptions extends Component {
   }
 
   render() {
-    const { label, name, options, title, description } = this.props
+    const { label, name, options, title, description, wrapperClass } = this.props
     const hasError = !this.props.isPristine() && !this.props.isValid()
     const errorMessage = this.props.getErrorMessage() || this.props.validationError
     const getId = s => s.id
@@ -36,7 +36,7 @@ class AddonOptions extends Component {
       const curValue = this.props.getValue() || []
       const checked = curValue.map(getId).indexOf(getId(cb.value)) !== -1
       const disabled = this.props.isFormDisabled() || cb.disabled || this.props.disabled
-      const rClass = cn('checkbox-group-item', { disabled })
+      const rClass = cn('checkbox-group-item', { disabled, selected: checked })
       const id = name+'-opt-'+group+'-'+key
       const setRef = (c) => this['element-' + group + '-' + key] = c
       return (
@@ -54,12 +54,18 @@ class AddonOptions extends Component {
             <label htmlFor={id}/>
           </div>
           <label className="tc-checkbox-label" htmlFor={id}>{cb.label}</label>
+          {
+            cb.quoteUp && !checked && <div className="checkbox-option-price"> {`+ $${cb.quoteUp}`} </div>
+          }
+          {
+            cb.description && checked && <div className="checkbox-option-description"> {cb.description} </div>
+          }
         </div>
       )
     }
 
     return (
-      <div>
+      <div className={cn(wrapperClass)}>
         <div styleName="addon-header">
           <h3 styleName="addon-title">{title}</h3>
           <p>{description}</p>

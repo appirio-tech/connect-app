@@ -5,6 +5,7 @@ import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
 import _ from 'lodash'
 import AddonOptions from './AddonOptions/AddonOptions'
+import cn from 'classnames'
 
 import SpecQuestionList from './SpecQuestionList/SpecQuestionList'
 import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
@@ -171,7 +172,7 @@ const SpecQuestions = ({
       break
     case 'radio-group':
       ChildElem = TCFormFields.RadioGroup
-      _.assign(elemProps, {wrapperClass: 'row', options: q.options})
+      _.assign(elemProps, {wrapperClass: cn('row', q.theme), options: q.options})
       // child = <TCFormFields.RadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
     case 'tiled-radio-group':
@@ -186,7 +187,7 @@ const SpecQuestions = ({
       break
     case 'checkbox-group':
       ChildElem = TCFormFields.CheckboxGroup
-      _.assign(elemProps, {options: q.options, layout: q.layout })
+      _.assign(elemProps, {options: q.options, layout: q.layout, wrapperClass: q.theme })
       // child = <TCFormFields.CheckboxGroup name={q.fieldName} label={q.label} value={value} options={q.options} />
       break
     case 'checkbox':
@@ -236,7 +237,8 @@ const SpecQuestions = ({
         options: groupAddonOptions(
           formatAddonOptions(filterAddonQuestions(productTemplates, q)),
           _.keyBy(productCategories, 'key')
-        )
+        ),
+        wrapperClass: q.theme
       })
       break
     case 'estimation':
