@@ -155,7 +155,6 @@ class ProjectPlanContainer extends React.Component {
             }}
           </MediaQuery>
         </TwoColsLayout.Sidebar>
-
         <TwoColsLayout.Content>
           {visiblePhases && visiblePhases.length > 0 ? (
             <ProjectStages
@@ -191,6 +190,7 @@ ProjectPlanContainer.propTypes = {
 
 const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates }) => ({
   productTemplates: templates.productTemplates,
+  productCategories: templates.productCategories,
   phases: projectState.phases,
   phasesNonDirty: projectState.phasesNonDirty,
   feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,

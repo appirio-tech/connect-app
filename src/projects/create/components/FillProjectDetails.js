@@ -72,7 +72,11 @@ class FillProjectDetails extends Component  {
     }
 
     return (
-      <div className={cn('FillProjectDetailsWrapper', template.theme)}>
+      <div
+        className={cn('FillProjectDetailsWrapper', {
+          [`form-theme-${template.theme}`]: template.theme
+        })}
+      >
         {!!header && <div className="header headerFillProjectDetails" />}
         <div className="FillProjectDetails">
           <div className="header">

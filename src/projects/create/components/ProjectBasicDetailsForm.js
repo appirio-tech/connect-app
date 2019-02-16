@@ -184,9 +184,11 @@ class ProjectBasicDetailsForm extends Component {
           key={section.id || `section-${idx}`}
           className={cn(
             'ProjectBasicDetailsForm', {
-            [`section-state-${section.stepState}`]: !!section.stepState,
-            [`section-visibility-${section.visibilityForRendering}`]: !!section.visibilityForRendering
-          })}
+              [`section-theme-${section.theme}`]: !!section.theme,
+              [`section-state-${section.stepState}`]: !!section.stepState,
+              [`section-visibility-${section.visibilityForRendering}`]: !!section.visibilityForRendering
+            }
+          )}
         >
           <div className="sections">
             <SpecSection

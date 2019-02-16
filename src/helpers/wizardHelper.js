@@ -316,10 +316,11 @@ export const forEachNode = (template, iteratee, iterateSublevelCondition) => {
  * @param {Object}  template            raw template
  * @param {Object}  project             project data (non-flat)
  * @param {Object}  incompleteWizard    incomplete wizard props
+ * @param {Boolean} editMode            init form in edit mode
  *
  * @returns {Object} initialized template
  */
-export const initWizard = (template, project, incompleteWizard) => {
+export const initWizard = (template, project, incompleteWizard, editMode = false) => {
   let wizardTemplate = _.cloneDeep(template)
   const isWizardMode = _.get(template, 'wizard.enabled')
   // try to get the step where we left the wizard

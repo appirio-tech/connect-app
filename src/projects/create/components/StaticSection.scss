@@ -18,27 +18,39 @@
     }
   }
 
-  & :global(.project-summary-footer) {
+  :global(.project-summary-footer) {
     @include roboto;
     font-size: $tc-body-sm;
     color: $tc-gray-30;
     line-height: $tc-body-lg;
     margin-top: 10 * $base-unit;
 
-    & p {
+    > p {
       color: $tc-gray-70;
       &:first-child {
         color: $tc-black;
         margin-bottom: $tc-body-lg;
         text-align: center;
       }
+
+      &:last-child {
+        font-size: $tc-label-sm;
+      }
     }
 
-    & a {
+    a {
       color: $tc-dark-blue-110;
       &:hover {
         color: $tc-dark-blue-110;
       }
+    }
+  }
+
+  :global(.form-header-summary) {
+    > h2 {
+      @include roboto-light;
+      font-size: 32px; // don't have a variable
+      text-align: center;
     }
   }
 }

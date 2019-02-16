@@ -18,6 +18,7 @@ import {
   getVisibilityForRendering,
   geStepState,
   STEP_VISIBILITY,
+  STEP_STATE,
 } from '../../../helpers/wizardHelper'
 
 import './SpecSection.scss'
@@ -113,9 +114,11 @@ const SpecSection = props => {
       className={cn(
         'section-features-module',
         `subSection-type-${subSection.type}`, {
-        [`subSection-state-${subSection.stepState}`]: !!subSection.stepState,
-        [`subSection-visibility-${subSection.visibilityForRendering}`]: !!subSection.visibilityForRendering
-      })}
+          [`subSection-theme-${subSection.theme}`]: !!subSection.theme,
+          [`subSection-state-${subSection.stepState}`]: !!subSection.stepState,
+          [`subSection-visibility-${subSection.visibilityForRendering}`]: !!subSection.visibilityForRendering
+        }
+      )}
       id={[id, subSection.id].join('-')}
     >
       {
@@ -176,6 +179,7 @@ const SpecSection = props => {
           isProjectDirty={isProjectDirty}
           productTemplates={productTemplates}
           productCategories={productCategories}
+          isCreation={isCreation}
         />
       )
     case 'notes':
@@ -391,8 +395,8 @@ const SpecSection = props => {
         </p>}
         {subSections.map(subSection => ({
           ...subSection,
-          visibilityForRendering: getVisibilityForRendering(template, subSection, currentWizardStep),
-          stepState: geStepState(subSection, currentWizardStep)
+          visibilityForRendering: isCreation ? getVisibilityForRendering(template, subSection, currentWizardStep) : STEP_VISIBILITY.READ_OPTIMIZED,
+          stepState: isCreation ? geStepState(subSection, currentWizardStep) : STEP_STATE.PREV
         })).filter((subSection) => (
           // hide if we are in a wizard mode and subSection is hidden for now
           (subSection.visibilityForRendering !== STEP_VISIBILITY.NONE) &&

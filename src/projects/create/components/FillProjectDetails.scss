@@ -95,7 +95,7 @@
                 background: none;
                 height: 40px;
 
-                :global(.FillProjectDetailsWrapper.light) & {
+                :global(.form-theme-light) & {
                   margin-top: 10 * $base-unit;
                 }
 

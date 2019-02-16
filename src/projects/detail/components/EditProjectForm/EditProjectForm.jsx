@@ -15,6 +15,8 @@ const Formsy = FormsyForm.Formsy
 import XMarkIcon from  '../../../../assets/icons/icon-x-mark.svg'
 import SpecSection from '../SpecSection'
 import { HOC as hoc } from 'formsy-react'
+import { STEP_VISIBILITY, STEP_STATE } from '../../../../helpers/wizardHelper'
+import cn from 'classnames'
 
 import './EditProjectForm.scss'
 
@@ -218,7 +220,7 @@ class EditProjectForm extends Component {
 
 
   render() {
-    const { isEdittable, showHidden, productTemplates } = this.props
+    const { isEdittable, showHidden, productTemplates, productCategories } = this.props
     const { template } = this.state
     const { project, dirtyProject } = this.state
     const onLeaveMessage = this.onLeave() || ''
@@ -233,6 +235,7 @@ class EditProjectForm extends Component {
             isProjectDirty={this.state.isProjectDirty}
             template={template}
             productTemplates={productTemplates}
+            productCategories={productCategories}
             sectionNumber={idx + 1}
             resetFeatures={this.onFeaturesSaveAttachedClick}
             showFeaturesDialog={this.showFeaturesDialog}
@@ -256,7 +259,9 @@ class EditProjectForm extends Component {
     }
 
     return (
-      <div className="editProjectForm">
+      <div className={cn('editProjectForm', {
+        [`form-theme-${template.theme}`]: template.theme
+      })}>
         <Prompt
           when={!!onLeaveMessage}
           message={onLeaveMessage}
@@ -269,7 +274,16 @@ class EditProjectForm extends Component {
           onValidSubmit={this.submit}
           onChange={ this.handleChange }
         >
-          {template.sections.map(renderSection)}
+          {template.sections.map(section => ({
+            ...section,
+            // in edit form we always show steps in read-optimized mode
+            visibilityForRendering: STEP_VISIBILITY.READ_OPTIMIZED,
+            // in edit form we always treat steps as completed aka 'prev'
+            stepState: STEP_STATE.PREV
+          })).filter((section) => (
+            // hide sections in edit mode
+            !section.hiddenOnEdit
+          )).map(renderSection)}
           <FeaturePickerFormField
             name="details.appDefinition.features"
             project={ project }
@@ -291,6 +305,7 @@ EditProjectForm.propTypes = {
   saving: PropTypes.bool.isRequired,
   template: PropTypes.object.isRequired,
   productTemplates: PropTypes.array.isRequired,
+  productCategories: PropTypes.array.isRequired,
   isEdittable: PropTypes.bool.isRequired,
   submitHandler: PropTypes.func.isRequired,
   fireProjectDirty: PropTypes.func.isRequired,

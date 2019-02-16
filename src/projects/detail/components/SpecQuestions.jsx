@@ -19,6 +19,7 @@ import {
   getVisibilityForRendering,
   geStepState,
   STEP_VISIBILITY,
+  STEP_STATE,
 } from '../../../helpers/wizardHelper'
 import Accordion from './Accordion/Accordion'
 
@@ -82,6 +83,7 @@ const SpecQuestions = ({
   isProjectDirty,
   productTemplates,
   productCategories,
+  isCreation,
 }) => {
   const currentProjectData = isProjectDirty ? dirtyProject : project
 
@@ -143,7 +145,7 @@ const SpecQuestions = ({
       })
     }
 
-    let additionalItemClass = q.theme || ''
+    let additionalItemClass = ''
 
     let ChildElem = ''
     switch (q.type) {
@@ -286,9 +288,11 @@ const SpecQuestions = ({
         additionalClass = {cn(
           additionalItemClass,
           `question-type-${q.type}`, {
-          [`question-state-${q.stepState}`]: !!q.stepState,
-          [`question-visibility-${q.visibilityForRendering}`]: !!q.visibilityForRendering
-        })}
+            [`question-theme-${q.theme}`]: !!q.theme,
+            [`question-state-${q.stepState}`]: !!q.stepState,
+            [`question-visibility-${q.visibilityForRendering}`]: !!q.visibilityForRendering
+          }
+        )}
         key={q.fieldName || `question-${index}`}
         title={q.title}
         type={q.type}
@@ -309,8 +313,8 @@ const SpecQuestions = ({
     <SpecQuestionList layout={layout} additionalClass={additionalClass}>
       {questions.map(question => ({
         ...question,
-        visibilityForRendering: getVisibilityForRendering(template, question, currentWizardStep),
-        stepState: geStepState(question, currentWizardStep)
+        visibilityForRendering: isCreation ? getVisibilityForRendering(template, question, currentWizardStep) : STEP_VISIBILITY.READ_OPTIMIZED,
+        stepState: isCreation ? geStepState(question, currentWizardStep) : STEP_STATE.PREV
       })).filter((question) =>
         // hide if we are in a wizard mode and question is hidden for now
         (question.visibilityForRendering !== STEP_VISIBILITY.NONE) &&
@@ -387,6 +391,11 @@ SpecQuestions.propTypes = {
    * list of product categories
    */
   productCategories: PropTypes.array.isRequired,
+
+  /**
+   * Determines if we are now during project creation or project edit
+   */
+  isCreation: PropTypes.bool,
 }
 
 SpecQuestions.defaultProps = {

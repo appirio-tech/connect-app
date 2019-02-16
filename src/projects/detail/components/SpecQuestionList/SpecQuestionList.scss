@@ -305,7 +305,7 @@
     }
   }
 
-  .spec-question-list-item.light {
+  .spec-question-list-item.question-theme-light {
     margin-bottom: 0;
 
     &:not(:first-child) {
@@ -328,6 +328,7 @@
   }
 
   .spec-question-list-item.question-type-estimation {
+    margin-bottom: - 4 * $base-unit;
     margin-top: -10 * $base-unit;
   }
 }
