@@ -1,14 +1,25 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 .container {
-  /* hide titles for questions which are immediate children of accordion like 'checkbox-group', 'radio-group' */
-  :global(.spec-question-list-item .content-col) > h5 {
-    display: none;
+  :global(.spec-question-list-item .content-col) {
+    /* hide titles for questions which are immediate children of accordion like 'checkbox-group', 'radio-group' */
+    > h5 {
+      display: none;
+    }
+
+    /* style of radio grop inside accordion */
+    :global(.radio-group-input.light) {
+      padding-top: 0;
+    }
   }
 
   /* hide main title for 'add-ons' */
   :global(.spec-question-list-item .content-col .child-component) h3 {
     display: none;
+  }
+
+  & + & {
+    margin-top: 2 * $base-unit;
   }
 }
 
@@ -28,9 +39,12 @@
 
 .title {
   @include roboto-bold;
-  flex: 0 0 160px;
+  flex: 0 0 180px;
   font-size: $tc-label-lg;
+  overflow: hidden;
   padding: 0 2 * $base-unit;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .value {
