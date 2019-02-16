@@ -79,7 +79,7 @@
     "webpack-merge": "^4.1.1"
   },
   "dependencies": {
-    "appirio-tech-react-components": "git+https://github.com/appirio-tech/react-components.git#feature/filestack-v3",
+    "appirio-tech-react-components": "git+https://github.com/maxceem/react-components.git#feature/connectv2-form-redesign",
     "axios": "^0.13.1",
     "classnames": "^2.2.3",
     "coffeescript": "^1.12.7",
