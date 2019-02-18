@@ -708,12 +708,20 @@
 
     .message-title {
       @include roboto;
-      font-size: 15px;
+      font-size: $tc-heading-xs;
       color: $tc-orange-70;
       line-height: 20px;
       padding-bottom: 10px;
       text-align: center;
       font-style: italic;
+    }
+
+    &.subSection-theme-light .message-title {
+      font-weight: 400;
+      color: $tc-gray-100;
+      line-height: 22px;
+      text-align: left;
+      font-style: normal;
     }
 
     textarea {
