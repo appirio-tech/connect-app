@@ -1,28 +1,30 @@
 import React from 'react'
-// import JSONInput from 'react-json-editor-ajrm'
-// import locale    from 'react-json-editor-ajrm/locale/en'
+
+import ace from 'brace'
+import 'brace/mode/json'
+import 'brace/theme/github'
+import { JsonEditor } from 'jsoneditor-react'
+// import 'jsoneditor-react/es/editor.min.css'
 
 import MobilePage from '../../../components/MobilePage/MobilePage'
 import './FullScreenJSONEditor.scss'
 
 const FullScreenJSONEditor = ({
-  // onJSONEdit,
+  onJSONEdit,
   onExit,
-  // json
+  json
 }) => (
   <MobilePage keepToolbar>
     <div styleName="full-screen-json-editor">
       <button type="button" className="tc-btn tc-btn-primary tc-btn-sm" onClick={onExit}>Restore</button>
-      {/* <JSONInput
-        id="jsonField"
-        placeholder ={ json }
-        theme="dark_vscode_tribute"
-        locale={ locale }
-        height="100%"
-        width="100%"
+      <JsonEditor
+        value={json}
+        ace={ace}
         onChange={onJSONEdit}
-        // onKeyPressUpdate={false}
-        waitAfterKeyPress={3000} */}
+        allowedModes={ ['code', 'tree', 'view']}
+        mode="code"
+        theme="ace/theme/github"
+        statusBar
       />
     </div>
   </MobilePage>

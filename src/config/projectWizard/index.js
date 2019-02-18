@@ -1,5 +1,8 @@
 import _ from 'lodash'
 import typeToSpecification from '../projectSpecification/typeToSpecification'
+import { evaluate } from '../../helpers/dependentQuestionsHelper'
+import { removeValuesOfHiddenNodes } from '../../helpers/wizardHelper'
+import { flatten } from 'flat'
 
 const products = {
   App: {
@@ -505,10 +508,35 @@ export function getProductEstimate(projectTemplate, productConfig) {
   let price = 0
   let minTime = 0
   let maxTime = 0
+  const flatProjectData = flatten(removeValuesOfHiddenNodes(projectTemplate, productConfig), { safe: true })
+  let priceConfig = {}
   if (projectTemplate) {
-    price = _.get(projectTemplate, 'scope.basePriceEstimate', 0)
-    minTime = _.get(projectTemplate, 'scope.baseTimeEstimateMin', 0)
-    maxTime = _.get(projectTemplate, 'scope.baseTimeEstimateMax', 0)
+    priceConfig = _.get(projectTemplate, 'scope.priceConfig')
+    const preparedConditions = _.get(projectTemplate, 'scope.preparedConditions', {})
+    const priceKey = _.findKey(priceConfig, (price, condition) => {
+      // console.log(condition, " : " + price)
+      let updatedCondition = condition
+      _.forOwn(preparedConditions, (cond, placeholder) => {
+        updatedCondition = _.replace(updatedCondition, placeholder, cond)
+      })
+      const result = evaluate(updatedCondition, flatProjectData)
+      // console.log(result)
+      if (result) {
+        console.log(condition, ' : ' + price)
+        console.log(flatProjectData)
+      }
+      return result
+    })
+    if (!priceKey) {
+      price = _.get(projectTemplate, 'scope.basePriceEstimate', 0)
+      minTime = _.get(projectTemplate, 'scope.baseTimeEstimateMin', 0)
+      maxTime = _.get(projectTemplate, 'scope.baseTimeEstimateMax', 0)
+    } else {
+      price = priceConfig[priceKey].price
+      minTime = priceConfig[priceKey].minTime
+      maxTime = priceConfig[priceKey].maxTime
+    }
+    // picks price from the first config for which condition holds true
   }
   const sections = projectTemplate.scope.sections
   if (sections) {
@@ -546,7 +574,8 @@ export function getProductEstimate(projectTemplate, productConfig) {
       }
     })
   }
-  return { priceEstimate: price, minTime, maxTime, durationEstimate: `${minTime}-${maxTime} days`}
+  const durationEstimate = minTime !== maxTime ? `${minTime}-${maxTime}` : `${minTime}`
+  return { priceEstimate: price, minTime, maxTime, durationEstimate: `${durationEstimate} days`}
 }
 
 /**
