@@ -5,9 +5,6 @@ import cn from 'classnames'
 
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
-// import ProjectEstimationSection from '../../detail/components/ProjectEstimationSection'
-import ModalControl from '../../../components/ModalControl'
-import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
 import HeaderWithProgress from './HeaderWithProgress'
 
 class FillProjectDetails extends Component  {
