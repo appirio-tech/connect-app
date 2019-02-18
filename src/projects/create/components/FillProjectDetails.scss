@@ -89,6 +89,13 @@
               box-shadow: 0px 1px 3px 0px $tc-gray-30;
               padding: 50px;
 
+              :global(.form-theme-light) & {
+                box-shadow: none;
+                padding-left: 65px;
+                padding-right: 65px;
+                padding-top: 30px;
+              }
+
               @media screen and (max-width: $screen-md - 1px) {
                 background-color: $tc-white;
                 border-radius: 0;

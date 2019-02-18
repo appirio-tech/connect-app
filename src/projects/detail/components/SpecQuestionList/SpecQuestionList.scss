@@ -316,27 +316,41 @@
       > h5 {
         > div {
           @include roboto;
-          color: $tc-gray-100;
-          font-size: $tc-label-sm;
-          font-weight: 400;
-          line-height: 15px;
+          font-size: $tc-heading-sm;
+          line-height: 25px;
 
           > span {
             display: none;
           }
         }
       }
+    }
 
-      > .child-component {
-        input, textarea {
-          color: $tc-gray-100;
-          font-size: $tc-body-md;
-          border-color: $tc-gray-05;
-          &:hover {
-            border-color: $tc-gray-30;
+    &.question-type-textinput,
+    &.question-type-textbox {
+      margin-top: 4 * $base-unit;
+
+      .content-col {
+        > h5 {
+          > div {
+            color: $tc-gray-100;
+            font-size: $tc-label-sm;
+            font-weight: 400;
+            line-height: 15px;
           }
-          &:focus {
-            box-shadow: none;
+        }
+
+        > .child-component {
+          input, textarea {
+            color: $tc-gray-100;
+            font-size: $tc-body-md;
+            border-color: $tc-gray-05;
+            &:hover {
+              border-color: $tc-gray-30;
+            }
+            &:focus {
+              box-shadow: none;
+            }
           }
         }
       }
