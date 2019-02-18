@@ -112,8 +112,9 @@ class Dialog extends React.Component {
   }
 
   render() {
-    const {members, currentUser, isMember, removeMember, onCancel, removeInvite, invites = []} = this.props
+    const {members, currentUser, isMember, removeMember, onCancel, removeInvite, approveOrDecline, invites = []} = this.props
     const showRemove = currentUser.isAdmin || (isMember && currentUser.isManager)
+    const showApproveDecline = currentUser.isCopilotManager
     let i = 0
     return (
       <Modal
@@ -226,6 +227,18 @@ class Dialog extends React.Component {
               const remove = () => {
                 removeInvite(invite)
               }
+              const approve = () => {
+                approveOrDecline({
+                  userId: invite.userId,
+                  status: 'accepted'
+                })
+              }
+              const decline = () => {
+                approveOrDecline({
+                  userId: invite.userId,
+                  status: 'refused'
+                })
+              }
               const firstName = _.get(invite.member, 'firstName', '')
               const lastName = _.get(invite.member, 'lastName', '')
               let userFullName = `${firstName} ${lastName}`
@@ -247,7 +260,14 @@ class Dialog extends React.Component {
                       @{invite.member.handle || 'ConnectUser'}
                     </span>
                   </div>
-                  {showRemove && <div className="member-remove" onClick={remove}>
+                  {showApproveDecline &&  <div className="member-remove">
+                    <span onClick={approve}>approve</span>
+                    <span onClick={decline}>decline</span>
+                    <span className="email-date">
+                      requested {moment(invite.createdAt).format('MMM D, YY')}
+                    </span>
+                  </div>}
+                  {!showApproveDecline && showRemove && <div className="member-remove" onClick={remove}>
                     Remove
                     <span className="email-date">
                       Invited {moment(invite.createdAt).format('MMM D, YY')}
@@ -269,7 +289,7 @@ class Dialog extends React.Component {
               disabled={(!currentUser.isAdmin && !isMember) || this.state.clearText}
             />
             { this.state.showAlreadyMemberError && <div className="error-message">
-                Project Member(s) can't be invited again. Please remove them from list.
+                'Project Member(s) can\'t be invited again. Please remove them from list.'
             </div> }
             <SelectDropdown
               name="role"
@@ -305,6 +325,7 @@ Dialog.propTypes = {
   changeRole: PT.func.isRequired,
   invites: PT.arrayOf(PT.object),
   addUsers: PT.func.isRequired,
+  approveOrDecline: PT.func.isRequired,
   removeInvite: PT.func.isRequired,
 }
 

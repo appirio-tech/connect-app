@@ -56,7 +56,7 @@ class TeamManagement extends React.Component {
       showNewMemberConfirmation, onJoin, onJoinConfirm, onShowProjectDialog, isShowProjectDialog,
       projectTeamInvites, onProjectInviteDeleteConfirm, onProjectInviteSend, deletingInvite, changeRole,
       onDeleteInvite, isShowTopcoderDialog, onShowTopcoderDialog, processingInvites, processingMembers,
-      onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, error
+      onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, onAcceptOrRefuse, error
     } = this.props
     const currentMember = members.filter((member) => member.userId === currentUser.userId)[0]
     const modalActive = isAddingTeamMember || deletingMember || isShowJoin || showNewMemberConfirmation || deletingInvite
@@ -196,8 +196,11 @@ class TeamManagement extends React.Component {
             />
           )
         })())}
-        {(!modalActive && isShowTopcoderDialog) && ((() => {
-          const onClickCancel = () => onShowTopcoderDialog(false)
+        {(!modalActive && (isShowTopcoderDialog || this.props.history.location.hash === '#manageTopcoderTeam')) && ((() => {
+          const onClickCancel = () => {
+            this.props.history.push(this.props.history.location.pathname)
+            onShowTopcoderDialog(false)
+          }
           const removeMember = (member) => {
             onMemberDelete(member)
           }
@@ -214,6 +217,7 @@ class TeamManagement extends React.Component {
               onCancel={onClickCancel}
               removeMember={removeMember}
               addUsers={onTopcoderInviteSend}
+              approveOrDecline={onAcceptOrRefuse}
               invites={topcoderTeamInvites}
               removeInvite={removeInvite}
               changeRole={changeRole}
@@ -369,6 +373,11 @@ TeamManagement.propTypes = {
    * Callback to send topcoder invitations
    */
   onTopcoderInviteSend: PropTypes.func,
+
+  /**
+   * Callback to accept or refuse invite
+   */
+  onAcceptOrRefuse: PropTypes.func,
 
   /**
    * Callback to send member role

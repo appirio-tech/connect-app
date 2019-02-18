@@ -23,6 +23,7 @@ class TeamManagementContainer extends Component {
     this.onTopcoderInviteSend = this.onTopcoderInviteSend.bind(this)
     this.onMemberDeleteConfirm = this.onMemberDeleteConfirm.bind(this)
     this.onJoinConfirm = this.onJoinConfirm.bind(this)
+    this.onAcceptOrRefuse = this.onAcceptOrRefuse.bind(this)
     this.changeRole = this.changeRole.bind(this)
   }
 
@@ -74,6 +75,10 @@ class TeamManagementContainer extends Component {
     this.props.inviteProjectMembers(this.props.projectId, emails, handles)
   }
 
+  onAcceptOrRefuse(invite) {
+    this.props.acceptOrRefuseInvite(this.props.projectId, invite)
+  }
+
   changeRole(memberId, item) {
     this.props.updateProjectMember(this.props.projectId, memberId, item)
   }
@@ -118,6 +123,7 @@ class TeamManagementContainer extends Component {
       <div>
         <TeamManagement
           {...this.state}
+          history={this.props.history}
           onUserInviteAction={this.onUserInviteAction}
           processingMembers={this.props.processingMembers}
           processingInvites={this.props.processingInvites}
@@ -129,6 +135,7 @@ class TeamManagementContainer extends Component {
           onMemberDeleteConfirm={this.onMemberDeleteConfirm}
           onJoinConfirm={this.onJoinConfirm}
           onProjectInviteDeleteConfirm={this.onProjectInviteDelete}
+          onAcceptOrRefuse={this.onAcceptOrRefuse}
           onProjectInviteSend={this.onProjectInviteSend}
           onTopcoderInviteDeleteConfirm={this.onTopcoderInviteDelete}
           onTopcoderInviteSend={this.onTopcoderInviteSend}

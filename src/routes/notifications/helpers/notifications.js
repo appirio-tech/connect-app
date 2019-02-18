@@ -66,10 +66,10 @@ export const renderGoTo = (goToHandlebars, contents) => (
 
 /**
  * Filter notifications by criteria
- * 
+ *
  * @param {Array}  notifications notifications list
  * @param {Object} criteria      criteria to filter notifications
- * 
+ *
  * @returns {Array} notifiations which meet the criteria
  */
 export const filterNotificationsByCriteria = (notifications, criteria) => {
@@ -85,7 +85,7 @@ export const isSubEqual = (object, criteria) => {
     } else {
       isEqual = !!object && value === object[key]
     }
-    
+
     return isEqual
   })
 
@@ -160,7 +160,7 @@ const compareSourcesByLastNotificationDate = (s1, s2) => {
 export const splitNotificationsBySources = (sources, notifications) => {
   const notificationsBySources = sources.map(source => {
     const sourceNotifications = _.filter(notifications, { sourceId: source.id })
-    
+
     return ({
       ...source,
       notifications: sourceNotifications,
@@ -290,6 +290,10 @@ const getNotificationRule = (notification) => {
       match = match && _notificationRule.toUserHandle
     }
 
+    if (notification.contents.creator) {
+      match = match && _notificationRule.creator
+    }
+
     if (notification.contents.projectRole) {
       match = match && _notificationRule.projectRoles && _.includes(_notificationRule.projectRoles, notification.contents.projectRole)
     }
@@ -318,7 +322,7 @@ const isNotificationRuleEqual = (rule1, rule2) => {
    *
    * @type {Array<String>}
    */
-  const ESSENTIAL_RULE_PROPERTIES = ['eventType', 'toTopicStarter', 'toUserHandle', 'projectRole', 'topcoderRole']
+  const ESSENTIAL_RULE_PROPERTIES = ['eventType', 'toTopicStarter', 'toUserHandle', 'projectRole', 'topcoderRole', 'creator']
   const essentialRule1 = _.pick(rule1, ESSENTIAL_RULE_PROPERTIES)
   const essentialRule2 = _.pick(rule2, ESSENTIAL_RULE_PROPERTIES)
 
@@ -410,7 +414,7 @@ export const prepareNotifications = (rawNotifications) => {
     contents: rawNotification.contents,
     version: rawNotification.version
   }))
-  
+
   // populate notifications with additional properties
   // - type
   // - goto
@@ -427,7 +431,7 @@ export const prepareNotifications = (rawNotifications) => {
       if (notificationRule.goTo) {
         notification.goto = renderGoTo(notificationRule.goTo, notification.contents)
       }
-  
+
       notification.rule = notificationRule
     }
   })
@@ -437,9 +441,9 @@ export const prepareNotifications = (rawNotifications) => {
 
 /**
  * Bundle notifications and renders notifications texts
- * 
+ *
  * @param {Array} notifications notifications list
- * 
+ *
  * @returns {Array} notifications list with rendered texts
  */
 export const preRenderNotifications = (notifications) => {
@@ -466,7 +470,7 @@ export const preRenderNotifications = (notifications) => {
   })
 
   const preRenderedNotifications = _.map(bundledNotificationsWithRules, 'notification')
-  
+
   // sort notifications by date (newer first)
   preRenderedNotifications.sort((n1, n2) => {
     const date1 = new Date(n1.date).getTime()
@@ -474,6 +478,6 @@ export const preRenderNotifications = (notifications) => {
 
     return date2 - date1
   })
-  
+
   return preRenderedNotifications
 }
