@@ -18,12 +18,14 @@ function HeaderWithProgress({project, template, currentWizardStep}) {
 
   return (
     <div styleName="HeaderWithProgress">
-      <div styleName="title-estimate">
-        <h3>{currentStep.title}</h3>
-        <div>From ${numberWithCommas(priceEstimate)}</div>
-      </div>
-      <div styleName="progress-bar">
-        <div styleName="progress" style={{width: (progress*100)+'%'}} />
+      <div styleName="content">
+        <div styleName="title-estimate">
+          <h3>{currentStep.title}</h3>
+          <div>From ${numberWithCommas(priceEstimate)}</div>
+        </div>
+        <div styleName="progress-bar">
+          <div styleName="progress" style={{width: (progress*100)+'%'}} />
+        </div>
       </div>
     </div>
   )

@@ -45,7 +45,7 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject, /* templates,*/ productTemplates, productCategories } = this.props
+    const { project, processing, submitBtnText, projectTemplates, dirtyProject, /* templates,*/ productTemplates, productCategories } = this.props
     const { currentWizardStep } = this.state
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
@@ -56,7 +56,11 @@ class FillProjectDetails extends Component  {
     let header = null
 
     if (!_.get(template, 'wizard.enabled')) {
-      header = <h1 dangerouslySetInnerHTML = {this.createMarkup(projectTemplate)} />
+      header = (
+        <div className="text-header-wrapper">
+          <h1 dangerouslySetInnerHTML = {this.createMarkup(projectTemplate)} />
+        </div>
+      )
     } else {
       const currentSection = currentWizardStep && template.sections[currentWizardStep.sectionIndex]
 
@@ -77,15 +81,8 @@ class FillProjectDetails extends Component  {
           [`form-theme-${template.theme}`]: template.theme
         })}
       >
-        {!!header && <div className="header headerFillProjectDetails" />}
         <div className="FillProjectDetails">
           <div className="header">
-            <ModalControl
-              className="back-button"
-              icon={<TailLeft className="icon-tail-left"/>}
-              label="back"
-              onClick={onBackClick}
-            />
             {header}
           </div>
           <section className="two-col-content content">

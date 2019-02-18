@@ -10,9 +10,7 @@ function WizardWrapper(props) {
         <ConnectLogo wrapperClass="top-logo with-text" title="CONNECT" />
       </div>
       <div styleName="content">
-        <div styleName="content-inner">
-          {props.children}
-        </div>
+        {props.children}
       </div>
     </div>
   )

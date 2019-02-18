@@ -3,7 +3,6 @@
 :global {
   .ProjectWizard {
     @media screen and (max-width: $screen-md - 1px) {
-      align-items: center;
       display: flex;
 
       &.ProjectWizard-step-5 {

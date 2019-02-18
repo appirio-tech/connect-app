@@ -1,13 +1,19 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 .HeaderWithProgress {
-  display: block;
-  width: calc(100% - 130px);
-  margin: -50px auto 30px;
+  background-color: $tc-gray-neutral-light;
+  padding: 30px 80px 20px;
+  width: 100%;
+
   @media screen and (max-width: $screen-md - 1px) {
-    margin: auto;
-    padding: 15px 0;
+    padding-top: 15px;
+    padding-bottom: 15px;
   }
+}
+
+.content {
+  margin: 0 auto;
+  max-width: 600px;
 }
 
 .title-estimate {

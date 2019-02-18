@@ -51,6 +51,11 @@
       @include roboto-light;
       font-size: 32px; // don't have a variable
       text-align: center;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        padding-left: 50px;
+        padding-right: 50px;
+      }
     }
   }
 }
