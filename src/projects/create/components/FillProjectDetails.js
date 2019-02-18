@@ -100,7 +100,7 @@ class FillProjectDetails extends Component  {
                     onStepChange={this.handleStepChange}
                     productCategories={productCategories}
                   />
-                  <ProjectEstimationSection project={dirtyProject} templates={templates} />
+                  {!_.get(template, 'wizard.enabled') && <ProjectEstimationSection project={dirtyProject} templates={templates} />}
                 </div>
                 {formDisclaimer && (
                   <div className="left-area-footer">
