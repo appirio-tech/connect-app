@@ -84,13 +84,10 @@
             position: relative;
 
             .left-area-content {
-              border-radius: 4px;
               background: $tc-white;
-              box-shadow: 0px 1px 3px 0px $tc-gray-30;
               padding: 50px;
 
               :global(.form-theme-light) & {
-                box-shadow: none;
                 padding-left: 65px;
                 padding-right: 65px;
                 padding-top: 30px;
