@@ -250,8 +250,8 @@ class MetaDataPanel extends React.Component {
         details: {appDefinition: {}}, version: 'v2'
       },
       dirtyProject: {details: {}, version: 'v2'},
-      fields: this.getFields(props),
-      metadata: this.getMetadata(props),
+      fields: _.cloneDeep(this.getFields(props)),
+      metadata: _.cloneDeep(this.getMetadata(props)),
       metadataType,
       isNew,
       isUpdating: templates.isLoading,
