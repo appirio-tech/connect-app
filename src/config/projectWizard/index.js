@@ -538,7 +538,7 @@ export function getProductEstimate(projectTemplate, productConfig) {
     }
     // picks price from the first config for which condition holds true
   }
-  const sections = projectTemplate.scope.sections
+  const sections = _.get(projectTemplate, 'scope.sections')
   if (sections) {
     sections.forEach((section) => {
       const subSections = section.subSections
