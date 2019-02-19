@@ -100,7 +100,7 @@ workflows:
             - test
           filters:
             branches:
-              only: ['dev', 'dev-msinteg', 'feature/attachmentPermissions']
+              only: ['dev', 'dev-msinteg', 'feature/form-redesign']
       - deployTest02:
           requires:
             - test
