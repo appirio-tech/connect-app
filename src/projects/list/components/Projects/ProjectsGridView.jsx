@@ -36,7 +36,7 @@ const ProjectsGridView = props => {
   const columns = [
     {
       id: 'id',
-      headerLabel: <ProjectListFilterColHeader setFilter={setFilter} title="ID" filterName="id" value={_.get(criteria, 'id', '')} />,
+      headerLabel: 'ID',
       classes: 'item-id',
       sortable: false,
       renderText: item => {
