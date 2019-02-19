@@ -9,21 +9,40 @@ import {AUTOCOMPLETE_TRIGGER_LENGTH} from '../../config/constants'
 /**
  * Render a searchable dropdown for selecting users that can be invited
  */
-const AutocompleteInput = ({
-  onUpdate,
-  placeholder,
-  selectedMembers,
-  disabled,
-  allMembers,
-}) => {
-  const onChange = (inputValue, selectedOptions = []) => {
+class AutocompleteInput extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.onChange = this.onChange.bind(this)
+    this.asyncOptions = this.asyncOptions.bind(this)
+
+    this.debounceTimer = null
+  }
+
+  // cannot use debounce method from lodash, because we have to return Promise
+  loadMemberSuggestionsDebounced(value) {
+    return new Promise((resolve) => {
+      if (this.debounceTimer) {
+        clearTimeout(this.debounceTimer)
+      }
+
+      this.debounceTimer = setTimeout(() => {
+        resolve(loadMemberSuggestions(value))
+      }, 500)
+    })
+  }
+
+  onChange(inputValue, selectedOptions = []) {
+    const { onUpdate } = this.props
 
     if (onUpdate) {
       onUpdate(selectedOptions)
     }
   }
 
-  const asyncOptions = (input) => {
+  asyncOptions(input) {
+    const { allMembers } = this.props
+
     const value =  typeof input === 'string' ? input : ''
     const createOption = {
       handle: value,
@@ -31,7 +50,7 @@ const AutocompleteInput = ({
       isEmail: (/(.+)@(.+){2,}\.(.+){2,}/).test(value),
     }
     if (value.length >= AUTOCOMPLETE_TRIGGER_LENGTH) {
-      return loadMemberSuggestions(value).then(r => {
+      return this.loadMemberSuggestionsDebounced(value).then(r => {
         // Remove current members from suggestions
         const suggestions = r.filter(suggestion => (
           findIndex(allMembers, (member) => member.handle === suggestion.handle) === -1 &&
@@ -49,20 +68,28 @@ const AutocompleteInput = ({
     return Promise.resolve({options: value.length > 0 ? [createOption] : []})
   }
 
-  return (
-    <div className="autocomplete-wrapper">
-      <Select
-        multi
-        placeholder={placeholder}
-        value={selectedMembers}
-        onChange={onChange}
-        asyncOptions={asyncOptions}
-        valueKey="handle"
-        labelKey="handle"
-        disabled={disabled}
-      />
-    </div>
-  )
+  render() {
+    const {
+      placeholder,
+      selectedMembers,
+      disabled,
+    } = this.props
+
+    return (
+      <div className="autocomplete-wrapper">
+        <Select
+          multi
+          placeholder={placeholder}
+          value={selectedMembers}
+          onChange={this.onChange}
+          asyncOptions={this.asyncOptions}
+          valueKey="handle"
+          labelKey="handle"
+          disabled={disabled}
+        />
+      </div>
+    )
+  }
 }
 
 AutocompleteInput.defaultProps = {
