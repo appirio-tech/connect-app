@@ -100,7 +100,7 @@ const SpecSection = props => {
     (subSection.questions || []).forEach(question => {
       if (question.type === 'tiled-radio-group') {
         question.options.forEach((option) => {
-          if (option.icon) {
+          if (option.icon && typeof option.icon === 'string') {
             // if icon is defined as a relative path to the icon, convert it to icon "id"
             const iconAsPath = option.icon.match(/(?:\.\.\/)+assets\/icons\/([^.]+)\.svg/)
             option.icon = tiledRadioGroupIcons[iconAsPath ? iconAsPath[1] : option.icon]
