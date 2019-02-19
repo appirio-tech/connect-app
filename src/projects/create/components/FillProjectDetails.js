@@ -4,7 +4,7 @@ import PT from 'prop-types'
 
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
-// import ProjectEstimationSection from '../../detail/components/ProjectEstimationSection'
+import ProjectEstimationSection from '../../detail/components/ProjectEstimationSection'
 import ModalControl from '../../../components/ModalControl'
 import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
 
@@ -37,7 +37,7 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject, /* templates,*/ productTemplates } = this.props
+    const { project, processing, submitBtnText, onBackClick, projectTemplates, dirtyProject, templates, productTemplates } = this.props
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
@@ -71,7 +71,7 @@ class FillProjectDetails extends Component  {
                     submitBtnText={ submitBtnText }
                     productTemplates={productTemplates}
                   />
-                  {/* <ProjectEstimationSection project={dirtyProject} templates={templates} /> */}
+                  <ProjectEstimationSection project={dirtyProject} templates={templates} />
                 </div>
                 {formDisclaimer && (
                   <div className="left-area-footer">

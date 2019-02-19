@@ -113,6 +113,13 @@ describe('Evaluate', () => {
       result.should.equal(true)
     })
 
+    it('contains \'a\' || contains \'b\'', () => {
+      const expression = 'someArrayWithText contains \'d\' && someArrayWithText contains \'b\''
+      const result = evaluate(expression, testData)
+
+      result.should.equal(false)
+    })
+
     it('contains \'a\' && hasLength (true) && contains \'b\'', () => {
       const expression = 'someArrayWithText contains \'a\' && someArrayWithText hasLength 3 && someArrayWithText contains \'b\''
       const result = evaluate(expression, testData)
