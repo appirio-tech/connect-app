@@ -46,6 +46,9 @@ class Dialog extends React.Component {
       value: 'copilot',
       disabled: !(currentUser.isCopilotManager || currentUser.isAdmin),
       toolTipMessage: !(currentUser.isCopilotManager || currentUser.isAdmin) ? 'Only Connect Copilot Managers can invite copilots.' : null,
+    }, {
+      title: 'Account Manager',
+      value: 'account_manager',
     }]
     this.setState({
       members: this.props.members
@@ -180,7 +183,7 @@ class Dialog extends React.Component {
                         </div>
                       )
                     }
-                    const types = ['Observer', 'Copilot', 'Manager']
+                    const types = ['Observer', 'Copilot', 'Manager', 'Account Manager']
                     const currentType = role
                     const onClick = (type) => {
                       this.onUserRoleChange(member.userId, member.id, type)
