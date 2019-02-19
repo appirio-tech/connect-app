@@ -250,8 +250,8 @@ class MetaDataPanel extends React.Component {
         details: {appDefinition: {}}, version: 'v2'
       },
       dirtyProject: {details: {}, version: 'v2'},
-      fields: _.cloneDeep(this.getFields(props)),
-      metadata: _.cloneDeep(this.getMetadata(props)),
+      fields: this.getFields(props),
+      metadata: this.getMetadata(props),
       metadataType,
       isNew,
       isUpdating: templates.isLoading,
@@ -532,6 +532,14 @@ class MetaDataPanel extends React.Component {
       templateSections = template.questions
       needTemplatePreview = true
     }
+    // FIXME
+    // if we don't clone templateSections then during rendering form preview they will be mutated
+    // - React object will be added here
+    //   https://github.com/appirio-tech/connect-app/blob/feature/form-redesign/src/projects/detail/components/SpecQuestions.jsx#L138,
+    //   which would lead to circular reference in JSON editor
+    // - also it would lead to some artificial parts be added to the JSON editor and later saved
+    // we should do other way rather than clone it on each render
+    templateSections = _.cloneDeep(templateSections)
     // console.log(templates)
 
     if (!isAdmin) {
