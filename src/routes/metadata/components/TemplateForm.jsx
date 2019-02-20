@@ -5,8 +5,11 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'react-modal'
-import JSONInput from 'react-json-editor-ajrm'
-import locale    from 'react-json-editor-ajrm/locale/en'
+import ace from 'brace'
+import 'brace/mode/json'
+import 'brace/theme/github'
+import { JsonEditor } from 'jsoneditor-react'
+import 'jsoneditor-react/es/editor.min.css'
 import SelectDropdown from '../../../components/SelectDropdown/SelectDropdown'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
@@ -170,14 +173,12 @@ class TemplateForm extends Component {
         {
           isJSON && (
             <div className="json_editor_wrapper">
-              <JSONInput
-                id={ `${label}JSON` }
-                placeholder ={ value }
-                theme="dark_vscode_tribute"
-                locale={ locale }
-                height="250px"
-                // width='0px'
-                onChange={ (params) => { this.onJSONEdit(field, params) } }
+              <JsonEditor
+                value={value}
+                ace={ace}
+                allowedModes={ ['code', 'tree', 'view']}
+                theme="ace/theme/github"
+                onChange={(json) => { this.onJSONEdit(field, json) }}
               />
             </div>
           )
@@ -287,7 +288,7 @@ class TemplateForm extends Component {
     }
   }
 
-  onJSONEdit(field, { jsObject }) {
+  onJSONEdit(field, jsObject) {
     const { values } = this.state
     // const type = field['type']
     const label = field['key']

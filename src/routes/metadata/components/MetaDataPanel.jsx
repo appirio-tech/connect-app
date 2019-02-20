@@ -3,13 +3,16 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import JSONInput from 'react-json-editor-ajrm'
-import locale    from 'react-json-editor-ajrm/locale/en'
+
+import ace from 'brace'
+import 'brace/mode/json'
+import 'brace/theme/github'
+import { JsonEditor } from 'jsoneditor-react'
+import 'jsoneditor-react/es/editor.min.css'
 import _ from 'lodash'
 import update from 'react-addons-update'
 import Sticky from '../../../components/Sticky'
 import MediaQuery from 'react-responsive'
-// import ReactJson from 'react-json-view'
 import SpecSection from '../../../projects/detail/components/SpecSection'
 import TemplateForm from './TemplateForm'
 import CoderBroken from '../../../assets/icons/coder-broken.svg'
@@ -466,11 +469,7 @@ class MetaDataPanel extends React.Component {
     })
   }
 
-  onJSONEdit({ jsObject, error }) {
-    if (error) {
-      return
-    }
-
+  onJSONEdit(jsObject) {
     const { metadataType } = this.state
     if (metadataType === 'productTemplate') {
       const updateQuery = { template : { $set : jsObject } }
@@ -586,25 +585,13 @@ class MetaDataPanel extends React.Component {
           { (metadata || isNew) && (['projectTemplate', 'productTemplate'].indexOf(metadataType) !== -1)  && (
             <div className="json_editor_wrapper">
               <button type="button" className="tc-btn tc-btn-primary tc-btn-sm maximize-btn" onClick={this.enterFullScreen}>Maximize</button>
-              <JSONInput
-                id="templateJSON"
-                placeholder ={ template }
-                theme="dark_vscode_tribute"
-                locale={ locale }
-                height="450px"
-                // width='340px'
+              <JsonEditor
+                value={template}
+                ace={ace}
                 onChange={this.onJSONEdit}
+                allowedModes={ ['code', 'tree', 'view']}
+                theme="ace/theme/github"
               />
-              {/* <ReactJson
-                src={template}
-                theme="rjv-default"
-                onEdit={this.onJSONEdit}
-                onAdd={this.onJSONEdit}
-                onDelete={this.onJSONEdit}
-                collapsed={3}
-                indentWidth={2}
-                collapseStringsAfterLength={20}
-              /> */}
             </div>
           )
           }

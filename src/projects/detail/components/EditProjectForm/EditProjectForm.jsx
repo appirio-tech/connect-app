@@ -16,7 +16,7 @@ import XMarkIcon from  '../../../../assets/icons/icon-x-mark.svg'
 import SpecSection from '../SpecSection'
 import { HOC as hoc } from 'formsy-react'
 import {
-  initWizard,
+  // initWizard,
   updateStepsByConditions,
   makeStepEditable,
   makeStepReadonly,
@@ -78,10 +78,16 @@ class EditProjectForm extends Component {
     this.stopEditReadOnly = this.stopEditReadOnly.bind(this)
     this.cancelEditReadOnly = this.cancelEditReadOnly.bind(this)
 
-    const {
-      template,
-      hasDependantFields,
-    } = initWizard(props.template, props.project, null, true)
+    // const {
+    //   template,
+    //   hasDependantFields,
+    // } = initWizard(props.template, props.project, null, true)
+    // This is a quick fix to disable read-optimized mode for scope/specification page as we wouldn't use it
+    // I didn't remove the code to not make a big change the day before release,
+    // also, at the same time there is a challenge run where this code should be removed
+    // so I don't make a lot of changes now, so after we can easily merge result of the challenge with the dev branch
+    const hasDependantFields = false
+    const template = props.template
 
     this.state = {
       template,

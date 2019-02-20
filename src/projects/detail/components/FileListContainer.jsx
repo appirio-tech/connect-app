@@ -110,8 +110,10 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = ({ members, projectState, loadUser }) => {
+  const project = projectState.project
+  const projectMembers = _.filter(members.members, m => _.some(project.members, pm => pm.userId === m.userId))
   return {
-    allMembers: members.members,
+    allMembers:  _.keyBy(projectMembers, 'userId'),
     pendingAttachments: projectState.attachmentsAwaitingPermission,
     attachmentPermissions: projectState.attachmentPermissions,
     loggedInUser: loadUser.user,
