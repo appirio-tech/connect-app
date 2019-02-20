@@ -176,6 +176,7 @@ class TemplateForm extends Component {
               <JsonEditor
                 value={value}
                 ace={ace}
+                mode="code"
                 allowedModes={ ['code', 'tree', 'view']}
                 theme="ace/theme/github"
                 onChange={(json) => { this.onJSONEdit(field, json) }}

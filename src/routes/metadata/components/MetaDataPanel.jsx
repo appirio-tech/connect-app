@@ -597,6 +597,7 @@ class MetaDataPanel extends React.Component {
                 value={template}
                 ace={ace}
                 onChange={this.onJSONEdit}
+                mode="code"
                 allowedModes={ ['code', 'tree', 'view']}
                 theme="ace/theme/github"
               />
