@@ -542,18 +542,19 @@ class MetaDataPanel extends React.Component {
     templateSections = _.cloneDeep(templateSections)
     // console.log(templates)
 
-    if (!isAdmin) {
-      return (
-        <section className="content content-error">
-          <div className="container">
-            <div className="page-error">
-              <CoderBroken className="icon-coder-broken" />
-              <span>You don't have permission to access Metadata Management</span>
-            </div>
-          </div>
-        </section>
-      )
-    }
+    // TODO uncomment temporary let non-admin user see metadata (they still couldn't save because server will reject)
+    // if (!isAdmin) {
+    //   return (
+    //     <section className="content content-error">
+    //       <div className="container">
+    //         <div className="page-error">
+    //           <CoderBroken className="icon-coder-broken" />
+    //           <span>You don't have permission to access Metadata Management</span>
+    //         </div>
+    //       </div>
+    //     </section>
+    //   )
+    // }
 
     return (
       <div className="meta-data-panel">
