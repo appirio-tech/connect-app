@@ -540,7 +540,7 @@ export const PROJECTS_LIST_VIEW = {
  */
 export const PROJECT_ROLE_COPILOT = 'copilot'
 export const PROJECT_ROLE_MANAGER = 'manager'
-export const PROJECT_ACCOUNT_MANAGER = 'account_manager'
+export const PROJECT_ROLE_ACCOUNT_MANAGER = 'account_manager'
 export const PROJECT_ROLE_CUSTOMER = 'customer'
 export const PROJECT_ROLE_OWNER = 'owner'
 export const PROJECT_ROLE_MEMBER = 'member' // this is need for notifications
