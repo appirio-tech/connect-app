@@ -52,19 +52,19 @@ class ProjectTemplatesContainer extends React.Component {
       error,
     } = this.props
     const { criteria } = this.state
-    // TODO uncomment temporary let non-admin user see metadata (they still couldn't save because server will reject)
-    // if (!isAdmin) {
-    //   return (
-    //     <section className="content content-error">
-    //       <div className="container">
-    //         <div className="page-error">
-    //           <CoderBroken className="icon-coder-broken" />
-    //           <span>You don't have permission to access Metadata Management</span>
-    //         </div>
-    //       </div>
-    //     </section>
-    //   )
-    // }
+    // TODO remove: temporary let non-admin user see metadata (they still couldn't save because server will reject)
+    if (!isAdmin || isAdmin) {
+      return (
+        <section className="content content-error">
+          <div className="container">
+            <div className="page-error">
+              <CoderBroken className="icon-coder-broken" />
+              <span>You don't have permission to access Metadata Management</span>
+            </div>
+          </div>
+        </section>
+      )
+    }
     return (
       <div>
         <ProjectTemplatesGridView
