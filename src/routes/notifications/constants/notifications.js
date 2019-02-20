@@ -238,22 +238,22 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.MEMBER.COPILOT_REFUSED,
+    eventType: EVENT_TYPE.MEMBER.INVITE_REFUSED,
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
-      text: 'Your request to add invite the copilot was refused',
+      text: 'Your request to add invite the member was refused',
       creator: true,
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
 
   {
-    eventType: EVENT_TYPE.MEMBER.COPILOT_JOINED,
+    eventType: EVENT_TYPE.MEMBER.INVITE_APPROVED,
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
-      text: 'A copilot joined your project team',
+      text: 'A member joined your project team',
       shouldBundle: true,
-      bundledText: '{{bundledCount}} copilots joined your project team',
+      bundledText: '{{bundledCount}} members joined your project team',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
