@@ -15,16 +15,16 @@ function ProjectEstimation({ question, project, template }) {
   const isSelected = (item) => evaluate(item.enableCondition, flatten(project, { safe: true }))
   const totalDuration = _.sumBy(question.deliverables, 'duration')
   const phasesEnabled = question.deliverables.filter(isSelected)
-  const enabledDuration = _.sumBy(phasesEnabled, 'duration')
+  // const enabledDuration = _.sumBy(phasesEnabled, 'duration')
 
-  const { priceEstimate } = getProductEstimate({scope: template}, project)
+  const { priceEstimate, durationEstimate } = getProductEstimate({scope: template}, project)
 
   return (
     <div styleName="ProjectEstimation">
       <div styleName="title">
         <h5>{question.title}</h5>
         <span>{phasesEnabled.length ? (
-          phasesEnabled.length + ' phases, ' + enabledDuration + ' weeks'
+          phasesEnabled.length + ' phases, ' + durationEstimate
         ) : (
           'No phase selected'
         )}</span>

@@ -72,7 +72,7 @@ class ProjectBasicDetailsForm extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     return !(
       _.isEqual(nextProps.project, this.props.project)
-     && _.isEqual(nextProps.dirty, this.props.dirty)
+     && _.isEqual(nextProps.dirtyProject, this.props.dirtyProject)
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextState.canSubmit, this.state.canSubmit)
      && _.isEqual(nextState.template, this.state.template)
