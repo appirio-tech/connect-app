@@ -127,14 +127,14 @@ class EditProjectForm extends Component {
     if (this.state.hasDependantFields && !_.isEqual(this.props.project, nextProps.project)) {
       const {
         updatedTemplate,
-        updatedSomeSteps,
-        hidedSomeSteps
+        updatedSomeNodes,
+        hidedSomeNodes
       } = updateNodesByConditions(this.state.template, nextProps.project)
 
-      if (updatedSomeSteps) {
+      if (updatedSomeNodes) {
         this.setState({
           template: updatedTemplate,
-          project: hidedSomeSteps ? nextProps.project : this.state.project,
+          project: hidedSomeNodes ? nextProps.project : this.state.project,
         })
       }
     }
@@ -176,9 +176,7 @@ class EditProjectForm extends Component {
   }
 
   isChanged() {
-    // We check if this.refs.form exists because this may be called before the
-    // first render, in which case it will be undefined.
-    return (this.refs.form && this.refs.form.isChanged()) || this.state.isFeaturesDirty
+    return !!this.props.project.isDirty
   }
 
   enableButton() {
@@ -231,11 +229,7 @@ class EditProjectForm extends Component {
    * @param isChanged flag that indicates if form actually changed from initial model values
    */
   handleChange(change) {
-    if (this.isChanged()) {
-      this.props.fireProjectDirty(unflatten(change))
-    } else {
-      this.props.fireProjectDirtyUndo()
-    }
+    this.props.fireProjectDirty(unflatten(change))
   }
 
   makeDeliveredPhaseReadOnly(projectStatus) {
