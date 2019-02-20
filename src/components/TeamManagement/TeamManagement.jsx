@@ -171,6 +171,7 @@ class TeamManagement extends React.Component {
               content={JOIN_MESSAGE}
               buttonText="Join project"
               buttonColor="blue"
+              showRoleSelector
             />
           )
         })())}

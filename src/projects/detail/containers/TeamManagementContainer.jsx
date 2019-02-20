@@ -12,6 +12,7 @@ import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_COPILOT_MANAGER,
   ROLE_CONNECT_MANAGER,
+  PROJECT_ROLE_ACCOUNT_MANAGER
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import {
@@ -68,9 +69,9 @@ class TeamManagementContainer extends Component {
     this.setState({isUserLeaving: isLeaving})
   }
 
-  onJoinConfirm() {
-    const {currentUser, projectId, addProjectMember} = this.props
-    const role = currentUser.isCopilot ? PROJECT_ROLE_COPILOT : PROJECT_ROLE_MANAGER
+  onJoinConfirm(role) {
+    const { currentUser, projectId, addProjectMember } = this.props
+    role = role || currentUser.isCopilot ? PROJECT_ROLE_COPILOT : PROJECT_ROLE_MANAGER
     addProjectMember(
       projectId,
       {userId: currentUser.userId, role}
@@ -114,6 +115,9 @@ class TeamManagementContainer extends Component {
         m.isPrimary = m.isPrimary || false
         break
       case PROJECT_ROLE_MANAGER:
+        m.isManager = true
+        break
+      case PROJECT_ROLE_ACCOUNT_MANAGER:
         m.isManager = true
         break
       }
