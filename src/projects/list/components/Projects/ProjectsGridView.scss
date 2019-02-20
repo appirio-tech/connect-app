@@ -21,7 +21,11 @@ $screen-one-column: 720px;
       .item-projects {
         flex: 8 1 505px;
         min-width: 505px;
-        overflow: hidden;
+      }
+
+      .item-ref-code {
+        flex: 1 3 142px;
+        min-width: 142px;
       }
 
       .item-status-date {
@@ -32,7 +36,6 @@ $screen-one-column: 720px;
       .item-customer {
         flex: 2 2 150px;
         min-width: 150px;
-        
         .spacing {
           width: 100%;
         }
@@ -115,6 +118,17 @@ $screen-one-column: 720px;
                   }
                 }
               }
+
+              .filter-drop-down {
+                a.dropdown-menu-header.txt-link {
+                  font-size: 13px;
+                  color: $tc-gray-50;
+
+                  &:focus {
+                    color: $tc-dark-blue;
+                  }
+                }
+              }
             }
           }
         }
@@ -178,19 +192,6 @@ $screen-one-column: 720px;
                 @include roboto-medium;
                 color: $tc-black;
                 font-size: 15px;
-              }
-
-              .item-ref-code {
-                flex: none;
-                justify-content: flex-end;
-                background: $tc-gray-10;
-                @include roboto-medium;
-                font-size: 13px;
-                color: $tc-gray-50;
-                border-radius: 2px;
-                line-height: 20px;
-                padding: 0px 2 * $base-unit;
-                cursor: pointer;
               }
             }
 
@@ -588,6 +589,54 @@ $screen-one-column: 720px;
           }
         }
       }
+    }
+  }
+
+  .filter-drop-down {
+    position: relative;
+    display: inline-block;
+    margin-left: 0px;
+
+    a {
+      outline: 0;
+    }
+
+    .txt-link {
+      position: relative;
+      padding-right: 16px;
+      display: block;
+      z-index: 3;
+
+      &:focus {
+        color: $tc-dark-blue;
+        outline: 0;
+        z-index: 3;
+      }
+
+      .icon-carret-down-normal {
+        font-size: 0;
+        line-height: 0;
+        width: 10px;
+        height: 6px;
+        content: "";
+        display: block;
+        position: absolute;
+        top: 5px;
+        right: 0;
+      }
+    }
+
+    .down-layer {
+      background: $tc-white;
+      border-radius: 5px;
+      min-width: 130px;
+      min-height: 45px;
+      position: absolute;
+      top: -18px;
+      left: -20px;
+      box-shadow: 0 0 10px rgba($tc-black, 0.2);
+      z-index: 3;
+      padding: 32px 5px 10px;
     }
   }
 }
