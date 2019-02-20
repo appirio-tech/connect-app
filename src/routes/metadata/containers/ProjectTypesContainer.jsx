@@ -53,7 +53,7 @@ class ProjectTypesContainer extends React.Component {
     } = this.props
     const { criteria } = this.state
     // TODO remove: temporary let non-admin user see metadata (they still couldn't save because server will reject)
-    if (!isAdmin || isAdmin) {
+    if (!isAdmin && isAdmin) {
       return (
         <section className="content content-error">
           <div className="container">
