@@ -3,86 +3,59 @@ import React from 'react'
 import PT from 'prop-types'
 import moment from 'moment'
 import Modal from 'react-modal'
-import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
+import XMarkIcon from '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
-import { getAvatarResized } from '../../helpers/tcHelpers'
-import FormsyForm from 'appirio-tech-react-components/components/Formsy'
-import { INVITE_CUSTOMER_FAILURE } from '../../config/constants'
-const TCFormFields = FormsyForm.Fields
+import {getAvatarResized} from '../../helpers/tcHelpers'
+import AutocompleteInput from './AutocompleteInput'
 
 class Dialog extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      inviteText: '',
-      validInviteText: false,
       clearText: false,
       showAlreadyMemberError: false,
       invitedMembers: {},
       members: {}
     }
     this.onChange = this.onChange.bind(this)
-    this.sendInvites = this.sendInvites.bind(this)
   }
 
-  componentWillMount(){
+  componentWillMount() {
     this.setState({
       invitedMembers: this.props.invites,
       members: this.props.members
     })
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.state.clearText && nextProps.processingInvites !== this.props.processingInvites &&
-      !nextProps.processingInvites) {
-      this.setState((prevState) => ({
-        inviteText: nextProps.error && nextProps.error.type === INVITE_CUSTOMER_FAILURE ? prevState.inviteText : '',
-        validInviteText: false,
-        clearText: false,
-      }))
-    }
-  }
-
-  onChange(currentValues) {
-    const text = currentValues.emails
-    const invites = text.split(/[,;]/g)
-    const handles = invites.filter((invite) => invite.startsWith('@')).map((invite) => invite.substring(1))
-    const isValid = invites.every(invite => {
-      invite = invite.trim()
-      return  invite.length > 1 && (/(.+)@(.+){2,}\.(.+){2,}/.test(invite) || invite.startsWith('@'))
-    })
-    let present = _.some(this.state.invitedMembers, invited => invites.indexOf(invited.email) > -1)
+  onChange(selectedMembers) {
+    // If a member invited with email exists in selectedMembers
+    let present = _.some(this.state.invitedMembers, invited => _.findIndex(selectedMembers,
+      selectedMember => selectedMember.isEmail && selectedMember.handle === invited.email) > -1)
+    // If a member invited with handle exists in selectedMembers
     present = present || _.some(this.state.invitedMembers, invited => {
       if (!invited.member) {
         return false
       }
-      return handles.indexOf(invited.member.handle) > -1
+      return _.findIndex(selectedMembers,
+        selectedMember => !selectedMember.isEmail && selectedMember.handle === invited.member.handle) > -1
     })
-    present = present || _.some(this.state.members, member => handles.indexOf(member.handle) > -1)
+    // If members exist in selectedMembers
+    present = present || _.some(this.state.members, m => _.findIndex(selectedMembers,
+      selectedMember => selectedMember.handle === m.handle) > -1)
     this.setState({
-      validInviteText: !present && isValid && text.trim().length > 0,
-      inviteText: currentValues.emails,
+      validInviteText: !present,
       showAlreadyMemberError: present
     })
-  }
-
-  // SEND INVITES
-  sendInvites() {
-    let invites = this.state.inviteText.split(/[,;]/g)
-    invites = invites.map(invite => invite.trim())
-    //emails = emails.filter((email) => /(.+)@(.+){2,}\.(.+){2,}/.test(email))
-    let handles = invites.filter((invite) => (invite.startsWith('@') && invite.length > 1))
-    handles = handles.map(handle => handle.replace(/^@/, ''))
-    const emails = invites.filter((invite) => (!invite.startsWith('@') && invite.length > 1))
-
-    this.props.sendInvite(emails, handles)
-    this.setState({clearText: true})
+    this.props.onSelectedMembersUpdate(selectedMembers)
   }
 
   render() {
-    const {members, currentUser, isMember, removeMember, removeInvite,
-      onCancel, invites = []} = this.props
+    const {
+      members, currentUser, isMember, removeMember, removeInvite,
+      onCancel, invites = [], selectedMembers, processingInvites
+    } = this.props
     const showRemove = currentUser.isAdmin || (!currentUser.isCopilot && isMember)
+    const allMembers = [...members, ...invites.map(i => i.member)]
     let i = 0
     return (
       <Modal
@@ -96,7 +69,7 @@ class Dialog extends React.Component {
         <div className="project-dialog">
           <div className="dialog-title">
             Project team
-            <span onClick={onCancel}><XMarkIcon /></span>
+            <span onClick={onCancel}><XMarkIcon/></span>
           </div>
 
           <div className="dialog-body">
@@ -115,7 +88,7 @@ class Dialog extends React.Component {
               return (
                 <div
                   key={i}
-                  className={`project-member-layout ${(i%2 !== 0) ? 'dark' : ''}`}
+                  className={`project-member-layout ${(i % 2 !== 0) ? 'dark' : ''}`}
                 >
 
                   <div className="memer-details">
@@ -150,7 +123,7 @@ class Dialog extends React.Component {
               return (
                 <div
                   key={i}
-                  className={`project-member-layout ${(i%2 !== 0) ? 'dark' : ''}`}
+                  className={`project-member-layout ${(i % 2 !== 0) ? 'dark' : ''}`}
                 >
                   <Avatar
                     userName={invite.email || userFullName}
@@ -175,27 +148,28 @@ class Dialog extends React.Component {
             }))}
           </div>
 
-          <Formsy.Form className="input-container" onValidSubmit={this.sendInvites} onChange={this.onChange} >
+          <div className="input-container">
             <div className="hint">invite more people</div>
-            <TCFormFields.TextInput
-              name="emails"
-              wrapperClass="inviteTextInput"
-              type="text"
-              value={this.state.inviteText}
-              placeholder="Enter one or more emails or user handles separated by ';' or comma ','"
-              disabled={(!currentUser.isAdmin && !isMember) || this.state.clearText}
+            <AutocompleteInput
+              placeholder="Enter one or more emails or user handles"
+              onUpdate={this.onChange}
+              currentUser={currentUser}
+              selectedMembers={selectedMembers}
+              disabled={processingInvites || (!currentUser.isAdmin && !isMember)}
+              allMembers={allMembers}
             />
-            { this.state.showAlreadyMemberError && <div className="error-message">
-                Project Member(s) can't be invited again. Please remove them from list.
-            </div> }
+            {this.state.showAlreadyMemberError && <div className="error-message">
+              Project Member(s) can't be invited again. Please remove them from list.
+            </div>}
             <button
               className="tc-btn tc-btn-primary tc-btn-md"
               type="submit"
-              disabled={!this.state.validInviteText || this.state.clearText}
+              disabled={processingInvites || !this.state.validInviteText || this.state.clearText}
+              onClick={this.props.sendInvite}
             >
               Send Invite
             </button>
-          </Formsy.Form>
+          </div>
         </div>
 
       </Modal>
@@ -203,8 +177,12 @@ class Dialog extends React.Component {
   }
 }
 
+Dialog.defaultProps = {
+  invites: [],
+  members: []
+}
+
 Dialog.propTypes = {
-  processingInvites: PT.bool.isRequired,
   error: PT.oneOfType([PT.object, PT.bool]),
   currentUser: PT.object.isRequired,
   members: PT.arrayOf(PT.object).isRequired,
@@ -214,6 +192,9 @@ Dialog.propTypes = {
   invites: PT.arrayOf(PT.object),
   sendInvite: PT.func.isRequired,
   removeInvite: PT.func.isRequired,
+  onSelectedMembersUpdate: PT.func.isRequired,
+  selectedMembers: PT.arrayOf(PT.object),
+  processingInvites: PT.bool.isRequired,
 }
 
 export default Dialog
