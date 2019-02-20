@@ -40,6 +40,7 @@ class Projects extends Component {
     this.onPageChange = this.onPageChange.bind(this)
     this.applyFilters = this.applyFilters.bind(this)
     this.applySearchFilter = this.applySearchFilter.bind(this)
+    this.setFilter = this.setFilter.bind(this)
     this.changeView = this.changeView.bind(this)
     this.init = this.init.bind(this)
     this.removeScrollPosition = this.removeScrollPosition.bind(this)
@@ -164,6 +165,19 @@ class Projects extends Component {
     this.routeWithParams(criteria)
   }
 
+  setFilter(name, filter) {
+    let criteria = _.assign({}, this.props.criteria)
+    if(filter && filter !== '') {
+      const temp = {}
+      temp[`${name}`] = `*${filter}*`
+      criteria = _.assign({}, criteria, temp)
+    } else if(_.has(criteria, name)){
+      criteria = _.omit(criteria, name)
+    }
+
+    this.props.loadProjects(criteria)
+  }
+
   changeView(view) {
     this.setState({selectedView : view})
   }
@@ -198,6 +212,8 @@ class Projects extends Component {
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
         newProjectLink={getNewProjectLink(orgConfig)}
+        setFilter={this.setFilter}
+        criteria={criteria}
       />
     )
     const cardView = (
