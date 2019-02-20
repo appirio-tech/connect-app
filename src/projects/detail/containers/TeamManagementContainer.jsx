@@ -6,7 +6,7 @@ import _ from 'lodash'
 import {
   ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN,
   PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_CUSTOMER, ROLE_CONNECT_COPILOT_MANAGER,
-  PROJECT_ACCOUNT_MANAGER,
+  PROJECT_ROLE_ACCOUNT_MANAGER,
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import { addProjectMember, updateProjectMember, removeProjectMember,
@@ -96,7 +96,7 @@ class TeamManagementContainer extends Component {
       case PROJECT_ROLE_MANAGER:
         m.isManager = true
         break
-      case PROJECT_ACCOUNT_MANAGER:
+      case PROJECT_ROLE_ACCOUNT_MANAGER:
         m.isManager = true
         break
       }
