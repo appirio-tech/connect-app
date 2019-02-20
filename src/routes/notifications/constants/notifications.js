@@ -224,7 +224,7 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.MEMBER.COPILOT_ADDED,
+    eventType: EVENT_TYPE.MEMBER.INVITE_APPROVED,
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
       text: 'You are added as a copilot',
@@ -248,12 +248,12 @@ export const NOTIFICATIONS = [
   },
 
   {
-    eventType: EVENT_TYPE.MEMBER.INVITE_APPROVED,
+    eventType: EVENT_TYPE.MEMBER.COPILOT_JOINED,
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
-      text: 'A member joined your project team',
+      text: 'A  copilot joined your project team',
       shouldBundle: true,
-      bundledText: '{{bundledCount}} members joined your project team',
+      bundledText: '{{bundledCount}} copilots joined your project team',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
