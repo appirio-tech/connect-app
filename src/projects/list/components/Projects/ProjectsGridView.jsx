@@ -8,6 +8,7 @@ import {
   filterNotificationsByProjectId,
 } from '../../../../routes/notifications/helpers/notifications'
 import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
+import ProjectListFilterColHeader from './ProjectListFilterColHeader'
 import GridView from '../../../../components/Grid/GridView'
 import UserTooltip from '../../../../components/User/UserTooltip'
 import { PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED, DATE_TO_USER_FIELD_MAP } from '../../../../config/constants'
@@ -26,7 +27,7 @@ const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 const ProjectsGridView = props => {
   const { projects, members, totalCount, criteria, pageNum, sortHandler, currentUser, onPageChange,
     error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus,
-    applyFilters, projectTemplates, notifications, newProjectLink } = props
+    applyFilters, projectTemplates, notifications, newProjectLink, setFilter } = props
 
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
@@ -70,12 +71,11 @@ const ProjectsGridView = props => {
       }
     }, {
       id: 'projects',
-      headerLabel: 'Project',
+      headerLabel: <ProjectListFilterColHeader setFilter={setFilter} title="Project" filterName="name" value={_.get(criteria, 'name', '')} />,
       classes: 'item-projects',
       sortable: false,
       renderText: item => {
         const url = `/projects/${item.id}`
-        const code = _.get(item, 'details.utm.code', '')
         // project notifications
         const notReadNotifications = filterReadNotifications(notifications)
         const unreadProjectUpdate = filterNotificationsByProjectId(notReadNotifications, item.id)
@@ -85,7 +85,6 @@ const ProjectsGridView = props => {
             {(recentlyCreated || unreadProjectUpdate.length > 0) && <span className="blue-border" />}
             <div className="project-title">
               <Link to={url} className="link-title">{_.unescape(item.name)}</Link>
-              {code && <span className="item-ref-code txt-gray-md" onClick={() => { applyFilters({ keyword: code }) }} dangerouslySetInnerHTML={{ __html: code }} />}
             </div>
             <Link to={url}>
               <TextTruncate
@@ -95,6 +94,19 @@ const ProjectsGridView = props => {
                 text={_.unescape(item.description)}
               />
             </Link>
+          </div>
+        )
+      }
+    }, {
+      id: 'reference',
+      headerLabel: <ProjectListFilterColHeader setFilter={setFilter} title="REF" filterName="code" value={_.get(criteria, 'code', '')} />,
+      sortable: false,
+      classes: 'item-ref-code',
+      renderText: item => {
+        const code = _.get(item, 'details.utm.code', '')
+        return (
+          <div className="spacing time-container">
+            <span className="txt-gray-md">{code}</span>
           </div>
         )
       }
@@ -121,7 +133,7 @@ const ProjectsGridView = props => {
       }
     }, {
       id: 'customer',
-      headerLabel: 'Customer',
+      headerLabel: <ProjectListFilterColHeader setFilter={setFilter} title="Customer" filterName="customer" value={_.get(criteria, 'customer', '')} />,
       sortable: false,
       classes: 'item-customer',
       renderText: item => {
@@ -166,7 +178,7 @@ const ProjectsGridView = props => {
       }
     }, {
       id: 'managers',
-      headerLabel: 'Managers',
+      headerLabel: <ProjectListFilterColHeader setFilter={setFilter} title="Managers" filterName="manager" value={_.get(criteria, 'manager', '')} />,
       sortable: false,
       classes: 'item-manager',
       renderText: item => {
@@ -256,6 +268,7 @@ ProjectsGridView.propTypes = {
   pageNum: PropTypes.number.isRequired,
   criteria: PropTypes.object.isRequired,
   projectTemplates: PropTypes.array.isRequired,
+  setFilter: PropTypes.func,
 }
 
 export default ProjectsGridView

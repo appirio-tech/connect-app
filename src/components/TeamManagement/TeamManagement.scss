@@ -340,8 +340,12 @@
             text-transform: uppercase;
           }
 
-          input {
-            width: stretch;
+          form {
+            width: 100%;
+          }
+
+          input, .autocomplete-wrapper {
+            width: 100%;
             margin: $base-unit*4 $base-unit*2;
           }
 

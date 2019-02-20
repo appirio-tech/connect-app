@@ -34,7 +34,7 @@ function addProjectMemberWithData(dispatch, projectId, member) {
   return new Promise((resolve, reject) => {
     return dispatch({
       type: ADD_PROJECT_MEMBER,
-      payload: addMember(projectId, member)
+      payload: addMember(projectId, {role: member.role})
     })
       .then((/*{value, action}*/) => {
         return resolve(dispatch(loadMembers([member.userId])))

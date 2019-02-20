@@ -35,20 +35,17 @@ const GridView = props => {
       <LoadingIndicator />
     ) : (
       <div className="container">
-        {resultSet.length ? (
-          <div className="flex-area">
-            <div className="flex-data">
-              <ListHeader {...headerProps} />
-              {resultSet.map(renderItem)}
-            </div>
-            <PaginationBar {...paginationProps} />
+        <div className="flex-area">
+          <div className="flex-data">
+            <ListHeader {...headerProps} />
+            {resultSet.length ? (
+              resultSet.map(renderItem)
+            ) : (
+              <div style={{textAlign: 'center'}}><br/><br/><h3> No results </h3><br/><br/></div>
+            )}
           </div>
-        ) : (
-          <div className="flex-area">
-            {/* TODO replace this with proper style */}
-            <div style={{textAlign: 'center'}}><br/><br/><h3> No results </h3><br/><br/></div>
-          </div>
-        )}
+          <PaginationBar {...paginationProps} />
+        </div>
       </div>
     )
   )
@@ -77,6 +74,15 @@ const GridView = props => {
               >
                 {[...resultSet, ...placeholders].map(renderItem)}
               </InfiniteScroll>
+              {totalCount === 0 && <section className="content gridview-content">
+                <div key="end" className="gridview-no-project">
+                  No results found based on current search criteria. <br /> Please modify your search criteria and/or search across all projects by selecting the "
+                  <a href="javascript:" onClick={() => { applyFilters({status: null }) }} className="tc-btn-all-projects" >
+                    All Projects
+                  </a>
+                  " filter.
+                </div>
+              </section>}
             </div>
           </div>
         </div>
@@ -91,20 +97,6 @@ const GridView = props => {
           <NewProjectCard link={newProjectLink} />
         </div>}
       </div>
-    )
-  }
-
-  if (totalCount === 0) {
-    return (
-      <section className="content gridview-content">
-        <div key="end" className="gridview-no-project">
-          No results found based on current search criteria. <br /> Please modify your search criteria and/or search across all projects by selecting the "
-          <a href="javascript:" onClick={() => { applyFilters({status: null }) }} className="tc-btn-all-projects" >
-            All Projects
-          </a>
-          " filter.
-        </div>
-      </section>
     )
   }
 
