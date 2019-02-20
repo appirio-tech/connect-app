@@ -28,8 +28,8 @@ import XMartIcon from '../../../../../assets/icons/x-mark.svg'
 
 import { MILESTONE_STATUS, SCREEN_BREAKPOINT_MD } from '../../../../../config/constants'
 
-import PERMISSIONS from '../../../config/permissions'
-import {checkPermission} from '../../../../helpers/permissions'
+import PERMISSIONS from '../../../../../config/permissions'
+import {checkPermission} from '../../../../../helpers/permissions'
 
 import './Milestone.scss'
 class Milestone extends React.Component {

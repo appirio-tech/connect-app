@@ -29,8 +29,8 @@ import BackIcon from '../../../../assets/icons/arrow-left.svg'
 import EditStageForm from './EditStageForm'
 import NotificationsReader from '../../../../components/NotificationsReader'
 
-import PERMISSIONS from '../../../config/permissions'
-import {checkPermission} from '../../../helpers/permissions'
+import PERMISSIONS from '../../../../config/permissions'
+import {checkPermission} from '../../../../helpers/permissions'
 
 import './PhaseCard.scss'
 
