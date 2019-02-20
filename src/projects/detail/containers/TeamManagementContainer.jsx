@@ -71,7 +71,7 @@ class TeamManagementContainer extends Component {
 
   onJoinConfirm(role) {
     const { currentUser, projectId, addProjectMember } = this.props
-    role = role || currentUser.isCopilot ? PROJECT_ROLE_COPILOT : PROJECT_ROLE_MANAGER
+    role = role || (currentUser.isCopilot ? PROJECT_ROLE_COPILOT : PROJECT_ROLE_MANAGER)
     addProjectMember(
       projectId,
       {userId: currentUser.userId, role}

@@ -159,8 +159,8 @@ class TeamManagement extends React.Component {
         </div>
         {isShowJoin && ((() => {
           const onClickCancel = () => onJoin(false)
-          const onClickJoinConfirm = () => {
-            onJoinConfirm()
+          const onClickJoinConfirm = (role) => {
+            onJoinConfirm(role)
           }
           return (
             <Dialog
