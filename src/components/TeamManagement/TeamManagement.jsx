@@ -157,14 +157,14 @@ class TeamManagement extends React.Component {
             }
           </div>
         </div>
-        {isShowJoin && ((() =>{
+        {isShowJoin && ((() => {
           const onClickCancel = () => onJoin(false)
           const onClickJoinConfirm = (role) => {
             onJoinConfirm(role)
           }
-          let role = 'Manager';
-          if (currentUser.isCopilot) role = 'Copilot';
-          if (currentUser.isAccountManager) role = 'Account Manager';
+          let role = 'Manager'
+          if (currentUser.isCopilot) role = 'Copilot'
+          if (currentUser.isAccountManager) role = 'Account Manager'
           return (
             <Dialog
               disabled={processingMembers}
