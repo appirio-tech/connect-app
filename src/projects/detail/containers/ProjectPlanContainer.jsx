@@ -37,6 +37,8 @@ import {
 } from '../../../config/constants'
 import Sticky from '../../../components/Sticky'
 import { Link } from 'react-router-dom'
+import PERMISSIONS from '../../../config/permissions'
+import {checkPermission} from '../../../helpers/permissions'
 
 import './ProjectPlanContainer.scss'
 
@@ -167,7 +169,7 @@ class ProjectPlanContainer extends React.Component {
           ) : (
             <ProjectPlanEmpty />
           )}
-          {isProjectLive && isManageUser && (<div styleName="add-button-container">
+          {isProjectLive && checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project, phases)  && (<div styleName="add-button-container">
             <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
           </div>)}
         </TwoColsLayout.Content>
