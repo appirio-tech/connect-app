@@ -68,7 +68,7 @@ class TeamManagement extends React.Component {
     const topcoderTeamManageAction = currentUser.isAdmin || (currentMember && currentUser.isManager)
     const topcoderTeamViewAction = !topcoderTeamManageAction
     const canJoinAsCopilot = !currentMember && currentUser.isCopilot
-    const canJoinAsManager = !currentMember && currentUser.isManager
+    const canJoinAsManager = !currentMember && (currentUser.isManager || currentUser.isAccountManager)
     const canShowInvite = currentMember && (currentUser.isCustomer || currentMember.isCopilot || currentMember.isManager)
 
     const sortedMembers = members
@@ -162,16 +162,19 @@ class TeamManagement extends React.Component {
           const onClickJoinConfirm = (role) => {
             onJoinConfirm(role)
           }
+          let role = 'Manager'
+          if (currentUser.isCopilot) role = 'Copilot'
+          if (currentUser.isAccountManager) role = 'Account Manager'
           return (
             <Dialog
               disabled={processingMembers}
               onCancel={onClickCancel}
               onConfirm={onClickJoinConfirm}
-              title={`Join project as ${currentUser.isCopilot ? 'Copilot' : 'Manager'}`}
+              title={`Join project as ${role}`}
               content={JOIN_MESSAGE}
               buttonText="Join project"
               buttonColor="blue"
-              showRoleSelector
+              showRoleSelector={currentUser.isManager}
             />
           )
         })())}

@@ -15,7 +15,7 @@ import _ from 'lodash'
 import querystring from 'query-string'
 import { updateProject } from '../../../actions/project'
 import { getNewProjectLink } from '../../../../helpers/projectHelper'
-import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
+import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED, PROJECT_STATUS_ACTIVE,
   PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
 
@@ -262,7 +262,7 @@ class Projects extends Component {
 
 const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templates, notifications }) => {
   let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
+  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   if (loadUser.user) {
     isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
   }

@@ -12,6 +12,7 @@ import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_COPILOT_MANAGER,
   ROLE_CONNECT_MANAGER,
+  ROLE_CONNECT_ACCOUNT_MANAGER,
   PROJECT_ROLE_ACCOUNT_MANAGER
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
@@ -72,7 +73,10 @@ class TeamManagementContainer extends Component {
 
   onJoinConfirm(role) {
     const { currentUser, projectId, addProjectMember } = this.props
-    role = role || (currentUser.isCopilot ? PROJECT_ROLE_COPILOT : PROJECT_ROLE_MANAGER)
+    let defaultRole = PROJECT_ROLE_MANAGER
+    if (currentUser.isCopilot) defaultRole = PROJECT_ROLE_COPILOT
+    if (currentUser.isAccountManager) defaultRole = PROJECT_ROLE_ACCOUNT_MANAGER
+    role = role || defaultRole
     addProjectMember(
       projectId,
       {userId: currentUser.userId, role}
@@ -218,6 +222,7 @@ const mapStateToProps = ({loadUser, members, projectState}) => {
       isManager: loadUser.user.roles.some((role) => managerRoles.indexOf(role) !== -1),
       isCustomer: !loadUser.user.roles.some((role) => powerUserRoles.indexOf(role) !== -1),
       isCopilotManager: _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT_MANAGER) > -1,
+      isAccountManager: _.indexOf(loadUser.user.roles, ROLE_CONNECT_ACCOUNT_MANAGER) > -1,
     },
     allMembers: _.values(members.members),
     processingInvites: projectState.processingInvites,
