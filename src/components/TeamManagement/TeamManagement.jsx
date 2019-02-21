@@ -56,7 +56,7 @@ class TeamManagement extends React.Component {
       showNewMemberConfirmation, onJoin, onJoinConfirm, onShowProjectDialog, isShowProjectDialog,
       projectTeamInvites, onProjectInviteDeleteConfirm, onProjectInviteSend, deletingInvite, changeRole,
       onDeleteInvite, isShowTopcoderDialog, onShowTopcoderDialog, processingInvites, processingMembers,
-      onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, error,
+      onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, onAcceptOrRefuse, error,
       onSelectedMembersUpdate, selectedMembers
     } = this.props
     const currentMember = members.filter((member) => member.userId === currentUser.userId)[0]
@@ -188,6 +188,7 @@ class TeamManagement extends React.Component {
           }
           return (
             <ProjectDialog
+              processingInvites={processingInvites}
               error={error}
               currentUser={currentUser}
               members={members}
@@ -203,8 +204,11 @@ class TeamManagement extends React.Component {
             />
           )
         })())}
-        {(!modalActive && isShowTopcoderDialog) && ((() => {
-          const onClickCancel = () => onShowTopcoderDialog(false)
+        {(!modalActive && (isShowTopcoderDialog || this.props.history.location.hash === '#manageTopcoderTeam')) && ((() => {
+          const onClickCancel = () => {
+            this.props.history.push(this.props.history.location.pathname)
+            onShowTopcoderDialog(false)
+          }
           const removeMember = (member) => {
             onMemberDelete(member)
           }
@@ -213,6 +217,7 @@ class TeamManagement extends React.Component {
           }
           return (
             <TopcoderDialog
+              processingInvites={processingInvites}
               error={error}
               currentUser={currentUser}
               members={members}
@@ -220,6 +225,7 @@ class TeamManagement extends React.Component {
               onCancel={onClickCancel}
               removeMember={removeMember}
               addUsers={onTopcoderInviteSend}
+              approveOrDecline={onAcceptOrRefuse}
               invites={topcoderTeamInvites}
               removeInvite={removeInvite}
               changeRole={changeRole}
@@ -388,6 +394,11 @@ TeamManagement.propTypes = {
    * List of members added to auto complete input
    */
   selectedMembers: PropTypes.arrayOf(PropTypes.object),
+
+  /**
+   * Callback to accept or refuse invite
+   */
+  onAcceptOrRefuse: PropTypes.func,
 
   /**
    * Callback to send member role

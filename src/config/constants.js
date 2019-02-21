@@ -783,8 +783,8 @@ export const EVENT_TYPE = {
     COPILOT_JOINED: 'notifications.connect.project.member.copilotJoined',
     ASSIGNED_AS_OWNER: 'notifications.connect.project.member.assignedAsOwner',
     INVITE_REQUESTED: 'notifications.connect.project.member.invite.requested',
-    INVITE_APPROVED: 'notifications.connect.project.member.copilot.added',
-    INVITE_REFUSED: 'notifications.connect.project.member.copilot.refused',
+    INVITE_APPROVED: 'notifications.connect.project.member.invite.approved',
+    INVITE_REFUSED: 'notifications.connect.project.member.invite.refused',
   },
   PROJECT: {
     ACTIVE: 'notifications.connect.project.active',

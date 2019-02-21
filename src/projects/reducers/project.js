@@ -19,7 +19,7 @@ import {
   INVITE_TOPCODER_MEMBER_SUCCESS, REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS, INVITE_TOPCODER_MEMBER_PENDING, REMOVE_CUSTOMER_INVITE_PENDING,
   REMOVE_TOPCODER_MEMBER_INVITE_PENDING, REMOVE_TOPCODER_MEMBER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_FAILURE,
   INVITE_CUSTOMER_FAILURE, INVITE_TOPCODER_MEMBER_FAILURE, INVITE_CUSTOMER_PENDING,
-  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, 
+  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING,
   UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION
 } from '../../config/constants'
 import _ from 'lodash'
@@ -165,7 +165,7 @@ export const projectState = function (state=initialState, action) {
 
   case LOAD_PROJECT_MEMBER_INVITES_SUCCESS: {
     return Object.assign({}, state, {
-      showUserInvited: true
+      showUserInvited: true && action.payload.role !== 'copilot'
     })
   }
 
@@ -177,7 +177,7 @@ export const projectState = function (state=initialState, action) {
 
   case ACCEPT_OR_REFUSE_INVITE_PENDING:
     return Object.assign({}, state, {
-      showUserInvited: true
+      showUserInvited: false
     })
 
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
@@ -388,7 +388,7 @@ export const projectState = function (state=initialState, action) {
       attachmentsAwaitingPermission: action.payload,
       attachmentPermissions: null
     }
-    
+
   case DISCARD_PROJECT_ATTACHMENT:
     return {
       ...state,
