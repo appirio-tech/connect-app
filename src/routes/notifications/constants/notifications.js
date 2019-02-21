@@ -6,7 +6,7 @@
  */
 import {
   NOTIFICATION_TYPE,
-  ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR,
+  ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_ADMINISTRATOR,
   PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER,
   EVENT_TYPE,
 } from '../../../config/constants'
@@ -32,6 +32,11 @@ export const NOTIFICATIONS = [
     rules: [{
       text: 'Your Project was created successfully',
       projectRoles: [PROJECT_ROLE_OWNER],
+      goTo: GOTO.PROJECT_DASHBOARD
+    },
+    {
+      text: 'New project is created',
+      topcoderRoles: [ROLE_CONNECT_ACCOUNT_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
@@ -59,7 +64,7 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'Project is available for review',
-      topcoderRoles: [ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR],
+      topcoderRoles: [ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_ADMINISTRATOR],
       goTo: GOTO.PROJECT_SPECIFICATION
     }]
   },

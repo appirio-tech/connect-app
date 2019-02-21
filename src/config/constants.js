@@ -556,6 +556,7 @@ export const EVENT_ROUTE_CHANGE = 'event.route_change'
 export const ROLE_TOPCODER_USER = 'Topcoder User'
 export const ROLE_CONNECT_COPILOT = 'Connect Copilot'
 export const ROLE_CONNECT_MANAGER = 'Connect Manager'
+export const ROLE_CONNECT_ACCOUNT_MANAGER = 'Connect Account Manager'
 export const ROLE_CONNECT_ADMIN = 'Connect Admin'
 export const ROLE_ADMINISTRATOR = 'administrator'
 export const ROLE_CONNECT_COPILOT_MANAGER = 'Connect Copilot Manager'
@@ -781,6 +782,9 @@ export const EVENT_TYPE = {
     MANAGER_JOINED: 'notifications.connect.project.member.managerJoined',
     COPILOT_JOINED: 'notifications.connect.project.member.copilotJoined',
     ASSIGNED_AS_OWNER: 'notifications.connect.project.member.assignedAsOwner',
+    INVITE_REQUESTED: 'notifications.connect.project.member.invite.requested',
+    INVITE_APPROVED: 'notifications.connect.project.member.copilot.added',
+    INVITE_REFUSED: 'notifications.connect.project.member.copilot.refused',
   },
   PROJECT: {
     ACTIVE: 'notifications.connect.project.active',
