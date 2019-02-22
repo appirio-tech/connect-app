@@ -49,8 +49,9 @@ export class EditFileAttachment extends React.Component {
         </div>
         <div className="modal-body">
           <label for="title">Title:</label>
-          <input className="edit-input" type="text" value={title} onChange={this.handleTitleChange.bind(this)} name="title"/> 
+          <input className="edit-input" type="text" value={title} onChange={this.handleTitleChange.bind(this)} name="title"/>
           <br />
+          <label for="title">File Viewers:</label>
           <UserAutoComplete onUpdate={this.onUserIdChange} 
             projectMembers={projectMembers}
             loggedInUser={loggedInUser}
@@ -60,7 +61,7 @@ export class EditFileAttachment extends React.Component {
 
           <div className="button-area flex center">
             <button className="tc-btn tc-btn-default tc-btn-sm btn-cancel" onClick={onCancel}>Cancel</button>
-            <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={() => onConfirm(title, allowedUsers)}>Edit Attachment</button>
+            <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={() => onConfirm(title, allowedUsers)}>Save Changes</button>
           </div>
         </div>
       </div>
