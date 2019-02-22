@@ -68,7 +68,7 @@ class Dialog extends React.Component {
 
         <div className="project-dialog">
           <div className="dialog-title">
-            Project team
+            Customer team
             <span onClick={onCancel}><XMarkIcon/></span>
           </div>
 

@@ -77,7 +77,7 @@ class TeamManagement extends React.Component {
       <div className="team-management-container">
         <div className="projects-team">
           <div className="title">
-            Project Team
+            Customer Team
             {(customerTeamManageAction || customerTeamViewAction) &&
               <span className="title-action" onClick={() => onShowProjectDialog(true)}>
                 {customerTeamViewAction ? 'View' : 'Manage'}
