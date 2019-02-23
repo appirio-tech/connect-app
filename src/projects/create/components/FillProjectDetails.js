@@ -35,6 +35,7 @@ class FillProjectDetails extends Component  {
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextProps.error, this.props.error)
      && _.isEqual(nextState.currentWizardStep, this.state.currentWizardStep)
+     && _.isEqual(nextProps.projectTemplates, this.props.projectTemplates)
     )
   }
 
@@ -43,7 +44,7 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, processing, submitBtnText, projectTemplates, dirtyProject, templates, productTemplates, productCategories } = this.props
+    const { project, processing, submitBtnText, projectTemplates, dirtyProject, templates, productTemplates, productCategories, shouldUpdateTemplate } = this.props
     const { currentWizardStep } = this.state
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
@@ -99,6 +100,7 @@ class FillProjectDetails extends Component  {
                     productTemplates={productTemplates}
                     onStepChange={this.handleStepChange}
                     productCategories={productCategories}
+                    shouldUpdateTemplate={shouldUpdateTemplate}
                   />
                   {!_.get(template, 'wizard.enabled') && <ProjectEstimationSection project={dirtyProject} templates={templates} />}
                 </div>
@@ -114,6 +116,10 @@ class FillProjectDetails extends Component  {
       </div>
     )
   }
+}
+
+FillProjectDetails.defaultProps = {
+  shouldUpdateTemplate: false
 }
 
 FillProjectDetails.propTypes = {
@@ -132,6 +138,7 @@ FillProjectDetails.propTypes = {
     PT.bool,
     PT.object
   ]),
+  shouldUpdateTemplate: PT.bool,
 }
 
 export default FillProjectDetails

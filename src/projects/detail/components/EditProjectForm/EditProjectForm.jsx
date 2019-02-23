@@ -94,6 +94,21 @@ class EditProjectForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    let { template, hasDependantFields } = this.state
+    // updating template from template editor
+    if(nextProps.shouldUpdateTemplate && template !== nextProps.template) {
+
+      const state = initWizard(nextProps.template, nextProps.project, null, true)
+
+      template = state.template
+      hasDependantFields = state.hasDependantFields
+
+      this.setState({
+        template,
+        hasDependantFields,
+      })
+    }
+
     // we received property updates from PROJECT_DIRTY REDUX state
     if (nextProps.project.isDirty) {
       this.setState({
@@ -124,12 +139,12 @@ class EditProjectForm extends Component {
       })
     }
 
-    if (this.state.hasDependantFields && !_.isEqual(this.props.project, nextProps.project)) {
+    if (hasDependantFields && !_.isEqual(this.props.project, nextProps.project)) {
       const {
         updatedTemplate,
         updatedSomeNodes,
         hidedSomeNodes
-      } = updateNodesByConditions(this.state.template, nextProps.project)
+      } = updateNodesByConditions(template, nextProps.project)
 
       if (updatedSomeNodes) {
         this.setState({
@@ -322,6 +337,10 @@ class EditProjectForm extends Component {
   }
 }
 
+EditProjectForm.defaultProps = {
+  shouldUpdateTemplate: false
+}
+
 EditProjectForm.propTypes = {
   project: PropTypes.object.isRequired,
   saving: PropTypes.bool.isRequired,
@@ -336,6 +355,7 @@ EditProjectForm.propTypes = {
   addAttachment: PropTypes.func.isRequired,
   updateAttachment: PropTypes.func.isRequired,
   removeAttachment: PropTypes.func.isRequired,
+  shouldUpdateTemplate: PropTypes.bool,
 }
 
 export default EditProjectForm
