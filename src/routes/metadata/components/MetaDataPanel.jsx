@@ -11,12 +11,11 @@ import { JsonEditor } from 'jsoneditor-react'
 import 'jsoneditor-react/es/editor.min.css'
 import _ from 'lodash'
 import update from 'react-addons-update'
-import Sticky from '../../../components/Sticky'
-import MediaQuery from 'react-responsive'
-import SpecSection from '../../../projects/detail/components/SpecSection'
+import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
+import FillProjectDetails from '../../../projects/create/components/FillProjectDetails'
+import EditProjectForm from '../../../projects/detail/components/EditProjectForm'
 import TemplateForm from './TemplateForm'
 import CoderBroken from '../../../assets/icons/coder-broken.svg'
-import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 
 import './MetaDataPanel.scss'
 import FullScreenJSONEditor from './FullScreenJSONEditor'
@@ -207,14 +206,14 @@ class MetaDataPanel extends React.Component {
       isProcessing: false,
       project: {},
       fields: [],
-      isFullScreen: false
+      isFullScreen: false,
+      editMode: false,
     }
     this.init = this.init.bind(this)
     this.getMetadata = this.getMetadata.bind(this)
     this.getProjectTypeOptions = this.getProjectTypeOptions.bind(this)
     this.getProductCategoryOptions = this.getProductCategoryOptions.bind(this)
     this.getResourceNameFromType = this.getResourceNameFromType.bind(this)
-    this.renderSection = this.renderSection.bind(this)
     this.enterFullScreen = this.enterFullScreen.bind(this)
     this.exitFullScreen = this.exitFullScreen.bind(this)
     this.onJSONEdit = this.onJSONEdit.bind(this)
@@ -224,15 +223,15 @@ class MetaDataPanel extends React.Component {
     this.onSaveTemplate = this.onSaveTemplate.bind(this)
     this.onDeleteTemplate = this.onDeleteTemplate.bind(this)
     this.onChangeTemplate = this.onChangeTemplate.bind(this)
+    this.toggleEditMode = this.toggleEditMode.bind(this)
+    this.renderProjectPreview = this.renderProjectPreview.bind(this)
+    this.renderProductPreview = this.renderProductPreview.bind(this)
   }
 
   componentDidMount() {
     document.title = 'Metadata Management - TopCoder'
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.init(nextProps)
-  }
 
   componentWillMount() {
     const { templates } = this.props
@@ -489,30 +488,93 @@ class MetaDataPanel extends React.Component {
     this.setState({ isFullScreen : false })
   }
 
-  renderSection(section, idx) {
+  toggleEditMode() {
+    this.setState({ editMode: !this.state.editMode })
+  }
+
+  renderProjectPreview({ metadata, template }) {
+    const { templates, previewProject } = this.props
+    const { editMode } = this.state
+
     return (
-      <div key={idx}>
-        <SpecSection
-          {...section}
-          project={this.state.project}
-          dirtyProject={this.state.dirtyProject}
-          isProjectDirty={this.state.isProjectDirty}
-          sectionNumber={idx + 1}
-          resetFeatures={ () => {} }
-          showFeaturesDialog={() => {} }
-          // TODO we shoudl not update the props (section is coming from props)
-          validate={(isInvalid) => section.isInvalid = isInvalid}
-          showHidden={false}
-          addAttachment={ () => {} }
-          updateAttachment={ () => {} }
-          removeAttachment={ () => {} }
-          attachmentsStorePath={'dummy'}
-          canManageAttachments
-          productTemplates={this.props.templates.productTemplates}
-        />
-        <div className="section-footer section-footer-spec">
-          <button className="tc-btn tc-btn-primary tc-btn-md" type="submit">Save Changes</button>
+      <div className="content template-preview">
+        <div className="header">
+          <h1>Template form preview</h1>
+          <SwitchButton
+            label="edit mode"
+            checked={editMode}
+            onChange={this.toggleEditMode}
+          />
         </div>
+        {
+          editMode ? (
+            <EditProjectForm
+              shouldUpdateTemplate
+              project={previewProject}
+              saving={false}
+              template={template}
+              productTemplates={templates.productTemplates}
+              productCategories={templates.productCategories}
+              isEdittable
+              submitHandler={() => { }}
+              fireProjectDirty={this.props.firePreviewProjectDirty}
+              fireProjectDirtyUndo={() => { }}
+              showHidden
+              addAttachment={() => { }}
+              updateAttachment={() => { }}
+              removeAttachment={() => { }}
+            />
+          ) : (
+            <FillProjectDetails
+              shouldUpdateTemplate
+              onBackClick={() => { }}
+              onCreateProject={() => { }}
+              onChangeProjectType={() => { }}
+              project={{
+                templateId: metadata.id || 'new',
+                details: {},
+                ...previewProject
+              }}
+              dirtyProject={previewProject}
+              templates={[]}
+              onProjectChange={this.props.firePreviewProjectDirty}
+              projectTemplates={[{
+                id: 'new',
+                ...metadata
+              }]}
+              productTemplates={templates.productTemplates}
+              productCategories={templates.productCategories}
+            />
+          )
+        }
+      </div>
+    )
+  }
+
+  renderProductPreview({ template }) {
+    const { templates, previewProject } = this.props
+
+    return (
+      <div className="content template-preview">
+        <div className="header">
+          <h1>Template form preview</h1>
+        </div>
+        <EditProjectForm
+          shouldUpdateTemplate
+          project={previewProject}
+          saving={false}
+          template={template}
+          productTemplates={templates.productTemplates}
+          productCategories={templates.productCategories}
+          isEdittable
+          submitHandler={() => { }}
+          fireProjectDirty={this.props.firePreviewProjectDirty}
+          fireProjectDirtyUndo={() => { }}
+          showHidden
+          addAttachment={() => { }}
+          updateAttachment={() => { }}
+          removeAttachment={() => { }}
+        />
       </div>
     )
   }
@@ -521,27 +583,13 @@ class MetaDataPanel extends React.Component {
     const { isAdmin, metadataType, templates } = this.props
     const { fields, metadata, isNew, isFullScreen } = this.state
     let template = {}
-    let templateSections = []
-    let needTemplatePreview = false
     if (metadata && metadataType === 'projectTemplate' && metadata.scope) {
       template = metadata.scope
-      templateSections = template.sections
-      needTemplatePreview = true
     } else if (metadata && metadataType === 'productTemplate' && metadata.template) {
-      template = metadata.template
-      templateSections = template.questions
-      needTemplatePreview = true
+      template = {
+        sections: _.get(metadata, 'template.questions') ||  _.get(metadata, 'template.sections', [])
+      }
     }
-    // FIXME
-    // if we don't clone templateSections then during rendering form preview they will be mutated
-    // - React object will be added here
-    //   https://github.com/appirio-tech/connect-app/blob/feature/form-redesign/src/projects/detail/components/SpecQuestions.jsx#L138,
-    //   which would lead to circular reference in JSON editor
-    // - also it would lead to some artificial parts be added to the JSON editor and later saved
-    // we should do other way rather than clone it on each render
-    templateSections = _.cloneDeep(templateSections)
-    // console.log(templates)
-
     // TODO remove: temporary let non-admin user see metadata (they still couldn't save because server will reject)
     if (!isAdmin && isAdmin) {
       return (
@@ -567,28 +615,13 @@ class MetaDataPanel extends React.Component {
             />
           )
         }
-        { needTemplatePreview &&
-          <div className="content">
-            {
-              //render preview for intake form
-              templateSections && (
-                <div className="ProjectWizard">
-                  <div className="FillProjectDetails">
-                    <h1>Template form preview</h1>
-                    <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
-                      <Sticky top={110}>
-                        <Formsy.Form
-                          ref="form"
-                        >
-                          {templateSections.map(this.renderSection)}
-                        </Formsy.Form>
-                      </Sticky>
-                    </MediaQuery>
-                  </div>
-                </div>
-              )
-            }
-          </div>
+        {
+          (metadata && metadataType === 'projectTemplate') &&
+          this.renderProjectPreview({ metadata, template })
+        }
+        {
+          (metadata && metadataType === 'productTemplate') &&
+          this.renderProductPreview({ metadata, template })
         }
         <aside className="filters">
           { (metadata || isNew) && (['projectTemplate', 'productTemplate'].indexOf(metadataType) !== -1)  && (
@@ -626,6 +659,11 @@ class MetaDataPanel extends React.Component {
   }
 }
 
+MetaDataPanel.defaultProps = {
+  previewProject: { details: {} },
+  firePreviewProjectDirty: () => {}
+}
+
 MetaDataPanel.propTypes = {
   loadProjectsMetadata: PropTypes.func.isRequired,
   deleteProjectsMetadata: PropTypes.func.isRequired,
@@ -633,6 +671,8 @@ MetaDataPanel.propTypes = {
   updateProjectsMetadata: PropTypes.func.isRequired,
   templates: PropTypes.object.isRequired,
   isAdmin: PropTypes.bool.isRequired,
+  previewProject: PropTypes.object,
+  firePreviewProjectDirty: PropTypes.func,
 }
 
 export default MetaDataPanel

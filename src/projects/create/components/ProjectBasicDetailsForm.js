@@ -91,12 +91,27 @@ class ProjectBasicDetailsForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.hasDependantFields && !_.isEqual(nextProps.dirtyProject, this.props.dirtyProject)) {
+    let { template, hasDependantFields } = this.state
+    // updating template from template editor
+    if(nextProps.shouldUpdateTemplate && template !== nextProps.template) {
+
+      const state = initWizard(nextProps.template, nextProps.project, null, true)
+
+      template = state.template
+      hasDependantFields = state.hasDependantFields
+
+      this.setState({
+        template,
+        hasDependantFields,
+      })
+    }
+
+    if (hasDependantFields && !_.isEqual(nextProps.dirtyProject, this.props.dirtyProject)) {
       const {
         updatedTemplate,
         hidedSomeNodes,
         updatedSomeNodes,
-      } = updateNodesByConditions(this.state.template, nextProps.dirtyProject)
+      } = updateNodesByConditions(template, nextProps.dirtyProject)
 
       if (updatedSomeNodes) {
         this.setState({
@@ -270,6 +285,10 @@ class ProjectBasicDetailsForm extends Component {
   }
 }
 
+ProjectBasicDetailsForm.defaultProps = {
+  shouldUpdateTemplate: false
+}
+
 ProjectBasicDetailsForm.propTypes = {
   project: PropTypes.object.isRequired,
   saving: PropTypes.bool.isRequired,
@@ -279,6 +298,7 @@ ProjectBasicDetailsForm.propTypes = {
   submitHandler: PropTypes.func.isRequired,
   onStepChange: PropTypes.func.isRequired,
   productCategories: PropTypes.array.isRequired,
+  shouldUpdateTemplate: PropTypes.bool,
 }
 
 export default ProjectBasicDetailsForm
