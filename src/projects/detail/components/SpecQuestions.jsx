@@ -212,6 +212,11 @@ const SpecQuestions = ({
       ChildElem = TCFormFields.Checkbox
       // child = <TCFormFields.Checkbox name={q.fieldName} label={q.label} value={value} />
       break
+    case 'tiled-checkbox-group':
+      ChildElem = TCFormFields.TiledCheckboxInput
+      _.assign(elemProps, {wrapperClass: 'row', options: q.options, theme: 'dark', tabable: true})
+      // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
+      break
     case 'see-attached-features':
       ChildElem = SeeAttachedSpecFeatureQuestion
       _.assign(elemProps, {
