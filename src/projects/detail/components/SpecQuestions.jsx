@@ -102,9 +102,7 @@ const SpecQuestions = ({
       q.options = q.options.filter((option) => !_.get(option, '__wizard.hiddenByCondition'))
       // disable options if they are disabled by conditions
       q.options.forEach((option) => {
-        if (_.get(option, '__wizard.disabledByCondition', false)) {
-          option.disabled = true
-        }
+        option.disabled = _.get(option, '__wizard.disabledByCondition', false)
       })
 
       if (elemProps.disabled) {
@@ -213,7 +211,7 @@ const SpecQuestions = ({
       // child = <TCFormFields.Checkbox name={q.fieldName} label={q.label} value={value} />
       break
     case 'tiled-checkbox-group':
-      ChildElem = TCFormFields.TiledCheckboxInput
+      ChildElem = TCFormFields.TiledCheckboxGroup
       _.assign(elemProps, {wrapperClass: 'row', options: q.options, theme: 'dark', tabable: true})
       // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break

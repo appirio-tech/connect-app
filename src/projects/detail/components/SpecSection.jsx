@@ -98,7 +98,7 @@ const SpecSection = props => {
   // replace string icon values in the "tiled-radio-group" questions with icon components
   subSections.forEach((subSection) => {
     (subSection.questions || []).forEach(question => {
-      if (question.type === 'tiled-radio-group') {
+      if (question.type === 'tiled-radio-group' || question.type === 'tiled-checkbox-group') {
         question.options.forEach((option) => {
           if (option.icon && typeof option.icon === 'string') {
             // if icon is defined as a relative path to the icon, convert it to icon "id"
