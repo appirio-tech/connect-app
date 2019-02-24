@@ -10,6 +10,7 @@ import { getAvatarResized } from '../../helpers/tcHelpers'
 import SelectDropdown from '../SelectDropdown/SelectDropdown'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import AutocompleteInput from './AutocompleteInput'
+import {PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PENDING} from '../../config/constants'
 
 class Dialog extends React.Component {
   constructor(props) {
@@ -31,8 +32,6 @@ class Dialog extends React.Component {
   }
 
   componentWillMount(){
-    const { currentUser } = this.props
-
     this.roles = [{
       title: 'Manager',
       value: 'manager',
@@ -42,8 +41,7 @@ class Dialog extends React.Component {
     }, {
       title: 'Copilot',
       value: 'copilot',
-      disabled: !(currentUser.isCopilotManager || currentUser.isAdmin),
-      toolTipMessage: !(currentUser.isCopilotManager || currentUser.isAdmin) ? 'Only Connect Copilot Managers can invite copilots.' : null,
+      canAddDirectly: true,
     }, {
       title: 'Account Manager',
       value: 'account_manager',
@@ -97,7 +95,7 @@ class Dialog extends React.Component {
       selectedMembers, processingInvites
     } = this.props
     const showRemove = currentUser.isAdmin || (isMember && currentUser.isManager)
-    const showApproveDecline = currentUser.isCopilotManager
+    const showApproveDecline = currentUser.isAdmin || currentUser.isCopilotManager
     let i = 0
     const allMembers = [...members, ...invites.map(i => i.member)]
     return (
@@ -214,13 +212,13 @@ class Dialog extends React.Component {
               const approve = () => {
                 approveOrDecline({
                   userId: invite.userId,
-                  status: 'accepted'
+                  status: 'request_approved'
                 })
               }
               const decline = () => {
                 approveOrDecline({
                   userId: invite.userId,
-                  status: 'refused'
+                  status: 'request_rejected'
                 })
               }
               const firstName = _.get(invite.member, 'firstName', '')
@@ -244,31 +242,55 @@ class Dialog extends React.Component {
                       @{invite.member.handle || 'ConnectUser'}
                     </span>
                   </div>
-                  {showApproveDecline &&  <div className="member-remove">
-                    <span onClick={approve}>approve</span>
-                    <span onClick={decline}>decline</span>
-                    <span className="email-date">
-                      requested {moment(invite.createdAt).format('MMM D, YY')}
-                    </span>
-                  </div>}
-                  {!showApproveDecline && showRemove && <div className="member-remove" onClick={remove}>
-                    Remove
-                    <span className="email-date">
-                      Invited {moment(invite.createdAt).format('MMM D, YY')}
-                    </span>
-                  </div>}
+
+                  {
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_REQUESTED && showApproveDecline &&  
+                    <div className="member-remove">
+                      <span onClick={approve}>approve</span>
+                      <span onClick={decline}>decline</span>
+                      <span className="email-date">
+                        Requested {moment(invite.createdAt).format('MMM D, YY')}
+                      </span>
+                    </div>
+                  }
+                  {
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_REQUESTED && !showApproveDecline && showRemove &&  
+                    <div className="member-remove">
+                      <span className="email-date">
+                        Requested {moment(invite.createdAt).format('MMM D, YY')}
+                      </span>
+                    </div>
+                  }
+                  {
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_PENDING && showRemove &&  
+                    <div className="member-remove" onClick={remove}>
+                      Remove
+                      <span className="email-date">
+                        Invited {moment(invite.createdAt).format('MMM D, YY')}
+                      </span>
+                    </div>
+                  }
+                  {
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_PENDING && !showRemove &&  
+                    <div className="member-remove" >
+                      <span className="email-date">
+                        Invited {moment(invite.createdAt).format('MMM D, YY')}
+                      </span>
+                    </div>
+                  }
+                  
                 </div>
               )
             }))}
           </div>
 
-          {showRemove && <div className="input-container" >
+          {(showRemove || showApproveDecline) && <div className="input-container" >
             <div className="hint">invite more people</div>
             <AutocompleteInput
               onUpdate={this.onChange}
               currentUser={currentUser}
               selectedMembers={selectedMembers}
-              disabled={processingInvites || (!currentUser.isAdmin && !isMember)}
+              disabled={processingInvites || (!currentUser.isAdmin && !isMember && !currentUser.isCopilotManager)}
               allMembers={allMembers}
             />
             { this.state.showAlreadyMemberError && <div className="error-message">
@@ -289,7 +311,9 @@ class Dialog extends React.Component {
               disabled={processingInvites || !this.state.validUserText || this.state.clearText}
               onClick={this.addUsers}
             >
-              Send Invite
+              {_.find(this.roles, {value:this.state.userRole}).canAddDirectly && !showApproveDecline 
+                ?'Request invite'
+                :'Invite users'}
             </button>
           </div>
           }

@@ -165,7 +165,7 @@ export const projectState = function (state=initialState, action) {
 
   case LOAD_PROJECT_MEMBER_INVITES_SUCCESS: {
     return Object.assign({}, state, {
-      showUserInvited: true && action.payload.role !== 'copilot'
+      showUserInvited: true
     })
   }
 
