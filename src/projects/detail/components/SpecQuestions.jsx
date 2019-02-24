@@ -212,7 +212,7 @@ const SpecQuestions = ({
       break
     case 'tiled-checkbox-group':
       ChildElem = TCFormFields.TiledCheckboxGroup
-      _.assign(elemProps, {wrapperClass: 'row', options: q.options, theme: 'dark', tabable: true})
+      _.assign(elemProps, { wrapperClass: 'row', options: q.options, theme: 'dark', tabable: true })
       // child = <TCFormFields.TiledRadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
     case 'see-attached-features':
