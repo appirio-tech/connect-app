@@ -237,7 +237,7 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'Your request to add invite the copilot was approved',
-      creator: true,
+      originator: true,
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
@@ -247,7 +247,7 @@ export const NOTIFICATIONS = [
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
       text: 'Your request to add invite the member was refused',
-      creator: true,
+      originator: true,
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },

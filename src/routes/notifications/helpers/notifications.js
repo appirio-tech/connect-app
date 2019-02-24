@@ -290,8 +290,8 @@ const getNotificationRule = (notification) => {
       match = match && _notificationRule.toUserHandle
     }
 
-    if (notification.contents.creator) {
-      match = match && _notificationRule.creator
+    if (notification.contents.originator) {
+      match = match && _notificationRule.originator
     }
 
     if (notification.contents.projectRole) {
@@ -322,7 +322,7 @@ const isNotificationRuleEqual = (rule1, rule2) => {
    *
    * @type {Array<String>}
    */
-  const ESSENTIAL_RULE_PROPERTIES = ['eventType', 'toTopicStarter', 'toUserHandle', 'projectRole', 'topcoderRole', 'creator']
+  const ESSENTIAL_RULE_PROPERTIES = ['eventType', 'toTopicStarter', 'toUserHandle', 'projectRole', 'topcoderRole', 'originator']
   const essentialRule1 = _.pick(rule1, ESSENTIAL_RULE_PROPERTIES)
   const essentialRule2 = _.pick(rule2, ESSENTIAL_RULE_PROPERTIES)
 
