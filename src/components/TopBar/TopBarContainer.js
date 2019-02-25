@@ -10,6 +10,7 @@ import {
   ROLE_CONNECT_MANAGER,
   ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN,
+  ROLE_CONNECT_ACCOUNT_MANAGER,
   DOMAIN
 } from '../../config/constants'
 import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
@@ -168,7 +169,7 @@ class TopBarContainer extends React.Component {
 
 const mapStateToProps = ({ loadUser }) => {
   let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
+  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   if (loadUser.user) {
     isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
   }
