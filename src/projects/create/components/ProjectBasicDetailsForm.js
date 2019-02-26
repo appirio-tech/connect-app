@@ -124,7 +124,7 @@ class ProjectBasicDetailsForm extends Component {
 
   componentDidUpdate() {
     this.refs.form && this.refs.form.inputs.forEach(q => {
-      q.props.options.forEach((option) => {
+      q.props.options && q.props.options.forEach((option) => {
         // select options if they are selected by condition
         if (_.get(option, '__wizard.selectedByCondition', false)) {
           const curValue = q.getValue()
