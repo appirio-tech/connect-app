@@ -559,7 +559,7 @@ export function getProductEstimate(projectTemplate, productConfig) {
       return result
     })
     const allBlocks = priceConfig[priceKey]
-    console.log(allBlocks)
+    // console.log(allBlocks)
     let filterdBlocks = []
     for(const idx in allBlocks) {
       const blocks = allBlocks[idx]
@@ -575,7 +575,7 @@ export function getProductEstimate(projectTemplate, productConfig) {
           updatedCondition = _.replace(updatedCondition, placeholder, cond)
         })
         const result = evaluate(updatedCondition, flatProjectData)
-        console.log(updatedCondition, ' : blocks => ' + b)
+        // console.log(updatedCondition, ' : blocks => ' + b)
         // console.log(result + " : " + typeof result)
         if (result) {
           // console.log(result + " : " + typeof result)
