@@ -159,6 +159,21 @@ class EditProjectForm extends Component {
     window.addEventListener('beforeunload', this.onLeave)
   }
 
+  componentDidUpdate() {
+    this.refs.form && this.refs.form.inputs.forEach(q => {
+      q.props.options && q.props.options.forEach((option) => {
+        // select options if they are selected by condition
+        if (_.get(option, '__wizard.selectedByCondition', false)) {
+          const curValue = q.getValue()
+
+          if (curValue.indexOf(option.value) === -1) {
+            q.setValue(curValue.concat(option.value))
+          }
+        }
+      })
+    })
+  }
+
   autoResize() {
     if (self.autoResizeSet === true) { return }
     self.autoResizeSet = true

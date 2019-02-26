@@ -868,7 +868,7 @@ export const updateNodesByConditions = (template, project) => {
   let updatedSomeNodes = false
 
   let flatProjectData = flatten(removeValuesOfHiddenNodes(updatedTemplate, project), { safe: true })
-  let { nodeToUpdate, hiddenByCondition, disabledByCondition } = getNodeWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData)
+  let { nodeToUpdate, hiddenByCondition, disabledByCondition, selectedByCondition } = getNodeWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData)
   updatedSomeNodes = !!nodeToUpdate
   while (nodeToUpdate) {
     const updateRule = {
@@ -883,13 +883,17 @@ export const updateNodesByConditions = (template, project) => {
       updateRule.__wizard.disabledByCondition = { $set: disabledByCondition }
     }
 
+    if (!_.isUndefined(selectedByCondition)) {
+      updateRule.__wizard.selectedByCondition = { $set: selectedByCondition }
+    }
+
     updatedTemplate = updateNodeObject(updatedTemplate, nodeToUpdate, updateRule)
     hidedSomeNodes = hidedSomeNodes || hiddenByCondition
 
     // now get the next node
     flatProjectData = flatten(removeValuesOfHiddenNodes(updatedTemplate, project), { safe: true })
     const prevNode = nodeToUpdate
-    !({ nodeToUpdate, hiddenByCondition, disabledByCondition } = getNodeWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData))
+    !({ nodeToUpdate, hiddenByCondition, disabledByCondition, selectedByCondition } = getNodeWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData))
     // as conditions in template or some errors in code could potentially lead to infinite loop at this point
     // we check that we are not trying to update the same node again
     // and in case of a loop we stop doing anything without any changes, as it's better than hang user's browser
@@ -990,6 +994,16 @@ const getNodeWhichMustBeUpdatedByCondition = (template, flatProjectData) => {
       if (disabledByCondition !== nodeObject.__wizard.disabledByCondition) {
         result.nodeToUpdate = node
         result.disabledByCondition = disabledByCondition
+      }
+    }
+
+    if (nodeObject.autoSelectCondition) {
+      const selectedByCondition = evaluate(nodeObject.autoSelectCondition, flatProjectData)
+
+      // only update if the condition result has changed
+      if (selectedByCondition !== nodeObject.__wizard.selectedByCondition) {
+        result.nodeToUpdate = node
+        result.selectedByCondition = selectedByCondition
       }
     }
 
