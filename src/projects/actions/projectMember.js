@@ -145,9 +145,6 @@ export function inviteProjectMembers(projectId, emailIds, handles) {
 function acceptOrRefuseInviteWithData(dispatch, projectId, item) {
   return new Promise((resolve, reject) => {
     return updateProjectMemberInvite(projectId, item)
-      .then(() => {
-        return dispatch(loadProjectDashboard(projectId))
-      })
       .catch(err => reject(err))
   })
 }
