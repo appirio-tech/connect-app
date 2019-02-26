@@ -6,7 +6,6 @@ import { addProjectMember as addMember,
 import { createProjectMemberInvite as createProjectMemberInvite,
   updateProjectMemberInvite as updateProjectMemberInvite
 } from '../../api/projectMemberInvites'
-import { loadProjectDashboard } from './projectDashboard'
 import { loadMembers, loadMembersByHandle } from '../../actions/members'
 
 import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
