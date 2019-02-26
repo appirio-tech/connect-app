@@ -17,8 +17,7 @@ const Walkthrough = ({newProjectLink}) => (
     </div>
 
     <div className="subtext">
-      If you have already created a project with us and are not seeing it listed, contact
-      <a href="mailto:support@topcoder.com" target="_blank">support@topcoder.com</a>
+      If you have already created a project with us and are not seeing it listed, contact <a href="mailto:support@topcoder.com" target="_blank">support@topcoder.com</a>
     </div>
   </div>
 )
