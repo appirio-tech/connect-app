@@ -509,32 +509,128 @@ export function getProductEstimate(projectTemplate, productConfig) {
   let minTime = 0
   let maxTime = 0
   const flatProjectData = flatten(removeValuesOfHiddenNodes(projectTemplate, productConfig), { safe: true })
-  let priceConfig = {}
   if (projectTemplate) {
-    priceConfig = _.get(projectTemplate, 'scope.priceConfig')
-    const preparedConditions = _.get(projectTemplate, 'scope.preparedConditions', {})
-    const priceKey = _.findKey(priceConfig, (price, condition) => {
+    const priceConfig = _.get(projectTemplate, 'scope.priceConfigOpt', {})
+    const buildingBlocks = _.get(projectTemplate, 'scope.buildingBlocks', {})
+    const preparedConditions = _.cloneDeep(_.get(projectTemplate, 'scope.preparedConditions', {}))
+    // prepares a list of pre evaluated variables
+    _.forOwn(preparedConditions, (cond, placeholder) => {
+      preparedConditions[placeholder] = evaluate(cond, flatProjectData) === true ? '1 == 1' : '1 == 2'
+    })
+
+    /*const evaluatedPriceConfig = _.map(priceConfig, (pc) => {
+      const blocks = _.get(pc, 'blocks', [])
+      const filterdBlocks = _.filter(blocks, b => {
+        const bBlock = buildingBlocks[b]
+        if (!bBlock) {
+          console.log("Building Block not found for " + b)
+          return false
+        }
+        let updatedCondition = bBlock.conditions
+        // console.log(b + " : ", updatedCondition)
+        _.forOwn(preparedConditions, (cond, placeholder) => {
+          updatedCondition = _.replace(updatedCondition, placeholder, cond)
+        })
+        const result = evaluate(updatedCondition, flatProjectData)
+        // console.log(result + " : " + typeof result)
+        if (result) {
+          // console.log(result + " : " + typeof result)
+          // console.log(updatedCondition, ' : ' + price)
+          // console.log(flatProjectData)
+        }
+        return result === true
+      })
+      // console.log(filterdBlocks, 'filteredBlocks')
+      return { ...pc, filterdBlocks: _.map(filterdBlocks, fb => buildingBlocks[fb]) }
+    });*/
+    const priceKey = _.findKey(priceConfig, (blocks, condition) => {
+      // console.log(condition, " : " + blocks)
+      let updatedCondition = condition
+      _.forOwn(preparedConditions, (cond, placeholder) => {
+        updatedCondition = _.replace(updatedCondition, placeholder, cond)
+      })
+      const result = evaluate(updatedCondition, flatProjectData)
+      // console.log(result + " : " + typeof result)
+      if (result) {
+        // console.log(result + " : " + typeof result)
+        // console.log(updatedCondition, ' : ' + price)
+        // console.log(flatProjectData)
+      }
+      return result
+    })
+    const allBlocks = priceConfig[priceKey]
+    console.log(allBlocks)
+    let filterdBlocks = []
+    for(const idx in allBlocks) {
+      const blocks = allBlocks[idx]
+      const passingBlocks = _.filter(blocks, b => {
+        const bBlock = buildingBlocks[b]
+        if (!bBlock) {
+          console.log('Building Block not found for ' + b)
+          return false
+        }
+        let updatedCondition = bBlock.conditions
+        // console.log(b + " : ", updatedCondition)
+        _.forOwn(preparedConditions, (cond, placeholder) => {
+          updatedCondition = _.replace(updatedCondition, placeholder, cond)
+        })
+        const result = evaluate(updatedCondition, flatProjectData)
+        console.log(updatedCondition, ' : blocks => ' + b)
+        // console.log(result + " : " + typeof result)
+        if (result) {
+          // console.log(result + " : " + typeof result)
+          console.log(updatedCondition, ' : blocks => ' + b)
+          // console.log(flatProjectData)
+        }
+        return result === true
+      })
+      if (passingBlocks.length === blocks.length) {
+        filterdBlocks = passingBlocks
+        break
+      }
+    }
+    // console.log(filterdBlocks)
+    // const matchedPrice = _.find(evaluatedPriceConfig, pc => {
+    //   const blocks = _.get(pc, 'blocks', [])
+    //   const filterdBlocks = _.get(pc, 'filterdBlocks', [])
+    //   // console.log(blocks)
+    //   // console.log(filterdBlocks)
+    //   let blockCondition = _.get(pc, 'conditions')
+    //   _.forOwn(preparedConditions, (cond, placeholder) => {
+    //     blockCondition = _.replace(blockCondition, placeholder, cond)
+    //   })
+    //   return blocks.length === filterdBlocks.length && evaluate(blockCondition, flatProjectData)
+    // })
+    // console.log(matchedPrice)
+    /*const priceKey = _.findKey(priceConfig, (price, condition) => {
       // console.log(condition, " : " + price)
       let updatedCondition = condition
       _.forOwn(preparedConditions, (cond, placeholder) => {
         updatedCondition = _.replace(updatedCondition, placeholder, cond)
       })
       const result = evaluate(updatedCondition, flatProjectData)
-      // console.log(result)
+      // console.log(result + " : " + typeof result)
       if (result) {
-        console.log(condition, ' : ' + price)
+        // console.log(result + " : " + typeof result)
+        console.log(updatedCondition, ' : ' + price)
         console.log(flatProjectData)
       }
       return result
-    })
-    if (!priceKey) {
+    })*/
+    if (!filterdBlocks || filterdBlocks.length === 0) {
       price = _.get(projectTemplate, 'scope.basePriceEstimate', 0)
       minTime = _.get(projectTemplate, 'scope.baseTimeEstimateMin', 0)
       maxTime = _.get(projectTemplate, 'scope.baseTimeEstimateMax', 0)
     } else {
-      price = priceConfig[priceKey].price
-      minTime = priceConfig[priceKey].minTime
-      maxTime = priceConfig[priceKey].maxTime
+      // price = priceConfig[priceKey].price
+      // minTime = priceConfig[priceKey].minTime
+      // maxTime = priceConfig[priceKey].maxTime
+      _.forEach(filterdBlocks, fb => {
+        const bb = buildingBlocks[fb]
+        price += bb.price
+        minTime += bb.minTime
+        maxTime += bb.maxTime
+      })
     }
     // picks price from the first config for which condition holds true
   }
@@ -575,6 +671,7 @@ export function getProductEstimate(projectTemplate, productConfig) {
     })
   }
   const durationEstimate = minTime !== maxTime ? `${minTime}-${maxTime}` : `${minTime}`
+  console.log(durationEstimate)
   return { priceEstimate: price, minTime, maxTime, durationEstimate: `${durationEstimate} days`}
 }
 
