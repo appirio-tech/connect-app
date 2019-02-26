@@ -16,16 +16,19 @@ import { Wizard } from 'appirio-tech-react-components'
 import { ViewTypes } from 'appirio-tech-react-components/components/Wizard/Wizard'
 import './CreateContainer.scss'
 import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
+import { getNewProjectLink } from '../../../helpers/projectHelper'
 
 import {
   CREATE_PROJECT_FAILURE,
   LS_INCOMPLETE_PROJECT,
+  LS_INCOMPLETE_WIZARD,
   PROJECT_STATUS_IN_REVIEW,
   ACCOUNTS_APP_REGISTER_URL,
   NEW_PROJECT_PATH,
   GA_CLIENT_ID,
   GA_CLICK_ID,
-  CONNECT_MAIN_PAGE_URL
+  CONNECT_MAIN_PAGE_URL,
+  PROJECT_CATALOG_URL
 } from '../../../config/constants'
 
 const page404 = compose(
@@ -45,7 +48,7 @@ const spinner = spinnerWhileLoading(props =>
   !props.processing &&
   !props.templates.isLoading &&
   props.templates.projectTemplates !== null &&
-  props.templates.projectCategories !== null
+  props.templates.projectTypes !== null
 )
 
 const enhance = compose(errorHandler, spinner)
@@ -89,13 +92,15 @@ class CreateContainer extends React.Component {
   componentWillReceiveProps(nextProps) {
     const projectId = _.get(this.props, 'project.id', null)
     const nextProjectId = _.get(nextProps, 'project.id', null)
-    const { templates: { projectTemplates, projectCategories }, match: { params }} = nextProps
-    const projectTypes = projectTemplates.concat(projectCategories)
-    if (params && params.project && projectTypes) {
+    const { templates: { projectTemplates, projectTypes }, match: { params }} = nextProps
+
+    // if templates are already loaded and project type is defined in URL
+    if (projectTemplates && projectTypes && params && params.project) {
+      const allProjectTypes = projectTemplates.concat(projectTypes)
       const projectTypeKey = params.project
-      let projectType = getProjectTypeByKey(projectTypes, projectTypeKey)
+      let projectType = getProjectTypeByKey(allProjectTypes, projectTypeKey)
       if (!projectType) {
-        projectType = getProjectTypeByAlias(projectTypes, projectTypeKey)
+        projectType = getProjectTypeByAlias(allProjectTypes, projectTypeKey)
       }
       if (projectType) {
         this.setState({ projectType })
@@ -114,6 +119,7 @@ class CreateContainer extends React.Component {
         // go to submitted state
         console.log('go to submitted state')
         window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
+        window.localStorage.removeItem(LS_INCOMPLETE_WIZARD)
         this.props.history.push('/new-project/submitted/' + nextProjectId)
       })
 
@@ -206,7 +212,7 @@ class CreateContainer extends React.Component {
 
   /**
    * Helper method to add additional details required to create project
-   * 
+   *
    * @param {Object} project project data captured from user
    * @param {Object} projectTemplate project template to be used
    */
@@ -250,26 +256,29 @@ class CreateContainer extends React.Component {
   }
 
   closeWizard() {
-    const { userRoles, location } = this.props
+    const { userRoles, location, orgConfig } = this.props
     const isLoggedIn = userRoles && userRoles.length > 0
     // calls leave handler
     this.onLeave()
     const returnUrl = _.get(qs.parse(location.search), 'returnUrl', null)
+    const orgConfigs = _.filter(orgConfig, (o) => { return o.configName === PROJECT_CATALOG_URL })
+
+
     if (returnUrl) {
       window.location = returnUrl
+    } else if (isLoggedIn && orgConfigs.length === 1) {
+      (/^https?:\/\//).test(orgConfigs[0].configValue) ? window.location = orgConfigs[0].configValue : this.props.history.push(orgConfigs[0].configValue)
+    } else if (isLoggedIn) {
+      this.props.history.push('/projects')
     } else {
-      if (isLoggedIn) {
-        this.props.history.push('/projects')
-      } else {
-        this.props.history.push('/')
-        // FIXME ideally we should push on router
-        // window.location = window.location.origin
-      }
+      this.props.history.push('/')
+      // FIXME ideally we should push on router
+      // window.location = window.location.origin
     }
   }
 
   createContainerView() {
-    const { templates: { projectTemplates, projectCategories: projectTypes }} = this.props
+    const { templates: { projectTemplates, projectTypes }, orgConfig } = this.props
 
     return (
       <EnhancedCreateView
@@ -293,6 +302,7 @@ class CreateContainer extends React.Component {
           const projectTemplate = _.find(projectTemplates, pt => pt.id === projectTemplateId)
           const templateAlias = _.get(projectTemplate, 'aliases[0]')
 
+          let link
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_INCOMP_PROJ_CONF) {
             let productUrl = templateAlias ? ('/' + templateAlias) : ''
             productUrl = !templateAlias && typeAlias ? ('/' + typeAlias) : productUrl
@@ -300,7 +310,12 @@ class CreateContainer extends React.Component {
           }
 
           if (wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
-            this.props.history.push(NEW_PROJECT_PATH + '/' + window.location.search)
+            link = getNewProjectLink(orgConfig)
+            if(/^https?:\/\//.test(link)) {
+              window.location = link
+            } else {
+              this.props.history.push(link + '/' + window.location.search)
+            }
           }
 
           if (typeAlias && wizardStep === ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TEMPLATE) {
@@ -340,7 +355,7 @@ class CreateContainer extends React.Component {
         }
         }
         projectTemplates={this.props.templates.projectTemplates}
-        projectTypes={this.props.templates.projectCategories}
+        projectTypes={this.props.templates.projectTypes}
       />
     )
   }
@@ -351,7 +366,7 @@ class CreateContainer extends React.Component {
     if (wizardStep <= ProjectWizard.Steps.WZ_STEP_SELECT_PROJ_TYPE) {
       type = ViewTypes.selectSolution
     } else if (wizardStep <= ProjectWizard.Steps.WZ_STEP_FILL_PROJ_DETAILS) {
-      type = ViewTypes.definedScope 
+      type = ViewTypes.definedScope
     } else if (wizardStep === ProjectWizard.Steps.WZ_STEP_PROJECT_SUBMITTED) {
       type = ViewTypes.projectSubmitted
     }
@@ -366,8 +381,8 @@ class CreateContainer extends React.Component {
       </Wizard>
     )
   }
-    
-    
+
+
 }
 
 CreateContainer.propTypes = {
@@ -381,6 +396,7 @@ CreateContainer.defaultProps = {
 const mapStateToProps = ({projectState, loadUser, templates }) => ({
   userHandle: _.get(loadUser, 'user.handle', []),
   userRoles: _.get(loadUser, 'user.roles', []),
+  orgConfig: _.get(loadUser, 'orgConfig', []),
   processing: projectState.processing,
   error: projectState.error,
   project: projectState.project,

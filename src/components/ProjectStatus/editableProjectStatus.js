@@ -4,15 +4,18 @@ import ProjectStatusChangeConfirmation from './ProjectStatusChangeConfirmation'
 import cn from 'classnames'
 import _ from 'lodash'
 import enhanceDropdown from 'appirio-tech-react-components/components/Dropdown/enhanceDropdown'
+import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import {
   PROJECT_STATUS,
+  PROJECT_STATUS_ACTIVE,
   PROJECT_STATUS_COMPLETED,
-  PROJECT_STATUS_CANCELLED
+  PROJECT_STATUS_CANCELLED,
+  TOOLTIP_DEFAULT_DELAY
 } from '../../config/constants'
 import CarretDownNormal9px from '../../assets/icons/arrow-9px-carret-down-normal.svg'
 
 
-const hocStatusDropdown = (CompositeComponent, statusList) => {
+const hocStatusDropdown = (CompositeComponent, statusList, projectCanBeActive) => {
   class StatusDropdown extends Component {
     shouldDropdownUp() {
       if (this.refs.dropdown) {
@@ -32,6 +35,12 @@ const hocStatusDropdown = (CompositeComponent, statusList) => {
         return null
       }
 
+      const activestatusList = statusList.map((status) => ({
+        ...status,
+        disabled: !projectCanBeActive && status.value === PROJECT_STATUS_ACTIVE,
+        toolTipMessage: (!projectCanBeActive && status.value === PROJECT_STATUS_ACTIVE) ? 'To activate project there should be at least one phase in "Planned" status. Please, check "Project Plan" tab.' : null,
+      }))
+
       this.shouldDropdownUp()
       return (
         <div className="project-status-dropdown" ref="dropdown">
@@ -46,7 +55,7 @@ const hocStatusDropdown = (CompositeComponent, statusList) => {
               unifiedHeader={unifiedHeader}
             />
             { canEdit && <i className="caret" >
-              <CarretDownNormal9px className="icon-carret-down-normal"/>
+              <CarretDownNormal9px className="icon-carret-down-normal" />
             </i> }
           </div>
           { isOpen && canEdit &&
@@ -54,18 +63,43 @@ const hocStatusDropdown = (CompositeComponent, statusList) => {
               <div className="status-header">Project Status</div>
               <ul>
                 {
-                  statusList.sort((a, b) => a.dropDownOrder > b.dropDownOrder).map((item) =>
-                    (<li key={item.value}>
-                      <a
-                        href="javascript:"
-                        className={cn('status-option', 'status-' + item.value, { active: item.value === status })}
-                        onClick={(e) => {
-                          onItemSelect(item.value, e)
-                        }}
-                      >
-                        <CompositeComponent status={item} showText />
-                      </a>
-                    </li>)
+                  activestatusList.sort((a, b) => a.dropDownOrder > b.dropDownOrder).map((item) =>
+                    item.toolTipMessage ? (
+                      <Tooltip key={item.value} theme="light" tooltipDelay={TOOLTIP_DEFAULT_DELAY}>
+                        <div className="tooltip-target">
+                          <li>
+                            <a
+                              href="javascript:"
+                              className={cn('status-option', 'status-' + item.value, { active: item.value === status, disabled: item.disabled })}
+                              onClick={(e) => {
+                                if (!item.disabled)
+                                  onItemSelect(item.value, e)
+                              }}
+                            >
+                              <CompositeComponent status={item} showText />
+                            </a>
+                          </li>
+                        </div>
+                        <div className="tooltip-body">
+                          {item.toolTipMessage}
+                        </div>
+                      </Tooltip>
+                    ) : (
+                      <div key={item.value} className="tooltip-target">
+                        <li>
+                          <a
+                            href="javascript:"
+                            className={cn('status-option', 'status-' + item.value, { active: item.value === status, disabled: item.disabled })}
+                            onClick={(e) => {
+                              if (!item.disabled)
+                                onItemSelect(item.value, e)
+                            }}
+                          >
+                            <CompositeComponent status={item} showText />
+                          </a>
+                        </li>
+                      </div>
+                    )
                   )
                 }
               </ul>
@@ -126,10 +160,10 @@ const editableProjectStatus = (CompositeComponent) => class extends Component {
 
   render() {
     const { showStatusChangeDialog, newStatus, statusChangeReason } = this.state
-    const { canEdit } = this.props
+    const { canEdit, projectCanBeActive } = this.props
     const StatusDropdown = canEdit
-      ? enhanceDropdown(hocStatusDropdown(CompositeComponent, PROJECT_STATUS))
-      : hocStatusDropdown(CompositeComponent, PROJECT_STATUS)
+      ? enhanceDropdown(hocStatusDropdown(CompositeComponent, PROJECT_STATUS, projectCanBeActive))
+      : hocStatusDropdown(CompositeComponent, PROJECT_STATUS, projectCanBeActive)
     return (
       <div className={cn('EditableProjectStatus', {'modal-active': showStatusChangeDialog})}>
         <div className="modal-overlay" onClick={ this.hideStatusChangeDialog }/>
@@ -152,7 +186,11 @@ editableProjectStatus.propTypes = {
   /**
    * Boolean flag to control editability of the project status. It does not render the dropdown if it is not editable.
    */
-  canEdit: PropTypes.bool
+  canEdit: PropTypes.bool,
+  /**
+   * Boolean flag to control if project status can be switched to active.
+   */
+  projectCanBeActive: PropTypes.bool
 }
 
 export default editableProjectStatus

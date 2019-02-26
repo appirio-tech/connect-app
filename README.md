@@ -1,7 +1,7 @@
 # Topcoder Connect App
 
 Topcoder Connect is client facing application of Topcoder. Customers use Topcoder Connect to input requirements of their projects, then managers and
-copilots take it from there.
+copilots take it from there. 
 
 ## Requirements
 
@@ -13,13 +13,13 @@ copilots take it from there.
 Prior to running the application locally you should add into your `/etc/hosts` the line `127.0.0.1 local.topcoder-dev.com`.
 
 - `$ npm install` - Installs all dependencies.
-- `$ npm start` - Run application in development mode against Topcoder development environment using [dev](https://github.com/appirio-tech/connect-app/blob/dev/config/constants/dev.js) config. In this case the frontend is build in memory by webpack server and uses dev tools like redux-devtools.
+- `$ npm start` - Run application in development mode against Topcoder development environment using [dev](https://github.com/appirio-tech/connect-app/blob/dev/config/constants/dev.js) config. In this case the frontend is build in memory by webpack server and uses dev tools like redux-logger.
 
 Open browser with URL http://local.topcoder-dev.com:3000.
 
 ## NPM commands
 
-- `$ npm start` - Run application in development mode against Topcoder development environment. In this case the frontend is build in memory by webpack server and uses dev tools like redux-devtools.
+- `$ npm start` - Run application in development mode against Topcoder development environment. In this case the frontend is build in memory by webpack server and uses dev tools like redux-logger.
 - `$ npm build` - Create build for production in `/dest` folder. In this case built app is configured to run against Topcoder production environment using [prod](https://github.com/appirio-tech/connect-app/blob/dev/config/constants/master.js) config. Files are being minimized and `gzipped`.
 - `$ npm run lint` - Check js code linting.
 - `$ npm run lint:fix` - Check js code linting and trying to fix errors automatically.

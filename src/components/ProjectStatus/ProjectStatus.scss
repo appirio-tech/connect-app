@@ -160,6 +160,22 @@
         &.active {
           background: $tc-gray-10;
         }
+
+        &.disabled  {
+          cursor: default;
+
+          svg {
+            filter: grayscale(1);
+          }
+
+          span {
+            color: $tc-gray-30;
+          }
+
+          &:hover {
+            background: transparent;
+          }
+        }
   
         svg {
           margin-top: 7px;

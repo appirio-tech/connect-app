@@ -46,6 +46,9 @@
         left: calc(50% - 15px);
         background-color: transparent;
       }
+      &:hover {
+        color: $tc-black;
+      }
       &.active {
         color: $tc-black;
         &:after {

@@ -1,5 +1,8 @@
 import _ from 'lodash'
 import typeToSpecification from '../projectSpecification/typeToSpecification'
+import { evaluate } from '../../helpers/dependentQuestionsHelper'
+import { removeValuesOfHiddenSteps } from '../../helpers/wizardHelper'
+import { flatten } from 'flat'
 
 const products = {
   App: {
@@ -501,20 +504,41 @@ export function getProjectCreationTemplateField(product, sectionId, subSectionId
  *
  * @return {object} object containing price and time estimate
  */
-export function getProductEstimate(productId, productConfig) {
-  let specification = 'topcoder.v1'
-  let product = null
+export function getProductEstimate(projectTemplate, productConfig) {
   let price = 0
   let minTime = 0
   let maxTime = 0
-  if (productId) {
-    specification = typeToSpecification[productId]
-    product = findProduct(productId)
-    price = _.get(product, 'basePriceEstimate', 0)
-    minTime = _.get(product, 'baseTimeEstimateMin', 0)
-    maxTime = _.get(product, 'baseTimeEstimateMax', 0)
+  const flatProjectData = flatten(removeValuesOfHiddenSteps(projectTemplate, productConfig), { safe: true })
+  let priceConfig = {}
+  if (projectTemplate) {
+    priceConfig = _.get(projectTemplate, 'scope.priceConfig')
+    const preparedConditions = _.get(projectTemplate, 'scope.preparedConditions', {})
+    const priceKey = _.findKey(priceConfig, (price, condition) => {
+      // console.log(condition, " : " + price)
+      let updatedCondition = condition
+      _.forOwn(preparedConditions, (cond, placeholder) => {
+        updatedCondition = _.replace(updatedCondition, placeholder, cond)
+      })
+      const result = evaluate(updatedCondition, flatProjectData)
+      // console.log(result)
+      if (result) {
+        console.log(condition, ' : ' + price)
+        console.log(flatProjectData)
+      }
+      return result
+    })
+    if (!priceKey) {
+      price = _.get(projectTemplate, 'scope.basePriceEstimate', 0)
+      minTime = _.get(projectTemplate, 'scope.baseTimeEstimateMin', 0)
+      maxTime = _.get(projectTemplate, 'scope.baseTimeEstimateMax', 0)
+    } else {
+      price = priceConfig[priceKey].price
+      minTime = priceConfig[priceKey].minTime
+      maxTime = priceConfig[priceKey].maxTime
+    }
+    // picks price from the first config for which condition holds true
   }
-  const sections = require(`../projectQuestions/${specification}`).default
+  const sections = projectTemplate.scope.sections
   if (sections) {
     sections.forEach((section) => {
       const subSections = section.subSections
@@ -532,13 +556,27 @@ export function getProductEstimate(productId, productConfig) {
                 minTime += _.get(qOption, 'minTimeUp', 0)
                 maxTime += _.get(qOption, 'maxTimeUp', 0)
               }
+              // right now we are supporting only radio-group and tiled-radio-group type of questions
+              if(['checkbox-group'].indexOf(q.type) !== -1 && q.affectsQuickQuote) {
+                const answer = _.get(productConfig, q.fieldName)
+                if (answer) {
+                  answer.forEach((a) => {
+                    const qOption = _.find(q.options, (o) => o.value === a)
+                    console.log(qOption)
+                    price += _.get(qOption, 'quoteUp', 0)
+                    minTime += _.get(qOption, 'minTimeUp', 0)
+                    maxTime += _.get(qOption, 'maxTimeUp', 0)
+                  })
+                }
+              }
             })
           }
         })
       }
     })
   }
-  return { priceEstimate: price, minTime, maxTime, durationEstimate: `${minTime}-${maxTime} days`}
+  const durationEstimate = minTime !== maxTime ? `${minTime}-${maxTime}` : `${minTime}`
+  return { priceEstimate: price, minTime, maxTime, durationEstimate: `${durationEstimate} days`}
 }
 
 /**

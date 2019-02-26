@@ -14,7 +14,8 @@ import {
   HIDE_OLDER_NOTIFICATIONS_SUCCESS,
   NOTIFICATIONS_PENDING,
   TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE,
-  TOGGLE_NOTIFICATIONS_DROPDOWN_WEB
+  TOGGLE_NOTIFICATIONS_DROPDOWN_WEB,
+  MARK_NOTIFICATIONS_READ,
 } from '../../../config/constants'
 import _ from 'lodash'
 
@@ -23,7 +24,7 @@ const initialState = {
   isLoading: false,
   initialized: false,
   filterBy: '',
-  sources: [{ id: 'global', title: 'Global', total: 0 }],
+  sources: [{ id: 'global', title: 'Global' }],
   notifications: [],
   // ids of sources that will also show old notifications
   oldSourceIds: [],
@@ -31,23 +32,41 @@ const initialState = {
   pending: false,
   // indicates if notifications dropdown opened for mobile devices
   isDropdownMobileOpen: false,
-  isDropdownWebOpen: false
+  isDropdownWebOpen: false,
+  readers: {},
 }
 
 // get sources from notifications
 const getSources = (notifications) => {
-  const sources = [{ id: 'global', title: 'Global', total: 0 }]
-  _.each(notifications, notification => {
-    if (!notification.isRead) {
-      const source = _.find(sources, s => s.id === notification.sourceId)
-      if (source) {
-        source.total++
-      } else {
-        sources.push({ id: notification.sourceId, title: notification.sourceName, total: 1 })
-      }
-    }
-  })
+  const sources = [
+    ...initialState.sources,
+    ..._.uniqBy(
+      notifications.map((notification) => ({ 
+        id: notification.sourceId, 
+        title: notification.sourceName 
+      })),
+      'id'
+    )
+  ]
   return sources
+}
+
+// check if no unread notifications available in the filtered section
+const isNotificationSectionCleared = (notifications, filterBy) => {
+  if (filterBy && notifications.filter(n => !n.isRead).map(n => n.sourceId).indexOf(filterBy) >= 0) {
+    return false
+  }
+
+  return true
+}
+
+// get notifications and updated filterBy based on the unread notifications in current filter
+const getNotificationsAndFilterBy = (notifications, filterBy) => {
+  if (isNotificationSectionCleared(notifications, filterBy)) {
+    return { notifications, filterBy: '' }
+  }
+
+  return { notifications }
 }
 
 export default (state = initialState, action) => {
@@ -71,7 +90,6 @@ export default (state = initialState, action) => {
         ids.indexOf(n.id) >= 0 ? { ...n, seen: true } : n
       ))
     }
-    newState.sources = getSources(newState.notifications)
     return newState
   }
 
@@ -89,11 +107,10 @@ export default (state = initialState, action) => {
     const newState = {
       ...state,
       pending: false,
-      notifications: state.notifications.map(n => (
-        !action.payload || n.sourceId === action.payload ? { ...n, isRead: true } : n
-      ))
+      ...getNotificationsAndFilterBy(state.notifications.map(n => (
+        !action.payload || n.sourceId === action.payload ? { ...n, isRead: action.isRead } : n
+      )), state.filterBy)
     }
-    newState.sources = getSources(newState.notifications)
     return newState
   }
 
@@ -101,11 +118,21 @@ export default (state = initialState, action) => {
     const newState = {
       ...state,
       pending: false,
-      notifications: state.notifications.map(n => (
-        n.id === action.payload ? { ...n, isRead: true } : n
-      ))
+      ...getNotificationsAndFilterBy(state.notifications.map(n => (
+        n.id === action.payload ? { ...n, isRead: action.isRead } : n
+      )), state.filterBy)
     }
-    newState.sources = getSources(newState.notifications)
+    return newState
+  }
+
+  case MARK_NOTIFICATIONS_READ: {
+    const newState = {
+      ...state,
+      pending: false,
+      ...getNotificationsAndFilterBy(state.notifications.map(n => (
+        _.includes(action.payload, n.id) ? { ...n, isRead: action.isRead } : n
+      )), state.filterBy)
+    }
     return newState
   }
 

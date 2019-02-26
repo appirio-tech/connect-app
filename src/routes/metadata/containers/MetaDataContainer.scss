@@ -1,0 +1,48 @@
+// this is to include tc styles in the output library
+@import '~tc-ui/src/styles/tc-includes';
+
+:global {
+  .meta-data-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    min-width: 960px;
+    padding: 30px 20px 0;
+
+    > .content {
+      flex: 1;
+      margin-right: 30px;
+      max-width: 340px;
+    }
+
+    > .filters {
+      flex: 1;
+      background-color: $tc-white;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    h5 {
+      margin-left: 10px;
+    }
+
+    .align-left {
+      margin-left: 10px;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      :global(.Dropdown) {
+        overflow-y: scroll;
+        height: 500px;
+      }
+
+      .clear-margin {
+        :global(.dropdown-wrap) {
+          margin-left: 0;
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}

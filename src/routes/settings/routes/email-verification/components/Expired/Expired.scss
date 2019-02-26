@@ -1,0 +1,27 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.list {
+  @include roboto;
+  font-size: $tc-label-lg;
+  color: $tc-gray-70;
+  letter-spacing: 0px;
+  line-height: 23px;
+  padding: 0 168px;
+  text-align: left;
+
+  @media screen and (max-width: 1000px - 1px) {
+    padding: 0 100px;
+  }
+
+  @media screen and (max-width: $screen-md - 1px) {
+    padding: 0 28px;
+  }
+
+  li {
+    list-style: inside circle;
+  }
+}
+
+.controls {
+  margin-top: 5 * $base-unit;
+}

@@ -12,12 +12,12 @@
 
   .s-alert-box {
     position: fixed;
-    background: rgba(42, 45, 50, 0.85);
+    background: rgba($tc-gray-90, 0.85);
     padding: 20px 50px 19px 20px;
     line-height: 20px;
     z-index: 9999;
     pointer-events: none;
-    color: rgba(250, 251, 255, 0.95);
+    color: rgba($tc-gray-neutral-light, 0.95);
     font-size: 15px;
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
     max-width: 300px;

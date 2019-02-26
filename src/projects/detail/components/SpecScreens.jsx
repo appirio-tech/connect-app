@@ -58,6 +58,7 @@ class SpecScreens extends Component {
     const { screens } = this.state
     const { appDefinition } = (this.props.dirtyProject || this.props.project).details
     const numberScreensSelected = parseInt(_.last(_.get(appDefinition, 'numberScreens', '0').split('-')))
+    const { additionalClass } = this.props
 
     const renderCurrentScreen = (screen, index) => {
       return (
@@ -87,7 +88,7 @@ class SpecScreens extends Component {
     }
 
     return (
-      <div>
+      <div className={additionalClass}>
         {screens.map(renderCurrentScreen)}
         {/*renderNewScreen(screens.length + 1)*/}
         <div className="edit-screen-footer">
@@ -122,6 +123,11 @@ SpecScreens.propTypes = {
   questions: PropTypes.arrayOf(PropTypes.object).isRequired,
   project: PropTypes.object.isRequired,
   dirtyProject: PropTypes.object.isRequired,
+  additionalClass: PropTypes.string
+}
+
+SpecScreens.defaultProps = {
+  additionalClass: '',
 }
 
 export default hoc(SpecScreens)

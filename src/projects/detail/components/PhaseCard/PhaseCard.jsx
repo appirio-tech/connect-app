@@ -17,7 +17,8 @@ import {
   PHASE_STATUS_COMPLETED,
   PROJECT_STATUS_COMPLETED,
   PROJECT_STATUS_CANCELLED,
-  SCREEN_BREAKPOINT_MD
+  SCREEN_BREAKPOINT_MD,
+  EVENT_TYPE,
 } from '../../../../config/constants'
 
 import ProjectProgress from '../../../../components/ProjectProgress/ProjectProgress'
@@ -26,6 +27,10 @@ import LoadingIndicator from '../../../../components/LoadingIndicator/LoadingInd
 import MobilePage from '../../../../components/MobilePage/MobilePage'
 import BackIcon from '../../../../assets/icons/arrow-left.svg'
 import EditStageForm from './EditStageForm'
+import NotificationsReader from '../../../../components/NotificationsReader'
+
+import PERMISSIONS from '../../../../config/permissions'
+import {checkPermission} from '../../../../helpers/permissions'
 
 import './PhaseCard.scss'
 
@@ -95,13 +100,22 @@ class PhaseCard extends React.Component {
     status = _.find(PHASE_STATUS, s => s.value === status) ? status : PHASE_STATUS_DRAFT
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
-    const phaseEditable = isManageUser && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
+    const phaseEditable = checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN) && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
     
 
     const hasUnseen = hasReadPosts
 
     return (
       <div styleName={'phase-card ' + (isExpanded ? ' expanded ' : ' ')} id={`phase-${phaseId}`}>
+        <NotificationsReader 
+          id={`phase-${phaseId}`}
+          criteria={[
+            { eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_ACTIVATED, contents: { phaseId } },
+            { eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_COMPLETED, contents: { phaseId } },
+            { eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_PAYMENT_UPDATED, contents: { phaseId } },
+            { eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_PROGRESS_UPDATED, contents: { phaseId } },
+          ]}
+        />
         {
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => (matches || !isExpanded ? (
@@ -200,7 +214,7 @@ class PhaseCard extends React.Component {
                   }
                 </div>
 
-                {!this.state.isEditting && (<div styleName="expandable-view">
+                {!this.state.isEditting && !!isExpanded && (<div styleName="expandable-view">
                   {this.props.children}
                 </div>)}
                 {isManageUser && this.state.isEditting && (

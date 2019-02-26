@@ -4,6 +4,7 @@
 :global {
   .notifications-section {
     border: 1px solid $tc-gray-20;
+    overflow: hidden;
 
     @media screen and (max-width: $screen-md - 1px) {
       border: 0;
@@ -24,6 +25,10 @@
       line-height: 40px;
       text-align: center;
       width: 100%;
+    }
+
+    .notification-list {
+      overflow: hidden;
     }
   }
 
