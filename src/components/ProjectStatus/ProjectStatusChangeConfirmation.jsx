@@ -35,14 +35,15 @@ class ProjectStatusChangeConfirmation extends Component {
     }
     this.cancelReasons = [
       { value: null, title: '-- Select Reason --'},
-      { value: 'spam', title: 'Spam'},
-      { value: 'demo', title: 'Demo/Test'},
-      { value: 'competitor', title: 'Customer selected competitor'},
-      { value: 'price', title: 'Price too high'},
-      { value: 'customer-inhouse', title: 'Being done in-house'},
-      { value: 'customer-inactivity', title: 'Customer not responsive'},
-      { value: 'non-community', title: 'Poor community fit'},
-      { value: 'by-choice', title: 'Declined by us'}
+      { value: "spam", title: "Spam"},
+      { value: "demo", title: "Demo/Test"},
+      { value: "duplicate", title: "Duplicate project"},
+      { value: "join-as-member", title: "Want to join Topcoder as member"},
+      { value: "price", title: "Project budget doesn't fit"},
+      { value: "insufficient-input", title: "Insufficient input from Customer"},
+      { value: "non-community", title: "Poor community fit"},
+      { value: "customer-inactivity", title: "Customer not responsive"},
+      { value: "unrealistic-timeline", title: "Unrealistic timeline"}
     ]
     this.confirmText = confirmText
     this.titleStatus = titleStatus
