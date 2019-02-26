@@ -1,42 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Link} from 'react-router-dom'
 import './Walkthrough.scss'
-import IconShadow from '../../../../assets/icons/ground-shadow.svg'
-import IconRobot from '../../../../assets/icons/coder-welcome.svg'
-import IconTextImg from '../../../../assets/icons/pointer-new-project.svg'
-import BoldAdd from '../../../../assets/icons/ui-16px-1_bold-add.svg'
+import NewProjectCard from '../../../components/projectsCard/NewProjectCard'
 
 
 
-const Walkthrough = ({currentUser}) => (
+const Walkthrough = ({newProjectLink}) => (
   <div className="walkthrough-column">
-    
-    <IconTextImg className="text-img"/>
-    
-    <div className="bubble">
-      <IconRobot className="robot robotleft"/>
-      <div>
-        <span className="arrow"/>
-        <h3>010010010010100101001000100100101 <br/>Bzzt …I mean… Hello, {currentUser.firstName}!</h3>
-        <p>Welcome to Connect! I’m Coder the Robot. I see you have no projects yet. To get you started, press the “New Project” icon and let’s build something.</p>
-        <Link to="/new-project">
-          <div className="new-project-button">
-            <div className="new-project-icon">
-              <BoldAdd className="icon-bold-add"/>
-            </div>
-            <div className="title">Create a new project</div>
-          </div>
-        </Link>
-      </div>
-      <IconRobot className="robot"/>
-      <IconShadow className="shadow"/>
+    <div className="header-text-wrapper">
+      <h3>Welcome to Topcoder.</h3>
+      <h3>To get started, click the "Create a new project" button below.</h3>
+    </div>
+
+    <div className="project-card-new">
+      <NewProjectCard link={newProjectLink} />
+    </div>
+
+    <div className="subtext">
+      If you have already created a project with us and are not seeing it listed, contact
+      <a href="mailto:support@topcoder.com" target="_blank">support@topcoder.com</a>
     </div>
   </div>
 )
 
 Walkthrough.PropTypes = {
-  currentUser: PropTypes.object.isRequired
+  newProjectLink: PropTypes.string
 }
 
 export default Walkthrough
