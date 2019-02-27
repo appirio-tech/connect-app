@@ -216,16 +216,22 @@ describe('Evaluate: ', () => {
       result.should.equal(testData.a)
     })
 
-    it ('should throw error if an argument is null', () => {
-      (() => { evaluate('a + null', testData) }).should.throw()
+    it ('should return same if an argument is null', () => {
+      const result = evaluate('a + null', testData)
+
+      result.should.equal(testData.a)
     })
 
-    it ('should throw error if an argument is undefined', () => {
-      (() => { evaluate('a + undefined', testData) }).should.throw()
+    it ('should return NaN if an argument is undefined', () => {
+      const result = evaluate('a + undefined', testData)
+
+      result.should.be.NaN
     })
 
-    it ('should throw error if an argument is NaN', () => {
-      (() => { evaluate('a + NaN', testData) }).should.throw()
+    it ('should return NaN if an argument is NaN', () => {
+      const result = evaluate('a + NaN', testData)
+
+      result.should.be.NaN
     })
 
     it ('should add true to numbers', () => {
@@ -260,16 +266,22 @@ describe('Evaluate: ', () => {
       result.should.equal(testData.a)
     })
 
-    it ('should throw error if an argument is null', () => {
-      (() => { evaluate('a - null', testData) }).should.throw()
+    it ('should return 0 if an argument is null', () => {
+      const result = evaluate('a - null', testData)
+
+      result.should.equal(testData.a)
     })
 
-    it ('should throw error if an argument is undefined', () => {
-      (() => { evaluate('a - undefined', testData) }).should.throw()
+    it ('should return NaN if an argument is undefined', () => {
+      const result = evaluate('a - undefined', testData)
+
+      result.should.be.NaN
     })
 
-    it ('should throw error if an argument is NaN', () => {
-      (() => { evaluate('a - NaN', testData) }).should.throw()
+    it ('should return NaN if an argument is NaN', () => {
+      const result = evaluate('a - NaN', testData)
+
+      result.should.be.NaN
     })
 
     it ('should subtract true from numbers', () => {
@@ -311,16 +323,22 @@ describe('Evaluate: ', () => {
       res.should.equal(testData.b)
     })
 
-    it ('should throw error if an argument is null', () => {
-      (() => { evaluate('a * null', testData) }).should.throw()
+    it ('should return 0 if an argument is null', () => {
+      const result = evaluate('a * null', testData)
+
+      result.should.equal(0)
     })
 
-    it ('should throw error if an argument is undefined', () => {
-      (() => { evaluate('a * undefined', testData) }).should.throw()
+    it ('should return NaN if an argument is undefined', () => {
+      const result = evaluate('a * undefined', testData)
+
+      result.should.be.NaN
     })
 
-    it ('should throw error if an argument is NaN', () => {
-      (() => { evaluate('a * NaN', testData) }).should.throw()
+    it ('should return NaN if an argument is NaN', () => {
+      const result = evaluate('a * NaN', testData)
+
+      result.should.be.NaN
     })
 
     it ('should flip the sign of Infinity', () => {
@@ -376,16 +394,22 @@ describe('Evaluate: ', () => {
       isNaN(result).should.equal(true)
     })
 
-    it ('should throw error if an argument is null', () => {
-      (() => { evaluate('a / null', testData) }).should.throw()
+    it ('should return Infinity if an argument is null', () => {
+      const result = evaluate('a / null', testData)
+
+      result.should.equal(0)
     })
 
-    it ('should throw error if an argument is undefined', () => {
-      (() => { evaluate('a / undefined', testData) }).should.throw()
+    it ('should return NaN if an argument is undefined', () => {
+      const result = evaluate('a / undefined', testData)
+
+      result.should.be.NaN
     })
 
-    it ('should throw error if an argument is NaN', () => {
-      (() => { evaluate('a / NaN', testData) }).should.throw()
+    it ('should return NaN if an argument is NaN', () => {
+      const result = evaluate('a / NaN', testData)
+
+      result.should.be.NaN
     })
   })
 
