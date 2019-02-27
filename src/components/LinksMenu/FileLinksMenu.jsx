@@ -38,6 +38,7 @@ const FileLinksMenu = ({
   selectedUsers,
   onAddAttachment,
   onUploadAttachment,
+  isSharingAttachment,
   discardAttachments,
   onChangePermissions,
   pendingAttachments,
@@ -118,6 +119,7 @@ const FileLinksMenu = ({
             selectedUsers={selectedUsers}
             projectMembers={projectMembers}
             loggedInUser={loggedInUser}
+            isSharingAttachment={isSharingAttachment}
           />
         }
 
@@ -243,6 +245,7 @@ FileLinksMenu.propTypes = {
   projectMembers: PropTypes.object,
   pendingAttachments: PropTypes.object,
   onUploadAttachment: PropTypes.func,
+  isSharingAttachment: PropTypes.bool.isRequired,
   discardAttachments: PropTypes.func,
   onChangePermissions: PropTypes.func,
   attachmentsStorePath: PropTypes.string.isRequired,
