@@ -217,15 +217,15 @@ describe('Evaluate: ', () => {
     })
 
     it ('should throw error if an argument is null', () => {
-      (() => { evaluate('a + null', testData) }).should.Throw()
+      (() => { evaluate('a + null', testData) }).should.throw()
     })
 
     it ('should throw error if an argument is undefined', () => {
-      (() => { evaluate('a + undefined', testData) }).should.Throw()
+      (() => { evaluate('a + undefined', testData) }).should.throw()
     })
 
     it ('should throw error if an argument is NaN', () => {
-      (() => { evaluate('a + NaN', testData) }).should.Throw()
+      (() => { evaluate('a + NaN', testData) }).should.throw()
     })
 
     it ('should add true to numbers', () => {
@@ -261,15 +261,15 @@ describe('Evaluate: ', () => {
     })
 
     it ('should throw error if an argument is null', () => {
-      (() => { evaluate('a - null', testData) }).should.Throw()
+      (() => { evaluate('a - null', testData) }).should.throw()
     })
 
     it ('should throw error if an argument is undefined', () => {
-      (() => { evaluate('a - undefined', testData) }).should.Throw()
+      (() => { evaluate('a - undefined', testData) }).should.throw()
     })
 
     it ('should throw error if an argument is NaN', () => {
-      (() => { evaluate('a - NaN', testData) }).should.Throw()
+      (() => { evaluate('a - NaN', testData) }).should.throw()
     })
 
     it ('should subtract true from numbers', () => {
@@ -312,15 +312,15 @@ describe('Evaluate: ', () => {
     })
 
     it ('should throw error if an argument is null', () => {
-      (() => { evaluate('a * null', testData) }).should.Throw()
+      (() => { evaluate('a * null', testData) }).should.throw()
     })
 
     it ('should throw error if an argument is undefined', () => {
-      (() => { evaluate('a * undefined', testData) }).should.Throw()
+      (() => { evaluate('a * undefined', testData) }).should.throw()
     })
 
     it ('should throw error if an argument is NaN', () => {
-      (() => { evaluate('a * NaN', testData) }).should.Throw()
+      (() => { evaluate('a * NaN', testData) }).should.throw()
     })
 
     it ('should flip the sign of Infinity', () => {
@@ -377,15 +377,15 @@ describe('Evaluate: ', () => {
     })
 
     it ('should throw error if an argument is null', () => {
-      (() => { evaluate('a / null', testData) }).should.Throw()
+      (() => { evaluate('a / null', testData) }).should.throw()
     })
 
     it ('should throw error if an argument is undefined', () => {
-      (() => { evaluate('a / undefined', testData) }).should.Throw()
+      (() => { evaluate('a / undefined', testData) }).should.throw()
     })
 
     it ('should throw error if an argument is NaN', () => {
-      (() => { evaluate('a / NaN', testData) }).should.Throw()
+      (() => { evaluate('a / NaN', testData) }).should.throw()
     })
   })
 
