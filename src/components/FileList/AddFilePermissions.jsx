@@ -4,11 +4,12 @@ import Modal from 'react-modal'
 import { mapKeys, get } from 'lodash'
 
 import UserAutoComplete from '../UserAutoComplete/UserAutoComplete'
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
 
 import './AddFilePermissions.scss'
 import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
 
-const AddFilePermission = ({ onCancel, onSubmit, onChange, selectedUsers, projectMembers, loggedInUser }) => {
+const AddFilePermission = ({ onCancel, onSubmit, onChange, selectedUsers, projectMembers, loggedInUser, isSharingAttachment }) => {
   selectedUsers = selectedUsers || ''
   const mapHandlesToUserIds = handles => {
     const projectMembersByHandle = mapKeys(projectMembers, value => value.handle)
@@ -28,10 +29,18 @@ const AddFilePermission = ({ onCancel, onSubmit, onChange, selectedUsers, projec
           <span onClick={onCancel}><XMarkIcon /></span>
         </div>
 
+        <div styleName="loading-indicator-wrapper">
+          { isSharingAttachment && <LoadingIndicator isSmall /> }
+        </div>
+
         {/* Share with all members */}
         <div className="dialog-body">
           <div styleName="btn-all-members">
-            <button className="tc-btn tc-btn-primary tc-btn-md" onClick={() => onSubmit(null)}>All project members</button>
+            <button
+              className="tc-btn tc-btn-primary tc-btn-md"
+              onClick={() => onSubmit(null)}
+              disabled={isSharingAttachment}
+            >All project members</button>
           </div>
         </div>
         
@@ -41,10 +50,10 @@ const AddFilePermission = ({ onCancel, onSubmit, onChange, selectedUsers, projec
 
           <UserAutoComplete projectMembers={projectMembers} selectedUsers={selectedUsers} onUpdate={onChange} loggedInUser={loggedInUser} />
 
-          <div>
+          <div styleName="btn-selected-members">
             <button className="tc-btn tc-btn-primary tc-btn-md" 
               onClick={() => onSubmit(mapHandlesToUserIds(selectedUsers.split(',')))}
-              disabled={!selectedUsers || selectedUsers.length === 0 }
+              disabled={!selectedUsers || selectedUsers.length === 0 || isSharingAttachment }
             >Share with selected members</button>
           </div>
         </div>
@@ -59,7 +68,8 @@ AddFilePermission.propTypes = {
   onChange: PropTypes.func.isRequired, 
   selectedUsers: PropTypes.string, 
   projectMembers: PropTypes.object, 
-  loggedInUser: PropTypes.object.isRequired
+  loggedInUser: PropTypes.object.isRequired,
+  isSharingAttachment: PropTypes.bool.isRequired,
 }
 
 export default AddFilePermission
