@@ -46,6 +46,7 @@ class ProjectInfoContainer extends React.Component {
       !_.isEqual(nextProps.isProjectProcessing, this.props.isProjectProcessing) ||
       !_.isEqual(nextProps.attachmentsAwaitingPermission, this.props.attachmentsAwaitingPermission) ||
       !_.isEqual(nextProps.attachmentPermissions, this.props.attachmentPermissions) ||
+      !_.isEqual(nextProps.isSharingAttachment, this.props.isSharingAttachment) ||
       nextProps.activeChannelId !== this.props.activeChannelId
   }
 
@@ -149,7 +150,7 @@ class ProjectInfoContainer extends React.Component {
       hideInfo, hideLinks, hideMembers, onChannelClick, activeChannelId, productsTimelines,
       isManageUser, phasesTopics, isProjectPlan, isProjectProcessing, projectTemplates,
       attachmentsAwaitingPermission, addProjectAttachment, discardAttachments, attachmentPermissions,
-      changeAttachmentPermission, projectMembers, loggedInUser } = this.props
+      changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -271,6 +272,7 @@ class ProjectInfoContainer extends React.Component {
             onAddNewLink={this.onAddFile}
             onAddAttachment={addProjectAttachment}
             onUploadAttachment={this.onUploadAttachment}
+            isSharingAttachment={isSharingAttachment}
             discardAttachments={discardAttachments}
             onChangePermissions={changeAttachmentPermission}
             selectedUsers={attachmentPermissions}
@@ -321,6 +323,7 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
     projectTemplates : templates.projectTemplates,
     attachmentsAwaitingPermission: projectState.attachmentsAwaitingPermission,
     attachmentPermissions: projectState.attachmentPermissions,
+    isSharingAttachment: projectState.processingAttachments,
     projectMembers:  _.keyBy(projectMembers, 'userId'),
     loggedInUser: loadUser.user
   })
