@@ -195,7 +195,7 @@ class Projects extends Component {
   }
 
   render() {
-    const { isPowerUser, isLoading, totalCount, criteria, currentUser, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history, orgConfig } = this.props
+    const { isPowerUser, isLoading, totalCount, criteria, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history, orgConfig } = this.props
     // show walk through if user is customer and no projects were returned
     // for default filters
     const showWalkThrough = !isLoading && totalCount === 0 &&
@@ -248,7 +248,7 @@ class Projects extends Component {
               <ProjectListNavHeader applyFilters={this.applyFilters} selectedView={chosenView} changeView={setProjectsListView} currentStatus={currentStatus} criteria={criteria} setInfiniteAutoload={setInfiniteAutoload} loadProjects={loadProjects} history={history}/>}
             { showWalkThrough  ?
               (
-                <Walkthrough currentUser={currentUser} />
+                <Walkthrough newProjectLink={getNewProjectLink(orgConfig)} />
               ) : (
                 projectsView
               )
