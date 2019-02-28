@@ -10,12 +10,14 @@ import { LOAD_MEMBERS_PENDING, LOAD_MEMBERS_SUCCESS, LOAD_MEMBERS_FAILURE,
 
 const initialState = {
   isLoading: false,
-  members: {}
+  members: {},
+  suggestedMembers: []
 }
 
 export default function(state = initialState, action) {
   switch(action.type) {
   case LOAD_MEMBER_SUGGESTIONS_SUCCESS:
+  	return Object.assign({}, state, {suggestedMembers: action.payload})
   case LOAD_MEMBERS_SUCCESS: {
     const _members = _.map(_.filter(action.payload, m => m.userId), m => {
       if (m.handle) {
