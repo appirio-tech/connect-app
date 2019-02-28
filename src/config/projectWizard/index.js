@@ -510,7 +510,7 @@ export function getProductEstimate(projectTemplate, productConfig) {
   let maxTime = 0
   const flatProjectData = flatten(removeValuesOfHiddenNodes(projectTemplate, productConfig), { safe: true })
   if (projectTemplate) {
-    const priceConfig = _.get(projectTemplate, 'scope.priceConfigOpt', {})
+    const priceConfig = _.get(projectTemplate, 'scope.priceConfig', {})
     const buildingBlocks = _.get(projectTemplate, 'scope.buildingBlocks', {})
     const preparedConditions = _.cloneDeep(_.get(projectTemplate, 'scope.preparedConditions', {}))
     // prepares a list of pre evaluated variables
@@ -518,31 +518,6 @@ export function getProductEstimate(projectTemplate, productConfig) {
       preparedConditions[placeholder] = evaluate(cond, flatProjectData) === true ? '1 == 1' : '1 == 2'
     })
 
-    /*const evaluatedPriceConfig = _.map(priceConfig, (pc) => {
-      const blocks = _.get(pc, 'blocks', [])
-      const filterdBlocks = _.filter(blocks, b => {
-        const bBlock = buildingBlocks[b]
-        if (!bBlock) {
-          console.log("Building Block not found for " + b)
-          return false
-        }
-        let updatedCondition = bBlock.conditions
-        // console.log(b + " : ", updatedCondition)
-        _.forOwn(preparedConditions, (cond, placeholder) => {
-          updatedCondition = _.replace(updatedCondition, placeholder, cond)
-        })
-        const result = evaluate(updatedCondition, flatProjectData)
-        // console.log(result + " : " + typeof result)
-        if (result) {
-          // console.log(result + " : " + typeof result)
-          // console.log(updatedCondition, ' : ' + price)
-          // console.log(flatProjectData)
-        }
-        return result === true
-      })
-      // console.log(filterdBlocks, 'filteredBlocks')
-      return { ...pc, filterdBlocks: _.map(filterdBlocks, fb => buildingBlocks[fb]) }
-    });*/
     const priceKey = _.findKey(priceConfig, (blocks, condition) => {
       // console.log(condition, " : " + blocks)
       let updatedCondition = condition
@@ -553,8 +528,6 @@ export function getProductEstimate(projectTemplate, productConfig) {
       // console.log(result + " : " + typeof result)
       if (result) {
         // console.log(result + " : " + typeof result)
-        // console.log(updatedCondition, ' : ' + price)
-        // console.log(flatProjectData)
       }
       return result
     })
@@ -570,7 +543,6 @@ export function getProductEstimate(projectTemplate, productConfig) {
           return false
         }
         let updatedCondition = bBlock.conditions
-        // console.log(b + " : ", updatedCondition)
         _.forOwn(preparedConditions, (cond, placeholder) => {
           updatedCondition = _.replace(updatedCondition, placeholder, cond)
         })
@@ -579,8 +551,7 @@ export function getProductEstimate(projectTemplate, productConfig) {
         // console.log(result + " : " + typeof result)
         if (result) {
           // console.log(result + " : " + typeof result)
-          console.log(updatedCondition, ' : blocks => ' + b)
-          // console.log(flatProjectData)
+          // console.log(updatedCondition, ' : blocks => ' + b)
         }
         return result === true
       })
@@ -590,33 +561,6 @@ export function getProductEstimate(projectTemplate, productConfig) {
       }
     }
     // console.log(filterdBlocks)
-    // const matchedPrice = _.find(evaluatedPriceConfig, pc => {
-    //   const blocks = _.get(pc, 'blocks', [])
-    //   const filterdBlocks = _.get(pc, 'filterdBlocks', [])
-    //   // console.log(blocks)
-    //   // console.log(filterdBlocks)
-    //   let blockCondition = _.get(pc, 'conditions')
-    //   _.forOwn(preparedConditions, (cond, placeholder) => {
-    //     blockCondition = _.replace(blockCondition, placeholder, cond)
-    //   })
-    //   return blocks.length === filterdBlocks.length && evaluate(blockCondition, flatProjectData)
-    // })
-    // console.log(matchedPrice)
-    /*const priceKey = _.findKey(priceConfig, (price, condition) => {
-      // console.log(condition, " : " + price)
-      let updatedCondition = condition
-      _.forOwn(preparedConditions, (cond, placeholder) => {
-        updatedCondition = _.replace(updatedCondition, placeholder, cond)
-      })
-      const result = evaluate(updatedCondition, flatProjectData)
-      // console.log(result + " : " + typeof result)
-      if (result) {
-        // console.log(result + " : " + typeof result)
-        console.log(updatedCondition, ' : ' + price)
-        console.log(flatProjectData)
-      }
-      return result
-    })*/
     if (!filterdBlocks || filterdBlocks.length === 0) {
       price = _.get(projectTemplate, 'scope.basePriceEstimate', 0)
       minTime = _.get(projectTemplate, 'scope.baseTimeEstimateMin', 0)
