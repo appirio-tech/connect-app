@@ -9,7 +9,7 @@ import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 import SelectDropdown from '../SelectDropdown/SelectDropdown'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
-import AutocompleteInput from './AutocompleteInput'
+import AutocompleteInputContainer from './AutocompleteInputContainer'
 import {PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PENDING} from '../../config/constants'
 
 class Dialog extends React.Component {
@@ -286,7 +286,7 @@ class Dialog extends React.Component {
 
           {(showRemove || showApproveDecline) && <div className="input-container" >
             <div className="hint">invite more people</div>
-			<AutocompleteInputContainer
+            <AutocompleteInputContainer
               onUpdate={this.onChange}
               currentUser={currentUser}
               selectedMembers={selectedMembers}

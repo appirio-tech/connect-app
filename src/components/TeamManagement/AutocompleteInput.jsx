@@ -1,9 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {findIndex} from 'lodash'
 import Select from '../Select/Select'
 import './AutocompleteInput.scss'
-import {loadMemberSuggestions} from '../../api/projectMembers'
 
 /**
  * Render a searchable dropdown for selecting users that can be invited
@@ -24,13 +22,13 @@ class AutocompleteInput extends React.Component {
     return (
       <div className="autocomplete-wrapper">
         <Select
-		isMulti={true}
-		placeholder={placeholder}
-		value={selectedMembers}
-		onInputChange={this.props.onInputChange}
-		onChange={this.props.onUpdate}
-		options={this.props.suggestedMembers}
-		disabled={disabled}
+          isMulti
+          placeholder={placeholder}
+          value={selectedMembers}
+          onInputChange={this.props.onInputChange}
+          onChange={this.props.onUpdate}
+          options={this.props.suggestedMembers}
+          disabled={disabled}
         />
       </div>
     )
