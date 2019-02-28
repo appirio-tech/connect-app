@@ -7,6 +7,7 @@ import XMarkIcon from '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import {getAvatarResized} from '../../helpers/tcHelpers'
 import AutocompleteInput from './AutocompleteInput'
+import AutocompleteInputContainer from './AutocompleteInputContainer'
 
 class Dialog extends React.Component {
   constructor(props) {
@@ -150,7 +151,7 @@ class Dialog extends React.Component {
 
           <div className="input-container">
             <div className="hint">invite more people</div>
-            <AutocompleteInput
+			<AutocompleteInputContainer
               placeholder="Enter one or more emails or user handles"
               onUpdate={this.onChange}
               currentUser={currentUser}

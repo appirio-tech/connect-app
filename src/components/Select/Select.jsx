@@ -8,7 +8,7 @@
  */
 import React from 'react'
 import ReactSelect from 'react-select'
-import 'react-select/dist/react-select.css'
+// import 'react-select/dist/react-select.css'
 import './Select.scss'
 
 const Select = (props) => {

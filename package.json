@@ -130,7 +130,7 @@
     "react-s-alert": "^1.1.4",
     "react-scroll": "^1.7.6",
     "react-scroll-lock-component": "^1.1.2",
-    "react-select": "^0.9.1",
+    "react-select": "^2.4.0",
     "react-stickynode": "^1.2.1",
     "react-text-truncate": "^0.8.3",
     "react-transition-group": "^2.5.0",
