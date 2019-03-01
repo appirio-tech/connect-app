@@ -515,22 +515,26 @@ export function getProductEstimate(projectTemplate, productConfig) {
     const preparedConditions = _.cloneDeep(_.get(projectTemplate, 'scope.preparedConditions', {}))
     // prepares a list of pre evaluated variables
     _.forOwn(preparedConditions, (cond, placeholder) => {
+      // console.log(placeholder)
       preparedConditions[placeholder] = evaluate(cond, flatProjectData) === true ? '1 == 1' : '1 == 2'
+      // console.log(preparedConditions[placeholder])
     })
 
     const priceKey = _.findKey(priceConfig, (blocks, condition) => {
       // console.log(condition, " : " + blocks)
       let updatedCondition = condition
       _.forOwn(preparedConditions, (cond, placeholder) => {
-        updatedCondition = _.replace(updatedCondition, placeholder, cond)
+        updatedCondition = _.replace(updatedCondition, new RegExp(placeholder,"g"), cond)
       })
       const result = evaluate(updatedCondition, flatProjectData)
       // console.log(result + " : " + typeof result)
       if (result) {
+        // console.log(updatedCondition)
         // console.log(result + " : " + typeof result)
       }
       return result
     })
+    // console.log(priceKey)
     const allBlocks = priceConfig[priceKey]
     // console.log(allBlocks)
     let filterdBlocks = []
@@ -544,7 +548,7 @@ export function getProductEstimate(projectTemplate, productConfig) {
         }
         let updatedCondition = bBlock.conditions
         _.forOwn(preparedConditions, (cond, placeholder) => {
-          updatedCondition = _.replace(updatedCondition, placeholder, cond)
+          updatedCondition = _.replace(updatedCondition, new RegExp(placeholder,"g"), cond)
         })
         const result = evaluate(updatedCondition, flatProjectData)
         // console.log(updatedCondition, ' : blocks => ' + b)
