@@ -524,7 +524,7 @@ export function getProductEstimate(projectTemplate, productConfig) {
       // console.log(condition, " : " + blocks)
       let updatedCondition = condition
       _.forOwn(preparedConditions, (cond, placeholder) => {
-        updatedCondition = _.replace(updatedCondition, new RegExp(placeholder,"g"), cond)
+        updatedCondition = _.replace(updatedCondition, new RegExp(placeholder, 'g'), cond)
       })
       const result = evaluate(updatedCondition, flatProjectData)
       // console.log(result + " : " + typeof result)
@@ -548,7 +548,7 @@ export function getProductEstimate(projectTemplate, productConfig) {
         }
         let updatedCondition = bBlock.conditions
         _.forOwn(preparedConditions, (cond, placeholder) => {
-          updatedCondition = _.replace(updatedCondition, new RegExp(placeholder,"g"), cond)
+          updatedCondition = _.replace(updatedCondition, new RegExp(placeholder, 'g'), cond)
         })
         const result = evaluate(updatedCondition, flatProjectData)
         // console.log(updatedCondition, ' : blocks => ' + b)
