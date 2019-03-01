@@ -4,7 +4,8 @@ import { LOAD_MEMBERS_PENDING, LOAD_MEMBERS_SUCCESS, LOAD_MEMBERS_FAILURE,
   LOAD_MEMBER_SUGGESTIONS_SUCCESS,
   CONNECT_USER,
   CONNECT_USER_HANDLE,
-  LOAD_USER_SUCCESS
+  LOAD_USER_SUCCESS,
+  CLEAR_MEMBER_SUGGESTIONS
 } from '../config/constants'
 
 
@@ -16,6 +17,8 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch(action.type) {
+  case CLEAR_MEMBER_SUGGESTIONS:
+    return Object.assign({}, state, {suggestedMembers: []})
   case LOAD_MEMBER_SUGGESTIONS_SUCCESS:
     return Object.assign({}, state, {suggestedMembers: action.payload})
   case LOAD_MEMBERS_SUCCESS: {

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import AutocompleteInput from './AutocompleteInput'
-import {loadMemberSuggestions} from '../../projects/actions/projectMember'
+import {loadMemberSuggestions, clearMemberSuggestions} from '../../projects/actions/projectMember'
 import {AUTOCOMPLETE_TRIGGER_LENGTH} from '../../config/constants'
 
 class AutocompleteInputContainer extends React.Component {
@@ -18,6 +18,13 @@ class AutocompleteInputContainer extends React.Component {
     }
   }
 
+  onUpdate(inputValue) {
+    if (this.props.onUpdate) {
+      this.props.onUpdate(inputValue)
+    }
+    this.props.onClearUserSuggestions()
+  }
+
   render() {
 
     const { placeholder, currentUser, selectedMembers, disabled, allMembers} = this.props
@@ -26,7 +33,7 @@ class AutocompleteInputContainer extends React.Component {
       <AutocompleteInput
         placeholder={placeholder ? placeholder:''}
         onInputChange={this.onInputChange.bind(this)}
-        onUpdate={this.props.onUpdate?this.props.onUpdate:() => {}}
+        onUpdate={this.onUpdate.bind(this)}
         suggestedMembers={this.props.suggestedMembers}
         currentUser={currentUser}
         selectedMembers={selectedMembers}
@@ -57,6 +64,9 @@ const mapDispatchToProps = (dispatch) => {
       this.debounceTimer = setTimeout(() => {
         loadMemberSuggestions(value)(dispatch)
       }, 500)
+    },
+    onClearUserSuggestions: () => {
+      clearMemberSuggestions(dispatch)
     }
   }
 }

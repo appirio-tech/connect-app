@@ -23,6 +23,7 @@ class AutocompleteInput extends React.Component {
       <div className="autocomplete-wrapper">
         <Select
           isMulti
+          closeMenuOnSelect
           placeholder={placeholder}
           value={selectedMembers}
           onInputChange={this.props.onInputChange}

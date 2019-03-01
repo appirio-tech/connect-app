@@ -17,7 +17,8 @@ import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   INVITE_CUSTOMER,
   ACCEPT_OR_REFUSE_INVITE,
   PROJECT_ROLE_CUSTOMER,
-  PROJECT_MEMBER_INVITE_STATUS_CANCELED
+  PROJECT_MEMBER_INVITE_STATUS_CANCELED,
+  CLEAR_MEMBER_SUGGESTIONS
 } from '../../config/constants'
 
 
@@ -28,6 +29,12 @@ export function loadMemberSuggestions(value) {
       payload: loadMemberSuggestionsAPI(value)
     })
   }
+}
+
+export function clearMemberSuggestions(dispatch) {
+	return dispatch({
+		type: CLEAR_MEMBER_SUGGESTIONS
+	})
 }
 
 function addProjectMemberWithData(dispatch, projectId, member) {
