@@ -534,6 +534,9 @@ export const PROJECT_MEMBER_INVITE_STATUS_REFUSED = 'refused'
 export const PROJECT_MEMBER_INVITE_STATUS_CANCELED = 'canceled'
 export const PROJECT_MEMBER_INVITE_STATUS_PENDING = 'pending'
 export const PROJECT_MEMBER_INVITE_STATUS_REQUESTED = 'requested'
+export const PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED = 'request_approved'
+export const PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED = 'request_rejected'
+
 
 // projects list view types
 export const PROJECTS_LIST_VIEW = {

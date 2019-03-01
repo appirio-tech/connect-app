@@ -183,13 +183,16 @@ export const projectState = function (state=initialState, action) {
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
     return Object.assign({}, state, {
       showUserInvited: false,
-      project: action.payload
     })
   }
 
   case RELOAD_PROJECT_MEMBERS_SUCCESS: {
     return Object.assign({}, state, {
-      project: action.payload
+      project:{
+        ...state.project,
+        members: action.payload.members,
+        invites: action.payload.invites,
+      }
     })
   }
 
