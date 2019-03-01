@@ -61,12 +61,13 @@ const mapStateToProps = (reduxstore) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onLoadUserSuggestions: (value) => {
-      if (this.debounceTimer) {
-        clearTimeout(this.debounceTimer)
-      }
-      this.debounceTimer = setTimeout(() => {
-        loadMemberSuggestions(value)(dispatch)
-      }, 500)
+	  _.debounce(()=>loadMemberSuggestions(value)(dispatch), 500, {leading: true})()
+      // if (this.debounceTimer) {
+      //   clearTimeout(this.debounceTimer)
+      // }
+      // this.debounceTimer = setTimeout(() => {
+      //   loadMemberSuggestions(value)(dispatch)
+      // }, 500)
     },
     onClearUserSuggestions: () => {
       clearMemberSuggestions(dispatch)
