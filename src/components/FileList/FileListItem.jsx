@@ -113,10 +113,10 @@ export default class FileListItem extends React.Component {
         { (errors && errors.title) && <div className="error-message">{ errors.title }</div> }
         <textarea defaultValue={description} ref="desc" maxLength={250} className="tc-textarea" />
         { (errors && errors.desc) && <div className="error-message">{ errors.desc }</div> }
-        <UserAutoComplete onUpdate={this.onUserIdChange} 
+        <UserAutoComplete onUpdate={this.onUserIdChange}
           projectMembers={projectMembers}
           loggedInUser={loggedInUser}
-          selectedUsers={this.userIdsToHandles(allowedUsers).join(',')}  
+          selectedUsers={this.userIdsToHandles(allowedUsers).join(',')}
         />
       </div>
     )

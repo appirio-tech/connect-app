@@ -11,7 +11,7 @@ import ReactSelect from 'react-select'
 // import '../../styles/react-select.css'
 import stylevars from './Select.scss'
 
-const customStyles = {
+let customStyles = {
 	control: (provided, state) => ({
 		...provided,
 		'border-color': '#aaaaab',
@@ -27,10 +27,6 @@ const customStyles = {
 		'background-color': '#cdcdce',
 		'font-weight': 'bold'
 	}),
-	dropdownIndicator: (provided, state) => ({
-		...provided,
-		display: 'none'
-	}),
 	noOptionsMessage: (provided, state) => ({
 		...provided,
 		'text-align': 'left',
@@ -40,7 +36,15 @@ const customStyles = {
 }
 
 const Select = (props) => {
-  console.log('Select class: ', stylevars)
+  if (!props.showDropdownIndicator) {
+	  customStyles = Object.assign(customStyles, {
+		  dropdownIndicator: (provided, state) => ({
+	  		...provided,
+	  		display: 'none'})
+		}
+		)
+  }
+  
   return (
     <ReactSelect
       {...props}

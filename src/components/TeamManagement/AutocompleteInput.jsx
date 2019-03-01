@@ -24,6 +24,7 @@ class AutocompleteInput extends React.Component {
         <Select
           isMulti
           closeMenuOnSelect
+		  showDropdownIndicator={false}
           placeholder={placeholder}
           value={selectedMembers}
           onInputChange={this.props.onInputChange}

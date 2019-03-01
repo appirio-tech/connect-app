@@ -52,10 +52,10 @@ export class EditFileAttachment extends React.Component {
           <input className="edit-input" type="text" value={title} onChange={this.handleTitleChange.bind(this)} name="title"/>
           <br />
           <label for="title">File Viewers:</label>
-          <UserAutoComplete onUpdate={this.onUserIdChange} 
+          <UserAutoComplete onUpdate={this.onUserIdChange}
             projectMembers={projectMembers}
             loggedInUser={loggedInUser}
-            selectedUsers={this.userIdsToHandles(allowedUsers).join(',')}
+            selectedUsers={this.userIdsToHandles(allowedUsers).map(user => ({value: user, label: user}))}
           />
           <br />
 
