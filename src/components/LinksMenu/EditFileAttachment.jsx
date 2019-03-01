@@ -42,7 +42,7 @@ export class EditFileAttachment extends React.Component {
   render() {
     const { onCancel, onConfirm, projectMembers, loggedInUser } = this.props
     const { title, allowedUsers } = this.state
-    const showVisibleToAllProjectMembersText = allowedUsers.length > 0 ? false : true
+    const showVisibleToAllProjectMembersText = !(allowedUsers.length > 0)
     return (
       <div className="modal delete-link-modal">
         <div className="modal-title danger">
