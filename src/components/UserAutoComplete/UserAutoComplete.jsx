@@ -22,6 +22,7 @@ const UserAutoComplete = ({
       isMulti
       closeMenuOnSelect
       showDropdownIndicator={true}
+	  createOption={false}
       placeholder="Enter user handles"
       value={selectedUsers}
       onChange={selectedOptions => onUpdate(selectedOptions.map(option => option.value).join(','))}

@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 
 import AutocompleteInput from './AutocompleteInput'
 import {loadMemberSuggestions, clearMemberSuggestions} from '../../projects/actions/projectMember'

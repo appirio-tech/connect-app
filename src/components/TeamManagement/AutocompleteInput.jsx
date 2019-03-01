@@ -16,7 +16,7 @@ class AutocompleteInput extends React.Component {
     const {
       placeholder,
       selectedMembers,
-      disabled,
+      disabled
     } = this.props
 
     return (
@@ -25,6 +25,7 @@ class AutocompleteInput extends React.Component {
           isMulti
           closeMenuOnSelect
 		  showDropdownIndicator={false}
+		  createOption={true}
           placeholder={placeholder}
           value={selectedMembers}
           onInputChange={this.props.onInputChange}
