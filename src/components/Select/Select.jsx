@@ -30,13 +30,22 @@ const customStyles = {
 	dropdownIndicator: (provided, state) => ({
 		...provided,
 		display: 'none'
+	}),
+	noOptionsMessage: (provided, state) => ({
+		...provided,
+		'text-align': 'left',
+		'font-size': '15px',
+		color: 'gray'
 	})
 }
 
 const Select = (props) => {
   console.log('Select class: ', stylevars)
   return (
-    <ReactSelect {...props} styles={customStyles}/>
+    <ReactSelect
+      {...props}
+      styles={customStyles}
+      noOptionsMessage={()=>('Type to search')}/>
   )
 }
 
