@@ -15,6 +15,8 @@ class AutocompleteInputContainer extends React.Component {
   onInputChange(inputValue) {
     if (inputValue.length >= AUTOCOMPLETE_TRIGGER_LENGTH) {
       this.props.onLoadUserSuggestions(inputValue)
+    } else {
+      this.props.onClearUserSuggestions()
     }
   }
 
