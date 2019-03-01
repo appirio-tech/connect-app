@@ -790,7 +790,7 @@ export const EVENT_TYPE = {
     ASSIGNED_AS_OWNER: 'notifications.connect.project.member.assignedAsOwner',
     INVITE_REQUESTED: 'notifications.connect.project.member.invite.requested',
     INVITE_APPROVED: 'notifications.connect.project.member.invite.approved',
-    INVITE_REFUSED: 'notifications.connect.project.member.invite.refused',
+    INVITE_REFUSED: 'notifications.connect.project.member.invite.rejected',
   },
   PROJECT: {
     ACTIVE: 'notifications.connect.project.active',
