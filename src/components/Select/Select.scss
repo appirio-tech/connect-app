@@ -5,36 +5,36 @@
     line-height: normal;
     text-align: left;
   }
-  
+
   /* to override input styles use same params like in tc-includes */
   .Select-input {
     height: 28px;
   }
-  
+
   .Select-input > input:not([type="checkbox"]) {
     border: 0 none;
     height: 28px;
     line-height: 17px;
     padding: 0;
     transition: none;
-  
+
     &:focus:not(.error),
     &:active {
       box-shadow: none;
     }
   }
-  
+
   .Select-placeholder {
     @include roboto;
     color: $tc-gray-50;
     font-size: 13px;
     line-height: 28px;
   }
-  
+
   .Select-control {
     height: 30px;
   }
-  
+
   .Select-item {
     background-color: $tc-gray-10;
     border: 0;
@@ -43,7 +43,7 @@
     margin-top: 4px;
     padding: 0 10px 0 4px;
   }
-  
+
   .Select-item-label {
     @include roboto-medium;
     display: inline;
@@ -52,12 +52,12 @@
     line-height: 20px;
     padding: 0 0 0 4px;
   }
-  
+
   .Select-item-icon {
     color:$tc-gray-40;
     border-right-color: $tc-gray-10;
     padding: 0 5px 1px;
-    
+
     &:active,
     &:focus,
     &:hover {
@@ -65,20 +65,20 @@
         color: $tc-red-110;
     }
   }
-  
+
   .Select-option {
     @include roboto-medium;
     color: $tc-black;
     font-size: 13px;
     padding-top: 5px;
     padding-bottom: 6px;
-  
+
     &:hover,
     &.is-focused {
       background-color: $tc-gray-neutral-dark;
     }
   }
-  
+
   .Select-noresults,
   .Select-search-prompt,
   .Select-searching {
@@ -87,4 +87,3 @@
     font-size: 13px;
   }
 }
-  
