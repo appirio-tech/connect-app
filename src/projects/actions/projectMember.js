@@ -32,9 +32,9 @@ export function loadMemberSuggestions(value) {
 }
 
 export function clearMemberSuggestions(dispatch) {
-	return dispatch({
-		type: CLEAR_MEMBER_SUGGESTIONS
-	})
+  return dispatch({
+    type: CLEAR_MEMBER_SUGGESTIONS
+  })
 }
 
 function addProjectMemberWithData(dispatch, projectId, member) {
