@@ -236,7 +236,7 @@ export const NOTIFICATIONS = [
       toUserHandle: true,
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
-      text: 'Your request to add invite the copilot was approved',
+      text: 'Your request to invite the copilot was approved',
       originator: true,
       goTo: GOTO.PROJECT_DASHBOARD
     }]
@@ -246,7 +246,7 @@ export const NOTIFICATIONS = [
     eventType: EVENT_TYPE.MEMBER.INVITE_REFUSED,
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
-      text: 'Your request to add invite the member was refused',
+      text: 'Your request to invite the copilot was refused',
       originator: true,
       goTo: GOTO.PROJECT_DASHBOARD
     }]
