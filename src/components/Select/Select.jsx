@@ -16,21 +16,19 @@ let customStyles = {
     'border-color': '#aaaaab',
 	height: '40px',
 	'& > div': {height: '40px'},
-	'& > div:nth-child(2)': {display: 'none'}
+	'& > div:nth-child(2)': {display: 'none'},
+	'& input:focus': {
+		'min-width': '40px',
+		'background-color': 'red',
+		'box-shadow': 'none !important',
+		'-webkit-box-shadow': 'none !important',
+		height: '20px'
+	}
   }),
   option: (provided) => ({
     ...provided,
     'font-family': 'Roboto, Arial, Helvetica, sans-serif',
     'font-size': '13px'
-  }),
-  input: (provided) => ({
-	...provided,
-	height: '20px',
-	'& input:focus': {
-		'box-shadow': 'none',
-		'-webkit-box-shadow': 'none',
-	},
-	outline: 'none'
   }),
   multiValue: (provided) => ({
     ...provided,
