@@ -15,14 +15,13 @@ let customStyles = {
     ...provided,
 
 	height: '40px',
-	'box-shadow': 'none !important'
+	'box-shadow': 'none !important',
 	'& > div': {
 		height: '40px'
 	},
 	'& > div:nth-child(2)': {display: 'none'},
 	'& input:focus': {
-		'min-width': '40px',
-		'background-color': 'red',
+		'min-width': '500px',
 		'box-shadow': 'none !important',
 		'-webkit-box-shadow': 'none !important',
 		height: '20px'
