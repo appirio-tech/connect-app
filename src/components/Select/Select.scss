@@ -19,18 +19,18 @@
 	}
 
 	.react-select__option {
-		font-family: 'Roboto', Arial, Helvetica, sans-serif;
+		@include roboto-medium;
 	    font-size: 13px;
 	}
 
 	.react-select__multi-value {
-		background-color: #cdcdce !important;
+		background-color: $tc-gray-20 !important;
     	font-weight: bold;
 	}
 
 	.react-select__menu-notice--no-options {
 		text-align : left !important;
 	    font-size : 15px;
-	    color: gray;
+	    color: $tc-gray-50;
 	}
 }
