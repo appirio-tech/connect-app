@@ -42,6 +42,7 @@ export class EditFileAttachment extends React.Component {
   render() {
     const { onCancel, onConfirm, projectMembers, loggedInUser } = this.props
     const { title, allowedUsers } = this.state
+    const showVisibleToAllProjectMembersText = !(allowedUsers.length > 0)
     return (
       <div className="modal delete-link-modal">
         <div className="modal-title danger">
@@ -57,6 +58,9 @@ export class EditFileAttachment extends React.Component {
             loggedInUser={loggedInUser}
             selectedUsers={this.userIdsToHandles(allowedUsers).join(',')}
           />
+          {showVisibleToAllProjectMembersText && <div className="project-members-visible">
+            There are no specified file viewers. File will be visible to all project members.
+          </div>}
           <br />
 
           <div className="button-area flex center">

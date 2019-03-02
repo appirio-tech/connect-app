@@ -119,6 +119,12 @@
       width: 100%;
     }
 
+    .project-members-visible {
+      margin: 10px 0;
+      line-height: 120%;
+      font-size: 12px;
+    }
+
     li:before {
      content: '\b7\a0';
      font-size: 200%;
