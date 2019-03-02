@@ -42,7 +42,7 @@ export class EditFileAttachment extends React.Component {
   render() {
     const { onCancel, onConfirm, projectMembers, loggedInUser } = this.props
     const { title, allowedUsers } = this.state
-    const showVisibleToAllProjectMembersText = !(allowedUsers.length > 0)
+    const showVisibleToAllProjectMembersText = !(allowedUsers && allowedUsers.length > 0)
     return (
       <div className="modal delete-link-modal">
         <div className="modal-title danger">
@@ -53,7 +53,7 @@ export class EditFileAttachment extends React.Component {
           <input className="edit-input" type="text" value={title} onChange={this.handleTitleChange.bind(this)} name="title"/>
           <br />
           <label for="title">File Viewers:</label>
-          <UserAutoComplete onUpdate={this.onUserIdChange} 
+          <UserAutoComplete onUpdate={this.onUserIdChange}
             projectMembers={projectMembers}
             loggedInUser={loggedInUser}
             selectedUsers={this.userIdsToHandles(allowedUsers).join(',')}
