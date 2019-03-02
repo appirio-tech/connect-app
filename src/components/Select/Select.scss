@@ -7,11 +7,9 @@
 	  & > div {
 	  		height: 40px;
 	  }
-	  & > div:nth-child(2) {
-		  display: none;
-	  }
+
   	  & input:focus {
-  		min-width: 500px;
+  		min-width: 100%;
   		box-shadow: none !important;
   		-webkit-box-shadow: none !important;
   		height: 20px;

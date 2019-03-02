@@ -14,19 +14,25 @@ import './Select.scss'
 let customStyles = {}
 
 const Select = (props) => {
-  console.log(props.showDropdownIndicator, props.createOption, customStyles)
   if (!props.showDropdownIndicator) {
     console.log('Hiding dropdownIndicator')
     customStyles = Object.assign(customStyles, {
       dropdownIndicator: (provided) => ({
         ...provided,
         display: 'none'
-      })
+	  }),
+	  control: (provided) => ({
+		  ...provided,
+		  '& > div:nth-child(2)': {
+			  display: 'none'
+		  }
+	  })
     })
   } else {
-    delete customStyles.dropdownIndicator
+	console.log('showing dropdown indicator')
+    customStyles = {}
   }
-
+  console.log(props.showDropdownIndicator, props.createOption, customStyles)
 
   if (props.createOption) {
     return (
