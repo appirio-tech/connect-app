@@ -14,12 +14,23 @@ let customStyles = {
   control: (provided) => ({
     ...provided,
     'border-color': '#aaaaab',
-    '& > div': { height: '40px' }
+	height: '40px',
+	'& > div': {height: '40px'},
+	'& > div:nth-child(2)': {display: 'none'}
   }),
   option: (provided) => ({
     ...provided,
     'font-family': 'Roboto, Arial, Helvetica, sans-serif',
-    'font-size': '12px'
+    'font-size': '13px'
+  }),
+  input: (provided) => ({
+	...provided,
+	height: '20px',
+	'& input:focus': {
+		'box-shadow': 'none',
+		'-webkit-box-shadow': 'none',
+	},
+	outline: 'none'
   }),
   multiValue: (provided) => ({
     ...provided,
