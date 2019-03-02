@@ -1,89 +1,36 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
-  .Select {
-    line-height: normal;
-    text-align: left;
-  }
+	.react-select__control {
+  	  height: 40px;
+  	  box-shadow: none !important;
+	  & > div {
+	  		height: 40px;
+	  }
+	  & > div:nth-child(2) {
+		  display: none;
+	  }
+  	  & input:focus {
+  		min-width: 500px;
+  		box-shadow: none !important;
+  		-webkit-box-shadow: none !important;
+  		height: 20px;
+  	  }
+	}
 
-  /* to override input styles use same params like in tc-includes */
-  .Select-input {
-    height: 28px;
-  }
+	.react-select__option {
+		font-family: 'Roboto', Arial, Helvetica, sans-serif;
+	    font-size: 13px;
+	}
 
-  .Select-input > input:not([type="checkbox"]) {
-    border: 0 none;
-    height: 28px;
-    line-height: 17px;
-    padding: 0;
-    transition: none;
+	.react-select__multi-value {
+		background-color: #cdcdce !important;
+    	font-weight: bold;
+	}
 
-    &:focus:not(.error),
-    &:active {
-      box-shadow: none;
-    }
-  }
-
-  .Select-placeholder {
-    @include roboto;
-    color: $tc-gray-50;
-    font-size: 13px;
-    line-height: 28px;
-  }
-
-  .Select-control {
-    height: 30px;
-  }
-
-  .Select-item {
-    background-color: $tc-gray-10;
-    border: 0;
-    height: 21px;
-    margin-left: 4px;
-    margin-top: 4px;
-    padding: 0 10px 0 4px;
-  }
-
-  .Select-item-label {
-    @include roboto-medium;
-    display: inline;
-    color: $tc-black;
-    font-size: 13px;
-    line-height: 20px;
-    padding: 0 0 0 4px;
-  }
-
-  .Select-item-icon {
-    color:$tc-gray-40;
-    border-right-color: $tc-gray-10;
-    padding: 0 5px 1px;
-
-    &:active,
-    &:focus,
-    &:hover {
-        background-color: transparent;
-        color: $tc-red-110;
-    }
-  }
-
-  .Select-option {
-    @include roboto-medium;
-    color: $tc-black;
-    font-size: 13px;
-    padding-top: 5px;
-    padding-bottom: 6px;
-
-    &:hover,
-    &.is-focused {
-      background-color: $tc-gray-neutral-dark;
-    }
-  }
-
-  .Select-noresults,
-  .Select-search-prompt,
-  .Select-searching {
-    @include roboto-medium;
-    color: $tc-gray-50;
-    font-size: 13px;
-  }
+	.react-select__menu-notice--no-options {
+		text-align : left !important;
+	    font-size : 15px;
+	    color: gray;
+	}
 }

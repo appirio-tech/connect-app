@@ -9,41 +9,9 @@
 import React from 'react'
 import ReactSelect from 'react-select'
 import CreatableSelect from 'react-select/lib/Creatable'
+import './Select.scss'
 
-let customStyles = {
-  control: (provided, state) => ({
-    ...provided,
-
-	height: '40px',
-	'box-shadow': 'none !important',
-	'& > div': {
-		height: '40px'
-	},
-	'& > div:nth-child(2)': {display: 'none'},
-	'& input:focus': {
-		'min-width': '500px',
-		'box-shadow': 'none !important',
-		'-webkit-box-shadow': 'none !important',
-		height: '20px'
-	}
-  }),
-  option: (provided) => ({
-    ...provided,
-    'font-family': 'Roboto, Arial, Helvetica, sans-serif',
-    'font-size': '13px'
-  }),
-  multiValue: (provided) => ({
-    ...provided,
-    'background-color': '#cdcdce',
-    'font-weight': 'bold'
-  }),
-  noOptionsMessage: (provided) => ({
-    ...provided,
-    'text-align': 'left',
-    'font-size': '15px',
-    color: 'gray'
-  })
-}
+let customStyles = {}
 
 const Select = (props) => {
   console.log(props.showDropdownIndicator, props.createOption, customStyles)
@@ -65,6 +33,8 @@ const Select = (props) => {
       <CreatableSelect
         {...props}
         styles={customStyles}
+		className="react-select-container"
+		classNamePrefix="react-select"
         noOptionsMessage={() => ('Type to search')}
       />
     )
@@ -72,6 +42,8 @@ const Select = (props) => {
     return (
       <ReactSelect
         {...props}
+		className="react-select-container"
+		classNamePrefix="react-select"
         styles={customStyles}
         noOptionsMessage={() => ('Type to search')}
       />
