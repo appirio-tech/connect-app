@@ -11,11 +11,14 @@ import ReactSelect from 'react-select'
 import CreatableSelect from 'react-select/lib/Creatable'
 
 let customStyles = {
-  control: (provided) => ({
+  control: (provided, state) => ({
     ...provided,
-    'border-color': '#aaaaab',
+
 	height: '40px',
-	'& > div': {height: '40px'},
+	'box-shadow': 'none !important'
+	'& > div': {
+		height: '40px'
+	},
 	'& > div:nth-child(2)': {display: 'none'},
 	'& input:focus': {
 		'min-width': '40px',
