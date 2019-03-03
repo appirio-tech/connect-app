@@ -8,12 +8,22 @@
 	  		height: 40px;
 	  }
 
+	  & input {
+		  height: 20px;
+		  transition: none !important;
+	  }
+
   	  & input:focus {
-  		min-width: 100%;
   		box-shadow: none !important;
   		-webkit-box-shadow: none !important;
   		height: 20px;
   	  }
+	}
+
+	.react-select__value-container {
+		& div:nth-last-child(1) {
+			height: 20px;
+		}
 	}
 
 	.react-select__option {

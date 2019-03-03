@@ -15,7 +15,6 @@ let customStyles = {}
 
 const Select = (props) => {
   if (!props.showDropdownIndicator) {
-    console.log('Hiding dropdownIndicator')
     customStyles = Object.assign(customStyles, {
       dropdownIndicator: (provided) => ({
         ...provided,
@@ -29,7 +28,6 @@ const Select = (props) => {
 	  })
     })
   } else {
-	console.log('showing dropdown indicator')
     customStyles = {}
   }
   console.log(props.showDropdownIndicator, props.createOption, customStyles)
