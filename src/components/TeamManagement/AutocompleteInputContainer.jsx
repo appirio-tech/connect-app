@@ -22,14 +22,14 @@ class AutocompleteInputContainer extends React.Component {
   }
 
   onUpdate(inputValue) {
-	inputValue = inputValue.map(value => {
-		value.isEmail = (/(.+)@(.+){2,}\.(.+){2,}/).test(value.label)
-		if (value.isEmail) {
-			value.handle = value.label
-		}
-		return value
-	})
-	console.log("inputValue :", inputValue)
+    inputValue = inputValue.map(value => {
+      value.isEmail = (/(.+)@(.+){2,}\.(.+){2,}/).test(value.label)
+      if (value.isEmail) {
+        value.handle = value.label
+      }
+      return value
+    })
+    console.log('inputValue :', inputValue)
     if (this.props.onUpdate) {
       this.props.onUpdate(inputValue)
     }
@@ -67,7 +67,7 @@ const mapStateToProps = (reduxstore) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  let debouncedDispatcher = _.debounce((arg) => memberSuggestionsDispatch(dispatch)(arg), 500, {leading: true});
+  const debouncedDispatcher = _.debounce((arg) => memberSuggestionsDispatch(dispatch)(arg), 500, {leading: true})
   return {
     onLoadUserSuggestions: (value) => {
       debouncedDispatcher(value)

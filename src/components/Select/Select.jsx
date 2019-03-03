@@ -19,13 +19,13 @@ const Select = (props) => {
       dropdownIndicator: (provided) => ({
         ...provided,
         display: 'none'
-	  }),
-	  control: (provided) => ({
-		  ...provided,
-		  '& > div:nth-child(2)': {
-			  display: 'none'
-		  }
-	  })
+      }),
+      control: (provided) => ({
+        ...provided,
+        '& > div:nth-child(2)': {
+          display: 'none'
+        }
+      })
     })
   } else {
     customStyles = {}
@@ -37,8 +37,8 @@ const Select = (props) => {
       <CreatableSelect
         {...props}
         styles={customStyles}
-		className="react-select-container"
-		classNamePrefix="react-select"
+        className="react-select-container"
+        classNamePrefix="react-select"
         noOptionsMessage={() => ('Type to search')}
       />
     )
@@ -46,8 +46,8 @@ const Select = (props) => {
     return (
       <ReactSelect
         {...props}
-		className="react-select-container"
-		classNamePrefix="react-select"
+        className="react-select-container"
+        classNamePrefix="react-select"
         styles={customStyles}
         noOptionsMessage={() => ('Type to search')}
       />

@@ -21,7 +21,7 @@ const UserAutoComplete = ({
     <Select
       isMulti
       closeMenuOnSelect
-      showDropdownIndicator={true}
+      showDropdownIndicator
       createOption={false}
       placeholder="Enter user handles"
       value={selectedUsers}

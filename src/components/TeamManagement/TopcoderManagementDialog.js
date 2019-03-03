@@ -287,7 +287,7 @@ class Dialog extends React.Component {
           {(showRemove || showApproveDecline) && <div className="input-container" >
             <div className="hint">invite more people</div>
             <AutocompleteInputContainer
-			  placeholder="Enter one or more user handles"
+              placeholder="Enter one or more user handles"
               onUpdate={this.onChange}
               currentUser={currentUser}
               selectedMembers={selectedMembers}

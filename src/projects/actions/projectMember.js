@@ -23,20 +23,20 @@ import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
 
 
 export function memberSuggestionsDispatch(dispatch) {
-	return (value) => {
-		return dispatch({
-	      type: LOAD_MEMBER_SUGGESTIONS,
-	      payload: loadMemberSuggestionsAPI(value)
-	    })
-	}
+  return (value) => {
+    return dispatch({
+      type: LOAD_MEMBER_SUGGESTIONS,
+      payload: loadMemberSuggestionsAPI(value)
+    })
+  }
 }
 
 export function loadMemberSuggestions(value) {
   return (dispatch) => {
-	  return dispatch({
-        type: LOAD_MEMBER_SUGGESTIONS,
-        payload: loadMemberSuggestionsAPI(value)
-      })
+    return dispatch({
+      type: LOAD_MEMBER_SUGGESTIONS,
+      payload: loadMemberSuggestionsAPI(value)
+    })
   }
 }
 
