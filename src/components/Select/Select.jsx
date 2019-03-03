@@ -30,7 +30,7 @@ const Select = (props) => {
   } else {
     customStyles = {}
   }
-  console.log(props.showDropdownIndicator, props.createOption, customStyles)
+  // console.log(props.showDropdownIndicator, props.createOption, customStyles)
 
   if (props.createOption) {
     return (
