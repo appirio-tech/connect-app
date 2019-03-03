@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 
 import AutocompleteInput from './AutocompleteInput'
-import {loadMemberSuggestions, clearMemberSuggestions} from '../../projects/actions/projectMember'
+import {memberSuggestionsDispatch, clearMemberSuggestions} from '../../projects/actions/projectMember'
 import {AUTOCOMPLETE_TRIGGER_LENGTH} from '../../config/constants'
 
 class AutocompleteInputContainer extends React.Component {
@@ -59,9 +59,10 @@ const mapStateToProps = (reduxstore) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
+  let debouncedDispatcher = _.debounce(() => memberSuggestionsDispatch(dispatch), 500, {leading: true});
   return {
     onLoadUserSuggestions: (value) => {
-      _.debounce(() => loadMemberSuggestions(value)(dispatch), 500, {leading: true})()
+      debouncedDispatcher(value)
     },
     onClearUserSuggestions: () => {
       clearMemberSuggestions(dispatch)
