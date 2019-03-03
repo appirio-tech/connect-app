@@ -21,7 +21,7 @@
 	}
 
 	.react-select__value-container {
-		& div:nth-last-child(1) {
+		& > div:nth-last-child(1) {
 			height: 20px;
 		}
 	}
