@@ -23,6 +23,9 @@ import CoderBroken from '../../../assets/icons/coder-broken.svg'
 
 import './MetaDataContainer.scss'
 
+const withLoader = spinnerWhileLoading(props => !props.isLoading && props.projectTypes)
+const ProjectTypesGridViewWithLoader = withLoader(ProjectTypesGridView)
+
 class ProjectTypesContainer extends React.Component {
 
   constructor(props) {
@@ -67,7 +70,7 @@ class ProjectTypesContainer extends React.Component {
     }
     return (
       <div>
-        <ProjectTypesGridView
+        <ProjectTypesGridViewWithLoader
           currentUser={currentUser}
           isLoading={isLoading}
           totalCount={projectTypes ? projectTypes.length : 0}
@@ -114,8 +117,7 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.error)
-const enhance = spinnerWhileLoading(props => !props.isLoading || props.templates)
-const ProjectTypesContainerWithLoaderEnhanced = enhance(errorHandler(ProjectTypesContainer))
-const ProjectTypesContainerWithLoaderAndAuth = requiresAuthentication(ProjectTypesContainerWithLoaderEnhanced)
+const ProjectTypesContainerWithErrorHandler = errorHandler(ProjectTypesContainer)
+const ProjectTypesContainerWithErrorHandlerAndAuth = requiresAuthentication(ProjectTypesContainerWithErrorHandler)
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectTypesContainerWithLoaderAndAuth))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectTypesContainerWithErrorHandlerAndAuth))

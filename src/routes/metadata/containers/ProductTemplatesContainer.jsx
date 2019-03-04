@@ -23,6 +23,8 @@ import CoderBroken from '../../../assets/icons/coder-broken.svg'
 
 import './MetaDataContainer.scss'
 
+const withLoader = spinnerWhileLoading(props => !props.isLoading && props.productTemplates)
+const ProductTemplatesGridViewWithLoader = withLoader(ProductTemplatesGridView)
 class ProductTemplatesContainer extends React.Component {
 
   constructor(props) {
@@ -67,7 +69,7 @@ class ProductTemplatesContainer extends React.Component {
     }
     return (
       <div>
-        <ProductTemplatesGridView
+        <ProductTemplatesGridViewWithLoader
           currentUser={currentUser}
           isLoading={isLoading}
           totalCount={templates ? templates.length : 0}
@@ -99,7 +101,8 @@ const mapStateToProps = ({ templates, loadUser }) => {
     templates: templates.productTemplates,
     isLoading: templates.isLoading,
     currentUser: loadUser.user,
-    isAdmin: _.intersection(loadUser.user.roles, powerUserRoles).length !== 0
+    isAdmin: _.intersection(loadUser.user.roles, powerUserRoles).length !== 0,
+    error: templates.error,
   }
 }
 
@@ -114,8 +117,7 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.error)
-const enhance = spinnerWhileLoading(props => !props.isLoading || props.templates)
-const ProductTemplatesContainerWithLoaderEnhanced = enhance(errorHandler(ProductTemplatesContainer))
-const ProductTemplatesContainerWithLoaderAndAuth = requiresAuthentication(ProductTemplatesContainerWithLoaderEnhanced)
+const ProductTemplatesContainerWithErrorHandler = errorHandler(ProductTemplatesContainer)
+const ProductTemplatesContainerWithErrorHandlerAndAuth = requiresAuthentication(ProductTemplatesContainerWithErrorHandler)
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductTemplatesContainerWithLoaderAndAuth))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductTemplatesContainerWithErrorHandlerAndAuth))

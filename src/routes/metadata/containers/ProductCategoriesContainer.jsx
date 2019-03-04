@@ -23,6 +23,9 @@ import CoderBroken from '../../../assets/icons/coder-broken.svg'
 
 import './MetaDataContainer.scss'
 
+const withLoader = spinnerWhileLoading(props => !props.isLoading && props.productCategories)
+const ProductCategoriesGridViewWithLoader = withLoader(ProductCategoriesGridView)
+
 class ProductCategoriesContainer extends React.Component {
 
   constructor(props) {
@@ -67,7 +70,7 @@ class ProductCategoriesContainer extends React.Component {
     }
     return (
       <div>
-        <ProductCategoriesGridView
+        <ProductCategoriesGridViewWithLoader
           currentUser={currentUser}
           isLoading={isLoading}
           totalCount={productCategories ? productCategories.length : 0}
@@ -114,8 +117,7 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.error)
-const enhance = spinnerWhileLoading(props => !props.isLoading || props.templates)
-const ProductCategoriesContainerWithLoaderEnhanced = enhance(errorHandler(ProductCategoriesContainer))
-const ProductCategoriesContainerWithLoaderAndAuth = requiresAuthentication(ProductCategoriesContainerWithLoaderEnhanced)
+const ProductCategoriesContainerWithErrorHandler = errorHandler(ProductCategoriesContainer)
+const ProductCategoriesContainerWithErrorHandlerAndAuth = requiresAuthentication(ProductCategoriesContainerWithErrorHandler)
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoriesContainerWithLoaderAndAuth))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoriesContainerWithErrorHandlerAndAuth))
