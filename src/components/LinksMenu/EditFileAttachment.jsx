@@ -56,7 +56,7 @@ export class EditFileAttachment extends React.Component {
           <UserAutoComplete onUpdate={this.onUserIdChange}
             projectMembers={projectMembers}
             loggedInUser={loggedInUser}
-            selectedUsers={this.userIdsToHandles(allowedUsers).join(',')}
+            selectedUsers={this.userIdsToHandles(allowedUsers).map(user => ({value: user, label: user}))}
           />
           {showVisibleToAllProjectMembersText && <div className="project-members-visible">
             There are no specified file viewers. File will be visible to all project members.

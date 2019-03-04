@@ -1,10 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {findIndex} from 'lodash'
 import Select from '../Select/Select'
 import './AutocompleteInput.scss'
-import {loadMemberSuggestions} from '../../api/projectMembers'
-import {AUTOCOMPLETE_TRIGGER_LENGTH} from '../../config/constants'
 
 /**
  * Render a searchable dropdown for selecting users that can be invited
@@ -13,78 +10,27 @@ class AutocompleteInput extends React.Component {
   constructor(props) {
     super(props)
 
-    this.onChange = this.onChange.bind(this)
-    this.asyncOptions = this.asyncOptions.bind(this)
-
-    this.debounceTimer = null
-  }
-
-  // cannot use debounce method from lodash, because we have to return Promise
-  loadMemberSuggestionsDebounced(value) {
-    return new Promise((resolve) => {
-      if (this.debounceTimer) {
-        clearTimeout(this.debounceTimer)
-      }
-
-      this.debounceTimer = setTimeout(() => {
-        resolve(loadMemberSuggestions(value))
-      }, 500)
-    })
-  }
-
-  onChange(inputValue, selectedOptions = []) {
-    const { onUpdate } = this.props
-
-    if (onUpdate) {
-      onUpdate(selectedOptions)
-    }
-  }
-
-  asyncOptions(input) {
-    const { allMembers } = this.props
-
-    const value =  typeof input === 'string' ? input : ''
-    const createOption = {
-      handle: value,
-      // Decide if it's email
-      isEmail: (/(.+)@(.+){2,}\.(.+){2,}/).test(value),
-    }
-    if (value.length >= AUTOCOMPLETE_TRIGGER_LENGTH) {
-      return this.loadMemberSuggestionsDebounced(value).then(r => {
-        // Remove current members from suggestions
-        const suggestions = r.filter(suggestion => (
-          findIndex(allMembers, (member) => member.handle === suggestion.handle) === -1 &&
-          // Remove current value from list to add it manually on top
-          suggestion.handle !== value
-        ))
-        // Only allow creation if it is not already exists in members
-        const shouldIncludeCreateOption = findIndex(allMembers, (member) => member.handle === value) === -1
-
-        return Promise.resolve({options: shouldIncludeCreateOption?[createOption, ...suggestions]: suggestions})
-      }).catch( () => {
-        return Promise.resolve({options: [createOption] })
-      })
-    }
-    return Promise.resolve({options: value.length > 0 ? [createOption] : []})
   }
 
   render() {
     const {
       placeholder,
       selectedMembers,
-      disabled,
+      disabled
     } = this.props
 
     return (
       <div className="autocomplete-wrapper">
         <Select
-          multi
+          isMulti
+          closeMenuOnSelect
+          showDropdownIndicator={false}
+          createOption
           placeholder={placeholder}
           value={selectedMembers}
-          onChange={this.onChange}
-          asyncOptions={this.asyncOptions}
-          valueKey="handle"
-          labelKey="handle"
+          onInputChange={this.props.onInputChange}
+          onChange={this.props.onUpdate}
+          options={this.props.suggestedMembers}
           disabled={disabled}
         />
       </div>
@@ -131,6 +77,5 @@ AutocompleteInput.propTypes = {
    */
   allMembers: PropTypes.arrayOf(PropTypes.object)
 }
-
 
 export default AutocompleteInput
