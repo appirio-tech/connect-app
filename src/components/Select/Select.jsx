@@ -14,30 +14,17 @@ import './Select.scss'
 let customStyles = {}
 
 const Select = (props) => {
-  if (!props.showDropdownIndicator) {
-    customStyles = Object.assign(customStyles, {
-      dropdownIndicator: (provided) => ({
-        ...provided,
-        display: 'none'
-      }),
-      control: (provided) => ({
-        ...provided,
-        '& > div:nth-child(2)': {
-          display: 'none'
-        }
-      })
-    })
-  } else {
-    customStyles = {}
+  let containerclass = "react-select-hiddendropdown-container"
+  if (props.showDropdownIndicator) {
+	containerclass = "react-select-container"
   }
-  // console.log(props.showDropdownIndicator, props.createOption, customStyles)
-
+  
   if (props.createOption) {
     return (
       <CreatableSelect
         {...props}
-        styles={customStyles}
-        className="react-select-container"
+		createOptionPosition="first"
+        className={containerclass}
         classNamePrefix="react-select"
         noOptionsMessage={() => ('Type to search')}
       />
@@ -46,9 +33,9 @@ const Select = (props) => {
     return (
       <ReactSelect
         {...props}
-        className="react-select-container"
+		createOptionPosition="first"
+        className={containerclass}
         classNamePrefix="react-select"
-        styles={customStyles}
         noOptionsMessage={() => ('Type to search')}
       />
     )
