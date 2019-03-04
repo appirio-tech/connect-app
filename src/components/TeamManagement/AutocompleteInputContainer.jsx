@@ -22,16 +22,13 @@ class AutocompleteInputContainer extends React.Component {
   }
 
   onUpdate(inputValue) {
-    inputValue = inputValue.map(value => {
-      value.isEmail = (/(.+)@(.+){2,}\.(.+){2,}/).test(value.label)
-      if (value.isEmail) {
-        value.handle = value.label
-      }
-      return value
-    })
-	
+    const inputValueNormalized = inputValue.map(value => ({
+      ...value,
+      isEmail: (/(.+)@(.+){2,}\.(.+){2,}/).test(value.label)
+    }))
+
     if (this.props.onUpdate) {
-      this.props.onUpdate(inputValue)
+      this.props.onUpdate(inputValueNormalized)
     }
     this.props.onClearUserSuggestions()
   }
