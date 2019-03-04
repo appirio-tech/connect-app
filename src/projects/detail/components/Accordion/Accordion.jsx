@@ -30,7 +30,7 @@ const TYPE = {
  * @returns {Function} valueMapper
  */
 const createValueMapper = (valuesMap) => (value) => (
-  valuesMap[value].summaryLabel || valuesMap[value].label
+  valuesMap[value] && (valuesMap[value].summaryLabel || valuesMap[value].label)
 )
 
 class Accordion extends React.Component {
