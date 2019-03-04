@@ -4,9 +4,21 @@
 	$reactselectheight : 40px;
 	$reactselectcontentheight: 20px;
 	@mixin reactselectstyles {
+
+		& .react-select__control:hover {
+			border-color: $tc-gray-50;
+		}
+
+		& .react-select__control--is-focused {
+			border-color: #0681ff !important;
+			box-shadow: 0 0 2px 0 rgba(6, 129, 255, 0.7) !important;
+		}
+
 		& .react-select__control {
 	  	  height: $reactselectheight;
-	  	  box-shadow: none !important;
+		  border-color: $tc-gray-30;
+		  box-shadow: none;//0 0 2px 0 rgba(6, 129, 255, 0.7) !important;
+
 		  & > div {
 		  		height: $reactselectheight - 2px;
 		  }
