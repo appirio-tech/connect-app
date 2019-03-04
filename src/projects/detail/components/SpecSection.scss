@@ -1184,21 +1184,4 @@
     }
   }
 
-  // Disabled item styles
-  .spec-question-list .spec-question-list-item > .content-col > .child-component {
-
-    // Using long selector for overriding other styles
-    .checkbox-group-item.disabled,
-    .tiled-group-row .tiled-group-item-container .disabled {
-      cursor: default;
-      color: $tc-gray-30;
-
-      span, label, div, small {
-        color: $tc-gray-30;
-        cursor: default;
-      }
-
-    }
-  }
-
 }

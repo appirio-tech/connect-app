@@ -266,7 +266,7 @@ class TemplateForm extends Component {
 
   onChange(currentValues, isChanged) {
     const { changeTemplate } = this.props
-    console.log(currentValues)
+    // console.log(currentValues)
     this.setState({ dirty: isChanged })
     if (currentValues.hasOwnProperty('metadata')) {
       try {

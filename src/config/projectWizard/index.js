@@ -508,6 +508,7 @@ export function getProductEstimate(projectTemplate, productConfig) {
   let price = 0
   let minTime = 0
   let maxTime = 0
+  const matchedBlocks = []
   const flatProjectData = flatten(removeValuesOfHiddenNodes(projectTemplate, productConfig), { safe: true })
   if (projectTemplate) {
     const priceConfig = _.get(projectTemplate, 'scope.priceConfig', {})
@@ -575,6 +576,7 @@ export function getProductEstimate(projectTemplate, productConfig) {
       // maxTime = priceConfig[priceKey].maxTime
       _.forEach(filterdBlocks, fb => {
         const bb = buildingBlocks[fb]
+        matchedBlocks.push(bb)
         price += bb.price
         minTime += bb.minTime
         maxTime += bb.maxTime
@@ -620,7 +622,13 @@ export function getProductEstimate(projectTemplate, productConfig) {
   }
   const durationEstimate = minTime !== maxTime ? `${minTime}-${maxTime}` : `${minTime}`
   console.log(durationEstimate)
-  return { priceEstimate: price, minTime, maxTime, durationEstimate: `${durationEstimate} days`}
+  return {
+    priceEstimate: price,
+    minTime,
+    maxTime,
+    durationEstimate: `${durationEstimate} days`,
+    estimateBlocks: matchedBlocks
+  }
 }
 
 /**

@@ -53,7 +53,7 @@ $timeline-colors: (design: #5A52A3, development: #306BE1, qa: #35A3BC, deploymen
     color: $tc-gray-70;
     border: 1px solid $tc-gray-20;
     font-weight: bold;
-    overflow: hidden;
+    // overflow: hidden;
   }
 
   li + li {

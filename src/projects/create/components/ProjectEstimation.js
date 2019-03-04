@@ -13,12 +13,39 @@ const numberWithCommas = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',
 
 function ProjectEstimation({ question, project, template }) {
   const isSelected = (item) => evaluate(item.enableCondition, flatten(project, { safe: true }))
-  const totalDuration = _.sumBy(question.deliverables, 'duration')
+  let totalDuration = 0//_.sumBy(question.deliverables, 'duration')
   const phasesEnabled = question.deliverables.filter(isSelected)
   // const enabledDuration = _.sumBy(phasesEnabled, 'duration')
 
-  const { priceEstimate, durationEstimate } = getProductEstimate({scope: template}, project)
-
+  const { priceEstimate, durationEstimate, estimateBlocks } = getProductEstimate({scope: template}, project)
+  // console.log(estimateBlocks)
+  const deliverables = _.map(question.deliverables, item => {
+    // for now it assumes that there is only one block that matches the conditions per deliverable
+    // if there are cases where we can have more than one blocks, we have to aggregate the blocks to come up
+    // with representable values
+    const buildingBlock = _.find(estimateBlocks, b => _.get(b, 'metadata.deliverable') === item.deliverableKey)
+    // console.log(buildingBlock)
+    if (buildingBlock) {
+      totalDuration += buildingBlock.maxTime
+    }
+    return { ...item, buildingBlock }
+  })
+  // console.log(totalDuration)
+  const renderBlock = (item) => {
+    const durationText = item.duration ? `${item.duration} Days` : 'N/A'
+    return (
+      <li
+        key={item.id}
+        style={{
+          width: (item.duration / totalDuration * 100) + '%'
+        }}
+        className={cn(`type-${item.id}`, { selected: isSelected(item) })}
+      >
+        <div styleName="item-title">{item.title}</div>
+        <span styleName="item-duration">{durationText}</span>
+      </li>
+    )
+  }
   return (
     <div styleName="ProjectEstimation">
       <div styleName="title">
@@ -30,18 +57,10 @@ function ProjectEstimation({ question, project, template }) {
         )}</span>
       </div>
       <ul styleName="project-estimate-timeline">
-        {question.deliverables.map(item => (
-          <li
-            key={item.id}
-            style={{
-              width: (item.duration / totalDuration * 100) + '%'
-            }}
-            className={cn(`type-${item.id}`, { selected: isSelected(item) })}
-          >
-            <div styleName="item-title">{item.title}</div>
-            <span styleName="item-duration">{item.duration}W</span>
-          </li>
-        ))}
+        {deliverables.map(item => {
+          const duration = _.get(item, 'buildingBlock.maxTime')
+          return renderBlock({ ...item, duration })
+        })}
       </ul>
       <h3>Our estimate is from <span>$</span>{numberWithCommas(priceEstimate)}</h3>
     </div>
