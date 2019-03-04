@@ -347,6 +347,11 @@ export const ACCEPT_OR_REFUSE_INVITE_PENDING = 'ACCEPT_OR_REFUSE_INVITE_PENDING'
 export const ACCEPT_OR_REFUSE_INVITE_FAILURE = 'ACCEPT_OR_REFUSE_INVITE_FAILURE'
 export const ACCEPT_OR_REFUSE_INVITE_SUCCESS = 'ACCEPT_OR_REFUSE_INVITE_SUCCESS'
 
+export const RELOAD_PROJECT_MEMBERS       = 'RELOAD_PROJECT_MEMBERS'
+export const RELOAD_PROJECT_MEMBERS_PENDING       = 'RELOAD_PROJECT_MEMBERS_PENDING'
+export const RELOAD_PROJECT_MEMBERS_FAILURE       = 'RELOAD_PROJECT_MEMBERS_FAILURE'
+export const RELOAD_PROJECT_MEMBERS_SUCCESS       = 'RELOAD_PROJECT_MEMBERS_SUCCESS'
+
 export const ADD_PROJECT_MEMBERS         = 'ADD_PROJECT_MEMBERS'
 export const ADD_PROJECT_MEMBERS_PENDING = 'ADD_PROJECT_MEMBERS_PENDING'
 export const ADD_PROJECT_MEMBERS_SUCCESS = 'ADD_PROJECT_MEMBERS_SUCCESS'
@@ -530,6 +535,9 @@ export const PROJECT_MEMBER_INVITE_STATUS_REFUSED = 'refused'
 export const PROJECT_MEMBER_INVITE_STATUS_CANCELED = 'canceled'
 export const PROJECT_MEMBER_INVITE_STATUS_PENDING = 'pending'
 export const PROJECT_MEMBER_INVITE_STATUS_REQUESTED = 'requested'
+export const PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED = 'request_approved'
+export const PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED = 'request_rejected'
+
 
 // projects list view types
 export const PROJECTS_LIST_VIEW = {
@@ -786,7 +794,7 @@ export const EVENT_TYPE = {
     ASSIGNED_AS_OWNER: 'notifications.connect.project.member.assignedAsOwner',
     INVITE_REQUESTED: 'notifications.connect.project.member.invite.requested',
     INVITE_APPROVED: 'notifications.connect.project.member.invite.approved',
-    INVITE_REFUSED: 'notifications.connect.project.member.invite.refused',
+    INVITE_REFUSED: 'notifications.connect.project.member.invite.rejected',
   },
   PROJECT: {
     ACTIVE: 'notifications.connect.project.active',

@@ -14,6 +14,7 @@ import {
   DOMAIN
 } from '../../config/constants'
 import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
+import { getAvatarResized } from '../../helpers/tcHelpers.js'
 require('./TopBarContainer.scss')
 
 
@@ -61,9 +62,9 @@ class TopBarContainer extends React.Component {
       )
     }
     const { user, toolbar, userRoles, isPowerUser } = this.props
-
     const userHandle  = _.get(user, 'handle')
-    const userImage = _.get(user, 'photoURL')
+    const bigPhotoURL = _.get(user, 'photoURL')
+    const userImage = getAvatarResized(bigPhotoURL, 40)
     const userFirstName = _.get(user, 'firstName')
     const userLastName = _.get(user, 'lastName')
     let userName = userFirstName

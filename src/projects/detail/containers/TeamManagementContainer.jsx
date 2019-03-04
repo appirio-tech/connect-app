@@ -18,6 +18,7 @@ import {
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import {
   acceptOrRefuseInvite,
+  reloadProjectMembers,
   addProjectMember,
   deleteProjectInvite,
   deleteTopcoderMemberInvite,
@@ -103,6 +104,7 @@ class TeamManagementContainer extends Component {
 
   onAcceptOrRefuse(invite) {
     this.props.acceptOrRefuseInvite(this.props.projectId, invite)
+      .then(() => this.props.reloadProjectMembers(this.props.projectId))
   }
 
   changeRole(memberId, item) {
@@ -243,6 +245,7 @@ const mapDispatchToProps = {
   inviteTopcoderMembers,
   deleteTopcoderMemberInvite,
   acceptOrRefuseInvite,
+  reloadProjectMembers,
 }
 
 TeamManagementContainer.propTypes = {

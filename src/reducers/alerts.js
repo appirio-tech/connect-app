@@ -24,6 +24,8 @@ import {
   REMOVE_CUSTOMER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_SUCCESS,
   // accepted or refused invite
   ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE,
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED,
+  PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED, PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED,
   // project feeds
   CREATE_PROJECT_FEED_FAILURE,
   CREATE_PROJECT_FEED_COMMENT_FAILURE,
@@ -159,7 +161,15 @@ export default function(state = {}, action) {
     return state
 
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS:
-    Alert.success('You\'ve successfully joined the project.')
+    if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_ACCEPTED){
+      Alert.success('You\'ve successfully joined the project.')
+    } else if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_REFUSED){
+      Alert.success('You\'ve refused to join the project.')
+    } else if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED){
+      Alert.success('You\'ve approved copilot invitation request.')
+    } else if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED){
+      Alert.success('You\'ve rejected copilot invitation request.')
+    }
     return state
 
   case UPDATE_PROJECT_FAILURE:

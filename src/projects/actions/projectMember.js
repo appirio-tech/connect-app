@@ -6,7 +6,7 @@ import { addProjectMember as addMember,
 import { createProjectMemberInvite as createProjectMemberInvite,
   updateProjectMemberInvite as updateProjectMemberInvite
 } from '../../api/projectMemberInvites'
-import { loadProjectDashboard } from './projectDashboard'
+import { getProjectById } from '../../api/projects'
 import { loadMembers, loadMembersByHandle } from '../../actions/members'
 
 import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
@@ -18,6 +18,7 @@ import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   ACCEPT_OR_REFUSE_INVITE,
   PROJECT_ROLE_CUSTOMER,
   PROJECT_MEMBER_INVITE_STATUS_CANCELED,
+  RELOAD_PROJECT_MEMBERS,
   CLEAR_MEMBER_SUGGESTIONS
 } from '../../config/constants'
 
@@ -157,22 +158,20 @@ export function inviteProjectMembers(projectId, emailIds, handles) {
   }
 }
 
-
-function acceptOrRefuseInviteWithData(dispatch, projectId, item) {
-  return new Promise((resolve, reject) => {
-    return updateProjectMemberInvite(projectId, item)
-      .then(() => {
-        return dispatch(loadProjectDashboard(projectId))
-      })
-      .catch(err => reject(err))
-  })
-}
-
 export function acceptOrRefuseInvite(projectId, item) {
   return (dispatch) => {
     return dispatch({
       type: ACCEPT_OR_REFUSE_INVITE,
-      payload: acceptOrRefuseInviteWithData(dispatch, projectId, item)
+      payload: updateProjectMemberInvite(projectId, item)
+    })
+  }
+}
+
+export function reloadProjectMembers(projectId) {
+  return (dispatch) => {
+    return dispatch({
+      type: RELOAD_PROJECT_MEMBERS,
+      payload: getProjectById(projectId)
     })
   }
 }
