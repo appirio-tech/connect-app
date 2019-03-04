@@ -11,19 +11,17 @@ import ReactSelect from 'react-select'
 import CreatableSelect from 'react-select/lib/Creatable'
 import './Select.scss'
 
-let customStyles = {}
-
 const Select = (props) => {
-  let containerclass = "react-select-hiddendropdown-container"
+  let containerclass = 'react-select-hiddendropdown-container'
   if (props.showDropdownIndicator) {
-	containerclass = "react-select-container"
+    containerclass = 'react-select-container'
   }
-  
+
   if (props.createOption) {
     return (
       <CreatableSelect
         {...props}
-		createOptionPosition="first"
+        createOptionPosition="first"
         className={containerclass}
         classNamePrefix="react-select"
         noOptionsMessage={() => ('Type to search')}
@@ -33,7 +31,7 @@ const Select = (props) => {
     return (
       <ReactSelect
         {...props}
-		createOptionPosition="first"
+        createOptionPosition="first"
         className={containerclass}
         classNamePrefix="react-select"
         noOptionsMessage={() => ('Type to search')}
