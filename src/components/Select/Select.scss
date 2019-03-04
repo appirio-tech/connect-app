@@ -1,29 +1,31 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
+	$reactselectheight : 40px;
+	$reactselectcontentheight: 20px;
 	@mixin reactselectstyles {
 		& .react-select__control {
-	  	  height: 40px;
+	  	  height: $reactselectheight;
 	  	  box-shadow: none !important;
 		  & > div {
-		  		height: 40px;
+		  		height: $reactselectheight - 2px;
 		  }
 
 		  & input {
-			  height: 20px;
+			  height: $reactselectcontentheight - 3px;
 			  transition: none !important;
 		  }
 
 	  	  & input:focus {
 	  		box-shadow: none !important;
 	  		-webkit-box-shadow: none !important;
-	  		height: 20px;
+	  		height: $reactselectcontentheight - 3px;
 	  	  }
 		}
 
 		& .react-select__value-container {
 			& > div:nth-last-child(1) {
-				height: 20px;
+				height: $reactselectcontentheight - 2px;
 			}
 		}
 
