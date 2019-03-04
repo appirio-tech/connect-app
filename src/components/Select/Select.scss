@@ -23,21 +23,23 @@
 				height: $reactselectheight - 2px;
 			}
 
-			& input {
-				height: $reactselectcontentheight - 3px;
-				transition: none !important;
+			& > div:nth-child(1) > div:nth-last-child(1) {
+				height: $reactselectcontentheight + 4px;
 			}
 
-			& input:focus {
+			& input {
+				height: $reactselectcontentheight;
+				line-height: $reactselectcontentheight;
+				transition: none !important;
 				box-shadow: none !important;
 				-webkit-box-shadow: none !important;
-				height: $reactselectcontentheight - 3px;
 			}
+
 		}
 
 		& .react-select__value-container {
 			& > div:nth-last-child(1) {
-				height: $reactselectcontentheight - 2px;
+				height: $reactselectcontentheight + 4px;
 			}
 		}
 

@@ -29,7 +29,7 @@ class AutocompleteInputContainer extends React.Component {
       }
       return value
     })
-    console.log('inputValue :', inputValue)
+	
     if (this.props.onUpdate) {
       this.props.onUpdate(inputValue)
     }

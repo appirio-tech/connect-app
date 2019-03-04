@@ -20,7 +20,6 @@ export default function(state = initialState, action) {
   case CLEAR_MEMBER_SUGGESTIONS:
     return Object.assign({}, state, {suggestedMembers: []})
   case LOAD_MEMBER_SUGGESTIONS_SUCCESS:
-    console.log(action.payload)
     return Object.assign({}, state, {suggestedMembers: action.payload})
   case LOAD_MEMBERS_SUCCESS: {
     const _members = _.map(_.filter(action.payload, m => m.userId), m => {
