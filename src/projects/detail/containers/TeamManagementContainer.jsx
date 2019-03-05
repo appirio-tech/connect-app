@@ -165,7 +165,7 @@ class TeamManagementContainer extends Component {
     const handles = []
     const emails = []
     selectedMembers.map(selectedOption => {
-      const value = selectedOption.handle
+      const value = selectedOption.label
       // Test if its email
       if (selectedOption.isEmail) {
         emails.push(value)

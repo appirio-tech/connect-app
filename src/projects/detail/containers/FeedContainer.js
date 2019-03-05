@@ -367,7 +367,7 @@ class FeedView extends React.Component {
 
   render () {
     const {currentUser, currentMemberRole, isCreatingFeed, error, allMembers,
-      toggleNotificationRead, notifications, project, isSuperUser } = this.props
+      toggleNotificationRead, notifications, project, isSuperUser, projectMembers } = this.props
     const { feeds, isNewPostMobileOpen, fullscreenFeedId } = this.state
     const isChanged = this.isChanged()
     const onLeaveMessage = this.onLeave() || ''
@@ -393,6 +393,7 @@ class FeedView extends React.Component {
                 allowComments: fullscreenFeed.allowComments && !!currentMemberRole,
                 currentUser,
                 allMembers,
+                projectMembers,
                 onNewCommentChange: this.onNewCommentChange.bind(this, fullscreenFeedId),
                 onAddNewComment: this.onAddNewComment.bind(this, fullscreenFeedId),
                 onLoadMoreComments: this.onShowAllComments.bind(this, fullscreenFeedId),
@@ -432,6 +433,7 @@ class FeedView extends React.Component {
               <NewPost
                 currentUser={currentUser}
                 allMembers={allMembers}
+                projectMembers={projectMembers}
                 onPost={this.onNewPost}
                 isCreating={isCreatingFeed}
                 hasError={error}
@@ -452,6 +454,7 @@ class FeedView extends React.Component {
                     allowComments: feed.allowComments && !!currentMemberRole,
                     currentUser,
                     allMembers,
+                    projectMembers,
                     onNewCommentChange: this.onNewCommentChange.bind(this, feed.id),
                     onAddNewComment: this.onAddNewComment.bind(this, feed.id),
                     onLoadMoreComments: this.onShowAllComments.bind(this, feed.id),
@@ -526,7 +529,9 @@ FeedContainer.PropTypes = {
   project: PropTypes.object.isRequired
 }
 
-const mapStateToProps = ({ projectTopics, members, loadUser, notifications }) => {
+const mapStateToProps = ({ projectTopics, members, loadUser, notifications, projectState }) => {
+  const project = projectState.project
+  const projectMembers = _.filter(members.members, m => _.some(project.members, pm => pm.userId === m.userId))
   return {
     currentUser    : loadUser.user,
     feeds          : projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
@@ -535,6 +540,7 @@ const mapStateToProps = ({ projectTopics, members, loadUser, notifications }) =>
     isCreatingFeed : projectTopics.isCreatingFeed,
     error          : projectTopics.error,
     allMembers     : members.members,
+    projectMembers : _.keyBy(projectMembers, 'userId'),
     notifications,
   }
 }

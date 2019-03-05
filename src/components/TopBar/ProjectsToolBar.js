@@ -194,7 +194,7 @@ class ProjectsToolBar extends Component {
             </div>
           }
           <div className="actions">
-            <NewProjectNavLink compact link={getNewProjectLink(orgConfig)} />
+            {isLoggedIn && <NewProjectNavLink compact link={getNewProjectLink(orgConfig)} />}
             { userMenu }
             {/* pass location, to make sure that component is re-rendered when location is changed
                 it's necessary to hide notification dropdown on mobile when users uses browser history back/forward buttons */}

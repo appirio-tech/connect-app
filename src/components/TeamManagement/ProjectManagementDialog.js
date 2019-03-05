@@ -6,7 +6,7 @@ import Modal from 'react-modal'
 import XMarkIcon from '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import {getAvatarResized} from '../../helpers/tcHelpers'
-import AutocompleteInput from './AutocompleteInput'
+import AutocompleteInputContainer from './AutocompleteInputContainer'
 
 class Dialog extends React.Component {
   constructor(props) {
@@ -30,18 +30,18 @@ class Dialog extends React.Component {
   onChange(selectedMembers) {
     // If a member invited with email exists in selectedMembers
     let present = _.some(this.state.invitedMembers, invited => _.findIndex(selectedMembers,
-      selectedMember => selectedMember.isEmail && selectedMember.handle === invited.email) > -1)
+      selectedMember => selectedMember.isEmail && selectedMember.label === invited.email) > -1)
     // If a member invited with handle exists in selectedMembers
     present = present || _.some(this.state.invitedMembers, invited => {
       if (!invited.member) {
         return false
       }
       return _.findIndex(selectedMembers,
-        selectedMember => !selectedMember.isEmail && selectedMember.handle === invited.member.handle) > -1
+        selectedMember => !selectedMember.isEmail && selectedMember.label === invited.member.handle) > -1
     })
     // If members exist in selectedMembers
     present = present || _.some(this.state.members, m => _.findIndex(selectedMembers,
-      selectedMember => selectedMember.handle === m.handle) > -1)
+      selectedMember => selectedMember.label === m.handle) > -1)
     this.setState({
       validInviteText: !present,
       showAlreadyMemberError: present
@@ -150,7 +150,7 @@ class Dialog extends React.Component {
 
           <div className="input-container">
             <div className="hint">invite more people</div>
-            <AutocompleteInput
+            <AutocompleteInputContainer
               placeholder="Enter one or more emails or user handles"
               onUpdate={this.onChange}
               currentUser={currentUser}

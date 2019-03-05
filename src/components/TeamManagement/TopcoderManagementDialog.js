@@ -9,7 +9,7 @@ import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 import SelectDropdown from '../SelectDropdown/SelectDropdown'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
-import AutocompleteInput from './AutocompleteInput'
+import AutocompleteInputContainer from './AutocompleteInputContainer'
 import {PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PENDING} from '../../config/constants'
 
 class Dialog extends React.Component {
@@ -244,7 +244,7 @@ class Dialog extends React.Component {
                   </div>
 
                   {
-                    invite.status===PROJECT_MEMBER_INVITE_STATUS_REQUESTED && showApproveDecline &&  
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_REQUESTED && showApproveDecline &&
                     <div className="member-remove">
                       <span onClick={approve}>approve</span>
                       <span onClick={decline}>decline</span>
@@ -254,7 +254,7 @@ class Dialog extends React.Component {
                     </div>
                   }
                   {
-                    invite.status===PROJECT_MEMBER_INVITE_STATUS_REQUESTED && !showApproveDecline && showRemove &&  
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_REQUESTED && !showApproveDecline && showRemove &&
                     <div className="member-remove">
                       <span className="email-date">
                         Requested {moment(invite.createdAt).format('MMM D, YY')}
@@ -262,7 +262,7 @@ class Dialog extends React.Component {
                     </div>
                   }
                   {
-                    invite.status===PROJECT_MEMBER_INVITE_STATUS_PENDING && showRemove &&  
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_PENDING && showRemove &&
                     <div className="member-remove" onClick={remove}>
                       Remove
                       <span className="email-date">
@@ -271,14 +271,14 @@ class Dialog extends React.Component {
                     </div>
                   }
                   {
-                    invite.status===PROJECT_MEMBER_INVITE_STATUS_PENDING && !showRemove &&  
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_PENDING && !showRemove &&
                     <div className="member-remove" >
                       <span className="email-date">
                         Invited {moment(invite.createdAt).format('MMM D, YY')}
                       </span>
                     </div>
                   }
-                  
+
                 </div>
               )
             }))}
@@ -286,7 +286,8 @@ class Dialog extends React.Component {
 
           {(showRemove || showApproveDecline) && <div className="input-container" >
             <div className="hint">invite more people</div>
-            <AutocompleteInput
+            <AutocompleteInputContainer
+              placeholder="Enter one or more user handles"
               onUpdate={this.onChange}
               currentUser={currentUser}
               selectedMembers={selectedMembers}
@@ -311,7 +312,7 @@ class Dialog extends React.Component {
               disabled={processingInvites || !this.state.validUserText || this.state.clearText}
               onClick={this.addUsers}
             >
-              {_.find(this.roles, {value:this.state.userRole}).canAddDirectly && !showApproveDecline 
+              {_.find(this.roles, {value:this.state.userRole}).canAddDirectly && !showApproveDecline
                 ?'Request invite'
                 :'Invite users'}
             </button>

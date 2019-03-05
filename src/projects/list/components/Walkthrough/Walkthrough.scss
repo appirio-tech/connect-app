@@ -6,234 +6,51 @@
   .walkthrough-column {
     position: relative;
     text-align: center;
-    min-height: 496px;
     padding: 20px 56px;
     @media screen and (max-width: $screen-sm - 1px) {
       padding: 20px 26px;
     }
 
-    .text-img{
-      background-size: 100% 100%;
-      position: relative;
-      display: block;
-      width: 90%;
-      left: 10%;
-      @media screen and (max-width: $screen-sm - 1px) {
-        display: none;
-      }
-      @media screen and (min-width: $screen-md - 1px) {
-        width: 60%;
-        left: 40%;
-      }
-    }
+    .header-text-wrapper {
+      margin-bottom: 6 * $base-unit;
 
-    h3{
-      word-break: break-all;
-      color: $tc-gray-70;
-      @include roboto-medium;
-      font-size: 48px;
-      letter-spacing: 0px;
-      padding: 0 0 25px 0;
-      line-height: inherit;
-    }
-    ul{
-      width: 100%;
-      left:50%;
-      margin-left: -50%;
-      position: relative;
-      li{
-        float: left;
-        width: calc((100% - 40px)/3);
-      }
-      li:nth-child(2){
-        margin-left:20px;
-        margin-right:20px;
-      }
-      a{
-        background: rgba($tc-gray-neutral-dark,0.39);
-        border-radius: 4px;
-        width: 100%;
-        height: 306px;
-        display: block;
-        margin-bottom:20px;
-        font-size: 88px;
-        line-height: 306px;
-        text-align: center;
-        @include roboto-bold;
-        color: $tc-gray-20;
-        &:hover {
-          color: $tc-gray-80;
+      h3 {
+        color: $tc-gray-70;
+        @include roboto-medium;
+        font-size: 28px;
+        letter-spacing: 0px;
+        line-height: 36px;
+
+        @media screen and (max-width: $screen-sm - 1px) {
+          font-size: 18px;
+          line-height: 22px;
         }
       }
     }
 
-    .bubble{
-      position: relative;
-      padding:0 10%;
-      display: flex;
-      padding: 0 20% 0 20%;
-      @media screen and (max-width: $screen-sm - 1px) {
-        left:0;
-        padding-left: 0;
-        display: block;
-        margin: 0;
-      }
-      @media screen and (max-width: 1200px) {
-        padding: 0 10% 0 10%;
-      }
-      @media screen and (max-width: 1000px) {
-        padding: 0;
-      }
-      div{
-        position:relative;
-        background: $tc-white;
-        min-height: 235px;
-        padding: 30px 30px 50px 30px;
-        box-shadow: 0 0 15px rgba($tc-black, .15);
-        border-radius: 4px;
-        @media screen and (max-width: $screen-sm - 1px) {
-          width: auto;
-          padding: 30px 30px 30px 30px;
-        }
-        a {
-          display: none;
-          @media screen and (max-width: $screen-sm - 1px) {
-            display: initial;
-          }
-          .new-project-button {
-            @include roboto;
-            color: $tc-dark-blue-70;
-            margin-top: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            .title {
-              white-space: nowrap;
-              margin-left: 10px;
-            }
-            .new-project-icon {
-              width: 30px;
-              height: 30px;
-              background-color: $tc-dark-blue-70;
-              border-radius: 100%;
-              display: -webkit-box;
-              display: -ms-flexbox;
-              display: flex;
-              -webkit-box-pack: center;
-              -ms-flex-pack: center;
-              justify-content: center;
-              -webkit-box-align: center;
-              -ms-flex-align: center;
-              align-items: center;
-              svg {
-                fill: $tc-white;
-                width: 10px;
-                height: 10px;
-              }
-            }
-          }
-          div {
-            box-shadow: none;
-            min-height: 0;
-            padding: 0;
-            width: auto;
-          }
-        }
-        h3{
-          @include roboto-medium;
-          line-height:35px;
-          font-size: $tc-heading-sm;
-          color: $tc-black;
-          text-align:left;
-          padding-bottom: 10px;
-          @media screen and (max-width: $screen-md - 1px) {
-            font-size: 18px;
-          }
-          @media screen and (max-width: $screen-sm - 1px) {
-            font-size: 16px;
-            line-height:30px;
-          }
-        }
-        p{
-          @include roboto;
-          font-size: $tc-label-lg;
-          color: $tc-gray-80;
-          line-height: 25px;
-          padding: 0;
-          @media screen and (max-width: $screen-md - 1px) {
-            font-size: 14px;
-          }
-          @media screen and (max-width: $screen-sm - 1px) {
-            font-size: 13px;
-          }
-        }
-        .arrow{
-          width:0;
-          height:0;
-          position: absolute;
-          left:-20px;
-          top: 42px;
-          border-left:34px solid transparent;
-          border-top:34px solid $tc-white;
-          @media screen and (max-width: $screen-sm - 1px) {
-            border-left: none;
-            border-right:34px solid transparent;
-            bottom: -20px;
-            left: inherit;
-            top: inherit;
-          }
-        }
+    .project-card-new {
+      margin: 0 auto 6 * $base-unit;
+      height: 400px;
+      min-width: 280px;
+      max-width: 460px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        height: auto;
       }
     }
-    .robot{
-      background-size: 238px 281px;
-      width: 238px;
-      height: 281px;
-      left: 30%;
-      top:0;
-      z-index:2;
-      display: none;
-      &.robotleft {
-        width: 100%;
-        display: block;
-        @media screen and (max-width: $screen-sm - 1px) {
-          display: none;
-        }
-      }
-      @media screen and (max-width: $screen-sm - 1px) {
-        width: 100%;
-        position: relative;
-        margin: 50px 0;
-        left: 0%;
-        display: block;
-      }
-      ellipse {
-        display: none;
-        @media screen and (max-width: $screen-sm - 1px) {
-          display: initial;
-        }
-      }
-    }
-    .shadow{
-      background-size: 960px 11px;
-      position: absolute;
-      width: 100%;
-      z-index:1;
-      display:block;
-      height: 11px;
-      bottom:-48px;
-      @media screen and (max-width: $screen-sm - 1px) {
-        display: none;
-      }
-    }
-    p{
-      text-align: left;
-      padding: 0 168px;
+
+    .subtext {
+      font-size: 14px;
       @include roboto;
-      font-size: $tc-label-lg;
       color: $tc-gray-70;
-      letter-spacing: 0px;
-      line-height: 23px;
+
+      a {
+        color: $tc-dark-blue;
+  
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
   }
 }
