@@ -15,9 +15,11 @@ class Dialog extends React.Component {
       clearText: false,
       showAlreadyMemberError: false,
       invitedMembers: {},
-      members: {}
+      members: {},
+      errorMessage: null
     }
     this.onChange = this.onChange.bind(this)
+    this.onErrorMessage = this.onErrorMessage.bind(this)
   }
 
   componentWillMount() {
@@ -25,6 +27,13 @@ class Dialog extends React.Component {
       invitedMembers: this.props.invites,
       members: this.props.members
     })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {processingInvites} = this.props
+    if (processingInvites && !nextProps.processingInvites && nextProps.error ) {
+      this.onErrorMessage(nextProps.error, this.props.selectedMembers)
+    }
   }
 
   onChange(selectedMembers) {
@@ -47,6 +56,33 @@ class Dialog extends React.Component {
       showAlreadyMemberError: present
     })
     this.props.onSelectedMembersUpdate(selectedMembers)
+  }
+
+  onErrorMessage(error, selectedMembers) {
+    if(error.msg) {
+      this.setState({
+        errorMessage: error.msg
+      })
+      return
+    }
+    const msg = []
+    _.forEach(error.failed, (failed) => {
+      const existingMessage = _.find(msg, (m) => failed.message === m.message)
+      if(existingMessage) {
+        existingMessage.allUsers.push((failed.email ? failed.email: _.find(selectedMembers, (m) => m.userId === failed.id).handle))
+        const index = _.find(msg, (m) => failed.message === m.message)
+        msg.splice(index, 1, existingMessage)
+      } else {
+        msg.push({
+          message: failed.message,
+          allUsers: [ (failed.email ? failed.email: _.find(selectedMembers, (m) => m.userId === failed.id).handle) ]
+        })
+      }
+    })
+    const listMessages = _.map(msg, m => `${m.allUsers} : ${m.message}`)
+    this.setState({
+      errorMessage: _.join(listMessages, '\n')
+    })
   }
 
   render() {
@@ -161,6 +197,9 @@ class Dialog extends React.Component {
             {this.state.showAlreadyMemberError && <div className="error-message">
               Project Member(s) can't be invited again. Please remove them from list.
             </div>}
+            { this.state.errorMessage  && <div className="error-message">
+              {this.state.errorMessage}
+            </div> }
             <button
               className="tc-btn tc-btn-primary tc-btn-md"
               type="submit"

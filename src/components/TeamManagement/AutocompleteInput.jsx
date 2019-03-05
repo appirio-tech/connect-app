@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {findIndex} from 'lodash'
+import {findIndex, find} from 'lodash'
 import Select from '../Select/Select'
 import './AutocompleteInput.scss'
 import {loadMemberSuggestions} from '../../api/projectMembers'
@@ -51,6 +51,8 @@ class AutocompleteInput extends React.Component {
     }
     if (value.length >= AUTOCOMPLETE_TRIGGER_LENGTH) {
       return this.loadMemberSuggestionsDebounced(value).then(r => {
+        const exists = find(r, (member) => member.handle === value)
+        if(exists) createOption.userId = exists.userId
         // Remove current members from suggestions
         const suggestions = r.filter(suggestion => (
           findIndex(allMembers, (member) => member.handle === suggestion.handle) === -1 &&
@@ -59,7 +61,6 @@ class AutocompleteInput extends React.Component {
         ))
         // Only allow creation if it is not already exists in members
         const shouldIncludeCreateOption = findIndex(allMembers, (member) => member.handle === value) === -1
-
         return Promise.resolve({options: shouldIncludeCreateOption?[createOption, ...suggestions]: suggestions})
       }).catch( () => {
         return Promise.resolve({options: [createOption] })
