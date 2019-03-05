@@ -109,13 +109,13 @@ class Dialog extends React.Component {
     _.forEach(error.failed, (failed) => {
       const existingMessage = _.find(msg, (m) => failed.message === m.message)
       if(existingMessage) {
-        existingMessage.allUsers.push((failed.email ? failed.email: _.find(selectedMembers, (m) => m.userId === failed.id).handle))
+        existingMessage.allUsers.push((failed.email ? failed.email: _.find(selectedMembers, { userId: failed.userId }).handle))
         const index = _.find(msg, (m) => failed.message === m.message)
         msg.splice(index, 1, existingMessage)
       } else {
         msg.push({
           message: failed.message,
-          allUsers: [ (failed.email ? failed.email: _.find(selectedMembers, (m) => m.userId === failed.id).handle) ]
+          allUsers: [ (failed.email ? failed.email: _.find(selectedMembers, { userId: failed.userId }).handle) ]
         })
       }
     })
