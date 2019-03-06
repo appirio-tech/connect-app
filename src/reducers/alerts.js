@@ -145,7 +145,7 @@ export default function(state = {}, action) {
     if(action.payload.success.length && !action.payload.failed) {
       Alert.success('You\'ve successfully invited member(s).')
     } else if (action.payload.success.length && action.payload.failed) {
-      Alert.warning('Some members couldn\’t be invited.')
+      Alert.warning('Some members couldn\'t be invited.')
     } else if (!action.payload.success.length && action.payload.failed) {
       Alert.error('You are unable to invite members successfully.')
     }

@@ -52,9 +52,6 @@ class ProjectManagementDialog extends React.Component {
   }
 
   isSelectedMemberAlreadyInvited(invites = [], selectedMember) {
-		console.log('TCL: ProjectManagementDialog -> isSelectedMemberAlreadyInvited -> invites', invites)
-
-
     return !!invites.find((invite) => (
       invite.email && invite.email === selectedMember.label ||
       invite.userId && this.resolveUserHandle(invite.userId) === selectedMember.label
@@ -77,7 +74,7 @@ class ProjectManagementDialog extends React.Component {
     const uniqueMessages = _.groupBy(error.failed, 'message')
 
     const msgs = _.keys(uniqueMessages).map((message) => {
-      let users = uniqueMessages[message].map((failed) => (
+      const users = uniqueMessages[message].map((failed) => (
         failed.email ? failed.email : this.resolveUserHandle(failed.userId)
       ))
 

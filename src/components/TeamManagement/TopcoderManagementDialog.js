@@ -115,7 +115,7 @@ class TopcoderManagementDialog extends React.Component {
     const uniqueMessages = _.groupBy(error.failed, 'message')
 
     const msgs = _.keys(uniqueMessages).map((message) => {
-      let users = uniqueMessages[message].map((failed) => (
+      const users = uniqueMessages[message].map((failed) => (
         failed.email ? failed.email : this.resolveUserHandle(failed.userId)
       ))
 
