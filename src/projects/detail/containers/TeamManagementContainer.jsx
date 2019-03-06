@@ -33,6 +33,11 @@ class TeamManagementContainer extends Component {
 
   constructor(props) {
     super(props)
+
+    this.state = {
+      selectedMembers: [],
+    }
+
     this.onProjectInviteSend = this.onProjectInviteSend.bind(this)
     this.onProjectInviteDelete = this.onProjectInviteDelete.bind(this)
     this.onTopcoderInviteDelete = this.onTopcoderInviteDelete.bind(this)
@@ -192,6 +197,7 @@ class TeamManagementContainer extends Component {
           error={this.props.error}
           currentUser={this.props.currentUser}
           members={projectMembers}
+          allMembers={this.props.allMembers}
           projectTeamInvites={projectTeamInvites}
           topcoderTeamInvites={topcoderTeamInvites}
           onMemberDeleteConfirm={this.onMemberDeleteConfirm}
@@ -205,7 +211,7 @@ class TeamManagementContainer extends Component {
           onSelectedMembersUpdate={this.onSelectedMembersUpdate}
           selectedMembers={this.state.selectedMembers}
           onShowTopcoderDialog={this.onShowDialog}
-          onShowProjectDialot={this.onShowDialog}
+          onShowProjectDialog={this.onShowDialog}
         />
       </div>
     )

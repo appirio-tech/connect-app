@@ -132,7 +132,7 @@ export default function(state = {}, action) {
   case ADD_PROJECT_ATTACHMENT_SUCCESS:
     Alert.success('Added attachment to the project successfully')
     return state
-  
+
   case UPDATE_PROJECT_ATTACHMENT_SUCCESS:
     Alert.success('Updated attachment succcessfully')
     return state
@@ -142,7 +142,13 @@ export default function(state = {}, action) {
 
   case INVITE_TOPCODER_MEMBER_SUCCESS:
   case INVITE_CUSTOMER_SUCCESS:
-    Alert.success('You\'ve successfully invited member(s).')
+    if(action.payload.success.length && !action.payload.failed) {
+      Alert.success('You\'ve successfully invited member(s).')
+    } else if (action.payload.success.length && action.payload.failed) {
+      Alert.warning('Some members couldn\'t be invited.')
+    } else if (!action.payload.success.length && action.payload.failed) {
+      Alert.error('You are unable to invite members successfully.')
+    }
     return state
 
   case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS:

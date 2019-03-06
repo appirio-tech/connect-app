@@ -514,17 +514,29 @@ export const projectState = function (state=initialState, action) {
 
   case INVITE_CUSTOMER_SUCCESS: {
     const newState = Object.assign({}, state)
-    newState.project.invites.push(...action.payload)
+    newState.project.invites.push(...action.payload.success)
     newState.processingInvites = false
     newState.error = false
+    if (action.payload.failed) {
+      newState.error = {
+        type: action.type,
+        failed: action.payload.failed,
+      }
+    }
     return newState
   }
 
   case INVITE_TOPCODER_MEMBER_SUCCESS: {
     const newState = Object.assign({}, state)
-    newState.project.invites.push(...action.payload)
+    newState.project.invites.push(...action.payload.success)
     newState.processingInvites = false
     newState.error = false
+    if (action.payload.failed) {
+      newState.error = {
+        type: action.type,
+        failed: action.payload.failed,
+      }
+    }
     return newState
   }
 

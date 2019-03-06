@@ -35,7 +35,7 @@ class AutocompleteInputContainer extends React.Component {
 
   render() {
 
-    const { placeholder, currentUser, selectedMembers, disabled, allMembers} = this.props
+    const { placeholder, currentUser, selectedMembers, disabled } = this.props
 
     return (
       <AutocompleteInput
@@ -46,7 +46,6 @@ class AutocompleteInputContainer extends React.Component {
         currentUser={currentUser}
         selectedMembers={selectedMembers}
         disabled={disabled}
-        allMembers={allMembers}
       />
     )
   }

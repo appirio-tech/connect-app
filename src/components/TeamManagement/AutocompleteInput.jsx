@@ -41,7 +41,6 @@ class AutocompleteInput extends React.Component {
 AutocompleteInput.defaultProps = {
   placeholder: 'Enter one or more user handles',
   selectedMembers: [],
-  allMembers: [],
   disabled: false
 }
 
@@ -71,11 +70,6 @@ AutocompleteInput.propTypes = {
    * The flag if component is disabled
    */
   disabled: PropTypes.bool,
-
-  /**
-   * List of both current and invited members of project
-   */
-  allMembers: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default AutocompleteInput
