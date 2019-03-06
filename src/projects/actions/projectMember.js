@@ -18,9 +18,19 @@ import {ADD_PROJECT_MEMBER, REMOVE_PROJECT_MEMBER, UPDATE_PROJECT_MEMBER,
   ACCEPT_OR_REFUSE_INVITE,
   PROJECT_ROLE_CUSTOMER,
   PROJECT_MEMBER_INVITE_STATUS_CANCELED,
-  RELOAD_PROJECT_MEMBERS
+  RELOAD_PROJECT_MEMBERS,
+  CLEAR_MEMBER_SUGGESTIONS
 } from '../../config/constants'
 
+
+export function memberSuggestionsDispatch(dispatch) {
+  return (value) => {
+    return dispatch({
+      type: LOAD_MEMBER_SUGGESTIONS,
+      payload: loadMemberSuggestionsAPI(value)
+    })
+  }
+}
 
 export function loadMemberSuggestions(value) {
   return (dispatch) => {
@@ -29,6 +39,12 @@ export function loadMemberSuggestions(value) {
       payload: loadMemberSuggestionsAPI(value)
     })
   }
+}
+
+export function clearMemberSuggestions(dispatch) {
+  return dispatch({
+    type: CLEAR_MEMBER_SUGGESTIONS
+  })
 }
 
 function addProjectMemberWithData(dispatch, projectId, member) {

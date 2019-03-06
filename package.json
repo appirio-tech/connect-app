@@ -79,7 +79,7 @@
     "webpack-merge": "^4.1.1"
   },
   "dependencies": {
-    "appirio-tech-react-components": "git+https://github.com/appirio-tech/react-components.git#feature/filestack-v3",
+    "appirio-tech-react-components": "git+https://github.com/appirio-tech/react-components.git#feature/connectv2",
     "axios": "^0.13.1",
     "brace": "^0.11.1",
     "classnames": "^2.2.3",
@@ -130,7 +130,7 @@
     "react-s-alert": "^1.1.4",
     "react-scroll": "^1.7.6",
     "react-scroll-lock-component": "^1.1.2",
-    "react-select": "^0.9.1",
+    "react-select": "^2.4.0",
     "react-stickynode": "^1.2.1",
     "react-text-truncate": "^0.8.3",
     "react-transition-group": "^2.5.0",

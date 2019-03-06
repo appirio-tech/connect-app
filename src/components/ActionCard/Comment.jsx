@@ -58,7 +58,7 @@ class Comment extends React.Component {
   }
 
   render() {
-    const {message, author, date, edited, children, noInfo, self, isSaving, hasError, readonly, allMembers, canDelete} = this.props
+    const {message, author, date, edited, children, noInfo, self, isSaving, hasError, readonly, allMembers, canDelete, projectMembers} = this.props
     const messageAnchor = `comment-${message.id}`
     const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#${messageAnchor}`
     const authorName = author ? (author.firstName + ' ' + author.lastName) : 'Connect user'
@@ -84,6 +84,7 @@ class Comment extends React.Component {
             authorName={authorName}
             cancelEdit={this.cancelEdit}
             allMembers={allMembers}
+            projectMembers={projectMembers}
             editingTopic = {false}
           />
         </div>
@@ -194,7 +195,7 @@ Comment.propTypes = {
    */
   readonly: PropTypes.bool,
   allMembers: PropTypes.object.isRequired,
-
+  projectMembers: PropTypes.object,
   /**
    * If true only comment text is shown without additional info
    */

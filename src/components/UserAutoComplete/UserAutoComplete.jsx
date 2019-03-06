@@ -9,7 +9,7 @@ import Select from '../Select/Select'
  * Render a searchable dropdown for selecting users
  * @param {Object} projectMembers - a map of userId to user object of project members. i.e., members.members from the store
  * @param {String} selectedUsers - currently selected user handles delimitted by ','
- * @param {Function} onUpdate - change handler. invoked when a user is added or removed from selection 
+ * @param {Function} onUpdate - change handler. invoked when a user is added or removed from selection
  */
 const UserAutoComplete = ({
   projectMembers,
@@ -19,10 +19,13 @@ const UserAutoComplete = ({
 }) => (
   <div styleName="user-select-wrapper" className="user-select-wrapper">
     <Select
-      multi
-      value={selectedUsers}
+      isMulti
+      closeMenuOnSelect
+      showDropdownIndicator
+      createOption={false}
       placeholder="Enter user handles"
-      onChange={selectedOptions => onUpdate(selectedOptions)}
+      value={selectedUsers}
+      onChange={selectedOptions => onUpdate(selectedOptions.map(option => option.value).join(','))}
       options={
         values(projectMembers || {})
           .filter(member => member.handle !== loggedInUser.handle)

@@ -176,6 +176,7 @@ class ProjectStage extends React.Component{
       isAddingComment,
       onDeleteMessage,
       allMembers,
+      projectMembers,
       onSaveMessage,
       timeline,
       notifications,
@@ -237,6 +238,7 @@ class ProjectStage extends React.Component{
               isAddingComment={isAddingComment}
               onDeleteMessage={onDeleteMessage}
               allMembers={allMembers}
+              projectMembers={projectMembers}
               onSaveMessage={onSaveMessage}
             />
           )}

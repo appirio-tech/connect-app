@@ -57,7 +57,7 @@ class TeamManagement extends React.Component {
       projectTeamInvites, onProjectInviteDeleteConfirm, onProjectInviteSend, deletingInvite, changeRole,
       onDeleteInvite, isShowTopcoderDialog, onShowTopcoderDialog, processingInvites, processingMembers,
       onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, onAcceptOrRefuse, error,
-      onSelectedMembersUpdate, selectedMembers
+      onSelectedMembersUpdate, selectedMembers, allMembers,
     } = this.props
     const currentMember = members.filter((member) => member.userId === currentUser.userId)[0]
     const modalActive = isAddingTeamMember || deletingMember || isShowJoin || showNewMemberConfirmation || deletingInvite
@@ -192,6 +192,7 @@ class TeamManagement extends React.Component {
               error={error}
               currentUser={currentUser}
               members={members}
+              allMembers={allMembers}
               isMember={!!currentMember}
               onCancel={onClickCancel}
               removeMember={removeMember}
@@ -221,6 +222,7 @@ class TeamManagement extends React.Component {
               error={error}
               currentUser={currentUser}
               members={members}
+              allMembers={allMembers}
               isMember={!!currentMember}
               onCancel={onClickCancel}
               removeMember={removeMember}
@@ -303,6 +305,11 @@ TeamManagement.propTypes = {
    * The list of all project members
    */
   members: PropTypes.arrayOf(userShape).isRequired,
+
+  /**
+   * The list of all members which data is loaded client side at the moment
+   */
+  allMembers: PropTypes.arrayOf(PropTypes.object).isRequired,
 
   /**
    * The current deleting member. When defined a confirmation overlay will be displayed
