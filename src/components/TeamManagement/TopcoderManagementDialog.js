@@ -11,6 +11,8 @@ import SelectDropdown from '../SelectDropdown/SelectDropdown'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
 import AutocompleteInputContainer from './AutocompleteInputContainer'
 import {PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PENDING} from '../../config/constants'
+import PERMISSIONS from '../../config/permissions'
+import {checkPermission} from '../../helpers/permissions'
 
 class TopcoderManagementDialog extends React.Component {
   constructor(props) {
@@ -137,7 +139,8 @@ class TopcoderManagementDialog extends React.Component {
       members, currentUser, isMember, removeMember, onCancel, removeInvite, approveOrDecline, invites = [],
       selectedMembers, processingInvites,
     } = this.props
-    const showRemove = currentUser.isAdmin || (isMember && currentUser.isManager)
+    console.log('is currentUser account manager : ', currentUser)
+    const showRemove = currentUser.isAdmin || (isMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
     const showApproveDecline = currentUser.isAdmin || currentUser.isCopilotManager
     let i = 0
 

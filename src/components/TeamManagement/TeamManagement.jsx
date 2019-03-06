@@ -8,6 +8,8 @@ import TopcoderDialog from './TopcoderManagementDialog'
 import UserTooltip from '../User/UserTooltip'
 import AddIcon from  '../../assets/icons/icon-ui-bold-add.svg'
 import Dialog from './Dialog'
+import PERMISSIONS from '../../config/permissions'
+import {checkPermission} from '../../helpers/permissions'
 
 const userShape = PropTypes.shape({
   userId: PropTypes.number.isRequired,
@@ -65,7 +67,7 @@ class TeamManagement extends React.Component {
     const customerTeamManageAction = (currentUser.isCustomer || currentUser.isAdmin) ||
       (currentMember && currentUser.isManager)
     const customerTeamViewAction = !customerTeamManageAction
-    const topcoderTeamManageAction = currentUser.isAdmin || (currentMember && currentUser.isManager)
+    const topcoderTeamManageAction = currentUser.isAdmin || (currentMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
     const topcoderTeamViewAction = !topcoderTeamManageAction
     const canJoinAsCopilot = !currentMember && currentUser.isCopilot
     const canJoinAsManager = !currentMember && (currentUser.isManager || currentUser.isAccountManager)
