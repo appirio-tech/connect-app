@@ -382,7 +382,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
           <div>
             <div styleName="top-space">
               <header styleName="milestone-heading selected-theme">
-                Selected designs
+                Checkpoint Winners
               </header>
             </div>
             <LinkList links={_.filter(links, { isSelected: true })} />
@@ -394,7 +394,7 @@ class MilestoneTypeCheckpointReview extends React.Component {
                     styleName={'milestone-heading rejected-theme no-line ' + (isRejectedExpanded ? 'open' : 'close')}
                     onClick={this.toggleRejectedSection}
                   >
-                    Rejected designs
+                    Other Designs
                   </header>
                 </div>
                 {isRejectedExpanded && (

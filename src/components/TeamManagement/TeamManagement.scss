@@ -212,10 +212,13 @@
             font-size: $tc-label-sm;
             cursor: pointer;
 
+            span {
+              margin-left: $base-unit*3;
+            }
+
             .email-date {
               cursor: default;
               color: $tc-gray-40;
-              margin-left: $base-unit*3;
 
               @media screen and (max-width: $screen-md - 1px) {
                 display: none;

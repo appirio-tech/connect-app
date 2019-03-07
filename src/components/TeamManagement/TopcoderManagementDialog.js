@@ -9,29 +9,26 @@ import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 import SelectDropdown from '../SelectDropdown/SelectDropdown'
 import Tooltip from 'appirio-tech-react-components/components/Tooltip/Tooltip'
-import AutocompleteInput from './AutocompleteInput'
+import AutocompleteInputContainer from './AutocompleteInputContainer'
+import {PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PENDING} from '../../config/constants'
+import PERMISSIONS from '../../config/permissions'
+import {checkPermission} from '../../helpers/permissions'
 
-class Dialog extends React.Component {
+class TopcoderManagementDialog extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       userRole: 'manager',
-      userText: '',
-      validUserText: false,
       managerType: {},
-      clearText: false,
-      members: {},
-      showAlreadyMemberError: false
+      showAlreadyMemberError: false,
+      errorMessage: null,
     }
 
     this.onUserRoleChange = this.onUserRoleChange.bind(this)
     this.handleRoles = this.handleRoles.bind(this)
     this.addUsers = this.addUsers.bind(this)
     this.onChange = this.onChange.bind(this)
-  }
-
-  componentWillMount(){
-    const { currentUser } = this.props
+    this.showIndividualErrors = this.showIndividualErrors.bind(this)
 
     this.roles = [{
       title: 'Manager',
@@ -42,15 +39,11 @@ class Dialog extends React.Component {
     }, {
       title: 'Copilot',
       value: 'copilot',
-      disabled: !(currentUser.isCopilotManager || currentUser.isAdmin),
-      toolTipMessage: !(currentUser.isCopilotManager || currentUser.isAdmin) ? 'Only Connect Copilot Managers can invite copilots.' : null,
+      canAddDirectly: true,
     }, {
       title: 'Account Manager',
       value: 'account_manager',
     }]
-    this.setState({
-      members: this.props.members
-    })
   }
 
   onUserRoleChange(memberId, id, type) {
@@ -71,34 +64,86 @@ class Dialog extends React.Component {
   }
 
   onChange(selectedMembers) {
-    // If a member invited with email exists in selectedMembers
-    let present = _.some(this.props.invites, invited => _.findIndex(selectedMembers,
-      selectedMember => selectedMember.isEmail && selectedMember.handle === invited.email) > -1)
-    // If a member invited with handle exists in selectedMembers
-    present = present || _.some(this.props.invites, invited => {
-      if (!invited.member) {
-        return false
-      }
-      return _.findIndex(selectedMembers,
-        selectedMember => !selectedMember.isEmail && selectedMember.handle === invited.member.handle) > -1
-    })
-    present = present || _.some(this.state.members, m => _.findIndex(selectedMembers,
-      selectedMember => selectedMember.handle === m.handle) > -1)
+    const { invites } = this.props
+
+    const present = _.some(selectedMembers, (selectedMember) => (
+      this.isSelectedMemberAlreadyInvited(invites, selectedMember)
+    ))
+
     this.setState({
-      validUserText: !present,
       showAlreadyMemberError: present,
+      errorMessage: null,
     })
+
     this.props.onSelectedMembersUpdate(selectedMembers)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { processingInvites, selectedMembers } = this.props
+
+    if (processingInvites && !nextProps.processingInvites ) {
+      const notInvitedSelectedMembers = _.reject(selectedMembers, (selectedMember) => (
+        this.isSelectedMemberAlreadyInvited(nextProps.invites, selectedMember)
+      ))
+
+      this.props.onSelectedMembersUpdate(notInvitedSelectedMembers)
+
+      if (nextProps.error) {
+        this.showIndividualErrors(nextProps.error, notInvitedSelectedMembers)
+      }
+    }
+  }
+
+  isSelectedMemberAlreadyInvited(invites = [], selectedMember) {
+    return !!invites.find((invite) => (
+      invite.email && invite.email === selectedMember.label ||
+      invite.userId && this.resolveUserHandle(invite.userId) === selectedMember.label
+    ))
+  }
+
+  /**
+   * Get user handle using `allMembers` which comes from props and contains all the users
+   * which are loaded to `members.members` in the Redux store
+   *
+   * @param {Number} userId user id
+   */
+  resolveUserHandle(userId) {
+    const { allMembers } = this.props
+
+    return _.find(allMembers, { userId }).handle
+  }
+
+  showIndividualErrors(error) {
+    const uniqueMessages = _.groupBy(error.failed, 'message')
+
+    const msgs = _.keys(uniqueMessages).map((message) => {
+      const users = uniqueMessages[message].map((failed) => (
+        failed.email ? failed.email : this.resolveUserHandle(failed.userId)
+      ))
+
+      return ({
+        message,
+        users,
+      })
+    })
+
+    const listMessages = msgs.map((m) => `${m.users.join(', ')}: ${m.message}`)
+
+    this.setState({
+      errorMessage: listMessages.length > 0 ? listMessages.join('\n') : null
+    })
   }
 
   render() {
     const {
-      members, currentUser, isMember, removeMember, onCancel, removeInvite, invites = [],
-      selectedMembers, processingInvites
+      members, currentUser, isMember, removeMember, onCancel, removeInvite, approveOrDecline, invites = [],
+      selectedMembers, processingInvites,
     } = this.props
-    const showRemove = currentUser.isAdmin || (isMember && currentUser.isManager)
+    console.log('is currentUser account manager : ', currentUser)
+    const showRemove = currentUser.isAdmin || (isMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
+    const showApproveDecline = currentUser.isAdmin || currentUser.isCopilotManager
     let i = 0
-    const allMembers = [...members, ...invites.map(i => i.member)]
+
     return (
       <Modal
         isOpen
@@ -210,6 +255,18 @@ class Dialog extends React.Component {
               const remove = () => {
                 removeInvite(invite)
               }
+              const approve = () => {
+                approveOrDecline({
+                  userId: invite.userId,
+                  status: 'request_approved'
+                })
+              }
+              const decline = () => {
+                approveOrDecline({
+                  userId: invite.userId,
+                  status: 'request_rejected'
+                })
+              }
               const firstName = _.get(invite.member, 'firstName', '')
               const lastName = _.get(invite.member, 'lastName', '')
               let userFullName = `${firstName} ${lastName}`
@@ -231,28 +288,59 @@ class Dialog extends React.Component {
                       @{invite.member.handle || 'ConnectUser'}
                     </span>
                   </div>
-                  {showRemove && <div className="member-remove" onClick={remove}>
-                    Remove
-                    <span className="email-date">
-                      Invited {moment(invite.createdAt).format('MMM D, YY')}
-                    </span>
-                  </div>}
+
+                  {
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_REQUESTED && showApproveDecline &&
+                    <div className="member-remove">
+                      <span onClick={approve}>approve</span>
+                      <span onClick={decline}>decline</span>
+                      <span className="email-date">
+                        Requested {moment(invite.createdAt).format('MMM D, YY')}
+                      </span>
+                    </div>
+                  }
+                  {
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_REQUESTED && !showApproveDecline && showRemove &&
+                    <div className="member-remove">
+                      <span className="email-date">
+                        Requested {moment(invite.createdAt).format('MMM D, YY')}
+                      </span>
+                    </div>
+                  }
+                  {
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_PENDING && showRemove &&
+                    <div className="member-remove" onClick={remove}>
+                      Remove
+                      <span className="email-date">
+                        Invited {moment(invite.createdAt).format('MMM D, YY')}
+                      </span>
+                    </div>
+                  }
+                  {
+                    invite.status===PROJECT_MEMBER_INVITE_STATUS_PENDING && !showRemove &&
+                    <div className="member-remove" >
+                      <span className="email-date">
+                        Invited {moment(invite.createdAt).format('MMM D, YY')}
+                      </span>
+                    </div>
+                  }
+
                 </div>
               )
             }))}
           </div>
 
-          {showRemove && <div className="input-container" >
+          {(showRemove || showApproveDecline) && <div className="input-container" >
             <div className="hint">invite more people</div>
-            <AutocompleteInput
+            <AutocompleteInputContainer
+              placeholder="Enter one or more user handles"
               onUpdate={this.onChange}
               currentUser={currentUser}
               selectedMembers={selectedMembers}
-              disabled={processingInvites || (!currentUser.isAdmin && !isMember)}
-              allMembers={allMembers}
+              disabled={processingInvites || (!currentUser.isAdmin && !isMember && !currentUser.isCopilotManager)}
             />
             { this.state.showAlreadyMemberError && <div className="error-message">
-                Project Member(s) can't be invited again. Please remove them from list.
+              Project Member(s) can\'t be invited again. Please remove them from list.
             </div> }
             <Formsy.Form>
               <SelectDropdown
@@ -263,13 +351,18 @@ class Dialog extends React.Component {
                 onSelect={this.handleRoles}
               />
             </Formsy.Form>
+            { this.state.errorMessage  && <div className="error-message">
+              {this.state.errorMessage}
+            </div> }
             <button
               className="tc-btn tc-btn-primary tc-btn-md"
               type="submit"
-              disabled={processingInvites || !this.state.validUserText || this.state.clearText}
+              disabled={processingInvites || this.state.showAlreadyMemberError || selectedMembers.length === 0}
               onClick={this.addUsers}
             >
-              Send Invite
+              {_.find(this.roles, {value:this.state.userRole}).canAddDirectly && !showApproveDecline
+                ?'Request invite'
+                :'Invite users'}
             </button>
           </div>
           }
@@ -280,25 +373,27 @@ class Dialog extends React.Component {
   }
 }
 
-Dialog.defaultProps = {
+TopcoderManagementDialog.defaultProps = {
   invites: [],
   members: []
 }
 
-Dialog.propTypes = {
+TopcoderManagementDialog.propTypes = {
   error: PT.oneOfType([PT.object, PT.bool]),
   currentUser: PT.object.isRequired,
   members: PT.arrayOf(PT.object).isRequired,
+  allMembers: PT.arrayOf(PT.object).isRequired,
   isMember: PT.bool.isRequired,
   onCancel: PT.func.isRequired,
   removeMember: PT.func.isRequired,
   changeRole: PT.func.isRequired,
   invites: PT.arrayOf(PT.object),
   addUsers: PT.func.isRequired,
+  approveOrDecline: PT.func.isRequired,
   removeInvite: PT.func.isRequired,
   onSelectedMembersUpdate: PT.func.isRequired,
   selectedMembers: PT.arrayOf(PT.object),
   processingInvites: PT.bool.isRequired,
 }
 
-export default Dialog
+export default TopcoderManagementDialog

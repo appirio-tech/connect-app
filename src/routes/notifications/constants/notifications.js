@@ -6,7 +6,7 @@
  */
 import {
   NOTIFICATION_TYPE,
-  ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR,
+  ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT_MANAGER, ROLE_ADMINISTRATOR,
   PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_OWNER, PROJECT_ROLE_MEMBER,
   EVENT_TYPE,
 } from '../../../config/constants'
@@ -18,7 +18,8 @@ export const GOTO = {
   TOPIC: '/projects/{{projectId}}/#feed-{{topicId}}',
   POST: '/projects/{{projectId}}/#comment-{{postId}}',
   FILE_LIST: '/projects/{{projectId}}/specification#appDefinition-files',
-  PHASE: '/projects/{{projectId}}/plan#phase-{{phaseId}}'
+  PHASE: '/projects/{{projectId}}/plan#phase-{{phaseId}}',
+  TOPCODER_TEAM: '/projects/{{projectId}}#manageTopcoderTeam'
 }
 
 // each notification can be displayed differently depend on WHO see them
@@ -32,6 +33,11 @@ export const NOTIFICATIONS = [
     rules: [{
       text: 'Your Project was created successfully',
       projectRoles: [PROJECT_ROLE_OWNER],
+      goTo: GOTO.PROJECT_DASHBOARD
+    },
+    {
+      text: 'New project is created',
+      topcoderRoles: [ROLE_CONNECT_ACCOUNT_MANAGER],
       goTo: GOTO.PROJECT_DASHBOARD
     }]
   },
@@ -59,7 +65,7 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PROJECT_DASHBOARD
     }, {
       text: 'Project is available for review',
-      topcoderRoles: [ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR],
+      topcoderRoles: [ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_ADMINISTRATOR],
       goTo: GOTO.PROJECT_SPECIFICATION
     }]
   },
@@ -213,10 +219,44 @@ export const NOTIFICATIONS = [
   },
 
   {
+    eventType: EVENT_TYPE.MEMBER.INVITE_REQUESTED,
+    type: NOTIFICATION_TYPE.MEMBER_ADDED,
+    rules: [{
+      text: 'You are requested to add <strong>{{userFullName}}</strong> as a copilot',
+      topcoderRoles: [ROLE_CONNECT_COPILOT_MANAGER],
+      goTo: GOTO.TOPCODER_TEAM
+    }]
+  },
+
+  {
+    eventType: EVENT_TYPE.MEMBER.INVITE_APPROVED,
+    type: NOTIFICATION_TYPE.MEMBER_ADDED,
+    rules: [{
+      text: 'You are added as a copilot',
+      toUserHandle: true,
+      goTo: GOTO.PROJECT_DASHBOARD
+    }, {
+      text: 'Your request to invite the copilot was approved',
+      originator: true,
+      goTo: GOTO.PROJECT_DASHBOARD
+    }]
+  },
+
+  {
+    eventType: EVENT_TYPE.MEMBER.INVITE_REFUSED,
+    type: NOTIFICATION_TYPE.MEMBER_ADDED,
+    rules: [{
+      text: 'Your request to invite the copilot was refused',
+      originator: true,
+      goTo: GOTO.PROJECT_DASHBOARD
+    }]
+  },
+
+  {
     eventType: EVENT_TYPE.MEMBER.COPILOT_JOINED,
     type: NOTIFICATION_TYPE.MEMBER_ADDED,
     rules: [{
-      text: 'A copilot joined your project team',
+      text: 'A  copilot joined your project team',
       shouldBundle: true,
       bundledText: '{{bundledCount}} copilots joined your project team',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER],
@@ -288,8 +328,8 @@ export const NOTIFICATIONS = [
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
       goTo: GOTO.POST
     }]
-  }, 
-  
+  },
+
   {
     version: 2,
     eventType: EVENT_TYPE.POST.UPDATED,
@@ -302,8 +342,8 @@ export const NOTIFICATIONS = [
       toTopicStarter: true,
       goTo: GOTO.POST
     }]
-  }, 
-  
+  },
+
   {
     version: 2,
     eventType: EVENT_TYPE.POST.MENTION,
@@ -379,7 +419,7 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PROJECT_SPECIFICATION
     }]
   },
-  
+
   {
     eventType: EVENT_TYPE.PROJECT_PLAN.READY,
     type: NOTIFICATION_TYPE.UPDATES,
@@ -469,7 +509,7 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PHASE
     }]
   },
-  
+
   {
     eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_PROGRESS_UPDATED,
     type: NOTIFICATION_TYPE.UPDATES,
@@ -524,7 +564,7 @@ export const NOTIFICATIONS = [
       goTo: GOTO.PROJECT_PLAN
     }]
   },
-  
+
   {
     eventType: EVENT_TYPE.PROJECT_PLAN.TIMELINE_ADJUSTED,
     type: NOTIFICATION_TYPE.UPDATES,

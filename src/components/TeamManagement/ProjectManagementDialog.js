@@ -6,56 +6,97 @@ import Modal from 'react-modal'
 import XMarkIcon from '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import {getAvatarResized} from '../../helpers/tcHelpers'
-import AutocompleteInput from './AutocompleteInput'
+import AutocompleteInputContainer from './AutocompleteInputContainer'
 
-class Dialog extends React.Component {
+class ProjectManagementDialog extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      clearText: false,
       showAlreadyMemberError: false,
-      invitedMembers: {},
-      members: {}
+      errorMessage: null
     }
     this.onChange = this.onChange.bind(this)
+    this.showIndividualErrors = this.showIndividualErrors.bind(this)
   }
 
-  componentWillMount() {
-    this.setState({
-      invitedMembers: this.props.invites,
-      members: this.props.members
-    })
+  componentWillReceiveProps(nextProps) {
+    const { processingInvites, selectedMembers } = this.props
+
+    if (processingInvites && !nextProps.processingInvites ) {
+      const notInvitedSelectedMembers = _.reject(selectedMembers, (selectedMember) => (
+        this.isSelectedMemberAlreadyInvited(nextProps.invites, selectedMember)
+      ))
+
+      this.props.onSelectedMembersUpdate(notInvitedSelectedMembers)
+
+      if (nextProps.error) {
+        this.showIndividualErrors(nextProps.error, notInvitedSelectedMembers)
+      }
+    }
   }
 
   onChange(selectedMembers) {
-    // If a member invited with email exists in selectedMembers
-    let present = _.some(this.state.invitedMembers, invited => _.findIndex(selectedMembers,
-      selectedMember => selectedMember.isEmail && selectedMember.handle === invited.email) > -1)
-    // If a member invited with handle exists in selectedMembers
-    present = present || _.some(this.state.invitedMembers, invited => {
-      if (!invited.member) {
-        return false
-      }
-      return _.findIndex(selectedMembers,
-        selectedMember => !selectedMember.isEmail && selectedMember.handle === invited.member.handle) > -1
-    })
-    // If members exist in selectedMembers
-    present = present || _.some(this.state.members, m => _.findIndex(selectedMembers,
-      selectedMember => selectedMember.handle === m.handle) > -1)
+    const { invites } = this.props
+
+    const present = _.some(selectedMembers, (selectedMember) => (
+      this.isSelectedMemberAlreadyInvited(invites, selectedMember)
+    ))
+
     this.setState({
-      validInviteText: !present,
-      showAlreadyMemberError: present
+      validUserText: !present,
+      showAlreadyMemberError: present,
+      errorMessage: null,
     })
+
     this.props.onSelectedMembersUpdate(selectedMembers)
+  }
+
+  isSelectedMemberAlreadyInvited(invites = [], selectedMember) {
+    return !!invites.find((invite) => (
+      invite.email && invite.email === selectedMember.label ||
+      invite.userId && this.resolveUserHandle(invite.userId) === selectedMember.label
+    ))
+  }
+
+  /**
+   * Get user handle using `allMembers` which comes from props and contains all the users
+   * which are loaded to `members.members` in the Redux store
+   *
+   * @param {Number} userId user id
+   */
+  resolveUserHandle(userId) {
+    const { allMembers } = this.props
+
+    return _.find(allMembers, { userId }).handle
+  }
+
+  showIndividualErrors(error) {
+    const uniqueMessages = _.groupBy(error.failed, 'message')
+
+    const msgs = _.keys(uniqueMessages).map((message) => {
+      const users = uniqueMessages[message].map((failed) => (
+        failed.email ? failed.email : this.resolveUserHandle(failed.userId)
+      ))
+
+      return ({
+        message,
+        users,
+      })
+    })
+
+    const listMessages = msgs.map((m) => `${m.users.join(', ')}: ${m.message}`)
+
+    this.setState({
+      errorMessage: listMessages.length > 0 ? listMessages.join('\n') : null
+    })
   }
 
   render() {
     const {
       members, currentUser, isMember, removeMember, removeInvite,
-      onCancel, invites = [], selectedMembers, processingInvites
+      onCancel, invites = [], selectedMembers, processingInvites,
     } = this.props
     const showRemove = currentUser.isAdmin || (!currentUser.isCopilot && isMember)
-    const allMembers = [...members, ...invites.map(i => i.member)]
     let i = 0
     return (
       <Modal
@@ -68,7 +109,7 @@ class Dialog extends React.Component {
 
         <div className="project-dialog">
           <div className="dialog-title">
-            Project team
+            Customer team
             <span onClick={onCancel}><XMarkIcon/></span>
           </div>
 
@@ -150,21 +191,23 @@ class Dialog extends React.Component {
 
           <div className="input-container">
             <div className="hint">invite more people</div>
-            <AutocompleteInput
+            <AutocompleteInputContainer
               placeholder="Enter one or more emails or user handles"
               onUpdate={this.onChange}
               currentUser={currentUser}
               selectedMembers={selectedMembers}
               disabled={processingInvites || (!currentUser.isAdmin && !isMember)}
-              allMembers={allMembers}
             />
             {this.state.showAlreadyMemberError && <div className="error-message">
               Project Member(s) can't be invited again. Please remove them from list.
             </div>}
+            { this.state.errorMessage  && <div className="error-message">
+              {this.state.errorMessage}
+            </div> }
             <button
               className="tc-btn tc-btn-primary tc-btn-md"
               type="submit"
-              disabled={processingInvites || !this.state.validInviteText || this.state.clearText}
+              disabled={processingInvites || this.state.showAlreadyMemberError || selectedMembers.length === 0}
               onClick={this.props.sendInvite}
             >
               Send Invite
@@ -177,15 +220,16 @@ class Dialog extends React.Component {
   }
 }
 
-Dialog.defaultProps = {
+ProjectManagementDialog.defaultProps = {
   invites: [],
   members: []
 }
 
-Dialog.propTypes = {
+ProjectManagementDialog.propTypes = {
   error: PT.oneOfType([PT.object, PT.bool]),
   currentUser: PT.object.isRequired,
   members: PT.arrayOf(PT.object).isRequired,
+  allMembers: PT.arrayOf(PT.object).isRequired,
   isMember: PT.bool.isRequired,
   onCancel: PT.func.isRequired,
   removeMember: PT.func.isRequired,
@@ -197,4 +241,4 @@ Dialog.propTypes = {
   processingInvites: PT.bool.isRequired,
 }
 
-export default Dialog
+export default ProjectManagementDialog

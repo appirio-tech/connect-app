@@ -12,11 +12,13 @@ import {
   ROLE_CONNECT_COPILOT,
   ROLE_CONNECT_COPILOT_MANAGER,
   ROLE_CONNECT_MANAGER,
+  ROLE_CONNECT_ACCOUNT_MANAGER,
   PROJECT_ROLE_ACCOUNT_MANAGER
 } from '../../../config/constants'
 import TeamManagement from '../../../components/TeamManagement/TeamManagement'
 import {
   acceptOrRefuseInvite,
+  reloadProjectMembers,
   addProjectMember,
   deleteProjectInvite,
   deleteTopcoderMemberInvite,
@@ -31,12 +33,18 @@ class TeamManagementContainer extends Component {
 
   constructor(props) {
     super(props)
+
+    this.state = {
+      selectedMembers: [],
+    }
+
     this.onProjectInviteSend = this.onProjectInviteSend.bind(this)
     this.onProjectInviteDelete = this.onProjectInviteDelete.bind(this)
     this.onTopcoderInviteDelete = this.onTopcoderInviteDelete.bind(this)
     this.onTopcoderInviteSend = this.onTopcoderInviteSend.bind(this)
     this.onMemberDeleteConfirm = this.onMemberDeleteConfirm.bind(this)
     this.onJoinConfirm = this.onJoinConfirm.bind(this)
+    this.onAcceptOrRefuse = this.onAcceptOrRefuse.bind(this)
     this.changeRole = this.changeRole.bind(this)
     this.onSelectedMembersUpdate = this.onSelectedMembersUpdate.bind(this)
     this.onShowDialog = this.onShowDialog.bind(this)
@@ -71,7 +79,10 @@ class TeamManagementContainer extends Component {
 
   onJoinConfirm(role) {
     const { currentUser, projectId, addProjectMember } = this.props
-    role = role || (currentUser.isCopilot ? PROJECT_ROLE_COPILOT : PROJECT_ROLE_MANAGER)
+    let defaultRole = PROJECT_ROLE_MANAGER
+    if (currentUser.isCopilot) defaultRole = PROJECT_ROLE_COPILOT
+    if (currentUser.isAccountManager) defaultRole = PROJECT_ROLE_ACCOUNT_MANAGER
+    role = role || defaultRole
     addProjectMember(
       projectId,
       {userId: currentUser.userId, role}
@@ -94,6 +105,11 @@ class TeamManagementContainer extends Component {
   onProjectInviteSend() {
     const {handles, emails} = this.getEmailsAndHandles()
     this.props.inviteProjectMembers(this.props.projectId, emails, handles)
+  }
+
+  onAcceptOrRefuse(invite) {
+    this.props.acceptOrRefuseInvite(this.props.projectId, invite)
+      .then(() => this.props.reloadProjectMembers(this.props.projectId))
   }
 
   changeRole(memberId, item) {
@@ -154,7 +170,7 @@ class TeamManagementContainer extends Component {
     const handles = []
     const emails = []
     selectedMembers.map(selectedOption => {
-      const value = selectedOption.handle
+      const value = selectedOption.label
       // Test if its email
       if (selectedOption.isEmail) {
         emails.push(value)
@@ -174,17 +190,20 @@ class TeamManagementContainer extends Component {
       <div>
         <TeamManagement
           {...this.state}
+          history={this.props.history}
           onUserInviteAction={this.onUserInviteAction}
           processingMembers={this.props.processingMembers}
           processingInvites={this.props.processingInvites}
           error={this.props.error}
           currentUser={this.props.currentUser}
           members={projectMembers}
+          allMembers={this.props.allMembers}
           projectTeamInvites={projectTeamInvites}
           topcoderTeamInvites={topcoderTeamInvites}
           onMemberDeleteConfirm={this.onMemberDeleteConfirm}
           onJoinConfirm={this.onJoinConfirm}
           onProjectInviteDeleteConfirm={this.onProjectInviteDelete}
+          onAcceptOrRefuse={this.onAcceptOrRefuse}
           onProjectInviteSend={this.onProjectInviteSend}
           onTopcoderInviteDeleteConfirm={this.onTopcoderInviteDelete}
           onTopcoderInviteSend={this.onTopcoderInviteSend}
@@ -192,7 +211,7 @@ class TeamManagementContainer extends Component {
           onSelectedMembersUpdate={this.onSelectedMembersUpdate}
           selectedMembers={this.state.selectedMembers}
           onShowTopcoderDialog={this.onShowDialog}
-          onShowProjectDialot={this.onShowDialog}
+          onShowProjectDialog={this.onShowDialog}
         />
       </div>
     )
@@ -211,6 +230,7 @@ const mapStateToProps = ({loadUser, members, projectState}) => {
       isManager: loadUser.user.roles.some((role) => managerRoles.indexOf(role) !== -1),
       isCustomer: !loadUser.user.roles.some((role) => powerUserRoles.indexOf(role) !== -1),
       isCopilotManager: _.indexOf(loadUser.user.roles, ROLE_CONNECT_COPILOT_MANAGER) > -1,
+      isAccountManager: _.indexOf(loadUser.user.roles, ROLE_CONNECT_ACCOUNT_MANAGER) > -1,
     },
     allMembers: _.values(members.members),
     processingInvites: projectState.processingInvites,
@@ -231,6 +251,7 @@ const mapDispatchToProps = {
   inviteTopcoderMembers,
   deleteTopcoderMemberInvite,
   acceptOrRefuseInvite,
+  reloadProjectMembers,
 }
 
 TeamManagementContainer.propTypes = {

@@ -19,7 +19,7 @@ import {
   INVITE_TOPCODER_MEMBER_SUCCESS, REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS, INVITE_TOPCODER_MEMBER_PENDING, REMOVE_CUSTOMER_INVITE_PENDING,
   REMOVE_TOPCODER_MEMBER_INVITE_PENDING, REMOVE_TOPCODER_MEMBER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_FAILURE,
   INVITE_CUSTOMER_FAILURE, INVITE_TOPCODER_MEMBER_FAILURE, INVITE_CUSTOMER_PENDING,
-  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, 
+  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE, ACCEPT_OR_REFUSE_INVITE_PENDING, RELOAD_PROJECT_MEMBERS_SUCCESS,
   UPLOAD_PROJECT_ATTACHMENT_FILES, DISCARD_PROJECT_ATTACHMENT, CHANGE_ATTACHMENT_PERMISSION
 } from '../../config/constants'
 import _ from 'lodash'
@@ -177,12 +177,22 @@ export const projectState = function (state=initialState, action) {
 
   case ACCEPT_OR_REFUSE_INVITE_PENDING:
     return Object.assign({}, state, {
-      showUserInvited: true
+      showUserInvited: false
     })
 
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
     return Object.assign({}, state, {
-      showUserInvited: false
+      showUserInvited: false,
+    })
+  }
+
+  case RELOAD_PROJECT_MEMBERS_SUCCESS: {
+    return Object.assign({}, state, {
+      project:{
+        ...state.project,
+        members: action.payload.members,
+        invites: action.payload.invites,
+      }
     })
   }
 
@@ -388,7 +398,7 @@ export const projectState = function (state=initialState, action) {
       attachmentsAwaitingPermission: action.payload,
       attachmentPermissions: null
     }
-    
+
   case DISCARD_PROJECT_ATTACHMENT:
     return {
       ...state,
@@ -504,17 +514,29 @@ export const projectState = function (state=initialState, action) {
 
   case INVITE_CUSTOMER_SUCCESS: {
     const newState = Object.assign({}, state)
-    newState.project.invites.push(...action.payload)
+    newState.project.invites.push(...action.payload.success)
     newState.processingInvites = false
     newState.error = false
+    if (action.payload.failed) {
+      newState.error = {
+        type: action.type,
+        failed: action.payload.failed,
+      }
+    }
     return newState
   }
 
   case INVITE_TOPCODER_MEMBER_SUCCESS: {
     const newState = Object.assign({}, state)
-    newState.project.invites.push(...action.payload)
+    newState.project.invites.push(...action.payload.success)
     newState.processingInvites = false
     newState.error = false
+    if (action.payload.failed) {
+      newState.error = {
+        type: action.type,
+        failed: action.payload.failed,
+      }
+    }
     return newState
   }
 

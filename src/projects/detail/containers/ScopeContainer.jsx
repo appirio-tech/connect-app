@@ -10,6 +10,11 @@ import { getProjectTemplateById } from '../../../helpers/templates'
 import ScopeAndSpecificationContainer from './ScopeAndSpecificationContainer'
 
 const ScopeContainer = (props) => {
+  
+  if (!props.projectTemplate) {
+    return null
+  }
+
   const template = props.projectTemplate.scope
 
   return (

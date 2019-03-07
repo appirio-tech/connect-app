@@ -8,6 +8,8 @@ import TopcoderDialog from './TopcoderManagementDialog'
 import UserTooltip from '../User/UserTooltip'
 import AddIcon from  '../../assets/icons/icon-ui-bold-add.svg'
 import Dialog from './Dialog'
+import PERMISSIONS from '../../config/permissions'
+import {checkPermission} from '../../helpers/permissions'
 
 const userShape = PropTypes.shape({
   userId: PropTypes.number.isRequired,
@@ -56,8 +58,8 @@ class TeamManagement extends React.Component {
       showNewMemberConfirmation, onJoin, onJoinConfirm, onShowProjectDialog, isShowProjectDialog,
       projectTeamInvites, onProjectInviteDeleteConfirm, onProjectInviteSend, deletingInvite, changeRole,
       onDeleteInvite, isShowTopcoderDialog, onShowTopcoderDialog, processingInvites, processingMembers,
-      onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, error,
-      onSelectedMembersUpdate, selectedMembers
+      onTopcoderInviteSend, onTopcoderInviteDeleteConfirm, topcoderTeamInvites, onAcceptOrRefuse, error,
+      onSelectedMembersUpdate, selectedMembers, allMembers,
     } = this.props
     const currentMember = members.filter((member) => member.userId === currentUser.userId)[0]
     const modalActive = isAddingTeamMember || deletingMember || isShowJoin || showNewMemberConfirmation || deletingInvite
@@ -65,10 +67,10 @@ class TeamManagement extends React.Component {
     const customerTeamManageAction = (currentUser.isCustomer || currentUser.isAdmin) ||
       (currentMember && currentUser.isManager)
     const customerTeamViewAction = !customerTeamManageAction
-    const topcoderTeamManageAction = currentUser.isAdmin || (currentMember && currentUser.isManager)
+    const topcoderTeamManageAction = currentUser.isAdmin || (currentMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
     const topcoderTeamViewAction = !topcoderTeamManageAction
     const canJoinAsCopilot = !currentMember && currentUser.isCopilot
-    const canJoinAsManager = !currentMember && currentUser.isManager
+    const canJoinAsManager = !currentMember && (currentUser.isManager || currentUser.isAccountManager)
     const canShowInvite = currentMember && (currentUser.isCustomer || currentMember.isCopilot || currentMember.isManager)
 
     const sortedMembers = members
@@ -77,7 +79,7 @@ class TeamManagement extends React.Component {
       <div className="team-management-container">
         <div className="projects-team">
           <div className="title">
-            Project Team
+            Customer Team
             {(customerTeamManageAction || customerTeamViewAction) &&
               <span className="title-action" onClick={() => onShowProjectDialog(true)}>
                 {customerTeamViewAction ? 'View' : 'Manage'}
@@ -162,16 +164,19 @@ class TeamManagement extends React.Component {
           const onClickJoinConfirm = (role) => {
             onJoinConfirm(role)
           }
+          let role = 'Manager'
+          if (currentUser.isCopilot) role = 'Copilot'
+          if (currentUser.isAccountManager) role = 'Account Manager'
           return (
             <Dialog
               disabled={processingMembers}
               onCancel={onClickCancel}
               onConfirm={onClickJoinConfirm}
-              title={`Join project as ${currentUser.isCopilot ? 'Copilot' : 'Manager'}`}
+              title={`Join project as ${role}`}
               content={JOIN_MESSAGE}
               buttonText="Join project"
               buttonColor="blue"
-              showRoleSelector
+              showRoleSelector={currentUser.isManager}
             />
           )
         })())}
@@ -185,9 +190,11 @@ class TeamManagement extends React.Component {
           }
           return (
             <ProjectDialog
+              processingInvites={processingInvites}
               error={error}
               currentUser={currentUser}
               members={members}
+              allMembers={allMembers}
               isMember={!!currentMember}
               onCancel={onClickCancel}
               removeMember={removeMember}
@@ -200,8 +207,11 @@ class TeamManagement extends React.Component {
             />
           )
         })())}
-        {(!modalActive && isShowTopcoderDialog) && ((() => {
-          const onClickCancel = () => onShowTopcoderDialog(false)
+        {(!modalActive && (isShowTopcoderDialog || this.props.history.location.hash === '#manageTopcoderTeam')) && ((() => {
+          const onClickCancel = () => {
+            this.props.history.push(this.props.history.location.pathname)
+            onShowTopcoderDialog(false)
+          }
           const removeMember = (member) => {
             onMemberDelete(member)
           }
@@ -210,13 +220,16 @@ class TeamManagement extends React.Component {
           }
           return (
             <TopcoderDialog
+              processingInvites={processingInvites}
               error={error}
               currentUser={currentUser}
               members={members}
+              allMembers={allMembers}
               isMember={!!currentMember}
               onCancel={onClickCancel}
               removeMember={removeMember}
               addUsers={onTopcoderInviteSend}
+              approveOrDecline={onAcceptOrRefuse}
               invites={topcoderTeamInvites}
               removeInvite={removeInvite}
               changeRole={changeRole}
@@ -294,6 +307,11 @@ TeamManagement.propTypes = {
    * The list of all project members
    */
   members: PropTypes.arrayOf(userShape).isRequired,
+
+  /**
+   * The list of all members which data is loaded client side at the moment
+   */
+  allMembers: PropTypes.arrayOf(PropTypes.object).isRequired,
 
   /**
    * The current deleting member. When defined a confirmation overlay will be displayed
@@ -385,6 +403,11 @@ TeamManagement.propTypes = {
    * List of members added to auto complete input
    */
   selectedMembers: PropTypes.arrayOf(PropTypes.object),
+
+  /**
+   * Callback to accept or refuse invite
+   */
+  onAcceptOrRefuse: PropTypes.func,
 
   /**
    * Callback to send member role

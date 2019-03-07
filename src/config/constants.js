@@ -315,6 +315,7 @@ export const LOAD_MEMBER_SUGGESTIONS             = 'LOAD_MEMBER_SUGGESTIONS'
 export const LOAD_MEMBER_SUGGESTIONS_PENDING     = 'LOAD_MEMBER_SUGGESTIONS_PENDING'
 export const LOAD_MEMBER_SUGGESTIONS_SUCCESS     = 'LOAD_MEMBER_SUGGESTIONS_SUCCESS'
 export const LOAD_MEMBER_SUGGESTIONS_FAILURE     = 'LOAD_MEMBER_SUGGESTIONS_FAILURE'
+export const CLEAR_MEMBER_SUGGESTIONS            = 'CLEAR_MEMBER_SUGGESTIONS'
 
 export const ADD_PROJECT_MEMBER             = 'ADD_PROJECT_MEMBER'
 export const ADD_PROJECT_MEMBER_PENDING     = 'ADD_PROJECT_MEMBER_PENDING'
@@ -345,6 +346,11 @@ export const ACCEPT_OR_REFUSE_INVITE         = 'ACCEPT_OR_REFUSE_INVITE'
 export const ACCEPT_OR_REFUSE_INVITE_PENDING = 'ACCEPT_OR_REFUSE_INVITE_PENDING'
 export const ACCEPT_OR_REFUSE_INVITE_FAILURE = 'ACCEPT_OR_REFUSE_INVITE_FAILURE'
 export const ACCEPT_OR_REFUSE_INVITE_SUCCESS = 'ACCEPT_OR_REFUSE_INVITE_SUCCESS'
+
+export const RELOAD_PROJECT_MEMBERS       = 'RELOAD_PROJECT_MEMBERS'
+export const RELOAD_PROJECT_MEMBERS_PENDING       = 'RELOAD_PROJECT_MEMBERS_PENDING'
+export const RELOAD_PROJECT_MEMBERS_FAILURE       = 'RELOAD_PROJECT_MEMBERS_FAILURE'
+export const RELOAD_PROJECT_MEMBERS_SUCCESS       = 'RELOAD_PROJECT_MEMBERS_SUCCESS'
 
 export const ADD_PROJECT_MEMBERS         = 'ADD_PROJECT_MEMBERS'
 export const ADD_PROJECT_MEMBERS_PENDING = 'ADD_PROJECT_MEMBERS_PENDING'
@@ -528,6 +534,10 @@ export const PROJECT_MEMBER_INVITE_STATUS_ACCEPTED = 'accepted'
 export const PROJECT_MEMBER_INVITE_STATUS_REFUSED = 'refused'
 export const PROJECT_MEMBER_INVITE_STATUS_CANCELED = 'canceled'
 export const PROJECT_MEMBER_INVITE_STATUS_PENDING = 'pending'
+export const PROJECT_MEMBER_INVITE_STATUS_REQUESTED = 'requested'
+export const PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED = 'request_approved'
+export const PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED = 'request_rejected'
+
 
 // projects list view types
 export const PROJECTS_LIST_VIEW = {
@@ -556,6 +566,7 @@ export const EVENT_ROUTE_CHANGE = 'event.route_change'
 export const ROLE_TOPCODER_USER = 'Topcoder User'
 export const ROLE_CONNECT_COPILOT = 'Connect Copilot'
 export const ROLE_CONNECT_MANAGER = 'Connect Manager'
+export const ROLE_CONNECT_ACCOUNT_MANAGER = 'Connect Account Manager'
 export const ROLE_CONNECT_ADMIN = 'Connect Admin'
 export const ROLE_ADMINISTRATOR = 'administrator'
 export const ROLE_CONNECT_COPILOT_MANAGER = 'Connect Copilot Manager'
@@ -781,6 +792,9 @@ export const EVENT_TYPE = {
     MANAGER_JOINED: 'notifications.connect.project.member.managerJoined',
     COPILOT_JOINED: 'notifications.connect.project.member.copilotJoined',
     ASSIGNED_AS_OWNER: 'notifications.connect.project.member.assignedAsOwner',
+    INVITE_REQUESTED: 'notifications.connect.project.member.invite.requested',
+    INVITE_APPROVED: 'notifications.connect.project.member.invite.approved',
+    INVITE_REFUSED: 'notifications.connect.project.member.invite.rejected',
   },
   PROJECT: {
     ACTIVE: 'notifications.connect.project.active',

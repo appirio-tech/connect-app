@@ -80,7 +80,7 @@ class RichTextArea extends React.Component {
   }
 
   componentWillMount() {
-    const suggestions = _.map(_.values(this.props.allMembers), (e) => { return {name: e.firstName + ' ' + e.lastName, handle: e.handle, userId: e.userId, link:'/users/'+e.handle} })
+    const suggestions = _.map(_.values(this.props.projectMembers), (e) => { return {name: e.firstName + ' ' + e.lastName, handle: e.handle, userId: e.userId, link:'/users/'+e.handle} })
     this.setState({
       editorExpanded: this.props.editMode,
       titleValue: this.props.title || '',
@@ -436,6 +436,7 @@ RichTextArea.propTypes = {
   title: PropTypes.string,
   content: PropTypes.string,
   allMembers: PropTypes.object,
+  projectMembers: PropTypes.object,
   editingTopic: PropTypes.bool
 }
 
