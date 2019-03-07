@@ -506,7 +506,7 @@ function getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditio
     })
     const result = evaluate(updatedCondition, flatProjectData)
     // console.log(result + " : " + typeof result)
-    if (result && (evaluateAllConfigs || priceKeys.length == 0)) {
+    if (result && (evaluateAllConfigs || priceKeys.length === 0)) {
       // console.log(updatedCondition)
       // console.log(result + " : " + typeof result)
       priceKeys.push(condition)
