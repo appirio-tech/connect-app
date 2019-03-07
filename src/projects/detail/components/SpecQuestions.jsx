@@ -45,10 +45,11 @@ const filterAddonQuestions = (productTemplates, question) => (
   _.filter(productTemplates, { category: question.category })
 )
 
-const formatAddonOptions = options => options.map(o => ({
-  label: o.name,
-  value: { id: o.id },
-  subCategory: o.subCategory,
+const formatAddonOptions = productTemplates => productTemplates.map(productTemplate => ({
+  label: productTemplate.name,
+  value: { id: productTemplate.id },
+  description: productTemplate.details,
+  subCategory: productTemplate.subCategory,
 }))
 
 const groupAddonOptions = (options, categories) => {
