@@ -468,6 +468,12 @@ const getStepByDir = (template, currentStep, dir) => {
 }
 
 /**
+ * Check if a node object has visible sub-nodes
+ */
+const checkHasVisibleQuestions = (nodeObject) => (
+  !nodeObject.questions || nodeObject.questions.some(q => !_.get(q, '__wizard.hiddenByCondition')))
+
+/**
  * Returns next step which can be shown in desired direction inside template
  *
  * The difference from `getStepByDir()` is that this method skips steps which are hidden by conditions
@@ -486,7 +492,7 @@ export const getStepToShowByDir = (template, currentStep, dir) => {
   do {
     tempNode = getStepByDir(template, tempNode, dir)
     tempNodeObject = tempNode && getNodeObject(template, tempNode)
-  } while (tempNodeObject && _.get(tempNodeObject, '__wizard.hiddenByCondition'))
+  } while (tempNodeObject && (_.get(tempNodeObject, '__wizard.hiddenByCondition') || !checkHasVisibleQuestions(tempNodeObject)))
 
   return tempNode
 }
