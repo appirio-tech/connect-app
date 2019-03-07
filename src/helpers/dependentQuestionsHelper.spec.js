@@ -159,7 +159,7 @@ describe('Evaluate: ', () => {
       result.should.equal(true)
     })
 
-    it('multiple spaces', () => {
+    xit('multiple spaces', () => {
       const expression = 'someArray  contains  (  b  -  a  )  *  2'
       const result = evaluate(expression, testData)
 
