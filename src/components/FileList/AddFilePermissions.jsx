@@ -15,7 +15,7 @@ const AddFilePermission = ({ onCancel, onSubmit, onChange, selectedUsers, projec
     const projectMembersByHandle = mapKeys(projectMembers, value => value.handle)
     return handles.filter(handle => handle).map(h => get(projectMembersByHandle[h], 'userId'))
   }
-  
+
   return (
     <Modal
       isOpen
@@ -43,15 +43,20 @@ const AddFilePermission = ({ onCancel, onSubmit, onChange, selectedUsers, projec
             >All project members</button>
           </div>
         </div>
-        
+
         {/* Share with specific people */}
         <div className="input-container">
           <div className="hint">OR ONLY SPECIFIC PEOPLE</div>
 
-          <UserAutoComplete projectMembers={projectMembers} selectedUsers={selectedUsers} onUpdate={onChange} loggedInUser={loggedInUser} />
+          <UserAutoComplete
+            projectMembers={projectMembers}
+            selectedUsers={selectedUsers ? selectedUsers.split(',').map((handle) => ({ value: handle, label: handle })) : []}
+            onUpdate={onChange}
+            loggedInUser={loggedInUser}
+          />
 
           <div styleName="btn-selected-members">
-            <button className="tc-btn tc-btn-primary tc-btn-md" 
+            <button className="tc-btn tc-btn-primary tc-btn-md"
               onClick={() => onSubmit(mapHandlesToUserIds(selectedUsers.split(',')))}
               disabled={!selectedUsers || selectedUsers.length === 0 || isSharingAttachment }
             >Share with selected members</button>
@@ -63,11 +68,11 @@ const AddFilePermission = ({ onCancel, onSubmit, onChange, selectedUsers, projec
 }
 
 AddFilePermission.propTypes = {
-  onCancel: PropTypes.func.isRequired, 
-  onSubmit: PropTypes.func.isRequired, 
-  onChange: PropTypes.func.isRequired, 
-  selectedUsers: PropTypes.string, 
-  projectMembers: PropTypes.object, 
+  onCancel: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  selectedUsers: PropTypes.string,
+  projectMembers: PropTypes.object,
   loggedInUser: PropTypes.object.isRequired,
   isSharingAttachment: PropTypes.bool.isRequired,
 }
