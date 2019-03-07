@@ -56,6 +56,7 @@ export function getProjectById(projectId) {
       _.forEach(res.attachments, a => {
         a.downloadUrl = `/projects/${projectId}/attachments/${a.id}`
       })
+      if (!res.invites) res.invites = []
       return res
     })
 }

@@ -179,7 +179,7 @@ class FeedComments extends React.Component {
     const {
       comments, currentUser, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
       onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage, allMembers,
-      totalComments, isFullScreen, headerHeight
+      totalComments, isFullScreen, headerHeight, projectMembers
     } = this.props
     const { isNewCommentMobileOpen, stickyRowNext, stickyRowPrev } = this.state
     let authorName = currentUser.firstName
@@ -319,6 +319,7 @@ class FeedComments extends React.Component {
           isSaving={item.isSavingComment}
           hasError={item.error}
           allMembers={allMembers}
+          projectMembers={projectMembers}
           noInfo={item.noInfo}
           canDelete={idx !== 0}
         >
@@ -389,6 +390,7 @@ class FeedComments extends React.Component {
                     isAdding={isAddingComment}
                     hasError={error}
                     allMembers={allMembers}
+                    projectMembers={projectMembers}
                   />
                 </div>
               }

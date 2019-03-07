@@ -42,6 +42,7 @@ export class EditFileAttachment extends React.Component {
   render() {
     const { onCancel, onConfirm, projectMembers, loggedInUser } = this.props
     const { title, allowedUsers } = this.state
+    const showVisibleToAllProjectMembersText = !(allowedUsers && allowedUsers.length > 0)
     return (
       <div className="modal delete-link-modal">
         <div className="modal-title danger">
@@ -49,18 +50,22 @@ export class EditFileAttachment extends React.Component {
         </div>
         <div className="modal-body">
           <label for="title">Title:</label>
-          <input className="edit-input" type="text" value={title} onChange={this.handleTitleChange.bind(this)} name="title"/> 
+          <input className="edit-input" type="text" value={title} onChange={this.handleTitleChange.bind(this)} name="title"/>
           <br />
-          <UserAutoComplete onUpdate={this.onUserIdChange} 
+          <label for="title">File Viewers:</label>
+          <UserAutoComplete onUpdate={this.onUserIdChange}
             projectMembers={projectMembers}
             loggedInUser={loggedInUser}
-            selectedUsers={this.userIdsToHandles(allowedUsers).join(',')}
+            selectedUsers={this.userIdsToHandles(allowedUsers).map(user => ({value: user, label: user}))}
           />
+          {showVisibleToAllProjectMembersText && <div className="project-members-visible">
+            There are no specified file viewers. File will be visible to all project members.
+          </div>}
           <br />
 
           <div className="button-area flex center">
             <button className="tc-btn tc-btn-default tc-btn-sm btn-cancel" onClick={onCancel}>Cancel</button>
-            <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={() => onConfirm(title, allowedUsers)}>Edit Attachment</button>
+            <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={() => onConfirm(title, allowedUsers)}>Save Changes</button>
           </div>
         </div>
       </div>

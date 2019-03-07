@@ -33,6 +33,7 @@ import {
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILURE,
   CLEAR_PROFILE_SETTINGS_PHOTO,
+  CONNECT_DOMAIN,
 } from '../../../config/constants'
 import settingsService from '../services/settings'
 import * as memberService from '../../../api/users'
@@ -67,9 +68,11 @@ export const checkEmailAvailability = (email) => (dispatch) => {
   memberService.checkEmailValidity(email)
     .then(data => {
       const isEmailAvailable = _.get(data, 'valid')
+      const reason = _.get(data, 'reason')
+
       dispatch({
         type: CHECK_EMAIL_AVAILABILITY_SUCCESS,
-        payload: {email, isEmailAvailable}
+        payload: {email, isEmailAvailable, reason}
       })
     })
     .catch(err => {
@@ -93,7 +96,12 @@ export const changeEmail = (email) => (dispatch, getState) => {
   // as we used `omit` above we have a new object and can directly update it
   newProfile.email = email
 
-  memberService.updateUserProfile(handle, newProfile)
+  const queryParams = {
+    successUrl: `${CONNECT_DOMAIN}/settings/account/email-verification/success`,
+    failUrl: `${CONNECT_DOMAIN}/settings/account/email-verification/failure`
+  }
+
+  memberService.updateUserProfile(handle, newProfile, queryParams)
     .then(data => {
       dispatch({
         type: CHANGE_EMAIL_SUCCESS,
@@ -205,13 +213,13 @@ export const saveProfileSettings = (settings) => (dispatch, getState) => {
     // some traits could have categoryName as null
     // for such traits we have to use POST method instead of PUT or we will get
     // error 404 for such traits
-    traits.filter((trait) => trait.categoryName), 
+    traits.filter((trait) => trait.categoryName),
     'traitId'
   )
   const updatedTraits = applyProfileSettingsToTraits(traits, settings)
 
   // we will only update on server traits which can be updated on the settings page
-  const traitsForServer = updatedTraits.filter((trait) => 
+  const traitsForServer = updatedTraits.filter((trait) =>
     // TODO Revert to 'connect_info' again when PROD supports it
     _.includes(['basic_info', customerTraitId], trait.traitId)
   )

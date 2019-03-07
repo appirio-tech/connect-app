@@ -3,85 +3,99 @@ import React from 'react'
 import PT from 'prop-types'
 import moment from 'moment'
 import Modal from 'react-modal'
-import XMarkIcon from  '../../assets/icons/icon-x-mark.svg'
+import XMarkIcon from '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
-import { getAvatarResized } from '../../helpers/tcHelpers'
-import FormsyForm from 'appirio-tech-react-components/components/Formsy'
-import { INVITE_CUSTOMER_FAILURE } from '../../config/constants'
-const TCFormFields = FormsyForm.Fields
+import {getAvatarResized} from '../../helpers/tcHelpers'
+import AutocompleteInputContainer from './AutocompleteInputContainer'
 
-class Dialog extends React.Component {
+class ProjectManagementDialog extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      inviteText: '',
-      validInviteText: false,
-      clearText: false,
       showAlreadyMemberError: false,
-      invitedMembers: {},
-      members: {}
+      errorMessage: null
     }
     this.onChange = this.onChange.bind(this)
-    this.sendInvites = this.sendInvites.bind(this)
-  }
-
-  componentWillMount(){
-    this.setState({
-      invitedMembers: this.props.invites,
-      members: this.props.members
-    })
+    this.showIndividualErrors = this.showIndividualErrors.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.clearText && nextProps.processingInvites !== this.props.processingInvites &&
-      !nextProps.processingInvites) {
-      this.setState((prevState) => ({
-        inviteText: nextProps.error && nextProps.error.type === INVITE_CUSTOMER_FAILURE ? prevState.inviteText : '',
-        validInviteText: false,
-        clearText: false,
-      }))
+    const { processingInvites, selectedMembers } = this.props
+
+    if (processingInvites && !nextProps.processingInvites ) {
+      const notInvitedSelectedMembers = _.reject(selectedMembers, (selectedMember) => (
+        this.isSelectedMemberAlreadyInvited(nextProps.invites, selectedMember)
+      ))
+
+      this.props.onSelectedMembersUpdate(notInvitedSelectedMembers)
+
+      if (nextProps.error) {
+        this.showIndividualErrors(nextProps.error, notInvitedSelectedMembers)
+      }
     }
   }
 
-  onChange(currentValues) {
-    const text = currentValues.emails
-    const invites = text.split(/[,;]/g)
-    const handles = invites.filter((invite) => invite.startsWith('@')).map((invite) => invite.substring(1))
-    const isValid = invites.every(invite => {
-      invite = invite.trim()
-      return  invite.length > 1 && (/(.+)@(.+){2,}\.(.+){2,}/.test(invite) || invite.startsWith('@'))
-    })
-    let present = _.some(this.state.invitedMembers, invited => invites.indexOf(invited.email) > -1)
-    present = present || _.some(this.state.invitedMembers, invited => {
-      if (!invited.member) {
-        return false
-      }
-      return handles.indexOf(invited.member.handle) > -1
-    })
-    present = present || _.some(this.state.members, member => handles.indexOf(member.handle) > -1)
+  onChange(selectedMembers) {
+    const { invites } = this.props
+
+    const present = _.some(selectedMembers, (selectedMember) => (
+      this.isSelectedMemberAlreadyInvited(invites, selectedMember)
+    ))
+
     this.setState({
-      validInviteText: !present && isValid && text.trim().length > 0,
-      inviteText: currentValues.emails,
-      showAlreadyMemberError: present
+      validUserText: !present,
+      showAlreadyMemberError: present,
+      errorMessage: null,
     })
+
+    this.props.onSelectedMembersUpdate(selectedMembers)
   }
 
-  // SEND INVITES
-  sendInvites() {
-    let invites = this.state.inviteText.split(/[,;]/g)
-    invites = invites.map(invite => invite.trim())
-    //emails = emails.filter((email) => /(.+)@(.+){2,}\.(.+){2,}/.test(email))
-    let handles = invites.filter((invite) => (invite.startsWith('@') && invite.length > 1))
-    handles = handles.map(handle => handle.replace(/^@/, ''))
-    const emails = invites.filter((invite) => (!invite.startsWith('@') && invite.length > 1))
+  isSelectedMemberAlreadyInvited(invites = [], selectedMember) {
+    return !!invites.find((invite) => (
+      invite.email && invite.email === selectedMember.label ||
+      invite.userId && this.resolveUserHandle(invite.userId) === selectedMember.label
+    ))
+  }
 
-    this.props.sendInvite(emails, handles)
-    this.setState({clearText: true})
+  /**
+   * Get user handle using `allMembers` which comes from props and contains all the users
+   * which are loaded to `members.members` in the Redux store
+   *
+   * @param {Number} userId user id
+   */
+  resolveUserHandle(userId) {
+    const { allMembers } = this.props
+
+    return _.find(allMembers, { userId }).handle
+  }
+
+  showIndividualErrors(error) {
+    const uniqueMessages = _.groupBy(error.failed, 'message')
+
+    const msgs = _.keys(uniqueMessages).map((message) => {
+      const users = uniqueMessages[message].map((failed) => (
+        failed.email ? failed.email : this.resolveUserHandle(failed.userId)
+      ))
+
+      return ({
+        message,
+        users,
+      })
+    })
+
+    const listMessages = msgs.map((m) => `${m.users.join(', ')}: ${m.message}`)
+
+    this.setState({
+      errorMessage: listMessages.length > 0 ? listMessages.join('\n') : null
+    })
   }
 
   render() {
-    const {members, currentUser, isMember, removeMember, removeInvite,
-      onCancel, invites = []} = this.props
+    const {
+      members, currentUser, isMember, removeMember, removeInvite,
+      onCancel, invites = [], selectedMembers, processingInvites,
+    } = this.props
     const showRemove = currentUser.isAdmin || (!currentUser.isCopilot && isMember)
     let i = 0
     return (
@@ -95,8 +109,8 @@ class Dialog extends React.Component {
 
         <div className="project-dialog">
           <div className="dialog-title">
-            Project team
-            <span onClick={onCancel}><XMarkIcon /></span>
+            Customer team
+            <span onClick={onCancel}><XMarkIcon/></span>
           </div>
 
           <div className="dialog-body">
@@ -115,7 +129,7 @@ class Dialog extends React.Component {
               return (
                 <div
                   key={i}
-                  className={`project-member-layout ${(i%2 !== 0) ? 'dark' : ''}`}
+                  className={`project-member-layout ${(i % 2 !== 0) ? 'dark' : ''}`}
                 >
 
                   <div className="memer-details">
@@ -150,7 +164,7 @@ class Dialog extends React.Component {
               return (
                 <div
                   key={i}
-                  className={`project-member-layout ${(i%2 !== 0) ? 'dark' : ''}`}
+                  className={`project-member-layout ${(i % 2 !== 0) ? 'dark' : ''}`}
                 >
                   <Avatar
                     userName={invite.email || userFullName}
@@ -175,27 +189,30 @@ class Dialog extends React.Component {
             }))}
           </div>
 
-          <Formsy.Form className="input-container" onValidSubmit={this.sendInvites} onChange={this.onChange} >
+          <div className="input-container">
             <div className="hint">invite more people</div>
-            <TCFormFields.TextInput
-              name="emails"
-              wrapperClass="inviteTextInput"
-              type="text"
-              value={this.state.inviteText}
-              placeholder="Enter one or more emails or user handles separated by ';' or comma ','"
-              disabled={(!currentUser.isAdmin && !isMember) || this.state.clearText}
+            <AutocompleteInputContainer
+              placeholder="Enter one or more emails or user handles"
+              onUpdate={this.onChange}
+              currentUser={currentUser}
+              selectedMembers={selectedMembers}
+              disabled={processingInvites || (!currentUser.isAdmin && !isMember)}
             />
-            { this.state.showAlreadyMemberError && <div className="error-message">
-                Project Member(s) can't be invited again. Please remove them from list.
+            {this.state.showAlreadyMemberError && <div className="error-message">
+              Project Member(s) can't be invited again. Please remove them from list.
+            </div>}
+            { this.state.errorMessage  && <div className="error-message">
+              {this.state.errorMessage}
             </div> }
             <button
               className="tc-btn tc-btn-primary tc-btn-md"
               type="submit"
-              disabled={!this.state.validInviteText || this.state.clearText}
+              disabled={processingInvites || this.state.showAlreadyMemberError || selectedMembers.length === 0}
+              onClick={this.props.sendInvite}
             >
               Send Invite
             </button>
-          </Formsy.Form>
+          </div>
         </div>
 
       </Modal>
@@ -203,17 +220,25 @@ class Dialog extends React.Component {
   }
 }
 
-Dialog.propTypes = {
-  processingInvites: PT.bool.isRequired,
+ProjectManagementDialog.defaultProps = {
+  invites: [],
+  members: []
+}
+
+ProjectManagementDialog.propTypes = {
   error: PT.oneOfType([PT.object, PT.bool]),
   currentUser: PT.object.isRequired,
   members: PT.arrayOf(PT.object).isRequired,
+  allMembers: PT.arrayOf(PT.object).isRequired,
   isMember: PT.bool.isRequired,
   onCancel: PT.func.isRequired,
   removeMember: PT.func.isRequired,
   invites: PT.arrayOf(PT.object),
   sendInvite: PT.func.isRequired,
   removeInvite: PT.func.isRequired,
+  onSelectedMembersUpdate: PT.func.isRequired,
+  selectedMembers: PT.arrayOf(PT.object),
+  processingInvites: PT.bool.isRequired,
 }
 
-export default Dialog
+export default ProjectManagementDialog

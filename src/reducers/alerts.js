@@ -24,6 +24,8 @@ import {
   REMOVE_CUSTOMER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_SUCCESS,
   // accepted or refused invite
   ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE,
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED,
+  PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED, PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED,
   // project feeds
   CREATE_PROJECT_FEED_FAILURE,
   CREATE_PROJECT_FEED_COMMENT_FAILURE,
@@ -130,7 +132,7 @@ export default function(state = {}, action) {
   case ADD_PROJECT_ATTACHMENT_SUCCESS:
     Alert.success('Added attachment to the project successfully')
     return state
-  
+
   case UPDATE_PROJECT_ATTACHMENT_SUCCESS:
     Alert.success('Updated attachment succcessfully')
     return state
@@ -140,7 +142,13 @@ export default function(state = {}, action) {
 
   case INVITE_TOPCODER_MEMBER_SUCCESS:
   case INVITE_CUSTOMER_SUCCESS:
-    Alert.success('You\'ve successfully invited member(s).')
+    if(action.payload.success.length && !action.payload.failed) {
+      Alert.success('You\'ve successfully invited member(s).')
+    } else if (action.payload.success.length && action.payload.failed) {
+      Alert.warning('Some members couldn\'t be invited.')
+    } else if (!action.payload.success.length && action.payload.failed) {
+      Alert.error('You are unable to invite members successfully.')
+    }
     return state
 
   case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS:
@@ -159,7 +167,15 @@ export default function(state = {}, action) {
     return state
 
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS:
-    Alert.success('You\'ve successfully joined the project.')
+    if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_ACCEPTED){
+      Alert.success('You\'ve successfully joined the project.')
+    } else if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_REFUSED){
+      Alert.success('You\'ve refused to join the project.')
+    } else if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED){
+      Alert.success('You\'ve approved copilot invitation request.')
+    } else if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED){
+      Alert.success('You\'ve rejected copilot invitation request.')
+    }
     return state
 
   case UPDATE_PROJECT_FAILURE:
