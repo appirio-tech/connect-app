@@ -37,7 +37,10 @@ const UserAutoComplete = ({
 
 UserAutoComplete.propTypes = {
   projectMembers: PropTypes.object,
-  selectedUsers: PropTypes.string,
+  selectedUsers: PropTypes.arrayOf(PropTypes.shape({
+    value: PropTypes.string,
+    label: PropTypes.string,
+  })),
   onUpdate: PropTypes.func,
   loggedInUser: PropTypes.object
 }
