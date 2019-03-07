@@ -20,25 +20,23 @@ function ProjectEstimation({ question, project, template }) {
   const { priceEstimate, durationEstimate, estimateBlocks } = getProductEstimate({scope: template}, project)
   // console.log(estimateBlocks)
   const deliverables = _.map(question.deliverables, item => {
-    // for now it assumes that there is only one block that matches the conditions per deliverable
-    // if there are cases where we can have more than one blocks, we have to aggregate the blocks to come up
-    // with representable values
-    const buildingBlock = _.find(estimateBlocks, b => _.get(b, 'metadata.deliverable') === item.deliverableKey)
-    // console.log(buildingBlock)
-    if (buildingBlock) {
-      totalDuration += buildingBlock.maxTime
+    const buildingBlocks = _.filter(estimateBlocks, b => _.get(b, 'metadata.deliverable') === item.deliverableKey)
+    if (buildingBlocks) {
+      totalDuration += _.sumBy(buildingBlocks, 'maxTime')
     }
-    return { ...item, buildingBlock }
+    return { ...item, buildingBlocks }
   })
   // console.log(totalDuration)
   const renderBlock = (item) => {
     const durationText = item.duration ? `${item.duration} Days` : 'N/A'
+    const style = {}
+    if (item.duration > 0) {
+      style['width'] = (item.duration / totalDuration * 100) + '%'
+    }
     return (
       <li
         key={item.id}
-        style={{
-          width: (item.duration / totalDuration * 100) + '%'
-        }}
+        style={style}
         className={cn(`type-${item.id}`, { selected: isSelected(item) })}
       >
         <div styleName="item-title">{item.title}</div>
@@ -58,8 +56,8 @@ function ProjectEstimation({ question, project, template }) {
       </div>
       <ul styleName="project-estimate-timeline">
         {deliverables.map(item => {
-          const duration = _.get(item, 'buildingBlock.maxTime')
-          return renderBlock({ ...item, duration })
+          const duration = _.sumBy(item.buildingBlocks, 'maxTime')
+          return renderBlock({ ...item, duration: duration ? duration : null })
         })}
       </ul>
       <h3>Our estimate is from <span>$</span>{numberWithCommas(priceEstimate)}</h3>

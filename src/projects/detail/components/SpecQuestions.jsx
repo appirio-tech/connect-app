@@ -47,7 +47,7 @@ const filterAddonQuestions = (productTemplates, question) => (
 
 const formatAddonOptions = productTemplates => productTemplates.map(productTemplate => ({
   label: productTemplate.name,
-  value: { id: productTemplate.id },
+  value: { id: productTemplate.id, productKey: productTemplate.productKey },
   description: productTemplate.details,
   subCategory: productTemplate.subCategory,
 }))
