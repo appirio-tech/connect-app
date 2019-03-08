@@ -274,6 +274,33 @@ export function getFieldNamesFromExpression(expression) {
  * @returns {String} expression
  */
 export function populatePreparedConditions(expression, preparedConditions) {
-  !preparedConditions // this is to avoid lint error - have to write implementation instead
+  const ArrayWords = expression.split(' ')//first we split expression by " "(white space)
+  expression = ''
+  for(let i = 0;i < ArrayWords.length;i++){
+    //we skip '(' on left and ')' on right
+    let Arraystartpos = -1
+    let Arrayendpos = -1
+    for(let q = 0;q < ArrayWords[i].length;q++){
+      if(ArrayWords[i][q] !== '('){
+        Arraystartpos = q
+        break
+      }
+    }
+    for(let q = ArrayWords[i].length - 1;q >= 0;q--){
+      if(ArrayWords[i][q] !== ')'){
+        Arrayendpos = q
+        break
+      }
+    }
+    if(Arraystartpos <= Arrayendpos&&preparedConditions.hasOwnProperty(ArrayWords[i].substring(Arraystartpos, Arrayendpos+1))){
+      ArrayWords[i] = ArrayWords[i].substring(0, Arraystartpos) 
+                      + preparedConditions[ArrayWords[i].substring(Arraystartpos, Arrayendpos+1)] 
+                      + ArrayWords[i].substring(Arrayendpos+1, ArrayWords[i].length)
+    }
+    if(i !== 0){
+      expression += ' ' //adding white space
+    }
+    expression += ArrayWords[i]
+  }
   return expression
 }
