@@ -107,7 +107,10 @@ const ProjectTypesGridView = props => {
     onPageChange: () => {}, // dummy, as we are not expecting paging yet in metadata views
     sortHandler,
     currentSortField,
-    resultSet: projectTypes,
+    resultSet: projectTypes.map((projectType) => ({
+      ...projectType,
+      id: projectType.key,
+    })),
     totalCount,
     currentPageNum: pageNum,
     pageSize,

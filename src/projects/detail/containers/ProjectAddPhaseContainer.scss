@@ -5,4 +5,8 @@
   // we have to additionally remove padding at the top added by Layout
   // to make Wizard properly fullscreen
   margin-top: -110px;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    margin-top: 0;
+  }
 }

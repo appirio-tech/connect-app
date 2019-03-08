@@ -115,8 +115,14 @@ function applyOp(op, b, a) {
     return a < b
   case '!':
     return !b
-  case 'contains':
-    return (a || []).indexOf(b) > -1
+  case 'contains': {
+    try {
+      const bJSON = JSON.parse(b)
+      return _.some(a || [], bJSON)
+    } catch(e) {
+      return (a || []).indexOf(b) > -1
+    }
+  }
   case 'hasLength':
     return (a || []).length === b
   }

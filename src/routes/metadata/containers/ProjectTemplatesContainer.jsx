@@ -23,6 +23,9 @@ import CoderBroken from '../../../assets/icons/coder-broken.svg'
 
 import './MetaDataContainer.scss'
 
+const withLoader = spinnerWhileLoading(props => !props.isLoading && props.projectTemplates)
+const ProjectTemplatesGridViewWithLoader = withLoader(ProjectTemplatesGridView)
+
 class ProjectTemplatesContainer extends React.Component {
 
   constructor(props) {
@@ -52,7 +55,8 @@ class ProjectTemplatesContainer extends React.Component {
       error,
     } = this.props
     const { criteria } = this.state
-    if (!isAdmin) {
+    // TODO remove: temporary let non-admin user see metadata (they still couldn't save because server will reject)
+    if (!isAdmin && isAdmin) {
       return (
         <section className="content content-error">
           <div className="container">
@@ -64,9 +68,10 @@ class ProjectTemplatesContainer extends React.Component {
         </section>
       )
     }
+
     return (
       <div>
-        <ProjectTemplatesGridView
+        <ProjectTemplatesGridViewWithLoader
           currentUser={currentUser}
           isLoading={isLoading}
           totalCount={templates ? templates.length : 0}
@@ -114,8 +119,7 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.error)
-const enhance = spinnerWhileLoading(props => !props.isLoading || props.templates)
-const ProjectTemplatesContainerWithLoaderEnhanced = enhance(errorHandler(ProjectTemplatesContainer))
-const ProjectTemplatesContainerWithLoaderAndAuth = requiresAuthentication(ProjectTemplatesContainerWithLoaderEnhanced)
+const ProjectTemplatesContainerWithErrorHandler = errorHandler(ProjectTemplatesContainer)
+const ProjectTemplatesContainerWithErrorHandlerAndAuth = requiresAuthentication(ProjectTemplatesContainerWithErrorHandler)
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectTemplatesContainerWithLoaderAndAuth))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectTemplatesContainerWithErrorHandlerAndAuth))

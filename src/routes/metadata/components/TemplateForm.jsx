@@ -176,6 +176,7 @@ class TemplateForm extends Component {
               <JsonEditor
                 value={value}
                 ace={ace}
+                mode="code"
                 allowedModes={ ['code', 'tree', 'view']}
                 theme="ace/theme/github"
                 onChange={(json) => { this.onJSONEdit(field, json) }}
@@ -265,7 +266,7 @@ class TemplateForm extends Component {
 
   onChange(currentValues, isChanged) {
     const { changeTemplate } = this.props
-    console.log(currentValues)
+    // console.log(currentValues)
     this.setState({ dirty: isChanged })
     if (currentValues.hasOwnProperty('metadata')) {
       try {

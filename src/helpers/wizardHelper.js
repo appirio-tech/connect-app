@@ -7,17 +7,17 @@
  * was processed by the methods in this helper.
  *
  * Glossary:
- *   - `step`: we call any section, subSection, question or option
- *             step is defined as an object with indexes:
+ *   - `node`: we call any section, subSection, question or option
+ *             node is defined as an object with indexes:
  *             {
  *                sectionIndex: Number,
  *                subSectionIndex: Number,
  *                questionIndex: Number,
  *                optionIndex: Number,
  *             }
- *             If some index is not applicable it has be defined as -1.
- *   - `stepObject`: it's an actual section, subSection, question or option object
- *   - `real step`: is a step which has to be shown as one single step in wizard
+ *             If some index is not applicable it has to be defined as -1.
+ *   - `nodeObject`: it's an actual section, subSection, question or option object
+ *   - `step`: is a particular case of node which has to be shown as one single step in wizard
  */
 import _ from 'lodash'
 import update from 'react-addons-update'
@@ -25,18 +25,19 @@ import { evaluate, getFieldNamesFromExpression } from './dependentQuestionsHelpe
 import { flatten, unflatten } from 'flat'
 
 /**
- * Defines how to display form steps which has been already filled
+ * Defines possible ways of displaying steps
  */
-export const PREVIOUS_STEP_VISIBILITY = {
+export const STEP_VISIBILITY = {
   NONE: 'none',
-  READ_ONLY: 'readOnly',
   WRITE: 'write',
+  READ_OPTIMIZED: 'readOptimized',
 }
 
 /**
  * Form template has many levels, and this constant define them
  */
 export const LEVEL = {
+  UNDEFINED: undefined,
   SECTION: 'section',
   SUB_SECTION: 'subSection',
   QUESTION: 'question',
@@ -44,149 +45,251 @@ export const LEVEL = {
 }
 
 /**
- * Define relation between steps
- * - the step is next to another one
- * - the step previous to another one
- * - it's a same step
+ * Defines possible wizard state values
+ *
+ * - `prev` - all passed steps
+ * - `current`
+ * - `next` - all next steps
  */
-export const STEP_DIR = {
+export const STEP_STATE = {
+  PREV: 'prev',
+  CURRENT: 'current',
+  NEXT: 'next'
+}
+
+/**
+ * Define relation between nodes
+ * - the node is next to another one
+ * - the node previous to another one
+ * - it's a same node
+ */
+export const NODE_DIR = {
   NEXT: +1,
   PREV: -1,
   SAME: 0,
 }
 
+const DEFAULT_STEP_VISIBILITY = STEP_VISIBILITY.WRITE
+
+const CURRENT_STEP_VISIBILITY = STEP_VISIBILITY.WRITE
+
+const NEXT_STEP_VISIBILITY = STEP_VISIBILITY.NONE
+
 /**
- * Determines if step has to be hidden during wizard initialization
+ * Get previous step visibility for the node
  *
- * @param {String} previousStepVisibility previous step visibility in wizard
- * @param {Object} currentStep            the step which we iterate
- * @param {Object} lastWizardStep         the last step which was previously filled
+ * @param {Object} template template
+ * @param {Object} node     node
  *
- * @returns {Boolean} true if step has to be hidden
+ * @returns {String} step visibility
  */
-const shouldStepBeHidden = (previousStepVisibility, currentStep, lastWizardStep) => {
-  if (!lastWizardStep) {
-    const level = getStepLevel(currentStep)
-    return currentStep[`${level}Index`] !== 0
-  } else if (previousStepVisibility === PREVIOUS_STEP_VISIBILITY.NONE) {
-    return !isSameStepAnyLevel(currentStep, lastWizardStep)
-  } else if (previousStepVisibility === PREVIOUS_STEP_VISIBILITY.READ_ONLY) {
-    return getDirForSteps(currentStep, lastWizardStep) === STEP_DIR.PREV
-  } else if (previousStepVisibility === PREVIOUS_STEP_VISIBILITY.WRITE) {
-    return false
-  } else {
-    return true
-  }
+const getPreviousStepVisibility = (template, node) => {
+  const level = getNodeLevel(node)
+  const parentNode = getParentNode(node)
+  const parentNodeObject = level === LEVEL.SECTION ? template : getNodeObject(template, parentNode)
+
+  return _.get(parentNodeObject, 'wizard.previousStepVisibility', DEFAULT_STEP_VISIBILITY)
 }
 
 /**
- * Determine if `step` is any level ancestor of `parentStep`
+ * Get node state in wizard.
+ * Other words if this is any previous node, current node or any next node in wizard workflow.
  *
- * @param {Object} parentStep parent step
- * @param {Object} step       step to check
+ * @param {Object} nodeObject        node object
+ * @param {Object} currentWizardStep current wizard step
  *
- * @returns {Boolean} true if `step` is any ancestor of `parentStep`
+ * @returns {String} node state
  */
-const isSameStepAnyLevel = (parentStep, step) => {
-  let isParent = parentStep.sectionIndex !== -1 && parentStep.sectionIndex === step.sectionIndex
+export const geStepState = (nodeObject, currentWizardStep) => {
+  const node = _.get(nodeObject, '__wizard.node')
 
-  if (parentStep.subSectionIndex !== -1) {
-    isParent = isParent && parentStep.subSectionIndex === step.subSectionIndex
+  // this means that we are not in a wizard mode, because it was not initialized for this node
+  if (!node) {
+    return null
   }
 
-  if (parentStep.questionIndex !== -1) {
-    isParent = isParent && parentStep.questionIndex === step.questionIndex
+  if (
+    isSameOrParentNode(currentWizardStep, node) ||
+    isSameOrParentNode(node, currentWizardStep)
+  ) {
+    return STEP_STATE.CURRENT
   }
 
-  if (parentStep.optionIndex !== -1) {
-    isParent = isParent && parentStep.optionIndex === step.optionIndex
+  if (isPreviousStep(node, currentWizardStep)) {
+    return STEP_STATE.PREV
   }
 
-  return isParent
+  if (isNextStep(node, currentWizardStep)) {
+    return STEP_STATE.NEXT
+  }
+
+  // this should never happen
+  console.error('Cannot determine node state, something went wrong.')
+  return null
 }
 
 /**
- * Check if wizard mode is enabled in template
+ *
+ * @param {Object} template          template
+ * @param {Object} nodeObject        node object
+ * @param {Object} currentWizardStep current wizard step
+ *
+ * @returns {String} step visibility
+ */
+export const getVisibilityForRendering = (template, nodeObject, currentWizardStep) => {
+  const node = _.get(nodeObject, '__wizard.node')
+
+  // this means that we are not in a wizard mode, because it was not initialized for this node
+  if (!node) {
+    return DEFAULT_STEP_VISIBILITY
+  }
+
+  const stepState = geStepState(nodeObject, currentWizardStep)
+  let stepVisibility = DEFAULT_STEP_VISIBILITY
+
+  switch(stepState) {
+  case STEP_STATE.PREV: stepVisibility = getPreviousStepVisibility(template, node)
+    break
+  case STEP_STATE.CURRENT: stepVisibility = CURRENT_STEP_VISIBILITY
+    break
+  case STEP_STATE.NEXT: stepVisibility = NEXT_STEP_VISIBILITY
+    break
+  }
+
+  return stepVisibility
+}
+
+/**
+ * Determines if the `sameOrParentNode` node is same or parent node to `node`.
+ *
+ * @param {Object} node             node
+ * @param {Object} sameOrParentNode same or parent node
+ *
+ * @returns {Boolean} is same or parent
+ */
+const isSameOrParentNode = (node, sameOrParentNode) => {
+  let isSameOrParent = true
+
+  if (node.optionIndex !== -1) {
+    isSameOrParent = isSameOrParent && (sameOrParentNode.optionIndex === -1 || sameOrParentNode.optionIndex === node.optionIndex)
+  }
+
+  if (node.questionIndex !== -1) {
+    isSameOrParent = isSameOrParent && (sameOrParentNode.questionIndex === -1 || sameOrParentNode.questionIndex === node.questionIndex)
+  }
+
+  if (node.subSectionIndex !== -1) {
+    isSameOrParent = isSameOrParent && (sameOrParentNode.subSectionIndex === -1 || sameOrParentNode.subSectionIndex === node.subSectionIndex)
+  }
+
+  if (node.sectionIndex !== -1) {
+    isSameOrParent = isSameOrParent && (sameOrParentNode.sectionIndex === -1 || sameOrParentNode.sectionIndex === node.sectionIndex)
+  }
+
+  return isSameOrParent
+}
+
+/**
+ * Calculate wizard progress.
  *
  * @param {Object} template template
+ * @param {Object} currentWizardStep current wizard step
  *
- * @returns {Boolean} true if wizard mode is enabled
+ * @returns {Number} progress [0, 1]
  */
-export const isWizardModeEnabled = (template) => (
-  _.get(template, 'wizard.enabled') || template.wizard === true
+export const getWizardProgress = (template, currentWizardStep) => {
+  let sectionsProgress = 0
+  let subSectionsProgress = 0
+  let questionsProgress = 0
+
+  const { section, subSection } = getNodeAllLevelsObjects(template, currentWizardStep)
+
+  if (currentWizardStep.sectionIndex !== -1 && _.get(template, 'wizard.enabled')) {
+    sectionsProgress = currentWizardStep.sectionIndex / template.sections.length
+  }
+
+  if (currentWizardStep.subSectionIndex !== -1 && _.get(section, 'wizard.enabled')) {
+    subSectionsProgress = currentWizardStep.subSectionIndex / section.subSections.length
+    subSectionsProgress = subSectionsProgress / template.sections.length
+  }
+
+  if (currentWizardStep.questionIndex !== -1 && _.get(subSection, 'wizard.enabled')) {
+    questionsProgress = currentWizardStep.questionIndex / subSection.questions.length
+    questionsProgress = questionsProgress / section.subSections.length
+    questionsProgress = questionsProgress / template.sections.length
+  }
+
+  return sectionsProgress + subSectionsProgress + questionsProgress
+}
+
+export const isPreviousStep = (step, currentStep) => (
+  getDirForNodes(step, currentStep) === NODE_DIR.NEXT
+)
+
+export const isNextStep = (step, currentStep) => (
+  getDirForNodes(step, currentStep) === NODE_DIR.PREV
 )
 
 /**
- * Get wizard previous step visibility
- *
- * @param {Object} template template
- *
- * @returns {String} previous step visibility
- */
-export const getPreviousStepVisibility = (template) => (
-  _.get(template, 'wizard.previousStepVisibility', PREVIOUS_STEP_VISIBILITY.WRITE)
-)
-
-/**
- * Iterates through all the steps of the template: sections, subSections, questions, options.
+ * Iterates through all the nodes of the template: sections, subSections, questions, options.
  *
  * If iteratee returns `false` iteration will be stopped.
  *
  * @param {Object}   template template
- * @param {Function} iteratee function which is called for each step with signature (stepObject, step)
- * @param {Function} [iterateSublevelCondition] if returns false, we don't iterate through the steps of the child level
+ * @param {Function} iteratee function which is called for each node with signature (nodeObject, node)
+ * @param {Function} [iterateSublevelCondition] if returns false, we don't iterate through the nodes of the child level
  */
-export const forEachStep = (template, iteratee, iterateSublevelCondition) => {
+export const forEachNode = (template, iteratee, iterateSublevelCondition) => {
   let iterateeResult
 
   // iterate SECTIONS
   _.forEach(template.sections, (section, sectionIndex) => {
-    const sectionStep = {
+    const sectionNode = {
       sectionIndex,
       subSectionIndex: -1,
       questionIndex: -1,
       optionIndex: -1,
     }
-    iterateeResult = iteratee(section, sectionStep)
+    iterateeResult = iteratee(section, sectionNode)
 
     // iterate SUB_SECTIONS
     if (iterateeResult !== false
-      && (!_.isFunction(iterateSublevelCondition) || iterateSublevelCondition(section, sectionStep))
+      && (!_.isFunction(iterateSublevelCondition) || iterateSublevelCondition(section, sectionNode))
     ) {
       _.forEach(section.subSections, (subSection, subSectionIndex) => {
-        const subSectionStep = {
+        const subSectionNode = {
           sectionIndex,
           subSectionIndex,
           questionIndex: -1,
           optionIndex: -1,
         }
-        iterateeResult = iteratee(subSection, subSectionStep)
+        iterateeResult = iteratee(subSection, subSectionNode)
 
         // iterate QUESTIONS
         if (iterateeResult !== false
-          && (!_.isFunction(iterateSublevelCondition) || iterateSublevelCondition(subSection, subSectionStep))
+          && (!_.isFunction(iterateSublevelCondition) || iterateSublevelCondition(subSection, subSectionNode))
         ) {
           subSection.questions && _.forEach(subSection.questions, (question, questionIndex) => {
-            const questionStep = {
+            const questionNode = {
               sectionIndex,
               subSectionIndex,
               questionIndex,
               optionIndex: -1,
             }
-            iterateeResult = iteratee(question, questionStep)
+            iterateeResult = iteratee(question, questionNode)
 
             // iterate OPTIONS
             if (iterateeResult !== false
-              && (!_.isFunction(iterateSublevelCondition) || iterateSublevelCondition(question, questionStep))
+              && (!_.isFunction(iterateSublevelCondition) || iterateSublevelCondition(question, questionNode))
             ) {
               question.options && _.forEach(question.options, (option, optionIndex) => {
-                const optionsStep = {
+                const optionsNode = {
                   sectionIndex,
                   subSectionIndex,
                   questionIndex,
                   optionIndex
                 }
-                iterateeResult = iteratee(option, optionsStep)
+                iterateeResult = iteratee(option, optionsNode)
 
                 return iterateeResult
               })
@@ -213,14 +316,12 @@ export const forEachStep = (template, iteratee, iterateSublevelCondition) => {
  * @param {Object}  template            raw template
  * @param {Object}  project             project data (non-flat)
  * @param {Object}  incompleteWizard    incomplete wizard props
- * @param {Boolean} isReadOptimizedMode if true wizard is inited in read optimized mode
  *
  * @returns {Object} initialized template
  */
-export const initWizard = (template, project, incompleteWizard, isReadOptimizedMode) => {
+export const initWizard = (template, project, incompleteWizard) => {
   let wizardTemplate = _.cloneDeep(template)
-  const isWizardMode = isWizardModeEnabled(wizardTemplate) && !isReadOptimizedMode
-  const previousStepVisibility = getPreviousStepVisibility(wizardTemplate)
+  const isWizardMode = _.get(template, 'wizard.enabled')
   // try to get the step where we left the wizard
   const lastWizardStep = incompleteWizard && incompleteWizard.currentWizardStep
   // current step will define the first of the wizard in case we have to start the wizard from the beginning
@@ -238,61 +339,42 @@ export const initWizard = (template, project, incompleteWizard, isReadOptimizedM
     dependantFields: []
   }
 
-  // initialize wizard for each step
-  forEachStep(wizardTemplate, (stepObject, step) => {
-    // keep step indexes for each step inside template
-    stepObject.__wizard = {
-      step
+  // initialize wizard for each node
+  forEachNode(wizardTemplate, (nodeObject, node) => {
+    // keep node indexes for each node inside template
+    nodeObject.__wizard = {
+      node
     }
 
     // add all found variables from condition to the list of dependant fields of the template
-    if (stepObject.condition) {
+    if (nodeObject.condition) {
       wizardTemplate.__wizard.dependantFields = _.uniq([
         ...wizardTemplate.__wizard.dependantFields,
-        ...getFieldNamesFromExpression(stepObject.condition)
+        ...getFieldNamesFromExpression(nodeObject.condition)
       ])
     }
   })
 
-  const updateResult = updateStepsByConditions(wizardTemplate, project)
+  const updateResult = updateNodesByConditions(wizardTemplate, project)
   wizardTemplate = updateResult.updatedTemplate
-
-  // in read optimized mode we display all the questions as readOnly if they are not hidden by conditions
-  forEachStep(wizardTemplate, (stepObject) => {
-    if (isReadOptimizedMode && !stepObject.__wizard.hiddenByCondition) {
-      stepObject.__wizard.readOnly = true
-    }
-  })
 
   // initialize wizard mode
   if (isWizardMode) {
     currentWizardStep.sectionIndex = 0
 
-    forEachStep(wizardTemplate, (stepObject, step) => {
-      stepObject.__wizard.isStep = true
-      stepObject.__wizard.hidden = shouldStepBeHidden(previousStepVisibility, step, lastWizardStep)
+    forEachNode(wizardTemplate, (nodeObject, node) => {
+      nodeObject.__wizard.isStep = true
 
       // if we reach subSection inside first section, then we will start from it
-      if (step.sectionIndex === 0 && currentWizardStep.subSectionIndex === -1 && getStepLevel(step) === LEVEL.SUB_SECTION) {
+      if (node.sectionIndex === 0 && currentWizardStep.subSectionIndex === -1 && getNodeLevel(node) === LEVEL.SUB_SECTION) {
         currentWizardStep.subSectionIndex = 0
       }
 
       // if we reach question inside first subSection of the first section, then we will start from it
-      if (step.sectionIndex === 0 && step.subSectionIndex === 0 && currentWizardStep.questionIndex === -1 && getStepLevel(step) === LEVEL.QUESTION) {
+      if (node.sectionIndex === 0 && node.subSectionIndex === 0 && currentWizardStep.questionIndex === -1 && getNodeLevel(node) === LEVEL.QUESTION) {
         currentWizardStep.questionIndex = 0
       }
-    }, (stepObject) => (_.get(stepObject, 'wizard.enabled') || stepObject.wizard === true))
-
-    // if we are restoring previously unfinished wizard, we have finalize all steps before the current one
-    // in readOnly mode
-    if (lastWizardStep && previousStepVisibility === PREVIOUS_STEP_VISIBILITY.READ_ONLY) {
-      let tempStep = currentWizardStep
-
-      while (tempStep && getDirForSteps(tempStep, lastWizardStep) === STEP_DIR.NEXT) {
-        wizardTemplate = finalizeStep(wizardTemplate, tempStep)
-        tempStep = getNextStepToShow(wizardTemplate, tempStep)
-      }
-    }
+    }, (nodeObject) => (_.get(nodeObject, 'wizard.enabled') || nodeObject.wizard === true))
 
     if (lastWizardStep) {
       prevWizardStep = getPrevStepToShow(wizardTemplate, lastWizardStep)
@@ -306,7 +388,6 @@ export const initWizard = (template, project, incompleteWizard, isReadOptimizedM
     currentWizardStep,
     prevWizardStep,
     isWizardMode,
-    previousStepVisibility,
     hasDependantFields: wizardTemplate.__wizard.dependantFields.length > 0
   }
 }
@@ -321,18 +402,18 @@ export const initWizard = (template, project, incompleteWizard, isReadOptimizedM
 const sign = (x) => ((x > 0) - (x < 0)) || +x
 
 /**
- * Return direction between two steps
+ * Return direction between two nodes
  *
- * @param {Object} step1 step
- * @param {Object} step2 step
+ * @param {Object} node1 node
+ * @param {Object} node2 node
  *
- * @returns {String} direction between two steps
+ * @returns {String} direction between two nodes
  */
-const getDirForSteps = (step1, step2) => {
-  const optionSign = sign(step2.optionIndex - step1.optionIndex)
-  const questionSign = sign(step2.questionIndex - step1.questionIndex)
-  const subSectionSign = sign(step2.subSectionIndex - step1.subSectionIndex)
-  const sectionSign = sign(step2.sectionIndex - step1.sectionIndex)
+const getDirForNodes = (node1, node2) => {
+  const optionSign = sign(node2.optionIndex - node1.optionIndex)
+  const questionSign = sign(node2.questionIndex - node1.questionIndex)
+  const subSectionSign = sign(node2.subSectionIndex - node1.subSectionIndex)
+  const sectionSign = sign(node2.sectionIndex - node1.sectionIndex)
 
   const dir = sectionSign || subSectionSign || questionSign || optionSign
 
@@ -350,40 +431,47 @@ const getDirForSteps = (step1, step2) => {
  */
 const getStepByDir = (template, currentStep, dir) => {
   // get the sibling of the current step if possible
-  let dirStep = getSiblingStepByDir(template, currentStep, dir)
+  // as per current design a sibling node of the step is always also a step
+  let siblingStep = getSiblingNodeByDir(template, currentStep, dir)
 
   // if there is no sibling
   // checking siblings of parent levels
-  let tempStep = currentStep
-  while (!dirStep && (tempStep = getParentStep(tempStep))) {
-    const parentStepObject = getStepObject(template, tempStep)
+  let tempNode = currentStep
+  while (!siblingStep && (tempNode = getParentNode(tempNode))) {
+    const parentNodeObject = getNodeObject(template, tempNode)
 
-    if (_.get(parentStepObject, '__wizard.isStep')) {
-      dirStep = getSiblingStepByDir(template, tempStep, dir)
+    if (_.get(parentNodeObject, '__wizard.isStep')) {
+      siblingStep = getSiblingNodeByDir(template, tempNode, dir)
     }
   }
 
   // no matter where we got step: between the sibling of the current step
   // or between siblings of the parent levels
   // try to find the most inner step inside the possible step
-  if (dirStep) {
-    let tempStep = dirStep
+  if (siblingStep) {
+    let tempNode = siblingStep
 
-    while (_.get(getStepObject(template, tempStep), 'wizard.enabled')) {
-      const childrenSteps = getStepChildren(template, tempStep)
+    while (_.get(getNodeObject(template, tempNode), 'wizard.enabled')) {
+      const childrenNodes = getNodeChildren(template, tempNode)
 
-      const childStepIndex = dir === STEP_DIR.NEXT ? 0 : childrenSteps.length - 1
+      const childStepIndex = dir === NODE_DIR.NEXT ? 0 : childrenNodes.length - 1
 
-      if (childrenSteps[childStepIndex]) {
-        tempStep = childrenSteps[childStepIndex]
+      if (childrenNodes[childStepIndex]) {
+        tempNode = childrenNodes[childStepIndex]
       }
     }
 
-    return tempStep
+    return tempNode
   }
 
   return null
 }
+
+/**
+ * Check if a node object has visible sub-nodes
+ */
+const checkHasVisibleQuestions = (nodeObject) => (
+  !nodeObject.questions || nodeObject.questions.some(q => !_.get(q, '__wizard.hiddenByCondition')))
 
 /**
  * Returns next step which can be shown in desired direction inside template
@@ -397,16 +485,16 @@ const getStepByDir = (template, currentStep, dir) => {
  *
  * @returns {Object} next step which can be shown in direction
  */
-const getStepToShowByDir = (template, currentStep, dir) => {
-  let tempStep = currentStep
-  let tempStepObject
+export const getStepToShowByDir = (template, currentStep, dir) => {
+  let tempNode = currentStep
+  let tempNodeObject
 
   do {
-    tempStep = getStepByDir(template, tempStep, dir)
-    tempStepObject = tempStep && getStepObject(template, tempStep)
-  } while (tempStepObject && _.get(tempStepObject, '__wizard.hiddenByCondition'))
+    tempNode = getStepByDir(template, tempNode, dir)
+    tempNodeObject = tempNode && getNodeObject(template, tempNode)
+  } while (tempNodeObject && (_.get(tempNodeObject, '__wizard.hiddenByCondition') || !checkHasVisibleQuestions(tempNodeObject)))
 
-  return tempStep
+  return tempNode
 }
 
 /**
@@ -418,7 +506,7 @@ const getStepToShowByDir = (template, currentStep, dir) => {
  * @returns {Object} next step which can be shown in direction
  */
 export const getNextStepToShow = (template, currentStep) => (
-  getStepToShowByDir(template, currentStep, STEP_DIR.NEXT)
+  getStepToShowByDir(template, currentStep, NODE_DIR.NEXT)
 )
 
 /**
@@ -430,81 +518,57 @@ export const getNextStepToShow = (template, currentStep) => (
  * @returns {Object} next step which can be shown in direction
  */
 export const getPrevStepToShow = (template, currentStep) => (
-  getStepToShowByDir(template, currentStep, STEP_DIR.PREV)
+  getStepToShowByDir(template, currentStep, NODE_DIR.PREV)
 )
 
 
 /**
- * Returns sibling step in desired direction inside template
+ * Returns sibling node in desired direction inside template
  *
  * @param {Object} template template
- * @param {Object} step     current step
+ * @param {Object} node     current node
  * @param {String} dir      direction
  *
  * @returns {Object} sibling step in direction
  */
-const getSiblingStepByDir = (template, step, dir) => {
-  const level = getStepLevel(step)
-  let siblingStep = null
+const getSiblingNodeByDir = (template, node, dir) => {
+  const level = getNodeLevel(node)
+  let siblingNode = null
 
   switch(level) {
   case LEVEL.OPTION:
-    siblingStep = {
-      ...step,
-      optionIndex: step.optionIndex + dir
+    siblingNode = {
+      ...node,
+      optionIndex: node.optionIndex + dir
     }
     break
   case LEVEL.QUESTION:
-    siblingStep = {
-      ...step,
-      questionIndex: step.questionIndex + dir
+    siblingNode = {
+      ...node,
+      questionIndex: node.questionIndex + dir
     }
     break
   case LEVEL.SUB_SECTION:
-    siblingStep = {
-      ...step,
-      subSectionIndex: step.subSectionIndex + dir
+    siblingNode = {
+      ...node,
+      subSectionIndex: node.subSectionIndex + dir
     }
     break
   case LEVEL.SECTION:
-    siblingStep = {
-      ...step,
-      sectionIndex: step.sectionIndex + dir
+    siblingNode = {
+      ...node,
+      sectionIndex: node.sectionIndex + dir
     }
     break
-  default: siblingStep = null
+  default: siblingNode = null
   }
 
-  if (siblingStep && getStepObject(template, siblingStep, level)) {
-    return siblingStep
+  if (siblingNode && getNodeObject(template, siblingNode, level)) {
+    return siblingNode
   } else {
     return null
   }
 }
-
-/**
- * Returns next sibling step inside template
- *
- * @param {Object} template template
- * @param {Object} step     current step
- *
- * @returns {Object} next sibling step
- */
-const getNextSiblingStep = (template, step) => (
-  getSiblingStepByDir(template, step, STEP_DIR.NEXT)
-)
-
-/**
- * Returns previous sibling step inside template
- *
- * @param {Object} template template
- * @param {Object} step     current step
- *
- * @returns {Object} previous sibling step
- */
-const getPrevSiblingStep = (template, step) => (
-  getSiblingStepByDir(template, step, STEP_DIR.PREV)
-)
 
 /**
  * Update option in template without template mutation
@@ -605,20 +669,20 @@ const updateSection = (template, sectionIndex, updateRule) => {
 }
 
 /**
- * Update any kind of step sections, subSection, question or option without template mutation.
+ * Update any kind of node sections, subSection, question or option without template mutation.
  *
- * If level is not defined, it automatically detects the level of step we are updating.
- * If level is defined, it forces to update step on that level.
+ * If level is not defined, it automatically detects the level of node we are updating.
+ * If level is defined, it forces to update node on that level.
  *
  * @param {Object} template   template
- * @param {Object} step       section index
+ * @param {Object} node       section index
  * @param {Object} updateRule rule acceptable by update function
- * @param {String} [level]    step level
+ * @param {String} [level]    node level
  *
  * @returns {Object} updated template
  */
-const updateStepObject = (template, step, updateRule, level) => {
-  const { sectionIndex, subSectionIndex, questionIndex, optionIndex } = step
+const updateNodeObject = (template, node, updateRule, level) => {
+  const { sectionIndex, subSectionIndex, questionIndex, optionIndex } = node
   let updatedTemplate = template
 
   switch (level) {
@@ -639,10 +703,6 @@ const updateStepObject = (template, step, updateRule, level) => {
       updatedTemplate = updateOption(template, sectionIndex, subSectionIndex, questionIndex, optionIndex, updateRule)
     } else if (questionIndex !== -1) {
       updatedTemplate = updateQuestion(template, sectionIndex, subSectionIndex, questionIndex, updateRule)
-      // if we are updating first question of a sub section, update the sub section as well
-      if (questionIndex === 0) {
-        updatedTemplate = updateSubSection(updatedTemplate, sectionIndex, subSectionIndex, updateRule)
-      }
     } else if (subSectionIndex !== -1) {
       updatedTemplate = updateSubSection(template, sectionIndex, subSectionIndex, updateRule)
     } else if (sectionIndex !== -1) {
@@ -654,17 +714,17 @@ const updateStepObject = (template, step, updateRule, level) => {
 }
 
 /**
- * Get step object from template using step (step indexes)
+ * Get node object from template using node (node indexes)
  *
- * If level is not defined, it automatically detects the level of step object to return.
- * If level is defined, it forces to return step object on that level
+ * If level is not defined, it automatically detects the level of node object to return.
+ * If level is defined, it forces to return node object on that level
  *
  * @param {Object} template template
- * @param {Object} step     step
- * @param {String} [level]  step level
+ * @param {Object} node     node
+ * @param {String} [level]  node level
  */
-export const getStepObject = (template, step, level) => {
-  const { section, subSection, question, option } = getStepAllLevelsObjects(template, step)
+export const getNodeObject = (template, node, level) => {
+  const { section, subSection, question, option } = getNodeAllLevelsObjects(template, node)
 
   switch (level) {
   case LEVEL.OPTION: return option
@@ -677,15 +737,15 @@ export const getStepObject = (template, step, level) => {
 }
 
 /**
- * Get step objects for all level of step.
+ * Get node objects for all level of node.
  *
  * @param {Object} template template
- * @param {Object} step     step
+ * @param {Object} node     node
  *
- * @returns {{section: Object, subSection: Object, question: Object, option: Object}} step objects for all levels of step
+ * @returns {{section: Object, subSection: Object, question: Object, option: Object}} node objects for all levels of node
  */
-const getStepAllLevelsObjects = (template, step) => {
-  const { sectionIndex, subSectionIndex, questionIndex, optionIndex } = step
+const getNodeAllLevelsObjects = (template, node) => {
+  const { sectionIndex, subSectionIndex, questionIndex, optionIndex } = node
   const section = sectionIndex !== -1 ? template.sections[sectionIndex] : null
   const subSection = section && subSectionIndex !== -1 ? section.subSections[subSectionIndex] : null
   const question = subSection && subSection.questions && questionIndex !== -1 ? subSection.questions[questionIndex] : null
@@ -700,19 +760,20 @@ const getStepAllLevelsObjects = (template, step) => {
 }
 
 /**
- * Check if the step is a step on a certain level
+ * Check if the node is a node on a certain level
  *
- * @param {Object} step  step
- * @param {String} level step level
+ * @param {Object} node  node
+ * @param {String} level node level
  *
- * @returns {Boolean} true if step has a certain level
+ * @returns {Boolean} true if node has a certain level
  */
-const isStepLevel = (step, level) => {
-  if (!step) {
+const isNodeLevel = (node, level) => {
+  if (!node) {
+    console.error('Node has to be an object.')
     return false
   }
 
-  const { sectionIndex, subSectionIndex, questionIndex, optionIndex } = step
+  const { sectionIndex, subSectionIndex, questionIndex, optionIndex } = node
 
   switch (level) {
   case LEVEL.OPTION: return optionIndex !== -1 && questionIndex !== -1 && subSectionIndex !== -1 && sectionIndex !== -1
@@ -724,58 +785,58 @@ const isStepLevel = (step, level) => {
 }
 
 /**
- * Get the step level
+ * Get the node level
  *
- * @param {Object} step step
+ * @param {Object} node node
  *
- * @returns {String} step level
+ * @returns {String} node level
  */
-const getStepLevel = (step) => {
-  if (isStepLevel(step, LEVEL.OPTION)) {
+const getNodeLevel = (node) => {
+  if (isNodeLevel(node, LEVEL.OPTION)) {
     return LEVEL.OPTION
   }
 
-  if (isStepLevel(step, LEVEL.QUESTION)) {
+  if (isNodeLevel(node, LEVEL.QUESTION)) {
     return LEVEL.QUESTION
   }
 
-  if (isStepLevel(step, LEVEL.SUB_SECTION)) {
+  if (isNodeLevel(node, LEVEL.SUB_SECTION)) {
     return LEVEL.SUB_SECTION
   }
 
-  if (isStepLevel(step, LEVEL.SECTION)) {
+  if (isNodeLevel(node, LEVEL.SECTION)) {
     return LEVEL.SECTION
   }
 
-  return null
+  return LEVEL.UNDEFINED
 }
 
 /**
- * Get parent step
+ * Get parent node
  *
- * @param {Object} step step
+ * @param {Object} node node
  *
- * @returns {Object} parent step
+ * @returns {Object} parent node
  */
-const getParentStep = (step) => {
-  if (step.optionIndex !== -1) {
+const getParentNode = (node) => {
+  if (node.optionIndex !== -1) {
     return {
-      ...step,
+      ...node,
       optionIndex: -1
     }
-  } else if (step.questionIndex !== -1) {
+  } else if (node.questionIndex !== -1) {
     return {
-      ...step,
+      ...node,
       questionIndex: -1
     }
-  } else if (step.subSectionIndex !== -1) {
+  } else if (node.subSectionIndex !== -1) {
     return {
-      ...step,
+      ...node,
       subSectionIndex: -1
     }
-  } else if (step.sectionIndex !== -1) {
+  } else if (node.sectionIndex !== -1) {
     return {
-      ...step,
+      ...node,
       sectionIndex: -1
     }
   } else {
@@ -784,38 +845,38 @@ const getParentStep = (step) => {
 }
 
 /**
- * Get step children
+ * Get node children
  *
  * @param {Object} template template
- * @param {Object} step     step
+ * @param {Object} node     node
  *
- * @returns {Array} list of children steps
+ * @returns {Array} list of children nodes
  */
-const getStepChildren = (template, step) => {
-  const stepObject = getStepObject(template, step)
+const getNodeChildren = (template, node) => {
+  const nodeObject = getNodeObject(template, node)
 
-  return (stepObject.options || stepObject.questions || stepObject.subSections || stepObject.sections || []).map((stepObject) => (
-    _.get(stepObject, '__wizard.step')
+  return (nodeObject.options || nodeObject.questions || nodeObject.subSections || nodeObject.sections || []).map((nodeObject) => (
+    _.get(nodeObject, '__wizard.node')
   ))
 }
 
 /**
  * Update questions in template using question conditions and data
  *
- * @param {Object} template        template
- * @param {Object} project data to evaluate question conditions
+ * @param {Object} template template
+ * @param {Object} project  data to evaluate question conditions
  *
  * @returns {Object} updated template
  */
-export const updateStepsByConditions = (template, project) => {
+export const updateNodesByConditions = (template, project) => {
   let updatedTemplate = template
-  let hidedSomeSteps = false
-  let updatedSomeSteps = false
+  let hidedSomeNodes = false
+  let updatedSomeNodes = false
 
-  let flatProjectData = flatten(removeValuesOfHiddenSteps(updatedTemplate, project), { safe: true })
-  let { stepToUpdate, hiddenByCondition, disabledByCondition } = getStepWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData)
-  updatedSomeSteps = !!stepToUpdate
-  while (stepToUpdate) {
+  let flatProjectData = flatten(removeValuesOfHiddenNodes(updatedTemplate, project), { safe: true })
+  let { nodeToUpdate, hiddenByCondition, disabledByCondition, selectedByCondition } = getNodeWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData)
+  updatedSomeNodes = !!nodeToUpdate
+  while (nodeToUpdate) {
     const updateRule = {
       __wizard: {}
     }
@@ -828,30 +889,34 @@ export const updateStepsByConditions = (template, project) => {
       updateRule.__wizard.disabledByCondition = { $set: disabledByCondition }
     }
 
-    updatedTemplate = updateStepObject(updatedTemplate, stepToUpdate, updateRule)
-    hidedSomeSteps = hidedSomeSteps || hiddenByCondition
+    if (!_.isUndefined(selectedByCondition)) {
+      updateRule.__wizard.selectedByCondition = { $set: selectedByCondition }
+    }
 
-    // now get the next step
-    flatProjectData = flatten(removeValuesOfHiddenSteps(updatedTemplate, project), { safe: true })
-    const prevStep = stepToUpdate
-    !({ stepToUpdate, hiddenByCondition, disabledByCondition } = getStepWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData))
+    updatedTemplate = updateNodeObject(updatedTemplate, nodeToUpdate, updateRule)
+    hidedSomeNodes = hidedSomeNodes || hiddenByCondition
+
+    // now get the next node
+    flatProjectData = flatten(removeValuesOfHiddenNodes(updatedTemplate, project), { safe: true })
+    const prevNode = nodeToUpdate
+    !({ nodeToUpdate, hiddenByCondition, disabledByCondition, selectedByCondition } = getNodeWhichMustBeUpdatedByCondition(updatedTemplate, flatProjectData))
     // as conditions in template or some errors in code could potentially lead to infinite loop at this point
-    // we check that we are not trying to update the same step again
+    // we check that we are not trying to update the same node again
     // and in case of a loop we stop doing anything without any changes, as it's better than hang user's browser
-    if (stepToUpdate && getDirForSteps(prevStep, stepToUpdate) === STEP_DIR.SAME) {
-      console.error(`Infinite loop during updating step by condition ${JSON.stringify(stepToUpdate)}.`, updatedTemplate)
+    if (nodeToUpdate && getDirForNodes(prevNode, nodeToUpdate) === NODE_DIR.SAME) {
+      console.error(`Infinite loop during updating node by condition ${JSON.stringify(nodeToUpdate)}.`, updatedTemplate)
       return {
         template,
-        hidedSomeSteps: false,
-        updatedSomeSteps: false,
+        hidedSomeNodes: false,
+        updatedSomeNodes: false,
       }
     }
   }
 
   return {
     updatedTemplate,
-    hidedSomeSteps,
-    updatedSomeSteps,
+    hidedSomeNodes,
+    updatedSomeNodes,
   }
 }
 
@@ -863,35 +928,35 @@ export const updateStepsByConditions = (template, project) => {
  *
  * @returns {Object} project data without data of hidden fields
  */
-export const removeValuesOfHiddenSteps = (template, project) => {
+export const removeValuesOfHiddenNodes = (template, project) => {
   let updatedProject = project
 
-  forEachStep(template, (stepObject, step) => {
-    const level = getStepLevel(step)
+  forEachNode(template, (nodeObject, node) => {
+    const level = getNodeLevel(node)
 
     switch(level) {
     // if some question is hidden, we remove it's value from the project data
     case LEVEL.QUESTION:
-      if (_.get(stepObject, '__wizard.hiddenByCondition') && _.get(updatedProject, stepObject.fieldName)) {
+      if (_.get(nodeObject, '__wizard.hiddenByCondition') && _.get(updatedProject, nodeObject.fieldName)) {
         updatedProject = update(updatedProject, unflatten({
-          [stepObject.fieldName]: { $set: undefined }
+          [nodeObject.fieldName]: { $set: undefined }
         }))
       }
       break
 
     // if some option is hidden, we remove it's value from the list of values of the parent question
     case LEVEL.OPTION: {
-      if (_.get(stepObject, 'stepObject.__wizard.hiddenByCondition')) {
-        const questionStep = {...step, optionIndex: -1}
-        const questionStepObject = getStepObject(template, questionStep)
-        const questionValue = _.get(updatedProject, questionStepObject.fieldName)
+      if (_.get(nodeObject, 'nodeObject.__wizard.hiddenByCondition')) {
+        const questionNode = {...node, optionIndex: -1}
+        const questionNodeObject = getNodeObject(template, questionNode)
+        const questionValue = _.get(updatedProject, questionNodeObject.fieldName)
 
         if (questionValue && _.isArray(questionValue)) {
-          const optionValueIndex = questionValue.indexOf(stepObject.value)
+          const optionValueIndex = questionValue.indexOf(nodeObject.value)
 
           if (optionValueIndex > - 1) {
             updatedProject = update(updatedProject, unflatten({
-              [questionStepObject.fieldName]: { $splice: [[optionValueIndex, 1]] }
+              [questionNodeObject.fieldName]: { $splice: [[optionValueIndex, 1]] }
             }))
           }
         }
@@ -905,384 +970,51 @@ export const removeValuesOfHiddenSteps = (template, project) => {
 }
 
 /**
- * Returns first found step (only one) which has to be updated by condition
+ * Returns first found node (only one) which has to be updated by condition
  *
  * @param {Object} template        template
  * @param {Object} flatProjectData project data (flat)
  *
- * @returns {Object} step
+ * @returns {Object} node
  */
-const getStepWhichMustBeUpdatedByCondition = (template, flatProjectData) => {
+const getNodeWhichMustBeUpdatedByCondition = (template, flatProjectData) => {
   const result = {
-    stepToUpdate: null
+    nodeToUpdate: null
   }
 
-  forEachStep(template, (stepObject, step) => {
-    if (stepObject.condition) {
-      const hiddenByCondition = !evaluate(stepObject.condition, flatProjectData)
+  forEachNode(template, (nodeObject, node) => {
+    if (nodeObject.condition) {
+      const hiddenByCondition = !evaluate(nodeObject.condition, flatProjectData)
 
       // only update if the condition result has changed
-      if (hiddenByCondition !== stepObject.__wizard.hiddenByCondition) {
-        result.stepToUpdate = step
+      if (hiddenByCondition !== nodeObject.__wizard.hiddenByCondition) {
+        result.nodeToUpdate = node
         result.hiddenByCondition = hiddenByCondition
       }
     }
 
-    if (stepObject.disableCondition) {
-      const disabledByCondition = evaluate(stepObject.disableCondition, flatProjectData)
+    if (nodeObject.disableCondition) {
+      const disabledByCondition = evaluate(nodeObject.disableCondition, flatProjectData)
 
       // only update if the condition result has changed
-      if (disabledByCondition !== stepObject.__wizard.disabledByCondition) {
-        result.stepToUpdate = step
+      if (disabledByCondition !== nodeObject.__wizard.disabledByCondition) {
+        result.nodeToUpdate = node
         result.disabledByCondition = disabledByCondition
       }
     }
 
-    return !result.stepToUpdate
+    if (nodeObject.autoSelectCondition) {
+      const selectedByCondition = evaluate(nodeObject.autoSelectCondition, flatProjectData)
+
+      // only update if the condition result has changed
+      if (selectedByCondition !== nodeObject.__wizard.selectedByCondition) {
+        result.nodeToUpdate = node
+        result.selectedByCondition = selectedByCondition
+      }
+    }
+
+    return !result.nodeToUpdate
   })
 
   return result
-}
-
-/**
- * Finalize/unfinalize step
- *
- * When we've done with step we want to finalize it as per previousStepVisibility hide or make it read-only.
- * This method does it. It also can the reverse operation if `value` is defined as `false`
- *
- * @param {Object}  template template
- * @param {Object}  step     step
- * @param {Boolean} value
- *
- * @returns {Object} updated template
- */
-const finalizeStep = (template, step, value = true) => {
-  let updatedTemplate = template
-
-  const previousStepVisibility = getPreviousStepVisibility(template)
-  const stepObject = getStepObject(updatedTemplate, step)
-
-  const updateRules = {
-    [PREVIOUS_STEP_VISIBILITY.READ_ONLY]: {
-      __wizard: {
-        readOnly: { $set: value }
-      }
-    },
-    [PREVIOUS_STEP_VISIBILITY.NONE]: {
-      __wizard: {
-        hidden: { $set: value }
-      }
-    },
-  }
-
-  const updateRule = updateRules[previousStepVisibility]
-
-  if (updateRule) {
-    updatedTemplate = updateStepObject(updatedTemplate, step, updateRule)
-
-    // if the children of current step are not in wizard mode and we are making step read-only
-    // we also have make such children read-only
-    if (previousStepVisibility === PREVIOUS_STEP_VISIBILITY.READ_ONLY && !_.get(stepObject, 'wizard.enabled')) {
-      const stepChildren = getStepChildren(updatedTemplate, step)
-
-      stepChildren.forEach((stepChild) => {
-        updatedTemplate = updateStepObject(updatedTemplate, stepChild, updateRule)
-      })
-    }
-  }
-
-  return updatedTemplate
-}
-
-/**
- * Update template so the next step in defined direction is shown
- *
- * @param {Object} template    template
- * @param {Object} currentStep current step
- * @param {String} dir         direction
- *
- * @returns {Object} updated template
- */
-export const showStepByDir = (template, currentStep, dir) => {
-  let updatedTemplate = template
-  let tempStep
-
-  // if we are moving to the next step, we have to finalize previous one
-  if (dir === STEP_DIR.NEXT) {
-    // finalize step on it's level all parent levels of the step
-    // as long as step is the last on the current level
-    tempStep = currentStep
-    do {
-      updatedTemplate = finalizeStep(updatedTemplate, tempStep)
-
-      // if step is the last on the current level, we also finalize parent level step
-      if (!getNextSiblingStep(updatedTemplate, tempStep, dir)) {
-        tempStep = getParentStep(tempStep)
-      } else {
-        tempStep = null
-      }
-    } while (tempStep)
-
-  // if we are moving to the previous step, we just have to hide current step
-  } else {
-    tempStep = currentStep
-
-    do {
-      updatedTemplate = updateStepObject(updatedTemplate, tempStep, {
-        __wizard: {
-          hidden: { $set: true }
-        }
-      })
-
-      // if step is the first on the current level, we also hide parent level step
-      if (!getPrevSiblingStep(updatedTemplate, tempStep, dir)) {
-        tempStep = getParentStep(tempStep)
-      } else {
-        tempStep = null
-      }
-    } while (tempStep)
-  }
-
-  const nextStep = getStepToShowByDir(updatedTemplate, currentStep, dir)
-
-  if (!nextStep) {
-    console.warn('showNextStep method is called when there is no next step, probably something is wrong.')
-  }
-
-  // make visible current step and all it's parents
-  tempStep = nextStep
-  do {
-    updatedTemplate = updateStepObject(updatedTemplate, tempStep, {
-      __wizard: {
-        hidden: { $set: false }
-      }
-    })
-    tempStep = getParentStep(tempStep)
-  } while (tempStep)
-
-  if (dir === STEP_DIR.PREV && _.get(updatedTemplate, 'wizard.previousStepVisibility') === PREVIOUS_STEP_VISIBILITY.READ_ONLY) {
-    updatedTemplate = finalizeStep(updatedTemplate, nextStep, false)
-  }
-
-  return {
-    updatedTemplate,
-    nextStep,
-  }
-}
-
-/**
- * Update template so we show the `destinationStep` instead of `currentStep`
- *
- * @param {Object} template        template
- * @param {Object} currentStep     current step
- * @param {Object} destinationStep destinationStep
- *
- * @returns {Object} updated template
- */
-export const rewindToStep = (template, currentStep, destinationStep) => {
-  const dir = getDirForSteps(currentStep, destinationStep)
-  let tempStep = currentStep
-  let tempDir = dir
-  let updatedTemplate = template
-
-  if (dir === STEP_DIR.SAME) {
-    return updatedTemplate
-  }
-
-  while (tempDir === dir) {
-    const nextStepData = showStepByDir(updatedTemplate, tempStep, dir)
-
-    updatedTemplate = nextStepData.updatedTemplate
-    tempStep = nextStepData.nextStep
-    tempDir = getDirForSteps(tempStep, destinationStep)
-  }
-
-  return updatedTemplate
-}
-
-/**
- * Determines if step has dependant steps
- *
- * @param {Object} template template
- * @param {Object} step     template
- *
- * @returns {Boolean} true if step has any dependant steps
- */
-export const isStepHasDependencies = (template, step) => {
-  const stepObject = getStepObject(template, step)
-
-  return _.includes(_.get(template, '__wizard.dependantFields', []), stepObject.fieldName)
-}
-
-/**
- * Check if step is defined as a step in wizard.
- *
- * @param {Object} template template
- * @param {Object} step     step
- *
- * @returns {Boolean} true if step is defined as a step in wizard
- */
-export const findRealStep = (template, step) => {
-  let tempStep = step
-  let tempStepObject = getStepObject(template, tempStep)
-
-  while (tempStep && !_.get(tempStepObject, '__wizard.isStep')) {
-    tempStep = getParentStep(tempStep)
-    tempStepObject = getStepObject(template, tempStep)
-  }
-
-  return tempStep
-}
-
-/**
- * Update template so the `step` is showed as editable (non read-only)
- *
- * @param {Object} template template
- * @param {Object} step     step
- *
- * @returns {Object} updated template
- */
-export const makeStepEditable = (template, step) => {
-  let updatedTemplate = template
-
-  updatedTemplate = updateStepObject(updatedTemplate, step, {
-    __wizard: {
-      readOnly: { $set: false },
-      editReadOnly: { $set: true }
-    }
-  })
-
-  return updatedTemplate
-}
-
-
-/**
- * Update template so the `step` is showed as read-only
- *
- * @param {Object} template template
- * @param {Object} step     step
- *
- * @returns {Object} updated template
- */
-export const makeStepReadonly = (template, step) => {
-  let updatedTemplate = template
-
-  updatedTemplate = updateStepObject(updatedTemplate, step, {
-    __wizard: {
-      readOnly: { $set: true },
-      editReadOnly: { $set: false }
-    }
-  })
-
-  return updatedTemplate
-}
-
-/**
- * Finds next either sibling or ancestor step
- *
- * @param {Object} template template
- * @param {Object} step     step
- *
- * @returns {Object} step
- */
-const getNextSiblingOrAncestorStep = (template, step) => {
-  const sibling = getNextSiblingStep(template, step)
-
-  if (sibling) {
-    return sibling
-  }
-
-  const children = getStepChildren(template, step)
-
-  if (children.length > 0) {
-    return children[0]
-  }
-
-  return null
-}
-
-/**
- * Adds data which manged by the step to the snapshot
- *
- * @param {Object} snapshot snapshot
- * @param {Object} template template
- * @param {Object} step      tep
- * @param {Object} flatData flat data
- */
-const saveStepDataToSnapshot = (snapshot, template, step, flatData) => {
-  const stepObject = getStepObject(template, step)
-
-  // is some step is not a field, don't save anything
-  if (!stepObject.fieldName) {
-    return
-  }
-
-  snapshot[stepObject.fieldName] = flatData[stepObject.fieldName]
-
-  // as some types of subSections has multiple values we have to save them too
-  const refCodeFieldName = 'details.utm.code'
-  const businessUnitFieldName = 'details.businessUnit'
-  const costCentreFieldName = 'details.costCentre'
-
-  switch(stepObject.type) {
-  case 'project-name':
-    snapshot[refCodeFieldName] = flatData[refCodeFieldName]
-    break
-  case 'project-name-advanced':
-    snapshot[refCodeFieldName] = flatData[refCodeFieldName]
-    snapshot[businessUnitFieldName] = flatData[businessUnitFieldName]
-    snapshot[costCentreFieldName] = flatData[costCentreFieldName]
-    break
-  default:break
-  }
-}
-
-/**
- * Adds snapshot of data of the provided "real step"
- *
- * @param {Array}  snapshotsStorage array to store snapshots
- * @param {Object} step             step
- * @param {Object} template         template
- * @param {Object} flatData         flat data
- */
-export const pushStepDataSnapshot = (snapshotsStorage, step, template, flatData) => {
-  const snapshot = {}
-
-  saveStepDataToSnapshot(snapshot, template, step, flatData)
-
-  const children = getStepChildren(template, step)
-  if (children.length > 0 && !isStepLevel(children[0], LEVEL.OPTION)) {
-    let tempStep = children[0]
-
-    do {
-      saveStepDataToSnapshot(snapshot, template, tempStep, flatData)
-
-      tempStep = getNextSiblingOrAncestorStep(template, tempStep)
-    } while (tempStep)
-  }
-
-  snapshotsStorage.push({
-    step,
-    snapshot,
-  })
-}
-
-/**
- * Pop snapshot of data of the provided "real step"
- *
- * It removes data form `snapshotsStorage` and returns it
- *
- * @param {Array}  snapshotsStorage array to store snapshots
- * @param {Object} step             step
- * @param {Object} template         template
- * @param {Object} flatData         flat data
- *
- * @returns {Object} snapshot
- */
-export const popStepDataSnapshot = (snapshotsStorage, step) => {
-  const savedDataIndex = snapshotsStorage.findIndex((item) => _.isEqual(item.step, step))
-  const savedData = savedDataIndex !== -1 ? snapshotsStorage[savedDataIndex] : null
-  snapshotsStorage.splice(savedDataIndex, 1)
-
-  return savedData ? savedData.snapshot : null
 }

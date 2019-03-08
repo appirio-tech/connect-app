@@ -76,6 +76,7 @@ const ProjectStages = ({
   phasesNonDirty,
   phasesStates,
   productTemplates,
+  productCategories,
   productsTimelines,
   currentMemberRole,
   isProcessing,
@@ -102,6 +103,7 @@ const ProjectStages = ({
           key={phase.id}
           phaseState={phasesStates[phase.id]}
           productTemplates={productTemplates}
+          productCategories={productCategories}
           currentMemberRole={currentMemberRole}
           isProcessing={isProcessing}
           isSuperUser={isSuperUser}
@@ -136,6 +138,7 @@ ProjectStages.defaultProps = {
 ProjectStages.propTypes = {
   project: PT.object.isRequired,
   productTemplates: PT.array.isRequired,
+  productCategories: PT.array.isRequired,
   productsTimelines: PT.object,
   currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,

@@ -39,7 +39,6 @@ const SelectProjectTemplate = ({
 
   return (
     <div>
-      <div className="header headerSelectProjectTemplate" />
       <div className="SelectProjectTemplate">
         <h1> { projectType.displayName } projects </h1>
         <h2>{ projectType.question }</h2>

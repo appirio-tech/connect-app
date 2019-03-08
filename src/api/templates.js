@@ -5,6 +5,9 @@ import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
 import { TC_API_URL } from '../config/constants'
 
+const projectTemplates = require('./templates-json/project-templates.json')
+const productTemplates = require('./templates-json/product-templates.json')
+
 /**
  * Get projects metadata (projectTemplates, productTemplates and projectTypes)
  *
@@ -12,6 +15,26 @@ import { TC_API_URL } from '../config/constants'
  */
 export function getProjectsMetadata() {
   return axios.get(`${TC_API_URL}/v4/projects/metadata`)
+    .catch((err) => {
+      // temporary mock data if Project Service is unavailable
+      if (err.message === 'Network Error') {
+        return {
+          data: {
+            result: {
+              content: {
+                projectTemplates,
+                productTemplates,
+                milestoneTemplates: [],
+                projectTypes: [],
+                productCategories: [],
+              }
+            }
+          }
+        }
+      }
+
+      throw err
+    })
     .then(resp => _.get(resp.data, 'result.content', {}))
 }
 

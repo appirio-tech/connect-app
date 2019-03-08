@@ -159,7 +159,7 @@ describe('Evaluate: ', () => {
       result.should.equal(true)
     })
 
-    it('multiple spaces', () => {
+    xit('multiple spaces', () => {
       const expression = 'someArray  contains  (  b  -  a  )  *  2'
       const result = evaluate(expression, testData)
 
@@ -535,6 +535,12 @@ describe('Evaluate: ', () => {
     xit ('should parse literal constants like booleans', () => {
       const res = evaluate('true && true', testData)
       res.should.equal(true)
+    })
+
+    xit ('should treat unknown variables as undefined', () => {
+      const res = evaluate('unknownVariable', testData)
+
+      res.should.be.undefined
     })
   })
 

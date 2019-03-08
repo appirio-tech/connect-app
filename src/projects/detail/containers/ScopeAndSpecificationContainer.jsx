@@ -73,7 +73,7 @@ class SpecificationContainer extends Component {
   }
 
   render() {
-    const { project, projectNonDirty, currentMemberRole, isSuperUser, processing, template, allProductTemplates } = this.props
+    const { project, projectNonDirty, currentMemberRole, isSuperUser, processing, template, allProductTemplates, productCategories } = this.props
     const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
@@ -117,6 +117,7 @@ class SpecificationContainer extends Component {
             attachmentsStorePath={attachmentsStorePath}
             canManageAttachments={!!currentMemberRole}
             productTemplates={allProductTemplates}
+            productCategories={productCategories}
             showHidden
           />
         </TwoColsLayout.Content>
@@ -151,6 +152,7 @@ const mapStateToProps = ({projectState, loadUser, templates}) => {
         projectState.project
       )
     ) : [],
+    productCategories: templates.productCategories,
     allProductTemplates: productTemplates,
   }
 }
