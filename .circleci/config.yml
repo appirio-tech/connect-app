@@ -78,7 +78,7 @@ jobs:
             cp ./../buildscript/buildenv.sh .
             ./buildenv.sh -e PROD -b prod-connectapp-deployvar
             source buildenvvar
-            ./master_deploy.sh -d CFRONT -e PROD -c false
+            ./master_deploy.sh -d CFRONT -e PROD -c true
 
   deployDiscourseFree:
     docker:
