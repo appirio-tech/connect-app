@@ -536,6 +536,12 @@ describe('Evaluate: ', () => {
       const res = evaluate('true && true', testData)
       res.should.equal(true)
     })
+
+    xit ('should treat unknown variables as undefined', () => {
+      const res = evaluate('unknownVariable', testData)
+
+      res.should.be.undefined
+    })
   })
 
   describe('! operator', () => {
