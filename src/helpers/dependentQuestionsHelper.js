@@ -261,7 +261,7 @@ export function getFieldNamesFromExpression(expression) {
  * @example
  *   const expression = 'preparedCondition1 == 1'
  *   const preparedConditions = {
- *     preparedCondition1: '2 - 1'
+ *     preparedCondition1: '(2 - 1)'
  *   }
  *
  *   const output = populatePreparedConditions(expression, preparedConditions)
