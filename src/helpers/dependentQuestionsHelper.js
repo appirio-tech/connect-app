@@ -254,3 +254,26 @@ export function getFieldNamesFromExpression(expression) {
 
   return fieldNames
 }
+
+/**
+ * Replace prepared conditions inside expression
+ *
+ * @example
+ *   const expression = 'preparedCondition1 == 1'
+ *   const preparedConditions = {
+ *     preparedCondition1: '2 - 1'
+ *   }
+ *
+ *   const output = populatePreparedConditions(expression, preparedConditions)
+ *
+ *   // output => '(2 - 1) == 1'
+ *
+ * @param {String} expression         expression
+ * @param {Object} preparedConditions prepared conditions
+ *
+ * @returns {String} expression
+ */
+export function populatePreparedConditions(expression, preparedConditions) {
+  !preparedConditions // this is to avoid lint error - have to write implementation instead
+  return expression
+}

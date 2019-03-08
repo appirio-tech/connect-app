@@ -1,6 +1,6 @@
 /* eslint quotes: 0 */
 import chai from 'chai'
-import { evaluate } from './dependentQuestionsHelper'
+import { evaluate, populatePreparedConditions } from './dependentQuestionsHelper'
 
 chai.should()
 
@@ -17,6 +17,18 @@ const testData = {
   someArrayWithText: ['a', 'b', 'c'],
   f: false,
   t: true,
+  nestedObject: {
+    textProperty: 'test',
+    preparedCondition1: 'fake prepared condition property',
+    propertyWithObject: {
+      preparedCondition1: 'fake prepared condition property'
+    },
+  }
+}
+
+const preparedConditions = {
+  preparedCondition1: 'someArray hasLength 3',
+  preparedCondition2: `(someArrayWithText contains 'a') || (someArrayWithText contains 'b')`
 }
 
 describe('Evaluate: ', () => {
@@ -632,4 +644,41 @@ describe('Evaluate: ', () => {
     })
   })
 
+})
+
+describe('Replace prepared conditions: ', () => {
+  it('should replace single prepared condition', () => {
+    const expression = 'preparedCondition1'
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`(${preparedConditions.preparedCondition1})`)
+  })
+
+  it('should replace multiple prepared conditions', () => {
+    const expression = 'preparedCondition1 && preparedCondition2'
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`(${preparedConditions.preparedCondition1}) && (${preparedConditions.preparedCondition2})`)
+  })
+
+  it('should not replace prepared condition inside text literals', () => {
+    const expression = `someArray contains 'preparedCondition1' && (a == preparedCondition2)`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`someArray contains 'preparedCondition1' && (a == (${preparedConditions.preparedCondition2}))`)
+  })
+
+  it('should not replace prepared condition inside object properties level 1', () => {
+    const expression = `nestedObject.preparedCondition1 && a == preparedCondition2`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`nestedObject.preparedCondition1 && (a == (${preparedConditions.preparedCondition2}))`)
+  })
+
+  it('should not replace prepared condition inside object properties level 2', () => {
+    const expression = `nestedObject.propertyWithObject.preparedCondition1 && a == preparedCondition2`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`nestedObject.propertyWithObject.preparedCondition1 && (a == (${preparedConditions.preparedCondition2}))`)
+  })
 })
