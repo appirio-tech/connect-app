@@ -513,7 +513,7 @@ function getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditio
     }
     // return result
   })
-  console.log(priceKeys)
+  // console.log(priceKeys)
   const matchedBlocks = []
   _.forEach(priceKeys, priceKey => {
     // console.log(priceKey)
@@ -596,7 +596,7 @@ export function getProductEstimate(projectTemplate, projectData) {
 
     const baseBlocks = getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditions, flatProjectData)
     const addonBlocks = getFilteredBuildingBlocks(addonPriceConfig, buildingBlocks, preparedConditions, flatProjectData, true)
-    console.log(addonBlocks)
+    // console.log(addonBlocks)
     matchedBlocks = matchedBlocks.concat(baseBlocks, addonBlocks)
     // console.log(filterdBlocks)
     if (!matchedBlocks || matchedBlocks.length === 0) {
