@@ -96,8 +96,8 @@ class TopcoderManagementDialog extends React.Component {
 
   isSelectedMemberAlreadyInvited(invites = [], selectedMember) {
     return !!invites.find((invite) => (
-      invite.email && invite.email === selectedMember.label ||
-      invite.userId && this.resolveUserHandle(invite.userId) === selectedMember.label
+      (invite.email && invite.email === selectedMember.label) ||
+      (invite.userId && this.resolveUserHandle(invite.userId) === selectedMember.label)
     ))
   }
 
@@ -110,7 +110,7 @@ class TopcoderManagementDialog extends React.Component {
   resolveUserHandle(userId) {
     const { allMembers } = this.props
 
-    return _.find(allMembers, { userId }).handle
+    return _.get(_.find(allMembers, { userId }), 'handle')
   }
 
   showIndividualErrors(error) {
