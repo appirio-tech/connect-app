@@ -339,7 +339,7 @@ export const initWizard = (template, project, incompleteWizard) => {
     dependantFields: []
   }
 
-  const preparedConditions = wizardTemplate.preparedConditions;
+  const preparedConditions = wizardTemplate.preparedConditions
 
   // initialize wizard for each node
   forEachNode(wizardTemplate, (nodeObject, node) => {
@@ -353,7 +353,7 @@ export const initWizard = (template, project, incompleteWizard) => {
     if (nodeObject.autoSelectCondition) {
       nodeObject.autoSelectCondition = populatePreparedConditions(nodeObject.autoSelectCondition, preparedConditions)
     }
-    
+
     // keep node indexes for each node inside template
     nodeObject.__wizard = {
       node

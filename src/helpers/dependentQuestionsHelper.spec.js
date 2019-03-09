@@ -681,4 +681,18 @@ describe('Replace prepared conditions: ', () => {
 
     populatedExpression.should.equal(`nestedObject.propertyWithObject.PREPARED_CONDITION_1 && a == ${preparedConditions.PREPARED_CONDITION_2}`)
   })
+
+  it('should not replace prepared condition delimited by parentheses', () => {
+    const expression = `(PREPARED_CONDITION_2)`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`(${preparedConditions.PREPARED_CONDITION_2})`)
+  })
+
+  it('should not replace prepared condition delimited preceded by "!"', () => {
+    const expression = `!PREPARED_CONDITION_2`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`!${preparedConditions.PREPARED_CONDITION_2}`)
+  })
 })

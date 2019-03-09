@@ -236,6 +236,8 @@ export function evaluate(expression, data) {
  * Parses expression to find variable names in format of domain name:
  * string1.string2.string3 and so on. Minimum one dot "." is required.
  *
+ * TODO this should be improved as we can have variables without "." like "name" for project name
+ *
  * @param {String} expression expression
  *
  * @returns {Array} list of variable names
@@ -274,9 +276,13 @@ export function getFieldNamesFromExpression(expression) {
  * @returns {String} expression
  */
 export function populatePreparedConditions(expression, preparedConditions) {
-  // we assume here that the preparedConsition could only have spaces around it, only then it can be replaced
+  // in the Regexp we describe situations when preparedCondition can be replaced,
+  // instead of defining situations when it cannot be replaced
+  const allowedBefore = ['^', '\\s', '\\(', '!'].join('|')
+  const allowedAfter = ['$', '\\s', '\\)'].join('|')
+
   preparedConditions && _.forEach(preparedConditions, (value, key) => {
-    const regex = new RegExp('(?<=^| )' + key + '(?=$| )', 'g');
+    const regex = new RegExp(`(?<=${allowedBefore})` + key + `(?=${allowedAfter})`, 'g')
     expression = expression.replace(regex, value)
   })
 
