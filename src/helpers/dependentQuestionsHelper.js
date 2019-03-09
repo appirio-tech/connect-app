@@ -274,6 +274,11 @@ export function getFieldNamesFromExpression(expression) {
  * @returns {String} expression
  */
 export function populatePreparedConditions(expression, preparedConditions) {
-  !preparedConditions // this is to avoid lint error - have to write implementation instead
+  // we assume here that the preparedConsition could only have spaces around it, only then it can be replaced
+  preparedConditions && _.forEach(preparedConditions, (value, key) => {
+    const regex = new RegExp('(?<=^| )' + key + '(?=$| )', 'g');
+    expression = expression.replace(regex, value)
+  })
+
   return expression
 }

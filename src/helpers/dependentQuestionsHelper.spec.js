@@ -662,23 +662,23 @@ describe('Replace prepared conditions: ', () => {
   })
 
   it('should not replace prepared condition inside text literals', () => {
-    const expression = `someArray contains 'PREPARED_CONDITION_1' && (a == PREPARED_CONDITION_2)`
+    const expression = `someArray contains 'PREPARED_CONDITION_1' && a == PREPARED_CONDITION_2`
     const populatedExpression = populatePreparedConditions(expression, preparedConditions)
 
-    populatedExpression.should.equal(`someArray contains 'PREPARED_CONDITION_1' && (a == ${preparedConditions.PREPARED_CONDITION_2})`)
+    populatedExpression.should.equal(`someArray contains 'PREPARED_CONDITION_1' && a == ${preparedConditions.PREPARED_CONDITION_2}`)
   })
 
   it('should not replace prepared condition inside object properties level 1', () => {
     const expression = `nestedObject.PREPARED_CONDITION_1 && a == PREPARED_CONDITION_2`
     const populatedExpression = populatePreparedConditions(expression, preparedConditions)
 
-    populatedExpression.should.equal(`nestedObject.PREPARED_CONDITION_1 && (a == ${preparedConditions.PREPARED_CONDITION_2})`)
+    populatedExpression.should.equal(`nestedObject.PREPARED_CONDITION_1 && a == ${preparedConditions.PREPARED_CONDITION_2}`)
   })
 
   it('should not replace prepared condition inside object properties level 2', () => {
     const expression = `nestedObject.propertyWithObject.PREPARED_CONDITION_1 && a == PREPARED_CONDITION_2`
     const populatedExpression = populatePreparedConditions(expression, preparedConditions)
 
-    populatedExpression.should.equal(`nestedObject.propertyWithObject.PREPARED_CONDITION_1 && (a == ${preparedConditions.PREPARED_CONDITION_2})`)
+    populatedExpression.should.equal(`nestedObject.propertyWithObject.PREPARED_CONDITION_1 && a == ${preparedConditions.PREPARED_CONDITION_2}`)
   })
 })
