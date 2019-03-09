@@ -49,10 +49,10 @@ export class EditFileAttachment extends React.Component {
         You're about to edit an attachment
         </div>
         <div className="modal-body">
-          <label for="title">Title:</label>
+          <label htmlFor="title">Title:</label>
           <input className="edit-input" type="text" value={title} onChange={this.handleTitleChange.bind(this)} name="title"/>
           <br />
-          <label for="title">File Viewers:</label>
+          <label>File Viewers:</label>
           <UserAutoComplete onUpdate={this.onUserIdChange}
             projectMembers={projectMembers}
             loggedInUser={loggedInUser}
