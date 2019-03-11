@@ -11,39 +11,21 @@ import ProjectStage from '../ProjectStage'
 
 import './WorkInProgress.scss'
 
-const WorkInProgress = ({
-  productTemplates, currentMemberRole, isProcessing, isSuperUser, isManageUser, project, activePhases, updateProduct,
-  fireProductDirty, fireProductDirtyUndo, addProductAttachment, updateProductAttachment, removeProductAttachment
-}) => {
-  const renderActivePhases = (activePhase, index) => {
-    return (
+const WorkInProgress = ({ activePhases, phasesStates, ...props }) => (
+  <Section>
+    <SectionTitle title="Work in progress">
+      <Link to={`/projects/${props.project.id}/plan`} styleName="view-all">View all</Link>
+    </SectionTitle>
+    {activePhases.map((activePhase) => (
       <ProjectStage
-        key={index}
-        productTemplates={productTemplates}
-        currentMemberRole={currentMemberRole}
-        isProcessing={isProcessing}
-        isSuperUser={isSuperUser}
-        isManageUser={isManageUser}
-        project={project}
+        {...props}
+        phaseState={phasesStates[activePhase.id]}
+        key={activePhase.id}
         phase={activePhase}
-        updateProduct={updateProduct}
-        fireProductDirty={fireProductDirty}
-        fireProductDirtyUndo={fireProductDirtyUndo}
-        addProductAttachment={addProductAttachment}
-        updateProductAttachment={updateProductAttachment}
-        removeProductAttachment={removeProductAttachment}
       />
-    )
-  }
-  return (
-    <Section>
-      <SectionTitle title="Work in progress">
-        <Link to={`/projects/${project.id}/plan`} styleName="view-all">View all</Link>
-      </SectionTitle>
-      {activePhases.map(renderActivePhases)}
-    </Section>
-  )
-}
+    ))}
+  </Section>
+)
 
 WorkInProgress.propTypes = {
   project: PT.object.isRequired,

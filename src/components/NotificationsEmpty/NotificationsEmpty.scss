@@ -3,7 +3,7 @@
 
 :global {
   .notifications-empty {
-    background-color: #fff;
+    background-color: $tc-white;
     border-radius: 4px;
     padding: 70px 0 110px;
     text-align: center;
@@ -24,7 +24,7 @@
         width: 32px;
 
         > g > g {
-          fill: #6a6a72;
+          fill: $tc-gray-60;
         }
       }
     }
@@ -54,7 +54,7 @@
       max-width: 440px;
 
       > a {
-        color: #55a5ff;
+        color: $tc-dark-blue-70;
 
         &:hover {
           color: $tc-dark-blue;

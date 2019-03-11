@@ -1,12 +1,13 @@
-import _ from 'lodash'
+/**
+ * Application starting point
+ */
 import React from 'react'
+import _ from 'lodash'
 import { render } from 'react-dom'
-import { Provider } from 'react-redux'
-import { AppContainer } from 'react-hot-loader'
-import { BrowserRouter } from 'react-router-dom'
-import store  from './config/store'
-import Routes from './routes'
 import { SEGMENT_KEY } from './config/constants'
+import App from './App'
+
+import 'styles/main.scss'
 
 const mountNode = document.getElementById('root')
 
@@ -18,28 +19,4 @@ if (!_.isEmpty(SEGMENT_KEY)) {
 }
 /* eslint-enable */
 
-const renderApp = (Component) => {
-  render(
-    <AppContainer>
-      <Provider store={store}>
-        <BrowserRouter>
-          <Component />
-        </BrowserRouter>
-      </Provider>
-    </AppContainer>,
-    mountNode
-  )
-}
-
-renderApp(Routes)
-
-if (module.hot) {
-  module.hot.accept('./routes', () => {
-    // TODO
-    // it has to work without explicit require component
-    // but it doesn't update components even though hot reloading is triggered, why?
-    const RoutesNew = require('./routes').default
-
-    renderApp(RoutesNew)
-  })
-}
+render(<App />, mountNode)

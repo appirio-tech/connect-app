@@ -1,7 +1,12 @@
 @import '~tc-ui/src/styles/tc-includes';
 
-:global {
-  .main-wrapper {
-    min-height: calc(100vh);
+.container {
+  // as <Wizard> block in this component comes inside Layout component
+  // we have to additionally remove padding at the top added by Layout
+  // to make Wizard properly fullscreen
+  margin-top: -110px;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    margin-top: 0;
   }
 }

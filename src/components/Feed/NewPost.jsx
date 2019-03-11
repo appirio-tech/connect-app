@@ -13,7 +13,7 @@ class NewPost extends React.Component {
   }
 
   render() {
-    const {currentUser, allMembers, titlePlaceholder, isCreating, hasError} = this.props
+    const {currentUser, allMembers, titlePlaceholder, contentPlaceholder, isCreating, hasError, expandedTitlePlaceholder, projectMembers} = this.props
     let authorName = currentUser.firstName
     if (authorName && currentUser.lastName) {
       authorName += ' ' + currentUser.lastName
@@ -29,6 +29,8 @@ class NewPost extends React.Component {
       <RichTextArea
         className={composerClasses}
         titlePlaceholder={titlePlaceholder || 'Title of the post'}
+        expandedTitlePlaceholder={expandedTitlePlaceholder || titlePlaceholder || 'Title of the post'}
+        contentPlaceholder={contentPlaceholder || 'New reply...'}
         onPost={this.props.onPost}
         onPostChange={this.props.onNewPostChange}
         isCreating={isCreating}
@@ -36,6 +38,7 @@ class NewPost extends React.Component {
         avatarUrl={currentUser.photoURL}
         authorName={authorName}
         allMembers={allMembers}
+        projectMembers={projectMembers}
       />
     )
   }
@@ -43,8 +46,10 @@ class NewPost extends React.Component {
 
 
 NewPost.propTypes = {
+  expandedTitlePlaceholder: PropTypes.string,
   currentUser: PropTypes.object.isRequired,
   allMembers: PropTypes.object.isRequired,
+  projectMembers: PropTypes.object,
   onPost: PropTypes.func.isRequired,
   onNewPostChange: PropTypes.func.isRequired,
   hasError: PropTypes.bool,

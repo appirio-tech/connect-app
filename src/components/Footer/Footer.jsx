@@ -10,17 +10,18 @@ require('./Footer.scss')
 const Footer = () => {
   const currentYear = moment().format('YYYY')
   const otherNavigationItems = [
-    {img: '', text: 'About', link: 'https://www.topcoder.com/about-topcoder/', target: '_blank'},
-    {img: '', text: 'Contact us', link: 'https://www.topcoder.com/about-topcoder/contact/', target: '_blank'},
+    {img: '', text: 'About', link: 'https://www.topcoder.com/about/', target: '_blank'},
+    {img: '', text: 'Contact us', link: 'https://www.topcoder.com/contact/', target: '_blank'},
     {img: '', text: 'Privacy', link: 'https://www.topcoder.com/community/how-it-works/privacy-policy/', target: '_blank'},
     {img: '', text: 'Terms', link: 'https://connect.topcoder.com/terms', target: '_blank'}
   ]
   const isProjectDetails = /projects\/\d+/.test(window.location.pathname)
   const isCreateProject = window.location.pathname.startsWith(NEW_PROJECT_PATH)
   const isNotificationsPage = window.location.pathname.startsWith('/notifications')
+  const isSettingsPage = window.location.pathname.startsWith('/settings/')
 
   // TODO this looks like a bad way of doing it, I think it should be re-factored
-  const shouldHideOnDesktop = isProjectDetails || isCreateProject || isNotificationsPage
+  const shouldHideOnDesktop = isProjectDetails || isCreateProject || isNotificationsPage || isSettingsPage
   // on mobile show footer only when user is logged-out, so only root page is available
   const shouldHideOnMobile =  window.location.pathname !== '/'
 

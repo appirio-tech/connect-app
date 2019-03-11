@@ -1,0 +1,15 @@
+.user-select-wrapper {
+  width: 100%;
+}
+
+:global {
+  .management-dialog-overlay
+  .project-dialog-conatiner
+  .project-dialog
+  .input-container
+  .user-select-wrapper {
+    input {
+      margin: 0;
+    }
+  }
+}

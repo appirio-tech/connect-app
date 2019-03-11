@@ -3,15 +3,38 @@
 :global {
   body.hidden-content #wrapper-main {
     height: 1px;
+    min-height: 0;
     overflow: hidden;
+  }
+
+  body.persist-scrollbar {
+    overflow: hidden;
+    overflow-y: scroll;
   }
 }
 
 .container {
   bottom: 0;
+  height: 100vh;
   left: 0;
+  overflow: hidden;
   position: absolute;
   right: 0;
   top: 0;
   z-index: 1000;
+
+  &.keep-toolbar {
+    padding-top: 60px;
+    z-index: 19;
+
+    @media screen and (max-width: $screen-md - 1px) {
+      padding-top: 0;
+      z-index: 21;
+    }
+  }
+
+  :global(.mobile-page-gateway) &:last-child {
+    height: auto;
+    overflow: initial;
+  }
 }

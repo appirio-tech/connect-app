@@ -4,29 +4,40 @@ import { Link } from 'react-router-dom'
 import './NewProjectNavLink.scss'
 import BoldAdd from '../../assets/icons/ui-16px-1_bold-add.svg'
 
-
-const NewProjectNavLink = ({ compact=false, returnUrl }) => {
-  if (compact) {
+const NewProjectNavLink = ({ compact=false, link }) => {
+  if (compact && /^https?:\/\//.test(link)) {
+    return (
+      <a
+        href={link}
+        className="new-project-link"
+      >
+        <div className="new-project-icon">
+          <BoldAdd className="icon-bold-add" />
+        </div>
+      </a>
+    )
+  } else if (compact) {
     return (
       <Link
-        to={{
-          pathname: '/new-project',
-          search: returnUrl ? '?returnUrl=' + returnUrl : ''
-        }} className="new-project-link"
+        to={link} className="new-project-link"
       >
         <div className="new-project-icon">
           <BoldAdd className="icon-bold-add" />
         </div>
       </Link>
     )
+  } else if (/^https?:\/\//.test(link)) {
+    return (
+      <a
+        href={link}
+        className="tc-btn tc-btn-sm tc-btn-primary"
+      >+ New Project</a>
+    )
   } else {
     return (
       <div className="new-project-link">
         <Link
-          to={{
-            pathname: '/new-project',
-            search: returnUrl ? '?returnUrl=' + returnUrl : ''
-          }} className="tc-btn tc-btn-sm tc-btn-primary"
+          to={link} className="tc-btn tc-btn-sm tc-btn-primary"
         >+ New Project</Link>
       </div>
     )
@@ -34,7 +45,8 @@ const NewProjectNavLink = ({ compact=false, returnUrl }) => {
 }
 
 NewProjectNavLink.propTypes = {
-  compact: PropTypes.bool
+  compact: PropTypes.bool,
+  link: PropTypes.string
 }
 
 export default NewProjectNavLink

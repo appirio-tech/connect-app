@@ -5,7 +5,7 @@
     min-width: 700px;
     text-align: center;
     h1 {
-      @include tc-heading;
+      @include tc-heading-small;
       color: $tc-gray-50;
       margin-bottom: 20px;
     }

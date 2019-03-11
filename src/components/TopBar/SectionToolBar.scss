@@ -4,7 +4,7 @@
 :global {
   .tc-header.tc-header__connect .top-bar{
     height: 60px;
-    background-color: #262628;
+    background-color: $tc-gray-100;
     position: relative;
     display: flex;
 
@@ -22,13 +22,6 @@
 
     @media screen and (max-width: $screen-md - 1px) {
       padding: 0;
-
-      /* add pseudo element to center title */
-      &::before {
-        content: '';
-        display: block;
-        width: 39px; /* close button width with padding */
-      }
     }
 
     > .section {
@@ -37,7 +30,7 @@
     }
 
     .title {
-      @include roboto-light;
+      @include roboto;
       font-size: 20px;
       color: $tc-gray-10;
       text-align: center;
@@ -68,20 +61,15 @@
       }
 
       &:hover {
-        background-color: #55a5ff;
-
-        .icon-x-mark {
-          fill: $tc-white;
-          margin: -6px;
-        }
+        background-color: $tc-dark-blue-70;
       }
 
       .icon-x-mark {
-        fill: $tc-black;
+        fill: $tc-gray-100;
         margin: -6px;
 
         @media screen and (max-width: $screen-md - 1px) {
-          fill: $tc-white;
+          fill: $tc-gray-100;
         }
       }
     }
@@ -108,13 +96,12 @@
       display: flex;
 
       @media screen and (max-width: $screen-md - 1px) {
-        display: none;
+        padding-left: 15px;
       }
 
       .icon-connect-logo-mono {
         height: auto;
         width: 53px;
-        margin-top: 13px;
 
         path {
           fill: $tc-gray-10;

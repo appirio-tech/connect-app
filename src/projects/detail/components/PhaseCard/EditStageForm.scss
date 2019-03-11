@@ -1,10 +1,18 @@
 @import '../../../../styles/includes';
 @import '~tc-ui/src/styles/tc-includes';
 .container {
-  background: #FAFAFB;
+  background: $tc-gray-neutral-light;
   padding: 10px;
   border-radius: 6px;
   @include roboto;
+}
+
+:global .Tooltip {
+  .tooltip-container {
+    .tooltip-content-container {
+      padding: 15px!important;
+    }
+  }
 }
 
 .form {
@@ -14,70 +22,88 @@
   }
 }
 
+.label-layer:nth-child(4) > :global(.Tooltip) {
+  width: 50%;
+  float: left;
+  .input-row {
+    width: 100%;
+  }
+}
+
+
 .input-row {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-around;
-  align-items: center;
-  height: inherit;
-  position: relative;
-  line-height: inherit;
-  flex: 0 300px; 
+  display: inline-block;
+  width: 50%;
 
   :global .dropdown-wrap {
-    width: 100%;
+    width: auto;
     margin-left: 0px;
-  } 
-
-  label {
-    margin: 0px 10px 10px;
-    flex: 0 250px;
-    text-align: right;
-    line-height: 30px;
-    white-space: nowrap;
   }
-  
+  input {
+    display: inline-block;
+    width:calc(100% - 170px)!important;
+  }
+  label {
+    float: left;
+    margin: 0px 10px 10px;
+    text-align: right;
+    height: 40px;
+    line-height: 40px;
+    white-space: nowrap;
+    display: block;
+    width: 150px;
+    
+  }
+
+  input:not([type="checkbox"]):disabled {
+    padding: 0;
+  }
+  :global(.SelectDropdown:not(.dropdown-wrap)) {
+    position: relative;
+    top: 12px;
+  }
+
   .input {
       &::-webkit-input-placeholder {
         text-transform: initial;
-        color:#A3A3AD;
+        color:$tc-gray-30;
         font-size: 15px;
         font-weight: 400;
       }
       &:-moz-placeholder {
         text-transform: initial;
-        color:#A3A3AD;
+        color:$tc-gray-30;
         font-size: 15px;
         font-weight: 400;
       }
       &::-moz-placeholder {
         text-transform: initial;
-        color:#A3A3AD;
+        color:$tc-gray-30;
         font-size: 15px;
         font-weight: 400;
       }
       &:-ms-input-placeholder {
         text-transform: initial;
-        color:#A3A3AD;
+        color:$tc-gray-30;
         font-size: 15px;
         font-weight: 400;
       }
   }
 }
 
-.label-layer {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-around;
-    height: inherit;
-    position: relative;
-    line-height: inherit;
+.title-label-layer {
+  
+  .input-row {
+    width: 100%;
+    input {
+      display: inline-block;
+      width:calc(100% - 170px);
+    }
+    label {
+      display: inline-block;
+      width: 150px;
+    }
+  }
 }
 
 .group-bottom {
@@ -87,12 +113,95 @@
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-    margin-bottom: 20px;
-    
+    padding-bottom: 20px;
+
     button {
       margin: 0 5px 0 5px;
       &.disable {
           opacity: 0.5;
       }
     }
+}
+
+.message {
+  background-color: $tc-red-10;
+  padding: 4 * $base-unit 4 * $base-unit 0 4 * $base-unit;
+  text-align: center;
+
+  .message-title {
+    @include roboto-bold;
+    color: $tc-red-100;
+    font-size: 15px;
+  }
+
+  .message-text {
+    @include roboto;
+    font-size: 13px;
+    line-height: 20px;
+    margin-top: 2 * $base-unit;
+  }
+}
+
+// screen < 1024px
+@media screen and (max-width: 1023px) {
+  .label-layer:nth-child(4) > :global(.Tooltip) {
+    width: 100%;
+    float: none;
+    .input-row {
+      width: 100%;
+    }
+  }
+  .label-layer,
+  .input-row {
+    display: block;
+    width: 100%;
+    input:not([type="checkbox"]):disabled {
+      width: 100%;
+    }
+    :global(.SelectDropdown:not(.dropdown-wrap)) {
+      width: 100%;
+      position: relative;
+      top: 0;
+    }
+    :global .dropdown-wrap {
+      width: 100%;
+      margin-left: 0px;
+      height: 40px;
+      div {
+        padding: 0 5px!important;
+      }
+    }
+    div {
+      padding: 0!important;
+    }
+    input {
+      width: 100%!important;
+      display: block;
+    }
+    label {
+      width: 100%;
+      display: block;
+      text-align: left;
+      margin: 0;
+      float: none;
+    }
+  }
+  .title-label-layer {
+    display: block;
+    .input-row {
+      width: 100%;
+      display: block;
+      input {
+        width: 100%!important;
+        display: block;
+      }
+      label {
+        float: none;
+        width: 100%;
+        display: block;
+        margin: 0;
+        text-align: left;
+      }
+    }
+  }
 }

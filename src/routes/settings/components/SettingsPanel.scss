@@ -1,80 +1,37 @@
 // this is to include tc styles in the output library
 @import '~tc-ui/src/styles/tc-includes';
 
-:global {
-  .settings-panel {
-    margin: 20px auto 0;
-    padding: 0 20px;
+.main {
+  background-color: $tc-white;
+  border-radius: 6px;
+  max-width: 760px;
+  padding: 35px 0px 20px 0px;
+  flex-grow: 1;
+  margin: auto;
+  margin-top: 20px;
 
-    @media screen and (max-width: $screen-md - 1px) {
-      margin: 0;
-      padding: 0;
-    }
+  @media screen and (max-width: $screen-md - 1px) {
+    padding: 0;
+    margin: 0;
+    max-width: none;
+  }
+}
 
-    > .inner {
-      background-color: $tc-white;
-      border-radius: 6px;
-      margin: 0 auto;
-      max-width: 720px;
-      padding: 50px 60px 40px;
+.title {
+  @include roboto-light;
+  color: $tc-black;
+  font-size: 28px;
+  line-height: 35px;
+  text-align: center;
 
-      @media screen and (max-width: $screen-md - 1px) {
-        padding: 4 * $base-unit;
-      }
+  @media screen and (max-width: $screen-md - 1px) {
+    display: none;
+  }
+}
 
-      > .title {
-        @include roboto-light;
-        color: $tc-gray-50;
-        font-size: 28px;
-        line-height: 30px;
-        text-align: center;
-
-        @media screen and (max-width: $screen-md - 1px) {
-          display: none;
-        }
-      }
-
-      > .text {
-        @include roboto;
-        color: $tc-gray-50;
-        font-size: 15px;
-        line-height: 25px;
-        margin-top: 20px;
-
-        @media screen and (max-width: $screen-md - 1px) {
-          margin-top: 0;
-        }
-      }
-
-      > .content {
-        border-top: 1px solid $tc-gray-50;
-        margin-top: 30px;
-      }
-    }
-
-    &.wide {
-      > .inner {
-        max-width: 960px;
-
-        > .content {
-          border-top: 0;
-          margin-top: 0;
-        }
-      }
-    }
-
-    a {
-      @include roboto;
-    }
-    // Link colors
-    a:link,
-    a:visited {
-      color: $tc-dark-blue;
-    }
-
-    a:hover,
-    a:active {
-      color: $tc-dark-blue-70;
-    }
+.content {
+  margin-top: 25px;
+  @media screen and (max-width: $screen-md - 1px) {
+    margin-top: 0;
   }
 }

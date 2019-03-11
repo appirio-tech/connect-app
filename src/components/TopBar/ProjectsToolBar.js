@@ -5,20 +5,16 @@ import PropTypes from 'prop-types'
 import querystring from 'query-string'
 import { withRouter, Prompt } from 'react-router-dom'
 import { connect } from 'react-redux'
-import cn from 'classnames'
 import _ from 'lodash'
 import SearchBar from 'appirio-tech-react-components/components/SearchBar/SearchBar'
 import MenuBar from 'appirio-tech-react-components/components/MenuBar/MenuBar'
-import Filters from './Filters'
 import NotificationsDropdown from '../NotificationsDropdown/NotificationsDropdownContainer'
 import NewProjectNavLink from './NewProjectNavLink'
 import MobileMenu from '../MobileMenu/MobileMenu'
 import MobileMenuToggle from '../MobileMenu/MobileMenuToggle'
-import SearchFilter from '../../assets/icons/ui-filters.svg'
-import SearchIcon from '../../assets/icons/ui-16px-1_zoom.svg'
 import { projectSuggestions, loadProjects, setInfiniteAutoload } from '../../projects/actions/loadProjects'
-import { loadProjectCategories } from '../../actions/templates'
-
+import { loadProjectsMetadata } from '../../actions/templates'
+import { getNewProjectLink } from '../../helpers/projectHelper'
 
 class ProjectsToolBar extends Component {
 
@@ -26,25 +22,26 @@ class ProjectsToolBar extends Component {
     super(props)
     this.state = {
       errorCreatingProject: false,
-      isFilterVisible: false,
       isMobileMenuOpen: false,
       isMobileSearchVisible: false
     }
-    this.state.isFilterVisible = sessionStorage.getItem('isFilterVisible') === 'true'
     this.applyFilters = this.applyFilters.bind(this)
-    this.toggleFilter = this.toggleFilter.bind(this)
     this.handleTermChange = this.handleTermChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.toggleMobileMenu = this.toggleMobileMenu.bind(this)
-    this.toggleMobileSearch = this.toggleMobileSearch.bind(this)
     this.onLeave = this.onLeave.bind(this)
   }
 
   componentWillMount() {
-    const { projectCategories, isProjectCategoriesLoading, loadProjectCategories } = this.props
+    const { projectTypes, isProjectTypesLoading, loadProjectsMetadata, criteria } = this.props
 
-    if (!isProjectCategoriesLoading && !projectCategories) {
-      loadProjectCategories()
+    if (!isProjectTypesLoading && !projectTypes) {
+      loadProjectsMetadata()
+    }
+
+    // update query string if there is a search
+    if (criteria && criteria.keyword) {
+      this.updateQueryParams(criteria)
     }
   }
 
@@ -69,10 +66,6 @@ class ProjectsToolBar extends Component {
   }
 
   componentDidMount() {
-    const contentDiv = document.getElementById('wrapper-main')
-    if (this.state.isFilterVisible) {
-      contentDiv.classList.add('with-filters')
-    }
     // sets window unload hook to show unsaved changes alert and persist incomplete project
     window.addEventListener('beforeunload', this.onLeave)
   }
@@ -89,6 +82,16 @@ class ProjectsToolBar extends Component {
     if (isProjectDirty && !creatingProject) {
       return e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
     }
+  }
+
+  // update query string to match criteria
+  updateQueryParams(criteria) {
+    // remove any null values
+    criteria = _.pickBy(criteria, _.identity)
+    this.props.history.push({
+      pathname: '/projects',
+      search: '?' + querystring.stringify(_.assign({}, criteria))
+    })
   }
 
   /*eslint-disable no-unused-vars */
@@ -110,36 +113,8 @@ class ProjectsToolBar extends Component {
     this.routeWithParams(criteria)
   }
 
-  toggleFilter() {
-    const {isFilterVisible, isMobileSearchVisible} = this.state
-    const contentDiv = document.getElementById('wrapper-main')
-    this.setState({isFilterVisible: !isFilterVisible}, () => {
-      sessionStorage.setItem('isFilterVisible', (!isFilterVisible).toString())
-      if (this.state.isFilterVisible) {
-        contentDiv.classList.add('with-filters')
-      } else {
-        contentDiv.classList.remove('with-filters')
-      }
-    })
-    // if open filters, close search panel on mobile
-    if (!isFilterVisible && isMobileSearchVisible) {
-      this.toggleMobileSearch()
-    }
-  }
-
   toggleMobileMenu() {
     this.setState({ isMobileMenuOpen: !this.state.isMobileMenuOpen })
-  }
-
-  toggleMobileSearch() {
-    const { isFilterVisible, isMobileSearchVisible } = this.state
-
-    // if open mobile search and filter is visible, then close filter
-    if (!isMobileSearchVisible && isFilterVisible) {
-      this.toggleFilter()
-    }
-
-    this.setState({ isMobileSearchVisible: !isMobileSearchVisible })
   }
 
   routeWithParams(criteria) {
@@ -155,33 +130,25 @@ class ProjectsToolBar extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { user, criteria, creatingProject, projectCreationError, searchTermTag, projectCategories } = this.props
-    const { errorCreatingProject, isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
-    return nextProps.user.handle !== user.handle
+    const { user, criteria, creatingProject, projectCreationError, searchTermTag, projectTypes } = this.props
+    const { errorCreatingProject, isMobileMenuOpen, isMobileSearchVisible } = this.state
+    return (nextProps.user || {}).handle !== (user || {}).handle
+    || (nextProps.user || {}).photoURL !== (this.props.user || {}).photoURL
     || JSON.stringify(nextProps.criteria) !== JSON.stringify(criteria)
     || nextProps.creatingProject !== creatingProject
     || nextProps.projectCreationError !== projectCreationError
     || nextProps.searchTermTag !== searchTermTag
-    || !!nextProps.projectCategories && !projectCategories
+    || !!nextProps.projectTypes && !projectTypes
     || nextState.errorCreatingProject !== errorCreatingProject
-    || nextState.isFilterVisible !== isFilterVisible
     || nextState.isMobileMenuOpen !== isMobileMenuOpen
     || nextState.isMobileSearchVisible !== isMobileSearchVisible
   }
 
   render() {
-    const { renderLogoSection, userMenu, userRoles, criteria, isPowerUser, user, mobileMenu, location, projectCategories } = this.props
-    const { isFilterVisible, isMobileMenuOpen, isMobileSearchVisible } = this.state
+    const { renderLogoSection, userMenu, userRoles, isPowerUser, user, mobileMenu, location, orgConfig } = this.props
+    const { isMobileMenuOpen, isMobileSearchVisible } = this.state
     const isLoggedIn = !!(userRoles && userRoles.length)
 
-    let excludedFiltersCount = 1 // 1 for default sort criteria
-    if (criteria.memberOnly) {
-      // https://github.com/appirio-tech/connect-app/issues/1319
-      // The switch should not count as a filter in the menu!
-      excludedFiltersCount++
-    }
-    // Ignore status from filters count
-    const noOfFilters = _.keys(_.omit(criteria, ['status', 'keyword'])).length - excludedFiltersCount
     const onLeaveMessage = this.onLeave() || ''
 
     const primaryNavigationItems = [
@@ -192,12 +159,14 @@ class ProjectsToolBar extends Component {
       {
         text: 'Getting Started',
         link: 'https://www.topcoder.com/about-topcoder/connect/',
-        target: '_blank'
+        target: '_blank',
+        absolute: true
       },
       {
         text: 'Help',
         link: 'https://help.topcoder.com/hc/en-us/articles/225540188-Topcoder-Connect-FAQs',
-        target: '_blank'
+        target: '_blank',
+        absolute: true
       }
     ]
     const menuBar = isLoggedIn && !isPowerUser && <MenuBar mobileBreakPoint={767} items={primaryNavigationItems} orientation="horizontal" forReactRouter />
@@ -222,24 +191,10 @@ class ProjectsToolBar extends Component {
                 onSearch={ this.handleSearch }
                 onClearSearch={ this.handleSearch }
               />
-              <div className="search-filter">
-                <a
-                  href="javascript:"
-                  className={cn('tc-btn tc-btn-sm mobile-search-toggle', {active: isMobileSearchVisible})}
-                  onClick={ this.toggleMobileSearch }
-                ><SearchIcon /></a>
-                { !!projectCategories &&
-                <a
-                  href="javascript:"
-                  className={cn('tc-btn tc-btn-sm', {active: isFilterVisible})}
-                  onClick={ this.toggleFilter }
-                ><SearchFilter className="icon-search-filter" /><span className="filter-text">Filters</span> { noOfFilters > 0 && <span className="filter-indicator">{ noOfFilters }</span> }</a>
-                }
-              </div>
             </div>
           }
           <div className="actions">
-            { isLoggedIn && <NewProjectNavLink compact /> }
+            {isLoggedIn && <NewProjectNavLink compact link={getNewProjectLink(orgConfig)} />}
             { userMenu }
             {/* pass location, to make sure that component is re-rendered when location is changed
                 it's necessary to hide notification dropdown on mobile when users uses browser history back/forward buttons */}
@@ -256,15 +211,6 @@ class ProjectsToolBar extends Component {
               onTermChange={ this.handleTermChange }
               onSearch={ this.handleSearch }
               onClearSearch={ this.handleSearch }
-            />
-          </div>
-        }
-        { !!projectCategories && isFilterVisible && isLoggedIn &&
-          <div className="secondary-toolbar">
-            <Filters
-              applyFilters={ this.applyFilters }
-              criteria={ criteria }
-              projectCategories={ projectCategories }
             />
           </div>
         }
@@ -300,11 +246,12 @@ const mapStateToProps = ({ projectSearchSuggestions, searchTerm, projectSearch, 
     criteria               : projectSearch.criteria,
     userRoles              : _.get(loadUser, 'user.roles', []),
     user                   : loadUser.user,
-    projectCategories           : templates.projectCategories,
-    isProjectCategoriesLoading  : templates.isProjectCategoriesLoading,
+    orgConfig              : loadUser.orgConfig,
+    projectTypes      : templates.projectTypes,
+    isProjectTypesLoading  : templates.isLoading,
   }
 }
 
-const actionsToBind = { projectSuggestions, loadProjects, setInfiniteAutoload, loadProjectCategories }
+const actionsToBind = { projectSuggestions, loadProjects, setInfiniteAutoload, loadProjectsMetadata }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(ProjectsToolBar))

@@ -5,6 +5,7 @@
   .notification-item-link {
     display: block;
     border-top: 1px solid $tc-gray-10;
+    overflow: hidden;
 
     @media screen and (max-width: $screen-md - 1px) {
       border-top: 0;
@@ -22,6 +23,14 @@
         }
       }
     }
+
+    &.exiting {
+      opacity: 0;
+      transform: scaleY(0);
+      margin: -35px 0;
+      overflow: hidden;
+      transition: 500ms all ease-in;
+    }
   }
 
   .notification-item {
@@ -29,14 +38,23 @@
     background-color: $tc-white;
     justify-content: space-between;
     transition: 150ms all;
+    overflow: hidden;
 
     &:hover {
       background-color: $tc-dark-blue-10;
     }
 
+    &.exiting {
+      opacity: 0;
+      transform: scaleY(0);
+      margin: -35px 0;
+      overflow: hidden;
+      transition: 500ms all ease-in;
+    }
+
     .icon {
       align-items: center;
-      // border-left: 2px solid #55a5ff;
+      // border-left: 2px solid $tc-dark-blue-70;
       display: flex;
       flex: 0 0 44px;
       justify-content: center;
@@ -58,7 +76,7 @@
         }
 
         > strong {
-          color: #000;
+          color: $tc-black;
           font-weight: bold;
         }
       }

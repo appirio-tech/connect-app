@@ -1,0 +1,296 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// project-progress specific styles
+.winner-bar {
+  position: relative;
+  background-color: $tc-gray-neutral-light;
+  border-radius: 4px;
+  color: $tc-black;
+  min-height: $base-unit*10;
+  line-height: $base-unit*10;
+  @include roboto;
+  font-weight: 400;
+  font-size: 15px;
+  &.clear {
+    background-color: transparent;
+  }
+  &.selected {
+    background-color: $tc-dark-blue-10;
+  }
+  strong {
+    font-weight: 500;
+  }
+  .group-right {
+    display: flex;
+    line-height: 50px;
+    justify-content: space-between;
+    text-align: right;
+    color: $tc-gray-50;
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+
+  .milestone-text {
+    color: $tc-gray-50;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 50px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .link {
+    color: $tc-gray-50;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 30px;
+    text-align: left;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  /* in-progress state */
+  &.in-progress {
+    .dot {
+      background-color: $tc-white;
+      border: 2px solid $tc-dark-blue-100;
+    }
+  }
+  /* completed state */
+  &.completed {
+    .dot {
+      background-color: $tc-dark-blue-100;
+      border: 2px solid $tc-dark-blue-100;
+    }
+  }
+
+  .addlink-bar {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    background-color: transparent;
+    padding-left: 50px;
+    padding-right: 10px;
+    height: 50px;
+    position: relative;
+    border-radius: 4px;
+    flex-wrap: nowrap;
+
+    .thumb {
+      left: 10px;
+      top: 10px;
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: $tc-gray-neutral-dark;
+      border-radius: 50%;
+      &.marvelapp {
+        background: url(../../../../../assets/icons/timeline-marvelapp.svg);
+        background-size: 30px;
+      }
+    }
+    .label {
+      color: $tc-black;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 30px;
+      text-align: left;
+      display: inline-block;
+      min-width: 88px;
+      padding-right: 6 * $base-unit;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    .sublable {
+      @include roboto;
+      color: $tc-gray-30;
+      display: none;
+      font-size: 10px;
+      line-height: 15px;
+      margin-top: -7px;
+      position: absolute;
+
+      @media screen and (max-width: $screen-sm - 1px) {
+        display: block;
+      }
+    }
+    .link {
+      color: $tc-gray-50;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 30px;
+      text-align: left;
+
+      @include viewSm {
+        display: none;
+      }
+    }
+    .position {
+      align-items: center;
+      display: flex;
+      min-width: 185px;
+      justify-content: flex-end;
+      padding-left: 4 * $base-unit;
+
+      .purchase-for {
+        color: $tc-gray-80;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 25px;
+        margin: auto 0;
+        white-space: nowrap;
+
+        @media screen and (max-width: $screen-sm - 1px) {
+          span {
+            display: none;
+          }
+        }
+      }
+      .switch-button {
+        padding-bottom: 3%;
+        i {
+          &:hover {
+            box-shadow: 0 0 3px $tc-dark-blue-100;
+          }
+        }
+      }
+    }
+  }
+
+  &.many-places:not(.view-only) {
+    .link {
+      display: none;
+    }
+
+    @media screen and (max-width: $screen-rg - 1px) {
+      .addlink-bar {
+        height: 100px;
+        padding-bottom: 50px;
+      }
+
+      .link {
+        display: block;
+      }
+
+      .position {
+        border-top: 1px solid $tc-gray-neutral-dark;
+        height: 50px;
+        left: 2 * $base-unit;
+        position: absolute;
+        right: 2 * $base-unit;
+        padding-left: 0;
+        top: 50px;
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  &.view-only {
+    .position {
+      min-width: 80px;
+    }
+  }
+
+  .item-checked {
+    display: inline-block;
+    background: url('../../../../../assets/icons/ui-check-gray.svg') 0 0 no-repeat;
+    background-size: 16px;
+    height: 16px;
+    width: 16px;
+  }
+}
+
+// checkbox-ctrl styles
+.checkbox-ctrl {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  & + & {
+    margin-left: 2 * $base-unit;
+  }
+  .checkbox-text {
+    position: relative;
+    width: 30px;
+    display: inline-block;
+    height: 30px;
+    background-color: $tc-white;
+    border: 1px solid $tc-dark-blue-70;
+    line-height: 28px;
+    border-radius: 35px;
+    color: $tc-dark-blue-100;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: center;
+
+    &.active {
+      border: 1px solid transparent;
+      color: $tc-silver-130;
+      cursor: default;
+      &.pos1{
+        background-color: $tc-gold-100;
+        box-shadow: inset 0 1px 3px 0 $tc-gold-110;
+      }
+      &.pos2 {
+        background-color: $tc-silver-100;
+        box-shadow: inset 0 1px 3px 0 $tc-silver-110;
+      }
+      &.pos3 {
+        background-color: $tc-bronze-100;
+        box-shadow: inset 0 1px 3px 0 $tc-bronze-110;
+      }
+      &.pos-rest {
+        background-color: $tc-dark-blue-70;
+        color: $tc-white;
+      }
+    }
+
+    &.inactive{
+      background: transparent;
+      box-shadow: none;
+      border: none;
+      color: $tc-gray-05;
+      cursor: default;
+    }
+  }
+  .checkbox {
+    display: none;
+    &:checked+.checkbox-text {
+      border: 1px solid transparent;
+      color: $tc-silver-130;
+      &.pos1 {
+        background-color: $tc-gold-100;
+        box-shadow: inset 0 1px 3px 0 $tc-gold-110;
+      }
+
+      &.pos2 {
+        background-color: $tc-silver-100;
+        box-shadow: inset 0 1px 3px 0 $tc-silver-110;
+      }
+
+      &.pos3 {
+        background-color: $tc-bronze-100;
+        box-shadow: inset 0 1px 3px 0 $tc-bronze-110;
+      }
+
+      &.pos-rest {
+        background-color: $tc-dark-blue-70;
+        color: $tc-white;
+      }
+    }
+  }
+}

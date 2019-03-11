@@ -4,20 +4,24 @@ import qs from 'query-string'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import { getProjectCreationTemplateField, getProjectTemplateByAlias,
-  getProjectTemplateByKey } from '../../../helpers/templates'
+import { getProjectCreationTemplateField, getProjectTemplateByAlias, getProjectTemplatesByCategory, getProjectTypeByAlias } from '../../../helpers/templates'
 import Wizard from '../../../components/Wizard'
-import SelectItemType from './SelectItemType'
+import SelectProjectTemplate from './SelectProjectTemplate'
+import SelectProjectType from './SelectProjectType'
 import IncompleteProjectConfirmation from './IncompleteProjectConfirmation'
 import FillProjectDetails from './FillProjectDetails'
+import ProjectSubmitted from './ProjectSubmitted'
+
 import update from 'react-addons-update'
-import { LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH } from '../../../config/constants'
+import { LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH, LS_INCOMPLETE_WIZARD } from '../../../config/constants'
 import './ProjectWizard.scss'
 
 const WZ_STEP_INCOMP_PROJ_CONF = 0
 const WZ_STEP_SELECT_PROJ_TYPE = 1
-const WZ_STEP_FILL_PROJ_DETAILS = 2
-const WZ_STEP_ERROR_CREATING_PROJ = 3
+const WZ_STEP_SELECT_PROJ_TEMPLATE = 2
+const WZ_STEP_FILL_PROJ_DETAILS = 3
+const WZ_STEP_ERROR_CREATING_PROJ = 4
+const WZ_STEP_PROJECT_SUBMITTED = 5
 
 class ProjectWizard extends Component {
 
@@ -32,6 +36,7 @@ class ProjectWizard extends Component {
     }
 
     this.updateProjectRef = this.updateProjectRef.bind(this)
+    this.updateProjectTemplate = this.updateProjectTemplate.bind(this)
     this.updateProjectType = this.updateProjectType.bind(this)
     this.handleProjectChange = this.handleProjectChange.bind(this)
     this.loadIncompleteProject = this.loadIncompleteProject.bind(this)
@@ -44,20 +49,35 @@ class ProjectWizard extends Component {
   }
 
   componentDidMount() {
-    const { onStepChange, projectTemplates } = this.props
+    const { onStepChange, projectTemplates, createdProject } = this.props
     const params = this.props.match.params
+
     // load incomplete project from local storage
     const incompleteProjectStr = window.localStorage.getItem(LS_INCOMPLETE_PROJECT)
-    if(incompleteProjectStr) {
+
+    if ((params && params.project === 'submitted') || createdProject) {
+      const wizardStep = WZ_STEP_PROJECT_SUBMITTED
+      const updateQuery = {}
+      this.setState({
+        project: update(this.state.project, updateQuery),
+        dirtyProject: update(this.state.dirtyProject, updateQuery),
+        wizardStep,
+        isProjectDirty: false
+      }, () => {
+        typeof onStepChange === 'function' && onStepChange(this.state.wizardStep, this.state.project)
+      })
+    } else if (incompleteProjectStr) {
       const incompleteProject = JSON.parse(incompleteProjectStr)
-      const incompleteProjectTemplateKey = _.get(incompleteProject, 'details.products[0]')
+      const incompleteProjectTemplateId = _.get(incompleteProject, 'templateId')
+      const incompleteProjectTemplate = _.find(projectTemplates, pt => pt.id === incompleteProjectTemplateId)
       let wizardStep = WZ_STEP_INCOMP_PROJ_CONF
       let updateQuery = {}
-      if (incompleteProjectTemplateKey && params && params.project) {
-        const project = getProjectTemplateByAlias(projectTemplates, params.project)
-        if (project) {
+      if (incompleteProjectTemplate && params && params.project) {
+        const projectTemplate = getProjectTemplateByAlias(projectTemplates, params.project)
+
+        if (projectTemplate) {
           // load project details page directly
-          if (project.key === incompleteProjectTemplateKey) {
+          if (projectTemplate.key === incompleteProjectTemplate.key) {
             wizardStep = WZ_STEP_FILL_PROJ_DETAILS
             updateQuery = {$merge : incompleteProject}
           } else {
@@ -67,6 +87,7 @@ class ProjectWizard extends Component {
           }
         }
       }
+
       this.setState({
         project: update(this.state.project, updateQuery),
         dirtyProject: update(this.state.dirtyProject, updateQuery),
@@ -105,19 +126,22 @@ class ProjectWizard extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { onStepChange } = nextProps
+    const { onStepChange, createdProject } = nextProps
     const params = nextProps.match.params
     const type = _.get(nextProps.project, 'type', null)
-    const projectTemplateKey = _.get(nextProps.project, 'details.products[0]', null)
+    const projectTemplateId = _.get(nextProps.project, 'templateId', null)
     // redirect user to project details form, if we already have type and project available
-    let wizardStep = type && projectTemplateKey ? WZ_STEP_FILL_PROJ_DETAILS : null
+    let wizardStep = type && projectTemplateId ? WZ_STEP_FILL_PROJ_DETAILS : null
     const updateQuery = {}
     if (params && params.project) { // if there exists project path param
       wizardStep = this.loadProjectFromURL(params, updateQuery)
     } else { // if there is not project path param, it should be first step of the wizard
       updateQuery['type'] = { $set : null }
-      updateQuery['details'] = { products : { $set: [] } }
+      updateQuery['details'] = { $set : {} }
       wizardStep = WZ_STEP_SELECT_PROJ_TYPE
+    }
+    if (createdProject) {
+      wizardStep = WZ_STEP_PROJECT_SUBMITTED
     }
     // if wizard step deduced above and stored in state are not the same, update the state
     if (wizardStep && this.state.wizardStep !== wizardStep) {
@@ -140,30 +164,42 @@ class ProjectWizard extends Component {
    * @return {number} step where wizard should move after parsing the URL param
    */
   loadProjectFromURL(urlParams, updateQuery) {
-    const { projectTemplates } = this.props
-    const projectUrlAlias = urlParams && urlParams.project
+    const { projectTemplates, projectTypes } = this.props
+    const urlAlias = urlParams && urlParams.project
     const statusParam  = urlParams && urlParams.status
 
     if ('incomplete' === statusParam) {
       return WZ_STEP_INCOMP_PROJ_CONF
     }
 
-    if (!projectUrlAlias) return
+    if (!urlAlias) return
 
-    const projectTemplate = getProjectTemplateByAlias(projectTemplates, projectUrlAlias)
+    const projectType = getProjectTypeByAlias(projectTypes, urlAlias)
+    // first try the path param to be a final step
+    if (projectType === 'submitted') {
+      return WZ_STEP_PROJECT_SUBMITTED
+    } if (projectType) {
+      // try the path param to be a project type
+      updateQuery['type'] = { $set : projectType.key }
+      return WZ_STEP_SELECT_PROJ_TEMPLATE
+    } else {
+      // if it is not a project type, it should be a project template
+      const projectTemplate = getProjectTemplateByAlias(projectTemplates, urlAlias)
 
-    // if we have some project template key in the URL and we can find the project template
-    // show details step
-    if (projectTemplate) {
-      updateQuery['type'] = { $set : projectTemplate.type }
-      updateQuery['details'] = { products : { $set: [projectTemplate.key] } }
+      // if we have some project template key in the URL and we can find the project template
+      // show details step
+      if (projectTemplate) {
+        updateQuery['type'] = { $set : projectTemplate.category }
+        updateQuery['templateId'] = { $set : projectTemplate.id }
+        updateQuery['details'] = {}
 
-      const refCode = _.get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
-      if (refCode) {
-        updateQuery.details.utm = { $set : { code : refCode } }
+        const refCode = _.get(qs.parse(window.location.search), 'refCode', '').trim().substr(0, PROJECT_REF_CODE_MAX_LENGTH)
+        if (refCode) {
+          updateQuery.details.utm = { $set : { code : refCode } }
+        }
+
+        return WZ_STEP_FILL_PROJ_DETAILS
       }
-
-      return WZ_STEP_FILL_PROJ_DETAILS
     }
   }
 
@@ -198,13 +234,14 @@ class ProjectWizard extends Component {
     const { onStepChange } = this.props
     // remove incomplete project from local storage
     window.localStorage.removeItem(LS_INCOMPLETE_PROJECT)
+    window.localStorage.removeItem(LS_INCOMPLETE_WIZARD)
     // following code assumes that componentDidMount has already updated state with correct project
     const projectType = _.get(this.state.project, 'type')
-    const projectTemplateKey = _.get(this.state.project, 'details.products[0]')
+    const projectTemplateId = _.get(this.state.project, 'templateId')
     let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
     let project = null
-    if (projectTemplateKey) {
-      project = { type: projectType, details: { products: [projectTemplateKey] } }
+    if (projectTemplateId) {
+      project = { type: projectType, templateId: projectTemplateId }
       wizardStep = WZ_STEP_FILL_PROJ_DETAILS
     }
     const refCode = this.getRefCodeFromURL()
@@ -232,23 +269,43 @@ class ProjectWizard extends Component {
     })
   }
 
-  updateProjectType(projectTemplateKey) {
+  updateProjectTemplate(projectTemplate) {
     window.scrollTo(0, 0)
-    const { onStepChange, onProjectUpdate, projectTemplates } = this.props
+    const { onStepChange, onProjectUpdate } = this.props
     const updateQuery = {}
-    if (projectTemplateKey) {
-      const projectTemplate = getProjectTemplateByKey(projectTemplates, projectTemplateKey)
-
-      const detailsQuery = { products : [projectTemplateKey] }
-      this.restoreCommonDetails(projectTemplate, updateQuery, detailsQuery)
-
-      updateQuery.type = { $set : projectTemplate.type }
-      updateQuery.details = { $set : detailsQuery }
+    if (projectTemplate) {
+      updateQuery.type = { $set : projectTemplate.category }
+      updateQuery.templateId = { $set: projectTemplate.id }
     }
     this.setState({
       project: update(this.state.project, updateQuery),
       dirtyProject: update(this.state.project, updateQuery),
       wizardStep: WZ_STEP_FILL_PROJ_DETAILS,
+    }, () => {
+      typeof onProjectUpdate === 'function' && onProjectUpdate(this.state.dirtyProject, false)
+      typeof onStepChange === 'function' && onStepChange(this.state.wizardStep, this.state.dirtyProject)
+    })
+  }
+
+  updateProjectType(projectType) {
+    window.scrollTo(0, 0)
+    const { onStepChange, onProjectUpdate, projectTemplates } = this.props
+    const updateQuery = {}
+    const visibleProjectTemplates = getProjectTemplatesByCategory(projectTemplates, projectType, true)
+
+    if (projectType) {
+      updateQuery.type = { $set : projectType }
+
+      // sets the appropriate project template if project category has only one project template
+      if (visibleProjectTemplates.length === 1) {
+        updateQuery.templateId = { $set : visibleProjectTemplates[0].id }
+      }
+    }
+
+    this.setState({
+      project: update(this.state.project, updateQuery),
+      dirtyProject: update(this.state.project, updateQuery),
+      wizardStep: visibleProjectTemplates.length === 1 ? WZ_STEP_FILL_PROJ_DETAILS : WZ_STEP_SELECT_PROJ_TEMPLATE
     }, () => {
       typeof onProjectUpdate === 'function' && onProjectUpdate(this.state.dirtyProject, false)
       typeof onStepChange === 'function' && onStepChange(this.state.wizardStep, this.state.dirtyProject)
@@ -338,16 +395,30 @@ class ProjectWizard extends Component {
     })
   }
 
-  handleOnCreateProject() {
-    this.props.createProject(this.state.dirtyProject)
+  handleOnCreateProject(model) {
+    // add templateId and type to the saved project form
+    _.set(model, 'templateId', _.get(this.state.dirtyProject, 'templateId'))
+    _.set(model, 'type', _.get(this.state.dirtyProject, 'type'))
+    this.props.createProject(model)
   }
 
   handleStepChange(wizardStep) {
-    const { onStepChange } = this.props
-    // resets project type
+    const { onStepChange, projectTemplates } = this.props
+    const visibleProjectTemplates = getProjectTemplatesByCategory(projectTemplates, this.state.project.type, true)
+
+    // if project type has only one project template, move one step back to select project type step
+    if (wizardStep === WZ_STEP_SELECT_PROJ_TEMPLATE && visibleProjectTemplates.length === 1) {
+      wizardStep = WZ_STEP_SELECT_PROJ_TYPE
+    }
+
+    // project type
+    // if wizard has moved to select project template step,
+    // it should persist project type, else it should be reset
+    const type = wizardStep === WZ_STEP_SELECT_PROJ_TEMPLATE ? this.state.project.type : null
     this.setState({
-      project: update(this.state.project, { type: { $set : null }, details: { products: {$set : [] }}}),
-      dirtyProject: update(this.state.project, { type: { $set : null }, details: { products: {$set : [] }}}),
+      // resets project sub type or product
+      project: update(this.state.project, { type: { $set : type }, details: {}}),
+      dirtyProject: update(this.state.project, { type: { $set : type }, details: {}}),
       wizardStep
     }, () => {
       typeof onStepChange === 'function' && onStepChange(wizardStep, this.state.dirtyProject)
@@ -359,8 +430,10 @@ class ProjectWizard extends Component {
   }
 
   render() {
-    const { processing, showModal, userRoles, projectTemplates } = this.props
+    const { processing, showModal, userRoles, projectTemplates, projectTypes, projectId, match, templates } = this.props
     const { project, dirtyProject, wizardStep } = this.state
+    const params = match.params
+
     return (
       <Wizard
         showModal={showModal}
@@ -368,23 +441,30 @@ class ProjectWizard extends Component {
         onCancel={this.handleWizardCancel}
         onStepChange={ this.handleStepChange }
         step={wizardStep}
-        shouldRenderBackButton={ (step) => step > 1 }
+        shouldRenderBackButton={ (step) => step > 1 && step !== 5 }
       >
         <IncompleteProjectConfirmation
           loadIncompleteProject={ this.loadIncompleteProject }
           removeIncompleteProject={ this.removeIncompleteProject }
           userRoles={ userRoles }
         />
-        <SelectItemType
-          header={'Create a new project'}
+        <SelectProjectType
           onProjectTypeChange={ this.updateProjectType }
-          userRoles={ userRoles }
           projectTemplates={ projectTemplates }
-          selectButtonTitle={'Select Project'}
+          projectTypes={ projectTypes }
+        />
+        <SelectProjectTemplate
+          onProjectTemplateChange={ this.updateProjectTemplate }
+          projectTemplates={ projectTemplates }
+          projectTypeKey={ project.type }
+          projectTypes={ projectTypes }
         />
         <FillProjectDetails
           project={ project }
+          templates={projectTemplates}
           projectTemplates={ projectTemplates }
+          productTemplates={templates.productTemplates}
+          productCategories={templates.productCategories}
           dirtyProject={ dirtyProject }
           processing={ processing}
           onCreateProject={ this.handleOnCreateProject }
@@ -392,7 +472,15 @@ class ProjectWizard extends Component {
           onProjectChange={ this.handleProjectChange }
           submitBtnText="Continue"
           userRoles={ userRoles }
-          onBackClick={() => this.handleStepChange(WZ_STEP_SELECT_PROJ_TYPE)}
+          onBackClick={() => this.handleStepChange(wizardStep - 1)}
+        />
+        <div />
+        <ProjectSubmitted
+          project={ project }
+          projectTemplates={ projectTemplates }
+          dirtyProject={ dirtyProject }
+          params={ params }
+          projectId={ projectId }
         />
       </Wizard>
     )
@@ -432,6 +520,14 @@ ProjectWizard.propTypes = {
    * Project templates list.
    */
   projectTemplates: PropTypes.array.isRequired,
+  /**
+   * Project types list.
+   */
+  projectTypes: PropTypes.array.isRequired,
+  /**
+   * templates
+   */
+  templates: PropTypes.object.isRequired,
 }
 
 ProjectWizard.defaultProps = {
@@ -442,8 +538,10 @@ ProjectWizard.defaultProps = {
 ProjectWizard.Steps = {
   WZ_STEP_INCOMP_PROJ_CONF,
   WZ_STEP_SELECT_PROJ_TYPE,
+  WZ_STEP_SELECT_PROJ_TEMPLATE,
   WZ_STEP_FILL_PROJ_DETAILS,
-  WZ_STEP_ERROR_CREATING_PROJ
+  WZ_STEP_ERROR_CREATING_PROJ,
+  WZ_STEP_PROJECT_SUBMITTED
 }
 
 export default withRouter(ProjectWizard)

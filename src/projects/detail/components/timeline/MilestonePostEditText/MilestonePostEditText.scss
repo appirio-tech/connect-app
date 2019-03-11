@@ -1,0 +1,143 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// project-progress specific styles
+.milestone-post {
+  @include roboto;
+  font-size: 15px;
+
+  .label-layer {
+    display: flex;
+    justify-content: space-between;
+    height: inherit;
+    position: relative;
+    line-height: inherit;
+    z-index: 2;
+    overflow: hidden;
+    @include viewSm {
+      padding-right: $base-unit*7;
+    }
+
+    .content {
+      width: 100%;
+      background-color: $tc-gray-neutral-light;
+      border-radius: 4px;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 25px;
+      text-align: left;
+      padding: 10px 10px;
+      word-break: break-all;
+    }
+
+    .input-text {
+      margin: auto;
+      resize:none;
+      height: 44px;
+      text-transform: initial;
+      &::-webkit-input-placeholder {
+        text-transform: initial;
+        color:$tc-gray-40;
+        font-size: 15px;
+        font-weight: 400;
+      }
+      &:-moz-placeholder {
+          text-transform: initial;
+          color:$tc-gray-40;
+          font-size: 15px;
+          font-weight: 400;
+      }
+      &::-moz-placeholder {
+          text-transform: initial;
+          color:$tc-gray-40;
+          font-size: 15px;
+          font-weight: 400;
+      }
+      &:-ms-input-placeholder {
+          text-transform: initial;
+          color:$tc-gray-40;
+          font-size: 15px;
+          font-weight: 400;
+      }
+      &.element:-o-input-placeholder {
+        text-transform: initial;
+        color:$tc-gray-40;
+        font-size: 15px;
+        font-weight: 400;
+      }
+    }
+
+    .group-right {
+      width: 405px;
+      display: flex;
+      line-height: 50px;
+      justify-content: space-between;
+      text-align: right;
+      color: $tc-gray-50;
+      @include viewSm {
+        min-width: 100px;
+
+        &.hide-sm{
+          display: none;
+        }
+      }
+    }
+
+    button {
+      width: 16px;
+      height: 16px;
+      color: white;
+      border-radius: 50%;
+      margin: auto auto auto 10px;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 0;
+      border: 0;
+      &.button-add {
+        background-color: $tc-gray-20;
+        padding: 0;
+        flex: 0 0 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &:hover {
+          background-color: $tc-dark-blue-100;
+        }
+
+        svg {
+          fill: $tc-white;
+          width: 8px;
+          transform: translate3d(0, 0, 0);
+        }
+      }
+      &.button-remove {
+        background-color: $tc-red-110;
+        font-size: 20px;
+        padding: 0;
+        flex: 0 0 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        svg {
+          fill: $tc-white;
+          width: 8px;
+          path {
+            fill: $tc-white;
+          }
+        }
+      }
+    }
+
+  }
+  .milestone-text {
+    color: $tc-gray-50;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 50px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

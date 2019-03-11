@@ -1,3 +1,4 @@
+import { getCookie } from '../helpers/cookie'
 /*
  * ACTIONS
  */
@@ -6,8 +7,14 @@
 export const LOAD_USER_SUCCESS     = 'LOAD_USER_SUCCESS'
 export const LOAD_USER_FAILURE     = 'LOAD_USER_FAILURE'
 
+// Load organization configs
+export const LOAD_ORG_CONFIG_SUCCESS     = 'LOAD_ORG_CONFIG_SUCCESS'
+export const LOAD_ORG_CONFIG_FAILURE     = 'LOAD_ORG_CONFIG_FAILURE'
+
 // Notifications
-export const GET_NOTIFICATIONS = 'GET_NOTIFICATIONS'
+export const GET_NOTIFICATIONS_PENDING = 'GET_NOTIFICATIONS_PENDING'
+export const GET_NOTIFICATIONS_SUCCESS = 'GET_NOTIFICATIONS_SUCCESS'
+export const GET_NOTIFICATIONS_FAILURE = 'GET_NOTIFICATIONS_FAILURE'
 export const VISIT_NOTIFICATIONS = 'VISIT_NOTIFICATIONS'
 export const SET_NOTIFICATIONS_FILTER_BY = 'SET_NOTIFICATIONS_FILTER_BY'
 export const MARK_ALL_NOTIFICATIONS_READ = 'MARK_ALL_NOTIFICATIONS_READ'
@@ -17,8 +24,13 @@ export const VIEW_OLDER_NOTIFICATIONS_SUCCESS = 'VIEW_OLDER_NOTIFICATIONS_SUCCES
 export const HIDE_OLDER_NOTIFICATIONS_SUCCESS = 'HIDE_OLDER_NOTIFICATIONS_SUCCESS'
 export const NOTIFICATIONS_PENDING = 'NOTIFICATIONS_PENDING'
 export const TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE = 'TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE'
+export const TOGGLE_NOTIFICATIONS_DROPDOWN_WEB = 'TOGGLE_NOTIFICATIONS_DROPDOWN_WEB'
+export const MARK_NOTIFICATIONS_READ = 'MARK_NOTIFICATIONS_READ'
 
 // Settings
+export const GET_SYSTEM_SETTINGS_PENDING = 'GET_SYSTEM_SETTINGS_PENDING'
+export const GET_SYSTEM_SETTINGS_SUCCESS = 'GET_SYSTEM_SETTINGS_SUCCESS'
+export const GET_SYSTEM_SETTINGS_FAILURE = 'GET_SYSTEM_SETTINGS_FAILURE'
 export const CHECK_EMAIL_AVAILABILITY_PENDING = 'CHECK_EMAIL_AVAILABILITY_PENDING'
 export const CHECK_EMAIL_AVAILABILITY_SUCCESS = 'CHECK_EMAIL_AVAILABILITY_SUCCESS'
 export const CHECK_EMAIL_AVAILABILITY_FAILURE = 'CHECK_EMAIL_AVAILABILITY_FAILURE'
@@ -31,12 +43,27 @@ export const CHANGE_PASSWORD_PENDING = 'CHANGE_PASSWORD_PENDING'
 export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS'
 export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE'
 
+export const RESET_PASSWORD_PENDING = 'RESET_PASSWORD_PENDING'
+export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS'
+export const RESET_PASSWORD_FAILURE = 'RESET_PASSWORD_FAILURE'
+
 export const GET_NOTIFICATION_SETTINGS_PENDING = 'GET_NOTIFICATION_SETTINGS_PENDING'
 export const GET_NOTIFICATION_SETTINGS_SUCCESS = 'GET_NOTIFICATION_SETTINGS_SUCCESS'
 export const GET_NOTIFICATION_SETTINGS_FAILURE = 'GET_NOTIFICATION_SETTINGS_FAILURE'
 export const SAVE_NOTIFICATION_SETTINGS_PENDING = 'SAVE_NOTIFICATION_SETTINGS_PENDING'
 export const SAVE_NOTIFICATION_SETTINGS_SUCCESS = 'SAVE_NOTIFICATION_SETTINGS_SUCCESS'
 export const SAVE_NOTIFICATION_SETTINGS_FAILURE = 'SAVE_NOTIFICATION_SETTINGS_FAILURE'
+
+export const GET_PROFILE_SETTINGS_PENDING = 'GET_PROFILE_SETTINGS_PENDING'
+export const GET_PROFILE_SETTINGS_SUCCESS = 'GET_PROFILE_SETTINGS_SUCCESS'
+export const GET_PROFILE_SETTINGS_FAILURE = 'GET_PROFILE_SETTINGS_FAILURE'
+export const SAVE_PROFILE_SETTINGS_PENDING = 'SAVE_PROFILE_SETTINGS_PENDING'
+export const SAVE_PROFILE_SETTINGS_SUCCESS = 'SAVE_PROFILE_SETTINGS_SUCCESS'
+export const SAVE_PROFILE_SETTINGS_FAILURE = 'SAVE_PROFILE_SETTINGS_FAILURE'
+export const CLEAR_PROFILE_SETTINGS_PHOTO = 'CLEAR_PROFILE_SETTINGS_PHOTO'
+export const SAVE_PROFILE_PHOTO_SUCCESS = 'SAVE_PROFILE_PHOTO_SUCCESS'
+export const SAVE_PROFILE_PHOTO_FAILURE = 'SAVE_PROFILE_PHOTO_FAILURE'
+export const SAVE_PROFILE_PHOTO_PENDING = 'SAVE_PROFILE_PHOTO_PENDING'
 
 // Search Term
 export const SET_SEARCH_TERM   = 'SET_SEARCH_TERM'
@@ -183,6 +210,10 @@ export const DELETE_PHASE_FEED_COMMENT_PENDING  = 'DELETE_PHASE_FEED_COMMENT_PEN
 export const DELETE_PHASE_FEED_COMMENT_SUCCESS  = 'DELETE_PHASE_FEED_COMMENT_SUCCESS'
 export const DELETE_PHASE_FEED_COMMENT_FAILURE  = 'DELETE_PHASE_FEED_COMMENT_FAILURE'
 
+export const EXPAND_PROJECT_PHASE = 'EXPAND_PROJECT_PHASE'
+export const COLLAPSE_PROJECT_PHASE = 'COLLAPSE_PROJECT_PHASE'
+export const COLLAPSE_ALL_PROJECT_PHASES = 'COLLAPSE_ALL_PROJECT_PHASES'
+
 // Project Sort
 export const PROJECT_SORT             = 'PROJECT_SORT'
 export const PROJECT_SORT_FAILURE     = 'PROJECT_SORT_FAILURE'
@@ -195,6 +226,11 @@ export const LOAD_PROJECT             = 'LOAD_PROJECT'
 export const LOAD_PROJECT_PENDING     = 'LOAD_PROJECT_PENDING'
 export const LOAD_PROJECT_FAILURE     = 'LOAD_PROJECT_FAILURE'
 export const LOAD_PROJECT_SUCCESS     = 'LOAD_PROJECT_SUCCESS'
+
+export const LOAD_PROJECT_MEMBER_INVITES  = 'LOAD_PROJECT_MEMBER_INVITES'
+export const LOAD_PROJECT_MEMBER_INVITES_PENDING  = 'LOAD_PROJECT_MEMBER_INVITES_PENDING'
+export const LOAD_PROJECT_MEMBER_INVITES_FAILURE  = 'LOAD_PROJECT_MEMBER_INVITES_FAILURE'
+export const LOAD_PROJECT_MEMBER_INVITES_SUCCESS  = 'LOAD_PROJECT_MEMBER_INVITES_SUCCESS'
 
 export const CREATE_PROJECT           = 'CREATE_PROJECT'
 export const CREATE_PROJECT_PENDING   = 'CREATE_PROJECT_PENDING'
@@ -229,6 +265,9 @@ export const UPDATE_PRODUCT_FAILURE   = 'UPDATE_PRODUCT_FAILURE'
 export const PROJECT_DIRTY            = 'PROJECT_DIRTY'
 export const PROJECT_DIRTY_UNDO       = 'PROJECT_DIRTY_UNDO'
 
+export const PHASE_DIRTY            = 'PHASE_DIRTY'
+export const PHASE_DIRTY_UNDO       = 'PHASE_DIRTY_UNDO'
+
 export const PRODUCT_DIRTY            = 'PRODUCT_DIRTY'
 export const PRODUCT_DIRTY_UNDO       = 'PRODUCT_DIRTY_UNDO'
 
@@ -236,6 +275,36 @@ export const LOAD_PROJECT_PHASES             = 'LOAD_PROJECT_PHASES'
 export const LOAD_PROJECT_PHASES_PENDING     = 'LOAD_PROJECT_PHASES_PENDING'
 export const LOAD_PROJECT_PHASES_FAILURE     = 'LOAD_PROJECT_PHASES_FAILURE'
 export const LOAD_PROJECT_PHASES_SUCCESS     = 'LOAD_PROJECT_PHASES_SUCCESS'
+
+export const LOAD_PRODUCT_TIMELINE_WITH_MILESTONES             = 'LOAD_PRODUCT_TIMELINE_WITH_MILESTONES'
+export const LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_PENDING     = 'LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_PENDING'
+export const LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE     = 'LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_FAILURE'
+export const LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_SUCCESS     = 'LOAD_PRODUCT_TIMELINE_WITH_MILESTONES_SUCCESS'
+
+export const UPDATE_PRODUCT_TIMELINE          = 'UPDATE_PRODUCT_TIMELINE'
+export const UPDATE_PRODUCT_TIMELINE_PENDING  = 'UPDATE_PRODUCT_TIMELINE_PENDING'
+export const UPDATE_PRODUCT_TIMELINE_FAILURE  = 'UPDATE_PRODUCT_TIMELINE_FAILURE'
+export const UPDATE_PRODUCT_TIMELINE_SUCCESS  = 'UPDATE_PRODUCT_TIMELINE_SUCCESS'
+
+export const UPDATE_PRODUCT_MILESTONE             = 'UPDATE_PRODUCT_MILESTONE'
+export const UPDATE_PRODUCT_MILESTONE_PENDING     = 'UPDATE_PRODUCT_MILESTONE_PENDING'
+export const UPDATE_PRODUCT_MILESTONE_FAILURE     = 'UPDATE_PRODUCT_MILESTONE_FAILURE'
+export const UPDATE_PRODUCT_MILESTONE_SUCCESS     = 'UPDATE_PRODUCT_MILESTONE_SUCCESS'
+
+export const COMPLETE_PRODUCT_MILESTONE             = 'COMPLETE_PRODUCT_MILESTONE'
+export const COMPLETE_PRODUCT_MILESTONE_PENDING     = 'COMPLETE_PRODUCT_MILESTONE_PENDING'
+export const COMPLETE_PRODUCT_MILESTONE_FAILURE     = 'COMPLETE_PRODUCT_MILESTONE_FAILURE'
+export const COMPLETE_PRODUCT_MILESTONE_SUCCESS     = 'COMPLETE_PRODUCT_MILESTONE_SUCCESS'
+
+export const SUBMIT_FINAL_FIXES_REQUEST             = 'SUBMIT_FINAL_FIXES_REQUEST'
+export const SUBMIT_FINAL_FIXES_REQUEST_PENDING     = 'SUBMIT_FINAL_FIXES_REQUEST_PENDING'
+export const SUBMIT_FINAL_FIXES_REQUEST_FAILURE     = 'SUBMIT_FINAL_FIXES_REQUEST_FAILURE'
+export const SUBMIT_FINAL_FIXES_REQUEST_SUCCESS     = 'SUBMIT_FINAL_FIXES_REQUEST_SUCCESS'
+
+export const EXTEND_PRODUCT_MILESTONE             = 'EXTEND_PRODUCT_MILESTONE'
+export const EXTEND_PRODUCT_MILESTONE_PENDING     = 'EXTEND_PRODUCT_MILESTONE_PENDING'
+export const EXTEND_PRODUCT_MILESTONE_FAILURE     = 'EXTEND_PRODUCT_MILESTONE_FAILURE'
+export const EXTEND_PRODUCT_MILESTONE_SUCCESS     = 'EXTEND_PRODUCT_MILESTONE_SUCCESS'
 
 export const LOAD_MEMBERS             = 'LOAD_MEMBERS'
 export const LOAD_MEMBERS_PENDING     = 'LOAD_MEMBERS_PENDING'
@@ -246,11 +315,47 @@ export const LOAD_MEMBER_SUGGESTIONS             = 'LOAD_MEMBER_SUGGESTIONS'
 export const LOAD_MEMBER_SUGGESTIONS_PENDING     = 'LOAD_MEMBER_SUGGESTIONS_PENDING'
 export const LOAD_MEMBER_SUGGESTIONS_SUCCESS     = 'LOAD_MEMBER_SUGGESTIONS_SUCCESS'
 export const LOAD_MEMBER_SUGGESTIONS_FAILURE     = 'LOAD_MEMBER_SUGGESTIONS_FAILURE'
+export const CLEAR_MEMBER_SUGGESTIONS            = 'CLEAR_MEMBER_SUGGESTIONS'
 
 export const ADD_PROJECT_MEMBER             = 'ADD_PROJECT_MEMBER'
 export const ADD_PROJECT_MEMBER_PENDING     = 'ADD_PROJECT_MEMBER_PENDING'
 export const ADD_PROJECT_MEMBER_SUCCESS     = 'ADD_PROJECT_MEMBER_SUCCESS'
 export const ADD_PROJECT_MEMBER_FAILURE     = 'ADD_PROJECT_MEMBER_FAILURE'
+
+export const INVITE_CUSTOMER             = 'INVITE_CUSTOMER'
+export const INVITE_CUSTOMER_PENDING     = 'INVITE_CUSTOMER_PENDING'
+export const INVITE_CUSTOMER_SUCCESS     = 'INVITE_CUSTOMER_SUCCESS'
+export const INVITE_CUSTOMER_FAILURE     = 'INVITE_CUSTOMER_FAILURE'
+
+export const REMOVE_CUSTOMER_INVITE         = 'REMOVE_CUSTOMER_INVITE'
+export const REMOVE_CUSTOMER_INVITE_PENDING = 'REMOVE_CUSTOMER_INVITE_PENDING'
+export const REMOVE_CUSTOMER_INVITE_SUCCESS = 'REMOVE_CUSTOMER_INVITE_SUCCESS'
+export const REMOVE_CUSTOMER_INVITE_FAILURE = 'REMOVE_CUSTOMER_INVITE_FAILURE'
+
+export const INVITE_TOPCODER_MEMBER         = 'INVITE_TOPCODER_MEMBER'
+export const INVITE_TOPCODER_MEMBER_PENDING = 'INVITE_TOPCODER_MEMBER_PENDING'
+export const INVITE_TOPCODER_MEMBER_SUCCESS = 'INVITE_TOPCODER_MEMBER_SUCCESS'
+export const INVITE_TOPCODER_MEMBER_FAILURE = 'INVITE_TOPCODER_MEMBER_FAILURE'
+
+export const REMOVE_TOPCODER_MEMBER_INVITE         = 'REMOVE_TOPCODER_MEMBER_INVITE'
+export const REMOVE_TOPCODER_MEMBER_INVITE_PENDING = 'REMOVE_TOPCODER_MEMBER_INVITE_PENDING'
+export const REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS = 'REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS'
+export const REMOVE_TOPCODER_MEMBER_INVITE_FAILURE = 'REMOVE_TOPCODER_MEMBER_INVITE_FAILURE'
+
+export const ACCEPT_OR_REFUSE_INVITE         = 'ACCEPT_OR_REFUSE_INVITE'
+export const ACCEPT_OR_REFUSE_INVITE_PENDING = 'ACCEPT_OR_REFUSE_INVITE_PENDING'
+export const ACCEPT_OR_REFUSE_INVITE_FAILURE = 'ACCEPT_OR_REFUSE_INVITE_FAILURE'
+export const ACCEPT_OR_REFUSE_INVITE_SUCCESS = 'ACCEPT_OR_REFUSE_INVITE_SUCCESS'
+
+export const RELOAD_PROJECT_MEMBERS       = 'RELOAD_PROJECT_MEMBERS'
+export const RELOAD_PROJECT_MEMBERS_PENDING       = 'RELOAD_PROJECT_MEMBERS_PENDING'
+export const RELOAD_PROJECT_MEMBERS_FAILURE       = 'RELOAD_PROJECT_MEMBERS_FAILURE'
+export const RELOAD_PROJECT_MEMBERS_SUCCESS       = 'RELOAD_PROJECT_MEMBERS_SUCCESS'
+
+export const ADD_PROJECT_MEMBERS         = 'ADD_PROJECT_MEMBERS'
+export const ADD_PROJECT_MEMBERS_PENDING = 'ADD_PROJECT_MEMBERS_PENDING'
+export const ADD_PROJECT_MEMBERS_SUCCESS = 'ADD_PROJECT_MEMBERS_SUCCESS'
+export const ADD_PROJECT_MEMBERS_FAILURE = 'ADD_PROJECT_MEMBERS_FAILURE'
 
 export const REMOVE_PROJECT_MEMBER             = 'REMOVE_PROJECT_MEMBER'
 export const REMOVE_PROJECT_MEMBER_PENDING     = 'REMOVE_PROJECT_MEMBER_PENDING'
@@ -266,10 +371,13 @@ export const CLEAR_LOADED_PROJECT     = 'CLEAR_LOADED_PROJECT'
 
 
 // Project attachments
-export const ADD_PROJECT_ATTACHMENT         = 'ADD_PROJECT_ATTACHMENT'
-export const ADD_PROJECT_ATTACHMENT_PENDING = 'ADD_PROJECT_ATTACHMENT_PENDING'
-export const ADD_PROJECT_ATTACHMENT_SUCCESS = 'ADD_PROJECT_ATTACHMENT_SUCCESS'
-export const ADD_PROJECT_ATTACHMENT_FAILURE = 'ADD_PROJECT_ATTACHMENT_FAILURE'
+export const ADD_PROJECT_ATTACHMENT          = 'ADD_PROJECT_ATTACHMENT'
+export const DISCARD_PROJECT_ATTACHMENT      = 'DISCARD_PROJECT_ATTACHMENT'
+export const UPLOAD_PROJECT_ATTACHMENT_FILES = 'UPLOAD_PROJECT_ATTACHMENT_FILES'
+export const CHANGE_ATTACHMENT_PERMISSION    = 'CHANGE_ATTACHMENT_PERMISSION'
+export const ADD_PROJECT_ATTACHMENT_PENDING  = 'ADD_PROJECT_ATTACHMENT_PENDING'
+export const ADD_PROJECT_ATTACHMENT_SUCCESS  = 'ADD_PROJECT_ATTACHMENT_SUCCESS'
+export const ADD_PROJECT_ATTACHMENT_FAILURE  = 'ADD_PROJECT_ATTACHMENT_FAILURE'
 
 export const REMOVE_PROJECT_ATTACHMENT         = 'REMOVE_PROJECT_ATTACHMENT'
 export const REMOVE_PROJECT_ATTACHMENT_PENDING = 'REMOVE_PROJECT_ATTACHMENT_PENDING'
@@ -299,35 +407,70 @@ export const UPDATE_PRODUCT_ATTACHMENT_FAILURE = 'UPDATE_PRODUCT_ATTACHMENT_FAIL
 
 // Templates
 
-// load all templates to `templates.projectTemplate` in store
-export const LOAD_PROJECT_TEMPLATES             = 'LOAD_PROJECT_TEMPLATES'
-export const LOAD_PROJECT_TEMPLATES_PENDING     = 'LOAD_PROJECT_TEMPLATES_PENDING'
-export const LOAD_PROJECT_TEMPLATES_SUCCESS     = 'LOAD_PROJECT_TEMPLATES_SUCCESS'
-export const LOAD_PROJECT_TEMPLATES_FAILURE     = 'LOAD_PROJECT_TEMPLATES_FAILURE'
+export const LOAD_PROJECTS_METADATA = 'LOAD_PROJECTS_METADATA'
+export const LOAD_PROJECTS_METADATA_PENDING = 'LOAD_PROJECTS_METADATA_PENDING'
+export const LOAD_PROJECTS_METADATA_SUCCESS = 'LOAD_PROJECTS_METADATA_SUCCESS'
+export const LOAD_PROJECTS_METADATA_FAILURE = 'LOAD_PROJECTS_METADATA_FAILURE'
 
-// load project template for particular project to `projectState.projectTemplate` in store
-export const LOAD_PROJECT_TEMPLATE             = 'LOAD_PROJECT_TEMPLATE'
-export const LOAD_PROJECT_TEMPLATE_PENDING     = 'LOAD_PROJECT_TEMPLATE_PENDING'
-export const LOAD_PROJECT_TEMPLATE_SUCCESS     = 'LOAD_PROJECT_TEMPLATE_SUCCESS'
-export const LOAD_PROJECT_TEMPLATE_FAILURE     = 'LOAD_PROJECT_TEMPLATE_FAILURE'
+export const ADD_PROJECTS_METADATA = 'ADD_PROJECT_METADATA'
+export const ADD_PROJECTS_METADATA_PENDING = 'ADD_PROJECT_METADATA_PENDING'
+export const ADD_PROJECTS_METADATA_SUCCESS = 'ADD_PROJECT_METADATA_SUCCESS'
+export const ADD_PROJECTS_METADATA_FAILURE = 'ADD_PROJECT_METADATA_FAILURE'
 
-// load product templates for particular project to `projectState.productTemplate` in store
-export const LOAD_PROJECT_PRODUCT_TEMPLATES             = 'LOAD_PROJECT_PRODUCT_TEMPLATES'
-export const LOAD_PROJECT_PRODUCT_TEMPLATES_PENDING     = 'LOAD_PROJECT_PRODUCT_TEMPLATES_PENDING'
-export const LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS     = 'LOAD_PROJECT_PRODUCT_TEMPLATES_SUCCESS'
-export const LOAD_PROJECT_PRODUCT_TEMPLATES_FAILURE     = 'LOAD_PROJECT_PRODUCT_TEMPLATES_FAILURE'
+export const CREATE_PROJECT_TEMPLATE = 'CREATE_PROJECT_TEMPLATE'
+export const CREATE_PROJECT_TEMPLATE_PENDING = 'CREATE_PROJECT_TEMPLATE_PENDING'
+export const CREATE_PROJECT_TEMPLATE_SUCCESS = 'CREATE_PROJECT_TEMPLATE_SUCCESS'
+export const CREATE_PROJECT_TEMPLATE_FAILURE = 'CREATE_PROJECT_TEMPLATE_FAILURE'
 
-// load all product templates to `projectState.allProductTemplate` in store
-export const LOAD_ALL_PRODUCT_TEMPLATES             = 'LOAD_ALL_PRODUCT_TEMPLATES'
-export const LOAD_ALL_PRODUCT_TEMPLATES_PENDING     = 'LOAD_ALL_PRODUCT_TEMPLATES_PENDING'
-export const LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS     = 'LOAD_ALL_PRODUCT_TEMPLATES_SUCCESS'
-export const LOAD_ALL_PRODUCT_TEMPLATES_FAILURE     = 'LOAD_ALL_PRODUCT_TEMPLATES_FAILURE'
+export const CREATE_PRODUCT_TEMPLATE = 'CREATE_PRODUCT_TEMPLATE'
+export const CREATE_PRODUCT_TEMPLATE_PENDING = 'CREATE_PRODUCT_TEMPLATE_PENDING'
+export const CREATE_PRODUCT_TEMPLATE_SUCCESS = 'CREATE_PRODUCT_TEMPLATE_SUCCESS'
+export const CREATE_PRODUCT_TEMPLATE_FAILURE = 'CREATE_PRODUCT_TEMPLATE_FAILURE'
 
-// load all project types to `template.projectCategories` in store
-export const LOAD_PROJECT_CATEGORIES             = 'LOAD_PROJECT_CATEGORIES'
-export const LOAD_PROJECT_CATEGORIES_PENDING     = 'LOAD_PROJECT_CATEGORIES_PENDING'
-export const LOAD_PROJECT_CATEGORIES_SUCCESS     = 'LOAD_PROJECT_CATEGORIES_SUCCESS'
-export const LOAD_PROJECT_CATEGORIES_FAILURE     = 'LOAD_PROJECT_CATEGORIES_FAILURE'
+export const CREATE_PROJECT_TYPE = 'CREATE_PROJECT_TYPE'
+export const CREATE_PROJECT_TYPE_PENDING = 'CREATE_PROJECT_TYPE_PENDING'
+export const CREATE_PROJECT_TYPE_SUCCESS = 'CREATE_PROJECT_TYPE_SUCCESS'
+export const CREATE_PROJECT_TYPE_FAILURE = 'CREATE_PROJECT_TYPE_FAILURE'
+
+export const CREATE_PRODUCT_CATEGORY = 'CREATE_PRODUCT_CATEGORY'
+export const CREATE_PRODUCT_CATEGORY_PENDING = 'CREATE_PRODUCT_CATEGORY_PENDING'
+export const CREATE_PRODUCT_CATEGORY_SUCCESS = 'CREATE_PRODUCT_CATEGORY_SUCCESS'
+export const CREATE_PRODUCT_CATEGORY_FAILURE = 'CREATE_PRODUCT_CATEGORY_FAILURE'
+
+export const UPDATE_PROJECTS_METADATA = 'UPDATE_PROJECT_METADATA'
+export const UPDATE_PROJECTS_METADATA_PENDING = 'UPDATE_PROJECT_METADATA_PENDING'
+export const UPDATE_PROJECTS_METADATA_SUCCESS = 'UPDATE_PROJECT_METADATA_SUCCESS'
+export const UPDATE_PROJECTS_METADATA_FAILURE = 'UPDATE_PROJECT_METADATA_FAILURE'
+
+export const REMOVE_PROJECTS_METADATA = 'REMOVE_PROJECT_METADATA'
+export const REMOVE_PROJECTS_METADATA_PENDING = 'REMOVE_PROJECT_METADATA_PENDING'
+export const REMOVE_PROJECTS_METADATA_SUCCESS = 'REMOVE_PROJECT_METADATA_SUCCESS'
+export const REMOVE_PROJECTS_METADATA_FAILURE = 'REMOVE_PROJECT_METADATA_FAILURE'
+
+export const REMOVE_PRODUCT_TEMPLATE = 'REMOVE_PRODUCT_TEMPLATE'
+export const REMOVE_PRODUCT_TEMPLATE_PENDING = 'REMOVE_PRODUCT_TEMPLATE_PENDING'
+export const REMOVE_PRODUCT_TEMPLATE_SUCCESS = 'REMOVE_PRODUCT_TEMPLATE_SUCCESS'
+export const REMOVE_PRODUCT_TEMPLATE_FAILURE = 'REMOVE_PRODUCT_TEMPLATE_FAILURE'
+
+export const REMOVE_PRODUCT_CATEGORY = 'REMOVE_PRODUCT_CATEGORY'
+export const REMOVE_PRODUCT_CATEGORY_PENDING = 'REMOVE_PRODUCT_CATEGORY_PENDING'
+export const REMOVE_PRODUCT_CATEGORY_SUCCESS = 'REMOVE_PRODUCT_CATEGORY_SUCCESS'
+export const REMOVE_PRODUCT_CATEGORY_FAILURE = 'REMOVE_PRODUCT_CATEGORY_FAILURE'
+
+export const REMOVE_PROJECT_TEMPLATE = 'REMOVE_PROJECT_TEMPLATE'
+export const REMOVE_PROJECT_TEMPLATE_PENDING = 'REMOVE_PROJECT_TEMPLATE_PENDING'
+export const REMOVE_PROJECT_TEMPLATE_SUCCESS = 'REMOVE_PROJECT_TEMPLATE_SUCCESS'
+export const REMOVE_PROJECT_TEMPLATE_FAILURE = 'REMOVE_PROJECT_TEMPLATE_FAILURE'
+
+export const REMOVE_PROJECT_TYPE = 'REMOVE_PROJECT_TYPE'
+export const REMOVE_PROJECT_TYPE_PENDING = 'REMOVE_PROJECT_TYPE_PENDING'
+export const REMOVE_PROJECT_TYPE_SUCCESS = 'REMOVE_PROJECT_TYPE_SUCCESS'
+export const REMOVE_PROJECT_TYPE_FAILURE = 'REMOVE_PROJECT_TYPE_FAILURE'
+
+export const PROJECT_TEMPLATES_SORT = 'PROJECT_TEMPLATES_SORT'
+export const PRODUCT_TEMPLATES_SORT = 'PRODUCT_TEMPLATES_SORT'
+export const PROJECT_TYPES_SORT = 'PROJECT_TYPES_SORT'
+export const PRODUCT_CATEGORIES_SORT = 'PRODUCT_CATEGORIES_SORT'
 
 export const THREAD_MESSAGES_PAGE_SIZE = 3
 /*
@@ -361,7 +504,7 @@ export const PROJECT_STATUS = [
 ]
 
 export const PHASE_STATUS = [
-  {color: 'gray', name: 'Unplanned', fullName: 'Phase is in draft', value: PHASE_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
+  {color: 'gray', name: 'Draft', fullName: 'Phase is in draft', value: PHASE_STATUS_DRAFT, order: 2, dropDownOrder: 1 },
   // {color: 'gray', name: 'In review', fullName: 'Phase is in review', value: PHASE_STATUS_IN_REVIEW, order: 3, dropDownOrder: 2 },
   {color: 'gray', name: 'Planned', fullName: 'Phase is reviewed', value: PHASE_STATUS_REVIEWED, order: 4, dropDownOrder: 3 },
   {color: 'green', name: 'In Progress', fullName: 'Phase is active', value: PHASE_STATUS_ACTIVE, order: 1, dropDownOrder: 4 },
@@ -384,6 +527,18 @@ export const NOTIFICATION_TYPE = {
   MEMBER_ADDED: 'member-added'
 }
 
+/*
+ * Project member invite status
+ */
+export const PROJECT_MEMBER_INVITE_STATUS_ACCEPTED = 'accepted'
+export const PROJECT_MEMBER_INVITE_STATUS_REFUSED = 'refused'
+export const PROJECT_MEMBER_INVITE_STATUS_CANCELED = 'canceled'
+export const PROJECT_MEMBER_INVITE_STATUS_PENDING = 'pending'
+export const PROJECT_MEMBER_INVITE_STATUS_REQUESTED = 'requested'
+export const PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED = 'request_approved'
+export const PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED = 'request_rejected'
+
+
 // projects list view types
 export const PROJECTS_LIST_VIEW = {
   GRID: 'grid',
@@ -395,6 +550,7 @@ export const PROJECTS_LIST_VIEW = {
  */
 export const PROJECT_ROLE_COPILOT = 'copilot'
 export const PROJECT_ROLE_MANAGER = 'manager'
+export const PROJECT_ROLE_ACCOUNT_MANAGER = 'account_manager'
 export const PROJECT_ROLE_CUSTOMER = 'customer'
 export const PROJECT_ROLE_OWNER = 'owner'
 export const PROJECT_ROLE_MEMBER = 'member' // this is need for notifications
@@ -410,12 +566,16 @@ export const EVENT_ROUTE_CHANGE = 'event.route_change'
 export const ROLE_TOPCODER_USER = 'Topcoder User'
 export const ROLE_CONNECT_COPILOT = 'Connect Copilot'
 export const ROLE_CONNECT_MANAGER = 'Connect Manager'
+export const ROLE_CONNECT_ACCOUNT_MANAGER = 'Connect Account Manager'
 export const ROLE_CONNECT_ADMIN = 'Connect Admin'
 export const ROLE_ADMINISTRATOR = 'administrator'
+export const ROLE_CONNECT_COPILOT_MANAGER = 'Connect Copilot Manager'
 
 // FIXME .. remove defaults
 export const FILE_PICKER_API_KEY = process.env.FILE_PICKER_API_KEY || 'AzFINuQoqTmqw0QEoaw9az'
 export const FILE_PICKER_SUBMISSION_CONTAINER_NAME = process.env.FILE_PICKER_SUBMISSION_CONTAINER_NAME || 'submission-staging-dev'
+export const FILE_PICKER_CNAME = process.env.FILE_PICKER_CNAME || 'fs.topcoder.com'
+export const FILE_PICKER_FROM_SOURCES = process.env.FILE_PICKER_FROM_SOURCES || ['local_file_system', 'googledrive', 'dropbox']
 export const PROJECT_ATTACHMENTS_FOLDER = process.env.PROJECT_ATTACHMENTS_FOLDER || 'PROJECT_ATTACHMENTS'
 
 export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
@@ -424,6 +584,7 @@ export const SEGMENT_KEY = process.env.CONNECT_SEGMENT_KEY
  */
 export const DOMAIN = process.env.domain || 'topcoder.com'
 export const CONNECT_DOMAIN = `connect.${DOMAIN}`
+export const CONNECT_MAIN_PAGE_URL = `http://connect.${DOMAIN}`
 export const ACCOUNTS_APP_CONNECTOR_URL = process.env.ACCOUNTS_APP_CONNECTOR_URL
 export const ACCOUNTS_APP_LOGIN_URL = process.env.ACCOUNTS_APP_LOGIN_URL || `https://accounts.${DOMAIN}/#!/connect`
 export const ACCOUNTS_APP_REGISTER_URL = process.env.ACCOUNTS_APP_REGISTER_URL || `https://accounts.${DOMAIN}/#!/connect/registration`
@@ -433,8 +594,14 @@ export const DIRECT_PROJECT_URL = `https://www.${DOMAIN}/direct/projectOverview?
 export const SALESFORCE_PROJECT_LEAD_LINK = process.env.SALESFORCE_PROJECT_LEAD_LINK
 export const TC_NOTIFICATION_URL = process.env.TC_NOTIFICATION_URL || `${TC_API_URL}/v5/notifications`
 
+export const TC_CDN_URL = process.env.NODE_ENV === 'development' ? 'https://d1aahxkjiobka8.cloudfront.net' : 'https://d2nl5eqipnb33q.cloudfront.net'
+
+export const RESET_PASSWORD_URL = `https://accounts.${DOMAIN}/connect/reset-password`
+
 export const PROJECT_NAME_MAX_LENGTH = 255
 export const PROJECT_REF_CODE_MAX_LENGTH = 32
+export const BUSINESS_UNIT_MAX_LENGTH = 20
+export const COST_CENTRE_MAX_LENGTH = 20
 
 export const PROJECT_FEED_TYPE_PRIMARY  = 'PRIMARY'
 export const PROJECT_FEED_TYPE_MESSAGES = 'MESSAGES'
@@ -445,15 +612,23 @@ export const CODER_BOT_USERID = 'CoderBot'
 export const TC_SYSTEM_USERID = parseInt(process.env.TC_SYSTEM_USERID || '0', 10)
 export const CODER_BOT_USER_FNAME = 'Coder'
 export const CODER_BOT_USER_LNAME = 'the Bot'
+export const CONNECT_USER_HANDLE = 'connectuser'
+export const CONNECT_USER_FNAME = 'Connect'
+export const CONNECT_USER_LNAME = 'User'
+export const CONNECT_USER = {
+  firstName: CONNECT_USER_FNAME,
+  lastName: CONNECT_USER_LNAME,
+}
 
 export const PROJECT_MAX_COLORS = 5
 
 export const AUTOCOMPLETE_TRIGGER_LENGTH = 3
 
 // Toggle this flag to enable/disable maintenance mode
-export const MAINTENANCE_MODE = false
+export const MAINTENANCE_MODE = process.env.MAINTENANCE_MODE
 
 export const LS_INCOMPLETE_PROJECT = 'incompleteProject'
+export const LS_INCOMPLETE_WIZARD = 'incompleteWizard'
 
 
 export const PROJECTS_API_URL = process.env.PROJECTS_API_URL || TC_API_URL
@@ -504,20 +679,30 @@ export const PROJECT_ICON_MAP = {
 /*eslint-enable */
 //Project sort options
 export const SORT_OPTIONS = [
-  { val: 'updatedAt desc', field: 'updatedAt' },
+  //{ val: 'updatedAt desc', field: 'updatedAt' },
+  { val: 'lastActivityAt desc', field: 'lastActivityAt' },
   { val: 'createdAt', field: 'createdAt' },
   { val: 'createdAt desc', field: 'createdAt' }
 ]
 
+// map project date field to corresponding user field
+export const DATE_TO_USER_FIELD_MAP = {
+  createdAt: 'createdBy',
+  //updatedAt: 'updatedBy',
+  lastActivityAt: 'lastActivityUserId',
+}
+
 // Notifications
 export const REFRESH_NOTIFICATIONS_INTERVAL = 1000 * 60 * 1 // 1 minute interval
-export const REFRESH_UNREAD_UPDATE_INTERVAL = 1000 * 10 * 1 // 10 second interval
 export const NOTIFICATIONS_DROPDOWN_PER_SOURCE = 5
 export const NOTIFICATIONS_NEW_PER_SOURCE = 10
 
 export const NOTIFICATIONS_LIMIT = 1000
 
-export const SCROLL_TO_MARGIN = 70 // px - 60px of toolbar height + 10px to make some margin
+export const SUPER_TEST_COOKIE_TAG = 'super-test'
+
+// 60px of primary toolbar height + 50px of secondary toolbar height + 10px to make some margin
+export const SCROLL_TO_MARGIN = 60 + 50 + 10
 export const SCROLL_TO_DURATION = 500 // ms
 
 // Settings
@@ -534,15 +719,112 @@ export const SCREEN_BREAKPOINT_SM = 640
 export const SCREEN_BREAKPOINT_XS = 320
 
 export const NOTIFICATION_SETTINGS_PERIODS = [
-  { text: 'Send as they happen', value: 'immediately' },
-  { text: 'Every 10m.', value: 'every10minutes' },
-  { text: 'Hourly', value: 'hourly' },
+  { text: 'Off', value: 'off' },
+  { text: 'Immediately', value: 'immediately' },
+  // { text: 'Hourly', value: 'hourly' },
   { text: 'Daily', value: 'daily' },
-  { text: 'Weekly', value: 'weekly' },
+  // { text: 'Weekly', value: 'weekly' },
+  { text: 'Every other day', value: 'everyOtherDay' },
 ]
+
+if (getCookie(SUPER_TEST_COOKIE_TAG) !== undefined) {
+  NOTIFICATION_SETTINGS_PERIODS.push({ text: 'Every 10 minutes', value: 'every10minutes' })
+}
 
 // date time formats
 export const POST_TIME_FORMAT = 'h:mm a'
 
 // max time difference between consecutive posts to bundle posts by same user
 export const POSTS_BUNDLE_TIME_DIFF = 1000 * 60 * 10 // 10 min difference
+
+// possible statuses of milestones
+export const MILESTONE_STATUS = {
+  UNPLANNED: 'in_review',
+  PLANNED: 'reviewed',
+  ACTIVE: 'active',
+  BLOCKED: 'paused',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled'
+}
+
+export const MILESTONE_STATUS_TEXT = [
+  {status: 'reviewed', textValue: 'plannedText' },
+  {status: 'active', textValue: 'activeText' },
+  {status: 'paused', textValue: 'blockedText' },
+  {status: 'completed', textValue: 'completedText' }
+]
+
+// minimum designs to select during checkpoint type milestone
+export const MIN_CHECKPOINT_REVIEW_DESIGNS = 5
+
+// minimum winner designs to select during final-designs milestone
+export const MIN_WINNER_DESIGNS = 3
+
+// default additional desgin cost to select during final-designs milestone
+export const DEFAULT_ADDITIONAL_DESIGN_COST = 100
+
+// project_catalog_url organization configuration name
+export const PROJECT_CATALOG_URL = 'project_catalog_url'
+
+// list of link types which are supported by milestones
+export const MILESTONE_LINK_SUPPORTED_TYPES = [
+  { title: 'Any', value: '' },
+  { title: 'Document', value: 'document' },
+  { title: 'Zipped file', value: 'zip' },
+  { title: 'Marvel link', value: 'marvelapp' },
+  { title: 'GitHub link', value: 'github' },
+  { title: 'Heroku link', value: 'heroku' },
+  { title: 'Invoice', value: 'invoice' }
+]
+
+// Notifications event types
+export const EVENT_TYPE = {
+  POST: {
+    UPDATED: 'notifications.connect.project.post.edited',
+    CREATED: 'notifications.connect.project.post.created',
+    DELETED: 'notifications.connect.project.post.deleted',
+    MENTION: 'notifications.connect.project.post.mention',
+  },
+  MEMBER: {
+    JOINED: 'notifications.connect.project.member.joined',
+    LEFT: 'notifications.connect.project.member.left',
+    REMOVED: 'notifications.connect.project.member.removed',
+    MANAGER_JOINED: 'notifications.connect.project.member.managerJoined',
+    COPILOT_JOINED: 'notifications.connect.project.member.copilotJoined',
+    ASSIGNED_AS_OWNER: 'notifications.connect.project.member.assignedAsOwner',
+    INVITE_REQUESTED: 'notifications.connect.project.member.invite.requested',
+    INVITE_APPROVED: 'notifications.connect.project.member.invite.approved',
+    INVITE_REFUSED: 'notifications.connect.project.member.invite.rejected',
+  },
+  PROJECT: {
+    ACTIVE: 'notifications.connect.project.active',
+    APPROVED: 'notifications.connect.project.approved',
+    CANCELED: 'notifications.connect.project.canceled',
+    COMPLETED: 'notifications.connect.project.completed',
+    CREATED: 'notifications.connect.project.created',
+    FILE_UPLOADED: 'notifications.connect.project.fileUploaded',
+    LINK_CREATED: 'notifications.connect.project.linkCreated',
+    PAUSED: 'notifications.connect.project.paused',
+    SUBMITTED_FOR_REVIEW: 'notifications.connect.project.submittedForReview',
+    SPECIFICATION_MODIFIED: 'connect.action.project.updated.spec',
+  },
+  PROJECT_PLAN: {
+    READY: 'connect.action.project.plan.ready',
+    MODIFIED: 'connect.action.project.plan.updated',
+    PROGRESS_UPDATED: 'connect.action.project.updated.progress',
+    PHASE_ACTIVATED: 'notifications.connect.project.phase.transition.active',
+    PHASE_COMPLETED: 'notifications.connect.project.phase.transition.completed',
+    PHASE_PAYMENT_UPDATED: 'notifications.connect.project.phase.update.payment',
+    PHASE_PROGRESS_UPDATED: 'notifications.connect.project.phase.update.progress',
+    PHASE_SCOPE_UPDATED: 'notifications.connect.project.phase.update.scope',
+    PHASE_PRODUCT_SPEC_UPDATED: 'connect.action.project.product.update.spec',
+    MILESTONE_ACTIVATED: 'connect.action.timeline.milestone.transition.active',
+    MILESTONE_COMPLETED: 'connect.action.timeline.milestone.transition.completed',
+    WAITING_FOR_CUSTOMER_INPUT: 'connect.action.timeline.milestone.waiting.customer',
+    TIMELINE_ADJUSTED: 'connect.action.timeline.adjusted',
+  },
+  TOPIC: {
+    CREATED: 'notifications.connect.project.topic.created',
+    DELETED: 'notifications.connect.project.topic.deleted',
+  },
+}

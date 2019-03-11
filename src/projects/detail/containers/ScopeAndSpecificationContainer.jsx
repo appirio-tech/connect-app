@@ -8,16 +8,22 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import Sticky from 'react-stickynode'
+import Sticky from '../../../components/Sticky'
 import MediaQuery from 'react-responsive'
 
 import ProjectSpecSidebar from '../components/ProjectSpecSidebar'
 import EditProjectForm from '../components/EditProjectForm'
-import TwoColsLayout from '../components/TwoColsLayout'
-import { SCREEN_BREAKPOINT_MD, PROJECT_ATTACHMENTS_FOLDER } from '../../../config/constants'
+import TwoColsLayout from '../../../components/TwoColsLayout'
+import {
+  SCREEN_BREAKPOINT_MD,
+  PROJECT_ATTACHMENTS_FOLDER,
+  EVENT_TYPE,
+} from '../../../config/constants'
 import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
+import NotificationsReader from '../../../components/NotificationsReader'
+import { getProjectProductTemplates } from '../../../helpers/templates'
 
 // This handles showing a spinner while the state is being loaded async
 const enhance = spinnerWhileLoading(props => !props.processing)
@@ -67,17 +73,23 @@ class SpecificationContainer extends Component {
   }
 
   render() {
-    const { project, currentMemberRole, isSuperUser, processing, sections } = this.props
+    const { project, projectNonDirty, currentMemberRole, isSuperUser, processing, template, allProductTemplates, productCategories } = this.props
     const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
 
     const leftArea = (
-      <ProjectSpecSidebar project={project} sections={sections} currentMemberRole={currentMemberRole} />
+      <ProjectSpecSidebar project={project} sections={template.sections} currentMemberRole={currentMemberRole} />
     )
 
     return (
       <TwoColsLayout>
+        <NotificationsReader
+          id="scope"
+          criteria={[
+            { eventType: EVENT_TYPE.PROJECT.SPECIFICATION_MODIFIED, contents: { projectId: project.id } },
+          ]}
+        />
         <TwoColsLayout.Sidebar>
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
@@ -89,11 +101,11 @@ class SpecificationContainer extends Component {
             }}
           </MediaQuery>
         </TwoColsLayout.Sidebar>
-
         <TwoColsLayout.Content>
           <EnhancedEditProjectForm
             project={project}
-            sections={sections}
+            projectNonDirty={projectNonDirty}
+            template={template}
             isEdittable={editPriv}
             submitHandler={this.saveProject}
             saving={processing}
@@ -104,6 +116,8 @@ class SpecificationContainer extends Component {
             removeAttachment={this.removeProjectAttachment}
             attachmentsStorePath={attachmentsStorePath}
             canManageAttachments={!!currentMemberRole}
+            productTemplates={allProductTemplates}
+            productCategories={productCategories}
             showHidden
           />
         </TwoColsLayout.Content>
@@ -117,18 +131,29 @@ SpecificationContainer.propTypes = {
   currentMemberRole: PropTypes.string,
   processing: PropTypes.bool,
   productTemplates: PropTypes.array.isRequired,
+  allProductTemplates: PropTypes.array.isRequired,
   error: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object
   ])
 }
 
-const mapStateToProps = ({projectState, loadUser}) => {
+const mapStateToProps = ({projectState, loadUser, templates}) => {
+  const { projectTemplates, productTemplates } = templates
+
   return {
     processing: projectState.processing,
     error: projectState.error,
     currentUserId: parseInt(loadUser.user.id),
-    productTemplates: projectState.productTemplates,
+    productTemplates: (productTemplates && projectTemplates) ? (
+      getProjectProductTemplates(
+        productTemplates,
+        projectTemplates,
+        projectState.project
+      )
+    ) : [],
+    productCategories: templates.productCategories,
+    allProductTemplates: productTemplates,
   }
 }
 

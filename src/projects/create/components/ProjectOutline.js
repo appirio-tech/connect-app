@@ -2,7 +2,7 @@
 import React from 'react'
 import PT from 'prop-types'
 // import VisualDesignProjectEstimateSection from '../../detail/components/VisualDesignProjectEstimateSection'
-import ProjectCardHeader from '../../list/components/Projects/ProjectCardHeader'
+import ProjectCardHeader from '../../components/projectsCard/ProjectCardHeader'
 import './ProjectOutline.scss'
 
 function ProjectOutline({ project, projectTemplates }) {

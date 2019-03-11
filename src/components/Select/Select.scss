@@ -1,90 +1,79 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
-  .Select {
-    line-height: normal;
-    text-align: left;
-  }
-  
-  /* to override input styles use same params like in tc-includes */
-  .Select-input {
-    height: 28px;
-  }
-  
-  .Select-input > input:not([type="checkbox"]) {
-    border: 0 none;
-    height: 28px;
-    line-height: 17px;
-    padding: 0;
-    transition: none;
-  
-    &:focus:not(.error),
-    &:active {
-      box-shadow: none;
-    }
-  }
-  
-  .Select-placeholder {
-    @include roboto;
-    color: $tc-gray-50;
-    font-size: 13px;
-    line-height: 28px;
-  }
-  
-  .Select-control {
-    height: 30px;
-  }
-  
-  .Select-item {
-    background-color: $tc-gray-10;
-    border: 0;
-    height: 21px;
-    margin-left: 4px;
-    margin-top: 4px;
-    padding: 0 10px 0 4px;
-  }
-  
-  .Select-item-label {
-    @include roboto-medium;
-    display: inline;
-    color: $tc-black;
-    font-size: 13px;
-    line-height: 20px;
-    padding: 0 0 0 4px;
-  }
-  
-  .Select-item-icon {
-    color:rgb(153, 153, 153);
-    border-right-color: rgb(220, 220, 224);
-    padding: 0 5px 1px;
-    
-    &:active,
-    &:focus,
-    &:hover {
-        background-color: transparent;
-        color: rgb(208, 2, 27);
-    }
-  }
-  
-  .Select-option {
-    @include roboto-medium;
-    color: $tc-black;
-    font-size: 13px;
-    padding-top: 5px;
-    padding-bottom: 6px;
-  
-    &:hover,
-    &.is-focused {
-      background-color: $tc-gray-neutral-dark;
-    }
-  }
-  
-  .Select-noresults,
-  .Select-search-prompt,
-  .Select-searching {
-    @include roboto-medium;
-    color: $tc-gray-50;
-    font-size: 13px;
-  }
+	$reactselectheight : 40px;
+	$reactselectcontentheight: 20px;
+	@mixin reactselectstyles {
+
+		& .react-select__control:hover {
+			border-color: $tc-gray-50;
+		}
+
+		& .react-select__control--is-focused {
+			border-color: #0681ff !important;
+			box-shadow: 0 0 2px 0 rgba(6, 129, 255, 0.7) !important;
+		}
+
+		& .react-select__control {
+			height: $reactselectheight;
+			border-color: $tc-gray-30;
+			box-shadow: none;//0 0 2px 0 rgba(6, 129, 255, 0.7) !important;
+
+			& > div {
+				height: $reactselectheight - 2px;
+			}
+
+			& > div:nth-child(1) > div:nth-last-child(1) {
+				height: $reactselectcontentheight + 4px;
+			}
+
+			& input {
+				height: $reactselectcontentheight;
+				line-height: $reactselectcontentheight;
+				transition: none !important;
+				box-shadow: none !important;
+				border-radius: 0;
+			}
+
+		}
+
+		& .react-select__value-container {
+			& > div:nth-last-child(1) {
+				height: $reactselectcontentheight + 4px;
+			}
+		}
+
+		& .react-select__option {
+			@include roboto-medium;
+			font-size: 13px;
+		}
+
+		& .react-select__multi-value {
+			background-color: $tc-gray-20 !important;
+			font-weight: bold;
+		}
+
+		& .react-select__menu-notice--no-options {
+			text-align : left !important;
+			font-size : 15px;
+			color: $tc-gray-50;
+		}
+	}
+	.react-select-hiddendropdown-container {
+		@include reactselectstyles;
+		/*hide dropdown indicator*/
+		& .react-select__control {
+			& > div:nth-child(2) {
+				display: none;
+			}
+			& .react-select__dropdown-indicator {
+				display: none;
+			}
+		}
+	}
+
+	.react-select-container {
+		@include reactselectstyles;
+	}
+
 }
-  

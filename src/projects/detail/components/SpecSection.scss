@@ -2,10 +2,36 @@
 
 :global {
   //TODO  Additional variables - need to find a home for these
-  $gray-color: $tc-gray-50;
-  $title-color: $tc-gray-80;
   $sideBarWidth: 280px;
   $sideBarMaxWidth: 360px;
+
+  .spec-section-edit-button {
+    align-items: center;
+    border: 0;
+    display: flex;
+    height: 20px;
+    justify-content: center;
+    margin-left: -25px;
+    margin-top: 3px;
+    opacity: 0.5;
+    padding: 0;
+    position: absolute;
+    width: 20px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .spec-section-actions {
+    display: flex;
+    justify-content: center;
+    padding-top: 2 * $base-unit;
+
+    button + button {
+      margin-left: 2 * $base-unit;
+    }
+  }
 
   .tc-file-field__inputs {
     height: 45px;
@@ -103,63 +129,6 @@
     }
   }
 
-  /* .section-features-module */
-  .section-features-module {
-    margin-top: 20px;
-
-    @media screen and (max-width: $screen-md - 1px) {
-      margin-top: 8 * $base-unit;
-    }
-
-    &.open {
-      .content-boxes {
-        display: block;
-      }
-
-      .bg-contents,
-      .btn-gray-border {
-        display: none;
-      }
-    }
-
-    .row {
-      margin-bottom: 5px;
-    }
-
-    .bg-contents {
-      @include roboto-medium;
-      font-size: 15px;
-      color: $tc-purple-70;
-      background: $tc-purple-10;
-      // letter-spacing: 10px;
-      width: 100%;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-    }
-
-    .content-boxes {
-      display: none;
-    }
-
-    .textarea-title {
-      @include roboto;
-      font-size: 13px;
-      color: $tc-gray-70;
-      line-height: 20px;
-      padding-bottom: 10px;
-    }
-
-    textarea {
-      min-height: 45px;
-      max-width: 100%;
-      text-align: left;
-      text-indent: 0;
-      resize: none;
-      overflow: hidden;
-    }
-  }
-
   .section-header {
     display: flex;
     justify-content: space-between;
@@ -200,6 +169,10 @@
     // &:last-child {
     //   margin-bottom: 0;
     // }
+
+    > button + button {
+      margin-left: 2 * $base-unit;
+    }
   }
 
   /* .section-file-interface */
@@ -282,7 +255,7 @@
       .titles {
         @include roboto-medium;
         font-size: 15px;
-        color: $gray-color;
+        color: $tc-gray-50;
         line-height: 20px;
         margin-bottom: 2px;
       }
@@ -330,7 +303,7 @@
           .txt {
             @include roboto;
             font-size: 15px;
-            color: $gray-color;
+            color: $tc-gray-50;
             letter-spacing: 0px;
             line-height: 20px;
           }
@@ -413,7 +386,7 @@
         .file-name {
           @include roboto-bold;
           font-size: 15px;
-          color: $title-color;
+          color: $tc-gray-80;
           letter-spacing: 0px;
           line-height: 20px;
           padding-left: 7px;
@@ -422,7 +395,7 @@
         .upload-status {
           @include roboto;
           font-size: 15px;
-          color: $gray-color;
+          color: $tc-gray-50;
           // letter-spacing: 0px;
           line-height: 20px;
           float: right;
@@ -458,7 +431,7 @@
 
       .file-list-bottom {
         .txt {
-          color: $title-color;
+          color: $tc-gray-80;
           @include roboto-bold;
         }
         padding: 20px 0;
@@ -475,7 +448,7 @@
       text-align: left;
       @include roboto-bold;
       font-size: 15px;
-      color: $title-color;
+      color: $tc-gray-80;
       line-height: 25px;
     }
 
@@ -524,7 +497,7 @@
           line-height: 18px;
           padding: 10px 0;
           @include roboto-bold;
-          color: $title-color;
+          color: $tc-gray-80;
         }
       }
 
@@ -655,6 +628,36 @@
         }
       }
     }
+
+    .textinput-codes {
+      position: relative;
+      width: 100px;
+      height: 100%;
+      margin-left: 10px;
+
+      @media screen and (max-width: $screen-sm - 1px) {
+        margin-left: 0;
+        margin-top: 4 * $base-unit;
+        width: 100%;
+      }
+
+      .codes-desc {
+        @include roboto;
+        font-size: 12px;
+        line-height: 20px;
+        color: $tc-gray-50;
+        position: absolute;
+        bottom: -20px;
+        font-style: italic;
+      }
+
+      .project-codes {
+        input {
+          background-color: $tc-gray-neutral-light;
+          border-bottom: 1px solid $tc-gray-40;
+        }
+      }
+    }
   }
 
   .section-features-module {
@@ -703,13 +706,48 @@
       padding-bottom: 10px;
     }
 
+    .message-title {
+      @include roboto;
+      font-size: $tc-heading-xs;
+      color: $tc-orange-70;
+      line-height: 20px;
+      padding-bottom: 10px;
+      text-align: center;
+      font-style: italic;
+    }
+
+    &.subSection-theme-light .message-title {
+      font-weight: 400;
+      color: $tc-gray-100;
+      line-height: 22px;
+      text-align: left;
+      font-style: normal;
+    }
+
     textarea {
-      min-height: 45px;
+      min-height: 40px;
       max-width: 100%;
       text-align: left;
       text-indent: 0;
       resize: none;
       overflow: hidden;
+      padding-top: 7px;
+      padding-bottom: 7px;
+      line-height: 24px;
+    }
+  }
+
+  .form-theme-light {
+    .section-features-module {
+      margin-top: 14 * $base-unit;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    .section-features-module.subSection-state-prev {
+      margin-top: 2 * $base-unit;
     }
   }
 
@@ -726,33 +764,6 @@
         padding-right: 0;
       }
     }
-  }
-
-  .section-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: $tc-gray-neutral-light;
-    height: 70px;
-    margin-top: -70px;
-    margin-bottom: 20px;
-    border-radius: $corner-radius * 2;
-
-    @media screen and (max-width: $screen-md - 1px) {
-      border-radius: 0;
-      height: 80px;
-      margin-top: 0;
-    }
-  }
-
-  .section-footer-spec {
-    border-radius: 0 0 $corner-radius * 2 $corner-radius * 2;
-    // margin-top: -10px;
-    // margin-bottom: $base-unit * 4;
-
-    // &:last-child {
-    //   margin-bottom: 0;
-    // }
   }
 
   /* .section-file-interface */
@@ -835,7 +846,7 @@
       .titles {
         @include roboto-medium;
         font-size: 15px;
-        color: $gray-color;
+        color: $tc-gray-50;
         line-height: 20px;
         margin-bottom: 2px;
       }
@@ -883,7 +894,7 @@
           .txt {
             @include roboto;
             font-size: 15px;
-            color: $gray-color;
+            color: $tc-gray-50;
             letter-spacing: 0px;
             line-height: 20px;
           }
@@ -966,7 +977,7 @@
         .file-name {
           @include roboto-bold;
           font-size: 15px;
-          color: $title-color;
+          color: $tc-gray-80;
           letter-spacing: 0px;
           line-height: 20px;
           padding-left: 7px;
@@ -975,7 +986,7 @@
         .upload-status {
           @include roboto;
           font-size: 15px;
-          color: $gray-color;
+          color: $tc-gray-50;
           // letter-spacing: 0px;
           line-height: 20px;
           float: right;
@@ -1011,7 +1022,7 @@
 
       .file-list-bottom {
         .txt {
-          color: $title-color;
+          color: $tc-gray-80;
           @include roboto-bold;
         }
         padding: 20px 0;
@@ -1028,7 +1039,7 @@
       text-align: left;
       @include roboto-bold;
       font-size: 15px;
-      color: $title-color;
+      color: $tc-gray-80;
       line-height: 25px;
     }
 
@@ -1077,7 +1088,7 @@
           line-height: 18px;
           padding: 10px 0;
           @include roboto-bold;
-          color: $title-color;
+          color: $tc-gray-80;
         }
       }
 
@@ -1126,4 +1137,51 @@
       }
     }
   }
+
+  /* light theme for radio group, checkbox group and addon options */
+  .spec-question-list-item .content-col .child-component .light {
+    .radio-group-options {
+      flex-direction: column;
+    }
+
+    .radio label,
+    .tc-checkbox-label {
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .radio-group-options .radio,
+    .checkbox-group-options .checkbox-group-item {
+      margin: 0 0 10px 0;
+      background-color: $tc-gray-neutral-light;
+      padding: 10px;
+      border-radius: 4px;
+      display: block;
+
+      &:first-child {
+        margin-top: 10px;
+      }
+    }
+
+    .radio-group-options .radio.selected,
+    .checkbox-group-item.selected {
+      background-color: $tc-dark-blue-10;
+    }
+
+    .radio-group-options .radio-option-price,
+    .checkbox-option-price {
+      float: right;
+      font-size: 15px;
+      color: $tc-gray-100;
+    }
+
+    .radio-option-description,
+    .checkbox-option-description {
+      color: $tc-gray-70;
+      font-size: 13px;
+      margin-top: 10px;
+      line-height: 20px;
+    }
+  }
+
 }

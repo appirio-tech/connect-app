@@ -1,0 +1,309 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+// timeline-post specific css
+.timeline-post {
+  display: flex;
+  position: relative;
+  padding: 10px 0;
+
+  :global(.loading-indicator) {
+    height: auto;
+  }
+
+
+
+  @include roboto;
+  a {
+    color: $tc-dark-blue-100;
+  }
+  .background {
+    height: 30px;
+    top: 10px;
+    position: absolute;
+    left: 0px;
+    right: 0;
+    &.hover {
+      background: $tc-dark-blue-10
+    };
+  }
+  .status-ring {
+    background-color: $tc-white;
+    border: 3px solid $tc-gray-30;
+    border-radius: 100%;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 10px;
+    top: 7px;
+    z-index: 3;
+  }
+  .col-date {
+    background-color: $tc-gray-neutral-light;
+    flex: 0 70px;
+    padding: 10px 20px 10px 10px;
+    margin: -10px 0;
+    width: 70px;
+
+    .month {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.4px;
+      text-align: right;
+      position: relative;
+      text-transform: uppercase;
+    }
+    .day {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 20px;
+      text-align: right;
+      position: relative;
+    }
+
+    .planned {
+      color: $tc-gray-30;
+    }
+
+    .completed {
+      color: $tc-black;
+    }
+  }
+  &:last-child {
+    .col-date {
+      border-radius: 0 0 0 6px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        border-radius: 0;
+      }
+    }
+  }
+
+  .col-timeline-post-con {
+    position: relative;
+    padding-left: 36px;
+    padding-right: 20px;
+    flex: 1;
+    min-width: 0;
+
+    &.completed {
+      &:before {
+        content: '';
+        position: absolute;
+        background-color: $tc-dark-blue-30;
+        width: 2px;
+        width: 2px;
+        left: 17px;
+        top: 10px;
+        bottom: -30px;
+        z-index: 2;
+      }
+      .status-ring {
+        background: $tc-dark-blue-100 url('../../../../../assets/icons/ui-check-small.svg') 50% 50% no-repeat;
+        background-size: 16px;
+        border: 3px solid $tc-dark-blue-100;
+      }
+    }
+    &.in-progress {
+      &:before {
+        content: '';
+        position: absolute;
+        background-color: $tc-dark-blue-100;
+        width: 2px;
+        width: 2px;
+        left: 17px;
+        top: 10px;
+        bottom: 0;
+      }
+      .status-ring {
+        background: $tc-white;
+        background-size: 16px;
+        border: 3px solid $tc-dark-blue-100;
+      }
+    }
+
+    .dot {
+      bottom: 22px;
+      position: absolute;
+      background-color: $tc-white;
+      border: 2px solid $tc-dark-blue-100;
+      border-radius: 100%;
+      width: 8px;
+      height: 8px;
+      left: 14px;
+      z-index: 3;
+    }
+
+    &.completed .dot {
+      background-color: $tc-dark-blue-100;
+    }
+
+    .file-wrap,
+    .progress-wrap,
+    .invoice-wrap,
+    .add-specification-wrap {
+      margin-top: 10px;
+
+      &.seperation-sm{
+        margin-top: 5px;
+      }
+    }
+  }
+
+  &:last-child .col-timeline-post-con.completed::before,
+  .col-timeline-post-con:not(.completed).is-editing::before {
+    display: none;
+  }
+
+  .post-title-container {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-content: space-between;
+
+    .post-title {
+      color: $tc-black;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 30px;
+      text-align: left;
+    }
+
+    .desktop-edit-section {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  .mobile-edit-section {
+    flex: 1;
+    .post-edit-mobile {
+      height: 100%;
+      padding-left: 20px;
+      margin-left: auto;
+      margin-right: 0;
+      background: url('../../../../../assets/icons/ui-pencil.svg') 100% 50% no-repeat;
+      opacity: 0.5;
+    }
+  }
+
+
+    .post-edit {
+      padding-left: 20px;
+      margin-left: auto;
+      margin-right: 0;
+      background: url('../../../../../assets/icons/ui-pencil.svg') 0 50% no-repeat;
+      opacity: 0.5;
+      &:hover {
+        opacity: 1;
+        .tooltiptext {
+          visibility: visible;
+        }
+      }
+      
+      .tooltiptext {
+        visibility: hidden;
+        background-color: black;
+        color: $tc-white;
+        text-align: center;
+        padding: 3px 10px;
+        position: absolute;
+        z-index: 100;
+        bottom: 100%;
+        right: 0%;
+        margin-left: 60px;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 25px;
+        
+        &:after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-left: 50px;
+          border-width: 5px;
+          border-style: solid;
+          border-color: black transparent transparent transparent;
+        }
+      }
+    }
+    
+  &:last-child {
+    .col-timeline-post-con.completed::before {
+      bottom: 23px;
+    }
+  }
+
+}
+//edit milestone specific css
+.edit-milestone-header {
+  background-color: $tc-gray-neutral-light;
+}
+
+.header-view {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid $tc-gray-10;
+  justify-content: center;
+  padding: 4 * $base-unit 4 * $base-unit 3 * $base-unit 4 * $base-unit;
+}
+
+.header-view-inner {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-actions {
+  align-items: flex-start;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.fullscreen {
+  border: 0;
+  background-color: transparent;
+  display: block;
+  margin: 0 0 0 3 * $base-unit;
+  padding: 0;
+
+  > svg {
+    > g {
+      fill: $tc-gray-50;
+    }
+  }
+
+  &.fullscreen-exit {
+    > svg {
+      /* as size of svg is 24x24 but we expect button to be 16x16 */
+      display: block;
+      margin: -4px;
+    }
+  }
+}
+
+.header-info {
+  display: flex;
+  flex: 1 0;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.title {
+  @include roboto;
+  color: $tc-black;
+  font-size: 15px;
+  text-transform: capitalize;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  background-color: $tc-gray-neutral-dark;
+  height: calc(100vh - 50px); /* window height - header height */
+  position: relative;
+
+  form {
+    flex: 1;
+  }
+}

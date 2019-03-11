@@ -22,6 +22,19 @@ import {
 import { loadMembers } from '../../actions/members'
 import { EventTypes } from 'redux-segment'
 
+export function loadFeedsForPhases(projectId, phases, dispatch) {
+
+  const tag = PROJECT_FEED_TYPE_PHASE
+  return Promise.all(
+    phases.map((phase) => getPhaseTopicWithoutMembers(dispatch, projectId, phase.id, tag))
+  ).then((responses) => {
+    return _.map(responses, (resp) => ({
+      topics: _.get(resp, 'value.topics'),
+      phaseId: _.get(resp, 'action.meta.phaseId')
+    }))
+  })
+}
+
 export function loadPhaseFeed(projectId, phaseId) {
   const tag = PROJECT_FEED_TYPE_PHASE
   return (dispatch) => {
@@ -33,12 +46,21 @@ export function loadPhaseFeed(projectId, phaseId) {
   }
 }
 
+const getPhaseTopicWithoutMembers = (dispatch, projectId, phaseId, tag) => {
+  return new Promise((resolve, reject) => {
+    return dispatch({
+      type: LOAD_PHASE_FEED,
+      payload: getTopicsWithComments('project', `${projectId}`, `phase#${phaseId}`, false),
+      meta: { tag, phaseId }
+    }).then((resp) => resolve(resp))
+      .catch(err => reject(err))
+  })
+}
+
 const getPhaseTopicWithMember = (dispatch, projectId, phaseId, tag) => {
   return new Promise((resolve, reject) => {
     return dispatch({
       type: LOAD_PHASE_FEED,
-      // TODO $PROJECT_PLAN$ remove getting topics for project 5021
-      // and uncomment calling for getting topics for phase
       payload: getTopicsWithComments('project', `${projectId}`, `phase#${phaseId}`, false),
       meta: { tag, phaseId }
     })

@@ -2,18 +2,20 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { branch, renderComponent, compose, withProps, renderNothing } from 'recompose'
 import { withRouter } from 'react-router-dom'
+import { preRenderNotifications } from '../../../../routes/notifications/helpers/notifications'
 import Walkthrough from '../Walkthrough/Walkthrough'
 import CoderBot from '../../../../components/CoderBot/CoderBot'
 import ProjectListNavHeader from './ProjectListNavHeader'
 import ProjectsGridView from './ProjectsGridView'
-import ProjectsCardView from './ProjectsCardView'
+import ProjectsCardView from '../../../components/projectsCard/ProjectsCardView'
 import { loadProjects, setInfiniteAutoload, setProjectsListView } from '../../../actions/loadProjects'
-import { loadProjectTemplates } from '../../../../actions/templates'
+import { loadProjectsMetadata } from '../../../../actions/templates'
 import { sortProjects } from '../../../actions/sortProjects'
 import _ from 'lodash'
 import querystring from 'query-string'
 import { updateProject } from '../../../actions/project'
-import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
+import { getNewProjectLink } from '../../../../helpers/projectHelper'
+import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED, PROJECT_STATUS_ACTIVE,
   PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
 
@@ -38,6 +40,7 @@ class Projects extends Component {
     this.onPageChange = this.onPageChange.bind(this)
     this.applyFilters = this.applyFilters.bind(this)
     this.applySearchFilter = this.applySearchFilter.bind(this)
+    this.setFilter = this.setFilter.bind(this)
     this.changeView = this.changeView.bind(this)
     this.init = this.init.bind(this)
     this.removeScrollPosition = this.removeScrollPosition.bind(this)
@@ -84,7 +87,7 @@ class Projects extends Component {
     document.title = 'Projects - Topcoder'
     // this.searchTermFromQuery = this.props.location.query.q || ''
     const {criteria, loadProjects, location, projects, refresh,
-      projectTemplates, isProjectTemplatesLoading, loadProjectTemplates} = props
+      projectTemplates, isProjectTemplatesLoading, loadProjectsMetadata} = props
     // check for criteria specified in URL.
     const queryParams = querystring.parse(location.search)
     this.setState({status : null})
@@ -120,7 +123,7 @@ class Projects extends Component {
 
     // load project templates if not yet
     if (!isProjectTemplatesLoading && !projectTemplates) {
-      loadProjectTemplates()
+      loadProjectsMetadata()
     }
   }
 
@@ -162,6 +165,19 @@ class Projects extends Component {
     this.routeWithParams(criteria)
   }
 
+  setFilter(name, filter) {
+    let criteria = _.assign({}, this.props.criteria)
+    if(filter && filter !== '') {
+      const temp = {}
+      temp[`${name}`] = `*${filter}*`
+      criteria = _.assign({}, criteria, temp)
+    } else if(_.has(criteria, name)){
+      criteria = _.omit(criteria, name)
+    }
+
+    this.props.loadProjects(criteria)
+  }
+
   changeView(view) {
     this.setState({selectedView : view})
   }
@@ -179,7 +195,7 @@ class Projects extends Component {
   }
 
   render() {
-    const { isPowerUser, isLoading, totalCount, criteria, currentUser, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history } = this.props
+    const { isPowerUser, isLoading, totalCount, criteria, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history, orgConfig } = this.props
     // show walk through if user is customer and no projects were returned
     // for default filters
     const showWalkThrough = !isLoading && totalCount === 0 &&
@@ -195,6 +211,9 @@ class Projects extends Component {
         applyFilters={this.applySearchFilter}
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
+        newProjectLink={getNewProjectLink(orgConfig)}
+        setFilter={this.setFilter}
+        criteria={criteria}
       />
     )
     const cardView = (
@@ -202,9 +221,11 @@ class Projects extends Component {
         {...this.props }
         // onPageChange={this.onPageChange}
         // sortHandler={this.sortHandler}
+        applyFilters={this.applySearchFilter}
         onPageChange={this.onPageChange}
         onChangeStatus={this.onChangeStatus}
         projectsStatus={getStatusCriteriaText(criteria)}
+        newProjectLink={getNewProjectLink(orgConfig)}
       />
     )
     let projectsView
@@ -227,7 +248,7 @@ class Projects extends Component {
               <ProjectListNavHeader applyFilters={this.applyFilters} selectedView={chosenView} changeView={setProjectsListView} currentStatus={currentStatus} criteria={criteria} setInfiniteAutoload={setInfiniteAutoload} loadProjects={loadProjects} history={history}/>}
             { showWalkThrough  ?
               (
-                <Walkthrough currentUser={currentUser} />
+                <Walkthrough newProjectLink={getNewProjectLink(orgConfig)} />
               ) : (
                 projectsView
               )
@@ -239,9 +260,9 @@ class Projects extends Component {
   }
 }
 
-const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templates }) => {
+const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templates, notifications }) => {
   let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
+  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   if (loadUser.user) {
     isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
   }
@@ -251,11 +272,13 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
   }
   return {
     currentUser : {
-      userId: loadUser.user.profile.userId,
-      firstName: loadUser.user.profile.firstName,
-      lastName: loadUser.user.profile.lastName,
-      roles: loadUser.user.roles
+      userId: loadUser.user.userId,
+      firstName: loadUser.user.firstName,
+      lastName: loadUser.user.lastName,
+      roles: loadUser.user.roles,
+      email: loadUser.user.email
     },
+    orgConfig   : loadUser.orgConfig,
     isLoading   : projectSearch.isLoading,
     error       : projectSearch.error,
     projects    : projectSearch.projects,
@@ -269,10 +292,11 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
     gridView    : isPowerUser,
     refresh     : projectSearch.refresh,
     projectTemplates: templates.projectTemplates,
-    isProjectTemplatesLoading: templates.isProjectTemplatesLoading,
+    isProjectTemplatesLoading: templates.isLoading,
+    notifications: preRenderNotifications(notifications.notifications),
   }
 }
 
-const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject, setProjectsListView, sortProjects, loadProjectTemplates }
+const actionsToBind = { loadProjects, setInfiniteAutoload, updateProject, setProjectsListView, sortProjects, loadProjectsMetadata }
 
 export default withRouter(connect(mapStateToProps, actionsToBind)(Projects))

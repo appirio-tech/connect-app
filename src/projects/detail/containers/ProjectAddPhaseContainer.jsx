@@ -20,13 +20,13 @@ import { loadProjectDashboard } from '../../../projects/actions/projectDashboard
 
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import Wizard from '../../../components/Wizard'
-import SelectItemType from '../../create/components/SelectItemType'
+import SelectProductTemplate from '../../create/components/SelectProductTemplate'
 import {
   CREATE_PROJECT_FAILURE,
 } from '../../../config/constants'
 
 import '../../../projects/create/components/ProjectWizard.scss'
-import './ProjectAddPhaseContainer.scss'
+import styles from './ProjectAddPhaseContainer.scss'
 
 const page404 = compose(
   withProps({code:500})
@@ -51,7 +51,7 @@ const enhance = compose(errorHandler, spinner)
 
 const CreateView = (props) => {
   return (
-    <div>
+    <div className={styles.container}>
       <Wizard
         {...props}
         showModal
@@ -61,15 +61,12 @@ const CreateView = (props) => {
         shouldRenderBackButton={ (step) => step > 1 }
       >
         <div />
-        <SelectItemType
-          header={'Add New Stage'}
-          onProjectTypeChange={ props.onProjectTypeChange }
-          userRoles={ props.userRoles }
-          projectTemplates={ props.projectTemplates }
-          selectButtonTitle={'Select Product'}
+        <SelectProductTemplate
+          onProductTemplateChange={ props.onProductTemplateChange }
+          productTemplates={ props.productTemplates }
+          productCategories={ props.productCategories }
         />
       </Wizard>
-
     </div>
   )
 }
@@ -79,7 +76,7 @@ class ProjectAddPhaseContainer extends React.Component {
   constructor(props) {
     super(props)
     this.closeWizard = this.closeWizard.bind(this)
-    this.updateProjectType = this.updateProjectType.bind(this)
+    this.updateProductTemplate = this.updateProductTemplate.bind(this)
     this.state = {
       isChosenProduct: false,
       shouldReloadPhases: false
@@ -108,7 +105,7 @@ class ProjectAddPhaseContainer extends React.Component {
     if (!props.processing && !props.error && project && this.state.isChosenProduct) {
       if (this.state.shouldReloadPhases) {
         // reload the project
-        props.loadProjectPhasesWithProducts(project.id, project, props.phases)
+        props.loadProjectPhasesWithProducts(project.id)
         this.setState({shouldReloadPhases: false})
       } else if (!props.isLoadingPhases) {
         // back to plan
@@ -117,11 +114,11 @@ class ProjectAddPhaseContainer extends React.Component {
     }
   }
 
-  updateProjectType(projectTemplateKey) {
+  updateProductTemplate(projectTemplateKey) {
     const props = this.props
     const productTemplate = getProductTemplateByKey(props.allProductTemplates, projectTemplateKey)
     if (productTemplate) {
-      props.createProduct(props.project, productTemplate)
+      props.createProduct(props.project, productTemplate, props.phases, props.timelines)
       this.setState({isChosenProduct: true, shouldReloadPhases: true})
     }
   }
@@ -134,8 +131,8 @@ class ProjectAddPhaseContainer extends React.Component {
         {...this.props}
         onCancel={this.closeWizard}
         showModal
-        projectTemplates={props.allProductTemplates}
-        onProjectTypeChange={this.updateProjectType}
+        productTemplates={props.allProductTemplates}
+        onProductTemplateChange={this.updateProductTemplate}
       />
     )
   }
@@ -144,16 +141,18 @@ class ProjectAddPhaseContainer extends React.Component {
 ProjectAddPhaseContainer.propTypes = {
   userRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
   addingState: PropTypes.bool,
-  allProductTemplates: PropTypes.array
+  allProductTemplates: PropTypes.array,
+  productCategories: PropTypes.array
 }
 
 ProjectAddPhaseContainer.defaultProps = {
   userRoles: [],
   addingState: false,
-  allProductTemplates: []
+  allProductTemplates: [],
+  productCategories: []
 }
 
-const mapStateToProps = ({projectState, loadUser, templates }) => ({
+const mapStateToProps = ({projectState, loadUser, templates, productsTimelines }) => ({
   userRoles: _.get(loadUser, 'user.roles', []),
   processing: projectState.processing,
   error: projectState.error,
@@ -161,6 +160,8 @@ const mapStateToProps = ({projectState, loadUser, templates }) => ({
   isLoadingPhases: projectState.isLoadingPhases,
   phases: projectState.phases,
   templates,
+  timelines: productsTimelines,
+  productCategories:  templates.productCategories,
 })
 
 const actionCreators = {createProduct, loadProjectPhasesWithProducts, loadProjectDashboard}

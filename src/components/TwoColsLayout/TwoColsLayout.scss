@@ -1,0 +1,86 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  display: flex;
+
+  @media screen and (max-width: $screen-md - 1px) {
+    flex-direction: column;
+  }
+}
+
+.sidebar {
+  background-color: $tc-white;
+  box-shadow: 1px 1px 0 0 $tc-gray-10, 0 1px 0 0 $tc-gray-10;
+  min-height: calc(100vh - 110px); /* minus primary and secondary toolbar height */
+  padding-bottom: 10 * $base-unit;
+  position: relative;
+  width: 360px;
+
+  .no-secondary-toolbar & {
+    min-height: calc(100vh - 60px); /* minus primary toolbar height only */
+  }
+
+  /*
+    if there is not enough space for sidebar to be 360
+    than sidebar becomes 1/3 of the width
+
+    NOTE, it could be done using min-width: 360px and flex: 1
+          but we cannot use that approach because of styles in Feed.scss
+          for .is-fullscreen .feed-header where we need to calculate
+          the width of the .content block and cannot do it otherwise
+          because media queries ignore scrollbar width
+  */
+  @media screen and (min-width: $screen-md) and (max-width: 360px * 3) {
+    width: 100% * 1/3;
+  }
+
+  @media screen and (max-width: $screen-md - 1px) {
+    background-color: transparent;
+    box-shadow: none;
+    min-height: 0;
+    padding-bottom: 0;
+    width: 100%;
+  }
+}
+
+.content {
+  padding-bottom: 4 * $base-unit;
+  padding-left: 4 * $base-unit;
+  padding-right: 4 * $base-unit;
+  /* minus sidebar width and minus sidebar border width */
+  width: calc(100% - 360px - 1px);
+
+  .no-padding & {
+    padding: 0;
+  }
+
+  /*
+    if there is not enough space for sidebar to be 360
+    than content becomes 2/3 of the width
+
+    NOTE, it could be done using flex: 2
+          but we cannot use that approach because of styles in Feed.scss
+          for `.is-fullscreen .feed-header` where we need to calculate
+          the width of the .content block and cannot do it otherwise
+          because media queries ignore scrollbar width
+  */
+  @media screen and (min-width: $screen-md) and (max-width: 360px * 3) {
+    /* minus sidebar border width */
+    width: calc(100% * 2/3 - 1px);
+  }
+
+  @media screen and (max-width: $screen-md - 1px) {
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+  }
+}
+
+.content-inner {
+  margin: 0 auto;
+  max-width: 760px;
+
+  .no-padding & {
+    max-width: 100%;
+  }
+}

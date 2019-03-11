@@ -38,7 +38,7 @@ import update from 'react-addons-update'
 
 
 const initialState = {
-  isLoading: true,
+  isLoading: false,
   isCreatingFeed: false,
   error: false,
   projectId: null,

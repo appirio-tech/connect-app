@@ -1,0 +1,2 @@
+import MilestoneTypeFinalDesigns from './MilestoneTypeFinalDesigns'
+export default MilestoneTypeFinalDesigns

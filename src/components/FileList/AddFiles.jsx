@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import FilePicker from 'appirio-tech-react-components/components/FilePicker/FilePicker'
 import './AddFiles.scss'
 
-import { FILE_PICKER_API_KEY, FILE_PICKER_SUBMISSION_CONTAINER_NAME } from '../../config/constants'
+import { FILE_PICKER_API_KEY, FILE_PICKER_SUBMISSION_CONTAINER_NAME, FILE_PICKER_CNAME, FILE_PICKER_FROM_SOURCES } from '../../config/constants'
 
 const AddFiles = props => {
   const { successHandler, category, storePath } = props
@@ -12,12 +12,14 @@ const AddFiles = props => {
 
   const options = {
     apiKey: FILE_PICKER_API_KEY,
+    cname: FILE_PICKER_CNAME,
     buttonText: 'Add File',
     buttonClass: 'tc-btn tc-btn-secondary tc-btn-sm',
     dragText: 'Drag and drop your files here',
     language: 'en',
     location: 's3',
     storeContainer: FILE_PICKER_SUBMISSION_CONTAINER_NAME,
+    fromSources: FILE_PICKER_FROM_SOURCES,
     path: storePath,
     multiple: 'true',
     services: ['COMPUTER', 'GOOGLE_DRIVE', 'BOX', 'DROPBOX', 'SKYDRIVE']

@@ -1,0 +1,201 @@
+@import '../../../../../styles/includes';
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  height: auto;
+  min-height: 10 * $base-unit;
+  line-height: 10 * $base-unit;
+
+  .title {
+    @include roboto;
+    background-position: 0 50%;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    font-size: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 4 * $base-unit;
+    min-width: 119px;
+
+    &.document {
+      background-image: url('../../../../../assets/icons/timeline-document.svg');
+      margin-left: -36px;
+      padding-left: 36px;
+    }
+
+    &.zip {
+      background-image: url('../../../../../assets/icons/timeline-zip.svg');
+      margin-left: -36px;
+      padding-left: 40px;
+    }
+
+    &.marvelapp {
+      background-image: url('../../../../../assets/icons/timeline-marvelapp.svg');
+      margin-left: -36px;
+      padding-left: 40px;
+      margin-right: 10px; 
+    }
+
+    &.invoice {
+      background-image: url('../../../../../assets/icons/timeline-invoice.svg');
+      margin-left: -36px;
+      padding-left: 40px;
+    }
+
+    &.github {
+      background-image: url('../../../../../assets/icons/timeline-github.svg');
+      margin-left: -36px;
+      padding-left: 40px;
+    }
+
+    &.heroku {
+      background-image: url('../../../../../assets/icons/timeline-heroku.svg');
+      margin-left: -36px;
+      padding-left: 40px;
+    }
+  }
+
+  .link-wrapper {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &.has-title {
+    .link-wrapper {
+      @media screen and (max-width: $screen-sm - 1px) {
+        display: none;
+      }
+    }
+  }
+
+  .link-item-text-group {
+    flex:1;
+    display:flex;
+    flex-wrap:nowrap;
+    padding-left:36px;
+    overflow: hidden;
+
+  }
+
+  .link-item-button-group {
+    flex:0 0 auto;
+    display:flex;
+  }
+
+  .button {
+    cursor: pointer;
+    padding-left: 20px;
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &.edit {
+      background: url('../../../../../assets/icons/ui-pencil.svg') 0 50% no-repeat;
+      margin-left: 20px;
+      margin-right: 0;
+    }
+
+    &.delete {
+      background: url('../../../../../assets/icons/ui-x-mark.svg') 0 50% no-repeat;
+      margin-left: 15px;
+    }
+
+    &.download {
+      background: url('../../../../../assets/icons/download-icon.svg') 0 50% no-repeat;
+      background-size: 20px;
+    }
+  }
+
+  .label-layer {
+    background-color: $tc-gray-neutral-light;
+    border-radius: 4px;
+    display: flex;
+    height: inherit;
+    justify-content: space-between;
+    line-height: inherit;
+    overflow: hidden;
+    padding-left: 2 * $base-unit;
+    padding-right: 2 * $base-unit;
+    position: relative;
+    flex-wrap:wrap;
+  }
+
+  &.is-selected {
+    .label-layer {
+      background-color: $tc-dark-blue-10;
+    }
+  }
+
+  .link {
+    color: $tc-gray-50;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 50px;
+    margin: auto 0px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    @include viewMd {
+      max-width: 200px;
+    }
+  }
+
+  .col-wrapper {
+    align-content: center;
+    display: flex;
+  }
+
+  .item-checked{
+    display: inline-block;
+    background: url('../../../../../assets/icons/ui-check-gray.svg') 0 0 no-repeat;
+    background-size: 16px;
+    height: 16px;
+    margin-top: 17px;
+    width: 16px;
+  }
+
+  // checkbox-ctrl styles
+  .checkbox-ctrl {
+    margin-top: 15px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    cursor: pointer;
+
+    .checkbox-text {
+      position: relative;
+      padding-left: 20px;
+      &:before {
+        position: absolute;
+        left: 0;
+        top: 0;
+        content: '';
+        background-color: $tc-white;
+        border: 1px solid $tc-gray-20;
+        border-radius: 3px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+    .checkbox {
+      display: none;
+      &:checked + .checkbox-text {
+        &:before {
+          background: $tc-dark-blue-100 url('../../../../../assets/icons/ui-check.svg') 50% 3px no-repeat;
+          background-size: 11px;
+          border-radius: 3px;
+          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+          border: 1px solid $tc-dark-blue-110;
+        }
+      }
+    }
+  }
+}

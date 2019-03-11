@@ -6,9 +6,8 @@
   @include roboto-bold;
   display: flex;
   justify-content: center;
-  box-shadow: 0 4px 3px -3px #C0C0C0, 0 1px 0 0 #C0C0C0, 0 -1px 0 0 #E0E0E0;
   height: 50px;
-  background-color: #fafafb;
+  background-color: $tc-gray-neutral-light;
   position: relative;
   .list {
     display: flex;
@@ -25,12 +24,12 @@
         width: 8px;
         height: 8px;
         border-radius: 100%;
-        background-color: #FF5B52;
+        background-color: $tc-red-70;
       }
     }
     a,
     span {
-      color: #959596;
+      color: $tc-gray-40;
       font-size: 13px;
       text-align: center;
       display: inline-block;
@@ -47,10 +46,13 @@
         left: calc(50% - 15px);
         background-color: transparent;
       }
+      &:hover {
+        color: $tc-black;
+      }
       &.active {
-        color: #151516;
+        color: $tc-black;
         &:after {
-          background-color: #0681FF;
+          background-color: $tc-dark-blue-100;
         }
       }
     }

@@ -34,6 +34,8 @@
    *
    * All of the styles in this file are optional and configurable!
    */
+
+   $stroke-width: 6px;
   
   .CircularProgressbar {
     width: 16px;
@@ -42,16 +44,18 @@
   
   .CircularProgressbar .CircularProgressbar-path {
     stroke: $tc-dark-blue;
-    stroke-linecap: round;
+    stroke-linecap: butt;
     transition: stroke-dashoffset 0.5s ease 0s;
+    stroke-width: $stroke-width;
   }
   
   .CircularProgressbar .CircularProgressbar-trail {
-    stroke: $tc-gray-20;
+    stroke: $tc-gray-10;
+    stroke-width: $stroke-width;
   }
   
   .CircularProgressbar .CircularProgressbar-text {
-    fill: $tc-dark-blue;
+    fill: $tc-dark-blue-70;
     font-size: 20px;
     dominant-baseline: middle;
     text-anchor: middle;

@@ -7,7 +7,11 @@ import { Link } from 'react-router-dom'
 import CommentEditToggle from './CommentEditToggle'
 import _ from 'lodash'
 import moment from 'moment'
-import { POST_TIME_FORMAT } from '../../config/constants.js'
+import NotificationsReader from '../../components/NotificationsReader'
+import { 
+  POST_TIME_FORMAT,
+  EVENT_TYPE, 
+} from '../../config/constants.js'
 
 import './Comment.scss'
 
@@ -54,7 +58,7 @@ class Comment extends React.Component {
   }
 
   render() {
-    const {message, author, date, edited, children, noInfo, self, isSaving, hasError, readonly, allMembers} = this.props
+    const {message, author, date, edited, children, noInfo, self, isSaving, hasError, readonly, allMembers, canDelete, projectMembers} = this.props
     const messageAnchor = `comment-${message.id}`
     const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#${messageAnchor}`
     const authorName = author ? (author.firstName + ' ' + author.lastName) : 'Connect user'
@@ -80,6 +84,8 @@ class Comment extends React.Component {
             authorName={authorName}
             cancelEdit={this.cancelEdit}
             allMembers={allMembers}
+            projectMembers={projectMembers}
+            editingTopic = {false}
           />
         </div>
       )
@@ -87,6 +93,14 @@ class Comment extends React.Component {
 
     return (
       <div styleName={cn('container', { self, 'is-deleting': isDeleting })} id={messageAnchor}>
+        <NotificationsReader 
+          id={messageAnchor}
+          criteria={[
+            { eventType: EVENT_TYPE.POST.CREATED, contents: { postId: message.id } }, 
+            { eventType: EVENT_TYPE.POST.UPDATED, contents: { postId: message.id } }, 
+            { eventType: EVENT_TYPE.POST.MENTION, contents: { postId: message.id } },
+          ]}
+        />
         <div styleName="avatar">
           {!noInfo && author && <UserTooltip usr={author} id={`${messageAnchor}-${author.userId}`} previewAvatar size={40} />}
         </div>
@@ -107,6 +121,7 @@ class Comment extends React.Component {
           {self && !readonly &&
             <aside styleName="controls">
               <CommentEditToggle
+                hideDelete={canDelete===false}
                 onEdit={this.edit}
                 onDelete={this.delete}
               />
@@ -180,11 +195,15 @@ Comment.propTypes = {
    */
   readonly: PropTypes.bool,
   allMembers: PropTypes.object.isRequired,
-
+  projectMembers: PropTypes.object,
   /**
    * If true only comment text is shown without additional info
    */
   noInfo: PropTypes.bool,
+  /**
+   * The can delete flag
+   */
+  canDelete: PropTypes.bool,
 }
 
 export default Comment
