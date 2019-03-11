@@ -282,8 +282,9 @@ export function populatePreparedConditions(expression, preparedConditions) {
   const allowedAfter = ['$', '\\s', '\\)'].join('|')
 
   preparedConditions && _.forEach(preparedConditions, (value, key) => {
-    const regex = new RegExp(`(?<=${allowedBefore})` + key + `(?=${allowedAfter})`, 'g')
-    expression = expression.replace(regex, value)
+    // as JS RegExp doesn't support lookbehind, we use some workaround here
+    const regex = new RegExp(`(${allowedBefore})` + key + `(?=${allowedAfter})`, 'g')
+    expression = expression.replace(regex, `$1${value}`)
   })
 
   return expression
