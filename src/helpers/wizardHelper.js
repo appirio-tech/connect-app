@@ -21,7 +21,7 @@
  */
 import _ from 'lodash'
 import update from 'react-addons-update'
-import { evaluate, getFieldNamesFromExpression } from './dependentQuestionsHelper'
+import { evaluate, getFieldNamesFromExpression, populatePreparedConditions } from './dependentQuestionsHelper'
 import { flatten, unflatten } from 'flat'
 
 /**
@@ -339,8 +339,21 @@ export const initWizard = (template, project, incompleteWizard) => {
     dependantFields: []
   }
 
+  const preparedConditions = wizardTemplate.preparedConditions
+
   // initialize wizard for each node
   forEachNode(wizardTemplate, (nodeObject, node) => {
+    // populate prepared conditions for each node
+    if (nodeObject.condition) {
+      nodeObject.condition = populatePreparedConditions(nodeObject.condition, preparedConditions)
+    }
+    if (nodeObject.disableCondition) {
+      nodeObject.disableCondition = populatePreparedConditions(nodeObject.disableCondition, preparedConditions)
+    }
+    if (nodeObject.autoSelectCondition) {
+      nodeObject.autoSelectCondition = populatePreparedConditions(nodeObject.autoSelectCondition, preparedConditions)
+    }
+
     // keep node indexes for each node inside template
     nodeObject.__wizard = {
       node
