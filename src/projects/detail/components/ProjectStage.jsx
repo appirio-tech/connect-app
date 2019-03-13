@@ -214,6 +214,7 @@ class ProjectStage extends React.Component{
         isExpanded={_.get(phaseState, 'isExpanded')}
         collapseProjectPhase={collapseProjectPhase}
         expandProjectPhase={expandProjectPhase}
+        project={project}
       >
         <div id={projectPhaseAnchor}>
           <ProjectStageTabs

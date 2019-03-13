@@ -93,6 +93,7 @@ class PhaseCard extends React.Component {
       hasReadPosts,
       phaseId,
       isExpanded,
+      project
     } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
@@ -100,7 +101,7 @@ class PhaseCard extends React.Component {
     status = _.find(PHASE_STATUS, s => s.value === status) ? status : PHASE_STATUS_DRAFT
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
-    const phaseEditable = checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN) && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
+    const phaseEditable = checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project) && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
     
 
     const hasUnseen = hasReadPosts
