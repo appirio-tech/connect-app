@@ -331,7 +331,7 @@ const SpecQuestions = ({
       ).map((q, index) => (
         _.includes(['checkbox-group', 'radio-group', 'add-ons'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
           <Accordion
-            key={index}
+            key={q.fieldName || `accordion-${index}`}
             title={q.summaryTitle || q.title}
             type={q.type}
             options={q.options || buildAddonsOptions(q, productTemplates, productCategories)}
