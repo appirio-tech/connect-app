@@ -1,121 +1,127 @@
 version: 2
-jobs:
-  test:
+defaults: &defaults
     docker:
       - image: circleci/node:8.9.4-browsers
-    steps:
-      - run:
-          name: installing dependency
+deploy_defaults: &deploy_defaults
+    docker:
+      - image: cibuilds/aws
+install_dependency: &install_dependency
+          name: Installation of build and deployment dependencies.
           command: |
             sudo apt install python-dev python-pip -y
-            sudo pip install awscli --upgrade  
-      - run:
-          name: checking out tc-deploy for environment
+            sudo pip install awscli --upgrade           
+install_deploysuite: &install_deploysuite
+          name: Installation of install_deploysuite.
           command: |
-            git clone --branch v1.2 https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
-      - checkout
-      - restore_cache:
+            git clone --branch v1.3 https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
+            cp ./../buildscript/master_deploy.sh .
+            cp ./../buildscript/buildenv.sh .
+            cp ./../buildscript/awsconfiguration.sh .
+restore_cache_settings_for_build: &restore_cache_settings_for_build
           key: test-node-modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "package-lock.json" }}
-      - run: npm install
-      - save_cache:
+save_cache_settings: &save_cache_settings    
           key: test-node-modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
-      - run:
-          name: checking out tc-deploy for environment
+running_npm_build: &running_npm_build
+          name: Running Npm Build
           command: |
-            cp ./../buildscript/buildenv.sh .
-            ./buildenv.sh -e DEV -b dev-connectapp-buildvar
-            ./buildenv.sh -e PROD -b prod-connectapp-buildvar
             source buildenvvar
             npm run lint
             npm run test
-            npm run build
-      - persist_to_workspace:
+            npm run build  
+workspace_persist: &workspace_persist
           root: .
           paths:
-            - dist
+            - dist 
+workspace_attach: &workspace_attach
+          at: ./workspace
+jobs:
+  build-dev:
+    <<: *defaults
+    steps:
+      # Initialization.
+      - checkout
+      - setup_remote_docker
+      - run: *install_dependency
+      - run: *install_deploysuite
+      - restore_cache: *restore_cache_settings_for_build
+      - run: npm install
+      - save_cache: *save_cache_settings
+      - run: 
+          name: "configuring environment"
+          command: |
+            ./awsconfiguration.sh DEV
+            ./buildenv.sh -e DEV -b dev-connectapp-buildvar     
+      - run: *running_npm_build
+      - persist_to_workspace: *workspace_persist
+      
+  build-prod:
+    <<: *defaults
+    steps:
+      # Initialization.
+      - checkout
+      - setup_remote_docker
+      - run: *install_dependency
+      - run: *install_deploysuite
+      - restore_cache: *restore_cache_settings_for_build
+      - run: npm install
+      - save_cache: *save_cache_settings
+      - run: 
+          name: "configuring environment"
+          command: |
+            ./awsconfiguration.sh PROD
+            ./buildenv.sh -e PROD -b prod-connectapp-buildvar     
+      - run: *running_npm_build
+      - persist_to_workspace: *workspace_persist
 
   # Just tests commited code.
   deployDev:
-    docker:
-      - image: cibuilds/aws
+    <<: *deploy_defaults
     steps:
       - checkout
-      - attach_workspace:
-          at: ./workspace
+      - attach_workspace: *workspace_attach
+      - run: *install_deploysuite      
       - deploy:
           name: Running MasterScript
           command: |
-            git clone --branch v1.2 https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
-            cp ./../buildscript/master_deploy.sh .
-            cp ./../buildscript/buildenv.sh .
+            ./awsconfiguration.sh DEV
+            source awsenvconf
             ./buildenv.sh -e DEV -b dev-connectapp-deployvar
             source buildenvvar
             ./master_deploy.sh -d CFRONT -e DEV -c false
-  # deploy to test02
-  deployTest02:
-    docker:
-      - image: cibuilds/aws
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ./workspace
-      - run: ./deploy.sh TEST02 no-cache
 
   deployProd:
-    docker:
-      - image: cibuilds/aws
+    <<: *deploy_defaults
     steps:
       - checkout
-      - attach_workspace:
-          at: ./workspace
+      - attach_workspace: *workspace_attach
+      - run: *install_deploysuite      
       - deploy:
           name: Running MasterScript
           command: |
-            git clone --branch v1.2 https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
-            cp ./../buildscript/master_deploy.sh .
-            cp ./../buildscript/buildenv.sh .
+            ./awsconfiguration.sh PROD
+            source awsenvconf
             ./buildenv.sh -e PROD -b prod-connectapp-deployvar
             source buildenvvar
             ./master_deploy.sh -d CFRONT -e PROD -c true
-
-  deployDiscourseFree:
-    docker:
-      - image: cibuilds/aws
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ./workspace
-      - run: ./deploy.sh DISCOURSE
-
 
 workflows:
   version: 2
   build:
     jobs:
-      - test
       - deployDev:
+          context : org-global
           requires:
-            - test
+            - build-dev
           filters:
             branches:
               only: ['dev', 'dev-msinteg', 'feature/form-redesign']
-      - deployTest02:
-          requires:
-            - test
-          filters:
-            branches:
-              only: "feature/discourse-migration"
+
       - deployProd:
+          context : org-global
           requires:
-            - test
+            - build-prod
           filters:
             branches:
               only: master
-      - deployDiscourseFree:
-          requires:
-            - test
-          filters:
-            branches:
-              only: master-discourse-free
