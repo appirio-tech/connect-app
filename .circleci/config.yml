@@ -110,8 +110,10 @@ workflows:
   version: 2
   build:
     jobs:
-      - build-dev
-      - build-prod
+      - build-dev:
+          context : org-global
+      - build-prod:
+          context : org-global
       - deployDev:
           context : org-global
           requires:
