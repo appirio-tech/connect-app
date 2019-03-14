@@ -11,7 +11,10 @@ import ProjectListTimeSortColHeader from './ProjectListTimeSortColHeader'
 import ProjectListFilterColHeader from './ProjectListFilterColHeader'
 import GridView from '../../../../components/Grid/GridView'
 import UserTooltip from '../../../../components/User/UserTooltip'
-import { PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED, DATE_TO_USER_FIELD_MAP } from '../../../../config/constants'
+import {
+  PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED, DATE_TO_USER_FIELD_MAP, PHASE_STATUS_REVIEWED,
+  PHASE_STATUS_ACTIVE, PROJECT_STATUS_ACTIVE
+} from '../../../../config/constants'
 import { getProjectTemplateByKey } from '../../../../helpers/templates'
 import TextTruncate from 'react-text-truncate'
 import ProjectStatus from '../../../../components/ProjectStatus/ProjectStatus'
@@ -196,6 +199,10 @@ const ProjectsGridView = props => {
       classes: 'item-status',
       renderText: item => {
         const canEdit = item.status !== PROJECT_STATUS_COMPLETED
+        const hasReviewedOrActivePhases = !!_.find(item.phases, (phase) => _.includes([PHASE_STATUS_REVIEWED, PHASE_STATUS_ACTIVE], phase.status))
+        const isProjectActive = item.status === PROJECT_STATUS_ACTIVE
+        const isV3Project = item.version === 'v3'
+        const projectCanBeActive =  (isV3Project && !isProjectActive && hasReviewedOrActivePhases) || isProjectActive
         return (
           <div className="spacing">
             <EnhancedProjectStatus
@@ -206,6 +213,7 @@ const ProjectsGridView = props => {
               unifiedHeader={false}
               onChangeStatus={onChangeStatus}
               projectId={item.id}
+              projectCanBeActive={projectCanBeActive}
             />
           </div>
         )
