@@ -112,9 +112,6 @@ workflows:
     jobs:
       - build-dev:
           context : org-global
-          filters:
-            branches:
-              only: ['dev', 'dev-msinteg', 'feature/form-redesign']  
               
       - build-prod:
           context : org-global
