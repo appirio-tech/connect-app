@@ -112,8 +112,14 @@ workflows:
     jobs:
       - build-dev:
           context : org-global
+          filters:
+            branches:
+              ignore: /.*/          
       - build-prod:
           context : org-global
+          filters:
+            branches:
+              ignore: /.*/             
       - deployDev:
           context : org-global
           requires:
