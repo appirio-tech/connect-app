@@ -13,7 +13,7 @@ import GridView from '../../../../components/Grid/GridView'
 import UserTooltip from '../../../../components/User/UserTooltip'
 import {
   PROJECTS_LIST_PER_PAGE, SORT_OPTIONS, PROJECT_STATUS_COMPLETED, DATE_TO_USER_FIELD_MAP, PHASE_STATUS_REVIEWED,
-  PHASE_STATUS_ACTIVE
+  PHASE_STATUS_ACTIVE, PROJECT_STATUS_ACTIVE
 } from '../../../../config/constants'
 import { getProjectTemplateByKey } from '../../../../helpers/templates'
 import TextTruncate from 'react-text-truncate'
