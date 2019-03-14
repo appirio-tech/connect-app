@@ -79,7 +79,7 @@ class ProjectSpecSidebar extends Component {
 
   componentWillReceiveProps(nextProps) {
     const {project, sections} = nextProps
-    const navItems = _.map(sections, s => {
+    const navItems = _.map(_.reject(sections, 'hiddenOnEdit'), s => {
       return {
         name: typeof s.title === 'function' ? s.title(project, false): s.title,
         required: s.required,
@@ -140,9 +140,9 @@ class ProjectSpecSidebar extends Component {
               you a good estimate.
             </p>
           </div>
-          <ReviewProjectButton 
-            project={project} 
-            disabled={!canSubmitForReview || project.isDirty} 
+          <ReviewProjectButton
+            project={project}
+            disabled={!canSubmitForReview || project.isDirty}
             onClick={this.onSubmitForReview}
           />
         </div>

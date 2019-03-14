@@ -115,8 +115,14 @@ function applyOp(op, b, a) {
     return a < b
   case '!':
     return !b
-  case 'contains':
-    return (a || []).indexOf(b) > -1
+  case 'contains': {
+    try {
+      const bJSON = JSON.parse(b)
+      return _.some(a || [], bJSON)
+    } catch(e) {
+      return (a || []).indexOf(b) > -1
+    }
+  }
   case 'hasLength':
     return (a || []).length === b
   }
@@ -230,6 +236,8 @@ export function evaluate(expression, data) {
  * Parses expression to find variable names in format of domain name:
  * string1.string2.string3 and so on. Minimum one dot "." is required.
  *
+ * TODO this should be improved as we can have variables without "." like "name" for project name
+ *
  * @param {String} expression expression
  *
  * @returns {Array} list of variable names
@@ -247,4 +255,37 @@ export function getFieldNamesFromExpression(expression) {
   } while (match)
 
   return fieldNames
+}
+
+/**
+ * Replace prepared conditions inside expression
+ *
+ * @example
+ *   const expression = 'preparedCondition1 == 1'
+ *   const preparedConditions = {
+ *     preparedCondition1: '(2 - 1)'
+ *   }
+ *
+ *   const output = populatePreparedConditions(expression, preparedConditions)
+ *
+ *   // output => '(2 - 1) == 1'
+ *
+ * @param {String} expression         expression
+ * @param {Object} preparedConditions prepared conditions
+ *
+ * @returns {String} expression
+ */
+export function populatePreparedConditions(expression, preparedConditions) {
+  // in the Regexp we describe situations when preparedCondition can be replaced,
+  // instead of defining situations when it cannot be replaced
+  const allowedBefore = ['^', '\\s', '\\(', '!'].join('|')
+  const allowedAfter = ['$', '\\s', '\\)'].join('|')
+
+  preparedConditions && _.forEach(preparedConditions, (value, key) => {
+    // as JS RegExp doesn't support lookbehind, we use some workaround here
+    const regex = new RegExp(`(${allowedBefore})` + key + `(?=${allowedAfter})`, 'g')
+    expression = expression.replace(regex, `$1${value}`)
+  })
+
+  return expression
 }

@@ -1,6 +1,6 @@
 /* eslint quotes: 0 */
 import chai from 'chai'
-import { evaluate } from './dependentQuestionsHelper'
+import { evaluate, populatePreparedConditions } from './dependentQuestionsHelper'
 
 chai.should()
 
@@ -17,6 +17,18 @@ const testData = {
   someArrayWithText: ['a', 'b', 'c'],
   f: false,
   t: true,
+  nestedObject: {
+    textProperty: 'test',
+    PREPARED_CONDITION_1: 'fake prepared condition property',
+    propertyWithObject: {
+      PREPARED_CONDITION_2: 'fake prepared condition property'
+    },
+  }
+}
+
+const preparedConditions = {
+  PREPARED_CONDITION_1: '(someArray hasLength 3)',
+  PREPARED_CONDITION_2: `((someArrayWithText contains 'a') || (someArrayWithText contains 'b'))`
 }
 
 describe('Evaluate: ', () => {
@@ -159,7 +171,7 @@ describe('Evaluate: ', () => {
       result.should.equal(true)
     })
 
-    it('multiple spaces', () => {
+    xit('multiple spaces', () => {
       const expression = 'someArray  contains  (  b  -  a  )  *  2'
       const result = evaluate(expression, testData)
 
@@ -536,6 +548,12 @@ describe('Evaluate: ', () => {
       const res = evaluate('true && true', testData)
       res.should.equal(true)
     })
+
+    xit ('should treat unknown variables as undefined', () => {
+      const res = evaluate('unknownVariable', testData)
+
+      res.should.be.undefined
+    })
   })
 
   describe('! operator', () => {
@@ -626,4 +644,62 @@ describe('Evaluate: ', () => {
     })
   })
 
+})
+
+describe('Replace prepared conditions: ', () => {
+  it('should replace single prepared condition', () => {
+    const expression = 'PREPARED_CONDITION_1'
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(preparedConditions.PREPARED_CONDITION_1)
+  })
+
+  it('should replace multiple prepared conditions', () => {
+    const expression = 'PREPARED_CONDITION_1 && PREPARED_CONDITION_2'
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`${preparedConditions.PREPARED_CONDITION_1} && ${preparedConditions.PREPARED_CONDITION_2}`)
+  })
+
+  it('should not replace prepared condition inside text literals', () => {
+    const expression = `someArray contains 'PREPARED_CONDITION_1' && a == PREPARED_CONDITION_2`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`someArray contains 'PREPARED_CONDITION_1' && a == ${preparedConditions.PREPARED_CONDITION_2}`)
+  })
+
+  it('should not replace prepared condition inside object properties level 1', () => {
+    const expression = `nestedObject.PREPARED_CONDITION_1 && a == PREPARED_CONDITION_2`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`nestedObject.PREPARED_CONDITION_1 && a == ${preparedConditions.PREPARED_CONDITION_2}`)
+  })
+
+  it('should not replace prepared condition inside object properties level 2', () => {
+    const expression = `nestedObject.propertyWithObject.PREPARED_CONDITION_1 && a == PREPARED_CONDITION_2`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`nestedObject.propertyWithObject.PREPARED_CONDITION_1 && a == ${preparedConditions.PREPARED_CONDITION_2}`)
+  })
+
+  it('should not replace prepared condition in the part of another prepared condition variable', () => {
+    const expression = `SUFFIX_PREPARED_CONDITION_2 && PREPARED_CONDITION_2 && PREPARED_CONDITION_2_POSTFIX`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`SUFFIX_PREPARED_CONDITION_2 && ${preparedConditions.PREPARED_CONDITION_2} && PREPARED_CONDITION_2_POSTFIX`)
+  })
+
+  it('should not replace prepared condition delimited by parentheses', () => {
+    const expression = `(PREPARED_CONDITION_2)`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`(${preparedConditions.PREPARED_CONDITION_2})`)
+  })
+
+  it('should not replace prepared condition delimited preceded by "!"', () => {
+    const expression = `!PREPARED_CONDITION_2`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`!${preparedConditions.PREPARED_CONDITION_2}`)
+  })
 })

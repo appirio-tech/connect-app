@@ -4,21 +4,22 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 :global {
-  .headerSelectProjectTemplate {
-    @extend .wizardHeader;
-  }
-
   .SelectProjectTemplate {
     @extend .wizardCardContainer;
 
+    @media screen and (max-width: $screen-md - 1px) {
+      padding: 0 2 * $base-unit;
+    }
+
     h1 {
       @extend .wizardHeadline;
+      margin-top: 30px;
 
       @media screen and (max-width: $screen-md - 1px) {
         font-size: 20px;
         line-height: 30px;
         margin-bottom: 0;
-        margin-top: 10px;
+        margin-top: 20px;
         padding: 5px 40px 0;
       }
 

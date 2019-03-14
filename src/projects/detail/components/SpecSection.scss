@@ -23,15 +23,6 @@
     }
   }
 
-  // here we repeat styles for disabled textarea and inputs from tc-ui
-  .spec-section-readonly-text-value {
-    color: $tc-gray-80;
-    font-size: $tc-body-md;
-    line-height: 24px;
-    // margin-top: 3 * $base-unit;
-    -webkit-text-fill-color: $tc-gray-50;
-  }
-
   .spec-section-actions {
     display: flex;
     justify-content: center;
@@ -135,63 +126,6 @@
         font-size: 15px;
         padding-left: 5px;
       }
-    }
-  }
-
-  /* .section-features-module */
-  .section-features-module {
-    margin-top: 20px;
-
-    @media screen and (max-width: $screen-md - 1px) {
-      margin-top: 8 * $base-unit;
-    }
-
-    &.open {
-      .content-boxes {
-        display: block;
-      }
-
-      .bg-contents,
-      .btn-gray-border {
-        display: none;
-      }
-    }
-
-    .row {
-      margin-bottom: 5px;
-    }
-
-    .bg-contents {
-      @include roboto-medium;
-      font-size: 15px;
-      color: $tc-purple-70;
-      background: $tc-purple-10;
-      // letter-spacing: 10px;
-      width: 100%;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-    }
-
-    .content-boxes {
-      display: none;
-    }
-
-    .textarea-title {
-      @include roboto;
-      font-size: 13px;
-      color: $tc-gray-70;
-      line-height: 20px;
-      padding-bottom: 10px;
-    }
-
-    textarea {
-      min-height: 45px;
-      max-width: 100%;
-      text-align: left;
-      text-indent: 0;
-      resize: none;
-      overflow: hidden;
     }
   }
 
@@ -618,21 +552,6 @@
     align-items: flex-start;
     margin-bottom: 20px;
 
-    &.read-optimized {
-      margin-bottom: 0px;
-
-      .editable-project-name {
-        flex: 0;
-      }
-
-      .refcode-read-optimized {
-        @include roboto;
-        color: $tc-gray-50;
-        font-style: italic;
-        margin-left: 10px;
-      }
-    }
-
     @media screen and (max-width: $screen-sm - 1px) {
       flex-direction: column;
       margin-bottom: 11 * $base-unit;
@@ -789,12 +708,20 @@
 
     .message-title {
       @include roboto;
-      font-size: 15px;
+      font-size: $tc-heading-xs;
       color: $tc-orange-70;
       line-height: 20px;
       padding-bottom: 10px;
       text-align: center;
       font-style: italic;
+    }
+
+    &.subSection-theme-light .message-title {
+      font-weight: 400;
+      color: $tc-gray-100;
+      line-height: 22px;
+      text-align: left;
+      font-style: normal;
     }
 
     textarea {
@@ -807,6 +734,20 @@
       padding-top: 7px;
       padding-bottom: 7px;
       line-height: 24px;
+    }
+  }
+
+  .form-theme-light {
+    .section-features-module {
+      margin-top: 14 * $base-unit;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    .section-features-module.subSection-state-prev {
+      margin-top: 2 * $base-unit;
     }
   }
 
@@ -823,33 +764,6 @@
         padding-right: 0;
       }
     }
-  }
-
-  .section-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: $tc-gray-neutral-light;
-    height: 70px;
-    margin-top: -70px;
-    margin-bottom: 20px;
-    border-radius: $corner-radius * 2;
-
-    @media screen and (max-width: $screen-md - 1px) {
-      border-radius: 0;
-      height: 80px;
-      margin-top: 0;
-    }
-  }
-
-  .section-footer-spec {
-    border-radius: 0 0 $corner-radius * 2 $corner-radius * 2;
-    // margin-top: -10px;
-    // margin-bottom: $base-unit * 4;
-
-    // &:last-child {
-    //   margin-bottom: 0;
-    // }
   }
 
   /* .section-file-interface */
@@ -1223,4 +1137,51 @@
       }
     }
   }
+
+  /* light theme for radio group, checkbox group and addon options */
+  .spec-question-list-item .content-col .child-component .light {
+    .radio-group-options {
+      flex-direction: column;
+    }
+
+    .radio label,
+    .tc-checkbox-label {
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .radio-group-options .radio,
+    .checkbox-group-options .checkbox-group-item {
+      margin: 0 0 10px 0;
+      background-color: $tc-gray-neutral-light;
+      padding: 10px;
+      border-radius: 4px;
+      display: block;
+
+      &:first-child {
+        margin-top: 10px;
+      }
+    }
+
+    .radio-group-options .radio.selected,
+    .checkbox-group-item.selected {
+      background-color: $tc-dark-blue-10;
+    }
+
+    .radio-group-options .radio-option-price,
+    .checkbox-option-price {
+      float: right;
+      font-size: 15px;
+      color: $tc-gray-100;
+    }
+
+    .radio-option-description,
+    .checkbox-option-description {
+      color: $tc-gray-70;
+      font-size: 13px;
+      margin-top: 10px;
+      line-height: 20px;
+    }
+  }
+
 }

@@ -90,6 +90,7 @@ jobs:
             ./buildenv.sh -e DEV -b dev-connectapp-deployvar
             source buildenvvar
             ./master_deploy.sh -d CFRONT -e DEV -c false
+
   deployProd:
     <<: *deploy_defaults
     steps:
@@ -104,6 +105,7 @@ jobs:
             ./buildenv.sh -e PROD -b prod-connectapp-deployvar
             source buildenvvar
             ./master_deploy.sh -d CFRONT -e PROD -c true
+
 workflows:
   version: 2
   build:

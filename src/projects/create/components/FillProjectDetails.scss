@@ -13,13 +13,30 @@
 :global {
   .FillProjectDetailsWrapper {
     // @extend .wizardWrapper;
-  }
 
-  .headerFillProjectDetails {
-    @extend .wizardHeader;
+    &.form-theme-light {
+      .FillProjectDetails {
+        .two-col-content.content .container .left-area .left-area-content {
+          .sub-title .title {
+            color: $tc-gray-100;
+            font-weight: 400;
+            font-size: $tc-heading-sm;
+          }
+        }
+      }
+    }
   }
 
   .FillProjectDetails {
+    .text-header-wrapper {
+      padding: 0 80px;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        padding-left: 50px;
+        padding-right: 50px;
+      }
+    }
+
     h1 {
       margin-top: 30px;
       @extend .wizardHeadline;
@@ -29,7 +46,7 @@
         font-size: 20px;
         line-height: 24px;
         margin-bottom: 0;
-        padding: 4 * $base-unit 4 * $base-unit 4 * $base-unit 12 * $base-unit;
+        padding: 4 * $base-unit;
         text-align: left;
       }
     }
@@ -41,10 +58,9 @@
         @include flexBox;
         background-color: transparent;
         display: flex;
-        padding: 0px;
-        max-width: 1110px;
+        max-width: 760px;
         margin: 20px auto;
-        /* .left-area */
+
         .left-area {
           flex: auto;
         }
@@ -72,10 +88,16 @@
             position: relative;
 
             .left-area-content {
-              border-radius: 4px;
               background: $tc-white;
-              box-shadow: 0px 1px 3px 0px $tc-gray-30;
-              padding: 50px;
+              padding: 50px 80px;
+
+              :global(.form-theme-light) & {
+                padding-top: 30px;
+
+                @media screen and (max-width: $screen-md - 1px) {
+                  padding: 0 4 * $base-unit 3 * $base-unit;
+                }
+              }
 
               @media screen and (max-width: $screen-md - 1px) {
                 background-color: $tc-white;
@@ -94,6 +116,10 @@
                 margin-bottom: 0;
                 background: none;
                 height: 40px;
+
+                :global(.form-theme-light) & {
+                  margin-top: 10 * $base-unit;
+                }
 
                 @media screen and (max-width: $screen-md - 1px) {
                   margin-bottom: 10 * $base-unit;
@@ -144,10 +170,6 @@
 
     .sub-title {
       margin: 30px 0 10px;
-      &.read-optimized {
-        margin: 10px 0;
-      }
-
       .title {
         font-size: 15px;
         line-height: 25px;
@@ -178,26 +200,6 @@
   }
 
   .ProjectWizard-step-3 {
-    .FillProjectDetails .header {
-      align-items: center;
-      display: flex;
-      justify-content: space-between;
-
-      h1 {
-        padding-left: 2px;
-      }
-
-      .back-button {
-        display: none;
-        margin-left: 12px;
-        position: static;
-
-        @media screen and (max-width: $screen-md - 1px) {
-          display: block;
-        }
-      }
-    }
-
     @media screen and (max-width: $screen-md - 1px) {
       .content {
         padding: 0;

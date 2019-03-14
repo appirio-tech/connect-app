@@ -13,6 +13,28 @@
       flex: 1;
       margin-right: 20px;
 
+      &.template-preview {
+        .header {
+          display: flex;
+          align-items: flex-start;
+        }
+
+        h1 {
+          @include tc-heading-small;
+          flex: 1;
+          text-align: center;
+          margin: 0 0 50px;
+          @include roboto-light;
+          font-size: 36px;
+          color: $tc-black;
+          line-height: 40px;
+        }
+
+        .FillProjectDetails {
+          background: $tc-white;
+        }
+      }
+
       .ProjectWizard {
         padding: 10px;
         
