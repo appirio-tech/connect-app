@@ -114,12 +114,14 @@ workflows:
           context : org-global
           filters:
             branches:
-              ignore: /.*/          
+              only: ['dev', 'dev-msinteg', 'feature/form-redesign']  
+              
       - build-prod:
           context : org-global
           filters:
             branches:
-              ignore: /.*/             
+              only: master
+              
       - deployDev:
           context : org-global
           requires:
