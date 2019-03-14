@@ -55,7 +55,7 @@ class ProjectInfo extends Component {
     const hasReviewedOrActivePhases = !!_.find(phases, (phase) => _.includes([PHASE_STATUS_REVIEWED, PHASE_STATUS_ACTIVE], phase.status))
     const isProjectActive = project.status === PROJECT_STATUS_ACTIVE
     const isV3Project = project.version === 'v3'
-    const projectCanBeActive =  (isV3Project && !isProjectActive && hasReviewedOrActivePhases) || isProjectActive
+    const projectCanBeActive =  !isV3Project || (!isProjectActive && hasReviewedOrActivePhases) || isProjectActive
 
 
     // prepare review button

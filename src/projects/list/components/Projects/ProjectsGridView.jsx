@@ -202,7 +202,7 @@ const ProjectsGridView = props => {
         const hasReviewedOrActivePhases = !!_.find(item.phases, (phase) => _.includes([PHASE_STATUS_REVIEWED, PHASE_STATUS_ACTIVE], phase.status))
         const isProjectActive = item.status === PROJECT_STATUS_ACTIVE
         const isV3Project = item.version === 'v3'
-        const projectCanBeActive =  (isV3Project && !isProjectActive && hasReviewedOrActivePhases) || isProjectActive
+        const projectCanBeActive =  !isV3Project || (!isProjectActive && hasReviewedOrActivePhases) || isProjectActive
         return (
           <div className="spacing">
             <EnhancedProjectStatus
