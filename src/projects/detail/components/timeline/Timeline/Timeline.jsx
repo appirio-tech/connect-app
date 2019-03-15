@@ -97,6 +97,7 @@ class Timeline extends React.Component {
       timeline,
       isLoading,
       phaseId,
+      project,
     } = this.props
 
     if (isLoading || _.some(timeline.milestones, 'isUpdating')) {
@@ -130,6 +131,7 @@ class Timeline extends React.Component {
               //$TODO convert the below logic more optimized way
               previousMilestone={_.find(orderedMilestones, m => m.order === milestone.order-1) &&
                _.find(orderedMilestones, m => m.order === milestone.order-1).type}
+              project={project}
             />
           ))}
         </div>
