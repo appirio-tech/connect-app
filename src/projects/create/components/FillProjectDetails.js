@@ -102,7 +102,6 @@ class FillProjectDetails extends Component  {
                     productCategories={productCategories}
                     shouldUpdateTemplate={shouldUpdateTemplate}
                   />
-                  {!_.get(template, 'wizard.enabled') && <ProjectEstimationSection project={dirtyProject} templates={templates} />}
                 </div>
                 {formDisclaimer && (
                   <div className="left-area-footer">
