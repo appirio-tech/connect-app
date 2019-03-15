@@ -199,6 +199,7 @@ class Milestone extends React.Component {
       milestone,
       currentUser,
       previousMilestone,
+      project
     } = this.props
     const { isEditing, isMobileEditing } = this.state
 
@@ -314,7 +315,7 @@ class Milestone extends React.Component {
                 <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
                   {(matches) => (matches ? (
                     <div styleName={'desktop-edit-section'}>
-                      {checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN) && !isCompleted && this.state.isHoverHeader && !isUpdating &&
+                      {checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project) && !isCompleted && this.state.isHoverHeader && !isUpdating &&
                         (<div onClick={this.toggleEditLink} styleName={'post-edit'} >
                           <span styleName="tooltiptext">Edit milestone properties</span>
                         </div>)
@@ -323,7 +324,7 @@ class Milestone extends React.Component {
                   ) : (
                     <div styleName={'mobile-edit-section'}>
                       {
-                        checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN) && !isCompleted && !isUpdating &&
+                        checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project) && !isCompleted && !isUpdating &&
                           (<div onClick={this.toggleMobileEditLink} styleName={'post-edit-mobile'}  />)
                       }
                     </div>
