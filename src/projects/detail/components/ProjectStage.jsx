@@ -226,7 +226,7 @@ class ProjectStage extends React.Component{
           />
 
           {currentActiveTab === 'timeline' &&
-            <ProductTimelineContainer product={product} />
+            <ProductTimelineContainer product={product} project={project} />
           }
 
           {currentActiveTab === 'posts' && (
