@@ -5,7 +5,6 @@ import cn from 'classnames'
 
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
-import ProjectEstimationSection from '../../detail/components/ProjectEstimationSection'
 import HeaderWithProgress from './HeaderWithProgress'
 
 class FillProjectDetails extends Component  {
@@ -44,7 +43,7 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, processing, submitBtnText, projectTemplates, dirtyProject, templates, productTemplates, productCategories, shouldUpdateTemplate } = this.props
+    const { project, processing, submitBtnText, projectTemplates, dirtyProject, productTemplates, productCategories, shouldUpdateTemplate } = this.props
     const { currentWizardStep } = this.state
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
