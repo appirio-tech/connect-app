@@ -120,7 +120,7 @@ class TeamManagementContainer extends Component {
     const {members, allMembers} = this.props
     // fill project members from state.members object
     return _.map(members, m => {
-      if (!m.userId) return m
+      if (!m.userId && !m.role) return m
       // map role
       switch (m.role) {
       case PROJECT_ROLE_COPILOT:
