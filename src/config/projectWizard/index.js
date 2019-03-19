@@ -496,29 +496,47 @@ export function getProjectCreationTemplateField(product, sectionId, subSectionId
   return null
 }
 
+/**
+ * Helper method to replace the values for conditional variables and then evaluating the expression
+ *
+ * @param {object} condition condition variable to be replaced by value
+ * @param {object} preparedConditions pre-evaluated conditions correspoinding to each key/placeholder
+ * @param {object} flatProjectData current project data so far chosen by user
+ *
+ * @return {boolean} boolean value after replacement of key with value in the condition and parsed against project data
+ */
+function replaceAndEvaluateCondition(condition, preparedConditions, flatProjectData) {
+  let updatedCondition = condition
+  _.forOwn(preparedConditions, (baseCondition, placeholder) => {
+    updatedCondition = _.replace(updatedCondition, new RegExp(placeholder, 'g'), baseCondition)
+  })
+  const result = evaluate(updatedCondition, flatProjectData)
+  return result
+}
+
+/**
+ * Helper method to get price and time estimate for the given product.
+ *
+ * @param {object} priceConfig projcet template's config object against deliverable/addons
+ * @param {object} buildingBlocks basic building blocks which combine to define a deliverable
+ * @param {object} preparedConditions pre-evaluated conditions correspoinding to each key/placeholder
+ * @param {object} flatProjectData current project data so far chosen by user
+ * @param {object} evaluateAllConfigs whether to stop at first match or not
+ *
+ * @return {object} object containing price and time estimate
+ */
 function getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditions, flatProjectData, evaluateAllConfigs = false) {
   const priceKeys = []
-  _.each(priceConfig, (blocks, condition) => {
-    // console.log(condition, " : " + blocks)
-    let updatedCondition = condition
-    _.forOwn(preparedConditions, (cond, placeholder) => {
-      updatedCondition = _.replace(updatedCondition, new RegExp(placeholder, 'g'), cond)
-    })
-    const result = evaluate(updatedCondition, flatProjectData)
-    // console.log(result + " : " + typeof result)
+  const priceConfigKeys = _.keys(priceConfig)
+  _.forEach(priceConfigKeys, condition => {
+    const result = replaceAndEvaluateCondition(condition, preparedConditions, flatProjectData)
     if (result && (evaluateAllConfigs || priceKeys.length === 0)) {
-      // console.log(updatedCondition)
-      // console.log(result + " : " + typeof result)
       priceKeys.push(condition)
     }
-    // return result
   })
-  // console.log(priceKeys)
   const matchedBlocks = []
   _.forEach(priceKeys, priceKey => {
-    // console.log(priceKey)
     const allBlocks = priceConfig[priceKey]
-    // console.log(allBlocks)
     let filterdBlocks = []
     for(const idx in allBlocks) {
       const blocks = allBlocks[idx]
@@ -528,17 +546,7 @@ function getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditio
           console.log('Building Block not found for ' + b)
           return false
         }
-        let updatedCondition = bBlock.conditions
-        _.forOwn(preparedConditions, (cond, placeholder) => {
-          updatedCondition = _.replace(updatedCondition, new RegExp(placeholder, 'g'), cond)
-        })
-        const result = evaluate(updatedCondition, flatProjectData)
-        // console.log(updatedCondition, ' : blocks => ' + b)
-        // console.log(result + " : " + typeof result)
-        if (result) {
-          // console.log(result + " : " + typeof result)
-          // console.log(updatedCondition, ' : blocks => ' + b)
-        }
+        const result = replaceAndEvaluateCondition(bBlock.conditions, preparedConditions, flatProjectData)
         return result === true
       })
       if (passingBlocks.length === blocks.length) {
@@ -559,7 +567,7 @@ function getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditio
 /**
  * Helper method to get price and time estimate for the given product.
  *
- * @param {string} productId id of the product. It should resolve to a valid product template
+ * @param {object} projectTemplate projcet template to get the config values
  * @param {object} projectData project object which contains the current value
  *
  * @return {object} object containing price and time estimate
@@ -572,41 +580,21 @@ export function getProductEstimate(projectTemplate, projectData) {
   const flatProjectData = flatten(removeValuesOfHiddenNodes(projectTemplate, projectData), { safe: true })
   if (projectTemplate) {
     const sections = _.get(projectTemplate, 'scope.sections')
-    const addonQuestions = _.flatMap(sections, (section) => {
-      const allSubsections = _.filter(section.subSections, ss => ss.type === 'questions')
-      return _.flatMap(allSubsections, ss => _.filter(ss.questions, q => q.type === 'add-ons'))
-    })
-    // console.log(addonQuestions)
-    let selectedAddons = []
-    _.forEach(addonQuestions, (addonQuestion) => {
-      // console.log(addonQuestion)
-      const addons = _.get(projectData, addonQuestion.fieldName)
-      selectedAddons = selectedAddons.concat(addons)
-    })
     const addonPriceConfig = _.get(projectTemplate, 'scope.addonPriceConfig', {})
     const priceConfig = _.get(projectTemplate, 'scope.priceConfig', {})
     const buildingBlocks = _.get(projectTemplate, 'scope.buildingBlocks', {})
     const preparedConditions = _.cloneDeep(_.get(projectTemplate, 'scope.preparedConditions', {}))
-    // prepares a list of pre evaluated variables
     _.forOwn(preparedConditions, (cond, placeholder) => {
-      // console.log(placeholder)
       preparedConditions[placeholder] = evaluate(cond, flatProjectData) === true ? '1 == 1' : '1 == 2'
-      // console.log(preparedConditions[placeholder])
     })
-
     const baseBlocks = getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditions, flatProjectData)
     const addonBlocks = getFilteredBuildingBlocks(addonPriceConfig, buildingBlocks, preparedConditions, flatProjectData, true)
-    // console.log(addonBlocks)
     matchedBlocks = matchedBlocks.concat(baseBlocks, addonBlocks)
-    // console.log(filterdBlocks)
     if (!matchedBlocks || matchedBlocks.length === 0) {
       price = _.get(projectTemplate, 'scope.basePriceEstimate', 0)
       minTime = _.get(projectTemplate, 'scope.baseTimeEstimateMin', 0)
       maxTime = _.get(projectTemplate, 'scope.baseTimeEstimateMax', 0)
     } else {
-      // price = priceConfig[priceKey].price
-      // minTime = priceConfig[priceKey].minTime
-      // maxTime = priceConfig[priceKey].maxTime
       _.forEach(matchedBlocks, bb => {
         price += bb.price
         minTime += bb.minTime
@@ -652,7 +640,6 @@ export function getProductEstimate(projectTemplate, projectData) {
     }
   }
   const durationEstimate = minTime !== maxTime ? `${minTime}-${maxTime}` : `${minTime}`
-  // console.log(durationEstimate)
   return {
     priceEstimate: price,
     minTime,
