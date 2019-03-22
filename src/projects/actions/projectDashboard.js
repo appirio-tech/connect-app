@@ -48,18 +48,19 @@ const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) 
             .then(({ value: phases }) => {
               loadFeedsForPhases(projectId, phases, dispatch)
                 .then((phaseFeeds) => {
-                  console.log(phaseFeeds)
-                  let userIds = []
+                  let phaseUserIds = []
                   _.forEach(phaseFeeds, phaseFeed => {
-                    userIds = _.union(userIds, _.map(phaseFeed.topics, 'userId'))
+                    phaseUserIds = _.union(phaseUserIds, _.map(phaseFeed.topics, 'userId'))
                     _.forEach(phaseFeed.topics, topic => {
-                      userIds = _.union(userIds, _.map(topic.posts, 'userId'))
+                      phaseUserIds = _.union(phaseUserIds, _.map(topic.posts, 'userId'))
                     })
                     // this is to remove any nulls from the list (dev had some bad data)
-                    _.remove(userIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(i) > -1)
+                    _.remove(phaseUserIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(i) > -1)
                   })
+                  // take difference of userIds identified from project members
+                  phaseUserIds = _.difference(phaseUserIds, userIds)
 
-                  dispatch(loadMembers(userIds))
+                  dispatch(loadMembers(phaseUserIds))
                 })
               // load timelines for phase products here together with all dashboard data
               // as we need to know timeline data not only inside timeline container

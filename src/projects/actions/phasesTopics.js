@@ -23,13 +23,12 @@ import { loadMembers } from '../../actions/members'
 import { EventTypes } from 'redux-segment'
 
 export function loadFeedsForPhases(projectId, phases, dispatch) {
-
   const tag = PROJECT_FEED_TYPE_PHASE
   return Promise.all(
     phases.map((phase) => getPhaseTopicWithoutMembers(dispatch, projectId, phase.id, tag))
   ).then((responses) => {
     return _.map(responses, (resp) => ({
-      topics: _.get(resp, 'value.topics'),
+      topics: [].concat(_.get(resp, 'value')),
       phaseId: _.get(resp, 'action.meta.phaseId')
     }))
   })
@@ -47,13 +46,14 @@ export function loadPhaseFeed(projectId, phaseId) {
 }
 
 const getPhaseTopicWithoutMembers = (dispatch, projectId, phaseId, tag) => {
-  return new Promise((resolve, reject) => {
-    return dispatch({
-      type: LOAD_PHASE_FEED,
-      payload: getTopicsWithComments('project', `${projectId}`, `phase#${phaseId}`, false),
-      meta: { tag, phaseId }
-    }).then((resp) => resolve(resp))
+  return dispatch({
+    type: LOAD_PHASE_FEED_MEMBERS,
+    payload:  new Promise((resolve, reject) => {
+      return getTopicsWithComments('project', `${projectId}`, `phase#${phaseId}`, false)
+      .then((resp) => resolve(_.get(resp, 'topics[0]')))
       .catch(err => reject(err))
+    }),
+    meta: { tag, phaseId }
   })
 }
 
