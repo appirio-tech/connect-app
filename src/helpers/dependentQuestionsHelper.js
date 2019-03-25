@@ -204,15 +204,13 @@ export function evaluate(expression, data) {
         //console.log("val : ",data[tokens[i]])
         values.push(_.get(data, tokens[i]))
       } else {
-        /*if(tokens[i] == "true")
-        values.push(true);
-        else if(tokens[i] == "false")
-        values.push(false); */
         if (!isNaN(tokens[i])) {
           values.push(parseInt(tokens[i]))
         } else {
           //removing single quotes around the text values
-          values.push(tokens[i].replace(/'/g, ''))
+          let literal = tokens[i].replace(/'/g, '')
+          literal = literal === 'true' || (literal === 'false' ? false : literal)
+          values.push(literal)
         }
       }
     }

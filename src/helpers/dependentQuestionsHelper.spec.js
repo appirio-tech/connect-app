@@ -446,6 +446,16 @@ describe('Evaluate: ', () => {
       res.should.equal(true)
     })
 
+    it('should compare boolean true', () => {
+      const res = evaluate('t == true', testData)
+      res.should.equal(true)
+    })
+
+    it('should compare boolean false', () => {
+      const res = evaluate('f == false', testData)
+      res.should.equal(true)
+    })
+
     it ('should compare string and number', () => {
       const res = evaluate('stringa == a', testData)
       res.should.equal(false)
@@ -481,6 +491,16 @@ describe('Evaluate: ', () => {
     it ('should compare string and number', () => {
       const res = evaluate('stringa != a', testData)
       res.should.equal(true)
+    })
+
+    it('should compare inequality for boolean true', () => {
+      const res = evaluate('t != true', testData)
+      res.should.equal(false)
+    })
+
+    it('should compare inequality for boolean false', () => {
+      const res = evaluate('f != false', testData)
+      res.should.equal(false)
     })
 
     xit ('should compare boolean and number', () => {
