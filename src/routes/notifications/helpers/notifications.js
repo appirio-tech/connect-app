@@ -60,9 +60,23 @@ const handlebarsFallbackHelper = (value, fallbackValue) => {
 Handlebars.registerHelper('showMore', handlebarsShowMoreHelper)
 Handlebars.registerHelper('fallback', handlebarsFallbackHelper)
 
-export const renderGoTo = (goToHandlebars, contents) => (
-  Handlebars.compile(goToHandlebars)(contents)
-)
+export const renderGoTo = (goTo, contents) => {
+  let goToHandlebars = ''
+
+  if (_.isArray(goTo)) {
+    const goToRule = _.find(goTo, (goToRuleTemp) => goToRuleTemp.condition(contents))
+
+    if (goToRule) {
+      goToHandlebars = goToRule.goTo
+    } else {
+      console.error('Cannot find goTo rule.', goTo, contents)
+    }
+  } else {
+    goToHandlebars = goTo
+  }
+  
+  return Handlebars.compile(goToHandlebars)(contents)
+}
 
 /**
  * Filter notifications by criteria
@@ -396,6 +410,30 @@ const bundleNotifications = (notificationsWithRules) => {
 }
 
 /**
+ * Prepare notification contents:
+ * - extracts phaseId from tags
+ * 
+ * @param {Object} contents notification contents
+ * 
+ * @returns {Object} notification contents
+ */
+const prepareNotificationContents = (contents) => {
+  const tags = _.get(contents, 'tags', [])
+  const preparedContents = {...contents}
+
+  // check if any of the tags has phaseId
+  const PHASE_ID_REGEXP = /phase#(\d+)/
+  const phaseIds = tags.map((tag) => _.get(tag.match(PHASE_ID_REGEXP), '1', null))
+  const phaseId = _.find(phaseIds, (phaseId) => phaseId !== null)
+
+  if (phaseId) {
+    preparedContents.phaseId = phaseId
+  }
+
+  return preparedContents
+}
+
+/**
  * Prepare notifications
  *
  * @param  {Array} rawNotifications notifications list
@@ -411,7 +449,7 @@ export const prepareNotifications = (rawNotifications) => {
     date: rawNotification.createdAt,
     isRead: rawNotification.read,
     seen: rawNotification.seen,
-    contents: rawNotification.contents,
+    contents: prepareNotificationContents(rawNotification.contents),
     version: rawNotification.version
   }))
 

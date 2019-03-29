@@ -17,6 +17,7 @@ export const GOTO = {
   PROJECT_PLAN: '/projects/{{projectId}}/plan',
   TOPIC: '/projects/{{projectId}}/#feed-{{topicId}}',
   POST: '/projects/{{projectId}}/#comment-{{postId}}',
+  PHASE_POST: '/projects/{{projectId}}/plan/#phase-{{phaseId}}',
   FILE_LIST: '/projects/{{projectId}}/specification#appDefinition-files',
   PHASE: '/projects/{{projectId}}/plan#phase-{{phaseId}}',
   TOPCODER_TEAM: '/projects/{{projectId}}#manageTopcoderTeam'
@@ -303,13 +304,19 @@ export const NOTIFICATIONS = [
       shouldBundle: true,
       bundledText: '{{#showMore __history__ 3}}<strong>{{userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts to your topic',
       toTopicStarter: true,
-      goTo: GOTO.POST
+      goTo: [
+        { goTo: GOTO.POST, condition: (contents) => !contents.phaseId },
+        { goTo: GOTO.PHASE_POST, condition: (contents) => !!contents.phaseId }
+      ]
     }, {
       text: '<strong>{{userHandle}}</strong> responded to a post',
       shouldBundle: true,
       bundledText: '{{#showMore __history__ 3}}<strong>{{userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
-      goTo: GOTO.POST
+      goTo: [
+        { goTo: GOTO.POST, condition: (contents) => !contents.phaseId },
+        { goTo: GOTO.PHASE_POST, condition: (contents) => !!contents.phaseId }
+      ]
     }]
   }, {
     version: 2,
@@ -320,13 +327,19 @@ export const NOTIFICATIONS = [
       shouldBundle: true,
       bundledText: '{{#showMore __history__ 3}}<strong>{{fallback userFullName userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts to your topic',
       toTopicStarter: true,
-      goTo: GOTO.POST
+      goTo: [
+        { goTo: GOTO.POST, condition: (contents) => !contents.phaseId },
+        { goTo: GOTO.PHASE_POST, condition: (contents) => !!contents.phaseId }
+      ]
     }, {
       text: '<strong>{{userFullName}}</strong> responded to a post',
       shouldBundle: true,
       bundledText: '{{#showMore __history__ 3}}<strong>{{fallback userFullName userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
-      goTo: GOTO.POST
+      goTo: [
+        { goTo: GOTO.POST, condition: (contents) => !contents.phaseId },
+        { goTo: GOTO.PHASE_POST, condition: (contents) => !!contents.phaseId }
+      ]
     }]
   },
 
