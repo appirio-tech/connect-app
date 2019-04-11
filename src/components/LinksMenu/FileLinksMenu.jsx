@@ -156,7 +156,7 @@ const FileLinksMenu = ({
                 const handleDeleteClick = () => onDeleteIntent(idx)
 
                 const onEditConfirm = (title, allowedUsers) => {
-                  onEdit(idx, title, allowedUsers)
+                  onEdit(link.id, title, allowedUsers)
                   onEditIntent(-1)
                 }
                 const onEditCancel = () => onEditIntent(-1)
