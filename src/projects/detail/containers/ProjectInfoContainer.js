@@ -264,25 +264,26 @@ class ProjectInfoContainer extends React.Component {
             noDots
             withHash
           />
-          <FileLinksMenu
-            links={attachments}
-            title="Files"
-            canAdd={enableFileUpload}
-            onEdit={this.onEditAttachment}
-            onAddNewLink={this.onAddFile}
-            onAddAttachment={addProjectAttachment}
-            onUploadAttachment={this.onUploadAttachment}
-            isSharingAttachment={isSharingAttachment}
-            discardAttachments={discardAttachments}
-            onChangePermissions={changeAttachmentPermission}
-            selectedUsers={attachmentPermissions}
-            projectMembers={projectMembers}
-            pendingAttachments={attachmentsAwaitingPermission}
-            loggedInUser={loggedInUser}
-            moreText="view all files"
-            noDots
-            attachmentsStorePath={attachmentsStorePath}
-          />
+          {enableFileUpload &&
+            <FileLinksMenu
+              links={attachments}
+              title="Files"
+              onEdit={this.onEditAttachment}
+              onAddNewLink={this.onAddFile}
+              onAddAttachment={addProjectAttachment}
+              onUploadAttachment={this.onUploadAttachment}
+              isSharingAttachment={isSharingAttachment}
+              discardAttachments={discardAttachments}
+              onChangePermissions={changeAttachmentPermission}
+              selectedUsers={attachmentPermissions}
+              projectMembers={projectMembers}
+              pendingAttachments={attachmentsAwaitingPermission}
+              loggedInUser={loggedInUser}
+              moreText="view all files"
+              noDots
+              attachmentsStorePath={attachmentsStorePath}
+            />
+          }
           {!hideLinks &&
             <LinksMenu
               links={project.bookmarks || []}
