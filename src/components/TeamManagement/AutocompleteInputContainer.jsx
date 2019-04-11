@@ -15,7 +15,14 @@ class AutocompleteInputContainer extends React.Component {
 
   onInputChange(inputValue) {
     if (inputValue.length >= AUTOCOMPLETE_TRIGGER_LENGTH) {
-      this.props.onLoadUserSuggestions(inputValue)
+      if (inputValue.indexOf(' ') > 1 || inputValue.indexOf(';') > 1 ) {
+        inputValue = inputValue.substring(0, inputValue.length -1 )
+        this.onUpdate([...this.props.selectedMembers, {'label': inputValue, 'value': inputValue}])
+        this.props.onClearUserSuggestions()
+        return ''
+      } else {
+        this.props.onLoadUserSuggestions(inputValue)
+      }
     } else {
       this.props.onClearUserSuggestions()
     }
