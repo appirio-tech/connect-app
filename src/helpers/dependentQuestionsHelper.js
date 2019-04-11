@@ -164,12 +164,18 @@ export function evaluate(expression, data) {
   // Stack for Operators: 'ops'
   const ops = new Stack()
 
+  // Keep track of unbalanced parenthesis
+  const unbalancedParens = []
+
   for (let i = 0; i < tokens.length; i++) {
     if (tokens[i] === '(') {
       ops.push(tokens[i])
+      unbalancedParens.push(i)
 
       // Closing brace encountered, solve expression since the last opening brace
     } else if (tokens[i] === ')') {
+      unbalancedParens.pop()
+
       while (ops.peek() !== '(') {
         const op = ops.pop()
         if (oneParamOps.indexOf(op) !== -1) {
@@ -215,6 +221,13 @@ export function evaluate(expression, data) {
       }
     }
   }
+
+  // if there are unbalanced parenthesis throw an error
+  if (unbalancedParens.length !== 0) {
+    throw new Error(`Parens at the following indexes are unbalanced: ${unbalancedParens}`)
+  }
+
+
   //debugger
   // Parsed expression tokens are pushed to values/ops respectively,
   // Running while loop to evaluate the expression

@@ -553,10 +553,30 @@ describe('Evaluate: ', () => {
     })
   })
 
-  describe('parser', () => {
+  describe.only('parser', () => {
     it('should parse literal constants like numbers', () => {
       const res = evaluate('4 + 2', testData)
       res.should.equal(4 + 2)
+    })
+
+    it('should throw error if one parenthesis is unbalanced', () => {
+      const expression = `((someArrayWithText contains 'a') || (someArrayWithText contains 'b') || (someArrayWithText contains 'c')`
+
+      try {
+        evaluate(expression, testData)
+      } catch(error) {
+        error.message.should.equal('Parens at the following indexes are unbalanced: 0')
+      }
+    })
+
+    it('should throw error if multiple parenthesis are unbalanced', () => {
+      const expression = `(someArrayWithText contains 'a') || ((someArrayWithText contains 'b') || ((someArrayWithText contains 'c')`
+
+      try {
+        evaluate(expression, testData)
+      } catch(error) {
+        error.message.should.equal('Parens at the following indexes are unbalanced: 6,13')
+      }
     })
 
     xit('should parse literal constants like numbers with decimal numbers', () => {
