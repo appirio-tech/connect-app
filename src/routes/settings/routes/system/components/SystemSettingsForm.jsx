@@ -9,7 +9,7 @@ const TCFormFields = FormsyForm.Fields
 
 class SystemSettingsForm extends Component {
   render() {
-    const { changePassword, checkEmailAvailability, changeEmail, systemSettings, resetPassword } = this.props
+    const { changePassword, checkEmailAvailability, changeEmail, systemSettings, resetPassword, isCustomer } = this.props
     return (
       <div styleName="system-settings-container">
 
