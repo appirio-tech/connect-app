@@ -34,7 +34,9 @@ const initialState = {
   attachmentsAwaitingPermission: null,
   attachmentPermissions: null,
   error: false,
-  project: {},
+  project: {
+    invites: [] // invites are pushed directly into it hence need to declare first
+  },
   projectNonDirty: {},
   updateExisting: false,
   phases: null,
