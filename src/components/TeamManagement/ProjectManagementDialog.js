@@ -24,7 +24,7 @@ class ProjectManagementDialog extends React.Component {
 
     if (processingInvites && !nextProps.processingInvites ) {
       const notInvitedSelectedMembers = _.reject(selectedMembers, (selectedMember) => (
-        this.isSelectedMemberAlreadyInvited(nextProps.invites, selectedMember)
+        this.isSelectedMemberAlreadyInvited(nextProps.projectTeamInvites, selectedMember)
       ))
 
       this.props.onSelectedMembersUpdate(notInvitedSelectedMembers)
@@ -36,10 +36,12 @@ class ProjectManagementDialog extends React.Component {
   }
 
   onChange(selectedMembers) {
-    const { invites } = this.props
+    const { projectTeamInvites, members, topcoderTeamInvites } = this.props
 
     const present = _.some(selectedMembers, (selectedMember) => (
-      this.isSelectedMemberAlreadyInvited(invites, selectedMember)
+      this.isSelectedMemberAlreadyInvited(members, selectedMember) 
+      || this.isSelectedMemberAlreadyInvited(topcoderTeamInvites, selectedMember) 
+      || this.isSelectedMemberAlreadyInvited(projectTeamInvites, selectedMember)
     ))
 
     this.setState({
@@ -51,8 +53,8 @@ class ProjectManagementDialog extends React.Component {
     this.props.onSelectedMembersUpdate(selectedMembers)
   }
 
-  isSelectedMemberAlreadyInvited(invites = [], selectedMember) {
-    return !!invites.find((invite) => (
+  isSelectedMemberAlreadyInvited(projectTeamInvites = [], selectedMember) {
+    return !!projectTeamInvites.find((invite) => (
       (invite.email && invite.email === selectedMember.label) ||
       (invite.userId && this.resolveUserHandle(invite.userId) === selectedMember.label)
     ))
@@ -94,7 +96,7 @@ class ProjectManagementDialog extends React.Component {
   render() {
     const {
       members, currentUser, isMember, removeMember, removeInvite,
-      onCancel, invites = [], selectedMembers, processingInvites,
+      onCancel, projectTeamInvites = [], selectedMembers, processingInvites,
     } = this.props
     const showRemove = currentUser.isAdmin || (!currentUser.isCopilot && isMember)
     let i = 0
@@ -151,7 +153,7 @@ class ProjectManagementDialog extends React.Component {
                 </div>
               )
             }))}
-            {(invites.map((invite) => {
+            {(projectTeamInvites.map((invite) => {
               const remove = () => {
                 removeInvite(invite)
               }
@@ -221,7 +223,8 @@ class ProjectManagementDialog extends React.Component {
 }
 
 ProjectManagementDialog.defaultProps = {
-  invites: [],
+  projectTeamInvites: [],
+  topcoderTeamInvites: [],
   members: []
 }
 
@@ -233,7 +236,8 @@ ProjectManagementDialog.propTypes = {
   isMember: PT.bool.isRequired,
   onCancel: PT.func.isRequired,
   removeMember: PT.func.isRequired,
-  invites: PT.arrayOf(PT.object),
+  projectTeamInvites: PT.arrayOf(PT.object),
+  topcoderTeamInvites: PT.arrayOf(PT.object),
   sendInvite: PT.func.isRequired,
   removeInvite: PT.func.isRequired,
   onSelectedMembersUpdate: PT.func.isRequired,
