@@ -17,7 +17,7 @@ export const GOTO = {
   PROJECT_PLAN: '/projects/{{projectId}}/plan',
   TOPIC: '/projects/{{projectId}}/#feed-{{topicId}}',
   POST: '/projects/{{projectId}}/#comment-{{postId}}',
-  PHASE_POST: '/projects/{{projectId}}/plan/#phase-{{phaseId}}-posts-{{postId}}',
+  PHASE_POST: '/projects/{{projectId}}/plan#phase-{{phaseId}}-posts-{{postId}}',
   FILE_LIST: '/projects/{{projectId}}/specification#appDefinition-files',
   PHASE: '/projects/{{projectId}}/plan#phase-{{phaseId}}',
   TOPCODER_TEAM: '/projects/{{projectId}}#manageTopcoderTeam'
