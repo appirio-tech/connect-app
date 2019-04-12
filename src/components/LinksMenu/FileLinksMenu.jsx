@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
+import * as filepicker from 'filestack-js'
+
 import './LinksMenu.scss'
 import Panel from '../Panel/Panel'
-import AddFiles from '../FileList/AddFiles'
 import AddFilePermission from '../FileList/AddFilePermissions'
 import DeleteLinkModal from './DeleteLinkModal'
 import EditFileAttachment from './EditFileAttachment'
@@ -13,7 +14,13 @@ import cn from 'classnames'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
 import BtnEdit from '../../assets/icons/icon-edit.svg'
 import _ from 'lodash'
-import Modal from '../Modal/Modal'
+
+import {
+  FILE_PICKER_API_KEY,
+  FILE_PICKER_FROM_SOURCES,
+  FILE_PICKER_CNAME,
+  FILE_PICKER_SUBMISSION_CONTAINER_NAME
+} from '../../config/constants'
 
 const FileLinksMenu = ({
   canAdd,
@@ -45,6 +52,11 @@ const FileLinksMenu = ({
   projectMembers,
   loggedInUser,
 }) => {
+
+  const fileUploadClient = filepicker.init(FILE_PICKER_API_KEY, {
+    cname: FILE_PICKER_CNAME
+  })
+
   const renderLink = (link) => {
     if (link.onClick) {
       return (
@@ -95,19 +107,43 @@ const FileLinksMenu = ({
     })
   }
 
-  const onClose = () => {
-    onAddingNewLink(false)
+  const openFileUpload = () => {
+    if (fileUploadClient) {
+      const picker = fileUploadClient.picker({
+        storeTo: {
+          location: 's3',
+          path: attachmentsStorePath,
+          container: FILE_PICKER_SUBMISSION_CONTAINER_NAME,
+          region: 'us-east-1'
+        },
+        maxFiles: 4,
+        fromSources: FILE_PICKER_FROM_SOURCES,
+        uploadInBackground: false,
+        onFileUploadFinished: (files) => {
+          processUploadedFiles(files, category)
+        },
+        onOpen: () => {
+          onAddingNewLink(true)
+        },
+        onClose: () => {
+          onAddingNewLink(false)
+        }
+      })
+
+      picker.open()
+    }
   }
 
   return (
     <MobileExpandable title={`${title} (${links.length})`}>
       <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0)}, 'panel-links-container')}>
-        {canAdd && !isAddingNewLink && onAddingNewLink &&
-        <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Upload File</Panel.AddBtn>}
+        {
+          canAdd && <Panel.AddBtn onClick={openFileUpload}>Upload File</Panel.AddBtn>
+        }
 
-        {!isAddingNewLink && <Panel.Title>
+        <Panel.Title>
           {title} ({links.length})
-        </Panel.Title>}
+        </Panel.Title>
 
         {(isAddingNewLink || linkToDelete >= 0) && <div className="modal-overlay"/>}
 
@@ -121,22 +157,6 @@ const FileLinksMenu = ({
             loggedInUser={loggedInUser}
             isSharingAttachment={isSharingAttachment}
           />
-        }
-
-        {isAddingNewLink &&
-          <Modal onClose={onClose}>
-            <Modal.Title>
-              UPLOAD A FILE
-            </Modal.Title>
-            {
-              pendingAttachments &&
-              <AddFilePermission />
-            }
-            <AddFiles successHandler={processUploadedFiles.bind(this)}
-              storePath={attachmentsStorePath}
-              category={category}
-            />
-          </Modal>
         }
 
         <div
