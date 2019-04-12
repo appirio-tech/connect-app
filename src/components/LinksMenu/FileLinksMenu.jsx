@@ -170,6 +170,11 @@ const FileLinksMenu = ({
                         onCancel={onDeleteCancel}
                         onConfirm={onDeleteConfirm}
                       />
+                      <DeleteLinkModal
+                        link={link}
+                        onCancel={onDeleteCancel}
+                        onConfirm={onDeleteConfirm}
+                      />
                     </li>
                   )
                 } else if (linkToEdit === idx) {
