@@ -168,6 +168,7 @@ class ProjectStage extends React.Component{
       phaseState,
       collapseProjectPhase,
       expandProjectPhase,
+      commentAnchorPrefix,
 
       // comes from phaseFeedHOC
       currentUser,
@@ -242,6 +243,7 @@ class ProjectStage extends React.Component{
               allMembers={allMembers}
               projectMembers={projectMembers}
               onSaveMessage={onSaveMessage}
+              commentAnchorPrefix={commentAnchorPrefix}
             />
           )}
 

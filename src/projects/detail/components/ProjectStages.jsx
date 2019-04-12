@@ -123,6 +123,7 @@ const ProjectStages = ({
           collapseProjectPhase={collapseProjectPhase}
           feedId={feedId}
           commentId={commentId}
+          commentAnchorPrefix={`phase-${phase.id}-posts-`}
         />
       ))
     }

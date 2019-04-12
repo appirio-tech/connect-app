@@ -86,7 +86,7 @@ class Feed extends React.Component {
       id, user, currentUser, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
       allowComments, comments, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
       onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, allMembers,
-      onEnterFullscreenClick, onExitFullscreenClick, isFullScreen, commentId, projectMembers
+      onEnterFullscreenClick, onExitFullscreenClick, isFullScreen, commentId, projectMembers, commentAnchorPrefix
     } = this.props
     const { editTopicMode, headerHeight } = this.state
     let authorName = user ? user.firstName : 'Unknown'
@@ -182,6 +182,7 @@ class Feed extends React.Component {
           headerHeight={headerHeight}
           commentId={commentId}
           error={error}
+          commentAnchorPrefix={commentAnchorPrefix}
         />
         {children}
         {isDeletingTopic &&

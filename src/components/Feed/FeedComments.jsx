@@ -179,7 +179,7 @@ class FeedComments extends React.Component {
     const {
       comments, currentUser, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
       onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage, allMembers,
-      totalComments, isFullScreen, headerHeight, projectMembers
+      totalComments, isFullScreen, headerHeight, projectMembers, commentAnchorPrefix
     } = this.props
     const { isNewCommentMobileOpen, stickyRowNext, stickyRowPrev } = this.state
     let authorName = currentUser.firstName
@@ -322,6 +322,7 @@ class FeedComments extends React.Component {
           projectMembers={projectMembers}
           noInfo={item.noInfo}
           canDelete={idx !== 0}
+          commentAnchorPrefix={commentAnchorPrefix}
         >
           <div dangerouslySetInnerHTML={{__html: markdownToHTML(itemContent)}} />
         </Comment>
