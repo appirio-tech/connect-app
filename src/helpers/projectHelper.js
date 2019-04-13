@@ -269,6 +269,10 @@ export function getPhaseActualData(phase, timeline) {
     progress = tlProgressInPercent
   }
 
+  if (!endDate) {
+    endDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
+  }
+
   return {
     startDate,
     endDate,
