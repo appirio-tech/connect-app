@@ -301,6 +301,7 @@ ProjectStage.propTypes = {
   updateProductAttachment: PT.func.isRequired,
   removeProductAttachment: PT.func.isRequired,
   deleteProjectPhase: PT.func.isRequired,
+  commentAnchorPrefix: PT.string,
 }
 
 const ProjectStageUncontrollable = uncontrollable(ProjectStage, {

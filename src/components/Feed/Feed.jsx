@@ -224,6 +224,7 @@ Feed.propTypes = {
   isSavingTopic: PropTypes.bool,
   onEnterFullscreenClick: PropTypes.func,
   isFullScreen: PropTypes.bool,
+  commentAnchorPrefix: PropTypes.string,
 }
 
 export default Feed

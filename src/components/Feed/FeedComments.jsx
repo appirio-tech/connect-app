@@ -436,10 +436,11 @@ class FeedComments extends React.Component {
   }
 }
 FeedComments.defaultProps = {
-  comments: []
+  comments: [],
 }
 FeedComments.propTypes = {
-  comments: PropTypes.array
+  comments: PropTypes.array,
+  commentAnchorPrefix: PropTypes.string,
 }
 
 export default FeedComments
