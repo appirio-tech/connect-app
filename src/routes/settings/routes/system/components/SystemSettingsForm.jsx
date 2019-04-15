@@ -40,6 +40,7 @@ class SystemSettingsForm extends Component {
             checkEmailAvailability={checkEmailAvailability}
             onSubmit={(email) => changeEmail(email)}
             {...systemSettings}
+            isCustomer={isCustomer}
           />
         </div>
 
