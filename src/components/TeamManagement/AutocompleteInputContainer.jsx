@@ -14,15 +14,24 @@ class AutocompleteInputContainer extends React.Component {
   }
 
   onInputChange(inputValue) {
+    const indexOfSpace = inputValue.indexOf(' ')
+    const indexOfSemiColon = inputValue.indexOf(';')
+
+    // if user enter only ' '  or ';' we should clean it to not allow
+    if (indexOfSpace === 0 || indexOfSemiColon === 0 ) {
+      return ''
+    }
+
+    if (indexOfSpace >= 1 || indexOfSemiColon >= 1 ) {
+      inputValue = inputValue.substring(0, inputValue.length -1 )
+      this.onUpdate([...this.props.selectedMembers, {'label': inputValue, 'value': inputValue}])
+      this.props.onClearUserSuggestions()
+      // this is return empty to nullify inputValue post processing
+      return ''
+    }
+
     if (inputValue.length >= AUTOCOMPLETE_TRIGGER_LENGTH) {
-      if (inputValue.indexOf(' ') > 1 || inputValue.indexOf(';') > 1 ) {
-        inputValue = inputValue.substring(0, inputValue.length -1 )
-        this.onUpdate([...this.props.selectedMembers, {'label': inputValue, 'value': inputValue}])
-        this.props.onClearUserSuggestions()
-        return ''
-      } else {
-        this.props.onLoadUserSuggestions(inputValue)
-      }
+      this.props.onLoadUserSuggestions(inputValue)
     } else {
       this.props.onClearUserSuggestions()
     }
