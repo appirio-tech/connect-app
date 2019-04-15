@@ -23,7 +23,6 @@ import {
 } from '../../config/constants'
 
 const FileLinksMenu = ({
-  canAdd,
   canDelete,
   noDots,
   isAddingNewLink,
@@ -137,9 +136,7 @@ const FileLinksMenu = ({
   return (
     <MobileExpandable title={`${title} (${links.length})`}>
       <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0)}, 'panel-links-container')}>
-        {
-          canAdd && <Panel.AddBtn onClick={openFileUpload}>Upload File</Panel.AddBtn>
-        }
+        <Panel.AddBtn onClick={openFileUpload}>Upload File</Panel.AddBtn>
 
         <Panel.Title>
           {title} ({links.length})
@@ -176,7 +173,7 @@ const FileLinksMenu = ({
                 const handleDeleteClick = () => onDeleteIntent(idx)
 
                 const onEditConfirm = (title, allowedUsers) => {
-                  onEdit(idx, title, allowedUsers)
+                  onEdit(link.id, title, allowedUsers)
                   onEditIntent(-1)
                 }
                 const onEditCancel = () => onEditIntent(-1)
@@ -243,9 +240,9 @@ const FileLinksMenu = ({
             <a href="javascript:" onClick={() => onChangeLimit(10000)}>{moreText}</a>
           </div>}
         </div>
-        {canAdd && !isAddingNewLink && (
+        {!isAddingNewLink && (
           <div className="add-link-mobile">
-            <button className="tc-btn tc-btn-secondary tc-btn-md" onClick={() => onAddingNewLink(true)}>Add New Link
+            <button className="tc-btn tc-btn-secondary tc-btn-md" onClick={() => onAddingNewLink(true)}>Upload File
             </button>
           </div>
         )}
@@ -255,7 +252,6 @@ const FileLinksMenu = ({
 }
 
 FileLinksMenu.propTypes = {
-  canAdd: PropTypes.bool,
   canDelete: PropTypes.bool,
   canEdit: PropTypes.bool,
   noDots: PropTypes.bool,
