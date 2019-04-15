@@ -24,7 +24,7 @@ class AutocompleteInputContainer extends React.Component {
 
     if (indexOfSpace >= 1 || indexOfSemiColon >= 1 ) {
       inputValue = inputValue.substring(0, inputValue.length -1 )
-      this.onUpdate([...this.props.selectedMembers, {'label': inputValue, 'value': inputValue}])
+      this.onUpdate([...this.props.selectedMembers, {label: inputValue, value: inputValue}])
       this.props.onClearUserSuggestions()
       // this is return empty to nullify inputValue post processing
       return ''
