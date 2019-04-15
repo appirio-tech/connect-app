@@ -16,7 +16,6 @@ import _ from 'lodash'
 import Modal from '../Modal/Modal'
 
 const FileLinksMenu = ({
-  canAdd,
   canDelete,
   noDots,
   isAddingNewLink,
@@ -102,7 +101,7 @@ const FileLinksMenu = ({
   return (
     <MobileExpandable title={`${title} (${links.length})`}>
       <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0)}, 'panel-links-container')}>
-        {canAdd && !isAddingNewLink && onAddingNewLink &&
+        {!isAddingNewLink && onAddingNewLink &&
         <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Upload File</Panel.AddBtn>}
 
         {!isAddingNewLink && <Panel.Title>
@@ -223,9 +222,9 @@ const FileLinksMenu = ({
             <a href="javascript:" onClick={() => onChangeLimit(10000)}>{moreText}</a>
           </div>}
         </div>
-        {canAdd && !isAddingNewLink && (
+        {!isAddingNewLink && (
           <div className="add-link-mobile">
-            <button className="tc-btn tc-btn-secondary tc-btn-md" onClick={() => onAddingNewLink(true)}>Add New Link
+            <button className="tc-btn tc-btn-secondary tc-btn-md" onClick={() => onAddingNewLink(true)}>Upload File
             </button>
           </div>
         )}
@@ -235,7 +234,6 @@ const FileLinksMenu = ({
 }
 
 FileLinksMenu.propTypes = {
-  canAdd: PropTypes.bool,
   canDelete: PropTypes.bool,
   canEdit: PropTypes.bool,
   noDots: PropTypes.bool,
