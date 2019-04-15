@@ -87,16 +87,18 @@ export default class ProjectListNavHeader extends Component {
               )
             )}
           </MediaQuery>
-          <div className="primary-filter">
-            <div className="tc-switch clearfix">
-              <SwitchButton
-                onChange={ this.handleMyProjectsFilter }
-                label="My projects"
-                name="my-projects-only"
-                checked={this.props.criteria.memberOnly}
-              />
+          {(!this.props.isCustomer) && 
+            <div className="primary-filter">
+              <div className="tc-switch clearfix">
+                <SwitchButton
+                  onChange={ this.handleMyProjectsFilter }
+                  label="My projects"
+                  name="my-projects-only"
+                  checked={this.props.criteria.memberOnly}
+                />
+              </div>
             </div>
-          </div>
+          }
         </div>
         {(!this.props.isCustomer) &&
           <div className="right-wrapper">
@@ -108,7 +110,7 @@ export default class ProjectListNavHeader extends Component {
                   label="My projects"
                   name="my-projects-only"
                   checked={this.props.criteria.memberOnly}
-                  />
+                />
               </div>
             </div>
             <div className="list-nav-item nav-icon">
