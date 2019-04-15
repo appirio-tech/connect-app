@@ -65,9 +65,10 @@ class ProjectPlanContainer extends React.Component {
     const { expandProjectPhase } = this.props
     const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
     if (scrollTo) {
-      const phaseId = scrollTo.startsWith('phase-') ? parseInt(scrollTo.replace('phase-', ''), 10) : null
+      const hashParts = _.split(scrollTo, '-')
+      const phaseId = hashParts[0] === 'phase' ? parseInt(hashParts[1], 10) : null
       if (phaseId) {
-        let tab = scrollTo.replace(`phase-${phaseId}-`, '')
+        let tab = hashParts[2]
         tab = tab === scrollTo ? 'timeline' : tab
         // we just open tab, while smooth scrolling has to be caused by URL hash
         expandProjectPhase(phaseId, tab)

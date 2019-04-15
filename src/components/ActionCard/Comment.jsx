@@ -58,8 +58,8 @@ class Comment extends React.Component {
   }
 
   render() {
-    const {message, author, date, edited, children, noInfo, self, isSaving, hasError, readonly, allMembers, canDelete, projectMembers} = this.props
-    const messageAnchor = `comment-${message.id}`
+    const {message, author, date, edited, children, noInfo, self, isSaving, hasError, readonly, allMembers, canDelete, projectMembers, commentAnchorPrefix} = this.props
+    const messageAnchor = commentAnchorPrefix + message.id
     const messageLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#${messageAnchor}`
     const authorName = author ? (author.firstName + ' ' + author.lastName) : 'Connect user'
     const avatarUrl = _.get(author, 'photoURL', null)
@@ -141,6 +141,10 @@ class Comment extends React.Component {
   }
 }
 
+Comment.defaultProps = {
+  commentAnchorPrefix: 'comment-',
+}
+
 Comment.propTypes = {
   /**
    * The author (user object)
@@ -204,6 +208,10 @@ Comment.propTypes = {
    * The can delete flag
    */
   canDelete: PropTypes.bool,
+  /**
+   * The prefix for comment anchor
+   */
+  commentAnchorPrefix: PropTypes.string,
 }
 
 export default Comment
