@@ -34,7 +34,9 @@ const initialState = {
   attachmentsAwaitingPermission: null,
   attachmentPermissions: null,
   error: false,
-  project: {},
+  project: {
+    invites: [] // invites are pushed directly into it hence need to declare first
+  },
   projectNonDirty: {},
   updateExisting: false,
   phases: null,
@@ -514,6 +516,9 @@ export const projectState = function (state=initialState, action) {
 
   case INVITE_CUSTOMER_SUCCESS: {
     const newState = Object.assign({}, state)
+    if (!newState.project.invites) {
+      newState.project.invites = []
+    }
     newState.project.invites.push(...action.payload.success)
     newState.processingInvites = false
     newState.error = false
@@ -528,6 +533,9 @@ export const projectState = function (state=initialState, action) {
 
   case INVITE_TOPCODER_MEMBER_SUCCESS: {
     const newState = Object.assign({}, state)
+    if (!newState.project.invites) {
+      newState.project.invites = []
+    }
     newState.project.invites.push(...action.payload.success)
     newState.processingInvites = false
     newState.error = false

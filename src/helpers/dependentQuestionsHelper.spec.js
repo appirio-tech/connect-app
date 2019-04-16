@@ -559,6 +559,46 @@ describe('Evaluate: ', () => {
       res.should.equal(4 + 2)
     })
 
+    it('should throw error if one opening parenthesis is unbalanced', () => {
+      const expression = `((someArrayWithText contains 'a') || (someArrayWithText contains 'b') || (someArrayWithText contains 'c')`
+
+      try {
+        evaluate(expression, testData)
+      } catch(error) {
+        error.message.should.equal('Parens with the following token indexes are unbalanced: 0')
+      }
+    })
+
+    it('should throw error if multiple opening parenthesis are unbalanced', () => {
+      const expression = `(someArrayWithText contains 'a') || ((someArrayWithText contains 'b') || ((someArrayWithText contains 'c')`
+
+      try {
+        evaluate(expression, testData)
+      } catch(error) {
+        error.message.should.equal('Parens with the following token indexes are unbalanced: 6,13')
+      }
+    })
+
+    it('should throw error if one closing parenthesis is unbalanced', () => {
+      const expression = `(someArrayWithText contains 'a')) || (someArrayWithText contains 'b') || (someArrayWithText contains 'c')`
+
+      try {
+        evaluate(expression, testData)
+      } catch(error) {
+        error.message.should.equal('Parens with the following token indexes are unbalanced: 5')
+      }
+    })
+
+    it('should throw error if multiple closing parenthesis are unbalanced', () => {
+      const expression = `(someArrayWithText contains 'a') || (someArrayWithText contains 'b')) || (someArrayWithText contains 'c'))`
+
+      try {
+        evaluate(expression, testData)
+      } catch(error) {
+        error.message.should.equal('Parens with the following token indexes are unbalanced: 11,18')
+      }
+    })
+
     xit('should parse literal constants like numbers with decimal numbers', () => {
       const res = evaluate('4.2 + 2.3', testData)
       res.should.equal(4.2 + 2.3)

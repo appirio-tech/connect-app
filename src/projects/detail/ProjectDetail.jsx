@@ -54,7 +54,7 @@ const spinner = spinnerWhileLoading(props =>
     // first check that there are no error, before checking project properties
     props.error && props.error.type === LOAD_PROJECT_FAILURE ||
     // old project or has projectTemplate loaded
-    (props.project.version !== 'v3' || props.projectTemplate)
+    ((props.project && props.project.version !== 'v3') || props.projectTemplate)
     // has product templates loaded
     && props.productTemplates.length > 0
   )

@@ -198,7 +198,8 @@ class TeamManagement extends React.Component {
               isMember={!!currentMember}
               onCancel={onClickCancel}
               removeMember={removeMember}
-              invites={projectTeamInvites}
+              projectTeamInvites={projectTeamInvites}
+              topcoderTeamInvites={topcoderTeamInvites}
               sendInvite={onProjectInviteSend}
               removeInvite={removeInvite}
               onSelectedMembersUpdate={onSelectedMembersUpdate}
@@ -230,7 +231,8 @@ class TeamManagement extends React.Component {
               removeMember={removeMember}
               addUsers={onTopcoderInviteSend}
               approveOrDecline={onAcceptOrRefuse}
-              invites={topcoderTeamInvites}
+              projectTeamInvites={projectTeamInvites}
+              topcoderTeamInvites={topcoderTeamInvites}
               removeInvite={removeInvite}
               changeRole={changeRole}
               onSelectedMembersUpdate={onSelectedMembersUpdate}

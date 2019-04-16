@@ -113,17 +113,19 @@ class ProjectInfoContainer extends React.Component {
     })
   }
 
-  onEditAttachment(idx, title, allowedUsers) {
+  onEditAttachment(attachmentId, title, allowedUsers) {
     const { project, updateProjectAttachment } = this.props
     const updatedAttachment = {
       title,
       allowedUsers
     }
-    const attachment = project.attachments[idx]
-    updateProjectAttachment(project.id,
-      attachment.id,
-      updatedAttachment
-    )
+    const attachment = project.attachments.find(attachment => attachment.id === attachmentId)
+    if (attachment) {
+      updateProjectAttachment(project.id,
+        attachment.id,
+        updatedAttachment
+      )
+    }
   }
 
   onDeleteProject() {
@@ -190,6 +192,7 @@ class ProjectInfoContainer extends React.Component {
     }
     attachments = _.sortBy(attachments, attachment => -new Date(attachment.updatedAt).getTime())
       .map(attachment => ({
+        id: attachment.id,
         title: attachment.title,
         address: attachment.downloadUrl,
         allowedUsers: attachment.allowedUsers,
@@ -264,25 +267,26 @@ class ProjectInfoContainer extends React.Component {
             noDots
             withHash
           />
-          <FileLinksMenu
-            links={attachments}
-            title="Files"
-            canAdd={enableFileUpload}
-            onEdit={this.onEditAttachment}
-            onAddNewLink={this.onAddFile}
-            onAddAttachment={addProjectAttachment}
-            onUploadAttachment={this.onUploadAttachment}
-            isSharingAttachment={isSharingAttachment}
-            discardAttachments={discardAttachments}
-            onChangePermissions={changeAttachmentPermission}
-            selectedUsers={attachmentPermissions}
-            projectMembers={projectMembers}
-            pendingAttachments={attachmentsAwaitingPermission}
-            loggedInUser={loggedInUser}
-            moreText="view all files"
-            noDots
-            attachmentsStorePath={attachmentsStorePath}
-          />
+          {enableFileUpload &&
+            <FileLinksMenu
+              links={attachments}
+              title="Files"
+              onEdit={this.onEditAttachment}
+              onAddNewLink={this.onAddFile}
+              onAddAttachment={addProjectAttachment}
+              onUploadAttachment={this.onUploadAttachment}
+              isSharingAttachment={isSharingAttachment}
+              discardAttachments={discardAttachments}
+              onChangePermissions={changeAttachmentPermission}
+              selectedUsers={attachmentPermissions}
+              projectMembers={projectMembers}
+              pendingAttachments={attachmentsAwaitingPermission}
+              loggedInUser={loggedInUser}
+              moreText="view all files"
+              noDots
+              attachmentsStorePath={attachmentsStorePath}
+            />
+          }
           {!hideLinks &&
             <LinksMenu
               links={project.bookmarks || []}

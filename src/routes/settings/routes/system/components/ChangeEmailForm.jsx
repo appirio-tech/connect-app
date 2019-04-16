@@ -96,7 +96,7 @@ class ChangeEmailForm extends React.Component {
   }
 
   render() {
-    const { settings, checkingEmail, checkedEmail, isEmailAvailable, isEmailChanging, emailSubmitted } = this.props
+    const { settings, checkingEmail, checkedEmail, isEmailAvailable, isEmailChanging, emailSubmitted, isCustomer } = this.props
     const { currentEmail, isValid, isFocused } = this.state
     const currentEmailAvailable = checkedEmail === currentEmail && isEmailAvailable
     const isCheckingCurrentEmail = checkingEmail === currentEmail
@@ -138,7 +138,7 @@ class ChangeEmailForm extends React.Component {
               validationErrors={{
                 isEmail: 'Provide a correct email'
               }}
-              disabled={isEmailChanging}
+              disabled={isEmailChanging || !isCustomer}
               ref={(ref) => this.emailRef = ref}
             />
             { isFocused && isCheckingCurrentEmail && (
@@ -177,7 +177,8 @@ ChangeEmailForm.propTypes = {
   checkedEmail: PropTypes.string,
   checkingEmailError: PropTypes.string,
   isEmailAvailable: PropTypes.bool,
-  isEmailChanging: PropTypes.bool
+  isEmailChanging: PropTypes.bool,
+  isCustomer: PropTypes.bool
 }
 
 export default ChangeEmailForm
