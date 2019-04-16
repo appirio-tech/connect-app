@@ -15,7 +15,8 @@ import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
   PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_DRAFT } from '../../../config/constants'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 import { 
-  addProjectAttachment, updateProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission
+  addProjectAttachment, updateProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission,
+  removeProjectAttachment
 } from '../../actions/projectAttachment'
 
 class ProjectInfoContainer extends React.Component {
@@ -33,6 +34,7 @@ class ProjectInfoContainer extends React.Component {
     this.onEditAttachment = this.onEditAttachment.bind(this)
     this.onAddFile = this.onAddFile.bind(this)
     this.onUploadAttachment = this.onUploadAttachment.bind(this)
+    this.removeAttachment = this.removeAttachment.bind(this)
     this.onSubmitForReview = this.onSubmitForReview.bind(this)
   }
 
@@ -126,6 +128,11 @@ class ProjectInfoContainer extends React.Component {
         updatedAttachment
       )
     }
+  }
+
+  removeAttachment(idx) {
+    const { project } = this.props
+    this.props.removeProjectAttachment(project.id, idx)
   }
 
   onDeleteProject() {
@@ -271,6 +278,8 @@ class ProjectInfoContainer extends React.Component {
             <FileLinksMenu
               links={attachments}
               title="Files"
+              canDelete={canManageLinks}
+              onDelete={this.removeAttachment}
               onEdit={this.onEditAttachment}
               onAddNewLink={this.onAddFile}
               onAddAttachment={addProjectAttachment}
@@ -334,6 +343,7 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
 }
 
 const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
-  discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission }
+  discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission,
+  removeProjectAttachment }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfoContainer)
