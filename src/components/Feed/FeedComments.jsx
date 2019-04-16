@@ -373,6 +373,7 @@ class FeedComments extends React.Component {
           {(matches) => (matches ? (
             <div>
               <div styleName="comments">
+                {commentRows}
                 {hasMoreComments &&
                   <div styleName="load-more" key="load-more">
                     <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
@@ -380,7 +381,6 @@ class FeedComments extends React.Component {
                     </a>
                   </div>
                 }
-                {commentRows}
               </div>
               {allowComments &&
                 <div styleName="add-comment" key="add-comment">
