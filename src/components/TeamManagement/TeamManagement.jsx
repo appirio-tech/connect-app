@@ -75,9 +75,6 @@ class TeamManagement extends React.Component {
 
     const sortedMembers = members
 
-    // alert('projectTeamInvites ' + JSON.stringify(projectTeamInvites))
-    // alert('topcoderTeamInvites ' + JSON.stringify(topcoderTeamInvites))
-
     return (
       <div className="team-management-container">
         <div className="projects-team">
