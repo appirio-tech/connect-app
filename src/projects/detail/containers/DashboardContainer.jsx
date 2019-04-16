@@ -41,6 +41,7 @@ import {
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
   PROJECT_FEED_TYPE_PRIMARY,
+  PROJECT_FEED_TYPE_MESSAGES,
   EVENT_TYPE,
 } from '../../../config/constants'
 
@@ -209,7 +210,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
   productTemplates: templates.productTemplates,
   isProcessing: projectState.processing,
   phases: projectState.phases,
-  feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
+  feeds: [...projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics],
   isFeedsLoading: projectTopics.isLoading,
   phasesStates: projectState.phasesStates,
   phasesTopics,

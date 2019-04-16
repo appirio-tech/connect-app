@@ -33,6 +33,7 @@ import {
   PHASE_STATUS_ACTIVE,
   PROJECT_STATUS_CANCELLED,
   PROJECT_FEED_TYPE_PRIMARY,
+  PROJECT_FEED_TYPE_MESSAGES,
   EVENT_TYPE,
 } from '../../../config/constants'
 import Sticky from '../../../components/Sticky'
@@ -196,7 +197,7 @@ const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates 
   productCategories: templates.productCategories,
   phases: projectState.phases,
   phasesNonDirty: projectState.phasesNonDirty,
-  feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
+  feeds: [...projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics],
   isFeedsLoading: projectTopics.isLoading,
   phasesTopics,
   phasesStates: projectState.phasesStates,
