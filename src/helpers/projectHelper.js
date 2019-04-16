@@ -234,7 +234,7 @@ export function getPhaseActualData(phase, timeline) {
     progress = phase.progress ? phase.progress : 0
     
     if (startDate) {
-      endDate = startDate.add(duration, 'days');
+      endDate = startDate.add(duration, 'days')
     }
     if (!endDate) {
       endDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
