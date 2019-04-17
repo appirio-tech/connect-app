@@ -14,6 +14,10 @@
           display: block;
         }
       }
+
+      &.is-private.modal {
+        background-color: $tc-orange-10;
+      }
     }
 
     .modal-row {
@@ -209,7 +213,19 @@
         }
 
         .tc-btns {
+          display: flex;
+          align-items: center;
           margin-left: auto;
+
+          .SwitchButton label {
+            margin: 0 10px 0 0;
+
+            .label {
+              padding: 0 0 0 10px;
+              order: 1;
+            }
+          }
+
           @media screen and (max-width: $screen-rg - 1px) {
             padding-top: $base-unit;
           }

@@ -13,6 +13,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import MobilePage from '../MobilePage/MobilePage'
 
+import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 import XMartIcon from '../../assets/icons/x-mark.svg'
 import './NewPostMobile.scss'
 
@@ -32,7 +33,8 @@ class NewPostMobile extends React.Component {
       step: props.step,
       statusValue: '',
       commentValue: '',
-      browserActualViewportHeigth: document.documentElement.clientHeight
+      browserActualViewportHeigth: document.documentElement.clientHeight,
+      isPrivate: false
     }
 
     this.setStep = this.setStep.bind(this)
@@ -80,9 +82,9 @@ class NewPostMobile extends React.Component {
   render() {
     const {
       statusTitle, commentTitle, commentPlaceholder, submitText, onPost, onClose,
-      isCreating, nextStepText, statusPlaceholder
+      isCreating, nextStepText, statusPlaceholder, canAccessPrivatePosts
     } = this.props
-    const { step, statusValue, commentValue, browserActualViewportHeigth } = this.state
+    const { step, statusValue, commentValue, browserActualViewportHeigth, isPrivate } = this.state
 
     let value
     let title
@@ -104,7 +106,8 @@ class NewPostMobile extends React.Component {
       placeholder = commentPlaceholder
       onBtnClick = () => onPost({
         title: statusValue,
-        content: commentValue
+        content: commentValue,
+        isPrivate
       })
       btnText = submitText
     }
@@ -112,7 +115,15 @@ class NewPostMobile extends React.Component {
     return (
       <MobilePage>
         <div styleName="header">
-          <div styleName="plug" />
+          {canAccessPrivatePosts ?
+            <SwitchButton
+              name="private-post"
+              onChange={(evt) => this.setState({isPrivate: evt.target.checked})}
+              checked={isPrivate}
+              label="Private"
+            /> :
+            <div styleName="plug" />
+          }
           <div styleName="title">{title}</div>
           <div styleName="close-wrapper"><XMartIcon onClick={onClose} /></div>
         </div>
@@ -153,6 +164,7 @@ NewPostMobile.propTypes = {
   onClose: PropTypes.func.isRequired,
   isCreating: PropTypes.bool,
   hasError: PropTypes.bool,
+  canAccessPrivatePosts: PropTypes.bool,
 }
 
 export default NewPostMobile
