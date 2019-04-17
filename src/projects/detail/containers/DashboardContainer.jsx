@@ -208,7 +208,7 @@ class DashboardContainer extends React.Component {
 }
 
 const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics }) => {
-  // all feeds includes primary topics as well as private topics if user has access to private posts
+  // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
   if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
     allFeed = [...allFeed, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
