@@ -14,6 +14,10 @@
           display: block;
         }
       }
+
+      &.is-private.modal {
+        background-color: $tc-orange-10;
+      }
     }
 
     .modal-row {

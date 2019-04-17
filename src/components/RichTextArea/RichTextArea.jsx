@@ -293,7 +293,7 @@ class RichTextArea extends React.Component {
     }
 
     return (
-      <div className={cn(className, 'rich-editor', {expanded: editorExpanded || editMode})} ref="richEditor">
+      <div className={cn(className, 'rich-editor', {expanded: editorExpanded || editMode}, {'is-private': isPrivate})} ref="richEditor">
         {(isCreating || isGettingComment) &&
          <div className="editing-layer" />
         }
