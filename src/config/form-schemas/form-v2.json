@@ -1,0 +1,343 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/appirio-tech/connect-app/master/src/config/form-schemas/form-v2.json",
+  "type": "object",
+  "title": "Project form schema v2",
+  "properties": {
+    "sections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/sectionDef"
+      }
+    }
+  },
+  "required": [
+    "sections"
+  ],
+  "definitions": {
+    "sectionDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "statusText": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "hideTitle": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        },
+        "wizard": {
+          "$ref": "#/definitions/wizardDef"
+        },
+        "hiddenOnEdit": {
+          "type": "boolean"
+        },
+        "hideFormHeader": {
+          "type": "boolean"
+        },
+        "nextButtonText": {
+          "type": "string"
+        },
+        "footer": {
+          "$ref": "#/definitions/footerDef"
+        },
+        "subSections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/subSectionDef"
+          }
+        }
+      }
+    },
+    "subSectionDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "tabs",
+            "questions",
+            "notes",
+            "message",
+            "files",
+            "screens",
+            "project-name",
+            "project-name-advanced",
+            "portal"
+          ]
+        },
+        "hideTitle": {
+          "type": "boolean"
+        },
+        "theme": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "questions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/questionDef"
+          }
+        },
+        "wizard": {
+          "$ref": "#/definitions/wizardDef"
+        },
+        "condition": {
+          "type": "string"
+        },
+        "fieldName": {
+          "type": "string"
+        },
+        "content": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/subSectionContentDef"
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "type": {
+            "const": "questions"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "questions"
+        ]
+      }
+    },
+    "questionDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "icon": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "fieldName": {
+          "type": "string"
+        },
+        "theme": {
+          "type": "string"
+        },
+        "condition": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "validations": {
+          "type": "string"
+        },
+        "validationError": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "hiddenOnEdit": {
+          "type": "boolean"
+        },
+        "content": {
+          "type": "string"
+        },
+        "summaryTitle": {
+          "type": "string"
+        },
+        "help": {
+          "$ref": "#/definitions/helpDef"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/optionDef"
+          }
+        },
+        "affectsQuickQuote": {
+          "type": "boolean"
+        },
+        "deliverables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/deliverableDef"
+          }
+        },
+        "summaryMode": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "see-attached-textbox",
+            "textinput",
+            "numberinput",
+            "numberinputpositive",
+            "textbox",
+            "radio-group",
+            "tiled-radio-group",
+            "see-attached-tiled-radio-group",
+            "checkbox-group",
+            "checkbox",
+            "tiled-checkbox-group",
+            "see-attached-features",
+            "colors",
+            "select-dropdown",
+            "slide-radiogroup",
+            "add-ons",
+            "estimation",
+            "static"
+          ]
+        }
+      }
+    },
+    "optionDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "summaryLabel": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "autoSelectCondition": {
+          "type": "string"
+        },
+        "disableCondition": {
+          "type": "string"
+        },
+        "disabled": {
+          "type": "boolean"
+        },
+        "condition": {
+          "type": "string"
+        }
+      }
+    },
+    "helpDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "linkTitle",
+        "title",
+        "content"
+      ],
+      "properties": {
+        "linkTitle": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "wizardDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "previousStepVisibility": {
+          "type": "string",
+          "enum": [
+            "write",
+            "readOptimized",
+            "none"
+          ]
+        }
+      }
+    },
+    "footerDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "content"
+      ],
+      "properties": {
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "deliverableDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "duration",
+        "enableCondition",
+        "deliverableKey"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "number"
+        },
+        "enableCondition": {
+          "type": "string"
+        },
+        "deliverableKey": {
+          "type": "string"
+        }
+      }
+    },
+    "subSectionContentDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sectionIndex": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}
