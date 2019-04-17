@@ -314,3 +314,27 @@ export function getNewProjectLink(orgConfigs) {
   if(orgConfigs.length === 1) return orgConfigs[0].configValue
   return NEW_PROJECT_PATH
 }
+
+/**
+ * Parses the URL hash value and filters out the content type and id
+ *
+ * @param {String} hash - The retrieved URL hash value
+ *
+ * @return {Object} {contentType, id}
+ */
+export function parseUrlHashValue(hash) {
+  const parsedValue = { contentType: null, typeId: null, contentSubType: null, subTypeId: null }
+  const hashFragments = hash.split('-')
+
+  if (hashFragments.length === 2) {
+    parsedValue.contentType = hashFragments[0].slice(1)
+    parsedValue.typeId = Number(hashFragments[1])
+  } else if (hashFragments.length === 4) {
+    parsedValue.contentType = hashFragments[0].slice(1)
+    parsedValue.typeId = Number(hashFragments[1])
+    parsedValue.contentSubType = hashFragments[2].slice(0)
+    parsedValue.subTypeId = Number(hashFragments[3])
+  }
+
+  return parsedValue
+}

@@ -3,13 +3,14 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import update from 'react-addons-update'
 import _ from 'lodash'
+import { withRouter } from 'react-router-dom'
 import LinksMenu from '../../../components/LinksMenu/LinksMenu'
 import FileLinksMenu from '../../../components/LinksMenu/FileLinksMenu'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
 import { loadDashboardFeeds } from '../../actions/projectTopics'
 import { loadPhaseFeed } from '../../actions/phasesTopics'
-import { setDuration } from '../../../helpers/projectHelper'
+import { setDuration, parseUrlHashValue } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_ATTACHMENTS_FOLDER,
   PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_DRAFT } from '../../../config/constants'
@@ -17,6 +18,7 @@ import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 import { 
   addProjectAttachment, updateProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission
 } from '../../actions/projectAttachment'
+const contentTypes = ['feed', 'comment', 'phase']
 
 class ProjectInfoContainer extends React.Component {
 
@@ -34,6 +36,7 @@ class ProjectInfoContainer extends React.Component {
     this.onAddFile = this.onAddFile.bind(this)
     this.onUploadAttachment = this.onUploadAttachment.bind(this)
     this.onSubmitForReview = this.onSubmitForReview.bind(this)
+    this.loadNewContent = this.loadNewContent.bind(this)
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
@@ -74,10 +77,26 @@ class ProjectInfoContainer extends React.Component {
         loadPhaseFeed(project.id, phase.id)
       }
     })
+
+    // Add a listener for changes in location
+    this.unlisten = this.props.history.listen((location, action) => {
+      console.log('on route change: ', location)
+      console.log('route changed on action: ', action)
+      if (location.hash) {
+        const { contentType, typeId, contentSubType, subTypeId } = parseUrlHashValue(location.hash)
+        if (contentTypes.includes(contentType) && typeId) {
+          this.loadNewContent(contentType, typeId, contentSubType, subTypeId)
+        }
+      }
+    })
   }
 
   componentWillReceiveProps({project}) {
     this.setDuration(project)
+  }
+
+  componentWillUnmount() {
+    this.unlisten()
   }
 
   onChangeStatus(projectId, status, reason) {
@@ -144,6 +163,60 @@ class ProjectInfoContainer extends React.Component {
   onSubmitForReview() {
     const { updateProject, project } = this.props
     updateProject(project.id, { status: 'in_review'})
+  }
+
+  loadNewContent(contentType, typeId, contentSubType, subTypeId) {
+    const { feeds, project, phasesTopics } = this.props
+
+    switch (contentType) {
+
+    case 'feed': {
+      const isFeedLoaded = feeds.findIndex((element) => element.id === typeId)
+      if (isFeedLoaded === -1) {
+        // loadDashboardFeeds(project.id)
+        window.location.reload()
+      }
+
+      break
+    }
+
+    case 'comment': {
+      const isPostWithinFeedLoaded = feeds.findIndex((element) => {
+        if (element.postIds.includes(typeId)) {
+          return true
+        }
+
+        return false
+      })
+
+      if (isPostWithinFeedLoaded === -1) {
+        // loadDashboardFeeds(project.id)
+        window.location.reload()
+      }
+
+      break
+    }
+
+    case 'phase': {
+      const isPhaseLoaded = () => typeId in phasesTopics
+
+      if (!isPhaseLoaded) {
+        // loadPhaseFeed(project.id, typeId)
+        window.location.reload()
+      } else if (contentSubType === 'posts' && subTypeId) {
+        const phaseTopic = phasesTopics[typeId].topic
+        if (!phaseTopic.postIds.includes(subTypeId)) {
+          // loadPhaseFeed(project.id, typeId)
+          window.location.reload()
+        }
+      }
+
+      break
+    }
+
+    default: break
+
+    }
   }
 
   render() {
@@ -336,4 +409,4 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
 const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
   discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfoContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProjectInfoContainer))
