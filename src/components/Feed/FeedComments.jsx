@@ -177,10 +177,13 @@ class FeedComments extends React.Component {
 
   render() {
     const {
-      comments, currentUser, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
+      currentUser, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
       onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage, allMembers,
       totalComments, isFullScreen, headerHeight, projectMembers, commentAnchorPrefix
     } = this.props
+    let { comments } = this.props
+    comments = _.sortBy(comments, 'createdBy')
+    comments = comments.reverse()
     const { isNewCommentMobileOpen, stickyRowNext, stickyRowPrev } = this.state
     let authorName = currentUser.firstName
     if (authorName && currentUser.lastName) {
@@ -371,6 +374,7 @@ class FeedComments extends React.Component {
           {(matches) => (matches ? (
             <div>
               <div styleName="comments">
+                {commentRows}
                 {hasMoreComments &&
                   <div styleName="load-more" key="load-more">
                     <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
@@ -378,7 +382,6 @@ class FeedComments extends React.Component {
                     </a>
                   </div>
                 }
-                {commentRows}
               </div>
               {allowComments &&
                 <div styleName="add-comment" key="add-comment">

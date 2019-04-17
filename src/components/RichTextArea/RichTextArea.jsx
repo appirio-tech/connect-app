@@ -20,6 +20,7 @@ import 'draft-js-mention-plugin/lib/plugin.css'
 import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'
 import _ from 'lodash'
 import { getAvatarResized } from '../../helpers/tcHelpers'
+import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 
 const linkPlugin = createLinkPlugin()
 const blockDndPlugin = createBlockDndPlugin()
@@ -54,7 +55,7 @@ const blocks = [
 class RichTextArea extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {editorExpanded: false, editorState: EditorState.createEmpty(), titleValue: '', suggestions: [], allSuggestions:[]}
+    this.state = {editorExpanded: false, editorState: EditorState.createEmpty(), titleValue: '', suggestions: [], allSuggestions:[], isPrivate: false}
     this.onTitleChange = this.onTitleChange.bind(this)
     this.onEditorChange = this.onEditorChange.bind(this)
     this.handleKeyCommand = this.handleKeyCommand.bind(this)
@@ -119,7 +120,8 @@ class RichTextArea extends React.Component {
       titleValue: '',
       editorState: EditorState.push(this.state.editorState, EditorState.createEmpty().getCurrentContent()),
       currentMDContent: null,
-      oldMDContent: null
+      oldMDContent: null,
+      isPrivate: false
     })
   }
 
@@ -168,7 +170,7 @@ class RichTextArea extends React.Component {
     if (!isEditor && !isCloseButton && hasContent) {
       return
     }
-    this.setState({editorExpanded: isEditor && !isCloseButton})
+    this.setState({editorExpanded: isEditor && !isCloseButton, isPrivate: isEditor && !isCloseButton ? this.state.isPrivate : false})
   }
 
   handleKeyCommand(command) {
@@ -224,12 +226,13 @@ class RichTextArea extends React.Component {
     if (this.props.isCreating) {
       return
     }
-    const title = this.state.titleValue
 
+    const title = this.state.titleValue
     const content = this.state.currentMDContent
+    const isPrivate = this.state.isPrivate
 
     if ((this.props.disableTitle || title) && (this.props.disableContent || content)) {
-      this.props.onPost({title, content})
+      this.props.onPost({title, content, isPrivate})
     }
   }
   onSearchChange({value}){
@@ -254,8 +257,8 @@ class RichTextArea extends React.Component {
   render() {
     const {MentionSuggestions} = this.mentionPlugin
     const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating,
-      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic } = this.props
-    const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading} = this.state
+      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic, hasPrivateSwitch } = this.props
+    const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading, isPrivate} = this.state
     let canSubmit = (disableTitle || titleValue.trim())
         && (disableContent || editorState.getCurrentContent().hasText())
     if (editMode && canSubmit) {
@@ -290,7 +293,7 @@ class RichTextArea extends React.Component {
     }
 
     return (
-      <div className={cn(className, 'rich-editor', {expanded: editorExpanded || editMode})} ref="richEditor">
+      <div className={cn(className, 'rich-editor', {expanded: editorExpanded || editMode}, {'is-private': isPrivate})} ref="richEditor">
         {(isCreating || isGettingComment) &&
          <div className="editing-layer" />
         }
@@ -387,6 +390,14 @@ class RichTextArea extends React.Component {
                     </div>
                   }
                   <div className="tc-btns">
+                    {hasPrivateSwitch &&
+                      <SwitchButton
+                        name="private-post"
+                        onChange={(evt) => this.setState({isPrivate: evt.target.checked})}
+                        checked={isPrivate}
+                        label="Private"
+                      />
+                    }
                     {!editMode &&
                       <button className="tc-btn tc-btn-default tc-btn-sm btn-close-creat">Cancel</button>
                     }
@@ -437,7 +448,8 @@ RichTextArea.propTypes = {
   content: PropTypes.string,
   allMembers: PropTypes.object,
   projectMembers: PropTypes.object,
-  editingTopic: PropTypes.bool
+  editingTopic: PropTypes.bool,
+  hasPrivateSwitch: PropTypes.bool,
 }
 
 export default RichTextArea
