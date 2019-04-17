@@ -166,7 +166,7 @@ const FileLinksMenu = ({
             {
               links.slice(0, limit).map((link, idx) => {
                 const onDeleteConfirm = () => {
-                  onDelete(idx)
+                  onDelete(link.id)
                   onDeleteIntent(-1)
                 }
                 const onDeleteCancel = () => onDeleteIntent(-1)
