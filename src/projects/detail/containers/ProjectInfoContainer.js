@@ -7,12 +7,12 @@ import LinksMenu from '../../../components/LinksMenu/LinksMenu'
 import FileLinksMenu from '../../../components/LinksMenu/FileLinksMenu'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
-import { loadDashboardFeeds } from '../../actions/projectTopics'
+import { loadDashboardFeeds, laodProjectMessages } from '../../actions/projectTopics'
 import { loadPhaseFeed } from '../../actions/phasesTopics'
 import { setDuration } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_ATTACHMENTS_FOLDER,
-  PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_DRAFT } from '../../../config/constants'
+  PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_DRAFT, PROJECT_FEED_TYPE_MESSAGES } from '../../../config/constants'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 import { 
   addProjectAttachment, updateProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission
@@ -57,7 +57,7 @@ class ProjectInfoContainer extends React.Component {
 
   componentWillMount() {
     const { project, isFeedsLoading, feeds, loadDashboardFeeds,
-      phases, phasesTopics, loadPhaseFeed } = this.props
+      laodProjectMessages, phases, phasesTopics, loadPhaseFeed } = this.props
 
     this.setDuration(project)
 
@@ -65,6 +65,7 @@ class ProjectInfoContainer extends React.Component {
     // also it will load feeds, if we already loaded them, but it was 0 feeds before
     if (!isFeedsLoading && feeds.length < 1) {
       loadDashboardFeeds(project.id)
+      laodProjectMessages(project.id)
     }
 
     // load phases feeds if they are not loaded yet
@@ -223,10 +224,10 @@ class ProjectInfoContainer extends React.Component {
 
     const discussions = [...feeds, ...phaseFeeds].map((feed) => ({
       title: feed.phaseName ? `${feed.phaseName}` : `${feed.title}`,
-      address: feed.tag === PROJECT_FEED_TYPE_PRIMARY ? `/projects/${project.id}#feed-${feed.id}` : `/projects/${project.id}/plan#phase-${feed.phaseId}-posts`,
+      address: (feed.tag === PROJECT_FEED_TYPE_PRIMARY || feed.tag === PROJECT_FEED_TYPE_MESSAGES) ? `/projects/${project.id}#feed-${feed.id}` : `/projects/${project.id}/plan#phase-${feed.phaseId}-posts`,
       noNewPage: true,
       //if PRIMARY discussion is to be loaded for project-plan page we won't attach the callback, for smoother transition to dashboard page
-      onClick: !(isProjectPlan && feed.tag === PROJECT_FEED_TYPE_PRIMARY) && onChannelClick ? () => onChannelClick(feed) : null,
+      onClick: !(isProjectPlan && (feed.tag === PROJECT_FEED_TYPE_PRIMARY || feed.tag === PROJECT_FEED_TYPE_MESSAGES)) && onChannelClick ? () => onChannelClick(feed) : null,
       allowDefaultOnClick: true,
       isActive: feed.id === activeChannelId,
     }))
@@ -333,7 +334,7 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
   })
 }
 
-const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
+const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment, laodProjectMessages,
   discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfoContainer)

@@ -26,6 +26,10 @@
   background-color: $tc-gray-neutral-light;
   border-radius: $card-border-radius $card-border-radius 0 0;
 
+  &.is-private {
+    background-color: $tc-orange-10;
+  }
+
   .is-fullscreen & {
     border-radius: 0;
     position: fixed;
@@ -73,6 +77,10 @@
 .header-view-inner {
   display: flex;
   justify-content: space-between;
+}
+
+.lock-icon {
+  margin: $base-unit / 2 4 * $base-unit 0 0;
 }
 
 .title {
