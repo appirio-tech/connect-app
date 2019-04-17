@@ -35,6 +35,8 @@ import TwoColsLayout from '../../../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
 import WorkInProgress from '../components/WorkInProgress'
 import NotificationsReader from '../../../components/NotificationsReader'
+import { checkPermission } from '../../../helpers/permissions'
+import PERMISSIONS from '../../../config/permissions'
 
 import {
   PHASE_STATUS_ACTIVE,
@@ -205,16 +207,24 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics }) => ({
-  notifications: preRenderNotifications(notifications.notifications),
-  productTemplates: templates.productTemplates,
-  isProcessing: projectState.processing,
-  phases: projectState.phases,
-  feeds: [...projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics],
-  isFeedsLoading: projectTopics.isLoading,
-  phasesStates: projectState.phasesStates,
-  phasesTopics,
-})
+const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics }) => {
+  // all feeds includes primary topics as well as private topics if user has access to private posts
+  let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
+  if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
+    allFeed = [...allFeed, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
+  }
+
+  return {
+    notifications: preRenderNotifications(notifications.notifications),
+    productTemplates: templates.productTemplates,
+    isProcessing: projectState.processing,
+    phases: projectState.phases,
+    feeds: allFeed,
+    isFeedsLoading: projectTopics.isLoading,
+    phasesStates: projectState.phasesStates,
+    phasesTopics,
+  }
+}
 
 const mapDispatchToProps = {
   toggleNotificationRead,

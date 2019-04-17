@@ -26,6 +26,10 @@
   background-color: $tc-gray-neutral-light;
   border-radius: $card-border-radius $card-border-radius 0 0;
 
+  &.is-private {
+    background-color: $tc-orange-10;
+  }
+
   .is-fullscreen & {
     border-radius: 0;
     position: fixed;

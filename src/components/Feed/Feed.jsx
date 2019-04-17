@@ -102,7 +102,7 @@ class Feed extends React.Component {
       const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
 
       topicHeader = (
-        <header styleName="feed-header" ref="header">
+        <header styleName={'feed-header' + (tag === PROJECT_FEED_TYPE_MESSAGES ? ' is-private' : '' )} ref="header">
           <NotificationsReader 
             id={`topic-${id}`}
             criteria={{ eventType: EVENT_TYPE.TOPIC.CREATED, contents: { topicId: id } }}

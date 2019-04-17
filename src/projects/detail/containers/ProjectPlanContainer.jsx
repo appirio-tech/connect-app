@@ -39,7 +39,7 @@ import {
 import Sticky from '../../../components/Sticky'
 import { Link } from 'react-router-dom'
 import PERMISSIONS from '../../../config/permissions'
-import {checkPermission} from '../../../helpers/permissions'
+import { checkPermission } from '../../../helpers/permissions'
 
 import './ProjectPlanContainer.scss'
 
@@ -192,16 +192,24 @@ ProjectPlanContainer.propTypes = {
   productsTimelines: PT.object.isRequired,
 }
 
-const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates }) => ({
-  productTemplates: templates.productTemplates,
-  productCategories: templates.productCategories,
-  phases: projectState.phases,
-  phasesNonDirty: projectState.phasesNonDirty,
-  feeds: [...projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics],
-  isFeedsLoading: projectTopics.isLoading,
-  phasesTopics,
-  phasesStates: projectState.phasesStates,
-})
+const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates }) => {
+  // all feeds includes primary topics as well as private topics if user has access to private posts
+  let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
+  if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
+    allFeed = [...allFeed, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
+  }
+
+  return {
+    productTemplates: templates.productTemplates,
+    productCategories: templates.productCategories,
+    phases: projectState.phases,
+    phasesNonDirty: projectState.phasesNonDirty,
+    feeds: allFeed,
+    isFeedsLoading: projectTopics.isLoading,
+    phasesTopics,
+    phasesStates: projectState.phasesStates,
+  }
+}
 
 const mapDispatchToProps = {
   updateProduct,

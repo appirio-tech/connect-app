@@ -542,8 +542,11 @@ FeedContainer.PropTypes = {
 const mapStateToProps = ({ projectTopics, members, loadUser, notifications, projectState }) => {
   const project = projectState.project
   const projectMembers = _.filter(members.members, m => _.some(project.members, pm => pm.userId === m.userId))
-  // all feeds includes primary topics as well as private topics if any
-  const allFeed = [...projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
+  // all feeds includes primary topics as well as private topics if user has access to private posts
+  let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
+  if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
+    allFeed = [...allFeed, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
+  }
   const allFeedCount = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].totalCount + projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].totalCount
 
   return {
