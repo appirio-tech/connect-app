@@ -18,7 +18,7 @@ import { connect } from 'react-redux'
 import update from 'react-addons-update'
 import NewPost from '../../../components/Feed/NewPost'
 
-import { loadDashboardFeeds, laodProjectMessages, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments,
+import { loadDashboardFeeds, loadProjectMessages, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments,
   addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import { toggleNotificationRead } from '../../../routes/notifications/actions'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
@@ -358,9 +358,9 @@ class FeedView extends React.Component {
   }
 
   onRefreshFeeds() {
-    const { loadDashboardFeeds, laodProjectMessages, project } = this.props
+    const { loadDashboardFeeds, loadProjectMessages, project, canAccessPrivatePosts } = this.props
     loadDashboardFeeds(project.id)
-    laodProjectMessages(project.id)
+    canAccessPrivatePosts && loadProjectMessages(project.id)
   }
 
   enterFullscreen(feedId) {
@@ -373,12 +373,11 @@ class FeedView extends React.Component {
 
   render () {
     const {currentUser, currentMemberRole, isCreatingFeed, error, allMembers,
-      toggleNotificationRead, notifications, project, isSuperUser, projectMembers } = this.props
+      toggleNotificationRead, notifications, project, isSuperUser, projectMembers, canAccessPrivatePosts } = this.props
     const { feeds, isNewPostMobileOpen, fullscreenFeedId } = this.state
     const isChanged = this.isChanged()
     const onLeaveMessage = this.onLeave() || ''
     const fullscreenFeed = fullscreenFeedId && _.find(feeds, { id: fullscreenFeedId })
-    const canAccessPrivatePosts = checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
 
     return (
       <div>
@@ -544,10 +543,11 @@ const mapStateToProps = ({ projectTopics, members, loadUser, notifications, proj
   const projectMembers = _.filter(members.members, m => _.some(project.members, pm => pm.userId === m.userId))
   // all feeds includes primary as well as private topics if user has access to private topics
   let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
-  if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
+  const canAccessPrivatePosts = checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
+  if (canAccessPrivatePosts) {
     allFeed = [...allFeed, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
   }
-  const allFeedCount = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].totalCount + projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].totalCount
+  const allFeedCount = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].totalCount + (canAccessPrivatePosts ? projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].totalCount : 0)
 
   return {
     currentUser    : loadUser.user,
@@ -559,11 +559,12 @@ const mapStateToProps = ({ projectTopics, members, loadUser, notifications, proj
     allMembers     : members.members,
     projectMembers : _.keyBy(projectMembers, 'userId'),
     notifications,
+    canAccessPrivatePosts,
   }
 }
 const mapDispatchToProps = {
   loadDashboardFeeds,
-  laodProjectMessages,
+  loadProjectMessages,
   createProjectTopic,
   saveProjectTopic,
   deleteProjectTopic,
