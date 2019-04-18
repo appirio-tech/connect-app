@@ -131,9 +131,9 @@ class ProjectInfoContainer extends React.Component {
     }
   }
 
-  removeAttachment(idx) {
+  removeAttachment(attachmentId) {
     const { project } = this.props
-    this.props.removeProjectAttachment(project.id, idx)
+    this.props.removeProjectAttachment(project.id, attachmentId)
   }
 
   onDeleteProject() {
@@ -279,7 +279,6 @@ class ProjectInfoContainer extends React.Component {
             <FileLinksMenu
               links={attachments}
               title="Files"
-              canDelete={canManageLinks}
               onDelete={this.removeAttachment}
               onEdit={this.onEditAttachment}
               onAddNewLink={this.onAddFile}
