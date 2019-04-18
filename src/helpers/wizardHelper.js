@@ -354,6 +354,18 @@ export const initWizard = (template, project, incompleteWizard) => {
       nodeObject.autoSelectCondition = populatePreparedConditions(nodeObject.autoSelectCondition, preparedConditions)
     }
 
+    // additionally we use enableConditions in `estimation` question type
+    // it's not good to keep such special case here and better to handle it inside that question type
+    // but to keep it faster and avoid repeating this actions, we do it here during wizard initialization
+    // TODO: think where we can move it to avoid creating a special case here, yet avoid repeating this aciton
+    if (nodeObject.type === 'estimation' && _.isArray(nodeObject.deliverables)) {
+      nodeObject.deliverables.forEach((deliverable) => {
+        if (deliverable.enableCondition) {
+          deliverable.enableCondition = populatePreparedConditions(deliverable.enableCondition, preparedConditions)
+        }        
+      })
+    }
+
     // keep node indexes for each node inside template
     nodeObject.__wizard = {
       node
