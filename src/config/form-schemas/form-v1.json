@@ -1,0 +1,309 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/appirio-tech/connect-app/master/src/config/form-schemas/form-v1.json",
+  "type": "object",
+  "title": "Project form schema v1",
+  "properties": {
+    "sections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/sectionDef"
+      }
+    }
+  },
+  "required": [
+    "sections"
+  ],
+  "definitions": {
+    "sectionDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "hideTitle": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        },
+        "productName": {
+          "type": "string"
+        },
+        "subSections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/subSectionDef"
+          }
+        }
+      }
+    },
+    "subSectionDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "validationError": {
+          "type": "string"
+        },
+        "fieldName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "hideTitle": {
+          "type": "boolean"
+        },
+        "hiddenOnCreation": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "files",
+            "notes",
+            "project-name",
+            "questions"
+          ]
+        },
+        "questions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/questionDef"
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "type": {
+            "const": "questions"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "questions"
+        ]
+      }
+    },
+    "questionDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "description",
+        "type"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "tiled-radio-group",
+            "radio-group",
+            "checkbox-group",
+            "textbox",
+            "slide-radiogroup",
+            "select-dropdown"
+          ]
+        },
+        "validations": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object"
+        },
+        "validationError": {
+          "type": "string"
+        },
+        "fieldName": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "tiled-radio-group"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "options"
+            ],
+            "properties": {
+              "options": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/tiledOptionDef"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "checkbox-group",
+                  "radio-group"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "options"
+            ],
+            "properties": {
+              "options": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/simpleOptionDef"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "slide-radiogroup",
+                  "select-dropdown"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "options"
+            ],
+            "properties": {
+              "options": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/valuePairOptionDef"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "valuePairOptionDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "title"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "simpleOptionDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "label"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    },
+    "tiledOptionDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "title",
+        "icon",
+        "iconOptions",
+        "desc"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "iconOptions": {
+          "type": "object",
+          "properties": {
+            "fill": {
+              "type": "string"
+            },
+            "number": {
+              "type": "string"
+            }
+          }
+        },
+        "desc": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}
