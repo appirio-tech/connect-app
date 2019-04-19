@@ -659,3 +659,32 @@ export const NOTIFICATION_RULES = (() => {
 
   return notificationRules
 })()
+
+/*
+  Below we would list functions to build criteria to filter notifications which we reuse in several places.
+ */
+
+/**
+ * Build criteria to filter all notifications related to phase timeline tab
+ * 
+ * @param {Object} timeline timeline
+ * 
+ * @returns {Array} notifications filter criteria
+ */
+export const buildPhaseTimelineNotificationsCriteria = (timeline) => ([
+  { eventType: EVENT_TYPE.PROJECT_PLAN.TIMELINE_ADJUSTED, contents: { updatedTimeline: { id: timeline.id } } },
+  { eventType: EVENT_TYPE.PROJECT_PLAN.MILESTONE_ACTIVATED, contents: { timeline: { id: timeline.id } } },
+  { eventType: EVENT_TYPE.PROJECT_PLAN.MILESTONE_COMPLETED, contents: { timeline: { id: timeline.id } } },
+  { eventType: EVENT_TYPE.PROJECT_PLAN.WAITING_FOR_CUSTOMER_INPUT, contents: { timeline: { id: timeline.id } } },
+])
+
+/**
+ * Build criteria to filter all notifications related to phase specification tab
+ * 
+ * @param {Object} phase phase
+ * 
+ * @returns {Array} notifications filter criteria
+ */
+export const buildPhaseSpecifiationNotificationsCriteria = (phase) => ([
+  { eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_PRODUCT_SPEC_UPDATED, contents: { phaseId: phase.id } },
+])
