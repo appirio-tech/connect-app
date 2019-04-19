@@ -168,6 +168,7 @@ class ProjectStage extends React.Component{
       phaseState,
       collapseProjectPhase,
       expandProjectPhase,
+      commentAnchorPrefix,
 
       // comes from phaseFeedHOC
       currentUser,
@@ -251,6 +252,7 @@ class ProjectStage extends React.Component{
               allMembers={allMembers}
               projectMembers={projectMembers}
               onSaveMessage={onSaveMessage}
+              commentAnchorPrefix={commentAnchorPrefix}
             />
           )}
 
@@ -306,6 +308,7 @@ ProjectStage.propTypes = {
   updateProductAttachment: PT.func.isRequired,
   removeProductAttachment: PT.func.isRequired,
   deleteProjectPhase: PT.func.isRequired,
+  commentAnchorPrefix: PT.string,
 }
 
 const ProjectStageUncontrollable = uncontrollable(ProjectStage, {

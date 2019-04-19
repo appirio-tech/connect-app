@@ -64,10 +64,12 @@ class TopcoderManagementDialog extends React.Component {
   }
 
   onChange(selectedMembers) {
-    const { invites } = this.props
+    const { projectTeamInvites, members, topcoderTeamInvites } = this.props
 
     const present = _.some(selectedMembers, (selectedMember) => (
-      this.isSelectedMemberAlreadyInvited(invites, selectedMember)
+      this.isSelectedMemberAlreadyInvited(members, selectedMember) 
+      || this.isSelectedMemberAlreadyInvited(topcoderTeamInvites, selectedMember) 
+      || this.isSelectedMemberAlreadyInvited(projectTeamInvites, selectedMember)
     ))
 
     this.setState({
@@ -83,7 +85,7 @@ class TopcoderManagementDialog extends React.Component {
 
     if (processingInvites && !nextProps.processingInvites ) {
       const notInvitedSelectedMembers = _.reject(selectedMembers, (selectedMember) => (
-        this.isSelectedMemberAlreadyInvited(nextProps.invites, selectedMember)
+        this.isSelectedMemberAlreadyInvited(nextProps.topcoderTeamInvites, selectedMember)
       ))
 
       this.props.onSelectedMembersUpdate(notInvitedSelectedMembers)
@@ -94,8 +96,8 @@ class TopcoderManagementDialog extends React.Component {
     }
   }
 
-  isSelectedMemberAlreadyInvited(invites = [], selectedMember) {
-    return !!invites.find((invite) => (
+  isSelectedMemberAlreadyInvited(topcoderTeamInvites = [], selectedMember) {
+    return !!topcoderTeamInvites.find((invite) => (
       (invite.email && invite.email === selectedMember.label) ||
       (invite.userId && this.resolveUserHandle(invite.userId) === selectedMember.label)
     ))
@@ -136,7 +138,7 @@ class TopcoderManagementDialog extends React.Component {
 
   render() {
     const {
-      members, currentUser, isMember, removeMember, onCancel, removeInvite, approveOrDecline, invites = [],
+      members, currentUser, isMember, removeMember, onCancel, removeInvite, approveOrDecline, topcoderTeamInvites = [],
       selectedMembers, processingInvites,
     } = this.props
     const showRemove = currentUser.isAdmin || (isMember && checkPermission(PERMISSIONS.INVITE_TOPCODER_MEMBER))
@@ -250,7 +252,7 @@ class TopcoderManagementDialog extends React.Component {
                 </div>
               )
             }))}
-            {(invites.map((invite) => {
+            {(topcoderTeamInvites.map((invite) => {
               const remove = () => {
                 removeInvite(invite)
               }
@@ -373,7 +375,8 @@ class TopcoderManagementDialog extends React.Component {
 }
 
 TopcoderManagementDialog.defaultProps = {
-  invites: [],
+  projectTeamInvites: [],
+  topcoderTeamInvites: [],
   members: []
 }
 
@@ -386,7 +389,8 @@ TopcoderManagementDialog.propTypes = {
   onCancel: PT.func.isRequired,
   removeMember: PT.func.isRequired,
   changeRole: PT.func.isRequired,
-  invites: PT.arrayOf(PT.object),
+  projectTeamInvites: PT.arrayOf(PT.object),
+  topcoderTeamInvites: PT.arrayOf(PT.object),
   addUsers: PT.func.isRequired,
   approveOrDecline: PT.func.isRequired,
   removeInvite: PT.func.isRequired,

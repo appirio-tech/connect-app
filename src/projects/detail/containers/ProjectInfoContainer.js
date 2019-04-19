@@ -7,15 +7,18 @@ import LinksMenu from '../../../components/LinksMenu/LinksMenu'
 import FileLinksMenu from '../../../components/LinksMenu/FileLinksMenu'
 import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
-import { loadDashboardFeeds } from '../../actions/projectTopics'
+import { loadDashboardFeeds, loadProjectMessages } from '../../actions/projectTopics'
 import { loadPhaseFeed } from '../../actions/phasesTopics'
 import { setDuration } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_ATTACHMENTS_FOLDER,
-  PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_DRAFT } from '../../../config/constants'
+  PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_DRAFT, PROJECT_FEED_TYPE_MESSAGES } from '../../../config/constants'
+import PERMISSIONS from '../../../config/permissions'
+import { checkPermission } from '../../../helpers/permissions'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
 import { 
-  addProjectAttachment, updateProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission
+  addProjectAttachment, updateProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission,
+  removeProjectAttachment
 } from '../../actions/projectAttachment'
 
 class ProjectInfoContainer extends React.Component {
@@ -33,6 +36,7 @@ class ProjectInfoContainer extends React.Component {
     this.onEditAttachment = this.onEditAttachment.bind(this)
     this.onAddFile = this.onAddFile.bind(this)
     this.onUploadAttachment = this.onUploadAttachment.bind(this)
+    this.removeAttachment = this.removeAttachment.bind(this)
     this.onSubmitForReview = this.onSubmitForReview.bind(this)
   }
 
@@ -57,7 +61,7 @@ class ProjectInfoContainer extends React.Component {
 
   componentWillMount() {
     const { project, isFeedsLoading, feeds, loadDashboardFeeds,
-      phases, phasesTopics, loadPhaseFeed } = this.props
+      loadProjectMessages, phases, phasesTopics, loadPhaseFeed, canAccessPrivatePosts } = this.props
 
     this.setDuration(project)
 
@@ -65,6 +69,7 @@ class ProjectInfoContainer extends React.Component {
     // also it will load feeds, if we already loaded them, but it was 0 feeds before
     if (!isFeedsLoading && feeds.length < 1) {
       loadDashboardFeeds(project.id)
+      canAccessPrivatePosts && loadProjectMessages(project.id)
     }
 
     // load phases feeds if they are not loaded yet
@@ -113,17 +118,24 @@ class ProjectInfoContainer extends React.Component {
     })
   }
 
-  onEditAttachment(idx, title, allowedUsers) {
+  onEditAttachment(attachmentId, title, allowedUsers) {
     const { project, updateProjectAttachment } = this.props
     const updatedAttachment = {
       title,
       allowedUsers
     }
-    const attachment = project.attachments[idx]
-    updateProjectAttachment(project.id,
-      attachment.id,
-      updatedAttachment
-    )
+    const attachment = project.attachments.find(attachment => attachment.id === attachmentId)
+    if (attachment) {
+      updateProjectAttachment(project.id,
+        attachment.id,
+        updatedAttachment
+      )
+    }
+  }
+
+  removeAttachment(attachmentId) {
+    const { project } = this.props
+    this.props.removeProjectAttachment(project.id, attachmentId)
   }
 
   onDeleteProject() {
@@ -190,6 +202,7 @@ class ProjectInfoContainer extends React.Component {
     }
     attachments = _.sortBy(attachments, attachment => -new Date(attachment.updatedAt).getTime())
       .map(attachment => ({
+        id: attachment.id,
         title: attachment.title,
         address: attachment.downloadUrl,
         allowedUsers: attachment.allowedUsers,
@@ -220,10 +233,10 @@ class ProjectInfoContainer extends React.Component {
 
     const discussions = [...feeds, ...phaseFeeds].map((feed) => ({
       title: feed.phaseName ? `${feed.phaseName}` : `${feed.title}`,
-      address: feed.tag === PROJECT_FEED_TYPE_PRIMARY ? `/projects/${project.id}#feed-${feed.id}` : `/projects/${project.id}/plan#phase-${feed.phaseId}-posts`,
+      address: (feed.tag === PROJECT_FEED_TYPE_PRIMARY || feed.tag === PROJECT_FEED_TYPE_MESSAGES) ? `/projects/${project.id}#feed-${feed.id}` : `/projects/${project.id}/plan#phase-${feed.phaseId}-posts`,
       noNewPage: true,
       //if PRIMARY discussion is to be loaded for project-plan page we won't attach the callback, for smoother transition to dashboard page
-      onClick: !(isProjectPlan && feed.tag === PROJECT_FEED_TYPE_PRIMARY) && onChannelClick ? () => onChannelClick(feed) : null,
+      onClick: !(isProjectPlan && (feed.tag === PROJECT_FEED_TYPE_PRIMARY || feed.tag === PROJECT_FEED_TYPE_MESSAGES)) && onChannelClick ? () => onChannelClick(feed) : null,
       allowDefaultOnClick: true,
       isActive: feed.id === activeChannelId,
     }))
@@ -264,25 +277,27 @@ class ProjectInfoContainer extends React.Component {
             noDots
             withHash
           />
-          <FileLinksMenu
-            links={attachments}
-            title="Files"
-            canAdd={enableFileUpload}
-            onEdit={this.onEditAttachment}
-            onAddNewLink={this.onAddFile}
-            onAddAttachment={addProjectAttachment}
-            onUploadAttachment={this.onUploadAttachment}
-            isSharingAttachment={isSharingAttachment}
-            discardAttachments={discardAttachments}
-            onChangePermissions={changeAttachmentPermission}
-            selectedUsers={attachmentPermissions}
-            projectMembers={projectMembers}
-            pendingAttachments={attachmentsAwaitingPermission}
-            loggedInUser={loggedInUser}
-            moreText="view all files"
-            noDots
-            attachmentsStorePath={attachmentsStorePath}
-          />
+          {enableFileUpload &&
+            <FileLinksMenu
+              links={attachments}
+              title="Files"
+              onDelete={this.removeAttachment}
+              onEdit={this.onEditAttachment}
+              onAddNewLink={this.onAddFile}
+              onAddAttachment={addProjectAttachment}
+              onUploadAttachment={this.onUploadAttachment}
+              isSharingAttachment={isSharingAttachment}
+              discardAttachments={discardAttachments}
+              onChangePermissions={changeAttachmentPermission}
+              selectedUsers={attachmentPermissions}
+              projectMembers={projectMembers}
+              pendingAttachments={attachmentsAwaitingPermission}
+              loggedInUser={loggedInUser}
+              moreText="view all files"
+              noDots
+              attachmentsStorePath={attachmentsStorePath}
+            />
+          }
           {!hideLinks &&
             <LinksMenu
               links={project.bookmarks || []}
@@ -314,22 +329,26 @@ ProjectInfoContainer.PropTypes = {
   productsTimelines : PropTypes.object.isRequired,
   isProjectPlan: PropTypes.bool,
   isProjectProcessing: PropTypes.bool,
+  canAccessPrivatePosts: PropTypes.bool.isRequired,
 }
 
 const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
   const project = projectState.project
   const projectMembers = _.filter(members.members, m => _.some(project.members, pm => pm.userId === m.userId))
+  const canAccessPrivatePosts = checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
   return ({
     projectTemplates : templates.projectTemplates,
     attachmentsAwaitingPermission: projectState.attachmentsAwaitingPermission,
     attachmentPermissions: projectState.attachmentPermissions,
     isSharingAttachment: projectState.processingAttachments,
     projectMembers:  _.keyBy(projectMembers, 'userId'),
-    loggedInUser: loadUser.user
+    loggedInUser: loadUser.user,
+    canAccessPrivatePosts
   })
 }
 
 const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
-  discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission }
+  loadProjectMessages, discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission,
+  removeProjectAttachment }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfoContainer)
