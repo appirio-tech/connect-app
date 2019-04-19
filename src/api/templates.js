@@ -3,7 +3,7 @@
  */
 import _ from 'lodash'
 import { axiosInstance as axios } from './requestInterceptor'
-import { TC_API_URL } from '../config/constants'
+import { PROJECTS_API_URL } from '../config/constants'
 
 const projectTemplates = require('./templates-json/project-templates.json')
 const productTemplates = require('./templates-json/product-templates.json')
@@ -14,7 +14,7 @@ const productTemplates = require('./templates-json/product-templates.json')
  * @return {Promise} projects metadata (projectTemplates, productTemplates and projectTypes)
  */
 export function getProjectsMetadata() {
-  return axios.get(`${TC_API_URL}/v4/projects/metadata`)
+  return axios.get(`${PROJECTS_API_URL}/v4/projects/metadata`)
     .catch((err) => {
       // temporary mock data if Project Service is unavailable
       if (err.message === 'Network Error') {
@@ -46,7 +46,7 @@ export function getProjectsMetadata() {
  */
 export function createProjectsMetadata(type, data) {
   const path = type !== 'milestoneTemplates' ? 'projects' : 'timelines'
-  return axios.post(`${TC_API_URL}/v4/${path}/metadata/${type}`, {
+  return axios.post(`${PROJECTS_API_URL}/v4/${path}/metadata/${type}`, {
     param: data
   })
     .then(resp => _.get(resp.data, 'result.content', {}))
@@ -61,7 +61,7 @@ export function createProjectsMetadata(type, data) {
  */
 export function updateProjectsMetadata(metadataId, type, data) {
   const path = type !== 'milestoneTemplates' ? 'projects' : 'timelines'
-  return axios.patch(`${TC_API_URL}/v4/${path}/metadata/${type}/${metadataId}`, {
+  return axios.patch(`${PROJECTS_API_URL}/v4/${path}/metadata/${type}/${metadataId}`, {
     param: data
   })
     .then(resp => _.get(resp.data, 'result.content', {}))
@@ -75,7 +75,7 @@ export function updateProjectsMetadata(metadataId, type, data) {
  */
 export function deleteProjectsMetadata(metadataId, type) {
   const path = type !== 'milestoneTemplates' ? 'projects' : 'timelines'
-  return axios.delete(`${TC_API_URL}/v4/${path}/metadata/${type}/${metadataId}`)
+  return axios.delete(`${PROJECTS_API_URL}/v4/${path}/metadata/${type}/${metadataId}`)
     .then(() => {
       return { metadataId, type }
     })
