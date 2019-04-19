@@ -6,7 +6,7 @@ import * as filepicker from 'filestack-js'
 import './LinksMenu.scss'
 import Panel from '../Panel/Panel'
 import AddFilePermission from '../FileList/AddFilePermissions'
-import DeleteLinkModal from './DeleteLinkModal'
+import DeleteFileLinkModal from './DeleteFileLinkModal'
 import EditFileAttachment from './EditFileAttachment'
 import uncontrollable from 'uncontrollable'
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
@@ -23,7 +23,6 @@ import {
 } from '../../config/constants'
 
 const FileLinksMenu = ({
-  canDelete,
   noDots,
   isAddingNewLink,
   limit,
@@ -166,7 +165,7 @@ const FileLinksMenu = ({
             {
               links.slice(0, limit).map((link, idx) => {
                 const onDeleteConfirm = () => {
-                  onDelete(idx)
+                  onDelete(link.id)
                   onDeleteIntent(-1)
                 }
                 const onDeleteCancel = () => onDeleteIntent(-1)
@@ -182,7 +181,7 @@ const FileLinksMenu = ({
                 if (linkToDelete === idx) {
                   return (
                     <li className="delete-confirmation-modal" key={'delete-confirmation-' + idx}>
-                      <DeleteLinkModal
+                      <DeleteFileLinkModal
                         link={link}
                         onCancel={onDeleteCancel}
                         onConfirm={onDeleteConfirm}
@@ -219,7 +218,7 @@ const FileLinksMenu = ({
                             <BtnEdit className="btn-remove"/>
                           </button>
                         </div>}
-                        {canDelete && <div className="buttons link-buttons">
+                        {canEdit && <div className="buttons link-buttons">
                           <button onClick={handleDeleteClick} type="button">
                             <BtnRemove className="btn-edit"/>
                           </button>
@@ -252,7 +251,6 @@ const FileLinksMenu = ({
 }
 
 FileLinksMenu.propTypes = {
-  canDelete: PropTypes.bool,
   canEdit: PropTypes.bool,
   noDots: PropTypes.bool,
   limit: PropTypes.number,
