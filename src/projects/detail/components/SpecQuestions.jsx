@@ -62,12 +62,13 @@ const groupAddonOptions = (options, categories) => {
   }))
 }
 
-const buildAddonsOptions = (q, productTemplates, productCategories) => (
-  groupAddonOptions(
-    formatAddonOptions(filterAddonQuestions(productTemplates, q)),
+const buildAddonsOptions = (q, productTemplates, productCategories) => {
+  const addOns = _.filter(productTemplates, (productTemplate) => productTemplate.isAddOn)
+  return groupAddonOptions(
+    formatAddonOptions(filterAddonQuestions(addOns, q)),
     _.keyBy(productCategories, 'key')
   )
-)
+}
 
 // { isRequired, represents the overall questions section's compulsion, is also available}
 const SpecQuestions = ({

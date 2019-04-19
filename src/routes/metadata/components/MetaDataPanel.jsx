@@ -321,6 +321,7 @@ class MetaDataPanel extends React.Component {
         { key: 'aliases', type: 'array' },
         { key: 'disabled', type: 'checkbox' },
         { key: 'hidden', type: 'checkbox' },
+        { key: 'isAddOn', type: 'checkbox' },
       ])
     } else if (metadataType === 'projectTemplate') {
       const projectTypeOptions = this.getProductCategoryOptions(templates.projectTypes)
