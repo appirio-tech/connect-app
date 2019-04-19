@@ -348,7 +348,7 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
 }
 
 const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
-  laodProjectMessages, discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission,
+  loadProjectMessages, discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission,
   removeProjectAttachment }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfoContainer)
