@@ -486,7 +486,7 @@ export const projectState = function (state=initialState, action) {
     // that was just removed
     const idx = _.findIndex(state.project.attachments, a => a.id === action.payload)
     return update(state, {
-      processing: { $set : false },
+      processingAttachments: { $set : false },
       project: { attachments: { $splice: [[idx, 1]] } },
       projectNonDirty: { attachments: { $splice: [[idx, 1]] } }
     })

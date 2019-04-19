@@ -7,7 +7,7 @@ import MessageList from '../../../components/MessageList/MessageList'
 import MessagingEmptyState from '../../../components/MessageList/MessagingEmptyState'
 import MessageDetails from '../../../components/MessageDetails/MessageDetails'
 import NewPost from '../../../components/Feed/NewPost'
-import { laodProjectMessages, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
+import { loadProjectMessages, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import FullHeightContainer from 'appirio-tech-react-components/components/FullHeightContainer/FullHeightContainer'
 import FooterV2 from '../../../components/FooterV2/FooterV2'
@@ -493,7 +493,7 @@ class MessagesContainer extends React.Component {
     super(props)
   }
   componentWillMount() {
-    this.props.laodProjectMessages(this.props.project.id)
+    this.props.loadProjectMessages(this.props.project.id)
   }
   render() {
     return <EnhancedMessagesView {...this.props} />
@@ -512,7 +512,7 @@ const mapStateToProps = ({ projectTopics, members, loadUser }) => {
   }
 }
 const mapDispatchToProps = {
-  laodProjectMessages,
+  loadProjectMessages,
   createProjectTopic,
   saveProjectTopic,
   deleteProjectTopic,
