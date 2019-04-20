@@ -4,16 +4,21 @@ import { connect } from 'react-redux'
 import update from 'react-addons-update'
 import _ from 'lodash'
 import { withRouter } from 'react-router-dom'
+import { bindActionCreators } from 'redux'
 import LinksMenu from '../../../components/LinksMenu/LinksMenu'
 import FileLinksMenu from '../../../components/LinksMenu/FileLinksMenu'
 import TeamManagementContainer from './TeamManagementContainer'
-import { updateProject, deleteProject } from '../../actions/project'
+import { updateProject, deleteProject, loadProjectPhasesWithProducts } from '../../actions/project'
 import { loadDashboardFeeds, loadProjectMessages } from '../../actions/projectTopics'
-import { loadPhaseFeed } from '../../actions/phasesTopics'
+import { loadPhaseFeed, loadFeedsForPhases } from '../../actions/phasesTopics'
+import { loadMembers } from '../../../actions/members'
+import { loadTimelinesForPhasesProducts } from '../../actions/projectDashboard'
 import { setDuration, parseUrlHashValue } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
-  DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_ATTACHMENTS_FOLDER,
-  PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_DRAFT, PROJECT_FEED_TYPE_MESSAGES } from '../../../config/constants'
+  DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED,
+  PROJECT_ATTACHMENTS_FOLDER, PROJECT_FEED_TYPE_PRIMARY, PHASE_STATUS_DRAFT,
+  PROJECT_FEED_TYPE_MESSAGES, DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID
+} from '../../../config/constants'
 import PERMISSIONS from '../../../config/permissions'
 import { checkPermission } from '../../../helpers/permissions'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
@@ -176,7 +181,7 @@ class ProjectInfoContainer extends React.Component {
   }
 
   loadNewContent(contentType, typeId, contentSubType, subTypeId) {
-    const { feeds, project, phasesTopics, loadDashboardFeeds, loadProjectMessages, loadPhaseFeed } = this.props
+    const { feeds, project, phasesTopics, loadDashboardFeeds, loadProjectMessages, loadPhaseFeed, loadProjectPhasesWithProducts, loadFeedsForPhases, loadMembers, dispatch } = this.props
 
     switch (contentType) {
 
@@ -185,6 +190,7 @@ class ProjectInfoContainer extends React.Component {
       if (isFeedLoaded === -1) {
         // We account for both public and private feeds
         loadDashboardFeeds(project.id)
+        // @todo Take the user to the targetted private post (scroll position)
         loadProjectMessages(project.id)
       }
 
@@ -212,8 +218,36 @@ class ProjectInfoContainer extends React.Component {
     case 'phase': {
       const isPhaseLoaded = () => typeId in phasesTopics
 
-      if (!isPhaseLoaded) {
-        window.location.reload()
+      if (!isPhaseLoaded()) {
+        let userIds = _.map(project.members, 'userId')
+        userIds = _.union(userIds, _.map(project.invites, 'userId'))
+
+        // this is to remove any nulls from the list (dev had some bad data)
+        _.remove(userIds, i => !i)
+
+        loadProjectPhasesWithProducts(project.id)
+          .then(({ value: phases }) => {
+            console.log('phases: ', phases)
+            loadFeedsForPhases(project.id, phases, dispatch)
+              .then((phaseFeeds) => {
+                let phaseUserIds = []
+                _.forEach(phaseFeeds, phaseFeed => {
+                  phaseUserIds = _.union(phaseUserIds, _.map(phaseFeed.topics, 'userId'))
+                  _.forEach(phaseFeed.topics, topic => {
+                    phaseUserIds = _.union(phaseUserIds, _.map(topic.posts, 'userId'))
+                  })
+                  // this is to remove any nulls from the list (dev had some bad data)
+                  _.remove(phaseUserIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(i) > -1)
+                })
+                // take difference of userIds identified from project members
+                phaseUserIds = _.difference(phaseUserIds, userIds)
+
+                dispatch(loadMembers(phaseUserIds))
+              })
+            // load timelines for phase products here together with all dashboard data
+            // as we need to know timeline data not only inside timeline container
+            loadTimelinesForPhasesProducts(phases, dispatch)
+          })
       } else if (contentSubType === 'posts' && subTypeId) {
         const phaseTopic = phasesTopics[typeId].topic
         if (!phaseTopic.postIds.includes(subTypeId)) {
@@ -420,8 +454,13 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
   })
 }
 
-const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
-  loadProjectMessages, discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission,
-  removeProjectAttachment }
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+  ...bindActionCreators({ updateProject, deleteProject, addProjectAttachment,
+    updateProjectAttachment, loadProjectMessages, discardAttachments,
+    uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed,
+    changeAttachmentPermission, removeProjectAttachment,
+    loadProjectPhasesWithProducts, loadFeedsForPhases, loadMembers }, dispatch)
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProjectInfoContainer))

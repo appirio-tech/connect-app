@@ -102,7 +102,7 @@ const getData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) => {
  * @param {Array}   phases    list of phases
  * @param {Function} dispatch dispatch function
  */
-function loadTimelinesForPhasesProducts(phases, dispatch) {
+export function loadTimelinesForPhasesProducts(phases, dispatch) {
   const products = []
 
   phases.forEach((phase) => {
