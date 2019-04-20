@@ -176,15 +176,16 @@ class ProjectInfoContainer extends React.Component {
   }
 
   loadNewContent(contentType, typeId, contentSubType, subTypeId) {
-    const { feeds, project, phasesTopics } = this.props
+    const { feeds, project, phasesTopics, loadDashboardFeeds, loadProjectMessages, loadPhaseFeed } = this.props
 
     switch (contentType) {
 
     case 'feed': {
       const isFeedLoaded = feeds.findIndex((element) => element.id === typeId)
       if (isFeedLoaded === -1) {
-        // loadDashboardFeeds(project.id)
-        window.location.reload()
+        // We account for both public and private feeds
+        loadDashboardFeeds(project.id)
+        loadProjectMessages(project.id)
       }
 
       break
@@ -200,8 +201,9 @@ class ProjectInfoContainer extends React.Component {
       })
 
       if (isPostWithinFeedLoaded === -1) {
-        // loadDashboardFeeds(project.id)
-        window.location.reload()
+        // We account for both public and private feeds
+        loadDashboardFeeds(project.id)
+        loadProjectMessages(project.id)
       }
 
       break
@@ -211,13 +213,11 @@ class ProjectInfoContainer extends React.Component {
       const isPhaseLoaded = () => typeId in phasesTopics
 
       if (!isPhaseLoaded) {
-        // loadPhaseFeed(project.id, typeId)
         window.location.reload()
       } else if (contentSubType === 'posts' && subTypeId) {
         const phaseTopic = phasesTopics[typeId].topic
         if (!phaseTopic.postIds.includes(subTypeId)) {
-          // loadPhaseFeed(project.id, typeId)
-          window.location.reload()
+          loadPhaseFeed(project.id, typeId)
         }
       }
 
