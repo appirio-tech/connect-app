@@ -241,8 +241,7 @@ const FileLinksMenu = ({
         </div>
         {!isAddingNewLink && (
           <div className="add-link-mobile">
-            <button className="tc-btn tc-btn-secondary tc-btn-md" onClick={() => onAddingNewLink(true)}>Upload File
-            </button>
+            <button className="tc-btn tc-btn-secondary tc-btn-md" onClick={openFileUpload}>Upload File</button>
           </div>
         )}
       </Panel>
