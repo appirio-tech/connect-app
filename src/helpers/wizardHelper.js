@@ -408,7 +408,7 @@ export const initWizard = (template, project, productTemplates, incompleteWizard
 
     currentWizardStep = lastWizardStep || currentWizardStep
   }
-  console.warn('wizardTemplate', wizardTemplate)
+  
   return {
     template: wizardTemplate,
     currentWizardStep,
