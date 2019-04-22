@@ -75,7 +75,7 @@ class EditProjectForm extends Component {
     const {
       template,
       hasDependantFields,
-    } = initWizard(props.template, props.project, null, true)
+    } = initWizard(props.template, props.project, props.productTemplates, null)
 
     this.state = {
       template,
@@ -98,7 +98,7 @@ class EditProjectForm extends Component {
     // updating template from template editor
     if(nextProps.shouldUpdateTemplate && template !== nextProps.template) {
 
-      const state = initWizard(nextProps.template, nextProps.project, null, true)
+      const state = initWizard(nextProps.template, nextProps.project, nextProps.productTemplates, null)
 
       template = state.template
       hasDependantFields = state.hasDependantFields
@@ -144,7 +144,7 @@ class EditProjectForm extends Component {
         updatedTemplate,
         updatedSomeNodes,
         hidedSomeNodes
-      } = updateNodesByConditions(template, nextProps.project)
+      } = updateNodesByConditions(template, nextProps.project, nextProps.productTemplates)
 
       if (updatedSomeNodes) {
         this.setState({
