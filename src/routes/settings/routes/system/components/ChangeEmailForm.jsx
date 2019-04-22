@@ -138,7 +138,7 @@ class ChangeEmailForm extends React.Component {
               validationErrors={{
                 isEmail: 'Provide a correct email'
               }}
-              disabled={isEmailChanging || !isCustomer}
+              disabled//={isEmailChanging || !isCustomer}
               ref={(ref) => this.emailRef = ref}
             />
             { isFocused && isCheckingCurrentEmail && (
