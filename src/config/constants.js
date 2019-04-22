@@ -515,7 +515,8 @@ export const PHASE_STATUS = [
 
 // this defines default criteria to filter projects for projects list
 export const PROJECT_LIST_DEFAULT_CRITERIA = {
-  sort: 'updatedAt desc'
+  sort: 'updatedAt desc',
+  status: PROJECT_STATUS_ACTIVE
 }
 
 export const NOTIFICATION_TYPE = {

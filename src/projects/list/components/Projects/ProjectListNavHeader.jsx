@@ -100,9 +100,9 @@ export default class ProjectListNavHeader extends Component {
             </div>
           }
         </div>
-        {(!this.props.isCustomer) &&
-          <div className="right-wrapper">
-
+        
+        <div className="right-wrapper">
+          {!this.props.isCustomer && (
             <div className="primary-filter">
               <div className="tc-switch clearfix">
                 <SwitchButton
@@ -113,18 +113,18 @@ export default class ProjectListNavHeader extends Component {
                 />
               </div>
             </div>
-            <div className="list-nav-item nav-icon">
-              <a href="javascript;" data-view="grid" onClick={this.switchViews} className={`list-nav-btn sm right ${(this.state.selectedView === 'grid') ? 'active' : ''}`}>
-                <GridView className="grid-view-ico" />
-              </a>
-            </div>
-            <div className="list-nav-item nav-icon">
-              <a href="javascript;" data-view="card" onClick={this.switchViews} className={`list-nav-btn sm right ${(this.state.selectedView === 'card') ? 'active' : ''}`}>
-                <CardView className="card-view-ico" />
-              </a>
-            </div>
+          )}
+          <div className="list-nav-item nav-icon">
+            <a href="javascript;" data-view="grid" onClick={this.switchViews} className={`list-nav-btn sm right ${(this.state.selectedView === 'grid') ? 'active' : ''}`}>
+              <GridView className="grid-view-ico" />
+            </a>
           </div>
-        }
+          <div className="list-nav-item nav-icon">
+            <a href="javascript;" data-view="card" onClick={this.switchViews} className={`list-nav-btn sm right ${(this.state.selectedView === 'card') ? 'active' : ''}`}>
+              <CardView className="card-view-ico" />
+            </a>
+          </div>
+        </div>
       </nav>
     )
   }
