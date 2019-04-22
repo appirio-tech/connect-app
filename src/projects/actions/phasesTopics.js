@@ -28,7 +28,7 @@ export function loadFeedsForPhases(projectId, phases, dispatch) {
     phases.map((phase) => getPhaseTopicWithoutMembers(dispatch, projectId, phase.id, tag))
   ).then((responses) => {
     return _.map(responses, (resp) => ({
-      topics: [].concat(_.get(resp, 'value')),
+      topics: _.get(resp, 'value') ? [_.get(resp, 'value')] : [],
       phaseId: _.get(resp, 'action.meta.phaseId')
     }))
   })
