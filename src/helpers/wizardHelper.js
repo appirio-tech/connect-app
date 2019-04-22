@@ -315,11 +315,12 @@ export const forEachNode = (template, iteratee, iterateSublevelCondition) => {
  *
  * @param {Object}  template            raw template
  * @param {Object}  project             project data (non-flat)
+ * @param {Array}   productTemplates    product templates
  * @param {Object}  incompleteWizard    incomplete wizard props
  *
  * @returns {Object} initialized template
  */
-export const initWizard = (template, project, incompleteWizard) => {
+export const initWizard = (template, project, productTemplates, incompleteWizard) => {
   let wizardTemplate = _.cloneDeep(template)
   const isWizardMode = _.get(template, 'wizard.enabled')
   // try to get the step where we left the wizard
@@ -362,7 +363,7 @@ export const initWizard = (template, project, incompleteWizard) => {
       nodeObject.deliverables.forEach((deliverable) => {
         if (deliverable.enableCondition) {
           deliverable.enableCondition = populatePreparedConditions(deliverable.enableCondition, preparedConditions)
-        }        
+        }
       })
     }
 
@@ -380,7 +381,7 @@ export const initWizard = (template, project, incompleteWizard) => {
     }
   })
 
-  const updateResult = updateNodesByConditions(wizardTemplate, project)
+  const updateResult = updateNodesByConditions(wizardTemplate, project, productTemplates)
   wizardTemplate = updateResult.updatedTemplate
 
   // initialize wizard mode
@@ -407,7 +408,7 @@ export const initWizard = (template, project, incompleteWizard) => {
 
     currentWizardStep = lastWizardStep || currentWizardStep
   }
-
+  
   return {
     template: wizardTemplate,
     currentWizardStep,
@@ -890,10 +891,11 @@ const getNodeChildren = (template, node) => {
  *
  * @param {Object} template template
  * @param {Object} project  data to evaluate question conditions
+ * @param {Array} productTemplates  product templates
  *
  * @returns {Object} updated template
  */
-export const updateNodesByConditions = (template, project) => {
+export const updateNodesByConditions = (template, project, productTemplates) => {
   let updatedTemplate = template
   let hidedSomeNodes = false
   let updatedSomeNodes = false
@@ -936,6 +938,49 @@ export const updateNodesByConditions = (template, project) => {
         updatedSomeNodes: false,
       }
     }
+  }
+
+  // TODO at the moment we use section ids for this logic which binds the logic to templates
+  //      making the common logic would be much more complicated here, so at the moment we use this solution
+  //      in the future we should re-implement it without using id to support it more general case if possible
+  const summaryIntermediateSection = updatedTemplate.sections.find(section => section.id === 'summary-intermediate')
+  const addOnSection =  updatedTemplate.sections.find(section => section.id === 'add-ons')
+  let hasActiveAddOnSection = false
+  const hideByConditionUpdateRule = {
+    __wizard: {
+      hiddenByCondition: { $set: true }
+    }
+  }
+  const showByConditionUpdateRule = {
+    __wizard: {
+      hiddenByCondition: { $set: false }
+    }
+  }
+  
+
+  addOnSection.subSections.forEach(subSection => {
+    subSection.questions.forEach(q => {
+      // skip add-ons step if no product templates found
+      const doesNotHaveAddOns = !_.some(productTemplates, { category: q.category, isAddOn: true })
+      if (q.type === 'add-ons' && doesNotHaveAddOns) {
+        updatedTemplate = updateNodeObject(updatedTemplate, q.__wizard.node, hideByConditionUpdateRule)
+      }
+
+      // as we updated template without mutation, we should check get the updated value of the question from the updated template
+      const updatedQuestionNodeObject = getNodeObject(updatedTemplate, q.__wizard.node)
+      if (!_.get(updatedQuestionNodeObject, '__wizard.hiddenByCondition')) {
+        hasActiveAddOnSection = true
+      }
+    })
+  })
+
+  // skip intermediate summary step if no add-ons step found
+  // NOTE  At the moment we can theoretically have other questions in the add-ons section so we don't hide it explicitly here. 
+  //       But as at the moment add-ons section has only add-ons questions, it would be hided automatically as a section without any visible question.
+  if (!hasActiveAddOnSection) {
+    updatedTemplate = updateNodeObject(updatedTemplate, summaryIntermediateSection.__wizard.node, hideByConditionUpdateRule)
+  } else {
+    updatedTemplate = updateNodeObject(updatedTemplate, summaryIntermediateSection.__wizard.node, showByConditionUpdateRule)
   }
 
   return {

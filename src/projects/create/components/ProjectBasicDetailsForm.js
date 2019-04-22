@@ -55,7 +55,7 @@ class ProjectBasicDetailsForm extends Component {
       prevWizardStep,
       isWizardMode,
       hasDependantFields,
-    } = initWizard(props.template, props.project, incompleteWizard)
+    } = initWizard(props.template, props.project, props.productTemplates, incompleteWizard)
 
     this.state = {
       template,
@@ -95,7 +95,7 @@ class ProjectBasicDetailsForm extends Component {
     // updating template from template editor
     if(nextProps.shouldUpdateTemplate && template !== nextProps.template) {
 
-      const state = initWizard(nextProps.template, nextProps.project, null, true)
+      const state = initWizard(nextProps.template, nextProps.project, nextProps.productTemplates, null)
 
       template = state.template
       hasDependantFields = state.hasDependantFields
@@ -111,7 +111,7 @@ class ProjectBasicDetailsForm extends Component {
         updatedTemplate,
         hidedSomeNodes,
         updatedSomeNodes,
-      } = updateNodesByConditions(template, nextProps.dirtyProject)
+      } = updateNodesByConditions(template, nextProps.dirtyProject, nextProps.productTemplates)
 
       if (updatedSomeNodes) {
         this.setState({
