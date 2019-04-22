@@ -942,30 +942,45 @@ export const updateNodesByConditions = (template, project, productTemplates) => 
 
   // TODO at the moment we use section ids for this logic which binds the logic to templates
   //      making the common logic would be much more complicated here, so at the moment we use this solution
-  //      in the future we should re-implement it without using id to support it more general case if posssible
+  //      in the future we should re-implement it without using id to support it more general case if possible
   const summaryIntermediateSection = updatedTemplate.sections.find(section => section.id === 'summary-intermediate')
   const addOnSection =  updatedTemplate.sections.find(section => section.id === 'add-ons')
   let hasActiveAddOnSection = false
+  const hideByConditionUpdateRule = {
+    __wizard: {
+      hiddenByCondition: { $set: true }
+    }
+  }
+  const showByConditionUpdateRule = {
+    __wizard: {
+      hiddenByCondition: { $set: false }
+    }
+  }
+  
 
   addOnSection.subSections.forEach(subSection => {
     subSection.questions.forEach(q => {
       // skip add-ons step if no product templates found
       const doesNotHaveAddOns = !_.some(productTemplates, { category: q.category, isAddOn: true })
       if (q.type === 'add-ons' && doesNotHaveAddOns) {
-        q.__wizard.hiddenByCondition = true
+        updatedTemplate = updateNodeObject(updatedTemplate, q.__wizard.node, hideByConditionUpdateRule)
       }
 
-      if (!_.get(q, '__wizard.hiddenByCondition')){
+      // as we updated template without mutation, we should check get the updated value of the question from the updated template
+      const updatedQuestionNodeObject = getNodeObject(updatedTemplate, q.__wizard.node)
+      if (!_.get(updatedQuestionNodeObject, '__wizard.hiddenByCondition')) {
         hasActiveAddOnSection = true
       }
     })
   })
 
   // skip intermediate summary step if no add-ons step found
+  // NOTE  At the moment we can theoretically have other questions in the add-ons section so we don't hide it explicitly here. 
+  //       But as at the moment add-ons section has only add-ons questions, it would be hided automatically as a section without any visible question.
   if (!hasActiveAddOnSection) {
-    summaryIntermediateSection.__wizard.hiddenByCondition = true
+    updatedTemplate = updateNodeObject(updatedTemplate, summaryIntermediateSection.__wizard.node, hideByConditionUpdateRule)
   } else {
-    delete summaryIntermediateSection.__wizard.hiddenByCondition
+    updatedTemplate = updateNodeObject(updatedTemplate, summaryIntermediateSection.__wizard.node, showByConditionUpdateRule)
   }
 
   return {
