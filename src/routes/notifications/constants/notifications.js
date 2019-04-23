@@ -364,7 +364,10 @@ export const NOTIFICATIONS = [
     rules: [{
       text: '<strong>{{userFullName}}</strong> mentioned you in a post',
       toUserHandle: true,
-      goTo: GOTO.POST
+      goTo: [
+        { goTo: GOTO.POST, condition: (contents) => !contents.phaseId },
+        { goTo: GOTO.PHASE_POST, condition: (contents) => !!contents.phaseId }
+      ]
     }]
   },
 
