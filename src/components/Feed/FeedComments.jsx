@@ -373,16 +373,6 @@ class FeedComments extends React.Component {
         <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
           {(matches) => (matches ? (
             <div>
-              <div styleName="comments">
-                {commentRows}
-                {hasMoreComments &&
-                  <div styleName="load-more" key="load-more">
-                    <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
-                      {isLoadingComments ? 'Loading...' : 'load earlier posts'}
-                    </a>
-                  </div>
-                }
-              </div>
               {allowComments &&
                 <div styleName="add-comment" key="add-comment">
                   <AddComment
@@ -398,6 +388,16 @@ class FeedComments extends React.Component {
                   />
                 </div>
               }
+              <div styleName="comments">
+                {commentRows}
+                {hasMoreComments &&
+                  <div styleName="load-more" key="load-more">
+                    <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
+                      {isLoadingComments ? 'Loading...' : 'load earlier posts'}
+                    </a>
+                  </div>
+                }
+              </div>
             </div>
           ) : (
             <div>
