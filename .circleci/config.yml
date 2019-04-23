@@ -18,9 +18,9 @@ install_deploysuite: &install_deploysuite
             cp ./../buildscript/buildenv.sh .
             cp ./../buildscript/awsconfiguration.sh .
 restore_cache_settings_for_build: &restore_cache_settings_for_build
-          key: test-node-modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "package-lock.json" }}
+          key: connect-node-modules-{{ checksum "package-lock.json" }}
 save_cache_settings: &save_cache_settings    
-          key: test-node-modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "package-lock.json" }}
+          key: connect-node-modules-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 running_npm_build: &running_npm_build
@@ -90,6 +90,7 @@ jobs:
             ./buildenv.sh -e DEV -b dev-connectapp-deployvar
             source buildenvvar
             ./master_deploy.sh -d CFRONT -e DEV -c false
+
   deployProd:
     <<: *deploy_defaults
     steps:
@@ -104,13 +105,16 @@ jobs:
             ./buildenv.sh -e PROD -b prod-connectapp-deployvar
             source buildenvvar
             ./master_deploy.sh -d CFRONT -e PROD -c true
+
 workflows:
   version: 2
   build:
     jobs:
       - build-dev:
           context : org-global
-              
+          filters:
+            branches:
+              ignore: ['master']              
       - build-prod:
           context : org-global
           filters:

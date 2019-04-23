@@ -10,7 +10,7 @@ const ProjectStageTabs = ({
   isManageUser,
   isSuperUser,
   onTabClick,
-  hasReadPosts,
+  hasNotifications,
 }) => {
   const tabs = []
 
@@ -18,7 +18,8 @@ const ProjectStageTabs = ({
     tabs.push({
       onClick: () => onTabClick('timeline'),
       label: 'Timeline',
-      isActive: activeTab === 'timeline'
+      isActive: activeTab === 'timeline',
+      hasNotifications: hasNotifications.timeline,
     })
   }
 
@@ -26,7 +27,7 @@ const ProjectStageTabs = ({
     onClick: () => onTabClick('posts'),
     label: 'Discussions',
     isActive: activeTab === 'posts',
-    hasNotifications: hasReadPosts,
+    hasNotifications: hasNotifications.posts,
   })
 
   // show specification tab for everybody expect of customers
@@ -34,7 +35,8 @@ const ProjectStageTabs = ({
     tabs.push({
       onClick: () => onTabClick('specification'),
       label: 'Specification',
-      isActive: activeTab === 'specification'
+      isActive: activeTab === 'specification',
+      hasNotifications: hasNotifications.specification,
     })
   }
 

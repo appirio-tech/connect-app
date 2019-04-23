@@ -1,0 +1,83 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+$timeline-colors: (design: #5A52A3, development: #306BE1, qa: #35A3BC, deployment: #2AB540);
+
+.ProjectEstimation {
+  h3 {
+    color: $tc-gray-100;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 34px;
+    text-align: center;
+
+    margin-top: 30px;
+  }
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: $tc-gray-70;
+  font-size: 12px;
+  line-height: 20px;
+
+  margin-bottom: 5px;
+  padding: 0 10px;
+
+  h5 {
+    font-size: 12px;
+    font-weight: 700;
+  }
+}
+
+.project-estimate-timeline {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    height: 70px;
+    border-radius: 4px;
+    padding: 10px;
+
+    background: $tc-gray-0;
+    color: $tc-gray-70;
+    border: 1px solid $tc-gray-20;
+    font-weight: bold;
+    // overflow: hidden;
+  }
+
+  li + li {
+    margin-left: 4px;
+  }
+
+  .item-title {
+    font-size: 15px;
+  }
+
+  .item-duration {
+    font-size: 12px;
+    opacity: 0.699999988079071;
+  }
+
+  li:global {
+    &.selected {
+      @each $type, $bg-color in $timeline-colors {
+        &.type-#{$type} {
+          background-color: $bg-color;
+          color: white;
+          border: 0 none;
+        }
+      }
+    }
+  }
+}

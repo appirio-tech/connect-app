@@ -241,7 +241,7 @@ class ProjectWizard extends Component {
     let wizardStep = WZ_STEP_SELECT_PROJ_TYPE
     let project = null
     if (projectTemplateId) {
-      project = { type: projectType, templateId: projectTemplateId }
+      project = { type: projectType, templateId: projectTemplateId, details: {} }
       wizardStep = WZ_STEP_FILL_PROJ_DETAILS
     }
     const refCode = this.getRefCodeFromURL()
@@ -464,6 +464,7 @@ class ProjectWizard extends Component {
           templates={projectTemplates}
           projectTemplates={ projectTemplates }
           productTemplates={templates.productTemplates}
+          productCategories={templates.productCategories}
           dirtyProject={ dirtyProject }
           processing={ processing}
           onCreateProject={ this.handleOnCreateProject }

@@ -17,6 +17,7 @@ export const GOTO = {
   PROJECT_PLAN: '/projects/{{projectId}}/plan',
   TOPIC: '/projects/{{projectId}}/#feed-{{topicId}}',
   POST: '/projects/{{projectId}}/#comment-{{postId}}',
+  PHASE_POST: '/projects/{{projectId}}/plan#phase-{{phaseId}}-posts-{{postId}}',
   FILE_LIST: '/projects/{{projectId}}/specification#appDefinition-files',
   PHASE: '/projects/{{projectId}}/plan#phase-{{phaseId}}',
   TOPCODER_TEAM: '/projects/{{projectId}}#manageTopcoderTeam'
@@ -303,13 +304,19 @@ export const NOTIFICATIONS = [
       shouldBundle: true,
       bundledText: '{{#showMore __history__ 3}}<strong>{{userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts to your topic',
       toTopicStarter: true,
-      goTo: GOTO.POST
+      goTo: [
+        { goTo: GOTO.POST, condition: (contents) => !contents.phaseId },
+        { goTo: GOTO.PHASE_POST, condition: (contents) => !!contents.phaseId }
+      ]
     }, {
       text: '<strong>{{userHandle}}</strong> responded to a post',
       shouldBundle: true,
       bundledText: '{{#showMore __history__ 3}}<strong>{{userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
-      goTo: GOTO.POST
+      goTo: [
+        { goTo: GOTO.POST, condition: (contents) => !contents.phaseId },
+        { goTo: GOTO.PHASE_POST, condition: (contents) => !!contents.phaseId }
+      ]
     }]
   }, {
     version: 2,
@@ -320,13 +327,19 @@ export const NOTIFICATIONS = [
       shouldBundle: true,
       bundledText: '{{#showMore __history__ 3}}<strong>{{fallback userFullName userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts to your topic',
       toTopicStarter: true,
-      goTo: GOTO.POST
+      goTo: [
+        { goTo: GOTO.POST, condition: (contents) => !contents.phaseId },
+        { goTo: GOTO.PHASE_POST, condition: (contents) => !!contents.phaseId }
+      ]
     }, {
       text: '<strong>{{userFullName}}</strong> responded to a post',
       shouldBundle: true,
       bundledText: '{{#showMore __history__ 3}}<strong>{{fallback userFullName userHandle}}</strong>{{/showMore}} created {{bundledCount}} new posts',
       projectRoles: [PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER, PROJECT_ROLE_MEMBER],
-      goTo: GOTO.POST
+      goTo: [
+        { goTo: GOTO.POST, condition: (contents) => !contents.phaseId },
+        { goTo: GOTO.PHASE_POST, condition: (contents) => !!contents.phaseId }
+      ]
     }]
   },
 
@@ -351,7 +364,10 @@ export const NOTIFICATIONS = [
     rules: [{
       text: '<strong>{{userFullName}}</strong> mentioned you in a post',
       toUserHandle: true,
-      goTo: GOTO.POST
+      goTo: [
+        { goTo: GOTO.POST, condition: (contents) => !contents.phaseId },
+        { goTo: GOTO.PHASE_POST, condition: (contents) => !!contents.phaseId }
+      ]
     }]
   },
 
@@ -646,3 +662,32 @@ export const NOTIFICATION_RULES = (() => {
 
   return notificationRules
 })()
+
+/*
+  Below we would list functions to build criteria to filter notifications which we reuse in several places.
+ */
+
+/**
+ * Build criteria to filter all notifications related to phase timeline tab
+ * 
+ * @param {Object} timeline timeline
+ * 
+ * @returns {Array} notifications filter criteria
+ */
+export const buildPhaseTimelineNotificationsCriteria = (timeline) => ([
+  { eventType: EVENT_TYPE.PROJECT_PLAN.TIMELINE_ADJUSTED, contents: { updatedTimeline: { id: timeline.id } } },
+  { eventType: EVENT_TYPE.PROJECT_PLAN.MILESTONE_ACTIVATED, contents: { timeline: { id: timeline.id } } },
+  { eventType: EVENT_TYPE.PROJECT_PLAN.MILESTONE_COMPLETED, contents: { timeline: { id: timeline.id } } },
+  { eventType: EVENT_TYPE.PROJECT_PLAN.WAITING_FOR_CUSTOMER_INPUT, contents: { timeline: { id: timeline.id } } },
+])
+
+/**
+ * Build criteria to filter all notifications related to phase specification tab
+ * 
+ * @param {Object} phase phase
+ * 
+ * @returns {Array} notifications filter criteria
+ */
+export const buildPhaseSpecifiationNotificationsCriteria = (phase) => ([
+  { eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_PRODUCT_SPEC_UPDATED, contents: { phaseId: phase.id } },
+])

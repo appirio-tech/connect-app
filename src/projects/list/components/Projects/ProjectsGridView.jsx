@@ -30,7 +30,7 @@ const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 const ProjectsGridView = props => {
   const { projects, members, totalCount, criteria, pageNum, sortHandler, currentUser, onPageChange,
     error, isLoading, infiniteAutoload, setInfiniteAutoload, projectsStatus, onChangeStatus,
-    applyFilters, projectTemplates, notifications, newProjectLink, setFilter } = props
+    applyFilters, projectTemplates, notifications, newProjectLink, setFilter, isCustomer } = props
 
   const currentSortField = _.get(criteria, 'sort', '')
   // This 'little' array is the heart of the list component.
@@ -198,7 +198,7 @@ const ProjectsGridView = props => {
       sortable: false,
       classes: 'item-status',
       renderText: item => {
-        const canEdit = item.status !== PROJECT_STATUS_COMPLETED
+        const canEdit = item.status !== PROJECT_STATUS_COMPLETED && !isCustomer
         const hasReviewedOrActivePhases = !!_.find(item.phases, (phase) => _.includes([PHASE_STATUS_REVIEWED, PHASE_STATUS_ACTIVE], phase.status))
         const isProjectActive = item.status === PROJECT_STATUS_ACTIVE
         const isV3Project = item.version === 'v3'
@@ -277,6 +277,7 @@ ProjectsGridView.propTypes = {
   criteria: PropTypes.object.isRequired,
   projectTemplates: PropTypes.array.isRequired,
   setFilter: PropTypes.func,
+  isCustomer: PropTypes.bool.isRequired
 }
 
 export default ProjectsGridView

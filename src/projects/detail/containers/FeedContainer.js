@@ -8,6 +8,7 @@ import _ from 'lodash'
 import {
   THREAD_MESSAGES_PAGE_SIZE,
   PROJECT_FEED_TYPE_PRIMARY,
+  PROJECT_FEED_TYPE_MESSAGES,
   SCREEN_BREAKPOINT_MD,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
@@ -17,7 +18,8 @@ import { connect } from 'react-redux'
 import update from 'react-addons-update'
 import NewPost from '../../../components/Feed/NewPost'
 
-import { loadDashboardFeeds, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
+import { loadDashboardFeeds, loadProjectMessages, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments,
+  addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import { toggleNotificationRead } from '../../../routes/notifications/actions'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import PostsRefreshPrompt from '../components/PostsRefreshPrompt'
@@ -32,6 +34,8 @@ import SectionTitle from '../components/SectionTitle'
 
 import { scrollToHash } from '../../../components/ScrollToAnchors'
 import { isSystemUser } from '../../../helpers/tcHelpers'
+import { checkPermission } from '../../../helpers/permissions'
+import PERMISSIONS from '../../../config/permissions'
 
 import './FeedContainer.scss'
 
@@ -228,12 +232,12 @@ class FeedView extends React.Component {
     })
   }
 
-  onNewPost({title, content}) {
+  onNewPost({title, content, isPrivate = false}) {
     const { project } = this.props
     const newFeed = {
       title,
       body: content,
-      tag: PROJECT_FEED_TYPE_PRIMARY
+      tag: isPrivate ? PROJECT_FEED_TYPE_MESSAGES : PROJECT_FEED_TYPE_PRIMARY
     }
     this.props.createProjectTopic(project.id, newFeed)
   }
@@ -354,7 +358,9 @@ class FeedView extends React.Component {
   }
 
   onRefreshFeeds() {
-    this.props.loadDashboardFeeds(this.props.project.id)
+    const { loadDashboardFeeds, loadProjectMessages, project, canAccessPrivatePosts } = this.props
+    loadDashboardFeeds(project.id)
+    canAccessPrivatePosts && loadProjectMessages(project.id)
   }
 
   enterFullscreen(feedId) {
@@ -367,7 +373,7 @@ class FeedView extends React.Component {
 
   render () {
     const {currentUser, currentMemberRole, isCreatingFeed, error, allMembers,
-      toggleNotificationRead, notifications, project, isSuperUser, projectMembers } = this.props
+      toggleNotificationRead, notifications, project, isSuperUser, projectMembers, canAccessPrivatePosts } = this.props
     const { feeds, isNewPostMobileOpen, fullscreenFeedId } = this.state
     const isChanged = this.isChanged()
     const onLeaveMessage = this.onLeave() || ''
@@ -442,6 +448,7 @@ class FeedView extends React.Component {
                 titlePlaceholder="Start a new discussion"
                 expandedTitlePlaceholder="Add your discussion title"
                 contentPlaceholder="Add your first post"
+                canAccessPrivatePosts={canAccessPrivatePosts}
               />
             </MediaQuery>
             {feeds.map((feed) => (
@@ -495,6 +502,7 @@ class FeedView extends React.Component {
             isCreating={isCreatingFeed}
             hasError={error}
             onNewPostChange={this.onNewPostChange}
+            canAccessPrivatePosts={canAccessPrivatePosts}
           />
         }
       </div>
@@ -526,26 +534,37 @@ class FeedContainer extends React.Component {
 
 FeedContainer.PropTypes = {
   currentMemberRole: PropTypes.string,
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
+  canAccessPrivatePosts: PropTypes.bool.isRequired,
 }
 
 const mapStateToProps = ({ projectTopics, members, loadUser, notifications, projectState }) => {
   const project = projectState.project
   const projectMembers = _.filter(members.members, m => _.some(project.members, pm => pm.userId === m.userId))
+  // all feeds includes primary as well as private topics if user has access to private topics
+  let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
+  const canAccessPrivatePosts = checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
+  if (canAccessPrivatePosts) {
+    allFeed = [...allFeed, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
+  }
+  const allFeedCount = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].totalCount + (canAccessPrivatePosts ? projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].totalCount : 0)
+
   return {
     currentUser    : loadUser.user,
-    feeds          : projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
-    feedTotalCount : projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].totalCount,
+    feeds          : allFeed,
+    feedTotalCount : allFeedCount,
     isLoading      : projectTopics.isLoading,
     isCreatingFeed : projectTopics.isCreatingFeed,
     error          : projectTopics.error,
     allMembers     : members.members,
     projectMembers : _.keyBy(projectMembers, 'userId'),
     notifications,
+    canAccessPrivatePosts,
   }
 }
 const mapDispatchToProps = {
   loadDashboardFeeds,
+  loadProjectMessages,
   createProjectTopic,
   saveProjectTopic,
   deleteProjectTopic,

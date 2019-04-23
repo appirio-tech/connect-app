@@ -115,8 +115,14 @@ function applyOp(op, b, a) {
     return a < b
   case '!':
     return !b
-  case 'contains':
-    return (a || []).indexOf(b) > -1
+  case 'contains': {
+    try {
+      const bJSON = JSON.parse(b)
+      return _.some(a || [], bJSON)
+    } catch(e) {
+      return (a || []).indexOf(b) > -1
+    }
+  }
   case 'hasLength':
     return (a || []).length === b
   }
@@ -158,13 +164,18 @@ export function evaluate(expression, data) {
   // Stack for Operators: 'ops'
   const ops = new Stack()
 
+  // Keep track of unbalanced parenthesis
+  const unbalancedParens = []
+
   for (let i = 0; i < tokens.length; i++) {
     if (tokens[i] === '(') {
       ops.push(tokens[i])
+      unbalancedParens.push(i)
 
       // Closing brace encountered, solve expression since the last opening brace
     } else if (tokens[i] === ')') {
-      while (ops.peek() !== '(') {
+
+      while (ops.peek() !== '(' && !ops.empty()) {
         const op = ops.pop()
         if (oneParamOps.indexOf(op) !== -1) {
           values.push(applyOp(op, values.pop()))
@@ -172,7 +183,14 @@ export function evaluate(expression, data) {
           values.push(applyOp(op, values.pop(), values.pop()))
         }
       }
-      ops.pop()//removing opening brace
+
+      // if the ops array is empty means there is an unbalanced closing parenthesis
+      if (ops.empty()) {
+        unbalancedParens.push(i)
+      } else {
+        unbalancedParens.pop()
+        ops.pop()//removing opening brace
+      }
 
       // Current token is an operator.
     } else if (allowedOps.indexOf(tokens[i]) > -1) {
@@ -198,19 +216,24 @@ export function evaluate(expression, data) {
         //console.log("val : ",data[tokens[i]])
         values.push(_.get(data, tokens[i]))
       } else {
-        /*if(tokens[i] == "true")
-        values.push(true);
-        else if(tokens[i] == "false")
-        values.push(false); */
         if (!isNaN(tokens[i])) {
           values.push(parseInt(tokens[i]))
         } else {
           //removing single quotes around the text values
-          values.push(tokens[i].replace(/'/g, ''))
+          let literal = tokens[i].replace(/'/g, '')
+          literal = literal === 'true' || (literal === 'false' ? false : literal)
+          values.push(literal)
         }
       }
     }
   }
+
+  // if there are unbalanced parenthesis throw an error
+  if (unbalancedParens.length !== 0) {
+    throw new Error(`Parens with the following token indexes are unbalanced: ${unbalancedParens}`)
+  }
+
+
   //debugger
   // Parsed expression tokens are pushed to values/ops respectively,
   // Running while loop to evaluate the expression
@@ -230,6 +253,8 @@ export function evaluate(expression, data) {
  * Parses expression to find variable names in format of domain name:
  * string1.string2.string3 and so on. Minimum one dot "." is required.
  *
+ * TODO this should be improved as we can have variables without "." like "name" for project name
+ *
  * @param {String} expression expression
  *
  * @returns {Array} list of variable names
@@ -247,4 +272,37 @@ export function getFieldNamesFromExpression(expression) {
   } while (match)
 
   return fieldNames
+}
+
+/**
+ * Replace prepared conditions inside expression
+ *
+ * @example
+ *   const expression = 'preparedCondition1 == 1'
+ *   const preparedConditions = {
+ *     preparedCondition1: '(2 - 1)'
+ *   }
+ *
+ *   const output = populatePreparedConditions(expression, preparedConditions)
+ *
+ *   // output => '(2 - 1) == 1'
+ *
+ * @param {String} expression         expression
+ * @param {Object} preparedConditions prepared conditions
+ *
+ * @returns {String} expression
+ */
+export function populatePreparedConditions(expression, preparedConditions) {
+  // in the Regexp we describe situations when preparedCondition can be replaced,
+  // instead of defining situations when it cannot be replaced
+  const allowedBefore = ['^', '\\s', '\\(', '!'].join('|')
+  const allowedAfter = ['$', '\\s', '\\)'].join('|')
+
+  preparedConditions && _.forEach(preparedConditions, (value, key) => {
+    // as JS RegExp doesn't support lookbehind, we use some workaround here
+    const regex = new RegExp(`(${allowedBefore})` + key + `(?=${allowedAfter})`, 'g')
+    expression = expression.replace(regex, `$1${value}`)
+  })
+
+  return expression
 }

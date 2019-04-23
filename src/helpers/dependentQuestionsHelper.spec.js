@@ -1,6 +1,6 @@
 /* eslint quotes: 0 */
 import chai from 'chai'
-import { evaluate } from './dependentQuestionsHelper'
+import { evaluate, populatePreparedConditions } from './dependentQuestionsHelper'
 
 chai.should()
 
@@ -17,6 +17,18 @@ const testData = {
   someArrayWithText: ['a', 'b', 'c'],
   f: false,
   t: true,
+  nestedObject: {
+    textProperty: 'test',
+    PREPARED_CONDITION_1: 'fake prepared condition property',
+    propertyWithObject: {
+      PREPARED_CONDITION_2: 'fake prepared condition property'
+    },
+  }
+}
+
+const preparedConditions = {
+  PREPARED_CONDITION_1: '(someArray hasLength 3)',
+  PREPARED_CONDITION_2: `((someArrayWithText contains 'a') || (someArrayWithText contains 'b'))`
 }
 
 describe('Evaluate: ', () => {
@@ -159,7 +171,7 @@ describe('Evaluate: ', () => {
       result.should.equal(true)
     })
 
-    it('multiple spaces', () => {
+    xit('multiple spaces', () => {
       const expression = 'someArray  contains  (  b  -  a  )  *  2'
       const result = evaluate(expression, testData)
 
@@ -434,6 +446,16 @@ describe('Evaluate: ', () => {
       res.should.equal(true)
     })
 
+    it('should compare boolean true', () => {
+      const res = evaluate('t == true', testData)
+      res.should.equal(true)
+    })
+
+    it('should compare boolean false', () => {
+      const res = evaluate('f == false', testData)
+      res.should.equal(true)
+    })
+
     it ('should compare string and number', () => {
       const res = evaluate('stringa == a', testData)
       res.should.equal(false)
@@ -469,6 +491,16 @@ describe('Evaluate: ', () => {
     it ('should compare string and number', () => {
       const res = evaluate('stringa != a', testData)
       res.should.equal(true)
+    })
+
+    it('should compare inequality for boolean true', () => {
+      const res = evaluate('t != true', testData)
+      res.should.equal(false)
+    })
+
+    it('should compare inequality for boolean false', () => {
+      const res = evaluate('f != false', testData)
+      res.should.equal(false)
     })
 
     xit ('should compare boolean and number', () => {
@@ -527,6 +559,46 @@ describe('Evaluate: ', () => {
       res.should.equal(4 + 2)
     })
 
+    it('should throw error if one opening parenthesis is unbalanced', () => {
+      const expression = `((someArrayWithText contains 'a') || (someArrayWithText contains 'b') || (someArrayWithText contains 'c')`
+
+      try {
+        evaluate(expression, testData)
+      } catch(error) {
+        error.message.should.equal('Parens with the following token indexes are unbalanced: 0')
+      }
+    })
+
+    it('should throw error if multiple opening parenthesis are unbalanced', () => {
+      const expression = `(someArrayWithText contains 'a') || ((someArrayWithText contains 'b') || ((someArrayWithText contains 'c')`
+
+      try {
+        evaluate(expression, testData)
+      } catch(error) {
+        error.message.should.equal('Parens with the following token indexes are unbalanced: 6,13')
+      }
+    })
+
+    it('should throw error if one closing parenthesis is unbalanced', () => {
+      const expression = `(someArrayWithText contains 'a')) || (someArrayWithText contains 'b') || (someArrayWithText contains 'c')`
+
+      try {
+        evaluate(expression, testData)
+      } catch(error) {
+        error.message.should.equal('Parens with the following token indexes are unbalanced: 5')
+      }
+    })
+
+    it('should throw error if multiple closing parenthesis are unbalanced', () => {
+      const expression = `(someArrayWithText contains 'a') || (someArrayWithText contains 'b')) || (someArrayWithText contains 'c'))`
+
+      try {
+        evaluate(expression, testData)
+      } catch(error) {
+        error.message.should.equal('Parens with the following token indexes are unbalanced: 11,18')
+      }
+    })
+
     xit('should parse literal constants like numbers with decimal numbers', () => {
       const res = evaluate('4.2 + 2.3', testData)
       res.should.equal(4.2 + 2.3)
@@ -535,6 +607,12 @@ describe('Evaluate: ', () => {
     xit ('should parse literal constants like booleans', () => {
       const res = evaluate('true && true', testData)
       res.should.equal(true)
+    })
+
+    xit ('should treat unknown variables as undefined', () => {
+      const res = evaluate('unknownVariable', testData)
+
+      res.should.be.undefined
     })
   })
 
@@ -626,4 +704,62 @@ describe('Evaluate: ', () => {
     })
   })
 
+})
+
+describe('Replace prepared conditions: ', () => {
+  it('should replace single prepared condition', () => {
+    const expression = 'PREPARED_CONDITION_1'
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(preparedConditions.PREPARED_CONDITION_1)
+  })
+
+  it('should replace multiple prepared conditions', () => {
+    const expression = 'PREPARED_CONDITION_1 && PREPARED_CONDITION_2'
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`${preparedConditions.PREPARED_CONDITION_1} && ${preparedConditions.PREPARED_CONDITION_2}`)
+  })
+
+  it('should not replace prepared condition inside text literals', () => {
+    const expression = `someArray contains 'PREPARED_CONDITION_1' && a == PREPARED_CONDITION_2`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`someArray contains 'PREPARED_CONDITION_1' && a == ${preparedConditions.PREPARED_CONDITION_2}`)
+  })
+
+  it('should not replace prepared condition inside object properties level 1', () => {
+    const expression = `nestedObject.PREPARED_CONDITION_1 && a == PREPARED_CONDITION_2`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`nestedObject.PREPARED_CONDITION_1 && a == ${preparedConditions.PREPARED_CONDITION_2}`)
+  })
+
+  it('should not replace prepared condition inside object properties level 2', () => {
+    const expression = `nestedObject.propertyWithObject.PREPARED_CONDITION_1 && a == PREPARED_CONDITION_2`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`nestedObject.propertyWithObject.PREPARED_CONDITION_1 && a == ${preparedConditions.PREPARED_CONDITION_2}`)
+  })
+
+  it('should not replace prepared condition in the part of another prepared condition variable', () => {
+    const expression = `SUFFIX_PREPARED_CONDITION_2 && PREPARED_CONDITION_2 && PREPARED_CONDITION_2_POSTFIX`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`SUFFIX_PREPARED_CONDITION_2 && ${preparedConditions.PREPARED_CONDITION_2} && PREPARED_CONDITION_2_POSTFIX`)
+  })
+
+  it('should not replace prepared condition delimited by parentheses', () => {
+    const expression = `(PREPARED_CONDITION_2)`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`(${preparedConditions.PREPARED_CONDITION_2})`)
+  })
+
+  it('should not replace prepared condition delimited preceded by "!"', () => {
+    const expression = `!PREPARED_CONDITION_2`
+    const populatedExpression = populatePreparedConditions(expression, preparedConditions)
+
+    populatedExpression.should.equal(`!${preparedConditions.PREPARED_CONDITION_2}`)
+  })
 })

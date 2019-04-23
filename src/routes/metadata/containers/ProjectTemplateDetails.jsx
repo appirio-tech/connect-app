@@ -12,6 +12,7 @@ import {
   updateProjectsMetadata,
   createProjectTemplate,
 } from '../../../actions/templates'
+import { fireProjectDirty } from '../../../projects/actions/project'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
@@ -46,6 +47,8 @@ class ProjectTemplateDetails extends React.Component {
       // isLoading,
       isAdmin,
       match,
+      previewProject,
+      firePreviewProjectDirty,
     } = this.props
     const projectTemplates = templates.projectTemplates
     let templateId = match.params.templateId
@@ -63,6 +66,8 @@ class ProjectTemplateDetails extends React.Component {
           createProjectsMetadata={createProjectTemplate}
           updateProjectsMetadata={updateProjectsMetadata}
           isNew={!templateId}
+          previewProject={previewProject}
+          firePreviewProjectDirty={firePreviewProjectDirty}
         />
       </div>
     )
@@ -77,10 +82,12 @@ ProjectTemplateDetails.propTypes = {
   deleteProjectTemplate: PropTypes.func.isRequired,
   createProjectTemplate: PropTypes.func.isRequired,
   updateProjectsMetadata: PropTypes.func.isRequired,
+  previewProject: PropTypes.object,
+  firePreviewProjectDirty: PropTypes.func,
 }
 
 
-const mapStateToProps = ({ templates, loadUser }) => {
+const mapStateToProps = ({ projectState, templates, loadUser }) => {
   const powerUserRoles = [ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
 
   return {
@@ -89,7 +96,8 @@ const mapStateToProps = ({ templates, loadUser }) => {
     isRemoving: templates.isRemoving,
     error: templates.error,
     currentUser: loadUser.user,
-    isAdmin: _.intersection(loadUser.user.roles, powerUserRoles).length !== 0
+    isAdmin: _.intersection(loadUser.user.roles, powerUserRoles).length !== 0,
+    previewProject: projectState.project,
   }
 }
 
@@ -98,6 +106,7 @@ const mapDispatchToProps = {
   deleteProjectTemplate,
   createProjectTemplate,
   updateProjectsMetadata,
+  firePreviewProjectDirty: fireProjectDirty
 }
 
 const page500 = compose(

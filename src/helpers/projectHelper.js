@@ -232,6 +232,15 @@ export function getPhaseActualData(phase, timeline) {
     endDate = phase.endDate && moment.utc(phase.endDate)
     duration = phase.duration ? phase.duration : 0
     progress = phase.progress ? phase.progress : 0
+    
+    if (startDate) {
+      endDate = startDate.clone().add(duration, 'days')
+    } else {
+      startDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
+    }
+    if (!endDate) {
+      endDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
+    }
 
   // if phase's product has timeline get data from timeline
   } else {

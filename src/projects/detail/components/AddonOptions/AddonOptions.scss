@@ -1,0 +1,36 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.addon-header {
+  display: block;
+
+  p {
+    color: $tc-gray-70;
+    font-size: 12px;
+    font-style: italic;
+    line-height: 20px;
+    margin-top: 15px;
+
+    + .subcategory {
+      margin-top: 50px;
+    }
+  }
+}
+
+.addon-title {
+  @include roboto-bold;
+  color: $tc-gray-100;
+  font-size: $tc-heading-sm;
+  line-height: 34px;
+  text-align: center;
+}
+
+.subcategory {
+  margin-top: 70px;
+}
+
+.subcategory-title {
+  @include roboto;
+  color: $tc-gray-100;
+  font-size: $tc-heading-sm;
+  line-height: 25px;
+}

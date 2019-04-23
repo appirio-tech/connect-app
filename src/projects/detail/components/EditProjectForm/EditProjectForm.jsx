@@ -15,15 +15,13 @@ const Formsy = FormsyForm.Formsy
 import XMarkIcon from  '../../../../assets/icons/icon-x-mark.svg'
 import SpecSection from '../SpecSection'
 import { HOC as hoc } from 'formsy-react'
+import cn from 'classnames'
 import {
-  // initWizard,
-  updateStepsByConditions,
-  makeStepEditable,
-  makeStepReadonly,
-  isStepHasDependencies,
-  pushStepDataSnapshot,
-  popStepDataSnapshot,
-  removeValuesOfHiddenSteps,
+  initWizard,
+  removeValuesOfHiddenNodes,
+  updateNodesByConditions,
+  STEP_VISIBILITY,
+  STEP_STATE,
 } from '../../../../helpers/wizardHelper'
 
 import './EditProjectForm.scss'
@@ -72,32 +70,17 @@ class EditProjectForm extends Component {
     this.onLeave = this.onLeave.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.makeDeliveredPhaseReadOnly = this.makeDeliveredPhaseReadOnly.bind(this)
-    this.startEditReadOnly = this.startEditReadOnly.bind(this)
-    this.declineEditReadOnly = this.declineEditReadOnly.bind(this)
-    this.confirmEditReadOnly = this.confirmEditReadOnly.bind(this)
-    this.stopEditReadOnly = this.stopEditReadOnly.bind(this)
-    this.cancelEditReadOnly = this.cancelEditReadOnly.bind(this)
 
-    // const {
-    //   template,
-    //   hasDependantFields,
-    // } = initWizard(props.template, props.project, null, true)
-    // This is a quick fix to disable read-optimized mode for scope/specification page as we wouldn't use it
-    // I didn't remove the code to not make a big change the day before release,
-    // also, at the same time there is a challenge run where this code should be removed
-    // so I don't make a lot of changes now, so after we can easily merge result of the challenge with the dev branch
-    const hasDependantFields = false
-    const template = props.template
+    // init wizard to support dependant questions
+    const {
+      template,
+      hasDependantFields,
+    } = initWizard(props.template, props.project, props.productTemplates, null)
 
     this.state = {
       template,
       hasDependantFields,
-      showStartEditConfirmation: false,
     }
-
-    // we will keep there form values before starting editing read-only values
-    // and we will use this data to restore previous values if user press Cancel
-    this.dataSnapshots = []
   }
 
   componentWillMount() {
@@ -111,6 +94,21 @@ class EditProjectForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    let { template, hasDependantFields } = this.state
+    // updating template from template editor
+    if(nextProps.shouldUpdateTemplate && template !== nextProps.template) {
+
+      const state = initWizard(nextProps.template, nextProps.project, nextProps.productTemplates, null)
+
+      template = state.template
+      hasDependantFields = state.hasDependantFields
+
+      this.setState({
+        template,
+        hasDependantFields,
+      })
+    }
+
     // we received property updates from PROJECT_DIRTY REDUX state
     if (nextProps.project.isDirty) {
       this.setState({
@@ -141,17 +139,17 @@ class EditProjectForm extends Component {
       })
     }
 
-    if (this.state.hasDependantFields && !_.isEqual(this.props.project, nextProps.project)) {
+    if (hasDependantFields && !_.isEqual(this.props.project, nextProps.project)) {
       const {
         updatedTemplate,
-        updatedSomeSteps,
-        hidedSomeSteps
-      } = updateStepsByConditions(this.state.template, nextProps.project)
+        updatedSomeNodes,
+        hidedSomeNodes
+      } = updateNodesByConditions(template, nextProps.project, nextProps.productTemplates)
 
-      if (updatedSomeSteps) {
+      if (updatedSomeNodes) {
         this.setState({
           template: updatedTemplate,
-          project: hidedSomeSteps ? nextProps.project : this.state.project,
+          project: hidedSomeNodes ? nextProps.project : this.state.project,
         })
       }
     }
@@ -161,74 +159,16 @@ class EditProjectForm extends Component {
     window.addEventListener('beforeunload', this.onLeave)
   }
 
-  startEditReadOnly(step) {
-    const { template } = this.state
+  componentDidUpdate() {
+    this.refs.form && this.refs.form.inputs.forEach(q => {
+      q.props.options && q.props.options.forEach((option) => {
+        // select options if they are selected by condition
+        if (_.get(option, '__wizard.selectedByCondition', false)) {
+          const curValue = q.getValue()
 
-    if (isStepHasDependencies(template, step)) {
-      this.setState({
-        showStartEditConfirmation: step,
-      })
-    } else {
-      this._startEditReadOnly(step)
-    }
-  }
-
-  declineEditReadOnly() {
-    this.setState({
-      showStartEditConfirmation: null,
-    })
-  }
-
-  confirmEditReadOnly() {
-    this._startEditReadOnly(this.state.showStartEditConfirmation)
-    this.setState({
-      showStartEditConfirmation: null,
-    })
-  }
-
-  _startEditReadOnly(step) {
-    const { template } = this.state
-    let updatedTemplate = template
-
-    pushStepDataSnapshot(this.dataSnapshots, step, template, this.refs.form.getCurrentValues())
-    updatedTemplate = makeStepEditable(template, step)
-
-    this.setState({
-      template: updatedTemplate,
-    })
-  }
-
-  stopEditReadOnly(step) {
-    const { template } = this.state
-    let updatedTemplate = template
-
-    // remove saved snapshot
-    popStepDataSnapshot(this.dataSnapshots, step)
-
-    updatedTemplate = makeStepReadonly(template, step)
-
-    this.setState({
-      template: updatedTemplate,
-    })
-  }
-
-  cancelEditReadOnly(step) {
-    const { template } = this.state
-    let updatedTemplate = template
-
-    const savedSnapshot = popStepDataSnapshot(this.dataSnapshots, step)
-    updatedTemplate = makeStepReadonly(template, step)
-
-    this.setState({
-      // first we show back form fields as it were before
-      template: updatedTemplate,
-    }, () => {
-      // only after we showed all the fields back we can restore their values
-      this.refs.form.inputs.forEach(component => {
-        const name = component.props.name
-
-        if (!_.isUndefined(savedSnapshot[name])) {
-          component.setValue(savedSnapshot[name])
+          if (curValue.indexOf(option.value) === -1) {
+            q.setValue(curValue.concat(option.value))
+          }
         }
       })
     })
@@ -307,11 +247,8 @@ class EditProjectForm extends Component {
   }
 
   submit(model) {
-    // if (this.state.isFeaturesDirty) {
-    //   model.details.appDefinition.features = this.state.project.details.appDefinition.features
-    // }
     this.setState({isSaving: true })
-    const modelWithoutHiddenValues = removeValuesOfHiddenSteps(this.state.template, model)
+    const modelWithoutHiddenValues = removeValuesOfHiddenNodes(this.state.template, model)
     this.props.submitHandler(modelWithoutHiddenValues)
   }
 
@@ -331,8 +268,9 @@ class EditProjectForm extends Component {
 
 
   render() {
-    const { isEdittable, showHidden, productTemplates } = this.props
-    const { project, dirtyProject, template, showStartEditConfirmation } = this.state
+    const { isEdittable, showHidden, productTemplates, productCategories } = this.props
+    const { template } = this.state
+    const { project, dirtyProject } = this.state
     const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
       const anySectionInvalid = _.some(template.sections, (s) => s.isInvalid)
@@ -343,6 +281,9 @@ class EditProjectForm extends Component {
             project={project}
             dirtyProject={dirtyProject}
             isProjectDirty={this.state.isProjectDirty}
+            template={template}
+            productTemplates={productTemplates}
+            productCategories={productCategories}
             sectionNumber={idx + 1}
             resetFeatures={this.onFeaturesSaveAttachedClick}
             showFeaturesDialog={this.showFeaturesDialog}
@@ -354,10 +295,6 @@ class EditProjectForm extends Component {
             removeAttachment={this.props.removeAttachment}
             attachmentsStorePath={this.props.attachmentsStorePath}
             canManageAttachments={this.props.canManageAttachments}
-            startEditReadOnly={this.startEditReadOnly}
-            stopEditReadOnly={this.stopEditReadOnly}
-            cancelEditReadOnly={this.cancelEditReadOnly}
-            productTemplates={productTemplates}
           />
           <div className="section-footer section-footer-spec">
             <button className="tc-btn tc-btn-primary tc-btn-md"
@@ -370,27 +307,13 @@ class EditProjectForm extends Component {
     }
 
     return (
-      <div className="editProjectForm">
-        <Modal
-          isOpen={!!showStartEditConfirmation}
-          className="delete-post-dialog"
-          overlayClassName="delete-post-dialog-overlay"
-          onRequestClose={this.declineEditReadOnly}
-          contentLabel=""
-        >
-          <div className="modal-title">
-            Confirmation
-          </div>
-
-          <div className="modal-body">
-            You are about to change the response to question which may result in loss of data, do you want to continue?
-          </div>
-
-          <div className="button-area flex center action-area">
-            <button className="tc-btn tc-btn-default tc-btn-sm action-btn btn-cancel" onClick={this.declineEditReadOnly}>Cancel</button>
-            <button className="tc-btn tc-btn-warning tc-btn-sm action-btn " onClick={this.confirmEditReadOnly}>Continue</button>
-          </div>
-        </Modal>
+      <div
+        className={cn(
+          'editProjectForm', {
+            [`form-theme-${template.theme}`]: template.theme
+          }
+        )}
+      >
         <Prompt
           when={!!onLeaveMessage}
           message={onLeaveMessage}
@@ -403,7 +326,16 @@ class EditProjectForm extends Component {
           onValidSubmit={this.submit}
           onChange={ this.handleChange }
         >
-          {template.sections.map(renderSection)}
+          {template.sections.map(section => ({
+            ...section,
+            // in edit form we always show steps in read-optimized mode
+            visibilityForRendering: STEP_VISIBILITY.READ_OPTIMIZED,
+            // in edit form we always treat steps as completed aka 'prev'
+            stepState: STEP_STATE.PREV
+          })).filter((section) => (
+            // hide sections in edit mode
+            !section.hiddenOnEdit
+          )).map(renderSection)}
           <FeaturePickerFormField
             name="details.appDefinition.features"
             project={ project }
@@ -420,10 +352,16 @@ class EditProjectForm extends Component {
   }
 }
 
+EditProjectForm.defaultProps = {
+  shouldUpdateTemplate: false
+}
+
 EditProjectForm.propTypes = {
   project: PropTypes.object.isRequired,
   saving: PropTypes.bool.isRequired,
   template: PropTypes.object.isRequired,
+  productTemplates: PropTypes.array.isRequired,
+  productCategories: PropTypes.array.isRequired,
   isEdittable: PropTypes.bool.isRequired,
   submitHandler: PropTypes.func.isRequired,
   fireProjectDirty: PropTypes.func.isRequired,
@@ -432,7 +370,7 @@ EditProjectForm.propTypes = {
   addAttachment: PropTypes.func.isRequired,
   updateAttachment: PropTypes.func.isRequired,
   removeAttachment: PropTypes.func.isRequired,
-  productTemplates: PropTypes.array.isRequired
+  shouldUpdateTemplate: PropTypes.bool,
 }
 
 export default EditProjectForm

@@ -12,6 +12,14 @@ import FileListContainer from './FileListContainer'
 import SpecScreens from './SpecScreens'
 import { PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH, BUSINESS_UNIT_MAX_LENGTH, COST_CENTRE_MAX_LENGTH } from '../../../config/constants'
 import { scrollToAnchors } from '../../../components/ScrollToAnchors'
+import PortalSubSection from './PortalSubSection'
+
+import {
+  getVisibilityForRendering,
+  geStepState,
+  STEP_VISIBILITY,
+  STEP_STATE,
+} from '../../../helpers/wizardHelper'
 
 import './SpecSection.scss'
 
@@ -29,7 +37,6 @@ import IconTcSpecIconTypeGlyphHome from  '../../../assets/icons/icon-tc-spec-ico
 import IconDontKnow from '../../../assets/icons/icon-dont-know.svg'
 import IconTestStructured from '../../../assets/icons/icon-test-structured.svg'
 import IconTestUnstructured from '../../../assets/icons/icon-test-unstructured.svg'
-import IconUIPencil from '../../../assets/icons/ui-pencil.svg'
 
 // map string values to icon components for "tiled-radio-group" field type
 // this map contains TWO types of map, dashed and CamelCased
@@ -64,6 +71,8 @@ const tiledRadioGroupIcons = {
 const SpecSection = props => {
   const {
     project,
+    template,
+    currentWizardStep,
     dirtyProject,
     isProjectDirty,
     resetFeatures,
@@ -80,45 +89,43 @@ const SpecSection = props => {
     removeAttachment,
     attachmentsStorePath,
     canManageAttachments,
-    startEditReadOnly,
-    stopEditReadOnly,
-    cancelEditReadOnly,
     productTemplates,
+    productCategories,
   } = props
 
-  // make a copy to avoid modifying redux store
-  const subSections = _.cloneDeep(props.subSections || [])
-
-  // these types of subSections cannot be displayed as readOnly and are always writable
-  const alwaysWritable = ['tabs', 'files', 'questions']
+  const subSections = props.subSections
 
   // replace string icon values in the "tiled-radio-group" questions with icon components
   subSections.forEach((subSection) => {
     (subSection.questions || []).forEach(question => {
-      if (question.type === 'tiled-radio-group') {
+      if (question.type === 'tiled-radio-group' || question.type === 'tiled-checkbox-group') {
         question.options.forEach((option) => {
-          // if icon is defined as a relative path to the icon, convert it to icon "id"
-          const iconAsPath = option.icon.match(/(?:\.\.\/)+assets\/icons\/([^.]+)\.svg/)
-          option.icon = tiledRadioGroupIcons[iconAsPath ? iconAsPath[1] : option.icon]
+          if (option.icon && typeof option.icon === 'string') {
+            // if icon is defined as a relative path to the icon, convert it to icon "id"
+            const iconAsPath = option.icon.match(/(?:\.\.\/)+assets\/icons\/([^.]+)\.svg/)
+            option.icon = tiledRadioGroupIcons[iconAsPath ? iconAsPath[1] : option.icon]
+          }
         })
       }
     })
   })
 
   const renderSubSection = (subSection, idx) => (
-    <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
-      {_.get(subSection, '__wizard.readOnly') && !_.includes(alwaysWritable, subSection.type) && (
-        <button
-          type="button"
-          className="spec-section-edit-button"
-          onClick={() => startEditReadOnly(_.get(subSection, '__wizard.step'))}
-        >
-          <IconUIPencil />
-        </button>
+    <div
+      key={idx}
+      className={cn(
+        'section-features-module',
+        `subSection-type-${subSection.type}`, {
+          [`subSection-theme-${subSection.theme}`]: !!subSection.theme,
+          [`subSection-state-${subSection.stepState}`]: !!subSection.stepState,
+          [`subSection-visibility-${subSection.visibilityForRendering}`]: !!subSection.visibilityForRendering
+        }
       )}
+      id={[id, subSection.id].join('-')}
+    >
       {
         !subSection.hideTitle &&
-        <div className={ cn('sub-title', { 'read-optimized' : _.get(subSection, '__wizard.readOnly')} ) }>
+        <div className="sub-title">
           <h4 className="title">
             {typeof subSection.title === 'function' ? subSection.title(project): subSection.title }
             <span>{((typeof subSection.required === 'function') ? subSection.required(project, subSections) : subSection.required) ? '*' : ''}</span>
@@ -128,31 +135,12 @@ const SpecSection = props => {
       <div className="content-boxs">
         {renderChild(subSection)}
       </div>
-      {!subSection.questions && _.get(subSection, '__wizard.editReadOnly') && (
-        <div className="spec-section-actions">
-          <button
-            type="button"
-            className="tc-btn tc-btn-default tc-btn-md"
-            onClick={() => cancelEditReadOnly(_.get(subSection, '__wizard.step'))}
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            className="tc-btn tc-btn-primary tc-btn-md"
-            onClick={() => stopEditReadOnly(_.get(subSection, '__wizard.step'))}
-          >
-            Update
-          </button>
-        </div>
-      )}
     </div>
   )
 
   const onValidate = (isInvalid) => validate(isInvalid)
 
   const renderChild = props => {
-    const isReadOnly = _.get(props, '__wizard.readOnly')
     const {type} = props
 
     let additionalClass = ''
@@ -185,42 +173,36 @@ const SpecSection = props => {
           questions={props.questions}
           layout={props.layout}
           project={project}
+          template={template}
+          currentWizardStep={currentWizardStep}
           dirtyProject={dirtyProject}
           isRequired={props.required}
           showHidden={showHidden}
-          startEditReadOnly={startEditReadOnly}
-          stopEditReadOnly={stopEditReadOnly}
-          cancelEditReadOnly={cancelEditReadOnly}
           isProjectDirty={isProjectDirty}
           productTemplates={productTemplates}
+          productCategories={productCategories}
+          isCreation={isCreation}
         />
       )
     case 'notes':
       return (
         <div>
-          {!isReadOnly && (
-            <div className={additionalClass}>
-              <div className="textarea-title">
-                {props.description}
-              </div>
+          <div className={additionalClass}>
+            <div className="textarea-title">
+              {props.description}
             </div>
-          )}
+          </div>
           <TCFormFields.Textarea
             autoResize
             name={props.fieldName}
             value={_.unescape(_.get(project, props.fieldName)) || ''}
-            disabled={_.get(props, '__wizard.readOnly')}
           />
         </div>
       )
     case 'message':
       return (
-        <div>
-          {!isReadOnly && (
-            <div className="message-title">
-              {props.description}
-            </div>
-          )}
+        <div className="message-title">
+          {props.description}
         </div>
       )
     case 'files': {
@@ -268,7 +250,7 @@ const SpecSection = props => {
       const refCode = _.get(project, refCodeFieldName, '')
       const queryParamRefCode = qs.parse(window.location.search).refCode
       return (
-        <div className={cn('project-name-section', { [`${additionalClass}`] : true, 'read-optimized' : isReadOnly} )}>
+        <div className={cn('project-name-section', { [`${additionalClass}`] : true} )}>
           <div className="editable-project-name">
             <TCFormFields.TextInput
               name="name"
@@ -280,13 +262,9 @@ const SpecSection = props => {
               validations={props.required ? 'isRequired' : null}
               validationError={props.validationError}
               theme="paper-form-dotted"
-              readonly={isReadOnly}
             />
           </div>
-          {isReadOnly && (
-            <div className="refcode-read-optimized">{`(Ref Code: ${refCode})`}</div>
-          )}
-          {!queryParamRefCode && !isReadOnly && (
+          {!queryParamRefCode && (
             <div className="textinput-refcode">
               <TCFormFields.TextInput
                 name={refCodeFieldName}
@@ -296,7 +274,6 @@ const SpecSection = props => {
                 maxLength={ PROJECT_REF_CODE_MAX_LENGTH }
                 theme="paper-form-dotted"
                 disabled={ queryParamRefCode && queryParamRefCode.length > 0 }
-                readonly={isReadOnly}
               />
               <div className="refcode-desc">
                 Optional
@@ -327,7 +304,6 @@ const SpecSection = props => {
               validations={props.required ? 'isRequired' : null}
               validationError={props.validationError}
               theme="paper-form-dotted"
-              readonly={_.get(props, '__wizard.readOnly')}
             />
           </div>
           { !queryParamRefCode &&
@@ -340,13 +316,10 @@ const SpecSection = props => {
                 maxLength={ PROJECT_REF_CODE_MAX_LENGTH }
                 theme="paper-form-dotted"
                 disabled={ queryParamRefCode && queryParamRefCode.length > 0 }
-                readonly={_.get(props, '__wizard.readOnly')}
               />
-              {!isReadOnly && (
-                <div className="refcode-desc">
-                  Optional
-                </div>
-              )}
+              <div className="refcode-desc">
+                Optional
+              </div>
             </div>
           }
           <div className="textinput-codes">
@@ -360,13 +333,10 @@ const SpecSection = props => {
               validationError="Mandatory field"
               theme="paper-form-dotted"
               wrapperClass="project-codes"
-              readonly={_.get(props, '__wizard.readOnly')}
             />
-            {!isReadOnly && (
-              <div className="codes-desc">
-                required
-              </div>
-            )}
+            <div className="codes-desc">
+              required
+            </div>
           </div>
           <div className="textinput-codes">
             <TCFormFields.TextInput
@@ -379,19 +349,36 @@ const SpecSection = props => {
               validationError="Mandatory field"
               theme="paper-form-dotted"
               wrapperClass="project-codes"
-              readonly={_.get(props, '__wizard.readOnly')}
             />
-            {!isReadOnly && (
-              <div className="codes-desc">
-                required
-              </div>
-            )}
+            <div className="codes-desc">
+              required
+            </div>
           </div>
         </div>
       )
     }
+
+    case 'portal':
+      return (
+        <PortalSubSection
+          content={props.content}
+          {...{
+            template,
+            project,
+            dirtyProject,
+            currentWizardStep,
+            productTemplates,
+            productCategories
+          }}
+        />
+      )
     default:
-      return <noscript />
+      return (
+        <div style={{ borderWidth: 1, borderStyle: 'dashed', borderColor: '#f00' }}>
+          <h5 style={{ color: '#f00' }}>Unsupported subSection type `{type}`</h5>
+          <pre style={{ fontFamily: 'monospace' }}>{JSON.stringify(_.omit(props, '__wizard'), null, 2)}</pre>
+        </div>
+      )
     }
   }
 
@@ -405,12 +392,16 @@ const SpecSection = props => {
           </h2>
           <span className="section-number">{ sectionNumber }</span>
         </div>}
-        <p className="gray-text">
+        {!!description && <p className="gray-text">
           {description}
-        </p>
-        {subSections.filter((subSection) => (
+        </p>}
+        {subSections.map(subSection => ({
+          ...subSection,
+          visibilityForRendering: isCreation ? getVisibilityForRendering(template, subSection, currentWizardStep) : STEP_VISIBILITY.READ_OPTIMIZED,
+          stepState: isCreation ? geStepState(subSection, currentWizardStep) : STEP_STATE.PREV
+        })).filter((subSection) => (
           // hide if we are in a wizard mode and subSection is hidden for now
-          (!_.get(subSection, '__wizard.hidden')) &&
+          (subSection.visibilityForRendering !== STEP_VISIBILITY.NONE) &&
           // hide if subSection is hidden by condition
           (!_.get(subSection, '__wizard.hiddenByCondition')) &&
           // hide section marked with hiddenOnCreation during creation process
@@ -425,6 +416,7 @@ const SpecSection = props => {
 
 SpecSection.propTypes = {
   project: PropTypes.object.isRequired,
+  template: PropTypes.object.isRequired,
   productTemplates: PropTypes.array.isRequired,
   sectionNumber: PropTypes.number.isRequired,
   showHidden: PropTypes.bool,
@@ -432,6 +424,7 @@ SpecSection.propTypes = {
   addAttachment: PropTypes.func,
   updateAttachment: PropTypes.func,
   removeAttachment: PropTypes.func,
+  productCategories: PropTypes.array.isRequired,
 }
 
 export default scrollToAnchors(SpecSection)

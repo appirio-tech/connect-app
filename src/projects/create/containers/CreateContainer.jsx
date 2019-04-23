@@ -12,7 +12,7 @@ import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import ProjectWizard from '../components/ProjectWizard'
 import { getProjectTemplateByAlias, getProjectTypeByKey, getProjectTypeByAlias } from '../../../helpers/templates'
-import { Wizard } from 'appirio-tech-react-components'
+import WizardWrapper from '../../../components/WizardWrapper'
 import { ViewTypes } from 'appirio-tech-react-components/components/Wizard/Wizard'
 import './CreateContainer.scss'
 import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
@@ -376,9 +376,9 @@ class CreateContainer extends React.Component {
     }
 
     return (
-      <Wizard wrapperClass="WizardCreateProject" type={type} vm={{userHandle: this.props.userHandle, projectType: projectType || {}}} >
+      <WizardWrapper className="WizardCreateProject" type={type}>
         { this.createContainerView() }
-      </Wizard>
+      </WizardWrapper>
     )
   }
 

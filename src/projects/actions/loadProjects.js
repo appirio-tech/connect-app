@@ -1,9 +1,8 @@
 import _ from 'lodash'
 import {
-  PROJECT_SEARCH, GET_PROJECTS, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
+  PROJECT_SEARCH, GET_PROJECTS,
   SET_SEARCH_TERM, SET_PROJECTS_SEARCH_CRITERIA,
   CLEAR_PROJECT_SUGGESTIONS_SEARCH, PROJECT_SUGGESTIONS_SEARCH_SUCCESS,
-  ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN,
   SET_PROJECTS_INFINITE_AUTOLOAD,
   SET_PROJECTS_LIST_VIEW
 } from '../../config/constants'
@@ -20,30 +19,9 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
       pageNum
     })
 
-    // for non power users, we hard coding the project status to not show Cancelled projects
-    // we don't want the URL to clutter with this, hence criteria has to modified just before passing to the API
-    // NOTE: we need to remove this if we provide status filter for such users
-    const requestCriteria = {...criteria} // make a copy of criteria to NOT to change it in the redux store
-    let isPowerUser = false
-    const loadUser = getState().loadUser
-    // power user roles
-    const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
-    if (loadUser.user) {
-      // determine if user is a power user
-      isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
-      if (!isPowerUser) {
-        // list of all project statuses
-        const statuses = PROJECT_STATUS.map((item) => item.value)
-        // statuses to be excluded for non power users
-        const excluded = [PROJECT_STATUS_CANCELLED]
-        // updates the criteria with status filter
-        _.set(requestCriteria, 'status', `in(${_.difference(statuses, excluded)})`)
-      }
-    }
-
     return dispatch({
       type: GET_PROJECTS,
-      payload: getProjects(requestCriteria, pageNum),
+      payload: getProjects(criteria, pageNum),
       meta: {
         // keep previous to enable the loading without paginator (infinite scroll)
         keepPrevious : pageNum !== 1

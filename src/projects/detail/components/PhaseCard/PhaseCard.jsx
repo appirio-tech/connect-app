@@ -90,7 +90,7 @@ class PhaseCard extends React.Component {
       deleteProjectPhase,
       isUpdating,
       timeline,
-      hasReadPosts,
+      hasUnseen,
       phaseId,
       isExpanded,
       project
@@ -102,9 +102,6 @@ class PhaseCard extends React.Component {
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
     const phaseEditable = checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project) && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
-    
-
-    const hasUnseen = hasReadPosts
 
     return (
       <div styleName={'phase-card ' + (isExpanded ? ' expanded ' : ' ')} id={`phase-${phaseId}`}>

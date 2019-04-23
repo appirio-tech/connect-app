@@ -4,7 +4,6 @@ import {
   LOAD_MORE_PROJECTS, CLEAR_PROJECT_SEARCH, SET_PROJECTS_SEARCH_CRITERIA,
   SET_PROJECTS_INFINITE_AUTOLOAD,
   SET_PROJECTS_LIST_VIEW,
-  PROJECTS_LIST_VIEW,
   PROJECT_LIST_DEFAULT_CRITERIA,
   PROJECT_SORT,
   DELETE_PROJECT_SUCCESS
@@ -19,7 +18,8 @@ export const initialState = {
   pageNum: 1,
   // make a copy of constant to avoid unintentional modifications
   criteria: {...PROJECT_LIST_DEFAULT_CRITERIA},
-  projectsListView: PROJECTS_LIST_VIEW.GRID,
+  // don't set default value as it will depend on the user type
+  projectsListView: null,
   refresh: false
 }
 

@@ -107,7 +107,10 @@ const ProductCategoriesGridView = props => {
     onPageChange: () => {}, // dummy, as we are not expecting paging yet in metadata views
     sortHandler,
     currentSortField,
-    resultSet: productCategories,
+    resultSet: productCategories.map((productCategory) => ({
+      ...productCategory,
+      id: productCategory.key,
+    })),
     totalCount,
     currentPageNum: pageNum,
     pageSize,

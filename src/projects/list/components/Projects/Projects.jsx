@@ -16,7 +16,7 @@ import querystring from 'query-string'
 import { updateProject } from '../../../actions/project'
 import { getNewProjectLink } from '../../../../helpers/projectHelper'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
-  ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED, PROJECT_STATUS_ACTIVE,
+  ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
   PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
 
 const page500 = compose(
@@ -110,13 +110,7 @@ class Projects extends Component {
     } else {
       // perform initial load only if there are not projects already loaded or only one projects
       // otherwise we will get projects duplicated in store
-      if (projects.length <= 1 || refresh) {
-        // for powerful user filter by 'active' status by default
-        // we cannot put it to PROJECT_LIST_DEFAULT_CRITERIA because
-        // it would apply for both powerful and regular users
-        if (props.isPowerUser && !criteria.status) {
-          criteria.status = PROJECT_STATUS_ACTIVE
-        }
+      if (projects.length <= 1 || refresh) {        
         this.routeWithParams(criteria)
       }
     }
@@ -195,7 +189,7 @@ class Projects extends Component {
   }
 
   render() {
-    const { isPowerUser, isLoading, totalCount, criteria, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history, orgConfig } = this.props
+    const { isPowerUser, isCustomer, isLoading, totalCount, criteria, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history, orgConfig } = this.props
     // show walk through if user is customer and no projects were returned
     // for default filters
     const showWalkThrough = !isLoading && totalCount === 0 &&
@@ -214,6 +208,7 @@ class Projects extends Component {
         newProjectLink={getNewProjectLink(orgConfig)}
         setFilter={this.setFilter}
         criteria={criteria}
+        isCustomer={isCustomer}
       />
     )
     const cardView = (
@@ -231,28 +226,35 @@ class Projects extends Component {
     let projectsView
     const chosenView = projectsListView
     const currentStatus = this.state.status || null
-    if (isPowerUser) {
-      if (chosenView === PROJECTS_LIST_VIEW.GRID) {
-        projectsView = gridView
-      } else if (chosenView === PROJECTS_LIST_VIEW.CARD) {
-        projectsView = cardView
-      }
-    } else {
+
+    if (chosenView === PROJECTS_LIST_VIEW.GRID) {
+      projectsView = gridView
+    } else if (chosenView === PROJECTS_LIST_VIEW.CARD) {
       projectsView = cardView
     }
+    
     return (
       <div>
         <section className="">
           <div className="container">
-            {(isPowerUser && !showWalkThrough) &&
-              <ProjectListNavHeader applyFilters={this.applyFilters} selectedView={chosenView} changeView={setProjectsListView} currentStatus={currentStatus} criteria={criteria} setInfiniteAutoload={setInfiniteAutoload} loadProjects={loadProjects} history={history}/>}
-            { showWalkThrough  ?
-              (
-                <Walkthrough newProjectLink={getNewProjectLink(orgConfig)} />
-              ) : (
-                projectsView
-              )
-            }
+            {!showWalkThrough && (
+              <ProjectListNavHeader 
+                applyFilters={this.applyFilters} 
+                selectedView={chosenView} 
+                changeView={setProjectsListView} 
+                currentStatus={currentStatus} 
+                criteria={criteria} 
+                setInfiniteAutoload={setInfiniteAutoload} 
+                loadProjects={loadProjects} 
+                history={history} 
+                isCustomer={isCustomer}
+              />
+            )}
+            {showWalkThrough ? (
+              <Walkthrough newProjectLink={getNewProjectLink(orgConfig)} />
+            ) : (
+              projectsView
+            )}
           </div>
         </section>
       </div>
@@ -270,6 +272,7 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
     const index = _.findIndex(projectSearch.projects, {id: projectState.project.id})
     projectSearch.projects.splice(index, 1, projectState.project)
   }
+  const defaultListView = isPowerUser ? PROJECTS_LIST_VIEW.GRID : PROJECTS_LIST_VIEW.CARD
   return {
     currentUser : {
       userId: loadUser.user.userId,
@@ -287,9 +290,9 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
     pageNum     : projectSearch.pageNum,
     criteria    : projectSearch.criteria,
     infiniteAutoload: projectSearch.infiniteAutoload,
-    projectsListView: projectSearch.projectsListView,
+    projectsListView: projectSearch.projectsListView || defaultListView,
     isPowerUser,
-    gridView    : isPowerUser,
+    isCustomer  : !isPowerUser,
     refresh     : projectSearch.refresh,
     projectTemplates: templates.projectTemplates,
     isProjectTemplatesLoading: templates.isLoading,
