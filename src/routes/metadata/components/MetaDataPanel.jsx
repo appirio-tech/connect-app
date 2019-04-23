@@ -398,9 +398,11 @@ class MetaDataPanel extends React.Component {
     } else {
       if (newValues.hasOwnProperty('id')) {
         newValues.id = null
-      } else {
-        newValues.key = null
       }
+      if (newValues.hasOwnProperty('aliases')) {
+        newValues.aliases = null
+      }
+      newValues.key = null
     }
 
     this.setState({
@@ -540,8 +542,8 @@ class MetaDataPanel extends React.Component {
               templates={[]}
               onProjectChange={this.props.firePreviewProjectDirty}
               projectTemplates={[{
-                id: 'new',
-                ...metadata
+                ...metadata,
+                id: metadata.id || 'new'
               }]}
               productTemplates={templates.productTemplates}
               productCategories={templates.productCategories}
