@@ -254,7 +254,7 @@ class FeedView extends React.Component {
   }
 
   onShowAllComments(feedId) {
-    const { feeds } = this.state
+    const { feeds } = this.props
     const feed = _.find(feeds, { id: feedId })
     const stateFeedIdx = _.findIndex(this.state.feeds, (f) => f.id === feedId)
     // in case we have already have all comments for that feed from the server,
