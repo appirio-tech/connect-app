@@ -77,12 +77,8 @@ class RedirectToProject extends React.Component {
         if (resp.topic) {
           const topic = resp.topic
           const projectId = topic.referenceId
-          if (topic.tag === PROJECT_FEED_TYPE_PRIMARY) {
-            history.replace(`/projects/${projectId}/`)
-          } else if (topic.tag === PROJECT_FEED_TYPE_MESSAGES) {
-            history.replace({
-              pathname: `/projects/${projectId}/discussions/${topic.id}`
-            })
+          if (topic.tag === PROJECT_FEED_TYPE_PRIMARY || topic.tag === PROJECT_FEED_TYPE_MESSAGES) {
+            history.replace(`/projects/${projectId}#feed-${topic.id}`)
           } else {
             history.replace('/projects')
           }
