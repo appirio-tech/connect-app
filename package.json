@@ -91,6 +91,7 @@
     "draft-js-mention-plugin": "^2.0.0-rc2",
     "draft-js-plugins-editor": "^2.0.0-rc2",
     "draft-js-utils": "^0.1.7",
+    "expression-evaluator": "git+https://github.com/topcoder-platform/expression-evaluator.git#master",
     "fbemitter": "^2.1.1",
     "fbjs": "^0.8.12",
     "filesize": "^3.3.0",
