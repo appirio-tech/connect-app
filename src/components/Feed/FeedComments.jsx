@@ -324,7 +324,7 @@ class FeedComments extends React.Component {
           allMembers={allMembers}
           projectMembers={projectMembers}
           noInfo={item.noInfo}
-          canDelete={idx !== comments.length - 1} // cannot delete the first post which is now shown as a last one
+          canDelete={comments && (idx !== comments.length - 1)} // cannot delete the first post which is now shown as a last one
           commentAnchorPrefix={commentAnchorPrefix}
         >
           <div dangerouslySetInnerHTML={{__html: markdownToHTML(itemContent)}} />
