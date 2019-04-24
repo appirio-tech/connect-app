@@ -173,7 +173,7 @@ class TopcoderManagementDialog extends React.Component {
               const lastName = _.get(member, 'lastName', '')
               let userFullName = `${firstName} ${lastName}`
               userFullName = userFullName.trim().length > 0 ? userFullName : 'Connect user'
-              const role = _.find(this.roles, r => r.value === member.role).title
+              const role = _.get(_.find(this.roles, r => r.value === member.role), 'title')
               return (
                 <div
                   key={i}
