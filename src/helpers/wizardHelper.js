@@ -21,7 +21,7 @@
  */
 import _ from 'lodash'
 import update from 'react-addons-update'
-import { evaluate, getFieldNamesFromExpression, populatePreparedConditions } from './dependentQuestionsHelper'
+import { evaluate, getFieldNamesFromExpression, populatePreparedConditions } from 'expression-evaluator'
 import { flatten, unflatten } from 'flat'
 
 /**
@@ -408,7 +408,7 @@ export const initWizard = (template, project, productTemplates, incompleteWizard
 
     currentWizardStep = lastWizardStep || currentWizardStep
   }
-  
+
   return {
     template: wizardTemplate,
     currentWizardStep,
@@ -958,7 +958,7 @@ export const updateNodesByConditions = (template, project, productTemplates) => 
         hiddenByCondition: { $set: false }
       }
     }
-    
+
 
     addOnSection.subSections.forEach(subSection => {
       subSection.questions.forEach(q => {
@@ -977,7 +977,7 @@ export const updateNodesByConditions = (template, project, productTemplates) => 
     })
 
     // skip intermediate summary step if no add-ons step found
-    // NOTE  At the moment we can theoretically have other questions in the add-ons section so we don't hide it explicitly here. 
+    // NOTE  At the moment we can theoretically have other questions in the add-ons section so we don't hide it explicitly here.
     //       But as at the moment add-ons section has only add-ons questions, it would be hided automatically as a section without any visible question.
     if (!hasActiveAddOnSection) {
       updatedTemplate = updateNodeObject(updatedTemplate, summaryIntermediateSection.__wizard.node, hideByConditionUpdateRule)

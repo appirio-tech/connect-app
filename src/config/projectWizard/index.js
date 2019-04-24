@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import typeToSpecification from '../projectSpecification/typeToSpecification'
-import { evaluate } from '../../helpers/dependentQuestionsHelper'
+import { evaluate } from 'expression-evaluator'
 import { removeValuesOfHiddenNodes } from '../../helpers/wizardHelper'
 import { flatten } from 'flat'
 
