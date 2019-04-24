@@ -255,7 +255,7 @@ class FeedView extends React.Component {
 
   onShowAllComments(feedId) {
     const { feeds } = this.props
-    const feed = _.find(feeds, feed => feed.id === feedId)
+    const feed = _.find(feeds, { id: feedId })
     const stateFeedIdx = _.findIndex(this.state.feeds, (f) => f.id === feedId)
     // in case we have already have all comments for that feed from the server,
     // just change the state to show all comments for that FeedId.
@@ -271,7 +271,7 @@ class FeedView extends React.Component {
         showAll: { $push: [feedId] },
         feeds: { $splice: [[stateFeedIdx, 1, updatedFeed ]] }
       }))
-      this.props.loadFeedComments(feedId, PROJECT_FEED_TYPE_PRIMARY, commentIdsToRetrieve)
+      this.props.loadFeedComments(feedId, feed.tag, commentIdsToRetrieve)
     } else {
       this.setState(update(this.state, {
         showAll: { $push: [feedId] },
@@ -281,13 +281,14 @@ class FeedView extends React.Component {
   }
 
   onAddNewComment(feedId, content) {
-    const { currentUser } = this.props
+    const { currentUser, feeds } = this.props
+    const feed = _.find(feeds, { id: feedId })
     const newComment = {
       date: new Date(),
       userId: parseInt(currentUser.id),
       content
     }
-    this.props.addFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, newComment)
+    this.props.addFeedComment(feedId, feed.tag, newComment)
   }
 
   onSaveMessageChange(feedId, messageId, content, editMode) {
@@ -309,28 +310,34 @@ class FeedView extends React.Component {
 
   onSaveMessage(feedId, message, content) {
     const newMessage = {...message}
+    const { feeds } = this.state
+    const feed = _.find(feeds, { id: feedId })
     newMessage.content = content
-    this.props.saveFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, newMessage)
+    this.props.saveFeedComment(feedId, feed.tag, newMessage)
   }
 
   onDeleteMessage(feedId, postId) {
-    this.props.deleteFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, postId)
+    const { feeds } = this.state
+    const feed = _.find(feeds, { id: feedId })
+    this.props.deleteFeedComment(feedId, feed.tag, postId)
   }
 
   onEditMessage(feedId, postId) {
-    const thread = _.find(this.state.feeds, t => feedId === t.id)
-    const comment = _.find(thread.comments, message => message.id === postId)
+    const { feeds } = this.state
+    const feed = _.find(feeds, { id: feedId })
+    const comment = _.find(feed.comments, message => message.id === postId)
     if (!comment.rawContent) {
-      this.props.getFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, postId)
+      this.props.getFeedComment(feedId, feed.tag, postId)
     }
     this.onSaveMessageChange(feedId, postId, null, true)
   }
 
   onEditTopic(feedId) {
-    const thread = _.find(this.state.feeds, t => feedId === t.id)
-    const comment = thread.topicMessage
+    const { feeds } = this.state
+    const feed = _.find(feeds, { id: feedId })
+    const comment = feed.topicMessage
     if (!comment.rawContent) {
-      this.props.getFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, comment.id)
+      this.props.getFeedComment(feedId, feed.tag, comment.id)
     }
     this.onTopicChange(feedId, comment.id, null, null, true)
   }
@@ -350,11 +357,15 @@ class FeedView extends React.Component {
   }
 
   onSaveTopic(feedId, postId, title, content) {
-    this.props.saveProjectTopic(feedId, PROJECT_FEED_TYPE_PRIMARY, {postId, title, content})
+    const { feeds } = this.state
+    const feed = _.find(feeds, { id: feedId })
+    this.props.saveProjectTopic(feedId, feed.tag, {postId, title, content})
   }
 
   onDeleteTopic(feedId) {
-    this.props.deleteProjectTopic(feedId, PROJECT_FEED_TYPE_PRIMARY)
+    const { feeds } = this.state
+    const feed = _.find(feeds, { id: feedId })
+    this.props.deleteProjectTopic(feedId, feed.tag)
   }
 
   onRefreshFeeds() {
