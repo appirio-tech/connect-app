@@ -190,7 +190,7 @@ const SpecQuestions = ({
       break
     case 'radio-group':
       ChildElem = TCFormFields.RadioGroup
-      _.assign(elemProps, {wrapperClass: cn('row', q.theme), options: q.options})
+      _.assign(elemProps, { layout: q.layout, wrapperClass: cn('row', q.theme), options: q.options})
       // child = <TCFormFields.RadioGroup name={q.fieldName} label={q.label} value={value} wrapperClass="row" options={q.options} />
       break
     case 'tiled-radio-group':
