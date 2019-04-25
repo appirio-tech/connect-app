@@ -4,7 +4,9 @@ import {
   SET_SEARCH_TERM, SET_PROJECTS_SEARCH_CRITERIA,
   CLEAR_PROJECT_SUGGESTIONS_SEARCH, PROJECT_SUGGESTIONS_SEARCH_SUCCESS,
   SET_PROJECTS_INFINITE_AUTOLOAD,
-  SET_PROJECTS_LIST_VIEW
+  SET_PROJECTS_LIST_VIEW,
+  PROJECT_STATUS_ACTIVE,
+  ROLE_TOPCODER_USER
 } from '../../config/constants'
 import { getProjects } from '../../api/projects'
 import { loadMembers } from '../../actions/members'
@@ -12,6 +14,7 @@ import { loadMembers } from '../../actions/members'
 // ignore action
 /*eslint-disable no-unused-vars */
 const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
+  const state = getState()
   return new Promise((resolve, reject) => {
     dispatch({
       type: SET_PROJECTS_SEARCH_CRITERIA,
@@ -21,7 +24,30 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
 
     return dispatch({
       type: GET_PROJECTS,
-      payload: getProjects(criteria, pageNum),
+      payload: getProjects(criteria, pageNum)
+        .then((data) => {
+          const retryForCustomer = criteria.status === PROJECT_STATUS_ACTIVE && state.loadUser.user.roles &&  state.loadUser.user.roles.length === 1
+            && state.loadUser.user.roles[0] === ROLE_TOPCODER_USER
+          if(data.totalCount === 0 && retryForCustomer) {
+            //retrying for customer if active projects are 0 but there are some projects with other status
+            //This is to bypass the walkthrough page which we ideally show for customer with zero projects
+            const newCriteria = {
+              sort: 'updatedAt desc'
+            }
+            return getProjects(newCriteria, pageNum)
+              .then((data2) => {
+                //if there no project in any status return original result
+                if(data2.totalCount === 0) {
+                  return data
+                } else {
+                  data2.projects.length = 0
+                  return data2
+                }
+              })
+          } else {
+            return data
+          }
+        }),
       meta: {
         // keep previous to enable the loading without paginator (infinite scroll)
         keepPrevious : pageNum !== 1
