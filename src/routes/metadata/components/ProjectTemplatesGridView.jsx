@@ -70,7 +70,7 @@ const ProjectTemplatesGridView = props => {
       renderText: item => {
         return (
           <div className="spacing project-template-container">
-              <div className="txt-normal">{_.unescape(item.aliases)}</div>
+            <div className="txt-normal">{_.unescape(item.aliases)}</div>
           </div>
         )
       }
