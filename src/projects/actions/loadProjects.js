@@ -25,27 +25,23 @@ const getProjectsWithMembers = (dispatch, getState, criteria, pageNum) => {
     return dispatch({
       type: GET_PROJECTS,
       payload: getProjects(criteria, pageNum)
-        .then((data) => {
+        .then((originalData) => {
           const retryForCustomer = criteria.status === PROJECT_STATUS_ACTIVE && state.loadUser.user.roles &&  state.loadUser.user.roles.length === 1
             && state.loadUser.user.roles[0] === ROLE_TOPCODER_USER
-          if(data.totalCount === 0 && retryForCustomer) {
+          if(originalData.totalCount === 0 && retryForCustomer) {
             //retrying for customer if active projects are 0 but there are some projects with other status
             //This is to bypass the walkthrough page which we ideally show for customer with zero projects
             const newCriteria = {
               sort: 'updatedAt desc'
             }
             return getProjects(newCriteria, pageNum)
-              .then((data2) => {
-                //if there no project in any status return original result
-                if(data2.totalCount === 0) {
-                  return data
-                } else {
-                  data2.projects.length = 0
-                  return data2
-                }
+              .then((allProjectsData) => {
+                //add allprojects count to be updated to redux store
+                originalData.allProjectsCount = allProjectsData.totalCount
+                return originalData
               })
           } else {
-            return data
+            return originalData
           }
         }),
       meta: {

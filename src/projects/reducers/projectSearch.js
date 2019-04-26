@@ -15,6 +15,7 @@ export const initialState = {
   projects: [],
   error: false,
   totalCount: 0,
+  allProjectsCount: 0,
   pageNum: 1,
   // make a copy of constant to avoid unintentional modifications
   criteria: {...PROJECT_LIST_DEFAULT_CRITERIA},
@@ -53,8 +54,8 @@ export default function(state = initialState, action) {
     })
   case GET_PROJECTS_SUCCESS: {
     const updatedProjects = action.meta.keepPrevious
-      ? { projects : { $push : action.payload.projects }, totalCount: { $set : action.payload.totalCount} }
-      : { projects : { $set : action.payload.projects }, totalCount: { $set : action.payload.totalCount} }
+      ? { projects : { $push : action.payload.projects }, totalCount: { $set : action.payload.totalCount}, allProjectsCount: { $set : action.payload.allProjectsCount} }
+      : { projects : { $set : action.payload.projects }, totalCount: { $set : action.payload.totalCount}, allProjectsCount: { $set : action.payload.allProjectsCount} }
     return update(state, updatedProjects)
   }
 
