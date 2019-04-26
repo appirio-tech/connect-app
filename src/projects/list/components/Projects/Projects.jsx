@@ -189,12 +189,11 @@ class Projects extends Component {
   }
 
   render() {
-    const { isPowerUser, isCustomer, isLoading, totalCount, criteria, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history, orgConfig } = this.props
+    const { isPowerUser, isCustomer, isLoading, totalCount, criteria, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history, orgConfig, allProjectsCount } = this.props
     // show walk through if user is customer and no projects were returned
     // for default filters
-    const showWalkThrough = !isLoading && totalCount === 0 &&
-      _.isEqual(criteria, PROJECT_LIST_DEFAULT_CRITERIA) &&
-      !isPowerUser
+    const showWalkThrough = !isLoading && !isPowerUser && totalCount === 0 && allProjectsCount === 0 &&
+    _.isEqual(criteria, PROJECT_LIST_DEFAULT_CRITERIA)
     const getStatusCriteriaText = (criteria) => {
       return (_.find(PROJECT_STATUS, { value: criteria.status }) || { name: ''}).name
     }
@@ -287,6 +286,7 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
     projects    : projectSearch.projects,
     members     : members.members,
     totalCount  : projectSearch.totalCount,
+    allProjectsCount: projectSearch.allProjectsCount,
     pageNum     : projectSearch.pageNum,
     criteria    : projectSearch.criteria,
     infiniteAutoload: projectSearch.infiniteAutoload,
