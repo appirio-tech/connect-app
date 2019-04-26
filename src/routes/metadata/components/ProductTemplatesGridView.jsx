@@ -48,6 +48,33 @@ const ProductTemplatesGridView = props => {
         )
       }
     }, {
+      id: 'templateKey',
+      headerLabel: 'Key',
+      classes: 'item-key',
+      sortable: false,
+      renderText: item => {
+        const url = `/metadata/productTemplates/${item.id}`
+        return (
+          <div className="spacing project-template-container">
+            <div className="template-title">
+              <Link to={url} className="link-title">{_.unescape(item.productKey)}</Link>
+            </div>
+          </div>
+        )
+      }
+    }, {
+      id: 'templateAliases',
+      headerLabel: 'Aliases',
+      classes: 'item-key',
+      sortable: false,
+      renderText: item => {
+        return (
+          <div className="spacing project-template-container">
+              <div className="txt-normal">{_.unescape(item.aliases)}</div>
+          </div>
+        )
+      }
+    }, {
       id: 'updatedAt',
       headerLabel: 'Updated At',
       sortable: true,
