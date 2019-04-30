@@ -82,6 +82,11 @@ class Feed extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps) {
+    // avoid re-rendering of this heavy component if no properties are changed
+    return !_.isEqual(this.props, nextProps)
+  }
+
   render() {
     const {
       id, user, currentUser, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,

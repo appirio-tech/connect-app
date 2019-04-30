@@ -55,7 +55,15 @@ const blocks = [
 class RichTextArea extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {editorExpanded: false, editorState: EditorState.createEmpty(), titleValue: '', suggestions: [], allSuggestions:[], isPrivate: false}
+    this.state = {
+      editorExpanded: false, 
+      editorState: EditorState.createEmpty(), 
+      titleValue: '', 
+      suggestions: [], 
+      allSuggestions:[], 
+      isPrivate: false
+    }
+    
     this.onTitleChange = this.onTitleChange.bind(this)
     this.onEditorChange = this.onEditorChange.bind(this)
     this.handleKeyCommand = this.handleKeyCommand.bind(this)
@@ -139,14 +147,17 @@ class RichTextArea extends React.Component {
     do {
       if (currNode.className
         && currNode.className.indexOf
-        && currNode.className.indexOf('btn-close') > -1) {
+        && currNode.className.indexOf('btn-close') > -1
+      ) {
         isCloseButton = true
       }
 
       if (currNode.className
         && currNode.className.indexOf
-        && currNode.className.indexOf('btn-close-creat') > -1) {
-        isCloseButton = true,
+        && currNode.className.indexOf('btn-close-creat') > -1
+      ) {
+        isCloseButton = true
+
         this.setState({
           titleValue: '',
           editorState: EditorState.createEmpty(),
@@ -170,7 +181,17 @@ class RichTextArea extends React.Component {
     if (!isEditor && !isCloseButton && hasContent) {
       return
     }
-    this.setState({editorExpanded: isEditor && !isCloseButton, isPrivate: isEditor && !isCloseButton ? this.state.isPrivate : false})
+
+    const editorExpanded = isEditor && !isCloseButton
+    const isPrivate = isEditor && !isCloseButton ? this.state.isPrivate : false
+    
+    // to avoid unnecessary re-rendering on every click, only update state if any of the values is updated
+    if (editorExpanded !== this.state.editorExpanded || isPrivate !== this.state.isPrivate) {
+      this.setState({
+        editorExpanded, 
+        isPrivate,
+      })
+    }
   }
 
   handleKeyCommand(command) {

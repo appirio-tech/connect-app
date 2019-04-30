@@ -27,10 +27,10 @@ import PostsRefreshPrompt from '../components/PostsRefreshPrompt'
 import MediaQuery from 'react-responsive'
 import ChatButton from '../../../components/ChatButton/ChatButton'
 import NewPostMobile from '../../../components/Feed/NewPostMobile'
-import ScrollableFeed from '../../../components/Feed/ScrollableFeed'
 import FullscreenFeedContainer from '../containers/FullscreenFeedContainer'
 import Section from '../components/Section'
 import SectionTitle from '../components/SectionTitle'
+import SingleFeedContainer from './SingleFeedContainer'
 
 import { scrollToHash } from '../../../components/ScrollToAnchors'
 import { isSystemUser } from '../../../helpers/tcHelpers'
@@ -403,25 +403,24 @@ class FeedView extends React.Component {
               this.enterFullscreen(feed.id)
             }}
           >
-            <ScrollableFeed
+            <SingleFeedContainer
               {...{
                 ...fullscreenFeed,
-                id: fullscreenFeedId,
                 allowComments: fullscreenFeed.allowComments && !!currentMemberRole,
                 currentUser,
                 allMembers,
                 projectMembers,
-                onNewCommentChange: this.onNewCommentChange.bind(this, fullscreenFeedId),
-                onAddNewComment: this.onAddNewComment.bind(this, fullscreenFeedId),
-                onLoadMoreComments: this.onShowAllComments.bind(this, fullscreenFeedId),
-                onEditMessage: this.onEditMessage.bind(this, fullscreenFeedId),
-                onSaveMessageChange: this.onSaveMessageChange.bind(this, fullscreenFeedId),
-                onSaveMessage: this.onSaveMessage.bind(this, fullscreenFeedId),
-                onDeleteMessage: this.onDeleteMessage.bind(this, fullscreenFeedId),
-                onEditTopic: this.onEditTopic.bind(this, fullscreenFeedId),
-                onTopicChange: this.onTopicChange.bind(this, fullscreenFeedId),
-                onSaveTopic: this.onSaveTopic.bind(this, fullscreenFeedId),
-                onDeleteTopic: this.onDeleteTopic.bind(this, fullscreenFeedId),
+                onNewCommentChange: this.onNewCommentChange,
+                onAddNewComment: this.onAddNewComment,
+                onLoadMoreComments: this.onShowAllComments,
+                onEditMessage: this.onEditMessage,
+                onSaveMessageChange: this.onSaveMessageChange,
+                onSaveMessage: this.onSaveMessage,
+                onDeleteMessage: this.onDeleteMessage,
+                onEditTopic: this.onEditTopic,
+                onTopicChange: this.onTopicChange,
+                onSaveTopic: this.onSaveTopic,
+                onDeleteTopic: this.onDeleteTopic,
                 onExitFullscreenClick: this.exitFullscreen,
                 isFullScreen: true,
               }}
@@ -464,27 +463,25 @@ class FeedView extends React.Component {
             </MediaQuery>
             {feeds.map((feed) => (
               <div styleName="feed-card" key={feed.id}>
-                <ScrollableFeed
+                <SingleFeedContainer
                   {...{
                     ...feed,
-                    id: feed.id.toString(), // convert it to string for `ScrollElement`
-                    topicId: feed.id,       // add topic id as a number, for `Feed`
                     allowComments: feed.allowComments && !!currentMemberRole,
                     currentUser,
                     allMembers,
                     projectMembers,
-                    onNewCommentChange: this.onNewCommentChange.bind(this, feed.id),
-                    onAddNewComment: this.onAddNewComment.bind(this, feed.id),
-                    onLoadMoreComments: this.onShowAllComments.bind(this, feed.id),
-                    onEditMessage: this.onEditMessage.bind(this, feed.id),
-                    onSaveMessageChange: this.onSaveMessageChange.bind(this, feed.id),
-                    onSaveMessage: this.onSaveMessage.bind(this, feed.id),
-                    onDeleteMessage: this.onDeleteMessage.bind(this, feed.id),
-                    onEditTopic: this.onEditTopic.bind(this, feed.id),
-                    onTopicChange: this.onTopicChange.bind(this, feed.id),
-                    onSaveTopic: this.onSaveTopic.bind(this, feed.id),
-                    onDeleteTopic: this.onDeleteTopic.bind(this, feed.id),
-                    onEnterFullscreenClick: this.enterFullscreen.bind(this, feed.id),
+                    onNewCommentChange: this.onNewCommentChange,
+                    onAddNewComment: this.onAddNewComment,
+                    onLoadMoreComments: this.onShowAllComments,
+                    onEditMessage: this.onEditMessage,
+                    onSaveMessageChange: this.onSaveMessageChange,
+                    onSaveMessage: this.onSaveMessage,
+                    onDeleteMessage: this.onDeleteMessage,
+                    onEditTopic: this.onEditTopic,
+                    onTopicChange: this.onTopicChange,
+                    onSaveTopic: this.onSaveTopic,
+                    onDeleteTopic: this.onDeleteTopic,
+                    onEnterFullscreenClick: this.enterFullscreen,
                   }}
                 />
               </div>
