@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import cn from 'classnames'
 import moment from 'moment'
 import PropTypes from 'prop-types'
