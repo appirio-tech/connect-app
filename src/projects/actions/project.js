@@ -203,10 +203,10 @@ export function createProject(newProject) {
  *
  * @returns {Promise<[]>} list of products
  */
-function getAllProjectProducts(project) {
-  return getProjectPhasesWithProducts(project.id)
-    .then((phases) => _.flatten(_.map(phases, 'products')))
-}
+// function getAllProjectProducts(project, fromDB = false) {
+//   return getProjectPhasesWithProducts(project.id, fromDB)
+//     .then((phases) => _.flatten(_.map(phases, 'products')))
+// }
 
 /**
  * Create timeline and milestones for a product
