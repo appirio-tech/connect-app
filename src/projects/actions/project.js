@@ -235,11 +235,12 @@ function createTimelineAndMilestoneForProduct(product, phase) {
  * @returns {Promise} project
  */
 function createProductsTimelineAndMilestone(project) {
-  return getAllProjectProducts(project)
-    .then((products) =>
-      Promise.all(products.map(createTimelineAndMilestoneForProduct))
-    )
-    .then(() => project)
+  if (project.phases) {
+    const products = _.flatten(_.map(project.phases, 'products'))
+    return Promise.all(products.map(createTimelineAndMilestoneForProduct)).then(() => project)
+  } else {
+    console.log('We did not receive the phases for the project. Hence timeline and milestones are not created')
+  }
 }
 
 export function createProduct(project, productTemplate, phases, timelines) {
