@@ -1,0 +1,81 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.container {
+  :global(.spec-question-list-item .content-col) {
+    /* hide titles for questions which are immediate children of accordion like 'checkbox-group', 'radio-group' */
+    > h5 {
+      display: none;
+    }
+
+    /* style of radio grop inside accordion */
+    :global(.radio-group-input.light) {
+      margin-bottom: 0;
+      padding-top: 0;
+    }
+  }
+
+  /* hide main title for 'add-ons' */
+  :global(.spec-question-list-item .content-col .child-component) h3 {
+    display: none;
+  }
+
+  & + & {
+    margin-top: 2 * $base-unit;
+  }
+}
+
+.header {
+  align-items: center;
+  background-color: $tc-gray-neutral-light;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  height: 8 * $base-unit;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.title {
+  @include roboto-bold;
+  flex: 0 0 180px;
+  font-size: $tc-label-lg;
+  overflow: hidden;
+  padding: 0 2 * $base-unit;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.value {
+  @include roboto;
+  color: $tc-gray-80;
+  flex: 1 0 auto;
+  font-size: $tc-label-lg;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 0;
+}
+
+.toggle {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 36px;
+  width: 36px;
+}
+
+.toggle-icon {
+  height: auto;
+  width: 10px;
+}
+
+.content {
+  display: none;
+
+  .is-open & {
+    display: block;
+  }
+}

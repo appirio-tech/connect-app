@@ -177,10 +177,13 @@ class FeedComments extends React.Component {
 
   render() {
     const {
-      comments, currentUser, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
+      currentUser, onLoadMoreComments, isLoadingComments, hasMoreComments, onAddNewComment,
       onNewCommentChange, error, avatarUrl, isAddingComment, allowComments, onSaveMessage, onDeleteMessage, allMembers,
-      totalComments, isFullScreen, headerHeight
+      totalComments, isFullScreen, headerHeight, projectMembers, commentAnchorPrefix
     } = this.props
+    let { comments } = this.props
+    comments = _.sortBy(comments, 'createdBy')
+    comments = comments.reverse()
     const { isNewCommentMobileOpen, stickyRowNext, stickyRowPrev } = this.state
     let authorName = currentUser.firstName
     if (authorName && currentUser.lastName) {
@@ -319,8 +322,10 @@ class FeedComments extends React.Component {
           isSaving={item.isSavingComment}
           hasError={item.error}
           allMembers={allMembers}
+          projectMembers={projectMembers}
           noInfo={item.noInfo}
-          canDelete={idx !== 0}
+          canDelete={comments && (idx !== comments.length - 1)} // cannot delete the first post which is now shown as a last one
+          commentAnchorPrefix={commentAnchorPrefix}
         >
           <div dangerouslySetInnerHTML={{__html: markdownToHTML(itemContent)}} />
         </Comment>
@@ -368,16 +373,6 @@ class FeedComments extends React.Component {
         <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
           {(matches) => (matches ? (
             <div>
-              <div styleName="comments">
-                {hasMoreComments &&
-                  <div styleName="load-more" key="load-more">
-                    <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
-                      {isLoadingComments ? 'Loading...' : 'load earlier posts'}
-                    </a>
-                  </div>
-                }
-                {commentRows}
-              </div>
               {allowComments &&
                 <div styleName="add-comment" key="add-comment">
                   <AddComment
@@ -389,9 +384,20 @@ class FeedComments extends React.Component {
                     isAdding={isAddingComment}
                     hasError={error}
                     allMembers={allMembers}
+                    projectMembers={projectMembers}
                   />
                 </div>
               }
+              <div styleName="comments">
+                {commentRows}
+                {hasMoreComments &&
+                  <div styleName="load-more" key="load-more">
+                    <a href="javascript:" onClick={ handleLoadMoreClick } styleName="load-btn">
+                      {isLoadingComments ? 'Loading...' : 'load earlier posts'}
+                    </a>
+                  </div>
+                }
+              </div>
             </div>
           ) : (
             <div>
@@ -433,10 +439,11 @@ class FeedComments extends React.Component {
   }
 }
 FeedComments.defaultProps = {
-  comments: []
+  comments: [],
 }
 FeedComments.propTypes = {
-  comments: PropTypes.array
+  comments: PropTypes.array,
+  commentAnchorPrefix: PropTypes.string,
 }
 
 export default FeedComments

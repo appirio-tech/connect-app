@@ -169,14 +169,16 @@ const phaseFeedHOC = (Component) => {
     }
   }
 
-  const mapStateToProps = ({ phasesTopics, loadUser, members, productsTimelines, notifications }, props) => {
+  const mapStateToProps = ({ phasesTopics, loadUser, members, productsTimelines, notifications, projectState }, props) => {
     const product = _.get(props.phase, 'products[0]')
     const phaseTopicState = phasesTopics[props.phase.id] || {}
-
+    const project = projectState.project
+    const projectMembers = _.filter(members.members, m => _.some(project.members, pm => pm.userId === m.userId))
     return {
       ...phaseTopicState,
       currentUser: loadUser.user,
       allMembers: members.members,
+      projectMembers : _.keyBy(projectMembers, 'userId'),
       timeline: _.get(productsTimelines[product.id], 'timeline'),
       notifications: _.get(notifications, 'notifications', [])
     }

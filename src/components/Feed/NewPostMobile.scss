@@ -8,6 +8,18 @@
   justify-content: space-between;
   height: 50px;
   padding: 0 $base-unit * 3;
+
+  :global {
+
+    .SwitchButton label {
+      margin: 0;
+
+      .label {
+        padding: 0 0 0 10px;
+        order: 1;
+      }
+    }
+  }
 }
 
 .title {
@@ -21,13 +33,14 @@
   align-items: center;
   display: flex;
   justify-content: flex-end;
+  margin-left: 59px;
   > svg {
       fill: $tc-gray-neutral-light;
   }
 }
 
 .plug {
-  width: 16px; /* same width as close button to align center title */
+  width: 83px; /* same width as close button to align center title */
 }
 
 .body {

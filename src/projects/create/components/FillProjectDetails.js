@@ -1,17 +1,18 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import PT from 'prop-types'
+import cn from 'classnames'
 
 import './FillProjectDetails.scss'
 import ProjectBasicDetailsForm from '../components/ProjectBasicDetailsForm'
-import ModalControl from '../../../components/ModalControl'
-import TailLeft from '../../../assets/icons/arrows-16px-1_tail-left.svg'
+import HeaderWithProgress from './HeaderWithProgress'
 
 class FillProjectDetails extends Component  {
   constructor(props) {
     super(props)
     this.createMarkup = this.createMarkup.bind(this)
-    this.state = { project: {} }
+    this.handleStepChange = this.handleStepChange.bind(this)
+    this.state = { project: {}, currentWizardStep: null }
   }
 
   componentWillMount() {
@@ -22,11 +23,18 @@ class FillProjectDetails extends Component  {
     this.setState({ project: nextProps.project })
   }
 
+  handleStepChange(currentWizardStep) {
+    this.setState({currentWizardStep})
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     return !(
       _.isEqual(nextProps.project, this.props.project)
+     && _.isEqual(nextProps.dirtyProject, this.props.dirtyProject)
      && _.isEqual(nextState.project, this.state.project)
      && _.isEqual(nextProps.error, this.props.error)
+     && _.isEqual(nextState.currentWizardStep, this.state.currentWizardStep)
+     && _.isEqual(nextProps.projectTemplates, this.props.projectTemplates)
     )
   }
 
@@ -35,24 +43,45 @@ class FillProjectDetails extends Component  {
   }
 
   render() {
-    const { project, processing, submitBtnText, onBackClick, projectTemplates } = this.props
+    const { project, processing, submitBtnText, projectTemplates, dirtyProject, productTemplates, productCategories, shouldUpdateTemplate } = this.props
+    const { currentWizardStep } = this.state
     const projectTemplateId = _.get(project, 'templateId')
     const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const formDisclaimer = _.get(projectTemplate, 'scope.formDisclaimer')
 
-    const sections = projectTemplate.scope.sections
+    const template = projectTemplate.scope
+
+    let header = null
+
+    if (!_.get(template, 'wizard.enabled')) {
+      header = (
+        <div className="text-header-wrapper">
+          <h1 dangerouslySetInnerHTML = {this.createMarkup(projectTemplate)} />
+        </div>
+      )
+    } else {
+      const currentSection = currentWizardStep && template.sections[currentWizardStep.sectionIndex]
+
+      if (!currentSection || currentSection && !currentSection.hideFormHeader) {
+        header = (
+          <HeaderWithProgress
+            template={template}
+            currentWizardStep={currentWizardStep}
+            project={dirtyProject}
+          />
+        )
+      }
+    }
+
     return (
-      <div className="FillProjectDetailsWrapper">
-        <div className="header headerFillProjectDetails" />
+      <div
+        className={cn('FillProjectDetailsWrapper', {
+          [`form-theme-${template.theme}`]: template.theme
+        })}
+      >
         <div className="FillProjectDetails">
           <div className="header">
-            <ModalControl
-              className="back-button"
-              icon={<TailLeft className="icon-tail-left"/>}
-              label="back"
-              onClick={onBackClick}
-            />
-            <h1 dangerouslySetInnerHTML = {this.createMarkup(projectTemplate)}  />
+            {header}
           </div>
           <section className="two-col-content content">
             <div className="container">
@@ -60,12 +89,17 @@ class FillProjectDetails extends Component  {
                 <div className="left-area-content">
                   <ProjectBasicDetailsForm
                     project={project}
-                    sections={sections}
+                    dirtyProject={dirtyProject}
+                    template={template}
                     isEditable
                     submitHandler={this.props.onCreateProject}
                     saving={processing}
                     onProjectChange={this.props.onProjectChange}
                     submitBtnText={ submitBtnText }
+                    productTemplates={productTemplates}
+                    onStepChange={this.handleStepChange}
+                    productCategories={productCategories}
+                    shouldUpdateTemplate={shouldUpdateTemplate}
                   />
                 </div>
                 {formDisclaimer && (
@@ -82,6 +116,10 @@ class FillProjectDetails extends Component  {
   }
 }
 
+FillProjectDetails.defaultProps = {
+  shouldUpdateTemplate: false
+}
+
 FillProjectDetails.propTypes = {
   // onProjectChange: PT.func.isRequired,
   onBackClick: PT.func.isRequired,
@@ -89,12 +127,16 @@ FillProjectDetails.propTypes = {
   onChangeProjectType: PT.func.isRequired,
   project: PT.object.isRequired,
   projectTemplates: PT.array.isRequired,
+  productTemplates: PT.array.isRequired,
+  productCategories: PT.array.isRequired,
   userRoles: PT.arrayOf(PT.string),
   processing: PT.bool,
+  templates: PT.array.isRequired,
   error: PT.oneOfType([
     PT.bool,
     PT.object
-  ])
+  ]),
+  shouldUpdateTemplate: PT.bool,
 }
 
 export default FillProjectDetails

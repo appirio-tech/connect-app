@@ -4,7 +4,7 @@ import { TC_API_URL, PROJECTS_API_URL, PROJECTS_LIST_PER_PAGE } from '../config/
 
 export function getProjects(criteria, pageNum) {
   // add default params
-  const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', 'details', 'lastActivityAt', 'lastActivityUserId']
+  const includeFields = ['id', 'name', 'description', 'members', 'status', 'type', 'actualPrice', 'estimatedPrice', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy', 'details', 'lastActivityAt', 'lastActivityUserId', 'version']
   const params = {
     limit: PROJECTS_LIST_PER_PAGE,
     offset: (pageNum - 1) * PROJECTS_LIST_PER_PAGE,
@@ -44,7 +44,7 @@ export function getProjectSuggestions() {
 
 
 /**
- * Get a project basd on it's id
+ * Get a project based on it's id
  * @param  {integer} projectId unique identifier of the project
  * @return {object}           project returned by api
  */
@@ -56,6 +56,7 @@ export function getProjectById(projectId) {
       _.forEach(res.attachments, a => {
         a.downloadUrl = `/projects/${projectId}/attachments/${a.id}`
       })
+      if (!res.invites) res.invites = []
       return res
     })
 }

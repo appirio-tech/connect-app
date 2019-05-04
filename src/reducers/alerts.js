@@ -16,6 +16,16 @@ import {
   ADD_PROJECT_MEMBER_SUCCESS, ADD_PROJECT_MEMBER_FAILURE,
   UPDATE_PROJECT_MEMBER_SUCCESS, UPDATE_PROJECT_MEMBER_FAILURE,
   REMOVE_PROJECT_MEMBER_SUCCESS, REMOVE_PROJECT_MEMBER_FAILURE,
+  // invite topcoder Team
+  INVITE_TOPCODER_MEMBER_FAILURE, INVITE_TOPCODER_MEMBER_SUCCESS,
+  REMOVE_TOPCODER_MEMBER_INVITE_FAILURE, REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS,
+  // invite customer
+  INVITE_CUSTOMER_FAILURE, INVITE_CUSTOMER_SUCCESS,
+  REMOVE_CUSTOMER_INVITE_FAILURE, REMOVE_CUSTOMER_INVITE_SUCCESS,
+  // accepted or refused invite
+  ACCEPT_OR_REFUSE_INVITE_SUCCESS, ACCEPT_OR_REFUSE_INVITE_FAILURE,
+  PROJECT_MEMBER_INVITE_STATUS_ACCEPTED, PROJECT_MEMBER_INVITE_STATUS_REFUSED,
+  PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED, PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED,
   // project feeds
   CREATE_PROJECT_FEED_FAILURE,
   CREATE_PROJECT_FEED_COMMENT_FAILURE,
@@ -119,6 +129,55 @@ export default function(state = {}, action) {
     }
     return state
 
+  case ADD_PROJECT_ATTACHMENT_SUCCESS:
+    Alert.success('Added attachment to the project successfully')
+    return state
+
+  case UPDATE_PROJECT_ATTACHMENT_SUCCESS:
+    Alert.success('Updated attachment succcessfully')
+    return state
+  case REMOVE_PROJECT_ATTACHMENT_SUCCESS:
+    Alert.success('Removed attachment successfully')
+    return state
+
+  case INVITE_TOPCODER_MEMBER_SUCCESS:
+  case INVITE_CUSTOMER_SUCCESS:
+    if(action.payload.success.length && !action.payload.failed) {
+      Alert.success('You\'ve successfully invited member(s).')
+    } else if (action.payload.success.length && action.payload.failed) {
+      Alert.warning('Some members couldn\'t be invited.')
+    } else if (!action.payload.success.length && action.payload.failed) {
+      Alert.error('You are unable to invite members successfully.')
+    }
+    return state
+
+  case REMOVE_TOPCODER_MEMBER_INVITE_SUCCESS:
+  case REMOVE_CUSTOMER_INVITE_SUCCESS:
+    Alert.success('You have successfully remove member invitation.')
+    return state
+
+  case REMOVE_TOPCODER_MEMBER_INVITE_FAILURE:
+  case REMOVE_CUSTOMER_INVITE_FAILURE:
+    Alert.error('You are unable to remove member invitations.')
+    return state
+
+  case INVITE_TOPCODER_MEMBER_FAILURE:
+  case INVITE_CUSTOMER_FAILURE:
+    Alert.error('You are unable to invite members successfully.')
+    return state
+
+  case ACCEPT_OR_REFUSE_INVITE_SUCCESS:
+    if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_ACCEPTED){
+      Alert.success('You\'ve successfully joined the project.')
+    } else if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_REFUSED){
+      Alert.success('You\'ve refused to join the project.')
+    } else if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_REQUEST_APPROVED){
+      Alert.success('You\'ve approved copilot invitation request.')
+    } else if (action.payload.status===PROJECT_MEMBER_INVITE_STATUS_REQUEST_REJECTED){
+      Alert.success('You\'ve rejected copilot invitation request.')
+    }
+    return state
+
   case UPDATE_PROJECT_FAILURE:
     Alert.error('Please add a name for your project and then try saving again.')
     return state
@@ -148,6 +207,7 @@ export default function(state = {}, action) {
   case COMPLETE_PRODUCT_MILESTONE_FAILURE:
   case EXTEND_PRODUCT_MILESTONE_FAILURE:
   case SUBMIT_FINAL_FIXES_REQUEST_FAILURE:
+  case ACCEPT_OR_REFUSE_INVITE_FAILURE:
     if (action.payload && action.payload.response) {
       const rdata = action.payload.response.data
       if (rdata && rdata.result && rdata.result.content && rdata.result.content.message) {

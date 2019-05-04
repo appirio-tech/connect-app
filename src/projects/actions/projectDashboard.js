@@ -1,9 +1,15 @@
 import _ from 'lodash'
 import { loadMembers } from '../../actions/members'
-import { loadProject, loadDirectProjectData, loadProjectPhasesWithProducts } from './project'
+import { loadProject, loadProjectInvite, loadDirectProjectData, loadProjectPhasesWithProducts } from './project'
 import { loadProjectsMetadata } from '../../actions/templates'
 import { loadProductTimelineWithMilestones } from './productsTimelines'
-import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../config/constants'
+import { loadFeedsForPhases } from './phasesTopics'
+import { LOAD_PROJECT_DASHBOARD,
+  LOAD_ADDITIONAL_PROJECT_DATA,
+  DISCOURSE_BOT_USERID,
+  CODER_BOT_USERID,
+  TC_SYSTEM_USERID
+} from '../../config/constants'
 
 /**
  * Load all project data to paint the dashboard
@@ -16,48 +22,78 @@ import { LOAD_PROJECT_DASHBOARD, LOAD_ADDITIONAL_PROJECT_DATA } from '../../conf
  */
 const getDashboardData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) => {
   const { productTemplates } = getState().templates
-  return new Promise((resolve, reject) => {
-    return dispatch(loadProject(projectId))
-      .then(({ value: project }) => {
-        const userIds = _.map(project.members, 'userId')
-        // this is to remove any nulls from the list (dev had some bad data)
-        _.remove(userIds, i => !i)
-        // load additional data in parallel
-        let promises = [
-          dispatch(loadMembers(userIds))
-        ]
-        if (isOnlyLoadProjectInfo) {
-          promises = []
-        }
+  return dispatch(loadProject(projectId))
+    .then(({ value: project }) => {
+      let userIds = _.map(project.members, 'userId')
+      userIds = _.union(userIds, _.map(project.invites, 'userId'))
 
-        if (project.directProjectId && !isOnlyLoadProjectInfo) {
-          promises.push(dispatch(loadDirectProjectData(project.directProjectId)))
-        }
+      // this is to remove any nulls from the list (dev had some bad data)
+      _.remove(userIds, i => !i)
+      // load additional data in parallel
+      let promises = [
+        dispatch(loadMembers(userIds))
+      ]
+      if (isOnlyLoadProjectInfo) {
+        promises = []
+      }
 
-        // for new projects load phases, products, project template and product templates
-        if (project.version === 'v3') {
-          promises.push(
-            dispatch(loadProjectPhasesWithProducts(projectId))
-              .then(({ value: phases }) =>
-                // load timelines for phase products here together with all dashboard data
-                // as we need to know timeline data not only inside timeline container
-                loadTimelinesForPhasesProducts(phases, dispatch)
-              )
-          )
-        }
+      if (project.directProjectId && !isOnlyLoadProjectInfo) {
+        promises.push(dispatch(loadDirectProjectData(project.directProjectId)))
+      }
 
-        if (!productTemplates) {
-          promises.push(dispatch(loadProjectsMetadata()))
-        }
+      // for new projects load phases, products, project template and product templates
+      if (project.version === 'v3') {
+        promises.push(
+          dispatch(loadProjectPhasesWithProducts(projectId))
+            .then(({ value: phases }) => {
+              loadFeedsForPhases(projectId, phases, dispatch)
+                .then((phaseFeeds) => {
+                  let phaseUserIds = []
+                  _.forEach(phaseFeeds, phaseFeed => {
+                    phaseUserIds = _.union(phaseUserIds, _.map(phaseFeed.topics, 'userId'))
+                    _.forEach(phaseFeed.topics, topic => {
+                      phaseUserIds = _.union(phaseUserIds, _.map(topic.posts, 'userId'))
+                    })
+                    // this is to remove any nulls from the list (dev had some bad data)
+                    _.remove(phaseUserIds, i => !i || [DISCOURSE_BOT_USERID, CODER_BOT_USERID, TC_SYSTEM_USERID].indexOf(i) > -1)
+                  })
+                  // take difference of userIds identified from project members
+                  phaseUserIds = _.difference(phaseUserIds, userIds)
 
-        return resolve(dispatch({
-          type: LOAD_ADDITIONAL_PROJECT_DATA,
-          payload: Promise.all(promises)
-        }))
+                  dispatch(loadMembers(phaseUserIds))
+                })
+              // load timelines for phase products here together with all dashboard data
+              // as we need to know timeline data not only inside timeline container
+              loadTimelinesForPhasesProducts(phases, dispatch)
+            })
+        )
+      }
 
+      if (!productTemplates) {
+        promises.push(dispatch(loadProjectsMetadata()))
+      }
+
+      return dispatch({
+        type: LOAD_ADDITIONAL_PROJECT_DATA,
+        payload: Promise.all(promises)
       })
-      .catch(err => reject(err))
-  })
+
+    })
+}
+
+/**
+ * Load project data and project invite
+ *
+ * @param {Function} dispatch  dispatches redux actions
+ * @param {Function} getState  returns redux state
+ * @param {Number}   projectId project id
+ *
+ * @return {Promise} LOAD_ADDITIONAL_PROJECT_DATA action
+ */
+const getData = (dispatch, getState, projectId, isOnlyLoadProjectInfo) => {
+  return dispatch(loadProjectInvite(projectId))
+    .then(() => getDashboardData(dispatch, getState, projectId, isOnlyLoadProjectInfo))
+    .catch(() => getDashboardData(dispatch, getState, projectId, isOnlyLoadProjectInfo))
 }
 
 /**
@@ -84,7 +120,7 @@ export function loadProjectDashboard(projectId, isOnlyLoadProjectInfo = false) {
   return (dispatch, getState) => {
     return dispatch({
       type: LOAD_PROJECT_DASHBOARD,
-      payload: getDashboardData(dispatch, getState, projectId, isOnlyLoadProjectInfo)
+      payload: Promise.all([getData(dispatch, getState, projectId, isOnlyLoadProjectInfo)])
     })
   }
 }

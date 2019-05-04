@@ -13,7 +13,7 @@ class NewPost extends React.Component {
   }
 
   render() {
-    const {currentUser, allMembers, titlePlaceholder, contentPlaceholder, isCreating, hasError, expandedTitlePlaceholder} = this.props
+    const {currentUser, allMembers, titlePlaceholder, contentPlaceholder, isCreating, hasError, expandedTitlePlaceholder, projectMembers, canAccessPrivatePosts} = this.props
     let authorName = currentUser.firstName
     if (authorName && currentUser.lastName) {
       authorName += ' ' + currentUser.lastName
@@ -38,6 +38,8 @@ class NewPost extends React.Component {
         avatarUrl={currentUser.photoURL}
         authorName={authorName}
         allMembers={allMembers}
+        projectMembers={projectMembers}
+        hasPrivateSwitch={canAccessPrivatePosts}
       />
     )
   }
@@ -48,10 +50,12 @@ NewPost.propTypes = {
   expandedTitlePlaceholder: PropTypes.string,
   currentUser: PropTypes.object.isRequired,
   allMembers: PropTypes.object.isRequired,
+  projectMembers: PropTypes.object,
   onPost: PropTypes.func.isRequired,
   onNewPostChange: PropTypes.func.isRequired,
   hasError: PropTypes.bool,
-  isCreating: PropTypes.bool
+  isCreating: PropTypes.bool,
+  canAccessPrivatePosts: PropTypes.bool,
 }
 
 export default NewPost

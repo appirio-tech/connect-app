@@ -6,11 +6,20 @@ import Tab from 'appirio-tech-react-components/components/Tabs/Tab'
 import FormsyForm from 'appirio-tech-react-components/components/Formsy'
 const TCFormFields = FormsyForm.Fields
 import _ from 'lodash'
+import cn from 'classnames'
 import SpecQuestions from './SpecQuestions'
 import FileListContainer from './FileListContainer'
 import SpecScreens from './SpecScreens'
 import { PROJECT_NAME_MAX_LENGTH, PROJECT_REF_CODE_MAX_LENGTH, BUSINESS_UNIT_MAX_LENGTH, COST_CENTRE_MAX_LENGTH } from '../../../config/constants'
 import { scrollToAnchors } from '../../../components/ScrollToAnchors'
+import PortalSubSection from './PortalSubSection'
+
+import {
+  getVisibilityForRendering,
+  geStepState,
+  STEP_VISIBILITY,
+  STEP_STATE,
+} from '../../../helpers/wizardHelper'
 
 import './SpecSection.scss'
 
@@ -62,6 +71,8 @@ const tiledRadioGroupIcons = {
 const SpecSection = props => {
   const {
     project,
+    template,
+    currentWizardStep,
     dirtyProject,
     isProjectDirty,
     resetFeatures,
@@ -78,26 +89,40 @@ const SpecSection = props => {
     removeAttachment,
     attachmentsStorePath,
     canManageAttachments,
+    productTemplates,
+    productCategories,
   } = props
 
-  // make a copy to avoid modifying redux store
-  const subSections = _.cloneDeep(props.subSections || [])
+  const subSections = props.subSections
 
   // replace string icon values in the "tiled-radio-group" questions with icon components
   subSections.forEach((subSection) => {
     (subSection.questions || []).forEach(question => {
-      if (question.type === 'tiled-radio-group') {
+      if (question.type === 'tiled-radio-group' || question.type === 'tiled-checkbox-group') {
         question.options.forEach((option) => {
-          // if icon is defined as a relative path to the icon, convert it to icon "id"
-          const iconAsPath = option.icon.match(/(?:\.\.\/)+assets\/icons\/([^.]+)\.svg/)
-          option.icon = tiledRadioGroupIcons[iconAsPath ? iconAsPath[1] : option.icon]
+          if (option.icon && typeof option.icon === 'string') {
+            // if icon is defined as a relative path to the icon, convert it to icon "id"
+            const iconAsPath = option.icon.match(/(?:\.\.\/)+assets\/icons\/([^.]+)\.svg/)
+            option.icon = tiledRadioGroupIcons[iconAsPath ? iconAsPath[1] : option.icon]
+          }
         })
       }
     })
   })
 
   const renderSubSection = (subSection, idx) => (
-    <div key={idx} className="section-features-module" id={[id, subSection.id].join('-')}>
+    <div
+      key={idx}
+      className={cn(
+        'section-features-module',
+        `subSection-type-${subSection.type}`, {
+          [`subSection-theme-${subSection.theme}`]: !!subSection.theme,
+          [`subSection-state-${subSection.stepState}`]: !!subSection.stepState,
+          [`subSection-visibility-${subSection.visibilityForRendering}`]: !!subSection.visibilityForRendering
+        }
+      )}
+      id={[id, subSection.id].join('-')}
+    >
       {
         !subSection.hideTitle &&
         <div className="sub-title">
@@ -117,6 +142,14 @@ const SpecSection = props => {
 
   const renderChild = props => {
     const {type} = props
+
+    let additionalClass = ''
+    const spacing = _.get(props.layout, 'spacing', '')
+
+    if (spacing) {
+      additionalClass += spacing
+    }
+
     switch(type) {
     case 'tabs': {
       const tabs = _.get(props, 'tabs')
@@ -126,7 +159,7 @@ const SpecSection = props => {
         </Tab>
       )
       return (
-        <Tabs defaultActiveKey={1}>
+        <Tabs additionalClass={additionalClass} defaultActiveKey={1}>
           {tabs.map(renderTab)}
         </Tabs>
       )
@@ -134,26 +167,42 @@ const SpecSection = props => {
     case 'questions':
       return (
         <SpecQuestions
+          additionalClass={additionalClass}
           showFeaturesDialog={showFeaturesDialog}
           resetFeatures={resetFeatures}
           questions={props.questions}
+          layout={props.layout}
           project={project}
+          template={template}
+          currentWizardStep={currentWizardStep}
           dirtyProject={dirtyProject}
           isRequired={props.required}
           showHidden={showHidden}
+          isProjectDirty={isProjectDirty}
+          productTemplates={productTemplates}
+          productCategories={productCategories}
+          isCreation={isCreation}
         />
       )
     case 'notes':
       return (
         <div>
-          <div className="textarea-title">
-            {props.description}
+          <div className={additionalClass}>
+            <div className="textarea-title">
+              {props.description}
+            </div>
           </div>
           <TCFormFields.Textarea
             autoResize
             name={props.fieldName}
             value={_.unescape(_.get(project, props.fieldName)) || ''}
           />
+        </div>
+      )
+    case 'message':
+      return (
+        <div className="message-title">
+          {props.description}
         </div>
       )
     case 'files': {
@@ -170,6 +219,7 @@ const SpecSection = props => {
       category = 'product' === category ? `${category}#${projectLatest.id}` : category
       return (
         <FileListContainer
+          additionalClass={additionalClass}
           project={projectLatest}
           files={files}
           category={category}
@@ -185,6 +235,7 @@ const SpecSection = props => {
       const screens = _.get(project, props.fieldName, [])
       return (
         <SpecScreens
+          additionalClass={additionalClass}
           name={props.fieldName}
           screens={screens}
           questions={props.questions}
@@ -199,7 +250,7 @@ const SpecSection = props => {
       const refCode = _.get(project, refCodeFieldName, '')
       const queryParamRefCode = qs.parse(window.location.search).refCode
       return (
-        <div className="project-name-section">
+        <div className={cn('project-name-section', { [`${additionalClass}`] : true} )}>
           <div className="editable-project-name">
             <TCFormFields.TextInput
               name="name"
@@ -213,7 +264,7 @@ const SpecSection = props => {
               theme="paper-form-dotted"
             />
           </div>
-          { !queryParamRefCode &&
+          {!queryParamRefCode && (
             <div className="textinput-refcode">
               <TCFormFields.TextInput
                 name={refCodeFieldName}
@@ -228,7 +279,7 @@ const SpecSection = props => {
                 Optional
               </div>
             </div>
-          }
+          )}
         </div>
       )
     }
@@ -241,7 +292,7 @@ const SpecSection = props => {
       const costCentreFieldName = 'details.costCentre'
       const costCentre = _.get(project, costCentreFieldName, '')
       return (
-        <div className="project-name-section">
+        <div className={'project-name-section ' + additionalClass}>
           <div className="editable-project-name">
             <TCFormFields.TextInput
               name="name"
@@ -306,8 +357,28 @@ const SpecSection = props => {
         </div>
       )
     }
+
+    case 'portal':
+      return (
+        <PortalSubSection
+          content={props.content}
+          {...{
+            template,
+            project,
+            dirtyProject,
+            currentWizardStep,
+            productTemplates,
+            productCategories
+          }}
+        />
+      )
     default:
-      return <noscript />
+      return (
+        <div style={{ borderWidth: 1, borderStyle: 'dashed', borderColor: '#f00' }}>
+          <h5 style={{ color: '#f00' }}>Unsupported subSection type `{type}`</h5>
+          <pre style={{ fontFamily: 'monospace' }}>{JSON.stringify(_.omit(props, '__wizard'), null, 2)}</pre>
+        </div>
+      )
     }
   }
 
@@ -321,10 +392,18 @@ const SpecSection = props => {
           </h2>
           <span className="section-number">{ sectionNumber }</span>
         </div>}
-        <p className="gray-text">
+        {!!description && <p className="gray-text">
           {description}
-        </p>
-        {subSections.filter((subSection) => (
+        </p>}
+        {subSections.map(subSection => ({
+          ...subSection,
+          visibilityForRendering: isCreation ? getVisibilityForRendering(template, subSection, currentWizardStep) : STEP_VISIBILITY.READ_OPTIMIZED,
+          stepState: isCreation ? geStepState(subSection, currentWizardStep) : STEP_STATE.PREV
+        })).filter((subSection) => (
+          // hide if we are in a wizard mode and subSection is hidden for now
+          (subSection.visibilityForRendering !== STEP_VISIBILITY.NONE) &&
+          // hide if subSection is hidden by condition
+          (!_.get(subSection, '__wizard.hiddenByCondition')) &&
           // hide section marked with hiddenOnCreation during creation process
           (!isCreation || !subSection.hiddenOnCreation) &&
           // hide hidden section, unless we not force to show them
@@ -337,12 +416,15 @@ const SpecSection = props => {
 
 SpecSection.propTypes = {
   project: PropTypes.object.isRequired,
+  template: PropTypes.object.isRequired,
+  productTemplates: PropTypes.array.isRequired,
   sectionNumber: PropTypes.number.isRequired,
   showHidden: PropTypes.bool,
   isCreation: PropTypes.bool,
   addAttachment: PropTypes.func,
   updateAttachment: PropTypes.func,
   removeAttachment: PropTypes.func,
+  productCategories: PropTypes.array.isRequired,
 }
 
 export default scrollToAnchors(SpecSection)

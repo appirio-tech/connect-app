@@ -15,6 +15,11 @@
   .SelectProjectType {
     @extend .wizardCardContainer;
 
+    @media screen and (max-width: $screen-md - 1px) {
+      padding-left: 2 * $base-unit;
+      padding-right: 2 * $base-unit;
+    }
+
     .cards {
       margin: 0 auto;
       max-width: 900px;
@@ -33,6 +38,7 @@
         font-size: 20px;
         margin-left: 10px;
         margin-bottom: 0;
+        margin-top: 10px;
         padding-top: 10px;
         text-align: left;
       }

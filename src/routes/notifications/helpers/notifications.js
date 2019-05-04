@@ -60,16 +60,30 @@ const handlebarsFallbackHelper = (value, fallbackValue) => {
 Handlebars.registerHelper('showMore', handlebarsShowMoreHelper)
 Handlebars.registerHelper('fallback', handlebarsFallbackHelper)
 
-export const renderGoTo = (goToHandlebars, contents) => (
-  Handlebars.compile(goToHandlebars)(contents)
-)
+export const renderGoTo = (goTo, contents) => {
+  let goToHandlebars = ''
+
+  if (_.isArray(goTo)) {
+    const goToRule = _.find(goTo, (goToRuleTemp) => goToRuleTemp.condition(contents))
+
+    if (goToRule) {
+      goToHandlebars = goToRule.goTo
+    } else {
+      console.error('Cannot find goTo rule.', goTo, contents)
+    }
+  } else {
+    goToHandlebars = goTo
+  }
+  
+  return Handlebars.compile(goToHandlebars)(contents)
+}
 
 /**
  * Filter notifications by criteria
- * 
+ *
  * @param {Array}  notifications notifications list
  * @param {Object} criteria      criteria to filter notifications
- * 
+ *
  * @returns {Array} notifiations which meet the criteria
  */
 export const filterNotificationsByCriteria = (notifications, criteria) => {
@@ -83,9 +97,9 @@ export const isSubEqual = (object, criteria) => {
     if (_.isObject(value)) {
       isEqual = isSubEqual(object[key], value)
     } else {
-      isEqual = value === object[key]
+      isEqual = !!object && value === object[key]
     }
-    
+
     return isEqual
   })
 
@@ -119,7 +133,7 @@ export const getNotificationsFilters = (sources) => {
   const sortedSources = [...sources].sort(compareSourcesByLastNotificationDate)
 
   sortedSources.forEach(source => {
-    if (source.id !== 'global') {
+    if (source.id !== 'global' && source.total !== 0) {
       filtersBySource.push({
         title: source.title,
         value: source.id,
@@ -160,7 +174,7 @@ const compareSourcesByLastNotificationDate = (s1, s2) => {
 export const splitNotificationsBySources = (sources, notifications) => {
   const notificationsBySources = sources.map(source => {
     const sourceNotifications = _.filter(notifications, { sourceId: source.id })
-    
+
     return ({
       ...source,
       notifications: sourceNotifications,
@@ -290,6 +304,10 @@ const getNotificationRule = (notification) => {
       match = match && _notificationRule.toUserHandle
     }
 
+    if (notification.contents.originator) {
+      match = match && _notificationRule.originator
+    }
+
     if (notification.contents.projectRole) {
       match = match && _notificationRule.projectRoles && _.includes(_notificationRule.projectRoles, notification.contents.projectRole)
     }
@@ -318,7 +336,7 @@ const isNotificationRuleEqual = (rule1, rule2) => {
    *
    * @type {Array<String>}
    */
-  const ESSENTIAL_RULE_PROPERTIES = ['eventType', 'toTopicStarter', 'toUserHandle', 'projectRole', 'topcoderRole']
+  const ESSENTIAL_RULE_PROPERTIES = ['eventType', 'toTopicStarter', 'toUserHandle', 'projectRole', 'topcoderRole', 'originator']
   const essentialRule1 = _.pick(rule1, ESSENTIAL_RULE_PROPERTIES)
   const essentialRule2 = _.pick(rule2, ESSENTIAL_RULE_PROPERTIES)
 
@@ -392,6 +410,30 @@ const bundleNotifications = (notificationsWithRules) => {
 }
 
 /**
+ * Prepare notification contents:
+ * - extracts phaseId from tags
+ * 
+ * @param {Object} contents notification contents
+ * 
+ * @returns {Object} notification contents
+ */
+const prepareNotificationContents = (contents) => {
+  const tags = _.get(contents, 'tags', [])
+  const preparedContents = {...contents}
+
+  // check if any of the tags has phaseId
+  const PHASE_ID_REGEXP = /phase#(\d+)/
+  const phaseIds = tags.map((tag) => _.get(tag.match(PHASE_ID_REGEXP), '1', null))
+  const phaseId = _.find(phaseIds, (phaseId) => phaseId !== null)
+
+  if (phaseId) {
+    preparedContents.phaseId = phaseId
+  }
+
+  return preparedContents
+}
+
+/**
  * Prepare notifications
  *
  * @param  {Array} rawNotifications notifications list
@@ -407,10 +449,10 @@ export const prepareNotifications = (rawNotifications) => {
     date: rawNotification.createdAt,
     isRead: rawNotification.read,
     seen: rawNotification.seen,
-    contents: rawNotification.contents,
+    contents: prepareNotificationContents(rawNotification.contents),
     version: rawNotification.version
   }))
-  
+
   // populate notifications with additional properties
   // - type
   // - goto
@@ -427,7 +469,7 @@ export const prepareNotifications = (rawNotifications) => {
       if (notificationRule.goTo) {
         notification.goto = renderGoTo(notificationRule.goTo, notification.contents)
       }
-  
+
       notification.rule = notificationRule
     }
   })
@@ -437,9 +479,9 @@ export const prepareNotifications = (rawNotifications) => {
 
 /**
  * Bundle notifications and renders notifications texts
- * 
+ *
  * @param {Array} notifications notifications list
- * 
+ *
  * @returns {Array} notifications list with rendered texts
  */
 export const preRenderNotifications = (notifications) => {
@@ -466,7 +508,7 @@ export const preRenderNotifications = (notifications) => {
   })
 
   const preRenderedNotifications = _.map(bundledNotificationsWithRules, 'notification')
-  
+
   // sort notifications by date (newer first)
   preRenderedNotifications.sort((n1, n2) => {
     const date1 = new Date(n1.date).getTime()
@@ -474,6 +516,6 @@ export const preRenderNotifications = (notifications) => {
 
     return date2 - date1
   })
-  
+
   return preRenderedNotifications
 }

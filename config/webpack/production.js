@@ -4,6 +4,7 @@
 const path = require('path')
 const webpackMerge = require('webpack-merge')
 const CompressionPlugin = require('compression-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const dirname = path.resolve(__dirname, '../..')
 
@@ -52,5 +53,10 @@ combinedConfig.plugins.push(
     minRatio: 0.8
   })
 )
+combinedConfig.plugins = combinedConfig.plugins.map((plugin) => {
+  // console.log(/UglifyJsPlugin/.test(plugin.constructor.toString()))
+  if (/UglifyJsPlugin/.test(plugin.constructor.toString())) return new UglifyJsPlugin()
+  return plugin
+})
 
 module.exports = combinedConfig

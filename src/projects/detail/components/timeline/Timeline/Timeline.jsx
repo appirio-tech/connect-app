@@ -9,7 +9,7 @@ import Milestone from '../Milestone'
 import LoadingIndicator from '../../../../../components/LoadingIndicator/LoadingIndicator'
 import NotificationsReader from '../../../../../components/NotificationsReader'
 
-import { EVENT_TYPE } from '../../../../../config/constants'
+import { buildPhaseTimelineNotificationsCriteria } from '../../../../../routes/notifications/constants/notifications'
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -97,6 +97,7 @@ class Timeline extends React.Component {
       timeline,
       isLoading,
       phaseId,
+      project,
     } = this.props
 
     if (isLoading || _.some(timeline.milestones, 'isUpdating')) {
@@ -110,12 +111,7 @@ class Timeline extends React.Component {
           <NotificationsReader 
             key="notifications-reader"
             id={`phase-${phaseId}-timeline-${timeline.id}`}
-            criteria={[
-              { eventType: EVENT_TYPE.PROJECT_PLAN.TIMELINE_ADJUSTED, contents: { timeline: { id: timeline.id } } },
-              { eventType: EVENT_TYPE.PROJECT_PLAN.MILESTONE_ACTIVATED, contents: { timeline: { id: timeline.id } } },
-              { eventType: EVENT_TYPE.PROJECT_PLAN.MILESTONE_COMPLETED, contents: { timeline: { id: timeline.id } } },
-              { eventType: EVENT_TYPE.PROJECT_PLAN.WAITING_FOR_CUSTOMER_INPUT, contents: { timeline: { id: timeline.id } } },
-            ]}
+            criteria={buildPhaseTimelineNotificationsCriteria(timeline)}
           />
           {_.reject(orderedMilestones, { hidden: true }).map((milestone) => (
             <Milestone
@@ -130,6 +126,7 @@ class Timeline extends React.Component {
               //$TODO convert the below logic more optimized way
               previousMilestone={_.find(orderedMilestones, m => m.order === milestone.order-1) &&
                _.find(orderedMilestones, m => m.order === milestone.order-1).type}
+              project={project}
             />
           ))}
         </div>

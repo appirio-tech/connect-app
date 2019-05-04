@@ -8,11 +8,11 @@ import uncontrollable from 'uncontrollable'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
-import { 
+import {
   PROJECT_ATTACHMENTS_FOLDER,
-  EVENT_TYPE, 
 } from '../../../config/constants'
-import { filterNotificationsByPosts, filterReadNotifications } from '../../../routes/notifications/helpers/notifications'
+import { filterNotificationsByPosts, filterReadNotifications, filterNotificationsByCriteria } from '../../../routes/notifications/helpers/notifications'
+import { buildPhaseTimelineNotificationsCriteria, buildPhaseSpecifiationNotificationsCriteria } from '../../../routes/notifications/constants/notifications'
 
 import PhaseCard from './PhaseCard'
 import ProjectStageTabs from './ProjectStageTabs'
@@ -152,9 +152,11 @@ class ProjectStage extends React.Component{
   render() {
     const {
       phase,
+      phaseNonDirty,
       phaseIndex,
       project,
       productTemplates,
+      productCategories,
       currentMemberRole,
       isProcessing,
       isSuperUser,
@@ -166,6 +168,7 @@ class ProjectStage extends React.Component{
       phaseState,
       collapseProjectPhase,
       expandProjectPhase,
+      commentAnchorPrefix,
 
       // comes from phaseFeedHOC
       currentUser,
@@ -175,6 +178,7 @@ class ProjectStage extends React.Component{
       isAddingComment,
       onDeleteMessage,
       allMembers,
+      projectMembers,
       onSaveMessage,
       timeline,
       notifications,
@@ -184,7 +188,10 @@ class ProjectStage extends React.Component{
     // so far we always have only one product per phase, so will display only one
     const productTemplate = _.find(productTemplates, { id: _.get(phase, 'products[0].templateId') })
     const product = _.get(phase, 'products[0]')
-    const sections = _.get(productTemplate, 'template.questions', [])
+    const productNonDirty = _.get(phaseNonDirty, 'products[0]')
+    const template = {
+      sections: _.get(productTemplate, 'template.questions', [])
+    }
     const projectPhaseAnchor = `phase-${phase.id}-posts`
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
@@ -192,9 +199,18 @@ class ProjectStage extends React.Component{
     const hasTimeline = !!timeline
     const defaultActiveTab = hasTimeline ? 'timeline' : 'posts'
     const currentActiveTab = _.get(phaseState, 'tab', defaultActiveTab)
-    const postNotifications = filterNotificationsByPosts(notifications, _.get(feed, 'posts', []))
-    const unreadPostNotifications = filterReadNotifications(postNotifications)
-    const hasReadPosts = unreadPostNotifications.length > 0
+    const unreadNotification = filterReadNotifications(notifications)
+    const unreadPostNotifications = filterNotificationsByPosts(unreadNotification, _.get(feed, 'posts', []))
+    const unreadTimelineNotifications = timeline ? filterNotificationsByCriteria(unreadNotification, buildPhaseTimelineNotificationsCriteria(timeline)) : []
+    const unreadSpecificationNotifications = filterNotificationsByCriteria(unreadNotification, buildPhaseSpecifiationNotificationsCriteria(phase))
+    
+    const hasNotifications = {
+      timeline: unreadTimelineNotifications.length > 0,
+      posts: unreadPostNotifications.length > 0,
+      specification: unreadSpecificationNotifications.length > 0,
+    }
+
+    const hasAnyNotifications = _.some(_.values(hasNotifications), _.identity)
 
     return (
       <PhaseCard
@@ -203,11 +219,12 @@ class ProjectStage extends React.Component{
         isManageUser={isManageUser}
         deleteProjectPhase={() => deleteProjectPhase(project.id, phase.id)}
         timeline={timeline}
-        hasReadPosts={hasReadPosts}
+        hasUnseen={hasAnyNotifications}
         phaseId={phase.id}
         isExpanded={_.get(phaseState, 'isExpanded')}
         collapseProjectPhase={collapseProjectPhase}
         expandProjectPhase={expandProjectPhase}
+        project={project}
       >
         <div id={projectPhaseAnchor}>
           <ProjectStageTabs
@@ -216,11 +233,11 @@ class ProjectStage extends React.Component{
             isSuperUser={isSuperUser}
             isManageUser={isManageUser}
             hasTimeline={hasTimeline}
-            hasReadPosts={hasReadPosts}
+            hasNotifications={hasNotifications}
           />
 
           {currentActiveTab === 'timeline' &&
-            <ProductTimelineContainer product={product} />
+            <ProductTimelineContainer product={product} project={project} />
           }
 
           {currentActiveTab === 'posts' && (
@@ -233,21 +250,24 @@ class ProjectStage extends React.Component{
               isAddingComment={isAddingComment}
               onDeleteMessage={onDeleteMessage}
               allMembers={allMembers}
+              projectMembers={projectMembers}
               onSaveMessage={onSaveMessage}
+              commentAnchorPrefix={commentAnchorPrefix}
             />
           )}
 
           {currentActiveTab === 'specification' &&
             <div className="two-col-content content">
-              <NotificationsReader 
+              <NotificationsReader
                 id={`phase-${phase.id}-specification`}
-                criteria={[
-                  { eventType: EVENT_TYPE.PROJECT_PLAN.PHASE_PRODUCT_SPEC_UPDATED, contents: { phaseId: phase.id } },
-                ]}
+                criteria={buildPhaseSpecifiationNotificationsCriteria(phase)}
               />
               <EnhancedEditProjectForm
                 project={product}
-                sections={sections}
+                projectNonDirty={productNonDirty}
+                template={template}
+                productTemplates={productTemplates}
+                productCategories={productCategories}
                 isEdittable={isSuperUser || !!currentMemberRole}
                 submitHandler={(model) => updateProduct(project.id, phase.id, product.id, model)}
                 saving={isProcessing}
@@ -276,6 +296,8 @@ ProjectStage.propTypes = {
   activeTab: PT.string,
   onTabClick: PT.func.isRequired,
   project: PT.object.isRequired,
+  productTemplates: PT.array.isRequired,
+  productCategories: PT.array.isRequired,
   currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,
   isSuperUser: PT.bool.isRequired,
@@ -286,6 +308,7 @@ ProjectStage.propTypes = {
   updateProductAttachment: PT.func.isRequired,
   removeProductAttachment: PT.func.isRequired,
   deleteProjectPhase: PT.func.isRequired,
+  commentAnchorPrefix: PT.string,
 }
 
 const ProjectStageUncontrollable = uncontrollable(ProjectStage, {

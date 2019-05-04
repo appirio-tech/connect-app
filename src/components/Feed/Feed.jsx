@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import cn from 'classnames'
 import moment from 'moment'
 import PropTypes from 'prop-types'
@@ -7,10 +8,11 @@ import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
 import NotificationsReader from '../../components/NotificationsReader'
 
-import { EVENT_TYPE } from '../../config/constants'
+import { EVENT_TYPE, PROJECT_FEED_TYPE_MESSAGES } from '../../config/constants'
 
 import XMarkIcon from '../../assets/icons/x-mark.svg'
 import FullscreenIcon from '../../assets/icons/ui-fullscreen.svg'
+import LockIcon from '../../assets/icons/lock.svg'
 
 import './Feed.scss'
 
@@ -81,12 +83,17 @@ class Feed extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps) {
+    // avoid re-rendering of this heavy component if no properties are changed
+    return !_.isEqual(this.props, nextProps)
+  }
+
   render() {
     const {
       id, user, currentUser, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
       allowComments, comments, children, onNewCommentChange, onAddNewComment, isAddingComment, onSaveMessageChange,
       onEditMessage, onSaveMessage, isSavingTopic, onDeleteMessage, onDeleteTopic, isDeletingTopic, error, allMembers,
-      onEnterFullscreenClick, onExitFullscreenClick, isFullScreen, commentId
+      onEnterFullscreenClick, onExitFullscreenClick, isFullScreen, commentId, projectMembers, commentAnchorPrefix, tag
     } = this.props
     const { editTopicMode, headerHeight } = this.state
     let authorName = user ? user.firstName : 'Unknown'
@@ -101,7 +108,7 @@ class Feed extends React.Component {
       const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
 
       topicHeader = (
-        <header styleName="feed-header" ref="header">
+        <header styleName={'feed-header' + (tag === PROJECT_FEED_TYPE_MESSAGES ? ' is-private' : '' )} ref="header">
           <NotificationsReader 
             id={`topic-${id}`}
             criteria={{ eventType: EVENT_TYPE.TOPIC.CREATED, contents: { topicId: id } }}
@@ -127,6 +134,7 @@ class Feed extends React.Component {
           ) : (
             <div styleName="header-view">
               <div styleName="header-view-inner">
+                {tag === PROJECT_FEED_TYPE_MESSAGES && <div styleName="lock-icon"><LockIcon /></div>}
                 <div styleName="header-info">
                   <div styleName="title">{title}</div>
                   <div styleName="header-details">
@@ -177,10 +185,12 @@ class Feed extends React.Component {
           onSaveMessage={onSaveMessage}
           onDeleteMessage={onDeleteMessage}
           allMembers={allMembers}
+          projectMembers={projectMembers}
           isFullScreen={isFullScreen}
           headerHeight={headerHeight}
           commentId={commentId}
           error={error}
+          commentAnchorPrefix={commentAnchorPrefix}
         />
         {children}
         {isDeletingTopic &&
@@ -222,6 +232,7 @@ Feed.propTypes = {
   isSavingTopic: PropTypes.bool,
   onEnterFullscreenClick: PropTypes.func,
   isFullScreen: PropTypes.bool,
+  commentAnchorPrefix: PropTypes.string,
 }
 
 export default Feed

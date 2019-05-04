@@ -37,7 +37,7 @@ export function loadDashboardFeeds(projectId) {
   }
 }
 
-export function laodProjectMessages(projectId) {
+export function loadProjectMessages(projectId) {
   const tag = PROJECT_FEED_TYPE_MESSAGES
   return (dispatch) => {
     return dispatch({

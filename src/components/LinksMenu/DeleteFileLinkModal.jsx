@@ -1,28 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const NewMemberConfirmModal = ({ onCancel, onConfirm }) => {
+const DeleteFileLinkModal = ({ onCancel, onConfirm}) => {
   return (
-    <div className="modal">
+    <div className="modal delete-link-modal">
       <div className="modal-title danger">
-        You are about to change the owner
+        You're about to delete a File
       </div>
       <div className="modal-body">
         <p className="message">
-          You are adding a customer to the team which would make them owner. This can not be undone by you later.
+          Your team might need this link, are you sure you want to delete it? This action can't be undone.
         </p>
+
         <div className="button-area flex center">
           <button className="tc-btn tc-btn-default tc-btn-sm btn-cancel" onClick={onCancel}>Cancel</button>
-          <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={onConfirm}>Add Owner</button>
+          <button className="tc-btn tc-btn-warning tc-btn-sm" onClick={onConfirm}>Delete file</button>
         </div>
       </div>
     </div>
   )
 }
 
-NewMemberConfirmModal.propTypes = {
+DeleteFileLinkModal.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired
+  // link: PropTypes.object.isRequired
 }
 
-export default NewMemberConfirmModal
+export default DeleteFileLinkModal

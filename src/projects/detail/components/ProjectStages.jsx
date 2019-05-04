@@ -73,8 +73,10 @@ function formatPhaseCardListHeaderProps(phases) {
 const ProjectStages = ({
   project,
   phases,
+  phasesNonDirty,
   phasesStates,
   productTemplates,
+  productCategories,
   productsTimelines,
   currentMemberRole,
   isProcessing,
@@ -101,12 +103,14 @@ const ProjectStages = ({
           key={phase.id}
           phaseState={phasesStates[phase.id]}
           productTemplates={productTemplates}
+          productCategories={productCategories}
           currentMemberRole={currentMemberRole}
           isProcessing={isProcessing}
           isSuperUser={isSuperUser}
           isManageUser={isManageUser}
           project={project}
           phase={phase}
+          phaseNonDirty={phasesNonDirty[index]}
           phaseIndex={index}
           updateProduct={updateProduct}
           fireProductDirty={fireProductDirty}
@@ -119,6 +123,7 @@ const ProjectStages = ({
           collapseProjectPhase={collapseProjectPhase}
           feedId={feedId}
           commentId={commentId}
+          commentAnchorPrefix={`phase-${phase.id}-posts-`}
         />
       ))
     }
@@ -134,6 +139,7 @@ ProjectStages.defaultProps = {
 ProjectStages.propTypes = {
   project: PT.object.isRequired,
   productTemplates: PT.array.isRequired,
+  productCategories: PT.array.isRequired,
   productsTimelines: PT.object,
   currentMemberRole: PT.string,
   isProcessing: PT.bool.isRequired,

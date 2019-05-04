@@ -1,0 +1,58 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.help-link-title {
+  font-size: $tc-label-sm;
+  color: $tc-dark-blue-110;
+  font-weight: normal;
+  cursor:pointer;
+  &:hover {
+    color: $tc-dark-blue-110;
+  }
+}
+
+.help-overlay {
+  background-color: rgba($tc-gray-80,.9);
+}
+
+.help-close {
+  position:absolute;
+  top: 4*$base-unit;
+  right: 4*$base-unit;
+  width:3*$base-unit;
+  height:3*$base-unit;
+  cursor: pointer;
+  background: url('../../../assets/icons/ui-x-mark.svg') 0 0 no-repeat;
+}
+
+.help-modal {
+  position: relative;
+  background: white;
+  border-radius: 6px;
+  width: 80vw;
+  & :global(.modal-title) {
+    font-size: $tc-heading-lg;
+    font-weight: 300;
+    text-align: center;
+    margin: 10*$base-unit 0;
+    color: $tc-gray-60;
+  }
+}
+
+.help-body {
+  overflow: auto;
+  max-height: 80vh;
+  & h2 {
+    font-weight: 700;
+    line-height: $tc-heading-md;
+    font-size: $tc-heading-sm;
+    text-align: center;
+    color: $tc-black;
+  }
+  & p {
+    margin: 3*$base-unit 36*$base-unit;
+    color: $tc-black;
+  }
+  & p:last-child {
+    margin-bottom: 32*$base-unit;
+  }
+}

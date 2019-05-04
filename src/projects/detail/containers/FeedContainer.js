@@ -8,6 +8,7 @@ import _ from 'lodash'
 import {
   THREAD_MESSAGES_PAGE_SIZE,
   PROJECT_FEED_TYPE_PRIMARY,
+  PROJECT_FEED_TYPE_MESSAGES,
   SCREEN_BREAKPOINT_MD,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
@@ -17,7 +18,8 @@ import { connect } from 'react-redux'
 import update from 'react-addons-update'
 import NewPost from '../../../components/Feed/NewPost'
 
-import { loadDashboardFeeds, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments, addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
+import { loadDashboardFeeds, loadProjectMessages, createProjectTopic, saveProjectTopic, deleteProjectTopic, loadFeedComments,
+  addFeedComment, saveFeedComment, deleteFeedComment, getFeedComment } from '../../actions/projectTopics'
 import { toggleNotificationRead } from '../../../routes/notifications/actions'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import PostsRefreshPrompt from '../components/PostsRefreshPrompt'
@@ -25,13 +27,15 @@ import PostsRefreshPrompt from '../components/PostsRefreshPrompt'
 import MediaQuery from 'react-responsive'
 import ChatButton from '../../../components/ChatButton/ChatButton'
 import NewPostMobile from '../../../components/Feed/NewPostMobile'
-import ScrollableFeed from '../../../components/Feed/ScrollableFeed'
 import FullscreenFeedContainer from '../containers/FullscreenFeedContainer'
 import Section from '../components/Section'
 import SectionTitle from '../components/SectionTitle'
+import SingleFeedContainer from './SingleFeedContainer'
 
 import { scrollToHash } from '../../../components/ScrollToAnchors'
 import { isSystemUser } from '../../../helpers/tcHelpers'
+import { checkPermission } from '../../../helpers/permissions'
+import PERMISSIONS from '../../../config/permissions'
 
 import './FeedContainer.scss'
 
@@ -54,6 +58,10 @@ class FeedView extends React.Component {
     this.onNewPostChange = this.onNewPostChange.bind(this)
     this.onEditMessage = this.onEditMessage.bind(this)
     this.onSaveMessageChange = this.onSaveMessageChange.bind(this)
+    this.onSaveMessage = this.onSaveMessage.bind(this)
+    this.onDeleteMessage = this.onDeleteMessage.bind(this)
+    this.onSaveTopic = this.onSaveTopic.bind(this)
+    this.onDeleteTopic = this.onDeleteTopic.bind(this)
     this.onEditTopic = this.onEditTopic.bind(this)
     this.onTopicChange = this.onTopicChange.bind(this)
     this.onRefreshFeeds = this.onRefreshFeeds.bind(this)
@@ -228,12 +236,12 @@ class FeedView extends React.Component {
     })
   }
 
-  onNewPost({title, content}) {
+  onNewPost({title, content, isPrivate = false}) {
     const { project } = this.props
     const newFeed = {
       title,
       body: content,
-      tag: PROJECT_FEED_TYPE_PRIMARY
+      tag: isPrivate ? PROJECT_FEED_TYPE_MESSAGES : PROJECT_FEED_TYPE_PRIMARY
     }
     this.props.createProjectTopic(project.id, newFeed)
   }
@@ -251,7 +259,7 @@ class FeedView extends React.Component {
 
   onShowAllComments(feedId) {
     const { feeds } = this.props
-    const feed = _.find(feeds, feed => feed.id === feedId)
+    const feed = _.find(feeds, { id: feedId })
     const stateFeedIdx = _.findIndex(this.state.feeds, (f) => f.id === feedId)
     // in case we have already have all comments for that feed from the server,
     // just change the state to show all comments for that FeedId.
@@ -267,7 +275,7 @@ class FeedView extends React.Component {
         showAll: { $push: [feedId] },
         feeds: { $splice: [[stateFeedIdx, 1, updatedFeed ]] }
       }))
-      this.props.loadFeedComments(feedId, PROJECT_FEED_TYPE_PRIMARY, commentIdsToRetrieve)
+      this.props.loadFeedComments(feedId, feed.tag, commentIdsToRetrieve)
     } else {
       this.setState(update(this.state, {
         showAll: { $push: [feedId] },
@@ -277,13 +285,14 @@ class FeedView extends React.Component {
   }
 
   onAddNewComment(feedId, content) {
-    const { currentUser } = this.props
+    const { currentUser, feeds } = this.props
+    const feed = _.find(feeds, { id: feedId })
     const newComment = {
       date: new Date(),
       userId: parseInt(currentUser.id),
       content
     }
-    this.props.addFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, newComment)
+    this.props.addFeedComment(feedId, feed.tag, newComment)
   }
 
   onSaveMessageChange(feedId, messageId, content, editMode) {
@@ -305,28 +314,34 @@ class FeedView extends React.Component {
 
   onSaveMessage(feedId, message, content) {
     const newMessage = {...message}
+    const { feeds } = this.state
+    const feed = _.find(feeds, { id: feedId })
     newMessage.content = content
-    this.props.saveFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, newMessage)
+    this.props.saveFeedComment(feedId, feed.tag, newMessage)
   }
 
   onDeleteMessage(feedId, postId) {
-    this.props.deleteFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, postId)
+    const { feeds } = this.state
+    const feed = _.find(feeds, { id: feedId })
+    this.props.deleteFeedComment(feedId, feed.tag, postId)
   }
 
   onEditMessage(feedId, postId) {
-    const thread = _.find(this.state.feeds, t => feedId === t.id)
-    const comment = _.find(thread.comments, message => message.id === postId)
+    const { feeds } = this.state
+    const feed = _.find(feeds, { id: feedId })
+    const comment = _.find(feed.comments, message => message.id === postId)
     if (!comment.rawContent) {
-      this.props.getFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, postId)
+      this.props.getFeedComment(feedId, feed.tag, postId)
     }
     this.onSaveMessageChange(feedId, postId, null, true)
   }
 
   onEditTopic(feedId) {
-    const thread = _.find(this.state.feeds, t => feedId === t.id)
-    const comment = thread.topicMessage
+    const { feeds } = this.state
+    const feed = _.find(feeds, { id: feedId })
+    const comment = feed.topicMessage
     if (!comment.rawContent) {
-      this.props.getFeedComment(feedId, PROJECT_FEED_TYPE_PRIMARY, comment.id)
+      this.props.getFeedComment(feedId, feed.tag, comment.id)
     }
     this.onTopicChange(feedId, comment.id, null, null, true)
   }
@@ -346,15 +361,21 @@ class FeedView extends React.Component {
   }
 
   onSaveTopic(feedId, postId, title, content) {
-    this.props.saveProjectTopic(feedId, PROJECT_FEED_TYPE_PRIMARY, {postId, title, content})
+    const { feeds } = this.state
+    const feed = _.find(feeds, { id: feedId })
+    this.props.saveProjectTopic(feedId, feed.tag, {postId, title, content})
   }
 
   onDeleteTopic(feedId) {
-    this.props.deleteProjectTopic(feedId, PROJECT_FEED_TYPE_PRIMARY)
+    const { feeds } = this.state
+    const feed = _.find(feeds, { id: feedId })
+    this.props.deleteProjectTopic(feedId, feed.tag)
   }
 
   onRefreshFeeds() {
-    this.props.loadDashboardFeeds(this.props.project.id)
+    const { loadDashboardFeeds, loadProjectMessages, project, canAccessPrivatePosts } = this.props
+    loadDashboardFeeds(project.id)
+    canAccessPrivatePosts && loadProjectMessages(project.id)
   }
 
   enterFullscreen(feedId) {
@@ -367,7 +388,7 @@ class FeedView extends React.Component {
 
   render () {
     const {currentUser, currentMemberRole, isCreatingFeed, error, allMembers,
-      toggleNotificationRead, notifications, project, isSuperUser } = this.props
+      toggleNotificationRead, notifications, project, isSuperUser, projectMembers, canAccessPrivatePosts } = this.props
     const { feeds, isNewPostMobileOpen, fullscreenFeedId } = this.state
     const isChanged = this.isChanged()
     const onLeaveMessage = this.onLeave() || ''
@@ -386,24 +407,24 @@ class FeedView extends React.Component {
               this.enterFullscreen(feed.id)
             }}
           >
-            <ScrollableFeed
+            <SingleFeedContainer
               {...{
                 ...fullscreenFeed,
-                id: fullscreenFeedId,
                 allowComments: fullscreenFeed.allowComments && !!currentMemberRole,
                 currentUser,
                 allMembers,
-                onNewCommentChange: this.onNewCommentChange.bind(this, fullscreenFeedId),
-                onAddNewComment: this.onAddNewComment.bind(this, fullscreenFeedId),
-                onLoadMoreComments: this.onShowAllComments.bind(this, fullscreenFeedId),
-                onEditMessage: this.onEditMessage.bind(this, fullscreenFeedId),
-                onSaveMessageChange: this.onSaveMessageChange.bind(this, fullscreenFeedId),
-                onSaveMessage: this.onSaveMessage.bind(this, fullscreenFeedId),
-                onDeleteMessage: this.onDeleteMessage.bind(this, fullscreenFeedId),
-                onEditTopic: this.onEditTopic.bind(this, fullscreenFeedId),
-                onTopicChange: this.onTopicChange.bind(this, fullscreenFeedId),
-                onSaveTopic: this.onSaveTopic.bind(this, fullscreenFeedId),
-                onDeleteTopic: this.onDeleteTopic.bind(this, fullscreenFeedId),
+                projectMembers,
+                onNewCommentChange: this.onNewCommentChange,
+                onAddNewComment: this.onAddNewComment,
+                onLoadMoreComments: this.onShowAllComments,
+                onEditMessage: this.onEditMessage,
+                onSaveMessageChange: this.onSaveMessageChange,
+                onSaveMessage: this.onSaveMessage,
+                onDeleteMessage: this.onDeleteMessage,
+                onEditTopic: this.onEditTopic,
+                onTopicChange: this.onTopicChange,
+                onSaveTopic: this.onSaveTopic,
+                onDeleteTopic: this.onDeleteTopic,
                 onExitFullscreenClick: this.exitFullscreen,
                 isFullScreen: true,
               }}
@@ -432,6 +453,7 @@ class FeedView extends React.Component {
               <NewPost
                 currentUser={currentUser}
                 allMembers={allMembers}
+                projectMembers={projectMembers}
                 onPost={this.onNewPost}
                 isCreating={isCreatingFeed}
                 hasError={error}
@@ -440,30 +462,30 @@ class FeedView extends React.Component {
                 titlePlaceholder="Start a new discussion"
                 expandedTitlePlaceholder="Add your discussion title"
                 contentPlaceholder="Add your first post"
+                canAccessPrivatePosts={canAccessPrivatePosts}
               />
             </MediaQuery>
             {feeds.map((feed) => (
               <div styleName="feed-card" key={feed.id}>
-                <ScrollableFeed
+                <SingleFeedContainer
                   {...{
                     ...feed,
-                    id: feed.id.toString(), // convert it to string for `ScrollElement`
-                    topicId: feed.id,       // add topic id as a number, for `Feed`
                     allowComments: feed.allowComments && !!currentMemberRole,
                     currentUser,
                     allMembers,
-                    onNewCommentChange: this.onNewCommentChange.bind(this, feed.id),
-                    onAddNewComment: this.onAddNewComment.bind(this, feed.id),
-                    onLoadMoreComments: this.onShowAllComments.bind(this, feed.id),
-                    onEditMessage: this.onEditMessage.bind(this, feed.id),
-                    onSaveMessageChange: this.onSaveMessageChange.bind(this, feed.id),
-                    onSaveMessage: this.onSaveMessage.bind(this, feed.id),
-                    onDeleteMessage: this.onDeleteMessage.bind(this, feed.id),
-                    onEditTopic: this.onEditTopic.bind(this, feed.id),
-                    onTopicChange: this.onTopicChange.bind(this, feed.id),
-                    onSaveTopic: this.onSaveTopic.bind(this, feed.id),
-                    onDeleteTopic: this.onDeleteTopic.bind(this, feed.id),
-                    onEnterFullscreenClick: this.enterFullscreen.bind(this, feed.id),
+                    projectMembers,
+                    onNewCommentChange: this.onNewCommentChange,
+                    onAddNewComment: this.onAddNewComment,
+                    onLoadMoreComments: this.onShowAllComments,
+                    onEditMessage: this.onEditMessage,
+                    onSaveMessageChange: this.onSaveMessageChange,
+                    onSaveMessage: this.onSaveMessage,
+                    onDeleteMessage: this.onDeleteMessage,
+                    onEditTopic: this.onEditTopic,
+                    onTopicChange: this.onTopicChange,
+                    onSaveTopic: this.onSaveTopic,
+                    onDeleteTopic: this.onDeleteTopic,
+                    onEnterFullscreenClick: this.enterFullscreen,
                   }}
                 />
               </div>
@@ -492,6 +514,7 @@ class FeedView extends React.Component {
             isCreating={isCreatingFeed}
             hasError={error}
             onNewPostChange={this.onNewPostChange}
+            canAccessPrivatePosts={canAccessPrivatePosts}
           />
         }
       </div>
@@ -523,23 +546,37 @@ class FeedContainer extends React.Component {
 
 FeedContainer.PropTypes = {
   currentMemberRole: PropTypes.string,
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
+  canAccessPrivatePosts: PropTypes.bool.isRequired,
 }
 
-const mapStateToProps = ({ projectTopics, members, loadUser, notifications }) => {
+const mapStateToProps = ({ projectTopics, members, loadUser, notifications, projectState }) => {
+  const project = projectState.project
+  const projectMembers = _.filter(members.members, m => _.some(project.members, pm => pm.userId === m.userId))
+  // all feeds includes primary as well as private topics if user has access to private topics
+  let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
+  const canAccessPrivatePosts = checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)
+  if (canAccessPrivatePosts) {
+    allFeed = [...allFeed, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
+  }
+  const allFeedCount = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].totalCount + (canAccessPrivatePosts ? projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].totalCount : 0)
+
   return {
     currentUser    : loadUser.user,
-    feeds          : projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
-    feedTotalCount : projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].totalCount,
+    feeds          : allFeed,
+    feedTotalCount : allFeedCount,
     isLoading      : projectTopics.isLoading,
     isCreatingFeed : projectTopics.isCreatingFeed,
     error          : projectTopics.error,
     allMembers     : members.members,
+    projectMembers : _.keyBy(projectMembers, 'userId'),
     notifications,
+    canAccessPrivatePosts,
   }
 }
 const mapDispatchToProps = {
   loadDashboardFeeds,
+  loadProjectMessages,
   createProjectTopic,
   saveProjectTopic,
   deleteProjectTopic,

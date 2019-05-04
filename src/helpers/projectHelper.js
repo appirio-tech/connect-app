@@ -9,6 +9,8 @@ import {
   PHASE_STATUS_COMPLETED,
   PHASE_STATUS_REVIEWED,
   PHASE_STATUS_DRAFT,
+  PROJECT_CATALOG_URL,
+  NEW_PROJECT_PATH,
 } from '../config/constants'
 
 import { formatNumberWithCommas } from './format'
@@ -86,14 +88,14 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
   const plannedDuration = getProjectPlannedDuration(phases, productsTimelines)
   const actualDuration = getProjectActualDuration(phases, productsTimelines)
   const delay = actualDuration - plannedDuration
-  const labelDayStatus = delay > 0 
+  const labelDayStatus = delay > 0
     ? `Delayed by ${delay} day${delay === 1 ? '' : 's'}`
     : `Day ${actualDuration} of ${plannedDuration}`
   const theme = delay > 0 ? 'warning' : null
-  
+
   // these phases contribute to the whole progress of the project
   // we need them to calculate the total progress percentage
-  const activeAndCompletedAndReviewedPhases = _.filter(phases, 
+  const activeAndCompletedAndReviewedPhases = _.filter(phases,
     (phase) => _.includes([PHASE_STATUS_ACTIVE, PHASE_STATUS_COMPLETED, PHASE_STATUS_REVIEWED], phase.status)
   )
 
@@ -102,7 +104,7 @@ export function formatProjectProgressProps(project, phases, productsTimelines) {
     const timeline = _.get(productsTimelines, `[${product.id}].timeline`)
     return getPhaseActualData(phase, timeline).progress
   })
-  
+
   const totalProgress = _.sum(phasesProgresses)
   const spentAmount = _.sumBy(activeAndCompletedAndReviewedPhases, 'spentBudget') || 0
   const labelSpent = spentAmount > 0 ? `Spent $${formatNumberWithCommas(spentAmount)}` : ''
@@ -156,7 +158,7 @@ export function getProjectPlannedDuration(phases, productsTimelines) {
  * @return {duration} planned duration of project
  */
 export function getProjectActualDuration(phases, productsTimelines) {
-  const activeAndCompletedPhases = _.filter(phases, 
+  const activeAndCompletedPhases = _.filter(phases,
     (phase) => _.includes([PHASE_STATUS_ACTIVE, PHASE_STATUS_COMPLETED], phase.status)
   )
   const today = moment()
@@ -165,7 +167,7 @@ export function getProjectActualDuration(phases, productsTimelines) {
     const timeline = _.get(productsTimelines, `[${product.id}].timeline`)
     const { startDate, endDate } = getPhaseActualData(phase, timeline)
 
-    return { 
+    return {
       startDate,
       // for all active phases use today as endDate
       endDate: phase.status === PHASE_STATUS_ACTIVE ? today : endDate,
@@ -230,6 +232,15 @@ export function getPhaseActualData(phase, timeline) {
     endDate = phase.endDate && moment.utc(phase.endDate)
     duration = phase.duration ? phase.duration : 0
     progress = phase.progress ? phase.progress : 0
+    
+    if (startDate) {
+      endDate = startDate.clone().add(duration, 'days')
+    } else {
+      startDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
+    }
+    if (!endDate) {
+      endDate = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
+    }
 
   // if phase's product has timeline get data from timeline
   } else {
@@ -277,15 +288,15 @@ export function getPhaseActualData(phase, timeline) {
 
 /**
  * Checks if project has estimations
- * 
+ *
  * TODO $PROJECT_PLAN$
  *   returns NO HAVE estimations until we get real data from server
  *   see https://github.com/appirio-tech/connect-app/issues/2016#issuecomment-400552992
- * 
+ *
  * NOTE This function has been created during refactoring of the old code and hasn't beed really tested.
- * 
- * @param {Object} project 
- * 
+ *
+ * @param {Object} project
+ *
  * @returns {Boolean} true if project has estimation data
  */
 export function isProjectEstimationPresent(project) {
@@ -294,8 +305,21 @@ export function isProjectEstimationPresent(project) {
   const { products } = project.details
   const productId = products ? products[0] : null
   const product = findProduct(productId)
-  
+
   const hasEstimation = product && typeof product.basePriceEstimate !== 'undefined'
 
   return hasEstimation && false
+}
+
+/**
+ * Calculate the new project link using orgConfig
+ *
+ * @param {Array} orgConfigs    organization configs
+ *
+ * @return {String} new project link
+ */
+export function getNewProjectLink(orgConfigs) {
+  orgConfigs = _.filter(orgConfigs, (o) => { return o.configName === PROJECT_CATALOG_URL })
+  if(orgConfigs.length === 1) return orgConfigs[0].configValue
+  return NEW_PROJECT_PATH
 }

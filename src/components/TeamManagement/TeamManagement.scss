@@ -5,444 +5,441 @@
     background: url("../../assets/images/#{$url}") no-repeat;
   }
 
-  /* wrap to avoid conflicts */
-  .team-management {
-    border-radius: 0 0 4px 4px;
+  .management-dialog-overlay {
+    z-index: 20;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #00000078;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    @media screen and (max-width: $screen-md - 1px) {
-      border-radius: 0;
-
-      .panel .panel-title,
-      .panel .btn-action {
-        display: none;
-      }
-    }
-
-    .panel {
-      background: $tc-white;
-      border-radius: 0 0 4px 4px;
-      padding: $base-unit*2 0;
-      box-shadow: none;
+    .management-dialog {
+      padding: $base-unit*4;
+      background: white;
+      border-radius: $base-unit;
+      margin: $base-unit*4;
+      box-shadow: 1px 8px 18px 1px #77777757;
 
       @media screen and (max-width: $screen-md - 1px) {
-        border-radius: 0;
+        padding: $base-unit*4 $base-unit*2;
+        margin: $base-unit;
       }
 
-      .add-member-mobile {
-        padding: $base-unit * 2 $base-unit * 5;
+      .management-dialog-container {
+        max-width: 500px;
 
-        @media screen and (min-width: $screen-md) {
-          display: none;
-        }
-
-        > button.tc-btn {
-          justify-content: center;
-          width: 100%;
-        }
-      }
-
-      .panel-title,
-      .panel-body,
-      .panel-row {
-        padding: $base-unit*2 $base-unit*4;
-      }
-
-      .panel-body {
-        &.join-project {
-          justify-content: center;
-          background-color: $tc-gray-neutral-light;
-        }
-      }
-
-      .panel-row {
-        @include roboto;
-        font-size: $tc-label-lg;
-        display: flex;
-        min-height: 60px;
-
-        .profile {
+        @media screen and (max-width: $screen-md - 1px) {
           flex-grow: 1;
-          margin-left: $base-unit*2;
+        }
 
-          .name {
-            font-weight: bold;
-          }
+        .dialog-title {
+          @include roboto;
+          margin: $base-unit*4 0;
+          font-size: 19px;
+          font-weight: 400;
+          color: $tc-gray-90;
+          text-align: center;
+        }
 
-          .self {
-            color: $tc-gray-30;
-            font-weight: bold;
-          }
+        .dialog-content {
+          @include roboto;
+          font-size: 13px;
+          color: $tc-gray-70;
+          line-height: 18px;
+          padding: $base-unit*4 $base-unit*5;
 
-          .handle {
-            font-size: $tc-label-md;
-            color: $tc-gray-50;
-            display: block;
-            margin-top: 6px;
+          @media screen and (max-width: $screen-md - 1px) {
+            padding: $base-unit;
           }
         }
 
-        .title {
-          margin-left: $base-unit*2;
-          color: $tc-gray-50;
-          font-size: $tc-label-sm;
-
-          &.highlight {
-            color: $tc-orange;
-          }
-        }
-
-        .buttons {
-          display: none;
-
-          button,
-          a {
-            display: block;
-            float: right;
-            border: none;
-            cursor: pointer;
-            background: transparent;
-            opacity: 0.4;
-            height: auto;
-            width: auto;
-            background-size: 16px;
-            display: inline-block;
-            margin-right: -$base-unit;
-            margin-top: 12px;
-            transition: 250ms all ease-in-out;
-
-            &:hover {
-              opacity: 1.0;
-            }
-          }
-        }
-
-        &.add-team-member {
-          cursor: pointer;
+        .dialog-actions {
+          margin: $base-unit*5;
+          height: 40px;
           display: flex;
-          align-items: center;
-
-          .add-icon {
-            padding-top: 10px;
-            padding-left: 10px;
-            width: 40px;
-            height: 40px;
-            border: 2px solid $tc-gray-50;
-            background-position: center;
-            background-size: 16px;
-            border-radius: 33px;
-          }
-        }
-
-        &:hover,
-        &.active {
-          background-color: $tc-gray-neutral-light;
-
-          .buttons {
-            display: block;
-          }
-        }
-      }
-
-      .panel-row:hover {
-        .title {
-          display: none;
-        }
-      }
-    }
-
-    .panel.modal-active {
-      position: relative;
-
-      .modal-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        background: $tc-white;
-        opacity: 0.8;
-        width: 100%;
-        height: 100%;
-        border-radius: $corner-radius;
-        z-index: 1;
-      }
-
-      .modal,
-      .panel-title {
-        position: relative;
-        z-index: 2;
-      }
-    }
-
-    .modal {
-      background: $tc-gray-neutral-light;
-      border-radius: $corner-radius;
-      position: relative;
-      padding: $base-unit*2 0;
-
-      .btn-close {
-        width: 14px;
-        height: 14px;
-        display: block;
-        position: absolute;
-        top: $base-unit*3;
-        right: $base-unit*3;
-        overflow: hidden;
-      }
-
-      .modal-title {
-        @include roboto-bold;
-        font-size: $tc-label-lg;
-        padding: $base-unit*2 $base-unit*4 0 $base-unit*4;
-        line-height: $base-unit*4;
-
-        &.title-muted {
-          @include roboto-medium;
-          color: $tc-gray-50;
-          font-size: $tc-label-sm;
-          text-transform: uppercase;
-          padding-top: $base-unit;
-          padding-bottom: $base-unit;
-        }
-
-        &.danger {
-          color: $tc-red;
-        }
-      }
-
-      .modal-body {
-        @include roboto;
-        font-size: $tc-label-md;
-        line-height: $base-unit * 4;
-        margin: $base-unit*2 $base-unit*4;
-
-        input {
-          display: block;
-          height: 38px;
-          margin: 0 auto;
-          color: $tc-black;
-          background: $tc-gray-neutral-light;
-          border-color: $tc-gray-20;
-          @include tc-label-md;
-
-          &[disabled] {
-            color: $tc-gray-20;
-            background: $tc-white;
-          }
-
-          &:hover {
-            border-color: $tc-gray-40;
-            background: $tc-gray-neutral-light;
-          }
-
-          &:focus {
-            background: $tc-white !important;
-            border-color: $tc-dark-blue !important;
-          }
-
-          &.error {
-            border-left: 3px solid $tc-red-70 !important;
-            background: $tc-gray-neutral-light !important;
-
-            &:focus {
-              background: $tc-white !important;
-              border-color: $tc-dark-blue !important;
-            }
-          }
-        }
-
-        input::-ms-clear {
-          display: none;
-        }
-
-        .modal-inline-form {
-          display: flex;
-          margin-bottom: $base-unit*2;
+          justify-content: center;
 
           button {
-            padding: 0 $base-unit*4;
+            @include roboto;
+            height: 100%;
+            margin: $base-unit*2;
           }
 
-          .input-icon-group {
-            position: relative;
-            flex-grow: 1;
-            height: 40px;
-            width: 233px;
-            display: flex;
-            background: $tc-white;
-            border: 1px solid $tc-gray-20;
-            box-shadow: inset 0px 0px 2px 0px rgba($tc-gray-30, 0.2);
-
-            input {
-              flex-grow: 1;
-              display: inline-block;
-              border: none;
-              box-shadow: none;
-              background: $tc-white;
-
-
-              /* lowercase username placeholder */
-              &::-webkit-input-placeholder {
-                text-transform: none;
-              }
-
-              &::-moz-placeholder {
-                text-transform: none;
-              }
-            }
-
-            .input-icon {
-              height: 30px;
-              width: 30px;
-              margin: 4px;
-
-              &:empty {
-                flex-shrink: 0;
-                width: 30px;
-                background-size: 30px 30px;
-                background-color: $tc-gray-20;
-                background-position: center;
-                border-radius: 34px;
-              }
-
-              .Avatar {
-                width: 30px;
-                height: 30px;
-              }
-            }
-          }
-        }
-
-        .message {
-          margin-bottom: $base-unit*4;
-
-          strong {
-            @include roboto-bold;
-          }
-        }
-
-        .error-message {
-          display: block;
-          margin: $base-unit*2 auto;
-          @include roboto;
-          color: $tc-gray-70;
-          font-size: 14px;
-          font-style: italic;
-          border: 1px solid $tc-red-30;
-          background: $tc-red-10;
-          color: $tc-red-70;
-          padding: $base-unit*2;
-          border-radius: $corner-radius;
-          box-sizing: border-box;
-          height: 40px;
-
-          strong {
-            @include roboto-bold;
-          }
-        }
-        /* Style for dropdown display */
-        .dropdown-demo {
-          position: absolute;
-          top: 42px;
-          left: 0px;
-          width: 100%;
-        }
-      }
-
-      &.add-team-member {
-        margin-bottom: -$base-unit*2;
-      }
-
-      .tab-group {
-        width: 160px;
-        list-style-type: none;
-        padding: 0;
-        margin: 10px 0 10px 0;
-
-        ul {
-          display: flex;
-          width: 200px;
-        }
-
-        li {
-          flex: initial;
-          height: 30px;
-          width: 50%;
-          padding: 5px 0;
-          text-align: center;
-          @include roboto-medium;
-          font-size: $tc-label-sm;
-          line-height: 18px;
-          box-shadow: none;
-          background-color: $tc-white;
-          border: 1px solid $tc-gray-30;
-          cursor: pointer;
-
-          a {
-            color: $tc-gray-80;
-            font-weight: normal;
-          }
-
-          &:hover {
-          }
-
-          &.active {
-            cursor: default;
-            background: $tc-dark-blue;
-            color: $tc-white;
-            // box-shadow: inset 0px 1px 3px 0px rgba($tc-gray-80,0.38);
-            a {
-            }
-          }
-
-          &:first-child {
-            border-radius: 2px 0 0 2px;
-            border-right: none;
-          }
-
-          &:last-child {
-            border-radius: 0 2px 2px 0;
-            border-left: none;
+          .btn-red {
+            background: red;
+            border-color: red;
+            color: $tc-gray-neutral-light;
           }
         }
       }
     }
 
-    .member-dropdown {
-      @include roboto;
-      transform: translateY(-100%);
-      position: absolute;
-      top: -3px;
-      left: 0px;
-      width: 100%;
-      margin: 0 auto;
-      background: $tc-white;
-      border: 1px solid $tc-gray-30;
-      box-shadow: 0px 1px 2px 1px rgba($tc-gray-90, 0.09);
-      border-radius: 2px;
-      padding: 10px 0 10px 0;
-      max-height: 210px;
-      overflow: auto;
+    .project-dialog-conatiner {
+      background: white;
+      border-radius: $base-unit;
+      margin: $base-unit*4;
+      box-shadow: 1px 8px 18px 1px #77777757;
+      display: flex;
+
+      @media screen and (max-width: $screen-md - 1px) {
+        margin: $base-unit;
+        flex-grow: 1;
+      }
 
       .Avatar {
-        height: 30px;
-        width: 30px;
-        margin: 5px 10px 5px 9px;
-        flex-shrink: 0;
+        height: 40px;
+        width: 40px;
       }
 
-      .dropdown-cell {
-        display: flex;
-        align-items: center;
+      .project-dialog {
+        flex-grow: 1;
+        width: 650px;
+
+        .dialog-title {
+          @include roboto;
+          position: relative;
+          margin: $base-unit*6 $base-unit*4;
+          font-size: 19px;
+          font-weight: 400;
+          color: $tc-gray-90;
+          text-align: center;
+
+          span {
+            position: absolute;
+            right: 0;
+            cursor: pointer;
+            top: -$base-unit*2;
+
+            svg {
+              fill: $tc-gray-20;
+            }
+          }
+        }
+
+        .dialog-body {
+          margin: 0 $base-unit*4;
+          margin-top: $base-unit*4;
+          border-top: 1px solid rgb(224, 224, 224);
+          max-height: 300px;
+          overflow-y: auto;
+
+          @media screen and (max-width: 400px) {
+            max-height: 200px;
+          }
+        }
+
+        .dark {
+          background: rgb(250, 250, 251);
+        }
+
+        @media screen and (max-width: $screen-md - 1px) {
+          .project-member-layout > * {
+            margin-top: $base-unit;
+          }
+        }
+
+        .project-member-layout {
+          min-height: 60px;
+          padding: $base-unit*2 $base-unit*4;
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          justify-content: center;
+
+          @media screen and (max-width: $screen-md - 1px) {
+            padding: $base-unit*2;
+          }
+
+          .memer-details {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+          }
+
+          .member-name {
+            display: flex;
+            flex-grow: 1;
+            margin-left: $base-unit*4;
+            @include roboto-bold;
+            color: $tc-black;
+            font-size: $tc-label-lg;
+
+            .span-name {
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;
+              max-width: 200px;
+              display: inline-block;
+              padding-bottom: 2px;
+            }
+
+            .member-handle {
+              @include roboto;
+              margin-left: $base-unit*2;
+              color: $tc-gray-60;
+            }
+
+            @media screen and (max-width: $screen-md - 1px) {
+              margin-left: $base-unit*2;
+
+              .member-handle {
+                margin-left: $base-unit;
+              }
+            }
+
+            @media screen and (max-width: 400px) {
+              .span-name {
+                max-width: 100px;
+              }
+
+              .member-handle {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                max-width: 80px;
+                padding-bottom: 2px;
+              }
+            }
+          }
+
+          .member-remove {
+            @include roboto;
+            color: $tc-dark-blue;
+            font-size: $tc-label-sm;
+            cursor: pointer;
+
+            span {
+              margin-left: $base-unit*3;
+            }
+
+            .email-date {
+              cursor: default;
+              color: $tc-gray-40;
+
+              @media screen and (max-width: $screen-md - 1px) {
+                display: none;
+              }
+            }
+          }
+
+          .member-role-container {
+            margin-left: $base-unit*3;
+            display: flex;
+            padding: 1px;
+            border-radius: 5px;
+            border: 1px solid $tc-gray-40;
+            background: white;
+
+            .member-role {
+              padding: $base-unit $base-unit*2;
+              @include roboto;
+              color: $tc-gray-70;
+              font-size: $tc-label-xs;
+              cursor: pointer;
+            }
+
+            .member-role.active {
+              border-radius: 5px;
+              background: $tc-dark-blue;
+              color: $tc-white;
+            }
+
+            .member-role.disabled:not(.active) {
+              cursor: default;
+              color: $tc-gray-20;
+            }
+          }
+
+          .member-type-wrapper {
+            display: flex;
+            justify-content: center;
+
+            @media screen and (max-width: $screen-md - 1px) {
+              width: 100%;
+            }
+          }
+
+          .member-type {
+            @include roboto;
+            padding: $base-unit $base-unit*2;
+            margin-left: $base-unit*3;
+            color: $tc-white;
+            background: $tc-gray-40;
+            font-size: $tc-label-xs;
+            border-radius: 3px;
+          }
+
+          .member-type-blue {
+            margin-left: $base-unit*3;
+            background: $tc-dark-blue;
+          }
+
+          .member-email {
+            @include roboto;
+            font-size: $tc-label-sm;
+            color: $tc-dark-blue;
+            display: block;
+
+            > span {
+              display: block;
+            }
+
+            .email-date {
+              cursor: default;
+              color: $tc-gray-40;
+              margin-top: $base-unit;
+              display: none;
+
+              @media screen and (max-width: $screen-md - 1px) {
+                display: block;
+              }
+            }
+          }
+        }
+
+        .dropdown-wrap {
+          width: stretch;
+          margin: $base-unit*4 0;
+        }
+
+        .role-drop-down {
+          margin: 0 $base-unit*2;
+        }
+
+        .input-container {
+          display: flex;
+          border-radius: 0 0 $base-unit*2 $base-unit*2;
+          flex-direction: column;
+          align-items: center;
+          margin-top: $base-unit*2;
+          padding: $base-unit*2;
+          background: #fafafb;
+          border-top: 1px solid rgb(224, 224, 224);
+
+          .hint {
+            @include roboto-medium;
+            margin-top: $base-unit*2;
+            width: 100%;
+            text-align: center;
+            font-size: $tc-label-xs;
+            color: $tc-gray-50;
+            text-transform: uppercase;
+          }
+
+          .inviteTextInput {
+            @include roboto-medium;
+            margin-top: $base-unit*2;
+            width: 100%;
+            text-align: center;
+            font-size: $tc-label-xs;
+            color: $tc-gray-50;
+            text-transform: uppercase;
+          }
+
+          form {
+            width: 100%;
+          }
+
+          input, .autocomplete-wrapper {
+            width: 100%;
+            margin: $base-unit*4 $base-unit*2;
+          }
+
+          input[type="text"][disabled] {
+            border: 1px solid #aaaaab;
+            border-radius: 4px;
+            color: white;
+            background: #eeeeee;
+          }
+
+          button {
+            @include roboto-light;
+            color: white;
+            margin-bottom: $base-unit*6;
+          }
+        }
+      }
+
+      .dialog-placeholder {
+        height: 200px;
+      }
+
+      .topcoder-dialog {
+        width: 750px;
+      }
+
+      @media screen and (max-width: $screen-md - 1px) {
+        .dialog-body {
+          margin: 0 !important;
+        }
+
+        .topcoder-dialog {
+          width: unset;
+        }
+
+        .project-dialog {
+          width: unset;
+        }
+      }
+    }
+  }
+
+  .team-management-container {
+    background: $tc-white;
+    padding: $base-unit $base-unit*4;
+    box-shadow: none;
+
+    .projects-team {
+      margin: $base-unit*3 0;
+
+      .title {
+        @include roboto-bold;
+        color: $tc-black;
+        text-transform: uppercase;
+        font-size: $tc-label-xs;
+        line-height: $base-unit*4;
+      }
+
+      .title-action {
+        @include roboto;
+        float: right;
+        color: $tc-dark-blue;
         cursor: pointer;
-
-        &:hover {
-          background: $tc-dark-blue-10;
-        }
-
-        .handle {
-          font-size: $tc-label-lg;
-          color: $tc-gray-80;
-        }
       }
+
+      .members {
+        margin: $base-unit 0;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .Tooltip {
+        margin: $base-unit * 2 $base-unit * 2 $base-unit $base-unit;
+      }
+    }
+  }
+
+  .join-btn {
+    @include roboto;
+    cursor: pointer;
+    padding: $base-unit*2 $base-unit*3;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    border: 1px solid $tc-gray-10;
+    border-radius: 20px;
+    margin: $base-unit*2 0 $base-unit 0;
+    color: $tc-gray-70;
+    font-size: $tc-label-md;
+
+    svg {
+      margin-right: $base-unit * 0.5;
+      transform: scale(.6);
+      fill: $tc-gray-90;
     }
   }
 }

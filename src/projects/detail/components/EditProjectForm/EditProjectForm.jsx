@@ -15,6 +15,14 @@ const Formsy = FormsyForm.Formsy
 import XMarkIcon from  '../../../../assets/icons/icon-x-mark.svg'
 import SpecSection from '../SpecSection'
 import { HOC as hoc } from 'formsy-react'
+import cn from 'classnames'
+import {
+  initWizard,
+  removeValuesOfHiddenNodes,
+  updateNodesByConditions,
+  STEP_VISIBILITY,
+  STEP_STATE,
+} from '../../../../helpers/wizardHelper'
 
 import './EditProjectForm.scss'
 
@@ -62,6 +70,17 @@ class EditProjectForm extends Component {
     this.onLeave = this.onLeave.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.makeDeliveredPhaseReadOnly = this.makeDeliveredPhaseReadOnly.bind(this)
+
+    // init wizard to support dependant questions
+    const {
+      template,
+      hasDependantFields,
+    } = initWizard(props.template, props.project, props.productTemplates, null)
+
+    this.state = {
+      template,
+      hasDependantFields,
+    }
   }
 
   componentWillMount() {
@@ -75,6 +94,21 @@ class EditProjectForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    let { template, hasDependantFields } = this.state
+    // updating template from template editor
+    if(nextProps.shouldUpdateTemplate && template !== nextProps.template) {
+
+      const state = initWizard(nextProps.template, nextProps.project, nextProps.productTemplates, null)
+
+      template = state.template
+      hasDependantFields = state.hasDependantFields
+
+      this.setState({
+        template,
+        hasDependantFields,
+      })
+    }
+
     // we received property updates from PROJECT_DIRTY REDUX state
     if (nextProps.project.isDirty) {
       this.setState({
@@ -83,31 +117,61 @@ class EditProjectForm extends Component {
         dirtyProject: Object.assign({}, nextProps.project),
         isProjectDirty: true
       })
-      return
-    }
-    let updatedProject = Object.assign({}, nextProps.project)
-    if (this.state.isFeaturesDirty && !this.state.isSaving) {
-      updatedProject = update(updatedProject, {
-        details: {
-          appDefinition: {
-            features: {
-              $set: this.state.project.details.appDefinition.features
+    } else {
+      let updatedProject = Object.assign({}, nextProps.project)
+      if (this.state.isFeaturesDirty && !this.state.isSaving) {
+        updatedProject = update(updatedProject, {
+          details: {
+            appDefinition: {
+              features: {
+                $set: this.state.project.details.appDefinition.features
+              }
             }
           }
-        }
+        })
+      }
+      this.setState({
+        project: updatedProject,
+        isFeaturesDirty: false, // Since we just saved, features are not dirty anymore.
+        isProjectDirty: false,
+        canSubmit: false,
+        isSaving: false
       })
     }
-    this.setState({
-      project: updatedProject,
-      isFeaturesDirty: false, // Since we just saved, features are not dirty anymore.
-      isProjectDirty: false,
-      canSubmit: false,
-      isSaving: false
-    })
+
+    if (hasDependantFields && !_.isEqual(this.props.project, nextProps.project)) {
+      const {
+        updatedTemplate,
+        updatedSomeNodes,
+        hidedSomeNodes
+      } = updateNodesByConditions(template, nextProps.project, nextProps.productTemplates)
+
+      if (updatedSomeNodes) {
+        this.setState({
+          template: updatedTemplate,
+          project: hidedSomeNodes ? nextProps.project : this.state.project,
+        })
+      }
+    }
   }
 
   componentDidMount() {
     window.addEventListener('beforeunload', this.onLeave)
+  }
+
+  componentDidUpdate() {
+    this.refs.form && this.refs.form.inputs.forEach(q => {
+      q.props.options && q.props.options.forEach((option) => {
+        // select options if they are selected by condition
+        if (_.get(option, '__wizard.selectedByCondition', false)) {
+          const curValue = q.getValue()
+
+          if (curValue.indexOf(option.value) === -1) {
+            q.setValue(curValue.concat(option.value))
+          }
+        }
+      })
+    })
   }
 
   autoResize() {
@@ -142,9 +206,7 @@ class EditProjectForm extends Component {
   }
 
   isChanged() {
-    // We check if this.refs.form exists because this may be called before the
-    // first render, in which case it will be undefined.
-    return (this.refs.form && this.refs.form.isChanged()) || this.state.isFeaturesDirty
+    return !!this.props.project.isDirty
   }
 
   enableButton() {
@@ -185,11 +247,9 @@ class EditProjectForm extends Component {
   }
 
   submit(model) {
-    // if (this.state.isFeaturesDirty) {
-    //   model.details.appDefinition.features = this.state.project.details.appDefinition.features
-    // }
     this.setState({isSaving: true })
-    this.props.submitHandler(model)
+    const modelWithoutHiddenValues = removeValuesOfHiddenNodes(this.state.template, model)
+    this.props.submitHandler(modelWithoutHiddenValues)
   }
 
   /**
@@ -199,11 +259,7 @@ class EditProjectForm extends Component {
    * @param isChanged flag that indicates if form actually changed from initial model values
    */
   handleChange(change) {
-    if (this.isChanged()) {
-      this.props.fireProjectDirty(unflatten(change))
-    } else {
-      this.props.fireProjectDirtyUndo()
-    }
+    this.props.fireProjectDirty(unflatten(change))
   }
 
   makeDeliveredPhaseReadOnly(projectStatus) {
@@ -212,11 +268,12 @@ class EditProjectForm extends Component {
 
 
   render() {
-    const { isEdittable, sections, showHidden } = this.props
+    const { isEdittable, showHidden, productTemplates, productCategories } = this.props
+    const { template } = this.state
     const { project, dirtyProject } = this.state
     const onLeaveMessage = this.onLeave() || ''
     const renderSection = (section, idx) => {
-      const anySectionInvalid = _.some(this.props.sections, (s) => s.isInvalid)
+      const anySectionInvalid = _.some(template.sections, (s) => s.isInvalid)
       return (
         <div key={idx}>
           <SpecSection
@@ -224,6 +281,9 @@ class EditProjectForm extends Component {
             project={project}
             dirtyProject={dirtyProject}
             isProjectDirty={this.state.isProjectDirty}
+            template={template}
+            productTemplates={productTemplates}
+            productCategories={productCategories}
             sectionNumber={idx + 1}
             resetFeatures={this.onFeaturesSaveAttachedClick}
             showFeaturesDialog={this.showFeaturesDialog}
@@ -238,7 +298,7 @@ class EditProjectForm extends Component {
           />
           <div className="section-footer section-footer-spec">
             <button className="tc-btn tc-btn-primary tc-btn-md"
-              type="submit" 
+              type="submit"
               disabled={(!this.isChanged() || this.state.isSaving) || anySectionInvalid || !this.state.canSubmit || this.makeDeliveredPhaseReadOnly(project.status)}
             >Save Changes</button>
           </div>
@@ -247,7 +307,13 @@ class EditProjectForm extends Component {
     }
 
     return (
-      <div className="editProjectForm">
+      <div
+        className={cn(
+          'editProjectForm', {
+            [`form-theme-${template.theme}`]: template.theme
+          }
+        )}
+      >
         <Prompt
           when={!!onLeaveMessage}
           message={onLeaveMessage}
@@ -260,7 +326,16 @@ class EditProjectForm extends Component {
           onValidSubmit={this.submit}
           onChange={ this.handleChange }
         >
-          {sections.map(renderSection)}
+          {template.sections.map(section => ({
+            ...section,
+            // in edit form we always show steps in read-optimized mode
+            visibilityForRendering: STEP_VISIBILITY.READ_OPTIMIZED,
+            // in edit form we always treat steps as completed aka 'prev'
+            stepState: STEP_STATE.PREV
+          })).filter((section) => (
+            // hide sections in edit mode
+            !section.hiddenOnEdit
+          )).map(renderSection)}
           <FeaturePickerFormField
             name="details.appDefinition.features"
             project={ project }
@@ -277,10 +352,16 @@ class EditProjectForm extends Component {
   }
 }
 
+EditProjectForm.defaultProps = {
+  shouldUpdateTemplate: false
+}
+
 EditProjectForm.propTypes = {
   project: PropTypes.object.isRequired,
   saving: PropTypes.bool.isRequired,
-  sections: PropTypes.arrayOf(PropTypes.object).isRequired,
+  template: PropTypes.object.isRequired,
+  productTemplates: PropTypes.array.isRequired,
+  productCategories: PropTypes.array.isRequired,
   isEdittable: PropTypes.bool.isRequired,
   submitHandler: PropTypes.func.isRequired,
   fireProjectDirty: PropTypes.func.isRequired,
@@ -289,6 +370,7 @@ EditProjectForm.propTypes = {
   addAttachment: PropTypes.func.isRequired,
   updateAttachment: PropTypes.func.isRequired,
   removeAttachment: PropTypes.func.isRequired,
+  shouldUpdateTemplate: PropTypes.bool,
 }
 
 export default EditProjectForm

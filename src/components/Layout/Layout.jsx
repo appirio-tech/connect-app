@@ -23,7 +23,7 @@ const Layout = (props) => {
     return (
       <div>
         { props.topbar }
-        <Alert stack={{limit: 3, spacing: 30}} position="bottom-left" html timeout={4000} offset={50} effect="stackslide" />
+        <Alert stack={{limit: 1, spacing: 30}} position="bottom-left" html timeout={4000} offset={50} effect="stackslide" />
         <div className={cn('main-wrapper')} data-route={window.location.pathname.replace(/\//g, '__')} id="wrapper-main">
           { props.content }
         </div>

@@ -35,12 +35,15 @@ import TwoColsLayout from '../../../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
 import WorkInProgress from '../components/WorkInProgress'
 import NotificationsReader from '../../../components/NotificationsReader'
+import { checkPermission } from '../../../helpers/permissions'
+import PERMISSIONS from '../../../config/permissions'
 
 import {
   PHASE_STATUS_ACTIVE,
   CODER_BOT_USER_FNAME,
   CODER_BOT_USER_LNAME,
   PROJECT_FEED_TYPE_PRIMARY,
+  PROJECT_FEED_TYPE_MESSAGES,
   EVENT_TYPE,
 } from '../../../config/constants'
 
@@ -123,7 +126,6 @@ class DashboardContainer extends React.Component {
     const leftArea = (
       <ProjectInfoContainer
         currentMemberRole={currentMemberRole}
-        phases={phases}
         project={project}
         phases={phases}
         isSuperUser={isSuperUser}
@@ -205,16 +207,24 @@ class DashboardContainer extends React.Component {
   }
 }
 
-const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics }) => ({
-  notifications: preRenderNotifications(notifications.notifications),
-  productTemplates: templates.productTemplates,
-  isProcessing: projectState.processing,
-  phases: projectState.phases,
-  feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
-  isFeedsLoading: projectTopics.isLoading,
-  phasesStates: projectState.phasesStates,
-  phasesTopics,
-})
+const mapStateToProps = ({ notifications, projectState, projectTopics, templates, phasesTopics }) => {
+  // all feeds includes primary as well as private topics if user has access to private topics
+  let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
+  if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
+    allFeed = [...allFeed, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
+  }
+
+  return {
+    notifications: preRenderNotifications(notifications.notifications),
+    productTemplates: templates.productTemplates,
+    isProcessing: projectState.processing,
+    phases: projectState.phases,
+    feeds: allFeed,
+    isFeedsLoading: projectTopics.isLoading,
+    phasesStates: projectState.phasesStates,
+    phasesTopics,
+  }
+}
 
 const mapDispatchToProps = {
   toggleNotificationRead,

@@ -28,6 +28,9 @@ import XMartIcon from '../../../../../assets/icons/x-mark.svg'
 
 import { MILESTONE_STATUS, SCREEN_BREAKPOINT_MD } from '../../../../../config/constants'
 
+import PERMISSIONS from '../../../../../config/permissions'
+import {checkPermission} from '../../../../../helpers/permissions'
+
 import './Milestone.scss'
 class Milestone extends React.Component {
   constructor(props) {
@@ -45,12 +48,14 @@ class Milestone extends React.Component {
     this.completeFinalFixesMilestone = this.completeFinalFixesMilestone.bind(this)
     this.extendMilestone = this.extendMilestone.bind(this)
     this.submitFinalFixesRequest = this.submitFinalFixesRequest.bind(this)
+    this.milestoneEditorChanged = this.milestoneEditorChanged.bind(this)
 
     this.state = {
       activeMenu: '',
       isHoverHeader: false,
       isEditing: false,
-      isMobileEditing: false
+      isMobileEditing: false,
+      disableSubmit: true
     }
   }
 
@@ -90,7 +95,7 @@ class Milestone extends React.Component {
   }
 
   closeEditForm() {
-    this.setState({ isEditing: false, isMobileEditing: false })
+    this.setState({ isEditing: false, isMobileEditing: false, disableSubmit: true })
   }
 
   toggleMobileEditLink() {
@@ -101,6 +106,33 @@ class Milestone extends React.Component {
     const { milestone, updateMilestone } = this.props
 
     updateMilestone(milestone.id, values)
+  }
+
+  milestoneEditorChanged(values) {
+    if (!this.props.milestone) {
+      if (this.state.disableSubmit) {
+        this.setState({ disableSubmit: false })
+      }
+      return
+    }
+    for (const key in values) {
+      if (values.hasOwnProperty(key)) {
+        const element = values[key]
+        let compareElement = this.props.milestone[key]
+        if (!(compareElement instanceof String)) {
+          compareElement = compareElement.toString()
+        }
+        if (element !== compareElement) {
+          if (this.state.disableSubmit) {
+            this.setState({ disableSubmit: false })
+          }
+          return
+        }
+      }
+    }
+    if (!this.state.disableSubmit) {
+      this.setState({ disableSubmit: true })
+    }
   }
 
   updateMilestoneContent(contentProps, metaDataProps) {
@@ -167,6 +199,7 @@ class Milestone extends React.Component {
       milestone,
       currentUser,
       previousMilestone,
+      project
     } = this.props
     const { isEditing, isMobileEditing } = this.state
 
@@ -247,8 +280,10 @@ class Milestone extends React.Component {
         }]}
         onCancelClick={this.closeEditForm}
         onSubmit={this.updateMilestoneWithData}
+        onChange={this.milestoneEditorChanged}
         submitButtonTitle="Update milestone"
         title="Milestone Properties"
+        disableSubmitButton={this.state.disableSubmit}
       />
     )
     return (
@@ -280,7 +315,7 @@ class Milestone extends React.Component {
                 <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
                   {(matches) => (matches ? (
                     <div styleName={'desktop-edit-section'}>
-                      {!currentUser.isCustomer && !isCompleted && this.state.isHoverHeader && !isUpdating &&
+                      {checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project) && !isCompleted && this.state.isHoverHeader && !isUpdating &&
                         (<div onClick={this.toggleEditLink} styleName={'post-edit'} >
                           <span styleName="tooltiptext">Edit milestone properties</span>
                         </div>)
@@ -289,7 +324,7 @@ class Milestone extends React.Component {
                   ) : (
                     <div styleName={'mobile-edit-section'}>
                       {
-                        !currentUser.isCustomer && !isCompleted && !isUpdating &&
+                        checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project) && !isCompleted && !isUpdating &&
                           (<div onClick={this.toggleMobileEditLink} styleName={'post-edit-mobile'}  />)
                       }
                     </div>

@@ -48,5 +48,4 @@ module.exports = {
   TC_SYSTEM_USERID: process.env.PROD_TC_SYSTEM_USERID,
   MAINTENANCE_MODE: process.env.PROD_MAINTENANCE_MODE,
 
-  RESET_PASSWORD_URL: 'https://accounts.topcoder.com/connect/reset-password'
 }

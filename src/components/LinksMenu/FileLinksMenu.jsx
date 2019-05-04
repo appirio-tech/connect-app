@@ -1,23 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
+import * as filepicker from 'filestack-js'
+
 import './LinksMenu.scss'
 import Panel from '../Panel/Panel'
-import AddFiles from '../FileList/AddFiles'
-import DeleteLinkModal from './DeleteLinkModal'
-import EditLinkModal from './EditLinkModal'
+import AddFilePermission from '../FileList/AddFilePermissions'
+import DeleteFileLinkModal from './DeleteFileLinkModal'
+import EditFileAttachment from './EditFileAttachment'
 import uncontrollable from 'uncontrollable'
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import cn from 'classnames'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
 import BtnEdit from '../../assets/icons/icon-edit.svg'
 import _ from 'lodash'
-import Modal from '../Modal/Modal'
+
+import {
+  FILE_PICKER_API_KEY,
+  FILE_PICKER_FROM_SOURCES,
+  FILE_PICKER_CNAME,
+  FILE_PICKER_SUBMISSION_CONTAINER_NAME
+} from '../../config/constants'
 
 const FileLinksMenu = ({
-  canAdd,
-  canDelete,
-  canEdit,
   noDots,
   isAddingNewLink,
   limit,
@@ -35,8 +40,21 @@ const FileLinksMenu = ({
   withHash,
   attachmentsStorePath,
   category,
+  selectedUsers,
   onAddAttachment,
+  onUploadAttachment,
+  isSharingAttachment,
+  discardAttachments,
+  onChangePermissions,
+  pendingAttachments,
+  projectMembers,
+  loggedInUser,
 }) => {
+
+  const fileUploadClient = filepicker.init(FILE_PICKER_API_KEY, {
+    cname: FILE_PICKER_CNAME
+  })
+
   const renderLink = (link) => {
     if (link.onClick) {
       return (
@@ -59,6 +77,7 @@ const FileLinksMenu = ({
   }
 
   const processUploadedFiles = (fpFiles, category) => {
+    const attachments = []
     onAddingNewLink(false)
     fpFiles = _.isArray(fpFiles) ? fpFiles : [fpFiles]
     _.forEach(fpFiles, f => {
@@ -70,36 +89,70 @@ const FileLinksMenu = ({
         filePath: f.key,
         contentType: f.mimetype || 'application/unknown'
       }
-      onAddAttachment(attachment)
+      attachments.push(attachment)
+    })
+    onUploadAttachment(attachments)
+  }
+
+  const onAddingAttachmentPermissions = (allowedUsers) => {
+    const { attachments, projectId } = pendingAttachments
+    _.forEach(attachments, f => {
+      const attachment = {
+        ...f,
+        allowedUsers
+      }
+      onAddAttachment(projectId, attachment)
     })
   }
 
-  const onClose = () => {
-    onAddingNewLink(false)
+  const openFileUpload = () => {
+    if (fileUploadClient) {
+      const picker = fileUploadClient.picker({
+        storeTo: {
+          location: 's3',
+          path: attachmentsStorePath,
+          container: FILE_PICKER_SUBMISSION_CONTAINER_NAME,
+          region: 'us-east-1'
+        },
+        maxFiles: 4,
+        fromSources: FILE_PICKER_FROM_SOURCES,
+        uploadInBackground: false,
+        onFileUploadFinished: (files) => {
+          processUploadedFiles(files, category)
+        },
+        onOpen: () => {
+          onAddingNewLink(true)
+        },
+        onClose: () => {
+          onAddingNewLink(false)
+        }
+      })
+
+      picker.open()
+    }
   }
 
   return (
     <MobileExpandable title={`${title} (${links.length})`}>
       <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0)}, 'panel-links-container')}>
-        {canAdd && !isAddingNewLink && onAddingNewLink &&
-        <Panel.AddBtn onClick={() => onAddingNewLink(true)}>Upload File</Panel.AddBtn>}
+        <Panel.AddBtn onClick={openFileUpload}>Upload File</Panel.AddBtn>
 
-        {!isAddingNewLink && <Panel.Title>
+        <Panel.Title>
           {title} ({links.length})
-        </Panel.Title>}
+        </Panel.Title>
 
         {(isAddingNewLink || linkToDelete >= 0) && <div className="modal-overlay"/>}
 
-        {isAddingNewLink &&
-          <Modal onClose={onClose}>
-            <Modal.Title>
-              UPLOAD A FILE
-            </Modal.Title>
-            <AddFiles successHandler={processUploadedFiles.bind(this)}
-              storePath={attachmentsStorePath}
-              category={category}
-            />
-          </Modal>
+        {
+          pendingAttachments &&
+          <AddFilePermission onCancel={discardAttachments}
+            onSubmit={onAddingAttachmentPermissions}
+            onChange={onChangePermissions}
+            selectedUsers={selectedUsers}
+            projectMembers={projectMembers}
+            loggedInUser={loggedInUser}
+            isSharingAttachment={isSharingAttachment}
+          />
         }
 
         <div
@@ -112,22 +165,23 @@ const FileLinksMenu = ({
             {
               links.slice(0, limit).map((link, idx) => {
                 const onDeleteConfirm = () => {
-                  onDelete(idx)
+                  onDelete(link.id)
                   onDeleteIntent(-1)
                 }
                 const onDeleteCancel = () => onDeleteIntent(-1)
                 const handleDeleteClick = () => onDeleteIntent(idx)
 
-                const onEditConfirm = (title, address) => {
-                  onEdit(idx, title, address)
+                const onEditConfirm = (title, allowedUsers) => {
+                  onEdit(link.id, title, allowedUsers)
                   onEditIntent(-1)
                 }
                 const onEditCancel = () => onEditIntent(-1)
                 const handleEditClick = () => onEditIntent(idx)
+                const canEdit = `${link.createdBy}` === `${loggedInUser.userId}`
                 if (linkToDelete === idx) {
                   return (
                     <li className="delete-confirmation-modal" key={'delete-confirmation-' + idx}>
-                      <DeleteLinkModal
+                      <DeleteFileLinkModal
                         link={link}
                         onCancel={onDeleteCancel}
                         onConfirm={onDeleteConfirm}
@@ -137,8 +191,10 @@ const FileLinksMenu = ({
                 } else if (linkToEdit === idx) {
                   return (
                     <li className="delete-confirmation-modal" key={'delete-confirmation-' + idx}>
-                      <EditLinkModal
-                        link={link}
+                      <EditFileAttachment
+                        attachment={link}
+                        projectMembers={projectMembers}
+                        loggedInUser={loggedInUser}
                         onCancel={onEditCancel}
                         onConfirm={onEditConfirm}
                       />
@@ -162,7 +218,7 @@ const FileLinksMenu = ({
                             <BtnEdit className="btn-remove"/>
                           </button>
                         </div>}
-                        {canDelete && <div className="buttons link-buttons">
+                        {canEdit && <div className="buttons link-buttons">
                           <button onClick={handleDeleteClick} type="button">
                             <BtnRemove className="btn-edit"/>
                           </button>
@@ -183,10 +239,9 @@ const FileLinksMenu = ({
             <a href="javascript:" onClick={() => onChangeLimit(10000)}>{moreText}</a>
           </div>}
         </div>
-        {canAdd && !isAddingNewLink && (
+        {!isAddingNewLink && (
           <div className="add-link-mobile">
-            <button className="tc-btn tc-btn-secondary tc-btn-md" onClick={() => onAddingNewLink(true)}>Add New Link
-            </button>
+            <button className="tc-btn tc-btn-secondary tc-btn-md" onClick={openFileUpload}>Upload File</button>
           </div>
         )}
       </Panel>
@@ -195,12 +250,17 @@ const FileLinksMenu = ({
 }
 
 FileLinksMenu.propTypes = {
-  canAdd: PropTypes.bool,
-  canDelete: PropTypes.bool,
   canEdit: PropTypes.bool,
   noDots: PropTypes.bool,
   limit: PropTypes.number,
   links: PropTypes.array.isRequired,
+  selectedUsers: PropTypes.string,
+  projectMembers: PropTypes.object,
+  pendingAttachments: PropTypes.object,
+  onUploadAttachment: PropTypes.func,
+  isSharingAttachment: PropTypes.bool.isRequired,
+  discardAttachments: PropTypes.func,
+  onChangePermissions: PropTypes.func,
   attachmentsStorePath: PropTypes.string.isRequired,
   moreText: PropTypes.string,
   onAddingNewLink: PropTypes.func,
@@ -208,6 +268,7 @@ FileLinksMenu.propTypes = {
   onChangeLimit: PropTypes.func,
   onDelete: PropTypes.func,
   title: PropTypes.string,
+  loggedInUser: PropTypes.object.isRequired,
 }
 
 FileLinksMenu.defaultProps = {

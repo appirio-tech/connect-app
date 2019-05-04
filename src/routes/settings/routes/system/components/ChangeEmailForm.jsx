@@ -96,7 +96,7 @@ class ChangeEmailForm extends React.Component {
   }
 
   render() {
-    const { settings, checkingEmail, checkedEmail, isEmailAvailable, isEmailChanging, emailSubmitted } = this.props
+    const { settings, checkingEmail, checkedEmail, isEmailAvailable, isEmailChanging, emailSubmitted/*, isCustomer */ } = this.props
     const { currentEmail, isValid, isFocused } = this.state
     const currentEmailAvailable = checkedEmail === currentEmail && isEmailAvailable
     const isCheckingCurrentEmail = checkingEmail === currentEmail
@@ -138,15 +138,9 @@ class ChangeEmailForm extends React.Component {
               validationErrors={{
                 isEmail: 'Provide a correct email'
               }}
-              disabled={isEmailChanging}
+              disabled//={isEmailChanging || !isCustomer}
               ref={(ref) => this.emailRef = ref}
-              /* disable email field for now, as backend doesn't support returnUrl yet
-                 and verification link which is sent to email leads to Community app, instead of Connect app for now */
-              disabled
             />
-            <div className="email-hint">
-              To change the email please <a href="mailto:support@topcoder.com">get in touch with support</a>
-            </div>
             { isFocused && isCheckingCurrentEmail && (
               <div className="field-status">
                 Verifying email
@@ -183,7 +177,8 @@ ChangeEmailForm.propTypes = {
   checkedEmail: PropTypes.string,
   checkingEmailError: PropTypes.string,
   isEmailAvailable: PropTypes.bool,
-  isEmailChanging: PropTypes.bool
+  isEmailChanging: PropTypes.bool,
+  isCustomer: PropTypes.bool
 }
 
 export default ChangeEmailForm

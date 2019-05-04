@@ -75,6 +75,11 @@ const topics = [
       EVENT_TYPE.MEMBER.MANAGER_JOINED,
       EVENT_TYPE.MEMBER.COPILOT_JOINED,
       EVENT_TYPE.MEMBER.ASSIGNED_AS_OWNER,
+      EVENT_TYPE.MEMBER.INVITE_REQUESTED,
+      EVENT_TYPE.MEMBER.INVITE_APPROVED,
+      EVENT_TYPE.MEMBER.INVITE_REFUSED,
+      EVENT_TYPE.MEMBER.COPILOT_ADDED,
+      EVENT_TYPE.MEMBER.COPILOT_REFUSED,
     ]
   }, {
     title: 'Project plan',
@@ -308,7 +313,7 @@ class NotificationSettingsForm extends React.Component {
                         <span className="checkbox-text" />
                       </label>
                     ) : (
-                      <SwitchButton                       
+                      <SwitchButton
                         onChange={() => this.handleWebConfigurationChange(index)}
                         name={`web[${index}]`}
                         checked={notifications[topicFirstType].web.enabled === 'yes'}

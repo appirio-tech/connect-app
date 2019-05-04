@@ -26,17 +26,20 @@ import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import NotificationsReader from '../../../components/NotificationsReader'
-import { 
-  SCREEN_BREAKPOINT_MD, 
-  PHASE_STATUS_DRAFT, 
-  PROJECT_STATUS_COMPLETED, 
+import {
+  SCREEN_BREAKPOINT_MD,
+  PHASE_STATUS_DRAFT,
+  PROJECT_STATUS_COMPLETED,
   PHASE_STATUS_ACTIVE,
-  PROJECT_STATUS_CANCELLED, 
+  PROJECT_STATUS_CANCELLED,
   PROJECT_FEED_TYPE_PRIMARY,
+  PROJECT_FEED_TYPE_MESSAGES,
   EVENT_TYPE,
 } from '../../../config/constants'
 import Sticky from '../../../components/Sticky'
 import { Link } from 'react-router-dom'
+import PERMISSIONS from '../../../config/permissions'
+import { checkPermission } from '../../../helpers/permissions'
 
 import './ProjectPlanContainer.scss'
 
@@ -63,9 +66,10 @@ class ProjectPlanContainer extends React.Component {
     const { expandProjectPhase } = this.props
     const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
     if (scrollTo) {
-      const phaseId = scrollTo.startsWith('phase-') ? parseInt(scrollTo.replace('phase-', ''), 10) : null
+      const hashParts = _.split(scrollTo, '-')
+      const phaseId = hashParts[0] === 'phase' ? parseInt(hashParts[1], 10) : null
       if (phaseId) {
-        let tab = scrollTo.replace(`phase-${phaseId}-`, '')
+        let tab = hashParts[2]
         tab = tab === scrollTo ? 'timeline' : tab
         // we just open tab, while smooth scrolling has to be caused by URL hash
         expandProjectPhase(phaseId, tab)
@@ -98,6 +102,7 @@ class ProjectPlanContainer extends React.Component {
       feeds,
       isFeedsLoading,
       phases,
+      phasesNonDirty,
       productsTimelines,
       phasesTopics,
       isProcessing,
@@ -107,6 +112,10 @@ class ProjectPlanContainer extends React.Component {
     // customer user doesn't see unplanned (draft) phases
     const visiblePhases = phases && phases.filter((phase) => (
       isSuperUser || isManageUser || phase.status !== PHASE_STATUS_DRAFT
+    ))
+    const visiblePhasesIds = _.map(visiblePhases, 'id')
+    const visiblePhasesNonDirty = phasesNonDirty && phasesNonDirty.filter((phaseNonDirty) => (
+      _.includes(visiblePhasesIds, phaseNonDirty.id)
     ))
 
     const isProjectLive = project.status !== PROJECT_STATUS_COMPLETED && project.status !== PROJECT_STATUS_CANCELLED
@@ -131,7 +140,7 @@ class ProjectPlanContainer extends React.Component {
 
     return (
       <TwoColsLayout>
-        <NotificationsReader 
+        <NotificationsReader
           id="project-plan"
           criteria={[
             { eventType: EVENT_TYPE.PROJECT_PLAN.READY, contents: { projectId: project.id } },
@@ -150,19 +159,19 @@ class ProjectPlanContainer extends React.Component {
             }}
           </MediaQuery>
         </TwoColsLayout.Sidebar>
-
         <TwoColsLayout.Content>
           {visiblePhases && visiblePhases.length > 0 ? (
             <ProjectStages
               {...{
                 ...this.props,
-                phases: visiblePhases
+                phases: visiblePhases,
+                phasesNonDirty: visiblePhasesNonDirty,
               }}
             />
           ) : (
             <ProjectPlanEmpty />
           )}
-          {isProjectLive && isManageUser && (<div styleName="add-button-container">
+          {isProjectLive && checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project, phases)  && (<div styleName="add-button-container">
             <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
           </div>)}
         </TwoColsLayout.Content>
@@ -183,14 +192,24 @@ ProjectPlanContainer.propTypes = {
   productsTimelines: PT.object.isRequired,
 }
 
-const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates }) => ({
-  productTemplates: templates.productTemplates,
-  phases: projectState.phases,
-  feeds: projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics,
-  isFeedsLoading: projectTopics.isLoading,
-  phasesTopics,
-  phasesStates: projectState.phasesStates,
-})
+const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates }) => {
+  // all feeds includes primary as well as private topics if user has access to private topics
+  let allFeed = projectTopics.feeds[PROJECT_FEED_TYPE_PRIMARY].topics
+  if (checkPermission(PERMISSIONS.ACCESS_PRIVATE_POST)) {
+    allFeed = [...allFeed, ...projectTopics.feeds[PROJECT_FEED_TYPE_MESSAGES].topics]
+  }
+
+  return {
+    productTemplates: templates.productTemplates,
+    productCategories: templates.productCategories,
+    phases: projectState.phases,
+    phasesNonDirty: projectState.phasesNonDirty,
+    feeds: allFeed,
+    isFeedsLoading: projectTopics.isLoading,
+    phasesTopics,
+    phasesStates: projectState.phasesStates,
+  }
+}
 
 const mapDispatchToProps = {
   updateProduct,

@@ -29,6 +29,9 @@ import BackIcon from '../../../../assets/icons/arrow-left.svg'
 import EditStageForm from './EditStageForm'
 import NotificationsReader from '../../../../components/NotificationsReader'
 
+import PERMISSIONS from '../../../../config/permissions'
+import {checkPermission} from '../../../../helpers/permissions'
+
 import './PhaseCard.scss'
 
 class PhaseCard extends React.Component {
@@ -87,9 +90,10 @@ class PhaseCard extends React.Component {
       deleteProjectPhase,
       isUpdating,
       timeline,
-      hasReadPosts,
+      hasUnseen,
       phaseId,
       isExpanded,
+      project
     } = this.props
     const progressInPercent = attr.progressInPercent || 0
 
@@ -97,10 +101,7 @@ class PhaseCard extends React.Component {
     status = _.find(PHASE_STATUS, s => s.value === status) ? status : PHASE_STATUS_DRAFT
     const statusDetails = _.find(PHASE_STATUS, s => s.value === status)
 
-    const phaseEditable = isManageUser && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
-    
-
-    const hasUnseen = hasReadPosts
+    const phaseEditable = checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project) && status !== PHASE_STATUS_COMPLETED && projectStatus !== PROJECT_STATUS_CANCELLED && projectStatus !== PROJECT_STATUS_COMPLETED
 
     return (
       <div styleName={'phase-card ' + (isExpanded ? ' expanded ' : ' ')} id={`phase-${phaseId}`}>

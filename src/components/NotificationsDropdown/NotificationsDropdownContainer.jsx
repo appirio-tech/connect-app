@@ -7,12 +7,13 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
+import { TransitionGroup, Transition } from 'react-transition-group'
 import { getNotifications, visitNotifications, toggleNotificationSeen, markAllNotificationsRead,
   toggleNotificationRead, toggleBundledNotificationRead, viewOlderNotifications,
   toggleNotificationsDropdownMobile, toggleNotificationsDropdownWeb, hideOlderNotifications } from '../../routes/notifications/actions'
-import { 
-  splitNotificationsBySources, 
-  filterReadNotifications, 
+import {
+  splitNotificationsBySources,
+  filterReadNotifications,
   limitQuantityInSources,
   preRenderNotifications,
 } from '../../routes/notifications/helpers/notifications'
@@ -116,11 +117,11 @@ const NotificationsDropdownContainerView = (props) => {
           const projectSources = notificationsBySources.length > 1 && globalSource ? notificationsBySources.slice(1) : notificationsBySources
 
           return (
-            <NotificationsDropdown 
-              hasUnread={hasUnread} 
-              hasNew={hasNew} 
-              onToggle={() => {
-                toggleNotificationsDropdownWeb()
+            <NotificationsDropdown
+              hasUnread={hasUnread}
+              hasNew={hasNew}
+              onToggle={(isOpen) => {
+                toggleNotificationsDropdownWeb(isOpen)
                 visitNotifications()
               }}
             >
@@ -133,30 +134,40 @@ const NotificationsDropdownContainerView = (props) => {
                 ) : ([
                   <ScrollLock key="body">
                     <div className="notifications-dropdown-body">
-                      {globalSource && globalSource.notifications.length &&
-                      <NotificationsSection
-                        {...globalSource}
-                        isGlobal
-                        isSimple
-                        onReadToggleClick={toggleNotificationReadWithDelay}
-                        onLinkClick={(notificationId) => {
-                          toggleNotificationsDropdownWeb()
-                          markNotificationSeen(notificationId)
-                        }}
-                      />
-                      }
-                      {projectSources.filter(source => source.notifications.length > 0).map(source => (
-                        <NotificationsSection
-                          {...source}
-                          key={source.id}
-                          isSimple
-                          onReadToggleClick={toggleNotificationReadWithDelay}
-                          onLinkClick={(notificationId) => {
-                            toggleNotificationsDropdownWeb()
-                            markNotificationSeen(notificationId)
-                          }}
-                        />
-                      ))}
+                      <Transition in={globalSource && globalSource.notifications.length} timeout={500} unmountOnExit>
+                        {state => (
+                          <NotificationsSection
+                            {...globalSource}
+                            transitionState={state}
+                            isGlobal
+                            isSimple
+                            onReadToggleClick={toggleNotificationReadWithDelay}
+                            onLinkClick={(notificationId) => {
+                              toggleNotificationsDropdownWeb()
+                              markNotificationSeen(notificationId)
+                            }}
+                          />
+                        )}
+                      </Transition>
+                      <TransitionGroup>
+                        {projectSources.filter(source => source.notifications.length > 0).map(source => (
+                          <Transition timeout={500} key={source.id} unmountOnExit>
+                            {state => (
+                              <NotificationsSection
+                                {...source}
+                                transitionState={state}
+                                key={source.id}
+                                isSimple
+                                onReadToggleClick={toggleNotificationReadWithDelay}
+                                onLinkClick={(notificationId) => {
+                                  toggleNotificationsDropdownWeb()
+                                  markNotificationSeen(notificationId)
+                                }}
+                              />
+                            )}
+                          </Transition>
+                        ))}
+                      </TransitionGroup>
                     </div>
                   </ScrollLock>,
                   <NotificationsReadAll key="footer" to="/notifications">
@@ -193,31 +204,42 @@ const NotificationsDropdownContainerView = (props) => {
                 notificationsEmpty
               ) : (
                 <div>
-                  {globalSource && globalSource.notifications.length > 0 &&
-                    <NotificationsSection
-                      {...globalSource}
-                      isGlobal
-                      isSimple
-                      onReadToggleClick={toggleNotificationReadWithDelay}
-                      onViewOlderClick={() => viewOlderNotifications(globalSource.id)}
-                      onLinkClick={(notificationId) => {
-                        toggleNotificationsDropdownMobile()
-                        markNotificationSeen(notificationId)
-                      }}
-                    />}
-                  {projectSources.filter(source => source.notifications.length).map(source => (
-                    <NotificationsSection
-                      {...source}
-                      key={source.id}
-                      isSimple
-                      onReadToggleClick={toggleNotificationReadWithDelay}
-                      onViewOlderClick={() => viewOlderNotifications(source.id)}
-                      onLinkClick={(notificationId) => {
-                        toggleNotificationsDropdownMobile()
-                        markNotificationSeen(notificationId)
-                      }}
-                    />
-                  ))}
+                  <Transition in={globalSource && globalSource.notifications.length} timeout={500} unmountOnExit>
+                    {state => (
+                      <NotificationsSection
+                        {...globalSource}
+                        transitionState={state}
+                        isGlobal
+                        isSimple
+                        onReadToggleClick={toggleNotificationReadWithDelay}
+                        onViewOlderClick={() => viewOlderNotifications(globalSource.id)}
+                        onLinkClick={(notificationId) => {
+                          toggleNotificationsDropdownMobile()
+                          markNotificationSeen(notificationId)
+                        }}
+                      />
+                    )}
+                  </Transition>
+                  <TransitionGroup>
+                    {projectSources.filter(source => source.notifications.length).map(source => (
+                      <Transition timeout={500} key={source.id} unmountOnExit>
+                        {state => (
+                          <NotificationsSection
+                            {...source}
+                            transitionState={state}
+                            key={source.id}
+                            isSimple
+                            onReadToggleClick={toggleNotificationReadWithDelay}
+                            onViewOlderClick={() => viewOlderNotifications(source.id)}
+                            onLinkClick={(notificationId) => {
+                              toggleNotificationsDropdownMobile()
+                              markNotificationSeen(notificationId)
+                            }}
+                          />
+                        )}
+                      </Transition>
+                    ))}
+                  </TransitionGroup>
                 </div>
               )}
             </NotificationsMobilePage>
@@ -258,11 +280,11 @@ class NotificationsDropdownContainer extends React.Component {
   render() {
     const { notifications, ...restProps } = this.props
     const preRenderedNotifications = preRenderNotifications(notifications)
-    
+
     return (
       <NotificationsDropdownContainerView
         {...{
-          ...restProps, 
+          ...restProps,
           notifications: preRenderedNotifications
         }}
       />

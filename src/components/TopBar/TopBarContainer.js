@@ -10,9 +10,11 @@ import {
   ROLE_CONNECT_MANAGER,
   ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN,
+  ROLE_CONNECT_ACCOUNT_MANAGER,
   DOMAIN
 } from '../../config/constants'
 import ConnectLogoMono from '../../assets/icons/connect-logo-mono.svg'
+import { getAvatarResized } from '../../helpers/tcHelpers.js'
 require('./TopBarContainer.scss')
 
 
@@ -60,9 +62,9 @@ class TopBarContainer extends React.Component {
       )
     }
     const { user, toolbar, userRoles, isPowerUser } = this.props
-
     const userHandle  = _.get(user, 'handle')
-    const userImage = _.get(user, 'photoURL')
+    const bigPhotoURL = _.get(user, 'photoURL')
+    const userImage = getAvatarResized(bigPhotoURL, 40)
     const userFirstName = _.get(user, 'firstName')
     const userLastName = _.get(user, 'lastName')
     let userName = userFirstName
@@ -105,13 +107,12 @@ class TopBarContainer extends React.Component {
           { label: 'My profile', link: '/settings/profile' },
           { label: 'Account and security', link: '/settings/account' },
           { label: 'Notification settings', link: '/settings/notifications' },
-          { label: 'Getting Started', link: 'https://www.topcoder.com/about-topcoder/connect/', absolute: true },
           { label: 'Help', link: 'https://help.topcoder.com/hc/en-us', absolute: true },
         ]
       }, {
         items: [
-          { label: 'About', link: 'https://www.topcoder.com/about-topcoder/', absolute: true },
-          { label: 'Contacts', link: 'https://www.topcoder.com/about-topcoder/contact/', absolute: true },
+          { label: 'About', link: 'https://www.topcoder.com/about/', absolute: true },
+          { label: 'Contact us', link: 'https://www.topcoder.com/contact/', absolute: true },
           { label: 'Privacy', link: 'https://www.topcoder.com/community/how-it-works/privacy-policy/', absolute: true },
           { label: 'Terms', link: 'https://connect.topcoder.com/terms', absolute: true },
         ]
@@ -169,7 +170,7 @@ class TopBarContainer extends React.Component {
 
 const mapStateToProps = ({ loadUser }) => {
   let isPowerUser = false
-  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
+  const roles = [ROLE_CONNECT_COPILOT, ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_ADMINISTRATOR, ROLE_CONNECT_ADMIN]
   if (loadUser.user) {
     isPowerUser = loadUser.user.roles.some((role) => roles.indexOf(role) !== -1)
   }
