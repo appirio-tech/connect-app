@@ -1,5 +1,6 @@
 import React from 'react'
 import { getProjectAttachment } from '../api/projectAttachments'
+import { getTopicAttachment } from '../api/messages'
 import { withRouter } from 'react-router-dom'
 
 class FileDownload extends React.Component {
@@ -15,13 +16,22 @@ class FileDownload extends React.Component {
   }
 
   download() {
-    const projectId = this.props.match.params.projectId
-    const attachmentId = this.props.match.params.attachmentId
-    getProjectAttachment(projectId, attachmentId).then((url) => {
-      window.location = url
-    }).catch(() => {
-      this.setState({loaded:true, error:'File unavailable'})
-    })
+    if (this.props.match.params.messageAttachmentId){
+      const attachmentId = this.props.match.params.messageAttachmentId
+      getTopicAttachment(attachmentId).then((url) => {
+        window.location = url
+      }).catch(() => {
+        this.setState({loaded:true, error:'File unavailable'})
+      })
+    } else {
+      const projectId = this.props.match.params.projectId
+      const attachmentId = this.props.match.params.attachmentId
+      getProjectAttachment(projectId, attachmentId).then((url) => {
+        window.location = url
+      }).catch(() => {
+        this.setState({loaded:true, error:'File unavailable'})
+      })
+    }
   }
 
   render() {

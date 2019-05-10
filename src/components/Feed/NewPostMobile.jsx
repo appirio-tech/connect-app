@@ -16,11 +16,26 @@ import MobilePage from '../MobilePage/MobilePage'
 import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 import XMartIcon from '../../assets/icons/x-mark.svg'
 import './NewPostMobile.scss'
+import * as filepicker from 'filestack-js'
+import {
+  FILE_PICKER_API_KEY,
+  FILE_PICKER_CNAME,
+  FILE_PICKER_FROM_SOURCES,
+  FILE_PICKER_SUBMISSION_CONTAINER_NAME, PROJECT_ATTACHMENTS_FOLDER
+} from '../../config/constants'
+import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
+import _ from 'lodash'
+import { withRouter } from 'react-router-dom'
+import { createTopicAttachment } from '../../api/messages'
 
 export const NEW_POST_STEP = {
   STATUS: 'STATUS',
   COMMENT: 'COMMENT'
 }
+
+const fileUploadClient = filepicker.init(FILE_PICKER_API_KEY, {
+  cname: FILE_PICKER_CNAME
+})
 
 // we need it to calulate body height based on the actual mobile browser viewport height
 const HEADER_HEIGHT = 50
@@ -29,17 +44,25 @@ class NewPostMobile extends React.Component {
   constructor(props) {
     super(props)
 
+    const projectId = props.match.params.projectId
     this.state = {
       step: props.step,
       statusValue: '',
       commentValue: '',
       browserActualViewportHeigth: document.documentElement.clientHeight,
-      isPrivate: false
+      isPrivate: false,
+      isAttachmentUploaderOpen: false,
+      rawFiles: [],
+      attachmentsStorePath: `${PROJECT_ATTACHMENTS_FOLDER}/${projectId}/`,
     }
 
     this.setStep = this.setStep.bind(this)
     this.onValueChange = this.onValueChange.bind(this)
     this.updateBrowserHeight = this.updateBrowserHeight.bind(this)
+    this.openFileUpload = this.openFileUpload.bind(this)
+    this.processUploadedFiles = this.processUploadedFiles.bind(this)
+    this.removeRawFile = this.removeRawFile.bind(this)
+    this.onPost = this.onPost.bind(this)
   }
 
   componentWillMount() {
@@ -79,12 +102,85 @@ class NewPostMobile extends React.Component {
     }
   }
 
+  openFileUpload() {
+    if (fileUploadClient) {
+      if (this.state.isAttachmentUploaderOpen) return
+      const picker = fileUploadClient.picker({
+        storeTo: {
+          location: 's3',
+          path: this.state.attachmentsStorePath,
+          container: FILE_PICKER_SUBMISSION_CONTAINER_NAME,
+          region: 'us-east-1'
+        },
+        maxFiles: 4,
+        fromSources: FILE_PICKER_FROM_SOURCES,
+        uploadInBackground: false,
+        onFileUploadFinished: (files) => {
+          this.processUploadedFiles(files)
+        },
+        onOpen: () => {
+          this.setState({isAttachmentUploaderOpen: true})
+        },
+        onClose: () => {
+          this.setState({isAttachmentUploaderOpen: false})
+        }
+      })
+
+      picker.open()
+    }
+  }
+
+  processUploadedFiles(fpFiles) {
+    fpFiles = _.isArray(fpFiles) ? fpFiles : [fpFiles]
+    const rawFiles = fpFiles.map(f => ({
+      filename: f.key,
+      bucket: f.container,
+      title: f.filename
+    }))
+
+    this.setState({ rawFiles })
+  }
+
+  removeRawFile(index) {
+    const rawFiles = _.cloneDeep(this.state.rawFiles)
+    rawFiles.splice(index, 1)
+    this.setState({
+      rawFiles
+    })
+  }
+
+  onPost() {
+    const { statusValue, commentValue, isPrivate, rawFiles } = this.state
+    if (rawFiles.length > 0) {
+      const promises = rawFiles.map(f => createTopicAttachment(_.omit(f, ['title'])))
+      Promise.all(promises)
+        .then(results => {
+          const rawFilesattachmentIds = results.map(content => content.result.id)
+          const attachmentIds = [
+            ...rawFilesattachmentIds
+          ]
+          this.props.onPost({
+            title: statusValue,
+            content: commentValue,
+            isPrivate,
+            attachmentIds
+          })
+        })
+    } else {
+      this.props.onPost({
+        title: statusValue,
+        content: commentValue,
+        isPrivate
+      })
+    }
+  }
+
   render() {
     const {
-      statusTitle, commentTitle, commentPlaceholder, submitText, onPost, onClose,
+      statusTitle, commentTitle, commentPlaceholder, submitText, onClose,
       isCreating, nextStepText, statusPlaceholder, canAccessPrivatePosts
     } = this.props
-    const { step, statusValue, commentValue, browserActualViewportHeigth, isPrivate } = this.state
+    const { step, statusValue, commentValue, browserActualViewportHeigth, isPrivate, rawFiles } = this.state
 
     let value
     let title
@@ -104,11 +200,7 @@ class NewPostMobile extends React.Component {
       value = commentValue
       title = commentTitle
       placeholder = commentPlaceholder
-      onBtnClick = () => onPost({
-        title: statusValue,
-        content: commentValue,
-        isPrivate
-      })
+      onBtnClick = () => { this.onPost() }
       btnText = submitText
     }
 
@@ -136,12 +228,37 @@ class NewPostMobile extends React.Component {
             onChange={this.onValueChange}
             disabled={isCreating}
           />
-          <div styleName="submit-wrapper">
-            <button
-              className="tc-btn tc-btn-primary tc-btn-md"
-              onClick={onBtnClick}
-              disabled={!value.trim() || isCreating}
-            >{isCreating ? 'Posting...' : btnText}</button>
+          <div>
+            <div styleName="attachment-wrapper">
+              <div styleName="attachment-files-mobile">
+                <ul>
+                  {
+                    rawFiles.map((f, index) => (
+                      <li key={`file-${index}`}>
+                        {f.title}
+                        <div styleName="button-group">
+                          <div styleName="buttons">
+                            <button onClick={(index) => {this.removeRawFile(index)}} type="button">
+                              <BtnRemove />
+                            </button>
+                          </div>
+                        </div>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </div>
+              <div styleName="tc-attachment-button" onClick={this.openFileUpload}>
+                <a>Attach a file</a>
+              </div>
+            </div>
+            <div styleName="submit-wrapper">
+              <button
+                className="tc-btn tc-btn-primary tc-btn-md"
+                onClick={onBtnClick}
+                disabled={!value.trim() || isCreating}
+              >{isCreating ? 'Posting...' : btnText}</button>
+            </div>
           </div>
         </div>
       </MobilePage>
@@ -167,4 +284,4 @@ NewPostMobile.propTypes = {
   canAccessPrivatePosts: PropTypes.bool,
 }
 
-export default NewPostMobile
+export default withRouter(NewPostMobile)

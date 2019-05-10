@@ -319,12 +319,15 @@ class MessagesView extends React.Component {
     })
   }
 
-  onAddNewMessage(threadId, content) {
+  onAddNewMessage(threadId, content, attachmentIds) {
     const { currentUser } = this.props
     const newMessage = {
       date: new Date(),
       userId: parseInt(currentUser.id),
       content
+    }
+    if (attachmentIds) {
+      Object.assign(newMessage, { attachmentIds })
     }
     this.props.addFeedComment(threadId, PROJECT_FEED_TYPE_MESSAGES, newMessage)
   }
@@ -346,9 +349,9 @@ class MessagesView extends React.Component {
     })
   }
 
-  onSaveMessage(threadId, message, content) {
+  onSaveMessage(threadId, message, content, attachmentIds) {
     const newMessage = {...message}
-    newMessage.content = content
+    Object.assign(newMessage, {content, attachmentIds})
     this.props.saveFeedComment(threadId, PROJECT_FEED_TYPE_MESSAGES, newMessage)
   }
 
@@ -389,19 +392,23 @@ class MessagesView extends React.Component {
   }
 
   onSaveTopic(threadId, postId, title, content) {
-    this.props.saveProjectTopic(threadId, PROJECT_FEED_TYPE_MESSAGES, {postId, title, content})
+    const newTopic = { postId, title, content }
+    this.props.saveProjectTopic(threadId, PROJECT_FEED_TYPE_MESSAGES, newTopic)
   }
 
   onDeleteTopic(threadId) {
     this.props.deleteProjectTopic(threadId, PROJECT_FEED_TYPE_MESSAGES)
   }
 
-  onNewThread({title, content}) {
+  onNewThread({title, content, attachmentIds}) {
     const { project } = this.props
     const newThread = {
       title,
       body: content,
       tag: PROJECT_FEED_TYPE_MESSAGES
+    }
+    if (attachmentIds) {
+      Object.assign(newThread, { attachmentIds })
     }
     this.props.createProjectTopic(project.id, newThread).then(() => {
       this.setState({

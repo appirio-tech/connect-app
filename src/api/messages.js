@@ -76,7 +76,11 @@ export function deleteTopic(topicId) {
 }
 
 export function addTopicPost(topicId, post) {
-  return axios.post(`${apiBaseUrl}/topics/${topicId}/posts/create`, { post: post.content }, { timeout } )
+  const payload = {
+    post: post.content,
+    attachmentIds: post.attachmentIds
+  }
+  return axios.post(`${apiBaseUrl}/topics/${topicId}/posts/create`, payload, { timeout } )
     .then( resp => {
       return {
         topicId,
@@ -86,7 +90,11 @@ export function addTopicPost(topicId, post) {
 }
 
 export function saveTopicPost(topicId, post) {
-  return axios.post(`${apiBaseUrl}/topics/${topicId}/posts/${post.id}/edit`, { post: post.content }, { timeout } )
+  const payload = {
+    post: post.content,
+    attachmentIds: post.attachmentIds
+  }
+  return axios.post(`${apiBaseUrl}/topics/${topicId}/posts/${post.id}/edit`, payload, { timeout } )
     .then( resp => {
       return {
         topicId,
@@ -147,5 +155,30 @@ export function getTopicsWithComments(reference, referenceId, tag, removeCoderBo
           return { topics, totalCount }
         })
 
+    })
+}
+
+export function createTopicAttachment(attachment) {
+  return axios.post(`${apiBaseUrl}/topics/attachments/create`, attachment, { timeout } )
+    .then( resp => {
+      return {
+        result : _.get(resp.data, 'result.content', {})
+      }
+    })
+}
+
+export function getTopicAttachment(attachmentId) {
+  return axios.get(`${apiBaseUrl}/topics/attachments/${attachmentId}/read`, { timeout } )
+    .then( resp => {
+      return _.get(resp.data, 'result.content.url', "")
+    })
+}
+
+export function deleteTopicAttachment(attachmentId) {
+  return axios.delete(`${apiBaseUrl}/topics/attachments/${attachmentId}/delete`, { timeout } )
+    .then( resp => {
+      return {
+        result : _.get(resp.data, 'result.content', {})
+      }
     })
 }

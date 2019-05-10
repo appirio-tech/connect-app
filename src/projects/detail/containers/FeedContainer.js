@@ -149,7 +149,8 @@ class FeedView extends React.Component {
         date,
         createdAt: p.date,
         edited,
-        author: isSystemUser(p.userId) ? SYSTEM_USER : commentAuthor
+        author: isSystemUser(p.userId) ? SYSTEM_USER : commentAuthor,
+        attachments: p.attachments || []
       }
       const prevComment = prevFeed ? _.find(prevFeed.posts, t => p.id === t.id) : null
       if (prevComment && prevComment.isSavingComment && !comment.isSavingComment && !comment.error) {
@@ -236,12 +237,15 @@ class FeedView extends React.Component {
     })
   }
 
-  onNewPost({title, content, isPrivate = false}) {
+  onNewPost({title, content, isPrivate = false, attachmentIds}) {
     const { project } = this.props
     const newFeed = {
       title,
       body: content,
       tag: isPrivate ? PROJECT_FEED_TYPE_MESSAGES : PROJECT_FEED_TYPE_PRIMARY
+    }
+    if (attachmentIds) {
+      Object.assign(newFeed, { attachmentIds })
     }
     this.props.createProjectTopic(project.id, newFeed)
   }
@@ -284,13 +288,16 @@ class FeedView extends React.Component {
     }
   }
 
-  onAddNewComment(feedId, content) {
+  onAddNewComment(feedId, content, attachmentIds) {
     const { currentUser, feeds } = this.props
     const feed = _.find(feeds, { id: feedId })
     const newComment = {
       date: new Date(),
       userId: parseInt(currentUser.id),
-      content
+      content,
+    }
+    if (attachmentIds) {
+      Object.assign(newComment, { attachmentIds })
     }
     this.props.addFeedComment(feedId, feed.tag, newComment)
   }
@@ -312,11 +319,11 @@ class FeedView extends React.Component {
     })
   }
 
-  onSaveMessage(feedId, message, content) {
+  onSaveMessage(feedId, message, content, attachmentIds) {
     const newMessage = {...message}
     const { feeds } = this.state
     const feed = _.find(feeds, { id: feedId })
-    newMessage.content = content
+    Object.assign(newMessage, {content, attachmentIds})
     this.props.saveFeedComment(feedId, feed.tag, newMessage)
   }
 
@@ -363,7 +370,8 @@ class FeedView extends React.Component {
   onSaveTopic(feedId, postId, title, content) {
     const { feeds } = this.state
     const feed = _.find(feeds, { id: feedId })
-    this.props.saveProjectTopic(feedId, feed.tag, {postId, title, content})
+    const newTopic = { postId, title, content }
+    this.props.saveProjectTopic(feedId, feed.tag, newTopic)
   }
 
   onDeleteTopic(feedId) {

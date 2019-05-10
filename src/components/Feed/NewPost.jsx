@@ -40,6 +40,7 @@ class NewPost extends React.Component {
         allMembers={allMembers}
         projectMembers={projectMembers}
         hasPrivateSwitch={canAccessPrivatePosts}
+        canUploadAttachment
       />
     )
   }
