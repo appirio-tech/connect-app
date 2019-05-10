@@ -462,6 +462,7 @@ export const projectTopics = function (state=initialState, action) {
         error: { $set : false },
         rawContent: { $set : rawContent },
         body: { $set : savedComment.body },
+        attachments: { $set : savedComment.attachments },
         updatedDate: { $set : savedComment.updatedDate },
         edited: {$set : true }
       })

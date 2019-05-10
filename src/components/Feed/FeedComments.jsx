@@ -425,7 +425,7 @@ class FeedComments extends React.Component {
                   submitText="Post"
                   nextStepText="Add a post"
                   onClose={this.toggleNewCommentMobile}
-                  onPost={({ content }) => onAddNewComment(content)}
+                  onPost={({ content, attachmentIds }) => onAddNewComment(content, attachmentIds)}
                   isCreating={isAddingComment}
                   hasError={error}
                   onNewPostChange={this.onNewCommentChange}

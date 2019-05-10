@@ -22,6 +22,17 @@ import _ from 'lodash'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 
+import {
+  FILE_PICKER_API_KEY,
+  FILE_PICKER_CNAME, FILE_PICKER_FROM_SOURCES,
+  FILE_PICKER_SUBMISSION_CONTAINER_NAME,
+  PROJECT_ATTACHMENTS_FOLDER
+} from '../../config/constants'
+import * as filepicker from 'filestack-js'
+import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
+import { createTopicAttachment } from '../../api/messages'
+import { withRouter } from 'react-router-dom'
+
 const linkPlugin = createLinkPlugin()
 const blockDndPlugin = createBlockDndPlugin()
 
@@ -52,18 +63,22 @@ const blocks = [
   {className: 'code', style: 'code-block'}
 ]
 
+const fileUploadClient = filepicker.init(FILE_PICKER_API_KEY, {
+  cname: FILE_PICKER_CNAME
+})
+
 class RichTextArea extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      editorExpanded: false, 
-      editorState: EditorState.createEmpty(), 
-      titleValue: '', 
-      suggestions: [], 
-      allSuggestions:[], 
+      editorExpanded: false,
+      editorState: EditorState.createEmpty(),
+      titleValue: '',
+      suggestions: [],
+      allSuggestions:[],
       isPrivate: false
     }
-    
+
     this.onTitleChange = this.onTitleChange.bind(this)
     this.onEditorChange = this.onEditorChange.bind(this)
     this.handleKeyCommand = this.handleKeyCommand.bind(this)
@@ -78,6 +93,11 @@ class RichTextArea extends React.Component {
     this.setUploadState = this.setUploadState.bind(this)
     this.onSearchChange = this.onSearchChange.bind(this)
     this.onAddMention = this.onAddMention.bind(this)
+    this.openFileUpload = this.openFileUpload.bind(this)
+    this.processUploadedFiles = this.processUploadedFiles.bind(this)
+    this.getDownloadAttachmentFilename = this.getDownloadAttachmentFilename.bind(this)
+    this.removeRawFile = this.removeRawFile.bind(this)
+    this.removeFile = this.removeFile.bind(this)
     this.mentionPlugin = createMentionPlugin({mentionPrefix: '@'})
     this.plugins = plugins.slice(0)
     this.plugins.push(this.mentionPlugin)
@@ -90,6 +110,7 @@ class RichTextArea extends React.Component {
 
   componentWillMount() {
     const suggestions = _.map(_.values(this.props.projectMembers), (e) => { return {name: e.firstName + ' ' + e.lastName, handle: e.handle, userId: e.userId, link:'/users/'+e.handle} })
+    const projectId = this.props.match.params.projectId
     this.setState({
       editorExpanded: this.props.editMode,
       titleValue: this.props.title || '',
@@ -97,7 +118,11 @@ class RichTextArea extends React.Component {
       currentMDContent: this.props.content,
       oldMDContent: this.props.oldContent,
       suggestions,
-      allSuggestions:suggestions
+      allSuggestions:suggestions,
+      isAttachmentUploaderOpen: false,
+      rawFiles: [],
+      attachmentsStorePath: `${PROJECT_ATTACHMENTS_FOLDER}/${projectId}/`,
+      files: _.cloneDeep(this.props.attachments || [])
     })
   }
 
@@ -106,7 +131,6 @@ class RichTextArea extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
     if (nextProps.isCreating !== this.props.isCreating && !nextProps.isCreating && !nextProps.hasError) {
       this.clearState()
     } else if ((nextProps.isGettingComment !== this.props.isGettingComment && !nextProps.isGettingComment)
@@ -117,7 +141,8 @@ class RichTextArea extends React.Component {
         titleValue: nextProps.title || '',
         editorState,
         currentMDContent: nextProps.content,
-        oldMDContent: nextProps.oldContent
+        oldMDContent: nextProps.oldContent,
+        files: _.cloneDeep(nextProps.attachments || [])
       })
     }
   }
@@ -184,11 +209,11 @@ class RichTextArea extends React.Component {
 
     const editorExpanded = isEditor && !isCloseButton
     const isPrivate = isEditor && !isCloseButton ? this.state.isPrivate : false
-    
+
     // to avoid unnecessary re-rendering on every click, only update state if any of the values is updated
     if (editorExpanded !== this.state.editorExpanded || isPrivate !== this.state.isPrivate) {
       this.setState({
-        editorExpanded, 
+        editorExpanded,
         isPrivate,
       })
     }
@@ -241,19 +266,32 @@ class RichTextArea extends React.Component {
       this.props.onPostChange(this.refs.title.value, this.state.currentMDContent)
     }
   }
-
   onPost() {
+    const { isCreating, disableTitle, disableContent, onPost, canUploadAttachment } = this.props
+    const { titleValue: title, currentMDContent: content, isPrivate, rawFiles, files } = this.state
     // if post creation is already in progress
-    if (this.props.isCreating) {
+    if (isCreating) {
       return
     }
 
-    const title = this.state.titleValue
-    const content = this.state.currentMDContent
-    const isPrivate = this.state.isPrivate
-
-    if ((this.props.disableTitle || title) && (this.props.disableContent || content)) {
-      this.props.onPost({title, content, isPrivate})
+    if (canUploadAttachment && rawFiles.length > 0) {
+      const promises = rawFiles.map(f => createTopicAttachment(_.omit(f, ['title'])))
+      Promise.all(promises)
+        .then(results => {
+          const rawFilesattachmentIds = results.map(content => content.result.id)
+          const filesattachmentIds = files.map(f => f.id)
+          const attachmentIds = [
+            ...filesattachmentIds,
+            ...rawFilesattachmentIds
+          ]
+          if ((disableTitle || title) && (disableContent || content)) {
+            onPost({ title, content, isPrivate, attachmentIds })
+          }
+        })
+    } else {
+      if ((disableTitle || title) && (disableContent || content)) {
+        onPost({ title, content, isPrivate, attachmentIds: files.map(f => f.id) })
+      }
     }
   }
   onSearchChange({value}){
@@ -264,6 +302,9 @@ class RichTextArea extends React.Component {
   onAddMention() {
   }
   cancelEdit() {
+    this.setState({
+      rawFiles: []
+    })
     this.props.cancelEdit()
   }
   getEditorState() {
@@ -275,15 +316,77 @@ class RichTextArea extends React.Component {
   setUploadState(uploading) {
     this.setState({uploading})
   }
+  openFileUpload() {
+    if (fileUploadClient) {
+      if (this.state.isAttachmentUploaderOpen) return
+      const picker = fileUploadClient.picker({
+        storeTo: {
+          location: 's3',
+          path: this.state.attachmentsStorePath,
+          container: FILE_PICKER_SUBMISSION_CONTAINER_NAME,
+          region: 'us-east-1'
+        },
+        maxFiles: 4,
+        fromSources: FILE_PICKER_FROM_SOURCES,
+        uploadInBackground: false,
+        onFileUploadFinished: (files) => {
+          this.processUploadedFiles(files)
+        },
+        onOpen: () => {
+          this.setState({isAttachmentUploaderOpen: true})
+        },
+        onClose: () => {
+          this.setState({isAttachmentUploaderOpen: false})
+        }
+      })
+
+      picker.open()
+    }
+  }
+  processUploadedFiles(fpFiles) {
+    fpFiles = _.isArray(fpFiles) ? fpFiles : [fpFiles]
+    let rawFiles = fpFiles.map(f => ({
+      filename: f.key,
+      bucket: f.container,
+      title: f.filename
+    }))
+    if (this.state.rawFiles){
+      rawFiles = this.state.rawFiles.concat(rawFiles)
+    }
+
+    this.setState({ rawFiles, editorExpanded: true })
+  }
+  removeRawFile(index) {
+    const rawFiles = _.cloneDeep(this.state.rawFiles)
+    rawFiles.splice(index, 1)
+    this.setState({
+      editorExpanded: true,
+      rawFiles
+    })
+  }
+  removeFile(index) {
+    const files = _.cloneDeep(this.state.files)
+    files.splice(index, 1)
+    this.setState({
+      editorExpanded: true,
+      files
+    })
+  }
+  getDownloadAttachmentFilename(attachmentOriginalFilename) {
+    const regex = new RegExp(`^${_.escapeRegExp(this.state.attachmentsStorePath)}.[a-zA-Z0-9]*.(.*.)`, 'g')
+    const match = regex.exec(attachmentOriginalFilename)
+    return match[1]
+  }
   render() {
     const {MentionSuggestions} = this.mentionPlugin
     const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating,
-      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic, hasPrivateSwitch } = this.props
-    const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading, isPrivate} = this.state
+      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic, hasPrivateSwitch, canUploadAttachment } = this.props
+    const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading, isPrivate, rawFiles, files} = this.state
     let canSubmit = (disableTitle || titleValue.trim())
         && (disableContent || editorState.getCurrentContent().hasText())
     if (editMode && canSubmit) {
       canSubmit = (!disableTitle && titleValue !== this.props.oldTitle) || (!disableContent && oldMDContent !== currentMDContent)
+                  || rawFiles.length > 0
     }
     const currentStyle = editorState.getCurrentInlineStyle()
     const blockType = RichUtils.getCurrentBlockType(editorState)
@@ -361,83 +464,120 @@ class RichTextArea extends React.Component {
               }
               <div className="textarea-footer">
                 <div className="textarea-footer-inner">
-                  {!disableContent &&
-                    <div className="textarea-buttons">
-                      {styles.map((item) => (
-                        <button
-                          key={item.style}
-                          disabled={disableForCodeBlock}
-                          onMouseDown={(e) => {
-                            this.toggleInlineStyle(item.style)
-                            e.preventDefault()
-                          }}
-                        >
-                          {
-                            EditorIcons.render(item.className, currentStyle.has(item.style))
-                          }
-                        </button>
-                      ))}
-                      <div className="separator"/>
-                      {blocks.map((item) => (
-                        <button
-                          disabled={item.style !== 'code-block' && disableForCodeBlock}
-                          key={item.style}
-                          onMouseDown={(e) => {
-                            this.toggleBlockType(item.style)
-                            e.preventDefault()
-                          }}
-                        >
-                          {
-                            EditorIcons.render(item.className, item.style === blockType)
-                          }
-                        </button>
-                      ))}
-                      <AddLinkButton
-                        type={'link'}
-                        getEditorState={this.getEditorState}
-                        setEditorState={this.setEditorState}
-                        disabled={disableForCodeBlock}
-                        active={currentEntity && 'LINK' === currentEntity.getType()}
-                      />
-                      { allowImages && <div className="separator"/> }
-                      { allowImages &&
+                  <div className="textarea-footer-inner-top">
+                    {!disableContent &&
+                      <div className="textarea-buttons">
+                        {styles.map((item) => (
+                          <button
+                            key={item.style}
+                            disabled={disableForCodeBlock}
+                            onMouseDown={(e) => {
+                              this.toggleInlineStyle(item.style)
+                              e.preventDefault()
+                            }}
+                          >
+                            {
+                              EditorIcons.render(item.className, currentStyle.has(item.style))
+                            }
+                          </button>
+                        ))}
+                        <div className="separator"/>
+                        {blocks.map((item) => (
+                          <button
+                            disabled={item.style !== 'code-block' && disableForCodeBlock}
+                            key={item.style}
+                            onMouseDown={(e) => {
+                              this.toggleBlockType(item.style)
+                              e.preventDefault()
+                            }}
+                          >
+                            {
+                              EditorIcons.render(item.className, item.style === blockType)
+                            }
+                          </button>
+                        ))}
                         <AddLinkButton
-                          type={'image'}
+                          type={'link'}
                           getEditorState={this.getEditorState}
                           setEditorState={this.setEditorState}
                           disabled={disableForCodeBlock}
+                          active={currentEntity && 'LINK' === currentEntity.getType()}
+                        />
+                        { allowImages && <div className="separator"/> }
+                        { allowImages &&
+                          <AddLinkButton
+                            type={'image'}
+                            getEditorState={this.getEditorState}
+                            setEditorState={this.setEditorState}
+                            disabled={disableForCodeBlock}
+                          />
+                        }
+                      </div>
+                    }
+                    <div className="tc-btns">
+                      {canUploadAttachment && <div className="tc-attachment-button" onClick={this.openFileUpload}>
+                        <a>Attach a file</a>
+                      </div>}
+                      {hasPrivateSwitch &&
+                        <SwitchButton
+                          name="private-post"
+                          onChange={(evt) => this.setState({isPrivate: evt.target.checked})}
+                          checked={isPrivate}
+                          label="Private"
                         />
                       }
-                    </div>
-                  }
-                  <div className="tc-btns">
-                    {hasPrivateSwitch &&
-                      <SwitchButton
-                        name="private-post"
-                        onChange={(evt) => this.setState({isPrivate: evt.target.checked})}
-                        checked={isPrivate}
-                        label="Private"
-                      />
-                    }
-                    {!editMode &&
-                      <button className="tc-btn tc-btn-default tc-btn-sm btn-close-creat">Cancel</button>
-                    }
-                    {editMode && !isCreating &&
-                    <button className="tc-btn tc-btn-default tc-btn-sm" onClick={this.cancelEdit}>
-                      Cancel
+                      {!editMode &&
+                        <button className="tc-btn tc-btn-default tc-btn-sm btn-close-creat">Cancel</button>
+                      }
+                      {editMode && !isCreating &&
+                      <button className="tc-btn tc-btn-default tc-btn-sm" onClick={this.cancelEdit}>
+                        Cancel
+                      </button>
+                      }
+                      { editMode &&
+                    <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
+                      { isCreating ? 'Saving...' : editButtonText }
                     </button>
-                    }
-                    { editMode &&
-                  <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
-                    { isCreating ? 'Saving...' : editButtonText }
-                  </button>
-                    }
-                    { !editMode &&
-                  <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
-                    { isCreating ? 'Posting...' : 'Post' }
-                  </button>
-                    }
+                      }
+                      { !editMode &&
+                    <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
+                      { isCreating ? 'Posting...' : 'Post' }
+                    </button>
+                      }
+                    </div>
                   </div>
+                  {canUploadAttachment && <div className="attachment-files">
+                    <ul>
+                      {
+                        files.map((f, index) => (
+                          <li key={`file-${index}`}>
+                            {this.getDownloadAttachmentFilename(f.originalFileName)}
+                            <div className="button-group">
+                              <div className="buttons link-buttons">
+                                <button onClick={() => {this.removeFile(index)}} type="button">
+                                  <BtnRemove className="btn-edit"/>
+                                </button>
+                              </div>
+                            </div>
+                          </li>
+                        ))
+                      }
+                      {
+                        rawFiles.map((f, index) => (
+                          <li key={`file-${index}`}>
+                            {f.title}
+                            <div className="button-group">
+                              <div className="buttons link-buttons">
+                                <button onClick={() => {this.removeRawFile(index)}} type="button">
+                                  <BtnRemove className="btn-edit"/>
+                                </button>
+                              </div>
+                            </div>
+                          </li>
+                        ))
+                      }
+                    </ul>
+                  </div>}
                 </div>
               </div>
             </div>
@@ -471,6 +611,8 @@ RichTextArea.propTypes = {
   projectMembers: PropTypes.object,
   editingTopic: PropTypes.bool,
   hasPrivateSwitch: PropTypes.bool,
+  canUploadAttachment: PropTypes.bool,
+  attachments: PropTypes.array
 }
 
-export default RichTextArea
+export default withRouter(RichTextArea)

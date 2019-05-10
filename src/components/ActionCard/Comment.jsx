@@ -3,17 +3,18 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import UserTooltip from '../User/UserTooltip'
 import RichTextArea from '../RichTextArea/RichTextArea'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import CommentEditToggle from './CommentEditToggle'
 import _ from 'lodash'
 import moment from 'moment'
 import NotificationsReader from '../../components/NotificationsReader'
-import { 
+import {
   POST_TIME_FORMAT,
-  EVENT_TYPE, 
+  EVENT_TYPE,
 } from '../../config/constants.js'
 
 import './Comment.scss'
+import { PROJECT_ATTACHMENTS_FOLDER } from '../../config/constants'
 
 class Comment extends React.Component {
 
@@ -25,18 +26,24 @@ class Comment extends React.Component {
     this.edit = this.edit.bind(this)
     this.delete = this.delete.bind(this)
     this.cancelEdit = this.cancelEdit.bind(this)
+    this.getDownloadAttachmentUrl = this.getDownloadAttachmentUrl.bind(this)
+    this.getDownloadAttachmentFilename = this.getDownloadAttachmentFilename.bind(this)
   }
 
   componentWillMount() {
-    this.setState({editMode: this.props.message && this.props.message.editMode || this.props.isSaving})
+    const projectId = this.props.match.params.projectId
+    this.setState({
+      editMode: this.props.message && this.props.message.editMode || this.props.isSaving,
+      attachmentsStorePath: `${PROJECT_ATTACHMENTS_FOLDER}/${projectId}/`
+    })
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({editMode: nextProps.message && nextProps.message.editMode || nextProps.isSaving})
   }
 
-  onSave({content}) {
-    this.props.onSave(this.props.message, content)
+  onSave({content, attachmentIds}) {
+    this.props.onSave(this.props.message, content, attachmentIds)
   }
 
   onChange(title, content) {
@@ -55,6 +62,16 @@ class Comment extends React.Component {
   cancelEdit() {
     this.setState({editMode: false})
     this.props.onChange(null, false)
+  }
+
+  getDownloadAttachmentUrl(attachmentId) {
+    return `/projects/messages/attachments/${attachmentId}`
+  }
+
+  getDownloadAttachmentFilename(attachmentOriginalFilename) {
+    const regex = new RegExp(`^${_.escapeRegExp(this.state.attachmentsStorePath)}.[a-zA-Z0-9]*.(.*.)`, 'g')
+    const match = regex.exec(attachmentOriginalFilename)
+    return match[1]
   }
 
   render() {
@@ -86,6 +103,8 @@ class Comment extends React.Component {
             allMembers={allMembers}
             projectMembers={projectMembers}
             editingTopic = {false}
+            canUploadAttachment
+            attachments={message.attachments}
           />
         </div>
       )
@@ -93,11 +112,11 @@ class Comment extends React.Component {
 
     return (
       <div styleName={cn('container', { self, 'is-deleting': isDeleting })} id={messageAnchor}>
-        <NotificationsReader 
+        <NotificationsReader
           id={messageAnchor}
           criteria={[
-            { eventType: EVENT_TYPE.POST.CREATED, contents: { postId: message.id } }, 
-            { eventType: EVENT_TYPE.POST.UPDATED, contents: { postId: message.id } }, 
+            { eventType: EVENT_TYPE.POST.CREATED, contents: { postId: message.id } },
+            { eventType: EVENT_TYPE.POST.UPDATED, contents: { postId: message.id } },
             { eventType: EVENT_TYPE.POST.MENTION, contents: { postId: message.id } },
           ]}
         />
@@ -130,6 +149,19 @@ class Comment extends React.Component {
           <div styleName="text" className="draftjs-post">
             {children}
           </div>
+          { message.attachments &&
+            <div styleName="download-attachment-files">
+              <ul>
+                {
+                  message.attachments.map(attachment => (
+                    <li key={`attachment-${attachment.id}`}>
+                      <a href={this.getDownloadAttachmentUrl(attachment.id)} target="_blank">{this.getDownloadAttachmentFilename(attachment.originalFileName)}</a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          }
           {isDeleting &&
             <div styleName="deleting-layer">
               <div>Deleting post ...</div>
@@ -214,4 +246,4 @@ Comment.propTypes = {
   commentAnchorPrefix: PropTypes.string,
 }
 
-export default Comment
+export default withRouter(Comment)
