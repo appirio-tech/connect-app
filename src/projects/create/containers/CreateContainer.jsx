@@ -85,7 +85,7 @@ class CreateContainer extends React.Component {
     this.createContainerView = this.createContainerView.bind(this)
 
     if (!props.userRoles || props.userRoles.length <= 0) {
-      window.location = ACCOUNTS_APP_LOGIN_URL
+      window.location = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.URL}`
     }
   }
 
