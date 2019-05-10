@@ -11,7 +11,6 @@ import NotificationsReader from '../../components/NotificationsReader'
 import {
   POST_TIME_FORMAT,
   EVENT_TYPE,
-  CONNECT_MESSAGE_API_URL,
 } from '../../config/constants.js'
 
 import './Comment.scss'

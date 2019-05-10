@@ -351,7 +351,7 @@ class RichTextArea extends React.Component {
       title: f.filename
     }))
     if (this.state.rawFiles){
-      rawFiles = this.state.rawFiles.concat(rawFiles);
+      rawFiles = this.state.rawFiles.concat(rawFiles)
     }
 
     this.setState({ rawFiles, editorExpanded: true })
@@ -386,7 +386,7 @@ class RichTextArea extends React.Component {
         && (disableContent || editorState.getCurrentContent().hasText())
     if (editMode && canSubmit) {
       canSubmit = (!disableTitle && titleValue !== this.props.oldTitle) || (!disableContent && oldMDContent !== currentMDContent)
-                  || rawFiles.length > 0;
+                  || rawFiles.length > 0
     }
     const currentStyle = editorState.getCurrentInlineStyle()
     const blockType = RichUtils.getCurrentBlockType(editorState)

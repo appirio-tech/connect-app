@@ -170,7 +170,7 @@ export function createTopicAttachment(attachment) {
 export function getTopicAttachment(attachmentId) {
   return axios.get(`${apiBaseUrl}/topics/attachments/${attachmentId}/read`, { timeout } )
     .then( resp => {
-      return _.get(resp.data, 'result.content.url', "")
+      return _.get(resp.data, 'result.content.url', '')
     })
 }
 
