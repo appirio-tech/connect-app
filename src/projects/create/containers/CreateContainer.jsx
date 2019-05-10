@@ -27,7 +27,7 @@ import {
   NEW_PROJECT_PATH,
   GA_CLIENT_ID,
   GA_CLICK_ID,
-  CONNECT_MAIN_PAGE_URL,
+  ACCOUNTS_APP_LOGIN_URL,
   PROJECT_CATALOG_URL
 } from '../../../config/constants'
 
@@ -85,7 +85,7 @@ class CreateContainer extends React.Component {
     this.createContainerView = this.createContainerView.bind(this)
 
     if (!props.userRoles || props.userRoles.length <= 0) {
-      window.location = CONNECT_MAIN_PAGE_URL
+      window.location = ACCOUNTS_APP_LOGIN_URL
     }
   }
 
