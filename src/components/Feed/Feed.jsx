@@ -3,6 +3,7 @@ import _ from 'lodash'
 import cn from 'classnames'
 import moment from 'moment'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import FeedComments from './FeedComments'
 import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
@@ -106,6 +107,7 @@ class Feed extends React.Component {
       const self = user && user.userId === currentUser.userId
       const title = this.props.newTitle === null || this.props.newTitle === undefined ? this.props.title : this.props.newTitle
       const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
+      const feedLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#feed-${id}`
 
       topicHeader = (
         <header styleName={'feed-header' + (tag === PROJECT_FEED_TYPE_MESSAGES ? ' is-private' : '' )} ref="header">
@@ -138,7 +140,7 @@ class Feed extends React.Component {
                 <div styleName="header-info">
                   <div styleName="title">{title}</div>
                   <div styleName="header-details">
-                    <span>{moment(topicMessage.date).format('MMM D YYYY')}</span>
+                    <Link to={feedLink}>{moment(topicMessage.date).format('MMM D YYYY')}</Link>
                     <span>{comments.length} post{comments.length !== 1 ? 's' : ''}</span>
                   </div>
                 </div>
