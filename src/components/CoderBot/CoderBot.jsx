@@ -53,7 +53,7 @@ const CoderBot = ({code, message, heading, children}) => {
         <div className="page-error">
           <h3>{ heading || getHeading(code) }</h3>
           <div className="content">
-            <p dangerouslySetInnerHTML={ {__html : message || getMessage(code, heading) } } />
+            <p dangerouslySetInnerHTML={ {__html : message || getMessage(code, heading, message) } } />
             <div>{children}</div>
           </div>
           <div>
