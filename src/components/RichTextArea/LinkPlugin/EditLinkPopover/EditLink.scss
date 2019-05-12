@@ -1,0 +1,99 @@
+@import "~tc-ui/src/styles/tc-includes";
+
+.wrapper {
+  font-size: 14px;
+  background-color: $tc-gray-0;
+  padding: $base-unit * 3;
+  border-radius: $base-unit;
+  box-shadow: 1px 1px 18px 1px rgba($tc-gray-50, 0.34);
+  z-index: 4;
+}
+
+.editForm {
+  width: 360px;
+}
+
+.actionBtnLink,
+.link:link,
+.link:active,
+.link:visited {
+  color: $tc-dark-blue-110;
+  text-decoration: none;
+  cursor: pointer;
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.formControlContainer {
+  position: relative;
+  margin-top: 15px;
+  margin-bottom: 18px;
+}
+
+.formControlLabel {
+  position: absolute;
+  background-color: $tc-gray-0;
+  color: $tc-gray-70;
+  font-size: 12px;
+  left: 12px;
+  top: 0;
+  transform: translateY(-50%);
+}
+
+.formControl {
+  border-color: $tc-gray-10;
+
+  &:focus {
+    border-color: $tc-light-blue-110;
+  }
+}
+
+.applyButtonWrapper {
+  text-align: right;
+}
+
+.popperArrow {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  position: absolute;
+  margin: 5px;
+}
+
+.wrapper[data-placement^="top"],
+.wrapper[data-placement^="bottom"] {
+  .popperArrow {
+    border-width: 5px;
+    left: calc(50% - 5px);
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.wrapper[data-placement^="top"] {
+  margin-bottom: 5px;
+
+  .popperArrow {
+    bottom: -5px;
+    border-bottom-width: 0;
+    border-color: $tc-gray-0 transparent transparent transparent;
+  }
+}
+
+.wrapper[data-placement^="bottom"] {
+  margin-top: 5px;
+
+  .popperArrow {
+    top: -5px;
+    border-top-width: 0;
+    border-color: transparent transparent $tc-gray-0 transparent;
+  }
+}
+
+.wrapper[data-placement^="top"],
+.wrapper[data-placement^="bottom"] {
+  .hidePopperArrow {
+    border-color: transparent;
+  }
+}

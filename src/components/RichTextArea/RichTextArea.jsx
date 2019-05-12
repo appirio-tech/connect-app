@@ -4,7 +4,7 @@ import Editor, {composeDecorators} from 'draft-js-plugins-editor'
 import {EditorState, RichUtils} from 'draft-js'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import cn from 'classnames'
-import createLinkPlugin from 'draft-js-link-plugin'
+import createLinkPlugin from './LinkPlugin/LinkPlugin'
 import createImagePlugin from 'draft-js-image-plugin'
 import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin'
 import imageUploadPlugin from './ImageUploadPlugin'
@@ -13,7 +13,6 @@ import AddLinkButton from './AddLinkButton'
 import {getCurrentEntity} from '../../helpers/draftJSHelper'
 import markdownToState from '../../helpers/markdownToState'
 import stateToMarkdown from '../../helpers/stateToMarkdown'
-import 'draft-js-link-plugin/lib/plugin.css'
 import EditorIcons from './EditorIcons'
 import './RichTextArea.scss'
 import 'draft-js-mention-plugin/lib/plugin.css'
@@ -21,6 +20,7 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import _ from 'lodash'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
+import EditLinkPopoverWrapper from './LinkPlugin/EditLinkPopoverWrapper/EditLinkPopoverWrapper'
 
 const linkPlugin = createLinkPlugin()
 const blockDndPlugin = createBlockDndPlugin()
@@ -56,14 +56,14 @@ class RichTextArea extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      editorExpanded: false, 
-      editorState: EditorState.createEmpty(), 
-      titleValue: '', 
-      suggestions: [], 
-      allSuggestions:[], 
+      editorExpanded: false,
+      editorState: EditorState.createEmpty(),
+      titleValue: '',
+      suggestions: [],
+      allSuggestions:[],
       isPrivate: false
     }
-    
+
     this.onTitleChange = this.onTitleChange.bind(this)
     this.onEditorChange = this.onEditorChange.bind(this)
     this.handleKeyCommand = this.handleKeyCommand.bind(this)
@@ -97,7 +97,8 @@ class RichTextArea extends React.Component {
       currentMDContent: this.props.content,
       oldMDContent: this.props.oldContent,
       suggestions,
-      allSuggestions:suggestions
+      allSuggestions:suggestions,
+      isAddLinkOpen: false
     })
   }
 
@@ -184,11 +185,11 @@ class RichTextArea extends React.Component {
 
     const editorExpanded = isEditor && !isCloseButton
     const isPrivate = isEditor && !isCloseButton ? this.state.isPrivate : false
-    
+
     // to avoid unnecessary re-rendering on every click, only update state if any of the values is updated
     if (editorExpanded !== this.state.editorExpanded || isPrivate !== this.state.isPrivate) {
       this.setState({
-        editorExpanded, 
+        editorExpanded,
         isPrivate,
       })
     }
@@ -263,6 +264,11 @@ class RichTextArea extends React.Component {
   }
   onAddMention() {
   }
+  onEditLink(value) {
+    this.setState({
+      isAddLinkOpen: value
+    })
+  }
   cancelEdit() {
     this.props.cancelEdit()
   }
@@ -279,7 +285,7 @@ class RichTextArea extends React.Component {
     const {MentionSuggestions} = this.mentionPlugin
     const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating,
       isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic, hasPrivateSwitch } = this.props
-    const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading, isPrivate} = this.state
+    const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading, isPrivate, isAddLinkOpen} = this.state
     let canSubmit = (disableTitle || titleValue.trim())
         && (disableContent || editorState.getCurrentContent().hasText())
     if (editMode && canSubmit) {
@@ -288,6 +294,7 @@ class RichTextArea extends React.Component {
     const currentStyle = editorState.getCurrentInlineStyle()
     const blockType = RichUtils.getCurrentBlockType(editorState)
     const currentEntity = getCurrentEntity(editorState)
+    const selectionState = editorState.getSelection()
     const disableForCodeBlock = blockType === 'code-block'
     const editButtonText = editingTopic ? 'Update title' : 'Update post'
 
@@ -357,6 +364,14 @@ class RichTextArea extends React.Component {
                     onAddMention={this.onAddMention}
                     entryComponent={Entry}
                   />
+                  <EditLinkPopoverWrapper
+                    editorState={ editorState }
+                    open={ isAddLinkOpen }
+                    onClose={ () => this.onEditLink(false) }
+                    setEditorState={ this.setEditorState }
+                    enableAutoPopover
+                    enableAutoPopoverPositioning={false}
+                  />
                 </div>
               }
               <div className="textarea-footer">
@@ -397,7 +412,8 @@ class RichTextArea extends React.Component {
                         getEditorState={this.getEditorState}
                         setEditorState={this.setEditorState}
                         disabled={disableForCodeBlock}
-                        active={currentEntity && 'LINK' === currentEntity.getType()}
+                        onEditLink={() => this.onEditLink(true)}
+                        active={currentEntity && 'LINK' === currentEntity.getType() && selectionState.isCollapsed()}
                       />
                       { allowImages && <div className="separator"/> }
                       { allowImages &&
