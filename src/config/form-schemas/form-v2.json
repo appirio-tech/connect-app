@@ -144,6 +144,9 @@
         "description": {
           "type": "string"
         },
+        "introduction": {
+          "type": "string"
+        },
         "fieldName": {
           "type": "string"
         },

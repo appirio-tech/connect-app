@@ -308,6 +308,7 @@ const SpecQuestions = ({
         hideDescription={elemProps.hideDescription}
         hideTitle={elemProps.hideTitle}
         help={q.help}
+        introduction={q.introduction}
       >
         <ChildElem {...elemProps} />
       </SpecQuestionList.Item>
