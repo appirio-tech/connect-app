@@ -46,6 +46,7 @@ const SpecQuestionListItem = ({
   hideDescription,
   hideTitle,
   help,
+  introduction,
 }) => {
   let shouldShowTitle = true
   let shouldShowRequire = false
@@ -62,6 +63,7 @@ const SpecQuestionListItem = ({
           {!!titleAside && <div className="spec-section-title-aside">{titleAside}</div>}
           { help && (<HelpModal {...help} />) }
         </h5>}
+        {!!introduction && <p className="introduction">{introduction}</p>}
         {children && <div className="child-component">{children}</div>}
         {!hideDescription && <p className={cn({bigger: !icon})}>{description}</p>}
         {shouldShowRequire && (<div className="require-desc">{required ? 'Required' : 'Optional'}</div>) }
@@ -78,6 +80,7 @@ SpecQuestionListItem.propTypes = {
   type: PropTypes.string,
   additionalClass: PropTypes.string,
   hideTitle: PropTypes.bool,
+  introduction: PropTypes.string,
 }
 
 SpecQuestionListItem.defaultProps = {

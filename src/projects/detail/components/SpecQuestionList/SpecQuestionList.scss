@@ -123,6 +123,16 @@
         }
       }
 
+      .introduction {
+        @include roboto-light;
+        font-size: $tc-body-sm;
+        color: $tc-gray-50;
+        font-weight: 400;
+        font-style: italic;
+        line-height: 1.5;
+        margin-top: $base-unit;
+      }
+
       .description {
         margin-bottom: $base-unit * 4;
       }
