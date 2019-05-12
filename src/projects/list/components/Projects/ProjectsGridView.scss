@@ -186,6 +186,13 @@ $screen-one-column: 720px;
 
             .project-title {
               display: flex;
+              position: relative;
+
+              .badge-wrapper {
+                position: absolute;
+                top: 0;
+                right: 0;
+              }
 
               .link-title {
                 flex: 1;

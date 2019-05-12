@@ -1,0 +1,14 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.badge {   
+    display: inline-flex;
+    background: $tc-red-70;
+    color: white;
+    @include roboto-bold;
+    border-radius: 100%;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    font-size: 10px;
+}
