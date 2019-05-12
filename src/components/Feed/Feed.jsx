@@ -67,8 +67,8 @@ class Feed extends React.Component {
     this.props.onTopicChange(this.props.topicMessage.id, title, content, true)
   }
 
-  onSaveTopic({title, content}) {
-    this.props.onSaveTopic(this.props.topicMessage.id, title, content)
+  onSaveTopic({title, content, attachmentIds}) {
+    this.props.onSaveTopic(this.props.topicMessage.id, title, content, attachmentIds)
   }
 
   updateHeaderHeight() {

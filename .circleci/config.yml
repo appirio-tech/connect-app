@@ -127,7 +127,7 @@ workflows:
             - build-dev
           filters:
             branches:
-              only: ['dev', 'dev-msinteg', 'feature/form-redesign']
+              only: ['dev', 'dev-msinteg']
 
       - deployProd:
           context : org-global
