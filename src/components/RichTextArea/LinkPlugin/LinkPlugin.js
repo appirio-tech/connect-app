@@ -1,5 +1,3 @@
-import decorateComponentWithProps from 'decorate-component-with-props'
-
 import Link from './Link/Link'
 import linkStrategy from './linkStrategy'
 
@@ -19,7 +17,7 @@ export default function createLinkPlugin() {
     decorators: [
       {
         strategy: linkStrategy,
-        component: decorateComponentWithProps(Link, {})
+        component: Link,
       }
     ],
     onChange: createLinkEntity
