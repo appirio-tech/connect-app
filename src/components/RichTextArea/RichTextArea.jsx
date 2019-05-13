@@ -4,7 +4,7 @@ import Editor, {composeDecorators} from 'draft-js-plugins-editor'
 import {EditorState, RichUtils} from 'draft-js'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import cn from 'classnames'
-import createLinkPlugin from 'draft-js-link-plugin'
+import createLinkPlugin from './LinkPlugin/LinkPlugin'
 import createImagePlugin from 'draft-js-image-plugin'
 import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin'
 import imageUploadPlugin from './ImageUploadPlugin'
@@ -13,7 +13,6 @@ import AddLinkButton from './AddLinkButton'
 import {getCurrentEntity} from '../../helpers/draftJSHelper'
 import markdownToState from '../../helpers/markdownToState'
 import stateToMarkdown from '../../helpers/stateToMarkdown'
-import 'draft-js-link-plugin/lib/plugin.css'
 import EditorIcons from './EditorIcons'
 import './RichTextArea.scss'
 import 'draft-js-mention-plugin/lib/plugin.css'
@@ -21,6 +20,7 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import _ from 'lodash'
 import { getAvatarResized } from '../../helpers/tcHelpers'
 import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
+import EditLinkPopoverWrapper from './LinkPlugin/EditLinkPopoverWrapper/EditLinkPopoverWrapper'
 
 import {
   FILE_PICKER_API_KEY,
@@ -119,6 +119,7 @@ class RichTextArea extends React.Component {
       oldMDContent: this.props.oldContent,
       suggestions,
       allSuggestions:suggestions,
+      isAddLinkOpen: false,
       isAttachmentUploaderOpen: false,
       rawFiles: [],
       attachmentsStorePath: `${PROJECT_ATTACHMENTS_FOLDER}/${projectId}/`,
@@ -301,6 +302,11 @@ class RichTextArea extends React.Component {
   }
   onAddMention() {
   }
+  onEditLink(value) {
+    this.setState({
+      isAddLinkOpen: value
+    })
+  }
   cancelEdit() {
     this.setState({
       rawFiles: []
@@ -381,7 +387,7 @@ class RichTextArea extends React.Component {
     const {MentionSuggestions} = this.mentionPlugin
     const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating,
       isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic, hasPrivateSwitch, canUploadAttachment } = this.props
-    const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading, isPrivate, rawFiles, files} = this.state
+    const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading, isPrivate, isAddLinkOpen, rawFiles, files} = this.state
     let canSubmit = (disableTitle || titleValue.trim())
         && (disableContent || editorState.getCurrentContent().hasText())
     if (editMode && canSubmit) {
@@ -391,6 +397,7 @@ class RichTextArea extends React.Component {
     const currentStyle = editorState.getCurrentInlineStyle()
     const blockType = RichUtils.getCurrentBlockType(editorState)
     const currentEntity = getCurrentEntity(editorState)
+    const selectionState = editorState.getSelection()
     const disableForCodeBlock = blockType === 'code-block'
     const editButtonText = editingTopic ? 'Update title' : 'Update post'
 
@@ -460,6 +467,14 @@ class RichTextArea extends React.Component {
                     onAddMention={this.onAddMention}
                     entryComponent={Entry}
                   />
+                  <EditLinkPopoverWrapper
+                    editorState={ editorState }
+                    open={ isAddLinkOpen }
+                    onClose={ () => this.onEditLink(false) }
+                    setEditorState={ this.setEditorState }
+                    enableAutoPopover
+                    enableAutoPopoverPositioning={false}
+                  />
                 </div>
               }
               <div className="textarea-footer">
@@ -501,7 +516,8 @@ class RichTextArea extends React.Component {
                           getEditorState={this.getEditorState}
                           setEditorState={this.setEditorState}
                           disabled={disableForCodeBlock}
-                          active={currentEntity && 'LINK' === currentEntity.getType()}
+                          onEditLink={() => this.onEditLink(true)}
+                          active={currentEntity && 'LINK' === currentEntity.getType() && selectionState.isCollapsed()}
                         />
                         { allowImages && <div className="separator"/> }
                         { allowImages &&
