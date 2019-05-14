@@ -19,7 +19,9 @@ import './Accordion.scss'
 const TYPE = {
   CHECKBOX_GROUP: 'checkbox-group',
   RADIO_GROUP: 'radio-group',
-  ADD_ONS: 'add-ons'
+  ADD_ONS: 'add-ons',
+  TEXTINPUT: 'textinput',
+  TEXTBOX: 'textbox'
 }
 
 /**
