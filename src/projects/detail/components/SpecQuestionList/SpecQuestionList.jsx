@@ -4,6 +4,7 @@ import cn from 'classnames'
 import _ from 'lodash'
 
 import HelpModal from '../../../create/components/HelpModal'
+import { markdownToHTML } from '../../../../helpers/markdownToState'
 
 import './SpecQuestionList.scss'
 
@@ -63,9 +64,9 @@ const SpecQuestionListItem = ({
           {!!titleAside && <div className="spec-section-title-aside">{titleAside}</div>}
           { help && (<HelpModal {...help} />) }
         </h5>}
-        {!!introduction && <p className="introduction">{introduction}</p>}
+        {!!introduction && <div className="introduction markdown" dangerouslySetInnerHTML={{__html: markdownToHTML(introduction)}} />}
         {children && <div className="child-component">{children}</div>}
-        {!hideDescription && <p className={cn({bigger: !icon})}>{description}</p>}
+        {!hideDescription && description && <div className={cn('description', 'markdown', {bigger: !icon})} dangerouslySetInnerHTML={{__html: markdownToHTML(description)}} />}
         {shouldShowRequire && (<div className="require-desc">{required ? 'Required' : 'Optional'}</div>) }
       </div>
     </div>
