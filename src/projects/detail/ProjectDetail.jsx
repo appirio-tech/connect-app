@@ -64,9 +64,7 @@ const ProjectDetailView = (props) => {
   if (!currentMemberRole && props.currentUserRoles && props.currentUserRoles.length > 0) {
     currentMemberRole = props.currentUserRoles[0]
   }
-  const regex = /#(feed-([0-9]+)|comment-([0-9]+))/
-  const match = props.location.hash.match(regex)
-  const ids = match ? { feedId: match[2], commentId: match[3] } : {}
+  const locationHash = window.location.hash ? window.location.hash.substring(1) : null
 
   const { component: Component } = props
   const componentProps = {
@@ -79,7 +77,7 @@ const ProjectDetailView = (props) => {
     isProcessing: props.isProcessing,
     allProductTemplates: props.allProductTemplates,
     productsTimelines: props.productsTimelines,
-    ...ids
+    locationHash
   }
   return <Component {...componentProps} />
 }

@@ -81,8 +81,25 @@ class ProjectInfoContainer extends React.Component {
     })
   }
 
-  componentWillReceiveProps({project}) {
+  componentWillReceiveProps(props) {
+    const { project, locationHash, feeds, canAccessPrivatePosts, loadDashboardFeeds, loadProjectMessages } = props
     this.setDuration(project)
+    if (locationHash && locationHash !== this.props.locationHash) {
+      const hashParts = _.split(locationHash, '-')
+      if (hashParts[0] === 'comment') {
+        let commentFound = false
+        _.forEach(feeds, feed => _.forEach(feed.posts, post => {
+          if (post.id === hashParts[1]) {
+            commentFound = true
+            return false
+          }
+        }))
+        if (!commentFound) {
+          loadDashboardFeeds(project.id)
+          canAccessPrivatePosts && loadProjectMessages(project.id)
+        }
+      }
+    }
   }
 
   onChangeStatus(projectId, status, reason) {
