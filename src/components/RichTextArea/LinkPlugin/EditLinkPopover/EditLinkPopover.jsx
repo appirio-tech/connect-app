@@ -140,8 +140,8 @@ export default class EditLink extends React.Component {
     this.onDocClick = this.onDocClick.bind(this)
   }
 
-  componentDidMount(props = this.props) {
-    const { editing, text, url, entityKey } = props
+  componentDidMount() {
+    const { editing, text, url, entityKey } = this.props
 
     this.currentlyEditingEntity = entityKey
     this.setState({
