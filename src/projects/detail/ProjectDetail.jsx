@@ -64,7 +64,6 @@ const ProjectDetailView = (props) => {
   if (!currentMemberRole && props.currentUserRoles && props.currentUserRoles.length > 0) {
     currentMemberRole = props.currentUserRoles[0]
   }
-  const locationHash = window.location.hash ? window.location.hash.substring(1) : null
 
   const { component: Component } = props
   const componentProps = {
@@ -77,7 +76,6 @@ const ProjectDetailView = (props) => {
     isProcessing: props.isProcessing,
     allProductTemplates: props.allProductTemplates,
     productsTimelines: props.productsTimelines,
-    locationHash
   }
   return <Component {...componentProps} />
 }

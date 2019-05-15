@@ -112,7 +112,6 @@ class DashboardContainer extends React.Component {
       phasesTopics,
       expandProjectPhase,
       collapseProjectPhase,
-      locationHash,
     } = this.props
 
     // system notifications
@@ -136,7 +135,6 @@ class DashboardContainer extends React.Component {
         productsTimelines={productsTimelines}
         phasesTopics={phasesTopics}
         isProjectProcessing={isProcessing}
-        locationHash={locationHash}
       />
     )
 
