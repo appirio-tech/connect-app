@@ -17,6 +17,10 @@
       padding-top: (40px - 25px) / 2; /* input height minus line-height */
       line-height: 25px;
     }
+
+    .Dropdown {
+      z-index: 4;
+    }
   }
 
   &.is-fullscreen {
