@@ -18,12 +18,18 @@ const getHeading = code => {
   }
 }
 
-const getMessage = (code, heading, message) => {
-  const subject = "Topcoder Connect Issue Report";
+const getMessage = (code, heading, message, error) => {
+  let subject = "Topcoder Connect Issue Report";
   let body = heading || getHeading(code);
   if (message) {
     body = `${body} <br> ${message}`;
   }
+  if (error) {
+    body = `${body}   ${error}`;
+  }
+
+  subject = encodeURIComponent(subject);
+  body = encodeURIComponent(body);
   switch(code) {
   case 200:
     return 'Operation performed successfully!!'
@@ -32,12 +38,17 @@ const getMessage = (code, heading, message) => {
   }
 }
 
-const copyToClipboard = (code, heading, message) => {
-  const subject = "Topcoder Connect Issue Report";
+const copyToClipboard = (code, heading, message, error) => {
+  let subject = "Topcoder Connect Issue Report";
   let body = heading || getHeading(code);
   if (message) {
     body = `${body} <br> ${message}`;
   }
+  if (error) {
+    body = `${body}   ${error}`;
+  }
+  subject = encodeURIComponent(subject);
+  body = encodeURIComponent(body);
   const textField = document.createElement('textarea')
   textField.innerText = `${subject} ${body}`
   document.body.appendChild(textField)
@@ -46,19 +57,19 @@ const copyToClipboard = (code, heading, message) => {
   textField.remove()
 }
 
-const CoderBot = ({code, message, heading, children}) => {
+const CoderBot = ({code, message, heading, children, error}) => {
   return (
     <section className="content content-error">
       <div className="container">
         <div className="page-error">
           <h3>{ heading || getHeading(code) }</h3>
           <div className="content">
-            <p dangerouslySetInnerHTML={ {__html : message || getMessage(code, heading, message) } } />
+            <p dangerouslySetInnerHTML={ {__html : message || getMessage(code, heading, message, error) } } />
             <div>{children}</div>
           </div>
           <div>
             <button
-              onClick= { () => copyToClipboard(code, heading, message) }
+              onClick= { () => copyToClipboard(code, heading, message, error) }
               className="tc-btn tc-btn-primary"
             >
               Copy error details
