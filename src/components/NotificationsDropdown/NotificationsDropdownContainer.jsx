@@ -8,9 +8,8 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { TransitionGroup, Transition } from 'react-transition-group'
-import { getNotifications, visitNotifications, toggleNotificationSeen, markAllNotificationsRead,
-  toggleNotificationRead, toggleBundledNotificationRead, viewOlderNotifications,
-  toggleNotificationsDropdownMobile, toggleNotificationsDropdownWeb, hideOlderNotifications } from '../../routes/notifications/actions'
+import { getNotifications, toggleNotificationSeen, markAllNotificationsRead, toggleNotificationRead,
+  toggleBundledNotificationRead, viewOlderNotifications, hideOlderNotifications } from '../../routes/notifications/actions'
 import {
   splitNotificationsBySources,
   filterReadNotifications,
@@ -251,6 +250,19 @@ const NotificationsDropdownContainerView = (props) => {
 }
 
 class NotificationsDropdownContainer extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      lastVisited: new Date(0),
+      isDropdownWebOpen: false,
+      isDropdownMobileOpen: false,
+    }
+
+    this.onToggleNotificationsDropdownWeb = this.onToggleNotificationsDropdownWeb.bind(this)
+    this.onToggleNotificationsDropdownMobile = this.onToggleNotificationsDropdownMobile.bind(this)
+    this.onVisitNotifications = this.onVisitNotifications.bind(this)
+  }
+
   componentDidMount() {
     this.props.getNotifications()
     this.autoRefreshNotifications = setInterval(() => this.props.getNotifications(), REFRESH_NOTIFICATIONS_INTERVAL)
@@ -259,8 +271,8 @@ class NotificationsDropdownContainer extends React.Component {
   componentWillUnmount() {
     clearInterval(this.autoRefreshNotifications)
     // hide notifications dropdown for mobile, when this component is unmounted
-    this.props.toggleNotificationsDropdownMobile(false)
-    this.props.toggleNotificationsDropdownWeb(false)
+    this.onToggleNotificationsDropdownMobile(false)
+    this.onToggleNotificationsDropdownWeb(false)
     this.props.hideOlderNotifications()
   }
 
@@ -271,10 +283,22 @@ class NotificationsDropdownContainer extends React.Component {
     if (currentPathname !== nextPathname) {
       // hide notifications dropdown for mobile,
       // when this component persist but URL changed
-      this.props.toggleNotificationsDropdownMobile(false)
-      this.props.toggleNotificationsDropdownWeb(false)
+      this.onToggleNotificationsDropdownMobile(false)
+      this.onToggleNotificationsDropdownWeb(false)
       this.props.hideOlderNotifications()
     }
+  }
+
+  onToggleNotificationsDropdownWeb(isOpen) {
+    this.setState({ isDropdownWebOpen: !_.isUndefined(isOpen) ? isOpen : !this.state.isDropdownWebOpen})
+  }
+
+  onToggleNotificationsDropdownMobile(isOpen) {
+    this.setState({ isDropdownMobileOpen: !_.isUndefined(isOpen) ? isOpen : !this.state.isDropdownMobileOpen})
+  }
+
+  onVisitNotifications() {
+    this.setState({ lastVisited: _.maxBy(_.map(this.props.notifications, n => new Date(n.date))) })
   }
 
   render() {
@@ -283,10 +307,14 @@ class NotificationsDropdownContainer extends React.Component {
 
     return (
       <NotificationsDropdownContainerView
-        {...{
-          ...restProps,
-          notifications: preRenderedNotifications
-        }}
+        {...restProps}
+        notifications={preRenderedNotifications}
+        toggleNotificationsDropdownWeb={this.onToggleNotificationsDropdownWeb}
+        toggleNotificationsDropdownMobile={this.onToggleNotificationsDropdownMobile}
+        visitNotifications={this.onVisitNotifications}
+        lastVisited={this.state.lastVisited}
+        isDropdownMobileOpen={this.state.isDropdownMobileOpen}
+        isDropdownWebOpen={this.state.isDropdownWebOpen}
       />
     )
   }
@@ -297,15 +325,12 @@ const mapStateToProps = ({ notifications }) => notifications
 
 const mapDispatchToProps = {
   getNotifications,
-  visitNotifications,
   toggleNotificationSeen,
   markAllNotificationsRead,
   toggleNotificationRead,
   toggleBundledNotificationRead,
   viewOlderNotifications,
   hideOlderNotifications,
-  toggleNotificationsDropdownMobile,
-  toggleNotificationsDropdownWeb
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsDropdownContainer)
