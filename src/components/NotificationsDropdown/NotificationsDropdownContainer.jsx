@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { TransitionGroup, Transition } from 'react-transition-group'
-import { getNotifications, toggleNotificationSeen, markAllNotificationsRead, toggleNotificationRead,
+import { getNotifications, toggleNotificationSeen, markAllNotificationsRead, toggleNotificationRead, visitNotifications,
   toggleBundledNotificationRead, viewOlderNotifications, hideOlderNotifications } from '../../routes/notifications/actions'
 import {
   splitNotificationsBySources,
@@ -256,6 +256,7 @@ class NotificationsDropdownContainer extends React.Component {
       lastVisited: new Date(0),
       isDropdownWebOpen: false,
       isDropdownMobileOpen: false,
+      notificationsVisited: false,
     }
 
     this.onToggleNotificationsDropdownWeb = this.onToggleNotificationsDropdownWeb.bind(this)
@@ -266,6 +267,7 @@ class NotificationsDropdownContainer extends React.Component {
   componentDidMount() {
     this.props.getNotifications()
     this.autoRefreshNotifications = setInterval(() => this.props.getNotifications(), REFRESH_NOTIFICATIONS_INTERVAL)
+    this.setState({ lastVisited: this.props.lastVisited })
   }
 
   componentWillUnmount() {
@@ -274,6 +276,7 @@ class NotificationsDropdownContainer extends React.Component {
     this.onToggleNotificationsDropdownMobile(false)
     this.onToggleNotificationsDropdownWeb(false)
     this.props.hideOlderNotifications()
+    this.state.notificationsVisited && this.props.visitNotifications()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -298,7 +301,10 @@ class NotificationsDropdownContainer extends React.Component {
   }
 
   onVisitNotifications() {
-    this.setState({ lastVisited: _.maxBy(_.map(this.props.notifications, n => new Date(n.date))) })
+    this.setState({
+      lastVisited: _.maxBy(_.map(this.props.notifications, n => new Date(n.date))),
+      notificationsVisited: true
+    })
   }
 
   render() {
@@ -325,6 +331,7 @@ const mapStateToProps = ({ notifications }) => notifications
 
 const mapDispatchToProps = {
   getNotifications,
+  visitNotifications,
   toggleNotificationSeen,
   markAllNotificationsRead,
   toggleNotificationRead,

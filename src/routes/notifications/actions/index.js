@@ -5,6 +5,7 @@ import {
   GET_NOTIFICATIONS_PENDING,
   GET_NOTIFICATIONS_SUCCESS,
   GET_NOTIFICATIONS_FAILURE,
+  VISIT_NOTIFICATIONS,
   TOGGLE_NOTIFICATION_SEEN,
   SET_NOTIFICATIONS_FILTER_BY,
   MARK_ALL_NOTIFICATIONS_READ,
@@ -47,6 +48,12 @@ export const getNotifications = () => (dispatch) => {
       payload: err
     })
     console.error(`Failed to load notifications. ${err.message}`)
+  })
+}
+
+export const visitNotifications = () => (dispatch) => {
+  dispatch({
+    type: VISIT_NOTIFICATIONS
   })
 }
 
