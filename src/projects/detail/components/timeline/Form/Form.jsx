@@ -89,7 +89,7 @@ class Form extends React.Component {
               )
             case 'number':
               return (
-                <FormFieldNumber disabled={field.disabled} {...field} key={field.name} />
+                <FormFieldNumber {...field} key={field.name} />
               )
             default:
               return null
