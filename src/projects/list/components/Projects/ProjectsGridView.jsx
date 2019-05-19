@@ -25,7 +25,7 @@ import ProjectTypeIcon from '../../../../components/ProjectTypeIcon'
 import IconProjectStatusTitle from '../../../../assets/icons/status-ico.svg'
 
 import './ProjectsGridView.scss'
-import NotificationBadge from '../../../../components/NotificationBadge/NotificationBadge';
+import NotificationBadge from '../../../../components/NotificationBadge/NotificationBadge'
 
 const EnhancedProjectStatus = editableProjectStatus(ProjectStatus)
 
@@ -85,7 +85,7 @@ const ProjectsGridView = props => {
         const notReadNotifications = filterReadNotifications(notifications)
         const unreadProjectUpdate = filterNotificationsByProjectId(notReadNotifications, item.id)
         const unreadMentions = filterPostsMentionNotifications(unreadProjectUpdate)
-        const unreadMentionsCount = unreadMentions.length;
+        const unreadMentionsCount = unreadMentions.length
         const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
           <div className="spacing project-container">
@@ -93,7 +93,7 @@ const ProjectsGridView = props => {
             <div className="project-title">
               <Link to={url} className="link-title">{_.unescape(item.name)}</Link>
               <span className="badge-wrapper">
-                { unreadMentionsCount > 0 && <NotificationBadge count={unreadMentionsCount} ></NotificationBadge> }
+                { unreadMentionsCount > 0 && <NotificationBadge count={unreadMentionsCount} /> }
               </span>
             </div>
             <Link to={url}>

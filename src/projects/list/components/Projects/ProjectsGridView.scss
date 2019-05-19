@@ -1,5 +1,5 @@
 @import '~tc-ui/src/styles/tc-includes';
-
+@import '../../../../styles/variables';
 /* cards are arranged in one column when width is less than 720, as one card minimum width is 360 */
 $screen-one-column: 720px;
 
@@ -192,6 +192,10 @@ $screen-one-column: 720px;
                 position: absolute;
                 top: 0;
                 right: 0;
+
+                @media screen and (max-width: $screen-rg - 1) {
+                  right: 8px;
+                }
               }
 
               .link-title {
