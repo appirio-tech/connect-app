@@ -32,6 +32,7 @@ class ProjectInfoContainer extends React.Component {
     this.onDeleteProject = this.onDeleteProject.bind(this)
     this.onAddNewLink = this.onAddNewLink.bind(this)
     this.onDeleteLink = this.onDeleteLink.bind(this)
+    this.onDeleteAttachements = this.onDeleteAttachements.bind(this)
     this.onEditLink = this.onEditLink.bind(this)
     this.onEditAttachment = this.onEditAttachment.bind(this)
     this.onAddFile = this.onAddFile.bind(this)
@@ -109,6 +110,10 @@ class ProjectInfoContainer extends React.Component {
     updateProject(project.id, {
       bookmarks: update(project.bookmarks, { $splice: [[idx, 1]] })
     })
+  }
+
+  onDeleteAttachements(id) {
+
   }
 
   onEditLink(idx, title, address) {
@@ -422,6 +427,15 @@ class ProjectInfoContainer extends React.Component {
               onAddNewLink={this.onAddNewLink}
               onDelete={this.onDeleteLink}
               onEdit={this.onEditLink}
+            />
+          }
+
+          { 
+            <LinksMenu
+              links={attachments}
+              canDelete={canManageLinks}
+              onDelete={this.onDeleteAttachements}
+              title="Attachements"
             />
           }
           {!hideMembers &&
