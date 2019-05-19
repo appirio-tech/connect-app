@@ -105,7 +105,6 @@
         }
       }
 
-      > p,
       .description {
         @include roboto-light;
         font-size: 12px;
@@ -133,8 +132,29 @@
         margin-top: $base-unit;
       }
 
-      .description {
-        margin-bottom: $base-unit * 4;
+      .markdown {
+        ol {
+          list-style: outside decimal;
+          padding-left: 5 * $base-unit;
+        }
+
+        ul {
+          list-style: outside disc;
+          padding-left: 5 * $base-unit;
+        }
+
+        strong {
+          font-weight: bold;
+        }
+
+        code {
+          background: $tc-gray-neutral-light;
+          color: $tc-gray-100;
+          font-family: 'Courier New', Courier, monospace;
+          font-style: normal;
+          border-radius: 3px;
+          padding: .2em .4em;
+        }
       }
 
       .child-component {

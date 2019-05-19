@@ -14,8 +14,6 @@ import {
   VIEW_OLDER_NOTIFICATIONS_SUCCESS,
   HIDE_OLDER_NOTIFICATIONS_SUCCESS,
   NOTIFICATIONS_PENDING,
-  TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE,
-  TOGGLE_NOTIFICATIONS_DROPDOWN_WEB,
 } from '../../../config/constants'
 import notificationsService from '../services/notifications.js'
 import {
@@ -126,16 +124,6 @@ export const viewOlderNotifications = (sourceId) => (dispatch) => dispatch({
 
 export const hideOlderNotifications = () => (dispatch) => dispatch({
   type: HIDE_OLDER_NOTIFICATIONS_SUCCESS
-})
-
-export const toggleNotificationsDropdownMobile = (isOpen) => (dispatch) => dispatch({
-  type: TOGGLE_NOTIFICATIONS_DROPDOWN_MOBILE,
-  payload: isOpen
-})
-
-export const toggleNotificationsDropdownWeb = (isOpen) => (dispatch) => dispatch({
-  type: TOGGLE_NOTIFICATIONS_DROPDOWN_WEB,
-  payload: isOpen
 })
 
 export const markNotificationsReadByCriteria = (criteria) => (dispatch, getState) => {
