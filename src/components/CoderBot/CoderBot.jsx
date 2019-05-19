@@ -18,18 +18,23 @@ const getHeading = code => {
   }
 }
 
-const getMessage = (code, heading, message, error) => {
-  let subject = "Topcoder Connect Issue Report";
-  let body = heading || getHeading(code);
+const getMailParams = (code, heading, message, error) => {
+  const subject = 'Topcoder Connect Issue Report'
+  let body = heading || getHeading(code)
   if (message) {
-    body = `${body} <br> ${message}`;
+    body = `${body} <br> ${message}`
   }
   if (error) {
-    body = `${body}   ${error}`;
+    body = `${body}   ${error.stack}`
   }
 
-  subject = encodeURIComponent(subject);
-  body = encodeURIComponent(body);
+  return { subject, body }
+}
+
+const getMessage = (code, heading, message, error) => {
+  let { subject, body } = getMailParams(code, heading, message, error)
+  subject = encodeURIComponent(subject)
+  body = encodeURIComponent(body)
   switch(code) {
   case 200:
     return 'Operation performed successfully!!'
@@ -39,16 +44,7 @@ const getMessage = (code, heading, message, error) => {
 }
 
 const copyToClipboard = (code, heading, message, error) => {
-  let subject = "Topcoder Connect Issue Report";
-  let body = heading || getHeading(code);
-  if (message) {
-    body = `${body} <br> ${message}`;
-  }
-  if (error) {
-    body = `${body}   ${error}`;
-  }
-  subject = encodeURIComponent(subject);
-  body = encodeURIComponent(body);
+  const { subject, body } = getMailParams(code, heading, message, error)
   const textField = document.createElement('textarea')
   textField.innerText = `${subject} ${body}`
   document.body.appendChild(textField)
