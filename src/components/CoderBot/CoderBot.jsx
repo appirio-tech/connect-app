@@ -21,11 +21,13 @@ const getHeading = code => {
 const getMailParams = (code, heading, message, error) => {
   const subject = 'Topcoder Connect Issue Report'
   let body = heading || getHeading(code)
+
   if (message) {
-    body = `${body} <br> ${message}`
+    body += `\n${message}`
   }
-  if (error) {
-    body = `${body}   ${error.stack}`
+
+  if (error && error.stack) {
+    body += `\n${error.stack}`
   }
 
   return { subject, body }
@@ -33,8 +35,10 @@ const getMailParams = (code, heading, message, error) => {
 
 const getMessage = (code, heading, message, error) => {
   let { subject, body } = getMailParams(code, heading, message, error)
+
   subject = encodeURIComponent(subject)
   body = encodeURIComponent(body)
+
   switch(code) {
   case 200:
     return 'Operation performed successfully!!'
@@ -46,7 +50,9 @@ const getMessage = (code, heading, message, error) => {
 const copyToClipboard = (code, heading, message, error) => {
   const { subject, body } = getMailParams(code, heading, message, error)
   const textField = document.createElement('textarea')
-  textField.innerText = `${subject} ${body}`
+
+  // use innerHTML to preserve text formatting (line breaks)
+  textField.innerHTML = `${subject}\n\n${body}`
   document.body.appendChild(textField)
   textField.select()
   document.execCommand('copy')
