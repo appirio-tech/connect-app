@@ -67,6 +67,7 @@
 
     .card-header {
       margin-bottom: 4 * $base_unit;
+      margin-right: -3 * $base-unit;
 
       @media screen and (max-width: $screen-md - 1px) {
         margin-bottom: 3 * $base_unit;
