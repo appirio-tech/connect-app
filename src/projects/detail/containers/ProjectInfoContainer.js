@@ -42,6 +42,8 @@ class ProjectInfoContainer extends React.Component {
     this.extractMarkdownLink = this.extractMarkdownLink.bind(this)
     this.extractHtmlLink = this.extractHtmlLink.bind(this)
     this.extractRawLink = this.extractRawLink.bind(this)
+    this.getFileAttachmentName = this.getFileAttachmentName.bind(this)
+    this.extractAttachmentLinksFromPosts = this.extractAttachmentLinksFromPosts.bind(this)
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
@@ -257,6 +259,39 @@ class ProjectInfoContainer extends React.Component {
     return links
   }
 
+  getFileAttachmentName(originalFileName) {
+    const arr = originalFileName.split('/')
+    return arr[arr.length - 1]
+  }
+
+  extractAttachmentLinksFromPosts(feeds) {
+    const attachmentLinks = []
+    feeds.forEach(feed => {
+      const attachmentLinksPerFeed = []
+      feed.posts.forEach(post => {
+        post.attachments.forEach(attachment => {
+          attachmentLinksPerFeed.push({
+            title: this.getFileAttachmentName(attachment.originalFileName),
+            address: attachment.originalFileName,
+            id: attachment.id,
+            attachment: true,
+            deletable: true,
+            createdBy: attachment.createdBy
+          })
+        })
+      })
+
+      if (attachmentLinksPerFeed.length > 0) {
+        attachmentLinks.push({
+          title: feed.title,
+          children: attachmentLinksPerFeed
+        })
+      }
+    })
+
+    return attachmentLinks
+  }
+
   render() {
     const { duration } = this.state
     const { project, currentMemberRole, isSuperUser, phases, feeds,
@@ -365,6 +400,13 @@ class ProjectInfoContainer extends React.Component {
       links = links.concat(privateTopicLinks)
     }
     links = links.concat(phaseLinks)
+
+    // extract attachment from posts
+    attachments = [
+      ...attachments,
+      ...this.extractAttachmentLinksFromPosts(feeds),
+      ...this.extractAttachmentLinksFromPosts(phaseFeeds)
+    ]
 
     return (
       <div>

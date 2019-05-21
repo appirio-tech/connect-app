@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import IconCarretDownNormal from '../../assets/icons/arrow-6px-carret-down-normal.svg'
 import './LinksMenuAccordion.scss'
+import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
 
 
 class LinksMenuAccordion extends React.Component {
@@ -21,7 +22,7 @@ class LinksMenuAccordion extends React.Component {
   }
 
   render() {
-    const { link, renderLink } = this.props
+    const { link, renderLink, canEdit, onDelete } = this.props
     const { isOpen } = this.state
     const iconClasses = `icon ${isOpen ? 'active' : ''}`
     return (
@@ -34,7 +35,16 @@ class LinksMenuAccordion extends React.Component {
           <ul>
             {
               link.children.map((childLink, i) => {
-                return <li key={`childlink-${childLink.address}-${i}`}>{renderLink(childLink)}</li>
+                return (<li key={`childlink-${childLink.address}-${i}`}>
+                  {renderLink(childLink)}
+                  <div className="button-group">
+                    {canEdit && childLink.deletable && <div className="buttons link-buttons">
+                      <button type="button" onClick={() => onDelete(childLink)}>
+                        <BtnRemove />
+                      </button>
+                    </div>}
+                  </div>
+                </li>)
               })
             }
           </ul>
@@ -46,7 +56,9 @@ class LinksMenuAccordion extends React.Component {
 
 LinksMenuAccordion.propTypes = {
   link: PropTypes.object.isRequired,
-  renderLink: PropTypes.func.isRequired
+  renderLink: PropTypes.func.isRequired,
+  canEdit: PropTypes.bool,
+  onDelete: PropTypes.func,
 }
 
 export default LinksMenuAccordion
