@@ -77,7 +77,6 @@ class ProjectPlanContainer extends React.Component {
     }
   }
 
-
   componentWillUnmount() {
     const { collapseAllProjectPhases } = this.props
 
