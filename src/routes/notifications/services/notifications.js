@@ -22,7 +22,7 @@ const markNotificationsSeen = (id) => {
 }
 
 const getNotifications = () => {
-  return axios.get(`${TC_NOTIFICATION_URL}/list?read=false&limit=${NOTIFICATIONS_LIMIT}`)
+  return axios.get(`${TC_NOTIFICATION_URL}/list?read=false&per_page=${NOTIFICATIONS_LIMIT}`)
     .then(resp => prepareNotifications(resp.data.items))
 }
 
