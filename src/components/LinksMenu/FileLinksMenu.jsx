@@ -134,10 +134,6 @@ const FileLinksMenu = ({
     }
   }
 
-  const onDeleteAttachment = (link) => {
-    console.dir(link)
-  }
-
   return (
     <MobileExpandable title={`${title} (${links.length})`}>
       <Panel className={cn({'modal-active': (isAddingNewLink || linkToDelete >= 0)}, 'panel-links-container')}>
@@ -185,7 +181,7 @@ const FileLinksMenu = ({
                 const handleEditClick = () => onEditIntent(idx)
                 const canEdit = `${link.createdBy}` === `${loggedInUser.userId}`
                 if (Array.isArray(link.children) && link.children.length > 0) {
-                  return (<LinksMenuAccordion key={`link-menu-accordion-${idx}`} link={ link } renderLink={ renderLink } canEdit={canEdit} onDelete={ onDeleteAttachment } />)
+                  return (<LinksMenuAccordion key={`link-menu-accordion-${idx}`} link={ link } renderLink={ renderLink } canEdit={canEdit} />)
                 } else if(linkToDelete === idx) {
                   return (
                     <li className="delete-confirmation-modal" key={'delete-confirmation-' + idx}>

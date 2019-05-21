@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import IconCarretDownNormal from '../../assets/icons/arrow-6px-carret-down-normal.svg'
 import './LinksMenuAccordion.scss'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
+import DeleteFileLinkModal from './DeleteFileLinkModal'
 
 
 class LinksMenuAccordion extends React.Component {
@@ -10,9 +11,13 @@ class LinksMenuAccordion extends React.Component {
     super(props)
     this.state = {
       isOpen: false,
+      linkToDelete: -1
     }
 
     this.toggleAccordion = this.toggleAccordion.bind(this)
+    this.onDeleteConfirm = this.onDeleteConfirm.bind(this)
+    this.onDeleteCancel = this.onDeleteCancel.bind(this)
+    this.deleteLink = this.deleteLink.bind(this)
   }
 
   toggleAccordion() {
@@ -21,9 +26,25 @@ class LinksMenuAccordion extends React.Component {
     })
   }
 
+  onDeleteConfirm() {
+    console.log('ok')
+  }
+
+  onDeleteCancel() {
+    this.setState({
+      linkToDelete: -1
+    })
+  }
+
+  deleteLink(idx) {
+    this.setState({
+      linkToDelete: idx
+    })
+  }
+
   render() {
-    const { link, renderLink, canEdit, onDelete } = this.props
-    const { isOpen } = this.state
+    const { link, renderLink, canEdit } = this.props
+    const { isOpen, linkToDelete } = this.state
     const iconClasses = `icon ${isOpen ? 'active' : ''}`
     return (
       <div styleName="link-accordion">
@@ -35,6 +56,17 @@ class LinksMenuAccordion extends React.Component {
           <ul>
             {
               link.children.map((childLink, i) => {
+                if (linkToDelete === i) {
+                  return (
+                    <li className="delete-confirmation-modal" key={'delete-confirmation-post-attachment-' + i}>
+                      <DeleteFileLinkModal
+                        link={link}
+                        onCancel={this.onDeleteCancel}
+                        onConfirm={this.onDeleteConfirm}
+                      />
+                    </li>
+                  )
+                }
                 return (<li key={`childlink-${childLink.address}-${i}`}>
                   {renderLink(childLink)}
                   <div className="button-group">
@@ -58,7 +90,6 @@ LinksMenuAccordion.propTypes = {
   link: PropTypes.object.isRequired,
   renderLink: PropTypes.func.isRequired,
   canEdit: PropTypes.bool,
-  onDelete: PropTypes.func,
 }
 
 export default LinksMenuAccordion
