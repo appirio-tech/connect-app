@@ -226,7 +226,7 @@ class FeedView extends React.Component {
       }
       const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
       if (scrollTo) {
-        setTimeout(() => scrollToHash(scrollTo), 0)
+        setTimeout(() => scrollToHash(scrollTo), 100)
       }
     })
   }

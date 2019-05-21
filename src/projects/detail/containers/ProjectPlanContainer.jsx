@@ -7,6 +7,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import _ from 'lodash'
 
 import {
@@ -63,29 +64,19 @@ class ProjectPlanContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { expandProjectPhase } = this.props
-    const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
-    if (scrollTo) {
-      const hashParts = _.split(scrollTo, '-')
-      const phaseId = hashParts[0] === 'phase' ? parseInt(hashParts[1], 10) : null
-      if (phaseId) {
-        let tab = hashParts[2]
-        tab = tab === scrollTo ? 'timeline' : tab
-        // we just open tab, while smooth scrolling has to be caused by URL hash
-        expandProjectPhase(phaseId, tab)
-      }
-    } else {
-      // if the user is a customer and its not a direct link to a particular phase
-      // then by default expand all phases which are active
-      if (this.props.isCustomerUser) {
-        _.forEach(this.props.phases, phase => {
-          if (phase.status === PHASE_STATUS_ACTIVE) {
-            expandProjectPhase(phase.id)
-          }
-        })
-      }
+    const { expandProjectPhase, location } = this.props
+
+    // if the user is a customer and its not a direct link to a particular phase
+    // then by default expand all phases which are active
+    if (_.isEmpty(location.hash) && this.props.isCustomerUser) {
+      _.forEach(this.props.phases, phase => {
+        if (phase.status === PHASE_STATUS_ACTIVE) {
+          expandProjectPhase(phase.id)
+        }
+      })
     }
   }
+
 
   componentWillUnmount() {
     const { collapseAllProjectPhases } = this.props
@@ -208,6 +199,7 @@ const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates 
     isFeedsLoading: projectTopics.isLoading,
     phasesTopics,
     phasesStates: projectState.phasesStates,
+    isLoadingPhases: projectState.isLoadingPhases,
   }
 }
 
@@ -224,4 +216,4 @@ const mapDispatchToProps = {
   collapseAllProjectPhases,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectPlanContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProjectPlanContainer))

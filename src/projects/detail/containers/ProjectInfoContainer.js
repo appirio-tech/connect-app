@@ -61,7 +61,7 @@ class ProjectInfoContainer extends React.Component {
   }
 
   componentWillMount() {
-    const { project, isFeedsLoading, feeds, phases, phasesTopics, loadPhaseFeed } = this.props
+    const { project, isFeedsLoading, feeds, phases, phasesTopics, loadPhaseFeed, location } = this.props
 
     this.setDuration(project)
 
@@ -78,39 +78,60 @@ class ProjectInfoContainer extends React.Component {
         loadPhaseFeed(project.id, phase.id)
       }
     })
+
+    // handle url hash
+    if (!_.isEmpty(location.hash)) {
+      this.handleUrlHash(this.props)
+    }
   }
 
   componentWillReceiveProps(props) {
-    const { project, phases, feeds, loadProjectPhasesWithProducts, loadPhaseFeed, location } = props
+    const { project, location } = props
 
     this.setDuration(project)
 
     if (!_.isEmpty(location.hash) && location.hash !== this.props.location.hash) {
-      const hashParts = _.split(location.hash.substring(1), '-')
-      const hashPrimaryId = parseInt(hashParts[1], 10)
+      this.handleUrlHash(props)
+    }
+  }
 
-      switch (hashParts[0]) {
-      case 'comment':
-        if (!this.foundCommentInFeeds(feeds, hashPrimaryId)) {
-          this.loadAllFeeds()
-        }
-        break
+  // this is just to see if the comment/feed/post/phase the url hash is attempting to scroll to is loaded or not
+  // if its not loaded then we load the appropriate item
+  handleUrlHash(props) {
+    const { project, isFeedsLoading, phases, phasesTopics, feeds, loadProjectPhasesWithProducts, loadPhaseFeed, location } = props
+    const hashParts = _.split(location.hash.substring(1), '-')
+    const hashPrimaryId = parseInt(hashParts[1], 10)
 
-      case 'feed':
-        if (!_.some(feeds, { id: hashPrimaryId})) {
-          this.loadAllFeeds()
-        }
-        break
+    switch (hashParts[0]) {
+    case 'comment': {
+      if (!isFeedsLoading && !this.foundCommentInFeeds(feeds, hashPrimaryId)) {
+        this.loadAllFeeds()
+      }
+      break
+    }
 
-      case 'phase':
+    case 'feed': {
+      if (!isFeedsLoading && !_.some(feeds, { id: hashPrimaryId})) {
+        this.loadAllFeeds()
+      }
+      break
+    }
+
+    case 'phase': {
+      const postId = parseInt(hashParts[3], 10)
+
+      if (phases && phasesTopics) {
         if (!_.some(phases, { id: hashPrimaryId})) {
           loadProjectPhasesWithProducts(project.id)
             .then(({ value: newPhases }) => {
               _.some(newPhases, { id: hashPrimaryId}) && loadPhaseFeed(project.id, hashPrimaryId)
             })
+        } else if(postId && !(phasesTopics[hashPrimaryId].topic && phasesTopics[hashPrimaryId].topic.postIds.includes(postId))) {
+          loadPhaseFeed(project.id, hashPrimaryId)
         }
-        break
       }
+      break
+    }
     }
   }
 

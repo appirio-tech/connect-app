@@ -5,6 +5,7 @@ import React from 'react'
 import PT from 'prop-types'
 import _ from 'lodash'
 import uncontrollable from 'uncontrollable'
+import { withRouter } from 'react-router-dom'
 
 import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
@@ -22,7 +23,6 @@ import ProductTimelineContainer from '../containers/ProductTimelineContainer'
 import NotificationsReader from '../../../components/NotificationsReader'
 import { phaseFeedHOC } from '../containers/PhaseFeedHOC'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
-import { scrollToHash } from '../../../components/ScrollToAnchors'
 
 const enhance = spinnerWhileLoading(props => !props.processing)
 const EnhancedEditProjectForm = enhance(EditProjectForm)
@@ -130,23 +130,26 @@ class ProjectStage extends React.Component{
     expandProjectPhase(phase.id, tab)
   }
 
-  componentDidUpdate() {
-    const { phaseState } = this.props
-    if (_.get(phaseState, 'isExpanded')) {
-      const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
-      if (scrollTo) {
-        scrollToHash(scrollTo)
-      }
+  componentWillReceiveProps(props) {
+    if (!_.isEmpty(location.hash) && props.location.hash !== this.props.location.hash) {
+      this.handleUrlHash(props)
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { feedId, commentId, phase, phaseState, expandProjectPhase } = this.props
-    const { feed } = nextProps
-    if (!_.get(phaseState, 'isExpanded') && feed && (feed.id === parseInt(feedId) || feed.postIds.includes(parseInt(commentId)))){
-      expandProjectPhase(phase.id, 'posts')
-    }
+  componentWillMount() {
+    !_.isEmpty(this.props.location.hash) && this.handleUrlHash(this.props)
+  }
 
+  handleUrlHash(props) {
+    const { expandProjectPhase, phase, location } = props
+
+    const hashParts = _.split(location.hash.substring(1), '-')
+    const phaseId = hashParts[0] === 'phase' ? parseInt(hashParts[1], 10) : null
+
+    if (phaseId && phase.id === phaseId) {
+      const tab = hashParts[2]
+      expandProjectPhase(phaseId, tab)
+    }
   }
 
   render() {
@@ -169,6 +172,7 @@ class ProjectStage extends React.Component{
       collapseProjectPhase,
       expandProjectPhase,
       commentAnchorPrefix,
+      isLoading,
 
       // comes from phaseFeedHOC
       currentUser,
@@ -253,6 +257,8 @@ class ProjectStage extends React.Component{
               projectMembers={projectMembers}
               onSaveMessage={onSaveMessage}
               commentAnchorPrefix={commentAnchorPrefix}
+              phaseId={phase.id}
+              isLoading={isLoading}
             />
           )}
 
@@ -311,7 +317,7 @@ ProjectStage.propTypes = {
   commentAnchorPrefix: PT.string,
 }
 
-const ProjectStageUncontrollable = uncontrollable(ProjectStage, {
+const ProjectStageUncontrollable = uncontrollable(withRouter(ProjectStage), {
   activeTab: 'onTabClick',
 })
 
