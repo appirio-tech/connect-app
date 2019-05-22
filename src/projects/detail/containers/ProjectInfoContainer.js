@@ -313,12 +313,10 @@ class ProjectInfoContainer extends React.Component {
         const attachments = post.attachments
           .filter(attachment => attachment.id !== attachmentId)
         const attachmentIds = attachments.map(attachment => attachment.id)
-        return saveFeedComment(topicId, feed.tag, {
+        saveFeedComment(topicId, feed.tag, {
           id: postId,
           content: post.rawContent,
           attachmentIds
-        }).then(() => {
-          post.attachments = attachments
         })
       }
     }
@@ -439,6 +437,7 @@ class ProjectInfoContainer extends React.Component {
       ...this.extractAttachmentLinksFromPosts(feeds),
       ...this.extractAttachmentLinksFromPosts(phaseFeeds)
     ]
+    console.dir(attachments)
 
     return (
       <div>

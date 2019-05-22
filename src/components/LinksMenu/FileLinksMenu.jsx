@@ -187,8 +187,8 @@ const FileLinksMenu = ({
                       key={`link-menu-accordion-${idx}`}
                       link={ link }
                       renderLink={ renderLink }
-                      canEdit={canEdit}
                       onDeletePostAttachment={onDeletePostAttachment}
+                      loggedInUser={loggedInUser}
                     />)
                 } else if(linkToDelete === idx) {
                   return (

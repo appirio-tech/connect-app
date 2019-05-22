@@ -18,6 +18,7 @@ class LinksMenuAccordion extends React.Component {
     this.onDeleteConfirm = this.onDeleteConfirm.bind(this)
     this.onDeleteCancel = this.onDeleteCancel.bind(this)
     this.deleteLink = this.deleteLink.bind(this)
+    this.hasAccess = this.hasAccess.bind(this)
   }
 
   toggleAccordion() {
@@ -30,9 +31,7 @@ class LinksMenuAccordion extends React.Component {
     const link = this.props.link.children[this.state.linkToDelete]
     if (link) {
       this.props.onDeletePostAttachment({ topicId: link.topicId, postId: link.postId, attachmentId: link.attachmentId, topicTag: link.topicTag })
-        .then(() => {
-          this.onDeleteCancel()
-        })
+      this.onDeleteCancel()
     }
   }
 
@@ -48,8 +47,13 @@ class LinksMenuAccordion extends React.Component {
     })
   }
 
+  hasAccess(createdBy) {
+    const { loggedInUser } = this.props
+    return Number.parseInt(createdBy) === loggedInUser.userId
+  }
+
   render() {
-    const { link, renderLink, canEdit } = this.props
+    const { link, renderLink } = this.props
     const { isOpen, linkToDelete } = this.state
     const iconClasses = `icon ${isOpen ? 'active' : ''}`
     return (
@@ -76,7 +80,7 @@ class LinksMenuAccordion extends React.Component {
                 return (<li key={`childlink-${childLink.address}-${i}`}>
                   {renderLink(childLink)}
                   <div className="button-group">
-                    {canEdit && childLink.deletable && <div className="buttons link-buttons">
+                    {this.hasAccess(childLink.createdBy) && childLink.deletable && <div className="buttons link-buttons">
                       <button type="button" onClick={() => this.deleteLink(i)}>
                         <BtnRemove />
                       </button>
@@ -95,8 +99,8 @@ class LinksMenuAccordion extends React.Component {
 LinksMenuAccordion.propTypes = {
   link: PropTypes.object.isRequired,
   renderLink: PropTypes.func.isRequired,
-  canEdit: PropTypes.bool,
-  onDeletePostAttachment: PropTypes.func
+  onDeletePostAttachment: PropTypes.func,
+  loggedInUser: PropTypes.object
 }
 
 export default LinksMenuAccordion
