@@ -27,7 +27,13 @@ class LinksMenuAccordion extends React.Component {
   }
 
   onDeleteConfirm() {
-    console.log('ok')
+    const link = this.props.link.children[this.state.linkToDelete]
+    if (link) {
+      this.props.onDeletePostAttachment({ topicId: link.topicId, postId: link.postId, attachmentId: link.attachmentId, topicTag: link.topicTag })
+        .then(() => {
+          this.onDeleteCancel()
+        })
+    }
   }
 
   onDeleteCancel() {
@@ -71,7 +77,7 @@ class LinksMenuAccordion extends React.Component {
                   {renderLink(childLink)}
                   <div className="button-group">
                     {canEdit && childLink.deletable && <div className="buttons link-buttons">
-                      <button type="button" onClick={() => onDelete(childLink)}>
+                      <button type="button" onClick={() => this.deleteLink(i)}>
                         <BtnRemove />
                       </button>
                     </div>}
@@ -90,6 +96,7 @@ LinksMenuAccordion.propTypes = {
   link: PropTypes.object.isRequired,
   renderLink: PropTypes.func.isRequired,
   canEdit: PropTypes.bool,
+  onDeletePostAttachment: PropTypes.func
 }
 
 export default LinksMenuAccordion

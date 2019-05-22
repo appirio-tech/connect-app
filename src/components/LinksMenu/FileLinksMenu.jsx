@@ -51,6 +51,7 @@ const FileLinksMenu = ({
   pendingAttachments,
   projectMembers,
   loggedInUser,
+  onDeletePostAttachment
 }) => {
 
   const fileUploadClient = filepicker.init(FILE_PICKER_API_KEY, {
@@ -181,7 +182,14 @@ const FileLinksMenu = ({
                 const handleEditClick = () => onEditIntent(idx)
                 const canEdit = `${link.createdBy}` === `${loggedInUser.userId}`
                 if (Array.isArray(link.children) && link.children.length > 0) {
-                  return (<LinksMenuAccordion key={`link-menu-accordion-${idx}`} link={ link } renderLink={ renderLink } canEdit={canEdit} />)
+                  return (
+                    <LinksMenuAccordion
+                      key={`link-menu-accordion-${idx}`}
+                      link={ link }
+                      renderLink={ renderLink }
+                      canEdit={canEdit}
+                      onDeletePostAttachment={onDeletePostAttachment}
+                    />)
                 } else if(linkToDelete === idx) {
                   return (
                     <li className="delete-confirmation-modal" key={'delete-confirmation-' + idx}>
@@ -273,6 +281,7 @@ FileLinksMenu.propTypes = {
   onDelete: PropTypes.func,
   title: PropTypes.string,
   loggedInUser: PropTypes.object.isRequired,
+  onDeletePostAttachment: PropTypes.func,
 }
 
 FileLinksMenu.defaultProps = {

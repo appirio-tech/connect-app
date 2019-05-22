@@ -20,6 +20,7 @@ import {
   addProjectAttachment, updateProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission,
   removeProjectAttachment
 } from '../../actions/projectAttachment'
+import { saveFeedComment } from '../../actions/projectTopics'
 
 class ProjectInfoContainer extends React.Component {
 
@@ -44,6 +45,7 @@ class ProjectInfoContainer extends React.Component {
     this.extractRawLink = this.extractRawLink.bind(this)
     this.getFileAttachmentName = this.getFileAttachmentName.bind(this)
     this.extractAttachmentLinksFromPosts = this.extractAttachmentLinksFromPosts.bind(this)
+    this.deletePostAttachment = this.deletePostAttachment.bind(this)
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
@@ -272,10 +274,13 @@ class ProjectInfoContainer extends React.Component {
           attachmentLinksPerFeed.unshift({
             title: this.getFileAttachmentName(attachment.originalFileName),
             address: `/projects/messages/attachments/${attachment.id}`,
-            id: attachment.id,
+            attachmentId: attachment.id,
             attachment: true,
             deletable: true,
-            createdBy: attachment.createdBy
+            createdBy: attachment.createdBy,
+            postId: post.id,
+            topicId: feed.id,
+            topicTag: feed.tag
           })
         })
       })
@@ -289,6 +294,34 @@ class ProjectInfoContainer extends React.Component {
     })
 
     return attachmentLinks
+  }
+
+  deletePostAttachment({ topicId, postId, attachmentId, topicTag }) {
+    const { feeds, phasesTopics, saveFeedComment } = this.props
+
+    let feed
+    if (topicTag === 'PRIMARY') {
+      feed = feeds.find(feed => feed.id === topicId)
+    } else {
+      const phaseFeeds = Object.keys(phasesTopics)
+        .map(key => phasesTopics[key].topic)
+      feed = phaseFeeds.find(feed => feed.id && feed.id === topicId)
+    }
+    if (feed) {
+      const post = feed.posts.find(post => post.id === postId)
+      if (post) {
+        const attachments = post.attachments
+          .filter(attachment => attachment.id !== attachmentId)
+        const attachmentIds = attachments.map(attachment => attachment.id)
+        return saveFeedComment(topicId, feed.tag, {
+          id: postId,
+          content: post.rawContent,
+          attachmentIds
+        }).then(() => {
+          post.attachments = attachments
+        })
+      }
+    }
   }
 
   render() {
@@ -452,6 +485,7 @@ class ProjectInfoContainer extends React.Component {
               moreText="view all files"
               noDots
               attachmentsStorePath={attachmentsStorePath}
+              onDeletePostAttachment={this.deletePostAttachment}
             />
           }
           {!hideLinks &&
@@ -505,6 +539,6 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
 
 const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
   loadProjectMessages, discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission,
-  removeProjectAttachment }
+  removeProjectAttachment, saveFeedComment }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfoContainer)
