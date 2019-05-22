@@ -130,16 +130,18 @@ class ProjectStage extends React.Component{
     expandProjectPhase(phase.id, tab)
   }
 
-  componentWillReceiveProps(props) {
-    if (!_.isEmpty(location.hash) && props.location.hash !== this.props.location.hash) {
-      this.handleUrlHash(props)
-    }
-  }
-
-  componentWillMount() {
+  componentDidMount() {
     !_.isEmpty(this.props.location.hash) && this.handleUrlHash(this.props)
   }
 
+  componentDidUpdate(prevProps) {
+    const { location } = this.props
+    if (!_.isEmpty(location.hash) && location.hash !== prevProps.location.hash) {
+      this.handleUrlHash(this.props)
+    }
+  }
+
+  // expand a phase if necessary depending on the url hash
   handleUrlHash(props) {
     const { expandProjectPhase, phase, location } = props
 

@@ -79,9 +79,6 @@ class FeedView extends React.Component {
 
   componentDidMount() {
     window.addEventListener('beforeunload', this.onLeave)
-  }
-
-  componentWillMount() {
     this.init(this.props)
   }
 
@@ -201,7 +198,7 @@ class FeedView extends React.Component {
     return item
   }
 
-  init(props, prevProps) {
+  init(props, prevProps) {console.log('infinite')
     const { feeds } = props
     let resetNewPost = false
     if (prevProps) {
@@ -226,7 +223,7 @@ class FeedView extends React.Component {
       }
       const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
       if (scrollTo) {
-        setTimeout(() => scrollToHash(scrollTo), 100)
+        scrollToHash(scrollTo)
       }
     })
   }

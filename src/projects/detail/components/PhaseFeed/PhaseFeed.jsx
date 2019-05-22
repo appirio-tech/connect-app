@@ -18,21 +18,23 @@ class PhaseFeedView extends React.Component {
     super(props)
   }
 
-  componentWillMount() {
+  componentDidMount() {
     !_.isEmpty(this.props.location.hash) && this.handleUrlHash(this.props)
   }
 
-  componentWillReceiveProps(props) {
-    if (!_.isEmpty(location.hash) && props.location.hash !== this.props.location.hash) {
-      this.handleUrlHash(props)
+  componentDidUpdate(prevProps) {
+    const { location } = this.props
+    if (!_.isEmpty(location.hash) && location.hash !== prevProps.location.hash) {
+      this.handleUrlHash(this.props)
     }
   }
 
+  // when the phase feed is actually loaded/rendered scroll to the appropriate post depending on url hash
   handleUrlHash(props) {
     const hashParts = _.split(location.hash.substring(1), '-')
     const phaseId = hashParts[0] === 'phase' ? parseInt(hashParts[1], 10) : null
     if (phaseId === props.phaseId) {
-      setTimeout(() => scrollToHash(props.location.hash), 100)
+      scrollToHash(props.location.hash)
     }
   }
 
