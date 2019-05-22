@@ -13,6 +13,8 @@ import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import cn from 'classnames'
 import BtnRemove from '../../assets/icons/ui-16px-1_trash-simple.svg'
 import BtnEdit from '../../assets/icons/icon-edit.svg'
+import LinksMenuAccordion from './LinksMenuAccordion'
+
 import _ from 'lodash'
 
 import {
@@ -49,6 +51,7 @@ const FileLinksMenu = ({
   pendingAttachments,
   projectMembers,
   loggedInUser,
+  onDeletePostAttachment
 }) => {
 
   const fileUploadClient = filepicker.init(FILE_PICKER_API_KEY, {
@@ -178,7 +181,16 @@ const FileLinksMenu = ({
                 const onEditCancel = () => onEditIntent(-1)
                 const handleEditClick = () => onEditIntent(idx)
                 const canEdit = `${link.createdBy}` === `${loggedInUser.userId}`
-                if (linkToDelete === idx) {
+                if (Array.isArray(link.children) && link.children.length > 0) {
+                  return (
+                    <LinksMenuAccordion
+                      key={`link-menu-accordion-${idx}`}
+                      link={ link }
+                      renderLink={ renderLink }
+                      onDeletePostAttachment={onDeletePostAttachment}
+                      loggedInUser={loggedInUser}
+                    />)
+                } else if(linkToDelete === idx) {
                   return (
                     <li className="delete-confirmation-modal" key={'delete-confirmation-' + idx}>
                       <DeleteFileLinkModal
@@ -269,6 +281,7 @@ FileLinksMenu.propTypes = {
   onDelete: PropTypes.func,
   title: PropTypes.string,
   loggedInUser: PropTypes.object.isRequired,
+  onDeletePostAttachment: PropTypes.func,
 }
 
 FileLinksMenu.defaultProps = {
