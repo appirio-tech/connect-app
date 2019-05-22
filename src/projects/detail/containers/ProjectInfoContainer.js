@@ -260,8 +260,7 @@ class ProjectInfoContainer extends React.Component {
   }
 
   getFileAttachmentName(originalFileName) {
-    const arr = originalFileName.split('/')
-    return arr[arr.length - 1]
+    return /^.*.\/[^_]+_(.*.)$/.exec(originalFileName)[1]
   }
 
   extractAttachmentLinksFromPosts(feeds) {
@@ -270,9 +269,9 @@ class ProjectInfoContainer extends React.Component {
       const attachmentLinksPerFeed = []
       feed.posts.forEach(post => {
         post.attachments.forEach(attachment => {
-          attachmentLinksPerFeed.push({
+          attachmentLinksPerFeed.unshift({
             title: this.getFileAttachmentName(attachment.originalFileName),
-            address: attachment.originalFileName,
+            address: `/projects/messages/attachments/${attachment.id}`,
             id: attachment.id,
             attachment: true,
             deletable: true,
