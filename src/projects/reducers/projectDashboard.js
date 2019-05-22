@@ -29,7 +29,7 @@ export const projectDashboard = function (state=initialState, action) {
   case LOAD_PROJECT_DASHBOARD_FAILURE:
     return Object.assign({}, state, {
       isLoading: false,
-      error: true
+      error: action.payload
     })
 
   // when we clear the project we have to put dashboard state to the initial state

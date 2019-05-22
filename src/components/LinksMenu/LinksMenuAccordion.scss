@@ -1,0 +1,46 @@
+@import '~tc-ui/src/styles/tc-includes';
+@import '../../styles/includes';
+
+.link-accordion {
+  padding: 0 20px;
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.link-accordion li .button-group {
+  display: flex;
+  align-items: center;
+}
+
+.link-accordion-content li {
+  padding-left: 15px;
+  padding-right: 5px;
+}
+
+.link-accordion-head {
+  padding: 10px 0;
+  cursor: pointer;
+  display: flex;
+}
+
+.link-accordion-head .icon {
+  transform: rotate(-90deg);
+}
+
+.link-accordion-head .icon.active {
+  transform: rotate(0);
+}
+
+.link-accordion-title {
+  margin-left: 5px;
+}
+
+.link-accordion-head:hover {
+  background: $tc-gray-neutral-light;
+}
+
+@media screen and (max-width: $screen-md - 1px) {
+  .link-accordion-head {
+    padding: 20px 0;
+  }
+}

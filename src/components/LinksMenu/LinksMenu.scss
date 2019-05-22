@@ -16,7 +16,7 @@
       font-size: $tc-label-md;
       color: $tc-dark-blue-110;
       line-height: 1;
-      padding: $base-unit 0 $base-unit $base-unit*4;
+      padding: $base-unit 20px $base-unit $base-unit*4;
       display: flex;
 
       &.clickable {
@@ -83,6 +83,7 @@
         }
         .link-buttons{
           display: inline-block;
+          float: right;
         }
       }
     }

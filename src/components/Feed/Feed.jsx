@@ -3,12 +3,13 @@ import _ from 'lodash'
 import cn from 'classnames'
 import moment from 'moment'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import FeedComments from './FeedComments'
 import CommentEditToggle from '../ActionCard/CommentEditToggle'
 import RichTextArea from '../RichTextArea/RichTextArea'
 import NotificationsReader from '../../components/NotificationsReader'
 
-import { EVENT_TYPE, PROJECT_FEED_TYPE_MESSAGES } from '../../config/constants'
+import { EVENT_TYPE, PROJECT_FEED_TYPE_MESSAGES, PROJECT_ROLE_CUSTOMER } from '../../config/constants'
 
 import XMarkIcon from '../../assets/icons/x-mark.svg'
 import FullscreenIcon from '../../assets/icons/ui-fullscreen.svg'
@@ -28,6 +29,7 @@ class Feed extends React.Component {
     this.onTopicChange = this.onTopicChange.bind(this)
     this.onSaveTopic = this.onSaveTopic.bind(this)
     this.updateHeaderHeight = this.updateHeaderHeight.bind(this)
+    this.filterProjectMembers = this.filterProjectMembers.bind(this)
   }
 
   componentDidMount() {
@@ -88,6 +90,10 @@ class Feed extends React.Component {
     return !_.isEqual(this.props, nextProps)
   }
 
+  filterProjectMembers(projectMembers, isPrivate) {
+    return isPrivate ? _.pickBy(projectMembers, pm => pm.role !== PROJECT_ROLE_CUSTOMER) : projectMembers
+  }
+
   render() {
     const {
       id, user, currentUser, topicMessage, totalComments, hasMoreComments, onLoadMoreComments, isLoadingComments,
@@ -102,13 +108,15 @@ class Feed extends React.Component {
     }
 
     let topicHeader = null
+    const isPrivate = tag === PROJECT_FEED_TYPE_MESSAGES
     if (topicMessage) {
       const self = user && user.userId === currentUser.userId
       const title = this.props.newTitle === null || this.props.newTitle === undefined ? this.props.title : this.props.newTitle
       const content = topicMessage.newContent === null || topicMessage.newContent === undefined ? topicMessage.rawContent : topicMessage.newContent
+      const feedLink = window.location.pathname.substr(0, window.location.pathname.indexOf('#')) + `#feed-${id}`
 
       topicHeader = (
-        <header styleName={'feed-header' + (tag === PROJECT_FEED_TYPE_MESSAGES ? ' is-private' : '' )} ref="header">
+        <header styleName={'feed-header' + (isPrivate ? ' is-private' : '' )} ref="header">
           <NotificationsReader 
             id={`topic-${id}`}
             criteria={{ eventType: EVENT_TYPE.TOPIC.CREATED, contents: { topicId: id } }}
@@ -134,11 +142,11 @@ class Feed extends React.Component {
           ) : (
             <div styleName="header-view">
               <div styleName="header-view-inner">
-                {tag === PROJECT_FEED_TYPE_MESSAGES && <div styleName="lock-icon"><LockIcon /></div>}
+                {isPrivate && <div styleName="lock-icon"><LockIcon /></div>}
                 <div styleName="header-info">
                   <div styleName="title">{title}</div>
                   <div styleName="header-details">
-                    <span>{moment(topicMessage.date).format('MMM D YYYY')}</span>
+                    <Link to={feedLink}>{moment(topicMessage.date).format('MMM D YYYY')}</Link>
                     <span>{comments.length} post{comments.length !== 1 ? 's' : ''}</span>
                   </div>
                 </div>
@@ -185,7 +193,7 @@ class Feed extends React.Component {
           onSaveMessage={onSaveMessage}
           onDeleteMessage={onDeleteMessage}
           allMembers={allMembers}
-          projectMembers={projectMembers}
+          projectMembers={this.filterProjectMembers(projectMembers, isPrivate)}
           isFullScreen={isFullScreen}
           headerHeight={headerHeight}
           commentId={commentId}

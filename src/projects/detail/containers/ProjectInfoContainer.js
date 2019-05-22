@@ -17,10 +17,11 @@ import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
 import PERMISSIONS from '../../../config/permissions'
 import { checkPermission } from '../../../helpers/permissions'
 import ProjectInfo from '../../../components/ProjectInfo/ProjectInfo'
-import { 
+import {
   addProjectAttachment, updateProjectAttachment, uploadProjectAttachments, discardAttachments, changeAttachmentPermission,
   removeProjectAttachment
 } from '../../actions/projectAttachment'
+import { saveFeedComment } from '../../actions/projectTopics'
 
 class ProjectInfoContainer extends React.Component {
 
@@ -39,6 +40,13 @@ class ProjectInfoContainer extends React.Component {
     this.onUploadAttachment = this.onUploadAttachment.bind(this)
     this.removeAttachment = this.removeAttachment.bind(this)
     this.onSubmitForReview = this.onSubmitForReview.bind(this)
+    this.extractLinksFromPosts = this.extractLinksFromPosts.bind(this)
+    this.extractMarkdownLink = this.extractMarkdownLink.bind(this)
+    this.extractHtmlLink = this.extractHtmlLink.bind(this)
+    this.extractRawLink = this.extractRawLink.bind(this)
+    this.getFileAttachmentName = this.getFileAttachmentName.bind(this)
+    this.extractAttachmentLinksFromPosts = this.extractAttachmentLinksFromPosts.bind(this)
+    this.deletePostAttachment = this.deletePostAttachment.bind(this)
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
@@ -226,13 +234,171 @@ class ProjectInfoContainer extends React.Component {
     updateProject(project.id, { status: 'in_review'})
   }
 
+  extractHtmlLink(str) {
+    const links = []
+    const regex = /<a[^>]+href="(.*?)"[^>]*>([\s\S]*?)<\/a>/gm
+    const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm // eslint-disable-line no-useless-escape
+    const rawLinks = regex.exec(str)
+
+    if (Array.isArray(rawLinks)) {
+      let i = 0
+      while (i < rawLinks.length) {
+        const title = rawLinks[i + 2]
+        const address = rawLinks[i + 1]
+
+        if (urlRegex.test(address)) {
+          links.push({
+            title,
+            address
+          })
+        }
+
+        i = i + 3
+      }
+    }
+
+    return links
+  }
+
+  extractMarkdownLink(str) {
+    const links = []
+    const regex = /(?:__|[*#])|\[(.*?)\]\((.*?)\)/gm
+    const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm // eslint-disable-line no-useless-escape
+    const rawLinks = regex.exec(str)
+
+    if (Array.isArray(rawLinks)) {
+      let i = 0
+      while (i < rawLinks.length) {
+        const title = rawLinks[i + 1]
+        const address = rawLinks[i + 2]
+
+        if (urlRegex.test(address)) {
+          links.push({
+            title,
+            address
+          })
+        }
+
+        i = i + 3
+      }
+    }
+
+    return links
+  }
+
+  extractRawLink(str) {
+    let links = []
+    const regex = /(\s|^)(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}[\s])(\s|$)/igm // eslint-disable-line no-useless-escape
+    const rawLinks = str.match(regex)
+
+    if (Array.isArray(rawLinks)) {
+      links = rawLinks
+        .filter(link => !link.includes(']'))
+        .map(link => {
+          const name = link.trim()
+          const url = !/^https?:\/\//i.test(name) ? 'http://' + name : name
+
+          return {
+            title: name,
+            address: url
+          }
+        })
+    }
+
+    return links
+  }
+
+  extractLinksFromPosts(feeds) {
+    const links = []
+    feeds.forEach(feed => {
+      let childrenLinks = []
+      feed.posts.forEach(post => {
+        childrenLinks = childrenLinks.concat([
+          ...this.extractHtmlLink(post.rawContent),
+          ...this.extractMarkdownLink(post.rawContent),
+          ...this.extractRawLink(post.rawContent)
+        ])
+      })
+
+      if (childrenLinks.length > 0) {
+        links.push({
+          title: feed.title,
+          children: childrenLinks
+        })
+      }
+    })
+
+    return links
+  }
+
+  getFileAttachmentName(originalFileName) {
+    return /^.*.\/[^_]+_(.*.)$/.exec(originalFileName)[1]
+  }
+
+  extractAttachmentLinksFromPosts(feeds) {
+    const attachmentLinks = []
+    feeds.forEach(feed => {
+      const attachmentLinksPerFeed = []
+      feed.posts.forEach(post => {
+        post.attachments.forEach(attachment => {
+          attachmentLinksPerFeed.unshift({
+            title: this.getFileAttachmentName(attachment.originalFileName),
+            address: `/projects/messages/attachments/${attachment.id}`,
+            attachmentId: attachment.id,
+            attachment: true,
+            deletable: true,
+            createdBy: attachment.createdBy,
+            postId: post.id,
+            topicId: feed.id,
+            topicTag: feed.tag
+          })
+        })
+      })
+
+      if (attachmentLinksPerFeed.length > 0) {
+        attachmentLinks.push({
+          title: feed.title,
+          children: attachmentLinksPerFeed
+        })
+      }
+    })
+
+    return attachmentLinks
+  }
+
+  deletePostAttachment({ topicId, postId, attachmentId, topicTag }) {
+    const { feeds, phasesTopics, saveFeedComment } = this.props
+
+    let feed
+    if (topicTag === 'PRIMARY') {
+      feed = feeds.find(feed => feed.id === topicId)
+    } else {
+      const phaseFeeds = Object.keys(phasesTopics)
+        .map(key => phasesTopics[key].topic)
+      feed = phaseFeeds.find(feed => feed.id && feed.id === topicId)
+    }
+    if (feed) {
+      const post = feed.posts.find(post => post.id === postId)
+      if (post) {
+        const attachments = post.attachments
+          .filter(attachment => attachment.id !== attachmentId)
+        const attachmentIds = attachments.map(attachment => attachment.id)
+        saveFeedComment(topicId, feed.tag, {
+          id: postId,
+          content: post.rawContent,
+          attachmentIds
+        })
+      }
+    }
+  }
+
   render() {
     const { duration } = this.state
     const { project, currentMemberRole, isSuperUser, phases, feeds,
       hideInfo, hideLinks, hideMembers, onChannelClick, activeChannelId, productsTimelines,
       isManageUser, phasesTopics, isProjectPlan, isProjectProcessing, projectTemplates,
       attachmentsAwaitingPermission, addProjectAttachment, discardAttachments, attachmentPermissions,
-      changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment } = this.props
+      changeAttachmentPermission, projectMembers, loggedInUser, isSharingAttachment, canAccessPrivatePosts } = this.props
     let directLinks = null
     // check if direct links need to be added
     const isMemberOrCopilot = _.indexOf([PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER], currentMemberRole) > -1
@@ -321,6 +487,28 @@ class ProjectInfoContainer extends React.Component {
       })
     }
 
+    // extract links from posts
+    const topicLinks = this.extractLinksFromPosts(feeds)
+    const publicTopicLinks = topicLinks.filter(link => link.tag !== PROJECT_FEED_TYPE_MESSAGES)
+    const privateTopicLinks = topicLinks.filter(link => link.tag === PROJECT_FEED_TYPE_MESSAGES)
+    const phaseLinks = this.extractLinksFromPosts(phaseFeeds)
+
+    let links = []
+    links = links.concat(project.bookmarks)
+    links = links.concat(publicTopicLinks)
+    if (canAccessPrivatePosts) {
+      links = links.concat(privateTopicLinks)
+    }
+    links = links.concat(phaseLinks)
+
+    // extract attachment from posts
+    attachments = [
+      ...attachments,
+      ...this.extractAttachmentLinksFromPosts(feeds),
+      ...this.extractAttachmentLinksFromPosts(phaseFeeds)
+    ]
+    console.dir(attachments)
+
     return (
       <div>
         <div className="sideAreaWrapper">
@@ -366,11 +554,12 @@ class ProjectInfoContainer extends React.Component {
               moreText="view all files"
               noDots
               attachmentsStorePath={attachmentsStorePath}
+              onDeletePostAttachment={this.deletePostAttachment}
             />
           }
           {!hideLinks &&
             <LinksMenu
-              links={project.bookmarks || []}
+              links={links}
               canDelete={canManageLinks}
               canEdit={canManageLinks}
               canAdd={canManageLinks}
@@ -419,6 +608,6 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
 
 const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
   loadProjectMessages, discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission,
-  removeProjectAttachment, loadProjectPhasesWithProducts }
+  removeProjectAttachment, loadProjectPhasesWithProducts, saveFeedComment }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProjectInfoContainer))
