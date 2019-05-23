@@ -507,7 +507,6 @@ class ProjectInfoContainer extends React.Component {
       ...this.extractAttachmentLinksFromPosts(feeds),
       ...this.extractAttachmentLinksFromPosts(phaseFeeds)
     ]
-    console.dir(attachments)
 
     return (
       <div>

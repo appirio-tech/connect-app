@@ -34,7 +34,7 @@ class PhaseFeedView extends React.Component {
     const hashParts = _.split(location.hash.substring(1), '-')
     const phaseId = hashParts[0] === 'phase' ? parseInt(hashParts[1], 10) : null
     if (phaseId === props.phaseId) {
-      scrollToHash(props.location.hash)
+      setTimeout(() => scrollToHash(props.location.hash), 100)
     }
   }
 

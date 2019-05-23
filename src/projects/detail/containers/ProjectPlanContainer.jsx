@@ -96,6 +96,7 @@ class ProjectPlanContainer extends React.Component {
       productsTimelines,
       phasesTopics,
       isProcessing,
+      isLoadingPhases
     } = this.props
 
     // manager user sees all phases
@@ -161,7 +162,7 @@ class ProjectPlanContainer extends React.Component {
           ) : (
             <ProjectPlanEmpty />
           )}
-          {isProjectLive && checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project, phases)  && (<div styleName="add-button-container">
+          {isProjectLive && checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project, phases)  && !isLoadingPhases && (<div styleName="add-button-container">
             <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
           </div>)}
         </TwoColsLayout.Content>

@@ -152,7 +152,7 @@ ProjectStages.propTypes = {
   updateProductAttachment: PT.func.isRequired,
   removeProductAttachment: PT.func.isRequired,
   deleteProjectPhase: PT.func.isRequired,
-  isLoadingPhases: PT.func.isRequired,
+  isLoadingPhases: PT.bool.isRequired,
 }
 
 const enhance = spinnerWhileLoading(props => !props.isLoadingPhases)
