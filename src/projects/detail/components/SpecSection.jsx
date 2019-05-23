@@ -425,6 +425,7 @@ SpecSection.propTypes = {
   updateAttachment: PropTypes.func,
   removeAttachment: PropTypes.func,
   productCategories: PropTypes.array.isRequired,
+  disableAutoScrolling: PropTypes.bool,
 }
 
 export default scrollToAnchors(SpecSection)

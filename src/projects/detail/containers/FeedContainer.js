@@ -198,7 +198,7 @@ class FeedView extends React.Component {
     return item
   }
 
-  init(props, prevProps) {console.log('infinite')
+  init(props, prevProps) {
     const { feeds } = props
     let resetNewPost = false
     if (prevProps) {
