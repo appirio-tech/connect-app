@@ -286,7 +286,7 @@ class ProjectStage extends React.Component{
                 removeAttachment={this.removeProductAttachment}
                 attachmentsStorePath={attachmentsStorePath}
                 canManageAttachments={!!currentMemberRole}
-                disableAutoScrolling={true}
+                disableAutoScrolling
               />
             </div>
           }
