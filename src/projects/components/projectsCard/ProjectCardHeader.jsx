@@ -5,9 +5,10 @@ import PT from 'prop-types'
 import TextTruncate from 'react-text-truncate'
 import { getProjectTemplateByKey } from '../../../helpers/templates'
 import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
+import NotificationBadge from '../../../components/NotificationBadge/NotificationBadge'
 import './ProjectCardHeader.scss'
 
-function ProjectCardHeader({ project, onClick, projectTemplates }) {
+function ProjectCardHeader({ project, onClick, projectTemplates, unreadMentionsCount}) {
   if (!project) return null
 
   const projectTemplateId = project.templateId
@@ -20,6 +21,9 @@ function ProjectCardHeader({ project, onClick, projectTemplates }) {
   return (
     <div className="project-card-header" onClick={onClick}>
       <div className="project-header">
+        <span className="badge-wrapper">
+          { unreadMentionsCount > 0 && <NotificationBadge count={unreadMentionsCount} /> }
+        </span>
         <div className="project-type-icon" title={project.type !== undefined ? project.type[0].toUpperCase() + project.type.substr(1).replace(/_/g, ' ') : null}>
           <ProjectTypeIcon type={productIcon} />
         </div>
@@ -45,7 +49,8 @@ ProjectCardHeader.defaultTypes = {
 ProjectCardHeader.propTypes = {
   project: PT.object.isRequired,
   projectTemplates: PT.array.isRequired,
-  onClick: PT.func
+  onClick: PT.func,
+  unreadMentionsCount: PT.number
 }
 
 export default ProjectCardHeader

@@ -6,6 +6,7 @@ import Panel from '../Panel/Panel'
 import AddLink from './AddLink'
 import DeleteLinkModal from './DeleteLinkModal'
 import EditLinkModal from './EditLinkModal'
+import LinksMenuAccordion from './LinksMenuAccordion'
 import uncontrollable from 'uncontrollable'
 import MobileExpandable from '../MobileExpandable/MobileExpandable'
 import cn from 'classnames'
@@ -100,7 +101,9 @@ const LinksMenu = ({
                 }
                 const onEditCancel = () => onEditIntent(-1)
                 const handleEditClick = () => onEditIntent(idx)
-                if (linkToDelete === idx) {
+                if (Array.isArray(link.children) && link.children.length > 0) {
+                  return (<LinksMenuAccordion key={`link-menu-accordion-${idx}`} link={ link } renderLink={ renderLink } />)
+                } else if (linkToDelete === idx) {
                   return (
                     <li className="delete-confirmation-modal" key={ 'delete-confirmation-' + idx }>
                       <DeleteLinkModal

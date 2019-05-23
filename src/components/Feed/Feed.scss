@@ -111,7 +111,7 @@
   margin-top: $base-unit;
   white-space: nowrap;
 
-  > span + span::before {
+  > span::before {
     content: " • ";
     display: inline;
     margin: 0 2px;

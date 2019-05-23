@@ -241,6 +241,16 @@ export const filterTopicAndPostChangedNotifications = (notifications) => _.filte
 })
 
 /**
+ * Filter notification about post mentions
+ * @param {Array} notifications list of notifications
+ * 
+ * @return {Array} notifications list filtered by post mention event type 
+ */
+export const filterPostsMentionNotifications = (notifications) => _.filter(notifications, (notification) => {
+  return notification.eventType === EVENT_TYPE.POST.MENTION
+})
+
+/**
  * Filter notifications about the project
  *
  * @param  {Array}  notifications list of notifications
