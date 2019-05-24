@@ -7,9 +7,10 @@ import _ from 'lodash'
 import LinksMenu from '../../../components/LinksMenu/LinksMenu'
 import FileLinksMenu from '../../../components/LinksMenu/FileLinksMenu'
 import TeamManagementContainer from './TeamManagementContainer'
-import { updateProject, deleteProject, loadProjectPhasesWithProducts } from '../../actions/project'
+import { updateProject, deleteProject } from '../../actions/project'
 import { loadDashboardFeeds, loadProjectMessages } from '../../actions/projectTopics'
 import { loadPhaseFeed } from '../../actions/phasesTopics'
+import { loadProjectPlan } from '../../actions/projectPlan'
 import { setDuration } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_ATTACHMENTS_FOLDER,
@@ -106,7 +107,7 @@ class ProjectInfoContainer extends React.Component {
   // this is just to see if the comment/feed/post/phase the url hash is attempting to scroll to is loaded or not
   // if its not loaded then we load the appropriate item
   handleUrlHash(props) {
-    const { project, isFeedsLoading, phases, phasesTopics, feeds, loadProjectPhasesWithProducts, loadPhaseFeed, location } = props
+    const { project, isFeedsLoading, phases, phasesTopics, feeds, loadProjectPlan, loadPhaseFeed, location } = props
     const hashParts = _.split(location.hash.substring(1), '-')
     const hashPrimaryId = parseInt(hashParts[1], 10)
 
@@ -130,10 +131,9 @@ class ProjectInfoContainer extends React.Component {
 
       if (phases && phasesTopics) {
         if (!_.some(phases, { id: hashPrimaryId})) {
-          loadProjectPhasesWithProducts(project.id)
-            .then(({ value: newPhases }) => {
-              _.some(newPhases, { id: hashPrimaryId}) && loadPhaseFeed(project.id, hashPrimaryId)
-            })
+          let existingUserIds = _.map(project.members, 'userId')
+          existingUserIds= _.union(existingUserIds, _.map(project.invites, 'userId'))
+          loadProjectPlan(project.id, existingUserIds)
         } else if(postId && !(phasesTopics[hashPrimaryId].topic && phasesTopics[hashPrimaryId].topic.postIds.includes(postId))) {
           loadPhaseFeed(project.id, hashPrimaryId)
         }
@@ -607,6 +607,6 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
 
 const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
   loadProjectMessages, discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission,
-  removeProjectAttachment, loadProjectPhasesWithProducts, saveFeedComment }
+  removeProjectAttachment, loadProjectPlan, saveFeedComment }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProjectInfoContainer))
