@@ -31,7 +31,7 @@ function loadTimelinesForPhasesProducts(phases, dispatch) {
 }
 
 export function loadProjectPlan(projectId, existingUserIds) {
-  return (dispatch) => {console.log('projectPlan')
+  return (dispatch) => {
     return dispatch(loadProjectPhasesWithProducts(projectId))
       .then(({ value: phases }) => {
         loadFeedsForPhases(projectId, phases, dispatch)
