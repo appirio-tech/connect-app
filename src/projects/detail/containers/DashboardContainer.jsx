@@ -47,6 +47,13 @@ import {
   EVENT_TYPE,
 } from '../../../config/constants'
 
+import Drawer from 'appirio-tech-react-components/components/Drawer/Drawer'
+import Toolbar from 'appirio-tech-react-components/components/Toolbar/Toolbar'
+import ToolbarGroup from 'appirio-tech-react-components/components/Toolbar/ToolbarGroup'
+import ToolbarTitle from 'appirio-tech-react-components/components/Toolbar/ToolbarTitle'
+import CloseIcon from 'appirio-tech-react-components/components/Icons/CloseIcon'
+import './DashboardContainer.scss'
+
 const SYSTEM_USER = {
   firstName: CODER_BOT_USER_FNAME,
   lastName: CODER_BOT_USER_LNAME,
@@ -57,7 +64,11 @@ class DashboardContainer extends React.Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      open: false
+    }
     this.onNotificationRead = this.onNotificationRead.bind(this)
+    this.toggleDrawer = this.toggleDrawer.bind(this)
   }
 
   onNotificationRead(notification) {
@@ -86,6 +97,12 @@ class DashboardContainer extends React.Component {
     const { collapseAllProjectPhases } = this.props
 
     collapseAllProjectPhases()
+  }
+
+  toggleDrawer() {
+    this.setState((prevState) => ({
+      open: !prevState.open
+    }))
   }
 
   render() {
@@ -173,6 +190,30 @@ class DashboardContainer extends React.Component {
               onNotificationRead={this.onNotificationRead}
             />
           }
+          <button type="button" onClick={this.toggleDrawer}>Toggle drawer</button>
+          {/* The following containerStyle and overlayStyle are needed for shrink drawer and overlay size for not
+              covering sidebar and topbar
+           */}
+          <Drawer
+            open={this.state.open}
+            containerStyle={{top: '110px'}}
+            overlayStyle={{top: '110px', left: '360px'}}
+            onRequestChange={(open) => this.setState({open})}
+          >
+            <Toolbar>
+              <ToolbarGroup>
+                <ToolbarTitle text="Project Scope" />
+              </ToolbarGroup>
+              <ToolbarGroup>
+                <span styleName="close-btn" onClick={() => this.setState({open: false})}>
+                  <CloseIcon />
+                </span>
+              </ToolbarGroup>
+            </Toolbar>
+            <div styleName="drawer-content">
+              test content
+            </div>
+          </Drawer>
 
           {activePhases.length > 0 &&
             <WorkInProgress
