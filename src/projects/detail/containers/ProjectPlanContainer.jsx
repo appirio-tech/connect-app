@@ -96,7 +96,8 @@ class ProjectPlanContainer extends React.Component {
       productsTimelines,
       phasesTopics,
       isProcessing,
-      isLoadingPhases
+      isLoadingPhases,
+      location
     } = this.props
 
     // manager user sees all phases
@@ -114,6 +115,7 @@ class ProjectPlanContainer extends React.Component {
 
     const leftArea = (
       <ProjectInfoContainer
+        location={location}
         currentMemberRole={currentMemberRole}
         phases={phases}
         project={project}

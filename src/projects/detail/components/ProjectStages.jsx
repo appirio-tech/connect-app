@@ -94,6 +94,7 @@ const ProjectStages = ({
   collapseProjectPhase,
   feedId,
   commentId,
+  location
 }) => (
   <Section>
 
@@ -101,6 +102,7 @@ const ProjectStages = ({
     {
       phases.map((phase, index) => (
         <ProjectStage
+          location={location}
           key={phase.id}
           phaseState={phasesStates[phase.id]}
           productTemplates={productTemplates}
