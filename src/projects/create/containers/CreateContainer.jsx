@@ -17,6 +17,7 @@ import { ViewTypes } from 'appirio-tech-react-components/components/Wizard/Wizar
 import './CreateContainer.scss'
 import ProjectTypeIcon from '../../../components/ProjectTypeIcon'
 import { getNewProjectLink } from '../../../helpers/projectHelper'
+import { getProductEstimate } from '../../../config/projectWizard'
 
 import {
   CREATE_PROJECT_FAILURE,
@@ -136,9 +137,11 @@ class CreateContainer extends React.Component {
   componentWillMount() {
     const { processing, userRoles, match, history,
       templates } = this.props
+    let projectTemplate
     // if we are on the project page validate project param
     if (match.path === '/new-project/:project?/:status?') {
       const project = match.params.project
+      projectTemplate = getProjectTemplateByAlias(templates.projectTemplates, project)
 
       if (
         // if project is defined in URL
@@ -149,7 +152,7 @@ class CreateContainer extends React.Component {
         // project templates are loaded
         templates.projectTemplates &&
         // if project template doesn't exist
-        !getProjectTemplateByAlias(templates.projectTemplates, project)
+        !projectTemplate
       ) {
         history.replace('/404')
       }
@@ -163,7 +166,12 @@ class CreateContainer extends React.Component {
         // if project wizard is loaded after redirection from register page
         // TODO should we validate the project again?
         console.log('calling createProjectAction...')
-        this.props.createProjectAction(incompleteProject, PROJECT_STATUS_IN_REVIEW)
+        const projectEstimation = getProductEstimate(projectTemplate, incompleteProject)
+        const projectWithEstimation = {
+          ...incompleteProject,
+          estimation: _.get(projectEstimation, 'estimateBlocks', []),
+        }
+        this.props.createProjectAction(projectWithEstimation, PROJECT_STATUS_IN_REVIEW)
       }
     } else {
       // if there is not incomplete project, clear the exisitng project from the redux state
@@ -241,12 +249,17 @@ class CreateContainer extends React.Component {
    */
   createProject(project) {
     const { templates: { projectTemplates }} = this.props
-    const projectTemplate = _.find(projectTemplates, _.get(project, 'templateId'))
+    const projectTemplate = _.find(projectTemplates, { id: _.get(project, 'templateId') })
 
     this.setState({ creatingProject: true }, () => {
       if (this.props.userRoles && this.props.userRoles.length > 0) {
         this.prepareProjectForCreation(project, projectTemplate)
-        this.props.createProjectAction(project)
+        const projectEstimation = getProductEstimate(projectTemplate, project)
+        const projectWithEstimation = {
+          ...project,
+          estimation: _.get(projectEstimation, 'estimateBlocks', []),
+        }
+        this.props.createProjectAction(projectWithEstimation)
       } else {
         // redirect to registration/login page
         const retUrl = window.location.origin + '/new-project-callback'
