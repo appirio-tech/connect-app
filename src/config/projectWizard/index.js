@@ -596,7 +596,8 @@ export function getProductEstimate(projectTemplate, projectData) {
       maxTime = _.get(projectTemplate, 'scope.baseTimeEstimateMax', 0)
     } else {
       _.forEach(matchedBlocks, bb => {
-        price += bb.price
+        const bbPrice = _.isString(bb.price) ? evaluate(bb.price, flatProjectData) : bb.price
+        price += bbPrice
         minTime += bb.minTime
         maxTime += bb.maxTime
       })
