@@ -7,8 +7,14 @@
   font-size: 13px;
 }
 
+.link-accordion li .button-group {
+  display: flex;
+  align-items: center;
+}
+
 .link-accordion-content li {
   padding-left: 15px;
+  padding-right: 5px;
 }
 
 .link-accordion-head {

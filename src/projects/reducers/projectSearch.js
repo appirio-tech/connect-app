@@ -70,7 +70,7 @@ export default function(state = initialState, action) {
       isLoading: false,
       projects: [],
       totalCount: 0,
-      error: true
+      error: action.payload
     })
 
   case LOAD_MORE_PROJECTS:

@@ -7,6 +7,11 @@ import NewProjectCard from './NewProjectCard'
 import cn from 'classnames'
 import { PROJECTS_LIST_PER_PAGE } from '../../../config/constants'
 import { setDuration } from '../../../helpers/projectHelper'
+import {
+  filterReadNotifications,
+  filterNotificationsByProjectId,
+  filterPostsMentionNotifications
+} from '../../../routes/notifications/helpers/notifications'
 
 require('../../list/components/Projects/ProjectsGridView.scss')
 
@@ -15,7 +20,7 @@ const ProjectsCardView = props => {
   //const { projects, members, totalCount, criteria, pageNum, applyFilters, sortHandler, onPageChange, error, isLoading, onNewProjectIntent } = props
   // TODO: use applyFilters and onNewProjectIntent. Temporary delete to avoid lint errors.
   const { projects, members, currentUser, onPageChange, pageNum, totalCount, infiniteAutoload, newProjectLink,
-    setInfiniteAutoload, isLoading, onChangeStatus, projectsStatus, projectTemplates, applyFilters } = props
+    setInfiniteAutoload, isLoading, onChangeStatus, projectsStatus, projectTemplates, applyFilters, notifications } = props
   // const currentSortField = _.get(criteria, 'sort', '')
 
   // annotate projects with member data
@@ -32,6 +37,11 @@ const ProjectsCardView = props => {
 
   const renderProject = (project) => {
     const duration = setDuration({}, project.status)
+    //const { notifications } = this.props;
+    const notReadNotifications = filterReadNotifications(notifications)
+    const unreadProjectUpdate = filterNotificationsByProjectId(notReadNotifications, project.id)
+    const unreadMentions = filterPostsMentionNotifications(unreadProjectUpdate)
+    const unreadMentionsCount = unreadMentions.length
     return (<div key={project.id} className="project-card">
       <ProjectCard
         project={project}
@@ -39,6 +49,7 @@ const ProjectsCardView = props => {
         duration={duration}
         onChangeStatus={onChangeStatus}
         projectTemplates={projectTemplates}
+        unreadMentionsCount={unreadMentionsCount}
       />
     </div>)
   }

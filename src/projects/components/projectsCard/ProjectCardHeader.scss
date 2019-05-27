@@ -7,6 +7,13 @@
         flex-direction: row;
         min-height: 40px;
         overflow: hidden;
+        position: relative;
+
+        .badge-wrapper {
+          position: absolute; 
+          right: 0px; 
+          top: 4px;
+        }
 
         .project-type-icon {
           height: 32px;
@@ -20,7 +27,7 @@
           flex-direction: column;
           margin-left: 2 * $base_unit;
           line-height: 3 * $base_unit;
-
+          margin-right: 5 * $base_unit;
           .project-name {
              @include roboto-medium;
             font-size: $tc-heading-xs;

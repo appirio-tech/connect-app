@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Editor, {composeDecorators} from 'draft-js-plugins-editor'
-import {EditorState, RichUtils} from 'draft-js'
+import Editor, { composeDecorators } from 'draft-js-plugins-editor'
+import { EditorState, RichUtils } from 'draft-js'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import cn from 'classnames'
 import createLinkPlugin from './LinkPlugin/LinkPlugin'
@@ -10,7 +10,7 @@ import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin'
 import imageUploadPlugin from './ImageUploadPlugin'
 import handleDropPlugin from './HandleDropPlugin'
 import AddLinkButton from './AddLinkButton'
-import {getCurrentEntity} from '../../helpers/draftJSHelper'
+import { getCurrentEntity } from '../../helpers/draftJSHelper'
 import markdownToState from '../../helpers/markdownToState'
 import stateToMarkdown from '../../helpers/stateToMarkdown'
 import EditorIcons from './EditorIcons'
@@ -41,7 +41,7 @@ const decorator = composeDecorators(
 )
 const allowImages = false
 const plugins = [linkPlugin, blockDndPlugin]
-if (allowImages){
+if (allowImages) {
   const imagePlugin = createImagePlugin({ decorator })
   plugins.push(handleDropPlugin)
   plugins.push(imagePlugin)
@@ -51,16 +51,16 @@ if (allowImages){
 
 
 const styles = [
-  {className: 'bold', style: 'BOLD'},
-  {className: 'italic', style: 'ITALIC'},
-  {className: 'underline', style: 'UNDERLINE'}
+  { className: 'bold', style: 'BOLD' },
+  { className: 'italic', style: 'ITALIC' },
+  { className: 'underline', style: 'UNDERLINE' }
 ]
 
 const blocks = [
-  {className: 'ordered-list', style: 'ordered-list-item'},
-  {className: 'unordered-list', style: 'unordered-list-item'},
-  {className: 'quote', style: 'blockquote'},
-  {className: 'code', style: 'code-block'}
+  { className: 'ordered-list', style: 'ordered-list-item' },
+  { className: 'unordered-list', style: 'unordered-list-item' },
+  { className: 'quote', style: 'blockquote' },
+  { className: 'code', style: 'code-block' }
 ]
 
 const fileUploadClient = filepicker.init(FILE_PICKER_API_KEY, {
@@ -75,7 +75,7 @@ class RichTextArea extends React.Component {
       editorState: EditorState.createEmpty(),
       titleValue: '',
       suggestions: [],
-      allSuggestions:[],
+      allSuggestions: [],
       isPrivate: false
     }
 
@@ -98,7 +98,7 @@ class RichTextArea extends React.Component {
     this.getDownloadAttachmentFilename = this.getDownloadAttachmentFilename.bind(this)
     this.removeRawFile = this.removeRawFile.bind(this)
     this.removeFile = this.removeFile.bind(this)
-    this.mentionPlugin = createMentionPlugin({mentionPrefix: '@'})
+    this.mentionPlugin = createMentionPlugin({ mentionPrefix: '@' })
     this.plugins = plugins.slice(0)
     this.plugins.push(this.mentionPlugin)
   }
@@ -109,7 +109,7 @@ class RichTextArea extends React.Component {
   }
 
   componentWillMount() {
-    const suggestions = _.map(_.values(this.props.projectMembers), (e) => { return {name: e.firstName + ' ' + e.lastName, handle: e.handle, userId: e.userId, link:'/users/'+e.handle} })
+    const suggestions = _.map(_.values(this.props.projectMembers), (e) => { return { name: e.firstName + ' ' + e.lastName, handle: e.handle, userId: e.userId, link: '/users/' + e.handle } })
     const projectId = this.props.match.params.projectId
     this.setState({
       editorExpanded: this.props.editMode,
@@ -118,7 +118,7 @@ class RichTextArea extends React.Component {
       currentMDContent: this.props.content,
       oldMDContent: this.props.oldContent,
       suggestions,
-      allSuggestions:suggestions,
+      allSuggestions: suggestions,
       isAddLinkOpen: false,
       isAttachmentUploaderOpen: false,
       rawFiles: [],
@@ -201,7 +201,7 @@ class RichTextArea extends React.Component {
 
       if (!currNode)
         break
-    } while(currNode.tagName)
+    } while (currNode.tagName)
 
     // if editor has content, do not proceed
     if (!isEditor && !isCloseButton && hasContent) {
@@ -221,7 +221,7 @@ class RichTextArea extends React.Component {
   }
 
   handleKeyCommand(command) {
-    const {editorState} = this.state
+    const { editorState } = this.state
     const newState = RichUtils.handleKeyCommand(editorState, command)
     if (newState) {
       this.onEditorChange(newState)
@@ -262,7 +262,7 @@ class RichTextArea extends React.Component {
   }
 
   onTitleChange() {
-    this.setState({titleValue: this.refs.title.value})
+    this.setState({ titleValue: this.refs.title.value })
     if (this.props.onPostChange) {
       this.props.onPostChange(this.refs.title.value, this.state.currentMDContent)
     }
@@ -295,7 +295,7 @@ class RichTextArea extends React.Component {
       }
     }
   }
-  onSearchChange({value}){
+  onSearchChange({ value }) {
     this.setState({
       suggestions: defaultSuggestionsFilter(value, this.state.allSuggestions)
     })
@@ -320,7 +320,7 @@ class RichTextArea extends React.Component {
     this.onEditorChange(editorState)
   }
   setUploadState(uploading) {
-    this.setState({uploading})
+    this.setState({ uploading })
   }
   openFileUpload() {
     if (fileUploadClient) {
@@ -339,10 +339,10 @@ class RichTextArea extends React.Component {
           this.processUploadedFiles(files)
         },
         onOpen: () => {
-          this.setState({isAttachmentUploaderOpen: true})
+          this.setState({ isAttachmentUploaderOpen: true })
         },
         onClose: () => {
-          this.setState({isAttachmentUploaderOpen: false})
+          this.setState({ isAttachmentUploaderOpen: false })
         }
       })
 
@@ -356,7 +356,7 @@ class RichTextArea extends React.Component {
       bucket: f.container,
       title: f.filename
     }))
-    if (this.state.rawFiles){
+    if (this.state.rawFiles) {
       rawFiles = this.state.rawFiles.concat(rawFiles)
     }
 
@@ -386,13 +386,13 @@ class RichTextArea extends React.Component {
   render() {
     const {MentionSuggestions} = this.mentionPlugin
     const {className, avatarUrl, authorName, titlePlaceholder, contentPlaceholder, editMode, isCreating,
-      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic, hasPrivateSwitch, canUploadAttachment } = this.props
+      isGettingComment, disableTitle, disableContent, expandedTitlePlaceholder, editingTopic, hasPrivateSwitch, canUploadAttachment, attachments } = this.props
     const {editorExpanded, editorState, titleValue, oldMDContent, currentMDContent, uploading, isPrivate, isAddLinkOpen, rawFiles, files} = this.state
     let canSubmit = (disableTitle || titleValue.trim())
-        && (disableContent || editorState.getCurrentContent().hasText())
+      && (disableContent || editorState.getCurrentContent().hasText())
     if (editMode && canSubmit) {
       canSubmit = (!disableTitle && titleValue !== this.props.oldTitle) || (!disableContent && oldMDContent !== currentMDContent)
-                  || rawFiles.length > 0
+        || (rawFiles.length > 0 || files.length < attachments.length)
     }
     const currentStyle = editorState.getCurrentInlineStyle()
     const blockType = RichUtils.getCurrentBlockType(editorState)
@@ -415,7 +415,7 @@ class RichTextArea extends React.Component {
           <div className={theme.mentionSuggestionsEntryContainer}>
             <div className={theme.mentionSuggestionsEntryContainerRight}>
               <div className={theme.mentionSuggestionsEntryText}>
-                {mention.get('name') +' - '+mention.get('handle')}
+                {mention.get('name') + ' - ' + mention.get('handle')}
               </div>
             </div>
           </div>
@@ -424,14 +424,14 @@ class RichTextArea extends React.Component {
     }
 
     return (
-      <div className={cn(className, 'rich-editor', {expanded: editorExpanded || editMode}, {'is-private': isPrivate})} ref="richEditor">
+      <div className={cn(className, 'rich-editor', { expanded: editorExpanded || editMode }, { 'is-private': isPrivate })} ref="richEditor">
         {(isCreating || isGettingComment) &&
-         <div className="editing-layer" />
+          <div className="editing-layer" />
         }
         {uploading &&
-         <div className="editing-layer">
-           <div>Uploading image {uploading}%</div>
-         </div>
+          <div className="editing-layer">
+            <div>Uploading image {uploading}%</div>
+          </div>
         }
         <a href="javascript:" className="btn-close" />
         <div className="modal-row">
@@ -440,10 +440,10 @@ class RichTextArea extends React.Component {
               <Avatar size={40} avatarUrl={getAvatarResized(avatarUrl, 40)} userName={authorName} />
             </div>
           }
-          <div className={cn('object', {comment: disableTitle}, 'commentEdit')}>
+          <div className={cn('object', { comment: disableTitle }, 'commentEdit')}>
             <input
               ref="title" value={titleValue}
-              className={cn('new-post-title', {'hide-title': disableTitle})}
+              className={cn('new-post-title', { 'hide-title': disableTitle })}
               type="text"
               onChange={this.onTitleChange}
               placeholder={editorExpanded ? expandedTitlePlaceholder : titlePlaceholder || 'Title of the post'}
@@ -496,7 +496,7 @@ class RichTextArea extends React.Component {
                             }
                           </button>
                         ))}
-                        <div className="separator"/>
+                        <div className="separator" />
                         {blocks.map((item) => (
                           <button
                             disabled={item.style !== 'code-block' && disableForCodeBlock}
@@ -519,8 +519,8 @@ class RichTextArea extends React.Component {
                           onEditLink={() => this.onEditLink(true)}
                           active={currentEntity && 'LINK' === currentEntity.getType() && selectionState.isCollapsed()}
                         />
-                        { allowImages && <div className="separator"/> }
-                        { allowImages &&
+                        {allowImages && <div className="separator" />}
+                        {allowImages &&
                           <AddLinkButton
                             type={'image'}
                             getEditorState={this.getEditorState}
@@ -537,7 +537,7 @@ class RichTextArea extends React.Component {
                       {hasPrivateSwitch &&
                         <SwitchButton
                           name="private-post"
-                          onChange={(evt) => this.setState({isPrivate: evt.target.checked})}
+                          onChange={(evt) => this.setState({ isPrivate: evt.target.checked })}
                           checked={isPrivate}
                           label="Private"
                         />
@@ -546,19 +546,19 @@ class RichTextArea extends React.Component {
                         <button className="tc-btn tc-btn-default tc-btn-sm btn-close-creat">Cancel</button>
                       }
                       {editMode && !isCreating &&
-                      <button className="tc-btn tc-btn-default tc-btn-sm" onClick={this.cancelEdit}>
-                        Cancel
-                      </button>
+                        <button className="tc-btn tc-btn-default tc-btn-sm" onClick={this.cancelEdit}>
+                          Cancel
+                        </button>
                       }
-                      { editMode &&
-                    <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
-                      { isCreating ? 'Saving...' : editButtonText }
-                    </button>
+                      {editMode &&
+                        <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit}>
+                          {isCreating ? 'Saving...' : editButtonText}
+                        </button>
                       }
-                      { !editMode &&
-                    <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit }>
-                      { isCreating ? 'Posting...' : 'Post' }
-                    </button>
+                      {!editMode &&
+                        <button className="tc-btn tc-btn-primary tc-btn-sm" onClick={this.onPost} disabled={!canSubmit}>
+                          {isCreating ? 'Posting...' : 'Post'}
+                        </button>
                       }
                     </div>
                   </div>
@@ -570,8 +570,8 @@ class RichTextArea extends React.Component {
                             {this.getDownloadAttachmentFilename(f.originalFileName)}
                             <div className="button-group">
                               <div className="buttons link-buttons">
-                                <button onClick={() => {this.removeFile(index)}} type="button">
-                                  <BtnRemove className="btn-edit"/>
+                                <button onClick={() => { this.removeFile(index) }} type="button">
+                                  <BtnRemove className="btn-edit" />
                                 </button>
                               </div>
                             </div>
@@ -584,8 +584,8 @@ class RichTextArea extends React.Component {
                             {f.title}
                             <div className="button-group">
                               <div className="buttons link-buttons">
-                                <button onClick={() => {this.removeRawFile(index)}} type="button">
-                                  <BtnRemove className="btn-edit"/>
+                                <button onClick={() => { this.removeRawFile(index) }} type="button">
+                                  <BtnRemove className="btn-edit" />
                                 </button>
                               </div>
                             </div>
@@ -612,7 +612,7 @@ RichTextArea.propTypes = {
   isCreating: PropTypes.bool,
   disableTitle: PropTypes.bool,
   disableContent: PropTypes.bool,
-  editMode:PropTypes.bool,
+  editMode: PropTypes.bool,
   hasError: PropTypes.bool,
   avatarUrl: PropTypes.string,
   authorName: PropTypes.string,
