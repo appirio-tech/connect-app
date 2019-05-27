@@ -64,7 +64,7 @@ const DefaultBlockTypes = {
 // again. In this case, key is remarkable key, value is
 // meethod that returns the draftjs key + any data needed.
 const DefaultBlockEntities = {
-  link_open: (item) => { //eslint-disable-line
+  link_open: (item, followingItems) => { //eslint-disable-line
 
     if (item.title && item.title.startsWith('@')){
       return {
@@ -79,11 +79,24 @@ const DefaultBlockEntities = {
       }
     }
 
+    const linkEndIndex = followingItems.map(item => item.type).indexOf('link_close')
+
+    let text = ''
+    if (linkEndIndex !== -1) {
+      text = followingItems.slice(0, linkEndIndex).map(item => item.content).join(' ')
+    }
+
+    // Ignore auto link title
+    if (item.href && (text === item.href.replace(/^https?:\/\//, '') || text === item.href)) {
+      text = ''
+    }
+
     return {
       type: 'LINK',
       mutability: 'MUTABLE',
       data: {
-        url: item.href
+        url: item.href,
+        text
       }
     }
   },
@@ -137,7 +150,7 @@ function parseInline(inlineItem, BlockEntities, BlockStyles) {
   const blockEntities = {}
   const blockEntityRanges = []
   const blockInlineStyleRanges = []
-  inlineItem.children.forEach((child) => {
+  inlineItem.children.forEach((child, i) => {
     if (child.type === 'text') {
       content += child.content
     } else if (child.type === 'softbreak') {
@@ -159,7 +172,8 @@ function parseInline(inlineItem, BlockEntities, BlockStyles) {
     } else if (BlockEntities[child.type]) {
       const key = generateUniqueKey()
 
-      blockEntities[key] = BlockEntities[child.type](child)
+      const followingItems = inlineItem.children.slice(i + 1, inlineItem.children.length)
+      blockEntities[key] = BlockEntities[child.type](child, followingItems)
 
       blockEntityRanges.push({
         offset: child.type === 'image' ? 0 : content.length || 0,
@@ -200,7 +214,7 @@ function parseInline(inlineItem, BlockEntities, BlockStyles) {
 export function markdownToHTML(markdown) {
   const md = new Remarkable('full', {
     html: true,
-    linkify: true,
+    linkify: false,
     // typographer: true,
   })
   // Replace the BBCode [u][/u] to markdown '++' for underline style
