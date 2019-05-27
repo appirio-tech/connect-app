@@ -45,10 +45,18 @@ class SingleFeedContainer extends React.Component {
   }
 
   componentDidMount() {
-    // we use this to just scroll to a feed block or comment in a feed block, if there is a url hash
+    // we use this to just scroll to a feed block or comment in a feed block,
+    // only if there is a url hash and the feed id and comment id match this feed
     const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
     if (scrollTo) {
-      setTimeout(() => scrollToHash(scrollTo), 100)
+      const hashParts = _.split(scrollTo, '-')
+      const hashId = parseInt(hashParts[1], 10)
+      if (
+        (hashParts[0] === 'feed' && hashId === this.props.id) ||
+        (hashParts[0] === 'comment' && this.props.comments && _.some(this.props.comments, { id: hashId }))
+      ) {
+        setTimeout(() => scrollToHash(scrollTo), 100)
+      }
     }
   }
 
