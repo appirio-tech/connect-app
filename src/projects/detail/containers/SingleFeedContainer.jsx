@@ -14,6 +14,7 @@ import React from 'react'
 import _ from 'lodash'
 
 import ScrollableFeed from '../../../components/Feed/ScrollableFeed'
+import { scrollToHash } from '../../../components/ScrollToAnchors'
 
 const bindMethods = [
   'onNewCommentChange',
@@ -41,6 +42,14 @@ class SingleFeedContainer extends React.Component {
         return this.props[method](...[this.props.id, ...arguments])
       }.bind(this)
     })
+  }
+
+  componentDidMount() {
+    // we use this to just scroll to a feed block or comment in a feed block, if there is a url hash
+    const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
+    if (scrollTo) {
+      setTimeout(() => scrollToHash(scrollTo), 100)
+    }
   }
 
   render() {

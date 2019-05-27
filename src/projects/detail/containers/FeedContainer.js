@@ -32,7 +32,6 @@ import Section from '../components/Section'
 import SectionTitle from '../components/SectionTitle'
 import SingleFeedContainer from './SingleFeedContainer'
 
-import { scrollToHash } from '../../../components/ScrollToAnchors'
 import { isSystemUser } from '../../../helpers/tcHelpers'
 import { checkPermission } from '../../../helpers/permissions'
 import PERMISSIONS from '../../../config/permissions'
@@ -216,15 +215,6 @@ class FeedView extends React.Component {
         const resetNewComment = prevFeed && prevFeed.isAddingComment && !feed.isAddingComment && !feed.error
         return this.mapFeed(feed, this.state.showAll.indexOf(feed.id) > -1, resetNewComment, prevProps)
       }).filter(item => item)
-    }, () => {
-      if (prevProps) {
-        // only scroll at first time
-        return
-      }
-      const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
-      if (scrollTo) {
-        setTimeout(() => scrollToHash(scrollTo), 100)
-      }
     })
   }
 
