@@ -78,6 +78,9 @@ class FeedView extends React.Component {
 
   componentDidMount() {
     window.addEventListener('beforeunload', this.onLeave)
+  }
+
+  componentWillMount() {
     this.init(this.props)
   }
 
