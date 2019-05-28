@@ -179,7 +179,7 @@ export const projectState = function (state=initialState, action) {
 
   case ACCEPT_OR_REFUSE_INVITE_PENDING:
     return Object.assign({}, state, {
-      showUserInvited: false
+      showUserInvited: true
     })
 
   case ACCEPT_OR_REFUSE_INVITE_SUCCESS: {
