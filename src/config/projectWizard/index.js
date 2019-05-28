@@ -557,7 +557,10 @@ function getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditio
       }
     }
     _.forEach(filterdBlocks, fb => {
-      const bb = buildingBlocks[fb]
+      const bb = {
+        ...buildingBlocks[fb],
+        buildingBlockKey: fb,
+      }
       matchedBlocks.push(bb)
     })
   })
