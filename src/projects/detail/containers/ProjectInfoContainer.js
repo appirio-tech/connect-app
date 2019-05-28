@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import update from 'react-addons-update'
 import _ from 'lodash'
 import LinksMenu from '../../../components/LinksMenu/LinksMenu'
@@ -9,6 +10,7 @@ import TeamManagementContainer from './TeamManagementContainer'
 import { updateProject, deleteProject } from '../../actions/project'
 import { loadDashboardFeeds, loadProjectMessages } from '../../actions/projectTopics'
 import { loadPhaseFeed } from '../../actions/phasesTopics'
+import { loadProjectPlan } from '../../actions/projectPlan'
 import { setDuration } from '../../../helpers/projectHelper'
 import { PROJECT_ROLE_OWNER, PROJECT_ROLE_COPILOT, PROJECT_ROLE_MANAGER,
   DIRECT_PROJECT_URL, SALESFORCE_PROJECT_LEAD_LINK, PROJECT_STATUS_CANCELLED, PROJECT_ATTACHMENTS_FOLDER,
@@ -68,16 +70,14 @@ class ProjectInfoContainer extends React.Component {
   }
 
   componentWillMount() {
-    const { project, isFeedsLoading, feeds, loadDashboardFeeds,
-      loadProjectMessages, phases, phasesTopics, loadPhaseFeed, canAccessPrivatePosts } = this.props
+    const { project, isFeedsLoading, feeds, phases, phasesTopics, loadPhaseFeed, location } = this.props
 
     this.setDuration(project)
 
     // load feeds from dashboard if they are not currently loading or loaded yet
     // also it will load feeds, if we already loaded them, but it was 0 feeds before
     if (!isFeedsLoading && feeds.length < 1) {
-      loadDashboardFeeds(project.id)
-      canAccessPrivatePosts && loadProjectMessages(project.id)
+      this.loadAllFeeds()
     }
 
     // load phases feeds if they are not loaded yet
@@ -87,10 +87,80 @@ class ProjectInfoContainer extends React.Component {
         loadPhaseFeed(project.id, phase.id)
       }
     })
+
+    // handle url hash
+    if (!_.isEmpty(location.hash)) {
+      this.handleUrlHash(this.props)
+    }
   }
 
-  componentWillReceiveProps({project}) {
+  componentWillReceiveProps(props) {
+    const { project, location } = props
+
     this.setDuration(project)
+
+    if (!_.isEmpty(location.hash) && location.hash !== this.props.location.hash) {
+      this.handleUrlHash(props)
+    }
+  }
+
+  // this is just to see if the comment/feed/post/phase the url hash is attempting to scroll to is loaded or not
+  // if its not loaded then we load the appropriate item
+  handleUrlHash(props) {
+    const { project, isFeedsLoading, phases, phasesTopics, feeds, loadProjectPlan, loadPhaseFeed, location } = props
+    const hashParts = _.split(location.hash.substring(1), '-')
+    const hashPrimaryId = parseInt(hashParts[1], 10)
+
+    switch (hashParts[0]) {
+    case 'comment': {
+      if (!isFeedsLoading && !this.foundCommentInFeeds(feeds, hashPrimaryId)) {
+        this.loadAllFeeds()
+      }
+      break
+    }
+
+    case 'feed': {
+      if (!isFeedsLoading && !_.some(feeds, { id: hashPrimaryId})) {
+        this.loadAllFeeds()
+      }
+      break
+    }
+
+    case 'phase': {
+      const postId = parseInt(hashParts[3], 10)
+
+      if (phases && phasesTopics) {
+        if (!_.some(phases, { id: hashPrimaryId})) {
+          let existingUserIds = _.map(project.members, 'userId')
+          existingUserIds= _.union(existingUserIds, _.map(project.invites, 'userId'))
+          loadProjectPlan(project.id, existingUserIds)
+        } else if(postId && !(phasesTopics[hashPrimaryId].topic && phasesTopics[hashPrimaryId].topic.postIds.includes(postId))) {
+          loadPhaseFeed(project.id, hashPrimaryId)
+        }
+      }
+      break
+    }
+    }
+  }
+
+  loadAllFeeds() {
+    const { canAccessPrivatePosts, loadDashboardFeeds, loadProjectMessages, project } = this.props
+
+    loadDashboardFeeds(project.id)
+    canAccessPrivatePosts && loadProjectMessages(project.id)
+  }
+
+  foundCommentInFeeds(feeds, commentId) {
+    let commentFound = false
+
+    _.forEach(feeds, feed => _.forEach(feed.posts, post => {
+      if (post.id === commentId) {
+        commentFound = true
+        return false
+      }
+    }))
+
+    return commentFound
   }
 
   onChangeStatus(projectId, status, reason) {
@@ -537,6 +607,6 @@ const mapStateToProps = ({ templates, projectState, members, loadUser }) => {
 
 const mapDispatchToProps = { updateProject, deleteProject, addProjectAttachment, updateProjectAttachment,
   loadProjectMessages, discardAttachments, uploadProjectAttachments, loadDashboardFeeds, loadPhaseFeed, changeAttachmentPermission,
-  removeProjectAttachment, saveFeedComment }
+  removeProjectAttachment, loadProjectPlan, saveFeedComment }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfoContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProjectInfoContainer))

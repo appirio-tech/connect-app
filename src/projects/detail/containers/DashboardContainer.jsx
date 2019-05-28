@@ -112,6 +112,7 @@ class DashboardContainer extends React.Component {
       phasesTopics,
       expandProjectPhase,
       collapseProjectPhase,
+      location,
     } = this.props
 
     // system notifications
@@ -125,6 +126,7 @@ class DashboardContainer extends React.Component {
 
     const leftArea = (
       <ProjectInfoContainer
+        location={location}
         currentMemberRole={currentMemberRole}
         project={project}
         phases={phases}
