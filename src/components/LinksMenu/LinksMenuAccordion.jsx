@@ -80,7 +80,7 @@ class LinksMenuAccordion extends React.Component {
                 return (<li key={`childlink-${childLink.address}-${i}`}>
                   {renderLink(childLink)}
                   <div className="button-group">
-                    {this.hasAccess(childLink.createdBy) && childLink.deletable && <div className="buttons link-buttons">
+                    {childLink.deletable && this.hasAccess(childLink.createdBy) && <div className="buttons link-buttons">
                       <button type="button" onClick={() => this.deleteLink(i)}>
                         <BtnRemove />
                       </button>
