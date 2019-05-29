@@ -10,7 +10,6 @@ class AddonOptions extends Component {
   constructor(props) {
     super(props)
     this.changeValue = this.changeValue.bind(this)
-    this.quantityOptions = _.range(1, 11).map(i => ({ title: i, value: i }))
   }
 
   changeValue() {
@@ -76,7 +75,8 @@ class AddonOptions extends Component {
                 type="number"
                 styleName="addon-qty-input"
                 name={`${name}-qty`}
-                ref={setQtyRef} value={optValue && optValue.qty ? optValue.qty : 1}
+                ref={setQtyRef}
+                value={optValue && optValue.qty ? optValue.qty : 1}
                 onChange={this.changeValue}
                 min={1}
                 max={100}
