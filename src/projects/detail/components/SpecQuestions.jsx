@@ -257,6 +257,7 @@ const SpecQuestions = ({
         hideTitle: true,
         hideDescription: true,
         description: q.description,
+        allowMultiple: q.allowMultiple,
         options: buildAddonsOptions(q, productTemplates, productCategories),
         wrapperClass: q.theme
       })

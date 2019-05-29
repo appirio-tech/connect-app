@@ -592,6 +592,19 @@ export function getProductEstimate(projectTemplate, projectData) {
     })
     const baseBlocks = getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditions, flatProjectData)
     const addonBlocks = getFilteredBuildingBlocks(addonPriceConfig, buildingBlocks, preparedConditions, flatProjectData, true)
+    // for each addon block, check if user has specified quantity for the selected addons
+    addonBlocks.forEach((addonBlock) => {
+      // retrieves productKey for the addon
+      const addonKey = addonBlock.metadata.addonProductKey
+      // retrieves the location of storing the selected addons details
+      const addonLocation = addonBlock.metadata.addonLocation
+      const addonsData = flatProjectData[addonLocation]
+      // finds the addon details for the current addon block
+      const addon = _.find(addonsData, ad => ad.productKey === addonKey)
+      if (addon.qty) {
+        addonBlock.quantity = addon.qty
+      }
+    })
     matchedBlocks = matchedBlocks.concat(baseBlocks, addonBlocks)
     if (!matchedBlocks || matchedBlocks.length === 0) {
       price = _.get(projectTemplate, 'scope.basePriceEstimate', 0)
@@ -600,7 +613,7 @@ export function getProductEstimate(projectTemplate, projectData) {
     } else {
       _.forEach(matchedBlocks, bb => {
         const bbPrice = _.isString(bb.price) ? evaluate(bb.price, flatProjectData) : bb.price
-        price += bbPrice
+        price += (bbPrice * (bb.quantity ? bb.quantity : 1))
         minTime += bb.minTime
         maxTime += bb.maxTime
       })
