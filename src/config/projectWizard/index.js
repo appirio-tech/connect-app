@@ -598,11 +598,13 @@ export function getProductEstimate(projectTemplate, projectData) {
       const addonKey = addonBlock.metadata.addonProductKey
       // retrieves the location of storing the selected addons details
       const addonLocation = addonBlock.metadata.addonLocation
-      const addonsData = flatProjectData[addonLocation]
-      // finds the addon details for the current addon block
-      const addon = _.find(addonsData, ad => ad.productKey === addonKey)
-      if (addon && addon.qty) {
-        addonBlock.quantity = addon.qty
+      if (addonKey && addonLocation) { // if addon block is configured to pick quantity of the addon
+        const addonsData = flatProjectData[addonLocation]
+        // finds the addon details for the current addon block
+        const addon = _.find(addonsData, ad => ad.productKey === addonKey)
+        if (addon && addon.qty) {
+          addonBlock.quantity = addon.qty
+        }
       }
     })
     matchedBlocks = matchedBlocks.concat(baseBlocks, addonBlocks)
