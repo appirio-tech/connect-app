@@ -601,7 +601,7 @@ export function getProductEstimate(projectTemplate, projectData) {
       const addonsData = flatProjectData[addonLocation]
       // finds the addon details for the current addon block
       const addon = _.find(addonsData, ad => ad.productKey === addonKey)
-      if (addon.qty) {
+      if (addon && addon.qty) {
         addonBlock.quantity = addon.qty
       }
     })
