@@ -5,26 +5,49 @@
  */
 import React from 'react'
 import _ from 'lodash'
+import { withRouter } from 'react-router-dom'
 
 import ScrollableFeed from '../../../../components/Feed/ScrollableFeed'
 import spinnerWhileLoading from '../../../../components/LoadingSpinner'
+import { scrollToHash } from '../../../../components/ScrollToAnchors'
 
 import './PhaseFeed.scss'
 
-const PhaseFeedView = (props) => (
-  <div styleName="container">
-    <ScrollableFeed
-      {...{
-        ..._.omit(props, 'feed'),
-        ...props.feed,
-        id: (props.feed ? props.feed.id.toString() : '0'),
-        commentId: props.commentId
-      }}
-    />
-  </div>
-)
+class PhaseFeedView extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
+  componentDidMount() {
+    !_.isEmpty(this.props.location.hash) && this.handleUrlHash(this.props)
+  }
+
+  // when the phase feed is actually loaded/rendered scroll to the appropriate post depending on url hash
+  handleUrlHash(props) {
+    const hashParts = _.split(location.hash.substring(1), '-')
+    const phaseId = hashParts[0] === 'phase' ? parseInt(hashParts[1], 10) : null
+    if (phaseId === props.phaseId) {
+      setTimeout(() => scrollToHash(props.location.hash), 100)
+    }
+  }
+
+  render() {
+    return (
+      <div styleName="container">
+        <ScrollableFeed
+          {...{
+            ..._.omit(this.props, 'feed'),
+            ...this.props.feed,
+            id: (this.props.feed ? this.props.feed.id.toString() : '0'),
+            commentId: this.props.commentId
+          }}
+        />
+      </div>
+    )
+  }
+}
 
 const enhance = spinnerWhileLoading(props => !props.isLoading)
-const EnhancedPhaseFeedView = enhance(PhaseFeedView)
+const EnhancedPhaseFeedView = enhance(withRouter(PhaseFeedView))
 
 export default EnhancedPhaseFeedView
