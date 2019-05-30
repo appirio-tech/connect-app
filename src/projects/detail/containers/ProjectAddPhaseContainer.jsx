@@ -125,13 +125,14 @@ class ProjectAddPhaseContainer extends React.Component {
 
   render() {
     const props = this.props
+    const nonAddOnProductTemplates = _.filter(props.allProductTemplates, pt => !pt.isAddOn)
 
     return (
       <EnhancedCreateView
         {...this.props}
         onCancel={this.closeWizard}
         showModal
-        productTemplates={props.allProductTemplates}
+        productTemplates={nonAddOnProductTemplates}
         onProductTemplateChange={this.updateProductTemplate}
       />
     )
