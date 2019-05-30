@@ -168,16 +168,32 @@ const SpecQuestions = ({
       // child = <TCFormFields.TextInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     }
-    case 'numberinput':
+    case 'numberinput': {
       ChildElem = TCFormFields.TextInput
       elemProps.wrapperClass = 'row'
       elemProps.type = 'number'
+      if (!isNaN(q.minValue)) {
+        elemProps.minValue = q.minValue
+      }
+      if (!isNaN(q.maxValue)) {
+        elemProps.maxValue = q.maxValue
+      }
+      if (!isNaN(q.defaultValue)) {
+        elemProps.value = q.defaultValue
+      }
       break
+    }
     case 'numberinputpositive':
       ChildElem = TCFormFields.TextInput
-      elemProps.wrapperClass = 'rowchut'
+      elemProps.wrapperClass = 'row'
       elemProps.type = 'number'
       elemProps.minValue = 0
+      if (!isNaN(q.maxValue)) {
+        elemProps.maxValue = q.maxValue
+      }
+      if (!isNaN(q.defaultValue)) {
+        elemProps.value = q.defaultValue
+      }
       break
     case 'textbox':
       ChildElem = TCFormFields.Textarea
