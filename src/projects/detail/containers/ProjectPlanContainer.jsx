@@ -7,6 +7,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import _ from 'lodash'
 
 import {
@@ -63,27 +64,16 @@ class ProjectPlanContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { expandProjectPhase } = this.props
-    const scrollTo = window.location.hash ? window.location.hash.substring(1) : null
-    if (scrollTo) {
-      const hashParts = _.split(scrollTo, '-')
-      const phaseId = hashParts[0] === 'phase' ? parseInt(hashParts[1], 10) : null
-      if (phaseId) {
-        let tab = hashParts[2]
-        tab = tab === scrollTo ? 'timeline' : tab
-        // we just open tab, while smooth scrolling has to be caused by URL hash
-        expandProjectPhase(phaseId, tab)
-      }
-    } else {
-      // if the user is a customer and its not a direct link to a particular phase
-      // then by default expand all phases which are active
-      if (this.props.isCustomerUser) {
-        _.forEach(this.props.phases, phase => {
-          if (phase.status === PHASE_STATUS_ACTIVE) {
-            expandProjectPhase(phase.id)
-          }
-        })
-      }
+    const { expandProjectPhase, location } = this.props
+
+    // if the user is a customer and its not a direct link to a particular phase
+    // then by default expand all phases which are active
+    if (_.isEmpty(location.hash) && this.props.isCustomerUser) {
+      _.forEach(this.props.phases, phase => {
+        if (phase.status === PHASE_STATUS_ACTIVE) {
+          expandProjectPhase(phase.id)
+        }
+      })
     }
   }
 
@@ -106,6 +96,8 @@ class ProjectPlanContainer extends React.Component {
       productsTimelines,
       phasesTopics,
       isProcessing,
+      isLoadingPhases,
+      location
     } = this.props
 
     // manager user sees all phases
@@ -123,6 +115,7 @@ class ProjectPlanContainer extends React.Component {
 
     const leftArea = (
       <ProjectInfoContainer
+        location={location}
         currentMemberRole={currentMemberRole}
         phases={phases}
         project={project}
@@ -171,7 +164,7 @@ class ProjectPlanContainer extends React.Component {
           ) : (
             <ProjectPlanEmpty />
           )}
-          {isProjectLive && checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project, phases)  && (<div styleName="add-button-container">
+          {isProjectLive && checkPermission(PERMISSIONS.EDIT_PROJECT_PLAN, project, phases)  && !isLoadingPhases && (<div styleName="add-button-container">
             <Link to={`/projects/${project.id}/add-phase`} className="tc-btn tc-btn-primary tc-btn-sm action-btn">Add New Phase</Link>
           </div>)}
         </TwoColsLayout.Content>
@@ -208,6 +201,7 @@ const mapStateToProps = ({ projectState, projectTopics, phasesTopics, templates 
     isFeedsLoading: projectTopics.isLoading,
     phasesTopics,
     phasesStates: projectState.phasesStates,
+    isLoadingPhases: projectState.isLoadingPhases,
   }
 }
 
@@ -224,4 +218,4 @@ const mapDispatchToProps = {
   collapseAllProjectPhases,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectPlanContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProjectPlanContainer))

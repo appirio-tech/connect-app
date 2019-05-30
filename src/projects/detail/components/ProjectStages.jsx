@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 import { formatNumberWithCommas } from '../../../helpers/format'
 import { getPhaseActualData } from '../../../helpers/projectHelper'
 
+import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import Section from '../components/Section'
 import ProjectStage from '../components/ProjectStage'
 import PhaseCardListHeader from '../components/PhaseCardListHeader'
@@ -93,6 +94,7 @@ const ProjectStages = ({
   collapseProjectPhase,
   feedId,
   commentId,
+  location
 }) => (
   <Section>
 
@@ -100,6 +102,7 @@ const ProjectStages = ({
     {
       phases.map((phase, index) => (
         <ProjectStage
+          location={location}
           key={phase.id}
           phaseState={phasesStates[phase.id]}
           productTemplates={productTemplates}
@@ -151,6 +154,10 @@ ProjectStages.propTypes = {
   updateProductAttachment: PT.func.isRequired,
   removeProductAttachment: PT.func.isRequired,
   deleteProjectPhase: PT.func.isRequired,
+  isLoadingPhases: PT.bool.isRequired,
 }
 
-export default withRouter(ProjectStages)
+const enhance = spinnerWhileLoading(props => !props.isLoadingPhases)
+const EnhancedProjectStages = enhance(ProjectStages)
+
+export default withRouter(EnhancedProjectStages)

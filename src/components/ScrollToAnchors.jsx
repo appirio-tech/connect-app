@@ -43,7 +43,7 @@ export function scrollToAnchors(Component) {
     componentDidMount() {
       const { hash } = window.location
 
-      if (hash !== '') {
+      if (!this.props.disableAutoScrolling && hash !== '') {
         // Push onto callback queue so it runs after the DOM is updated,
         // this is required when navigating from a different page so that
         // the element is rendered on the page before trying to getElementById.
