@@ -105,7 +105,7 @@ class Accordion extends React.Component {
     const mapValue = createValueMapper(valuesMap)
 
     if (!value) {
-      return value
+      return "N/A"//value
     }
 
     switch (type) {
