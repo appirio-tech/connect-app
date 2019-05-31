@@ -348,7 +348,7 @@ const SpecQuestions = ({
         // hide question in edit mode if configured
         (isCreation || !question.hiddenOnEdit)
       ).map((q, index) => (
-        _.includes(['checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
+        _.includes(['checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
           <Accordion
             key={q.fieldName || `accordion-${index}`}
             title={q.summaryTitle || q.title}
