@@ -614,7 +614,10 @@ export function getProductEstimate(projectTemplate, projectData) {
       maxTime = _.get(projectTemplate, 'scope.baseTimeEstimateMax', 0)
     } else {
       _.forEach(matchedBlocks, bb => {
-        const bbPrice = _.isString(bb.price) ? evaluate(bb.price, flatProjectData) : bb.price
+        let bbPrice = _.isString(bb.price) ? evaluate(bb.price, flatProjectData) : bb.price
+        if (isNaN(bbPrice)) { // if we are unable to parse price as numeric value, set it as ZERO
+          bbPrice = 0
+        }
         price += (bbPrice * (bb.quantity ? bb.quantity : 1))
         minTime += bb.minTime
         maxTime += bb.maxTime
