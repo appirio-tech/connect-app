@@ -21,7 +21,8 @@ const TYPE = {
   RADIO_GROUP: 'radio-group',
   ADD_ONS: 'add-ons',
   TEXTINPUT: 'textinput',
-  TEXTBOX: 'textbox'
+  TEXTBOX: 'textbox',
+  NUMBERINPUT: 'numberinput'
 }
 
 /**
