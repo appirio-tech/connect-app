@@ -618,6 +618,13 @@ export function getProductEstimate(projectTemplate, projectData) {
         if (isNaN(bbPrice)) { // if we are unable to parse price as numeric value, set it as ZERO
           bbPrice = 0
         }
+        // stores back the evaluated price, if the price field contains the formula
+        if (_.isString(bb.price)) {
+          // stores the original formula in metadata
+          bb.metadata.priceFormula = bb.price
+          // updates the price with evaluated price
+          bb.price = bbPrice
+        }
         price += (bbPrice * (bb.quantity ? bb.quantity : 1))
         minTime += bb.minTime
         maxTime += bb.maxTime
