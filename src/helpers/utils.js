@@ -44,3 +44,15 @@ export const compareEmail = (email1, email2, options = { UNIQUE_GMAIL_VALIDATION
   }
   return _.toLower(email1) === _.toLower(email2)
 }
+
+/**
+ * Helper method to check the uniqueness of two user handles
+ *
+ * @param {String} handle1    first user handle to compare
+ * @param {String} handle2    second user handle to compare
+ *
+ * @returns {Boolean} true if two user handles are same
+ */
+export const compareHandles = (handle1, handle2) => (
+  (handle1 || '').toLowerCase() === (handle2 || '').toLowerCase()
+)

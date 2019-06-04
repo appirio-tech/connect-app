@@ -13,7 +13,7 @@ import AutocompleteInputContainer from './AutocompleteInputContainer'
 import {PROJECT_MEMBER_INVITE_STATUS_REQUESTED, PROJECT_MEMBER_INVITE_STATUS_PENDING} from '../../config/constants'
 import PERMISSIONS from '../../config/permissions'
 import {checkPermission} from '../../helpers/permissions'
-import { compareEmail } from '../../helpers/utils'
+import { compareEmail, compareHandles } from '../../helpers/utils'
 
 class TopcoderManagementDialog extends React.Component {
   constructor(props) {
@@ -100,7 +100,7 @@ class TopcoderManagementDialog extends React.Component {
   isSelectedMemberAlreadyInvited(topcoderTeamInvites = [], selectedMember) {
     return !!topcoderTeamInvites.find((invite) => (
       (invite.email && compareEmail(invite.email, selectedMember.label)) ||
-      (invite.userId && this.resolveUserHandle(invite.userId) === selectedMember.label)
+      (invite.userId && compareHandles(this.resolveUserHandle(invite.userId), selectedMember.label))
     ))
   }
 

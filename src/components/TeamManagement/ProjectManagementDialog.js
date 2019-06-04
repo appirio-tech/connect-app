@@ -6,7 +6,7 @@ import Modal from 'react-modal'
 import XMarkIcon from '../../assets/icons/icon-x-mark.svg'
 import Avatar from 'appirio-tech-react-components/components/Avatar/Avatar'
 import {getAvatarResized} from '../../helpers/tcHelpers'
-import { compareEmail } from '../../helpers/utils'
+import { compareEmail, compareHandles } from '../../helpers/utils'
 import AutocompleteInputContainer from './AutocompleteInputContainer'
 
 class ProjectManagementDialog extends React.Component {
@@ -57,7 +57,7 @@ class ProjectManagementDialog extends React.Component {
   isSelectedMemberAlreadyInvited(projectTeamInvites = [], selectedMember) {
     return !!projectTeamInvites.find((invite) => (
       (invite.email && compareEmail(invite.email, selectedMember.label)) ||
-      (invite.userId && this.resolveUserHandle(invite.userId) === selectedMember.label)
+      (invite.userId && compareHandles(this.resolveUserHandle(invite.userId), selectedMember.label))
     ))
   }
 
