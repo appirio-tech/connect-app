@@ -84,3 +84,33 @@ $timeline-colors: (design: #5A52A3, development: #306BE1, qa: #35A3BC, deploymen
     }
   }
 }
+
+.dashboard{
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px 1px $tc-gray-neutral-dark;
+  padding: 15px 20px 20px 20px;
+  margin-top: 15px;
+  .title {
+    padding: 0;
+
+    h5{
+      @include roboto-bold;
+      color:  $tc-black;
+      font-size: 16px;
+      line-height: 30px;
+      text-align: left;
+    }
+  }
+
+  .project-estimate-timeline li{
+    border-radius:0;
+    &:first-child {
+      border-radius: 5px 0 0 5px;
+    }
+
+    &:last-child{
+      border-radius: 0 5px 5px 0;
+    }
+  }
+}

@@ -37,6 +37,8 @@ import WorkInProgress from '../components/WorkInProgress'
 import NotificationsReader from '../../../components/NotificationsReader'
 import { checkPermission } from '../../../helpers/permissions'
 import PERMISSIONS from '../../../config/permissions'
+import ProjectEstimation from '../../create/components/ProjectEstimation'
+import { getProductEstimate } from '../../../config/projectWizard'
 
 import {
   PHASE_STATUS_ACTIVE,
@@ -97,6 +99,7 @@ class DashboardContainer extends React.Component {
       isManageUser,
       notifications,
       productTemplates,
+      projectTemplates,
       isProcessing,
       updateProduct,
       fireProductDirty,
@@ -123,6 +126,32 @@ class DashboardContainer extends React.Component {
     // work in progress phases
     // find active phases
     const activePhases = _.orderBy(_.filter(phases, phase => phase.status === PHASE_STATUS_ACTIVE), ['endDate'])
+
+    let showProjectEstimation = false
+    const projectTemplateId = _.get(project, 'templateId')
+    const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
+    const template = _.get(projectTemplate, 'scope', {})
+    let estimationQuestion = []
+    const showDescription = false
+    const { estimateBlocks } = getProductEstimate({scope: template}, project)
+
+    if(estimateBlocks.length > 0){
+      _.forEach(template.sections, (section) => {
+        _.forEach(section.subSections, (subSection) => {
+          if (subSection.type === 'questions') {
+            _.forEach(subSection.questions, (question) => {
+              if(question.type === 'estimation'){
+                console.log(question)
+                estimationQuestion = question
+                estimationQuestion.title = 'Project Scope'
+                showProjectEstimation = true
+                return false
+              }
+            })
+          }
+        })
+      })
+    }
 
     const leftArea = (
       <ProjectInfoContainer
@@ -176,6 +205,16 @@ class DashboardContainer extends React.Component {
             />
           }
 
+          {showProjectEstimation &&
+            <ProjectEstimation
+              question={estimationQuestion}
+              template={template}
+              project={project}
+              showDescription={showDescription}
+              theme="dashboard"
+            />
+          }
+
           {activePhases.length > 0 &&
             <WorkInProgress
               productTemplates={productTemplates}
@@ -219,6 +258,7 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
   return {
     notifications: preRenderNotifications(notifications.notifications),
     productTemplates: templates.productTemplates,
+    projectTemplates: templates.projectTemplates,
     isProcessing: projectState.processing,
     phases: projectState.phases,
     feeds: allFeed,
