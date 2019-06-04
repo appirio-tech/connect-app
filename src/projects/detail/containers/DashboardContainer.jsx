@@ -34,9 +34,13 @@ import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 import TwoColsLayout from '../../../components/TwoColsLayout'
 import SystemFeed from '../../../components/Feed/SystemFeed'
 import WorkInProgress from '../components/WorkInProgress'
+import ProjectScopeDrawer from '../components/ProjectScopeDrawer'
 import NotificationsReader from '../../../components/NotificationsReader'
 import { checkPermission } from '../../../helpers/permissions'
+import { getProjectTemplateById } from '../../../helpers/templates'
 import PERMISSIONS from '../../../config/permissions'
+import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../actions/project'
+import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 
 import {
   PHASE_STATUS_ACTIVE,
@@ -46,13 +50,6 @@ import {
   PROJECT_FEED_TYPE_MESSAGES,
   EVENT_TYPE,
 } from '../../../config/constants'
-
-import Drawer from 'appirio-tech-react-components/components/Drawer/Drawer'
-import Toolbar from 'appirio-tech-react-components/components/Toolbar/Toolbar'
-import ToolbarGroup from 'appirio-tech-react-components/components/Toolbar/ToolbarGroup'
-import ToolbarTitle from 'appirio-tech-react-components/components/Toolbar/ToolbarTitle'
-import CloseIcon from 'appirio-tech-react-components/components/Icons/CloseIcon'
-import './DashboardContainer.scss'
 
 const SYSTEM_USER = {
   firstName: CODER_BOT_USER_FNAME,
@@ -114,6 +111,8 @@ class DashboardContainer extends React.Component {
       isManageUser,
       notifications,
       productTemplates,
+      projectTemplates,
+      productCategories,
       isProcessing,
       updateProduct,
       fireProductDirty,
@@ -129,7 +128,16 @@ class DashboardContainer extends React.Component {
       phasesTopics,
       expandProjectPhase,
       collapseProjectPhase,
+      fireProjectDirty,
+      fireProjectDirtyUndo,
+      updateProject,
+      addProjectAttachment,
+      updateProjectAttachment,
+      removeProjectAttachment
     } = this.props
+
+
+    const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
 
     // system notifications
     const notReadNotifications = filterReadNotifications(notifications)
@@ -194,26 +202,25 @@ class DashboardContainer extends React.Component {
           {/* The following containerStyle and overlayStyle are needed for shrink drawer and overlay size for not
               covering sidebar and topbar
            */}
-          <Drawer
+          <ProjectScopeDrawer
             open={this.state.open}
-            containerStyle={{top: '110px'}}
+            containerStyle={{top: '110px', height: 'calc(100% - 110px)'}}
             overlayStyle={{top: '110px', left: '360px'}}
             onRequestChange={(open) => this.setState({open})}
-          >
-            <Toolbar>
-              <ToolbarGroup>
-                <ToolbarTitle text="Project Scope" />
-              </ToolbarGroup>
-              <ToolbarGroup>
-                <span styleName="close-btn" onClick={() => this.setState({open: false})}>
-                  <CloseIcon />
-                </span>
-              </ToolbarGroup>
-            </Toolbar>
-            <div styleName="drawer-content">
-              test content
-            </div>
-          </Drawer>
+            isSuperUser={isSuperUser}
+            project={project}
+            projectTemplate={projectTemplate}
+            updateProject={updateProject}
+            processing={isProcessing}
+            fireProjectDirty={fireProjectDirty}
+            fireProjectDirtyUndo= {fireProjectDirtyUndo}
+            addProjectAttachment={addProjectAttachment}
+            updateProjectAttachment={updateProjectAttachment}
+            removeProjectAttachment={removeProjectAttachment}
+            currentMemberRole={currentMemberRole}
+            productTemplates={productTemplates}
+            productCategories={productCategories}
+          />
 
           {activePhases.length > 0 &&
             <WorkInProgress
@@ -258,6 +265,8 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
   return {
     notifications: preRenderNotifications(notifications.notifications),
     productTemplates: templates.productTemplates,
+    projectTemplates: templates.projectTemplates,
+    productCategories: templates.productCategories,
     isProcessing: projectState.processing,
     phases: projectState.phases,
     feeds: allFeed,
@@ -280,6 +289,12 @@ const mapDispatchToProps = {
   expandProjectPhase,
   collapseProjectPhase,
   collapseAllProjectPhases,
+  fireProjectDirty,
+  fireProjectDirtyUndo,
+  updateProject,
+  addProjectAttachment,
+  updateProjectAttachment,
+  removeProjectAttachment
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardContainer)
