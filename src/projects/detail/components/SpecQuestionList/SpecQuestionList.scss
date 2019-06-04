@@ -105,7 +105,6 @@
         }
       }
 
-      > p,
       .description {
         @include roboto-light;
         font-size: 12px;
@@ -123,8 +122,39 @@
         }
       }
 
-      .description {
-        margin-bottom: $base-unit * 4;
+      .introduction {
+        @include roboto-light;
+        font-size: $tc-body-sm;
+        color: $tc-gray-50;
+        font-weight: 400;
+        font-style: italic;
+        line-height: 1.5;
+        margin-top: $base-unit;
+      }
+
+      .markdown {
+        ol {
+          list-style: outside decimal;
+          padding-left: 5 * $base-unit;
+        }
+
+        ul {
+          list-style: outside disc;
+          padding-left: 5 * $base-unit;
+        }
+
+        strong {
+          font-weight: bold;
+        }
+
+        code {
+          background: $tc-gray-neutral-light;
+          color: $tc-gray-100;
+          font-family: 'Courier New', Courier, monospace;
+          font-style: normal;
+          border-radius: 3px;
+          padding: .2em .4em;
+        }
       }
 
       .child-component {
@@ -319,9 +349,9 @@
           font-size: $tc-heading-sm;
           line-height: 25px;
 
-          > span {
-            display: none;
-          }
+          // > span {
+          //   display: none;
+          // }
         }
       }
     }

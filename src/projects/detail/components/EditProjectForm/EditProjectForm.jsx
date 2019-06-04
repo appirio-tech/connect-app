@@ -268,7 +268,7 @@ class EditProjectForm extends Component {
 
 
   render() {
-    const { isEdittable, showHidden, productTemplates, productCategories } = this.props
+    const { isEdittable, showHidden, productTemplates, productCategories, disableAutoScrolling } = this.props
     const { template } = this.state
     const { project, dirtyProject } = this.state
     const onLeaveMessage = this.onLeave() || ''
@@ -287,6 +287,7 @@ class EditProjectForm extends Component {
             sectionNumber={idx + 1}
             resetFeatures={this.onFeaturesSaveAttachedClick}
             showFeaturesDialog={this.showFeaturesDialog}
+            disableAutoScrolling={disableAutoScrolling}
             // TODO we shoudl not update the props (section is coming from props)
             validate={(isInvalid) => section.isInvalid = isInvalid}
             showHidden={showHidden}
@@ -353,7 +354,8 @@ class EditProjectForm extends Component {
 }
 
 EditProjectForm.defaultProps = {
-  shouldUpdateTemplate: false
+  shouldUpdateTemplate: false,
+  disableAutoScrolling: false,
 }
 
 EditProjectForm.propTypes = {
@@ -371,6 +373,7 @@ EditProjectForm.propTypes = {
   updateAttachment: PropTypes.func.isRequired,
   removeAttachment: PropTypes.func.isRequired,
   shouldUpdateTemplate: PropTypes.bool,
+  disableAutoScrolling: PropTypes.bool,
 }
 
 export default EditProjectForm

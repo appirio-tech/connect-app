@@ -19,7 +19,10 @@ import './Accordion.scss'
 const TYPE = {
   CHECKBOX_GROUP: 'checkbox-group',
   RADIO_GROUP: 'radio-group',
-  ADD_ONS: 'add-ons'
+  ADD_ONS: 'add-ons',
+  TEXTINPUT: 'textinput',
+  TEXTBOX: 'textbox',
+  NUMBERINPUT: 'numberinput'
 }
 
 /**
@@ -103,7 +106,7 @@ class Accordion extends React.Component {
     const mapValue = createValueMapper(valuesMap)
 
     if (!value) {
-      return value
+      return 'N/A'//value
     }
 
     switch (type) {

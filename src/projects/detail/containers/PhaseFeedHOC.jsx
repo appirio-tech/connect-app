@@ -43,9 +43,9 @@ const phaseFeedHOC = (Component) => {
     }
 
     componentWillMount() {
-      const { isLoading, loadPhaseFeed, phase, project } = this.props
+      const { isLoading, topic, loadPhaseFeed, phase, project } = this.props
 
-      if (!isLoading) {
+      if (!isLoading && !topic) {
         loadPhaseFeed(project.id, phase.id)
       }
     }
@@ -125,13 +125,17 @@ const phaseFeedHOC = (Component) => {
       })
     }
 
-    onAddNewComment(content) {
+    onAddNewComment(content, attachmentIds) {
       const { phase, topic, currentUser, addPhaseFeedComment } = this.props
 
       const newComment = {
         date: new Date(),
         userId: parseInt(currentUser.id),
         content,
+      }
+
+      if (attachmentIds) {
+        Object.assign(newComment, { attachmentIds })
       }
 
       addPhaseFeedComment(phase.id, topic.id, newComment)
@@ -143,10 +147,10 @@ const phaseFeedHOC = (Component) => {
       deletePhaseFeedComment(phase.id, topic.id, postId)
     }
 
-    onSaveMessage(message, content) {
+    onSaveMessage(message, content, attachmentIds) {
       const { phase, topic, savePhaseFeedComment } = this.props
       const updatedMessage = {...message}
-      updatedMessage.content = content
+      Object.assign(updatedMessage, {content, attachmentIds})
 
       savePhaseFeedComment(phase.id, topic.id, updatedMessage)
     }

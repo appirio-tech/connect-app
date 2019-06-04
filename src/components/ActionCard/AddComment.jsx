@@ -16,8 +16,8 @@ export default class AddComment extends React.Component {
     }
   }
 
-  onPost({content}) {
-    this.props.onAdd(content)
+  onPost({ content, attachmentIds }) {
+    this.props.onAdd(content, attachmentIds)
   }
 
   onChange(title, content) {
@@ -40,6 +40,7 @@ export default class AddComment extends React.Component {
         authorName={authorName}
         allMembers={allMembers}
         projectMembers={projectMembers}
+        canUploadAttachment
       />
     )
   }

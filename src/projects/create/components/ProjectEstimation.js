@@ -4,7 +4,7 @@ import PT from 'prop-types'
 import { flatten } from 'flat'
 import cn from 'classnames'
 
-import { evaluate } from '../../../helpers/dependentQuestionsHelper'
+import { evaluate } from 'expression-evaluator'
 import { getProductEstimate } from '../../../config/projectWizard'
 
 import './ProjectEstimation.scss'

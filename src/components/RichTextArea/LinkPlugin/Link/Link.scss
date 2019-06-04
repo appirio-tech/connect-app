@@ -1,0 +1,8 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.link:link,
+.link:active,
+.link:visited {
+    color: $tc-dark-blue-110;
+    text-decoration: underline;
+}

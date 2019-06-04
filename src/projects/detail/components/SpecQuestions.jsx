@@ -168,16 +168,34 @@ const SpecQuestions = ({
       // child = <TCFormFields.TextInput name={q.fieldName} label={q.label} value={value} wrapperClass="row" />
       break
     }
-    case 'numberinput':
+    case 'numberinput': {
       ChildElem = TCFormFields.TextInput
       elemProps.wrapperClass = 'row'
       elemProps.type = 'number'
+      if (!isNaN(q.minValue)) {
+        elemProps.minValue = q.minValue
+      }
+      if (!isNaN(q.maxValue)) {
+        elemProps.maxValue = q.maxValue
+      }
+      // update with default value only if we don't have any value yet
+      if (!elemProps.value && !isNaN(q.defaultValue)) {
+        elemProps.value = q.defaultValue
+      }
       break
+    }
     case 'numberinputpositive':
       ChildElem = TCFormFields.TextInput
-      elemProps.wrapperClass = 'rowchut'
+      elemProps.wrapperClass = 'row'
       elemProps.type = 'number'
       elemProps.minValue = 0
+      if (!isNaN(q.maxValue)) {
+        elemProps.maxValue = q.maxValue
+      }
+      // update with default value only if we don't have any value yet
+      if (!elemProps.value && !isNaN(q.defaultValue)) {
+        elemProps.value = q.defaultValue
+      }
       break
     case 'textbox':
       ChildElem = TCFormFields.Textarea
@@ -257,6 +275,7 @@ const SpecQuestions = ({
         hideTitle: true,
         hideDescription: true,
         description: q.description,
+        allowMultiple: q.allowMultiple,
         options: buildAddonsOptions(q, productTemplates, productCategories),
         wrapperClass: q.theme
       })
@@ -308,6 +327,7 @@ const SpecQuestions = ({
         hideDescription={elemProps.hideDescription}
         hideTitle={elemProps.hideTitle}
         help={q.help}
+        introduction={q.introduction}
       >
         <ChildElem {...elemProps} />
       </SpecQuestionList.Item>
@@ -330,7 +350,7 @@ const SpecQuestions = ({
         // hide question in edit mode if configured
         (isCreation || !question.hiddenOnEdit)
       ).map((q, index) => (
-        _.includes(['checkbox-group', 'radio-group', 'add-ons'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
+        _.includes(['checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
           <Accordion
             key={q.fieldName || `accordion-${index}`}
             title={q.summaryTitle || q.title}

@@ -34,3 +34,45 @@
   font-size: $tc-heading-sm;
   line-height: 25px;
 }
+
+.addon-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.addon-checkbox {
+  display: flex;
+  align-items: center;
+}
+
+:global(.checkbox-group-item) .addon-checkbox :global(.tc-checkbox) {
+  vertical-align: middle;
+}
+
+.addon-label + div:not(:global(.checkbox-option-description)) {
+  display: inline-block;
+  width: 70px;
+  margin-left: 20px;
+}
+    
+.subcategory .addon-label + div  :global(.dropdown-wrap.SelectDropdown.default) {
+  max-width: 70px;
+  min-width: 70px;
+}
+
+.addon-qty {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.addon-qty-label {
+
+}
+
+.addon-row .addon-qty .addon-qty-input {
+  width: 70px;
+  height: 30px;
+  margin: 0px;
+  margin-left: 20px;
+}

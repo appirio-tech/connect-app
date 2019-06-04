@@ -71,6 +71,9 @@ $timeline-colors: (design: #5A52A3, development: #306BE1, qa: #35A3BC, deploymen
 
   li:global {
     &.selected {
+      background-color: #306BE1;
+      color: white;
+      border: 0 none;
       @each $type, $bg-color in $timeline-colors {
         &.type-#{$type} {
           background-color: $bg-color;

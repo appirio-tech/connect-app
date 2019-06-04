@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import typeToSpecification from '../projectSpecification/typeToSpecification'
-import { evaluate } from '../../helpers/dependentQuestionsHelper'
+import { evaluate } from 'expression-evaluator'
 import { removeValuesOfHiddenNodes } from '../../helpers/wizardHelper'
 import { flatten } from 'flat'
 
@@ -557,7 +557,10 @@ function getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditio
       }
     }
     _.forEach(filterdBlocks, fb => {
-      const bb = buildingBlocks[fb]
+      const bb = {
+        ...buildingBlocks[fb],
+        buildingBlockKey: fb,
+      }
       matchedBlocks.push(bb)
     })
   })
@@ -589,6 +592,21 @@ export function getProductEstimate(projectTemplate, projectData) {
     })
     const baseBlocks = getFilteredBuildingBlocks(priceConfig, buildingBlocks, preparedConditions, flatProjectData)
     const addonBlocks = getFilteredBuildingBlocks(addonPriceConfig, buildingBlocks, preparedConditions, flatProjectData, true)
+    // for each addon block, check if user has specified quantity for the selected addons
+    addonBlocks.forEach((addonBlock) => {
+      // retrieves productKey for the addon
+      const addonKey = addonBlock.metadata.addonProductKey
+      // retrieves the location of storing the selected addons details
+      const addonLocation = addonBlock.metadata.addonLocation
+      if (addonKey && addonLocation) { // if addon block is configured to pick quantity of the addon
+        const addonsData = flatProjectData[addonLocation]
+        // finds the addon details for the current addon block
+        const addon = _.find(addonsData, ad => ad.productKey === addonKey)
+        if (addon && addon.qty) {
+          addonBlock.quantity = addon.qty
+        }
+      }
+    })
     matchedBlocks = matchedBlocks.concat(baseBlocks, addonBlocks)
     if (!matchedBlocks || matchedBlocks.length === 0) {
       price = _.get(projectTemplate, 'scope.basePriceEstimate', 0)
@@ -596,7 +614,11 @@ export function getProductEstimate(projectTemplate, projectData) {
       maxTime = _.get(projectTemplate, 'scope.baseTimeEstimateMax', 0)
     } else {
       _.forEach(matchedBlocks, bb => {
-        price += bb.price
+        let bbPrice = _.isString(bb.price) ? evaluate(bb.price, flatProjectData) : bb.price
+        if (isNaN(bbPrice)) { // if we are unable to parse price as numeric value, set it as ZERO
+          bbPrice = 0
+        }
+        price += (bbPrice * (bb.quantity ? bb.quantity : 1))
         minTime += bb.minTime
         maxTime += bb.maxTime
       })
