@@ -178,7 +178,8 @@ const SpecQuestions = ({
       if (!isNaN(q.maxValue)) {
         elemProps.maxValue = q.maxValue
       }
-      if (!isNaN(q.defaultValue)) {
+      // update with default value only if we don't have any value yet
+      if (!elemProps.value && !isNaN(q.defaultValue)) {
         elemProps.value = q.defaultValue
       }
       break
@@ -191,7 +192,8 @@ const SpecQuestions = ({
       if (!isNaN(q.maxValue)) {
         elemProps.maxValue = q.maxValue
       }
-      if (!isNaN(q.defaultValue)) {
+      // update with default value only if we don't have any value yet
+      if (!elemProps.value && !isNaN(q.defaultValue)) {
         elemProps.value = q.defaultValue
       }
       break
