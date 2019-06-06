@@ -1006,7 +1006,7 @@ export const removeValuesOfHiddenNodes = (template, project) => {
 
   const fieldMap = {}
   // iterates over all nodes to find out nodes with same fieldName
-  forEachNode(template, (nodeObject, node) => {
+  forEachNode(template, (nodeObject, node) => { // eslint-disable-line no-unused-vars 
     if (nodeObject.fieldName ) {
       if (!fieldMap[nodeObject.fieldName]) {
         fieldMap[nodeObject.fieldName] = []
