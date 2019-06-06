@@ -1004,13 +1004,32 @@ export const updateNodesByConditions = (template, project, productTemplates) => 
 export const removeValuesOfHiddenNodes = (template, project) => {
   let updatedProject = project
 
+  const fieldMap = {}
+  // iterates over all nodes to find out nodes with same fieldName
+  forEachNode(template, (nodeObject, node) => {
+    if (nodeObject.fieldName ) {
+      if (!fieldMap[nodeObject.fieldName]) {
+        fieldMap[nodeObject.fieldName] = []
+      }
+      fieldMap[nodeObject.fieldName].push(nodeObject)
+    }
+  })
+
   forEachNode(template, (nodeObject, node) => {
     const level = getNodeLevel(node)
+    let hasVisbleNodeWithSameCond = false
+    if (nodeObject.fieldName) {
+      fieldMap[nodeObject.fieldName].forEach((no) => {
+        if (!_.get(no, '__wizard.hiddenByCondition')) {
+          hasVisbleNodeWithSameCond = true
+        }
+      })
+    }
 
     switch(level) {
     // if some question is hidden, we remove it's value from the project data
     case LEVEL.QUESTION:
-      if (_.get(nodeObject, '__wizard.hiddenByCondition') && _.get(updatedProject, nodeObject.fieldName)) {
+      if (_.get(nodeObject, '__wizard.hiddenByCondition') && !hasVisbleNodeWithSameCond && _.get(updatedProject, nodeObject.fieldName)) {
         updatedProject = update(updatedProject, unflatten({
           [nodeObject.fieldName]: { $set: undefined }
         }))
