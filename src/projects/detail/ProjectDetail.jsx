@@ -55,8 +55,9 @@ const spinner = spinnerWhileLoading(props =>
     props.error && props.error.type === LOAD_PROJECT_FAILURE ||
     // old project or has projectTemplate loaded
     ((props.project && props.project.version !== 'v3') || props.projectTemplate)
-    // has product templates loaded
-    && props.productTemplates.length > 0
+    // has all product templates loaded (earlier it was checking project specific product templates only
+    // which can be empty when we have empty project plan config for the template)
+    && props.allProductTemplates.length > 0
   )
 )
 const ProjectDetailView = (props) => {
