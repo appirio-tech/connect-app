@@ -96,8 +96,8 @@ export default class EditLinkPopoverWrapper extends React.Component {
         autoPopover: false,
         popoverOnTop: false
       })
-    } else if (evt.key === 'Backspace') {
-      // Backspace should close the popover as it may delete the created link entity
+    } else if (evt.key === 'Backspace' || evt.key === 'Delete') {
+      // Backspace or Delete should close the popover as it may delete the created link entity
       this.setState({
         autoPopover: false,
         popoverOnTop: false
@@ -140,14 +140,23 @@ export default class EditLinkPopoverWrapper extends React.Component {
    */
   onEditorStateChange(editorState, prevLastCreatedEntityKey) {
     const selectionState = editorState.getSelection()
+    const contentState = editorState.getCurrentContent()
 
-    // If cursor moved
-    if (
-      this.isSelectionChanged(selectionState) &&
-      selectionState.getHasFocus()
-    ) {
-      const contentState = editorState.getCurrentContent()
+    const lastCreatedEntityKey = contentState.getLastCreatedEntityKey()
+    const lastCreatedEntity = getEntityForKey(
+      contentState,
+      lastCreatedEntityKey
+    )
+    const lastCreatedEntityType = lastCreatedEntity && lastCreatedEntity.getType()
+    const newEntityCreated =
+      lastCreatedEntityKey && prevLastCreatedEntityKey !== lastCreatedEntityKey
+    const newLinkCreated = newEntityCreated && lastCreatedEntityType === 'LINK'
 
+    const cursorMoved =
+      this.isSelectionChanged(selectionState) && selectionState.getHasFocus()
+
+    // If cursor moved or new link created
+    if (cursorMoved || newLinkCreated) {
       const startBlock = getSelectionBlock(selectionState, contentState)
       const endBlock = getSelectionBlock(selectionState, contentState, true)
 
@@ -161,36 +170,11 @@ export default class EditLinkPopoverWrapper extends React.Component {
         selectionState.isCollapsed() ? selectionEnd : selectionEnd - 1
       )
 
-      // If the cursor is on a link or whole/part of the link is selected
-      if (
-        startEntity &&
-        endEntity === startEntity &&
-        startEntity.getType() === 'LINK'
-      ) {
-        this.editExistingLink(
-          startBlock.getEntityAt(selectionStart),
-          contentState
-        )
-      } else if (selectionState.isCollapsed()) {
-        const lastCreatedEntityKey = contentState.getLastCreatedEntityKey()
-        const lastCreatedEntity = getEntityForKey(
-          contentState,
-          lastCreatedEntityKey
-        )
-
+      // If a new link entity created, auto show the popover
+      if (selectionState.isCollapsed() && newLinkCreated) {
         const entityData = lastCreatedEntity && lastCreatedEntity.getData()
-        const entityType = lastCreatedEntity && lastCreatedEntity.getType()
-        const newEntityCreated =
-          lastCreatedEntityKey &&
-          prevLastCreatedEntityKey !== lastCreatedEntityKey
 
-        // If a new link entity created, auto show the popover
-        if (
-          newEntityCreated &&
-          entityType === 'LINK' &&
-          entityData &&
-          entityData.url
-        ) {
+        if (entityData && entityData.url) {
           this.openAutoPopover(lastCreatedEntityKey, contentState)
 
           // If enter is pressed, the cursor would be in the start of the line. So, text till cursor will be empty ('')
@@ -203,6 +187,17 @@ export default class EditLinkPopoverWrapper extends React.Component {
         } else {
           this.hideEdit()
         }
+      }
+      // If the cursor is on a link or whole/part of the link is selected
+      else if (
+        startEntity &&
+        endEntity === startEntity &&
+        startEntity.getType() === 'LINK'
+      ) {
+        this.editExistingLink(
+          startBlock.getEntityAt(selectionStart),
+          contentState
+        )
       } else {
         this.hideEdit()
       }
