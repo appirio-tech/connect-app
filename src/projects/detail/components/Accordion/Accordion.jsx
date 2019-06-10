@@ -22,7 +22,8 @@ const TYPE = {
   ADD_ONS: 'add-ons',
   TEXTINPUT: 'textinput',
   TEXTBOX: 'textbox',
-  NUMBERINPUT: 'numberinput'
+  NUMBERINPUT: 'numberinput',
+  SKILLS: 'skills'
 }
 
 /**
@@ -33,7 +34,7 @@ const TYPE = {
  * @returns {Function} valueMapper
  */
 const createValueMapper = (valuesMap) => (value) => (
-  valuesMap[value] && (valuesMap[value].summaryLabel || valuesMap[value].label)
+  valuesMap[value] && (valuesMap[value].summaryLabel || valuesMap[value].label || valuesMap[value].title)
 )
 
 class Accordion extends React.Component {
@@ -113,6 +114,7 @@ class Accordion extends React.Component {
     case TYPE.CHECKBOX_GROUP: return value.map(mapValue).join(', ')
     case TYPE.RADIO_GROUP: return mapValue(value)
     case TYPE.ADD_ONS: return `${value.length} selected`
+    case TYPE.SKILLS: return value.map(mapValue).join(', ')
     default: return value
     }
   }

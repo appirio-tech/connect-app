@@ -1,0 +1,22 @@
+@import '~tc-ui/src/styles/tc-includes';
+
+.select-wrapper {
+  margin: 5px 0 15px 0;
+}
+.error-message{
+  display:block;
+  margin: 5px auto;
+  @include roboto;
+
+  color: $tc-red-70;
+  font-size: 13px;
+  line-height:20px;
+  font-style:italic;
+  border: 1px solid $tc-red-30;
+  background: $tc-red-10;
+  padding:10px;
+  border-radius: 2px;
+  strong{
+    @include roboto-bold;
+  }
+}
