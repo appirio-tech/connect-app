@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
-import './CheckboxGroup.scss'
+import './SkillsCheckboxGroup.scss'
 
-class CheckboxGroup extends Component {
+class SkillsCheckboxGroup extends Component {
 
   constructor(props) {
     super(props)
@@ -65,12 +65,12 @@ class CheckboxGroup extends Component {
   }
 }
 
-CheckboxGroup.PropTypes = {
+SkillsCheckboxGroup.PropTypes = {
   options: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 
-CheckboxGroup.defaultProps = {
+SkillsCheckboxGroup.defaultProps = {
   onChange: () => {}
 }
 
-export default CheckboxGroup
+export default SkillsCheckboxGroup

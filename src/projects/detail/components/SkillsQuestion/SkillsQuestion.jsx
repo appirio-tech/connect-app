@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import { HOC as hoc } from 'formsy-react'
-import CheckboxGroup from './CheckboxGroup'
+import SkillsCheckboxGroup from './SkillsCheckboxGroup'
 import Select from '../../../../components/Select/Select'
 import './SkillsQuestion.scss'
 
@@ -70,7 +70,7 @@ class SkillsQuestion extends React.Component {
 
     return (
       <div>
-        <CheckboxGroup
+        <SkillsCheckboxGroup
           disabled={questionDisabled}
           options={checkboxGroupOptions}
           getValue={() => checkboxGroupValues}
