@@ -9,6 +9,7 @@ import cn from 'classnames'
 
 import SpecQuestionList from './SpecQuestionList/SpecQuestionList'
 import SpecQuestionIcons from './SpecQuestionList/SpecQuestionIcons'
+import SkillsQuestion from './SkillsQuestion/SkillsQuestion'
 import SpecFeatureQuestion from './SpecFeatureQuestion'
 import ColorSelector from './../../../components/ColorSelector/ColorSelector'
 import SelectDropdown from './../../../components/SelectDropdown/SelectDropdown'
@@ -298,6 +299,15 @@ const SpecQuestions = ({
         hideTitle: true
       })
       break
+    case 'skills':
+      ChildElem = SkillsQuestion
+      _.assign(elemProps, {
+        currentProjectData,
+        options: q.skills,
+        skillsCategoriesField: q.skillsCategoriesField,
+        fieldName: q.fieldName
+      })
+      break
     default:
       ChildElem = () => (
         <div style={{ borderWidth: 1, borderStyle: 'dashed', borderColor: '#f00' }}>
@@ -350,12 +360,12 @@ const SpecQuestions = ({
         // hide question in edit mode if configured
         (isCreation || !question.hiddenOnEdit)
       ).map((q, index) => (
-        _.includes(['checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
+        _.includes(['checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
           <Accordion
             key={q.fieldName || `accordion-${index}`}
             title={q.summaryTitle || q.title}
             type={q.type}
-            options={q.options || buildAddonsOptions(q, productTemplates, productCategories)}
+            options={q.options || q.skills || buildAddonsOptions(q, productTemplates, productCategories)}
           >
             {renderQ(q, index)}
           </Accordion>
