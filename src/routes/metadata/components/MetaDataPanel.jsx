@@ -267,6 +267,9 @@ class MetaDataPanel extends React.Component {
       if (metadataType === 'productTemplate') {
         return { template: { questions: sectionsDefaultValue } }
       }
+      if (metadataType === 'projectType') {
+        return { metadata: {} }
+      }
       return {}
     }
     return metadata ? metadata : dirtyMetadata
