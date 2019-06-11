@@ -560,6 +560,13 @@ class MetaDataPanel extends React.Component {
   renderProductPreview({ template }) {
     const { templates, previewProject } = this.props
 
+    // as productTemplate's template has `questions` root element instead of `sections`
+    // we normalize it for the EditProjectForm component
+    const normalizedTemplate = {
+      ..._.omit(template, 'questions'),
+      sections: template.questions
+    }
+
     return (
       <div className="content template-preview">
         <div className="header">
@@ -569,7 +576,7 @@ class MetaDataPanel extends React.Component {
           shouldUpdateTemplate
           project={previewProject}
           saving={false}
-          template={template}
+          template={normalizedTemplate}
           productTemplates={templates.productTemplates}
           productCategories={templates.productCategories}
           isEdittable
@@ -592,9 +599,7 @@ class MetaDataPanel extends React.Component {
     if (metadata && metadataType === 'projectTemplate' && metadata.scope) {
       template = metadata.scope
     } else if (metadata && metadataType === 'productTemplate' && metadata.template) {
-      template = {
-        sections: _.get(metadata, 'template.questions') ||  _.get(metadata, 'template.sections', [])
-      }
+      template = metadata.template
     }
     // TODO remove: temporary let non-admin user see metadata (they still couldn't save because server will reject)
     if (!isAdmin && isAdmin) {
