@@ -31,9 +31,7 @@ export default class Link extends Component {
 
   setElementGetter(contentState, entityKey) {
     contentState.mergeEntityData(entityKey, {
-      el: () => {
-        return this.element
-      }
+      el: () => this.element
     })
   }
 
