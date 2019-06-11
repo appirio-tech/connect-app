@@ -14,6 +14,8 @@ import ProjectTemplateDetails from './containers/ProjectTemplateDetails'
 import ProductTemplateDetails from './containers/ProductTemplateDetails'
 import ProjectTypesContainer from './containers/ProjectTypesContainer'
 import ProjectTypeDetails from './containers/ProjectTypeDetails'
+import MilestoneTemplatesContainer from './containers/MilestoneTemplatesContainer'
+import MilestoneTemplateDetails from './containers/MilestoneTemplateDetails'
 import ProductTemplatesContainer from './containers/ProductTemplatesContainer'
 import ProductCategoriesContainer from './containers/ProductCategoriesContainer'
 import ProductCategoryDetails from './containers/ProductCategoryDetails'
@@ -29,6 +31,9 @@ const MetaDataContainerWithAuth = withProps({ main:
     <Route exact path="/metadata/productTemplates" component={ProductTemplatesContainer} />
     <Route path="/metadata/new-product-template" render={ProductTemplateDetails} />
     <Route path="/metadata/productTemplates/:templateId" render={ProductTemplateDetails} />
+    <Route exact path="/metadata/milestoneTemplates" component={MilestoneTemplatesContainer} />
+    <Route path="/metadata/new-milestone-template" render={MilestoneTemplateDetails} />
+    <Route path="/metadata/milestoneTemplates/:id" render={MilestoneTemplateDetails} />
     <Route exact path="/metadata/projectTypes" component={ProjectTypesContainer} />
     <Route path="/metadata/new-project-type" render={ProjectTypeDetails} />
     <Route path="/metadata/projectTypes/:key" render={ProjectTypeDetails} />

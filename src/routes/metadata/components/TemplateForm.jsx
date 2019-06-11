@@ -91,10 +91,14 @@ class TemplateForm extends Component {
     const isObject = type === 'object'
     const isJSON = type === 'json'
     const isCheckbox = type === 'checkbox'
-    const isTextBox = !isDropdown && !isCheckbox && !isObject && !isJSON
+    const isTextarea = type === 'textarea'
+    const isTextBox = !isDropdown && !isCheckbox && !isObject && !isJSON && !isTextarea
     const options = isDropdown ? field['options'] : []
     let value = field['value']
     let isReadOnly = false
+    if (field['readonly']) {
+      isReadOnly = true
+    }
     let isHidden = false
     if (values && values[label]) {
       value = field['type'] === 'object' ? JSON.stringify(values[label]) : values[label]
@@ -122,6 +126,21 @@ class TemplateForm extends Component {
         {
           isTextBox && (
             <TCFormFields.TextInput
+              wrapperClass="input-field"
+              type={type}
+              name={label}
+              validations={validations}
+              value={value || ''}
+              validationError={`Please enter ${label}`}
+              required={isRequired}
+              readonly={isReadOnly}
+            />
+          )
+        }
+        {
+          isTextarea && (
+            <TCFormFields.Textarea
+              autoResize
               wrapperClass="input-field"
               type={type}
               name={label}
