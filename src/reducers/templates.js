@@ -16,6 +16,7 @@ import {
   PROJECT_TEMPLATES_SORT,
   PRODUCT_TEMPLATES_SORT,
   PROJECT_TYPES_SORT,
+  MILESTONE_TEMPLATES_SORT,
   CREATE_PROJECT_TEMPLATE_PENDING,
   CREATE_PROJECT_TEMPLATE_FAILURE,
   CREATE_PROJECT_TEMPLATE_SUCCESS,
@@ -25,6 +26,9 @@ import {
   CREATE_PROJECT_TYPE_FAILURE,
   CREATE_PRODUCT_TEMPLATE_SUCCESS,
   CREATE_PROJECT_TYPE_SUCCESS,
+  CREATE_MILESTONE_TEMPLATE_SUCCESS,
+  CREATE_MILESTONE_TEMPLATE_PENDING,
+  CREATE_MILESTONE_TEMPLATE_FAILURE,
   REMOVE_PRODUCT_CATEGORY_PENDING,
   REMOVE_PROJECT_TYPE_PENDING,
   REMOVE_PRODUCT_CATEGORY_FAILURE,
@@ -67,7 +71,7 @@ export default function(state = initialState, action) {
       projectTypes: _.orderBy(projectTypes, ['updatedAt'], ['desc']),
       productTemplates: _.orderBy(productTemplates, ['updatedAt'], ['desc']),
       productCategories: _.orderBy(productCategories, ['updatedAt'], ['desc']),
-      milestoneTemplates,
+      milestoneTemplates: _.orderBy(milestoneTemplates, ['updatedAt'], ['desc']),
       isLoading: false,
     }
   }
@@ -75,6 +79,7 @@ export default function(state = initialState, action) {
   case CREATE_PROJECT_TEMPLATE_PENDING:
   case CREATE_PRODUCT_TEMPLATE_PENDING:
   case CREATE_PROJECT_TYPE_PENDING:
+  case CREATE_MILESTONE_TEMPLATE_PENDING:
   case UPDATE_PROJECTS_METADATA_PENDING:
     return {
       ...state,
@@ -93,6 +98,7 @@ export default function(state = initialState, action) {
   case CREATE_PROJECT_TEMPLATE_FAILURE:
   case CREATE_PRODUCT_TEMPLATE_FAILURE:
   case CREATE_PROJECT_TYPE_FAILURE:
+  case CREATE_MILESTONE_TEMPLATE_FAILURE:
     Alert.error(`PROJECT METADATA CREATE FAILED: ${action.payload.response.data.result.content.message}`)
     return {
       ...state,
@@ -121,6 +127,7 @@ export default function(state = initialState, action) {
   case CREATE_PROJECT_TEMPLATE_SUCCESS:
   case CREATE_PRODUCT_TEMPLATE_SUCCESS:
   case CREATE_PROJECT_TYPE_SUCCESS:
+  case CREATE_MILESTONE_TEMPLATE_SUCCESS:
     Alert.success('PROJECT METADATA CREATE SUCCESS')
     return {
       ...state,
@@ -190,6 +197,14 @@ export default function(state = initialState, action) {
     return {
       ...state,
       projectTypes: _.orderBy(state.projectTypes, [`${fieldName}`], [`${order}`]),
+    }
+  }
+  case MILESTONE_TEMPLATES_SORT: {
+    const fieldName = action.payload.fieldName
+    const order = action.payload.order
+    return {
+      ...state,
+      milestoneTemplates: _.orderBy(state.milestoneTemplates, [`${fieldName}`], [`${order}`]),
     }
   }
   case PRODUCT_CATEGORIES_SORT: {
