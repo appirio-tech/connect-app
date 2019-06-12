@@ -158,7 +158,7 @@ class TemplateForm extends Component {
               <SelectDropdown
                 name={label}
                 options={options}
-                theme="default"
+                theme="default max-height"
                 onSelect={ this.onChangeDropdown }
                 value={value}
                 required
