@@ -262,7 +262,7 @@ class MetaDataPanel extends React.Component {
     const { metadata : dirtyMetadata } = this.state
     if (isNew && !metadata && !dirtyMetadata) {
       if (metadataType === 'projectTemplate') {
-        return { scope: { sections: sectionsDefaultValue } }
+        return { scope: { sections: sectionsDefaultValue }, phases: phasesDefaultValue }
       }
       if (metadataType === 'productTemplate') {
         return { template: { questions: sectionsDefaultValue } }
@@ -460,7 +460,8 @@ class MetaDataPanel extends React.Component {
         })
     } else {
       let payload = _.omit(data, omitKeys)
-      if (metadataType === 'milestoneTemplate') {
+      const noKeys = ['milestoneTemplate', 'productTemplate']
+      if (noKeys.includes(metadataType)) {
         payload = _.omit(payload, ['key'])
       }
       const metadataResource = this.getResourceNameFromType(metadataType)
