@@ -78,6 +78,7 @@ const ProjectDetailView = (props) => {
     allProductTemplates: props.allProductTemplates,
     productsTimelines: props.productsTimelines,
     location: props.location,
+    projectTemplate: props.projectTemplate,
   }
   return <Component {...componentProps} />
 }
