@@ -38,7 +38,6 @@ import NotificationsReader from '../../../components/NotificationsReader'
 import { checkPermission } from '../../../helpers/permissions'
 import PERMISSIONS from '../../../config/permissions'
 import ProjectEstimation from '../../create/components/ProjectEstimation'
-import { getProductEstimate } from '../../../config/projectWizard'
 
 import {
   PHASE_STATUS_ACTIVE,
@@ -115,6 +114,7 @@ class DashboardContainer extends React.Component {
       expandProjectPhase,
       collapseProjectPhase,
       location,
+      estimationQuestion,
       projectTemplate,
     } = this.props
 
@@ -126,29 +126,6 @@ class DashboardContainer extends React.Component {
     // work in progress phases
     // find active phases
     const activePhases = _.orderBy(_.filter(phases, phase => phase.status === PHASE_STATUS_ACTIVE), ['endDate'])
-
-    let showProjectEstimation = false
-    const template = _.get(projectTemplate, 'scope', {})
-    let estimationQuestion = []
-    const showDescription = false
-    const { estimateBlocks } = getProductEstimate({scope: template}, project)
-
-    if (estimateBlocks.length > 0){
-      _.forEach(template.sections, (section) => {
-        _.forEach(section.subSections, (subSection) => {
-          if (subSection.type === 'questions') {
-            _.forEach(subSection.questions, (question) => {
-              if(question.type === 'estimation') {
-                estimationQuestion = question
-                estimationQuestion.title = 'Project Scope'
-                showProjectEstimation = true
-                return false
-              }
-            })
-          }
-        })
-      })
-    }
 
     const leftArea = (
       <ProjectInfoContainer
@@ -202,12 +179,12 @@ class DashboardContainer extends React.Component {
             />
           }
 
-          {showProjectEstimation &&
+          {!!estimationQuestion &&
             <ProjectEstimation
               question={estimationQuestion}
-              template={template}
+              template={_.get(projectTemplate, 'scope', {})}
               project={project}
-              showDescription={showDescription}
+              showDescription={false}
               theme="dashboard"
             />
           }

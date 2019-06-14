@@ -18,6 +18,7 @@ import spinnerWhileLoading from '../../components/LoadingSpinner'
 import CoderBot from '../../components/CoderBot/CoderBot'
 import { getProjectProductTemplates, getProjectTemplateById } from '../../helpers/templates'
 import Dialog from '../../components/TeamManagement/Dialog'
+import { getProductEstimate } from '../../config/projectWizard'
 
 
 const JOIN_INVITE_TITLE = 'You\'re invited to join this project'
@@ -66,6 +67,26 @@ const ProjectDetailView = (props) => {
     currentMemberRole = props.currentUserRoles[0]
   }
 
+  const template = _.get(props.projectTemplate, 'scope', {})
+  let estimationQuestion = null
+  const { estimateBlocks } = getProductEstimate({scope: template}, props.project)
+
+  if (estimateBlocks.length > 0){
+    _.forEach(template.sections, (section) => {
+      _.forEach(section.subSections, (subSection) => {
+        if (subSection.type === 'questions') {
+          _.forEach(subSection.questions, (question) => {
+            if(question.type === 'estimation') {
+              estimationQuestion = question
+              estimationQuestion.title = 'Project Scope'
+              return false
+            }
+          })
+        }
+      })
+    })
+  }
+
   const { component: Component } = props
   const componentProps = {
     project: props.project,
@@ -78,6 +99,7 @@ const ProjectDetailView = (props) => {
     allProductTemplates: props.allProductTemplates,
     productsTimelines: props.productsTimelines,
     location: props.location,
+    estimationQuestion: estimationQuestion,
     projectTemplate: props.projectTemplate,
   }
   return <Component {...componentProps} />
