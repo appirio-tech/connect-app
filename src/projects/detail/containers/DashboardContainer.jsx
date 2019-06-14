@@ -99,7 +99,6 @@ class DashboardContainer extends React.Component {
       isManageUser,
       notifications,
       productTemplates,
-      projectTemplates,
       isProcessing,
       updateProduct,
       fireProductDirty,
@@ -116,6 +115,7 @@ class DashboardContainer extends React.Component {
       expandProjectPhase,
       collapseProjectPhase,
       location,
+      projectTemplate,
     } = this.props
 
     // system notifications
@@ -128,20 +128,17 @@ class DashboardContainer extends React.Component {
     const activePhases = _.orderBy(_.filter(phases, phase => phase.status === PHASE_STATUS_ACTIVE), ['endDate'])
 
     let showProjectEstimation = false
-    const projectTemplateId = _.get(project, 'templateId')
-    const projectTemplate = _.find(projectTemplates, { id: projectTemplateId })
     const template = _.get(projectTemplate, 'scope', {})
     let estimationQuestion = []
     const showDescription = false
     const { estimateBlocks } = getProductEstimate({scope: template}, project)
 
-    if(estimateBlocks.length > 0){
+    if (estimateBlocks.length > 0){
       _.forEach(template.sections, (section) => {
         _.forEach(section.subSections, (subSection) => {
           if (subSection.type === 'questions') {
             _.forEach(subSection.questions, (question) => {
-              if(question.type === 'estimation'){
-                console.log(question)
+              if(question.type === 'estimation') {
                 estimationQuestion = question
                 estimationQuestion.title = 'Project Scope'
                 showProjectEstimation = true
@@ -258,7 +255,6 @@ const mapStateToProps = ({ notifications, projectState, projectTopics, templates
   return {
     notifications: preRenderNotifications(notifications.notifications),
     productTemplates: templates.productTemplates,
-    projectTemplates: templates.projectTemplates,
     isProcessing: projectState.processing,
     phases: projectState.phases,
     feeds: allFeed,
