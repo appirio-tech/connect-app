@@ -184,7 +184,6 @@ class DashboardContainer extends React.Component {
               question={estimationQuestion}
               template={_.get(projectTemplate, 'scope', {})}
               project={project}
-              showDescription={false}
               theme="dashboard"
             />
           }
