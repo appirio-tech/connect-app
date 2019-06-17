@@ -133,7 +133,8 @@ class DashboardContainer extends React.Component {
       updateProject,
       addProjectAttachment,
       updateProjectAttachment,
-      removeProjectAttachment
+      removeProjectAttachment,
+      location,
     } = this.props
 
 
@@ -150,6 +151,7 @@ class DashboardContainer extends React.Component {
 
     const leftArea = (
       <ProjectInfoContainer
+        location={location}
         currentMemberRole={currentMemberRole}
         project={project}
         phases={phases}

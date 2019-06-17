@@ -24,9 +24,20 @@ export default class Link extends Component {
     this.setElementGetter(contentState, entityKey)
   }
 
+  componentWillUnmount() {
+    const { contentState, entityKey } = this.props
+    this.removeElementGetter(contentState, entityKey)
+  }
+
   setElementGetter(contentState, entityKey) {
     contentState.mergeEntityData(entityKey, {
       el: () => this.element
+    })
+  }
+
+  removeElementGetter(contentState, entityKey) {
+    contentState.mergeEntityData(entityKey, {
+      el: null
     })
   }
 

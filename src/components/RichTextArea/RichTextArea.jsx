@@ -155,7 +155,8 @@ class RichTextArea extends React.Component {
       editorState: EditorState.push(this.state.editorState, EditorState.createEmpty().getCurrentContent()),
       currentMDContent: null,
       oldMDContent: null,
-      isPrivate: false
+      isPrivate: false,
+      rawFiles: []
     })
   }
 
@@ -168,7 +169,7 @@ class RichTextArea extends React.Component {
     let isEditor = false
     let isCloseButton = false
     const title = this.state.titleValue
-    const hasContent = (title && title.trim().length > 0) || this.state.editorState.getCurrentContent().hasText()
+    const hasContent = (title && title.trim().length > 0) || this.state.editorState.getCurrentContent().hasText() || this.state.rawFiles.length > 0
 
     do {
       if (currNode.className
@@ -188,7 +189,8 @@ class RichTextArea extends React.Component {
           titleValue: '',
           editorState: EditorState.createEmpty(),
           currentMDContent: null,
-          oldMDContent: null
+          oldMDContent: null,
+          rawFiles: []
         })
       }
 
@@ -392,7 +394,7 @@ class RichTextArea extends React.Component {
       && (disableContent || editorState.getCurrentContent().hasText())
     if (editMode && canSubmit) {
       canSubmit = (!disableTitle && titleValue !== this.props.oldTitle) || (!disableContent && oldMDContent !== currentMDContent)
-        || (rawFiles.length > 0 || files.length < attachments.length)
+        || (rawFiles.length > 0 || (attachments && files.length < attachments.length))
     }
     const currentStyle = editorState.getCurrentInlineStyle()
     const blockType = RichUtils.getCurrentBlockType(editorState)

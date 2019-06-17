@@ -598,11 +598,13 @@ export function getProductEstimate(projectTemplate, projectData) {
       const addonKey = addonBlock.metadata.addonProductKey
       // retrieves the location of storing the selected addons details
       const addonLocation = addonBlock.metadata.addonLocation
-      const addonsData = flatProjectData[addonLocation]
-      // finds the addon details for the current addon block
-      const addon = _.find(addonsData, ad => ad.productKey === addonKey)
-      if (addon && addon.qty) {
-        addonBlock.quantity = addon.qty
+      if (addonKey && addonLocation) { // if addon block is configured to pick quantity of the addon
+        const addonsData = flatProjectData[addonLocation]
+        // finds the addon details for the current addon block
+        const addon = _.find(addonsData, ad => ad.productKey === addonKey)
+        if (addon && addon.qty) {
+          addonBlock.quantity = addon.qty
+        }
       }
     })
     matchedBlocks = matchedBlocks.concat(baseBlocks, addonBlocks)
@@ -612,7 +614,17 @@ export function getProductEstimate(projectTemplate, projectData) {
       maxTime = _.get(projectTemplate, 'scope.baseTimeEstimateMax', 0)
     } else {
       _.forEach(matchedBlocks, bb => {
-        const bbPrice = _.isString(bb.price) ? evaluate(bb.price, flatProjectData) : bb.price
+        let bbPrice = _.isString(bb.price) ? evaluate(bb.price, flatProjectData) : bb.price
+        if (isNaN(bbPrice)) { // if we are unable to parse price as numeric value, set it as ZERO
+          bbPrice = 0
+        }
+        // stores back the evaluated price, if the price field contains the formula
+        if (_.isString(bb.price)) {
+          // stores the original formula in metadata
+          bb.metadata.priceFormula = bb.price
+          // updates the price with evaluated price
+          bb.price = bbPrice
+        }
         price += (bbPrice * (bb.quantity ? bb.quantity : 1))
         minTime += bb.minTime
         maxTime += bb.maxTime

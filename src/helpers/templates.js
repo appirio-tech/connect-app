@@ -96,7 +96,7 @@ export function getProjectProductTemplates(productTemplates, projectTemplates, p
   }
 
   const projectTemplate = getProjectTemplateById(projectTemplates, project.templateId)
-  const { phases } = projectTemplate
+  const phases = _.get(projectTemplate, 'phases', {}) // TODO we can log error details here for missing project template
   const projectProductTemplates = []
 
   Object.keys(phases).forEach((phaseName) => {

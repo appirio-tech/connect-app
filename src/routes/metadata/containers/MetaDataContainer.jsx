@@ -18,6 +18,7 @@ import MetaDataPanel from '../components/MetaDataPanel'
 import MetaDataProjectTemplatesGridView from '../components/MetaDataProjectTemplatesGridView'
 import MetaDataProductTemplatesGridView from '../components/MetaDataProductTemplatesGridView'
 import MetaDataProjectTypesGridView from '../components/MetaDataProjectTypesGridView'
+import MetaDataMilestoneTemplatesGridView from '../components/MetaDataMilestoneTemplatesGridView'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import { requiresAuthentication } from '../../../components/AuthenticatedComponent'
@@ -53,6 +54,7 @@ class MetaDataContainer extends React.Component {
       metadataType,
       match,
     } = this.props
+
     if (metadataType === 'projectTemplates') {
       const projectTemplates = templates.projectTemplates
       return (
@@ -118,6 +120,23 @@ class MetaDataContainer extends React.Component {
         </div>
       )
     }
+
+    if (metadataType === 'milestoneTemplates') {
+      const milestoneTemplates = templates.milestoneTemplates
+      return (
+        <div>
+          <MetaDataMilestoneTemplatesGridView
+            currentUser={currentUser}
+            isLoading={templates.isLoading}
+            totalCount={milestoneTemplates ? milestoneTemplates.length : 0}
+            pageNum={1}
+            milestoneTemplates={milestoneTemplates}
+            criteria={{ sort: 'createdAt' }}
+          />
+        </div>
+      )
+    }
+
     return <div>None</div>
   }
 }

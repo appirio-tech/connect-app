@@ -20,3 +20,39 @@ export function difference(object, base) {
   }
   return changes(object, base)
 }
+
+/**
+ * Helper method to check the uniqueness of two emails
+ *
+ * @param {String} email1    first email to compare
+ * @param {String} email2    second email to compare
+ * @param {Object} options  the options
+ *
+ * @returns {Boolean} true if two emails are same
+ */
+export const compareEmail = (email1, email2, options = { UNIQUE_GMAIL_VALIDATION: false }) => {
+  if (options.UNIQUE_GMAIL_VALIDATION) {
+    // email is gmail
+    const emailSplit = /(^[\w.+-]+)(@gmail\.com|@googlemail\.com)$/g.exec(_.toLower(email1))
+    if (emailSplit) {
+      const address = emailSplit[1].replace('.', '')
+      const emailDomain = emailSplit[2].replace('.', '\\.')
+      const regexAddress = address.split('').join('\\.?')
+      const regex = new RegExp(`${regexAddress}${emailDomain}`)
+      return regex.test(_.toLower(email2))
+    }
+  }
+  return _.toLower(email1) === _.toLower(email2)
+}
+
+/**
+ * Helper method to check the uniqueness of two user handles
+ *
+ * @param {String} handle1    first user handle to compare
+ * @param {String} handle2    second user handle to compare
+ *
+ * @returns {Boolean} true if two user handles are same
+ */
+export const compareHandles = (handle1, handle2) => (
+  (handle1 || '').toLowerCase() === (handle2 || '').toLowerCase()
+)

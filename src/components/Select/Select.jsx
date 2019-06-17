@@ -16,6 +16,9 @@ const Select = (props) => {
   if (props.showDropdownIndicator) {
     containerclass = 'react-select-container'
   }
+  if (props.heightAuto) {
+    containerclass += ' height-auto'
+  }
 
   if (props.createOption) {
     return (
@@ -24,7 +27,6 @@ const Select = (props) => {
         createOptionPosition="first"
         className={containerclass}
         classNamePrefix="react-select"
-        noOptionsMessage={() => ('Type to search')}
       />
     )
   } else {
@@ -34,10 +36,13 @@ const Select = (props) => {
         createOptionPosition="first"
         className={containerclass}
         classNamePrefix="react-select"
-        noOptionsMessage={() => ('Type to search')}
       />
     )
   }
+}
+
+Select.defaultProps = {
+  noOptionsMessage: () => 'Type to search'
 }
 
 export default Select

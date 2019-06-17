@@ -48,11 +48,11 @@
     text-align: center;
     color: $tc-black;
   }
-  & p {
+  & p, ul {
     margin: 3*$base-unit 36*$base-unit;
     color: $tc-black;
   }
-  & p:last-child {
+  & p:last-child, ul:last-child {
     margin-bottom: 32*$base-unit;
   }
 }

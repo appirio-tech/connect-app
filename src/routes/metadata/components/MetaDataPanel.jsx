@@ -262,10 +262,16 @@ class MetaDataPanel extends React.Component {
     const { metadata : dirtyMetadata } = this.state
     if (isNew && !metadata && !dirtyMetadata) {
       if (metadataType === 'projectTemplate') {
-        return { scope: { sections: sectionsDefaultValue } }
+        return { scope: { sections: sectionsDefaultValue }, phases: phasesDefaultValue }
       }
       if (metadataType === 'productTemplate') {
         return { template: { questions: sectionsDefaultValue } }
+      }
+      if (metadataType === 'projectType') {
+        return { metadata: {} }
+      }
+      if (metadataType === 'milestoneTemplate') {
+        return { metadata: {} }
       }
       return {}
     }
@@ -363,6 +369,29 @@ class MetaDataPanel extends React.Component {
         { key: 'disabled', type: 'checkbox' },
         { key: 'hidden', type: 'checkbox' },
       ])
+    } else if (metadataType === 'milestoneTemplate') {
+      const productTemplateOptions = templates.productTemplates.map((item) => {
+        return {
+          value: item.id,
+          title: `(${item.id}) ${item.name}`
+        }
+      })
+
+      fields = fields.concat([
+        { key: 'name', type: 'text' },
+        { key: 'description', type: 'textarea' },
+        { key: 'duration', type: 'number' },
+        { key: 'type', type: 'text' },
+        { key: 'order', type: 'number' },
+        { key: 'plannedText', type: 'textarea' },
+        { key: 'activeText', type: 'textarea' },
+        { key: 'completedText', type: 'textarea' },
+        { key: 'blockedText', type: 'textarea' },
+        { key: 'reference', type: 'text', readonly: true, value: 'productTemplate' },
+        { key: 'referenceId', type: 'dropdown', options: productTemplateOptions, value: String(productTemplateOptions[0].value) },
+        { key: 'metadata', type: 'json' },
+        { key: 'hidden', type: 'checkbox' },
+      ])
     }
     return fields
   }
@@ -430,13 +459,17 @@ class MetaDataPanel extends React.Component {
           }
         })
     } else {
-      const payload = _.omit(data, omitKeys)
+      let payload = _.omit(data, omitKeys)
+      const noKeys = ['milestoneTemplate', 'productTemplate']
+      if (noKeys.includes(metadataType)) {
+        payload = _.omit(payload, ['key'])
+      }
       const metadataResource = this.getResourceNameFromType(metadataType)
       this.props.createProjectsMetadata(payload)
         .then((res) => {
           if (!res.error) {
             const createdMetadata = res.action.payload
-            if (['projectTemplate', 'productTemplate'].indexOf(metadataType) !== -1) {
+            if (['projectTemplate', 'productTemplate', 'milestoneTemplate'].indexOf(metadataType) !== -1) {
               window.location = `/metadata/${metadataResource}/${createdMetadata.id}`
             } else {
               window.location = `/metadata/${metadataResource}/${createdMetadata.key}`
@@ -557,6 +590,13 @@ class MetaDataPanel extends React.Component {
   renderProductPreview({ template }) {
     const { templates, previewProject } = this.props
 
+    // as productTemplate's template has `questions` root element instead of `sections`
+    // we normalize it for the EditProjectForm component
+    const normalizedTemplate = {
+      ..._.omit(template, 'questions'),
+      sections: template.questions
+    }
+
     return (
       <div className="content template-preview">
         <div className="header">
@@ -566,7 +606,7 @@ class MetaDataPanel extends React.Component {
           shouldUpdateTemplate
           project={previewProject}
           saving={false}
-          template={template}
+          template={normalizedTemplate}
           productTemplates={templates.productTemplates}
           productCategories={templates.productCategories}
           isEdittable
@@ -589,9 +629,7 @@ class MetaDataPanel extends React.Component {
     if (metadata && metadataType === 'projectTemplate' && metadata.scope) {
       template = metadata.scope
     } else if (metadata && metadataType === 'productTemplate' && metadata.template) {
-      template = {
-        sections: _.get(metadata, 'template.questions') ||  _.get(metadata, 'template.sections', [])
-      }
+      template = metadata.template
     }
     // TODO remove: temporary let non-admin user see metadata (they still couldn't save because server will reject)
     if (!isAdmin && isAdmin) {

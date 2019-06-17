@@ -5,8 +5,9 @@
 import _ from 'lodash'
 import {
   LOAD_PROJECTS_METADATA, ADD_PROJECTS_METADATA, UPDATE_PROJECTS_METADATA, REMOVE_PROJECTS_METADATA,
-  PROJECT_TEMPLATES_SORT, PRODUCT_TEMPLATES_SORT, PROJECT_TYPES_SORT, CREATE_PROJECT_TEMPLATE, CREATE_PROJECT_TYPE,
+  PROJECT_TEMPLATES_SORT, PRODUCT_TEMPLATES_SORT, PROJECT_TYPES_SORT, MILESTONE_TEMPLATES_SORT, CREATE_PROJECT_TEMPLATE, CREATE_PROJECT_TYPE,
   CREATE_PRODUCT_TEMPLATE,
+  CREATE_MILESTONE_TEMPLATE,
   PRODUCT_CATEGORIES_SORT,
   CREATE_PRODUCT_CATEGORY,
   REMOVE_PROJECT_TYPE,
@@ -83,6 +84,15 @@ export function createProjectType(data) {
   }
 }
 
+export function createMilestoneTemplate(data) {
+  return (dispatch) => {
+    return dispatch({
+      type: CREATE_MILESTONE_TEMPLATE,
+      payload: createProjectsMetadataAPI('milestoneTemplates', data)
+    })
+  }
+}
+
 export function createProductCategory(data) {
   return (dispatch) => {
     return dispatch({
@@ -150,7 +160,7 @@ export function sortProjectTemplates(criteria) {
   return (dispatch) => {
     const fieldName = _.split(criteria, ' ')[0]
     const order = _.split(criteria, ' ')[1] || 'asc'
-    
+
     return dispatch({
       type: PROJECT_TEMPLATES_SORT,
       payload: { fieldName, order }
@@ -162,7 +172,7 @@ export function sortProductTemplates(criteria) {
   return (dispatch) => {
     const fieldName = _.split(criteria, ' ')[0]
     const order = _.split(criteria, ' ')[1] || 'asc'
-    
+
     return dispatch({
       type: PRODUCT_TEMPLATES_SORT,
       payload: { fieldName, order }
@@ -174,9 +184,21 @@ export function sortProjectTypes(criteria) {
   return (dispatch) => {
     const fieldName = _.split(criteria, ' ')[0]
     const order = _.split(criteria, ' ')[1] || 'asc'
-    
+
     return dispatch({
       type: PROJECT_TYPES_SORT,
+      payload: { fieldName, order }
+    })
+  }
+}
+
+export function sortMilestoneTemplates(criteria) {
+  return (dispatch) => {
+    const fieldName = _.split(criteria, ' ')[0]
+    const order = _.split(criteria, ' ')[1] || 'asc'
+
+    return dispatch({
+      type: MILESTONE_TEMPLATES_SORT,
       payload: { fieldName, order }
     })
   }
@@ -186,7 +208,7 @@ export function sortProductCategories(criteria) {
   return (dispatch) => {
     const fieldName = _.split(criteria, ' ')[0]
     const order = _.split(criteria, ' ')[1] || 'asc'
-    
+
     return dispatch({
       type: PRODUCT_CATEGORIES_SORT,
       payload: { fieldName, order }

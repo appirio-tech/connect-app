@@ -231,7 +231,7 @@ class FeedComments extends React.Component {
       const prevComment = comments[idx - 1]
       const prevCreatedAt = prevComment && moment(prevComment.createdAt)
       const isSameDay = prevCreatedAt && prevCreatedAt.isSame(createdAt, 'day')
-      const isSameAuthor = _.get(prevComment, 'author.userId') === item.author.userId
+      const isSameAuthor = _.get(prevComment, 'author.userId') === _.get(item, 'author.userId')
       const isFirstUnread = prevComment && !prevComment.unread && item.unread
 
       const timeDiffComment = bundleCreatedAt && createdAt.diff(bundleCreatedAt)
