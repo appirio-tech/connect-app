@@ -37,6 +37,7 @@ import WorkInProgress from '../components/WorkInProgress'
 import NotificationsReader from '../../../components/NotificationsReader'
 import { checkPermission } from '../../../helpers/permissions'
 import PERMISSIONS from '../../../config/permissions'
+import ProjectEstimation from '../../create/components/ProjectEstimation'
 
 import {
   PHASE_STATUS_ACTIVE,
@@ -113,6 +114,8 @@ class DashboardContainer extends React.Component {
       expandProjectPhase,
       collapseProjectPhase,
       location,
+      estimationQuestion,
+      projectTemplate,
     } = this.props
 
     // system notifications
@@ -173,6 +176,15 @@ class DashboardContainer extends React.Component {
               messages={sortedUnreadProjectUpdates}
               user={SYSTEM_USER}
               onNotificationRead={this.onNotificationRead}
+            />
+          }
+
+          {!!estimationQuestion &&
+            <ProjectEstimation
+              question={estimationQuestion}
+              template={_.get(projectTemplate, 'scope', {})}
+              project={project}
+              theme="dashboard"
             />
           }
 
