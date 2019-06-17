@@ -18,7 +18,7 @@ const FileList = ({files, onDelete, onSave, deletingFile, onDeleteIntent, canMod
           onDeleteIntent(null)
         }
         const _onFileDeleteCancel = () => onDeleteIntent(null)
-        if (deletingFile === file.id) {
+        if (deletingFile && deletingFile === file.id) {
           return (
             <FileDeletionConfirmModal
               key={i}

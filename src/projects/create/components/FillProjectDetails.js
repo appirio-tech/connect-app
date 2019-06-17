@@ -93,6 +93,11 @@ class FillProjectDetails extends Component  {
                     template={template}
                     isEditable
                     submitHandler={this.props.onCreateProject}
+                    addAttachment={this.props.addAttachment}
+                    updateAttachment={this.props.updateAttachment}
+                    removeAttachment={this.props.removeAttachment}
+                    attachmentsStorePath={this.props.attachmentsStorePath}
+                    canManageAttachments={this.props.canManageAttachments}
                     saving={processing}
                     onProjectChange={this.props.onProjectChange}
                     submitBtnText={ submitBtnText }

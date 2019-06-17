@@ -13,7 +13,9 @@ import FillProjectDetails from './FillProjectDetails'
 import ProjectSubmitted from './ProjectSubmitted'
 
 import update from 'react-addons-update'
-import { LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH, LS_INCOMPLETE_WIZARD } from '../../../config/constants'
+import { 
+  LS_INCOMPLETE_PROJECT, PROJECT_REF_CODE_MAX_LENGTH, LS_INCOMPLETE_WIZARD, PROJECT_ATTACHMENTS_FOLDER
+} from '../../../config/constants'
 import './ProjectWizard.scss'
 
 const WZ_STEP_INCOMP_PROJ_CONF = 0
@@ -429,10 +431,23 @@ class ProjectWizard extends Component {
     this.props.closeModal()
   }
 
+  addProjectAttachment(attachment) {
+    this.props.addProjectAttachment(this.props.project.id, attachment)
+  }
+
+  removeProjectAttachment(attachmentId) {
+    this.props.removeProjectAttachment(this.props.project.id, attachmentId)
+  }
+
+  updateProjectAttachment(attachmentId, updatedAttachment) {
+    this.props.updateProjectAttachment(this.props.project.id, attachmentId, updatedAttachment)
+  }
+
   render() {
-    const { processing, showModal, userRoles, projectTemplates, projectTypes, projectId, match, templates } = this.props
+    const { processing, showModal, currentMemberRole, userRoles, projectTemplates, projectTypes, projectId, match, templates } = this.props
     const { project, dirtyProject, wizardStep } = this.state
     const params = match.params
+    const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/new-project/`
 
     return (
       <Wizard
@@ -473,6 +488,11 @@ class ProjectWizard extends Component {
           submitBtnText="Continue"
           userRoles={ userRoles }
           onBackClick={() => this.handleStepChange(wizardStep - 1)}
+          addAttachment={this.addProjectAttachment}
+          updateAttachment={this.updateProjectAttachment}
+          removeAttachment={this.removeProjectAttachment}
+          attachmentsStorePath={attachmentsStorePath}
+          canManageAttachments={!!currentMemberRole}
         />
         <div />
         <ProjectSubmitted

@@ -68,7 +68,15 @@ class FileListContainer extends Component {
       additionalClass,
       pendingAttachments,
       attachmentPermissions,
+      askForPermissions,
     } = this.props
+
+
+    if (!askForPermissions && pendingAttachments && pendingAttachments.attachments) {
+      pendingAttachments.attachments.forEach(a => {
+        files.push(a)
+      });
+    }
 
     files.forEach(file => {
       if (allMembers[file.updatedBy]) {
@@ -82,14 +90,18 @@ class FileListContainer extends Component {
 
     return (
       <div className={additionalClass}>
-        <FileList files={files} onDelete={removeAttachment} onSave={updateAttachment} canModify={canManageAttachments}
+        <FileList
+          files={files}
+          onDelete={removeAttachment}
+          onSave={updateAttachment}
+          canModify={canManageAttachments}
           projectMembers={allMembers}
           loggedInUser={loggedInUser}
         />
         <AddFiles successHandler={this.processUploadedFiles} storePath={attachmentsStorePath} category={category} />
 
         {
-          pendingAttachments &&
+          askForPermissions && pendingAttachments &&
           <AddFilePermission onCancel={this.props.onDiscardAttachments}
             onSubmit={this.onAddingAttachmentPermissions}
             onChange={this.props.changeAttachmentPermission}
@@ -126,11 +138,13 @@ FileListContainer.propTypes = {
   addAttachment: PropTypes.func.isRequired,
   updateAttachment: PropTypes.func.isRequired,
   removeAttachment: PropTypes.func.isRequired,
-  additionalClass: PropTypes.string
+  additionalClass: PropTypes.string,
+  askForPermissions: PropTypes.bool
 }
 
 FileListContainer.defaultProps = {
   additionalClass: '',
+  askForPermissions: true,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FileListContainer)

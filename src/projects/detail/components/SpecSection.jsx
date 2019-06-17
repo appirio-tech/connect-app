@@ -228,6 +228,7 @@ const SpecSection = props => {
           removeAttachment={removeAttachment}
           attachmentsStorePath={attachmentsStorePath}
           canManageAttachments={canManageAttachments}
+          askForPermissions={!isCreation}
         />
       )
     }

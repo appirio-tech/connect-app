@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject } from '../../actions/project'
+import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import { loadProjectsMetadata } from '../../../actions/templates'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
@@ -248,7 +249,7 @@ class CreateContainer extends React.Component {
    * Creates new project if user is already logged in, otherwise, redirects user for registration/login.
    */
   createProject(project) {
-    const { templates: { projectTemplates }} = this.props
+    const { templates: { projectTemplates }, pendingAttachments } = this.props
     const projectTemplate = _.find(projectTemplates, { id: _.get(project, 'templateId') })
 
     this.setState({ creatingProject: true }, () => {
@@ -258,6 +259,7 @@ class CreateContainer extends React.Component {
         const projectWithEstimation = {
           ...project,
           estimation: _.get(projectEstimation, 'estimateBlocks', []),
+          attachments: _.get(pendingAttachments, 'attachments', [])
         }
         this.props.createProjectAction(projectWithEstimation)
       } else {
@@ -413,6 +415,7 @@ const mapStateToProps = ({projectState, loadUser, templates }) => ({
   processing: projectState.processing,
   error: projectState.error,
   project: projectState.project,
+  pendingAttachments: projectState.attachmentsAwaitingPermission,
   templates,
 })
 
@@ -422,6 +425,9 @@ const actionCreators = {
   fireProjectDirtyUndo,
   clearLoadedProject,
   loadProjectsMetadata,
+  addProjectAttachment,
+  updateProjectAttachment,
+  removeProjectAttachment,
 }
 
 export default withRouter(connect(mapStateToProps, actionCreators)(CreateContainer))
