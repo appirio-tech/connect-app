@@ -3,6 +3,8 @@
 }
 
 .drawer-content {
+  height: 100%;
+  overflow: auto;
   padding: 5px 50px;
   position: relative;
   z-index: 2;
