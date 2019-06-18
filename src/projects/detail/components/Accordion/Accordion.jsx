@@ -23,7 +23,9 @@ const TYPE = {
   TEXTINPUT: 'textinput',
   TEXTBOX: 'textbox',
   NUMBERINPUT: 'numberinput',
-  SKILLS: 'skills'
+  SKILLS: 'skills',
+  SLIDER_RADIO: 'slide-radiogroup',
+  SELECT_DROPDOWN: 'select-dropdown'
 }
 
 /**
