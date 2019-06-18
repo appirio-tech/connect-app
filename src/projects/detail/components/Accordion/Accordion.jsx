@@ -114,7 +114,7 @@ class Accordion extends React.Component {
     case TYPE.CHECKBOX_GROUP: return value.map(mapValue).join(', ')
     case TYPE.RADIO_GROUP: return mapValue(value)
     case TYPE.ADD_ONS: return `${value.length} selected`
-    case TYPE.SKILLS: return value.map(mapValue).join(', ')
+    case TYPE.SKILLS: return `${value.length} selected`
     default: return value
     }
   }

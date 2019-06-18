@@ -13,9 +13,11 @@ class SkillsQuestion extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      options: cachedOptions || []
+      options: cachedOptions || [],
+      customOptionValue: '',
     }
     this.handleChange = this.handleChange.bind(this)
+    this.onSelectType = this.onSelectType.bind(this)
   }
 
   componentWillMount() {
@@ -37,10 +39,7 @@ class SkillsQuestion extends React.Component {
 
     this.setState({ options })
     if (onSkillsLoaded) {
-      onSkillsLoaded(options.map((option) => ({
-        title: option.name,
-        value: option.id,
-      })))
+      onSkillsLoaded(options.map((option) => _.pick(option, ['id', 'name'])))
     }
   }
 
@@ -50,7 +49,7 @@ class SkillsQuestion extends React.Component {
     setValue(val)
   }
 
-  componentDidUpdate(prevProps) {
+  componentWillUpdate(prevProps) {
     const { categoriesField, categoriesMapping, currentProjectData, getValue, onChange, setValue, name } = this.props
     const { options } = this.state
     const prevSelectedCategories = _.get(prevProps.currentProjectData, categoriesField, [])
@@ -63,8 +62,8 @@ class SkillsQuestion extends React.Component {
       const currentValues = getValue() || []
       const prevAvailableOptions = options.filter(option => _.intersection(option.categories, mappedPrevSelectedCategories).length > 0)
       const nextAvailableOptions = options.filter(option => _.intersection(option.categories, mappedSelectedCategories).length > 0)
-      const prevValues = currentValues.filter(skill => prevAvailableOptions.some(option => option.id === skill))
-      const nextValues = currentValues.filter(skill => nextAvailableOptions.some(option => option.id === skill))
+      const prevValues = currentValues.filter(skill => _.some(prevAvailableOptions, skill))
+      const nextValues = currentValues.filter(skill => _.some(nextAvailableOptions, skill))
 
       if (prevValues.length < nextValues.length) {
         onChange(name, prevValues)
@@ -74,6 +73,26 @@ class SkillsQuestion extends React.Component {
         setValue(nextValues)
       }
     }
+  }
+
+  onSelectType(value) {
+    const { getValue } = this.props
+    const indexOfSpace = value.indexOf(' ')
+    const indexOfSemiColon = value.indexOf(';')
+
+    // if user enter only ' '  or ';' we should clean it to not allow
+    if (indexOfSpace === 0 || indexOfSemiColon === 0 ) {
+      return ''
+    }
+
+    if (indexOfSemiColon >= 1 ) {
+      const currentValues = getValue()
+      this.handleChange([...currentValues, { name: value.substring(0, value.length -1) }])
+      // this is return empty to nullify value post processing
+      return ''
+    }
+
+    this.setState({ customOptionValue: value })
   }
 
   render() {
@@ -90,30 +109,32 @@ class SkillsQuestion extends React.Component {
       getValue,
       frequentSkills
     } = this.props
-    const { options } = this.state
+    const { options, customOptionValue } = this.state
 
     const selectedCategories = _.get(currentProjectData, categoriesField, [])
     const mappedCategories = _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
-    const availableOptions = options.filter(option => _.intersection(option.categories, mappedCategories).length > 0)
+    const availableOptions = options
+      .filter(option => _.intersection(option.categories, mappedCategories).length > 0)
+      .map(
+        option => _.pick(option, ['id', 'name'])
+      )
 
     let currentValues = getValue() || []
-    currentValues = currentValues.filter(skill => availableOptions.some(option => option.id === skill))
+    // remove from currentValues not available options but still keep created custom options without id
+    currentValues = currentValues.filter(skill => _.some(availableOptions, skill) || !skill.id)
 
     const questionDisabled = isFormDisabled() || disabled || selectedCategories.length === 0
     const hasError = !isPristine() && !isValid()
     const errorMessage = getErrorMessage() || validationError
 
-    const checkboxGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.id) > -1).map(
-      option => ({
-        title: option.name,
-        value: option.id,
-      })
-    )
-    const checkboxGroupValues = currentValues.filter(val => _.some(checkboxGroupOptions, option => option.value === val ))
-    const selectGroupOptions =
-      availableOptions.filter(option => frequentSkills.indexOf(option.id) === -1).map(
-        option => Object.assign({}, option, { value: option.id }))
-    const selectGroupValues = currentValues.filter(val => _.some(selectGroupOptions, option => option.id === val ))
+    const checkboxGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.id) > -1)
+    const checkboxGroupValues = currentValues.filter(val => _.some(checkboxGroupOptions, option => option.id === val.id ))
+
+    const selectGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.id) === -1)
+    if (customOptionValue) {
+      selectGroupOptions.unshift({ name: customOptionValue })
+    }
+    const selectGroupValues = _.reject(currentValues, (val => _.some(checkboxGroupValues, val)))
 
     return (
       <div>
@@ -125,6 +146,7 @@ class SkillsQuestion extends React.Component {
         />
         <div styleName="select-wrapper">
           <Select
+            createOption
             isMulti
             closeMenuOnSelect
             showDropdownIndicator
@@ -132,9 +154,13 @@ class SkillsQuestion extends React.Component {
             isSearchable
             heightAuto
             placeholder="Start typing a skill then select from the list"
-            value={selectGroupOptions.filter(option => selectGroupValues.some(val => option.id=== val))}
-            getOptionLabel={(option) => option.name}
-            onChange={(val) => { this.handleChange(_.union(val.map(val => val.id), checkboxGroupValues)) }}
+            value={selectGroupValues}
+            getOptionLabel={(option) => option.name || ''}
+            getOptionValue={(option) => option.name || ''}
+            onInputChange={this.onSelectType}
+            onChange={(val) => {
+              this.handleChange(_.union(val, checkboxGroupValues))
+            }}
             noOptionsMessage={() => 'No results found'}
             options={selectGroupOptions}
             isDisabled={questionDisabled}
