@@ -7,28 +7,41 @@ import './SkillsQuestion.scss'
 import { axiosInstance as axios } from '../../../../api/requestInterceptor'
 import { TC_API_URL } from '../../../../config/constants'
 
+let cachedOptions
+
 class SkillsQuestion extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      options: []
+      options: cachedOptions || []
     }
     this.handleChange = this.handleChange.bind(this)
   }
 
-  componentDidMount() {
+  componentWillMount() {
+    if (!cachedOptions) {
+      axios.get(`${TC_API_URL}/v3/tags/?domain=SKILLS&status=APPROVED`)
+        .then(resp => {
+          const options = _.get(resp.data, 'result.content', {})
+
+          cachedOptions = options
+          this.updateOptions(options)
+        })
+    } else {
+      this.updateOptions(cachedOptions)
+    }
+  }
+
+  updateOptions(options) {
     const { onSkillsLoaded } = this.props
-    axios.get(`${TC_API_URL}/v3/tags/?domain=SKILLS&status=APPROVED`)
-      .then(resp => {
-        const options = _.get(resp.data, 'result.content', {})
-        this.setState({ options })
-        if (onSkillsLoaded) {
-          onSkillsLoaded(options.map((option) => ({
-            title: option.name,
-            value: option.id,
-          })))
-        }
-      })
+
+    this.setState({ options })
+    if (onSkillsLoaded) {
+      onSkillsLoaded(options.map((option) => ({
+        title: option.name,
+        value: option.id,
+      })))
+    }
   }
 
   handleChange(val = []) {
