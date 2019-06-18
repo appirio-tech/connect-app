@@ -34,7 +34,7 @@ const TYPE = {
  * @returns {Function} valueMapper
  */
 const createValueMapper = (valuesMap) => (value) => (
-  valuesMap[value] && (valuesMap[value].summaryLabel || valuesMap[value].label || valuesMap[value].title || valuesMap[value].name)
+  valuesMap[value] && (valuesMap[value].summaryLabel || valuesMap[value].label || valuesMap[value].title)
 )
 
 class Accordion extends React.Component {
@@ -103,7 +103,7 @@ class Accordion extends React.Component {
     const { type, options } = this.props
     const { value } = this.state
 
-    const valuesMap = _.keyBy(options, TYPE.SKILLS === type ? 'id' : 'value')
+    const valuesMap = _.keyBy(options, 'value')
     const mapValue = createValueMapper(valuesMap)
 
     if (!value) {

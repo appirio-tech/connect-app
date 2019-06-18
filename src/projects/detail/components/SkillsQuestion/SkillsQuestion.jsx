@@ -23,7 +23,10 @@ class SkillsQuestion extends React.Component {
         const options = _.get(resp.data, 'result.content', {})
         this.setState({ options })
         if (onSkillsLoaded) {
-          onSkillsLoaded(options)
+          onSkillsLoaded(options.map((option) => ({
+            title: option.name,
+            value: option.id,
+          })))
         }
       })
   }
@@ -88,9 +91,12 @@ class SkillsQuestion extends React.Component {
     const errorMessage = getErrorMessage() || validationError
 
     const checkboxGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.id) > -1).map(
-      option => Object.assign({}, option, { value: option.id })
+      option => ({
+        title: option.name,
+        value: option.id,
+      })
     )
-    const checkboxGroupValues = currentValues.filter(val => _.some(checkboxGroupOptions, option => option.id === val ))
+    const checkboxGroupValues = currentValues.filter(val => _.some(checkboxGroupOptions, option => option.value === val ))
     const selectGroupOptions =
       availableOptions.filter(option => frequentSkills.indexOf(option.id) === -1).map(
         option => Object.assign({}, option, { value: option.id }))
