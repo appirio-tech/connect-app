@@ -77,7 +77,7 @@ class FileListContainer extends Component {
       pendingAttachments.attachments.forEach(a => {
         // assumes the logged in user as creator of the attachment
         files.push({ ...a, createdByUser: loggedInUser, updatedByUser: loggedInUser, createdAt: new Date().toUTCString() })
-      });
+      })
     }
 
     files.forEach(file => {
