@@ -117,6 +117,8 @@ class Accordion extends React.Component {
     case TYPE.RADIO_GROUP: return mapValue(value)
     case TYPE.ADD_ONS: return `${value.length} selected`
     case TYPE.SKILLS: return `${value.length} selected`
+    case TYPE.SLIDER_RADIO: return mapValue(value)
+    case TYPE.SELECT_DROPDOWN: return mapValue(value)
     default: return value
     }
   }
