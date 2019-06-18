@@ -45,7 +45,7 @@ class SkillsCheckboxGroup extends Component {
             />
             <label htmlFor={id}/>
           </div>
-          <label htmlFor={id}>{cb.title}</label>
+          <label htmlFor={id}>{cb.title || cb.name}</label>
           {
             cb.description && checked && <div styleName="item-description"> {cb.description} </div>
           }

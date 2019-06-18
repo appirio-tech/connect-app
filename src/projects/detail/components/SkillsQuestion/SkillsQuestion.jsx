@@ -1,15 +1,31 @@
 import React from 'react'
 import _ from 'lodash'
-import PropTypes from 'prop-types'
 import { HOC as hoc } from 'formsy-react'
 import SkillsCheckboxGroup from './SkillsCheckboxGroup'
 import Select from '../../../../components/Select/Select'
 import './SkillsQuestion.scss'
+import { axiosInstance as axios } from '../../../../api/requestInterceptor'
+import { TC_API_URL } from '../../../../config/constants'
 
 class SkillsQuestion extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      options: []
+    }
     this.handleChange = this.handleChange.bind(this)
+  }
+
+  componentDidMount() {
+    const { onSkillsLoaded } = this.props
+    axios.get(`${TC_API_URL}/v3/tags/?domain=SKILLS&status=APPROVED`)
+      .then(resp => {
+        const options = _.get(resp.data, 'result.content', {})
+        this.setState({ options })
+        if (onSkillsLoaded) {
+          onSkillsLoaded(options)
+        }
+      })
   }
 
   handleChange(val = []) {
@@ -19,16 +35,20 @@ class SkillsQuestion extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { skillsCategoriesField, currentProjectData, options, getValue, onChange, setValue, name } = this.props
-    const prevSelectedCategories = _.get(prevProps.currentProjectData, skillsCategoriesField, [])
-    const selectedCategories = _.get(currentProjectData, skillsCategoriesField, [])
+    const { categoriesField, categoriesMapping, currentProjectData, getValue, onChange, setValue, name } = this.props
+    const { options } = this.state
+    const prevSelectedCategories = _.get(prevProps.currentProjectData, categoriesField, [])
+    const selectedCategories = _.get(currentProjectData, categoriesField, [])
 
     if (selectedCategories.length !== prevSelectedCategories.length) {
+      const mappedPrevSelectedCategories = _.map(prevSelectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
+      const mappedSelectedCategories = _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
+
       const currentValues = getValue() || []
-      const prevAvailableOptions = options.filter(option => _.intersection(option.categories, prevSelectedCategories).length > 0)
-      const nextAvailableOptions = options.filter(option => _.intersection(option.categories, selectedCategories).length > 0)
-      const prevValues = currentValues.filter(skill => prevAvailableOptions.some(option => option.value === skill))
-      const nextValues = currentValues.filter(skill => nextAvailableOptions.some(option => option.value === skill))
+      const prevAvailableOptions = options.filter(option => _.intersection(option.categories, mappedPrevSelectedCategories).length > 0)
+      const nextAvailableOptions = options.filter(option => _.intersection(option.categories, mappedSelectedCategories).length > 0)
+      const prevValues = currentValues.filter(skill => prevAvailableOptions.some(option => option.id === skill))
+      const nextValues = currentValues.filter(skill => nextAvailableOptions.some(option => option.id === skill))
 
       if (prevValues.length < nextValues.length) {
         onChange(name, prevValues)
@@ -49,24 +69,32 @@ class SkillsQuestion extends React.Component {
       validationError,
       disabled,
       currentProjectData,
-      skillsCategoriesField,
-      options,
-      getValue
+      categoriesField,
+      categoriesMapping,
+      getValue,
+      frequentSkills
     } = this.props
+    const { options } = this.state
 
-    const selectedCategories = _.get(currentProjectData, skillsCategoriesField, [])
-    const availableOptions = options.filter(option => _.intersection(option.categories, selectedCategories).length > 0)
+    const selectedCategories = _.get(currentProjectData, categoriesField, [])
+    const mappedCategories = _.map(selectedCategories, (category) => categoriesMapping[category] ? categoriesMapping[category].toLowerCase() : null)
+    const availableOptions = options.filter(option => _.intersection(option.categories, mappedCategories).length > 0)
+
     let currentValues = getValue() || []
-    currentValues = currentValues.filter(skill => availableOptions.some(option => option.value === skill))
+    currentValues = currentValues.filter(skill => availableOptions.some(option => option.id === skill))
 
     const questionDisabled = isFormDisabled() || disabled || selectedCategories.length === 0
     const hasError = !isPristine() && !isValid()
     const errorMessage = getErrorMessage() || validationError
 
-    const checkboxGroupOptions = availableOptions.filter(option => option.isFrequent)
-    const checkboxGroupValues = currentValues.filter(val => _.some(checkboxGroupOptions, option => option.value === val ))
-    const selectGroupOptions = availableOptions.filter(option => !option.isFrequent)
-    const selectGroupValues = currentValues.filter(val => _.some(selectGroupOptions, option => option.value === val ))
+    const checkboxGroupOptions = availableOptions.filter(option => frequentSkills.indexOf(option.id) > -1).map(
+      option => Object.assign({}, option, { value: option.id })
+    )
+    const checkboxGroupValues = currentValues.filter(val => _.some(checkboxGroupOptions, option => option.id === val ))
+    const selectGroupOptions =
+      availableOptions.filter(option => frequentSkills.indexOf(option.id) === -1).map(
+        option => Object.assign({}, option, { value: option.id }))
+    const selectGroupValues = currentValues.filter(val => _.some(selectGroupOptions, option => option.id === val ))
 
     return (
       <div>
@@ -85,9 +113,9 @@ class SkillsQuestion extends React.Component {
             isSearchable
             heightAuto
             placeholder="Start typing a skill then select from the list"
-            value={selectGroupOptions.filter(option => selectGroupValues.some(val => option.value === val))}
-            getOptionLabel={(option) => option.title}
-            onChange={(val) => { this.handleChange(_.union(val.map(val => val.value), checkboxGroupValues)) }}
+            value={selectGroupOptions.filter(option => selectGroupValues.some(val => option.id=== val))}
+            getOptionLabel={(option) => option.name}
+            onChange={(val) => { this.handleChange(_.union(val.map(val => val.id), checkboxGroupValues)) }}
             noOptionsMessage={() => 'No results found'}
             options={selectGroupOptions}
             isDisabled={questionDisabled}
@@ -97,10 +125,6 @@ class SkillsQuestion extends React.Component {
       </div>
     )
   }
-}
-
-SkillsQuestion.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 
 SkillsQuestion.defaultProps = {
