@@ -23,6 +23,7 @@ import { updateProject, fireProjectDirty, fireProjectDirtyUndo } from '../../act
 import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
 import NotificationsReader from '../../../components/NotificationsReader'
+import ProjectEstimation from '../../create/components/ProjectEstimation'
 import { getProjectProductTemplates } from '../../../helpers/templates'
 
 // This handles showing a spinner while the state is being loaded async
@@ -73,7 +74,17 @@ class SpecificationContainer extends Component {
   }
 
   render() {
-    const { project, projectNonDirty, currentMemberRole, isSuperUser, processing, template, allProductTemplates, productCategories } = this.props
+    const {
+      project,
+      projectNonDirty,
+      currentMemberRole,
+      isSuperUser,
+      processing,
+      template,
+      allProductTemplates,
+      productCategories,
+      estimationQuestion,
+    } = this.props
     const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
@@ -120,6 +131,14 @@ class SpecificationContainer extends Component {
             productCategories={productCategories}
             showHidden
           />
+          {!!estimationQuestion &&
+            <ProjectEstimation
+              question={estimationQuestion}
+              template={template}
+              project={project}
+              theme="dashboard"
+            />
+          }
         </TwoColsLayout.Content>
       </TwoColsLayout>
     )

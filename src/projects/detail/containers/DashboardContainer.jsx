@@ -142,16 +142,16 @@ class DashboardContainer extends React.Component {
 
     return (
       <TwoColsLayout>
-        <NotificationsReader 
+        <NotificationsReader
           id="dashboard"
           criteria={[
-            { eventType: EVENT_TYPE.PROJECT.ACTIVE, contents: { projectId: project.id } }, 
-            { eventType: EVENT_TYPE.MEMBER.JOINED, contents: { projectId: project.id } }, 
-            { eventType: EVENT_TYPE.MEMBER.LEFT, contents: { projectId: project.id } }, 
-            { eventType: EVENT_TYPE.MEMBER.REMOVED, contents: { projectId: project.id } }, 
-            { eventType: EVENT_TYPE.MEMBER.ASSIGNED_AS_OWNER, contents: { projectId: project.id } }, 
-            { eventType: EVENT_TYPE.MEMBER.COPILOT_JOINED, contents: { projectId: project.id } }, 
-            { eventType: EVENT_TYPE.MEMBER.MANAGER_JOINED, contents: { projectId: project.id } }, 
+            { eventType: EVENT_TYPE.PROJECT.ACTIVE, contents: { projectId: project.id } },
+            { eventType: EVENT_TYPE.MEMBER.JOINED, contents: { projectId: project.id } },
+            { eventType: EVENT_TYPE.MEMBER.LEFT, contents: { projectId: project.id } },
+            { eventType: EVENT_TYPE.MEMBER.REMOVED, contents: { projectId: project.id } },
+            { eventType: EVENT_TYPE.MEMBER.ASSIGNED_AS_OWNER, contents: { projectId: project.id } },
+            { eventType: EVENT_TYPE.MEMBER.COPILOT_JOINED, contents: { projectId: project.id } },
+            { eventType: EVENT_TYPE.MEMBER.MANAGER_JOINED, contents: { projectId: project.id } },
           ]}
         />
 

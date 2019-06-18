@@ -286,6 +286,8 @@ const SpecQuestions = ({
         question: q,
         project: currentProjectData,
         template,
+        showDescription: true,
+        theme: '',
         currentWizardStep,
         hideTitle: true
       })
