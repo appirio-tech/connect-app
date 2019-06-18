@@ -72,25 +72,35 @@ const buildAddonsOptions = (q, productTemplates, productCategories) => {
 }
 
 // { isRequired, represents the overall questions section's compulsion, is also available}
-const SpecQuestions = ({
-  questions,
-  layout,
-  additionalClass,
-  project,
-  template,
-  currentWizardStep,
-  dirtyProject,
-  resetFeatures,
-  showFeaturesDialog,
-  showHidden,
-  isProjectDirty,
-  productTemplates,
-  productCategories,
-  isCreation,
-}) => {
-  const currentProjectData = isProjectDirty ? dirtyProject : project
+class SpecQuestions extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      skillOptions: []
+    }
+    this.handleSkillsLoaded = this.handleSkillsLoaded.bind(this)
+    this.renderQ = this.renderQ.bind(this)
+  }
 
-  const renderQ = (q, index) => {
+  handleSkillsLoaded(skills) {
+    this.setState({ skillOptions: skills })
+  }
+
+
+  renderQ(q, index) {
+    const {
+      project,
+      template,
+      currentWizardStep,
+      dirtyProject,
+      resetFeatures,
+      showFeaturesDialog,
+      isProjectDirty,
+      productTemplates,
+      productCategories,
+    } = this.props
+    const currentProjectData = isProjectDirty ? dirtyProject : project
+
     const elemProps = {
       name: q.fieldName,
       label: q.label,
@@ -305,9 +315,11 @@ const SpecQuestions = ({
       ChildElem = SkillsQuestion
       _.assign(elemProps, {
         currentProjectData,
-        options: q.skills,
-        skillsCategoriesField: q.skillsCategoriesField,
-        fieldName: q.fieldName
+        categoriesField: q.skills.categoriesField,
+        categoriesMapping: q.skills.categoriesMapping,
+        frequentSkills: q.skills.frequent,
+        fieldName: q.fieldName,
+        onSkillsLoaded: this.handleSkillsLoaded
       })
       break
     default:
@@ -346,37 +358,54 @@ const SpecQuestions = ({
     )
   }
 
-  return (
-    <SpecQuestionList layout={layout} additionalClass={additionalClass}>
-      {questions.map(question => ({
-        ...question,
-        visibilityForRendering: isCreation ? getVisibilityForRendering(template, question, currentWizardStep) : STEP_VISIBILITY.READ_OPTIMIZED,
-        stepState: isCreation ? geStepState(question, currentWizardStep) : STEP_STATE.PREV
-      })).filter((question) =>
-        // hide if we are in a wizard mode and question is hidden for now
-        (question.visibilityForRendering !== STEP_VISIBILITY.NONE) &&
-        // hide if question is hidden by condition
-        (!_.get(question, '__wizard.hiddenByCondition')) &&
-        // hide hidden questions, unless we not force to show them
-        (showHidden || !question.hidden) &&
-        // hide question in edit mode if configured
-        (isCreation || !question.hiddenOnEdit)
-      ).map((q, index) => (
-        _.includes(['checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
-          <Accordion
-            key={q.fieldName || `accordion-${index}`}
-            title={q.summaryTitle || q.title}
-            type={q.type}
-            options={q.options || q.skills || buildAddonsOptions(q, productTemplates, productCategories)}
-          >
-            {renderQ(q, index)}
-          </Accordion>
-        ) : (
-          renderQ(q, index)
-        )
-      ))}
-    </SpecQuestionList>
-  )
+  render() {
+    const {
+      questions,
+      layout,
+      additionalClass,
+      template,
+      currentWizardStep,
+      showHidden,
+      productTemplates,
+      productCategories,
+      isCreation,
+    } = this.props
+    const { skillOptions } = this.state
+
+    return (
+      <SpecQuestionList layout={layout} additionalClass={additionalClass}>
+        {questions.map(question => ({
+          ...question,
+          visibilityForRendering: isCreation ? getVisibilityForRendering(template, question, currentWizardStep) : STEP_VISIBILITY.READ_OPTIMIZED,
+          stepState: isCreation ? geStepState(question, currentWizardStep) : STEP_STATE.PREV
+        })).filter((question) =>
+          // hide if we are in a wizard mode and question is hidden for now
+          (question.visibilityForRendering !== STEP_VISIBILITY.NONE) &&
+          // hide if question is hidden by condition
+          (!_.get(question, '__wizard.hiddenByCondition')) &&
+          // hide hidden questions, unless we not force to show them
+          (showHidden || !question.hidden) &&
+          // hide question in edit mode if configured
+          (isCreation || !question.hiddenOnEdit)
+        ).map((q, index) => {
+          return  (
+            _.includes(['checkbox-group', 'radio-group', 'add-ons', 'textinput', 'textbox', 'numberinput', 'skills'], q.type) && q.visibilityForRendering === STEP_VISIBILITY.READ_OPTIMIZED ? (
+              <Accordion
+                key={q.fieldName || `accordion-${index}`}
+                title={q.summaryTitle || q.title}
+                type={q.type}
+                options={q.options || skillOptions || buildAddonsOptions(q, productTemplates, productCategories)}
+              >
+                {this.renderQ(q, index)}
+              </Accordion>
+            ) : (
+              this.renderQ(q, index)
+            )
+          )
+        })}
+      </SpecQuestionList>
+    )
+  }
 }
 
 SpecQuestions.propTypes = {
