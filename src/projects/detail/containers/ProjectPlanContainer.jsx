@@ -27,7 +27,6 @@ import ProjectPlanEmpty from '../components/ProjectPlanEmpty'
 import MediaQuery from 'react-responsive'
 import ProjectInfoContainer from './ProjectInfoContainer'
 import NotificationsReader from '../../../components/NotificationsReader'
-import ProjectEstimation from '../../create/components/ProjectEstimation'
 import {
   SCREEN_BREAKPOINT_MD,
   PHASE_STATUS_DRAFT,
@@ -99,8 +98,6 @@ class ProjectPlanContainer extends React.Component {
       isProcessing,
       isLoadingPhases,
       location,
-      estimationQuestion,
-      projectTemplate,
     } = this.props
 
     // manager user sees all phases
@@ -156,14 +153,6 @@ class ProjectPlanContainer extends React.Component {
           </MediaQuery>
         </TwoColsLayout.Sidebar>
         <TwoColsLayout.Content>
-          {!!estimationQuestion &&
-            <ProjectEstimation
-              question={estimationQuestion}
-              template={_.get(projectTemplate, 'scope', {})}
-              project={project}
-              theme="dashboard"
-            />
-          }
           {visiblePhases && visiblePhases.length > 0 ? (
             <ProjectStages
               {...{
