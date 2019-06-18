@@ -71,10 +71,12 @@ class FileListContainer extends Component {
       askForPermissions,
     } = this.props
 
-
+    // loads pending attachments in the FileList component, if askFormPermissions flag is off which would ideally
+    // be off on project creation form
     if (!askForPermissions && pendingAttachments && pendingAttachments.attachments) {
       pendingAttachments.attachments.forEach(a => {
-        files.push(a)
+        // assumes the logged in user as creator of the attachment
+        files.push({ ...a, createdByUser: loggedInUser, updatedByUser: loggedInUser, createdAt: new Date().toUTCString() })
       });
     }
 

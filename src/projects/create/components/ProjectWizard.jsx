@@ -492,7 +492,7 @@ class ProjectWizard extends Component {
           updateAttachment={this.updateProjectAttachment}
           removeAttachment={this.removeProjectAttachment}
           attachmentsStorePath={attachmentsStorePath}
-          canManageAttachments={!!currentMemberRole}
+          canManageAttachments={true}
         />
         <div />
         <ProjectSubmitted
