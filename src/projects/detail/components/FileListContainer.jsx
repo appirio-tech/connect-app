@@ -70,13 +70,14 @@ class FileListContainer extends Component {
       attachmentPermissions,
       askForPermissions,
     } = this.props
-
+    // we need to clone the array to avoid updating the props `files` array
+    const allFiles = []
     // loads pending attachments in the FileList component, if askFormPermissions flag is off which would ideally
     // be off on project creation form
     if (!askForPermissions && pendingAttachments && pendingAttachments.attachments) {
-      pendingAttachments.attachments.forEach(a => {
+      pendingAttachments.attachments.forEach((a, idx) => {
         // assumes the logged in user as creator of the attachment
-        files.push({ ...a, createdByUser: loggedInUser, updatedByUser: loggedInUser, createdAt: new Date().toUTCString() })
+        allFiles.push({ id: `new-${idx}`, ...a, createdByUser: loggedInUser, updatedByUser: loggedInUser, createdAt: new Date().toUTCString() })
       })
     }
 
@@ -88,17 +89,19 @@ class FileListContainer extends Component {
       if (allMembers[file.createdBy]) {
         file.createdByUser = allMembers[file.createdBy]
       }
+      allFiles.push(file)
     })
 
     return (
       <div className={additionalClass}>
         <FileList
-          files={files}
+          files={allFiles}
           onDelete={removeAttachment}
           onSave={updateAttachment}
           canModify={canManageAttachments}
           projectMembers={allMembers}
           loggedInUser={loggedInUser}
+          askForPermissions={askForPermissions}
         />
         <AddFiles successHandler={this.processUploadedFiles} storePath={attachmentsStorePath} category={category} />
 

@@ -431,18 +431,6 @@ class ProjectWizard extends Component {
     this.props.closeModal()
   }
 
-  addProjectAttachment(attachment) {
-    this.props.addProjectAttachment(this.props.project.id, attachment)
-  }
-
-  removeProjectAttachment(attachmentId) {
-    this.props.removeProjectAttachment(this.props.project.id, attachmentId)
-  }
-
-  updateProjectAttachment(attachmentId, updatedAttachment) {
-    this.props.updateProjectAttachment(this.props.project.id, attachmentId, updatedAttachment)
-  }
-
   render() {
     const { processing, showModal, userRoles, projectTemplates, projectTypes, projectId, match, templates } = this.props
     const { project, dirtyProject, wizardStep } = this.state
@@ -488,9 +476,9 @@ class ProjectWizard extends Component {
           submitBtnText="Continue"
           userRoles={ userRoles }
           onBackClick={() => this.handleStepChange(wizardStep - 1)}
-          addAttachment={this.addProjectAttachment}
-          updateAttachment={this.updateProjectAttachment}
-          removeAttachment={this.removeProjectAttachment}
+          addAttachment={this.props.addAttachment}
+          updateAttachment={this.props.updateAttachment}
+          removeAttachment={this.props.removeAttachment}
           attachmentsStorePath={attachmentsStorePath}
           canManageAttachments
         />

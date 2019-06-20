@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { renderComponent, branch, compose, withProps } from 'recompose'
 import { createProject as createProjectAction, fireProjectDirty, fireProjectDirtyUndo, clearLoadedProject } from '../../actions/project'
-import { addProjectAttachment, updateProjectAttachment, removeProjectAttachment } from '../../actions/projectAttachment'
+import { addProjectAttachment, updatePendingAttachment, removeProjectAttachment, removePendingAttachment } from '../../actions/projectAttachment'
 import { loadProjectsMetadata } from '../../../actions/templates'
 import CoderBot from '../../../components/CoderBot/CoderBot'
 import spinnerWhileLoading from '../../../components/LoadingSpinner'
@@ -85,6 +85,9 @@ class CreateContainer extends React.Component {
     this.closeWizard = this.closeWizard.bind(this)
     this.prepareProjectForCreation = this.prepareProjectForCreation.bind(this)
     this.createContainerView = this.createContainerView.bind(this)
+    this.addProjectAttachment = this.addProjectAttachment.bind(this)
+    this.removeProjectAttachment = this.removeProjectAttachment.bind(this)
+    this.updatePendingAttachment = this.updatePendingAttachment.bind(this)
 
     if (!props.userRoles || props.userRoles.length <= 0) {
       window.location = `${ACCOUNTS_APP_LOGIN_URL}?retUrl=${window.location.href}`
@@ -371,8 +374,25 @@ class CreateContainer extends React.Component {
         }
         projectTemplates={this.props.templates.projectTemplates}
         projectTypes={this.props.templates.projectTypes}
+        addAttachment={this.addProjectAttachment}
+        updateAttachment={this.updatePendingAttachment}
+        removeAttachment={this.removeProjectAttachment}
       />
     )
+  }
+
+  addProjectAttachment(attachment) {
+    this.props.addProjectAttachment(this.props.project.id, attachment)
+  }
+
+  removeProjectAttachment(attachmentId) {
+    const attachmentIdx = attachmentId.substr(4)
+    this.props.removePendingAttachment(attachmentIdx)
+  }
+
+  updatePendingAttachment(attachmentId, updatedAttachment) {
+    const attachmentIdx = attachmentId.substr(4)
+    this.props.updatePendingAttachment(attachmentIdx, updatedAttachment)
   }
 
   render() {
@@ -426,8 +446,9 @@ const actionCreators = {
   clearLoadedProject,
   loadProjectsMetadata,
   addProjectAttachment,
-  updateProjectAttachment,
+  updatePendingAttachment,
   removeProjectAttachment,
+  removePendingAttachment,
 }
 
 export default withRouter(connect(mapStateToProps, actionCreators)(CreateContainer))
