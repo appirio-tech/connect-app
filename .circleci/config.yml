@@ -97,6 +97,13 @@ jobs:
       LOGICAL_ENV: "prod"
     steps: *deploy_steps
 
+  deployQAdev:
+    <<: *deploy_defaults
+    environment:
+      DEPLOY_ENV: "DEV"
+      LOGICAL_ENV: "qadev"
+    steps: *deploy_steps
+
 workflows:
   version: 2
   build:
@@ -127,3 +134,11 @@ workflows:
           filters:
             branches:
               only: master
+
+      - deployQAdev:
+          context : org-global
+          requires:
+            - build-dev
+          filters:
+            branches:
+              only: ['dev-qa']
