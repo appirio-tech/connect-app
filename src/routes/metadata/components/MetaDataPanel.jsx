@@ -590,12 +590,6 @@ class MetaDataPanel extends React.Component {
   renderProductPreview({ template }) {
     const { templates, previewProject } = this.props
 
-    // we normalize it for the EditProjectForm component
-    const normalizedTemplate = {
-      ..._.omit(template, 'sections'),
-      sections: template.sections
-    }
-
     return (
       <div className="content template-preview">
         <div className="header">
@@ -605,7 +599,7 @@ class MetaDataPanel extends React.Component {
           shouldUpdateTemplate
           project={previewProject}
           saving={false}
-          template={normalizedTemplate}
+          template={template}
           productTemplates={templates.productTemplates}
           productCategories={templates.productCategories}
           isEdittable

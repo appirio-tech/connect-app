@@ -11,10 +11,12 @@ import ScopeAndSpecificationContainer from './ScopeAndSpecificationContainer'
 import { getProjectProductTemplates } from '../../../helpers/templates'
 
 const SpecificationContainer = (props) => {
-  // as for old projects we use productTemplate instead of projectTemplate
-  // so we normalize template scheme for other components here
-  const template = _.omit(props.productTemplates[0].template, 'sections')
-  template.sections = props.productTemplates[0].template.sections
+  if (!props.productTemplates || !props.productTemplates[0]) {
+    return null
+  }
+
+  // for old projects we use productTemplate instead of projectTemplate
+  const template = props.productTemplates[0].template
 
   return (
     <ScopeAndSpecificationContainer
