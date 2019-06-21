@@ -196,7 +196,7 @@ class ProjectStage extends React.Component{
     const product = _.get(phase, 'products[0]')
     const productNonDirty = _.get(phaseNonDirty, 'products[0]')
     const template = {
-      sections: _.get(productTemplate, 'template.questions', [])
+      sections: _.get(productTemplate, 'template.sections', [])
     }
     const projectPhaseAnchor = `phase-${phase.id}-posts`
 
