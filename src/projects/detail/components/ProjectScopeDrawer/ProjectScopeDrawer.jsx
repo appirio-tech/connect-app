@@ -49,11 +49,11 @@ class ProjectScopeDrawer extends Component {
   removeProjectAttachment(attachmentId) {
     this.props.removeProjectAttachment(this.props.project.id, attachmentId)
   }
- 
+
   render() {
     const {
       project,
-      projectTemplate,
+      template,
       processing,
       fireProjectDirty,
       fireProjectDirtyUndo,
@@ -64,13 +64,9 @@ class ProjectScopeDrawer extends Component {
       onRequestChange,
     } = this.props
 
-    const template = _.cloneDeep(projectTemplate.scope)
-
     const editPriv = isSuperUser ? isSuperUser : !!currentMemberRole
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/`
-    const projectTemplateScope = _.cloneDeep(_.get(projectTemplate, 'scope', {}))
-    let haveEstimateQuestion = false
-    haveEstimateQuestion = _.filter(_.get(projectTemplateScope, 'sections', []), {id: 'summary-final'}).length > 0
+    const haveEstimateQuestion = _.some(_.get(template, 'sections', []), {id: 'summary-final'})
 
     if (haveEstimateQuestion) {
       template.wizard = null
@@ -83,7 +79,7 @@ class ProjectScopeDrawer extends Component {
         lastSection.subSections.shift()
       }
     }
-    
+
 
     return (
       <Drawer {...this.props}>

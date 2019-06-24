@@ -140,6 +140,18 @@ class DashboardContainer extends React.Component {
 
     const projectTemplate = project && project.templateId && projectTemplates ? (getProjectTemplateById(projectTemplates, project.templateId)) : null
 
+    let template
+    if (project.version === 'v3') {
+      template = _.get(projectTemplate, 'scope')
+    } else {
+      template = _.get(productTemplates[0], 'template')
+      // normalize template JSON
+      template = {
+        ..._.omit(template, ['questions']),
+        sections: template.questions,
+      }
+    }
+
     // system notifications
     const notReadNotifications = filterReadNotifications(notifications)
     const unreadProjectUpdate = filterProjectNotifications(filterNotificationsByProjectId(notReadNotifications, project.id))
@@ -211,7 +223,7 @@ class DashboardContainer extends React.Component {
             onRequestChange={(open) => this.setState({open})}
             isSuperUser={isSuperUser}
             project={project}
-            projectTemplate={projectTemplate}
+            template={template}
             updateProject={updateProject}
             processing={isProcessing}
             fireProjectDirty={fireProjectDirty}
