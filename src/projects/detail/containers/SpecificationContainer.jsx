@@ -4,7 +4,6 @@
  * NOTE data is loaded by the parent ProjectDetail component
  */
 import React from 'react'
-import _ from 'lodash'
 import { connect } from 'react-redux'
 
 import ScopeAndSpecificationContainer from './ScopeAndSpecificationContainer'
