@@ -195,9 +195,7 @@ class ProjectStage extends React.Component{
     const productTemplate = _.find(productTemplates, { id: _.get(phase, 'products[0].templateId') })
     const product = _.get(phase, 'products[0]')
     const productNonDirty = _.get(phaseNonDirty, 'products[0]')
-    const template = {
-      sections: _.get(productTemplate, 'template.questions', [])
-    }
+    const template = productTemplate.template
     const projectPhaseAnchor = `phase-${phase.id}-posts`
 
     const attachmentsStorePath = `${PROJECT_ATTACHMENTS_FOLDER}/${project.id}/phases/${phase.id}/products/${product.id}`
@@ -209,7 +207,7 @@ class ProjectStage extends React.Component{
     const unreadPostNotifications = filterNotificationsByPosts(unreadNotification, _.get(feed, 'posts', []))
     const unreadTimelineNotifications = timeline ? filterNotificationsByCriteria(unreadNotification, buildPhaseTimelineNotificationsCriteria(timeline)) : []
     const unreadSpecificationNotifications = filterNotificationsByCriteria(unreadNotification, buildPhaseSpecifiationNotificationsCriteria(phase))
-    
+
     const hasNotifications = {
       timeline: unreadTimelineNotifications.length > 0,
       posts: unreadPostNotifications.length > 0,
