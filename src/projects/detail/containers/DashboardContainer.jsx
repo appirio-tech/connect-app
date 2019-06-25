@@ -145,11 +145,6 @@ class DashboardContainer extends React.Component {
       template = _.get(projectTemplate, 'scope')
     } else {
       template = _.get(productTemplates[0], 'template')
-      // normalize template JSON
-      template = {
-        ..._.omit(template, ['questions']),
-        sections: template.questions,
-      }
     }
 
     // system notifications
