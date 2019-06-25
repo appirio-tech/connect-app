@@ -6,6 +6,7 @@ import {
   ADD_PROJECT_ATTACHMENT_PENDING, ADD_PROJECT_ATTACHMENT_SUCCESS, ADD_PROJECT_ATTACHMENT_FAILURE,
   UPDATE_PROJECT_ATTACHMENT_PENDING, UPDATE_PROJECT_ATTACHMENT_SUCCESS, UPDATE_PROJECT_ATTACHMENT_FAILURE,
   REMOVE_PROJECT_ATTACHMENT_PENDING, REMOVE_PROJECT_ATTACHMENT_SUCCESS, REMOVE_PROJECT_ATTACHMENT_FAILURE,
+  REMOVE_PENDING_ATTACHMENT, UPDATE_PENDING_ATTACHMENT,
   ADD_PRODUCT_ATTACHMENT_PENDING, ADD_PRODUCT_ATTACHMENT_SUCCESS, ADD_PRODUCT_ATTACHMENT_FAILURE,
   UPDATE_PRODUCT_ATTACHMENT_PENDING, UPDATE_PRODUCT_ATTACHMENT_SUCCESS, UPDATE_PRODUCT_ATTACHMENT_FAILURE,
   REMOVE_PRODUCT_ATTACHMENT_PENDING, REMOVE_PRODUCT_ATTACHMENT_SUCCESS, REMOVE_PRODUCT_ATTACHMENT_FAILURE,
@@ -343,7 +344,8 @@ export const projectState = function (state=initialState, action) {
       error: false,
       project: restoredProject,
       projectNonDirty: _.cloneDeep(restoredProject),
-      updateExisting: action.payload.updateExisting
+      updateExisting: action.payload.updateExisting,
+      attachmentsAwaitingPermission: null
     })
   }
 
@@ -394,12 +396,18 @@ export const projectState = function (state=initialState, action) {
       attachmentsAwaitingPermission: { $set: null }
     })
 
-  case UPLOAD_PROJECT_ATTACHMENT_FILES:
-    return {
-      ...state,
-      attachmentsAwaitingPermission: action.payload,
-      attachmentPermissions: null
+  case UPLOAD_PROJECT_ATTACHMENT_FILES: {
+    let query = {}
+    if (state.attachmentsAwaitingPermission && state.attachmentsAwaitingPermission.attachments) {
+      query = { attachments: { $push: action.payload.attachments } }
+    } else {
+      query = { $set : action.payload }
     }
+    return update(state, {
+      attachmentsAwaitingPermission: query,
+      attachmentPermissions: { $set : null }
+    })
+  }
 
   case DISCARD_PROJECT_ATTACHMENT:
     return {
@@ -489,6 +497,26 @@ export const projectState = function (state=initialState, action) {
       processingAttachments: { $set : false },
       project: { attachments: { $splice: [[idx, 1]] } },
       projectNonDirty: { attachments: { $splice: [[idx, 1]] } }
+    })
+  }
+
+  case REMOVE_PENDING_ATTACHMENT: {
+    // action.payload will contain id of the attachment
+    // that was just removed
+    const idx = action.payload
+    return update(state, {
+      processingAttachments: { $set : false },
+      attachmentsAwaitingPermission: { attachments : { $splice: [[idx, 1]] } },
+    })
+  }
+
+  case UPDATE_PENDING_ATTACHMENT: {
+    const idx = action.payload.attachmentIdx
+    const existingAttachment = _.get(state.attachmentsAwaitingPermission, `attachments[${idx}]`)
+    const updatedAttachment = _.assign({}, existingAttachment, action.payload.updatedAttachment)
+    return update(state, {
+      processingAttachments: { $set : false },
+      attachmentsAwaitingPermission: { attachments : { $splice: [[idx, 1, updatedAttachment]] } },
     })
   }
 
