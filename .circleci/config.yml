@@ -13,7 +13,7 @@ install_dependency: &install_dependency
 install_deploysuite: &install_deploysuite
           name: Installation of install_deploysuite.
           command: |
-            git clone --branch v1.3 https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
+            git clone --branch v1.4 https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
             cp ./../buildscript/master_deploy.sh .
             cp ./../buildscript/buildenv.sh .
             cp ./../buildscript/awsconfiguration.sh .
@@ -36,75 +36,66 @@ workspace_persist: &workspace_persist
             - dist 
 workspace_attach: &workspace_attach
           at: ./workspace
+
+build_steps: &build_steps
+      # Initialization.
+      - checkout
+      - setup_remote_docker
+      - run: *install_dependency
+      - run: *install_deploysuite
+      - restore_cache: *restore_cache_settings_for_build
+      - run: npm install
+      - save_cache: *save_cache_settings
+      - run: 
+          name: "configuring environment"
+          command: |
+            ./awsconfiguration.sh $DEPLOY_ENV
+            ./buildenv.sh -e $DEPLOY_ENV -b ${LOGICAL_ENV}-connectapp-buildvar
+      - run: *running_npm_build
+      - persist_to_workspace: *workspace_persist
+
+deploy_steps: &deploy_steps
+      - checkout
+      - attach_workspace: *workspace_attach
+      - run: *install_deploysuite      
+      - deploy:
+          name: Running MasterScript
+          command: |
+            ./awsconfiguration.sh $DEPLOY_ENV
+            source awsenvconf
+            ./buildenv.sh -e $DEPLOY_ENV -b ${LOGICAL_ENV}-connectapp-deployvar
+            source buildenvvar
+            ./master_deploy.sh -d CFRONT -e $DEPLOY_ENV -c false
+
 jobs:
   build-dev:
     <<: *defaults
-    steps:
-      # Initialization.
-      - checkout
-      - setup_remote_docker
-      - run: *install_dependency
-      - run: *install_deploysuite
-      - restore_cache: *restore_cache_settings_for_build
-      - run: npm install
-      - save_cache: *save_cache_settings
-      - run: 
-          name: "configuring environment"
-          command: |
-            ./awsconfiguration.sh DEV
-            ./buildenv.sh -e DEV -b dev-connectapp-buildvar     
-      - run: *running_npm_build
-      - persist_to_workspace: *workspace_persist
-      
+    environment:
+      DEPLOY_ENV: "DEV"
+      LOGICAL_ENV: "dev"
+    steps: *build_steps
+
   build-prod:
     <<: *defaults
-    steps:
-      # Initialization.
-      - checkout
-      - setup_remote_docker
-      - run: *install_dependency
-      - run: *install_deploysuite
-      - restore_cache: *restore_cache_settings_for_build
-      - run: npm install
-      - save_cache: *save_cache_settings
-      - run: 
-          name: "configuring environment"
-          command: |
-            ./awsconfiguration.sh PROD
-            ./buildenv.sh -e PROD -b prod-connectapp-buildvar     
-      - run: *running_npm_build
-      - persist_to_workspace: *workspace_persist
+    environment:
+      DEPLOY_ENV: "PROD"
+      LOGICAL_ENV: "prod"
+    steps: *build_steps
 
   # Just tests commited code.
   deployDev:
     <<: *deploy_defaults
-    steps:
-      - checkout
-      - attach_workspace: *workspace_attach
-      - run: *install_deploysuite      
-      - deploy:
-          name: Running MasterScript
-          command: |
-            ./awsconfiguration.sh DEV
-            source awsenvconf
-            ./buildenv.sh -e DEV -b dev-connectapp-deployvar
-            source buildenvvar
-            ./master_deploy.sh -d CFRONT -e DEV -c false
+    environment:
+      DEPLOY_ENV: "DEV"
+      LOGICAL_ENV: "dev"
+    steps: *deploy_steps
 
   deployProd:
     <<: *deploy_defaults
-    steps:
-      - checkout
-      - attach_workspace: *workspace_attach
-      - run: *install_deploysuite      
-      - deploy:
-          name: Running MasterScript
-          command: |
-            ./awsconfiguration.sh PROD
-            source awsenvconf
-            ./buildenv.sh -e PROD -b prod-connectapp-deployvar
-            source buildenvvar
-            ./master_deploy.sh -d CFRONT -e PROD -c true
+    environment:
+      DEPLOY_ENV: "PROD"
+      LOGICAL_ENV: "prod"
+    steps: *deploy_steps
 
 workflows:
   version: 2

@@ -265,7 +265,7 @@ class MetaDataPanel extends React.Component {
         return { scope: { sections: sectionsDefaultValue }, phases: phasesDefaultValue }
       }
       if (metadataType === 'productTemplate') {
-        return { template: { questions: sectionsDefaultValue } }
+        return { template: { sections: sectionsDefaultValue } }
       }
       if (metadataType === 'projectType') {
         return { metadata: {} }
@@ -590,13 +590,6 @@ class MetaDataPanel extends React.Component {
   renderProductPreview({ template }) {
     const { templates, previewProject } = this.props
 
-    // as productTemplate's template has `questions` root element instead of `sections`
-    // we normalize it for the EditProjectForm component
-    const normalizedTemplate = {
-      ..._.omit(template, 'questions'),
-      sections: template.questions
-    }
-
     return (
       <div className="content template-preview">
         <div className="header">
@@ -606,7 +599,7 @@ class MetaDataPanel extends React.Component {
           shouldUpdateTemplate
           project={previewProject}
           saving={false}
-          template={normalizedTemplate}
+          template={template}
           productTemplates={templates.productTemplates}
           productCategories={templates.productCategories}
           isEdittable

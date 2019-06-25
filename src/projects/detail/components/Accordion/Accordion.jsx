@@ -23,7 +23,9 @@ const TYPE = {
   TEXTINPUT: 'textinput',
   TEXTBOX: 'textbox',
   NUMBERINPUT: 'numberinput',
-  SKILLS: 'skills'
+  SKILLS: 'skills',
+  SLIDER_RADIO: 'slide-radiogroup',
+  SELECT_DROPDOWN: 'select-dropdown'
 }
 
 /**
@@ -114,7 +116,9 @@ class Accordion extends React.Component {
     case TYPE.CHECKBOX_GROUP: return value.map(mapValue).join(', ')
     case TYPE.RADIO_GROUP: return mapValue(value)
     case TYPE.ADD_ONS: return `${value.length} selected`
-    case TYPE.SKILLS: return value.map(mapValue).join(', ')
+    case TYPE.SKILLS: return `${value.length} selected`
+    case TYPE.SLIDER_RADIO: return mapValue(value)
+    case TYPE.SELECT_DROPDOWN: return mapValue(value)
     default: return value
     }
   }

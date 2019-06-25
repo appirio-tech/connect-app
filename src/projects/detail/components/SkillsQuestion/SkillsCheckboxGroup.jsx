@@ -14,7 +14,7 @@ class SkillsCheckboxGroup extends Component {
     const value = []
     this.props.options.forEach((option, key) => {
       if (this['element-' + key].checked) {
-        value.push(option.value)
+        value.push(option)
       }
     })
     this.props.setValue(value)
@@ -26,7 +26,7 @@ class SkillsCheckboxGroup extends Component {
     const curValue = getValue() || []
 
     const renderOption = (cb, key) => {
-      const checked = curValue.includes(cb.value)
+      const checked = _.some(curValue, cb)
       const checkboxDisabled = cb.disabled || disabled
       const rClass = cn('tc-checkbox-group-item', { disabled, selected: checked })
       const id = name+'-opt-'+key
@@ -45,7 +45,7 @@ class SkillsCheckboxGroup extends Component {
             />
             <label htmlFor={id}/>
           </div>
-          <label htmlFor={id}>{cb.title}</label>
+          <label htmlFor={id}>{cb.name}</label>
           {
             cb.description && checked && <div styleName="item-description"> {cb.description} </div>
           }

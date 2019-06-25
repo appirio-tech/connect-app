@@ -97,7 +97,7 @@ class ProjectPlanContainer extends React.Component {
       phasesTopics,
       isProcessing,
       isLoadingPhases,
-      location
+      location,
     } = this.props
 
     // manager user sees all phases
