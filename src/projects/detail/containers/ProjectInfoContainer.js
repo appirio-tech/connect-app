@@ -534,7 +534,7 @@ class ProjectInfoContainer extends React.Component {
             noDots
             withHash
           />
-          {enableFileUpload &&
+          {(enableFileUpload || attachments.length > 0) &&
             <FileLinksMenu
               links={attachments}
               title="Files"
