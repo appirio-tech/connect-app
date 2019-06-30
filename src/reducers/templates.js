@@ -16,6 +16,9 @@ import {
   PROJECT_TEMPLATES_SORT,
   PRODUCT_TEMPLATES_SORT,
   PROJECT_TYPES_SORT,
+  FORM_SORT,
+  PLAN_CONFIG_SORT,
+  PRICE_CONFIG_SORT,
   MILESTONE_TEMPLATES_SORT,
   CREATE_PROJECT_TEMPLATE_PENDING,
   CREATE_PROJECT_TEMPLATE_FAILURE,
@@ -26,6 +29,21 @@ import {
   CREATE_PROJECT_TYPE_FAILURE,
   CREATE_PRODUCT_TEMPLATE_SUCCESS,
   CREATE_PROJECT_TYPE_SUCCESS,
+  CREATE_FORM_SUCCESS,
+  CREATE_FORM_PENDING,
+  CREATE_FORM_FAILURE,
+  CREATE_PLAN_CONFIG_SUCCESS,
+  CREATE_PLAN_CONFIG_PENDING,
+  CREATE_PLAN_CONFIG_FAILURE,
+  CREATE_PRICE_CONFIG_SUCCESS,
+  CREATE_PRICE_CONFIG_PENDING,
+  CREATE_PRICE_CONFIG_FAILURE,
+  LOAD_VERSION_OPTION_LIST_PENDING,
+  LOAD_VERSION_OPTION_LIST_SUCCESS,
+  LOAD_PROJECTS_METADATA_REVISION_LIST_PENDING,
+  LOAD_PROJECTS_METADATA_REVISION_LIST_SUCCESS,
+  LOAD_PROJECT_METADATA_WITH_VERSION_PENDING,
+  LOAD_PROJECT_METADATA_WITH_VERSION_SUCCESS,
   CREATE_MILESTONE_TEMPLATE_SUCCESS,
   CREATE_MILESTONE_TEMPLATE_PENDING,
   CREATE_MILESTONE_TEMPLATE_FAILURE,
@@ -51,6 +69,14 @@ export const initialState = {
   productTemplates: null,
   productCategories: null,
   milestoneTemplates: null,
+  forms: null,
+  planConfigs: null,
+  priceConfigs: null,
+  versionOptions: null,
+  metadataRevisions: null,
+  versionMetadata: null,
+  metadataRevisionsLoading: false,
+  versionOptionsLoading: false,
   isLoading: false,
   isRemoving: false,
   error: false,
@@ -59,12 +85,13 @@ export const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
   case LOAD_PROJECTS_METADATA_PENDING:
+  case LOAD_PROJECT_METADATA_WITH_VERSION_PENDING:
     return {
       ...state,
       isLoading: true
     }
   case LOAD_PROJECTS_METADATA_SUCCESS: {
-    const { projectTemplates, projectTypes, productTemplates, productCategories, milestoneTemplates } = action.payload
+    const { projectTemplates, projectTypes, productTemplates, productCategories, milestoneTemplates, forms, planConfigs, priceConfigs } = action.payload
     return {
       ...state,
       projectTemplates: _.orderBy(projectTemplates, ['updatedAt'], ['desc']),
@@ -72,14 +99,48 @@ export default function(state = initialState, action) {
       productTemplates: _.orderBy(productTemplates, ['updatedAt'], ['desc']),
       productCategories: _.orderBy(productCategories, ['updatedAt'], ['desc']),
       milestoneTemplates: _.orderBy(milestoneTemplates, ['updatedAt'], ['desc']),
+      forms: _.orderBy(forms, ['updatedAt'], ['desc']),
+      planConfigs: _.orderBy(planConfigs, ['updatedAt'], ['desc']),
+      priceConfigs: _.orderBy(priceConfigs, ['updatedAt'], ['desc']),
       isLoading: false,
     }
   }
+  case LOAD_PROJECT_METADATA_WITH_VERSION_SUCCESS:
+    return {
+      ...state,
+      versionMetadata: action.payload,
+      isLoading: false,
+    }
+  case LOAD_VERSION_OPTION_LIST_PENDING:
+    return {
+      ...state,
+      versionOptionsLoading: true
+    }
+  case LOAD_VERSION_OPTION_LIST_SUCCESS:
+    return {
+      ...state,
+      versionOptions: action.payload,
+      versionOptionsLoading: false,
+    }
+  case LOAD_PROJECTS_METADATA_REVISION_LIST_PENDING:
+    return {
+      ...state,
+      metadataRevisionsLoading: true
+    }
+  case LOAD_PROJECTS_METADATA_REVISION_LIST_SUCCESS:
+    return {
+      ...state,
+      metadataRevisions: _.orderBy(action.payload, ['updatedAt'], ['desc']),
+      metadataRevisionsLoading: false,
+    }
   case ADD_PROJECTS_METADATA_PENDING:
   case CREATE_PROJECT_TEMPLATE_PENDING:
   case CREATE_PRODUCT_TEMPLATE_PENDING:
   case CREATE_PROJECT_TYPE_PENDING:
   case CREATE_MILESTONE_TEMPLATE_PENDING:
+  case CREATE_FORM_PENDING:
+  case CREATE_PLAN_CONFIG_PENDING:
+  case CREATE_PRICE_CONFIG_PENDING:
   case UPDATE_PROJECTS_METADATA_PENDING:
     return {
       ...state,
@@ -99,6 +160,9 @@ export default function(state = initialState, action) {
   case CREATE_PRODUCT_TEMPLATE_FAILURE:
   case CREATE_PROJECT_TYPE_FAILURE:
   case CREATE_MILESTONE_TEMPLATE_FAILURE:
+  case CREATE_FORM_FAILURE:
+  case CREATE_PLAN_CONFIG_FAILURE:
+  case CREATE_PRICE_CONFIG_FAILURE:
     Alert.error(`PROJECT METADATA CREATE FAILED: ${action.payload.response.data.result.content.message}`)
     return {
       ...state,
@@ -128,6 +192,9 @@ export default function(state = initialState, action) {
   case CREATE_PRODUCT_TEMPLATE_SUCCESS:
   case CREATE_PROJECT_TYPE_SUCCESS:
   case CREATE_MILESTONE_TEMPLATE_SUCCESS:
+  case CREATE_FORM_SUCCESS:
+  case CREATE_PLAN_CONFIG_SUCCESS:
+  case CREATE_PRICE_CONFIG_SUCCESS:
     Alert.success('PROJECT METADATA CREATE SUCCESS')
     return {
       ...state,
@@ -197,6 +264,30 @@ export default function(state = initialState, action) {
     return {
       ...state,
       projectTypes: _.orderBy(state.projectTypes, [`${fieldName}`], [`${order}`]),
+    }
+  }
+  case FORM_SORT: {
+    const fieldName = action.payload.fieldName
+    const order = action.payload.order
+    return {
+      ...state,
+      forms: _.orderBy(state.forms, [`${fieldName}`], [`${order}`]),
+    }
+  }
+  case PLAN_CONFIG_SORT: {
+    const fieldName = action.payload.fieldName
+    const order = action.payload.order
+    return {
+      ...state,
+      planConfigs: _.orderBy(state.planConfigs, [`${fieldName}`], [`${order}`]),
+    }
+  }
+  case PRICE_CONFIG_SORT: {
+    const fieldName = action.payload.fieldName
+    const order = action.payload.order
+    return {
+      ...state,
+      priceConfigs: _.orderBy(state.priceConfigs, [`${fieldName}`], [`${order}`]),
     }
   }
   case MILESTONE_TEMPLATES_SORT: {

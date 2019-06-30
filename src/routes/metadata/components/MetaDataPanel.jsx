@@ -8,14 +8,17 @@ import ace from 'brace'
 import 'brace/mode/json'
 import 'brace/theme/github'
 import { JsonEditor } from 'jsoneditor-react'
+import Modal from 'react-modal'
 import 'jsoneditor-react/es/editor.min.css'
 import _ from 'lodash'
+import moment from 'moment'
 import update from 'react-addons-update'
 import SwitchButton from 'appirio-tech-react-components/components/SwitchButton/SwitchButton'
 import FillProjectDetails from '../../../projects/create/components/FillProjectDetails'
 import EditProjectForm from '../../../projects/detail/components/EditProjectForm'
 import TemplateForm from './TemplateForm'
 import CoderBroken from '../../../assets/icons/coder-broken.svg'
+import XMarkIcon from '../../../assets/icons/x-mark.svg'
 
 import './MetaDataPanel.scss'
 import FullScreenJSONEditor from './FullScreenJSONEditor'
@@ -208,6 +211,8 @@ class MetaDataPanel extends React.Component {
       fields: [],
       isFullScreen: false,
       editMode: false,
+      metadataWithVersion: false,
+      modalOpen: false,
     }
     this.init = this.init.bind(this)
     this.getMetadata = this.getMetadata.bind(this)
@@ -226,6 +231,13 @@ class MetaDataPanel extends React.Component {
     this.toggleEditMode = this.toggleEditMode.bind(this)
     this.renderProjectPreview = this.renderProjectPreview.bind(this)
     this.renderProductPreview = this.renderProductPreview.bind(this)
+    this.getVersionOptions = this.getVersionOptions.bind(this)
+    this.onCreateNewVersion = this.onCreateNewVersion.bind(this)
+    this.onLoadRevisionData = this.onLoadRevisionData.bind(this)
+    this.onChangeDropdown = this.onChangeDropdown.bind(this)
+    this.toggleModalOpen = this.toggleModalOpen.bind(this)
+    this.renderModal = this.renderModal.bind(this)
+    this.setJsonEditorRef = instance => this.jsonEditor = instance
   }
 
   componentDidMount() {
@@ -244,16 +256,24 @@ class MetaDataPanel extends React.Component {
 
   init(props) {
     const { metadataType, isNew, templates } = props
+    const keys = ['form', 'planConfig', 'priceConfig']
+    const metadataWithVersion = keys.includes(metadataType)
+    const fields = this.getFields(props, metadataWithVersion)
+    const metadata = this.getMetadata(props)
+    if(this.props.getRevisionList && metadata.revision && !this.props.metadataRevisionsLoading) {
+      this.props.getRevisionList(metadataType, metadata.key, metadata.version)
+    }
     this.setState({
       project: {
         details: {appDefinition: {}}, version: 'v2'
       },
       dirtyProject: {details: {}, version: 'v2'},
-      fields: this.getFields(props),
-      metadata: this.getMetadata(props),
+      fields,
+      metadata,
       metadataType,
       isNew,
       isUpdating: templates.isLoading,
+      metadataWithVersion,
     })
   }
 
@@ -273,6 +293,9 @@ class MetaDataPanel extends React.Component {
       if (metadataType === 'milestoneTemplate') {
         return { metadata: {} }
       }
+      if (metadataType === 'form' || metadataType === 'planConfig' || metadataType === 'priceConfig') {
+        return { config: {} }
+      }
       return {}
     }
     return metadata ? metadata : dirtyMetadata
@@ -281,6 +304,9 @@ class MetaDataPanel extends React.Component {
   getResourceNameFromType(type) {
     if (type === 'productCategory') {
       return 'productCategories'
+    }
+    if (this.state.metadataWithVersion) {
+      return type
     }
     return type + 's'
   }
@@ -304,11 +330,20 @@ class MetaDataPanel extends React.Component {
     })
   }
 
+  getVersionOptions(versionOptions) {
+    return _.map(versionOptions, (versionOption) => {
+      return {
+        value: _.toString(versionOption.version),
+        title: _.toString(versionOption.version)
+      }
+    })
+  }
+
   /**
    * get all fields of metadata
    */
-  getFields(props) {
-    const { metadataType, templates } = props
+  getFields(props, metadataWithVersion) {
+    const { metadataType, templates, isNew } = props
     let fields = []
     const metadata = this.getMetadata(props)
     if (metadataType === 'productTemplate') {
@@ -357,6 +392,22 @@ class MetaDataPanel extends React.Component {
         { key: 'disabled', type: 'checkbox' },
         { key: 'hidden', type: 'checkbox' },
       ])
+    } else if (metadataWithVersion) {
+      if(isNew || !metadata.version ) {
+        fields = fields.concat([
+          { key: 'key', type: 'text' },
+          { key: 'config', type: 'jsonfullscreen' },
+        ])
+      } else {
+        const projectVersionOptions = this.getVersionOptions(templates.versionOptions)
+        const value = _.toString(metadata.version)
+        fields = fields.concat([
+          { key: 'key', type: 'text' },
+          { key: 'version', type: 'dropdown', options: projectVersionOptions, value },
+          { key: 'config', type: 'jsonfullscreen' },
+          { key: 'revision', type: 'text', readonly: true },
+        ])
+      }
     } else if (metadataType === 'productCategory') {
       fields = fields.concat([
         { key: 'key', type: 'text' },
@@ -400,12 +451,51 @@ class MetaDataPanel extends React.Component {
     this.onCreateTemplate(false)
   }
 
+  onChangeDropdown(label, option) {
+    const {metadataType, metadata, metadataWithVersion } = this.state
+    const metadataResource = this.getResourceNameFromType(metadataType)
+    if (metadataWithVersion && label === 'version') {
+      window.location = `/metadata/${metadataResource}/${metadata.key}/versions/${option.value}`
+    }
+  }
+
+  onCreateNewVersion() {
+    const { fields, metadata, metadataWithVersion } = this.state
+    const newValues = _.assign({}, metadata)
+    let newfields = _.assign({}, fields)
+    if (newValues.hasOwnProperty('id')) {
+      newValues.id = null
+    }
+    if(metadataWithVersion) {
+      newValues.version = null
+      newValues.revision = null
+      newfields = _.pullAllBy(fields, [{ key: 'version'}, { key: 'revision'} ], 'key')
+    }
+    this.setState({
+      metadata: newValues,
+      isNew: true,
+      fields: newfields,
+    })
+  }
+
+  onLoadRevisionData(id) {
+    const { metadata, metadataWithVersion } = this.state
+    const { templates } = this.props
+    if(metadataWithVersion && templates.metadataRevisions) {
+      const revision = _.find(templates.metadataRevisions, r => r.id === id)
+      const newMetadata = _.assign({}, metadata, revision)
+      this.setState({ metadata: newMetadata })
+      this.jsonEditor.jsonEditor.set(newMetadata.config)
+    }
+  }
+
   /**
    * create new template
    */
   onCreateTemplate(isDuplicate) {
-    const { fields, metadata, metadataType } = this.state
+    const { fields, metadata, metadataType, metadataWithVersion } = this.state
     const newValues = _.assign({}, metadata)
+    let newfields = _.assign({}, fields)
     if (!isDuplicate) {
       _.forEach(fields, (field) => {
         switch (field.type) {
@@ -431,12 +521,18 @@ class MetaDataPanel extends React.Component {
       if (newValues.hasOwnProperty('aliases')) {
         newValues.aliases = null
       }
+      if(metadataWithVersion) {
+        newValues.version = null
+        newValues.revision = null
+        newfields = _.pullAllBy(fields, [{ key: 'version'}, { key: 'revision'} ], 'key')
+      }
       newValues.key = null
     }
 
     this.setState({
       metadata: newValues,
       isNew: true,
+      fields: newfields,
     })
   }
 
@@ -444,7 +540,7 @@ class MetaDataPanel extends React.Component {
    * save template
    */
   onSaveTemplate(id, data) {
-    const {metadataType, isNew } = this.state
+    const {metadataType, isNew, metadataWithVersion } = this.state
     const omitKeys = ['createdAt', 'createdBy', 'updatedAt', 'updatedBy']
     if (!isNew) {
       if (metadataType === 'productTemplates') {
@@ -455,7 +551,11 @@ class MetaDataPanel extends React.Component {
       this.props.updateProjectsMetadata(id, metadataResource, payload)
         .then((res) => {
           if (!res.error) {
-            this.props.loadProjectsMetadata()
+            if(metadataWithVersion && this.props.routerParams.version) {
+              this.props.getProjectMetadataWithVersion(metadataResource, payload.key, payload.version)
+            } else{
+              this.props.loadProjectsMetadata()
+            }
           }
         })
     } else {
@@ -471,6 +571,8 @@ class MetaDataPanel extends React.Component {
             const createdMetadata = res.action.payload
             if (['projectTemplate', 'productTemplate', 'milestoneTemplate'].indexOf(metadataType) !== -1) {
               window.location = `/metadata/${metadataResource}/${createdMetadata.id}`
+            } else if (metadataWithVersion) {
+              window.location = `/metadata/${metadataResource}/${createdMetadata.key}/versions/${createdMetadata.version}`
             } else {
               window.location = `/metadata/${metadataResource}/${createdMetadata.key}`
             }
@@ -483,14 +585,23 @@ class MetaDataPanel extends React.Component {
    * delete template
    */
   onDeleteTemplate(value) {
-    const {metadataType} = this.state
+    const {metadataType, metadata} = this.state
     const metadataResource = this.getResourceNameFromType(metadataType)
-    this.props.deleteProjectsMetadata(value, metadataResource)
-      .then((res) => {
-        if (!res.error) {
-          window.location = `/metadata/${metadataResource}`
-        }
-      })
+    if (this.state.metadataWithVersion) {
+      this.props.deleteProjectsMetadata(value, metadataResource, metadata)
+        .then((res) => {
+          if (!res.error) {
+            window.location = `/metadata/${metadataResource}s`
+          }
+        })
+    } else {
+      this.props.deleteProjectsMetadata(value, metadataResource)
+        .then((res) => {
+          if (!res.error) {
+            window.location = `/metadata/${metadataResource}`
+          }
+        })
+    }
   }
 
   /**
@@ -505,13 +616,17 @@ class MetaDataPanel extends React.Component {
   }
 
   onJSONEdit(jsObject) {
-    const { metadataType } = this.state
+    const { metadataType, metadataWithVersion } = this.state
     if (metadataType === 'productTemplate') {
       const updateQuery = { template : { $set : jsObject } }
       this.setState(update(this.state, { metadata: updateQuery }))
     }
     if (metadataType === 'projectTemplate') {
       const updateQuery = { scope : { $set : jsObject } }
+      this.setState(update(this.state, { metadata: updateQuery }))
+    }
+    if(metadataWithVersion) {
+      const updateQuery = { config : { $set : jsObject } }
       this.setState(update(this.state, { metadata: updateQuery }))
     }
   }
@@ -526,6 +641,10 @@ class MetaDataPanel extends React.Component {
 
   toggleEditMode() {
     this.setState({ editMode: !this.state.editMode })
+  }
+
+  toggleModalOpen() {
+    this.setState({ modalOpen: !this.state.modalOpen })
   }
 
   renderProjectPreview({ metadata, template }) {
@@ -587,6 +706,72 @@ class MetaDataPanel extends React.Component {
     )
   }
 
+  renderModal() {
+    const { metadataType, templates } = this.props
+    const { modalOpen } = this.state
+    let i = 1
+    return (
+      <Modal
+        isOpen={ modalOpen }
+        className="revision-dialog-conatiner"
+        overlayClassName="management-dialog-overlay"
+        onRequestClose={this.toggleModalOpen}
+        contentLabel=""
+      >
+
+        <div className="revision-dialog">
+          <div className="dialog-title">
+            {`${metadataType} history`}
+            <span onClick={this.toggleModalOpen}><XMarkIcon/></span>
+          </div>
+
+          <div className="dialog-body">
+            <div
+              key={i}
+              className={`revision-member-layout ${i%2 === 1 ? 'dark' : ''}`}
+            >
+              <div className="memer-details">
+                <div className="member-name">
+                  Revision
+                </div>
+                <div className="member-name">
+                  Updated At
+                </div>
+                <div className="member-name">
+                  Button
+                </div>
+              </div>
+            </div>
+            {
+              (templates.metadataRevisions.map((metadataRevision) => {
+                const time = moment(metadataRevision.updatedAt)
+                i++
+                return (
+                  <div
+                    key={i}
+                    className={`revision-member-layout ${i%2 === 1 ? 'dark' : ''}`}
+                  >
+                    <div className="memer-details">
+                      <div className="member-name">
+                        {metadataRevision.revision}
+                      </div>
+                      <div className="member-name">
+                        {time.year() === moment().year() ? time.format('MMM D, h:mm a') : time.format('MMM D YYYY, h:mm a')}
+                      </div>
+                      <div className="member-name">
+                        <button type="button" className="tc-btn tc-btn-primary tc-btn-sm maximize-btn" onClick={() => this.onLoadRevisionData(metadataRevision.id)}>Load this revision</button>
+                      </div>
+                    </div>
+                  </div>
+                )
+              }))
+            }
+          </div>
+        </div>
+      </Modal>
+    )
+  }
+
   renderProductPreview({ template }) {
     const { templates, previewProject } = this.props
 
@@ -617,12 +802,14 @@ class MetaDataPanel extends React.Component {
 
   render() {
     const { isAdmin, metadataType, templates } = this.props
-    const { fields, metadata, isNew, isFullScreen } = this.state
+    const { fields, metadata, isNew, metadataWithVersion, isFullScreen } = this.state
     let template = {}
     if (metadata && metadataType === 'projectTemplate' && metadata.scope) {
       template = metadata.scope
     } else if (metadata && metadataType === 'productTemplate' && metadata.template) {
       template = metadata.template
+    } else if (metadata && metadataWithVersion && metadata.config) {
+      template = metadata.config
     }
     // TODO remove: temporary let non-admin user see metadata (they still couldn't save because server will reject)
     if (!isAdmin && isAdmin) {
@@ -640,6 +827,7 @@ class MetaDataPanel extends React.Component {
 
     return (
       <div className="meta-data-panel">
+        { metadataWithVersion && !templates.metadataRevisionsLoading && templates.metadataRevisions && this.renderModal() }
         {
           isFullScreen && (
             <FullScreenJSONEditor
@@ -658,7 +846,7 @@ class MetaDataPanel extends React.Component {
           this.renderProductPreview({ metadata, template })
         }
         <aside className="filters">
-          { (metadata || isNew) && (['projectTemplate', 'productTemplate'].indexOf(metadataType) !== -1)  && (
+          { !isFullScreen && (metadata || isNew) && (['projectTemplate', 'productTemplate'].indexOf(metadataType) !== -1)  && (
             <div className="json_editor_wrapper">
               <button type="button" className="tc-btn tc-btn-primary tc-btn-sm maximize-btn" onClick={this.enterFullScreen}>Maximize</button>
               <JsonEditor
@@ -672,7 +860,7 @@ class MetaDataPanel extends React.Component {
             </div>
           )
           }
-          { !templates.isLoading && (!!metadata || isNew ) && (
+          { !isFullScreen && !templates.isLoading && !templates.metadataRevisionsLoading && (!!metadata || isNew ) && (
             <TemplateForm
               metadata={metadata}
               metadataType={metadataType}
@@ -680,7 +868,14 @@ class MetaDataPanel extends React.Component {
               changeTemplate={this.onChangeTemplate}
               saveTemplate={this.onSaveTemplate}
               createTemplate={this.onCreateTemplate}
+              createNewVersion={this.onCreateNewVersion}
+              dropdownChange={this.onChangeDropdown}
+              enterFullScreen={this.enterFullScreen}
+              changeJSONEdit={this.onJSONEdit}
+              toggleModalOpen={this.toggleModalOpen}
+              setJsonEditorRef={this.setJsonEditorRef}
               isNew={isNew}
+              metadataWithVersion={metadataWithVersion}
               fields={fields}
               loadProjectMetadata={this.props.loadProjectsMetadata}
               productCategories={templates['productCategories']}
@@ -695,7 +890,9 @@ class MetaDataPanel extends React.Component {
 
 MetaDataPanel.defaultProps = {
   previewProject: { details: {} },
-  firePreviewProjectDirty: () => {}
+  routerParams:{},
+  firePreviewProjectDirty: () => {},
+  getProjectMetadataWithVersion: () => {},
 }
 
 MetaDataPanel.propTypes = {
@@ -706,7 +903,10 @@ MetaDataPanel.propTypes = {
   templates: PropTypes.object.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   previewProject: PropTypes.object,
+  routerParams: PropTypes.object,
   firePreviewProjectDirty: PropTypes.func,
+  getProjectMetadataWithVersion: PropTypes.func,
+  getRevisionList: PropTypes.func,
 }
 
 export default MetaDataPanel
