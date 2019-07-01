@@ -98,6 +98,8 @@ const ProjectDetailView = (props) => {
     isProcessing: props.isProcessing,
     allProductTemplates: props.allProductTemplates,
     productsTimelines: props.productsTimelines,
+    match: props.match,
+    history: props.history,
     location: props.location,
     estimationQuestion,
     projectTemplate: props.projectTemplate,

@@ -21,6 +21,7 @@ const SecondaryToolBarContainer = ({
   // choose set of menu links based on the project version
   const navLinks = project.version === 'v3' ? [
     { label: 'Dashboard', to: `/projects/${match.params.projectId}` },
+    { label: 'Messages', to: `/projects/${match.params.projectId}/messages` },
     { label: 'Scope', to: `/projects/${match.params.projectId}/scope` },
     { label: 'Project Plan', to: `/projects/${match.params.projectId}/plan` },
   ] : [

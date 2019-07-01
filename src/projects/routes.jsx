@@ -10,6 +10,7 @@ import ProjectToolBar from '../components/TopBar/ProjectToolBar'
 import FileDownload from '../components/FileDownload'
 import ProjectDetail from './detail/ProjectDetail'
 import Dashboard from './detail/containers/DashboardContainer'
+import MessagesTabContainer from './detail/containers/MessagesTabContainer'
 import Scope from './detail/containers/ScopeContainer'
 import ProjectPlan from './detail/containers/ProjectPlanContainer'
 import ProjectAddPhaseContainer from './detail/containers/ProjectAddPhaseContainer'
@@ -25,6 +26,8 @@ const ProjectDetailWithAuth = withProps({ main:
   <Switch>
     <Route exact path="/projects/:projectId" render={() => <ProjectDetail component={Dashboard} />} />
     <Route path="/projects/:projectId/status/:statusId" render={() => <ProjectDetail component={Dashboard} />} />
+    <Route path="/projects/:projectId/messages/:topicId" render={() => <ProjectDetail component={MessagesTabContainer} />} />
+    <Route path="/projects/:projectId/messages" render={() => <ProjectDetail component={MessagesTabContainer} />} />
     <Route path="/projects/:projectId/specification" render={() => <ProjectDetail component={SpecificationContainer} />} />
     <Route path="/projects/:projectId/scope" render={() => <ProjectDetail component={Scope} />} />
     <Route path="/projects/:projectId/plan" render={() => <ProjectDetail component={ProjectPlan} />} />

@@ -469,7 +469,7 @@ class ProjectInfoContainer extends React.Component {
 
     const discussions = [...feeds, ...phaseFeeds].map((feed) => ({
       title: feed.phaseName ? `${feed.phaseName}` : `${feed.title}`,
-      address: (feed.tag === PROJECT_FEED_TYPE_PRIMARY || feed.tag === PROJECT_FEED_TYPE_MESSAGES) ? `/projects/${project.id}#feed-${feed.id}` : `/projects/${project.id}/plan#phase-${feed.phaseId}-posts`,
+      address: (feed.tag === PROJECT_FEED_TYPE_PRIMARY || feed.tag === PROJECT_FEED_TYPE_MESSAGES) ? `/projects/${project.id}/messages/${feed.id}` : `/projects/${project.id}/plan#phase-${feed.phaseId}-posts`,
       noNewPage: true,
       //if PRIMARY discussion is to be loaded for project-plan page we won't attach the callback, for smoother transition to dashboard page
       onClick: !(isProjectPlan && (feed.tag === PROJECT_FEED_TYPE_PRIMARY || feed.tag === PROJECT_FEED_TYPE_MESSAGES)) && onChannelClick ? () => onChannelClick(feed) : null,
