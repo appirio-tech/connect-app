@@ -23,7 +23,7 @@ const PriceConfigsGridView = props => {
       classes: 'item-key',
       sortable: false,
       renderText: item => {
-        const url = `/metadata/priceConfig/${item.key}`
+        const url = `/metadata/priceConfigs/${item.key}/${item.version}`
         const recentlyCreated = moment().diff(item.createdAt, 'seconds') < 3600
         return (
           <Link to={url} className="spacing">
@@ -38,7 +38,7 @@ const PriceConfigsGridView = props => {
       classes: 'item-project-templates',
       sortable: false,
       renderText: item => {
-        const url = `/metadata/priceConfig/${item.key}`
+        const url = `/metadata/priceConfigs/${item.key}/${item.version}`
         return (
           <div className="spacing project-template-container">
             <div className="template-title">
@@ -110,13 +110,11 @@ const PriceConfigsGridView = props => {
   )
 }
 
-
 PriceConfigsGridView.propTypes = {
   currentUser: PropTypes.object.isRequired,
   totalCount: PropTypes.number.isRequired,
   isLoading: PropTypes.bool.isRequired,
   error: PropTypes.bool.isRequired,
-  // onPageChange: PropTypes.func.isRequired,
   sortHandler: PropTypes.func.isRequired,
   pageNum: PropTypes.number.isRequired,
   criteria: PropTypes.object.isRequired,

@@ -24,7 +24,10 @@ export function getProjectsMetadata() {
  */
 export function getProjectMetadataWithVersion(type, key, version) {
   return axios.get(`${PROJECTS_API_URL}/v4/projects/metadata/${type}/${key}/versions/${version}`)
-    .then(resp => _.get(resp.data, 'result.content', {}))
+    .then((resp) => {
+      const versionMetadata = _.get(resp.data, 'result.content', {})
+      return { type, versionMetadata }
+    })
 }
 
 /**

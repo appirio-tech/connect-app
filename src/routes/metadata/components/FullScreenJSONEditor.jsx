@@ -21,7 +21,7 @@ const FullScreenJSONEditor = ({
         value={json}
         ace={ace}
         onChange={onJSONEdit}
-        allowedModes={ ['code', 'tree', 'view']}
+        allowedModes={['code', 'tree', 'view']}
         mode="code"
         theme="ace/theme/github"
         statusBar
