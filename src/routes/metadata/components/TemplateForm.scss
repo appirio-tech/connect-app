@@ -77,34 +77,44 @@
     }
   }
 
-  .json_editor_wrapper{
+  .json_editor_wrapper {
     margin-bottom: 10px;
 
-    .label{
+    .label {
       display: block;
       float: left;
       margin-top: 12px;
     }
 
-    .maximize-btn{
+    .maximize-btn {
       float: right;
       display: block;
     }
   }
 
-  .history-field{
+  .history-field {
     display: inline-block;
     width: 100%;
 
-    .title-action{
-      @include roboto;
+    .label{
+      widows: 100%;
+      margin-bottom: 5px;
+    }
+
+    .field-value{
+      color: $tc-gray-40;
+      display: inline-block;
+      float: left;
+    }
+
+    .title-action {
       float: right;
       color: $tc-dark-blue;
       cursor: pointer;
     }
   }
 
-  .new-version-btn{
+  .new-version-btn {
     border: 1px solid $tc-gray-40;
     background: white;
   }

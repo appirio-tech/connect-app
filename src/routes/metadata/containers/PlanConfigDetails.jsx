@@ -35,13 +35,24 @@ class PlanConfigDetails extends React.Component {
 
   componentWillMount() {
     const { match } = this.props
-    if (!match.params.version && !this.props.templates && !this.props.isLoading) {
-      this.props.loadProjectsMetadata()
+    let ifNewKey = false
+    let ifNewVersion = false
+    let ifMetadataTypeChanged = false
+    if (this.props.templates.versionMetadataType && this.props.templates.versionMetadataType !== 'planConfig') {
+      ifMetadataTypeChanged = true
     }
-    if (match.params.version && match.params.key && !this.props.templates.versionMetadata && !this.props.isLoading) {
+    if (this.props.templates.versionMetadata) {
+      if (this.props.templates.versionMetadata.key !== match.params.key) {
+        ifNewKey = true
+      }
+      if (_.toString(this.props.templates.versionMetadata.version) !== match.params.version) {
+        ifNewVersion = true
+      }
+    }
+    if (match.params.version && match.params.key && (!this.props.templates.versionMetadata || ifMetadataTypeChanged || ifNewKey || ifNewVersion) && !this.props.isLoading) {
       this.props.getProjectMetadataWithVersion('planConfig', match.params.key, match.params.version)
     }
-    if (match.params.key && !this.props.versionOptionsLoading) {
+    if (match.params.key && (!this.props.templates.versionOptions || ifMetadataTypeChanged || ifNewKey) && !this.props.versionOptionsLoading) {
       this.props.getVersionOptionList('planConfig', match.params.key)
     }
   }
@@ -58,33 +69,27 @@ class PlanConfigDetails extends React.Component {
       isAdmin,
       match,
     } = this.props
-    let planConfig
     const key = match.params.key
-    if (match.params.version) {
+    let planConfig
+    if (key) {
       planConfig = templates.versionMetadata
-    }else{
-      const planConfigs = templates.planConfigs
-      planConfig = _.find(planConfigs, t => t.key === key)
     }
-
     return (
       <div>
-        { !this.props.versionOptionsLoading && (
-          <MetaDataPanel
-            templates={templates}
-            isAdmin={isAdmin}
-            metadataType="planConfig"
-            metadata={planConfig}
-            getRevisionList={getRevisionList}
-            loadProjectsMetadata={loadProjectsMetadata}
-            getProjectMetadataWithVersion={getProjectMetadataWithVersion}
-            deleteProjectsMetadata={deleteProjectsMetadataSpecial}
-            createProjectsMetadata={createPlanConfig}
-            updateProjectsMetadata={updateProjectsMetadata}
-            routerParams={match.params}
-            isNew={!key}
-          />
-        )}
+        <MetaDataPanel
+          templates={templates}
+          isAdmin={isAdmin}
+          metadataType="planConfig"
+          metadata={planConfig}
+          getRevisionList={getRevisionList}
+          loadProjectsMetadata={loadProjectsMetadata}
+          getProjectMetadataWithVersion={getProjectMetadataWithVersion}
+          deleteProjectsMetadata={deleteProjectsMetadataSpecial}
+          createProjectsMetadata={createPlanConfig}
+          updateProjectsMetadata={updateProjectsMetadata}
+          routerParams={match.params}
+          isNew={!key}
+        />
       </div>
     )
   }
@@ -133,7 +138,7 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.error)
-const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving)
+const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving && !props.versionOptionsLoading)
 const PlanConfigDetailsWithLoaderEnhanced = enhance(errorHandler(PlanConfigDetails))
 const PlanConfigDetailsWithLoaderAndAuth = requiresAuthentication(PlanConfigDetailsWithLoaderEnhanced)
 

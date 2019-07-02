@@ -35,13 +35,24 @@ class FormDetails extends React.Component {
 
   componentWillMount() {
     const { match } = this.props
-    if (!match.params.version && !this.props.templates && !this.props.isLoading) {
-      this.props.loadProjectsMetadata()
+    let ifNewKey = false
+    let ifNewVersion = false
+    let ifMetadataTypeChanged = false
+    if (this.props.templates.versionMetadataType && this.props.templates.versionMetadataType !== 'form') {
+      ifMetadataTypeChanged = true
     }
-    if (match.params.version && match.params.key && !this.props.templates.versionMetadata && !this.props.isLoading) {
+    if (this.props.templates.versionMetadata) {
+      if (this.props.templates.versionMetadata.key !== match.params.key) {
+        ifNewKey = true
+      }
+      if (_.toString(this.props.templates.versionMetadata.version) !== match.params.version) {
+        ifNewVersion = true
+      }
+    }
+    if (match.params.version && match.params.key && (!this.props.templates.versionMetadata || ifMetadataTypeChanged || ifNewKey || ifNewVersion) && !this.props.isLoading) {
       this.props.getProjectMetadataWithVersion('form', match.params.key, match.params.version)
     }
-    if (match.params.key && !this.props.versionOptionsLoading) {
+    if (match.params.key && (!this.props.templates.versionOptions || ifMetadataTypeChanged || ifNewKey) && !this.props.versionOptionsLoading) {
       this.props.getVersionOptionList('form', match.params.key)
     }
   }
@@ -58,32 +69,27 @@ class FormDetails extends React.Component {
       isAdmin,
       match,
     } = this.props
-    let form
     const key = match.params.key
-    if (match.params.version ) {
+    let form
+    if (key) {
       form = templates.versionMetadata
-    }else{
-      const forms = templates.forms
-      form = _.find(forms, t => t.key === key)
     }
     return (
       <div>
-        { !this.props.versionOptionsLoading && (
-          <MetaDataPanel
-            templates={templates}
-            isAdmin={isAdmin}
-            metadataType="form"
-            metadata={form}
-            getRevisionList={getRevisionList}
-            loadProjectsMetadata={loadProjectsMetadata}
-            getProjectMetadataWithVersion={getProjectMetadataWithVersion}
-            deleteProjectsMetadata={deleteProjectsMetadataSpecial}
-            createProjectsMetadata={createForm}
-            updateProjectsMetadata={updateProjectsMetadata}
-            routerParams={match.params}
-            isNew={!key}
-          />
-        )}
+        <MetaDataPanel
+          templates={templates}
+          isAdmin={isAdmin}
+          metadataType="form"
+          metadata={form}
+          getRevisionList={getRevisionList}
+          loadProjectsMetadata={loadProjectsMetadata}
+          getProjectMetadataWithVersion={getProjectMetadataWithVersion}
+          deleteProjectsMetadata={deleteProjectsMetadataSpecial}
+          createProjectsMetadata={createForm}
+          updateProjectsMetadata={updateProjectsMetadata}
+          routerParams={match.params}
+          isNew={!key}
+        />
       </div>
     )
   }
@@ -132,7 +138,7 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.error)
-const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving)
+const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving && !props.versionOptionsLoading)
 const FormDetailsWithLoaderEnhanced = enhance(errorHandler(FormDetails))
 const FormDetailsWithLoaderAndAuth = requiresAuthentication(FormDetailsWithLoaderEnhanced)
 

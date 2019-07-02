@@ -74,6 +74,7 @@ export const initialState = {
   priceConfigs: null,
   versionOptions: null,
   metadataRevisions: null,
+  versionMetadataType: null,
   versionMetadata: null,
   metadataRevisionsLoading: false,
   versionOptionsLoading: false,
@@ -85,7 +86,6 @@ export const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
   case LOAD_PROJECTS_METADATA_PENDING:
-  case LOAD_PROJECT_METADATA_WITH_VERSION_PENDING:
     return {
       ...state,
       isLoading: true
@@ -105,15 +105,25 @@ export default function(state = initialState, action) {
       isLoading: false,
     }
   }
+  case LOAD_PROJECT_METADATA_WITH_VERSION_PENDING:
+    return {
+      ...state,
+      versionMetadataType: null,
+      versionMetadata: null,
+      metadataRevisions: null,
+      isLoading: true
+    }
   case LOAD_PROJECT_METADATA_WITH_VERSION_SUCCESS:
     return {
       ...state,
-      versionMetadata: action.payload,
+      versionMetadataType: action.payload.type,
+      versionMetadata: action.payload.versionMetadata,
       isLoading: false,
     }
   case LOAD_VERSION_OPTION_LIST_PENDING:
     return {
       ...state,
+      versionOptions: null,
       versionOptionsLoading: true
     }
   case LOAD_VERSION_OPTION_LIST_SUCCESS:

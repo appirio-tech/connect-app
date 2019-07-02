@@ -35,13 +35,24 @@ class PriceConfigDetails extends React.Component {
 
   componentWillMount() {
     const { match } = this.props
-    if (!this.props.templates && !this.props.isLoading) {
-      this.props.loadProjectsMetadata()
+    let ifNewKey = false
+    let ifNewVersion = false
+    let ifMetadataTypeChanged = false
+    if (this.props.templates.versionMetadataType && this.props.templates.versionMetadataType !== 'priceConfig') {
+      ifMetadataTypeChanged = true
     }
-    if (match.params.version && match.params.key && !this.props.templates.versionMetadata && !this.props.isLoading) {
+    if (this.props.templates.versionMetadata) {
+      if (this.props.templates.versionMetadata.key !== match.params.key) {
+        ifNewKey = true
+      }
+      if (_.toString(this.props.templates.versionMetadata.version) !== match.params.version) {
+        ifNewVersion = true
+      }
+    }
+    if (match.params.version && match.params.key && (!this.props.templates.versionMetadata || ifMetadataTypeChanged || ifNewKey || ifNewVersion) && !this.props.isLoading) {
       this.props.getProjectMetadataWithVersion('priceConfig', match.params.key, match.params.version)
     }
-    if (match.params.key && !this.props.versionOptionsLoading) {
+    if (match.params.key && (!this.props.templates.versionOptions || ifMetadataTypeChanged || ifNewKey) && !this.props.versionOptionsLoading) {
       this.props.getVersionOptionList('priceConfig', match.params.key)
     }
   }
@@ -58,33 +69,27 @@ class PriceConfigDetails extends React.Component {
       isAdmin,
       match,
     } = this.props
-    let priceConfig
     const key = match.params.key
-    if (match.params.version) {
+    let priceConfig
+    if (key) {
       priceConfig = templates.versionMetadata
-    }else{
-      const priceConfigs = templates.priceConfigs
-      priceConfig = _.find(priceConfigs, t => t.key === key)
     }
-
     return (
       <div>
-        { !this.props.versionOptionsLoading && (
-          <MetaDataPanel
-            templates={templates}
-            isAdmin={isAdmin}
-            metadataType="priceConfig"
-            metadata={priceConfig}
-            getRevisionList={getRevisionList}
-            loadProjectsMetadata={loadProjectsMetadata}
-            getProjectMetadataWithVersion={getProjectMetadataWithVersion}
-            deleteProjectsMetadata={deleteProjectsMetadataSpecial}
-            createProjectsMetadata={createPriceConfig}
-            updateProjectsMetadata={updateProjectsMetadata}
-            routerParams={match.params}
-            isNew={!key}
-          />
-        )}
+        <MetaDataPanel
+          templates={templates}
+          isAdmin={isAdmin}
+          metadataType="priceConfig"
+          metadata={priceConfig}
+          getRevisionList={getRevisionList}
+          loadProjectsMetadata={loadProjectsMetadata}
+          getProjectMetadataWithVersion={getProjectMetadataWithVersion}
+          deleteProjectsMetadata={deleteProjectsMetadataSpecial}
+          createProjectsMetadata={createPriceConfig}
+          updateProjectsMetadata={updateProjectsMetadata}
+          routerParams={match.params}
+          isNew={!key}
+        />
       </div>
     )
   }
@@ -133,7 +138,7 @@ const page500 = compose(
 const showErrorMessageIfError = hasLoaded =>
   branch(hasLoaded, renderComponent(page500(CoderBot)), t => t)
 const errorHandler = showErrorMessageIfError(props => props.error)
-const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving)
+const enhance = spinnerWhileLoading(props => !props.isLoading && !props.isRemoving && !props.versionOptionsLoading)
 const PriceConfigDetailsWithLoaderEnhanced = enhance(errorHandler(PriceConfigDetails))
 const PriceConfigDetailsWithLoaderAndAuth = requiresAuthentication(PriceConfigDetailsWithLoaderEnhanced)
 

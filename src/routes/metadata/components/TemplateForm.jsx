@@ -203,7 +203,7 @@ class TemplateForm extends Component {
                 value={value}
                 ace={ace}
                 mode="code"
-                allowedModes={ ['code', 'tree', 'view']}
+                allowedModes={['code', 'tree', 'view']}
                 theme="ace/theme/github"
                 onChange={(json) => { this.onJSONEdit(field, json) }}
               />
@@ -222,7 +222,7 @@ class TemplateForm extends Component {
                 value={value}
                 ace={ace}
                 mode="code"
-                allowedModes={ ['code', 'tree', 'view']}
+                allowedModes={['code', 'tree', 'view']}
                 theme="ace/theme/github"
                 onChange={(json) => { this.props.changeJSONEdit(json) }}
               />
@@ -250,7 +250,7 @@ class TemplateForm extends Component {
     }
 
     if (state.verifyPrimaryKeyValue !== null && state.verifyPrimaryKeyValue !== state.primaryKeyValue.toString()) {
-      errors.verifyPrimaryKeyValue = `The ${state.primaryKeyType === 'number' ? 'id' : 'key'} do not match`
+      errors.verifyPrimaryKeyValue = `The ${state.primaryKeyType === 'number' ? 'id' : 'key'} does not match`
     }
     return errors
   }
@@ -377,6 +377,10 @@ class TemplateForm extends Component {
           {
             metadataWithVersion && metadata.revision && (
               <div className="history-field">
+                <div className="label">revision</div>
+                <span className="field-value">
+                  {metadata.revision}
+                </span>
                 <span className="title-action" onClick={this.props.toggleModalOpen}>
                   See history
                 </span>
@@ -477,6 +481,8 @@ TemplateForm.defaultProps = {
   dropdownChange: () => {},
   changeJSONEdit: () => {},
   toggleModalOpen: () => {},
+  productCategories: [],
+  projectTypes: [],
   metadataWithVersion: false,
 }
 
@@ -484,8 +490,8 @@ TemplateForm.propTypes = {
   isNew: PropTypes.bool.isRequired,
   metadataWithVersion: PropTypes.bool,
   fields: PropTypes.array.isRequired,
-  productCategories: PropTypes.array.isRequired,
-  projectTypes: PropTypes.array.isRequired,
+  productCategories: PropTypes.array,
+  projectTypes: PropTypes.array,
   metadata: PropTypes.object.isRequired,
   metadataType: PropTypes.string.isRequired,
   deleteTemplate: PropTypes.func.isRequired,

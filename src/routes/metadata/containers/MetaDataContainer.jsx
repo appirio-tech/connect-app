@@ -154,7 +154,7 @@ class MetaDataContainer extends React.Component {
         </div>
       )
     }
-    if (metadataType === 'projectTypes') {
+    if (metadataType === 'priceConfigs') {
       const priceConfigs = templates.priceConfigs
       return (
         <div>
