@@ -42,13 +42,13 @@ const MetaDataContainerWithAuth = withProps({ main:
     <Route path="/metadata/milestoneTemplates/:id" render={MilestoneTemplateDetails} />
     <Route exact path="/metadata/forms" component={FormsContainer} />
     <Route path="/metadata/new-form" render={FormDetails} />
-    <Route path="/metadata/forms/:key/:version" render={FormDetails} />
+    <Route path="/metadata/forms/:key/versions/:version" render={FormDetails} />
     <Route exact path="/metadata/planConfigs" component={PlanConfigsContainer} />
     <Route path="/metadata/new-plan-config" render={PlanConfigDetails} />
-    <Route path="/metadata/planConfigs/:key/:version" render={PlanConfigDetails} />
+    <Route path="/metadata/planConfigs/:key/versions/:version" render={PlanConfigDetails} />
     <Route exact path="/metadata/priceConfigs" component={PriceConfigsContainer} />
     <Route path="/metadata/new-price-config" render={PriceConfigDetails} />
-    <Route path="/metadata/priceConfigs/:key/:version" render={PriceConfigDetails} />
+    <Route path="/metadata/priceConfigs/:key/versions/:version" render={PriceConfigDetails} />
     <Route exact path="/metadata/projectTypes" component={ProjectTypesContainer} />
     <Route path="/metadata/new-project-type" render={ProjectTypeDetails} />
     <Route path="/metadata/projectTypes/:key" render={ProjectTypeDetails} />

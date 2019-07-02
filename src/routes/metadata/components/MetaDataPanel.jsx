@@ -456,7 +456,7 @@ class MetaDataPanel extends React.Component {
     const { metadataType, metadata, metadataWithVersion } = this.state
     const metadataResource = this.getResourceNameFromType(metadataType)
     if (metadataWithVersion && label === 'version') {
-      window.location = `/metadata/${metadataResource}s/${metadata.key}/${option.value}`
+      window.location = `/metadata/${metadataResource}s/${metadata.key}/versions/${option.value}`
     }
   }
 
@@ -573,7 +573,7 @@ class MetaDataPanel extends React.Component {
             if (['projectTemplate', 'productTemplate', 'milestoneTemplate'].indexOf(metadataType) !== -1) {
               window.location = `/metadata/${metadataResource}/${createdMetadata.id}`
             } else if (metadataWithVersion) {
-              window.location = `/metadata/${metadataResource}s/${createdMetadata.key}/${createdMetadata.version}`
+              window.location = `/metadata/${metadataResource}s/${createdMetadata.key}/versions/${createdMetadata.version}`
             } else {
               window.location = `/metadata/${metadataResource}/${createdMetadata.key}`
             }
