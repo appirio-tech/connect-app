@@ -10,7 +10,7 @@
   .template-form {
     // padding: 0 20px;
 
-    .checkbox {
+    .checkbox, .read-only {
       margin-bottom: 10px;
     }
 
@@ -76,4 +76,47 @@
       margin: 0 0 10px 0
     }
   }
+
+  .json_editor_wrapper {
+    margin-bottom: 10px;
+
+    .label {
+      display: block;
+      float: left;
+      margin-top: 12px;
+    }
+
+    .maximize-btn {
+      float: right;
+      display: block;
+    }
+  }
+
+  .history-field {
+    display: inline-block;
+    width: 100%;
+
+    .label{
+      widows: 100%;
+      margin-bottom: 5px;
+    }
+
+    .field-value{
+      color: $tc-gray-40;
+      display: inline-block;
+      float: left;
+    }
+
+    .title-action {
+      float: right;
+      color: $tc-dark-blue;
+      cursor: pointer;
+    }
+  }
+
+  .new-version-btn {
+    border: 1px solid $tc-gray-40;
+    background: white;
+  }
+
 }

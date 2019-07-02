@@ -25,7 +25,7 @@ class SelectDropdown extends Component {
   }
 
   componentWillMount() {
-    this.updateSelectedOptionValue(this.props.value)
+    this.updateSelectedOptionValue(_.toString(this.props.value))
   }
 
   updateSelectedOptionValue(value) {
