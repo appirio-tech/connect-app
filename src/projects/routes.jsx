@@ -1,8 +1,6 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { withProps } from 'recompose'
 import { renderApp } from '../components/App/App'
-import ProjectLayout from './detail/components/ProjectLayout'
 import Projects from './list/components/Projects/Projects'
 import TopBarContainer from '../components/TopBar/TopBarContainer'
 import ProjectsToolBar from '../components/TopBar/ProjectsToolBar'
@@ -18,11 +16,10 @@ import CoderBot from '../components/CoderBot/CoderBot'
 import SpecificationContainer from './detail/containers/SpecificationContainer'
 import { requiresAuthentication } from '../components/AuthenticatedComponent'
 
-const ProjectLayoutWithAuth = requiresAuthentication(ProjectLayout)
 const FileDownloadWithAuth = requiresAuthentication(FileDownload)
 
-const ProjectDetailWithAuth = withProps({ main:
-  <Switch>
+const ProjectDetailWithAuth = requiresAuthentication(() =>
+  (<Switch>
     <Route exact path="/projects/:projectId" render={() => <ProjectDetail component={Dashboard} />} />
     <Route path="/projects/:projectId/status/:statusId" render={() => <ProjectDetail component={Dashboard} />} />
     <Route path="/projects/:projectId/specification" render={() => <ProjectDetail component={SpecificationContainer} />} />
@@ -31,8 +28,8 @@ const ProjectDetailWithAuth = withProps({ main:
     <Route path="/projects/:projectId/add-phase" render={() => <ProjectDetail component={ProjectAddPhaseContainer} />} />
     <Route path="/projects/:projectId/discussions/:discussionId?" render={() => <ProjectDetail component={ProjectMessages} />} />
     <Route render={() => <CoderBot code={404}/>} />
-  </Switch>
-})(ProjectLayoutWithAuth)
+  </Switch>)
+)
 
 const ProjectsWithAuth = requiresAuthentication(Projects)
 

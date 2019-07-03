@@ -3,7 +3,7 @@ require('./ProjectToolBar.scss')
 import _ from 'lodash'
 import React from 'react'
 import PT from 'prop-types'
-import { NavLink, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import { getNewProjectLink } from '../../helpers/projectHelper'
@@ -12,7 +12,6 @@ import NewProjectNavLink from './NewProjectNavLink'
 import MobileMenu from '../MobileMenu/MobileMenu'
 import MobileMenuToggle from '../MobileMenu/MobileMenuToggle'
 
-import TailLeft from '../../assets/icons/arrows-16px-1_tail-left.svg'
 
 import './ProjectToolBar.scss'
 
@@ -62,11 +61,6 @@ class ProjectToolBar extends React.Component {
         <div className="tool-bar">
           <div className="bar-column">
             {renderLogoSection()}
-            <div className="breadcrumb">
-              <NavLink to="/projects">
-                <TailLeft className="icon-tail-left" />
-                <span>View All Projects</span></NavLink>
-            </div>
           </div>
           {project && project.name && <div className="bar-column project-name">
             <span ref="name" onMouseEnter={this.onNameEnter} onMouseLeave={this.onNameLeave}>{_.unescape(project.name)}</span>

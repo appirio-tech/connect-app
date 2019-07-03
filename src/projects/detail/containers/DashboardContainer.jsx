@@ -187,11 +187,11 @@ class DashboardContainer extends React.Component {
           ]}
         />
 
-        <TwoColsLayout.Sidebar>
+        <TwoColsLayout.Sidebar wrapperClass="gray-bg">
           <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
             {(matches) => {
               if (matches) {
-                return <Sticky top={110}>{leftArea}</Sticky>
+                return <Sticky top={60}>{leftArea}</Sticky>
               } else {
                 return leftArea
               }

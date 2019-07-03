@@ -79,7 +79,7 @@ class TeamManagement extends React.Component {
       <div className="team-management-container">
         <div className="projects-team">
           <div className="title">
-            Customer Team
+            <span styleName="title-text">Team</span>
             {(customerTeamManageAction || customerTeamViewAction) &&
               <span className="title-action" onClick={() => onShowProjectDialog(true)}>
                 {customerTeamViewAction ? 'View' : 'Manage'}
@@ -118,9 +118,11 @@ class TeamManagement extends React.Component {
             }
           </div>
         </div>
+
+        <hr styleName="separator" />
         <div className="projects-team">
           <div className="title">
-            Topcoder
+            <span styleName="title-text">Topcoder</span>
             {(topcoderTeamManageAction || topcoderTeamViewAction) &&
               <span className="title-action" onClick={() => onShowTopcoderDialog(true)}>
                 {topcoderTeamViewAction ? 'View' : 'Manage'}

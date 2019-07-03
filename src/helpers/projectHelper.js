@@ -13,6 +13,16 @@ import {
   NEW_PROJECT_PATH,
 } from '../config/constants'
 
+import DashboardTabIcon from '../assets/icons/dashboard-tab.svg'
+import AssetsTabIcon from '../assets/icons/assets-tab.svg'
+import MessagesTabIcon from '../assets/icons/messages-tab.svg'
+import ReportsTabIcon from '../assets/icons/reports-tab.svg'
+import ScopeTabIcon from '../assets/icons/scope-tab.svg'
+import ProjectPlanTabIcon from '../assets/icons/project-plan-tab.svg'
+import SpecificationTabIcon from '../assets/icons/specifications-tab.svg'
+import DiscussionsTabIcon from '../assets/icons/discussions-tab.svg'
+
+
 import { formatNumberWithCommas } from './format'
 
 export const getProjectRoleForCurrentUser = ({currentUserId, project}) => {
@@ -322,4 +332,32 @@ export function getNewProjectLink(orgConfigs) {
   orgConfigs = _.filter(orgConfigs, (o) => { return o.configName === PROJECT_CATALOG_URL })
   if(orgConfigs.length === 1) return orgConfigs[0].configValue
   return NEW_PROJECT_PATH
+}
+
+/**
+ * Get the list of navigation links for project details view
+ * @param {Object} project - The project object
+ * @param {string} projectId - The project id
+ */
+export function getProjectNavLinks(project, projectId) {
+  // choose set of menu links based on the project version
+  const navLinks = project.version === 'v3' ? [
+    { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardTabIcon },
+    { label: 'Messages', to: '#', Icon: MessagesTabIcon },
+    { label: 'Scope', to: `/projects/${projectId}/scope`, Icon: ScopeTabIcon },
+    { label: 'Project Plan', to: `/projects/${projectId}/plan`, Icon: ProjectPlanTabIcon },
+    { label: 'Reports', to: '#', Icon: ReportsTabIcon },
+    { label: 'Assets Library', to: '#', Icon: AssetsTabIcon },
+  ] : [
+    { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardTabIcon },
+    { label: 'Specification', to: `/projects/${projectId}/specification`, Icon: SpecificationTabIcon },
+  ]
+
+  // `Discussions` items can be added as soon as project is loaded
+  // if discussions are not hidden for it
+  if (project.details && !project.details.hideDiscussions) {
+    navLinks.push({ label: 'Discussions', to: `/projects/${projectId}/discussions`, Icon: DiscussionsTabIcon })
+  }
+
+  return navLinks
 }
