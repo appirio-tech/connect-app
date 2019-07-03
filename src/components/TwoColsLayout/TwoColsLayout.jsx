@@ -23,8 +23,8 @@ const TwoColsLayout = ({
   </div>
 )
 
-TwoColsLayout.Sidebar = ({ children }) => (
-  <aside styleName="sidebar">{children}</aside>
+TwoColsLayout.Sidebar = ({ children, wrapperClass }) => (
+  <aside styleName={cn('sidebar', wrapperClass)}>{children}</aside>
 )
 
 TwoColsLayout.Content = ({ children }) => (
