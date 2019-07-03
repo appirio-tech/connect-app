@@ -25,7 +25,7 @@ MenuItem.propTypes = {
   navLink: PT.shape({
     label: PT.string,
     to: PT.string,
-    Icon: PT.object
+    Icon: PT.func
   })
 }
 

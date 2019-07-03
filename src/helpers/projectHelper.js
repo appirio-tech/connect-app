@@ -13,15 +13,8 @@ import {
   NEW_PROJECT_PATH,
 } from '../config/constants'
 
-import DashboardTabIcon from '../assets/icons/dashboard-tab.svg'
-import AssetsTabIcon from '../assets/icons/assets-tab.svg'
-import MessagesTabIcon from '../assets/icons/messages-tab.svg'
-import ReportsTabIcon from '../assets/icons/reports-tab.svg'
-import ScopeTabIcon from '../assets/icons/scope-tab.svg'
-import ProjectPlanTabIcon from '../assets/icons/project-plan-tab.svg'
-import SpecificationTabIcon from '../assets/icons/specifications-tab.svg'
-import DiscussionsTabIcon from '../assets/icons/discussions-tab.svg'
-
+import FileIcon from '../assets/icons/file.svg'
+import InvisibleIcon from '../assets/icons/invisible.svg'
 
 import { formatNumberWithCommas } from './format'
 
@@ -242,7 +235,7 @@ export function getPhaseActualData(phase, timeline) {
     endDate = phase.endDate && moment.utc(phase.endDate)
     duration = phase.duration ? phase.duration : 0
     progress = phase.progress ? phase.progress : 0
-    
+
     if (startDate) {
       endDate = startDate.clone().add(duration, 'days')
     } else {
@@ -342,21 +335,21 @@ export function getNewProjectLink(orgConfigs) {
 export function getProjectNavLinks(project, projectId) {
   // choose set of menu links based on the project version
   const navLinks = project.version === 'v3' ? [
-    { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardTabIcon },
-    { label: 'Messages', to: '#', Icon: MessagesTabIcon },
-    { label: 'Scope', to: `/projects/${projectId}/scope`, Icon: ScopeTabIcon },
-    { label: 'Project Plan', to: `/projects/${projectId}/plan`, Icon: ProjectPlanTabIcon },
-    { label: 'Reports', to: '#', Icon: ReportsTabIcon },
-    { label: 'Assets Library', to: '#', Icon: AssetsTabIcon },
+    { label: 'Dashboard', to: `/projects/${projectId}`, Icon: FileIcon },
+    { label: 'Messages', to: '#', Icon: FileIcon },
+    { label: 'Scope', to: `/projects/${projectId}/scope`, Icon: FileIcon },
+    { label: 'Project Plan', to: `/projects/${projectId}/plan`, Icon: FileIcon },
+    { label: 'Reports', to: '#', Icon: FileIcon },
+    { label: 'Assets Library', to: '#', Icon: FileIcon },
   ] : [
-    { label: 'Dashboard', to: `/projects/${projectId}`, Icon: DashboardTabIcon },
-    { label: 'Specification', to: `/projects/${projectId}/specification`, Icon: SpecificationTabIcon },
+    { label: 'Dashboard', to: `/projects/${projectId}`, Icon: FileIcon },
+    { label: 'Specification', to: `/projects/${projectId}/specification`, Icon: FileIcon },
   ]
 
   // `Discussions` items can be added as soon as project is loaded
   // if discussions are not hidden for it
   if (project.details && !project.details.hideDiscussions) {
-    navLinks.push({ label: 'Discussions', to: `/projects/${projectId}/discussions`, Icon: DiscussionsTabIcon })
+    navLinks.push({ label: 'Discussions', to: `/projects/${projectId}/discussions`, Icon: InvisibleIcon })
   }
 
   return navLinks
