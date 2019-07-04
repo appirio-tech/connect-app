@@ -177,7 +177,8 @@ export default function(state = initialState, action) {
     return {
       ...state,
       isLoading: false,
-      error: action.payload.response.data.result.content.message
+      error: action.payload.response.data.result.content.message,
+      metadata: action.payload.values
     }
   case UPDATE_PROJECTS_METADATA_FAILURE:
     Alert.error(`PROJECT METADATA UPDATE FAILED: ${action.payload.response.data.result.content.message}`)
