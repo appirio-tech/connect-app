@@ -1,63 +1,48 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-
-import FooterV2 from '../../../components/FooterV2/FooterV2'
+import PropTypes from 'prop-types'
+import UserSummary from '../../../components/UserSummary/UserSummary'
+import MenuList from '../../../components/MenuList/MenuList'
+import FileIcon from '../../../assets/icons/file.svg'
 
 import './SettingsSidebar.scss'
 
-const settings = [{
-  name: 'My profile',
-  path: '/settings/profile'
+const navLinks = [{
+  label: 'ALL PROJECTS',
+  to: '/projects?sort=updatedAt%20desc',
+  Icon: FileIcon
 }, {
-  name: 'Account and security',
-  path: '/settings/account'
+  label: 'MY PROFILE',
+  to: '/settings/profile',
+  Icon: FileIcon
 }, {
-  name: 'Notifications',
-  path: '/settings/notifications'
+  label: 'NOTIFICATION SETTINGS',
+  to: '/settings/notifications',
+  Icon: FileIcon
+}, {
+  label: 'ACCOUNT & SECURITY',
+  to: '/settings/account',
+  Icon: FileIcon
 }]
 
-const getOption = (selected, setting) => {
-  const selectedStyle = (setting.name === selected) ? 'selected-option' : ''
-  return (
-    <Link to={setting.path} key={setting.name}>
-      <div styleName={'options ' + selectedStyle}>
-        {setting.name}
-      </div>
-    </Link>
-  )
-}
-
-const getMobileOption = (selected, setting) => {
-  const selectedStyle = (setting.name === selected) ? 'selected' : ''
-  return (
-    <Link to={setting.path} key={setting.name}>
-      <div styleName={'option-mobile ' + selectedStyle}>
-        {setting.name}
-      </div>
-      {(setting.name === selected) &&
-        <div styleName="option-highlight"/>
-      }
-    </Link>
-  )
-}
-
-const Sidebar = ({selected}) => {
+const Sidebar = ({user}) => {
   return (
     <div styleName="container">
-      <div styleName="sidebar">
-        <div styleName="title">
-          TOPCODER SETTINGS
+      <div className="sideAreaWrapper">
+        <UserSummary user={user}/>
+        <hr styleName="separator"/>
+        <div styleName="section-title">
+          SYSTEM
         </div>
-        {settings.map(getOption.bind(this, selected))}
-        <div styleName="footer">
-          <FooterV2 />
+        <div syleName="navigation">
+          <MenuList navLinks={navLinks}/>
         </div>
-      </div>
-      <div styleName="topbar">
-        {settings.map(getMobileOption.bind(this, selected))}
       </div>
     </div>
   )
+}
+
+Sidebar.propTypes = {
+  user: PropTypes.object.isRequired
 }
 
 export default Sidebar
