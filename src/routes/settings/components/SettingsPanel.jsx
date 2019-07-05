@@ -9,7 +9,7 @@ import PropTypes from 'prop-types'
 import Sticky from 'react-stickynode'
 import MediaQuery from 'react-responsive'
 import TwoColsLayout from '../../../components/TwoColsLayout'
-import SettingsSidebar from './SettingsSidebar'
+import UserSidebar from '../../../components/UserSidebar/UserSidebar'
 
 import { SCREEN_BREAKPOINT_MD } from '../../../config/constants'
 
@@ -23,11 +23,11 @@ const SettingsPanel = (props) => (
           if (matches) {
             return (
               <Sticky top={60}>
-                <SettingsSidebar user={props.user}/>
+                <UserSidebar user={props.user}/>
               </Sticky>
             )
           } else {
-            return <SettingsSidebar user={props.user}/>
+            return <UserSidebar user={props.user}/>
           }
         }}
       </MediaQuery>
