@@ -57,6 +57,15 @@ export function getProjectById(projectId) {
         a.downloadUrl = `/projects/${projectId}/attachments/${a.id}`
       })
       if (!res.invites) res.invites = []
+      if (res.details.utm && !res.details.utm.code) {
+        res.details.utm.code = ""
+      }
+      if (res.details.appDefinition && !res.details.appDefinition.features) {
+        res.details.appDefinition.features = {}
+      }
+      if (res.details.apiDefinition && !res.details.apiDefinition.notes) {
+        res.details.apiDefinition.notes = ""
+      }
       return res
     })
 }
