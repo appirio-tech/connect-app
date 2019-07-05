@@ -33,9 +33,7 @@ const Sidebar = ({user}) => {
         <div styleName="section-title">
           SYSTEM
         </div>
-        <div syleName="navigation">
-          <MenuList navLinks={navLinks}/>
-        </div>
+        <MenuList navLinks={navLinks}/>
       </div>
     </div>
   )
