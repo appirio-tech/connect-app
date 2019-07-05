@@ -1,93 +1,24 @@
 @import '~tc-ui/src/styles/tc-includes';
 
 .container {
+  background: $tc-gray-05;
   min-height: calc(100vh - 60px);
-  position: relative;
-
   @media screen and (max-width: $screen-md - 1px) {
     min-height: 0;
   }
 }
 
-.sidebar {
-  background: $tc-white;
-
-  @media screen and (max-width: $screen-md - 1px) {
-    display: none;
-  }
+.separator {
+  border-top-color: $tc-gray-20;
+  border-top-style: solid;
+  border-bottom: none;
+  margin: 0 20px 20px 20px;
 }
 
-.topbar::-webkit-scrollbar {
-  display:none;
-}
-
-.topbar {
-  background-color: $tc-gray-neutral-light;
-  box-shadow: 0 1px 0 0 rgba(195, 195, 200, 0.699999988079071), 0 1px 0 0 #DCDCE0;
-  width: 100%;
-  height: 100%;
-  display: inline-flex;
-  overflow: auto;
-
-  @media screen and (min-width: $screen-md - 1px) {
-    display: none;
-  }
-
-  > a {
-    flex: 0 0 160px;
-    position: relative;
-
-    > .option-mobile {
-      @include roboto-bold;
-      color: $tc-gray-40;
-      font-size: 13px;
-      text-align: center;
-      text-transform: uppercase;
-      line-height: 50px;
-    }
-
-    > .selected {
-      color: $tc-black;
-    }
-  }
-
-  .option-highlight {
-    position: absolute;
-    height: 2px;
-    width: 20px;
-    bottom: 7px;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    background: $tc-dark-blue-110;
-  }
-}
-
-.title {
-  @include roboto-bold;
-  color: $tc-black;
-  font-size: 11px;
-  padding: 20px 0px 5px 20px;
-}
-
-.options {
-  @include roboto;
-  height: 30px;
-  padding-left: 20px;
-  color: $tc-black;
-  font-size: 13px;
-  line-height: 30px;
-}
-
-.selected-option {
-  @include roboto-bold;
-  background-color: $tc-dark-blue-30;
-}
-
-.footer {
-  bottom: 2 * $base-unit;
-  padding: 0px 4 * $base-unit;
-  position: absolute;
-  width: 100%;
+.section-title {
+  font-size: 10px;
+  color: $tc-gray-50;
+  margin-left: 20px;
+  letter-spacing: 0.8px;
+  margin-bottom: 10px;
 }

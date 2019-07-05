@@ -19,11 +19,12 @@ class ProfileSettingsContainer extends Component {
   }
 
   render() {
-    const { profileSettings, saveProfileSettings, uploadProfilePhoto } = this.props
+    const { profileSettings, saveProfileSettings, uploadProfilePhoto, user } = this.props
 
     return (
       <SettingsPanel
         title="My profile"
+        user={user}
       >
         <ProfileSettingsFormEnhanced
           values={profileSettings}
@@ -42,11 +43,12 @@ ProfileSettingsContainer.propTypes = {
 
 const ProfileSettingsContainerWithAuth = requiresAuthentication(ProfileSettingsContainer)
 
-const mapStateToProps = ({ settings }) => ({
-  profileSettings: { 
+const mapStateToProps = ({ settings, loadUser  }) => ({
+  profileSettings: {
     ...settings.profile,
     settings: formatProfileSettings(settings.profile.traits)
-  }
+  },
+  user: loadUser.user
 })
 
 const mapDispatchToProps = {
