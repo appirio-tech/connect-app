@@ -70,7 +70,7 @@ const NotificationsDropdownContainerView = (props) => {
       }, 0)
     }
   }
-  const hasNew = hasUnread && lastVisited < _.maxBy(_.map(notifications, n => new Date(n.date)))
+  const hasNew = hasUnread
   let notificationsEmpty = (
     <NotificationsEmpty>
       <p className="notifications-empty-note">
