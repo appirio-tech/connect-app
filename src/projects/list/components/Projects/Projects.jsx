@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import MediaQuery from 'react-responsive'
+import Sticky from 'react-stickynode'
 import { connect } from 'react-redux'
 import { branch, renderComponent, compose, withProps, renderNothing } from 'recompose'
 import { withRouter } from 'react-router-dom'
@@ -17,7 +19,9 @@ import { updateProject } from '../../../actions/project'
 import { getNewProjectLink } from '../../../../helpers/projectHelper'
 import { ROLE_CONNECT_MANAGER, ROLE_CONNECT_ACCOUNT_MANAGER, ROLE_CONNECT_COPILOT, ROLE_ADMINISTRATOR,
   ROLE_CONNECT_ADMIN, PROJECT_STATUS, PROJECT_STATUS_CANCELLED,
-  PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE } from '../../../../config/constants'
+  PROJECT_LIST_DEFAULT_CRITERIA, PROJECTS_LIST_VIEW, PROJECTS_LIST_PER_PAGE, SCREEN_BREAKPOINT_MD } from '../../../../config/constants'
+import TwoColsLayout from '../../../../components/TwoColsLayout'
+import UserSidebar from '../../../../components/UserSidebar/UserSidebar'
 
 const page500 = compose(
   withProps({code:500})
@@ -110,7 +114,7 @@ class Projects extends Component {
     } else {
       // perform initial load only if there are not projects already loaded or only one projects
       // otherwise we will get projects duplicated in store
-      if (projects.length <= 1 || refresh) {        
+      if (projects.length <= 1 || refresh) {
         this.routeWithParams(criteria)
       }
     }
@@ -189,7 +193,8 @@ class Projects extends Component {
   }
 
   render() {
-    const { isPowerUser, isCustomer, isLoading, totalCount, criteria, projectsListView, setProjectsListView, setInfiniteAutoload, loadProjects, history, orgConfig, allProjectsCount } = this.props
+    const { isPowerUser, isCustomer, isLoading, totalCount, criteria, projectsListView, setProjectsListView,
+      setInfiniteAutoload, loadProjects, history, orgConfig, allProjectsCount, user } = this.props
     // show walk through if user is customer and no projects were returned
     // for default filters
     const showWalkThrough = !isLoading && !isPowerUser && totalCount === 0 && allProjectsCount === 0 &&
@@ -231,32 +236,51 @@ class Projects extends Component {
     } else if (chosenView === PROJECTS_LIST_VIEW.CARD) {
       projectsView = cardView
     }
-    
+
     return (
-      <div>
-        <section className="">
-          <div className="container">
-            {!showWalkThrough && (
-              <ProjectListNavHeader 
-                applyFilters={this.applyFilters} 
-                selectedView={chosenView} 
-                changeView={setProjectsListView} 
-                currentStatus={currentStatus} 
-                criteria={criteria} 
-                setInfiniteAutoload={setInfiniteAutoload} 
-                loadProjects={loadProjects} 
-                history={history} 
-                isCustomer={isCustomer}
-              />
-            )}
-            {showWalkThrough ? (
-              <Walkthrough newProjectLink={getNewProjectLink(orgConfig)} />
-            ) : (
-              projectsView
-            )}
+      <TwoColsLayout noPadding>
+        <TwoColsLayout.Sidebar>
+          <MediaQuery minWidth={SCREEN_BREAKPOINT_MD}>
+            {(matches) => {
+              if (matches) {
+                return (
+                  <Sticky top={60}>
+                    <UserSidebar user={user}/>
+                  </Sticky>
+                )
+              } else {
+                return <UserSidebar user={user}/>
+              }
+            }}
+          </MediaQuery>
+        </TwoColsLayout.Sidebar>
+        <TwoColsLayout.Content>
+          <div>
+            <section className="">
+              <div className="container">
+                {!showWalkThrough && (
+                  <ProjectListNavHeader
+                    applyFilters={this.applyFilters}
+                    selectedView={chosenView}
+                    changeView={setProjectsListView}
+                    currentStatus={currentStatus}
+                    criteria={criteria}
+                    setInfiniteAutoload={setInfiniteAutoload}
+                    loadProjects={loadProjects}
+                    history={history}
+                    isCustomer={isCustomer}
+                  />
+                )}
+                {showWalkThrough ? (
+                  <Walkthrough newProjectLink={getNewProjectLink(orgConfig)} />
+                ) : (
+                  projectsView
+                )}
+              </div>
+            </section>
           </div>
-        </section>
-      </div>
+        </TwoColsLayout.Content>
+      </TwoColsLayout>
     )
   }
 }
@@ -280,6 +304,7 @@ const mapStateToProps = ({ projectSearch, members, loadUser, projectState, templ
       roles: loadUser.user.roles,
       email: loadUser.user.email
     },
+    user: loadUser.user,
     orgConfig   : loadUser.orgConfig,
     isLoading   : projectSearch.isLoading,
     error       : projectSearch.error,

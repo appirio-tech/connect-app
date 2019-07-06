@@ -13,6 +13,7 @@ const MenuItem = ({ navLink }) => {
         className={styles.navItem}
         activeClassName={styles.active}
         exact
+        isActive={navLink.isActive}
       >
         <Icon className={styles.icon} />
         {navLink.label}
@@ -25,7 +26,8 @@ MenuItem.propTypes = {
   navLink: PT.shape({
     label: PT.string,
     to: PT.string,
-    Icon: PT.func
+    Icon: PT.func,
+    isActive: PT.func
   })
 }
 

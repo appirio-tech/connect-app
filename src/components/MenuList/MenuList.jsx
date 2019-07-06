@@ -19,7 +19,8 @@ MenuList.propTypes = {
     PT.shape({
       label: PT.string,
       to: PT.string,
-      Icon: PT.func
+      Icon: PT.func,
+      isActive: PT.func
     })
   )
 }
